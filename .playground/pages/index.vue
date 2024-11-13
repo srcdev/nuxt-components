@@ -8,12 +8,29 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
           </template>
         </PageRow>
+
+        <hr />
+
+        <PageRow :isFullWidth="false">
+          <template #default>
+            <MasonryGrid :gridData="quotesData?.quotes.slice(0, qoutesDisplayCount) ?? <IQuotes>{}" :gap="12" :min-tile-width="300" :use-scroll-reveal="false">
+              <template v-for="(item, index) in quotesData?.quotes.slice(0, qoutesDisplayCount)" v-slot:[item.id]>
+                <div class="p-10 border border-1 border-grey-dark border-r-4">
+                  <p class="text-normal wght-700">{{ index + 1 }}: {{ item.author }}</p>
+                  <p class="text-normal">{{ item.quote }}</p>
+                </div>
+              </template>
+            </MasonryGrid>
+          </template>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
 </template>
 
 <script setup lang="ts">
+import type { IQuotes } from '@/types/types.quotes';
+
 definePageMeta({
   layout: false,
 });
@@ -25,4 +42,7 @@ useHead({
     class: 'home',
   },
 });
+
+const qoutesDisplayCount = 21;
+const { data: quotesData, status, error, refresh } = await useFetch<IQuotes>('https://dummyjson.com/quotes');
 </script>
