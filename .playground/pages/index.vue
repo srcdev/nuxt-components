@@ -13,11 +13,11 @@
 
         <PageRow :isFullWidth="false">
           <template #default>
-            <MasonryGrid :gridData="quotesData?.quotes.slice(0, qoutesDisplayCount) ?? <IQuotes>{}" :gap="12" :min-tile-width="300" :use-scroll-reveal="false">
+            <MasonryGrid :gridData="quotesData?.quotes.slice(0, qoutesDisplayCount) ?? <IQuotes>{}">
               <template v-for="(item, index) in quotesData?.quotes.slice(0, qoutesDisplayCount)" v-slot:[item.id]>
-                <div class="p-10 border border-1 border-grey-dark border-r-4">
-                  <p class="text-normal wght-700">{{ index + 1 }}: {{ item.author }}</p>
-                  <p class="text-normal">{{ item.quote }}</p>
+                <div class="">
+                  <p class="">{{ index + 1 }}: {{ item.author }}</p>
+                  <p class="">{{ item.quote }}</p>
                 </div>
               </template>
             </MasonryGrid>

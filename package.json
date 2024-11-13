@@ -19,7 +19,6 @@
     "assets/",
     "components/",
     "composables/",
-    "layouts/",
     "types/"
   ],
   "devDependencies": {
