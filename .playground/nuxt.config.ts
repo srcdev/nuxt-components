@@ -2,31 +2,21 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   extends: ['..'],
-
   app: {
     head: {
       htmlAttrs: {
         lang: 'en',
       },
-      titleTemplate: '%s - Website name',
+      titleTemplate: '%s - Nuxt Components Layer',
       meta: [{ charset: 'utf-8' }, { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
     },
-    pageTransition: {
-      name: 'page',
-      mode: 'out-in',
-    },
-    layoutTransition: {
-      name: 'layout',
-      mode: 'out-in',
-    },
   },
-
-  components: [
-    {
-      path: './components',
-      pathPrefix: false,
-    },
-  ],
+  // components: [
+  //   {
+  //     path: './components',
+  //     pathPrefix: false,
+  //   },
+  // ],
 
   compatibilityDate: '2024-11-12',
 });
