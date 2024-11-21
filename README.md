@@ -10,6 +10,12 @@ Althought this repo is public and feel free to do what you wish with it, this ha
 npm install --save nuxt-compnents
 ```
 
+## Additional reuired packages
+
+```bash
+npm install --save @oddbird/css-anchor-positioning
+```
+
 Then add the dependency to their `extends` in `nuxt.config`:
 
 ```ts
