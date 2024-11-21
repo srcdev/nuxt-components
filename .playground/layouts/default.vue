@@ -4,6 +4,7 @@
   </div>
 </template>
 
+<script setup lang="ts"></script>
 <style lang="css">
 body {
   margin: 0;

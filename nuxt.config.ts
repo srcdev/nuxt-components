@@ -16,5 +16,6 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+  plugins: ['~/plugins/css-anchor-positioning.ts'],
   compatibilityDate: '2024-07-13',
 });
