@@ -1,6 +1,6 @@
 <template>
-  <div class="layout-row">
-    <component :is="tag" :data-testid="dataTestid" :class="[variant, elementClasses]">
+  <div class="layout-row" :class="[variant, elementClasses]">
+    <component :is="tag" :data-testid="dataTestid" class="layout-row-inner">
       <slot name="default"></slot>
     </component>
   </div>
