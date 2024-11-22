@@ -28,7 +28,7 @@
     "eslint": "9.15.0",
     "nuxt": "3.14.1592",
     "release-it": "17.10.0",
-    "typescript": "5.6.3"
+    "typescript": "^5.7.2"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
@@ -39,5 +39,8 @@
       "release": true,
       "releaseName": "v${version}"
     }
+  },
+  "dependencies": {
+    "modern-normalize": "3.0.1"
   }
 }

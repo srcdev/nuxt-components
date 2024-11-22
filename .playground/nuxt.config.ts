@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   extends: ['..'],
+  css: ['modern-normalize', './assets/styles/main.css'],
   app: {
     head: {
       htmlAttrs: {

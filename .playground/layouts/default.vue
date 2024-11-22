@@ -1,6 +1,25 @@
 <template>
-  <div class="page-layout">
-    <slot name="content"></slot>
+  <div>
+    <LayoutRow tag="header" variant="full" :styleClassPassthrough="['header']">
+      <template #default>
+        <LayoutRow tag="div" variant="popout">
+          <template #default>
+            <h1 class="heading-1">Nuxt Component Library</h1>
+            <nav>
+              <ul>
+                <li><NuxtLink to="/" class="link-normal">Home</NuxtLink></li>
+                <li><NuxtLink to="/ui/layout-row" class="link-normal">Layout Row</NuxtLink></li>
+              </ul>
+            </nav>
+          </template>
+        </LayoutRow>
+      </template>
+    </LayoutRow>
+    <LayoutRow tag="div" variant="full">
+      <template #default>
+        <slot name="content"></slot>
+      </template>
+    </LayoutRow>
   </div>
 </template>
 
@@ -17,12 +36,18 @@ if (import.meta.client && !('anchorName' in document.documentElement.style)) {
 
 <script setup lang="ts"></script>
 <style lang="css">
-body {
-  margin: 0;
-  overflow-x: hidden;
-}
-.page-layout {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+.header {
+  ul {
+    display: flex;
+    gap: 1rem;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      margin: 0;
+      padding: 0;
+    }
+  }
 }
 </style>
