@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <ClientOnly>
     <button :popovertarget class="popover-trigger" :class="[elementClasses]">
       <slot name="trigger"></slot>
     </button>
@@ -7,7 +7,7 @@
     <dialog popover :id="popovertarget" :class="[elementClasses]">
       <slot name="popoverCotent"></slot>
     </dialog>
-  </div>
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">
