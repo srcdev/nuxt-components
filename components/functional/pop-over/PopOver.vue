@@ -27,7 +27,7 @@ const anchorName = `--anchor-${useId()}`;
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
-<style lang="css">
+<style scoped lang="css">
 @layer popover-setup {
   .popover-trigger {
     anchor-name: v-bind(anchorName);
