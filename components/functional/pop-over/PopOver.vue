@@ -1,10 +1,10 @@
 <template>
   <div>
-    <button :popovertarget class="popover-trigger">
+    <button :popovertarget class="popover-trigger" :class="[elementClasses]">
       <slot name="trigger"></slot>
     </button>
 
-    <dialog popover :id="popovertarget">
+    <dialog popover :id="popovertarget" :class="[elementClasses]">
       <slot name="popoverCotent"></slot>
     </dialog>
   </div>
@@ -16,9 +16,15 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  styleClassPassthrough: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
 });
 
 const anchorName = `--anchor-${useId()}`;
+
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">

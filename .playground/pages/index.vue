@@ -59,4 +59,8 @@ useHead({
 
 const qoutesDisplayCount = 21;
 const { data: quotesData, status, error, refresh } = await useFetch<IQuotes>('https://dummyjson.com/quotes');
+
+const popoverSupported = computed(() => {
+  return import.meta.client && !('anchorName' in document.documentElement.style);
+});
 </script>
