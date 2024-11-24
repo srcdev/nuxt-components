@@ -4,9 +4,9 @@
       <slot name="trigger"></slot>
     </button>
 
-    <dialog popover :id="popovertarget" :class="[elementClasses]">
+    <div class="dialog-popover" popover :id="popovertarget" :class="[elementClasses]">
       <slot name="popoverCotent"></slot>
-    </dialog>
+    </div>
   </ClientOnly>
 </template>
 
@@ -28,12 +28,18 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style scoped lang="css">
+@position-try --left {
+  inset: auto;
+  top: anchor(bottom);
+  right: anchor(right);
+}
+
 @layer popover-setup {
   .popover-trigger {
     anchor-name: v-bind(anchorName);
   }
 
-  dialog {
+  .dialog-popover {
     display: none;
     position: absolute;
     position-anchor: v-bind(anchorName);
@@ -58,10 +64,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     }
   }
 
-  @position-try --left {
+  /* @position-try --left {
     inset: auto;
     top: anchor(bottom);
     right: anchor(right);
-  }
+  } */
 }
 </style>
