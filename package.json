@@ -26,7 +26,6 @@
     "@nuxt/eslint-config": "0.7.1",
     "@oddbird/css-anchor-positioning": "0.4.0",
     "eslint": "9.15.0",
-    "focus-trap-vue": "^4.0.3",
     "nuxt": "3.14.1592",
     "release-it": "17.10.0",
     "typescript": "^5.7.2"
@@ -42,6 +41,7 @@
     }
   },
   "dependencies": {
+    "focus-trap-vue": "^4.0.3",
     "modern-normalize": "3.0.1"
   }
 }
