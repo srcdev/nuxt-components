@@ -4,9 +4,9 @@
       <slot name="trigger"></slot>
     </button>
 
-    <div class="dialog-popover" popover :id="popovertarget" :class="[elementClasses]">
+    <dialog class="dialog-popover" popover :id="popovertarget" :class="[elementClasses]">
       <slot name="popoverCotent"></slot>
-    </div>
+    </dialog>
   </ClientOnly>
 </template>
 
