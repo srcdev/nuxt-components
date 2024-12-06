@@ -10,6 +10,7 @@
                 <li><NuxtLink to="/" class="link-normal">Home</NuxtLink></li>
                 <li><NuxtLink to="/ui/layout-row" class="link-normal">Layout Row</NuxtLink></li>
                 <li><NuxtLink to="/ui/dialog" class="link-normal">Dialogs</NuxtLink></li>
+                <li><NuxtLink to="/ui/tabs" class="link-normal">Tabs</NuxtLink></li>
               </ul>
             </nav>
           </template>

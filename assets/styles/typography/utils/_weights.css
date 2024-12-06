@@ -1,0 +1,69 @@
+/* By numeric step */
+.wght-100 {
+  font-weight: 100;
+}
+.wght-200 {
+  font-weight: 200;
+}
+.wght-300 {
+  font-weight: 300;
+}
+.wght-400 {
+  font-weight: 400;
+}
+.wght-500 {
+  font-weight: 500;
+}
+.wght-600 {
+  font-weight: 600;
+}
+.wght-700 {
+  font-weight: 700;
+}
+.wght-800 {
+  font-weight: 800;
+}
+.wght-900 {
+  font-weight: 900;
+}
+
+/* By named weight */
+.light {
+  font-weight: light;
+}
+.normal {
+  font-weight: normal;
+}
+.bold {
+  font-weight: bold;
+}
+
+/* Using the font-variation-settings property. */
+
+.fvs-wght-100 {
+  font-variation-settings: 'wght' 100;
+}
+.fvs-wght-200 {
+  font-variation-settings: 'wght' 200;
+}
+.fvs-wght-300 {
+  font-variation-settings: 'wght' 300;
+}
+.fvs-wght-400 {
+  font-variation-settings: 'wght' 400;
+}
+.fvs-wght-500 {
+  font-variation-settings: 'wght' 500;
+}
+.fvs-wght-600 {
+  font-variation-settings: 'wght' 600;
+}
+.fvs-wght-700 {
+  font-variation-settings: 'wght' 700;
+}
+.fvs-wght-800 {
+  font-variation-settings: 'wght' 800;
+}
+.fvs-wght-900 {
+  font-variation-settings: 'wght' 900;
+}

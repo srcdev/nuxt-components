@@ -42,6 +42,6 @@
   },
   "dependencies": {
     "focus-trap-vue": "^4.0.3",
-    "modern-normalize": "3.0.1"
+    "modern-normalize": "^3.0.1"
   }
 }

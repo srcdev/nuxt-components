@@ -1,0 +1,63 @@
+:root {
+  [data-form-theme='ghost'] {
+    --theme-form-input-bg: light-dark(var(--gray-1), var(--gray-4));
+    --theme-form-input-border: var(--gray-8);
+    --theme-form-input-border-active: var(--gray-2);
+    --theme-form-input-border-focus: var(--gray-2);
+    --theme-form-input-outline: white;
+    --theme-form-input-outline-active: var(--gray-6);
+    --theme-form-input-outline-focus: var(--gray-6);
+    --theme-form-input-text: light-dark(var(--gray-10), var(--gray-11));
+
+    --theme-form-focus-box-shadow: 1px 1px 8px 1px light-dark(var(--gray-12), var(--gray-2));
+
+    --theme-form-checkbox-bg: light-dark(var(--gray-1), var(--gray-4));
+    --theme-form-checkbox-border: light-dark(var(--gray-12), var(--gray-12));
+    --theme-form-checkbox-outline: light-dark(var(--gray-1), var(--gray-1));
+    --theme-form-checkbox-shadow: transparent;
+    --theme-form-checkbox-shadow-focus: var(--gray-6);
+    --theme-form-checkbox-symbol: var(--gray-12);
+
+    --theme-form-radio-bg: light-dark(var(--gray-1), var(--gray-4));
+    --theme-form-radio-border: light-dark(var(--gray-12), var(--gray-12));
+    --theme-form-radio-outline: light-dark(var(--gray-1), var(--gray-1));
+    --theme-form-radio-shadow: transparent;
+    --theme-form-radio-shadow-focus: var(--gray-6);
+    --theme-form-radio-symbol: var(--gray-12);
+
+    --theme-form-range-accent-color: light-dark(var(--gray-12), var(--gray-3));
+
+    /*
+    * Checkbox as button
+    **/
+
+    --theme-checkbox-radio-button-bg-default: light-dark(var(--gray-1), var(--gray-4));
+
+    --theme-checkbox-radio-button-border-default: light-dark(var(--gray-12), var(--gray-12));
+    --theme-checkbox-radio-button-border-width: 1px;
+
+    --theme-checkbox-radio-button-outline-default: light-dark(var(--gray-5), var(--gray-5));
+    --theme-checkbox-radio-button-outline-width: 1px;
+
+    --theme-checkbox-radio-button-label-default: light-dark(var(--gray-12), var(--gray-12));
+  }
+
+  [data-btn-theme='ghost'] {
+    --theme-btn-bg: transparent;
+    --theme-btn-border: var(--gray-0);
+    --theme-btn-outline: var(--gray-12);
+    --theme-btn-text: light-dark(var(--gray-12), var(--gray-0));
+
+    --theme-btn-bg-hover: light-dark(var(--gray-2), var(--gray-8));
+    --theme-btn-border-hover: light-dark(var(--gray-12), var(--gray-0));
+    --theme-btn-outline-hover: light-dark(var(--gray-12), var(--gray-0));
+    --theme-btn-text-hover: light-dark(var(--gray-12), var(--gray-0));
+
+    --theme-btn-bg-focus: light-dark(var(--gray-2), var(--gray-8));
+    --theme-btn-border-focus: light-dark(var(--gray-12), var(--gray-0));
+    --theme-btn-outline-focus: light-dark(var(--gray-12), var(--gray-0));
+    --theme-btn-text-focus: light-dark(var(--gray-12), var(--gray-0));
+
+    --theme-form-focus-box-shadow: 1px 1px 8px 1px light-dark(var(--gray-12), var(--gray-2));
+  }
+}
