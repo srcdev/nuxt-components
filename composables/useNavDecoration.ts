@@ -5,8 +5,6 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
   const previousTab = ref<HTMLElement>();
   const currentTab = ref<HTMLElement>();
 
-  // const { resizeObserver } = useResizeObserver(navContainerRef);
-
   const initNavDecorators = () => {
     navItems.value = navContainerRef.value ? (Array.from(navContainerRef.value.querySelectorAll('[data-nav-item')) as HTMLElement[]) : [];
     previousTab.value = navItems.value[0];
