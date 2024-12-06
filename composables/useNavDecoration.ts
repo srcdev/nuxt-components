@@ -23,22 +23,22 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>) => {
   };
 
   const moveIndicator = () => {
-    const newTabPosition = previousTab.value.compareDocumentPosition(currentTab.value);
-    const newTabWidth = currentTab.value.offsetWidth / navContainerRef.value.offsetWidth;
+    const newTabPosition = previousTab.value && currentTab.value ? previousTab.value.compareDocumentPosition(currentTab.value) : 0;
+    const newTabWidth = currentTab.value && navContainerRef.value ? currentTab.value.offsetWidth / navContainerRef.value.offsetWidth : 0;
     let transitionWidth;
 
     if (newTabPosition === 4) {
       transitionWidth = currentTab.value.offsetLeft + currentTab.value.offsetWidth - previousTab.value.offsetLeft;
     } else {
       transitionWidth = previousTab.value.offsetLeft + previousTab.value.offsetWidth - currentTab.value.offsetLeft;
-      navContainerRef.value.style.setProperty('--_left', currentTab.value.offsetLeft + 'px');
+      navContainerRef.value?.style.setProperty('--_left', currentTab.value ? currentTab.value.offsetLeft + 'px' : '0');
     }
 
-    navContainerRef.value.style.setProperty('--_width', transitionWidth / navContainerRef.value.offsetWidth);
+    navContainerRef.value?.style.setProperty('--_width', String(transitionWidth / navContainerRef.value.offsetWidth));
 
     setTimeout(() => {
-      navContainerRef.value.style.setProperty('--_left', currentTab.value.offsetLeft + 'px');
-      navContainerRef.value.style.setProperty('--_width', newTabWidth);
+      navContainerRef.value?.style.setProperty('--_left', currentTab.value?.offsetLeft + 'px');
+      navContainerRef.value?.style.setProperty('--_width', newTabWidth?.toString());
     }, 220);
   };
 
