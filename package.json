@@ -25,6 +25,7 @@
   "devDependencies": {
     "@nuxt/eslint-config": "0.7.1",
     "@oddbird/css-anchor-positioning": "0.4.0",
+    "@vueuse/core": "^12.0.0",
     "eslint": "9.15.0",
     "nuxt": "3.14.1592",
     "release-it": "17.10.0",
