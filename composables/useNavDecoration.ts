@@ -14,6 +14,19 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
     currentActiveTab.value = navItems.value[0];
     previousHoveredTab.value = navItems.value[0];
     currentHoveredTab.value = navItems.value[0];
+
+    addNavDecorators();
+  };
+
+  const addNavDecorators = () => {
+    const elementClasses = ['nav__active-indicator', 'nav__active', 'nav__hovered'];
+    if (navContainerRef.value) {
+      for (let i = 0; i < 3; i++) {
+        const div = document.createElement('div');
+        div.classList.add(elementClasses[i]);
+        navContainerRef.value.appendChild(div);
+      }
+    }
   };
 
   const navItemHovered = (event: Event) => {
@@ -25,6 +38,12 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
       currentHoveredTab.value = target;
       moveHoveredIndicator();
     }
+  };
+
+  const resetHoverToActivePosition = () => {
+    previousHoveredTab.value = currentHoveredTab.value;
+    currentHoveredTab.value = currentActiveTab.value;
+    moveHoveredIndicator();
   };
 
   const navItemClicked = (event: Event) => {
@@ -106,6 +125,7 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
     navContainerRef,
     navItemClicked,
     navItemHovered,
+    resetHoverToActivePosition,
   };
 };
 

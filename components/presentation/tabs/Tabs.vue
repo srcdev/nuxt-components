@@ -1,5 +1,5 @@
 <template>
-  <div role="tablist" aria-labelledby="channel-name" ref="navContainerRef">
+  <div role="tablist" aria-labelledby="channel-name" ref="navContainerRef" @mouseleave="resetHoverToActivePosition()">
     <button @click.prevent="navItemClicked($event)" @mouseover="navItemHovered($event)" data-tab-index="1" data-nav-item role="tab" aria-selected="true">Home</button>
     <button @click.prevent="navItemClicked($event)" @mouseover="navItemHovered($event)" data-tab-index="2" data-nav-item role="tab" aria-selected="false">Functional Components</button>
     <button @click.prevent="navItemClicked($event)" @mouseover="navItemHovered($event)" data-tab-index="3" data-nav-item role="tab" aria-selected="false">Static UI Components</button>
@@ -12,7 +12,7 @@
 <script setup lang="ts">
 const navContainerRef = ref<HTMLElement | null>(null);
 
-const { initNavDecorators, navItemClicked, navItemHovered } = useNavDecoration(navContainerRef);
+const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useNavDecoration(navContainerRef);
 
 onMounted(() => {
   initNavDecorators();
@@ -26,9 +26,10 @@ onMounted(() => {
   width: fit-content;
   border-bottom: 1px solid hsl(0 0% 30%);
   margin-block: 3rem;
+  z-index: 1;
 }
 
-[role='tablist']::before {
+[role='tablist'] .nav__hovered {
   content: '';
   position: absolute;
   left: 0;
@@ -43,19 +44,33 @@ onMounted(() => {
   z-index: 1;
 }
 
-[role='tablist']::after {
+[role='tablist'] .nav__active {
   content: '';
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   top: 0;
-  border-bottom: 4px solid white;
   scale: var(--_width-active, 0.125) 1;
   translate: var(--_left-active, 0) 0;
   transform-origin: left;
   transition: scale var(--_transition-duration), translate var(--_transition-duration);
-  background: transparent;
+  background: lightseagreen;
+  z-index: 2;
+}
+
+[role='tablist'] .nav__active-indicator {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 4px;
+  scale: var(--_width-active, 0.125) 1;
+  translate: var(--_left-active, 0) 0;
+  transform-origin: left;
+  transition: scale var(--_transition-duration), translate var(--_transition-duration);
+  background: white;
   z-index: 3;
 }
 
@@ -71,7 +86,7 @@ onMounted(() => {
   opacity: 0.7;
   cursor: pointer;
   position: relative;
-  z-index: 1;
+  z-index: 4;
 }
 
 [role='tab']:hover {
