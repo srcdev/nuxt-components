@@ -28,9 +28,9 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>) => {
     let transitionWidth;
 
     if (newTabPosition === 4) {
-      transitionWidth = currentTab.value.offsetLeft + currentTab.value.offsetWidth - previousTab.value.offsetLeft;
+      transitionWidth = currentTab.value && previousTab.value ? currentTab.value.offsetLeft + currentTab.value.offsetWidth - previousTab.value.offsetLeft : 0;
     } else {
-      transitionWidth = previousTab.value.offsetLeft + previousTab.value.offsetWidth - currentTab.value.offsetLeft;
+      transitionWidth = previousTab.value && currentTab.value ? previousTab.value.offsetLeft + previousTab.value.offsetWidth - currentTab.value.offsetLeft : 0;
       navContainerRef.value?.style.setProperty('--_left', currentTab.value ? currentTab.value.offsetLeft + 'px' : '0');
     }
 
