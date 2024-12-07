@@ -7,13 +7,19 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
 
   const previousHoveredTab = ref<HTMLElement>();
   const currentHoveredTab = ref<HTMLElement>();
+  const tagName = ref<string>();
 
   const initNavDecorators = () => {
     navItems.value = navContainerRef.value ? (Array.from(navContainerRef.value.querySelectorAll('[data-nav-item')) as HTMLElement[]) : [];
-    previousActiveTab.value = navItems.value[0];
-    currentActiveTab.value = navItems.value[0];
-    previousHoveredTab.value = navItems.value[0];
-    currentHoveredTab.value = navItems.value[0];
+    tagName.value = navItems.value[0].tagName.toLowerCase();
+
+    const activeIndex = ref(0);
+
+    currentActiveTab.value = navItems.value[activeIndex.value];
+    currentHoveredTab.value = navItems.value[activeIndex.value];
+
+    previousActiveTab.value = navItems.value[activeIndex.value];
+    previousHoveredTab.value = navItems.value[activeIndex.value];
 
     addNavDecorators();
   };
