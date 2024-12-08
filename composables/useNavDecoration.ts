@@ -2,7 +2,7 @@ import { useResizeObserver } from '@vueuse/core';
 
 const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: number = 200) => {
   const navItems = ref<HTMLElement[] | null>(null);
-  const previousActiveTab = ref<HTMLElement>();
+  const previousActiveTab = useState<HTMLElement | null>('previousActiveTab', () => null);
   const currentActiveTab = ref<HTMLElement>();
 
   const previousHoveredTab = ref<HTMLElement>();
@@ -14,6 +14,12 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
     tagName.value = navItems.value[0].tagName.toLowerCase();
 
     const activeIndex = ref(0);
+
+    // Test if navItems are hyperlinks
+    if (navItems.value[0].tagName.toLowerCase() === 'a') {
+      // Find index of element with class "router-link-active"
+      activeIndex.value = navItems.value.findIndex((el) => el.classList.contains('router-link-active'));
+    }
 
     currentActiveTab.value = navItems.value[activeIndex.value];
     currentHoveredTab.value = navItems.value[activeIndex.value];
@@ -55,7 +61,7 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
   const navItemClicked = (event: Event) => {
     const target = event.target as HTMLElement;
 
-    previousActiveTab.value = currentActiveTab.value;
+    previousActiveTab.value = currentActiveTab.value || null;
     currentActiveTab.value = target;
 
     navItems.value?.forEach((tab) => {

@@ -8,7 +8,7 @@
             <nav role="tablist" aria-labelledby="channel-name" ref="navContainerRef" @mouseleave="resetHoverToActivePosition()">
               <ul>
                 <li v-for="(link, index) in navLinks" :key="link.name">
-                  <NuxtLink @click.prevent="navItemClicked($event)" @mouseover="navItemHovered($event)" :to="link.path" :data-tab-index="index" data-nav-item role="tab" :aria-selected="false">{{
+                  <NuxtLink @click.stop.prevent="navItemClicked($event)" @mouseover="navItemHovered($event)" :to="link.path" :data-tab-index="index" data-nav-item role="tab" :aria-selected="false">{{
                     link.name
                   }}</NuxtLink>
                 </li>
@@ -49,10 +49,9 @@ const navLinks = <INavLink[]>[
   { name: 'Dialogs', path: '/ui/dialog' },
   { name: 'Tabs', path: '/ui/tabs' },
 ];
-const previousLinkIndex = useState('previousLinkIndex', () => 0);
 
 const navContainerRef = ref<HTMLElement | null>(null);
-const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useNavDecoration(navContainerRef, 200, previousLinkIndex);
+const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useNavDecoration(navContainerRef, 200);
 onMounted(() => {
   initNavDecorators();
 });
