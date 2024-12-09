@@ -1,0 +1,69 @@
+:root {
+  --font-size: 16px;
+  --line-height: calc((var(--font-size) * 2) - 10px);
+
+  --input-border-radius: 4px;
+  --input-border-width-thin: 1px;
+  --input-border-width-default: 2px;
+  --input-border-width-thick: 3px;
+
+  --input-outline-radius: 4px;
+  --input-outline-width-thin: 1px;
+  --input-outline-width-default: 2px;
+  --input-outline-width-thick: 3px;
+
+  --font-family: futura-pt, Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
+
+  --theme-error-surface: var(--red-12);
+  --theme-error-text: var(--red-0);
+
+  --theme-form-button-font-size-x-small: 14px;
+  --theme-form-button-font-size-small: 14px;
+  --theme-form-button-font-size-normal: 16px;
+  --theme-form-button-font-size-medium: 18px;
+  --theme-form-button-font-size-large: 20px;
+
+  /*
+  * Button Padding
+  */
+
+  --theme-form-button-padding-block-x-small: 6px;
+  --theme-form-button-padding-block-small: 8px;
+  --theme-form-button-padding-block-normal: 10px;
+  --theme-form-button-padding-block-medium: 12px;
+  --theme-form-button-padding-block-large: 12px;
+
+  --theme-form-button-padding-inline-x-small: 12px;
+  --theme-form-button-padding-inline-small: 16px;
+  --theme-form-button-padding-inline-normal: 20px;
+  --theme-form-button-padding-inline-medium: 22px;
+  --theme-form-button-padding-inline-large: 24px;
+
+  /*
+  * Button Icon Sizes and Gap
+  */
+
+  --theme-form-button-padding-inline-icon-only-x-small: 4px;
+  --theme-form-button-padding-inline-icon-only-small: 6px;
+  --theme-form-button-padding-inline-icon-only-normal: 8px;
+  --theme-form-button-padding-inline-icon-only-medium: 10px;
+  --theme-form-button-padding-inline-icon-only-large: 12px;
+
+  --theme-form-button-padding-block-icon-only-x-small: 4px;
+  --theme-form-button-padding-block-icon-only-small: 4px;
+  --theme-form-button-padding-block-icon-only-normal: 6px;
+  --theme-form-button-padding-block-icon-only-medium: 8px;
+  --theme-form-button-padding-block-icon-only-large: 10px;
+
+  --theme-form-button-icon-size-x-small: 18px;
+  --theme-form-button-icon-size-small: 18px;
+  --theme-form-button-icon-size-normal: 18px;
+  --theme-form-button-icon-size-medium: 20px;
+  --theme-form-button-icon-size-large: 22px;
+
+  --theme-form-button-icon-gap-x-small: var(--theme-form-button-padding-inline-x-small);
+  --theme-form-button-icon-gap-small: var(--theme-form-button-padding-inline-small);
+  --theme-form-button-icon-gap-normal: var(--theme-form-button-padding-inline-normal);
+  --theme-form-button-icon-gap-medium: var(--theme-form-button-padding-inline-medium);
+  --theme-form-button-icon-gap-large: var(--theme-form-button-padding-inline-large);
+}

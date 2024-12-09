@@ -15,11 +15,17 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
 
     const activeIndex = ref(0);
 
+    // Temporarily set the first nav item as active
+    navItems.value[0].setAttribute('aria-selected', 'true');
+
     // Test if navItems are hyperlinks
     if (navItems.value[0].tagName.toLowerCase() === 'a') {
       // Find index of element with class "router-link-active"
       activeIndex.value = navItems.value.findIndex((el) => el.classList.contains('router-link-active'));
     }
+    // else {
+    //  Set actve tab
+    // }
 
     currentActiveTab.value = navItems.value[activeIndex.value];
     currentHoveredTab.value = navItems.value[activeIndex.value];
