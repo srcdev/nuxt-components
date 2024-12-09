@@ -37,12 +37,6 @@ const navLinks = <INavLink[]>[
   { name: 'Tabs', path: '/ui/tabs' },
   { name: 'Something Else', path: '/ui/something' },
 ];
-
-// const navContainerRef = ref<HTMLElement | null>(null);
-// const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useNavDecoration(navContainerRef, 200);
-// onMounted(() => {
-//   initNavDecorators();
-// });
 </script>
 
 <style lang="css">
@@ -56,6 +50,7 @@ const navLinks = <INavLink[]>[
   --_border-bottom: light-dark(var(--red-7), var(--red-6));
 
   border-bottom: 1px solid var(--_border-bottom);
+  margin-block: 3rem;
 
   .nav__hovered {
     background: var(--_hovered-bg);
