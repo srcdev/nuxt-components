@@ -1,7 +1,7 @@
 {
   "name": "srcdev-nuxt-components",
   "type": "module",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "main": "nuxt.config.ts",
   "scripts": {
     "clean": "rm -rf .nuxt && rm -rf .output && rm -rf .playground/.nuxt && rm -rf .playground/.output",
