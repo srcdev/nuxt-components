@@ -27,10 +27,16 @@ const anchorName = `--anchor-${useId()}`;
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
-<style scoped lang="css">
+<style lang="css">
 @position-try --left {
   inset: auto;
   top: anchor(bottom);
+  right: anchor(right);
+}
+
+@position-try --top {
+  inset: auto;
+  bottom: anchor(top);
   right: anchor(right);
 }
 
@@ -52,6 +58,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     transition-behavior: allow-discrete;
 
     position-try-fallbacks: --left;
+    position-try-fallbacks: --top;
 
     &:popover-open {
       display: block;
