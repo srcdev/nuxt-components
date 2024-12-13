@@ -40,41 +40,41 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   right: anchor(right);
 }
 
-@layer popover-setup {
-  .popover-trigger {
-    anchor-name: v-bind(anchorName);
-  }
+/* @layer popover-setup { */
+.popover-trigger {
+  anchor-name: v-bind(anchorName);
+}
 
-  .dialog-popover {
-    display: none;
-    position: absolute;
-    position-anchor: v-bind(anchorName);
-    margin: 0;
-    inset: auto;
-    bottom: anchor(bottom);
-    left: anchor(right);
-    opacity: 0;
-    transition: opacity 200ms, display 200ms, overlay 200ms;
-    transition-behavior: allow-discrete;
+.dialog-popover {
+  display: none;
+  position: absolute;
+  position-anchor: v-bind(anchorName);
+  margin: 0;
+  inset: auto;
+  bottom: anchor(bottom);
+  left: anchor(right);
+  opacity: 0;
+  transition: opacity 200ms, display 200ms, overlay 200ms;
+  transition-behavior: allow-discrete;
 
-    position-try-fallbacks: --left;
-    position-try-fallbacks: --top;
+  position-try-fallbacks: --left;
+  position-try-fallbacks: --top;
 
-    &:popover-open {
+  &:popover-open {
+    display: block;
+    opacity: 1;
+
+    @starting-style {
       display: block;
-      opacity: 1;
-
-      @starting-style {
-        display: block;
-        opacity: 0;
-      }
+      opacity: 0;
     }
   }
+}
 
-  /* @position-try --left {
+/* @position-try --left {
     inset: auto;
     top: anchor(bottom);
     right: anchor(right);
   } */
-}
+/* } */
 </style>
