@@ -1,6 +1,6 @@
 <template>
-  <dialog class="display-dialog wrapper" :class="[elementClasses]" :align-dialog="`${positionY}-${positionX}`" :open="displayDialog" ref="dialogRef">
-    <focus-trap v-model:active="displayDialog" :clickOutsideDeactivates="true" @deactivate="closeDialog()">
+  <dialog class="display-dialog wrapper" :class="[elementClasses]" :align-dialog :open ref="dialogRef">
+    <focus-trap v-model:active="open" :clickOutsideDeactivates="true" @deactivate="closeDialog()">
       <div class="inner">
         <div class="top-bar">
           <template v-if="hasDialogTitle">
@@ -57,12 +57,12 @@ const props = defineProps({
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const displayDialog = defineModel<boolean>();
+const open = defineModel<boolean>();
 const bodyTag = ref<HTMLBodyElement | null>(null);
 const lockViewport = toRef<boolean>(props.lockViewport);
 
 const closeDialog = () => {
-  displayDialog.value = false;
+  open.value = false;
 
   if (lockViewport.value && bodyTag.value !== null) {
     bodyTag.value.classList.remove('lock');
@@ -73,6 +73,8 @@ const slots = useSlots();
 const hasDialogTitle = computed(() => slots.dialogTitle !== undefined);
 const hasDialogContent = computed(() => slots.dialogContent !== undefined);
 const hasActionButtons = computed(() => slots.actionButtons !== undefined);
+
+const alignDialog = computed(() => `${props.positionY}-${props.positionX}`);
 
 onMounted(() => {
   bodyTag.value = document.querySelector('body');

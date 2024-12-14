@@ -4,6 +4,7 @@
       <template #content>
         <LayoutRow tag="div" variant="inset-content" :styleClassPassthrough="['mbe-20']">
           <h2 class="heading-2">PopOver component 1</h2>
+          <p>popoverSupported({{ popoverSupported }})</p>
           <PopOver popovertarget="profile1">
             <template #trigger>
               <img class="profile-image" src="https://ui-avatars.com/api/name=1?background=0A8A0A&color=fff" alt="" />

@@ -1,17 +1,24 @@
 <template>
   <ClientOnly>
-    <button :popovertarget class="popover-trigger" :class="[elementClasses]">
+    <button @click.prevent="showPopover()" :popovertarget class="popover-trigger" :class="[elementClasses]">
       <slot name="trigger"></slot>
     </button>
 
-    <dialog class="dialog-popover" popover :id="popovertarget" :class="[elementClasses]">
-      <slot name="popoverCotent"></slot>
+    <dialog :open class="dialog-popover" popover :id="popovertarget" :class="[elementClasses]">
+      <focus-trap v-model:active="open" :clickOutsideDeactivates="true" @deactivate="closePopover()">
+        <div>
+          <button @click.prevent="closePopover()">x</button>
+          <slot name="popoverCotent"></slot>
+        </div>
+      </focus-trap>
     </dialog>
   </ClientOnly>
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
+import { FocusTrap } from 'focus-trap-vue';
+
+const { popovertarget, styleClassPassthrough } = defineProps({
   popovertarget: {
     type: String,
     required: true,
@@ -24,7 +31,19 @@ const props = defineProps({
 
 const anchorName = `--anchor-${useId()}`;
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses } = useStyleClassPassthrough(styleClassPassthrough);
+
+const open = ref<boolean>(false);
+
+const showPopover = () => {
+  console.log('showPopover()');
+  open.value = true;
+};
+
+const closePopover = () => {
+  console.log('closePopover()');
+  open.value = false;
+};
 </script>
 
 <style lang="css">
@@ -46,6 +65,11 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 }
 
 .dialog-popover {
+  /* backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.5);
+  border: 0;
+  padding: 0; */
+
   display: none;
   position: absolute;
   position-anchor: v-bind(anchorName);

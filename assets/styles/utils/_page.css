@@ -1,5 +1,6 @@
 :root {
   color-scheme: light dark;
+  interpolate-size: allow-keywords; /* can also be set within html {} */
 }
 
 html {
