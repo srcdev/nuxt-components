@@ -43,6 +43,7 @@ interface INavLink {
 
 const navLinks = <INavLink[]>[
   { name: 'Home', path: '/' },
+  { name: 'Accordian', path: '/ui/accordian' },
   { name: 'Layout Row', path: '/ui/layout-row' },
   { name: 'Dialogs', path: '/ui/dialog' },
   { name: 'Tabs', path: '/ui/tabs' },
