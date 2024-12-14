@@ -1,13 +1,14 @@
 <template>
-  <div class="display-accordian">
-    <template v-for="(item, key, index) in data">
+  <div class="display-accordian" :class="[elementClasses]">
+    <template v-for="(item, key) in data" :key="key">
       <div class="accordion-panel">
         <button class="accordion-trigger" :id="`accordian-${key}-trigger`" aria-expanded="false" :aria-controls="`accordian-${key}-content`" ref="triggerRefs" @click.stop.prevent="handleSummary(key)">
-          {{ key }} - {{ item.title }}
+          <slot :name="`accordian-${key}-trigger`"></slot>
         </button>
+
         <div class="accordion-content" :aria-labelledby="`accordian-${key}-trigger`" :id="`accordian-${key}-content`" role="region" aria-hidden="true" ref="contentRefs">
           <div>
-            <p class="p-24">{{ item.content }}</p>
+            <slot :name="`accordian-${key}-content`"></slot>
           </div>
         </div>
       </div>
@@ -32,8 +33,15 @@ const props = defineProps({
   },
 });
 
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
 const triggerRefs = ref<HTMLElement[]>([]);
 const contentRefs = ref<HTMLElement[]>([]);
+
+onMounted(() => {
+  triggerRefs.value = Array.from(document.querySelectorAll('.accordion-trigger'));
+  contentRefs.value = Array.from(document.querySelectorAll('.accordion-content'));
+});
 
 const handleSummary = (clickedIndex: number) => {
   triggerRefs.value.forEach((element, index) => {
@@ -50,7 +58,7 @@ const handleSummary = (clickedIndex: number) => {
 };
 </script>
 
-<style lang="css" scoped>
+<style lang="css">
 .display-accordian {
   max-width: 600px;
   margin: 0 auto;

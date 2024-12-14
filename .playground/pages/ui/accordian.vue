@@ -4,7 +4,13 @@
       <template #content>
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
           <h2 class="heading-2">Accordian</h2>
-          <AccordianCore :data />
+
+          <AccordianCore :data :style-class-passthrough="['class-modifier']">
+            <template v-for="(item, key) in data" v-slot:[`accordian-${key}-trigger`]> {{ key }} - {{ item.title }} </template>
+            <template v-for="(item, key) in data" v-slot:[`accordian-${key}-content`]>
+              <p class="p-24">{{ item.content }}</p>
+            </template>
+          </AccordianCore>
         </LayoutRow>
       </template>
     </NuxtLayout>
