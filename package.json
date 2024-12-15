@@ -13,7 +13,9 @@
     "preview": "nuxt preview .playground",
     "lint": "eslint .",
     "postinstall": "nuxt prepare .playground",
-    "release": "release-it"
+    "release": "release-it",
+    "storybook": "storybook dev --port 6006 --config-dir .storybook",
+    "test": "vitest"
   },
   "files": [
     "assets/",
@@ -23,12 +25,22 @@
     "types/"
   ],
   "devDependencies": {
-    "@nuxt/eslint-config": "0.7.2",
+    "@nuxt/eslint-config": "0.7.3",
+    "@nuxt/icon": "1.10.1",
+    "@nuxt/test-utils": "3.15.1",
     "@oddbird/css-anchor-positioning": "0.4.0",
-    "eslint": "9.16.0",
+    "@storybook/addon-essentials": "8.4.7",
+    "@storybook/addon-interactions": "8.4.7",
+    "@storybook/addon-links": "8.4.7",
+    "@storybook/vue3": "8.4.7",
+    "@vue/test-utils": "2.4.6",
+    "eslint": "9.17.0",
+    "happy-dom": "15.11.7",
     "nuxt": "3.14.1592",
     "release-it": "17.10.0",
-    "typescript": "5.7.2"
+    "typescript": "5.7.2",
+    "vitest": "2.1.8",
+    "vue": "3.5.13"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
@@ -41,8 +53,10 @@
     }
   },
   "dependencies": {
+    "@nuxtjs/storybook": "8.3.2",
     "@vueuse/core": "12.0.0",
     "focus-trap-vue": "4.0.3",
+    "http-proxy-middleware": "3.0.3",
     "modern-normalize": "3.0.1"
   }
 }

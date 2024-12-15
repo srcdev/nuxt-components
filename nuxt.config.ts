@@ -2,6 +2,8 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['modern-normalize', './assets/styles/main.css'],
+  modules: ['@nuxt/icon', '@nuxt/test-utils/module', '@nuxtjs/storybook'],
+
   app: {
     head: {
       htmlAttrs: {
@@ -25,6 +27,9 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
+  vue: {
+    runtimeCompiler: true,
+  },
   // plugins: ['css-anchor-positioning'],
   compatibilityDate: '2024-07-13',
 });
