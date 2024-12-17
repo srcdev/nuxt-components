@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['modern-normalize', './assets/styles/main.css'],
-  modules: ['@nuxt/icon', '@nuxt/test-utils/module', '@nuxtjs/storybook'],
+  modules: ['@nuxt/icon', '@nuxtjs/storybook'],
 
   app: {
     head: {

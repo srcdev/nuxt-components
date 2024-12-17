@@ -3,6 +3,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   extends: ['..'],
   css: ['modern-normalize', './assets/styles/main.css'],
+  modules: ['@nuxt/icon', '@nuxtjs/storybook'],
   app: {
     head: {
       htmlAttrs: {
@@ -20,12 +21,12 @@ export default defineNuxtConfig({
       mode: 'out-in',
     },
   },
-  // components: [
-  //   {
-  //     path: './components',
-  //     pathPrefix: false,
-  //   },
-  // ],
+  components: [
+    {
+      path: '../components',
+      pathPrefix: false,
+    },
+  ],
 
   compatibilityDate: '2024-11-12',
 });

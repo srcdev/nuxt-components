@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from '@nuxtjs/storybook';
+
 import LayoutRow from '../LayoutRow.vue';
 
 export default {
@@ -33,7 +34,7 @@ export default {
   },
 } as Meta<typeof LayoutRow>;
 
-const Template: StoryFn<typeof LayoutRow> = (args) => ({
+const Template: StoryFn<typeof LayoutRow> = (args: any) => ({
   components: { LayoutRow },
   setup() {
     return { args };
