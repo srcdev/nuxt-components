@@ -1,5 +1,5 @@
 <template>
-  <div class="display-accordian" :class="[elementClasses]">
+  <div class="display-accordian" :class="[elementClasses]" ref="accordianRef">
     <template v-for="(item, key) in data" :key="key">
       <div class="accordion-panel">
         <button class="accordion-trigger" :id="`accordian-${key}-trigger`" aria-expanded="false" :aria-controls="`accordian-${key}-content`" ref="triggerRefs" @click.stop.prevent="handleSummary(key)">
@@ -35,12 +35,15 @@ const props = defineProps({
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
+const accordianRef = ref<HTMLElement>();
 const triggerRefs = ref<HTMLElement[]>([]);
 const contentRefs = ref<HTMLElement[]>([]);
 
 onMounted(() => {
-  triggerRefs.value = Array.from(document.querySelectorAll('.accordion-trigger'));
-  contentRefs.value = Array.from(document.querySelectorAll('.accordion-content'));
+  if (accordianRef.value) {
+    triggerRefs.value = Array.from(accordianRef.value.querySelectorAll('.accordion-trigger'));
+    contentRefs.value = Array.from(accordianRef.value.querySelectorAll('.accordion-content'));
+  }
 });
 
 const handleSummary = (clickedIndex: number) => {
