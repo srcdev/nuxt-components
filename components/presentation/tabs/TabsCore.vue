@@ -70,13 +70,16 @@ onMounted(() => {
 
 <style lang="css">
 .tabs-list {
-  --_default-text: light-dark(var(--gray-12), var(--gray-0));
-  --_active-bg: light-dark(var(--gray-12), var(--gray-0));
-  --_active-text: light-dark(var(--gray-0), var(--gray-12));
-  --_active-indicator: light-dark(var(--gray-12), var(--gray-0));
-  --_hovered-bg: light-dark(var(--gray-7), var(--gray-3));
-  --_hovered-text: light-dark(var(--gray-0), var(--gray-12));
-  --_border-bottom: light-dark(var(--gray-12), var(--gray-0));
+  /*
+  * CSS var within /assets/styles/components/tabs.css
+  */
+  --_tabs-default-text: var(--tabs-default-text, light-dark(var(--gray-12), var(--gray-0)));
+  --_tabs-active-bg: var(--tabs-active-bg, light-dark(var(--gray-12), var(--gray-0)));
+  --_tabs-active-text: var(--tabs-active-text, light-dark(var(--gray-0), var(--gray-12)));
+  --_tabs-active-indicator: var(--tabs-active-indicator, light-dark(var(--gray-12), var(--gray-0)));
+  --_tabs-hovered-bg: var(--tabs-hovered-bg, light-dark(var(--gray-7), var(--gray-3)));
+  --_tabs-hovered-text: var(--tabs-hovered-text, light-dark(var(--gray-0), var(--gray-12)));
+  --_tabs-border-bottom: var(--tabs-border-bottom, light-dark(var(--gray-12), var(--gray-0)));
 
   position: relative;
   display: flex;
@@ -145,28 +148,28 @@ onMounted(() => {
   /*
 * User configurable variables
 */
-  border-bottom: 1px solid var(--_border-bottom);
+  border-bottom: 1px solid var(--_tabs-border-bottom);
   margin-block: 3rem;
 
   .nav__hovered {
-    background: var(--_hovered-bg);
-    color: var(--_hovered-text);
+    background: var(--_tabs-hovered-bg);
+    color: var(--_tabs-hovered-text);
   }
 
   .nav__active {
-    background: var(--_active-bg);
-    color: var(--_active-text);
+    background: var(--_tabs-active-bg);
+    color: var(--_tabs-active-text);
   }
 
   .nav__active-indicator {
-    background: var(--_active-indicator);
+    background: var(--_tabs-active-indicator);
     height: 4px;
   }
 
   .tabs-list-item {
     background: transparent;
     border: 0;
-    color: var(--_default-text);
+    color: var(--_tabs-default-text);
     cursor: pointer;
     font: inherit;
     text-transform: uppercase;
@@ -175,11 +178,11 @@ onMounted(() => {
     padding: 1em 2em;
 
     &:hover {
-      color: var(--_hovered-text);
+      color: var(--_tabs-hovered-text);
     }
 
     &[aria-selected='true'] {
-      color: var(--_active-text);
+      color: var(--_tabs-active-text);
     }
   }
 }

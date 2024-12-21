@@ -1,0 +1,9 @@
+:root {
+  --tabs-default-text: light-dark(var(--gray-12), var(--gray-0));
+  --tabs-active-bg: light-dark(var(--gray-12), var(--gray-0));
+  --tabs-active-text: light-dark(var(--gray-0), var(--gray-12));
+  --tabs-active-indicator: var(--green-6);
+  --tabs-hovered-bg: light-dark(var(--gray-7), var(--gray-3));
+  --tabs-hovered-text: light-dark(var(--gray-0), var(--gray-12));
+  --tabs-border-bottom: var(--green-6);
+}
