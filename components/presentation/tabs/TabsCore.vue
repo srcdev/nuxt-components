@@ -1,19 +1,33 @@
 <template>
-  <ul role="tablist" aria-labelledby="channel-name" ref="navContainerRef" @mouseleave="resetHoverToActivePosition()" class="tabs-list" :class="[elementClasses]">
-    <li v-for="(item, index) in navItems" class="masonry-grid-ordered-item" ref="gridItemsRefs">
-      <button @click.prevent="navItemClicked($event)" @mouseover="navItemHovered($event)" :data-tab-index="index" data-nav-item role="tab" aria-selected="false" class="tabs-list-item">
-        {{ item.name }}
-      </button>
-    </li>
-  </ul>
+  <div class="tabs">
+    <ul role="tablist" aria-labelledby="channel-name" ref="tabsNavRef" @mouseleave="resetHoverToActivePosition()" class="tabs-list" :class="[elementClasses]">
+      <li v-for="(index, key) in navItems" :key="key">
+        <button
+          @click.prevent="navItemClicked($event)"
+          @mouseover="navItemHovered($event)"
+          :id="`tab-${key}-trigger`"
+          :data-tab-index="index"
+          data-nav-item
+          role="tab"
+          aria-selected="false"
+          class="tabs-list-item"
+        >
+          <slot :name="`tab-${key}-trigger`"></slot>
+        </button>
+      </li>
+    </ul>
+    <div class="tab-content-wrapper">
+      <div v-for="(item, key) in navItems" :key="key" class="tab-content" :aria-labelledby="`tab-${key}-trigger`" :id="`tab-${key}-content`" role="region" aria-hidden="true" ref="tabsContentRefs">
+        <div>
+          <slot :name="`tab-${key}-content`"></slot>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-interface INavLink {
-  action?: string;
-  name: string;
-  path?: string;
-}
+import type { ITabNav } from '@/types/types.tabs';
 
 const props = defineProps({
   tag: {
@@ -21,7 +35,7 @@ const props = defineProps({
     default: 'button',
   },
   navItems: {
-    type: Array as PropType<INavLink[]>,
+    type: Array as PropType<ITabNav[]>,
     required: true,
   },
   trackHover: {
@@ -44,9 +58,10 @@ const props = defineProps({
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const navContainerRef = ref<HTMLElement | null>(null);
+const tabsNavRef = ref<HTMLElement | null>(null);
+const tabsContentRefs = ref<HTMLElement[] | null>(null);
 
-const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useNavDecoration(navContainerRef);
+const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useTabs(tabsNavRef, tabsContentRefs);
 
 onMounted(() => {
   initNavDecorators();
@@ -166,6 +181,16 @@ onMounted(() => {
     &[aria-selected='true'] {
       color: var(--_active-text);
     }
+  }
+}
+
+.tab-content-wrapper {
+  display: grid;
+  grid-template-areas: 'element-stack';
+
+  .tab-content {
+    grid-area: element-stack;
+    display: none;
   }
 }
 </style>

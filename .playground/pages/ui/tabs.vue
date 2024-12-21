@@ -3,9 +3,51 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
-          <template #default>
-            <Tabs :navItems="navLinks" :style-class-passthrough="['colour-test']" />
-          </template>
+          <h2 class="heading-2">Tabs #1</h2>
+          <p>Data driven accordian navigation with custom content</p>
+
+          <TabsCore :navItems="navLinks" :style-class-passthrough="['class-modifier']">
+            <template v-for="(item, key) in navLinks" v-slot:[`tab-${key}-trigger`]> {{ key }} - {{ item.name }} </template>
+            <template v-slot:[`tab-0-content`]>
+              <p class="p-24">This is content slot 0</p>
+            </template>
+            <template v-slot:[`tab-1-content`]>
+              <p class="p-24">This is content slot 1</p>
+            </template>
+            <template v-slot:[`tab-2-content`]>
+              <p class="p-24">This is content slot 2</p>
+            </template>
+            <template v-slot:[`tab-3-content`]>
+              <p class="p-24">This is content slot 3</p>
+            </template>
+            <template v-slot:[`tab-4-content`]>
+              <p class="p-24">This is content slot 4</p>
+            </template>
+          </TabsCore>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
+          <h2 class="heading-2">Tabs #2</h2>
+          <p>Data driven accordian navigation with custom content</p>
+
+          <TabsCore :navItems="navLinks" :style-class-passthrough="['class-modifier']">
+            <template v-for="(item, key) in navLinks" v-slot:[`tab-${key}-trigger`]> {{ key }} - {{ item.name }} </template>
+            <template v-slot:[`tab-0-content`]>
+              <p class="p-24">This is content slot 0</p>
+            </template>
+            <template v-slot:[`tab-1-content`]>
+              <p class="p-24">This is content slot 1</p>
+            </template>
+            <template v-slot:[`tab-2-content`]>
+              <p class="p-24">This is content slot 2</p>
+            </template>
+            <template v-slot:[`tab-3-content`]>
+              <p class="p-24">This is content slot 3</p>
+            </template>
+            <template v-slot:[`tab-4-content`]>
+              <p class="p-24">This is content slot 4</p>
+            </template>
+          </TabsCore>
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -13,6 +55,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ITabNav } from '@/types/types.tabs';
 definePageMeta({
   layout: false,
 });
@@ -25,12 +68,7 @@ useHead({
   },
 });
 
-interface INavLink {
-  name: string;
-  path: string;
-}
-
-const navLinks = <INavLink[]>[
+const navLinks = <ITabNav[]>[
   { name: 'Home', path: '/' },
   { name: 'Layout Row', path: '/ui/layout-row' },
   { name: 'Dialogs', path: '/ui/dialog' },

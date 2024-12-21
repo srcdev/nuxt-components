@@ -1,6 +1,6 @@
 import { useResizeObserver } from '@vueuse/core';
 
-const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: number = 200) => {
+const useTabs = (tabsNavRef: Ref<HTMLElement | null>, tabsContentRefs: Ref<HTMLElement[] | null>, duration: number = 200) => {
   const navItems = ref<HTMLElement[] | null>(null);
   const previousActiveTab = useState<HTMLElement | null>('previousActiveTab', () => null);
   const currentActiveTab = ref<HTMLElement>();
@@ -10,7 +10,7 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
   const tagName = ref<string>();
 
   const initNavDecorators = () => {
-    navItems.value = navContainerRef.value ? (Array.from(navContainerRef.value.querySelectorAll('[data-nav-item')) as HTMLElement[]) : [];
+    navItems.value = tabsNavRef.value ? (Array.from(tabsNavRef.value.querySelectorAll('[data-nav-item')) as HTMLElement[]) : [];
     tagName.value = navItems.value[0].tagName.toLowerCase();
 
     const activeIndex = ref(0);
@@ -34,15 +34,16 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
     previousHoveredTab.value = navItems.value[activeIndex.value];
 
     addNavDecorators();
+    setActiveTabContent();
   };
 
   const addNavDecorators = () => {
     const elementClasses = ['nav__active-indicator', 'nav__active', 'nav__hovered'];
-    if (navContainerRef.value) {
+    if (tabsNavRef.value) {
       for (let i = 0; i < 3; i++) {
         const div = document.createElement('div');
         div.classList.add(elementClasses[i]);
-        navContainerRef.value.appendChild(div);
+        tabsNavRef.value.appendChild(div);
       }
     }
   };
@@ -75,26 +76,27 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
     });
 
     moveActiveIndicator();
+    setActiveTabContent();
   };
 
   const setFinalHoveredPositions = (resized: boolean = false) => {
     const setDuration = resized ? 0 : duration;
-    const newTabWidth = currentHoveredTab.value && navContainerRef.value ? currentHoveredTab.value.offsetWidth / navContainerRef.value.offsetWidth : 0;
-    navContainerRef.value?.style.setProperty('--_transition-duration', setDuration + 'ms');
-    navContainerRef.value?.style.setProperty('--_left-hovered', currentHoveredTab.value?.offsetLeft + 'px');
-    navContainerRef.value?.style.setProperty('--_width-hovered', newTabWidth?.toString());
+    const newTabWidth = currentHoveredTab.value && tabsNavRef.value ? currentHoveredTab.value.offsetWidth / tabsNavRef.value.offsetWidth : 0;
+    tabsNavRef.value?.style.setProperty('--_transition-duration', setDuration + 'ms');
+    tabsNavRef.value?.style.setProperty('--_left-hovered', currentHoveredTab.value?.offsetLeft + 'px');
+    tabsNavRef.value?.style.setProperty('--_width-hovered', newTabWidth?.toString());
   };
 
   const setFinalActivePositions = (resized: boolean = false) => {
     const setDuration = resized ? 0 : duration;
-    const newTabWidth = currentActiveTab.value && navContainerRef.value ? currentActiveTab.value.offsetWidth / navContainerRef.value.offsetWidth : 0;
-    navContainerRef.value?.style.setProperty('--_transition-duration', setDuration + 'ms');
-    navContainerRef.value?.style.setProperty('--_left-active', currentActiveTab.value?.offsetLeft + 'px');
-    navContainerRef.value?.style.setProperty('--_width-active', newTabWidth?.toString());
+    const newTabWidth = currentActiveTab.value && tabsNavRef.value ? currentActiveTab.value.offsetWidth / tabsNavRef.value.offsetWidth : 0;
+    tabsNavRef.value?.style.setProperty('--_transition-duration', setDuration + 'ms');
+    tabsNavRef.value?.style.setProperty('--_left-active', currentActiveTab.value?.offsetLeft + 'px');
+    tabsNavRef.value?.style.setProperty('--_width-active', newTabWidth?.toString());
   };
 
   const moveActiveIndicator = () => {
-    navContainerRef.value?.style.setProperty('--_transition-duration', duration + 'ms');
+    tabsNavRef.value?.style.setProperty('--_transition-duration', duration + 'ms');
 
     const newTabPosition = previousActiveTab.value && currentActiveTab.value ? previousActiveTab.value.compareDocumentPosition(currentActiveTab.value) : 0;
     let transitionWidth;
@@ -103,10 +105,10 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
       transitionWidth = currentActiveTab.value && previousActiveTab.value ? currentActiveTab.value.offsetLeft + currentActiveTab.value.offsetWidth - previousActiveTab.value.offsetLeft : 0;
     } else {
       transitionWidth = previousActiveTab.value && currentActiveTab.value ? previousActiveTab.value.offsetLeft + previousActiveTab.value.offsetWidth - currentActiveTab.value.offsetLeft : 0;
-      navContainerRef.value?.style.setProperty('--_left-active', currentActiveTab.value ? currentActiveTab.value.offsetLeft + 'px' : '0');
+      tabsNavRef.value?.style.setProperty('--_left-active', currentActiveTab.value ? currentActiveTab.value.offsetLeft + 'px' : '0');
     }
 
-    navContainerRef.value?.style.setProperty('--_width-active', String(transitionWidth / navContainerRef.value.offsetWidth));
+    tabsNavRef.value?.style.setProperty('--_width-active', String(transitionWidth / tabsNavRef.value.offsetWidth));
 
     setTimeout(() => {
       setFinalActivePositions();
@@ -114,7 +116,7 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
   };
 
   const moveHoveredIndicator = () => {
-    navContainerRef.value?.style.setProperty('--_transition-duration', duration + 'ms');
+    tabsNavRef.value?.style.setProperty('--_transition-duration', duration + 'ms');
 
     const newTabPosition = previousHoveredTab.value && currentHoveredTab.value ? previousHoveredTab.value.compareDocumentPosition(currentHoveredTab.value) : 0;
     let transitionWidth;
@@ -123,28 +125,38 @@ const useNavDecoration = (navContainerRef: Ref<HTMLElement | null>, duration: nu
       transitionWidth = currentHoveredTab.value && previousHoveredTab.value ? currentHoveredTab.value.offsetLeft + currentHoveredTab.value.offsetWidth - previousHoveredTab.value.offsetLeft : 0;
     } else {
       transitionWidth = previousHoveredTab.value && currentHoveredTab.value ? previousHoveredTab.value.offsetLeft + previousHoveredTab.value.offsetWidth - currentHoveredTab.value.offsetLeft : 0;
-      navContainerRef.value?.style.setProperty('--_left-hovered', currentHoveredTab.value ? currentHoveredTab.value.offsetLeft + 'px' : '0');
+      tabsNavRef.value?.style.setProperty('--_left-hovered', currentHoveredTab.value ? currentHoveredTab.value.offsetLeft + 'px' : '0');
     }
 
-    navContainerRef.value?.style.setProperty('--_width-hovered', String(transitionWidth / navContainerRef.value.offsetWidth));
+    tabsNavRef.value?.style.setProperty('--_width-hovered', String(transitionWidth / tabsNavRef.value.offsetWidth));
 
     setTimeout(() => {
       setFinalHoveredPositions();
     }, Math.floor(duration + 20));
   };
 
-  useResizeObserver(navContainerRef, () => {
+  const setActiveTabContent = () => {
+    const activeIndex = navItems.value?.findIndex((el) => el === currentActiveTab.value);
+    tabsContentRefs.value?.forEach((tabContent: HTMLElement, index: number) => {
+      tabContent.style.display = activeIndex === index ? 'block' : 'none';
+    });
+  };
+
+  const animationRunning = (running: boolean) => {
+    console.log('animationRunning', running);
+  };
+
+  useResizeObserver(tabsNavRef, () => {
     setFinalActivePositions(true);
     setFinalHoveredPositions(true);
   });
 
   return {
     initNavDecorators,
-    navContainerRef,
     navItemClicked,
     navItemHovered,
     resetHoverToActivePosition,
   };
 };
 
-export default useNavDecoration;
+export default useTabs;
