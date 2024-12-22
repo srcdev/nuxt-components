@@ -5,5 +5,14 @@
   --tabs-active-indicator: var(--green-6);
   --tabs-hovered-bg: light-dark(var(--gray-7), var(--gray-3));
   --tabs-hovered-text: light-dark(var(--gray-0), var(--gray-12));
-  --tabs-border-bottom: var(--green-6);
+  --tabs-border-bottom: 0px solid var(--green-6);
+
+  --tabs-content-border: 1px solid var(--green-6);
+  --tabs-content-outline: 1px solid var(--green-12);
+  --tabs-content-bg: light-dark(var(--gray-1), var(--gray-8));
+
+  --tabs-content-start-start-radius: 0;
+  --tabs-content-start-end-radius: 0;
+  --tabs-content-end-start-radius: 10px;
+  --tabs-content-end-end-radius: 10px;
 }
