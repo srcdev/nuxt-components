@@ -106,7 +106,7 @@ const handleSummary = (clickedIndex: number) => {
   /* > div {
       transform: translateY(0);
       > p {
-        padding-block: 32px;
+        padding-block: 3.2rem;
       }
     } */
 }

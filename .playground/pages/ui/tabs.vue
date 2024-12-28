@@ -87,7 +87,7 @@ const navLinks = <ITabNav[]>[
   --_hovered-text: light-dark(var(--blue-4), var(--blue-12));
   --_border-bottom: light-dark(var(--red-7), var(--red-6));
 
-  border-bottom: 1px solid var(--_border-bottom);
+  border-bottom: 0.1rem solid var(--_border-bottom);
   margin-block: 3rem;
 
   .nav__hovered {
@@ -102,7 +102,7 @@ const navLinks = <ITabNav[]>[
 
   .nav__active-indicator {
     background: var(--_active-indicator);
-    height: 4px;
+    height: 0.4rem;
   }
 
   .tabs-list-item {

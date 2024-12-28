@@ -25,9 +25,9 @@ const gridData = toRef(() => props.gridData);
 
   .masonry-grid-item {
     break-inside: avoid;
-    outline: 1px solid #cdcdcd;
-    padding: 12px;
-    margin-block-end: 12px;
+    outline: 0.1rem solid #cdcdcd;
+    padding: 1.2rem;
+    margin-block-end: 1.2rem;
   }
 }
 </style>

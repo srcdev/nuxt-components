@@ -1,65 +1,65 @@
 :root {
-  --font-size: 16px;
-  --line-height: calc((var(--font-size) * 2) - 10px);
+  --font-size: 1.6rem;
+  --line-height: calc((var(--font-size) * 2) - 1rem);
 
-  --input-border-radius: 4px;
-  --input-border-width-thin: 1px;
-  --input-border-width-default: 2px;
-  --input-border-width-thick: 3px;
+  --input-border-radius: 0.4rem;
+  --input-border-width-thin: 0.1rem;
+  --input-border-width-default: 0.2rem;
+  --input-border-width-thick: 0.3rem;
 
-  --input-outline-radius: 4px;
-  --input-outline-width-thin: 1px;
-  --input-outline-width-default: 2px;
-  --input-outline-width-thick: 3px;
+  --input-outline-radius: 0.4rem;
+  --input-outline-width-thin: 0.1rem;
+  --input-outline-width-default: 0.2rem;
+  --input-outline-width-thick: 0.3rem;
 
   --font-family: futura-pt, Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
 
   --theme-error-surface: var(--red-12);
   --theme-error-text: var(--red-0);
 
-  --theme-form-button-font-size-x-small: 14px;
-  --theme-form-button-font-size-small: 14px;
-  --theme-form-button-font-size-normal: 16px;
-  --theme-form-button-font-size-medium: 18px;
-  --theme-form-button-font-size-large: 20px;
+  --theme-form-button-font-size-x-small: 1.4rem;
+  --theme-form-button-font-size-small: 1.4rem;
+  --theme-form-button-font-size-normal: 1.6rem;
+  --theme-form-button-font-size-medium: 1.8rem;
+  --theme-form-button-font-size-large: 2rem;
 
   /*
   * Button Padding
   */
 
-  --theme-form-button-padding-block-x-small: 6px;
-  --theme-form-button-padding-block-small: 8px;
-  --theme-form-button-padding-block-normal: 10px;
-  --theme-form-button-padding-block-medium: 12px;
-  --theme-form-button-padding-block-large: 12px;
+  --theme-form-button-padding-block-x-small: 0.6rem;
+  --theme-form-button-padding-block-small: 0.8rem;
+  --theme-form-button-padding-block-normal: 1rem;
+  --theme-form-button-padding-block-medium: 1.2rem;
+  --theme-form-button-padding-block-large: 1.2rem;
 
-  --theme-form-button-padding-inline-x-small: 12px;
-  --theme-form-button-padding-inline-small: 16px;
-  --theme-form-button-padding-inline-normal: 20px;
-  --theme-form-button-padding-inline-medium: 22px;
-  --theme-form-button-padding-inline-large: 24px;
+  --theme-form-button-padding-inline-x-small: 1.2rem;
+  --theme-form-button-padding-inline-small: 1.6rem;
+  --theme-form-button-padding-inline-normal: 2rem;
+  --theme-form-button-padding-inline-medium: 2.2rem;
+  --theme-form-button-padding-inline-large: 2.4rem;
 
   /*
   * Button Icon Sizes and Gap
   */
 
-  --theme-form-button-padding-inline-icon-only-x-small: 4px;
-  --theme-form-button-padding-inline-icon-only-small: 6px;
-  --theme-form-button-padding-inline-icon-only-normal: 8px;
-  --theme-form-button-padding-inline-icon-only-medium: 10px;
-  --theme-form-button-padding-inline-icon-only-large: 12px;
+  --theme-form-button-padding-inline-icon-only-x-small: 0.4rem;
+  --theme-form-button-padding-inline-icon-only-small: 0.6rem;
+  --theme-form-button-padding-inline-icon-only-normal: 0.8rem;
+  --theme-form-button-padding-inline-icon-only-medium: 1rem;
+  --theme-form-button-padding-inline-icon-only-large: 1.2rem;
 
-  --theme-form-button-padding-block-icon-only-x-small: 4px;
-  --theme-form-button-padding-block-icon-only-small: 4px;
-  --theme-form-button-padding-block-icon-only-normal: 6px;
-  --theme-form-button-padding-block-icon-only-medium: 8px;
-  --theme-form-button-padding-block-icon-only-large: 10px;
+  --theme-form-button-padding-block-icon-only-x-small: 0.4rem;
+  --theme-form-button-padding-block-icon-only-small: 0.4rem;
+  --theme-form-button-padding-block-icon-only-normal: 0.6rem;
+  --theme-form-button-padding-block-icon-only-medium: 0.8rem;
+  --theme-form-button-padding-block-icon-only-large: 1rem;
 
-  --theme-form-button-icon-size-x-small: 18px;
-  --theme-form-button-icon-size-small: 18px;
-  --theme-form-button-icon-size-normal: 18px;
-  --theme-form-button-icon-size-medium: 20px;
-  --theme-form-button-icon-size-large: 22px;
+  --theme-form-button-icon-size-x-small: 1.8rem;
+  --theme-form-button-icon-size-small: 1.8rem;
+  --theme-form-button-icon-size-normal: 1.8rem;
+  --theme-form-button-icon-size-medium: 2rem;
+  --theme-form-button-icon-size-large: 2.2rem;
 
   --theme-form-button-icon-gap-x-small: var(--theme-form-button-padding-inline-x-small);
   --theme-form-button-icon-gap-small: var(--theme-form-button-padding-inline-small);

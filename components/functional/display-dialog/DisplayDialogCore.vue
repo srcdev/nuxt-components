@@ -103,7 +103,7 @@ onMounted(() => {
     height: 100%;
     backdrop-filter: blur(5px);
     background-color: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--color-grey-1);
+    border: 0.1rem solid var(--color-grey-1);
     z-index: 13;
     opacity: 0;
 
@@ -125,8 +125,8 @@ onMounted(() => {
   .inner {
     background-color: var(--page-bg);
     width: 100vw;
-    margin: 12px;
-    padding: 12px;
+    margin: 1.2rem;
+    padding: 1.2rem;
 
     @media only screen and (min-width: 768px) {
       width: 720px;
@@ -163,7 +163,7 @@ onMounted(() => {
 
   /* .button-row {
      display: flex;
-     gap: 12px;
+     gap: 1.2rem;
      justify-content: flex-end;
    } */
 }

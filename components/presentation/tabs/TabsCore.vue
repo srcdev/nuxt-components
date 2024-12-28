@@ -77,9 +77,9 @@ onMounted(() => {
   --_tabs-active-indicator: var(--tabs-active-indicator, light-dark(var(--gray-12), var(--gray-0)));
   --_tabs-hovered-bg: var(--tabs-hovered-bg, light-dark(var(--gray-7), var(--gray-3)));
   --_tabs-hovered-text: var(--tabs-hovered-text, light-dark(var(--gray-0), var(--gray-12)));
-  --_tabs-border-bottom: var(--tabs-border-bottom, 1px solid var(--gray-6));
-  --_tabs-content-border: var(--tabs-content-border, 1px solid var(--gray-6));
-  --_tabs-content-outline: var(--tabs-content-outline, 1px solid var(--gray-6));
+  --_tabs-border-bottom: var(--tabs-border-bottom, 0.1rem solid var(--gray-6));
+  --_tabs-content-border: var(--tabs-content-border, 0.1rem solid var(--gray-6));
+  --_tabs-content-outline: var(--tabs-content-outline, 0.1rem solid var(--gray-6));
   --_tabs-content-bg: var(--tabs-content-bg, light-dark(var(--gray-12), var(--gray-0)));
   --_tabs-content-start-start-radius: var(--tabs-content-start-start-radius, 0);
   --_tabs-content-start-end-radius: var(--tabs-content-start-end-radius, 0);
@@ -166,7 +166,7 @@ onMounted(() => {
 
     .nav__active-indicator {
       background: var(--_tabs-active-indicator);
-      height: 4px;
+      height: 0.4rem;
     }
 
     .tabs-list-item {

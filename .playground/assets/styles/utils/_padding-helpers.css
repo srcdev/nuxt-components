@@ -22,287 +22,287 @@
 }
 
 .p-1 {
-  padding: 1px;
+  padding: 0.1rem;
 }
 .pbs-1 {
-  padding-block-start: 1px;
+  padding-block-start: 0.1rem;
 }
 .pbe-1 {
-  padding-block-end: 1px;
+  padding-block-end: 0.1rem;
 }
 .pis-1 {
-  padding-inline-start: 1px;
+  padding-inline-start: 0.1rem;
 }
 .pie-1 {
-  padding-inline-end: 1px;
+  padding-inline-end: 0.1rem;
 }
 .pi-1 {
-  padding-inline: 1px;
+  padding-inline: 0.1rem;
 }
 .pb-1 {
-  padding-block: 1px;
+  padding-block: 0.1rem;
 }
 
 .p-2 {
-  padding: 2px;
+  padding: 0.2rem;
 }
 .pbs-2 {
-  padding-block-start: 2px;
+  padding-block-start: 0.2rem;
 }
 .pbe-2 {
-  padding-block-end: 2px;
+  padding-block-end: 0.2rem;
 }
 .pis-2 {
-  padding-inline-start: 2px;
+  padding-inline-start: 0.2rem;
 }
 .pie-2 {
-  padding-inline-end: 2px;
+  padding-inline-end: 0.2rem;
 }
 .pi-2 {
-  padding-inline: 2px;
+  padding-inline: 0.2rem;
 }
 .pb-2 {
-  padding-block: 2px;
+  padding-block: 0.2rem;
 }
 
 .p-4 {
-  padding: 4px;
+  padding: 0.4rem;
 }
 .pbs-4 {
-  padding-block-start: 4px;
+  padding-block-start: 0.4rem;
 }
 .pbe-4 {
-  padding-block-end: 4px;
+  padding-block-end: 0.4rem;
 }
 .pis-4 {
-  padding-inline-start: 4px;
+  padding-inline-start: 0.4rem;
 }
 .pie-4 {
-  padding-inline-end: 4px;
+  padding-inline-end: 0.4rem;
 }
 .pi-4 {
-  padding-inline: 4px;
+  padding-inline: 0.4rem;
 }
 .pb-4 {
-  padding-block: 4px;
+  padding-block: 0.4rem;
 }
 
 .p-6 {
-  padding: 6px;
+  padding: 0.6rem;
 }
 .pbs-6 {
-  padding-block-start: 6px;
+  padding-block-start: 0.6rem;
 }
 .pbe-6 {
-  padding-block-end: 6px;
+  padding-block-end: 0.6rem;
 }
 .pis-6 {
-  padding-inline-start: 6px;
+  padding-inline-start: 0.6rem;
 }
 .pie-6 {
-  padding-inline-end: 6px;
+  padding-inline-end: 0.6rem;
 }
 .pi-6 {
-  padding-inline: 6px;
+  padding-inline: 0.6rem;
 }
 .pb-6 {
-  padding-block: 6px;
+  padding-block: 0.6rem;
 }
 
 .p-8 {
-  padding: 8px;
+  padding: 0.8rem;
 }
 .pbs-8 {
-  padding-block-start: 8px;
+  padding-block-start: 0.8rem;
 }
 .pbe-8 {
-  padding-block-end: 8px;
+  padding-block-end: 0.8rem;
 }
 .pis-8 {
-  padding-inline-start: 8px;
+  padding-inline-start: 0.8rem;
 }
 .pie-8 {
-  padding-inline-end: 8px;
+  padding-inline-end: 0.8rem;
 }
 .pi-8 {
-  padding-inline: 8px;
+  padding-inline: 0.8rem;
 }
 .pb-8 {
-  padding-block: 8px;
+  padding-block: 0.8rem;
 }
 
 .p-10 {
-  padding: 10px;
+  padding: 1rem;
 }
 .pbs-10 {
-  padding-block-start: 10px;
+  padding-block-start: 1rem;
 }
 .pbe-10 {
-  padding-block-end: 10px;
+  padding-block-end: 1rem;
 }
 .pis-10 {
-  padding-inline-start: 10px;
+  padding-inline-start: 1rem;
 }
 .pie-10 {
-  padding-inline-end: 10px;
+  padding-inline-end: 1rem;
 }
 .pi-10 {
-  padding-inline: 10px;
+  padding-inline: 1rem;
 }
 .pb-10 {
-  padding-block: 10px;
+  padding-block: 1rem;
 }
 
 .p-12 {
-  padding: 12px;
+  padding: 1.2rem;
 }
 .pbs-12 {
-  padding-block-start: 12px;
+  padding-block-start: 1.2rem;
 }
 .pbe-12 {
-  padding-block-end: 12px;
+  padding-block-end: 1.2rem;
 }
 .pis-12 {
-  padding-inline-start: 12px;
+  padding-inline-start: 1.2rem;
 }
 .pie-12 {
-  padding-inline-end: 12px;
+  padding-inline-end: 1.2rem;
 }
 .pi-12 {
-  padding-inline: 12px;
+  padding-inline: 1.2rem;
 }
 .pb-12 {
-  padding-block: 12px;
+  padding-block: 1.2rem;
 }
 
 .p-18 {
-  padding: 18px;
+  padding: 1.8rem;
 }
 .pbs-18 {
-  padding-block-start: 18px;
+  padding-block-start: 1.8rem;
 }
 .pbe-18 {
-  padding-block-end: 18px;
+  padding-block-end: 1.8rem;
 }
 .pis-18 {
-  padding-inline-start: 18px;
+  padding-inline-start: 1.8rem;
 }
 .pie-18 {
-  padding-inline-end: 18px;
+  padding-inline-end: 1.8rem;
 }
 .pi-18 {
-  padding-inline: 18px;
+  padding-inline: 1.8rem;
 }
 .pb-18 {
-  padding-block: 18px;
+  padding-block: 1.8rem;
 }
 
 .p-20 {
-  padding: 20px;
+  padding: 2rem;
 }
 .pbs-20 {
-  padding-block-start: 20px;
+  padding-block-start: 2rem;
 }
 .pbe-20 {
-  padding-block-end: 20px;
+  padding-block-end: 2rem;
 }
 .pis-20 {
-  padding-inline-start: 20px;
+  padding-inline-start: 2rem;
 }
 .pie-20 {
-  padding-inline-end: 20px;
+  padding-inline-end: 2rem;
 }
 .pi-20 {
-  padding-inline: 20px;
+  padding-inline: 2rem;
 }
 .pb-20 {
-  padding-block: 20px;
+  padding-block: 2rem;
 }
 
 .p-24 {
-  padding: 24px;
+  padding: 2.4rem;
 }
 .pbs-24 {
-  padding-block-start: 24px;
+  padding-block-start: 2.4rem;
 }
 .pbe-24 {
-  padding-block-end: 24px;
+  padding-block-end: 2.4rem;
 }
 .pis-24 {
-  padding-inline-start: 24px;
+  padding-inline-start: 2.4rem;
 }
 .pie-24 {
-  padding-inline-end: 24px;
+  padding-inline-end: 2.4rem;
 }
 .pi-24 {
-  padding-inline: 24px;
+  padding-inline: 2.4rem;
 }
 .pb-24 {
-  padding-block: 24px;
+  padding-block: 2.4rem;
 }
 
 .p-32 {
-  padding: 32px;
+  padding: 3.2rem;
 }
 .pbs-32 {
-  padding-block-start: 32px;
+  padding-block-start: 3.2rem;
 }
 .pbe-32 {
-  padding-block-end: 32px;
+  padding-block-end: 3.2rem;
 }
 .pis-32 {
-  padding-inline-start: 32px;
+  padding-inline-start: 3.2rem;
 }
 .pie-32 {
-  padding-inline-end: 32px;
+  padding-inline-end: 3.2rem;
 }
 .pi-32 {
-  padding-inline: 32px;
+  padding-inline: 3.2rem;
 }
 .pb-32 {
-  padding-block: 32px;
+  padding-block: 3.2rem;
 }
 
 .p-40 {
-  padding: 40px;
+  padding: 4rem;
 }
 .pbs-40 {
-  padding-block-start: 40px;
+  padding-block-start: 4rem;
 }
 .pbe-40 {
-  padding-block-end: 40px;
+  padding-block-end: 4rem;
 }
 .pis-40 {
-  padding-inline-start: 40px;
+  padding-inline-start: 4rem;
 }
 .pie-40 {
-  padding-inline-end: 40px;
+  padding-inline-end: 4rem;
 }
 .pi-40 {
-  padding-inline: 40px;
+  padding-inline: 4rem;
 }
 .pb-40 {
-  padding-block: 40px;
+  padding-block: 4rem;
 }
 
 .p-60 {
-  padding: 60px;
+  padding: 6rem;
 }
 .pbs-60 {
-  padding-block-start: 60px;
+  padding-block-start: 6rem;
 }
 .pbe-60 {
-  padding-block-end: 60px;
+  padding-block-end: 6rem;
 }
 .pis-60 {
-  padding-inline-start: 60px;
+  padding-inline-start: 6rem;
 }
 .pie-60 {
-  padding-inline-end: 60px;
+  padding-inline-end: 6rem;
 }
 .pi-60 {
-  padding-inline: 60px;
+  padding-inline: 6rem;
 }
 .pb-60 {
-  padding-block: 60px;
+  padding-block: 6rem;
 }

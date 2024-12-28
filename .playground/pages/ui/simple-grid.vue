@@ -47,16 +47,16 @@ const { data: postsData, status, error, refresh } = await useFetch<Posts>('https
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
 
-  gap: 20px;
+  gap: 2rem;
 
   .display-post-item {
     display: grid;
     grid-template-rows: subgrid;
     grid-row: span 3;
-    gap: 12px;
-    outline: 1px solid green;
-    border-radius: 4px;
-    padding: 12px;
+    gap: 1.2rem;
+    outline: 0.1rem solid green;
+    border-radius: 0.4rem;
+    padding: 1.2rem;
   }
 }
 </style>

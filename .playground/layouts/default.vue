@@ -54,7 +54,7 @@ const navLinks = <INavLink[]>[
 .header {
   ul {
     display: flex;
-    gap: 12px;
+    gap: 1.2rem;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -65,7 +65,7 @@ const navLinks = <INavLink[]>[
 
       .link-normal {
         display: inline-block;
-        padding: 8px 16px;
+        padding: 0.8rem 1.6rem;
       }
     }
   }

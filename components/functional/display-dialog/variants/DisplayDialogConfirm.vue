@@ -32,7 +32,7 @@ const props = defineProps({
 
       .button-row {
         display: grid;
-        gap: 12px;
+        gap: 1.2rem;
         grid-template-columns: 1fr 1fr;
       }
     }
