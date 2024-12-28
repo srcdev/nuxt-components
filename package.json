@@ -7,6 +7,7 @@
     "clean": "rm -rf .nuxt && rm -rf .output && rm -rf .playground/.nuxt && rm -rf .playground/.output",
     "cleanall": "rm -rf node_modules && rm -rf .nuxt && rm -rf .output && rm -rf .playground/.nuxt && rm -rf .playground/.output && rm -rf .playground/node_modules && rm package-lock.json",
     "reinstall": "rm -rf node_modules && npm install",
+    "cleaninstall": "npm run clean && npm run reinstall",
     "dev": "nuxi dev .playground",
     "build": "nuxt build .playground",
     "generate": "nuxt generate .playground",
