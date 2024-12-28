@@ -29,40 +29,53 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style scoped lang="css">
-@layer popover-setup {
-  .popover-trigger {
-    anchor-name: v-bind(anchorName);
-  }
+@position-try --right {
+  inset: auto;
+  top: anchor(top);
+  left: anchor(right);
+}
 
-  dialog {
-    display: none;
-    position: absolute;
-    position-anchor: v-bind(anchorName);
-    margin: 0;
-    inset: auto;
-    bottom: anchor(bottom);
-    left: anchor(right);
-    opacity: 0;
-    transition: opacity 200ms, display 200ms, overlay 200ms;
-    transition-behavior: allow-discrete;
+@position-try --left {
+  inset: auto;
+  top: anchor(top);
+  right: anchor(left);
+}
 
-    position-try-fallbacks: --left;
+/* @layer popover-setup { */
+.popover-trigger {
+  anchor-name: v-bind(anchorName);
+}
 
-    &:popover-open {
+dialog {
+  display: none;
+  position: absolute;
+  position-anchor: v-bind(anchorName);
+  margin: 0;
+  inset: auto;
+  bottom: anchor(bottom);
+  left: anchor(right);
+  opacity: 0;
+  transition: opacity 200ms, display 200ms, overlay 200ms;
+  transition-behavior: allow-discrete;
+
+  position-try-fallbacks: --left, --right;
+  /* position-try-fallbacks: --right; */
+
+  &:popover-open {
+    display: block;
+    opacity: 1;
+
+    @starting-style {
       display: block;
-      opacity: 1;
-
-      @starting-style {
-        display: block;
-        opacity: 0;
-      }
+      opacity: 0;
     }
   }
+}
 
-  @position-try --left {
+/* @position-try --left {
     inset: auto;
     top: anchor(bottom);
     right: anchor(right);
-  }
-}
+  } */
+/* } */
 </style>

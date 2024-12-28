@@ -17,14 +17,16 @@
 
         <LayoutRow tag="div" variant="inset-content" :styleClassPassthrough="['mbe-20']">
           <h2 class="heading-2">PopOver component 2</h2>
-          <PopOver popovertarget="profile2">
-            <template #trigger>
-              <img class="profile-image" src="https://ui-avatars.com/api/name=2?background=0A8A0A&color=fff" alt="" />
-            </template>
-            <template #popoverCotent>
-              <h2>Popover content 2</h2>
-            </template>
-          </PopOver>
+          <div class="justify-end">
+            <PopOver popovertarget="profile2">
+              <template #trigger>
+                <img class="profile-image" src="https://ui-avatars.com/api/name=2?background=0A8A0A&color=fff" alt="" />
+              </template>
+              <template #popoverCotent>
+                <h2>Popover content 2</h2>
+              </template>
+            </PopOver>
+          </div>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
@@ -65,3 +67,10 @@ const popoverSupported = computed(() => {
   return import.meta.client && !('anchorName' in document.documentElement.style);
 });
 </script>
+
+<style lang="css">
+.justify-end {
+  display: flex;
+  justify-content: flex-end;
+}
+</style>
