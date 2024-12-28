@@ -1,0 +1,27 @@
+.margin-trim-block {
+  margin-trim: block;
+
+  @support not (margin-trim: block) {
+    &:first-child {
+      margin-block-start: 0;
+    }
+
+    &:last-child {
+      margin-block-end: 0;
+    }
+  }
+}
+
+.margin-trim-inline {
+  margin-trim: inline;
+
+  @support not (margin-trim: inline) {
+    &:first-child {
+      margin-inline-start: 0;
+    }
+
+    &:last-child {
+      margin-inline-end: 0;
+    }
+  }
+}
