@@ -1,24 +1,18 @@
 <template>
   <ClientOnly>
-    <button @click.prevent="showPopover()" :popovertarget class="popover-trigger" :class="[elementClasses]">
+    <button :popovertarget popovertargetaction="toggle" class="popover-trigger" :class="[elementClasses]">
       <slot name="trigger"></slot>
     </button>
 
-    <dialog :open class="dialog-popover" popover :id="popovertarget" :class="[elementClasses]">
-      <focus-trap v-model:active="open" :clickOutsideDeactivates="true" @deactivate="closePopover()">
-        <div>
-          <button @click.prevent="closePopover()">x</button>
-          <slot name="popoverCotent"></slot>
-        </div>
-      </focus-trap>
+    <dialog popover role="tooltip" :id="popovertarget" :class="[elementClasses]">
+      <button :popovertarget popovertargetaction="hide">x</button>
+      <slot name="popoverCotent"></slot>
     </dialog>
   </ClientOnly>
 </template>
 
 <script setup lang="ts">
-import { FocusTrap } from 'focus-trap-vue';
-
-const { popovertarget, styleClassPassthrough } = defineProps({
+const props = defineProps({
   popovertarget: {
     type: String,
     required: true,
@@ -31,74 +25,44 @@ const { popovertarget, styleClassPassthrough } = defineProps({
 
 const anchorName = `--anchor-${useId()}`;
 
-const { elementClasses } = useStyleClassPassthrough(styleClassPassthrough);
-
-const open = ref<boolean>(false);
-
-const showPopover = () => {
-  console.log('showPopover()');
-  open.value = true;
-};
-
-const closePopover = () => {
-  console.log('closePopover()');
-  open.value = false;
-};
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
-<style lang="css">
-@position-try --left {
-  inset: auto;
-  top: anchor(bottom);
-  right: anchor(right);
-}
+<style scoped lang="css">
+@layer popover-setup {
+  .popover-trigger {
+    anchor-name: v-bind(anchorName);
+  }
 
-@position-try --top {
-  inset: auto;
-  bottom: anchor(top);
-  right: anchor(right);
-}
+  dialog {
+    display: none;
+    position: absolute;
+    position-anchor: v-bind(anchorName);
+    margin: 0;
+    inset: auto;
+    bottom: anchor(bottom);
+    left: anchor(right);
+    opacity: 0;
+    transition: opacity 200ms, display 200ms, overlay 200ms;
+    transition-behavior: allow-discrete;
 
-/* @layer popover-setup { */
-.popover-trigger {
-  anchor-name: v-bind(anchorName);
-}
+    position-try-fallbacks: --left;
 
-.dialog-popover {
-  /* backdrop-filter: blur(5px);
-  background-color: rgba(0, 0, 0, 0.5);
-  border: 0;
-  padding: 0; */
-
-  display: none;
-  position: absolute;
-  position-anchor: v-bind(anchorName);
-  margin: 0;
-  inset: auto;
-  bottom: anchor(bottom);
-  left: anchor(right);
-  opacity: 0;
-  transition: opacity 200ms, display 200ms, overlay 200ms;
-  transition-behavior: allow-discrete;
-
-  position-try-fallbacks: --left;
-  position-try-fallbacks: --top;
-
-  &:popover-open {
-    display: block;
-    opacity: 1;
-
-    @starting-style {
+    &:popover-open {
       display: block;
-      opacity: 0;
+      opacity: 1;
+
+      @starting-style {
+        display: block;
+        opacity: 0;
+      }
     }
   }
-}
 
-/* @position-try --left {
+  @position-try --left {
     inset: auto;
     top: anchor(bottom);
     right: anchor(right);
-  } */
-/* } */
+  }
+}
 </style>
