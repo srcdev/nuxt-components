@@ -1,0 +1,8 @@
+:root {
+  --focus-box-shadow-colour-off: transparent;
+  --focus-box-shadow-colour-on: light-dark(var(--blue-12), var(--gray-0));
+  --form-focus-box-shadow: 0 0 0 0.3rem;
+
+  --box-shadow-off: 0 0 0 0.3rem transparent;
+  --box-shadow-on: 0 0 0 0.3rem light-dark(var(--blue-12), var(--gray-0));
+}

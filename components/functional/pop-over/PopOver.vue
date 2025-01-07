@@ -29,53 +29,50 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style scoped lang="css">
-@position-try --right {
-  inset: auto;
-  top: anchor(top);
-  left: anchor(right);
-}
+@layer popover-setup {
+  @position-try --right {
+    inset: auto;
+    top: anchor(top);
+    left: calc(anchor(right) + 10px);
+  }
 
-@position-try --left {
-  inset: auto;
-  top: anchor(top);
-  right: anchor(left);
-}
+  @position-try --left {
+    inset: auto;
+    top: anchor(top);
+    right: calc(anchor(left) + 10px);
+  }
 
-/* @layer popover-setup { */
-.popover-trigger {
-  anchor-name: v-bind(anchorName);
-}
+  .popover-trigger {
+    anchor-name: v-bind(anchorName);
+  }
 
-dialog {
-  display: none;
-  position: absolute;
-  position-anchor: v-bind(anchorName);
-  margin: 0;
-  inset: auto;
-  bottom: anchor(bottom);
-  left: anchor(right);
-  opacity: 0;
-  transition: opacity 200ms, display 200ms, overlay 200ms;
-  transition-behavior: allow-discrete;
+  dialog {
+    display: none;
+    position: absolute;
+    position-anchor: v-bind(anchorName);
+    margin: 0;
+    inset: auto;
+    top: anchor(top);
+    left: calc(anchor(right) + 10px);
+    opacity: 0;
+    transition: opacity 200ms, display 200ms, overlay 200ms;
+    transition-behavior: allow-discrete;
 
-  position-try-fallbacks: --left, --right;
-  /* position-try-fallbacks: --right; */
+    /* position-try: flip-inline, flip-block, flip-block flip-inline; */
+    /* position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline; */
 
-  &:popover-open {
-    display: block;
-    opacity: 1;
+    position-try: --right;
+    position-try-fallbacks: --left;
 
-    @starting-style {
+    &:popover-open {
       display: block;
-      opacity: 0;
+      opacity: 1;
+
+      @starting-style {
+        display: block;
+        opacity: 0;
+      }
     }
   }
 }
-
-/* @position-try --left {
-    inset: auto;
-    top: anchor(bottom);
-    right: anchor(right);
-  } */
-/* } */
 </style>

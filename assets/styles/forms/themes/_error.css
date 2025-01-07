@@ -9,7 +9,7 @@
     --theme-form-input-outline-focus: var(--red-6);
     --theme-form-input-text: light-dark(var(--gray-10), var(--gray-11));
 
-    --theme-form-focus-box-shadow: 0.1rem 0.1rem 0.8rem 0.1rem light-dark(var(--red-12), var(--red-2));
+    --theme-form-focus-box-shadow: light-dark(var(--red-12), var(--red-2));
 
     --theme-form-checkbox-bg: light-dark(var(--gray-1), var(--gray-4));
     --theme-form-checkbox-border: light-dark(var(--red-12), var(--red-12));
@@ -26,6 +26,20 @@
     --theme-form-radio-symbol: var(--red-12);
 
     --theme-form-range-accent-color: light-dark(var(--red-12), var(--red-3));
+
+    /*
+    * ToggleSwitch
+    **/
+    --theme-form-toggle-bg-off: light-dark(var(--gray-1), var(--gray-4));
+    --theme-form-toggle-bg-on: light-dark(var(--gray-1), var(--gray-6));
+
+    --theme-form-toggle-border: var(--form-element-border-width) solid light-dark(var(--red-12), var(--red-1));
+
+    --theme-form-toggle-outline: var(--form-element-outline-width) solid light-dark(var(--red-12), var(--red-12));
+    --theme-form-toggle-symbol-off: var(--orange-12);
+    --theme-form-toggle-symbol-on: var(--gray-12);
+    --theme-form-toggle-icon-stroke-colour-off: var(--gray-1);
+    --theme-form-toggle-icon-stroke-colour-on: var(--gray-1);
 
     /*
     * Checkbox as button
@@ -58,6 +72,6 @@
     --theme-btn-outline-focus: var(--red-0);
     --theme-btn-text-focus: var(--red-12);
 
-    --theme-form-focus-box-shadow: 0.1rem 0.1rem 0.8rem 0.1rem light-dark(var(--red-12), var(--red-2));
+    --theme-form-focus-box-shadow: light-dark(var(--red-12), var(--red-2));
   }
 }
