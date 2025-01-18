@@ -1,0 +1,51 @@
+:root {
+  /*
+  * Wrapper styles
+  */
+  --display-prompt-core-wrapper-background-color: red;
+  --display-prompt-core-wrapper-border: 0.1rem solid red;
+  --display-prompt-core-wrapper-outline: 0.1rem solid red;
+  --display-prompt-core-wrapper-border-radius: 1rem;
+
+  /*
+  * Inner styles
+  */
+  --display-prompt-core-inner-margin: 0 0 0 0.5rem;
+  --display-prompt-core-inner-padding: 1rem 1.5rem;
+  --display-prompt-core-inner-background-color: #f5f5f5;
+  --display-prompt-core-inner-gap: 1.6rem;
+  --display-prompt-core-inner-border-radius: 1rem;
+
+  /*
+  * Icon styles
+  */
+  --display-prompt-core-icon-color: red;
+  --display-prompt-core-icon-size: 3rem;
+  --display-prompt-core-icon-weight: normal;
+  /*
+  * Title styles
+  */
+  --display-prompt-core-inner-content-gap: 1rem;
+  --display-prompt-content-margin: 0;
+  --display-prompt-content-padding: 0.2rem;
+
+  /*
+  * Title styles
+  */
+  --display-prompt-content-title-font-size: var(--step-2);
+  --display-prompt-content-title-font-weight: bold;
+  --display-prompt-content-title-line-height: 1.3;
+  --display-prompt-content-title-color: red;
+  --display-prompt-content-title-margin: 0;
+  --display-prompt-content-title-padding: 0;
+
+  /*
+  * Text styles
+  */
+  --display-prompt-content-text-font-size: var(--step-2);
+  --display-prompt-content-text-font-weight: normal;
+  --display-prompt-content-text-line-height: 1.3;
+  --display-prompt-content-text-color: red;
+  --display-prompt-content-title-margin: 0;
+  --display-prompt-content-title-padding: 0;
+}

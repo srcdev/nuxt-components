@@ -47,6 +47,7 @@ const navLinks = <INavLink[]>[
   { name: 'Layout Row', path: '/ui/layout-row' },
   { name: 'Dialogs', path: '/ui/dialog' },
   { name: 'Tabs', path: '/ui/tabs' },
+  { name: 'Prompts', path: '/ui/display-prompt' },
   { name: 'Simple Grid', path: '/ui/simple-grid' },
 ];
 </script>
