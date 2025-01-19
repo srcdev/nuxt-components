@@ -13,7 +13,8 @@
         </p>
       </div>
       <button v-if="dismissible" @click.prevent="dismissPrompt()" data-test-id="display-prompt-action" class="display-prompt-action">
-        <span class="sr-only">Close</span>
+        <Icon name="bitcoin-icons:cross-filled" class="icon" />
+        <span class="sr-only">Really Close</span>
       </button>
     </div>
   </div>
@@ -58,10 +59,10 @@ const dismissPrompt = () => {
 
 <style lang="css">
 .display-prompt-wrapper {
-  background-color: var(--display-prompt-core-wrapper-background-color);
-  border-radius: var(--display-prompt-core-wrapper-border-radius);
-  border: var(--display-prompt-core-wrapper-border);
-  outline: var(--display-prompt-core-wrapper-outline);
+  background-color: var(--display-prompt-wrapper-background-color);
+  border-radius: var(--display-prompt-wrapper-border-radius);
+  border: var(--display-prompt-wrapper-border);
+  outline: var(--display-prompt-wrapper-outline);
   overflow: hidden;
   transition: height 200ms, opacity 200ms, display 200ms;
   transition-behavior: allow-discrete;
@@ -73,23 +74,23 @@ const dismissPrompt = () => {
   }
 
   .display-prompt-inner {
-    background-color: var(--display-prompt-core-inner-background-color);
+    background-color: var(--display-prompt-inner-background-color);
     align-items: center;
-    border-radius: var(--display-prompt-core-inner-border-radius);
+    border-radius: var(--display-prompt-inner-border-radius);
     display: flex;
-    gap: var(--display-prompt-core-inner-gap);
+    gap: var(--display-prompt-inner-gap);
     justify-content: space-between;
-    padding: var(--display-prompt-core-inner-padding);
-    margin: var(--display-prompt-core-inner-margin);
+    padding: var(--display-prompt-inner-padding);
+    margin: var(--display-prompt-inner-margin);
 
     .display-prompt-icon {
       display: inline-flex;
       .icon {
-        color: var(--display-prompt-core-icon-color);
+        color: var(--display-prompt-icon-color);
         display: inline-block;
-        font-size: var(--display-prompt-core-icon-size);
+        font-size: var(--display-prompt-icon-size);
         font-style: normal;
-        font-weight: var(--display-prompt-core-icon-weight);
+        font-weight: var(--display-prompt-icon-weight);
         overflow: hidden;
       }
     }
@@ -98,7 +99,7 @@ const dismissPrompt = () => {
       display: block flex;
       flex-direction: column;
       flex-grow: 1;
-      gap: var(--display-prompt-core-inner-content-gap);
+      gap: var(--display-prompt-inner-content-gap);
       margin: var(--display-prompt-content-margin);
       padding: var(--display-prompt-content-padding);
 
@@ -121,10 +122,28 @@ const dismissPrompt = () => {
       }
     }
     .display-prompt-action {
-      display: flex;
+      /* all: unset; */
+      background-color: transparent;
+      display: block flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
+      margin: var(--display-prompt-button-margin);
+      padding: var(--display-prompt-button-padding);
+      border: var(--display-prompt-button-border);
+      border-radius: var(--display-prompt-button-border-radius);
+      outline: var(--display-prompt-button-outline);
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      .icon {
+        color: var(--display-prompt-button-icon-color);
+        display: block;
+        font-size: var(--display-prompt-button-icon-font-size);
+        border: 1px solid green;
+        padding: 1rem;
+      }
     }
   }
 }

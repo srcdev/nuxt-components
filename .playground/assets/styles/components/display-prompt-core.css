@@ -2,30 +2,30 @@
   /*
   * Wrapper styles
   */
-  --display-prompt-core-wrapper-background-color: red;
-  --display-prompt-core-wrapper-border: 0.1rem solid red;
-  --display-prompt-core-wrapper-outline: 0.1rem solid red;
-  --display-prompt-core-wrapper-border-radius: 1rem;
+  --display-prompt-wrapper-background-color: red;
+  --display-prompt-wrapper-border: 0.1rem solid red;
+  --display-prompt-wrapper-outline: 0.1rem solid red;
+  --display-prompt-wrapper-border-radius: 1rem;
 
   /*
   * Inner styles
   */
-  --display-prompt-core-inner-margin: 0 0 0 0.5rem;
-  --display-prompt-core-inner-padding: 1rem 1.5rem;
-  --display-prompt-core-inner-background-color: #f5f5f5;
-  --display-prompt-core-inner-gap: 1.6rem;
-  --display-prompt-core-inner-border-radius: 1rem;
+  --display-prompt-inner-margin: 0 0 0 0.5rem;
+  --display-prompt-inner-padding: 1rem 1.5rem;
+  --display-prompt-inner-background-color: #f5f5f5;
+  --display-prompt-inner-gap: 1.6rem;
+  --display-prompt-inner-border-radius: 1rem;
 
   /*
   * Icon styles
   */
-  --display-prompt-core-icon-color: red;
-  --display-prompt-core-icon-size: 3rem;
-  --display-prompt-core-icon-weight: normal;
+  --display-prompt-icon-color: red;
+  --display-prompt-icon-size: 3rem;
+  --display-prompt-icon-weight: normal;
   /*
   * Title styles
   */
-  --display-prompt-core-inner-content-gap: 1rem;
+  --display-prompt-inner-content-gap: 1rem;
   --display-prompt-content-margin: 0;
   --display-prompt-content-padding: 0.2rem;
 
@@ -48,4 +48,19 @@
   --display-prompt-content-text-color: red;
   --display-prompt-content-title-margin: 0;
   --display-prompt-content-title-padding: 0;
+
+  /*
+  * Button styles
+  */
+  --display-prompt-button-border: 0.1rem solid red;
+  --display-prompt-button-border-radius: 50%;
+  --display-prompt-button-outline: 0.1rem solid red;
+  --display-prompt-button-margin: 1rem;
+  --display-prompt-button-padding: 0.5rem;
+
+  /*
+  * Button styles
+  */
+  --display-prompt-button-icon-color: red;
+  --display-prompt-button-icon-font-size: var(--step-2);
 }
