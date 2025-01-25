@@ -1,5 +1,5 @@
 <template>
-  <div class="display-prompt-wrapper" :class="[theme, elementClasses, { dismissed: hide }]" data-test-id="display-prompt">
+  <div class="display-prompt-wrapper" :data-prompt-theme="theme" :class="[elementClasses, { dismissed: hide }]" data-test-id="display-prompt">
     <div class="display-prompt-inner">
       <div class="display-prompt-icon" data-test-id="prompt-icon">
         <slot name="icon"></slot>

@@ -2,26 +2,22 @@
   /*
   * Wrapper styles
   */
-  --display-prompt-wrapper-background-color: red;
-  --display-prompt-wrapper-border: 0.1rem solid red;
-  --display-prompt-wrapper-outline: 0.1rem solid red;
-  --display-prompt-wrapper-border-radius: 1rem;
+  --display-prompt-wrapper-border-radius: 0.5rem;
 
   /*
   * Inner styles
   */
-  --display-prompt-inner-margin: 0 0 0 0.5rem;
+  --display-prompt-inner-margin: 0 0 0 0.7rem;
   --display-prompt-inner-padding: 1rem 1.5rem;
-  --display-prompt-inner-background-color: #f5f5f5;
   --display-prompt-inner-gap: 1.6rem;
-  --display-prompt-inner-border-radius: 1rem;
+  --display-prompt-inner-border-radius: 0.2rem;
 
   /*
   * Icon styles
   */
-  --display-prompt-icon-color: red;
   --display-prompt-icon-size: 3rem;
   --display-prompt-icon-weight: normal;
+
   /*
   * Title styles
   */
@@ -35,7 +31,6 @@
   --display-prompt-content-title-font-size: var(--step-2);
   --display-prompt-content-title-font-weight: bold;
   --display-prompt-content-title-line-height: 1.3;
-  --display-prompt-content-title-color: red;
   --display-prompt-content-title-margin: 0;
   --display-prompt-content-title-padding: 0;
 
@@ -45,22 +40,18 @@
   --display-prompt-content-text-font-size: var(--step-2);
   --display-prompt-content-text-font-weight: normal;
   --display-prompt-content-text-line-height: 1.3;
-  --display-prompt-content-text-color: red;
   --display-prompt-content-title-margin: 0;
   --display-prompt-content-title-padding: 0;
 
   /*
   * Button styles
   */
-  --display-prompt-button-border: 0.1rem solid red;
   --display-prompt-button-border-radius: 50%;
-  --display-prompt-button-outline: 0.1rem solid red;
   --display-prompt-button-margin: 1rem;
   --display-prompt-button-padding: 0.5rem;
 
   /*
   * Button styles
   */
-  --display-prompt-button-icon-color: red;
   --display-prompt-button-icon-font-size: var(--step-2);
 }

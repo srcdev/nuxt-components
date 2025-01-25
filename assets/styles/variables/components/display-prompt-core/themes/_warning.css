@@ -1,0 +1,39 @@
+[data-prompt-theme='warning'] {
+  /*
+  * Wrapper styles
+  */
+  --display-prompt-wrapper-background-color: var(--orange-8);
+  --display-prompt-wrapper-border: 0.1rem solid var(--orange-8);
+  --display-prompt-wrapper-outline: 0.1rem solid var(--orange-5);
+
+  /*
+  * Inner styles
+  */
+  --display-prompt-inner-background-color: var(--orange-0);
+
+  /*
+  * Icon styles
+  */
+  --display-prompt-icon-color: var(--orange-8);
+
+  /*
+  * Title styles
+  */
+  --display-prompt-content-title-color: var(--orange-8);
+
+  /*
+  * Text styles
+  */
+  --display-prompt-content-text-color: var(--orange-8);
+
+  /*
+  * Button styles
+  */
+  --display-prompt-button-border: 0.1rem solid var(--orange-8);
+  --display-prompt-button-outline: 0.1rem solid var(--orange-8);
+
+  /*
+  * Button styles
+  */
+  --display-prompt-button-icon-color: var(--orange-8);
+}

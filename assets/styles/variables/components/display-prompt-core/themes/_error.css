@@ -1,0 +1,39 @@
+[data-prompt-theme='error'] {
+  /*
+  * Wrapper styles
+  */
+  --display-prompt-wrapper-background-color: var(--red-8);
+  --display-prompt-wrapper-border: 0.1rem solid var(--red-8);
+  --display-prompt-wrapper-outline: 0.1rem solid var(--red-5);
+
+  /*
+  * Inner styles
+  */
+  --display-prompt-inner-background-color: var(--red-0);
+
+  /*
+  * Icon styles
+  */
+  --display-prompt-icon-color: var(--red-8);
+
+  /*
+  * Title styles
+  */
+  --display-prompt-content-title-color: var(--red-8);
+
+  /*
+  * Text styles
+  */
+  --display-prompt-content-text-color: var(--red-8);
+
+  /*
+  * Button styles
+  */
+  --display-prompt-button-border: 0.1rem solid var(--red-8);
+  --display-prompt-button-outline: 0.1rem solid var(--red-8);
+
+  /*
+  * Button styles
+  */
+  --display-prompt-button-icon-color: var(--red-8);
+}
