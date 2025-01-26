@@ -1,27 +1,28 @@
 <template>
-  <dialog class="display-dialog wrapper" :class="[elementClasses]" :align-dialog :open ref="dialogRef">
+  <dialog class="display-dialog-core" :class="[variant, elementClasses]" :align-dialog :open ref="dialogRef">
     <focus-trap v-model:active="open" :clickOutsideDeactivates="true" @deactivate="closeDialog()">
       <div class="inner">
-        <div class="top-bar">
-          <template v-if="hasDialogTitle">
-            <div class="col-left">
-              <slot name="dialogTitle"></slot>
-            </div>
-          </template>
+        <div class="header">
+          <div v-if="hasDialogTitle" class="col-left">
+            <slot name="dialogTitle"></slot>
+          </div>
 
           <div class="col-center">
             <p class="text-normal wght-700">Center col</p>
           </div>
           <div class="col-right">
-            <button @click.prevent="closeDialog()">x</button>
+            <button @click.prevent="closeDialog()" data-test-id="display-dialog-header-close" class="display-prompt-action">
+              <Icon name="bitcoin-icons:cross-filled" class="icon" />
+              <span class="sr-only">Really Close</span>
+            </button>
           </div>
         </div>
-        <slot v-if="hasDialogContent" name="dialogContent"></slot>
-        <template v-if="hasActionButtons">
-          <div class="button-row">
-            <slot name="actionButtons"></slot>
-          </div>
-        </template>
+        <div v-if="hasDialogContent" class="dialog-content" :class="[{ 'allow-content-scroll': allowContentScroll }]">
+          <slot name="dialogContent"></slot>
+        </div>
+        <div v-if="hasActionButtons" class="footer">
+          <slot name="actionButtons"></slot>
+        </div>
       </div>
     </focus-trap>
   </dialog>
@@ -37,7 +38,7 @@ const props = defineProps({
   variant: {
     type: String,
     default: 'dialog',
-    validator: (val) => ['dialog', 'modal'].includes(val as string),
+    validator: (val) => ['dialog', 'modal', 'confirm'].includes(val as string),
   },
   positionX: {
     type: String,
@@ -52,6 +53,10 @@ const props = defineProps({
   lockViewport: {
     type: Boolean,
     default: true,
+  },
+  allowContentScroll: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -85,8 +90,36 @@ onMounted(() => {
 </script>
 
 <style lang="css">
-.display-dialog {
+.display-dialog-core {
+  --_dialog-inner-height: initial;
+  --_dialog-inner-width: 100vw;
+
   display: flex;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 13;
+  opacity: 0;
+  border: none;
+  padding: 0;
+
+  display: none;
+  transition: opacity 200ms, display 200ms, overlay 200ms;
+  transition-behavior: allow-discrete;
+
+  &[open] {
+    display: flex;
+    opacity: 1;
+
+    @starting-style {
+      display: flex;
+      opacity: 0;
+    }
+  }
 
   &[align-dialog$='center'] {
     justify-content: center;
@@ -95,76 +128,113 @@ onMounted(() => {
     align-items: center;
   }
 
-  &.wrapper {
-    position: fixed;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    backdrop-filter: blur(5px);
-    background-color: rgba(0, 0, 0, 0.5);
-    border: 0.1rem solid var(--color-grey-1);
-    z-index: 13;
-    opacity: 0;
+  &.confirm {
+    --_dialog-inner-width: initial;
+  }
 
-    display: none;
-    transition: opacity 200ms, display 200ms, overlay 200ms;
-    transition-behavior: allow-discrete;
+  &.dialog {
+    --_dialog-inner-height: 70dvh;
+    --_dialog-inner-width: min(75%, 720px);
+  }
 
-    &[open] {
-      display: flex;
-      opacity: 1;
+  &.form {
+    --_dialog-inner-width: initial;
+  }
 
-      @starting-style {
-        display: flex;
-        opacity: 0;
-      }
-    }
+  &.fullscreen {
+    --_dialog-inner-width: initial;
+  }
+
+  &.modal {
+    --_dialog-inner-width: initial;
   }
 
   .inner {
-    background-color: var(--page-bg);
-    width: 100vw;
-    margin: 1.2rem;
-    padding: 1.2rem;
-
-    @media only screen and (min-width: 768px) {
-      width: 720px;
-    }
-
-    /* @media only screen and (min-width: 1024px) {
-       height: 100dvh;
-       width: 100vw;
-     } */
-  }
-
-  .top-bar {
     display: grid;
-    grid-template-columns: auto 1fr auto;
-    align-items: center;
+    grid-template-rows: auto 1fr auto;
 
-    .col-left {
-      /* grid-column: 1; */
-      /* display: none; */
+    border-radius: var(--dialog-border-radius);
+    border: var(--dialog-border);
+    outline: var(--dialog-outline);
+
+    background-color: var(--dialog-inner-background);
+    height: var(--_dialog-inner-height);
+    width: var(--_dialog-inner-width);
+
+    overflow: hidden;
+
+    .header {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+
+      padding: var(--dialog-header-padding);
+
+      .col-left {
+        /* grid-column: 1; */
+        /* display: none; */
+      }
+
+      .col-center {
+        /* grid-column: 2; */
+        text-align: center;
+
+        color: var(--color-red-1);
+        display: none;
+      }
+
+      .col-right {
+        grid-column: 3;
+
+        .display-prompt-action {
+          background-color: transparent;
+          display: block flex;
+          align-items: center;
+          justify-content: center;
+          margin: var(--dialog-header-button-margin);
+          padding: var(--dialog-header-button-padding);
+          border: var(--dialog-header-button-border);
+          border-radius: var(--dialog-header-button-border-radius);
+          outline: var(--dialog-header-button-outline);
+
+          transition: border-color 0.2s, outline-color 0.2s;
+
+          &:hover,
+          &:focus-visible {
+            cursor: pointer;
+            border: var(--dialog-header-button-border-hover);
+            outline: var(--dialog-header-button-outline-hover);
+          }
+
+          .icon {
+            color: var(--dialog-header-button-icon-color);
+            display: block;
+            font-size: var(--dialog-header-button-icon-font-size);
+            border: 1px solid green;
+            padding: 1rem;
+          }
+        }
+      }
     }
 
-    .col-center {
-      /* grid-column: 2; */
-      text-align: center;
+    .dialog-content {
+      overflow: hidden;
+      padding: var(--dialog-content-padding);
 
-      color: var(--color-red-1);
-      display: none;
+      &.allow-content-scroll {
+        overflow-y: auto;
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
     }
 
-    .col-right {
-      grid-column: 3;
+    .footer {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: flex-end;
+      padding: var(--dialog-footer-padding);
     }
   }
-
-  /* .button-row {
-     display: flex;
-     gap: 1.2rem;
-     justify-content: flex-end;
-   } */
 }
 </style>

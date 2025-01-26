@@ -7,7 +7,7 @@
     "nixon.env-cmd-file-syntax",
     "jkjustjoshing.vscode-text-pastry",
     "willofindie.vscode-cssvar",
-    "vitest.explorer",
+    // "vitest.explorer",
     "esbenp.prettier-vscode"
   ]
 }

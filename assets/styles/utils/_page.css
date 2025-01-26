@@ -22,3 +22,9 @@ a {
   font-family: var(--font-family);
   font-size: var(--step-1);
 }
+
+body {
+  &.lock {
+    overflow: hidden;
+  }
+}
