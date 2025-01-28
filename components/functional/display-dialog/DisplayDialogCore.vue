@@ -1,5 +1,5 @@
 <template>
-  <dialog class="display-dialog-core" :class="[variant, elementClasses]" :align-dialog :open ref="dialogRef">
+  <dialog class="display-dialog-core" :class="[variant, elementClasses]" role="dialog" :align-dialog :open :data-dialog-id="dataDialogId" ref="dialogRef">
     <focus-trap v-model:active="open" :clickOutsideDeactivates="true" @deactivate="closeDialog()">
       <div class="inner">
         <div class="header">
@@ -57,6 +57,10 @@ const props = defineProps({
   allowContentScroll: {
     type: Boolean,
     default: false,
+  },
+  dataDialogId: {
+    type: String,
+    required: true,
   },
 });
 

@@ -1,5 +1,5 @@
 <template>
-  <DisplayDialogCore variant="dialog" :styleClassPassthrough :lockViewport="true" :allowContentScroll>
+  <DisplayDialogCore variant="dialog" :styleClassPassthrough :lockViewport="true" :allowContentScroll :dataDialogId>
     <template #dialogTitle>
       <slot name="dialogTitle">
         <p class="text-normal wght-700">Confirm</p>
@@ -24,6 +24,10 @@ const props = defineProps({
   allowContentScroll: {
     type: Boolean,
     default: false,
+  },
+  dataDialogId: {
+    type: String,
+    required: true,
   },
 });
 </script>

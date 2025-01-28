@@ -4,9 +4,15 @@
       <template #content>
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
           <h2 class="heading-2">Dialog withscrollable content</h2>
-          <p><button @click="controlDialogs('sample1', !dialogsConfig['sample1'].open)" type="button">Show Dialog</button></p>
+          <p><button @click="controlDialogs('sample1', true)" type="button">Show Dialog</button></p>
 
-          <DisplayDialogScrollableContent v-if="dialogsConfig['sample1'].open" v-model="dialogsConfig['sample1'].open" :style-class-passthrough="['content-width']" :allowContentScroll="true">
+          <DisplayDialogScrollableContent
+            v-if="dialogsConfig['sample1']"
+            v-model="dialogsConfig['sample1']"
+            :style-class-passthrough="['content-width']"
+            :allowContentScroll="true"
+            data-dialog-id="sample1"
+          >
             <template #dialogTitle>
               <p class="text-normal wght-700">Confirm logout?</p>
             </template>
@@ -53,19 +59,19 @@
               </div>
             </template>
             <template #actionButtonLeft>
-              <button @click="controlDialogs('sample1', !dialogsConfig['sample1'].open)" type="submit">Cancel</button>
+              <button @click="controlDialogs('sample1', false)" type="submit">Cancel</button>
             </template>
             <template #actionButtonRight>
-              <button @click="controlDialogs('sample1', !dialogsConfig['sample1'].open)" type="submit">Confirm</button>
+              <button @click="controlDialogs('sample1', false)" type="submit">Confirm</button>
             </template>
           </DisplayDialogScrollableContent>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
           <h2 class="heading-2">Confirm Dialog</h2>
-          <p><button @click="controlDialogs('logout', !dialogsConfig['logout'].open)" type="button">Show Dialog Prompt</button></p>
+          <p><button @click="controlDialogs('logout', true)" type="button">Show Dialog Prompt</button></p>
 
-          <DisplayDialogConfirm v-if="dialogsConfig['logout'].open" v-model="dialogsConfig['logout'].open" :style-class-passthrough="['content-width']">
+          <DisplayDialogConfirm v-if="dialogsConfig['logout']" v-model="dialogsConfig['logout']" :style-class-passthrough="['content-width']" data-dialog-id="logout">
             <template #dialogTitle>
               <p class="text-normal wght-700">Confirm logout?</p>
             </template>
@@ -76,10 +82,10 @@
               </div>
             </template>
             <template #actionButtonLeft>
-              <button @click="controlDialogs('logout', !dialogsConfig['logout'].open)" type="submit">Cancel</button>
+              <button @click="controlDialogs('logout', false)" type="submit">Cancel</button>
             </template>
             <template #actionButtonRight>
-              <button @click="controlDialogs('logout', !dialogsConfig['logout'].open)" type="submit">Confirm</button>
+              <button @click="controlDialogs('logout', false)" type="submit">Confirm</button>
             </template>
           </DisplayDialogConfirm>
         </LayoutRow>
@@ -94,29 +100,17 @@ definePageMeta({
 });
 
 useHead({
-  title: 'UI Layout Row',
-  meta: [{ name: 'description', content: 'Examples of UI Component Layout Row' }],
+  title: 'UI Dialogs',
+  meta: [{ name: 'description', content: 'Examples of Dialogs' }],
   bodyAttrs: {
     class: 'home',
   },
 });
 
-const displayDialog = ref(false);
-const toggleDialog = (state: boolean) => {
-  displayDialog.value = state;
-};
+const { dialogsConfig, controlDialogs, initialiseDialogs } = useDialogControls();
 
-const dialogsConfig = ref({
-  logout: {
-    open: false,
-  },
-  sample1: {
-    open: false,
-  },
+onMounted(() => {
+  const dialogIds = ['logout', 'sample1'];
+  initialiseDialogs(dialogIds);
 });
-
-const controlDialogs = (name: string, state: boolean) => {
-  console.log('controlDialogs > name > ', name, state);
-  (dialogsConfig.value as Record<string, { open: boolean }>)[name].open = state;
-};
 </script>

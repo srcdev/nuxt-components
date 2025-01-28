@@ -1,5 +1,5 @@
 <template>
-  <DisplayDialogCore variant="confirm" :styleClassPassthrough :lockViewport="true">
+  <DisplayDialogCore variant="confirm" :styleClassPassthrough :lockViewport="true" :dataDialogId>
     <template #dialogTitle>
       <slot name="dialogTitle">
         <p class="text-normal wght-700">Confirm</p>
@@ -20,6 +20,10 @@ const props = defineProps({
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
     default: () => [],
+  },
+  dataDialogId: {
+    type: String,
+    required: true,
   },
 });
 </script>
