@@ -6,7 +6,7 @@
           @click.prevent="navItemClicked($event)"
           @mouseover="navItemHovered($event)"
           :id="`tab-${key}-trigger`"
-          :data-tab-index="index"
+          :data-tab-index="key"
           data-nav-item
           role="tab"
           aria-selected="false"
@@ -31,6 +31,10 @@ const props = defineProps({
   tag: {
     type: String as PropType<string>,
     default: 'button',
+  },
+  transitionDuration: {
+    type: Number as PropType<number>,
+    default: 200,
   },
   navItems: {
     type: Array as PropType<ITabNav[]>,
@@ -59,7 +63,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 const tabsNavRef = ref<HTMLElement | null>(null);
 const tabsContentRefs = ref<HTMLElement[] | null>(null);
 
-const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useTabs(tabsNavRef, tabsContentRefs);
+const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useTabs(tabsNavRef, tabsContentRefs, props.transitionDuration);
 
 onMounted(() => {
   initNavDecorators();
@@ -140,7 +144,7 @@ onMounted(() => {
     .tabs-list-item {
       opacity: 0.7;
       position: relative;
-      transition: color 0.2s;
+      transition: color 100ms;
       z-index: 4;
 
       &:hover {
@@ -186,6 +190,10 @@ onMounted(() => {
 
       &[aria-selected='true'] {
         color: var(--_tabs-active-text);
+      }
+
+      &.transitioning {
+        color: var(--_tabs-hovered-text);
       }
     }
   }

@@ -1,6 +1,6 @@
 import { useResizeObserver } from '@vueuse/core';
 
-const useTabs = (tabsNavRef: Ref<HTMLElement | null>, tabsContentRefs: Ref<HTMLElement[] | null>, duration: number = 200) => {
+const useTabs = (tabsNavRef: Ref<HTMLElement | null>, tabsContentRefs: Ref<HTMLElement[] | null>, duration: number) => {
   const navItems = ref<HTMLElement[] | null>(null);
   const previousActiveTab = useState<HTMLElement | null>('previousActiveTab', () => null);
   const currentActiveTab = ref<HTMLElement>();
@@ -79,6 +79,37 @@ const useTabs = (tabsNavRef: Ref<HTMLElement | null>, tabsContentRefs: Ref<HTMLE
     setActiveTabContent();
   };
 
+  const handleTransitioningClass = (transitionDuration: number = 200) => {
+    if (previousHoveredTab.value && currentHoveredTab.value) {
+      const newTabPosition = previousHoveredTab.value.compareDocumentPosition(currentHoveredTab.value);
+      const navItemsArray = navItems.value || [];
+
+      const timeout = Math.floor(transitionDuration / Math.abs(navItemsArray.indexOf(currentHoveredTab.value) - navItemsArray.indexOf(previousHoveredTab.value)));
+
+      if (newTabPosition === 4) {
+        for (let i = navItemsArray.indexOf(previousHoveredTab.value); i < navItemsArray.indexOf(currentHoveredTab.value); i++) {
+          navItemsArray[i].classList.add('transitioning');
+          if (i >= navItemsArray.indexOf(previousHoveredTab.value) && i < navItemsArray.indexOf(currentHoveredTab.value)) {
+            setTimeout(() => {
+              navItemsArray[i].classList.remove('transitioning');
+              // }, timeout * (i - navItemsArray.indexOf(previousHoveredTab.value) - 1));
+            }, duration * 1.5);
+          }
+        }
+      } else {
+        for (let i = navItemsArray.indexOf(previousHoveredTab.value); i > navItemsArray.indexOf(currentHoveredTab.value); i--) {
+          navItemsArray[i].classList.add('transitioning');
+          if (i <= navItemsArray.indexOf(previousHoveredTab.value) && i > navItemsArray.indexOf(currentHoveredTab.value)) {
+            setTimeout(() => {
+              navItemsArray[i].classList.remove('transitioning');
+              // }, timeout * (i - navItemsArray.indexOf(previousHoveredTab.value) - 1));
+            }, duration * 1.5);
+          }
+        }
+      }
+    }
+  };
+
   const setFinalHoveredPositions = (resized: boolean = false) => {
     const setDuration = resized ? 0 : duration;
     const newTabWidth = currentHoveredTab.value && tabsNavRef.value ? currentHoveredTab.value.offsetWidth / tabsNavRef.value.offsetWidth : 0;
@@ -110,6 +141,8 @@ const useTabs = (tabsNavRef: Ref<HTMLElement | null>, tabsContentRefs: Ref<HTMLE
 
     tabsNavRef.value?.style.setProperty('--_width-active', String(transitionWidth / tabsNavRef.value.offsetWidth));
 
+    handleTransitioningClass(duration);
+
     setTimeout(() => {
       setFinalActivePositions();
     }, Math.floor(duration + 20));
@@ -130,6 +163,8 @@ const useTabs = (tabsNavRef: Ref<HTMLElement | null>, tabsContentRefs: Ref<HTMLE
 
     tabsNavRef.value?.style.setProperty('--_width-hovered', String(transitionWidth / tabsNavRef.value.offsetWidth));
 
+    handleTransitioningClass(duration);
+
     setTimeout(() => {
       setFinalHoveredPositions();
     }, Math.floor(duration + 20));
@@ -140,10 +175,6 @@ const useTabs = (tabsNavRef: Ref<HTMLElement | null>, tabsContentRefs: Ref<HTMLE
     tabsContentRefs.value?.forEach((tabContent: HTMLElement, index: number) => {
       tabContent.style.display = activeIndex === index ? 'block' : 'none';
     });
-  };
-
-  const animationRunning = (running: boolean) => {
-    console.log('animationRunning', running);
   };
 
   useResizeObserver(tabsNavRef, () => {

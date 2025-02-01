@@ -6,8 +6,8 @@
           <h2 class="heading-2">Tabs #1</h2>
           <p>Data driven accordian navigation with custom content</p>
 
-          <TabsCore :navItems="navLinks" :style-class-passthrough="['class-modifier']">
-            <template v-for="(item, key) in navLinks" v-slot:[`tab-${key}-trigger`]> {{ key }} - {{ item.name }} </template>
+          <TabsCore :navItems="navLinks3" :transitionDuration="300" :style-class-passthrough="['class-modifier']">
+            <template v-for="(item, key) in navLinks3" v-slot:[`tab-${key}-trigger`]> {{ key }} - {{ item.name }} </template>
             <template v-slot:[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
             </template>
@@ -16,12 +16,6 @@
             </template>
             <template v-slot:[`tab-2-content`]>
               <p class="p-24">This is content slot 2</p>
-            </template>
-            <template v-slot:[`tab-3-content`]>
-              <p class="p-24">This is content slot 3</p>
-            </template>
-            <template v-slot:[`tab-4-content`]>
-              <p class="p-24">This is content slot 4</p>
             </template>
           </TabsCore>
         </LayoutRow>
@@ -30,8 +24,29 @@
           <h2 class="heading-2">Tabs #2</h2>
           <p>Data driven accordian navigation with custom content</p>
 
-          <TabsCore :navItems="navLinks" :style-class-passthrough="['class-modifier']">
-            <template v-for="(item, key) in navLinks" v-slot:[`tab-${key}-trigger`]> {{ key }} - {{ item.name }} </template>
+          <TabsCore :navItems="navLinks4" :style-class-passthrough="['class-modifier']">
+            <template v-for="(item, key) in navLinks4" v-slot:[`tab-${key}-trigger`]> {{ key }} - {{ item.name }} </template>
+            <template v-slot:[`tab-0-content`]>
+              <p class="p-24">This is content slot 0</p>
+            </template>
+            <template v-slot:[`tab-1-content`]>
+              <p class="p-24">This is content slot 1</p>
+            </template>
+            <template v-slot:[`tab-2-content`]>
+              <p class="p-24">This is content slot 2</p>
+            </template>
+            <template v-slot:[`tab-3-content`]>
+              <p class="p-24">This is content slot 3</p>
+            </template>
+          </TabsCore>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
+          <h2 class="heading-2">Tabs #3</h2>
+          <p>Data driven accordian navigation with custom content</p>
+
+          <TabsCore :navItems="navLinks6" :style-class-passthrough="['class-modifier']">
+            <template v-for="(item, key) in navLinks6" v-slot:[`tab-${key}-trigger`]> {{ key }} - {{ item.name }} </template>
             <template v-slot:[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
             </template>
@@ -46,6 +61,9 @@
             </template>
             <template v-slot:[`tab-4-content`]>
               <p class="p-24">This is content slot 4</p>
+            </template>
+            <template v-slot:[`tab-5-content`]>
+              <p class="p-24">This is content slot 5</p>
             </template>
           </TabsCore>
         </LayoutRow>
@@ -68,12 +86,26 @@ useHead({
   },
 });
 
-const navLinks = <ITabNav[]>[
+const navLinks3 = <ITabNav[]>[
+  { name: 'Home', path: '/' },
+  { name: 'Layout Row', path: '/ui/layout-row' },
+  { name: 'Dialogs', path: '/ui/dialog' },
+];
+
+const navLinks4 = <ITabNav[]>[
+  { name: 'Home', path: '/' },
+  { name: 'Layout Row', path: '/ui/layout-row' },
+  { name: 'Dialogs', path: '/ui/dialog' },
+  { name: 'Tabs', path: '/ui/tabs' },
+];
+
+const navLinks6 = <ITabNav[]>[
   { name: 'Home', path: '/' },
   { name: 'Layout Row', path: '/ui/layout-row' },
   { name: 'Dialogs', path: '/ui/dialog' },
   { name: 'Tabs', path: '/ui/tabs' },
   { name: 'Something Else', path: '/ui/something' },
+  { name: 'Home Again', path: '/' },
 ];
 </script>
 
