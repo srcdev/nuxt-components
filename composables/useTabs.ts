@@ -1,6 +1,6 @@
 import { useResizeObserver } from '@vueuse/core';
 
-const useTabs = (tabsNavRef: Ref<HTMLElement | null>, tabsContentRefs: Ref<HTMLElement[] | null>, duration: number) => {
+const useTabs = (axis: string, tabsNavRef: Ref<HTMLElement | null>, tabsContentRefs: Ref<HTMLElement[] | null>, duration: number) => {
   const navItems = ref<HTMLElement[] | null>(null);
   const previousActiveTab = useState<HTMLElement | null>('previousActiveTab', () => null);
   const currentActiveTab = ref<HTMLElement>();
@@ -112,18 +112,26 @@ const useTabs = (tabsNavRef: Ref<HTMLElement | null>, tabsContentRefs: Ref<HTMLE
 
   const setFinalHoveredPositions = (resized: boolean = false) => {
     const setDuration = resized ? 0 : duration;
+    // const tabsNavRefYPosition = tabsNavRef.value?.getBoundingClientRect().top || 0;
     const newTabWidth = currentHoveredTab.value && tabsNavRef.value ? currentHoveredTab.value.offsetWidth / tabsNavRef.value.offsetWidth : 0;
     tabsNavRef.value?.style.setProperty('--_transition-duration', setDuration + 'ms');
-    tabsNavRef.value?.style.setProperty('--_left-hovered', currentHoveredTab.value?.offsetLeft + 'px');
+    tabsNavRef.value?.style.setProperty('--_x-hovered', currentHoveredTab.value?.offsetLeft + 'px');
+
     tabsNavRef.value?.style.setProperty('--_width-hovered', newTabWidth?.toString());
+    tabsNavRef.value?.style.setProperty('--_y-hovered', currentHoveredTab.value?.offsetTop + 'px');
+    tabsNavRef.value?.style.setProperty('--_y-height', currentHoveredTab.value?.offsetHeight + 'px');
+    tabsNavRef.value?.style.setProperty('--_y-width', currentHoveredTab.value?.offsetWidth + 'px');
   };
 
   const setFinalActivePositions = (resized: boolean = false) => {
     const setDuration = resized ? 0 : duration;
     const newTabWidth = currentActiveTab.value && tabsNavRef.value ? currentActiveTab.value.offsetWidth / tabsNavRef.value.offsetWidth : 0;
     tabsNavRef.value?.style.setProperty('--_transition-duration', setDuration + 'ms');
-    tabsNavRef.value?.style.setProperty('--_left-active', currentActiveTab.value?.offsetLeft + 'px');
+    tabsNavRef.value?.style.setProperty('--_x-active', currentActiveTab.value?.offsetLeft + 'px');
     tabsNavRef.value?.style.setProperty('--_width-active', newTabWidth?.toString());
+    tabsNavRef.value?.style.setProperty('--_y-active', currentActiveTab.value?.offsetTop + 'px');
+    tabsNavRef.value?.style.setProperty('--_y-height', currentActiveTab.value?.offsetHeight + 'px');
+    tabsNavRef.value?.style.setProperty('--_y-width', currentActiveTab.value?.offsetWidth + 'px');
   };
 
   const moveActiveIndicator = () => {
@@ -136,7 +144,7 @@ const useTabs = (tabsNavRef: Ref<HTMLElement | null>, tabsContentRefs: Ref<HTMLE
       transitionWidth = currentActiveTab.value && previousActiveTab.value ? currentActiveTab.value.offsetLeft + currentActiveTab.value.offsetWidth - previousActiveTab.value.offsetLeft : 0;
     } else {
       transitionWidth = previousActiveTab.value && currentActiveTab.value ? previousActiveTab.value.offsetLeft + previousActiveTab.value.offsetWidth - currentActiveTab.value.offsetLeft : 0;
-      tabsNavRef.value?.style.setProperty('--_left-active', currentActiveTab.value ? currentActiveTab.value.offsetLeft + 'px' : '0');
+      tabsNavRef.value?.style.setProperty('--_x-active', currentActiveTab.value ? currentActiveTab.value.offsetLeft + 'px' : '0');
     }
 
     tabsNavRef.value?.style.setProperty('--_width-active', String(transitionWidth / tabsNavRef.value.offsetWidth));
@@ -158,7 +166,7 @@ const useTabs = (tabsNavRef: Ref<HTMLElement | null>, tabsContentRefs: Ref<HTMLE
       transitionWidth = currentHoveredTab.value && previousHoveredTab.value ? currentHoveredTab.value.offsetLeft + currentHoveredTab.value.offsetWidth - previousHoveredTab.value.offsetLeft : 0;
     } else {
       transitionWidth = previousHoveredTab.value && currentHoveredTab.value ? previousHoveredTab.value.offsetLeft + previousHoveredTab.value.offsetWidth - currentHoveredTab.value.offsetLeft : 0;
-      tabsNavRef.value?.style.setProperty('--_left-hovered', currentHoveredTab.value ? currentHoveredTab.value.offsetLeft + 'px' : '0');
+      tabsNavRef.value?.style.setProperty('--_x-hovered', currentHoveredTab.value ? currentHoveredTab.value.offsetLeft + 'px' : '0');
     }
 
     tabsNavRef.value?.style.setProperty('--_width-hovered', String(transitionWidth / tabsNavRef.value.offsetWidth));

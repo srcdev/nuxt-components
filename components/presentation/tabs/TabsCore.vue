@@ -1,5 +1,5 @@
 <template>
-  <div class="tabs">
+  <div class="tabs-core" :class="`axis-${axis}`">
     <ul role="tablist" aria-labelledby="channel-name" ref="tabsNavRef" @mouseleave="resetHoverToActivePosition()" class="tabs-list" :class="[elementClasses]">
       <li v-for="(index, key) in navItems" :key="key">
         <button
@@ -32,6 +32,10 @@ const props = defineProps({
     type: String as PropType<string>,
     default: 'button',
   },
+  axis: {
+    type: String as PropType<'x' | 'y'>,
+    default: 'x',
+  },
   transitionDuration: {
     type: Number as PropType<number>,
     default: 200,
@@ -63,7 +67,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 const tabsNavRef = ref<HTMLElement | null>(null);
 const tabsContentRefs = ref<HTMLElement[] | null>(null);
 
-const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useTabs(tabsNavRef, tabsContentRefs, props.transitionDuration);
+const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useTabs(props.axis, tabsNavRef, tabsContentRefs, props.transitionDuration);
 
 onMounted(() => {
   initNavDecorators();
@@ -71,7 +75,7 @@ onMounted(() => {
 </script>
 
 <style lang="css">
-.tabs {
+.tabs-core {
   /*
   * CSS var within /assets/styles/components/tabs.css
   */
@@ -108,7 +112,7 @@ onMounted(() => {
       bottom: 0;
       top: 0;
       scale: var(--_width-hovered, 0.125) 1;
-      translate: var(--_left-hovered, 0) 0;
+      translate: var(--_x-hovered, 0) 0;
       transform-origin: left;
       transition: scale var(--_transition-duration), translate var(--_transition-duration);
       z-index: 1;
@@ -122,7 +126,7 @@ onMounted(() => {
       bottom: 0;
       top: 0;
       scale: var(--_width-active, 0.125) 1;
-      translate: var(--_left-active, 0) 0;
+      translate: var(--_x-active, 0) 0;
       transform-origin: left;
       transition: scale var(--_transition-duration), translate var(--_transition-duration);
       z-index: 2;
@@ -135,7 +139,7 @@ onMounted(() => {
       right: 0;
       bottom: 0;
       scale: var(--_width-active, 0.125) 1;
-      translate: var(--_left-active, 0) 0;
+      translate: var(--_x-active, 0) 0;
       transform-origin: left;
       transition: scale var(--_transition-duration), translate var(--_transition-duration);
       z-index: 3;
@@ -185,6 +189,7 @@ onMounted(() => {
       padding: 1em 2em;
 
       &:hover {
+        /* background: var(--_tabs-hovered-bg); */
         color: var(--_tabs-hovered-text);
       }
 
@@ -224,6 +229,80 @@ onMounted(() => {
 
     /* .tab-content {
     } */
+  }
+}
+
+/*
+* Deal with axis-y
+**/
+
+.tabs-core {
+  &.axis-y {
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+
+    .tabs-list {
+      flex-direction: column;
+
+      border-bottom: initial;
+      border-left: var(--_tabs-border-bottom);
+      position: relative;
+
+      .tabs-list-item {
+        text-align: left;
+        width: 100%;
+
+        /* &:hover {
+          color: var(--_tabs-hovered-text);
+        }
+
+        &[aria-selected='true'] {
+          color: var(--_tabs-active-text);
+        }
+
+        &.transitioning {
+          color: var(--_tabs-hovered-text);
+        } */
+      }
+
+      .nav__hovered {
+        left: 0;
+        right: initial;
+        bottom: initial;
+        top: 0;
+        height: var(--_y-height);
+        translate: 0 var(--_y-hovered, 0);
+        transform-origin: top;
+        width: var(--_y-width);
+      }
+
+      .nav__active {
+        left: 0;
+        right: initial;
+        bottom: initial;
+        top: 0;
+        height: var(--_y-height);
+        translate: 0 var(--_y-active, 0);
+        transform-origin: top;
+        width: var(--_y-width);
+      }
+
+      .nav__active-indicator {
+        left: 0;
+        right: initial;
+        bottom: initial;
+        top: 0;
+        height: var(--_y-height);
+        scale: var(--_width-active, 0.125) 1;
+        translate: 0 var(--_y-active, 0);
+        transform-origin: top;
+        width: 0.4em;
+      }
+    }
+    .tab-content-wrapper {
+      flex-grow: 1;
+    }
   }
 }
 </style>
