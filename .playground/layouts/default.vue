@@ -46,6 +46,7 @@ const navLinks = <INavLink[]>[
   { name: 'Container Glow', path: '/ui/container-glow' },
   { name: 'Accordian', path: '/ui/accordian' },
   { name: 'Layout Row', path: '/ui/layout-row' },
+  { name: 'Layout Grid A', path: '/ui/layout-grid-a' },
   { name: 'Dialogs', path: '/ui/dialog' },
   { name: 'Tabs X', path: '/ui/tabs' },
   { name: 'Tabs Y', path: '/ui/tabs-y' },
@@ -57,6 +58,7 @@ const navLinks = <INavLink[]>[
 .header {
   ul {
     display: flex;
+    flex-wrap: wrap;
     gap: 1.2rem;
     list-style-type: none;
     margin: 0;

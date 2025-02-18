@@ -22,9 +22,14 @@ export const useStyleClassPassthrough = (styleClassPassthrough: string[]) => {
     });
   };
 
+  const resetElementClasses = (propsClasses: string[]) => {
+    styleClassPassthroughRef.value = propsClasses;
+  };
+
   return {
     elementClasses,
     updateElementClasses,
+    resetElementClasses,
     styleClassPassthroughRef,
   };
 };
