@@ -32,6 +32,8 @@ const props = defineProps({
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
+const controller = new AbortController();
+
 const containerGlowWrapper = ref<HTMLElement>();
 const containerGlowItem = ref<HTMLElement[]>([]);
 
@@ -80,21 +82,26 @@ const RESTYLE = () => {
 // document.body.addEventListener('pointermove', UPDATE);
 
 onMounted(() => {
+  RESTYLE();
   if (containerGlowWrapper.value) {
-    RESTYLE();
-    document.body.addEventListener('pointermove', UPDATE);
+    document.body.addEventListener('pointermove', UPDATE, {
+      signal: controller.signal,
+    });
   }
+});
+
+onBeforeUnmount(() => {
+  return controller.abort();
 });
 </script>
 
 <style lang="css">
-:root {
-  --bg: hsl(246 44% 7%);
-  --border: hsl(280 10% 50% / 1);
-  --card: hsl(237 36% 10%);
-  --color: hsl(240 18% 80%);
-  --border-width: 2px;
-  --border-radius: 12px;
+.container-glow-wrapper {
+  --container-bg-colour: light-dark(hsl(250, 18%, 93%), hsl(246 44% 7%));
+  --container-border-colour: hsl(280 10% 50% / 1);
+  --card: light-dark(white, hsl(246 44% 7%));
+  --container-border-width: 2px;
+  --container-border-radius: 12px;
   --gradient: conic-gradient(
     from 180deg at 50% 70%,
     hsla(0, 0%, 98%, 1) 0deg,
@@ -104,102 +111,100 @@ onMounted(() => {
     #4dffbf 288.0000042915344deg,
     hsla(0, 0%, 98%, 1) 1turn
   );
-}
 
-@property --start {
-  syntax: '<number>';
-  inherits: true;
-  initial-value: 0;
-}
+  @property --start {
+    syntax: '<number>';
+    inherits: true;
+    initial-value: 0;
+  }
 
-.container-glow-wrapper {
   display: flex;
   gap: 3.2rem;
-}
 
-.container-glow-core {
-  & *,
-  & *:after,
-  & *:before {
-    box-sizing: border-box;
-  }
+  .container-glow-core {
+    & *,
+    & *:after,
+    & *:before {
+      box-sizing: border-box;
+    }
 
-  --active: 0.15;
-  --start: 0;
-  height: 100%;
-  background: var(--card);
-  padding: 2rem;
-  aspect-ratio: 330 / 400;
-  border-radius: var(--border-radius);
-  min-width: 280px;
-  max-width: 280px;
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  position: relative;
+    --active: 0.15;
+    --start: 0;
+    height: 100%;
+    background: var(--card);
+    padding: 2rem;
+    aspect-ratio: 330 / 400;
+    border-radius: var(--container-border-radius);
+    min-width: 280px;
+    max-width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    position: relative;
 
-  &:is(:hover, :focus-visible) {
-    z-index: 2;
-  }
+    &:is(:hover, :focus-visible) {
+      z-index: 2;
+    }
 
-  &::before {
-    position: absolute;
-    inset: 0;
-    border: var(--border-width) solid transparent;
-    content: '';
-    border-radius: var(--border-radius);
-    pointer-events: none;
-    background: var(--border);
-    background-attachment: fixed;
-    border-radius: var(--border-radius);
-    mask: linear-gradient(#0000, #0000),
-      conic-gradient(from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 1.5)) * 1deg), hsl(0 0% 100% / 0.15) 0deg, white, hsl(0 0% 100% / 0.15) calc(var(--spread) * 2.5deg));
-    mask-clip: padding-box, border-box;
-    mask-composite: intersect;
-    opacity: var(--active);
-    transition: opacity 1s;
-  }
-
-  &::after {
-    --bg-size: 100%;
-    content: '';
-    pointer-events: none;
-    position: absolute;
-    background: var(--gradient);
-    background-attachment: fixed;
-    border-radius: var(--border-radius);
-    opacity: var(--active, 0);
-    transition: opacity 1s;
-    --alpha: 0;
-    inset: 0;
-    border: var(--border-width) solid transparent;
-    mask: linear-gradient(#0000, #0000), conic-gradient(from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 0.5)) * 1deg), #0000 0deg, #fff, #0000 calc(var(--spread) * 0.5deg));
-    filter: brightness(1.5);
-    mask-clip: padding-box, border-box;
-    mask-composite: intersect;
-  }
-
-  .glows {
-    pointer-events: none;
-    position: absolute;
-    inset: 0;
-    filter: blur(calc(var(--blur) * 1px));
-
-    &::after,
     &::before {
-      --alpha: 0;
-      content: '';
-      background: var(--gradient);
-      background-attachment: fixed;
       position: absolute;
-      inset: -5px;
-      border: 10px solid transparent;
-      border-radius: var(--border-radius);
-      mask: linear-gradient(#0000, #0000), conic-gradient(from calc((var(--start) - (var(--spread) * 0.5)) * 1deg), #000 0deg, #fff, #0000 calc(var(--spread) * 1deg));
-      mask-composite: intersect;
+      inset: 0;
+      border: var(--container-border-width) solid transparent;
+      content: '';
+      border-radius: var(--container-border-radius);
+      pointer-events: none;
+      background: var(--container-border-colour);
+      background-attachment: fixed;
+      border-radius: var(--container-border-radius);
+      mask: linear-gradient(#0000, #0000),
+        conic-gradient(from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 1.5)) * 1deg), hsl(0 0% 100% / 0.15) 0deg, white, hsl(0 0% 100% / 0.15) calc(var(--spread) * 2.5deg));
       mask-clip: padding-box, border-box;
+      mask-composite: intersect;
       opacity: var(--active);
       transition: opacity 1s;
+    }
+
+    &::after {
+      /* --container-bg-colour-size: 100%; */
+      content: '';
+      pointer-events: none;
+      position: absolute;
+      background: var(--gradient);
+      background-attachment: fixed;
+      border-radius: var(--container-border-radius);
+      opacity: var(--active, 0);
+      transition: opacity 1s;
+      --alpha: 0;
+      inset: 0;
+      border: var(--container-border-width) solid transparent;
+      mask: linear-gradient(#0000, #0000), conic-gradient(from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 0.5)) * 1deg), #0000 0deg, #fff, #0000 calc(var(--spread) * 0.5deg));
+      filter: brightness(1.5);
+      mask-clip: padding-box, border-box;
+      mask-composite: intersect;
+    }
+
+    .glows {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      filter: blur(calc(var(--blur) * 1px));
+
+      &::after,
+      &::before {
+        --alpha: 0;
+        content: '';
+        background: var(--gradient);
+        background-attachment: fixed;
+        position: absolute;
+        inset: -5px;
+        border: 10px solid transparent;
+        border-radius: var(--container-border-radius);
+        mask: linear-gradient(#0000, #0000), conic-gradient(from calc((var(--start) - (var(--spread) * 0.5)) * 1deg), #000 0deg, #fff, #0000 calc(var(--spread) * 1deg));
+        mask-composite: intersect;
+        mask-clip: padding-box, border-box;
+        opacity: var(--active);
+        transition: opacity 1s;
+      }
     }
   }
 }

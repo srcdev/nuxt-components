@@ -6,9 +6,9 @@
           <h2 class="heading-2">Container Glow Effect</h2>
           <p>Glow will track mouse position</p>
 
-          <ContainerGlowCore :data :style-class-passthrough="['class-modifier']">
+          <ContainerGlowCore :data :style-class-passthrough="['pbe-20']">
             <template v-for="(item, key) in data" v-slot:[`container-glow-${key}`]>
-              <div class="p-12">
+              <div class="example-card p-12">
                 <h3 class="heading-3">{{ item.title }}</h3>
                 <p class="pbs-24">{{ item.content }}</p>
               </div>
@@ -55,4 +55,8 @@ const data = ref<IAccordianData[]>([
 ]);
 </script>
 
-<style lang="css"></style>
+<style lang="css">
+.example-card {
+  background-color: light-dark(white, hsl(246 44% 7%));
+}
+</style>
