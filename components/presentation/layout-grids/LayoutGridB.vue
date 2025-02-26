@@ -2,12 +2,11 @@
   <div class="layout-reporting-grid" :class="[elementClasses]">
     <section class="reporting-block">
       <div class="slot-1">
-        <div class="panel">Panel 1<br />Panel 1<br />Panel 1<br />Panel 1</div>
-        <div class="panel">Panel 2<br />Panel 2</div>
-        <div class="panel">Panel 3</div>
-        <div class="panel">Panel 4<br />Panel 4<br />Panel 4<br />Panel 4<br />Panel 4</div>
-        <div class="panel">Panel 5<br />Panel 5<br />Panel 5</div>
+        <div v-for="key in slot1ItemCount" class="panel">
+          <slot :name="`slot1-${key}-content`"></slot>
+        </div>
       </div>
+
       <!-- Delete slot-2 to test not present -->
       <div class="slot-2">
         <div class="panel">
@@ -76,6 +75,10 @@
 
 <script setup lang="ts">
 const props = defineProps({
+  slot1ItemCount: {
+    type: Number as PropType<number>,
+    default: 5,
+  },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
     default: () => [],
@@ -146,15 +149,15 @@ watch(
     display: grid;
     grid-area: slot1;
     /* Force 5 equally paced items     */
-    grid-template-columns: 1fr;
+    /* grid-template-columns: 1fr; */
 
-    gap: 12px;
+    /* gap: 12px; */
 
     /* Columns will be fluid between 250px and full width depending on space available */
-    @container (min-width: 680px) {
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 12px;
-    }
+    /* @container (min-width: 680px) { */
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    /* } */
 
     .panel {
       display: grid;

@@ -8,54 +8,26 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
-          <LayoutGridB :styleClassPassthrough="[canvasName]">
-            <template #slot1>
-              <h3 class="heading-3">Slot 1</h3>
-              <p>
-                Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit convallis himenaeos. Tellus varius cursus convallis commodo suspendisse litora.
-                Platea accumsan interdum ultrices adipiscing molestie cras dui. Vehicula egestas nisi sagittis fames metus velit. Sodales blandit nisi eu dis sit, ridiculus aliquam. Morbi tellus eu in
-                penatibus torquent tortor. Platea gravida nam; egestas enim nostra ultricies.
-              </p>
+          <LayoutGridB :slot1ItemCount="6" :styleClassPassthrough="[canvasName]">
+            <template v-slot:[`slot1-1-content`]>
+              <p class="p-24">This is content slot 1</p>
             </template>
-            <template #slot2>
-              <h3 class="heading-3">Slot 2</h3>
-              <p>
-                Mi nibh quisque taciti porta curabitur nostra volutpat. Habitant sodales arcu habitasse mi duis conubia leo lacinia. Montes torquent sodales adipiscing; proin semper feugiat morbi
-                ullamcorper praesent. Arcu luctus tempor quam ligula vestibulum sapien faucibus ridiculus. Cursus consequat ultricies consectetur class suscipit quisque convallis eget? Dignissim
-                mattis luctus enim habitant porta pretium litora. Parturient montes imperdiet massa; sollicitudin varius hac aptent. Eleifend parturient mattis tellus nisi a montes.
-              </p>
+            <template v-slot:[`slot1-2-content`]>
+              <p class="p-24">This is content slot 2</p>
             </template>
-            <template #slot3>
-              <h3 class="heading-3">Slot 3</h3>
-              <p>
-                Mi nibh quisque taciti porta curabitur nostra volutpat. Habitant sodales arcu habitasse mi duis conubia leo lacinia. Montes torquent sodales adipiscing; proin semper feugiat morbi
-                ullamcorper praesent. Arcu luctus tempor quam ligula vestibulum sapien faucibus ridiculus. Cursus consequat ultricies consectetur class suscipit quisque convallis eget? Dignissim
-                mattis luctus enim habitant porta pretium litora. Parturient montes imperdiet massa; sollicitudin varius hac aptent. Eleifend parturient mattis tellus nisi a montes.
-              </p>
+            <template v-slot:[`slot1-3-content`]>
+              <p class="p-24">This is content slot 3</p>
             </template>
-            <template #slot4>
-              <h3 class="heading-3">Slot 4</h3>
-              <p>
-                Mi nibh quisque taciti porta curabitur nostra volutpat. Habitant sodales arcu habitasse mi duis conubia leo lacinia. Montes torquent sodales adipiscing; proin semper feugiat morbi
-                ullamcorper praesent. Arcu luctus tempor quam ligula vestibulum sapien faucibus ridiculus. Cursus consequat ultricies consectetur class suscipit quisque convallis eget? Dignissim
-                mattis luctus enim habitant porta pretium litora. Parturient montes imperdiet massa; sollicitudin varius hac aptent. Eleifend parturient mattis tellus nisi a montes.
-              </p>
+            <template v-slot:[`slot1-4-content`]>
+              <p class="p-24">This is content slot 4</p>
+            </template>
+            <template v-slot:[`slot1-5-content`]>
+              <p class="p-24">This is content slot 5</p>
+            </template>
+            <template v-slot:[`slot1-6-content`]>
+              <p class="p-24">This is content slot 6</p>
             </template>
           </LayoutGridB>
-        </LayoutRow>
-
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
-          <h2 class="heading-2">Full Width</h2>
-          <p>
-            Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit convallis himenaeos. Tellus varius cursus convallis commodo suspendisse litora.
-            Platea accumsan interdum ultrices adipiscing molestie cras dui. Vehicula egestas nisi sagittis fames metus velit. Sodales blandit nisi eu dis sit, ridiculus aliquam. Morbi tellus eu in
-            penatibus torquent tortor. Platea gravida nam; egestas enim nostra ultricies.
-          </p>
-          <p>
-            Mi nibh quisque taciti porta curabitur nostra volutpat. Habitant sodales arcu habitasse mi duis conubia leo lacinia. Montes torquent sodales adipiscing; proin semper feugiat morbi
-            ullamcorper praesent. Arcu luctus tempor quam ligula vestibulum sapien faucibus ridiculus. Cursus consequat ultricies consectetur class suscipit quisque convallis eget? Dignissim mattis
-            luctus enim habitant porta pretium litora. Parturient montes imperdiet massa; sollicitudin varius hac aptent. Eleifend parturient mattis tellus nisi a montes.
-          </p>
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -78,4 +50,40 @@ useHead({
 });
 
 const canvasName = ref<MediaCanvas>('desktopCanvas');
+
+interface IAccordianData {
+  title: string;
+  content: string;
+}
+
+const data = ref<IAccordianData[]>([
+  {
+    title: 'Item 1',
+    content: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!. Lorem ipsum dolor sit, adipisicing elit. Iusto, amet!',
+  },
+  {
+    title: 'Item 2',
+    content: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!',
+  },
+  {
+    title: 'Item 3',
+    content:
+      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!',
+  },
+  {
+    title: 'Item 4',
+    content:
+      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!',
+  },
+  {
+    title: 'Item 5',
+    content:
+      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!',
+  },
+  {
+    title: 'Item 6',
+    content:
+      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!',
+  },
+]);
 </script>
