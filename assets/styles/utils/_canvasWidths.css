@@ -1,0 +1,18 @@
+/*
+* Used for testing the responsiveness of components
+* by setting the max-width of the canvas to the desired width
+* See: useCanvasSwitcher()
+**/
+
+.mobileCanvas {
+  max-width: 412px;
+}
+.tabletCanvas {
+  max-width: 768px;
+}
+.laptopCanvas {
+  max-width: 1024px;
+}
+.desktopCanvas {
+  max-width: 1280px;
+}

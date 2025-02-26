@@ -47,6 +47,7 @@ const navLinks = <INavLink[]>[
   { name: 'Accordian', path: '/ui/accordian' },
   { name: 'Layout Row', path: '/ui/layout-row' },
   { name: 'Layout Grid A', path: '/ui/layout-grid-a' },
+  { name: 'Layout Grid B', path: '/ui/layout-grid-b' },
   { name: 'Dialogs', path: '/ui/dialog' },
   { name: 'Tabs X', path: '/ui/tabs' },
   { name: 'Tabs Y', path: '/ui/tabs-y' },
