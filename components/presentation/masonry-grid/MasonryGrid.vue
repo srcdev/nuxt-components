@@ -1,5 +1,5 @@
 <template>
-  <div class="masonry-grid-wrapper">
+  <div class="masonry-grid-wrapper" :class="[elementClasses]">
     <template v-for="item in gridData" :key="item.id">
       <div class="masonry-grid-item">
         <slot :name="item.id"></slot>
@@ -14,9 +14,22 @@ const props = defineProps({
     type: Object,
     default: {},
   },
+  styleClassPassthrough: {
+    type: Array as PropType<string[]>,
+    default: () => [],
+  },
 });
 
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
 const gridData = toRef(() => props.gridData);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 </script>
 
 <style lang="css">

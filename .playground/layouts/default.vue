@@ -53,6 +53,8 @@ const navLinks = <INavLink[]>[
   { name: 'Tabs Y', path: '/ui/tabs-y' },
   { name: 'Prompts', path: '/ui/display-prompt' },
   { name: 'Simple Grid', path: '/ui/simple-grid' },
+  { name: 'Masonry Grid Simple', path: '/ui/masonry-grid' },
+  { name: 'Masonry Grid Ordered', path: '/ui/masonry-grid-ordered' },
 ];
 </script>
 <style lang="css">
