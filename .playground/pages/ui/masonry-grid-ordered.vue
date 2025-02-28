@@ -15,7 +15,7 @@
             :gap="12"
             :min-tile-width="300"
             :fixed-width="useFixedWidth"
-            :styleClassPassthrough="[canvasName]"
+            :styleClassPassthrough="[canvasName, 'mi-auto']"
           >
             <template v-for="(item, index) in quotesData?.quotes.slice(0, displayCount)" v-slot:[item.id]>
               <div class="p-10 border border-1 border-grey-dark border-r-4">

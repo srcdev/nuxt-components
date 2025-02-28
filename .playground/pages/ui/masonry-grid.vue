@@ -8,7 +8,7 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
-          <MasonryGrid :gridData="quotesData?.quotes.slice(0, qoutesDisplayCount) ?? <IQuotes>{}" :styleClassPassthrough="[canvasName]">
+          <MasonryGrid :gridData="quotesData?.quotes.slice(0, qoutesDisplayCount) ?? <IQuotes>{}" :itemMinWidth="350" :gap="3.2" unit="rem" :styleClassPassthrough="[canvasName, 'mi-auto']">
             <template v-for="(item, index) in quotesData?.quotes.slice(0, qoutesDisplayCount)" v-slot:[item.id]>
               <div class="">
                 <p class="">{{ index + 1 }}: {{ item.author }}</p>
