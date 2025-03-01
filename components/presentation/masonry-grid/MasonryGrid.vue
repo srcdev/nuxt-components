@@ -1,5 +1,5 @@
 <template>
-  <div class="masonry-grid-wrapper" :class="[elementClasses]" :style="`--_masonry-grid-gap: ${gap}${unit}; --_item-min-width: ${itemMinWidth}px`" ref="gridWrapper">
+  <div class="masonry-grid-wrapper" :class="[elementClasses]" :style="`--_masonry-grid-gap: ${gap}${unit}; --_item-min-width: ${itemMinWidth}px`">
     <template v-for="item in gridData" :key="item.id">
       <div class="masonry-grid-item">
         <slot :name="item.id"></slot>
@@ -9,8 +9,6 @@
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver } from '@vueuse/core';
-
 const props = defineProps({
   gridData: {
     type: Object,
@@ -38,26 +36,12 @@ const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.s
 
 const gridData = toRef(() => props.gridData);
 
-const gridWrapper = ref<HTMLDivElement>();
-
-const getColumnCountWithinGridWrapper = () => {
-  return gridWrapper.value ? Math.floor(gridWrapper.value.clientWidth / props.itemMinWidth) : 0;
-};
-
 watch(
   () => props.styleClassPassthrough,
   () => {
     resetElementClasses(props.styleClassPassthrough);
   }
 );
-
-onMounted(() => {
-  console.log(getColumnCountWithinGridWrapper());
-});
-
-useResizeObserver(gridWrapper, () => {
-  console.log(getColumnCountWithinGridWrapper());
-});
 </script>
 
 <style lang="css">
