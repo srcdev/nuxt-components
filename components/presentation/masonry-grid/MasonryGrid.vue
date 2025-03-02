@@ -46,12 +46,15 @@ watch(
 
 <style lang="css">
 .masonry-grid-wrapper {
+  --_border-color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
+  --_color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
+
   columns: var(--_item-min-width);
-  gap: var(--_masonry-grid-gap);
+  gap: 12px;
 
   .masonry-grid-item {
     break-inside: avoid;
-    outline: 0.1rem solid #cdcdcd;
+    outline: 0.1rem solid var(--_border-color);
     padding: 1.2rem;
     margin-block-end: var(--_masonry-grid-gap);
   }

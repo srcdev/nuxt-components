@@ -120,8 +120,13 @@ watch(
 
 <style scoped lang="css">
 .masonry-grid-ordered {
+  --_border-color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
+  --_transition-duration: 0.3s;
+
   container-type: inline-size;
   position: relative;
+
+  transition: max-width var(--_transition-duration) ease;
 
   .masonry-grid-ordered-wrapper {
     display: grid;
@@ -144,12 +149,16 @@ watch(
     }
 
     .masonry-grid-ordered-item {
-      transition: position 0.3s ease, top 0.3s ease, left 0.3s ease;
+      transition: position var(--_transition-duration) ease, top var(--_transition-duration) ease, left var(--_transition-duration) ease;
 
       position: var(--_position);
       top: var(--_position-top);
       left: var(--_position-left);
       width: var(--_element-width);
+
+      outline: 0.1rem solid var(--_border-color);
+      padding: 1.2rem;
+      border-radius: 4px;
     }
   }
 }
