@@ -8,22 +8,27 @@
             <div class="display-flex mbe-12" align-content="center-center" gap="12px" flex-wrap="wrap">
               <label for="rotateX">rotateX</label>
               <input type="range" min="-20" max="20" step="1" v-model="rotateX" id="rotateX" />
-              <span>{{ rotateX }}</span>
+              <span>{{ rotateX }}deg</span>
             </div>
             <div class="display-flex mbe-12" align-content="center-center" gap="12px" flex-wrap="wrap">
               <label for="perspective">perspective</label>
               <input type="range" min="600" max="1500" step="50" v-model="perspective" id="perspective" />
-              <span>{{ perspective }}</span>
+              <span>{{ perspective }}px</span>
             </div>
             <div class="display-flex mbe-12" align-content="center-center" gap="12px" flex-wrap="wrap">
               <label for="translateZ">translateZ</label>
               <input type="range" min="350" max="900" step="10" v-model="translateZ" id="translateZ" />
-              <span>{{ translateZ }}</span>
+              <span>{{ translateZ }}px</span>
+            </div>
+            <div class="display-flex mbe-12" align-content="center-center" gap="12px" flex-wrap="wrap">
+              <label for="pauseOnHover">pauseOnHover</label>
+              <input type="checkbox" v-model="pauseOnHover" id="pauseOnHover" />
+              <span>{{ pauseOnHover }}</span>
             </div>
           </div>
         </LayoutRow>
         <LayoutRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']">
-          <RotatingCarouselImage :data :rotateX="Number(rotateX)" :perspective="Number(perspective)" :translateZ="Number(translateZ)" />
+          <RotatingCarouselImage :data :rotateX="Number(rotateX)" :perspective="Number(perspective)" :translateZ="Number(translateZ)" :pauseOnHover />
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -49,8 +54,9 @@ useHead({
 });
 
 const perspective = ref<number>(1000);
-const rotateX = ref<number>(0);
+const rotateX = ref<number>(-13);
 const translateZ = ref<number>(550);
+const pauseOnHover = ref<boolean>(false);
 
 interface IAccordianData {
   src: string;

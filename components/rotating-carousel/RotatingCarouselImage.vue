@@ -1,9 +1,11 @@
 <template>
   <component
     :is="tag"
-    class="banner"
+    class="rotating-carousel"
     :class="[elementClasses]"
-    :style="`--quantity: ${Object.keys(data).length}; --_rotate-x: ${rotateXProp}; --_perspective: ${perspectiveProp}; --_translateZ: ${translateZProp};`"
+    :style="`--quantity: ${Object.keys(data).length}; --_rotate-x: ${rotateXProp}; --_perspective: ${perspectiveProp}; --_translateZ: ${translateZProp}; --_animation-play-state: ${
+      pauseOnHover ? 'paused' : 'running'
+    }`"
   >
     <div class="slider" style="--quantity: 10">
       <div v-for="(item, key) in data" :key="key" class="item" :style="`--_position: ${key}`"><NuxtImg :src="item.src" :alt="item.alt" /></div>
@@ -44,6 +46,10 @@ const props = defineProps({
     type: Number,
     default: 1000,
   },
+  pauseOnHover: {
+    type: Boolean,
+    default: false,
+  },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
     default: () => [],
@@ -65,25 +71,6 @@ watch(
 </script>
 
 <style lang="css">
-.banner {
-  width: 100%;
-  height: 100vh;
-  text-align: center;
-  overflow: hidden;
-  position: relative;
-}
-.banner .slider {
-  position: absolute;
-  width: 200px;
-  height: 250px;
-  top: 10%;
-  left: calc(50% - 100px);
-  transform-style: preserve-3d;
-  transform: perspective(var(--_perspective));
-  animation: autoRun 30s linear infinite;
-  z-index: 2;
-  /* transition: transform 0.5s ease-in-out; */
-}
 @keyframes autoRun {
   from {
     transform: perspective(var(--_perspective)) rotateX(var(--_rotate-x)) rotateY(0deg);
@@ -93,14 +80,39 @@ watch(
   }
 }
 
-.banner .slider .item {
-  position: absolute;
-  inset: 0 0 0 0;
-  transform: rotateY(calc((var(--_position) - 1) * (360 / var(--quantity)) * 1deg)) translateZ(var(--_translateZ));
-}
-.banner .slider .item img {
+.rotating-carousel {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: 100vh;
+  text-align: center;
+  overflow: hidden;
+  position: relative;
+
+  .slider {
+    position: absolute;
+    width: 200px;
+    height: 250px;
+    top: 10%;
+    left: calc(50% - 100px);
+    transform-style: preserve-3d;
+    transform: perspective(var(--_perspective));
+    animation: autoRun 30s linear infinite;
+    z-index: 2;
+
+    &:has(.item img:hover) {
+      animation-play-state: var(--_animation-play-state);
+    }
+
+    .item {
+      position: absolute;
+      inset: 0 0 0 0;
+      transform: rotateY(calc((var(--_position) - 1) * (360 / var(--quantity)) * 1deg)) translateZ(var(--_translateZ));
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
 }
 </style>
