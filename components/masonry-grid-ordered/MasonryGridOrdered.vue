@@ -79,11 +79,6 @@ const updateGrid = () => {
       const minHeight = Math.min(...colHeights);
       const minIndex = colHeights.indexOf(minHeight);
 
-      // item.style.position = 'absolute';
-      // item.style.top = minHeight + 'px';
-      // item.style.width = itemWidth + 'px';
-      // item.style.left = minIndex * (100 / columnCount.value) + '%';
-
       item?.style.setProperty('--_position', 'absolute');
       item?.style.setProperty('--_position-top', minHeight + 'px');
       item?.style.setProperty('--_position-left', minIndex * (100 / columnCount.value) + '%');
@@ -93,8 +88,6 @@ const updateGrid = () => {
     });
 
     const maxHeight = Math.max(...colHeights);
-
-    // gridWrapper.value.style.height = maxHeight + 'px';
     gridWrapper.value?.style.setProperty('--_wrapper-height', maxHeight + 'px');
   }
 };

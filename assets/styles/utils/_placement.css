@@ -1,0 +1,73 @@
+/*
+* <div placement="top-left"></siv>
+* <div placement="bottom-right"></siv>
+**/
+
+[placement^='top'] {
+  align-self: start;
+}
+
+[placement^='bottom'] {
+  align-self: end;
+}
+
+[placement^='center'] {
+  align-self: center;
+}
+
+[placement$='left'] {
+  justify-self: start;
+}
+
+[placement$='right'] {
+  justify-self: start;
+}
+
+[placement$='center'] {
+  align-self: center;
+}
+
+/*
+* <div align-content="top-left"></siv>
+* <div align-content="bottom-right"></siv>
+**/
+
+[align-content^='center'] {
+  align-items: center;
+}
+
+[align-content^='top'] {
+  align-items: start;
+}
+
+[align-content^='bottom'] {
+  align-items: end;
+}
+
+[align-content$='center'] {
+  justify-content: center;
+}
+
+[align-content$='left'] {
+  justify-content: start;
+}
+
+[align-content$='right'] {
+  justify-content: end;
+}
+
+[align-content$='space-around'] {
+  justify-content: space-around;
+}
+
+[align-content$='space-between'] {
+  justify-content: space-between;
+}
+
+[gap='12px'] {
+  gap: 12px;
+}
+
+[flex-wrap='wrap'] {
+  flex-wrap: wrap;
+}
