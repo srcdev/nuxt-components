@@ -56,7 +56,9 @@ const navLinks = <INavLink[]>[
   { name: 'Masonry Grid Simple', path: '/ui/masonry-grid' },
   { name: 'Masonry Grid Sorted', path: '/ui/masonry-grid-sorted' },
   { name: 'Masonry Grid Ordered', path: '/ui/masonry-grid-ordered' },
+  { name: 'Masonry Columns', path: '/ui/masonry-columns' },
   { name: 'Rotating Carousel', path: '/ui/rotating-carousel' },
+  { name: 'Clipped Panels', path: '/ui/clipped-panels' },
 ];
 </script>
 <style lang="css">

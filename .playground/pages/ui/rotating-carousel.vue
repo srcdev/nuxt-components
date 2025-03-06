@@ -25,10 +25,15 @@
               <input type="checkbox" v-model="pauseOnHover" id="pauseOnHover" />
               <span>{{ pauseOnHover }}</span>
             </div>
+            <div class="display-flex mbe-12" align-content="center-center" gap="12px" flex-wrap="wrap">
+              <label for="useParallaxEffect">useParallaxEffect</label>
+              <input type="checkbox" v-model="useParallaxEffect" id="useParallaxEffect" />
+              <span>{{ useParallaxEffect }}</span>
+            </div>
           </div>
         </LayoutRow>
         <LayoutRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']">
-          <RotatingCarouselImage :data :rotateX="Number(rotateX)" :perspective="Number(perspective)" :translateZ="Number(translateZ)" :pauseOnHover />
+          <RotatingCarouselImage :data :rotateX="Number(rotateX)" :perspective="Number(perspective)" :translateZ="Number(translateZ)" :pauseOnHover :useParallaxEffect />
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -57,6 +62,7 @@ const perspective = ref<number>(1000);
 const rotateX = ref<number>(-13);
 const translateZ = ref<number>(550);
 const pauseOnHover = ref<boolean>(false);
+const useParallaxEffect = ref<boolean>(true);
 
 interface IAccordianData {
   src: string;
