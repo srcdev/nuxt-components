@@ -3,7 +3,7 @@
     :is="tag"
     class="rotating-carousel"
     :class="[elementClasses]"
-    :style="`--_rotate-x: ${currentRotateX}deg; --_perspective: ${perspectiveProp}; --_translateZ: ${translateZProp}; --_animation-play-state: ${pauseOnHover ? 'paused' : 'running'}`"
+    :style="`--_rotate-x: ${rotateXProp}deg; --_perspective: ${perspectiveProp}; --_translateZ: ${translateZProp}; --_animation-play-state: ${pauseOnHover ? 'paused' : 'running'}`"
     ref="carouselRef"
   >
     <div class="slider" :style="`--quantity: ${Object.keys(data).length}`">
@@ -21,8 +21,6 @@ interface IAccordianData {
 </script>
 
 <script setup lang="ts">
-import { useParallax } from '@vueuse/core';
-
 const props = defineProps({
   data: {
     type: Array as PropType<IAccordianData[]>,
@@ -61,12 +59,11 @@ const props = defineProps({
   },
 });
 
-const rotateXProp = computed(() => `${props.rotateX.toString()}deg`);
 const perspectiveProp = computed(() => `${props.perspective.toString()}px`);
 const translateZProp = computed(() => `${props.translateZ.toString()}px`);
 
 const carouselRef = ref<HTMLElement | null>(null);
-const currentRotateX = ref(props.rotateX);
+const rotateXProp = ref(props.rotateX);
 const minRotateX = -32;
 const maxRotateX = 32;
 
@@ -83,55 +80,53 @@ watch(
   () => props.rotateX,
   () => {
     if (!props.useParallaxEffect) {
-      console.log('currentRotateX changed: ', currentRotateX.value);
+      console.log('rotateXProp changed: ', rotateXProp.value);
 
-      currentRotateX.value = props.rotateX;
+      rotateXProp.value = props.rotateX;
     }
   }
 );
 
-// watch(
-//   () => currentRotateX.value,
-//   () => {
-//     console.log('currentRotateX changed: ', currentRotateX.value);
-//   }
-// );
-
-onMounted(() => {
-  // Use only one method - either IntersectionObserver OR scroll events, not both
-  if ('IntersectionObserver' in window && props.useParallaxEffect) {
-    // Option 1: Use scroll events (recommended for this use case)
-    const handleScroll = () => {
-      if (!carouselRef.value) return;
-
-      const rect = carouselRef.value.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-
-      // Calculate how far the element is through the viewport
-      // Adjusted calculation for smoother transition
-      const elementCenter = rect.top + rect.height / 2;
-      const viewportCenter = viewportHeight / 2;
-      const distanceFromCenter = viewportCenter - elementCenter;
-      const maxDistance = viewportHeight / 2 + rect.height / 2;
-
-      // Convert to progress value between 0 and 1
-      const progress = (distanceFromCenter + maxDistance) / (maxDistance * 2);
-      const clampedProgress = Math.max(0, Math.min(1, progress));
-
-      // Map progress to rotation value
-      currentRotateX.value = minRotateX + (maxRotateX - minRotateX) * clampedProgress;
-    };
-
-    // Initial call to set the correct position
-    handleScroll();
-
-    window.addEventListener('scroll', handleScroll);
-
-    // Clean up
-    onUnmounted(() => {
+watch(
+  () => props.useParallaxEffect,
+  (currentValue) => {
+    if (currentValue) {
+      handleScroll();
+      window.addEventListener('scroll', handleScroll);
+    } else {
       window.removeEventListener('scroll', handleScroll);
-    });
+    }
   }
+);
+
+const handleScroll = () => {
+  if (!carouselRef.value) return;
+  if ('IntersectionObserver' in window) {
+    const rect = carouselRef.value.getBoundingClientRect();
+    const viewportHeight = window.innerHeight;
+
+    const elementCenter = rect.top + rect.height / 2;
+    const viewportCenter = viewportHeight / 2;
+    const distanceFromCenter = viewportCenter - elementCenter;
+    const maxDistance = viewportHeight / 2 + rect.height / 2;
+
+    const progress = (distanceFromCenter + maxDistance) / (maxDistance * 2);
+    const clampedProgress = Math.max(0, Math.min(1, progress));
+
+    rotateXProp.value = minRotateX + (maxRotateX - minRotateX) * clampedProgress;
+  }
+};
+
+onMounted(async () => {
+  if (props.useParallaxEffect) {
+    handleScroll();
+    await nextTick();
+    window.addEventListener('scroll', handleScroll);
+  }
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
 });
 </script>
 
@@ -162,12 +157,12 @@ onMounted(() => {
 
 .rotating-carousel {
   width: 100%;
-  height: 100vh;
+  height: 70svh;
   text-align: center;
   overflow: hidden;
   position: relative;
 
-  padding-block: 800px;
+  /* padding-block: 800px; */
 
   /* &.scroll-effect {
     animation: autoRotateAnimation;
@@ -178,7 +173,7 @@ onMounted(() => {
     position: absolute;
     width: 200px;
     height: 250px;
-    top: 10%;
+    bottom: 35%;
     left: calc(50% - 100px);
     transform-style: preserve-3d;
     transform: perspective(var(--_perspective));
