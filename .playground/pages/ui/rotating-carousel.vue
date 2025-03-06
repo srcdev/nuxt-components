@@ -65,44 +65,40 @@ interface IAccordianData {
 
 const data = ref<IAccordianData[]>([
   {
-    src: '/images/rotating-carousel/dragon_1.jpg',
+    src: '/images/rotating-carousel/image-1.webp',
     alt: 'Image 1',
   },
   {
-    src: '/images/rotating-carousel/dragon_2.jpg',
+    src: '/images/rotating-carousel/image-2.webp',
     alt: 'Image 2',
   },
   {
-    src: '/images/rotating-carousel/dragon_3.jpg',
+    src: '/images/rotating-carousel/image-3.webp',
     alt: 'Image 3',
   },
   {
-    src: '/images/rotating-carousel/dragon_4.jpg',
+    src: '/images/rotating-carousel/image-4.webp',
     alt: 'Image 4',
   },
   {
-    src: '/images/rotating-carousel/dragon_5.jpg',
+    src: '/images/rotating-carousel/image-5.webp',
     alt: 'Image 5',
   },
   {
-    src: '/images/rotating-carousel/dragon_6.jpg',
+    src: '/images/rotating-carousel/image-6.webp',
     alt: 'Image 6',
   },
   {
-    src: '/images/rotating-carousel/dragon_7.jpg',
+    src: '/images/rotating-carousel/image-7.webp',
     alt: 'Image 7',
   },
   {
-    src: '/images/rotating-carousel/dragon_8.jpg',
+    src: '/images/rotating-carousel/image-8.webp',
     alt: 'Image 8',
   },
   {
-    src: '/images/rotating-carousel/dragon_9.jpg',
+    src: '/images/rotating-carousel/image-9.webp',
     alt: 'Image 9',
-  },
-  {
-    src: '/images/rotating-carousel/dragon_10.jpg',
-    alt: 'Image 10',
   },
 ]);
 </script>

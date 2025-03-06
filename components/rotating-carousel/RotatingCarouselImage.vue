@@ -3,11 +3,9 @@
     :is="tag"
     class="rotating-carousel"
     :class="[elementClasses]"
-    :style="`--quantity: ${Object.keys(data).length}; --_rotate-x: ${rotateXProp}; --_perspective: ${perspectiveProp}; --_translateZ: ${translateZProp}; --_animation-play-state: ${
-      pauseOnHover ? 'paused' : 'running'
-    }`"
+    :style="`--_rotate-x: ${rotateXProp}; --_perspective: ${perspectiveProp}; --_translateZ: ${translateZProp}; --_animation-play-state: ${pauseOnHover ? 'paused' : 'running'}`"
   >
-    <div class="slider" style="--quantity: 10">
+    <div class="slider" :style="`--quantity: ${Object.keys(data).length}`">
       <div v-for="(item, key) in data" :key="key" class="item" :style="`--_position: ${key}`"><NuxtImg :src="item.src" :alt="item.alt" /></div>
     </div>
   </component>
