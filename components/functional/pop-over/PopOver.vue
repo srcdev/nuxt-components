@@ -4,10 +4,10 @@
       <slot name="trigger"></slot>
     </button>
 
-    <dialog popover role="tooltip" :id="popovertarget" :class="[elementClasses]">
+    <div class="dialog" popover role="tooltip" :id="popovertarget" :class="[elementClasses]">
       <button :popovertarget popovertargetaction="hide">x</button>
       <slot name="popoverCotent"></slot>
-    </dialog>
+    </div>
   </ClientOnly>
 </template>
 
@@ -46,7 +46,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     anchor-name: v-bind(anchorName);
   }
 
-  dialog {
+  .dialog {
     display: none;
     position: absolute;
     position-anchor: v-bind(anchorName);

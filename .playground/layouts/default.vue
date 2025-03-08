@@ -5,13 +5,7 @@
         <LayoutRow tag="div" variant="popout">
           <template #default>
             <h1 class="heading-1">Nuxt Component Library</h1>
-            <nav>
-              <ul>
-                <li v-for="link in navLinks" :key="link.name">
-                  <NuxtLink :to="link.path" class="link-normal">{{ link.name }}</NuxtLink>
-                </li>
-              </ul>
-            </nav>
+            <DeepExpandingMenu />
           </template>
         </LayoutRow>
       </template>
@@ -36,30 +30,30 @@ if (import.meta.client && !('anchorName' in document.documentElement.style)) {
 </script> -->
 
 <script setup lang="ts">
-interface INavLink {
-  name: string;
-  path: string;
-}
+// interface INavLink {
+//   name: string;
+//   path: string;
+// }
 
-const navLinks = <INavLink[]>[
-  { name: 'Home', path: '/' },
-  { name: 'Container Glow', path: '/ui/container-glow' },
-  { name: 'Accordian', path: '/ui/accordian' },
-  { name: 'Layout Row', path: '/ui/layout-row' },
-  { name: 'Layout Grid A', path: '/ui/layout-grid-a' },
-  { name: 'Layout Grid B', path: '/ui/layout-grid-b' },
-  { name: 'Dialogs', path: '/ui/dialog' },
-  { name: 'Tabs X', path: '/ui/tabs' },
-  { name: 'Tabs Y', path: '/ui/tabs-y' },
-  { name: 'Prompts', path: '/ui/display-prompt' },
-  { name: 'Simple Grid', path: '/ui/simple-grid' },
-  { name: 'Masonry Grid Simple', path: '/ui/masonry-grid' },
-  { name: 'Masonry Grid Sorted', path: '/ui/masonry-grid-sorted' },
-  { name: 'Masonry Grid Ordered', path: '/ui/masonry-grid-ordered' },
-  { name: 'Masonry Columns', path: '/ui/masonry-columns' },
-  { name: 'Rotating Carousel', path: '/ui/rotating-carousel' },
-  { name: 'Clipped Panels', path: '/ui/clipped-panels' },
-];
+// const navLinks = <INavLink[]>[
+//   { name: 'Home', path: '/' },
+//   { name: 'Container Glow', path: '/ui/container-glow' },
+//   { name: 'Accordian', path: '/ui/accordian' },
+//   { name: 'Layout Row', path: '/ui/layout-row' },
+//   { name: 'Layout Grid A', path: '/ui/layout-grid-a' },
+//   { name: 'Layout Grid B', path: '/ui/layout-grid-b' },
+//   { name: 'Dialogs', path: '/ui/dialog' },
+//   { name: 'Tabs X', path: '/ui/tabs' },
+//   { name: 'Tabs Y', path: '/ui/tabs-y' },
+//   { name: 'Prompts', path: '/ui/display-prompt' },
+//   { name: 'Simple Grid', path: '/ui/simple-grid' },
+//   { name: 'Masonry Grid Simple', path: '/ui/masonry-grid' },
+//   { name: 'Masonry Grid Sorted', path: '/ui/masonry-grid-sorted' },
+//   { name: 'Masonry Grid Ordered', path: '/ui/masonry-grid-ordered' },
+//   { name: 'Masonry Columns', path: '/ui/masonry-columns' },
+//   { name: 'Rotating Carousel', path: '/ui/rotating-carousel' },
+//   { name: 'Clipped Panels', path: '/ui/clipped-panels' },
+// ];
 </script>
 <style lang="css">
 .header {
