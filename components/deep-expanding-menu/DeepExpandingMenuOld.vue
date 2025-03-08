@@ -2,17 +2,13 @@
   <component :is="tag" class="deep-expanding-menu" :class="[elementClasses]">
     <div class="inner">
       <template v-for="(link, key) in navLinks" :key="key">
-        <NuxtLink v-if="link.path" :to="link.path" class="navigation-link">{{ link.name }}</NuxtLink>
-
-        <div v-else class="navigation-group" :style="`--_anchor-name: --anchor-nav-1-${key};`" ref="detailsRef">
-          <button :popovertarget="`popovertarget-nav-1-${key}`" class="navigation-group-toggle">
-            {{ link.name }}
-          </button>
-
-          <div class="navigation-group-links" popover role="tooltip" :id="`popovertarget-nav-1-${key}`" :class="[elementClasses]">
+        <NuxtLink v-if="link.path" :to="link.path" class="">{{ link.name }}</NuxtLink>
+        <details v-else name="top-level-nav" :style="`--_position-anchor: --anchor-nav-1-${key};, --_anchor-name: --anchor-nav-1-${key};`" ref="detailsRef">
+          <summary>{{ link.name }}</summary>
+          <div popver>
             <NuxtLink v-for="childLink in link.childLinks" :key="childLink.name" :to="childLink.path" class="">{{ childLink.name }}</NuxtLink>
           </div>
-        </div>
+        </details>
       </template>
     </div>
   </component>
@@ -34,7 +30,7 @@ const props = defineProps({
 });
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-// const detailsRef = useTemplateRef('detailsRef');
+const detailsRef = useTemplateRef('detailsRef');
 
 watch(
   () => props.styleClassPassthrough,
@@ -43,9 +39,9 @@ watch(
   }
 );
 
-// onMounted(() => {
-//   console.log(detailsRef.value);
-// });
+onMounted(() => {
+  console.log(detailsRef.value);
+});
 </script>
 
 <script lang="ts">
@@ -91,17 +87,17 @@ const navLinks = <INavLink[]>[
 </script>
 
 <style lang="css">
-@layer deep-expanding-menu-setup {
+@layer popover-setup {
   @position-try --anchor-left {
     inset: auto;
-    top: calc(anchor(bottom) + 10px);
-    left: calc(anchor(left) + 10px);
+    top: anchor(top);
+    right: calc(anchor(left) + 10px);
   }
 
   @position-try-fallbacks --anchor-right {
     inset: auto;
-    top: calc(anchor(bottom) + 10px);
-    right: calc(anchor(right) + 10px);
+    top: anchor(top);
+    left: calc(anchor(right) + 10px);
   }
 
   .deep-expanding-menu {
@@ -119,7 +115,7 @@ const navLinks = <INavLink[]>[
       z-index: 1;
 
       a,
-      button {
+      summary {
         &:hover {
           cursor: pointer;
         }
@@ -135,18 +131,21 @@ const navLinks = <INavLink[]>[
         }
       }
 
-      .navigation-group {
-        display: grid;
-        /* grid-template-areas: 'details-stack'; */
-        /* z-index: 1; */
-        position: relative;
+      details {
+        all: unset;
         border: 1px solid red;
+        padding: 6px 12px;
+      }
 
-        .navigation-group-toggle {
-          all: unset;
-          /* grid-area: details-stack; */
+      details {
+        display: grid;
+        grid-template-areas: 'details-stack';
+        z-index: 1;
+
+        summary {
+          grid-area: details-stack;
+          /* position: relative; */
           anchor-name: var(--_anchor-name);
-          padding: 6px 12px;
 
           &:focus {
             outline: 2px solid green;
@@ -157,33 +156,22 @@ const navLinks = <INavLink[]>[
           }
         }
 
-        .navigation-group-links {
-          display: none;
+        div {
+          position-anchor: var(--_position-anchor);
+          background-color: black;
+          display: grid;
+          grid-area: details-stack;
+          z-index: 2;
           position: absolute;
-          position-anchor: var(--_anchor-name);
-          margin: 0;
-          /* inset: auto; */
+          inset: auto;
           top: calc(anchor(bottom) + 20px);
           left: calc(anchor(left) + 0px);
-          opacity: 0;
-          transition: opacity 200ms, display 200ms, overlay 200ms;
-          transition-behavior: allow-discrete;
+          /* translate: 0 20px; */
+          padding: 12px;
+          gap: 12px;
 
-          /* position-try: flip-inline, flip-block, flip-block flip-inline; */
-          /* position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline; */
-
-          /* position-try: ----anchor-left; */
-          /* position-try-fallbacks: --anchor-right; */
-
-          &:popover-open {
-            display: grid;
-            opacity: 1;
-
-            @starting-style {
-              display: grid;
-              opacity: 0;
-            }
-          }
+          /* position-try: --anchor-left;
+          position-try-fallbacks: --anchor-right; */
         }
       }
     }
