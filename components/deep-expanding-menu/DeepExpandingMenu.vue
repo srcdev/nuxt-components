@@ -6,17 +6,35 @@
 
         <div v-else class="navigation-group" :style="`--_anchor-name: --anchor-nav-1-${key};`" ref="detailsRef">
           <button :popovertarget="`popovertarget-nav-1-${key}`" class="navigation-group-toggle">
-            {{ link.name }}
+            <span>{{ link.name }}</span>
+            <Icon name="bi:caret-down-fill" class="icon" />
           </button>
 
-          <div class="navigation-group-links" popover role="tooltip" :id="`popovertarget-nav-1-${key}`" :class="[elementClasses]">
-            <NuxtLink v-for="childLink in link.childLinks" :key="childLink.name" :to="childLink.path" class="">{{ childLink.name }}</NuxtLink>
+          <div class="navigation-group-panel" popover role="tooltip" :id="`popovertarget-nav-1-${key}`" :class="[elementClasses]">
+            <h4 class="heading-4 mb-6">{{ link.childLinksTitle }}</h4>
+            <ul class="navigation-group-list">
+              <li class="navigation-group-item" v-for="childLink in link.childLinks" :key="childLink.name">
+                <NuxtLink :to="childLink.path" class="navigation-group-link">{{ childLink.name }}</NuxtLink>
+              </li>
+            </ul>
           </div>
         </div>
       </template>
     </div>
   </component>
 </template>
+
+<script lang="ts">
+const TAGS_ALLOWED = <string[]>['div', 'section', 'nav', 'ul', 'ol'];
+
+interface INavLink {
+  name: string;
+  path?: string;
+  isExternal?: boolean;
+  childLinks?: INavLink[];
+  childLinksTitle?: string;
+}
+</script>
 
 <script setup lang="ts">
 const props = defineProps({
@@ -26,6 +44,10 @@ const props = defineProps({
     validator(value: string) {
       return TAGS_ALLOWED.includes(value);
     },
+  },
+  navLinks: {
+    type: Array as PropType<INavLink[]>,
+    default: () => [],
   },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
@@ -48,48 +70,6 @@ watch(
 // });
 </script>
 
-<script lang="ts">
-const TAGS_ALLOWED = <string[]>['div', 'section', 'nav', 'ul', 'ol'];
-
-interface INavLink {
-  name: string;
-  path?: string;
-  isExternal?: boolean;
-  childLinks?: INavLink[];
-}
-
-const navLinks = <INavLink[]>[
-  { name: 'Home', path: '/' },
-  {
-    name: 'Components',
-    childLinks: [
-      { name: 'Container Glow', path: '/ui/container-glow' },
-      { name: 'Accordian', path: '/ui/accordian' },
-      { name: 'Dialogs', path: '/ui/dialog' },
-      { name: 'Tabs X', path: '/ui/tabs' },
-      { name: 'Tabs Y', path: '/ui/tabs-y' },
-      { name: 'Prompts', path: '/ui/display-prompt' },
-      { name: 'Rotating Carousel', path: '/ui/rotating-carousel' },
-      { name: 'Clipped Panels', path: '/ui/clipped-panels' },
-    ],
-  },
-  {
-    name: 'Layouts',
-    childLinks: [
-      { name: 'Layout Row', path: '/ui/layout-row' },
-      { name: 'Layout Grid A', path: '/ui/layout-grid-a' },
-      { name: 'Layout Grid B', path: '/ui/layout-grid-b' },
-      { name: 'Simple Grid', path: '/ui/simple-grid' },
-      { name: 'Masonry Grid Simple', path: '/ui/masonry-grid' },
-      { name: 'Masonry Grid Sorted', path: '/ui/masonry-grid-sorted' },
-      { name: 'Masonry Grid Ordered', path: '/ui/masonry-grid-ordered' },
-      { name: 'Masonry Columns', path: '/ui/masonry-columns' },
-    ],
-  },
-  { name: 'About', path: '/' },
-];
-</script>
-
 <style lang="css">
 @layer deep-expanding-menu-setup {
   @position-try --anchor-left {
@@ -105,69 +85,79 @@ const navLinks = <INavLink[]>[
   }
 
   .deep-expanding-menu {
+    --_gap-between-top-level-items: 24px;
+
     container-type: inline-size;
     display: grid;
     grid-template-areas: 'element-stack';
-    align-items: center;
-    gap: 12px;
 
     .inner {
       grid-area: element-stack;
       display: flex;
-      gap: 12px;
+      gap: var(--_gap-between-top-level-items);
       align-items: center;
-      z-index: 1;
 
-      a,
-      button {
+      .navigation-link,
+      .navigation-group-toggle {
+        all: unset;
+        border-bottom: 2px solid transparent;
+        padding-block: 8px;
+
+        transition: border-color 200ms;
+
         &:hover {
           cursor: pointer;
+          border-color: light-dark(var(--blue-12), var(--gray-0));
         }
-      }
 
-      a {
-        all: unset;
-        border: 1px solid red;
-        padding: 6px 12px;
+        &:focus {
+          border-color: light-dark(var(--blue-12), var(--gray-0));
+        }
 
         &:focus-visible {
-          outline: 2px solid red;
+          border-color: light-dark(var(--blue-12), var(--gray-0));
         }
       }
 
       .navigation-group {
-        display: grid;
-        /* grid-template-areas: 'details-stack'; */
-        /* z-index: 1; */
-        position: relative;
-        border: 1px solid red;
+        --_icon-transform: scaleY(1);
 
         .navigation-group-toggle {
-          all: unset;
-          /* grid-area: details-stack; */
           anchor-name: var(--_anchor-name);
-          padding: 6px 12px;
 
-          &:focus {
-            outline: 2px solid green;
-          }
+          display: flex;
+          align-items: center;
+          gap: 12px;
 
-          &:focus-visible {
-            outline: 2px solid red;
+          .icon {
+            display: block;
+            font-size: 1.2rem;
+
+            transform: var(--_icon-transform);
+            transition: transform 200ms;
           }
         }
 
-        .navigation-group-links {
+        .navigation-group-panel {
           display: none;
           position: absolute;
           position-anchor: var(--_anchor-name);
           margin: 0;
           /* inset: auto; */
-          top: calc(anchor(bottom) + 20px);
+          top: calc(anchor(bottom) + 10px);
           left: calc(anchor(left) + 0px);
           opacity: 0;
           transition: opacity 200ms, display 200ms, overlay 200ms;
           transition-behavior: allow-discrete;
+
+          width: min(100%, 50vw);
+
+          background-color: white;
+          border: 1px solid black;
+          border-radius: 12px;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          padding: 12px;
+          overflow: clip;
 
           /* position-try: flip-inline, flip-block, flip-block flip-inline; */
           /* position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline; */
@@ -176,14 +166,54 @@ const navLinks = <INavLink[]>[
           /* position-try-fallbacks: --anchor-right; */
 
           &:popover-open {
-            display: grid;
+            display: block;
             opacity: 1;
 
             @starting-style {
-              display: grid;
+              display: block;
               opacity: 0;
             }
           }
+
+          h4 {
+            color: var(--gray-12);
+          }
+
+          .navigation-group-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            padding-inline-start: 0;
+            margin-block-end: 8px;
+
+            .navigation-group-item {
+              display: block;
+
+              a.navigation-group-link {
+                display: inline-block;
+                color: var(--gray-12);
+                text-decoration: none;
+                padding-block: 8px;
+
+                border-bottom: 2px solid transparent;
+
+                transition: border-color 200ms;
+
+                &:hover {
+                  cursor: pointer;
+                  border-color: var(--gray-12);
+                }
+
+                &:focus-visible {
+                  border-color: var(--gray-12);
+                }
+              }
+            }
+          }
+        }
+
+        &:has(.navigation-group-panel:popover-open) {
+          --_icon-transform: scaleY(-1);
         }
       }
     }
