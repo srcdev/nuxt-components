@@ -10,7 +10,7 @@
             <Icon name="bi:caret-down-fill" class="icon" />
           </button>
 
-          <div class="navigation-group-panel" popover role="tooltip" :id="`popovertarget-nav-1-${key}`" :class="[elementClasses]">
+          <div class="navigation-group-panel" popover role="tooltip" :id="`popovertarget-nav-1-${key}`">
             <h4 class="heading-4 mb-6">{{ link.childLinksTitle }}</h4>
             <ul class="navigation-group-list">
               <li class="navigation-group-item" v-for="childLink in link.childLinks" :key="childLink.name">
