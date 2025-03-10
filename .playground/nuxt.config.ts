@@ -2,9 +2,9 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   extends: ['..'],
-  devServer: {
-    https: true,
-  },
+  // devServer: {
+  //   https: true,
+  // },
   css: ['modern-normalize', './assets/styles/main.css'],
   modules: ['@nuxt/icon'],
   app: {

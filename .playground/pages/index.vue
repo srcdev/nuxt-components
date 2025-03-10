@@ -4,7 +4,9 @@
       <template #content>
         <LayoutRow tag="div" variant="inset-content" :styleClassPassthrough="['mbe-20']">
           <h2 class="heading-2">PopOver component 1</h2>
-          <p>popoverSupported({{ popoverSupported }})</p>
+          <ClientOnly>
+            <p>popoverSupported({{ popoverSupported }})</p>
+          </ClientOnly>
 
           <PopOver popovertarget="profile1">
             <template #trigger>
@@ -65,7 +67,7 @@ const qoutesDisplayCount = 21;
 const { data: quotesData, status, error, refresh } = await useFetch<IQuotes>('https://dummyjson.com/quotes');
 
 const popoverSupported = computed(() => {
-  return import.meta.client && !('anchorName' in document.documentElement.style);
+  return 'anchorName' in document.documentElement.style;
 });
 </script>
 

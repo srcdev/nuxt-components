@@ -121,6 +121,7 @@ watch(
 
       .navigation-group {
         --_icon-transform: scaleY(1);
+        position: relative;
 
         .navigation-group-toggle {
           anchor-name: var(--_anchor-name);
@@ -146,6 +147,7 @@ watch(
           /* inset: auto; */
           top: calc(anchor(bottom) + 10px);
           left: calc(anchor(left) + 0px);
+
           opacity: 0;
           transition: opacity 200ms, display 200ms, overlay 200ms;
           transition-behavior: allow-discrete;
@@ -158,12 +160,6 @@ watch(
           box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
           padding: 12px;
           overflow: clip;
-
-          /* position-try: flip-inline, flip-block, flip-block flip-inline; */
-          /* position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline; */
-
-          /* position-try: ----anchor-left; */
-          /* position-try-fallbacks: --anchor-right; */
 
           &:popover-open {
             display: block;

@@ -32,7 +32,6 @@ import type { MediaCanvas } from '@/types/types.canvasName';
 const canvasName = defineModel<MediaCanvas>('canvasName');
 
 const updateCanvas = (setCanvas: MediaCanvas) => {
-  console.log('setCanvas', setCanvas);
   canvasName.value = setCanvas;
 };
 </script>

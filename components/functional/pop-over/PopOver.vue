@@ -30,7 +30,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 <style scoped lang="css">
 @layer popover-setup {
-  @position-try --right {
+  /* @position-try --right {
     inset: auto;
     top: anchor(top);
     left: calc(anchor(right) + 10px);
@@ -40,7 +40,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     inset: auto;
     top: anchor(top);
     right: calc(anchor(left) + 10px);
-  }
+  } */
 
   .popover-trigger {
     anchor-name: v-bind(anchorName);
@@ -52,17 +52,13 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     position-anchor: v-bind(anchorName);
     margin: 0;
     inset: auto;
-    top: anchor(top);
+    top: calc(anchor(top) + 0px);
     left: calc(anchor(right) + 10px);
     opacity: 0;
     transition: opacity 200ms, display 200ms, overlay 200ms;
     transition-behavior: allow-discrete;
 
-    /* position-try: flip-inline, flip-block, flip-block flip-inline; */
-    /* position-try-fallbacks: flip-inline, flip-block, flip-block flip-inline; */
-
-    position-try: --right;
-    position-try-fallbacks: --left;
+    position-try-fallbacks: flip-inline;
 
     &:popover-open {
       display: block;
@@ -73,6 +69,20 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
         opacity: 0;
       }
     }
+  }
+
+  @position-try --top-left {
+    top: anchor(top);
+    right: calc(anchor(left + 10px));
+    left: unset;
+    /* width: revert; */
+  }
+
+  @position-try --bottom-right {
+    top: anchor(bottom);
+    /* right: calc(anchor(left + 10px)); */
+    /* left: unset; */
+    /* width: revert; */
   }
 }
 </style>
