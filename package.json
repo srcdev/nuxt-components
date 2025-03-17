@@ -27,8 +27,8 @@
   "devDependencies": {
     "@iconify-json/akar-icons": "1.2.2",
     "@iconify-json/bitcoin-icons": "1.2.2",
-    "@nuxt/eslint-config": "1.0.0",
-    "@nuxt/icon": "1.10.3",
+    "@nuxt/eslint-config": "1.2.0",
+    "@nuxt/icon": "1.11.0",
     "@nuxt/image": "^1.9.0",
     "eslint": "9.22.0",
     "happy-dom": "16.8.1",
@@ -37,6 +37,7 @@
     "typescript": "5.8.2"
   },
   "dependencies": {
+    "@oddbird/css-anchor-positioning": "^0.4.0",
     "@vueuse/core": "13.0.0",
     "focus-trap-vue": "4.0.3",
     "modern-normalize": "3.0.1"

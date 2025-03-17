@@ -57,6 +57,7 @@ watch(
 );
 
 onMounted(() => {
+  console.log('DeepExpandingMenuOld');
   navigationGroupRef.value?.forEach((element, index) => {
     onClickOutside(element, () => {
       navigationGroupRef.value?.[index]?.removeAttribute('open');
