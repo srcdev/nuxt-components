@@ -1,7 +1,7 @@
 <template>
   <component :is="tag" class="deep-expanding-menu-old" :class="[elementClasses]">
     <div class="inner">
-      <template v-for="(link, key, index) in navLinks" :key="key">
+      <template v-for="(link, key) in navLinks" :key="key">
         <NuxtLink v-if="link.path" :to="link.path" class="navigation-link">{{ link.name }}</NuxtLink>
         <details v-else class="navigation-group" name="navigation-group" :style="`--_position-anchor: --anchor-nav-1-${key};, --_anchor-name: --anchor-nav-1-${key};`" ref="navigationGroupRef">
           <summary class="navigation-group-toggle">
@@ -73,6 +73,7 @@ interface INavLink {
   name: string;
   path?: string;
   isExternal?: boolean;
+  childLinksTitle?: string;
   childLinks?: INavLink[];
 }
 </script>
@@ -89,7 +90,7 @@ interface INavLink {
     .inner {
       grid-area: element-stack;
       display: flex;
-      gap: 12px;
+      gap: 24px;
       align-items: center;
       z-index: 1;
 
