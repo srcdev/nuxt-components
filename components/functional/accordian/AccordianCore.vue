@@ -1,18 +1,18 @@
 <template>
   <div class="display-accordian" :class="[elementClasses]" ref="accordianRef">
-    <template v-for="(item, key) in data" :key="key">
-      <div class="accordion-panel">
-        <button class="accordion-trigger" :id="`accordian-${key}-trigger`" aria-expanded="false" :aria-controls="`accordian-${key}-content`" ref="triggerRefs" @click.stop.prevent="handleSummary(key)">
+    <details v-for="(item, key) in data" :key="key" class="accordion-panel" name="navigation-group">
+      <summary class="accordion-trigger" :id="`accordian-${key}-trigger`" :aria-controls="`accordian-${key}-content`" ref="triggerRefs">
+        <span class="label">
           <slot :name="`accordian-${key}-trigger`"></slot>
-        </button>
-
-        <div class="accordion-content" :aria-labelledby="`accordian-${key}-trigger`" :id="`accordian-${key}-content`" role="region" aria-hidden="true" ref="contentRefs">
-          <div>
-            <slot :name="`accordian-${key}-content`"></slot>
-          </div>
+        </span>
+        <Icon name="bi:caret-down-fill" class="icon mi-12" />
+      </summary>
+      <div class="accordion-content" :aria-labelledby="`accordian-${key}-trigger`" :id="`accordian-${key}-content`" role="region" ref="contentRefs">
+        <div class="accordion-content-inner">
+          <slot :name="`accordian-${key}-content`"></slot>
         </div>
       </div>
-    </template>
+    </details>
   </div>
 </template>
 
@@ -34,31 +34,6 @@ const props = defineProps({
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-
-const accordianRef = ref<HTMLElement>();
-const triggerRefs = ref<HTMLElement[]>([]);
-const contentRefs = ref<HTMLElement[]>([]);
-
-onMounted(() => {
-  if (accordianRef.value) {
-    triggerRefs.value = Array.from(accordianRef.value.querySelectorAll('.accordion-trigger'));
-    contentRefs.value = Array.from(accordianRef.value.querySelectorAll('.accordion-content'));
-  }
-});
-
-const handleSummary = (clickedIndex: number) => {
-  triggerRefs.value.forEach((element, index) => {
-    if (clickedIndex === index) {
-      const currentState = element.getAttribute('aria-expanded');
-      const newState = currentState !== 'true';
-      triggerRefs.value[index].setAttribute('aria-expanded', String(newState));
-      contentRefs.value[index].setAttribute('aria-hidden', String(currentState));
-    } else {
-      triggerRefs.value[index].setAttribute('aria-expanded', 'false');
-      contentRefs.value[index].setAttribute('aria-hidden', 'true');
-    }
-  });
-};
 </script>
 
 <style lang="css">
@@ -68,46 +43,58 @@ const handleSummary = (clickedIndex: number) => {
 }
 
 .accordion-panel {
+  @property --_grid-template-rows {
+    syntax: '<length-percentage> | auto | min-content | max-content | minmax( <length-percentage> , <length-percentage> ) | fit-content( <length-percentage> ) | <flex>';
+    inherits: true;
+    initial-value: 0fr;
+  }
+
+  --_grid-template-rows: 0fr;
+  --_icon-transform: scaleY(1);
+
   border: var(--accordian-panel-border);
   border-radius: var(--accordian-panel-border-radius);
   margin-block-end: var(--accordian-panel-mbe);
-}
 
-.accordion-trigger {
-  display: block;
-  width: 100%;
-  padding: 1rem;
-  background: var(--accordion-trigger-bg);
-  border: none;
-  text-align: left;
-  cursor: pointer;
-}
-
-.accordion-content {
-  display: grid;
-  grid-template-rows: 0fr;
-  transition: grid-template-rows ease-in-out 500ms;
-
-  > div {
-    overflow: hidden;
-    /* transform: translateY(-1rem);
-      transition: all ease-in-out 500ms;
-
-      > p {
-        padding-block: 0;
-        transition: all ease-in-out 500ms;
-      } */
+  &[open] {
+    --_grid-template-rows: 1fr;
+    --_icon-transform: scaleY(-1);
   }
-}
 
-.accordion-content[aria-hidden='false'] {
-  grid-template-rows: 1fr;
+  summary::-webkit-details-marker,
+  summary::marker {
+    display: none;
+  }
 
-  /* > div {
-      transform: translateY(0);
-      > p {
-        padding-block: 3.2rem;
-      }
-    } */
+  .accordion-trigger {
+    display: flex !important;
+    align-items: center;
+    gap: 12px;
+    list-style: none;
+    padding: 1rem;
+
+    .label {
+      display: block;
+      flex-grow: 1;
+    }
+
+    .icon {
+      display: block;
+      font-size: 1.2rem;
+
+      transform: var(--_icon-transform);
+      transition: transform 200ms;
+    }
+  }
+
+  .accordion-content {
+    display: grid;
+    grid-template-rows: var(--_grid-template-rows);
+    transition: all 2000ms;
+
+    .accordion-content-inner {
+      overflow: hidden;
+    }
+  }
 }
 </style>

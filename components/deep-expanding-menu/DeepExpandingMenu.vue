@@ -64,8 +64,4 @@ watch(
     resetElementClasses(props.styleClassPassthrough);
   }
 );
-
-onMounted(() => {
-  console.log('DeepExpandingMenu');
-});
 </script>
