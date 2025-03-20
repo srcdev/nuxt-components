@@ -1,5 +1,5 @@
 {
-	"Bootstrap Nuxt3 component": {
+	"SRCDEV Bootstrap Nuxt3 component": {
 		"scope": "vue",
 		"prefix": "nuxt-component-boilerplate",
 		"body": [
@@ -41,6 +41,6 @@
 		"</style>",
 		"",
 		],
-		"description": "Bootstrap Nuxt3 component"
+		"description": "SRCDEV Bootstrap Nuxt3 component"
 	}
 }

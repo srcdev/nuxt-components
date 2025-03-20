@@ -1,5 +1,5 @@
 {
-	"Nuxt Accordian Component From Data": {
+	"SRCDEV Nuxt Accordian Component From Data": {
 		"scope": "vue, html",
 		"prefix": "nuxt-accordian-component-from-data",
 		"body": [
@@ -10,9 +10,9 @@
 			"    </template>",
 			"  </AccordianCore>",
 		],
-		"description": "Nuxt Accordian Component From Data"
+		"description": "SRCDEV Nuxt Accordian Component From Data"
 	},
-	"Nuxt Accordian Component Hard Coded Slots": {
+	"SRCDEV Nuxt Accordian Component Hard Coded Slots": {
 		"scope": "vue, html",
 		"prefix": "nuxt-accordian-component-hand-coded-slots",
 		"body": [
@@ -29,6 +29,6 @@
 			"      </template>",
 			"  </AccordianCore>",
 		],
-		"description": "Nuxt Accordian Component Hard Coded Slots"
+		"description": "SRCDEV Nuxt Accordian Component Hard Coded Slots"
 	}
 }

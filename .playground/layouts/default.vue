@@ -2,7 +2,7 @@
   <div>
     <LayoutRow tag="header" variant="full" :styleClassPassthrough="['header']">
       <template #default>
-        <LayoutRow tag="div" variant="popout">
+        <LayoutRow tag="nav" variant="popout">
           <template #default>
             <h1 class="heading-1">Nuxt Component Library</h1>
             <DeepExpandingMenu :navLinks />
@@ -10,7 +10,7 @@
         </LayoutRow>
       </template>
     </LayoutRow>
-    <LayoutRow tag="div" variant="full">
+    <LayoutRow tag="main" variant="full">
       <template #default>
         <slot name="content"></slot>
       </template>
@@ -60,6 +60,7 @@ const navLinks = <INavLink[]>[
     childLinks: [
       { name: 'Container Glow', path: '/ui/container-glow' },
       { name: 'Accordian', path: '/ui/accordian' },
+      { name: 'Details', path: '/ui/display-details' },
       { name: 'Dialogs', path: '/ui/dialog' },
       { name: 'Tabs X', path: '/ui/tabs' },
       { name: 'Tabs Y', path: '/ui/tabs-y' },

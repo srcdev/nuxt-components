@@ -1,7 +1,9 @@
 <template>
   <div class="layout-row" :class="elementClasses">
     <component :is="tag" :data-testid="dataTestid" class="layout-row-inner" :class="variant">
-      <slot name="default"></slot>
+      <div>
+        <slot name="default"></slot>
+      </div>
     </component>
   </div>
 </template>

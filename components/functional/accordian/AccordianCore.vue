@@ -1,13 +1,13 @@
 <template>
   <div class="display-accordian" :class="[elementClasses]" ref="accordianRef">
-    <details v-for="(item, key) in data" :key="key" class="accordion-panel" name="navigation-group">
-      <summary class="accordion-trigger" :id="`accordian-${key}-trigger`" :aria-controls="`accordian-${key}-content`" ref="triggerRefs">
+    <details v-for="(item, key) in data" :key="key" class="accordion-panel" :name="accordianName">
+      <summary class="accordion-trigger" :id="`accordian-${key}-trigger`" :aria-controls="`accordian-${key}-content`">
         <span class="label">
           <slot :name="`accordian-${key}-trigger`"></slot>
         </span>
         <Icon name="bi:caret-down-fill" class="icon mi-12" />
       </summary>
-      <div class="accordion-content" :aria-labelledby="`accordian-${key}-trigger`" :id="`accordian-${key}-content`" role="region" ref="contentRefs">
+      <div class="accordion-content" :aria-labelledby="`accordian-${key}-trigger`" :id="`accordian-${key}-content`" role="region">
         <div class="accordion-content-inner">
           <slot :name="`accordian-${key}-content`"></slot>
         </div>
@@ -34,6 +34,7 @@ const props = defineProps({
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const accordianName = useId();
 </script>
 
 <style lang="css">
@@ -49,17 +50,19 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     initial-value: 0fr;
   }
 
+  @property --_accordian-content-transform {
+    syntax: '<transform-list>';
+    inherits: true;
+    initial-value: scaleY(0);
+  }
+
   --_grid-template-rows: 0fr;
   --_icon-transform: scaleY(1);
+  --_accordian-content-transform: scaleY(0);
 
   border: var(--accordian-panel-border);
   border-radius: var(--accordian-panel-border-radius);
   margin-block-end: var(--accordian-panel-mbe);
-
-  &[open] {
-    --_grid-template-rows: 1fr;
-    --_icon-transform: scaleY(-1);
-  }
 
   summary::-webkit-details-marker,
   summary::marker {
@@ -88,12 +91,41 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   }
 
   .accordion-content {
+    /* display: block; */
     display: grid;
-    grid-template-rows: var(--_grid-template-rows);
+    grid-template-rows: 0fr;
+    /* grid-template-rows: var(--_grid-template-rows); */
+
+    /* transform: var(--_accordian-content-transform); */
+    /* transform: scaleY(0); */
+    /* transform-origin: top; */
     transition: all 2000ms;
 
     .accordion-content-inner {
-      overflow: hidden;
+      /* display: grid; */
+      /* grid-template-rows: 0fr; */
+
+      /* transform: scaleY(0); */
+      /* transform-origin: top; */
+
+      /* transition: all 2000ms; */
+    }
+  }
+
+  &[open] {
+    --_grid-template-rows: 1fr;
+    --_icon-transform: scaleY(-1);
+    --_accordian-content-transform: scaleY(1);
+
+    .accordion-content {
+      /* transform: scaleY(1); */
+      /* grid-template-rows: unset; */
+      grid-template-rows: 1fr;
+
+      .accordion-content-inner {
+        /* grid-template-rows: 1fr; */
+        /* transform: scaleY(1); */
+      }
     }
   }
 }

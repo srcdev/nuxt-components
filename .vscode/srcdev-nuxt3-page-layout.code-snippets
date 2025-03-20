@@ -1,5 +1,5 @@
 {
-	"Bootstrap Nuxt3 page with layout template": {
+	"SRCDEV Nuxt3 page with layout template": {
 		"scope": "vue",
 		"prefix": "nuxt-page-with-layout",
 		"body": [
@@ -30,18 +30,18 @@
 		"    },",
 		"  ],",
 		"  bodyAttrs: {",
-		"    class: 'classname-for-namespacing-if-desired',",
+		"    class: '.${TM_FILENAME_BASE/(.*[\\/])([^\\/]+)[\\/]?/${2:/downcase}/}-body',",
 		"  },",
 		"});",
 		"</script>",
 		"",
 		"<style lang=\"css\">",
-		"  .classname-for-namespacing-if-desired {",
+		"  .${TM_FILENAME_BASE/(.*[\\/])([^\\/]+)[\\/]?/${2:/downcase}/}-page {",
     "    /* CSS styles */",
     "  }",
 		"</style>",
 		"",
 		],
-		"description": "Bootstrap Nuxt3 page with layout template"
+		"description": "SRCDEV Nuxt3 page with layout template"
 	}
 }

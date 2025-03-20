@@ -1,5 +1,5 @@
 {
-	"Pinia Options Store Boilerplate": {
+	"SRCDEV Pinia Options Store Boilerplate": {
 		"scope": "javascript,typescript",
 		"prefix": "pinia-options",
 		"body": [
@@ -18,9 +18,9 @@
 			"}",
 			""
 		],
-		"description": "Bootstrap the code needed for a Vue.js Pinia Options Store file"
+		"description": "SRCDEV Bootstrap the code needed for a Vue.js Pinia Options Store file"
 	},
-	"Pinia Setup Store Boilerplate": {
+	"SRCDEV Pinia Setup Store Boilerplate": {
 		"scope": "javascript,typescript",
 		"prefix": "pinia-setup",
 		"body": [
@@ -49,13 +49,17 @@
 			"    doubleNumberValue,",
 			"    increment",
 			"  };",
-			"})",
+			"},",
+		  "{",
+      "  persist: {",
+      "    storage: piniaPluginPersistedstate.cookies(),",
+		  "  },",
+	    "}",
 			"",
 			"if (import.meta.hot) {",
 			" import.meta.hot.accept(acceptHMRUpdate(use${TM_FILENAME_BASE/^(.*)$/${1:/pascalcase}/}Store, import.meta.hot))",
 			"}",
-			""
 		],
-		"description": "Bootstrap the code needed for a Vue.js Pinia Setup Store file"
+		"description": "SRCDEV Bootstrap the code needed for a Vue.js Pinia Setup Store file"
 	}
 }

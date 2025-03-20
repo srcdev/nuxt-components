@@ -1,0 +1,22 @@
+{
+	"SRCDEV Nuxt Display Details Component": {
+		"scope": "vue, html",
+		"prefix": "nuxt-display-details-component",
+		"body": [
+      "  <DisplayDetailsCore name=\"set-details-name\" id=\"set-details-id\" iconSize=\"small/medium/large\":styleClassPassthrough=\"['mbe-20']\">",
+      "     <template #summary>",
+      "       // Summary content html",
+      "     </template>",
+      "     <template #summaryIcon>",
+      "       // Optional Icon override, this slot/template can be deleted if not needed",
+      "       <Icon name=\"bi:caret-down-fill\" class=\"icon mi-12\" />",
+      "     </template>",
+      "     <template #content>",
+      "       // Content html",
+      "       $0",
+      "     </template>",
+      "   </DisplayDetailsCore>",
+		],
+		"description": "SRCDEV Nuxt Display Details Component"
+	}
+}
