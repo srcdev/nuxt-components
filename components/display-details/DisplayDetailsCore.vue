@@ -15,7 +15,10 @@
 </template>
 
 <script lang="ts">
-export const useDetailsTransition = (detailsRef: Ref<HTMLDetailsElement | null>, summaryRef: Ref<HTMLElement | null>, contentRef: Ref<HTMLDivElement | null>) => {
+// Create a global store to track open details elements by name
+const openDetailsByName = reactive(new Map<string, HTMLDetailsElement>());
+
+export const useDetailsTransition = (detailsRef: Ref<HTMLDetailsElement | null>, summaryRef: Ref<HTMLElement | null>, contentRef: Ref<HTMLDivElement | null>, name: string) => {
   // State
   const animation = ref<Animation | null>(null);
   const animationDuration = 400;
@@ -24,11 +27,41 @@ export const useDetailsTransition = (detailsRef: Ref<HTMLDetailsElement | null>,
 
   // Check if refs are available
   if (!detailsRef.value || !summaryRef.value || !contentRef.value) {
-    console.warn('Details or content ref is null');
+    console.warn('Details, summary, or content ref is null');
     return {
       clickAction: () => console.warn('Component not fully initialized'),
     };
   }
+
+  const closeOtherDetailsWithSameName = () => {
+    const currentDetails = detailsRef.value;
+    if (!currentDetails || !name) return;
+
+    // Get the currently open details with the same name
+    const openDetails = openDetailsByName.get(name);
+
+    // If there's an open details with the same name and it's not the current one, close it
+    if (openDetails && openDetails !== currentDetails && openDetails.open) {
+      // Simulate a click on the other details to close it with animation
+      const otherSummary = openDetails.querySelector('summary');
+      if (otherSummary) {
+        otherSummary.click();
+      } else {
+        // Fallback: close directly without animation
+        openDetails.open = false;
+      }
+    }
+
+    // Update the map with the current details if it's open
+    if (currentDetails.open) {
+      openDetailsByName.set(name, currentDetails);
+    } else {
+      // If it's closed and was the one in the map, remove it
+      if (openDetailsByName.get(name) === currentDetails) {
+        openDetailsByName.delete(name);
+      }
+    }
+  };
 
   const clickAction = () => {
     const details = detailsRef.value;
@@ -41,13 +74,15 @@ export const useDetailsTransition = (detailsRef: Ref<HTMLDetailsElement | null>,
     details.style.overflow = 'hidden';
 
     if (isClosing.value || !details.open) {
+      // Close other details with the same name first
+      closeOtherDetailsWithSameName();
+
       // Open the details
       details.open = true;
       isExpanding.value = true;
       isClosing.value = false;
 
       // Get the height of the content
-
       const detailsHeight = details.offsetHeight;
       const contentHeight = content.offsetHeight;
       const summaryHeight = summary.offsetHeight;
@@ -77,6 +112,9 @@ export const useDetailsTransition = (detailsRef: Ref<HTMLDetailsElement | null>,
         details.style.overflow = '';
         isExpanding.value = false;
         animation.value = null;
+
+        // Register this as the open details for this name
+        openDetailsByName.set(name, details);
       };
 
       animation.value.oncancel = () => {
@@ -114,6 +152,11 @@ export const useDetailsTransition = (detailsRef: Ref<HTMLDetailsElement | null>,
         details.style.overflow = '';
         isClosing.value = false;
         animation.value = null;
+
+        // Remove this from the open details map if it's there
+        if (openDetailsByName.get(name) === details) {
+          openDetailsByName.delete(name);
+        }
       };
 
       animation.value.oncancel = () => {
@@ -182,7 +225,7 @@ watch(
 onMounted(() => {
   // Initialize the composable once the component is mounted and refs are available
   if (detailsRef.value && contentRef.value && summaryRef.value) {
-    const details = useDetailsTransition(detailsRef, summaryRef, contentRef);
+    const details = useDetailsTransition(detailsRef, summaryRef, contentRef, props.name);
     clickAction = details.clickAction; // Assign the real click handler
   } else {
     console.error('Refs not available after mounting');
