@@ -5,7 +5,7 @@
         <slot name="summary"></slot>
       </span>
       <slot name="summaryIcon">
-        <Icon name="bi:caret-down-fill" class="icon mi-12" :class="iconsSize" />
+        <Icon name="bi:caret-down-fill" class="icon mi-12" :class="iconSize" />
       </slot>
     </summary>
     <div class="display-details-content" :aria-labelledby="triggerId" :id="contentId" role="region" ref="contentRef">
@@ -234,70 +234,72 @@ onMounted(() => {
 </script>
 
 <style lang="css">
-.display-details {
-  /* Component setup */
-  --_display-details-icon-transform: scaleY(1);
-  --_display-details-icon-size: 1.2rem;
+@scope (.display-details) {
+  .display-details {
+    /* Component setup */
+    --_display-details-icon-transform: scaleY(1);
+    --_display-details-icon-size: 1.2rem;
 
-  /* Configurable properties */
-  --_display-details-border: none;
-  --_display-details-outline: none;
-  --_display-details-box-shadow: none;
-  --_display-details-border-radius: 0;
-  --_display-details-mbe: 1em;
+    /* Configurable properties */
+    --_display-details-border: none;
+    --_display-details-outline: none;
+    --_display-details-box-shadow: none;
+    --_display-details-border-radius: 0;
+    --_display-details-mbe: 1em;
 
-  --_display-details-summary-gap: 12px;
-  --_display-details-summary-flex-direction: row;
+    --_display-details-summary-gap: 12px;
+    --_display-details-summary-flex-direction: row;
 
-  --_display-details-content-padding: 0;
+    --_display-details-content-padding: 0;
 
-  &.medium {
-    --_display-details-icon-size: 1.8rem;
-  }
-  &.large {
-    --_display-details-icon-size: 2.4rem;
-  }
-
-  &[open] {
-    --_display-details-icon-transform: scaleY(-1);
-  }
-
-  border: var(--_display-details-border);
-  outline: var(--_display-details-outline);
-  box-shadow: var(--_display-details-box-shadow);
-  border-radius: var(--_display-details-border-radius);
-  margin-block-end: var(--_display-details-mbe);
-
-  .display-details-summary {
-    list-style: none;
-
-    &::-webkit-details-marker,
-    &::marker {
-      display: none;
+    &.medium {
+      --_display-details-icon-size: 1.8rem;
+    }
+    &.large {
+      --_display-details-icon-size: 2.4rem;
     }
 
-    display: flex !important;
-    flex-direction: var(--_display-details-summary-flex-direction);
-    align-items: center;
-    gap: var(--_display-details-summary-gap);
-    overflow: clip;
-
-    .label {
-      display: block;
-      flex-grow: 1;
+    &[open] {
+      --_display-details-icon-transform: scaleY(-1);
     }
 
-    .icon {
-      display: block;
+    border: var(--_display-details-border);
+    outline: var(--_display-details-outline);
+    box-shadow: var(--_display-details-box-shadow);
+    border-radius: var(--_display-details-border-radius);
+    margin-block-end: var(--_display-details-mbe);
 
-      font-size: var(--_display-details-icon-size);
-      transform: var(--_display-details-icon-transform);
-      transition: transform 200ms;
+    .display-details-summary {
+      list-style: none;
+
+      &::-webkit-details-marker,
+      &::marker {
+        display: none;
+      }
+
+      display: flex !important;
+      flex-direction: var(--_display-details-summary-flex-direction);
+      align-items: center;
+      gap: var(--_display-details-summary-gap);
+      overflow: clip;
+
+      .label {
+        display: block;
+        flex-grow: 1;
+      }
+
+      .icon {
+        display: block;
+
+        font-size: var(--_display-details-icon-size);
+        transform: var(--_display-details-icon-transform);
+        transition: transform 200ms;
+      }
     }
-  }
 
-  .display-details-content {
-    padding: var(--_display-details-content-padding);
+    .display-details-content {
+      padding: var(--_display-details-content-padding);
+    }
   }
 }
 </style>
