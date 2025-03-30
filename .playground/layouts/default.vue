@@ -58,6 +58,7 @@ const navLinks = <INavLink[]>[
     name: 'Components',
     childLinksTitle: 'UI Components',
     childLinks: [
+      { name: 'Animated SVG Text', path: '/ui/animated-svg-text' },
       { name: 'Container Glow', path: '/ui/container-glow' },
       { name: 'Accordian', path: '/ui/accordian' },
       { name: 'Details', path: '/ui/display-details' },
