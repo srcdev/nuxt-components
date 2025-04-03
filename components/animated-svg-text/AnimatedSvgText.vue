@@ -34,14 +34,14 @@ watch(
     stroke-width: 0.3;
   }
   100% {
-    fill: var(--_animated-svg-fill-color);
+    fill: var(--_animated-svg-fill-color, var(--_animated-svg-text-fill-light));
     stroke-dashoffset: 0;
     stroke-width: 0;
   }
 }
 .animated-svg-text {
   svg path {
-    stroke: var(--_animated-svg-text-color);
+    stroke: var(--_animated-svg-text-color, var(--_animated-svg-text-stroke-light));
     stroke-width: 0.3;
     stroke-dasharray: var(--_animated-svg-text-stroke-dasharray);
     stroke-dashoffset: var(--_animated-svg-text-stroke-dasharray);
