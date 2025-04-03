@@ -23,6 +23,17 @@ watch(
 </script>
 
 <style lang="css">
+html {
+  &[data-color-scheme='light'] {
+    --_animated-svg-text-color: var(--_animated-svg-text-stroke-light);
+    --_animated-svg-fill-color: var(--_animated-svg-text-fill-light);
+  }
+  &[data-color-scheme='dark'] {
+    --_animated-svg-text-color: var(--_animated-svg-text-stroke-dark);
+    --_animated-svg-fill-color: var(--_animated-svg-text-fill-dark);
+  }
+}
+
 @keyframes textAnimation {
   0% {
     fill: transparent;
@@ -48,14 +59,14 @@ watch(
     animation: textAnimation var(--_animated-svg-animation-duration) linear 1 forwards;
   }
 
-  @media (prefers-color-scheme: dark) {
-    --_animated-svg-text-color: var(--_animated-svg-text-stroke-dark);
-    --_animated-svg-fill-color: var(--_animated-svg-text-fill-dark);
-  }
-
   @media (prefers-color-scheme: light) {
     --_animated-svg-text-color: var(--_animated-svg-text-stroke-light);
     --_animated-svg-fill-color: var(--_animated-svg-text-fill-light);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    --_animated-svg-text-color: var(--_animated-svg-text-stroke-dark);
+    --_animated-svg-fill-color: var(--_animated-svg-text-fill-dark);
   }
 }
 </style>
