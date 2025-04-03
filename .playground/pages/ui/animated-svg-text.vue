@@ -4,8 +4,6 @@
       <template #content>
         <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['display-details-section', 'mbe-20']">
           <h2 class="heading-2">Animated SVG Text Component</h2>
-          <h3 class="heading-3">Dark Mode Only Currently XX</h3>
-          <p class="mbe-12">SVG Text outline and background colour will animate</p>
 
           <AnimatedSvgText :styleClassPassthrough="['luxury-locs-title']">
             <template #text>
@@ -55,21 +53,32 @@ useHead({
 .animated-svg-text-page {
   .animated-svg-text {
     &.luxury-locs-title {
-      margin-block: 6em;
-
-      --_animated-svg-animation-duration: 6s;
-      --_animated-svg-fill-color: #fff;
-      --_animated-svg-text-color: #fff;
-      --_animated-svg-text-stroke-dasharray: 176;
-    }
-    &.luxury-locs-title-3 {
-      margin-block: 6em;
+      margin-block-start: 2em;
 
       --_animated-svg-animation-duration: 4s;
-      --_animated-svg-fill-color: light-dark(#000, #fff);
-      --_animated-svg-text-color: light-dark(#000, #fff);
-      /* --_animated-svg-text-color: #fff; */
+      --_animated-svg-text-stroke-dasharray: 176;
+
+      /* Light mode */
+      --_animated-svg-text-stroke-light: #000;
+      --_animated-svg-text-fill-light: #000;
+
+      /* Dark mode */
+      --_animated-svg-text-stroke-dark: #fff;
+      --_animated-svg-text-fill-dark: #fff;
+    }
+    &.luxury-locs-title-3 {
+      margin-block-start: 2em;
+
+      --_animated-svg-animation-duration: 6s;
       --_animated-svg-text-stroke-dasharray: 523;
+
+      /* Light mode */
+      --_animated-svg-text-stroke-light: #000;
+      --_animated-svg-text-fill-light: #000;
+
+      /* Dark mode */
+      --_animated-svg-text-stroke-dark: #fff;
+      --_animated-svg-text-fill-dark: #fff;
     }
   }
 }
