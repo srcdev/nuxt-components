@@ -59,7 +59,7 @@ watch(
   }
 }
 
-html {
+/* html {
   &[data-color-scheme='light'] {
     --_animated-svg-text-color: var(--_animated-svg-text-stroke-light);
     --_animated-svg-fill-color: var(--_animated-svg-text-fill-light);
@@ -68,5 +68,5 @@ html {
     --_animated-svg-text-color: var(--_animated-svg-text-stroke-dark);
     --_animated-svg-fill-color: var(--_animated-svg-text-fill-dark);
   }
-}
+} */
 </style>
