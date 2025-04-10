@@ -30,6 +30,8 @@ export default defineNuxtConfig({
   vue: {
     runtimeCompiler: true,
   },
-  // plugins: ['css-anchor-positioning'],
   compatibilityDate: '2024-07-13',
+  typescript: {
+    includeWorkspace: true,
+  },
 });
