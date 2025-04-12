@@ -46,7 +46,7 @@ const galleryData = ref<IGalleryData[]>([
     stylist: 'Luxury Locs',
     title: 'High lights',
     category: 'Hair',
-    description: 'This is some description text about the image abd the hair shown in the image.',
+    description: 'This is some description text about the image and the hair shown in the image.',
   },
   {
     src: '/images/rotating-carousel/image-2.webp',
@@ -54,7 +54,7 @@ const galleryData = ref<IGalleryData[]>([
     stylist: 'Luxury Locs',
     title: 'High lights',
     category: 'Hair',
-    description: 'This is some description text about the image abd the hair shown in the image.',
+    description: 'This is some description text about the image and the hair shown in the image.',
   },
   {
     src: '/images/rotating-carousel/image-3.webp',
@@ -62,7 +62,7 @@ const galleryData = ref<IGalleryData[]>([
     stylist: 'Luxury Locs',
     title: 'High lights',
     category: 'Hair',
-    description: 'This is some description text about the image abd the hair shown in the image.',
+    description: 'This is some description text about the image and the hair shown in the image.',
   },
   {
     src: '/images/rotating-carousel/image-4.webp',
@@ -70,7 +70,7 @@ const galleryData = ref<IGalleryData[]>([
     stylist: 'Luxury Locs',
     title: 'High lights',
     category: 'Hair',
-    description: 'This is some description text about the image abd the hair shown in the image.',
+    description: 'This is some description text about the image and the hair shown in the image.',
   },
   {
     src: '/images/rotating-carousel/image-5.webp',
@@ -78,7 +78,7 @@ const galleryData = ref<IGalleryData[]>([
     stylist: 'Luxury Locs',
     title: 'High lights',
     category: 'Hair',
-    description: 'This is some description text about the image abd the hair shown in the image.',
+    description: 'This is some description text about the image and the hair shown in the image.',
   },
   {
     src: '/images/rotating-carousel/image-6.webp',
@@ -86,7 +86,7 @@ const galleryData = ref<IGalleryData[]>([
     stylist: 'Luxury Locs',
     title: 'Low lights',
     category: 'Hair',
-    description: 'This is some description text about the image abd the hair shown in the image.',
+    description: 'This is some description text about the image and the hair shown in the image.',
   },
   {
     src: '/images/rotating-carousel/image-7.webp',
@@ -94,7 +94,7 @@ const galleryData = ref<IGalleryData[]>([
     stylist: 'Luxury Locs',
     title: 'High lights',
     category: 'Hair',
-    description: 'This is some description text about the image abd the hair shown in the image.',
+    description: 'This is some description text about the image and the hair shown in the image.',
   },
   {
     src: '/images/rotating-carousel/image-8.webp',
@@ -102,7 +102,7 @@ const galleryData = ref<IGalleryData[]>([
     stylist: 'Luxury Locs',
     title: 'High lights',
     category: 'Hair',
-    description: 'This is some description text about the image abd the hair shown in the image.',
+    description: 'This is some description text about the image and the hair shown in the image.',
   },
   {
     src: '/images/rotating-carousel/image-9.webp',
@@ -110,7 +110,7 @@ const galleryData = ref<IGalleryData[]>([
     stylist: 'Luxury Locs',
     title: 'High lights',
     category: 'Hair',
-    description: 'This is some description text about the image abd the hair shown in the image.',
+    description: 'This is some description text about the image and the hair shown in the image.',
   },
 ]);
 </script>
