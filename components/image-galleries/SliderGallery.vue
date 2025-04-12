@@ -1,8 +1,8 @@
 <template>
-  <div class="carousel" ref="carouselDom">
+  <div class="carousel" ref="sliderGalleryWrapper">
     <!-- list item -->
-    <div class="list" ref="SliderDom">
-      <div v-for="item in galleryData" class="item" ref="SliderItemsDom">
+    <div class="list" ref="sliderGalleryImagesList">
+      <div v-for="item in galleryData" class="item" ref="sliderGalleryImagesItems">
         <img :src="item.src" />
         <div class="content">
           <div class="author">{{ item.stylist }}</div>
@@ -16,8 +16,8 @@
       </div>
     </div>
     <!-- list thumnail -->
-    <div class="thumbnail" ref="thumbnailBorderDom">
-      <div v-for="item in galleryData" class="item" ref="thumbnailItemsDom">
+    <div class="thumbnail" ref="sliderGalleryThumbnailsList">
+      <div v-for="item in galleryData" class="item" ref="sliderGalleryThumbnailsItems">
         <img :src="item.src" />
         <div class="content">
           <div class="title">Name Slider</div>
@@ -38,10 +38,6 @@
 
 <script setup lang="ts">
 const props = defineProps({
-  // galleryData: {
-  //   type: Array as PropType<{ src: string; alt: string }[]>,
-  //   default: () => [],
-  // },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
     default: () => [],
@@ -60,21 +56,17 @@ interface IGalleryData {
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 const galleryData = defineModel<IGalleryData[]>('galleryData');
 
-//step 1: get DOM
-const nextDom = useTemplateRef('nextDom');
-const prevDom = useTemplateRef('prevDom');
-
-const carouselDom = useTemplateRef('carouselDom');
-const SliderDom = useTemplateRef('SliderDom');
-const thumbnailBorderDom = useTemplateRef('thumbnailBorderDom');
-// let thumbnailItemsDom = useTemplateRef('thumbnailItemsDom');
+const sliderGalleryWrapper = useTemplateRef('sliderGalleryWrapper');
+const sliderGalleryImagesList = useTemplateRef('sliderGalleryImagesList');
+const sliderGalleryThumbnailsList = useTemplateRef('sliderGalleryThumbnailsList');
+// let sliderGalleryThumbnailsItems = useTemplateRef('sliderGalleryThumbnailsItems');
 const timeDom = useTemplateRef('timeDom');
 
 // setup showSlider DOM
-const SliderItemsDom = useTemplateRef('SliderItemsDom');
-const thumbnailItemsDom = useTemplateRef('thumbnailItemsDom');
+const sliderGalleryImagesItems = useTemplateRef('sliderGalleryImagesItems');
+const sliderGalleryThumbnailsItems = useTemplateRef('sliderGalleryThumbnailsItems');
 
-// thumbnailBorderDom.value.appendChild(thumbnailItemsDom.value[0]);
+// sliderGalleryThumbnailsList.value.appendChild(sliderGalleryThumbnailsItems.value[0]);
 const timeRunning = 3000;
 const timeAutoNext = 7000;
 
@@ -93,42 +85,42 @@ let runNextAuto = setTimeout(() => {
 
 function showSlider(type: string) {
   // Get fresh references to all items by querying the DOM directly
-  const currentSliderItems = Array.from(SliderDom.value?.children || []);
-  const currentThumbnailItems = Array.from(thumbnailBorderDom.value?.children || []);
+  const currentSliderItems = Array.from(sliderGalleryImagesList.value?.children || []);
+  const currentThumbnailItems = Array.from(sliderGalleryThumbnailsList.value?.children || []);
 
   if (type === 'next') {
     // Move the first item to the end
     if (currentSliderItems.length) {
       const firstItem = currentSliderItems[0];
-      SliderDom.value?.appendChild(firstItem);
+      sliderGalleryImagesList.value?.appendChild(firstItem);
     }
 
     if (currentThumbnailItems.length) {
       const firstThumb = currentThumbnailItems[0];
-      thumbnailBorderDom.value?.appendChild(firstThumb);
+      sliderGalleryThumbnailsList.value?.appendChild(firstThumb);
     }
 
-    carouselDom.value?.classList.add('next');
+    sliderGalleryWrapper.value?.classList.add('next');
   } else {
     // Move the last item to the beginning
     if (currentSliderItems.length) {
       const lastItem = currentSliderItems[currentSliderItems.length - 1];
-      SliderDom.value?.prepend(lastItem);
+      sliderGalleryImagesList.value?.prepend(lastItem);
     }
 
     if (currentThumbnailItems.length) {
       const lastThumb = currentThumbnailItems[currentThumbnailItems.length - 1];
-      thumbnailBorderDom.value?.prepend(lastThumb);
+      sliderGalleryThumbnailsList.value?.prepend(lastThumb);
     }
 
-    carouselDom.value?.classList.add('prev');
+    sliderGalleryWrapper.value?.classList.add('prev');
   }
 
   clearTimeout(runTimeOut);
   runTimeOut = setTimeout(() => {
-    if (carouselDom.value) {
-      carouselDom.value.classList.remove('next');
-      carouselDom.value.classList.remove('prev');
+    if (sliderGalleryWrapper.value) {
+      sliderGalleryWrapper.value.classList.remove('next');
+      sliderGalleryWrapper.value.classList.remove('prev');
     }
   }, timeRunning);
 
