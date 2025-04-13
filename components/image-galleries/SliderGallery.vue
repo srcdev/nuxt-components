@@ -36,6 +36,18 @@
 
 <script setup lang="ts">
 const props = defineProps({
+  autoRun: {
+    type: Boolean,
+    default: true,
+  },
+  autoRunInterval: {
+    type: Number,
+    default: 7000,
+  },
+  animationDuration: {
+    type: Number,
+    default: 3000,
+  },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
     default: () => [],
@@ -59,8 +71,8 @@ const sliderGalleryImagesList = useTemplateRef('sliderGalleryImagesList');
 const sliderGalleryThumbnailsList = useTemplateRef('sliderGalleryThumbnailsList');
 const timeDom = useTemplateRef('timeDom');
 
-const timeRunning = 3000;
-const timeAutoNext = 7000;
+const animationDuration = 3000;
+const autoRunInterval = 7000;
 
 const doNext = () => {
   showSlider('next');
@@ -72,8 +84,9 @@ const doPrevious = () => {
 
 let runTimeOut: any;
 let runNextAuto = setTimeout(() => {
+  if (!props.autoRun) return;
   doNext();
-}, timeAutoNext);
+}, autoRunInterval);
 
 function showSlider(type: string) {
   // Get fresh references to all items by querying the DOM directly
@@ -114,12 +127,13 @@ function showSlider(type: string) {
       sliderGalleryWrapper.value.classList.remove('next');
       sliderGalleryWrapper.value.classList.remove('prev');
     }
-  }, timeRunning);
+  }, animationDuration);
 
   clearTimeout(runNextAuto);
   runNextAuto = setTimeout(() => {
+    if (!props.autoRun) return;
     doNext();
-  }, timeAutoNext);
+  }, autoRunInterval);
 }
 
 watch(

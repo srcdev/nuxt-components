@@ -5,7 +5,7 @@
         <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['display-details-section', 'mbe-20']">
           <h2 class="heading-2">Slider Gallery Component</h2>
 
-          <SliderGallery v-model:galleryData="galleryData"></SliderGallery>
+          <SliderGallery v-model:galleryData="galleryData" :autoRun="false"></SliderGallery>
         </LayoutRow>
       </template>
     </NuxtLayout>
