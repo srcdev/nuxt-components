@@ -1,5 +1,5 @@
 <template>
-  <div class="slider-gallery" ref="sliderGalleryWrapper">
+  <div class="slider-gallery" :class="elementClasses" ref="sliderGalleryWrapper">
     <div class="list" ref="sliderGalleryImagesList">
       <div v-for="item in galleryData" class="item">
         <img :src="item.src" />
@@ -30,7 +30,7 @@
       <button id="next" ref="nextDom" @click.prevent="doNext()">></button>
     </div>
 
-    <div class="time" ref="timeDom"></div>
+    <div class="time"></div>
   </div>
 </template>
 
@@ -69,7 +69,6 @@ const galleryData = defineModel<IGalleryData[]>('galleryData');
 const sliderGalleryWrapper = useTemplateRef('sliderGalleryWrapper');
 const sliderGalleryImagesList = useTemplateRef('sliderGalleryImagesList');
 const sliderGalleryThumbnailsList = useTemplateRef('sliderGalleryThumbnailsList');
-const timeDom = useTemplateRef('timeDom');
 
 const animationDuration = 3000;
 const autoRunInterval = 7000;
@@ -89,12 +88,10 @@ let runNextAuto = setTimeout(() => {
 }, autoRunInterval);
 
 function showSlider(type: string) {
-  // Get fresh references to all items by querying the DOM directly
   const currentSliderItems = Array.from(sliderGalleryImagesList.value?.children || []);
   const currentThumbnailItems = Array.from(sliderGalleryThumbnailsList.value?.children || []);
 
   if (type === 'next') {
-    // Move the first item to the end
     if (currentSliderItems.length) {
       const firstItem = currentSliderItems[0];
       sliderGalleryImagesList.value?.appendChild(firstItem);
@@ -107,17 +104,28 @@ function showSlider(type: string) {
 
     sliderGalleryWrapper.value?.classList.add('next');
   } else {
-    // Move the last item to the beginning
+    // For prev animation:
+    // 1. First modify the DOM (prepend the items)
     if (currentSliderItems.length) {
       const lastItem = currentSliderItems[currentSliderItems.length - 1];
+      // Set initial state before prepending (if needed)
+      lastItem.classList.add('prepend-item');
       sliderGalleryImagesList.value?.prepend(lastItem);
     }
 
     if (currentThumbnailItems.length) {
       const lastThumb = currentThumbnailItems[currentThumbnailItems.length - 1];
+      // Set initial state before prepending (if needed)
+      lastThumb.classList.add('prepend-item');
       sliderGalleryThumbnailsList.value?.prepend(lastThumb);
     }
 
+    // 2. Force reflow to ensure the DOM changes are applied
+    // This is a standard technique to ensure CSS transitions work properly
+    // when you need to apply styles immediately after DOM changes
+    sliderGalleryWrapper.value?.offsetWidth;
+
+    // 3. Add the class for animation
     sliderGalleryWrapper.value?.classList.add('prev');
   }
 
@@ -126,6 +134,13 @@ function showSlider(type: string) {
     if (sliderGalleryWrapper.value) {
       sliderGalleryWrapper.value.classList.remove('next');
       sliderGalleryWrapper.value.classList.remove('prev');
+
+      // Remove any helper classes we added
+      const items = sliderGalleryImagesList.value?.querySelectorAll('.prepend-item');
+      items?.forEach((item) => item.classList.remove('prepend-item'));
+
+      const thumbs = sliderGalleryThumbnailsList.value?.querySelectorAll('.prepend-item');
+      thumbs?.forEach((thumb) => thumb.classList.remove('prepend-item'));
     }
   }, animationDuration);
 
@@ -392,6 +407,11 @@ watch(
           z-index: 100;
         }
       }
+
+      .item.prepend-item {
+        z-index: 1; /* Ensure it's visible */
+        /* Any initial styles needed */
+      }
     }
 
     .arrows {
@@ -401,12 +421,20 @@ watch(
     }
 
     .thumbnail {
+      /* Add a transform to the entire thumbnail container */
+      animation: effectPrev 0.5s linear 1 forwards;
+
       .item {
         &:nth-child(1) {
           overflow: hidden;
-          opacity: 0;
-          animation: showThumbnail 0.5s linear 1 forwards;
+          animation: showThumbnailPrev 0.5s linear 1 forwards;
         }
+      }
+
+      .item.prepend-item {
+        opacity: 0;
+        transform: translateX(-20px);
+        /* Initial state for thumbnail animation */
       }
     }
     .time {
@@ -472,6 +500,27 @@ watch(
     opacity: 0;
   }
 }
+
+@keyframes effectPrev {
+  from {
+    transform: translateX(-150px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes showThumbnailPrev {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 @media screen and (max-width: 678px) {
   .slider-gallery .list .item .content {
     padding-right: 0;
