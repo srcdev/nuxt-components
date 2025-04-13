@@ -37,6 +37,10 @@ interface IGalleryData {
   title?: string;
   category?: string;
   description?: string;
+  thumbnail?: {
+    title?: string;
+    description?: string;
+  };
 }
 
 const galleryData = ref<IGalleryData[]>([
@@ -47,6 +51,10 @@ const galleryData = ref<IGalleryData[]>([
     title: 'Highlights',
     category: 'Hair',
     description: 'This is some description text about the image and the hair shown in the image.',
+    thumbnail: {
+      title: '',
+      description: '',
+    },
   },
   {
     src: '/images/rotating-carousel/image-2.webp',
@@ -55,6 +63,10 @@ const galleryData = ref<IGalleryData[]>([
     title: 'Highlights',
     category: 'Hair',
     description: 'This is some description text about the image and the hair shown in the image.',
+    thumbnail: {
+      title: '',
+      description: '',
+    },
   },
   {
     src: '/images/rotating-carousel/image-3.webp',
@@ -63,6 +75,10 @@ const galleryData = ref<IGalleryData[]>([
     title: 'Highlights',
     category: 'Hair',
     description: 'This is some description text about the image and the hair shown in the image.',
+    thumbnail: {
+      title: '',
+      description: '',
+    },
   },
   {
     src: '/images/rotating-carousel/image-4.webp',
@@ -71,6 +87,10 @@ const galleryData = ref<IGalleryData[]>([
     title: 'Highlights',
     category: 'Hair',
     description: 'This is some description text about the image and the hair shown in the image.',
+    thumbnail: {
+      title: '',
+      description: '',
+    },
   },
   {
     src: '/images/rotating-carousel/image-5.webp',
@@ -79,6 +99,10 @@ const galleryData = ref<IGalleryData[]>([
     title: 'Highlights',
     category: 'Hair',
     description: 'This is some description text about the image and the hair shown in the image.',
+    thumbnail: {
+      title: '',
+      description: '',
+    },
   },
   {
     src: '/images/rotating-carousel/image-6.webp',
@@ -87,6 +111,10 @@ const galleryData = ref<IGalleryData[]>([
     title: 'Low lights',
     category: 'Hair',
     description: 'This is some description text about the image and the hair shown in the image.',
+    thumbnail: {
+      title: '',
+      description: '',
+    },
   },
   {
     src: '/images/rotating-carousel/image-7.webp',
@@ -95,6 +123,10 @@ const galleryData = ref<IGalleryData[]>([
     title: 'Highlights',
     category: 'Hair',
     description: 'This is some description text about the image and the hair shown in the image.',
+    thumbnail: {
+      title: '',
+      description: '',
+    },
   },
   {
     src: '/images/rotating-carousel/image-8.webp',
@@ -103,6 +135,10 @@ const galleryData = ref<IGalleryData[]>([
     title: 'Highlights',
     category: 'Hair',
     description: 'This is some description text about the image and the hair shown in the image.',
+    thumbnail: {
+      title: '',
+      description: '',
+    },
   },
   {
     src: '/images/rotating-carousel/image-9.webp',
@@ -111,41 +147,20 @@ const galleryData = ref<IGalleryData[]>([
     title: 'Highlights',
     category: 'Hair',
     description: 'This is some description text about the image and the hair shown in the image.',
+    thumbnail: {
+      title: '',
+      description: '',
+    },
   },
 ]);
 </script>
 
 <style lang="css">
-.animated-svg-text-page {
-  .animated-svg-text {
-    &.luxury-locs-title {
-      margin-block-start: 2em;
-
-      --_animated-svg-animation-duration: 4s;
-      --_animated-svg-text-stroke-dasharray: 176;
-
-      /* Light mode */
-      --_animated-svg-text-stroke-light: #000;
-      --_animated-svg-text-fill-light: #000;
-
-      /* Dark mode */
-      --_animated-svg-text-stroke-dark: #fff;
-      --_animated-svg-text-fill-dark: #fff;
-    }
-    &.luxury-locs-title-3 {
-      margin-block-start: 2em;
-
-      --_animated-svg-animation-duration: 6s;
-      --_animated-svg-text-stroke-dasharray: 523;
-
-      /* Light mode */
-      --_animated-svg-text-stroke-light: #000;
-      --_animated-svg-text-fill-light: #000;
-
-      /* Dark mode */
-      --_animated-svg-text-stroke-dark: #fff;
-      --_animated-svg-text-fill-dark: #fff;
-    }
+.slider-gallery-page {
+  .slider-gallery {
+    --_thumbnailBorder: 1px solid light-dark(white, dark);
+    --_thumbnailOutline: 1px solid light-dark(black, white);
+    --_thumbnailBorderRadius: 20px;
   }
 }
 </style>

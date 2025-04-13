@@ -1,7 +1,7 @@
 <template>
   <div class="slider-gallery" :class="elementClasses" ref="sliderGalleryWrapper">
     <div class="list" ref="sliderGalleryImagesList">
-      <div v-for="item in galleryData" class="item">
+      <div v-for="(item, index) in galleryData" :key="index" class="item">
         <img :src="item.src" />
         <div class="content">
           <div class="author">{{ item.stylist }}</div>
@@ -16,11 +16,11 @@
     </div>
 
     <div class="thumbnail" ref="sliderGalleryThumbnailsList">
-      <div v-for="item in galleryData" class="item">
+      <div v-for="(item, index) in galleryData" :key="index" class="item">
         <img :src="item.src" />
         <div class="content">
-          <div class="title">Name Slider</div>
-          <div class="description">Description</div>
+          <div class="title" v-show="item.thumbnail?.title !== ''">{{ item.thumbnail?.title }}</div>
+          <div class="description" v-show="item.thumbnail?.description !== ''">{{ item.thumbnail?.description }}</div>
         </div>
       </div>
     </div>
@@ -61,6 +61,10 @@ interface IGalleryData {
   title?: string;
   category?: string;
   description?: string;
+  thumbnail?: {
+    title: string;
+    description: string;
+  };
 }
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -70,7 +74,7 @@ const sliderGalleryWrapper = useTemplateRef('sliderGalleryWrapper');
 const sliderGalleryImagesList = useTemplateRef('sliderGalleryImagesList');
 const sliderGalleryThumbnailsList = useTemplateRef('sliderGalleryThumbnailsList');
 
-const animationDuration = 3000;
+// const animationDuration = 3000;
 const autoRunInterval = 7000;
 
 const doNext = () => {
@@ -142,7 +146,7 @@ function showSlider(type: string) {
       const thumbs = sliderGalleryThumbnailsList.value?.querySelectorAll('.prepend-item');
       thumbs?.forEach((thumb) => thumb.classList.remove('prepend-item'));
     }
-  }, animationDuration);
+  }, props.animationDuration);
 
   clearTimeout(runNextAuto);
   runNextAuto = setTimeout(() => {
@@ -162,6 +166,10 @@ watch(
 <style lang="css">
 /* slider-gallery */
 .slider-gallery {
+  --_animationDuration: v-bind(animationDuration + 'ms');
+
+  --_thembnailAspectRatio: 150 /220;
+
   height: 100svh;
   /* margin-top: -50px; */
   width: 100vw;
@@ -275,6 +283,10 @@ watch(
       flex-shrink: 0;
       position: relative;
 
+      border: var(--_thumbnailBorder, 1px solid transparent);
+      outline: var(--_thumbnailOutline, 1px solid transparent);
+      border-radius: var(--_thumbnailBorderRadius, 20px);
+
       img {
         width: 100%;
         height: 100%;
@@ -376,7 +388,7 @@ watch(
     }
 
     .time {
-      animation: runningTime 3s linear 1 forwards;
+      animation: runningTime var(--_animationDuration) linear 1 forwards;
     }
   }
 
@@ -438,7 +450,7 @@ watch(
       }
     }
     .time {
-      animation: runningTime 3s linear 1 forwards;
+      animation: runningTime var(--_animationDuration) linear 1 forwards;
     }
   }
 }
