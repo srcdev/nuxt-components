@@ -23,10 +23,12 @@
 
       <div class="thumbnail" ref="sliderGalleryThumbnailsList">
         <div v-for="(item, index) in galleryData" :key="index" class="item">
-          <img :src="item.src" :alt="item.alt" loading="lazy" />
-          <div class="content">
-            <div class="title" v-show="item.thumbnail?.title !== ''">{{ item.thumbnail?.title }}</div>
-            <div class="description" v-show="item.thumbnail?.description !== ''">{{ item.thumbnail?.description }}</div>
+          <div class="inner">
+            <img :src="item.src" :alt="item.alt" loading="lazy" />
+            <div class="content">
+              <div class="title" v-show="item.thumbnail?.title !== ''">{{ item.thumbnail?.title }}</div>
+              <div class="description" v-show="item.thumbnail?.description !== ''">{{ item.thumbnail?.description }}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -401,6 +403,28 @@ onBeforeUnmount(() => {
       outline: var(--_thumbnailOutline, 1px solid transparent);
       border-radius: var(--_thumbnailBorderRadius, 20px);
 
+      .inner {
+        position: absolute;
+        inset: 0 0 0 0;
+        background-color: #0004;
+        border-radius: var(--_thumbnailBorderRadius, 20px);
+        z-index: 2;
+      }
+
+      &:first-child {
+        /* Add the animated border effect */
+        &::before {
+          content: '';
+          position: absolute;
+          inset: -3px; /* Border outside the thumbnail */
+          border-radius: 20px;
+          /* background: conic-gradient(transparent 0deg, transparent 360deg); */
+          z-index: 1;
+          animation: none;
+          pointer-events: none;
+        }
+      }
+
       img {
         width: 100%;
         height: 100%;
@@ -494,6 +518,12 @@ onBeforeUnmount(() => {
       animation: effectNext 0.5s linear 1 forwards;
 
       .item {
+        &:first-child {
+          /* Add the animated border effect */
+          &::before {
+            animation: countdownBorder 7s linear 1 forwards;
+          }
+        }
         &:nth-last-child(1) {
           overflow: hidden;
           animation: showThumbnail 0.5s linear 1 forwards;
@@ -551,6 +581,12 @@ onBeforeUnmount(() => {
       animation: effectPrev 0.5s linear 1 forwards;
 
       .item {
+        &:first-child {
+          /* Add the animated border effect */
+          &::before {
+            animation: countdownBorder 7s linear 1 forwards;
+          }
+        }
         &:nth-child(1) {
           overflow: hidden;
           animation: showThumbnailPrev 0.5s linear 1 forwards;
@@ -662,6 +698,16 @@ onBeforeUnmount(() => {
   }
   .slider-gallery .list .item .content .title {
     font-size: 30px;
+  }
+}
+
+/* Keyframe for the border animation */
+@keyframes countdownBorder {
+  0% {
+    background: conic-gradient(brightgreen 0deg, transparent 0deg);
+  }
+  100% {
+    background: conic-gradient(brightgreen 0deg, brightgreen 360deg);
   }
 }
 </style>
