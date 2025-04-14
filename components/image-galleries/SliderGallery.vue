@@ -1,36 +1,43 @@
 <template>
-  <div class="slider-gallery" :class="elementClasses" ref="sliderGalleryWrapper">
-    <div class="list" ref="sliderGalleryImagesList">
-      <div v-for="(item, index) in galleryData" :key="index" class="item">
-        <img :src="item.src" />
-        <div class="content">
-          <div class="author">{{ item.stylist }}</div>
-          <div class="title">{{ item.title }}</div>
-          <div class="topic">{{ item.category }}</div>
-          <div class="des">{{ item.description }}</div>
-          <div class="buttons">
-            <button>SEE MORE</button>
+  <div class="slider-gallery" :class="[elementClasses]" ref="sliderGalleryWrapper">
+    <div class="loading-state" :class="[{ loaded: !isLoading }]">
+      <div class="loading-spinner"></div>
+      <p>Loading gallery...</p>
+    </div>
+
+    <div class="gallery-content" :class="[{ loaded: isLoading }]">
+      <div class="list" ref="sliderGalleryImagesList">
+        <div v-for="(item, index) in galleryData" :key="index" class="item">
+          <img :src="item.src" :alt="item.alt" @load="handleImageLoad(index)" @error="handleImageError(index)" loading="lazy" />
+          <div class="content">
+            <div class="author">{{ item.stylist }}</div>
+            <div class="title">{{ item.title }}</div>
+            <div class="topic">{{ item.category }}</div>
+            <div class="des">{{ item.description }}</div>
+            <div class="buttons">
+              <button>SEE MORE</button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div class="thumbnail" ref="sliderGalleryThumbnailsList">
-      <div v-for="(item, index) in galleryData" :key="index" class="item">
-        <img :src="item.src" />
-        <div class="content">
-          <div class="title" v-show="item.thumbnail?.title !== ''">{{ item.thumbnail?.title }}</div>
-          <div class="description" v-show="item.thumbnail?.description !== ''">{{ item.thumbnail?.description }}</div>
+      <div class="thumbnail" ref="sliderGalleryThumbnailsList">
+        <div v-for="(item, index) in galleryData" :key="index" class="item">
+          <img :src="item.src" :alt="item.alt" loading="lazy" />
+          <div class="content">
+            <div class="title" v-show="item.thumbnail?.title !== ''">{{ item.thumbnail?.title }}</div>
+            <div class="description" v-show="item.thumbnail?.description !== ''">{{ item.thumbnail?.description }}</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="arrows">
-      <button id="prev" ref="prevDom" @click.prevent="doPrevious()"><</button>
-      <button id="next" ref="nextDom" @click.prevent="doNext()">></button>
-    </div>
+      <div class="arrows">
+        <button id="prev" ref="prevDom" @click.prevent="doPrevious()"><</button>
+        <button id="next" ref="nextDom" @click.prevent="doNext()">></button>
+      </div>
 
-    <div class="time"></div>
+      <div class="time"></div>
+    </div>
   </div>
 </template>
 
@@ -74,22 +81,75 @@ const sliderGalleryWrapper = useTemplateRef('sliderGalleryWrapper');
 const sliderGalleryImagesList = useTemplateRef('sliderGalleryImagesList');
 const sliderGalleryThumbnailsList = useTemplateRef('sliderGalleryThumbnailsList');
 
-// const animationDuration = 3000;
-const autoRunInterval = 7000;
+const isLoading = ref(true);
+const loadedImages = ref<Set<number>>(new Set());
+const preloadedImages = ref<Array<HTMLImageElement>>([]);
+
+onMounted(async () => {
+  await nextTick();
+
+  // If no images or galleryData is empty, stop loading
+  if (!galleryData.value || galleryData.value.length === 0) {
+    isLoading.value = false;
+    return;
+  }
+
+  // Create an array to hold image loading promises
+  const imageLoadPromises: Promise<void>[] = [];
+
+  // Preload the first image at minimum
+  const firstImageIndex = 0;
+  if (galleryData.value[firstImageIndex]) {
+    const img = new Image();
+    img.src = galleryData.value[firstImageIndex].src;
+
+    const promise = new Promise<void>((resolve) => {
+      img.onload = () => {
+        console.log('Image preloaded:', firstImageIndex);
+        loadedImages.value.add(firstImageIndex);
+        resolve();
+      };
+      img.onerror = () => {
+        console.error('Failed to preload image:', firstImageIndex);
+        loadedImages.value.add(firstImageIndex); // Count as loaded anyway
+        resolve();
+      };
+    });
+
+    imageLoadPromises.push(promise);
+    preloadedImages.value.push(img);
+  }
+
+  // Wait for at least the first image to load
+  await Promise.race(imageLoadPromises);
+
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 500);
+});
+
+const handleImageLoad = (index: number) => {
+  console.log('Image loaded:', index);
+  loadedImages.value.add(index);
+};
+
+const handleImageError = (index: number) => {
+  console.error(`Failed to load image at index ${index}`);
+  loadedImages.value.add(index);
+};
 
 const doNext = () => {
+  if (isLoading.value) return;
   showSlider('next');
 };
 
 const doPrevious = () => {
+  if (isLoading.value) return;
   showSlider('prev');
 };
 
 let runTimeOut: any;
-let runNextAuto = setTimeout(() => {
-  if (!props.autoRun) return;
-  doNext();
-}, autoRunInterval);
+let runNextAuto: any = null;
 
 function showSlider(type: string) {
   const currentSliderItems = Array.from(sliderGalleryImagesList.value?.children || []);
@@ -108,38 +168,30 @@ function showSlider(type: string) {
 
     sliderGalleryWrapper.value?.classList.add('next');
   } else {
-    // For prev animation:
-    // 1. First modify the DOM (prepend the items)
     if (currentSliderItems.length) {
       const lastItem = currentSliderItems[currentSliderItems.length - 1];
-      // Set initial state before prepending (if needed)
       lastItem.classList.add('prepend-item');
       sliderGalleryImagesList.value?.prepend(lastItem);
     }
 
     if (currentThumbnailItems.length) {
       const lastThumb = currentThumbnailItems[currentThumbnailItems.length - 1];
-      // Set initial state before prepending (if needed)
       lastThumb.classList.add('prepend-item');
       sliderGalleryThumbnailsList.value?.prepend(lastThumb);
     }
 
-    // 2. Force reflow to ensure the DOM changes are applied
-    // This is a standard technique to ensure CSS transitions work properly
-    // when you need to apply styles immediately after DOM changes
-    sliderGalleryWrapper.value?.offsetWidth;
-
-    // 3. Add the class for animation
+    sliderGalleryWrapper.value?.offsetWidth; // Force reflow
     sliderGalleryWrapper.value?.classList.add('prev');
   }
 
   clearTimeout(runTimeOut);
   runTimeOut = setTimeout(() => {
+    // Your existing cleanup code
     if (sliderGalleryWrapper.value) {
       sliderGalleryWrapper.value.classList.remove('next');
       sliderGalleryWrapper.value.classList.remove('prev');
 
-      // Remove any helper classes we added
+      // Remove helper classes
       const items = sliderGalleryImagesList.value?.querySelectorAll('.prepend-item');
       items?.forEach((item) => item.classList.remove('prepend-item'));
 
@@ -148,12 +200,23 @@ function showSlider(type: string) {
     }
   }, props.animationDuration);
 
+  // Reset auto-run timer
   clearTimeout(runNextAuto);
   runNextAuto = setTimeout(() => {
-    if (!props.autoRun) return;
+    if (!props.autoRun || isLoading.value) return;
     doNext();
-  }, autoRunInterval);
+  }, props.autoRunInterval);
 }
+
+// Initialize auto-run only after loading completes
+watch(isLoading, (isLoadingNow) => {
+  if (!isLoadingNow && props.autoRun) {
+    clearTimeout(runNextAuto);
+    runNextAuto = setTimeout(() => {
+      doNext();
+    }, props.autoRunInterval);
+  }
+});
 
 watch(
   () => props.styleClassPassthrough,
@@ -161,6 +224,11 @@ watch(
     resetElementClasses(props.styleClassPassthrough);
   }
 );
+
+onBeforeUnmount(() => {
+  clearTimeout(runTimeOut);
+  clearTimeout(runNextAuto);
+});
 </script>
 
 <style lang="css">
@@ -171,11 +239,57 @@ watch(
   --_thembnailAspectRatio: 150 /220;
 
   height: 100svh;
-  /* margin-top: -50px; */
   width: 100vw;
   overflow: hidden;
   position: absolute;
   inset: 0 0 0 0;
+
+  .loading-state {
+    position: absolute;
+    inset: 0 0 0 0;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--page-bg);
+    align-items: center;
+    justify-content: center;
+    color: var(--grayscale-text-body);
+    opacity: 1;
+    transition: display 0.5s, opacity 0.5s;
+    transition-behavior: allow-discrete;
+
+    &.loaded {
+      display: none;
+      opacity: 0;
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: #f1683a;
+      animation: spinner 1s ease-in-out infinite;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.2em;
+      font-weight: 500;
+    }
+  }
+
+  .gallery-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    /* opacity: 0; */
+    /* transition: opacity 0.5s ease-in-out; */
+
+    &.loaded {
+      /* opacity: 1; */
+    }
+  }
 
   .list {
     .item {
@@ -530,6 +644,15 @@ watch(
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 
