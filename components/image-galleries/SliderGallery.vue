@@ -5,7 +5,7 @@
       <p>Loading gallery...</p>
     </div>
 
-    <div class="gallery-content" :class="[{ loaded: isLoading }]">
+    <div v-if="showGallery" class="gallery-content" :class="[{ loaded: isLoading }]">
       <div class="list" ref="sliderGalleryImagesList">
         <div v-for="(item, index) in galleryData" :key="index" class="item">
           <img :src="item.src" :alt="item.alt" @load="handleImageLoad(index)" @error="handleImageError(index)" loading="lazy" />
@@ -84,6 +84,7 @@ const sliderGalleryImagesList = useTemplateRef('sliderGalleryImagesList');
 const sliderGalleryThumbnailsList = useTemplateRef('sliderGalleryThumbnailsList');
 
 const isLoading = ref(true);
+const showGallery = ref(false);
 const loadedImages = ref<Set<number>>(new Set());
 const preloadedImages = ref<Array<HTMLImageElement>>([]);
 
@@ -230,6 +231,10 @@ watch(
 onBeforeUnmount(() => {
   clearTimeout(runTimeOut);
   clearTimeout(runNextAuto);
+});
+
+onMounted(() => {
+  showGallery.value = true;
 });
 </script>
 
