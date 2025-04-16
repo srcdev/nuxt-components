@@ -8,6 +8,7 @@ html {
   background-color: var(--page-bg);
 
   font-size: 62.5%;
+  scrollbar-gutter: stable;
 }
 body {
   color: var(--grayscale-text-body);
