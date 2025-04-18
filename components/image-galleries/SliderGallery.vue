@@ -245,6 +245,10 @@ onMounted(() => {
 
   --_thembnailAspectRatio: 150 /220;
 
+  --_thumbnailDesktopWidth: 150px;
+  --_thumbnailDesktopHeight: 220px;
+
+
   height: 100svh;
   width: 100vw;
   overflow: hidden;
@@ -399,7 +403,7 @@ onMounted(() => {
     gap: 20px;
 
     .item {
-      width: 150px;
+      width: var(--_thumbnailDesktopWidth);
       height: 220px;
       flex-shrink: 0;
       position: relative;
@@ -501,7 +505,7 @@ onMounted(() => {
       .item {
         &:nth-child(1) {
           img {
-            width: 150px;
+            width: var(--_thumbnailDesktopWidth);
             height: 220px;
             position: absolute;
             bottom: 50px;
@@ -637,7 +641,7 @@ onMounted(() => {
 
 @keyframes effectNext {
   from {
-    transform: translateX(150px);
+    transform: translateX(var(--_thumbnailDesktopWidth));
   }
 }
 
@@ -652,7 +656,7 @@ onMounted(() => {
 
 @keyframes outFrame {
   to {
-    width: 150px;
+    width: var(--_thumbnailDesktopWidth);
     height: 220px;
     bottom: 50px;
     left: 50%;
@@ -662,7 +666,7 @@ onMounted(() => {
 
 @keyframes contentOut {
   to {
-    transform: translateY(-150px);
+    transform: translateY(calc(-1 * var(--_thumbnailDesktopWidth)));
     filter: blur(20px);
     opacity: 0;
   }
@@ -670,7 +674,7 @@ onMounted(() => {
 
 @keyframes effectPrev {
   from {
-    transform: translateX(-150px);
+    transform: translateX(calc(-1 * var(--_thumbnailDesktopWidth)));
   }
   to {
     transform: translateX(0);
