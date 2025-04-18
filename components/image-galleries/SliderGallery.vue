@@ -243,11 +243,16 @@ onMounted(() => {
 .slider-gallery {
   --_animationDuration: v-bind(animationDuration + 'ms');
 
-  --_thembnailAspectRatio: 150 /220;
+  --_thumbnailAspectRatio: 150 /220;
 
-  --_thumbnailDesktopWidth: 150px;
-  --_thumbnailDesktopHeight: 220px;
+  --_thumbnailWidth: 100px;
+  --_thumbnailHeight: 165px;
 
+
+  @media screen and (min-width: 1024px) {
+    --_thumbnailWidth: 150px;
+    --_thumbnailHeight: 220px;
+  }
 
   height: 100svh;
   width: 100vw;
@@ -403,8 +408,8 @@ onMounted(() => {
     gap: 20px;
 
     .item {
-      width: var(--_thumbnailDesktopWidth);
-      height: 220px;
+      width: var(--_thumbnailWidth);
+      height: var(--_thumbnailHeight);
       flex-shrink: 0;
       position: relative;
 
@@ -505,8 +510,8 @@ onMounted(() => {
       .item {
         &:nth-child(1) {
           img {
-            width: var(--_thumbnailDesktopWidth);
-            height: 220px;
+            width: var(--_thumbnailWidth);
+            height: var(--_thumbnailHeight);
             position: absolute;
             bottom: 50px;
             left: 50%;
@@ -641,7 +646,7 @@ onMounted(() => {
 
 @keyframes effectNext {
   from {
-    transform: translateX(var(--_thumbnailDesktopWidth));
+    transform: translateX(calc(1 * var(--_thumbnailWidth)));
   }
 }
 
@@ -656,8 +661,8 @@ onMounted(() => {
 
 @keyframes outFrame {
   to {
-    width: var(--_thumbnailDesktopWidth);
-    height: 220px;
+    width: var(--_thumbnailWidth);
+    height: var(--_thumbnailHeight);
     bottom: 50px;
     left: 50%;
     border-radius: 20px;
@@ -666,7 +671,7 @@ onMounted(() => {
 
 @keyframes contentOut {
   to {
-    transform: translateY(calc(-1 * var(--_thumbnailDesktopWidth)));
+    transform: translateY(calc(-1 * var(--_thumbnailWidth)));
     filter: blur(20px);
     opacity: 0;
   }
@@ -674,7 +679,7 @@ onMounted(() => {
 
 @keyframes effectPrev {
   from {
-    transform: translateX(calc(-1 * var(--_thumbnailDesktopWidth)));
+    transform: translateX(calc(-1 * var(--_thumbnailWidth)));
   }
   to {
     transform: translateX(0);
@@ -719,4 +724,5 @@ onMounted(() => {
     background: conic-gradient(brightgreen 0deg, brightgreen 360deg);
   }
 }
+
 </style>
