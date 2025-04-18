@@ -248,7 +248,6 @@ onMounted(() => {
   --_thumbnailWidth: 100px;
   --_thumbnailHeight: 165px;
 
-
   @media screen and (min-width: 1024px) {
     --_thumbnailWidth: 150px;
     --_thumbnailHeight: 220px;
@@ -425,20 +424,6 @@ onMounted(() => {
         z-index: 2;
       }
 
-      &:first-child {
-        /* Add the animated border effect */
-        &::before {
-          content: '';
-          position: absolute;
-          inset: -3px; /* Border outside the thumbnail */
-          border-radius: 20px;
-          /* background: conic-gradient(transparent 0deg, transparent 360deg); */
-          z-index: 1;
-          animation: none;
-          pointer-events: none;
-        }
-      }
-
       img {
         width: 100%;
         height: 100%;
@@ -532,12 +517,6 @@ onMounted(() => {
       animation: effectNext 0.5s linear 1 forwards;
 
       .item {
-        &:first-child {
-          /* Add the animated border effect */
-          &::before {
-            animation: countdownBorder 7s linear 1 forwards;
-          }
-        }
         &:nth-last-child(1) {
           overflow: hidden;
           animation: showThumbnail 0.5s linear 1 forwards;
@@ -714,15 +693,4 @@ onMounted(() => {
     font-size: 30px;
   }
 }
-
-/* Keyframe for the border animation */
-@keyframes countdownBorder {
-  0% {
-    background: conic-gradient(brightgreen 0deg, transparent 0deg);
-  }
-  100% {
-    background: conic-gradient(brightgreen 0deg, brightgreen 360deg);
-  }
-}
-
 </style>

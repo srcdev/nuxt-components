@@ -2,10 +2,10 @@
   <div>
     <NuxtLayout name="default">
       <template #content>
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['display-details-section', 'mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['display-details-section', 'mbe-20']">
           <h2 class="heading-2">Slider Gallery Component</h2>
 
-          <SliderGallery v-model:galleryData="galleryData" :autoRun="false"></SliderGallery>
+          <SliderGallery v-model:gallery-data="galleryData" :auto-run="false"/>
         </LayoutRow>
       </template>
     </NuxtLayout>
