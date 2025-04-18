@@ -1,14 +1,12 @@
 {
   "recommendations": [
     "davidanson.vscode-markdownlint",
-    "dbaeumer.vscode-eslint",
     "vue.volar",
     "nuxtr.nuxtr-vscode",
     "nixon.env-cmd-file-syntax",
     "jkjustjoshing.vscode-text-pastry",
     "willofindie.vscode-cssvar",
     "vitest.explorer",
-    "esbenp.prettier-vscode", // ensure installation of prettier > settings > default format > select prettier as default code formatter. then search for 'format to save' and enable it
     "echoapi.echoapi-for-vscode",
     "pranaygp.vscode-css-peek", // hover then ctrl + click to go to css file
     "formulahendry.auto-rename-tag", // auto rename closing tag

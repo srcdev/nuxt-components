@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #content>
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h2 class="heading-2">Display Prompts</h2>
 
           <DisplayPromptCore theme="success" :dismissible="true" :style-class-passthrough="['mbs-20']">

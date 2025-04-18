@@ -1,11 +1,11 @@
 <template>
   <div>
-    <LayoutRow tag="header" variant="full" :styleClassPassthrough="['header']">
+    <LayoutRow tag="header" variant="full" :style-class-passthrough="['header']">
       <template #default>
         <LayoutRow tag="nav" variant="popout">
           <template #default>
             <h1 class="heading-1">Nuxt Component Library</h1>
-            <DeepExpandingMenu :navLinks />
+            <DeepExpandingMenu :nav-links />
           </template>
         </LayoutRow>
       </template>
@@ -19,28 +19,28 @@
 </template>
 
 <script type="module" lang="ts">
-declare global {
-  interface Window {
-    ANCHOR_POSITIONING_POLYFILL_OPTIONS?: {
-      elements?: any;
-      excludeInlineStyles?: boolean;
-      useAnimationFrame?: boolean;
-    };
-  }
-}
+// declare global {
+//   interface Window {
+//     ANCHOR_POSITIONING_POLYFILL_OPTIONS?: {
+//       elements?: any;
+//       excludeInlineStyles?: boolean;
+//       useAnimationFrame?: boolean;
+//     };
+//   }
+// }
 
-if (import.meta.client) {
-  (async () => {
-    if (!('anchorName' in document.documentElement.style)) {
-      window.ANCHOR_POSITIONING_POLYFILL_OPTIONS = {
-        elements: undefined,
-        excludeInlineStyles: false,
-        useAnimationFrame: false,
-      };
-      await import('@oddbird/css-anchor-positioning');
-    }
-  })();
-}
+// if (import.meta.client) {
+//   (async () => {
+//     if (!('anchorName' in document.documentElement.style)) {
+//       window.ANCHOR_POSITIONING_POLYFILL_OPTIONS = {
+//         elements: undefined,
+//         excludeInlineStyles: false,
+//         useAnimationFrame: false,
+//       };
+//       await import('@oddbird/css-anchor-positioning');
+//     }
+//   })();
+// }
 </script>
 
 <script setup lang="ts">
@@ -77,7 +77,7 @@ interface INavLink {
   childLinksTitle?: string;
 }
 
-const navLinks = <INavLink[]>[
+const navLinks = [
   { name: 'Home', path: '/' },
   {
     name: 'Components',
@@ -111,9 +111,10 @@ const navLinks = <INavLink[]>[
     ],
   },
   { name: 'About', path: '/' },
-];
+] as INavLink[];
 </script>
 <style lang="css">
 .header {
+  /* css placeholder */
 }
 </style>

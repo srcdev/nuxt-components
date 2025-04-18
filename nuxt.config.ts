@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['modern-normalize', './assets/styles/main.css'],
-  modules: ['@nuxt/icon', '@nuxt/image'],
+  modules: ['@nuxt/icon', '@nuxt/image', '@nuxt/eslint'],
   app: {
     head: {
       htmlAttrs: {
@@ -33,5 +33,9 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-07-13',
   typescript: {
     includeWorkspace: true,
+  },
+  eslint: {
+    // Add any custom options here
+
   },
 });

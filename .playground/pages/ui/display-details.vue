@@ -2,11 +2,11 @@
   <div>
     <NuxtLayout name="default">
       <template #content>
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['display-details-section', 'mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['display-details-section', 'mbe-20']">
           <h2 class="heading-2">Details element - Unlinked</h2>
           <p class="mbe-12">Following 2 details block behave independantly.</p>
 
-          <DisplayDetailsCore name="details-1" id="details-1" iconSize="medium" :styleClassPassthrough="['custom-style-1']">
+          <DisplayDetailsCore id="details-1" name="details-1" icon-size="medium" :style-class-passthrough="['custom-style-1']">
             <template #summary>
               <h3 class="heading-3 m-8">Details header 1</h3>
             </template>
@@ -24,7 +24,7 @@
             </template>
           </DisplayDetailsCore>
 
-          <DisplayDetailsCore name="details-2" id="details-2" iconSize="medium" :styleClassPassthrough="['custom-style-2']">
+          <DisplayDetailsCore id="details-2" name="details-2" icon-size="medium" :style-class-passthrough="['custom-style-2']">
             <template #summary>
               <h3 class="heading-3 m-8">Details header 2</h3>
             </template>
@@ -43,11 +43,11 @@
           </DisplayDetailsCore>
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['display-details-section', 'mbe-20', 'hidden']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['display-details-section', 'mbe-20', 'hidden']">
           <h2 class="heading-2">Details element - Linked</h2>
           <p class="mbe-12">Details panels are linked, only 1 can be open at a time.</p>
 
-          <DisplayDetailsCore name="details-linked" :id="useId()" iconSize="medium" :styleClassPassthrough="['linked']">
+          <DisplayDetailsCore :id="useId()" name="details-linked" icon-size="medium" :style-class-passthrough="['linked']">
             <template #summary>
               <h3 class="heading-3 m-8">Details header 1</h3>
             </template>
@@ -65,7 +65,7 @@
             </template>
           </DisplayDetailsCore>
 
-          <DisplayDetailsCore name="details-linked" :id="useId()" iconSize="medium" :styleClassPassthrough="['linked']">
+          <DisplayDetailsCore :id="useId()" name="details-linked" icon-size="medium" :style-class-passthrough="['linked']">
             <template #summary>
               <h3 class="heading-3 m-8">Details header 2</h3>
             </template>
