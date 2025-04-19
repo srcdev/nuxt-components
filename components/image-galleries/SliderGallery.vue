@@ -8,7 +8,7 @@
     <div v-if="showGallery" class="gallery-content" :class="[{ loaded: isLoading }]">
       <div class="list" ref="sliderGalleryImagesList">
         <div v-for="(item, index) in galleryData" :key="index" class="item">
-          <img :src="item.src" :alt="item.alt" @load="handleImageLoad(index)" @error="handleImageError(index)" loading="lazy" />
+          <NuxtImg :src="item.src" :alt="item.alt" @load="handleImageLoad(index)" @error="handleImageError(index)" loading="lazy" />
           <div class="content">
             <div class="author">{{ item.stylist }}</div>
             <div class="title">{{ item.title }}</div>
@@ -239,18 +239,17 @@ onMounted(() => {
 </script>
 
 <style lang="css">
-/* slider-gallery */
 .slider-gallery {
   --_animationDuration: v-bind(animationDuration + 'ms');
 
   --_thumbnailAspectRatio: 150 /220;
 
-  --_thumbnailWidth: 100px;
-  --_thumbnailHeight: 165px;
+  --_thumbnailWidth: var(--_thumbnailMobileWidth, 100px);
+  --_thumbnailHeight: var(--_thumbnailMobileHeight, 165px);
 
   @media screen and (min-width: 1024px) {
-    --_thumbnailWidth: 150px;
-    --_thumbnailHeight: 220px;
+    --_thumbnailWidth: var(--_thumbnailDesktopWidth, 150px);
+    --_thumbnailHeight: var(--_thumbnailDesktopHeight, 220px);
   }
 
   height: 100svh;
