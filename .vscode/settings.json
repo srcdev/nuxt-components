@@ -8,14 +8,21 @@
   "files.insertFinalNewline": true,
   "files.trimFinalNewlines": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "eslint.validate": ["javascript", "typescript", "vue"],
   "[typescript][javascript][json][jsonc][css][scss][html][markdown]": {
     "editor.formatOnSave": true
   },
   "[vue]": {
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": "Vue.volar",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.fixAll.stylelint": "explicit",
+      "source.fixAll.markdownlint": "explicit",
+      "editor.trimAutoWhitespace": "explicit"
+    }
   },
   "[css][html][javascript][json][jsonc][markdown][scss][typescript][vue]": {
     "editor.codeActionsOnSave": {

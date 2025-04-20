@@ -69,13 +69,6 @@ useHead({
   // ],
 });
 
-interface INavLink {
-  name: string;
-  path?: string;
-  isExternal?: boolean;
-  childLinks?: INavLink[];
-  childLinksTitle?: string;
-}
 
 const navLinks = [
   { name: 'Home', path: '/' },
@@ -111,7 +104,7 @@ const navLinks = [
     ],
   },
   { name: 'About', path: '/' },
-] as INavLink[];
+];
 </script>
 <style lang="css">
 .header {
