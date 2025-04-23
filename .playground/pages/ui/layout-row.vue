@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #content>
-        <LayoutRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="heading-2">Full Track (1fr)</h2>
           <p>
             Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit convallis himenaeos. Tellus varius cursus convallis commodo suspendisse litora.
@@ -16,7 +16,7 @@
           </p>
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h2 class="heading-2">Popout Track (1400px)</h2>
           <p>
             Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit convallis himenaeos. Tellus varius cursus convallis commodo suspendisse litora.
@@ -30,7 +30,7 @@
           </p>
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="content" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <h2 class="heading-2">Content Track (1060px)</h2>
           <p>
             Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit convallis himenaeos. Tellus varius cursus convallis commodo suspendisse litora.
@@ -44,7 +44,7 @@
           </p>
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="inset-content" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
           <h2 class="heading-2">Inset Content Track (840px)</h2>
           <p>
             Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit convallis himenaeos. Tellus varius cursus convallis commodo suspendisse litora.
@@ -58,7 +58,7 @@
           </p>
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h2 class="heading-2">Full Width</h2>
           <p>
             Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit convallis himenaeos. Tellus varius cursus convallis commodo suspendisse litora.

@@ -1,0 +1,8 @@
+{
+  "SRCDEV Nuxt Layout Row Component HTML Template": {
+    "scope": "vue",
+    "prefix": "nuxt-layout=row-component-html-template",
+    "body": ["<LayoutRow tag=\"div\" variant=\"[full|full-width|popout|content|inset-content]\" :style-class-passthrough=\"['mbe-20']\">", "  $0", "</LayoutRow>", ""],
+    "description": "SRCDEV Nuxt Layout Row Component HTML Template"
+  }
+}
