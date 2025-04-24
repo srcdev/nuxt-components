@@ -2,18 +2,26 @@
   <div>
     <NuxtLayout name="default">
       <template #content>
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h2 class="heading-2">Clipped Panels</h2>
         </LayoutRow>
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+          <h2 class="heading-2">Rectangle</h2>
+          <ClippedPanel variant="rectangle">
+            <template #default>
+              <p>Clipped Panels Rectangle</p>
+            </template>
+          </ClippedPanel>
+        </LayoutRow>
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h2 class="heading-2">Square</h2>
-          <ClippedPanelSquare :styleClassPassthrough="['square']">
+          <ClippedPanel variant="square">
             <template #default>
               <p>Clipped Panels Square</p>
             </template>
-          </ClippedPanelSquare>
+          </ClippedPanel>
         </LayoutRow>
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h2 class="heading-2">Circle</h2>
           <div class="counter-panel">
             <div class="counter-panel__counter">1</div>
