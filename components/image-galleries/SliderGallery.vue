@@ -1,11 +1,11 @@
 <template>
   <div class="slider-gallery" :class="[elementClasses]" ref="sliderGalleryWrapper">
-    <div class="loading-state" :class="[{ loaded: !isLoading }]">
+    <div class="loading-state" :class="[{ galleryLoaded: !galleryLoaded }]">
       <div class="loading-spinner"></div>
       <p>Loading gallery...</p>
     </div>
 
-    <div v-if="showGallery" class="gallery-content" :class="[{ loaded: isLoading }]">
+    <div v-if="showGallery" class="gallery-content" :class="[{ galleryLoaded: !galleryLoaded }]">
       <div class="list" ref="sliderGalleryImagesList">
         <div v-for="(item, index) in galleryData" :key="index" class="item">
           <NuxtImg :src="item.src" :alt="item.alt" @load="handleImageLoad(index)" @error="handleImageError(index)" loading="lazy" />
@@ -83,7 +83,8 @@ const sliderGalleryWrapper = useTemplateRef('sliderGalleryWrapper');
 const sliderGalleryImagesList = useTemplateRef('sliderGalleryImagesList');
 const sliderGalleryThumbnailsList = useTemplateRef('sliderGalleryThumbnailsList');
 
-const isLoading = ref(true);
+const transitionRunning = ref(false);
+const galleryLoaded = ref(true);
 const showGallery = ref(false);
 const loadedImages = ref<Set<number>>(new Set());
 const preloadedImages = ref<Array<HTMLImageElement>>([]);
@@ -93,7 +94,7 @@ onMounted(async () => {
 
   // If no images or galleryData is empty, stop loading
   if (!galleryData.value || galleryData.value.length === 0) {
-    isLoading.value = false;
+    galleryLoaded.value = false;
     return;
   }
 
@@ -127,27 +128,26 @@ onMounted(async () => {
   await Promise.race(imageLoadPromises);
 
   setTimeout(() => {
-    isLoading.value = false;
+    galleryLoaded.value = false;
   }, 500);
 });
 
 const handleImageLoad = (index: number) => {
-  console.log('Image loaded:', index);
   loadedImages.value.add(index);
 };
 
 const handleImageError = (index: number) => {
-  console.error(`Failed to load image at index ${index}`);
+  // console.error(`Failed to load image at index ${index}`);
   loadedImages.value.add(index);
 };
 
 const doNext = () => {
-  if (isLoading.value) return;
+  if (transitionRunning.value) return;
   showSlider('next');
 };
 
 const doPrevious = () => {
-  if (isLoading.value) return;
+  if (transitionRunning.value) return;
   showSlider('prev');
 };
 
@@ -155,6 +155,8 @@ let runTimeOut: any;
 let runNextAuto: any = null;
 
 function showSlider(type: string) {
+  transitionRunning.value = true;
+
   const currentSliderItems = Array.from(sliderGalleryImagesList.value?.children || []);
   const currentThumbnailItems = Array.from(sliderGalleryThumbnailsList.value?.children || []);
 
@@ -201,19 +203,23 @@ function showSlider(type: string) {
       const thumbs = sliderGalleryThumbnailsList.value?.querySelectorAll('.prepend-item');
       thumbs?.forEach((thumb) => thumb.classList.remove('prepend-item'));
     }
+    transitionRunning.value = false;
   }, props.animationDuration);
 
   // Reset auto-run timer
   clearTimeout(runNextAuto);
   runNextAuto = setTimeout(() => {
-    if (!props.autoRun || isLoading.value) return;
+    if (!props.autoRun || galleryLoaded.value) return;
     doNext();
   }, props.autoRunInterval);
 }
 
 // Initialize auto-run only after loading completes
-watch(isLoading, (isLoadingNow) => {
-  if (!isLoadingNow && props.autoRun) {
+watch(galleryLoaded, (previousValue, currentValue) => {
+
+  console.log(`galleryLoaded, (currentValue(${currentValue}), previousValue(${previousValue})`);
+
+  if (!currentValue && props.autoRun) {
     clearTimeout(runNextAuto);
     runNextAuto = setTimeout(() => {
       doNext();
@@ -258,6 +264,8 @@ onMounted(() => {
   position: absolute;
   inset: 0 0 0 0;
 
+  z-index: 9999;
+
   .loading-state {
     position: absolute;
     inset: 0 0 0 0;
@@ -272,7 +280,7 @@ onMounted(() => {
     transition: display 0.5s, opacity 0.5s;
     transition-behavior: allow-discrete;
 
-    &.loaded {
+    &.galleryLoaded {
       display: none;
       opacity: 0;
     }
@@ -300,7 +308,7 @@ onMounted(() => {
     /* opacity: 0; */
     /* transition: opacity 0.5s ease-in-out; */
 
-    &.loaded {
+    &.galleryLoaded {
       /* opacity: 1; */
     }
   }
