@@ -130,6 +130,9 @@ onMounted(async () => {
   setTimeout(() => {
     galleryLoaded.value = false;
   }, 500);
+
+  showGallery.value = true;
+  window.addEventListener('keydown', handleKeyDown);
 });
 
 const handleImageLoad = (index: number) => {
@@ -137,7 +140,6 @@ const handleImageLoad = (index: number) => {
 };
 
 const handleImageError = (index: number) => {
-  // console.error(`Failed to load image at index ${index}`);
   loadedImages.value.add(index);
 };
 
@@ -191,12 +193,11 @@ function showSlider(type: string) {
 
   clearTimeout(runTimeOut);
   runTimeOut = setTimeout(() => {
-    // Your existing cleanup code
+
     if (sliderGalleryWrapper.value) {
       sliderGalleryWrapper.value.classList.remove('next');
       sliderGalleryWrapper.value.classList.remove('prev');
 
-      // Remove helper classes
       const items = sliderGalleryImagesList.value?.querySelectorAll('.prepend-item');
       items?.forEach((item) => item.classList.remove('prepend-item'));
 
@@ -214,11 +215,22 @@ function showSlider(type: string) {
   }, props.autoRunInterval);
 }
 
+// Add keyboard navigation event handlers
+const handleKeyDown = (event: KeyboardEvent) => {
+  // Don't process key events if transition is running or gallery isn't loaded
+  if (transitionRunning.value || galleryLoaded.value) {
+    return;
+  }
+
+  if (event.key === 'ArrowLeft') {
+    doPrevious();
+  } else if (event.key === 'ArrowRight') {
+    doNext();
+  }
+};
+
 // Initialize auto-run only after loading completes
 watch(galleryLoaded, (previousValue, currentValue) => {
-
-  console.log(`galleryLoaded, (currentValue(${currentValue}), previousValue(${previousValue})`);
-
   if (!currentValue && props.autoRun) {
     clearTimeout(runNextAuto);
     runNextAuto = setTimeout(() => {
@@ -237,10 +249,7 @@ watch(
 onBeforeUnmount(() => {
   clearTimeout(runTimeOut);
   clearTimeout(runNextAuto);
-});
-
-onMounted(() => {
-  showGallery.value = true;
+  window.removeEventListener('keydown', handleKeyDown);
 });
 </script>
 
