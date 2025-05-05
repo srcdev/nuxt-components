@@ -497,8 +497,16 @@ onBeforeUnmount(() => {
       transition: 0.5s;
 
       border-width: 2px;
-      border-style: dashed;
-      border-color: yellow;
+      border-style: solid;
+      border-color: white;
+
+      &#prev {
+        --_translateX: -2px;
+      }
+
+      &#next {
+        --_translateX: 2px;
+      }
 
       &:hover {
         background-color: #fff;
@@ -510,7 +518,7 @@ onBeforeUnmount(() => {
         font-weight: 900;
         height: 40px;
         width: 40px;
-
+        translate: var(--_translateX) -3px;
       }
     }
   }
