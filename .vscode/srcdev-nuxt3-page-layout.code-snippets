@@ -1,7 +1,7 @@
 {
   "Bootstrap Nuxt3 page with layout template": {
-    "scope": "vue",
-    "prefix": "nuxt-page-with-layout",
+    "scope": "vue, html",
+    "prefix": "srcdev-nuxt-page-with-layout",
     "body": [
       "<template>",
       "  <div>",

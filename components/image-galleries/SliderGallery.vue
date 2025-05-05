@@ -8,7 +8,8 @@
     <div v-if="showGallery" class="gallery-content" :class="[{ galleryLoaded: !galleryLoaded }]">
       <div class="list" ref="sliderGalleryImagesList">
         <div v-for="(item, index) in galleryData" :key="index" class="item">
-          <NuxtImg :src="item.src" :alt="item.alt" @load="handleImageLoad(index)" @error="handleImageError(index)" loading="lazy" />
+          <NuxtImg :src="item.src" :alt="item.alt" @load="handleImageLoad(index)" @error="handleImageError(index)"
+            loading="lazy" />
           <div class="content">
             <div class="author">{{ item.stylist }}</div>
             <div class="title">{{ item.title }}</div>
@@ -27,15 +28,20 @@
             <img :src="item.src" :alt="item.alt" loading="lazy" />
             <div class="content">
               <div class="title" v-show="item.thumbnail?.title !== ''">{{ item.thumbnail?.title }}</div>
-              <div class="description" v-show="item.thumbnail?.description !== ''">{{ item.thumbnail?.description }}</div>
+              <div class="description" v-show="item.thumbnail?.description !== ''">{{ item.thumbnail?.description }}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="arrows">
-        <button id="prev" ref="prevDom" @click.prevent="doPrevious()"><</button>
-        <button id="next" ref="nextDom" @click.prevent="doNext()">></button>
+        <button id="prev" ref="prevDom" @click.prevent="doPrevious()">
+          <Icon name="ic:outline-keyboard-arrow-left" class="arrows-icon" />
+        </button>
+        <button id="next" ref="nextDom" @click.prevent="doNext()">
+          <Icon name="ic:outline-keyboard-arrow-right" class="arrows-icon" />
+        </button>
       </div>
 
       <div class="time"></div>
@@ -474,23 +480,37 @@ onBeforeUnmount(() => {
     width: 300px;
     max-width: 30%;
     display: flex;
-    gap: 10px;
+    gap: 20px;
     align-items: center;
 
     button {
+      display: grid;
+      justify-content: center;
+      align-items: center;
       width: 40px;
       height: 40px;
       border-radius: 50%;
       background-color: #eee4;
-      border: none;
       color: #fff;
       font-family: monospace;
       font-weight: bold;
       transition: 0.5s;
 
+      border-width: 2px;
+      border-style: dashed;
+      border-color: yellow;
+
       &:hover {
         background-color: #fff;
         color: #000;
+      }
+
+      .arrows-icon {
+        color: currentColor;
+        font-weight: 900;
+        height: 40px;
+        width: 40px;
+
       }
     }
   }
