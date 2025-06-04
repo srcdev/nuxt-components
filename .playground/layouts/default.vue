@@ -5,7 +5,7 @@
         <LayoutRow tag="nav" variant="popout">
           <template #default>
             <h1 class="heading-1">Nuxt Component Library</h1>
-            <DeepExpandingMenu :nav-links />
+            <DeepExpandingMenuOld :nav-links />
           </template>
         </LayoutRow>
       </template>

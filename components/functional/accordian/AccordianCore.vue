@@ -57,6 +57,7 @@ const accordianName = useId();
   }
 
   --_grid-template-rows: 0fr;
+  --_details-content-height: 0px;
   --_icon-transform: scaleY(1);
   --_accordian-content-transform: scaleY(0);
 
@@ -92,28 +93,33 @@ const accordianName = useId();
 
   .accordion-content {
     /* display: block; */
-    display: grid;
-    grid-template-rows: 0fr;
+    /* display: grid; */
+    /* grid-template-rows: 0fr; */
     /* grid-template-rows: var(--_grid-template-rows); */
 
     /* transform: var(--_accordian-content-transform); */
     /* transform: scaleY(0); */
     /* transform-origin: top; */
-    transition: all 2000ms;
+    /* transition: all 2000ms; */
 
     .accordion-content-inner {
-      /* display: grid; */
-      /* grid-template-rows: 0fr; */
+      background-color: red;
 
-      /* transform: scaleY(0); */
-      /* transform-origin: top; */
+      overflow: clip;
+      height: var(--_details-content-height);
+      transition: all 2000ms;
+      transition-behavior: allow-discrete;
 
-      /* transition: all 2000ms; */
+      @starting-style {
+        height: 0;
+      }
     }
   }
 
   &[open] {
     --_grid-template-rows: 1fr;
+    --_details-content-height: calc-size(auto, size);
+
     --_icon-transform: scaleY(-1);
     --_accordian-content-transform: scaleY(1);
 
