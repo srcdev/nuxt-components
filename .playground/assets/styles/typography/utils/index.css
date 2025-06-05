@@ -1,2 +1,3 @@
-@import './_font-classes.css';
-@import './_weights.css';
+@import './_font-classes';
+@import './_weights';
+@import './_text-box-trim';

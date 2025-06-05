@@ -1,5 +1,13 @@
 <template>
   <div>
+    <LayoutRow tag="div" variant="full" :style-class-passthrough="['header', 'mbe-40']">
+      <template #default>
+        <ResponsiveHeader :responsive-nav-links />
+      </template>
+    </LayoutRow>
+
+    <hr />
+
     <LayoutRow tag="header" variant="full" :style-class-passthrough="['header']">
       <template #default>
         <LayoutRow tag="nav" variant="popout">
@@ -105,6 +113,56 @@ const navLinks = [
   },
   { name: 'About', path: '/' },
 ];
+
+const responsiveNavLinks = {
+  firstNav: [
+    { name: 'Home', path: '/' },
+    {
+      name: 'Components',
+      childLinksTitle: 'UI Components',
+      childLinks: [
+        { name: 'Responsive Header', path: '/ui/responsive-header' },
+        { name: 'Slider Gallery', path: '/ui/slider-gallery' },
+        { name: 'Container Glow', path: '/ui/container-glow' },
+        { name: 'Accordian', path: '/ui/accordian' },
+        { name: 'Details', path: '/ui/display-details' },
+        { name: 'Dialogs', path: '/ui/dialog' },
+      ],
+    },
+    {
+      name: 'Layouts',
+      childLinksTitle: 'UI Layouts',
+      childLinks: [
+        { name: 'Layout Row', path: '/ui/layout-row' },
+        { name: 'Layout Grid A', path: '/ui/layout-grid-a' },
+        { name: 'Layout Grid B', path: '/ui/layout-grid-b' },
+        { name: 'Simple Grid', path: '/ui/simple-grid' },
+      ],
+    },
+    { name: 'About', path: '/' },
+  ],
+  secondNav: [
+    { name: 'Some other link', path: '/' },
+    {
+      name: 'Help',
+      childLinksTitle: 'Find Help',
+      childLinks: [
+        { name: 'FAQs', path: '#' },
+        { name: 'Contact Us', path: '#' },
+        { name: 'Logout', path: '#' },
+      ],
+    },
+    {
+      name: 'Account',
+      childLinksTitle: 'Manage Your Account',
+      childLinks: [
+        { name: 'Your Profile', path: '#' },
+        { name: 'Settings', path: '#' },
+        { name: 'Logout', path: '#' },
+      ],
+    },
+  ],
+}
 </script>
 <style lang="css">
 .header {
