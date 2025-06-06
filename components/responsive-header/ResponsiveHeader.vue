@@ -8,7 +8,7 @@
           v-for="(navGroup, groupKey) in responsiveNavLinks"
           :key="groupKey"
           class="main-navigation-list"
-          :ref="el => setNavRef(groupKey, el)"
+          :ref="el => setNavRef(String(groupKey), el as HTMLUListElement | null)"
         >
           <template v-for="(link, localIndex) in navGroup" :key="localIndex">
             <li
@@ -30,7 +30,7 @@
               <details
                 class="main-navigation-details"
                 name="navigation-group"
-                ref="navigationGroupRef"
+                ref="navigationDetails"
               >
                 <summary class="main-navigation-link has-toggle-icon">
                   <Icon name="mdi:chevron-down" class="icon" />
@@ -133,7 +133,7 @@
 </script>
 
 <script setup lang="ts">
-import { useResizeObserver } from '@vueuse/core';
+import { useResizeObserver, onClickOutside } from '@vueuse/core';
 
 const props = defineProps({
   responsiveNavLinks: {
@@ -187,6 +187,8 @@ const secondaryNavRects = ref<IFlooredRect | null>(null);
 
 const mainNavigationItemsRefs = useTemplateRef<HTMLLIElement[]>('mainNavigationItems');
 const mainNavigationItemsState = ref<MainNavigationItem[]>([]);
+
+const navigationDetailsRefs = useTemplateRef<HTMLElement[]>('navigationDetails');
 
 const mainNavigationMarginBlockEnd = computed(() => {
   return navRefTrackState.value.atMinWidth && secondaryNavRects.value
@@ -252,6 +254,7 @@ const setNavigationConfig = async (source: string) => {
   }
   navRefTrackState.value.navRefsMinWidthPrevious = secondNavRects.value ? secondNavRects.value.right : 0;
   navRefTrackState.value.isInitialized = true;
+
 }
 
 const setMainNavigationItemsState = () => {
@@ -272,6 +275,12 @@ onMounted(async() => {
   setTimeout(() => {
     navLoaded.value = true;
   }, 100);
+
+  navigationDetailsRefs.value?.forEach((element, index) => {
+    onClickOutside(element, () => {
+      navigationDetailsRefs.value?.[index]?.removeAttribute('open');
+    });
+  });
 });
 
 useResizeObserver(navigationWrapperRef, async () => {
@@ -436,16 +445,30 @@ watch(
         }
 
         summary {
-          text-align: right;
-          list-style: none;
+          --_icon-zoom: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           padding-inline: 5px;
           text-wrap: nowrap;
 
+          aspect-ratio: 1;
+          border-radius: 4px;
+          border: 1px solid #ffffff90;
+          outline: 1px solid #ffffff10;
+          background-color: Canvas;
+
+          width: 28px;
+          overflow: hidden;
+
+          &:hover {
+            --_icon-zoom: 1.2;
+            outline: 1px solid #ffffff;
+          }
+
           .icon {
-            aspect-ratio: 1;
-            background-color: green;
-            border-radius: 4px;
-            border: 1px solid #ffffff90;
+            scale: var(--_icon-zoom);
+            transition: scale 0.2s ease-in-out;
           }
         }
 
