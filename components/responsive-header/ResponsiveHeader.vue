@@ -1,7 +1,7 @@
 <template>
   <header class="responsive-header" :class="[elementClasses]">
     <h1><a href="/">Logo</a></h1>
-    <div class="navigation" ref="navigationWrapper">
+    <div class="navigation" :class="[{ loaded: navLoaded }]" ref="navigationWrapper">
       <nav class="main-navigation" :class="[{ collapsed: navRefTrackState.isCollapsed }]" ref="mainNav">
 
         <ul
@@ -156,6 +156,7 @@ const flatNavItems = computed(() => {
   return items
 })
 
+const navLoaded = ref(false);
 const navigationWrapperRef = useTemplateRef('navigationWrapper');
 const mainNavRef = useTemplateRef('mainNav');
 const gapBetweenMainNavAndSecondaryNav = 12; // px
@@ -186,6 +187,12 @@ const secondaryNavRects = ref<IFlooredRect | null>(null);
 
 const mainNavigationItemsRefs = useTemplateRef<HTMLLIElement[]>('mainNavigationItems');
 const mainNavigationItemsState = ref<MainNavigationItem[]>([]);
+
+const mainNavigationMarginBlockEnd = computed(() => {
+  return navRefTrackState.value.atMinWidth && secondaryNavRects.value
+    ? secondaryNavRects.value.width
+    : 0;
+});
 
 const checkMainNavigationItemsVisibility = (index: number) => {
   if (!navigationWrapperRects.value || !mainNavigationItemsState.value[index]) return false;
@@ -255,13 +262,16 @@ const setMainNavigationItemsState = () => {
     return {
       left: Math.floor(rect.left),
       right: Math.floor(rect.right),
-      visible: navigationWrapperRects.value ? rect.right < navigationWrapperRects.value.right : true,
+      visible: navigationWrapperRects.value ? Math.floor(rect.right + mainNavigationMarginBlockEnd.value + gapBetweenMainNavAndSecondaryNav) < navigationWrapperRects.value.right : true,
     };
   });
 }
 
 onMounted(async() => {
   await initTemplateRefs();
+  setTimeout(() => {
+    navLoaded.value = true;
+  }, 100);
 });
 
 useResizeObserver(navigationWrapperRef, async () => {
@@ -333,6 +343,13 @@ watch(
     }
 
     .navigation {
+      --_link-visibility-transition: none;
+
+      &.loaded {
+        --_link-visibility-transition: translate 0.2s ease-in-out;
+      }
+
+
       display: grid;
       grid-template-areas: 'navStack';
 
@@ -362,6 +379,10 @@ watch(
         summary::-webkit-details-marker,
         summary::marker {
           display: none;
+        }
+
+        summary:hover {
+          cursor: pointer;
         }
 
         .main-navigation-details-sub-nav {
@@ -474,7 +495,7 @@ watch(
         }
 
         /* margin-inline-end: calc(var(--_secondary-nav-width) + var(--_gap-for-overflow-details)); */
-        /* margin-inline-end: calc(v-bind(secondaryNavWidth) + v-bind(`${gapBetweenMainNavAndSecondaryNav}px`)); */
+        /* margin-inline-end: v-bind(`${mainNavigationMarginBlockEnd}px`); */
         overflow-x: hidden;
 
         outline: 0px solid green;
@@ -502,6 +523,28 @@ watch(
               opacity: 0;
             }
           }
+
+          /* .main-navigation-item {
+            transition:
+              opacity 0.2s ease-in-out,
+              visibility 0.2s ease-in-out;
+
+            .main-navigation-details,
+            .main-navigation-link {
+              translate: 0 0;
+              transition: var(--_link-visibility-transition);
+            }
+
+            &.visually-hidden {
+              visibility: hidden;
+              opacity: 0;
+
+              .main-navigation-details,
+              .main-navigation-link {
+                translate: 100px 0;
+              }
+            }
+          } */
         }
       }
 
