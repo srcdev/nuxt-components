@@ -15,6 +15,7 @@
               v-if="link.path"
               class="main-navigation-item"
               :class="{ 'visually-hidden': !checkMainNavigationItemsVisibility(flatNavItems.findIndex(item => item === link)) }"
+              :style="{ '--_main-navigation-item-width': getMainNavigationItemWidth(flatNavItems.findIndex(item => item === link)) + 'px' }"
               ref="mainNavigationItems"
               :data-index="flatNavItems.findIndex(item => item === link)"
             >
@@ -24,6 +25,7 @@
               v-else
               class="main-navigation-item"
               :class="{ 'visually-hidden': !checkMainNavigationItemsVisibility(flatNavItems.findIndex(item => item === link)) }"
+              :style="{ '--_main-navigation-item-width': getMainNavigationItemWidth(flatNavItems.findIndex(item => item === link)) + 'px' }"
               ref="mainNavigationItems"
               :data-index="flatNavItems.findIndex(item => item === link)"
             >
@@ -117,6 +119,7 @@
   interface MainNavigationItem {
     left: number;
     right: number;
+    width?: number;
     visible: boolean;
   }
 
@@ -211,6 +214,13 @@ const initTemplateRefs = async () => {
   return;
 }
 
+// Function to return width from mainNavigationItemsState based on index
+const getMainNavigationItemWidth = (index: number): number => {
+  // console.log(`getMainNavigationItemWidth: index ${index}`);
+  if (!mainNavigationItemsState.value[index]) return "auto";
+  return mainNavigationItemsState.value[index].width || "auto";
+}
+
 // Helper function to return Math.floor values from getBoundingClientRect()
 const getFlooredRect = (rect: DOMRect | null) => {
   if (!rect) return null;
@@ -225,7 +235,7 @@ const getFlooredRect = (rect: DOMRect | null) => {
 }
 
 const setNavigationConfig = async (source: string) => {
-  console.clear();
+  // console.clear();
   console.log("setNavigationConfig called", source);
   // Get the bounding rectangle of the main navigation
   navigationWrapperRects.value = getFlooredRect((navigationWrapperRef.value && navigationWrapperRef.value.getBoundingClientRect()) ?? null) || null;
@@ -260,11 +270,19 @@ const setNavigationConfig = async (source: string) => {
 const setMainNavigationItemsState = () => {
   if (!mainNavigationItemsRefs.value) return;
 
-  mainNavigationItemsState.value = Array.from(mainNavigationItemsRefs.value).map((item) => {
+  mainNavigationItemsState.value = Array.from(mainNavigationItemsRefs.value).map((item, index) => {
     const rect = item.getBoundingClientRect();
+
+    const width = navLoaded.value
+      ? mainNavigationItemsState.value[index]?.width
+      : Math.ceil(rect.width);
+
+    console.log(`setMainNavigationItemsState: navLoaded ${navLoaded.value} item ${index}, width: ${width}`);
+
     return {
       left: Math.floor(rect.left),
       right: Math.floor(rect.right),
+      width: Math.ceil(rect.width),
       visible: navigationWrapperRects.value ? Math.floor(rect.right + mainNavigationMarginBlockEnd.value + gapBetweenMainNavAndSecondaryNav) < navigationWrapperRects.value.right : true,
     };
   });
@@ -355,7 +373,7 @@ watch(
       --_link-visibility-transition: none;
 
       &.loaded {
-        --_link-visibility-transition: translate 0.2s ease-in-out;
+        --_link-visibility-transition: all 0.2s ease-in-out;
       }
 
 
@@ -536,7 +554,8 @@ watch(
             gap: 30px;
           }
 
-          .main-navigation-item {
+
+          /* .main-navigation-item {
             transition:
               opacity 0.2s ease-in-out,
               visibility 0.2s ease-in-out;
@@ -545,16 +564,19 @@ watch(
               visibility: hidden;
               opacity: 0;
             }
-          }
+          } */
 
-          /* .main-navigation-item {
+
+          .main-navigation-item {
+            width: var(--_main-navigation-item-width);
+            overflow: hidden;
             transition:
               opacity 0.2s ease-in-out,
               visibility 0.2s ease-in-out;
 
             .main-navigation-details,
             .main-navigation-link {
-              translate: 0 0;
+              margin-inline-start: 0;
               transition: var(--_link-visibility-transition);
             }
 
@@ -564,10 +586,10 @@ watch(
 
               .main-navigation-details,
               .main-navigation-link {
-                translate: 100px 0;
+                margin-inline-start: var(--_main-navigation-item-width);
               }
             }
-          } */
+          }
         }
       }
 
