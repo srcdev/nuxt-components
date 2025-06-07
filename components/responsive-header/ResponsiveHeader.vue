@@ -15,7 +15,7 @@
               v-if="link.path"
               class="main-navigation-item"
               :class="{ 'visually-hidden': !checkMainNavigationItemsVisibility(flatNavItems.findIndex(item => item === link)) }"
-              :style="{ '--_main-navigation-item-width': getMainNavigationItemWidth(flatNavItems.findIndex(item => item === link)) + 'px' }"
+              :style="{ '--_main-navigation-item-width': getMainNavigationItemStyle(flatNavItems.findIndex(item => item === link)) }"
               ref="mainNavigationItems"
               :data-index="flatNavItems.findIndex(item => item === link)"
             >
@@ -25,7 +25,7 @@
               v-else
               class="main-navigation-item"
               :class="{ 'visually-hidden': !checkMainNavigationItemsVisibility(flatNavItems.findIndex(item => item === link)) }"
-              :style="{ '--_main-navigation-item-width': getMainNavigationItemWidth(flatNavItems.findIndex(item => item === link)) + 'px' }"
+              :style="{ '--_main-navigation-item-width': getMainNavigationItemStyle(flatNavItems.findIndex(item => item === link)) }"
               ref="mainNavigationItems"
               :data-index="flatNavItems.findIndex(item => item === link)"
             >
@@ -159,6 +159,7 @@ const flatNavItems = computed(() => {
   return items
 })
 
+
 const navLoaded = ref(false);
 const navigationWrapperRef = useTemplateRef('navigationWrapper');
 const mainNavRef = useTemplateRef('mainNav');
@@ -206,7 +207,7 @@ const checkMainNavigationItemsVisibility = (index: number) => {
 }
 
 const initTemplateRefs = async () => {
-  console.log("initTemplateRefs called");
+  // console.log("initTemplateRefs called");
 
   firstNavRef.value = navRefs.value['firstNav'] as HTMLUListElement | null;
   secondNavRef.value = navRefs.value['secondNav'] as HTMLUListElement | null;
@@ -214,12 +215,15 @@ const initTemplateRefs = async () => {
   return;
 }
 
-// Function to return width from mainNavigationItemsState based on index
-const getMainNavigationItemWidth = (index: number): number => {
-  // console.log(`getMainNavigationItemWidth: index ${index}`);
-  if (!mainNavigationItemsState.value[index]) return "auto";
-  return mainNavigationItemsState.value[index].width || "auto";
-}
+const getMainNavigationItemWidth = (index: number): number | string => {
+  const item = mainNavigationItemsState.value[index];
+  return item?.width ?? 'auto';
+};
+
+const getMainNavigationItemStyle = (index: number): string => {
+  const width = getMainNavigationItemWidth(index);
+  return typeof width === 'number' ? `${width}px` : width;
+};
 
 // Helper function to return Math.floor values from getBoundingClientRect()
 const getFlooredRect = (rect: DOMRect | null) => {
@@ -236,7 +240,7 @@ const getFlooredRect = (rect: DOMRect | null) => {
 
 const setNavigationConfig = async (source: string) => {
   // console.clear();
-  console.log("setNavigationConfig called", source);
+  // console.log("setNavigationConfig called", source);
   // Get the bounding rectangle of the main navigation
   navigationWrapperRects.value = getFlooredRect((navigationWrapperRef.value && navigationWrapperRef.value.getBoundingClientRect()) ?? null) || null;
   secondaryNavRects.value = getFlooredRect((secondaryNavRef.value && secondaryNavRef.value.getBoundingClientRect()) ?? null) || null;
@@ -254,7 +258,7 @@ const setNavigationConfig = async (source: string) => {
     navRefTrackState.value.atMinWidth = (navRefTrackState.value.navRefsMinWidthCurrent === navRefTrackState.value.navRefsMinWidthPrevious);
 
     if (navRefTrackState.value.atMinWidth) {
-      console.log("atMinWidth is true");
+      // console.log("atMinWidth is true");
       navRefTrackState.value.isCollapsed = navigationWrapperRects.value !== null
         && secondaryNavRects.value !== null
         && (navigationWrapperRects.value.right < secondaryNavRects.value.right);
@@ -277,7 +281,7 @@ const setMainNavigationItemsState = () => {
       ? mainNavigationItemsState.value[index]?.width
       : Math.ceil(rect.width);
 
-    console.log(`setMainNavigationItemsState: navLoaded ${navLoaded.value} item ${index}, width: ${width}`);
+    // console.log(`setMainNavigationItemsState: navLoaded ${navLoaded.value} item ${index}, width: ${width}`);
 
     return {
       left: Math.floor(rect.left),
