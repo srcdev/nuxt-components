@@ -17,7 +17,6 @@
               :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
               :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
               ref="mainNavigationItems"
-              :data-index="flatNavItems.findIndex(item => item === link)"
               :data-group-key="groupKey"
               :data-local-index="localIndex"
             >
@@ -29,7 +28,6 @@
               :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
               :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
               ref="mainNavigationItems"
-              :data-index="flatNavItems.findIndex(item => item === link)"
               :data-group-key="groupKey"
               :data-local-index="localIndex"
             >
@@ -195,7 +193,6 @@ const secondaryNavRef = useTemplateRef('secondaryNav');
 const secondaryNavRects = ref<IFlooredRect | null>(null);
 
 const mainNavigationItemsRefs = useTemplateRef<HTMLLIElement[]>('mainNavigationItems');
-const mainNavigationItemsState = ref<MainNavigationItem[]>([]);
 
 const navigationDetailsRefs = useTemplateRef<HTMLElement[]>('navigationDetails');
 
@@ -206,23 +203,10 @@ const mainNavigationMarginBlockEnd = computed(() => {
 });
 
 const initTemplateRefs = async () => {
-  // console.log("initTemplateRefs called");
-
   firstNavRef.value = navRefs.value['firstNav'] as HTMLUListElement | null;
   secondNavRef.value = navRefs.value['secondNav'] as HTMLUListElement | null;
-
   return;
 }
-
-const getMainNavigationItemWidth = (index: number): number | string => {
-  const item = mainNavigationItemsState.value[index];
-  return item?.width ?? 'auto';
-};
-
-const getMainNavigationItemStyle = (index: number): string => {
-  const width = getMainNavigationItemWidth(index);
-  return typeof width === 'number' ? `${width}px` : width;
-};
 
 // Helper function to return Math.floor values from getBoundingClientRect()
 const getFlooredRect = (rect: DOMRect | null) => {
