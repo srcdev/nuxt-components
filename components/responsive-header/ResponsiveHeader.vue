@@ -2,7 +2,7 @@
   <header class="responsive-header" :class="[elementClasses]">
     <h1><a href="/">Logo</a></h1>
     <div class="navigation" :class="[{ loaded: navLoaded }]" ref="navigationWrapper">
-      <nav class="main-navigation" :class="[{ collapsed: navRefTrackState.isCollapsed }]" ref="mainNav">
+      <nav class="main-navigation" :class="[{ collapsed: mainNavigationState.isCollapsed }]" ref="mainNav">
 
         <ul
           v-for="(navGroup, groupKey) in responsiveNavLinks"
@@ -14,20 +14,24 @@
             <li
               v-if="link.path"
               class="main-navigation-item"
-              :class="{ 'visually-hidden': !checkMainNavigationItemsVisibility(flatNavItems.findIndex(item => item === link)) }"
-              :style="{ '--_main-navigation-item-width': getMainNavigationItemStyle(flatNavItems.findIndex(item => item === link)) }"
+              :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
+              :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
               ref="mainNavigationItems"
               :data-index="flatNavItems.findIndex(item => item === link)"
+              :data-group-key="groupKey"
+              :data-local-index="localIndex"
             >
               <NuxtLink class="main-navigation-link" :to="link.path">{{ link.name }}</NuxtLink>
             </li>
             <li
               v-else
               class="main-navigation-item"
-              :class="{ 'visually-hidden': !checkMainNavigationItemsVisibility(flatNavItems.findIndex(item => item === link)) }"
-              :style="{ '--_main-navigation-item-width': getMainNavigationItemStyle(flatNavItems.findIndex(item => item === link)) }"
+              :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
+              :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
               ref="mainNavigationItems"
               :data-index="flatNavItems.findIndex(item => item === link)"
+              :data-group-key="groupKey"
+              :data-local-index="localIndex"
             >
               <details
                 class="main-navigation-details"
@@ -52,7 +56,7 @@
 
       </nav>
       <nav class="secondary-navigation" ref="secondaryNav">
-        <details class="overflow-details" :class="[{ 'visually-hidden': !navRefTrackState.atMinWidth }]" ref="overflowDetails" name="overflow-group">
+        <details class="overflow-details" :class="[{ 'visually-hidden': !mainNavigationState.atMinWidth }]" ref="overflowDetails" name="overflow-group">
           <summary class="has-toggle-icon">
             <Icon name="gravity-ui:ellipsis" class="icon" />
           </summary>
@@ -72,24 +76,8 @@
         <pre>{{ navigationWrapperRects }}</pre>
       </div>
       <div>
-        <h2 class="heading-4">navRefTrackState</h2>
-        <pre>{{ navRefTrackState }}</pre>
-      </div>
-      <div>
-        <h2 class="heading-4">firstNavRef</h2>
-        <pre>{{ firstNavRects }}</pre>
-      </div>
-      <div>
-        <h2 class="heading-4">secondNavRects</h2>
-        <pre>{{ secondNavRects }}</pre>
-      </div>
-      <div>
-        <h2 class="heading-4">secondaryNavRects</h2>
-        <pre>{{ secondaryNavRects }}</pre>
-      </div>
-      <div>
-        <h2 class="heading-4">mainNavigationItemsState</h2>
-        <pre>{{ mainNavigationItemsState }}</pre>
+        <h2 class="heading-4">mainNavigationState</h2>
+        <pre>{{ mainNavigationState }}</pre>
       </div>
     </ClientOnly>
 
@@ -104,16 +92,11 @@
     isExternal?: boolean;
     childLinksTitle?: string;
     childLinks?: INavLink[];
+    config?: NavLinkConfig;
   }
 
   interface IResponsiveNavLinks {
     [key: string]: INavLink[];
-  }
-
-  interface DetailsConfigItem {
-    left: number;
-    right: number;
-    visible: boolean;
   }
 
   interface MainNavigationItem {
@@ -130,6 +113,23 @@
     bottom: number;
     width: number;
     height: number;
+  }
+
+  interface NavLinkConfig {
+    left: number;
+    right: number;
+    width?: number;
+    visible: boolean;
+  }
+
+  interface INavigationRefTrackState {
+    isInitialized: boolean;
+    navRefsMinWidthCurrent: number;
+    navRefsMinWidthPrevious: number;
+    atMinWidth: boolean;
+    isCollapsed: boolean;
+    navRefsMaxWidth: number;
+    clonedNavLinks?: IResponsiveNavLinks;
   }
 
 
@@ -165,15 +165,20 @@ const navigationWrapperRef = useTemplateRef('navigationWrapper');
 const mainNavRef = useTemplateRef('mainNav');
 const gapBetweenMainNavAndSecondaryNav = 12; // px
 
-const navRefs = ref<Record<string, HTMLUListElement | null>>({});
-const navRefTrackState = ref({
+const mainNavigationState = ref<INavigationRefTrackState>({
   isInitialized: false,
   navRefsMinWidthCurrent: 0,
   navRefsMinWidthPrevious: 0,
   atMinWidth: false,
   isCollapsed: false,
   navRefsMaxWidth: 0,
-})
+  clonedNavLinks: props.responsiveNavLinks,
+});
+
+
+
+
+const navRefs = ref<Record<string, HTMLUListElement | null>>({});
 
 const setNavRef = (key: string, el: HTMLUListElement | null) => {
   navRefs.value[key] = el
@@ -195,16 +200,10 @@ const mainNavigationItemsState = ref<MainNavigationItem[]>([]);
 const navigationDetailsRefs = useTemplateRef<HTMLElement[]>('navigationDetails');
 
 const mainNavigationMarginBlockEnd = computed(() => {
-  return navRefTrackState.value.atMinWidth && secondaryNavRects.value
+  return mainNavigationState.value.atMinWidth && secondaryNavRects.value
     ? secondaryNavRects.value.width
     : 0;
 });
-
-const checkMainNavigationItemsVisibility = (index: number) => {
-  if (!navigationWrapperRects.value || !mainNavigationItemsState.value[index]) return false;
-  const item = mainNavigationItemsState.value[index];
-  return item.visible;
-}
 
 const initTemplateRefs = async () => {
   // console.log("initTemplateRefs called");
@@ -238,58 +237,55 @@ const getFlooredRect = (rect: DOMRect | null) => {
   };
 }
 
-const setNavigationConfig = async (source: string) => {
+const updateNavigationConfig = async (source: string) => {
   // console.clear();
-  // console.log("setNavigationConfig called", source);
-  // Get the bounding rectangle of the main navigation
+  // console.log("updateNavigationConfig called", source);
+
   navigationWrapperRects.value = getFlooredRect((navigationWrapperRef.value && navigationWrapperRef.value.getBoundingClientRect()) ?? null) || null;
   secondaryNavRects.value = getFlooredRect((secondaryNavRef.value && secondaryNavRef.value.getBoundingClientRect()) ?? null) || null;
   firstNavRects.value = getFlooredRect((firstNavRef.value && firstNavRef.value.getBoundingClientRect()) ?? null) || null;
   secondNavRects.value = getFlooredRect((secondNavRef.value && secondNavRef.value.getBoundingClientRect()) ?? null) || null;
 
-  // If navRefTrackState is not initialized, set the previous min width for correct calculations
-  if (!navRefTrackState.value.isInitialized) {
-    navRefTrackState.value.navRefsMinWidthPrevious = secondNavRects.value ? secondNavRects.value.right : 0;
+  if (!mainNavigationState.value.isInitialized) {
+    mainNavigationState.value.navRefsMinWidthPrevious = secondNavRects.value ? secondNavRects.value.right : 0;
   }
 
-  navRefTrackState.value.navRefsMinWidthCurrent = secondNavRects.value ? secondNavRects.value.right : 0;
+  mainNavigationState.value.navRefsMinWidthCurrent = secondNavRects.value ? secondNavRects.value.right : 0;
 
-  if (navRefTrackState.value.isInitialized) {
-    navRefTrackState.value.atMinWidth = (navRefTrackState.value.navRefsMinWidthCurrent === navRefTrackState.value.navRefsMinWidthPrevious);
+  if (mainNavigationState.value.isInitialized) {
+    mainNavigationState.value.atMinWidth = (mainNavigationState.value.navRefsMinWidthCurrent === mainNavigationState.value.navRefsMinWidthPrevious);
 
-    if (navRefTrackState.value.atMinWidth) {
-      // console.log("atMinWidth is true");
-      navRefTrackState.value.isCollapsed = navigationWrapperRects.value !== null
+    if (mainNavigationState.value.atMinWidth) {
+      mainNavigationState.value.isCollapsed = navigationWrapperRects.value !== null
         && secondaryNavRects.value !== null
         && (navigationWrapperRects.value.right < secondaryNavRects.value.right);
-
     }
 
   }
-  navRefTrackState.value.navRefsMinWidthPrevious = secondNavRects.value ? secondNavRects.value.right : 0;
-  navRefTrackState.value.isInitialized = true;
+  mainNavigationState.value.navRefsMinWidthPrevious = secondNavRects.value ? secondNavRects.value.right : 0;
+  mainNavigationState.value.isInitialized = true;
 
 }
 
-const setMainNavigationItemsState = () => {
+const initMainNavigationState = () => {
   if (!mainNavigationItemsRefs.value) return;
 
-  mainNavigationItemsState.value = Array.from(mainNavigationItemsRefs.value).map((item, index) => {
+  mainNavigationItemsRefs.value.forEach((item, index) => {
+
     const rect = item.getBoundingClientRect();
 
-    const width = navLoaded.value
-      ? mainNavigationItemsState.value[index]?.width
-      : Math.ceil(rect.width);
-
-    // console.log(`setMainNavigationItemsState: navLoaded ${navLoaded.value} item ${index}, width: ${width}`);
-
-    return {
-      left: Math.floor(rect.left),
-      right: Math.floor(rect.right),
-      width: Math.ceil(rect.width),
-      visible: navigationWrapperRects.value ? Math.floor(rect.right + mainNavigationMarginBlockEnd.value + gapBetweenMainNavAndSecondaryNav) < navigationWrapperRects.value.right : true,
+    const groupKey = item.dataset.groupKey;
+    const localIndex = item.dataset.localIndex ? parseInt(item.dataset.localIndex, 10) : 0;
+    mainNavigationState.value.clonedNavLinks![groupKey][localIndex] = {
+      ...mainNavigationState.value.clonedNavLinks![groupKey][localIndex],
+      config: {
+        left: item.offsetLeft,
+        right: item.offsetLeft + item.offsetWidth,
+        width: item.offsetWidth,
+        visible: navigationWrapperRects.value ? Math.floor(rect.right + mainNavigationMarginBlockEnd.value + gapBetweenMainNavAndSecondaryNav) < navigationWrapperRects.value.right : true,
+      },
     };
-  });
+  })
 }
 
 onMounted(async() => {
@@ -306,12 +302,10 @@ onMounted(async() => {
 });
 
 useResizeObserver(navigationWrapperRef, async () => {
-  await setNavigationConfig("useResizeObserver").then(() => {
-    setMainNavigationItemsState();
+  await updateNavigationConfig("useResizeObserver").then(() => {
+    initMainNavigationState()
   });
 });
-
-
 
 /*
 * Handle css props
