@@ -264,15 +264,23 @@ const initMainNavigationState = () => {
 
     const groupKey = item.dataset.groupKey;
     const localIndex = item.dataset.localIndex ? parseInt(item.dataset.localIndex, 10) : 0;
-    mainNavigationState.value.clonedNavLinks![groupKey][localIndex] = {
-      ...mainNavigationState.value.clonedNavLinks![groupKey][localIndex],
-      config: {
-        left: item.offsetLeft,
-        right: item.offsetLeft + item.offsetWidth,
-        width: item.offsetWidth,
-        visible: navigationWrapperRects.value ? Math.floor(rect.right + mainNavigationMarginBlockEnd.value + gapBetweenMainNavAndSecondaryNav) < navigationWrapperRects.value.right : true,
-      },
-    };
+    if (
+      groupKey !== undefined &&
+      groupKey !== null &&
+      mainNavigationState.value.clonedNavLinks &&
+      mainNavigationState.value.clonedNavLinks[groupKey] &&
+      mainNavigationState.value.clonedNavLinks[groupKey][localIndex]
+    ) {
+      mainNavigationState.value.clonedNavLinks[groupKey][localIndex] = {
+        ...mainNavigationState.value.clonedNavLinks[groupKey][localIndex],
+        config: {
+          left: item.offsetLeft,
+          right: item.offsetLeft + item.offsetWidth,
+          width: item.offsetWidth,
+          visible: navigationWrapperRects.value ? Math.floor(rect.right + mainNavigationMarginBlockEnd.value + gapBetweenMainNavAndSecondaryNav) < navigationWrapperRects.value.right : true,
+        },
+      };
+    }
   })
 }
 
