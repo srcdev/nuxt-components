@@ -2,7 +2,7 @@
   <div>
     <LayoutRow tag="div" variant="full" :style-class-passthrough="['header', 'mbe-40']">
       <template #default>
-        <ResponsiveHeader :responsive-nav-links />
+        <ResponsiveHeader :responsive-nav-links :gap-between-first-and-second-nav="12" />
       </template>
     </LayoutRow>
 

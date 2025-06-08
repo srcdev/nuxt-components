@@ -54,7 +54,7 @@
 
       </nav>
       <nav class="secondary-navigation" ref="secondaryNav">
-        <details class="overflow-details" :class="[{ 'visually-hidden': !mainNavigationState.atMinWidth }]" ref="overflowDetails" name="overflow-group">
+        <details class="overflow-details" :class="[{ 'visually-hidden': !showOverflowDetails }]" ref="overflowDetails" name="overflow-group">
           <summary class="overflow-details-summary has-toggle-icon">
             <Icon name="gravity-ui:ellipsis" class="icon" />
           </summary>
@@ -76,6 +76,9 @@
       <div>
         <h2 class="heading-4">navigationWrapperRects</h2>
         <pre>{{ navigationWrapperRects }}</pre>
+        <hr>
+        <h2 class="heading-4">secondaryNavRects</h2>
+        <pre>{{ secondaryNavRects }}</pre>
       </div>
       <div>
         <h2 class="heading-4">mainNavigationState</h2>
@@ -146,6 +149,10 @@ const props = defineProps({
     type: Object as PropType<IResponsiveNavLinks>,
     default: () => [],
   },
+  gapBetweenFirstAndSecondNav: {
+    type: Number,
+    default: 12, // px
+  },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
     default: () => [],
@@ -166,7 +173,6 @@ const flatNavItems = computed(() => {
 const navLoaded = ref(false);
 const navigationWrapperRef = useTemplateRef('navigationWrapper');
 const mainNavRef = useTemplateRef('mainNav');
-const gapBetweenMainNavAndSecondaryNav = 12; // px
 
 const mainNavigationState = ref<INavigationRefTrackState>({
   isInitialized: false,
@@ -181,11 +187,6 @@ const mainNavigationState = ref<INavigationRefTrackState>({
   },
   clonedNavLinks: props.responsiveNavLinks,
 });
-
-// const navListVisibility = ref<Record<string, boolean>>({
-//   firstNav: true,
-//   secondNav: true,
-// });
 
 const navRefs = ref<Record<string, HTMLUListElement | null>>({});
 
@@ -208,6 +209,12 @@ const mainNavigationItemsRefs = useTemplateRef<HTMLLIElement[]>('mainNavigationI
 const navigationDetailsRefs = useTemplateRef<HTMLElement[]>('navigationDetails');
 
 const overflowDetailsRef = useTemplateRef('overflowDetails');
+
+const showOverflowDetails = computed(() => {
+  return navigationWrapperRects.value && secondaryNavRects.value
+    ? (navigationWrapperRects.value.right - props.gapBetweenFirstAndSecondNav) <= mainNavigationState.value.navRefsMinWidthCurrent
+    : false;
+});
 
 const mainNavigationMarginBlockEnd = computed(() => {
   return mainNavigationState.value.atMinWidth && secondaryNavRects.value
@@ -279,7 +286,7 @@ const initMainNavigationState = () => {
           left: item.offsetLeft,
           right: item.offsetLeft + item.offsetWidth,
           width: item.offsetWidth,
-          visible: navigationWrapperRects.value ? Math.floor(rect.right + mainNavigationMarginBlockEnd.value + gapBetweenMainNavAndSecondaryNav) < navigationWrapperRects.value.right : true,
+          visible: navigationWrapperRects.value ? Math.floor(rect.right + mainNavigationMarginBlockEnd.value + props.gapBetweenFirstAndSecondNav) < navigationWrapperRects.value.right : true,
         },
       };
     }
