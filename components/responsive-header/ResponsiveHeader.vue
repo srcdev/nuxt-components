@@ -239,7 +239,8 @@ const updateNavigationConfig = async (source: string) => {
 
   mainNavigationState.value.navRefsMinWidthCurrent = secondNavRects.value ? secondNavRects.value.right : 0;
 
-  if (mainNavigationState.value.isInitialized) {
+  // if (mainNavigationState.value.isInitialized) {
+    // console.log("> set atMinWidth");
     mainNavigationState.value.atMinWidth = (mainNavigationState.value.navRefsMinWidthCurrent === mainNavigationState.value.navRefsMinWidthPrevious);
 
     if (mainNavigationState.value.atMinWidth) {
@@ -248,7 +249,7 @@ const updateNavigationConfig = async (source: string) => {
         && (navigationWrapperRects.value.right < secondaryNavRects.value.right);
     }
 
-  }
+  // }
   mainNavigationState.value.navRefsMinWidthPrevious = secondNavRects.value ? secondNavRects.value.right : 0;
   mainNavigationState.value.isInitialized = true;
 
