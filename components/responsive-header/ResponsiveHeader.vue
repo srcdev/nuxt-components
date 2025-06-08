@@ -397,8 +397,6 @@ watch(
       border: 1px solid #efefef75;
       padding: 12px;
 
-      /* background: yellow; */
-
       /*
       * .main-navigation-link & .main-navigation-details placed here they can also exist within
       */
@@ -469,8 +467,6 @@ watch(
           justify-content: flex-start;
         }
 
-        /* margin-inline-end: calc(var(--_secondary-nav-width) + var(--_gap-for-overflow-details)); */
-        /* margin-inline-end: v-bind(`${mainNavigationMarginBlockEnd}px`); */
         overflow-x: hidden;
 
         outline: 0px solid green;
@@ -478,7 +474,6 @@ watch(
         .main-navigation-list {
           display: flex;
           flex-wrap: nowrap;
-          /* gap: 24px; */
 
           &:nth-of-type(1) {
             gap: 30px;
@@ -487,19 +482,6 @@ watch(
           &:nth-of-type(2) {
             gap: 30px;
           }
-
-
-          /* .main-navigation-item {
-            transition:
-              opacity 0.2s ease-in-out,
-              visibility 0.2s ease-in-out;
-
-            &.visually-hidden {
-              visibility: hidden;
-              opacity: 0;
-            }
-          } */
-
 
           .main-navigation-item {
             width: var(--_main-navigation-item-width);
