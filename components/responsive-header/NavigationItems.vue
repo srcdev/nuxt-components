@@ -162,6 +162,7 @@ watch(
             display: flex;
             flex-direction: column;
             gap: 12px;
+            margin-block-start: 12px;
 
             .overflow-navigation-sub-nav-item {
 
