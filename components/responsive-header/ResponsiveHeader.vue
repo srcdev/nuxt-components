@@ -40,10 +40,10 @@
                   <Icon name="mdi:chevron-down" class="icon" />
                   {{ link.childLinksTitle }}
                 </summary>
-                <div class="main-navigation-details-sub-nav">
-                  <ul>
-                    <li v-for="childLink in link.childLinks" :key="childLink.name">
-                      <NuxtLink :to="childLink.path">{{ childLink.name }}</NuxtLink>
+                <div class="main-navigation-sub-nav">
+                  <ul class="main-navigation-sub-nav-list">
+                    <li class="main-navigation-sub-nav-item" v-for="childLink in link.childLinks" :key="childLink.name">
+                      <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link">{{ childLink.name }}</NuxtLink>
                     </li>
                   </ul>
                 </div>
@@ -423,7 +423,7 @@ watch(
           cursor: pointer;
         }
 
-        .main-navigation-details-sub-nav {
+        .main-navigation-sub-nav {
           position: absolute;
           padding: 12px;
           border: 1px solid #efefef75;
@@ -433,103 +433,26 @@ watch(
 
           min-width: var(--_main-navigation-item-width);
 
-          > ul {
-            li {
+          .main-navigation-sub-nav-list {
+
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+
+            .main-navigation-sub-nav-item {
               margin-bottom: 8px;
 
               &:last-child {
                 margin-bottom: 0;
               }
 
-              a {
+              .main-navigation-sub-nav-link {
                 display: block;
                 text-wrap-mode: nowrap;
+                text-decoration: none;
+                color: inherit;
               }
             }
-          }
-        }
-
-        &.cloned {
-          .main-navigation-details-sub-nav {
-            position: initial;
-            border: none;
-            padding: 0 0 12px 0;
-          }
-        }
-      }
-
-      .overflow-details {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        position: relative;
-        cursor: pointer;
-
-        transition: all 0.2s ease-in-out;
-
-        &.visually-hidden {
-          opacity: 0;
-          visibility: hidden;
-          /* width: 0; */
-        }
-
-        .overflow-details-summary {
-          --_icon-zoom: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding-inline: 5px;
-          text-wrap: nowrap;
-
-          aspect-ratio: 1;
-          border-radius: 4px;
-          border: 1px solid #ffffff90;
-          outline: 1px solid #ffffff10;
-          background-color: Canvas;
-
-          width: 28px;
-          overflow: hidden;
-
-          &:hover {
-            --_icon-zoom: 1.2;
-            outline: 1px solid #ffffff;
-          }
-
-          .icon {
-            scale: var(--_icon-zoom);
-            transition: scale 0.2s ease-in-out;
-          }
-        }
-
-        summary::-webkit-details-marker,
-        summary::marker {
-          display: none;
-        }
-
-        .overflow-details-nav {
-          position: absolute;
-          top: 135%;
-          right: 0;
-          background-color: #000;
-          border: 1px solid #ffffff90;
-          border-radius: 8px;
-          padding: 12px;
-          margin: 0;
-          z-index: 999;
-          min-width: var(--_overflow-drop-down-width, 120px);
-
-          display: grid;
-          grid-auto-flow: row;
-          gap: 8px;
-
-          ul[class^='overflow-'] {
-            .main-navigation-item {
-              margin-bottom: 8px;
-            }
-
-            /* + ul[class^='overflow-'] {
-              margin-top: 12px;
-            } */
           }
         }
       }
@@ -607,16 +530,82 @@ watch(
       .secondary-navigation {
         grid-area: navStack;
         justify-self: end;
-        /* display: flex;
-        flex-wrap: nowrap;
-        gap: 12px;
-        justify-content: space-between; */
+
+        .overflow-details {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          position: relative;
+          cursor: pointer;
+
+          transition: all 0.2s ease-in-out;
+
+          &.visually-hidden {
+            opacity: 0;
+            visibility: hidden;
+            /* width: 0; */
+          }
+
+          .overflow-details-summary {
+            --_icon-zoom: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-inline: 5px;
+            text-wrap: nowrap;
+
+            aspect-ratio: 1;
+            border-radius: 4px;
+            border: 1px solid #ffffff90;
+            outline: 1px solid #ffffff10;
+            background-color: Canvas;
+
+            width: 28px;
+            overflow: hidden;
+
+
+            &::-webkit-details-marker,
+            &::marker {
+              display: none;
+            }
+
+            &:hover {
+              --_icon-zoom: 1.2;
+              outline: 1px solid #ffffff;
+            }
+
+            .icon {
+              scale: var(--_icon-zoom);
+              transition: scale 0.2s ease-in-out;
+            }
+          }
+
+
+          .overflow-details-nav {
+            position: absolute;
+            top: 135%;
+            right: 0;
+            background-color: #000;
+            border: 1px solid #ffffff90;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 0;
+            z-index: 999;
+            min-width: var(--_overflow-drop-down-width, fit-content);
+
+            display: grid;
+            grid-auto-flow: row;
+            gap: 8px;
+          }
+        }
+
       }
     }
   }
 
   .debug-grid {
-    display: none;
+    /* display: none; */
+
     .layout-row-inner > div {
       display: flex;
       flex-wrap: wrap;
