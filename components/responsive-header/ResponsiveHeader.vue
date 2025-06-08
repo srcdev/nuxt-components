@@ -221,7 +221,6 @@ const initTemplateRefs = async () => {
   return;
 }
 
-// Helper function to return Math.floor values from getBoundingClientRect()
 const getFlooredRect = (rect: DOMRect | null) => {
   if (!rect) return null;
   return {
@@ -235,9 +234,6 @@ const getFlooredRect = (rect: DOMRect | null) => {
 }
 
 const updateNavigationConfig = async (source: string) => {
-  // console.clear();
-  // console.log("updateNavigationConfig called", source);
-
   navigationWrapperRects.value = getFlooredRect((navigationWrapperRef.value && navigationWrapperRef.value.getBoundingClientRect()) ?? null) || null;
   secondaryNavRects.value = getFlooredRect((secondaryNavRef.value && secondaryNavRef.value.getBoundingClientRect()) ?? null) || null;
   firstNavRects.value = getFlooredRect((firstNavRef.value && firstNavRef.value.getBoundingClientRect()) ?? null) || null;
@@ -250,19 +246,15 @@ const updateNavigationConfig = async (source: string) => {
   mainNavigationState.value.navRefsMinWidthCurrent = secondNavRects.value ? secondNavRects.value.right : 0;
 
   if (mainNavigationState.value.isInitialized) {
-    console.log("> set atMinWidth");
     mainNavigationState.value.atMinWidth = (mainNavigationState.value.navRefsMinWidthCurrent === mainNavigationState.value.navRefsMinWidthPrevious);
-
     if (mainNavigationState.value.atMinWidth) {
       mainNavigationState.value.isCollapsed = navigationWrapperRects.value !== null
         && secondaryNavRects.value !== null
         && (navigationWrapperRects.value.right < secondaryNavRects.value.right);
     }
-
   }
   mainNavigationState.value.navRefsMinWidthPrevious = secondNavRects.value ? secondNavRects.value.right : 0;
   mainNavigationState.value.isInitialized = true;
-
 }
 
 const initMainNavigationState = () => {
@@ -303,19 +295,6 @@ const initMainNavigationState = () => {
     } else if (typeof groupKey === 'string') {
       mainNavigationState.value.navListVisibility[groupKey] = true;
     }
-
-    // Check if all items in this group are invisible and update the group's visibility
-    // if (
-    //   typeof groupKey === 'string' &&
-    //   mainNavigationState.value.clonedNavLinks &&
-    //   mainNavigationState.value.clonedNavLinks[groupKey] &&
-    //   mainNavigationState.value.clonedNavLinks[groupKey].every(item => item.config?.visible === false)
-    // ) {
-    //   mainNavigationState.value.navListVisibility[groupKey] = false;
-    // } else if (typeof groupKey === 'string') {
-    //   mainNavigationState.value.navListVisibility[groupKey] = true;
-    // }
-
   })
 
 }
@@ -344,9 +323,6 @@ useResizeObserver(navigationWrapperRef, async () => {
   });
 });
 
-/*
-* Handle css props
-*/
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
@@ -640,7 +616,7 @@ watch(
   }
 
   .debug-grid {
-
+    display: none;
     .layout-row-inner > div {
       display: flex;
       flex-wrap: wrap;

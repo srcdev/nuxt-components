@@ -11,7 +11,7 @@
         <li
           v-if="link.path"
           class="overflow-navigation-item"
-          :class="{ 'visually-hidden': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
+          :class="{ 'visible': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
           :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
           :data-group-key="groupKey"
           :data-local-index="localIndex"
@@ -21,7 +21,7 @@
         <li
           v-else
           class="overflow-navigation-item"
-          :class="{ 'visually-hidden': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
+          :class="{ 'visible': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
           :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
           :data-group-key="groupKey"
           :data-local-index="localIndex"
@@ -133,7 +133,12 @@ watch(
 
     .overflow-navigation-item {
 
-      display: block;
+      display: none;
+
+      &.visible {
+        display: block;
+      }
+
       /* Shared text between link and summary tags */
       .overflow-navigation-text {
 
