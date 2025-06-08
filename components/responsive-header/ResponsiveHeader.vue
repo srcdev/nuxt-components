@@ -131,6 +131,7 @@
     atMinWidth: boolean;
     isCollapsed: boolean;
     navRefsMaxWidth: number;
+    navListVisibility: Record<string, boolean>;
     clonedNavLinks?: IResponsiveNavLinks;
   }
 
@@ -174,8 +175,17 @@ const mainNavigationState = ref<INavigationRefTrackState>({
   atMinWidth: false,
   isCollapsed: false,
   navRefsMaxWidth: 0,
+  navListVisibility: {
+    firstNav: false,
+    secondNav: false,
+  },
   clonedNavLinks: props.responsiveNavLinks,
 });
+
+// const navListVisibility = ref<Record<string, boolean>>({
+//   firstNav: true,
+//   secondNav: true,
+// });
 
 const navRefs = ref<Record<string, HTMLUListElement | null>>({});
 
@@ -239,8 +249,8 @@ const updateNavigationConfig = async (source: string) => {
 
   mainNavigationState.value.navRefsMinWidthCurrent = secondNavRects.value ? secondNavRects.value.right : 0;
 
-  // if (mainNavigationState.value.isInitialized) {
-    // console.log("> set atMinWidth");
+  if (mainNavigationState.value.isInitialized) {
+    console.log("> set atMinWidth");
     mainNavigationState.value.atMinWidth = (mainNavigationState.value.navRefsMinWidthCurrent === mainNavigationState.value.navRefsMinWidthPrevious);
 
     if (mainNavigationState.value.atMinWidth) {
@@ -249,7 +259,7 @@ const updateNavigationConfig = async (source: string) => {
         && (navigationWrapperRects.value.right < secondaryNavRects.value.right);
     }
 
-  // }
+  }
   mainNavigationState.value.navRefsMinWidthPrevious = secondNavRects.value ? secondNavRects.value.right : 0;
   mainNavigationState.value.isInitialized = true;
 
@@ -281,7 +291,33 @@ const initMainNavigationState = () => {
         },
       };
     }
+
+    // Check if a single item has visible set to false and set the visibility of the group accordingly
+    if (
+      typeof groupKey === 'string' &&
+      mainNavigationState.value.clonedNavLinks &&
+      mainNavigationState.value.clonedNavLinks[groupKey] &&
+      mainNavigationState.value.clonedNavLinks[groupKey][localIndex].config?.visible === false
+    ) {
+      mainNavigationState.value.navListVisibility[groupKey] = false;
+    } else if (typeof groupKey === 'string') {
+      mainNavigationState.value.navListVisibility[groupKey] = true;
+    }
+
+    // Check if all items in this group are invisible and update the group's visibility
+    // if (
+    //   typeof groupKey === 'string' &&
+    //   mainNavigationState.value.clonedNavLinks &&
+    //   mainNavigationState.value.clonedNavLinks[groupKey] &&
+    //   mainNavigationState.value.clonedNavLinks[groupKey].every(item => item.config?.visible === false)
+    // ) {
+    //   mainNavigationState.value.navListVisibility[groupKey] = false;
+    // } else if (typeof groupKey === 'string') {
+    //   mainNavigationState.value.navListVisibility[groupKey] = true;
+    // }
+
   })
+
 }
 
 onMounted(async() => {

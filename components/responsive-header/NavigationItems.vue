@@ -4,6 +4,7 @@
       v-for="(navGroup, groupKey) in mainNavigationState.clonedNavLinks"
       :key="groupKey"
       class="overflow-navigation-list"
+      :class="[{visible: !mainNavigationState.navListVisibility[groupKey]}]"
       :style="{ '--_overflow-navigation-list-min-width': widestNavLinkWidthInMainNavigationState + 'px' }"
     >
       <template v-for="(link, localIndex) in navGroup" :key="localIndex">
@@ -75,6 +76,7 @@
     atMinWidth: boolean;
     isCollapsed: boolean;
     navRefsMaxWidth: number;
+    navListVisibility: Record<string, boolean>;
     clonedNavLinks?: IResponsiveNavLinks;
   }
 </script>
@@ -118,10 +120,16 @@ watch(
   gap: 12px;
 
   .overflow-navigation-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    min-width: var(--_overflow-navigation-list-min-width, auto);
+
+    display: none;
+
+    &.visible {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: var(--_overflow-navigation-list-min-width, auto);
+    }
+
 
     .overflow-navigation-item {
 
