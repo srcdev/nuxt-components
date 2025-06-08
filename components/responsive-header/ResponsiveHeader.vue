@@ -197,6 +197,8 @@ const mainNavigationItemsRefs = useTemplateRef<HTMLLIElement[]>('mainNavigationI
 
 const navigationDetailsRefs = useTemplateRef<HTMLElement[]>('navigationDetails');
 
+const overflowDetailsRef = useTemplateRef('overflowDetails');
+
 const mainNavigationMarginBlockEnd = computed(() => {
   return mainNavigationState.value.atMinWidth && secondaryNavRects.value
     ? secondaryNavRects.value.width
@@ -285,6 +287,10 @@ onMounted(async() => {
       navigationDetailsRefs.value?.[index]?.removeAttribute('open');
     });
   });
+  // Add onClickOutside to overflowDetailsRef
+  overflowDetailsRef.value && onClickOutside(overflowDetailsRef.value, () => {
+    overflowDetailsRef.value?.removeAttribute('open');
+  });
 });
 
 useResizeObserver(navigationWrapperRef, async () => {
@@ -326,8 +332,8 @@ watch(
       padding: 0;
 
       li {
-        text-box-trim: trim-both;
-        text-box-edge: cap alphabetic;
+        /* text-box-trim: trim-both; */
+        /* text-box-edge: cap alphabetic; */
         display: flex;
         align-items: center;
       }
