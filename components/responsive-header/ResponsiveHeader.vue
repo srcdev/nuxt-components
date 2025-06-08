@@ -64,6 +64,7 @@
             />
           </div>
         </details>
+        <NuxtLink class="main-navigation-link" to="/"><Icon name="material-symbols:settings-outline-rounded" class="icon" /></NuxtLink>
       </nav>
     </div>
   </header>
@@ -212,14 +213,15 @@ const overflowDetailsRef = useTemplateRef('overflowDetails');
 
 const showOverflowDetails = computed(() => {
   return navigationWrapperRects.value && secondaryNavRects.value
-    ? (navigationWrapperRects.value.right - props.gapBetweenFirstAndSecondNav) <= mainNavigationState.value.navRefsMinWidthCurrent
+    ? (navigationWrapperRects.value.right - (props.gapBetweenFirstAndSecondNav + secondaryNavRects.value.width)) <= mainNavigationState.value.navRefsMinWidthCurrent
     : false;
 });
 
 const mainNavigationMarginBlockEnd = computed(() => {
-  return mainNavigationState.value.atMinWidth && secondaryNavRects.value
-    ? secondaryNavRects.value.width
-    : 0;
+  // return showOverflowDetails.value && secondaryNavRects.value
+  //   ? secondaryNavRects.value.width
+  //   : 0;
+    return secondaryNavRects.value ? secondaryNavRects.value.width + props.gapBetweenFirstAndSecondNav : 0;
 });
 
 const initTemplateRefs = async () => {
@@ -470,13 +472,12 @@ watch(
         justify-content: space-between;
         gap: 60px;
 
+        overflow-x: hidden;
+        margin-inline-end: v-bind(`${mainNavigationMarginBlockEnd}px`);
+
         &.collapsed {
           justify-content: flex-start;
         }
-
-        overflow-x: hidden;
-
-        outline: 0px solid green;
 
         .main-navigation-list {
           display: flex;
@@ -520,12 +521,27 @@ watch(
         grid-area: navStack;
         justify-self: end;
 
+        display: flex;
+        gap: 12px;
+        align-items: center;
+
+        > a {
+          /* display: none; */
+
+          .icon {
+            height: 1.35em;
+            width: 1.35em;
+          }
+        }
+
         .overflow-details {
           list-style: none;
           padding: 0;
           margin: 0;
           position: relative;
           cursor: pointer;
+          width: fit-content;
+          overflow: hidden;
 
           transition: all 0.2s ease-in-out;
 
