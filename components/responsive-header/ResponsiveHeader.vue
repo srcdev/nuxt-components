@@ -55,10 +55,14 @@
       </nav>
       <nav class="secondary-navigation" ref="secondaryNav">
         <details class="overflow-details" :class="[{ 'visually-hidden': !mainNavigationState.atMinWidth }]" ref="overflowDetails" name="overflow-group">
-          <summary class="has-toggle-icon">
+          <summary class="overflow-details-summary has-toggle-icon">
             <Icon name="gravity-ui:ellipsis" class="icon" />
           </summary>
-          <div class="overflow-details-nav" id="overflowList"></div>
+          <div class="overflow-details-nav">
+            <NavigationItems
+              :main-navigation-state="mainNavigationState"
+            />
+          </div>
         </details>
       </nav>
     </div>
@@ -173,9 +177,6 @@ const mainNavigationState = ref<INavigationRefTrackState>({
   clonedNavLinks: props.responsiveNavLinks,
 });
 
-
-
-
 const navRefs = ref<Record<string, HTMLUListElement | null>>({});
 
 const setNavRef = (key: string, el: HTMLUListElement | null) => {
@@ -273,10 +274,11 @@ const initMainNavigationState = () => {
 }
 
 onMounted(async() => {
-  await initTemplateRefs();
-  setTimeout(() => {
-    navLoaded.value = true;
-  }, 100);
+  await initTemplateRefs().then(() => {
+    setTimeout(() => {
+      navLoaded.value = true;
+    }, 100);
+  });
 
   navigationDetailsRefs.value?.forEach((element, index) => {
     onClickOutside(element, () => {
@@ -444,7 +446,7 @@ watch(
           /* width: 0; */
         }
 
-        summary {
+        .overflow-details-summary {
           --_icon-zoom: 1;
           display: flex;
           align-items: center;
