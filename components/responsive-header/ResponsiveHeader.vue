@@ -351,6 +351,10 @@ watch(
     padding-block: 12px;
     padding-inline: 24px;
 
+    /* Make sure always on top of page content */
+    position: relative;
+    z-index: 999999;
+
     h1 {
       text-wrap-mode: nowrap;
     }
@@ -609,7 +613,7 @@ watch(
   }
 
   .debug-grid {
-    /* display: none; */
+    display: none;
 
     .layout-row-inner > div {
       display: flex;
