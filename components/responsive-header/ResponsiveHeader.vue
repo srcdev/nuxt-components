@@ -36,7 +36,7 @@
                 name="navigation-group"
                 ref="navigationDetails"
               >
-                <summary class="main-navigation-link has-toggle-icon">
+                <summary @mouseover="handleSummaryHover($event)" @focusin="handleSummaryHover($event)" class="main-navigation-link has-toggle-icon">
                   <Icon name="mdi:chevron-down" class="icon" />
                   {{ link.childLinksTitle }}
                 </summary>
@@ -160,20 +160,25 @@ const props = defineProps({
   },
 });
 
-const flatNavItems = computed(() => {
-  const items = []
-  for (const groupKey in props.responsiveNavLinks) {
-    for (const link of props.responsiveNavLinks[groupKey]) {
-      items.push(link)
-    }
-  }
-  return items
-})
-
 
 const navLoaded = ref(false);
 const navigationWrapperRef = useTemplateRef('navigationWrapper');
-const mainNavRef = useTemplateRef('mainNav');
+// const mainNavRef = useTemplateRef('mainNav');
+
+// Function that takes an event from hover on summary and applies the open attribute if not currently present
+const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
+  // console.clear();
+  // console.log("Summary event sent:", (event.target as HTMLElement).tagName);
+
+  const summaryElement = event.currentTarget as HTMLElement;
+  const parentDetailsElement = summaryElement.closest('details');
+  if (!parentDetailsElement) return;
+  if (parentDetailsElement.hasAttribute('open')) {
+    parentDetailsElement.removeAttribute('open');
+  } else {
+    parentDetailsElement.setAttribute('open', '');
+  }
+};
 
 const mainNavigationState = ref<INavigationRefTrackState>({
   isInitialized: false,
