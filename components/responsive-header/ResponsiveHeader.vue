@@ -446,8 +446,8 @@ watch(
 
           .main-navigation-sub-nav-list {
 
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(2, auto);
             gap: 12px;
 
             .main-navigation-sub-nav-item {
