@@ -71,12 +71,6 @@
   }
 
   interface INavigationRefTrackState {
-    isInitialized: boolean;
-    navRefsMinWidthCurrent: number;
-    navRefsMinWidthPrevious: number;
-    atMinWidth: boolean;
-    isCollapsed: boolean;
-    navRefsMaxWidth: number;
     navListVisibility: Record<string, boolean>;
     clonedNavLinks?: IResponsiveNavLinks;
   }

@@ -2,7 +2,7 @@
   <header class="responsive-header" :class="[elementClasses]">
     <h1><a href="/">Logo</a></h1>
     <div class="navigation" :class="[{ loaded: navLoaded }]" ref="navigationWrapper">
-      <nav class="main-navigation" :class="[{ collapsed: mainNavigationState.isCollapsed }]" ref="mainNav">
+      <nav class="main-navigation" ref="mainNav">
 
         <ul
           v-for="(navGroup, groupKey) in responsiveNavLinks"
@@ -54,7 +54,7 @@
 
       </nav>
       <nav class="secondary-navigation" ref="secondaryNav">
-        <details class="overflow-details" :class="[{ 'visually-hidden': !showOverflowDetails }]" ref="overflowDetails" name="overflow-group">
+        <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]" ref="overflowDetails" name="overflow-group">
           <summary class="overflow-details-summary has-toggle-icon">
             <Icon name="gravity-ui:ellipsis" class="icon" />
           </summary>
@@ -129,12 +129,6 @@
   }
 
   interface INavigationRefTrackState {
-    isInitialized: boolean;
-    navRefsMinWidthCurrent: number;
-    navRefsMinWidthPrevious: number;
-    atMinWidth: boolean;
-    isCollapsed: boolean;
-    navRefsMaxWidth: number;
     navListVisibility: Record<string, boolean>;
     clonedNavLinks?: IResponsiveNavLinks;
   }
@@ -163,13 +157,8 @@ const props = defineProps({
 
 const navLoaded = ref(false);
 const navigationWrapperRef = useTemplateRef('navigationWrapper');
-// const mainNavRef = useTemplateRef('mainNav');
 
-// Function that takes an event from hover on summary and applies the open attribute if not currently present
 const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
-  // console.clear();
-  // console.log("Summary event sent:", (event.target as HTMLElement).tagName);
-
   const summaryElement = event.currentTarget as HTMLElement;
   const parentDetailsElement = summaryElement.closest('details');
   if (!parentDetailsElement) return;
@@ -181,12 +170,6 @@ const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
 };
 
 const mainNavigationState = ref<INavigationRefTrackState>({
-  isInitialized: false,
-  navRefsMinWidthCurrent: 0,
-  navRefsMinWidthPrevious: 0,
-  atMinWidth: false,
-  isCollapsed: false,
-  navRefsMaxWidth: 0,
   navListVisibility: {
     firstNav: false,
     secondNav: false,
@@ -217,15 +200,11 @@ const navigationDetailsRefs = useTemplateRef<HTMLElement[]>('navigationDetails')
 const overflowDetailsRef = useTemplateRef('overflowDetails');
 
 const showOverflowDetails = computed(() => {
-  return navigationWrapperRects.value && secondaryNavRects.value
-    ? (navigationWrapperRects.value.right - (props.gapBetweenFirstAndSecondNav + secondaryNavRects.value.width)) <= mainNavigationState.value.navRefsMinWidthCurrent
-    : false;
+  const hasHiddenNav = !mainNavigationState.value.navListVisibility['firstNav'] || !mainNavigationState.value.navListVisibility['secondNav'];
+  return hasHiddenNav;
 });
 
 const mainNavigationMarginBlockEnd = computed(() => {
-  // return showOverflowDetails.value && secondaryNavRects.value
-  //   ? secondaryNavRects.value.width
-  //   : 0;
     return secondaryNavRects.value ? secondaryNavRects.value.width + props.gapBetweenFirstAndSecondNav : 0;
 });
 
@@ -252,23 +231,6 @@ const updateNavigationConfig = async (source: string) => {
   secondaryNavRects.value = getFlooredRect((secondaryNavRef.value && secondaryNavRef.value.getBoundingClientRect()) ?? null) || null;
   firstNavRects.value = getFlooredRect((firstNavRef.value && firstNavRef.value.getBoundingClientRect()) ?? null) || null;
   secondNavRects.value = getFlooredRect((secondNavRef.value && secondNavRef.value.getBoundingClientRect()) ?? null) || null;
-
-  if (!mainNavigationState.value.isInitialized) {
-    mainNavigationState.value.navRefsMinWidthPrevious = secondNavRects.value ? secondNavRects.value.right : 0;
-  }
-
-  mainNavigationState.value.navRefsMinWidthCurrent = secondNavRects.value ? secondNavRects.value.right : 0;
-
-  if (mainNavigationState.value.isInitialized) {
-    mainNavigationState.value.atMinWidth = (mainNavigationState.value.navRefsMinWidthCurrent === mainNavigationState.value.navRefsMinWidthPrevious);
-    if (mainNavigationState.value.atMinWidth) {
-      mainNavigationState.value.isCollapsed = navigationWrapperRects.value !== null
-        && secondaryNavRects.value !== null
-        && (navigationWrapperRects.value.right < secondaryNavRects.value.right);
-    }
-  }
-  mainNavigationState.value.navRefsMinWidthPrevious = secondNavRects.value ? secondNavRects.value.right : 0;
-  mainNavigationState.value.isInitialized = true;
 }
 
 const initMainNavigationState = () => {
@@ -618,7 +580,7 @@ watch(
   }
 
   .debug-grid {
-    display: none;
+    /* display: none; */
 
     .layout-row-inner > div {
       display: flex;
