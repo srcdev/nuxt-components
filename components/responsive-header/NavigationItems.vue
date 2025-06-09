@@ -127,7 +127,6 @@ watch(
       min-width: var(--_overflow-navigation-list-min-width, auto);
     }
 
-
     .overflow-navigation-item {
 
       display: none;

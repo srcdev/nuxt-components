@@ -105,13 +105,6 @@
     [key: string]: INavLink[];
   }
 
-  interface MainNavigationItem {
-    left: number;
-    right: number;
-    width?: number;
-    visible: boolean;
-  }
-
   interface IFlooredRect {
     left: number;
     right: number;
@@ -580,7 +573,7 @@ watch(
   }
 
   .debug-grid {
-    /* display: none; */
+    display: none;
 
     .layout-row-inner > div {
       display: flex;
