@@ -6,9 +6,9 @@
           <h2 class="heading-2">Details element - Unlinked</h2>
           <p class="mbe-12">Following 2 details block behave independantly.</p>
 
-          <DisplayDetailsCore id="details-1" name="details-1" icon-size="medium" :style-class-passthrough="['custom-style-1']">
+          <DisplayDetailsCore id="details-1" name="details-1" :animation-duration="200" icon-size="medium" :style-class-passthrough="['custom-style-1']">
             <template #summary>
-              <h3 class="heading-3 m-8">Details header 1</h3>
+              <h3 class="heading-3 m-8">Details header 1 (Fast)</h3>
             </template>
             <template #summaryIcon>
               <Icon name="bi:caret-down-fill" class="icon mi-12" />
@@ -24,9 +24,9 @@
             </template>
           </DisplayDetailsCore>
 
-          <DisplayDetailsCore id="details-2" name="details-2" icon-size="medium" :style-class-passthrough="['custom-style-2']">
+          <DisplayDetailsCore id="details-2" name="details-2" :animation-duration="2000" icon-size="medium" :style-class-passthrough="['custom-style-2']">
             <template #summary>
-              <h3 class="heading-3 m-8">Details header 2</h3>
+              <h3 class="heading-3 m-8">Details header 2 (Slow)</h3>
             </template>
             <template #summaryIcon>
               <Icon name="bi:caret-down-fill" class="icon mi-12" />

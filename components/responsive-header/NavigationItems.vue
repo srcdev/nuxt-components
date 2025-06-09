@@ -26,22 +26,23 @@
           :data-group-key="groupKey"
           :data-local-index="localIndex"
         >
-          <details
-            class="overflow-navigation-details"
-            name="overflow-navigation-group"
-          >
-            <summary class="overflow-navigation-summary has-toggle-icon">
-              <Icon name="mdi:chevron-down" class="icon" />
+          <DisplayDetailsCore :id="useId()" name="overflow-navigation-group" :animation-duration="detailsAanimationDuration" icon-size="medium" :style-class-passthrough="['overflow-navigation-details']">
+            <template #summary>
               <span class="overflow-navigation-text">{{ link.childLinksTitle }}</span>
-            </summary>
-            <div class="overflow-navigation-sub-nav">
-              <ul class="overflow-navigation-sub-nav-list">
-                <li v-for="childLink in link.childLinks" :key="childLink.name" class="overflow-navigation-sub-nav-item">
-                  <NuxtLink :to="childLink.path" class="overflow-navigation-sub-nav-link"><span class="overflow-navigation-sub-nav-text">{{ childLink.name }}</span></NuxtLink>
-                </li>
-              </ul>
-            </div>
-          </details>
+            </template>
+            <template #summaryIcon>
+              <Icon name="mdi:chevron-down" class="icon" />
+            </template>
+            <template #content>
+              <div class="overflow-navigation-sub-nav-inner">
+                <ul class="overflow-navigation-sub-nav-list">
+                  <li v-for="childLink in link.childLinks" :key="childLink.name" class="overflow-navigation-sub-nav-item">
+                    <NuxtLink :to="childLink.path" class="overflow-navigation-sub-nav-link"><span class="overflow-navigation-sub-nav-text">{{ childLink.name }}</span></NuxtLink>
+                  </li>
+                </ul>
+              </div>
+            </template>
+          </DisplayDetailsCore>
         </li>
       </template>
     </ul>
@@ -93,6 +94,8 @@ const props = defineProps({
   },
 });
 
+const detailsAanimationDuration = 200;
+
 const widestNavLinkWidthInMainNavigationState = computed(() => {
   return Object.values(props.mainNavigationState.clonedNavLinks || {}).reduce((maxWidth, group) => {
     return Math.max(
@@ -139,39 +142,51 @@ watch(
         display: block;
       }
 
-      /* Shared text between link and summary tags */
-      .overflow-navigation-text {
-
-      }
-
       .overflow-navigation-link {
         text-decoration: none;
         color: inherit;
       }
 
       .overflow-navigation-details {
-        .overflow-navigation-summary {
-          flex-direction: row-reverse;
-          justify-content: space-between;
+        --_overflow-navigation-sub-nav-list-margin-block-start: 0;
+
+        &[open] {
+          --_overflow-navigation-sub-nav-list-margin-block-start: 12px;
         }
 
-        .overflow-navigation-sub-nav {
+        &.display-details {
+          margin-block-end: 0;
 
-          .overflow-navigation-sub-nav-list {
+          .display-details-summary {
+            .label {
+              .overflow-navigation-text {
+                text-wrap: nowrap;
+              }
+            }
+            .icon {
 
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-block-start: 12px;
+            }
+          }
+          .display-details-content {
+            .overflow-navigation-sub-nav-inner {
+              .overflow-navigation-sub-nav-list {
 
-            .overflow-navigation-sub-nav-item {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                margin-block-start: var(--_overflow-navigation-sub-nav-list-margin-block-start);
+                transition: margin-block-start v-bind(`${detailsAanimationDuration}ms`) ease;
 
-              .overflow-navigation-sub-nav-link {
-                text-decoration: none;
-                color: inherit;
+                .overflow-navigation-sub-nav-item {
 
-                .overflow-navigation-sub-nav-text {
+                  .overflow-navigation-sub-nav-link {
+                    text-decoration: none;
+                    color: inherit;
 
+                    .overflow-navigation-sub-nav-text {
+
+                    }
+                  }
                 }
               }
             }
@@ -181,6 +196,4 @@ watch(
     }
   }
 }
-
-
 </style>

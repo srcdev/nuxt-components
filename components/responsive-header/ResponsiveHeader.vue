@@ -541,7 +541,7 @@ watch(
           position: relative;
           cursor: pointer;
           width: fit-content;
-          overflow: hidden;
+          /* overflow: hidden; */
 
           transition: all 0.2s ease-in-out;
 

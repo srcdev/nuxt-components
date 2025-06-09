@@ -18,10 +18,9 @@
 // Create a global store to track open details elements by name
 const openDetailsByName = reactive(new Map<string, HTMLDetailsElement>());
 
-export const useDetailsTransition = (detailsRef: Ref<HTMLDetailsElement | null>, summaryRef: Ref<HTMLElement | null>, contentRef: Ref<HTMLDivElement | null>, name: string) => {
+export const useDetailsTransition = (detailsRef: Ref<HTMLDetailsElement | null>, summaryRef: Ref<HTMLElement | null>, contentRef: Ref<HTMLDivElement | null>, name: string, animationDuration: number) => {
   // State
   const animation = ref<Animation | null>(null);
-  const animationDuration = 400;
   const isClosing = ref(false);
   const isExpanding = ref(false);
 
@@ -183,6 +182,10 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  animationDuration: {
+    type: Number,
+    default: 400,
+  },
   iconSize: {
     type: String,
     default: 'small',
@@ -225,7 +228,7 @@ watch(
 onMounted(() => {
   // Initialize the composable once the component is mounted and refs are available
   if (detailsRef.value && contentRef.value && summaryRef.value) {
-    const details = useDetailsTransition(detailsRef, summaryRef, contentRef, props.name);
+    const details = useDetailsTransition(detailsRef, summaryRef, contentRef, props.name, props.animationDuration);
     clickAction = details.clickAction; // Assign the real click handler
   } else {
     console.error('Refs not available after mounting');
@@ -234,7 +237,6 @@ onMounted(() => {
 </script>
 
 <style lang="css">
-@scope (.display-details) {
   .display-details {
     /* Component setup */
     --_display-details-icon-transform: scaleY(1);
@@ -270,6 +272,11 @@ onMounted(() => {
     margin-block-end: var(--_display-details-mbe);
 
     .display-details-summary {
+
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
       list-style: none;
 
       &::-webkit-details-marker,
@@ -301,5 +308,5 @@ onMounted(() => {
       padding: var(--_display-details-content-padding);
     }
   }
-}
+
 </style>
