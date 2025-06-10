@@ -2,39 +2,22 @@
   <div class="navigation" :class="[elementClasses, { loaded: navLoaded }]" ref="navigationWrapper">
     <nav class="main-navigation" ref="mainNav">
 
-      <ul
-        v-for="(navGroup, groupKey) in responsiveNavLinks"
-        :key="groupKey"
-        class="main-navigation-list"
-        :ref="el => setNavRef(String(groupKey), el as HTMLUListElement | null)"
-      >
+      <ul v-for="(navGroup, groupKey) in responsiveNavLinks" :key="groupKey" class="main-navigation-list"
+        :ref="el => setNavRef(String(groupKey), el as HTMLUListElement | null)">
         <template v-for="(link, localIndex) in navGroup" :key="localIndex">
-          <li
-            v-if="link.path"
-            class="main-navigation-item"
+          <li v-if="link.path" class="main-navigation-item"
             :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
             :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
-            ref="mainNavigationItems"
-            :data-group-key="groupKey"
-            :data-local-index="localIndex"
-          >
+            ref="mainNavigationItems" :data-group-key="groupKey" :data-local-index="localIndex">
             <NuxtLink class="main-navigation-link" :to="link.path">{{ link.name }}</NuxtLink>
           </li>
-          <li
-            v-else
-            class="main-navigation-item"
+          <li v-else class="main-navigation-item"
             :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
             :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
-            ref="mainNavigationItems"
-            :data-group-key="groupKey"
-            :data-local-index="localIndex"
-          >
-            <details
-              class="main-navigation-details"
-              name="navigation-group"
-              ref="navigationDetails"
-            >
-              <summary @mouseover="handleSummaryHover($event)" @focusin="handleSummaryHover($event)" class="main-navigation-link has-toggle-icon">
+            ref="mainNavigationItems" :data-group-key="groupKey" :data-local-index="localIndex">
+            <details class="main-navigation-details" name="navigation-group" ref="navigationDetails">
+              <summary @mouseover="handleSummaryHover($event)" @focusin="handleSummaryHover($event)"
+                class="main-navigation-details-summary has-toggle-icon">
                 <Icon name="mdi:chevron-down" class="icon" />
                 {{ link.childLinksTitle }}
               </summary>
@@ -52,24 +35,27 @@
 
     </nav>
     <nav class="secondary-navigation" ref="secondaryNav">
-      <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]" ref="overflowDetails" name="overflow-group">
+      <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]"
+        ref="overflowDetails" name="overflow-group">
         <summary class="overflow-details-summary has-toggle-icon">
           <Icon name="gravity-ui:ellipsis" class="icon" />
         </summary>
         <div class="overflow-details-nav">
-          <NavigationItems
-            :main-navigation-state="mainNavigationState"
-          />
+          <NavigationItems :main-navigation-state="mainNavigationState" />
         </div>
       </details>
-      <NuxtLink class="main-navigation-link" to="/"><Icon name="material-symbols:settings-outline-rounded" class="icon" /></NuxtLink>
+      <ul class="secondary-navigation-list">
+        <li class="secondary-navigation-item">
+          <NuxtLink class="secondary-navigation-link" to="/">
+            <Icon name="material-symbols:settings-outline-rounded" class="icon" />
+          </NuxtLink>
+        </li>
+      </ul>
     </nav>
   </div>
-  <LayoutRow
-    tag="div"
-    variant="full"
-    :style-class-passthrough="['mb-20', 'debug-grid']"
-  >
+
+
+  <LayoutRow tag="div" variant="full" :style-class-passthrough="['mb-20', 'debug-grid']">
     <ClientOnly>
       <div>
         <h2 class="heading-4">navigationWrapperRects</h2>
@@ -317,32 +303,11 @@ watch(
       }
     }
 
-    details {
-      /* --_icon-transform: scaleY(1);
-
-      &[open] {
-        --_icon-transform: scaleY(-1);
-      }
-
-      .has-toggle-icon {
-        display: flex;
-        gap: 6px;
-        text-wrap-mode: nowrap;
-
-        .icon {
-          display: block;
-          transform: var(--_icon-transform);
-          transition: transform 0.2s ease-in-out;
-        }
-      } */
-    }
-
     --_link-visibility-transition: none;
 
     &.loaded {
       --_link-visibility-transition: all 0.2s ease-in-out;
     }
-
 
     display: grid;
     grid-template-areas: 'navStack';
@@ -352,83 +317,6 @@ watch(
     background-color: #efefef05;
     border: 1px solid #efefef75;
     padding: 12px;
-
-    /*
-    * .main-navigation-link & .main-navigation-details placed here they can also exist within
-    */
-    .main-navigation-link {
-      display: flex;
-      text-wrap-mode: nowrap;
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .main-navigation-details {
-
-      --_icon-transform: scaleY(1);
-
-      &[open] {
-        --_icon-transform: scaleY(-1);
-      }
-
-      .has-toggle-icon {
-        display: flex;
-        gap: 6px;
-        text-wrap-mode: nowrap;
-
-        .icon {
-          display: block;
-          transform: var(--_icon-transform);
-          transition: transform 0.2s ease-in-out;
-        }
-      }
-
-      .main-navigation-link {
-        list-style: none;
-      }
-
-      summary::-webkit-details-marker,
-      summary::marker {
-        display: none;
-      }
-
-      summary:hover {
-        cursor: pointer;
-      }
-
-      .main-navigation-sub-nav {
-        position: absolute;
-        padding: 12px;
-        border: 1px solid #efefef75;
-        border-radius: 8px;
-        background-color: #000;
-        translate: 0 12px;
-
-        min-width: var(--_main-navigation-item-width);
-
-        .main-navigation-sub-nav-list {
-
-          display: grid;
-          grid-template-columns: repeat(2, auto);
-          gap: 12px;
-
-          .main-navigation-sub-nav-item {
-            margin-bottom: 8px;
-
-            &:last-child {
-              margin-bottom: 0;
-            }
-
-            .main-navigation-sub-nav-link {
-              display: block;
-              text-wrap-mode: nowrap;
-              text-decoration: none;
-              color: inherit;
-            }
-          }
-        }
-      }
-    }
 
     .main-navigation {
       grid-area: navStack;
@@ -458,16 +346,90 @@ watch(
         }
 
         .main-navigation-item {
+
           width: var(--_main-navigation-item-width);
           overflow: hidden;
           transition:
             opacity 0.2s ease-in-out,
             visibility 0.2s ease-in-out;
 
-          .main-navigation-details,
           .main-navigation-link {
+            display: flex;
+            text-wrap-mode: nowrap;
+            color: inherit;
+            text-decoration: none;
             margin-inline-start: 0;
             transition: var(--_link-visibility-transition);
+          }
+
+          .main-navigation-details {
+
+            --_icon-transform: scaleY(1);
+
+            margin-inline-start: 0;
+            transition: var(--_link-visibility-transition);
+
+            &[open] {
+              --_icon-transform: scaleY(-1);
+            }
+
+            .has-toggle-icon {
+              display: flex;
+              gap: 6px;
+              text-wrap-mode: nowrap;
+
+              .icon {
+                display: block;
+                transform: var(--_icon-transform);
+                transition: transform 0.2s ease-in-out;
+              }
+            }
+
+            .main-navigation-details-summary {
+
+              &::-webkit-details-marker,
+              &::marker {
+                display: none;
+              }
+
+              &:hover {
+                cursor: pointer;
+              }
+
+            }
+
+            .main-navigation-sub-nav {
+              position: absolute;
+              padding: 12px;
+              border: 1px solid #efefef75;
+              border-radius: 8px;
+              background-color: #000;
+              translate: 0 12px;
+
+              min-width: var(--_main-navigation-item-width);
+
+              .main-navigation-sub-nav-list {
+
+                display: grid;
+                grid-template-columns: repeat(2, auto);
+                gap: 12px;
+
+                .main-navigation-sub-nav-item {
+                  margin-bottom: 8px;
+
+                  &:last-child {
+                    margin-bottom: 0;
+                  }
+
+                  .main-navigation-sub-nav-link {
+                    display: block;
+                    text-wrap-mode: nowrap;
+                    text-decoration: none;
+                    color: inherit;
+                  }
+                }
+              }
+            }
           }
 
           &.visually-hidden {
@@ -491,9 +453,25 @@ watch(
       gap: 12px;
       align-items: center;
 
-      > a {
-        /* display: none; */
+      .secondary-navigation-list {
 
+        .secondary-navigation-item {
+
+          .secondary-navigation-link {
+            display: flex;
+            align-items: center;
+            font: inherit;
+            color: inherit;
+
+            .icon {
+              height: 1.35em;
+              width: 1.35em;
+            }
+          }
+        }
+      }
+
+      .main-navigation-link {
         .icon {
           height: 1.35em;
           width: 1.35em;
