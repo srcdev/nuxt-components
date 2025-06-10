@@ -156,9 +156,7 @@ watch(
                 text-wrap: nowrap;
               }
             }
-            .icon {
-
-            }
+            /* .icon {} */
           }
           .display-details-content {
             .overflow-navigation-sub-nav-inner {
@@ -176,9 +174,7 @@ watch(
                     text-decoration: none;
                     color: inherit;
 
-                    .overflow-navigation-sub-nav-text {
-
-                    }
+                    /* .overflow-navigation-sub-nav-text {} */
                   }
                 }
               }
