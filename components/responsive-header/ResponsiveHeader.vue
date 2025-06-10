@@ -1,73 +1,70 @@
 <template>
-  <header class="responsive-header" :class="[elementClasses]">
-    <h1><a href="/">Logo</a></h1>
-    <div class="navigation" :class="[{ loaded: navLoaded }]" ref="navigationWrapper">
-      <nav class="main-navigation" ref="mainNav">
+  <div class="navigation" :class="[elementClasses, { loaded: navLoaded }]" ref="navigationWrapper">
+    <nav class="main-navigation" ref="mainNav">
 
-        <ul
-          v-for="(navGroup, groupKey) in responsiveNavLinks"
-          :key="groupKey"
-          class="main-navigation-list"
-          :ref="el => setNavRef(String(groupKey), el as HTMLUListElement | null)"
-        >
-          <template v-for="(link, localIndex) in navGroup" :key="localIndex">
-            <li
-              v-if="link.path"
-              class="main-navigation-item"
-              :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
-              :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
-              ref="mainNavigationItems"
-              :data-group-key="groupKey"
-              :data-local-index="localIndex"
+      <ul
+        v-for="(navGroup, groupKey) in responsiveNavLinks"
+        :key="groupKey"
+        class="main-navigation-list"
+        :ref="el => setNavRef(String(groupKey), el as HTMLUListElement | null)"
+      >
+        <template v-for="(link, localIndex) in navGroup" :key="localIndex">
+          <li
+            v-if="link.path"
+            class="main-navigation-item"
+            :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
+            :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
+            ref="mainNavigationItems"
+            :data-group-key="groupKey"
+            :data-local-index="localIndex"
+          >
+            <NuxtLink class="main-navigation-link" :to="link.path">{{ link.name }}</NuxtLink>
+          </li>
+          <li
+            v-else
+            class="main-navigation-item"
+            :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
+            :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
+            ref="mainNavigationItems"
+            :data-group-key="groupKey"
+            :data-local-index="localIndex"
+          >
+            <details
+              class="main-navigation-details"
+              name="navigation-group"
+              ref="navigationDetails"
             >
-              <NuxtLink class="main-navigation-link" :to="link.path">{{ link.name }}</NuxtLink>
-            </li>
-            <li
-              v-else
-              class="main-navigation-item"
-              :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
-              :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
-              ref="mainNavigationItems"
-              :data-group-key="groupKey"
-              :data-local-index="localIndex"
-            >
-              <details
-                class="main-navigation-details"
-                name="navigation-group"
-                ref="navigationDetails"
-              >
-                <summary @mouseover="handleSummaryHover($event)" @focusin="handleSummaryHover($event)" class="main-navigation-link has-toggle-icon">
-                  <Icon name="mdi:chevron-down" class="icon" />
-                  {{ link.childLinksTitle }}
-                </summary>
-                <div class="main-navigation-sub-nav">
-                  <ul class="main-navigation-sub-nav-list">
-                    <li class="main-navigation-sub-nav-item" v-for="childLink in link.childLinks" :key="childLink.name">
-                      <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link">{{ childLink.name }}</NuxtLink>
-                    </li>
-                  </ul>
-                </div>
-              </details>
-            </li>
-          </template>
-        </ul>
+              <summary @mouseover="handleSummaryHover($event)" @focusin="handleSummaryHover($event)" class="main-navigation-link has-toggle-icon">
+                <Icon name="mdi:chevron-down" class="icon" />
+                {{ link.childLinksTitle }}
+              </summary>
+              <div class="main-navigation-sub-nav">
+                <ul class="main-navigation-sub-nav-list">
+                  <li class="main-navigation-sub-nav-item" v-for="childLink in link.childLinks" :key="childLink.name">
+                    <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link">{{ childLink.name }}</NuxtLink>
+                  </li>
+                </ul>
+              </div>
+            </details>
+          </li>
+        </template>
+      </ul>
 
-      </nav>
-      <nav class="secondary-navigation" ref="secondaryNav">
-        <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]" ref="overflowDetails" name="overflow-group">
-          <summary class="overflow-details-summary has-toggle-icon">
-            <Icon name="gravity-ui:ellipsis" class="icon" />
-          </summary>
-          <div class="overflow-details-nav">
-            <NavigationItems
-              :main-navigation-state="mainNavigationState"
-            />
-          </div>
-        </details>
-        <NuxtLink class="main-navigation-link" to="/"><Icon name="material-symbols:settings-outline-rounded" class="icon" /></NuxtLink>
-      </nav>
-    </div>
-  </header>
+    </nav>
+    <nav class="secondary-navigation" ref="secondaryNav">
+      <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]" ref="overflowDetails" name="overflow-group">
+        <summary class="overflow-details-summary has-toggle-icon">
+          <Icon name="gravity-ui:ellipsis" class="icon" />
+        </summary>
+        <div class="overflow-details-nav">
+          <NavigationItems
+            :main-navigation-state="mainNavigationState"
+          />
+        </div>
+      </details>
+      <NuxtLink class="main-navigation-link" to="/"><Icon name="material-symbols:settings-outline-rounded" class="icon" /></NuxtLink>
+    </nav>
+  </div>
   <LayoutRow
     tag="div"
     variant="full"
@@ -303,21 +300,8 @@ watch(
 </script>
 
 <style lang="css">
-  .responsive-header {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 24px;
-    align-items: center;
-    padding-block: 12px;
-    padding-inline: 24px;
 
-    /* Make sure always on top of page content */
-    position: relative;
-    z-index: 999999;
-
-    h1 {
-      text-wrap-mode: nowrap;
-    }
+  .navigation {
 
     ul,
     ol {
@@ -334,6 +318,53 @@ watch(
     }
 
     details {
+      /* --_icon-transform: scaleY(1);
+
+      &[open] {
+        --_icon-transform: scaleY(-1);
+      }
+
+      .has-toggle-icon {
+        display: flex;
+        gap: 6px;
+        text-wrap-mode: nowrap;
+
+        .icon {
+          display: block;
+          transform: var(--_icon-transform);
+          transition: transform 0.2s ease-in-out;
+        }
+      } */
+    }
+
+    --_link-visibility-transition: none;
+
+    &.loaded {
+      --_link-visibility-transition: all 0.2s ease-in-out;
+    }
+
+
+    display: grid;
+    grid-template-areas: 'navStack';
+
+    margin: 12px;
+    border-radius: 8px;
+    background-color: #efefef05;
+    border: 1px solid #efefef75;
+    padding: 12px;
+
+    /*
+    * .main-navigation-link & .main-navigation-details placed here they can also exist within
+    */
+    .main-navigation-link {
+      display: flex;
+      text-wrap-mode: nowrap;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .main-navigation-details {
+
       --_icon-transform: scaleY(1);
 
       &[open] {
@@ -351,223 +382,192 @@ watch(
           transition: transform 0.2s ease-in-out;
         }
       }
-    }
 
-    .navigation {
-      --_link-visibility-transition: none;
-
-      &.loaded {
-        --_link-visibility-transition: all 0.2s ease-in-out;
-      }
-
-
-      display: grid;
-      grid-template-areas: 'navStack';
-
-      margin: 12px;
-      border-radius: 8px;
-      background-color: #efefef05;
-      border: 1px solid #efefef75;
-      padding: 12px;
-
-      /*
-      * .main-navigation-link & .main-navigation-details placed here they can also exist within
-      */
       .main-navigation-link {
-        display: flex;
-        text-wrap-mode: nowrap;
-        color: inherit;
-        text-decoration: none;
+        list-style: none;
       }
 
-      .main-navigation-details {
-        .main-navigation-link {
-          list-style: none;
-        }
+      summary::-webkit-details-marker,
+      summary::marker {
+        display: none;
+      }
 
-        summary::-webkit-details-marker,
-        summary::marker {
-          display: none;
-        }
+      summary:hover {
+        cursor: pointer;
+      }
 
-        summary:hover {
-          cursor: pointer;
-        }
+      .main-navigation-sub-nav {
+        position: absolute;
+        padding: 12px;
+        border: 1px solid #efefef75;
+        border-radius: 8px;
+        background-color: #000;
+        translate: 0 12px;
 
-        .main-navigation-sub-nav {
-          position: absolute;
-          padding: 12px;
-          border: 1px solid #efefef75;
-          border-radius: 8px;
-          background-color: #000;
-          translate: 0 12px;
+        min-width: var(--_main-navigation-item-width);
 
-          min-width: var(--_main-navigation-item-width);
+        .main-navigation-sub-nav-list {
 
-          .main-navigation-sub-nav-list {
+          display: grid;
+          grid-template-columns: repeat(2, auto);
+          gap: 12px;
 
-            display: grid;
-            grid-template-columns: repeat(2, auto);
-            gap: 12px;
+          .main-navigation-sub-nav-item {
+            margin-bottom: 8px;
 
-            .main-navigation-sub-nav-item {
-              margin-bottom: 8px;
+            &:last-child {
+              margin-bottom: 0;
+            }
 
-              &:last-child {
-                margin-bottom: 0;
-              }
-
-              .main-navigation-sub-nav-link {
-                display: block;
-                text-wrap-mode: nowrap;
-                text-decoration: none;
-                color: inherit;
-              }
+            .main-navigation-sub-nav-link {
+              display: block;
+              text-wrap-mode: nowrap;
+              text-decoration: none;
+              color: inherit;
             }
           }
         }
       }
+    }
 
-      .main-navigation {
-        grid-area: navStack;
+    .main-navigation {
+      grid-area: navStack;
+      display: flex;
+      flex-wrap: nowrap;
+      flex-grow: 1;
+      justify-content: space-between;
+      gap: 60px;
+
+      overflow-x: hidden;
+      margin-inline-end: v-bind(`${mainNavigationMarginBlockEnd}px`);
+
+      &.collapsed {
+        justify-content: flex-start;
+      }
+
+      .main-navigation-list {
         display: flex;
         flex-wrap: nowrap;
-        flex-grow: 1;
-        justify-content: space-between;
-        gap: 60px;
 
-        overflow-x: hidden;
-        margin-inline-end: v-bind(`${mainNavigationMarginBlockEnd}px`);
-
-        &.collapsed {
-          justify-content: flex-start;
+        &:nth-of-type(1) {
+          gap: 30px;
         }
 
-        .main-navigation-list {
-          display: flex;
-          flex-wrap: nowrap;
+        &:nth-of-type(2) {
+          gap: 30px;
+        }
 
-          &:nth-of-type(1) {
-            gap: 30px;
+        .main-navigation-item {
+          width: var(--_main-navigation-item-width);
+          overflow: hidden;
+          transition:
+            opacity 0.2s ease-in-out,
+            visibility 0.2s ease-in-out;
+
+          .main-navigation-details,
+          .main-navigation-link {
+            margin-inline-start: 0;
+            transition: var(--_link-visibility-transition);
           }
 
-          &:nth-of-type(2) {
-            gap: 30px;
-          }
-
-          .main-navigation-item {
-            width: var(--_main-navigation-item-width);
-            overflow: hidden;
-            transition:
-              opacity 0.2s ease-in-out,
-              visibility 0.2s ease-in-out;
+          &.visually-hidden {
+            visibility: hidden;
+            opacity: 0;
 
             .main-navigation-details,
             .main-navigation-link {
-              margin-inline-start: 0;
-              transition: var(--_link-visibility-transition);
-            }
-
-            &.visually-hidden {
-              visibility: hidden;
-              opacity: 0;
-
-              .main-navigation-details,
-              .main-navigation-link {
-                margin-inline-start: var(--_main-navigation-item-width);
-              }
+              margin-inline-start: var(--_main-navigation-item-width);
             }
           }
         }
       }
+    }
 
-      .secondary-navigation {
-        grid-area: navStack;
-        justify-self: end;
+    .secondary-navigation {
+      grid-area: navStack;
+      justify-self: end;
 
-        display: flex;
-        gap: 12px;
-        align-items: center;
+      display: flex;
+      gap: 12px;
+      align-items: center;
 
-        > a {
-          /* display: none; */
+      > a {
+        /* display: none; */
+
+        .icon {
+          height: 1.35em;
+          width: 1.35em;
+        }
+      }
+
+      .overflow-details {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        position: relative;
+        cursor: pointer;
+        width: fit-content;
+        /* overflow: hidden; */
+
+        transition: all 0.2s ease-in-out;
+
+        &.visually-hidden {
+          opacity: 0;
+          visibility: hidden;
+          /* width: 0; */
+        }
+
+        .overflow-details-summary {
+          --_icon-zoom: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding-inline: 5px;
+          text-wrap: nowrap;
+
+          aspect-ratio: 1;
+          border-radius: 4px;
+          border: 1px solid #ffffff90;
+          outline: 1px solid #ffffff10;
+          background-color: Canvas;
+
+          width: 28px;
+          overflow: hidden;
+
+
+          &::-webkit-details-marker,
+          &::marker {
+            display: none;
+          }
+
+          &:hover {
+            --_icon-zoom: 1.2;
+            outline: 1px solid #ffffff;
+          }
 
           .icon {
-            height: 1.35em;
-            width: 1.35em;
+            scale: var(--_icon-zoom);
+            transition: scale 0.2s ease-in-out;
           }
         }
 
-        .overflow-details {
-          list-style: none;
-          padding: 0;
+
+        .overflow-details-nav {
+          position: absolute;
+          top: 135%;
+          right: 0;
+          background-color: #000;
+          border: 1px solid #ffffff90;
+          border-radius: 8px;
+          padding: 12px;
           margin: 0;
-          position: relative;
-          cursor: pointer;
-          width: fit-content;
-          /* overflow: hidden; */
+          z-index: 999;
+          min-width: var(--_overflow-drop-down-width, fit-content);
 
-          transition: all 0.2s ease-in-out;
-
-          &.visually-hidden {
-            opacity: 0;
-            visibility: hidden;
-            /* width: 0; */
-          }
-
-          .overflow-details-summary {
-            --_icon-zoom: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-inline: 5px;
-            text-wrap: nowrap;
-
-            aspect-ratio: 1;
-            border-radius: 4px;
-            border: 1px solid #ffffff90;
-            outline: 1px solid #ffffff10;
-            background-color: Canvas;
-
-            width: 28px;
-            overflow: hidden;
-
-
-            &::-webkit-details-marker,
-            &::marker {
-              display: none;
-            }
-
-            &:hover {
-              --_icon-zoom: 1.2;
-              outline: 1px solid #ffffff;
-            }
-
-            .icon {
-              scale: var(--_icon-zoom);
-              transition: scale 0.2s ease-in-out;
-            }
-          }
-
-
-          .overflow-details-nav {
-            position: absolute;
-            top: 135%;
-            right: 0;
-            background-color: #000;
-            border: 1px solid #ffffff90;
-            border-radius: 8px;
-            padding: 12px;
-            margin: 0;
-            z-index: 999;
-            min-width: var(--_overflow-drop-down-width, fit-content);
-
-            display: grid;
-            grid-auto-flow: row;
-            gap: 8px;
-          }
+          display: grid;
+          grid-auto-flow: row;
+          gap: 8px;
         }
-
       }
     }
   }
