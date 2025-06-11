@@ -64,6 +64,7 @@ const props = defineProps({
 });
 
 const detailsAanimationDuration = 200;
+const detailsAanimationDurationString = `${detailsAanimationDuration}ms`;
 
 const widestNavLinkWidthInMainNavigationState = computed(() => {
   return Object.values(props.mainNavigationState.clonedNavLinks || {}).reduce((maxWidth, group) => {
@@ -141,7 +142,7 @@ watch(
                 flex-direction: column;
                 gap: 12px;
                 margin-block-start: var(--_overflow-navigation-sub-nav-list-margin-block-start);
-                transition: margin-block-start v-bind(`${detailsAanimationDuration}ms`) ease;
+                transition: margin-block-start v-bind(detailsAanimationDurationString) ease;
 
                 .overflow-navigation-sub-nav-item {
 

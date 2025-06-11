@@ -142,7 +142,11 @@ const showOverflowDetails = computed(() => {
 });
 
 const mainNavigationMarginBlockEnd = computed(() => {
-    return secondaryNavRects.value ? secondaryNavRects.value.width + props.gapBetweenFirstAndSecondNav : 0;
+  return secondaryNavRects.value ? secondaryNavRects.value.width + props.gapBetweenFirstAndSecondNav : 0;
+});
+
+const mainNavigationMarginBlockEndStr = computed(() => {
+  return mainNavigationMarginBlockEnd.value + 'px';
 });
 
 const initTemplateRefs = async () => {
@@ -288,7 +292,7 @@ watch(
       gap: 60px;
 
       overflow-x: hidden;
-      margin-inline-end: v-bind(`${mainNavigationMarginBlockEnd}px`);
+      margin-inline-end: v-bind(mainNavigationMarginBlockEndStr);
 
       &.collapsed {
         justify-content: flex-start;
