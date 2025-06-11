@@ -73,51 +73,13 @@
   </LayoutRow>
 </template>
 
-<script lang="ts">
-
-  interface INavLink {
-    name: string;
-    path?: string;
-    isExternal?: boolean;
-    childLinksTitle?: string;
-    childLinks?: INavLink[];
-    config?: NavLinkConfig;
-  }
-
-  interface IResponsiveNavLinks {
-    [key: string]: INavLink[];
-  }
-
-  interface IFlooredRect {
-    left: number;
-    right: number;
-    top: number;
-    bottom: number;
-    width: number;
-    height: number;
-  }
-
-  interface NavLinkConfig {
-    left: number;
-    right: number;
-    width?: number;
-    visible: boolean;
-  }
-
-  interface INavigationRefTrackState {
-    navListVisibility: Record<string, boolean>;
-    clonedNavLinks?: IResponsiveNavLinks;
-  }
-
-
-</script>
-
 <script setup lang="ts">
 import { useResizeObserver, onClickOutside } from '@vueuse/core';
+import type { ResponsiveHeaderProp, ResponsiveHeaderState, IFlooredRect } from '@/types/responsiveHeader';
 
 const props = defineProps({
   responsiveNavLinks: {
-    type: Object as PropType<IResponsiveNavLinks>,
+    type: Object as PropType<ResponsiveHeaderProp>,
     default: () => [],
   },
   gapBetweenFirstAndSecondNav: {
@@ -129,7 +91,6 @@ const props = defineProps({
     default: () => [],
   },
 });
-
 
 const navLoaded = ref(false);
 const navigationWrapperRef = useTemplateRef('navigationWrapper');
@@ -145,7 +106,7 @@ const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
   }
 };
 
-const mainNavigationState = ref<INavigationRefTrackState>({
+const mainNavigationState = ref<ResponsiveHeaderState>({
   navListVisibility: {
     firstNav: false,
     secondNav: false,
@@ -485,14 +446,13 @@ watch(
         position: relative;
         cursor: pointer;
         width: fit-content;
-        /* overflow: hidden; */
 
         transition: all 0.2s ease-in-out;
 
         &.visually-hidden {
           opacity: 0;
           visibility: hidden;
-          /* width: 0; */
+          width: 0;
         }
 
         .overflow-details-summary {

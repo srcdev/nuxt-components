@@ -34,7 +34,7 @@ const props = defineProps({
     },
   },
   navLinks: {
-    type: Array as PropType<INavLink[]>,
+    type: Array as PropType<ResponsiveHeaderNavItem[]>,
     default: () => [],
   },
   styleClassPassthrough: {
@@ -66,12 +66,12 @@ onMounted(() => {
 <script lang="ts">
 const TAGS_ALLOWED = <string[]>['div', 'section', 'nav', 'ul', 'ol'];
 
-interface INavLink {
+interface ResponsiveHeaderNavItem {
   name: string;
   path?: string;
   isExternal?: boolean;
   childLinksTitle?: string;
-  childLinks?: INavLink[];
+  childLinks?: ResponsiveHeaderNavItem[];
 }
 </script>
 

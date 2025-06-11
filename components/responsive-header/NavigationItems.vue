@@ -49,37 +49,12 @@
   </div>
 </template>
 
-<script lang="ts">
-  interface NavLinkConfig {
-    left: number;
-    right: number;
-    width?: number;
-    visible: boolean;
-  }
-
-  interface INavLink {
-    name: string;
-    path?: string;
-    isExternal?: boolean;
-    childLinksTitle?: string;
-    childLinks?: INavLink[];
-    config?: NavLinkConfig;
-  }
-
-  interface IResponsiveNavLinks {
-    [key: string]: INavLink[];
-  }
-
-  interface INavigationRefTrackState {
-    navListVisibility: Record<string, boolean>;
-    clonedNavLinks?: IResponsiveNavLinks;
-  }
-</script>
-
 <script setup lang="ts">
+import type { ResponsiveHeaderState } from '@/types/responsiveHeader';
+
 const props = defineProps({
   mainNavigationState: {
-    type: Object as PropType<INavigationRefTrackState>,
+    type: Object as PropType<ResponsiveHeaderState>,
     default: () => [],
   },
   styleClassPassthrough: {

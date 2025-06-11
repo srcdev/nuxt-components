@@ -17,6 +17,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ResponsiveHeaderProp } from '@/types/responsiveHeader';
 
 const responsiveNavLinks = {
   firstNav: [
@@ -75,7 +76,8 @@ const responsiveNavLinks = {
       ],
     },
   ],
-}
+} as ResponsiveHeaderProp;
+
 </script>
 <style lang="css">
 .header {

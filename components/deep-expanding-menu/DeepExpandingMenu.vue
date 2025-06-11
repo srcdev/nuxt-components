@@ -27,11 +27,11 @@
 <script lang="ts">
 const TAGS_ALLOWED = <string[]>['div', 'section', 'nav', 'ul', 'ol'];
 
-interface INavLink {
+interface ResponsiveHeaderNavItem {
   name: string;
   path?: string;
   isExternal?: boolean;
-  childLinks?: INavLink[];
+  childLinks?: ResponsiveHeaderNavItem[];
   childLinksTitle?: string;
 }
 </script>
@@ -46,7 +46,7 @@ const props = defineProps({
     },
   },
   navLinks: {
-    type: Array as PropType<INavLink[]>,
+    type: Array as PropType<ResponsiveHeaderNavItem[]>,
     default: () => [],
   },
   styleClassPassthrough: {
