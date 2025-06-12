@@ -104,6 +104,7 @@ const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
   } else {
     parentDetailsElement.setAttribute('open', '');
   }
+  overflowDetailsRef.value?.removeAttribute('open');
 };
 
 const mainNavigationState = ref<ResponsiveHeaderState>({
