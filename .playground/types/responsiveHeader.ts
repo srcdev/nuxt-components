@@ -33,6 +33,7 @@ export interface ResponsiveHeaderItemRects {
 }
 
 export interface ResponsiveHeaderState {
+  hasSecondNav: boolean;
   navListVisibility: Record<string, boolean>;
   clonedNavLinks?: ResponsiveHeaderProp;
 }

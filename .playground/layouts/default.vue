@@ -7,7 +7,18 @@
           <ResponsiveHeader
             :responsive-nav-links
             :gap-between-first-and-second-nav="12"
-            :style-class-passthrough="['your-scope-class']" />
+            :style-class-passthrough="['your-scope-class']"
+          >
+            <template #secondaryNavigation>
+              <ul class="secondary-navigation-list">
+                <li class="secondary-navigation-item">
+                  <NuxtLink class="secondary-navigation-link" to="/">
+                    <Icon name="material-symbols:settings-outline-rounded" class="icon" />
+                  </NuxtLink>
+                </li>
+              </ul>
+            </template>
+          </ResponsiveHeader>
         </header>
       </template>
     </LayoutRow>
@@ -89,6 +100,7 @@ const responsiveNavLinks = {
   .responsive-header {
     display: grid;
     grid-template-columns: auto 1fr;
+    /* display: flex; */
     gap: 24px;
     align-items: center;
     padding-block: 12px;

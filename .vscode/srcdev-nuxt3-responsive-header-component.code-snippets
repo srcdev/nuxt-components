@@ -2,7 +2,23 @@
   "SRCDEV Nuxt Responsive Header Component HTML Template": {
     "scope": "vue, html",
     "prefix": "srcdev-nuxt-responsive-header-component-html-template",
-    "body": ["<ResponsiveHeader", "  :responsive-nav-links", "  :gap-between-first-and-second-nav=\"12\"", "  :style-class-passthrough=\"['your-scope-class']\" />"],
+    "body": [
+      "<ResponsiveHeader",
+      "  :responsive-nav-links",
+      "  :gap-between-first-and-second-nav=\"12\"",
+      "  :style-class-passthrough=\"['your-scope-class']\"",
+      ">",
+      "  <template #secondaryNavigation>",
+      "    <ul class=\"secondary-navigation-list\">",
+      "     <li class=\"secondary-navigation-item\">",
+      "       <NuxtLink class=\"secondary-navigation-link\" to=\"/\">",
+      "         <Icon name=\"material-symbols:settings-outline-rounded\" class=\"icon\" />",
+      "       </NuxtLink>",
+      "      </li>",
+      "    </ul>",
+      "  </template>",
+      "</ResponsiveHeader>"
+    ],
     "description": "SRCDEV Nuxt Responsive Header Component HTML Template"
   },
   "SRCDEV Nuxt Responsive Header Component JS Navigation Object Configuration": {

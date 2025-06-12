@@ -44,33 +44,24 @@
           <NavigationItems :main-navigation-state="mainNavigationState" />
         </div>
       </details>
-      <ul class="secondary-navigation-list">
-        <li class="secondary-navigation-item">
-          <NuxtLink class="secondary-navigation-link" to="/">
-            <Icon name="material-symbols:settings-outline-rounded" class="icon" />
-          </NuxtLink>
-        </li>
-      </ul>
+      <slot v-if="hasSecondaryNavigation" name="secondaryNavigation"></slot>
     </nav>
+    <LayoutRow tag="div" variant="full" :style-class-passthrough="['mb-20', 'debug-grid']">
+      <ClientOnly>
+        <div>
+          <h2 class="heading-4">navigationWrapperRects</h2>
+          <pre>{{ navigationWrapperRects }}</pre>
+          <hr>
+          <h2 class="heading-4">secondaryNavRects</h2>
+          <pre>{{ secondaryNavRects }}</pre>
+        </div>
+        <div>
+          <h2 class="heading-4">mainNavigationState</h2>
+          <pre>{{ mainNavigationState }}</pre>
+        </div>
+      </ClientOnly>
+    </LayoutRow>
   </div>
-
-
-  <LayoutRow tag="div" variant="full" :style-class-passthrough="['mb-20', 'debug-grid']">
-    <ClientOnly>
-      <div>
-        <h2 class="heading-4">navigationWrapperRects</h2>
-        <pre>{{ navigationWrapperRects }}</pre>
-        <hr>
-        <h2 class="heading-4">secondaryNavRects</h2>
-        <pre>{{ secondaryNavRects }}</pre>
-      </div>
-      <div>
-        <h2 class="heading-4">mainNavigationState</h2>
-        <pre>{{ mainNavigationState }}</pre>
-      </div>
-    </ClientOnly>
-
-  </LayoutRow>
 </template>
 
 <script setup lang="ts">
@@ -91,6 +82,9 @@ const props = defineProps({
     default: () => [],
   },
 });
+
+const slots = useSlots();
+const hasSecondaryNavigation = computed(() => slots.secondaryNavigation !== undefined);
 
 const navLoaded = ref(false);
 const navigationWrapperRef = useTemplateRef('navigationWrapper');
@@ -113,6 +107,7 @@ const mainNavigationState = ref<ResponsiveHeaderState>({
     secondNav: false,
   },
   clonedNavLinks: props.responsiveNavLinks,
+  hasSecondNav: Object.keys(props.responsiveNavLinks).length > 1,
 });
 
 const navRefs = ref<Record<string, HTMLUListElement | null>>({});
@@ -138,7 +133,7 @@ const navigationDetailsRefs = useTemplateRef<HTMLElement[]>('navigationDetails')
 const overflowDetailsRef = useTemplateRef('overflowDetails');
 
 const showOverflowDetails = computed(() => {
-  const hasHiddenNav = !mainNavigationState.value.navListVisibility['firstNav'] || !mainNavigationState.value.navListVisibility['secondNav'];
+  const hasHiddenNav = !mainNavigationState.value.navListVisibility['firstNav'] || (!mainNavigationState.value.navListVisibility['secondNav'] && mainNavigationState.value.hasSecondNav);
   return hasHiddenNav;
 });
 
@@ -275,6 +270,7 @@ watch(
       --_link-visibility-transition: all 0.2s ease-in-out;
     }
 
+    /* flex-grow: 1; */
     display: grid;
     grid-template-areas: 'navStack';
 
