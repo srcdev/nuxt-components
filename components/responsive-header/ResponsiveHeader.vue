@@ -38,7 +38,7 @@
       <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]"
         ref="overflowDetails" name="overflow-group">
         <summary class="overflow-details-summary has-toggle-icon">
-          <slot v-if="hasOverflowDetailsSummaryIcon" name="overflowDetailsSummaryIcon">
+          <slot name="overflowDetailsSummaryIcon">
             <Icon name="gravity-ui:ellipsis" class="icon" />
           </slot>
         </summary>
@@ -87,7 +87,6 @@ const props = defineProps({
 
 const slots = useSlots();
 const hasSecondaryNavigation = computed(() => slots.secondaryNavigation !== undefined);
-const hasOverflowDetailsSummaryIcon = computed(() => slots.overflowDetailsSummaryIcon !== undefined);
 
 const navLoaded = ref(false);
 const navigationWrapperRef = useTemplateRef('navigationWrapper');
