@@ -9,9 +9,6 @@
             :gap-between-first-and-second-nav="12"
             :style-class-passthrough="['your-scope-class']"
           >
-            <template #overflowDetailsSummaryIcon>
-              <Icon name="gravity-ui:ellipsis" class="icon" />
-            </template>
             <template #secondaryNavigation>
               <ul class="secondary-navigation-list">
                 <li class="secondary-navigation-item">
