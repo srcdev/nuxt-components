@@ -38,7 +38,9 @@
       <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]"
         ref="overflowDetails" name="overflow-group">
         <summary class="overflow-details-summary has-toggle-icon">
-          <Icon name="gravity-ui:ellipsis" class="icon" />
+          <slot v-if="hasOverflowDetailsSummaryIcon" name="overflowDetailsSummaryIcon">
+            <Icon name="gravity-ui:ellipsis" class="icon" />
+          </slot>
         </summary>
         <div class="overflow-details-nav">
           <NavigationItems :main-navigation-state="mainNavigationState" />
@@ -85,6 +87,7 @@ const props = defineProps({
 
 const slots = useSlots();
 const hasSecondaryNavigation = computed(() => slots.secondaryNavigation !== undefined);
+const hasOverflowDetailsSummaryIcon = computed(() => slots.overflowDetailsSummaryIcon !== undefined);
 
 const navLoaded = ref(false);
 const navigationWrapperRef = useTemplateRef('navigationWrapper');
@@ -458,6 +461,7 @@ watch(
 
         .overflow-details-summary {
           --_icon-zoom: 1;
+          --_icon-size: 30px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -470,7 +474,8 @@ watch(
           outline: 1px solid #ffffff10;
           background-color: Canvas;
 
-          width: 28px;
+          width: var(--_icon-size);
+          height: var(--_icon-size);
           overflow: hidden;
 
 
@@ -487,6 +492,8 @@ watch(
           .icon {
             scale: var(--_icon-zoom);
             transition: scale 0.2s ease-in-out;
+            width: var(--_icon-size);
+            height: var(--_icon-size);
           }
         }
 

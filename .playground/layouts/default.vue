@@ -9,6 +9,9 @@
             :gap-between-first-and-second-nav="12"
             :style-class-passthrough="['your-scope-class']"
           >
+            <template #overflowDetailsSummaryIcon>
+              <Icon name="gravity-ui:ellipsis" class="icon" />
+            </template>
             <template #secondaryNavigation>
               <ul class="secondary-navigation-list">
                 <li class="secondary-navigation-item">
@@ -229,14 +232,13 @@ const responsiveNavLinks = {
 
       .overflow-details-summary {
         --_icon-zoom: 1;
+        --_icon-size: 30px;
         padding-inline: 5px;
 
         border-radius: 4px;
         border: 1px solid #ffffff90;
         outline: 1px solid #ffffff10;
         background-color: Canvas;
-
-        width: 28px;
 
         &:hover {
           --_icon-zoom: 1.2;
