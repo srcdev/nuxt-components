@@ -185,6 +185,23 @@ const updateNavigationConfig = async (source: string) => {
   secondNavRects.value = getFlooredRect((secondNavRef.value && secondNavRef.value.getBoundingClientRect()) ?? null) || null;
 }
 
+const determineNavigationItemVisibility = (rect: DOMRect) => {
+  // Check if navigation should be collapsed based on width
+  if (props.collapseNavigationBelowWidth &&
+      navigationWrapperRects.value &&
+      navigationWrapperRects.value.width < props.collapseBreakpoint) {
+    return false;
+  }
+
+  // Use default responsive visibility logic if wrapper exists
+  if (navigationWrapperRects.value) {
+    return Math.floor(rect.right + mainNavigationMarginBlockEnd.value + props.gapBetweenFirstAndSecondNav) < navigationWrapperRects.value.right;
+  }
+
+  // Default to visible
+  return true;
+};
+
 const initMainNavigationState = () => {
   if (!mainNavigationItemsRefs.value) return;
 
@@ -207,11 +224,7 @@ const initMainNavigationState = () => {
           left: item.offsetLeft,
           right: item.offsetLeft + item.offsetWidth,
           width: item.offsetWidth,
-          visible: props.collapseNavigationBelowWidth && navigationWrapperRects.value && navigationWrapperRects.value.width < props.collapseBreakpoint
-            ? false
-            : navigationWrapperRects.value
-              ? Math.floor(rect.right + mainNavigationMarginBlockEnd.value + props.gapBetweenFirstAndSecondNav) < navigationWrapperRects.value.right
-              : true,
+          visible: determineNavigationItemVisibility(rect),
         },
       };
     }
