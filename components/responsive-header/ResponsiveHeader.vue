@@ -38,9 +38,7 @@
       <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]"
         ref="overflowDetails" name="overflow-group">
         <summary class="overflow-details-summary has-toggle-icon">
-          <slot name="overflowDetailsSummaryIcon">
-            <Icon name="gravity-ui:ellipsis" class="icon" />
-          </slot>
+          <Icon :name="overflowDetailsSummaryIcons.more" class="icon" />
         </summary>
         <div class="overflow-details-nav">
           <NavigationItems :main-navigation-state="mainNavigationState" />
@@ -78,6 +76,21 @@ const props = defineProps({
   gapBetweenFirstAndSecondNav: {
     type: Number,
     default: 12, // px
+  },
+  overflowDetailsSummaryIcons: {
+    type: Object as PropType<Record<string, string>>,
+    default: {
+      more: 'gravity-ui:ellipsis',
+      burger: 'gravity-ui:bars',
+    }
+  },
+  collapseNavigationBelowWidth: {
+    type: Boolean,
+    default: true,
+  },
+  collapseBreakpoint: {
+    type: Number,
+    default: 732, // px
   },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
