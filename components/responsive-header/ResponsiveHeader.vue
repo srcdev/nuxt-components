@@ -38,7 +38,8 @@
       <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]"
         ref="overflowDetails" name="overflow-group">
         <summary class="overflow-details-summary has-toggle-icon">
-          <Icon :name="overflowDetailsSummaryIcons.more" class="icon" />
+          <Icon :name="overflowDetailsSummaryIcons.more" class="icon" :class="[{ show: !allowNavigationCollapse }]" />
+          <Icon :name="overflowDetailsSummaryIcons.burger" class="icon" :class="[{ show: allowNavigationCollapse }]" />
         </summary>
         <div class="overflow-details-nav">
           <NavigationItems :main-navigation-state="mainNavigationState" />
@@ -90,7 +91,7 @@ const props = defineProps({
   },
   collapseBreakpoint: {
     type: Number,
-    default: 732, // px
+    default: 500, // px
   },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
@@ -185,11 +186,13 @@ const updateNavigationConfig = async (source: string) => {
   secondNavRects.value = getFlooredRect((secondNavRef.value && secondNavRef.value.getBoundingClientRect()) ?? null) || null;
 }
 
+const allowNavigationCollapse = computed(() => {
+  return props.collapseNavigationBelowWidth && navigationWrapperRects.value && navigationWrapperRects.value.width < props.collapseBreakpoint;
+});
+
 const determineNavigationItemVisibility = (rect: DOMRect) => {
   // Check if navigation should be collapsed based on width
-  if (props.collapseNavigationBelowWidth &&
-      navigationWrapperRects.value &&
-      navigationWrapperRects.value.width < props.collapseBreakpoint) {
+  if (allowNavigationCollapse.value) {
     return false;
   }
 
@@ -490,8 +493,11 @@ watch(
 
         .overflow-details-summary {
           --_icon-zoom: 1;
-          --_icon-size: 30px;
-          display: flex;
+          --_icon-size: 20px;
+          --_border-width: 1px;
+          --_outline-width: 1px;
+          display: grid;
+          grid-template-areas: 'icon';
           align-items: center;
           justify-content: center;
           padding-inline: 5px;
@@ -499,8 +505,8 @@ watch(
 
           aspect-ratio: 1;
           border-radius: 4px;
-          border: 1px solid #ffffff90;
-          outline: 1px solid #ffffff10;
+          border: var(--_border-width) solid #ffffff90;
+          outline: var(--_outline-width) solid #ffffff10;
           background-color: Canvas;
 
           width: var(--_icon-size);
@@ -515,14 +521,22 @@ watch(
 
           &:hover {
             --_icon-zoom: 1.2;
-            outline: 1px solid #ffffff;
+            outline: var(--_outline-width) solid #ffffff;
           }
 
           .icon {
+            grid-area: icon;
             scale: var(--_icon-zoom);
             transition: scale 0.2s ease-in-out;
-            width: var(--_icon-size);
-            height: var(--_icon-size);
+            width: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
+            height: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
+
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+
+            &.show {
+              opacity: 1;
+            }
           }
         }
 
