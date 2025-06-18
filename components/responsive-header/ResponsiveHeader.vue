@@ -207,7 +207,11 @@ const initMainNavigationState = () => {
           left: item.offsetLeft,
           right: item.offsetLeft + item.offsetWidth,
           width: item.offsetWidth,
-          visible: navigationWrapperRects.value ? Math.floor(rect.right + mainNavigationMarginBlockEnd.value + props.gapBetweenFirstAndSecondNav) < navigationWrapperRects.value.right : true,
+          visible: props.collapseNavigationBelowWidth && navigationWrapperRects.value && navigationWrapperRects.value.width < props.collapseBreakpoint
+            ? false
+            : navigationWrapperRects.value
+              ? Math.floor(rect.right + mainNavigationMarginBlockEnd.value + props.gapBetweenFirstAndSecondNav) < navigationWrapperRects.value.right
+              : true,
         },
       };
     }
