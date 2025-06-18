@@ -5,9 +5,15 @@
         <header class="responsive-header">
           <h1><a href="/">Logo</a></h1>
           <ResponsiveHeader
-            :responsive-nav-links
+            :responsive-nav-links:
             :gap-between-first-and-second-nav="12"
             :style-class-passthrough="['your-scope-class']"
+            :overflow-details-summary-icons="{
+              more: 'gravity-ui:ellipsis',
+              burger: 'gravity-ui:bars',
+            }"
+            :collapse-navigation-below-width="true"
+            :collapse-breakpoint="600"
           >
             <template #secondaryNavigation>
               <ul class="secondary-navigation-list">
