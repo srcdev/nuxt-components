@@ -532,7 +532,9 @@ watch(
             height: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
 
             opacity: 0;
-            transition: opacity 0.2s ease-in-out;
+            transition-property: opacity, transform; /* For reference */
+            transition-timing-function: linear; /* For reference */
+            transition-duration: 0.2s; /* For reference */
 
             &.show {
               opacity: 1;
