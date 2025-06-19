@@ -44,6 +44,7 @@ watch(
   display: grid;
   grid-template-areas: 'banner';
   container-type: inline-size;
+  overflow: hidden;
 
   .canvas {
     grid-area: banner;
