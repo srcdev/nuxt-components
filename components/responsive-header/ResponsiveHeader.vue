@@ -496,6 +496,8 @@ watch(
           --_icon-size: 20px;
           --_border-width: 1px;
           --_outline-width: 1px;
+          --_transition-duration: 0.2s;
+
           display: grid;
           grid-template-areas: 'icon';
           align-items: center;
@@ -512,7 +514,9 @@ watch(
           width: var(--_icon-size);
           height: var(--_icon-size);
           overflow: hidden;
-
+          transition-property: all;
+          transition-timing-function: linear;
+          transition-duration: var(--_transition-duration);
 
           &::-webkit-details-marker,
           &::marker {
@@ -534,7 +538,7 @@ watch(
             opacity: 0;
             transition-property: opacity, transform; /* For reference */
             transition-timing-function: linear; /* For reference */
-            transition-duration: 0.2s; /* For reference */
+            transition-duration: var(--_transition-duration); /* For reference */
 
             &.show {
               opacity: 1;
