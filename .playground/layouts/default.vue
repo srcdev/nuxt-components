@@ -5,7 +5,7 @@
         <header class="responsive-header">
           <h1><a href="/">Logo</a></h1>
           <ResponsiveHeader
-            :responsive-nav-links:
+            :responsive-nav-links
             :gap-between-first-and-second-nav="12"
             :style-class-passthrough="['your-scope-class']"
             :overflow-details-summary-icons="{
@@ -131,6 +131,8 @@ const responsiveNavLinks = {
   background-color: #efefef05;
   border: 1px solid #efefef75;
   padding: 12px;
+
+  max-height: 48px;
 
   .main-navigation {
     gap: 60px;

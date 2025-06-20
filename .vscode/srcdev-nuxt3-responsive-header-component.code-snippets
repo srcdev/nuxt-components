@@ -103,6 +103,7 @@
       "  background-color: #efefef05;",
       "  border: 1px solid #efefef75;",
       "  padding: 12px;",
+      "  max-height: 48px; /* Prevents a flicker of deeper navigation onload */",
       "",
       "  .main-navigation {",
       "    gap: 60px;",
