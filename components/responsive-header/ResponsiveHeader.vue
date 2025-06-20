@@ -16,7 +16,7 @@
             :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
             ref="mainNavigationItems" :data-group-key="groupKey" :data-local-index="localIndex">
             <details class="main-navigation-details" name="navigation-group" ref="navigationDetails">
-              <summary @mouseover="handleSummaryHover($event)" @focusin="handleSummaryHover($event)"
+              <summary @mouseenter="handleSummaryHover($event)" @focusin="handleSummaryHover($event)"
                 class="main-navigation-details-summary has-toggle-icon">
                 <Icon name="mdi:chevron-down" class="icon" />
                 {{ link.childLinksTitle }}
