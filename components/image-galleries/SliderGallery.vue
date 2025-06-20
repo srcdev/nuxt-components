@@ -253,6 +253,7 @@ watch(
 );
 
 onBeforeUnmount(() => {
+  showGallery.value = false;
   clearTimeout(runTimeOut);
   clearTimeout(runNextAuto);
   window.removeEventListener('keydown', handleKeyDown);
