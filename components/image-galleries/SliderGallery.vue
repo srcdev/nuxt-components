@@ -270,11 +270,6 @@ onBeforeUnmount(() => {
   --_thumbnailWidth: var(--_thumbnailMobileWidth, 100px);
   --_thumbnailHeight: var(--_thumbnailMobileHeight, 165px);
 
-  @container (width >= 1024px) {
-    --_thumbnailWidth: var(--_thumbnailDesktopWidth, 150px);
-    --_thumbnailHeight: var(--_thumbnailDesktopHeight, 220px);
-  }
-
   height: 100svh;
   width: 100vw;
   overflow: hidden;
@@ -464,6 +459,11 @@ onBeforeUnmount(() => {
     display: flex;
     gap: 20px;
 
+    @container (width >= 1024px) {
+      --_thumbnailWidth: var(--_thumbnailDesktopWidth, 150px);
+      --_thumbnailHeight: var(--_thumbnailDesktopHeight, 220px);
+    }
+
     .item {
       width: var(--_thumbnailWidth);
       height: var(--_thumbnailHeight);
@@ -473,12 +473,12 @@ onBeforeUnmount(() => {
       border: var(--_thumbnailBorder, 1px solid transparent);
       outline: var(--_thumbnailOutline, 1px solid transparent);
       border-radius: var(--_thumbnailBorderRadius, 20px);
+      overflow: hidden;
 
       .inner {
         position: absolute;
         inset: 0 0 0 0;
         background-color: #0004;
-        border-radius: var(--_thumbnailBorderRadius, 20px);
         z-index: 2;
       }
 
@@ -486,7 +486,6 @@ onBeforeUnmount(() => {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        border-radius: 20px;
       }
 
       .content {
