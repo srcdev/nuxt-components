@@ -270,7 +270,7 @@ onBeforeUnmount(() => {
   --_thumbnailWidth: var(--_thumbnailMobileWidth, 100px);
   --_thumbnailHeight: var(--_thumbnailMobileHeight, 165px);
 
-  @media screen and (min-width: 1024px) {
+  @container (width >= 1024px) {
     --_thumbnailWidth: var(--_thumbnailDesktopWidth, 150px);
     --_thumbnailHeight: var(--_thumbnailDesktopHeight, 220px);
   }
@@ -282,6 +282,7 @@ onBeforeUnmount(() => {
   inset: 0 0 0 0;
 
   z-index: 9999;
+  container-type: inline-size;
 
   .loading-state {
     position: absolute;
