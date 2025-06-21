@@ -43,6 +43,7 @@ const galleryData = ref([
       title: 'Balayage',
       description: 'Heighlights',
     },
+    textBrightness: 'light',
   },
   {
     src: '/images/rotating-carousel/spanish-green-stripe.webp',
@@ -55,8 +56,8 @@ const galleryData = ref([
       title: 'Hair Colouring',
       description: 'Striking Lime',
     },
+    textBrightness: 'light',
   },
-
   {
     src: '/images/rotating-carousel/image-1.webp',
     alt: 'Image 1',
@@ -68,6 +69,7 @@ const galleryData = ref([
       title: '',
       description: '',
     },
+    textBrightness: 'light',
   },
   {
     src: '/images/rotating-carousel/image-2.webp',
@@ -80,6 +82,7 @@ const galleryData = ref([
       title: '',
       description: '',
     },
+    textBrightness: 'light',
   },
   {
     src: '/images/rotating-carousel/55-woman-garden-backdrop.webp',
@@ -92,6 +95,7 @@ const galleryData = ref([
       title: '',
       description: '',
     },
+    textBrightness: 'light',
   },
   {
     src: '/images/rotating-carousel/35-light-brown-highlights.webp',
@@ -104,6 +108,7 @@ const galleryData = ref([
       title: '',
       description: '',
     },
+    textBrightness: 'light',
   },
   {
     src: '/images/rotating-carousel/image-3.webp',
@@ -116,6 +121,7 @@ const galleryData = ref([
       title: '',
       description: '',
     },
+    textBrightness: 'light',
   },
   {
     src: '/images/rotating-carousel/image-5.webp',
@@ -128,6 +134,7 @@ const galleryData = ref([
       title: '',
       description: '',
     },
+    textBrightness: 'light',
   },
   {
     src: '/images/rotating-carousel/indian-pink-stripe.webp',
@@ -140,6 +147,7 @@ const galleryData = ref([
       title: '',
       description: '',
     },
+    textBrightness: 'light',
   },
   {
     src: '/images/rotating-carousel/image-6.webp',
@@ -152,6 +160,7 @@ const galleryData = ref([
       title: '',
       description: '',
     },
+    textBrightness: 'light',
   },
   {
     src: '/images/rotating-carousel/image-7.webp',
@@ -164,6 +173,7 @@ const galleryData = ref([
       title: '',
       description: '',
     },
+    textBrightness: 'light',
   },
   {
     src: '/images/rotating-carousel/image-8.webp',
@@ -176,6 +186,7 @@ const galleryData = ref([
       title: '',
       description: '',
     },
+    textBrightness: 'light',
   },
   {
     src: '/images/rotating-carousel/image-9.webp',
@@ -188,6 +199,7 @@ const galleryData = ref([
       title: '',
       description: '',
     },
+    textBrightness: 'light',
   },
 ]);
 </script>

@@ -8,14 +8,14 @@
     <div v-if="showGallery" class="gallery-content" :class="[{ galleryLoaded: !galleryLoaded }]">
       <div class="list" ref="sliderGalleryImagesList">
         <div v-for="(item, index) in galleryData" :key="index" class="item">
-          <NuxtImg :src="item.src" :alt="item.alt" @load="handleImageLoad(index)" @error="handleImageError(index)"
+          <NuxtImg @load="handleImageLoad(index)" @error="handleImageError(index)" :src="item.src" :alt="item.alt"
             loading="lazy" />
-          <div class="content">
-            <div class="author">{{ item.stylist }}</div>
-            <div class="title">{{ item.title }}</div>
-            <div class="topic">{{ item.category }}</div>
-            <div class="des">{{ item.description }}</div>
-            <div class="buttons">
+          <div class="content" :class="item.textBrightness">
+            <div v-show="item.stylist !== ''" class="author" :class="item.textBrightness">{{ item.stylist }}</div>
+            <div v-show="item.title !== ''" class="title" :class="item.textBrightness">{{ item.title }}</div>
+            <div v-show="item.category !== ''" class="topic" :class="item.textBrightness">{{ item.category }}</div>
+            <div v-show="item.description !== ''" class="des" :class="item.textBrightness">{{ item.description }}</div>
+            <div class="buttons" :class="item.textBrightness">
               <button>SEE MORE</button>
             </div>
           </div>
@@ -26,9 +26,9 @@
         <div v-for="(item, index) in galleryData" :key="index" class="item">
           <div class="inner">
             <img :src="item.src" :alt="item.alt" loading="lazy" />
-            <div class="content">
-              <div class="title" v-show="item.thumbnail?.title !== ''">{{ item.thumbnail?.title }}</div>
-              <div class="description" v-show="item.thumbnail?.description !== ''">{{ item.thumbnail?.description }}
+            <div class="content" :class="item.textBrightness">
+              <div v-show="item.thumbnail?.title !== ''" class="title" :class="item.textBrightness">{{ item.thumbnail?.title }}</div>
+              <div v-show="item.thumbnail?.description !== ''" class="description" :class="item.textBrightness">{{ item.thumbnail?.description }}
               </div>
             </div>
           </div>
@@ -80,6 +80,7 @@ interface IGalleryData {
     title: string;
     description: string;
   };
+  textBrightness: 'light' | 'dark';
 }
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -381,24 +382,50 @@ onBeforeUnmount(() => {
         transform: translateX(-50%);
         padding-right: 30%;
         box-sizing: border-box;
-        color: #fff;
         text-shadow: 0 5px 10px #0004;
+
+        &.light {
+          color: #fff;
+        }
+        &.dark {
+          color: #000;
+        }
 
         .author {
           font-weight: bold;
           letter-spacing: 10px;
+
+          &.light {
+            color: #fff;
+          }
+          &.dark {
+            color: #000;
+          }
         }
 
         .title {
           font-size: 5em;
           font-weight: bold;
           line-height: 1.3em;
+
+          &.light {
+            color: #fff;
+          }
+          &.dark {
+            color: #000;
+          }
         }
         .topic {
           font-size: 5em;
           font-weight: bold;
           line-height: 1.3em;
-          color: #f1683a;
+
+          &.light {
+            color: #fff;
+          }
+          &.dark {
+            color: #000;
+          }
         }
 
         .buttons {
@@ -414,6 +441,13 @@ onBeforeUnmount(() => {
             color: #fff;
             letter-spacing: 3px;
             font-weight: 500;
+
+            &.light {
+              color: #fff;
+            }
+            &.dark {
+              color: #000;
+            }
           }
         }
       }
@@ -455,7 +489,6 @@ onBeforeUnmount(() => {
       }
 
       .content {
-        color: #fff;
         position: absolute;
         bottom: 10px;
         left: 10px;
@@ -463,10 +496,24 @@ onBeforeUnmount(() => {
 
         .title {
           font-weight: 500;
+
+          &.light {
+            color: #fff;
+          }
+          &.dark {
+            color: #000;
+}
         }
 
         .description {
           font-weight: 300;
+
+          &.light {
+            color: #fff;
+          }
+          &.dark {
+            color: #000;
+          }
         }
       }
     }
