@@ -14,7 +14,7 @@
             <div v-show="item.stylist !== ''" class="author" :class="item.textBrightness">{{ item.stylist }}</div>
             <div v-show="item.title !== ''" class="title" :class="item.textBrightness">{{ item.title }}</div>
             <div v-show="item.category !== ''" class="topic" :class="item.textBrightness">{{ item.category }}</div>
-            <div v-show="item.description !== ''" class="des" :class="item.textBrightness">{{ item.description }}</div>
+            <div v-show="item.description !== ''" class="description" :class="item.textBrightness">{{ item.description }}</div>
             <div class="buttons" :class="item.textBrightness">
               <button>SEE MORE</button>
             </div>
@@ -345,7 +345,7 @@ onBeforeUnmount(() => {
           .author,
           .title,
           .topic,
-          .des,
+          .description,
           .buttons {
             transform: translateY(50px);
             filter: blur(20px);
@@ -359,7 +359,7 @@ onBeforeUnmount(() => {
           .topic {
             animation-delay: 1.4s !important;
           }
-          .des {
+          .description {
             animation-delay: 1.6s !important;
           }
           .buttons {
@@ -639,7 +639,7 @@ onBeforeUnmount(() => {
             .author,
             .title,
             .topic,
-            .des,
+            .description,
             .buttons {
               animation: contentOut 1.5s linear 1 forwards !important;
             }

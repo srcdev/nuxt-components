@@ -237,7 +237,7 @@ const galleryData = ref([
             mix-blend-mode: difference;
           }
           /* Placeholder for description styles */
-          .desc {
+          .description {
             line-height: 1.5;
           }
         }
