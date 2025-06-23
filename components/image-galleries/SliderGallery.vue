@@ -8,13 +8,13 @@
     <div v-if="showGallery" class="gallery-content" :class="[{ galleryLoaded: !galleryLoaded }]">
       <div class="list" ref="sliderGalleryImagesList">
         <div v-for="(item, index) in galleryData" :key="index" class="item">
-          <NuxtImg @load="handleImageLoad(index)" @error="handleImageError(index)" :src="item.src" :alt="item.alt"
-            loading="lazy" />
+          <NuxtImg @load="handleImageLoad(index)" @error="handleImageError(index)" :src="item.src" :alt="item.alt" />
           <div class="content" :class="item.textBrightness">
             <div v-show="item.stylist !== ''" class="author" :class="item.textBrightness">{{ item.stylist }}</div>
             <div v-show="item.title !== ''" class="title" :class="item.textBrightness">{{ item.title }}</div>
             <div v-show="item.category !== ''" class="topic" :class="item.textBrightness">{{ item.category }}</div>
-            <div v-show="item.description !== ''" class="description" :class="item.textBrightness">{{ item.description }}</div>
+            <div v-show="item.description !== ''" class="description" :class="item.textBrightness">{{ item.description
+              }}</div>
             <div class="buttons" :class="item.textBrightness">
               <button>SEE MORE</button>
             </div>
@@ -25,10 +25,12 @@
       <div class="thumbnail" ref="sliderGalleryThumbnailsList">
         <div v-for="(item, index) in galleryData" :key="index" class="item">
           <div class="inner">
-            <img :src="item.src" :alt="item.alt" loading="lazy" />
+            <NuxtImg :src="item.src" :alt="item.alt" />
             <div class="content" :class="item.textBrightness">
-              <div v-show="item.thumbnail?.title !== ''" class="title" :class="item.textBrightness">{{ item.thumbnail?.title }}</div>
-              <div v-show="item.thumbnail?.description !== ''" class="description" :class="item.textBrightness">{{ item.thumbnail?.description }}
+              <div v-show="item.thumbnail?.title !== ''" class="title" :class="item.textBrightness">{{
+                item.thumbnail?.title }}</div>
+              <div v-show="item.thumbnail?.description !== ''" class="description" :class="item.textBrightness">{{
+                item.thumbnail?.description }}
               </div>
             </div>
           </div>
@@ -36,10 +38,10 @@
       </div>
 
       <div class="arrows">
-        <button id="prev" ref="prevDom" @click.prevent="doPrevious()">
+        <button id="prev" ref="prevDom" @click.prevent="doPrevious()" aria-label="Previous image">
           <Icon name="ic:outline-keyboard-arrow-left" class="arrows-icon" />
         </button>
-        <button id="next" ref="nextDom" @click.prevent="doNext()">
+        <button id="next" ref="nextDom" @click.prevent="doNext()" aria-label="Next image">
           <Icon name="ic:outline-keyboard-arrow-right" class="arrows-icon" />
         </button>
       </div>
@@ -50,6 +52,8 @@
 </template>
 
 <script setup lang="ts">
+import NuxtImg from '#image/components/NuxtImg.vue';
+
 const props = defineProps({
   autoRun: {
     type: Boolean,
