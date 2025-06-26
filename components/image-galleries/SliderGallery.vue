@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import NuxtImg from '#image/components/NuxtImg.vue';
+import { type IGalleryData } from '~/types/gallery-data';
 
 const props = defineProps({
   autoRun: {
@@ -72,20 +72,6 @@ const props = defineProps({
     default: () => [],
   },
 });
-
-interface IGalleryData {
-  src: string;
-  alt: string;
-  stylist?: string;
-  title?: string;
-  category?: string;
-  description?: string;
-  thumbnail?: {
-    title: string;
-    description: string;
-  };
-  textBrightness: 'light' | 'dark';
-}
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 const galleryData = defineModel<IGalleryData[]>('galleryData');
