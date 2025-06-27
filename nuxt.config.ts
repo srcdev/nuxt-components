@@ -1,8 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  future: {
-    compatibilityVersion: 4,
-  },
   devtools: { enabled: true },
   css: ['modern-normalize', './assets/styles/main.css'],
   modules: ['@nuxt/icon', '@nuxt/image', '@nuxt/eslint'],
