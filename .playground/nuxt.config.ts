@@ -1,5 +1,8 @@
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
+  future: {
+    compatibilityVersion: 4,
+  },
   devtools: { enabled: true },
   extends: ['..'],
   // devServer: {

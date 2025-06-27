@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { type IGalleryData } from '~/types/gallery-data';
+import { type IGalleryData } from '@/types/gallery-data';
 
 const props = defineProps({
   autoRun: {
@@ -106,12 +106,10 @@ onMounted(async () => {
 
     const promise = new Promise<void>((resolve) => {
       img.onload = () => {
-        console.log('Image preloaded:', firstImageIndex);
         loadedImages.value.add(firstImageIndex);
         resolve();
       };
       img.onerror = () => {
-        console.error('Failed to preload image:', firstImageIndex);
         loadedImages.value.add(firstImageIndex); // Count as loaded anyway
         resolve();
       };
@@ -162,26 +160,34 @@ function showSlider(type: string) {
   if (type === 'next') {
     if (currentSliderItems.length) {
       const firstItem = currentSliderItems[0];
-      sliderGalleryImagesList.value?.appendChild(firstItem);
+      if (firstItem) {
+        sliderGalleryImagesList.value?.appendChild(firstItem);
+      }
     }
 
     if (currentThumbnailItems.length) {
       const firstThumb = currentThumbnailItems[0];
-      sliderGalleryThumbnailsList.value?.appendChild(firstThumb);
+      if (firstThumb) {
+        sliderGalleryThumbnailsList.value?.appendChild(firstThumb);
+      }
     }
 
     sliderGalleryWrapper.value?.classList.add('next');
   } else {
     if (currentSliderItems.length) {
       const lastItem = currentSliderItems[currentSliderItems.length - 1];
-      lastItem.classList.add('prepend-item');
-      sliderGalleryImagesList.value?.prepend(lastItem);
+      if (lastItem) {
+        lastItem.classList.add('prepend-item');
+        sliderGalleryImagesList.value?.prepend(lastItem);
+      }
     }
 
     if (currentThumbnailItems.length) {
       const lastThumb = currentThumbnailItems[currentThumbnailItems.length - 1];
-      lastThumb.classList.add('prepend-item');
-      sliderGalleryThumbnailsList.value?.prepend(lastThumb);
+      if (lastThumb) {
+        lastThumb.classList.add('prepend-item');
+        sliderGalleryThumbnailsList.value?.prepend(lastThumb);
+      }
     }
 
     sliderGalleryWrapper.value?.offsetWidth; // Force reflow
