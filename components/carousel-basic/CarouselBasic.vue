@@ -16,7 +16,7 @@
       </div>
       <div class="thumbnail-container">
         <ul class="thumbnail-list">
-          <li v-for="item, index in data?.items" class="thumbnail-item">
+          <li v-for="item, index in data?.items" class="thumbnail-item" ref="thumbnailItems">
             <div class="thumbnail-item_inner">{{ index }}</div>
           </li>
         </ul>
@@ -52,6 +52,7 @@ const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.s
 
 const carouselContentRef = useTemplateRef<HTMLDivElement>('carouselContent');
 const carouselItems = useTemplateRef<HTMLDivElement[]>('carouselItems');
+const thumbnailItems = useTemplateRef<HTMLLIElement[]>('thumbnailItems');
 const carouselInitComplete = ref(false);
 
 const currentIndex = ref(1);
@@ -64,6 +65,13 @@ onMounted(() => {
   if (items && Array.isArray(items)) {
     items.forEach((item, index) => {
       item.style.zIndex = index === 0 ? '1' : '2';
+    });
+  }
+
+  const thumbs = thumbnailItems.value;
+  if (thumbs && Array.isArray(thumbs)) {
+    thumbs.forEach((thumb, index) => {
+      thumb.style.zIndex = index === 0 ? '1' : '2';
     });
   }
 });
@@ -94,15 +102,24 @@ const updateOrder = (index: number, order: number) => {
     const element = carouselItems.value[index - 1];
     element.style.order = order.toString();
   }
+
+  // Also update thumbnail order
+  if (thumbnailItems.value !== null) {
+    const thumbElement = thumbnailItems.value[index - 1];
+    thumbElement.style.order = order.toString();
+  }
 };
 
 const onTransitionEnd = () => {
   const items = carouselItems.value;
+  const thumbs = thumbnailItems.value;
 
   if (!items || !Array.isArray(items)) return;
+  if (!thumbs || !Array.isArray(thumbs)) return;
 
-  // 1. Capture initial positions
+  // 1. Capture initial positions for both main items and thumbnails
   const firstRects = items.map(el => el.getBoundingClientRect());
+  const firstThumbRects = thumbs.map(el => el.getBoundingClientRect());
 
   // 2. Update orders
   let firstVisualElementIndex = currentIndex.value; // Track which element should be visually first
@@ -126,12 +143,17 @@ const onTransitionEnd = () => {
     items.forEach((item, index) => {
       item.style.zIndex = index === 0 ? '1' : '2';
     });
+    thumbs.forEach((thumb, index) => {
+      thumb.style.zIndex = index === 0 ? '1' : '2';
+    });
   }
 
-  // 3. Next tick: capture new positions & animate
+  // 3. Next tick: capture new positions & animate both main items and thumbnails
   requestAnimationFrame(() => {
     const lastRects = items.map(el => el.getBoundingClientRect());
+    const lastThumbRects = thumbs.map(el => el.getBoundingClientRect());
 
+    // Animate main carousel items
     items.forEach((el, i) => {
       const dx = firstRects[i].left - lastRects[i].left;
       const dy = firstRects[i].top - lastRects[i].top;
@@ -156,6 +178,34 @@ const onTransitionEnd = () => {
         };
 
         el.addEventListener('transitionend', handleTransitionEnd);
+      });
+    });
+
+    // Animate thumbnail items
+    thumbs.forEach((thumb, i) => {
+      const dx = firstThumbRects[i].left - lastThumbRects[i].left;
+      const dy = firstThumbRects[i].top - lastThumbRects[i].top;
+
+      thumb.style.transition = 'none';
+      thumb.style.transform = `translate(${dx}px, ${dy}px)`;
+
+      requestAnimationFrame(() => {
+        thumb.style.transition = 'transform 3000ms ease';
+        thumb.style.transform = '';
+
+        // Set z-index after the transition actually completes
+        const thumbIndex = i + 1; // Convert to 1-based index
+        const isActiveThumbnail = thumbIndex === firstVisualElementIndex;
+
+        // Listen for transition end to update z-index
+        const handleThumbTransitionEnd = (event: TransitionEvent) => {
+          if (event.propertyName === 'transform') {
+            thumb.style.zIndex = isActiveThumbnail ? '1' : '2';
+            thumb.removeEventListener('transitionend', handleThumbTransitionEnd);
+          }
+        };
+
+        thumb.addEventListener('transitionend', handleThumbTransitionEnd);
       });
     });
   });
