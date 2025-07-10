@@ -51,12 +51,22 @@ const props = defineProps({
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const carouselContentRef = useTemplateRef<HTMLDivElement>('carouselContent');
-const carouselItems = useTemplateRef<HTMLDivElement>('carouselItems');
+const carouselItems = useTemplateRef<HTMLDivElement[]>('carouselItems');
 const carouselInitComplete = ref(false);
 
 const currentIndex = ref(1);
 const itemCount = ref(props.data.items.length);
 const forward = ref(true);
+
+// Set initial z-index values when component mounts
+onMounted(() => {
+  const items = carouselItems.value;
+  if (items && Array.isArray(items)) {
+    items.forEach((item, index) => {
+      item.style.zIndex = index === 0 ? '1' : '2';
+    });
+  }
+});
 
 
 // useEventListener(carouselContentRef, "transitionend", () => {
@@ -81,8 +91,8 @@ const updateOrder = (index: number, order: number) => {
   // console.log(`updateOrder() | itemCount(${itemCount.value}), index(${index}), order(${order})`);
 
   if (carouselItems.value !== null) {
-    // carouselItems.value[index - 1].style.order = order;
-    carouselItems.value[index - 1].style.order = order;
+    const element = carouselItems.value[index - 1];
+    element.style.order = order.toString();
   }
 };
 
@@ -95,18 +105,27 @@ const onTransitionEnd = () => {
   const firstRects = items.map(el => el.getBoundingClientRect());
 
   // 2. Update orders
+  let firstVisualElementIndex = currentIndex.value; // Track which element should be visually first
+
   if (carouselInitComplete.value) {
     if (forward.value) {
       currentIndex.value = currentIndex.value === itemCount.value ? 1 : currentIndex.value + 1;
+      firstVisualElementIndex = currentIndex.value;
       let order = 1;
       for (let i = currentIndex.value; i <= itemCount.value; i++) updateOrder(i, order++);
       for (let i = 1; i < currentIndex.value; i++) updateOrder(i, order++);
     } else {
       currentIndex.value = currentIndex.value === 1 ? itemCount.value : currentIndex.value - 1;
+      firstVisualElementIndex = currentIndex.value;
       let order = itemCount.value;
       for (let i = currentIndex.value; i >= 1; i--) updateOrder(i, order--);
       for (let i = itemCount.value; i > currentIndex.value; i--) updateOrder(i, order--);
     }
+  } else {
+    // Initial setup - set z-index for all items
+    items.forEach((item, index) => {
+      item.style.zIndex = index === 0 ? '1' : '2';
+    });
   }
 
   // 3. Next tick: capture new positions & animate
@@ -123,6 +142,20 @@ const onTransitionEnd = () => {
       requestAnimationFrame(() => {
         el.style.transition = 'transform 3000ms ease';
         el.style.transform = '';
+
+        // Set z-index after the transition actually completes
+        const elementIndex = i + 1; // Convert to 1-based index to match your logic
+        const isFirstVisual = elementIndex === firstVisualElementIndex;
+
+        // Listen for transition end to update z-index
+        const handleTransitionEnd = (event: TransitionEvent) => {
+          if (event.propertyName === 'transform') {
+            el.style.zIndex = isFirstVisual ? '1' : '2';
+            el.removeEventListener('transitionend', handleTransitionEnd);
+          }
+        };
+
+        el.addEventListener('transitionend', handleTransitionEnd);
       });
     });
   });
@@ -145,13 +178,16 @@ const onTransitionEnd = () => {
       padding-inline: 10px;
       outline: 1px solid light-dark(#00000090, #f0f0f090);
 
+      /* isolation: isolate; */
+      position: relative;
+
       .item {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
 
-        transition: transform 3000ms ease;
+        /* transition: transform 3000ms ease; */
           /* For FLIP smoothness */
 
         aspect-ratio: 4 / 3;
