@@ -47,7 +47,8 @@ const responsiveNavLinks = {
       childLinksTitle: 'UI Components',
       childLinks: [
       { name: 'Animated SVG Text', path: '/ui/animated-svg-text' },
-      { name: 'Carousel (Basic)', path: 'ui/carousel-basic' },
+      { name: 'Carousel (Basic)', path: '/ui/carousel-basic' },
+      { name: 'Carousel (Flip)', path: '/ui/carousel-flip' },
       { name: 'Slider Gallery', path: '/ui/slider-gallery' },
       { name: 'Container Glow', path: '/ui/container-glow' },
       { name: 'Accordian', path: '/ui/accordian' },
