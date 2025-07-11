@@ -245,6 +245,8 @@ onMounted(() => {
       padding-inline: 10px;
       outline: 1px solid light-dark(#00000090, #f00ff090);
 
+      /* scroll-snap-type: x mandatory; */
+
       /* isolation: isolate; */
       position: relative;
 
@@ -255,7 +257,7 @@ onMounted(() => {
         justify-content: center;
 
         /* transition: transform v-bind(transitionSpeedStr) ease; */
-          /* For FLIP smoothness */
+        /* For FLIP smoothness */
 
         aspect-ratio: 4 / 3;
 
@@ -267,6 +269,8 @@ onMounted(() => {
         outline: 1px solid light-dark(#00000090, #f00ff090);
 
         background-color: light-dark(#f00, #00f);
+
+        /* scroll-snap-align: none center; */
 
         &:nth-child(odd) {
           background-color: light-dark(#00f, #f00);
@@ -298,11 +302,11 @@ onMounted(() => {
           height: fit-content;
 
           &:hover {
-            background-color: light-dark(#f00aa, #00faa);
+            background-color: light-dark(#0009, #fff9);
           }
 
           &:active {
-            background-color: light-dark(#f00dd, #00fdd);
+            background-color: light-dark(#0009, #fff9);
           }
         }
       }
