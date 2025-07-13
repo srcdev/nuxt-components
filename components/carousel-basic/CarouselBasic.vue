@@ -1,25 +1,31 @@
 <template>
   <section class="carousel-basic" :class="[elementClasses, { 'controls-inside': controlsInside }]">
 
-    <div class="item-container" ref="carouselContent">
+    <div class="item-container">
       <div v-for="(item, index) in data?.items" :key="index" class="item" ref="carouselItems">
         <h3>{{ index }}</h3>
         <p>{{ item.alt }}</p>
       </div>
+    </div>
 
+    <div class="timeline-container">
+      <div v-for="(item, index) in data?.items" :key="index" class="timeline-item">
+        <div class="count">Step {{ index }}</div>
+      </div>
     </div>
 
     <div class="controls-container">
+      <div class="markers-container">
+        <ul class="markers-list">
+          <li v-for="(index) in Math.floor(itemCount - 1)" :key="index" class="markers-item" ref="thumbnailItems">
+            <button @click.prevent="jumpToFrame(index)" class="marker" :class="[{ active: currentIndex  === index}]"><span class="sr-only">Jump to item{{
+                Math.floor(index + 1) }}</span></button>
+          </li>
+        </ul>
+      </div>
       <div class="buttons-container">
         <button type="submit" @click.prevent="actionPrevious()" class="btn-action">Prev</button>
         <button type="submit" @click.prevent="actionNext()" class="btn-action">Next</button>
-      </div>
-      <div class="thumbnail-container">
-        <ul class="thumbnail-list">
-          <li v-for="item, index in data?.items" class="thumbnail-item" ref="thumbnailItems">
-            <div class="thumbnail-item_inner">{{ index }}</div>
-          </li>
-        </ul>
       </div>
     </div>
   </section>
@@ -27,7 +33,7 @@
 
 <script setup lang="ts">
 import type { ICarouselBasic } from "@/types/types.carousel-basic";
-import { useElementSize, useEventListener, useResizeObserver } from "@vueuse/core";
+
 const props = defineProps({
   propsData: {
     type: Object as PropType<ICarouselBasic>,
@@ -48,7 +54,7 @@ const props = defineProps({
   },
   transitionSpeed: {
     type: Number,
-    default: 1000
+    default: 200
   },
   controlsInside: {
     type: Boolean,
@@ -58,163 +64,77 @@ const props = defineProps({
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const carouselContentRef = useTemplateRef<HTMLDivElement>('carouselContent');
 const carouselItems = useTemplateRef<HTMLDivElement[]>('carouselItems');
 const thumbnailItems = useTemplateRef<HTMLLIElement[]>('thumbnailItems');
 const carouselInitComplete = ref(false);
 
-const currentIndex = ref(1);
+const currentIndex = ref(0);
 const itemCount = ref(props.data.items.length);
-const offset = ref(1);
-const previousOffset = ref(1);
+const offset = ref(0);
 const transitionSpeedStr = props.transitionSpeed + 'ms';
+const itemTransform = computed(() => {
+  return `translateX(calc(${offset.value} * (${itemWidth.value} + var(--_item-gap))))`;
+})
+
+const itemWidth = ref('0px');
 
 const actionPrevious = () => {
-  offset.value = -1;
-  onTransitionEnd();
+  if (offset.value >= 0) {
+    return;
+  }
+
+  offset.value = Math.min(offset.value + 1);
+  doAction();
 }
 
 const actionNext = () => {
-  offset.value = 1;
-  onTransitionEnd();
+  if (offset.value <= -1 * (itemCount.value - 1)) {
+    return;
+  }
+
+  offset.value = Math.min(offset.value - 1);
+  doAction();
 }
 
-const updateOrder = (index: number, order: number) => {
-  if (carouselItems.value !== null && thumbnailItems.value !== null) {
-    carouselItems.value[index - 1].style.order = order.toString();
-    thumbnailItems.value[index - 1].style.order = order.toString();
-  }
-};
+const doAction = () => {
+  currentIndex.value = Math.abs(offset.value);
+}
 
+const jumpToFrame = (index: number) => {
+
+  if (index >= 0 && index < itemCount.value) {
+    offset.value = -index;
+    doAction();
+  }
+}
 
 const initialSetup = () => {
-  const items = carouselItems.value;
-  const thumbs = thumbnailItems.value;
 
-  items?.forEach((item, index) => {
-    item.style.zIndex = index === 0 || index === itemCount.value - 1 ? '1' : '2';
-    item.style.order = String(index + 1);
-    // item.setAttribute('data-order', String(index + 1));
-  });
-  thumbs?.forEach((thumb, index) => {
-    thumb.style.zIndex = index === 0 || index === itemCount.value - 1 ? '1' : '2';
-    thumb.style.order = String(index + 1);
-    // thumb.setAttribute('data-order', String(index + 1));
-  });
-  carouselInitComplete.value = true;
-}
-
-const onTransitionEnd = () => {
-
-  const items = carouselItems.value;
-  const thumbs = thumbnailItems.value;
-
-  if (!items || !Array.isArray(items)) return;
-  if (!thumbs || !Array.isArray(thumbs)) return;
-
-  // 1. Capture initial positions for both main items and thumbnails
-  const firstRects = items.map(el => el.getBoundingClientRect());
-  const firstThumbRects = thumbs.map(el => el.getBoundingClientRect());
-
-  // 2. Update orders
-  let firstVisualElementIndex = currentIndex.value; // Track which element should be visually first
-
-  if (carouselInitComplete.value) {
-    if (offset.value === 1) {
-      const localOffset = offset.value === previousOffset.value ? offset.value : 2; // Ensure we have a valid offset
-      currentIndex.value = currentIndex.value === itemCount.value ? 1 : currentIndex.value + localOffset;
-      firstVisualElementIndex = currentIndex.value;
-      let order = 1;
-
-      for (let i = currentIndex.value; i <= itemCount.value; i++) updateOrder(i, order++);
-      for (let i = 1; i < currentIndex.value; i++) updateOrder(i, order++);
-
-    } else {
-      const localOffset = offset.value === previousOffset.value ? offset.value : -2; // Ensure we have a valid offset
-      currentIndex.value = currentIndex.value === 1 ? itemCount.value : currentIndex.value + localOffset;
-      firstVisualElementIndex = currentIndex.value;
-      let order = itemCount.value;
-
-      for (let i = currentIndex.value; i >= 1; i--) updateOrder(i, order--);
-      for (let i = itemCount.value; i > currentIndex.value; i--) updateOrder(i, order--);
-    }
-    previousOffset.value = offset.value; // Store the previous offset for next transition
-
+  if (carouselItems?.value && carouselItems.value.length > 0 && carouselItems.value[0]) {
+    itemWidth.value = carouselItems.value[0].offsetWidth + 'px';
   }
 
-  // 3. Next tick: capture new positions & animate both main items and thumbnails
-  requestAnimationFrame(() => {
-    const lastRects = items.map(el => el.getBoundingClientRect());
-    const lastThumbRects = thumbs.map(el => el.getBoundingClientRect());
-
-    // Animate main carousel items
-    items.forEach((el, i) => {
-      const dx = firstRects[i].left - lastRects[i].left;
-      const dy = firstRects[i].top - lastRects[i].top;
-
-      el.style.transition = 'none';
-      el.style.transform = `translate(${dx}px, ${dy}px)`;
-
-      requestAnimationFrame(() => {
-        el.style.transition = `transform ${transitionSpeedStr} ease`;
-        el.style.transform = '';
-
-        // Set z-index after the transition actually completes
-        const elementIndex = i + 1; // Convert to 1-based index to match your logic
-        const isFirstVisual = elementIndex === firstVisualElementIndex;
-
-        // Listen for transition end to update z-index
-        const handleTransitionEnd = (event: TransitionEvent) => {
-          if (event.propertyName === 'transform') {
-            el.style.zIndex = isFirstVisual ? '1' : '2';
-            el.removeEventListener('transitionend', handleTransitionEnd);
-          }
-        };
-
-        el.addEventListener('transitionend', handleTransitionEnd);
-      });
-    });
-
-    // Animate thumbnail items
-    thumbs.forEach((thumb, i) => {
-      const dx = firstThumbRects[i].left - lastThumbRects[i].left;
-      const dy = firstThumbRects[i].top - lastThumbRects[i].top;
-
-      thumb.style.transition = 'none';
-      thumb.style.transform = `translate(${dx}px, ${dy}px)`;
-
-      requestAnimationFrame(() => {
-        thumb.style.transition = `transform ${transitionSpeedStr} ease`;
-        thumb.style.transform = '';
-
-        // Set z-index after the transition actually completes
-        const thumbIndex = i + 1; // Convert to 1-based index
-        const isActiveThumbnail = thumbIndex === firstVisualElementIndex;
-
-        // Listen for transition end to update z-index
-        const handleThumbTransitionEnd = (event: TransitionEvent) => {
-          if (event.propertyName === 'transform') {
-            thumb.style.zIndex = isActiveThumbnail ? '1' : '2';
-            thumb.removeEventListener('transitionend', handleThumbTransitionEnd);
-          }
-        };
-
-        thumb.addEventListener('transitionend', handleThumbTransitionEnd);
-      });
-    });
-  });
-
   carouselInitComplete.value = true;
-};
+}
 
 onMounted(() => {
   initialSetup();
 });
 
+watch(
+  () => currentIndex.value,
+  () => {
+    // console.log('currentIndex changed:', currentIndex.value);
+  }
+);
+
 </script>
 
 <style lang="css">
+
 .carousel-basic {
+
+  --_item-gap: 10px;
 
   display: grid;
   grid-template-columns: 1fr;
@@ -237,9 +157,53 @@ onMounted(() => {
     }
   }
 
+  .timeline-container {
+    display: flex;
+    gap: var(--_item-gap);
+    overflow-x: auto;
+    padding-block: 10px;
+    padding-inline: 10px;
+    outline: 1px solid light-dark(#00000090, #f00ff090);
+
+    .timeline-item {
+      display: grid;
+      grid-template-areas: 'stack';
+      align-items: center;
+      /* justify-content: center; */
+
+      min-inline-size: 600px;
+      color: light-dar(#aaa, #333);
+      padding-block: 10px;
+      border-radius: 4px;
+      outline: 1px solid light-dark(#00000090, #f00ff090);
+      transform: v-bind(itemTransform);
+
+      &::before {
+        content: '';
+        grid-area: stack;
+        display: grid;
+        height: 2px;
+        background-color: #fff;
+        margin-inline-start: 70px;
+      }
+
+      .count {
+        grid-area: stack;
+        display: inline-grid;
+        font-size: 1.2rem;
+        border-radius: 8px;
+        width: fit-content;
+        color: light-dark(#fff, #000);
+        background-color: light-dark(#000, #fff);
+        padding-block: 6px;
+        padding-inline: 12px;
+      }
+    }
+  }
+
   .item-container {
     display: flex;
-    gap: 10px;
+    gap: var(--_item-gap);
     overflow-x: auto;
     padding-block: 10px;
     padding-inline: 10px;
@@ -275,18 +239,60 @@ onMounted(() => {
       &:nth-child(odd) {
         background-color: light-dark(#00f, #f00);
       }
+
+      /* &.slide { */
+        transition: transform v-bind(transitionSpeedStr) ease;
+        /* transform: translateX(calc(v-bind(offset) * (v-bind(itemWidth) + var(--_item-gap)))); */
+        transform: v-bind(itemTransform);
+
+        /* animation: autoRun v-bind(transitionSpeedStr) linear forwards; */
+      /* } */
     }
   }
-
 
   .controls-container {
 
     display: flex;
+    align-items: center;
+    justify-content: flex-end;
     gap: 20px;
+
+    .markers-container {
+
+      .markers-list {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        list-style-type: none;
+        margin: unset;
+        padding: unset;
+
+        /* overflow-x: auto; */
+
+        .markers-item {
+          line-height: 3px;
+
+          &.active {
+            background-color: light-dark(#f00, #0f0);
+          }
+
+          .marker {
+            width: 22px;
+            height: 3px;
+            background-color: lightgray;
+            cursor: pointer;
+            line-height: 3px;
+
+            &.active {
+              background-color: red;
+            }
+          }
+        }
+      }
+    }
 
     .buttons-container {
       display: flex;
-      flex-grow: 1;
       align-items: center;
       justify-content: end;
       gap: 20px;
@@ -305,53 +311,15 @@ onMounted(() => {
           background-color: light-dark(#0009, #fff9);
         }
 
-        &:active {
+        &:active,
+        &.active {
           background-color: light-dark(#0009, #fff9);
         }
       }
     }
-
-    .thumbnail-container {
-      padding-block: 10px;
-      padding-inline: 10px;
-      outline: 1px solid light-dark(#00000090, #f00ff090);
-      max-inline-size: 40%;
-
-      .thumbnail-list {
-        display: flex;
-        gap: 10px;
-        list-style-type: none;
-        padding-block: 8px;
-        padding-inline: 8px;
-        margin-block: 0;
-        margin-inline: 0;
-
-        outline: 1px solid light-dark(#00000090, #f00ff090);
-        overflow-x: auto;
-
-        .thumbnail-item {
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          aspect-ratio: 3 / 4;
-          min-inline-size: 120px;
-          outline: 1px solid light-dark(#f00, #00f);
-          border-radius: 4px;
-
-          background-color: light-dark(#f00, #00f);
-
-          &:nth-child(odd) {
-            background-color: light-dark(#00f, #f00);
-          }
-
-
-          .thumbnail-item_inner {}
-        }
-      }
-    }
   }
+
+
 
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <section class="carousel-basic" :class="[elementClasses, { 'controls-inside': controlsInside }]">
+  <section class="carousel-flip" :class="[elementClasses, { 'controls-inside': controlsInside }]">
 
     <div class="item-container" ref="carouselContent">
       <div v-for="(item, index) in data?.items" :key="index" class="item" ref="carouselItems">
@@ -11,8 +11,10 @@
 
     <div class="controls-container">
       <div class="buttons-container">
-        <button type="submit" @click.prevent="actionPrevious()" class="btn-action">Prev</button>
-        <button type="submit" @click.prevent="actionNext()" class="btn-action">Next</button>
+        <button type="submit" @click.prevent="actionPrevious()" class="btn-action"
+          :disabled="transitionRunning">Prev</button>
+        <button type="submit" @click.prevent="actionNext()" class="btn-action"
+          :disabled="transitionRunning">Next</button>
       </div>
       <div class="thumbnail-container">
         <ul class="thumbnail-list">
@@ -68,13 +70,18 @@ const itemCount = ref(props.data.items.length);
 const offset = ref(1);
 const previousOffset = ref(1);
 const transitionSpeedStr = props.transitionSpeed + 'ms';
+const transitionRunning = ref(false);
 
 const actionPrevious = () => {
+  // if (transitionRunning.value) return;
+
   offset.value = -1;
   onTransitionEnd();
 }
 
 const actionNext = () => {
+  // if (transitionRunning.value) return;
+
   offset.value = 1;
   onTransitionEnd();
 }
@@ -85,7 +92,6 @@ const updateOrder = (index: number, order: number) => {
     thumbnailItems.value[index - 1].style.order = order.toString();
   }
 };
-
 
 const initialSetup = () => {
   const items = carouselItems.value;
@@ -104,8 +110,10 @@ const initialSetup = () => {
   carouselInitComplete.value = true;
 }
 
+
 const onTransitionEnd = () => {
 
+  // transitionRunning.value = true;
   const items = carouselItems.value;
   const thumbs = thumbnailItems.value;
 
@@ -140,6 +148,9 @@ const onTransitionEnd = () => {
     }
     previousOffset.value = offset.value; // Store the previous offset for next transition
 
+    // setTimeout(() => {
+    //   transitionRunning.value = false;
+    // }, props.transitionSpeed);
   }
 
   // 3. Next tick: capture new positions & animate both main items and thumbnails
@@ -214,7 +225,7 @@ onMounted(() => {
 </script>
 
 <style lang="css">
-.carousel-basic {
+.carousel-flip {
 
   display: grid;
   grid-template-columns: 1fr;
@@ -284,6 +295,8 @@ onMounted(() => {
     display: flex;
     gap: 20px;
 
+
+
     .buttons-container {
       display: flex;
       flex-grow: 1;
@@ -301,12 +314,19 @@ onMounted(() => {
         cursor: pointer;
         height: fit-content;
 
+        transition: background-color 0.3s ease, color 0.3s ease;
+
         &:hover {
           background-color: light-dark(#0009, #fff9);
         }
 
         &:active {
           background-color: light-dark(#0009, #fff9);
+        }
+
+        &:disabled {
+          background-color: light-dark(#0003, #fff3);
+          cursor: not-allowed;
         }
       }
     }
@@ -348,6 +368,7 @@ onMounted(() => {
 
 
           .thumbnail-item_inner {}
+
         }
       }
     }
