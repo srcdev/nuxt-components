@@ -277,12 +277,15 @@ watch(
           }
 
           .marker {
+            border: none;
+            outline: none;
+            box-shadow: none;
             width: 22px;
             height: 3px;
             background-color: lightgray;
             cursor: pointer;
             line-height: 3px;
-
+            transition: background-color v-bind(transitionSpeedStr) linear;
             &.active {
               background-color: red;
             }
@@ -299,6 +302,7 @@ watch(
 
 
       .btn-action {
+
         padding: 10px 20px;
         border-radius: 4px;
         background-color: light-dark(#000, #fff);
