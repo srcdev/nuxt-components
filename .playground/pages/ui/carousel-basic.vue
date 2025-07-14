@@ -7,10 +7,7 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
-          <CarouselBasic
-            v-if="carouselStatus === 'success'"
-            :carousel-data-ids
-            :style-class-passthrough="['carousel-basic-demo', 'mbe-20']">
+          <CarouselBasic v-if="carouselStatus === 'success'" :carousel-data-ids :style-class-passthrough="['carousel-basic-demo', 'mbe-20']">
             <template v-for="(item, index) in carouselData?.items" #[item.id]>
               <div class="case-study-item">
                 <h3>{{ index }}</h3>
@@ -25,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ICarouselBasic } from "@/types/types.carousel-basic";
+import type { ICarouselBasic } from '@/types/types.carousel-basic';
 
 definePageMeta({
   layout: false,
@@ -43,19 +40,17 @@ const {
   data: carouselData,
   execute: carouselExecute,
   status: carouselStatus,
-  error: carouselError
-} = await useFetch<ICarouselBasic>("/api/carousel", {
-  immediate: true
+  error: carouselError,
+} = await useFetch<ICarouselBasic>('/api/carousel', {
+  immediate: true,
 });
 
 const carouselDataIds = computed(() => {
-  return carouselData.value?.items.map(item => item.id) || [];
+  return carouselData.value?.items.map((item) => item.id) || [];
 });
-
 </script>
 
 <style lang="css">
-
 .carousel-basic-demo {
   &.carousel-basic {
     /* Var used in calcs */
@@ -109,7 +104,6 @@ const carouselDataIds = computed(() => {
         }
 
         .case-study-item {
-
           flex-direction: column;
           align-items: center;
           justify-content: center;
@@ -130,9 +124,7 @@ const carouselDataIds = computed(() => {
       gap: 20px;
 
       .markers-container {
-
         .markers-list {
-
           .markers-item {
             line-height: 3px;
 
@@ -160,7 +152,6 @@ const carouselDataIds = computed(() => {
         justify-content: end;
         gap: 20px;
 
-
         .btn-action {
           padding: 10px 20px;
           border-radius: 4px;
@@ -180,8 +171,5 @@ const carouselDataIds = computed(() => {
       }
     }
   }
-
-
 }
-
 </style>

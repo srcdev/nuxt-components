@@ -1,6 +1,5 @@
 <template>
   <section class="carousel-basic" :class="[elementClasses]" ref="carouselWrapperRef">
-
     <div tabindex="0" class="item-container" ref="carouselContainerRef">
       <div v-for="(item, index) in carouselDataIds" :key="index" class="item" ref="carouselItems">
         <slot :name="item"></slot>
@@ -17,9 +16,9 @@
       <div class="markers-container">
         <ul class="markers-list">
           <li v-for="index in itemCount" :key="index" class="markers-item">
-            <button @click.prevent="jumpToFrame(index)" class="btn-marker"
-              :class="[{ active: currentIndex  === index - 1}]"><span class="sr-only">Jump to item{{
-                Math.floor(index + 1) }}</span></button>
+            <button @click.prevent="jumpToFrame(index)" class="btn-marker" :class="[{ active: currentIndex === index - 1 }]">
+              <span class="sr-only">Jump to item{{ Math.floor(index + 1) }}</span>
+            </button>
           </li>
         </ul>
       </div>
@@ -32,13 +31,13 @@
 </template>
 
 <script setup lang="ts">
-import type { ICarouselBasic } from "@/types/types.carousel-basic";
-import { useEventListener, useResizeObserver, useSwipe } from "@vueuse/core";
+import type { ICarouselBasic } from '@/types/types.carousel-basic';
+import { useEventListener, useResizeObserver, useSwipe } from '@vueuse/core';
 
 const props = defineProps({
   carouselDataIds: {
     type: Array as PropType<string[]>,
-    default: () => []
+    default: () => [],
   },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
@@ -46,8 +45,8 @@ const props = defineProps({
   },
   transitionSpeed: {
     type: Number,
-    default: 200
-  }
+    default: 200,
+  },
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -63,7 +62,7 @@ const offset = ref(0);
 const transitionSpeedStr = props.transitionSpeed + 'ms';
 const itemTransform = computed(() => {
   return `translateX(calc(${offset.value} * (${itemWidth.value} + var(--_item-gap))))`;
-})
+});
 
 const itemWidth = ref('0px');
 
@@ -74,7 +73,7 @@ const actionPrevious = () => {
 
   offset.value = Math.min(offset.value + 1);
   doAction();
-}
+};
 
 const actionNext = () => {
   if (offset.value <= -1 * (itemCount.value - 1)) {
@@ -83,19 +82,18 @@ const actionNext = () => {
 
   offset.value = Math.min(offset.value - 1);
   doAction();
-}
+};
 
 const doAction = () => {
   currentIndex.value = Math.abs(offset.value);
-}
+};
 
 const jumpToFrame = (index: number) => {
-
   if (index >= 0 && index < itemCount.value) {
     offset.value = -index;
     doAction();
   }
-}
+};
 
 const initialSetup = () => {
   if (carouselItemsRef?.value && carouselItemsRef.value.length > 0 && carouselItemsRef.value[0]) {
@@ -103,33 +101,26 @@ const initialSetup = () => {
   }
 
   carouselInitComplete.value = true;
-}
+};
 
-const { direction } = useSwipe(
-  carouselContainerRef,
-  {
-    passive: false,
-    onSwipeEnd() {
-      if (direction.value === 'left') {
-        actionNext();
-      } else if (direction.value === 'right') {
-        actionPrevious();
-      }
-    },
-  },
-);
-
-useEventListener(
-  carouselContainerRef,
-  'keydown',
-  (event: KeyboardEvent) => {
-    if (event.key === 'ArrowLeft') {
-      actionPrevious();
-    } else if (event.key === 'ArrowRight') {
+const { direction } = useSwipe(carouselContainerRef, {
+  passive: false,
+  onSwipeEnd() {
+    if (direction.value === 'left') {
       actionNext();
+    } else if (direction.value === 'right') {
+      actionPrevious();
     }
   },
-);
+});
+
+useEventListener(carouselContainerRef, 'keydown', (event: KeyboardEvent) => {
+  if (event.key === 'ArrowLeft') {
+    actionPrevious();
+  } else if (event.key === 'ArrowRight') {
+    actionNext();
+  }
+});
 
 useResizeObserver(carouselWrapperRef, async () => {
   initialSetup();
@@ -138,11 +129,9 @@ useResizeObserver(carouselWrapperRef, async () => {
 onMounted(() => {
   initialSetup();
 });
-
 </script>
 
 <style lang="css">
-
 .carousel-basic {
   --_item-gap: 10px;
 
@@ -199,7 +188,6 @@ onMounted(() => {
     justify-content: flex-end;
 
     .markers-container {
-
       .markers-list {
         display: flex;
         flex-direction: row;
@@ -209,7 +197,6 @@ onMounted(() => {
         padding: unset;
 
         .markers-item {
-
           .btn-marker {
             border: none;
             outline: none;
