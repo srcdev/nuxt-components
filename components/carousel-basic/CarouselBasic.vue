@@ -8,7 +8,7 @@
 
     <div class="timeline-container">
       <div v-for="index in itemCount" :key="index" class="timeline-item">
-        <div class="count">Step {{ Math.floor(index + 1) }}</div>
+        <div class="count">Step {{ index }}</div>
       </div>
     </div>
 
@@ -16,7 +16,7 @@
       <div class="markers-container">
         <ul class="markers-list">
           <li v-for="index in itemCount" :key="index" class="markers-item">
-            <button @click.prevent="jumpToFrame(index)" class="btn-marker" :class="[{ active: currentIndex === index - 1 }]">
+            <button @click.prevent="jumpToFrame(index - 1)" class="btn-marker" :class="[{ active: currentIndex === index - 1 }]">
               <span class="sr-only">Jump to item{{ Math.floor(index + 1) }}</span>
             </button>
           </li>
