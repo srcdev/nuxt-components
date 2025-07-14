@@ -1,7 +1,8 @@
 <template>
-  <section class="carousel-basic" :class="[elementClasses, { 'controls-inside': controlsInside }]" ref="carouselWrapperRef">
+  <section class="carousel-basic" :class="[elementClasses, { 'controls-inside': controlsInside }]"
+    ref="carouselWrapperRef">
 
-    <div class="item-container" ref="carouselContainerRef">
+    <div tabindex="0" class="item-container" ref="carouselContainerRef">
       <div v-for="(item, index) in data?.items" :key="index" class="item" ref="carouselItems">
         <h3>{{ index }}</h3>
         <p>{{ item.alt }}</p>
@@ -18,7 +19,8 @@
       <div class="markers-container">
         <ul class="markers-list">
           <li v-for="(index) in Math.floor(itemCount - 1)" :key="index" class="markers-item">
-            <button @click.prevent="jumpToFrame(index)" class="marker" :class="[{ active: currentIndex  === index}]"><span class="sr-only">Jump to item{{
+            <button @click.prevent="jumpToFrame(index)" class="marker"
+              :class="[{ active: currentIndex  === index}]"><span class="sr-only">Jump to item{{
                 Math.floor(index + 1) }}</span></button>
           </li>
         </ul>
@@ -70,20 +72,6 @@ const carouselContainerRef = ref<HTMLDivElement | null>(null);
 const carouselItemsRef = useTemplateRef<HTMLDivElement[]>('carouselItems');
 const carouselInitComplete = ref(false);
 
-const { direction } = useSwipe(
-  carouselContainerRef,
-  {
-    passive: false,
-    onSwipeEnd() {
-      if (direction.value === 'left') {
-        actionNext();
-      } else if (direction.value === 'right') {
-        actionPrevious();
-      }
-    },
-  },
-);
-
 const currentIndex = ref(0);
 const itemCount = ref(props.data.items.length);
 const offset = ref(0);
@@ -91,8 +79,6 @@ const transitionSpeedStr = props.transitionSpeed + 'ms';
 const itemTransform = computed(() => {
   return `translateX(calc(${offset.value} * (${itemWidth.value} + var(--_item-gap))))`;
 })
-
-
 
 const itemWidth = ref('0px');
 
@@ -127,13 +113,38 @@ const jumpToFrame = (index: number) => {
 }
 
 const initialSetup = () => {
-  console.log("initialSetup()");
   if (carouselItemsRef?.value && carouselItemsRef.value.length > 0 && carouselItemsRef.value[0]) {
     itemWidth.value = carouselItemsRef.value[0].offsetWidth + 'px';
   }
 
   carouselInitComplete.value = true;
 }
+
+const { direction } = useSwipe(
+  carouselContainerRef,
+  {
+    passive: false,
+    onSwipeEnd() {
+      if (direction.value === 'left') {
+        actionNext();
+      } else if (direction.value === 'right') {
+        actionPrevious();
+      }
+    },
+  },
+);
+
+useEventListener(
+  carouselContainerRef,
+  'keydown',
+  (event: KeyboardEvent) => {
+    if (event.key === 'ArrowLeft') {
+      actionPrevious();
+    } else if (event.key === 'ArrowRight') {
+      actionNext();
+    }
+  },
+);
 
 useResizeObserver(carouselWrapperRef, async () => {
   initialSetup();
@@ -142,13 +153,6 @@ useResizeObserver(carouselWrapperRef, async () => {
 onMounted(() => {
   initialSetup();
 });
-
-watch(
-  () => currentIndex.value,
-  () => {
-    // console.log('currentIndex changed:', currentIndex.value);
-  }
-);
 
 </script>
 
