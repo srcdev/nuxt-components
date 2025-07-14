@@ -1,6 +1,5 @@
 <template>
-  <section class="carousel-basic" :class="[elementClasses]"
-    ref="carouselWrapperRef">
+  <section class="carousel-basic" :class="[elementClasses]" ref="carouselWrapperRef">
 
     <div tabindex="0" class="item-container" ref="carouselContainerRef">
       <div v-for="(item, index) in data?.items" :key="index" class="item" ref="carouselItems">
@@ -18,7 +17,7 @@
       <div class="markers-container">
         <ul class="markers-list">
           <li v-for="index in itemCount" :key="index" class="markers-item">
-            <button @click.prevent="jumpToFrame(index)" class="marker"
+            <button @click.prevent="jumpToFrame(index)" class="btn-marker"
               :class="[{ active: currentIndex  === index - 1}]"><span class="sr-only">Jump to item{{
                 Math.floor(index + 1) }}</span></button>
           </li>
@@ -145,7 +144,6 @@ onMounted(() => {
 <style lang="css">
 
 .carousel-basic {
-
   --_item-gap: 10px;
 
   display: grid;
@@ -156,22 +154,13 @@ onMounted(() => {
     display: flex;
     gap: var(--_item-gap);
     overflow-x: hidden;
-    padding-block: 10px;
-    padding-inline: 10px;
-    outline: 1px solid light-dark(#00000090, #f00ff090);
 
     .timeline-item {
       display: flex;
       flex: 0 0 100%;
       max-inline-size: 800px;
       align-items: center;
-
-      color: light-dark(#aaa, #333);
-      padding-block: 10px;
-      border-radius: 4px;
-      outline: 1px solid light-dark(#00000090, #f00ff090);
       transform: v-bind(itemTransform);
-
       position: relative;
 
       &::before {
@@ -184,13 +173,7 @@ onMounted(() => {
       }
 
       .count {
-        font-size: 1.2rem;
-        border-radius: 8px;
         width: fit-content;
-        color: light-dark(#fff, #000);
-        background-color: light-dark(#000, #fff);
-        padding-block: 6px;
-        padding-inline: 12px;
       }
     }
   }
@@ -199,9 +182,6 @@ onMounted(() => {
     display: flex;
     gap: var(--_item-gap);
     overflow-x: hidden;
-    padding-block: 10px;
-    padding-inline: 10px;
-    outline: 1px solid light-dark(#00000090, #f00ff090);
     position: relative;
 
     .item {
@@ -210,21 +190,13 @@ onMounted(() => {
       max-inline-size: 800px;
       transition: transform v-bind(transitionSpeedStr) ease;
       transform: v-bind(itemTransform);
-
-      background-color: light-dark(#f00, #00f);
-
-      &:nth-child(odd) {
-        background-color: light-dark(#00f, #f00);
-      }
     }
   }
 
   .controls-container {
-
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 20px;
 
     .markers-container {
 
@@ -237,22 +209,14 @@ onMounted(() => {
         padding: unset;
 
         .markers-item {
-          line-height: 3px;
 
-          &.active {
-            background-color: light-dark(#f00, #0f0);
-          }
-
-          .marker {
+          .btn-marker {
             border: none;
             outline: none;
             box-shadow: none;
-            width: 22px;
-            height: 3px;
-            background-color: lightgray;
             cursor: pointer;
-            line-height: 3px;
             transition: background-color v-bind(transitionSpeedStr) linear;
+
             &.active {
               background-color: red;
             }
@@ -267,24 +231,9 @@ onMounted(() => {
       justify-content: end;
       gap: 20px;
 
-
       .btn-action {
-        padding: 10px 20px;
-        border-radius: 4px;
-        background-color: light-dark(#000, #fff);
-        color: light-dark(#fff, #000);
-        border: none;
         cursor: pointer;
         height: fit-content;
-
-        &:hover {
-          background-color: light-dark(#0009, #fff9);
-        }
-
-        &:active,
-        &.active {
-          background-color: light-dark(#0009, #fff9);
-        }
       }
     }
   }
