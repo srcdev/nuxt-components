@@ -1,26 +1,25 @@
 <template>
-  <section class="carousel-basic" :class="[elementClasses, { 'controls-inside': controlsInside }]"
+  <section class="carousel-basic" :class="[elementClasses]"
     ref="carouselWrapperRef">
 
     <div tabindex="0" class="item-container" ref="carouselContainerRef">
       <div v-for="(item, index) in data?.items" :key="index" class="item" ref="carouselItems">
-        <h3>{{ index }}</h3>
-        <p>{{ item.alt }}</p>
+        <slot :name="item.id"></slot>
       </div>
     </div>
 
     <div class="timeline-container">
-      <div v-for="(item, index) in data?.items" :key="index" class="timeline-item">
-        <div class="count">Step {{ index }}</div>
+      <div v-for="index in itemCount" :key="index" class="timeline-item">
+        <div class="count">Step {{ Math.floor(index + 1) }}</div>
       </div>
     </div>
 
     <div class="controls-container">
       <div class="markers-container">
         <ul class="markers-list">
-          <li v-for="(index) in Math.floor(itemCount - 1)" :key="index" class="markers-item">
+          <li v-for="index in itemCount" :key="index" class="markers-item">
             <button @click.prevent="jumpToFrame(index)" class="marker"
-              :class="[{ active: currentIndex  === index}]"><span class="sr-only">Jump to item{{
+              :class="[{ active: currentIndex  === index - 1}]"><span class="sr-only">Jump to item{{
                 Math.floor(index + 1) }}</span></button>
           </li>
         </ul>
@@ -38,15 +37,6 @@ import type { ICarouselBasic } from "@/types/types.carousel-basic";
 import { useEventListener, useResizeObserver, useSwipe } from "@vueuse/core";
 
 const props = defineProps({
-  propsData: {
-    type: Object as PropType<ICarouselBasic>,
-    default: <ICarouselBasic>{
-      items: [],
-      total: 0,
-      skip: 0,
-      limit: 10
-    }
-  },
   data: {
     type: Object,
     default: <ICarouselBasic>{}
@@ -58,10 +48,6 @@ const props = defineProps({
   transitionSpeed: {
     type: Number,
     default: 200
-  },
-  controlsInside: {
-    type: Boolean,
-    default: false
   }
 });
 
@@ -166,27 +152,10 @@ onMounted(() => {
   grid-template-columns: 1fr;
   gap: 10px;
 
-  &.controls-inside {
-    grid-template-areas: "carousel-content";
-    isolation: isolate;
-
-    .item-container {
-      grid-area: carousel-content;
-      z-index: 1;
-    }
-
-    .controls-container {
-      grid-area: carousel-content;
-      z-index: 2;
-      height: fit-content;
-      align-self: flex-end;
-    }
-  }
-
   .timeline-container {
     display: flex;
     gap: var(--_item-gap);
-    overflow-x: auto;
+    overflow-x: hidden;
     padding-block: 10px;
     padding-inline: 10px;
     outline: 1px solid light-dark(#00000090, #f00ff090);
@@ -239,27 +208,14 @@ onMounted(() => {
       display: flex;
       flex: 0 0 100%;
       max-inline-size: 800px;
-
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      aspect-ratio: 4 / 3;
-
-      color: light-dar(#aaa, #333);
-      padding-block: 10px;
-      padding-inline: 10px;
-      border-radius: 4px;
-      outline: 1px solid light-dark(#00000090, #f00ff090);
+      transition: transform v-bind(transitionSpeedStr) ease;
+      transform: v-bind(itemTransform);
 
       background-color: light-dark(#f00, #00f);
 
       &:nth-child(odd) {
         background-color: light-dark(#00f, #f00);
       }
-
-      transition: transform v-bind(transitionSpeedStr) ease;
-      transform: v-bind(itemTransform);
     }
   }
 
@@ -313,7 +269,6 @@ onMounted(() => {
 
 
       .btn-action {
-
         padding: 10px 20px;
         border-radius: 4px;
         background-color: light-dark(#000, #fff);
@@ -333,8 +288,5 @@ onMounted(() => {
       }
     }
   }
-
-
-
 }
 </style>

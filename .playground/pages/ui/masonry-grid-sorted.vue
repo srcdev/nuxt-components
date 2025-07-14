@@ -2,14 +2,14 @@
   <div>
     <NuxtLayout name="default">
       <template #content>
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h2 class="heading-2">Masonry Grid</h2>
-          <CanvasSwitcher v-model:canvasName="canvasName" />
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
-          <MasonryGridSorted :gridData="quotesData?.quotes.slice(0, qoutesDisplayCount) ?? <IQuotes>{}" :itemMinWidth="350" :gap="3.2" unit="rem" :styleClassPassthrough="[canvasName, 'mi-auto']">
-            <template v-for="(item, index) in quotesData?.quotes.slice(0, qoutesDisplayCount)" v-slot:[item.id]>
+        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+          <MasonryGridSorted :grid-data="quotesData?.quotes.slice(0, qoutesDisplayCount) ?? <IQuotes>{}" :item-min-width="350" :gap="3.2" unit="rem" :style-class-passthrough="[canvasName, 'mi-auto']">
+            <template v-for="(item, index) in quotesData?.quotes.slice(0, qoutesDisplayCount)" #[item.id]>
               <div class="">
                 <p class="">{{ index + 1 }}: {{ item.author }}</p>
                 <p class="">{{ item.quote }}</p>
