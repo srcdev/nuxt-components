@@ -1,5 +1,5 @@
 <template>
-  <section class="carousel-basic" :class="[elementClasses, { 'controls-inside': controlsInside }]">
+  <section class="carousel-basic" :class="[elementClasses, { 'controls-inside': controlsInside }]" ref="carouselWrapperRef">
 
     <div class="item-container">
       <div v-for="(item, index) in data?.items" :key="index" class="item" ref="carouselItems">
@@ -33,6 +33,7 @@
 
 <script setup lang="ts">
 import type { ICarouselBasic } from "@/types/types.carousel-basic";
+import { useElementSize, useEventListener, useResizeObserver } from "@vueuse/core";
 
 const props = defineProps({
   propsData: {
@@ -64,6 +65,7 @@ const props = defineProps({
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
+const carouselWrapperRef = ref<HTMLDivElement | null>(null);
 const carouselItems = useTemplateRef<HTMLDivElement[]>('carouselItems');
 const thumbnailItems = useTemplateRef<HTMLLIElement[]>('thumbnailItems');
 const carouselInitComplete = ref(false);
@@ -109,13 +111,17 @@ const jumpToFrame = (index: number) => {
 }
 
 const initialSetup = () => {
-
+  console.log("initialSetup()");
   if (carouselItems?.value && carouselItems.value.length > 0 && carouselItems.value[0]) {
     itemWidth.value = carouselItems.value[0].offsetWidth + 'px';
   }
 
   carouselInitComplete.value = true;
 }
+
+useResizeObserver(carouselWrapperRef, async () => {
+  initialSetup();
+});
 
 onMounted(() => {
   initialSetup();
@@ -166,30 +172,29 @@ watch(
     outline: 1px solid light-dark(#00000090, #f00ff090);
 
     .timeline-item {
-      display: grid;
-      grid-template-areas: 'stack';
+      display: flex;
+      flex: 0 0 100%;
+      max-inline-size: 800px;
       align-items: center;
-      /* justify-content: center; */
 
-      min-inline-size: 600px;
-      color: light-dar(#aaa, #333);
+      color: light-dark(#aaa, #333);
       padding-block: 10px;
       border-radius: 4px;
       outline: 1px solid light-dark(#00000090, #f00ff090);
       transform: v-bind(itemTransform);
 
+      position: relative;
+
       &::before {
         content: '';
-        grid-area: stack;
-        display: grid;
+        position: absolute;
         height: 2px;
         background-color: #fff;
-        margin-inline-start: 70px;
+        left: 70px;
+        right: 0;
       }
 
       .count {
-        grid-area: stack;
-        display: inline-grid;
         font-size: 1.2rem;
         border-radius: 8px;
         width: fit-content;
@@ -204,28 +209,23 @@ watch(
   .item-container {
     display: flex;
     gap: var(--_item-gap);
-    overflow-x: auto;
+    overflow-x: hidden;
     padding-block: 10px;
     padding-inline: 10px;
     outline: 1px solid light-dark(#00000090, #f00ff090);
-
-    /* scroll-snap-type: x mandatory; */
-
-    /* isolation: isolate; */
     position: relative;
 
     .item {
       display: flex;
+      flex: 0 0 100%;
+      max-inline-size: 800px;
+
       flex-direction: column;
       align-items: center;
       justify-content: center;
 
-      /* transition: transform v-bind(transitionSpeedStr) ease; */
-      /* For FLIP smoothness */
-
       aspect-ratio: 4 / 3;
 
-      min-inline-size: 600px;
       color: light-dar(#aaa, #333);
       padding-block: 10px;
       padding-inline: 10px;
@@ -234,19 +234,12 @@ watch(
 
       background-color: light-dark(#f00, #00f);
 
-      /* scroll-snap-align: none center; */
-
       &:nth-child(odd) {
         background-color: light-dark(#00f, #f00);
       }
 
-      /* &.slide { */
-        transition: transform v-bind(transitionSpeedStr) ease;
-        /* transform: translateX(calc(v-bind(offset) * (v-bind(itemWidth) + var(--_item-gap)))); */
-        transform: v-bind(itemTransform);
-
-        /* animation: autoRun v-bind(transitionSpeedStr) linear forwards; */
-      /* } */
+      transition: transform v-bind(transitionSpeedStr) ease;
+      transform: v-bind(itemTransform);
     }
   }
 
@@ -266,8 +259,6 @@ watch(
         list-style-type: none;
         margin: unset;
         padding: unset;
-
-        /* overflow-x: auto; */
 
         .markers-item {
           line-height: 3px;
