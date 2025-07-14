@@ -7,7 +7,10 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
-          <CarouselBasic v-if="carouselStatus === 'success'" :data="carouselData" :style-class-passthrough="['carousel-basic-demo', 'mbe-20']">
+          <CarouselBasic
+            v-if="carouselStatus === 'success'"
+            :carousel-data-ids
+            :style-class-passthrough="['carousel-basic-demo', 'mbe-20']">
             <template v-for="(item, index) in carouselData?.items" #[item.id]>
               <div class="case-study-item">
                 <h3>{{ index }}</h3>
@@ -44,6 +47,11 @@ const {
 } = await useFetch<ICarouselBasic>("/api/carousel", {
   immediate: true
 });
+
+const carouselDataIds = computed(() => {
+  return carouselData.value?.items.map(item => item.id) || [];
+});
+
 </script>
 
 <style lang="css">

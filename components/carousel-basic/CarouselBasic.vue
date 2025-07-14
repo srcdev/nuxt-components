@@ -2,8 +2,8 @@
   <section class="carousel-basic" :class="[elementClasses]" ref="carouselWrapperRef">
 
     <div tabindex="0" class="item-container" ref="carouselContainerRef">
-      <div v-for="(item, index) in data?.items" :key="index" class="item" ref="carouselItems">
-        <slot :name="item.id"></slot>
+      <div v-for="(item, index) in carouselDataIds" :key="index" class="item" ref="carouselItems">
+        <slot :name="item"></slot>
       </div>
     </div>
 
@@ -36,9 +36,9 @@ import type { ICarouselBasic } from "@/types/types.carousel-basic";
 import { useEventListener, useResizeObserver, useSwipe } from "@vueuse/core";
 
 const props = defineProps({
-  data: {
-    type: Object,
-    default: <ICarouselBasic>{}
+  carouselDataIds: {
+    type: Array as PropType<string[]>,
+    default: () => []
   },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
@@ -58,7 +58,7 @@ const carouselItemsRef = useTemplateRef<HTMLDivElement[]>('carouselItems');
 const carouselInitComplete = ref(false);
 
 const currentIndex = ref(0);
-const itemCount = ref(props.data.items.length);
+const itemCount = ref(props.carouselDataIds.length);
 const offset = ref(0);
 const transitionSpeedStr = props.transitionSpeed + 'ms';
 const itemTransform = computed(() => {
