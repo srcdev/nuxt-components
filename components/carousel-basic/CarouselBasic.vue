@@ -1,7 +1,7 @@
 <template>
   <section class="carousel-basic" :class="[elementClasses, { 'controls-inside': controlsInside }]" ref="carouselWrapperRef">
 
-    <div class="item-container">
+    <div class="item-container" ref="carouselContainerRef">
       <div v-for="(item, index) in data?.items" :key="index" class="item" ref="carouselItems">
         <h3>{{ index }}</h3>
         <p>{{ item.alt }}</p>
@@ -17,7 +17,7 @@
     <div class="controls-container">
       <div class="markers-container">
         <ul class="markers-list">
-          <li v-for="(index) in Math.floor(itemCount - 1)" :key="index" class="markers-item" ref="thumbnailItems">
+          <li v-for="(index) in Math.floor(itemCount - 1)" :key="index" class="markers-item">
             <button @click.prevent="jumpToFrame(index)" class="marker" :class="[{ active: currentIndex  === index}]"><span class="sr-only">Jump to item{{
                 Math.floor(index + 1) }}</span></button>
           </li>
@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import type { ICarouselBasic } from "@/types/types.carousel-basic";
-import { useElementSize, useEventListener, useResizeObserver } from "@vueuse/core";
+import { useEventListener, useResizeObserver, useSwipe } from "@vueuse/core";
 
 const props = defineProps({
   propsData: {
@@ -63,12 +63,26 @@ const props = defineProps({
   }
 });
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const carouselWrapperRef = ref<HTMLDivElement | null>(null);
-const carouselItems = useTemplateRef<HTMLDivElement[]>('carouselItems');
-const thumbnailItems = useTemplateRef<HTMLLIElement[]>('thumbnailItems');
+const carouselContainerRef = ref<HTMLDivElement | null>(null);
+const carouselItemsRef = useTemplateRef<HTMLDivElement[]>('carouselItems');
 const carouselInitComplete = ref(false);
+
+const { direction } = useSwipe(
+  carouselContainerRef,
+  {
+    passive: false,
+    onSwipeEnd() {
+      if (direction.value === 'left') {
+        actionNext();
+      } else if (direction.value === 'right') {
+        actionPrevious();
+      }
+    },
+  },
+);
 
 const currentIndex = ref(0);
 const itemCount = ref(props.data.items.length);
@@ -77,6 +91,8 @@ const transitionSpeedStr = props.transitionSpeed + 'ms';
 const itemTransform = computed(() => {
   return `translateX(calc(${offset.value} * (${itemWidth.value} + var(--_item-gap))))`;
 })
+
+
 
 const itemWidth = ref('0px');
 
@@ -112,8 +128,8 @@ const jumpToFrame = (index: number) => {
 
 const initialSetup = () => {
   console.log("initialSetup()");
-  if (carouselItems?.value && carouselItems.value.length > 0 && carouselItems.value[0]) {
-    itemWidth.value = carouselItems.value[0].offsetWidth + 'px';
+  if (carouselItemsRef?.value && carouselItemsRef.value.length > 0 && carouselItemsRef.value[0]) {
+    itemWidth.value = carouselItemsRef.value[0].offsetWidth + 'px';
   }
 
   carouselInitComplete.value = true;
