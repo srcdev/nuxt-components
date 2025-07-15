@@ -8,10 +8,13 @@ html {
 
   font-size: 62.5%;
   scrollbar-gutter: stable;
+  overflow-x: hidden;
 }
 body {
   color: var(--grayscale-text-body);
   font-family: var(--font-family);
   font-size: var(--step-1);
   min-height: 100vh;
+
+  overflow-x: hidden;
 }
