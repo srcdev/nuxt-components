@@ -16,9 +16,7 @@
       <div class="markers-container">
         <ul class="markers-list">
           <li v-for="index in itemCount" :key="index" class="markers-item">
-            <button @click.prevent="jumpToFrame(index - 1)" class="btn-marker" :class="[{ active: currentIndex === index - 1 }]">
-              <span class="sr-only">Jump to item{{ Math.floor(index + 1) }}</span>
-            </button>
+            <button @click.prevent="jumpToFrame(index - 1)" class="btn-marker" :class="[{ active: currentIndex === index - 1 }]" :aria-label="`Jump to item ${Math.floor(index + 1)}`"></button>
           </li>
         </ul>
       </div>
