@@ -141,6 +141,10 @@ const carouselDataIds = computed(() => {
               &.active {
                 background-color: red;
               }
+
+              &:focus-visible {
+                outline: 1px solid light-dark(#000, #fff);
+              }
             }
           }
         }
@@ -166,6 +170,10 @@ const carouselDataIds = computed(() => {
           &:active,
           &.active {
             background-color: light-dark(#0009, #fff9);
+          }
+
+          &:focus-visible {
+            outline: 1px solid light-dark(#0f0, #f0f);
           }
         }
       }

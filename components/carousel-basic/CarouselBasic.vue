@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <div class="controls-container">
+    <div tabindex="0" class="controls-container" ref="controlsContainerRef">
       <div class="markers-container">
         <ul class="markers-list">
           <li v-for="index in itemCount" :key="index" class="markers-item">
@@ -54,6 +54,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 const carouselWrapperRef = ref<HTMLDivElement | null>(null);
 const carouselContainerRef = ref<HTMLDivElement | null>(null);
 const carouselItemsRef = useTemplateRef<HTMLDivElement[]>('carouselItems');
+const controlsContainerRef = ref<HTMLDivElement | null>(null);
 const carouselInitComplete = ref(false);
 
 const currentIndex = ref(0);
@@ -115,6 +116,14 @@ const { direction } = useSwipe(carouselContainerRef, {
 });
 
 useEventListener(carouselContainerRef, 'keydown', (event: KeyboardEvent) => {
+  if (event.key === 'ArrowLeft') {
+    actionPrevious();
+  } else if (event.key === 'ArrowRight') {
+    actionNext();
+  }
+});
+
+useEventListener(controlsContainerRef, 'keydown', (event: KeyboardEvent) => {
   if (event.key === 'ArrowLeft') {
     actionPrevious();
   } else if (event.key === 'ArrowRight') {
