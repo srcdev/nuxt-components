@@ -39,14 +39,53 @@ useHead({
 const {
   data: carouselData,
   execute: carouselExecute,
-  status: carouselStatus,
+  status: carouselStatus, // See v-if on CarouselBasic
   error: carouselError,
 } = await useFetch<ICarouselBasic>('/api/carousel', {
   immediate: true,
 });
 
+const carouselDataStatic = {
+  items: [
+    {
+      id: 1,
+      url: '/images/spotlights/v2/dining-out.webp',
+      alt: 'Dining out',
+    },
+    {
+      id: 2,
+      url: '/images/spotlights/v2/beer-gardens.webp',
+      alt: 'Entertaining the kids',
+    },
+    {
+      id: 3,
+      url: '/images/spotlights/v2/will-it-rain.webp',
+      alt: 'Will it rain?',
+    },
+    {
+      id: 4,
+      url: '/images/spotlights/v2/nightlife.webp',
+      alt: 'Nightlife',
+    },
+    {
+      id: 5,
+      url: '/images/spotlights/v2/got-toothache-2.webp',
+      alt: 'Dental Services',
+    },
+    {
+      id: 6,
+      url: '/images/spotlights/v2/days-out.webp',
+      alt: 'Days Out',
+    },
+  ],
+  total: 6,
+  skip: 0,
+  limit: 4,
+};
+
 const carouselDataIds = computed(() => {
   return carouselData.value?.items.map((item) => item.id) || [];
+  // return carouselData?.items.map((item) => item.id) || [];
 });
 </script>
 
