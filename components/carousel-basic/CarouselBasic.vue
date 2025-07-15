@@ -3,31 +3,37 @@
     <!-- Screen reader announcement for current item -->
     <div aria-live="polite" aria-atomic="true" class="sr-only">Item {{ currentIndex + 1 }} of {{ itemCount }}</div>
 
-    <div tabindex="0" class="item-container" ref="carouselContainerRef" role="group" aria-label="Carousel items">
-      <div v-for="(item, index) in carouselDataIds" :key="index" class="item" ref="carouselItems" :aria-current="currentIndex === index ? 'true' : 'false'">
-        <slot :name="item"></slot>
+    <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+      <div tabindex="0" class="item-container" :class="{ 'allow-overflow': allowCarouselOverflow }" ref="carouselContainerRef" role="group" aria-label="Carousel items">
+        <div v-for="(item, index) in carouselDataIds" :key="index" class="item" ref="carouselItems" :aria-current="currentIndex === index ? 'true' : 'false'">
+          <slot :name="item"></slot>
+        </div>
       </div>
-    </div>
+    </LayoutRow>
 
-    <div class="timeline-container">
-      <div v-for="index in itemCount" :key="index" class="timeline-item">
-        <div class="count">Step {{ index }}</div>
+    <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+      <div class="timeline-container">
+        <div v-for="index in itemCount" :key="index" class="timeline-item">
+          <div class="count">Step {{ index }}</div>
+        </div>
       </div>
-    </div>
+    </LayoutRow>
 
-    <div tabindex="0" class="controls-container" ref="controlsContainerRef">
-      <div class="markers-container">
-        <ul class="markers-list">
-          <li v-for="index in itemCount" :key="index" class="markers-item">
-            <button @click.prevent="jumpToFrame(index - 1)" class="btn-marker" :class="[{ active: currentIndex === index - 1 }]" :aria-label="`Jump to item ${Math.floor(index + 1)}`"></button>
-          </li>
-        </ul>
+    <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+      <div tabindex="0" class="controls-container" ref="controlsContainerRef">
+        <div class="markers-container">
+          <ul class="markers-list">
+            <li v-for="index in itemCount" :key="index" class="markers-item">
+              <button @click.prevent="jumpToFrame(index - 1)" class="btn-marker" :class="[{ active: currentIndex === index - 1 }]" :aria-label="`Jump to item ${Math.floor(index + 1)}`"></button>
+            </li>
+          </ul>
+        </div>
+        <div class="buttons-container">
+          <button type="button" @click.prevent="actionPrevious()" class="btn-action" aria-label="Go to previous item">Prev</button>
+          <button type="button" @click.prevent="actionNext()" class="btn-action" aria-label="Go to next item">Next</button>
+        </div>
       </div>
-      <div class="buttons-container">
-        <button type="button" @click.prevent="actionPrevious()" class="btn-action" aria-label="Go to previous item">Prev</button>
-        <button type="button" @click.prevent="actionNext()" class="btn-action" aria-label="Go to next item">Next</button>
-      </div>
-    </div>
+    </LayoutRow>
   </section>
 </template>
 
@@ -46,6 +52,10 @@ const props = defineProps({
   transitionSpeed: {
     type: Number,
     default: 200,
+  },
+  allowCarouselOverflow: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -193,6 +203,10 @@ onMounted(() => {
     gap: var(--_item-gap);
     overflow-x: hidden;
     position: relative;
+
+    &.allow-overflow {
+      overflow-x: initial;
+    }
 
     .item {
       display: flex;
