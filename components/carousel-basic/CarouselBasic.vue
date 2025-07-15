@@ -1,7 +1,10 @@
 <template>
-  <section class="carousel-basic" :class="[elementClasses]" ref="carouselWrapperRef">
-    <div tabindex="0" class="item-container" ref="carouselContainerRef">
-      <div v-for="(item, index) in carouselDataIds" :key="index" class="item" ref="carouselItems">
+  <section class="carousel-basic" :class="[elementClasses]" ref="carouselWrapperRef" role="region" aria-label="Image carousel">
+    <!-- Screen reader announcement for current item -->
+    <div aria-live="polite" aria-atomic="true" class="sr-only">Item {{ currentIndex + 1 }} of {{ itemCount }}</div>
+
+    <div tabindex="0" class="item-container" ref="carouselContainerRef" role="group" aria-label="Carousel items">
+      <div v-for="(item, index) in carouselDataIds" :key="index" class="item" ref="carouselItems" :aria-current="currentIndex === index ? 'true' : 'false'">
         <slot :name="item"></slot>
       </div>
     </div>
@@ -21,8 +24,8 @@
         </ul>
       </div>
       <div class="buttons-container">
-        <button type="submit" @click.prevent="actionPrevious()" class="btn-action">Prev</button>
-        <button type="submit" @click.prevent="actionNext()" class="btn-action">Next</button>
+        <button type="button" @click.prevent="actionPrevious()" class="btn-action" aria-label="Go to previous item">Prev</button>
+        <button type="button" @click.prevent="actionNext()" class="btn-action" aria-label="Go to next item">Next</button>
       </div>
     </div>
   </section>
@@ -145,6 +148,18 @@ onMounted(() => {
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 
   .timeline-container {
     display: flex;
