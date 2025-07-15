@@ -32,7 +32,6 @@
 </template>
 
 <script setup lang="ts">
-import type { ICarouselBasic } from '@/types/types.carousel-basic';
 import { useEventListener, useResizeObserver, useSwipe } from '@vueuse/core';
 
 const props = defineProps({
