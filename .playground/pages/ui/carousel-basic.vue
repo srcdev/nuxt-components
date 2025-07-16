@@ -90,6 +90,18 @@ const carouselDataIds = computed(() => {
 </script>
 
 <style lang="css">
+@property --glow-deg {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: -90deg;
+}
+
+@keyframes glow {
+  100% {
+    --glow-deg: 270deg;
+  }
+}
+
 .carousel-basic-demo {
   &.carousel-basic {
     /* Var used in calcs */
@@ -196,23 +208,71 @@ const carouselDataIds = computed(() => {
         gap: 20px;
 
         .btn-action {
-          padding: 10px 20px;
-          border-radius: 4px;
-          background-color: light-dark(#000, #fff);
-          color: light-dark(#fff, #000);
-          border: none;
+          --gradient-glow-dark: var(--gray-7), var(--gray-5), var(--gray-8), var(--gray-6), var(--gray-7), var(--gray-8), var(--gray-7);
+          --gradient-glow-light: var(--gray-4), var(--gray-6), var(--gray-0), var(--gray-6), var(--gray-4);
+
+          padding-block: 10px;
+          padding-inline: 10px;
+          border-radius: 100%;
+          /* background-color: light-dark(#000, #fff); */
+          /* color: light-dark(#fff, #000); */
+
+          border: 3px solid transparent;
+          background: linear-gradient(var(--surface, canvas) 0 0) padding-box, conic-gradient(from var(--glow-deg), var(--gradient-glow-dark)) border-box;
+          outline: 1px solid light-dark(var(--gray-9), var(--gray-7));
+
+          position: relative;
+          isolation: isolate;
+
+          animation: glow 10s infinite linear;
+          animation-play-state: paused;
+          transition: outline-color 0.3s ease;
+
+          &::before,
+          &::after {
+            content: '';
+            position: absolute;
+            border-radius: inherit;
+          }
+
+          &::before {
+            z-index: -1;
+            background: var(--surface, canvas);
+            inset: 0.5rem;
+            scale: 1.2 1;
+            transform-origin: right;
+            filter: blur(var(--glow-size, 0.5rem));
+          }
+
+          &::after {
+            z-index: -2;
+            inset: -1.5rem;
+            background: conic-gradient(from var(--glow-deg), var(--gradient-glow-dark));
+            filter: blur(var(--glow-size, 1rem));
+            opacity: var(--glow-intensity, 0.125);
+          }
 
           &:hover {
-            background-color: light-dark(#0009, #fff9);
+            animation-play-state: running;
+            outline-color: light-dark(var(--gray-9), var(--gray-4));
           }
 
-          &:active,
-          &.active {
-            background-color: light-dark(#0009, #fff9);
-          }
+          .arrows-icon {
+            width: 24px;
+            height: 24px;
 
-          &:focus-visible {
-            outline: 1px solid light-dark(#0f0, #f0f);
+            /* &:hover {
+              background-color: light-dark(#0009, #fff9);
+            }
+
+            &:active,
+            &.active {
+              background-color: light-dark(#0009, #fff9);
+            }
+
+            &:focus-visible {
+              outline: 1px solid light-dark(#0f0, #f0f);
+            } */
           }
         }
       }

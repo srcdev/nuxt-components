@@ -29,8 +29,12 @@
           </ul>
         </div>
         <div class="buttons-container">
-          <button type="button" @click.prevent="actionPrevious()" class="btn-action" aria-label="Go to previous item">Prev</button>
-          <button type="button" @click.prevent="actionNext()" class="btn-action" aria-label="Go to next item">Next</button>
+          <button type="button" @click.prevent="actionPrevious()" class="btn-action" aria-label="Go to previous item">
+            <Icon name="ic:outline-keyboard-arrow-left" class="arrows-icon" />
+          </button>
+          <button type="button" @click.prevent="actionNext()" class="btn-action" aria-label="Go to next item">
+            <Icon name="ic:outline-keyboard-arrow-right" class="arrows-icon" />
+          </button>
         </div>
       </div>
     </LayoutRow>
@@ -254,8 +258,17 @@ onMounted(() => {
       gap: 20px;
 
       .btn-action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
         cursor: pointer;
         height: fit-content;
+
+        .arrows-icon {
+          width: 24px;
+          height: 24px;
+        }
       }
     }
   }
