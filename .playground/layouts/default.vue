@@ -46,33 +46,34 @@ const responsiveNavLinks = {
       name: 'Components',
       childLinksTitle: 'UI Components',
       childLinks: [
-      { name: 'Animated SVG Text', path: '/ui/animated-svg-text' },
-      { name: 'Carousel (Basic)', path: '/ui/carousel-basic' },
-      { name: 'Carousel (Flip)', path: '/ui/carousel-flip' },
-      { name: 'Slider Gallery', path: '/ui/slider-gallery' },
-      { name: 'Container Glow', path: '/ui/container-glow' },
-      { name: 'Accordian', path: '/ui/accordian' },
-      { name: 'Details', path: '/ui/display-details' },
-      { name: 'Dialogs', path: '/ui/dialog' },
-      { name: 'Tabs X', path: '/ui/tabs' },
-      { name: 'Tabs Y', path: '/ui/tabs-y' },
-      { name: 'Prompts', path: '/ui/display-prompt' },
-      { name: 'Rotating Carousel', path: '/ui/rotating-carousel' },
-      { name: 'Clipped Panels', path: '/ui/clipped-panels' },
+        { name: 'Animated SVG Text', path: '/ui/animated-svg-text' },
+        { name: 'Carousel (Basic)', path: '/ui/carousel-basic' },
+        { name: 'Carousel (Infinite)', path: '/ui/carousel-infinite' },
+        { name: 'Carousel (Flip)', path: '/ui/carousel-flip' },
+        { name: 'Slider Gallery', path: '/ui/slider-gallery' },
+        { name: 'Container Glow', path: '/ui/container-glow' },
+        { name: 'Accordian', path: '/ui/accordian' },
+        { name: 'Details', path: '/ui/display-details' },
+        { name: 'Dialogs', path: '/ui/dialog' },
+        { name: 'Tabs X', path: '/ui/tabs' },
+        { name: 'Tabs Y', path: '/ui/tabs-y' },
+        { name: 'Prompts', path: '/ui/display-prompt' },
+        { name: 'Rotating Carousel', path: '/ui/rotating-carousel' },
+        { name: 'Clipped Panels', path: '/ui/clipped-panels' },
       ],
     },
     {
       name: 'Layouts',
       childLinksTitle: 'UI Layouts',
       childLinks: [
-      { name: 'Layout Row', path: '/ui/layout-row' },
-      { name: 'Layout Grid A', path: '/ui/layout-grid-a' },
-      { name: 'Layout Grid B', path: '/ui/layout-grid-b' },
-      { name: 'Simple Grid', path: '/ui/simple-grid' },
-      { name: 'Masonry Grid Simple', path: '/ui/masonry-grid' },
-      { name: 'Masonry Grid Sorted', path: '/ui/masonry-grid-sorted' },
-      { name: 'Masonry Grid Ordered', path: '/ui/masonry-grid-ordered' },
-      { name: 'Masonry Columns', path: '/ui/masonry-columns' },
+        { name: 'Layout Row', path: '/ui/layout-row' },
+        { name: 'Layout Grid A', path: '/ui/layout-grid-a' },
+        { name: 'Layout Grid B', path: '/ui/layout-grid-b' },
+        { name: 'Simple Grid', path: '/ui/simple-grid' },
+        { name: 'Masonry Grid Simple', path: '/ui/masonry-grid' },
+        { name: 'Masonry Grid Sorted', path: '/ui/masonry-grid-sorted' },
+        { name: 'Masonry Grid Ordered', path: '/ui/masonry-grid-ordered' },
+        { name: 'Masonry Columns', path: '/ui/masonry-columns' },
       ],
     },
     { name: 'About', path: '/' },
@@ -99,7 +100,6 @@ const responsiveNavLinks = {
     },
   ],
 } as ResponsiveHeaderProp;
-
 </script>
 <style lang="css">
 .header {
@@ -127,7 +127,6 @@ const responsiveNavLinks = {
 
 /* Modifiers for ResposiveHeader  */
 .navigation.your-scope-class {
-
   margin: 12px;
   border-radius: 8px;
   background-color: #efefef05;
@@ -140,7 +139,6 @@ const responsiveNavLinks = {
     gap: 60px;
 
     .main-navigation-list {
-
       &:nth-of-type(1) {
         gap: 30px;
       }
@@ -150,7 +148,6 @@ const responsiveNavLinks = {
       }
 
       .main-navigation-item {
-
         .main-navigation-link {
           color: inherit;
           text-decoration: none;
@@ -158,7 +155,6 @@ const responsiveNavLinks = {
         }
 
         .main-navigation-details {
-
           margin-inline-start: 0;
 
           .has-toggle-icon {
@@ -170,7 +166,6 @@ const responsiveNavLinks = {
           }
 
           .main-navigation-details-summary {
-
           }
 
           .main-navigation-sub-nav {
@@ -181,7 +176,6 @@ const responsiveNavLinks = {
             translate: 0 12px;
 
             .main-navigation-sub-nav-list {
-
               display: grid;
               grid-template-columns: repeat(2, auto);
               gap: 12px;
@@ -211,9 +205,7 @@ const responsiveNavLinks = {
     gap: 12px;
 
     .secondary-navigation-list {
-
       .secondary-navigation-item {
-
         .secondary-navigation-link {
           font: inherit;
           color: inherit;
@@ -259,7 +251,6 @@ const responsiveNavLinks = {
         }
       }
 
-
       .overflow-details-nav {
         top: 135%;
         right: 0;
@@ -276,14 +267,12 @@ const responsiveNavLinks = {
           gap: 12px;
 
           .overflow-navigation-list {
-
             &.visible {
               flex-direction: column;
               gap: 12px;
             }
 
             .overflow-navigation-item {
-
               .overflow-navigation-link {
                 text-decoration: none;
                 color: inherit;
@@ -297,7 +286,6 @@ const responsiveNavLinks = {
                 }
 
                 &.display-details {
-
                   .display-details-summary {
                     .label {
                       .overflow-navigation-text {
@@ -311,11 +299,9 @@ const responsiveNavLinks = {
                   .display-details-content {
                     .overflow-navigation-sub-nav-inner {
                       .overflow-navigation-sub-nav-list {
-
                         gap: 12px;
 
                         .overflow-navigation-sub-nav-item {
-
                           .overflow-navigation-sub-nav-link {
                             text-decoration: none;
                             color: inherit;
@@ -338,5 +324,4 @@ const responsiveNavLinks = {
     }
   }
 }
-
 </style>
