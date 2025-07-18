@@ -3,7 +3,7 @@
     "scope": "vue, html",
     "prefix": "srcdev-nuxt-carousel-basic-component-html-template",
     "body": [
-      "<CarouselBasic v-if=\"carouselStatus === 'success'\" :carousel-data-ids :allow-carousel-overflow=\"true\" :style-class-passthrough=\"['carousel-basic-demo']\">",
+      "<CarouselBasic v-if=\"carouselStatus === 'success'\" :carousel-data-ids :allow-carousel-overflow=\"true\" :return-to-start=\"true\" :style-class-passthrough=\"['carousel-basic-demo']\">",
       "  <template v-for=\"(item, index) in carouselData?.items\" #[item.id]>",
       "   <div class=\"case-study-item\">",
       "   </div>",

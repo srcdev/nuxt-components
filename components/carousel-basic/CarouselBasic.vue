@@ -61,6 +61,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  returnToStart: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -82,6 +86,11 @@ const itemTransform = computed(() => {
 const itemWidth = ref('0px');
 
 const actionPrevious = () => {
+  if (props.returnToStart && currentIndex.value === 0) {
+    offset.value = -itemCount.value;
+    doAction();
+  }
+
   if (offset.value >= 0) {
     return;
   }
@@ -91,6 +100,12 @@ const actionPrevious = () => {
 };
 
 const actionNext = () => {
+  if (props.returnToStart && offset.value <= -1 * (itemCount.value - 1)) {
+    offset.value = 0;
+    doAction();
+    return;
+  }
+
   if (offset.value <= -1 * (itemCount.value - 1)) {
     return;
   }
