@@ -12,14 +12,6 @@
     </LayoutRow>
 
     <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-      <div class="timeline-container">
-        <div v-for="index in itemCount" :key="index" class="timeline-item">
-          <div class="count">Step {{ index }}</div>
-        </div>
-      </div>
-    </LayoutRow>
-
-    <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
       <div tabindex="0" class="controls-container" ref="controlsContainerRef">
         <div class="markers-container">
           <ul class="markers-list">
@@ -263,33 +255,6 @@ onMounted(() => {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
-  }
-
-  .timeline-container {
-    display: flex;
-    gap: var(--_item-gap);
-    overflow-x: hidden;
-
-    .timeline-item {
-      display: flex;
-      flex: 0 0 100%;
-      max-inline-size: 800px;
-      align-items: center;
-      position: relative;
-
-      &::before {
-        content: '';
-        position: absolute;
-        height: 2px;
-        background-color: #fff;
-        left: 70px;
-        right: 0;
-      }
-
-      .count {
-        width: fit-content;
-      }
-    }
   }
 
   .item-container {
