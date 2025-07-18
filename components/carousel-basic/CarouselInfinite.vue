@@ -87,25 +87,45 @@ const transitionSpeedStr = props.transitionSpeed + 'ms';
 const itemWidth = ref('0px');
 const currentVisibleIndex = ref(0);
 
-const updateItemOrder = (index: number, order: number) => {
+const updateItemOrder = (index: number, order: number, zIndex: number = 2) => {
   if (carouselItemsRef?.value && carouselItemsRef.value[index]) {
     carouselItemsRef.value[index].style.order = order.toString();
+    carouselItemsRef.value[index].style.zIndex = zIndex.toString();
   }
 };
 
-const reorderItems = () => {
+const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump') => {
   if (!carouselItemsRef?.value || !carouselInitComplete.value) return;
 
   // Capture positions before reordering
   const beforeRects = carouselItemsRef.value.map((item) => item.getBoundingClientRect());
 
-  // Apply new order
+  // Apply new order and z-index based on direction
   let order = 1;
+
+  // For items from currentVisibleIndex to end
   for (let i = currentVisibleIndex.value; i < itemCount.value; i++) {
-    updateItemOrder(i, order++);
+    let zIndex = 2; // default normal z-index
+
+    if (i === currentVisibleIndex.value) {
+      // The item becoming visible
+      if (direction === 'previous') {
+        // When going previous, the item moving to first position should go behind
+        zIndex = 1;
+      } else {
+        // Normal case - visible item gets highest z-index
+        zIndex = 3;
+      }
+    }
+
+    updateItemOrder(i, order++, zIndex);
   }
+
+  // For items from 0 to currentVisibleIndex
   for (let i = 0; i < currentVisibleIndex.value; i++) {
-    updateItemOrder(i, order++);
+    // Items that wrap around get lower z-index to slide behind
+    const zIndex = 1;
+    updateItemOrder(i, order++, zIndex);
   }
 
   // Animate using FLIP technique
@@ -122,6 +142,18 @@ const reorderItems = () => {
         requestAnimationFrame(() => {
           item.style.transition = `transform ${transitionSpeedStr} ease`;
           item.style.transform = 'translateX(0)';
+
+          // After animation completes, normalize z-index values
+          const handleTransitionEnd = (event: TransitionEvent) => {
+            if (event.propertyName === 'transform') {
+              // Set final z-index: current item gets highest, others get normal
+              const isCurrentlyVisible = index === currentVisibleIndex.value;
+              item.style.zIndex = isCurrentlyVisible ? '3' : '2';
+              item.removeEventListener('transitionend', handleTransitionEnd);
+            }
+          };
+
+          item.addEventListener('transitionend', handleTransitionEnd);
         });
       }
     });
@@ -137,7 +169,7 @@ const actionPrevious = () => {
     currentVisibleIndex.value = currentVisibleIndex.value === 0 ? itemCount.value - 1 : currentVisibleIndex.value - 1;
   }
 
-  reorderItems();
+  reorderItems('previous');
   currentIndex.value = currentVisibleIndex.value;
 };
 
@@ -150,14 +182,14 @@ const actionNext = () => {
     currentVisibleIndex.value = currentVisibleIndex.value === itemCount.value - 1 ? 0 : currentVisibleIndex.value + 1;
   }
 
-  reorderItems();
+  reorderItems('next');
   currentIndex.value = currentVisibleIndex.value;
 };
 
 const jumpToFrame = (index: number) => {
   if (index >= 0 && index < itemCount.value) {
     currentVisibleIndex.value = index;
-    reorderItems();
+    reorderItems('jump');
     currentIndex.value = currentVisibleIndex.value;
   }
 };
@@ -166,9 +198,11 @@ const initialSetup = () => {
   if (carouselItemsRef?.value && carouselItemsRef.value.length > 0 && carouselItemsRef.value[0]) {
     itemWidth.value = carouselItemsRef.value[0].offsetWidth + 'px';
 
-    // Set initial order for all items
+    // Set initial order and z-index for all items
     carouselItemsRef.value.forEach((item, index) => {
       item.style.order = String(index + 1);
+      // First item gets higher z-index, others get normal z-index
+      item.style.zIndex = index === 0 ? '3' : '2';
     });
   }
 
@@ -272,6 +306,7 @@ onMounted(() => {
       display: flex;
       flex: 0 0 100%;
       max-inline-size: 800px;
+      position: relative;
     }
   }
 
