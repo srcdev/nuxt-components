@@ -1,48 +1,50 @@
 <template>
-  <section class="carousel-flip" :class="[elementClasses, { 'controls-inside': controlsInside }]">
+  <section class="carousel-basic" :class="[elementClasses]" ref="carouselWrapperRef" role="region" aria-label="Image carousel">
+    <!-- Screen reader announcement for current item -->
+    <div aria-live="polite" aria-atomic="true" class="sr-only">Item {{ currentVisibleIndex + 1 }} of {{ itemCount }}</div>
 
-    <div class="item-container" ref="carouselContent">
-      <div v-for="(item, index) in data?.items" :key="index" class="item" ref="carouselItems">
-        <h3>{{ index }}</h3>
-        <p>{{ item.alt }}</p>
+    <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+      <div tabindex="0" class="item-container" :class="{ 'allow-overflow': allowCarouselOverflow }" ref="carouselContainerRef" role="group" aria-label="Carousel items">
+        <div v-for="(item, index) in carouselDataIds" :key="index" class="item" ref="carouselItems" :aria-current="currentVisibleIndex === index ? 'true' : 'false'">
+          <slot :name="item"></slot>
+        </div>
       </div>
+    </LayoutRow>
 
-    </div>
-
-    <div class="controls-container">
-      <div class="buttons-container">
-        <button type="submit" @click.prevent="actionPrevious()" class="btn-action"
-          :disabled="transitionRunning">Prev</button>
-        <button type="submit" @click.prevent="actionNext()" class="btn-action"
-          :disabled="transitionRunning">Next</button>
+    <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+      <div tabindex="0" class="controls-container" ref="controlsContainerRef">
+        <div class="markers-container">
+          <ul class="markers-list">
+            <li v-for="index in itemCount" :key="index" class="markers-item">
+              <button
+                @click.prevent="jumpToFrame(index - 1)"
+                class="btn-marker"
+                :class="[{ active: currentVisibleIndex === index - 1 }]"
+                :aria-label="`Jump to item ${Math.floor(index + 1)}`"
+              ></button>
+            </li>
+          </ul>
+        </div>
+        <div class="buttons-container">
+          <button type="button" @click.prevent="actionPrevious()" class="btn-action" aria-label="Go to previous item">
+            <Icon name="ic:outline-keyboard-arrow-left" class="arrows-icon" />
+          </button>
+          <button type="button" @click.prevent="actionNext()" class="btn-action" aria-label="Go to next item">
+            <Icon name="ic:outline-keyboard-arrow-right" class="arrows-icon" />
+          </button>
+        </div>
       </div>
-      <div class="thumbnail-container">
-        <ul class="thumbnail-list">
-          <li v-for="item, index in data?.items" class="thumbnail-item" ref="thumbnailItems">
-            <div class="thumbnail-item_inner">{{ index }}</div>
-          </li>
-        </ul>
-      </div>
-    </div>
+    </LayoutRow>
   </section>
 </template>
 
 <script setup lang="ts">
-import type { ICarouselBasic } from "@/types/types.carousel-basic";
-import { useElementSize, useEventListener, useResizeObserver } from "@vueuse/core";
+import { useEventListener, useResizeObserver, useSwipe } from '@vueuse/core';
+
 const props = defineProps({
-  propsData: {
-    type: Object as PropType<ICarouselBasic>,
-    default: <ICarouselBasic>{
-      items: [],
-      total: 0,
-      skip: 0,
-      limit: 10
-    }
-  },
-  data: {
-    type: Object,
-    default: <ICarouselBasic>{}
+  carouselDataIds: {
+    type: Array as PropType<string[]>,
+    default: () => [],
   },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
@@ -50,329 +52,279 @@ const props = defineProps({
   },
   transitionSpeed: {
     type: Number,
-    default: 1000
+    default: 200,
   },
-  controlsInside: {
+  allowCarouselOverflow: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
+  returnToStart: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const carouselContentRef = useTemplateRef<HTMLDivElement>('carouselContent');
-const carouselItems = useTemplateRef<HTMLDivElement[]>('carouselItems');
-const thumbnailItems = useTemplateRef<HTMLLIElement[]>('thumbnailItems');
+const carouselWrapperRef = ref<HTMLDivElement | null>(null);
+const carouselContainerRef = ref<HTMLDivElement | null>(null);
+const carouselItemsRef = useTemplateRef<HTMLDivElement[]>('carouselItems');
+const controlsContainerRef = ref<HTMLDivElement | null>(null);
 const carouselInitComplete = ref(false);
 
-const currentIndex = ref(1);
-const itemCount = ref(props.data.items.length);
-const offset = ref(1);
-const previousOffset = ref(1);
+const currentIndex = ref(0);
+const itemCount = ref(props.carouselDataIds.length);
 const transitionSpeedStr = props.transitionSpeed + 'ms';
-const transitionRunning = ref(false);
+
+const itemWidth = ref('0px');
+const currentVisibleIndex = ref(0);
+
+const updateItemOrder = (index: number, order: number, zIndex: number = 2) => {
+  if (carouselItemsRef?.value && carouselItemsRef.value[index]) {
+    carouselItemsRef.value[index].style.order = order.toString();
+    carouselItemsRef.value[index].style.zIndex = zIndex.toString();
+  }
+};
+
+const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump') => {
+  if (!carouselItemsRef?.value || !carouselInitComplete.value) return;
+
+  // Capture positions before reordering
+  const beforeRects = carouselItemsRef.value.map((item) => item.getBoundingClientRect());
+
+  // Apply new order and z-index based on direction
+  let order = 1;
+
+  // For items from currentVisibleIndex to end
+  for (let i = currentVisibleIndex.value; i < itemCount.value; i++) {
+    let zIndex = 2; // default normal z-index
+
+    if (i === currentVisibleIndex.value) {
+      // The item becoming visible
+      if (direction === 'previous') {
+        // When going previous, the item moving to first position should go behind
+        zIndex = 1;
+      } else {
+        // Normal case - visible item gets highest z-index
+        zIndex = 3;
+      }
+    }
+
+    updateItemOrder(i, order++, zIndex);
+  }
+
+  // For items from 0 to currentVisibleIndex
+  for (let i = 0; i < currentVisibleIndex.value; i++) {
+    // Items that wrap around get lower z-index to slide behind
+    const zIndex = 1;
+    updateItemOrder(i, order++, zIndex);
+  }
+
+  // Animate using FLIP technique
+  requestAnimationFrame(() => {
+    const afterRects = carouselItemsRef.value!.map((item) => item.getBoundingClientRect());
+
+    carouselItemsRef.value!.forEach((item, index) => {
+      const deltaX = beforeRects[index].left - afterRects[index].left;
+
+      if (deltaX !== 0) {
+        item.style.transition = 'none';
+        item.style.transform = `translateX(${deltaX}px)`;
+
+        requestAnimationFrame(() => {
+          item.style.transition = `transform ${transitionSpeedStr} ease`;
+          item.style.transform = 'translateX(0)';
+
+          // After animation completes, normalize z-index values
+          const handleTransitionEnd = (event: TransitionEvent) => {
+            if (event.propertyName === 'transform') {
+              // Set final z-index: current item gets highest, others get normal
+              const isCurrentlyVisible = index === currentVisibleIndex.value;
+              item.style.zIndex = isCurrentlyVisible ? '3' : '2';
+              item.removeEventListener('transitionend', handleTransitionEnd);
+            }
+          };
+
+          item.addEventListener('transitionend', handleTransitionEnd);
+        });
+      }
+    });
+  });
+};
 
 const actionPrevious = () => {
-  // if (transitionRunning.value) return;
+  if (!carouselInitComplete.value || !carouselItemsRef?.value) return;
 
-  offset.value = -1;
-  onTransitionEnd();
-}
+  if (props.returnToStart && currentVisibleIndex.value === 0) {
+    currentVisibleIndex.value = itemCount.value - 1;
+  } else {
+    currentVisibleIndex.value = currentVisibleIndex.value === 0 ? itemCount.value - 1 : currentVisibleIndex.value - 1;
+  }
+
+  reorderItems('previous');
+  currentIndex.value = currentVisibleIndex.value;
+};
 
 const actionNext = () => {
-  // if (transitionRunning.value) return;
+  if (!carouselInitComplete.value || !carouselItemsRef?.value) return;
 
-  offset.value = 1;
-  onTransitionEnd();
-}
+  if (props.returnToStart && currentVisibleIndex.value === itemCount.value - 1) {
+    currentVisibleIndex.value = 0;
+  } else {
+    currentVisibleIndex.value = currentVisibleIndex.value === itemCount.value - 1 ? 0 : currentVisibleIndex.value + 1;
+  }
 
-const updateOrder = (index: number, order: number) => {
-  if (carouselItems.value !== null && thumbnailItems.value !== null) {
-    carouselItems.value[index - 1].style.order = order.toString();
-    thumbnailItems.value[index - 1].style.order = order.toString();
+  reorderItems('next');
+  currentIndex.value = currentVisibleIndex.value;
+};
+
+const jumpToFrame = (index: number) => {
+  if (index >= 0 && index < itemCount.value) {
+    currentVisibleIndex.value = index;
+    reorderItems('jump');
+    currentIndex.value = currentVisibleIndex.value;
   }
 };
 
 const initialSetup = () => {
-  const items = carouselItems.value;
-  const thumbs = thumbnailItems.value;
+  if (carouselItemsRef?.value && carouselItemsRef.value.length > 0 && carouselItemsRef.value[0]) {
+    itemWidth.value = carouselItemsRef.value[0].offsetWidth + 'px';
 
-  items?.forEach((item, index) => {
-    item.style.zIndex = index === 0 || index === itemCount.value - 1 ? '1' : '2';
-    item.style.order = String(index + 1);
-    // item.setAttribute('data-order', String(index + 1));
-  });
-  thumbs?.forEach((thumb, index) => {
-    thumb.style.zIndex = index === 0 || index === itemCount.value - 1 ? '1' : '2';
-    thumb.style.order = String(index + 1);
-    // thumb.setAttribute('data-order', String(index + 1));
-  });
-  carouselInitComplete.value = true;
-}
-
-
-const onTransitionEnd = () => {
-
-  // transitionRunning.value = true;
-  const items = carouselItems.value;
-  const thumbs = thumbnailItems.value;
-
-  if (!items || !Array.isArray(items)) return;
-  if (!thumbs || !Array.isArray(thumbs)) return;
-
-  // 1. Capture initial positions for both main items and thumbnails
-  const firstRects = items.map(el => el.getBoundingClientRect());
-  const firstThumbRects = thumbs.map(el => el.getBoundingClientRect());
-
-  // 2. Update orders
-  let firstVisualElementIndex = currentIndex.value; // Track which element should be visually first
-
-  if (carouselInitComplete.value) {
-    if (offset.value === 1) {
-      const localOffset = offset.value === previousOffset.value ? offset.value : 2; // Ensure we have a valid offset
-      currentIndex.value = currentIndex.value === itemCount.value ? 1 : currentIndex.value + localOffset;
-      firstVisualElementIndex = currentIndex.value;
-      let order = 1;
-
-      for (let i = currentIndex.value; i <= itemCount.value; i++) updateOrder(i, order++);
-      for (let i = 1; i < currentIndex.value; i++) updateOrder(i, order++);
-
-    } else {
-      const localOffset = offset.value === previousOffset.value ? offset.value : -2; // Ensure we have a valid offset
-      currentIndex.value = currentIndex.value === 1 ? itemCount.value : currentIndex.value + localOffset;
-      firstVisualElementIndex = currentIndex.value;
-      let order = itemCount.value;
-
-      for (let i = currentIndex.value; i >= 1; i--) updateOrder(i, order--);
-      for (let i = itemCount.value; i > currentIndex.value; i--) updateOrder(i, order--);
-    }
-    previousOffset.value = offset.value; // Store the previous offset for next transition
-
-    // setTimeout(() => {
-    //   transitionRunning.value = false;
-    // }, props.transitionSpeed);
+    // Set initial order and z-index for all items
+    carouselItemsRef.value.forEach((item, index) => {
+      item.style.order = String(index + 1);
+      // First item gets higher z-index, others get normal z-index
+      item.style.zIndex = index === 0 ? '3' : '2';
+    });
   }
-
-  // 3. Next tick: capture new positions & animate both main items and thumbnails
-  requestAnimationFrame(() => {
-    const lastRects = items.map(el => el.getBoundingClientRect());
-    const lastThumbRects = thumbs.map(el => el.getBoundingClientRect());
-
-    // Animate main carousel items
-    items.forEach((el, i) => {
-      const dx = firstRects[i].left - lastRects[i].left;
-      const dy = firstRects[i].top - lastRects[i].top;
-
-      el.style.transition = 'none';
-      el.style.transform = `translate(${dx}px, ${dy}px)`;
-
-      requestAnimationFrame(() => {
-        el.style.transition = `transform ${transitionSpeedStr} ease`;
-        el.style.transform = '';
-
-        // Set z-index after the transition actually completes
-        const elementIndex = i + 1; // Convert to 1-based index to match your logic
-        const isFirstVisual = elementIndex === firstVisualElementIndex;
-
-        // Listen for transition end to update z-index
-        const handleTransitionEnd = (event: TransitionEvent) => {
-          if (event.propertyName === 'transform') {
-            el.style.zIndex = isFirstVisual ? '1' : '2';
-            el.removeEventListener('transitionend', handleTransitionEnd);
-          }
-        };
-
-        el.addEventListener('transitionend', handleTransitionEnd);
-      });
-    });
-
-    // Animate thumbnail items
-    thumbs.forEach((thumb, i) => {
-      const dx = firstThumbRects[i].left - lastThumbRects[i].left;
-      const dy = firstThumbRects[i].top - lastThumbRects[i].top;
-
-      thumb.style.transition = 'none';
-      thumb.style.transform = `translate(${dx}px, ${dy}px)`;
-
-      requestAnimationFrame(() => {
-        thumb.style.transition = `transform ${transitionSpeedStr} ease`;
-        thumb.style.transform = '';
-
-        // Set z-index after the transition actually completes
-        const thumbIndex = i + 1; // Convert to 1-based index
-        const isActiveThumbnail = thumbIndex === firstVisualElementIndex;
-
-        // Listen for transition end to update z-index
-        const handleThumbTransitionEnd = (event: TransitionEvent) => {
-          if (event.propertyName === 'transform') {
-            thumb.style.zIndex = isActiveThumbnail ? '1' : '2';
-            thumb.removeEventListener('transitionend', handleThumbTransitionEnd);
-          }
-        };
-
-        thumb.addEventListener('transitionend', handleThumbTransitionEnd);
-      });
-    });
-  });
 
   carouselInitComplete.value = true;
 };
 
-onMounted(() => {
+const { direction } = useSwipe(carouselContainerRef, {
+  passive: false,
+  onSwipeEnd() {
+    if (direction.value === 'left') {
+      actionNext();
+    } else if (direction.value === 'right') {
+      actionPrevious();
+    }
+  },
+});
+
+useEventListener(carouselContainerRef, 'keydown', (event: KeyboardEvent) => {
+  if (event.key === 'ArrowLeft') {
+    actionPrevious();
+  } else if (event.key === 'ArrowRight') {
+    actionNext();
+  }
+});
+
+useEventListener(controlsContainerRef, 'keydown', (event: KeyboardEvent) => {
+  if (event.key === 'ArrowLeft') {
+    actionPrevious();
+  } else if (event.key === 'ArrowRight') {
+    actionNext();
+  }
+});
+
+useResizeObserver(carouselWrapperRef, async () => {
   initialSetup();
 });
 
+onMounted(() => {
+  initialSetup();
+});
 </script>
 
 <style lang="css">
-.carousel-flip {
+.carousel-basic {
+  --_item-gap: 10px;
 
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
 
-  &.controls-inside {
-    grid-template-areas: "carousel-content";
-    isolation: isolate;
-
-    .item-container {
-      grid-area: carousel-content;
-      z-index: 1;
-    }
-
-    .controls-container {
-      grid-area: carousel-content;
-      z-index: 2;
-      height: fit-content;
-      align-self: flex-end;
-    }
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
   }
 
   .item-container {
     display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    padding-block: 10px;
-    padding-inline: 10px;
-    outline: 1px solid light-dark(#00000090, #f00ff090);
-
-    /* scroll-snap-type: x mandatory; */
-
-    /* isolation: isolate; */
+    gap: var(--_item-gap);
+    overflow-x: hidden;
     position: relative;
+
+    &.allow-overflow {
+      overflow-x: initial;
+    }
 
     .item {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      /* transition: transform v-bind(transitionSpeedStr) ease; */
-      /* For FLIP smoothness */
-
-      aspect-ratio: 4 / 3;
-
-      min-inline-size: 600px;
-      color: light-dar(#aaa, #333);
-      padding-block: 10px;
-      padding-inline: 10px;
-      border-radius: 4px;
-      outline: 1px solid light-dark(#00000090, #f00ff090);
-
-      background-color: light-dark(#f00, #00f);
-
-      /* scroll-snap-align: none center; */
-
-      &:nth-child(odd) {
-        background-color: light-dark(#00f, #f00);
-      }
+      flex: 0 0 100%;
+      max-inline-size: 800px;
+      position: relative;
     }
   }
 
-
   .controls-container {
-
     display: flex;
-    gap: 20px;
+    align-items: center;
+    justify-content: flex-end;
 
+    .markers-container {
+      .markers-list {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        list-style-type: none;
+        margin: unset;
+        padding: unset;
 
+        .markers-item {
+          .btn-marker {
+            border: none;
+            outline: none;
+            box-shadow: none;
+            cursor: pointer;
+            transition: background-color v-bind(transitionSpeedStr) linear;
+
+            &.active {
+              background-color: red;
+            }
+          }
+        }
+      }
+    }
 
     .buttons-container {
       display: flex;
-      flex-grow: 1;
       align-items: center;
       justify-content: end;
       gap: 20px;
 
-
       .btn-action {
-        padding: 10px 20px;
-        border-radius: 4px;
-        background-color: light-dark(#000, #fff);
-        color: light-dark(#fff, #000);
-        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
         cursor: pointer;
         height: fit-content;
 
-        transition: background-color 0.3s ease, color 0.3s ease;
-
-        &:hover {
-          background-color: light-dark(#0009, #fff9);
-        }
-
-        &:active {
-          background-color: light-dark(#0009, #fff9);
-        }
-
-        &:disabled {
-          background-color: light-dark(#0003, #fff3);
-          cursor: not-allowed;
-        }
-      }
-    }
-
-    .thumbnail-container {
-      padding-block: 10px;
-      padding-inline: 10px;
-      outline: 1px solid light-dark(#00000090, #f00ff090);
-      max-inline-size: 40%;
-
-      .thumbnail-list {
-        display: flex;
-        gap: 10px;
-        list-style-type: none;
-        padding-block: 8px;
-        padding-inline: 8px;
-        margin-block: 0;
-        margin-inline: 0;
-
-        outline: 1px solid light-dark(#00000090, #f00ff090);
-        overflow-x: auto;
-
-        .thumbnail-item {
-
-          display: flex;
-          align-items: center;
-          justify-content: center;
-
-          aspect-ratio: 3 / 4;
-          min-inline-size: 120px;
-          outline: 1px solid light-dark(#f00, #00f);
-          border-radius: 4px;
-
-          background-color: light-dark(#f00, #00f);
-
-          &:nth-child(odd) {
-            background-color: light-dark(#00f, #f00);
-          }
-
-
-          .thumbnail-item_inner {}
-
+        .arrows-icon {
+          width: 24px;
+          height: 24px;
         }
       }
     }
   }
-
 }
 </style>
