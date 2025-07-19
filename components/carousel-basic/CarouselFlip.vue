@@ -1,7 +1,7 @@
 <template>
   <section class="carousel-flip" :class="[elementClasses]" ref="carouselWrapperRef" role="region" aria-label="Image carousel">
     <!-- Screen reader announcement for current item -->
-    <div aria-live="polite" aria-atomic="true" class="sr-only">Item {{ currentVisibleIndex + 1 }} of {{ itemCount }}</div>
+    <div aria-live="polite" aria-atomic="true" class="sr-only">Item {{ currentActiveIndex + 1 }} of {{ itemCount }}</div>
 
     <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
       <div tabindex="0" class="item-container" :class="{ 'allow-overflow': allowCarouselOverflow }" ref="carouselContainerRef" role="group" aria-label="Carousel items">
@@ -11,7 +11,7 @@
           class="item"
           :class="{ loaded: carouselInitComplete && userHasInteracted }"
           ref="carouselItems"
-          :aria-current="currentVisibleIndex === index ? 'true' : 'false'"
+          :aria-current="currentActiveIndex === index ? 'true' : 'false'"
         >
           <slot :name="item"></slot>
         </div>
@@ -23,12 +23,7 @@
         <div class="markers-container">
           <ul class="markers-list">
             <li v-for="index in itemCount" :key="index" class="markers-item">
-              <button
-                @click.prevent="jumpToFrame(index - 1)"
-                class="btn-marker"
-                :class="[{ active: currentVisibleIndex === index - 1 }]"
-                :aria-label="`Jump to item ${Math.floor(index + 1)}`"
-              ></button>
+              <button @click.prevent="jumpToFrame(index - 1)" class="btn-marker" :class="[{ active: currentActiveIndex === index - 1 }]" :aria-label="`Jump to item ${Math.floor(index + 1)}`"></button>
             </li>
           </ul>
         </div>
@@ -83,7 +78,7 @@ const carouselItemsRef = useTemplateRef<HTMLDivElement[]>('carouselItems');
 const controlsContainerRef = ref<HTMLDivElement | null>(null);
 const carouselInitComplete = ref(false);
 const userHasInteracted = ref(false);
-
+const initialItemOffset = ref(0);
 const currentIndex = ref(0);
 const itemCount = ref(props.carouselDataIds.length);
 const transitionSpeedStr = props.transitionSpeed + 'ms';
@@ -92,7 +87,7 @@ const itemWidth = ref(0);
 const itemWidthOffsetStr = computed(() => {
   return `calc(-2 * ${itemWidth.value}px - var(--_carousel-item-track-gap))`;
 });
-const currentVisibleIndex = ref(0);
+const currentActiveIndex = ref(0);
 
 const carouselContainerRefLeftPosition = computed(() => {
   return carouselContainerRef.value ? carouselContainerRef.value.getBoundingClientRect().left : 0;
@@ -135,11 +130,11 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnim
   // Apply new order and z-index based on direction
   let order = 1;
 
-  // For items from currentVisibleIndex to end
-  for (let i = currentVisibleIndex.value; i < itemCount.value; i++) {
+  // For items from currentActiveIndex to end
+  for (let i = currentActiveIndex.value; i < itemCount.value; i++) {
     let zIndex = 2; // default normal z-index
 
-    if (i === currentVisibleIndex.value) {
+    if (i === currentActiveIndex.value) {
       // The item becoming visible
       if (direction === 'previous') {
         // When going previous, the item moving to first position should go behind
@@ -153,8 +148,8 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnim
     updateItemOrder(i, order++, zIndex);
   }
 
-  // For items from 0 to currentVisibleIndex
-  for (let i = 0; i < currentVisibleIndex.value; i++) {
+  // For items from 0 to currentActiveIndex
+  for (let i = 0; i < currentActiveIndex.value; i++) {
     // Items that wrap around get lower z-index to slide behind
     const zIndex = 1;
     updateItemOrder(i, order++, zIndex);
@@ -207,7 +202,7 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnim
           const handleTransitionEnd = (event: TransitionEvent) => {
             if (event.propertyName === 'transform') {
               // Set final z-index: current item gets highest, others get normal
-              const isCurrentlyVisible = index === currentVisibleIndex.value;
+              const isCurrentlyVisible = index === currentActiveIndex.value;
               item.style.zIndex = isCurrentlyVisible ? '3' : '2';
               item.removeEventListener('transitionend', handleTransitionEnd);
             }
@@ -217,7 +212,7 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnim
             item.addEventListener('transitionend', handleTransitionEnd);
           } else {
             // If no transition, immediately normalize z-index
-            const isCurrentlyVisible = index === currentVisibleIndex.value;
+            const isCurrentlyVisible = index === currentActiveIndex.value;
             item.style.zIndex = isCurrentlyVisible ? '3' : '2';
           }
         });
@@ -231,14 +226,14 @@ const actionPrevious = () => {
 
   userHasInteracted.value = true;
 
-  if (props.returnToStart && currentVisibleIndex.value === 0) {
-    currentVisibleIndex.value = itemCount.value - 1;
+  if (props.returnToStart && currentActiveIndex.value === 0) {
+    currentActiveIndex.value = itemCount.value - 1;
   } else {
-    currentVisibleIndex.value = currentVisibleIndex.value === 0 ? itemCount.value - 1 : currentVisibleIndex.value - 1;
+    currentActiveIndex.value = currentActiveIndex.value === 0 ? itemCount.value - 1 : currentActiveIndex.value - 1;
   }
 
   reorderItems('previous');
-  currentIndex.value = currentVisibleIndex.value;
+  currentIndex.value = currentActiveIndex.value;
 };
 
 const actionNext = () => {
@@ -246,35 +241,37 @@ const actionNext = () => {
 
   userHasInteracted.value = true;
 
-  if (props.returnToStart && currentVisibleIndex.value === itemCount.value - 1) {
-    currentVisibleIndex.value = 0;
+  if (props.returnToStart && currentActiveIndex.value === itemCount.value - 1) {
+    currentActiveIndex.value = 0;
   } else {
-    currentVisibleIndex.value = currentVisibleIndex.value === itemCount.value - 1 ? 0 : currentVisibleIndex.value + 1;
+    currentActiveIndex.value = currentActiveIndex.value === itemCount.value - 1 ? 0 : currentActiveIndex.value + 1;
   }
 
   reorderItems('next');
-  currentIndex.value = currentVisibleIndex.value;
+  currentIndex.value = currentActiveIndex.value;
 };
 
 const jumpToFrame = (index: number) => {
+  console.log(`Jumping to frame: ${index}`);
   if (index >= 0 && index < itemCount.value) {
     // Only mark as user interaction if carousel is already initialized
     if (carouselInitComplete.value) {
       userHasInteracted.value = true;
     }
 
-    currentVisibleIndex.value = index;
+    currentActiveIndex.value = index;
     reorderItems('jump');
-    currentIndex.value = currentVisibleIndex.value;
+    currentIndex.value = currentActiveIndex.value;
   }
 };
 
 const checkAndMoveLastItem = () => {
+  initialItemOffset.value = 2;
   if (props.allowCarouselOverflow) {
     const itemsFit = Math.floor(carouselContainerRefLeftPosition.value / itemWidth.value + 1);
-    currentVisibleIndex.value = itemCount.value - 2;
+    currentActiveIndex.value = itemCount.value - initialItemOffset.value;
     reorderItems('jump', true); // Skip animation during initial setup
-    currentIndex.value = currentVisibleIndex.value;
+    currentIndex.value = currentActiveIndex.value;
   }
 };
 
@@ -327,13 +324,20 @@ useResizeObserver(carouselWrapperRef, async () => {
 
 onMounted(() => {
   initialSetup();
+  console.log(`onMounted | currentActiveIndex: ${currentActiveIndex.value} | currentIndex: ${currentIndex.value}`);
 });
+
+watch(
+  () => currentActiveIndex.value,
+  () => {
+    console.log(`watch | currentActiveIndex: ${currentActiveIndex.value} | currentIndex: ${currentIndex.value}`);
+  }
+);
 </script>
 
 <style lang="css">
 .carousel-flip {
   --_carousel-item-track-gap: 10px;
-  --_carousel-display-max-width: 800px;
 
   display: grid;
   grid-template-columns: 1fr;
@@ -371,7 +375,7 @@ onMounted(() => {
     .item {
       display: flex;
       flex: 0 0 100%;
-      max-inline-size: var(--_carousel-display-max-width);
+      max-inline-size: var(--_carousel-item-max-width);
       position: relative;
 
       &.loaded {

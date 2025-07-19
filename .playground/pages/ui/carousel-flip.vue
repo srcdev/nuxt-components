@@ -75,7 +75,6 @@ const carouselDataIds = computed(() => {
   &.carousel-flip {
     /* Var used in calcs */
     --_carousel-item-track-gap: 24px;
-    --_carousel-display-max-width: 800px;
 
     .item-container {
       outline: light-dark(var(--gray-5), var(--gray-6));
@@ -111,6 +110,7 @@ const carouselDataIds = computed(() => {
 
     .controls-container {
       gap: 20px;
+      max-inline-size: 800px;
 
       .markers-container {
         .markers-list {
