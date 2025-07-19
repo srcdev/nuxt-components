@@ -5,7 +5,14 @@
 
     <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
       <div tabindex="0" class="item-container" :class="{ 'allow-overflow': allowCarouselOverflow }" ref="carouselContainerRef" role="group" aria-label="Carousel items">
-        <div v-for="(item, index) in carouselDataIds" :key="index" class="item" ref="carouselItems" :aria-current="currentVisibleIndex === index ? 'true' : 'false'">
+        <div
+          v-for="(item, index) in carouselDataIds"
+          :key="index"
+          class="item"
+          :class="{ loaded: carouselInitComplete }"
+          ref="carouselItems"
+          :aria-current="currentVisibleIndex === index ? 'true' : 'false'"
+        >
           <slot :name="item"></slot>
         </div>
       </div>
@@ -76,8 +83,18 @@ const currentIndex = ref(0);
 const itemCount = ref(props.carouselDataIds.length);
 const transitionSpeedStr = props.transitionSpeed + 'ms';
 
-const itemWidth = ref('0px');
+const itemWidth = ref(0);
+const itemWidthOffsetStr = computed(() => {
+  return `-${itemWidth.value}px`;
+});
 const currentVisibleIndex = ref(0);
+
+const carouselContainerRefLeftPosition = computed(() => {
+  return carouselContainerRef.value ? carouselContainerRef.value.getBoundingClientRect().left : 0;
+});
+const fullScreenOffsset = computed(() => {
+  return `-${Math.floor(carouselContainerRefLeftPosition.value)}px`;
+});
 
 const updateItemOrder = (index: number, order: number, zIndex: number = 2) => {
   if (carouselItemsRef?.value && carouselItemsRef.value[index]) {
@@ -87,7 +104,8 @@ const updateItemOrder = (index: number, order: number, zIndex: number = 2) => {
 };
 
 const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump') => {
-  if (!carouselItemsRef?.value || !carouselInitComplete.value) return;
+  // if (!carouselItemsRef?.value || !carouselInitComplete.value) return;
+  if (!carouselItemsRef?.value) return;
 
   // Capture positions before reordering
   const beforeRects = carouselItemsRef.value.map((item) => item.getBoundingClientRect());
@@ -132,7 +150,7 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump') => {
         item.style.transform = `translateX(${deltaX}px)`;
 
         requestAnimationFrame(() => {
-          item.style.transition = `transform ${transitionSpeedStr} ease`;
+          item.style.transition = carouselInitComplete.value ? `transform ${transitionSpeedStr} ease` : 'none';
           item.style.transform = 'translateX(0)';
 
           // After animation completes, normalize z-index values
@@ -186,9 +204,16 @@ const jumpToFrame = (index: number) => {
   }
 };
 
+const checkAndMoveLastItem = () => {
+  if (props.allowCarouselOverflow) {
+    const itemsFit = Math.floor(carouselContainerRefLeftPosition.value / itemWidth.value + 1);
+    jumpToFrame(itemCount.value - 1);
+  }
+};
+
 const initialSetup = () => {
   if (carouselItemsRef?.value && carouselItemsRef.value.length > 0 && carouselItemsRef.value[0]) {
-    itemWidth.value = carouselItemsRef.value[0].offsetWidth + 'px';
+    itemWidth.value = carouselItemsRef.value[0].offsetWidth;
 
     // Set initial order and z-index for all items
     carouselItemsRef.value.forEach((item, index) => {
@@ -199,6 +224,7 @@ const initialSetup = () => {
   }
 
   carouselInitComplete.value = true;
+  checkAndMoveLastItem();
 };
 
 const { direction } = useSwipe(carouselContainerRef, {
@@ -265,6 +291,10 @@ onMounted(() => {
 
     &.allow-overflow {
       overflow-x: initial;
+
+      .item {
+        translate: calc(v-bind(itemWidthOffsetStr) - var(--_item-gap)) 0;
+      }
     }
 
     .item {
@@ -272,6 +302,10 @@ onMounted(() => {
       flex: 0 0 100%;
       max-inline-size: 800px;
       position: relative;
+
+      &.loaded {
+        transition: transform v-bind(transitionSpeedStr) ease;
+      }
     }
   }
 
