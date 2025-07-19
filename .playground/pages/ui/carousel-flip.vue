@@ -13,6 +13,7 @@
             :allow-carousel-overflow="true"
             :return-to-start="false"
             :transition-speed="1000"
+            :use-flip-animation="false"
             :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
           >
             <template v-for="(item, index) in carouselData?.items" #[item.id]>
@@ -54,7 +55,6 @@ const {
 
 const carouselDataIds = computed(() => {
   return carouselData.value?.items.map((item) => item.id) || [];
-  // return carouselData?.items.map((item) => item.id) || [];
 });
 </script>
 

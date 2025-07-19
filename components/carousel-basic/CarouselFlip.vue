@@ -69,6 +69,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  useFlipAnimation: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -86,15 +90,12 @@ const transitionSpeedStr = props.transitionSpeed + 'ms';
 
 const itemWidth = ref(0);
 const itemWidthOffsetStr = computed(() => {
-  return `-${itemWidth.value}px`;
+  return `calc(-2 * ${itemWidth.value}px - var(--_item-gap))`;
 });
 const currentVisibleIndex = ref(0);
 
 const carouselContainerRefLeftPosition = computed(() => {
   return carouselContainerRef.value ? carouselContainerRef.value.getBoundingClientRect().left : 0;
-});
-const fullScreenOffsset = computed(() => {
-  return `-${Math.floor(carouselContainerRefLeftPosition.value)}px`;
 });
 
 const updateItemOrder = (index: number, order: number, zIndex: number = 2) => {
@@ -104,9 +105,27 @@ const updateItemOrder = (index: number, order: number, zIndex: number = 2) => {
   }
 };
 
-const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnimation: boolean = false) => {
-  console.log(`Reordering items in direction: ${direction}, skipAnimation: ${skipAnimation}`);
+function analyzeOffsets(offsets: number[]) {
+  const counts = new Map<number, number>();
 
+  offsets.forEach((val) => {
+    counts.set(val, (counts.get(val) || 0) + 1);
+  });
+
+  const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1]);
+
+  const majorityValue = sorted[0][0];
+  const minorityValue = sorted[sorted.length - 1][0];
+  const minorityIndex = offsets.findIndex((val) => val === minorityValue);
+
+  return {
+    majorityValue,
+    minorityValue,
+    minorityIndex,
+  };
+}
+
+const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnimation: boolean = false) => {
   // if (!carouselItemsRef?.value || !carouselInitComplete.value) return;
   if (!carouselItemsRef?.value) return;
 
@@ -150,6 +169,14 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnim
   requestAnimationFrame(() => {
     const afterRects = carouselItemsRef.value!.map((item) => item.getBoundingClientRect());
 
+    // Calculate offset values
+    const offsetValues = beforeRects.map((beforeRect, index) => {
+      const afterRect = afterRects[index];
+      return beforeRect.left - afterRect.left;
+    });
+
+    const leftValues = analyzeOffsets(offsetValues);
+
     carouselItemsRef.value!.forEach((item, index) => {
       const deltaX = beforeRects[index].left - afterRects[index].left;
 
@@ -159,7 +186,21 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnim
 
         requestAnimationFrame(() => {
           const shouldTransition = carouselInitComplete.value && userHasInteracted.value;
-          item.style.transition = shouldTransition ? `transform ${transitionSpeedStr} ease` : 'none';
+
+          if (shouldTransition) {
+            if (props.allowCarouselOverflow) {
+              if (leftValues.minorityIndex !== index) {
+                item.style.transition = `transform ${transitionSpeedStr} ease`;
+              } else {
+                item.style.transition = 'none';
+              }
+            } else {
+              item.style.transition = `transform ${transitionSpeedStr} ease`;
+            }
+          } else {
+            item.style.transition = 'none';
+          }
+
           item.style.transform = 'translateX(0)';
 
           // After animation completes, normalize z-index values
@@ -231,7 +272,7 @@ const jumpToFrame = (index: number) => {
 const checkAndMoveLastItem = () => {
   if (props.allowCarouselOverflow) {
     const itemsFit = Math.floor(carouselContainerRefLeftPosition.value / itemWidth.value + 1);
-    currentVisibleIndex.value = itemCount.value - 1;
+    currentVisibleIndex.value = itemCount.value - 2;
     reorderItems('jump', true); // Skip animation during initial setup
     currentIndex.value = currentVisibleIndex.value;
   }
