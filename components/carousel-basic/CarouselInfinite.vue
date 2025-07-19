@@ -119,37 +119,6 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump') => {
     const zIndex = 1;
     updateItemOrder(i, order++, zIndex);
   }
-
-  // Animate using FLIP technique
-  requestAnimationFrame(() => {
-    const afterRects = carouselItemsRef.value!.map((item) => item.getBoundingClientRect());
-
-    carouselItemsRef.value!.forEach((item, index) => {
-      const deltaX = beforeRects[index].left - afterRects[index].left;
-
-      if (deltaX !== 0) {
-        item.style.transition = 'none';
-        item.style.transform = `translateX(${deltaX}px)`;
-
-        requestAnimationFrame(() => {
-          item.style.transition = `transform ${transitionSpeedStr} ease`;
-          item.style.transform = 'translateX(0)';
-
-          // After animation completes, normalize z-index values
-          const handleTransitionEnd = (event: TransitionEvent) => {
-            if (event.propertyName === 'transform') {
-              // Set final z-index: current item gets highest, others get normal
-              const isCurrentlyVisible = index === currentVisibleIndex.value;
-              item.style.zIndex = isCurrentlyVisible ? '3' : '2';
-              item.removeEventListener('transitionend', handleTransitionEnd);
-            }
-          };
-
-          item.addEventListener('transitionend', handleTransitionEnd);
-        });
-      }
-    });
-  });
 };
 
 const actionPrevious = () => {
