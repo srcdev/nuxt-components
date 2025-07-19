@@ -168,14 +168,10 @@ const jumpToFrame = (index: number) => {
   }
 };
 
-// Function to check if there's space before carouselContainerRefLeftPosition and move last item to first position
 const checkAndMoveLastItem = () => {
-  console.log('checkAndMoveLastItem called');
-
-  if (carouselContainerRefLeftPosition.value > 0 && carouselItemsRef?.value && carouselItemsRef.value.length > 0 && carouselContainerRef.value) {
-    // how many items will fit to the left of carouselContainerRef
+  if (props.allowCarouselOverflow) {
     const itemsFit = Math.floor(carouselContainerRefLeftPosition.value / itemWidth.value + 1);
-    console.log('Items that can fit:', itemsFit);
+    jumpToFrame(itemCount.value - 1);
   }
 };
 
@@ -262,7 +258,7 @@ onMounted(() => {
       overflow-x: initial;
 
       .item {
-        translate: v-bind(itemWidthOffsetStr) 0;
+        translate: calc(v-bind(itemWidthOffsetStr) - var(--_item-gap)) 0;
       }
     }
 
