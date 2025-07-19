@@ -10,7 +10,7 @@
           <CarouselInfinite
             v-if="carouselStatus === 'success'"
             :carousel-data-ids
-            :allow-carousel-overflow="false"
+            :allow-carousel-overflow="true"
             :return-to-start="false"
             :transition-speed="1000"
             :style-class-passthrough="['carousel-infinite-demo', 'mbe-20']"
@@ -114,51 +114,18 @@ const carouselDataIds = computed(() => {
     /* Var used in calcs */
     --_item-gap: 10px;
 
-    .timeline-container {
-      padding-block: 10px;
-      padding-inline: 10px;
-      outline: 1px solid light-dark(#00000090, #f00ff090);
-
-      .timeline-item {
-        max-inline-size: 800px;
-
-        color: light-dark(#aaa, #333);
-        padding-block: 10px;
-        border-radius: 4px;
-        outline: 1px solid light-dark(#00000090, #f00ff090);
-
-        &::before {
-          content: '';
-          position: absolute;
-          height: 2px;
-          background-color: #fff;
-          left: 70px;
-          right: 0;
-        }
-
-        .count {
-          font-size: 1.2rem;
-          border-radius: 8px;
-          color: light-dark(#fff, #000);
-          background-color: light-dark(#000, #fff);
-          padding-block: 6px;
-          padding-inline: 12px;
-        }
-      }
-    }
-
     .item-container {
       padding-block: 10px;
       padding-inline: 10px;
-      outline: 1px solid light-dark(#00000090, #f00ff090);
+      outline: 1px solid light-dark(var(--gray-6), var(--gray-5));
 
       .item {
         max-inline-size: 800px;
 
-        background-color: light-dark(#f00, #00f);
+        background-color: light-dark(var(--gray-5), var(--gray-6));
 
         &:nth-child(odd) {
-          background-color: light-dark(#00f, #f00);
+          background-color: light-dark(var(--gray-6), var(--gray-5));
         }
 
         .case-study-item {
@@ -173,7 +140,7 @@ const carouselDataIds = computed(() => {
           padding-block: 10px;
           padding-inline: 10px;
           border-radius: 4px;
-          outline: 1px solid light-dark(#00000090, #f00ff090);
+          outline: 1px solid light-dark(var(--gray-6), var(--gray-5));
         }
       }
     }
@@ -187,7 +154,7 @@ const carouselDataIds = computed(() => {
             line-height: 3px;
 
             &.active {
-              background-color: light-dark(#f00, #0f0);
+              background-color: light-dark(var(--gray-6), var(--gray-5));
             }
 
             .btn-marker {
@@ -197,7 +164,7 @@ const carouselDataIds = computed(() => {
               line-height: 3px;
 
               &.active {
-                background-color: red;
+                background-color: black;
               }
 
               &:focus-visible {
