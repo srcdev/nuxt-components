@@ -110,7 +110,7 @@ const carouselDataIds = computed(() => {
 }
 
 .carousel-infinite-demo {
-  &.carousel-basic {
+  &.carousel-infinite {
     /* Var used in calcs */
     --_item-gap: 10px;
 
