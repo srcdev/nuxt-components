@@ -1,5 +1,5 @@
 <template>
-  <section class="carousel-basic" :class="[elementClasses]" ref="carouselWrapperRef" role="region" aria-label="Image carousel">
+  <section class="carousel-flip" :class="[elementClasses]" ref="carouselWrapperRef" role="region" aria-label="Image carousel">
     <!-- Screen reader announcement for current item -->
     <div aria-live="polite" aria-atomic="true" class="sr-only">Item {{ currentVisibleIndex + 1 }} of {{ itemCount }}</div>
 
@@ -238,7 +238,7 @@ onMounted(() => {
 </script>
 
 <style lang="css">
-.carousel-basic {
+.carousel-flip {
   --_item-gap: 10px;
 
   display: grid;

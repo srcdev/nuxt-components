@@ -7,10 +7,10 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
-          <CarouselInfinite
+          <CarouselFlip
             v-if="carouselStatus === 'success'"
             :carousel-data-ids
-            :allow-carousel-overflow="false"
+            :allow-carousel-overflow="true"
             :return-to-start="false"
             :transition-speed="1000"
             :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
@@ -21,7 +21,7 @@
                 <p>{{ item.alt }}</p>
               </div>
             </template>
-          </CarouselInfinite>
+          </CarouselFlip>
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -72,7 +72,7 @@ const carouselDataIds = computed(() => {
 }
 
 .carousel-flip-demo {
-  &.carousel-basic {
+  &.carousel-flip {
     /* Var used in calcs */
     --_item-gap: 10px;
 
