@@ -76,8 +76,20 @@ const currentIndex = ref(0);
 const itemCount = ref(props.carouselDataIds.length);
 const transitionSpeedStr = props.transitionSpeed + 'ms';
 
-const itemWidth = ref('0px');
+const itemWidth = ref(0);
+const itemWidthOffsetStr = computed(() => {
+  return `-${itemWidth.value}px`;
+});
+
 const currentVisibleIndex = ref(0);
+
+const carouselContainerRefLeftPosition = computed(() => {
+  return carouselContainerRef.value ? carouselContainerRef.value.getBoundingClientRect().left : 0;
+});
+const fullScreenOffsset = computed(() => {
+  return `-${Math.floor(carouselContainerRefLeftPosition.value)}px`;
+});
+console.log('INIT: carouselContainerRefLeftPosition:', carouselContainerRefLeftPosition.value, 'fullScreenOffsset:', fullScreenOffsset.value);
 
 const updateItemOrder = (index: number, order: number, zIndex: number = 2) => {
   if (carouselItemsRef?.value && carouselItemsRef.value[index]) {
@@ -87,6 +99,7 @@ const updateItemOrder = (index: number, order: number, zIndex: number = 2) => {
 };
 
 const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump') => {
+  console.log(`Reordering items in direction: ${direction}`);
   if (!carouselItemsRef?.value || !carouselInitComplete.value) return;
 
   // Capture positions before reordering
@@ -155,9 +168,20 @@ const jumpToFrame = (index: number) => {
   }
 };
 
+// Function to check if there's space before carouselContainerRefLeftPosition and move last item to first position
+const checkAndMoveLastItem = () => {
+  console.log('checkAndMoveLastItem called');
+
+  if (carouselContainerRefLeftPosition.value > 0 && carouselItemsRef?.value && carouselItemsRef.value.length > 0 && carouselContainerRef.value) {
+    // how many items will fit to the left of carouselContainerRef
+    const itemsFit = Math.floor(carouselContainerRefLeftPosition.value / itemWidth.value + 1);
+    console.log('Items that can fit:', itemsFit);
+  }
+};
+
 const initialSetup = () => {
   if (carouselItemsRef?.value && carouselItemsRef.value.length > 0 && carouselItemsRef.value[0]) {
-    itemWidth.value = carouselItemsRef.value[0].offsetWidth + 'px';
+    itemWidth.value = carouselItemsRef.value[0].offsetWidth;
 
     // Set initial order and z-index for all items
     carouselItemsRef.value.forEach((item, index) => {
@@ -168,6 +192,7 @@ const initialSetup = () => {
   }
 
   carouselInitComplete.value = true;
+  checkAndMoveLastItem();
 };
 
 const { direction } = useSwipe(carouselContainerRef, {
@@ -203,6 +228,7 @@ useResizeObserver(carouselWrapperRef, async () => {
 
 onMounted(() => {
   initialSetup();
+  console.log('onMounted: carouselContainerRefLeftPosition:', carouselContainerRefLeftPosition.value, 'fullScreenOffsset:', fullScreenOffsset.value);
 });
 </script>
 
@@ -234,6 +260,10 @@ onMounted(() => {
 
     &.allow-overflow {
       overflow-x: initial;
+
+      .item {
+        translate: v-bind(itemWidthOffsetStr) 0;
+      }
     }
 
     .item {
