@@ -9,7 +9,7 @@
           v-for="(item, index) in carouselDataIds"
           :key="index"
           class="item"
-          :class="{ loaded: carouselInitComplete }"
+          :class="{ loaded: carouselInitComplete && userHasInteracted }"
           ref="carouselItems"
           :aria-current="currentVisibleIndex === index ? 'true' : 'false'"
         >
@@ -78,6 +78,7 @@ const carouselContainerRef = ref<HTMLDivElement | null>(null);
 const carouselItemsRef = useTemplateRef<HTMLDivElement[]>('carouselItems');
 const controlsContainerRef = ref<HTMLDivElement | null>(null);
 const carouselInitComplete = ref(false);
+const userHasInteracted = ref(false);
 
 const currentIndex = ref(0);
 const itemCount = ref(props.carouselDataIds.length);
@@ -103,12 +104,14 @@ const updateItemOrder = (index: number, order: number, zIndex: number = 2) => {
   }
 };
 
-const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump') => {
+const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnimation: boolean = false) => {
+  console.log(`Reordering items in direction: ${direction}, skipAnimation: ${skipAnimation}`);
+
   // if (!carouselItemsRef?.value || !carouselInitComplete.value) return;
   if (!carouselItemsRef?.value) return;
 
-  // Capture positions before reordering
-  const beforeRects = carouselItemsRef.value.map((item) => item.getBoundingClientRect());
+  // Capture positions before reordering (only if we're going to animate)
+  const beforeRects = skipAnimation ? [] : carouselItemsRef.value.map((item) => item.getBoundingClientRect());
 
   // Apply new order and z-index based on direction
   let order = 1;
@@ -138,6 +141,11 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump') => {
     updateItemOrder(i, order++, zIndex);
   }
 
+  // Skip animation if requested (for initial setup)
+  if (skipAnimation) {
+    return;
+  }
+
   // Animate using FLIP technique
   requestAnimationFrame(() => {
     const afterRects = carouselItemsRef.value!.map((item) => item.getBoundingClientRect());
@@ -150,7 +158,8 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump') => {
         item.style.transform = `translateX(${deltaX}px)`;
 
         requestAnimationFrame(() => {
-          item.style.transition = carouselInitComplete.value ? `transform ${transitionSpeedStr} ease` : 'none';
+          const shouldTransition = carouselInitComplete.value && userHasInteracted.value;
+          item.style.transition = shouldTransition ? `transform ${transitionSpeedStr} ease` : 'none';
           item.style.transform = 'translateX(0)';
 
           // After animation completes, normalize z-index values
@@ -163,7 +172,13 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump') => {
             }
           };
 
-          item.addEventListener('transitionend', handleTransitionEnd);
+          if (shouldTransition) {
+            item.addEventListener('transitionend', handleTransitionEnd);
+          } else {
+            // If no transition, immediately normalize z-index
+            const isCurrentlyVisible = index === currentVisibleIndex.value;
+            item.style.zIndex = isCurrentlyVisible ? '3' : '2';
+          }
         });
       }
     });
@@ -172,6 +187,8 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump') => {
 
 const actionPrevious = () => {
   if (!carouselInitComplete.value || !carouselItemsRef?.value) return;
+
+  userHasInteracted.value = true;
 
   if (props.returnToStart && currentVisibleIndex.value === 0) {
     currentVisibleIndex.value = itemCount.value - 1;
@@ -186,6 +203,8 @@ const actionPrevious = () => {
 const actionNext = () => {
   if (!carouselInitComplete.value || !carouselItemsRef?.value) return;
 
+  userHasInteracted.value = true;
+
   if (props.returnToStart && currentVisibleIndex.value === itemCount.value - 1) {
     currentVisibleIndex.value = 0;
   } else {
@@ -198,6 +217,11 @@ const actionNext = () => {
 
 const jumpToFrame = (index: number) => {
   if (index >= 0 && index < itemCount.value) {
+    // Only mark as user interaction if carousel is already initialized
+    if (carouselInitComplete.value) {
+      userHasInteracted.value = true;
+    }
+
     currentVisibleIndex.value = index;
     reorderItems('jump');
     currentIndex.value = currentVisibleIndex.value;
@@ -207,7 +231,9 @@ const jumpToFrame = (index: number) => {
 const checkAndMoveLastItem = () => {
   if (props.allowCarouselOverflow) {
     const itemsFit = Math.floor(carouselContainerRefLeftPosition.value / itemWidth.value + 1);
-    jumpToFrame(itemCount.value - 1);
+    currentVisibleIndex.value = itemCount.value - 1;
+    reorderItems('jump', true); // Skip animation during initial setup
+    currentIndex.value = currentVisibleIndex.value;
   }
 };
 
