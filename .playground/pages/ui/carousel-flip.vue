@@ -12,7 +12,7 @@
             :carousel-data-ids
             :allow-carousel-overflow="true"
             :return-to-start="false"
-            :transition-speed="1000"
+            :transition-speed="300"
             :use-flip-animation="false"
             :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
           >
@@ -74,12 +74,14 @@ const carouselDataIds = computed(() => {
 .carousel-flip-demo {
   &.carousel-flip {
     /* Var used in calcs */
-    --_item-gap: 10px;
+    --_carousel-item-track-gap: 24px;
+    --_carousel-display-max-width: 800px;
 
     .item-container {
-      padding-block: 10px;
-      padding-inline: 10px;
-      outline: 1px solid light-dark(#00000090, #f00ff090);
+      outline: light-dark(var(--gray-5), var(--gray-6));
+
+      max-inline-size: 800px;
+      margin-inline: auto;
 
       .item {
         max-inline-size: 800px;

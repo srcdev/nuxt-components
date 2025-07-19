@@ -230,7 +230,7 @@ onMounted(() => {
 
 <style lang="css">
 .carousel-infinite {
-  --_item-gap: 10px;
+  --_carousel-item-track-gap: 10px;
 
   display: grid;
   grid-template-columns: 1fr;
@@ -250,7 +250,7 @@ onMounted(() => {
 
   .item-container {
     display: flex;
-    gap: var(--_item-gap);
+    gap: var(--_carousel-item-track-gap);
     overflow-x: hidden;
     position: relative;
 
@@ -258,7 +258,7 @@ onMounted(() => {
       overflow-x: initial;
 
       .item {
-        translate: calc(v-bind(itemWidthOffsetStr) - var(--_item-gap)) 0;
+        translate: calc(v-bind(itemWidthOffsetStr) - var(--_carousel-item-track-gap)) 0;
       }
     }
 

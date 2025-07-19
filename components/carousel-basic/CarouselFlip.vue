@@ -90,7 +90,7 @@ const transitionSpeedStr = props.transitionSpeed + 'ms';
 
 const itemWidth = ref(0);
 const itemWidthOffsetStr = computed(() => {
-  return `calc(-2 * ${itemWidth.value}px - var(--_item-gap))`;
+  return `calc(-2 * ${itemWidth.value}px - var(--_carousel-item-track-gap))`;
 });
 const currentVisibleIndex = ref(0);
 
@@ -332,7 +332,8 @@ onMounted(() => {
 
 <style lang="css">
 .carousel-flip {
-  --_item-gap: 10px;
+  --_carousel-item-track-gap: 10px;
+  --_carousel-display-max-width: 800px;
 
   display: grid;
   grid-template-columns: 1fr;
@@ -352,22 +353,25 @@ onMounted(() => {
 
   .item-container {
     display: flex;
-    gap: var(--_item-gap);
+    gap: var(--_carousel-item-track-gap);
     overflow-x: hidden;
     position: relative;
+
+    max-inline-size: var(--_carousel-display-max-width);
+    margin-inline: auto;
 
     &.allow-overflow {
       overflow-x: initial;
 
       .item {
-        translate: calc(v-bind(itemWidthOffsetStr) - var(--_item-gap)) 0;
+        translate: calc(v-bind(itemWidthOffsetStr) - var(--_carousel-item-track-gap)) 0;
       }
     }
 
     .item {
       display: flex;
       flex: 0 0 100%;
-      max-inline-size: 800px;
+      max-inline-size: var(--_carousel-display-max-width);
       position: relative;
 
       &.loaded {
@@ -380,6 +384,8 @@ onMounted(() => {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    max-inline-size: var(--_carousel-display-max-width);
+    margin-inline: auto;
 
     .markers-container {
       .markers-list {

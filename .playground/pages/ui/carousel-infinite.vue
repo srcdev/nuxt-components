@@ -112,7 +112,7 @@ const carouselDataIds = computed(() => {
 .carousel-infinite-demo {
   &.carousel-infinite {
     /* Var used in calcs */
-    --_item-gap: 10px;
+    --_carousel-item-track-gap: 10px;
 
     .item-container {
       padding-block: 10px;

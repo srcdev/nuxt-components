@@ -105,7 +105,7 @@ const carouselDataIds = computed(() => {
 .carousel-basic-demo {
   &.carousel-basic {
     /* Var used in calcs */
-    --_item-gap: 10px;
+    --_carousel-item-track-gap: 10px;
 
     .timeline-container {
       padding-block: 10px;

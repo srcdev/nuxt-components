@@ -80,7 +80,7 @@ const itemCount = ref(props.carouselDataIds.length);
 const offset = ref(0);
 const transitionSpeedStr = props.transitionSpeed + 'ms';
 const itemTransform = computed(() => {
-  return `translateX(calc(${offset.value} * (${itemWidth.value} + var(--_item-gap))))`;
+  return `translateX(calc(${offset.value} * (${itemWidth.value} + var(--_carousel-item-track-gap))))`;
 });
 
 const itemWidth = ref('0px');
@@ -171,7 +171,7 @@ onMounted(() => {
 
 <style lang="css">
 .carousel-basic {
-  --_item-gap: 10px;
+  --_carousel-item-track-gap: 10px;
 
   display: grid;
   grid-template-columns: 1fr;
@@ -191,7 +191,7 @@ onMounted(() => {
 
   .timeline-container {
     display: flex;
-    gap: var(--_item-gap);
+    gap: var(--_carousel-item-track-gap);
     overflow-x: hidden;
 
     .timeline-item {
@@ -219,7 +219,7 @@ onMounted(() => {
 
   .item-container {
     display: flex;
-    gap: var(--_item-gap);
+    gap: var(--_carousel-item-track-gap);
     overflow-x: hidden;
     position: relative;
 
