@@ -11,6 +11,7 @@
           class="item"
           :class="{ loaded: carouselInitComplete && userHasInteracted }"
           ref="carouselItems"
+          :data-id="item"
           :aria-current="currentActiveIndex === index ? 'true' : 'false'"
         >
           <slot :name="item"></slot>
@@ -23,7 +24,12 @@
         <div class="markers-container">
           <ul class="markers-list">
             <li v-for="index in itemCount" :key="index" class="markers-item">
-              <button @click.prevent="jumpToFrame(index - 1)" class="btn-marker" :class="[{ active: currentActiveIndex === index - 1 }]" :aria-label="`Jump to item ${Math.floor(index + 1)}`"></button>
+              <button
+                @click.prevent="jumpToFrame(index - 1)"
+                class="btn-marker"
+                :class="[{ active: currentActiveIndex === getOffsetIndex(index - 1, circularOffsetBase, itemCount) }]"
+                :aria-label="`Jump to item ${Math.floor(index + 1)}`"
+              ></button>
             </li>
           </ul>
         </div>
@@ -70,6 +76,29 @@ const props = defineProps({
   },
 });
 
+interface ClonedCarouselItem {
+  order: number;
+  index: number;
+  zIndex: number;
+}
+
+interface ClonedCarouselConfig {
+  [key: string]: ClonedCarouselItem;
+}
+
+const clonedCarouselItems: ClonedCarouselConfig = reactive(
+  Object.fromEntries(
+    props.carouselDataIds.map((id, index) => [
+      id,
+      {
+        order: index,
+        index,
+        zIndex: index === 0 || index === props.carouselDataIds.length - 1 ? 2 : 3,
+      },
+    ])
+  )
+);
+
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const carouselWrapperRef = ref<HTMLDivElement | null>(null);
@@ -82,6 +111,9 @@ const userHasInteracted = ref(false);
 const initialItemOffset = computed(() => {
   return props.useFlipAnimation ? 1 : 2;
 });
+const circularOffsetBase = computed(() => {
+  return props.useFlipAnimation ? 1 : Math.floor(2 * initialItemOffset.value);
+});
 
 const initialItemOffsetOld = computed(() => {
   if (props.allowCarouselOverflow) {
@@ -90,6 +122,10 @@ const initialItemOffsetOld = computed(() => {
     return props.useFlipAnimation ? 1 : 2;
   }
 });
+
+function getOffsetIndex(index: number, offset: number, itemCount: number): number {
+  return (index + offset) % itemCount;
+}
 
 const currentIndex = ref(0);
 const itemCount = ref(props.carouselDataIds.length);
@@ -225,9 +261,6 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnim
                 }
               }
             }
-            // if (props.useFlipAnimation) {
-            //   item.style.transition = `transform ${transitionSpeedStr} ease`;
-            // }
           }
 
           item.style.transition = transitionProperties; // `transform ${transitionSpeedStr} ease`
@@ -293,7 +326,9 @@ const jumpToFrame = (index: number) => {
       userHasInteracted.value = true;
     }
 
-    currentActiveIndex.value = index;
+    currentActiveIndex.value = getOffsetIndex(index, circularOffsetBase.value, itemCount.value);
+
+    // currentActiveIndex.value = index;
     reorderItems('jump');
     currentIndex.value = currentActiveIndex.value;
   }
@@ -301,8 +336,6 @@ const jumpToFrame = (index: number) => {
 
 const checkAndMoveLastItem = () => {
   if (props.allowCarouselOverflow || !props.useFlipAnimation) {
-    console.log('Checking and moving last item');
-
     currentActiveIndex.value = itemCount.value - initialItemOffset.value;
     reorderItems('jump', true); // Skip animation during initial setup
     currentIndex.value = currentActiveIndex.value;
@@ -316,8 +349,15 @@ const initialSetup = () => {
     // Set initial order and z-index for all items
     carouselItemsRef.value.forEach((item, index) => {
       item.style.order = String(index + 1);
+      item.dataset.order = String(index + 1);
       // First item gets higher z-index, others get normal z-index
       item.style.zIndex = index === 0 ? '3' : '2';
+
+      // console.log('item.dataset.id', item.dataset.id);
+
+      // if (item.dataset.id !== undefined) {
+      //   clonedCarouselItems[item.dataset.id].index = Math.floor(index + 1);
+      // }
     });
   }
 
@@ -358,15 +398,7 @@ useResizeObserver(carouselWrapperRef, async () => {
 
 onMounted(() => {
   initialSetup();
-  // console.log(`onMounted | currentActiveIndex: ${currentActiveIndex.value} | currentIndex: ${currentIndex.value}`);
 });
-
-watch(
-  () => currentActiveIndex.value,
-  () => {
-    // console.log(`watch | currentActiveIndex: ${currentActiveIndex.value} | currentIndex: ${currentIndex.value}`);
-  }
-);
 </script>
 
 <style lang="css">
@@ -444,7 +476,7 @@ watch(
             transition: background-color v-bind(transitionSpeedStr) linear;
 
             &.active {
-              background-color: red;
+              background-color: light-dark(var(--gray-12), var(--gray-00));
             }
           }
         }

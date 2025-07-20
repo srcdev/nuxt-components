@@ -13,12 +13,12 @@
             :allow-carousel-overflow="true"
             :return-to-start="false"
             :transition-speed="500"
-            :use-flip-animation="true"
+            :use-flip-animation="false"
             :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
           >
             <template v-for="(item, index) in carouselData?.items" #[item.id]>
               <div class="case-study-item">
-                <h3>{{ index }}</h3>
+                <h3>{{ index + 1 }}</h3>
                 <p>{{ item.alt }}</p>
               </div>
             </template>
@@ -56,6 +56,7 @@ const {
 const carouselDataIds = computed(() => {
   return carouselData.value?.items.map((item) => item.id) || [];
 });
+// console.log(carouselDataIds.value);
 </script>
 
 <style lang="css">
@@ -126,11 +127,11 @@ const carouselDataIds = computed(() => {
             .btn-marker {
               width: 22px;
               height: 3px;
-              background-color: lightgray;
+              background-color: light-dark(var(--gray-5), var(--gray-7));
               line-height: 3px;
 
               &.active {
-                background-color: red;
+                background-color: light-dark(var(--gray-12), var(--gray-00));
               }
 
               &:focus-visible {
@@ -192,7 +193,8 @@ const carouselDataIds = computed(() => {
             opacity: var(--glow-intensity, 0.125);
           }
 
-          &:hover {
+          &:hover,
+          &:focus-visible {
             animation-play-state: running;
             outline-color: light-dark(var(--gray-9), var(--gray-4));
           }
@@ -200,19 +202,6 @@ const carouselDataIds = computed(() => {
           .arrows-icon {
             width: 24px;
             height: 24px;
-
-            /* &:hover {
-              background-color: light-dark(#0009, #fff9);
-            }
-
-            &:active,
-            &.active {
-              background-color: light-dark(#0009, #fff9);
-            }
-
-            &:focus-visible {
-              outline: 1px solid light-dark(#0f0, #f0f);
-            } */
           }
         }
       }
