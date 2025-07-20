@@ -1,6 +1,5 @@
 <template>
   <section class="carousel-flip" :class="[elementClasses]" ref="carouselWrapperRef" role="region" aria-label="Image carousel">
-    <!-- Screen reader announcement for current item -->
     <div aria-live="polite" aria-atomic="true" class="sr-only">Item {{ currentActiveIndex + 1 }} of {{ itemCount }}</div>
 
     <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
@@ -76,29 +75,6 @@ const props = defineProps({
   },
 });
 
-interface ClonedCarouselItem {
-  order: number;
-  index: number;
-  zIndex: number;
-}
-
-interface ClonedCarouselConfig {
-  [key: string]: ClonedCarouselItem;
-}
-
-const clonedCarouselItems: ClonedCarouselConfig = reactive(
-  Object.fromEntries(
-    props.carouselDataIds.map((id, index) => [
-      id,
-      {
-        order: index,
-        index,
-        zIndex: index === 0 || index === props.carouselDataIds.length - 1 ? 2 : 3,
-      },
-    ])
-  )
-);
-
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const carouselWrapperRef = ref<HTMLDivElement | null>(null);
@@ -113,14 +89,6 @@ const initialItemOffset = computed(() => {
 });
 const circularOffsetBase = computed(() => {
   return props.useFlipAnimation ? 1 : Math.floor(2 * initialItemOffset.value);
-});
-
-const initialItemOffsetOld = computed(() => {
-  if (props.allowCarouselOverflow) {
-    return props.useFlipAnimation ? 1 : 2;
-  } else {
-    return props.useFlipAnimation ? 1 : 2;
-  }
 });
 
 function getOffsetIndex(index: number, offset: number, itemCount: number): number {
@@ -148,10 +116,6 @@ const itemWidthOffsetStr = computed(() => {
   }
 });
 const currentActiveIndex = ref(0);
-
-const carouselContainerRefLeftPosition = computed(() => {
-  return carouselContainerRef.value ? carouselContainerRef.value.getBoundingClientRect().left : 0;
-});
 
 const updateItemOrder = (index: number, order: number, zIndex: number = 2) => {
   if (carouselItemsRef?.value && carouselItemsRef.value[index]) {
@@ -181,7 +145,6 @@ function analyzeOffsets(offsets: number[]) {
 }
 
 const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnimation: boolean = false) => {
-  // if (!carouselItemsRef?.value || !carouselInitComplete.value) return;
   if (!carouselItemsRef?.value) return;
 
   // Capture positions before reordering (only if we're going to animate)
@@ -263,7 +226,7 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnim
             }
           }
 
-          item.style.transition = transitionProperties; // `transform ${transitionSpeedStr} ease`
+          item.style.transition = transitionProperties;
           item.style.transform = 'translateX(0)';
 
           // After animation completes, normalize z-index values
@@ -352,12 +315,6 @@ const initialSetup = () => {
       item.dataset.order = String(index + 1);
       // First item gets higher z-index, others get normal z-index
       item.style.zIndex = index === 0 ? '3' : '2';
-
-      // console.log('item.dataset.id', item.dataset.id);
-
-      // if (item.dataset.id !== undefined) {
-      //   clonedCarouselItems[item.dataset.id].index = Math.floor(index + 1);
-      // }
     });
   }
 
