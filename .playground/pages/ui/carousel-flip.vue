@@ -12,7 +12,7 @@
             :carousel-data-ids
             :allow-carousel-overflow="true"
             :return-to-start="false"
-            :transition-speed="300"
+            :transition-speed="500"
             :use-flip-animation="false"
             :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
           >

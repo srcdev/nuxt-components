@@ -78,14 +78,25 @@ const carouselItemsRef = useTemplateRef<HTMLDivElement[]>('carouselItems');
 const controlsContainerRef = ref<HTMLDivElement | null>(null);
 const carouselInitComplete = ref(false);
 const userHasInteracted = ref(false);
-const initialItemOffset = ref(0);
+const initialItemOffsetOLD = computed(() => {
+  return props.useFlipAnimation ? 1 : 2;
+});
+
+const initialItemOffset = computed(() => {
+  if (props.allowCarouselOverflow) {
+    return props.useFlipAnimation ? 1 : 2; // Works as expected
+  } else {
+    return props.useFlipAnimation ? 1 : 2; // True works as expected, false doesn't
+  }
+});
+
 const currentIndex = ref(0);
 const itemCount = ref(props.carouselDataIds.length);
 const transitionSpeedStr = props.transitionSpeed + 'ms';
 
 const itemWidth = ref(0);
 const itemWidthOffsetStr = computed(() => {
-  return `calc(-2 * ${itemWidth.value}px - var(--_carousel-item-track-gap))`;
+  return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - var(--_carousel-item-track-gap))`;
 });
 const currentActiveIndex = ref(0);
 
@@ -181,21 +192,32 @@ const reorderItems = (direction: 'next' | 'previous' | 'jump' = 'jump', skipAnim
 
         requestAnimationFrame(() => {
           const shouldTransition = carouselInitComplete.value && userHasInteracted.value;
+          let transitionProperties = 'none';
 
           if (shouldTransition) {
             if (props.allowCarouselOverflow) {
-              if (leftValues.minorityIndex !== index) {
-                item.style.transition = `transform ${transitionSpeedStr} ease`;
+              if (props.useFlipAnimation) {
+                transitionProperties = `transform ${transitionSpeedStr} ease`;
               } else {
-                item.style.transition = 'none';
+                if (leftValues.minorityIndex !== index) {
+                  transitionProperties = `transform ${transitionSpeedStr} ease`;
+                }
               }
             } else {
-              item.style.transition = `transform ${transitionSpeedStr} ease`;
+              if (props.useFlipAnimation) {
+                transitionProperties = `transform ${transitionSpeedStr} ease`;
+              } else {
+                if (leftValues.minorityIndex !== index) {
+                  transitionProperties = `transform ${transitionSpeedStr} ease`;
+                }
+              }
             }
-          } else {
-            item.style.transition = 'none';
+            // if (props.useFlipAnimation) {
+            //   item.style.transition = `transform ${transitionSpeedStr} ease`;
+            // }
           }
 
+          item.style.transition = transitionProperties; // `transform ${transitionSpeedStr} ease`
           item.style.transform = 'translateX(0)';
 
           // After animation completes, normalize z-index values
@@ -252,7 +274,6 @@ const actionNext = () => {
 };
 
 const jumpToFrame = (index: number) => {
-  console.log(`Jumping to frame: ${index}`);
   if (index >= 0 && index < itemCount.value) {
     // Only mark as user interaction if carousel is already initialized
     if (carouselInitComplete.value) {
@@ -266,9 +287,9 @@ const jumpToFrame = (index: number) => {
 };
 
 const checkAndMoveLastItem = () => {
-  initialItemOffset.value = 2;
-  if (props.allowCarouselOverflow) {
-    const itemsFit = Math.floor(carouselContainerRefLeftPosition.value / itemWidth.value + 1);
+  if (props.allowCarouselOverflow || !props.useFlipAnimation) {
+    console.log('Checking and moving last item');
+
     currentActiveIndex.value = itemCount.value - initialItemOffset.value;
     reorderItems('jump', true); // Skip animation during initial setup
     currentIndex.value = currentActiveIndex.value;
@@ -324,13 +345,13 @@ useResizeObserver(carouselWrapperRef, async () => {
 
 onMounted(() => {
   initialSetup();
-  console.log(`onMounted | currentActiveIndex: ${currentActiveIndex.value} | currentIndex: ${currentIndex.value}`);
+  // console.log(`onMounted | currentActiveIndex: ${currentActiveIndex.value} | currentIndex: ${currentIndex.value}`);
 });
 
 watch(
   () => currentActiveIndex.value,
   () => {
-    console.log(`watch | currentActiveIndex: ${currentActiveIndex.value} | currentIndex: ${currentIndex.value}`);
+    // console.log(`watch | currentActiveIndex: ${currentActiveIndex.value} | currentIndex: ${currentIndex.value}`);
   }
 );
 </script>
