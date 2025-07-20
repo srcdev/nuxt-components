@@ -78,15 +78,16 @@ const carouselItemsRef = useTemplateRef<HTMLDivElement[]>('carouselItems');
 const controlsContainerRef = ref<HTMLDivElement | null>(null);
 const carouselInitComplete = ref(false);
 const userHasInteracted = ref(false);
-const initialItemOffsetOLD = computed(() => {
+
+const initialItemOffset = computed(() => {
   return props.useFlipAnimation ? 1 : 2;
 });
 
-const initialItemOffset = computed(() => {
+const initialItemOffsetOld = computed(() => {
   if (props.allowCarouselOverflow) {
-    return props.useFlipAnimation ? 1 : 2; // Works as expected
+    return props.useFlipAnimation ? 1 : 2;
   } else {
-    return props.useFlipAnimation ? 1 : 2; // True works as expected, false doesn't
+    return props.useFlipAnimation ? 1 : 2;
   }
 });
 
@@ -96,7 +97,19 @@ const transitionSpeedStr = props.transitionSpeed + 'ms';
 
 const itemWidth = ref(0);
 const itemWidthOffsetStr = computed(() => {
-  return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - var(--_carousel-item-track-gap))`;
+  if (props.allowCarouselOverflow) {
+    if (props.useFlipAnimation) {
+      return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - var(--_carousel-item-track-gap))`; // Good
+    } else {
+      return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - (2 * var(--_carousel-item-track-gap)))`; // Good
+    }
+  } else {
+    if (props.useFlipAnimation) {
+      return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - var(--_carousel-item-track-gap))`; // Goof
+    } else {
+      return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - (2 * var(--_carousel-item-track-gap)))`; // Good
+    }
+  }
 });
 const currentActiveIndex = ref(0);
 
@@ -387,17 +400,18 @@ watch(
 
     &.allow-overflow {
       overflow-x: initial;
-
-      .item {
-        translate: calc(v-bind(itemWidthOffsetStr) - var(--_carousel-item-track-gap)) 0;
-      }
     }
 
     .item {
       display: flex;
       flex: 0 0 100%;
-      max-inline-size: var(--_carousel-item-max-width);
       position: relative;
+
+      margin-inline: auto;
+
+      max-inline-size: calc(var(--_carousel-container-width) + var(--_carousel-item-track-gap) - (2 * var(--_carousel-item-edge-preview-width)));
+
+      translate: calc(v-bind(itemWidthOffsetStr) - var(--_carousel-item-track-gap) + var(--_carousel-item-edge-preview-width)) 0;
 
       &.loaded {
         transition: transform v-bind(transitionSpeedStr) ease;

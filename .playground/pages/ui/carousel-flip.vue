@@ -13,7 +13,7 @@
             :allow-carousel-overflow="true"
             :return-to-start="false"
             :transition-speed="500"
-            :use-flip-animation="false"
+            :use-flip-animation="true"
             :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
           >
             <template v-for="(item, index) in carouselData?.items" #[item.id]>
@@ -75,16 +75,18 @@ const carouselDataIds = computed(() => {
   &.carousel-flip {
     /* Var used in calcs */
     --_carousel-item-track-gap: 24px;
+    --_carousel-container-width: 800px;
+    --_carousel-item-edge-preview-width: 60px; /* Must be at 2x var(--_carousel-item-track-gap)  */
 
     .item-container {
-      outline: light-dark(var(--gray-5), var(--gray-6));
-
       max-inline-size: 800px;
       margin-inline: auto;
 
-      .item {
-        max-inline-size: 800px;
+      outline: 1px solid light-dark(var(--gray-8), var(--gray-1));
+      padding-block: 12px;
+      padding-inline: 12px;
 
+      .item {
         background-color: light-dark(var(--gray-5), var(--gray-6));
 
         &:nth-child(odd) {
