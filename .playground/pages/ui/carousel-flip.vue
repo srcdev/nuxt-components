@@ -11,7 +11,6 @@
             v-if="carouselStatus === 'success'"
             :carousel-data-ids
             :allow-carousel-overflow="true"
-            :return-to-start="false"
             :transition-speed="500"
             :use-flip-animation="false"
             :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
@@ -116,26 +115,34 @@ const carouselDataIds = computed(() => {
       max-inline-size: 800px;
 
       .markers-container {
+        --marker-height: 22px;
+        --marker-width: 22px;
+        --marker-border-radius: 100%;
+
         .markers-list {
           .markers-item {
-            line-height: 3px;
-
-            &.active {
-              background-color: light-dark(#f00, #0f0);
-            }
+            width: var(--marker-width);
+            height: var(--marker-height);
+            border-radius: var(--marker-border-radius);
+            line-height: var(--marker-height);
 
             .btn-marker {
-              width: 22px;
-              height: 3px;
+              width: var(--marker-width);
+              height: var(--marker-height);
+              border-radius: var(--marker-border-radius);
               background-color: light-dark(var(--gray-5), var(--gray-7));
               line-height: 3px;
+              transition: all 0.3s linear;
+              border: 1px solid transparent;
+              outline: 1px solid transparent;
 
               &.active {
                 background-color: light-dark(var(--gray-12), var(--gray-00));
               }
 
+              &:hover,
               &:focus-visible {
-                outline: 1px solid light-dark(#000, #fff);
+                outline-color: light-dark(#000, #fff);
               }
             }
           }

@@ -65,10 +65,6 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  returnToStart: {
-    type: Boolean,
-    default: false,
-  },
   useFlipAnimation: {
     type: Boolean,
     default: true,
@@ -257,7 +253,7 @@ const actionPrevious = () => {
 
   userHasInteracted.value = true;
 
-  if (props.returnToStart && currentActiveIndex.value === 0) {
+  if (currentActiveIndex.value === 0) {
     currentActiveIndex.value = itemCount.value - 1;
   } else {
     currentActiveIndex.value = currentActiveIndex.value === 0 ? itemCount.value - 1 : currentActiveIndex.value - 1;
@@ -272,7 +268,7 @@ const actionNext = () => {
 
   userHasInteracted.value = true;
 
-  if (props.returnToStart && currentActiveIndex.value === itemCount.value - 1) {
+  if (currentActiveIndex.value === itemCount.value - 1) {
     currentActiveIndex.value = 0;
   } else {
     currentActiveIndex.value = currentActiveIndex.value === itemCount.value - 1 ? 0 : currentActiveIndex.value + 1;
@@ -426,8 +422,8 @@ onMounted(() => {
 
         .markers-item {
           .btn-marker {
-            border: none;
-            outline: none;
+            border: 1px solid transparent;
+            outline: 1px solid transparent;
             box-shadow: none;
             cursor: pointer;
             transition: background-color v-bind(transitionSpeedStr) linear;
