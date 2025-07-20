@@ -394,7 +394,7 @@ onMounted(() => {
 
       margin-inline: auto;
 
-      max-inline-size: calc(var(--_carousel-container-width) + var(--_carousel-item-track-gap) - (2 * var(--_carousel-item-edge-preview-width)));
+      max-inline-size: calc(var(--_carousel-container-max-inline-size) + var(--_carousel-item-track-gap) - (2 * var(--_carousel-item-edge-preview-width)));
 
       translate: calc(v-bind(itemWidthOffsetStr) - var(--_carousel-item-track-gap) + var(--_carousel-item-edge-preview-width)) 0;
 

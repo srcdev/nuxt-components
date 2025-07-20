@@ -92,7 +92,7 @@
       "  &.carousel-flip {",
       "    /* Var used in calcs */",
       "    --_carousel-item-track-gap: 10px;",
-      "    --_carousel-container-width: 800px;",
+      "    --_carousel-container-max-inline-size: 800px;",
       "    --_carousel-item-edge-preview-width: 60px; /* Must be at 2x var(--_carousel-item-track-gap)  */",
       "",
       "    .item-container {",

@@ -74,17 +74,27 @@ const carouselDataIds = computed(() => {
 .carousel-flip-demo {
   &.carousel-flip {
     /* Var used in calcs */
-    --_carousel-item-track-gap: 24px;
-    --_carousel-container-width: 800px;
-    --_carousel-item-edge-preview-width: 60px; /* Must be at 2x var(--_carousel-item-track-gap)  */
+    --_carousel-item-track-gap: 12px;
+    --_carousel-container-max-inline-size: 800px;
+    --_carousel-item-edge-preview-width: 12px; /* Must be at 2x var(--_carousel-item-track-gap)  */
+
+    @media (width >= 768px) {
+      --_carousel-item-track-gap: 24px;
+      --_carousel-item-edge-preview-width: 80px; /* Must be at 2x var(--_carousel-item-track-gap)  */
+    }
 
     .item-container {
       max-inline-size: 800px;
       margin-inline: auto;
 
       outline: 1px solid light-dark(var(--gray-8), var(--gray-1));
-      padding-block: 12px;
-      padding-inline: 12px;
+      padding-block: 6px;
+      padding-inline: 6px;
+
+      @media (width >= 768px) {
+        padding-block: 12px;
+        padding-inline: 12px;
+      }
 
       .item {
         background-color: light-dark(var(--gray-5), var(--gray-6));
@@ -115,9 +125,14 @@ const carouselDataIds = computed(() => {
       max-inline-size: 800px;
 
       .markers-container {
-        --marker-height: 22px;
-        --marker-width: 22px;
+        --marker-height: 12px;
+        --marker-width: 12px;
         --marker-border-radius: 100%;
+
+        @media (width >= 768px) {
+          --marker-height: 22px;
+          --marker-width: 22px;
+        }
 
         .markers-list {
           .markers-item {
@@ -159,11 +174,9 @@ const carouselDataIds = computed(() => {
           --gradient-glow-dark: var(--gray-7), var(--gray-5), var(--gray-8), var(--gray-6), var(--gray-7), var(--gray-8), var(--gray-7);
           --gradient-glow-light: var(--gray-4), var(--gray-6), var(--gray-0), var(--gray-6), var(--gray-4);
 
-          padding-block: 10px;
-          padding-inline: 10px;
+          padding-block: 6px;
+          padding-inline: 6px;
           border-radius: 100%;
-          /* background-color: light-dark(#000, #fff); */
-          /* color: light-dark(#fff, #000); */
 
           border: 3px solid transparent;
           background: linear-gradient(var(--surface, canvas) 0 0) padding-box, conic-gradient(from var(--glow-deg), var(--gradient-glow-dark)) border-box;
@@ -175,6 +188,11 @@ const carouselDataIds = computed(() => {
           animation: glow 10s infinite linear;
           animation-play-state: paused;
           transition: outline-color 0.3s ease;
+
+          @media (width >= 768px) {
+            padding-block: 10px;
+            padding-inline: 10px;
+          }
 
           &::before,
           &::after {
@@ -207,8 +225,13 @@ const carouselDataIds = computed(() => {
           }
 
           .arrows-icon {
-            width: 24px;
-            height: 24px;
+            width: 16px;
+            height: 16px;
+
+            @media (width >= 768px) {
+              width: 24px;
+              height: 24px;
+            }
           }
         }
       }
