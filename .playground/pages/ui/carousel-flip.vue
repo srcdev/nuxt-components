@@ -16,7 +16,7 @@
             :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
           >
             <template v-for="(item, index) in carouselData?.items" #[item.id]>
-              <div class="case-study-item">
+              <div class="custom-carousel-item">
                 <h3>{{ index + 1 }}</h3>
                 <p>{{ item.alt }}</p>
               </div>
@@ -93,7 +93,7 @@ const carouselDataIds = computed(() => {
           background-color: light-dark(var(--gray-6), var(--gray-5));
         }
 
-        .case-study-item {
+        .custom-carousel-item {
           flex-direction: column;
           align-items: center;
           justify-content: center;
