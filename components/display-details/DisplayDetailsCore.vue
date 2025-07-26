@@ -18,7 +18,13 @@
 // Create a global store to track open details elements by name
 const openDetailsByName = reactive(new Map<string, HTMLDetailsElement>());
 
-export const useDetailsTransition = (detailsRef: Ref<HTMLDetailsElement | null>, summaryRef: Ref<HTMLElement | null>, contentRef: Ref<HTMLDivElement | null>, name: string, animationDuration: number) => {
+export const useDetailsTransition = (
+  detailsRef: Ref<HTMLDetailsElement | null>,
+  summaryRef: Ref<HTMLElement | null>,
+  contentRef: Ref<HTMLDivElement | null>,
+  name: string,
+  animationDuration: number
+) => {
   // State
   const animation = ref<Animation | null>(null);
   const isClosing = ref(false);
@@ -101,7 +107,7 @@ export const useDetailsTransition = (detailsRef: Ref<HTMLDetailsElement | null>,
         },
         {
           duration: animationDuration,
-          easing: 'ease-out',
+          easing: 'linear',
         }
       );
 
@@ -140,7 +146,7 @@ export const useDetailsTransition = (detailsRef: Ref<HTMLDetailsElement | null>,
         },
         {
           duration: animationDuration,
-          easing: 'ease-out',
+          easing: 'linear',
         }
       );
 
@@ -237,76 +243,59 @@ onMounted(() => {
 </script>
 
 <style lang="css">
-  .display-details {
-    /* Component setup */
-    --_display-details-icon-transform: scaleY(1);
-    --_display-details-icon-size: 1.2rem;
+.display-details {
+  border: none;
+  outline: none;
+  box-shadow: none;
+  border-radius: 0;
 
-    /* Configurable properties */
-    --_display-details-border: none;
-    --_display-details-outline: none;
-    --_display-details-box-shadow: none;
-    --_display-details-border-radius: 0;
-    --_display-details-mbe: 1em;
-
-    --_display-details-summary-gap: 12px;
-    --_display-details-summary-flex-direction: row;
-
-    --_display-details-content-padding: 0;
-
-    &.medium {
-      --_display-details-icon-size: 1.8rem;
-    }
-    &.large {
-      --_display-details-icon-size: 2.4rem;
-    }
-
-    &[open] {
-      --_display-details-icon-transform: scaleY(-1);
-    }
-
-    border: var(--_display-details-border);
-    outline: var(--_display-details-outline);
-    box-shadow: var(--_display-details-box-shadow);
-    border-radius: var(--_display-details-border-radius);
-    margin-block-end: var(--_display-details-mbe);
-
+  &[open] {
     .display-details-summary {
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      list-style: none;
-
-      &::-webkit-details-marker,
-      &::marker {
-        display: none;
-      }
-
-      display: flex !important;
-      flex-direction: var(--_display-details-summary-flex-direction);
-      align-items: center;
-      gap: var(--_display-details-summary-gap);
-      overflow: clip;
-
-      .label {
-        display: block;
-        flex-grow: 1;
-      }
-
       .icon {
-        display: block;
-
-        font-size: var(--_display-details-icon-size);
-        transform: var(--_display-details-icon-transform);
-        transition: transform 200ms;
+        transform: scaleY(-1);
       }
-    }
-
-    .display-details-content {
-      padding: var(--_display-details-content-padding);
     }
   }
 
+  .display-details-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    gap: 0;
+
+    list-style: none;
+
+    &::-webkit-details-marker,
+    &::marker {
+      display: none;
+    }
+
+    overflow: clip;
+
+    .label {
+      display: block;
+      flex-grow: 1;
+    }
+
+    .icon {
+      display: block;
+
+      transform: scaleY(1);
+      transition: transform 200ms;
+
+      font-size: 1.2rem;
+      &.medium {
+        font-size: 1.8rem;
+      }
+      &.large {
+        font-size: 2.4rem;
+      }
+    }
+  }
+
+  .display-details-content {
+    /* Use an inner element for styling */
+  }
+}
 </style>
