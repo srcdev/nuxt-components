@@ -1,7 +1,7 @@
 <template>
   <div class="tabs-core" :class="`axis-${axis}`">
     <ul role="tablist" aria-labelledby="channel-name" ref="tabsNavRef" @mouseleave="resetHoverToActivePosition()" class="tabs-list" :class="[elementClasses]">
-      <li v-for="(index, key) in navItems" :key="key">
+      <li v-for="(index, key) in itemCount" :key="key">
         <button
           @click.prevent="navItemClicked($event)"
           @mouseover="navItemHovered($event)"
@@ -17,7 +17,7 @@
       </li>
     </ul>
     <div class="tab-content-wrapper">
-      <div v-for="(item, key) in navItems" :key="key" class="tab-content" :aria-labelledby="`tab-${key}-trigger`" :id="`tab-${key}-content`" role="region" aria-hidden="true" ref="tabsContentRefs">
+      <div v-for="(item, key) in itemCount" :key="key" class="tab-content" :aria-labelledby="`tab-${key}-trigger`" :id="`tab-${key}-content`" role="region" aria-hidden="true" ref="tabsContentRefs">
         <slot :name="`tab-${key}-content`"></slot>
       </div>
     </div>
@@ -25,8 +25,6 @@
 </template>
 
 <script setup lang="ts">
-import type { ITabNav } from '@/types/types.tabs';
-
 const props = defineProps({
   tag: {
     type: String as PropType<string>,
@@ -40,9 +38,9 @@ const props = defineProps({
     type: Number as PropType<number>,
     default: 200,
   },
-  navItems: {
-    type: Array as PropType<ITabNav[]>,
-    required: true,
+  itemCount: {
+    type: Number as PropType<number>,
+    default: 0,
   },
   trackHover: {
     type: Boolean as PropType<boolean>,
@@ -76,24 +74,6 @@ onMounted(() => {
 
 <style lang="css">
 .tabs-core {
-  /*
-  * CSS var within /assets/styles/components/tabs.css
-  */
-  --_tabs-default-text: var(--tabs-default-text, light-dark(var(--gray-12), var(--gray-0)));
-  --_tabs-active-bg: var(--tabs-active-bg, light-dark(var(--gray-12), var(--gray-0)));
-  --_tabs-active-text: var(--tabs-active-text, light-dark(var(--gray-0), var(--gray-12)));
-  --_tabs-active-indicator: var(--tabs-active-indicator, light-dark(var(--gray-12), var(--gray-0)));
-  --_tabs-hovered-bg: var(--tabs-hovered-bg, light-dark(var(--gray-7), var(--gray-3)));
-  --_tabs-hovered-text: var(--tabs-hovered-text, light-dark(var(--gray-0), var(--gray-12)));
-  --_tabs-border-bottom: var(--tabs-border-bottom, 0.1rem solid var(--gray-6));
-  --_tabs-content-border: var(--tabs-content-border, 0.1rem solid var(--gray-6));
-  --_tabs-content-outline: var(--tabs-content-outline, 0.1rem solid var(--gray-6));
-  --_tabs-content-bg: var(--tabs-content-bg, light-dark(var(--gray-12), var(--gray-0)));
-  --_tabs-content-start-start-radius: var(--tabs-content-start-start-radius, 0);
-  --_tabs-content-start-end-radius: var(--tabs-content-start-end-radius, 0);
-  --_tabs-content-end-start-radius: var(--tabs-content-end-start-radius, 0);
-  --_tabs-content-end-end-radius: var(--tabs-content-end-end-radius, 0);
-
   .tabs-list {
     position: relative;
     display: flex;
@@ -163,24 +143,24 @@ onMounted(() => {
     border-bottom: var(--_tabs-border-bottom);
 
     .nav__hovered {
-      background: var(--_tabs-hovered-bg);
-      color: var(--_tabs-hovered-text);
+      background: light-dark(var(--gray-7), var(--gray-3));
+      color: light-dark(var(--gray-0), var(--gray-12));
     }
 
     .nav__active {
-      background: var(--_tabs-active-bg);
-      color: var(--_tabs-active-text);
+      background: light-dark(var(--gray-12), var(--gray-0));
+      color: light-dark(var(--gray-0), var(--gray-12));
     }
 
     .nav__active-indicator {
-      background: var(--_tabs-active-indicator);
+      background: light-dark(var(--gray-12), var(--gray-0));
       height: 0.4rem;
     }
 
     .tabs-list-item {
       background: transparent;
       border: 0;
-      color: var(--_tabs-default-text);
+      color: light-dark(var(--gray-12), var(--gray-0));
       cursor: pointer;
       font: inherit;
       text-transform: uppercase;
@@ -189,16 +169,15 @@ onMounted(() => {
       padding: 1em 2em;
 
       &:hover {
-        /* background: var(--_tabs-hovered-bg); */
-        color: var(--_tabs-hovered-text);
+        color: light-dark(var(--gray-0), var(--gray-12));
       }
 
       &[aria-selected='true'] {
-        color: var(--_tabs-active-text);
+        color: light-dark(var(--gray-0), var(--gray-12));
       }
 
       &.transitioning {
-        color: var(--_tabs-hovered-text);
+        color: light-dark(var(--gray-0), var(--gray-12));
       }
     }
   }
@@ -207,28 +186,18 @@ onMounted(() => {
     display: grid;
     grid-template-areas: 'element-stack';
 
+    background-color: light-dark(var(--gray-9), var(--gray-10));
+    border: 0.1rem solid var(--gray-6);
+    border-start-start-radius: 0;
+    border-start-end-radius: 0;
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+    outline: 0.1rem solid var(--gray-6);
+
     .tab-content {
       grid-area: element-stack;
       display: none;
     }
-  }
-
-  /*
-  * User configurable variables
-  */
-
-  .tab-content-wrapper {
-    background: var(--_tabs-content-bg);
-    border: var(--_tabs-content-border);
-    border-start-start-radius: var(--_tabs-content-start-start-radius);
-    border-start-end-radius: var(--_tabs-content-start-end-radius);
-    border-end-start-radius: var(--_tabs-content-end-start-radius);
-    border-end-end-radius: var(--_tabs-content-end-end-radius);
-
-    outline: var(--_tabs-content-outline);
-
-    /* .tab-content {
-    } */
   }
 }
 
@@ -253,17 +222,17 @@ onMounted(() => {
         text-align: left;
         width: 100%;
 
-        /* &:hover {
-          color: var(--_tabs-hovered-text);
+        &:hover {
+          /* color: light-dark(var(--gray-0), var(--gray-12)); */
         }
 
         &[aria-selected='true'] {
-          color: var(--_tabs-active-text);
+          /* color: var(--_tabs-active-text); */
         }
 
         &.transitioning {
-          color: var(--_tabs-hovered-text);
-        } */
+          /* color: light-dark(var(--gray-0), var(--gray-12)); */
+        }
       }
 
       .nav__hovered {

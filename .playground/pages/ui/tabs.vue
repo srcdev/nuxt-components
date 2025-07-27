@@ -4,10 +4,12 @@
       <template #content>
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
           <h2 class="heading-2">Tabs #1</h2>
-          <p>Data driven accordian navigation with custom content</p>
+          <p>Static tabs</p>
 
-          <TabsCore :navItems="navLinks3" :transitionDuration="300" :style-class-passthrough="['class-modifier']">
-            <template v-for="(item, key) in navLinks3" v-slot:[`tab-${key}-trigger`]> {{ key }} - {{ item.name }} </template>
+          <TabsCore :navItems="navLinks3" :itemCount="3" :transitionDuration="300" :style-class-passthrough="['class-modifier']">
+            <template v-slot:[`tab-0-trigger`]> 0 - Tab 1 </template>
+            <template v-slot:[`tab-1-trigger`]> 1 - Tab 2 </template>
+            <template v-slot:[`tab-2-trigger`]> 2 - Tab 3 </template>
             <template v-slot:[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
             </template>
@@ -22,9 +24,9 @@
 
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
           <h2 class="heading-2">Tabs #2</h2>
-          <p>Data driven accordian navigation with custom content</p>
+          <p>Data driven tabs</p>
 
-          <TabsCore :navItems="navLinks4" :style-class-passthrough="['class-modifier']">
+          <TabsCore :itemCount="4" :style-class-passthrough="['class-modifier']">
             <template v-for="(item, key) in navLinks4" v-slot:[`tab-${key}-trigger`]> {{ key }} - {{ item.name }} </template>
             <template v-slot:[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
@@ -45,7 +47,7 @@
           <h2 class="heading-2">Tabs #3</h2>
           <p>Data driven accordian navigation with custom content</p>
 
-          <TabsCore :navItems="navLinks6" :style-class-passthrough="['class-modifier']">
+          <TabsCore :itemCount="6" :style-class-passthrough="['class-modifier']">
             <template v-for="(item, key) in navLinks6" v-slot:[`tab-${key}-trigger`]> {{ key }} - {{ item.name }} </template>
             <template v-slot:[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
@@ -73,7 +75,6 @@
 </template>
 
 <script setup lang="ts">
-import type { ITabNav } from '@/types/types.tabs';
 definePageMeta({
   layout: false,
 });
@@ -85,6 +86,12 @@ useHead({
     class: 'home',
   },
 });
+
+interface ITabNav {
+  action?: string;
+  name: string;
+  path?: string;
+}
 
 const navLinks3 = <ITabNav[]>[
   { name: 'Home', path: '/' },
@@ -110,50 +117,70 @@ const navLinks6 = <ITabNav[]>[
 </script>
 
 <style lang="css">
-.tabs-list.colour-test {
-  --_default-text: light-dark(var(--green-4), var(--green-5));
-  --_active-bg: light-dark(var(--red-12), var(--red-0));
-  --_active-text: light-dark(var(--yellow-3), var(--yellow-6));
-  --_active-indicator: light-dark(var(--orange-6), var(--orange-7));
-  --_hovered-bg: light-dark(var(--blue-7), var(--blue-3));
-  --_hovered-text: light-dark(var(--blue-4), var(--blue-12));
-  --_border-bottom: light-dark(var(--red-7), var(--red-6));
+.class-modifier {
+  &.tabs-core {
+    .tabs-list {
+      /* custom css */
 
-  border-bottom: 0.1rem solid var(--_border-bottom);
-  margin-block: 3rem;
+      .nav__hovered {
+        /* custom css */
+      }
 
-  .nav__hovered {
-    background: var(--_hovered-bg);
-    color: var(--_hovered-text);
-  }
+      .nav__active {
+        /* custom css */
+      }
 
-  .nav__active {
-    background: var(--_active-bg);
-    color: var(--_active-text);
-  }
+      .nav__active-indicator {
+        /* custom css */
+      }
 
-  .nav__active-indicator {
-    background: var(--_active-indicator);
-    height: 0.4rem;
-  }
+      .tabs-list-item {
+        /* custom css */
 
-  .tabs-list-item {
-    background: transparent;
-    border: 0;
-    color: var(--_default-text);
-    cursor: pointer;
-    font: inherit;
-    text-transform: uppercase;
-    font-weight: 500;
-    margin: 0;
-    padding: 1em 2em;
+        &:hover {
+          /* custom css */
+        }
 
-    &:hover {
-      color: var(--_hovered-text);
+        &[aria-selected='true'] {
+          /* custom css */
+        }
+      }
+
+      .nav__hovered {
+        /* custom css */
+      }
+
+      .nav__active {
+        /* custom css */
+      }
+
+      .nav__active-indicator {
+        /* custom css */
+      }
+
+      .tabs-list-item {
+        /* custom css */
+
+        &:hover {
+          /* custom css */
+        }
+
+        &[aria-selected='true'] {
+          /* custom css */
+        }
+
+        &.transitioning {
+          /* custom css */
+        }
+      }
     }
 
-    &[aria-selected='true'] {
-      color: var(--_active-text);
+    .tab-content-wrapper {
+      /* custom css */
+
+      .tab-content {
+        /* custom css */
+      }
     }
   }
 }
