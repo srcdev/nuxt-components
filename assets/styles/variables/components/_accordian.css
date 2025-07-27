@@ -1,7 +1,0 @@
-:root {
-  --accordian-panel-border: 0.1rem solid light-dark(var(--gray-3), var(--gray-6));
-  --accordian-panel-border-radius: 0.4rem;
-  --accordian-panel-mbe: 1.6rem;
-
-  --accordion-trigger-bg: light-dark(var(--gray-3), var(--gray-6));
-}

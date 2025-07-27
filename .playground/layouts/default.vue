@@ -53,7 +53,7 @@ const responsiveNavLinks = {
         { name: 'Slider Gallery', path: '/ui/slider-gallery' },
         { name: 'Container Glow', path: '/ui/container-glow' },
         { name: 'Accordian', path: '/ui/accordian' },
-        { name: 'Details', path: '/ui/display-details' },
+        { name: 'Display Details', path: '/ui/display-details' },
         { name: 'Expanding Panel', path: '/ui/expanding-panel' },
         { name: 'Dialogs', path: '/ui/dialog' },
         { name: 'Tabs X', path: '/ui/tabs' },
@@ -80,7 +80,7 @@ const responsiveNavLinks = {
     { name: 'About', path: '/' },
   ],
   secondNav: [
-    { name: 'Some other link', path: '/' },
+    { name: 'Some other link', path: '#link-description' },
     {
       name: 'Help',
       childLinksTitle: 'Find Help',

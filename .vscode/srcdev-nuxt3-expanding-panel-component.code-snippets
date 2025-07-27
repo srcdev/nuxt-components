@@ -1,7 +1,7 @@
 {
   "SRCDEV Nuxt Expanding Panel Component HTML Template": {
+    "description": "Add a Nuxt Expanding Panel Component HTML template",
     "scope": "vue, html",
-    "prefix": "srcdev-nuxt-expanding-panel-component-html-template",
     "body": [
       "<ExpandingPanel",
       "  name=\"set-details-name\"",
@@ -21,12 +21,11 @@
       "     $0",
       "  </template>",
       "</ExpandingPanel>"
-    ],
-    "description": "SRCDEV Nuxt Expanding Panel Component HTML Template"
+    ]
   },
   "SRCDEV Nuxt Expanding Panel Component CSS Configuration": {
+    "description": "Add a Nuxt Expanding Panel Component CSS configuration",
     "scope": "css",
-    "prefix": "srcdev-nuxt-expanding-panel-component-css-configuration",
     "body": [
       ".expanding-panel {",
       "  $0&.custom-style-1 [ /* css class modifier set via :style-class-passthrough on template */",
@@ -81,7 +80,6 @@
       "    }",
       "  }",
       "}",
-    ],
-    "description": "SRCDEV Nuxt Expanding Panel Component CSS Configuration"
+    ]
   }
 }
