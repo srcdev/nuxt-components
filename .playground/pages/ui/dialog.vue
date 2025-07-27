@@ -14,7 +14,7 @@
             data-dialog-id="sample1"
           >
             <template #dialogTitle>
-              <p class="text-normal wght-700">Confirm logout?</p>
+              <p class="text-normal wght-700 m-0">Confirm logout?</p>
             </template>
 
             <template #dialogContent>
@@ -73,11 +73,11 @@
 
           <DisplayDialogConfirm v-if="dialogsConfig['logout']" v-model="dialogsConfig['logout']" :style-class-passthrough="['content-width']" data-dialog-id="logout">
             <template #dialogTitle>
-              <p class="text-normal wght-700">Confirm logout?</p>
+              <p class="text-normal wght-700 m-0">Confirm logout?</p>
             </template>
 
             <template #dialogContent>
-              <div class="pt-12 pb-12">
+              <div class="m-0">
                 <p class="text-normal">Are you sure you wish to log out?</p>
               </div>
             </template>
@@ -114,3 +114,5 @@ onMounted(() => {
   initialiseDialogs(dialogIds);
 });
 </script>
+
+<style lang="css"></style>

@@ -1,7 +1,7 @@
 <template>
-  <dialog class="display-dialog-core" :class="[variant, elementClasses]" role="dialog" :align-dialog :open :data-dialog-id="dataDialogId" ref="dialogRef">
+  <dialog class="display-dialog-core" :class="[elementClasses]" role="dialog" :align-dialog :open :data-dialog-id="dataDialogId" ref="dialogRef">
     <focus-trap v-model:active="open" :clickOutsideDeactivates="true" @deactivate="closeDialog()">
-      <div class="inner">
+      <div class="inner" :class="[variant]">
         <div class="header">
           <div v-if="hasDialogTitle" class="col-left">
             <slot name="dialogTitle"></slot>
@@ -95,9 +95,6 @@ onMounted(() => {
 
 <style lang="css">
 .display-dialog-core {
-  --_dialog-inner-height: initial;
-  --_dialog-inner-width: 100vw;
-
   display: flex;
   position: fixed;
   left: 0;
@@ -132,47 +129,46 @@ onMounted(() => {
     align-items: center;
   }
 
-  &.confirm {
-    --_dialog-inner-width: initial;
-  }
-
-  &.dialog {
-    --_dialog-inner-height: 70dvh;
-    --_dialog-inner-width: min(75%, 720px);
-  }
-
-  &.form {
-    --_dialog-inner-width: initial;
-  }
-
-  &.fullscreen {
-    --_dialog-inner-width: initial;
-  }
-
-  &.modal {
-    --_dialog-inner-width: initial;
-  }
-
   .inner {
     display: grid;
     grid-template-rows: auto 1fr auto;
 
-    border-radius: var(--dialog-border-radius);
-    border: var(--dialog-border);
-    outline: var(--dialog-outline);
+    border-radius: 8px;
+    border: 1px solid light-dark(var(--gray-10), var(--gray-2));
+    outline: 1px solid light-dark(var(--gray-12), var(--gray-0));
 
     background-color: var(--dialog-inner-background);
-    height: var(--_dialog-inner-height);
-    width: var(--_dialog-inner-width);
-
+    height: initial;
+    width: 100vw;
     overflow: hidden;
+
+    &.confirm {
+      width: initial;
+    }
+
+    &.dialog {
+      height: 70dvh;
+      width: min(75%, 720px);
+    }
+
+    &.form {
+      width: initial;
+    }
+
+    &.fullscreen {
+      width: initial;
+    }
+
+    &.modal {
+      width: initial;
+    }
 
     .header {
       display: grid;
       grid-template-columns: auto 1fr auto;
       align-items: center;
 
-      padding: var(--dialog-header-padding);
+      padding: 12px;
 
       .col-left {
         /* grid-column: 1; */
@@ -223,7 +219,7 @@ onMounted(() => {
 
     .dialog-content {
       overflow: hidden;
-      padding: var(--dialog-content-padding);
+      padding: 12px;
 
       &.allow-content-scroll {
         overflow-y: auto;
@@ -237,7 +233,7 @@ onMounted(() => {
       display: flex;
       gap: 1.2rem;
       justify-content: flex-end;
-      padding: var(--dialog-footer-padding);
+      padding: 12px;
     }
   }
 }
