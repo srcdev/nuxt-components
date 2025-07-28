@@ -4,7 +4,7 @@
       <template #content>
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
           <h2 class="heading-2">Dialog withscrollable content</h2>
-          <p><button @click="controlDialogs('sample1', true)" type="button">Show Dialog</button></p>
+          <p><button @click.prevent="controlDialogs('sample1', true)" type="button">Show Dialog</button></p>
 
           <DisplayDialogScrollableContent
             v-if="dialogsConfig['sample1']"
@@ -59,17 +59,17 @@
               </div>
             </template>
             <template #actionButtonLeft>
-              <button @click="controlDialogs('sample1', false, 'cancel')" type="submit">Cancel</button>
+              <button @click.prevent="controlDialogs('sample1', false, 'cancel')" type="submit">Cancel</button>
             </template>
             <template #actionButtonRight>
-              <button @click="controlDialogs('sample1', false, 'confirm')" type="submit">Confirm</button>
+              <button @click.prevent="controlDialogs('sample1', false, 'confirm')" type="submit">Confirm</button>
             </template>
           </DisplayDialogScrollableContent>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
           <h2 class="heading-2">Confirm Dialog</h2>
-          <p><button @click="controlDialogs('logout', true)" type="button">Show Dialog Prompt</button></p>
+          <p><button @click.prevent="controlDialogs('logout', true)" type="button">Show Dialog Prompt</button></p>
 
           <DisplayDialogConfirm v-if="dialogsConfig['logout']" v-model="dialogsConfig['logout']" :style-class-passthrough="['your-modifier-class']" data-dialog-id="logout">
             <template #dialogTitle>
@@ -82,10 +82,10 @@
               </div>
             </template>
             <template #actionButtonLeft>
-              <button @click="controlDialogs('logout', false, 'cancel')" type="submit">Cancel</button>
+              <button @click.prevent="controlDialogs('logout', false, 'cancel')" type="submit">Cancel</button>
             </template>
             <template #actionButtonRight>
-              <button @click="controlDialogs('logout', false, 'confirm')" type="submit">Confirm</button>
+              <button @click.prevent="controlDialogs('logout', false, 'confirm')" type="submit">Confirm</button>
             </template>
           </DisplayDialogConfirm>
         </LayoutRow>

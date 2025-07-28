@@ -101,7 +101,7 @@ onMounted(() => {
   height: 100%;
   backdrop-filter: blur(5px);
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 13;
+  z-index: 999999;
   opacity: 0;
   border: none;
   padding: 0;
