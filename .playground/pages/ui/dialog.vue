@@ -9,7 +9,7 @@
           <DisplayDialogScrollableContent
             v-if="dialogsConfig['sample1']"
             v-model="dialogsConfig['sample1']"
-            :style-class-passthrough="['content-width']"
+            :style-class-passthrough="['your-modifier-class']"
             :allowContentScroll="true"
             data-dialog-id="sample1"
           >
@@ -71,7 +71,7 @@
           <h2 class="heading-2">Confirm Dialog</h2>
           <p><button @click="controlDialogs('logout', true)" type="button">Show Dialog Prompt</button></p>
 
-          <DisplayDialogConfirm v-if="dialogsConfig['logout']" v-model="dialogsConfig['logout']" :style-class-passthrough="['content-width']" data-dialog-id="logout">
+          <DisplayDialogConfirm v-if="dialogsConfig['logout']" v-model="dialogsConfig['logout']" :style-class-passthrough="['your-modifier-class']" data-dialog-id="logout">
             <template #dialogTitle>
               <p class="text-normal wght-700 m-0">Confirm logout?</p>
             </template>
@@ -107,6 +107,10 @@ useHead({
   },
 });
 
+const dialogBtnSampleAction = () => {
+  console.log('Dialog button action clicked');
+};
+
 const { dialogsConfig, controlDialogs, initialiseDialogs } = useDialogControls();
 
 onMounted(() => {
@@ -115,4 +119,81 @@ onMounted(() => {
 });
 </script>
 
-<style lang="css"></style>
+<style lang="css">
+.your-modifier-class {
+  &.display-dialog-core {
+    /* Dialog core styles */
+    /* Delete or add styles as needed */
+
+    &[open] {
+      @starting-style {
+      }
+    }
+
+    /* * Positioning the dialog */
+    &[justify-dialog='start'] {
+    }
+
+    &[justify-dialog='center'] {
+    }
+
+    &[justify-dialog='end'] {
+    }
+
+    &[align-dialog='start'] {
+    }
+
+    &[align-dialog='center'] {
+    }
+    &[align-dialog='end'] {
+    }
+
+    .inner {
+      &.confirm {
+      }
+
+      &.dialog {
+      }
+
+      &.form {
+      }
+
+      &.fullscreen {
+      }
+
+      &.modal {
+      }
+
+      .header {
+        .col-left {
+        }
+
+        .col-center {
+        }
+
+        .col-right {
+          .display-prompt-action {
+            &:hover {
+            }
+            &:focus-visible {
+            }
+
+            .icon {
+            }
+          }
+        }
+      }
+
+      .dialog-content {
+        &.allow-content-scroll {
+          &::-webkit-scrollbar {
+          }
+        }
+      }
+
+      .footer {
+      }
+    }
+  }
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <dialog class="display-dialog-core" :class="[elementClasses]" role="dialog" :align-dialog :open :data-dialog-id="dataDialogId" ref="dialogRef">
+  <dialog class="display-dialog-core" :class="[elementClasses]" role="dialog" :align-dialog :justify-dialog :open :data-dialog-id="dataDialogId" ref="dialogRef">
     <focus-trap v-model:active="open" :clickOutsideDeactivates="true" @deactivate="closeDialog()">
       <div class="inner" :class="[variant]">
         <div class="header">
@@ -40,15 +40,15 @@ const props = defineProps({
     default: 'dialog',
     validator: (val) => ['dialog', 'modal', 'confirm'].includes(val as string),
   },
-  positionX: {
+  justifyDialog: {
     type: String,
     default: 'center',
-    validator: (val) => ['left', 'center', 'right'].includes(val as string),
+    validator: (val) => ['start', 'center', 'end'].includes(val as string),
   },
-  positionY: {
+  alignDialog: {
     type: String,
     default: 'center',
-    validator: (val) => ['top', 'center', 'bottom'].includes(val as string),
+    validator: (val) => ['start', 'center', 'end'].includes(val as string),
   },
   lockViewport: {
     type: Boolean,
@@ -82,8 +82,6 @@ const slots = useSlots();
 const hasDialogTitle = computed(() => slots.dialogTitle !== undefined);
 const hasDialogContent = computed(() => slots.dialogContent !== undefined);
 const hasActionButtons = computed(() => slots.actionButtons !== undefined);
-
-const alignDialog = computed(() => `${props.positionY}-${props.positionX}`);
 
 onMounted(() => {
   bodyTag.value = document.querySelector('body');
@@ -122,11 +120,28 @@ onMounted(() => {
     }
   }
 
-  &[align-dialog$='center'] {
+  /* * Positioning the dialog */
+  &[justify-dialog='start'] {
+    justify-content: flex-start;
+  }
+
+  &[justify-dialog='center'] {
     justify-content: center;
   }
-  &[align-dialog^='center'] {
+
+  &[justify-dialog='end'] {
+    justify-content: flex-end;
+  }
+
+  &[align-dialog='start'] {
+    align-items: flex-start;
+  }
+
+  &[align-dialog='center'] {
     align-items: center;
+  }
+  &[align-dialog='end'] {
+    align-items: flex-end;
   }
 
   .inner {
