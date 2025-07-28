@@ -59,10 +59,10 @@
               </div>
             </template>
             <template #actionButtonLeft>
-              <button @click="controlDialogs('sample1', false)" type="submit">Cancel</button>
+              <button @click="controlDialogs('sample1', false, 'cancel')" type="submit">Cancel</button>
             </template>
             <template #actionButtonRight>
-              <button @click="controlDialogs('sample1', false)" type="submit">Confirm</button>
+              <button @click="controlDialogs('sample1', false, 'confirm')" type="submit">Confirm</button>
             </template>
           </DisplayDialogScrollableContent>
         </LayoutRow>
@@ -82,10 +82,10 @@
               </div>
             </template>
             <template #actionButtonLeft>
-              <button @click="controlDialogs('logout', false)" type="submit">Cancel</button>
+              <button @click="controlDialogs('logout', false, 'cancel')" type="submit">Cancel</button>
             </template>
             <template #actionButtonRight>
-              <button @click="controlDialogs('logout', false)" type="submit">Confirm</button>
+              <button @click="controlDialogs('logout', false, 'confirm')" type="submit">Confirm</button>
             </template>
           </DisplayDialogConfirm>
         </LayoutRow>
@@ -111,11 +111,25 @@ const dialogBtnSampleAction = () => {
   console.log('Dialog button action clicked');
 };
 
-const { dialogsConfig, controlDialogs, initialiseDialogs } = useDialogControls();
+const { dialogsConfig, controlDialogs, initialiseDialogs, registerDialogCallbacks } = useDialogControls();
 
 onMounted(() => {
   const dialogIds = ['logout', 'sample1'];
   initialiseDialogs(dialogIds);
+
+  // Register callbacks for each dialog
+  registerDialogCallbacks('sample1', {
+    onConfirm: dialogBtnSampleAction,
+    onCancel: () => console.log('Sample1 dialog cancelled'),
+  });
+
+  registerDialogCallbacks('logout', {
+    onConfirm: () => {
+      dialogBtnSampleAction();
+      console.log('User logged out');
+    },
+    onCancel: () => console.log('Logout cancelled'),
+  });
 });
 </script>
 
