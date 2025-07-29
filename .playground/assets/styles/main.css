@@ -1,5 +1,2 @@
-@import './variables';
-@import './forms';
-@import './utils';
-@import './typography';
-@import './a11y';
+@import './setup/';
+@import './extends-layer/srcdev-components/';
