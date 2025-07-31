@@ -4,7 +4,7 @@
   * Wrapper styles
   */
     --display-prompt-wrapper-background-color: var(--red-8);
-    --display-prompt-wrapper-border: 0.1rem solid var(--red-8);
+    --display-prompt-wrapper-color: var(--red-8);
     --display-prompt-wrapper-outline: 0.1rem solid var(--red-5);
 
     /*
@@ -30,8 +30,8 @@
     /*
   * Button styles
   */
-    --display-prompt-button-border: 0.1rem solid var(--red-8);
-    --display-prompt-button-outline: 0.1rem solid var(--red-8);
+    --display-prompt-button-border-color: var(--red-8);
+    --display-prompt-button-outline-color: var(--red-8);
 
     /*
   * Button styles

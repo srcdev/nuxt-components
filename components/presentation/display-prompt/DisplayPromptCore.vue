@@ -59,13 +59,16 @@ const dismissPrompt = () => {
 
 <style lang="css">
 .display-prompt-wrapper {
-  background-color: var(--display-prompt-wrapper-background-color);
-  border-radius: var(--display-prompt-wrapper-border-radius);
-  border: var(--display-prompt-wrapper-border);
-  outline: var(--display-prompt-wrapper-outline);
   overflow: hidden;
   transition: height 200ms, opacity 200ms, display 200ms;
   transition-behavior: allow-discrete;
+
+  background-color: var(--display-prompt-wrapper-background-color);
+  border: 1px solid var(--display-prompt-wrapper-color);
+  border-inline-start: 8px solid var(--display-prompt-wrapper-color);
+  border-radius: 4px;
+  border-start-start-radius: 8px;
+  border-end-start-radius: 8px;
 
   &.dismissed {
     opacity: 0;
@@ -76,21 +79,20 @@ const dismissPrompt = () => {
   .display-prompt-inner {
     background-color: var(--display-prompt-inner-background-color);
     align-items: center;
-    border-radius: var(--display-prompt-inner-border-radius);
     display: flex;
     gap: var(--display-prompt-inner-gap);
     justify-content: space-between;
-    padding: var(--display-prompt-inner-padding);
-    margin: var(--display-prompt-inner-margin);
+    padding-block: 1rem;
+    padding-inline: 1.5rem;
 
     .display-prompt-icon {
       display: inline-flex;
       .icon {
         color: var(--display-prompt-icon-color);
         display: inline-block;
-        font-size: var(--display-prompt-icon-size);
+        font-size: 3rem;
         font-style: normal;
-        font-weight: var(--display-prompt-icon-weight);
+        font-weight: normal;
         overflow: hidden;
       }
     }
@@ -99,26 +101,26 @@ const dismissPrompt = () => {
       display: block flex;
       flex-direction: column;
       flex-grow: 1;
-      gap: var(--display-prompt-inner-content-gap);
-      margin: var(--display-prompt-content-margin);
-      padding: var(--display-prompt-content-padding);
+      gap: 1rem;
+      margin: 0;
+      padding: 0.2rem;
 
       .title {
-        font-size: var(--display-prompt-content-title-font-size);
-        font-weight: var(--display-prompt-content-title-font-weight);
-        line-height: var(--display-prompt-content-title-line-height);
+        font-size: var(--step-2);
+        font-weight: bold;
+        line-height: 1.3;
         color: var(--display-prompt-content-title-color);
-        margin: var(--display-prompt-content-title-margin);
-        padding: var(--display-prompt-content-title-padding);
+        margin: 0;
+        padding: 0;
       }
 
       .text {
-        font-size: var(--display-prompt-content-text-font-size);
-        font-weight: var(--display-prompt-content-text-font-weight);
-        line-height: var(--display-prompt-content-text-line-height);
+        font-size: var(--step-2);
+        font-weight: normal;
+        line-height: 1.3;
         color: var(--display-prompt-content-text-color);
-        margin: var(--display-prompt-content-text-margin);
-        padding: var(--display-prompt-content-text-padding);
+        margin: 0;
+        padding: 0;
       }
     }
     .display-prompt-action {
@@ -127,11 +129,11 @@ const dismissPrompt = () => {
       display: block flex;
       align-items: center;
       justify-content: center;
-      margin: var(--display-prompt-button-margin);
-      padding: var(--display-prompt-button-padding);
-      border: var(--display-prompt-button-border);
-      border-radius: var(--display-prompt-button-border-radius);
-      outline: var(--display-prompt-button-outline);
+      margin: 1rem;
+      padding: 0.5rem;
+      border: 0.1rem solid var(--display-prompt-button-border-color);
+      border-radius: 50%;
+      outline: 1px solid var(--display-prompt-button-outline-color);
 
       &:hover {
         cursor: pointer;
@@ -140,7 +142,7 @@ const dismissPrompt = () => {
       .icon {
         color: var(--display-prompt-button-icon-color);
         display: block;
-        font-size: var(--display-prompt-button-icon-font-size);
+        font-size: var(--step-2);
         border: 1px solid green;
         padding: 1rem;
       }
