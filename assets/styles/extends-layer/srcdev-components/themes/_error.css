@@ -1,0 +1,15 @@
+[data-prompt-theme='error'] {
+  --component-theme-0: var(--red-0);
+  --component-theme-1: var(--red-1);
+  --component-theme-2: var(--red-2);
+  --component-theme-3: var(--red-3);
+  --component-theme-4: var(--red-4);
+  --component-theme-5: var(--red-5);
+  --component-theme-6: var(--red-6);
+  --component-theme-7: var(--red-7);
+  --component-theme-8: var(--red-8);
+  --component-theme-9: var(--red-9);
+  --component-theme-10: var(--red-10);
+  --component-theme-11: var(--red-11);
+  --component-theme-12: var(--red-12);
+}

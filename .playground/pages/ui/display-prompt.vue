@@ -2,40 +2,42 @@
   <div>
     <NuxtLayout name="default">
       <template #content>
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="popout">
           <h2 class="heading-2">Display Prompts</h2>
 
-          <DisplayPromptCore theme="success" :dismissible="true" :style-class-passthrough="['mbs-20']">
-            <template #icon>
-              <Icon name="akar-icons:check" class="icon" />
-            </template>
-            <template #title>Success Prompt Title with content (Dismissable)</template>
-            <template #content>This is prompt content, it can contain html or plain text.</template>
-          </DisplayPromptCore>
+          <section class="prompt-examples">
+            <DisplayPromptCore theme="success" :dismissible="true" :style-class-passthrough="['your-scope-class']">
+              <template #icon>
+                <Icon name="akar-icons:check" class="icon" />
+              </template>
+              <template #title>Success Prompt Title with content (Dismissable)</template>
+              <template #content>This is prompt content, it can contain html or plain text.</template>
+            </DisplayPromptCore>
 
-          <DisplayPromptCore theme="info" :dismissible="true" :style-class-passthrough="['mbs-20']">
-            <template #icon>
-              <Icon name="akar-icons:info" class="icon" />
-            </template>
-            <template #title>Info Prompt Title with content (Dismissable)</template>
-            <template #content>This is prompt content, it can contain html or plain text.</template>
-          </DisplayPromptCore>
+            <DisplayPromptCore theme="info" :dismissible="true" :style-class-passthrough="['your-scope-class']">
+              <template #icon>
+                <Icon name="akar-icons:info" class="icon" />
+              </template>
+              <template #title>Info Prompt Title with content (Dismissable)</template>
+              <template #content>This is prompt content, it can contain html or plain text.</template>
+            </DisplayPromptCore>
 
-          <DisplayPromptCore theme="error" :dismissible="true" :style-class-passthrough="['mbs-20']">
-            <template #icon>
-              <Icon name="akar-icons:circle-alert" class="icon" />
-            </template>
-            <template #title>Error Prompt Title with content (Dismissable)</template>
-            <template #content>This is prompt content, it can contain html or plain text.</template>
-          </DisplayPromptCore>
+            <DisplayPromptCore theme="error" :dismissible="true" :style-class-passthrough="['your-scope-class']">
+              <template #icon>
+                <Icon name="akar-icons:circle-alert" class="icon" />
+              </template>
+              <template #title>Error Prompt Title with content (Dismissable)</template>
+              <template #content>This is prompt content, it can contain html or plain text.</template>
+            </DisplayPromptCore>
 
-          <DisplayPromptCore theme="warning" :dismissible="true" :style-class-passthrough="['mbs-20']">
-            <template #icon>
-              <Icon name="akar-icons:circle-alert" class="icon" />
-            </template>
-            <template #title>Warning Prompt Title with content (Dismissable)</template>
-            <template #content>This is prompt content, it can contain html or plain text.</template>
-          </DisplayPromptCore>
+            <DisplayPromptCore theme="warning" :dismissible="true" :style-class-passthrough="['your-scope-class']">
+              <template #icon>
+                <Icon name="akar-icons:circle-alert" class="icon" />
+              </template>
+              <template #title>Warning Prompt Title with content (Dismissable)</template>
+              <template #content>This is prompt content, it can contain html or plain text.</template>
+            </DisplayPromptCore>
+          </section>
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -52,3 +54,11 @@ useHead({
   meta: [{ name: 'description', content: 'Examples of UI Display Prompts' }],
 });
 </script>
+
+<style lang="css">
+.prompt-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+</style>
