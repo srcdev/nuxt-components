@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
-          <h2 class="heading-2">Dialog withscrollable content</h2>
+          <h1 class="heading-2">Dialog withscrollable content</h1>
           <p><button @click.prevent="controlDialogs('sample1', true)" type="button">Show Dialog</button></p>
 
           <DisplayDialogScrollableContent

@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']">
-          <h2 class="heading-2">Rotating Carousel</h2>
+          <h1 class="heading-2">Rotating Carousel</h1>
           <div class="display-flex mbe-12" align-content="center-center" gap="12px" flex-wrap="wrap">
             <div class="display-flex mbe-12" align-content="center-center" gap="12px" flex-wrap="wrap">
               <label for="rotateX">rotateX</label>

@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['display-details-section', 'mbe-20']">
-          <h2 class="heading-2">Slider Gallery Component</h2>
+          <h1 class="heading-2">Slider Gallery Component</h1>
 
           <SliderGallery v-model:gallery-data="galleryData" :auto-run="false" />
         </LayoutRow>

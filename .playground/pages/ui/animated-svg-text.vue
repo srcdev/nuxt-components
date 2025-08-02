@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['display-details-section', 'mbe-20']">
-          <h2 class="heading-2">Animated SVG Text Component</h2>
+          <h1 class="heading-2">Animated SVG Text Component</h1>
 
           <AnimatedSvgText :styleClassPassthrough="['luxury-locs-title']">
             <template #text>

@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="popout">
-          <h2 class="heading-2">Display Prompts</h2>
+          <h1 class="heading-2">Display Prompts</h1>
 
           <section class="prompt-examples">
             <DisplayPromptCore theme="success" :dismissible="true" :use-local-style-overrides="true" :style-class-passthrough="['your-scope-class']">

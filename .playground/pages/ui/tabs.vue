@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
-          <h2 class="heading-2">Tabs #1</h2>
+          <h1 class="heading-2">Tabs #1</h1>
           <p>Static tabs</p>
 
           <TabsCore :navItems="navLinks3" :itemCount="3" :transitionDuration="300" :style-class-passthrough="['class-modifier']">

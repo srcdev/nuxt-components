@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <h2 class="heading-2">Carousel (Basic)</h2>
+          <h1 class="heading-2">Carousel (Basic)</h1>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">

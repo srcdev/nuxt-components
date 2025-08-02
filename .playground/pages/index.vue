@@ -2,6 +2,11 @@
   <div>
     <NuxtLayout name="default">
       <template #content>
+        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
+          <h1 class="heading-1">Nuxt3 Components Layer</h1>
+          <p>A collection of hand rolled UI components for Nuxt3 that can be added as a layer (extended into another Nuxt3 app)</p>
+        </LayoutRow>
+
         <LayoutRow tag="div" variant="inset-content" :styleClassPassthrough="['mbe-20']">
           <h2 class="heading-2">PopOver component 1</h2>
           <ClientOnly>

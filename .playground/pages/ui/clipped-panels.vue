@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-          <h2 class="heading-2">Clipped Panels</h2>
+          <h1 class="heading-2">Clipped Panels</h1>
         </LayoutRow>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h2 class="heading-2">Rectangle</h2>

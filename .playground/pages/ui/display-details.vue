@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['display-details-section', 'mbe-20']">
-          <h2 class="heading-2">Details element - Unlinked</h2>
+          <h1 class="heading-2">Details element - Unlinked</h1>
           <p class="mbe-12">Following 2 details block behave independantly.</p>
 
           <DisplayDetailsCore id="details-1" name="details-1" :animation-duration="200" icon-size="medium" :style-class-passthrough="['custom-style-1']">

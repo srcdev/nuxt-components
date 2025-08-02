@@ -2,6 +2,10 @@
   <div>
     <NuxtLayout name="default">
       <template #content>
+        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
+          <h1 class="heading-2">Layout rows</h1>
+        </LayoutRow>
+
         <LayoutRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="heading-2">Full Track (1fr)</h2>
           <p>

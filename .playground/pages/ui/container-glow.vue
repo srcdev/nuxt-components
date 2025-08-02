@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
-          <h2 class="heading-2">Container Glow Effect</h2>
+          <h1 class="heading-2">Container Glow Effect</h1>
           <p>Glow will track mouse position</p>
 
           <ContainerGlowCore

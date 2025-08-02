@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
-          <h2 class="heading-2">Layout Grid 'A'</h2>
+          <h1 class="heading-2">Layout Grid 'A'</h1>
 
           <CanvasSwitcher v-model:canvasName="canvasName" />
         </LayoutRow>

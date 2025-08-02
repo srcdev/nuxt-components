@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #content>
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
-          <h2 class="heading-2">Accordian</h2>
+          <h1 class="heading-2">Accordian</h1>
           <p>Any item open and/closed</p>
 
           <AccordianCore :itemCount="3" :style-class-passthrough="['class-modifier-narrow']">
