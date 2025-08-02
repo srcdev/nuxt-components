@@ -1,23 +1,36 @@
 <template>
   <div class="navigation" :class="[elementClasses, { loaded: navLoaded }]" ref="navigationWrapper">
     <nav class="main-navigation" ref="mainNav">
-
-      <ul v-for="(navGroup, groupKey) in responsiveNavLinks" :key="groupKey" class="main-navigation-list"
-        :ref="el => setNavRef(String(groupKey), el as HTMLUListElement | null)">
+      <ul v-for="(navGroup, groupKey) in responsiveNavLinks" :key="groupKey" class="main-navigation-list" :ref="el => setNavRef(String(groupKey), el as HTMLUListElement | null)">
         <template v-for="(link, localIndex) in navGroup" :key="localIndex">
-          <li v-if="link.path" class="main-navigation-item"
+          <li
+            v-if="link.path"
+            class="main-navigation-item"
             :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
             :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
-            ref="mainNavigationItems" :data-group-key="groupKey" :data-local-index="localIndex">
+            ref="mainNavigationItems"
+            :data-group-key="groupKey"
+            :data-local-index="localIndex"
+          >
             <NuxtLink class="main-navigation-link" :to="link.path">{{ link.name }}</NuxtLink>
           </li>
-          <li v-else class="main-navigation-item"
+          <li
+            v-else
+            class="main-navigation-item"
             :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
             :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
-            ref="mainNavigationItems" :data-group-key="groupKey" :data-local-index="localIndex">
+            ref="mainNavigationItems"
+            :data-group-key="groupKey"
+            :data-local-index="localIndex"
+          >
             <details class="main-navigation-details" name="navigation-group" ref="navigationDetails">
-              <summary @mouseenter="handleSummaryHover($event)" @focusin="handleSummaryHover($event)"
-                class="main-navigation-details-summary has-toggle-icon">
+              <summary
+                @mouseenter="handleSummaryHover($event)"
+                @focusin="handleSummaryHover($event)"
+                @click.prevent="handleSummaryAction($event)"
+                @keypup.prevent.stop="handleSummaryAction($event)"
+                class="main-navigation-details-summary has-toggle-icon"
+              >
                 <Icon name="mdi:chevron-down" class="icon" />
                 {{ link.childLinksTitle }}
               </summary>
@@ -32,11 +45,9 @@
           </li>
         </template>
       </ul>
-
     </nav>
     <nav class="secondary-navigation" ref="secondaryNav">
-      <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]"
-        ref="overflowDetails" name="overflow-group">
+      <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]" ref="overflowDetails" name="overflow-group">
         <summary class="overflow-details-summary has-toggle-icon">
           <Icon :name="overflowDetailsSummaryIcons.more" class="icon" :class="[{ show: !allowNavigationCollapse }]" />
           <Icon :name="overflowDetailsSummaryIcons.burger" class="icon" :class="[{ show: allowNavigationCollapse }]" />
@@ -52,7 +63,7 @@
         <div>
           <h2 class="heading-4">navigationWrapperRects</h2>
           <pre>{{ navigationWrapperRects }}</pre>
-          <hr>
+          <hr />
           <h2 class="heading-4">secondaryNavRects</h2>
           <pre>{{ secondaryNavRects }}</pre>
         </div>
@@ -83,7 +94,7 @@ const props = defineProps({
     default: {
       more: 'gravity-ui:ellipsis',
       burger: 'gravity-ui:bars',
-    }
+    },
   },
   collapseNavigationBelowWidth: {
     type: Boolean,
@@ -97,6 +108,10 @@ const props = defineProps({
     type: Array as PropType<string[]>,
     default: () => [],
   },
+  allowExpandOnGesture: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 const slots = useSlots();
@@ -105,16 +120,28 @@ const hasSecondaryNavigation = computed(() => slots.secondaryNavigation !== unde
 const navLoaded = ref(false);
 const navigationWrapperRef = useTemplateRef('navigationWrapper');
 
-const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
+const toggleDetailsElement = (event: Event) => {
   const summaryElement = event.currentTarget as HTMLElement;
   const parentDetailsElement = summaryElement.closest('details');
   if (!parentDetailsElement) return;
+
   if (parentDetailsElement.hasAttribute('open')) {
     parentDetailsElement.removeAttribute('open');
   } else {
     parentDetailsElement.setAttribute('open', '');
   }
   overflowDetailsRef.value?.removeAttribute('open');
+};
+
+const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
+  if (!props.allowExpandOnGesture) {
+    return;
+  }
+  toggleDetailsElement(event);
+};
+
+const handleSummaryAction = (event: MouseEvent | KeyboardEvent) => {
+  toggleDetailsElement(event);
 };
 
 const mainNavigationState = ref<ResponsiveHeaderState>({
@@ -129,8 +156,8 @@ const mainNavigationState = ref<ResponsiveHeaderState>({
 const navRefs = ref<Record<string, HTMLUListElement | null>>({});
 
 const setNavRef = (key: string, el: HTMLUListElement | null) => {
-  navRefs.value[key] = el
-}
+  navRefs.value[key] = el;
+};
 
 const navigationWrapperRects = ref<IFlooredRect | null>(null);
 const firstNavRef = ref<HTMLUListElement | null>(null);
@@ -165,7 +192,7 @@ const initTemplateRefs = async () => {
   firstNavRef.value = navRefs.value['firstNav'] as HTMLUListElement | null;
   secondNavRef.value = navRefs.value['secondNav'] as HTMLUListElement | null;
   return;
-}
+};
 
 const getFlooredRect = (rect: DOMRect | null) => {
   if (!rect) return null;
@@ -177,14 +204,14 @@ const getFlooredRect = (rect: DOMRect | null) => {
     width: Math.floor(rect.width),
     height: Math.floor(rect.height),
   };
-}
+};
 
 const updateNavigationConfig = async (source: string) => {
   navigationWrapperRects.value = getFlooredRect((navigationWrapperRef.value && navigationWrapperRef.value.getBoundingClientRect()) ?? null) || null;
   secondaryNavRects.value = getFlooredRect((secondaryNavRef.value && secondaryNavRef.value.getBoundingClientRect()) ?? null) || null;
   firstNavRects.value = getFlooredRect((firstNavRef.value && firstNavRef.value.getBoundingClientRect()) ?? null) || null;
   secondNavRects.value = getFlooredRect((secondNavRef.value && secondNavRef.value.getBoundingClientRect()) ?? null) || null;
-}
+};
 
 const allowNavigationCollapse = computed(() => {
   return props.collapseNavigationBelowWidth && navigationWrapperRects.value && navigationWrapperRects.value.width < props.collapseBreakpoint;
@@ -209,7 +236,6 @@ const initMainNavigationState = () => {
   if (!mainNavigationItemsRefs.value) return;
 
   mainNavigationItemsRefs.value.forEach((item, index) => {
-
     const rect = item.getBoundingClientRect();
 
     const groupKey = item.dataset.groupKey;
@@ -243,11 +269,10 @@ const initMainNavigationState = () => {
     } else if (typeof groupKey === 'string') {
       mainNavigationState.value.navListVisibility[groupKey] = true;
     }
-  })
+  });
+};
 
-}
-
-onMounted(async() => {
+onMounted(async () => {
   await initTemplateRefs().then(() => {
     setTimeout(() => {
       navLoaded.value = true;
@@ -260,14 +285,15 @@ onMounted(async() => {
     });
   });
   // Add onClickOutside to overflowDetailsRef
-  overflowDetailsRef.value && onClickOutside(overflowDetailsRef.value, () => {
-    overflowDetailsRef.value?.removeAttribute('open');
-  });
+  overflowDetailsRef.value &&
+    onClickOutside(overflowDetailsRef.value, () => {
+      overflowDetailsRef.value?.removeAttribute('open');
+    });
 });
 
 useResizeObserver(navigationWrapperRef, async () => {
-  await updateNavigationConfig("useResizeObserver").then(() => {
-    initMainNavigationState()
+  await updateNavigationConfig('useResizeObserver').then(() => {
+    initMainNavigationState();
   });
 });
 
@@ -282,305 +308,293 @@ watch(
 </script>
 
 <style lang="css">
+.navigation {
+  ul,
+  ol {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 
-  .navigation {
+    li {
+      /* text-box-trim: trim-both; */
+      /* text-box-edge: cap alphabetic; */
+      display: flex;
+      align-items: center;
+    }
+  }
 
-    ul,
-    ol {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
+  --_link-visibility-transition: none;
 
-      li {
-        /* text-box-trim: trim-both; */
-        /* text-box-edge: cap alphabetic; */
-        display: flex;
-        align-items: center;
-      }
+  &.loaded {
+    --_link-visibility-transition: all 0.2s ease-in-out;
+  }
+
+  /* flex-grow: 1; */
+  display: grid;
+  grid-template-areas: 'navStack';
+
+  margin: 12px;
+  border-radius: 8px;
+  background-color: #efefef05;
+  border: 1px solid #efefef75;
+  padding: 12px;
+
+  .main-navigation {
+    grid-area: navStack;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-grow: 1;
+    justify-content: space-between;
+    gap: 60px;
+
+    overflow-x: hidden;
+    margin-inline-end: v-bind(mainNavigationMarginBlockEndStr);
+
+    &.collapsed {
+      justify-content: flex-start;
     }
 
-    --_link-visibility-transition: none;
-
-    &.loaded {
-      --_link-visibility-transition: all 0.2s ease-in-out;
-    }
-
-    /* flex-grow: 1; */
-    display: grid;
-    grid-template-areas: 'navStack';
-
-    margin: 12px;
-    border-radius: 8px;
-    background-color: #efefef05;
-    border: 1px solid #efefef75;
-    padding: 12px;
-
-    .main-navigation {
-      grid-area: navStack;
+    .main-navigation-list {
       display: flex;
       flex-wrap: nowrap;
-      flex-grow: 1;
-      justify-content: space-between;
-      gap: 60px;
 
-      overflow-x: hidden;
-      margin-inline-end: v-bind(mainNavigationMarginBlockEndStr);
-
-      &.collapsed {
-        justify-content: flex-start;
+      &:nth-of-type(1) {
+        gap: 30px;
       }
 
-      .main-navigation-list {
-        display: flex;
-        flex-wrap: nowrap;
+      &:nth-of-type(2) {
+        gap: 30px;
+      }
 
-        &:nth-of-type(1) {
-          gap: 30px;
+      .main-navigation-item {
+        width: var(--_main-navigation-item-width);
+        overflow: hidden;
+        transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+
+        .main-navigation-link {
+          display: flex;
+          text-wrap-mode: nowrap;
+          color: inherit;
+          text-decoration: none;
+          margin-inline-start: 0;
+          transition: var(--_link-visibility-transition);
         }
 
-        &:nth-of-type(2) {
-          gap: 30px;
-        }
+        .main-navigation-details {
+          --_icon-transform: scaleY(1);
 
-        .main-navigation-item {
+          margin-inline-start: 0;
+          transition: var(--_link-visibility-transition);
 
-          width: var(--_main-navigation-item-width);
-          overflow: hidden;
-          transition:
-            opacity 0.2s ease-in-out,
-            visibility 0.2s ease-in-out;
-
-          .main-navigation-link {
-            display: flex;
-            text-wrap-mode: nowrap;
-            color: inherit;
-            text-decoration: none;
-            margin-inline-start: 0;
-            transition: var(--_link-visibility-transition);
+          &[open] {
+            --_icon-transform: scaleY(-1);
           }
 
-          .main-navigation-details {
+          .has-toggle-icon {
+            display: flex;
+            gap: 6px;
+            text-wrap-mode: nowrap;
 
-            --_icon-transform: scaleY(1);
+            .icon {
+              display: block;
+              transform: var(--_icon-transform);
+              transition: transform 0.2s ease-in-out;
+            }
+          }
 
-            margin-inline-start: 0;
-            transition: var(--_link-visibility-transition);
-
-            &[open] {
-              --_icon-transform: scaleY(-1);
+          .main-navigation-details-summary {
+            &::-webkit-details-marker,
+            &::marker {
+              display: none;
             }
 
-            .has-toggle-icon {
-              display: flex;
-              gap: 6px;
-              text-wrap-mode: nowrap;
-
-              .icon {
-                display: block;
-                transform: var(--_icon-transform);
-                transition: transform 0.2s ease-in-out;
-              }
+            &:hover {
+              cursor: pointer;
             }
+          }
 
-            .main-navigation-details-summary {
+          .main-navigation-sub-nav {
+            position: absolute;
+            padding: 12px;
+            border: 1px solid #efefef75;
+            border-radius: 8px;
+            background-color: #000;
+            translate: 0 12px;
 
-              &::-webkit-details-marker,
-              &::marker {
-                display: none;
-              }
+            min-width: var(--_main-navigation-item-width);
 
-              &:hover {
-                cursor: pointer;
-              }
+            .main-navigation-sub-nav-list {
+              display: grid;
+              grid-template-columns: repeat(2, auto);
+              gap: 12px;
 
-            }
+              .main-navigation-sub-nav-item {
+                margin-bottom: 8px;
 
-            .main-navigation-sub-nav {
-              position: absolute;
-              padding: 12px;
-              border: 1px solid #efefef75;
-              border-radius: 8px;
-              background-color: #000;
-              translate: 0 12px;
+                &:last-child {
+                  margin-bottom: 0;
+                }
 
-              min-width: var(--_main-navigation-item-width);
-
-              .main-navigation-sub-nav-list {
-
-                display: grid;
-                grid-template-columns: repeat(2, auto);
-                gap: 12px;
-
-                .main-navigation-sub-nav-item {
-                  margin-bottom: 8px;
-
-                  &:last-child {
-                    margin-bottom: 0;
-                  }
-
-                  .main-navigation-sub-nav-link {
-                    display: block;
-                    text-wrap-mode: nowrap;
-                    text-decoration: none;
-                    color: inherit;
-                  }
+                .main-navigation-sub-nav-link {
+                  display: block;
+                  text-wrap-mode: nowrap;
+                  text-decoration: none;
+                  color: inherit;
                 }
               }
             }
           }
-
-          &.visually-hidden {
-            visibility: hidden;
-            opacity: 0;
-
-            .main-navigation-details,
-            .main-navigation-link {
-              margin-inline-start: var(--_main-navigation-item-width);
-            }
-          }
         }
-      }
-    }
-
-    .secondary-navigation {
-      grid-area: navStack;
-      justify-self: end;
-
-      display: flex;
-      gap: 12px;
-      align-items: center;
-
-      .secondary-navigation-list {
-
-        .secondary-navigation-item {
-
-          .secondary-navigation-link {
-            display: flex;
-            align-items: center;
-            font: inherit;
-            color: inherit;
-
-            .icon {
-              height: 1.35em;
-              width: 1.35em;
-            }
-          }
-        }
-      }
-
-      .main-navigation-link {
-        .icon {
-          height: 1.35em;
-          width: 1.35em;
-        }
-      }
-
-      .overflow-details {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        position: relative;
-        cursor: pointer;
-        width: fit-content;
-
-        transition: all 0.2s ease-in-out;
 
         &.visually-hidden {
-          opacity: 0;
           visibility: hidden;
-          width: 0;
+          opacity: 0;
+
+          .main-navigation-details,
+          .main-navigation-link {
+            margin-inline-start: var(--_main-navigation-item-width);
+          }
         }
+      }
+    }
+  }
 
-        .overflow-details-summary {
-          --_icon-zoom: 1;
-          --_icon-size: 20px;
-          --_border-width: 1px;
-          --_outline-width: 1px;
-          --_transition-duration: 0.2s;
+  .secondary-navigation {
+    grid-area: navStack;
+    justify-self: end;
 
-          display: grid;
-          grid-template-areas: 'icon';
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    .secondary-navigation-list {
+      .secondary-navigation-item {
+        .secondary-navigation-link {
+          display: flex;
           align-items: center;
-          justify-content: center;
-          padding-inline: 5px;
-          text-wrap: nowrap;
-
-          aspect-ratio: 1;
-          border-radius: 4px;
-          border: var(--_border-width) solid #ffffff90;
-          outline: var(--_outline-width) solid #ffffff10;
-          background-color: Canvas;
-
-          width: var(--_icon-size);
-          height: var(--_icon-size);
-          overflow: hidden;
-          transition-property: all;
-          transition-timing-function: linear;
-          transition-duration: var(--_transition-duration);
-
-          &::-webkit-details-marker,
-          &::marker {
-            display: none;
-          }
-
-          &:hover {
-            --_icon-zoom: 1.2;
-            outline: var(--_outline-width) solid #ffffff;
-          }
+          font: inherit;
+          color: inherit;
 
           .icon {
-            grid-area: icon;
-            scale: var(--_icon-zoom);
-            transition: scale 0.2s ease-in-out;
-            width: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
-            height: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
-
-            opacity: 0;
-            transition-property: opacity, transform; /* For reference */
-            transition-timing-function: linear; /* For reference */
-            transition-duration: var(--_transition-duration); /* For reference */
-
-            &.show {
-              opacity: 1;
-            }
+            height: 1.35em;
+            width: 1.35em;
           }
         }
+      }
+    }
 
+    .main-navigation-link {
+      .icon {
+        height: 1.35em;
+        width: 1.35em;
+      }
+    }
 
-        .overflow-details-nav {
-          position: absolute;
-          top: 135%;
-          right: 0;
-          background-color: #000;
-          border: 1px solid #ffffff90;
-          border-radius: 8px;
-          padding: 12px;
-          margin: 0;
-          z-index: 999;
-          min-width: var(--_overflow-drop-down-width, fit-content);
+    .overflow-details {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      position: relative;
+      cursor: pointer;
+      width: fit-content;
 
-          display: grid;
-          grid-auto-flow: row;
-          gap: 8px;
+      transition: all 0.2s ease-in-out;
+
+      &.visually-hidden {
+        opacity: 0;
+        visibility: hidden;
+        width: 0;
+      }
+
+      .overflow-details-summary {
+        --_icon-zoom: 1;
+        --_icon-size: 20px;
+        --_border-width: 1px;
+        --_outline-width: 1px;
+        --_transition-duration: 0.2s;
+
+        display: grid;
+        grid-template-areas: 'icon';
+        align-items: center;
+        justify-content: center;
+        padding-inline: 5px;
+        text-wrap: nowrap;
+
+        aspect-ratio: 1;
+        border-radius: 4px;
+        border: var(--_border-width) solid #ffffff90;
+        outline: var(--_outline-width) solid #ffffff10;
+        background-color: Canvas;
+
+        width: var(--_icon-size);
+        height: var(--_icon-size);
+        overflow: hidden;
+        transition-property: all;
+        transition-timing-function: linear;
+        transition-duration: var(--_transition-duration);
+
+        &::-webkit-details-marker,
+        &::marker {
+          display: none;
+        }
+
+        &:hover {
+          --_icon-zoom: 1.2;
+          outline: var(--_outline-width) solid #ffffff;
+        }
+
+        .icon {
+          grid-area: icon;
+          scale: var(--_icon-zoom);
+          transition: scale 0.2s ease-in-out;
+          width: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
+          height: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
+
+          opacity: 0;
+          transition-property: opacity, transform; /* For reference */
+          transition-timing-function: linear; /* For reference */
+          transition-duration: var(--_transition-duration); /* For reference */
+
+          &.show {
+            opacity: 1;
+          }
         }
       }
-    }
-  }
 
-  .debug-grid {
-    display: none;
-
-    .layout-row-inner > div {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-
-      margin-inline: 12px;
-
-      > div {
-        outline: 1px solid gray;
+      .overflow-details-nav {
+        position: absolute;
+        top: 135%;
+        right: 0;
+        background-color: #000;
+        border: 1px solid #ffffff90;
+        border-radius: 8px;
         padding: 12px;
+        margin: 0;
+        z-index: 999;
+        min-width: var(--_overflow-drop-down-width, fit-content);
+
+        display: grid;
+        grid-auto-flow: row;
+        gap: 8px;
       }
     }
   }
+}
+
+.debug-grid {
+  display: none;
+
+  .layout-row-inner > div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-inline: 12px;
+
+    > div {
+      outline: 1px solid gray;
+      padding: 12px;
+    }
+  }
+}
 </style>
