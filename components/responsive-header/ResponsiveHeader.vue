@@ -11,6 +11,8 @@
             ref="mainNavigationItems"
             :data-group-key="groupKey"
             :data-local-index="localIndex"
+            @mouseenter="handleNavigationItemHover"
+            @focusin="handleNavigationItemHover"
           >
             <NuxtLink class="main-navigation-link" :to="link.path">{{ link.name }}</NuxtLink>
           </li>
@@ -121,6 +123,13 @@ const collapseBreakpoint = ref(props.collapseBreakpoint);
 const navLoaded = ref(false);
 const navigationWrapperRef = useTemplateRef('navigationWrapper');
 
+const closeAllNavigationDetails = () => {
+  navigationDetailsRefs.value?.forEach((element) => {
+    element?.removeAttribute('open');
+  });
+  overflowDetailsRef.value?.removeAttribute('open');
+};
+
 const toggleDetailsElement = (event: Event) => {
   const summaryElement = event.currentTarget as HTMLElement;
   const parentDetailsElement = summaryElement.closest('details');
@@ -138,7 +147,29 @@ const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
   if (!props.allowExpandOnGesture) {
     return;
   }
+
+  // Close all other open navigation details first
+  const summaryElement = event.currentTarget as HTMLElement;
+  const parentDetailsElement = summaryElement.closest('details');
+
+  navigationDetailsRefs.value?.forEach((element) => {
+    if (element !== parentDetailsElement) {
+      element?.removeAttribute('open');
+    }
+  });
+  overflowDetailsRef.value?.removeAttribute('open');
+
+  // Then toggle the current one
   toggleDetailsElement(event);
+};
+
+const handleNavigationItemHover = () => {
+  if (!props.allowExpandOnGesture) {
+    return;
+  }
+
+  // Close all open navigation details when hovering over regular nav items
+  closeAllNavigationDetails();
 };
 
 const handleSummaryAction = (event: MouseEvent | KeyboardEvent) => {
@@ -219,7 +250,12 @@ const updateNavigationConfig = async (source: string) => {
 };
 
 const allowNavigationCollapse = computed(() => {
-  return collapseNavigationBelowWidth.value && navigationWrapperRects.value && Math.floor(secondaryNavRects?.value.left - props.gapBetweenFirstAndSecondNav) <= collapseBreakpoint.value;
+  return (
+    collapseNavigationBelowWidth.value &&
+    navigationWrapperRects.value &&
+    secondaryNavRects.value !== null &&
+    Math.floor(secondaryNavRects.value.left - props.gapBetweenFirstAndSecondNav) <= collapseBreakpoint.value
+  );
 });
 
 const determineNavigationItemVisibility = (rect: DOMRect) => {
