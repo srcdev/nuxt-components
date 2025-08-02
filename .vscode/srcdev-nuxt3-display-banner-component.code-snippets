@@ -1,5 +1,6 @@
 {
   "SRCDEV Nuxt Display Banner Component HTML Template": {
+    "description": "Display Banner Component HTML Template",
     "scope": "vue, html",
     "prefix": "srcdev-nuxt-display-banner-component-html-template",
     "body": [
@@ -13,12 +14,11 @@
       "     $0",
       "  </template>",
       "</DisplayBanner>"
-    ],
-    "description": "SRCDEV Nuxt Display Banner Component HTML Template"
+    ]
   },
   "SRCDEV Nuxt Display Banner Component CSS Configuration": {
+    "description": "Display Banner Component CSS Configuration",
     "scope": "css",
-    "prefix": "srcdev-nuxt-display-banner-component-css-configuration",
     "body": [
       ".display-banner-page-class {",
       "",
@@ -58,7 +58,6 @@
       "    }",
       "  }",
       "}"
-    ],
-    "description": "SRCDEV Nuxt Display Banner Component CSS Configuration"
+    ]
   }
 }

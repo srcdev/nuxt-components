@@ -1,7 +1,7 @@
 {
   "SRCDEV Nuxt Carousel Basic Component HTML Template": {
+    "description": "Carousel Basic Component HTML Template",
     "scope": "vue, html",
-    "prefix": "srcdev-nuxt-carousel-basic-component-html-template",
     "body": [
       "<CarouselBasic v-if=\"carouselStatus === 'success'\" :carousel-data-ids :allow-carousel-overflow=\"true\" :return-to-start=\"true\" :style-class-passthrough=\"['carousel-basic-demo']\">",
       "  <template v-for=\"(item, index) in carouselData?.items\" #[item.id]>",
@@ -10,11 +10,10 @@
       " </template>",
       "</CarouselBasic>",
     ],
-    "description": "SRCDEV Nuxt Carousel Basic Component HTML Template"
   },
   "SRCDEV Nuxt Carousel Basic Component JS Navigation Object Configuration": {
+    "description": "Carousel Basic Component JS Navigation Object Configuration",
     "scope": "javascript,typescript",
-    "prefix": "srcdev-nuxt-carousel-basic-component-js-template",
     "body": [
       "import type { ICarouselBasic } from '@/types/types.carousel-basic'; // Import the interface for type safety",
       "",
@@ -74,12 +73,11 @@
       "  return carouselDataStatic?.items.map((item) => item.id) || [];",
       "});",
       ""
-    ],
-    "description": "Nuxt Carousel Basic Component JS Navigation Object Configuration"
+    ]
   },
   "SRCDEV Nuxt Carousel Basic Component CSS Configuration": {
+    "description": "Carousel Basic Component CSS Configuration",
     "scope": "css",
-    "prefix": "srcdev-nuxt-carousel-basic-component-css-configuration",
     "body": [
       ".carousel-basic-demo { /* This class is the namespace added to the component props */",
       "  &.carousel-basic {",
@@ -227,7 +225,6 @@
       "    }",
       "  }",
       "}",
-    ],
-    "description": "SRCDEV Nuxt Carousel Basic Component CSS Configuration"
+    ]
   }
 }

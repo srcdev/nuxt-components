@@ -1,7 +1,7 @@
 {
-  "SRCDEV Bootstrap Nuxt3 component": {
+  "SRCDEV Bootstrap Nuxt3 component template": {
+    "description": "Create a new Nuxt3 component with a basic template",
     "scope": "vue",
-    "prefix": "srcdev-nuxt-component-boilerplate",
     "body": [
       "<template>",
       "  <component :is=\"tag\" class=\"${TM_DIRECTORY/(.*[\\/])([^\\/]+)[\\/]?/${2:/downcase}/}\" :class=\"[elementClasses]\"></component>",
@@ -42,7 +42,6 @@
       "}",
       "</style>",
       ""
-    ],
-    "description": "SRCDEV Bootstrap Nuxt3 component"
+    ]
   }
 }

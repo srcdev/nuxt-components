@@ -1,7 +1,7 @@
 {
   "SRCDEV Nuxt Tabs Component (Static) HTML Template": {
-    "scope": "vue, html",
     "description": "Add <TabsCore> component with static slots",
+    "scope": "vue, html",
     "body": [
       "<TabsCore ",
       "  :itemCount=\"3\"",

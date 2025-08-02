@@ -1,7 +1,7 @@
 {
   "SRCDEV Nuxt Responsive Header Component HTML Template": {
+    "description": "Responsive Header Component HTML Template",
     "scope": "vue, html",
-    "prefix": "srcdev-nuxt-responsive-header-component-html-template",
     "body": [
       "<ResponsiveHeader",
       "  :responsive-nav-links",
@@ -27,12 +27,11 @@
       "    </ul>",
       "  </template>",
       "</ResponsiveHeader>"
-    ],
-    "description": "SRCDEV Nuxt Responsive Header Component HTML Template"
+    ]
   },
   "SRCDEV Nuxt Responsive Header Component JS Navigation Object Configuration": {
+    "description": "Responsive Header Component JS Navigation Object Configuration",
     "scope": "javascript,typescript",
-    "prefix": "srcdev-nuxt-responsive-header-component-js-navigation-object-template",
     "body": [
       "import type { ResponsiveHeaderProp } from '@/types/responsiveHeader';",
       "",
@@ -88,12 +87,11 @@
       "        ],",
       "      } as ResponsiveHeaderProp;",
       ""
-    ],
-    "description": "Nuxt Responsive Header Component JS Navigation Object Configuration"
+    ]
   },
   "SRCDEV Nuxt Responsive Header Component CSS Configuration": {
+    "description": "Responsive Header Component CSS Configuration",
     "scope": "css",
-    "prefix": "srcdev-nuxt-responsive-header-component-css-configuration",
     "body": [
       "      /* Modifiers for ResposiveHeader  */",
       ".navigation.your-scope-class {",
@@ -319,7 +317,6 @@
       "    }",
       "  }",
       "}"
-    ],
-    "description": "SRCDEV Nuxt Responsive Header Component CSS Configuration"
+    ]
   }
 }

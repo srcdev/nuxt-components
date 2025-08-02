@@ -1,7 +1,7 @@
 {
   "SRCDEV Pinia Options Store Boilerplate": {
+    "description": "Bootstrap the code needed for a Vue.js Pinia Options Store file",
     "scope": "javascript,typescript",
-    "prefix": "srcdev-pinia-options",
     "body": [
       "import { defineStore, acceptHMRUpdate } from 'pinia'",
       "",
@@ -17,12 +17,11 @@
       " import.meta.hot.accept(acceptHMRUpdate(use${TM_FILENAME_BASE/^(.*)$/${1:/pascalcase}/}Store, import.meta.hot))",
       "}",
       ""
-    ],
-    "description": "SRCDEV Bootstrap the code needed for a Vue.js Pinia Options Store file"
+    ]
   },
   "SRCDEV Pinia Setup Store Boilerplate": {
+    "description": "Bootstrap the code needed for a Vue.js Pinia Setup Store file",
     "scope": "javascript,typescript",
-    "prefix": "srcdev-pinia-setup",
     "body": [
       "import { defineStore, acceptHMRUpdate } from 'pinia'",
       "",
@@ -59,7 +58,6 @@
       "if (import.meta.hot) {",
       " import.meta.hot.accept(acceptHMRUpdate(use${TM_FILENAME_BASE/^(.*)$/${1:/pascalcase}/}Store, import.meta.hot))",
       "}"
-    ],
-    "description": "SRCDEV Bootstrap the code needed for a Vue.js Pinia Setup Store file"
+    ]
   }
 }

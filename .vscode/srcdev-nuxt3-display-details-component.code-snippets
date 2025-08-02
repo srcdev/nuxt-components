@@ -1,7 +1,7 @@
 {
   "SRCDEV Nuxt Display Details Component HTML Template": {
+    "description": "Display Details Component HTML Template",
     "scope": "vue, html",
-    "prefix": "srcdev-nuxt-display-details-component-html-template",
     "body": [
       "<DisplayDetailsCore",
       "  name=\"set-details-name\"",
@@ -21,12 +21,11 @@
       "     $0",
       "  </template>",
       "</DisplayDetailsCore>"
-    ],
-    "description": "SRCDEV Nuxt Display Details Component HTML Template"
+    ]
   },
   "SRCDEV Nuxt Display Details Component CSS Configuration": {
+    "description": "Display Details Component CSS Configuration",
     "scope": "css",
-    "prefix": "srcdev-nuxt-display-details-component-css-configuration",
     "body": [
       ".display-details {",
       "   &.custom-style-1 {",
@@ -67,7 +66,6 @@
       "    }",
       "  }",
       "}"
-    ],
-    "description": "SRCDEV Nuxt Display Details Component CSS Configuration"
+    ]
   }
 }
