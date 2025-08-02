@@ -20,7 +20,8 @@
               <ul class="secondary-navigation-list">
                 <li class="secondary-navigation-item">
                   <NuxtLink class="secondary-navigation-link" to="/">
-                    <Icon name="material-symbols:settings-outline-rounded" class="icon" />
+                    <Icon name="material-symbols:settings-outline-rounded" class="icon" aria-hidden="true" />
+                    <span class="sr-only">Settings</span>
                   </NuxtLink>
                 </li>
               </ul>
@@ -113,6 +114,7 @@ const responsiveNavLinks = {
     align-items: center;
     padding-block: 12px;
     padding-inline: 24px;
+    background-color: #000;
 
     position: relative;
     z-index: 999999;
