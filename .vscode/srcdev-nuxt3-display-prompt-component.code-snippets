@@ -1,0 +1,38 @@
+{
+  "SRCDEV Nuxt Display Prompt Component HTML Template": {
+    "description": "Display Prompt Component HTML Template",
+    "scope": "vue, html",
+    "body": [
+      "<DisplayPromptCore theme=\"$0['error', 'info', 'success', 'warning', 'secondary']\" :dismissible=\"true\" :use-local-style-overrides=\"true\" :style-class-passthrough=\"['your-scope-class']\">",
+      "  <template #customDecoratorIcon>",
+      "    <Icon name=\"akar-icons:info\" class=\"icon\" />",
+      "  </template>",
+      "  <template #title>Success Prompt Title with content (Dismissable)</template>",
+      "  <template #content>This is prompt content, it can contain html or plain text.</template>",
+      "  <template #customCloseIcon>",
+      "    <Icon name=\"material-symbols:close-small\" class=\"icon\" />",
+      "  </template>",
+      "  <template #customTitle>Dismiss</template>",
+      "</DisplayPromptCore>",
+    ],
+  },
+  "SRCDEV Nuxt Display Prompt Script Setup Template": {
+    "description": "Display Prompt setup themeing and properties",
+    "scope": "javascript,typescript",
+    "body": [
+      "// Set required theme for the display prompt component",
+      "const theme = ref<'error' | 'info' | 'success' | 'warning' | 'secondary'>('error');",
+      "$0",
+    ]
+  },
+  "SRCDEV Nuxt Display Details Component CSS Configuration": {
+    "description": "Display Prompt CSS Configuration",
+    "scope": "css",
+    "body": [
+      "// Globally styled component",
+      "// see: ~/assets/styles/extends-layer/srcdev-components/display-prompt-core/index.css",
+      "// This file is used to configure the display prompt component styles",
+      "// Copy css structure for locally scoped components",
+    ],
+  }
+}

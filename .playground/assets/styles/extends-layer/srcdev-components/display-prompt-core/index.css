@@ -1,4 +1,4 @@
-.use-style-overrides {
+.use-local-style-overrides {
   &.display-prompt-core {
     .display-prompt-wrapper {
       background-color: var(--component-theme-0);
@@ -64,7 +64,7 @@
             outline: 2px solid var(--component-theme-6);
           }
 
-          &.focus-visible {
+          &:focus-visible {
             box-shadow: var(--focus-box-shadow-colour-on);
             border: 0.1rem solid var(--component-theme-12);
             outline: 2px solid var(--component-theme-6);

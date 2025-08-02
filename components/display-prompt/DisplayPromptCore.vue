@@ -1,9 +1,11 @@
 <template>
-  <div class="display-prompt-core" :class="[{ dismissed: hide }, { 'use-style-overrides': useStyleOverrides }]" :data-test-id="`display-prompt-core-${theme}`">
+  <div class="display-prompt-core" :class="[{ dismissed: hide }, { 'use-local-style-overrides': useLocalStyleOverrides }]" :data-test-id="`display-prompt-core-${theme}`">
     <div class="display-prompt-wrapper" :data-prompt-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
       <div class="display-prompt-inner">
         <div class="display-prompt-icon" data-test-id="prompt-icon">
-          <slot name="icon"></slot>
+          <slot name="customDecoratorIcon">
+            <Icon :name="displayPromptIcons[theme]" class="icon" :color="iconColor" />
+          </slot>
         </div>
         <div class="display-prompt-content">
           <p class="title" data-test-id="display-prompt-title">
@@ -14,11 +16,11 @@
           </p>
         </div>
         <button v-if="dismissible" @click.prevent="dismissPrompt()" data-test-id="display-prompt-action" class="display-prompt-action">
-          <slot name="actionIcon">
+          <slot name="customCloseIcon">
             <Icon name="bitcoin-icons:cross-filled" class="icon" />
           </slot>
           <span class="sr-only">
-            <slot name="actionTitle">Close this prompt</slot>
+            <slot name="customTitle">Close this prompt</slot>
           </span>
         </button>
       </div>
@@ -50,9 +52,19 @@ const props = defineProps({
       return ['dark-grey', 'white'].includes(value);
     },
   },
-  useStyleOverrides: {
+  useLocalStyleOverrides: {
     type: Boolean,
     default: false,
+  },
+  displayPromptIcons: {
+    type: Object as PropType<Record<string, string>>,
+    default: () => ({
+      error: 'akar-icons:circle-alert',
+      info: 'akar-icons:info',
+      success: 'akar-icons:check',
+      warning: 'akar-icons:circle-alert',
+      secondary: 'akar-icons:info',
+    }),
   },
 });
 
@@ -156,7 +168,7 @@ const dismissPrompt = () => {
           outline: 2px solid var(--component-theme-6);
         }
 
-        &.focus-visible {
+        &:focus-visible {
           box-shadow: var(--focus-box-shadow-colour-on);
           border: 0.1rem solid var(--component-theme-12);
           outline: 2px solid var(--component-theme-6);
