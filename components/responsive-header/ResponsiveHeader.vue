@@ -579,7 +579,8 @@ watch(
           display: none;
         }
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
           --_icon-zoom: 1.2;
           outline: var(--_outline-width) solid #ffffff;
         }

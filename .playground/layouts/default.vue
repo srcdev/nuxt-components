@@ -242,7 +242,8 @@ const responsiveNavLinks = {
         outline: var(--_outline-width) solid #ffffff10;
         background-color: Canvas;
 
-        &:hover {
+        &:hover,
+        &:focus-visible {
           --_icon-zoom: 1.2;
           outline: var(--_outline-width) solid #ffffff;
         }
