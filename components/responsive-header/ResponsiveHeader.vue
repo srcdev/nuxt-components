@@ -1,6 +1,6 @@
 <template>
-  <div class="navigation" :class="[elementClasses, { loaded: navLoaded }]" ref="navigationWrapper">
-    <nav class="main-navigation" ref="mainNav">
+  <div class="navigation" :class="[elementClasses, { loaded: navLoaded }]" ref="navigationWrapper" role="banner">
+    <nav class="main-navigation" ref="mainNav" aria-label="Main navigation">
       <ul v-for="(navGroup, groupKey) in responsiveNavLinks" :key="groupKey" class="main-navigation-list" :ref="el => setNavRef(String(groupKey), el as HTMLUListElement | null)">
         <template v-for="(link, localIndex) in navGroup" :key="localIndex">
           <li
@@ -32,14 +32,15 @@
                 @click.prevent="handleSummaryAction($event)"
                 @keypup.prevent.stop="handleSummaryAction($event)"
                 class="main-navigation-details-summary has-toggle-icon"
+                :aria-label="`${link.childLinksTitle} submenu`"
               >
-                <Icon name="mdi:chevron-down" class="icon" />
+                <Icon name="mdi:chevron-down" class="icon" :aria-hidden="true" />
                 {{ link.childLinksTitle }}
               </summary>
-              <div class="main-navigation-sub-nav">
+              <div class="main-navigation-sub-nav" role="menu" :aria-labelledby="`summary-${groupKey}-${localIndex}`">
                 <ul class="main-navigation-sub-nav-list">
                   <li class="main-navigation-sub-nav-item" v-for="childLink in link.childLinks" :key="childLink.name">
-                    <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link">{{ childLink.name }}</NuxtLink>
+                    <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link" role="menuitem">{{ childLink.name }}</NuxtLink>
                   </li>
                 </ul>
               </div>
@@ -48,13 +49,13 @@
         </template>
       </ul>
     </nav>
-    <nav class="secondary-navigation" ref="secondaryNav">
+    <nav class="secondary-navigation" ref="secondaryNav" aria-label="Secondary navigation">
       <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]" ref="overflowDetails" name="overflow-group">
         <summary class="overflow-details-summary has-toggle-icon">
-          <Icon :name="overflowDetailsSummaryIcons.more" class="icon" :class="[{ show: !allowNavigationCollapse }]" />
-          <Icon :name="overflowDetailsSummaryIcons.burger" class="icon" :class="[{ show: allowNavigationCollapse }]" />
+          <Icon :name="overflowDetailsSummaryIcons.more" class="icon" :class="[{ show: !allowNavigationCollapse }]" :aria-hidden="true" />
+          <Icon :name="overflowDetailsSummaryIcons.burger" class="icon" :class="[{ show: allowNavigationCollapse }]" :aria-hidden="true" />
         </summary>
-        <div class="overflow-details-nav">
+        <div class="overflow-details-nav" role="menu">
           <NavigationItems :main-navigation-state="mainNavigationState" />
         </div>
       </details>

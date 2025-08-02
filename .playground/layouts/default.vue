@@ -14,6 +14,7 @@
             }"
             :collapse-breakpoint="600"
             :collapse-at-main-nav-intersection="true"
+            :allow-expand-on-gesture="true"
           >
             <template #secondaryNavigation>
               <ul class="secondary-navigation-list">
@@ -128,13 +129,14 @@ const responsiveNavLinks = {
 
 /* Modifiers for ResposiveHeader  */
 .navigation.your-scope-class {
-  margin: 12px;
-  border-radius: 8px;
+  margin: 1.2rem;
+  border-radius: 0.8rem;
   background-color: #efefef05;
   border: 1px solid #efefef75;
-  padding: 12px;
+  padding-block: 1rem;
+  padding-inline: 1.2rem;
 
-  max-height: 48px;
+  max-block-size: 4.2rem;
 
   .main-navigation {
     gap: 60px;
