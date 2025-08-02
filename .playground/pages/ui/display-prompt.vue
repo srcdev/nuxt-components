@@ -6,12 +6,16 @@
           <h2 class="heading-2">Display Prompts</h2>
 
           <section class="prompt-examples">
-            <DisplayPromptCore theme="success" :dismissible="true" :style-class-passthrough="['your-scope-class']">
+            <DisplayPromptCore theme="success" :dismissible="true" :use-style-overrides="true" :style-class-passthrough="['your-scope-class']">
               <template #icon>
                 <Icon name="akar-icons:check" class="icon" />
               </template>
               <template #title>Success Prompt Title with content (Dismissable)</template>
               <template #content>This is prompt content, it can contain html or plain text.</template>
+              <template #actionIcon>
+                <Icon name="bitcoin-icons:cross-filled" class="icon" />
+              </template>
+              <template #actionTitle>Dismiss</template>
             </DisplayPromptCore>
 
             <DisplayPromptCore theme="info" :dismissible="true" :style-class-passthrough="['your-scope-class']">

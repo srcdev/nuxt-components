@@ -1,5 +1,5 @@
 <template>
-  <div class="display-prompt-core" :class="[{ dismissed: hide }]">
+  <div class="display-prompt-core" :class="[{ dismissed: hide }, { 'use-style-overrides': useStyleOverrides }]" :data-test-id="`display-prompt-core-${theme}`">
     <div class="display-prompt-wrapper" :data-prompt-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
       <div class="display-prompt-inner">
         <div class="display-prompt-icon" data-test-id="prompt-icon">
@@ -14,8 +14,12 @@
           </p>
         </div>
         <button v-if="dismissible" @click.prevent="dismissPrompt()" data-test-id="display-prompt-action" class="display-prompt-action">
-          <Icon name="bitcoin-icons:cross-filled" class="icon" />
-          <span class="sr-only">Really Close</span>
+          <slot name="actionIcon">
+            <Icon name="bitcoin-icons:cross-filled" class="icon" />
+          </slot>
+          <span class="sr-only">
+            <slot name="actionTitle">Close this prompt</slot>
+          </span>
         </button>
       </div>
     </div>
@@ -46,6 +50,10 @@ const props = defineProps({
       return ['dark-grey', 'white'].includes(value);
     },
   },
+  useStyleOverrides: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const slots = useSlots();
@@ -75,8 +83,9 @@ const dismissPrompt = () => {
   .display-prompt-wrapper {
     background-color: var(--component-theme-0);
     border: 1px solid var(--component-theme-8);
-    border-inline-start: 8px solid var(--component-theme-8);
     border-radius: 4px;
+
+    border-inline-start: 8px solid var(--component-theme-8);
     border-start-start-radius: 8px;
     border-end-start-radius: 8px;
 
@@ -139,15 +148,24 @@ const dismissPrompt = () => {
         border-radius: 50%;
         outline: 1px solid var(--component-theme-3);
 
+        transition: border 200ms ease-in-out, outline 200ms ease-in-out;
+
         &:hover {
           cursor: pointer;
+          border: 0.1rem solid var(--component-theme-12);
+          outline: 2px solid var(--component-theme-6);
+        }
+
+        &.focus-visible {
+          box-shadow: var(--focus-box-shadow-colour-on);
+          border: 0.1rem solid var(--component-theme-12);
+          outline: 2px solid var(--component-theme-6);
         }
 
         .icon {
           color: var(--component-theme-8);
           display: block;
           font-size: var(--step-2);
-          border: 1px solid green;
           padding: 1rem;
         }
       }
