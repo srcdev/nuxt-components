@@ -3,7 +3,7 @@
     <LayoutRow tag="div" variant="full" :style-class-passthrough="['header', 'mbe-40']">
       <template #default>
         <header class="responsive-header">
-          <h1><a href="/">Logo</a></h1>
+          <div class="home-link"><a href="/">Logo</a></div>
           <ResponsiveHeader
             :responsive-nav-links
             :gap-between-first-and-second-nav="12"
@@ -42,7 +42,6 @@ import type { ResponsiveHeaderProp } from '@/types/responsiveHeader';
 
 const responsiveNavLinks = {
   firstNav: [
-    { name: 'Home', path: '/' },
     {
       name: 'Components',
       childLinksTitle: 'UI Components',
@@ -110,7 +109,6 @@ const responsiveNavLinks = {
   .responsive-header {
     display: grid;
     grid-template-columns: auto 1fr;
-    /* display: flex; */
     gap: 24px;
     align-items: center;
     padding-block: 12px;
@@ -121,7 +119,9 @@ const responsiveNavLinks = {
 
     width: 100%;
 
-    h1 {
+    .home-link {
+      display: flex;
+      align-items: center;
       text-wrap-mode: nowrap;
     }
   }
