@@ -5,7 +5,10 @@ export default defineNuxtConfig({
   // devServer: {
   //   https: true,
   // },
-  css: ['modern-normalize', './assets/styles/main.css'],
+  css: [
+    'modern-normalize',
+    // './assets/styles/main.css'
+  ],
   modules: ['@nuxt/icon'],
   app: {
     head: {
@@ -15,6 +18,9 @@ export default defineNuxtConfig({
       },
       titleTemplate: '%s - Nuxt Components Layer',
       meta: [{ charset: 'utf-8' }, { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
+      bodyAttrs: {
+        class: 'nuxt-component-layer',
+      },
     },
     pageTransition: {
       name: 'page',
@@ -31,6 +37,5 @@ export default defineNuxtConfig({
       pathPrefix: false,
     },
   ],
-
   compatibilityDate: '2024-11-12',
 });
