@@ -96,13 +96,13 @@ const props = defineProps({
       burger: 'gravity-ui:bars',
     },
   },
-  collapseNavigationBelowWidth: {
-    type: Boolean,
-    default: true,
-  },
   collapseBreakpoint: {
     type: Number,
-    default: 500, // px
+    default: null, // px
+  },
+  collapseAtMainNavIntersection: {
+    type: Boolean,
+    default: false,
   },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
@@ -116,7 +116,8 @@ const props = defineProps({
 
 const slots = useSlots();
 const hasSecondaryNavigation = computed(() => slots.secondaryNavigation !== undefined);
-
+const collapseNavigationBelowWidth = computed(() => props.collapseBreakpoint !== null || props.collapseAtMainNavIntersection);
+const collapseBreakpoint = ref(props.collapseBreakpoint);
 const navLoaded = ref(false);
 const navigationWrapperRef = useTemplateRef('navigationWrapper');
 
@@ -211,14 +212,18 @@ const updateNavigationConfig = async (source: string) => {
   secondaryNavRects.value = getFlooredRect((secondaryNavRef.value && secondaryNavRef.value.getBoundingClientRect()) ?? null) || null;
   firstNavRects.value = getFlooredRect((firstNavRef.value && firstNavRef.value.getBoundingClientRect()) ?? null) || null;
   secondNavRects.value = getFlooredRect((secondNavRef.value && secondNavRef.value.getBoundingClientRect()) ?? null) || null;
+
+  if (collapseNavigationBelowWidth.value && firstNavRects.value) {
+    collapseBreakpoint.value = firstNavRects.value?.right;
+  }
 };
 
 const allowNavigationCollapse = computed(() => {
-  return props.collapseNavigationBelowWidth && navigationWrapperRects.value && navigationWrapperRects.value.width < props.collapseBreakpoint;
+  return collapseNavigationBelowWidth.value && navigationWrapperRects.value && Math.floor(secondaryNavRects?.value.left - props.gapBetweenFirstAndSecondNav) <= collapseBreakpoint.value;
 });
 
 const determineNavigationItemVisibility = (rect: DOMRect) => {
-  // Check if navigation should be collapsed based on width
+  // Check if navigation should be collapsed based on width breakpoint
   if (allowNavigationCollapse.value) {
     return false;
   }

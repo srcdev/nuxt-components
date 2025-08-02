@@ -12,8 +12,8 @@
               more: 'gravity-ui:ellipsis',
               burger: 'gravity-ui:bars',
             }"
-            :collapse-navigation-below-width="true"
             :collapse-breakpoint="600"
+            :collapse-at-main-nav-intersection="true"
           >
             <template #secondaryNavigation>
               <ul class="secondary-navigation-list">

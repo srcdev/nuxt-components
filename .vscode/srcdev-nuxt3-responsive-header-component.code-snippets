@@ -11,7 +11,7 @@
       "     more: 'gravity-ui:ellipsis',",
       "     burger: 'gravity-ui:bars',",
       "  }\"",
-      "  :collapse-navigation-below-width=\"true\"",
+      "  :collapse-at-main-nav-intersection=\"true\"",
       "  :collapse-breakpoint=\"768\"",
       ">",
       "  <template #overflowDetailsSummaryIcon>",
