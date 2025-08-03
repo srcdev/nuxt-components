@@ -45,6 +45,7 @@ const responsiveNavLinks = {
   firstNav: [
     {
       name: 'Components',
+      iconName: 'material-symbols:widgets',
       childLinksTitle: 'UI Components',
       childLinks: [
         { name: 'Animated SVG Text', path: '/ui/animated-svg-text' },
@@ -66,6 +67,7 @@ const responsiveNavLinks = {
     },
     {
       name: 'Layouts',
+      iconName: 'material-symbols:responsive-layout',
       childLinksTitle: 'UI Layouts',
       childLinks: [
         { name: 'Layout Row', path: '/ui/layout-row' },
@@ -81,7 +83,7 @@ const responsiveNavLinks = {
     { name: 'About', path: '/' },
   ],
   secondNav: [
-    { name: 'Some other link', path: '#link-description' },
+    { name: 'Some other link', iconName: 'material-symbols:widgets', path: '#link-description' },
     {
       name: 'Help',
       childLinksTitle: 'Find Help',

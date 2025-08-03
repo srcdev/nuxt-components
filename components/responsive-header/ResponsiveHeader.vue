@@ -14,7 +14,10 @@
             @mouseenter="handleNavigationItemHover"
             @focusin="handleNavigationItemHover"
           >
-            <NuxtLink class="main-navigation-link" :to="link.path">{{ link.name }}</NuxtLink>
+            <NuxtLink class="main-navigation-link" :class="{ 'has-icon': link.iconName }" :to="link.path">
+              <Icon v-if="link.iconName" :name="link.iconName" class="decorator-icon" aria-hidden="true" />
+              {{ link.name }}
+            </NuxtLink>
           </li>
           <li
             v-else
@@ -35,6 +38,8 @@
                 :aria-label="`${link.childLinksTitle} submenu`"
               >
                 <Icon name="mdi:chevron-down" class="icon" :aria-hidden="true" />
+                <Icon v-if="link.iconName" :name="link.iconName" class="decorator-icon" aria-hidden="true" />
+
                 {{ link.childLinksTitle }}
               </summary>
               <div class="main-navigation-sub-nav" role="menu" :aria-labelledby="`summary-${groupKey}-${localIndex}`">
@@ -415,6 +420,7 @@ watch(
 
         .main-navigation-link {
           display: flex;
+          gap: 6px;
           text-wrap-mode: nowrap;
           color: inherit;
           text-decoration: none;
@@ -452,6 +458,10 @@ watch(
 
             &:hover {
               cursor: pointer;
+            }
+
+            .decorator-icon {
+              margin-inline-start: 8px;
             }
           }
 
