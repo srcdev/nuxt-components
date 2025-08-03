@@ -108,3 +108,53 @@ main.css
 ```
 
 This architecture ensures proper CSS cascade order and allows for easy customization through CSS custom properties.
+
+## Development Environment (`.vscode`)
+
+The `.vscode` directory contains Visual Studio Code configuration files to ensure a consistent development experience across the project:
+
+### Workspace Configuration
+
+- **`settings.json`** - VS Code workspace settings including:
+  - Code formatting configuration (2-space indentation, auto-formatting on save)
+  - ESLint, Prettier, and Stylelint integration
+  - File handling settings (trim whitespace, final newlines, Unix line endings)
+  - CSS variable recognition for the project's custom properties
+
+### Recommended Extensions
+
+- **`extensions.json`** - Curated list of VS Code extensions for optimal development:
+  - **Vue.js Development**: `vue.volar` - Vue 3 language support
+  - **Nuxt.js Development**: `nuxtr.nuxtr-vscode` - Enhanced Nuxt development tools
+  - **Code Quality**: `dbaeumer.vscode-eslint`, `esbenp.prettier-vscode` - Linting and formatting
+  - **CSS Development**: `willofindie.vscode-cssvar` - CSS custom property IntelliSense
+  - **Testing**: `vitest.explorer` - Vitest test runner integration
+  - **Markdown**: `davidanson.vscode-markdownlint` - Markdown linting
+  - **Productivity**: `jkjustjoshing.vscode-text-pastry`, `formulahendry.auto-rename-tag`
+
+### Code Snippets
+
+The `.vscode` directory includes comprehensive code snippets for rapid component development:
+
+#### Core Components
+
+- **`srcdev-nuxt3-component-boilerplate.code-snippets`** - Base component template with prop validation
+- **`srcdev-nuxt3-page-layout.code-snippets`** - Page layout scaffolding
+- **`srcdev-nuxt3-pinia-store-setup.code-snippets`** - Pinia store configuration
+
+#### UI Components
+
+- **`srcdev-nuxt3-accordian-component.code-snippets`** - Accordion component templates
+- **`srcdev-nuxt3-carousel-basic-component.code-snippets`** - Basic carousel implementation
+- **`srcdev-nuxt3-carousel-flip-component.code-snippets`** - Flip carousel variant
+- **`srcdev-nuxt3-container-glow-component.code-snippets`** - Container with glow effects
+- **`srcdev-nuxt3-dialog-component.code-snippets`** - Modal dialog templates
+- **`srcdev-nuxt3-display-banner-component.code-snippets`** - Display banner component
+- **`srcdev-nuxt3-display-details-component.code-snippets`** - Collapsible details component
+- **`srcdev-nuxt3-display-prompt-component.code-snippets`** - Alert/notification prompts
+- **`srcdev-nuxt3-expanding-panel-component.code-snippets`** - Expandable panel component
+- **`srcdev-nuxt3-layout-row.code-snippets`** - Layout row component
+- **`srcdev-nuxt3-responsive-header-component.code-snippets`** - Responsive navigation header
+- **`srcdev-nuxt3-tabs-component.code-snippets`** - Tab component system
+
+Each snippet provides both HTML template usage examples and TypeScript setup code, enabling developers to quickly implement components with proper typing and configuration.
