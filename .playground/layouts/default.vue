@@ -12,9 +12,8 @@
               more: 'gravity-ui:ellipsis',
               burger: 'gravity-ui:bars',
             }"
-            :collapse-breakpoint="600"
             :collapse-at-main-nav-intersection="true"
-            :allow-expand-on-gesture="true"
+            :allow-expand-on-gesture="false"
           >
             <template #secondaryNavigation>
               <ul class="secondary-navigation-list">
