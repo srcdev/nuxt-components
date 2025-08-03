@@ -10,13 +10,13 @@ Althought this repo is public and feel free to do what you wish with it, this ha
 npm install --save nuxt-compnents
 ```
 
-## Additional reuired packages
+## Additional required packages
 
 ```bash
 npm install --save @oddbird/css-anchor-positioning
 ```
 
-Then add the dependency to their `extends` in `nuxt.config`:
+Then add the dependency to the property `extends` in `nuxt.config`:
 
 ```ts
 defineNuxtConfig({
@@ -98,13 +98,47 @@ The styles follow a cascading import pattern:
 ```text
 main.css
 ├── setup/
+│   ├── index.css
+│   ├── _head.css
 │   ├── utility-classes/
+│   │   ├── index.css
+│   │   ├── _margin-helpers.css
+│   │   ├── _padding-helpers.css
+│   │   └── _page.css
 │   ├── a11y/
+│   │   ├── index.css
+│   │   ├── _utils.css
+│   │   └── _variables.css
 │   ├── variables/
-│   ├── typography/
-│   └── _head.css
+│   │   ├── index.css
+│   │   └── colors/
+│   │       ├── index.css
+│   │       ├── _blue.css
+│   │       ├── _gray.css
+│   │       ├── _green.css
+│   │       ├── _orange.css
+│   │       ├── _red.css
+│   │       └── _yellow.css
+│   └── typography/
+│       ├── index.css
+│       ├── utility-classes/
+│       │   ├── index.css
+│       │   ├── _generic-font-classes.css
+│       │   ├── _generic-font-variation-settings.css
+│       │   └── _generic-font-weights.css
+│       └── vars/
+│           ├── index.css
+│           └── _reponsive-font-sizes.css
 └── extends-layer/srcdev-components/
-    └── display-prompt-core/
+    ├── index.css
+    ├── display-prompt-core/
+    │   └── index.css
+    └── themes/
+        ├── index.css
+        ├── _error.css
+        ├── _info.css
+        ├── _success.css
+        └── _warning.css
 ```
 
 This architecture ensures proper CSS cascade order and allows for easy customization through CSS custom properties.
