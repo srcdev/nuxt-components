@@ -55,7 +55,7 @@ The setup layer provides the foundational styles and utilities:
 #### Typography (`/typography`)
 
 - **Responsive Font Sizes** - Fluid typography using clamp() functions:
-  - `--step-5` to `--step--2` providing 8 responsive font size steps
+  - `--step-8` to `--step-1` providing 8 responsive font size steps
 - **Utility Classes** - Pre-built typography classes:
   - `.heading-1` through `.heading-5` - Semantic heading styles
   - Generic font weight and variation settings

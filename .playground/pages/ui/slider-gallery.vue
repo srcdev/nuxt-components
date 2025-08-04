@@ -226,14 +226,14 @@ const galleryData = ref([
           }
           /* Placeholder for title styles */
           .title {
-            font-size: var(--step-5);
-            margin-block: var(--step-0);
+            font-size: var(--step-8);
+            margin-block: var(--step-3);
           }
           /* Placeholder for topic styles */
           .topic {
             color: white;
-            font-size: var(--step-3);
-            margin-block: var(--step-0);
+            font-size: var(--step-6);
+            margin-block: var(--step-3);
             mix-blend-mode: difference;
           }
           /* Placeholder for description styles */

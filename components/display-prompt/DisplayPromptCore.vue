@@ -132,7 +132,7 @@ const dismissPrompt = () => {
         padding: 0.2rem;
 
         .title {
-          font-size: var(--step-2);
+          font-size: var(--step-5);
           font-weight: bold;
           line-height: 1.3;
           color: var(--component-theme-8);
@@ -141,7 +141,7 @@ const dismissPrompt = () => {
         }
 
         .text {
-          font-size: var(--step-2);
+          font-size: var(--step-5);
           font-weight: normal;
           line-height: 1.3;
           color: var(--component-theme-8);
@@ -177,7 +177,7 @@ const dismissPrompt = () => {
         .icon {
           color: var(--component-theme-8);
           display: block;
-          font-size: var(--step-2);
+          font-size: var(--step-5);
           padding: 1rem;
         }
       }

@@ -28,7 +28,7 @@ li,
 a {
   color: light-dark(var(--gray-12), var(--gray-3));
   font-family: var(--font-family);
-  font-size: var(--step-1);
+  font-size: var(--step-4);
 }
 
 body {
