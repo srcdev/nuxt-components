@@ -4,7 +4,11 @@
       <template #default>
         <header class="responsive-header">
           <nav class="home-navigation" aria-label="Home Navigation">
-            <SkipLinks />
+            <SkipLinks>
+              <template #homeLink>
+                <NuxtLink to="/" class="home-link">Logo</NuxtLink>
+              </template>
+            </SkipLinks>
           </nav>
           <ResponsiveHeader
             :responsive-nav-links
