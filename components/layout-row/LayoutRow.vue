@@ -1,11 +1,11 @@
 <template>
-  <div class="layout-row" :class="elementClasses">
-    <component :is="tag" :data-testid="dataTestid" class="layout-row-inner" :class="variant">
+  <component :is="tag" class="layout-row" :class="elementClasses" :id :tab-index="isLandmark ? 0 : null" :aria-label="isLandmark ? 'Layout Row Landmark' : undefined">
+    <div :data-testid="dataTestid" class="layout-row-inner" :class="variant">
       <div>
         <slot name="default"></slot>
       </div>
-    </component>
-  </div>
+    </div>
+  </component>
 </template>
 
 <script lang="ts">
@@ -51,9 +51,17 @@ const props = defineProps({
       return VARIANT_CLASSES.includes(value);
     },
   },
+  id: {
+    type: String,
+    default: null,
+  },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
     default: () => [],
+  },
+  isLandmark: {
+    type: Boolean,
+    default: false,
   },
 });
 

@@ -3,7 +3,9 @@
     <LayoutRow tag="div" variant="full" :style-class-passthrough="['header', 'mbe-40']">
       <template #default>
         <header class="responsive-header">
-          <div class="home-link"><a href="/">Logo</a></div>
+          <nav class="home-navigation" aria-label="Home Navigation">
+            <SkipLinks />
+          </nav>
           <ResponsiveHeader
             :responsive-nav-links
             :gap-between-first-and-second-nav="12"
@@ -29,7 +31,7 @@
         </header>
       </template>
     </LayoutRow>
-    <LayoutRow tag="main" variant="full">
+    <LayoutRow tag="main" variant="full" id="main-content" :is-landmark="true">
       <template #default>
         <slot name="content"></slot>
       </template>
@@ -139,7 +141,7 @@ const responsiveNavLinks = {
   padding-block: 1rem;
   padding-inline: 1.2rem;
 
-  max-block-size: 4.2rem;
+  /* max-block-size: 4.2rem; */
 
   .main-navigation {
     gap: 60px;

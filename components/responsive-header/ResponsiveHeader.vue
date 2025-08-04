@@ -387,6 +387,15 @@ watch(
   padding: 12px;
 
   .main-navigation {
+    /* Set up some global vars */
+    --_link-padding-block: 0.8rem;
+    --_link-padding-inline: 0.2rem;
+    --_link-margin-block: 0.1rem;
+    --_link-margin-inline: 0.1rem;
+    --_link-focus-visible-outline-width: 0.2rem;
+    --_link-border-default: 2px solid transparent;
+    --_link-border-bottom-hover: var(--green-8);
+
     grid-area: navStack;
     display: flex;
     flex-wrap: nowrap;
@@ -417,6 +426,8 @@ watch(
         width: var(--_main-navigation-item-width);
         overflow: hidden;
         transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+        padding-block: var(--_link-focus-visible-outline-width);
+        padding-inline: var(--_link-focus-visible-outline-width);
 
         .main-navigation-link {
           display: flex;
@@ -426,6 +437,17 @@ watch(
           text-decoration: none;
           margin-inline-start: 0;
           transition: var(--_link-visibility-transition);
+
+          padding-block: var(--_link-padding-block);
+          padding-inline: var(--_link-padding-inline);
+          margin-block: var(--_link-margin-block);
+          margin-inline: var(--_link-margin-inline);
+          border-bottom: var(--_link-border-default);
+
+          &:hover {
+            cursor: pointer;
+            border-bottom-color: var(--_link-border-bottom-hover);
+          }
         }
 
         .main-navigation-details {
@@ -436,6 +458,10 @@ watch(
 
           &[open] {
             --_icon-transform: scaleY(-1);
+
+            .main-navigation-details-summary {
+              border-bottom-color: var(--_link-border-bottom-hover);
+            }
           }
 
           .has-toggle-icon {
@@ -451,6 +477,12 @@ watch(
           }
 
           .main-navigation-details-summary {
+            padding-block: var(--_link-padding-block);
+            padding-inline: var(--_link-padding-inline);
+            margin-block: var(--_link-margin-block);
+            margin-inline: var(--_link-margin-inline);
+            border-bottom: var(--_link-border-default);
+
             &::-webkit-details-marker,
             &::marker {
               display: none;
@@ -458,6 +490,7 @@ watch(
 
             &:hover {
               cursor: pointer;
+              border-bottom-color: var(--_link-border-bottom-hover);
             }
 
             .decorator-icon {
