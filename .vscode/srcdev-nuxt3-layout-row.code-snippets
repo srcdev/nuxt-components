@@ -2,6 +2,11 @@
   "SRCDEV Nuxt Layout Row Component HTML Template": {
     "description": "Add Layout Row Component HTML Template",
     "scope": "vue, html",
-    "body": ["<LayoutRow tag=\"div\" variant=\"$0[full|full-width|popout|content|inset-content]\" :style-class-passthrough=\"['mbe-20']\">", "  $0", "</LayoutRow>", ""],
+    "body": [
+      "<LayoutRow tag=\"div\" variant=\"$0[full|full-width|popout|content|inset-content]\" id=\"optional-id\" :style-class-passthrough=\"['mbe-20']\">",
+      "",
+      "</LayoutRow>",
+      ""
+    ],
   }
 }
