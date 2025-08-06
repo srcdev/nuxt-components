@@ -1,29 +1,29 @@
-:root {
-  .fvs-wght-100 {
-    font-variation-settings: 'wght' 100;
-  }
-  .fvs-wght-200 {
-    font-variation-settings: 'wght' 200;
-  }
-  .fvs-wght-300 {
-    font-variation-settings: 'wght' 300;
-  }
-  .fvs-wght-400 {
-    font-variation-settings: 'wght' 400;
-  }
-  .fvs-wght-500 {
-    font-variation-settings: 'wght' 500;
-  }
-  .fvs-wght-600 {
-    font-variation-settings: 'wght' 600;
-  }
-  .fvs-wght-700 {
-    font-variation-settings: 'wght' 700;
-  }
-  .fvs-wght-800 {
-    font-variation-settings: 'wght' 800;
-  }
-  .fvs-wght-900 {
-    font-variation-settings: 'wght' 900;
-  }
+/* Using the font-variation-settings property. */
+
+.fvs-wght-100 {
+  font-variation-settings: 'wght' 100;
+}
+.fvs-wght-200 {
+  font-variation-settings: 'wght' 200;
+}
+.fvs-wght-300 {
+  font-variation-settings: 'wght' 300;
+}
+.fvs-wght-400 {
+  font-variation-settings: 'wght' 400;
+}
+.fvs-wght-500 {
+  font-variation-settings: 'wght' 500;
+}
+.fvs-wght-600 {
+  font-variation-settings: 'wght' 600;
+}
+.fvs-wght-700 {
+  font-variation-settings: 'wght' 700;
+}
+.fvs-wght-800 {
+  font-variation-settings: 'wght' 800;
+}
+.fvs-wght-900 {
+  font-variation-settings: 'wght' 900;
 }

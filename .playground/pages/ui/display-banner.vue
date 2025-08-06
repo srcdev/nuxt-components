@@ -8,7 +8,7 @@
 
         <DisplayBanner tag="div" :style-class-passthrough="['mbe-20']">
           <template #canvas>
-            <NuxtImg src="/images/banners/banner-ginger.webp" width="100%" height="100%" class="image" alt="" />
+            <NuxtImg src="/images/banners/test-banner/banner-ginger-desktop.jpeg" class="image" alt="" />
           </template>
           <template #content>
             <h2 class="heading-2">Display Banner Content</h2>
