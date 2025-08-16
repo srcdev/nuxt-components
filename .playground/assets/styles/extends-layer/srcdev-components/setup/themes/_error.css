@@ -1,4 +1,4 @@
-[data-prompt-theme='error'] {
+[data-component-theme='error'] {
   --component-theme-0: var(--red-0);
   --component-theme-1: var(--red-1);
   --component-theme-2: var(--red-2);

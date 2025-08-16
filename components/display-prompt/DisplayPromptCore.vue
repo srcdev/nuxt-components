@@ -1,6 +1,6 @@
 <template>
   <div class="display-prompt-core" :class="[{ dismissed: hide }, { 'use-local-style-overrides': useLocalStyleOverrides }]" :data-test-id="`display-prompt-core-${theme}`">
-    <div class="display-prompt-wrapper" :data-prompt-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
+    <div class="display-prompt-wrapper" :data-component-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
       <div class="display-prompt-inner">
         <div class="display-prompt-icon" data-test-id="prompt-icon">
           <slot name="customDecoratorIcon">

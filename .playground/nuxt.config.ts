@@ -19,7 +19,7 @@ export default defineNuxtConfig({
       titleTemplate: '%s - Nuxt Components Layer',
       meta: [{ charset: 'utf-8' }, { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
       bodyAttrs: {
-        class: 'nuxt-component-layer',
+        class: 'srcdev-components-extended',
       },
     },
     pageTransition: {

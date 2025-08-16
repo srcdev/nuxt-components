@@ -1,2 +1,2 @@
-@import './themes';
-@import './display-prompt-core';
+@import './setup';
+@import './components';
