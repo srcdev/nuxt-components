@@ -7,12 +7,12 @@ Althought this repo is public and feel free to do what you wish with it, this ha
 ## Install Nuxt Forms layer
 
 ```bash
-npm install --save nuxt-compnents
+npm install --save srcdev-nuxt-components
 ```
 
 ```ts
 defineNuxtConfig({
-  extends: 'nuxt-compnents',
+  extends: 'srcdev-nuxt-components',
 });
 ```
 

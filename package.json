@@ -18,11 +18,8 @@
     "test": "vitest"
   },
   "files": [
-    "assets/",
-    "components/",
-    "composables/",
-    "plugins/",
-    "types/"
+    "app/",
+    "nuxt.config.ts"
   ],
   "devDependencies": {
     "@iconify-json/akar-icons": "1.2.7",
