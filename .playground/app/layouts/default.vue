@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderProp } from '@/types/responsiveHeader';
+import type { ResponsiveHeaderProp } from '../types/responsiveHeader';
 
 const responsiveNavLinks = {
   firstNav: [

@@ -10,14 +10,6 @@ Althought this repo is public and feel free to do what you wish with it, this ha
 npm install --save nuxt-compnents
 ```
 
-## Additional required packages
-
-```bash
-npm install --save @oddbird/css-anchor-positioning
-```
-
-Then add the dependency to the property `extends` in `nuxt.config`:
-
 ```ts
 defineNuxtConfig({
   extends: 'nuxt-compnents',
