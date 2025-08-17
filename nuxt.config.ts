@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  css: ['modern-normalize', './assets/styles/main.css'],
+  css: ['modern-normalize', './app/assets/styles/main.css'],
   modules: ['@nuxt/icon', '@nuxt/image'],
   app: {
     head: {
@@ -11,6 +11,9 @@ export default defineNuxtConfig({
       },
       titleTemplate: '%s - Nuxt Components Layer',
       meta: [{ charset: 'utf-8' }, { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
+      bodyAttrs: {
+        class: 'srcdev-components-extended',
+      },
     },
     pageTransition: {
       name: 'page',
@@ -30,7 +33,7 @@ export default defineNuxtConfig({
   vue: {
     runtimeCompiler: true,
   },
-  compatibilityDate: '2024-07-13',
+  compatibilityDate: '2024-11-01',
   typescript: {
     includeWorkspace: true,
   },

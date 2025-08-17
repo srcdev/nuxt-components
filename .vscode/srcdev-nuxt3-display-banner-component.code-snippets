@@ -9,7 +9,7 @@
       "     <!-- Canvas image, this slot/template can be deleted if not needed -->",
       "    <NuxtImg src=\"/images/banners/banner-ginger.webp\" width=\"100%\" height=\"100%\" class=\"image\" alt=\"\" />",
       "  </template>",
-      "  <template #content>",
+      "  <template #layout-content>",
       "     <!-- Content html -->",
       "     $0",
       "  </template>",

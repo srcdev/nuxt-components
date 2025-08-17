@@ -6,7 +6,7 @@
       "<template>",
       "  <div>",
       "    <NuxtLayout name=\"default\">",
-      "      <template #content>",
+      "      <template #layout-content>",
       "        <LayoutRow ",
       "          tag=\"div\"",
       "          variant=\"full-width\"",

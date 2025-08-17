@@ -16,7 +16,7 @@
       "     // Optional Icon override, this slot/template can be deleted if not needed",
       "     <Icon name=\"bi:caret-down-fill\" class=\"icon mi-12\" />",
       "  </template>",
-      "  <template #content>",
+      "  <template #layout-content>",
       "     // Content html",
       "     $0",
       "  </template>",

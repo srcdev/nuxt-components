@@ -8,7 +8,7 @@
       "    <Icon name=\"akar-icons:info\" class=\"icon\" />",
       "  </template>",
       "  <template #title>Success Prompt Title with content (Dismissable)</template>",
-      "  <template #content>This is prompt content, it can contain html or plain text.</template>",
+      "  <template #layout-content>This is prompt content, it can contain html or plain text.</template>",
       "  <template #customCloseIcon>",
       "    <Icon name=\"material-symbols:close-small\" class=\"icon\" />",
       "  </template>",

@@ -25,18 +25,18 @@
     "types/"
   ],
   "devDependencies": {
-    "@iconify-json/akar-icons": "1.2.2",
-    "@iconify-json/bitcoin-icons": "1.2.2",
-    "@nuxt/eslint-config": "1.5.2",
-    "@nuxt/icon": "1.15.0",
-    "@nuxt/image": "1.10.0",
-    "@oddbird/css-anchor-positioning": "0.6.1",
-    "@vueuse/core": "13.5.0",
-    "eslint": "9.31.0",
-    "happy-dom": "16.8.1",
-    "nuxt": "3.17.6",
-    "release-it": "18.1.2",
-    "typescript": "5.8.3"
+    "@iconify-json/akar-icons": "^1.2.7",
+    "@iconify-json/bitcoin-icons": "^1.2.4",
+    "@nuxt/eslint-config": "^1.8.0",
+    "@nuxt/icon": "^2.0.0",
+    "@nuxt/image": "^1.11.0",
+    "@oddbird/css-anchor-positioning": "^0.6.1",
+    "@vueuse/core": "^13.6.0",
+    "eslint": "^9.33.0",
+    "happy-dom": "^18.0.1",
+    "nuxt": "^4.0.3",
+    "release-it": "^19.0.4",
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "focus-trap-vue": "4.0.3",
