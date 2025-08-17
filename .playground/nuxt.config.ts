@@ -6,7 +6,6 @@ export default defineNuxtConfig({
   //   https: true,
   // },
   css: [
-    'modern-normalize',
     // './assets/styles/main.css'
   ],
   modules: ['@nuxt/icon'],
