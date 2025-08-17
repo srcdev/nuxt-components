@@ -1,40 +1,43 @@
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  extends: ['..'],
+  extends: [".."],
   // devServer: {
   //   https: true,
   // },
   css: [
     // './assets/styles/main.css'
   ],
-  modules: ['@nuxt/icon'],
+  modules: ["@nuxt/eslint", "@nuxt/icon"],
   app: {
     head: {
       htmlAttrs: {
-        lang: 'en',
-        'data-color-scheme': 'auto',
+        lang: "en",
+        "data-color-scheme": "auto",
       },
-      titleTemplate: '%s - Nuxt Components Layer',
-      meta: [{ charset: 'utf-8' }, { name: 'viewport', content: 'width=device-width, initial-scale=1' }],
+      titleTemplate: "%s - Nuxt Components Layer",
+      meta: [
+        { charset: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+      ],
       bodyAttrs: {
-        class: 'srcdev-components-extended',
+        class: "srcdev-components-extended",
       },
     },
     pageTransition: {
-      name: 'page',
-      mode: 'out-in',
+      name: "page",
+      mode: "out-in",
     },
     layoutTransition: {
-      name: 'layout',
-      mode: 'out-in',
+      name: "layout",
+      mode: "out-in",
     },
   },
   components: [
     {
-      path: './components',
+      path: "./components",
       pathPrefix: false,
     },
   ],
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: "2024-11-01",
 });

@@ -24,7 +24,7 @@
   "devDependencies": {
     "@iconify-json/akar-icons": "1.2.7",
     "@iconify-json/bitcoin-icons": "1.2.4",
-    "@nuxt/eslint-config": "1.8.0",
+    "@nuxt/eslint": "1.8.0",
     "@nuxt/icon": "2.0.0",
     "@nuxt/image": "1.11.0",
     "@vueuse/core": "13.6.0",

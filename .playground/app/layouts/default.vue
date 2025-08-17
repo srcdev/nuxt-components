@@ -44,72 +44,72 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderProp } from '../types/responsiveHeader';
+import type { ResponsiveHeaderProp } from "../types/responsiveHeader"
 
 const responsiveNavLinks = {
   firstNav: [
     {
-      name: 'Components',
-      iconName: 'material-symbols:widgets',
-      childLinksTitle: 'UI Components',
+      name: "Components",
+      iconName: "material-symbols:widgets",
+      childLinksTitle: "UI Components",
       childLinks: [
-        { name: 'Banner', path: '/ui/display-banner' },
-        { name: 'Animated SVG Text', path: '/ui/animated-svg-text' },
-        { name: 'Carousel (Basic)', path: '/ui/carousel-basic' },
-        { name: 'Carousel (Infinite)', path: '/ui/carousel-infinite' },
-        { name: 'Carousel (Flip)', path: '/ui/carousel-flip' },
-        { name: 'Slider Gallery', path: '/ui/slider-gallery' },
-        { name: 'Container Glow', path: '/ui/container-glow' },
-        { name: 'Accordian', path: '/ui/accordian' },
-        { name: 'Display Details', path: '/ui/display-details' },
-        { name: 'Expanding Panel', path: '/ui/expanding-panel' },
-        { name: 'Dialogs', path: '/ui/dialog' },
-        { name: 'Tabs X', path: '/ui/tabs' },
-        { name: 'Tabs Y', path: '/ui/tabs-y' },
-        { name: 'Prompts', path: '/ui/display-prompt' },
-        { name: 'Rotating Carousel', path: '/ui/rotating-carousel' },
-        { name: 'Clipped Panels', path: '/ui/clipped-panels' },
+        { name: "Banner", path: "/ui/display-banner" },
+        { name: "Animated SVG Text", path: "/ui/animated-svg-text" },
+        { name: "Carousel (Basic)", path: "/ui/carousel-basic" },
+        { name: "Carousel (Infinite)", path: "/ui/carousel-infinite" },
+        { name: "Carousel (Flip)", path: "/ui/carousel-flip" },
+        { name: "Slider Gallery", path: "/ui/slider-gallery" },
+        { name: "Container Glow", path: "/ui/container-glow" },
+        { name: "Accordian", path: "/ui/accordian" },
+        { name: "Display Details", path: "/ui/display-details" },
+        { name: "Expanding Panel", path: "/ui/expanding-panel" },
+        { name: "Dialogs", path: "/ui/dialog" },
+        { name: "Tabs X", path: "/ui/tabs" },
+        { name: "Tabs Y", path: "/ui/tabs-y" },
+        { name: "Prompts", path: "/ui/display-prompt" },
+        { name: "Rotating Carousel", path: "/ui/rotating-carousel" },
+        { name: "Clipped Panels", path: "/ui/clipped-panels" },
       ],
     },
     {
-      name: 'Layouts',
-      iconName: 'material-symbols:responsive-layout',
-      childLinksTitle: 'UI Layouts',
+      name: "Layouts",
+      iconName: "material-symbols:responsive-layout",
+      childLinksTitle: "UI Layouts",
       childLinks: [
-        { name: 'Layout Row', path: '/ui/layout-row' },
-        { name: 'Layout Grid A', path: '/ui/layout-grid-a' },
-        { name: 'Layout Grid B', path: '/ui/layout-grid-b' },
-        { name: 'Simple Grid', path: '/ui/simple-grid' },
-        { name: 'Masonry Grid Simple', path: '/ui/masonry-grid' },
-        { name: 'Masonry Grid Sorted', path: '/ui/masonry-grid-sorted' },
-        { name: 'Masonry Grid Ordered', path: '/ui/masonry-grid-ordered' },
-        { name: 'Masonry Columns', path: '/ui/masonry-columns' },
+        { name: "Layout Row", path: "/ui/layout-row" },
+        { name: "Layout Grid A", path: "/ui/layout-grid-a" },
+        { name: "Layout Grid B", path: "/ui/layout-grid-b" },
+        { name: "Simple Grid", path: "/ui/simple-grid" },
+        { name: "Masonry Grid Simple", path: "/ui/masonry-grid" },
+        { name: "Masonry Grid Sorted", path: "/ui/masonry-grid-sorted" },
+        { name: "Masonry Grid Ordered", path: "/ui/masonry-grid-ordered" },
+        { name: "Masonry Columns", path: "/ui/masonry-columns" },
       ],
     },
-    { name: 'About', path: '/' },
+    { name: "About", path: "/" },
   ],
   secondNav: [
-    { name: 'Some other link', iconName: 'material-symbols:widgets', path: '#link-description' },
+    { name: "Some other link", iconName: "material-symbols:widgets", path: "#link-description" },
     {
-      name: 'Help',
-      childLinksTitle: 'Find Help',
+      name: "Help",
+      childLinksTitle: "Find Help",
       childLinks: [
-        { name: 'FAQs', path: '#' },
-        { name: 'Contact Us', path: '#' },
-        { name: 'Logout', path: '#' },
+        { name: "FAQs", path: "#" },
+        { name: "Contact Us", path: "#" },
+        { name: "Logout", path: "#" },
       ],
     },
     {
-      name: 'Account',
-      childLinksTitle: 'Manage Your Account',
+      name: "Account",
+      childLinksTitle: "Manage Your Account",
       childLinks: [
-        { name: 'Your Profile', path: '#' },
-        { name: 'Settings', path: '#' },
-        { name: 'Logout', path: '#' },
+        { name: "Your Profile", path: "#" },
+        { name: "Settings", path: "#" },
+        { name: "Logout", path: "#" },
       ],
     },
   ],
-} as ResponsiveHeaderProp;
+} as ResponsiveHeaderProp
 </script>
 <style lang="css">
 .header {

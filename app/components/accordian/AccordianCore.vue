@@ -1,6 +1,13 @@
 <template>
   <div class="display-accordian" :class="[elementClasses]">
-    <ExpandingPanel v-for="(item, key) in itemCount" :key="key" :name :animation-duration="300" icon-size="medium" :style-class-passthrough="['accordian-item']">
+    <ExpandingPanel
+      v-for="(item, key) in itemCount"
+      :key="key"
+      :name
+      :animation-duration="300"
+      icon-size="medium"
+      :style-class-passthrough="['accordian-item']"
+    >
       <template #summary>
         <slot :name="`accordian-${key}-summary`"></slot>
       </template>
@@ -32,10 +39,10 @@ const props = defineProps({
     type: Array as PropType<string[]>,
     default: () => [],
   },
-});
+})
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-const animationDurationStr = computed(() => `${props.animationDuration}ms`);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const animationDurationStr = computed(() => `${props.animationDuration}ms`)
 </script>
 
 <style lang="css">
