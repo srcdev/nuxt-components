@@ -1,9 +1,18 @@
 <template>
-  <dialog class="display-dialog-core" :class="[elementClasses]" role="dialog" :align-dialog :justify-dialog :open :data-dialog-id="dataDialogId" ref="dialogRef">
+  <dialog
+    class="display-dialog-core"
+    :class="[elementClasses]"
+    role="dialog"
+    :align-dialog
+    :justify-dialog
+    :open
+    :data-dialog-id="dataDialogId"
+    ref="dialogRef"
+  >
     <focus-trap v-model:active="open" :clickOutsideDeactivates="true" @deactivate="closeDialog()">
       <div class="inner" :class="[variant]">
         <div class="header">
-          <div v-if="hasDialogTitle" class="col-left">
+          <div v-if="slots.dialogTitle" class="col-left">
             <slot name="dialogTitle"></slot>
           </div>
 
@@ -11,16 +20,24 @@
             <p class="text-normal wght-700">Center col</p>
           </div>
           <div class="col-right">
-            <button @click.prevent="closeDialog()" data-test-id="display-dialog-header-close" class="display-prompt-action">
+            <button
+              @click.prevent="closeDialog()"
+              data-test-id="display-dialog-header-close"
+              class="display-prompt-action"
+            >
               <Icon name="bitcoin-icons:cross-filled" class="icon" />
               <span class="sr-only">Really Close</span>
             </button>
           </div>
         </div>
-        <div v-if="hasDialogContent" class="dialog-content" :class="[{ 'allow-content-scroll': allowContentScroll }]">
+        <div
+          v-if="slots.dialogContent"
+          class="dialog-content"
+          :class="[{ 'allow-content-scroll': allowContentScroll }]"
+        >
           <slot name="dialogContent"></slot>
         </div>
-        <div v-if="hasActionButtons" class="footer">
+        <div v-if="slots.actionButtons" class="footer">
           <slot name="actionButtons"></slot>
         </div>
       </div>
@@ -29,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { FocusTrap } from 'focus-trap-vue';
+import { FocusTrap } from "focus-trap-vue"
 const props = defineProps({
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
@@ -37,18 +54,18 @@ const props = defineProps({
   },
   variant: {
     type: String,
-    default: 'dialog',
-    validator: (val) => ['dialog', 'modal', 'confirm'].includes(val as string),
+    default: "dialog",
+    validator: (val) => ["dialog", "modal", "confirm"].includes(val as string),
   },
   justifyDialog: {
     type: String,
-    default: 'center',
-    validator: (val) => ['start', 'center', 'end'].includes(val as string),
+    default: "center",
+    validator: (val) => ["start", "center", "end"].includes(val as string),
   },
   alignDialog: {
     type: String,
-    default: 'center',
-    validator: (val) => ['start', 'center', 'end'].includes(val as string),
+    default: "center",
+    validator: (val) => ["start", "center", "end"].includes(val as string),
   },
   lockViewport: {
     type: Boolean,
@@ -62,33 +79,30 @@ const props = defineProps({
     type: String,
     required: true,
   },
-});
+})
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-const open = defineModel<boolean>();
-const bodyTag = ref<HTMLBodyElement | null>(null);
-const lockViewport = toRef<boolean>(props.lockViewport);
+const open = defineModel<boolean>()
+const bodyTag = ref<HTMLBodyElement | null>(null)
+const lockViewport = toRef<boolean>(props.lockViewport)
 
 const closeDialog = () => {
-  open.value = false;
+  open.value = false
 
   if (lockViewport.value && bodyTag.value !== null) {
-    bodyTag.value.classList.remove('lock');
+    bodyTag.value.classList.remove("lock")
   }
-};
+}
 
-const slots = useSlots();
-const hasDialogTitle = computed(() => slots.dialogTitle !== undefined);
-const hasDialogContent = computed(() => slots.dialogContent !== undefined);
-const hasActionButtons = computed(() => slots.actionButtons !== undefined);
+const slots = useSlots()
 
 onMounted(() => {
-  bodyTag.value = document.querySelector('body');
+  bodyTag.value = document.querySelector("body")
   if (lockViewport.value && bodyTag.value !== null) {
-    bodyTag.value.classList.add('lock');
+    bodyTag.value.classList.add("lock")
   }
-});
+})
 </script>
 
 <style lang="css">
@@ -121,26 +135,26 @@ onMounted(() => {
   }
 
   /* * Positioning the dialog */
-  &[justify-dialog='start'] {
+  &[justify-dialog="start"] {
     justify-content: flex-start;
   }
 
-  &[justify-dialog='center'] {
+  &[justify-dialog="center"] {
     justify-content: center;
   }
 
-  &[justify-dialog='end'] {
+  &[justify-dialog="end"] {
     justify-content: flex-end;
   }
 
-  &[align-dialog='start'] {
+  &[align-dialog="start"] {
     align-items: flex-start;
   }
 
-  &[align-dialog='center'] {
+  &[align-dialog="center"] {
     align-items: center;
   }
-  &[align-dialog='end'] {
+  &[align-dialog="end"] {
     align-items: flex-end;
   }
 

@@ -1,21 +1,35 @@
 <template>
-  <div class="display-prompt-core" :class="[{ dismissed: hide }, { 'use-local-style-overrides': useLocalStyleOverrides }]" :data-test-id="`display-prompt-core-${theme}`">
-    <div class="display-prompt-wrapper" :data-component-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
+  <div
+    class="display-prompt-core"
+    :class="[{ dismissed: hide }, { 'use-local-style-overrides': useLocalStyleOverrides }]"
+    :data-test-id="`display-prompt-core-${theme}`"
+  >
+    <div
+      class="display-prompt-wrapper"
+      :data-component-theme="theme"
+      :class="[elementClasses]"
+      data-test-id="display-prompt"
+    >
       <div class="display-prompt-inner">
         <div class="display-prompt-icon" data-test-id="prompt-icon">
           <slot name="customDecoratorIcon">
-            <Icon :name="displayPromptIcons[theme]" class="icon" :color="iconColor" />
+            <Icon :name="displayPromptIcons[theme] ?? 'akar-icons:circle-alert'" class="icon" :color="iconColor" />
           </slot>
         </div>
         <div class="display-prompt-content">
           <p class="title" data-test-id="display-prompt-title">
             <slot name="title"></slot>
           </p>
-          <p v-if="hasContent" class="text" data-test-id="display-prompt-content">
+          <p v-if="slots.content" class="text" data-test-id="display-prompt-content">
             <slot name="content"></slot>
           </p>
         </div>
-        <button v-if="dismissible" @click.prevent="dismissPrompt()" data-test-id="display-prompt-action" class="display-prompt-action">
+        <button
+          v-if="dismissible"
+          @click.prevent="dismissPrompt()"
+          data-test-id="display-prompt-action"
+          class="display-prompt-action"
+        >
           <slot name="customCloseIcon">
             <Icon name="bitcoin-icons:cross-filled" class="icon" />
           </slot>
@@ -36,9 +50,9 @@ const props = defineProps({
   },
   theme: {
     type: String,
-    default: 'error',
+    default: "error",
     validator(value: string) {
-      return ['error', 'info', 'success', 'warning', 'secondary'].includes(value);
+      return ["error", "info", "success", "warning", "secondary"].includes(value)
     },
   },
   styleClassPassthrough: {
@@ -47,9 +61,9 @@ const props = defineProps({
   },
   iconColor: {
     type: String as PropType<string>,
-    default: 'dark-grey',
+    default: "dark-grey",
     validator(value: string) {
-      return ['dark-grey', 'white'].includes(value);
+      return ["dark-grey", "white"].includes(value)
     },
   },
   useLocalStyleOverrides: {
@@ -59,24 +73,23 @@ const props = defineProps({
   displayPromptIcons: {
     type: Object as PropType<Record<string, string>>,
     default: () => ({
-      error: 'akar-icons:circle-alert',
-      info: 'akar-icons:info',
-      success: 'akar-icons:check',
-      warning: 'akar-icons:circle-alert',
-      secondary: 'akar-icons:info',
+      error: "akar-icons:circle-alert",
+      info: "akar-icons:info",
+      success: "akar-icons:check",
+      warning: "akar-icons:circle-alert",
+      secondary: "akar-icons:info",
     }),
   },
-});
+})
 
-const slots = useSlots();
-const hasContent = ref(slots.content !== undefined);
-const hide = ref(false);
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const slots = useSlots()
+const hide = ref(false)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 const dismissPrompt = () => {
   // styleClassPassthrough.value = '';
-  hide.value = true;
-};
+  hide.value = true
+}
 </script>
 
 <style lang="css">

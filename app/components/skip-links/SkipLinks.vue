@@ -1,13 +1,15 @@
 <template>
   <ul class="home-link-navigation" aria-label="Home Navigation">
-    <li v-if="hasHomeLink" class="home-link">
+    <li v-if="slots.homeLink" class="home-link">
       <slot name="homeLink">
         <NuxtLink to="/" class="home-link-default">Logo</NuxtLink>
       </slot>
     </li>
     <li class="skip-links">
       <ul class="skip-links-nav">
-        <li class="skip-link-item"><a href="#main-content" class="skip-link" ref="skipLink">Skip to main content</a></li>
+        <li class="skip-link-item">
+          <a href="#main-content" class="skip-link" ref="skipLink">Skip to main content</a>
+        </li>
         <li class="skip-link-item"><a href="#footer" class="skip-link">Skip to footer</a></li>
       </ul>
     </li>
@@ -15,8 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-const slots = useSlots();
-const hasHomeLink = ref(slots.homeLink !== undefined);
+const slots = useSlots()
 </script>
 
 <style lang="css">

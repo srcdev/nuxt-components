@@ -24,11 +24,11 @@
 const props = defineProps({
   name: {
     type: String,
-    default: '',
+    default: "",
   },
   iconSize: {
     type: String,
-    default: 'medium',
+    default: "medium",
   },
   animationDuration: {
     type: Number,
@@ -38,15 +38,15 @@ const props = defineProps({
     type: Array as PropType<string[]>,
     default: () => [],
   },
-});
+})
 
-const name = computed(() => props.name || useId());
+const name = computed(() => props.name || useId())
 
-const triggerId = computed(() => `id-${name.value}-trigger`);
-const contentId = computed(() => `id-${name.value}-content`);
-const animationDurationStr = computed(() => `${props.animationDuration}ms`);
+const triggerId = computed(() => `id-${name.value}-trigger`)
+const contentId = computed(() => `id-${name.value}-content`)
+const animationDurationStr = computed(() => `${props.animationDuration}ms`)
 
-const { elementClasses, resetElementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">

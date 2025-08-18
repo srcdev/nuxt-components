@@ -14,7 +14,7 @@
       <template #icon>
         <slot :name="`accordian-${key}-icon`"></slot>
       </template>
-      <template #layout-content>
+      <template #content>
         <slot :name="`accordian-${key}-content`"></slot>
       </template>
     </ExpandingPanel>

@@ -1,9 +1,9 @@
 <template>
   <div class="ui-content-grid" :class="[applyClasses]" :data-testid="dataTestid">
-    <div v-if="hasSlot1" class="col-1">
+    <div v-if="slots.slot1" class="col-1">
       <slot name="slot1"></slot>
     </div>
-    <div v-if="hasSlot2" class="col-2">
+    <div v-if="slots.slot2" class="col-2">
       <slot name="slot2"></slot>
     </div>
   </div>
@@ -13,17 +13,15 @@
 const props = defineProps({
   dataTestid: {
     type: String,
-    default: 'ui-content-grid',
+    default: "ui-content-grid",
   },
   applyClasses: {
     type: String,
-    default: '',
+    default: "",
   },
-});
+})
 
-const slots = useSlots();
-const hasSlot1 = ref(slots.slot1 !== undefined);
-const hasSlot2 = ref(slots.slot2 !== undefined);
+const slots = useSlots()
 </script>
 
 <style lang="css">

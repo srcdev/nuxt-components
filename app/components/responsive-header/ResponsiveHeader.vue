@@ -1,13 +1,23 @@
 <template>
   <div class="navigation" :class="[elementClasses, { loaded: navLoaded }]" ref="navigationWrapper" role="banner">
     <nav class="main-navigation" ref="mainNav" aria-label="Main navigation">
-      <ul v-for="(navGroup, groupKey) in responsiveNavLinks" :key="groupKey" class="main-navigation-list" :ref="el => setNavRef(String(groupKey), el as HTMLUListElement | null)">
+      <ul
+        v-for="(navGroup, groupKey) in responsiveNavLinks"
+        :key="groupKey"
+        class="main-navigation-list"
+        :ref="el => setNavRef(String(groupKey), el as HTMLUListElement | null)"
+      >
         <template v-for="(link, localIndex) in navGroup" :key="localIndex">
           <li
             v-if="link.path"
             class="main-navigation-item"
-            :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
-            :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
+            :class="{
+              'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible,
+            }"
+            :style="{
+              '--_main-navigation-item-width':
+                mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
+            }"
             ref="mainNavigationItems"
             :data-group-key="groupKey"
             :data-local-index="localIndex"
@@ -22,8 +32,13 @@
           <li
             v-else
             class="main-navigation-item"
-            :class="{ 'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
-            :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
+            :class="{
+              'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible,
+            }"
+            :style="{
+              '--_main-navigation-item-width':
+                mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
+            }"
             ref="mainNavigationItems"
             :data-group-key="groupKey"
             :data-local-index="localIndex"
@@ -45,7 +60,9 @@
               <div class="main-navigation-sub-nav" role="menu" :aria-labelledby="`summary-${groupKey}-${localIndex}`">
                 <ul class="main-navigation-sub-nav-list">
                   <li class="main-navigation-sub-nav-item" v-for="childLink in link.childLinks" :key="childLink.name">
-                    <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link" role="menuitem">{{ childLink.name }}</NuxtLink>
+                    <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link" role="menuitem">
+                      {{ childLink.name }}
+                    </NuxtLink>
                   </li>
                 </ul>
               </div>
@@ -55,16 +72,31 @@
       </ul>
     </nav>
     <nav class="secondary-navigation" ref="secondaryNav" aria-label="Secondary navigation">
-      <details class="overflow-details" :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]" ref="overflowDetails" name="overflow-group">
+      <details
+        class="overflow-details"
+        :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]"
+        ref="overflowDetails"
+        name="overflow-group"
+      >
         <summary class="overflow-details-summary has-toggle-icon">
-          <Icon :name="overflowDetailsSummaryIcons.more" class="icon" :class="[{ show: !allowNavigationCollapse }]" :aria-hidden="true" />
-          <Icon :name="overflowDetailsSummaryIcons.burger" class="icon" :class="[{ show: allowNavigationCollapse }]" :aria-hidden="true" />
+          <Icon
+            :name="overflowDetailsSummaryIcons.more ?? 'gravity-ui:ellipsis'"
+            class="icon"
+            :class="[{ show: !allowNavigationCollapse }]"
+            :aria-hidden="true"
+          />
+          <Icon
+            :name="overflowDetailsSummaryIcons.burger ?? 'gravity-ui:bars'"
+            class="icon"
+            :class="[{ show: allowNavigationCollapse }]"
+            :aria-hidden="true"
+          />
         </summary>
         <div class="overflow-details-nav" role="menu">
           <NavigationItems :main-navigation-state="mainNavigationState" />
         </div>
       </details>
-      <slot v-if="hasSecondaryNavigation" name="secondaryNavigation"></slot>
+      <slot v-if="slots.secondaryNavigation" name="secondaryNavigation"></slot>
     </nav>
     <LayoutRow tag="div" variant="full" :style-class-passthrough="['mb-20', 'debug-grid']">
       <ClientOnly>
@@ -85,8 +117,8 @@
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver, onClickOutside } from '@vueuse/core';
-import type { ResponsiveHeaderProp, ResponsiveHeaderState, IFlooredRect } from '@/types/responsiveHeader';
+import { useResizeObserver, onClickOutside } from "@vueuse/core"
+import type { ResponsiveHeaderProp, ResponsiveHeaderState, IFlooredRect } from "@/types/responsiveHeader"
 
 const props = defineProps({
   responsiveNavLinks: {
@@ -100,8 +132,8 @@ const props = defineProps({
   overflowDetailsSummaryIcons: {
     type: Object as PropType<Record<string, string>>,
     default: {
-      more: 'gravity-ui:ellipsis',
-      burger: 'gravity-ui:bars',
+      more: "gravity-ui:ellipsis",
+      burger: "gravity-ui:bars",
     },
   },
   collapseBreakpoint: {
@@ -120,67 +152,68 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-});
+})
 
-const slots = useSlots();
-const hasSecondaryNavigation = computed(() => slots.secondaryNavigation !== undefined);
-const collapseNavigationBelowWidth = computed(() => props.collapseBreakpoint !== null || props.collapseAtMainNavIntersection);
-const collapseBreakpoint = ref(props.collapseBreakpoint);
-const navLoaded = ref(false);
-const navigationWrapperRef = useTemplateRef('navigationWrapper');
+const slots = useSlots()
+const collapseNavigationBelowWidth = computed(
+  () => props.collapseBreakpoint !== null || props.collapseAtMainNavIntersection
+)
+const collapseBreakpoint = ref(props.collapseBreakpoint)
+const navLoaded = ref(false)
+const navigationWrapperRef = useTemplateRef("navigationWrapper")
 
 const closeAllNavigationDetails = () => {
   navigationDetailsRefs.value?.forEach((element) => {
-    element?.removeAttribute('open');
-  });
-  overflowDetailsRef.value?.removeAttribute('open');
-};
+    element?.removeAttribute("open")
+  })
+  overflowDetailsRef.value?.removeAttribute("open")
+}
 
 const toggleDetailsElement = (event: Event) => {
-  const summaryElement = event.currentTarget as HTMLElement;
-  const parentDetailsElement = summaryElement.closest('details');
-  if (!parentDetailsElement) return;
+  const summaryElement = event.currentTarget as HTMLElement
+  const parentDetailsElement = summaryElement.closest("details")
+  if (!parentDetailsElement) return
 
-  if (parentDetailsElement.hasAttribute('open')) {
-    parentDetailsElement.removeAttribute('open');
+  if (parentDetailsElement.hasAttribute("open")) {
+    parentDetailsElement.removeAttribute("open")
   } else {
-    parentDetailsElement.setAttribute('open', '');
+    parentDetailsElement.setAttribute("open", "")
   }
-  overflowDetailsRef.value?.removeAttribute('open');
-};
+  overflowDetailsRef.value?.removeAttribute("open")
+}
 
 const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
   if (!props.allowExpandOnGesture) {
-    return;
+    return
   }
 
   // Close all other open navigation details first
-  const summaryElement = event.currentTarget as HTMLElement;
-  const parentDetailsElement = summaryElement.closest('details');
+  const summaryElement = event.currentTarget as HTMLElement
+  const parentDetailsElement = summaryElement.closest("details")
 
   navigationDetailsRefs.value?.forEach((element) => {
     if (element !== parentDetailsElement) {
-      element?.removeAttribute('open');
+      element?.removeAttribute("open")
     }
-  });
-  overflowDetailsRef.value?.removeAttribute('open');
+  })
+  overflowDetailsRef.value?.removeAttribute("open")
 
   // Then toggle the current one
-  toggleDetailsElement(event);
-};
+  toggleDetailsElement(event)
+}
 
 const handleNavigationItemHover = () => {
   if (!props.allowExpandOnGesture) {
-    return;
+    return
   }
 
   // Close all open navigation details when hovering over regular nav items
-  closeAllNavigationDetails();
-};
+  closeAllNavigationDetails()
+}
 
 const handleSummaryAction = (event: MouseEvent | KeyboardEvent) => {
-  toggleDetailsElement(event);
-};
+  toggleDetailsElement(event)
+}
 
 const mainNavigationState = ref<ResponsiveHeaderState>({
   navListVisibility: {
@@ -189,51 +222,53 @@ const mainNavigationState = ref<ResponsiveHeaderState>({
   },
   clonedNavLinks: props.responsiveNavLinks,
   hasSecondNav: Object.keys(props.responsiveNavLinks).length > 1,
-});
+})
 
-const navRefs = ref<Record<string, HTMLUListElement | null>>({});
+const navRefs = ref<Record<string, HTMLUListElement | null>>({})
 
 const setNavRef = (key: string, el: HTMLUListElement | null) => {
-  navRefs.value[key] = el;
-};
+  navRefs.value[key] = el
+}
 
-const navigationWrapperRects = ref<IFlooredRect | null>(null);
-const firstNavRef = ref<HTMLUListElement | null>(null);
-const firstNavRects = ref<IFlooredRect | null>(null);
+const navigationWrapperRects = ref<IFlooredRect | null>(null)
+const firstNavRef = ref<HTMLUListElement | null>(null)
+const firstNavRects = ref<IFlooredRect | null>(null)
 
-const secondNavRef = ref<HTMLUListElement | null>(null);
-const secondNavRects = ref<IFlooredRect | null>(null);
+const secondNavRef = ref<HTMLUListElement | null>(null)
+const secondNavRects = ref<IFlooredRect | null>(null)
 
-const secondaryNavRef = useTemplateRef('secondaryNav');
-const secondaryNavRects = ref<IFlooredRect | null>(null);
+const secondaryNavRef = useTemplateRef("secondaryNav")
+const secondaryNavRects = ref<IFlooredRect | null>(null)
 
-const mainNavigationItemsRefs = useTemplateRef<HTMLLIElement[]>('mainNavigationItems');
+const mainNavigationItemsRefs = useTemplateRef<HTMLLIElement[]>("mainNavigationItems")
 
-const navigationDetailsRefs = useTemplateRef<HTMLElement[]>('navigationDetails');
+const navigationDetailsRefs = useTemplateRef<HTMLElement[]>("navigationDetails")
 
-const overflowDetailsRef = useTemplateRef('overflowDetails');
+const overflowDetailsRef = useTemplateRef("overflowDetails")
 
 const showOverflowDetails = computed(() => {
-  const hasHiddenNav = !mainNavigationState.value.navListVisibility['firstNav'] || (!mainNavigationState.value.navListVisibility['secondNav'] && mainNavigationState.value.hasSecondNav);
-  return hasHiddenNav;
-});
+  const hasHiddenNav =
+    !mainNavigationState.value.navListVisibility["firstNav"] ||
+    (!mainNavigationState.value.navListVisibility["secondNav"] && mainNavigationState.value.hasSecondNav)
+  return hasHiddenNav
+})
 
 const mainNavigationMarginBlockEnd = computed(() => {
-  return secondaryNavRects.value ? secondaryNavRects.value.width + props.gapBetweenFirstAndSecondNav : 0;
-});
+  return secondaryNavRects.value ? secondaryNavRects.value.width + props.gapBetweenFirstAndSecondNav : 0
+})
 
 const mainNavigationMarginBlockEndStr = computed(() => {
-  return mainNavigationMarginBlockEnd.value + 'px';
-});
+  return mainNavigationMarginBlockEnd.value + "px"
+})
 
 const initTemplateRefs = async () => {
-  firstNavRef.value = navRefs.value['firstNav'] as HTMLUListElement | null;
-  secondNavRef.value = navRefs.value['secondNav'] as HTMLUListElement | null;
-  return;
-};
+  firstNavRef.value = navRefs.value["firstNav"] as HTMLUListElement | null
+  secondNavRef.value = navRefs.value["secondNav"] as HTMLUListElement | null
+  return
+}
 
 const getFlooredRect = (rect: DOMRect | null) => {
-  if (!rect) return null;
+  if (!rect) return null
   return {
     left: Math.floor(rect.left),
     right: Math.floor(rect.right),
@@ -241,19 +276,22 @@ const getFlooredRect = (rect: DOMRect | null) => {
     bottom: Math.floor(rect.bottom),
     width: Math.floor(rect.width),
     height: Math.floor(rect.height),
-  };
-};
+  }
+}
 
 const updateNavigationConfig = async (source: string) => {
-  navigationWrapperRects.value = getFlooredRect((navigationWrapperRef.value && navigationWrapperRef.value.getBoundingClientRect()) ?? null) || null;
-  secondaryNavRects.value = getFlooredRect((secondaryNavRef.value && secondaryNavRef.value.getBoundingClientRect()) ?? null) || null;
-  firstNavRects.value = getFlooredRect((firstNavRef.value && firstNavRef.value.getBoundingClientRect()) ?? null) || null;
-  secondNavRects.value = getFlooredRect((secondNavRef.value && secondNavRef.value.getBoundingClientRect()) ?? null) || null;
+  navigationWrapperRects.value =
+    getFlooredRect((navigationWrapperRef.value && navigationWrapperRef.value.getBoundingClientRect()) ?? null) || null
+  secondaryNavRects.value =
+    getFlooredRect((secondaryNavRef.value && secondaryNavRef.value.getBoundingClientRect()) ?? null) || null
+  firstNavRects.value = getFlooredRect((firstNavRef.value && firstNavRef.value.getBoundingClientRect()) ?? null) || null
+  secondNavRects.value =
+    getFlooredRect((secondNavRef.value && secondNavRef.value.getBoundingClientRect()) ?? null) || null
 
   if (collapseNavigationBelowWidth.value && firstNavRects.value) {
-    collapseBreakpoint.value = firstNavRects.value?.right;
+    collapseBreakpoint.value = firstNavRects.value?.right
   }
-};
+}
 
 const allowNavigationCollapse = computed(() => {
   return (
@@ -261,32 +299,35 @@ const allowNavigationCollapse = computed(() => {
     navigationWrapperRects.value &&
     secondaryNavRects.value !== null &&
     Math.floor(secondaryNavRects.value.left - props.gapBetweenFirstAndSecondNav) <= collapseBreakpoint.value
-  );
-});
+  )
+})
 
 const determineNavigationItemVisibility = (rect: DOMRect) => {
   // Check if navigation should be collapsed based on width breakpoint
   if (allowNavigationCollapse.value) {
-    return false;
+    return false
   }
 
   // Use default responsive visibility logic if wrapper exists
   if (navigationWrapperRects.value) {
-    return Math.floor(rect.right + mainNavigationMarginBlockEnd.value + props.gapBetweenFirstAndSecondNav) < navigationWrapperRects.value.right;
+    return (
+      Math.floor(rect.right + mainNavigationMarginBlockEnd.value + props.gapBetweenFirstAndSecondNav) <
+      navigationWrapperRects.value.right
+    )
   }
 
   // Default to visible
-  return true;
-};
+  return true
+}
 
 const initMainNavigationState = () => {
-  if (!mainNavigationItemsRefs.value) return;
+  if (!mainNavigationItemsRefs.value) return
 
   mainNavigationItemsRefs.value.forEach((item, index) => {
-    const rect = item.getBoundingClientRect();
+    const rect = item.getBoundingClientRect()
 
-    const groupKey = item.dataset.groupKey;
-    const localIndex = item.dataset.localIndex ? parseInt(item.dataset.localIndex, 10) : 0;
+    const groupKey = item.dataset.groupKey
+    const localIndex = item.dataset.localIndex ? parseInt(item.dataset.localIndex, 10) : 0
     if (
       groupKey !== undefined &&
       groupKey !== null &&
@@ -302,56 +343,57 @@ const initMainNavigationState = () => {
           width: item.offsetWidth,
           visible: determineNavigationItemVisibility(rect),
         },
-      };
+      }
     }
 
     // Check if a single item has visible set to false and set the visibility of the group accordingly
     if (
-      typeof groupKey === 'string' &&
+      typeof groupKey === "string" &&
       mainNavigationState.value.clonedNavLinks &&
       mainNavigationState.value.clonedNavLinks[groupKey] &&
+      mainNavigationState.value.clonedNavLinks[groupKey][localIndex] &&
       mainNavigationState.value.clonedNavLinks[groupKey][localIndex].config?.visible === false
     ) {
-      mainNavigationState.value.navListVisibility[groupKey] = false;
-    } else if (typeof groupKey === 'string') {
-      mainNavigationState.value.navListVisibility[groupKey] = true;
+      mainNavigationState.value.navListVisibility[groupKey] = false
+    } else if (typeof groupKey === "string") {
+      mainNavigationState.value.navListVisibility[groupKey] = true
     }
-  });
-};
+  })
+}
 
 onMounted(async () => {
   await initTemplateRefs().then(() => {
     setTimeout(() => {
-      navLoaded.value = true;
-    }, 100);
-  });
+      navLoaded.value = true
+    }, 100)
+  })
 
   navigationDetailsRefs.value?.forEach((element, index) => {
     onClickOutside(element, () => {
-      navigationDetailsRefs.value?.[index]?.removeAttribute('open');
-    });
-  });
+      navigationDetailsRefs.value?.[index]?.removeAttribute("open")
+    })
+  })
   // Add onClickOutside to overflowDetailsRef
   overflowDetailsRef.value &&
     onClickOutside(overflowDetailsRef.value, () => {
-      overflowDetailsRef.value?.removeAttribute('open');
-    });
-});
+      overflowDetailsRef.value?.removeAttribute("open")
+    })
+})
 
 useResizeObserver(navigationWrapperRef, async () => {
-  await updateNavigationConfig('useResizeObserver').then(() => {
-    initMainNavigationState();
-  });
-});
+  await updateNavigationConfig("useResizeObserver").then(() => {
+    initMainNavigationState()
+  })
+})
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough);
+    resetElementClasses(props.styleClassPassthrough)
   }
-);
+)
 </script>
 
 <style lang="css">
@@ -378,7 +420,7 @@ watch(
 
   /* flex-grow: 1; */
   display: grid;
-  grid-template-areas: 'navStack';
+  grid-template-areas: "navStack";
 
   margin: 12px;
   border-radius: 8px;
@@ -599,7 +641,7 @@ watch(
         --_transition-duration: 0.2s;
 
         display: grid;
-        grid-template-areas: 'icon';
+        grid-template-areas: "icon";
         align-items: center;
         justify-content: center;
         padding-inline: 5px;

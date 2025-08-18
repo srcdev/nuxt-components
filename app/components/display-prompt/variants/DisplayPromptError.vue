@@ -6,7 +6,7 @@
     <template #title>
       <slot name="title"></slot>
     </template>
-    <template v-if="hasContent" #content>
+    <template v-if="slots.content" #content>
       <slot name="content"></slot>
     </template>
   </DisplayPromptCore>
@@ -22,11 +22,9 @@ const props = defineProps({
     type: Array as PropType<string[]>,
     default: () => [],
   },
-});
+})
 
-const slots = useSlots();
-const hasContent = ref(slots.content !== undefined);
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const slots = useSlots()
 </script>
 
 <style lang="css">
