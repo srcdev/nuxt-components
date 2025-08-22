@@ -1,0 +1,308 @@
+/* Padding */
+.p-0 {
+  padding: 0;
+}
+.pbs-0 {
+  padding-block-start: 0;
+}
+.pbe-0 {
+  padding-block-end: 0;
+}
+.pis-0 {
+  padding-inline-start: 0;
+}
+.pie-0 {
+  padding-inline-end: 0;
+}
+.pi-0 {
+  padding-inline: 0;
+}
+.pb-0 {
+  padding-block: 0;
+}
+
+.p-1 {
+  padding: 0.1rem;
+}
+.pbs-1 {
+  padding-block-start: 0.1rem;
+}
+.pbe-1 {
+  padding-block-end: 0.1rem;
+}
+.pis-1 {
+  padding-inline-start: 0.1rem;
+}
+.pie-1 {
+  padding-inline-end: 0.1rem;
+}
+.pi-1 {
+  padding-inline: 0.1rem;
+}
+.pb-1 {
+  padding-block: 0.1rem;
+}
+
+.p-2 {
+  padding: 0.2rem;
+}
+.pbs-2 {
+  padding-block-start: 0.2rem;
+}
+.pbe-2 {
+  padding-block-end: 0.2rem;
+}
+.pis-2 {
+  padding-inline-start: 0.2rem;
+}
+.pie-2 {
+  padding-inline-end: 0.2rem;
+}
+.pi-2 {
+  padding-inline: 0.2rem;
+}
+.pb-2 {
+  padding-block: 0.2rem;
+}
+
+.p-4 {
+  padding: 0.4rem;
+}
+.pbs-4 {
+  padding-block-start: 0.4rem;
+}
+.pbe-4 {
+  padding-block-end: 0.4rem;
+}
+.pis-4 {
+  padding-inline-start: 0.4rem;
+}
+.pie-4 {
+  padding-inline-end: 0.4rem;
+}
+.pi-4 {
+  padding-inline: 0.4rem;
+}
+.pb-4 {
+  padding-block: 0.4rem;
+}
+
+.p-6 {
+  padding: 0.6rem;
+}
+.pbs-6 {
+  padding-block-start: 0.6rem;
+}
+.pbe-6 {
+  padding-block-end: 0.6rem;
+}
+.pis-6 {
+  padding-inline-start: 0.6rem;
+}
+.pie-6 {
+  padding-inline-end: 0.6rem;
+}
+.pi-6 {
+  padding-inline: 0.6rem;
+}
+.pb-6 {
+  padding-block: 0.6rem;
+}
+
+.p-8 {
+  padding: 0.8rem;
+}
+.pbs-8 {
+  padding-block-start: 0.8rem;
+}
+.pbe-8 {
+  padding-block-end: 0.8rem;
+}
+.pis-8 {
+  padding-inline-start: 0.8rem;
+}
+.pie-8 {
+  padding-inline-end: 0.8rem;
+}
+.pi-8 {
+  padding-inline: 0.8rem;
+}
+.pb-8 {
+  padding-block: 0.8rem;
+}
+
+.p-10 {
+  padding: 1rem;
+}
+.pbs-10 {
+  padding-block-start: 1rem;
+}
+.pbe-10 {
+  padding-block-end: 1rem;
+}
+.pis-10 {
+  padding-inline-start: 1rem;
+}
+.pie-10 {
+  padding-inline-end: 1rem;
+}
+.pi-10 {
+  padding-inline: 1rem;
+}
+.pb-10 {
+  padding-block: 1rem;
+}
+
+.p-12 {
+  padding: 1.2rem;
+}
+.pbs-12 {
+  padding-block-start: 1.2rem;
+}
+.pbe-12 {
+  padding-block-end: 1.2rem;
+}
+.pis-12 {
+  padding-inline-start: 1.2rem;
+}
+.pie-12 {
+  padding-inline-end: 1.2rem;
+}
+.pi-12 {
+  padding-inline: 1.2rem;
+}
+.pb-12 {
+  padding-block: 1.2rem;
+}
+
+.p-18 {
+  padding: 1.8rem;
+}
+.pbs-18 {
+  padding-block-start: 1.8rem;
+}
+.pbe-18 {
+  padding-block-end: 1.8rem;
+}
+.pis-18 {
+  padding-inline-start: 1.8rem;
+}
+.pie-18 {
+  padding-inline-end: 1.8rem;
+}
+.pi-18 {
+  padding-inline: 1.8rem;
+}
+.pb-18 {
+  padding-block: 1.8rem;
+}
+
+.p-20 {
+  padding: 2rem;
+}
+.pbs-20 {
+  padding-block-start: 2rem;
+}
+.pbe-20 {
+  padding-block-end: 2rem;
+}
+.pis-20 {
+  padding-inline-start: 2rem;
+}
+.pie-20 {
+  padding-inline-end: 2rem;
+}
+.pi-20 {
+  padding-inline: 2rem;
+}
+.pb-20 {
+  padding-block: 2rem;
+}
+
+.p-24 {
+  padding: 2.4rem;
+}
+.pbs-24 {
+  padding-block-start: 2.4rem;
+}
+.pbe-24 {
+  padding-block-end: 2.4rem;
+}
+.pis-24 {
+  padding-inline-start: 2.4rem;
+}
+.pie-24 {
+  padding-inline-end: 2.4rem;
+}
+.pi-24 {
+  padding-inline: 2.4rem;
+}
+.pb-24 {
+  padding-block: 2.4rem;
+}
+
+.p-32 {
+  padding: 3.2rem;
+}
+.pbs-32 {
+  padding-block-start: 3.2rem;
+}
+.pbe-32 {
+  padding-block-end: 3.2rem;
+}
+.pis-32 {
+  padding-inline-start: 3.2rem;
+}
+.pie-32 {
+  padding-inline-end: 3.2rem;
+}
+.pi-32 {
+  padding-inline: 3.2rem;
+}
+.pb-32 {
+  padding-block: 3.2rem;
+}
+
+.p-40 {
+  padding: 4rem;
+}
+.pbs-40 {
+  padding-block-start: 4rem;
+}
+.pbe-40 {
+  padding-block-end: 4rem;
+}
+.pis-40 {
+  padding-inline-start: 4rem;
+}
+.pie-40 {
+  padding-inline-end: 4rem;
+}
+.pi-40 {
+  padding-inline: 4rem;
+}
+.pb-40 {
+  padding-block: 4rem;
+}
+
+.p-60 {
+  padding: 6rem;
+}
+.pbs-60 {
+  padding-block-start: 6rem;
+}
+.pbe-60 {
+  padding-block-end: 6rem;
+}
+.pis-60 {
+  padding-inline-start: 6rem;
+}
+.pie-60 {
+  padding-inline-end: 6rem;
+}
+.pi-60 {
+  padding-inline: 6rem;
+}
+.pb-60 {
+  padding-block: 6rem;
+}
