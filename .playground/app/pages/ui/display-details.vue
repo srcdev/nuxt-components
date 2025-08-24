@@ -6,14 +6,20 @@
           <h1 class="heading-2">Details element - Unlinked</h1>
           <p class="mbe-12">Following 2 details block behave independantly.</p>
 
-          <DisplayDetailsCore id="details-1" name="details-1" :animation-duration="200" icon-size="medium" :style-class-passthrough="['custom-style-1']">
+          <DisplayDetailsCore
+            id="details-1"
+            name="details-1"
+            :animation-duration="200"
+            icon-size="medium"
+            :style-class-passthrough="['custom-style-1']"
+          >
             <template #summary>
               <h3 class="heading-3 m-8">Details header 1 (Fast)</h3>
             </template>
             <template #summaryIcon>
               <Icon name="bi:caret-down-fill" class="icon mi-12" />
             </template>
-            <template #layout-content>
+            <template #details-content>
               <div>
                 <p class="mt-0">Details content</p>
                 <p>Details content</p>
@@ -24,14 +30,20 @@
             </template>
           </DisplayDetailsCore>
 
-          <DisplayDetailsCore id="details-2" name="details-2" :animation-duration="2000" icon-size="medium" :style-class-passthrough="['custom-style-2']">
+          <DisplayDetailsCore
+            id="details-2"
+            name="details-2"
+            :animation-duration="2000"
+            icon-size="medium"
+            :style-class-passthrough="['custom-style-2']"
+          >
             <template #summary>
               <h3 class="heading-3 m-8">Details header 2 (Slow)</h3>
             </template>
             <template #summaryIcon>
               <Icon name="bi:caret-down-fill" class="icon mi-12" />
             </template>
-            <template #layout-content>
+            <template #details-content>
               <div>
                 <p class="mt-0">Details content</p>
                 <p>Details content</p>
@@ -43,18 +55,27 @@
           </DisplayDetailsCore>
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['display-details-section', 'mbe-20', 'hidden']">
+        <LayoutRow
+          tag="div"
+          variant="full-width"
+          :style-class-passthrough="['display-details-section', 'mbe-20', 'hidden']"
+        >
           <h2 class="heading-2">Details element - Linked</h2>
           <p class="mbe-12">Details panels are linked, only 1 can be open at a time.</p>
 
-          <DisplayDetailsCore :id="useId()" name="details-linked" icon-size="medium" :style-class-passthrough="['linked']">
+          <DisplayDetailsCore
+            :id="useId()"
+            name="details-linked"
+            icon-size="medium"
+            :style-class-passthrough="['linked']"
+          >
             <template #summary>
               <h3 class="heading-3 m-8">Details header 1</h3>
             </template>
             <template #summaryIcon>
               <Icon name="bi:caret-down-fill" class="icon mi-12" />
             </template>
-            <template #layout-content>
+            <template #details-content>
               <div>
                 <p class="mt-0">Details content</p>
                 <p>Details content</p>
@@ -65,14 +86,19 @@
             </template>
           </DisplayDetailsCore>
 
-          <DisplayDetailsCore :id="useId()" name="details-linked" icon-size="medium" :style-class-passthrough="['linked']">
+          <DisplayDetailsCore
+            :id="useId()"
+            name="details-linked"
+            icon-size="medium"
+            :style-class-passthrough="['linked']"
+          >
             <template #summary>
               <h3 class="heading-3 m-8">Details header 2</h3>
             </template>
             <template #summaryIcon>
               <Icon name="bi:caret-down-fill" class="icon mi-12" />
             </template>
-            <template #layout-content>
+            <template #details-content>
               <div>
                 <p class="mt-0">Details content</p>
                 <p>Details content</p>
@@ -91,17 +117,17 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-});
+})
 
 useHead({
-  title: 'Browser title tag',
+  title: "Browser title tag",
   meta: [
     {
-      name: 'description',
-      content: 'Meta description content',
+      name: "description",
+      content: "Meta description content",
     },
   ],
-});
+})
 </script>
 
 <style lang="css">
