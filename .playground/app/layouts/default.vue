@@ -6,7 +6,10 @@
           <nav class="home-navigation" aria-label="Home Navigation">
             <SkipLinks>
               <template #homeLink>
-                <NuxtLink to="/" class="home-link">Logo</NuxtLink>
+                <NuxtLink to="/" class="home-link">
+                  SRCDEV
+                  <span>components</span>
+                </NuxtLink>
               </template>
             </SkipLinks>
           </nav>
@@ -120,7 +123,7 @@ const responsiveNavLinks = {
     grid-template-columns: auto 1fr;
     gap: 24px;
     align-items: center;
-    padding-block: 12px;
+    padding-block: 0;
     padding-inline: 24px;
     background-color: #000;
 
@@ -131,8 +134,23 @@ const responsiveNavLinks = {
 
     .home-link {
       display: flex;
-      align-items: center;
+      flex-direction: column;
       text-wrap-mode: nowrap;
+      font-size: var(--step-5);
+      letter-spacing: 0.2em;
+      color: var(--gray-0);
+      text-decoration: none;
+
+      span {
+        font-size: var(--step-3);
+        letter-spacing: initial;
+      }
+
+      &:hover {
+        border-radius: 0.4rem;
+        outline: 2px solid var(--green-8);
+        outline-offset: 0.4rem;
+      }
     }
   }
 }
@@ -142,11 +160,11 @@ const responsiveNavLinks = {
   margin: 1.2rem;
   border-radius: 0.8rem;
   background-color: #efefef05;
-  border: 0.1rem solid #efefef75;
-  padding-block: 1rem;
+  border: 0.1rem solid transparent;
+  padding-block: 0;
   padding-inline: 1.2rem;
 
-  /* max-block-size: 4.2rem; */
+  max-block-size: 4rem;
 
   .main-navigation {
     gap: 60px;
