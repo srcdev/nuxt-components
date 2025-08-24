@@ -696,7 +696,7 @@ watch(
         background-color: #000;
         border: 1px solid #ffffff90;
         border-radius: 8px;
-        padding: 12px;
+        padding-block: 12px;
         margin: 0;
         z-index: 999;
         min-width: var(--_overflow-drop-down-width, fit-content);

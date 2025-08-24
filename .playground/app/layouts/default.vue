@@ -142,7 +142,7 @@ const responsiveNavLinks = {
   margin: 1.2rem;
   border-radius: 0.8rem;
   background-color: #efefef05;
-  border: 1px solid #efefef75;
+  border: 0.1rem solid #efefef75;
   padding-block: 1rem;
   padding-inline: 1.2rem;
 
@@ -183,7 +183,7 @@ const responsiveNavLinks = {
 
           .main-navigation-sub-nav {
             padding: 12px;
-            border: 1px solid #efefef75;
+            border: 0.1rem solid #efefef75;
             border-radius: 8px;
             background-color: #000;
             translate: 0 12px;
@@ -245,8 +245,8 @@ const responsiveNavLinks = {
       .overflow-details-summary {
         --_icon-zoom: 1;
         --_icon-size: 20px;
-        --_border-width: 1px;
-        --_outline-width: 1px;
+        --_border-width: 0.1rem;
+        --_outline-width: 0.1rem;
         padding-inline: 5px;
 
         border-radius: 4px;
@@ -269,59 +269,107 @@ const responsiveNavLinks = {
         top: 135%;
         right: 0;
         background-color: #000;
-        border: 1px solid #ffffff90;
+        border: 0.1rem solid #ffffff90;
         border-radius: 8px;
-        padding: 12px;
-        margin: 0;
-        gap: 8px;
+        padding-block: 0;
+        margin-block-end: -0.1rem;
+        gap: 0.8rem;
 
         /* Override for NavigationItems START */
 
         .overflow-navigation-wrapper {
-          gap: 12px;
+          --overflow-nav-padding-inline: 0.8rem;
+          --overflow-nav-items-gap: 0px;
+          --overflow-nav-items-padding-block: 0.8rem;
+          display: flex;
+          flex-direction: column;
+          gap: var(--overflow-nav-items-gap);
 
           .overflow-navigation-list {
+            display: none;
+
             &.visible {
+              display: flex;
               flex-direction: column;
-              gap: 12px;
+              gap: var(--overflow-nav-items-gap);
+              min-width: var(--_overflow-navigation-list-min-width, auto);
             }
 
             .overflow-navigation-item {
+              display: none;
+
+              &.visible {
+                display: block;
+              }
+
               .overflow-navigation-link {
                 text-decoration: none;
                 color: inherit;
+                padding-block: var(--overflow-nav-items-padding-block);
+                padding-inline: var(--overflow-nav-padding-inline);
+                display: flex;
+                /* background-color: red; */
+                border-bottom: 0.1rem solid #efefef75;
               }
 
               .overflow-navigation-details {
-                --_overflow-navigation-sub-nav-list-margin-block-start: 0;
+                &.expanding-panel {
+                  margin-block-end: 0;
 
-                &[open] {
-                  --_overflow-navigation-sub-nav-list-margin-block-start: 12px;
-                }
+                  .expanding-panel-details {
+                    .expanding-panel-summary {
+                      padding-block: var(--overflow-nav-items-padding-block);
+                      padding-inline: var(--overflow-nav-padding-inline);
+                      gap: 1rem;
+                      /* background-color: red; */
+                      border-bottom: 0.1rem solid #efefef75;
 
-                &.display-details {
-                  .display-details-summary {
-                    .label {
-                      .overflow-navigation-text {
-                        text-wrap: nowrap;
+                      .label-wrapper {
+                        .overflow-navigation-text {
+                          text-wrap: nowrap;
+                        }
+                      }
+                      .icon-wrapper {
+                        padding: 0;
                       }
                     }
 
-                    /* .icon {} */
+                    &[open] {
+                      .expanding-panel-summary {
+                        border-bottom: 0.1rem solid transparent;
+                      }
+                      + .expanding-panel-content {
+                        border-bottom: 0.1rem solid #efefef75;
+                        .inner {
+                          .overflow-navigation-sub-nav-inner {
+                            margin-top: var(--overflow-nav-items-gap);
+                          }
+                        }
+                      }
+                    }
                   }
 
-                  .display-details-content {
-                    .overflow-navigation-sub-nav-inner {
-                      .overflow-navigation-sub-nav-list {
-                        gap: 12px;
+                  .expanding-panel-content {
+                    border-bottom: 0.1rem solid transparent;
 
-                        .overflow-navigation-sub-nav-item {
-                          .overflow-navigation-sub-nav-link {
-                            text-decoration: none;
-                            color: inherit;
+                    .inner {
+                      margin-top: 0;
 
-                            .overflow-navigation-sub-nav-text {
-                              color: green;
+                      .overflow-navigation-sub-nav-inner {
+                        margin-top: 0;
+
+                        .overflow-navigation-sub-nav-list {
+                          display: flex;
+                          flex-direction: column;
+                          gap: 2px;
+
+                          .overflow-navigation-sub-nav-item {
+                            padding-block: var(--overflow-nav-items-padding-block);
+                            padding-inline: var(--overflow-nav-padding-inline);
+
+                            .overflow-navigation-sub-nav-link {
+                              text-decoration: none;
+                              color: inherit;
                             }
                           }
                         }

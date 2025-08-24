@@ -57,17 +57,17 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       align-items: center;
       justify-content: space-between;
       flex-direction: row;
-      gap: 0;
+      gap: 1rem;
       list-style: none;
 
-      padding-inline: 0.5rem;
+      padding-block: 0.5rem;
 
       &::-webkit-details-marker,
       &::marker {
         display: none;
       }
 
-      overflow: clip;
+      overflow: hidden;
 
       .label-wrapper {
       }
@@ -77,8 +77,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
         justify-content: space-between;
 
         aspect-ratio: 1;
-        outline: 1px solid var(--gray-3);
-        padding: 1rem;
         overflow: hidden;
 
         .icon {
@@ -101,7 +99,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       + .expanding-panel-content {
         grid-template-rows: 1fr;
         .inner {
-          /* transform: scaleY(1); */
+          transition: all v-bind(animationDurationStr) ease-in-out;
         }
       }
     }
@@ -114,10 +112,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
     .inner {
       overflow: hidden;
-      padding: 0.5rem;
-
-      /* transform: scaleY(0); */
-      /* transition: transform v-bind(animationDurationStr) ease-in-out; */
+      margin-top: 0;
     }
   }
 }

@@ -13,7 +13,10 @@
           v-if="link.path"
           class="overflow-navigation-item"
           :class="{ visible: !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
-          :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
+          :style="{
+            '--_main-navigation-item-width':
+              mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
+          }"
           :data-group-key="groupKey"
           :data-local-index="localIndex"
           role="none"
@@ -26,28 +29,41 @@
           v-else
           class="overflow-navigation-item"
           :class="{ visible: !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
-          :style="{ '--_main-navigation-item-width': mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px' }"
+          :style="{
+            '--_main-navigation-item-width':
+              mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
+          }"
           :data-group-key="groupKey"
           :data-local-index="localIndex"
           role="none"
         >
-          <DisplayDetailsCore
-            :id="useId()"
+          <ExpandingPanel
             name="overflow-navigation-group"
             :animation-duration="detailsAanimationDuration"
             icon-size="medium"
             :style-class-passthrough="['overflow-navigation-details']"
           >
             <template #summary>
-              <span class="overflow-navigation-text" :aria-label="`${link.childLinksTitle} submenu`" role="menuitem" :aria-haspopup="true">{{ link.childLinksTitle }}</span>
+              <span
+                class="overflow-navigation-text"
+                :aria-label="`${link.childLinksTitle} submenu`"
+                role="menuitem"
+                :aria-haspopup="true"
+              >
+                {{ link.childLinksTitle }}
+              </span>
             </template>
-            <template #summaryIcon>
+            <template #icon>
               <Icon name="mdi:chevron-down" class="icon" :aria-hidden="true" />
             </template>
-            <template #layout-content>
+            <template #content>
               <div class="overflow-navigation-sub-nav-inner">
                 <ul class="overflow-navigation-sub-nav-list">
-                  <li v-for="childLink in link.childLinks" :key="childLink.name" class="overflow-navigation-sub-nav-item">
+                  <li
+                    v-for="childLink in link.childLinks"
+                    :key="childLink.name"
+                    class="overflow-navigation-sub-nav-item"
+                  >
                     <NuxtLink :to="childLink.path" class="overflow-navigation-sub-nav-link" role="menuitem">
                       <span class="overflow-navigation-sub-nav-text">{{ childLink.name }}</span>
                     </NuxtLink>
@@ -55,7 +71,7 @@
                 </ul>
               </div>
             </template>
-          </DisplayDetailsCore>
+          </ExpandingPanel>
         </li>
       </template>
     </ul>
@@ -63,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderState } from '@/types/responsiveHeader';
+import type { ResponsiveHeaderState } from "@/types/responsiveHeader"
 
 const props = defineProps({
   mainNavigationState: {
@@ -74,32 +90,35 @@ const props = defineProps({
     type: Array as PropType<string[]>,
     default: () => [],
   },
-});
+})
 
-const detailsAanimationDuration = 200;
-const detailsAanimationDurationString = `${detailsAanimationDuration}ms`;
+const detailsAanimationDuration = 200
+const detailsAanimationDurationString = `${detailsAanimationDuration}ms`
 
 const widestNavLinkWidthInMainNavigationState = computed(() => {
   return Object.values(props.mainNavigationState.clonedNavLinks || {}).reduce((maxWidth, group) => {
-    return Math.max(maxWidth, ...group.map((link) => link.config?.width || 0));
-  }, 0);
-});
+    return Math.max(maxWidth, ...group.map((link) => link.config?.width || 0))
+  }, 0)
+})
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough);
+    resetElementClasses(props.styleClassPassthrough)
   }
-);
+)
 </script>
 
 <style lang="css">
 .overflow-navigation-wrapper {
+  --overflow-nav-padding-inline: 0.8rem;
+  --overflow-nav-items-gap: 0px;
+  --overflow-nav-items-padding-block: 0.8rem;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--overflow-nav-items-gap);
 
   .overflow-navigation-list {
     display: none;
@@ -107,7 +126,7 @@ watch(
     &.visible {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: var(--overflow-nav-items-gap);
       min-width: var(--_overflow-navigation-list-min-width, auto);
     }
 
@@ -121,41 +140,72 @@ watch(
       .overflow-navigation-link {
         text-decoration: none;
         color: inherit;
+        padding-block: var(--overflow-nav-items-padding-block);
+        padding-inline: var(--overflow-nav-padding-inline);
+        display: flex;
+        /* background-color: red; */
+        border-bottom: 0.1rem solid #efefef75;
       }
 
       .overflow-navigation-details {
-        --_overflow-navigation-sub-nav-list-margin-block-start: 0;
-
-        &[open] {
-          --_overflow-navigation-sub-nav-list-margin-block-start: 12px;
-        }
-
-        &.display-details {
+        &.expanding-panel {
           margin-block-end: 0;
 
-          .display-details-summary {
-            .label {
-              .overflow-navigation-text {
-                text-wrap: nowrap;
+          .expanding-panel-details {
+            .expanding-panel-summary {
+              padding-block: var(--overflow-nav-items-padding-block);
+              padding-inline: var(--overflow-nav-padding-inline);
+              gap: 1rem;
+              /* background-color: red; */
+              border-bottom: 0.1rem solid #efefef75;
+
+              .label-wrapper {
+                .overflow-navigation-text {
+                  text-wrap: nowrap;
+                }
+              }
+              .icon-wrapper {
+                padding: 0;
               }
             }
-            /* .icon {} */
+
+            &[open] {
+              .expanding-panel-summary {
+                border-bottom: 0.1rem solid transparent;
+              }
+              + .expanding-panel-content {
+                border-bottom: 0.1rem solid #efefef75;
+                .inner {
+                  .overflow-navigation-sub-nav-inner {
+                    margin-top: var(--overflow-nav-items-gap);
+                  }
+                }
+              }
+            }
           }
-          .display-details-content {
-            .overflow-navigation-sub-nav-inner {
-              .overflow-navigation-sub-nav-list {
-                display: flex;
-                flex-direction: column;
-                gap: 12px;
-                margin-block-start: var(--_overflow-navigation-sub-nav-list-margin-block-start);
-                transition: margin-block-start v-bind(detailsAanimationDurationString) ease;
 
-                .overflow-navigation-sub-nav-item {
-                  .overflow-navigation-sub-nav-link {
-                    text-decoration: none;
-                    color: inherit;
+          .expanding-panel-content {
+            border-bottom: 0.1rem solid transparent;
 
-                    /* .overflow-navigation-sub-nav-text {} */
+            .inner {
+              margin-top: 0;
+
+              .overflow-navigation-sub-nav-inner {
+                margin-top: 0;
+
+                .overflow-navigation-sub-nav-list {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 2px;
+
+                  .overflow-navigation-sub-nav-item {
+                    padding-block: var(--overflow-nav-items-padding-block);
+                    padding-inline: var(--overflow-nav-padding-inline);
+
+                    .overflow-navigation-sub-nav-link {
+                      text-decoration: none;
+                      color: inherit;
+                    }
                   }
                 }
               }
