@@ -3,11 +3,17 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <h1 class="heading-2">Carousel (Basic)</h1>
+          <h1 class="page-heading-2">Carousel (Basic)</h1>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
-          <CarouselBasic v-if="carouselStatus === 'success'" :carousel-data-ids :allow-carousel-overflow="true" :return-to-start="true" :style-class-passthrough="['carousel-basic-demo', 'mbe-20']">
+          <CarouselBasic
+            v-if="carouselStatus === 'success'"
+            :carousel-data-ids
+            :allow-carousel-overflow="true"
+            :return-to-start="true"
+            :style-class-passthrough="['carousel-basic-demo', 'mbe-20']"
+          >
             <template v-for="(item, index) in carouselData?.items" #[item.id]>
               <div class="case-study-item">
                 <h3>{{ index }}</h3>
@@ -22,76 +28,76 @@
 </template>
 
 <script setup lang="ts">
-import type { ICarouselBasic } from '@/types/types.carousel-basic';
+import type { ICarouselBasic } from "@/types/types.carousel-basic"
 
 definePageMeta({
   layout: false,
-});
+})
 
 useHead({
-  title: 'Carousel (Basic)',
-  meta: [{ name: 'description', content: 'Examples of Carousel (Basic)' }],
+  title: "Carousel (Basic)",
+  meta: [{ name: "description", content: "Examples of Carousel (Basic)" }],
   bodyAttrs: {
-    class: 'carousel-basic-example-page',
+    class: "carousel-basic-example-page",
   },
-});
+})
 
 const {
   data: carouselData,
   execute: carouselExecute,
   status: carouselStatus, // See v-if on CarouselBasic
   error: carouselError,
-} = await useFetch<ICarouselBasic>('/api/carousel', {
+} = await useFetch<ICarouselBasic>("/api/carousel", {
   immediate: true,
-});
+})
 
 const carouselDataStatic = {
   items: [
     {
       id: 1,
-      url: '/images/spotlights/v2/dining-out.webp',
-      alt: 'Dining out',
+      url: "/images/spotlights/v2/dining-out.webp",
+      alt: "Dining out",
     },
     {
       id: 2,
-      url: '/images/spotlights/v2/beer-gardens.webp',
-      alt: 'Entertaining the kids',
+      url: "/images/spotlights/v2/beer-gardens.webp",
+      alt: "Entertaining the kids",
     },
     {
       id: 3,
-      url: '/images/spotlights/v2/will-it-rain.webp',
-      alt: 'Will it rain?',
+      url: "/images/spotlights/v2/will-it-rain.webp",
+      alt: "Will it rain?",
     },
     {
       id: 4,
-      url: '/images/spotlights/v2/nightlife.webp',
-      alt: 'Nightlife',
+      url: "/images/spotlights/v2/nightlife.webp",
+      alt: "Nightlife",
     },
     {
       id: 5,
-      url: '/images/spotlights/v2/got-toothache-2.webp',
-      alt: 'Dental Services',
+      url: "/images/spotlights/v2/got-toothache-2.webp",
+      alt: "Dental Services",
     },
     {
       id: 6,
-      url: '/images/spotlights/v2/days-out.webp',
-      alt: 'Days Out',
+      url: "/images/spotlights/v2/days-out.webp",
+      alt: "Days Out",
     },
   ],
   total: 6,
   skip: 0,
   limit: 4,
-};
+}
 
 const carouselDataIds = computed(() => {
-  return carouselData.value?.items.map((item) => item.id) || [];
+  return carouselData.value?.items.map((item) => item.id) || []
   // return carouselData?.items.map((item) => item.id) || [];
-});
+})
 </script>
 
 <style lang="css">
 @property --glow-deg {
-  syntax: '<angle>';
+  syntax: "<angle>";
   inherits: true;
   initial-value: -90deg;
 }
@@ -121,7 +127,7 @@ const carouselDataIds = computed(() => {
         outline: 1px solid light-dark(#00000090, #f00ff090);
 
         &::before {
-          content: '';
+          content: "";
           position: absolute;
           height: 2px;
           background-color: #fff;
@@ -208,7 +214,8 @@ const carouselDataIds = computed(() => {
         gap: 20px;
 
         .btn-action {
-          --gradient-glow-dark: var(--gray-7), var(--gray-5), var(--gray-8), var(--gray-6), var(--gray-7), var(--gray-8), var(--gray-7);
+          --gradient-glow-dark: var(--gray-7), var(--gray-5), var(--gray-8), var(--gray-6), var(--gray-7), var(--gray-8),
+            var(--gray-7);
           --gradient-glow-light: var(--gray-4), var(--gray-6), var(--gray-0), var(--gray-6), var(--gray-4);
 
           padding-block: 10px;
@@ -218,7 +225,8 @@ const carouselDataIds = computed(() => {
           /* color: light-dark(#fff, #000); */
 
           border: 3px solid transparent;
-          background: linear-gradient(var(--surface, canvas) 0 0) padding-box, conic-gradient(from var(--glow-deg), var(--gradient-glow-dark)) border-box;
+          background: linear-gradient(var(--surface, canvas) 0 0) padding-box,
+            conic-gradient(from var(--glow-deg), var(--gradient-glow-dark)) border-box;
           outline: 1px solid light-dark(var(--gray-9), var(--gray-7));
 
           position: relative;
@@ -230,7 +238,7 @@ const carouselDataIds = computed(() => {
 
           &::before,
           &::after {
-            content: '';
+            content: "";
             position: absolute;
             border-radius: inherit;
           }

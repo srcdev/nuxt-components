@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { useBreakpoints, useElementSize, useResizeObserver } from '@vueuse/core';
+import { useBreakpoints, useElementSize, useResizeObserver } from "@vueuse/core"
 
 const props = defineProps({
   gridData: {
@@ -38,77 +38,79 @@ const props = defineProps({
   },
   justify: {
     type: String as PropType<String>,
-    default: 'left',
-    validator: (val: string) => ['left', 'center', 'right'].includes(val),
+    default: "left",
+    validator: (val: string) => ["left", "center", "right"].includes(val),
   },
-});
+})
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-const gridData = toRef(() => props.gridData);
+const gridData = toRef(() => props.gridData)
 
-const minTileWidth = toRef(() => props.minTileWidth);
-const gridWrapper = ref<null | HTMLDivElement>(null);
-const gridItemsRefs = ref<HTMLDivElement[]>([]);
-const { width } = useElementSize(gridWrapper);
+const minTileWidth = toRef(() => props.minTileWidth)
+const gridWrapper = ref<null | HTMLDivElement>(null)
+const gridItemsRefs = ref<HTMLDivElement[]>([])
+const { width } = useElementSize(gridWrapper)
 const columnCount = computed(() => {
-  return Math.floor(width.value / minTileWidth.value);
-});
+  return Math.floor(width.value / minTileWidth.value)
+})
 
-const gapNum = toRef(props.gap);
-const gapStr = toRef(props.gap + 'px');
+const gapNum = toRef(props.gap)
+const gapStr = toRef(props.gap + "px")
 
-const fixedWidth = toRef(() => props.fixedWidth);
-const minTileWidthStr = toRef(props.minTileWidth + 'px');
+const fixedWidth = toRef(() => props.fixedWidth)
+const minTileWidthStr = toRef(props.minTileWidth + "px")
 const maxTileWidth = computed(() => {
-  return fixedWidth.value ? minTileWidth.value + 'px' : '1fr';
-});
+  return fixedWidth.value ? minTileWidth.value + "px" : "1fr"
+})
 
 const justify = computed(() => {
-  return fixedWidth.value ? props.justify : 'stretch';
-});
+  return fixedWidth.value ? props.justify : "stretch"
+})
 
 const updateGrid = () => {
   if (gridWrapper.value !== null) {
-    const wrapperWidth = gridWrapper.value?.offsetWidth ?? 0;
-    const itemWidth = fixedWidth.value ? minTileWidth.value : Math.floor((wrapperWidth - (columnCount.value - 1) * gapNum.value) / columnCount.value);
+    const wrapperWidth = gridWrapper.value?.offsetWidth ?? 0
+    const itemWidth = fixedWidth.value
+      ? minTileWidth.value
+      : Math.floor((wrapperWidth - (columnCount.value - 1) * gapNum.value) / columnCount.value)
 
-    const colHeights = Array(columnCount.value).fill(0);
+    const colHeights = Array(columnCount.value).fill(0)
 
     gridItemsRefs.value.forEach((item) => {
-      const minHeight = Math.min(...colHeights);
-      const minIndex = colHeights.indexOf(minHeight);
+      const minHeight = Math.min(...colHeights)
+      const minIndex = colHeights.indexOf(minHeight)
 
-      item?.style.setProperty('--_position', 'absolute');
-      item?.style.setProperty('--_position-top', minHeight + 'px');
-      item?.style.setProperty('--_position-left', minIndex * (100 / columnCount.value) + '%');
-      item?.style.setProperty('--_element-width', itemWidth + 'px');
+      item?.style.setProperty("--_position", "absolute")
+      item?.style.setProperty("--_position-top", minHeight + "px")
+      item?.style.setProperty("--_position-left", minIndex * (100 / columnCount.value) + "%")
+      item?.style.setProperty("--_element-width", itemWidth + "px")
 
-      colHeights[minIndex] += Math.floor(item.offsetHeight + gapNum.value);
-    });
+      colHeights[minIndex] += Math.floor(item.offsetHeight + gapNum.value)
+    })
 
-    const maxHeight = Math.max(...colHeights);
-    gridWrapper.value?.style.setProperty('--_wrapper-height', maxHeight + 'px');
+    const maxHeight = Math.max(...colHeights)
+    gridWrapper.value?.style.setProperty("--_wrapper-height", maxHeight + "px")
   }
-};
+}
 
 useResizeObserver(gridWrapper, () => {
-  updateGrid();
-});
+  updateGrid()
+})
 
 watch(
   () => fixedWidth.value,
   () => {
-    updateGrid();
+    updateGrid()
   }
-);
+)
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough);
+    resetElementClasses(props.styleClassPassthrough)
   }
-);
+)
 </script>
 
 <style scoped lang="css">
@@ -142,7 +144,8 @@ watch(
     }
 
     .masonry-grid-ordered-item {
-      transition: position var(--_transition-duration) ease, top var(--_transition-duration) ease, left var(--_transition-duration) ease;
+      transition: position var(--_transition-duration) ease, top var(--_transition-duration) ease,
+        left var(--_transition-duration) ease;
 
       position: var(--_position);
       top: var(--_position-top);

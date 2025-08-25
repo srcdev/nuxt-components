@@ -56,6 +56,7 @@ const responsiveNavLinks = {
       iconName: "material-symbols:widgets",
       childLinksTitle: "UI Components",
       childLinks: [
+        { name: "Marquee Scroller", path: "/ui/marquee-scroller" },
         { name: "Banner", path: "/ui/display-banner" },
         { name: "Animated SVG Text", path: "/ui/animated-svg-text" },
         { name: "Carousel (Basic)", path: "/ui/carousel-basic" },
