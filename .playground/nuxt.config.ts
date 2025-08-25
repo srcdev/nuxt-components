@@ -5,9 +5,7 @@ export default defineNuxtConfig({
   // devServer: {
   //   https: true,
   // },
-  css: [
-    // './assets/styles/main.css'
-  ],
+  css: ["./assets/styles/main.css"],
   modules: ["@nuxt/eslint", "@nuxt/icon"],
   app: {
     head: {
@@ -16,10 +14,7 @@ export default defineNuxtConfig({
         "data-color-scheme": "auto",
       },
       titleTemplate: "%s - Nuxt Components Layer",
-      meta: [
-        { charset: "utf-8" },
-        { name: "viewport", content: "width=device-width, initial-scale=1" },
-      ],
+      meta: [{ charset: "utf-8" }, { name: "viewport", content: "width=device-width, initial-scale=1" }],
       bodyAttrs: {
         class: "srcdev-components-extended",
       },
@@ -40,4 +35,4 @@ export default defineNuxtConfig({
     },
   ],
   compatibilityDate: "2024-11-01",
-});
+})
