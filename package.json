@@ -36,8 +36,7 @@
     "typescript": "5.9.2"
   },
   "dependencies": {
-    "focus-trap-vue": "4.0.3",
-    "modern-normalize": "3.0.1"
+    "focus-trap-vue": "4.0.3"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
