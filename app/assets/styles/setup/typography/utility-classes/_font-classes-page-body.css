@@ -1,0 +1,139 @@
+.page-body-large {
+  font-size: var(--step-6);
+  font-weight: 400;
+  font-variation-settings: "wght" 400;
+  line-height: 1.5;
+}
+
+.page-body-medium {
+  font-size: var(--step-5);
+  font-weight: 400;
+  font-variation-settings: "wght" 400;
+  line-height: 1.5;
+}
+
+.page-body-normal {
+  font-size: var(--step-4);
+  font-weight: 400;
+  font-variation-settings: "wght" 400;
+  line-height: 1.5;
+}
+
+.page-body-small {
+  font-size: var(--step--0);
+  font-weight: 400;
+  font-variation-settings: "wght" 400;
+  line-height: 1.5;
+}
+
+.page-body-xsmall {
+  font-size: var(--step-2);
+  font-weight: 400;
+  font-variation-settings: "wght" 400;
+  line-height: 1.5;
+}
+
+.page-body-large-light {
+  font-size: var(--step-6);
+  font-weight: 200;
+  font-variation-settings: "wght" 200;
+  line-height: 1.5;
+}
+
+.page-body-medium-light {
+  font-size: var(--step-5);
+  font-weight: 200;
+  font-variation-settings: "wght" 200;
+  line-height: 1.5;
+}
+
+.page-body-normal-light {
+  font-size: var(--step-4);
+  font-weight: 200;
+  font-variation-settings: "wght" 200;
+  line-height: 1.5;
+}
+
+.page-body-small-light {
+  font-size: var(--step--0);
+  font-weight: 200;
+  font-variation-settings: "wght" 200;
+  line-height: 1.5;
+}
+
+.page-body-xsmall-light {
+  font-size: var(--step-2);
+  font-weight: 200;
+  font-variation-settings: "wght" 200;
+  line-height: 1.5;
+}
+
+.page-body-large-semibold {
+  font-size: var(--step-6);
+  font-weight: 600;
+  font-variation-settings: "wght" 600;
+  line-height: 1.5;
+}
+
+.page-body-medium-semibold {
+  font-size: var(--step-5);
+  font-weight: 600;
+  font-variation-settings: "wght" 600;
+  line-height: 1.5;
+}
+
+.page-body-normal-semibold {
+  font-size: var(--step-4);
+  font-weight: 600;
+  font-variation-settings: "wght" 600;
+  line-height: 1.5;
+}
+
+.page-body-small-semibold {
+  font-size: var(--step-3);
+  font-weight: 600;
+  font-variation-settings: "wght" 600;
+  line-height: 1.5;
+}
+
+.page-body-xsmall-semibold {
+  font-size: var(--step-2);
+  font-weight: 600;
+  font-variation-settings: "wght" 600;
+  line-height: 1.5;
+}
+
+.page-body-large-bold {
+  font-size: var(--step-6);
+  font-weight: 800;
+  font-variation-settings: "wght" 800;
+  line-height: 1.5;
+}
+
+.page-body-medium-bold {
+  font-size: var(--step-5);
+  font-weight: 800;
+  font-variation-settings: "wght" 800;
+  line-height: 1.5;
+}
+
+.page-body-normal-bold {
+  font-size: var(--step-4);
+  font-weight: 800;
+  font-variation-settings: "wght" 800;
+  line-height: 1.5;
+}
+
+.page-body-small-bold {
+  font-size: var(--step-3);
+  font-weight: 800;
+  font-variation-settings: "wght" 800;
+  line-height: 1.5;
+}
+
+.page-body-xsmall-bold {
+  font-size: var(--step-2);
+  font-weight: 800;
+  font-variation-settings: "wght" 800;
+  line-height: 1.5;
+}

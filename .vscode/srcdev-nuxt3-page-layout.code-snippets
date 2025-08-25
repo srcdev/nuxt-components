@@ -12,7 +12,7 @@
       "          variant=\"full-width\"",
       "          :style-class-passthrough=\"['mbe-20']\"",
       "        >",
-      "          <h2 class=\"heading-2\">${TM_FILENAME_BASE/[\\-_]([a-z])|^([a-z])/${1:/upcase}${2:/upcase}/g}</h2>",
+      "          <h2 class=\"page-heading-2\">${TM_FILENAME_BASE/[\\-_]([a-z])|^([a-z])/${1:/upcase}${2:/upcase}/g}</h2>",
       "          $0",
       "        </LayoutRow>",
       "      </template>",

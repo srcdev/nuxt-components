@@ -18,7 +18,7 @@
       ">",
       "  <template v-for=\"(item, key) in data\" :key=\"key\" v-slot:[`container-glow-${key}`]>",
       "    <div class=\"example-card p-12\">",
-      "      <h3 class=\"heading-3\">{{ item.title }}</h3>",
+      "      <h3 class=\"page-heading-3\">{{ item.title }}</h3>",
       "      <p class=\"pbs-24\">{{ item.content }}</p>",
       "    </div>",
       "  </template>",

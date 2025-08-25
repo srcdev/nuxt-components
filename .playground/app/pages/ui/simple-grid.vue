@@ -3,10 +3,14 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
-          <h1 class="heading-3">Simple Grid</h1>
-          <p class="body-normal">Simple grid displaying dummy posts data</p>
+          <h1 class="page-heading-3">Simple Grid</h1>
+          <p class="page-body-normal">Simple grid displaying dummy posts data</p>
 
-          <DisplayGridCore v-if="status === 'success'" :gridData="postsData?.posts.slice(0, displayCount) ?? <Posts>{}" :style-class-passthrough="['display-posts']">
+          <DisplayGridCore
+            v-if="status === 'success'"
+            :gridData="postsData?.posts.slice(0, displayCount) ?? <Posts>{}"
+            :style-class-passthrough="['display-posts']"
+          >
             <template v-for="(item, index) in postsData?.posts.slice(0, displayCount)" v-slot:[item.id]>
               <div class="display-post-item">
                 <div>Views: {{ item.views }}</div>
@@ -16,7 +20,7 @@
             </template>
           </DisplayGridCore>
 
-          <p v-else class="body-normal">&hellip;Loading</p>
+          <p v-else class="page-body-normal">&hellip;Loading</p>
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -24,22 +28,22 @@
 </template>
 
 <script setup lang="ts">
-import type { Posts } from '@/types/types.posts';
+import type { Posts } from "@/types/types.posts"
 
 definePageMeta({
   layout: false,
-});
+})
 
 useHead({
-  title: 'Simple Grid',
-  meta: [{ name: 'description', content: 'Simple Grid' }],
+  title: "Simple Grid",
+  meta: [{ name: "description", content: "Simple Grid" }],
   bodyAttrs: {
-    class: '',
+    class: "",
   },
-});
+})
 
-const displayCount = 12;
-const { data: postsData, status, error, refresh } = await useFetch<Posts>('https://dummyjson.com/posts');
+const displayCount = 12
+const { data: postsData, status, error, refresh } = await useFetch<Posts>("https://dummyjson.com/posts")
 </script>
 
 <style lang="css">

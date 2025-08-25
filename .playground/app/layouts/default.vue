@@ -89,7 +89,16 @@ const responsiveNavLinks = {
         { name: "Masonry Columns", path: "/ui/masonry-columns" },
       ],
     },
-    { name: "About", path: "/" },
+    {
+      name: "Typography",
+      iconName: "material-symbols:custom-typography",
+      childLinksTitle: "Typography",
+      childLinks: [
+        { name: "Page Headings", path: "/typography/page-heading" },
+        { name: "Page Body", path: "/typography/page-body" },
+        { name: "Page Links", path: "/typography/page-link" },
+      ],
+    },
   ],
   secondNav: [
     { name: "Some other link", iconName: "material-symbols:widgets", path: "#link-description" },

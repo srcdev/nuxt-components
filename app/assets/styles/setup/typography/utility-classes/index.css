@@ -1,3 +1,6 @@
-@import './_generic-font-classes.css';
-@import './_generic-font-variation-settings.css';
-@import './_generic-font-weights.css';
+@import "./_font-classes-page-heading";
+@import "./_font-classes-page-body";
+@import "./_font-classes-page-link";
+@import "./_generic-font-classes.css";
+@import "./_generic-font-variation-settings.css";
+@import "./_generic-font-weights.css";
