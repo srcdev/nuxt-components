@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['display-details-section', 'mbe-20']">
-          <h1 class="heading-2">Animated SVG Text Component</h1>
+          <h1 class="page-heading-2">Animated SVG Text Component</h1>
 
           <AnimatedSvgText :styleClassPassthrough="['luxury-locs-title']">
             <template #text>
@@ -33,20 +33,20 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-});
+})
 
 useHead({
-  title: 'Animated SVG Text Component',
+  title: "Animated SVG Text Component",
   meta: [
     {
-      name: 'description',
-      content: 'Animated SVG Text Component',
+      name: "description",
+      content: "Animated SVG Text Component",
     },
   ],
   bodyAttrs: {
-    class: 'animated-svg-text-page',
+    class: "animated-svg-text-page",
   },
-});
+})
 </script>
 
 <style lang="css">

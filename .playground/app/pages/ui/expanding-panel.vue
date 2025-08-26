@@ -3,12 +3,12 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['expanding-panel-section', 'mbe-20']">
-          <h1 class="heading-2">Details element - Unlinked</h1>
+          <h1 class="page-heading-2">Details element - Unlinked</h1>
           <p class="mbe-12">Following 2 details block behave independantly.</p>
 
           <ExpandingPanel :animation-duration="300" icon-size="medium" :style-class-passthrough="['custom-style-1']">
             <template #summary>
-              <h3 class="heading-3 mb-2">Expander Panel 1 (Fast)</h3>
+              <h3 class="page-heading-3 mb-2">Expander Panel 1 (Fast)</h3>
             </template>
             <template #icon>
               <Icon name="bi:caret-down-fill" class="icon" />
@@ -26,7 +26,7 @@
 
           <ExpandingPanel :animation-duration="2000" icon-size="medium" :style-class-passthrough="['custom-style-2']">
             <template #summary>
-              <h3 class="heading-3 mb-2">Expander Panel 2 (Slow)</h3>
+              <h3 class="page-heading-3 mb-2">Expander Panel 2 (Slow)</h3>
             </template>
             <template #icon>
               <Icon name="bi:caret-down-fill" class="icon" />
@@ -43,13 +43,17 @@
           </ExpandingPanel>
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['expanding-panel-section', 'mbe-20', 'hidden']">
-          <h2 class="heading-2">Details element - Linked</h2>
+        <LayoutRow
+          tag="div"
+          variant="full-width"
+          :style-class-passthrough="['expanding-panel-section', 'mbe-20', 'hidden']"
+        >
+          <h2 class="page-heading-2">Details element - Linked</h2>
           <p class="mbe-12">Details panels are linked, only 1 can be open at a time.</p>
 
           <ExpandingPanel name="details-linked" icon-size="medium" :style-class-passthrough="['linked']">
             <template #summary>
-              <h3 class="heading-3 mb-2">Details header 1</h3>
+              <h3 class="page-heading-3 mb-2">Details header 1</h3>
             </template>
             <template #icon>
               <Icon name="bi:caret-down-fill" class="icon" />
@@ -67,7 +71,7 @@
 
           <ExpandingPanel name="details-linked" icon-size="medium" :style-class-passthrough="['linked']">
             <template #summary>
-              <h3 class="heading-3 mb-2">Details header 2</h3>
+              <h3 class="page-heading-3 mb-2">Details header 2</h3>
             </template>
             <template #icon>
               <Icon name="bi:caret-down-fill" class="icon" />
@@ -91,17 +95,17 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-});
+})
 
 useHead({
-  title: 'Browser title tag',
+  title: "Browser title tag",
   meta: [
     {
-      name: 'description',
-      content: 'Meta description content',
+      name: "description",
+      content: "Meta description content",
     },
   ],
-});
+})
 </script>
 
 <style lang="css">

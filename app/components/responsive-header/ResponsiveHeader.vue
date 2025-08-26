@@ -101,14 +101,14 @@
     <LayoutRow tag="div" variant="full" :style-class-passthrough="['mb-20', 'debug-grid']">
       <ClientOnly>
         <div>
-          <h2 class="heading-4">navigationWrapperRects</h2>
+          <h2 class="page-heading-4">navigationWrapperRects</h2>
           <pre>{{ navigationWrapperRects }}</pre>
           <hr />
-          <h2 class="heading-4">secondaryNavRects</h2>
+          <h2 class="page-heading-4">secondaryNavRects</h2>
           <pre>{{ secondaryNavRects }}</pre>
         </div>
         <div>
-          <h2 class="heading-4">mainNavigationState</h2>
+          <h2 class="page-heading-4">mainNavigationState</h2>
           <pre>{{ mainNavigationState }}</pre>
         </div>
       </ClientOnly>

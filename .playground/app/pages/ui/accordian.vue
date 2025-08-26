@@ -3,11 +3,13 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
-          <h1 class="heading-2">Accordian</h1>
+          <h1 class="page-heading-2">Accordian</h1>
           <p>Any item open and/closed</p>
 
           <AccordianCore :itemCount="3" :style-class-passthrough="['class-modifier-narrow']">
-            <template v-for="(item, key) in data" v-slot:[`accordian-${key}-summary`]> {{ key }} - {{ item.title }} </template>
+            <template v-for="(item, key) in data" v-slot:[`accordian-${key}-summary`]>
+              {{ key }} - {{ item.title }}
+            </template>
             <template v-for="(item, key) in data" v-slot:[`accordian-${key}-icon`]>
               <Icon name="bi:caret-down-fill" class="icon" />
             </template>
@@ -18,11 +20,17 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
-          <h2 class="heading-2">Accordian</h2>
+          <h2 class="page-heading-2">Accordian</h2>
           <p>Only 1 item open, pass a name prop</p>
 
-          <AccordianCore :itemCount="3" :name="`accordian-${useId()}`" :style-class-passthrough="['class-modifier-wide']">
-            <template v-for="(item, key) in data" v-slot:[`accordian-${key}-summary`]> {{ key }} - {{ item.title }} </template>
+          <AccordianCore
+            :itemCount="3"
+            :name="`accordian-${useId()}`"
+            :style-class-passthrough="['class-modifier-wide']"
+          >
+            <template v-for="(item, key) in data" v-slot:[`accordian-${key}-summary`]>
+              {{ key }} - {{ item.title }}
+            </template>
             <template v-for="(item, key) in data" v-slot:[`accordian-${key}-icon`]>
               <Icon name="bi:caret-down-fill" class="icon" />
             </template>
@@ -45,36 +53,37 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-});
+})
 
 useHead({
-  title: 'Display Accordian',
-  meta: [{ name: 'description', content: 'Display Accordian' }],
+  title: "Display Accordian",
+  meta: [{ name: "description", content: "Display Accordian" }],
   bodyAttrs: {
-    class: '',
+    class: "",
   },
-});
+})
 
 interface IAccordianData {
-  title: string;
-  content: string;
+  title: string
+  content: string
 }
 
 const data = ref<IAccordianData[]>([
   {
-    title: 'Trigger Item 1',
-    content: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!. Lorem ipsum dolor sit, adipisicing elit. Iusto, amet!',
-  },
-  {
-    title: 'Trigger Item 2',
-    content: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!',
-  },
-  {
-    title: 'Trigger Item 3',
+    title: "Trigger Item 1",
     content:
-      'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!',
+      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!. Lorem ipsum dolor sit, adipisicing elit. Iusto, amet!",
   },
-]);
+  {
+    title: "Trigger Item 2",
+    content: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!",
+  },
+  {
+    title: "Trigger Item 3",
+    content:
+      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!",
+  },
+])
 </script>
 
 <style lang="css">

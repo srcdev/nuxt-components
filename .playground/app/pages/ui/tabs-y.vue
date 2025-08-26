@@ -3,11 +3,11 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
-          <h1 class="heading-2">Tabs #3</h1>
+          <h1 class="page-heading-2">Tabs #3</h1>
           <p>Data driven accordian navigation with custom content</p>
 
           <TabsCore axis="y" :navItems="navLinks6" :style-class-passthrough="['class-modifier']">
-            <template v-for="(item, key) in navLinks6" v-slot:[`tab-${key}-trigger`]>{{ item.name }} </template>
+            <template v-for="(item, key) in navLinks6" v-slot:[`tab-${key}-trigger`]>{{ item.name }}</template>
             <template v-slot:[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
             </template>
@@ -34,27 +34,27 @@
 </template>
 
 <script setup lang="ts">
-import type { ITabNav } from '@/types/types.tabs';
+import type { ITabNav } from "@/types/types.tabs"
 definePageMeta({
   layout: false,
-});
+})
 
 useHead({
-  title: 'UI Tabs',
-  meta: [{ name: 'description', content: 'Examples of UI Component Tabs' }],
+  title: "UI Tabs",
+  meta: [{ name: "description", content: "Examples of UI Component Tabs" }],
   bodyAttrs: {
-    class: 'home',
+    class: "home",
   },
-});
+})
 
 const navLinks6 = <ITabNav[]>[
-  { name: 'Home', path: '/' },
-  { name: 'Layout Row', path: '/ui/layout-row' },
-  { name: 'Dialogs', path: '/ui/dialog' },
-  { name: 'Tabs', path: '/ui/tabs' },
-  { name: 'Something Else', path: '/ui/something' },
-  { name: 'Home Again', path: '/' },
-];
+  { name: "Home", path: "/" },
+  { name: "Layout Row", path: "/ui/layout-row" },
+  { name: "Dialogs", path: "/ui/dialog" },
+  { name: "Tabs", path: "/ui/tabs" },
+  { name: "Something Else", path: "/ui/something" },
+  { name: "Home Again", path: "/" },
+]
 </script>
 
 <style lang="css">
@@ -100,7 +100,7 @@ const navLinks6 = <ITabNav[]>[
       color: var(--_hovered-text);
     }
 
-    &[aria-selected='true'] {
+    &[aria-selected="true"] {
       color: var(--_active-text);
     }
   }

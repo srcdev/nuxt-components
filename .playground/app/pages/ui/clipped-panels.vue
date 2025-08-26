@@ -3,10 +3,10 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-          <h1 class="heading-2">Clipped Panels</h1>
+          <h1 class="page-heading-2">Clipped Panels</h1>
         </LayoutRow>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-          <h2 class="heading-2">Rectangle</h2>
+          <h2 class="page-heading-2">Rectangle</h2>
           <ClippedPanel variant="rectangle">
             <template #default>
               <p>Clipped Panels Rectangle</p>
@@ -14,7 +14,7 @@
           </ClippedPanel>
         </LayoutRow>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-          <h2 class="heading-2">Square</h2>
+          <h2 class="page-heading-2">Square</h2>
           <ClippedPanel variant="square">
             <template #default>
               <p>Clipped Panels Square</p>
@@ -22,7 +22,7 @@
           </ClippedPanel>
         </LayoutRow>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-          <h2 class="heading-2">Circle</h2>
+          <h2 class="page-heading-2">Circle</h2>
           <div class="counter-panel">
             <div class="counter-panel__counter">1</div>
             <div class="counter-panel__title">Title</div>
@@ -37,29 +37,29 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-});
+})
 
 useHead({
-  title: 'Browser title tag',
+  title: "Browser title tag",
   meta: [
     {
-      name: 'description',
-      content: 'Meta description content',
+      name: "description",
+      content: "Meta description content",
     },
   ],
-});
+})
 </script>
 
 <style scoped lang="css">
 .counter-panel {
   display: inline-grid;
-  grid-template-areas: 'select-stack';
+  grid-template-areas: "select-stack";
 
   aspect-ratio: 1;
   width: 200px;
 
   &:before {
-    content: '';
+    content: "";
     grid-area: select-stack;
     background-color: red;
 
@@ -69,7 +69,7 @@ useHead({
       'M 10, 40 L 30, 40 A 10, 10, 0, 0, 0 40, 30 L 40, 10 A 10, 10, 0, 0, 1 50, 0 L 190, 0 A 10, 10, 0, 0, 1 200, 10 L 200, 190 A 10, 10, 0, 0, 1 190, 200 L 10, 200 A 10, 10, 0, 0, 1 0, 190 L 0, 50 A 10, 10, 0, 0, 1 10, 40 Z'
     ); */
     clip-path: path(
-      'M 10, 40 L 20, 40 A 20, 20, 0, 0, 0 40, 20 L 40, 10 A 10, 10, 0, 0, 1 50, 0 L 190, 0 A 10, 10, 0, 0, 1 200, 10 L 200, 190 A 10, 10, 0, 0, 1 190, 200 L 10, 200 A 10, 10, 0, 0, 1 0, 190 L 0, 50 A 10, 10, 0, 0, 1 10, 40 Z'
+      "M 10, 40 L 20, 40 A 20, 20, 0, 0, 0 40, 20 L 40, 10 A 10, 10, 0, 0, 1 50, 0 L 190, 0 A 10, 10, 0, 0, 1 200, 10 L 200, 190 A 10, 10, 0, 0, 1 190, 200 L 10, 200 A 10, 10, 0, 0, 1 0, 190 L 0, 50 A 10, 10, 0, 0, 1 10, 40 Z"
     );
   }
 

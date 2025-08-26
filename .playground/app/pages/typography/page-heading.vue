@@ -68,7 +68,7 @@ useHead({
       margin-block: 0;
     }
     .class-demo {
-      display: inline-block;
+      display: block;
       margin-block-end: 1rem;
     }
   }

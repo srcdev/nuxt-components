@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-          <h1 class="heading-2">DisplayBanner</h1>
+          <h1 class="page-heading-2">DisplayBanner</h1>
         </LayoutRow>
 
         <DisplayBanner tag="div" :style-class-passthrough="['mbe-20']">
@@ -11,7 +11,7 @@
             <NuxtImg src="/images/banners/test-banner/banner-ginger-desktop.jpeg" class="image" alt="" />
           </template>
           <template #layout-content>
-            <h2 class="heading-2">Display Banner Content</h2>
+            <h2 class="page-heading-2">Display Banner Content</h2>
           </template>
         </DisplayBanner>
       </template>
@@ -22,20 +22,20 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-});
+})
 
 useHead({
-  title: 'Display Banner',
+  title: "Display Banner",
   meta: [
     {
-      name: 'description',
-      content: 'Display Banner Meta description content',
+      name: "description",
+      content: "Display Banner Meta description content",
     },
   ],
   bodyAttrs: {
-    class: 'display-banner-page',
+    class: "display-banner-page",
   },
-});
+})
 </script>
 
 <style lang="css">

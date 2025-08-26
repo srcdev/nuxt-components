@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <h1 class="heading-2">Carousel (Flip)</h1>
+          <h1 class="page-heading-2">Carousel (Flip)</h1>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
@@ -29,38 +29,38 @@
 </template>
 
 <script setup lang="ts">
-import type { ICarouselBasic } from '@/types/types.carousel-basic';
+import type { ICarouselBasic } from "@/types/types.carousel-basic"
 
 definePageMeta({
   layout: false,
-});
+})
 
 useHead({
-  title: 'Carousel (Basic)',
-  meta: [{ name: 'description', content: 'Examples of Carousel (Basic)' }],
+  title: "Carousel (Basic)",
+  meta: [{ name: "description", content: "Examples of Carousel (Basic)" }],
   bodyAttrs: {
-    class: 'carousel-flip',
+    class: "carousel-flip",
   },
-});
+})
 
 const {
   data: carouselData,
   execute: carouselExecute,
   status: carouselStatus,
   error: carouselError,
-} = await useFetch<ICarouselBasic>('/api/carousel', {
+} = await useFetch<ICarouselBasic>("/api/carousel", {
   immediate: true,
-});
+})
 
 const carouselDataIds = computed(() => {
-  return carouselData.value?.items.map((item) => item.id) || [];
-});
+  return carouselData.value?.items.map((item) => item.id) || []
+})
 // console.log(carouselDataIds.value);
 </script>
 
 <style lang="css">
 @property --glow-deg {
-  syntax: '<angle>';
+  syntax: "<angle>";
   inherits: true;
   initial-value: -90deg;
 }
@@ -171,7 +171,8 @@ const carouselDataIds = computed(() => {
         gap: 20px;
 
         .btn-action {
-          --gradient-glow-dark: var(--gray-7), var(--gray-5), var(--gray-8), var(--gray-6), var(--gray-7), var(--gray-8), var(--gray-7);
+          --gradient-glow-dark: var(--gray-7), var(--gray-5), var(--gray-8), var(--gray-6), var(--gray-7), var(--gray-8),
+            var(--gray-7);
           --gradient-glow-light: var(--gray-4), var(--gray-6), var(--gray-0), var(--gray-6), var(--gray-4);
 
           padding-block: 6px;
@@ -179,7 +180,8 @@ const carouselDataIds = computed(() => {
           border-radius: 100%;
 
           border: 3px solid transparent;
-          background: linear-gradient(var(--surface, canvas) 0 0) padding-box, conic-gradient(from var(--glow-deg), var(--gradient-glow-dark)) border-box;
+          background: linear-gradient(var(--surface, canvas) 0 0) padding-box,
+            conic-gradient(from var(--glow-deg), var(--gradient-glow-dark)) border-box;
           outline: 1px solid light-dark(var(--gray-9), var(--gray-7));
 
           position: relative;
@@ -196,7 +198,7 @@ const carouselDataIds = computed(() => {
 
           &::before,
           &::after {
-            content: '';
+            content: "";
             position: absolute;
             border-radius: inherit;
           }

@@ -12,8 +12,8 @@ npm install --save srcdev-nuxt-components
 
 ```ts
 defineNuxtConfig({
-  extends: 'srcdev-nuxt-components',
-});
+  extends: "srcdev-nuxt-components",
+})
 ```
 
 ## Styles Architecture
@@ -49,7 +49,7 @@ The setup layer provides the foundational styles and utilities:
 - **Responsive Font Sizes** - Fluid typography using clamp() functions:
   - `--step-8` to `--step-1` providing 8 responsive font size steps
 - **Utility Classes** - Pre-built typography classes:
-  - `.heading-1` through `.heading-5` - Semantic heading styles
+  - `.page-heading-1` through `.page-heading-5` - Semantic heading styles
   - Generic font weight and variation settings
 - **Font Variation Settings** - Advanced typography controls
 

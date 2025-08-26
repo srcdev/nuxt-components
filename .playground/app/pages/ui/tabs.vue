@@ -3,13 +3,18 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
-          <h1 class="heading-2">Tabs #1</h1>
+          <h1 class="page-heading-2">Tabs #1</h1>
           <p>Static tabs</p>
 
-          <TabsCore :navItems="navLinks3" :itemCount="3" :transitionDuration="300" :style-class-passthrough="['class-modifier']">
-            <template v-slot:[`tab-0-trigger`]> 0 - Tab 1 </template>
-            <template v-slot:[`tab-1-trigger`]> 1 - Tab 2 </template>
-            <template v-slot:[`tab-2-trigger`]> 2 - Tab 3 </template>
+          <TabsCore
+            :navItems="navLinks3"
+            :itemCount="3"
+            :transitionDuration="300"
+            :style-class-passthrough="['class-modifier']"
+          >
+            <template v-slot:[`tab-0-trigger`]>0 - Tab 1</template>
+            <template v-slot:[`tab-1-trigger`]>1 - Tab 2</template>
+            <template v-slot:[`tab-2-trigger`]>2 - Tab 3</template>
             <template v-slot:[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
             </template>
@@ -23,11 +28,13 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
-          <h2 class="heading-2">Tabs #2</h2>
+          <h2 class="page-heading-2">Tabs #2</h2>
           <p>Data driven tabs</p>
 
           <TabsCore :itemCount="4" :style-class-passthrough="['class-modifier']">
-            <template v-for="(item, key) in navLinks4" v-slot:[`tab-${key}-trigger`]> {{ key }} - {{ item.name }} </template>
+            <template v-for="(item, key) in navLinks4" v-slot:[`tab-${key}-trigger`]>
+              {{ key }} - {{ item.name }}
+            </template>
             <template v-slot:[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
             </template>
@@ -44,11 +51,13 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
-          <h2 class="heading-2">Tabs #3</h2>
+          <h2 class="page-heading-2">Tabs #3</h2>
           <p>Data driven accordian navigation with custom content</p>
 
           <TabsCore :itemCount="6" :style-class-passthrough="['class-modifier']">
-            <template v-for="(item, key) in navLinks6" v-slot:[`tab-${key}-trigger`]> {{ key }} - {{ item.name }} </template>
+            <template v-for="(item, key) in navLinks6" v-slot:[`tab-${key}-trigger`]>
+              {{ key }} - {{ item.name }}
+            </template>
             <template v-slot:[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
             </template>
@@ -77,43 +86,43 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-});
+})
 
 useHead({
-  title: 'UI Tabs',
-  meta: [{ name: 'description', content: 'Examples of UI Component Tabs' }],
+  title: "UI Tabs",
+  meta: [{ name: "description", content: "Examples of UI Component Tabs" }],
   bodyAttrs: {
-    class: 'home',
+    class: "home",
   },
-});
+})
 
 interface ITabNav {
-  action?: string;
-  name: string;
-  path?: string;
+  action?: string
+  name: string
+  path?: string
 }
 
 const navLinks3 = <ITabNav[]>[
-  { name: 'Home', path: '/' },
-  { name: 'Layout Row', path: '/ui/layout-row' },
-  { name: 'Dialogs', path: '/ui/dialog' },
-];
+  { name: "Home", path: "/" },
+  { name: "Layout Row", path: "/ui/layout-row" },
+  { name: "Dialogs", path: "/ui/dialog" },
+]
 
 const navLinks4 = <ITabNav[]>[
-  { name: 'Home', path: '/' },
-  { name: 'Layout Row', path: '/ui/layout-row' },
-  { name: 'Dialogs', path: '/ui/dialog' },
-  { name: 'Tabs', path: '/ui/tabs' },
-];
+  { name: "Home", path: "/" },
+  { name: "Layout Row", path: "/ui/layout-row" },
+  { name: "Dialogs", path: "/ui/dialog" },
+  { name: "Tabs", path: "/ui/tabs" },
+]
 
 const navLinks6 = <ITabNav[]>[
-  { name: 'Home', path: '/' },
-  { name: 'Layout Row', path: '/ui/layout-row' },
-  { name: 'Dialogs', path: '/ui/dialog' },
-  { name: 'Tabs', path: '/ui/tabs' },
-  { name: 'Something Else', path: '/ui/something' },
-  { name: 'Home Again', path: '/' },
-];
+  { name: "Home", path: "/" },
+  { name: "Layout Row", path: "/ui/layout-row" },
+  { name: "Dialogs", path: "/ui/dialog" },
+  { name: "Tabs", path: "/ui/tabs" },
+  { name: "Something Else", path: "/ui/something" },
+  { name: "Home Again", path: "/" },
+]
 </script>
 
 <style lang="css">
@@ -141,7 +150,7 @@ const navLinks6 = <ITabNav[]>[
           /* custom css */
         }
 
-        &[aria-selected='true'] {
+        &[aria-selected="true"] {
           /* custom css */
         }
       }
@@ -165,7 +174,7 @@ const navLinks6 = <ITabNav[]>[
           /* custom css */
         }
 
-        &[aria-selected='true'] {
+        &[aria-selected="true"] {
           /* custom css */
         }
 
