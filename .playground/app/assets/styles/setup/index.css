@@ -3,5 +3,5 @@
 @import "./_head";
 @import "./utility-classes";
 @import "./a11y";
-@import "./variables";
+@import "./theming";
 @import "./typography";

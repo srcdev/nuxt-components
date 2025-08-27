@@ -4,12 +4,7 @@
     :class="[{ dismissed: hide }, { 'use-local-style-overrides': useLocalStyleOverrides }]"
     :data-test-id="`display-prompt-core-${theme}`"
   >
-    <div
-      class="display-prompt-wrapper"
-      :data-component-theme="theme"
-      :class="[elementClasses]"
-      data-test-id="display-prompt"
-    >
+    <div class="display-prompt-wrapper" :data-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
       <div class="display-prompt-inner">
         <div class="display-prompt-icon" data-test-id="prompt-icon">
           <slot name="customDecoratorIcon">
@@ -106,11 +101,11 @@ const dismissPrompt = () => {
   }
 
   .display-prompt-wrapper {
-    background-color: var(--component-theme-0);
-    border: 1px solid var(--component-theme-8);
+    background-color: var(--colour-theme-0);
+    border: 1px solid var(--colour-theme-8);
     border-radius: 4px;
 
-    border-inline-start: 8px solid var(--component-theme-8);
+    border-inline-start: 8px solid var(--colour-theme-8);
     border-start-start-radius: 8px;
     border-end-start-radius: 8px;
 
@@ -127,7 +122,7 @@ const dismissPrompt = () => {
       .display-prompt-icon {
         display: inline-flex;
         .icon {
-          color: var(--component-theme-8);
+          color: var(--colour-theme-8);
           display: inline-block;
           font-size: 3rem;
           font-style: normal;
@@ -148,7 +143,7 @@ const dismissPrompt = () => {
           font-size: var(--step-5);
           font-weight: bold;
           line-height: 1.3;
-          color: var(--component-theme-8);
+          color: var(--colour-theme-8);
           margin: 0;
           padding: 0;
         }
@@ -157,7 +152,7 @@ const dismissPrompt = () => {
           font-size: var(--step-5);
           font-weight: normal;
           line-height: 1.3;
-          color: var(--component-theme-8);
+          color: var(--colour-theme-8);
           margin: 0;
           padding: 0;
         }
@@ -169,26 +164,26 @@ const dismissPrompt = () => {
         justify-content: center;
         margin: 1rem;
         padding: 0.5rem;
-        border: 0.1rem solid var(--component-theme-8);
+        border: 0.1rem solid var(--colour-theme-8);
         border-radius: 50%;
-        outline: 1px solid var(--component-theme-3);
+        outline: 1px solid var(--colour-theme-3);
 
         transition: border 200ms ease-in-out, outline 200ms ease-in-out;
 
         &:hover {
           cursor: pointer;
-          border: 0.1rem solid var(--component-theme-12);
-          outline: 2px solid var(--component-theme-6);
+          border: 0.1rem solid var(--colour-theme-12);
+          outline: 2px solid var(--colour-theme-6);
         }
 
         &:focus-visible {
           box-shadow: var(--focus-box-shadow-colour-on);
-          border: 0.1rem solid var(--component-theme-12);
-          outline: 2px solid var(--component-theme-6);
+          border: 0.1rem solid var(--colour-theme-12);
+          outline: 2px solid var(--colour-theme-6);
         }
 
         .icon {
-          color: var(--component-theme-8);
+          color: var(--colour-theme-8);
           display: block;
           font-size: var(--step-5);
           padding: 1rem;
