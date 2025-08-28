@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="display-prompt-core"
-    :class="[{ dismissed: hide }, { 'use-local-style-overrides': useLocalStyleOverrides }]"
-    :data-test-id="`display-prompt-core-${theme}`"
-  >
+  <div class="display-prompt-core" :class="[{ dismissed: hide }]" :data-test-id="`display-prompt-core-${theme}`">
     <div class="display-prompt-wrapper" :data-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
       <div class="display-prompt-inner">
         <div class="display-prompt-icon" data-test-id="prompt-icon">
@@ -47,7 +43,7 @@ const props = defineProps({
     type: String,
     default: "error",
     validator(value: string) {
-      return ["error", "info", "success", "warning", "secondary"].includes(value)
+      return ["primary", "secondary", "tertiary", "ghost", "error", "info", "success", "warning"].includes(value)
     },
   },
   styleClassPassthrough: {
@@ -60,10 +56,6 @@ const props = defineProps({
     validator(value: string) {
       return ["dark-grey", "white"].includes(value)
     },
-  },
-  useLocalStyleOverrides: {
-    type: Boolean,
-    default: false,
   },
   displayPromptIcons: {
     type: Object as PropType<Record<string, string>>,
