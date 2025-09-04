@@ -384,17 +384,8 @@ const initMainNavigationState = () => {
   })
 }
 
-onMounted(async () => {
-  // If navigation is already initialized and loaded, skip the setup
-  if (navigationInitialized.value && navLoaded.value) {
-    return
-  }
-
-  await initTemplateRefs().then(() => {
-    navLoaded.value = true
-    navigationInitialized.value = true
-  })
-
+// Function to set up click outside listeners
+const setupClickOutsideListeners = () => {
   navigationDetailsRefs.value?.forEach((element, index) => {
     onClickOutside(element, () => {
       navigationDetailsRefs.value?.[index]?.removeAttribute("open")
@@ -405,6 +396,23 @@ onMounted(async () => {
     onClickOutside(overflowDetailsRef.value, () => {
       overflowDetailsRef.value?.removeAttribute("open")
     })
+}
+
+onMounted(async () => {
+  // If navigation is already initialized and loaded, skip the template refs setup
+  if (navigationInitialized.value && navLoaded.value) {
+    // But still set up click outside listeners as DOM elements may have changed
+    await nextTick()
+    setupClickOutsideListeners()
+    return
+  }
+
+  await initTemplateRefs().then(() => {
+    navLoaded.value = true
+    navigationInitialized.value = true
+  })
+
+  setupClickOutsideListeners()
 })
 
 useResizeObserver(navigationWrapperRef, async () => {
