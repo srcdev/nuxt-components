@@ -23,10 +23,10 @@ export default defineNuxtConfig({
       name: "page",
       mode: "out-in",
     },
-    layoutTransition: {
-      name: "layout",
-      mode: "out-in",
-    },
+    // Disable layout transitions to prevent navigation remounting
+    layoutTransition: false,
+    // Keep layouts alive to preserve navigation state
+    keepalive: true,
   },
   components: [
     {

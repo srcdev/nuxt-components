@@ -154,12 +154,22 @@ const props = defineProps({
   },
 })
 
-const slots = useSlots()
 const collapseNavigationBelowWidth = computed(
   () => props.collapseBreakpoint !== null || props.collapseAtMainNavIntersection
 )
 const collapseBreakpoint = ref(props.collapseBreakpoint)
-const navLoaded = ref(false)
+
+// Use global navigation state for caching between route changes
+const {
+  navLoaded,
+  navigationInitialized,
+  navigationWrapperRects: cachedNavigationWrapperRects,
+  secondaryNavRects: cachedSecondaryNavRects,
+  clearNavigationCache,
+} = useNavigationState()
+
+const slots = useSlots()
+
 const navigationWrapperRef = useTemplateRef("navigationWrapper")
 
 const closeAllNavigationDetails = () => {
@@ -215,6 +225,7 @@ const handleSummaryAction = (event: MouseEvent | KeyboardEvent) => {
   toggleDetailsElement(event)
 }
 
+// Initialize main navigation state
 const mainNavigationState = ref<ResponsiveHeaderState>({
   navListVisibility: {
     firstNav: false,
@@ -230,7 +241,13 @@ const setNavRef = (key: string, el: HTMLUListElement | null) => {
   navRefs.value[key] = el
 }
 
-const navigationWrapperRects = ref<IFlooredRect | null>(null)
+const navigationWrapperRects = computed({
+  get: () => cachedNavigationWrapperRects.value,
+  set: (value: IFlooredRect | null) => {
+    cachedNavigationWrapperRects.value = value
+  },
+})
+
 const firstNavRef = ref<HTMLUListElement | null>(null)
 const firstNavRects = ref<IFlooredRect | null>(null)
 
@@ -238,7 +255,12 @@ const secondNavRef = ref<HTMLUListElement | null>(null)
 const secondNavRects = ref<IFlooredRect | null>(null)
 
 const secondaryNavRef = useTemplateRef("secondaryNav")
-const secondaryNavRects = ref<IFlooredRect | null>(null)
+const secondaryNavRects = computed({
+  get: () => cachedSecondaryNavRects.value,
+  set: (value: IFlooredRect | null) => {
+    cachedSecondaryNavRects.value = value
+  },
+})
 
 const mainNavigationItemsRefs = useTemplateRef<HTMLLIElement[]>("mainNavigationItems")
 
@@ -323,7 +345,8 @@ const determineNavigationItemVisibility = (rect: DOMRect) => {
 const initMainNavigationState = () => {
   if (!mainNavigationItemsRefs.value) return
 
-  mainNavigationItemsRefs.value.forEach((item, index) => {
+  mainNavigationItemsRefs.value.forEach(async (item, index) => {
+    // await nextTick()
     const rect = item.getBoundingClientRect()
 
     const groupKey = item.dataset.groupKey
@@ -362,10 +385,14 @@ const initMainNavigationState = () => {
 }
 
 onMounted(async () => {
+  // If navigation is already initialized and loaded, skip the setup
+  if (navigationInitialized.value && navLoaded.value) {
+    return
+  }
+
   await initTemplateRefs().then(() => {
-    setTimeout(() => {
-      navLoaded.value = true
-    }, 100)
+    navLoaded.value = true
+    navigationInitialized.value = true
   })
 
   navigationDetailsRefs.value?.forEach((element, index) => {
@@ -465,7 +492,7 @@ watch(
       }
 
       .main-navigation-item {
-        width: var(--_main-navigation-item-width);
+        /* width: var(--_main-navigation-item-width); */
         overflow: hidden;
         transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
         padding-block: var(--_link-focus-visible-outline-width);
@@ -478,7 +505,7 @@ watch(
           color: inherit;
           text-decoration: none;
           margin-inline-start: 0;
-          transition: var(--_link-visibility-transition);
+          /* transition: var(--_link-visibility-transition); */
 
           padding-block: var(--_link-padding-block);
           padding-inline: var(--_link-padding-inline);
@@ -496,7 +523,7 @@ watch(
           --_icon-transform: scaleY(1);
 
           margin-inline-start: 0;
-          transition: var(--_link-visibility-transition);
+          /* transition: var(--_link-visibility-transition); */
 
           &[open] {
             --_icon-transform: scaleY(-1);

@@ -23,6 +23,7 @@ export default defineNuxtConfig({
       name: "layout",
       mode: "out-in",
     },
+    keepalive: true,
   },
   components: [
     {
