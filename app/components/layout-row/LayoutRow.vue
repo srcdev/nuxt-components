@@ -15,40 +15,6 @@
   </component>
 </template>
 
-<script lang="ts">
-export const TAGS_ALLOWED = <string[]>[
-  "div",
-  "section",
-  "article",
-  "aside",
-  "header",
-  "footer",
-  "main",
-  "nav",
-  "ul",
-  "ol",
-]
-
-export const VARIANT_CLASSES = <string[]>[
-  "full",
-  "full-start",
-  "full-end",
-  "popout",
-  "popout-start",
-  "popout-end",
-  "content",
-  "content-start",
-  "content-end",
-  "inset-content",
-  "inset-content-start",
-  "inset-content-end",
-  "full-width",
-  "full-content",
-  "full-content-nopad",
-  "full-content",
-]
-</script>
-
 <script setup lang="ts">
 const props = defineProps({
   dataTestid: {
@@ -59,14 +25,31 @@ const props = defineProps({
     type: String,
     default: "div",
     validator(value: string) {
-      return TAGS_ALLOWED.includes(value)
+      return ["div", "section", "article", "aside", "header", "footer", "main", "nav", "ul", "ol"].includes(value)
     },
   },
   variant: {
     type: String,
     required: true,
     validator(value: string) {
-      return VARIANT_CLASSES.includes(value)
+      return [
+        "full",
+        "full-start",
+        "full-end",
+        "popout",
+        "popout-start",
+        "popout-end",
+        "content",
+        "content-start",
+        "content-end",
+        "inset-content",
+        "inset-content-start",
+        "inset-content-end",
+        "full-width",
+        "full-content",
+        "full-content-nopad",
+        "full-content",
+      ].includes(value)
     },
   },
   id: {

@@ -3,20 +3,23 @@
     :is="tag"
     class="rotating-carousel"
     :class="[elementClasses]"
-    :style="`--_rotate-x: ${rotateXProp}deg; --_perspective: ${perspectiveProp}; --_translateZ: ${translateZProp}; --_animation-play-state: ${pauseOnHover ? 'paused' : 'running'}`"
+    :style="`--_rotate-x: ${rotateXProp}deg; --_perspective: ${perspectiveProp}; --_translateZ: ${translateZProp}; --_animation-play-state: ${
+      pauseOnHover ? 'paused' : 'running'
+    }`"
     ref="carouselRef"
   >
     <div class="slider" :style="`--quantity: ${Object.keys(data).length}`">
-      <div v-for="(item, key) in data" :key="key" class="item" :style="`--_position: ${key}`"><NuxtImg :src="item.src" :alt="item.alt" /></div>
+      <div v-for="(item, key) in data" :key="key" class="item" :style="`--_position: ${key}`">
+        <NuxtImg :src="item.src" :alt="item.alt" />
+      </div>
     </div>
   </component>
 </template>
 
 <script lang="ts">
-const TAGS_ALLOWED = <string[]>['div', 'p', 'span', 'section', 'article', 'aside', 'header', 'footer', 'main', 'nav', 'ul', 'ol'];
 interface IAccordianData {
-  src: string;
-  alt: string;
+  src: string
+  alt: string
 }
 </script>
 
@@ -28,9 +31,22 @@ const props = defineProps({
   },
   tag: {
     type: String,
-    default: 'div',
+    default: "div",
     validator(value: string) {
-      return TAGS_ALLOWED.includes(value);
+      return [
+        "div",
+        "p",
+        "span",
+        "section",
+        "article",
+        "aside",
+        "header",
+        "footer",
+        "main",
+        "nav",
+        "ul",
+        "ol",
+      ].includes(value)
     },
   },
   rotateX: {
@@ -57,77 +73,77 @@ const props = defineProps({
     type: Array as PropType<string[]>,
     default: () => [],
   },
-});
+})
 
-const perspectiveProp = computed(() => `${props.perspective.toString()}px`);
-const translateZProp = computed(() => `${props.translateZ.toString()}px`);
+const perspectiveProp = computed(() => `${props.perspective.toString()}px`)
+const translateZProp = computed(() => `${props.translateZ.toString()}px`)
 
-const carouselRef = ref<HTMLElement | null>(null);
-const rotateXProp = ref(props.rotateX);
-const minRotateX = -32;
-const maxRotateX = 32;
+const carouselRef = ref<HTMLElement | null>(null)
+const rotateXProp = ref(props.rotateX)
+const minRotateX = -32
+const maxRotateX = 32
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough);
+    resetElementClasses(props.styleClassPassthrough)
   }
-);
+)
 
 watch(
   () => props.rotateX,
   () => {
     if (!props.useParallaxEffect) {
-      console.log('rotateXProp changed: ', rotateXProp.value);
+      console.log("rotateXProp changed: ", rotateXProp.value)
 
-      rotateXProp.value = props.rotateX;
+      rotateXProp.value = props.rotateX
     }
   }
-);
+)
 
 watch(
   () => props.useParallaxEffect,
   (currentValue) => {
     if (currentValue) {
-      handleScroll();
-      window.addEventListener('scroll', handleScroll);
+      handleScroll()
+      window.addEventListener("scroll", handleScroll)
     } else {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll)
     }
   }
-);
+)
 
 const handleScroll = () => {
-  if (!carouselRef.value) return;
-  if ('IntersectionObserver' in window) {
-    const rect = carouselRef.value.getBoundingClientRect();
-    const viewportHeight = window.innerHeight;
+  if (!carouselRef.value) return
+  if ("IntersectionObserver" in window) {
+    const rect = carouselRef.value.getBoundingClientRect()
+    const viewportHeight = window.innerHeight
 
-    const elementCenter = rect.top + rect.height / 2;
-    const viewportCenter = viewportHeight / 2;
-    const distanceFromCenter = viewportCenter - elementCenter;
-    const maxDistance = viewportHeight / 2 + rect.height / 2;
+    const elementCenter = rect.top + rect.height / 2
+    const viewportCenter = viewportHeight / 2
+    const distanceFromCenter = viewportCenter - elementCenter
+    const maxDistance = viewportHeight / 2 + rect.height / 2
 
-    const progress = (distanceFromCenter + maxDistance) / (maxDistance * 2);
-    const clampedProgress = Math.max(0, Math.min(1, progress));
+    const progress = (distanceFromCenter + maxDistance) / (maxDistance * 2)
+    const clampedProgress = Math.max(0, Math.min(1, progress))
 
-    rotateXProp.value = minRotateX + (maxRotateX - minRotateX) * clampedProgress;
+    rotateXProp.value = minRotateX + (maxRotateX - minRotateX) * clampedProgress
   }
-};
+}
 
 onMounted(async () => {
   if (props.useParallaxEffect) {
-    handleScroll();
-    await nextTick();
-    window.addEventListener('scroll', handleScroll);
+    handleScroll()
+    await nextTick()
+    window.addEventListener("scroll", handleScroll)
   }
-});
+})
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', handleScroll);
-});
+  window.removeEventListener("scroll", handleScroll)
+})
 </script>
 
 <style lang="css">

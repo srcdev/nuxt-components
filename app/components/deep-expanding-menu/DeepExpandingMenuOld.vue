@@ -30,7 +30,7 @@ const props = defineProps({
     type: String,
     default: "nav",
     validator(value: string) {
-      return TAGS_ALLOWED.includes(value)
+      return ["div", "section", "nav", "ul", "ol"].includes(value)
     },
   },
   navLinks: {
@@ -64,8 +64,6 @@ onMounted(() => {
 </script>
 
 <script lang="ts">
-const TAGS_ALLOWED = <string[]>["div", "section", "nav", "ul", "ol"]
-
 interface ResponsiveHeaderNavItem {
   name: string
   path?: string
