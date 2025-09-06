@@ -1,5 +1,12 @@
 <template>
-  <component :is="tag" class="layout-row" :class="elementClasses" :id :tab-index="isLandmark ? 0 : null" :aria-label="isLandmark ? 'Layout Row Landmark' : undefined">
+  <component
+    :is="tag"
+    class="layout-row"
+    :class="elementClasses"
+    :id
+    :tab-index="isLandmark ? 0 : null"
+    :aria-label="isLandmark ? 'Layout Row Landmark' : undefined"
+  >
     <div :data-testid="dataTestid" class="layout-row-inner" :class="variant">
       <div>
         <slot name="default"></slot>
@@ -9,46 +16,57 @@
 </template>
 
 <script lang="ts">
-const TAGS_ALLOWED = <string[]>['div', 'section', 'article', 'aside', 'header', 'footer', 'main', 'nav', 'ul', 'ol'];
+export const TAGS_ALLOWED = <string[]>[
+  "div",
+  "section",
+  "article",
+  "aside",
+  "header",
+  "footer",
+  "main",
+  "nav",
+  "ul",
+  "ol",
+]
 
-const VARIANT_CLASSES = <string[]>[
-  'full',
-  'full-start',
-  'full-end',
-  'popout',
-  'popout-start',
-  'popout-end',
-  'content',
-  'content-start',
-  'content-end',
-  'inset-content',
-  'inset-content-start',
-  'inset-content-end',
-  'full-width',
-  'full-content',
-  'full-content-nopad',
-  'full-content',
-];
+export const VARIANT_CLASSES = <string[]>[
+  "full",
+  "full-start",
+  "full-end",
+  "popout",
+  "popout-start",
+  "popout-end",
+  "content",
+  "content-start",
+  "content-end",
+  "inset-content",
+  "inset-content-start",
+  "inset-content-end",
+  "full-width",
+  "full-content",
+  "full-content-nopad",
+  "full-content",
+]
 </script>
 
 <script setup lang="ts">
 const props = defineProps({
   dataTestid: {
     type: String,
-    default: 'layout-row',
+    default: "layout-row",
   },
   tag: {
     type: String,
-    default: 'div',
+    default: "div",
     validator(value: string) {
-      return TAGS_ALLOWED.includes(value);
+      return TAGS_ALLOWED.includes(value)
     },
   },
   variant: {
     type: String,
     required: true,
     validator(value: string) {
-      return VARIANT_CLASSES.includes(value);
+      return VARIANT_CLASSES.includes(value)
     },
   },
   id: {
@@ -63,9 +81,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-});
+})
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">

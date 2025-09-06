@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   //   https: true,
   // },
   css: ["./assets/styles/main.css"],
-  modules: ["@nuxt/eslint", "@nuxt/icon"],
+  modules: ["@nuxt/eslint", "@nuxt/image"],
   app: {
     head: {
       htmlAttrs: {
