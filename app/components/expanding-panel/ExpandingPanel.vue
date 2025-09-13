@@ -1,7 +1,7 @@
 <template>
   <div class="expanding-panel" :class="[elementClasses]">
-    <details class="expanding-panel-details" :name>
-      <summary class="expanding-panel-summary" :id="triggerId" :aria-controls="contentId">
+    <details class="expanding-panel-details" :name :open>
+      <summary @click="handleToggle" class="expanding-panel-summary" :id="triggerId" :aria-controls="contentId">
         <span class="label-wrapper">
           <slot name="summary"></slot>
         </span>
@@ -34,6 +34,10 @@ const props = defineProps({
     type: Number,
     default: 400,
   },
+  forceOpened: {
+    type: Boolean,
+    default: false,
+  },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
     default: () => [],
@@ -45,8 +49,15 @@ const name = computed(() => props.name || useId())
 const triggerId = computed(() => `id-${name.value}-trigger`)
 const contentId = computed(() => `id-${name.value}-content`)
 const animationDurationStr = computed(() => `${props.animationDuration}ms`)
+const open = computed(() => props.forceOpened)
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+
+const handleToggle = (event: Event) => {
+  if (props.forceOpened) {
+    event.preventDefault()
+  }
+}
 </script>
 
 <style lang="css">

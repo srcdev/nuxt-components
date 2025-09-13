@@ -13,7 +13,7 @@
             <template #icon>
               <Icon name="bi:caret-down-fill" class="icon" />
             </template>
-            <template #layout-content>
+            <template #content>
               <div>
                 <p class="mt-0">Details content</p>
                 <p>Details content</p>
@@ -31,7 +31,7 @@
             <template #icon>
               <Icon name="bi:caret-down-fill" class="icon" />
             </template>
-            <template #layout-content>
+            <template #content>
               <div>
                 <p class="mt-0">Details content</p>
                 <p>Details content</p>
@@ -51,14 +51,19 @@
           <h2 class="page-heading-2">Details element - Linked</h2>
           <p class="mbe-12">Details panels are linked, only 1 can be open at a time.</p>
 
-          <ExpandingPanel name="details-linked" icon-size="medium" :style-class-passthrough="['linked']">
+          <ExpandingPanel
+            :animation-duration="300"
+            name="details-linked"
+            icon-size="medium"
+            :style-class-passthrough="['linked']"
+          >
             <template #summary>
-              <h3 class="page-heading-3 mb-2">Details header 1</h3>
+              <h3 class="page-heading-3 mb-2">Expander Panel 1 Linked</h3>
             </template>
             <template #icon>
               <Icon name="bi:caret-down-fill" class="icon" />
             </template>
-            <template #layout-content>
+            <template #content>
               <div>
                 <p class="mt-0">Details content</p>
                 <p>Details content</p>
@@ -69,14 +74,47 @@
             </template>
           </ExpandingPanel>
 
-          <ExpandingPanel name="details-linked" icon-size="medium" :style-class-passthrough="['linked']">
+          <ExpandingPanel
+            :animation-duration="300"
+            name="details-linked"
+            icon-size="medium"
+            :style-class-passthrough="['linked']"
+          >
             <template #summary>
-              <h3 class="page-heading-3 mb-2">Details header 2</h3>
+              <h3 class="page-heading-3 mb-2">Expander Panel 2 Linked</h3>
             </template>
             <template #icon>
               <Icon name="bi:caret-down-fill" class="icon" />
             </template>
-            <template #layout-content>
+            <template #content>
+              <div>
+                <p class="mt-0">Details content</p>
+                <p>Details content</p>
+                <p>Details content</p>
+                <p>Details content</p>
+                <p>Details content</p>
+              </div>
+            </template>
+          </ExpandingPanel>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['expanding-panel-section', 'mbe-20']">
+          <h1 class="page-heading-2">Details element - forceOpened</h1>
+          <p class="mbe-12">Will be displayed as force opened via prop forceOpened</p>
+          <p class="mbe-12">
+            <button class="btn btn-primary" @click="forceOpened = !forceOpened">
+              Toggle forceOpened (currently: {{ forceOpened }})
+            </button>
+          </p>
+
+          <ExpandingPanel :animation-duration="300" icon-size="medium" :force-opened>
+            <template #summary>
+              <h3 class="page-heading-3 mb-2">Expander Panel Force Opened</h3>
+            </template>
+            <template #icon>
+              <Icon name="bi:caret-down-fill" class="icon" />
+            </template>
+            <template #content>
               <div>
                 <p class="mt-0">Details content</p>
                 <p>Details content</p>
@@ -106,6 +144,8 @@ useHead({
     },
   ],
 })
+
+const forceOpened = ref(false)
 </script>
 
 <style lang="css">

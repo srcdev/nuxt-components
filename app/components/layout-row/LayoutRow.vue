@@ -48,7 +48,6 @@ const props = defineProps({
         "full-width",
         "full-content",
         "full-content-nopad",
-        "full-content",
       ].includes(value)
     },
   },
