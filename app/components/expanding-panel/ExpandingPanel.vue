@@ -5,7 +5,7 @@
         <span class="label-wrapper">
           <slot name="summary"></slot>
         </span>
-        <span class="icon-wrapper">
+        <span v-if="!forceOpened" class="icon-wrapper">
           <slot name="icon">
             <Icon name="bi:caret-down-fill" class="icon mi-12" />
           </slot>
