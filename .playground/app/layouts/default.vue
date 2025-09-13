@@ -58,6 +58,7 @@ const responsiveNavLinks = {
       childLinks: [
         { name: "Marquee Scroller", path: "/ui/marquee-scroller" },
         { name: "Banner", path: "/ui/display-banner" },
+        { name: "Section Parallax", path: "/ui/section-parallax" },
         { name: "Animated SVG Text", path: "/ui/animated-svg-text" },
         { name: "Carousel (Basic)", path: "/ui/carousel-basic" },
         { name: "Carousel (Infinite)", path: "/ui/carousel-infinite" },
