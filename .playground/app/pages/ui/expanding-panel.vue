@@ -118,8 +118,16 @@
             <template #content>
               <div>
                 <p class="mt-0">Details content with test link and button</p>
-                <p><button @click.prevent="closePanel()">Close via reactive binding</button></p>
-                <p><a href="#forceClose" @click="closePanel" class="page-link-normal">Close via ref</a></p>
+                <p>
+                  <button @click.prevent="closePanel()" @keydown.enter="closePanel()">
+                    Close via reactive binding
+                  </button>
+                </p>
+                <p>
+                  <a href="#forceClose" @click="closePanel()" @keydown.enter="closePanel()" class="page-link-normal">
+                    Close via ref
+                  </a>
+                </p>
                 <p>Details content</p>
                 <p>Details content</p>
                 <p>Details content</p>

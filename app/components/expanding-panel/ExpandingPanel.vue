@@ -3,6 +3,8 @@
     <details class="expanding-panel-details" :name :open>
       <summary
         @click.prevent="handleToggle"
+        @keydown.enter.prevent="handleToggle"
+        @keydown.space.prevent="handleToggle"
         class="expanding-panel-summary"
         :id="`id-${name}-trigger`"
         :aria-controls="`id-${name}-content`"
@@ -92,6 +94,7 @@ const handleToggle = (event: Event) => {
       overflow: hidden;
 
       .label-wrapper {
+        display: inline-block;
       }
       .icon-wrapper {
         display: flex;
