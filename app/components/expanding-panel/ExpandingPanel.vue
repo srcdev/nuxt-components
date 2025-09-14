@@ -1,7 +1,12 @@
 <template>
   <div class="expanding-panel" :class="[elementClasses]">
     <details class="expanding-panel-details" :name :open>
-      <summary @click="handleToggle" class="expanding-panel-summary" :id="triggerId" :aria-controls="contentId">
+      <summary
+        @click.prevent="handleToggle"
+        class="expanding-panel-summary"
+        :id="`id-${name}-trigger`"
+        :aria-controls="`id-${name}-content`"
+      >
         <span class="label-wrapper">
           <slot name="summary"></slot>
         </span>
@@ -12,7 +17,12 @@
         </span>
       </summary>
     </details>
-    <div class="expanding-panel-content" :aria-labelledby="triggerId" :id="contentId" role="region">
+    <div
+      class="expanding-panel-content"
+      :aria-labelledby="`id-${name}-trigger`"
+      :id="`id-${name}-content`"
+      role="region"
+    >
       <div class="inner">
         <slot name="content"></slot>
       </div>
@@ -45,11 +55,11 @@ const props = defineProps({
 })
 
 const name = computed(() => props.name || useId())
-
-const triggerId = computed(() => `id-${name.value}-trigger`)
-const contentId = computed(() => `id-${name.value}-content`)
+const isPanelOpen = defineModel({ default: false }) as Ref<boolean>
 const animationDurationStr = computed(() => `${props.animationDuration}ms`)
-const open = computed(() => props.forceOpened)
+const open = computed(() => {
+  return props.forceOpened ? true : isPanelOpen.value
+})
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
@@ -57,6 +67,7 @@ const handleToggle = (event: Event) => {
   if (props.forceOpened) {
     event.preventDefault()
   }
+  isPanelOpen.value = !isPanelOpen.value
 }
 </script>
 

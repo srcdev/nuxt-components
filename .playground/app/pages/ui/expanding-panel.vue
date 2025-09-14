@@ -100,14 +100,15 @@
 
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['expanding-panel-section', 'mbe-20']">
           <h1 class="page-heading-2">Details element - forceOpened</h1>
-          <p class="mbe-12">Will be displayed as force opened via prop forceOpened</p>
+          <p class="page-body-normal">Will be displayed as force opened via prop forceOpened</p>
+          <p class="page-body-normal">Also contains a button and link within content which toggles to closed</p>
           <p class="mbe-12">
             <button class="btn btn-primary" @click="forceOpened = !forceOpened">
               Toggle forceOpened (currently: {{ forceOpened }})
             </button>
           </p>
 
-          <ExpandingPanel :animation-duration="300" icon-size="medium" :force-opened>
+          <ExpandingPanel v-model="isPanelOpen" :animation-duration="300" icon-size="medium" :force-opened>
             <template #summary>
               <h3 class="page-heading-3 mb-2">Expander Panel Force Opened</h3>
             </template>
@@ -116,8 +117,9 @@
             </template>
             <template #content>
               <div>
-                <p class="mt-0">Details content</p>
-                <p>Details content</p>
+                <p class="mt-0">Details content with test link and button</p>
+                <p><button @click.prevent="closePanel()">Close via reactive binding</button></p>
+                <p><a href="#forceClose" @click="closePanel" class="page-link-normal">Close via ref</a></p>
                 <p>Details content</p>
                 <p>Details content</p>
                 <p>Details content</p>
@@ -146,6 +148,11 @@ useHead({
 })
 
 const forceOpened = ref(false)
+const isPanelOpen = ref(false)
+
+const closePanel = () => {
+  isPanelOpen.value = false
+}
 </script>
 
 <style lang="css">
