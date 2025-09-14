@@ -57,7 +57,7 @@
 
                 {{ link.childLinksTitle }}
               </summary>
-              <div class="main-navigation-sub-nav" role="menu" :aria-labelledby="`summary-${groupKey}-${localIndex}`">
+              <div class="main-navigation-sub-nav" role="menu">
                 <ul class="main-navigation-sub-nav-list">
                   <li class="main-navigation-sub-nav-item" v-for="childLink in link.childLinks" :key="childLink.name">
                     <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link" role="menuitem">
