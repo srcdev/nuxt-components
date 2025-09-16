@@ -203,6 +203,7 @@ watch(
                     padding-inline: var(--overflow-nav-padding-inline);
 
                     .overflow-navigation-sub-nav-link {
+                      display: block;
                       text-decoration: none;
                       color: inherit;
                     }
