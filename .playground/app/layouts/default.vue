@@ -67,6 +67,7 @@ const responsiveNavLinks = {
         { name: "Container Glow", path: "/ui/container-glow" },
         { name: "Accordian", path: "/ui/accordian" },
         { name: "Display Details", path: "/ui/display-details" },
+        { name: "Display Card", path: "/ui/display-card" },
         { name: "Expanding Panel", path: "/ui/expanding-panel" },
         { name: "Dialogs", path: "/ui/dialog" },
         { name: "Tabs X", path: "/ui/tabs" },
