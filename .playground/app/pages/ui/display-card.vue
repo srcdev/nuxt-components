@@ -2,22 +2,31 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['expanding-panel-section', 'mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">DisplayCard Component</h1>
-          <p class="mbe-12">Static image displayed as page scrolls through it.</p>
           <form class="mb-12">
-            <label for="variant" class="form-label mie-12">Variant:</label>
-            <select id="variant" v-model="variant" class="form-select mbe-12">
-              <option value="solid">Solid</option>
-              <option value="subtle">Subtle</option>
-              <option value="soft">Soft</option>
-              <option value="outline">Outline</option>
-            </select>
+            <div>
+              <label for="variant" class="form-label mie-12">Variant:</label>
+              <select id="variant" v-model="displayCardVariant" class="form-select">
+                <option value="solid">Solid</option>
+                <option value="subtle">Subtle</option>
+                <option value="soft">Soft</option>
+                <option value="outline">Outline</option>
+              </select>
+            </div>
+            <div>
+              <label for="hasDividers" class="form-label mie-12">Has Dividers:</label>
+              <input type="checkbox" id="hasDividers" v-model="hasDividers" class="form-checkbox" />
+            </div>
+            <div>
+              <label for="noOutline" class="form-label mie-12">No Outline:</label>
+              <input type="checkbox" id="noOutline" v-model="noOutline" class="form-checkbox" />
+            </div>
           </form>
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['expanding-panel-section', 'mbe-20']">
-          <DisplayCard :variant :style-class-passthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
+          <DisplayCard :variant="displayCardVariant" :has-dividers="hasDividers" :no-outline="noOutline">
             <template #header>
               <h2 class="page-heading-2">DisplayCard Header</h2>
             </template>
@@ -54,11 +63,19 @@ useHead({
   },
 })
 
-const variant = ref("solid")
+const displayCardVariant = ref("solid")
+const hasDividers = ref(false)
+const noOutline = ref(false)
 </script>
 
 <style lang="css">
 .display-card-page {
+  form {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+  }
   .display-card {
   }
 }

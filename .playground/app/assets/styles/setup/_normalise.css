@@ -50,19 +50,6 @@ Text-level semantics
 */
 
 /**
-Remove the margin in all browsers.
-*/
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
-  margin: 0;
-}
-
-/**
 Add the correct font weight in Chrome and Safari.
 */
 
