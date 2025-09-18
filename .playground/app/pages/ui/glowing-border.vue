@@ -41,7 +41,7 @@
           <h2 class="page-heading-2">Default</h2>
 
           <GlowingBorder :variant="glowingBorderVariant" :style-class-passthrough="['mbe-20']">
-            <div>
+            <div class="p-20">
               <h3 class="page-heading-2">GlowingBorder Header</h3>
               <h4 class="page-heading-3">GlowingBorder Content</h4>
               <p class="page-body-normal">This is default slot content for the GlowingBorder component.</p>
@@ -106,11 +106,6 @@ const noOutline = ref(false)
     gap: 2rem;
     flex-wrap: wrap;
     margin-bottom: 2rem;
-  }
-  .glowing-border {
-    > div {
-      padding: 2rem;
-    }
   }
 }
 </style>

@@ -69,6 +69,7 @@ const responsiveNavLinks = {
         { name: "Display Details", path: "/ui/display-details" },
         { name: "Display Card", path: "/ui/display-card" },
         { name: "Glowing Border", path: "/ui/glowing-border" },
+        { name: "Display Toast", path: "/ui/display-toast" },
         { name: "Expanding Panel", path: "/ui/expanding-panel" },
         { name: "Dialogs", path: "/ui/dialog" },
         { name: "Tabs X", path: "/ui/tabs" },
