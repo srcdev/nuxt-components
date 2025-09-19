@@ -1,19 +1,18 @@
 <template>
   <Teleport to="body">
     <div
-      v-if="triggerToastElem"
+      v-if="privateToastState"
       class="display-notification"
       :class="[
         elementClasses,
         {
           [theme]: !slots.default,
           'has-theme': !slots.default,
-          show: showToast && !isHiding && displayDurationInt === 0,
+          show: publicToastState && !isHiding && displayDurationInt === 0,
           'use-timer': displayDurationInt > 0,
           hide: isHiding,
         },
       ]"
-      ref="toastElement"
     >
       <slot v-if="slots.default"></slot>
 
@@ -71,10 +70,9 @@ watch(
   }
 )
 
-const toastElementRef = useTemplateRef<HTMLDivElement | null>("toastElement")
-const triggerToastElem = ref(false)
+const privateToastState = ref(false)
 const isHiding = ref(false)
-const showToast = defineModel<boolean>({ default: false })
+const publicToastState = defineModel<boolean>({ default: false })
 
 const revealDurationInt = computed(() => props.revealDuration)
 const revealDuration = computed(() => revealDurationInt.value + "ms")
@@ -85,37 +83,28 @@ const progressDurationInt = computed(() => Math.floor(displayDurationInt.value -
 const progressDuration = computed(() => progressDurationInt.value + "ms")
 
 const sendCloseEvent = () => {
-  console.log("sendCloseEvent triggered")
-  showToast.value = false
-  triggerToastElem.value = false
+  publicToastState.value = false
+  privateToastState.value = false
   isHiding.value = false
 }
 
 const closeToast = async () => {
-  console.log("closeToast triggered")
   isHiding.value = true
-
   await useSleep(revealDurationInt.value)
   sendCloseEvent()
 }
 
 watch(
-  () => showToast.value,
+  () => publicToastState.value,
   async (newValue, previousValue) => {
-    console.log("Toast Config Changed: newValue", newValue, "previousValue", previousValue)
-
     if (!previousValue && newValue) {
-      console.log("Showing toast...")
-      triggerToastElem.value = true
+      privateToastState.value = true
 
       if (newValue && displayDurationInt.value > 0) {
-        console.log("Setting timeout to hide toast after duration:", displayDurationInt.value)
-
         await useSleep(displayDurationInt.value)
         sendCloseEvent()
       }
     } else if (previousValue && !newValue) {
-      console.log("Hiding toast...")
       closeToast()
     }
   }

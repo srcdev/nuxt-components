@@ -9,21 +9,68 @@
               Trigger First Toast (current value: {{ firstToastActive }})
             </button>
           </p>
+          <p>
+            <button @click.prevent="triggerSecondToast()" class="button primary mbe-10">
+              Trigger Second Toast (current value: {{ secondToastActive }})
+            </button>
+          </p>
+          <p>
+            <button @click.prevent="triggerThirdToast()" class="button primary mbe-10">
+              Trigger Third Toast (current value: {{ thirdToastActive }})
+            </button>
+          </p>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
-          <DisplayToast v-model="firstToastActive" :duration="0" :style-class-passthrough="['top', 'full-width']">
+          <DisplayToast v-model="firstToastActive" :duration="5000" :style-class-passthrough="['top', 'full-width']">
             <DisplayPromptCore
               v-model:parentComponentState="firstToastActive"
               theme="info"
-              :dismissible="true"
+              :dismissible="false"
               :style-class-passthrough="['your-scope-class']"
             >
               <template #customDecoratorIcon>
                 <Icon name="akar-icons:info" class="icon" />
               </template>
               <template #title>Info Prompt Title with content (Dismissable)</template>
-              <template #layout-content>This is prompt content, it can contain html or plain text.</template>
+            </DisplayPromptCore>
+          </DisplayToast>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
+          <DisplayToast v-model="secondToastActive" :duration="0" :style-class-passthrough="['top', 'full-width']">
+            <DisplayPromptCore
+              v-model:parentComponentState="secondToastActive"
+              theme="error"
+              :dismissible="true"
+              :style-class-passthrough="['dark']"
+            >
+              <template #customDecoratorIcon>
+                <Icon name="akar-icons:info" class="icon" />
+              </template>
+              <template #title>Info Prompt Title with content (Dismissable)</template>
+              <template #content>This is prompt content, it can contain html or plain text.</template>
+            </DisplayPromptCore>
+          </DisplayToast>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
+          <DisplayToast v-model="thirdToastActive" :duration="7000" :style-class-passthrough="['top', 'full-width']">
+            <DisplayPromptCore
+              v-model:parentComponentState="thirdToastActive"
+              theme="success"
+              :dismissible="true"
+              :style-class-passthrough="['dark', 'outlined']"
+            >
+              <template #customDecoratorIcon>
+                <Icon name="akar-icons:info" class="icon" />
+              </template>
+              <template #title>Success Prompt Title with content (Dismissable)</template>
+              <template #content>This is prompt content, it can contain html or plain text.</template>
+              <template #customCloseIcon>
+                <Icon name="material-symbols:close-small" class="icon" />
+              </template>
+              <template #customTitle>Dismiss</template>
             </DisplayPromptCore>
           </DisplayToast>
         </LayoutRow>
@@ -59,8 +106,15 @@ const secondToastActive = ref(false)
 const thirdToastActive = ref(false)
 
 const triggerFirstToast = () => {
-  console.log("Triggering toast...")
   firstToastActive.value = true
+}
+
+const triggerSecondToast = () => {
+  secondToastActive.value = true
+}
+
+const triggerThirdToast = () => {
+  thirdToastActive.value = true
 }
 
 onMounted(() => {
