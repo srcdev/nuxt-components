@@ -8,8 +8,9 @@
         {
           [theme]: !slots.default,
           'has-theme': !slots.default,
-          show: showToast && displayDurationInt === 0,
+          show: showToast && !isHiding && displayDurationInt === 0,
           'use-timer': displayDurationInt > 0,
+          hide: isHiding,
         },
       ]"
       ref="toastElement"
@@ -34,7 +35,6 @@
   </Teleport>
 </template>
 <script setup lang="ts">
-import type { IToastConfig } from "@/types/display-toast"
 const props = defineProps({
   theme: {
     type: String,
@@ -73,6 +73,7 @@ watch(
 
 const toastElementRef = useTemplateRef<HTMLDivElement | null>("toastElement")
 const triggerToastElem = ref(false)
+const isHiding = ref(false)
 const showToast = defineModel<boolean>({ default: false })
 
 const revealDurationInt = computed(() => props.revealDuration)
@@ -87,14 +88,14 @@ const sendCloseEvent = () => {
   console.log("sendCloseEvent triggered")
   showToast.value = false
   triggerToastElem.value = false
+  isHiding.value = false
 }
 
 const closeToast = async () => {
   console.log("closeToast triggered")
-  toastElementRef.value?.classList.remove("show")
-  toastElementRef.value?.classList.add("hide")
+  isHiding.value = true
 
-  await useSleep(Math.floor(2 * revealDurationInt.value))
+  await useSleep(revealDurationInt.value)
   sendCloseEvent()
 }
 
@@ -115,8 +116,6 @@ watch(
       }
     } else if (previousValue && !newValue) {
       console.log("Hiding toast...")
-      // closeToast()
-      await useSleep(displayDurationInt.value)
       closeToast()
     }
   }
@@ -151,8 +150,8 @@ watch(
     transform: translateY(0);
   }
   100% {
-    /* opacity: 0; */
-    /* visibility: hidden; */
+    opacity: 0;
+    visibility: hidden;
     transform: translateY(-30px);
   }
 }
@@ -170,9 +169,6 @@ watch(
   margin: 0;
   opacity: 0;
   visibility: hidden;
-  /* animation: fade-in v-bind(displayDuration) linear; */
-
-  transition: all 0.3s ease-in-out;
 
   z-index: 100;
 

@@ -33,8 +33,6 @@
 </template>
 
 <script setup lang="ts">
-import type { IToastConfig } from "@/types/display-toast"
-
 definePageMeta({
   layout: false,
 })
@@ -59,14 +57,6 @@ const noOutline = ref(false)
 const firstToastActive = ref(false)
 const secondToastActive = ref(false)
 const thirdToastActive = ref(false)
-
-const toastConfig = ref<IToastConfig>({
-  showToast: false,
-  variant: "success",
-  revealDuration: 500,
-  duration: 0,
-  toastDisplayText: "Success! This is a success toast message.",
-})
 
 const triggerFirstToast = () => {
   console.log("Triggering toast...")
