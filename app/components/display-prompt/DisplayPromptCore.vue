@@ -1,5 +1,5 @@
 <template>
-  <div class="display-prompt-core" :class="[{ dismissed: hide }]" :data-test-id="`display-prompt-core-${theme}`">
+  <div class="display-prompt-core" :class="[{ dismissed: dismissed }]" :data-test-id="`display-prompt-core-${theme}`">
     <div class="display-prompt-wrapper" :data-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
       <div class="display-prompt-inner">
         <div class="display-prompt-icon" data-test-id="prompt-icon">
@@ -70,13 +70,32 @@ const props = defineProps({
 })
 
 const slots = useSlots()
-const hide = ref(false)
+const parentOpen = defineModel<boolean>({ default: false })
+const dismissed = ref(false)
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 const dismissPrompt = () => {
   // styleClassPassthrough.value = '';
-  hide.value = true
+  console.log("dismissPrompt clicked, parentOpen:", parentOpen.value, " dismissed:", dismissed.value)
+
+  if (parentOpen.value) {
+    console.log("IF: parentOpen")
+    parentOpen.value = false
+    return
+  }
+
+  dismissed.value = true
 }
+
+// onMounted(() => {
+//   console.log("onMounted | DisplayPromptCore parentOpen:", parentOpen.value)
+//   console.log("onMounted | DisplayPromptCore dismissed:", dismissed.value)
+// })
+
+// watchEffect(() => {
+//   console.log("watchEffect | DisplayPromptCore parentOpen:", parentOpen.value)
+//   console.log("watchEffect | DisplayPromptCore dismissed:", dismissed.value)
+// })
 </script>
 
 <style lang="css">

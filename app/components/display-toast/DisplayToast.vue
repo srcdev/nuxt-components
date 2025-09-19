@@ -1,30 +1,55 @@
 <template>
-  <div v-if="toastConfig?.showToast" class="display-notification" :class="[elementClasses, toastConfig?.variant]">
-    <div class="display-notification-body">
-      <div class="display-notification-description">
-        <div class="description-icon icon__wrapper" :class="[toastConfig?.variant]">
-          <Icon name="akar-icons:circle-check-fill" class="icon-circle-check-fill" />
-        </div>
-        <div class="description-text text-normal pl-12 pr-12 wght-700">{{ toastConfig.toastDisplayText }}</div>
-        <div class="description-close">
-          <button class="description-close-btn">
-            <Icon name="material-symbols:close" class="close" :class="[toastConfig?.variant]" />
-          </button>
+  <Teleport to="body">
+    <div
+      v-if="toastConfig?.showToast"
+      class="display-notification"
+      :class="[
+        elementClasses,
+        {
+          [toastConfig?.variant]: !slots.default,
+          'has-theme': !slots.default,
+          show: toastConfig?.showToast && displayDurationInt === 0,
+          'use-timer': displayDurationInt > 0,
+        },
+      ]"
+      ref="toastElement"
+    >
+      <slot v-if="slots.default"></slot>
+
+      <div v-else class="display-notification-body">
+        <div class="display-notification-description">
+          <div class="description-icon icon__wrapper" :class="[toastConfig?.variant]">
+            <Icon name="akar-icons:circle-check-fill" class="icon-circle-check-fill" />
+          </div>
+          <div class="description-text page-body-normal">{{ toastConfig.toastDisplayText }}</div>
+          <div class="description-close">
+            <button class="description-close-btn" @click.prevent="closeToast()">
+              <Icon name="material-symbols:close" class="close" :class="[toastConfig?.variant]" />
+            </button>
+          </div>
         </div>
       </div>
+      <div v-if="displayDurationInt > 0" @transitionend="closeToast()" class="display-notification-progress"></div>
     </div>
-    <div class="display-notification-progress"></div>
-  </div>
+  </Teleport>
 </template>
 <script setup lang="ts">
 import type { IToastConfig } from "@/types/display-toast"
 const props = defineProps({
+  theme: {
+    type: String,
+    default: "ghost",
+    validator(value: string) {
+      return ["primary", "secondary", "tertiary", "ghost", "error", "info", "success", "warning"].includes(value)
+    },
+  },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
     default: () => [],
   },
 })
 
+const slots = useSlots()
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 watch(
@@ -34,18 +59,42 @@ watch(
   }
 )
 
+const toastElementRef = useTemplateRef<HTMLDivElement | null>("toastElement")
 const toastConfig = defineModel<undefined | IToastConfig>()
-const displayDuration = toastConfig.value?.duration + "ms"
-const progressDuration = Math.floor(toastConfig.value!.duration * 0.9) + "ms"
+
+const revealDurationInt = computed(() => toastConfig.value?.revealDuration ?? 300)
+const revealDuration = computed(() => revealDurationInt.value + "ms")
+const displayDurationInt = computed(() => toastConfig.value?.duration ?? 0)
+const displayDuration = computed(() => displayDurationInt.value + "ms")
+
+const progressDurationInt = computed(() => Math.floor(displayDurationInt.value - revealDurationInt.value / 2))
+const progressDuration = computed(() => progressDurationInt.value + "ms")
+
+const sendCloseEvent = () => {
+  console.log("sendCloseEvent triggered")
+  toastConfig.value!.showToast = false
+}
+
+const closeToast = () => {
+  console.log("closeToast triggered")
+  toastElementRef.value?.classList.remove("show")
+  toastElementRef.value?.classList.add("hide")
+
+  setTimeout(() => {
+    sendCloseEvent()
+  }, revealDurationInt.value)
+}
 
 watch(
   () => toastConfig.value,
-  () => {
+  (newValue, previousValue) => {
     console.log("Toast Config Changed:", toastConfig.value?.showToast)
-    if (toastConfig.value?.showToast && toastConfig.value?.timeout && toastConfig.value?.timeout > 0) {
+
+    if (newValue?.showToast && displayDurationInt.value > 0) {
+      console.log("Setting timeout to hide toast after duration:", displayDurationInt.value)
       setTimeout(() => {
-        toastConfig.value!.showToast = false
-      }, toastConfig.value.timeout)
+        sendCloseEvent()
+      }, displayDurationInt.value + revealDurationInt.value)
     }
   },
   { deep: true }
@@ -65,6 +114,22 @@ watch(
   }
 }
 
+@keyframes show {
+  to {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+@keyframes hide {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(30px);
+  }
+}
+
 @keyframes progress {
   to {
     transform: scaleX(1);
@@ -72,18 +137,67 @@ watch(
 }
 
 .display-notification {
+  display: block;
+  overflow: hidden;
   position: fixed;
-  align-items: center;
-  border: 2px solid transparent;
-  border-radius: 6px;
-  background-color: #9ce6a8;
-  color: white;
   margin: 0;
   opacity: 0;
   visibility: hidden;
-  animation: fade-in v-bind(displayDuration) linear;
-  border-radius: 12px;
-  z-index: 4;
+  /* animation: fade-in v-bind(displayDuration) linear; */
+
+  transition: all 0.3s ease-in-out;
+
+  z-index: 100;
+
+  &.use-timer {
+    animation: fade-in v-bind(displayDuration) linear;
+  }
+
+  &.show {
+    animation: show v-bind(revealDuration)
+      linear(
+        0,
+        0.029 1.6%,
+        0.123 3.5%,
+        0.651 10.6%,
+        0.862 14.1%,
+        1.002 17.7%,
+        1.046 19.6%,
+        1.074 21.6%,
+        1.087 23.9%,
+        1.086 26.6%,
+        1.014 38.5%,
+        0.994 46.3%,
+        1
+      )
+      forwards;
+  }
+
+  &.hide {
+    animation: hide v-bind(revealDuration)
+      linear(
+        0,
+        0.029 1.6%,
+        0.123 3.5%,
+        0.651 10.6%,
+        0.862 14.1%,
+        1.002 17.7%,
+        1.046 19.6%,
+        1.074 21.6%,
+        1.087 23.9%,
+        1.086 26.6%,
+        1.014 38.5%,
+        0.994 46.3%,
+        1
+      )
+      forwards;
+  }
+
+  &:hover {
+    .display-notification-progress {
+      animation-play-state: paused;
+    }
+  }
 
   &.full-width {
     left: 24px;
@@ -107,13 +221,21 @@ watch(
     transform: translateY(30px);
   }
 
-  &.success {
-    background-color: var(--green-4);
-    border-color: var(--green-2);
-  }
-  &.error {
-    background-color: var(--red-3);
-    border-color: var(--red-2);
+  &.has-theme {
+    align-items: center;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background-color: #9ce6a8;
+    color: white;
+
+    &.success {
+      background-color: var(--green-4);
+      border-color: var(--green-2);
+    }
+    &.error {
+      background-color: var(--red-3);
+      border-color: var(--red-2);
+    }
   }
 
   .display-notification-body {
@@ -177,12 +299,6 @@ watch(
     }
   }
 
-  .display-notification-icon {
-    height: 26px;
-    width: 26px;
-    margin-right: 4px;
-  }
-
   .display-notification-progress {
     position: absolute;
     right: 8px;
@@ -193,19 +309,7 @@ watch(
     transform-origin: right;
     background: linear-gradient(to right, #9ce6a8, #9ce6a8);
     border-radius: inherit;
-    animation: progress v-bind(progressDuration) 0.3s linear;
-  }
-
-  .display-notification-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background-color: #9ce6a8;
-    margin-right: 8px;
-    padding: 6px;
+    animation: progress v-bind(progressDuration) linear forwards;
   }
 }
 </style>

@@ -142,7 +142,7 @@ const responsiveNavLinks = {
     background-color: #000;
 
     position: relative;
-    z-index: 999999;
+    z-index: 99;
 
     width: 100%;
 

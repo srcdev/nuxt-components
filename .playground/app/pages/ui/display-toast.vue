@@ -5,14 +5,27 @@
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">DisplayToast</h2>
           <p>
-            <button @click.prevent="toastConfig.showToast = !toastConfig.showToast" class="button primary mbe-10">
+            <button @click.prevent="triggerToast()" class="button primary mbe-10">
               Trigger Toast (current value: {{ toastConfig.showToast }})
             </button>
           </p>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
-          <DisplayToast v-model="toastConfig" :style-class-passthrough="['top', 'full-width']"></DisplayToast>
+          <DisplayToast v-model="toastConfig" :style-class-passthrough="['top', 'full-width']">
+            <DisplayPromptCore
+              v-model:parentOpen="toastConfig.showToast"
+              theme="info"
+              :dismissible="true"
+              :style-class-passthrough="['your-scope-class']"
+            >
+              <template #customDecoratorIcon>
+                <Icon name="akar-icons:info" class="icon" />
+              </template>
+              <template #title>Info Prompt Title with content (Dismissable)</template>
+              <template #layout-content>This is prompt content, it can contain html or plain text.</template>
+            </DisplayPromptCore>
+          </DisplayToast>
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -46,9 +59,9 @@ const noOutline = ref(false)
 const toastConfig = ref<IToastConfig>({
   showToast: false,
   variant: "success",
-  duration: 5000,
+  revealDuration: 500,
+  duration: 0,
   toastDisplayText: "Success! This is a success toast message.",
-  timeout: 0,
 })
 
 const triggerToast = () => {
@@ -58,7 +71,7 @@ const triggerToast = () => {
 
 onMounted(() => {
   // Trigger a toast on mount for demonstration purposes
-  triggerToast()
+  // triggerToast()
 })
 </script>
 
