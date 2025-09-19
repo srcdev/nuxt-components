@@ -21,7 +21,7 @@
         </div>
         <button
           v-if="dismissible"
-          @click.prevent="dismissPrompt()"
+          @click.prevent="updateComponentState()"
           data-test-id="display-prompt-action"
           class="display-prompt-action"
         >
@@ -78,7 +78,7 @@ const parentComponentState = defineModel<boolean>("parentComponentState", { defa
 const compopnentOpen = ref(true)
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-const dismissPrompt = () => {
+const updateComponentState = () => {
   if (parentComponentState.value) {
     parentComponentState.value = false
     return
@@ -150,7 +150,7 @@ const dismissPrompt = () => {
         }
 
         .text {
-          font-size: var(--step-5);
+          font-size: var(--step-4);
           font-weight: normal;
           line-height: 1.3;
           color: var(--colour-theme-8);

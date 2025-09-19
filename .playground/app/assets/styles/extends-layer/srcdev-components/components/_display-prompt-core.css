@@ -8,6 +8,17 @@
       border-start-start-radius: 8px;
       border-end-start-radius: 8px;
 
+      &.dark {
+        background-color: var(--gray-12);
+        border: 1px solid var(--gray-12);
+        border-inline-start: 8px solid var(--colour-theme-8);
+
+        &.outlined {
+          border: 1px solid var(--colour-theme-8);
+          border-inline-start: 8px solid var(--colour-theme-8);
+        }
+      }
+
       .display-prompt-inner {
         align-items: center;
         gap: 12px;
@@ -38,7 +49,7 @@
           }
 
           .text {
-            font-size: var(--step-5);
+            font-size: var(--step-4);
             font-weight: normal;
             line-height: 1.3;
             color: var(--colour-theme-0);
