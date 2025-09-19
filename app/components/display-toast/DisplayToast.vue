@@ -1,14 +1,14 @@
 <template>
   <Teleport to="body">
     <div
-      v-if="toastConfig?.showToast"
+      v-if="triggerToastElem"
       class="display-notification"
       :class="[
         elementClasses,
         {
-          [toastConfig?.variant]: !slots.default,
+          [theme]: !slots.default,
           'has-theme': !slots.default,
-          show: toastConfig?.showToast && displayDurationInt === 0,
+          show: showToast && displayDurationInt === 0,
           'use-timer': displayDurationInt > 0,
         },
       ]"
@@ -18,13 +18,13 @@
 
       <div v-else class="display-notification-body">
         <div class="display-notification-description">
-          <div class="description-icon icon__wrapper" :class="[toastConfig?.variant]">
+          <div class="description-icon icon__wrapper" :class="[theme]">
             <Icon name="akar-icons:circle-check-fill" class="icon-circle-check-fill" />
           </div>
-          <div class="description-text page-body-normal">{{ toastConfig.toastDisplayText }}</div>
+          <div class="description-text page-body-normal">{{ toastDisplayText }}</div>
           <div class="description-close">
             <button class="description-close-btn" @click.prevent="closeToast()">
-              <Icon name="material-symbols:close" class="close" :class="[toastConfig?.variant]" />
+              <Icon name="material-symbols:close" class="close" :class="[theme]" />
             </button>
           </div>
         </div>
@@ -43,6 +43,18 @@ const props = defineProps({
       return ["primary", "secondary", "tertiary", "ghost", "error", "info", "success", "warning"].includes(value)
     },
   },
+  revealDuration: {
+    type: Number,
+    default: 3000,
+  },
+  duration: {
+    type: Number,
+    default: 5000,
+  },
+  toastDisplayText: {
+    type: String,
+    default: "",
+  },
   styleClassPassthrough: {
     type: Array as PropType<string[]>,
     default: () => [],
@@ -60,11 +72,12 @@ watch(
 )
 
 const toastElementRef = useTemplateRef<HTMLDivElement | null>("toastElement")
-const toastConfig = defineModel<undefined | IToastConfig>()
+const triggerToastElem = ref(false)
+const showToast = defineModel<boolean>({ default: false })
 
-const revealDurationInt = computed(() => toastConfig.value?.revealDuration ?? 300)
+const revealDurationInt = computed(() => props.revealDuration)
 const revealDuration = computed(() => revealDurationInt.value + "ms")
-const displayDurationInt = computed(() => toastConfig.value?.duration ?? 0)
+const displayDurationInt = computed(() => props.duration)
 const displayDuration = computed(() => displayDurationInt.value + "ms")
 
 const progressDurationInt = computed(() => Math.floor(displayDurationInt.value - revealDurationInt.value / 2))
@@ -72,32 +85,41 @@ const progressDuration = computed(() => progressDurationInt.value + "ms")
 
 const sendCloseEvent = () => {
   console.log("sendCloseEvent triggered")
-  toastConfig.value!.showToast = false
+  showToast.value = false
+  triggerToastElem.value = false
 }
 
-const closeToast = () => {
+const closeToast = async () => {
   console.log("closeToast triggered")
   toastElementRef.value?.classList.remove("show")
   toastElementRef.value?.classList.add("hide")
 
-  setTimeout(() => {
-    sendCloseEvent()
-  }, revealDurationInt.value)
+  await useSleep(Math.floor(2 * revealDurationInt.value))
+  sendCloseEvent()
 }
 
 watch(
-  () => toastConfig.value,
-  (newValue, previousValue) => {
-    console.log("Toast Config Changed:", toastConfig.value?.showToast)
+  () => showToast.value,
+  async (newValue, previousValue) => {
+    console.log("Toast Config Changed: newValue", newValue, "previousValue", previousValue)
 
-    if (newValue?.showToast && displayDurationInt.value > 0) {
-      console.log("Setting timeout to hide toast after duration:", displayDurationInt.value)
-      setTimeout(() => {
+    if (!previousValue && newValue) {
+      console.log("Showing toast...")
+      triggerToastElem.value = true
+
+      if (newValue && displayDurationInt.value > 0) {
+        console.log("Setting timeout to hide toast after duration:", displayDurationInt.value)
+
+        await useSleep(displayDurationInt.value)
         sendCloseEvent()
-      }, displayDurationInt.value + revealDurationInt.value)
+      }
+    } else if (previousValue && !newValue) {
+      console.log("Hiding toast...")
+      // closeToast()
+      await useSleep(displayDurationInt.value)
+      closeToast()
     }
-  },
-  { deep: true }
+  }
 )
 </script>
 
@@ -123,10 +145,15 @@ watch(
 }
 
 @keyframes hide {
-  to {
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(30px);
+  0% {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  100% {
+    /* opacity: 0; */
+    /* visibility: hidden; */
+    transform: translateY(-30px);
   }
 }
 

@@ -70,7 +70,7 @@ const props = defineProps({
 })
 
 const slots = useSlots()
-const parentOpen = defineModel<boolean>({ default: false })
+const parentOpen = defineModel<boolean>("parentOpen", { default: false })
 const dismissed = ref(false)
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 

@@ -5,16 +5,16 @@
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">DisplayToast</h2>
           <p>
-            <button @click.prevent="triggerToast()" class="button primary mbe-10">
-              Trigger Toast (current value: {{ toastConfig.showToast }})
+            <button @click.prevent="triggerFirstToast()" class="button primary mbe-10">
+              Trigger First Toast (current value: {{ firstToastActive }})
             </button>
           </p>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
-          <DisplayToast v-model="toastConfig" :style-class-passthrough="['top', 'full-width']">
+          <DisplayToast v-model="firstToastActive" :duration="0" :style-class-passthrough="['top', 'full-width']">
             <DisplayPromptCore
-              v-model:parentOpen="toastConfig.showToast"
+              v-model:parentOpen="firstToastActive"
               theme="info"
               :dismissible="true"
               :style-class-passthrough="['your-scope-class']"
@@ -56,6 +56,10 @@ const variant = ref("solid")
 const hasDividers = ref(false)
 const noOutline = ref(false)
 
+const firstToastActive = ref(false)
+const secondToastActive = ref(false)
+const thirdToastActive = ref(false)
+
 const toastConfig = ref<IToastConfig>({
   showToast: false,
   variant: "success",
@@ -64,9 +68,9 @@ const toastConfig = ref<IToastConfig>({
   toastDisplayText: "Success! This is a success toast message.",
 })
 
-const triggerToast = () => {
+const triggerFirstToast = () => {
   console.log("Triggering toast...")
-  toastConfig.value.showToast = true
+  firstToastActive.value = true
 }
 
 onMounted(() => {
