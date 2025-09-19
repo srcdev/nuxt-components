@@ -1,5 +1,9 @@
 <template>
-  <div class="display-prompt-core" :class="[{ dismissed: dismissed }]" :data-test-id="`display-prompt-core-${theme}`">
+  <div
+    class="display-prompt-core"
+    :class="[{ closed: !compopnentOpen }]"
+    :data-test-id="`display-prompt-core-${theme}`"
+  >
     <div class="display-prompt-wrapper" :data-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
       <div class="display-prompt-inner">
         <div class="display-prompt-icon" data-test-id="prompt-icon">
@@ -70,32 +74,18 @@ const props = defineProps({
 })
 
 const slots = useSlots()
-const parentOpen = defineModel<boolean>("parentOpen", { default: false })
-const dismissed = ref(false)
+const parentComponentState = defineModel<boolean>("parentComponentState", { default: false })
+const compopnentOpen = ref(true)
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 const dismissPrompt = () => {
-  // styleClassPassthrough.value = '';
-  console.log("dismissPrompt clicked, parentOpen:", parentOpen.value, " dismissed:", dismissed.value)
-
-  if (parentOpen.value) {
-    console.log("IF: parentOpen")
-    parentOpen.value = false
+  if (parentComponentState.value) {
+    parentComponentState.value = false
     return
   }
 
-  dismissed.value = true
+  compopnentOpen.value = false
 }
-
-// onMounted(() => {
-//   console.log("onMounted | DisplayPromptCore parentOpen:", parentOpen.value)
-//   console.log("onMounted | DisplayPromptCore dismissed:", dismissed.value)
-// })
-
-// watchEffect(() => {
-//   console.log("watchEffect | DisplayPromptCore parentOpen:", parentOpen.value)
-//   console.log("watchEffect | DisplayPromptCore dismissed:", dismissed.value)
-// })
 </script>
 
 <style lang="css">
@@ -105,7 +95,7 @@ const dismissPrompt = () => {
   opacity: 1;
   transition: all 200ms ease-in-out;
 
-  &.dismissed {
+  &.closed {
     grid-template-rows: 0fr;
     opacity: 0;
     pointer-events: none;

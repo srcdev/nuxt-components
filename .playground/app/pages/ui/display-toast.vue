@@ -14,7 +14,7 @@
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
           <DisplayToast v-model="firstToastActive" :duration="0" :style-class-passthrough="['top', 'full-width']">
             <DisplayPromptCore
-              v-model:parentOpen="firstToastActive"
+              v-model:parentComponentState="firstToastActive"
               theme="info"
               :dismissible="true"
               :style-class-passthrough="['your-scope-class']"
