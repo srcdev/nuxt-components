@@ -98,6 +98,7 @@
 .page-link-small-semibold,
 .page-link-xsmall,
 .page-link-xsmall-semibold {
+  margin: 0;
   &:visited {
     color: var(--theme-link-default);
   }

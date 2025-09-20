@@ -18,5 +18,13 @@
   font-weight: 400;
   font-variation-settings: "wght" 400;
   line-height: 1.5;
-  margin-block: 0.8rem;
+}
+
+/*
+* Shared styles
+*/
+.article-heading,
+.article-body-normal,
+.article-list-normal {
+  margin: 0;
 }

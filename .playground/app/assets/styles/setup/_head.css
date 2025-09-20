@@ -1,5 +1,6 @@
 html {
   color-scheme: light dark;
+  interpolate-size: allow-keywords;
 
   &[data-color-scheme="light"] {
     color-scheme: light;
