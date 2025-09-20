@@ -19,31 +19,37 @@
               Trigger Third Toast (current value: {{ thirdToastActive }})
             </button>
           </p>
+          <p>
+            <button @click.prevent="triggerFourthToast()" class="button primary mbe-10">
+              Trigger Fourth Toast (current value: {{ fourthToastActive }})
+            </button>
+          </p>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
-          <DisplayToast v-model="firstToastActive" :duration="5000" :style-class-passthrough="['top', 'full-width']">
-            <DisplayPromptCore
-              v-model:parentComponentState="firstToastActive"
-              theme="info"
-              :dismissible="false"
-              :style-class-passthrough="['your-scope-class']"
-            >
-              <template #customDecoratorIcon>
-                <Icon name="akar-icons:info" class="icon" />
-              </template>
-              <template #title>Info Prompt Title with content (Dismissable)</template>
-            </DisplayPromptCore>
-          </DisplayToast>
+          <DisplayToast
+            v-model="firstToastActive"
+            theme="warning"
+            :duration="0"
+            :reveal-duration="500"
+            toast-display-text="This is a toast notification message"
+            :style-class-passthrough="['top', 'right']"
+          ></DisplayToast>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
-          <DisplayToast v-model="secondToastActive" :duration="0" :style-class-passthrough="['top', 'full-width']">
+          <DisplayToast
+            v-model="secondToastActive"
+            theme="error"
+            :duration="2000"
+            :reveal-duration="500"
+            :style-class-passthrough="['top', 'full-width']"
+          >
             <DisplayPromptCore
               v-model:parentComponentState="secondToastActive"
               theme="error"
               :dismissible="true"
-              :style-class-passthrough="['dark']"
+              :style-class-passthrough="['dark', 'outlined']"
             >
               <template #customDecoratorIcon>
                 <Icon name="akar-icons:info" class="icon" />
@@ -55,7 +61,13 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
-          <DisplayToast v-model="thirdToastActive" :duration="7000" :style-class-passthrough="['top', 'full-width']">
+          <DisplayToast
+            v-model="thirdToastActive"
+            theme="success"
+            :duration="0"
+            :reveal-duration="500"
+            :style-class-passthrough="['top', 'full-width']"
+          >
             <DisplayPromptCore
               v-model:parentComponentState="thirdToastActive"
               theme="success"
@@ -66,6 +78,30 @@
                 <Icon name="akar-icons:info" class="icon" />
               </template>
               <template #title>Success Prompt Title with content (Dismissable)</template>
+              <template #content>This is prompt content, it can contain html or plain text.</template>
+              <template #customCloseIcon>
+                <Icon name="material-symbols:close-small" class="icon" />
+              </template>
+              <template #customTitle>Dismiss</template>
+            </DisplayPromptCore>
+          </DisplayToast>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
+          <DisplayToast
+            v-model="fourthToastActive"
+            theme="info"
+            :duration="5000"
+            :reveal-duration="300"
+            :style-class-passthrough="['top', 'full-width']"
+          >
+            <DisplayPromptCore
+              v-model:parentComponentState="fourthToastActive"
+              theme="info"
+              :dismissible="false"
+              :style-class-passthrough="['dark', 'outlined']"
+            >
+              <template #title>Warning Prompt Title with content (Auto Dismiss)</template>
               <template #content>This is prompt content, it can contain html or plain text.</template>
               <template #customCloseIcon>
                 <Icon name="material-symbols:close-small" class="icon" />
@@ -104,6 +140,7 @@ const noOutline = ref(false)
 const firstToastActive = ref(false)
 const secondToastActive = ref(false)
 const thirdToastActive = ref(false)
+const fourthToastActive = ref(false)
 
 const triggerFirstToast = () => {
   firstToastActive.value = true
@@ -115,6 +152,10 @@ const triggerSecondToast = () => {
 
 const triggerThirdToast = () => {
   thirdToastActive.value = true
+}
+
+const triggerFourthToast = () => {
+  fourthToastActive.value = true
 }
 
 onMounted(() => {

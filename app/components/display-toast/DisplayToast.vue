@@ -2,7 +2,7 @@
   <Teleport to="body">
     <div
       v-if="privateToastState"
-      class="display-notification"
+      class="display-toast"
       :class="[
         elementClasses,
         {
@@ -13,30 +13,32 @@
           hide: isHiding,
         },
       ]"
+      :data-theme="theme"
     >
       <slot v-if="slots.default"></slot>
 
-      <div v-else class="display-notification-body">
-        <div class="display-notification-description">
-          <div class="description-icon icon__wrapper" :class="[theme]">
-            <Icon name="akar-icons:circle-check-fill" class="icon-circle-check-fill" />
-          </div>
-          <div class="description-text page-body-normal">{{ toastDisplayText }}</div>
-          <div class="description-close">
-            <button class="description-close-btn" @click.prevent="closeToast()">
-              <Icon name="material-symbols:close" class="close" :class="[theme]" />
-            </button>
-          </div>
+      <div v-else class="display-toast-inner">
+        <div class="toast-icon" aria-hidden="true">
+          <slot name="customToastIcon">
+            <Icon :name="defaultThemeIcons[props.theme] ?? 'akar-icons:info'" class="icon" />
+          </slot>
+        </div>
+        <div class="toast-message">{{ toastDisplayText }}</div>
+        <div class="toast-action">
+          <button @click.prevent="closeToast">
+            <Icon name="material-symbols:close" class="icon" />
+            <span class="sr-only">Close</span>
+          </button>
         </div>
       </div>
-      <div v-if="displayDurationInt > 0" @transitionend="closeToast()" class="display-notification-progress"></div>
+      <div v-if="displayDurationInt > 0" @transitionend="closeToast()" class="display-toast-progress"></div>
     </div>
   </Teleport>
 </template>
 <script setup lang="ts">
 const props = defineProps({
   theme: {
-    type: String,
+    type: String as PropType<"primary" | "secondary" | "tertiary" | "ghost" | "error" | "info" | "success" | "warning">,
     default: "ghost",
     validator(value: string) {
       return ["primary", "secondary", "tertiary", "ghost", "error", "info", "success", "warning"].includes(value)
@@ -60,15 +62,19 @@ const props = defineProps({
   },
 })
 
+const defaultThemeIcons = {
+  primary: "akar-icons:info",
+  secondary: "akar-icons:info",
+  tertiary: "akar-icons:info",
+  ghost: "akar-icons:info",
+  error: "akar-icons:circle-alert",
+  info: "akar-icons:info",
+  success: "akar-icons:info",
+  warning: "akar-icons:circle-alert",
+}
+
 const slots = useSlots()
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
-
-watch(
-  () => props.styleClassPassthrough,
-  () => {
-    resetElementClasses(props.styleClassPassthrough)
-  }
-)
 
 const privateToastState = ref(false)
 const isHiding = ref(false)
@@ -95,6 +101,13 @@ const closeToast = async () => {
 }
 
 watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough)
+  }
+)
+
+watch(
   () => publicToastState.value,
   async (newValue, previousValue) => {
     if (!previousValue && newValue) {
@@ -111,7 +124,7 @@ watch(
 )
 </script>
 
-<style lang="css">
+<style scoped lang="css">
 @keyframes fade-in {
   5% {
     opacity: 1;
@@ -151,7 +164,7 @@ watch(
   }
 }
 
-.display-notification {
+.display-toast {
   display: block;
   overflow: hidden;
   position: fixed;
@@ -189,24 +202,24 @@ watch(
     animation: hide v-bind(revealDuration)
       linear(
         0,
-        0.029 1.6%,
-        0.123 3.5%,
-        0.651 10.6%,
-        0.862 14.1%,
-        1.002 17.7%,
-        1.046 19.6%,
-        1.074 21.6%,
-        1.087 23.9%,
-        1.086 26.6%,
-        1.014 38.5%,
-        0.994 46.3%,
-        1
+        0.006 53.7%,
+        0.986 61.5%,
+        1.014 73.4%,
+        1.087 76.1%,
+        1.074 78.4%,
+        1.046 80.4%,
+        1.002 82.3%,
+        0.862 85.9%,
+        0.651 89.4%,
+        0.123 96.5%,
+        0.029 98.4%,
+        0
       )
       forwards;
   }
 
   &:hover {
-    .display-notification-progress {
+    .display-toast-progress {
       animation-play-state: paused;
     }
   }
@@ -216,12 +229,19 @@ watch(
     right: 24px;
   }
 
-  &.left {
-    left: 24px;
-  }
+  &:not(.full-width) {
+    &.left {
+      left: 24px;
+    }
 
-  &.right {
-    right: 24px;
+    &.right {
+      right: 24px;
+    }
+
+    &.center {
+      left: 50%;
+      /* transform: translateX(-50%); */
+    }
   }
 
   &.top {
@@ -233,85 +253,99 @@ watch(
     transform: translateY(30px);
   }
 
+  /*
+  * Styles for the display toast component
+  */
+
   &.has-theme {
-    align-items: center;
-    border: 2px solid transparent;
-    border-radius: 12px;
-    background-color: #9ce6a8;
-    color: white;
+    padding-inline-start: 6px;
+    background-color: var(--colour-theme-8);
 
-    &.success {
-      background-color: var(--green-4);
-      border-color: var(--green-2);
-    }
-    &.error {
-      background-color: var(--red-3);
-      border-color: var(--red-2);
-    }
-  }
+    border: 0.1rem solid var(--colour-theme-8);
+    border-start-start-radius: 8px;
+    border-end-start-radius: 8px;
+    overflow: hidden;
 
-  .display-notification-body {
-    display: flex;
-    flex-direction: row;
-    padding: 6px 12px 10px 12px;
-  }
+    .display-toast-inner {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 12px;
+      align-items: center;
+      background-color: var(--gray-10);
+      border-start-start-radius: 8px;
+      border-end-start-radius: 8px;
+      padding: 12px 14px;
+      overflow: hidden;
 
-  .display-notification-description {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 1rem;
-    flex-grow: 2;
+      .toast-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
 
-    .description {
-      .description-icon {
-        transform: translateY(2px);
-
-        &.success {
-          background-color: var(--green-4);
-          border-color: var(--green-2);
-        }
-        &.error {
-          background-color: var(--red-3);
-          border-color: var(--red-2);
+        .icon {
+          color: var(--colour-theme-0);
+          display: inline-block;
+          font-size: 2.5rem;
+          font-style: normal;
+          font-weight: normal;
+          overflow: hidden;
         }
       }
 
-      .description-text {
-        flex-grow: 1;
-        text-align: right;
+      .toast-message {
+        display: flex;
+        align-items: center;
+        font-size: var(--step-4);
+        font-weight: normal;
+        line-height: 1.3;
+        color: var(--colour-theme-0);
+        margin: 0;
+        padding: 0;
       }
-      .description-close {
-        .description-close-btn {
-          background-color: transparent;
-          border: none;
-          outline: 0;
-          margin: 0;
-          padding: 0;
-          line-height: initial;
 
-          svg {
-            border-radius: 50%;
-            border-width: 1px;
-            border-style: solid;
-            color: var(--gray-0);
+      .toast-action {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 12px;
 
-            &.success {
-              background-color: var(--green-2);
-              border-color: var(--green-2);
-            }
-            &.error {
-              background-color: var(--red-2);
-              border-color: var(--red-2);
-            }
+        button {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--colour-theme-10);
+          border: 0.1rem solid var(--colour-theme-8);
+          outline: 0.1rem solid transparent;
+          border-radius: 50%;
+          box-shadow: none;
+          color: var(--colour-theme-0);
+          cursor: pointer;
+          font-size: var(--step-4);
+          font-weight: bold;
+          padding: 0.5rem;
+          text-decoration: underline;
+
+          transition: all 0.3s ease;
+
+          .icon {
+            font-size: 1.5rem;
+            vertical-align: middle;
+          }
+
+          &:hover {
+            box-shadow: none;
+            background-color: var(--colour-theme-8);
+            color: var(--colour-theme-0);
+            outline: 0.1rem solid var(--colour-theme-3);
+            outline-offset: 0.2rem;
           }
         }
       }
     }
   }
 
-  .display-notification-progress {
+  .display-toast-progress {
     position: absolute;
     right: 8px;
     bottom: 4px;
@@ -319,7 +353,7 @@ watch(
     height: 3px;
     transform: scaleX(0);
     transform-origin: right;
-    background: linear-gradient(to right, #9ce6a8, #9ce6a8);
+    background: linear-gradient(to right, var(--colour-theme-2), var(--colour-theme-8));
     border-radius: inherit;
     animation: progress v-bind(progressDuration) linear forwards;
   }

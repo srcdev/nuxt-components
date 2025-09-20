@@ -6,7 +6,7 @@
   >
     <div class="display-prompt-wrapper" :data-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
       <div class="display-prompt-inner">
-        <div class="display-prompt-icon" data-test-id="prompt-icon">
+        <div class="display-prompt-icon" data-test-id="prompt-icon" aria-hidden="true">
           <slot name="customDecoratorIcon">
             <Icon :name="displayPromptIcons[theme] ?? 'akar-icons:circle-alert'" class="icon" :color="iconColor" />
           </slot>
