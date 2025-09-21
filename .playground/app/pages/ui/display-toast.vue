@@ -46,8 +46,8 @@
           <DisplayToast
             v-model="secondToastActive"
             theme="error"
-            :duration="2000"
-            :reveal-duration="500"
+            :duration="5000"
+            :reveal-duration="1000"
             :style-class-passthrough="['top', 'full-width']"
           >
             <DisplayPromptCore

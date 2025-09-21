@@ -99,66 +99,33 @@ const progressDurationInt = computed(() => Math.floor(displayDurationInt.value -
 const progressDuration = computed(() => progressDurationInt.value + "ms")
 
 const removeToast = () => {
-  console.log("Removing toast")
   publicToastState.value = false
   privateToastState.value = false
 }
 
 const updateToIdle = () => {
-  console.log("Updating state to idle")
   state.value = "idle"
   removeToast()
 }
 const updateToEntering = async () => {
-  console.log("Updating state to entering")
   privateToastState.value = true
   state.value = "entering"
   await useSleep(revealDurationInt.value)
   updateToVisible()
 }
 const updateToVisible = () => {
-  console.log("Updating state to visible")
   state.value = "visible"
 }
 const updateToHiding = async () => {
-  console.log("Updating state to hiding")
   state.value = "hiding"
   await useSleep(revealDurationInt.value)
   updateToIdle()
-}
-
-const sendCloseEvent = () => {
-  publicToastState.value = false
-  privateToastState.value = false
-}
-
-const closeToast = async () => {
-  await useSleep(revealDurationInt.value)
-  // sendCloseEvent()
 }
 
 watch(
   () => props.styleClassPassthrough,
   () => {
     resetElementClasses(props.styleClassPassthrough)
-  }
-)
-
-watch(
-  () => state.value,
-  async (newValue, previousValue) => {
-    if (props.autoDismiss) return
-
-    // console.log(`State changed: previous "${previousValue}", new "${newValue}"`)
-    if (newValue === "hiding") {
-      // console.log("State is now HIDING - Before sleep")
-      // await useSleep(revealDurationInt.value)
-      // console.log("State is now HIDING - After sleep")
-      // updateToIdle()
-    } else if (previousValue === "entering" && newValue === "idle") {
-      // console.log("State is now IDLE")
-      // privateToastState.value = false
-    }
   }
 )
 
@@ -171,38 +138,46 @@ watch(
       updateToIdle()
       return
     }
-    // console.log(`Public toast state changed: previous "${previousValue}", new "${newValue}", state "${state.value}"`)
 
     if (!previousValue && newValue && state.value === "idle") {
-      // console.log("Was closed, now open - setting private state to true")
-      // privateToastState.value = true
       updateToEntering()
     }
 
     if (previousValue && !newValue && state.value == "visible") {
-      console.log("Was open, now closed - setting private state to false")
-      // privateToastState.value = false
       updateToHiding()
     }
-
-    /*
-    if (!previousValue && newValue) {
-      privateToastState.value = true
-
-      if (newValue && displayDurationInt.value > 0) {
-        await useSleep(displayDurationInt.value)
-        sendCloseEvent()
-      }
-    } else if (previousValue && !newValue) {
-      closeToast()
-    }
-  */
   }
 )
 </script>
 
 <style scoped lang="css">
-@keyframes fade-in {
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+  }
+}
+
+@keyframes slide-in-out {
   5% {
     opacity: 1;
     visibility: visible;
@@ -252,7 +227,9 @@ watch(
   z-index: 100;
 
   &.auto-dismiss {
-    animation: fade-in v-bind(displayDuration) linear forwards;
+    /* first run slide-in, then slide-out after a delay */
+    animation: slide-in 400ms var(--spring-in-easing) forwards,
+      slide-out 400ms var(--spring-out-easing) forwards v-bind(displayDuration);
   }
 
   &:not(&.auto-dismiss) {
@@ -320,6 +297,9 @@ watch(
     border: 0.1rem solid var(--colour-theme-8);
     border-start-start-radius: 8px;
     border-end-start-radius: 8px;
+    border-start-end-radius: 4px;
+    border-end-end-radius: 4px;
+
     overflow: hidden;
 
     .display-toast-inner {
