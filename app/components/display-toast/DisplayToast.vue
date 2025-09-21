@@ -5,12 +5,10 @@
       class="display-toast"
       :class="[
         elementClasses,
+        cssStateClass,
         {
-          [theme]: !slots.default,
           'has-theme': !slots.default,
-          show: publicToastState && !isHiding && displayDurationInt === 0,
-          'use-timer': displayDurationInt > 0,
-          hide: isHiding,
+          'auto-dismiss': autoDismiss,
         },
       ]"
       :data-theme="theme"
@@ -25,13 +23,13 @@
         </div>
         <div class="toast-message">{{ toastDisplayText }}</div>
         <div class="toast-action">
-          <button @click.prevent="closeToast">
+          <button @click.prevent="updateToHiding()">
             <Icon name="material-symbols:close" class="icon" />
             <span class="sr-only">Close</span>
           </button>
         </div>
       </div>
-      <div v-if="displayDurationInt > 0" @transitionend="closeToast()" class="display-toast-progress"></div>
+      <div v-if="autoDismiss" class="display-toast-progress"></div>
     </div>
   </Teleport>
 </template>
@@ -46,7 +44,11 @@ const props = defineProps({
   },
   revealDuration: {
     type: Number,
-    default: 3000,
+    default: 550,
+  },
+  autoDismiss: {
+    type: Boolean,
+    default: true,
   },
   duration: {
     type: Number,
@@ -76,9 +78,17 @@ const defaultThemeIcons = {
 const slots = useSlots()
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-const privateToastState = ref(false)
-const isHiding = ref(false)
+// single state ref
+const state = ref<"idle" | "entering" | "visible" | "hiding">("idle")
+const cssStateClass = computed(() => {
+  return state.value !== "idle" && !props.autoDismiss ? state.value : ""
+})
+
+// external toggle
 const publicToastState = defineModel<boolean>({ default: false })
+
+// computed helpers
+const privateToastState = ref(false)
 
 const revealDurationInt = computed(() => props.revealDuration)
 const revealDuration = computed(() => revealDurationInt.value + "ms")
@@ -88,16 +98,43 @@ const displayDuration = computed(() => displayDurationInt.value + "ms")
 const progressDurationInt = computed(() => Math.floor(displayDurationInt.value - revealDurationInt.value / 2))
 const progressDuration = computed(() => progressDurationInt.value + "ms")
 
+const removeToast = () => {
+  console.log("Removing toast")
+  publicToastState.value = false
+  privateToastState.value = false
+}
+
+const updateToIdle = () => {
+  console.log("Updating state to idle")
+  state.value = "idle"
+  removeToast()
+}
+const updateToEntering = async () => {
+  console.log("Updating state to entering")
+  privateToastState.value = true
+  state.value = "entering"
+  await useSleep(revealDurationInt.value)
+  updateToVisible()
+}
+const updateToVisible = () => {
+  console.log("Updating state to visible")
+  state.value = "visible"
+}
+const updateToHiding = async () => {
+  console.log("Updating state to hiding")
+  state.value = "hiding"
+  await useSleep(revealDurationInt.value)
+  updateToIdle()
+}
+
 const sendCloseEvent = () => {
   publicToastState.value = false
   privateToastState.value = false
-  isHiding.value = false
 }
 
 const closeToast = async () => {
-  isHiding.value = true
   await useSleep(revealDurationInt.value)
-  sendCloseEvent()
+  // sendCloseEvent()
 }
 
 watch(
@@ -108,8 +145,47 @@ watch(
 )
 
 watch(
+  () => state.value,
+  async (newValue, previousValue) => {
+    if (props.autoDismiss) return
+
+    // console.log(`State changed: previous "${previousValue}", new "${newValue}"`)
+    if (newValue === "hiding") {
+      // console.log("State is now HIDING - Before sleep")
+      // await useSleep(revealDurationInt.value)
+      // console.log("State is now HIDING - After sleep")
+      // updateToIdle()
+    } else if (previousValue === "entering" && newValue === "idle") {
+      // console.log("State is now IDLE")
+      // privateToastState.value = false
+    }
+  }
+)
+
+watch(
   () => publicToastState.value,
   async (newValue, previousValue) => {
+    if (props.autoDismiss) {
+      privateToastState.value = newValue
+      await useSleep(displayDurationInt.value)
+      updateToIdle()
+      return
+    }
+    // console.log(`Public toast state changed: previous "${previousValue}", new "${newValue}", state "${state.value}"`)
+
+    if (!previousValue && newValue && state.value === "idle") {
+      // console.log("Was closed, now open - setting private state to true")
+      // privateToastState.value = true
+      updateToEntering()
+    }
+
+    if (previousValue && !newValue && state.value == "visible") {
+      console.log("Was open, now closed - setting private state to false")
+      // privateToastState.value = false
+      updateToHiding()
+    }
+
+    /*
     if (!previousValue && newValue) {
       privateToastState.value = true
 
@@ -120,6 +196,7 @@ watch(
     } else if (previousValue && !newValue) {
       closeToast()
     }
+  */
   }
 )
 </script>
@@ -174,48 +251,27 @@ watch(
 
   z-index: 100;
 
-  &.use-timer {
-    animation: fade-in v-bind(displayDuration) linear;
+  &.auto-dismiss {
+    animation: fade-in v-bind(displayDuration) linear forwards;
   }
 
-  &.show {
-    animation: show v-bind(revealDuration)
-      linear(
-        0,
-        0.029 1.6%,
-        0.123 3.5%,
-        0.651 10.6%,
-        0.862 14.1%,
-        1.002 17.7%,
-        1.046 19.6%,
-        1.074 21.6%,
-        1.087 23.9%,
-        1.086 26.6%,
-        1.014 38.5%,
-        0.994 46.3%,
-        1
-      )
-      forwards;
-  }
+  &:not(&.auto-dismiss) {
+    &.show,
+    &.entering {
+      animation: show v-bind(revealDuration) var(--spring-easing) forwards;
+    }
 
-  &.hide {
-    animation: hide v-bind(revealDuration)
-      linear(
-        0,
-        0.006 53.7%,
-        0.986 61.5%,
-        1.014 73.4%,
-        1.087 76.1%,
-        1.074 78.4%,
-        1.046 80.4%,
-        1.002 82.3%,
-        0.862 85.9%,
-        0.651 89.4%,
-        0.123 96.5%,
-        0.029 98.4%,
-        0
-      )
-      forwards;
+    &.visible {
+      /* if you want a steady state style, add here */
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    &.hide,
+    &.hiding {
+      animation: hide v-bind(revealDuration) var(--spring-easing) forwards;
+    }
   }
 
   &:hover {

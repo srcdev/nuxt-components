@@ -4,21 +4,27 @@
       <template #layout-content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">DisplayToast</h2>
+          <p class="page-body-normal">Trigger default toast with manual dismiss</p>
           <p>
             <button @click.prevent="triggerFirstToast()" class="button primary mbe-10">
               Trigger First Toast (current value: {{ firstToastActive }})
             </button>
           </p>
+          <hr class="mbe-20" />
+          <p class="page-body-normal">Trigger prompt as toast with auto dismiss</p>
           <p>
             <button @click.prevent="triggerSecondToast()" class="button primary mbe-10">
               Trigger Second Toast (current value: {{ secondToastActive }})
             </button>
           </p>
+          <hr class="mbe-20" />
+          <p class="page-body-normal">Trigger prompt as toast with manual dismiss</p>
           <p>
             <button @click.prevent="triggerThirdToast()" class="button primary mbe-10">
               Trigger Third Toast (current value: {{ thirdToastActive }})
             </button>
           </p>
+          <hr class="mbe-20" />
           <p>
             <button @click.prevent="triggerFourthToast()" class="button primary mbe-10">
               Trigger Fourth Toast (current value: {{ fourthToastActive }})
@@ -30,8 +36,7 @@
           <DisplayToast
             v-model="firstToastActive"
             theme="warning"
-            :duration="0"
-            :reveal-duration="500"
+            :auto-dismiss="false"
             toast-display-text="This is a toast notification message"
             :style-class-passthrough="['top', 'right']"
           ></DisplayToast>
@@ -48,7 +53,7 @@
             <DisplayPromptCore
               v-model:parentComponentState="secondToastActive"
               theme="error"
-              :dismissible="true"
+              :dismissible="false"
               :style-class-passthrough="['dark', 'outlined']"
             >
               <template #customDecoratorIcon>
@@ -64,8 +69,7 @@
           <DisplayToast
             v-model="thirdToastActive"
             theme="success"
-            :duration="0"
-            :reveal-duration="500"
+            :auto-dismiss="false"
             :style-class-passthrough="['top', 'full-width']"
           >
             <DisplayPromptCore
