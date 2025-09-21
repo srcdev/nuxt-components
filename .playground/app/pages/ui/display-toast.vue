@@ -11,20 +11,21 @@
             </button>
           </p>
           <hr class="mbe-20" />
-          <p class="page-body-normal">Trigger prompt as toast with auto dismiss</p>
+          <p class="page-body-normal">Trigger ERROR prompt as toast with auto dismiss</p>
           <p>
             <button @click.prevent="triggerSecondToast()" class="button primary mbe-10">
               Trigger Second Toast (current value: {{ secondToastActive }})
             </button>
           </p>
           <hr class="mbe-20" />
-          <p class="page-body-normal">Trigger prompt as toast with manual dismiss</p>
+          <p class="page-body-normal">Trigger SUCCESS prompt as toast with manual dismiss</p>
           <p>
             <button @click.prevent="triggerThirdToast()" class="button primary mbe-10">
               Trigger Third Toast (current value: {{ thirdToastActive }})
             </button>
           </p>
           <hr class="mbe-20" />
+          <p class="page-body-normal">Trigger INFO prompt as toast with auto dismiss</p>
           <p>
             <button @click.prevent="triggerFourthToast()" class="button primary mbe-10">
               Trigger Fourth Toast (current value: {{ fourthToastActive }})
