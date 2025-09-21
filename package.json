@@ -1,7 +1,7 @@
 {
   "name": "srcdev-nuxt-components",
   "type": "module",
-  "version": "6.1.20",
+  "version": "6.1.21",
   "main": "nuxt.config.ts",
   "scripts": {
     "clean": "rm -rf .nuxt && rm -rf .output && rm -rf .playground/.nuxt && rm -rf .playground/.output",
