@@ -1,6 +1,13 @@
 <template>
   <div class="tabs-core" :class="`axis-${axis}`">
-    <ul role="tablist" aria-labelledby="channel-name" ref="tabsNavRef" @mouseleave="resetHoverToActivePosition()" class="tabs-list" :class="[elementClasses]">
+    <ul
+      role="tablist"
+      aria-labelledby="channel-name"
+      ref="tabsNavRef"
+      @mouseleave="resetHoverToActivePosition()"
+      class="tabs-list"
+      :class="[elementClasses]"
+    >
       <li v-for="(index, key) in itemCount" :key="key">
         <button
           @click.prevent="navItemClicked($event)"
@@ -17,7 +24,16 @@
       </li>
     </ul>
     <div class="tab-content-wrapper">
-      <div v-for="(item, key) in itemCount" :key="key" class="tab-content" :aria-labelledby="`tab-${key}-trigger`" :id="`tab-${key}-content`" role="region" aria-hidden="true" ref="tabsContentRefs">
+      <div
+        v-for="(item, key) in itemCount"
+        :key="key"
+        class="tab-content"
+        :aria-labelledby="`tab-${key}-trigger`"
+        :id="`tab-${key}-content`"
+        role="region"
+        aria-hidden="true"
+        ref="tabsContentRefs"
+      >
         <slot :name="`tab-${key}-content`"></slot>
       </div>
     </div>
@@ -28,11 +44,11 @@
 const props = defineProps({
   tag: {
     type: String as PropType<string>,
-    default: 'button',
+    default: "button",
   },
   axis: {
-    type: String as PropType<'x' | 'y'>,
-    default: 'x',
+    type: String as PropType<"x" | "y">,
+    default: "x",
   },
   transitionDuration: {
     type: Number as PropType<number>,
@@ -55,21 +71,26 @@ const props = defineProps({
     default: true,
   },
   styleClassPassthrough: {
-    type: Array as PropType<string[]>,
+    type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-});
+})
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-const tabsNavRef = ref<HTMLElement | null>(null);
-const tabsContentRefs = ref<HTMLElement[] | null>(null);
+const tabsNavRef = ref<HTMLElement | null>(null)
+const tabsContentRefs = ref<HTMLElement[] | null>(null)
 
-const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useTabs(props.axis, tabsNavRef, tabsContentRefs, props.transitionDuration);
+const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useTabs(
+  props.axis,
+  tabsNavRef,
+  tabsContentRefs,
+  props.transitionDuration
+)
 
 onMounted(() => {
-  initNavDecorators();
-});
+  initNavDecorators()
+})
 </script>
 
 <style lang="css">
@@ -85,7 +106,7 @@ onMounted(() => {
     padding: 0;
 
     .nav__hovered {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       right: 0;
@@ -99,7 +120,7 @@ onMounted(() => {
     }
 
     .nav__active {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       right: 0;
@@ -113,7 +134,7 @@ onMounted(() => {
     }
 
     .nav__active-indicator {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       right: 0;
@@ -135,7 +156,7 @@ onMounted(() => {
         opacity: 1;
       }
 
-      &[aria-selected='true'] {
+      &[aria-selected="true"] {
         opacity: 1;
       }
     }
@@ -172,7 +193,7 @@ onMounted(() => {
         color: light-dark(var(--gray-0), var(--gray-12));
       }
 
-      &[aria-selected='true'] {
+      &[aria-selected="true"] {
         color: light-dark(var(--gray-0), var(--gray-12));
       }
 
@@ -184,7 +205,7 @@ onMounted(() => {
 
   .tab-content-wrapper {
     display: grid;
-    grid-template-areas: 'element-stack';
+    grid-template-areas: "element-stack";
 
     background-color: light-dark(var(--gray-9), var(--gray-10));
     border: 0.1rem solid var(--gray-6);
@@ -226,7 +247,7 @@ onMounted(() => {
           /* color: light-dark(var(--gray-0), var(--gray-12)); */
         }
 
-        &[aria-selected='true'] {
+        &[aria-selected="true"] {
           /* color: var(--_tabs-active-text); */
         }
 

@@ -18,14 +18,14 @@ const props = defineProps({
     required: true,
   },
   styleClassPassthrough: {
-    type: Array as PropType<string[]>,
+    type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-});
+})
 
-const anchorName = `--anchor-${useId()}`;
+const anchorName = `--anchor-${useId()}`
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style scoped lang="css">

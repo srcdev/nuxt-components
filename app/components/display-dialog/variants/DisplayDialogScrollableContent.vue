@@ -18,7 +18,7 @@
 <script setup lang="ts">
 const props = defineProps({
   styleClassPassthrough: {
-    type: Array as PropType<string[]>,
+    type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
   allowContentScroll: {
@@ -29,7 +29,7 @@ const props = defineProps({
     type: String,
     required: true,
   },
-});
+})
 </script>
 
 <style lang="css">

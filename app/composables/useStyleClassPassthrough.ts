@@ -1,35 +1,32 @@
-export const useStyleClassPassthrough = (styleClassPassthrough: string[]) => {
-  const styleClassPassthroughRef = ref(styleClassPassthrough);
+export const useStyleClassPassthrough = (styleClassPassthrough: string | string[]) => {
+  // Normalize initial value to an array
+  const normalize = (input: string | string[]): string[] =>
+    Array.isArray(input) ? input : input.split(/\s+/).filter(Boolean)
 
-  const elementClasses = computed(() => {
-    return styleClassPassthroughRef.value.join(' ');
-  });
+  const styleClassPassthroughRef = ref<string[]>(normalize(styleClassPassthrough))
+
+  const elementClasses = computed(() => styleClassPassthroughRef.value.join(" "))
 
   const updateElementClasses = (cssClass: string | string[]) => {
-    let cssClasses = [] as string[];
-    if (typeof cssClass === 'string') {
-      cssClasses = [cssClass];
-    } else if (Array.isArray(cssClass)) {
-      cssClasses = cssClass;
-    }
+    const cssClasses = Array.isArray(cssClass) ? cssClass : [cssClass]
 
-    cssClasses.forEach((cssClass) => {
-      if (styleClassPassthroughRef.value.includes(cssClass)) {
-        styleClassPassthroughRef.value = styleClassPassthroughRef.value.filter((className) => className !== cssClass);
+    cssClasses.forEach((cls) => {
+      if (styleClassPassthroughRef.value.includes(cls)) {
+        styleClassPassthroughRef.value = styleClassPassthroughRef.value.filter((c) => c !== cls)
       } else {
-        styleClassPassthroughRef.value.push(cssClass);
+        styleClassPassthroughRef.value.push(cls)
       }
-    });
-  };
+    })
+  }
 
-  const resetElementClasses = (propsClasses: string[]) => {
-    styleClassPassthroughRef.value = propsClasses;
-  };
+  const resetElementClasses = (propsClasses: string | string[]) => {
+    styleClassPassthroughRef.value = normalize(propsClasses)
+  }
 
   return {
     elementClasses,
     updateElementClasses,
     resetElementClasses,
     styleClassPassthroughRef,
-  };
-};
+  }
+}

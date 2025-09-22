@@ -7,19 +7,19 @@
 <script setup lang="ts">
 const props = defineProps({
   styleClassPassthrough: {
-    type: Array as PropType<string[]>,
+    type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-});
+})
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough);
+    resetElementClasses(props.styleClassPassthrough)
   }
-);
+)
 </script>
 
 <style lang="css">

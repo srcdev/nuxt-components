@@ -40,19 +40,19 @@ const props = defineProps({
     default: 4,
   },
   styleClassPassthrough: {
-    type: Array as PropType<string[]>,
+    type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-});
+})
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough);
+    resetElementClasses(props.styleClassPassthrough)
   }
-);
+)
 </script>
 
 <style lang="css">
@@ -82,15 +82,15 @@ watch(
 
     grid-template-columns: 1fr;
     grid-template-areas:
-      'slot1'
-      'slot2'
-      'slot3';
+      "slot1"
+      "slot2"
+      "slot3";
 
     @container (min-width: 1024px) {
       grid-template-columns: 1fr minmax(460px, 33%);
       grid-template-areas:
-        'slot1 slot2'
-        'slot3 slot2';
+        "slot1 slot2"
+        "slot3 slot2";
     }
   }
 

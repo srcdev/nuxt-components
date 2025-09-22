@@ -19,7 +19,7 @@ const props = defineProps({
     default: false,
   },
   styleClassPassthrough: {
-    type: Array as PropType<string[]>,
+    type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
 })

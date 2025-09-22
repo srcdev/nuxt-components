@@ -49,7 +49,7 @@
 import { FocusTrap } from "focus-trap-vue"
 const props = defineProps({
   styleClassPassthrough: {
-    type: Array as PropType<string[]>,
+    type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
   variant: {

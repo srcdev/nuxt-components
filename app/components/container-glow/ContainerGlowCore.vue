@@ -1,6 +1,12 @@
 <template>
   <div class="container-glow-wrapper" :class="elementClasses" ref="containerGlowWrapper">
-    <component :is="tag" v-for="(item, key) in itemCount" :key="key" class="container-glow-core" ref="containerGlowItem">
+    <component
+      :is="tag"
+      v-for="(item, key) in itemCount"
+      :key="key"
+      class="container-glow-core"
+      ref="containerGlowItem"
+    >
       <div class="glows"></div>
       <slot :name="`container-glow-${key}`"></slot>
     </component>
@@ -9,12 +15,12 @@
 
 <script setup lang="ts">
 interface Config {
-  proximity: number;
-  spread: number;
-  blur: number;
-  gap: number;
-  vertical: boolean;
-  opacity: number;
+  proximity: number
+  spread: number
+  blur: number
+  gap: number
+  vertical: boolean
+  opacity: number
 }
 
 const props = defineProps({
@@ -24,10 +30,10 @@ const props = defineProps({
   },
   tag: {
     type: String as PropType<string>,
-    default: 'div',
+    default: "div",
   },
   styleClassPassthrough: {
-    type: Array as PropType<string[]>,
+    type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
   config: {
@@ -41,20 +47,20 @@ const props = defineProps({
       opacity: 0.15,
     }),
   },
-});
+})
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-const controller = new AbortController();
+const controller = new AbortController()
 
-const containerGlowWrapper = ref<HTMLElement>();
-const containerGlowItem = ref<HTMLElement[]>([]);
+const containerGlowWrapper = ref<HTMLElement>()
+const containerGlowItem = ref<HTMLElement[]>([])
 
 const updateStyles = (event: PointerEvent) => {
   // get the angle based on the center point of the card and pointer position
   for (const cardElem of containerGlowItem.value) {
     // Check the card against the proximity and then start updating
-    const cardBounds = cardElem.getBoundingClientRect();
+    const cardBounds = cardElem.getBoundingClientRect()
     // Get distance between pointer and outerbounds of card
     if (
       event?.x > cardBounds.left - props.config.proximity &&
@@ -63,44 +69,44 @@ const updateStyles = (event: PointerEvent) => {
       event?.y < cardBounds.top + cardBounds.height + props.config.proximity
     ) {
       // If within proximity set the active opacity
-      cardElem.style.setProperty('--opacity-active', String(1));
+      cardElem.style.setProperty("--opacity-active", String(1))
     } else {
-      cardElem.style.setProperty('--opacity-active', String(props.config.opacity));
+      cardElem.style.setProperty("--opacity-active", String(props.config.opacity))
     }
-    const cardCentre = [cardBounds.left + cardBounds.width * 0.5, cardBounds.top + cardBounds.height * 0.5];
-    let angle = (Math.atan2(event?.y - cardCentre[1], event?.x - cardCentre[0]) * 180) / Math.PI;
-    angle = angle < 0 ? angle + 360 : angle;
-    cardElem.style.setProperty('--start', String(angle + 90));
+    const cardCentre = [cardBounds.left + cardBounds.width * 0.5, cardBounds.top + cardBounds.height * 0.5]
+    let angle = (Math.atan2(event?.y - cardCentre[1], event?.x - cardCentre[0]) * 180) / Math.PI
+    angle = angle < 0 ? angle + 360 : angle
+    cardElem.style.setProperty("--start", String(angle + 90))
   }
-};
+}
 
 const applyStyles = () => {
-  containerGlowWrapper.value?.style.setProperty('--gap', String(props.config.gap));
-  containerGlowWrapper.value?.style.setProperty('--blur', String(props.config.blur));
-  containerGlowWrapper.value?.style.setProperty('--spread', String(props.config.spread));
-  containerGlowWrapper.value?.style.setProperty('--direction', props.config.vertical ? 'column' : 'row');
-};
+  containerGlowWrapper.value?.style.setProperty("--gap", String(props.config.gap))
+  containerGlowWrapper.value?.style.setProperty("--blur", String(props.config.blur))
+  containerGlowWrapper.value?.style.setProperty("--spread", String(props.config.spread))
+  containerGlowWrapper.value?.style.setProperty("--direction", props.config.vertical ? "column" : "row")
+}
 
 // document.body.addEventListener('pointermove', updateStyles);
 
 onMounted(() => {
-  applyStyles();
+  applyStyles()
   if (containerGlowWrapper.value) {
-    document.body.addEventListener('pointermove', updateStyles, {
+    document.body.addEventListener("pointermove", updateStyles, {
       signal: controller.signal,
-    });
+    })
   }
-});
+})
 
 onBeforeUnmount(() => {
-  return controller.abort();
-});
+  return controller.abort()
+})
 </script>
 
 <style lang="css">
 .container-glow-wrapper {
   @property --start {
-    syntax: '<number>';
+    syntax: "<number>";
     inherits: true;
     initial-value: 0;
   }
@@ -146,7 +152,7 @@ onBeforeUnmount(() => {
 
     &::before,
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       inset: 0;
     }
@@ -160,7 +166,12 @@ onBeforeUnmount(() => {
       background-attachment: fixed;
       border-radius: 12px;
       mask: linear-gradient(#0000, #0000),
-        conic-gradient(from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 1.5)) * 1deg), hsl(0 0% 100% / 0.15) 0deg, white, hsl(0 0% 100% / 0.15) calc(var(--spread) * 2.5deg));
+        conic-gradient(
+          from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 1.5)) * 1deg),
+          hsl(0 0% 100% / 0.15) 0deg,
+          white,
+          hsl(0 0% 100% / 0.15) calc(var(--spread) * 2.5deg)
+        );
       mask-clip: padding-box, border-box;
       mask-composite: intersect;
       opacity: var(--opacity-active);
@@ -177,7 +188,13 @@ onBeforeUnmount(() => {
       transition: opacity 1s;
       --alpha: 0;
       border: 2px solid transparent;
-      mask: linear-gradient(#0000, #0000), conic-gradient(from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 0.5)) * 1deg), #0000 0deg, #fff, #0000 calc(var(--spread) * 0.5deg));
+      mask: linear-gradient(#0000, #0000),
+        conic-gradient(
+          from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 0.5)) * 1deg),
+          #0000 0deg,
+          #fff,
+          #0000 calc(var(--spread) * 0.5deg)
+        );
       filter: brightness(1.5);
       mask-clip: padding-box, border-box;
       mask-composite: intersect;
@@ -192,14 +209,20 @@ onBeforeUnmount(() => {
       &::after,
       &::before {
         --alpha: 0;
-        content: '';
+        content: "";
         background: var(--gradient);
         background-attachment: fixed;
         position: absolute;
         inset: -5px;
         border: 10px solid transparent;
         border-radius: 12px;
-        mask: linear-gradient(#0000, #0000), conic-gradient(from calc((var(--start) - (var(--spread) * 0.5)) * 1deg), #000 0deg, #fff, #0000 calc(var(--spread) * 1deg));
+        mask: linear-gradient(#0000, #0000),
+          conic-gradient(
+            from calc((var(--start) - (var(--spread) * 0.5)) * 1deg),
+            #000 0deg,
+            #fff,
+            #0000 calc(var(--spread) * 1deg)
+          );
         mask-composite: intersect;
         mask-clip: padding-box, border-box;
         opacity: var(--opacity-active);

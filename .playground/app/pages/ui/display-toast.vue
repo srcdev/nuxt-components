@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20', 'p-20']">
           <h2 class="page-heading-2">DisplayToast</h2>
           <p class="page-body-normal">Trigger default toast with manual dismiss</p>
           <p>

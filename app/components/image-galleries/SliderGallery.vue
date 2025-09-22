@@ -13,8 +13,9 @@
             <div v-show="item.stylist !== ''" class="author" :class="item.textBrightness">{{ item.stylist }}</div>
             <div v-show="item.title !== ''" class="title" :class="item.textBrightness">{{ item.title }}</div>
             <div v-show="item.category !== ''" class="topic" :class="item.textBrightness">{{ item.category }}</div>
-            <div v-show="item.description !== ''" class="description" :class="item.textBrightness">{{ item.description
-              }}</div>
+            <div v-show="item.description !== ''" class="description" :class="item.textBrightness">
+              {{ item.description }}
+            </div>
             <div class="buttons" :class="item.textBrightness">
               <button>SEE MORE</button>
             </div>
@@ -27,10 +28,11 @@
           <div class="inner">
             <NuxtImg :src="item.src" :alt="item.alt" />
             <div class="content" :class="item.textBrightness">
-              <div v-show="item.thumbnail?.title !== ''" class="title" :class="item.textBrightness">{{
-                item.thumbnail?.title }}</div>
-              <div v-show="item.thumbnail?.description !== ''" class="description" :class="item.textBrightness">{{
-                item.thumbnail?.description }}
+              <div v-show="item.thumbnail?.title !== ''" class="title" :class="item.textBrightness">
+                {{ item.thumbnail?.title }}
+              </div>
+              <div v-show="item.thumbnail?.description !== ''" class="description" :class="item.textBrightness">
+                {{ item.thumbnail?.description }}
               </div>
             </div>
           </div>
@@ -52,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import { type IGalleryData } from '@/types/gallery-data';
+import { type IGalleryData } from "@/types/gallery-data"
 
 const props = defineProps({
   autoRun: {
@@ -68,198 +70,197 @@ const props = defineProps({
     default: 3000,
   },
   styleClassPassthrough: {
-    type: Array as PropType<string[]>,
+    type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-});
+})
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-const galleryData = defineModel<IGalleryData[]>('galleryData');
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const galleryData = defineModel<IGalleryData[]>("galleryData")
 
-const sliderGalleryWrapper = useTemplateRef('sliderGalleryWrapper');
-const sliderGalleryImagesList = useTemplateRef('sliderGalleryImagesList');
-const sliderGalleryThumbnailsList = useTemplateRef('sliderGalleryThumbnailsList');
+const sliderGalleryWrapper = useTemplateRef("sliderGalleryWrapper")
+const sliderGalleryImagesList = useTemplateRef("sliderGalleryImagesList")
+const sliderGalleryThumbnailsList = useTemplateRef("sliderGalleryThumbnailsList")
 
-const transitionRunning = ref(false);
-const galleryLoaded = ref(true);
-const showGallery = ref(false);
-const loadedImages = ref<Set<number>>(new Set());
-const preloadedImages = ref<Array<HTMLImageElement>>([]);
+const transitionRunning = ref(false)
+const galleryLoaded = ref(true)
+const showGallery = ref(false)
+const loadedImages = ref<Set<number>>(new Set())
+const preloadedImages = ref<Array<HTMLImageElement>>([])
 
 onMounted(async () => {
-  await nextTick();
+  await nextTick()
 
   // If no images or galleryData is empty, stop loading
   if (!galleryData.value || galleryData.value.length === 0) {
-    galleryLoaded.value = false;
-    return;
+    galleryLoaded.value = false
+    return
   }
 
   // Create an array to hold image loading promises
-  const imageLoadPromises: Promise<void>[] = [];
+  const imageLoadPromises: Promise<void>[] = []
 
   // Preload the first image at minimum
-  const firstImageIndex = 0;
+  const firstImageIndex = 0
   if (galleryData.value[firstImageIndex]) {
-    const img = new Image();
-    img.src = galleryData.value[firstImageIndex].src;
+    const img = new Image()
+    img.src = galleryData.value[firstImageIndex].src
 
     const promise = new Promise<void>((resolve) => {
       img.onload = () => {
-        loadedImages.value.add(firstImageIndex);
-        resolve();
-      };
+        loadedImages.value.add(firstImageIndex)
+        resolve()
+      }
       img.onerror = () => {
-        loadedImages.value.add(firstImageIndex); // Count as loaded anyway
-        resolve();
-      };
-    });
+        loadedImages.value.add(firstImageIndex) // Count as loaded anyway
+        resolve()
+      }
+    })
 
-    imageLoadPromises.push(promise);
-    preloadedImages.value.push(img);
+    imageLoadPromises.push(promise)
+    preloadedImages.value.push(img)
   }
 
   // Wait for at least the first image to load
-  await Promise.race(imageLoadPromises);
+  await Promise.race(imageLoadPromises)
 
   setTimeout(() => {
-    galleryLoaded.value = false;
-  }, 500);
+    galleryLoaded.value = false
+  }, 500)
 
-  showGallery.value = true;
-  window.addEventListener('keydown', handleKeyDown);
-});
+  showGallery.value = true
+  window.addEventListener("keydown", handleKeyDown)
+})
 
 const handleImageLoad = (index: number) => {
-  loadedImages.value.add(index);
-};
+  loadedImages.value.add(index)
+}
 
 const handleImageError = (index: number) => {
-  loadedImages.value.add(index);
-};
+  loadedImages.value.add(index)
+}
 
 const doNext = () => {
-  if (transitionRunning.value) return;
-  showSlider('next');
-};
+  if (transitionRunning.value) return
+  showSlider("next")
+}
 
 const doPrevious = () => {
-  if (transitionRunning.value) return;
-  showSlider('prev');
-};
+  if (transitionRunning.value) return
+  showSlider("prev")
+}
 
-let runTimeOut: any;
-let runNextAuto: any = null;
+let runTimeOut: any
+let runNextAuto: any = null
 
 function showSlider(type: string) {
-  transitionRunning.value = true;
+  transitionRunning.value = true
 
-  const currentSliderItems = Array.from(sliderGalleryImagesList.value?.children || []);
-  const currentThumbnailItems = Array.from(sliderGalleryThumbnailsList.value?.children || []);
+  const currentSliderItems = Array.from(sliderGalleryImagesList.value?.children || [])
+  const currentThumbnailItems = Array.from(sliderGalleryThumbnailsList.value?.children || [])
 
-  if (type === 'next') {
+  if (type === "next") {
     if (currentSliderItems.length) {
-      const firstItem = currentSliderItems[0];
+      const firstItem = currentSliderItems[0]
       if (firstItem) {
-        sliderGalleryImagesList.value?.appendChild(firstItem);
+        sliderGalleryImagesList.value?.appendChild(firstItem)
       }
     }
 
     if (currentThumbnailItems.length) {
-      const firstThumb = currentThumbnailItems[0];
+      const firstThumb = currentThumbnailItems[0]
       if (firstThumb) {
-        sliderGalleryThumbnailsList.value?.appendChild(firstThumb);
+        sliderGalleryThumbnailsList.value?.appendChild(firstThumb)
       }
     }
 
-    sliderGalleryWrapper.value?.classList.add('next');
+    sliderGalleryWrapper.value?.classList.add("next")
   } else {
     if (currentSliderItems.length) {
-      const lastItem = currentSliderItems[currentSliderItems.length - 1];
+      const lastItem = currentSliderItems[currentSliderItems.length - 1]
       if (lastItem) {
-        lastItem.classList.add('prepend-item');
-        sliderGalleryImagesList.value?.prepend(lastItem);
+        lastItem.classList.add("prepend-item")
+        sliderGalleryImagesList.value?.prepend(lastItem)
       }
     }
 
     if (currentThumbnailItems.length) {
-      const lastThumb = currentThumbnailItems[currentThumbnailItems.length - 1];
+      const lastThumb = currentThumbnailItems[currentThumbnailItems.length - 1]
       if (lastThumb) {
-        lastThumb.classList.add('prepend-item');
-        sliderGalleryThumbnailsList.value?.prepend(lastThumb);
+        lastThumb.classList.add("prepend-item")
+        sliderGalleryThumbnailsList.value?.prepend(lastThumb)
       }
     }
 
-    sliderGalleryWrapper.value?.offsetWidth; // Force reflow
-    sliderGalleryWrapper.value?.classList.add('prev');
+    sliderGalleryWrapper.value?.offsetWidth // Force reflow
+    sliderGalleryWrapper.value?.classList.add("prev")
   }
 
-  clearTimeout(runTimeOut);
+  clearTimeout(runTimeOut)
   runTimeOut = setTimeout(() => {
-
     if (sliderGalleryWrapper.value) {
-      sliderGalleryWrapper.value.classList.remove('next');
-      sliderGalleryWrapper.value.classList.remove('prev');
+      sliderGalleryWrapper.value.classList.remove("next")
+      sliderGalleryWrapper.value.classList.remove("prev")
 
-      const items = sliderGalleryImagesList.value?.querySelectorAll('.prepend-item');
-      items?.forEach((item) => item.classList.remove('prepend-item'));
+      const items = sliderGalleryImagesList.value?.querySelectorAll(".prepend-item")
+      items?.forEach((item) => item.classList.remove("prepend-item"))
 
-      const thumbs = sliderGalleryThumbnailsList.value?.querySelectorAll('.prepend-item');
-      thumbs?.forEach((thumb) => thumb.classList.remove('prepend-item'));
+      const thumbs = sliderGalleryThumbnailsList.value?.querySelectorAll(".prepend-item")
+      thumbs?.forEach((thumb) => thumb.classList.remove("prepend-item"))
     }
-    transitionRunning.value = false;
-  }, props.animationDuration);
+    transitionRunning.value = false
+  }, props.animationDuration)
 
   // Reset auto-run timer
-  clearTimeout(runNextAuto);
+  clearTimeout(runNextAuto)
   runNextAuto = setTimeout(() => {
-    if (!props.autoRun || galleryLoaded.value) return;
-    doNext();
-  }, props.autoRunInterval);
+    if (!props.autoRun || galleryLoaded.value) return
+    doNext()
+  }, props.autoRunInterval)
 }
 
 // Add keyboard navigation event handlers
 const handleKeyDown = (event: KeyboardEvent) => {
   // Don't process key events if transition is running or gallery isn't loaded
   if (transitionRunning.value || galleryLoaded.value) {
-    return;
+    return
   }
 
-  if (event.key === 'ArrowLeft') {
-    doPrevious();
-  } else if (event.key === 'ArrowRight') {
-    doNext();
+  if (event.key === "ArrowLeft") {
+    doPrevious()
+  } else if (event.key === "ArrowRight") {
+    doNext()
   }
-};
+}
 
 // Initialize auto-run only after loading completes
 watch(galleryLoaded, (previousValue, currentValue) => {
   if (!currentValue && props.autoRun) {
-    clearTimeout(runNextAuto);
+    clearTimeout(runNextAuto)
     runNextAuto = setTimeout(() => {
-      doNext();
-    }, props.autoRunInterval);
+      doNext()
+    }, props.autoRunInterval)
   }
-});
+})
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough);
+    resetElementClasses(props.styleClassPassthrough)
   }
-);
+)
 
 onBeforeUnmount(() => {
-  showGallery.value = false;
-  clearTimeout(runTimeOut);
-  clearTimeout(runNextAuto);
-  window.removeEventListener('keydown', handleKeyDown);
-});
+  showGallery.value = false
+  clearTimeout(runTimeOut)
+  clearTimeout(runNextAuto)
+  window.removeEventListener("keydown", handleKeyDown)
+})
 </script>
 
 <style lang="css">
 .slider-gallery {
-  --_animationDuration: v-bind(animationDuration + 'ms');
+  --_animationDuration: v-bind(animationDuration + "ms");
 
   --_thumbnailAspectRatio: 150 /220;
 
@@ -498,7 +499,7 @@ onBeforeUnmount(() => {
           }
           &.dark {
             color: #000;
-}
+          }
         }
 
         .description {

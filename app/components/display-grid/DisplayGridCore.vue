@@ -11,12 +11,12 @@ const props = defineProps({
     default: {},
   },
   styleClassPassthrough: {
-    type: Array as PropType<string[]>,
+    type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-});
+})
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-const gridData = toRef(() => props.gridData);
+const gridData = toRef(() => props.gridData)
 </script>

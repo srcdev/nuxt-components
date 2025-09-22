@@ -1,5 +1,9 @@
 <template>
-  <div class="masonry-grid-wrapper" :class="[elementClasses]" :style="`--_masonry-grid-gap: ${gap}${unit}; --_item-min-width: ${itemMinWidth}px`">
+  <div
+    class="masonry-grid-wrapper"
+    :class="[elementClasses]"
+    :style="`--_masonry-grid-gap: ${gap}${unit}; --_item-min-width: ${itemMinWidth}px`"
+  >
     <template v-for="item in gridData" :key="item.id">
       <div class="masonry-grid-item">
         <slot :name="item.id"></slot>
@@ -24,24 +28,24 @@ const props = defineProps({
   },
   unit: {
     type: String,
-    default: 'rem',
+    default: "rem",
   },
   styleClassPassthrough: {
-    type: Array as PropType<string[]>,
+    type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-});
+})
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-const gridData = toRef(() => props.gridData);
+const gridData = toRef(() => props.gridData)
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough);
+    resetElementClasses(props.styleClassPassthrough)
   }
-);
+)
 </script>
 
 <style lang="css">

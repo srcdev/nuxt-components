@@ -1,5 +1,10 @@
 <template>
-  <div class="masonry-grid-wrapper" :class="[elementClasses]" :style="`--_masonry-grid-gap: ${gap}${unit}; --_item-min-width: ${itemMinWidth}px`" ref="gridWrapper">
+  <div
+    class="masonry-grid-wrapper"
+    :class="[elementClasses]"
+    :style="`--_masonry-grid-gap: ${gap}${unit}; --_item-min-width: ${itemMinWidth}px`"
+    ref="gridWrapper"
+  >
     <template v-for="item in rearrangedItems" :key="item.id">
       <div class="masonry-grid-item">
         <slot :name="item.id"></slot>
@@ -9,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver } from '@vueuse/core';
+import { useResizeObserver } from "@vueuse/core"
 
 const props = defineProps({
   gridData: {
@@ -26,46 +31,46 @@ const props = defineProps({
   },
   unit: {
     type: String,
-    default: 'rem',
+    default: "rem",
   },
   styleClassPassthrough: {
-    type: Array as PropType<string[]>,
+    type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-});
+})
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-const gridData = toRef(() => props.gridData);
+const gridData = toRef(() => props.gridData)
 
-const gridWrapper = ref<HTMLDivElement>();
+const gridWrapper = ref<HTMLDivElement>()
 
 const getColumnCountWithinGridWrapper = () => {
-  return gridWrapper.value ? Math.floor(gridWrapper.value.clientWidth / props.itemMinWidth) : 0;
-};
+  return gridWrapper.value ? Math.floor(gridWrapper.value.clientWidth / props.itemMinWidth) : 0
+}
 
 // const columns = ref(4);
 const columns = computed(() => {
-  return gridWrapper.value ? Math.floor(gridWrapper.value.clientWidth / props.itemMinWidth) : 0;
-});
+  return gridWrapper.value ? Math.floor(gridWrapper.value.clientWidth / props.itemMinWidth) : 0
+})
 
 const rearrangeArray = (items: any[], columns: number): any[] => {
-  const rows = Math.ceil(items.length / columns);
-  const rearrangedArray = [];
+  const rows = Math.ceil(items.length / columns)
+  const rearrangedArray = []
 
   for (let col = 0; col < columns; col++) {
     for (let row = 0; row < rows; row++) {
-      const index = row * columns + col;
+      const index = row * columns + col
       if (index < items.length) {
-        rearrangedArray.push(items[index]);
+        rearrangedArray.push(items[index])
       }
     }
   }
 
-  return rearrangedArray;
-};
+  return rearrangedArray
+}
 
-const rearrangedItems = computed(() => rearrangeArray(props.gridData, columns.value));
+const rearrangedItems = computed(() => rearrangeArray(props.gridData, columns.value))
 // const rearrangedItems = computed(() => {
 //   const rows = Math.ceil(props.gridData.length / columns.value);
 //   const rearrangedArray = [];
@@ -85,9 +90,9 @@ const rearrangedItems = computed(() => rearrangeArray(props.gridData, columns.va
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough);
+    resetElementClasses(props.styleClassPassthrough)
   }
-);
+)
 
 // onMounted(() => {
 //   console.log(getColumnCountWithinGridWrapper());
