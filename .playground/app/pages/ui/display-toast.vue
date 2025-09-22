@@ -3,7 +3,10 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20', 'p-20']">
-          <h2 class="page-heading-2">DisplayToast</h2>
+          <h2 class="page-heading-2">DisplayToast Component</h2>
+          <HeaderBlock :tag-level="3" :class-level="3" :style-class-passthrough="['mbe-10']">
+            Toast notification component
+          </HeaderBlock>
           <p class="page-body-normal">Trigger default toast with manual dismiss</p>
           <p>
             <button @click.prevent="triggerFirstToast()" class="button primary mbe-10">
@@ -121,6 +124,8 @@
 </template>
 
 <script setup lang="ts">
+import HeaderBlock from "../../../../app/components/typography/HeaderBlock.vue"
+
 definePageMeta({
   layout: false,
 })
