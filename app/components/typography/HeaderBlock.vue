@@ -22,7 +22,7 @@ const classLevel = computed(() => {
 })
 
 const tag = computed(() => `h${tagLevel.value}`)
-const classLevelClass = computed(() => `page-header-${classLevel.value}`)
+const classLevelClass = computed(() => `page-heading-${classLevel.value}`)
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough ?? [])
 
