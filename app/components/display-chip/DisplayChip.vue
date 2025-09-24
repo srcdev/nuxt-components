@@ -141,14 +141,20 @@ const chipStyles = computed(() => ({
     }
   }
 
-  &.online&::after {
-    background-color: var(--color-online);
+  &.online {
+    &::after {
+      background-color: var(--color-online);
+    }
   }
-  &.idle&::after {
-    background-color: var(--color-idle);
+  &.idle {
+    &::after {
+      background-color: var(--color-idle);
+    }
   }
-  &.dnd&::after {
-    background-color: var(--color-dnd);
+  &.dnd {
+    &::after {
+      background-color: var(--color-dnd);
+    }
   }
 
   .chip-label {
