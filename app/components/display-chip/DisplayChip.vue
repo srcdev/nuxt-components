@@ -59,25 +59,9 @@ const chipStyles = computed(() => ({
   "--status-offset": chipConfig.value.offset,
   "--status-angle": chipConfig.value.angle,
 }))
-
-watch(
-  () => props.styleClassPassthrough,
-  () => {
-    resetElementClasses(props.styleClassPassthrough)
-  }
-)
 </script>
 
 <style lang="css">
-:root {
-  /* demo vars for controlling */
-
-  --status-size: 12px; /* size of the status */
-  --status-gap: 4px; /* size of the gap around the status */
-  --status-offset: 0px; /* how far from the circumference to offset the status */
-  --status-angle: 90deg; /* where on the edge we want the status */
-}
-
 .display-chip-core {
   &.circle {
     --d: calc(var(--status-size) + (var(--status-gap) * 2)); /* diameter of the mask */

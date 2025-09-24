@@ -9,19 +9,19 @@
             <div class="form-row">
               <div class="form-col">
                 <label for="size">Size - {{ chipConfig.size }}</label>
-                <input @change="changeSize" id="size" type="range" min="1" max="24" />
+                <input @input="changeSize" id="size" type="range" min="1" max="24" />
               </div>
               <div class="form-col">
                 <label for="gap">Gap - {{ chipConfig.gap }}</label>
-                <input @change="changeGap" id="gap" type="range" min="0" max="12" />
+                <input @input="changeGap" id="gap" type="range" min="0" max="12" />
               </div>
               <div class="form-col">
                 <label for="offset">Offset - {{ chipConfig.offset }}</label>
-                <input @change="changeOffset" id="offset" type="range" min="-12" max="12" />
+                <input @input="changeOffset" id="offset" type="range" min="-12" max="12" />
               </div>
               <div class="form-col">
                 <label for="angle">Angle - {{ chipConfig.angle }}</label>
-                <input @change="changeAngle" id="angle" type="range" min="0" max="360" />
+                <input @input="changeAngle" id="angle" type="range" min="0" max="360" />
               </div>
             </div>
           </form>
@@ -92,14 +92,6 @@ const changeAngle = (e: Event) => {
   const target = e.target as HTMLInputElement
   chipConfig.angle = `${target.value}deg`
 }
-
-watch(
-  () => ({ ...chipConfig }),
-  (newConfig) => {
-    console.log("chipConfig updated:", newConfig)
-  },
-  { deep: true }
-)
 </script>
 
 <style lang="css">
