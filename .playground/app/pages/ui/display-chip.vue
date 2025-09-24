@@ -5,11 +5,32 @@
         <LayoutRow tag="div" variant="popout">
           <h1 class="page-heading-2">Display Chip</h1>
 
+          <form>
+            <div class="form-row">
+              <div class="form-col">
+                <label for="size">Size - {{ chipConfig.size }}</label>
+                <input @change="changeSize" id="size" type="range" min="0" max="100" />
+              </div>
+              <div class="form-col">
+                <label for="gap">Gap - {{ chipConfig.gap }}</label>
+                <input @change="changeGap" id="gap" type="range" min="0" max="100" />
+              </div>
+              <div class="form-col">
+                <label for="offset">Offset - {{ chipConfig.offset }}</label>
+                <input @change="changeOffset" id="offset" type="range" min="0" max="100" />
+              </div>
+              <div class="form-col">
+                <label for="angle">Angle - {{ chipConfig.angle }}</label>
+                <input @change="changeAngle" id="angle" type="range" min="0" max="360" />
+              </div>
+            </div>
+          </form>
+
           <section>
             <div class="dl">
               <div class="dt">Round</div>
               <div class="dd">
-                <DisplayChip shape="circle" :style-class-passthrough="['online']">
+                <DisplayChip shape="circle" v-model="chipConfig" :style-class-passthrough="['online']">
                   <div class="chip-content round">
                     <Icon name="akar-icons:info" size="24" color="white" />
                   </div>
@@ -18,7 +39,7 @@
 
               <div class="dt">Square</div>
               <div class="dd">
-                <DisplayChip shape="square" :style-class-passthrough="['idle']">
+                <DisplayChip shape="square" v-model="chipConfig" :style-class-passthrough="['idle']">
                   <div class="chip-content square">
                     <Icon name="akar-icons:info" size="24" color="white" />
                   </div>
@@ -44,10 +65,67 @@ useHead({
     class: "ui-display-chip-page",
   },
 })
+
+const chipConfig = reactive({
+  size: "12px",
+  gap: "4px",
+  offset: "0px",
+  angle: "90deg",
+})
+
+const changeSize = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  chipConfig.size = `${target.value}px`
+}
+
+const changeGap = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  chipConfig.gap = `${target.value}px`
+}
+
+const changeOffset = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  chipConfig.offset = `${target.value}px`
+}
+
+const changeAngle = (e: Event) => {
+  const target = e.target as HTMLInputElement
+  chipConfig.angle = `${target.value}deg`
+}
+
+watch(
+  () => chipConfig,
+  () => {
+    console.log(chipConfig)
+  }
+)
 </script>
 
 <style lang="css">
 .ui-display-chip-page {
+  form {
+    margin-bottom: 2rem;
+
+    .form-row {
+      .form-col {
+        display: grid;
+        grid-template-columns: 200px 200px;
+        gap: 1rem;
+        padding: 0.5rem 0;
+
+        label {
+          font-weight: bold;
+        }
+
+        input {
+          padding: 0.5rem;
+          border: 1px solid var(--gray-7);
+          border-radius: 4px;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
   section {
     margin-top: 2rem;
 
