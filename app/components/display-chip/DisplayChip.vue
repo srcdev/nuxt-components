@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="display-chip-core" :class="[shape, elementClasses]" :style="chipStyles" ref="chip">
+  <component :is="tag" class="display-chip-core" :class="[shape, elementClasses]" :style="chipStyles">
     <slot></slot>
   </component>
 </template>
@@ -14,10 +14,10 @@ const props = defineProps({
     },
   },
   shape: {
-    type: String as PropType<"circle" | "square" | "rounded">,
+    type: String as PropType<"circle" | "square">,
     default: "circle",
     validator(value: string) {
-      return ["circle", "square", "rounded"].includes(value)
+      return ["circle", "square"].includes(value)
     },
   },
   styleClassPassthrough: {
@@ -25,9 +25,6 @@ const props = defineProps({
     default: () => [],
   },
 })
-
-const slots = useSlots()
-const chipRef = useTemplateRef("chip")
 
 const chipConfig = defineModel<{
   size: string
