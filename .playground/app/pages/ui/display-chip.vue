@@ -9,15 +9,15 @@
             <div class="form-row">
               <div class="form-col">
                 <label for="size">Size - {{ chipConfig.size }}</label>
-                <input @change="changeSize" id="size" type="range" min="0" max="100" />
+                <input @change="changeSize" id="size" type="range" min="1" max="24" />
               </div>
               <div class="form-col">
                 <label for="gap">Gap - {{ chipConfig.gap }}</label>
-                <input @change="changeGap" id="gap" type="range" min="0" max="100" />
+                <input @change="changeGap" id="gap" type="range" min="0" max="12" />
               </div>
               <div class="form-col">
                 <label for="offset">Offset - {{ chipConfig.offset }}</label>
-                <input @change="changeOffset" id="offset" type="range" min="0" max="100" />
+                <input @change="changeOffset" id="offset" type="range" min="-12" max="12" />
               </div>
               <div class="form-col">
                 <label for="angle">Angle - {{ chipConfig.angle }}</label>
@@ -69,8 +69,8 @@ useHead({
 const chipConfig = reactive({
   size: "12px",
   gap: "4px",
-  offset: "0px",
-  angle: "90deg",
+  offset: "2px",
+  angle: "45deg",
 })
 
 const changeSize = (e: Event) => {
@@ -94,10 +94,11 @@ const changeAngle = (e: Event) => {
 }
 
 watch(
-  () => chipConfig,
-  () => {
-    console.log(chipConfig)
-  }
+  () => ({ ...chipConfig }),
+  (newConfig) => {
+    console.log("chipConfig updated:", newConfig)
+  },
+  { deep: true }
 )
 </script>
 

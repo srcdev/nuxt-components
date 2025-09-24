@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="display-chip-core" :class="[shape, elementClasses]" ref="chip">
+  <component :is="tag" class="display-chip-core" :class="[shape, elementClasses]" :style="chipStyles" ref="chip">
     <slot></slot>
   </component>
 </template>
@@ -52,19 +52,18 @@ const chipConfig = defineModel<{
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-console.log(chipConfig)
+// Compute the CSS custom properties based on chipConfig
+const chipStyles = computed(() => ({
+  "--status-size": chipConfig.value.size,
+  "--status-gap": chipConfig.value.gap,
+  "--status-offset": chipConfig.value.offset,
+  "--status-angle": chipConfig.value.angle,
+}))
 
 watch(
   () => props.styleClassPassthrough,
   () => {
     resetElementClasses(props.styleClassPassthrough)
-  }
-)
-
-watch(
-  () => chipConfig,
-  () => {
-    console.log(chipConfig)
   }
 )
 </script>
