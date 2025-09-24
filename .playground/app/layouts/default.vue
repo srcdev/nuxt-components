@@ -77,6 +77,7 @@ const responsiveNavLinks = {
         { name: "Prompts", path: "/ui/display-prompt" },
         { name: "Rotating Carousel", path: "/ui/rotating-carousel" },
         { name: "Clipped Panels", path: "/ui/clipped-panels" },
+        { name: "Display Chip", path: "/ui/display-chip" },
       ],
     },
     {
