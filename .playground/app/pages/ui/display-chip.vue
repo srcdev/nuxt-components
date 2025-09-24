@@ -9,19 +9,19 @@
             <div class="form-row">
               <div class="form-col">
                 <label for="size">Size - {{ chipConfig.size }}</label>
-                <input @input="changeSize" id="size" type="range" min="1" max="24" />
+                <input @input="changeSize" id="size" type="range" min="1" max="24" :value="12" />
               </div>
               <div class="form-col">
                 <label for="gap">Gap - {{ chipConfig.gap }}</label>
-                <input @input="changeGap" id="gap" type="range" min="0" max="12" />
+                <input @input="changeGap" id="gap" type="range" min="0" max="12" :value="4" />
               </div>
               <div class="form-col">
                 <label for="offset">Offset - {{ chipConfig.offset }}</label>
-                <input @input="changeOffset" id="offset" type="range" min="-12" max="12" />
+                <input @input="changeOffset" id="offset" type="range" min="-12" max="12" :value="2" />
               </div>
               <div class="form-col">
                 <label for="angle">Angle - {{ chipConfig.angle }}</label>
-                <input @input="changeAngle" id="angle" type="range" min="0" max="360" />
+                <input @input="changeAngle" id="angle" type="range" min="0" max="360" :value="45" />
               </div>
             </div>
           </form>
