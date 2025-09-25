@@ -2,21 +2,21 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout">
+        <LayoutRow tag="div" variant="popout" style-class-passthrough="['pb-12']">
           <h1 class="page-heading-2">Display Prompts</h1>
 
-          <section class="prompt-examples">
+          <section class="prompt-examples pb-12">
             <DisplayPromptCore
               theme="success"
               :dismissible="true"
               :use-local-style-overrides="true"
-              :style-class-passthrough="['your-scope-class']"
+              :style-class-passthrough="['your-scope-class', 'outlined', 'dark']"
             >
               <template #customDecoratorIcon>
                 <Icon name="akar-icons:info" class="icon" />
               </template>
               <template #title>Success Prompt Title with content (Dismissable)</template>
-              <template #layout-content>This is prompt content, it can contain html or plain text.</template>
+              <template #content>This is prompt content, it can contain html or plain text.</template>
               <template #customCloseIcon>
                 <Icon name="material-symbols:close-small" class="icon" />
               </template>
@@ -28,7 +28,7 @@
                 <Icon name="akar-icons:info" class="icon" />
               </template>
               <template #title>Secondary Prompt Title with content (Dismissable)</template>
-              <template #layout-content>This is prompt content, it can contain html or plain text.</template>
+              <template #content>This is prompt content, it can contain html or plain text.</template>
             </DisplayPromptCore>
 
             <DisplayPromptCore theme="info" :dismissible="true" :style-class-passthrough="['your-scope-class']">
@@ -36,7 +36,7 @@
                 <Icon name="akar-icons:info" class="icon" />
               </template>
               <template #title>Info Prompt Title with content (Dismissable)</template>
-              <template #layout-content>This is prompt content, it can contain html or plain text.</template>
+              <template #content>This is prompt content, it can contain html or plain text.</template>
             </DisplayPromptCore>
 
             <DisplayPromptCore theme="error" :dismissible="true" :style-class-passthrough="['your-scope-class']">
@@ -44,7 +44,7 @@
                 <Icon name="akar-icons:circle-alert" class="icon" />
               </template>
               <template #title>Error Prompt Title with content (Dismissable)</template>
-              <template #layout-content>This is prompt content, it can contain html or plain text.</template>
+              <template #content>This is prompt content, it can contain html or plain text.</template>
             </DisplayPromptCore>
 
             <DisplayPromptCore theme="warning" :dismissible="true" :style-class-passthrough="['your-scope-class']">
@@ -52,7 +52,7 @@
                 <Icon name="akar-icons:circle-alert" class="icon" />
               </template>
               <template #title>Warning Prompt Title with content (Dismissable)</template>
-              <template #layout-content>This is prompt content, it can contain html or plain text.</template>
+              <template #content>This is prompt content, it can contain html or plain text.</template>
             </DisplayPromptCore>
           </section>
         </LayoutRow>

@@ -28,70 +28,50 @@ const props = defineProps({
 
 const chipConfig = defineModel<{
   size: string
-  gap: string
+  maskWidth: string
   offset: string
   angle: string
 }>({
   type: Object as PropType<{
     size: string
-    gap: string
+    maskWidth: string
     offset: string
     angle: string
   }>,
   default: () => ({
     size: "12px",
-    gap: "4px",
+    maskWidth: "4px",
     offset: "0px",
     angle: "90deg",
   }),
   required: false,
 })
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-// Compute the CSS custom properties based on chipConfig
 const chipStyles = computed(() => ({
-  "--status-size": chipConfig.value.size,
-  "--status-gap": chipConfig.value.gap,
-  "--status-offset": chipConfig.value.offset,
-  "--status-angle": chipConfig.value.angle,
+  "--chip-size": chipConfig.value.size,
+  "--chip-mask-width": chipConfig.value.maskWidth,
+  "--chip-offset": chipConfig.value.offset,
+  "--chip-angle": chipConfig.value.angle,
 }))
 </script>
 
 <style lang="css">
 .display-chip-core {
+  --computed-mask-diameter: calc(var(--chip-size) + (var(--chip-mask-width) * 2));
+
   &.circle {
-    --d: calc(var(--status-size) + (var(--status-gap) * 2)); /* diameter of the mask */
-    --r: calc((100% / 2) + var(--status-offset)); /* distance from edge of avatar */
-    --x: calc(var(--r) * cos(var(--status-angle) - 90deg) + (100% / 2)); /* x coord of status/mask */
-    --y: calc(var(--r) * sin(var(--status-angle) - 90deg) + (100% / 2)); /* y coord of status/mask */
+    --computed-chip-offset: calc((100% / 2) + var(--chip-offset));
+    --computed-position-x: calc(var(--computed-chip-offset) * cos(var(--chip-angle) - 90deg) + (100% / 2));
+    --computed-position-y: calc(var(--computed-chip-offset) * sin(var(--chip-angle) - 90deg) + (100% / 2));
   }
 
   &.square {
-    /*
-    --normalized-angle: calc(var(--status-angle) - 90deg);
-    --abs-tan: abs(tan(var(--normalized-angle)));
-    --half-size: 50%;
-
-    --edge-distance: min(var(--half-size), var(--half-size) / var(--abs-tan));
-    --base-x: calc(var(--half-size) + var(--edge-distance) * cos(var(--normalized-angle)));
-    --base-y: calc(var(--half-size) + var(--edge-distance) * sin(var(--normalized-angle)));
-
-    --x: calc(var(--base-x) + var(--status-offset) * cos(var(--normalized-angle)));
-    --y: calc(var(--base-y) + var(--status-offset) * sin(var(--normalized-angle)));
-
-    --d: calc(var(--status-size) + (var(--status-gap) * 2));
-    */
-
-    /* Simple square positioning - clamp the circular calculation to square bounds */
-    --circle-x: calc(50% + (50% + var(--status-offset) + (var(--status-size) / 2)) * cos(var(--status-angle) - 90deg));
-    --circle-y: calc(50% + (50% + var(--status-offset) + (var(--status-size) / 2)) * sin(var(--status-angle) - 90deg));
-
-    /* Clamp to square bounds (0% to 100% with some padding) */
-    --x: clamp(calc(var(--status-offset) * -1), var(--circle-x), calc(100% + var(--status-offset)));
-    --y: clamp(calc(var(--status-offset) * -1), var(--circle-y), calc(100% + var(--status-offset)));
-
-    --d: calc(var(--status-size) + (var(--status-gap) * 2)); /* diameter of the mask (same as circle) */
+    --circle-x: calc(50% + (50% + var(--chip-offset) + (var(--chip-size) / 2)) * cos(var(--chip-angle) - 90deg));
+    --circle-y: calc(50% + (50% + var(--chip-offset) + (var(--chip-size) / 2)) * sin(var(--chip-angle) - 90deg));
+    --computed-position-x: clamp(calc(var(--chip-offset) * -1), var(--circle-x), calc(100% + var(--chip-offset)));
+    --computed-position-y: clamp(calc(var(--chip-offset) * -1), var(--circle-y), calc(100% + var(--chip-offset)));
   }
 
   /* colors */
@@ -109,7 +89,7 @@ const chipStyles = computed(() => ({
     aspect-ratio: 1;
     background: var(--color-offline);
     position: absolute;
-    width: var(--status-size);
+    width: var(--chip-size);
     border-radius: 100%;
   }
 
@@ -121,7 +101,8 @@ const chipStyles = computed(() => ({
     */
 
     mask-image: radial-gradient(
-      var(--d) var(--d) at var(--x) var(--y),
+      var(--computed-mask-diameter) var(--computed-mask-diameter) at var(--computed-position-x)
+        var(--computed-position-y),
       transparent calc(50% - 0.5px),
       black calc(50% + 0.5px)
     );
@@ -129,15 +110,15 @@ const chipStyles = computed(() => ({
 
   &.circle {
     &::after {
-      top: calc(var(--y) - (var(--status-size) / 2));
-      left: calc(var(--x) - (var(--status-size) / 2));
+      top: calc(var(--computed-position-y) - (var(--chip-size) / 2));
+      left: calc(var(--computed-position-x) - (var(--chip-size) / 2));
     }
   }
 
   &.square {
     &::after {
-      top: calc(var(--y) - (var(--status-size) / 2));
-      left: calc(var(--x) - (var(--status-size) / 2));
+      top: calc(var(--computed-position-y) - (var(--chip-size) / 2));
+      left: calc(var(--computed-position-x) - (var(--chip-size) / 2));
     }
   }
 

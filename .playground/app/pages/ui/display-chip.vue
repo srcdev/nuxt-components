@@ -12,8 +12,8 @@
                 <input @input="changeSize" id="size" type="range" min="1" max="24" :value="12" />
               </div>
               <div class="form-col">
-                <label for="gap">Gap - {{ chipConfig.gap }}</label>
-                <input @input="changeGap" id="gap" type="range" min="0" max="12" :value="4" />
+                <label for="maskWidth">Mask Width - {{ chipConfig.maskWidth }}</label>
+                <input @input="changeMaskWidth" id="maskWidth" type="range" min="0" max="12" :value="4" />
               </div>
               <div class="form-col">
                 <label for="offset">Offset - {{ chipConfig.offset }}</label>
@@ -68,7 +68,7 @@ useHead({
 
 const chipConfig = reactive({
   size: "12px",
-  gap: "4px",
+  maskWidth: "4px",
   offset: "2px",
   angle: "45deg",
 })
@@ -78,9 +78,9 @@ const changeSize = (e: Event) => {
   chipConfig.size = `${target.value}px`
 }
 
-const changeGap = (e: Event) => {
+const changeMaskWidth = (e: Event) => {
   const target = e.target as HTMLInputElement
-  chipConfig.gap = `${target.value}px`
+  chipConfig.maskWidth = `${target.value}px`
 }
 
 const changeOffset = (e: Event) => {

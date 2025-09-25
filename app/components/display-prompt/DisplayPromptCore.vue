@@ -102,15 +102,32 @@ const updateComponentState = () => {
   }
 
   .display-prompt-wrapper {
-    background-color: var(--colour-theme-0);
-    border: 1px solid var(--colour-theme-8);
+    background-color: var(--colour-theme-8);
+    border: 0px solid transparent;
     border-radius: 4px;
-
-    border-inline-start: 8px solid var(--colour-theme-8);
     border-start-start-radius: 8px;
     border-end-start-radius: 8px;
+    padding-inline-start: 8px;
 
     overflow: hidden;
+
+    &:not(.dark) {
+      &.outlined {
+        border: 1px solid var(--colour-theme-8);
+      }
+    }
+
+    &.dark {
+      border-width: 0;
+
+      .display-prompt-inner {
+        background-color: var(--gray-12);
+      }
+
+      &.outlined {
+        border: 1px solid var(--colour-theme-8);
+      }
+    }
 
     .display-prompt-inner {
       align-items: center;
@@ -119,6 +136,10 @@ const updateComponentState = () => {
       justify-content: space-between;
       padding-block: 1rem;
       padding-inline: 1.5rem;
+
+      border-start-start-radius: 8px;
+      border-end-start-radius: 8px;
+      background-color: var(--colour-theme-10);
 
       .display-prompt-icon {
         display: inline-flex;
