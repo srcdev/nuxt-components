@@ -47,7 +47,7 @@ const props = defineProps({
     type: String,
     default: "error",
     validator(value: string) {
-      return ["primary", "secondary", "tertiary", "ghost", "error", "info", "success", "warning"].includes(value)
+      return ["success", "secondary", "info", "error", "warning"].includes(value)
     },
   },
   styleClassPassthrough: {
