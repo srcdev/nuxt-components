@@ -46,9 +46,6 @@ const props = defineProps({
   theme: {
     type: String,
     default: "error",
-    validator(value: string) {
-      return ["success", "secondary", "info", "error", "warning"].includes(value)
-    },
   },
   styleClassPassthrough: {
     type: [String, Array] as PropType<string | string[]>,
@@ -57,9 +54,6 @@ const props = defineProps({
   iconColor: {
     type: String as PropType<string>,
     default: "dark-grey",
-    validator(value: string) {
-      return ["dark-grey", "white"].includes(value)
-    },
   },
   displayPromptIcons: {
     type: Object as PropType<Record<string, string>>,
