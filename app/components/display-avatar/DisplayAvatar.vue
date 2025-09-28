@@ -5,7 +5,7 @@
     v-bind="props.chip ? (typeof props.chip === 'object' ? { config: props.chip } : { config: chipDefaultConfig }) : {}"
     class="display-avatar"
     :class="[size, elementClasses]"
-    :style-class-passthrough="[elementClasses]"
+    :style-class-passthrough="elementClasses"
   >
     <slot name="default">
       <NuxtImg v-if="src" :src :alt="alt || 'Avatar'" width="100%" height="100%" class="avatar-image" />
