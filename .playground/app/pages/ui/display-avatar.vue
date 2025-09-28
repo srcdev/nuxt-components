@@ -39,7 +39,11 @@
             <div class="dl">
               <div class="dt">Has Avatar image</div>
               <div class="dd">
-                <DisplayAvatar src="https://github.com/benjamincanac.png" :style-class-passthrough="['online']" />
+                <DisplayAvatar
+                  src="https://github.com/benjamincanac.png"
+                  alt="Joe Bloggs"
+                  :style-class-passthrough="['online']"
+                />
               </div>
             </div>
           </section>
@@ -50,6 +54,7 @@
               <div class="dd">
                 <DisplayAvatar
                   src="https://github.com/benjamincanac.png"
+                  alt="Joe Bloggs"
                   :chip="chipConfig"
                   :style-class-passthrough="['online']"
                 />

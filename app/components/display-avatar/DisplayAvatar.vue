@@ -2,12 +2,13 @@
   <component
     :is="props.chip ? DisplayChip : as"
     tag="div"
-    v-bind="props.chip ? (typeof props.chip === 'object' ? { inset: true, ...props.chip } : { inset: true }) : {}"
+    v-bind="props.chip ? (typeof props.chip === 'object' ? { config: props.chip } : { config: chipDefaultConfig }) : {}"
     class="display-avatar"
     :class="[size, elementClasses]"
+    :style-class-passthrough="[elementClasses]"
   >
     <slot name="default">
-      <NuxtImg v-if="src" :src="src" :alt="alt || 'Avatar'" width="100%" height="100%" class="avatar-image" />
+      <NuxtImg v-if="src" :src :alt="alt || 'Avatar'" width="100%" height="100%" class="avatar-image" />
       <span v-else>{{ fallback }}</span>
     </slot>
     <slot name="icon"></slot>
@@ -15,13 +16,9 @@
 </template>
 
 <script lang="ts">
-import DisplayChip from "~/pages/ui/display-chip.vue"
+import DisplayChip from "../display-chip/DisplayChip.vue"
 import type { DisplayChipProps, DisplayChipConfig } from "../../types"
 export interface AvatarProps {
-  /**
-   * The element or component this component should render as.
-   * @defaultValue 'span'
-   */
   as?: any
   src?: string
   alt?: string
@@ -47,7 +44,13 @@ const props = withDefaults(defineProps<AvatarProps>(), {
 })
 defineSlots<AvatarSlots>()
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, resetElementClasses, updateElementClasses } = useStyleClassPassthrough(
+  props.styleClassPassthrough
+)
+
+if (props.chip && typeof props.chip === "object" && !("styleClassPassthrough" in props.chip)) {
+  updateElementClasses(["display-avatar", props.size])
+}
 
 const fallback = computed(
   () =>
@@ -59,7 +62,7 @@ const fallback = computed(
       .substring(0, 2)
 )
 
-const chipConfig = defineModel<DisplayChipConfig>({
+const chipDefaultConfig = defineModel<DisplayChipConfig>({
   type: Object as PropType<{
     size: string
     maskWidth: string
@@ -84,14 +87,15 @@ watch(
 </script>
 
 <style lang="css">
-span.display-avatar {
+.display-avatar {
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
   color: var(--gray-3);
   border: 1px solid light-dark(var(--gray-7), var(--gray-3));
-  overflow: hidden;
+
+  isolation: isolate;
 
   &.xs {
     width: 24px;
