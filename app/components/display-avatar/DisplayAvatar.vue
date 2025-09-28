@@ -62,21 +62,12 @@ const fallback = computed(
       .substring(0, 2)
 )
 
-const chipDefaultConfig = defineModel<DisplayChipConfig>({
-  type: Object as PropType<{
-    size: string
-    maskWidth: string
-    offset: string
-    angle: string
-  }>,
-  default: () => ({
-    size: "12px",
-    maskWidth: "4px",
-    offset: "0px",
-    angle: "90deg",
-  }),
-  required: false,
-})
+const chipDefaultConfig = {
+  size: "12px",
+  maskWidth: "4px",
+  offset: "0px",
+  angle: "90deg",
+}
 
 watch(
   () => props.styleClassPassthrough,
