@@ -30,7 +30,7 @@
             <div class="dl">
               <div class="dt">Round</div>
               <div class="dd">
-                <DisplayChip shape="circle" v-model="chipConfig" :style-class-passthrough="['online']">
+                <DisplayChip shape="circle" :config="chipConfig" :style-class-passthrough="['online']">
                   <div class="chip-content round">
                     <Icon name="akar-icons:info" size="24" color="white" />
                   </div>
@@ -39,7 +39,7 @@
 
               <div class="dt">Square</div>
               <div class="dd">
-                <DisplayChip shape="square" v-model="chipConfig" :style-class-passthrough="['idle']">
+                <DisplayChip shape="square" :config="chipConfig" :style-class-passthrough="['idle']">
                   <div class="chip-content square">
                     <Icon name="akar-icons:info" size="24" color="white" />
                   </div>

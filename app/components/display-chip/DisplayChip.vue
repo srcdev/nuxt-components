@@ -15,6 +15,7 @@ export interface DisplayChipConfig {
 export interface DisplayChipProps {
   tag?: "div" | "span"
   shape?: "circle" | "square"
+  config?: DisplayChipConfig
   styleClassPassthrough?: string | string[]
 }
 
@@ -28,33 +29,39 @@ export interface ChipSlots {
 const props = withDefaults(defineProps<DisplayChipProps>(), {
   tag: "div",
   shape: "circle",
-  styleClassPassthrough: () => [],
-})
-defineSlots<ChipSlots>()
-
-const chipConfig = defineModel<DisplayChipConfig>({
-  type: Object as PropType<{
-    size: string
-    maskWidth: string
-    offset: string
-    angle: string
-  }>,
-  default: () => ({
+  config: () => ({
     size: "12px",
     maskWidth: "4px",
     offset: "0px",
     angle: "90deg",
   }),
-  required: false,
+  styleClassPassthrough: () => [],
 })
+defineSlots<ChipSlots>()
+
+// const chipConfig = defineModel<DisplayChipConfig>({
+//   type: Object as PropType<{
+//     size: string
+//     maskWidth: string
+//     offset: string
+//     angle: string
+//   }>,
+//   default: () => ({
+//     size: "12px",
+//     maskWidth: "4px",
+//     offset: "0px",
+//     angle: "90deg",
+//   }),
+//   required: false,
+// })
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 const chipStyles = computed(() => ({
-  "--chip-size": chipConfig.value.size,
-  "--chip-mask-width": chipConfig.value.maskWidth,
-  "--chip-offset": chipConfig.value.offset,
-  "--chip-angle": chipConfig.value.angle,
+  "--chip-size": props.config?.size,
+  "--chip-mask-width": props.config?.maskWidth,
+  "--chip-offset": props.config?.offset,
+  "--chip-angle": props.config?.angle,
 }))
 </script>
 
