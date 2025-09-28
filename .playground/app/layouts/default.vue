@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderProp } from "../types/responsiveHeader"
+import type { ResponsiveHeaderProp } from "../types"
 
 const responsiveNavLinks = {
   firstNav: [
@@ -78,6 +78,7 @@ const responsiveNavLinks = {
         { name: "Rotating Carousel", path: "/ui/rotating-carousel" },
         { name: "Clipped Panels", path: "/ui/clipped-panels" },
         { name: "Display Chip", path: "/ui/display-chip" },
+        { name: "Display Avatar", path: "/ui/display-avatar" },
       ],
     },
     {

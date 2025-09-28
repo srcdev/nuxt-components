@@ -65,6 +65,28 @@
   </section>
 </template>
 
+<script lang="ts">
+export interface CarouselBasicItem {
+  id: number | string
+  url: string
+  alt: string
+}
+
+export interface CarouselModifiedItem {
+  id: number | string
+  url: string
+  alt: string
+  order: number
+}
+
+export interface ICarouselBasic {
+  items: CarouselBasicItem[] | CarouselModifiedItem[]
+  total: number
+  skip: number
+  limit: number
+}
+</script>
+
 <script setup lang="ts">
 import { useEventListener, useResizeObserver, useSwipe } from "@vueuse/core"
 

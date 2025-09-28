@@ -4,34 +4,35 @@
   </component>
 </template>
 
-<script setup lang="ts">
-const props = defineProps({
-  tag: {
-    type: String,
-    default: "span",
-    validator(value: string) {
-      return ["div", "span"].includes(value)
-    },
-  },
-  shape: {
-    type: String as PropType<"circle" | "square">,
-    default: "circle",
-    validator(value: string) {
-      return ["circle", "square"].includes(value)
-    },
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-})
-
-const chipConfig = defineModel<{
+<script lang="ts">
+export interface DisplayChipConfig {
   size: string
   maskWidth: string
   offset: string
   angle: string
-}>({
+}
+
+export interface DisplayChipProps {
+  tag?: "div" | "span"
+  shape?: "circle" | "square"
+  styleClassPassthrough?: string | string[]
+}
+
+export interface ChipSlots {
+  default(props?: {}): any
+  content(props?: {}): any
+}
+</script>
+
+<script setup lang="ts">
+const props = withDefaults(defineProps<DisplayChipProps>(), {
+  tag: "div",
+  shape: "circle",
+  styleClassPassthrough: () => [],
+})
+defineSlots<ChipSlots>()
+
+const chipConfig = defineModel<DisplayChipConfig>({
   type: Object as PropType<{
     size: string
     maskWidth: string

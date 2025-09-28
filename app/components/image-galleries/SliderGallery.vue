@@ -53,9 +53,23 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { type IGalleryData } from "@/types/gallery-data"
+<script lang="ts">
+export interface IGalleryData {
+  src: string
+  alt: string
+  stylist?: string
+  title?: string
+  category?: string
+  description?: string
+  thumbnail?: {
+    title: string
+    description: string
+  }
+  textBrightness: "light" | "dark"
+}
+</script>
 
+<script setup lang="ts">
 const props = defineProps({
   autoRun: {
     type: Boolean,

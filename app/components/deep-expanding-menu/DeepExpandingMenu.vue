@@ -24,17 +24,8 @@
   </component>
 </template>
 
-<script lang="ts">
-interface ResponsiveHeaderNavItem {
-  name: string
-  path?: string
-  isExternal?: boolean
-  childLinks?: ResponsiveHeaderNavItem[]
-  childLinksTitle?: string
-}
-</script>
-
 <script setup lang="ts">
+import type { ResponsiveHeaderNavItem } from "../../types"
 const props = defineProps({
   tag: {
     type: String,
