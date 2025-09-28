@@ -28,9 +28,45 @@
 
           <section>
             <div class="dl">
+              <div class="dt">Alt tag only</div>
+              <div class="dd">
+                <DisplayAvatar alt="Joe Bloggs" size="s" />
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="dl">
+              <div class="dt">Has Avatar image</div>
+              <div class="dd">
+                <DisplayAvatar
+                  src="https://github.com/benjamincanac.png"
+                  alt="Joe Bloggs"
+                  :style-class-passthrough="['online']"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="dl">
+              <div class="dt">Has Avatar image and Chip</div>
+              <div class="dd">
+                <DisplayAvatar
+                  src="https://github.com/benjamincanac.png"
+                  alt="Joe Bloggs"
+                  :chip="chipConfig"
+                  :style-class-passthrough="['online']"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="dl">
               <div class="dt">Round</div>
               <div class="dd">
-                <DisplayChip shape="circle" v-model="chipConfig" :style-class-passthrough="['online']">
+                <DisplayChip shape="circle" :config="chipConfig" :style-class-passthrough="['online']">
                   <div class="chip-content round">
                     <Icon name="akar-icons:info" size="24" color="white" />
                   </div>
@@ -39,7 +75,7 @@
 
               <div class="dt">Square</div>
               <div class="dd">
-                <DisplayChip shape="square" v-model="chipConfig" :style-class-passthrough="['idle']">
+                <DisplayChip shape="square" :config="chipConfig" :style-class-passthrough="['idle']">
                   <div class="chip-content square">
                     <Icon name="akar-icons:info" size="24" color="white" />
                   </div>
