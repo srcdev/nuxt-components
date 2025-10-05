@@ -67,7 +67,7 @@
               <div class="dt">Round</div>
               <div class="dd">
                 <DisplayChip shape="circle" :config="chipConfig" :style-class-passthrough="['online']">
-                  <div class="chip-content round">
+                  <div class="demo-content round">
                     <Icon name="akar-icons:info" size="24" color="white" />
                   </div>
                 </DisplayChip>
@@ -76,7 +76,7 @@
               <div class="dt">Square</div>
               <div class="dd">
                 <DisplayChip shape="square" :config="chipConfig" :style-class-passthrough="['idle']">
-                  <div class="chip-content square">
+                  <div class="demo-content square">
                     <Icon name="akar-icons:info" size="24" color="white" />
                   </div>
                 </DisplayChip>
@@ -161,9 +161,10 @@ const changeAngle = (e: Event) => {
 
     .dl {
       display: grid;
-      grid-template-columns: auto 1fr;
+      grid-template-columns: auto auto;
       gap: 2rem;
       align-items: center;
+      justify-content: start;
 
       /* background-color: var(--gray-5); */
 
@@ -173,7 +174,7 @@ const changeAngle = (e: Event) => {
       .dd {
         margin: 0;
 
-        .chip-content {
+        .demo-content {
           display: flex;
           align-items: center;
           justify-content: center;

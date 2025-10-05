@@ -1,6 +1,8 @@
 <template>
   <component :is="tag" class="display-chip-core" :class="[shape, elementClasses]" :style="chipStyles">
-    <slot></slot>
+    <slot name="default"></slot>
+    <Icon v-if="icon" :name="icon" class="chip-icon" />
+    <span v-if="label" class="chip-label" :class="`length-${label.length}`">{{ validatedLabel }}</span>
   </component>
 </template>
 
@@ -16,12 +18,14 @@ export interface DisplayChipProps {
   tag?: "div" | "span"
   shape?: "circle" | "square"
   config?: DisplayChipConfig
+  icon?: string
+  label?: string
   styleClassPassthrough?: string | string[]
 }
 
 export interface ChipSlots {
   default(props?: {}): any
-  content(props?: {}): any
+  // content(props?: {}): any
 }
 </script>
 
@@ -37,25 +41,25 @@ const props = withDefaults(defineProps<DisplayChipProps>(), {
   }),
   styleClassPassthrough: () => [],
 })
-defineSlots<ChipSlots>()
-
-// const chipConfig = defineModel<DisplayChipConfig>({
-//   type: Object as PropType<{
-//     size: string
-//     maskWidth: string
-//     offset: string
-//     angle: string
-//   }>,
-//   default: () => ({
-//     size: "12px",
-//     maskWidth: "4px",
-//     offset: "0px",
-//     angle: "90deg",
-//   }),
-//   required: false,
-// })
+const slots = defineSlots<ChipSlots>()
+// const slots = useSlots()
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+
+// Validate and truncate label to max 3 characters
+const validatedLabel = computed(() => {
+  if (!props.label) return props.label
+  if (props.label.length > 3) {
+    console.warn(
+      `DisplayChip: label "${props.label}" exceeds maximum length of 3 characters. Truncating to "${props.label.slice(
+        0,
+        3
+      )}"`
+    )
+    return props.label.slice(0, 3)
+  }
+  return props.label
+})
 
 const chipStyles = computed(() => ({
   "--chip-size": props.config?.size,
@@ -99,6 +103,43 @@ const chipStyles = computed(() => ({
     position: absolute;
     width: var(--chip-size);
     border-radius: 100%;
+    z-index: 1;
+  }
+  .chip-icon {
+    position: absolute;
+    width: var(--chip-size);
+    height: var(--chip-size);
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    z-index: 2;
+  }
+
+  .chip-label {
+    --_font-size-adjust: 0.7;
+    position: absolute;
+    width: var(--chip-size);
+    height: var(--chip-size);
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    z-index: 2;
+    font-size: calc(var(--chip-size) * var(--_font-size-adjust));
+    line-height: 1;
+    letter-spacing: -0.05rem;
+    user-select: none;
+
+    &.length-2 {
+      --_font-size-adjust: 0.6;
+    }
+
+    &.length-3 {
+      --_font-size-adjust: 0.5;
+    }
   }
 
   & > * {
@@ -108,23 +149,29 @@ const chipStyles = computed(() => ({
     psuedo-element ::after
     */
 
-    mask-image: radial-gradient(
-      var(--computed-mask-diameter) var(--computed-mask-diameter) at var(--computed-position-x)
-        var(--computed-position-y),
-      transparent calc(50% - 0.5px),
-      black calc(50% + 0.5px)
-    );
+    &:not(.chip-icon, .chip-label) {
+      mask-image: radial-gradient(
+        var(--computed-mask-diameter) var(--computed-mask-diameter) at var(--computed-position-x)
+          var(--computed-position-y),
+        transparent calc(50% - 0.5px),
+        black calc(50% + 0.5px)
+      );
+    }
   }
 
   &.circle {
-    &::after {
+    &::after,
+    .chip-icon,
+    .chip-label {
       top: calc(var(--computed-position-y) - (var(--chip-size) / 2));
       left: calc(var(--computed-position-x) - (var(--chip-size) / 2));
     }
   }
 
   &.square {
-    &::after {
+    &::after,
+    .chip-icon,
+    .chip-label {
       top: calc(var(--computed-position-y) - (var(--chip-size) / 2));
       left: calc(var(--computed-position-x) - (var(--chip-size) / 2));
     }
@@ -144,10 +191,6 @@ const chipStyles = computed(() => ({
     &::after {
       background-color: var(--color-dnd);
     }
-  }
-
-  .chip-label {
-    display: none;
   }
 }
 </style>
