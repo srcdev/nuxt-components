@@ -64,6 +64,48 @@
 
           <section>
             <div class="dl">
+              <div class="dt">Has Avatar image and Chip (with icon)</div>
+              <div class="dd">
+                <DisplayAvatar
+                  src="https://github.com/benjamincanac.png"
+                  alt="Joe Bloggs"
+                  :chip="{ ...chipConfig, icon: 'material-symbols:star-outline', size: '16px', maskWidth: '6px' }"
+                  :style-class-passthrough="['online']"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="dl">
+              <div class="dt">Has Avatar image and Chip (text single character)</div>
+              <div class="dd">
+                <DisplayAvatar
+                  src="https://github.com/benjamincanac.png"
+                  alt="Joe Bloggs"
+                  :chip="{ ...chipConfig, label: '3', size: '16px', maskWidth: '6px' }"
+                  :style-class-passthrough="['online']"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="dl">
+              <div class="dt">Has Avatar image and Chip (text 2 character)</div>
+              <div class="dd">
+                <DisplayAvatar
+                  src="https://github.com/benjamincanac.png"
+                  alt="Joe Bloggs"
+                  :chip="{ ...chipConfig, label: '+2', size: '16px', maskWidth: '6px' }"
+                  :style-class-passthrough="['online']"
+                />
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="dl">
               <div class="dt">Round</div>
               <div class="dd">
                 <DisplayChip shape="circle" :config="chipConfig" :style-class-passthrough="['online']">

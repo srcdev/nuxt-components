@@ -1,8 +1,8 @@
 <template>
   <component :is="tag" class="display-chip-core" :class="[shape, elementClasses]" :style="chipStyles">
     <slot name="default"></slot>
-    <Icon v-if="icon" :name="icon" class="chip-icon" />
-    <span v-if="label" class="chip-label" :class="`length-${label.length}`">{{ validatedLabel }}</span>
+    <Icon v-if="config?.icon" :name="config.icon" class="chip-icon" />
+    <span v-if="config?.label" class="chip-label" :class="`length-${config.label.length}`">{{ validatedLabel }}</span>
   </component>
 </template>
 
@@ -12,14 +12,14 @@ export interface DisplayChipConfig {
   maskWidth: string
   offset: string
   angle: string
+  icon?: string
+  label?: string
 }
 
 export interface DisplayChipProps {
   tag?: "div" | "span"
   shape?: "circle" | "square"
   config?: DisplayChipConfig
-  icon?: string
-  label?: string
   styleClassPassthrough?: string | string[]
 }
 
@@ -38,6 +38,8 @@ const props = withDefaults(defineProps<DisplayChipProps>(), {
     maskWidth: "4px",
     offset: "0px",
     angle: "90deg",
+    icon: undefined,
+    label: undefined,
   }),
   styleClassPassthrough: () => [],
 })
@@ -48,17 +50,16 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 // Validate and truncate label to max 3 characters
 const validatedLabel = computed(() => {
-  if (!props.label) return props.label
-  if (props.label.length > 3) {
+  if (!props.config?.label) return props.config?.label
+  if (props.config.label.length > 3) {
     console.warn(
-      `DisplayChip: label "${props.label}" exceeds maximum length of 3 characters. Truncating to "${props.label.slice(
-        0,
-        3
-      )}"`
+      `DisplayChip: label "${
+        props.config.label
+      }" exceeds maximum length of 3 characters. Truncating to "${props.config.label.slice(0, 3)}"`
     )
-    return props.label.slice(0, 3)
+    return props.config.label.slice(0, 3)
   }
-  return props.label
+  return props.config.label
 })
 
 const chipStyles = computed(() => ({

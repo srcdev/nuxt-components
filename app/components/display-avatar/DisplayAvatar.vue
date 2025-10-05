@@ -84,7 +84,6 @@ watch(
   justify-content: center;
   border-radius: 50%;
   color: var(--gray-3);
-  border: 1px solid light-dark(var(--gray-7), var(--gray-3));
 
   isolation: isolate;
 

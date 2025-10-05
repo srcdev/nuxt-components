@@ -41,8 +41,7 @@
               <div class="dd">
                 <DisplayChip
                   shape="circle"
-                  icon="material-symbols:star-outline"
-                  :config="chipConfig"
+                  :config="{ ...chipConfig, icon: 'material-symbols:star-outline' }"
                   :style-class-passthrough="['online']"
                 >
                   <div class="demo-content round">
@@ -53,7 +52,11 @@
 
               <div class="dt">Round + Text (1 character)</div>
               <div class="dd">
-                <DisplayChip shape="circle" label="2" :config="chipConfig" :style-class-passthrough="['online']">
+                <DisplayChip
+                  shape="circle"
+                  :config="{ ...chipConfig, label: '2' }"
+                  :style-class-passthrough="['online']"
+                >
                   <div class="demo-content round">
                     <p class="page-body-normal">SRC</p>
                   </div>
@@ -62,7 +65,11 @@
 
               <div class="dt">Round + Text (2 character)</div>
               <div class="dd">
-                <DisplayChip shape="circle" label="+2" :config="chipConfig" :style-class-passthrough="['online']">
+                <DisplayChip
+                  shape="circle"
+                  :config="{ ...chipConfig, label: '+2' }"
+                  :style-class-passthrough="['online']"
+                >
                   <div class="demo-content round">
                     <p class="page-body-normal">SRC</p>
                   </div>
@@ -71,7 +78,11 @@
 
               <div class="dt">Round + Text (3 character)</div>
               <div class="dd">
-                <DisplayChip shape="circle" label="314" :config="chipConfig" :style-class-passthrough="['online']">
+                <DisplayChip
+                  shape="circle"
+                  :config="{ ...chipConfig, label: '314' }"
+                  :style-class-passthrough="['online']"
+                >
                   <div class="demo-content round">
                     <p class="page-body-normal">SRC</p>
                   </div>
