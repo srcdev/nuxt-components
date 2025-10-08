@@ -1,4 +1,4 @@
-:root {
+:where(html) {
   /* Theme-neutral component scale using light-dark() */
   --colour-theme-0: light-dark(var(--gray-0), var(--gray-12));
   --colour-theme-1: light-dark(var(--gray-1), var(--gray-11));

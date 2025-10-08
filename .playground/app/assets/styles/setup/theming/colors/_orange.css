@@ -1,4 +1,4 @@
-:root {
+:where(html) {
   --orange-0: #fff4e6;
   --orange-1: #ffe8cc;
   --orange-2: #ffd8a8;

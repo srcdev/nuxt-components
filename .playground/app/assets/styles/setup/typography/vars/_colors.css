@@ -1,4 +1,4 @@
-:root {
+:where(html) {
   --theme-link-default: light-dark(var(--blue-12), var(--blue-4));
 
   --page-bg: light-dark(var(--gray-0), var(--gray-9));

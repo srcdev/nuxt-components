@@ -1,4 +1,4 @@
-:root {
+:where(html) {
   [data-theme="warning"] {
     --colour-theme-0: var(--orange-0);
     --colour-theme-1: var(--orange-1);

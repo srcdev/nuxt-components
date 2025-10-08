@@ -1,6 +1,6 @@
 /* @link https://utopia.fyi/clamp/calculator?a=360,1240,1—2|2—4|4—8|6—12|8—16|10—20|12—24|16—32|20—40 */
 
-:root {
+:where(html) {
   --fluid-1-2: clamp(0.0625rem, 0.0369rem + 0.1136vw, 0.125rem);
   --fluid-2-4: clamp(0.125rem, 0.0739rem + 0.2273vw, 0.25rem);
   --fluid-4-8: clamp(0.25rem, 0.1477rem + 0.4545vw, 0.5rem);

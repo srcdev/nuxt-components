@@ -1,4 +1,4 @@
-:root {
+:where(html) {
   --step-10: clamp(4.0311rem, 3.36rem + 3.3555vw, 5.9605rem); /* 10 */
   --step-9: clamp(3.3592rem, 2.8691rem + 2.4507vw, 4.7684rem); /* 9 */
   --step-8: clamp(2.7994rem, 2.4462rem + 1.7658vw, 3.8147rem); /* 8 */

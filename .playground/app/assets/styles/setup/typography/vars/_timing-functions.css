@@ -1,4 +1,4 @@
-:root {
+:where(html) {
   --spring-easing: linear(
     0,
     0.009,

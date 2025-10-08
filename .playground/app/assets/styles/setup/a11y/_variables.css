@@ -1,4 +1,4 @@
-:root {
+:where(html) {
   --focus-box-shadow-colour-off: transparent;
   --focus-box-shadow-colour-on: light-dark(var(--blue-12), var(--gray-0));
   --form-focus-box-shadow: 0 0 0 0.3rem;
