@@ -1,0 +1,11 @@
+:where(html) {
+  /* --border-color: light-dark(#4b4b4c, #2d333b); */
+  --border-strength: 1px;
+
+  --border-1: var(--border-strength) solid light-dark(var(--gray-3), var(--gray-7));
+  --border-2: calc(var(--border-strength) * 2) solid light-dark(var(--gray-4), var(--gray-6));
+  --border-3: var(--border-strength) solid light-dark(var(--gray-5), var(--gray-6));
+  --border-4: calc(var(--border-strength) * 2) solid light-dark(var(--gray-6), var(--gray-5));
+  --border-5: var(--border-strength) solid light-dark(var(--gray-7), var(--gray-4));
+  --border-6: calc(var(--border-strength) * 2) solid light-dark(var(--gray-8), var(--gray-3));
+}

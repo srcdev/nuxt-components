@@ -86,6 +86,7 @@ const responsiveNavLinks = {
       iconName: "material-symbols:responsive-layout",
       childLinksTitle: "UI Layouts",
       childLinks: [
+        { name: "Block Decorators", path: "/ui/block-decorators" },
         { name: "Magnetic Navigation", path: "/ui/magnetic-navigation" },
         { name: "Layout Row", path: "/ui/layout-row" },
         { name: "Layout Grid A", path: "/ui/layout-grid-a" },
