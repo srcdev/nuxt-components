@@ -30,7 +30,7 @@
           </button>
         </div>
       </div>
-      <div v-if="autoDismiss" class="display-toast-progress"></div>
+      <div v-if="autoDismiss" class="display-toast-progress" ref="displayToastProgressRef"></div>
     </div>
   </Teleport>
 </template>
@@ -79,17 +79,25 @@ const defaultThemeIcons = {
 const slots = useSlots()
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
+/*
+ * Setup comonent refs
+ */
 const displayToastRef = useTemplateRef<HTMLElement | null>("displayToast")
+const displayToastProgressRef = useTemplateRef<HTMLElement | null>("displayToastProgress")
 
-// external toggle
+/*
+ * Setup component state
+ */
 const externalTriggerModel = defineModel<boolean>({ default: false })
 const privateDisplayToast = ref(false)
-
 const transitionalState = ref(false)
 const cssStateClass = computed(() => {
   return transitionalState.value ? "show" : "hide"
 })
 
+/*
+ * Computed properties for durations (in ms for CSS
+ */
 const revealDurationInt = computed(() => props.revealDuration)
 const revealDuration = computed(() => revealDurationInt.value + "ms")
 const displayDurationInt = computed(() => props.duration)
@@ -98,10 +106,9 @@ const displayDuration = computed(() => displayDurationInt.value + "ms")
 const progressDurationInt = computed(() => Math.floor(displayDurationInt.value - revealDurationInt.value / 2))
 const progressDuration = computed(() => progressDurationInt.value + "ms")
 
-const removeToast = () => {
-  // externalTriggerModel.value = false
-}
-
+/*
+ * Lifecycle hooks
+ */
 const setDismissToast = () => {
   transitionalState.value = false
 }
@@ -129,11 +136,6 @@ watch(
   () => transitionalState.value,
   (newValue, previousValue) => {
     console.log("transitionalState changed: newValue", newValue, "previousValue", previousValue)
-    // if (newValue) transitionalState.value = true
-
-    // if (!newValue && previousValue) {
-    //   transitionalState.value = false
-    // }
   }
 )
 </script>
@@ -221,20 +223,11 @@ watch(
   }
 
   &:not(&.auto-dismiss) {
-    &.show,
-    &.entering {
+    &.show {
       animation: show v-bind(revealDuration) var(--spring-easing) forwards;
     }
 
-    &.visible {
-      /* if you want a steady state style, add here */
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
-    }
-
-    &.hide,
-    &.hiding {
+    &.hide {
       /* animation: hide v-bind(revealDuration) var(--spring-easing) forwards; */
       animation: hide 5s var(--spring-easing) forwards;
     }
