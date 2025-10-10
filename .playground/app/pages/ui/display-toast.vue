@@ -52,7 +52,7 @@
             theme="error"
             :duration="5000"
             :reveal-duration="1000"
-            :style-class-passthrough="['top', 'full-width']"
+            :style-class-passthrough="['top', 'right']"
           >
             <DisplayPromptCore
               v-model:parentComponentState="secondToastActive"
@@ -74,7 +74,8 @@
             v-model="thirdToastActive"
             theme="success"
             :auto-dismiss="false"
-            :style-class-passthrough="['top', 'full-width']"
+            :reveal-duration="3000"
+            :style-class-passthrough="['top', 'right']"
           >
             <DisplayPromptCore
               v-model:parentComponentState="thirdToastActive"

@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <div
-      v-if="privateToastState"
+      v-if="privateDisplayToast"
       class="display-toast"
       :class="[
         elementClasses,
@@ -12,6 +12,7 @@
         },
       ]"
       :data-theme="theme"
+      ref="displayToastRef"
     >
       <slot v-if="slots.default"></slot>
 
@@ -23,7 +24,7 @@
         </div>
         <div class="toast-message">{{ toastDisplayText }}</div>
         <div class="toast-action">
-          <button @click.prevent="updateToHiding()">
+          <button @click.prevent="setDismissToast()">
             <Icon name="material-symbols:close" class="icon" />
             <span class="sr-only">Close</span>
           </button>
@@ -78,17 +79,16 @@ const defaultThemeIcons = {
 const slots = useSlots()
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-// single state ref
-const state = ref<"idle" | "entering" | "visible" | "hiding">("idle")
-const cssStateClass = computed(() => {
-  return state.value !== "idle" && !props.autoDismiss ? state.value : ""
-})
+const displayToastRef = useTemplateRef<HTMLElement | null>("displayToast")
 
 // external toggle
-const publicToastState = defineModel<boolean>({ default: false })
+const externalTriggerModel = defineModel<boolean>({ default: false })
+const privateDisplayToast = ref(false)
 
-// computed helpers
-const privateToastState = ref(false)
+const transitionalState = ref(false)
+const cssStateClass = computed(() => {
+  return transitionalState.value ? "show" : "hide"
+})
 
 const revealDurationInt = computed(() => props.revealDuration)
 const revealDuration = computed(() => revealDurationInt.value + "ms")
@@ -99,27 +99,11 @@ const progressDurationInt = computed(() => Math.floor(displayDurationInt.value -
 const progressDuration = computed(() => progressDurationInt.value + "ms")
 
 const removeToast = () => {
-  publicToastState.value = false
-  privateToastState.value = false
+  // externalTriggerModel.value = false
 }
 
-const updateToIdle = () => {
-  state.value = "idle"
-  removeToast()
-}
-const updateToEntering = async () => {
-  privateToastState.value = true
-  state.value = "entering"
-  await useSleep(revealDurationInt.value)
-  updateToVisible()
-}
-const updateToVisible = () => {
-  state.value = "visible"
-}
-const updateToHiding = async () => {
-  state.value = "hiding"
-  await useSleep(revealDurationInt.value)
-  updateToIdle()
+const setDismissToast = () => {
+  transitionalState.value = false
 }
 
 watch(
@@ -130,22 +114,26 @@ watch(
 )
 
 watch(
-  () => publicToastState.value,
-  async (newValue, previousValue) => {
-    if (props.autoDismiss) {
-      privateToastState.value = newValue
-      await useSleep(displayDurationInt.value)
-      updateToIdle()
-      return
-    }
+  () => externalTriggerModel.value,
+  (newValue, previousValue) => {
+    console.log("externalTriggerModel changed: newValue", newValue, "previousValue", previousValue)
+    if (newValue) privateDisplayToast.value = transitionalState.value = true
 
-    if (!previousValue && newValue && state.value === "idle") {
-      updateToEntering()
+    if (!newValue && previousValue) {
+      transitionalState.value = false
     }
+  }
+)
 
-    if (previousValue && !newValue && state.value == "visible") {
-      updateToHiding()
-    }
+watch(
+  () => transitionalState.value,
+  (newValue, previousValue) => {
+    console.log("transitionalState changed: newValue", newValue, "previousValue", previousValue)
+    // if (newValue) transitionalState.value = true
+
+    // if (!newValue && previousValue) {
+    //   transitionalState.value = false
+    // }
   }
 )
 </script>
@@ -154,12 +142,12 @@ watch(
 @keyframes slide-in {
   from {
     opacity: 0;
-    visibility: hidden;
+    /* visibility: hidden; */
     transform: translateY(20px);
   }
   to {
     opacity: 1;
-    visibility: visible;
+    /* visibility: visible; */
     transform: translateY(0);
   }
 }
@@ -167,12 +155,12 @@ watch(
 @keyframes slide-out {
   from {
     opacity: 1;
-    visibility: visible;
+    /* visibility: visible; */
     transform: translateY(0);
   }
   to {
     opacity: 0;
-    visibility: hidden;
+    /* visibility: hidden; */
     transform: translateY(20px);
   }
 }
@@ -180,7 +168,7 @@ watch(
 @keyframes slide-in-out {
   5% {
     opacity: 1;
-    visibility: visible;
+    /* visibility: visible; */
     transform: translateY(0);
   }
   95% {
@@ -192,7 +180,7 @@ watch(
 @keyframes show {
   to {
     opacity: 1;
-    visibility: visible;
+    /* visibility: visible; */
     transform: translateY(0);
   }
 }
@@ -200,12 +188,12 @@ watch(
 @keyframes hide {
   0% {
     opacity: 1;
-    visibility: visible;
+    /* visibility: visible; */
     transform: translateY(0);
   }
   100% {
     opacity: 0;
-    visibility: hidden;
+    /* visibility: hidden; */
     transform: translateY(-30px);
   }
 }
@@ -222,7 +210,7 @@ watch(
   position: fixed;
   margin: 0;
   opacity: 0;
-  visibility: hidden;
+  /* visibility: hidden; */
 
   z-index: 100;
 
@@ -247,7 +235,8 @@ watch(
 
     &.hide,
     &.hiding {
-      animation: hide v-bind(revealDuration) var(--spring-easing) forwards;
+      /* animation: hide v-bind(revealDuration) var(--spring-easing) forwards; */
+      animation: hide 5s var(--spring-easing) forwards;
     }
   }
 
