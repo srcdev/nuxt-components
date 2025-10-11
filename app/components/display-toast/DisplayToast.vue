@@ -150,7 +150,6 @@ const defaultThemeIcons = {
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 // Computed properties for accessing config values with defaults
-// Computed properties for accessing config values with defaults
 const theme = computed(() => props.config?.appearance?.theme ?? "ghost")
 const position = computed(() => props.config?.appearance?.position ?? "top")
 const alignment = computed(() => props.config?.appearance?.alignment ?? "right")
@@ -176,7 +175,7 @@ const positionClasses = computed(() => {
 /*
  * Accessibility setup
  */
-const toastId = ref(Math.random().toString(36).substr(2, 9))
+const toastId = useId()
 const toastElement = ref<HTMLElement>()
 
 // Determine appropriate ARIA attributes based on theme
