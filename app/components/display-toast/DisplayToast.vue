@@ -2,6 +2,7 @@
   <Teleport to="body">
     <div
       v-if="privateDisplayToast"
+      ref="toastElement"
       class="display-toast"
       :class="[
         elementClasses,
@@ -11,6 +12,11 @@
         },
       ]"
       :data-theme="theme"
+      :role="toastRole"
+      :aria-live="ariaLive"
+      :tabindex="slots.default ? undefined : '0'"
+      :aria-describedby="slots.default ? undefined : 'toast-message-' + toastId"
+      @keydown.escape="setDismissToast"
     >
       <slot v-if="slots.default"></slot>
 
@@ -20,7 +26,7 @@
             <Icon :name="defaultThemeIcons[props.theme] ?? 'akar-icons:info'" class="icon" />
           </slot>
         </div>
-        <div class="toast-message">{{ toastDisplayText }}</div>
+        <div class="toast-message" :id="'toast-message-' + toastId">{{ toastDisplayText }}</div>
         <div class="toast-action">
           <button @click.prevent="setDismissToast()">
             <Icon name="material-symbols:close" class="icon" />
@@ -78,6 +84,21 @@ const slots = useSlots()
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 /*
+ * Accessibility setup
+ */
+const toastId = ref(Math.random().toString(36).substr(2, 9))
+const toastElement = ref<HTMLElement>()
+
+// Determine appropriate ARIA attributes based on theme
+const toastRole = computed(() => {
+  return ["error", "warning"].includes(props.theme) ? "alert" : "status"
+})
+
+const ariaLive = computed(() => {
+  return ["error", "warning"].includes(props.theme) ? "assertive" : "polite"
+})
+
+/*
  * Setup component state
  */
 const externalTriggerModel = defineModel<boolean>({ default: false })
@@ -116,6 +137,15 @@ watch(
     if (newValue) {
       privateDisplayToast.value = true
       transitionalState.value = true
+
+      // Focus management for accessibility when not using custom slots
+      if (!slots.default) {
+        await nextTick()
+        // Wait for animation to start before focusing
+        setTimeout(() => {
+          toastElement.value?.focus()
+        }, 100)
+      }
 
       if (props.autoDismiss) {
         await useSleep(props.duration)
@@ -163,6 +193,16 @@ watch(
   visibility: hidden;
 
   z-index: 100;
+
+  /* Focus styles for accessibility */
+  &:focus {
+    outline: 2px solid var(--colour-theme-3, #007acc);
+    outline-offset: 2px;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
 
   &.show {
     animation: show v-bind(revealDuration) var(--spring-easing) forwards;
@@ -283,7 +323,8 @@ watch(
             vertical-align: middle;
           }
 
-          &:hover {
+          &:hover,
+          &:focus-visible {
             box-shadow: none;
             background-color: var(--colour-theme-8);
             color: var(--colour-theme-0);
