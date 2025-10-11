@@ -7,6 +7,7 @@
       :class="[
         elementClasses,
         cssStateClass,
+        positionClasses,
         {
           'has-theme': !slots.default,
         },
@@ -23,7 +24,7 @@
       <div v-else class="display-toast-inner">
         <div class="toast-icon" aria-hidden="true">
           <slot name="customToastIcon">
-            <Icon :name="defaultThemeIcons[props.theme] ?? 'akar-icons:info'" class="icon" />
+            <Icon :name="customIcon || defaultThemeIcons[theme] || 'akar-icons:info'" class="icon" />
           </slot>
         </div>
         <div class="toast-message" :id="'toast-message-' + toastId">{{ toastDisplayText }}</div>
@@ -38,36 +39,102 @@
     </div>
   </Teleport>
 </template>
+
+<script lang="ts">
+/**
+ * DisplayToast - Configurable toast notification component
+ *
+ * Example usage with config object:
+ * <DisplayToast
+ *   v-model="showToast"
+ *   :config="{
+ *     appearance: { theme: 'success', position: 'top', alignment: 'right' },
+ *     behavior: { autoDismiss: true, duration: 3000 },
+ *     content: { text: 'Operation completed successfully!' }
+ *   }"
+ * />
+ *
+ * Types exported for use in other components:
+ * - DisplayToastConfig
+ * - DisplayToastProps
+ * - DisplayToastTheme
+ * - DisplayToastAppearanceConfig
+ * - DisplayToastBehaviorConfig
+ * - DisplayToastContentConfig
+ * - ToastSlots
+ */
+
+export type DisplayToastTheme =
+  | "primary"
+  | "secondary"
+  | "tertiary"
+  | "ghost"
+  | "error"
+  | "info"
+  | "success"
+  | "warning"
+
+export type DisplayToastPosition = "top" | "bottom"
+export type DisplayToastAlignment = "left" | "center" | "right"
+
+export interface DisplayToastAppearanceConfig {
+  theme?: DisplayToastTheme
+  position?: DisplayToastPosition
+  alignment?: DisplayToastAlignment
+  fullWidth?: boolean
+}
+
+export interface DisplayToastBehaviorConfig {
+  autoDismiss?: boolean
+  duration?: number
+  revealDuration?: number
+}
+
+export interface DisplayToastContentConfig {
+  text?: string
+  customIcon?: string
+}
+
+export interface DisplayToastConfig {
+  appearance?: DisplayToastAppearanceConfig
+  behavior?: DisplayToastBehaviorConfig
+  content?: DisplayToastContentConfig
+}
+
+export interface DisplayToastProps {
+  config?: DisplayToastConfig
+  styleClassPassthrough?: string | string[]
+}
+
+export interface ToastSlots {
+  default?(props?: {}): any
+  customToastIcon?(props?: {}): any
+}
+</script>
+
 <script setup lang="ts">
-const props = defineProps({
-  theme: {
-    type: String as PropType<"primary" | "secondary" | "tertiary" | "ghost" | "error" | "info" | "success" | "warning">,
-    default: "ghost",
-    validator(value: string) {
-      return ["primary", "secondary", "tertiary", "ghost", "error", "info", "success", "warning"].includes(value)
+const props = withDefaults(defineProps<DisplayToastProps>(), {
+  config: () => ({
+    appearance: {
+      theme: "ghost" as DisplayToastTheme,
+      position: "top" as DisplayToastPosition,
+      alignment: "right" as DisplayToastAlignment,
+      fullWidth: false,
     },
-  },
-  revealDuration: {
-    type: Number,
-    default: 550,
-  },
-  autoDismiss: {
-    type: Boolean,
-    default: true,
-  },
-  duration: {
-    type: Number,
-    default: 5000,
-  },
-  toastDisplayText: {
-    type: String,
-    default: "",
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+    behavior: {
+      autoDismiss: true,
+      duration: 5000,
+      revealDuration: 550,
+    },
+    content: {
+      text: "",
+      customIcon: undefined,
+    },
+  }),
+  styleClassPassthrough: () => [],
 })
+
+const slots = defineSlots<ToastSlots>()
 
 const defaultThemeIcons = {
   primary: "akar-icons:info",
@@ -80,8 +147,31 @@ const defaultThemeIcons = {
   warning: "akar-icons:circle-alert",
 }
 
-const slots = useSlots()
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+
+// Computed properties for accessing config values with defaults
+// Computed properties for accessing config values with defaults
+const theme = computed(() => props.config?.appearance?.theme ?? "ghost")
+const position = computed(() => props.config?.appearance?.position ?? "top")
+const alignment = computed(() => props.config?.appearance?.alignment ?? "right")
+const fullWidth = computed(() => props.config?.appearance?.fullWidth ?? false)
+const autoDismiss = computed(() => props.config?.behavior?.autoDismiss ?? true)
+const duration = computed(() => props.config?.behavior?.duration ?? 5000)
+const revealDuration = computed(() => props.config?.behavior?.revealDuration ?? 550)
+const toastDisplayText = computed(() => props.config?.content?.text ?? "")
+const customIcon = computed(() => props.config?.content?.customIcon)
+
+// Computed classes for positioning
+const positionClasses = computed(() => {
+  const classes = []
+  classes.push(position.value)
+  if (fullWidth.value) {
+    classes.push("full-width")
+  } else {
+    classes.push(alignment.value)
+  }
+  return classes
+})
 
 /*
  * Accessibility setup
@@ -91,11 +181,11 @@ const toastElement = ref<HTMLElement>()
 
 // Determine appropriate ARIA attributes based on theme
 const toastRole = computed(() => {
-  return ["error", "warning"].includes(props.theme) ? "alert" : "status"
+  return ["error", "warning"].includes(theme.value) ? "alert" : "status"
 })
 
 const ariaLive = computed(() => {
-  return ["error", "warning"].includes(props.theme) ? "assertive" : "polite"
+  return ["error", "warning"].includes(theme.value) ? "assertive" : "polite"
 })
 
 /*
@@ -109,17 +199,17 @@ const cssStateClass = computed(() => {
 })
 
 /*
- * Computed properties for durations (in ms for CSS
+ * Computed properties for durations (in ms for CSS)
  */
-const revealDuration = computed(() => props.revealDuration + "ms")
-const displayDuration = computed(() => props.duration + "ms")
+const revealDurationMs = computed(() => revealDuration.value + "ms")
+const displayDurationMs = computed(() => duration.value + "ms")
 
 /*
  * Lifecycle hooks
  */
 const setDismissToast = async () => {
   transitionalState.value = false
-  await useSleep(props.revealDuration)
+  await useSleep(revealDuration.value)
   externalTriggerModel.value = false
   privateDisplayToast.value = false
 }
@@ -147,8 +237,8 @@ watch(
         }, 100)
       }
 
-      if (props.autoDismiss) {
-        await useSleep(props.duration)
+      if (autoDismiss.value) {
+        await useSleep(duration.value)
         setDismissToast()
       }
     }
@@ -205,11 +295,11 @@ watch(
   }
 
   &.show {
-    animation: show v-bind(revealDuration) var(--spring-easing) forwards;
+    animation: show v-bind(revealDurationMs) var(--spring-easing) forwards;
   }
 
   &.hide {
-    animation: hide v-bind(revealDuration) var(--spring-easing) forwards;
+    animation: hide v-bind(revealDurationMs) var(--spring-easing) forwards;
   }
 
   &.full-width {
@@ -227,8 +317,9 @@ watch(
     }
 
     &.center {
-      left: 50%;
-      /* transform: translateX(-50%); */
+      inset-inline: 0;
+      margin-inline: auto;
+      width: max-content;
     }
   }
 
@@ -346,7 +437,7 @@ watch(
     transform-origin: right;
     background: linear-gradient(to right, var(--colour-theme-2), var(--colour-theme-8));
     border-radius: inherit;
-    animation: progress v-bind(displayDuration) linear forwards;
+    animation: progress v-bind(displayDurationMs) linear forwards;
   }
 }
 </style>
