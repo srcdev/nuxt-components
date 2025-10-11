@@ -8,11 +8,9 @@
         cssStateClass,
         {
           'has-theme': !slots.default,
-          'auto-dismiss': autoDismiss,
         },
       ]"
       :data-theme="theme"
-      ref="displayToastRef"
     >
       <slot v-if="slots.default"></slot>
 
@@ -30,7 +28,7 @@
           </button>
         </div>
       </div>
-      <div v-if="autoDismiss" class="display-toast-progress" ref="displayToastProgressRef"></div>
+      <div v-if="autoDismiss" class="display-toast-progress"></div>
     </div>
   </Teleport>
 </template>
@@ -80,12 +78,6 @@ const slots = useSlots()
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 /*
- * Setup comonent refs
- */
-const displayToastRef = useTemplateRef<HTMLElement | null>("displayToast")
-const displayToastProgressRef = useTemplateRef<HTMLElement | null>("displayToastProgress")
-
-/*
  * Setup component state
  */
 const externalTriggerModel = defineModel<boolean>({ default: false })
@@ -98,19 +90,17 @@ const cssStateClass = computed(() => {
 /*
  * Computed properties for durations (in ms for CSS
  */
-const revealDurationInt = computed(() => props.revealDuration)
-const revealDuration = computed(() => revealDurationInt.value + "ms")
-const displayDurationInt = computed(() => props.duration)
-const displayDuration = computed(() => displayDurationInt.value + "ms")
-
-const progressDurationInt = computed(() => Math.floor(displayDurationInt.value - revealDurationInt.value / 2))
-const progressDuration = computed(() => progressDurationInt.value + "ms")
+const revealDuration = computed(() => props.revealDuration + "ms")
+const displayDuration = computed(() => props.duration + "ms")
 
 /*
  * Lifecycle hooks
  */
-const setDismissToast = () => {
+const setDismissToast = async () => {
   transitionalState.value = false
+  await useSleep(props.revealDuration)
+  externalTriggerModel.value = false
+  privateDisplayToast.value = false
 }
 
 watch(
@@ -122,67 +112,25 @@ watch(
 
 watch(
   () => externalTriggerModel.value,
-  (newValue, previousValue) => {
-    console.log("externalTriggerModel changed: newValue", newValue, "previousValue", previousValue)
-    if (newValue) privateDisplayToast.value = transitionalState.value = true
+  async (newValue, previousValue) => {
+    if (newValue) {
+      privateDisplayToast.value = true
+      transitionalState.value = true
 
-    if (!newValue && previousValue) {
-      transitionalState.value = false
+      if (props.autoDismiss) {
+        await useSleep(props.duration)
+        setDismissToast()
+      }
     }
-  }
-)
-
-watch(
-  () => transitionalState.value,
-  (newValue, previousValue) => {
-    console.log("transitionalState changed: newValue", newValue, "previousValue", previousValue)
   }
 )
 </script>
 
 <style scoped lang="css">
-@keyframes slide-in {
-  from {
-    opacity: 0;
-    /* visibility: hidden; */
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    /* visibility: visible; */
-    transform: translateY(0);
-  }
-}
-
-@keyframes slide-out {
-  from {
-    opacity: 1;
-    /* visibility: visible; */
-    transform: translateY(0);
-  }
-  to {
-    opacity: 0;
-    /* visibility: hidden; */
-    transform: translateY(20px);
-  }
-}
-
-@keyframes slide-in-out {
-  5% {
-    opacity: 1;
-    /* visibility: visible; */
-    transform: translateY(0);
-  }
-  95% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @keyframes show {
   to {
     opacity: 1;
-    /* visibility: visible; */
+    visibility: visible;
     transform: translateY(0);
   }
 }
@@ -190,12 +138,12 @@ watch(
 @keyframes hide {
   0% {
     opacity: 1;
-    /* visibility: visible; */
+    visibility: visible;
     transform: translateY(0);
   }
   100% {
     opacity: 0;
-    /* visibility: hidden; */
+    visibility: hidden;
     transform: translateY(-30px);
   }
 }
@@ -212,31 +160,16 @@ watch(
   position: fixed;
   margin: 0;
   opacity: 0;
-  /* visibility: hidden; */
+  visibility: hidden;
 
   z-index: 100;
 
-  &.auto-dismiss {
-    /* first run slide-in, then slide-out after a delay */
-    animation: slide-in 400ms var(--spring-in-easing) forwards,
-      slide-out 400ms var(--spring-out-easing) forwards v-bind(displayDuration);
+  &.show {
+    animation: show v-bind(revealDuration) var(--spring-easing) forwards;
   }
 
-  &:not(&.auto-dismiss) {
-    &.show {
-      animation: show v-bind(revealDuration) var(--spring-easing) forwards;
-    }
-
-    &.hide {
-      /* animation: hide v-bind(revealDuration) var(--spring-easing) forwards; */
-      animation: hide 5s var(--spring-easing) forwards;
-    }
-  }
-
-  &:hover {
-    .display-toast-progress {
-      animation-play-state: paused;
-    }
+  &.hide {
+    animation: hide v-bind(revealDuration) var(--spring-easing) forwards;
   }
 
   &.full-width {
@@ -271,7 +204,6 @@ watch(
   /*
   * Styles for the display toast component
   */
-
   &.has-theme {
     padding-inline-start: 6px;
     background-color: var(--colour-theme-8);
@@ -373,7 +305,7 @@ watch(
     transform-origin: right;
     background: linear-gradient(to right, var(--colour-theme-2), var(--colour-theme-8));
     border-radius: inherit;
-    animation: progress v-bind(progressDuration) linear forwards;
+    animation: progress v-bind(displayDuration) linear forwards;
   }
 }
 </style>

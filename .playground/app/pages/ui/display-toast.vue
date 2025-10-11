@@ -47,13 +47,7 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
-          <DisplayToast
-            v-model="secondToastActive"
-            theme="error"
-            :duration="5000"
-            :reveal-duration="1000"
-            :style-class-passthrough="['top', 'right']"
-          >
+          <DisplayToast v-model="secondToastActive" theme="error" :style-class-passthrough="['top', 'right']">
             <DisplayPromptCore
               v-model:parentComponentState="secondToastActive"
               theme="error"
@@ -74,7 +68,6 @@
             v-model="thirdToastActive"
             theme="success"
             :auto-dismiss="false"
-            :reveal-duration="3000"
             :style-class-passthrough="['top', 'right']"
           >
             <DisplayPromptCore
@@ -97,13 +90,7 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
-          <DisplayToast
-            v-model="fourthToastActive"
-            theme="info"
-            :duration="5000"
-            :reveal-duration="300"
-            :style-class-passthrough="['top', 'full-width']"
-          >
+          <DisplayToast v-model="fourthToastActive" theme="info" :style-class-passthrough="['top', 'full-width']">
             <DisplayPromptCore
               v-model:parentComponentState="fourthToastActive"
               theme="info"
