@@ -28,31 +28,38 @@
             </button>
           </p>
           <hr class="mbe-20" />
-          <p class="page-body-normal">Trigger INFO prompt as toast with auto dismiss</p>
+          <p class="page-body-normal">Trigger INFO prompt as toast with auto dismiss (full-width)</p>
           <p>
             <button @click.prevent="triggerFourthToast()" class="button primary mbe-10">
               Trigger Fourth Toast (current value: {{ fourthToastActive }})
             </button>
           </p>
+          <hr class="mbe-20" />
+          <p class="page-body-normal">New config-based positioning examples:</p>
+          <div class="button-grid">
+            <button @click.prevent="triggerBottomLeftToast()" class="button secondary">Bottom Left Toast</button>
+            <button @click.prevent="triggerBottomCenterToast()" class="button secondary">Bottom Center Toast</button>
+            <button @click.prevent="triggerCustomIconToast()" class="button secondary">Custom Icon Toast</button>
+          </div>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
           <DisplayToast
             v-model="firstToastActive"
-            theme="warning"
-            :auto-dismiss="false"
-            toast-display-text="This is a toast notification message"
-            :style-class-passthrough="['top', 'right']"
+            :config="{
+              appearance: { theme: 'warning', position: 'top', alignment: 'right' },
+              behavior: { autoDismiss: false },
+              content: { text: 'This is a toast notification message' },
+            }"
           ></DisplayToast>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
           <DisplayToast
             v-model="secondToastActive"
-            theme="error"
-            :duration="5000"
-            :reveal-duration="1000"
-            :style-class-passthrough="['top', 'full-width']"
+            :config="{
+              appearance: { theme: 'error', position: 'top', alignment: 'right' },
+            }"
           >
             <DisplayPromptCore
               v-model:parentComponentState="secondToastActive"
@@ -72,9 +79,10 @@
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
           <DisplayToast
             v-model="thirdToastActive"
-            theme="success"
-            :auto-dismiss="false"
-            :style-class-passthrough="['top', 'full-width']"
+            :config="{
+              appearance: { theme: 'success', position: 'top', alignment: 'right' },
+              behavior: { autoDismiss: false },
+            }"
           >
             <DisplayPromptCore
               v-model:parentComponentState="thirdToastActive"
@@ -98,10 +106,9 @@
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
           <DisplayToast
             v-model="fourthToastActive"
-            theme="info"
-            :duration="5000"
-            :reveal-duration="300"
-            :style-class-passthrough="['top', 'full-width']"
+            :config="{
+              appearance: { theme: 'info', position: 'top', fullWidth: true },
+            }"
           >
             <DisplayPromptCore
               v-model:parentComponentState="fourthToastActive"
@@ -118,13 +125,60 @@
             </DisplayPromptCore>
           </DisplayToast>
         </LayoutRow>
+
+        <!-- New config-based positioning examples -->
+        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
+          <DisplayToast
+            v-model="bottomLeftToastActive"
+            :config="{
+              appearance: { theme: 'primary', position: 'bottom', alignment: 'left' },
+              behavior: { autoDismiss: true, duration: 3000 },
+              content: { text: 'Bottom left positioned toast!' },
+            }"
+          ></DisplayToast>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
+          <DisplayToast
+            v-model="bottomCenterToastActive"
+            :config="{
+              appearance: { theme: 'secondary', position: 'bottom', alignment: 'center' },
+              behavior: { autoDismiss: true, duration: 4000 },
+              content: { text: 'Bottom center positioned toast with longer duration!' },
+            }"
+          ></DisplayToast>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
+          <DisplayToast
+            v-model="customIconToastActive"
+            :config="{
+              appearance: { theme: 'success', position: 'top', alignment: 'left' },
+              behavior: { autoDismiss: false },
+              content: { text: 'Custom icon toast (manual dismiss)', customIcon: 'akar-icons:check-box' },
+            }"
+          ></DisplayToast>
+        </LayoutRow>
       </template>
     </NuxtLayout>
   </div>
 </template>
 
 <script setup lang="ts">
-import HeaderBlock from "../../../../app/components/typography/HeaderBlock.vue"
+/**
+ * DisplayToast Playground - Updated to use new config-based props system
+ *
+ * This playground demonstrates:
+ * 1. Legacy examples converted to new config structure
+ * 2. New positioning capabilities (bottom left, bottom center)
+ * 3. Custom icon support through config
+ * 4. Different behavior configurations (autoDismiss, duration)
+ *
+ * The new config system groups props into logical sections:
+ * - appearance: theme, position, alignment, fullWidth
+ * - behavior: autoDismiss, duration, revealDuration
+ * - content: text, customIcon
+ */
 
 definePageMeta({
   layout: false,
@@ -143,14 +197,15 @@ useHead({
   },
 })
 
-const variant = ref("solid")
-const hasDividers = ref(false)
-const noOutline = ref(false)
+// Toast state variables
 
 const firstToastActive = ref(false)
 const secondToastActive = ref(false)
 const thirdToastActive = ref(false)
 const fourthToastActive = ref(false)
+const bottomLeftToastActive = ref(false)
+const bottomCenterToastActive = ref(false)
+const customIconToastActive = ref(false)
 
 const triggerFirstToast = () => {
   firstToastActive.value = true
@@ -168,14 +223,29 @@ const triggerFourthToast = () => {
   fourthToastActive.value = true
 }
 
+const triggerBottomLeftToast = () => {
+  bottomLeftToastActive.value = true
+}
+
+const triggerBottomCenterToast = () => {
+  bottomCenterToastActive.value = true
+}
+
+const triggerCustomIconToast = () => {
+  customIconToastActive.value = true
+}
+
 onMounted(() => {
   // Trigger a toast on mount for demonstration purposes
   // triggerToast()
 })
 </script>
 
-<style lang="css">
-.displayToast-page {
-  /* CSS styles */
+<style scoped lang="css">
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 </style>
