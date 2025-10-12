@@ -249,7 +249,7 @@ watch(
 @keyframes show {
   to {
     opacity: 1;
-    visibility: visible;
+    /* visibility: visible; */
     transform: translateY(0);
   }
 }
@@ -257,12 +257,12 @@ watch(
 @keyframes hide {
   0% {
     opacity: 1;
-    visibility: visible;
+    /* visibility: visible; */
     transform: translateY(0);
   }
   100% {
     opacity: 0;
-    visibility: hidden;
+    /* visibility: hidden; */
     transform: translateY(-30px);
   }
 }
@@ -279,7 +279,7 @@ watch(
   position: fixed;
   margin: 0;
   opacity: 0;
-  visibility: hidden;
+  /* visibility: hidden; */
 
   z-index: 100;
 
