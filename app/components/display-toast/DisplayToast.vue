@@ -28,7 +28,7 @@
           </slot>
         </div>
         <div class="toast-message" :id="'toast-message-' + toastId">{{ toastDisplayText }}</div>
-        <div class="toast-action">
+        <div v-if="!autoDismiss" class="toast-action">
           <button @click.prevent="setDismissToast()">
             <Icon name="material-symbols:close" class="icon" />
             <span class="sr-only">Close</span>
