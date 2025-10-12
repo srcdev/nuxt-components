@@ -294,13 +294,23 @@ watch(
   }
 
   &.show {
-    animation: show v-bind(revealDurationMs) var(--spring-easing) forwards;
-    /* animation: show v-bind(revealDurationMs) linear forwards; */
+    @supports (animation-timing-function: linear(0, 1)) {
+      animation: show v-bind(revealDurationMs) var(--spring-easing) forwards;
+    }
+
+    @supports not (animation-timing-function: linear(0, 1)) {
+      animation: show v-bind(revealDurationMs) linear forwards;
+    }
   }
 
   &.hide {
-    animation: hide v-bind(revealDurationMs) var(--spring-easing) forwards;
-    /* animation: hide v-bind(revealDurationMs) linear forwards; */
+    @supports (animation-timing-function: linear(0, 1)) {
+      animation: hide v-bind(revealDurationMs) var(--spring-easing) forwards;
+    }
+
+    @supports not (animation-timing-function: linear(0, 1)) {
+      animation: hide v-bind(revealDurationMs) linear forwards;
+    }
   }
 
   &.full-width {
