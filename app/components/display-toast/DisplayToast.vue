@@ -294,13 +294,13 @@ watch(
   }
 
   &.show {
-    /* animation: show v-bind(revealDurationMs) var(--spring-easing) forwards; */
-    animation: show v-bind(revealDurationMs) linear forwards;
+    animation: show v-bind(revealDurationMs) var(--spring-easing) forwards;
+    /* animation: show v-bind(revealDurationMs) linear forwards; */
   }
 
   &.hide {
-    /* animation: hide v-bind(revealDurationMs) var(--spring-easing) forwards; */
-    animation: hide v-bind(revealDurationMs) linear forwards;
+    animation: hide v-bind(revealDurationMs) var(--spring-easing) forwards;
+    /* animation: hide v-bind(revealDurationMs) linear forwards; */
   }
 
   &.full-width {
