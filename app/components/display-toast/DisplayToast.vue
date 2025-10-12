@@ -249,7 +249,6 @@ watch(
 @keyframes show {
   to {
     opacity: 1;
-    /* visibility: visible; */
     transform: translateY(0);
   }
 }
@@ -257,12 +256,10 @@ watch(
 @keyframes hide {
   0% {
     opacity: 1;
-    /* visibility: visible; */
     transform: translateY(0);
   }
   100% {
     opacity: 0;
-    /* visibility: hidden; */
     transform: translateY(-30px);
   }
 }
@@ -274,12 +271,16 @@ watch(
 }
 
 .display-toast {
+  --_toast-gutter: 12px;
+  @media (width >= 600px) {
+    --_toast-gutter: 24px;
+  }
+
   display: block;
   overflow: hidden;
   position: fixed;
   margin: 0;
   opacity: 0;
-  /* visibility: hidden; */
 
   z-index: 100;
 
@@ -299,7 +300,7 @@ watch(
     }
 
     @supports not (animation-timing-function: linear(0, 1)) {
-      animation: show v-bind(revealDurationMs) linear forwards;
+      animation: show calc(v-bind(revealDurationMs) / 2) linear forwards;
     }
   }
 
@@ -309,42 +310,48 @@ watch(
     }
 
     @supports not (animation-timing-function: linear(0, 1)) {
-      animation: hide v-bind(revealDurationMs) linear forwards;
+      animation: hide calc(v-bind(revealDurationMs) / 2) linear forwards;
     }
   }
 
-  &.full-width {
-    left: 24px;
-    right: 24px;
-  }
+  /*
+  * Default is centre for smaller screens
+  */
 
-  &:not(.full-width) {
+  inset-inline: var(--_toast-gutter);
+  margin-inline: auto;
+
+  @media (width >= 600px) {
     &.left {
-      left: 24px;
+      inset-inline-start: var(--_toast-gutter);
+      inset-inline-end: unset;
     }
 
     &.right {
-      right: 24px;
+      inset-inline-end: var(--_toast-gutter);
+      inset-inline-start: unset;
     }
 
     &.center {
-      inset-inline: 0;
-      margin-inline: auto;
-      width: max-content;
+      &:not(.full-width) {
+        inset-inline: 0;
+        margin-inline: auto;
+        width: max-content;
+      }
     }
   }
 
   &.top {
-    top: 24px;
+    inset-block-start: var(--_toast-gutter);
     transform: translateY(-30px);
   }
   &.bottom {
-    bottom: 24px;
+    inset-block-end: var(--_toast-gutter);
     transform: translateY(30px);
   }
 
   /*
-  * Styles for the display toast component
+  * Styles for the display toast component if slot is empty
   */
   &.has-theme {
     padding-inline-start: 6px;
