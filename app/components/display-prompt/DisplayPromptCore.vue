@@ -3,6 +3,8 @@
     class="display-prompt-core"
     :class="[{ closed: !compopnentOpen }]"
     :data-test-id="`display-prompt-core-${theme}`"
+    ref="promptElementRef"
+    tabindex="0"
   >
     <div class="display-prompt-wrapper" :data-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
       <div class="display-prompt-inner">
@@ -11,7 +13,7 @@
             <Icon :name="displayPromptIcons[theme] ?? 'akar-icons:circle-alert'" class="icon" :color="iconColor" />
           </slot>
         </div>
-        <div class="display-prompt-content">
+        <div class="display-prompt-content" :aria-live="useAutoFocus ? 'polite' : undefined">
           <p class="title" data-test-id="display-prompt-title">
             <slot name="title"></slot>
           </p>
@@ -65,9 +67,14 @@ const props = defineProps({
       secondary: "akar-icons:info",
     }),
   },
+  useAutoFocus: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const slots = useSlots()
+const promptElementRef = useTemplateRef<HTMLElement>("promptElementRef")
 const parentComponentState = defineModel<boolean>("parentComponentState", { default: false })
 const compopnentOpen = ref(true)
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
@@ -80,6 +87,12 @@ const updateComponentState = () => {
 
   compopnentOpen.value = false
 }
+
+onMounted(async () => {
+  if (props.useAutoFocus && promptElementRef.value) {
+    promptElementRef.value.focus()
+  }
+})
 </script>
 
 <style lang="css">

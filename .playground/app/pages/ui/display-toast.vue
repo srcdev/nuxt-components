@@ -106,6 +106,7 @@
               v-model="thirdToastActive"
               theme="success"
               :dismissible="true"
+              :use-auto-focus="true"
               :style-class-passthrough="['dark', 'outlined']"
             >
               <template #customDecoratorIcon>

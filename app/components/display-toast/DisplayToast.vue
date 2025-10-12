@@ -2,7 +2,7 @@
   <Teleport to="body">
     <div
       v-if="privateDisplayToast"
-      ref="toastElement"
+      ref="toastElementRef"
       class="display-toast"
       :class="[
         elementClasses,
@@ -176,7 +176,7 @@ const positionClasses = computed(() => {
  * Accessibility setup
  */
 const toastId = useId()
-const toastElement = ref<HTMLElement>()
+const toastElementRef = useTemplateRef<HTMLElement>("toastElementRef")
 
 // Determine appropriate ARIA attributes based on theme
 const toastRole = computed(() => {
@@ -232,7 +232,7 @@ watch(
         await nextTick()
         // Wait for animation to start before focusing
         setTimeout(() => {
-          toastElement.value?.focus()
+          toastElementRef.value?.focus()
         }, 100)
       }
 
