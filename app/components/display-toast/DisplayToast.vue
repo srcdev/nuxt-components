@@ -245,7 +245,7 @@ watch(
 )
 </script>
 
-<style scoped lang="css">
+<style lang="css">
 @keyframes show {
   to {
     opacity: 1;

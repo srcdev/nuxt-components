@@ -9,37 +9,55 @@
           </HeaderBlock>
           <p class="page-body-normal">Trigger default toast with manual dismiss</p>
           <p>
-            <button @click.prevent="triggerFirstToast()" class="button primary mbe-10">
+            <button @click.prevent="triggerFirstToast()" :read-only="firstToastActive" class="button primary mbe-10">
               Trigger First Toast (current value: {{ firstToastActive }})
             </button>
           </p>
           <hr class="mbe-20" />
           <p class="page-body-normal">Trigger ERROR prompt as toast with auto dismiss</p>
           <p>
-            <button @click.prevent="triggerSecondToast()" class="button primary mbe-10">
+            <button @click.prevent="triggerSecondToast()" :read-only="secondToastActive" class="button primary mbe-10">
               Trigger Second Toast (current value: {{ secondToastActive }})
             </button>
           </p>
           <hr class="mbe-20" />
           <p class="page-body-normal">Trigger SUCCESS prompt as toast with manual dismiss</p>
           <p>
-            <button @click.prevent="triggerThirdToast()" class="button primary mbe-10">
+            <button @click.prevent="triggerThirdToast()" :read-only="thirdToastActive" class="button primary mbe-10">
               Trigger Third Toast (current value: {{ thirdToastActive }})
             </button>
           </p>
           <hr class="mbe-20" />
           <p class="page-body-normal">Trigger INFO prompt as toast with auto dismiss (full-width)</p>
           <p>
-            <button @click.prevent="triggerFourthToast()" class="button primary mbe-10">
+            <button @click.prevent="triggerFourthToast()" :read-only="fourthToastActive" class="button primary mbe-10">
               Trigger Fourth Toast (current value: {{ fourthToastActive }})
             </button>
           </p>
           <hr class="mbe-20" />
           <p class="page-body-normal">New config-based positioning examples:</p>
           <div class="button-grid">
-            <button @click.prevent="triggerBottomLeftToast()" class="button secondary">Bottom Left Toast</button>
-            <button @click.prevent="triggerBottomCenterToast()" class="button secondary">Bottom Center Toast</button>
-            <button @click.prevent="triggerCustomIconToast()" class="button secondary">Custom Icon Toast</button>
+            <button
+              @click.prevent="triggerBottomLeftToast()"
+              :read-only="bottomLeftToastActive"
+              class="button secondary"
+            >
+              Bottom Left Toast
+            </button>
+            <button
+              @click.prevent="triggerBottomCenterToast()"
+              :read-only="bottomCenterToastActive"
+              class="button secondary"
+            >
+              Bottom Center Toast
+            </button>
+            <button
+              @click.prevent="triggerCustomIconToast()"
+              :read-only="customIconToastActive"
+              class="button secondary"
+            >
+              Custom Icon Toast
+            </button>
           </div>
         </LayoutRow>
 
@@ -62,7 +80,7 @@
             }"
           >
             <DisplayPromptCore
-              v-model:parentComponentState="secondToastActive"
+              v-model="secondToastActive"
               theme="error"
               :dismissible="false"
               :style-class-passthrough="['dark', 'outlined']"
@@ -85,7 +103,7 @@
             }"
           >
             <DisplayPromptCore
-              v-model:parentComponentState="thirdToastActive"
+              v-model="thirdToastActive"
               theme="success"
               :dismissible="true"
               :style-class-passthrough="['dark', 'outlined']"
@@ -111,7 +129,7 @@
             }"
           >
             <DisplayPromptCore
-              v-model:parentComponentState="fourthToastActive"
+              v-model="fourthToastActive"
               theme="info"
               :dismissible="false"
               :style-class-passthrough="['dark', 'outlined']"
