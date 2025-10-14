@@ -254,17 +254,6 @@ const triggerBottomCenterToast = () => {
 const triggerCustomIconToast = () => {
   customIconToastActive.value = true
 }
-
-onBeforeUnmount(() => {
-  // Cleanup if necessary
-  firstToastActive.value = false
-  secondToastActive.value = false
-  thirdToastActive.value = false
-  fourthToastActive.value = false
-  bottomLeftToastActive.value = false
-  bottomCenterToastActive.value = false
-  customIconToastActive.value = false
-})
 </script>
 
 <style scoped lang="css">

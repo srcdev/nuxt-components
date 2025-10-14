@@ -246,6 +246,10 @@ watch(
     }
   }
 )
+
+onBeforeRouteLeave(() => {
+  setDismissToast()
+})
 </script>
 
 <style lang="css">
