@@ -256,7 +256,7 @@ watch(
   }
 }
 
-@keyframes hide {
+@keyframes hideTop {
   0% {
     opacity: 1;
     transform: translateY(0);
@@ -264,6 +264,17 @@ watch(
   100% {
     opacity: 0;
     transform: translateY(-30px);
+  }
+}
+
+@keyframes hideBottom {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(30px);
   }
 }
 
@@ -309,11 +320,21 @@ watch(
 
   &.hide {
     @supports (animation-timing-function: linear(0, 1)) {
-      animation: hide v-bind(revealDurationMs) var(--spring-easing) forwards;
+      animation: hideTop v-bind(revealDurationMs) var(--spring-easing) forwards;
     }
 
     @supports not (animation-timing-function: linear(0, 1)) {
-      animation: hide calc(v-bind(revealDurationMs) / 2) linear forwards;
+      animation: hideTop calc(v-bind(revealDurationMs) / 2) linear forwards;
+    }
+
+    &.bottom {
+      @supports (animation-timing-function: linear(0, 1)) {
+        animation: hideBottom v-bind(revealDurationMs) var(--spring-easing) forwards;
+      }
+
+      @supports not (animation-timing-function: linear(0, 1)) {
+        animation: hideBottom calc(v-bind(revealDurationMs) / 2) linear forwards;
+      }
     }
   }
 
