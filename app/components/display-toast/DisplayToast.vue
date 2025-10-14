@@ -49,10 +49,13 @@
  *   v-model="showToast"
  *   :config="{
  *     appearance: { theme: 'success', position: 'top', alignment: 'right' },
- *     behavior: { autoDismiss: true, duration: 3000 },
+ *     behavior: { autoDismiss: true, duration: 3000, returnFocusTo: buttonRef },
  *     content: { text: 'Operation completed successfully!' }
  *   }"
  * />
+ *
+ * The returnFocusTo property accepts an HTMLElement or ComponentPublicInstance
+ * and will focus that element when the toast is dismissed for better accessibility.
  *
  * Types exported for use in other components:
  * - DisplayToastConfig
@@ -88,6 +91,7 @@ export interface DisplayToastBehaviorConfig {
   autoDismiss?: boolean
   duration?: number
   revealDuration?: number
+  returnFocusTo?: HTMLElement | ComponentPublicInstance | null
 }
 
 export interface DisplayToastContentConfig {
@@ -157,6 +161,7 @@ const fullWidth = computed(() => props.config?.appearance?.fullWidth ?? false)
 const autoDismiss = computed(() => props.config?.behavior?.autoDismiss ?? true)
 const duration = computed(() => props.config?.behavior?.duration ?? 5000)
 const revealDuration = computed(() => props.config?.behavior?.revealDuration ?? 550)
+const returnFocusTo = computed(() => props.config?.behavior?.returnFocusTo ?? null)
 const toastDisplayText = computed(() => props.config?.content?.text ?? "")
 const customIcon = computed(() => props.config?.content?.customIcon)
 
@@ -209,6 +214,23 @@ const displayDurationMs = computed(() => duration.value + "ms")
 const setDismissToast = async () => {
   transitionalState.value = false
   await useSleep(revealDuration.value)
+
+  // Return focus to specified element if provided
+  if (returnFocusTo.value) {
+    // Handle both HTMLElement and ComponentPublicInstance
+    let focusTarget: HTMLElement | null = null
+
+    if (returnFocusTo.value instanceof HTMLElement) {
+      focusTarget = returnFocusTo.value
+    } else if (returnFocusTo.value && "$el" in returnFocusTo.value) {
+      focusTarget = returnFocusTo.value.$el as HTMLElement
+    }
+
+    if (focusTarget && typeof focusTarget.focus === "function") {
+      focusTarget.focus()
+    }
+  }
+
   externalTriggerModel.value = false
   privateDisplayToast.value = false
 }
