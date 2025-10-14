@@ -127,12 +127,13 @@
             v-model="fourthToastActive"
             :config="{
               appearance: { theme: 'info', position: 'top', fullWidth: true },
+              behavior: { autoDismiss: false },
             }"
           >
             <DisplayPromptCore
               v-model="fourthToastActive"
               theme="info"
-              :dismissible="false"
+              :dismissible="true"
               :style-class-passthrough="['dark', 'outlined']"
             >
               <template #title>Warning Prompt Title with content (Auto Dismiss)</template>
@@ -253,11 +254,6 @@ const triggerBottomCenterToast = () => {
 const triggerCustomIconToast = () => {
   customIconToastActive.value = true
 }
-
-onMounted(() => {
-  // Trigger a toast on mount for demonstration purposes
-  // triggerToast()
-})
 
 onBeforeUnmount(() => {
   // Cleanup if necessary

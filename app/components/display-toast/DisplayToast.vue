@@ -240,6 +240,9 @@ watch(
         await useSleep(duration.value)
         setDismissToast()
       }
+    } else if (!newValue && previousValue) {
+      // If external model is set to false, dismiss the toast
+      setDismissToast()
     }
   }
 )
@@ -317,7 +320,6 @@ watch(
   /*
   * Default is centre for smaller screens
   */
-
   inset-inline: var(--_toast-gutter);
   margin-inline: auto;
 
@@ -447,9 +449,8 @@ watch(
 
   .display-toast-progress {
     position: absolute;
-    right: 8px;
-    bottom: 4px;
-    width: calc(100% - 16px);
+    inset-block-end: 4px;
+    inset-inline: 15px 8px;
     height: 3px;
     transform: scaleX(0);
     transform-origin: right;

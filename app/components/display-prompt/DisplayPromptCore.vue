@@ -75,7 +75,7 @@ const props = defineProps({
 
 const slots = useSlots()
 const promptElementRef = useTemplateRef<HTMLElement>("promptElementRef")
-const parentComponentState = defineModel<boolean>("parentComponentState", { default: false })
+const parentComponentState = defineModel<boolean>({ default: false })
 const compopnentOpen = ref(true)
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
