@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { useBreakpoints, useElementSize, useResizeObserver } from "@vueuse/core"
+import { useElementSize, useResizeObserver } from "@vueuse/core"
 
 const props = defineProps({
   gridData: {

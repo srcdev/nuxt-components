@@ -56,6 +56,7 @@ const responsiveNavLinks = {
       iconName: "material-symbols:widgets",
       childLinksTitle: "UI Components",
       childLinks: [
+        { name: "Wipe Away Vertical", path: "/ui/wipe-away-vertical" },
         { name: "Marquee Scroller", path: "/ui/marquee-scroller" },
         { name: "Banner", path: "/ui/display-banner" },
         { name: "Section Parallax", path: "/ui/section-parallax" },

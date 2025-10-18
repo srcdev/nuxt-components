@@ -17,7 +17,7 @@ html {
   transition: background-color 0.4s ease, color 0.4s ease;
   scrollbar-gutter: stable;
 
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 body {
   color: var(--grayscale-text-body);
@@ -26,5 +26,5 @@ body {
   min-height: 100vh;
   transition: background-color 0.4s ease, color 0.4s ease;
 
-  overflow-x: hidden;
+  overflow-x: clip;
 }
