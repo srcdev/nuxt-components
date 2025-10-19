@@ -52,9 +52,8 @@ const props = defineProps({
   },
 })
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-const supportsScrollTimeline = ref(false)
 const timelineId = useId()
 const stickyItemsContainerRef = useTemplateRef<HTMLElement | null>("stickyItemsContainerRef")
 const stickyItemsRef = useTemplateRef<HTMLElement[] | null>("stickyItemsRef")
@@ -83,6 +82,22 @@ const calculateInset = () => {
   scrollContainerRef.value.style.setProperty("--calculated-inset", timelineInset.value)
 }
 
+let requestAnimationFrameId: number | null = null
+const onScrollDebounce = () => {
+  if (requestAnimationFrameId !== null) return
+  requestAnimationFrameId = requestAnimationFrame(() => {
+    calculateInset()
+    requestAnimationFrameId = null
+  })
+}
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough)
+  }
+)
+
 const fallbackScrollHandler = () => {
   const sections = scrollingItemsRef.value || []
   const layers = stickyItemsRef.value || []
@@ -96,51 +111,23 @@ const fallbackScrollHandler = () => {
   })
 }
 
-const createDebouncedScrollHandler = (callback: () => void) => {
-  let requestAnimationFrameId: number | null = null
-  return () => {
-    if (requestAnimationFrameId !== null) return
-    requestAnimationFrameId = requestAnimationFrame(() => {
-      callback()
-      requestAnimationFrameId = null
-    })
-  }
-}
-
-const debouncedCalculateInset = createDebouncedScrollHandler(calculateInset)
-const debouncedFallbackScrollHandler = createDebouncedScrollHandler(fallbackScrollHandler)
-
-let scrollListener: (() => void) | null = null
-
-watch(
-  () => supportsScrollTimeline.value,
-  (newValue) => {
-    if (newValue) {
-      window.removeEventListener("scroll", debouncedFallbackScrollHandler)
-      window.addEventListener("scroll", debouncedCalculateInset)
-    } else {
-      window.removeEventListener("scroll", debouncedCalculateInset)
-      window.addEventListener("scroll", debouncedFallbackScrollHandler)
-    }
-  }
-)
+const supportsScrollTimeline = import.meta.client ? CSS.supports("animation-timeline: view()") : false
 
 onMounted(() => {
-  supportsScrollTimeline.value = typeof CSS !== "undefined" && CSS.supports("animation-timeline: view()")
-
-  scrollListener = supportsScrollTimeline.value ? debouncedCalculateInset : debouncedFallbackScrollHandler
-  window.addEventListener("scroll", scrollListener)
-
   calculateInset()
+  if (supportsScrollTimeline) {
+    window.addEventListener("scroll", onScrollDebounce)
+  } else {
+    window.addEventListener("scroll", fallbackScrollHandler)
+  }
 })
 
 onUnmounted(() => {
-  if (supportsScrollTimeline.value) {
-    window.removeEventListener("scroll", debouncedCalculateInset)
+  if (supportsScrollTimeline) {
+    window.removeEventListener("scroll", onScrollDebounce)
   } else {
-    window.removeEventListener("scroll", debouncedFallbackScrollHandler)
+    window.removeEventListener("scroll", fallbackScrollHandler)
   }
-  if (scrollListener) window.removeEventListener("scroll", scrollListener)
 })
 </script>
 
@@ -149,9 +136,8 @@ onUnmounted(() => {
   .sticky-items-container {
     position: sticky;
     top: 50%;
-    inset-inline-end: 0;
+    left: 100%;
     transform: translateY(-50%);
-    pointer-events: none;
 
     .sticky-item {
       position: absolute;

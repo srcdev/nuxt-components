@@ -2,8 +2,11 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['view-transition-banner']">
           <h2 class="page-heading-2">Wipe Away Vertical</h2>
+        </LayoutRow>
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['view-transition-banner']">
+          <p class="page-body-normal">Some dummy content</p>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="full">
@@ -29,6 +32,14 @@
               </div>
             </template>
           </WipeAwayVertical>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['view-transition-banner']">
+          <p class="page-body-normal">Some dummy content</p>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['view-transition-banner']">
+          <p class="page-body-normal">Some dummy content</p>
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -89,6 +100,10 @@ const scrollingSection = [
 .wipe-away-vertical-page {
   /* CSS styles */
 
+  .view-transition-banner {
+    min-block-size: 75svh;
+  }
+
   .wipe-away-vertical {
     .sticky-items-container {
       width: 50%;
@@ -100,7 +115,7 @@ const scrollingSection = [
     }
 
     .scrolling-section {
-      min-height: 75vh;
+      min-height: 100vh;
 
       background-color: darkcyan;
       overflow-y: hidden;
