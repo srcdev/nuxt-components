@@ -15,6 +15,7 @@
           'animation-timeline': key === itemCount - 1 ? 'none' : `--section-${timelineId}-${key}`,
           'z-index': itemCount - key,
         }"
+        ref="stickyItemsRef"
       >
         <slot :name="`stickyItem-${key}`"></slot>
       </div>
@@ -27,6 +28,7 @@
       :style="{
         'view-timeline-name': `--section-${timelineId}-${key}`,
       }"
+      ref="scrollingItemsRef"
     >
       <slot :name="`scrollingItem-${key}`"></slot>
     </section>
@@ -54,7 +56,9 @@ const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.s
 
 const timelineId = useId()
 const stickyItemsContainerRef = useTemplateRef<HTMLElement | null>("stickyItemsContainerRef")
+const stickyItemsRef = useTemplateRef<HTMLElement[] | null>("stickyItemsRef")
 const scrollContainerRef = useTemplateRef<HTMLElement | null>("scrollContainerRef")
+const scrollingItemsRef = useTemplateRef<HTMLElement[] | null>("scrollingItemsRef")
 const timelineInset = ref("35% 35%")
 const topPercent = ref("0")
 const bottomPercent = ref("0")
@@ -94,13 +98,36 @@ watch(
   }
 )
 
+const fallbackScrollHandler = () => {
+  const sections = scrollingItemsRef.value || []
+  const layers = stickyItemsRef.value || []
+
+  const mid = window.innerHeight / 2
+
+  sections.forEach((section, i) => {
+    const rect = section.getBoundingClientRect()
+    const active = rect.top <= mid && rect.bottom >= mid
+    if (layers[i]) layers[i].style.opacity = active ? "1" : "0"
+  })
+}
+
+const supportsScrollTimeline = import.meta.client ? CSS.supports("animation-timeline: view()") : false
+
 onMounted(() => {
   calculateInset()
-  window.addEventListener("scroll", onScrollDebounce)
+  if (supportsScrollTimeline) {
+    window.addEventListener("scroll", onScrollDebounce)
+  } else {
+    window.addEventListener("scroll", fallbackScrollHandler)
+  }
 })
 
 onUnmounted(() => {
-  window.removeEventListener("scroll", onScrollDebounce)
+  if (supportsScrollTimeline) {
+    window.removeEventListener("scroll", onScrollDebounce)
+  } else {
+    window.removeEventListener("scroll", fallbackScrollHandler)
+  }
 })
 </script>
 
@@ -139,6 +166,13 @@ onUnmounted(() => {
   .sticky-item {
     animation: wipe-out 1s linear both;
     animation-range: entry 0% entry 100%;
+  }
+}
+
+@supports not (animation-timeline: view()) {
+  .sticky-item {
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
   }
 }
 </style>

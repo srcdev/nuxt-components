@@ -100,9 +100,10 @@ const scrollingSection = [
     }
 
     .scrolling-section {
-      min-height: 100vh;
+      min-height: 75vh;
 
       background-color: darkcyan;
+      overflow-y: hidden;
 
       &:nth-child(odd) {
         background-color: darkgoldenrod;
