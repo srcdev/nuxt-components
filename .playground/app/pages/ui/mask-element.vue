@@ -8,7 +8,7 @@
 
         <LayoutRow tag="div" variant="full" :style-class-passthrough="['test-mask-element', 'mbe-20']">
           <!-- SVG Mask Approach -->
-          <div class="mask-element-wrapper svg-approach">
+          <div class="mask-element-wrapper">
             <svg class="mask-svg" viewBox="0 0 450 120" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <mask id="borderMask">
