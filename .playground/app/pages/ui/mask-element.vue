@@ -9,19 +9,64 @@
         <LayoutRow tag="div" variant="full" :style-class-passthrough="['test-mask-element', 'mbe-20']">
           <!-- SVG Mask Approach -->
           <div class="mask-element-wrapper svg-approach">
-            <svg class="mask-svg" viewBox="0 0 250 70" xmlns="http://www.w3.org/2000/svg">
+            <svg class="mask-svg" viewBox="0 0 450 120" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <mask id="borderMask">
-                  <!-- White area will be visible -->
-                  <rect width="250" height="70" fill="white" rx="8" ry="8" />
-                  <!-- Black area will be transparent (cut out) -->
-                  <rect x="8" y="1" width="241" height="68" fill="black" rx="7" ry="7" />
+                  <!-- White area will be visible (outer shape with different corner radii) -->
+                  <path
+                    d="M 8 0
+                           L 442 0
+                           Q 450 0 450 4
+                           L 450 116
+                           Q 450 120 446 120
+                           L 8 120
+                           Q 0 120 0 112
+                           L 0 8
+                           Q 0 0 8 0 Z"
+                    fill="white"
+                  />
+                  <!-- Black area will be transparent (inner cutout with matching corner radii) -->
+                  <path
+                    d="M 15 1
+                           L 442 1
+                           Q 449 1 449 4
+                           L 449 116
+                           Q 449 119 446 119
+                           L 15 119
+                           Q 8 119 8 112
+                           L 8 8
+                           Q 8 1 15 1 Z"
+                    fill="black"
+                  />
                 </mask>
               </defs>
               <!-- The orange border -->
-              <rect width="250" height="70" fill="var(--orange-8)" mask="url(#borderMask)" rx="8" ry="8" />
+              <path
+                d="M 8 0
+                       L 442 0
+                       Q 450 0 450 4
+                       L 450 116
+                       Q 450 120 446 120
+                       L 8 120
+                       Q 0 120 0 112
+                       L 0 8
+                       Q 0 0 8 0 Z"
+                fill="var(--orange-8)"
+                mask="url(#borderMask)"
+              />
               <!-- Semi-transparent overlay in the cutout area -->
-              <rect x="8" y="1" width="241" height="68" fill="rgba(0,0,0,0.8)" rx="7" ry="7" />
+              <path
+                d="M 15 1
+                       L 442 1
+                       Q 449 1 449 4
+                       L 449 116
+                       Q 449 119 446 119
+                       L 15 119
+                       Q 8 119 8 112
+                       L 8 8
+                       Q 8 1 15 1 Z"
+                fill="rgba(0,0,0,0.8)"
+              />
             </svg>
 
             <!-- Content area positioned over the SVG -->
@@ -79,46 +124,43 @@ useHead({
       inset-inline-start: 50%;
       transform: translateX(-50%);
 
-      /* Position multiple approaches vertically */
-      &.svg-approach {
-        top: 0;
+      .mask-svg {
+        width: 100%;
+        height: 100%;
+        display: block;
       }
 
-      /* SVG approach styles */
-      &.svg-approach {
-        .mask-svg {
-          width: 100%;
-          height: 100%;
-          display: block;
-        }
+      .svg-content {
+        position: absolute;
+        /* Position to match the inner content area */
+        left: var(--_thick-border-width);
+        top: 1px;
+        right: 1px;
+        bottom: 1px;
 
-        .svg-content {
-          position: absolute;
-          /* Position to match the inner content area */
-          left: var(--_thick-border-width);
-          top: 1px;
-          right: 1px;
-          bottom: 1px;
+        /* Styling for the content */
+        padding: 8px 12px;
 
-          /* Styling for the content */
-          padding: 8px 12px;
+        /* Text styling */
+        color: white;
+        font-size: 14px;
+        line-height: 1.3;
 
-          /* Text styling */
-          color: white;
-          font-size: 14px;
-          line-height: 1.3;
+        /* Center content vertically and horizontally */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
 
-          /* Center content vertically and horizontally */
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
+        /* Ensure content appears above the SVG */
+        z-index: 10;
 
-          /* Ensure content appears above the SVG */
-          z-index: 10;
+        p {
+          margin: 0;
 
-          p {
-            margin: 0;
+          & + p {
+            margin-top: 12px;
           }
         }
       }
