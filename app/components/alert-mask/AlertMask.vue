@@ -1,13 +1,5 @@
 <template>
-  <div
-    class="mask-element-wrapper"
-    :class="[{ loaded: loaded }]"
-    ref="wrapperRef"
-    :style="{
-      maxWidth: (props.maxWidth ?? 1024) + 'px',
-      maxHeight: (props.maxHeight ?? 200) + 'px',
-    }"
-  >
+  <div class="mask-element-wrapper" ref="wrapperRef">
     <svg class="mask-svg" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <mask id="borderMask" maskUnits="userSpaceOnUse">
@@ -23,10 +15,10 @@
     <div
       class="svg-content"
       :style="{
-        insetInlineStart: (props.config?.borderLeft ?? 0) + 'px',
-        insetInlineEnd: (props.config?.borderRight ?? 0) + 'px',
-        insetBlockStart: (props.config?.borderTop ?? 0) + 'px',
-        insetBlockEnd: (props.config?.borderBottom ?? 0) + 'px',
+        '--insetInlineStart': (props.config?.borderLeft ?? 0) + 'px',
+        '--insetInlineEnd': (props.config?.borderRight ?? 0) + 'px',
+        '--insetBlockStart': (props.config?.borderTop ?? 0) + 'px',
+        '--insetBlockEnd': (props.config?.borderBottom ?? 0) + 'px',
       }"
     >
       <div class="alert-content-slot" ref="contentRef">
@@ -49,42 +41,36 @@ interface BorderConfig {
 
 const props = defineProps<{
   config?: BorderConfig
-  maxWidth?: number
-  maxHeight?: number
 }>()
 
 const wrapperRef = useTemplateRef<HTMLElement | null>("wrapperRef")
 const contentRef = useTemplateRef<HTMLElement | null>("contentRef")
 const svgWidth = ref(0)
 const svgHeight = ref(0)
-const loaded = ref(false)
 
-// Update whenever container resizes
+// Update dimensions based on content
 onMounted(() => {
-  const el = wrapperRef.value
-  if (!el) return
+  const updateDimensions = () => {
+    const contentEl = contentRef.value
+    if (!contentEl) return
 
-  const resizeObserver = new ResizeObserver(([entry]) => {
-    if (!entry) return
-    svgWidth.value = entry.contentRect.width
-    svgHeight.value = entry.contentRect.height
-  })
-  resizeObserver.observe(el)
+    const rect = contentEl.getBoundingClientRect()
+    const { borderLeft, borderTop, borderRight, borderBottom } = cfg.value
 
-  // console.log("MaskElement mounted, width:", svgWidth.value, "height:", svgHeight.value)
+    // Calculate total dimensions including borders
+    svgWidth.value = rect.width + borderLeft + borderRight
+    svgHeight.value = rect.height + borderTop + borderBottom
+  }
 
-  // const contentHeight = contentRef.value?.getBoundingClientRect().height || 0
-  // const contentWidth = contentRef.value?.getBoundingClientRect().width || 0
-  // svgWidth.value = contentWidth
-  // svgHeight.value = contentHeight
+  // Initial measurement
+  nextTick(updateDimensions)
 
-  console.log("wrapperRef:")
-  console.log(wrapperRef.value?.getBoundingClientRect())
-
-  console.log("contentRef:")
-  console.log(contentRef.value?.getBoundingClientRect())
-
-  loaded.value = true
+  // Observe content changes
+  const contentEl = contentRef.value
+  if (contentEl) {
+    const resizeObserver = new ResizeObserver(updateDimensions)
+    resizeObserver.observe(contentEl)
+  }
 })
 
 const cfg = computed(() => ({
@@ -99,9 +85,11 @@ const cfg = computed(() => ({
 
 // Outer border path (fixed radii)
 const outerPath = computed(() => {
-  const width = svgWidth.value || 400
-  const height = svgHeight.value || 120
+  const width = svgWidth.value
+  const height = svgHeight.value
   const { radiusLeft, radiusRight } = cfg.value
+
+  if (!width || !height) return ""
 
   return `
     M ${radiusLeft} 0
@@ -118,9 +106,11 @@ const outerPath = computed(() => {
 
 // Inner cutout (based on fixed pixel border thickness)
 const innerPath = computed(() => {
-  const width = svgWidth.value || 400
-  const height = svgHeight.value || 120
+  const width = svgWidth.value
+  const height = svgHeight.value
   const { radiusLeft, radiusRight, borderLeft, borderTop, borderRight, borderBottom: borderBottom } = cfg.value
+
+  if (!width || !height) return ""
 
   return `
     M ${radiusLeft + borderLeft} ${borderTop}
@@ -136,27 +126,32 @@ const innerPath = computed(() => {
 })
 </script>
 
-<style scoped>
+<style lang="css">
 .mask-element-wrapper {
-  position: relative;
-  width: 100%;
-  /* height: 100%; */
-  /* aspect-ratio: 450 / 120; */
-  opacity: 0;
+  display: grid;
+  grid-template-areas: "mask";
+  width: 700px;
 
-  &.loaded {
-    opacity: 1;
+  .mask-svg {
+    grid-area: mask;
+    width: 100%;
+    /* height: 100%; */
+    /* display: block; */
   }
-}
 
-.mask-svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
+  .svg-content {
+    grid-area: mask;
+    overflow: hidden;
+    /* position: absolute; */
+    /* z-index: 10; */
+    margin-block: var(--insetBlockStart) var(--insetBlockEnd);
+    margin-inline: var(--insetInlineStart) var(--insetInlineEnd);
 
-.svg-content {
-  position: absolute;
-  z-index: 10;
+    .alert-content-slot {
+      /* width: 100%; */
+      /* height: 100%; */
+      /* box-sizing: border-box; */
+    }
+  }
 }
 </style>

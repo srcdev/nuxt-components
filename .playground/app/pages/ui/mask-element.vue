@@ -17,10 +17,8 @@
               borderRight: 1,
               borderBottom: 1,
             }"
-            :maxWidth="600"
-            :maxHeight="100"
           >
-            <div class="alert-content">
+            <div class="alert-content-parent">
               <p>Constant-radius masked border demo, and some more text</p>
               <p>Constant-radius masked border demo, and some more text</p>
             </div>
@@ -66,14 +64,13 @@ useHead({
     margin-top: 100px;
     display: grid;
     justify-self: center;
-    width: 500px;
-    /* height: 100px; */
 
-    /* outline: 2px solid black; */
+    outline: 2px solid black;
     outline-offset: 4px;
 
-    .alert-content {
+    .alert-content-parent {
       color: white;
+      padding: 1.2rem;
     }
   }
 }
