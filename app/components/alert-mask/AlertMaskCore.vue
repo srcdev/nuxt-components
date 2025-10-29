@@ -1,6 +1,6 @@
 <template>
-  <div class="mask-element-wrapper" ref="wrapperRef">
-    <svg class="mask-svg" xmlns="http://www.w3.org/2000/svg">
+  <div class="alert-mask-core" :class="[elementClasses]">
+    <svg class="alert-mask-decorator" :style="{ '--alertHeight': svgHeight + 'px' }" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <mask id="borderMask" maskUnits="userSpaceOnUse">
           <path :d="outerPath" fill="white" />
@@ -13,7 +13,7 @@
     </svg>
 
     <div
-      class="svg-content"
+      class="alert-mask-content"
       :style="{
         '--insetInlineStart': (props.config?.borderLeft ?? 0) + 'px',
         '--insetInlineEnd': (props.config?.borderRight ?? 0) + 'px',
@@ -21,15 +21,15 @@
         '--insetBlockEnd': (props.config?.borderBottom ?? 0) + 'px',
       }"
     >
-      <div class="alert-content-slot" ref="contentRef">
+      <div class="alert-mask-content-slot" ref="alertContentRef">
         <slot name="default"></slot>
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-interface BorderConfig {
+<script lang="ts">
+export interface BorderConfig {
   color?: string
   radiusLeft?: number
   radiusRight?: number
@@ -38,20 +38,27 @@ interface BorderConfig {
   borderRight?: number
   borderBottom?: number
 }
+</script>
 
-const props = defineProps<{
-  config?: BorderConfig
-}>()
+<script setup lang="ts">
+const props = defineProps({
+  config: Object as PropType<BorderConfig>,
+  styleClassPassthrough: {
+    type: [String, Array] as PropType<string | string[]>,
+    default: () => [],
+  },
+})
 
-const wrapperRef = useTemplateRef<HTMLElement | null>("wrapperRef")
-const contentRef = useTemplateRef<HTMLElement | null>("contentRef")
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+
+const alertContentRef = useTemplateRef<HTMLElement | null>("alertContentRef")
 const svgWidth = ref(0)
 const svgHeight = ref(0)
 
 // Update dimensions based on content
 onMounted(() => {
   const updateDimensions = () => {
-    const contentEl = contentRef.value
+    const contentEl = alertContentRef.value
     if (!contentEl) return
 
     const rect = contentEl.getBoundingClientRect()
@@ -66,7 +73,7 @@ onMounted(() => {
   nextTick(updateDimensions)
 
   // Observe content changes
-  const contentEl = contentRef.value
+  const contentEl = alertContentRef.value
   if (contentEl) {
     const resizeObserver = new ResizeObserver(updateDimensions)
     resizeObserver.observe(contentEl)
@@ -127,31 +134,20 @@ const innerPath = computed(() => {
 </script>
 
 <style lang="css">
-.mask-element-wrapper {
+.alert-mask-core {
   display: grid;
   grid-template-areas: "mask";
-  width: 700px;
 
-  .mask-svg {
+  .alert-mask-decorator {
     grid-area: mask;
     width: 100%;
-    /* height: 100%; */
-    /* display: block; */
+    height: var(--alertHeight);
   }
 
-  .svg-content {
+  .alert-mask-content {
     grid-area: mask;
-    overflow: hidden;
-    /* position: absolute; */
-    /* z-index: 10; */
     margin-block: var(--insetBlockStart) var(--insetBlockEnd);
     margin-inline: var(--insetInlineStart) var(--insetInlineEnd);
-
-    .alert-content-slot {
-      /* width: 100%; */
-      /* height: 100%; */
-      /* box-sizing: border-box; */
-    }
   }
 }
 </style>

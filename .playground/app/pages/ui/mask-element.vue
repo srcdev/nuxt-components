@@ -4,26 +4,26 @@
       <template #layout-content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Mask Element</h2>
-        </LayoutRow>
 
-        <div class="test-mask-element">
-          <AlertMask
-            :config="{
-              color: '#FF7A00',
-              radiusLeft: 12,
-              radiusRight: 4,
-              borderLeft: 12,
-              borderTop: 1,
-              borderRight: 1,
-              borderBottom: 1,
-            }"
-          >
-            <div class="alert-content-parent">
-              <p>Constant-radius masked border demo, and some more text</p>
-              <p>Constant-radius masked border demo, and some more text</p>
-            </div>
-          </AlertMask>
-        </div>
+          <div class="test-mask-element">
+            <AlertMaskCore
+              :config="{
+                color: 'var(--orange-8)',
+                radiusLeft: 12,
+                radiusRight: 4,
+                borderLeft: 12,
+                borderTop: 1,
+                borderRight: 1,
+                borderBottom: 1,
+              }"
+              :style-class-passthrough="['test-alert']"
+            >
+              <div class="some-local-class">
+                <p>Constant-radius masked border demo, and some more text</p>
+              </div>
+            </AlertMaskCore>
+          </div>
+        </LayoutRow>
       </template>
     </NuxtLayout>
   </div>
@@ -50,7 +50,6 @@ useHead({
 
 <style lang="css">
 .mask-element-page {
-  /* CSS styles */
   --_background-image: url("/images/rotating-carousel/image-2.webp");
   --_background-position: 0 0;
 
@@ -65,12 +64,17 @@ useHead({
     display: grid;
     justify-self: center;
 
-    outline: 2px solid black;
-    outline-offset: 4px;
+    .alert-mask-core {
+      &.test-alert {
+        width: 600px;
 
-    .alert-content-parent {
-      color: white;
-      padding: 1.2rem;
+        .alert-mask-content-slot {
+          .some-local-class {
+            color: white;
+            padding: 1.2rem;
+          }
+        }
+      }
     }
   }
 }
