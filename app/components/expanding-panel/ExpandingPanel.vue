@@ -2,7 +2,7 @@
   <div class="expanding-panel" :class="[elementClasses]">
     <details class="expanding-panel-details" :name :open>
       <summary
-        @click.prevent="handleToggle"
+        @click.prevent.stop="handleToggle"
         @keydown.enter.prevent="handleToggle"
         @keydown.space.prevent="handleToggle"
         class="expanding-panel-summary"
@@ -56,7 +56,7 @@ const props = defineProps({
   },
 })
 
-const name = computed(() => props.name || useId())
+const name = shallowRef(props.name || useId())
 const isPanelOpen = defineModel({ default: false }) as Ref<boolean>
 const animationDurationStr = computed(() => `${props.animationDuration}ms`)
 const open = computed(() => {
@@ -76,6 +76,9 @@ const handleToggle = (event: Event) => {
 <style lang="css">
 .expanding-panel {
   .expanding-panel-details {
+    &:hover {
+      cursor: pointer;
+    }
     .expanding-panel-summary {
       display: flex;
       align-items: center;
@@ -109,6 +112,7 @@ const handleToggle = (event: Event) => {
           transform: scaleY(1);
           transition: transform v-bind(animationDurationStr) ease-in-out;
           font-size: 1.2rem;
+          will-change: transform;
         }
       }
     }
@@ -134,6 +138,7 @@ const handleToggle = (event: Event) => {
     display: grid;
     grid-template-rows: 0fr;
     transition: all v-bind(animationDurationStr) ease-in-out;
+    will-change: grid-template-rows;
 
     .inner {
       overflow: hidden;
