@@ -6,7 +6,7 @@
           <h1 class="page-heading-2">Accordian</h1>
           <p>Any item open and/closed</p>
 
-          <AccordianCore :itemCount="3" :style-class-passthrough="['class-modifier-narrow']">
+          <AccordianCore :itemCount="data.length ?? 0" :style-class-passthrough="['class-modifier-narrow']">
             <template v-for="(item, key) in data" v-slot:[`accordian-${key}-summary`]>
               {{ key }} - {{ item.title }}
             </template>
@@ -83,6 +83,11 @@ const data = ref<IAccordianData[]>([
     content:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!",
   },
+  {
+    title: "Trigger Item 4",
+    content:
+      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!",
+  },
 ])
 </script>
 
@@ -109,53 +114,52 @@ const data = ref<IAccordianData[]>([
         transition: margin-block-end 300ms ease-in-out, border-radius 300ms ease-in-out,
           background-color 300ms ease-in-out;
 
+        /* Default state: first element gets top corners, last gets bottom corners */
         &:first-child {
           background-color: darkblue; /* DEV STYLES */
           border-start-start-radius: var(--_border-radius);
           border-start-end-radius: var(--_border-radius);
-
-          &:has(.expanding-panel-details[open]) {
-            margin-block-end: var(--_margin-block-end);
-          }
         }
 
         &:last-child {
           background-color: darkred; /* DEV STYLES */
           border-end-start-radius: var(--_border-radius);
           border-end-end-radius: var(--_border-radius);
-          &:has(.expanding-panel-details[open]) {
+        }
+
+        /* When current element is open: gets full border-radius and reduced margin */
+        &:has(.expanding-panel-details[open]) {
+          border-radius: var(--_border-radius);
+          margin-block-end: var(--_margin-block-end);
+
+          &:first-child {
+            margin-block-end: var(--_margin-block-end);
+          }
+
+          &:last-child {
             background-color: darkorange; /* DEV STYLES */
-            border-end-start-radius: var(--_border-radius);
-            border-end-end-radius: var(--_border-radius);
           }
         }
 
-        &:has(.expanding-panel-details[open]) + .expanding-panel {
-          background-color: darkcyan; /* DEV STYLES */
-          border-radius: var(--_border-radius);
-        }
-
-        /* Previous element is open */
-        &:not(:first-child):has(.expanding-panel-details[open]) {
-          border-start-start-radius: var(--_border-radius);
-          border-start-end-radius: var(--_border-radius);
-          margin-block-end: var(--_margin-block-end);
-        }
-
-        /* Next element is open */
+        /* When immediately before an open element: gets bottom corners and margin */
         &:has(+ .expanding-panel .expanding-panel-details[open]) {
-          /* &:has(.expanding-panel-details[open]) { */
           background-color: darkgreen; /* DEV STYLES */
           border-end-start-radius: var(--_border-radius);
           border-end-end-radius: var(--_border-radius);
           margin-block-end: var(--_margin-block-end);
-          /* } */
         }
 
-        /* Current element is open */
-        &:has(.expanding-panel-details[open]) {
-          border-radius: var(--_border-radius);
-          margin-block-end: 0.4rem;
+        /* Override: if last child and previous element is open, keep bottom corners */
+        &:last-child:has(.expanding-panel-details:not([open])) {
+          border-end-start-radius: var(--_border-radius);
+          border-end-end-radius: var(--_border-radius);
+        }
+
+        /* When following an open element: only gets top corners (not full border-radius) */
+        &:has(.expanding-panel-details[open]) + .expanding-panel {
+          background-color: darkcyan; /* DEV STYLES */
+          border-start-start-radius: var(--_border-radius);
+          border-start-end-radius: var(--_border-radius);
         }
 
         .expanding-panel-details {
