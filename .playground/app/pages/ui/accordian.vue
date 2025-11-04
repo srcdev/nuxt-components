@@ -110,40 +110,33 @@ const data = ref<IAccordianData[]>([
         --_margin-block-end: 1rem;
 
         border: 1px solid var(--gray-0);
-        will-change: margin-block-end, border-radius, background-color;
-        transition: margin-block-end 300ms ease-in-out, border-radius 300ms ease-in-out,
-          background-color 300ms ease-in-out;
+        transition: margin-block-end 300ms ease-in-out, border-radius 300ms ease-in-out;
 
         /* Default state: first element gets top corners, last gets bottom corners */
         &:first-child {
-          background-color: darkblue; /* DEV STYLES */
           border-start-start-radius: var(--_border-radius);
           border-start-end-radius: var(--_border-radius);
         }
 
         &:last-child {
-          background-color: darkred; /* DEV STYLES */
           border-end-start-radius: var(--_border-radius);
           border-end-end-radius: var(--_border-radius);
         }
 
         /* When current element is open: gets full border-radius and reduced margin */
         &:has(.expanding-panel-details[open]) {
+          will-change: margin-block-end, border-radius;
           border-radius: var(--_border-radius);
           margin-block-end: var(--_margin-block-end);
 
           &:first-child {
             margin-block-end: var(--_margin-block-end);
           }
-
-          &:last-child {
-            background-color: darkorange; /* DEV STYLES */
-          }
         }
 
         /* When immediately before an open element: gets bottom corners and margin */
         &:has(+ .expanding-panel .expanding-panel-details[open]) {
-          background-color: darkgreen; /* DEV STYLES */
+          will-change: margin-block-end, border-radius;
           border-end-start-radius: var(--_border-radius);
           border-end-end-radius: var(--_border-radius);
           margin-block-end: var(--_margin-block-end);
@@ -157,7 +150,6 @@ const data = ref<IAccordianData[]>([
 
         /* When following an open element: only gets top corners (not full border-radius) */
         &:has(.expanding-panel-details[open]) + .expanding-panel {
-          background-color: darkcyan; /* DEV STYLES */
           border-start-start-radius: var(--_border-radius);
           border-start-end-radius: var(--_border-radius);
         }
