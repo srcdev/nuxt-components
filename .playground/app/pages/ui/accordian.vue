@@ -101,7 +101,67 @@ const data = ref<IAccordianData[]>([
 
     .accordian-item {
       &.expanding-panel {
+        --_border-radius: 0.6rem;
+        --_margin-block-end: 1rem;
+
+        border: 1px solid var(--gray-0);
+        will-change: margin-block-end, border-radius, background-color;
+        transition: margin-block-end 300ms ease-in-out, border-radius 300ms ease-in-out,
+          background-color 300ms ease-in-out;
+
+        &:first-child {
+          background-color: darkblue; /* DEV STYLES */
+          border-start-start-radius: var(--_border-radius);
+          border-start-end-radius: var(--_border-radius);
+
+          &:has(.expanding-panel-details[open]) {
+            margin-block-end: var(--_margin-block-end);
+          }
+        }
+
+        &:last-child {
+          background-color: darkred; /* DEV STYLES */
+          border-end-start-radius: var(--_border-radius);
+          border-end-end-radius: var(--_border-radius);
+          &:has(.expanding-panel-details[open]) {
+            background-color: darkorange; /* DEV STYLES */
+            border-end-start-radius: var(--_border-radius);
+            border-end-end-radius: var(--_border-radius);
+          }
+        }
+
+        &:has(.expanding-panel-details[open]) + .expanding-panel {
+          background-color: darkcyan; /* DEV STYLES */
+          border-radius: var(--_border-radius);
+        }
+
+        /* Previous element is open */
+        &:not(:first-child):has(.expanding-panel-details[open]) {
+          border-start-start-radius: var(--_border-radius);
+          border-start-end-radius: var(--_border-radius);
+          margin-block-end: var(--_margin-block-end);
+        }
+
+        /* Next element is open */
+        &:has(+ .expanding-panel .expanding-panel-details[open]) {
+          /* &:has(.expanding-panel-details[open]) { */
+          background-color: darkgreen; /* DEV STYLES */
+          border-end-start-radius: var(--_border-radius);
+          border-end-end-radius: var(--_border-radius);
+          margin-block-end: var(--_margin-block-end);
+          /* } */
+        }
+
+        /* Current element is open */
+        &:has(.expanding-panel-details[open]) {
+          border-radius: var(--_border-radius);
+          margin-block-end: 0.4rem;
+        }
+
         .expanding-panel-details {
+          padding-block: 0.8rem;
+          padding-inline: 1.4rem;
+
           .expanding-panel-summary {
             padding: 0.1rem;
 
