@@ -128,7 +128,9 @@ const displayActiveIndex = computed(() => {
 
 const updateItemOrder = (index: number, order: number, zIndex: number = 2) => {
   if (carouselItemsRef?.value && carouselItemsRef.value[index]) {
-    carouselItemsRef.value[index].style.order = order.toString()
+    if (order !== -1) {
+      carouselItemsRef.value[index].style.order = order.toString()
+    }
     carouselItemsRef.value[index].style.zIndex = zIndex.toString()
   }
 }
@@ -167,20 +169,45 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
 
   // Capture positions before reordering (only if we're going to animate)
   const beforeRects = skipAnimation ? [] : carouselItemsRef.value.map((item) => item.getBoundingClientRect())
+  
+  // Store current order positions before reordering
+  const currentOrderMap = new Map<number, number>()
+  if (!skipAnimation) {
+    carouselItemsRef.value.forEach((item, index) => {
+      const currentOrder = parseInt(item.style.order || '1')
+      currentOrderMap.set(index, currentOrder)
+    })
+  }
 
-  // Apply new order and z-index based on direction
+  // Apply new order and calculate z-index based on order transition
   let order = 1
+
+  // Helper function to determine if an item should go behind during transition
+  const shouldGoBehind = (currentOrder: number, newOrder: number) => {
+    // Normal case: moving to higher order (left to right)
+    if (currentOrder < newOrder) return true
+    
+    // Wrap case: moving from end to beginning (high order to low order with big gap)
+    // This happens when an item at the end wraps to the beginning
+    const orderDifference = Math.abs(currentOrder - newOrder)
+    const isWrapping = orderDifference > itemCount.value / 2
+    if (isWrapping && currentOrder > newOrder) return true
+    
+    return false
+  }
 
   // First, place the previous item (for visual continuity)
   const prevIndex = currentActiveIndex.value === 0 ? itemCount.value - 1 : currentActiveIndex.value - 1
-  updateItemOrder(prevIndex, order++, 1) // Lower z-index for previous item
+  const prevCurrentOrder = currentOrderMap.get(prevIndex) || 1
+  const prevNewOrder = order++
+  const prevZIndex = shouldGoBehind(prevCurrentOrder, prevNewOrder) ? 1 : 2
+  updateItemOrder(prevIndex, prevNewOrder, prevZIndex)
 
   // Then place the current active item
-  let zIndex = 3 // Active item gets highest z-index
-  if (direction === "previous") {
-    zIndex = 1 // When going previous, the item moving to position should go behind
-  }
-  updateItemOrder(currentActiveIndex.value, order++, zIndex)
+  const currentOrder = currentOrderMap.get(currentActiveIndex.value) || 1
+  const newCurrentOrder = order++
+  const currentZIndex = shouldGoBehind(currentOrder, newCurrentOrder) ? 1 : 2
+  updateItemOrder(currentActiveIndex.value, newCurrentOrder, currentZIndex)
 
   // Then place all remaining items in sequence
   let nextIndex = currentActiveIndex.value + 1
@@ -190,7 +217,10 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
     }
     if (nextIndex === prevIndex) break // Don't place the previous item again
 
-    updateItemOrder(nextIndex, order++, 2) // Normal z-index for other items
+    const itemCurrentOrder = currentOrderMap.get(nextIndex) || 1
+    const itemNewOrder = order++
+    const itemZIndex = shouldGoBehind(itemCurrentOrder, itemNewOrder) ? 1 : 2
+    updateItemOrder(nextIndex, itemNewOrder, itemZIndex)
     nextIndex++
   }
 
@@ -221,7 +251,7 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
         item.style.willChange = "transform"
         item.style.transition = "none"
         item.style.transform = `translateX(${deltaX}px)`
-
+        
         requestAnimationFrame(() => {
           const shouldTransition = carouselInitComplete.value && userHasInteracted.value
           let transitionProperties = "none"
@@ -249,13 +279,9 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
           item.style.transition = transitionProperties
           item.style.transform = "translateX(0)"
 
-          // After animation completes, normalize z-index values and clean up will-change
+          // After animation completes, clean up will-change (keep z-index as set)
           const handleTransitionEnd = (event: TransitionEvent) => {
             if (event.propertyName === "transform") {
-              // Set final z-index: current item gets highest, others get normal
-              const isCurrentlyVisible = index === currentActiveIndex.value
-              item.style.zIndex = isCurrentlyVisible ? "3" : "2"
-              // Remove will-change after animation completes to free up resources
               item.style.willChange = "auto"
               item.removeEventListener("transitionend", handleTransitionEnd)
             }
@@ -264,9 +290,7 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
           if (shouldTransition) {
             item.addEventListener("transitionend", handleTransitionEnd)
           } else {
-            // If no transition, immediately normalize z-index and clean up will-change
-            const isCurrentlyVisible = index === currentActiveIndex.value
-            item.style.zIndex = isCurrentlyVisible ? "3" : "2"
+            // If no transition, just clean up will-change (keep z-index as set)
             item.style.willChange = "auto"
           }
         })
@@ -416,6 +440,7 @@ onMounted(() => {
     gap: var(--_carousel-item-track-gap);
     overflow-x: hidden;
     position: relative;
+    isolation: isolate;
 
     max-inline-size: var(--_carousel-display-max-width);
     margin-inline: auto;
