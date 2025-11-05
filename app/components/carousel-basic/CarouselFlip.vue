@@ -182,22 +182,12 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
   const prevIndex = currentActiveIndex.value === 0 ? itemCount.value - 1 : currentActiveIndex.value - 1
   updateItemOrder(prevIndex, order++, 1) // Lower z-index for previous item
 
-  console.log("reorderItems - placing previous item (index", prevIndex, ") at order", order - 1)
-
   // Then place the current active item
   let zIndex = 3 // Active item gets highest z-index
   if (direction === "previous") {
     zIndex = 1 // When going previous, the item moving to position should go behind
   }
   updateItemOrder(currentActiveIndex.value, order++, zIndex)
-  console.log(
-    "reorderItems - placing current item (index",
-    currentActiveIndex.value,
-    ") at order",
-    order - 1,
-    "with zIndex",
-    zIndex
-  )
 
   // Then place all remaining items in sequence
   let nextIndex = currentActiveIndex.value + 1
@@ -208,7 +198,6 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
     if (nextIndex === prevIndex) break // Don't place the previous item again
 
     updateItemOrder(nextIndex, order++, 2) // Normal z-index for other items
-    console.log("reorderItems - placing item (index", nextIndex, ") at order", order - 1)
     nextIndex++
   }
 
@@ -331,7 +320,6 @@ const jumpToFrame = (index: number) => {
     }
 
     currentActiveIndex.value = index
-    console.log("jumpToFrame - jumping to index:", index)
 
     reorderItems("jump")
     currentIndex.value = currentActiveIndex.value
@@ -339,29 +327,13 @@ const jumpToFrame = (index: number) => {
 }
 
 const checkAndMoveLastItem = () => {
-  console.log(
-    "checkAndMoveLastItem - allowCarouselOverflow:",
-    props.allowCarouselOverflow,
-    "useFlipAnimation:",
-    props.useFlipAnimation
-  )
   // We need to reorder items for the initial layout regardless of the settings
   // Keep currentActiveIndex at 0 (first item) but reorder visually
-  console.log("checkAndMoveLastItem - keeping currentActiveIndex at 0 but reordering items for initial layout")
   reorderItems("jump", true) // Skip animation during initial setup
   currentIndex.value = currentActiveIndex.value
 }
 
 const initialSetup = () => {
-  console.log(
-    "initialSetup - itemCount:",
-    itemCount.value,
-    "initialItemOffset:",
-    initialItemOffset.value,
-    "circularOffsetBase:",
-    circularOffsetBase.value
-  )
-
   if (carouselItemsRef?.value && carouselItemsRef.value.length > 0 && carouselItemsRef.value[0]) {
     itemWidth.value = carouselItemsRef.value[0].offsetWidth
 
@@ -374,10 +346,8 @@ const initialSetup = () => {
     })
   }
 
-  console.log("initialSetup - before checkAndMoveLastItem, currentActiveIndex:", currentActiveIndex.value)
   carouselInitComplete.value = true
   checkAndMoveLastItem()
-  console.log("initialSetup - after checkAndMoveLastItem, currentActiveIndex:", currentActiveIndex.value)
 }
 
 const { direction } = useSwipe(carouselContainerRef, {
