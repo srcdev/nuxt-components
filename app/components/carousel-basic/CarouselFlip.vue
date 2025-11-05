@@ -341,6 +341,13 @@ const initialSetup = () => {
 
   carouselInitComplete.value = true
   checkAndMoveLastItem()
+
+  // Add mounted class to trigger opacity transition after setup is complete
+  nextTick(() => {
+    if (carouselWrapperRef.value) {
+      carouselWrapperRef.value.classList.add("mounted")
+    }
+  })
 }
 
 const { direction } = useSwipe(carouselContainerRef, {
@@ -386,6 +393,11 @@ onMounted(() => {
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
+  opacity: 0;
+
+  &.mounted {
+    opacity: 1;
+  }
 
   .sr-only {
     position: absolute;

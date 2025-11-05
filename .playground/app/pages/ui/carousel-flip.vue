@@ -39,7 +39,7 @@ useHead({
   title: "Carousel (Basic)",
   meta: [{ name: "description", content: "Examples of Carousel (Basic)" }],
   bodyAttrs: {
-    class: "carousel-flip",
+    class: "carousel-flip-page",
   },
 })
 
