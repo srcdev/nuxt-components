@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ICarouselBasic } from "@/types/types.carousel-basic"
+import type { ICarouselBasic } from "@/types"
 
 definePageMeta({
   layout: false,

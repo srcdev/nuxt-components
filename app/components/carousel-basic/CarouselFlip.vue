@@ -149,8 +149,17 @@ function analyzeOffsets(offsets: number[]) {
 
   const sorted = [...counts.entries()].sort((a, b) => b[1] - a[1])
 
-  const majorityValue = sorted[0][0]
-  const minorityValue = sorted[sorted.length - 1][0]
+  // Handle empty sorted array
+  if (sorted.length === 0) {
+    return {
+      majorityValue: 0,
+      minorityValue: 0,
+      minorityIndex: -1,
+    }
+  }
+
+  const majorityValue = sorted[0]![0]
+  const minorityValue = sorted[sorted.length - 1]![0]
   const minorityIndex = offsets.findIndex((val) => val === minorityValue)
 
   return {
@@ -215,13 +224,15 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
     // Calculate offset values
     const offsetValues = beforeRects.map((beforeRect, index) => {
       const afterRect = afterRects[index]
-      return beforeRect.left - afterRect.left
+      return beforeRect.left - (afterRect?.left ?? beforeRect.left)
     })
 
     const leftValues = analyzeOffsets(offsetValues)
 
     carouselItemsRef.value!.forEach((item, index) => {
-      const deltaX = beforeRects[index].left - afterRects[index].left
+      const beforeRect = beforeRects[index]
+      const afterRect = afterRects[index]
+      const deltaX = (beforeRect?.left ?? 0) - (afterRect?.left ?? 0)
 
       if (deltaX !== 0) {
         item.style.transition = "none"
