@@ -127,7 +127,7 @@ const carouselDataIds = computed(() => {
       .markers-container {
         --marker-height: 12px;
         --marker-width: 12px;
-        --marker-border-radius: 100%;
+        --marker-border-radius: 100vw;
 
         @media (width >= 768px) {
           --marker-height: 22px;

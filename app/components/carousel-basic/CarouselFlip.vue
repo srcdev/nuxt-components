@@ -41,7 +41,7 @@
               <button
                 @click.prevent="jumpToFrame(index - 1)"
                 class="btn-marker"
-                :class="[{ active: currentActiveIndex === getOffsetIndex(index - 1, circularOffsetBase, itemCount) }]"
+                :class="[{ active: displayActiveIndex === index - 1 }]"
                 :aria-label="`Jump to item ${Math.floor(index + 1)}`"
               ></button>
             </li>
@@ -128,6 +128,11 @@ const itemWidthOffsetStr = computed(() => {
 })
 const currentActiveIndex = ref(0)
 
+// Computed property to get the display index (what the user sees as active)
+const displayActiveIndex = computed(() => {
+  return currentActiveIndex.value
+})
+
 const updateItemOrder = (index: number, order: number, zIndex: number = 2) => {
   if (carouselItemsRef?.value && carouselItemsRef.value[index]) {
     carouselItemsRef.value[index].style.order = order.toString()
@@ -164,29 +169,38 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
   // Apply new order and z-index based on direction
   let order = 1
 
-  // For items from currentActiveIndex to end
-  for (let i = currentActiveIndex.value; i < itemCount.value; i++) {
-    let zIndex = 2 // default normal z-index
+  // First, place the previous item (for visual continuity)
+  const prevIndex = currentActiveIndex.value === 0 ? itemCount.value - 1 : currentActiveIndex.value - 1
+  updateItemOrder(prevIndex, order++, 1) // Lower z-index for previous item
 
-    if (i === currentActiveIndex.value) {
-      // The item becoming visible
-      if (direction === "previous") {
-        // When going previous, the item moving to first position should go behind
-        zIndex = 1
-      } else {
-        // Normal case - visible item gets highest z-index
-        zIndex = 3
-      }
-    }
+  console.log("reorderItems - placing previous item (index", prevIndex, ") at order", order - 1)
 
-    updateItemOrder(i, order++, zIndex)
+  // Then place the current active item
+  let zIndex = 3 // Active item gets highest z-index
+  if (direction === "previous") {
+    zIndex = 1 // When going previous, the item moving to position should go behind
   }
+  updateItemOrder(currentActiveIndex.value, order++, zIndex)
+  console.log(
+    "reorderItems - placing current item (index",
+    currentActiveIndex.value,
+    ") at order",
+    order - 1,
+    "with zIndex",
+    zIndex
+  )
 
-  // For items from 0 to currentActiveIndex
-  for (let i = 0; i < currentActiveIndex.value; i++) {
-    // Items that wrap around get lower z-index to slide behind
-    const zIndex = 1
-    updateItemOrder(i, order++, zIndex)
+  // Then place all remaining items in sequence
+  let nextIndex = currentActiveIndex.value + 1
+  while (nextIndex !== prevIndex) {
+    if (nextIndex >= itemCount.value) {
+      nextIndex = 0 // Wrap around
+    }
+    if (nextIndex === prevIndex) break // Don't place the previous item again
+
+    updateItemOrder(nextIndex, order++, 2) // Normal z-index for other items
+    console.log("reorderItems - placing item (index", nextIndex, ") at order", order - 1)
+    nextIndex++
   }
 
   // Skip animation if requested (for initial setup)
@@ -300,23 +314,38 @@ const jumpToFrame = (index: number) => {
       userHasInteracted.value = true
     }
 
-    currentActiveIndex.value = getOffsetIndex(index, circularOffsetBase.value, itemCount.value)
+    currentActiveIndex.value = index
+    console.log("jumpToFrame - jumping to index:", index)
 
-    // currentActiveIndex.value = index;
     reorderItems("jump")
     currentIndex.value = currentActiveIndex.value
   }
 }
 
 const checkAndMoveLastItem = () => {
-  if (props.allowCarouselOverflow || !props.useFlipAnimation) {
-    currentActiveIndex.value = itemCount.value - initialItemOffset.value
-    reorderItems("jump", true) // Skip animation during initial setup
-    currentIndex.value = currentActiveIndex.value
-  }
+  console.log(
+    "checkAndMoveLastItem - allowCarouselOverflow:",
+    props.allowCarouselOverflow,
+    "useFlipAnimation:",
+    props.useFlipAnimation
+  )
+  // We need to reorder items for the initial layout regardless of the settings
+  // Keep currentActiveIndex at 0 (first item) but reorder visually
+  console.log("checkAndMoveLastItem - keeping currentActiveIndex at 0 but reordering items for initial layout")
+  reorderItems("jump", true) // Skip animation during initial setup
+  currentIndex.value = currentActiveIndex.value
 }
 
 const initialSetup = () => {
+  console.log(
+    "initialSetup - itemCount:",
+    itemCount.value,
+    "initialItemOffset:",
+    initialItemOffset.value,
+    "circularOffsetBase:",
+    circularOffsetBase.value
+  )
+
   if (carouselItemsRef?.value && carouselItemsRef.value.length > 0 && carouselItemsRef.value[0]) {
     itemWidth.value = carouselItemsRef.value[0].offsetWidth
 
@@ -329,8 +358,10 @@ const initialSetup = () => {
     })
   }
 
+  console.log("initialSetup - before checkAndMoveLastItem, currentActiveIndex:", currentActiveIndex.value)
   carouselInitComplete.value = true
   checkAndMoveLastItem()
+  console.log("initialSetup - after checkAndMoveLastItem, currentActiveIndex:", currentActiveIndex.value)
 }
 
 const { direction } = useSwipe(carouselContainerRef, {
