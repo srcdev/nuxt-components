@@ -98,13 +98,6 @@ const userHasInteracted = ref(false)
 const initialItemOffset = computed(() => {
   return props.useFlipAnimation ? 1 : 2
 })
-const circularOffsetBase = computed(() => {
-  return props.useFlipAnimation ? 1 : Math.floor(2 * initialItemOffset.value)
-})
-
-function getOffsetIndex(index: number, offset: number, itemCount: number): number {
-  return (index + offset) % itemCount
-}
 
 const currentIndex = ref(0)
 const itemCount = ref(props.carouselDataIds.length)
