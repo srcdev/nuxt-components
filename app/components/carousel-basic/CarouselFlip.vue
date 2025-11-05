@@ -235,6 +235,8 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
       const deltaX = (beforeRect?.left ?? 0) - (afterRect?.left ?? 0)
 
       if (deltaX !== 0) {
+        // Optimize for upcoming transform animation
+        item.style.willChange = "transform"
         item.style.transition = "none"
         item.style.transform = `translateX(${deltaX}px)`
 
@@ -265,12 +267,14 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
           item.style.transition = transitionProperties
           item.style.transform = "translateX(0)"
 
-          // After animation completes, normalize z-index values
+          // After animation completes, normalize z-index values and clean up will-change
           const handleTransitionEnd = (event: TransitionEvent) => {
             if (event.propertyName === "transform") {
               // Set final z-index: current item gets highest, others get normal
               const isCurrentlyVisible = index === currentActiveIndex.value
               item.style.zIndex = isCurrentlyVisible ? "3" : "2"
+              // Remove will-change after animation completes to free up resources
+              item.style.willChange = "auto"
               item.removeEventListener("transitionend", handleTransitionEnd)
             }
           }
@@ -278,9 +282,10 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
           if (shouldTransition) {
             item.addEventListener("transitionend", handleTransitionEnd)
           } else {
-            // If no transition, immediately normalize z-index
+            // If no transition, immediately normalize z-index and clean up will-change
             const isCurrentlyVisible = index === currentActiveIndex.value
             item.style.zIndex = isCurrentlyVisible ? "3" : "2"
+            item.style.willChange = "auto"
           }
         })
       }

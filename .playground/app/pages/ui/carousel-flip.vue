@@ -98,6 +98,7 @@ const carouselDataIds = computed(() => {
 
       .item {
         background-color: light-dark(var(--gray-5), var(--gray-6));
+        contain: layout style paint;
 
         &:nth-child(odd) {
           background-color: light-dark(var(--gray-6), var(--gray-5));
@@ -153,11 +154,13 @@ const carouselDataIds = computed(() => {
 
               &.active {
                 background-color: light-dark(var(--gray-12), var(--gray-00));
+                will-change: background-color;
               }
 
               &:hover,
               &:focus-visible {
                 outline-color: light-dark(#000, #fff);
+                will-change: background-color, outline-color;
               }
             }
           }
@@ -224,6 +227,7 @@ const carouselDataIds = computed(() => {
           &:focus-visible {
             animation-play-state: running;
             outline-color: light-dark(var(--gray-9), var(--gray-4));
+            will-change: transform, opacity, filter;
           }
 
           .arrows-icon {
