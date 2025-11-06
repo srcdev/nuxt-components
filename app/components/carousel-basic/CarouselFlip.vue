@@ -82,7 +82,11 @@ const props = defineProps({
   },
   useFlipAnimation: {
     type: Boolean,
-    default: true,
+    default: false,
+  },
+  useSpringEffect: {
+    type: Boolean,
+    default: false,
   },
 })
 
@@ -105,19 +109,19 @@ const transitionSpeedStr = props.transitionSpeed + "ms"
 
 const itemWidth = ref(0)
 const itemWidthOffsetStr = computed(() => {
-  if (props.allowCarouselOverflow) {
-    if (props.useFlipAnimation) {
-      return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - var(--_carousel-item-track-gap))` // Good
-    } else {
-      return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - (2 * var(--_carousel-item-track-gap)))` // Good
-    }
+  // if (props.allowCarouselOverflow) {
+  if (props.useFlipAnimation) {
+    return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - var(--_carousel-item-track-gap))` // Good
   } else {
-    if (props.useFlipAnimation) {
-      return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - var(--_carousel-item-track-gap))` // Goof
-    } else {
-      return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - (2 * var(--_carousel-item-track-gap)))` // Good
-    }
+    return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - (2 * var(--_carousel-item-track-gap)))` // Good
   }
+  // } else {
+  //   if (props.useFlipAnimation) {
+  //     return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - var(--_carousel-item-track-gap))` // Goof
+  //   } else {
+  //     return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - (2 * var(--_carousel-item-track-gap)))` // Good
+  //   }
+  // }
 })
 const currentActiveIndex = ref(0)
 
@@ -245,6 +249,7 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
       const beforeRect = beforeRects[index]
       const afterRect = afterRects[index]
       const deltaX = (beforeRect?.left ?? 0) - (afterRect?.left ?? 0)
+      const timingFunction = props.useSpringEffect ? "var(--spring-easing)" : "ease"
 
       if (deltaX !== 0) {
         // Optimize for upcoming transform animation
@@ -259,18 +264,18 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
           if (shouldTransition) {
             if (props.allowCarouselOverflow) {
               if (props.useFlipAnimation) {
-                transitionProperties = `transform ${transitionSpeedStr} ease`
+                transitionProperties = `transform ${transitionSpeedStr} ${timingFunction}`
               } else {
                 if (leftValues.minorityIndex !== index) {
-                  transitionProperties = `transform ${transitionSpeedStr} ease`
+                  transitionProperties = `transform ${transitionSpeedStr} ${timingFunction}`
                 }
               }
             } else {
               if (props.useFlipAnimation) {
-                transitionProperties = `transform ${transitionSpeedStr} ease`
+                transitionProperties = `transform ${transitionSpeedStr} ${timingFunction}`
               } else {
                 if (leftValues.minorityIndex !== index) {
-                  transitionProperties = `transform ${transitionSpeedStr} ease`
+                  transitionProperties = `transform ${transitionSpeedStr} ${timingFunction}`
                 }
               }
             }

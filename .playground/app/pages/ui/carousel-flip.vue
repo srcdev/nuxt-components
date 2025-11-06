@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <h1 class="page-heading-2">Carousel (Flip)</h1>
+          <h1 class="page-heading-2">Carousel</h1>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
@@ -11,8 +11,9 @@
             v-if="carouselStatus === 'success'"
             :carousel-data-ids
             :allow-carousel-overflow="true"
-            :transition-speed="500"
-            :use-flip-animation="true"
+            :transition-speed="1000"
+            :use-flip-animation="false"
+            :use-spring-effect="false"
             :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
           >
             <template v-for="(item, index) in carouselData?.items" #[item.id]>
