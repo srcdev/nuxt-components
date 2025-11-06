@@ -169,12 +169,12 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
 
   // Capture positions before reordering (only if we're going to animate)
   const beforeRects = skipAnimation ? [] : carouselItemsRef.value.map((item) => item.getBoundingClientRect())
-  
+
   // Store current order positions before reordering
   const currentOrderMap = new Map<number, number>()
   if (!skipAnimation) {
     carouselItemsRef.value.forEach((item, index) => {
-      const currentOrder = parseInt(item.style.order || '1')
+      const currentOrder = parseInt(item.style.order || "1")
       currentOrderMap.set(index, currentOrder)
     })
   }
@@ -186,13 +186,13 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
   const shouldGoBehind = (currentOrder: number, newOrder: number) => {
     // Normal case: moving to higher order (left to right)
     if (currentOrder < newOrder) return true
-    
+
     // Wrap case: moving from end to beginning (high order to low order with big gap)
     // This happens when an item at the end wraps to the beginning
     const orderDifference = Math.abs(currentOrder - newOrder)
     const isWrapping = orderDifference > itemCount.value / 2
     if (isWrapping && currentOrder > newOrder) return true
-    
+
     return false
   }
 
@@ -251,7 +251,7 @@ const reorderItems = (direction: "next" | "previous" | "jump" = "jump", skipAnim
         item.style.willChange = "transform"
         item.style.transition = "none"
         item.style.transform = `translateX(${deltaX}px)`
-        
+
         requestAnimationFrame(() => {
           const shouldTransition = carouselInitComplete.value && userHasInteracted.value
           let transitionProperties = "none"
