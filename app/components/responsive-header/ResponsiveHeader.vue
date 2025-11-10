@@ -38,7 +38,7 @@
               @mouseenter="handleSummaryHover($event)"
               @focusin="handleSummaryHover($event)"
               @click.prevent="handleSummaryAction($event)"
-              @keypup.prevent.stop="handleSummaryAction($event)"
+              @keyup.prevent.stop="handleSummaryAction($event)"
               class="main-navigation-details-summary has-toggle-icon"
               :aria-label="`${link.childLinksTitle} submenu`"
             >
