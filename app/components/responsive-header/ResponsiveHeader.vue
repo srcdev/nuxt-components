@@ -7,68 +7,57 @@
         class="main-navigation-list"
         :ref="el => setNavRef(String(groupKey), el as HTMLUListElement | null)"
       >
-        <template v-for="(link, localIndex) in navGroup" :key="localIndex">
-          <li
+        <li
+          v-for="(link, localIndex) in navGroup"
+          :key="localIndex"
+          class="main-navigation-item"
+          :class="{
+            'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible,
+          }"
+          :style="{
+            '--_main-navigation-item-width':
+              mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
+          }"
+          ref="mainNavigationItems"
+          :data-group-key="groupKey"
+          :data-local-index="localIndex"
+          @mouseenter="handleNavigationItemHover"
+          @focusin="handleNavigationItemHover"
+        >
+          <NuxtLink
             v-if="link.path"
-            class="main-navigation-item"
-            :class="{
-              'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible,
-            }"
-            :style="{
-              '--_main-navigation-item-width':
-                mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
-            }"
-            ref="mainNavigationItems"
-            :data-group-key="groupKey"
-            :data-local-index="localIndex"
-            @mouseenter="handleNavigationItemHover"
-            @focusin="handleNavigationItemHover"
+            class="main-navigation-link"
+            :class="{ 'has-icon': link.iconName }"
+            :to="link.path"
           >
-            <NuxtLink class="main-navigation-link" :class="{ 'has-icon': link.iconName }" :to="link.path">
+            <Icon v-if="link.iconName" :name="link.iconName" class="decorator-icon" aria-hidden="true" />
+            {{ link.name }}
+          </NuxtLink>
+          <details v-else class="main-navigation-details" name="navigation-group" ref="navigationDetails">
+            <summary
+              @mouseenter="handleSummaryHover($event)"
+              @focusin="handleSummaryHover($event)"
+              @click.prevent="handleSummaryAction($event)"
+              @keypup.prevent.stop="handleSummaryAction($event)"
+              class="main-navigation-details-summary has-toggle-icon"
+              :aria-label="`${link.childLinksTitle} submenu`"
+            >
+              <Icon name="mdi:chevron-down" class="icon" :aria-hidden="true" />
               <Icon v-if="link.iconName" :name="link.iconName" class="decorator-icon" aria-hidden="true" />
-              {{ link.name }}
-            </NuxtLink>
-          </li>
-          <li
-            v-else
-            class="main-navigation-item"
-            :class="{
-              'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible,
-            }"
-            :style="{
-              '--_main-navigation-item-width':
-                mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
-            }"
-            ref="mainNavigationItems"
-            :data-group-key="groupKey"
-            :data-local-index="localIndex"
-          >
-            <details class="main-navigation-details" name="navigation-group" ref="navigationDetails">
-              <summary
-                @mouseenter="handleSummaryHover($event)"
-                @focusin="handleSummaryHover($event)"
-                @click.prevent="handleSummaryAction($event)"
-                @keypup.prevent.stop="handleSummaryAction($event)"
-                class="main-navigation-details-summary has-toggle-icon"
-                :aria-label="`${link.childLinksTitle} submenu`"
-              >
-                <Icon name="mdi:chevron-down" class="icon" :aria-hidden="true" />
-                <Icon v-if="link.iconName" :name="link.iconName" class="decorator-icon" aria-hidden="true" />
 
-                {{ link.childLinksTitle }}
-              </summary>
-              <div class="main-navigation-sub-nav" role="menu">
-                <ul class="main-navigation-sub-nav-list">
-                  <li class="main-navigation-sub-nav-item" v-for="childLink in link.childLinks" :key="childLink.name">
-                    <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link" role="menuitem">
-                      {{ childLink.name }}
-                    </NuxtLink>
-                  </li>
-                </ul>
-              </div>
-            </details>
-          </li>
-        </template>
+              {{ link.childLinksTitle }}
+            </summary>
+            <div class="main-navigation-sub-nav" role="menu">
+              <ul class="main-navigation-sub-nav-list">
+                <li class="main-navigation-sub-nav-item" v-for="childLink in link.childLinks" :key="childLink.name">
+                  <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link" role="menuitem">
+                    {{ childLink.name }}
+                  </NuxtLink>
+                </li>
+              </ul>
+            </div>
+          </details>
+        </li>
       </ul>
     </nav>
     <nav class="secondary-navigation" ref="secondaryNav" aria-label="Secondary navigation">
