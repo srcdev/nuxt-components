@@ -5,7 +5,7 @@
         v-for="(navGroup, groupKey) in responsiveNavLinks"
         :key="groupKey"
         class="main-navigation-list"
-        :ref="el => setNavRef(String(groupKey), el as HTMLUListElement | null)"
+        :ref="(el: HTMLUListElement | null) => setNavRef(String(groupKey), el as HTMLUListElement | null)"
       >
         <li
           v-for="(link, localIndex) in navGroup"
@@ -196,7 +196,7 @@ const {
 
 const slots = useSlots()
 
-const navigationWrapperRef = useTemplateRef("navigationWrapper")
+const navigationWrapperRef = useTemplateRef<HTMLDivElement>("navigationWrapper")
 
 const closeAllNavigationDetails = () => {
   navigationDetailsRefs.value?.forEach((element) => {
@@ -280,7 +280,7 @@ const firstNavRects = ref<IFlooredRect | null>(null)
 const secondNavRef = ref<HTMLUListElement | null>(null)
 const secondNavRects = ref<IFlooredRect | null>(null)
 
-const secondaryNavRef = useTemplateRef("secondaryNav")
+const secondaryNavRef = useTemplateRef<HTMLElement>("secondaryNav")
 const secondaryNavRects = computed({
   get: () => cachedSecondaryNavRects.value,
   set: (value: IFlooredRect | null) => {
@@ -292,7 +292,7 @@ const mainNavigationItemsRefs = useTemplateRef<HTMLLIElement[]>("mainNavigationI
 
 const navigationDetailsRefs = useTemplateRef<HTMLElement[]>("navigationDetails")
 
-const overflowDetailsRef = useTemplateRef("overflowDetails")
+const overflowDetailsRef = useTemplateRef<HTMLDetailsElement>("overflowDetails")
 
 const showOverflowDetails = computed(() => {
   const hasHiddenNav =
