@@ -14,8 +14,7 @@
     "preview": "nuxt preview .playground",
     "lint": "eslint .",
     "postinstall": "nuxt prepare .playground",
-    "release": "release-it",
-    "test": "vitest"
+    "release": "release-it"
   },
   "files": [
     "app/",
@@ -31,7 +30,6 @@
     "@nuxt/eslint": "1.10.0",
     "@nuxt/icon": "2.1.0",
     "@nuxt/image": "2.0.0",
-    "@nuxt/test-utils": "3.20.1",
     "@nuxtjs/i18n": "10.2.0",
     "@vueuse/core": "14.0.0",
     "eslint": "9.39.1",
@@ -40,8 +38,7 @@
     "nuxt": "4.2.1",
     "patch-package": "8.0.1",
     "release-it": "19.0.6",
-    "typescript": "5.9.3",
-    "vitest": "^3.2.0"
+    "typescript": "5.9.3"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
