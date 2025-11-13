@@ -5,7 +5,7 @@
         v-for="(navGroup, groupKey) in responsiveNavLinks"
         :key="groupKey"
         class="main-navigation-list"
-        :ref="(el: HTMLUListElement | null) => setNavRef(String(groupKey), el as HTMLUListElement | null)"
+        :ref="(el: Element | ComponentPublicInstance | null) => setNavRef(String(groupKey), el as HTMLUListElement | null)"
       >
         <li
           v-for="(link, localIndex) in navGroup"
@@ -263,8 +263,8 @@ const mainNavigationState = ref<ResponsiveHeaderState>({
 
 const navRefs = ref<Record<string, HTMLUListElement | null>>({})
 
-const setNavRef = (key: string, el: HTMLUListElement | null) => {
-  navRefs.value[key] = el
+const setNavRef = (key: string, el: Element | ComponentPublicInstance | null) => {
+  navRefs.value[key] = el as HTMLUListElement | null
 }
 
 const navigationWrapperRects = computed({

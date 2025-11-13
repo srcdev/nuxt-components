@@ -1,4 +1,4 @@
-import type { IFlooredRect } from "@/types/responsiveHeader"
+import type { IFlooredRect } from "@/types"
 
 export const useNavigationState = () => {
   // Simple reactive refs that persist across route changes using useState
