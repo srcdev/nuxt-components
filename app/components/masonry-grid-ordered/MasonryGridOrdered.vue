@@ -1,7 +1,7 @@
 <template>
   <div class="masonry-grid-ordered" :class="[elementClasses]">
     <div class="masonry-grid-ordered-wrapper" ref="gridWrapper">
-      <div v-for="item in gridData" :key="item.id" class="masonry-grid-ordered-item" ref="gridItemsRefs">
+      <div v-for="item in props.gridData" :key="item.id" class="masonry-grid-ordered-item" ref="gridItemsRefs">
         <slot :name="item.id"></slot>
       </div>
     </div>
@@ -9,12 +9,13 @@
 </template>
 
 <script setup lang="ts">
+import { computed, nextTick, onMounted, ref, watch, type PropType } from "vue"
 import { useElementSize, useResizeObserver } from "@vueuse/core"
 
 const props = defineProps({
   gridData: {
-    type: Object,
-    default: {},
+    type: Array as PropType<{ id: string }[]>,
+    default: () => [],
   },
   minTileWidth: {
     type: Number,
@@ -28,16 +29,12 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-  mobilePreferredColCount: {
-    type: Number,
-    default: 1,
-  },
   fixedWidth: {
     type: Boolean,
     default: false,
   },
   justify: {
-    type: String as PropType<String>,
+    type: String as PropType<"left" | "center" | "right">,
     default: "left",
     validator: (val: string) => ["left", "center", "right"].includes(val),
   },
@@ -45,35 +42,48 @@ const props = defineProps({
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-const gridData = toRef(() => props.gridData)
-
-const minTileWidth = toRef(() => props.minTileWidth)
 const gridWrapper = ref<null | HTMLDivElement>(null)
 const gridItemsRefs = ref<HTMLDivElement[]>([])
 const { width } = useElementSize(gridWrapper)
+
 const columnCount = computed(() => {
-  return Math.floor(width.value / minTileWidth.value)
+  if (width.value === 0) return 1
+  return Math.max(1, Math.floor(width.value / props.minTileWidth))
 })
 
-const gapNum = toRef(props.gap)
-const gapStr = toRef(props.gap + "px")
+const isSingleColumn = computed(() => columnCount.value === 1)
 
-const fixedWidth = toRef(() => props.fixedWidth)
-const minTileWidthStr = toRef(props.minTileWidth + "px")
+const gapStr = computed(() => `${props.gap}px`)
+
+const minTileWidthStr = computed(() => `${props.minTileWidth}px`)
 const maxTileWidth = computed(() => {
-  return fixedWidth.value ? minTileWidth.value + "px" : "1fr"
+  return props.fixedWidth ? `${props.minTileWidth}px` : "1fr"
 })
 
-const justify = computed(() => {
-  return fixedWidth.value ? props.justify : "stretch"
+const justifyContent = computed(() => {
+  return props.fixedWidth ? props.justify : "stretch"
 })
 
 const updateGrid = () => {
   if (gridWrapper.value !== null) {
+    // For single column, no need for complex calculations - just use CSS grid
+    if (columnCount.value === 1) {
+      // Reset any absolute positioning for single column
+      gridItemsRefs.value.forEach((item) => {
+        item?.style.removeProperty("--_position")
+        item?.style.removeProperty("--_position-top")
+        item?.style.removeProperty("--_position-left")
+        item?.style.removeProperty("--_element-width")
+      })
+      gridWrapper.value?.style.removeProperty("--_wrapper-height")
+      return
+    }
+
+    // Only run complex masonry calculations for 2+ columns
     const wrapperWidth = gridWrapper.value?.offsetWidth ?? 0
-    const itemWidth = fixedWidth.value
-      ? minTileWidth.value
-      : Math.floor((wrapperWidth - (columnCount.value - 1) * gapNum.value) / columnCount.value)
+    const itemWidth = props.fixedWidth
+      ? props.minTileWidth
+      : Math.floor((wrapperWidth - (columnCount.value - 1) * props.gap) / columnCount.value)
 
     const colHeights = Array(columnCount.value).fill(0)
 
@@ -86,7 +96,7 @@ const updateGrid = () => {
       item?.style.setProperty("--_position-left", minIndex * (100 / columnCount.value) + "%")
       item?.style.setProperty("--_element-width", itemWidth + "px")
 
-      colHeights[minIndex] += Math.floor(item.offsetHeight + gapNum.value)
+      colHeights[minIndex] += Math.floor(item.offsetHeight + props.gap)
     })
 
     const maxHeight = Math.max(...colHeights)
@@ -98,10 +108,21 @@ useResizeObserver(gridWrapper, () => {
   updateGrid()
 })
 
+onMounted(() => {
+  nextTick(() => updateGrid())
+})
+
 watch(
-  () => fixedWidth.value,
+  () => props.fixedWidth,
   () => {
     updateGrid()
+  }
+)
+
+watch(
+  () => props.gridData,
+  () => {
+    nextTick(() => updateGrid())
   }
 )
 
@@ -124,37 +145,53 @@ watch(
   transition: max-width var(--_transition-duration) ease;
 
   .masonry-grid-ordered-wrapper {
+    background-color: blueviolet;
     display: grid;
-    justify-self: v-bind(justify);
-    grid-gap: v-bind(gapStr);
-    grid-template-columns: repeat(1, minmax(v-bind(minTileWidthStr), v-bind(maxTileWidth)));
+    justify-self: v-bind(justifyContent);
+    gap: v-bind(gapStr);
+    /* grid-template-columns: repeat(1, minmax(v-bind(minTileWidthStr), v-bind(maxTileWidth))); */
+    grid-auto-flow: row;
     position: relative;
 
+    /* Only set explicit height for multi-column layouts */
     height: var(--_wrapper-height);
+    width: 100%;
 
-    @container (min-width: 768px) {
+    /* 2 columns: when container can fit 2 * minTileWidth + 1 gap (hard coded for now) */
+    @container (width >= 636px) {
+      grid-auto-flow: unset;
       grid-template-columns: repeat(2, minmax(v-bind(minTileWidthStr), v-bind(maxTileWidth)));
     }
 
-    @container (min-width: 1024px) {
+    /* Next querie commented as it's my intention to not need them */
+    /* 3 columns: when container can fit 3 * minTileWidth + 2 gaps */
+    /* @container (min-width: 1024px) {
       grid-template-columns: repeat(3, minmax(v-bind(minTileWidthStr), v-bind(maxTileWidth)));
-    }
-    @container (min-width: 1280px) {
+    } */
+
+    /* 4 columns: when container can fit 4 * minTileWidth + 3 gaps */
+    /* @container (min-width: 1280px) {
       grid-template-columns: repeat(4, minmax(v-bind(minTileWidthStr), v-bind(maxTileWidth)));
-    }
+    } */
 
     .masonry-grid-ordered-item {
-      transition: position var(--_transition-duration) ease, top var(--_transition-duration) ease,
-        left var(--_transition-duration) ease;
-
-      position: var(--_position);
-      top: var(--_position-top);
-      left: var(--_position-left);
-      width: var(--_element-width);
+      /* width: auto; */
 
       outline: 0.1rem solid var(--_border-color);
       padding: 1.2rem;
       border-radius: 4px;
+
+      background-color: brown;
+
+      @container (min-width: calc(2 * v-bind(minTileWidthStr) + v-bind(gapStr))) {
+        position: var(--_position, static);
+        top: var(--_position-top, auto);
+        left: var(--_position-left, auto);
+        width: var(--_element-width, auto);
+
+        transition: position var(--_transition-duration) ease, top var(--_transition-duration) ease,
+          left var(--_transition-duration) ease;
+      }
     }
   }
 }
