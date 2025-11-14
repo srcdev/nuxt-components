@@ -53,6 +53,7 @@ const { width } = useElementSize(gridWrapper)
 interface ItemData {
   height: number
   column: number
+  row: number
   top: number
   bottom: number
   // Future: translateY, etc.
@@ -84,7 +85,7 @@ const updateGrid = () => {
     // Initialize or reset the item data array
     itemDataArray.value = Array(props.gridData.length)
       .fill(null)
-      .map(() => ({ height: 0, column: 0, top: 0, bottom: 0 }))
+      .map(() => ({ height: 0, column: 0, row: 0, top: 0, bottom: 0 }))
 
     // Step 1: Hide items for measurement
     gridItemsRefs.value.forEach((itemEl) => {
@@ -106,6 +107,9 @@ const updateGrid = () => {
       // Calculate which column this item would be in based on CSS Grid's auto-fit
       const column = index % columnCount.value
 
+      // Calculate which row this item would be in based on CSS Grid's auto-fit
+      const row = Math.floor(index / columnCount.value)
+
       // Get the item's position relative to the grid wrapper
       const wrapperRect = gridWrapper.value!.getBoundingClientRect()
       const itemRect = itemEl.getBoundingClientRect()
@@ -115,6 +119,7 @@ const updateGrid = () => {
       // Store the data in our tracking array
       itemDataArray.value[index].height = contentHeight
       itemDataArray.value[index].column = column
+      itemDataArray.value[index].row = row
       itemDataArray.value[index].top = top
       itemDataArray.value[index].bottom = bottom
 
