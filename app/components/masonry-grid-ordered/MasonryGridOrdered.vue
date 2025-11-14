@@ -1,6 +1,6 @@
 <template>
   <div class="masonry-grid-ordered" :class="[elementClasses]">
-    <div class="masonry-grid-ordered-wrapper" ref="gridWrapper">
+    <div class="masonry-grid-ordered-wrapper" :class="[{ 'multiple-cols': !isSingleColumn }]" ref="gridWrapper">
       <div v-for="item in props.gridData" :key="item.id" class="masonry-grid-ordered-item" ref="gridItemsRefs">
         <div class="masonry-grid-ordered-content" ref="gridContentRefs">
           <slot :name="item.id"></slot>
@@ -52,8 +52,8 @@ const { width } = useElementSize(gridWrapper)
 const columnCount = computed(() => {
   if (width.value === 0) return 1
   // Match the CSS container query breakpoint (636px hard-coded for now)
-  if (width.value < 636) return 1
-  return Math.max(1, Math.floor(width.value / props.minTileWidth))
+  // if (width.value < 636) return 1
+  return Math.max(1, Math.floor(width.value / (props.minTileWidth + props.gap)))
 })
 
 const isSingleColumn = computed(() => columnCount.value === 1)
@@ -84,9 +84,7 @@ const updateGrid = () => {
     // Step 1: Hide items and reset to static positioning for measurement
     gridItemsRefs.value.forEach((itemEl, index) => {
       if (itemEl) {
-        itemEl.style.setProperty("--_position", "static")
         itemEl.style.setProperty("--_opacity", "0")
-        itemEl.style.removeProperty("--_position-top")
       }
     })
 
@@ -127,20 +125,21 @@ const updateGrid = () => {
     measurements.forEach((measurement, index) => {
       const itemEl = gridItemsRefs.value[index]
       if (!itemEl) return
+      // if (!measurements.length) return
 
       // Find the shortest column
       const minHeight = Math.min(...colHeights)
       const minIndex = colHeights.indexOf(minHeight)
 
+      itemEl.style.setProperty("--_item-height", measurements[index].contentHeight + "px")
+
       // Apply masonry positioning with captured width
-      itemEl.style.setProperty("--_position", "absolute")
-      itemEl.style.setProperty("--_position-top", minHeight + "px")
-      itemEl.style.setProperty("--_position-left", (minIndex * (measurement.itemWidth + props.gap)) + "px")
-      itemEl.style.setProperty("--_element-width", measurement.itemWidth + "px")
       itemEl.style.setProperty("--_opacity", "1") // Show the item
 
       console.log(
-        `📍 Positioning item ${index} at top: ${minHeight}px, left: ${minIndex * (measurement.itemWidth + props.gap)}px in column ${minIndex}, width: ${measurement.itemWidth}px`
+        `📍 Positioning item ${index} at top: ${minHeight}px, left: ${
+          minIndex * (measurement.itemWidth + props.gap)
+        }px in column ${minIndex}, width: ${measurement.itemWidth}px`
       )
 
       // Update column height for next item
@@ -158,10 +157,6 @@ const updateGrid = () => {
     // Single column: reset to normal flow
     gridItemsRefs.value.forEach((itemEl) => {
       if (itemEl) {
-        itemEl.style.removeProperty("--_position")
-        itemEl.style.removeProperty("--_position-top")
-        itemEl.style.removeProperty("--_position-left")
-        itemEl.style.removeProperty("--_element-width")
         itemEl.style.removeProperty("--_opacity")
       }
     })
@@ -235,45 +230,24 @@ watch(
     height: var(--_wrapper-height, auto);
     width: 100%;
 
-    /* 2 columns: when container can fit 2 * minTileWidth + 1 gap (hard coded for now) */
-    @container (width >= 636px) {
-      position: relative;
-      /* grid-template-columns: repeat(auto-fit, minmax(v-bind(minTileWidthStr), v-bind(maxTileWidth))); */
-    }
-
-    /* Next querie commented as it's my intention to not need them */
-    /* 3 columns: when container can fit 3 * minTileWidth + 2 gaps */
-    /* @container (min-width: 1024px) {
-      grid-template-columns: repeat(3, minmax(v-bind(minTileWidthStr), v-bind(maxTileWidth)));
-    } */
-
-    /* 4 columns: when container can fit 4 * minTileWidth + 3 gaps */
-    /* @container (min-width: 1280px) {
-      grid-template-columns: repeat(4, minmax(v-bind(minTileWidthStr), v-bind(maxTileWidth)));
-    } */
-
     .masonry-grid-ordered-item {
-      /* width: auto; */
+      background-color: darkcyan;
 
-      outline: 0.1rem solid var(--_border-color);
-      padding: 1.2rem;
-      border-radius: 4px;
+      .masonry-grid-ordered-content {
+        outline: 0.1rem solid var(--_border-color);
+        padding: 1.2rem;
+        border-radius: 4px;
 
-      background-color: brown;
-
-      @container (width >= 636px) {
-        position: var(--_position);
-        top: var(--_position-top);
-        left: var(--_position-left);
-        width: var(--_element-width);
-        opacity: var(--_opacity, 1);
-
-        transition: position var(--_transition-duration) ease, top var(--_transition-duration) ease,
-          left var(--_transition-duration) ease;
+        background-color: brown;
       }
     }
 
-    /* Content element has no styling - just contains slot for accurate height measurement */
+    &.multiple-cols {
+      .masonry-grid-ordered-item {
+        height: var(--_item-height, auto);
+        opacity: var(--_opacity, 1);
+      }
+    }
   }
 }
 </style>
