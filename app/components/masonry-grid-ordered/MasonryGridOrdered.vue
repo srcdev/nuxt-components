@@ -45,9 +45,19 @@ const props = defineProps({
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 const gridWrapper = ref<null | HTMLDivElement>(null)
-const gridItemsRefs = ref<HTMLDivElement[]>([]) // Refs to item elements (with styling)
-const gridContentRefs = ref<HTMLDivElement[]>([]) // Refs to content elements (no styling)
+const gridItemsRefs = ref<HTMLDivElement[]>([])
+const gridContentRefs = ref<HTMLDivElement[]>([])
 const { width } = useElementSize(gridWrapper)
+
+// Track item properties for masonry positioning
+interface ItemData {
+  height: number
+  column: number
+  top: number
+  bottom: number
+  // Future: translateY, etc.
+}
+const itemDataArray = ref<ItemData[]>([])
 
 const columnCount = computed(() => {
   if (width.value === 0) return 1
@@ -70,19 +80,14 @@ const justifyContent = computed(() => {
 })
 
 const updateGrid = () => {
-  console.log("🧪 Debug info:", {
-    gridWrapperExists: !!gridWrapper.value,
-    width: width.value,
-    columnCount: columnCount.value,
-    minTileWidth: props.minTileWidth,
-    condition: gridWrapper.value !== null && columnCount.value > 1,
-  })
-
   if (gridWrapper.value !== null && columnCount.value > 1) {
-    console.log("🎯 Starting updateGrid - columnCount:", columnCount.value)
+    // Initialize or reset the item data array
+    itemDataArray.value = Array(props.gridData.length)
+      .fill(null)
+      .map(() => ({ height: 0, column: 0, top: 0, bottom: 0 }))
 
-    // Step 1: Hide items and reset to static positioning for measurement
-    gridItemsRefs.value.forEach((itemEl, index) => {
+    // Step 1: Hide items for measurement
+    gridItemsRefs.value.forEach((itemEl) => {
       if (itemEl) {
         itemEl.style.setProperty("--_opacity", "0")
       }
@@ -91,73 +96,44 @@ const updateGrid = () => {
     // Force a reflow to get accurate measurements in grid layout
     gridWrapper.value.offsetHeight
 
-    // Step 2: Measure natural heights while items are in CSS grid
-    const colHeights = Array(columnCount.value).fill(0)
-    const measurements: { contentHeight: number; itemHeight: number; totalHeight: number; itemWidth: number }[] = []
-
+    // Step 2: Measure heights and store in array
     gridContentRefs.value.forEach((contentEl, index) => {
-      if (!contentEl || !gridItemsRefs.value[index]) return
+      if (!contentEl || !gridItemsRefs.value[index] || !itemDataArray.value[index]) return
 
       const itemEl = gridItemsRefs.value[index]
-
-      // Get the natural height of the content and item (with proper grid width)
       const contentHeight = contentEl.offsetHeight
-      const itemHeight = itemEl.offsetHeight
-      const itemWidth = itemEl.offsetWidth // Capture the grid-constrained width
 
-      // Add the item's padding to get total height needed
-      const computedStyle = getComputedStyle(itemEl)
-      const paddingTop = parseFloat(computedStyle.paddingTop) || 0
-      const paddingBottom = parseFloat(computedStyle.paddingBottom) || 0
-      const totalItemHeight = contentHeight + paddingTop + paddingBottom
+      // Calculate which column this item would be in based on CSS Grid's auto-fit
+      const column = index % columnCount.value
 
-      measurements.push({ contentHeight, itemHeight: totalItemHeight, totalHeight: totalItemHeight, itemWidth })
+      // Get the item's position relative to the grid wrapper
+      const wrapperRect = gridWrapper.value!.getBoundingClientRect()
+      const itemRect = itemEl.getBoundingClientRect()
+      const top = itemRect.top - wrapperRect.top
+      const bottom = top + contentHeight
 
-      console.log(`📏 Item ${index} (measured in grid):`, {
-        contentHeight,
-        itemHeight,
-        paddingTop,
-        paddingBottom,
-        totalItemHeight,
-        itemWidth: itemEl.offsetWidth,
-      })
-    }) // Step 3: Apply absolute positioning with measured heights and widths
-    measurements.forEach((measurement, index) => {
-      const itemEl = gridItemsRefs.value[index]
-      if (!itemEl) return
-      // if (!measurements.length) return
+      // Store the data in our tracking array
+      itemDataArray.value[index].height = contentHeight
+      itemDataArray.value[index].column = column
+      itemDataArray.value[index].top = top
+      itemDataArray.value[index].bottom = bottom
 
-      // Find the shortest column
-      const minHeight = Math.min(...colHeights)
-      const minIndex = colHeights.indexOf(minHeight)
-
-      itemEl.style.setProperty("--_item-height", measurements[index].contentHeight + "px")
-
-      // Apply masonry positioning with captured width
-      itemEl.style.setProperty("--_opacity", "1") // Show the item
-
-      console.log(
-        `📍 Positioning item ${index} at top: ${minHeight}px, left: ${
-          minIndex * (measurement.itemWidth + props.gap)
-        }px in column ${minIndex}, width: ${measurement.itemWidth}px`
-      )
-
-      // Update column height for next item
-      colHeights[minIndex] += measurement.totalHeight + props.gap
+      // Set the CSS custom property for height
+      itemEl.style.setProperty("--_item-height", `${contentHeight}px`)
+      itemEl.style.setProperty("--_opacity", "1")
     })
 
-    // Set container height based on tallest column
-    const maxHeight = Math.max(...colHeights) - props.gap // Remove last gap
-    gridWrapper.value?.style.setProperty("--_wrapper-height", maxHeight + "px")
-
-    console.log("📊 Column heights:", colHeights)
-    console.log("🎨 Container height set to:", maxHeight + "px")
+    // Log the complete item data array when calculations are complete
+    console.log("📊 Item data array:", itemDataArray.value)
   } else {
-    console.log("🔄 Single column mode - resetting positioning")
+    // Reset item data array
+    itemDataArray.value = []
+
     // Single column: reset to normal flow
     gridItemsRefs.value.forEach((itemEl) => {
       if (itemEl) {
         itemEl.style.removeProperty("--_opacity")
+        itemEl.style.removeProperty("--_item-height")
       }
     })
     gridWrapper.value?.style.removeProperty("--_wrapper-height")
@@ -192,7 +168,6 @@ watch(
 watch(
   () => width.value,
   (newWidth) => {
-    console.log("📐 Width changed:", newWidth)
     if (newWidth > 0) {
       nextTick(() => updateGrid())
     }
