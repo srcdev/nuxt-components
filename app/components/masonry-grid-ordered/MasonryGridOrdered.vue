@@ -150,8 +150,9 @@ const updateGrid = () => {
       itemDataArray.value[index].bottom = bottom
       itemDataArray.value[index].translateY = translateY
 
-      // Set the CSS custom property for height
+      // Set the CSS custom properties
       itemEl.style.setProperty("--_item-height", `${contentHeight}px`)
+      itemEl.style.setProperty("--_translate-y", `${translateY}px`)
       itemEl.style.setProperty("--_opacity", "1")
     })
 
@@ -166,6 +167,7 @@ const updateGrid = () => {
       if (itemEl) {
         itemEl.style.removeProperty("--_opacity")
         itemEl.style.removeProperty("--_item-height")
+        itemEl.style.removeProperty("--_translate-y")
       }
     })
     gridWrapper.value?.style.removeProperty("--_wrapper-height")
@@ -253,6 +255,8 @@ watch(
       .masonry-grid-ordered-item {
         height: var(--_item-height, auto);
         opacity: var(--_opacity, 1);
+        transform: translateY(var(--_translate-y, 0px));
+        transition: transform var(--_transition-duration) ease;
       }
     }
   }
