@@ -1,6 +1,10 @@
 <template>
   <div class="masonry-grid-ordered" :class="[elementClasses]">
-    <div class="masonry-grid-ordered-wrapper" :class="[{ 'multiple-cols': !isSingleColumn }]" ref="gridWrapper">
+    <div
+      class="masonry-grid-ordered-wrapper"
+      :class="[{ 'multiple-cols': !isSingleColumn, 'setup-complete': isSetupComplete }]"
+      ref="gridWrapper"
+    >
       <div v-for="item in props.gridData" :key="item.id" class="masonry-grid-ordered-item" ref="gridItemsRefs">
         <div class="masonry-grid-ordered-content" ref="gridContentRefs">
           <slot :name="item.id"></slot>
@@ -59,6 +63,7 @@ interface ItemData {
   translateY: number
 }
 const itemDataArray = ref<ItemData[]>([])
+const isSetupComplete = ref(false)
 
 const columnCount = computed(() => {
   if (width.value === 0) return 1
@@ -158,7 +163,13 @@ const updateGrid = () => {
 
     // Log the complete item data array when calculations are complete
     console.log("📊 Item data array:", itemDataArray.value)
+
+    // Mark setup as complete
+    isSetupComplete.value = true
   } else {
+    // Reset setup state for single column
+    isSetupComplete.value = false
+
     // Reset item data array
     itemDataArray.value = []
 
@@ -218,38 +229,14 @@ watch(
 
 <style lang="css">
 .masonry-grid-ordered {
-  --_border-color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
   --_transition-duration: 0.3s;
 
-  container-type: inline-size;
-  position: relative;
-
-  transition: max-width var(--_transition-duration) ease;
-
   .masonry-grid-ordered-wrapper {
-    background-color: blueviolet;
     display: grid;
-    justify-self: v-bind(justifyContent);
     gap: v-bind(gapStr);
     grid-template-columns: repeat(auto-fit, minmax(v-bind(minTileWidthStr), 1fr));
-    /* grid-auto-flow: row; */
-    position: relative;
 
-    /* Only set explicit height for multi-column layouts */
     height: var(--_wrapper-height, auto);
-    width: 100%;
-
-    .masonry-grid-ordered-item {
-      background-color: darkcyan;
-
-      .masonry-grid-ordered-content {
-        outline: 0.1rem solid var(--_border-color);
-        padding: 1.2rem;
-        border-radius: 4px;
-
-        background-color: brown;
-      }
-    }
 
     &.multiple-cols {
       .masonry-grid-ordered-item {

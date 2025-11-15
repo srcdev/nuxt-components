@@ -18,7 +18,7 @@
             :styleClassPassthrough="[canvasName, 'mi-auto']"
           >
             <template v-for="(item, index) in quotesData?.quotes.slice(0, displayCount)" v-slot:[item.id]>
-              <div class="p-10 border border-1 border-grey-dark border-r-4">
+              <div class="demo-grid-item-content">
                 <p class="text-normal wght-700">{{ index + 1 }}: {{ item.author }}</p>
                 <p class="text-normal">{{ item.quote }}</p>
               </div>
@@ -53,4 +53,27 @@ const displayCount = 12
 const { data: quotesData, status } = await useFetch<IQuotes>("https://dummyjson.com/quotes")
 </script>
 
-<style lang="css"></style>
+<style lang="css">
+.mi-auto {
+  --_border-color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
+
+  &.masonry-grid-ordered {
+    .masonry-grid-ordered-wrapper {
+      background-color: blueviolet;
+
+      .masonry-grid-ordered-item {
+        background-color: darkcyan;
+
+        .masonry-grid-ordered-content {
+          background-color: brown;
+
+          .demo-grid-item-content {
+            outline: 0.1rem solid var(--_border-color);
+            padding: 1.2rem;
+          }
+        }
+      }
+    }
+  }
+}
+</style>
