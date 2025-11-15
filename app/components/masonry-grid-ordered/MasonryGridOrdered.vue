@@ -56,7 +56,7 @@ interface ItemData {
   row: number
   top: number
   bottom: number
-  // Future: translateY, etc.
+  translateY: number
 }
 const itemDataArray = ref<ItemData[]>([])
 
@@ -85,7 +85,7 @@ const updateGrid = () => {
     // Initialize or reset the item data array
     itemDataArray.value = Array(props.gridData.length)
       .fill(null)
-      .map(() => ({ height: 0, column: 0, row: 0, top: 0, bottom: 0 }))
+      .map(() => ({ height: 0, column: 0, row: 0, top: 0, bottom: 0, translateY: 0 }))
 
     // Step 1: Hide items for measurement
     gridItemsRefs.value.forEach((itemEl) => {
@@ -110,11 +110,31 @@ const updateGrid = () => {
       // Calculate which row this item would be in based on CSS Grid's auto-fit
       const row = Math.floor(index / columnCount.value)
 
-      // Get the item's position relative to the grid wrapper
-      const wrapperRect = gridWrapper.value!.getBoundingClientRect()
-      const itemRect = itemEl.getBoundingClientRect()
-      const top = itemRect.top - wrapperRect.top
-      const bottom = top + contentHeight
+      let top: number
+      let bottom: number
+
+      if (row === 0) {
+        // First row: use natural CSS Grid position
+        const wrapperRect = gridWrapper.value!.getBoundingClientRect()
+        const itemRect = itemEl.getBoundingClientRect()
+        top = itemRect.top - wrapperRect.top
+        bottom = top + contentHeight
+      } else {
+        // Subsequent rows: position based on item above in same column
+        const itemAboveIndex = index - columnCount.value
+        const itemAbove = itemDataArray.value[itemAboveIndex]
+        
+        if (itemAbove) {
+          top = itemAbove.bottom + props.gap
+          bottom = top + contentHeight
+        } else {
+          // Fallback to natural position if no item above found
+          const wrapperRect = gridWrapper.value!.getBoundingClientRect()
+          const itemRect = itemEl.getBoundingClientRect()
+          top = itemRect.top - wrapperRect.top
+          bottom = top + contentHeight
+        }
+      }
 
       // Store the data in our tracking array
       itemDataArray.value[index].height = contentHeight
@@ -122,6 +142,7 @@ const updateGrid = () => {
       itemDataArray.value[index].row = row
       itemDataArray.value[index].top = top
       itemDataArray.value[index].bottom = bottom
+      itemDataArray.value[index].translateY = 0 // Will calculate this later if needed
 
       // Set the CSS custom property for height
       itemEl.style.setProperty("--_item-height", `${contentHeight}px`)
