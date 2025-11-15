@@ -112,27 +112,33 @@ const updateGrid = () => {
 
       let top: number
       let bottom: number
+      let translateY: number
+
+      // Always get the actual measured position first
+      const wrapperRect = gridWrapper.value!.getBoundingClientRect()
+      const itemRect = itemEl.getBoundingClientRect()
+      const actualTop = itemRect.top - wrapperRect.top
 
       if (row === 0) {
         // First row: use natural CSS Grid position
-        const wrapperRect = gridWrapper.value!.getBoundingClientRect()
-        const itemRect = itemEl.getBoundingClientRect()
-        top = itemRect.top - wrapperRect.top
+        top = actualTop
         bottom = top + contentHeight
+        translateY = 0 // No transform needed for first row
       } else {
         // Subsequent rows: position based on item above in same column
         const itemAboveIndex = index - columnCount.value
         const itemAbove = itemDataArray.value[itemAboveIndex]
-        
+
         if (itemAbove) {
           top = itemAbove.bottom + props.gap
           bottom = top + contentHeight
+          // Calculate the transform needed to move from actual position to desired position
+          translateY = top - actualTop
         } else {
           // Fallback to natural position if no item above found
-          const wrapperRect = gridWrapper.value!.getBoundingClientRect()
-          const itemRect = itemEl.getBoundingClientRect()
-          top = itemRect.top - wrapperRect.top
+          top = actualTop
           bottom = top + contentHeight
+          translateY = 0
         }
       }
 
@@ -142,7 +148,7 @@ const updateGrid = () => {
       itemDataArray.value[index].row = row
       itemDataArray.value[index].top = top
       itemDataArray.value[index].bottom = bottom
-      itemDataArray.value[index].translateY = 0 // Will calculate this later if needed
+      itemDataArray.value[index].translateY = translateY
 
       // Set the CSS custom property for height
       itemEl.style.setProperty("--_item-height", `${contentHeight}px`)
