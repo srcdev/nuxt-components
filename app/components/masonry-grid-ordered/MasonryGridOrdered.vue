@@ -162,7 +162,7 @@ const updateGrid = () => {
     })
 
     // Log the complete item data array when calculations are complete
-    console.log("📊 Item data array:", itemDataArray.value)
+    // console.log("📊 Item data array:", itemDataArray.value)
 
     // Mark setup as complete
     isSetupComplete.value = true
@@ -185,8 +185,22 @@ const updateGrid = () => {
   }
 }
 
-useResizeObserver(gridWrapper, () => {
+useResizeObserver(gridWrapper, async () => {
+  // console.log("useResizeObserver triggered")
+  // itemDataArray.value = [] // Clear previous data
+  // await useSleep(100)
+  // console.log("useResizeObserver after sleep")
+  nextTick(() => updateGrid())
+
+  // requestAnimationFrame(() => {
   // updateGrid()
+  // nextTick(() => updateGrid())
+  // })
+
+  // Add a small delay to ensure DOM is fully rendered and measured
+  // setTimeout(() => {
+  //   nextTick(() => updateGrid())
+  // }, 100)
 })
 
 onMounted(() => {
@@ -206,7 +220,7 @@ watch(
 watch(
   () => props.gridData,
   () => {
-    nextTick(() => updateGrid())
+    // nextTick(() => updateGrid())
   }
 )
 
@@ -214,7 +228,7 @@ watch(
   () => width.value,
   (newWidth) => {
     if (newWidth > 0) {
-      nextTick(() => updateGrid())
+      // nextTick(() => updateGrid())
     }
   }
 )
