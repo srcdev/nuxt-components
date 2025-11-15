@@ -22,18 +22,31 @@
           <Icon name="ic:outline-desktop-mac" class="icon" :class="[{ current: canvasName === 'desktopCanvas' }]" />
         </button>
       </li>
+      <li>
+        <button type="button" @click.stop.prevent="updateCanvas('fullWidthCanvas')">
+          <Icon
+            name="pixelarticons:viewport-wide"
+            class="icon"
+            :class="[{ current: canvasName === 'fullWidthCanvas' }]"
+          />
+        </button>
+      </li>
     </ul>
   </div>
 </template>
 
-<script setup lang="ts">
-import type { MediaCanvas } from '@/types/types.canvasName';
+<script lang="ts">
+export type MediaCanvas = "mobileCanvas" | "tabletCanvas" | "laptopCanvas" | "desktopCanvas" | "fullWidthCanvas"
+</script>
 
-const canvasName = defineModel<MediaCanvas>('canvasName');
+<script setup lang="ts">
+// import type { MediaCanvas } from "@/types"
+
+const canvasName = defineModel<MediaCanvas>("canvasName")
 
 const updateCanvas = (setCanvas: MediaCanvas) => {
-  canvasName.value = setCanvas;
-};
+  canvasName.value = setCanvas
+}
 </script>
 
 <style lang="css">
@@ -73,5 +86,21 @@ const updateCanvas = (setCanvas: MediaCanvas) => {
       }
     }
   }
+}
+
+.mobileCanvas {
+  max-width: 412px;
+}
+.tabletCanvas {
+  max-width: 768px;
+}
+.laptopCanvas {
+  max-width: 1060px;
+}
+.desktopCanvas {
+  max-width: 1280px;
+}
+.fullWidthCanvas {
+  max-width: unset;
 }
 </style>

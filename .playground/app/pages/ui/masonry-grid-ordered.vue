@@ -8,7 +8,7 @@
           <CanvasSwitcher v-model:canvasName="canvasName" />
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full-content" :styleClassPassthrough="['mbe-20']">
           <MasonryGridOrdered
             v-if="status === 'success'"
             :gridData="quotesData?.quotes.slice(0, displayCount) ?? <IQuotes>{}"
@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import type { IQuotes } from "@/types/types.quotes"
-import type { MediaCanvas } from "@/types/types.canvasName"
+import type { MediaCanvas } from "@/types"
 
 definePageMeta({
   layout: false,

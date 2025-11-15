@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import type { IQuotes } from "@/types/types.quotes"
-import type { MediaCanvas } from "@/types/types.canvasName"
+import type { MediaCanvas } from "@/types"
 
 definePageMeta({
   layout: false,
