@@ -9,7 +9,7 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="full-content" :styleClassPassthrough="['mbe-20']">
-          <MasonryGridOrdered
+          <MasonryGridOrderedGridExperiment
             v-if="status === 'success'"
             :gridData="quotesData?.quotes.slice(0, displayCount) ?? <IQuotes>{}"
             :gap="12"
@@ -23,7 +23,7 @@
                 <p class="text-normal">{{ item.quote }}</p>
               </div>
             </template>
-          </MasonryGridOrdered>
+          </MasonryGridOrderedGridExperiment>
           <p v-else class="page-body-normal">&hellip;Loading</p>
         </LayoutRow>
       </template>
