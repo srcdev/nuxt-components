@@ -100,7 +100,7 @@ const updateGrid = () => {
     })
 
     // Force a reflow to get accurate measurements in grid layout
-    gridWrapper.value.offsetHeight
+    void gridWrapper.value.offsetHeight
 
     // Step 2: Measure heights and store in array
     gridContentRefs.value.forEach((contentEl, index) => {
