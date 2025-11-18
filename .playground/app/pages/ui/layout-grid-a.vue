@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import type { MediaCanvas } from "@/types/types.canvasName"
+import type { MediaCanvas } from "@/types"
 definePageMeta({
   layout: false,
 })

@@ -7,7 +7,7 @@
           <CanvasSwitcher v-model:canvasName="canvasName" />
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']">
           <LayoutGridB :topRowSlot1ItemCount="6" :bottomRowItemCount="4" :styleClassPassthrough="[canvasName]">
             <template v-slot:[`top-row-slot1-1-content`]>
               <p class="p-24">This is content slot 1</p>
@@ -114,7 +114,7 @@
 </template>
 
 <script setup lang="ts">
-import type { MediaCanvas } from "@/types/types.canvasName"
+import type { MediaCanvas } from "@/types"
 
 definePageMeta({
   layout: false,
