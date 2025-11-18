@@ -14,7 +14,7 @@ import { useElementSize, useResizeObserver } from "@vueuse/core"
 const props = defineProps({
   gridData: {
     type: Object,
-    default: {},
+    default: () => ({}),
   },
   minTileWidth: {
     type: Number,
