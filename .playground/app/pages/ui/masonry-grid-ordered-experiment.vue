@@ -11,7 +11,7 @@
         <LayoutRow tag="div" variant="full-content" :styleClassPassthrough="['mbe-20']">
           <MasonryGridOrderedGridExperiment
             v-if="status === 'success'"
-            :gridData="quotesData?.quotes.slice(0, displayCount) ?? <IQuotes>{}"
+            :gridData="quotesData?.quotes?.slice(0, displayCount).map((q) => ({ ...q, id: String(q.id) })) ?? []"
             :gap="12"
             :min-tile-width="300"
             :fixed-width="useFixedWidth"
