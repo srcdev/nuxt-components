@@ -2,7 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   // css: ["modern-normalize", "./app/assets/styles/main.css"],
-  modules: ["@nuxt/eslint", "@nuxt/icon", "@nuxt/image", "@nuxtjs/i18n"],
+  modules: ["@nuxt/eslint", "@nuxt/icon", "@nuxt/image", "@nuxtjs/i18n", "nuxt-qrcode"],
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
