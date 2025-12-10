@@ -1,5 +1,5 @@
 <template>
-  <div class="decode-qr-code">
+  <div class="decode-qr-code" :class="[elementClasses]">
     <h2>Upload QR Code</h2>
     <QrcodeCapture class="qr-code-capture" @detect="onDetect" />
 

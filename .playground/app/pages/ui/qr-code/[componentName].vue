@@ -4,7 +4,7 @@
       <template #layout-content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Index</h2>
-          <p class="page=body-normal">This is the index page for the QR Code component: {{ componentName }}</p>
+          <p class="page-body-normal">This is the index page for the QR Code component: {{ componentName }}</p>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
@@ -120,7 +120,7 @@ const route = useRoute()
 type QrComponentName = "decode" | "capture" | "display"
 const componentName = computed<QrComponentName>(() => route.params.componentName as QrComponentName)
 
-// Component set up up
+// Component set up
 const DecodeQrCode = defineAsyncComponent(() => import("../../../../../app/components/qr-code/DecodeQrCode.vue"))
 const CaptureQrCode = defineAsyncComponent(() => import("../../../../../app/components/qr-code/CaptureQrCode.vue"))
 const DisplayQrCode = defineAsyncComponent(() => import("../../../../../app/components/qr-code/DisplayQrCode.vue"))

@@ -1,5 +1,5 @@
 <template>
-  <div class="capture-qr-stream">
+  <div class="capture-qr-stream" :class="[elementClasses]">
     <h2>Capture QR Code</h2>
     <div v-if="!state.error">
       <QrcodeStream v-if="state.cameraOn" ref="qrcodeStreamRef" @error="onError" @detect="onDetect" />
