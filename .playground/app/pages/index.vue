@@ -88,4 +88,9 @@ const popoverSupported = computed(() => {
   display: flex;
   justify-content: flex-end;
 }
+
+.qr-code {
+  width: 250px;
+  height: 250px;
+}
 </style>

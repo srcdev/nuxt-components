@@ -57,6 +57,7 @@ const responsiveNavLinks = {
       childLinksTitle: "UI Components",
       childLinks: [
         { name: "Wipe Away Vertical", path: "/ui/wipe-away-vertical" },
+        { name: "Tooltips", path: "/ui/tooltips" },
         { name: "Marquee Scroller", path: "/ui/marquee-scroller" },
         { name: "Banner", path: "/ui/display-banner" },
         { name: "Section Parallax", path: "/ui/section-parallax" },
@@ -80,6 +81,7 @@ const responsiveNavLinks = {
         { name: "Clipped Panels", path: "/ui/clipped-panels" },
         { name: "Display Chip", path: "/ui/display-chip" },
         { name: "Display Avatar", path: "/ui/display-avatar" },
+        { name: "Qr Codes", path: "/ui/qr-code/display" },
       ],
     },
     {
