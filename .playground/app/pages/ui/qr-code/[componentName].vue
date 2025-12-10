@@ -19,9 +19,9 @@
           <h2 class="page-heading-2 pbe-20">Display QR Code</h2>
           <div class="demo-panel">
             <div class="qr-code-col">
-              <component :is="activeComponent" v-bind="activeProps" />
+              <component :is="activeComponent" :key="componentName" v-bind="activeProps" />
             </div>
-            <form>
+            <form v-if="componentName === 'display'">
               <div class="form-group mbe-12">
                 <label for="qr-value-input">QR Code Value:</label>
                 <input id="qr-value-input" v-model="qrValue" type="text" class="form-control" />
@@ -116,6 +116,7 @@ useHead({
 })
 
 const route = useRoute()
+
 type QrComponentName = "decode" | "capture" | "display"
 const componentName = computed<QrComponentName>(() => route.params.componentName as QrComponentName)
 
