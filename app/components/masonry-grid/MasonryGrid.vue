@@ -53,8 +53,8 @@ watch(
   --_border-color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
   --_color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
 
-  columns: var(--_item-min-width);
-  gap: 12px;
+  columns: auto var(--_item-min-width);
+  column-gap: var(--_masonry-grid-gap);
 
   .masonry-grid-item {
     break-inside: avoid;
