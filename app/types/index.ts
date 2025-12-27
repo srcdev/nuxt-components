@@ -5,3 +5,8 @@ export * from "../components/image-galleries/SliderGallery.vue"
 export * from "../components/display-toast/DisplayToast.vue"
 export * from "../components/alert-mask/AlertMaskCore.vue"
 export * from "../components/canvas-switcher/CanvasSwitcher.vue"
+
+// Export types from the components directory
+export * from "./components/display-toast.d"
+export * from "./components/qr-code.d"
+export * from "./components/alert-mask-core.d"

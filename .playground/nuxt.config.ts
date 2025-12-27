@@ -1,12 +1,16 @@
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  extends: [".."],
+  extends: ["../"],
   // devServer: {
   //   https: true,
   // },
   css: ["./assets/styles/main.css"],
   modules: ["@nuxt/eslint", "@nuxt/image"],
+  typescript: {
+    includeWorkspace: true,
+    strict: false, // Allow more flexible type checking in playground
+  },
   app: {
     head: {
       htmlAttrs: {

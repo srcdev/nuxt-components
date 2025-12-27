@@ -82,6 +82,18 @@
               Custom Icon Toast
             </button>
           </div>
+          <hr class="mbe-20" />
+          <p class="page-body-normal">Toast with title and content slots:</p>
+          <p>
+            <button
+              @click.prevent="triggerSlottedToast()"
+              ref="slottedToastButton"
+              :read-only="slottedToastActive"
+              class="button primary mbe-10"
+            >
+              Trigger Slotted Toast (current value: {{ slottedToastActive }})
+            </button>
+          </p>
         </LayoutRow>
 
         <DisplayToast
@@ -89,7 +101,10 @@
           :config="{
             appearance: { theme: 'warning', position: 'top', alignment: 'right' },
             behavior: { autoDismiss: false, returnFocusTo: firstToastButton },
-            content: { text: 'This is a toast notification message' },
+            content: {
+              title: 'Warning Alert',
+              description: 'This is a toast notification message with structured content.',
+            },
           }"
         ></DisplayToast>
 
@@ -167,7 +182,10 @@
           :config="{
             appearance: { theme: 'primary', position: 'bottom', alignment: 'left' },
             behavior: { autoDismiss: true, duration: 3000, returnFocusTo: bottomLeftToastButton },
-            content: { text: 'Bottom left positioned toast!' },
+            content: {
+              title: 'Warning Alert',
+              description: 'This is a toast notification message with structured content.',
+            },
           }"
         ></DisplayToast>
 
@@ -176,7 +194,10 @@
           :config="{
             appearance: { theme: 'secondary', position: 'bottom', alignment: 'center' },
             behavior: { autoDismiss: true, duration: 4000, returnFocusTo: bottomCenterToastButton },
-            content: { text: 'Bottom center positioned toast with longer duration!' },
+            content: {
+              title: 'Warning Alert',
+              description: 'This is a toast notification message with structured content.',
+            },
           }"
         ></DisplayToast>
 
@@ -185,9 +206,28 @@
           :config="{
             appearance: { theme: 'success', position: 'top', alignment: 'left' },
             behavior: { autoDismiss: false, returnFocusTo: customIconToastButton },
-            content: { text: 'Custom icon toast (manual dismiss)', customIcon: 'akar-icons:check-box' },
+            content: {
+              title: 'Warning Alert',
+              description: 'This is a toast notification message with structured content.',
+            },
           }"
         ></DisplayToast>
+
+        <DisplayToast
+          v-model="slottedToastActive"
+          :config="{
+            appearance: { theme: 'info', position: 'top', alignment: 'right' },
+            behavior: { autoDismiss: false, returnFocusTo: slottedToastButton },
+          }"
+        >
+          <template #title>
+            <strong>New Feature Available!</strong>
+          </template>
+          <template #description>
+            You can now use title and content slots to create more structured toast notifications with better typography
+            and layout.
+          </template>
+        </DisplayToast>
       </template>
     </NuxtLayout>
   </div>
@@ -238,6 +278,7 @@ const fourthToastActive = ref(false)
 const bottomLeftToastActive = ref(false)
 const bottomCenterToastActive = ref(false)
 const customIconToastActive = ref(false)
+const slottedToastActive = ref(false)
 
 // Template refs for focus return
 const firstToastButton = useTemplateRef<HTMLButtonElement>("firstToastButton")
@@ -247,6 +288,7 @@ const fourthToastButton = useTemplateRef<HTMLButtonElement>("fourthToastButton")
 const bottomLeftToastButton = useTemplateRef<HTMLButtonElement>("bottomLeftToastButton")
 const bottomCenterToastButton = useTemplateRef<HTMLButtonElement>("bottomCenterToastButton")
 const customIconToastButton = useTemplateRef<HTMLButtonElement>("customIconToastButton")
+const slottedToastButton = useTemplateRef<HTMLButtonElement>("slottedToastButton")
 
 const triggerFirstToast = () => {
   firstToastActive.value = true
@@ -274,6 +316,10 @@ const triggerBottomCenterToast = () => {
 
 const triggerCustomIconToast = () => {
   customIconToastActive.value = true
+}
+
+const triggerSlottedToast = () => {
+  slottedToastActive.value = true
 }
 </script>
 

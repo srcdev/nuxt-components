@@ -3,6 +3,7 @@
   "type": "module",
   "version": "6.2.13",
   "main": "nuxt.config.ts",
+  "types": "types.d.ts",
   "scripts": {
     "clean": "rm -rf .nuxt && rm -rf .output && rm -rf .playground/.nuxt && rm -rf .playground/.output",
     "cleanall": "rm -rf node_modules && rm -rf .nuxt && rm -rf .output && rm -rf .playground/.nuxt && rm -rf .playground/.output && rm -rf .playground/node_modules && rm package-lock.json",
@@ -18,7 +19,8 @@
   },
   "files": [
     "app/",
-    "nuxt.config.ts"
+    "nuxt.config.ts",
+    "types.d.ts"
   ],
   "devDependencies": {
     "@iconify-json/akar-icons": "1.2.7",
@@ -38,7 +40,8 @@
     "nuxt-qrcode": "^0.4.8",
     "patch-package": "8.0.1",
     "release-it": "19.0.6",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "vue-tsc": "^3.2.1"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",

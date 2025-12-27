@@ -28,19 +28,9 @@
   </div>
 </template>
 
-<script lang="ts">
-export interface BorderConfig {
-  color?: string
-  radiusLeft?: number
-  radiusRight?: number
-  borderLeft?: number
-  borderTop?: number
-  borderRight?: number
-  borderBottom?: number
-}
-</script>
-
 <script setup lang="ts">
+import type { BorderConfig } from "../../types/components/alert-mask-core"
+
 const props = defineProps({
   config: Object as PropType<BorderConfig>,
   styleClassPassthrough: {

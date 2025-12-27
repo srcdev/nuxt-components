@@ -21,102 +21,41 @@
     >
       <slot v-if="slots.default"></slot>
 
-      <div v-else class="display-toast-inner">
-        <div class="toast-icon" aria-hidden="true">
-          <slot name="customToastIcon">
-            <Icon :name="customIcon || defaultThemeIcons[theme] || 'akar-icons:info'" class="icon" />
-          </slot>
-        </div>
-        <div class="toast-message" :id="'toast-message-' + toastId">{{ toastDisplayText }}</div>
-        <div v-if="!autoDismiss" class="toast-action">
-          <button @click.prevent="setDismissToast()">
-            <Icon name="material-symbols:close" class="icon" />
-            <span class="sr-only">Close</span>
-          </button>
-        </div>
-      </div>
+      <DefaultToastContent
+        v-else
+        :theme="theme"
+        :custom-icon="customIcon"
+        :toast-id="toastId"
+        :toast-display-text="toastDisplayText"
+        :toast-title="toastTitle"
+        :toast-description="toastDescription"
+        :auto-dismiss="autoDismiss"
+        :set-dismiss-toast="setDismissToast"
+      >
+        <template #customToastIcon>
+          <slot name="customToastIcon" />
+        </template>
+        <template #title>
+          <slot name="title" />
+        </template>
+        <template #description>
+          <slot name="description" />
+        </template>
+      </DefaultToastContent>
       <div v-if="autoDismiss" class="display-toast-progress"></div>
     </div>
   </Teleport>
 </template>
 
-<script lang="ts">
-/**
- * DisplayToast - Configurable toast notification component
- *
- * Example usage with config object:
- * <DisplayToast
- *   v-model="showToast"
- *   :config="{
- *     appearance: { theme: 'success', position: 'top', alignment: 'right' },
- *     behavior: { autoDismiss: true, duration: 3000, returnFocusTo: buttonRef },
- *     content: { text: 'Operation completed successfully!' }
- *   }"
- * />
- *
- * The returnFocusTo property accepts an HTMLElement or ComponentPublicInstance
- * and will focus that element when the toast is dismissed for better accessibility.
- *
- * Types exported for use in other components:
- * - DisplayToastConfig
- * - DisplayToastProps
- * - DisplayToastTheme
- * - DisplayToastAppearanceConfig
- * - DisplayToastBehaviorConfig
- * - DisplayToastContentConfig
- * - ToastSlots
- */
-
-export type DisplayToastTheme =
-  | "primary"
-  | "secondary"
-  | "tertiary"
-  | "ghost"
-  | "error"
-  | "info"
-  | "success"
-  | "warning"
-
-export type DisplayToastPosition = "top" | "bottom"
-export type DisplayToastAlignment = "left" | "center" | "right"
-
-export interface DisplayToastAppearanceConfig {
-  theme?: DisplayToastTheme
-  position?: DisplayToastPosition
-  alignment?: DisplayToastAlignment
-  fullWidth?: boolean
-}
-
-export interface DisplayToastBehaviorConfig {
-  autoDismiss?: boolean
-  duration?: number
-  revealDuration?: number
-  returnFocusTo?: HTMLElement | ComponentPublicInstance | null
-}
-
-export interface DisplayToastContentConfig {
-  text?: string
-  customIcon?: string
-}
-
-export interface DisplayToastConfig {
-  appearance?: DisplayToastAppearanceConfig
-  behavior?: DisplayToastBehaviorConfig
-  content?: DisplayToastContentConfig
-}
-
-export interface DisplayToastProps {
-  config?: DisplayToastConfig
-  styleClassPassthrough?: string | string[]
-}
-
-export interface ToastSlots {
-  default?(props?: {}): any
-  customToastIcon?(props?: {}): any
-}
-</script>
-
 <script setup lang="ts">
+import type {
+  DisplayToastProps,
+  DisplayToastTheme,
+  DisplayToastPosition,
+  DisplayToastAlignment,
+  ToastSlots,
+} from "../../types/components/display-toast.d"
+
 const props = withDefaults(defineProps<DisplayToastProps>(), {
   config: () => ({
     appearance: {
@@ -140,17 +79,6 @@ const props = withDefaults(defineProps<DisplayToastProps>(), {
 
 const slots = defineSlots<ToastSlots>()
 
-const defaultThemeIcons = {
-  primary: "akar-icons:info",
-  secondary: "akar-icons:info",
-  tertiary: "akar-icons:info",
-  ghost: "akar-icons:info",
-  error: "akar-icons:circle-alert",
-  info: "akar-icons:info",
-  success: "akar-icons:info",
-  warning: "akar-icons:circle-alert",
-}
-
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 // Computed properties for accessing config values with defaults
@@ -163,6 +91,8 @@ const duration = computed(() => props.config?.behavior?.duration ?? 5000)
 const revealDuration = computed(() => props.config?.behavior?.revealDuration ?? 550)
 const returnFocusTo = computed(() => props.config?.behavior?.returnFocusTo ?? null)
 const toastDisplayText = computed(() => props.config?.content?.text ?? "")
+const toastTitle = computed(() => props.config?.content?.title ?? "")
+const toastDescription = computed(() => props.config?.content?.description ?? "")
 const customIcon = computed(() => props.config?.content?.customIcon)
 
 // Computed classes for positioning
@@ -414,7 +344,7 @@ onBeforeRouteLeave(() => {
 
     overflow: hidden;
 
-    .display-toast-inner {
+    /* .display-toast-inner {
       display: grid;
       grid-template-columns: auto 1fr auto;
       gap: 12px;
@@ -491,7 +421,7 @@ onBeforeRouteLeave(() => {
           }
         }
       }
-    }
+    } */
   }
 
   .display-toast-progress {
