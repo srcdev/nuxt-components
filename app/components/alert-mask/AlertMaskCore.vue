@@ -8,8 +8,8 @@
         </mask>
       </defs>
 
-      <path :d="outerPath" :fill="cfg.color" mask="url(#borderMask)" vector-effect="non-scaling-stroke" />
-      <path :d="innerPath" fill="rgba(0,0,0,0.5)" />
+      <path :d="outerPath" :fill="cfg.borderColour" mask="url(#borderMask)" vector-effect="non-scaling-stroke" />
+      <path :d="innerPath" :fill="cfg.backgroundColour" />
     </svg>
 
     <div
@@ -29,10 +29,10 @@
 </template>
 
 <script setup lang="ts">
-import type { BorderConfig } from "../../types/components/alert-mask-core"
+import type { AlertMaskConfig } from "../../types/components/alert-mask-core"
 
 const props = defineProps({
-  config: Object as PropType<BorderConfig>,
+  config: Object as PropType<AlertMaskConfig>,
   styleClassPassthrough: {
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
@@ -71,7 +71,8 @@ onMounted(() => {
 })
 
 const cfg = computed(() => ({
-  color: props.config?.color ?? "var(--orange-8)",
+  backgroundColour: props.config?.backgroundColour ?? "rgba(0,0,0,0.25)",
+  borderColour: props.config?.borderColour ?? "var(--orange-8)",
   radiusLeft: props.config?.radiusLeft ?? 12,
   radiusRight: props.config?.radiusRight ?? 12,
   borderLeft: props.config?.borderLeft ?? 8,

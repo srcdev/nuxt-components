@@ -1,5 +1,6 @@
-export interface BorderConfig {
-  color?: string
+export interface AlertMaskConfig {
+  backgroundColour?: string
+  borderColour?: string
   radiusLeft?: number
   radiusRight?: number
   borderLeft?: number

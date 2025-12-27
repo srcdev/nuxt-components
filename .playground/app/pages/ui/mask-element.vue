@@ -8,7 +8,8 @@
           <div class="test-mask-element">
             <AlertMaskCore
               :config="{
-                color: 'var(--orange-8)',
+                backgroundColour: 'rgba(0,0,0,0.25)',
+                borderColour: 'var(--orange-8)',
                 radiusLeft: 12,
                 radiusRight: 4,
                 borderLeft: 12,
