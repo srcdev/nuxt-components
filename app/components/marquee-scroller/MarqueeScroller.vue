@@ -201,8 +201,8 @@ onMounted(() => {
   /* Control button */
   .control-btn {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    inset-block-start: 8px;
+    inset-inline-end: 8px;
     z-index: 10;
     background: rgba(0, 0, 0, 0.7);
     color: white;
