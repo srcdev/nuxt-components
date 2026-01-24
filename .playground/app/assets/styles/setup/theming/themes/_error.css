@@ -1,4 +1,4 @@
-[data-theme="error"] {
+:where(html) .error {
   --colour-theme-0: var(--red-0);
   --colour-theme-1: var(--red-1);
   --colour-theme-2: var(--red-2);

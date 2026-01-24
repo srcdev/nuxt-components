@@ -6,7 +6,7 @@
     ref="promptElementRef"
     tabindex="0"
   >
-    <div class="display-prompt-wrapper" :data-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
+    <div class="display-prompt-wrapper" :class="[theme, elementClasses]" data-test-id="display-prompt">
       <div class="display-prompt-inner">
         <div class="display-prompt-icon" data-test-id="prompt-icon" aria-hidden="true">
           <slot name="customDecoratorIcon">
@@ -197,7 +197,9 @@ onMounted(async () => {
         border-radius: 50%;
         outline: 1px solid var(--colour-theme-3);
 
-        transition: border 200ms ease-in-out, outline 200ms ease-in-out;
+        transition:
+          border 200ms ease-in-out,
+          outline 200ms ease-in-out;
 
         &:hover {
           cursor: pointer;

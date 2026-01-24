@@ -1,4 +1,4 @@
-[data-theme="primary"] {
+:where(html) .primary {
   --colour-theme-0: var(--blue-0);
   --colour-theme-1: var(--blue-1);
   --colour-theme-2: var(--blue-2);

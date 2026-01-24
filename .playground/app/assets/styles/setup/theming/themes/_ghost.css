@@ -1,4 +1,4 @@
-[data-theme="ghost"] {
+:where(html) .ghost {
   --colour-theme-0: var(--gray-0);
   --colour-theme-1: var(--gray-1);
   --colour-theme-2: var(--gray-2);

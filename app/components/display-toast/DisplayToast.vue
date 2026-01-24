@@ -8,11 +8,11 @@
         elementClasses,
         cssStateClass,
         positionClasses,
+        theme,
         {
           'has-theme': !slots.default,
         },
       ]"
-      :data-theme="theme"
       :role="toastRole"
       :aria-live="ariaLive"
       :tabindex="slots.default ? undefined : '0'"

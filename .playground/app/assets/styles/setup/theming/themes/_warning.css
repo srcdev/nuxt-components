@@ -1,5 +1,5 @@
 :where(html) {
-  [data-theme="warning"] {
+  :where(html) .warning {
     --colour-theme-0: var(--orange-0);
     --colour-theme-1: var(--orange-1);
     --colour-theme-2: var(--orange-2);

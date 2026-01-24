@@ -1,4 +1,4 @@
-[data-theme="success"] {
+:where(html) .success {
   --colour-theme-0: var(--green-0);
   --colour-theme-1: var(--green-1);
   --colour-theme-2: var(--green-2);
