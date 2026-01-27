@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderNavItem } from "../../types"
+import type { ResponsiveHeaderNavItem } from "../../types/components"
 const props = defineProps({
   tag: {
     type: String,
@@ -134,7 +134,10 @@ watch(
           left: calc(anchor(left) + 0px);
 
           opacity: 0;
-          transition: opacity 200ms, display 200ms, overlay 200ms;
+          transition:
+            opacity 200ms,
+            display 200ms,
+            overlay 200ms;
           transition-behavior: allow-discrete;
 
           width: min(100%, 50vw);

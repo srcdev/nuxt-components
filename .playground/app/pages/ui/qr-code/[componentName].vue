@@ -16,7 +16,7 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-          <h2 class="page-heading-2 pbe-20">Display QR Code</h2>
+          <h2 class="page-heading-2 pbe-20">{{ pageHeader }}</h2>
           <div class="demo-panel">
             <div class="qr-code-col">
               <component :is="activeComponent" :key="componentName" v-bind="activeProps" />
@@ -96,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import type { QrCodeVariant } from "~/types/components/qr-code" // Adjust the import path as needed
+import type { QrCodeVariant } from "../../../../../app/types/components"
 
 definePageMeta({
   layout: false,
@@ -156,6 +156,19 @@ const components: Record<
 }
 
 // Config for display qr code
+const pageHeader = computed(() => {
+  switch (componentName.value) {
+    case "decode":
+      return "Decode QR Code"
+    case "capture":
+      return "Capture QR Code"
+    case "display":
+      return "Display QR Code"
+    default:
+      return "QR Code"
+  }
+})
+
 const qrValue = ref("P|7450952822|144392")
 const variant = ref<QrCodeVariant>({
   inner: "circle",

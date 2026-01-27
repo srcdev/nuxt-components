@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ITabNav } from "@/types/types.tabs"
+import type { ITabNav } from "../../../../app/types/components"
 definePageMeta({
   layout: false,
 })

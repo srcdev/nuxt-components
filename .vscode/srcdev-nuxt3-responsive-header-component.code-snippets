@@ -33,7 +33,7 @@
     "description": "Responsive Header Component JS Navigation Object Configuration",
     "scope": "javascript,typescript",
     "body": [
-      "import type { ResponsiveHeaderProp } from '@/types/responsiveHeader';",
+      "import type { ResponsiveHeaderProp } from '@/types/components/responsiveHeader';",
       "",
       "      const responsiveNavLinks = {",
       "        firstNav: [",

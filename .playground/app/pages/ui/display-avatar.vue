@@ -132,7 +132,7 @@
 </template>
 
 <script setup lang="ts">
-import { type DisplayChipConfig } from "../../../../app/types"
+import { type DisplayChipConfig } from "../../../../app/types/components"
 definePageMeta({
   layout: false,
 })

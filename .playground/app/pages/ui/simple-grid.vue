@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Posts } from "@/types/types.posts"
+import type { Posts } from "~/types/types.posts"
 
 definePageMeta({
   layout: false,

@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import type { DisplayToastTheme } from "../../../types/components/display-toast.d"
+import type { DisplayToastTheme } from "../../../types/components"
 
 interface DefaultToastContentProps {
   theme: DisplayToastTheme

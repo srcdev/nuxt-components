@@ -5,7 +5,9 @@
         v-for="(navGroup, groupKey) in responsiveNavLinks"
         :key="groupKey"
         class="main-navigation-list"
-        :ref="(el: Element | ComponentPublicInstance | null) => setNavRef(String(groupKey), el as HTMLUListElement | null)"
+        :ref="
+          (el: Element | ComponentPublicInstance | null) => setNavRef(String(groupKey), el as HTMLUListElement | null)
+        "
       >
         <li
           v-for="(link, localIndex) in navGroup"
@@ -105,45 +107,8 @@
   </div>
 </template>
 
-<script lang="ts">
-export interface ResponsiveHeaderNavItem {
-  name: string
-  path?: string
-  isExternal?: boolean
-  childLinks?: ResponsiveHeaderNavItem[]
-  childLinksTitle?: string
-  iconName?: string
-  config?: ResponsiveHeaderItemRects
-}
-
-export interface ResponsiveHeaderProp {
-  [key: string]: ResponsiveHeaderNavItem[]
-}
-
-export interface IFlooredRect {
-  left: number
-  right: number
-  top: number
-  bottom: number
-  width: number
-  height: number
-}
-
-export interface ResponsiveHeaderItemRects {
-  left: number
-  right: number
-  width?: number
-  visible: boolean
-}
-
-export interface ResponsiveHeaderState {
-  hasSecondNav: boolean
-  navListVisibility: Record<string, boolean>
-  clonedNavLinks?: ResponsiveHeaderProp
-}
-</script>
-
 <script setup lang="ts">
+import type { ResponsiveHeaderProp, ResponsiveHeaderState, IFlooredRect } from "../../types/components"
 import { useResizeObserver, onClickOutside } from "@vueuse/core"
 
 const props = defineProps({
@@ -528,7 +493,9 @@ watch(
       .main-navigation-item {
         /* width: var(--_main-navigation-item-width); */
         overflow: hidden;
-        transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out;
+        transition:
+          opacity 0.2s ease-in-out,
+          visibility 0.2s ease-in-out;
         padding-block: var(--_link-focus-visible-outline-width);
         padding-inline: var(--_link-focus-visible-outline-width);
 

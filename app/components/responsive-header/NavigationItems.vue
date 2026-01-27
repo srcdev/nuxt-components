@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderState } from "@/types"
+import type { ResponsiveHeaderState } from "../../types/components"
 
 const props = defineProps({
   mainNavigationState: {

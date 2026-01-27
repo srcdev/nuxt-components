@@ -35,12 +35,8 @@
   </div>
 </template>
 
-<script lang="ts">
-export type MediaCanvas = "mobileCanvas" | "tabletCanvas" | "laptopCanvas" | "desktopCanvas" | "fullWidthCanvas"
-</script>
-
 <script setup lang="ts">
-// import type { MediaCanvas } from "@/types"
+import type { MediaCanvas } from "../../types/components"
 
 const canvasName = defineModel<MediaCanvas>("canvasName")
 

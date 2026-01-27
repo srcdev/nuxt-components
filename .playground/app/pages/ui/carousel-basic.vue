@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ICarouselBasic } from "@/types"
+import type { ICarouselBasic } from "../../../../app/types/components"
 
 definePageMeta({
   layout: false,
@@ -214,8 +214,8 @@ const carouselDataIds = computed(() => {
         gap: 20px;
 
         .btn-action {
-          --gradient-glow-dark: var(--gray-7), var(--gray-5), var(--gray-8), var(--gray-6), var(--gray-7), var(--gray-8),
-            var(--gray-7);
+          --gradient-glow-dark:
+            var(--gray-7), var(--gray-5), var(--gray-8), var(--gray-6), var(--gray-7), var(--gray-8), var(--gray-7);
           --gradient-glow-light: var(--gray-4), var(--gray-6), var(--gray-0), var(--gray-6), var(--gray-4);
 
           padding-block: 10px;
@@ -225,7 +225,8 @@ const carouselDataIds = computed(() => {
           /* color: light-dark(#fff, #000); */
 
           border: 3px solid transparent;
-          background: linear-gradient(var(--surface, canvas) 0 0) padding-box,
+          background:
+            linear-gradient(var(--surface, canvas) 0 0) padding-box,
             conic-gradient(from var(--glow-deg), var(--gradient-glow-dark)) border-box;
           outline: 1px solid light-dark(var(--gray-9), var(--gray-7));
 

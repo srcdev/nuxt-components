@@ -26,8 +26,8 @@
 </template>
 
 <script setup lang="ts">
-import type { IQuotes } from "@/types/types.quotes"
-import type { MediaCanvas } from "@/types"
+import type { IQuotes } from "~/types/types.quotes"
+import type { MediaCanvas } from "../../../../app/types/components"
 
 definePageMeta({
   layout: false,

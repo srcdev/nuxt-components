@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import type { IQuotes } from "../types/types.quotes"
+import type { IQuotes } from "~/types/types.quotes"
 
 definePageMeta({
   layout: false,

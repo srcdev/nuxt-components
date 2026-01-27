@@ -54,7 +54,7 @@ import type {
   DisplayToastPosition,
   DisplayToastAlignment,
   ToastSlots,
-} from "../../types/components/display-toast.d"
+} from "../../types/components"
 
 const props = withDefaults(defineProps<DisplayToastProps>(), {
   config: () => ({

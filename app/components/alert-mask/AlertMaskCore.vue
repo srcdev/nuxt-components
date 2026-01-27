@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import type { AlertMaskConfig } from "../../types/components/alert-mask-core"
+import type { AlertMaskConfig } from "../../types/components"
 
 const props = defineProps({
   config: Object as PropType<AlertMaskConfig>,

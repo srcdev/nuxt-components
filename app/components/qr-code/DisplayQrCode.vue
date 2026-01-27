@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import type { QrCodeVariant } from "~/types/components/qr-code" // Adjust the import path as needed
+import type { QrCodeVariant } from "../../types/components"
 
 const props = defineProps({
   qrValue: {

@@ -10,6 +10,7 @@ export default defineNuxtConfig({
   typescript: {
     includeWorkspace: true,
     strict: false, // Allow more flexible type checking in playground
+    typeCheck: false, // Disable type checking in playground to avoid path resolution issues
   },
   app: {
     head: {

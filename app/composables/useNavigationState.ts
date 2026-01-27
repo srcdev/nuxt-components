@@ -1,4 +1,4 @@
-import type { IFlooredRect } from "@/types"
+import type { IFlooredRect } from "../types/components"
 
 export const useNavigationState = () => {
   // Simple reactive refs that persist across route changes using useState

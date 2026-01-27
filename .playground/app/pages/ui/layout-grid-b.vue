@@ -114,7 +114,7 @@
 </template>
 
 <script setup lang="ts">
-import type { MediaCanvas } from "@/types"
+import type { MediaCanvas } from "../../../../app/types/components"
 
 definePageMeta({
   layout: false,

@@ -6,30 +6,20 @@
   </component>
 </template>
 
-<script lang="ts">
-export interface DisplayChipConfig {
-  size: string
-  maskWidth: string
-  offset: string
-  angle: string
-  icon?: string
-  label?: string
-}
+<script setup lang="ts">
+import type { DisplayChipConfig } from "../../types/components"
 
-export interface DisplayChipProps {
+interface DisplayChipProps {
   tag?: "div" | "span"
   shape?: "circle" | "square"
   config?: DisplayChipConfig
   styleClassPassthrough?: string | string[]
 }
 
-export interface ChipSlots {
+interface ChipSlots {
   default(props?: {}): any
-  // content(props?: {}): any
 }
-</script>
 
-<script setup lang="ts">
 const props = withDefaults(defineProps<DisplayChipProps>(), {
   tag: "div",
   shape: "circle",

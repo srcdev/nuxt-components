@@ -15,7 +15,7 @@
     "description": "Carousel Basic Component JS Navigation Object Configuration",
     "scope": "javascript,typescript",
     "body": [
-      "import type { ICarouselBasic } from '@/types/types.carousel-basic'; // Import the interface for type safety",
+      "import type { ICarouselBasic } from '@/types/components/types/components.carousel-basic'; // Import the interface for type safety",
       "",
       "// Fetch API carousel data structure",
       "const {",

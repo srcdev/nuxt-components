@@ -53,23 +53,8 @@
   </div>
 </template>
 
-<script lang="ts">
-export interface IGalleryData {
-  src: string
-  alt: string
-  stylist?: string
-  title?: string
-  category?: string
-  description?: string
-  thumbnail?: {
-    title: string
-    description: string
-  }
-  textBrightness: "light" | "dark"
-}
-</script>
-
 <script setup lang="ts">
+import type { IGalleryData } from "../../types/components"
 const props = defineProps({
   autoRun: {
     type: Boolean,
@@ -301,7 +286,9 @@ onBeforeUnmount(() => {
     justify-content: center;
     color: var(--grayscale-text-body);
     opacity: 1;
-    transition: display 0.5s, opacity 0.5s;
+    transition:
+      display 0.5s,
+      opacity 0.5s;
     transition-behavior: allow-discrete;
 
     &.galleryLoaded {
