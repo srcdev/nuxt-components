@@ -17,7 +17,7 @@
 
 <script lang="ts">
 import DisplayChip from "../display-chip/DisplayChip.vue"
-import type { DisplayChipProps, DisplayChipConfig } from "../../types/components"
+import type { DisplayChipProps } from "../../types/components"
 export interface AvatarProps {
   as?: any
   src?: string
