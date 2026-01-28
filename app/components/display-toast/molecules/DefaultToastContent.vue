@@ -31,18 +31,40 @@
 <script setup lang="ts">
 import type { DisplayToastTheme } from "../../../types/components"
 
-interface DefaultToastContentProps {
-  theme: DisplayToastTheme
-  customIcon?: string
-  toastId: string
-  toastDisplayText: string
-  toastTitle?: string
-  toastDescription?: string
-  autoDismiss: boolean
-  setDismissToast: () => void
-}
-
-const props = defineProps<DefaultToastContentProps>()
+const props = defineProps({
+  theme: {
+    type: String as PropType<DisplayToastTheme>,
+    required: true,
+  },
+  customIcon: {
+    type: String,
+    default: undefined,
+  },
+  toastId: {
+    type: String,
+    required: true,
+  },
+  toastDisplayText: {
+    type: String,
+    required: true,
+  },
+  toastTitle: {
+    type: String,
+    default: undefined,
+  },
+  toastDescription: {
+    type: String,
+    default: undefined,
+  },
+  autoDismiss: {
+    type: Boolean,
+    required: true,
+  },
+  setDismissToast: {
+    type: Function as PropType<() => void>,
+    required: true,
+  },
+})
 
 const defaultThemeIcons = {
   primary: "akar-icons:info",

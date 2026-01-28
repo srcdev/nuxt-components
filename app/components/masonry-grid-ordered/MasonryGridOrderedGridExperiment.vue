@@ -15,7 +15,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch, type PropType } from "vue"
 import { useElementSize, useResizeObserver } from "@vueuse/core"
 
 const props = defineProps({

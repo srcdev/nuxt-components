@@ -66,7 +66,6 @@
 </template>
 
 <script setup lang="ts">
-import type { CarouselBasicItem, CarouselModifiedItem, ICarouselBasic } from "../../types/components"
 import { useEventListener, useResizeObserver, useSwipe } from "@vueuse/core"
 
 const props = defineProps({

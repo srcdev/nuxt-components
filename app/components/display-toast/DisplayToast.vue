@@ -49,32 +49,38 @@
 
 <script setup lang="ts">
 import type {
-  DisplayToastProps,
+  DisplayToastConfig,
   DisplayToastTheme,
   DisplayToastPosition,
   DisplayToastAlignment,
   ToastSlots,
 } from "../../types/components"
 
-const props = withDefaults(defineProps<DisplayToastProps>(), {
-  config: () => ({
-    appearance: {
-      theme: "ghost" as DisplayToastTheme,
-      position: "top" as DisplayToastPosition,
-      alignment: "right" as DisplayToastAlignment,
-      fullWidth: false,
-    },
-    behavior: {
-      autoDismiss: true,
-      duration: 5000,
-      revealDuration: 550,
-    },
-    content: {
-      text: "",
-      customIcon: undefined,
-    },
-  }),
-  styleClassPassthrough: () => [],
+const props = defineProps({
+  config: {
+    type: Object as PropType<DisplayToastConfig>,
+    default: () => ({
+      appearance: {
+        theme: "ghost" as DisplayToastTheme,
+        position: "top" as DisplayToastPosition,
+        alignment: "right" as DisplayToastAlignment,
+        fullWidth: false,
+      },
+      behavior: {
+        autoDismiss: true,
+        duration: 5000,
+        revealDuration: 550,
+      },
+      content: {
+        text: "",
+        customIcon: undefined,
+      },
+    }),
+  },
+  styleClassPassthrough: {
+    type: [String, Array] as PropType<string | string[]>,
+    default: () => [],
+  },
 })
 
 const slots = defineSlots<ToastSlots>()

@@ -16,17 +16,15 @@
   </component>
 </template>
 
-<script lang="ts">
-interface IAccordianData {
+<script setup lang="ts">
+interface CarouselImageData {
   src: string
   alt: string
 }
-</script>
 
-<script setup lang="ts">
 const props = defineProps({
   data: {
-    type: Array as PropType<IAccordianData[]>,
+    type: Array as PropType<CarouselImageData[]>,
     default: () => [],
   },
   tag: {

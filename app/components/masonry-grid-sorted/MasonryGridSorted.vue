@@ -14,8 +14,6 @@
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver } from "@vueuse/core"
-
 const props = defineProps({
   gridData: {
     type: Array as PropType<any[]>,
