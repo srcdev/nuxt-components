@@ -9,10 +9,6 @@
 <script setup lang="ts">
 import type { DisplayChipConfig } from "../../types/components"
 
-interface ChipSlots {
-  default(props?: {}): any
-}
-
 const props = defineProps({
   tag: {
     type: String as PropType<"div" | "span">,
@@ -39,12 +35,8 @@ const props = defineProps({
   },
 })
 
-const slots = defineSlots<ChipSlots>()
-// const slots = useSlots()
-
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
-// Validate and truncate label to max 3 characters
 const validatedLabel = computed(() => {
   if (!props.config?.label) return props.config?.label
   if (props.config.label.length > 3) {

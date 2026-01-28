@@ -1,7 +1,6 @@
 <template>
   <component
     :is="props.chip ? DisplayChip : as"
-    tag="div"
     v-bind="props.chip ? (typeof props.chip === 'object' ? { config: props.chip } : { config: chipDefaultConfig }) : {}"
     class="display-avatar"
     :class="[size, elementClasses]"
@@ -138,6 +137,10 @@ watch(
     width: 100%;
     border-radius: 50%;
     object-fit: cover;
+  }
+
+  .avatar-icon {
+    font-size: 24px;
   }
 }
 </style>

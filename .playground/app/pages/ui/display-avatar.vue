@@ -40,7 +40,7 @@
               <div class="dt">Has Avatar image</div>
               <div class="dd">
                 <DisplayAvatar
-                  src="https://github.com/benjamincanac.png"
+                  src="https://github.com/srcdev.png"
                   alt="Joe Bloggs"
                   :style-class-passthrough="['online']"
                 />
@@ -53,7 +53,7 @@
               <div class="dt">Has Avatar image and Chip</div>
               <div class="dd">
                 <DisplayAvatar
-                  src="https://github.com/benjamincanac.png"
+                  src="https://github.com/srcdev.png"
                   alt="Joe Bloggs"
                   :chip="chipConfig"
                   :style-class-passthrough="['online']"
@@ -67,7 +67,7 @@
               <div class="dt">Has Avatar image and Chip (with icon)</div>
               <div class="dd">
                 <DisplayAvatar
-                  src="https://github.com/benjamincanac.png"
+                  src="https://github.com/srcdev.png"
                   alt="Joe Bloggs"
                   :chip="{ ...chipConfig, icon: 'material-symbols:star-outline', size: '16px', maskWidth: '6px' }"
                   :style-class-passthrough="['online']"
@@ -78,10 +78,21 @@
 
           <section>
             <div class="dl">
+              <div class="dt">Has Avatar Icon</div>
+              <div class="dd">
+                <DisplayAvatar alt="" :style-class-passthrough="['online']">
+                  <template #icon><Icon name="material-symbols:star-outline" class="avatar-icon" /></template>
+                </DisplayAvatar>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <div class="dl">
               <div class="dt">Has Avatar image and Chip (text single character)</div>
               <div class="dd">
                 <DisplayAvatar
-                  src="https://github.com/benjamincanac.png"
+                  src="https://github.com/srcdev.png"
                   alt="Joe Bloggs"
                   :chip="{ ...chipConfig, label: '3', size: '16px', maskWidth: '6px' }"
                   :style-class-passthrough="['online']"
@@ -95,7 +106,7 @@
               <div class="dt">Has Avatar image and Chip (text 2 character)</div>
               <div class="dd">
                 <DisplayAvatar
-                  src="https://github.com/benjamincanac.png"
+                  src="https://github.com/srcdev.png"
                   alt="Joe Bloggs"
                   :chip="{ ...chipConfig, label: '+2', size: '16px', maskWidth: '6px' }"
                   :style-class-passthrough="['online']"

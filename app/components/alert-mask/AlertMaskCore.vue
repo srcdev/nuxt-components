@@ -32,7 +32,10 @@
 import type { AlertMaskConfig } from "../../types/components"
 
 const props = defineProps({
-  config: Object as PropType<AlertMaskConfig>,
+  config: {
+    type: Object as PropType<AlertMaskConfig>,
+    default: () => ({}),
+  },
   styleClassPassthrough: {
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
