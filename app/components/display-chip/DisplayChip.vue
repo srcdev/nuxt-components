@@ -7,14 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import type { DisplayChipConfig } from "../../types/components"
-
-interface DisplayChipProps {
-  tag?: "div" | "span"
-  shape?: "circle" | "square"
-  config?: DisplayChipConfig
-  styleClassPassthrough?: string | string[]
-}
+import type { DisplayChipProps } from "../../types/components"
 
 interface ChipSlots {
   default(props?: {}): any

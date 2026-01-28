@@ -6,3 +6,10 @@ export interface DisplayChipConfig {
   icon?: string
   label?: string
 }
+
+export interface DisplayChipProps {
+  tag?: "div" | "span"
+  shape?: "circle" | "square"
+  config?: DisplayChipConfig
+  styleClassPassthrough?: string | string[]
+}
