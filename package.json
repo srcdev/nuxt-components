@@ -1,7 +1,7 @@
 {
   "name": "srcdev-nuxt-components",
   "type": "module",
-  "version": "7.0.3",
+  "version": "8.0.0",
   "main": "nuxt.config.ts",
   "types": "types.d.ts",
   "scripts": {
