@@ -42,8 +42,7 @@
     "nuxt-qrcode": "0.4.8",
     "patch-package": "8.0.1",
     "release-it": "19.2.4",
-    "typescript": "5.9.3",
-    "vue-tsc": "3.2.4"
+    "typescript": "5.9.3"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
