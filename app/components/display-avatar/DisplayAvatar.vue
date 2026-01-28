@@ -15,33 +15,54 @@
   </component>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import DisplayChip from "../display-chip/DisplayChip.vue"
 import type { DisplayChipProps } from "../../types/components"
-export interface AvatarProps {
-  as?: any
-  src?: string
-  alt?: string
-  text?: string
-  size?: "xs" | "s" | "md" | "lg" | "xl" | string
-  chip?: boolean | DisplayChipProps
-  class?: any
-  style?: any
-  styleClassPassthrough?: string | string[]
-}
 
 export interface AvatarSlots {
   default(props?: {}): any
   icon(props?: {}): any
 }
-</script>
 
-<script setup lang="ts">
-const props = withDefaults(defineProps<AvatarProps>(), {
-  as: "span",
-  size: "md",
-  styleClassPassthrough: () => [],
+const props = defineProps({
+  as: {
+    type: [String, Object] as PropType<any>,
+    default: "span",
+  },
+  src: {
+    type: String,
+    default: undefined,
+  },
+  alt: {
+    type: String,
+    default: undefined,
+  },
+  text: {
+    type: String,
+    default: undefined,
+  },
+  size: {
+    type: String as PropType<"xs" | "s" | "md" | "lg" | "xl" | string>,
+    default: "md",
+  },
+  chip: {
+    type: [Boolean, Object] as PropType<boolean | DisplayChipProps>,
+    default: undefined,
+  },
+  class: {
+    type: [String, Array, Object] as PropType<any>,
+    default: undefined,
+  },
+  style: {
+    type: [String, Array, Object] as PropType<any>,
+    default: undefined,
+  },
+  styleClassPassthrough: {
+    type: [String, Array] as PropType<string | string[]>,
+    default: () => [],
+  },
 })
+
 defineSlots<AvatarSlots>()
 
 const { elementClasses, resetElementClasses, updateElementClasses } = useStyleClassPassthrough(

@@ -7,25 +7,38 @@
 </template>
 
 <script setup lang="ts">
-import type { DisplayChipProps } from "../../types/components"
+import type { DisplayChipConfig } from "../../types/components"
 
 interface ChipSlots {
   default(props?: {}): any
 }
 
-const props = withDefaults(defineProps<DisplayChipProps>(), {
-  tag: "div",
-  shape: "circle",
-  config: () => ({
-    size: "12px",
-    maskWidth: "4px",
-    offset: "0px",
-    angle: "90deg",
-    icon: undefined,
-    label: undefined,
-  }),
-  styleClassPassthrough: () => [],
+const props = defineProps({
+  tag: {
+    type: String as PropType<"div" | "span">,
+    default: "div",
+  },
+  shape: {
+    type: String as PropType<"circle" | "square">,
+    default: "circle",
+  },
+  config: {
+    type: Object as PropType<DisplayChipConfig>,
+    default: () => ({
+      size: "12px",
+      maskWidth: "4px",
+      offset: "0px",
+      angle: "90deg",
+      icon: undefined,
+      label: undefined,
+    }),
+  },
+  styleClassPassthrough: {
+    type: [String, Array] as PropType<string | string[]>,
+    default: () => [],
+  },
 })
+
 const slots = defineSlots<ChipSlots>()
 // const slots = useSlots()
 
