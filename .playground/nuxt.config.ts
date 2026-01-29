@@ -1,7 +1,4 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-// eslint-disable-next-line
-declare const defineNuxtConfig: (config: any) => any
-
 export default defineNuxtConfig({
   devtools: { enabled: true },
   extends: ["../"],
