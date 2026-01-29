@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { defineNuxtConfig } from "nuxt/config"
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
   // css: ["modern-normalize", "./app/assets/styles/main.css"],
