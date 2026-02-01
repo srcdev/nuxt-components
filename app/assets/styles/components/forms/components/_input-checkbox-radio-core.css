@@ -1,0 +1,85 @@
+.input-checkbox-radio-wrapper {
+  background-color: var(--theme-checkbox-symbol-surface);
+  border: var(--form-element-border-width) solid var(--theme-input-border);
+  outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+  box-shadow: var(--_box-shadow);
+
+  &.x-small {
+    --input-checked-element-size: var(--step-3);
+    --input-checked-icon-size: var(--step-2);
+  }
+
+  &.small {
+    --input-checked-element-size: var(--step-4);
+    --input-checked-icon-size: var(--step-3);
+  }
+
+  &.default {
+    --input-checked-element-size: var(--step-7);
+    --input-checked-icon-size: var(--step-6);
+  }
+
+  &.medium {
+    --input-checked-element-size: var(--step-6);
+    --input-checked-icon-size: var(--step-5);
+  }
+
+  &.large {
+    --input-checked-element-size: var(--step-6);
+    --input-checked-icon-size: var(--step-5);
+  }
+
+  &.checkbox {
+    border-radius: var(--form-input-border-radius);
+    &.button {
+      &.display-as-disc {
+        border-radius: 50%;
+      }
+    }
+  }
+
+  &.radio {
+    border-radius: 50%;
+  }
+
+  &:hover {
+    /* Duplicate within _input-checkbox-radio-with-label.css */
+    background-color: var(--theme-input-surface-hover);
+    outline-color: var(--theme-input-outline-hover);
+    outline-offset: var(--form-element-outline-offset-hover);
+  }
+
+  &:has(.input-checkbox-radio-core:checked) {
+    .input-checked-icon-slot {
+      .input-checked-icon-checked {
+        color: var(--theme-checkbox-symbol-color);
+      }
+    }
+  }
+
+  /* focus-visible */
+  &:not(.button):focus-within {
+    background-color: var(--theme-input-surface-focus);
+    outline-color: var(--theme-input-outline-focus);
+    outline-offset: var(--form-element-outline-offset-focus);
+  }
+
+  .input-checked-icon-checked,
+  .icon {
+    color: var(--theme-checkbox-symbol-color);
+    box-shadow: var(--_box-shadow);
+  }
+
+  .input-checkbox-radio-core {
+    margin: 0;
+    opacity: 0;
+
+    &:not(.is-button) {
+      &:focus-visible {
+        /* background-color: var(--theme-input-surface-focus);
+          outline-color: var(--theme-input-outline-focus);
+          outline-offset: var(--form-element-outline-offset-focus); */
+      }
+    }
+  }
+}

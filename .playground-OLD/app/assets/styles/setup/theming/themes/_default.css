@@ -1,0 +1,69 @@
+:where(html) {
+  /* Theme-neutral component scale using light-dark() */
+  --colour-theme-0: light-dark(var(--gray-0), var(--gray-12));
+  --colour-theme-1: light-dark(var(--gray-1), var(--gray-11));
+  --colour-theme-2: light-dark(var(--gray-2), var(--gray-10));
+  --colour-theme-3: light-dark(var(--gray-3), var(--gray-9));
+  --colour-theme-4: light-dark(var(--gray-4), var(--gray-8));
+  --colour-theme-5: light-dark(var(--gray-5), var(--gray-7));
+  --colour-theme-6: light-dark(var(--gray-6), var(--gray-6));
+  --colour-theme-7: light-dark(var(--gray-7), var(--gray-5));
+  --colour-theme-8: light-dark(var(--gray-8), var(--gray-4));
+  --colour-theme-9: light-dark(var(--gray-9), var(--gray-3));
+  --colour-theme-10: light-dark(var(--gray-10), var(--gray-2));
+  --colour-theme-11: light-dark(var(--gray-11), var(--gray-1));
+  --colour-theme-12: light-dark(var(--gray-12), var(--gray-0));
+
+  /* Generic */
+  --theme-box-shadow: var(--colour-theme-12);
+
+  /* Fieldset & Label */
+  --form-fieldset-legend-color: light-dark(var(--gray-12), var(--gray-1));
+  --form-label-color: light-dark(var(--gray-12), var(--gray-1));
+
+  /* Description */
+  --form-description-color: light-dark(var(--gray-12), var(--gray-1));
+
+  /* Input Elements */
+  --theme-input-surface: light-dark(var(--gray-1), var(--gray-8));
+  --theme-input-surface-hover: light-dark(var(--gray-1), var(--gray-5));
+
+  --theme-input-border: light-dark(var(--gray-9), var(--gray-4));
+  --theme-input-border-hover: light-dark(var(--gray-10), var(--gray-5));
+  --theme-input-border-focus: light-dark(var(--gray-10), var(--gray-5));
+
+  --theme-input-outline: transparent;
+  --theme-input-outline-hover: light-dark(var(--gray-10), var(--gray-5));
+  --theme-input-outline-focus: light-dark(var(--gray-10), var(--gray-5));
+
+  --theme-input-text: var(--gray-0);
+  --theme-input-text-hover: var(--gray-0);
+  --theme-input-text-focus: var(--gray-0);
+  --theme-input-placeholder: light-dark(var(--gray-7), var(--gray-5));
+
+  /* Checkboxes & Radio buttons */
+  --theme-checkbox-label-text-color: light-dark(var(--gray-11), var(--gray-1));
+  --theme-checkbox-decorator-color: light-dark(var(--gray-11), var(--gray-1));
+  --theme-checkbox-symbol-surface: var(--colour-theme-2);
+  --theme-checkbox-symbol-color: light-dark(var(--gray-11), var(--gray-1));
+
+  /* a11y */
+  --theme-focus-visible-shadow: var(--colour-theme-12);
+  --theme-focus-visible-outline: var(--colour-theme-12);
+
+  /* Buttons */
+  --theme-button-surface: light-dark(var(--gray-5), var(--gray-4));
+  --theme-button-surface-hover: light-dark(var(--gray-6), var(--gray-5));
+
+  --theme-button-border: light-dark(var(--gray-9), var(--gray-4));
+  --theme-button-border-hover: light-dark(var(--gray-10), var(--gray-5));
+  --theme-button-border-focus: light-dark(var(--gray-10), var(--gray-5));
+
+  --theme-button-outline: transparent;
+  --theme-button-outline-hover: light-dark(var(--gray-10), var(--gray-5));
+  --theme-button-outline-focus: light-dark(var(--gray-10), var(--gray-5));
+
+  --theme-button-text: var(--gray-0);
+  --theme-button-text-hover: var(--gray-0);
+  --theme-button-text-focus: var(--gray-0);
+}

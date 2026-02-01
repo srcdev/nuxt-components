@@ -1,0 +1,37 @@
+{
+  "items": [
+    {
+      "id": "item-1",
+      "url": "/images/spotlights/v2/dining-out.webp",
+      "alt": "Dining out"
+    },
+    {
+      "id": "item-2",
+      "url": "/images/spotlights/v2/beer-gardens.webp",
+      "alt": "Entertaining the kids"
+    },
+    {
+      "id": "item-3",
+      "url": "/images/spotlights/v2/will-it-rain.webp",
+      "alt": "Will it rain?"
+    },
+    {
+      "id": "item-4",
+      "url": "/images/spotlights/v2/nightlife.webp",
+      "alt": "Nightlife"
+    },
+    {
+      "id": "item-5",
+      "url": "/images/spotlights/v2/got-toothache-2.webp",
+      "alt": "Dental Services"
+    },
+    {
+      "id": "item-6",
+      "url": "/images/spotlights/v2/days-out.webp",
+      "alt": "Days Out"
+    }
+  ],
+  "total": 6,
+  "skip": 0,
+  "limit": 4
+}

@@ -1,0 +1,7 @@
+.section-heading {
+  font-size: var(--step-6);
+  font-weight: 600;
+  font-variation-settings: "wght" 600;
+  line-height: 1;
+  margin: 0;
+}

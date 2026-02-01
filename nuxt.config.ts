@@ -1,11 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  // css: ["modern-normalize", "./app/assets/styles/main.css"],
+  css: ["modern-normalize", "./app/assets/styles/main.css"],
   modules: ["@nuxt/eslint", "@nuxt/icon", "@nuxt/image", "@nuxtjs/i18n", "nuxt-qrcode"],
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
+  },
+  imports: {
+    dirs: ["./stores"],
+  },
+  alias: {
+    "#shared": "./shared",
   },
   app: {
     head: {
@@ -38,10 +44,10 @@ export default defineNuxtConfig({
   vue: {
     runtimeCompiler: true,
   },
-  compatibilityDate: "2024-11-01",
+  compatibilityDate: "2026-01-30",
   typescript: {
     includeWorkspace: true,
     strict: true,
-    typeCheck: true,
+    typeCheck: "build", // Enable type checking during build only - Fixes vue-tsc dependency issues
   },
 })

@@ -1,0 +1,19 @@
+.input-label {
+  &.normal {
+    color: var(--form-label-color);
+    margin-block: 0.8rem;
+    font-size: var(--step-5);
+    font-weight: normal;
+    line-height: 1.5;
+    display: block;
+  }
+
+  &.underlined {
+    color: var(--form-label-color);
+    margin-block: 0.8rem;
+    font-size: var(--step-5);
+    font-weight: normal;
+    line-height: 1.5;
+    display: block;
+  }
+}

@@ -1,0 +1,15 @@
+[data-theme="tertiary"] {
+  --colour-theme-0: var(--gray-0);
+  --colour-theme-1: var(--gray-1);
+  --colour-theme-2: var(--gray-2);
+  --colour-theme-3: var(--gray-3);
+  --colour-theme-4: var(--gray-4);
+  --colour-theme-5: var(--gray-5);
+  --colour-theme-6: var(--gray-6);
+  --colour-theme-7: var(--gray-7);
+  --colour-theme-8: var(--gray-8);
+  --colour-theme-9: var(--gray-9);
+  --colour-theme-10: var(--gray-10);
+  --colour-theme-11: var(--gray-11);
+  --colour-theme-12: var(--gray-12);
+}
