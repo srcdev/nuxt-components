@@ -4,6 +4,7 @@
   "version": "8.0.3",
   "main": "nuxt.config.ts",
   "types": "types.d.ts",
+  "license": "MIT",
   "scripts": {
     "clean": "rm -rf .nuxt && rm -rf .output",
     "cleanall": "rm -rf node_modules && rm -rf .nuxt && rm -rf .output && rm package-lock.json",
@@ -40,6 +41,7 @@
     "@nuxt/test-utils": "3.23.0",
     "@nuxtjs/i18n": "10.2.1",
     "@pinia/nuxt": "0.11.3",
+    "@stylistic/eslint-plugin": "^5.7.1",
     "@vue/test-utils": "2.4.6",
     "@vueuse/core": "14.2.0",
     "eslint": "9.39.2",
@@ -52,7 +54,7 @@
     "pinia-plugin-persistedstate": "4.7.1",
     "release-it": "19.2.4",
     "typescript": "5.9.3",
-    "vitest": "^4.0.18",
+    "vitest": "^3.2.4",
     "vue-tsc": "3.2.4",
     "zod": "4.3.6"
   },

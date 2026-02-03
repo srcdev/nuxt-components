@@ -6,11 +6,8 @@ export default withNuxt(
   {
     files: ["**/*.vue"],
     rules: {
-      // Disable the rule that enforces line breaking in templates
-      "@stylistic/max-len": "off",
+      // Vue-specific rules that work without additional plugins
       "vue/max-len": "off",
-      "@stylistic/vue/max-len": "off",
-      // Allow longer lines in Vue templates
       "vue/max-attributes-per-line": "off",
       "vue/singleline-html-element-content-newline": "off",
       "vue/html-closing-bracket-newline": "off",
@@ -22,20 +19,6 @@ export default withNuxt(
             normal: "never", // <div></div>
             component: "always", // <MyComponent />
           },
-        },
-      ],
-      "@stylistic/member-delimiter-style": [
-        "error",
-        {
-          multiline: {
-            delimiter: "semi",
-            requireLast: true,
-          },
-          singleline: {
-            delimiter: "semi",
-            requireLast: false,
-          },
-          multilineDetection: "brackets",
         },
       ],
     },
