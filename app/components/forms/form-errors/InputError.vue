@@ -70,7 +70,7 @@ const isArray = computed(() => {
   return Array.isArray(props.errorMessage)
 })
 
-const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
@@ -128,7 +128,8 @@ const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.
     align-items: center;
 
     overflow: hidden;
-    transition: opacity var(--theme-form-transition-duration) linear,
+    transition:
+      opacity var(--theme-form-transition-duration) linear,
       display var(--theme-form-transition-duration) linear allow-discrete;
 
     .inner-content {

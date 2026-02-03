@@ -701,8 +701,7 @@
 
 <script setup lang="ts">
 import { z } from "zod"
-// import type { IFormMultipleOptions } from '../../../../types/types.forms';
-import type { IFormMultipleOptions } from "../../../../../../shared/types/types.forms"
+import type { IFormMultipleOptions } from "~/types/forms/types.forms"
 
 definePageMeta({
   layout: false,

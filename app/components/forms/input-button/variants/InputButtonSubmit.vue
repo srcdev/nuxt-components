@@ -1,74 +1,21 @@
 <template>
   <InputButtonCore
-    type="button"
-    :use-effect
-    :isPending
+    type="submit"
+    :use-effect="useEffect"
+    :is-pending="isPending"
     :readonly
     :effect
-    :data-testid
+    :data-testid="dataTestid || undefined"
     :size
     :weight
-    :button-text
-    :style-class-passthrough
+    :button-text="buttonText"
+    :style-class-passthrough="styleClassPassthrough"
     :theme
   />
 </template>
 
 <script setup lang="ts">
-import propValidators from "../../c12/prop-validators"
+import type { BaseButtonProps } from "~/types/forms/types.forms"
 
-defineProps({
-  size: {
-    type: String as PropType<string>,
-    default: "default",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
-  },
-  weight: {
-    type: String as PropType<string>,
-    default: "wght-400",
-    validator(value: string) {
-      return propValidators.weight.includes(value)
-    },
-  },
-  theme: {
-    type: String as PropType<string>,
-    default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
-  },
-  useEffect: {
-    type: Boolean,
-    default: false,
-  },
-  effect: {
-    type: String as PropType<string>,
-    default: "fancy",
-    validator(value: string) {
-      return ["fancy", "pulse"].includes(value)
-    },
-  },
-  buttonText: {
-    type: String,
-    required: true,
-  },
-  dataTestid: {
-    type: String,
-    default: "",
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  isPending: {
-    type: Boolean,
-    default: false,
-  },
-  readonly: {
-    type: Boolean,
-    default: false,
-  },
-})
+defineProps<BaseButtonProps>()
 </script>

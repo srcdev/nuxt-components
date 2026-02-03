@@ -1,14 +1,14 @@
-import type { InpuTextC12, IFormFieldC12, IFormData } from '../../../../shared/types/types.forms';
+import type { InpuTextC12, IFormFieldC12, IFormData } from "../../../types/forms/types.forms"
 
 const formFieldC12 = <IFormFieldC12>{
-  label: '',
-  placeholder: '',
-  errorMessage: '',
+  label: "",
+  placeholder: "",
+  errorMessage: "",
   useCustomError: false,
   customErrors: {},
   isValid: false,
   isDirty: false,
-  type: 'string',
-};
+  type: "string",
+}
 
-export { formFieldC12 };
+export { formFieldC12 }

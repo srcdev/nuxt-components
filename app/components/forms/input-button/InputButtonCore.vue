@@ -3,25 +3,25 @@
     :type
     :readonly
     :aria-disabled="readonly"
-    :data-testid
+    :data-testid="dataTestid || undefined"
     :data-theme="theme"
     :data-size="size"
     class="input-button-core"
-    :class="[`btn-${type}`, effectClass, elementClasses, { 'icon-only': slots.iconOnly }]"
+    :class="buttonClasses"
   >
-    <span v-if="useEffect && effect == 'fancy'" class="fancy"></span>
-    <template v-if="slots.left && !slots.iconOnly">
+    <span v-if="showFancyEffect" class="fancy"></span>
+    <template v-if="hasLeftSlot">
       <span class="btn-icon left">
         <slot name="left"></slot>
       </span>
     </template>
-    <span class="btn-text" :class="[weight, { 'sr-only': slots.iconOnly }]">{{ buttonText }}</span>
-    <template v-if="slots.right && !slots.iconOnly">
+    <span class="btn-text" :class="[weight, { 'sr-only': hasIconOnlySlot }]">{{ buttonText }}</span>
+    <template v-if="hasRightSlot">
       <span class="btn-icon right">
         <slot name="right"></slot>
       </span>
     </template>
-    <template v-if="slots.iconOnly">
+    <template v-if="hasIconOnlySlot">
       <span class="btn-icon icon-only">
         <slot name="iconOnly"></slot>
       </span>
@@ -30,80 +30,40 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
+import type { BaseButtonProps } from "~/types/forms/types.forms"
 
-const props = defineProps({
-  size: {
-    type: String as PropType<string>,
-    default: "default",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
-  },
-  weight: {
-    type: String as PropType<string>,
-    default: "wght-400",
-    validator(value: string) {
-      return propValidators.weight.includes(value)
-    },
-  },
-  theme: {
-    type: String as PropType<string>,
-    default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
-  },
-  type: {
-    type: String as PropType<"submit" | "button" | "reset">,
-    default: "button",
-    validator(value: string) {
-      return propValidators.inputTypesButton.includes(value)
-    },
-  },
-  buttonText: {
-    type: String,
-    required: true,
-  },
-  dataTestid: {
-    type: String,
-    default: "",
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  useEffect: {
-    type: Boolean,
-    default: false,
-  },
-  effect: {
-    type: String as PropType<string>,
-    default: "fancy",
-    validator(value: string) {
-      return ["fancy", "pulse"].includes(value)
-    },
-  },
-  isPending: {
-    type: Boolean,
-    default: false,
-  },
-  readonly: {
-    type: Boolean,
-    default: false,
-  },
-})
+interface Props extends BaseButtonProps {
+  type?: "submit" | "button" | "reset"
+}
 
-const type = toRef(() => props.type)
-const effectClass = computed(() => {
-  if (props.useEffect) {
-    return props.effect === "fancy" ? "" : props.effect
-  } else {
-    return ""
-  }
+const props = withDefaults(defineProps<Props>(), {
+  size: "default",
+  weight: "wght-400",
+  theme: "primary",
+  type: "button",
+  dataTestid: "",
+  styleClassPassthrough: () => [],
+  useEffect: false,
+  effect: "fancy",
+  isPending: false,
+  readonly: false,
 })
 
 const slots = useSlots()
+
+// Cache slot computations for better performance
+const hasLeftSlot = computed(() => Boolean(slots.left && !slots.iconOnly))
+const hasRightSlot = computed(() => Boolean(slots.right && !slots.iconOnly))
+const hasIconOnlySlot = computed(() => Boolean(slots.iconOnly))
+const showFancyEffect = computed(() => props.useEffect && props.effect === "fancy")
+
+// Combine all button classes into a single computed
+const buttonClasses = computed(() => [
+  `btn-${props.type}`,
+  props.useEffect && props.effect !== "fancy" ? props.effect : "",
+  elementClasses.value,
+  { "icon-only": hasIconOnlySlot.value },
+])
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
@@ -140,6 +100,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     color: var(--theme-button-text-hover);
     outline-color: var(--theme-button-outline-hover);
     outline-offset: var(--form-element-outline-offset-focus);
+    cursor: pointer;
   }
 
   &:focus-visible {
@@ -148,10 +109,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     color: var(--theme-button-text-focus);
     outline-color: var(--theme-button-outline-focus);
     outline-offset: var(--form-element-outline-offset-focus);
-  }
-
-  &:hover {
-    cursor: pointer;
   }
 
   &[readonly] {

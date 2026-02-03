@@ -80,7 +80,7 @@
 
 <script setup lang="ts">
 import propValidators from "../../c12/prop-validators"
-import type { IFormMultipleOptions } from "../../../../../shared/types/types.forms"
+import type { IFormMultipleOptions } from "../../../../types/forms/types.forms"
 
 const props = defineProps({
   dataTestid: {

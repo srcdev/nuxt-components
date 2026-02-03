@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import propValidators from "../c12/prop-validators"
-import type { IFormMultipleOptions } from "../../../../shared/types/types.forms"
+import type { IFormMultipleOptions } from "../../../types/forms/types.forms"
 
 const props = defineProps({
   id: {
@@ -130,8 +130,10 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>
     }
 
     &::picker(select) {
-      transition: display allow-discrete var(--theme-form-transition-duration),
-        opacity var(--theme-form-transition-duration), overlay var(--theme-form-transition-duration) allow-discrete;
+      transition:
+        display allow-discrete var(--theme-form-transition-duration),
+        opacity var(--theme-form-transition-duration),
+        overlay var(--theme-form-transition-duration) allow-discrete;
     }
 
     &:not(:open)::picker(select) {

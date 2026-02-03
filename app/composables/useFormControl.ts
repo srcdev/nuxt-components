@@ -1,15 +1,22 @@
-import type { IFormData, IFieldsInitialState, IFormFieldC12, IApiErrorMessages, ICustomErrorMessage, IErrorMessagesArr } from '../../shared/types/types.forms';
+import type {
+  IFormData,
+  IFieldsInitialState,
+  IFormFieldC12,
+  IApiErrorMessages,
+  ICustomErrorMessage,
+  IErrorMessagesArr,
+} from "../types/forms/types.forms"
 // import { formFieldC12 } from '@/components/forms/c12/utils';
 
 // export function useFormControl(name: string = '') {
-export function useFormControl(name: string = '') {
-  let savedInitialState = {};
+export function useFormControl(name: string = "") {
+  let savedInitialState = {}
 
   const formData = ref<IFormData>({
     data: {} as IFieldsInitialState,
     validityState: {},
     dirtyFields: {},
-    focusedField: '',
+    focusedField: "",
     isPending: false,
     errorCount: 0,
     errorMessages: {},
@@ -20,61 +27,64 @@ export function useFormControl(name: string = '') {
     submitDisabled: false,
     submitSuccess: false,
     displayErrorMessages: false,
-  });
+  })
 
   const initValidationState = async (fieldsInitialState: IFieldsInitialState | Ref<IFieldsInitialState | null>) => {
-    const fields = Object.keys(fieldsInitialState.value || {});
-    const state = fields.reduce((accumulatedFields, field) => {
-      accumulatedFields[field] = false;
-      return accumulatedFields;
-    }, {} as Record<string, boolean>);
-    formData.value.validityState = state;
-  };
+    const fields = Object.keys(fieldsInitialState.value || {})
+    const state = fields.reduce(
+      (accumulatedFields, field) => {
+        accumulatedFields[field] = false
+        return accumulatedFields
+      },
+      {} as Record<string, boolean>
+    )
+    formData.value.validityState = state
+  }
 
   const initFormData = async (fieldsInitialState: IFieldsInitialState | Ref<IFieldsInitialState | null>) => {
-    initValidationState(fieldsInitialState);
+    initValidationState(fieldsInitialState)
 
     if (fieldsInitialState !== null) {
-      savedInitialState = toRaw(fieldsInitialState.value) as IFieldsInitialState;
-      formData.value.data = fieldsInitialState as IFieldsInitialState;
+      savedInitialState = toRaw(fieldsInitialState.value) as IFieldsInitialState
+      formData.value.data = fieldsInitialState as IFieldsInitialState
     }
-    return;
-  };
+    return
+  }
 
   const initFormFieldsC12 = (name: string, formFieldC12: IFormFieldC12) => {
-    formData.value.formFieldsC12[name] = formFieldC12;
-    return;
-  };
+    formData.value.formFieldsC12[name] = formFieldC12
+    return
+  }
 
   const updatePreviousValues = () => {
-    console.log(`useFormControl | updatePreviousValues`);
+    console.log(`useFormControl | updatePreviousValues`)
 
     Object.keys(formData.value.data).forEach((key) => {
       if (formData.value.formFieldsC12[key]) {
-        const currentValue = formData.value.data[key];
+        const currentValue = formData.value.data[key]
         // Filter out undefined values and IOptionsValueArr[] which are not supported by previousValue
         if (currentValue !== undefined && !Array.isArray(currentValue)) {
-          formData.value.formFieldsC12[key].previousValue = currentValue;
+          formData.value.formFieldsC12[key].previousValue = currentValue
         }
       }
-    });
-  };
+    })
+  }
 
   const getErrorCount = async (updateState: boolean = false) => {
-    await nextTick();
+    await nextTick()
 
-    const errorCount = Object.values(formData.value.validityState).filter((value) => !value).length;
-    formData.value.errorCount = errorCount;
-    formData.value.formIsValid = errorCount === 0;
+    const errorCount = Object.values(formData.value.validityState).filter((value) => !value).length
+    formData.value.errorCount = errorCount
+    formData.value.formIsValid = errorCount === 0
 
     if (updateState) {
-      formData.value.submitDisabled = true;
-      formData.value.displayErrorMessages = formData.value.errorCount > 0;
-      formData.value.submitAttempted = true;
+      formData.value.submitDisabled = true
+      formData.value.displayErrorMessages = formData.value.errorCount > 0
+      formData.value.submitAttempted = true
     }
 
     if (formData.value.submitDisabled) {
-      formData.value.submitDisabled = !formData.value.formIsValid;
+      formData.value.submitDisabled = !formData.value.formIsValid
     }
 
     // update fieldHasError ref
@@ -84,21 +94,21 @@ export function useFormControl(name: string = '') {
     //   fieldHasError.value = false;
     // }
 
-    return formData.value.errorCount;
-  };
+    return formData.value.errorCount
+  }
 
   // Function to count items with "useCustomError" set to true
   const countItemsWithCustomError = (obj: IErrorMessagesArr) => {
-    let count = 0;
+    let count = 0
 
     for (const key in obj) {
       if (obj.hasOwnProperty(key) && obj[key]?.useCustomError === true) {
-        count++;
+        count++
       }
     }
 
-    return count;
-  };
+    return count
+  }
 
   /*
    *   Useage:
@@ -112,15 +122,15 @@ export function useFormControl(name: string = '') {
    *   };
    *   updateErrorMessages("email", sampleCustomErrorEmail);
    */
-  const updateErrorMessages = async (name: string, message: string = '', valid: boolean = false) => {
+  const updateErrorMessages = async (name: string, message: string = "", valid: boolean = false) => {
     if (!valid) {
       // Ensure the form field exists before updating it
       if (!formData.value.formFieldsC12[name]) {
-        console.warn(`Form field "${name}" not found in formFieldsC12`);
-        return;
+        console.warn(`Form field "${name}" not found in formFieldsC12`)
+        return
       }
 
-      formData.value.formFieldsC12[name].useCustomError = true;
+      formData.value.formFieldsC12[name].useCustomError = true
 
       // if (typeof message === 'string') {
       //   formData.value.formFieldsC12[name].customErrors = message;
@@ -128,14 +138,14 @@ export function useFormControl(name: string = '') {
       //   formData.value.formFieldsC12[name].customErrors = message;
       // }
 
-      formData.value.formFieldsC12[name].customErrors = message;
-      formData.value.formFieldsC12[name].isValid = valid;
+      formData.value.formFieldsC12[name].customErrors = message
+      formData.value.formFieldsC12[name].isValid = valid
 
       // formData.value.errorMessages[name].useCustomError = true;
       // formData.value.errorMessages[name].message = message;
     }
-    formData.value.hasCustomErrorMessages = countItemsWithCustomError(formData.value.errorMessages) > 0;
-  };
+    formData.value.hasCustomErrorMessages = countItemsWithCustomError(formData.value.errorMessages) > 0
+  }
 
   const useApiErrors = async (errors: IApiErrorMessages) => {
     // Object.keys(errors).forEach((key) => {
@@ -144,9 +154,9 @@ export function useFormControl(name: string = '') {
 
     for (const [key, message] of Object.entries(errors)) {
       // console.log(`${key}: ${message}`);
-      updateErrorMessages(key, message);
+      updateErrorMessages(key, message)
     }
-  };
+  }
 
   // const resetForm = () => {
   //   console.log('resetForm()');
@@ -159,12 +169,12 @@ export function useFormControl(name: string = '') {
   // };
 
   const fieldIsDirty = (name: string) => {
-    if (typeof formData.value.formFieldsC12[name] !== 'undefined') {
-      return formData.value.formFieldsC12[name].isDirty;
+    if (typeof formData.value.formFieldsC12[name] !== "undefined") {
+      return formData.value.formFieldsC12[name].isDirty
     } else {
-      return false;
+      return false
     }
-  };
+  }
 
   // const fieldHasError = (name: string) => {
   //   const currentValidityState = formData.value.validityState[name];
@@ -196,12 +206,12 @@ export function useFormControl(name: string = '') {
   // const fieldHasError = ref(false);
 
   const formIsValid = computed(() => {
-    return formData.value.formIsValid;
-  });
+    return formData.value.formIsValid
+  })
 
   const submitDisabled = computed(() => {
-    return formData.value.submitDisabled;
-  });
+    return formData.value.submitDisabled
+  })
 
   // Keep an eye on this for performance issue
 
@@ -215,27 +225,27 @@ export function useFormControl(name: string = '') {
   watch(
     () => formData.value.validityState,
     () => {
-      getErrorCount();
+      getErrorCount()
     },
     { deep: true }
-  );
+  )
 
   watch(
     () => formData.value.formFieldsC12,
     () => {
-      formData.value.formFieldsC12;
+      formData.value.formFieldsC12
     },
     { deep: true }
-  );
+  )
 
   watch(
     () => formData.value.isPending,
     (newValue, oldValue) => {
       if (newValue) {
-        updatePreviousValues();
+        updatePreviousValues()
       }
     }
-  );
+  )
 
   return {
     formData,
@@ -250,5 +260,5 @@ export function useFormControl(name: string = '') {
     // fieldHasError,
     fieldIsDirty,
     // updateFieldValidity,
-  };
+  }
 }
