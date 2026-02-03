@@ -2,16 +2,22 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["modern-normalize", "./app/assets/styles/main.css"],
-  modules: ["@nuxt/eslint", "@nuxt/icon", "@nuxt/image", "@nuxtjs/i18n", "nuxt-qrcode"],
+  modules: [
+    "@nuxt/eslint",
+    "@nuxt/icon",
+    "@nuxt/image",
+    "@nuxtjs/i18n",
+    "nuxt-qrcode",
+    "@pinia/nuxt",
+    "pinia-plugin-persistedstate/nuxt",
+    "@nuxt/test-utils/module",
+  ],
   i18n: {
     defaultLocale: "en",
     locales: ["en"],
   },
   imports: {
     dirs: ["./stores"],
-  },
-  alias: {
-    "#shared": "./shared",
   },
   app: {
     head: {
@@ -49,5 +55,10 @@ export default defineNuxtConfig({
     includeWorkspace: true,
     strict: true,
     typeCheck: "build", // Enable type checking during build only - Fixes vue-tsc dependency issues
+    tsConfig: {
+      compilerOptions: {
+        types: ["vitest/globals"], // TypeScript support for globals
+      },
+    },
   },
 })

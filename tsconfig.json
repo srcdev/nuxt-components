@@ -2,7 +2,7 @@
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
     "strict": true,
-    "types": [],
+    "types": ["vitest/globals", "@nuxt/test-utils", "@vue/test-utils"],
     "skipLibCheck": true
   }
 }

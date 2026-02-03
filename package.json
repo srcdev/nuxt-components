@@ -15,7 +15,8 @@
     "preview": "nuxt preview",
     "lint": "eslint .",
     "postinstall": "nuxt prepare",
-    "release": "release-it"
+    "release": "release-it",
+    "test": "vitest"
   },
   "files": [
     "app/",
@@ -28,17 +29,20 @@
     "@iconify-json/akar-icons": "1.2.7",
     "@iconify-json/bi": "1.2.7",
     "@iconify-json/bitcoin-icons": "1.2.4",
-    "@iconify-json/gravity-ui": "1.2.10",
+    "@iconify-json/gravity-ui": "1.2.11",
     "@iconify-json/material-symbols": "1.2.53",
     "@iconify-json/mdi": "1.2.3",
     "@nuxt/eslint": "1.13.0",
     "@nuxt/icon": "2.2.1",
-    "@pinia/nuxt": "0.11.3",
     "@nuxt/image": "2.0.0",
+    "@nuxt/test-utils": "3.23.0",
     "@nuxtjs/i18n": "10.2.1",
-    "@vueuse/core": "14.1.0",
+    "@pinia/nuxt": "0.11.3",
+    "@vue/test-utils": "2.4.6",
+    "@vueuse/core": "14.2.0",
     "eslint": "9.39.2",
     "focus-trap-vue": "4.1.0",
+    "happy-dom": "20.5.0",
     "nuxt": "4.3.0",
     "nuxt-qrcode": "0.4.8",
     "patch-package": "8.0.1",
@@ -46,7 +50,9 @@
     "pinia-plugin-persistedstate": "4.7.1",
     "release-it": "19.2.4",
     "typescript": "5.9.3",
-    "zod": "4.1.12"
+    "vitest": "^4.0.18",
+    "vue-tsc": "3.2.4",
+    "zod": "4.3.6"
   },
   "release-it": {
     "$schema": "https://unpkg.com/release-it/schema/release-it.json",
@@ -59,6 +65,6 @@
     }
   },
   "dependencies": {
-    "modern-normalize": "^3.0.1"
+    "modern-normalize": "3.0.1"
   }
 }
