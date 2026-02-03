@@ -3,10 +3,10 @@
     :id
     :name
     :legend
-    :fieldHasError
+    :field-has-error
     :required
     :data-testid
-    :styleClassPassthrough="['multiple-checkboxes-fieldset', elementClasses]"
+    :style-class-passthrough="['multiple-checkboxes-fieldset', elementClasses]"
   >
     <InputDescription :id :name :field-has-error="fieldHasError" :style-class-passthrough="['input-text-description']">
       <template v-if="slots.descriptionHtml" #descriptionHtml>
@@ -22,13 +22,13 @@
         <template v-for="item in fieldData.data" :key="item.id">
           <InputCheckboxRadioButton
             v-if="isButton"
-            type="checkbox"
             :id="`${name}-${item.value}`"
+            v-model="modelValue"
+            type="checkbox"
             :name
             :required
             :label="item.label"
             :field-has-error
-            v-model="modelValue"
             :true-value="item.value"
             :size
             :options-layout
@@ -49,13 +49,13 @@
           </InputCheckboxRadioButton>
           <InputCheckboxRadioWithLabel
             v-else
-            type="checkbox"
             :id="`${name}-${item.value}`"
+            v-model="modelValue"
+            type="checkbox"
             :name
             :required
             :label="item.label"
             :field-has-error
-            v-model="modelValue"
             :true-value="item.value"
             :size
             :options-layout
@@ -69,14 +69,14 @@
           </InputCheckboxRadioWithLabel>
         </template>
       </div>
-      <InputError :errorMessage="errorMessage" :showError="fieldHasError" :id="errorId" :isDetached="true" />
+      <InputError :id="errorId" :error-message="errorMessage" :show-error="fieldHasError" :is-detached="true" />
     </template>
   </FormFieldset>
 </template>
 
 <script setup lang="ts">
 import propValidators from "../c12/prop-validators";
-import type { IOptionsConfig, IFormMultipleOptions } from "../../../types/forms/types.forms";
+import type { IFormMultipleOptions } from "~/types/forms/types.forms";
 
 const props = defineProps({
   dataTestid: {

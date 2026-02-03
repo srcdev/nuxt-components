@@ -7,17 +7,17 @@
     </div>
 
     <input
+      :id
+      ref="inputField"
+      v-model="modelValue"
       :type
       :true-value="trueValue"
       :false-value="falseValue"
-      :id
       :name
       :required="required && !multipleOptions"
       :value="trueValue"
       class="input-checkbox-radio-core"
       :class="inputClasses"
-      v-model="modelValue"
-      ref="inputField"
       :aria-checked="isChecked"
       :aria-describedby="ariaDescribedby"
       :aria-invalid="fieldHasError"
@@ -26,38 +26,40 @@
 </template>
 
 <script setup lang="ts">
-import type { BaseCheckboxRadioProps } from "~/types/forms/types.forms"
+import type { BaseCheckboxRadioProps } from "~/types/forms/types.forms";
 
 interface Props extends BaseCheckboxRadioProps {
-  isButton?: boolean
+  isButton?: boolean;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || [])
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || []);
 
 const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme
-})
+  return props.fieldHasError ? "error" : props.theme;
+});
 
-const modelValue = defineModel<any>()
+const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
 
-const inputField = ref<HTMLInputElement | null>(null)
+const inputField = ref<HTMLInputElement | null>(null);
 
 const defaultIcon = computed(() => {
-  return props.type === "checkbox" ? "material-symbols:check-small" : "material-symbols:circle"
-})
+  return props.type === "checkbox" ? "material-symbols:check-small" : "material-symbols:circle";
+});
 
 // Cache array check for performance
-const isModelValueArray = computed(() => Array.isArray(modelValue.value))
+const isModelValueArray = computed(() => Array.isArray(modelValue.value));
 
 const isChecked = computed(() => {
+  if (!props.trueValue) return false;
+
   if (isModelValueArray.value) {
-    return modelValue.value.includes(props.trueValue)
+    return (modelValue.value as (string | number | boolean)[])?.includes(props.trueValue) || false;
   } else {
-    return modelValue.value === props.trueValue
+    return modelValue.value === props.trueValue;
   }
-})
+});
 
 // Consolidated class computations
 const wrapperClasses = computed(() => [
@@ -69,7 +71,7 @@ const wrapperClasses = computed(() => [
     button: props.isButton,
     "display-as-disc": props.displayAsDisc,
   },
-])
+]);
 
 const inputClasses = computed(() => [
   props.size,
@@ -77,7 +79,7 @@ const inputClasses = computed(() => [
     error: props.fieldHasError,
     "is-button": props.isButton,
   },
-])
+]);
 </script>
 
 <style lang="css">
