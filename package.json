@@ -5,6 +5,10 @@
   "main": "nuxt.config.ts",
   "types": "types.d.ts",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.19.0",
+    "npm": ">=10.0.0"
+  },
   "scripts": {
     "clean": "rm -rf .nuxt && rm -rf .output",
     "cleanall": "rm -rf node_modules && rm -rf .nuxt && rm -rf .output && rm package-lock.json",
