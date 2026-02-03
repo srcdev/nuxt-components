@@ -7,19 +7,19 @@
     :class="[size, elementClasses, optionsLayout, { error: fieldHasError }, { lozenge: displayAsLozenge }]"
   >
     <InputCheckboxRadioCore
-      :isButton="true"
+      :is-button="true"
       :type
       :id
       :name
       :required
       v-model="modelValue"
       :size
-      :trueValue
-      :falseValue
-      :fieldHasError
+      :true-value="trueValue"
+      :false-value="falseValue"
+      :field-has-error="fieldHasError"
       :theme
-      :ariaDescribedby
-      :displayAsDisc
+      :aria-describedby="ariaDescribedby"
+      :display-as-disc="displayAsDisc"
     >
       <template #checkedIcon>
         <slot name="checkedIcon"></slot>
@@ -38,89 +38,19 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
+import type { BaseCheckboxRadioProps } from "~/types/forms/types.forms"
 
-const props = defineProps({
-  type: {
-    type: String as PropType<"checkbox" | "radio">,
-    required: true,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  trueValue: {
-    type: [String, Number, Boolean],
-    default: true,
-  },
-  falseValue: {
-    type: [String, Number, Boolean],
-    default: false,
-  },
-  size: {
-    type: String as PropType<string>,
-    default: "medium",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
-  },
-  optionsLayout: {
-    type: String as PropType<string>,
-    default: "equal-widths",
-    validator(value: string) {
-      return propValidators.optionsLayout.includes(value)
-    },
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  theme: {
-    type: String as PropType<string>,
-    default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
-  },
-  direction: {
-    type: String as PropType<"row" | "row-reverse">,
-    default: "row",
-    validator(value: string) {
-      return ["row", "row-reverse"].includes(value)
-    },
-  },
-  ariaDescribedby: {
-    type: String,
-    default: null,
-  },
-  displayAsDisc: {
-    type: Boolean,
-    default: false,
-  },
-  displayAsLozenge: {
-    type: Boolean,
-    default: false,
-  },
-})
+interface Props extends BaseCheckboxRadioProps {
+  label: string
+  optionsLayout?: string
+  direction?: "row" | "row-reverse"
+  displayAsLozenge?: boolean
+}
+
+const props = defineProps<Props>()
 
 const slots = useSlots()
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || [])
 
 const modelValue = defineModel()
 

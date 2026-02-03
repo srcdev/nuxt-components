@@ -1,17 +1,5 @@
 <template>
-  <div
-    class="input-checkbox-radio-wrapper"
-    :data-theme="formTheme"
-    :data-size="size"
-    :class="[
-      type,
-      size,
-      elementClasses,
-      { error: fieldHasError },
-      { button: isButton },
-      { 'display-as-disc': displayAsDisc },
-    ]"
-  >
+  <div class="input-checkbox-radio-wrapper" :data-theme="formTheme" :data-size="size" :class="wrapperClasses">
     <div class="input-checked-icon-slot">
       <slot name="checkedIcon">
         <Icon :name="defaultIcon" class="input-checked-icon-checked" />
@@ -20,91 +8,33 @@
 
     <input
       :type
-      :true-value
-      :false-value
+      :true-value="trueValue"
+      :false-value="falseValue"
       :id
       :name
       :required="required && !multipleOptions"
       :value="trueValue"
       class="input-checkbox-radio-core"
-      :class="[size, { error: fieldHasError }, { 'is-button': isButton }]"
+      :class="inputClasses"
       v-model="modelValue"
       ref="inputField"
       :aria-checked="isChecked"
-      :aria-describedby
+      :aria-describedby="ariaDescribedby"
       :aria-invalid="fieldHasError"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
-const props = defineProps({
-  isButton: {
-    type: Boolean,
-    default: false,
-  },
-  type: {
-    type: String as PropType<"checkbox" | "radio">,
-    required: true,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  required: {
-    type: Boolean,
-    value: false,
-  },
-  trueValue: {
-    type: [String, Number, Boolean],
-    default: true,
-  },
-  falseValue: {
-    type: [String, Number, Boolean],
-    default: false,
-  },
-  multipleOptions: {
-    type: Boolean,
-    default: false,
-  },
-  theme: {
-    type: String as PropType<string>,
-    default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
-  },
-  size: {
-    type: String as PropType<string>,
-    default: "medium",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  ariaDescribedby: {
-    type: String,
-    default: null,
-  },
-  displayAsDisc: {
-    type: Boolean,
-    default: false,
-  },
-})
+import type { BaseCheckboxRadioProps } from "~/types/forms/types.forms"
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+interface Props extends BaseCheckboxRadioProps {
+  isButton?: boolean
+}
+
+const props = defineProps<Props>()
+
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || [])
 
 const formTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme
@@ -118,15 +48,36 @@ const defaultIcon = computed(() => {
   return props.type === "checkbox" ? "material-symbols:check-small" : "material-symbols:circle"
 })
 
-const isArray = Array.isArray(modelValue.value)
+// Cache array check for performance
+const isModelValueArray = computed(() => Array.isArray(modelValue.value))
 
 const isChecked = computed(() => {
-  if (isArray) {
+  if (isModelValueArray.value) {
     return modelValue.value.includes(props.trueValue)
   } else {
     return modelValue.value === props.trueValue
   }
 })
+
+// Consolidated class computations
+const wrapperClasses = computed(() => [
+  props.type,
+  props.size,
+  elementClasses.value,
+  {
+    error: props.fieldHasError,
+    button: props.isButton,
+    "display-as-disc": props.displayAsDisc,
+  },
+])
+
+const inputClasses = computed(() => [
+  props.size,
+  {
+    error: props.fieldHasError,
+    "is-button": props.isButton,
+  },
+])
 </script>
 
 <style lang="css">

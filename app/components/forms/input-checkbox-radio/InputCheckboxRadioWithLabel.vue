@@ -12,12 +12,12 @@
       :required
       v-model="modelValue"
       :size
-      :trueValue
-      :falseValue
-      :fieldHasError
+      :true-value="trueValue"
+      :false-value="falseValue"
+      :field-has-error="fieldHasError"
       :theme
-      :ariaDescribedby
-      :displayAsDisc
+      :aria-describedby="ariaDescribedby"
+      :display-as-disc="displayAsDisc"
     >
       <template #checkedIcon>
         <slot name="checkedIcon"></slot>
@@ -32,74 +32,17 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
+import type { BaseCheckboxRadioProps } from "~/types/forms/types.forms"
 
-const props = defineProps({
-  type: {
-    type: String as PropType<"checkbox" | "radio">,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  trueValue: {
-    type: [String, Number, Boolean],
-    default: true,
-  },
-  falseValue: {
-    type: [String, Number, Boolean],
-    default: false,
-  },
-  size: {
-    type: String as PropType<string>,
-    default: "medium",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
-  },
-  optionsLayout: {
-    type: String as PropType<string>,
-    default: "equal-widths",
-    validator(value: string) {
-      return propValidators.optionsLayout.includes(value)
-    },
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  theme: {
-    type: String as PropType<string>,
-    default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
-  },
-  ariaDescribedby: {
-    type: String,
-    default: null,
-  },
-  displayAsDisc: {
-    type: Boolean,
-    default: false,
-  },
-})
+interface Props extends Omit<BaseCheckboxRadioProps, "id"> {
+  label: string
+  optionsLayout?: string
+}
+
+const props = defineProps<Props>()
 
 const slots = useSlots()
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || [])
 
 const modelValue = defineModel()
 const id = useId()

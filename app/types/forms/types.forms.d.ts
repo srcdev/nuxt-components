@@ -229,3 +229,19 @@ export interface BaseButtonProps {
   isPending?: boolean
   readonly?: boolean
 }
+// Checkbox/Radio component shared props
+export interface BaseCheckboxRadioProps {
+  type: "checkbox" | "radio"
+  id: string
+  name: string
+  required?: boolean
+  size?: string
+  theme?: string
+  fieldHasError?: boolean
+  styleClassPassthrough?: string | string[]
+  trueValue?: string | number | boolean
+  falseValue?: string | number | boolean
+  ariaDescribedby?: string
+  displayAsDisc?: boolean
+  multipleOptions?: boolean
+}
