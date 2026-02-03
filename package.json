@@ -16,7 +16,9 @@
     "lint": "eslint .",
     "postinstall": "nuxt prepare",
     "release": "release-it",
-    "test": "vitest"
+    "test": "vitest",
+    "test:run": "vitest --run",
+    "test:ui": "vitest --ui"
   },
   "files": [
     "app/",

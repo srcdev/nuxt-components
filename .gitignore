@@ -10,6 +10,10 @@ framework
 dist
 .DS_Store
 
+# Coverage reports
+coverage/
+*.lcov
+
 # Yarn
 .yarn/cache
 .yarn/*state*
