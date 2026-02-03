@@ -56,50 +56,114 @@ const controller = new AbortController()
 const containerGlowWrapper = ref<HTMLElement>()
 const containerGlowItem = ref<HTMLElement[]>([])
 
+// Cache frequently used values to avoid repeated access
+const configCache = computed(() => ({
+  proximity: props.config.proximity,
+  opacityStr: String(props.config.opacity),
+  gapStr: String(props.config.gap),
+  blurStr: String(props.config.blur),
+  spreadStr: String(props.config.spread),
+  direction: props.config.vertical ? "column" : "row",
+}))
+
+// Pre-calculate constants to avoid repeated calculations
+const ANGLE_OFFSET = 90
+const FULL_CIRCLE = 360
+const RAD_TO_DEG = 180 / Math.PI
+
+// Throttle mechanism using RAF
+let rafId: number | null = null
+let lastEventData: { x: number; y: number } | null = null
+
 const updateStyles = (event: PointerEvent) => {
-  // get the angle based on the center point of the card and pointer position
-  for (const cardElem of containerGlowItem.value) {
-    // Check the card against the proximity and then start updating
-    const cardBounds = cardElem.getBoundingClientRect()
-    // Get distance between pointer and outerbounds of card
-    if (
-      event?.x > cardBounds.left - props.config.proximity &&
-      event?.x < cardBounds.left + cardBounds.width + props.config.proximity &&
-      event?.y > cardBounds.top - props.config.proximity &&
-      event?.y < cardBounds.top + cardBounds.height + props.config.proximity
-    ) {
-      // If within proximity set the active opacity
-      cardElem.style.setProperty("--opacity-active", String(1))
-    } else {
-      cardElem.style.setProperty("--opacity-active", String(props.config.opacity))
-    }
-    const cardCentre = [cardBounds.left + cardBounds.width * 0.5, cardBounds.top + cardBounds.height * 0.5]
-    let angle = (Math.atan2(event?.y - cardCentre[1], event?.x - cardCentre[0]) * 180) / Math.PI
-    angle = angle < 0 ? angle + 360 : angle
-    cardElem.style.setProperty("--start", String(angle + 90))
+  // Early return if event coordinates are not available
+  if (typeof event.x !== "number" || typeof event.y !== "number") {
+    return
   }
+
+  // Store event data and schedule update
+  lastEventData = { x: event.x, y: event.y }
+
+  if (rafId !== null) {
+    return // Already scheduled
+  }
+
+  rafId = requestAnimationFrame(() => {
+    if (!lastEventData) {
+      rafId = null
+      return
+    }
+
+    const { x: eventX, y: eventY } = lastEventData
+    const { proximity, opacityStr } = configCache.value
+
+    // Process all elements
+    for (const cardElem of containerGlowItem.value) {
+      // Check the card against the proximity and then start updating
+      const cardBounds = cardElem.getBoundingClientRect()
+
+      // Pre-calculate bounds to avoid repeated operations
+      const leftBound = cardBounds.left - proximity
+      const rightBound = cardBounds.left + cardBounds.width + proximity
+      const topBound = cardBounds.top - proximity
+      const bottomBound = cardBounds.top + cardBounds.height + proximity
+
+      // Check proximity with pre-calculated bounds
+      const isInProximity = eventX > leftBound && eventX < rightBound && eventY > topBound && eventY < bottomBound
+
+      // Set opacity based on proximity
+      cardElem.style.setProperty("--opacity-active", isInProximity ? "1" : opacityStr)
+
+      if (isInProximity) {
+        // Only calculate angle when in proximity
+        const cardCentreX = cardBounds.left + cardBounds.width * 0.5
+        const cardCentreY = cardBounds.top + cardBounds.height * 0.5
+
+        let angle = Math.atan2(eventY - cardCentreY, eventX - cardCentreX) * RAD_TO_DEG
+        angle = angle < 0 ? angle + FULL_CIRCLE : angle
+
+        cardElem.style.setProperty("--start", String(angle + ANGLE_OFFSET))
+      }
+    }
+
+    rafId = null
+  })
 }
 
 const applyStyles = () => {
-  containerGlowWrapper.value?.style.setProperty("--gap", String(props.config.gap))
-  containerGlowWrapper.value?.style.setProperty("--blur", String(props.config.blur))
-  containerGlowWrapper.value?.style.setProperty("--spread", String(props.config.spread))
-  containerGlowWrapper.value?.style.setProperty("--direction", props.config.vertical ? "column" : "row")
+  if (!containerGlowWrapper.value) return
+
+  const { gapStr, blurStr, spreadStr, direction } = configCache.value
+  const wrapper = containerGlowWrapper.value
+
+  // Batch DOM updates
+  wrapper.style.setProperty("--gap", gapStr)
+  wrapper.style.setProperty("--blur", blurStr)
+  wrapper.style.setProperty("--spread", spreadStr)
+  wrapper.style.setProperty("--direction", direction)
 }
 
-// document.body.addEventListener('pointermove', updateStyles);
+// Watch for config changes and reapply styles
+watch(() => props.config, applyStyles, { deep: true })
 
 onMounted(() => {
   applyStyles()
   if (containerGlowWrapper.value) {
     document.body.addEventListener("pointermove", updateStyles, {
       signal: controller.signal,
+      passive: true, // Improve scroll performance
     })
   }
 })
 
 onBeforeUnmount(() => {
-  return controller.abort()
+  // Clean up RAF if pending
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId)
+    rafId = null
+  }
+  lastEventData = null
+  controller.abort()
 })
 </script>
 
@@ -165,7 +229,8 @@ onBeforeUnmount(() => {
       background: hsl(280 10% 50% / 1);
       background-attachment: fixed;
       border-radius: 12px;
-      mask: linear-gradient(#0000, #0000),
+      mask:
+        linear-gradient(#0000, #0000),
         conic-gradient(
           from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 1.5)) * 1deg),
           hsl(0 0% 100% / 0.15) 0deg,
@@ -188,7 +253,8 @@ onBeforeUnmount(() => {
       transition: opacity 1s;
       --alpha: 0;
       border: 2px solid transparent;
-      mask: linear-gradient(#0000, #0000),
+      mask:
+        linear-gradient(#0000, #0000),
         conic-gradient(
           from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 0.5)) * 1deg),
           #0000 0deg,
@@ -216,7 +282,8 @@ onBeforeUnmount(() => {
         inset: -5px;
         border: 10px solid transparent;
         border-radius: 12px;
-        mask: linear-gradient(#0000, #0000),
+        mask:
+          linear-gradient(#0000, #0000),
           conic-gradient(
             from calc((var(--start) - (var(--spread) * 0.5)) * 1deg),
             #000 0deg,

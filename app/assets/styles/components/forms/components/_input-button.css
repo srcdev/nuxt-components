@@ -1,0 +1,65 @@
+.input-button-core {
+  gap: var(--form-button-icon-gap);
+  border-radius: var(--form-input-border-radius);
+
+  padding-inline: var(--form-button-padding-inline);
+  padding-block-start: var(--form-element-padding-block-start);
+  padding-block-end: var(--form-element-padding-block-end);
+
+  box-shadow: var(--box-shadow-off);
+  background-color: var(--theme-button-surface);
+  border: var(--form-element-border-width) solid var(--theme-button-border);
+  color: var(--theme-button-text);
+  outline: var(--form-element-outline-width) solid var(--theme-button-outline);
+  outline-offset: var(--form-element-outline-offset-focus);
+
+  &:hover {
+    background-color: var(--theme-button-surface-hover);
+    border-color: var(--theme-button-border-hover);
+    color: var(--theme-button-text-hover);
+    outline-color: var(--theme-button-outline-hover);
+    outline-offset: var(--form-element-outline-offset-focus);
+  }
+
+  &:focus-visible {
+    background-color: var(--theme-button-surface-hover);
+    border-color: var(--theme-button-border-hover);
+    color: var(--theme-button-text-focus);
+    outline-color: var(--theme-button-outline-focus);
+    outline-offset: var(--form-element-outline-offset-focus);
+  }
+
+  &[readonly] {
+    opacity: 0.5;
+    &:hover,
+    &:focus-visible {
+      cursor: not-allowed;
+    }
+  }
+
+  &.icon-only {
+    aspect-ratio: 1;
+    height: var(--form-icon-only-button-size);
+    width: var(--form-icon-only-button-size);
+    margin: 0;
+    padding: 0;
+  }
+
+  .btn-text {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: var(--form-element-font-size);
+    line-height: var(--form-element-line-height);
+  }
+
+  .btn-icon {
+    display: flex;
+    .icon {
+      aspect-ratio: 1;
+      display: inline-block;
+      height: var(--form-icon-size);
+      width: var(--form-icon-size);
+      color: var(--theme-button-icon-color);
+    }
+  }
+}

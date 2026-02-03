@@ -1,0 +1,67 @@
+{
+  "data": [
+    {
+      "id": "pizza",
+      "name": "tags",
+      "value": "pizza",
+      "label": "Pizza"
+    },
+    {
+      "id": "italian",
+      "name": "tags",
+      "value": "italian",
+      "label": "Italian"
+    },
+    {
+      "id": "vegetarian",
+      "name": "tags",
+      "value": "vegetarian",
+      "label": "Vegetarian"
+    },
+    {
+      "id": "stir-fry",
+      "name": "tags",
+      "value": "stir-fry",
+      "label": "Stir-fry"
+    },
+    {
+      "id": "asian",
+      "name": "tags",
+      "value": "asian",
+      "label": "Asian"
+    },
+    {
+      "id": "cookies",
+      "name": "tags",
+      "value": "cookies",
+      "label": "Cookies"
+    },
+    {
+      "id": "dessert",
+      "name": "tags",
+      "value": "dessert",
+      "label": "Dessert"
+    },
+    {
+      "id": "baking",
+      "name": "tags",
+      "value": "baking",
+      "label": "Baking"
+    },
+    {
+      "id": "pasta",
+      "name": "tags",
+      "value": "pasta",
+      "label": "Pasta"
+    },
+    {
+      "id": "chicken",
+      "name": "tags",
+      "value": "chicken",
+      "label": "Chicken"
+    }
+  ],
+  "total": 5,
+  "skip": 0,
+  "limit": 10
+}

@@ -1,0 +1,63 @@
+{
+  "data": [
+    {
+      "id": "uk",
+      "name": "countries",
+      "value": "countries-12",
+      "label": "United Kingdom",
+      "icon": "circle-flags:uk"
+    },
+    {
+      "id": "france",
+      "name": "countries",
+      "value": "countries-23",
+      "label": "France",
+      "icon": "circle-flags:fr"
+    },
+    {
+      "id": "spain",
+      "name": "countries",
+      "value": "countries-42",
+      "label": "Spain",
+      "icon": "circle-flags:es"
+    },
+    {
+      "id": "italy",
+      "name": "countries",
+      "value": "countries-56",
+      "label": "Italy",
+      "icon": "circle-flags:it"
+    },
+    {
+      "id": "greece",
+      "name": "countries",
+      "value": "countries-09",
+      "label": "Greece",
+      "icon": "circle-flags:gr"
+    },
+    {
+      "id": "turkey",
+      "name": "countries",
+      "value": "countries-13",
+      "label": "Turkey",
+      "icon": "circle-flags:tr"
+    },
+    {
+      "id": "germany",
+      "name": "countries",
+      "value": "countries-76",
+      "label": "Germany",
+      "icon": "circle-flags:de"
+    },
+    {
+      "id": "portugal",
+      "name": "countries",
+      "value": "countries-34",
+      "label": "Portugal",
+      "icon": "circle-flags:pt"
+    }
+  ],
+  "total": 5,
+  "skip": 0,
+  "limit": 10
+}

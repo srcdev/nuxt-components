@@ -1,0 +1,43 @@
+{
+  "data": [
+    {
+      "id": "bradford-on-avon",
+      "name": "cities",
+      "value": "cities-2",
+      "label": "Bradford on Avon"
+    },
+    {
+      "id": "bath",
+      "name": "cities",
+      "value": "cities-12",
+      "label": "Bath"
+    },
+    {
+      "id": "bristol",
+      "name": "cities",
+      "value": "cities-23",
+      "label": "Bristol"
+    },
+    {
+      "id": "london",
+      "name": "cities",
+      "value": "cities-42",
+      "label": "London"
+    },
+    {
+      "id": "sunderland",
+      "name": "cities",
+      "value": "cities-56",
+      "label": "Sunderland"
+    },
+    {
+      "id": "penzance",
+      "name": "cities",
+      "value": "cities-09",
+      "label": "Penzance"
+    }
+  ],
+  "total": 6,
+  "skip": 0,
+  "limit": 10
+}
