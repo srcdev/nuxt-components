@@ -6,7 +6,7 @@
     :fieldHasError
     :required
     :data-testid
-    :styleClassPassthrough="['multiple-checkboxes-fieldset']"
+    :styleClassPassthrough="['multiple-checkboxes-fieldset', elementClasses]"
   >
     <InputDescription :id :name :field-has-error="fieldHasError" :style-class-passthrough="['input-text-description']">
       <template v-if="slots.descriptionHtml" #descriptionHtml>
@@ -75,8 +75,8 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
-import type { IOptionsConfig, IFormMultipleOptions } from "../../../types/forms/types.forms"
+import propValidators from "../c12/prop-validators";
+import type { IOptionsConfig, IFormMultipleOptions } from "../../../types/forms/types.forms";
 
 const props = defineProps({
   dataTestid: {
@@ -123,14 +123,14 @@ const props = defineProps({
     type: String as PropType<string>,
     default: "medium",
     validator(value: string) {
-      return propValidators.size.includes(value)
+      return propValidators.size.includes(value);
     },
   },
   optionsLayout: {
     type: String as PropType<string>,
     default: "equal-widths",
     validator(value: string) {
-      return propValidators.optionsLayout.includes(value)
+      return propValidators.optionsLayout.includes(value);
     },
   },
   equalCols: {
@@ -145,14 +145,14 @@ const props = defineProps({
     type: String as PropType<string>,
     default: "primary",
     validator(value: string) {
-      return propValidators.theme.includes(value)
+      return propValidators.theme.includes(value);
     },
   },
   direction: {
     type: String as PropType<"row" | "row-reverse">,
     default: "row",
     validator(value: string) {
-      return ["row", "row-reverse"].includes(value)
+      return ["row", "row-reverse"].includes(value);
     },
   },
   displayAsDisc: {
@@ -163,19 +163,21 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 
-const modelValue = defineModel()
-const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>
+const modelValue = defineModel();
+const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
-const id = `${props.name}-${useId()}`
-const errorId = `${id}-error-message`
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+const id = `${props.name}-${useId()}`;
+const errorId = `${id}-error-message`;
 const ariaDescribedby = computed(() => {
-  const ariaDescribedbyId = slots.descriptionText || slots.descriptionHtml ? `${id}-description` : undefined
-  return props.fieldHasError ? errorId : ariaDescribedbyId
-})
+  const ariaDescribedbyId = slots.descriptionText || slots.descriptionHtml ? `${id}-description` : undefined;
+  return props.fieldHasError ? errorId : ariaDescribedbyId;
+});
 </script>
 
 <style lang="css">

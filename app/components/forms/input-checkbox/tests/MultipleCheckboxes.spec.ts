@@ -1,26 +1,26 @@
 // https://nuxt.com/docs/getting-started/testing#unit-testing
-import { describe, it, expect } from 'vitest';
-import { VueWrapper } from '@vue/test-utils';
-import { mountSuspended } from '@nuxt/test-utils/runtime';
-import ComponentUnderTest from '../MultipleCheckboxes.vue';
-import tagsData from './data/tags.json';
+import type { VueWrapper } from "@vue/test-utils";
+import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { ref } from "vue";
+import ComponentUnderTest from "../MultipleCheckboxes.vue";
+import tagsData from "./data/tags.json";
 
-let initialPropsData = {
-  dataTestid: 'multiple-checkboxes',
-  id: 'tags',
-  name: 'tags',
-  legend: 'Choose tags (as checkboxes)',
+const initialPropsData = {
+  dataTestid: "multiple-checkboxes",
+  id: "tags",
+  name: "tags",
+  legend: "Choose tags (as checkboxes)",
   required: true,
-  label: 'Check between 3 and 8 tags',
-  placeholder: 'eg. Type something here',
+  label: "Check between 3 and 8 tags",
+  placeholder: "eg. Type something here",
   isButton: true,
-  errorMessage: 'Please select between 3 and 8 tags',
+  errorMessage: "Please select between 3 and 8 tags",
   fieldHasError: false,
   fieldData: tagsData,
-  size: 'small',
-  optionsLayout: 'inline',
-  styleClassPassthrough: ['testClass'],
-  theme: 'primary',
+  size: "small",
+  optionsLayout: "inline",
+  styleClassPassthrough: ["testClass"],
+  theme: "primary",
 };
 
 const initialSlots = {
@@ -40,20 +40,21 @@ const wrapperFactory = (propsData = {}, slotsData = {}) => {
   });
 };
 
-describe('MultipleCheckboxes Component', () => {
-  it('Mounts', async () => {
+describe("MultipleCheckboxes Component", () => {
+  it("Mounts", async () => {
     wrapper = await wrapperFactory();
     expect(wrapper).toBeTruthy();
   });
 
-  it('renders properly', async () => {
+  it("renders properly", async () => {
     wrapper = await wrapperFactory();
-    const dataTestIdElem = wrapper.attributes('data-testid');
+    const dataTestIdElem = wrapper.attributes("data-testid");
     expect(dataTestIdElem).toBe(initialPropsData.dataTestid);
-    expect(wrapper.find('[data-testid]').classes()).toContain('testClass');
+    // The styleClassPassthrough is applied to the FormFieldset component, not the root
+    expect(wrapper.find(".form-fieldset").classes()).toContain("testClass");
   });
 
-  it('updates checkbox modelValue when items clicked', async () => {
+  it("updates checkbox modelValue when items clicked", async () => {
     const modelValue = ref<string[]>([]);
     const propsData = {
       modelValue,
@@ -65,34 +66,36 @@ describe('MultipleCheckboxes Component', () => {
      * Test the first checkbox checked
      **/
     const firstCheckbox = checkboxElements[0];
-    expect(firstCheckbox.attributes('aria-checked')).toBe('false');
-    const firstCheckboxTrueValue = firstCheckbox.attributes('true-value');
+    expect(firstCheckbox).toBeDefined();
+    expect(firstCheckbox!.attributes("aria-checked")).toBe("false");
+    const firstCheckboxTrueValue = firstCheckbox!.attributes("true-value");
 
-    await firstCheckbox.trigger('click');
+    await firstCheckbox!.trigger("click");
 
-    expect(wrapper.emitted()).toHaveProperty('update:modelValue');
-    const firstEmittedEvents = wrapper.emitted('update:modelValue');
+    expect(wrapper.emitted()).toHaveProperty("update:modelValue");
+    const firstEmittedEvents = wrapper.emitted("update:modelValue");
     if (firstEmittedEvents && firstEmittedEvents[0]) {
       expect(firstEmittedEvents[0]).includes(firstCheckboxTrueValue);
     }
 
-    expect(firstCheckbox.attributes('aria-checked')).toBe('true');
+    expect(firstCheckbox!.attributes("aria-checked")).toBe("true");
 
     /*
      * Test the second checkbox chekced
      **/
     const secondCheckbox = checkboxElements[1];
-    expect(secondCheckbox.attributes('aria-checked')).toBe('false');
-    const secondCheckboxTrueValue = secondCheckbox.attributes('true-value');
+    expect(secondCheckbox).toBeDefined();
+    expect(secondCheckbox!.attributes("aria-checked")).toBe("false");
+    const secondCheckboxTrueValue = secondCheckbox!.attributes("true-value");
 
-    await secondCheckbox.trigger('click');
+    await secondCheckbox!.trigger("click");
 
-    expect(wrapper.emitted()).toHaveProperty('update:modelValue');
-    const secondEmittedEvents = wrapper.emitted('update:modelValue');
+    expect(wrapper.emitted()).toHaveProperty("update:modelValue");
+    const secondEmittedEvents = wrapper.emitted("update:modelValue");
     if (secondEmittedEvents && secondEmittedEvents[0]) {
       expect(secondEmittedEvents[1]).includes(secondCheckboxTrueValue);
     }
 
-    expect(secondCheckbox.attributes('aria-checked')).toBe('true');
+    expect(secondCheckbox!.attributes("aria-checked")).toBe("true");
   });
 });
