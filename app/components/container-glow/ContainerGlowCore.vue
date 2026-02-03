@@ -57,24 +57,34 @@ const containerGlowWrapper = ref<HTMLElement>()
 const containerGlowItem = ref<HTMLElement[]>([])
 
 const updateStyles = (event: PointerEvent) => {
+  // Early return if event coordinates are not available
+  if (typeof event.x !== "number" || typeof event.y !== "number") {
+    return
+  }
+
+  // Extract coordinates for type safety
+  const eventX = event.x
+  const eventY = event.y
+
   // get the angle based on the center point of the card and pointer position
   for (const cardElem of containerGlowItem.value) {
     // Check the card against the proximity and then start updating
     const cardBounds = cardElem.getBoundingClientRect()
     // Get distance between pointer and outerbounds of card
     if (
-      event?.x > cardBounds.left - props.config.proximity &&
-      event?.x < cardBounds.left + cardBounds.width + props.config.proximity &&
-      event?.y > cardBounds.top - props.config.proximity &&
-      event?.y < cardBounds.top + cardBounds.height + props.config.proximity
+      eventX > cardBounds.left - props.config.proximity &&
+      eventX < cardBounds.left + cardBounds.width + props.config.proximity &&
+      eventY > cardBounds.top - props.config.proximity &&
+      eventY < cardBounds.top + cardBounds.height + props.config.proximity
     ) {
       // If within proximity set the active opacity
       cardElem.style.setProperty("--opacity-active", String(1))
     } else {
       cardElem.style.setProperty("--opacity-active", String(props.config.opacity))
     }
-    const cardCentre = [cardBounds.left + cardBounds.width * 0.5, cardBounds.top + cardBounds.height * 0.5]
-    let angle = (Math.atan2(event?.y - cardCentre[1], event?.x - cardCentre[0]) * 180) / Math.PI
+    const cardCentreX = cardBounds.left + cardBounds.width * 0.5
+    const cardCentreY = cardBounds.top + cardBounds.height * 0.5
+    let angle = (Math.atan2(eventY - cardCentreY, eventX - cardCentreX) * 180) / Math.PI
     angle = angle < 0 ? angle + 360 : angle
     cardElem.style.setProperty("--start", String(angle + 90))
   }
@@ -165,7 +175,8 @@ onBeforeUnmount(() => {
       background: hsl(280 10% 50% / 1);
       background-attachment: fixed;
       border-radius: 12px;
-      mask: linear-gradient(#0000, #0000),
+      mask:
+        linear-gradient(#0000, #0000),
         conic-gradient(
           from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 1.5)) * 1deg),
           hsl(0 0% 100% / 0.15) 0deg,
@@ -188,7 +199,8 @@ onBeforeUnmount(() => {
       transition: opacity 1s;
       --alpha: 0;
       border: 2px solid transparent;
-      mask: linear-gradient(#0000, #0000),
+      mask:
+        linear-gradient(#0000, #0000),
         conic-gradient(
           from calc(((var(--start) + (var(--spread) * 0.25)) - (var(--spread) * 0.5)) * 1deg),
           #0000 0deg,
@@ -216,7 +228,8 @@ onBeforeUnmount(() => {
         inset: -5px;
         border: 10px solid transparent;
         border-radius: 12px;
-        mask: linear-gradient(#0000, #0000),
+        mask:
+          linear-gradient(#0000, #0000),
           conic-gradient(
             from calc((var(--start) - (var(--spread) * 0.5)) * 1deg),
             #000 0deg,
