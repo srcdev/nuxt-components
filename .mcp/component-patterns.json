@@ -1,0 +1,66 @@
+{
+  "component_patterns": {
+    "form_components": {
+      "base_interface": "BaseCheckboxRadioProps from ~/types/forms/types.forms",
+      "common_props": [
+        "id: string - unique identifier",
+        "name: string - form field name",
+        "theme: string - visual theme variant",
+        "size: string - component size (small, medium, large)",
+        "fieldHasError: boolean - error state indicator",
+        "styleClassPassthrough: array - for styling flexibility"
+      ],
+      "patterns": {
+        "model_binding": "Uses defineModel<T>() for v-model support",
+        "theme_support": "data-theme attribute with CSS custom properties",
+        "error_handling": "Conditional styling based on fieldHasError prop",
+        "accessibility": "Proper ARIA attributes and semantic HTML"
+      }
+    },
+    "composable_patterns": {
+      "useStyleClassPassthrough": {
+        "purpose": "Allows parent components to pass styling classes",
+        "usage": "const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || [])",
+        "returns": "reactive elementClasses for component styling"
+      },
+      "useFormControl": {
+        "purpose": "Centralized form state and validation management",
+        "integrates_with": ["Zod validation", "error display", "form submission"]
+      }
+    }
+  },
+  "styling_system": {
+    "css_architecture": {
+      "methodology": "Custom properties with BEM-like structure",
+      "theme_variables": {
+        "--theme-input-border": "Dynamic border colors",
+        "--theme-input-outline": "Focus outline styling",
+        "--theme-checkbox-symbol-color": "Icon colors for checkboxes/radios",
+        "--form-element-outline-width": "Consistent focus indicators"
+      },
+      "responsive_approach": "CSS Grid and Flexbox with container queries where supported"
+    }
+  },
+  "common_tasks": {
+    "creating_form_component": {
+      "steps": [
+        "1. Extend BaseCheckboxRadioProps interface",
+        "2. Use defineModel for v-model support",
+        "3. Implement useStyleClassPassthrough for styling",
+        "4. Add theme data attribute for CSS targeting",
+        "5. Include proper ARIA attributes",
+        "6. Create comprehensive test suite"
+      ]
+    },
+    "adding_tests": {
+      "setup": "Use mountSuspended from @nuxt/test-utils",
+      "patterns": [
+        "Test component mounting with various props",
+        "Verify v-model binding and reactivity",
+        "Check accessibility attributes",
+        "Test error states and styling",
+        "Validate slot rendering when applicable"
+      ]
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "name": "SRCDEV Nuxt Components MCP Index",
+  "version": "8.0.3",
+  "description": "Model Context Protocol index for SRCDEV Nuxt Components layer",
+  "base_url": "https://raw.githubusercontent.com/srcdev/nuxt-components/main/.mcp",
+  "last_updated": "2026-02-03",
+  "core_files": {
+    "project_context": {
+      "url": "https://raw.githubusercontent.com/srcdev/nuxt-components/main/.mcp/project-context.json",
+      "description": "High-level project architecture, conventions, and directory structure"
+    },
+    "component_patterns": {
+      "url": "https://raw.githubusercontent.com/srcdev/nuxt-components/main/.mcp/component-patterns.json",
+      "description": "Development patterns, styling system, and composables"
+    },
+    "component_reference": {
+      "url": "https://raw.githubusercontent.com/srcdev/nuxt-components/main/.mcp/component-reference.json",
+      "description": "TypeScript interfaces, testing patterns, and examples"
+    }
+  },
+  "components": {
+    "forms": {
+      "InputCheckboxRadioCore": {
+        "url": "https://raw.githubusercontent.com/srcdev/nuxt-components/main/.mcp/components/forms/InputCheckboxRadioCore.json",
+        "description": "Core checkbox and radio input component with extensive customization"
+      },
+      "MultipleCheckboxes": {
+        "url": "https://raw.githubusercontent.com/srcdev/nuxt-components/main/.mcp/components/forms/MultipleCheckboxes.json",
+        "description": "Checkbox group component for multiple selections"
+      },
+      "InputError": {
+        "url": "https://raw.githubusercontent.com/srcdev/nuxt-components/main/.mcp/components/forms/InputError.json",
+        "description": "Form validation error display component"
+      }
+    },
+    "display": {},
+    "layout": {},
+    "interactive": {}
+  },
+  "usage": {
+    "single_url_reference": "https://raw.githubusercontent.com/srcdev/nuxt-components/main/.mcp/index.json",
+    "agent_instructions": [
+      "Reference this single URL to discover all available MCP resources",
+      "Agents can fetch individual component documentation as needed",
+      "This index is automatically updated when new components are added"
+    ]
+  }
+}

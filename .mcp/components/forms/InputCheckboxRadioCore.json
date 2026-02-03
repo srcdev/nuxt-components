@@ -1,0 +1,65 @@
+{
+  "component": "InputCheckboxRadioCore",
+  "category": "forms",
+  "file_path": "app/components/forms/input-checkbox-radio/InputCheckboxRadioCore.vue",
+  "description": "Core checkbox and radio input component with extensive customization options",
+  "extends": "BaseCheckboxRadioProps",
+  "props": {
+    "isButton": {
+      "type": "boolean",
+      "optional": true,
+      "description": "Renders as button-style input"
+    }
+  },
+  "model": {
+    "type": "(string | number | boolean)[] | string | number | boolean | undefined",
+    "description": "Supports arrays for multiple checkboxes or single values for individual inputs"
+  },
+  "usage_examples": [
+    {
+      "title": "Basic Checkbox",
+      "code": "<InputCheckboxRadioCore v-model=\"selected\" type=\"checkbox\" :true-value=\"'yes'\" :false-value=\"'no'\" />"
+    },
+    {
+      "title": "Radio Button",
+      "code": "<InputCheckboxRadioCore v-model=\"choice\" type=\"radio\" :true-value=\"'option1'\" name=\"choice-group\" />"
+    },
+    {
+      "title": "Button Style",
+      "code": "<InputCheckboxRadioCore v-model=\"toggle\" type=\"checkbox\" :is-button=\"true\" theme=\"primary\" />"
+    }
+  ],
+  "slots": {
+    "checkedIcon": {
+      "description": "Custom icon when checked",
+      "default": "material-symbols:check-small for checkbox, material-symbols:circle for radio"
+    }
+  },
+  "computed_properties": {
+    "isChecked": "Handles both array and single value model checking",
+    "defaultIcon": "Returns appropriate icon based on type",
+    "formTheme": "Switches to error theme when fieldHasError is true"
+  },
+  "css_custom_properties": [
+    "--theme-checkbox-symbol-surface",
+    "--theme-input-border",
+    "--theme-input-outline",
+    "--input-checked-element-size",
+    "--input-checked-icon-size"
+  ],
+  "accessibility": {
+    "aria_attributes": ["aria-checked", "aria-describedby", "aria-invalid"],
+    "focus_management": "Supports focus-visible for keyboard navigation"
+  },
+  "testing": {
+    "test_file": "app/components/forms/input-checkbox-radio/tests/InputCheckboxRadioCore.spec.ts",
+    "test_count": 24,
+    "key_test_cases": [
+      "Checkbox type rendering and functionality",
+      "Radio type rendering and functionality",
+      "Model value binding for arrays and single values",
+      "Theme and size variations",
+      "Error states and accessibility"
+    ]
+  }
+}

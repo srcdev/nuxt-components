@@ -1,0 +1,68 @@
+{
+  "name": "SRCDEV Nuxt Components",
+  "version": "8.0.3",
+  "description": "A comprehensive Nuxt 4 component library focused on forms, UI elements, and interactive components",
+  "type": "nuxt-component-library",
+  "framework": {
+    "name": "Nuxt",
+    "version": "4.3.0",
+    "features": ["SSR", "TypeScript", "Auto-imports", "Layers"]
+  },
+  "architecture": {
+    "structure": "layer-based",
+    "patterns": ["composition-api", "composables", "typescript-first"],
+    "conventions": {
+      "components": "PascalCase with descriptive prefixes (Display*, Input*, etc.)",
+      "files": "kebab-case directories, PascalCase component files",
+      "composables": "camelCase starting with 'use'",
+      "types": "interfaces in types/ directory"
+    }
+  },
+  "key_directories": {
+    "app/components/": "All Vue components organized by functionality",
+    "app/composables/": "Reusable composition functions",
+    "app/types/": "TypeScript interfaces and type definitions",
+    "tests/": "Vitest test suites for components",
+    ".github/workflows/": "CI/CD automation"
+  },
+  "component_categories": {
+    "forms": {
+      "description": "Form controls and validation components",
+      "key_components": ["InputCheckboxRadioCore", "MultipleCheckboxes", "MultipleRadioButtons", "InputError"],
+      "patterns": ["v-model binding", "validation integration", "theme support"]
+    },
+    "display": {
+      "description": "Data presentation and UI elements",
+      "examples": ["DisplayCard", "DisplayBanner", "DisplayAvatar", "DisplayToast"]
+    },
+    "layout": {
+      "description": "Structural and positioning components",
+      "examples": ["ContentGrid", "LayoutRow", "MasonryGrid"]
+    },
+    "interactive": {
+      "description": "User interaction and animation components",
+      "examples": ["CarouselBasic", "AccordianCore", "DeepExpandingMenu"]
+    }
+  },
+  "development_patterns": {
+    "styling": {
+      "approach": "CSS custom properties with theme variables",
+      "conventions": "--theme-* for colors, --form-* for form elements",
+      "responsive": "CSS grid and flexbox based"
+    },
+    "composables": {
+      "purpose": "Shared logic extraction",
+      "key_composables": [
+        "useStyleClassPassthrough - for component styling flexibility",
+        "useFormControl - for form state management",
+        "useZodValidation - for form validation",
+        "useDialogControls - for modal/dialog state"
+      ]
+    },
+    "testing": {
+      "framework": "Vitest with @vue/test-utils",
+      "patterns": ["mountSuspended for Nuxt components", "comprehensive prop testing", "accessibility testing"],
+      "coverage": "34+ tests across core form components"
+    }
+  }
+}

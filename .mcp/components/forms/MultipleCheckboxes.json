@@ -1,0 +1,30 @@
+{
+  "component": "MultipleCheckboxes",
+  "category": "forms",
+  "file_path": "app/components/forms/input-checkbox/MultipleCheckboxes.vue",
+  "description": "Renders a group of checkboxes for multiple selections",
+  "extends": "BaseCheckboxRadioProps",
+  "model": {
+    "type": "array",
+    "description": "Array of selected values"
+  },
+  "usage_examples": [
+    {
+      "title": "Basic Multiple Checkboxes",
+      "code": "<MultipleCheckboxes v-model=\"selectedOptions\" :options=\"checkboxOptions\" name=\"preferences\" />"
+    }
+  ],
+  "patterns": {
+    "options_iteration": "Iterates over provided options array to render individual checkboxes",
+    "styling_passthrough": "Uses useStyleClassPassthrough composable for flexible styling"
+  },
+  "testing": {
+    "test_file": "app/components/forms/input-checkbox/tests/MultipleCheckboxes.spec.ts",
+    "test_count": 3,
+    "key_test_cases": [
+      "Component mounting with options",
+      "Checkbox rendering and interaction",
+      "Style class passthrough functionality"
+    ]
+  }
+}

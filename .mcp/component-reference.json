@@ -1,0 +1,55 @@
+{
+  "typescript_interfaces": {
+    "BaseCheckboxRadioProps": {
+      "file": "~/types/forms/types.forms",
+      "description": "Base interface for checkbox and radio components",
+      "key_properties": [
+        "id: string",
+        "name: string",
+        "type: 'checkbox' | 'radio'",
+        "theme: string",
+        "size: 'small' | 'medium' | 'large'",
+        "trueValue: string | number | boolean",
+        "falseValue: string | number | boolean",
+        "fieldHasError: boolean",
+        "required: boolean",
+        "multipleOptions: boolean",
+        "displayAsDisc: boolean",
+        "styleClassPassthrough: string[]"
+      ]
+    }
+  },
+  "component_examples": {
+    "InputCheckboxRadioCore": {
+      "purpose": "Core checkbox/radio input with extensive customization",
+      "usage_example": "<InputCheckboxRadioCore v-model=\"value\" type=\"checkbox\" :true-value=\"'yes'\" theme=\"primary\" />",
+      "key_features": [
+        "Supports both checkbox and radio types",
+        "Custom true/false values",
+        "Theme-based styling",
+        "Error state handling",
+        "Custom icon slots",
+        "Full accessibility support"
+      ]
+    },
+    "MultipleCheckboxes": {
+      "purpose": "Checkbox group component for multiple selections",
+      "model_type": "Array of selected values",
+      "usage_pattern": "Iterates over options array to render individual checkboxes"
+    }
+  },
+  "testing_examples": {
+    "basic_component_test": {
+      "pattern": "mountSuspended(Component, { props: {...} })",
+      "common_assertions": [
+        "expect(wrapper.find('input')).toBeTruthy()",
+        "expect(wrapper.attributes('data-theme')).toBe('expected-theme')",
+        "expect(wrapper.classes()).toContain('expected-class')"
+      ]
+    },
+    "model_binding_test": {
+      "pattern": "Test v-model reactivity with setValue and getValue",
+      "example": "await wrapper.setValue(true); expect(wrapper.emitted('update:modelValue')).toBeTruthy()"
+    }
+  }
+}

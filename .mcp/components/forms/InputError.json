@@ -1,0 +1,28 @@
+{
+  "component": "InputError",
+  "category": "forms",
+  "file_path": "app/components/forms/form-errors/InputError.vue",
+  "description": "Displays validation error messages for form fields",
+  "usage_examples": [
+    {
+      "title": "Basic Error Display",
+      "code": "<InputError :message=\"errorMessage\" :show=\"hasError\" />"
+    }
+  ],
+  "slots": {
+    "icon": {
+      "description": "Custom error icon",
+      "default": "Uses default error icon"
+    }
+  },
+  "testing": {
+    "test_file": "app/components/forms/form-errors/tests/InputError.spec.ts",
+    "test_count": 4,
+    "key_test_cases": [
+      "Error message display",
+      "Show/hide functionality",
+      "Icon slot rendering",
+      "Styling and accessibility"
+    ]
+  }
+}
