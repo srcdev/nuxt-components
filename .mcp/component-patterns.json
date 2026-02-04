@@ -123,7 +123,29 @@
         "Check accessibility attributes",
         "Test error states and styling",
         "Validate slot rendering when applicable"
-      ]
+      ],
+      "advanced_testing": {
+        "component_instance_access": {
+          "pattern": "const vm = wrapper.vm as unknown as ComponentInstance",
+          "purpose": "Access component internals with proper TypeScript casting",
+          "interface_example": "Define interface matching component's computed/ref structure"
+        },
+        "browser_api_mocking": {
+          "pattern": "vi.stubGlobal('ResizeObserver', mockImplementation)",
+          "common_apis": ["ResizeObserver", "IntersectionObserver", "matchMedia"],
+          "purpose": "Mock browser APIs not available in test environment"
+        },
+        "dom_testing": {
+          "element_casting": "(element.element as HTMLElement).style",
+          "css_properties": "style.getPropertyValue('--custom-prop')",
+          "purpose": "Test CSS custom properties and DOM manipulation"
+        },
+        "dynamic_content": {
+          "pattern": "Set reactive properties, await nextTick(), verify changes",
+          "use_cases": ["SVG path generation", "computed styles", "template refs"],
+          "example": "AlertMaskCore SVG path testing with dimension changes"
+        }
+      }
     }
   }
 }

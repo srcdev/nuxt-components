@@ -21,7 +21,7 @@
         '--insetBlockEnd': (props.config?.borderBottom ?? 0) + 'px',
       }"
     >
-      <div class="alert-mask-content-slot" ref="alertContentRef">
+      <div ref="alertContentRef" class="alert-mask-content-slot">
         <slot name="default"></slot>
       </div>
     </div>
@@ -29,7 +29,8 @@
 </template>
 
 <script setup lang="ts">
-import type { AlertMaskConfig } from "../../types/components"
+import type { PropType } from "vue";
+import type { AlertMaskConfig } from "../../types/components";
 
 const props = defineProps({
   config: {
@@ -40,38 +41,38 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const alertContentRef = useTemplateRef<HTMLElement | null>("alertContentRef")
-const svgWidth = ref(0)
-const svgHeight = ref(0)
+const alertContentRef = useTemplateRef<HTMLElement | null>("alertContentRef");
+const svgWidth = ref(0);
+const svgHeight = ref(0);
 
 // Update dimensions based on content
 onMounted(() => {
   const updateDimensions = () => {
-    const contentEl = alertContentRef.value
-    if (!contentEl) return
+    const contentEl = alertContentRef.value;
+    if (!contentEl) return;
 
-    const rect = contentEl.getBoundingClientRect()
-    const { borderLeft, borderTop, borderRight, borderBottom } = cfg.value
+    const rect = contentEl.getBoundingClientRect();
+    const { borderLeft, borderTop, borderRight, borderBottom } = cfg.value;
 
     // Calculate total dimensions including borders
-    svgWidth.value = rect.width + borderLeft + borderRight
-    svgHeight.value = rect.height + borderTop + borderBottom
-  }
+    svgWidth.value = rect.width + borderLeft + borderRight;
+    svgHeight.value = rect.height + borderTop + borderBottom;
+  };
 
   // Initial measurement
-  nextTick(updateDimensions)
+  nextTick(updateDimensions);
 
   // Observe content changes
-  const contentEl = alertContentRef.value
+  const contentEl = alertContentRef.value;
   if (contentEl) {
-    const resizeObserver = new ResizeObserver(updateDimensions)
-    resizeObserver.observe(contentEl)
+    const resizeObserver = new ResizeObserver(updateDimensions);
+    resizeObserver.observe(contentEl);
   }
-})
+});
 
 const cfg = computed(() => ({
   backgroundColour: props.config?.backgroundColour ?? "rgba(0,0,0,0.25)",
@@ -82,15 +83,15 @@ const cfg = computed(() => ({
   borderTop: props.config?.borderTop ?? 8,
   borderRight: props.config?.borderRight ?? 8,
   borderBottom: props.config?.borderBottom ?? 8,
-}))
+}));
 
 // Outer border path (fixed radii)
 const outerPath = computed(() => {
-  const width = svgWidth.value
-  const height = svgHeight.value
-  const { radiusLeft, radiusRight } = cfg.value
+  const width = svgWidth.value;
+  const height = svgHeight.value;
+  const { radiusLeft, radiusRight } = cfg.value;
 
-  if (!width || !height) return ""
+  if (!width || !height) return "";
 
   return `
     M ${radiusLeft} 0
@@ -102,16 +103,16 @@ const outerPath = computed(() => {
     Q 0 ${height} 0 ${height - radiusLeft}
     L 0 ${radiusLeft}
     Q 0 0 ${radiusLeft} 0 Z
-  `
-})
+  `;
+});
 
 // Inner cutout (based on fixed pixel border thickness)
 const innerPath = computed(() => {
-  const width = svgWidth.value
-  const height = svgHeight.value
-  const { radiusLeft, radiusRight, borderLeft, borderTop, borderRight, borderBottom: borderBottom } = cfg.value
+  const width = svgWidth.value;
+  const height = svgHeight.value;
+  const { radiusLeft, radiusRight, borderLeft, borderTop, borderRight, borderBottom: borderBottom } = cfg.value;
 
-  if (!width || !height) return ""
+  if (!width || !height) return "";
 
   return `
     M ${radiusLeft + borderLeft} ${borderTop}
@@ -123,8 +124,8 @@ const innerPath = computed(() => {
     Q ${borderLeft} ${height - borderBottom} ${borderLeft} ${height - radiusLeft - borderBottom}
     L ${borderLeft} ${radiusLeft + borderTop}
     Q ${borderLeft} ${borderTop} ${radiusLeft + borderLeft} ${borderTop} Z
-  `
-})
+  `;
+});
 </script>
 
 <style lang="css">

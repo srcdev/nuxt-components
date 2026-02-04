@@ -89,7 +89,7 @@ watch(
 
 ```typescript
 // ✅ Standard test pattern
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import ComponentName from "../ComponentName.vue";
 
@@ -99,6 +99,51 @@ describe("ComponentName", () => {
     expect(wrapper.vm).toBeTruthy();
   });
 });
+```
+
+### Advanced Testing Patterns
+
+**Component Instance Access:**
+
+```typescript
+// ✅ Proper TypeScript casting for component internals
+interface ComponentInstance {
+  computedProp: { value: string };
+  refProp: HTMLElement | null;
+}
+const vm = wrapper.vm as unknown as ComponentInstance;
+expect(vm.computedProp.value).toBe("expected");
+```
+
+**Browser API Mocking:**
+
+```typescript
+// ✅ Mock browser APIs (ResizeObserver, IntersectionObserver, etc.)
+const mockResizeObserver = vi.fn(() => ({
+  observe: vi.fn(),
+  unobserve: vi.fn(),
+  disconnect: vi.fn(),
+}));
+vi.stubGlobal("ResizeObserver", mockResizeObserver);
+```
+
+**DOM Element Testing:**
+
+```typescript
+// ✅ Test CSS custom properties and DOM manipulation
+const element = wrapper.find(".component");
+const style = (element.element as HTMLElement).style;
+expect(style.getPropertyValue("--custom-prop")).toBe("expected-value");
+```
+
+**SVG and Dynamic Content:**
+
+```typescript
+// ✅ Test dynamically generated content (SVG paths, computed styles)
+const vm = wrapper.vm as unknown as ComponentInstance;
+vm.width = 200; // Set reactive property
+await nextTick();
+expect(vm.generatedPath.length).toBeGreaterThan(0);
 ```
 
 ## Styling Methodology
@@ -171,6 +216,9 @@ const props = defineProps({
 4. **PropType runtime imports**: Import as type only
 5. **Missing accessibility**: Include proper ARIA attributes
 6. **Inconsistent naming**: Follow established slot/prop naming patterns
+7. **Incorrect type casting**: Use `as unknown as CustomType` for component instances
+8. **Unmocked browser APIs**: Always mock ResizeObserver, IntersectionObserver, etc.
+9. **Missing DOM element casting**: Cast to HTMLElement when accessing style properties
 
 ## Development Workflow
 
