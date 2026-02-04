@@ -67,7 +67,6 @@
 
 <script setup lang="ts">
 import { useEventListener, useResizeObserver, useSwipe } from "@vueuse/core";
-import type { PropType } from "vue";
 
 const props = defineProps({
   carouselDataIds: {
