@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
+import type { InputVariant } from "~/types/forms/types.forms";
 import InputLabel from "../InputLabel.vue";
 
 // Mock useStyleClassPassthrough composable
@@ -17,7 +18,7 @@ describe("InputLabel", () => {
     const defaultProps = {
       id: "test-input",
       name: "testInput",
-      inputVariant: "normal", // Set valid default
+      inputVariant: "normal" as InputVariant, // Set valid default with proper typing
       ...props,
     };
 
