@@ -123,12 +123,8 @@ const props = defineProps({
 });
 
 const slots = useSlots();
-
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
-
 const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-
-// const inputErrorStyles = ref(styleClassPassthroughRef.value)
 
 const id = `${props.name}-input-${useId()}`;
 const errorId = `${name}-error-message`;

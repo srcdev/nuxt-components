@@ -4,7 +4,7 @@
       v-for="(item, key) in itemCount"
       :key="key"
       :name
-      :animation-duration="300"
+      :animation-duration="animationDuration"
       icon-size="medium"
       :style-class-passthrough="['accordian-item']"
     >
@@ -22,6 +22,8 @@
 </template>
 
 <script setup lang="ts">
+// import type { PropType } from "vue";
+
 const props = defineProps({
   name: {
     type: String,
@@ -33,21 +35,29 @@ const props = defineProps({
   },
   animationDuration: {
     type: Number,
-    default: 400,
+    default: 300,
   },
   styleClassPassthrough: {
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
-const animationDurationStr = computed(() => `${props.animationDuration}ms`)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const animationDurationStr = computed(() => `${props.animationDuration}ms`);
 </script>
 
 <style lang="css">
 .display-accordian {
   max-width: 600px;
   margin: 0 auto;
+
+  .accordian-item {
+    &.expanding-panel {
+      transition:
+        margin-block-end v-bind(animationDurationStr) ease-in-out,
+        border-radius v-bind(animationDurationStr) ease-in-out;
+    }
+  }
 }
 </style>

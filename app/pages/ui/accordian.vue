@@ -2,45 +2,50 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Accordian</h1>
           <p>Any item open and/closed</p>
 
-          <AccordianCore :itemCount="data.length ?? 0" :style-class-passthrough="['class-modifier-narrow']">
-            <template v-for="(item, key) in data" v-slot:[`accordian-${key}-summary`]>
+          <AccordianCore
+            :item-count="data.length ?? 0"
+            :animation-duration="3000"
+            :style-class-passthrough="['class-modifier-narrow']"
+          >
+            <template v-for="(item, key) in data" :key="`summary-${key}`" #[`accordian-${key}-summary`]>
               {{ key }} - {{ item.title }}
             </template>
-            <template v-for="(item, key) in data" v-slot:[`accordian-${key}-icon`]>
+            <template v-for="(item, key) in data" :key="`icon-${key}`" #[`accordian-${key}-icon`]>
               <Icon name="bi:caret-down-fill" class="icon" />
             </template>
-            <template v-for="(item, key) in data" v-slot:[`accordian-${key}-content`]>
+            <template v-for="(item, key) in data" :key="`content-${key}`" #[`accordian-${key}-content`]>
               <p class="pb-12">{{ item.content }}</p>
             </template>
           </AccordianCore>
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Accordian</h2>
           <p>Only 1 item open, pass a name prop</p>
 
           <AccordianCore
-            :itemCount="3"
+            :item-count="3"
             :name="`accordian-${useId()}`"
+            :animation-duration="400"
             :style-class-passthrough="['class-modifier-wide']"
           >
-            <template v-for="(item, key) in data" v-slot:[`accordian-${key}-summary`]>
+            <template v-for="(item, key) in data" :key="`summary-${key}`" #[`accordian-${key}-summary`]>
               {{ key }} - {{ item.title }}
             </template>
-            <template v-for="(item, key) in data" v-slot:[`accordian-${key}-icon`]>
+            <template v-for="(item, key) in data" :key="`icon-${key}`" #[`accordian-${key}-icon`]>
               <Icon name="bi:caret-down-fill" class="icon" />
             </template>
-            <template v-slot:[`accordian-0-content`]>
+            <template #[`accordian-0-content`]>
               <p class="pb-12">This is content slot 0</p>
             </template>
-            <template v-slot:[`accordian-1-content`]>
+            <template #[`accordian-1-content`]>
               <p class="pb-12">This is content slot 1</p>
             </template>
-            <template v-slot:[`accordian-2-content`]>
+            <template #[`accordian-2-content`]>
               <p class="pb-12">This is content slot 2</p>
             </template>
           </AccordianCore>
@@ -53,7 +58,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Display Accordian",
@@ -61,11 +66,11 @@ useHead({
   bodyAttrs: {
     class: "",
   },
-})
+});
 
 interface IAccordianData {
-  title: string
-  content: string
+  title: string;
+  content: string;
 }
 
 const data = ref<IAccordianData[]>([
@@ -88,7 +93,7 @@ const data = ref<IAccordianData[]>([
     content:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!",
   },
-])
+]);
 </script>
 
 <style lang="css">
@@ -110,7 +115,9 @@ const data = ref<IAccordianData[]>([
         --_margin-block-end: 1rem;
 
         border: 1px solid var(--gray-0);
-        transition: margin-block-end 300ms ease-in-out, border-radius 300ms ease-in-out;
+        /* transition:
+          margin-block-end 300ms ease-in-out,
+          border-radius 300ms ease-in-out; */
 
         /* Default state: first element gets top corners, last gets bottom corners */
         &:first-child {
