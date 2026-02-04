@@ -1,8 +1,8 @@
 <template>
   <div
+    :id
     class="input-error-message"
     data-theme="error"
-    :id
     :class="[inputVariant, elementClasses, { show: showError }, { detached: isDetached }]"
     :data-testid
     :aria-hidden="!showError"
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
+import type { InputVariant } from "~/types/forms/types.forms";
 
 const props = defineProps({
   dataTestid: {
@@ -58,19 +58,16 @@ const props = defineProps({
     required: true,
   },
   inputVariant: {
-    type: String as PropType<string>,
+    type: String as PropType<InputVariant>,
     default: "normal",
-    validator(value: string) {
-      return propValidators.inputVariant.includes(value)
-    },
   },
-})
+});
 
 const isArray = computed(() => {
-  return Array.isArray(props.errorMessage)
-})
+  return Array.isArray(props.errorMessage);
+});
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">

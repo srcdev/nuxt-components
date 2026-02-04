@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
+import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
 const props = defineProps({
   id: {
@@ -74,25 +74,16 @@ const props = defineProps({
     default: false,
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "medium",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
   },
   weight: {
-    type: String as PropType<string>,
+    type: String as PropType<FormWeight>,
     default: "wght-400",
-    validator(value: string) {
-      return propValidators.weight.includes(value)
-    },
   },
   fieldHasError: {
     type: Boolean,
@@ -102,60 +93,60 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const modelValue = defineModel<number | readonly number[]>()
+const modelValue = defineModel<number | readonly number[]>();
 
-const control = ref<HTMLDivElement | null>(null)
-const controlTrack = ref<HTMLDivElement | null>(null)
-const toolTip = ref<HTMLDivElement | null>(null)
-const toolTipLow = ref<HTMLDivElement | null>(null)
-const toolTipHigh = ref<HTMLDivElement | null>(null)
-const inputRef = ref<HTMLInputElement | null>(null)
+const control = ref<HTMLDivElement | null>(null);
+const controlTrack = ref<HTMLDivElement | null>(null);
+const toolTip = ref<HTMLDivElement | null>(null);
+const toolTipLow = ref<HTMLDivElement | null>(null);
+const toolTipHigh = ref<HTMLDivElement | null>(null);
+const inputRef = ref<HTMLInputElement | null>(null);
 
 // Box sizes
-const toolTipWidth = ref(0)
-const toolTipLowWidth = ref(0)
-const toolTipHighWidth = ref(0)
-const toolTipMargin = 20
+const toolTipWidth = ref(0);
+const toolTipLowWidth = ref(0);
+const toolTipHighWidth = ref(0);
+const toolTipMargin = 20;
 
 const toolTipLowContainerEnd = computed(() => {
-  return Math.floor(((toolTipHighWidth.value + toolTipMargin) / toolTipWidth.value) * 100) + "%"
-})
+  return Math.floor(((toolTipHighWidth.value + toolTipMargin) / toolTipWidth.value) * 100) + "%";
+});
 
 const toolTipHighContainerStart = computed(() => {
-  return Math.floor(((toolTipWidth.value - (toolTipHighWidth.value + toolTipMargin)) / toolTipWidth.value) * 100) + "%"
-})
+  return Math.floor(((toolTipWidth.value - (toolTipHighWidth.value + toolTipMargin)) / toolTipWidth.value) * 100) + "%";
+});
 
 const lowValue = computed(() => {
-  return Math.floor(Number(props.max) - Number(highValue.value))
-})
+  return Math.floor(Number(props.max) - Number(highValue.value));
+});
 const highValue = computed(() => {
-  return Math.floor((Number(modelValue.value) / props.max) * 100)
-})
+  return Math.floor((Number(modelValue.value) / props.max) * 100);
+});
 
 const update = () => {
-  control.value?.style.setProperty("--value", String(modelValue.value))
-  const value = typeof modelValue.value === "number" ? modelValue.value : 0
-  controlTrack.value?.style.setProperty("--shift", value > 40 && value < 68 ? "1" : "0")
-  toolTip.value?.style.setProperty("--shift", value > 40 && value < 68 ? "1" : "0")
-}
+  control.value?.style.setProperty("--value", String(modelValue.value));
+  const value = typeof modelValue.value === "number" ? modelValue.value : 0;
+  controlTrack.value?.style.setProperty("--shift", value > 40 && value < 68 ? "1" : "0");
+  toolTip.value?.style.setProperty("--shift", value > 40 && value < 68 ? "1" : "0");
+};
 
 const updateBoxSizes = () => {
-  toolTipWidth.value = toolTip.value?.offsetWidth || 0
-  toolTipLowWidth.value = toolTipLow.value?.offsetWidth || 0
-  toolTipHighWidth.value = toolTipHigh.value?.offsetWidth || 0
-  console.log("toolTipWidth", toolTipWidth.value)
-  console.log("toolTipLowContainerEnd", toolTipLowContainerEnd.value)
-  console.log("toolTipHighContainerStart", toolTipHighContainerStart.value)
-}
+  toolTipWidth.value = toolTip.value?.offsetWidth || 0;
+  toolTipLowWidth.value = toolTipLow.value?.offsetWidth || 0;
+  toolTipHighWidth.value = toolTipHigh.value?.offsetWidth || 0;
+  console.log("toolTipWidth", toolTipWidth.value);
+  console.log("toolTipLowContainerEnd", toolTipLowContainerEnd.value);
+  console.log("toolTipHighContainerStart", toolTipHighContainerStart.value);
+};
 
 onMounted(() => {
-  updateBoxSizes()
+  updateBoxSizes();
   if (!CSS.supports("animation-timeline: scroll()")) {
-    update()
+    update();
   }
-})
+});
 </script>
 
 <style lang="css">
@@ -248,13 +239,17 @@ onMounted(() => {
     height: 6rem;
     /* background: hsl(10 80% 50% / 0.5); */
     margin-top: 0rem; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
-    box-shadow: 0.1rem 0.1rem 0.1rem #000000, 0rem 0rem 0.1rem #0d0d0d;
+    box-shadow:
+      0.1rem 0.1rem 0.1rem #000000,
+      0rem 0rem 0.1rem #0d0d0d;
   }
   [type="range"]::-moz-range-track {
     height: 6rem;
     /* background: hsl(10 80% 50% / 0.5); */
     margin-top: 0rem; /* You need to specify a margin in Chrome, but in Firefox and IE it is automatic */
-    box-shadow: 0.1rem 0.1rem 0.1rem #000000, 0rem 0rem 0.1rem #0d0d0d;
+    box-shadow:
+      0.1rem 0.1rem 0.1rem #000000,
+      0rem 0rem 0.1rem #0d0d0d;
   }
 }
 
@@ -290,7 +285,9 @@ onMounted(() => {
 
   .control {
     width: 100%;
-    animation: sync both linear reverse, shift both linear;
+    animation:
+      sync both linear reverse,
+      shift both linear;
     animation-timeline: --thumb;
     animation-range: contain;
     container-type: inline-size;

@@ -43,22 +43,16 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
+import type { FormTheme, FormSize, InputVariant, InputTypesText, InputMode } from "~/types/forms/types.forms";
 
 const props = defineProps({
   type: {
-    type: String as PropType<"text" | "email" | "password" | "number" | "tel" | "url">,
+    type: String as PropType<InputTypesText>,
     default: "text",
-    validator(value: string) {
-      return propValidators.inputTypesText.includes(value)
-    },
   },
   inputmode: {
-    type: String as PropType<"text" | "email" | "tel" | "url" | "search" | "numeric" | "none" | "decimal">,
+    type: String as PropType<InputMode>,
     default: "text",
-    validator(value: string) {
-      return propValidators.inputMode.includes(value)
-    },
   },
   maxlength: {
     type: Number,
@@ -89,76 +83,67 @@ const props = defineProps({
     default: () => [],
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   ariaDescribedby: {
     type: String,
     default: null,
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "default",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
   },
   inputVariant: {
-    type: String as PropType<string>,
+    type: String as PropType<InputVariant>,
     default: "normal",
-    validator(value: string) {
-      return propValidators.inputVariant.includes(value)
-    },
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 
 const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme
-})
+  return props.fieldHasError ? "error" : props.theme;
+});
 
-const modelValue = defineModel()
-const isDirty = defineModel("isDirty")
-const isActive = defineModel("isActive")
+const modelValue = defineModel();
+const isDirty = defineModel("isDirty");
+const isActive = defineModel("isActive");
 
 const inputPattern = computed(() => {
-  return props.inputmode === "numeric" ? "[0-9]+" : undefined
-})
+  return props.inputmode === "numeric" ? "[0-9]+" : undefined;
+});
 
 const updateFocus = (isFocused: boolean) => {
-  isActive.value = isFocused
-}
+  isActive.value = isFocused;
+};
 
-const inputField = ref<HTMLInputElement | null>(null)
+const inputField = ref<HTMLInputElement | null>(null);
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 // TODO: Move this to a utility function to allow removeEventListener on unmounted
 // Leaving like this could lead to memory leaks
 const validateInput = () => {
   if (inputField.value !== null) {
     inputField.value.addEventListener("beforeinput", (event: any) => {
-      let beforeValue = modelValue.value
+      let beforeValue = modelValue.value;
       event.target.addEventListener(
         "input",
         () => {
           if (inputField.value !== null && inputField.value.validity.patternMismatch) {
-            inputField.value.value = beforeValue as string
+            inputField.value.value = beforeValue as string;
           }
         },
         { once: true }
-      )
-    })
+      );
+    });
   }
-}
+};
 
 onMounted(() => {
-  if (props.inputmode === "numeric") validateInput()
-})
+  if (props.inputmode === "numeric") validateInput();
+});
 </script>
 
 <style lang="css">

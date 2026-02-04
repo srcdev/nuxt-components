@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
+import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
 const props = defineProps({
   maxlength: {
     type: Number,
@@ -73,45 +73,36 @@ const props = defineProps({
     default: () => [],
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "default",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
   },
   inputVariant: {
-    type: String as PropType<string>,
+    type: String as PropType<InputVariant>,
     default: "normal",
-    validator(value: string) {
-      return propValidators.inputVariant.includes(value)
-    },
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 
 const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme
-})
+  return props.fieldHasError ? "error" : props.theme;
+});
 
-const modelValue = defineModel<string | number | readonly string[] | null | undefined>()
-const isDirty = defineModel("isDirty")
-const isActive = defineModel("isActive")
+const modelValue = defineModel<string | number | readonly string[] | null | undefined>();
+const isDirty = defineModel("isDirty");
+const isActive = defineModel("isActive");
 
 const updateFocus = (isFocused: boolean) => {
-  isActive.value = isFocused
-}
+  isActive.value = isFocused;
+};
 
-const inputField = ref<HTMLInputElement | null>(null)
+const inputField = ref<HTMLInputElement | null>(null);
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">
