@@ -94,12 +94,12 @@
 </template>
 
 <script setup lang="ts">
-import { z } from "zod"
-import type { IFormMultipleOptions, FormTheme, FormSize } from "~/types/forms/types.forms"
+import { z } from "zod";
+import type { IFormMultipleOptions, FormTheme, FormSize } from "~/types/forms/types.forms";
 
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Text Field Example",
@@ -107,30 +107,30 @@ useHead({
   bodyAttrs: {
     class: "checkbox-radio-panels-page",
   },
-})
+});
 
-const theme = ref<FormTheme>("primary")
-const size = ref<FormSize>("default")
+const theme = ref<FormTheme>("primary");
+const size = ref<FormSize>("default");
 
 /*
  * Fetch some sample data
  **/
-const { data: tagsData } = await useFetch<IFormMultipleOptions>("/api/recipes/tags")
+const { data: tagsData } = await useFetch<IFormMultipleOptions>("/api/recipes/tags");
 
 // 1st 3 items from tagsData
 const limitedTags = computed(() => {
-  if (!tagsData.value) return null
+  if (!tagsData.value) return null;
 
-  const count = 3
+  const count = 3;
   const tags: IFormMultipleOptions = {
     data: tagsData.value.data.slice(0, count),
     total: count,
     skip: 0,
     limit: 3,
-  }
+  };
 
-  return tags
-})
+  return tags;
+});
 
 /*
  * Setup forms
@@ -145,17 +145,17 @@ const formSchema = reactive(
       tags: true,
       tagsRadio: true,
     })
-)
+);
 
-type formSchema = z.infer<typeof formSchema>
-const formErrors = computed<z.ZodFormattedError<formSchema> | null>(() => zodErrorObj.value)
+type formSchema = z.infer<typeof formSchema>;
+const formErrors = computed<z.ZodFormattedError<formSchema> | null>(() => zodErrorObj.value);
 
 const state = reactive({
   tags: ["pizza"],
   tagsRadio: "italian",
-})
+});
 
-const formRef = ref<HTMLFormElement | null>(null)
+const formRef = ref<HTMLFormElement | null>(null);
 
 const {
   initZodForm,
@@ -167,26 +167,26 @@ const {
   fieldMaxLength,
   scrollToFirstError,
   scrollToFormHead,
-} = useZodValidation(formSchema, formRef)
+} = useZodValidation(formSchema, formRef);
 
-initZodForm()
+initZodForm();
 
 const submitForm = async () => {
-  zodFormControl.submitAttempted = true
+  zodFormControl.submitAttempted = true;
   if (!(await doZodValidate(state))) {
-    scrollToFirstError()
-    return
+    scrollToFirstError();
+    return;
   }
-  zodFormControl.displayLoader = true
+  zodFormControl.displayLoader = true;
   try {
-    console.log("Form valid - post it")
+    console.log("Form valid - post it");
     const data = await $fetch("/api/textFields", {
       method: "post",
       body: state,
       async onResponse({ response }) {
         if (response.status === 400) {
-          console.log("onResponse", response)
-          console.log(response.status)
+          console.log("onResponse", response);
+          console.log(response.status);
 
           // useApiErrors(response._data.data.errors);
           // for (const [key, message] of Object.entries(response._data.data.errors)) {
@@ -195,33 +195,33 @@ const submitForm = async () => {
           // }
 
           // if (error instanceof Error) {
-          await pushCustomErrors(response._data, state)
+          await pushCustomErrors(response._data, state);
           // zodFormControl.formIsValid = false;
           // }
           // zodFormControl.submitAttempted = false;
         }
         if (response.status === 200) {
-          zodFormControl.submitSuccessful = true
+          zodFormControl.submitSuccessful = true;
         }
       },
-    })
-    console.log("3: Finished data", data)
+    });
+    console.log("3: Finished data", data);
     // return data;
   } catch (error) {
-    console.warn("2: An error occured posting form data", error)
+    console.warn("2: An error occured posting form data", error);
   } finally {
-    zodFormControl.displayLoader = false
+    zodFormControl.displayLoader = false;
   }
-}
+};
 
 watch(
   () => state,
   () => {
     // console.log('Watching state');
-    doZodValidate(state)
+    doZodValidate(state);
   },
   { deep: true }
-)
+);
 </script>
 
 <style lang="css">

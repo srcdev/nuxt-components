@@ -700,12 +700,12 @@
 </template>
 
 <script setup lang="ts">
-import { z } from "zod"
-import type { IFormMultipleOptions, FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms"
+import { z } from "zod";
+import type { IFormMultipleOptions, FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
 
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Text Field Example",
@@ -713,9 +713,9 @@ useHead({
   bodyAttrs: {
     class: "page-theme-grey-XX",
   },
-})
+});
 
-const inputVariant = ref<InputVariant>("underlined")
+const inputVariant = ref<InputVariant>("underlined");
 // const inputVariantData = ref<IFormMultipleOptions>({
 //   data: [
 //     {
@@ -741,22 +741,22 @@ const inputVariant = ref<InputVariant>("underlined")
 //   skip: 0,
 //   limit: 3,
 // });
-const theme = ref<FormTheme>("primary")
-const size = ref<FormSize>("default")
+const theme = ref<FormTheme>("primary");
+const size = ref<FormSize>("default");
 const swapTheme = (newTheme: FormTheme) => {
-  theme.value = newTheme
-}
+  theme.value = newTheme;
+};
 const swapSize = (newSize: FormSize) => {
-  size.value = newSize
-}
+  size.value = newSize;
+};
 
 /*
  * Fetch some sample data
  **/
-const { data: citiesData } = await useFetch<IFormMultipleOptions>("/api/places/list?category=cities")
-const { data: countriesData } = await useFetch<IFormMultipleOptions>("/api/places/list?category=countries")
-const { data: titleData } = await useFetch<IFormMultipleOptions>("/api/utils?category=title")
-const { data: tagsData } = await useFetch<IFormMultipleOptions>("/api/recipes/tags")
+const { data: citiesData } = await useFetch<IFormMultipleOptions>("/api/places/list?category=cities");
+const { data: countriesData } = await useFetch<IFormMultipleOptions>("/api/places/list?category=countries");
+const { data: titleData } = await useFetch<IFormMultipleOptions>("/api/utils?category=title");
+const { data: tagsData } = await useFetch<IFormMultipleOptions>("/api/recipes/tags");
 
 /*
  * Setup forms
@@ -849,10 +849,10 @@ const formSchema = reactive(
       agree: true,
       terms: true,
     })
-)
+);
 
-type formSchema = z.infer<typeof formSchema>
-const formErrors = computed<z.ZodFormattedError<formSchema> | null>(() => zodErrorObj.value)
+type formSchema = z.infer<typeof formSchema>;
+const formErrors = computed<z.ZodFormattedError<formSchema> | null>(() => zodErrorObj.value);
 
 const state = reactive({
   emailAddress: "",
@@ -875,9 +875,9 @@ const state = reactive({
   agreed: false,
   agree: false,
   terms: false,
-})
+});
 
-const formRef = ref<HTMLFormElement | null>(null)
+const formRef = ref<HTMLFormElement | null>(null);
 
 const {
   initZodForm,
@@ -889,26 +889,26 @@ const {
   fieldMaxLength,
   scrollToFirstError,
   scrollToFormHead,
-} = useZodValidation(formSchema, formRef)
+} = useZodValidation(formSchema, formRef);
 
-initZodForm()
+initZodForm();
 
 const submitForm = async () => {
-  zodFormControl.submitAttempted = true
+  zodFormControl.submitAttempted = true;
   if (!(await doZodValidate(state))) {
-    scrollToFirstError()
-    return
+    scrollToFirstError();
+    return;
   }
-  zodFormControl.displayLoader = true
+  zodFormControl.displayLoader = true;
   try {
-    console.log("Form valid - post it")
+    console.log("Form valid - post it");
     const data = await $fetch("/api/textFields", {
       method: "post",
       body: state,
       async onResponse({ response }) {
         if (response.status === 400) {
-          console.log("onResponse", response)
-          console.log(response.status)
+          console.log("onResponse", response);
+          console.log(response.status);
 
           // useApiErrors(response._data.data.errors);
           // for (const [key, message] of Object.entries(response._data.data.errors)) {
@@ -917,33 +917,33 @@ const submitForm = async () => {
           // }
 
           // if (error instanceof Error) {
-          await pushCustomErrors(response._data, state)
+          await pushCustomErrors(response._data, state);
           // zodFormControl.formIsValid = false;
           // }
           // zodFormControl.submitAttempted = false;
         }
         if (response.status === 200) {
-          zodFormControl.submitSuccessful = true
+          zodFormControl.submitSuccessful = true;
         }
       },
-    })
-    console.log("3: Finished data", data)
+    });
+    console.log("3: Finished data", data);
     // return data;
   } catch (error) {
-    console.warn("2: An error occured posting form data", error)
+    console.warn("2: An error occured posting form data", error);
   } finally {
-    zodFormControl.displayLoader = false
+    zodFormControl.displayLoader = false;
   }
-}
+};
 
 watch(
   () => state,
   () => {
     // console.log('Watching state');
-    doZodValidate(state)
+    doZodValidate(state);
   },
   { deep: true }
-)
+);
 </script>
 
 <style lang="css">
