@@ -167,7 +167,7 @@ const props = defineProps({
 
 const slots = useSlots();
 
-const modelValue = defineModel();
+const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
 const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);

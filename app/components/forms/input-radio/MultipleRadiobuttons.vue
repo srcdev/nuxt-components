@@ -3,10 +3,10 @@
     :id
     :name
     :legend
-    :fieldHasError
+    :field-has-error
     :required
     :data-testid
-    :styleClassPassthrough="['multiple-radiobuttons-fieldset', elementClasses]"
+    :style-class-passthrough="['multiple-radiobuttons-fieldset', elementClasses]"
   >
     <template #description>
       <slot name="description"></slot>
@@ -17,19 +17,19 @@
         <template v-for="item in fieldData.data" :key="item.id">
           <InputCheckboxRadioButton
             v-if="isButton"
-            type="radio"
             :id="`${name}-${item.value}`"
+            v-model="modelValue"
+            type="radio"
             :name="`${name}-${item.name}`"
             :required
             :label="item.label"
-            :fieldHasError
-            v-model="modelValue"
+            :field-has-error
             :true-value="item.value"
             :size
-            :optionsLayout
+            :options-layout
             :theme
             :direction
-            :ariaDescribedby
+            :aria-describedby
             :display-as-lozenge
           >
             <template #checkedIcon>
@@ -43,18 +43,18 @@
           </InputCheckboxRadioButton>
           <InputCheckboxRadioWithLabel
             v-else
-            type="radio"
             :id="`${name}-${item.value}`"
+            v-model="modelValue"
+            type="radio"
             :name="`${name}-${item.name}`"
             :required
             :label="item.label"
-            :fieldHasError
-            v-model="modelValue"
+            :field-has-error
             :true-value="item.value"
             :size
-            :optionsLayout
+            :options-layout
             :theme
-            :ariaDescribedby
+            :aria-describedby
           >
             <template #checkedIcon>
               <slot name="checkedIcon"></slot>
@@ -62,7 +62,7 @@
           </InputCheckboxRadioWithLabel>
         </template>
       </div>
-      <InputError :errorMessage="errorMessage" :showError="fieldHasError" :id="errorId" :isDetached="true" />
+      <InputError :id="errorId" :error-message="errorMessage" :show-error="fieldHasError" :is-detached="true" />
     </template>
   </FormFieldset>
 </template>
@@ -165,7 +165,7 @@ const ariaDescribedby = computed(() => {
   return props.fieldHasError ? errorId : ariaDescribedbyId;
 });
 
-const modelValue = defineModel();
+const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
 const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 </script>
 
