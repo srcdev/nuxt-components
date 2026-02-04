@@ -1,23 +1,23 @@
 <template>
   <div class="colour-scheme-select" :data-size="size" :data-theme="theme">
-    <form class="colour-scheme-select-form mbe-20" ref="colourSchemeWrapper">
+    <form ref="colourSchemeWrapper" class="colour-scheme-select-form mbe-20">
       <div class="select-scheme-marker-wrapper">
         <div class="select-scheme-marker" :class="[{ show: showMarker }]"></div>
       </div>
       <div class="select-scheme-group-wrapper">
         <div class="select-scheme-group">
           <LazyIcon name="material-symbols:night-sight-auto-sharp" class="scheme-icon" />
-          <input type="radio" id="auto" name="colour-scheme" class="scheme-input" v-model="colourMode" value="auto" />
+          <input id="auto" v-model="colourMode" type="radio" name="colour-scheme" class="scheme-input" value="auto" />
           <label for="auto" class="sr-only">{{ labels.auto }}</label>
         </div>
         <div class="select-scheme-group">
           <LazyIcon name="radix-icons:sun" class="scheme-icon" />
-          <input type="radio" id="light" name="colour-scheme" class="scheme-input" v-model="colourMode" value="light" />
+          <input id="light" v-model="colourMode" type="radio" name="colour-scheme" class="scheme-input" value="light" />
           <label for="light" class="sr-only">{{ labels.light }}</label>
         </div>
         <div class="select-scheme-group">
           <LazyIcon name="radix-icons:moon" class="scheme-icon" />
-          <input type="radio" id="dark" name="colour-scheme" class="scheme-input" v-model="colourMode" value="dark" />
+          <input id="dark" v-model="colourMode" type="radio" name="colour-scheme" class="scheme-input" value="dark" />
           <label for="dark" class="sr-only">{{ labels.dark }}</label>
         </div>
       </div>
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../../forms/c12/prop-validators"
+import propValidators from "../../forms/c12/prop-validators";
 
 const props = defineProps({
   name: {
@@ -45,14 +45,14 @@ const props = defineProps({
     type: String as PropType<string>,
     default: "medium",
     validator(value: string) {
-      return propValidators.size.includes(value)
+      return propValidators.size.includes(value);
     },
   },
   theme: {
     type: String as PropType<string>,
     default: "primary",
     validator(value: string) {
-      return propValidators.theme.includes(value)
+      return propValidators.theme.includes(value);
     },
   },
   stepAnimationDuration: {
@@ -63,96 +63,96 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const duration = ref(props.stepAnimationDuration)
+const duration = ref(props.stepAnimationDuration);
 
-const colourMode = ref<"light" | "dark" | "auto">("dark")
-const { setColourScheme } = useSettingsStore()
+const colourMode = ref<"light" | "dark" | "auto">("dark");
+const { setColourScheme } = useSettingsStore();
 
-const colourSchemeWrapper = ref<HTMLFormElement | null>(null)
-const colourSchemeGroupElements = ref<HTMLDivElement[]>([])
-const colourSchemeInputElements = ref<HTMLInputElement[]>([])
-const showMarker = ref(false)
+const colourSchemeWrapper = ref<HTMLFormElement | null>(null);
+const colourSchemeGroupElements = ref<HTMLDivElement[]>([]);
+const colourSchemeInputElements = ref<HTMLInputElement[]>([]);
+const showMarker = ref(false);
 
 const findIndexOfInputValueFromCurrentColourScheme = () => {
-  if (colourMode.value === "auto") return 1
-  if (colourMode.value === "light") return 2
-  if (colourMode.value === "dark") return 3
-  return undefined
-}
+  if (colourMode.value === "auto") return 1;
+  if (colourMode.value === "light") return 2;
+  if (colourMode.value === "dark") return 3;
+  return undefined;
+};
 
 const findIndexOfCheckedInput = () => {
-  return colourSchemeInputElements.value.findIndex((input) => input.checked)
-}
+  return colourSchemeInputElements.value.findIndex((input) => input.checked);
+};
 
-const currentActiveIndex = ref(findIndexOfCheckedInput())
+const currentActiveIndex = ref(findIndexOfCheckedInput());
 
 const setColourSchemeAttr = async () => {
-  const index = findIndexOfInputValueFromCurrentColourScheme() ?? 0
+  const index = findIndexOfInputValueFromCurrentColourScheme() ?? 0;
 
-  await nextTick()
-  currentActiveIndex.value = findIndexOfCheckedInput()
+  await nextTick();
+  currentActiveIndex.value = findIndexOfCheckedInput();
 
-  const wrapperLeftPosition = colourSchemeWrapper.value?.getBoundingClientRect().left ?? 0
-  const parentLeftPosition = colourSchemeWrapper.value?.parentElement?.getBoundingClientRect().left ?? 0
-  const relativeLeftPosition = wrapperLeftPosition - parentLeftPosition
+  const wrapperLeftPosition = colourSchemeWrapper.value?.getBoundingClientRect().left ?? 0;
+  const parentLeftPosition = colourSchemeWrapper.value?.parentElement?.getBoundingClientRect().left ?? 0;
+  const relativeLeftPosition = wrapperLeftPosition - parentLeftPosition;
 
   colourSchemeWrapper.value?.style.setProperty(
     "--_select-scheme-marker-step-animation-duration",
     colourSchemeGroupElements.value?.length * duration.value + "ms"
-  )
+  );
 
   colourSchemeWrapper.value?.style.setProperty(
     "--_select-scheme-marker-position",
     index !== undefined ? index.toString() : "0"
-  )
-  const leftOffset = (colourSchemeGroupElements.value?.[index - 1]?.offsetLeft ?? 0) - relativeLeftPosition
-  colourSchemeWrapper.value?.style.setProperty("--_select-scheme-marker-left-offset", leftOffset + "px")
+  );
+  const leftOffset = (colourSchemeGroupElements.value?.[index - 1]?.offsetLeft ?? 0) - relativeLeftPosition;
+  colourSchemeWrapper.value?.style.setProperty("--_select-scheme-marker-left-offset", leftOffset + "px");
   colourSchemeWrapper.value?.style.setProperty(
     "--_select-scheme-marker-width",
     colourSchemeGroupElements.value?.[index - 1]?.getBoundingClientRect().width + "px"
-  )
-}
+  );
+};
 
 const handleInputActiveClass = () => {
   colourSchemeInputElements.value.forEach((element) => {
-    element.classList.remove("active")
-  })
+    element.classList.remove("active");
+  });
 
   setTimeout(() => {
-    const activeElement = colourSchemeInputElements.value?.[currentActiveIndex.value]
+    const activeElement = colourSchemeInputElements.value?.[currentActiveIndex.value];
     if (activeElement) {
-      activeElement.classList.add("active")
+      activeElement.classList.add("active");
     }
-  }, duration.value)
-}
+  }, duration.value);
+};
 
 onMounted(() => {
   colourSchemeGroupElements.value = Array.from(
     colourSchemeWrapper.value?.querySelectorAll(".select-scheme-group") || []
-  ) as HTMLInputElement[]
+  ) as HTMLInputElement[];
   colourSchemeInputElements.value = Array.from(
     colourSchemeWrapper.value?.querySelectorAll(".scheme-input") || []
-  ) as HTMLInputElement[]
+  ) as HTMLInputElement[];
 
   if (colourSchemeWrapper.value !== null) {
-    setColourSchemeAttr()
+    setColourSchemeAttr();
     setTimeout(() => {
-      showMarker.value = true
-      handleInputActiveClass()
-    }, duration.value)
+      showMarker.value = true;
+      handleInputActiveClass();
+    }, duration.value);
   }
-})
+});
 
 watch(colourMode, (newVal) => {
-  console.log("Colour mode changed:", newVal)
-  setColourScheme(newVal)
-})
+  console.log("Colour mode changed:", newVal);
+  setColourScheme(newVal);
+});
 
 watch(currentActiveIndex, () => {
-  handleInputActiveClass()
-})
+  handleInputActiveClass();
+});
 </script>
 
 <style lang="css">
@@ -165,8 +165,8 @@ watch(currentActiveIndex, () => {
   --_form-outline-colour: var(--theme-form-radio-outline);
 
   --_form-border-radius: calc(
-    (var(--_scheme-icon-font-size) / 2) + var(--_form-border-width) + var(--_form-outline-width) + var(--_form-padding) +
-      var(--_select-scheme-group-padding) + var(--_select-scheme-group-border-width) +
+    (var(--_scheme-icon-font-size) / 2) + var(--_form-border-width) + var(--_form-outline-width) +
+      var(--_form-padding) + var(--_select-scheme-group-padding) + var(--_select-scheme-group-border-width) +
       var(--_select-scheme-group-outline-width)
   );
 

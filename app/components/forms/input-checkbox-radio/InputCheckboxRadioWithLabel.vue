@@ -6,11 +6,11 @@
     :class="[elementClasses, optionsLayout, { error: fieldHasError }]"
   >
     <InputCheckboxRadioCore
-      :type
       :id
+      v-model="modelValue"
+      :type
       :name
       :required
-      v-model="modelValue"
       :size
       :true-value="trueValue"
       :false-value="falseValue"
@@ -32,20 +32,20 @@
 </template>
 
 <script setup lang="ts">
-import type { BaseCheckboxRadioProps } from "~/types/forms/types.forms"
+import type { BaseCheckboxRadioProps } from "~/types/forms/types.forms";
 
 interface Props extends Omit<BaseCheckboxRadioProps, "id"> {
-  label: string
-  optionsLayout?: string
+  label: string;
+  optionsLayout?: string;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const slots = useSlots()
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || [])
+const slots = useSlots();
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || []);
 
-const modelValue = defineModel()
-const id = useId()
+const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
+const id = useId();
 </script>
 
 <style lang="css">

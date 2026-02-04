@@ -7,12 +7,12 @@
     :class="[size, elementClasses, optionsLayout, { error: fieldHasError }, { lozenge: displayAsLozenge }]"
   >
     <InputCheckboxRadioCore
+      :id
+      v-model="modelValue"
       :is-button="true"
       :type
-      :id
       :name
       :required
-      v-model="modelValue"
       :size
       :true-value="trueValue"
       :false-value="falseValue"
@@ -38,27 +38,27 @@
 </template>
 
 <script setup lang="ts">
-import type { BaseCheckboxRadioProps } from "~/types/forms/types.forms"
+import type { BaseCheckboxRadioProps } from "~/types/forms/types.forms";
 
 interface Props extends BaseCheckboxRadioProps {
-  label: string
-  optionsLayout?: string
-  direction?: "row" | "row-reverse"
-  displayAsLozenge?: boolean
+  label: string;
+  optionsLayout?: string;
+  direction?: "row" | "row-reverse";
+  displayAsLozenge?: boolean;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const slots = useSlots()
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || [])
+const slots = useSlots();
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || []);
 
-const modelValue = defineModel()
+const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
 
 const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme
-})
+  return props.fieldHasError ? "error" : props.theme;
+});
 
-const flexDirection = ref(props.direction)
+const flexDirection = ref(props.direction);
 </script>
 
 <style lang="css">
