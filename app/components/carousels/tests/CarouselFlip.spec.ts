@@ -26,7 +26,7 @@ const mockDirection = { value: "" };
 const mockOnSwipeEnd = vi.fn();
 
 // Store event handlers for testing
-const eventHandlers = new Map<any, Map<string, Function>>();
+const eventHandlers = new Map<HTMLElement | { value: HTMLElement }, Map<string, EventListener>>();
 
 vi.mock("@vueuse/core", () => ({
   useEventListener: vi.fn((target, event, handler) => {
@@ -61,7 +61,7 @@ vi.mock("@vueuse/core", () => ({
     }
     return { direction: mockDirection };
   }),
-  useTemplateRef: vi.fn((refName) => {
+  useTemplateRef: vi.fn((_refName) => {
     const ref = { value: [] as HTMLDivElement[] };
     return ref;
   }),
@@ -75,7 +75,7 @@ vi.mock("#imports", () => ({
 }));
 
 describe("CarouselFlip", () => {
-  let wrapper: any;
+  let wrapper: ReturnType<typeof mountSuspended>;
   let component: CarouselFlipInstance;
 
   const createWrapper = async (props = {}) => {
@@ -161,7 +161,7 @@ describe("CarouselFlip", () => {
       const markers = wrapper.findAll(".btn-marker");
       expect(markers).toHaveLength(6);
 
-      markers.forEach((marker, index) => {
+      markers.forEach((marker: ReturnType<typeof wrapper.find>, index: number) => {
         // Fixed: v-for="index in itemCount" means index starts at 1, so aria-label should be index (1,2,3...)
         expect(marker.attributes("aria-label")).toBe(`Jump to item ${index + 1}`);
       });
@@ -253,7 +253,7 @@ describe("CarouselFlip", () => {
       const items = wrapper.findAll(".item");
       // After initialization, items are reordered by the component
       // Just verify that all items have order and z-index set
-      items.forEach((item) => {
+      items.forEach((item: ReturnType<typeof wrapper.find>) => {
         expect(item.element.style.order).toBeTruthy();
         expect(item.element.style.zIndex).toBeTruthy();
       });
@@ -538,8 +538,7 @@ describe("CarouselFlip", () => {
 
       const items = wrapper.findAll(".item");
       if (items.length > 0) {
-        const computedStyle = getComputedStyle(items[0].element);
-        // The actual CSS custom property binding is handled by Vue's reactivity
+        // CSS custom properties are handled by Vue's reactivity system
         expect(component).toBeDefined();
       }
     });
