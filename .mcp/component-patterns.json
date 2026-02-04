@@ -17,6 +17,40 @@
         "accessibility": "Proper ARIA attributes and semantic HTML"
       }
     },
+    "layout_components": {
+      "AccordianCore": {
+        "purpose": "Multi-panel accordion container that creates expandable sections",
+        "file_location": "app/components/accordian/AccordianCore.vue",
+        "props": {
+          "name": "string - unique identifier for single-open behavior (optional)",
+          "itemCount": "number - number of accordion panels to create (required)",
+          "animationDuration": "number - animation duration in milliseconds (default: 300)",
+          "styleClassPassthrough": "string|array - classes for styling flexibility"
+        },
+        "slot_patterns": {
+          "summary": "accordian-{index}-summary - header content for each panel",
+          "icon": "accordian-{index}-icon - icon content for each panel",
+          "content": "accordian-{index}-content - expandable content for each panel"
+        },
+        "behavior": {
+          "without_name": "Multiple panels can be open simultaneously",
+          "with_name": "Only one panel open at a time (radio-button behavior)",
+          "dependencies": "Uses ExpandingPanelCore component internally"
+        },
+        "styling_approach": {
+          "base_class": ".display-accordian with auto-centering and max-width",
+          "item_styling": ".accordian-item class passed to each ExpandingPanel",
+          "animation_binding": "CSS custom property v-bind for dynamic timing",
+          "customization": "Functional base styles, custom design via HOC style blocks"
+        },
+        "usage_example": {
+          "basic": "AccordianCore with :item-count and slot templates",
+          "single_open": "Add :name prop for exclusive panel behavior",
+          "custom_timing": ":animation-duration for different transition speeds",
+          "demo_location": "app/pages/ui/accordian.vue"
+        }
+      }
+    },
     "composable_patterns": {
       "useStyleClassPassthrough": {
         "purpose": "Allows parent components to pass styling classes",
@@ -51,6 +85,20 @@
         "5. Include proper ARIA attributes",
         "6. Create comprehensive test suite"
       ]
+    },
+    "adding_layout_component": {
+      "example": "AccordianCore pattern",
+      "steps": [
+        "1. Define clear prop interface with required/optional properties",
+        "2. Use v-for with itemCount for dynamic panel generation",
+        "3. Implement slot forwarding with dynamic slot names",
+        "4. Apply useStyleClassPassthrough for styling flexibility",
+        "5. Use v-bind for CSS custom properties when needed",
+        "6. Keep base styles functional, allow HOC customization",
+        "7. Create comprehensive test suite with mountSuspended"
+      ],
+      "slot_naming": "Use descriptive patterns like 'component-{index}-{type}'",
+      "dependencies": "Leverage existing components when possible"
     },
     "adding_tests": {
       "setup": "Use mountSuspended from @nuxt/test-utils",
