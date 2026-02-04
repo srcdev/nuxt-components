@@ -1,9 +1,9 @@
 <template>
   <fieldset
+    :id
     :aria-required="required"
     :aria-invalid="fieldHasError"
     role="radiogroup"
-    :id
     :name
     class="form-fieldset"
     :class="[elementClasses, { error: fieldHasError }]"
@@ -13,7 +13,7 @@
       <slot name="legend">{{ legend }}</slot>
     </legend>
 
-    <div v-if="slots.description" class="form-fieldset-description" :id="`${id}-description`">
+    <div v-if="slots.description" :id="`${id}-description`" class="form-fieldset-description">
       <slot name="description"></slot>
     </div>
 
@@ -24,8 +24,6 @@
 </template>
 
 <script setup lang="ts">
-// import propValidators from '../c12/prop-validators';
-
 const props = defineProps({
   id: {
     type: String,
@@ -55,12 +53,12 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 // const hasDescriptionSlot = computed(() => slots.description !== undefined);
-const hasDescription = computed(() => slots.description !== undefined)
-const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const hasDescription = computed(() => slots.description !== undefined);
+const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">

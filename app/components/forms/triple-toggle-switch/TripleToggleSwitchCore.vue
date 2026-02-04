@@ -36,8 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../../forms/c12/prop-validators";
-import type { IFormMultipleOptions } from "~/types/forms/types.forms";
+import type { FormTheme, FormSize, IFormMultipleOptions } from "~/types/forms/types.forms";
 
 const props = defineProps({
   name: {
@@ -45,18 +44,12 @@ const props = defineProps({
     default: "triple-toggle-switch",
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "medium",
-    validator(value: string) {
-      return propValidators.size.includes(value);
-    },
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value);
-    },
   },
   stepAnimationDuration: {
     type: String as PropType<string>,

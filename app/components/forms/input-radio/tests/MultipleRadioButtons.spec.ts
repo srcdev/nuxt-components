@@ -2,6 +2,7 @@
 import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { ref } from "vue";
+import type { FormSize, FormTheme, OptionsLayout } from "~/types/forms/types.forms";
 import ComponentUnderTest from "../MultipleRadiobuttons.vue";
 import tagsData from "./data/tags.json";
 
@@ -17,10 +18,10 @@ const initialPropsData = {
   errorMessage: "Please select between 3 and 8 tags",
   fieldHasError: false,
   fieldData: tagsData,
-  size: "small",
-  optionsLayout: "inline",
+  size: "small" as FormSize,
+  optionsLayout: "inline" as OptionsLayout,
   styleClassPassthrough: ["testClass"],
-  theme: "primary",
+  theme: "primary" as FormTheme,
 };
 
 const initialSlots = {

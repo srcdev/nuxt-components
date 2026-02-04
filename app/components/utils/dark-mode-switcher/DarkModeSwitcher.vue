@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../../forms/c12/prop-validators"
+import type { FormSize, LabelWeight } from "~/types/forms/types.forms";
 
 defineProps({
   name: {
@@ -31,33 +31,27 @@ defineProps({
     required: true,
   },
   labelWeight: {
-    type: String as PropType<string>,
+    type: String as PropType<LabelWeight>,
     default: "semi-bold",
-    validator(value: string) {
-      return propValidators.labelWeight.includes(value)
-    },
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "small",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
   },
   styleClassPassthrough: {
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
 // const displayMode = ref<'auto' | 'dark' | 'light'>('auto');
 
-const colourMode = ref<"light" | "dark" | "auto">("dark")
+const colourMode = ref<"light" | "dark" | "auto">("dark");
 
 // const { currentColourScheme, setColourScheme } = useSettingsStore()
 
 watch(colourMode, (newVal) => {
   // console.log("Colour mode changed:", newVal)
   // setColourScheme(newVal)
-})
+});
 </script>
