@@ -2,16 +2,17 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-3">Masonry Grid Ordered</h1>
           <p class="page-body-normal">Masonry grid ordered displaying dummy posts data</p>
-          <CanvasSwitcher v-model:canvasName="canvasName" />
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <div v-if="status === 'success'" class="masonry-columns">
             <div
               v-for="(item, index) in quotesData?.quotes.slice(0, displayCount)"
+              :key="index"
               class="p-10 border border-1 border-grey-dark border-r-4"
             >
               <p class="text-normal wght-700">{{ index + 1 }}: {{ item.author }}</p>
@@ -26,12 +27,12 @@
 </template>
 
 <script setup lang="ts">
-import type { IQuotes } from "~/types/types.quotes"
-import type { MediaCanvas } from "~/types/components"
+import type { IQuotes } from "~/types/types.quotes";
+import type { MediaCanvas } from "~/types/components";
 
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Masonry Grid Ordered",
@@ -39,12 +40,11 @@ useHead({
   bodyAttrs: {
     class: "",
   },
-})
-const canvasName = ref<MediaCanvas>("desktopCanvas")
+});
+const canvasName = ref<MediaCanvas>("desktopCanvas");
 
-const useFixedWidth = true
-const displayCount = 12
-const { data: quotesData, status } = await useFetch<IQuotes>("https://dummyjson.com/quotes")
+const displayCount = 12;
+const { data: quotesData, status } = await useFetch<IQuotes>("https://dummyjson.com/quotes");
 </script>
 
 <style lang="css">

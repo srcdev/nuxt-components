@@ -6,26 +6,26 @@
       </div>
       <div class="option-group-wrapper">
         <label
-          v-for="(option, index) in fieldData.data"
+          v-for="option in fieldData.data"
           :key="option.id"
+          ref="optionGroup"
           :for="option.id"
           class="option-group"
-          ref="optionGroup"
         >
           <span class="sr-only">{{ option.label }}</span>
           <Icon
             v-if="option.icon"
+            ref="optionIcons"
             :name="option.icon"
             class="option-icon"
             :class="[option.id, { active: modelValue === option.value }]"
-            ref="optionIcons"
           />
           <input
-            type="radio"
             :id="option.id"
-            name="colour-scheme"
-            class="option-input"
             v-model="modelValue"
+            type="radio"
+            :name="props.name"
+            class="option-input"
             :value="option.value"
             :aria-selected="modelValue === option.value"
           />
@@ -36,7 +36,8 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../../forms/c12/prop-validators"
+import propValidators from "../../forms/c12/prop-validators";
+import type { IFormMultipleOptions } from "~/types/forms/types.forms";
 
 const props = defineProps({
   name: {
@@ -47,14 +48,14 @@ const props = defineProps({
     type: String as PropType<string>,
     default: "medium",
     validator(value: string) {
-      return propValidators.size.includes(value)
+      return propValidators.size.includes(value);
     },
   },
   theme: {
     type: String as PropType<string>,
     default: "primary",
     validator(value: string) {
-      return propValidators.theme.includes(value)
+      return propValidators.theme.includes(value);
     },
   },
   stepAnimationDuration: {
@@ -65,34 +66,34 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const modelValue = defineModel()
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const modelValue = defineModel();
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>
+const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
-const optionGroupRefs = useTemplateRef<HTMLDivElement>("optionGroup")
+const optionGroupRefs = useTemplateRef<HTMLDivElement>("optionGroup");
 
-const iconWidth = ref("0px")
-const showMarker = ref(false)
+const iconWidth = ref("0px");
+const showMarker = ref(false);
 
 const selectedOptionIndex = computed(() => {
-  return fieldData.value.data.findIndex((option) => option.value === modelValue.value)
-})
+  return fieldData.value.data.findIndex((option) => option.value === modelValue.value);
+});
 
 const setupDefaults = async () => {
   if (Array.isArray(optionGroupRefs.value) && optionGroupRefs.value[0]) {
-    iconWidth.value = optionGroupRefs.value[0].getBoundingClientRect().width + "px"
+    iconWidth.value = optionGroupRefs.value[0].getBoundingClientRect().width + "px";
   }
 
-  await useSleep(250)
-  showMarker.value = true
-}
+  await useSleep(250);
+  showMarker.value = true;
+};
 
 onMounted(() => {
-  setupDefaults()
-})
+  setupDefaults();
+});
 </script>
 
 <style lang="css">

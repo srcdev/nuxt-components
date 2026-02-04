@@ -61,11 +61,11 @@
 </template>
 
 <script setup lang="ts">
-import type { IQuotes } from "~/types/types.quotes"
+import type { IQuotes } from "~/types/types.quotes";
 
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Home",
@@ -73,14 +73,14 @@ useHead({
   bodyAttrs: {
     class: "home",
   },
-})
+});
 
-const qoutesDisplayCount = 21
-const { data: quotesData } = await useFetch<IQuotes>("https://dummyjson.com/quotes")
+const qoutesDisplayCount = 21;
+const { data: quotesData } = await useFetch<IQuotes>("https://dummyjson.com/quotes");
 
 const popoverSupported = computed(() => {
-  return "anchorName" in document.documentElement.style
-})
+  return "anchorName" in document.documentElement.style;
+});
 </script>
 
 <style lang="css">
