@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../../c12/prop-validators"
+import type { FormTheme, FormSize, LabelWeight } from "~/types/forms/types.forms";
 
 const props = defineProps({
   name: {
@@ -36,11 +36,8 @@ const props = defineProps({
     required: true,
   },
   labelWeight: {
-    type: String as PropType<string>,
-    default: "semi-bold",
-    validator(value: string) {
-      return propValidators.labelWeight.includes(value)
-    },
+    type: String as PropType<LabelWeight>,
+    default: "normal",
   },
   trueValue: {
     type: [String, Number, Boolean],
@@ -55,43 +52,37 @@ const props = defineProps({
     default: () => [],
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   round: {
     type: Boolean,
     default: true,
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "default",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
   },
-})
+});
 
-const slots = useSlots()
-const id = useId()
+const slots = useSlots();
+const id = useId();
 
 const labelWeightClass = computed(() => {
   switch (props.labelWeight) {
     case "bold":
-      return "body-normal-bold"
+      return "body-normal-bold";
     case "semi-bold":
-      return "body-normal-semibold"
+      return "body-normal-semibold";
     case "normal":
-      return "body-normal"
+      return "body-normal";
     default:
-      return "body-normal-semibold"
+      return "body-normal-semibold";
   }
-})
+});
 
-const modelValue = defineModel()
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const modelValue = defineModel();
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">

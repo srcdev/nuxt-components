@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
+import type { FormTheme, FormSize } from "~/types/forms/types.forms";
 
 const props = defineProps({
   id: {
@@ -60,43 +60,37 @@ const props = defineProps({
     default: () => [],
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   round: {
     type: Boolean,
     default: true,
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "default",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
   },
   ariaDescribedby: {
     type: String,
     default: null,
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 
 const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme
-})
+  return props.fieldHasError ? "error" : props.theme;
+});
 
-const modelValue = defineModel()
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const modelValue = defineModel();
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const inputId = computed(() => `toggle-sitch-${props.id}`)
+const inputId = computed(() => `toggle-sitch-${props.id}`);
 
 const toggleSwitchValue = () => {
-  modelValue.value = modelValue.value === props.trueValue ? props.falseValue : props.trueValue
-}
+  modelValue.value = modelValue.value === props.trueValue ? props.falseValue : props.trueValue;
+};
 </script>
 
 <style lang="css">

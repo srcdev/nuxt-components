@@ -25,7 +25,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
+import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
 const props = defineProps({
   id: {
@@ -77,25 +77,16 @@ const props = defineProps({
     default: false,
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "medium",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
   },
   weight: {
-    type: String as PropType<string>,
+    type: String as PropType<FormWeight>,
     default: "wght-400",
-    validator(value: string) {
-      return propValidators.weight.includes(value)
-    },
   },
   styleClassPassthrough: {
     type: [String, Array] as PropType<string | string[]>,
@@ -105,16 +96,16 @@ const props = defineProps({
     type: String,
     default: "",
   },
-})
+});
 
-const slots = useSlots()
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const slots = useSlots();
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme
-})
+  return props.fieldHasError ? "error" : props.theme;
+});
 
-const modelValue = defineModel<number | readonly number[]>()
+const modelValue = defineModel<number | readonly number[]>();
 </script>
 
 <style lang="css">

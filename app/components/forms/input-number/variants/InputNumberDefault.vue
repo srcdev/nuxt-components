@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../../c12/prop-validators"
+import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
 const props = defineProps({
   name: {
@@ -111,49 +111,40 @@ const props = defineProps({
     default: false,
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   size: {
-    type: String as PropType<string>,
-    default: "medium",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
+    type: String as PropType<FormSize>,
+    default: "default",
   },
   weight: {
-    type: String as PropType<string>,
-    default: "wght-400",
-    validator(value: string) {
-      return propValidators.weight.includes(value)
-    },
+    type: String as PropType<FormWeight>,
+    default: "normal",
   },
   styleClassPassthrough: {
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const slots = useSlots()
-const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const slots = useSlots();
+const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const id = useId()
+const id = useId();
 const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme
-})
+  return props.fieldHasError ? "error" : props.theme;
+});
 
-const modelValue = defineModel<number | readonly number[]>()
+const modelValue = defineModel<number | readonly number[]>();
 
 const updateValue = (step: number, withinRangeLimit: boolean) => {
   if (withinRangeLimit) {
-    modelValue.value = (Number(modelValue.value) + step) as number
+    modelValue.value = (Number(modelValue.value) + step) as number;
   }
-}
+};
 
-updateElementClasses(["has-left-button", "has-right-button"])
+updateElementClasses(["has-left-button", "has-right-button"]);
 </script>
 
 <style lang="css">

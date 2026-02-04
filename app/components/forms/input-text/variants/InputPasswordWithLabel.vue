@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../../c12/prop-validators"
+import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
 
 const props = defineProps({
   type: {
@@ -75,55 +75,46 @@ const props = defineProps({
     default: () => [],
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "medium",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
   },
   inputVariant: {
-    type: String as PropType<string>,
+    type: String as PropType<InputVariant>,
     default: "normal",
-    validator(value: string) {
-      return propValidators.inputVariant.includes(value)
-    },
   },
-})
+});
 
 const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme
-})
+  return props.fieldHasError ? "error" : props.theme;
+});
 
 const buttonTheme = computed(() => {
-  return props.inputVariant === "underlined" ? "input-action-underlined" : "input-action"
-})
+  return props.inputVariant === "underlined" ? "input-action-underlined" : "input-action";
+});
 
-const modelValue = defineModel()
+const modelValue = defineModel();
 
-const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const updateFocus = (name: string, isFocused: boolean) => {
   // console.log('updateFocus', name, isFocused);
   // modelValue.value.focusedField = isFocused ? name : '';
-}
+};
 
-const inputType = ref<"text" | "password">(props.type)
+const inputType = ref<"text" | "password">(props.type);
 
-const displayPassword = ref(false)
+const displayPassword = ref(false);
 const buttonText = computed(() => {
-  inputType.value = displayPassword.value ? "text" : "password"
-  return displayPassword.value ? "Hide password" : "Show password"
-})
+  inputType.value = displayPassword.value ? "text" : "password";
+  return displayPassword.value ? "Hide password" : "Show password";
+});
 const toggleDisplayPassword = () => {
-  displayPassword.value = !displayPassword.value
-}
+  displayPassword.value = !displayPassword.value;
+};
 
-updateElementClasses(["has-right-button"])
+updateElementClasses(["has-right-button"]);
 </script>

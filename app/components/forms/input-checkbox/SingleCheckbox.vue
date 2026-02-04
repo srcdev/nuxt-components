@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators";
+import type { FormTheme, FormSize, OptionsLayout } from "~/types/forms/types.forms";
 
 const props = defineProps({
   dataTestid: {
@@ -84,11 +84,8 @@ const props = defineProps({
     default: false,
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "medium",
-    validator(value: string) {
-      return propValidators.size.includes(value);
-    },
   },
   trueValue: {
     type: [String, Number, Boolean],
@@ -99,11 +96,8 @@ const props = defineProps({
     default: false,
   },
   optionsLayout: {
-    type: String as PropType<string>,
+    type: String as PropType<OptionsLayout>,
     default: "equal-widths",
-    validator(value: string) {
-      return propValidators.optionsLayout.includes(value);
-    },
   },
   equalCols: {
     type: Boolean,
@@ -114,11 +108,8 @@ const props = defineProps({
     default: () => [],
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value);
-    },
   },
 });
 

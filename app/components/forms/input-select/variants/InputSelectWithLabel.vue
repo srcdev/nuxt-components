@@ -79,8 +79,8 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../../c12/prop-validators"
-import type { IFormMultipleOptions } from "../../../../types/forms/types.forms"
+import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
+import type { IFormMultipleOptions } from "../../../../types/forms/types.forms";
 
 const props = defineProps({
   dataTestid: {
@@ -112,47 +112,38 @@ const props = defineProps({
     default: false,
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "medium",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
   },
   styleClassPassthrough: {
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   inputVariant: {
-    type: String as PropType<string>,
+    type: String as PropType<InputVariant>,
     default: "normal",
-    validator(value: string) {
-      return propValidators.inputVariant.includes(value)
-    },
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 
 const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme
-})
+  return props.fieldHasError ? "error" : props.theme;
+});
 
-const id = `${props.name}-${useId()}`
-const errorId = `${id}-error-message`
+const id = `${props.name}-${useId()}`;
+const errorId = `${id}-error-message`;
 const ariaDescribedby = computed(() => {
-  const ariaDescribedbyId = slots.descriptionText || slots.descriptionHtml ? `${id}-description` : undefined
-  return props.fieldHasError ? errorId : ariaDescribedbyId
-})
+  const ariaDescribedbyId = slots.descriptionText || slots.descriptionHtml ? `${id}-description` : undefined;
+  return props.fieldHasError ? errorId : ariaDescribedbyId;
+});
 
-const modelValue = defineModel({ required: true })
-const isDirty = defineModel("isDirty")
-const isActive = defineModel("isActive")
-const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>
+const modelValue = defineModel({ required: true });
+const isDirty = defineModel("isDirty");
+const isActive = defineModel("isActive");
+const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 </script>

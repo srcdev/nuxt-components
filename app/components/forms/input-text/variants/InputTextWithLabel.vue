@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../../c12/prop-validators"
+import type { FormTheme, FormSize, InputVariant, InputMode } from "~/types/forms/types.forms";
 const props = defineProps({
   maxlength: {
     type: Number,
@@ -94,11 +94,8 @@ const props = defineProps({
     required: true,
   },
   inputmode: {
-    type: String as PropType<"text" | "email" | "tel" | "url" | "search" | "numeric" | "none" | "decimal">,
+    type: String as PropType<InputMode>,
     default: "text",
-    validator(value: string) {
-      return propValidators.inputMode.includes(value)
-    },
   },
   name: {
     type: String,
@@ -129,63 +126,54 @@ const props = defineProps({
     default: () => [],
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "default",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
   },
   inputVariant: {
-    type: String as PropType<string>,
+    type: String as PropType<InputVariant>,
     default: "normal",
-    validator(value: string) {
-      return propValidators.inputVariant.includes(value)
-    },
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 
 const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme
-})
+  return props.fieldHasError ? "error" : props.theme;
+});
 
-const id = `${props.name}-${useId()}`
-const errorId = `${id}-error-message`
+const id = `${props.name}-${useId()}`;
+const errorId = `${id}-error-message`;
 const ariaDescribedby = computed(() => {
-  const ariaDescribedbyId = slots.descriptionText || slots.descriptionHtml ? `${id}-description` : undefined
-  return props.fieldHasError ? errorId : ariaDescribedbyId
-})
+  const ariaDescribedbyId = slots.descriptionText || slots.descriptionHtml ? `${id}-description` : undefined;
+  return props.fieldHasError ? errorId : ariaDescribedbyId;
+});
 
-const modelValue = defineModel()
-const isActive = ref<boolean>(false)
-const isDirty = ref<boolean>(false)
+const modelValue = defineModel();
+const isActive = ref<boolean>(false);
+const isDirty = ref<boolean>(false);
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const testDirty = () => {
-  const watchValue = modelValue.value ?? ""
+  const watchValue = modelValue.value ?? "";
 
   if (!isDirty.value && typeof watchValue === "string" && watchValue.length > 0) {
-    isDirty.value = true
+    isDirty.value = true;
   }
-}
+};
 
 onMounted(() => {
-  testDirty()
-})
+  testDirty();
+});
 
 watch(
   () => modelValue.value,
   () => {
-    testDirty()
+    testDirty();
   }
-)
+);
 </script>

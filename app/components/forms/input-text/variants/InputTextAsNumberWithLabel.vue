@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../../c12/prop-validators"
+import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
 const props = defineProps({
   maxlength: {
     type: Number,
@@ -111,11 +111,8 @@ const props = defineProps({
     default: () => [],
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   min: {
     type: Number,
@@ -130,48 +127,42 @@ const props = defineProps({
     default: 1,
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "default",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
   },
   inputVariant: {
-    type: String as PropType<string>,
+    type: String as PropType<InputVariant>,
     default: "normal",
-    validator(value: string) {
-      return propValidators.inputVariant.includes(value)
-    },
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 
 const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme
-})
+  return props.fieldHasError ? "error" : props.theme;
+});
 
-const id = useId()
-const errorId = `${id}-error-message`
+const id = useId();
+const errorId = `${id}-error-message`;
 const ariaDescribedby = computed(() => {
-  const ariaDescribedbyId = slots.description ? `${id}-description` : undefined
-  return props.fieldHasError ? errorId : ariaDescribedbyId
-})
+  const ariaDescribedbyId = slots.description ? `${id}-description` : undefined;
+  return props.fieldHasError ? errorId : ariaDescribedbyId;
+});
 
-const modelValue = defineModel()
-const isActive = ref<boolean>(false)
-const isDirty = ref<boolean>(false)
+const modelValue = defineModel();
+const isActive = ref<boolean>(false);
+const isDirty = ref<boolean>(false);
 
-const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
-const minLength = computed(() => `${props.max.toString().length + 1}em`)
+const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const minLength = computed(() => `${props.max.toString().length + 1}em`);
 
 const updateValue = (step: number, withinRangeLimit: boolean) => {
   if (withinRangeLimit) {
-    modelValue.value = (Number(modelValue.value) + step) as number
+    modelValue.value = (Number(modelValue.value) + step) as number;
   }
-}
+};
 
-updateElementClasses(["input-text-as-number", "has-left-button", "has-right-button"])
+updateElementClasses(["input-text-as-number", "has-left-button", "has-right-button"]);
 </script>
 
 <style lang="css">

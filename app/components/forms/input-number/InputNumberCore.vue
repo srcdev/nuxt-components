@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
+import type { FormTheme, FormSize, InputVariant, InputTypesText, FormWeight } from "~/types/forms/types.forms";
 
 const props = defineProps({
   id: {
@@ -65,25 +65,16 @@ const props = defineProps({
     default: false,
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   size: {
-    type: String as PropType<string>,
+    type: String as PropType<FormSize>,
     default: "medium",
-    validator(value: string) {
-      return propValidators.size.includes(value)
-    },
   },
   weight: {
-    type: String as PropType<string>,
+    type: String as PropType<FormWeight>,
     default: "wght-400",
-    validator(value: string) {
-      return propValidators.weight.includes(value)
-    },
   },
   fieldHasError: {
     type: Boolean,
@@ -93,18 +84,18 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 
 const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme
-})
+  return props.fieldHasError ? "error" : props.theme;
+});
 
-const modelValue = defineModel<number | readonly number[]>()
+const modelValue = defineModel<number | readonly number[]>();
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
-const minLength = computed(() => `${props.max.toString().length + 1}em`)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const minLength = computed(() => `${props.max.toString().length + 1}em`);
 </script>
 
 <style lang="css">
