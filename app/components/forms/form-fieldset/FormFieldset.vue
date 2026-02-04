@@ -57,8 +57,8 @@ const props = defineProps({
 
 const slots = useSlots();
 // const hasDescriptionSlot = computed(() => slots.description !== undefined);
-const hasDescription = computed(() => slots.description !== undefined);
-const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+// const hasDescription = computed(() => slots.description !== undefined);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">
