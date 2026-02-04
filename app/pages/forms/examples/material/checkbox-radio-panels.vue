@@ -95,7 +95,7 @@
 
 <script setup lang="ts">
 import { z } from "zod"
-import type { IFormMultipleOptions } from "~/types/forms/types.forms"
+import type { IFormMultipleOptions, FormTheme, FormSize } from "~/types/forms/types.forms"
 
 definePageMeta({
   layout: false,
@@ -109,8 +109,8 @@ useHead({
   },
 })
 
-const theme = ref("primary")
-const size = ref<"x-small" | "small" | "default" | "medium" | "large">("default")
+const theme = ref<FormTheme>("primary")
+const size = ref<FormSize>("default")
 
 /*
  * Fetch some sample data

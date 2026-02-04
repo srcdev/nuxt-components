@@ -701,7 +701,7 @@
 
 <script setup lang="ts">
 import { z } from "zod"
-import type { IFormMultipleOptions } from "~/types/forms/types.forms"
+import type { IFormMultipleOptions, FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms"
 
 definePageMeta({
   layout: false,
@@ -715,7 +715,7 @@ useHead({
   },
 })
 
-const inputVariant = ref("underlined") // 'normal' | 'outlined' | 'underlined'
+const inputVariant = ref<InputVariant>("underlined")
 // const inputVariantData = ref<IFormMultipleOptions>({
 //   data: [
 //     {
@@ -741,12 +741,12 @@ const inputVariant = ref("underlined") // 'normal' | 'outlined' | 'underlined'
 //   skip: 0,
 //   limit: 3,
 // });
-const theme = ref("primary")
-const size = ref<"x-small" | "small" | "default" | "medium" | "large">("default")
-const swapTheme = (newTheme: string) => {
+const theme = ref<FormTheme>("primary")
+const size = ref<FormSize>("default")
+const swapTheme = (newTheme: FormTheme) => {
   theme.value = newTheme
 }
-const swapSize = (newSize: "x-small" | "small" | "default" | "medium" | "large") => {
+const swapSize = (newSize: FormSize) => {
   size.value = newSize
 }
 
