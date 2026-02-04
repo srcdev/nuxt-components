@@ -57,7 +57,7 @@
     "pinia-plugin-persistedstate": "4.7.1",
     "release-it": "19.2.4",
     "typescript": "5.9.3",
-    "vitest": "^3.2.4",
+    "vitest": "3.2.4",
     "vue-tsc": "3.2.4",
     "zod": "4.3.6"
   },
