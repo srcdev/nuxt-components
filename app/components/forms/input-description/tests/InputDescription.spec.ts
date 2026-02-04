@@ -9,14 +9,6 @@ vi.mock("#imports", () => ({
   })),
 }));
 
-// Mock prop validators
-vi.mock("../c12/prop-validators", () => ({
-  default: {
-    theme: ["primary", "secondary", "success", "warning", "error"],
-    inputVariant: ["default", "outlined", "filled"],
-  },
-}));
-
 describe("InputDescription", () => {
   let wrapper: ReturnType<typeof mountSuspended>;
 
@@ -24,6 +16,7 @@ describe("InputDescription", () => {
     const defaultProps = {
       id: "test-input",
       name: "testInput",
+      inputVariant: "normal", // Set valid default
       ...props,
     };
 

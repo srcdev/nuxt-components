@@ -6,7 +6,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
+import type { FormTheme, InputVariant } from "~/types/forms/types.forms";
 
 const props = defineProps({
   id: {
@@ -26,24 +26,18 @@ const props = defineProps({
     default: () => [],
   },
   theme: {
-    type: String as PropType<string>,
+    type: String as PropType<FormTheme>,
     default: "primary",
-    validator(value: string) {
-      return propValidators.theme.includes(value)
-    },
   },
   inputVariant: {
-    type: String as PropType<string>,
-    default: "default",
-    validator(value: string) {
-      return propValidators.inputVariant.includes(value)
-    },
+    type: String as PropType<InputVariant>,
+    default: "normal",
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">
