@@ -3,6 +3,7 @@
   "compilerOptions": {
     "strict": true,
     "types": ["vitest/globals", "@nuxt/test-utils", "@vue/test-utils"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "ignoreDeprecations": "5.0"
   }
 }

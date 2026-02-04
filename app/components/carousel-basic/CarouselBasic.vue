@@ -1,8 +1,8 @@
 <template>
   <section
+    ref="carouselWrapperRef"
     class="carousel-basic"
     :class="[elementClasses]"
-    ref="carouselWrapperRef"
     role="region"
     aria-label="Image carousel"
   >
@@ -11,18 +11,18 @@
 
     <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
       <div
+        ref="carouselContainerRef"
         tabindex="0"
         class="item-container"
         :class="{ 'allow-overflow': allowCarouselOverflow }"
-        ref="carouselContainerRef"
         role="group"
         aria-label="Carousel items"
       >
         <div
           v-for="(item, index) in carouselDataIds"
           :key="index"
-          class="item"
           ref="carouselItems"
+          class="item"
           :aria-current="currentIndex === index ? 'true' : 'false'"
         >
           <slot :name="item"></slot>
@@ -39,24 +39,24 @@
     </LayoutRow>
 
     <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-      <div tabindex="0" class="controls-container" ref="controlsContainerRef">
+      <div ref="controlsContainerRef" tabindex="0" class="controls-container">
         <div class="markers-container">
           <ul class="markers-list">
             <li v-for="index in itemCount" :key="index" class="markers-item">
               <button
-                @click.prevent="jumpToFrame(index - 1)"
                 class="btn-marker"
                 :class="[{ active: currentIndex === index - 1 }]"
                 :aria-label="`Jump to item ${Math.floor(index + 1)}`"
+                @click.prevent="jumpToFrame(index - 1)"
               ></button>
             </li>
           </ul>
         </div>
         <div class="buttons-container">
-          <button type="button" @click.prevent="actionPrevious()" class="btn-action" aria-label="Go to previous item">
+          <button type="button" class="btn-action" aria-label="Go to previous item" @click.prevent="actionPrevious()">
             <Icon name="ic:outline-keyboard-arrow-left" class="arrows-icon" />
           </button>
-          <button type="button" @click.prevent="actionNext()" class="btn-action" aria-label="Go to next item">
+          <button type="button" class="btn-action" aria-label="Go to next item" @click.prevent="actionNext()">
             <Icon name="ic:outline-keyboard-arrow-right" class="arrows-icon" />
           </button>
         </div>
@@ -66,7 +66,8 @@
 </template>
 
 <script setup lang="ts">
-import { useEventListener, useResizeObserver, useSwipe } from "@vueuse/core"
+import { useEventListener, useResizeObserver, useSwipe } from "@vueuse/core";
+import type { PropType } from "vue";
 
 const props = defineProps({
   carouselDataIds: {
@@ -89,108 +90,108 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const carouselWrapperRef = ref<HTMLDivElement | null>(null)
-const carouselContainerRef = ref<HTMLDivElement | null>(null)
-const carouselItemsRef = useTemplateRef<HTMLDivElement[]>("carouselItems")
-const controlsContainerRef = ref<HTMLDivElement | null>(null)
-const carouselInitComplete = ref(false)
+const carouselWrapperRef = ref<HTMLDivElement | null>(null);
+const carouselContainerRef = ref<HTMLDivElement | null>(null);
+const carouselItemsRef = useTemplateRef<HTMLDivElement[]>("carouselItems");
+const controlsContainerRef = ref<HTMLDivElement | null>(null);
+const carouselInitComplete = ref(false);
 
-const currentIndex = ref(0)
-const itemCount = ref(props.carouselDataIds.length)
-const offset = ref(0)
-const transitionSpeedStr = props.transitionSpeed + "ms"
+const currentIndex = ref(0);
+const itemCount = ref(props.carouselDataIds.length);
+const offset = ref(0);
+const transitionSpeedStr = props.transitionSpeed + "ms";
 const itemTransform = computed(() => {
-  return `translateX(calc(${offset.value} * (${itemWidth.value} + var(--_carousel-item-track-gap))))`
-})
+  return `translateX(calc(${offset.value} * (${itemWidth.value} + var(--_carousel-item-track-gap))))`;
+});
 
-const itemWidth = ref("0px")
+const itemWidth = ref("0px");
 
 const actionPrevious = () => {
   if (props.returnToStart && currentIndex.value === 0) {
-    offset.value = -itemCount.value
-    doAction()
+    offset.value = -itemCount.value;
+    doAction();
   }
 
   if (offset.value >= 0) {
-    return
+    return;
   }
 
-  offset.value = Math.min(offset.value + 1)
-  doAction()
-}
+  offset.value = Math.min(offset.value + 1);
+  doAction();
+};
 
 const actionNext = () => {
   if (props.returnToStart && offset.value <= -1 * (itemCount.value - 1)) {
-    offset.value = 0
-    doAction()
-    return
+    offset.value = 0;
+    doAction();
+    return;
   }
 
   if (offset.value <= -1 * (itemCount.value - 1)) {
-    return
+    return;
   }
 
-  offset.value = Math.min(offset.value - 1)
-  doAction()
-}
+  offset.value = Math.min(offset.value - 1);
+  doAction();
+};
 
 const doAction = () => {
-  currentIndex.value = Math.abs(offset.value)
-}
+  currentIndex.value = Math.abs(offset.value);
+};
 
 const jumpToFrame = (index: number) => {
   if (index >= 0 && index < itemCount.value) {
-    offset.value = -index
-    doAction()
+    offset.value = -index;
+    doAction();
   }
-}
+};
 
 const initialSetup = () => {
   if (carouselItemsRef?.value && carouselItemsRef.value.length > 0 && carouselItemsRef.value[0]) {
-    itemWidth.value = carouselItemsRef.value[0].offsetWidth + "px"
+    itemWidth.value = carouselItemsRef.value[0].offsetWidth + "px";
   }
 
-  carouselInitComplete.value = true
-}
+  carouselInitComplete.value = true;
+};
 
 const { direction } = useSwipe(carouselContainerRef, {
   passive: false,
   onSwipeEnd() {
     if (direction.value === "left") {
-      actionNext()
+      actionNext();
     } else if (direction.value === "right") {
-      actionPrevious()
+      actionPrevious();
     }
   },
-})
+});
 
 useEventListener(carouselContainerRef, "keydown", (event: KeyboardEvent) => {
   if (event.key === "ArrowLeft") {
-    actionPrevious()
+    actionPrevious();
   } else if (event.key === "ArrowRight") {
-    actionNext()
+    actionNext();
   }
-})
+});
 
 useEventListener(controlsContainerRef, "keydown", (event: KeyboardEvent) => {
   if (event.key === "ArrowLeft") {
-    actionPrevious()
+    actionPrevious();
   } else if (event.key === "ArrowRight") {
-    actionNext()
+    actionNext();
   }
-})
+});
 
 useResizeObserver(carouselWrapperRef, async () => {
-  initialSetup()
-})
+  initialSetup();
+});
 
 onMounted(() => {
-  initialSetup()
-})
+  initialSetup();
+});
 </script>
 
 <style lang="css">
