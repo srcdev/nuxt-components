@@ -53,9 +53,24 @@
     },
     "composable_patterns": {
       "useStyleClassPassthrough": {
-        "purpose": "Allows parent components to pass styling classes",
-        "usage": "const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || [])",
-        "returns": "reactive elementClasses for component styling"
+        "purpose": "Dynamic styling class management with reactive updates",
+        "file_location": "app/composables/useStyleClassPassthrough.ts",
+        "full_api": {
+          "elementClasses": "computed reactive class string for template binding",
+          "updateElementClasses": "toggle classes on/off dynamically (string|array)",
+          "resetElementClasses": "reset to initial prop value, used in watchers",
+          "styleClassPassthroughRef": "underlying reactive reference"
+        },
+        "usage_patterns": {
+          "basic": "const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)",
+          "dynamic": "const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)",
+          "with_watcher": "watch(() => props.styleClassPassthrough, () => resetElementClasses(props.styleClassPassthrough))"
+        },
+        "examples": {
+          "conditional_classes": "updateElementClasses(['has-left-button', 'has-right-button'])",
+          "slot_based": "updateElementClasses based on slot presence",
+          "state_based": "Toggle classes based on component state"
+        }
       },
       "useFormControl": {
         "purpose": "Centralized form state and validation management",
