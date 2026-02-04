@@ -1,9 +1,9 @@
 <template>
   <div
     v-if="slots.descriptionText || slots.descriptionHtml"
+    :id="descriptionId"
     class="input-description"
     :class="[elementClasses]"
-    :id="descriptionId"
   >
     <div v-if="slots.descriptionHtml" class="input-description-html">
       <slot name="descriptionHtml"></slot>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import propValidators from "../c12/prop-validators"
+import propValidators from "../c12/prop-validators";
 
 const props = defineProps({
   id: {
@@ -38,23 +38,23 @@ const props = defineProps({
     type: String as PropType<string>,
     default: "primary",
     validator(value: string) {
-      return propValidators.theme.includes(value)
+      return propValidators.theme.includes(value);
     },
   },
   inputVariant: {
     type: String as PropType<string>,
     default: "default",
     validator(value: string) {
-      return propValidators.inputVariant.includes(value)
+      return propValidators.inputVariant.includes(value);
     },
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 
-const descriptionId = `${props.id}-description`
+const descriptionId = `${props.id}-description`;
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 <style lang="css">
 .input-description {
