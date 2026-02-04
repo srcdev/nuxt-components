@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/srcdev/nuxt-components/workflows/Tests/badge.svg)](https://github.com/srcdev/nuxt-components/actions/workflows/test.yml)
 [![npm version](https://badge.fury.io/js/srcdev-nuxt-components.svg)](https://badge.fury.io/js/srcdev-nuxt-components)
-[![License](https://img.shields.io/npm/l/srcdev-nuxt-components.svg)](https://github.com/srcdev/nuxt-components/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/srcdev/nuxt-components.svg)](https://github.com/srcdev/nuxt-components/blob/main/LICENSE)
 
 ## NOTE
 
