@@ -29,8 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
-import type { AlertMaskConfig } from "../../types/components";
+import type { AlertMaskConfig } from "~/types/components";
 
 const props = defineProps({
   config: {
