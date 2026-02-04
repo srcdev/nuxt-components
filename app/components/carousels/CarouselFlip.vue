@@ -41,7 +41,7 @@
               <button
                 class="btn-marker"
                 :class="[{ active: displayActiveIndex === index - 1 }]"
-                :aria-label="`Jump to item ${Math.floor(index + 1)}`"
+                :aria-label="`Jump to item ${index}`"
                 @click.prevent="jumpToFrame(index - 1)"
               ></button>
             </li>

@@ -35,9 +35,9 @@ vi.mock("@vueuse/core", () => ({
       eventHandlers.set(targetKey, new Map());
     }
     eventHandlers.get(targetKey)?.set(event, handler);
-    
+
     // Also add to DOM element if possible
-    if (targetKey && typeof targetKey === 'object' && targetKey.addEventListener) {
+    if (targetKey && typeof targetKey === "object" && targetKey.addEventListener) {
       targetKey.addEventListener(event, handler);
     }
   }),
@@ -98,7 +98,7 @@ describe("CarouselFlip", () => {
         components: {
           Icon: {
             template: '<svg data-testid="icon" :class="$attrs.class"><title>{{ name }}</title></svg>',
-            props: ['name']
+            props: ["name"],
           },
           LayoutRow: {
             template: '<div :class="$attrs.class"><slot /></div>',
@@ -162,8 +162,8 @@ describe("CarouselFlip", () => {
       expect(markers).toHaveLength(6);
 
       markers.forEach((marker, index) => {
-        // v-for="index in itemCount" means index starts at 1, so Math.floor(1+1)=2, Math.floor(2+1)=3, etc.
-        expect(marker.attributes("aria-label")).toBe(`Jump to item ${index + 2}`);
+        // Fixed: v-for="index in itemCount" means index starts at 1, so aria-label should be index (1,2,3...)
+        expect(marker.attributes("aria-label")).toBe(`Jump to item ${index + 1}`);
       });
     });
 
@@ -175,10 +175,10 @@ describe("CarouselFlip", () => {
 
       expect(prevButton.exists()).toBe(true);
       expect(nextButton.exists()).toBe(true);
-      
+
       // Verify the buttons are functional
-      expect(prevButton.element.tagName).toBe('BUTTON');
-      expect(nextButton.element.tagName).toBe('BUTTON');
+      expect(prevButton.element.tagName).toBe("BUTTON");
+      expect(nextButton.element.tagName).toBe("BUTTON");
     });
   });
 
@@ -205,7 +205,7 @@ describe("CarouselFlip", () => {
 
     it("handles transitionSpeed prop", async () => {
       await createWrapper({ transitionSpeed: 500 });
-      
+
       // Component should be rendered with custom transition speed
       expect(component).toBeDefined();
       // The transition speed is used in computed property transitionSpeedStr
@@ -460,7 +460,7 @@ describe("CarouselFlip", () => {
     it("calls reorderItems with animation during user interaction", async () => {
       // Test that navigation works which implicitly tests reorderItems is called
       const initialIndex = component.currentActiveIndex;
-      
+
       const nextButton = wrapper.find('[aria-label="Go to next item"]');
       await nextButton.trigger("click");
       await nextTick();
