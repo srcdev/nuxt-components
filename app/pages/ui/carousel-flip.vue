@@ -12,11 +12,11 @@
             :carousel-data-ids
             :allow-carousel-overflow="true"
             :transition-speed="1000"
-            :use-flip-animation="false"
+            :use-flip-animation="true"
             :use-spring-effect="false"
             :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
           >
-            <template v-for="(item, index) in carouselData?.items" #[item.id]>
+            <template v-for="(item, index) in carouselData?.items" :key="index" #[item.id]>
               <div class="custom-carousel-item">
                 <h3>{{ index + 1 }}</h3>
                 <p>{{ item.alt }}</p>
@@ -30,11 +30,11 @@
 </template>
 
 <script setup lang="ts">
-import type { ICarouselBasic } from "~/types/components"
+import type { ICarouselBasic } from "~/types/components";
 
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Carousel (Basic)",
@@ -42,21 +42,15 @@ useHead({
   bodyAttrs: {
     class: "carousel-flip-page",
   },
-})
+});
 
-const {
-  data: carouselData,
-  execute: carouselExecute,
-  status: carouselStatus,
-  error: carouselError,
-} = await useFetch<ICarouselBasic>("/api/carousel", {
+const { data: carouselData, status: carouselStatus } = await useFetch<ICarouselBasic>("/api/carousel", {
   immediate: true,
-})
+});
 
 const carouselDataIds = computed(() => {
-  return carouselData.value?.items.map((item) => item.id) || []
-})
-// console.log(carouselDataIds.value);
+  return carouselData.value?.items.map((item) => item.id) || [];
+});
 </script>
 
 <style lang="css">
