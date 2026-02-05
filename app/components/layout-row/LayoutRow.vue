@@ -73,11 +73,11 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 * Page Layout by https://layout-breakouts-builder.vercel.app
 **/
 .layout-row > *,
-.full-width > * {
+.full-width-BAK > * {
   grid-column: content;
 }
 .layout-row,
-.full-width {
+.full-width-BAK {
   --minimum-content-padding: 1rem;
 
   /** TRACK WIDTHS **/
@@ -112,58 +112,58 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
   .layout-row-inner {
     container-type: inline-size;
+
+    /** CLASSES **/
+    &.full {
+      grid-column: full;
+    }
+    &.full-start {
+      grid-column-start: full-start;
+    }
+    &.full-end {
+      grid-column-end: full-end;
+    }
+
+    &.popout {
+      grid-column: popout;
+    }
+    &.popout-start {
+      grid-column-start: popout-start;
+    }
+    &.popout-end {
+      grid-column-end: popout-end;
+    }
+
+    &.content {
+      grid-column: content;
+    }
+    &.content-start {
+      grid-column-start: content-start;
+    }
+    &.content-end {
+      grid-column-end: content-end;
+    }
+
+    &.inset-content {
+      grid-column: inset-content;
+    }
+    &.inset-content-start {
+      grid-column-start: inset-content-start;
+    }
+    &.inset-content-end {
+      grid-column-end: inset-content-end;
+    }
+
+    &.full-width {
+      grid-column: full;
+    }
+    &.full-content,
+    &.full-content-nopad {
+      grid-column: full;
+    }
+    &.full-content {
+      padding-inline: var(--minimum-content-padding);
+    }
   }
-}
-
-/** CLASSES **/
-.full {
-  grid-column: full;
-}
-.full-start {
-  grid-column-start: full-start;
-}
-.full-end {
-  grid-column-end: full-end;
-}
-
-.popout {
-  grid-column: popout;
-}
-.popout-start {
-  grid-column-start: popout-start;
-}
-.popout-end {
-  grid-column-end: popout-end;
-}
-
-.content {
-  grid-column: content;
-}
-.content-start {
-  grid-column-start: content-start;
-}
-.content-end {
-  grid-column-end: content-end;
-}
-
-.inset-content {
-  grid-column: inset-content;
-}
-.inset-content-start {
-  grid-column-start: inset-content-start;
-}
-.inset-content-end {
-  grid-column-end: inset-content-end;
-}
-
-.full-width {
-  grid-column: full;
-}
-.full-content,
-.full-content-nopad {
-  grid-column: full;
-}
-.full-content {
-  padding-inline: var(--minimum-content-padding);
 }
 </style>
