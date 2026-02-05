@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-import type { QrCodeVariant } from "../../types/components"
+import type { QrCodeVariant } from "../../types/components";
 
 const props = defineProps({
   qrValue: {
@@ -12,11 +12,11 @@ const props = defineProps({
   },
   variant: {
     type: Object as PropType<QrCodeVariant>,
-    default: {
+    default: () => ({
       inner: "default",
       marker: "default",
       pixel: "default",
-    },
+    }),
   },
   radius: {
     type: Number,
@@ -38,9 +38,9 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">

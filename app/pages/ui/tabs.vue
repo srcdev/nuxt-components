@@ -86,7 +86,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "UI Tabs",
@@ -94,26 +94,26 @@ useHead({
   bodyAttrs: {
     class: "home",
   },
-})
+});
 
 interface ITabNav {
-  action?: string
-  name: string
-  path?: string
+  action?: string;
+  name: string;
+  path?: string;
 }
 
 const navLinks3: ITabNav[] = [
   { name: "Home", path: "/" },
   { name: "Layout Row", path: "/ui/layout-row" },
   { name: "Dialogs", path: "/ui/dialog" },
-]
+];
 
 const navLinks4: ITabNav[] = [
   { name: "Home", path: "/" },
   { name: "Layout Row", path: "/ui/layout-row" },
   { name: "Dialogs", path: "/ui/dialog" },
   { name: "Tabs", path: "/ui/tabs" },
-]
+];
 
 const navLinks6: ITabNav[] = [
   { name: "Home", path: "/" },
@@ -122,7 +122,7 @@ const navLinks6: ITabNav[] = [
   { name: "Tabs", path: "/ui/tabs" },
   { name: "Something Else", path: "/ui/something" },
   { name: "Home Again", path: "/" },
-]
+];
 </script>
 
 <style lang="css">

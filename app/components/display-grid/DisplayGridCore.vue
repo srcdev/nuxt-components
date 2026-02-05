@@ -8,15 +8,15 @@
 const props = defineProps({
   gridData: {
     type: Object,
-    default: {},
+    default: () => ({}),
   },
   styleClassPassthrough: {
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const gridData = toRef(() => props.gridData)
+const gridData = toRef(() => props.gridData);
 </script>

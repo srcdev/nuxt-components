@@ -16,7 +16,7 @@
 const props = defineProps({
   gridData: {
     type: Object,
-    default: {},
+    default: () => ({}),
   },
   itemMinWidth: {
     type: Number,
@@ -34,18 +34,18 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const gridData = toRef(() => props.gridData)
+const gridData = toRef(() => props.gridData);
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough)
+    resetElementClasses(props.styleClassPassthrough);
   }
-)
+);
 </script>
 
 <style lang="css">

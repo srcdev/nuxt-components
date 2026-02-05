@@ -108,8 +108,8 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderProp, ResponsiveHeaderState, IFlooredRect } from "../../types/components"
-import { useResizeObserver, onClickOutside } from "@vueuse/core"
+import type { ResponsiveHeaderProp, ResponsiveHeaderState, IFlooredRect } from "../../types/components";
+import { useResizeObserver, onClickOutside } from "@vueuse/core";
 
 const props = defineProps({
   responsiveNavLinks: {
@@ -122,10 +122,10 @@ const props = defineProps({
   },
   overflowDetailsSummaryIcons: {
     type: Object as PropType<Record<string, string>>,
-    default: {
+    default: () => ({
       more: "gravity-ui:ellipsis",
       burger: "gravity-ui:bars",
-    },
+    }),
   },
   collapseBreakpoint: {
     type: Number,
@@ -143,12 +143,12 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-})
+});
 
 const collapseNavigationBelowWidth = computed(
   () => props.collapseBreakpoint !== null || props.collapseAtMainNavIntersection
-)
-const collapseBreakpoint = ref(props.collapseBreakpoint)
+);
+const collapseBreakpoint = ref(props.collapseBreakpoint);
 
 // Use global navigation state for caching between route changes
 const {
@@ -157,64 +157,64 @@ const {
   navigationWrapperRects: cachedNavigationWrapperRects,
   secondaryNavRects: cachedSecondaryNavRects,
   clearNavigationCache,
-} = useNavigationState()
+} = useNavigationState();
 
-const slots = useSlots()
+const slots = useSlots();
 
-const navigationWrapperRef = useTemplateRef<HTMLDivElement>("navigationWrapper")
+const navigationWrapperRef = useTemplateRef<HTMLDivElement>("navigationWrapper");
 
 const closeAllNavigationDetails = () => {
   navigationDetailsRefs.value?.forEach((element) => {
-    element?.removeAttribute("open")
-  })
-  overflowDetailsRef.value?.removeAttribute("open")
-}
+    element?.removeAttribute("open");
+  });
+  overflowDetailsRef.value?.removeAttribute("open");
+};
 
 const toggleDetailsElement = (event: Event) => {
-  const summaryElement = event.currentTarget as HTMLElement
-  const parentDetailsElement = summaryElement.closest("details")
-  if (!parentDetailsElement) return
+  const summaryElement = event.currentTarget as HTMLElement;
+  const parentDetailsElement = summaryElement.closest("details");
+  if (!parentDetailsElement) return;
 
   if (parentDetailsElement.hasAttribute("open")) {
-    parentDetailsElement.removeAttribute("open")
+    parentDetailsElement.removeAttribute("open");
   } else {
-    parentDetailsElement.setAttribute("open", "")
+    parentDetailsElement.setAttribute("open", "");
   }
-  overflowDetailsRef.value?.removeAttribute("open")
-}
+  overflowDetailsRef.value?.removeAttribute("open");
+};
 
 const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
   if (!props.allowExpandOnGesture) {
-    return
+    return;
   }
 
   // Close all other open navigation details first
-  const summaryElement = event.currentTarget as HTMLElement
-  const parentDetailsElement = summaryElement.closest("details")
+  const summaryElement = event.currentTarget as HTMLElement;
+  const parentDetailsElement = summaryElement.closest("details");
 
   navigationDetailsRefs.value?.forEach((element) => {
     if (element !== parentDetailsElement) {
-      element?.removeAttribute("open")
+      element?.removeAttribute("open");
     }
-  })
-  overflowDetailsRef.value?.removeAttribute("open")
+  });
+  overflowDetailsRef.value?.removeAttribute("open");
 
   // Then toggle the current one
-  toggleDetailsElement(event)
-}
+  toggleDetailsElement(event);
+};
 
 const handleNavigationItemHover = () => {
   if (!props.allowExpandOnGesture) {
-    return
+    return;
   }
 
   // Close all open navigation details when hovering over regular nav items
-  closeAllNavigationDetails()
-}
+  closeAllNavigationDetails();
+};
 
 const handleSummaryAction = (event: MouseEvent | KeyboardEvent) => {
-  toggleDetailsElement(event)
-}
+  toggleDetailsElement(event);
+};
 
 // Initialize main navigation state
 const mainNavigationState = ref<ResponsiveHeaderState>({
@@ -224,64 +224,64 @@ const mainNavigationState = ref<ResponsiveHeaderState>({
   },
   clonedNavLinks: props.responsiveNavLinks,
   hasSecondNav: Object.keys(props.responsiveNavLinks).length > 1,
-})
+});
 
-const navRefs = ref<Record<string, HTMLUListElement | null>>({})
+const navRefs = ref<Record<string, HTMLUListElement | null>>({});
 
 const setNavRef = (key: string, el: Element | ComponentPublicInstance | null) => {
-  navRefs.value[key] = el as HTMLUListElement | null
-}
+  navRefs.value[key] = el as HTMLUListElement | null;
+};
 
 const navigationWrapperRects = computed({
   get: () => cachedNavigationWrapperRects.value,
   set: (value: IFlooredRect | null) => {
-    cachedNavigationWrapperRects.value = value
+    cachedNavigationWrapperRects.value = value;
   },
-})
+});
 
-const firstNavRef = ref<HTMLUListElement | null>(null)
-const firstNavRects = ref<IFlooredRect | null>(null)
+const firstNavRef = ref<HTMLUListElement | null>(null);
+const firstNavRects = ref<IFlooredRect | null>(null);
 
-const secondNavRef = ref<HTMLUListElement | null>(null)
-const secondNavRects = ref<IFlooredRect | null>(null)
+const secondNavRef = ref<HTMLUListElement | null>(null);
+const secondNavRects = ref<IFlooredRect | null>(null);
 
-const secondaryNavRef = useTemplateRef<HTMLElement>("secondaryNav")
+const secondaryNavRef = useTemplateRef<HTMLElement>("secondaryNav");
 const secondaryNavRects = computed({
   get: () => cachedSecondaryNavRects.value,
   set: (value: IFlooredRect | null) => {
-    cachedSecondaryNavRects.value = value
+    cachedSecondaryNavRects.value = value;
   },
-})
+});
 
-const mainNavigationItemsRefs = useTemplateRef<HTMLLIElement[]>("mainNavigationItems")
+const mainNavigationItemsRefs = useTemplateRef<HTMLLIElement[]>("mainNavigationItems");
 
-const navigationDetailsRefs = useTemplateRef<HTMLElement[]>("navigationDetails")
+const navigationDetailsRefs = useTemplateRef<HTMLElement[]>("navigationDetails");
 
-const overflowDetailsRef = useTemplateRef<HTMLDetailsElement>("overflowDetails")
+const overflowDetailsRef = useTemplateRef<HTMLDetailsElement>("overflowDetails");
 
 const showOverflowDetails = computed(() => {
   const hasHiddenNav =
     !mainNavigationState.value.navListVisibility["firstNav"] ||
-    (!mainNavigationState.value.navListVisibility["secondNav"] && mainNavigationState.value.hasSecondNav)
-  return hasHiddenNav
-})
+    (!mainNavigationState.value.navListVisibility["secondNav"] && mainNavigationState.value.hasSecondNav);
+  return hasHiddenNav;
+});
 
 const mainNavigationMarginBlockEnd = computed(() => {
-  return secondaryNavRects.value ? secondaryNavRects.value.width + props.gapBetweenFirstAndSecondNav : 0
-})
+  return secondaryNavRects.value ? secondaryNavRects.value.width + props.gapBetweenFirstAndSecondNav : 0;
+});
 
 const mainNavigationMarginBlockEndStr = computed(() => {
-  return mainNavigationMarginBlockEnd.value + "px"
-})
+  return mainNavigationMarginBlockEnd.value + "px";
+});
 
 const initTemplateRefs = async () => {
-  firstNavRef.value = navRefs.value["firstNav"] as HTMLUListElement | null
-  secondNavRef.value = navRefs.value["secondNav"] as HTMLUListElement | null
-  return
-}
+  firstNavRef.value = navRefs.value["firstNav"] as HTMLUListElement | null;
+  secondNavRef.value = navRefs.value["secondNav"] as HTMLUListElement | null;
+  return;
+};
 
 const getFlooredRect = (rect: DOMRect | null) => {
-  if (!rect) return null
+  if (!rect) return null;
   return {
     left: Math.floor(rect.left),
     right: Math.floor(rect.right),
@@ -289,22 +289,23 @@ const getFlooredRect = (rect: DOMRect | null) => {
     bottom: Math.floor(rect.bottom),
     width: Math.floor(rect.width),
     height: Math.floor(rect.height),
-  }
-}
+  };
+};
 
 const updateNavigationConfig = async (source: string) => {
   navigationWrapperRects.value =
-    getFlooredRect((navigationWrapperRef.value && navigationWrapperRef.value.getBoundingClientRect()) ?? null) || null
+    getFlooredRect((navigationWrapperRef.value && navigationWrapperRef.value.getBoundingClientRect()) ?? null) || null;
   secondaryNavRects.value =
-    getFlooredRect((secondaryNavRef.value && secondaryNavRef.value.getBoundingClientRect()) ?? null) || null
-  firstNavRects.value = getFlooredRect((firstNavRef.value && firstNavRef.value.getBoundingClientRect()) ?? null) || null
+    getFlooredRect((secondaryNavRef.value && secondaryNavRef.value.getBoundingClientRect()) ?? null) || null;
+  firstNavRects.value =
+    getFlooredRect((firstNavRef.value && firstNavRef.value.getBoundingClientRect()) ?? null) || null;
   secondNavRects.value =
-    getFlooredRect((secondNavRef.value && secondNavRef.value.getBoundingClientRect()) ?? null) || null
+    getFlooredRect((secondNavRef.value && secondNavRef.value.getBoundingClientRect()) ?? null) || null;
 
   if (collapseNavigationBelowWidth.value && firstNavRects.value) {
-    collapseBreakpoint.value = firstNavRects.value?.right
+    collapseBreakpoint.value = firstNavRects.value?.right;
   }
-}
+};
 
 const allowNavigationCollapse = computed(() => {
   return (
@@ -312,13 +313,13 @@ const allowNavigationCollapse = computed(() => {
     navigationWrapperRects.value &&
     secondaryNavRects.value !== null &&
     Math.floor(secondaryNavRects.value.left - props.gapBetweenFirstAndSecondNav) <= collapseBreakpoint.value
-  )
-})
+  );
+});
 
 const determineNavigationItemVisibility = (rect: DOMRect) => {
   // Check if navigation should be collapsed based on width breakpoint
   if (allowNavigationCollapse.value) {
-    return false
+    return false;
   }
 
   // Use default responsive visibility logic if wrapper exists
@@ -326,22 +327,22 @@ const determineNavigationItemVisibility = (rect: DOMRect) => {
     return (
       Math.floor(rect.right + mainNavigationMarginBlockEnd.value + props.gapBetweenFirstAndSecondNav) <
       navigationWrapperRects.value.right
-    )
+    );
   }
 
   // Default to visible
-  return true
-}
+  return true;
+};
 
 const initMainNavigationState = () => {
-  if (!mainNavigationItemsRefs.value) return
+  if (!mainNavigationItemsRefs.value) return;
 
   mainNavigationItemsRefs.value.forEach(async (item, index) => {
     // await nextTick()
-    const rect = item.getBoundingClientRect()
+    const rect = item.getBoundingClientRect();
 
-    const groupKey = item.dataset.groupKey
-    const localIndex = item.dataset.localIndex ? parseInt(item.dataset.localIndex, 10) : 0
+    const groupKey = item.dataset.groupKey;
+    const localIndex = item.dataset.localIndex ? parseInt(item.dataset.localIndex, 10) : 0;
     if (
       groupKey !== undefined &&
       groupKey !== null &&
@@ -357,7 +358,7 @@ const initMainNavigationState = () => {
           width: item.offsetWidth,
           visible: determineNavigationItemVisibility(rect),
         },
-      }
+      };
     }
 
     // Check if a single item has visible set to false and set the visibility of the group accordingly
@@ -368,58 +369,58 @@ const initMainNavigationState = () => {
       mainNavigationState.value.clonedNavLinks[groupKey][localIndex] &&
       mainNavigationState.value.clonedNavLinks[groupKey][localIndex].config?.visible === false
     ) {
-      mainNavigationState.value.navListVisibility[groupKey] = false
+      mainNavigationState.value.navListVisibility[groupKey] = false;
     } else if (typeof groupKey === "string") {
-      mainNavigationState.value.navListVisibility[groupKey] = true
+      mainNavigationState.value.navListVisibility[groupKey] = true;
     }
-  })
-}
+  });
+};
 
 // Function to set up click outside listeners
 const setupClickOutsideListeners = () => {
   navigationDetailsRefs.value?.forEach((element, index) => {
     onClickOutside(element, () => {
-      navigationDetailsRefs.value?.[index]?.removeAttribute("open")
-    })
-  })
+      navigationDetailsRefs.value?.[index]?.removeAttribute("open");
+    });
+  });
   // Add onClickOutside to overflowDetailsRef
   overflowDetailsRef.value &&
     onClickOutside(overflowDetailsRef.value, () => {
-      overflowDetailsRef.value?.removeAttribute("open")
-    })
-}
+      overflowDetailsRef.value?.removeAttribute("open");
+    });
+};
 
 onMounted(async () => {
   // If navigation is already initialized and loaded, skip the template refs setup
   if (navigationInitialized.value && navLoaded.value) {
     // But still set up click outside listeners as DOM elements may have changed
-    await nextTick()
-    setupClickOutsideListeners()
-    return
+    await nextTick();
+    setupClickOutsideListeners();
+    return;
   }
 
   await initTemplateRefs().then(() => {
-    navLoaded.value = true
-    navigationInitialized.value = true
-  })
+    navLoaded.value = true;
+    navigationInitialized.value = true;
+  });
 
-  setupClickOutsideListeners()
-})
+  setupClickOutsideListeners();
+});
 
 useResizeObserver(navigationWrapperRef, async () => {
   await updateNavigationConfig("useResizeObserver").then(() => {
-    initMainNavigationState()
-  })
-})
+    initMainNavigationState();
+  });
+});
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough)
+    resetElementClasses(props.styleClassPassthrough);
   }
-)
+);
 </script>
 
 <style lang="css">

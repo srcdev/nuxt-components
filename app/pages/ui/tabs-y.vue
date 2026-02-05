@@ -34,10 +34,10 @@
 </template>
 
 <script setup lang="ts">
-import type { ITabNav } from "~/types/components"
+import type { ITabNav } from "~/types/components";
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "UI Tabs",
@@ -45,7 +45,7 @@ useHead({
   bodyAttrs: {
     class: "home",
   },
-})
+});
 
 const navLinks6: ITabNav[] = [
   { name: "Home", path: "/" },
@@ -54,7 +54,7 @@ const navLinks6: ITabNav[] = [
   { name: "Tabs", path: "/ui/tabs" },
   { name: "Something Else", path: "/ui/something" },
   { name: "Home Again", path: "/" },
-]
+];
 </script>
 
 <style lang="css">
