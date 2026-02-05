@@ -109,7 +109,8 @@ export default {
   parameters: {
     docs: {
       description: {
-        component: "An interactive glow effect component that creates multiple containers with animated gradient borders that respond to mouse movement. Each container glows more intensely when the cursor is nearby, with customizable proximity detection, blur effects, and gradient animations.",
+        component:
+          "An interactive glow effect component that creates multiple containers with animated gradient borders that respond to mouse movement. Each container glows more intensely when the cursor is nearby, with customizable proximity detection, blur effects, and gradient animations.",
       },
     },
   },
@@ -134,7 +135,7 @@ const Template: StoryFn<ContainerGlowCoreArgs> = (args) => ({
             {{ args.itemCount }} container{{ args.itemCount > 1 ? 's' : '' }} • {{ args.config.vertical ? 'Vertical' : 'Horizontal' }} layout
           </p>
         </div>
-        
+
         <ContainerGlowCoreComponent
           :item-count="args.itemCount"
           :tag="args.tag"
@@ -154,7 +155,7 @@ const Template: StoryFn<ContainerGlowCoreArgs> = (args) => ({
                   Interactive glow card
                 </p>
               </div>
-              
+
               <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; text-align: center; padding: 16px 0;">
                 <div style="padding: 16px; background: rgba(0, 0, 0, 0.02); border-radius: 8px; margin-bottom: 16px;">
                   <h4 style="margin: 0 0 8px 0; color: #4b5563; font-size: 14px; font-weight: 600;">Effect Settings</h4>
@@ -164,7 +165,7 @@ const Template: StoryFn<ContainerGlowCoreArgs> = (args) => ({
                     <div>Blur: {{ args.config.blur }}px</div>
                   </div>
                 </div>
-                
+
                 <div style="padding: 12px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 6px; border-left: 3px solid #3b82f6;">
                   <p style="margin: 0; color: #1e40af; font-size: 12px; line-height: 1.4; font-weight: 500;">
                     💡 Hover to activate the glow effect with mouse tracking
@@ -193,7 +194,8 @@ SingleContainer.args = {
 SingleContainer.parameters = {
   docs: {
     description: {
-      story: "Single container with glow effects - perfect for highlighting individual elements or call-to-action cards.",
+      story:
+        "Single container with glow effects - perfect for highlighting individual elements or call-to-action cards.",
     },
   },
 };
@@ -210,7 +212,8 @@ FourContainers.args = {
 FourContainers.parameters = {
   docs: {
     description: {
-      story: "Four containers showing how the glow effect scales with multiple elements - ideal for feature grids or product showcases.",
+      story:
+        "Four containers showing how the glow effect scales with multiple elements - ideal for feature grids or product showcases.",
     },
   },
 };
@@ -239,7 +242,7 @@ export const HighIntensityGlow: StoryFn<ContainerGlowCoreArgs> = (args) => ({
             <span>Opacity: {{ args.config.opacity }}</span>
           </div>
         </div>
-        
+
         <ContainerGlowCoreComponent
           :item-count="args.itemCount"
           :tag="args.tag"
@@ -259,7 +262,7 @@ export const HighIntensityGlow: StoryFn<ContainerGlowCoreArgs> = (args) => ({
                   High-impact glow effect
                 </p>
               </div>
-              
+
               <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 16px;">
                 <div style="padding: 20px; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.1);">
                   <h4 style="margin: 0 0 12px 0; color: #f59e0b; font-size: 14px; font-weight: 600;">⚡ Power Settings</h4>
@@ -278,7 +281,7 @@ export const HighIntensityGlow: StoryFn<ContainerGlowCoreArgs> = (args) => ({
                     </div>
                   </div>
                 </div>
-                
+
                 <div style="padding: 16px; background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(139, 92, 246, 0.1)); border-radius: 8px; border: 1px solid rgba(255, 107, 107, 0.2);">
                   <p style="margin: 0; color: #ff6b6b; font-size: 11px; line-height: 1.4; font-weight: 500;">
                     🎯 Move cursor close for maximum glow intensity
@@ -306,7 +309,8 @@ HighIntensityGlow.args = {
 HighIntensityGlow.parameters = {
   docs: {
     description: {
-      story: "High-intensity glow configuration with increased proximity range, spread, blur, and opacity for dramatic visual effects.",
+      story:
+        "High-intensity glow configuration with increased proximity range, spread, blur, and opacity for dramatic visual effects.",
     },
   },
 };
@@ -326,7 +330,8 @@ SubtleGlow.args = {
 SubtleGlow.parameters = {
   docs: {
     description: {
-      story: "Subtle glow configuration with reduced intensity, tighter proximity, and minimal blur for elegant, understated effects.",
+      story:
+        "Subtle glow configuration with reduced intensity, tighter proximity, and minimal blur for elegant, understated effects.",
     },
   },
 };

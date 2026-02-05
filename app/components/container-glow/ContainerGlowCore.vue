@@ -194,7 +194,7 @@ onBeforeUnmount(() => {
       #4dffbf 288.0000042915344deg,
       hsla(0, 0%, 98%, 1) 1turn
     );
-    --opacity-active: 0.15;
+    --opacity-active: 0;
     --start: 0;
 
     position: relative;
