@@ -20,6 +20,7 @@ interface Config {
   blur: number;
   gap: number;
   vertical: boolean;
+  inactiveOpacity: number;
 }
 
 const props = defineProps({
@@ -43,6 +44,7 @@ const props = defineProps({
       blur: 20,
       gap: 32,
       vertical: false,
+      inactiveOpacity: 0,
     }),
   },
 });
@@ -57,6 +59,7 @@ const containerGlowItem = ref<HTMLElement[]>([]);
 // Cache frequently used values to avoid repeated access
 const configCache = computed(() => ({
   proximity: props.config.proximity,
+  inactiveOpacityStr: String(props.config.inactiveOpacity),
   gapStr: String(props.config.gap),
   blurStr: String(props.config.blur),
   spreadStr: String(props.config.spread),
@@ -92,7 +95,7 @@ const updateStyles = (event: PointerEvent) => {
     }
 
     const { x: eventX, y: eventY } = lastEventData;
-    const { proximity } = configCache.value;
+    const { proximity, inactiveOpacityStr } = configCache.value;
 
     // Process all elements
     for (const cardElem of containerGlowItem.value) {
@@ -109,7 +112,7 @@ const updateStyles = (event: PointerEvent) => {
       const isInProximity = eventX > leftBound && eventX < rightBound && eventY > topBound && eventY < bottomBound;
 
       // Set opacity based on proximity
-      cardElem.style.setProperty("--opacity-active", isInProximity ? "1" : "0");
+      cardElem.style.setProperty("--opacity-active", isInProximity ? "1" : inactiveOpacityStr);
 
       if (isInProximity) {
         // Only calculate angle when in proximity
@@ -191,7 +194,7 @@ onBeforeUnmount(() => {
       #4dffbf 288.0000042915344deg,
       hsla(0, 0%, 98%, 1) 1turn
     );
-    --opacity-active: 0;
+    --opacity-active: v-bind("props.config.inactiveOpacity");
     --start: 0;
 
     position: relative;

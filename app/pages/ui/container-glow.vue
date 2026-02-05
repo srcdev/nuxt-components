@@ -16,6 +16,7 @@
               blur: 20,
               gap: 32,
               vertical: false,
+              inactiveOpacity: 0,
             }"
           >
             <template v-for="(item, key) in data" :key="key" #[`container-glow-${key}`]>

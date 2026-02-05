@@ -12,7 +12,7 @@ interface ContainerGlowCoreArgs {
     blur: number;
     gap: number;
     vertical: boolean;
-    opacity: number;
+    inactiveOpacity: number;
   };
 }
 
@@ -79,9 +79,9 @@ export default {
         category: "Layout",
       },
     },
-    "config.opacity": {
+    "config.inactiveOpacity": {
       control: { type: "range", min: 0.05, max: 1, step: 0.05 },
-      description: "Opacity of the glow effect when not hovering",
+      description: "Opacity of the glow effect when not hovering (inactive state)",
       table: {
         category: "Glow Settings",
       },
@@ -103,7 +103,7 @@ export default {
       blur: 20,
       gap: 32,
       vertical: false,
-      opacity: 0.15,
+      inactiveOpacity: 0,
     },
   },
   parameters: {
@@ -239,7 +239,7 @@ export const HighIntensityGlow: StoryFn<ContainerGlowCoreArgs> = (args) => ({
             <span>Proximity: {{ args.config.proximity }}px</span>
             <span>Spread: {{ args.config.spread }}°</span>
             <span>Blur: {{ args.config.blur }}px</span>
-            <span>Opacity: {{ args.config.opacity }}</span>
+            <span>Inactive Opacity: {{ args.config.inactiveOpacity }}</span>
           </div>
         </div>
 
@@ -273,7 +273,7 @@ export const HighIntensityGlow: StoryFn<ContainerGlowCoreArgs> = (args) => ({
                     </div>
                     <div style="display: flex; justify-content: space-between;">
                       <span>Intensity:</span>
-                      <span style="color: #f59e0b;">{{ Math.round(args.config.opacity * 100) }}%</span>
+                      <span style="color: #f59e0b;">{{ Math.round(args.config.inactiveOpacity * 100) }}%</span>
                     </div>
                     <div style="display: flex; justify-content: space-between;">
                       <span>Blur:</span>
@@ -303,7 +303,7 @@ HighIntensityGlow.args = {
     blur: 40,
     gap: 48,
     vertical: false,
-    opacity: 0.6,
+    inactiveOpacity: 0,
   },
 };
 HighIntensityGlow.parameters = {
@@ -324,7 +324,7 @@ SubtleGlow.args = {
     blur: 10,
     gap: 20,
     vertical: false,
-    opacity: 0.08,
+    inactiveOpacity: 0,
   },
 };
 SubtleGlow.parameters = {
