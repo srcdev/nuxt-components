@@ -10,7 +10,7 @@ interface GlowingBorderStoryArgs {
 }
 
 export default {
-  title: "Components/Playground/GlowingBorder",
+  title: "Components/Ui/GlowingBorder",
   component: StorybookComponent,
   argTypes: {
     variant: {
