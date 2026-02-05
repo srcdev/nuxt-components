@@ -20,7 +20,6 @@ interface Config {
   blur: number;
   gap: number;
   vertical: boolean;
-  opacity: number;
 }
 
 const props = defineProps({
@@ -44,7 +43,6 @@ const props = defineProps({
       blur: 20,
       gap: 32,
       vertical: false,
-      opacity: 0.15,
     }),
   },
 });
@@ -59,7 +57,6 @@ const containerGlowItem = ref<HTMLElement[]>([]);
 // Cache frequently used values to avoid repeated access
 const configCache = computed(() => ({
   proximity: props.config.proximity,
-  opacityStr: String(props.config.opacity),
   gapStr: String(props.config.gap),
   blurStr: String(props.config.blur),
   spreadStr: String(props.config.spread),
@@ -95,7 +92,7 @@ const updateStyles = (event: PointerEvent) => {
     }
 
     const { x: eventX, y: eventY } = lastEventData;
-    const { proximity, opacityStr } = configCache.value;
+    const { proximity } = configCache.value;
 
     // Process all elements
     for (const cardElem of containerGlowItem.value) {
@@ -112,7 +109,7 @@ const updateStyles = (event: PointerEvent) => {
       const isInProximity = eventX > leftBound && eventX < rightBound && eventY > topBound && eventY < bottomBound;
 
       // Set opacity based on proximity
-      cardElem.style.setProperty("--opacity-active", isInProximity ? "1" : opacityStr);
+      cardElem.style.setProperty("--opacity-active", isInProximity ? "1" : "0");
 
       if (isInProximity) {
         // Only calculate angle when in proximity
