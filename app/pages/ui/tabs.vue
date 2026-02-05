@@ -102,20 +102,20 @@ interface ITabNav {
   path?: string
 }
 
-const navLinks3 = <ITabNav[]>[
+const navLinks3: ITabNav[] = [
   { name: "Home", path: "/" },
   { name: "Layout Row", path: "/ui/layout-row" },
   { name: "Dialogs", path: "/ui/dialog" },
 ]
 
-const navLinks4 = <ITabNav[]>[
+const navLinks4: ITabNav[] = [
   { name: "Home", path: "/" },
   { name: "Layout Row", path: "/ui/layout-row" },
   { name: "Dialogs", path: "/ui/dialog" },
   { name: "Tabs", path: "/ui/tabs" },
 ]
 
-const navLinks6 = <ITabNav[]>[
+const navLinks6: ITabNav[] = [
   { name: "Home", path: "/" },
   { name: "Layout Row", path: "/ui/layout-row" },
   { name: "Dialogs", path: "/ui/dialog" },

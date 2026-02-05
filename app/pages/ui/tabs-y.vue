@@ -47,7 +47,7 @@ useHead({
   },
 })
 
-const navLinks6 = <ITabNav[]>[
+const navLinks6: ITabNav[] = [
   { name: "Home", path: "/" },
   { name: "Layout Row", path: "/ui/layout-row" },
   { name: "Dialogs", path: "/ui/dialog" },
