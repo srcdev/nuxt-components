@@ -2,29 +2,29 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Layout Grid 'B'</h1>
-          <CanvasSwitcher v-model:canvasName="canvasName" />
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']">
-          <LayoutGridB :topRowSlot1ItemCount="6" :bottomRowItemCount="4" :styleClassPassthrough="[canvasName]">
-            <template v-slot:[`top-row-slot1-1-content`]>
+        <LayoutRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
+          <LayoutGridB :top-row-slot1-item-count="6" :bottom-row-item-count="4" :style-class-passthrough="[canvasName]">
+            <template #[`top-row-slot1-1-content`]>
               <p class="p-24">This is content slot 1</p>
             </template>
-            <template v-slot:[`top-row-slot1-2-content`]>
+            <template #[`top-row-slot1-2-content`]>
               <p class="p-24">This is content slot 2</p>
             </template>
-            <template v-slot:[`top-row-slot1-3-content`]>
+            <template #[`top-row-slot1-3-content`]>
               <p class="p-24">This is content slot 3</p>
             </template>
-            <template v-slot:[`top-row-slot1-4-content`]>
+            <template #[`top-row-slot1-4-content`]>
               <p class="p-24">This is content slot 4</p>
             </template>
-            <template v-slot:[`top-row-slot1-5-content`]>
+            <template #[`top-row-slot1-5-content`]>
               <p class="p-24">This is content slot 5</p>
             </template>
-            <template v-slot:[`top-row-slot1-6-content`]>
+            <template #[`top-row-slot1-6-content`]>
               <p class="p-24">This is content slot 6</p>
             </template>
 
@@ -66,7 +66,7 @@
               </p>
             </template>
 
-            <template v-slot:[`bottom-row-1-content`]>
+            <template #[`bottom-row-1-content`]>
               <h2 class="page-heading-3">This is content slot 1</h2>
               <p class="page-body-normal">
                 Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit
@@ -76,7 +76,7 @@
                 egestas enim nostra ultricies.
               </p>
             </template>
-            <template v-slot:[`bottom-row-2-content`]>
+            <template #[`bottom-row-2-content`]>
               <h2 class="page-heading-3">This is content slot 2</h2>
               <p class="page-body-normal">
                 Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit
@@ -86,7 +86,7 @@
                 egestas enim nostra ultricies.
               </p>
             </template>
-            <template v-slot:[`bottom-row-3-content`]>
+            <template #[`bottom-row-3-content`]>
               <h2 class="page-heading-3">This is content slot 3</h2>
               <p class="page-body-normal">
                 Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit
@@ -96,7 +96,7 @@
                 egestas enim nostra ultricies.
               </p>
             </template>
-            <template v-slot:[`bottom-row-4-content`]>
+            <template #[`bottom-row-4-content`]>
               <h2 class="page-heading-3">This is content slot 4</h2>
               <p class="page-body-normal">
                 Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit
@@ -114,11 +114,11 @@
 </template>
 
 <script setup lang="ts">
-import type { MediaCanvas } from "~/types/components"
+import type { MediaCanvas } from "~/types/components";
 
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "UI Layout Row",
@@ -126,44 +126,7 @@ useHead({
   bodyAttrs: {
     class: "home",
   },
-})
+});
 
-const canvasName = ref<MediaCanvas>("desktopCanvas")
-
-interface IAccordianData {
-  title: string
-  content: string
-}
-
-const data = ref<IAccordianData[]>([
-  {
-    title: "Item 1",
-    content:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!. Lorem ipsum dolor sit, adipisicing elit. Iusto, amet!",
-  },
-  {
-    title: "Item 2",
-    content: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!",
-  },
-  {
-    title: "Item 3",
-    content:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!",
-  },
-  {
-    title: "Item 4",
-    content:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!",
-  },
-  {
-    title: "Item 5",
-    content:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!",
-  },
-  {
-    title: "Item 6",
-    content:
-      "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!",
-  },
-])
+const canvasName = ref<MediaCanvas>("desktopCanvas");
 </script>

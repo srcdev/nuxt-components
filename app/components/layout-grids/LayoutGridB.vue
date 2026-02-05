@@ -3,7 +3,7 @@
     <section class="top-row">
       <div class="top-row-slot-1">
         <div class="top-row-slot-1-inner">
-          <div v-for="key in topRowSlot1ItemCount" class="panel">
+          <div v-for="key in topRowSlot1ItemCount" :key="key" class="panel">
             <slot :name="`top-row-slot1-${key}-content`"></slot>
           </div>
         </div>
@@ -22,7 +22,7 @@
     </section>
 
     <section class="bottom-row">
-      <div v-for="key in bottomRowItemCount" class="panel">
+      <div v-for="key in bottomRowItemCount" :key="key" class="panel">
         <slot :name="`bottom-row-${key}-content`"></slot>
       </div>
     </section>
@@ -43,16 +43,16 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough)
+    resetElementClasses(props.styleClassPassthrough);
   }
-)
+);
 </script>
 
 <style lang="css">

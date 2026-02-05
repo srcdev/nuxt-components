@@ -36,13 +36,13 @@
 </template>
 
 <script setup lang="ts">
-import type { MediaCanvas } from "../../types/components"
+import type { MediaCanvas } from "../../types/components";
 
-const canvasName = defineModel<MediaCanvas>("canvasName")
+const canvasName = defineModel<MediaCanvas>("canvasName");
 
 const updateCanvas = (setCanvas: MediaCanvas) => {
-  canvasName.value = setCanvas
-}
+  canvasName.value = setCanvas;
+};
 </script>
 
 <style lang="css">
@@ -91,7 +91,7 @@ const updateCanvas = (setCanvas: MediaCanvas) => {
   max-width: 768px;
 }
 .laptopCanvas {
-  max-width: 1060px;
+  max-width: 1064px;
 }
 .desktopCanvas {
   max-width: 1280px;
