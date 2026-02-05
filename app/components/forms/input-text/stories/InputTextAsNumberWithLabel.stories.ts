@@ -1,5 +1,4 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import { ref, reactive, computed } from "vue";
 import StorybookComponent from "../variants/InputTextAsNumberWithLabel.vue";
 import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms.d";
 

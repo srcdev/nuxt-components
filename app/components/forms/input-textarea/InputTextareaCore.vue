@@ -17,14 +17,14 @@
     </span>
 
     <textarea
+      :id
+      ref="inputField"
+      v-model="modelValue"
       :maxlength
       :placeholder
-      :id
       :name
       :required
       :class="['input-textarea-core', elementClasses, { dirty: isDirty }, { active: isActive }]"
-      v-model="modelValue"
-      ref="inputField"
       :aria-invalid="fieldHasError"
       :aria-describedby
       @focusin="updateFocus(true)"
@@ -160,7 +160,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     padding-block: var(--input-element-padding-block);
     padding-inline: var(--input-element-padding-inline);
 
-    min-height: 4rem;
+    min-height: 6lh;
 
     &::placeholder {
       color: var(--input-placeholder-color);

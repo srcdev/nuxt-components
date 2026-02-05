@@ -6,8 +6,8 @@
       :class="[elementClasses, inputVariant, { dirty: isDirty }, { active: isActive }]"
     >
       <InputLabel
-        :for="id"
         :id
+        :for="id"
         :theme
         :name
         :input-variant
@@ -34,11 +34,11 @@
       </InputDescription>
 
       <InputTextareaCore
-        v-model="modelValue"
-        v-model:isDirty="isDirty"
-        v-model:isActive="isActive"
-        :maxlength
         :id
+        v-model="modelValue"
+        v-model:is-dirty="isDirty"
+        v-model:is-active="isActive"
+        :maxlength
         :name
         :placeholder
         :label
@@ -48,6 +48,7 @@
         :theme
         :size
         :input-variant
+        :aria-describedby
       >
         <template v-if="slots.left" #left>
           <slot name="left"></slot>
@@ -56,7 +57,7 @@
           <slot name="right"></slot>
         </template>
       </InputTextareaCore>
-      <InputError :errorMessage :showError="fieldHasError" :id :isDetached="false" :inputVariant />
+      <InputError :id :error-message :show-error="fieldHasError" :is-detached="false" :input-variant />
     </div>
 
     <InputDescription
