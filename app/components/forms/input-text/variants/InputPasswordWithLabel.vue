@@ -6,24 +6,22 @@
     :name
     :placeholder
     :label
-    :errorMessage
-    :fieldHasError
+    :error-message
+    :field-has-error
     :required
-    :styleClassPassthrough
+    :style-class-passthrough
     :theme
     :size
-    :inputVariant
+    :input-variant
   >
     <template #right>
       <InputButtonCore
         type="button"
-        @click.stop.prevent="toggleDisplayPassword"
         :is-pending="false"
-        :buttonText
+        :button-text
         :theme="buttonTheme"
         :size
-        @focusin="updateFocus(name, true)"
-        @focusout="updateFocus(name, false)"
+        @click.stop.prevent="toggleDisplayPassword"
       >
         <template #iconOnly>
           <Icon v-if="displayPassword" name="radix-icons:eye-none" class="icon" />
@@ -88,28 +86,20 @@ const props = defineProps({
   },
 });
 
-const formTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
-});
-
 const buttonTheme = computed(() => {
   return props.inputVariant === "underlined" ? "input-action-underlined" : "input-action";
 });
 
-const modelValue = defineModel();
+const modelValue = defineModel<string>();
 
-const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const updateFocus = (name: string, isFocused: boolean) => {
-  // console.log('updateFocus', name, isFocused);
-  // modelValue.value.focusedField = isFocused ? name : '';
-};
-
-const inputType = ref<"text" | "password">(props.type);
+const inputType = computed<"text" | "password">(() => {
+  return displayPassword.value ? "text" : "password";
+});
 
 const displayPassword = ref(false);
 const buttonText = computed(() => {
-  inputType.value = displayPassword.value ? "text" : "password";
   return displayPassword.value ? "Hide password" : "Show password";
 });
 const toggleDisplayPassword = () => {

@@ -19,15 +19,15 @@
     </span>
 
     <input
+      :id
+      ref="inputField"
+      v-model="modelValue"
       :type
       :placeholder
-      :id
       :name
       :required
       :maxlength
       :class="['input-text-core', elementClasses, { dirty: isDirty }, { active: isActive }]"
-      v-model="modelValue"
-      ref="inputField"
       :aria-invalid="fieldHasError"
       :aria-describedby
       :pattern="inputPattern"
@@ -106,9 +106,9 @@ const formTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 
-const modelValue = defineModel();
-const isDirty = defineModel("isDirty");
-const isActive = defineModel("isActive");
+const modelValue = defineModel<string>();
+const isDirty = defineModel<boolean>("isDirty");
+const isActive = defineModel<boolean>("isActive");
 
 const inputPattern = computed(() => {
   return props.inputmode === "numeric" ? "[0-9]+" : undefined;
@@ -126,17 +126,22 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 // Leaving like this could lead to memory leaks
 const validateInput = () => {
   if (inputField.value !== null) {
-    inputField.value.addEventListener("beforeinput", (event: any) => {
-      let beforeValue = modelValue.value;
-      event.target.addEventListener(
-        "input",
-        () => {
-          if (inputField.value !== null && inputField.value.validity.patternMismatch) {
-            inputField.value.value = beforeValue as string;
-          }
-        },
-        { once: true }
-      );
+    inputField.value.addEventListener("beforeinput", (event: InputEvent) => {
+      const beforeValue = modelValue.value;
+      if (event.data === null) {
+        // Handle deletion case
+        return;
+      } else if (event.target) {
+        event.target.addEventListener(
+          "input",
+          () => {
+            if (inputField.value !== null && inputField.value.validity.patternMismatch) {
+              inputField.value.value = beforeValue as string;
+            }
+          },
+          { once: true }
+        );
+      }
     });
   }
 };

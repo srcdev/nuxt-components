@@ -5,8 +5,8 @@
     :class="[inputVariant, elementClasses, { dirty: isDirty }, { active: isActive }]"
   >
     <InputLabel
-      :for="id"
       :id
+      :for="id"
       :theme
       :name
       :input-variant
@@ -21,34 +21,34 @@
     </div>
 
     <InputTextCore
-      v-model="modelValue"
-      v-model:isDirty="isDirty"
-      v-model:isActive="isActive"
+      :id
+      v-model="internalStringValue"
+      v-model:is-dirty="isDirty"
+      v-model:is-active="isActive"
       type="text"
       :maxlength
-      :id
       :name
       :placeholder
       :label
-      :errorMessage
-      :fieldHasError
+      :error-message
+      :field-has-error
       :required
-      :styleClassPassthrough
+      :style-class-passthrough
       :theme
       inputmode="numeric"
-      :ariaDescribedby
+      :aria-describedby
       :size
-      :inputVariant
+      :input-variant
     >
       <template v-if="slots.left" #left>
         <InputButtonCore
           type="button"
-          @click.stop.prevent="updateValue(-step, Number(modelValue) > min)"
-          :readonly="Number(modelValue) <= min"
+          :readonly="(modelValue ?? 0) <= min"
           :is-pending="false"
-          buttonText="Step down"
+          button-text="Step down"
           theme="input-action"
           :size
+          @click.stop.prevent="updateValue(-step, (modelValue ?? 0) > min)"
         >
           <template #iconOnly>
             <slot name="left"></slot>
@@ -58,12 +58,12 @@
       <template v-if="slots.right" #right>
         <InputButtonCore
           type="button"
-          @click.stop.prevent="updateValue(step, Number(modelValue) < max)"
-          :readonly="Number(modelValue) >= max"
+          :readonly="(modelValue ?? 0) >= max"
           :is-pending="false"
-          buttonText="Step up"
+          button-text="Step up"
           theme="input-action"
           :size
+          @click.stop.prevent="updateValue(step, (modelValue ?? 0) < max)"
         >
           <template #iconOnly>
             <slot name="right"></slot>
@@ -71,7 +71,7 @@
         </InputButtonCore>
       </template>
     </InputTextCore>
-    <InputError :errorMessage :showError="fieldHasError" :id="errorId" :isDetached="true" />
+    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" />
   </div>
 </template>
 
@@ -149,16 +149,29 @@ const ariaDescribedby = computed(() => {
   return props.fieldHasError ? errorId : ariaDescribedbyId;
 });
 
-const modelValue = defineModel();
+const modelValue = defineModel<number>();
 const isActive = ref<boolean>(false);
 const isDirty = ref<boolean>(false);
+
+// Convert between string (for input) and number (for modelValue)
+const internalStringValue = computed({
+  get: () => modelValue.value?.toString() ?? "",
+  set: (value: string) => {
+    const numericValue = value === "" ? undefined : Number(value);
+    // Only update if it's a valid number or empty string
+    if (value === "" || !isNaN(numericValue as number)) {
+      modelValue.value = numericValue;
+    }
+  },
+});
 
 const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 const minLength = computed(() => `${props.max.toString().length + 1}em`);
 
 const updateValue = (step: number, withinRangeLimit: boolean) => {
   if (withinRangeLimit) {
-    modelValue.value = (Number(modelValue.value) + step) as number;
+    const currentValue = modelValue.value ?? 0;
+    modelValue.value = currentValue + step;
   }
 };
 

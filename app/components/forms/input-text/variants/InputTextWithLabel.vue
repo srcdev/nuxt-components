@@ -6,8 +6,8 @@
       :class="[elementClasses, inputVariant, { dirty: isDirty }, { active: isActive }]"
     >
       <InputLabel
-        :for="id"
         :id
+        :for="id"
         :theme
         :name
         :input-variant
@@ -34,17 +34,17 @@
       </InputDescription>
 
       <InputTextCore
+        :id
         v-model="modelValue"
-        v-model:isDirty="isDirty"
-        v-model:isActive="isActive"
+        v-model:is-dirty="isDirty"
+        v-model:is-active="isActive"
         :type
         :inputmode
         :maxlength
-        :id
         :name
         :placeholder
         :label
-        :errorMessage
+        :error-message
         :field-has-error
         :required
         :style-class-passthrough
@@ -61,7 +61,7 @@
         </template>
       </InputTextCore>
 
-      <InputError :errorMessage :showError="fieldHasError" :id="errorId" :isDetached="false" :inputVariant />
+      <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="false" :input-variant />
     </div>
 
     <InputDescription
@@ -152,7 +152,7 @@ const ariaDescribedby = computed(() => {
   return props.fieldHasError ? errorId : ariaDescribedbyId;
 });
 
-const modelValue = defineModel();
+const modelValue = defineModel<string>();
 const isActive = ref<boolean>(false);
 const isDirty = ref<boolean>(false);
 
