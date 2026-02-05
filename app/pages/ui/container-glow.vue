@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Container Glow Effect</h1>
           <p>Glow will track mouse position</p>
 
@@ -19,7 +19,7 @@
               opacity: 0.15,
             }"
           >
-            <template v-for="(item, key) in data" :key="key" v-slot:[`container-glow-${key}`]>
+            <template v-for="(item, key) in data" :key="key" #[`container-glow-${key}`]>
               <div class="example-card p-12">
                 <h3 class="page-heading-3">{{ item.title }}</h3>
                 <p class="pbs-24">{{ item.content }}</p>
@@ -35,15 +35,15 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Container Glow Effect",
   meta: [{ name: "description", content: "Container Glow Effect" }],
   bodyAttrs: {
-    class: "",
+    class: "container-glow-core-page",
   },
-})
+});
 
 const data = [
   {
@@ -60,7 +60,7 @@ const data = [
     content:
       "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!, Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet! Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iusto, amet!",
   },
-]
+];
 </script>
 
 <style lang="css">

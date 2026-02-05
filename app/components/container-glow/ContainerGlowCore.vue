@@ -1,11 +1,11 @@
 <template>
-  <div class="container-glow-wrapper" :class="elementClasses" ref="containerGlowWrapper">
+  <div ref="containerGlowWrapper" class="container-glow-wrapper" :class="elementClasses">
     <component
       :is="tag"
       v-for="(item, key) in itemCount"
       :key="key"
-      class="container-glow-core"
       ref="containerGlowItem"
+      class="container-glow-core"
     >
       <div class="glows"></div>
       <slot :name="`container-glow-${key}`"></slot>
@@ -15,12 +15,12 @@
 
 <script setup lang="ts">
 interface Config {
-  proximity: number
-  spread: number
-  blur: number
-  gap: number
-  vertical: boolean
-  opacity: number
+  proximity: number;
+  spread: number;
+  blur: number;
+  gap: number;
+  vertical: boolean;
+  opacity: number;
 }
 
 const props = defineProps({
@@ -47,14 +47,14 @@ const props = defineProps({
       opacity: 0.15,
     }),
   },
-})
+});
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const controller = new AbortController()
+const controller = new AbortController();
 
-const containerGlowWrapper = ref<HTMLElement>()
-const containerGlowItem = ref<HTMLElement[]>([])
+const containerGlowWrapper = ref<HTMLElement>();
+const containerGlowItem = ref<HTMLElement[]>([]);
 
 // Cache frequently used values to avoid repeated access
 const configCache = computed(() => ({
@@ -64,107 +64,107 @@ const configCache = computed(() => ({
   blurStr: String(props.config.blur),
   spreadStr: String(props.config.spread),
   direction: props.config.vertical ? "column" : "row",
-}))
+}));
 
 // Pre-calculate constants to avoid repeated calculations
-const ANGLE_OFFSET = 90
-const FULL_CIRCLE = 360
-const RAD_TO_DEG = 180 / Math.PI
+const ANGLE_OFFSET = 90;
+const FULL_CIRCLE = 360;
+const RAD_TO_DEG = 180 / Math.PI;
 
 // Throttle mechanism using RAF
-let rafId: number | null = null
-let lastEventData: { x: number; y: number } | null = null
+let rafId: number | null = null;
+let lastEventData: { x: number; y: number } | null = null;
 
 const updateStyles = (event: PointerEvent) => {
   // Early return if event coordinates are not available
   if (typeof event.x !== "number" || typeof event.y !== "number") {
-    return
+    return;
   }
 
   // Store event data and schedule update
-  lastEventData = { x: event.x, y: event.y }
+  lastEventData = { x: event.x, y: event.y };
 
   if (rafId !== null) {
-    return // Already scheduled
+    return; // Already scheduled
   }
 
   rafId = requestAnimationFrame(() => {
     if (!lastEventData) {
-      rafId = null
-      return
+      rafId = null;
+      return;
     }
 
-    const { x: eventX, y: eventY } = lastEventData
-    const { proximity, opacityStr } = configCache.value
+    const { x: eventX, y: eventY } = lastEventData;
+    const { proximity, opacityStr } = configCache.value;
 
     // Process all elements
     for (const cardElem of containerGlowItem.value) {
       // Check the card against the proximity and then start updating
-      const cardBounds = cardElem.getBoundingClientRect()
+      const cardBounds = cardElem.getBoundingClientRect();
 
       // Pre-calculate bounds to avoid repeated operations
-      const leftBound = cardBounds.left - proximity
-      const rightBound = cardBounds.left + cardBounds.width + proximity
-      const topBound = cardBounds.top - proximity
-      const bottomBound = cardBounds.top + cardBounds.height + proximity
+      const leftBound = cardBounds.left - proximity;
+      const rightBound = cardBounds.left + cardBounds.width + proximity;
+      const topBound = cardBounds.top - proximity;
+      const bottomBound = cardBounds.top + cardBounds.height + proximity;
 
       // Check proximity with pre-calculated bounds
-      const isInProximity = eventX > leftBound && eventX < rightBound && eventY > topBound && eventY < bottomBound
+      const isInProximity = eventX > leftBound && eventX < rightBound && eventY > topBound && eventY < bottomBound;
 
       // Set opacity based on proximity
-      cardElem.style.setProperty("--opacity-active", isInProximity ? "1" : opacityStr)
+      cardElem.style.setProperty("--opacity-active", isInProximity ? "1" : opacityStr);
 
       if (isInProximity) {
         // Only calculate angle when in proximity
-        const cardCentreX = cardBounds.left + cardBounds.width * 0.5
-        const cardCentreY = cardBounds.top + cardBounds.height * 0.5
+        const cardCentreX = cardBounds.left + cardBounds.width * 0.5;
+        const cardCentreY = cardBounds.top + cardBounds.height * 0.5;
 
-        let angle = Math.atan2(eventY - cardCentreY, eventX - cardCentreX) * RAD_TO_DEG
-        angle = angle < 0 ? angle + FULL_CIRCLE : angle
+        let angle = Math.atan2(eventY - cardCentreY, eventX - cardCentreX) * RAD_TO_DEG;
+        angle = angle < 0 ? angle + FULL_CIRCLE : angle;
 
-        cardElem.style.setProperty("--start", String(angle + ANGLE_OFFSET))
+        cardElem.style.setProperty("--start", String(angle + ANGLE_OFFSET));
       }
     }
 
-    rafId = null
-  })
-}
+    rafId = null;
+  });
+};
 
 const applyStyles = () => {
-  if (!containerGlowWrapper.value) return
+  if (!containerGlowWrapper.value) return;
 
-  const { gapStr, blurStr, spreadStr, direction } = configCache.value
-  const wrapper = containerGlowWrapper.value
+  const { gapStr, blurStr, spreadStr, direction } = configCache.value;
+  const wrapper = containerGlowWrapper.value;
 
   // Batch DOM updates
-  wrapper.style.setProperty("--gap", gapStr)
-  wrapper.style.setProperty("--blur", blurStr)
-  wrapper.style.setProperty("--spread", spreadStr)
-  wrapper.style.setProperty("--direction", direction)
-}
+  wrapper.style.setProperty("--gap", gapStr);
+  wrapper.style.setProperty("--blur", blurStr);
+  wrapper.style.setProperty("--spread", spreadStr);
+  wrapper.style.setProperty("--direction", direction);
+};
 
 // Watch for config changes and reapply styles
-watch(() => props.config, applyStyles, { deep: true })
+watch(() => props.config, applyStyles, { deep: true });
 
 onMounted(() => {
-  applyStyles()
+  applyStyles();
   if (containerGlowWrapper.value) {
     document.body.addEventListener("pointermove", updateStyles, {
       signal: controller.signal,
       passive: true, // Improve scroll performance
-    })
+    });
   }
-})
+});
 
 onBeforeUnmount(() => {
   // Clean up RAF if pending
   if (rafId !== null) {
-    cancelAnimationFrame(rafId)
-    rafId = null
+    cancelAnimationFrame(rafId);
+    rafId = null;
   }
-  lastEventData = null
-  controller.abort()
-})
+  lastEventData = null;
+  controller.abort();
+});
 </script>
 
 <style lang="css">
