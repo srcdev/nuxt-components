@@ -53,6 +53,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   .content-container {
     --gutter: 16px;
     --content-max-width: auto;
+    --justify-content: initial;
 
     display: grid;
 
@@ -65,18 +66,19 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       var(--gutter)
       [gutter-end];
 
-    justify-content: center;
+    justify-content: var(--justify-content);
     box-sizing: border-box;
 
-    @container content-container (width >= 1064px) {
+    @container content-container (width >= 1092px) {
       --gutter: 0;
       --content-max-width: 1064px;
+      --justify-content: center;
     }
 
     .content-container-inner {
       grid-column: content;
 
-      @container content-container (width >= 1064px) {
+      @container content-container (width >= 1092px) {
         grid-column: gutter;
       }
     }
