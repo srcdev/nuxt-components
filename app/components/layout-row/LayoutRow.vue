@@ -1,9 +1,9 @@
 <template>
   <component
     :is="tag"
+    :id
     class="layout-row"
     :class="elementClasses"
-    :id
     :tab-index="isLandmark ? 0 : null"
     :aria-label="isLandmark ? 'Layout Row Landmark' : undefined"
   >
@@ -25,7 +25,7 @@ const props = defineProps({
     type: String,
     default: "div",
     validator(value: string) {
-      return ["div", "section", "article", "aside", "header", "footer", "main", "nav", "ul", "ol"].includes(value)
+      return ["div", "section", "article", "aside", "header", "footer", "main", "nav", "ul", "ol"].includes(value);
     },
   },
   variant: {
@@ -48,7 +48,7 @@ const props = defineProps({
         "full-width",
         "full-content",
         "full-content-nopad",
-      ].includes(value)
+      ].includes(value);
     },
   },
   id: {
@@ -63,9 +63,9 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">
@@ -83,7 +83,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   /** TRACK WIDTHS **/
   --full-max-width: 1fr;
   --popout-max-width: 1400px;
-  --content-max-width: 1060px;
+  --content-max-width: 1064px;
   --inset-content-max-width: 840px;
 
   /** TRACK SIZES **/
@@ -109,6 +109,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     [popout-end]
     var(--full)
     [full-end];
+
+  .layout-row-inner {
+    container-type: inline-size;
+  }
 }
 
 /** CLASSES **/

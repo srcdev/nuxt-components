@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Layout rows</h1>
         </LayoutRow>
 
@@ -64,7 +64,7 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <h2 class="page-heading-2">Content Track (1060px)</h2>
+          <h2 class="page-heading-2">Content Track (1064px)</h2>
           <pre>variant="content"</pre>
           <p>
             Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit
@@ -127,7 +127,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "UI Layout Row",
@@ -135,5 +135,5 @@ useHead({
   bodyAttrs: {
     class: "home",
   },
-})
+});
 </script>
