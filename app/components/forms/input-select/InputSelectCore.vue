@@ -5,7 +5,7 @@
     :data-size="size"
     :class="[inputVariant, size, { dirty: isDirty }, { active: isActive }, { error: fieldHasError }]"
   >
-    <select v-model="modelValue" class="input-select-core" :name :id :title>
+    <select :id v-model="modelValue" class="input-select-core" :name :title>
       <option v-if="placeholder" value="" readonly :selected="!modelValue" class="input-select-core-option placeholder">
         {{ placeholder }}
       </option>
@@ -13,7 +13,7 @@
         v-for="item in fieldData.data"
         :key="item.id"
         :value="item.value"
-        :selected="item.value === modelValue"
+        :selected="Number(item.value) === modelValue"
         class="input-select-core-option"
       >
         <Icon
@@ -32,56 +32,37 @@
 <script setup lang="ts">
 import type { FormTheme, FormSize, InputVariant, IFormMultipleOptions } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  title: {
-    type: String,
-    default: "Please select an option",
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "medium",
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  inputVariant: {
-    type: String as PropType<InputVariant>,
-    default: "normal",
-  },
+interface Props {
+  id: string;
+  name: string;
+  placeholder?: string;
+  title?: string;
+  required?: boolean;
+  fieldHasError?: boolean;
+  size?: FormSize;
+  styleClassPassthrough?: string | string[];
+  theme?: FormTheme;
+  inputVariant?: InputVariant;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  placeholder: "",
+  title: "Please select an option",
+  required: false,
+  fieldHasError: false,
+  size: "medium",
+  styleClassPassthrough: () => [],
+  theme: "primary",
+  inputVariant: "normal",
 });
 
 const formTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 
-const modelValue = defineModel({ required: true });
-const isDirty = defineModel("isDirty");
-const isActive = defineModel("isActive");
+const modelValue = defineModel<string | number | readonly number[]>({ required: true });
+const isDirty = defineModel<boolean>("isDirty");
+const isActive = defineModel<boolean>("isActive");
 const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 </script>
 

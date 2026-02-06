@@ -8,31 +8,20 @@
 <script setup lang="ts">
 import type { FormTheme, InputVariant } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  inputVariant: {
-    type: String as PropType<InputVariant>,
-    default: "normal",
-  },
+interface Props {
+  id: string;
+  name: string;
+  fieldHasError?: boolean;
+  styleClassPassthrough?: string | string[];
+  theme?: FormTheme;
+  inputVariant?: InputVariant;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  fieldHasError: false,
+  styleClassPassthrough: () => [],
+  theme: "primary",
+  inputVariant: "normal",
 });
 
 const slots = useSlots();

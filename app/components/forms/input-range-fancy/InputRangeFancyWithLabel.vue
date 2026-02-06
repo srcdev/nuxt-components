@@ -6,11 +6,11 @@
     </template>
 
     <InputRangeFancyCore
-      v-model="modelValue"
       :id
+      v-model="modelValue"
       :name
-      :rangeLowLabel
-      :rangeHighLabel
+      :range-low-label
+      :range-high-label
       :min
       :max
       :step
@@ -18,84 +18,51 @@
       :required
       :size
       :weight
-      :fieldHasError
+      :field-has-error
     />
-    <InputError :errorMessage :showError="fieldHasError" :id :isDetached="true" :styleClassPassthrough="['mbe-20']" />
+    <InputError
+      :id
+      :error-message
+      :show-error="fieldHasError"
+      :is-detached="true"
+      :style-class-passthrough="['mbe-20']"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  rangeLowLabel: {
-    type: String,
-    required: true,
-  },
-  rangeHighLabel: {
-    type: String,
-    required: true,
-  },
-  min: {
-    type: Number,
-    required: true,
-  },
-  max: {
-    type: Number,
-    required: true,
-  },
-  step: {
-    type: Number,
-    default: 1,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  errorMessage: {
-    type: [Object, String],
-    required: true,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "medium",
-  },
-  weight: {
-    type: String as PropType<FormWeight>,
-    default: "wght-400",
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  deepCssClassPassthrough: {
-    type: String,
-    default: "",
-  },
+interface Props {
+  id: string;
+  name: string;
+  label: string;
+  rangeLowLabel: string;
+  rangeHighLabel: string;
+  min: number;
+  max: number;
+  step?: number;
+  placeholder?: string;
+  errorMessage: object | string;
+  fieldHasError?: boolean;
+  required?: boolean;
+  theme?: FormTheme;
+  size?: FormSize;
+  weight?: FormWeight;
+  styleClassPassthrough?: string | string[];
+  deepCssClassPassthrough?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  step: 1,
+  placeholder: "",
+  fieldHasError: false,
+  required: false,
+  theme: "primary",
+  size: "medium",
+  weight: "wght-400",
+  styleClassPassthrough: () => [],
+  deepCssClassPassthrough: "",
 });
 
 const slots = useSlots();

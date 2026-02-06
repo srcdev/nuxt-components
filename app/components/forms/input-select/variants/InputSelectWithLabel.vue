@@ -8,8 +8,8 @@
       :data-size="size"
     >
       <InputLabel
-        :for="id"
         :id
+        :for="id"
         :theme
         :name
         :input-variant
@@ -36,11 +36,11 @@
       </InputDescription>
 
       <InputSelectCore
-        v-model="modelValue"
-        v-model:fieldData="fieldData"
-        v-model:isDirty="isDirty"
-        v-model:isActive="isActive"
         :id
+        v-model="modelValue"
+        v-model:field-data="fieldData"
+        v-model:is-dirty="isDirty"
+        v-model:is-active="isActive"
         :name
         :placeholder
         :field-has-error
@@ -53,11 +53,11 @@
       />
 
       <InputError
-        :errorMessage="errorMessage"
-        :showError="fieldHasError"
         :id="errorId"
-        :isDetached="false"
-        :inputVariant
+        :error-message="errorMessage"
+        :show-error="fieldHasError"
+        :is-detached="false"
+        :input-variant
       />
     </div>
     <InputDescription
@@ -79,54 +79,31 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
-import type { IFormMultipleOptions } from "../../../../types/forms/types.forms";
+import type { FormTheme, FormSize, InputVariant, IFormMultipleOptions } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  dataTestid: {
-    type: String,
-    default: "input-select-with-label",
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  errorMessage: {
-    type: [Object, String],
-    required: true,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "medium",
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  inputVariant: {
-    type: String as PropType<InputVariant>,
-    default: "normal",
-  },
+interface Props {
+  dataTestid?: string;
+  name: string;
+  label: string;
+  placeholder?: string;
+  errorMessage: object | string;
+  required?: boolean;
+  fieldHasError?: boolean;
+  size?: FormSize;
+  styleClassPassthrough?: string | string[];
+  theme?: FormTheme;
+  inputVariant?: InputVariant;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  dataTestid: "input-select-with-label",
+  placeholder: "",
+  required: false,
+  fieldHasError: false,
+  size: "medium",
+  styleClassPassthrough: () => [],
+  theme: "primary",
+  inputVariant: "normal",
 });
 
 const slots = useSlots();
@@ -142,8 +119,8 @@ const ariaDescribedby = computed(() => {
   return props.fieldHasError ? errorId : ariaDescribedbyId;
 });
 
-const modelValue = defineModel({ required: true });
-const isDirty = defineModel("isDirty");
-const isActive = defineModel("isActive");
-const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
+const modelValue = defineModel<string | number | readonly number[]>({ required: true });
+const isDirty = defineModel<boolean>("isDirty");
+const isActive = defineModel<boolean>("isActive");
+const fieldData = defineModel<IFormMultipleOptions>("fieldData");
 </script>

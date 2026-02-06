@@ -8,8 +8,10 @@
       <slot v-if="slots.markers" name="markers"></slot>
 
       <input
-        type="range"
         :id
+        ref="inputRange"
+        v-model="modelValue"
+        type="range"
         :name
         :required
         :min
@@ -23,8 +25,6 @@
           styleClassPassthrough,
           { 'has-markers': slots.markers },
         ]"
-        v-model="modelValue"
-        ref="inputRange"
       />
 
       <slot v-if="slots.datalist" name="datalist"></slot>
@@ -38,55 +38,30 @@
 <script setup lang="ts">
 import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  min: {
-    type: Number,
-    required: true,
-  },
-  max: {
-    type: Number,
-    required: true,
-  },
-  step: {
-    type: Number,
-    default: 1,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "default",
-  },
-  weight: {
-    type: String as PropType<FormWeight>,
-    default: "normal",
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+interface Props {
+  id: string;
+  name: string;
+  min: number;
+  max: number;
+  step?: number;
+  placeholder?: string;
+  required?: boolean;
+  theme?: FormTheme;
+  size?: FormSize;
+  weight?: FormWeight;
+  fieldHasError?: boolean;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  step: 1,
+  placeholder: "",
+  required: false,
+  theme: "primary",
+  size: "default",
+  weight: "normal",
+  fieldHasError: false,
+  styleClassPassthrough: () => [],
 });
 
 const slots = useSlots();
@@ -96,15 +71,6 @@ const formTheme = computed(() => {
 });
 
 const modelValue = defineModel<number | readonly number[]>();
-
-// @input="changeBackgroundColor"
-const changeBackgroundColor = () => {
-  console.log("changeBackgroundColor()");
-  const inputRange = ref<HTMLInputElement | null>(null);
-  if (inputRange.value !== null) {
-    inputRange.value.style.accentColor = "hsl(" + modelValue.value + ", 100%, 50%)";
-  }
-};
 </script>
 
 <style lang="css">

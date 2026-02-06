@@ -24,40 +24,25 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  legend: {
-    type: String,
-    default: "",
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  dataTestid: {
-    type: String,
-    default: "",
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+interface Props {
+  id: string;
+  name: string;
+  legend?: string;
+  required?: boolean;
+  fieldHasError?: boolean;
+  dataTestid?: string;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  legend: "",
+  required: false,
+  fieldHasError: false,
+  dataTestid: "",
+  styleClassPassthrough: () => [],
 });
 
 const slots = useSlots();
-// const hasDescriptionSlot = computed(() => slots.description !== undefined);
-// const hasDescription = computed(() => slots.description !== undefined);
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
@@ -66,15 +51,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   margin: 0;
   padding: 0;
   border: 0;
-
-  &.single-checkbox-fieldset {
-  }
-
-  &.multiple-checkboxes-fieldset {
-  }
-
-  &.multiple-radiobuttons-fieldset {
-  }
 
   .form-fieldset-legend {
     color: var(--form-fieldset-legend-color);

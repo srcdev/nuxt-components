@@ -49,68 +49,37 @@
 <script setup lang="ts">
 import type { FormTheme, FormSize, OptionsLayout } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  dataTestid: {
-    type: String,
-    default: "multiple-radio-buttons",
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  legend: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: false,
-    default: "",
-  },
-  errorMessage: {
-    type: [Object, String],
-    required: true,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  multipleOptions: {
-    type: Boolean,
-    default: false,
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "medium",
-  },
-  trueValue: {
-    type: [String, Number, Boolean],
-    default: true,
-  },
-  falseValue: {
-    type: [String, Number, Boolean],
-    default: false,
-  },
-  optionsLayout: {
-    type: String as PropType<OptionsLayout>,
-    default: "equal-widths",
-  },
-  equalCols: {
-    type: Boolean,
-    default: true,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
+interface Props {
+  dataTestid?: string;
+  name: string;
+  legend: string;
+  label?: string;
+  errorMessage: string | object;
+  required?: boolean;
+  fieldHasError?: boolean;
+  multipleOptions?: boolean;
+  size?: FormSize;
+  trueValue?: string | number | boolean;
+  falseValue?: string | number | boolean;
+  optionsLayout?: OptionsLayout;
+  equalCols?: boolean;
+  styleClassPassthrough?: string | string[];
+  theme?: FormTheme;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  dataTestid: "multiple-radio-buttons",
+  label: "",
+  required: false,
+  fieldHasError: false,
+  multipleOptions: false,
+  size: "medium",
+  trueValue: true,
+  falseValue: false,
+  optionsLayout: "equal-widths",
+  equalCols: true,
+  styleClassPassthrough: () => [],
+  theme: "primary",
 });
 
 const slots = useSlots();
@@ -118,9 +87,9 @@ const modelValue = defineModel<(string | number | boolean)[] | string | number |
 const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const id = `${props.name}-input-${useId()}`;
-const errorId = `${name}-error-message`;
+const errorId = `${props.name}-error-message`;
 const ariaDescribedby = computed(() => {
-  const ariaDescribedbyId = slots.description ? `${name}-description` : undefined;
+  const ariaDescribedbyId = slots.description ? `${props.name}-description` : undefined;
   return props.fieldHasError ? errorId : ariaDescribedbyId;
 });
 

@@ -6,8 +6,10 @@
 
     <div class="input-number-container">
       <input
-        type="number"
         :id
+        ref="inputField"
+        v-model="modelValue"
+        type="number"
         :name
         :required
         :min
@@ -20,8 +22,6 @@
           `input-number--${size}`,
           `input-number--${weight}`,
         ]"
-        v-model="modelValue"
-        ref="inputField"
         inputmode="numeric"
         pattern="[0-9]+"
       />
@@ -33,57 +33,32 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, InputVariant, InputTypesText, FormWeight } from "~/types/forms/types.forms";
+import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  min: {
-    type: Number,
-    required: true,
-  },
-  max: {
-    type: Number,
-    required: true,
-  },
-  step: {
-    type: Number,
-    default: 1,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "medium",
-  },
-  weight: {
-    type: String as PropType<FormWeight>,
-    default: "wght-400",
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+interface Props {
+  id: string;
+  name: string;
+  min: number;
+  max: number;
+  step?: number;
+  placeholder?: string;
+  required?: boolean;
+  theme?: FormTheme;
+  size?: FormSize;
+  weight?: FormWeight;
+  fieldHasError?: boolean;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  step: 1,
+  placeholder: "",
+  required: false,
+  theme: "primary",
+  size: "medium",
+  weight: "wght-400",
+  fieldHasError: false,
+  styleClassPassthrough: () => [],
 });
 
 const slots = useSlots();

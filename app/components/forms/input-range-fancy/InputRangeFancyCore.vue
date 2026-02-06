@@ -1,29 +1,29 @@
 <template>
-  <div class="control" ref="control">
-    <div aria-hidden="true" class="tooltip" ref="toolTip">
-      <div class="range-label range-low-label" ref="toolTipLow">
+  <div ref="control" class="control">
+    <div ref="toolTip" aria-hidden="true" class="tooltip">
+      <div ref="toolTipLow" class="range-label range-low-label">
         {{ rangeLowLabel }}
         <span class="value">{{ lowValue }} %</span>
       </div>
-      <div class="range-label range-high-label" ref="toolTipHigh">
+      <div ref="toolTipHigh" class="range-label range-high-label">
         <span class="value">{{ highValue }} %</span>
         {{ rangeHighLabel }}
       </div>
     </div>
     <input
-      type="range"
-      v-model="modelValue"
-      ref="inputRef"
-      @input="update()"
-      @pointerdown="update()"
       :id
+      ref="inputRef"
+      v-model="modelValue"
+      type="range"
       :name
       :min
       :max
       :step
+      @input="update()"
+      @pointerdown="update()"
     />
 
-    <div class="control__track" ref="controlTrack">
+    <div ref="controlTrack" class="control__track">
       <div class="control__track-slide">
         <div class="control__fill"></div>
         <div class="control__indicator"></div>
@@ -36,63 +36,32 @@
 <script setup lang="ts">
 import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  min: {
-    type: Number,
-    required: true,
-  },
-  max: {
-    type: Number,
-    required: true,
-  },
-  step: {
-    type: Number,
-    default: 1,
-  },
-  rangeLowLabel: {
-    type: String,
-    required: true,
-  },
-  rangeHighLabel: {
-    type: String,
-    required: true,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "medium",
-  },
-  weight: {
-    type: String as PropType<FormWeight>,
-    default: "wght-400",
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+interface Props {
+  id: string;
+  name: string;
+  min: number;
+  max: number;
+  step?: number;
+  rangeLowLabel: string;
+  rangeHighLabel: string;
+  placeholder?: string;
+  required?: boolean;
+  theme?: FormTheme;
+  size?: FormSize;
+  weight?: FormWeight;
+  fieldHasError?: boolean;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  step: 1,
+  placeholder: "",
+  required: false,
+  theme: "primary",
+  size: "medium",
+  weight: "wght-400",
+  fieldHasError: false,
+  styleClassPassthrough: () => [],
 });
 
 const modelValue = defineModel<number | readonly number[]>();

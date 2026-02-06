@@ -47,7 +47,21 @@ interface Props extends BaseCheckboxRadioProps {
   displayAsLozenge?: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  required: false,
+  size: "default",
+  theme: "primary",
+  fieldHasError: false,
+  styleClassPassthrough: () => [],
+  trueValue: true,
+  falseValue: false,
+  ariaDescribedby: "",
+  displayAsDisc: false,
+  multipleOptions: false,
+  optionsLayout: "equal-widths",
+  direction: "row",
+  displayAsLozenge: false,
+});
 
 const slots = useSlots();
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || []);

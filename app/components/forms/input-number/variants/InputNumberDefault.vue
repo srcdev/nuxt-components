@@ -6,8 +6,8 @@
     :class="[elementClasses, `theme-${theme}`, { error: fieldHasError }]"
   >
     <InputLabel
-      :for="id"
       :id
+      :for="id"
       :theme
       :name
       input-variant="normal"
@@ -22,8 +22,8 @@
     </template>
 
     <InputNumberCore
-      v-model="modelValue"
       :id
+      v-model="modelValue"
       :name
       :min
       :max
@@ -32,18 +32,18 @@
       :required
       :size
       :weight
-      :fieldHasError
-      :styleClassPassthrough
+      :field-has-error
+      :style-class-passthrough
     >
       <template v-if="slots.left" #left>
         <InputButtonCore
           type="button"
-          @click.stop.prevent="updateValue(-step, Number(modelValue) > min)"
           :readonly="Number(modelValue) <= min"
           :is-pending="false"
-          buttonText="Step down"
+          button-text="Step down"
           theme="input-action"
           :size
+          @click.stop.prevent="updateValue(-step, Number(modelValue) > min)"
         >
           <template #iconOnly>
             <slot name="left"></slot>
@@ -53,12 +53,12 @@
       <template v-if="slots.right" #right>
         <InputButtonCore
           type="button"
-          @click.stop.prevent="updateValue(step, Number(modelValue) < max)"
           :readonly="Number(modelValue) >= max"
           :is-pending="false"
-          buttonText="Step up"
+          button-text="Step up"
           theme="input-action"
           :size
+          @click.stop.prevent="updateValue(step, Number(modelValue) < max)"
         >
           <template #iconOnly>
             <slot name="right"></slot>
@@ -66,66 +66,38 @@
         </InputButtonCore>
       </template>
     </InputNumberCore>
-    <InputError :errorMessage :showError="fieldHasError" :id :isDetached="true" />
+    <InputError :id :error-message :show-error="fieldHasError" :is-detached="true" />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  min: {
-    type: Number,
-    required: true,
-  },
-  max: {
-    type: Number,
-    required: true,
-  },
-  step: {
-    type: Number,
-    default: 1,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  errorMessage: {
-    type: [Object, String],
-    required: true,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "default",
-  },
-  weight: {
-    type: String as PropType<FormWeight>,
-    default: "normal",
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+interface Props {
+  name: string;
+  label: string;
+  min: number;
+  max: number;
+  step?: number;
+  placeholder?: string;
+  errorMessage: object | string;
+  fieldHasError?: boolean;
+  required?: boolean;
+  theme?: FormTheme;
+  size?: FormSize;
+  weight?: FormWeight;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  step: 1,
+  placeholder: "",
+  fieldHasError: false,
+  required: false,
+  theme: "primary",
+  size: "default",
+  weight: "normal",
+  styleClassPassthrough: () => [],
 });
 
 const slots = useSlots();

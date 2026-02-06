@@ -1,8 +1,8 @@
 <template>
   <div class="input-range-with-label" :data-theme="formTheme" :class="[elementClasses, { error: fieldHasError }]">
     <InputLabel
-      :for="id"
       :id
+      :for="id"
       :theme
       :name
       input-variant="normal"
@@ -16,19 +16,19 @@
       <slot name="description"></slot>
     </template>
 
-    <InputRangeCore v-model="modelValue" :id :name :min :max :step :theme :required :size :weight :fieldHasError>
+    <InputRangeCore :id v-model="modelValue" :name :min :max :step :theme :required :size :weight :field-has-error>
       <template v-if="slots.datalist" #datalist>
         <slot name="datalist"></slot>
       </template>
       <template v-if="slots.left" #left>
         <InputButtonCore
           type="button"
-          @click.stop.prevent="updateRange(-step, Number(modelValue) > min)"
           :readonly="Number(modelValue) === min"
           :is-pending="false"
-          buttonText="Step down"
+          button-text="Step down"
           :theme
           size="x-small"
+          @click.stop.prevent="updateRange(-step, Number(modelValue) > min)"
         >
           <template #iconOnly>
             <slot name="left"></slot>
@@ -38,12 +38,12 @@
       <template v-if="slots.right" #right>
         <InputButtonCore
           type="button"
-          @click.stop.prevent="updateRange(step, Number(modelValue) < max)"
           :readonly="Number(modelValue) === max"
           :is-pending="false"
-          buttonText="Step up"
+          button-text="Step up"
           :theme
           size="x-small"
+          @click.stop.prevent="updateRange(step, Number(modelValue) < max)"
         >
           <template #iconOnly>
             <slot name="right"></slot>
@@ -51,91 +51,54 @@
         </InputButtonCore>
       </template>
     </InputRangeCore>
-    <InputError :errorMessage :showError="fieldHasError" :id :isDetached="true" :styleClassPassthrough="['mbe-20']" />
+    <InputError
+      :id
+      :error-message
+      :show-error="fieldHasError"
+      :is-detached="true"
+      :style-class-passthrough="['mbe-20']"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
-const {
-  name,
-  label,
-  required,
-  min,
-  max,
-  step,
-  theme,
-  size,
-  weight,
-  styleClassPassthrough,
-  errorMessage,
-  fieldHasError,
-} = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  min: {
-    type: Number,
-    required: true,
-  },
-  max: {
-    type: Number,
-    required: true,
-  },
-  step: {
-    type: Number,
-    default: 1,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  errorMessage: {
-    type: [Object, String],
-    required: true,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "medium",
-  },
-  weight: {
-    type: String as PropType<FormWeight>,
-    default: "wght-400",
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  deepCssClassPassthrough: {
-    type: String,
-    default: "",
-  },
+interface Props {
+  name: string;
+  label: string;
+  min: number;
+  max: number;
+  step?: number;
+  placeholder?: string;
+  errorMessage: object | string;
+  fieldHasError?: boolean;
+  required?: boolean;
+  theme?: FormTheme;
+  size?: FormSize;
+  weight?: FormWeight;
+  styleClassPassthrough?: string | string[];
+  deepCssClassPassthrough?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  step: 1,
+  placeholder: "",
+  fieldHasError: false,
+  required: false,
+  theme: "primary",
+  size: "medium",
+  weight: "wght-400",
+  styleClassPassthrough: () => [],
+  deepCssClassPassthrough: "",
 });
 
 const slots = useSlots();
-const { elementClasses } = useStyleClassPassthrough(styleClassPassthrough);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const id = useId();
 const formTheme = computed(() => {
-  return fieldHasError ? "error" : theme;
+  return props.fieldHasError ? "error" : props.theme;
 });
 
 const modelValue = defineModel<number | readonly number[]>();

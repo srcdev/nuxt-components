@@ -77,82 +77,42 @@
 <script setup lang="ts">
 import type { FormTheme, FormSize, OptionsLayout, IFormMultipleOptions } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  dataTestid: {
-    type: String,
-    default: "multiple-checkboxes",
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  legend: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  isButton: {
-    type: Boolean,
-    default: false,
-  },
-  errorMessage: {
-    type: [Object, String],
-    required: true,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  multipleOptions: {
-    type: Boolean,
-    default: false,
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "medium",
-  },
-  optionsLayout: {
-    type: String as PropType<OptionsLayout>,
-    default: "equal-widths",
-  },
-  equalCols: {
-    type: Boolean,
-    default: true,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  direction: {
-    type: String as PropType<"row" | "row-reverse">,
-    default: "row",
-    validator(value: string) {
-      return ["row", "row-reverse"].includes(value);
-    },
-  },
-  displayAsDisc: {
-    type: Boolean,
-    default: false,
-  },
-  displayAsLozenge: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  dataTestid?: string;
+  name: string;
+  legend: string;
+  label: string;
+  placeholder?: string;
+  isButton?: boolean;
+  errorMessage: string | object;
+  required?: boolean;
+  fieldHasError?: boolean;
+  multipleOptions?: boolean;
+  size?: FormSize;
+  optionsLayout?: OptionsLayout;
+  equalCols?: boolean;
+  styleClassPassthrough?: string | string[];
+  theme?: FormTheme;
+  direction?: "row" | "row-reverse";
+  displayAsDisc?: boolean;
+  displayAsLozenge?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  dataTestid: "multiple-checkboxes",
+  placeholder: "",
+  isButton: false,
+  required: false,
+  fieldHasError: false,
+  multipleOptions: false,
+  size: "medium",
+  optionsLayout: "equal-widths",
+  equalCols: true,
+  styleClassPassthrough: () => [],
+  theme: "primary",
+  direction: "row",
+  displayAsDisc: false,
+  displayAsLozenge: false,
 });
 
 const slots = useSlots();

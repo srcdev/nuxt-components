@@ -28,39 +28,22 @@
 <script setup lang="ts">
 import type { InputVariant } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  dataTestid: {
-    type: String,
-    default: "inputError",
-  },
-  errorMessage: {
-    type: [Array, Object, String],
-    required: true,
-  },
-  showError: {
-    type: Boolean,
-    required: true,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  compact: {
-    type: Boolean,
-    value: false,
-  },
-  isDetached: {
-    type: Boolean,
-    required: true,
-  },
-  inputVariant: {
-    type: String as PropType<InputVariant>,
-    default: "normal",
-  },
+interface Props {
+  dataTestid?: string;
+  errorMessage: string | string[] | object;
+  showError: boolean;
+  id: string;
+  styleClassPassthrough?: string | string[];
+  compact?: boolean;
+  isDetached: boolean;
+  inputVariant?: InputVariant;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  dataTestid: "inputError",
+  styleClassPassthrough: () => [],
+  compact: false,
+  inputVariant: "normal",
 });
 
 const isArray = computed(() => {
