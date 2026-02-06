@@ -1,25 +1,20 @@
 <template>
   <div class="toggle-switch-core" :class="elementClasses" :data-size="size" :data-theme="formTheme">
-    <div
-      @click="toggleSwitchValue"
-      class="toggle-switch-wrapper"
-      :class="[{ round }, { 'use-default-icons': useDefaultIcons }]"
-      :for="inputId"
-    >
+    <div class="toggle-switch-wrapper" :class="wrapperClasses" :for="inputId" @click="toggleSwitchValue">
       <input
-        type="checkbox"
+        :id="inputId"
         v-model="modelValue"
+        type="checkbox"
         :true-value
         :false-value
         :aria-invalid="fieldHasError"
-        :id="inputId"
-        :aria-describedby="`${id}-description`"
+        :aria-describedby="ariaDescribedbyId"
         :name
         :required
         :checked="isChecked"
       />
-      <div class="symbol-wrapper" :class="[{ round }]">
-        <div class="symbol" :class="[{ round }, { checked: isChecked }]">
+      <div class="symbol-wrapper" :class="{ round }">
+        <div class="symbol" :class="symbolClasses">
           <div class="symbol-icon icon-on" :class="{ active: isChecked }">
             <slot name="iconOn">
               <Icon name="material-symbols:circle-outline" class="icon" />
@@ -40,51 +35,30 @@
 <script setup lang="ts">
 import type { FormTheme, FormSize } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  trueValue: {
-    type: [String, Number, Boolean],
-    default: true,
-  },
-  falseValue: {
-    type: [String, Number, Boolean],
-    default: false,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  round: {
-    type: Boolean,
-    default: true,
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "default",
-  },
-  ariaDescribedby: {
-    type: String,
-    default: null,
-  },
+interface Props {
+  id: string;
+  name: string;
+  required?: boolean;
+  fieldHasError?: boolean;
+  trueValue?: string | number | boolean;
+  falseValue?: string | number | boolean;
+  styleClassPassthrough?: string | string[];
+  theme?: FormTheme;
+  round?: boolean;
+  size?: FormSize;
+  ariaDescribedby?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  required: false,
+  fieldHasError: false,
+  trueValue: true,
+  falseValue: false,
+  styleClassPassthrough: () => [],
+  theme: "primary",
+  round: true,
+  size: "default",
+  ariaDescribedby: "",
 });
 
 const slots = useSlots();
@@ -94,14 +68,26 @@ const formTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 
-const modelValue = defineModel();
+const modelValue = defineModel<string | number | boolean>();
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const inputId = computed(() => `toggle-sitch-${props.id}`);
+const inputId = computed(() => `toggle-switch-${props.id}`);
+const ariaDescribedbyId = computed(() => `${props.id}-description`);
 
 const isChecked = computed(() => {
   return modelValue.value === props.trueValue;
 });
+
+// Optimized class computeds to reduce template reactivity
+const wrapperClasses = computed(() => ({
+  round: props.round,
+  "use-default-icons": useDefaultIcons.value,
+}));
+
+const symbolClasses = computed(() => ({
+  round: props.round,
+  checked: isChecked.value,
+}));
 
 const toggleSwitchValue = () => {
   modelValue.value = modelValue.value === props.trueValue ? props.falseValue : props.trueValue;

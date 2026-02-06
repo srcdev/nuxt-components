@@ -1,8 +1,8 @@
 <template>
   <div class="toggle-switch-with-label" :class="[elementClasses]" :data-theme="formTheme">
     <InputLabel
-      :for="`toggle-sitch-${id}`"
       :id
+      :for="toggleSwitchId"
       :theme
       :name
       input-variant="normal"
@@ -12,12 +12,12 @@
       <template #textLabel>{{ label }}</template>
     </InputLabel>
 
-    <div v-if="slots.description" :id="`${id}-description`">
+    <div v-if="slots.description" :id="descriptionId">
       <slot name="description"></slot>
     </div>
     <ToggleSwitchCore
-      v-model="modelValue"
       :id
+      v-model="modelValue"
       :name
       :required
       :field-has-error
@@ -26,7 +26,7 @@
       :theme
       :round
       :size
-      :ariaDescribedby
+      :aria-describedby
     >
       <template v-if="slots.iconOn" #iconOn>
         <slot name="iconOn"></slot>
@@ -36,59 +36,37 @@
         <slot name="iconOff"></slot>
       </template>
     </ToggleSwitchCore>
-    <InputError :errorMessage :showError="fieldHasError" :id="errorId" :isDetached="true" />
+    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" />
   </div>
 </template>
 
 <script setup lang="ts">
 import type { FormTheme, FormSize } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  errorMessage: {
-    type: [Object, String],
-    default: "",
-    required: false,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  trueValue: {
-    type: [String, Number, Boolean],
-    default: true,
-  },
-  falseValue: {
-    type: [String, Number, Boolean],
-    default: false,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  round: {
-    type: Boolean,
-    default: true,
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "default",
-  },
+interface Props {
+  name: string;
+  label: string;
+  required?: boolean;
+  errorMessage?: object | string;
+  fieldHasError?: boolean;
+  trueValue?: string | number | boolean;
+  falseValue?: string | number | boolean;
+  styleClassPassthrough?: string | string[];
+  theme?: FormTheme;
+  round?: boolean;
+  size?: FormSize;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  required: false,
+  errorMessage: "",
+  fieldHasError: false,
+  trueValue: true,
+  falseValue: false,
+  styleClassPassthrough: () => [],
+  theme: "primary",
+  round: true,
+  size: "default",
 });
 
 const slots = useSlots();
@@ -98,13 +76,18 @@ const formTheme = computed(() => {
 });
 
 const id = useId();
-const errorId = `${id}-error-message`;
+
+// Performance-optimized computed properties to avoid template string interpolation
+const toggleSwitchId = computed(() => `toggle-switch-${id}`);
+const descriptionId = computed(() => `${id}-description`);
+const errorId = computed(() => `${id}-error-message`);
+
 const ariaDescribedby = computed(() => {
-  const ariaDescribedbyId = slots.description ? `${id}-description` : undefined;
-  return props.fieldHasError ? errorId : ariaDescribedbyId;
+  const ariaDescribedbyId = slots.description ? descriptionId.value : undefined;
+  return props.fieldHasError ? errorId.value : ariaDescribedbyId;
 });
 
-const modelValue = defineModel();
+const modelValue = defineModel<string | number | boolean>();
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
