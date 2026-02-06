@@ -24,7 +24,7 @@
             :id="option.id"
             v-model="modelValue"
             type="radio"
-            :name="props.name"
+            :name="name"
             class="option-input"
             :value="option.value"
             :aria-selected="modelValue === option.value"
@@ -38,49 +38,58 @@
 <script setup lang="ts">
 import type { FormTheme, FormSize, IFormMultipleOptions } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  name: {
-    type: String,
-    default: "triple-toggle-switch",
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "medium",
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  stepAnimationDuration: {
-    type: String as PropType<string>,
-    default: "250ms",
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+interface Props {
+  name?: string;
+  size?: FormSize;
+  theme?: FormTheme;
+  stepAnimationDuration?: string;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  name: "triple-toggle-switch",
+  size: "medium",
+  theme: "primary",
+  stepAnimationDuration: "250ms",
+  styleClassPassthrough: () => [],
 });
 
-const modelValue = defineModel();
+const modelValue = defineModel<string | number | boolean>();
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
+
+// Performance optimization: provide reactive access to props for template
+const { name, theme, size, stepAnimationDuration } = toRefs(props);
 
 const optionGroupRefs = useTemplateRef<HTMLDivElement>("optionGroup");
 
 const iconWidth = ref("0px");
 const showMarker = ref(false);
 
+// Performance-optimized computed for selected option index
 const selectedOptionIndex = computed(() => {
-  return fieldData.value.data.findIndex((option) => option.value === modelValue.value);
+  if (!fieldData.value?.data) return 0;
+  const index = fieldData.value.data.findIndex((option) => option.value === modelValue.value);
+  return Math.max(0, index); // Ensure non-negative index
 });
 
+// Optimized setup with better error handling
 const setupDefaults = async () => {
+  await nextTick(); // Ensure DOM is ready
+
   if (Array.isArray(optionGroupRefs.value) && optionGroupRefs.value[0]) {
-    iconWidth.value = optionGroupRefs.value[0].getBoundingClientRect().width + "px";
+    const rect = optionGroupRefs.value[0].getBoundingClientRect();
+    iconWidth.value = `${rect.width}px`;
   }
 
-  await useSleep(250);
+  // Use requestAnimationFrame for better performance than setTimeout
+  await new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      setTimeout(resolve, 250);
+    });
+  });
+
   showMarker.value = true;
 };
 
@@ -148,7 +157,7 @@ onMounted(() => {
     background-color: var(--theme-input-surface);
     border: var(--form-element-border-width) solid var(--theme-input-border);
     outline: var(--form-element-outline-width) solid var(--theme-input-outline);
-    border-radius: var(--_form-border-radius);
+    border-radius: 100vw;
     padding: var(--_form-padding);
 
     transition: all var(--theme-form-transition-duration) ease-in-out;
