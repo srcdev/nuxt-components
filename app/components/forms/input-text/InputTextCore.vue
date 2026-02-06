@@ -45,59 +45,34 @@
 <script setup lang="ts">
 import type { FormTheme, FormSize, InputVariant, InputTypesText, InputMode } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  type: {
-    type: String as PropType<InputTypesText>,
-    default: "text",
-  },
-  inputmode: {
-    type: String as PropType<InputMode>,
-    default: "text",
-  },
-  maxlength: {
-    type: Number,
-    default: 255,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  ariaDescribedby: {
-    type: String,
-    default: null,
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "default",
-  },
-  inputVariant: {
-    type: String as PropType<InputVariant>,
-    default: "normal",
-  },
+interface Props {
+  type?: InputTypesText;
+  inputmode?: InputMode;
+  maxlength?: number;
+  id: string;
+  name: string;
+  required?: boolean;
+  placeholder?: string;
+  fieldHasError?: boolean;
+  styleClassPassthrough?: string | string[];
+  theme?: FormTheme;
+  ariaDescribedby?: string;
+  size?: FormSize;
+  inputVariant?: InputVariant;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  type: "text",
+  inputmode: "text",
+  maxlength: 255,
+  required: false,
+  placeholder: "",
+  fieldHasError: false,
+  styleClassPassthrough: () => [],
+  theme: "primary",
+  ariaDescribedby: "",
+  size: "default",
+  inputVariant: "normal",
 });
 
 const slots = useSlots();

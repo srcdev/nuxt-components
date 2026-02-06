@@ -39,51 +39,31 @@
 
 <script setup lang="ts">
 import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
-const props = defineProps({
-  maxlength: {
-    type: Number,
-    default: 255,
-  },
-  id: {
-    type: String,
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  ariaDescribedby: {
-    type: String,
-    default: "",
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "default",
-  },
-  inputVariant: {
-    type: String as PropType<InputVariant>,
-    default: "normal",
-  },
+
+interface Props {
+  maxlength?: number;
+  id: string;
+  name: string;
+  placeholder?: string;
+  ariaDescribedby?: string;
+  fieldHasError?: boolean;
+  required?: boolean;
+  styleClassPassthrough?: string | string[];
+  theme?: FormTheme;
+  size?: FormSize;
+  inputVariant?: InputVariant;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  maxlength: 255,
+  placeholder: "",
+  ariaDescribedby: "",
+  fieldHasError: false,
+  required: false,
+  styleClassPassthrough: () => [],
+  theme: "primary",
+  size: "default",
+  inputVariant: "normal",
 });
 
 const slots = useSlots();
@@ -93,8 +73,8 @@ const formTheme = computed(() => {
 });
 
 const modelValue = defineModel<string | number | readonly string[] | null | undefined>();
-const isDirty = defineModel("isDirty");
-const isActive = defineModel("isActive");
+const isDirty = defineModel<boolean>("isDirty");
+const isActive = defineModel<boolean>("isActive");
 
 const updateFocus = (isFocused: boolean) => {
   isActive.value = isFocused;

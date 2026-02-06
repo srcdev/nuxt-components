@@ -35,55 +35,31 @@
 <script setup lang="ts">
 import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
 
-const props = defineProps({
-  type: {
-    type: String as PropType<"text" | "password">,
-    default: "password",
-  },
-  maxlength: {
-    type: Number,
-    default: 255,
-  },
-  name: {
-    type: String,
-    required: true,
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  label: {
-    type: String,
-    required: true,
-  },
-  errorMessage: {
-    type: [Object, String],
-    required: true,
-  },
-  fieldHasError: {
-    type: Boolean,
-    default: false,
-  },
-  required: {
-    type: Boolean,
-    default: false,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  theme: {
-    type: String as PropType<FormTheme>,
-    default: "primary",
-  },
-  size: {
-    type: String as PropType<FormSize>,
-    default: "medium",
-  },
-  inputVariant: {
-    type: String as PropType<InputVariant>,
-    default: "normal",
-  },
+interface Props {
+  type?: "text" | "password";
+  maxlength?: number;
+  name: string;
+  placeholder?: string;
+  label: string;
+  errorMessage: object | string;
+  fieldHasError?: boolean;
+  required?: boolean;
+  styleClassPassthrough?: string | string[];
+  theme?: FormTheme;
+  size?: FormSize;
+  inputVariant?: InputVariant;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  type: "password",
+  maxlength: 255,
+  placeholder: "",
+  fieldHasError: false,
+  required: false,
+  styleClassPassthrough: () => [],
+  theme: "primary",
+  size: "medium",
+  inputVariant: "normal",
 });
 
 const buttonTheme = computed(() => {
