@@ -148,11 +148,35 @@ const responsiveNavLinks = {
 
 // *** COLOR SCHEME INITIALIZATION ***
 onMounted(() => {
+  const getSystemPreference = () => {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+
   const applyColorScheme = (scheme: string) => {
     const htmlElement = document.documentElement;
     htmlElement.classList.remove("system", "dark", "light");
-    htmlElement.classList.add(scheme);
+
+    // If scheme is "system", use the actual system preference
+    const actualScheme = scheme === "system" ? getSystemPreference() : scheme;
+    htmlElement.classList.add(actualScheme);
+
+    console.log(`Applied color scheme: ${actualScheme} (requested: ${scheme})`);
   };
+
+  // Listen for system preference changes
+  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const handleSystemChange = () => {
+    const storedValue = localStorage.getItem("useSettingsStore");
+    if (storedValue) {
+      const parsed = JSON.parse(storedValue);
+      // Only update if user has "system" selected
+      if (parsed.colourScheme === "system") {
+        applyColorScheme("system");
+      }
+    }
+  };
+
+  mediaQuery.addEventListener('change', handleSystemChange);
 
   try {
     const storedValue = localStorage.getItem("useSettingsStore");
@@ -161,10 +185,15 @@ onMounted(() => {
       const parsed = JSON.parse(storedValue);
       applyColorScheme(parsed.colourScheme || "system");
     } else {
-      applyColorScheme("system");
+      // For new users, detect and apply system preference
+      const systemPreference = getSystemPreference();
+      applyColorScheme(systemPreference);
+      console.log(`New user detected, applied system preference: ${systemPreference}`);
     }
   } catch {
-    applyColorScheme("system");
+    // Fallback to system preference
+    const systemPreference = getSystemPreference();
+    applyColorScheme(systemPreference);
   }
 });
 </script>
