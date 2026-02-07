@@ -11,7 +11,7 @@
             :item-config="{ width: '100px', height: '100px', quantity: marqueeData.length }"
             :reverse="false"
           >
-            <template v-for="(item, index) in marqueeData" #[item.id]>
+            <template v-for="item in marqueeData" :key="item.id" #[item.id]>
               <div class="item-inner">
                 <h3>ID: {{ item.id }}</h3>
                 <p>{{ item.content }}</p>
@@ -27,7 +27,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Typography",
@@ -35,7 +35,7 @@ useHead({
   bodyAttrs: {
     class: "page-marquee-scroller",
   },
-})
+});
 
 const marqueeData = [
   {
@@ -90,7 +90,7 @@ const marqueeData = [
     id: 13,
     content: "Item 13",
   },
-]
+];
 </script>
 
 <style lang="css">

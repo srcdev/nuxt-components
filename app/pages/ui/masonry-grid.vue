@@ -2,20 +2,24 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Masonry Grid</h1>
-          <CanvasSwitcher v-model:canvasName="canvasName" />
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <MasonryGrid
-            :gridData="quotesData?.quotes.slice(0, qoutesDisplayCount) ?? <IQuotes>{}"
-            :itemMinWidth="350"
+            :grid-data="quotesData?.quotes.slice(0, qoutesDisplayCount) ?? []"
+            :item-min-width="350"
             :gap="3.2"
             unit="rem"
-            :styleClassPassthrough="[canvasName, 'mi-auto']"
+            :style-class-passthrough="[canvasName, 'mi-auto']"
           >
-            <template v-for="(item, index) in quotesData?.quotes.slice(0, qoutesDisplayCount)" v-slot:[item.id]>
+            <template
+              v-for="(item, index) in quotesData?.quotes.slice(0, qoutesDisplayCount)"
+              :key="item.id"
+              #[item.id]
+            >
               <div class="">
                 <p class="">{{ index + 1 }}: {{ item.author }}</p>
                 <p class="">{{ item.quote }}</p>
@@ -29,12 +33,12 @@
 </template>
 
 <script setup lang="ts">
-import type { IQuotes } from "~/types/types.quotes"
-import type { MediaCanvas } from "~/types/components"
+import type { IQuotes } from "~/types/types.quotes";
+import type { MediaCanvas } from "~/types/components";
 
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Masonry Grid",
@@ -42,10 +46,10 @@ useHead({
   bodyAttrs: {
     class: "home",
   },
-})
+});
 
-const canvasName = ref<MediaCanvas>("desktopCanvas")
+const canvasName = ref<MediaCanvas>("desktopCanvas");
 
-const qoutesDisplayCount = 21
-const { data: quotesData, status, error, refresh } = await useFetch<IQuotes>("https://dummyjson.com/quotes")
+const qoutesDisplayCount = 21;
+const { data: quotesData } = await useFetch<IQuotes>("https://dummyjson.com/quotes");
 </script>

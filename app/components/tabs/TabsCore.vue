@@ -1,23 +1,23 @@
 <template>
   <div class="tabs-core" :class="`axis-${axis}`">
     <ul
+      ref="tabsNavRef"
       role="tablist"
       aria-labelledby="channel-name"
-      ref="tabsNavRef"
-      @mouseleave="resetHoverToActivePosition()"
       class="tabs-list"
       :class="[elementClasses]"
+      @mouseleave="resetHoverToActivePosition()"
     >
       <li v-for="(index, key) in itemCount" :key="key">
         <button
-          @click.prevent="navItemClicked($event)"
-          @mouseover="navItemHovered($event)"
           :id="`tab-${key}-trigger`"
           :data-tab-index="key"
           data-nav-item
           role="tab"
           aria-selected="false"
           class="tabs-list-item"
+          @click.prevent="navItemClicked($event)"
+          @mouseover="navItemHovered($event)"
         >
           <slot :name="`tab-${key}-trigger`"></slot>
         </button>
@@ -26,13 +26,13 @@
     <div class="tab-content-wrapper">
       <div
         v-for="(item, key) in itemCount"
+        :id="`tab-${key}-content`"
         :key="key"
+        ref="tabsContentRefs"
         class="tab-content"
         :aria-labelledby="`tab-${key}-trigger`"
-        :id="`tab-${key}-content`"
         role="region"
         aria-hidden="true"
-        ref="tabsContentRefs"
       >
         <slot :name="`tab-${key}-content`"></slot>
       </div>
@@ -74,23 +74,23 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const tabsNavRef = ref<HTMLElement | null>(null)
-const tabsContentRefs = ref<HTMLElement[] | null>(null)
+const tabsNavRef = ref<HTMLElement | null>(null);
+const tabsContentRefs = ref<HTMLElement[] | null>(null);
 
 const { initNavDecorators, navItemClicked, navItemHovered, resetHoverToActivePosition } = useTabs(
   props.axis,
   tabsNavRef,
   tabsContentRefs,
   props.transitionDuration
-)
+);
 
 onMounted(() => {
-  initNavDecorators()
-})
+  initNavDecorators();
+});
 </script>
 
 <style lang="css">
@@ -115,7 +115,9 @@ onMounted(() => {
       scale: var(--_width-hovered, 0.125) 1;
       translate: var(--_x-hovered, 0) 0;
       transform-origin: left;
-      transition: scale var(--_transition-duration), translate var(--_transition-duration);
+      transition:
+        scale var(--_transition-duration),
+        translate var(--_transition-duration);
       z-index: 1;
     }
 
@@ -129,7 +131,9 @@ onMounted(() => {
       scale: var(--_width-active, 0.125) 1;
       translate: var(--_x-active, 0) 0;
       transform-origin: left;
-      transition: scale var(--_transition-duration), translate var(--_transition-duration);
+      transition:
+        scale var(--_transition-duration),
+        translate var(--_transition-duration);
       z-index: 2;
     }
 
@@ -142,7 +146,9 @@ onMounted(() => {
       scale: var(--_width-active, 0.125) 1;
       translate: var(--_x-active, 0) 0;
       transform-origin: left;
-      transition: scale var(--_transition-duration), translate var(--_transition-duration);
+      transition:
+        scale var(--_transition-duration),
+        translate var(--_transition-duration);
       z-index: 3;
     }
 

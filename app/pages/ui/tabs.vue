@@ -7,21 +7,21 @@
           <p>Static tabs</p>
 
           <TabsCore
-            :navItems="navLinks3"
-            :itemCount="3"
-            :transitionDuration="300"
+            :nav-items="navLinks3"
+            :item-count="3"
+            :transition-duration="300"
             :style-class-passthrough="['class-modifier']"
           >
-            <template v-slot:[`tab-0-trigger`]>0 - Tab 1</template>
-            <template v-slot:[`tab-1-trigger`]>1 - Tab 2</template>
-            <template v-slot:[`tab-2-trigger`]>2 - Tab 3</template>
-            <template v-slot:[`tab-0-content`]>
+            <template #[`tab-0-trigger`]>0 - Tab 1</template>
+            <template #[`tab-1-trigger`]>1 - Tab 2</template>
+            <template #[`tab-2-trigger`]>2 - Tab 3</template>
+            <template #[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
             </template>
-            <template v-slot:[`tab-1-content`]>
+            <template #[`tab-1-content`]>
               <p class="p-24">This is content slot 1</p>
             </template>
-            <template v-slot:[`tab-2-content`]>
+            <template #[`tab-2-content`]>
               <p class="p-24">This is content slot 2</p>
             </template>
           </TabsCore>
@@ -31,20 +31,18 @@
           <h2 class="page-heading-2">Tabs #2</h2>
           <p>Data driven tabs</p>
 
-          <TabsCore :itemCount="4" :style-class-passthrough="['class-modifier']">
-            <template v-for="(item, key) in navLinks4" v-slot:[`tab-${key}-trigger`]>
-              {{ key }} - {{ item.name }}
-            </template>
-            <template v-slot:[`tab-0-content`]>
+          <TabsCore :item-count="4" :style-class-passthrough="['class-modifier']">
+            <template v-for="(item, key) in navLinks4" #[`tab-${key}-trigger`]>{{ key }} - {{ item.name }}</template>
+            <template #[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
             </template>
-            <template v-slot:[`tab-1-content`]>
+            <template #[`tab-1-content`]>
               <p class="p-24">This is content slot 1</p>
             </template>
-            <template v-slot:[`tab-2-content`]>
+            <template #[`tab-2-content`]>
               <p class="p-24">This is content slot 2</p>
             </template>
-            <template v-slot:[`tab-3-content`]>
+            <template #[`tab-3-content`]>
               <p class="p-24">This is content slot 3</p>
             </template>
           </TabsCore>
@@ -54,26 +52,24 @@
           <h2 class="page-heading-2">Tabs #3</h2>
           <p>Data driven accordian navigation with custom content</p>
 
-          <TabsCore :itemCount="6" :style-class-passthrough="['class-modifier']">
-            <template v-for="(item, key) in navLinks6" v-slot:[`tab-${key}-trigger`]>
-              {{ key }} - {{ item.name }}
-            </template>
-            <template v-slot:[`tab-0-content`]>
+          <TabsCore :item-count="6" :style-class-passthrough="['class-modifier']">
+            <template v-for="(item, key) in navLinks6" #[`tab-${key}-trigger`]>{{ key }} - {{ item.name }}</template>
+            <template #[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
             </template>
-            <template v-slot:[`tab-1-content`]>
+            <template #[`tab-1-content`]>
               <p class="p-24">This is content slot 1</p>
             </template>
-            <template v-slot:[`tab-2-content`]>
+            <template #[`tab-2-content`]>
               <p class="p-24">This is content slot 2</p>
             </template>
-            <template v-slot:[`tab-3-content`]>
+            <template #[`tab-3-content`]>
               <p class="p-24">This is content slot 3</p>
             </template>
-            <template v-slot:[`tab-4-content`]>
+            <template #[`tab-4-content`]>
               <p class="p-24">This is content slot 4</p>
             </template>
-            <template v-slot:[`tab-5-content`]>
+            <template #[`tab-5-content`]>
               <p class="p-24">This is content slot 5</p>
             </template>
           </TabsCore>

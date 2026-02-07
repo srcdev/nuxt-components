@@ -6,24 +6,24 @@
           <h1 class="page-heading-2">Tabs #3</h1>
           <p>Data driven accordian navigation with custom content</p>
 
-          <TabsCore axis="y" :navItems="navLinks6" :style-class-passthrough="['class-modifier']">
-            <template v-for="(item, key) in navLinks6" v-slot:[`tab-${key}-trigger`]>{{ item.name }}</template>
-            <template v-slot:[`tab-0-content`]>
+          <TabsCore axis="y" :nav-items="navLinks6" :style-class-passthrough="['class-modifier']">
+            <template v-for="(item, key) in navLinks6" #[`tab-${key}-trigger`]>{{ item.name }}</template>
+            <template #[`tab-0-content`]>
               <p class="p-24">This is content slot 0</p>
             </template>
-            <template v-slot:[`tab-1-content`]>
+            <template #[`tab-1-content`]>
               <p class="p-24">This is content slot 1</p>
             </template>
-            <template v-slot:[`tab-2-content`]>
+            <template #[`tab-2-content`]>
               <p class="p-24">This is content slot 2</p>
             </template>
-            <template v-slot:[`tab-3-content`]>
+            <template #[`tab-3-content`]>
               <p class="p-24">This is content slot 3</p>
             </template>
-            <template v-slot:[`tab-4-content`]>
+            <template #[`tab-4-content`]>
               <p class="p-24">This is content slot 4</p>
             </template>
-            <template v-slot:[`tab-5-content`]>
+            <template #[`tab-5-content`]>
               <p class="p-24">This is content slot 5</p>
             </template>
           </TabsCore>
