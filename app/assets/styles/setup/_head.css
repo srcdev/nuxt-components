@@ -2,14 +2,6 @@ html {
   color-scheme: light dark;
   interpolate-size: allow-keywords;
 
-  &.light {
-    color-scheme: light;
-  }
-
-  &.dark {
-    color-scheme: dark;
-  }
-
   background-color: var(--page-bg);
 
   font-size: 62.5%;
@@ -22,7 +14,9 @@ html {
   overflow-x: clip;
 }
 body {
-  color: var(--grayscale-text-body);
+  /* color: var(--grayscale-text-body); */
+  color: light-dark(black, white);
+  background-color: light-dark(white, black);
   font-family: var(--font-family);
   font-size: var(--step-4);
   min-height: 100vh;
@@ -31,4 +25,16 @@ body {
     color 0.4s ease;
 
   overflow-x: clip;
+
+  &.light {
+    color-scheme: light;
+  }
+
+  &.dark {
+    color-scheme: dark;
+  }
+
+  &.system {
+    color-scheme: light dark;
+  }
 }
