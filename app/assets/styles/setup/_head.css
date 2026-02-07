@@ -2,7 +2,7 @@ html {
   color-scheme: light dark;
   interpolate-size: allow-keywords;
 
-  background-color: var(--page-bg);
+  /* background-color: var(--page-bg); */
 
   font-size: 62.5%;
 
