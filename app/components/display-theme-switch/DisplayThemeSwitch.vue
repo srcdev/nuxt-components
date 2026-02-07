@@ -1,9 +1,11 @@
 <template>
-  <TripleToggleSwitchCore
-    v-model="colorModeVal"
-    v-model:field-data="sampleFieldData"
-    :style-class-passthrough="[`colour-scheme-select`, elementClasses]"
-  />
+  <ClientOnly>
+    <TripleToggleSwitchCore
+      v-model="colorModeVal"
+      v-model:field-data="sampleFieldData"
+      :style-class-passthrough="[`colour-scheme-select`, elementClasses]"
+    />
+  </ClientOnly>
 </template>
 
 <script setup lang="ts">

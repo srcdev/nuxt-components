@@ -145,6 +145,28 @@ const responsiveNavLinks = {
     },
   ],
 } as ResponsiveHeaderProp;
+
+// *** COLOR SCHEME INITIALIZATION ***
+onMounted(() => {
+  const applyColorScheme = (scheme: string) => {
+    const htmlElement = document.documentElement;
+    htmlElement.classList.remove("system", "dark", "light");
+    htmlElement.classList.add(scheme);
+  };
+
+  try {
+    const storedValue = localStorage.getItem("useSettingsStore");
+
+    if (storedValue) {
+      const parsed = JSON.parse(storedValue);
+      applyColorScheme(parsed.colourScheme || "system");
+    } else {
+      applyColorScheme("system");
+    }
+  } catch {
+    applyColorScheme("system");
+  }
+});
 </script>
 <style lang="css">
 .header {

@@ -29,7 +29,7 @@ export const useSettingsStore = defineStore(
   },
   {
     persist: {
-      storage: piniaPluginPersistedstate.cookies(),
+      storage: piniaPluginPersistedstate.localStorage(),
     },
   }
 );
