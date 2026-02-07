@@ -12,7 +12,7 @@
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1 mbe-18">Test button elements</h1>
 
-          <div class="mbe-12">
+          <div class="mb-12">
             <p class="page-body-normal mbe-12"><code>class="test-button"</code></p>
             <button type="button" class="test-button">This is a button</button>
           </div>
@@ -20,6 +20,10 @@
           <div class="mbe-12">
             <p class="page-body-normal mbe-12"><code>class="test-button class-theme"</code></p>
             <button type="button" class="test-button class-theme">This is a button</button>
+          </div>
+          <hr class="mb-12" />
+          <div class="mb-12 p-24 test-div">
+            <div class="test-button class-theme">This is a test</div>
           </div>
         </LayoutRow>
       </template>
@@ -44,7 +48,7 @@ useHead({
 <style lang="css">
 .settings-page {
   .test-button {
-    all: unset;
+    /* all: unset; */
     padding: 0.6rem 1.2rem;
 
     border: black solid 1px;
@@ -60,6 +64,14 @@ useHead({
       background-color: light-dark(lightslategray, black);
       color: light-dark(white, yellow);
     }
+  }
+
+  .test-div {
+    background-color: light-dark(red, green);
+    border: light-dark(lightslategray, white) solid 3px;
+    outline: light-dark(red, yellow) solid 3px;
+    outline-offset: 3px;
+    border-radius: 4px;
   }
 }
 </style>
