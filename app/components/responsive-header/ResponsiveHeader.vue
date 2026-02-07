@@ -1,17 +1,18 @@
 <template>
-  <div class="navigation" :class="[elementClasses, { loaded: navLoaded }]" ref="navigationWrapper" role="banner">
-    <nav class="main-navigation" ref="mainNav" aria-label="Main navigation">
+  <div ref="navigationWrapper" class="navigation" :class="[elementClasses, { loaded: navLoaded }]" role="banner">
+    <nav ref="mainNav" class="main-navigation" aria-label="Main navigation">
       <ul
         v-for="(navGroup, groupKey) in responsiveNavLinks"
         :key="groupKey"
-        class="main-navigation-list"
         :ref="
           (el: Element | ComponentPublicInstance | null) => setNavRef(String(groupKey), el as HTMLUListElement | null)
         "
+        class="main-navigation-list"
       >
         <li
           v-for="(link, localIndex) in navGroup"
           :key="localIndex"
+          ref="mainNavigationItems"
           class="main-navigation-item"
           :class="{
             'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible,
@@ -20,7 +21,6 @@
             '--_main-navigation-item-width':
               mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
           }"
-          ref="mainNavigationItems"
           :data-group-key="groupKey"
           :data-local-index="localIndex"
           @mouseenter="handleNavigationItemHover"
@@ -35,14 +35,14 @@
             <Icon v-if="link.iconName" :name="link.iconName" class="decorator-icon" aria-hidden="true" />
             {{ link.name }}
           </NuxtLink>
-          <details v-else class="main-navigation-details" name="navigation-group" ref="navigationDetails">
+          <details v-else ref="navigationDetails" class="main-navigation-details" name="navigation-group">
             <summary
+              class="main-navigation-details-summary has-toggle-icon"
+              :aria-label="`${link.childLinksTitle} submenu`"
               @mouseenter="handleSummaryHover($event)"
               @focusin="handleSummaryHover($event)"
               @click.prevent="handleSummaryAction($event)"
               @keyup.prevent.stop="handleSummaryAction($event)"
-              class="main-navigation-details-summary has-toggle-icon"
-              :aria-label="`${link.childLinksTitle} submenu`"
             >
               <Icon name="mdi:chevron-down" class="icon" :aria-hidden="true" />
               <Icon v-if="link.iconName" :name="link.iconName" class="decorator-icon" aria-hidden="true" />
@@ -51,7 +51,7 @@
             </summary>
             <div class="main-navigation-sub-nav" role="menu">
               <ul class="main-navigation-sub-nav-list">
-                <li class="main-navigation-sub-nav-item" v-for="childLink in link.childLinks" :key="childLink.name">
+                <li v-for="childLink in link.childLinks" :key="childLink.name" class="main-navigation-sub-nav-item">
                   <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link" role="menuitem">
                     {{ childLink.name }}
                   </NuxtLink>
@@ -62,11 +62,11 @@
         </li>
       </ul>
     </nav>
-    <nav class="secondary-navigation" ref="secondaryNav" aria-label="Secondary navigation">
+    <nav ref="secondaryNav" class="secondary-navigation" aria-label="Secondary navigation">
       <details
+        ref="overflowDetails"
         class="overflow-details"
         :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]"
-        ref="overflowDetails"
         name="overflow-group"
       >
         <summary class="overflow-details-summary has-toggle-icon">
@@ -111,38 +111,27 @@
 import type { ResponsiveHeaderProp, ResponsiveHeaderState, IFlooredRect } from "../../types/components";
 import { useResizeObserver, onClickOutside } from "@vueuse/core";
 
-const props = defineProps({
-  responsiveNavLinks: {
-    type: Object as PropType<ResponsiveHeaderProp>,
-    default: () => [],
-  },
-  gapBetweenFirstAndSecondNav: {
-    type: Number,
-    default: 12, // px
-  },
-  overflowDetailsSummaryIcons: {
-    type: Object as PropType<Record<string, string>>,
-    default: () => ({
-      more: "gravity-ui:ellipsis",
-      burger: "gravity-ui:bars",
-    }),
-  },
-  collapseBreakpoint: {
-    type: Number,
-    default: null, // px
-  },
-  collapseAtMainNavIntersection: {
-    type: Boolean,
-    default: false,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  allowExpandOnGesture: {
-    type: Boolean,
-    default: true,
-  },
+interface Props {
+  responsiveNavLinks?: ResponsiveHeaderProp;
+  gapBetweenFirstAndSecondNav?: number;
+  overflowDetailsSummaryIcons?: Record<string, string>;
+  collapseBreakpoint?: number | null;
+  collapseAtMainNavIntersection?: boolean;
+  styleClassPassthrough?: string | string[];
+  allowExpandOnGesture?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  responsiveNavLinks: () => ({}),
+  gapBetweenFirstAndSecondNav: 12,
+  overflowDetailsSummaryIcons: () => ({
+    more: "gravity-ui:ellipsis",
+    burger: "gravity-ui:bars",
+  }),
+  collapseBreakpoint: null,
+  collapseAtMainNavIntersection: false,
+  styleClassPassthrough: () => [],
+  allowExpandOnGesture: true,
 });
 
 const collapseNavigationBelowWidth = computed(
@@ -156,7 +145,6 @@ const {
   navigationInitialized,
   navigationWrapperRects: cachedNavigationWrapperRects,
   secondaryNavRects: cachedSecondaryNavRects,
-  clearNavigationCache,
 } = useNavigationState();
 
 const slots = useSlots();
@@ -292,7 +280,7 @@ const getFlooredRect = (rect: DOMRect | null) => {
   };
 };
 
-const updateNavigationConfig = async (source: string) => {
+const updateNavigationConfig = async (_source?: string) => {
   navigationWrapperRects.value =
     getFlooredRect((navigationWrapperRef.value && navigationWrapperRef.value.getBoundingClientRect()) ?? null) || null;
   secondaryNavRects.value =
@@ -312,6 +300,7 @@ const allowNavigationCollapse = computed(() => {
     collapseNavigationBelowWidth.value &&
     navigationWrapperRects.value &&
     secondaryNavRects.value !== null &&
+    collapseBreakpoint.value !== null &&
     Math.floor(secondaryNavRects.value.left - props.gapBetweenFirstAndSecondNav) <= collapseBreakpoint.value
   );
 });
@@ -337,7 +326,7 @@ const determineNavigationItemVisibility = (rect: DOMRect) => {
 const initMainNavigationState = () => {
   if (!mainNavigationItemsRefs.value) return;
 
-  mainNavigationItemsRefs.value.forEach(async (item, index) => {
+  mainNavigationItemsRefs.value.forEach(async (item) => {
     // await nextTick()
     const rect = item.getBoundingClientRect();
 
@@ -384,10 +373,11 @@ const setupClickOutsideListeners = () => {
     });
   });
   // Add onClickOutside to overflowDetailsRef
-  overflowDetailsRef.value &&
+  if (overflowDetailsRef.value) {
     onClickOutside(overflowDetailsRef.value, () => {
       overflowDetailsRef.value?.removeAttribute("open");
     });
+  }
 };
 
 onMounted(async () => {
@@ -553,6 +543,7 @@ watch(
             margin-block: var(--_link-margin-block);
             margin-inline: var(--_link-margin-inline);
             border-bottom: var(--_link-border-default);
+            white-space: nowrap;
 
             &::-webkit-details-marker,
             &::marker {

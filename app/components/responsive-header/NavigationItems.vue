@@ -39,7 +39,7 @@
         >
           <ExpandingPanel
             name="overflow-navigation-group"
-            :animation-duration="detailsAanimationDuration"
+            :animation-duration="DETAILS_ANIMATION_DURATION"
             icon-size="medium"
             :style-class-passthrough="['overflow-navigation-details']"
           >
@@ -79,36 +79,45 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderState } from "../../types/components"
+import type { ResponsiveHeaderState } from "../../types/components";
 
-const props = defineProps({
-  mainNavigationState: {
-    type: Object as PropType<ResponsiveHeaderState>,
-    default: () => [],
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-})
+interface Props {
+  mainNavigationState?: ResponsiveHeaderState;
+  styleClassPassthrough?: string | string[];
+}
 
-const detailsAanimationDuration = 200
-const detailsAanimationDurationString = `${detailsAanimationDuration}ms`
+const props = withDefaults(defineProps<Props>(), {
+  mainNavigationState: () => ({ clonedNavLinks: {}, navListVisibility: {}, hasSecondNav: false }),
+  styleClassPassthrough: () => [],
+});
 
+// Performance: Use const assertion for static values
+const DETAILS_ANIMATION_DURATION = 200 as const;
+// const DETAILS_ANIMATION_DURATION_STRING = `${DETAILS_ANIMATION_DURATION}ms` as const;
+
+// Performance: Memoize expensive computed with proper dependencies
 const widestNavLinkWidthInMainNavigationState = computed(() => {
-  return Object.values(props.mainNavigationState.clonedNavLinks || {}).reduce((maxWidth, group) => {
-    return Math.max(maxWidth, ...group.map((link) => link.config?.width || 0))
-  }, 0)
-})
+  const clonedNavLinks = props.mainNavigationState?.clonedNavLinks;
+  if (!clonedNavLinks || Object.keys(clonedNavLinks).length === 0) {
+    return 0;
+  }
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+  return Object.values(clonedNavLinks).reduce((maxWidth, group) => {
+    if (!Array.isArray(group)) return maxWidth;
+    return Math.max(maxWidth, ...group.map((link) => link.config?.width || 0));
+  }, 0);
+});
 
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+// Performance: Use immediate flag and more efficient watching
 watch(
   () => props.styleClassPassthrough,
-  () => {
-    resetElementClasses(props.styleClassPassthrough)
-  }
-)
+  (newValue) => {
+    resetElementClasses(newValue);
+  },
+  { immediate: false, flush: "post" }
+);
 </script>
 
 <style lang="css">
