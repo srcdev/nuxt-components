@@ -22,7 +22,7 @@ export default {
     docs: {
       description: {
         component:
-          "A theme switching component that allows users to toggle between auto, light, and dark color schemes. This component integrates with the app's color scheme settings and provides a smooth animated toggle interface.",
+          "A theme switching component that allows users to toggle between system, light, and dark color schemes. This component integrates with the app's color scheme settings and provides a smooth animated toggle interface.",
       },
     },
   },
@@ -39,7 +39,7 @@ const Template: StoryFn<DisplayThemeSwitchStoryArgs> = (_args, { argTypes }) => 
       <div style="margin-bottom: 1.5rem;">
         <h3 style="margin: 0 0 0.5rem 0; font-size: 1.8rem;">Theme Selector</h3>
         <p style="margin: 0; color: #666; font-size: 1.4rem;">
-          Choose your preferred color scheme. Auto mode follows your system preference.
+          Choose your preferred color scheme. system mode follows your system preference.
         </p>
       </div>
 
@@ -80,7 +80,7 @@ Default.parameters = {
   docs: {
     description: {
       story:
-        "The default theme switch with auto, light, and dark mode options. The component features smooth animations and integrates with the application's global theme state.",
+        "The default theme switch with system, light, and dark mode options. The component features smooth animations and integrates with the application's global theme state.",
     },
   },
 };

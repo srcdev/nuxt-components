@@ -2,11 +2,11 @@ html {
   color-scheme: light dark;
   interpolate-size: allow-keywords;
 
-  &[data-color-scheme="light"] {
+  &.light {
     color-scheme: light;
   }
 
-  &[data-color-scheme="dark"] {
+  &.dark {
     color-scheme: dark;
   }
 
@@ -14,7 +14,9 @@ html {
 
   font-size: 62.5%;
 
-  transition: background-color 0.4s ease, color 0.4s ease;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
   scrollbar-gutter: stable;
 
   overflow-x: clip;
@@ -24,7 +26,9 @@ body {
   font-family: var(--font-family);
   font-size: var(--step-4);
   min-height: 100vh;
-  transition: background-color 0.4s ease, color 0.4s ease;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease;
 
   overflow-x: clip;
 }

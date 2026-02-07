@@ -4,29 +4,35 @@ export const useSettingsStore = defineStore(
   "useSettingsStore",
   () => {
     // State
-    const colourScheme = ref<"auto" | "dark" | "light">("auto")
+    const colourScheme = ref<"system" | "dark" | "light">("system");
 
-    // Getters
-    const currentColourScheme = computed(() => colourScheme.value)
+    // Getters - removed unnecessary computed wrapper
 
     // Actions
-    const setColourScheme = (newVal: "auto" | "dark" | "light") => {
-      colourScheme.value = newVal
+    const setColourScheme = (newVal: "system" | "dark" | "light") => {
+      // Early return if value hasn't changed
+      if (colourScheme.value === newVal) return;
+
+      colourScheme.value = newVal;
 
       if (import.meta.client && newVal !== null) {
-        document.documentElement.dataset.colorScheme = newVal
+        // Cache DOM element reference
+        const htmlElement = document.documentElement;
+        // Remove existing color scheme classes
+        htmlElement.classList.remove("system", "dark", "light");
+        // Add the new color scheme class
+        htmlElement.classList.add(newVal);
       }
-    }
+    };
 
     return {
       colourScheme,
-      currentColourScheme,
       setColourScheme,
-    }
+    };
   },
   {
     persist: {
       storage: piniaPluginPersistedstate.cookies(),
     },
   }
-)
+);

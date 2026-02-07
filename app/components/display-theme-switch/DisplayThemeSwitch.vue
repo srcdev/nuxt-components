@@ -22,10 +22,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 const sampleFieldData = ref<IFormMultipleOptions>({
   data: [
     {
-      id: "auto",
+      id: "system",
       name: "colorModeVal",
-      value: "auto",
-      label: "Auto",
+      value: "system",
+      label: "System",
       icon: "material-symbols:night-sight-auto-sharp",
     },
     {
@@ -52,7 +52,7 @@ const { colourScheme, setColourScheme } = useSettingsStore();
 
 const colorModeVal = ref(colourScheme);
 watch(colorModeVal, (val) => {
-  setColourScheme(val as "auto" | "dark" | "light");
+  setColourScheme(val);
 });
 </script>
 
