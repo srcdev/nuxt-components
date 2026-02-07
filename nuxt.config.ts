@@ -25,7 +25,11 @@ export default defineNuxtConfig({
         lang: "en",
       },
       titleTemplate: "%s - Nuxt Components Layer",
-      meta: [{ charset: "utf-8" }, { name: "viewport", content: "width=device-width, initial-scale=1" }],
+      meta: [
+        { charset: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "color-scheme", content: "light dark" },
+      ],
       bodyAttrs: {
         class: "srcdev-components-extended",
       },
