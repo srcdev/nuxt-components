@@ -1,8 +1,9 @@
-@import "./_default";
-@import "./_primary";
-@import "./_secondary";
-@import "./_tertiary";
-@import "./_ghost";
-@import "./_error";
-@import "./_success";
-@import "./_warning";
+@import "./default";
+@import "./primary";
+@import "./secondary";
+@import "./tertiary";
+@import "./ghost";
+@import "./error";
+@import "./info";
+@import "./success";
+@import "./warning";

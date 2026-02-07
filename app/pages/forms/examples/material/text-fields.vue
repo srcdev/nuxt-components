@@ -13,51 +13,51 @@
               <li>
                 <InputButtonSubmit
                   type="button"
-                  @click.stop.prevent="swapTheme('primary')"
                   :is-pending="false"
                   button-text="Primary"
                   theme="primary"
                   size="default"
+                  @click.stop.prevent="swapTheme('primary')"
                 />
               </li>
               <li>
                 <InputButtonSubmit
                   type="button"
-                  @click.stop.prevent="swapTheme('secondary')"
                   :is-pending="false"
                   button-text="Secondary"
                   theme="secondary"
                   size="default"
+                  @click.stop.prevent="swapTheme('secondary')"
                 />
               </li>
               <li>
                 <InputButtonSubmit
                   type="button"
-                  @click.stop.prevent="swapTheme('warning')"
                   :is-pending="false"
                   button-text="Warning"
                   theme="warning"
                   size="default"
+                  @click.stop.prevent="swapTheme('warning')"
                 />
               </li>
               <li>
                 <InputButtonSubmit
                   type="button"
-                  @click.stop.prevent="swapTheme('success')"
                   :is-pending="false"
                   button-text="Success"
                   theme="success"
                   size="default"
+                  @click.stop.prevent="swapTheme('success')"
                 />
               </li>
               <li>
                 <InputButtonSubmit
                   type="button"
-                  @click.stop.prevent="swapTheme('error')"
                   :is-pending="false"
                   button-text="Error"
                   theme="error"
                   size="default"
+                  @click.stop.prevent="swapTheme('error')"
                 />
               </li>
             </ul>
@@ -71,51 +71,51 @@
               <li>
                 <InputButtonSubmit
                   type="button"
-                  @click.stop.prevent="swapSize('x-small')"
                   :is-pending="false"
                   button-text="X-Small"
                   theme="primary"
                   size="x-small"
+                  @click.stop.prevent="swapSize('x-small')"
                 />
               </li>
               <li>
                 <InputButtonSubmit
                   type="button"
-                  @click.stop.prevent="swapSize('small')"
                   :is-pending="false"
                   button-text="Small"
                   theme="primary"
                   size="small"
+                  @click.stop.prevent="swapSize('small')"
                 />
               </li>
               <li>
                 <InputButtonSubmit
                   type="button"
-                  @click.stop.prevent="swapSize('default')"
                   :is-pending="false"
                   button-text="Default"
                   theme="primary"
                   size="default"
+                  @click.stop.prevent="swapSize('default')"
                 />
               </li>
               <li>
                 <InputButtonSubmit
                   type="button"
-                  @click.stop.prevent="swapSize('medium')"
                   :is-pending="false"
                   button-text="Medium"
                   theme="primary"
                   size="medium"
+                  @click.stop.prevent="swapSize('medium')"
                 />
               </li>
               <li>
                 <InputButtonSubmit
                   type="button"
-                  @click.stop.prevent="swapSize('large')"
                   :is-pending="false"
                   button-text="Large"
                   theme="primary"
                   size="large"
+                  @click.stop.prevent="swapSize('large')"
                 />
               </li>
             </ul>
@@ -125,40 +125,47 @@
               <li>
                 <InputButtonSubmit
                   type="button"
-                  @click.stop.prevent="inputVariant = 'normal'"
                   button-text="Normal"
                   theme="primary"
                   size="default"
+                  @click.stop.prevent="inputVariant = 'normal'"
                 />
               </li>
               <li>
                 <InputButtonSubmit
                   type="button"
-                  @click.stop.prevent="inputVariant = 'underlined'"
                   button-text="Underlined"
                   theme="primary"
                   size="default"
+                  @click.stop.prevent="inputVariant = 'underlined'"
                 />
               </li>
             </ul>
 
+            <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+              <h1 class="page-heading-1 mbe-18">Settings</h1>
+              <h2 class="page-heading-2 mbe-18">Theme Switcher</h2>
+
+              <DisplayThemeSwitch />
+            </LayoutRow>
+
             <FormWrapper width="medium">
               <template #default>
                 <ClientOnly>
-                  <form class="form-wrapper" @submit.stop.prevent="submitForm()" ref="formRef">
-                    <div aria-live="assertive" id="aria-live-message"></div>
+                  <form ref="formRef" class="form-wrapper" @submit.stop.prevent="submitForm()">
+                    <div id="aria-live-message" aria-live="assertive"></div>
 
                     <FormField v-if="countriesData !== null" width="wide" :has-gutter="false">
                       <template #default>
                         <InputSelectWithLabel
+                          v-model="state.countrySelect"
+                          v-model:field-data="countriesData"
                           name="countrySelect"
                           :required="true"
                           label="Where are you from?"
                           placeholder="Please select a country"
                           :error-message="formErrors?.countrySelect?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.countrySelect)"
-                          v-model="state.countrySelect"
-                          v-model:fieldData="countriesData"
                           :theme
                           :size
                           :input-variant
@@ -171,11 +178,11 @@
                     <FormField width="wide" :has-gutter="false">
                       <template #default>
                         <InputTextWithLabel
+                          id="emailAddress"
                           v-model="state.emailAddress"
                           type="email"
                           inputmode="email"
                           :maxlength="fieldMaxLength('email')"
-                          id="emailAddress"
                           name="emailAddress"
                           placeholder="eg. name@domain.com"
                           label="Email address"
@@ -201,10 +208,10 @@
                     <FormField width="wide" :has-gutter="false">
                       <template #default>
                         <InputTextWithLabel
+                          id="username"
                           v-model="state.username"
                           type="text"
                           :maxlength="fieldMaxLength('username')"
-                          id="username"
                           name="username"
                           placeholder="eg. JoeBloggs1"
                           label="Username"
@@ -231,9 +238,9 @@
                     <FormField width="wide" :has-gutter="false">
                       <template #default>
                         <InputPasswordWithLabel
+                          id="password"
                           v-model="state.password"
                           :maxlength="fieldMaxLength('password')"
-                          id="password"
                           name="password"
                           placeholder="eg. a mixure of numbers and letters"
                           label="Password"
@@ -276,16 +283,16 @@
                     <FormField v-if="tagsData !== null" width="wide" :has-gutter="false">
                       <template #default>
                         <MultipleCheckboxes
+                          v-model="state.tags"
+                          v-model:field-data="tagsData"
                           name="tags"
                           legend="Choose tags (MultipleCheckboxes)"
                           :required="true"
                           label="Check between 3 and 8 tags"
                           placeholder="eg. Type something here"
-                          :isButton="true"
+                          :is-button="true"
                           :error-message="formErrors?.tags?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.tags)"
-                          v-model="state.tags"
-                          v-model:fieldData="tagsData"
                           options-layout="inline"
                           :theme
                           :size
@@ -394,6 +401,7 @@
                     <FormField width="wide" :has-gutter="false">
                       <template #default>
                         <InputNumberDefault
+                          v-model.number="state.count"
                           name="count"
                           label="How many things? Between 25 & 75 , step 5"
                           :min="25"
@@ -404,7 +412,6 @@
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.count)"
                           :required="true"
                           :style-class-passthrough="['count-1', 'count-2']"
-                          v-model.number="state.count"
                           :theme
                           :size
                         >
@@ -424,16 +431,16 @@
                     <FormField v-if="tagsData !== null" width="wide" :has-gutter="false">
                       <template #default>
                         <MultipleRadiobuttons
+                          v-model="state.tagsRadio"
+                          v-model:field-data="tagsData"
                           name="tagsRadio"
                           legend="Choose tags (as radiobuttons)"
                           :required="true"
                           label="Check between 3 and 8 tags"
                           placeholder="eg. Type something here"
-                          :isButton="true"
+                          :is-button="true"
                           :error-message="formErrors?.tagsRadio?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.tagsRadio)"
-                          v-model="state.tagsRadio"
-                          v-model:fieldData="tagsData"
                           options-layout="inline"
                           :theme
                           :size
@@ -448,11 +455,12 @@
 
                     <FormField
                       width="wide"
-                      :fieldHasError="Boolean(zodFormControl.submitAttempted && formErrors?.score)"
+                      :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.score)"
                       :has-gutter="false"
                     >
                       <template #default>
                         <InputRangeDefault
+                          v-model.number="state.score"
                           name="score"
                           label="Score between 0 & 100"
                           :min="0"
@@ -463,7 +471,6 @@
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.score)"
                           :required="true"
                           :style-class-passthrough="['style-1', 'style-2']"
-                          v-model.number="state.score"
                           :theme
                           :size
                         >
@@ -471,7 +478,7 @@
                             <p class="label-description">This is a description of what the user is required to do</p>
                           </template>
                           <template #datalist>
-                            <datalist class="input-range-datalist" id="score-datalist">
+                            <datalist id="score-datalist" class="input-range-datalist">
                               <option value="0" label="Rubbish!"></option>
                               <option value="25" label="Below par"></option>
                               <option value="50" label="Average"></option>
@@ -492,6 +499,8 @@
                     <FormField v-if="titleData !== null" width="wide" :has-gutter="false">
                       <template #default>
                         <MultipleRadiobuttons
+                          v-model="state.title"
+                          v-model:field-data="titleData"
                           name="title"
                           legend="What is your title"
                           :required="true"
@@ -499,8 +508,6 @@
                           placeholder="eg. Type something here"
                           :error-message="formErrors?.title?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.title)"
-                          v-model="state.title"
-                          v-model:fieldData="titleData"
                           options-layout="equal-widths"
                           :theme
                           :size
@@ -522,6 +529,8 @@
                     <FormField v-if="titleData !== null" width="wide" :has-gutter="false">
                       <template #default>
                         <MultipleRadiobuttons
+                          v-model="state.otherTitle"
+                          v-model:field-data="titleData"
                           name="otherTitle"
                           legend="What is your title"
                           :required="true"
@@ -529,8 +538,6 @@
                           placeholder="eg. Type something here"
                           :error-message="formErrors?.otherTitle?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.otherTitle)"
-                          v-model="state.otherTitle"
-                          v-model:fieldData="titleData"
                           options-layout="equal-widths"
                           :theme
                           :size
@@ -545,6 +552,8 @@
                     <FormField v-if="citiesData !== null" width="wide" :has-gutter="false">
                       <template #default>
                         <MultipleCheckboxes
+                          v-model="state.cities"
+                          v-model:field-data="citiesData"
                           name="cities"
                           legend="Choose a location"
                           :required="true"
@@ -552,8 +561,6 @@
                           placeholder="eg. Type something here"
                           :error-message="formErrors?.cities?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.cities)"
-                          v-model="state.cities"
-                          v-model:fieldData="citiesData"
                           options-layout="inline"
                           :theme
                           :size
@@ -568,6 +575,8 @@
                     <FormField v-if="countriesData !== null" width="wide" :has-gutter="false">
                       <template #default>
                         <MultipleCheckboxes
+                          v-model="state.countries"
+                          v-model:field-data="countriesData"
                           name="countries"
                           legend="Choose a country"
                           :required="true"
@@ -575,8 +584,6 @@
                           placeholder="eg. Type something here"
                           :error-message="formErrors?.countries?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.countries)"
-                          v-model="state.countries"
-                          v-model:fieldData="countriesData"
                           options-layout="equal-widths"
                           :theme
                           :size
@@ -598,13 +605,13 @@
                     <FormField width="wide" :has-gutter="false">
                       <template #default>
                         <SingleCheckbox
+                          v-model="state.agreed"
                           name="agreed"
                           legend="I agree (label with description)"
                           label="Click to agree to something"
                           :required="true"
                           :error-message="formErrors?.agreed?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.agreed)"
-                          v-model="state.agreed"
                           :theme
                           :size
                         >
@@ -622,28 +629,28 @@
                     <FormField width="wide" :has-gutter="false">
                       <template #default>
                         <SingleCheckbox
+                          v-model="state.agree"
                           name="agree"
                           legend="I agree (label no description)"
                           label="Click to agree to something"
                           :required="true"
                           :error-message="formErrors?.agree?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.agree)"
-                          v-model="state.agree"
                           :theme
                           :size
-                        ></SingleCheckbox>
+                        />
                       </template>
                     </FormField>
 
                     <FormField width="wide" :has-gutter="false">
                       <template #default>
                         <SingleCheckbox
+                          v-model="state.terms"
                           name="terms"
                           legend="Terms and conditions"
                           :required="true"
                           :error-message="formErrors?.terms?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.terms)"
-                          v-model="state.terms"
                           :theme
                           :size
                         >
@@ -662,12 +669,12 @@
                       <template #default>
                         <InputButtonSubmit
                           type="button"
-                          @click.stop.prevent="submitForm()"
                           :is-pending="false"
                           :readonly="zodFormControl.submitDisabled"
                           button-text="Submit"
                           :theme
                           :size
+                          @click.stop.prevent="submitForm()"
                         />
                       </template>
                     </FormField>

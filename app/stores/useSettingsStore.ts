@@ -6,27 +6,24 @@ export const useSettingsStore = defineStore(
     // State
     const colourScheme = ref<"system" | "dark" | "light">("system");
 
-    // Getters - removed unnecessary computed wrapper
+    // Getters
+    const currentColourScheme = computed(() => colourScheme.value);
 
     // Actions
     const setColourScheme = (newVal: "system" | "dark" | "light") => {
-      // Early return if value hasn't changed
-      if (colourScheme.value === newVal) return;
-
       colourScheme.value = newVal;
 
       if (import.meta.client && newVal !== null) {
-        // Cache DOM element reference - use body instead of html for iOS 18 compatibility
-        const bodyElement = document.body;
         // Remove existing color scheme classes
-        bodyElement.classList.remove("system", "dark", "light");
+        document.documentElement.classList.remove("system", "dark", "light");
         // Add the new color scheme class
-        bodyElement.classList.add(newVal);
+        document.documentElement.classList.add(newVal);
       }
     };
 
     return {
       colourScheme,
+      currentColourScheme,
       setColourScheme,
     };
   },
