@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderProp } from "~/types/components"
+import type { ResponsiveHeaderProp } from "~/types/components";
 
 const responsiveNavLinks = {
   firstNav: [
@@ -139,12 +139,12 @@ const responsiveNavLinks = {
       childLinksTitle: "Manage Your Account",
       childLinks: [
         { name: "Your Profile", path: "#" },
-        { name: "Settings", path: "#" },
+        { name: "Settings", path: "/ui/settings" },
         { name: "Logout", path: "#" },
       ],
     },
   ],
-} as ResponsiveHeaderProp
+} as ResponsiveHeaderProp;
 </script>
 <style lang="css">
 .header {
