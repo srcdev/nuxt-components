@@ -8,6 +8,14 @@
 
           <DisplayThemeSwitch />
         </LayoutRow>
+
+        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+          <h1 class="page-heading-1 mbe-18">Test form element</h1>
+
+          <div class="mbe-12">
+            <button type="button" class="test-button class-theme">This is a button</button>
+          </div>
+        </LayoutRow>
       </template>
     </NuxtLayout>
   </div>
@@ -27,4 +35,15 @@ useHead({
 });
 </script>
 
-<style lang="css"></style>
+<style lang="css">
+.settings-page {
+  .test-button {
+    all: unset;
+    padding: 0.6rem 1.2rem;
+
+    &.class-theme {
+      border: light-dark(black, white) solid 1px;
+    }
+  }
+}
+</style>
