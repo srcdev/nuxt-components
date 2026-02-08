@@ -440,9 +440,6 @@ watch(
   grid-template-areas: "navStack";
 
   margin: 12px;
-  border-radius: 8px;
-  background-color: #efefef05;
-  border: 1px solid #efefef75;
   padding: 12px;
 
   .main-navigation {
@@ -600,6 +597,25 @@ watch(
           .main-navigation-details,
           .main-navigation-link {
             margin-inline-start: var(--_main-navigation-item-width);
+          }
+        }
+      }
+
+      &:last-child {
+        .main-navigation-item {
+          /* border: 2px solid red; */
+
+          .main-navigation-details {
+            /* border: 2px solid blue; */
+            /* position: relative; */
+            /* isolation: isolate; */
+
+            .main-navigation-sub-nav {
+              /* border: 2px solid yellow; */
+              /* left: initial; */
+              /* right: 0; */
+              translate: calc(-1 * var(--_main-navigation-item-width)) 12px;
+            }
           }
         }
       }

@@ -149,7 +149,7 @@ const responsiveNavLinks = {
 // *** COLOR SCHEME INITIALIZATION ***
 onMounted(() => {
   const getSystemPreference = () => {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
   };
 
   const applyColorScheme = (scheme: string) => {
@@ -159,12 +159,10 @@ onMounted(() => {
     // If scheme is "system", use the actual system preference
     const actualScheme = scheme === "system" ? getSystemPreference() : scheme;
     htmlElement.classList.add(actualScheme);
-
-    console.log(`Applied color scheme: ${actualScheme} (requested: ${scheme})`);
   };
 
   // Listen for system preference changes
-  const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
   const handleSystemChange = () => {
     const storedValue = localStorage.getItem("useSettingsStore");
     if (storedValue) {
@@ -176,7 +174,7 @@ onMounted(() => {
     }
   };
 
-  mediaQuery.addEventListener('change', handleSystemChange);
+  mediaQuery.addEventListener("change", handleSystemChange);
 
   try {
     const storedValue = localStorage.getItem("useSettingsStore");
@@ -188,7 +186,6 @@ onMounted(() => {
       // For new users, detect and apply system preference
       const systemPreference = getSystemPreference();
       applyColorScheme(systemPreference);
-      console.log(`New user detected, applied system preference: ${systemPreference}`);
     }
   } catch {
     // Fallback to system preference
@@ -198,7 +195,12 @@ onMounted(() => {
 });
 </script>
 <style lang="css">
+/* Modifiers for ResposiveHeader  */
 .header {
+  .debug-grid {
+    display: none !important;
+  }
+
   width: 100%;
 
   .responsive-header {
@@ -211,7 +213,7 @@ onMounted(() => {
     background-color: #000;
 
     position: relative;
-    z-index: 99;
+    z-index: 9;
 
     width: 100%;
 
@@ -238,16 +240,17 @@ onMounted(() => {
   }
 }
 
-/* Modifiers for ResposiveHeader  */
-.navigation.your-scope-class {
+.navigation {
   margin: 1.2rem;
   border-radius: 0.8rem;
   background-color: #efefef05;
-  border: 0.1rem solid transparent;
-  padding-block: 0;
+  border: 1px solid transparent;
+  padding-block: 1rem;
   padding-inline: 1.2rem;
+  inline-size: 100%;
+  max-height: 6.4rem;
 
-  max-block-size: 4rem;
+  /* max-block-size: 4.2rem; */
 
   .main-navigation {
     gap: 60px;
@@ -262,10 +265,36 @@ onMounted(() => {
       }
 
       .main-navigation-item {
+        width: initial;
+
         .main-navigation-link {
-          color: inherit;
+          position: relative;
+          display: block;
+          color: var(--gray-0);
           text-decoration: none;
           margin-inline-start: 0;
+
+          padding: 8px 2px;
+          border-bottom: 0.2rem solid #efefef25;
+
+          &:before {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 0.2rem;
+            background-color: transparent;
+            transition: all 0.3s;
+          }
+
+          &:hover {
+            &:before {
+              width: 100%;
+              height: 0.2rem;
+              background-color: var(--green-8);
+            }
+          }
         }
 
         .main-navigation-details {
@@ -273,18 +302,39 @@ onMounted(() => {
 
           .has-toggle-icon {
             gap: 6px;
-
-            .icon {
-              /* color: red; */
-            }
           }
 
           .main-navigation-details-summary {
+            position: relative;
+            color: var(--gray-0);
+            white-space: nowrap;
+            border-bottom: 0.2rem solid #efefef25;
+
+            &:before {
+              content: "";
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 0%;
+              height: 0.2rem;
+              background-color: transparent;
+              transition: all 0.3s;
+            }
+          }
+
+          &[open] {
+            .main-navigation-details-summary {
+              &:before {
+                width: 100%;
+                height: 0.2rem;
+                background-color: var(--green-8);
+              }
+            }
           }
 
           .main-navigation-sub-nav {
-            padding: 12px;
-            border: 0.1rem solid #efefef75;
+            padding: 8px;
+            border: 1px solid #efefef75;
             border-radius: 8px;
             background-color: #000;
             translate: 0 12px;
@@ -295,17 +345,41 @@ onMounted(() => {
               gap: 12px;
 
               .main-navigation-sub-nav-item {
-                margin-bottom: 8px;
+                display: block;
+                margin-bottom: 0;
 
                 &:last-child {
                   margin-bottom: 0;
                 }
 
                 .main-navigation-sub-nav-link {
+                  position: relative;
                   display: block;
                   text-wrap-mode: nowrap;
                   text-decoration: none;
-                  color: inherit;
+                  color: var(--gray-0);
+                  padding: 8px 2px;
+                  border-bottom: 0.2rem solid #efefef25;
+                  min-width: 170px;
+
+                  &:before {
+                    content: "";
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    width: 0%;
+                    height: 0.2rem;
+                    background-color: transparent;
+                    transition: all 0.3s;
+                  }
+
+                  &:hover {
+                    &:before {
+                      width: 100%;
+                      height: 0.2rem;
+                      background-color: var(--green-8);
+                    }
+                  }
                 }
               }
             }
@@ -322,7 +396,7 @@ onMounted(() => {
       .secondary-navigation-item {
         .secondary-navigation-link {
           font: inherit;
-          color: inherit;
+          color: var(--gray-0);
 
           .icon {
             height: 1.35em;
@@ -333,6 +407,8 @@ onMounted(() => {
     }
 
     .main-navigation-link {
+      color: var(--gray-0);
+
       .icon {
         height: 1.35em;
         width: 1.35em;
@@ -346,23 +422,33 @@ onMounted(() => {
       .overflow-details-summary {
         --_icon-zoom: 1;
         --_icon-size: 20px;
-        --_border-width: 0.1rem;
-        --_outline-width: 0.1rem;
+        --_border-width: 1px;
+        --_outline-width: 1px;
         padding-inline: 5px;
 
         border-radius: 4px;
         border: var(--_border-width) solid #ffffff90;
         outline: var(--_outline-width) solid #ffffff10;
-        background-color: Canvas;
+        background-color: var(--gray-8);
+
+        width: 3rem;
+        height: 3rem;
 
         &:hover,
         &:focus-visible {
           --_icon-zoom: 1.2;
-          outline: var(--_outline-width) solid #ffffff;
+          outline: 2px solid var(--green-8);
+          outline-offset: 0.3rem;
+
+          .icon {
+            scale: 0.9;
+          }
         }
 
         .icon {
-          scale: var(--_icon-zoom);
+          color: var(--gray-0);
+          width: 2.6rem;
+          height: 2.6rem;
         }
       }
 
@@ -375,8 +461,6 @@ onMounted(() => {
         padding-block: 0;
         margin-block-end: -0.1rem;
         gap: 0.8rem;
-
-        /* Override for NavigationItems START */
 
         .overflow-navigation-wrapper {
           --overflow-nav-padding-inline: 0.8rem;
@@ -409,8 +493,13 @@ onMounted(() => {
                 padding-block: var(--overflow-nav-items-padding-block);
                 padding-inline: var(--overflow-nav-padding-inline);
                 display: flex;
-                /* background-color: red; */
-                border-bottom: 0.1rem solid #efefef75;
+                color: var(--gray-0);
+                border-bottom: 0.2rem solid #efefef75;
+
+                &:hover {
+                  background-color: var(--gray-7);
+                  border-color: var(--green-8);
+                }
               }
 
               .overflow-navigation-details {
@@ -422,8 +511,13 @@ onMounted(() => {
                       padding-block: var(--overflow-nav-items-padding-block);
                       padding-inline: var(--overflow-nav-padding-inline);
                       gap: 1rem;
-                      /* background-color: red; */
-                      border-bottom: 0.1rem solid #efefef75;
+                      color: var(--gray-0);
+                      border-bottom: 0.2rem solid #efefef75;
+
+                      &:hover {
+                        background-color: var(--gray-7);
+                        border-color: var(--green-8);
+                      }
 
                       .label-wrapper {
                         .overflow-navigation-text {
@@ -437,10 +531,15 @@ onMounted(() => {
 
                     &[open] {
                       .expanding-panel-summary {
-                        border-bottom: 0.1rem solid transparent;
+                        border-color: transparent;
+
+                        &:hover {
+                          background-color: var(--gray-7);
+                          border-color: var(--green-8);
+                        }
                       }
                       + .expanding-panel-content {
-                        border-bottom: 0.1rem solid #efefef75;
+                        border-bottom: 0.2rem solid #efefef75;
                         .inner {
                           .overflow-navigation-sub-nav-inner {
                             margin-top: var(--overflow-nav-items-gap);
@@ -451,7 +550,7 @@ onMounted(() => {
                   }
 
                   .expanding-panel-content {
-                    border-bottom: 0.1rem solid transparent;
+                    border-bottom: 0.2rem solid transparent;
 
                     .inner {
                       margin-top: 0;
@@ -467,10 +566,15 @@ onMounted(() => {
                           .overflow-navigation-sub-nav-item {
                             padding-block: var(--overflow-nav-items-padding-block);
                             padding-inline: var(--overflow-nav-padding-inline);
+                            font-size: var(--step-4);
+                            color: var(--gray-0);
 
+                            &:hover {
+                              background-color: var(--gray-7);
+                              border-color: var(--green-8);
+                            }
                             .overflow-navigation-sub-nav-link {
                               text-decoration: none;
-                              color: inherit;
                             }
                           }
                         }
@@ -482,7 +586,6 @@ onMounted(() => {
             }
           }
         }
-        /* Override for NavigationItems END */
       }
     }
   }
