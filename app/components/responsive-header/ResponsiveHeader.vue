@@ -439,9 +439,6 @@ watch(
   display: grid;
   grid-template-areas: "navStack";
 
-  margin: 12px;
-  padding: 12px;
-
   .main-navigation {
     /* Set up some global vars */
     --_link-padding-block: 0.8rem;
@@ -690,7 +687,6 @@ watch(
         background-color: Canvas;
 
         width: var(--_icon-size);
-        height: var(--_icon-size);
         overflow: hidden;
         transition-property: all;
         transition-timing-function: linear;
