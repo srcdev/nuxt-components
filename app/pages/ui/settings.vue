@@ -23,6 +23,7 @@
           </div>
           <hr class="mb-12" />
           <div class="mb-12 p-24 test-div">
+            <p class="page-body-normal mbe-12">This is test div</p>
             <div class="test-button class-theme">This is a test</div>
           </div>
         </LayoutRow>
@@ -47,6 +48,7 @@ useHead({
 
 <style lang="css">
 .settings-page {
+  background-color: lightslategray;
   .test-button {
     /* all: unset; */
     padding: 0.6rem 1.2rem;
@@ -67,11 +69,19 @@ useHead({
   }
 
   .test-div {
-    background-color: light-dark(red, green);
-    border: light-dark(lightslategray, white) solid 3px;
-    outline: light-dark(red, yellow) solid 3px;
+    color: light-dark(lightslategray, lightslategray);
+    background-color: light-dark(white, lightslategray);
+    border: light-dark(black, lightslategray) solid 3px;
+    outline: light-dark(black, lightslategray) solid 3px;
     outline-offset: 3px;
     border-radius: 4px;
+
+    .class-theme {
+      border: light-dark(black, lightslategray) solid 1px;
+      outline: light-dark(black, lightslategray) solid 1px;
+      background-color: light-dark(lightslategray, lightslategray);
+      color: light-dark(white, lightslategray);
+    }
   }
 }
 </style>
