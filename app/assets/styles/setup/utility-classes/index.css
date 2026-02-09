@@ -1,4 +1,3 @@
 @import "./animations/";
-@import "./_fluid-spacing";
-@import "./_margin";
-@import "./_padding";
+@import "./spacing/";
+@import "./_a11y";
