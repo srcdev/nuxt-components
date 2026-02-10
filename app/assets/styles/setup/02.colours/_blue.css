@@ -13,18 +13,18 @@
   --blue-11: #0043c1;
   --blue-12: #0e01cd; */
 
-  /* OKLCH Set */
-  --blue-0: oklch(98% 0.02 255);
-  --blue-1: oklch(94% 0.04 255);
-  --blue-2: oklch(88% 0.07 255);
-  --blue-3: oklch(80% 0.11 255);
-  --blue-4: oklch(72% 0.15 255);
-  --blue-5: oklch(64% 0.19 255);
-  --blue-6: oklch(56% 0.22 255);
-  --blue-7: oklch(48% 0.21 255);
-  --blue-8: oklch(40% 0.19 255);
-  --blue-9: oklch(32% 0.17 255);
-  --blue-10: oklch(25% 0.14 255);
-  --blue-11: oklch(20% 0.18 260);
-  --blue-12: oklch(16% 0.22 265);
+  /* OKLCH Set - Primary Brand Colors for Forms */
+  --blue-0: oklch(98% 0.02 255); /* Very light background for info containers, brand highlight areas */
+  --blue-1: oklch(94% 0.04 255); /* Light background for form focus states, brand notification bars */
+  --blue-2: oklch(88% 0.07 255); /* Background for info badges, brand accent containers */
+  --blue-3: oklch(80% 0.11 255); /* Hover states for light brand elements, subtle form highlights */
+  --blue-4: oklch(72% 0.15 255); /* Secondary brand buttons, form field focus borders */
+  --blue-5: oklch(64% 0.19 255); /* Secondary brand color, info icons, form helper elements */
+  --blue-6: oklch(56% 0.22 255); /* Primary brand color, main CTA buttons, active form elements */
+  --blue-7: oklch(48% 0.21 255); /* Hover state for primary buttons, pressed brand elements */
+  --blue-8: oklch(40% 0.19 255); /* Brand text on light backgrounds, form labels, links */
+  --blue-9: oklch(32% 0.17 255); /* High contrast brand text, important form indicators */
+  --blue-10: oklch(25% 0.14 255); /* Strong brand text, form section headers */
+  --blue-11: oklch(20% 0.18 260); /* Very high contrast text, accessible brand elements */
+  --blue-12: oklch(16% 0.22 265); /* Maximum contrast brand text, dark theme primary backgrounds */
 }

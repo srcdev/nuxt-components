@@ -1,0 +1,18 @@
+button {
+  background: var(--theme-button-surface);
+  color: var(--theme-button-text);
+  border: 1px solid var(--theme-button-border);
+}
+
+button:hover {
+  background: var(--theme-button-surface-hover);
+}
+
+button:active {
+  background: var(--theme-button-surface-active);
+}
+
+button:focus-visible {
+  outline: 2px solid var(--theme-button-focus-ring);
+  outline-offset: 2px;
+}

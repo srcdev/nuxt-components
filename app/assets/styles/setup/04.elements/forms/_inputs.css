@@ -1,0 +1,27 @@
+input,
+textarea,
+select {
+  background: var(--theme-input-surface);
+  color: var(--theme-input-text);
+  border: 1px solid var(--theme-input-border);
+}
+
+input::placeholder {
+  color: var(--theme-input-placeholder);
+}
+
+input:hover {
+  border-color: var(--theme-input-border-hover);
+}
+
+input:focus-visible {
+  border-color: var(--theme-input-border-focus);
+  outline: 2px solid var(--theme-input-focus-ring);
+  outline-offset: 2px;
+}
+
+input:disabled {
+  background: var(--theme-input-surface-disabled);
+  border-color: var(--theme-input-border-disabled);
+  color: var(--theme-input-text-disabled);
+}

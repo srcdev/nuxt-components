@@ -1,0 +1,17 @@
+:where([data-theme="success"]) {
+  --theme-input-border: var(--green-4);
+  --theme-input-border-hover: var(--green-6);
+  --theme-input-border-focus: var(--green-8);
+
+  --theme-input-focus-ring: var(--green-5);
+
+  /* buttons */
+  --theme-button-surface: var(--green-2);
+  --theme-button-surface-hover: var(--green-3);
+  --theme-button-surface-active: var(--green-4);
+
+  --theme-button-border: var(--green-4);
+  --theme-button-text: var(--green-12);
+
+  --theme-button-focus-ring: var(--green-8);
+}

@@ -1,4 +1,6 @@
 :where(html) {
+  /* HEX Set - Original */
+  /*
   --orange-0: #fff4e6;
   --orange-1: #ffe8cc;
   --orange-2: #ffd8a8;
@@ -12,4 +14,20 @@
   --orange-10: #bf400d;
   --orange-11: #99330b;
   --orange-12: #c23903;
+  */
+
+  /* OKLCH Set - Optimized for Warning States */
+  --orange-0: oklch(97.8% 0.025 65); /* Very light background for warning containers, alert backgrounds */
+  --orange-1: oklch(95.2% 0.045 65); /* Light background for form field warning states, notification bars */
+  --orange-2: oklch(92.5% 0.065 65); /* Background for warning badges, pills, or info cards */
+  --orange-3: oklch(89% 0.085 65); /* Hover states for light warning elements, subtle emphasis */
+  --orange-4: oklch(84.5% 0.11 65); /* Warning button backgrounds, form field borders with warnings */
+  --orange-5: oklch(78% 0.135 65); /* Primary warning color, attention icons, caution indicators */
+  --orange-6: oklch(70% 0.155 65); /* Hover state for warning buttons, active warning elements */
+  --orange-7: oklch(62% 0.165 65); /* Pressed/active warning buttons, important warnings */
+  --orange-8: oklch(54% 0.16 65); /* Warning text on light backgrounds, validation messages */
+  --orange-9: oklch(46% 0.15 65); /* High contrast warning text, critical alerts */
+  --orange-10: oklch(38% 0.135 65); /* Strong warning text, form error labels */
+  --orange-11: oklch(30% 0.115 65); /* Very high contrast text, accessible on light backgrounds */
+  --orange-12: oklch(22% 0.09 65); /* Maximum contrast warning text, dark theme backgrounds */
 }

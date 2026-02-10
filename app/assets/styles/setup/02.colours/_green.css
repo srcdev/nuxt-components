@@ -1,4 +1,6 @@
 :where(html) {
+  /* HEX Set - Original */
+  /*
   --green-0: #ebfbee;
   --green-1: #d3f9d8;
   --green-2: #b2f2bb;
@@ -12,4 +14,20 @@
   --green-10: #237032;
   --green-11: #1b5727;
   --green-12: #017f18;
+  */
+
+  /* OKLCH Set - Optimized for Form Success States */
+  --green-0: oklch(97.5% 0.02 145); /* Very light background for success containers, toast backgrounds */
+  --green-1: oklch(95% 0.04 145); /* Light background for form field success states, subtle highlights */
+  --green-2: oklch(92% 0.06 145); /* Background for success badges, pills, or cards */
+  --green-3: oklch(88% 0.08 145); /* Hover states for light success elements */
+  --green-4: oklch(83% 0.11 145); /* Success button backgrounds (light theme), form borders */
+  --green-5: oklch(77% 0.14 145); /* Primary success color, checkmarks, icons */
+  --green-6: oklch(70% 0.16 145); /* Hover state for success buttons, active form elements */
+  --green-7: oklch(62% 0.17 145); /* Pressed/active success buttons, strong emphasis */
+  --green-8: oklch(54% 0.16 145); /* Success text on light backgrounds, form validation text */
+  --green-9: oklch(46% 0.15 145); /* Success text with higher contrast, important indicators */
+  --green-10: oklch(38% 0.13 145); /* High contrast success text, form labels */
+  --green-11: oklch(30% 0.11 145); /* Very high contrast text, accessible on light backgrounds */
+  --green-12: oklch(22% 0.08 145); /* Maximum contrast success text, dark theme backgrounds */
 }
