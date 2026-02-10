@@ -1,0 +1,33 @@
+:where(html) {
+  /* HEX Set */
+  /*
+    --red-0: #fff5f5;
+    --red-1: #ffe3e3;
+    --red-2: #ffc9c9;
+    --red-3: #ffa8a8;
+    --red-4: #ff8787;
+    --red-5: #ff6b6b;
+    --red-6: #fa5252;
+    --red-7: #f03e3e;
+    --red-8: #e03131;
+    --red-9: #ff0b0b;
+    --red-10: #b02525;
+    --red-11: #962020;
+    --red-12: #cc0000;
+    */
+
+  /* OKLCH Set */
+  --red-0: oklch(98% 0.02 30);
+  --red-1: oklch(94% 0.04 30);
+  --red-2: oklch(88% 0.07 30);
+  --red-3: oklch(80% 0.12 30);
+  --red-4: oklch(72% 0.17 30);
+  --red-5: oklch(64% 0.21 30);
+  --red-6: oklch(56% 0.24 30); /* primary error */
+  --red-7: oklch(48% 0.23 30);
+  --red-8: oklch(40% 0.21 30);
+  --red-9: oklch(32% 0.19 30);
+  --red-10: oklch(25% 0.16 30);
+  --red-11: oklch(20% 0.19 28);
+  --red-12: oklch(16% 0.22 26);
+}
