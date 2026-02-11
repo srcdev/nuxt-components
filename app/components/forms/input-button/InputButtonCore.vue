@@ -30,10 +30,10 @@
 </template>
 
 <script setup lang="ts">
-import type { BaseButtonProps } from "~/types/forms/types.forms"
+import type { BaseButtonProps } from "~/types/forms/types.forms";
 
 interface Props extends BaseButtonProps {
-  type?: "submit" | "button" | "reset"
+  type?: "submit" | "button" | "reset";
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -47,15 +47,15 @@ const props = withDefaults(defineProps<Props>(), {
   effect: "fancy",
   isPending: false,
   readonly: false,
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 
 // Cache slot computations for better performance
-const hasLeftSlot = computed(() => Boolean(slots.left && !slots.iconOnly))
-const hasRightSlot = computed(() => Boolean(slots.right && !slots.iconOnly))
-const hasIconOnlySlot = computed(() => Boolean(slots.iconOnly))
-const showFancyEffect = computed(() => props.useEffect && props.effect === "fancy")
+const hasLeftSlot = computed(() => Boolean(slots.left && !slots.iconOnly));
+const hasRightSlot = computed(() => Boolean(slots.right && !slots.iconOnly));
+const hasIconOnlySlot = computed(() => Boolean(slots.iconOnly));
+const showFancyEffect = computed(() => props.useEffect && props.effect === "fancy");
 
 // Combine all button classes into a single computed
 const buttonClasses = computed(() => [
@@ -69,79 +69,79 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
-.input-button-core {
-  touch-action: manipulation;
-  align-items: center;
-  display: flex;
-  gap: var(--form-button-icon-gap);
-  justify-content: center;
-  border-radius: var(--form-input-border-radius);
-  font-family: var(--font-family);
+  .input-button-core {
+    touch-action: manipulation;
+    align-items: center;
+    display: flex;
+    gap: var(--form-button-icon-gap);
+    justify-content: center;
+    border-radius: var(--form-input-border-radius);
+    font-family: var(--font-family);
 
-  padding-inline: var(--form-button-padding-inline);
-  padding-block-start: var(--form-element-padding-block-start);
-  padding-block-end: var(--form-element-padding-block-end);
+    padding-inline: var(--form-button-padding-inline);
+    padding-block-start: var(--form-element-padding-block-start);
+    padding-block-end: var(--form-element-padding-block-end);
 
-  transition: all var(--theme-form-transition-duration) ease-in-out;
+    transition: all var(--theme-form-transition-duration) ease-in-out;
 
-  box-shadow: var(--box-shadow-off);
-  background-color: var(--theme-button-surface);
-  border: var(--form-element-border-width) solid var(--theme-button-border);
-  color: var(--theme-button-text);
-  outline: var(--form-element-outline-width) solid var(--theme-button-outline);
-  outline-offset: 0rem;
+    box-shadow: var(--box-shadow-off);
+    background-color: var(--theme-button-surface);
+    border: var(--form-element-border-width) solid var(--theme-button-border);
+    color: var(--theme-button-text);
+    outline: var(--form-element-outline-width) solid var(--theme-button-outline);
+    outline-offset: 0rem;
 
-  /*
+    /*
   * States
   **/
-  &:hover {
-    background-color: var(--theme-button-surface-hover);
-    border-color: var(--theme-button-border-hover);
-    color: var(--theme-button-text-hover);
-    outline-color: var(--theme-button-outline-hover);
-    outline-offset: var(--form-element-outline-offset-focus);
-    cursor: pointer;
-  }
+    &:hover {
+      background-color: var(--theme-button-surface-hover);
+      border-color: var(--theme-button-border-hover);
+      color: var(--theme-button-text-hover);
+      outline-color: var(--theme-button-outline-hover);
+      outline-offset: var(--form-element-outline-offset-focus);
+      cursor: pointer;
+    }
 
-  &:focus-visible {
-    background-color: var(--theme-button-surface-hover);
-    border-color: var(--theme-button-border-hover);
-    color: var(--theme-button-text-focus);
-    outline-color: var(--theme-button-outline-focus);
-    outline-offset: var(--form-element-outline-offset-focus);
-  }
-
-  &[readonly] {
-    opacity: 0.5;
-    &:hover,
     &:focus-visible {
-      cursor: not-allowed;
+      background-color: var(--theme-button-surface-hover);
+      border-color: var(--theme-button-border-hover);
+      color: var(--theme-button-text-focus);
+      outline-color: var(--theme-button-outline-focus);
+      outline-offset: var(--form-element-outline-offset-focus);
     }
-  }
 
-  &.icon-only {
-    aspect-ratio: 1;
-    height: var(--form-icon-only-button-size);
-    width: var(--form-icon-only-button-size);
-    margin: 0;
-    padding: 0;
-  }
+    &[readonly] {
+      opacity: 0.5;
+      &:hover,
+      &:focus-visible {
+        cursor: not-allowed;
+      }
+    }
 
-  .btn-text {
-    display: inline-block;
-    white-space: nowrap;
-    font-size: var(--form-element-font-size);
-    line-height: var(--form-element-line-height);
-  }
-
-  .btn-icon {
-    display: flex;
-    .icon {
+    &.icon-only {
       aspect-ratio: 1;
+      height: var(--form-icon-only-button-size);
+      width: var(--form-icon-only-button-size);
+      margin: 0;
+      padding: 0;
+    }
+
+    .btn-text {
       display: inline-block;
-      height: var(--form-icon-size);
-      width: var(--form-icon-size);
+      white-space: nowrap;
+      font-size: var(--form-element-font-size);
+      line-height: var(--form-element-line-height);
+    }
+
+    .btn-icon {
+      display: flex;
+      .icon {
+        aspect-ratio: 1;
+        display: inline-block;
+        height: var(--form-icon-size);
+        width: var(--form-icon-size);
+      }
     }
   }
-}
 </style>

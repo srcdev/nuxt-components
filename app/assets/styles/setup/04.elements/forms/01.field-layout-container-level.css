@@ -1,0 +1,14 @@
+:where(.form) {
+  /* Field spacing */
+  --field-gap-block: 0.8rem; /* space between stacked fields */
+  --field-gap-inline: 0;
+
+  /* Label spacing */
+  --field-label-gap: 0.4rem; /* label → input */
+
+  /* Description spacing */
+  --field-description-gap: 0.4rem;
+
+  /* Error spacing */
+  --field-error-gap: 0.5rem;
+}

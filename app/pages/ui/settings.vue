@@ -30,7 +30,7 @@
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1 mbe-18">Error button elements</h1>
 
-          <div class="mb-12" data-theme="error">
+          <div class="mb-12" data-theme="primary" data-error>
             <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="error"</code></p>
             <button type="button">This is a button</button>
           </div>

@@ -1,0 +1,17 @@
+:where(.form) {
+  /* Control size */
+  --control-size: 1.8rem; /* 18px */
+  --control-border-radius: 0.4rem; /* checkbox only */
+
+  /* Radio */
+  --radio-border-radius: 50%;
+
+  /* Border */
+  --control-border-width: 0.1rem;
+
+  /* Checkmark / dot scale */
+  --control-indicator-scale: 0.6;
+
+  /* Label spacing */
+  --control-label-gap: 0.8rem;
+}

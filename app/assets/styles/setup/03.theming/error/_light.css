@@ -1,9 +1,9 @@
-:where([data-theme="error"]) {
-  --theme-input-border: var(--red-4);
-  --theme-input-border-hover: var(--red-6);
+:where([data-error]) {
+  --theme-input-border: var(--red-6);
+  --theme-input-border-hover: var(--red-7);
   --theme-input-border-focus: var(--red-8);
-
-  --theme-input-focus-ring: var(--red-5);
+  --theme-input-focus-ring: var(--red-6);
+  --theme-help-text: var(--red-7);
 
   /* buttons */
   --theme-button-surface: var(--red-2);

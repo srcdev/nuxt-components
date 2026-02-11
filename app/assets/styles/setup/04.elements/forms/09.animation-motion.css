@@ -1,0 +1,4 @@
+:where(.form) {
+  --control-transition-duration: 120ms;
+  --control-transition-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}

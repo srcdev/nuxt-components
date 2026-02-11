@@ -1,8 +1,6 @@
-:where(html.dark [data-theme="error"]) {
-  --theme-input-border: var(--red-6);
-  --theme-input-border-hover: var(--red-5);
+:where(html.dark [data-error]) {
+  --theme-input-border: var(--red-5);
   --theme-input-border-focus: var(--red-4);
-
   --theme-input-focus-ring: var(--red-4);
 
   /* buttons */

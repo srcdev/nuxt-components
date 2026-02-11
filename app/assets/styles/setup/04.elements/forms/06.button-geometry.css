@@ -1,0 +1,16 @@
+:where(.form) {
+  --button-padding-block: 1rem;
+  --button-padding-inline: 1.6rem;
+
+  --button-border-radius: 0.8rem;
+  --button-border-radius-icon-only: 9999px;
+
+  --button-border-width: 0.1rem;
+
+  --button-focus-ring-width: 0.2rem;
+  --button-focus-ring-offset: 0.2rem;
+
+  --button-icon-gap: 0.8rem;
+
+  --button-min-height: 4rem;
+}

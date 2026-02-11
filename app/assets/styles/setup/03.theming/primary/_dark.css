@@ -6,12 +6,12 @@
   --theme-input-focus-ring: var(--blue-4);
 
   /* buttons */
-  --theme-button-surface: var(--gray-9);
-  --theme-button-surface-hover: var(--gray-8);
-  --theme-button-surface-active: var(--gray-7);
+  --theme-button-surface: var(--blue-9);
+  --theme-button-surface-hover: var(--blue-8);
+  --theme-button-surface-active: var(--blue-7);
 
-  --theme-button-border: var(--gray-7);
-  --theme-button-text: var(--gray-0);
+  --theme-button-border: var(--blue-7);
+  --theme-button-text: var(--blue-0);
 
-  --theme-button-focus-ring: var(--gray-4);
+  --theme-button-focus-ring: var(--blue-4);
 }

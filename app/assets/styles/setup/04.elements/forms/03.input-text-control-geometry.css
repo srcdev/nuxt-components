@@ -1,0 +1,22 @@
+:where(.form) {
+  /* Padding */
+  --input-padding-block: 1rem; /* 10px */
+  --input-padding-inline: 1.2rem; /* 12px */
+
+  /* With slots */
+  --input-padding-inline-with-icon: 3.2rem;
+
+  /* Border */
+  --input-border-width: 0.1rem; /* 1px */
+  --input-border-radius: 0.8rem; /* 8px */
+
+  /* Focus */
+  --input-focus-ring-width: 0.2rem; /* 2px */
+  --input-focus-ring-offset: 0.2rem;
+
+  /* Underlined variant */
+  --input-underline-width: 0.2rem;
+
+  /* Min height */
+  --input-min-height: 4rem; /* ~40px tap target */
+}

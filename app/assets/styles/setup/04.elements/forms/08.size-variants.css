@@ -1,0 +1,9 @@
+:where(.form) {
+  /* Small */
+  --input-padding-block-sm: 0.6rem;
+  --input-min-height-sm: 3.2rem;
+
+  /* Large */
+  --input-padding-block-lg: 1.2rem;
+  --input-min-height-lg: 4.8rem;
+}

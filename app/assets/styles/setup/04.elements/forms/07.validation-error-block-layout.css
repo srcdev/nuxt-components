@@ -1,0 +1,9 @@
+:where(.form) {
+  --error-icon-size: 1.4rem;
+  --error-icon-gap: 0.6rem;
+
+  --error-border-radius: 0.6rem;
+
+  --error-padding-block: 0.8rem;
+  --error-padding-inline: 1rem;
+}

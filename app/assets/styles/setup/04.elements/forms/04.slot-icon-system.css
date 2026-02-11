@@ -1,0 +1,14 @@
+:where(.form) {
+  /* Slot container */
+  --input-slot-width: 3rem;
+  --input-slot-gap: 0.8rem;
+
+  /* Icon sizing */
+  --input-icon-size: 1.6rem; /* 16px */
+  --input-icon-stroke-width: 1.5;
+
+  /* Icon colours (semantic layer controls actual color) */
+  --input-icon-color: currentColor;
+  --input-icon-color-focus: currentColor;
+  --input-icon-color-error: currentColor;
+}
