@@ -1,4 +1,4 @@
-:where(.form) {
+:where(html) {
   /* Field spacing */
   --field-gap-block: 0.8rem; /* space between stacked fields */
   --field-gap-inline: 0;

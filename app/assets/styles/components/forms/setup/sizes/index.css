@@ -4,7 +4,7 @@
 @import "./_medium";
 @import "./_large";
 
-:where(.form) {
+:where(html) {
   --form-element-padding-block-start: 0.4lh;
   --form-element-padding-block-end: 0.4lh;
   --form-element-border-width: 0.2rem;
@@ -22,7 +22,7 @@
   --input-element-padding-inline: 1rem;
 }
 
-:where(.form) {
+:where(html) {
   --button-padding-block: 0.75rem;
   --button-padding-inline: 1.25em;
   --button-border-radius: 0.4rem;

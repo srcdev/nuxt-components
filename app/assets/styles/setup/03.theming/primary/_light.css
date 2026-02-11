@@ -1,17 +1,18 @@
 :where([data-theme="primary"]) {
-  --theme-input-border: var(--blue-4);
-  --theme-input-border-hover: var(--blue-6);
-  --theme-input-border-focus: var(--blue-8);
+  --theme-input-border: var(--blue-6);
+  --theme-input-border-hover: var(--blue-5);
+  --theme-input-border-focus: var(--blue-4);
 
-  --theme-input-focus-ring: var(--blue-5);
+  --theme-input-focus-ring: var(--blue-4);
 
   /* buttons */
-  --theme-button-surface: var(--blue-2);
-  --theme-button-surface-hover: var(--blue-3);
-  --theme-button-surface-active: var(--blue-4);
+  --theme-button-surface: var(--blue-9);
+  --theme-button-surface-hover: var(--blue-8);
+  --theme-button-surface-active: var(--blue-7);
 
-  --theme-button-border: var(--blue-4);
-  --theme-button-text: var(--blue-12);
+  --theme-button-border: var(--blue-7);
+  --theme-button-text: var(--blue-0);
+  --theme-button-text-hover: var(--blue-0);
 
-  --theme-button-focus-ring: var(--blue-8);
+  --theme-button-focus-ring: var(--blue-4);
 }

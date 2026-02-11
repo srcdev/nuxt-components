@@ -63,85 +63,88 @@ const buttonClasses = computed(() => [
   props.useEffect && props.effect !== "fancy" ? props.effect : "",
   elementClasses.value,
   { "icon-only": hasIconOnlySlot.value },
-])
+]);
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">
-  .input-button-core {
-    touch-action: manipulation;
-    align-items: center;
-    display: flex;
-    gap: var(--form-button-icon-gap);
-    justify-content: center;
-    border-radius: var(--form-input-border-radius);
-    font-family: var(--font-family);
+.input-button-core {
+  touch-action: manipulation;
+  align-items: center;
+  display: flex;
+  gap: var(--button-icon-gap);
+  justify-content: center;
+  border-radius: var(--button-border-radius);
+  font-family: var(--font-family);
 
-    padding-inline: var(--form-button-padding-inline);
-    padding-block-start: var(--form-element-padding-block-start);
-    padding-block-end: var(--form-element-padding-block-end);
+  padding-inline: var(--button-padding-inline);
+  padding-block: var(--button-padding-block);
 
-    transition: all var(--theme-form-transition-duration) ease-in-out;
+  transition: all var(--control-transition-duration) var(--control-transition-ease);
 
-    box-shadow: var(--box-shadow-off);
-    background-color: var(--theme-button-surface);
-    border: var(--form-element-border-width) solid var(--theme-button-border);
-    color: var(--theme-button-text);
-    outline: var(--form-element-outline-width) solid var(--theme-button-outline);
-    outline-offset: 0rem;
+  box-shadow: var(--box-shadow-off);
+  background-color: var(--theme-button-surface);
+  border: var(--button-border-width) solid var(--theme-button-border);
+  color: var(--theme-button-text);
+  outline: var(--button-focus-ring-width) solid transparent;
+  outline-offset: 0rem;
+  min-height: var(--button-min-height);
 
-    /*
+  /*
   * States
   **/
-    &:hover {
-      background-color: var(--theme-button-surface-hover);
-      border-color: var(--theme-button-border-hover);
-      color: var(--theme-button-text-hover);
-      outline-color: var(--theme-button-outline-hover);
-      outline-offset: var(--form-element-outline-offset-focus);
-      cursor: pointer;
-    }
+  &:hover {
+    background-color: var(--theme-button-surface-hover);
+    border-color: var(--theme-button-border-hover);
+    color: var(--theme-button-text-hover);
+    /* UNSURE: outline-color: var(--theme-button-outline-hover); - no equivalent found */
+    outline-offset: var(--button-focus-ring-offset);
+    cursor: pointer;
+  }
 
+  &:focus-visible {
+    background-color: var(--theme-button-surface-hover);
+    border-color: var(--theme-button-border-hover);
+    /* UNSURE: color: var(--theme-button-text-focus); - no equivalent found, using hover color */
+    color: var(--theme-button-text-hover);
+    outline-color: var(--theme-button-focus-ring);
+    outline-offset: var(--button-focus-ring-offset);
+  }
+
+  &[readonly] {
+    opacity: 0.5;
+    &:hover,
     &:focus-visible {
-      background-color: var(--theme-button-surface-hover);
-      border-color: var(--theme-button-border-hover);
-      color: var(--theme-button-text-focus);
-      outline-color: var(--theme-button-outline-focus);
-      outline-offset: var(--form-element-outline-offset-focus);
-    }
-
-    &[readonly] {
-      opacity: 0.5;
-      &:hover,
-      &:focus-visible {
-        cursor: not-allowed;
-      }
-    }
-
-    &.icon-only {
-      aspect-ratio: 1;
-      height: var(--form-icon-only-button-size);
-      width: var(--form-icon-only-button-size);
-      margin: 0;
-      padding: 0;
-    }
-
-    .btn-text {
-      display: inline-block;
-      white-space: nowrap;
-      font-size: var(--form-element-font-size);
-      line-height: var(--form-element-line-height);
-    }
-
-    .btn-icon {
-      display: flex;
-      .icon {
-        aspect-ratio: 1;
-        display: inline-block;
-        height: var(--form-icon-size);
-        width: var(--form-icon-size);
-      }
+      cursor: not-allowed;
     }
   }
+
+  &.icon-only {
+    aspect-ratio: 1;
+    border-radius: var(--button-border-radius-icon-only);
+    /* CANNOT FIND: height/width for icon-only buttons - keeping original var */
+    height: var(--form-icon-only-button-size);
+    width: var(--form-icon-only-button-size);
+    margin: 0;
+    padding: 0;
+  }
+
+  .btn-text {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: var(--input-font-size);
+    line-height: var(--input-line-height);
+  }
+
+  .btn-icon {
+    display: flex;
+    .icon {
+      aspect-ratio: 1;
+      display: inline-block;
+      height: var(--input-icon-size);
+      width: var(--input-icon-size);
+    }
+  }
+}
 </style>

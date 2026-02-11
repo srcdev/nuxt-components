@@ -1,4 +1,4 @@
-:where(.form) {
+:where(html) {
   /* Padding */
   --input-padding-block: 1rem; /* 10px */
   --input-padding-inline: 1.2rem; /* 12px */

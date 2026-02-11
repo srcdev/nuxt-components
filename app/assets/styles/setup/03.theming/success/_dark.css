@@ -12,6 +12,7 @@
 
   --theme-button-border: var(--green-7);
   --theme-button-text: var(--green-0);
+  --theme-button-text-hover: var(--green-0);
 
   --theme-button-focus-ring: var(--green-4);
 }

@@ -1,4 +1,4 @@
-:where(.form) {
+:where(html) {
   /* Slot container */
   --input-slot-width: 3rem;
   --input-slot-gap: 0.8rem;

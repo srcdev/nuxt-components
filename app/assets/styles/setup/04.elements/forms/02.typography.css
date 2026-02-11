@@ -1,4 +1,4 @@
-:where(.form) {
+:where(html) {
   /* Label */
   --field-label-font-size: 1.4rem; /* 14px */
   --field-label-font-weight: 500;

@@ -25,6 +25,7 @@
 
   --theme-button-border: var(--gray-7);
   --theme-button-text: var(--gray-0);
+  --theme-button-text-hover: var(--gray-0);
 
   --theme-button-focus-ring: var(--gray-4);
 }

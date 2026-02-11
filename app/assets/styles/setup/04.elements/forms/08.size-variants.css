@@ -1,4 +1,4 @@
-:where(.form) {
+:where(html) {
   /* Small */
   --input-padding-block-sm: 0.6rem;
   --input-min-height-sm: 3.2rem;

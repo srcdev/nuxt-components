@@ -1,4 +1,4 @@
-:where(.form) {
+:where(html) {
   --error-icon-size: 1.4rem;
   --error-icon-gap: 0.6rem;
 

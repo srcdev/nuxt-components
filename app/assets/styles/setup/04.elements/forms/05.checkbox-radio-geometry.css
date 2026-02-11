@@ -1,4 +1,4 @@
-:where(.form) {
+:where(html) {
   /* Control size */
   --control-size: 1.8rem; /* 18px */
   --control-border-radius: 0.4rem; /* checkbox only */

@@ -1,4 +1,4 @@
-:where(.form) {
+:where(html) {
   --button-padding-block: 1rem;
   --button-padding-inline: 1.6rem;
 

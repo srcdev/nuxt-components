@@ -1,36 +1,30 @@
 :where(html) {
-  /* surfaces */
-  --theme-input-surface: var(--gray-0);
-  --theme-input-surface-hover: var(--gray-0);
-  --theme-input-surface-focus: var(--gray-0);
+  --theme-input-surface: var(--gray-11);
+  --theme-input-surface-hover: var(--gray-11);
+  --theme-input-surface-focus: var(--gray-11);
 
-  /* borders */
-  --theme-input-border: var(--gray-4);
+  --theme-input-border: var(--gray-7);
   --theme-input-border-hover: var(--gray-6);
-  --theme-input-border-focus: var(--gray-8);
+  --theme-input-border-focus: var(--gray-4);
 
-  /* text */
-  --theme-input-text: var(--gray-12);
-  --theme-input-placeholder: var(--gray-7);
-  --theme-label-text: var(--gray-11);
-  --theme-help-text: var(--gray-9);
+  --theme-input-text: var(--gray-0);
+  --theme-input-placeholder: var(--gray-5);
+  --theme-label-text: var(--gray-2);
+  --theme-help-text: var(--gray-4);
 
-  /* focus & outline */
-  --theme-input-focus-ring: var(--gray-8);
-  --theme-input-outline: transparent;
+  --theme-input-focus-ring: var(--gray-4);
 
-  /* disabled */
-  --theme-input-surface-disabled: var(--gray-1);
-  --theme-input-border-disabled: var(--gray-3);
-  --theme-input-text-disabled: var(--gray-7);
+  --theme-input-surface-disabled: var(--gray-10);
+  --theme-input-border-disabled: var(--gray-8);
+  --theme-input-text-disabled: var(--gray-6);
 
-  /* buttons */
-  --theme-button-surface: var(--gray-2);
-  --theme-button-surface-hover: var(--gray-3);
-  --theme-button-surface-active: var(--gray-4);
+  --theme-button-surface: var(--gray-9);
+  --theme-button-surface-hover: var(--gray-8);
+  --theme-button-surface-active: var(--gray-7);
 
-  --theme-button-border: var(--gray-4);
-  --theme-button-text: var(--gray-12);
+  --theme-button-border: var(--gray-7);
+  --theme-button-text: var(--gray-0);
+  --theme-button-text-hover: var(--gray-0);
 
-  --theme-button-focus-ring: var(--gray-8);
+  --theme-button-focus-ring: var(--gray-4);
 }

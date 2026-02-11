@@ -14,7 +14,7 @@
 
           <div class="mb-12">
             <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="primary"</code></p>
-            <button type="button">This is a button</button>
+            <button class="input-button-core" type="button">This is a button</button>
           </div>
         </LayoutRow>
 
@@ -23,7 +23,7 @@
 
           <div class="mb-12" data-theme="primary">
             <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="primary"</code></p>
-            <button type="button">This is a button</button>
+            <button class="input-button-core" type="button">This is a button</button>
           </div>
         </LayoutRow>
 
@@ -32,7 +32,7 @@
 
           <div class="mb-12" data-theme="primary" data-error>
             <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="error"</code></p>
-            <button type="button">This is a button</button>
+            <button class="input-button-core" type="button">This is a button</button>
           </div>
         </LayoutRow>
 
@@ -41,7 +41,7 @@
 
           <div class="mb-12" data-theme="success">
             <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="success"</code></p>
-            <button type="button">This is a button</button>
+            <button class="input-button-core" type="button">This is a button</button>
           </div>
         </LayoutRow>
       </template>
