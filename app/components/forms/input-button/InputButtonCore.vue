@@ -98,7 +98,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     background-color: var(--theme-button-surface-hover);
     border-color: var(--theme-button-border-hover);
     color: var(--theme-button-text-hover);
-    /* UNSURE: outline-color: var(--theme-button-outline-hover); - no equivalent found */
+    outline-color: var(--theme-button-focus-ring); /* no equivalent found */
     outline-offset: var(--button-focus-ring-offset);
     cursor: pointer;
   }

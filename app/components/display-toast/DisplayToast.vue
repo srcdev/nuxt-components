@@ -33,13 +33,13 @@
         :set-dismiss-toast="setDismissToast"
       >
         <template #customToastIcon>
-          <slot name="customToastIcon" />
+          <slot name="customToastIcon"></slot>
         </template>
         <template #title>
-          <slot name="title" />
+          <slot name="title"></slot>
         </template>
         <template #description>
-          <slot name="description" />
+          <slot name="description"></slot>
         </template>
       </DefaultToastContent>
       <div v-if="autoDismiss" class="display-toast-progress"></div>
@@ -54,7 +54,7 @@ import type {
   DisplayToastPosition,
   DisplayToastAlignment,
   ToastSlots,
-} from "../../types/components"
+} from "../../types/components";
 
 const props = defineProps({
   config: {
@@ -81,133 +81,133 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const slots = defineSlots<ToastSlots>()
+const slots = defineSlots<ToastSlots>();
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 // Computed properties for accessing config values with defaults
-const theme = computed(() => props.config?.appearance?.theme ?? "ghost")
-const position = computed(() => props.config?.appearance?.position ?? "top")
-const alignment = computed(() => props.config?.appearance?.alignment ?? "right")
-const fullWidth = computed(() => props.config?.appearance?.fullWidth ?? false)
-const autoDismiss = computed(() => props.config?.behavior?.autoDismiss ?? true)
-const duration = computed(() => props.config?.behavior?.duration ?? 5000)
-const revealDuration = computed(() => props.config?.behavior?.revealDuration ?? 550)
-const returnFocusTo = computed(() => props.config?.behavior?.returnFocusTo ?? null)
-const toastDisplayText = computed(() => props.config?.content?.text ?? "")
-const toastTitle = computed(() => props.config?.content?.title ?? "")
-const toastDescription = computed(() => props.config?.content?.description ?? "")
-const customIcon = computed(() => props.config?.content?.customIcon)
+const theme = computed(() => props.config?.appearance?.theme ?? "ghost");
+const position = computed(() => props.config?.appearance?.position ?? "top");
+const alignment = computed(() => props.config?.appearance?.alignment ?? "right");
+const fullWidth = computed(() => props.config?.appearance?.fullWidth ?? false);
+const autoDismiss = computed(() => props.config?.behavior?.autoDismiss ?? true);
+const duration = computed(() => props.config?.behavior?.duration ?? 5000);
+const revealDuration = computed(() => props.config?.behavior?.revealDuration ?? 550);
+const returnFocusTo = computed(() => props.config?.behavior?.returnFocusTo ?? null);
+const toastDisplayText = computed(() => props.config?.content?.text ?? "");
+const toastTitle = computed(() => props.config?.content?.title ?? "");
+const toastDescription = computed(() => props.config?.content?.description ?? "");
+const customIcon = computed(() => props.config?.content?.customIcon);
 
 // Computed classes for positioning
 const positionClasses = computed(() => {
-  const classes = []
-  classes.push(position.value)
+  const classes = [];
+  classes.push(position.value);
   if (fullWidth.value) {
-    classes.push("full-width")
+    classes.push("full-width");
   } else {
-    classes.push(alignment.value)
+    classes.push(alignment.value);
   }
-  return classes
-})
+  return classes;
+});
 
 /*
  * Accessibility setup
  */
-const toastId = useId()
-const toastElementRef = useTemplateRef<HTMLElement>("toastElementRef")
+const toastId = useId();
+const toastElementRef = useTemplateRef<HTMLElement>("toastElementRef");
 
 // Determine appropriate ARIA attributes based on theme
 const toastRole = computed(() => {
-  return ["error", "warning"].includes(theme.value) ? "alert" : "status"
-})
+  return ["error", "warning"].includes(theme.value) ? "alert" : "status";
+});
 
 const ariaLive = computed(() => {
-  return ["error", "warning"].includes(theme.value) ? "assertive" : "polite"
-})
+  return ["error", "warning"].includes(theme.value) ? "assertive" : "polite";
+});
 
 /*
  * Setup component state
  */
-const externalTriggerModel = defineModel<boolean>({ default: false })
-const privateDisplayToast = ref(false)
-const transitionalState = ref(false)
+const externalTriggerModel = defineModel<boolean>({ default: false });
+const privateDisplayToast = ref(false);
+const transitionalState = ref(false);
 const cssStateClass = computed(() => {
-  return transitionalState.value ? "show" : "hide"
-})
+  return transitionalState.value ? "show" : "hide";
+});
 
 /*
  * Computed properties for durations (in ms for CSS)
  */
-const revealDurationMs = computed(() => revealDuration.value + "ms")
-const displayDurationMs = computed(() => duration.value + "ms")
+const revealDurationMs = computed(() => revealDuration.value + "ms");
+const displayDurationMs = computed(() => duration.value + "ms");
 
 /*
  * Lifecycle hooks
  */
 const setDismissToast = async () => {
-  transitionalState.value = false
-  await useSleep(revealDuration.value)
+  transitionalState.value = false;
+  await useSleep(revealDuration.value);
 
   // Return focus to specified element if provided
   if (returnFocusTo.value) {
     // Handle both HTMLElement and ComponentPublicInstance
-    let focusTarget: HTMLElement | null = null
+    let focusTarget: HTMLElement | null = null;
 
     if (returnFocusTo.value instanceof HTMLElement) {
-      focusTarget = returnFocusTo.value
+      focusTarget = returnFocusTo.value;
     } else if (returnFocusTo.value && "$el" in returnFocusTo.value) {
-      focusTarget = returnFocusTo.value.$el as HTMLElement
+      focusTarget = returnFocusTo.value.$el as HTMLElement;
     }
 
     if (focusTarget && typeof focusTarget.focus === "function") {
-      focusTarget.focus()
+      focusTarget.focus();
     }
   }
 
-  externalTriggerModel.value = false
-  privateDisplayToast.value = false
-}
+  externalTriggerModel.value = false;
+  privateDisplayToast.value = false;
+};
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough)
+    resetElementClasses(props.styleClassPassthrough);
   }
-)
+);
 
 watch(
   () => externalTriggerModel.value,
   async (newValue, previousValue) => {
     if (newValue) {
-      privateDisplayToast.value = true
-      transitionalState.value = true
+      privateDisplayToast.value = true;
+      transitionalState.value = true;
 
       // Focus management for accessibility when not using custom slots
       if (!slots.default) {
-        await nextTick()
+        await nextTick();
         // Wait for animation to start before focusing
         setTimeout(() => {
-          toastElementRef.value?.focus()
-        }, 100)
+          toastElementRef.value?.focus();
+        }, 100);
       }
 
       if (autoDismiss.value) {
-        await useSleep(duration.value)
-        setDismissToast()
+        await useSleep(duration.value);
+        setDismissToast();
       }
     } else if (!newValue && previousValue) {
       // If external model is set to false, dismiss the toast
-      setDismissToast()
+      setDismissToast();
     }
   }
-)
+);
 
 onBeforeRouteLeave(() => {
-  setDismissToast()
-})
+  setDismissToast();
+});
 </script>
 
 <style lang="css">

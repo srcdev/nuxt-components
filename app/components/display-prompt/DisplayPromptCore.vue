@@ -1,9 +1,9 @@
 <template>
   <div
+    ref="promptElementRef"
     class="display-prompt-core"
     :class="[{ closed: !compopnentOpen }]"
     :data-test-id="`display-prompt-core-${theme}`"
-    ref="promptElementRef"
     tabindex="0"
   >
     <div class="display-prompt-wrapper" :data-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
@@ -23,9 +23,9 @@
         </div>
         <button
           v-if="dismissible"
-          @click.prevent="updateComponentState()"
           data-test-id="display-prompt-action"
           class="display-prompt-action"
+          @click.prevent="updateComponentState()"
         >
           <slot name="customCloseIcon">
             <Icon name="bitcoin-icons:cross-filled" class="icon" />
@@ -71,28 +71,28 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 
-const slots = useSlots()
-const promptElementRef = useTemplateRef<HTMLElement>("promptElementRef")
-const parentComponentState = defineModel<boolean>({ default: false })
-const compopnentOpen = ref(true)
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const slots = useSlots();
+const promptElementRef = useTemplateRef<HTMLElement>("promptElementRef");
+const parentComponentState = defineModel<boolean>({ default: false });
+const compopnentOpen = ref(true);
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const updateComponentState = () => {
   if (parentComponentState.value) {
-    parentComponentState.value = false
-    return
+    parentComponentState.value = false;
+    return;
   }
 
-  compopnentOpen.value = false
-}
+  compopnentOpen.value = false;
+};
 
 onMounted(async () => {
   if (props.useAutoFocus && promptElementRef.value) {
-    promptElementRef.value.focus()
+    promptElementRef.value.focus();
   }
-})
+});
 </script>
 
 <style lang="css">
@@ -128,7 +128,7 @@ onMounted(async () => {
       border-width: 0;
 
       .display-prompt-inner {
-        background-color: var(--gray-12);
+        background-color: var(--gray-1);
       }
 
       &.outlined {
@@ -197,7 +197,9 @@ onMounted(async () => {
         border-radius: 50%;
         outline: 1px solid var(--colour-theme-3);
 
-        transition: border 200ms ease-in-out, outline 200ms ease-in-out;
+        transition:
+          border 200ms ease-in-out,
+          outline 200ms ease-in-out;
 
         &:hover {
           cursor: pointer;

@@ -33,7 +33,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Mask Element",
@@ -46,7 +46,7 @@ useHead({
   bodyAttrs: {
     class: "mask-element-page",
   },
-})
+});
 </script>
 
 <style lang="css">

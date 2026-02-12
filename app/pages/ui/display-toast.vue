@@ -8,92 +8,91 @@
             Toast notification component (HeaderBlock)
           </HeaderBlock>
           <p class="page-body-normal">Trigger default toast with manual dismiss</p>
-          <p>
-            <button
-              @click.prevent="triggerFirstToast()"
-              ref="firstToastButton"
-              :read-only="firstToastActive"
-              class="button primary mbe-10"
-            >
-              Trigger First Toast (current value: {{ firstToastActive }})
-            </button>
-          </p>
-          <hr class="mbe-20" />
-          <p class="page-body-normal">Trigger ERROR prompt as toast with auto dismiss</p>
-          <p>
-            <button
-              @click.prevent="triggerSecondToast()"
-              ref="secondToastButton"
-              :read-only="secondToastActive"
-              class="button primary mbe-10"
-            >
-              Trigger Second Toast (current value: {{ secondToastActive }})
-            </button>
-          </p>
-          <hr class="mbe-20" />
-          <p class="page-body-normal">Trigger SUCCESS prompt as toast with manual dismiss</p>
-          <p>
-            <button
-              @click.prevent="triggerThirdToast()"
-              ref="thirdToastButton"
-              :read-only="thirdToastActive"
-              class="button primary mbe-10"
-            >
-              Trigger Third Toast (current value: {{ thirdToastActive }})
-            </button>
-          </p>
-          <hr class="mbe-20" />
-          <p class="page-body-normal">Trigger INFO prompt as toast with auto dismiss (full-width)</p>
-          <p>
-            <button
-              @click.prevent="triggerFourthToast()"
-              ref="fourthToastButton"
-              :read-only="fourthToastActive"
-              class="button primary mbe-10"
-            >
-              Trigger Fourth Toast (current value: {{ fourthToastActive }})
-            </button>
-          </p>
-          <hr class="mbe-20" />
-          <p class="page-body-normal">New config-based positioning examples:</p>
-          <div class="button-grid">
-            <button
-              @click.prevent="triggerBottomLeftToast()"
-              ref="bottomLeftToastButton"
-              :read-only="bottomLeftToastActive"
-              class="button secondary"
-            >
-              Bottom Left Toast
-            </button>
-            <button
-              @click.prevent="triggerBottomCenterToast()"
-              ref="bottomCenterToastButton"
-              :read-only="bottomCenterToastActive"
-              class="button secondary"
-            >
-              Bottom Center Toast
-            </button>
-            <button
-              @click.prevent="triggerCustomIconToast()"
-              ref="customIconToastButton"
-              :read-only="customIconToastActive"
-              class="button secondary"
-            >
-              Custom Icon Toast
-            </button>
-          </div>
-          <hr class="mbe-20" />
-          <p class="page-body-normal">Toast with title and content slots:</p>
-          <p>
-            <button
-              @click.prevent="triggerSlottedToast()"
-              ref="slottedToastButton"
-              :read-only="slottedToastActive"
-              class="button primary mbe-10"
-            >
-              Trigger Slotted Toast (current value: {{ slottedToastActive }})
-            </button>
-          </p>
+          <form class="form-wrapper">
+            <p>
+              <InputButtonCore
+                ref="firstToastButton"
+                :readonly="firstToastActive"
+                button-text="Trigger First Toast (current value: {{ firstToastActive }})"
+                theme="primary"
+                :style-class-passthrough="['mbe-10']"
+                @click.prevent="triggerFirstToast()"
+              />
+            </p>
+            <hr class="mbe-20" />
+            <p class="page-body-normal">Trigger ERROR prompt as toast with auto dismiss</p>
+            <p>
+              <InputButtonCore
+                ref="secondToastButton"
+                :readonly="secondToastActive"
+                button-text="Trigger Second Toast (current value: {{ secondToastActive }})"
+                theme="primary"
+                :style-class-passthrough="['mbe-10']"
+                @click.prevent="triggerSecondToast()"
+              />
+            </p>
+            <hr class="mbe-20" />
+            <p class="page-body-normal">Trigger SUCCESS prompt as toast with manual dismiss</p>
+            <p>
+              <InputButtonCore
+                ref="thirdToastButton"
+                :readonly="thirdToastActive"
+                button-text="Trigger Third Toast (current value: {{ thirdToastActive }})"
+                theme="primary"
+                :style-class-passthrough="['mbe-10']"
+                @click.prevent="triggerThirdToast()"
+              />
+            </p>
+            <hr class="mbe-20" />
+            <p class="page-body-normal">Trigger INFO prompt as toast with auto dismiss (full-width)</p>
+            <p>
+              <InputButtonCore
+                ref="fourthToastButton"
+                :readonly="fourthToastActive"
+                button-text="Trigger Fourth Toast (current value: {{ fourthToastActive }})"
+                theme="primary"
+                :style-class-passthrough="['mbe-10']"
+                @click.prevent="triggerFourthToast()"
+              />
+            </p>
+            <hr class="mbe-20" />
+            <p class="page-body-normal">New config-based positioning examples:</p>
+            <div class="button-grid">
+              <InputButtonCore
+                ref="bottomLeftToastButton"
+                :readonly="bottomLeftToastActive"
+                button-text="Bottom Left Toast"
+                theme="primary"
+                @click.prevent="triggerBottomLeftToast()"
+              />
+              <InputButtonCore
+                ref="bottomCenterToastButton"
+                :readonly="bottomCenterToastActive"
+                button-text="Bottom Center Toast"
+                theme="primary"
+                @click.prevent="triggerBottomCenterToast()"
+              />
+              <InputButtonCore
+                ref="customIconToastButton"
+                :readonly="customIconToastActive"
+                button-text="Custom Icon Toast"
+                theme="primary"
+                @click.prevent="triggerCustomIconToast()"
+              />
+            </div>
+            <hr class="mbe-20" />
+            <p class="page-body-normal">Toast with title and content slots:</p>
+            <p>
+              <InputButtonCore
+                ref="slottedToastButton"
+                :readonly="slottedToastActive"
+                button-text="Trigger Slotted Toast (current value: {{ slottedToastActive }})"
+                theme="primary"
+                :style-class-passthrough="['mbe-10']"
+                @click.prevent="triggerSlottedToast()"
+              />
+            </p>
+          </form>
         </LayoutRow>
 
         <DisplayToast
@@ -106,7 +105,7 @@
               description: 'This is a toast notification message with structured content.',
             },
           }"
-        ></DisplayToast>
+        />
 
         <DisplayToast
           v-model="secondToastActive"
@@ -187,7 +186,7 @@
               description: 'This is a toast notification message with structured content.',
             },
           }"
-        ></DisplayToast>
+        />
 
         <DisplayToast
           v-model="bottomCenterToastActive"
@@ -199,7 +198,7 @@
               description: 'This is a toast notification message with structured content.',
             },
           }"
-        ></DisplayToast>
+        />
 
         <DisplayToast
           v-model="customIconToastActive"
@@ -211,7 +210,7 @@
               description: 'This is a toast notification message with structured content.',
             },
           }"
-        ></DisplayToast>
+        />
 
         <DisplayToast
           v-model="slottedToastActive"
@@ -255,7 +254,7 @@
 
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "DisplayToast",
@@ -268,59 +267,59 @@ useHead({
   bodyAttrs: {
     class: "displayToast-page",
   },
-})
+});
 
 // Toast state variables
-const firstToastActive = ref(false)
-const secondToastActive = ref(false)
-const thirdToastActive = ref(false)
-const fourthToastActive = ref(false)
-const bottomLeftToastActive = ref(false)
-const bottomCenterToastActive = ref(false)
-const customIconToastActive = ref(false)
-const slottedToastActive = ref(false)
+const firstToastActive = ref(false);
+const secondToastActive = ref(false);
+const thirdToastActive = ref(false);
+const fourthToastActive = ref(false);
+const bottomLeftToastActive = ref(false);
+const bottomCenterToastActive = ref(false);
+const customIconToastActive = ref(false);
+const slottedToastActive = ref(false);
 
 // Template refs for focus return
-const firstToastButton = useTemplateRef<HTMLButtonElement>("firstToastButton")
-const secondToastButton = useTemplateRef<HTMLButtonElement>("secondToastButton")
-const thirdToastButton = useTemplateRef<HTMLButtonElement>("thirdToastButton")
-const fourthToastButton = useTemplateRef<HTMLButtonElement>("fourthToastButton")
-const bottomLeftToastButton = useTemplateRef<HTMLButtonElement>("bottomLeftToastButton")
-const bottomCenterToastButton = useTemplateRef<HTMLButtonElement>("bottomCenterToastButton")
-const customIconToastButton = useTemplateRef<HTMLButtonElement>("customIconToastButton")
-const slottedToastButton = useTemplateRef<HTMLButtonElement>("slottedToastButton")
+const firstToastButton = useTemplateRef<HTMLButtonElement>("firstToastButton");
+const secondToastButton = useTemplateRef<HTMLButtonElement>("secondToastButton");
+const thirdToastButton = useTemplateRef<HTMLButtonElement>("thirdToastButton");
+const fourthToastButton = useTemplateRef<HTMLButtonElement>("fourthToastButton");
+const bottomLeftToastButton = useTemplateRef<HTMLButtonElement>("bottomLeftToastButton");
+const bottomCenterToastButton = useTemplateRef<HTMLButtonElement>("bottomCenterToastButton");
+const customIconToastButton = useTemplateRef<HTMLButtonElement>("customIconToastButton");
+const slottedToastButton = useTemplateRef<HTMLButtonElement>("slottedToastButton");
 
 const triggerFirstToast = () => {
-  firstToastActive.value = true
-}
+  firstToastActive.value = true;
+};
 
 const triggerSecondToast = () => {
-  secondToastActive.value = true
-}
+  secondToastActive.value = true;
+};
 
 const triggerThirdToast = () => {
-  thirdToastActive.value = true
-}
+  thirdToastActive.value = true;
+};
 
 const triggerFourthToast = () => {
-  fourthToastActive.value = true
-}
+  fourthToastActive.value = true;
+};
 
 const triggerBottomLeftToast = () => {
-  bottomLeftToastActive.value = true
-}
+  bottomLeftToastActive.value = true;
+};
 
 const triggerBottomCenterToast = () => {
-  bottomCenterToastActive.value = true
-}
+  bottomCenterToastActive.value = true;
+};
 
 const triggerCustomIconToast = () => {
-  customIconToastActive.value = true
-}
+  customIconToastActive.value = true;
+};
 
 const triggerSlottedToast = () => {
-  slottedToastActive.value = true
-}
+  slottedToastActive.value = true;
+};
 </script>
 
 <style scoped lang="css">

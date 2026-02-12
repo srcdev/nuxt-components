@@ -1,6 +1,4 @@
 /* @layer theming { */
-@import "./default/";
-@import "./primary/";
-@import "./error/";
-@import "./success/";
+@import "./01.forms/";
+@import "./02.components/";
 /* } */

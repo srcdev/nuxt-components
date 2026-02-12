@@ -1,0 +1,14 @@
+:where(html.dark [data-theme="error"]) {
+  --colour-theme-1: var(--red-1);
+  --colour-theme-2: var(--red-2);
+  --colour-theme-3: var(--red-3);
+  --colour-theme-4: var(--red-4);
+  --colour-theme-5: var(--red-5);
+  --colour-theme-6: var(--red-6);
+  --colour-theme-7: var(--red-7);
+  --colour-theme-8: var(--red-8);
+  --colour-theme-9: var(--red-9);
+  --colour-theme-10: var(--red-10);
+  --colour-theme-11: var(--red-11);
+  --colour-theme-12: var(--red-12);
+}

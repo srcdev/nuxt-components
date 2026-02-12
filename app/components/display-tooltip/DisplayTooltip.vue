@@ -12,7 +12,7 @@
         <Icon name="fa7-solid:circle-question" class="display-tooltip-trigger-icon" aria-hidden="true" />
       </button>
     </div>
-    <div popover class="display-tooltip-popover" :id="tooltipId" ref="popover1">
+    <div :id="tooltipId" ref="popover1" popover class="display-tooltip-popover">
       <div class="display-tooltip-popover-content">
         <slot name="tooltipContent"></slot>
       </div>
@@ -30,16 +30,16 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 const tooltipId = computed(() => {
-  return props.tooltipId.length ? props.tooltipId : `nuxt-tooltip-${useId()}`
-})
-const tooltipAnchorName = `tooltip-anchor-${useId()}`
-const hideTooltipTrigger = ref(false)
+  return props.tooltipId.length ? props.tooltipId : `nuxt-tooltip-${useId()}`;
+});
+const tooltipAnchorName = `tooltip-anchor-${useId()}`;
+const hideTooltipTrigger = ref(false);
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">
@@ -116,7 +116,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     top: calc(anchor(top) + 0px);
     left: calc(anchor(right) + 1px);
     opacity: 0;
-    transition: opacity 200ms, display 200ms, overlay 200ms;
+    transition:
+      opacity 200ms,
+      display 200ms,
+      overlay 200ms;
 
     transition-behavior: allow-discrete;
     position-try-fallbacks: flip-inline;

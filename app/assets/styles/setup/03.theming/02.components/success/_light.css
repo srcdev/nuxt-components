@@ -1,0 +1,14 @@
+:where([data-theme="success"]) {
+  --colour-theme-1: var(--green-1);
+  --colour-theme-2: var(--green-2);
+  --colour-theme-3: var(--green-3);
+  --colour-theme-4: var(--green-4);
+  --colour-theme-5: var(--green-5);
+  --colour-theme-6: var(--green-6);
+  --colour-theme-7: var(--green-7);
+  --colour-theme-8: var(--green-8);
+  --colour-theme-9: var(--green-9);
+  --colour-theme-10: var(--green-10);
+  --colour-theme-11: var(--green-11);
+  --colour-theme-12: var(--green-12);
+}

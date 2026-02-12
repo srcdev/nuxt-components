@@ -1,0 +1,14 @@
+:where([data-theme="warning"]) {
+  --colour-theme-1: var(--orange-1);
+  --colour-theme-2: var(--orange-2);
+  --colour-theme-3: var(--orange-3);
+  --colour-theme-4: var(--orange-4);
+  --colour-theme-5: var(--orange-5);
+  --colour-theme-6: var(--orange-6);
+  --colour-theme-7: var(--orange-7);
+  --colour-theme-8: var(--orange-8);
+  --colour-theme-9: var(--orange-9);
+  --colour-theme-10: var(--orange-10);
+  --colour-theme-11: var(--orange-11);
+  --colour-theme-12: var(--orange-12);
+}

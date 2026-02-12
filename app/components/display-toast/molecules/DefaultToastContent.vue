@@ -5,7 +5,7 @@
         <Icon :name="customIcon || defaultThemeIcons[theme] || 'akar-icons:info'" class="icon" />
       </slot>
     </div>
-    <div class="toast-message" :id="'toast-message-' + toastId">
+    <div :id="'toast-message-' + toastId" class="toast-message">
       <template v-if="slots.title || slots.description || toastTitle || toastDescription">
         <p v-if="slots.title || toastTitle" class="title" data-test-id="toast-title">
           <slot name="title">{{ toastTitle }}</slot>
@@ -29,42 +29,20 @@
 </template>
 
 <script setup lang="ts">
-import type { DisplayToastTheme } from "../../../types/components"
+import type { DisplayToastTheme } from "../../../types/components";
 
-const props = defineProps({
-  theme: {
-    type: String as PropType<DisplayToastTheme>,
-    required: true,
-  },
-  customIcon: {
-    type: String,
-    default: undefined,
-  },
-  toastId: {
-    type: String,
-    required: true,
-  },
-  toastDisplayText: {
-    type: String,
-    required: true,
-  },
-  toastTitle: {
-    type: String,
-    default: undefined,
-  },
-  toastDescription: {
-    type: String,
-    default: undefined,
-  },
-  autoDismiss: {
-    type: Boolean,
-    required: true,
-  },
-  setDismissToast: {
-    type: Function as PropType<() => void>,
-    required: true,
-  },
-})
+interface Props {
+  theme: DisplayToastTheme;
+  customIcon?: string;
+  toastId: string;
+  toastDisplayText: string;
+  toastTitle?: string;
+  toastDescription?: string;
+  autoDismiss: boolean;
+  setDismissToast: () => void;
+}
+
+defineProps<Props>();
 
 const defaultThemeIcons = {
   primary: "akar-icons:info",
@@ -75,13 +53,9 @@ const defaultThemeIcons = {
   info: "akar-icons:info",
   success: "akar-icons:info",
   warning: "akar-icons:circle-alert",
-}
+};
 
-const slots = defineSlots<{
-  customToastIcon?: () => any
-  title?: () => any
-  description?: () => any
-}>()
+const slots = useSlots();
 </script>
 
 <style lang="css">
@@ -90,7 +64,7 @@ const slots = defineSlots<{
   grid-template-columns: auto 1fr auto;
   gap: 12px;
   align-items: center;
-  background-color: var(--gray-10);
+  background-color: oklch(from var(--colour-theme-6) calc(l + 0.2) c h);
   border-start-start-radius: 8px;
   border-end-start-radius: 8px;
   padding: 12px 14px;
@@ -159,7 +133,7 @@ const slots = defineSlots<{
       outline: 0.1rem solid transparent;
       border-radius: 50%;
       box-shadow: none;
-      color: var(--colour-theme-0);
+      color: var(--colour-theme-1);
       cursor: pointer;
       font-size: var(--step-4);
       font-weight: bold;
