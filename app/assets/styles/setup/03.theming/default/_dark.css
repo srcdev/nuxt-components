@@ -1,0 +1,89 @@
+:where(html.dark) {
+  /* ===========================================
+     COLOR SCALE VARIABLES
+     Base color tokens for the default theme
+     =========================================== */
+  --colour-theme-1: var(--gray-1);
+  --colour-theme-2: var(--gray-2);
+  --colour-theme-3: var(--gray-3);
+  --colour-theme-4: var(--gray-4);
+  --colour-theme-5: var(--gray-5);
+  --colour-theme-6: var(--gray-6);
+  --colour-theme-7: var(--gray-7);
+  --colour-theme-8: var(--gray-8);
+  --colour-theme-9: var(--gray-9);
+  --colour-theme-10: var(--gray-10);
+  --colour-theme-11: var(--gray-11);
+  --colour-theme-12: var(--gray-12);
+
+  /* ===========================================
+     FORM INPUT VARIABLES
+     Styling for form inputs and controls
+     =========================================== */
+  --theme-input-surface: var(--gray-11);
+  --theme-input-surface-hover: var(--gray-11);
+  --theme-input-surface-focus: var(--gray-11);
+  --theme-input-border: var(--gray-7);
+  --theme-input-border-hover: var(--gray-6);
+  --theme-input-border-focus: var(--gray-4);
+  --theme-input-text: var(--gray-0);
+  --theme-input-placeholder: var(--gray-5);
+  --theme-label-text: var(--gray-2);
+  --theme-help-text: var(--gray-4);
+  --theme-input-focus-ring: var(--gray-4);
+  --theme-input-surface-disabled: var(--gray-10);
+  --theme-input-border-disabled: var(--gray-8);
+  --theme-input-text-disabled: var(--gray-6);
+
+  /* ===========================================
+     FORM BUTTON VARIABLES
+     Styling for form buttons and controls
+     =========================================== */
+  --theme-button-surface: var(--gray-9);
+  --theme-button-surface-hover: var(--gray-8);
+  --theme-button-surface-active: var(--gray-7);
+  --theme-button-border: var(--gray-7);
+  --theme-button-text: var(--gray-0);
+  --theme-button-text-hover: var(--gray-0);
+  --theme-button-focus-ring: var(--gray-4);
+
+  /* ===========================================
+     COMPONENT SURFACE VARIABLES
+     Background colors for various UI surfaces
+     =========================================== */
+  --surface-primary: var(--gray-2);
+  --surface-secondary: var(--gray-3);
+  --surface-tertiary: var(--gray-4);
+
+  /* ===========================================
+     COMPONENT TEXT VARIABLES
+     Text color hierarchy for readability
+     =========================================== */
+  --text-primary: var(--gray-1);
+  --text-secondary: var(--gray-2);
+  --text-muted: var(--gray-3);
+
+  /* ===========================================
+     COMPONENT BORDER VARIABLES
+     Border colors for various emphasis levels
+     =========================================== */
+  --border-subtle: var(--gray-5);
+  --border-default: var(--gray-7);
+  --border-strong: var(--gray-9);
+
+  /* ===========================================
+     INTERACTIVE STATE VARIABLES
+     Colors for hover, active, and focus states
+     =========================================== */
+  --interactive-hover: var(--gray-4);
+  --interactive-active: var(--gray-6);
+  --interactive-focus: var(--gray-4);
+
+  /* ===========================================
+     SHADOW VARIABLES
+     Elevation and depth through shadows
+     =========================================== */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.15);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.25), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+}

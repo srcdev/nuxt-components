@@ -1,0 +1,79 @@
+:where(html.dark [data-error]),
+:where(html.dark [data-theme="error"]) {
+  /* ===========================================
+     COLOR SCALE VARIABLES
+     Base color tokens for the error theme
+     =========================================== */
+  --colour-theme-1: var(--red-1);
+  --colour-theme-2: var(--red-2);
+  --colour-theme-3: var(--red-3);
+  --colour-theme-4: var(--red-4);
+  --colour-theme-5: var(--red-5);
+  --colour-theme-6: var(--red-6);
+  --colour-theme-7: var(--red-7);
+  --colour-theme-8: var(--red-8);
+  --colour-theme-9: var(--red-9);
+  --colour-theme-10: var(--red-10);
+  --colour-theme-11: var(--red-11);
+  --colour-theme-12: var(--red-12);
+
+  /* ===========================================
+     FORM INPUT VARIABLES
+     Styling for form inputs and controls
+     =========================================== */
+  --theme-input-border: var(--red-5);
+  --theme-input-border-focus: var(--red-4);
+  --theme-input-focus-ring: var(--red-4);
+
+  /* ===========================================
+     FORM BUTTON VARIABLES
+     Styling for form buttons and controls
+     =========================================== */
+  --theme-button-surface: var(--red-9);
+  --theme-button-surface-hover: var(--red-8);
+  --theme-button-surface-active: var(--red-7);
+  --theme-button-border: var(--red-7);
+  --theme-button-text: var(--red-0);
+  --theme-button-text-hover: var(--red-0);
+  --theme-button-focus-ring: var(--red-4);
+
+  /* ===========================================
+     COMPONENT SURFACE VARIABLES
+     Background colors for various UI surfaces
+     =========================================== */
+  --surface-primary: var(--red-2);
+  --surface-secondary: var(--red-3);
+  --surface-tertiary: var(--red-4);
+
+  /* ===========================================
+     COMPONENT TEXT VARIABLES
+     Text color hierarchy for readability
+     =========================================== */
+  --text-primary: var(--red-1);
+  --text-secondary: var(--red-2);
+  --text-muted: var(--red-3);
+
+  /* ===========================================
+     COMPONENT BORDER VARIABLES
+     Border colors for various emphasis levels
+     =========================================== */
+  --border-subtle: var(--red-5);
+  --border-default: var(--red-7);
+  --border-strong: var(--red-9);
+
+  /* ===========================================
+     INTERACTIVE STATE VARIABLES
+     Colors for hover, active, and focus states
+     =========================================== */
+  --interactive-hover: var(--red-4);
+  --interactive-active: var(--red-6);
+  --interactive-focus: var(--red-4);
+
+  /* ===========================================
+     SHADOW VARIABLES
+     Elevation and depth through shadows
+     =========================================== */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.15);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.25), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+}

@@ -1,10 +1,25 @@
 :where([data-error]),
-:where(html.dark [data-theme="error"]) {
+:where([data-theme="error"]) {
+  /* Color scale variables */
+  --colour-theme-1: var(--red-1);
+  --colour-theme-2: var(--red-2);
+  --colour-theme-3: var(--red-3);
+  --colour-theme-4: var(--red-4);
+  --colour-theme-5: var(--red-5);
+  --colour-theme-6: var(--red-6);
+  --colour-theme-7: var(--red-7);
+  --colour-theme-8: var(--red-8);
+  --colour-theme-9: var(--red-9);
+  --colour-theme-10: var(--red-10);
+  --colour-theme-11: var(--red-11);
+  --colour-theme-12: var(--red-12);
+
+  /* Form input variables */
   --theme-input-border: var(--red-5);
   --theme-input-border-focus: var(--red-4);
   --theme-input-focus-ring: var(--red-4);
 
-  /* buttons */
+  /* Form button variables */
   --theme-button-surface: var(--red-9);
   --theme-button-surface-hover: var(--red-8);
   --theme-button-surface-active: var(--red-7);

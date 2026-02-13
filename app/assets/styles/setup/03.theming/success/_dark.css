@@ -1,0 +1,79 @@
+:where(html.dark [data-theme="success"]) {
+  /* ===========================================
+     COLOR SCALE VARIABLES
+     Base color tokens for the success theme
+     =========================================== */
+  --colour-theme-1: var(--green-1);
+  --colour-theme-2: var(--green-2);
+  --colour-theme-3: var(--green-3);
+  --colour-theme-4: var(--green-4);
+  --colour-theme-5: var(--green-5);
+  --colour-theme-6: var(--green-6);
+  --colour-theme-7: var(--green-7);
+  --colour-theme-8: var(--green-8);
+  --colour-theme-9: var(--green-9);
+  --colour-theme-10: var(--green-10);
+  --colour-theme-11: var(--green-11);
+  --colour-theme-12: var(--green-12);
+
+  /* ===========================================
+     FORM INPUT VARIABLES
+     Styling for form inputs and controls
+     =========================================== */
+  --theme-input-border: var(--green-6);
+  --theme-input-border-hover: var(--green-5);
+  --theme-input-border-focus: var(--green-4);
+  --theme-input-focus-ring: var(--green-4);
+
+  /* ===========================================
+     FORM BUTTON VARIABLES
+     Styling for form buttons and controls
+     =========================================== */
+  --theme-button-surface: var(--green-9);
+  --theme-button-surface-hover: var(--green-8);
+  --theme-button-surface-active: var(--green-7);
+  --theme-button-border: var(--green-7);
+  --theme-button-text: var(--green-0);
+  --theme-button-text-hover: var(--green-0);
+  --theme-button-focus-ring: var(--green-4);
+
+  /* ===========================================
+     COMPONENT SURFACE VARIABLES
+     Background colors for various UI surfaces
+     =========================================== */
+  --surface-primary: var(--green-2);
+  --surface-secondary: var(--green-3);
+  --surface-tertiary: var(--green-4);
+
+  /* ===========================================
+     COMPONENT TEXT VARIABLES
+     Text color hierarchy for readability
+     =========================================== */
+  --text-primary: var(--green-1);
+  --text-secondary: var(--green-2);
+  --text-muted: var(--green-3);
+
+  /* ===========================================
+     COMPONENT BORDER VARIABLES
+     Border colors for various emphasis levels
+     =========================================== */
+  --border-subtle: var(--green-5);
+  --border-default: var(--green-7);
+  --border-strong: var(--green-9);
+
+  /* ===========================================
+     INTERACTIVE STATE VARIABLES
+     Colors for hover, active, and focus states
+     =========================================== */
+  --interactive-hover: var(--green-4);
+  --interactive-active: var(--green-6);
+  --interactive-focus: var(--green-4);
+
+  /* ===========================================
+     SHADOW VARIABLES
+     Elevation and depth through shadows
+     =========================================== */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.15);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.25), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+}
