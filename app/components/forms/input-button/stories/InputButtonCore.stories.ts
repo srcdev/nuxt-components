@@ -185,7 +185,7 @@ export default {
   args: {
     type: "button",
     size: "default",
-    weight: "wght-400",
+    weight: "wght-500",
     theme: "primary",
     buttonText: "Click me",
     dataTestid: "",

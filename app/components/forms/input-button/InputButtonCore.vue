@@ -38,7 +38,7 @@ interface Props extends BaseButtonProps {
 
 const props = withDefaults(defineProps<Props>(), {
   size: "default",
-  weight: "wght-400",
+  weight: "wght-500",
   theme: "primary",
   type: "button",
   dataTestid: "",

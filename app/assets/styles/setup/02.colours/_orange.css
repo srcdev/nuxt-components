@@ -24,9 +24,9 @@
   --orange-4: oklch(84.5% 0.11 65); /* Warning button backgrounds, form field borders with warnings */
   --orange-5: oklch(78% 0.135 65); /* Primary warning color, attention icons, caution indicators */
   --orange-6: oklch(70% 0.155 65); /* Hover state for warning buttons, active warning elements */
-  --orange-7: oklch(62% 0.165 65); /* Pressed/active warning buttons, important warnings */
-  --orange-8: oklch(54% 0.16 65); /* Warning text on light backgrounds, validation messages */
-  --orange-9: oklch(46% 0.15 65); /* High contrast warning text, critical alerts */
+  --orange-7: oklch(48% 0.175 65); /* Active/pressed warning buttons, strong warning emphasis */
+  --orange-8: oklch(52% 0.17 65); /* Hover state for warning buttons, validation messages */
+  --orange-9: oklch(62% 0.22 68); /* Primary warning buttons, critical alerts - bright vibrant orange */
   --orange-10: oklch(38% 0.135 65); /* Strong warning text, form error labels */
   --orange-11: oklch(30% 0.115 65); /* Very high contrast text, accessible on light backgrounds */
   --orange-12: oklch(22% 0.09 65); /* Maximum contrast warning text, dark theme backgrounds */

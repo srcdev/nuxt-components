@@ -115,7 +115,7 @@ export default {
   },
   args: {
     size: "default",
-    weight: "wght-400",
+    weight: "wght-500",
     theme: "primary",
     buttonText: "Submit",
     dataTestid: "",

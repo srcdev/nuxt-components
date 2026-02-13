@@ -24,9 +24,9 @@
   --red-4: oklch(72% 0.17 30); /* Error button backgrounds, invalid form field borders */
   --red-5: oklch(64% 0.21 30); /* Secondary error color, error icons, validation indicators */
   --red-6: oklch(56% 0.24 30); /* Primary error color, critical alerts, danger buttons */
-  --red-7: oklch(48% 0.23 30); /* Hover state for error buttons, active destructive elements */
-  --red-8: oklch(40% 0.21 30); /* Error text on light backgrounds, form validation messages */
-  --red-9: oklch(32% 0.19 30); /* High contrast error text, critical system alerts */
+  --red-7: oklch(42% 0.23 30); /* Active/pressed state for error buttons, strong destructive emphasis */
+  --red-8: oklch(46% 0.21 30); /* Hover state for error buttons, active destructive elements */
+  --red-9: oklch(52% 0.22 30); /* Primary error buttons, critical alerts - more vibrant for better UX */
   --red-10: oklch(25% 0.16 30); /* Strong error text, required field labels */
   --red-11: oklch(20% 0.19 28); /* Very high contrast text, accessible on light backgrounds */
   --red-12: oklch(16% 0.22 26); /* Maximum contrast error text, dark theme backgrounds */
