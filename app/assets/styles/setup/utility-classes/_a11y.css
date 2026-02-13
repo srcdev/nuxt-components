@@ -1,20 +1,280 @@
+/* ===========================================
+   ACCESSIBILITY UTILITIES
+   Modern a11y helpers and utilities
+   =========================================== */
+
+/* Screen reader only content (modern approach) */
 .sr-only {
-  border-width: 0;
-  clip: rect(1px, 0.1rem, 0.1rem, 0.1rem);
-  clip-path: inset(50%);
-  height: 0.1rem;
-  overflow: hidden;
-  position: absolute;
-  white-space: nowrap;
-  width: 0.1rem;
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
-/* .sr-only {
+
+/* Screen reader only - focusable variant */
+.sr-only-focusable:not(:focus):not(:focus-within) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Not screen reader (opposite of sr-only) */
+.not-sr-only {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: inherit !important;
+  margin: inherit !important;
+  overflow: visible !important;
+  clip-path: none !important;
+  white-space: normal !important;
+}
+
+/* Focus management */
+.focus-visible-only {
+  outline: none;
+}
+
+.focus-visible-only:focus-visible {
+  outline: 2px solid var(--focus-color, currentColor);
+  outline-offset: 2px;
+}
+
+.focus-ring {
+  outline: 2px solid var(--focus-color, currentColor);
+  outline-offset: 2px;
+}
+
+.focus-ring-inset {
+  outline: 2px solid var(--focus-color, currentColor);
+  outline-offset: -2px;
+}
+
+.focus-ring-none {
+  outline: none !important;
+}
+
+/* Skip links */
+.skip-link {
   position: absolute;
-  width: 0.1rem;
-  height: 0.1rem;
-  padding: 0;
-  margin: -0.1rem;
+  top: -100vh;
+  left: 0;
+  background: var(--color-text, #000);
+  color: var(--color-background, #fff);
+  padding: var(--space-sm, 1rem);
+  text-decoration: none;
+  font-weight: 600;
+  z-index: var(--z-max, 9999);
+  transform: translateY(0);
+  transition: transform 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+  transform: translateY(0);
+}
+
+/* High contrast mode utilities */
+@media (prefers-contrast: high) {
+  .high-contrast-hidden {
+    display: none !important;
+  }
+
+  .high-contrast-visible {
+    display: block !important;
+  }
+}
+
+/* Reduced motion utilities */
+@media (prefers-reduced-motion: reduce) {
+  .motion-reduce {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .motion-reduce * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .motion-safe {
+    animation: inherit;
+    transition: inherit;
+  }
+}
+
+/* Color scheme utilities */
+@media (prefers-color-scheme: dark) {
+  .dark-mode-only {
+    display: block !important;
+  }
+
+  .light-mode-only {
+    display: none !important;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .dark-mode-only {
+    display: none !important;
+  }
+
+  .light-mode-only {
+    display: block !important;
+  }
+}
+
+/* Cursor utilities for interaction */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+.cursor-help {
+  cursor: help;
+}
+
+.cursor-wait {
+  cursor: wait;
+}
+
+.cursor-grab {
+  cursor: grab;
+}
+
+.cursor-grabbing {
+  cursor: grabbing;
+}
+
+/* Interactive state utilities */
+.interactive {
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.interactive:hover {
+  opacity: 0.8;
+}
+
+.interactive:focus-visible {
+  outline: 2px solid var(--focus-color, currentColor);
+  outline-offset: 2px;
+}
+
+.interactive:active {
+  transform: translateY(1px);
+}
+
+.interactive[disabled],
+.interactive[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Text selection utilities */
+.select-none {
+  user-select: none;
+}
+
+.select-text {
+  user-select: text;
+}
+
+.select-all {
+  user-select: all;
+}
+
+.select-auto {
+  user-select: auto;
+}
+
+/* Touch action utilities */
+.touch-auto {
+  touch-action: auto;
+}
+
+.touch-none {
+  touch-action: none;
+}
+
+.touch-pan-x {
+  touch-action: pan-x;
+}
+
+.touch-pan-y {
+  touch-action: pan-y;
+}
+
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* ARIA live region utilities */
+.live-polite {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-} */
+}
+
+.live-polite[aria-live="polite"] {
+  position: static;
+  left: auto;
+  width: auto;
+  height: auto;
+  overflow: visible;
+}
+
+/* Content visibility utilities */
+.content-hidden {
+  content-visibility: hidden;
+}
+
+.content-auto {
+  content-visibility: auto;
+}
+
+/* Logical property utilities for RTL support */
+.text-start {
+  text-align: start;
+}
+
+.text-end {
+  text-align: end;
+}
+
+/* Accessibility debug utilities (development only) */
+.a11y-debug * {
+  outline: 1px solid red !important;
+}
+
+.a11y-debug *[role] {
+  outline: 2px solid blue !important;
+}
+
+.a11y-debug *[aria-label],
+.a11y-debug *[aria-labelledby],
+.a11y-debug *[aria-describedby] {
+  outline: 2px solid green !important;
+}
