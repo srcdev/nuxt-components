@@ -1,0 +1,266 @@
+/* ===========================================
+   GRID UTILITIES
+   Modern CSS Grid system
+   =========================================== */
+
+/* Base grid */
+.grid {
+  display: grid;
+}
+.inline-grid {
+  display: inline-grid;
+}
+
+/* Grid columns */
+.grid-cols-1 {
+  grid-template-columns: repeat(1, 1fr);
+}
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+.grid-cols-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+.grid-cols-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+.grid-cols-7 {
+  grid-template-columns: repeat(7, 1fr);
+}
+.grid-cols-8 {
+  grid-template-columns: repeat(8, 1fr);
+}
+.grid-cols-9 {
+  grid-template-columns: repeat(9, 1fr);
+}
+.grid-cols-10 {
+  grid-template-columns: repeat(10, 1fr);
+}
+.grid-cols-11 {
+  grid-template-columns: repeat(11, 1fr);
+}
+.grid-cols-12 {
+  grid-template-columns: repeat(12, 1fr);
+}
+
+/* Auto-fit grids */
+.grid-cols-auto {
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+}
+.grid-cols-auto-xs {
+  grid-template-columns: repeat(auto-fit, minmax(var(--container-xs), 1fr));
+}
+.grid-cols-auto-sm {
+  grid-template-columns: repeat(auto-fit, minmax(var(--container-sm), 1fr));
+}
+.grid-cols-auto-md {
+  grid-template-columns: repeat(auto-fit, minmax(var(--container-md), 1fr));
+}
+
+/* Grid rows */
+.grid-rows-1 {
+  grid-template-rows: repeat(1, 1fr);
+}
+.grid-rows-2 {
+  grid-template-rows: repeat(2, 1fr);
+}
+.grid-rows-3 {
+  grid-template-rows: repeat(3, 1fr);
+}
+.grid-rows-4 {
+  grid-template-rows: repeat(4, 1fr);
+}
+.grid-rows-5 {
+  grid-template-rows: repeat(5, 1fr);
+}
+.grid-rows-6 {
+  grid-template-rows: repeat(6, 1fr);
+}
+
+/* Column span */
+.col-span-1 {
+  grid-column: span 1;
+}
+.col-span-2 {
+  grid-column: span 2;
+}
+.col-span-3 {
+  grid-column: span 3;
+}
+.col-span-4 {
+  grid-column: span 4;
+}
+.col-span-5 {
+  grid-column: span 5;
+}
+.col-span-6 {
+  grid-column: span 6;
+}
+.col-span-7 {
+  grid-column: span 7;
+}
+.col-span-8 {
+  grid-column: span 8;
+}
+.col-span-9 {
+  grid-column: span 9;
+}
+.col-span-10 {
+  grid-column: span 10;
+}
+.col-span-11 {
+  grid-column: span 11;
+}
+.col-span-12 {
+  grid-column: span 12;
+}
+.col-span-full {
+  grid-column: 1 / -1;
+}
+
+/* Row span */
+.row-span-1 {
+  grid-row: span 1;
+}
+.row-span-2 {
+  grid-row: span 2;
+}
+.row-span-3 {
+  grid-row: span 3;
+}
+.row-span-4 {
+  grid-row: span 4;
+}
+.row-span-5 {
+  grid-row: span 5;
+}
+.row-span-6 {
+  grid-row: span 6;
+}
+.row-span-full {
+  grid-row: 1 / -1;
+}
+
+/* Grid gaps */
+.gap-0 {
+  gap: 0;
+}
+.gap-1 {
+  gap: var(--space-3xs, 0.25rem);
+}
+.gap-2 {
+  gap: var(--space-2xs, 0.5rem);
+}
+.gap-3 {
+  gap: var(--space-xs, 0.75rem);
+}
+.gap-4 {
+  gap: var(--space-sm, 1rem);
+}
+.gap-5 {
+  gap: var(--space-md, 1.5rem);
+}
+.gap-6 {
+  gap: var(--space-lg, 2rem);
+}
+.gap-8 {
+  gap: var(--space-xl, 3rem);
+}
+.gap-10 {
+  gap: var(--space-2xl, 4rem);
+}
+.gap-12 {
+  gap: var(--space-3xl, 6rem);
+}
+
+/* Column gaps */
+.gap-x-0 {
+  column-gap: 0;
+}
+.gap-x-1 {
+  column-gap: var(--space-3xs, 0.25rem);
+}
+.gap-x-2 {
+  column-gap: var(--space-2xs, 0.5rem);
+}
+.gap-x-3 {
+  column-gap: var(--space-xs, 0.75rem);
+}
+.gap-x-4 {
+  column-gap: var(--space-sm, 1rem);
+}
+.gap-x-5 {
+  column-gap: var(--space-md, 1.5rem);
+}
+.gap-x-6 {
+  column-gap: var(--space-lg, 2rem);
+}
+
+/* Row gaps */
+.gap-y-0 {
+  row-gap: 0;
+}
+.gap-y-1 {
+  row-gap: var(--space-3xs, 0.25rem);
+}
+.gap-y-2 {
+  row-gap: var(--space-2xs, 0.5rem);
+}
+.gap-y-3 {
+  row-gap: var(--space-xs, 0.75rem);
+}
+.gap-y-4 {
+  row-gap: var(--space-sm, 1rem);
+}
+.gap-y-5 {
+  row-gap: var(--space-md, 1.5rem);
+}
+.gap-y-6 {
+  row-gap: var(--space-lg, 2rem);
+}
+
+/* Grid alignment */
+.justify-items-start {
+  justify-items: start;
+}
+.justify-items-end {
+  justify-items: end;
+}
+.justify-items-center {
+  justify-items: center;
+}
+.justify-items-stretch {
+  justify-items: stretch;
+}
+
+.align-items-start {
+  align-items: start;
+}
+.align-items-end {
+  align-items: end;
+}
+.align-items-center {
+  align-items: center;
+}
+.align-items-stretch {
+  align-items: stretch;
+}
+
+.place-items-start {
+  place-items: start;
+}
+.place-items-end {
+  place-items: end;
+}
+.place-items-center {
+  place-items: center;
+}
+.place-items-stretch {
+  place-items: stretch;
+}

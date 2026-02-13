@@ -1,0 +1,34 @@
+/* ===========================================
+   IMPROVED SETUP STRUCTURE
+   Better organization for maintainability
+   =========================================== */
+
+/*
+RECOMMENDED IMPORT ORDER:
+
+@import "./00.reset/";        # Browser normalization
+@import "./01.tokens/";       # Design tokens & variables
+@import "./02.base/";         # Base HTML elements
+@import "./03.theming/";      # Theme system (your current)
+@import "./04.layout/";       # Layout utilities & grid
+@import "./05.components/";   # Component base styles
+@import "./06.utilities/";    # Utility classes
+@import "./07.dev/";          # Debug tools (dev only)
+
+WHAT TO MOVE:
+
+01.config/_normalise.css     → 00.reset/_normalize.css
+01.config/_basic-resets.css  → 00.reset/_resets.css
+01.config/_head.css          → 02.base/_html-body.css
+02.colours/                  → 01.tokens/colors/
+Typography system            → 01.tokens/typography/
+04.elements/                 → 05.components/
+utility-classes/             → 06.utilities/
+
+NEW ADDITIONS:
+01.tokens/_spacing.css       # Missing spacing system
+01.tokens/_animation.css     # Animation tokens
+04.layout/_grid.css          # Grid system
+04.layout/_containers.css    # Container utilities
+07.dev/_debug.css           # Development tools
+*/

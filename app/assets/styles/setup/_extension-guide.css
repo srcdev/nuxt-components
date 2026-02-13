@@ -1,0 +1,55 @@
+/* ===========================================
+   DESIGN SYSTEM DOCUMENTATION
+   Core tokens that should be customized by extending apps
+   =========================================== */
+
+/*
+  REQUIRED OVERRIDES for extending Nuxt layers:
+
+  1. Brand Colors - Override in your app's CSS:
+     --brand-primary: your-color;
+     --brand-secondary: your-color;
+
+  2. Typography - Override font stacks:
+     --font-family-primary: your-font-stack;
+     --font-family-secondary: your-font-stack;
+
+  3. Spacing Scale - Adjust if needed:
+     --space-unit: 1rem; (base unit for spacing)
+
+  4. Border Radius - Brand consistency:
+     --radius-sm: 4px;
+     --radius-md: 8px;
+     --radius-lg: 12px;
+
+  5. Shadow System - Match brand:
+     --shadow-sm: your-shadow;
+     --shadow-md: your-shadow;
+     --shadow-lg: your-shadow;
+*/
+
+/* ===========================================
+   EXTENSION GUIDE FOR DEVELOPERS
+
+   To extend this layer in your Nuxt app:
+
+   1. Create: ~/assets/styles/overrides/
+   2. Add: tokens.css, themes.css, components.css
+   3. Import in your main.css AFTER this layer
+   4. Override any variables listed above
+
+   Example structure:
+   your-app/
+   ├── assets/styles/
+   │   ├── main.css
+   │   └── overrides/
+   │       ├── tokens.css      # Override design tokens
+   │       ├── themes.css      # Custom themes
+   │       └── components.css  # Component overrides
+   =========================================== */
+
+:root {
+  /* Default tokens - override in your extending app */
+  --design-system-version: "1.0.0";
+  --extend-ready: true;
+}

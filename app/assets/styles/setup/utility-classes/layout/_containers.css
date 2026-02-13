@@ -1,0 +1,96 @@
+/* ===========================================
+   CONTAINER UTILITIES
+   Responsive container system
+   =========================================== */
+
+/* Base container */
+.container {
+  width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--space-md, 1.5rem);
+}
+
+/* Container sizes */
+.container-xs {
+  max-width: var(--container-xs);
+}
+.container-sm {
+  max-width: var(--container-sm);
+}
+.container-md {
+  max-width: var(--container-md);
+}
+.container-lg {
+  max-width: var(--container-lg);
+}
+.container-xl {
+  max-width: var(--container-xl);
+}
+.container-2xl {
+  max-width: var(--container-2xl);
+}
+.container-3xl {
+  max-width: var(--container-3xl);
+}
+.container-4xl {
+  max-width: var(--container-4xl);
+}
+.container-5xl {
+  max-width: var(--container-5xl);
+}
+.container-6xl {
+  max-width: var(--container-6xl);
+}
+.container-7xl {
+  max-width: var(--container-7xl);
+}
+
+/* Container with no padding */
+.container-flush {
+  padding-inline: 0;
+}
+
+/* Responsive containers */
+@container (width >= 20rem) {
+  .container-xs-up {
+    max-width: var(--container-xs);
+  }
+}
+
+@container (width >= 24rem) {
+  .container-sm-up {
+    max-width: var(--container-sm);
+  }
+}
+
+@container (width >= 28rem) {
+  .container-md-up {
+    max-width: var(--container-md);
+  }
+}
+
+@container (width >= 32rem) {
+  .container-lg-up {
+    max-width: var(--container-lg);
+  }
+}
+
+@container (width >= 36rem) {
+  .container-xl-up {
+    max-width: var(--container-xl);
+  }
+}
+
+/* Full width containers */
+.container-full {
+  max-width: none;
+  width: 100%;
+}
+
+/* Container with specific padding */
+.container-tight {
+  padding-inline: var(--space-sm, 1rem);
+}
+.container-loose {
+  padding-inline: var(--space-lg, 2rem);
+}

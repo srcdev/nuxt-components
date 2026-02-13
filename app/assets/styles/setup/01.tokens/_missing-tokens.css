@@ -1,0 +1,80 @@
+/* ===========================================
+   MISSING DESIGN TOKENS
+   Essential tokens your system needs
+   =========================================== */
+
+:root {
+  /* ===========================================
+     SPACING SYSTEM
+     Consistent spacing scale
+     =========================================== */
+  --space-3xs: 0.25rem; /* 4px */
+  --space-2xs: 0.5rem; /* 8px */
+  --space-xs: 0.75rem; /* 12px */
+  --space-sm: 1rem; /* 16px */
+  --space-md: 1.5rem; /* 24px */
+  --space-lg: 2rem; /* 32px */
+  --space-xl: 3rem; /* 48px */
+  --space-2xl: 4rem; /* 64px */
+  --space-3xl: 6rem; /* 96px */
+
+  /* ===========================================
+     BORDER RADIUS SYSTEM
+     Consistent rounded corners
+     =========================================== */
+  --radius-none: 0;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-full: 9999px;
+
+  /* ===========================================
+     Z-INDEX SCALE
+     Prevent z-index conflicts
+     =========================================== */
+  --z-behind: -1;
+  --z-base: 0;
+  --z-raised: 10;
+  --z-overlay: 100;
+  --z-dropdown: 200;
+  --z-sticky: 300;
+  --z-modal: 400;
+  --z-notification: 500;
+  --z-tooltip: 600;
+  --z-max: 999;
+
+  /* ===========================================
+     ANIMATION SYSTEM
+     Consistent timing and easing
+     =========================================== */
+  --duration-instant: 0ms;
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+  --duration-slow: 350ms;
+  --duration-slowest: 500ms;
+
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* ===========================================
+     CONTAINER SYSTEM
+     Responsive container widths
+     =========================================== */
+  --container-xs: 20rem; /* 320px */
+  --container-sm: 24rem; /* 384px */
+  --container-md: 28rem; /* 448px */
+  --container-lg: 32rem; /* 512px */
+  --container-xl: 36rem; /* 576px */
+  --container-2xl: 42rem; /* 672px */
+  --container-3xl: 48rem; /* 768px */
+  --container-4xl: 56rem; /* 896px */
+  --container-5xl: 64rem; /* 1024px */
+  --container-6xl: 72rem; /* 1152px */
+  --container-7xl: 80rem; /* 1280px */
+}
