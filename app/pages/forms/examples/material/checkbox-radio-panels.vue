@@ -71,7 +71,7 @@
 
                     <FormField width="wide" :has-gutter="false">
                       <template #default>
-                        <InputButtonSubmit
+                        <InputButtonCore
                           type="button"
                           @click.stop.prevent="submitForm()"
                           :is-pending="false"

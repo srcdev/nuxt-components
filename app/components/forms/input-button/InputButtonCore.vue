@@ -56,7 +56,6 @@ const hasIconOnlySlot = computed(() => Boolean(slots.iconOnly));
 // Combine all button classes into a single computed
 const buttonClasses = computed(() => [
   props.variant,
-  `btn-${props.type}`,
   elementClasses.value,
   { "icon-only": hasIconOnlySlot.value },
   { "pending-effect": props.hasPendingEffect },

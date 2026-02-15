@@ -15,7 +15,7 @@
             <p>Themes switcher</p>
             <ul class="flex-group">
               <li>
-                <InputButtonSubmit
+                <InputButtonCore
                   type="button"
                   :is-pending="false"
                   button-text="Primary"
@@ -25,7 +25,7 @@
                 />
               </li>
               <li>
-                <InputButtonSubmit
+                <InputButtonCore
                   type="button"
                   :is-pending="false"
                   button-text="Secondary"
@@ -35,7 +35,7 @@
                 />
               </li>
               <li>
-                <InputButtonSubmit
+                <InputButtonCore
                   type="button"
                   :is-pending="false"
                   button-text="Warning"
@@ -45,7 +45,7 @@
                 />
               </li>
               <li>
-                <InputButtonSubmit
+                <InputButtonCore
                   type="button"
                   :is-pending="false"
                   button-text="Success"
@@ -55,7 +55,7 @@
                 />
               </li>
               <li>
-                <InputButtonSubmit
+                <InputButtonCore
                   type="button"
                   :is-pending="false"
                   button-text="Error"
@@ -73,7 +73,7 @@
             </p>
             <ul class="flex-group">
               <li>
-                <InputButtonSubmit
+                <InputButtonCore
                   type="button"
                   :is-pending="false"
                   button-text="X-Small"
@@ -83,7 +83,7 @@
                 />
               </li>
               <li>
-                <InputButtonSubmit
+                <InputButtonCore
                   type="button"
                   :is-pending="false"
                   button-text="Small"
@@ -93,7 +93,7 @@
                 />
               </li>
               <li>
-                <InputButtonSubmit
+                <InputButtonCore
                   type="button"
                   :is-pending="false"
                   button-text="Default"
@@ -103,7 +103,7 @@
                 />
               </li>
               <li>
-                <InputButtonSubmit
+                <InputButtonCore
                   type="button"
                   :is-pending="false"
                   button-text="Medium"
@@ -113,7 +113,7 @@
                 />
               </li>
               <li>
-                <InputButtonSubmit
+                <InputButtonCore
                   type="button"
                   :is-pending="false"
                   button-text="Large"
@@ -127,7 +127,7 @@
             <p>Select type of text input to display</p>
             <ul class="flex-group">
               <li>
-                <InputButtonSubmit
+                <InputButtonCore
                   type="button"
                   button-text="Normal"
                   theme="primary"
@@ -136,7 +136,7 @@
                 />
               </li>
               <li>
-                <InputButtonSubmit
+                <InputButtonCore
                   type="button"
                   button-text="Underlined"
                   theme="primary"
@@ -671,7 +671,7 @@
 
                     <FormField width="wide" :has-gutter="false">
                       <template #default>
-                        <InputButtonSubmit
+                        <InputButtonCore
                           type="button"
                           :is-pending="false"
                           :readonly="zodFormControl.submitDisabled"
