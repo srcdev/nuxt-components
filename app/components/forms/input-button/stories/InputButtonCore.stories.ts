@@ -70,45 +70,8 @@ export default {
     // Styling
     theme: {
       control: { type: "select" },
-      options: [
-        "primary",
-        "secondary",
-        "tertiary",
-        "ghost",
-        "error",
-        "success",
-        "warning",
-        "input-action",
-        "input-action-underlined",
-      ],
+      options: ["default", "success", "error", "warning"],
       description: "Button theme",
-      table: {
-        category: "Styling",
-      },
-    },
-    size: {
-      control: { type: "select" },
-      options: ["x-small", "small", "default", "medium", "large"],
-      description: "Button size",
-      table: {
-        category: "Styling",
-      },
-    },
-    weight: {
-      control: { type: "select" },
-      options: [
-        "wght-100",
-        "wght-200",
-        "wght-300",
-        "wght-400",
-        "wght-500",
-        "wght-600",
-        "wght-700",
-        "wght-800",
-        "wght-900",
-        "light",
-      ],
-      description: "Font weight",
       table: {
         category: "Styling",
       },
@@ -122,17 +85,9 @@ export default {
     },
 
     // Effects
-    useEffect: {
+    hasPendingEffect: {
       control: "boolean",
-      description: "Enable visual effects",
-      table: {
-        category: "Effects",
-      },
-    },
-    effect: {
-      control: { type: "select" },
-      options: ["fancy", "pulse"],
-      description: "Effect type",
+      description: "Enable pending effect",
       table: {
         category: "Effects",
       },
@@ -184,15 +139,11 @@ export default {
   },
   args: {
     type: "button",
-    size: "default",
-    weight: "wght-500",
-    theme: "primary",
+    theme: "default",
     buttonText: "Click me",
-    dataTestid: "",
     styleClassPassthrough: [],
-    useEffect: false,
-    effect: "fancy",
     isPending: false,
+    hasPendingEffect: false,
     readonly: false,
     useLeftSlot: false,
     useRightSlot: false,
@@ -236,45 +187,12 @@ const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
         <template v-if="useRightSlot" #right>{{ rightSlotContent }}</template>
         <template v-if="useIconOnlySlot" #iconOnly>{{ iconOnlyContent }}</template>
       </StorybookComponent>
-      <div class="text-sm text-gray-600">
+      <div class="mbs-40">
         Click count: {{ clickCount }}
       </div>
     </div>
   `,
 });
-
-export const Default = Template.bind({});
-Default.args = {};
-
-export const Primary = Template.bind({});
-Primary.args = {
-  theme: "primary",
-  buttonText: "Primary Button",
-};
-
-export const Secondary = Template.bind({});
-Secondary.args = {
-  theme: "secondary",
-  buttonText: "Secondary Button",
-};
-
-export const Success = Template.bind({});
-Success.args = {
-  theme: "success",
-  buttonText: "Success Button",
-};
-
-export const Error = Template.bind({});
-Error.args = {
-  theme: "error",
-  buttonText: "Error Button",
-};
-
-export const Ghost = Template.bind({});
-Ghost.args = {
-  theme: "ghost",
-  buttonText: "Ghost Button",
-};
 
 export const WithLeftIcon = Template.bind({});
 WithLeftIcon.args = {
@@ -297,6 +215,8 @@ WithBothIcons.args = {
   useRightSlot: true,
   leftSlotContent: "💸",
   rightSlotContent: "✅",
+  // leftSlotContent: '<Icon name="mdi:arrow-left" class="icon" />',
+  // rightSlotContent: '<Icon name="mdi:arrow-right" class="icon" />',
 };
 
 export const IconOnly = Template.bind({});
@@ -305,148 +225,3 @@ IconOnly.args = {
   useIconOnlySlot: true,
   iconOnlyContent: "⚡",
 };
-
-export const SubmitButton = Template.bind({});
-SubmitButton.args = {
-  type: "submit",
-  theme: "primary",
-  buttonText: "Submit Form",
-  useRightSlot: true,
-  rightSlotContent: "📤",
-};
-
-export const ResetButton = Template.bind({});
-ResetButton.args = {
-  type: "reset",
-  theme: "ghost",
-  buttonText: "Reset",
-  useLeftSlot: true,
-  leftSlotContent: "🔄",
-};
-
-export const ReadonlyButton = Template.bind({});
-ReadonlyButton.args = {
-  readonly: true,
-  buttonText: "Readonly Button",
-  theme: "primary",
-};
-
-export const PendingButton = Template.bind({});
-PendingButton.args = {
-  isPending: true,
-  buttonText: "Loading...",
-  theme: "primary",
-};
-
-export const WithFancyEffect = Template.bind({});
-WithFancyEffect.args = {
-  useEffect: true,
-  effect: "fancy",
-  buttonText: "Fancy Button",
-  theme: "primary",
-};
-
-export const WithPulseEffect = Template.bind({});
-WithPulseEffect.args = {
-  useEffect: true,
-  effect: "pulse",
-  buttonText: "Pulse Button",
-  theme: "success",
-};
-
-export const Large = Template.bind({});
-Large.args = {
-  size: "large",
-  buttonText: "Large Button",
-  theme: "primary",
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  size: "small",
-  buttonText: "Small Button",
-  theme: "primary",
-};
-
-export const BoldText = Template.bind({});
-BoldText.args = {
-  weight: "wght-700",
-  buttonText: "Bold Button",
-  theme: "primary",
-};
-
-export const AllThemes = Template.bind({});
-AllThemes.storyName = "All Themes";
-AllThemes.render = (args) => ({
-  components: { StorybookComponent },
-  setup() {
-    const themes = ["primary", "secondary", "tertiary", "ghost", "success", "warning", "error", "input-action"];
-
-    return {
-      themes,
-      args,
-    };
-  },
-  template: `
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div v-for="theme in themes" :key="theme" class="space-y-2">
-        <h4 class="text-sm font-medium capitalize">{{ theme }}</h4>
-        <StorybookComponent
-          v-bind="{ ...args, theme, buttonText: theme }"
-        />
-      </div>
-    </div>
-  `,
-});
-
-export const AllSizes = Template.bind({});
-AllSizes.storyName = "All Sizes";
-AllSizes.render = (args) => ({
-  components: { StorybookComponent },
-  setup() {
-    const sizes = ["x-small", "small", "default", "medium", "large"];
-
-    return {
-      sizes,
-      args,
-    };
-  },
-  template: `
-    <div class="flex flex-wrap items-end gap-4">
-      <div v-for="size in sizes" :key="size" class="space-y-2">
-        <h4 class="text-sm font-medium capitalize">{{ size }}</h4>
-        <StorybookComponent
-          v-bind="{ ...args, size, buttonText: size }"
-        />
-      </div>
-    </div>
-  `,
-});
-
-export const ButtonTypes = Template.bind({});
-ButtonTypes.storyName = "Button Types";
-ButtonTypes.render = (args) => ({
-  components: { StorybookComponent },
-  setup() {
-    const types = [
-      { type: "button", text: "Button", theme: "primary" },
-      { type: "submit", text: "Submit", theme: "success" },
-      { type: "reset", text: "Reset", theme: "ghost" },
-    ];
-
-    return {
-      types,
-      args,
-    };
-  },
-  template: `
-    <div class="flex gap-4">
-      <div v-for="buttonType in types" :key="buttonType.type" class="space-y-2">
-        <h4 class="text-sm font-medium capitalize">{{ buttonType.type }}</h4>
-        <StorybookComponent
-          v-bind="{ ...args, type: buttonType.type, buttonText: buttonType.text, theme: buttonType.theme }"
-        />
-      </div>
-    </div>
-  `,
-});

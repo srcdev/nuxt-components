@@ -43,10 +43,10 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, InputVariant, InputTypesText, InputMode } from "~/types/forms/types.forms";
+import type { FormSize, InputVariant, InputMode } from "~/types/forms/types.forms";
 
 interface Props {
-  type?: InputTypesText;
+  type?: "number" | "text" | "email" | "password" | "tel" | "url";
   inputmode?: InputMode;
   maxlength?: number;
   id: string;
@@ -55,7 +55,7 @@ interface Props {
   placeholder?: string;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
+  theme?: "primary" | "secondary" | "tertiary";
   ariaDescribedby?: string;
   size?: FormSize;
   inputVariant?: InputVariant;
@@ -231,7 +231,7 @@ onMounted(() => {
 
     border-top: none;
     border-right: none;
-    border-bottom: var(--form-element-border-width-underlined) solid var(--theme-input-border);
+    border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-input-border);
     border-left: none;
 
     overflow: hidden;
@@ -296,7 +296,7 @@ onMounted(() => {
     font-family: var(--font-family);
     font-size: var(--form-element-font-size);
     line-height: var(--form-element-line-height);
-    padding-block: var(--input-element-padding-block);
+    padding-block: var(--form-text-padding-block);
     padding-inline: 1rem;
 
     &::placeholder {

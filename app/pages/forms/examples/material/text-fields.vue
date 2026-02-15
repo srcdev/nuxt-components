@@ -2,10 +2,14 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <div>
-          <h1 class="header-1">Example form</h1>
-          <p class="body-normal">Use 'test@test.com' to trigger server errors</p>
-        </div>
+        <ContentGrid>
+          <template #slot1>
+            <div>
+              <h1 class="header-1">Example form</h1>
+              <p class="body-normal">Use 'test@test.com' to trigger server errors</p>
+            </div>
+          </template>
+        </ContentGrid>
         <ContentGrid>
           <template #slot1>
             <p>Themes switcher</p>
@@ -718,7 +722,7 @@ useHead({
   title: "Text Field Example",
   meta: [{ name: "description", content: "Homepage" }],
   bodyAttrs: {
-    class: "page-theme-grey-XX",
+    class: "text-fields-page",
   },
 });
 
@@ -954,6 +958,14 @@ watch(
 </script>
 
 <style lang="css">
+.text-fields-page {
+  .layout-row {
+    .ui-content-grid {
+      --_margin-inline: 12px;
+    }
+  }
+}
+
 .flex-group {
   align-items: flex-start;
   display: flex;

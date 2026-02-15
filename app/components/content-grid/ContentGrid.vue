@@ -19,9 +19,9 @@ const props = defineProps({
     type: String,
     default: "",
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 </script>
 
 <style lang="css">

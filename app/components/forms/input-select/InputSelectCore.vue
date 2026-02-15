@@ -68,10 +68,10 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
 <style lang="css">
 .input-select-wrapper {
-  background-color: var(--theme-input-surface);
-  outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+  /* background-color: var(--theme-input-surface); */
+  /* outline: var(--form-element-outline-width) solid var(--theme-input-outline); */
 
-  border-top-left-radius: var(--element-decorator-border-top-left-radius);
+  /* border-top-left-radius: var(--element-decorator-border-top-left-radius);
   border-top-right-radius: var(--element-decorator-border-top-right-radius);
   border-bottom-left-radius: var(--element-decorator-border-bottom-left-radius);
   border-bottom-right-radius: var(--element-decorator-border-bottom-right-radius);
@@ -79,7 +79,10 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
   border-top: var(--element-decorator-border-top-default);
   border-right: var(--element-decorator-border-right-default);
   border-bottom: var(--element-decorator-border-bottom-default);
-  border-left: var(--element-decorator-border-left-default);
+  border-left: var(--element-decorator-border-left-default); */
+
+  border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-input-border);
+  background-color: var(--theme-input-surface);
 
   .input-select-core {
     appearance: none;

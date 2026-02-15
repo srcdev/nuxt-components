@@ -3,50 +3,47 @@
     :type
     :readonly
     :aria-disabled="readonly"
-    :data-testid="dataTestid || undefined"
+    data-testid="input-button-core"
     :data-theme="theme"
-    :data-size="size"
     class="input-button-core"
     :class="buttonClasses"
   >
-    <span v-if="showFancyEffect" class="fancy"></span>
-    <template v-if="hasLeftSlot">
-      <span class="btn-icon left">
-        <slot name="left"></slot>
-      </span>
-    </template>
-    <span class="btn-text" :class="[weight, { 'sr-only': hasIconOnlySlot }]">{{ buttonText }}</span>
-    <template v-if="hasRightSlot">
-      <span class="btn-icon right">
-        <slot name="right"></slot>
-      </span>
-    </template>
-    <template v-if="hasIconOnlySlot">
-      <span class="btn-icon icon-only">
-        <slot name="iconOnly"></slot>
-      </span>
-    </template>
+    <PendingEffect v-if="hasPendingEffect" />
+
+    <span v-if="hasLeftSlot" class="btn-icon left">
+      <slot name="left"></slot>
+    </span>
+    <span class="button-text" :class="[{ 'sr-only': hasIconOnlySlot }]">{{ buttonText }}</span>
+    <span v-if="hasRightSlot" class="btn-icon right">
+      <slot name="right"></slot>
+    </span>
+    <span v-if="hasIconOnlySlot" class="btn-icon icon-only">
+      <slot name="iconOnly"></slot>
+    </span>
   </button>
 </template>
 
 <script setup lang="ts">
-import type { BaseButtonProps } from "~/types/forms/types.forms";
-
-interface Props extends BaseButtonProps {
+interface Props {
   type?: "submit" | "button" | "reset";
+  theme?: "default" | "success" | "error" | "warning";
+  variant?: "primary" | "secondary" | "tertiary";
+  buttonText?: string;
+  isPending?: boolean;
+  hasPendingEffect?: boolean;
+  readonly?: boolean;
+  styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  size: "default",
-  weight: "wght-500",
-  theme: "primary",
   type: "button",
-  dataTestid: "",
-  styleClassPassthrough: () => [],
-  useEffect: false,
-  effect: "fancy",
+  theme: "default",
+  variant: "primary",
+  buttonText: "",
   isPending: false,
+  hasPendingEffect: false,
   readonly: false,
+  styleClassPassthrough: () => [],
 });
 
 const slots = useSlots();
@@ -55,14 +52,15 @@ const slots = useSlots();
 const hasLeftSlot = computed(() => Boolean(slots.left && !slots.iconOnly));
 const hasRightSlot = computed(() => Boolean(slots.right && !slots.iconOnly));
 const hasIconOnlySlot = computed(() => Boolean(slots.iconOnly));
-const showFancyEffect = computed(() => props.useEffect && props.effect === "fancy");
 
 // Combine all button classes into a single computed
 const buttonClasses = computed(() => [
+  props.variant,
   `btn-${props.type}`,
-  props.useEffect && props.effect !== "fancy" ? props.effect : "",
   elementClasses.value,
   { "icon-only": hasIconOnlySlot.value },
+  { "pending-effect": props.hasPendingEffect },
+  { "is-pending": props.isPending },
 ]);
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -70,45 +68,75 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 <style lang="css">
 .input-button-core {
-  touch-action: manipulation;
-  align-items: center;
   display: flex;
   gap: var(--button-icon-gap);
   justify-content: center;
+  align-items: center;
+  box-sizing: content-box;
   border-radius: var(--button-border-radius);
   font-family: var(--font-family);
-
   padding-inline: var(--button-padding-inline);
   padding-block: var(--button-padding-block);
-
+  touch-action: manipulation;
   transition: all var(--control-transition-duration) var(--control-transition-ease);
 
-  box-shadow: var(--box-shadow-off);
-  background-color: var(--theme-button-surface);
-  border: var(--button-border-width) solid var(--theme-button-border);
-  color: var(--theme-button-text);
-  outline: var(--button-focus-ring-width) solid transparent;
-  outline-offset: 0rem;
-  min-height: var(--button-min-height);
+  /*
+  * Variants
+  **/
+  &.primary {
+    background-color: var(--theme-button-primary-surface);
+    border: var(--button-border-width) solid var(--theme-button-primary-border);
+    color: var(--theme-button-primary-text);
+    outline: var(--button-outline-width) solid var(--theme-button-primary-outline);
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--theme-button-secondary-surface);
+      outline-color: var(--theme-button-primary-outline-active);
+      color: var(--theme-button-secondary-text);
+    }
+
+    &.is-pending {
+      background-color: color-mix(in oklab, var(--theme-button-primary-surface) 50%, transparent);
+    }
+  }
+
+  &.secondary {
+    background-color: var(--theme-button-secondary-surface);
+    border: var(--button-border-width) solid var(--theme-button-secondary-border);
+    color: var(--theme-button-secondary-text);
+    outline: var(--button-outline-width) solid var(--theme-button-secondary-outline);
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--theme-button-primary-surface);
+      color: var(--theme-button-primary-text);
+      outline-color: var(--theme-button-secondary-outline-active);
+    }
+  }
+
+  &.tertiary {
+    border: var(--button-border-width) solid transparent;
+    color: var(--theme-button-tertiary-text);
+    text-decoration: underline;
+    outline: var(--button-outline-width) solid transparent;
+
+    &:hover,
+    &:focus-visible {
+      border-color: var(--theme-button-tertiary-border-hover);
+      outline-color: var(--theme-button-tertiary-border-active);
+    }
+  }
 
   /*
-  * States
+  * Shared States
   **/
   &:hover {
-    background-color: var(--theme-button-surface-hover);
-    border-color: var(--theme-button-border-hover);
-    color: var(--theme-button-text-hover);
-    outline-color: var(--theme-button-focus-ring); /* no equivalent found */
-    outline-offset: var(--button-focus-ring-offset);
     cursor: pointer;
   }
 
   &:focus-visible {
-    background-color: var(--theme-button-surface-hover);
-    border-color: var(--theme-button-border-hover);
-    /* UNSURE: color: var(--theme-button-text-focus); - no equivalent found, using hover color */
-    color: var(--theme-button-text-hover);
-    outline-color: var(--theme-button-focus-ring);
+    outline-width: var(--button-focus-ring-width);
     outline-offset: var(--button-focus-ring-offset);
   }
 
@@ -117,33 +145,37 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     &:hover,
     &:focus-visible {
       cursor: not-allowed;
+      pointer-events: none;
+    }
+  }
+
+  .button-text {
+    display: inline-block;
+    white-space: nowrap;
+    font-size: var(--button-font-size);
+    line-height: var(--button-line-height);
+    font-weight: var(--button-font-weight);
+  }
+
+  .btn-icon {
+    display: flex;
+
+    .icon {
+      aspect-ratio: 1;
+      display: inline-block;
+      height: var(--input-icon-size);
+      width: var(--input-icon-size);
     }
   }
 
   &.icon-only {
     aspect-ratio: 1;
     border-radius: var(--button-border-radius-icon-only);
-    /* CANNOT FIND: height/width for icon-only buttons - keeping original var */
-    height: var(--form-icon-only-button-size);
-    width: var(--form-icon-only-button-size);
     margin: 0;
     padding: 0;
-  }
 
-  .btn-text {
-    display: inline-block;
-    white-space: nowrap;
-    font-size: var(--input-font-size);
-    line-height: var(--input-line-height);
-  }
-
-  .btn-icon {
-    display: flex;
-    .icon {
-      aspect-ratio: 1;
-      display: inline-block;
-      height: var(--input-icon-size);
-      width: var(--input-icon-size);
+    .btn-icon {
+      margin: 1.2rem;
     }
   }
 }
