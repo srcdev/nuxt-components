@@ -1,0 +1,38 @@
+.srcdev-forms-extended {
+  .form-fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+
+    &.single-checkbox-fieldset {
+    }
+
+    &.multiple-checkboxes-fieldset {
+    }
+
+    &.multiple-radiobuttons-fieldset {
+    }
+
+    .form-fieldset-legend {
+      color: var(--form-fieldset-legend-color);
+      margin-block: 0.8rem;
+      font-size: var(--step-5);
+      font-weight: normal;
+      line-height: 1.5;
+
+      &.has-description {
+        margin-bottom: 0;
+      }
+    }
+
+    .form-fieldset-description {
+      font-size: 1.6rem;
+      margin-top: 1.2rem;
+    }
+
+    .form-fieldset-content {
+      margin-block-start: 0;
+      margin-block-end: 0;
+    }
+  }
+}

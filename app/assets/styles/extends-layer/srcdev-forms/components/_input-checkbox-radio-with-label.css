@@ -1,0 +1,14 @@
+.srcdev-forms-extended {
+  .input-checkbox-radio-with-label {
+    &:hover {
+      text-decoration: underline;
+
+      .input-checkbox-radio-wrapper {
+        /* Duplicate within _input-checkbox-radio-core.css */
+        background-color: var(--theme-input-surface-hover);
+        outline-color: var(--theme-input-outline-hover);
+        outline-offset: var(--form-element-outline-offset-hover);
+      }
+    }
+  }
+}

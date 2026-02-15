@@ -1,0 +1,12 @@
+:where(html) {
+  [data-size="medium"] {
+    --form-element-font-size: var(--step-6);
+    --form-placeholder-font-size: calc(var(--step-6) * 0.65);
+    --form-element-line-height: var(--step-6);
+    --form-icon-size: var(--step-6);
+    --form-input-border-radius: 0.4rem;
+    --form-icon-only-button-size: calc(var(--step-4) * 2.75 + 1px);
+    --form-toggle-symbol-size: calc(var(--step-6) * 1.78);
+    --form-toggle-switch-width-adjustment: 0rem;
+  }
+}

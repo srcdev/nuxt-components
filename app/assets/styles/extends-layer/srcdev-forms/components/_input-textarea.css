@@ -1,0 +1,96 @@
+.srcdev-forms-extended {
+  .input-textarea-wrapper {
+    /* Custom placeholder styles */
+    background-color: var(--theme-input-surface);
+
+    &:hover {
+      background-color: var(--theme-input-surface-hover);
+    }
+
+    &:focus-within {
+      background-color: var(--theme-input-surface-hover);
+      outline: var(--theme-focus-visible-outline);
+      box-shadow: var(--theme-focus-visible-shadow);
+    }
+
+    &.normal {
+      outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+
+      border-top-left-radius: var(--form-input-border-radius);
+      border-top-right-radius: var(--form-input-border-radius);
+      border-bottom-left-radius: var(--form-input-border-radius);
+      border-bottom-right-radius: var(--form-input-border-radius);
+
+      border-top: var(--form-element-border-width) solid var(--theme-input-border);
+      border-right: var(--form-element-border-width) solid var(--theme-input-border);
+      border-bottom: var(--form-element-border-width) solid var(--theme-input-border);
+      border-left: var(--form-element-border-width) solid var(--theme-input-border);
+
+      padding-inline: 1rem;
+
+      &:focus-within {
+        outline-color: var(--theme-input-outline-focus);
+        outline-offset: var(--form-element-outline-offset-focus);
+      }
+
+      &.error {
+        border-color: var(--theme-error-surface);
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+    }
+
+    &:hover {
+      /* Custom placeholder styles */
+    }
+
+    .slot {
+      /* Custom placeholder styles */
+
+      &.left-slot {
+        /* Custom placeholder styles */
+      }
+      &.right-slot {
+        /* Custom placeholder styles */
+      }
+    }
+
+    .input-textarea-core {
+      min-height: 4rem;
+
+      &::placeholder {
+        color: var(--theme-input-placeholder);
+        font-size: var(--theme-input-placeholder-font-size);
+        font-style: italic;
+        line-height: 1;
+        font-weight: normal;
+      }
+    }
+
+    &.underlined {
+      margin-block-start: 0;
+      padding-block: 0;
+      padding-inline: 0.6rem;
+
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-bottom-left-radius: var(--form-input-border-radius);
+      border-bottom-right-radius: var(--form-input-border-radius);
+
+      border-top: var(--form-element-border-width) solid transparent;
+      border-right: var(--form-element-border-width) solid transparent;
+      border-bottom: var(--form-element-border-width-underlined) solid var(--theme-input-border);
+      border-left: var(--form-element-border-width) solid transparent;
+
+      &.error {
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+
+        border-top: var(--form-element-border-width) solid var(--theme-error-surface);
+        border-right: var(--form-element-border-width) solid var(--theme-error-surface);
+        border-bottom: var(--form-element-border-width) solid var(--theme-error-surface);
+        border-left: var(--form-element-border-width) solid var(--theme-error-surface);
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+.srcdev-forms-extended {
+  .input-description {
+    .input-description-html {
+      margin-block: 0.4rem 0.8rem;
+    }
+    .input-description-text {
+      color: var(--form-description-color);
+      font-size: var(--step-4);
+      margin-block: 0.4rem 0.8rem;
+      line-height: var(--step-4);
+    }
+  }
+}

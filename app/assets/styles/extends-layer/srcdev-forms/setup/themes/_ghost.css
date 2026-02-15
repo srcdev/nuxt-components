@@ -1,0 +1,63 @@
+[data-theme="ghost"] {
+  /* Generic */
+  --theme-box-shadow: var(--colour-theme-12);
+
+  /* Fieldset & Label */
+  --form-fieldset-legend-color: light-dark(var(--gray-12), var(--gray-1));
+  --form-label-color: light-dark(var(--gray-12), var(--gray-1));
+
+  /* Description */
+  --form-description-color: light-dark(var(--gray-12), var(--gray-1));
+
+  /* Input Elements */
+  --theme-input-surface: light-dark(var(--gray-1), var(--gray-8));
+  --theme-input-surface-hover: light-dark(var(--gray-1), var(--gray-12));
+
+  /* --theme-input-border: light-dark(var(--gray-9), var(--gray-4)); */
+  --theme-input-border: var(--gray-4);
+  --theme-input-border-hover: light-dark(var(--gray-10), var(--gray-5));
+  --theme-input-border-focus: light-dark(var(--gray-10), var(--gray-5));
+
+  --theme-input-outline: transparent;
+  --theme-input-outline-hover: light-dark(var(--gray-10), var(--gray-5));
+  --theme-input-outline-focus: light-dark(var(--gray-10), var(--gray-5));
+
+  --theme-input-text: var(--gray-0);
+  --theme-input-text-hover: var(--gray-0);
+  --theme-input-text-focus: var(--gray-0);
+  --theme-input-placeholder: light-dark(var(--gray-7), var(--gray-5));
+
+  /* Checkboxes & Radio buttons */
+  --theme-checkbox-label-text-color: light-dark(var(--gray-11), var(--gray-1));
+  --theme-checkbox-decorator-color: light-dark(var(--gray-11), var(--gray-1));
+  --theme-checkbox-symbol-surface: var(--theme-input-surface);
+  --theme-checkbox-symbol-color: light-dark(var(--gray-11), var(--gray-1));
+
+  /* Toggle Switch */
+  --theme-toggle-wrapper-surface-color: var(--theme-input-surface);
+  --theme-toggle-wrapper-surface-color-hover: var(--theme-input-surface-hover);
+  --theme-toggle-symbol-surface-color: var(--blue-11);
+  --theme-toggle-symbol-border-color: var(--gray-11);
+  --theme-toggle-symbol-outline-color: transparent;
+  --theme-toggle-symbol-icon-color: var(--gray-0);
+
+  /* a11y */
+  --theme-focus-visible-shadow: var(--colour-theme-12);
+  --theme-focus-visible-outline: var(--colour-theme-12);
+
+  /* Buttons */
+  --theme-button-surface: light-dark(var(--gray-2), var(--gray-8));
+  --theme-button-surface-hover: var(--gray-10);
+
+  --theme-button-border: transparent;
+  --theme-button-border-hover: transparent;
+  --theme-button-border-focus: transparent;
+
+  --theme-button-outline: transparent;
+  --theme-button-outline-hover: light-dark(var(--gray-10), var(--gray-6));
+  --theme-button-outline-focus: light-dark(var(--gray-10), var(--gray-6));
+
+  --theme-button-text: light-dark(var(--gray-10), var(--gray-1));
+  --theme-button-text-hover: var(--gray-0);
+  --theme-button-text-focus: var(--gray-0);
+}
