@@ -8,6 +8,11 @@
   --input-font-size: 1.6rem; /* 16px */
   --input-line-height: 1.4;
 
+  /* Button text */
+  --button-font-size: 1.6rem; /* 16px */
+  --button-line-height: 1.4;
+  --button-font-weight: 600;
+
   /* Description */
   --field-description-font-size: 1.3rem;
   --field-description-line-height: 1.4;

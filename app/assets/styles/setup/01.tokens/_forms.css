@@ -1,0 +1,32 @@
+/* ===========================================
+   FORM LAYOUT TOKENS
+   Non-theme specific form element sizing and spacing
+   =========================================== */
+
+:where(html) {
+  /* Border widths */
+  --form-element-border-width: 1px;
+  --form-element-border-bottom-width-underlined: 0.3rem;
+
+  /* Outline settings */
+  --form-element-outline-width: 2px;
+  --form-element-outline-offset-focus: 2px;
+
+  /* Border radius */
+  --form-input-border-radius: 0.5rem;
+  --form-input-border-radius-underlined: 0.25rem;
+
+  /* Typography */
+  --form-element-font-size: var(--step-0);
+  --form-element-line-height: 1.5;
+
+  /* Padding */
+
+  --form-element-padding-block-start: 0.75rem;
+  --form-element-padding-block-end: 0.75rem;
+  --form-text-padding-block: 1.25rem;
+  --form-text-padding-inline: 1rem;
+
+  /* Transition duration */
+  --theme-form-transition-duration: 0.2s;
+}

@@ -25,17 +25,53 @@
   --theme-input-border-focus: var(--orange-4);
   --theme-input-focus-ring: var(--orange-4);
 
+  /* Input surfaces and backgrounds */
+  --theme-input-surface: var(--orange-1);
+  --theme-input-surface-hover: var(--orange-2);
+
+  /* Input outlines and focus */
+  --theme-input-outline: var(--orange-6);
+  --theme-input-outline-focus: var(--orange-4);
+  --theme-focus-visible-outline: 2px solid var(--orange-4);
+  --theme-focus-visible-shadow: 0 0 0 2px var(--orange-2);
+
+  /* Input text and placeholders */
+  --theme-input-placeholder: var(--orange-8);
+  --theme-input-placeholder-font-size: var(--step--1);
+  --theme-form-input-text-color-normal: var(--orange-12);
+  --theme-form-input-outline: transparent;
+
   /* ===========================================
      FORM BUTTON VARIABLES
      Styling for form buttons and controls
      =========================================== */
-  --theme-button-surface: var(--orange-9);
-  --theme-button-surface-hover: var(--orange-8);
-  --theme-button-surface-active: var(--orange-7);
-  --theme-button-border: var(--orange-7);
-  --theme-button-text: var(--orange-0);
-  --theme-button-text-hover: var(--orange-0);
-  --theme-button-focus-ring: var(--orange-4);
+
+  /* Variant Primary */
+  --theme-button-primary-surface: var(--orange-9);
+  --theme-button-primary-surface-hover: var(--orange-8);
+  --theme-button-primary-surface-active: var(--orange-7);
+  --theme-button-primary-border: var(--orange-7);
+  --theme-button-primary-border-active: var(--orange-7);
+  --theme-button-primary-outline: var(--orange-1);
+  --theme-button-primary-text: var(--orange-0);
+  --theme-button-primary-text-hover: var(--orange-0);
+  --theme-button-primary-outline-active: var(--orange-7);
+
+  /* Variant Secondary */
+  --theme-button-secondary-surface: var(--orange-0);
+  --theme-button-secondary-surface-hover: var(--orange-1);
+  --theme-button-secondary-surface-active: var(--orange-1);
+  --theme-button-secondary-border: var(--orange-7);
+  --theme-button-secondary-border-active: var(--orange-7);
+  --theme-button-secondary-outline: var(--orange-1);
+  --theme-button-secondary-text: var(--orange-9);
+  --theme-button-secondary-text-hover: var(--orange-9);
+  --theme-button-secondary-outline-active: var(--orange-4);
+
+  /* Variant Tertiary */
+  --theme-button-tertiary-text: var(--orange-9);
+  --theme-button-tertiary-border-active: var(--orange-7);
+  --theme-button-tertiary-outline-active: var(--orange-4);
 
   /* ===========================================
      COMPONENT SURFACE VARIABLES

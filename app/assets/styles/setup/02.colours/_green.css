@@ -17,7 +17,7 @@
   */
 
   /* OKLCH Set - Optimized for Form Success States */
-  --green-0: oklch(97.5% 0.02 145); /* Very light background for success containers, toast backgrounds */
+  --green-0: oklch(98% 0.01 145); /* Very light background for success containers, toast backgrounds */
   --green-1: oklch(95% 0.04 145); /* Light background for form field success states, subtle highlights */
   --green-2: oklch(92% 0.06 145); /* Background for success badges, pills, or cards */
   --green-3: oklch(88% 0.08 145); /* Hover states for light success elements */
@@ -27,7 +27,7 @@
   --green-7: oklch(48% 0.175 145); /* Active/pressed success buttons, strong emphasis */
   --green-8: oklch(52% 0.17 145); /* Hover state for success buttons, form validation text */
   --green-9: oklch(58% 0.18 145); /* Primary success buttons, important indicators - bright and appealing */
-  --green-10: oklch(38% 0.13 145); /* High contrast success text, form labels */
+  --green-10: oklch(55% 0.16 145); /* High contrast success text, form labels */
   --green-11: oklch(30% 0.11 145); /* Very high contrast text, accessible on light backgrounds */
   --green-12: oklch(22% 0.08 145); /* Maximum contrast success text, dark theme backgrounds */
 }

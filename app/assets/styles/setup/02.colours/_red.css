@@ -17,7 +17,7 @@
     */
 
   /* OKLCH Set - Optimized for Error States */
-  --red-0: oklch(98% 0.02 30); /* Very light background for error containers, alert backgrounds */
+  --red-0: oklch(98% 0.01 30); /* Very light background for error containers, alert backgrounds */
   --red-1: oklch(94% 0.04 30); /* Light background for form field error states, error notification bars */
   --red-2: oklch(88% 0.07 30); /* Background for error badges, destructive action confirmations */
   --red-3: oklch(80% 0.12 30); /* Hover states for light error elements, subtle validation hints */

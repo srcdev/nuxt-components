@@ -17,7 +17,7 @@
   */
 
   /* OKLCH Set - Optimized for Warning States */
-  --orange-0: oklch(97.8% 0.025 65); /* Very light background for warning containers, alert backgrounds */
+  --orange-0: oklch(99% 0.01 65); /* Very light background for warning containers, alert backgrounds */
   --orange-1: oklch(95.2% 0.045 65); /* Light background for form field warning states, notification bars */
   --orange-2: oklch(92.5% 0.065 65); /* Background for warning badges, pills, or info cards */
   --orange-3: oklch(89% 0.085 65); /* Hover states for light warning elements, subtle emphasis */
@@ -27,7 +27,7 @@
   --orange-7: oklch(48% 0.175 65); /* Active/pressed warning buttons, strong warning emphasis */
   --orange-8: oklch(52% 0.17 65); /* Hover state for warning buttons, validation messages */
   --orange-9: oklch(62% 0.22 68); /* Primary warning buttons, critical alerts - bright vibrant orange */
-  --orange-10: oklch(38% 0.135 65); /* Strong warning text, form error labels */
+  --orange-10: oklch(56% 0.122 65); /* Strong warning text, form error labels */
   --orange-11: oklch(30% 0.115 65); /* Very high contrast text, accessible on light backgrounds */
   --orange-12: oklch(22% 0.09 65); /* Maximum contrast warning text, dark theme backgrounds */
 }

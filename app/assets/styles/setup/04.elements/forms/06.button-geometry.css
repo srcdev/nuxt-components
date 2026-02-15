@@ -1,16 +1,17 @@
 :where(html) {
   --button-padding-block: 1rem;
-  --button-padding-inline: 1.6rem;
+  --button-padding-inline: 1.8rem;
 
   --button-border-radius: 0.8rem;
-  --button-border-radius-icon-only: 9999px;
+  --button-border-radius-icon-only: 100vw;
 
   --button-border-width: 0.1rem;
+  --button-outline-width: 0.1rem;
 
   --button-focus-ring-width: 0.2rem;
   --button-focus-ring-offset: 0.2rem;
 
-  --button-icon-gap: 0.8rem;
+  --button-icon-gap: 1.8rem;
 
-  --button-min-height: 4rem;
+  /* --button-min-height: 4rem; */
 }

@@ -3,6 +3,8 @@
    Essential tokens your system needs
    =========================================== */
 
+@import "_forms.css";
+
 :root {
   /* ===========================================
      SPACING SYSTEM
@@ -45,6 +47,12 @@
   --z-notification: 500;
   --z-tooltip: 600;
   --z-max: 999;
+
+  /* ===========================================
+     FORM SYSTEM
+     Form-specific tokens
+     =========================================== */
+  --form-description-color: var(--gray-8);
 
   /* ===========================================
      ANIMATION SYSTEM
