@@ -5,7 +5,7 @@ import StorybookComponent from "../InputButtonCore.vue";
 interface InputButtonCoreStoryArgs {
   type: "submit" | "button" | "reset";
   theme: "default" | "success" | "error" | "warning";
-  variant: "primary" | "secondary" | "tertiary" | "inline";
+  inputVariant: "primary" | "secondary" | "tertiary" | "inline";
   buttonText: string;
   styleClassPassthrough: string[];
   isPending: boolean;
@@ -71,7 +71,7 @@ export default {
         category: "Styling",
       },
     },
-    variant: {
+    inputVariant: {
       control: { type: "select" },
       options: ["primary", "secondary", "tertiary", "inline"],
       description: "Button variant/style",
@@ -187,7 +187,7 @@ export default {
   args: {
     type: "button",
     theme: "default",
-    variant: "primary",
+    inputVariant: "primary",
     buttonText: "Click me",
     styleClassPassthrough: [],
     isPending: false,
@@ -254,7 +254,7 @@ const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
 export const WithBothIcons = Template.bind({});
 WithBothIcons.args = {
   buttonText: "Transfer",
-  variant: "primary",
+  inputVariant: "primary",
   useLeftSlot: true,
   useRightSlot: true,
   leftSlotContent: "💸",
@@ -264,7 +264,7 @@ WithBothIcons.args = {
 export const WithBothIconComponents = Template.bind({});
 WithBothIconComponents.args = {
   buttonText: "Navigate",
-  variant: "primary",
+  inputVariant: "primary",
   useLeftIcon: true,
   useRightIcon: true,
   leftIconName: "mdi:arrow-left",
@@ -274,7 +274,7 @@ WithBothIconComponents.args = {
 export const IconOnly = Template.bind({});
 IconOnly.args = {
   buttonText: "Icon Only Button",
-  variant: "tertiary",
+  inputVariant: "tertiary",
   useIconOnlySlot: true,
   iconOnlyContent: "⚡",
 };
@@ -282,7 +282,7 @@ IconOnly.args = {
 export const IconOnlyComponent = Template.bind({});
 IconOnlyComponent.args = {
   buttonText: "Icon Only Button",
-  variant: "tertiary",
+  inputVariant: "tertiary",
   useIconOnly: true,
   iconOnlyName: "mdi:flash",
 };

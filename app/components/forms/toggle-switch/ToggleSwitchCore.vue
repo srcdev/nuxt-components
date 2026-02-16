@@ -1,5 +1,5 @@
 <template>
-  <div class="toggle-switch-core" :class="elementClasses" :data-size="size" :data-theme="formTheme">
+  <div class="toggle-switch-core" :class="elementClasses" :data-size="size" :data-theme="FormUiTheme">
     <div class="toggle-switch-wrapper" :class="wrapperClasses" :for="inputId" @click="toggleSwitchValue">
       <input
         :id="inputId"
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
@@ -43,7 +43,7 @@ interface Props {
   trueValue?: string | number | boolean;
   falseValue?: string | number | boolean;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
+  theme?: FormUiTheme;
   round?: boolean;
   size?: FormSize;
   ariaDescribedby?: string;
@@ -55,7 +55,7 @@ const props = withDefaults(defineProps<Props>(), {
   trueValue: true,
   falseValue: false,
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
   round: true,
   size: "default",
   ariaDescribedby: "",
@@ -64,7 +64,7 @@ const props = withDefaults(defineProps<Props>(), {
 const slots = useSlots();
 const useDefaultIcons = computed(() => !slots.iconOn && !slots.iconOff);
 
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 

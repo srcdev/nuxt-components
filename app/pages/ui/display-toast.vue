@@ -14,7 +14,7 @@
                 ref="firstToastButton"
                 :readonly="firstToastActive"
                 button-text="Trigger First Toast (current value: {{ firstToastActive }})"
-                theme="primary"
+                theme="default"
                 :style-class-passthrough="['mbe-10']"
                 @click.prevent="triggerFirstToast()"
               />
@@ -26,7 +26,7 @@
                 ref="secondToastButton"
                 :readonly="secondToastActive"
                 button-text="Trigger Second Toast (current value: {{ secondToastActive }})"
-                theme="primary"
+                theme="default"
                 :style-class-passthrough="['mbe-10']"
                 @click.prevent="triggerSecondToast()"
               />
@@ -38,7 +38,7 @@
                 ref="thirdToastButton"
                 :readonly="thirdToastActive"
                 button-text="Trigger Third Toast (current value: {{ thirdToastActive }})"
-                theme="primary"
+                theme="default"
                 :style-class-passthrough="['mbe-10']"
                 @click.prevent="triggerThirdToast()"
               />
@@ -50,7 +50,7 @@
                 ref="fourthToastButton"
                 :readonly="fourthToastActive"
                 button-text="Trigger Fourth Toast (current value: {{ fourthToastActive }})"
-                theme="primary"
+                theme="default"
                 :style-class-passthrough="['mbe-10']"
                 @click.prevent="triggerFourthToast()"
               />
@@ -62,21 +62,21 @@
                 ref="bottomLeftToastButton"
                 :readonly="bottomLeftToastActive"
                 button-text="Bottom Left Toast"
-                theme="primary"
+                theme="default"
                 @click.prevent="triggerBottomLeftToast()"
               />
               <InputButtonCore
                 ref="bottomCenterToastButton"
                 :readonly="bottomCenterToastActive"
                 button-text="Bottom Center Toast"
-                theme="primary"
+                theme="default"
                 @click.prevent="triggerBottomCenterToast()"
               />
               <InputButtonCore
                 ref="customIconToastButton"
                 :readonly="customIconToastActive"
                 button-text="Custom Icon Toast"
-                theme="primary"
+                theme="default"
                 @click.prevent="triggerCustomIconToast()"
               />
             </div>
@@ -87,7 +87,7 @@
                 ref="slottedToastButton"
                 :readonly="slottedToastActive"
                 button-text="Trigger Slotted Toast (current value: {{ slottedToastActive }})"
-                theme="primary"
+                theme="default"
                 :style-class-passthrough="['mbe-10']"
                 @click.prevent="triggerSlottedToast()"
               />

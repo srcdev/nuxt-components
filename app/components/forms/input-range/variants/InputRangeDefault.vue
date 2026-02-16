@@ -1,5 +1,5 @@
 <template>
-  <div class="input-range-with-label" :data-theme="formTheme" :class="[elementClasses, { error: fieldHasError }]">
+  <div class="input-range-with-label" :data-theme="FormUiTheme" :class="[elementClasses, { error: fieldHasError }]">
     <InputLabel
       :id
       :for="id"
@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
 interface Props {
   name: string;
@@ -74,7 +74,7 @@ interface Props {
   errorMessage: object | string;
   fieldHasError?: boolean;
   required?: boolean;
-  theme?: FormTheme;
+  theme?: FormUiTheme;
   size?: FormSize;
   weight?: FormWeight;
   styleClassPassthrough?: string | string[];
@@ -86,7 +86,7 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: "",
   fieldHasError: false,
   required: false,
-  theme: "primary",
+  theme: "default",
   size: "medium",
   weight: "wght-400",
   styleClassPassthrough: () => [],
@@ -97,7 +97,7 @@ const slots = useSlots();
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const id = useId();
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 

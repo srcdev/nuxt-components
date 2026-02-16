@@ -42,7 +42,7 @@ interface Props extends Omit<BaseCheckboxRadioProps, "id"> {
 const props = withDefaults(defineProps<Props>(), {
   required: false,
   size: "default",
-  theme: "primary",
+  theme: "default",
   fieldHasError: false,
   styleClassPassthrough: () => [],
   trueValue: true,

@@ -38,7 +38,7 @@
   "computed_properties": {
     "isChecked": "Handles both array and single value model checking",
     "defaultIcon": "Returns appropriate icon based on type",
-    "formTheme": "Switches to error theme when fieldHasError is true"
+    "FormUiTheme": "Switches to error theme when fieldHasError is true"
   },
   "css_custom_properties": [
     "--theme-checkbox-symbol-surface",

@@ -2,7 +2,7 @@
 import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { ref } from "vue";
-import type { FormSize, FormTheme, OptionsLayout } from "~/types/forms/types.forms";
+import type { FormSize, FormUiTheme, OptionsLayout } from "~/types/forms/types.forms";
 import ComponentUnderTest from "../MultipleCheckboxes.vue";
 import tagsData from "./data/tags.json";
 
@@ -21,7 +21,7 @@ const initialPropsData = {
   size: "small" as FormSize,
   optionsLayout: "inline" as OptionsLayout,
   styleClassPassthrough: ["testClass"],
-  theme: "primary" as FormTheme,
+  theme: "default" as FormUiTheme,
 };
 
 const initialSlots = {

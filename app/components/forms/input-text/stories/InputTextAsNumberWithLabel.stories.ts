@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../variants/InputTextAsNumberWithLabel.vue";
-import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms.d";
+import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputTextAsNumberWithLabelStoryArgs {
   modelValue: number | undefined;
@@ -11,9 +11,9 @@ interface InputTextAsNumberWithLabelStoryArgs {
   errorMessage: string;
   fieldHasError: boolean;
   required: boolean;
-  theme: FormTheme;
+  theme: FormUiTheme;
   size: FormSize;
-  inputVariant: InputVariant;
+  InputUiVariant: InputUiVariant;
   min: number;
   max: number;
   step: number;
@@ -132,7 +132,7 @@ export default {
         category: "Styling",
       },
     },
-    inputVariant: {
+    InputUiVariant: {
       control: { type: "select" },
       options: ["normal", "outlined", "underlined"],
       description: "Input variant style",
@@ -201,7 +201,7 @@ export default {
     errorMessage: "",
     fieldHasError: false,
     required: false,
-    theme: "primary",
+    theme: "default",
     size: "default",
     inputVariant: "normal",
     min: 0,
@@ -341,7 +341,7 @@ Required.args = {
 export const Outlined = Template.bind({});
 Outlined.args = {
   modelValue: 42,
-  inputVariant: "outlined",
+  InputUiVariant: "outlined",
   label: "Temperature (°C)",
   placeholder: "Enter temperature",
   min: -50,
@@ -354,7 +354,7 @@ Outlined.args = {
 export const Underlined = Template.bind({});
 Underlined.args = {
   modelValue: 10,
-  inputVariant: "underlined",
+  InputUiVariant: "underlined",
   label: "Items Count",
   placeholder: "Number of items",
   min: 0,

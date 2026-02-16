@@ -2,7 +2,7 @@
   <div
     class="input-text-wrapper"
     data-testid="input-text-wrapper"
-    :data-theme="formTheme"
+    :data-theme="FormUiTheme"
     :data-size="size"
     :data-inputmode="inputmode"
     :class="[
@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormSize, InputVariant, InputMode } from "~/types/forms/types.forms";
+import type { FormSize, InputUiVariant, InputMode } from "~/types/forms/types.forms";
 
 interface Props {
   type?: "number" | "text" | "email" | "password" | "tel" | "url";
@@ -55,10 +55,10 @@ interface Props {
   placeholder?: string;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: "primary" | "secondary" | "tertiary";
+  theme?: "default" | "success" | "error" | "warning";
   ariaDescribedby?: string;
   size?: FormSize;
-  inputVariant?: InputVariant;
+  inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -69,7 +69,7 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: "",
   fieldHasError: false,
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
   ariaDescribedby: "",
   size: "default",
   inputVariant: "normal",
@@ -77,7 +77,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 
@@ -163,9 +163,11 @@ onMounted(() => {
     }
 
     .slot {
-      display: flex;
+      display: grid;
       place-items: center;
       background-clip: padding-box;
+      aspect-ratio: 1;
+      width: 46px;
 
       &.left-slot:not([data-theme="input-action"]) {
         .icon {
@@ -223,18 +225,15 @@ onMounted(() => {
   }
 
   &.underlined {
-    margin-block-start: 0;
-    padding-block: 0;
-    padding-inline: 1rem;
-
-    border-radius: 0;
-
-    border-top: none;
-    border-right: none;
+    /* margin-block-start: 0; */
+    /* padding-block: 0; */
+    /* padding-inline: 0; */
+    /* border-radius: 0; */
+    /* border-top: none; */
+    /* border-right: none; */
     border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-input-border);
-    border-left: none;
-
-    overflow: hidden;
+    /* border-left: none; */
+    /* overflow: hidden; */
 
     &.error {
       border-bottom-right-radius: 0;
@@ -247,9 +246,11 @@ onMounted(() => {
     }
 
     .slot {
-      display: flex;
+      display: grid;
       place-items: center;
       background-clip: padding-box;
+      aspect-ratio: 1;
+      width: 46px;
 
       &.left-slot:not([data-theme="input-action-underlined"]) {
         .icon {

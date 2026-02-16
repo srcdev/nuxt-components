@@ -13,7 +13,7 @@
           <h1 class="page-heading-1 mbe-18">Default button elements</h1>
 
           <div class="mb-12">
-            <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="primary"</code></p>
+            <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="default"</code></p>
             <button class="input-button-core" type="button">This is a button</button>
           </div>
         </LayoutRow>
@@ -21,8 +21,8 @@
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1 mbe-18">Primary button elements</h1>
 
-          <div class="mb-12" data-theme="primary">
-            <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="primary"</code></p>
+          <div class="mb-12" data-theme="default">
+            <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="default"</code></p>
             <button class="input-button-core" type="button">This is a button</button>
           </div>
         </LayoutRow>
@@ -30,7 +30,7 @@
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1 mbe-18">Error button elements</h1>
 
-          <div class="mb-12" data-theme="primary" data-error>
+          <div class="mb-12" data-theme="default" data-error>
             <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="error"</code></p>
             <button class="input-button-core" type="button">This is a button</button>
           </div>

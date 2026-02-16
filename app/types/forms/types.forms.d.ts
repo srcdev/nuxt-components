@@ -1,20 +1,26 @@
 // Theme types for form components
-export type FormTheme =
-  | "primary"
-  | "secondary"
-  | "tertiary"
-  | "ghost"
-  | "error"
-  | "success"
-  | "warning"
-  | "input-action"
-  | "input-action-underlined";
+export type FormUiTheme = "default" | "success" | "error" | "warning";
+
+// Button type attribute values
+export type InputTypesButton = "button" | "reset" | "submit" | undefined;
+
+// Input variant types for button components
+export type InputButtonVariant = "primary" | "secondary" | "tertiary" | "inline";
 
 // Input variant types for form components
-export type InputVariant = "normal" | "outlined" | "underlined";
+export type InputUiVariant = "normal" | "outlined" | "underlined";
 
 // Size types for form components
 export type FormSize = "x-small" | "small" | "default" | "medium" | "large";
+
+// Other form-specific types
+export type CheckboxAppearance = null | "with-decorator";
+export type CheckboxStyle = "check" | "cross";
+export type RadioAppearance = null | "with-decorator";
+export type OptionsLayout = "block" | "inline" | "equal-widths";
+export type LabelWeight = "normal" | "semi-bold" | "bold";
+export type InputTypesText = "text" | "email" | "password" | "number" | "tel" | "url";
+export type InputMode = "text" | "email" | "tel" | "url" | "search" | "numeric" | "none" | "decimal";
 
 // Weight types for form components
 export type FormWeight =
@@ -39,16 +45,6 @@ export type FormWeight =
   | "fvs-wght-700"
   | "fvs-wght-800"
   | "fvs-wght-900";
-
-// Other form-specific types
-export type CheckboxAppearance = null | "with-decorator";
-export type CheckboxStyle = "check" | "cross";
-export type RadioAppearance = null | "with-decorator";
-export type OptionsLayout = "block" | "inline" | "equal-widths";
-export type LabelWeight = "normal" | "semi-bold" | "bold";
-export type InputTypesButton = "button" | "cancel" | "reset" | "submit";
-export type InputTypesText = "text" | "email" | "password" | "number" | "tel" | "url";
-export type InputMode = "text" | "email" | "tel" | "url" | "search" | "numeric" | "none" | "decimal";
 
 export interface IValidationPatterns {
   pattern: string;

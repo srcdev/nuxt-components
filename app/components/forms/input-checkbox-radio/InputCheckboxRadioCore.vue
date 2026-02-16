@@ -1,5 +1,5 @@
 <template>
-  <div class="input-checkbox-radio-wrapper" :data-theme="formTheme" :data-size="size" :class="wrapperClasses">
+  <div class="input-checkbox-radio-wrapper" :data-theme="FormUiTheme" :data-size="size" :class="wrapperClasses">
     <div class="input-checked-icon-slot">
       <slot name="checkedIcon">
         <Icon :name="defaultIcon" class="input-checked-icon-checked" />
@@ -35,7 +35,7 @@ interface Props extends BaseCheckboxRadioProps {
 const props = withDefaults(defineProps<Props>(), {
   required: false,
   size: "default",
-  theme: "primary",
+  theme: "default",
   fieldHasError: false,
   styleClassPassthrough: () => [],
   trueValue: true,
@@ -48,7 +48,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || []);
 
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 

@@ -2,7 +2,7 @@
   <div>
     <div
       class="input-textarea-with-label"
-      :data-theme="formTheme"
+      :data-theme="FormUiTheme"
       :class="[elementClasses, inputVariant, { dirty: isDirty }, { active: isActive }]"
     >
       <InputLabel
@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   maxlength?: number;
@@ -90,9 +90,9 @@ interface Props {
   fieldHasError?: boolean;
   required?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
+  theme?: FormUiTheme;
   size?: FormSize;
-  inputVariant?: InputVariant;
+  inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -101,14 +101,14 @@ const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   required: false,
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
   size: "default",
   inputVariant: "normal",
 });
 
 const slots = useSlots();
 
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 

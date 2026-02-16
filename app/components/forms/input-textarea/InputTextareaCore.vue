@@ -1,7 +1,7 @@
 <template>
   <div
     class="input-textarea-wrapper"
-    :data-theme="formTheme"
+    :data-theme="FormUiTheme"
     :data-size="size"
     :class="[
       inputVariant,
@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   maxlength?: number;
@@ -49,9 +49,9 @@ interface Props {
   fieldHasError?: boolean;
   required?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
+  theme?: FormUiTheme;
   size?: FormSize;
-  inputVariant?: InputVariant;
+  inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -61,14 +61,14 @@ const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   required: false,
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
   size: "default",
   inputVariant: "normal",
 });
 
 const slots = useSlots();
 
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 
@@ -137,8 +137,8 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     font-family: var(--font-family);
     font-size: var(--form-element-font-size);
     line-height: var(--form-element-line-height);
-    padding-block: var(--input-element-padding-block);
-    padding-inline: var(--input-element-padding-inline);
+    padding-block: var(--form-text-padding-block);
+    padding-inline: var(--form-text-padding-inline);
 
     min-height: 6lh;
 

@@ -36,12 +36,12 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, IFormMultipleOptions } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, IFormMultipleOptions } from "~/types/forms/types.forms";
 
 interface Props {
   name?: string;
   size?: FormSize;
-  theme?: FormTheme;
+  theme?: FormUiTheme;
   stepAnimationDuration?: string;
   styleClassPassthrough?: string | string[];
 }
@@ -49,7 +49,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   name: "triple-toggle-switch",
   size: "medium",
-  theme: "primary",
+  theme: "default",
   stepAnimationDuration: "250ms",
   styleClassPassthrough: () => [],
 });

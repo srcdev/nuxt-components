@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
 import StorybookComponent from "../ToggleSwitchCore.vue";
-import type { FormTheme, FormSize } from "~/types/forms/types.forms.d";
+import type { FormUiTheme, FormSize } from "~/types/forms/types.forms.d";
 
 interface ToggleSwitchCoreStoryArgs {
   id: string;
@@ -11,7 +11,7 @@ interface ToggleSwitchCoreStoryArgs {
   trueValue: string | number | boolean;
   falseValue: string | number | boolean;
   styleClassPassthrough: string[];
-  theme: FormTheme;
+  theme: FormUiTheme;
   round: boolean;
   size: FormSize;
   ariaDescribedby: string;
@@ -182,7 +182,7 @@ Default.args = {
   trueValue: true,
   falseValue: false,
   styleClassPassthrough: [],
-  theme: "primary",
+  theme: "default",
   round: true,
   size: "default",
   ariaDescribedby: "",

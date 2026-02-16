@@ -1,5 +1,5 @@
 <template>
-  <div class="toggle-switch-with-label" :class="[elementClasses]" :data-theme="formTheme">
+  <div class="toggle-switch-with-label" :class="[elementClasses]" :data-theme="FormUiTheme">
     <InputLabel
       :id
       :for="toggleSwitchId"
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize } from "~/types/forms/types.forms";
 
 interface Props {
   name: string;
@@ -52,7 +52,7 @@ interface Props {
   trueValue?: string | number | boolean;
   falseValue?: string | number | boolean;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
+  theme?: FormUiTheme;
   round?: boolean;
   size?: FormSize;
 }
@@ -64,14 +64,14 @@ const props = withDefaults(defineProps<Props>(), {
   trueValue: true,
   falseValue: false,
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
   round: true,
   size: "default",
 });
 
 const slots = useSlots();
 
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 

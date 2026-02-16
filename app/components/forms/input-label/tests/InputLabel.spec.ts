@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import type { InputVariant } from "~/types/forms/types.forms";
+import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms";
 import InputLabel from "../InputLabel.vue";
 
 // Mock useStyleClassPassthrough composable
@@ -18,7 +18,7 @@ describe("InputLabel", () => {
     const defaultProps = {
       id: "test-input",
       name: "testInput",
-      inputVariant: "normal" as InputVariant, // Set valid default with proper typing
+      inputVariant: "normal" as InputUiVariant, // Set valid default with proper typing
       ...props,
     };
 
@@ -119,15 +119,6 @@ describe("InputLabel", () => {
       expect(label.classes()).toContain("another-class");
     });
 
-    it("applies inputVariant class", async () => {
-      await createWrapper({
-        inputVariant: "outlined",
-      });
-
-      const label = wrapper.find("label");
-      expect(label.classes()).toContain("outlined");
-    });
-
     it("applies normal variant class", async () => {
       await createWrapper({
         inputVariant: "normal",
@@ -135,15 +126,6 @@ describe("InputLabel", () => {
 
       const label = wrapper.find("label");
       expect(label.classes()).toContain("normal");
-    });
-
-    it("applies underlined variant class", async () => {
-      await createWrapper({
-        inputVariant: "underlined",
-      });
-
-      const label = wrapper.find("label");
-      expect(label.classes()).toContain("underlined");
     });
 
     it("handles theme prop correctly", async () => {
@@ -208,10 +190,10 @@ describe("InputLabel", () => {
       expect(label.exists()).toBe(true);
     });
 
-    it("applies default inputVariant value", async () => {
+    it("applies default InputUiVariant value", async () => {
       await createWrapper();
 
-      // Component should work with default inputVariant 'normal'
+      // Component should work with default InputUiVariant 'normal'
       const label = wrapper.find("label");
       expect(label.classes()).toContain("normal");
     });
@@ -340,19 +322,6 @@ describe("InputLabel", () => {
       expect(label.classes()).toContain("input-label");
     });
 
-    it("combines all class sources correctly", async () => {
-      await createWrapper({
-        inputVariant: "outlined",
-        styleClassPassthrough: ["custom-1", "custom-2"],
-      });
-
-      const label = wrapper.find("label");
-      expect(label.classes()).toContain("input-label");
-      expect(label.classes()).toContain("outlined");
-      expect(label.classes()).toContain("custom-1");
-      expect(label.classes()).toContain("custom-2");
-    });
-
     it("handles empty styleClassPassthrough", async () => {
       await createWrapper({
         styleClassPassthrough: [],
@@ -418,20 +387,9 @@ describe("InputLabel", () => {
       expect(label.text()).toContain("Label Content");
     });
 
-    it("works with all valid inputVariant values", async () => {
-      const variants = ["normal", "outlined", "underlined"];
-
-      for (const variant of variants) {
-        const testWrapper = await createWrapper({ inputVariant: variant });
-        const label = testWrapper.find("label");
-        expect(label.classes()).toContain(variant);
-        testWrapper.unmount();
-      }
-    });
-
     it("works with all valid theme values", async () => {
-      const themes = ["primary", "secondary", "tertiary", "ghost", "error", "success", "warning"];
-
+      // Use FormUiTheme type for type-safe theme values
+      const themes = ["primary", "secondary", "tertiary", "ghost", "error", "success", "warning"] as FormUiTheme[];
       for (const theme of themes) {
         const testWrapper = await createWrapper({ theme });
         const label = testWrapper.find("label");

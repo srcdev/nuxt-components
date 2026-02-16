@@ -1,5 +1,5 @@
 <template>
-  <div class="input-range-wrapper" :data-theme="formTheme">
+  <div class="input-range-wrapper" :data-theme="FormUiTheme">
     <div v-if="slots.left" class="slot left">
       <slot name="left"></slot>
     </div>
@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
@@ -46,7 +46,7 @@ interface Props {
   step?: number;
   placeholder?: string;
   required?: boolean;
-  theme?: FormTheme;
+  theme?: FormUiTheme;
   size?: FormSize;
   weight?: FormWeight;
   fieldHasError?: boolean;
@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<Props>(), {
   step: 1,
   placeholder: "",
   required: false,
-  theme: "primary",
+  theme: "default",
   size: "default",
   weight: "normal",
   fieldHasError: false,
@@ -66,7 +66,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 

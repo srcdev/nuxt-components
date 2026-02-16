@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../variants/InputTextareaWithLabel.vue";
-import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms.d";
+import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputTextareaWithLabelStoryArgs {
   modelValue: string;
@@ -11,9 +11,9 @@ interface InputTextareaWithLabelStoryArgs {
   errorMessage: string;
   fieldHasError: boolean;
   required: boolean;
-  theme: FormTheme;
+  theme: FormUiTheme;
   size: FormSize;
-  inputVariant: InputVariant;
+  InputUiVariant: InputUiVariant;
   styleClassPassthrough: string[];
   useDescriptionTextSlot: boolean;
   useDescriptionHtmlSlot: boolean;
@@ -108,7 +108,7 @@ export default {
         category: "Styling",
       },
     },
-    inputVariant: {
+    InputUiVariant: {
       control: { type: "select" },
       options: ["normal", "outlined", "underlined"],
       description: "Textarea variant style",
@@ -191,7 +191,7 @@ export default {
     errorMessage: "",
     fieldHasError: false,
     required: false,
-    theme: "primary",
+    theme: "default",
     size: "default",
     inputVariant: "normal",
     styleClassPassthrough: [],
@@ -315,7 +315,7 @@ Required.args = {
 
 export const Outlined = Template.bind({});
 Outlined.args = {
-  inputVariant: "outlined",
+  InputUiVariant: "outlined",
   label: "Outlined Textarea",
   placeholder: "This is an outlined textarea",
   useDescriptionTextSlot: true,
@@ -324,7 +324,7 @@ Outlined.args = {
 
 export const Underlined = Template.bind({});
 Underlined.args = {
-  inputVariant: "underlined",
+  InputUiVariant: "underlined",
   label: "Underlined Textarea",
   placeholder: "This is an underlined textarea",
 };
@@ -362,7 +362,7 @@ AllVariants.storyName = "All Input Variants";
 AllVariants.render = (args) => ({
   components: { StorybookComponent },
   setup() {
-    const variants: InputVariant[] = ["normal", "outlined", "underlined"];
+    const variants: InputUiVariant[] = ["normal", "outlined", "underlined"];
     const textareaValues = reactive(
       variants.reduce(
         (acc, variant) => ({
@@ -385,7 +385,7 @@ AllVariants.render = (args) => ({
         <h3 class="text-lg font-semibold capitalize">{{ variant }} Variant</h3>
         <StorybookComponent
           v-model="textareaValues[variant]"
-          v-bind="{ ...args, inputVariant: variant, label: variant + ' Textarea', name: variant + '-textarea' }"
+          v-bind="{ ...args, InputUiVariant: variant, label: variant + ' Textarea', name: variant + '-textarea' }"
         />
       </div>
     </div>

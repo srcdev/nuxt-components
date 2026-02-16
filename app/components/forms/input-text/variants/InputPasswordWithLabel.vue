@@ -19,8 +19,8 @@
         type="button"
         :is-pending="false"
         :button-text
-        :theme="buttonTheme"
-        :size
+        :theme="theme"
+        variant="inline"
         @click.stop.prevent="toggleDisplayPassword"
       >
         <template #iconOnly>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
+import type { FormSize, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   type?: "text" | "password";
@@ -45,9 +45,9 @@ interface Props {
   fieldHasError?: boolean;
   required?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
+  theme?: "default" | "success" | "error" | "warning";
   size?: FormSize;
-  inputVariant?: InputVariant;
+  inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -57,14 +57,14 @@ const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   required: false,
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
   size: "medium",
   inputVariant: "normal",
 });
 
-const buttonTheme = computed(() => {
-  return props.inputVariant === "underlined" ? "input-action-underlined" : "input-action";
-});
+// const buttonTheme = computed(() => {
+//   return props.InputUiVariant === "underlined" ? "input-action-underlined" : "input-action";
+// });
 
 const modelValue = defineModel<string>();
 

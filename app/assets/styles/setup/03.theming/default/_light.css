@@ -34,8 +34,8 @@
      FORM INPUT VARIABLES
      Styling for form inputs and controls
      =========================================== */
-  --theme-input-surface: var(--blue-1);
-  --theme-input-surface-hover: var(--blue-2);
+  --theme-input-surface: var(--blue-0);
+  --theme-input-surface-hover: var(--blue-1);
   --theme-input-border: var(--blue-6);
   --theme-input-border-hover: var(--blue-5);
   --theme-input-border-focus: var(--blue-4);

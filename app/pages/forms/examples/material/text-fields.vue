@@ -18,30 +18,9 @@
                 <InputButtonCore
                   type="button"
                   :is-pending="false"
-                  button-text="Primary"
-                  theme="primary"
-                  size="default"
-                  @click.stop.prevent="swapTheme('primary')"
-                />
-              </li>
-              <li>
-                <InputButtonCore
-                  type="button"
-                  :is-pending="false"
-                  button-text="Secondary"
-                  theme="secondary"
-                  size="default"
-                  @click.stop.prevent="swapTheme('secondary')"
-                />
-              </li>
-              <li>
-                <InputButtonCore
-                  type="button"
-                  :is-pending="false"
-                  button-text="Warning"
-                  theme="warning"
-                  size="default"
-                  @click.stop.prevent="swapTheme('warning')"
+                  button-text="Default"
+                  theme="default"
+                  @click.stop.prevent="swapTheme('default')"
                 />
               </li>
               <li>
@@ -50,7 +29,6 @@
                   :is-pending="false"
                   button-text="Success"
                   theme="success"
-                  size="default"
                   @click.stop.prevent="swapTheme('success')"
                 />
               </li>
@@ -60,66 +38,16 @@
                   :is-pending="false"
                   button-text="Error"
                   theme="error"
-                  size="default"
                   @click.stop.prevent="swapTheme('error')"
                 />
               </li>
-            </ul>
-
-            <p>Size switcher - current size &raquo; {{ size }}</p>
-            <p>
-              <span class="body-normal-semibold">Note:</span>
-              Only small and normal optimized for general usage
-            </p>
-            <ul class="flex-group">
               <li>
                 <InputButtonCore
                   type="button"
                   :is-pending="false"
-                  button-text="X-Small"
-                  theme="primary"
-                  size="x-small"
-                  @click.stop.prevent="swapSize('x-small')"
-                />
-              </li>
-              <li>
-                <InputButtonCore
-                  type="button"
-                  :is-pending="false"
-                  button-text="Small"
-                  theme="primary"
-                  size="small"
-                  @click.stop.prevent="swapSize('small')"
-                />
-              </li>
-              <li>
-                <InputButtonCore
-                  type="button"
-                  :is-pending="false"
-                  button-text="Default"
-                  theme="primary"
-                  size="default"
-                  @click.stop.prevent="swapSize('default')"
-                />
-              </li>
-              <li>
-                <InputButtonCore
-                  type="button"
-                  :is-pending="false"
-                  button-text="Medium"
-                  theme="primary"
-                  size="medium"
-                  @click.stop.prevent="swapSize('medium')"
-                />
-              </li>
-              <li>
-                <InputButtonCore
-                  type="button"
-                  :is-pending="false"
-                  button-text="Large"
-                  theme="primary"
-                  size="large"
-                  @click.stop.prevent="swapSize('large')"
+                  button-text="Warning"
+                  theme="warning"
+                  @click.stop.prevent="swapTheme('warning')"
                 />
               </li>
             </ul>
@@ -130,7 +58,7 @@
                 <InputButtonCore
                   type="button"
                   button-text="Normal"
-                  theme="primary"
+                  theme="default"
                   size="default"
                   @click.stop.prevent="inputVariant = 'normal'"
                 />
@@ -139,7 +67,7 @@
                 <InputButtonCore
                   type="button"
                   button-text="Underlined"
-                  theme="primary"
+                  theme="default"
                   size="default"
                   @click.stop.prevent="inputVariant = 'underlined'"
                 />
@@ -712,7 +640,7 @@
 
 <script setup lang="ts">
 import { z } from "zod";
-import type { IFormMultipleOptions, FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
+import type { IFormMultipleOptions, FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms";
 
 definePageMeta({
   layout: false,
@@ -726,7 +654,7 @@ useHead({
   },
 });
 
-const inputVariant = ref<InputVariant>("underlined");
+const inputVariant = ref<InputUiVariant>("underlined");
 // const inputVariantData = ref<IFormMultipleOptions>({
 //   data: [
 //     {
@@ -752,14 +680,20 @@ const inputVariant = ref<InputVariant>("underlined");
 //   skip: 0,
 //   limit: 3,
 // });
-const theme = ref<FormTheme>("primary");
-const size = ref<FormSize>("default");
-const swapTheme = (newTheme: FormTheme) => {
+const theme = ref<FormUiTheme>("default");
+const swapTheme = (newTheme: FormUiTheme) => {
   theme.value = newTheme;
 };
-const swapSize = (newSize: FormSize) => {
-  size.value = newSize;
-};
+
+// const variant = ref<"primary" | "secondary" | "tertiary">("primary");
+// const swapVariant = (newVariant: "primary" | "secondary" | "tertiary") => {
+//   variant.value = newVariant;
+// };
+
+const size = ref<FormSize>("default");
+// const swapSize = (newSize: FormSize) => {
+//   size.value = newSize;
+// };
 
 /*
  * Fetch some sample data

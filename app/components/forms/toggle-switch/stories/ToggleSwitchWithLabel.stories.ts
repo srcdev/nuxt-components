@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
 import StorybookComponent from "../variants/ToggleSwitchWithLabel.vue";
-import type { FormTheme, FormSize } from "~/types/forms/types.forms.d";
+import type { FormUiTheme, FormSize } from "~/types/forms/types.forms.d";
 
 interface ToggleSwitchWithLabelStoryArgs {
   name: string;
@@ -12,7 +12,7 @@ interface ToggleSwitchWithLabelStoryArgs {
   trueValue: string | number | boolean;
   falseValue: string | number | boolean;
   styleClassPassthrough: string[];
-  theme: FormTheme;
+  theme: FormUiTheme;
   round: boolean;
   size: FormSize;
   useDescription: boolean;
@@ -202,7 +202,7 @@ Default.args = {
   trueValue: true,
   falseValue: false,
   styleClassPassthrough: [],
-  theme: "primary",
+  theme: "default",
   round: true,
   size: "default",
   useDescription: false,

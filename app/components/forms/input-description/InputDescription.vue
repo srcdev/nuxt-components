@@ -15,21 +15,21 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, InputVariant } from "~/types/forms/types.forms";
+import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
   name: string;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
-  inputVariant?: InputVariant;
+  theme?: FormUiTheme;
+  inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
   inputVariant: "normal",
 });
 

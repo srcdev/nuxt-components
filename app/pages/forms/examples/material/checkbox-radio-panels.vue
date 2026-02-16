@@ -10,22 +10,22 @@
             <FormWrapper width="medium">
               <template #default>
                 <ClientOnly>
-                  <form class="form-wrapper" @submit.stop.prevent="submitForm()" ref="formRef">
-                    <div aria-live="assertive" id="aria-live-message"></div>
+                  <form ref="formRef" class="form-wrapper" @submit.stop.prevent="submitForm()">
+                    <div id="aria-live-message" aria-live="assertive"></div>
 
                     <FormField v-if="limitedTags !== null" width="wide" :has-gutter="false">
                       <template #default>
                         <MultipleCheckboxes
+                          v-model="state.tags"
+                          v-model:field-data="limitedTags"
                           name="tags"
                           legend="Choose tags (MultipleCheckboxes)"
                           :required="true"
                           label="Check between 3 and 8 tags"
                           placeholder="eg. Type something here"
-                          :isButton="true"
+                          :is-button="true"
                           :error-message="formErrors?.tags?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.tags)"
-                          v-model="state.tags"
-                          v-model:fieldData="limitedTags"
                           options-layout="inline"
                           :theme
                           :size
@@ -43,16 +43,16 @@
                     <FormField v-if="limitedTags !== null" width="wide" :has-gutter="false">
                       <template #default>
                         <MultipleRadiobuttons
+                          v-model="state.tagsRadio"
+                          v-model:field-data="limitedTags"
                           name="tagsRadio"
                           legend="Choose tags (as radiobuttons)"
                           :required="true"
                           label="Check between 3 and 8 tags"
                           placeholder="eg. Type something here"
-                          :isButton="true"
+                          :is-button="true"
                           :error-message="formErrors?.tagsRadio?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.tagsRadio)"
-                          v-model="state.tagsRadio"
-                          v-model:fieldData="limitedTags"
                           options-layout="inline"
                           :theme
                           :size
@@ -73,12 +73,12 @@
                       <template #default>
                         <InputButtonCore
                           type="button"
-                          @click.stop.prevent="submitForm()"
                           :is-pending="false"
                           :readonly="zodFormControl.submitDisabled"
                           button-text="Submit"
                           :theme
                           :size
+                          @click.stop.prevent="submitForm()"
                         />
                       </template>
                     </FormField>
@@ -95,7 +95,7 @@
 
 <script setup lang="ts">
 import { z } from "zod";
-import type { IFormMultipleOptions, FormTheme, FormSize } from "~/types/forms/types.forms";
+import type { IFormMultipleOptions, FormUiTheme, FormSize } from "~/types/forms/types.forms";
 
 definePageMeta({
   layout: false,
@@ -109,7 +109,7 @@ useHead({
   },
 });
 
-const theme = ref<FormTheme>("primary");
+const theme = ref<FormUiTheme>("default");
 const size = ref<FormSize>("default");
 
 /*
@@ -164,9 +164,9 @@ const {
   // formErrors,
   pushCustomErrors,
   doZodValidate,
-  fieldMaxLength,
+  // fieldMaxLength,
   scrollToFirstError,
-  scrollToFormHead,
+  // scrollToFormHead,
 } = useZodValidation(formSchema, formRef);
 
 initZodForm();

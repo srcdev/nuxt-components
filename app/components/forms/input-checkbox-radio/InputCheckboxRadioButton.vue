@@ -2,7 +2,7 @@
   <label
     :for="id"
     class="input-checkbox-radio-options-button"
-    :data-theme="formTheme"
+    :data-theme="FormUiTheme"
     :data-size="size"
     :class="[size, elementClasses, optionsLayout, { error: fieldHasError }, { lozenge: displayAsLozenge }]"
   >
@@ -50,7 +50,7 @@ interface Props extends BaseCheckboxRadioProps {
 const props = withDefaults(defineProps<Props>(), {
   required: false,
   size: "default",
-  theme: "primary",
+  theme: "default",
   fieldHasError: false,
   styleClassPassthrough: () => [],
   trueValue: true,
@@ -68,7 +68,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough 
 
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
 
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 

@@ -4,7 +4,7 @@
       class="input-select-with-label"
       :class="[inputVariant, { dirty: isDirty }, { active: isActive }, { error: fieldHasError }]"
       :data-testid
-      :data-theme="formTheme"
+      :data-theme="FormUiTheme"
       :data-size="size"
     >
       <InputLabel
@@ -46,7 +46,7 @@
         :field-has-error
         :required
         :style-class-passthrough
-        :theme="formTheme"
+        :theme="FormUiTheme"
         :aria-describedby
         :size
         :input-variant
@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, InputVariant, IFormMultipleOptions } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, InputUiVariant, IFormMultipleOptions } from "~/types/forms/types.forms";
 
 interface Props {
   dataTestid?: string;
@@ -91,8 +91,8 @@ interface Props {
   fieldHasError?: boolean;
   size?: FormSize;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
-  inputVariant?: InputVariant;
+  theme?: FormUiTheme;
+  inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -102,13 +102,13 @@ const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   size: "medium",
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
   inputVariant: "normal",
 });
 
 const slots = useSlots();
 
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 

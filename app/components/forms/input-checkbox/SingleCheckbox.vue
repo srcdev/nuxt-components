@@ -47,7 +47,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, OptionsLayout } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, OptionsLayout } from "~/types/forms/types.forms";
 
 interface Props {
   dataTestid?: string;
@@ -64,7 +64,7 @@ interface Props {
   optionsLayout?: OptionsLayout;
   equalCols?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
+  theme?: FormUiTheme;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -79,7 +79,7 @@ const props = withDefaults(defineProps<Props>(), {
   optionsLayout: "equal-widths",
   equalCols: true,
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
 });
 
 const slots = useSlots();

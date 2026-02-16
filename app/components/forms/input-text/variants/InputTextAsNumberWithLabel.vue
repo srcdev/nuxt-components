@@ -1,7 +1,7 @@
 <template>
   <div
     class="input-text-with-label"
-    :data-theme="formTheme"
+    :data-theme="FormUiTheme"
     :class="[inputVariant, elementClasses, { dirty: isDirty }, { active: isActive }]"
   >
     <InputLabel
@@ -46,7 +46,7 @@
           :readonly="(modelValue ?? 0) <= min"
           :is-pending="false"
           button-text="Step down"
-          theme="input-action"
+          theme="default"
           :size
           @click.stop.prevent="updateValue(-step, (modelValue ?? 0) > min)"
         >
@@ -61,7 +61,7 @@
           :readonly="(modelValue ?? 0) >= max"
           :is-pending="false"
           button-text="Step up"
-          theme="input-action"
+          theme="default"
           :size
           @click.stop.prevent="updateValue(step, (modelValue ?? 0) < max)"
         >
@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   maxlength?: number;
@@ -87,12 +87,12 @@ interface Props {
   fieldHasError?: boolean;
   required?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
+  theme?: FormUiTheme;
   min: number;
   max: number;
   step?: number;
   size?: FormSize;
-  inputVariant?: InputVariant;
+  inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -101,7 +101,7 @@ const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   required: false,
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
   step: 1,
   size: "default",
   inputVariant: "normal",
@@ -109,7 +109,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 

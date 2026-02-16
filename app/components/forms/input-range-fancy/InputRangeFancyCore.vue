@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
@@ -46,7 +46,7 @@ interface Props {
   rangeHighLabel: string;
   placeholder?: string;
   required?: boolean;
-  theme?: FormTheme;
+  theme?: FormUiTheme;
   size?: FormSize;
   weight?: FormWeight;
   fieldHasError?: boolean;
@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<Props>(), {
   step: 1,
   placeholder: "",
   required: false,
-  theme: "primary",
+  theme: "default",
   size: "medium",
   weight: "wght-400",
   fieldHasError: false,
@@ -185,7 +185,7 @@ onMounted(() => {
   /* .tooltip::before, */
   .tooltip .range-label {
     display: block;
-    font-variant: tabular-nums;
+    font-inputvariant: tabular-nums;
     position: absolute;
     top: 50%;
     translate: 0 -50%;

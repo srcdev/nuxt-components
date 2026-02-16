@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import type { InputVariant } from "~/types/forms/types.forms";
+import type { InputUiVariant } from "~/types/forms/types.forms";
 import InputDescription from "../InputDescription.vue";
 
 // Mock useStyleClassPassthrough composable
@@ -17,7 +17,7 @@ describe("InputDescription", () => {
     const defaultProps = {
       id: "test-input",
       name: "testInput",
-      inputVariant: "normal" as InputVariant, // Set valid default with proper typing
+      inputVariant: "normal" as InputUiVariant, // Set valid default with proper typing
       ...props,
     };
 
@@ -158,10 +158,10 @@ describe("InputDescription", () => {
       expect(container.exists()).toBe(true);
     });
 
-    it("handles inputVariant prop correctly", async () => {
+    it("handles InputUiVariant prop correctly", async () => {
       await createWrapper(
         {
-          inputVariant: "outlined",
+          InputUiVariant: "outlined",
         },
         {
           descriptionText: "Outlined variant description",
@@ -233,7 +233,7 @@ describe("InputDescription", () => {
       expect(container.exists()).toBe(true);
     });
 
-    it("applies default inputVariant value", async () => {
+    it("applies default InputUiVariant value", async () => {
       await createWrapper(
         {},
         {
@@ -241,7 +241,7 @@ describe("InputDescription", () => {
         }
       );
 
-      // Component should work with default inputVariant 'default'
+      // Component should work with default InputUiVariant 'default'
       const container = wrapper.find(".input-description");
       expect(container.exists()).toBe(true);
     });

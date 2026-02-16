@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../variants/InputPasswordWithLabel.vue";
-import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms.d";
+import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputPasswordWithLabelStoryArgs {
   modelValue: string;
@@ -11,9 +11,9 @@ interface InputPasswordWithLabelStoryArgs {
   errorMessage: string;
   fieldHasError: boolean;
   required: boolean;
-  theme: FormTheme;
+  theme: FormUiTheme;
   size: FormSize;
-  inputVariant: InputVariant;
+  InputUiVariant: InputUiVariant;
   styleClassPassthrough: string[];
   useDescriptionSlot: boolean;
   useDescriptionHtmlSlot: boolean;
@@ -104,7 +104,7 @@ export default {
         category: "Styling",
       },
     },
-    inputVariant: {
+    InputUiVariant: {
       control: { type: "select" },
       options: ["normal", "outlined", "underlined"],
       description: "Input variant style",
@@ -159,7 +159,7 @@ export default {
     errorMessage: "",
     fieldHasError: false,
     required: false,
-    theme: "primary",
+    theme: "default",
     size: "default",
     inputVariant: "normal",
     styleClassPassthrough: [],
@@ -249,14 +249,14 @@ PasswordTooShort.args = {
 
 export const Outlined = Template.bind({});
 Outlined.args = {
-  inputVariant: "outlined",
+  InputUiVariant: "outlined",
   label: "Confirm Password",
   placeholder: "Confirm your password",
 };
 
 export const Underlined = Template.bind({});
 Underlined.args = {
-  inputVariant: "underlined",
+  InputUiVariant: "underlined",
   label: "Master Password",
   placeholder: "Enter master password",
 };
@@ -281,7 +281,7 @@ AllVariants.storyName = "All Input Variants";
 AllVariants.render = (args) => ({
   components: { StorybookComponent },
   setup() {
-    const variants: InputVariant[] = ["normal", "outlined", "underlined"];
+    const variants: InputUiVariant[] = ["normal", "outlined", "underlined"];
     const passwordValues = reactive(
       variants.reduce(
         (acc, variant) => ({
@@ -304,7 +304,7 @@ AllVariants.render = (args) => ({
         <h3 class="text-lg font-semibold capitalize">{{ variant }} Variant</h3>
         <StorybookComponent
           v-model="passwordValues[variant]"
-          v-bind="{ ...args, inputVariant: variant, label: variant + ' Password', name: variant + '-password' }"
+          v-bind="{ ...args, InputUiVariant: variant, label: variant + ' Password', name: variant + '-password' }"
         />
       </div>
     </div>

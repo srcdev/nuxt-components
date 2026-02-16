@@ -10,7 +10,7 @@ const initialPropsData = {
   name: "testName",
   required: false,
   size: "medium",
-  theme: "primary",
+  theme: "default",
   fieldHasError: false,
   styleClassPassthrough: ["testClass"],
   trueValue: "checked",
@@ -49,7 +49,7 @@ describe("InputCheckboxRadioCore Component", () => {
 
       const wrapperDiv = wrapper.find(".input-checkbox-radio-wrapper");
       expect(wrapperDiv.exists()).toBe(true);
-      expect(wrapperDiv.attributes("data-theme")).toBe("primary");
+      expect(wrapperDiv.attributes("data-theme")).toBe("default");
       expect(wrapperDiv.attributes("data-size")).toBe("medium");
 
       const input = wrapper.find("input");
@@ -195,7 +195,7 @@ describe("InputCheckboxRadioCore Component", () => {
     it("applies error theme when fieldHasError is true", async () => {
       wrapper = await wrapperFactory({
         fieldHasError: true,
-        theme: "primary",
+        theme: "default",
       });
 
       const wrapperDiv = wrapper.find(".input-checkbox-radio-wrapper");

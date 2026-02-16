@@ -1,7 +1,7 @@
 <template>
   <div
     class="input-select-wrapper"
-    :data-theme="formTheme"
+    :data-theme="FormUiTheme"
     :data-size="size"
     :class="[inputVariant, size, { dirty: isDirty }, { active: isActive }, { error: fieldHasError }]"
   >
@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, InputVariant, IFormMultipleOptions } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, InputUiVariant, IFormMultipleOptions } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
@@ -41,8 +41,8 @@ interface Props {
   fieldHasError?: boolean;
   size?: FormSize;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
-  inputVariant?: InputVariant;
+  theme?: FormUiTheme;
+  inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -52,11 +52,11 @@ const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   size: "medium",
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
   inputVariant: "normal",
 });
 
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 

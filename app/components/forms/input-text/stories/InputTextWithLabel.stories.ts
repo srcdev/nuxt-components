@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../variants/InputTextWithLabel.vue";
-import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms.d";
+import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputTextWithLabelStoryArgs {
   modelValue: string;
@@ -12,9 +12,9 @@ interface InputTextWithLabelStoryArgs {
   errorMessage: string;
   fieldHasError: boolean;
   required: boolean;
-  theme: FormTheme;
+  theme: FormUiTheme;
   size: FormSize;
-  inputVariant: InputVariant;
+  inputVariant: InputUiVariant;
   styleClassPassthrough: string[];
   useDescriptionSlot: boolean;
   useDescriptionHtmlSlot: boolean;
@@ -169,7 +169,7 @@ export default {
     errorMessage: "",
     fieldHasError: false,
     required: false,
-    theme: "primary",
+    theme: "default",
     size: "default",
     inputVariant: "normal",
     styleClassPassthrough: [],
@@ -288,7 +288,7 @@ AllThemes.args = {};
 AllThemes.render = (args) => ({
   components: { StorybookComponent },
   setup() {
-    const themes: FormTheme[] = ["primary", "secondary", "tertiary", "ghost", "success", "warning"];
+    const themes: FormUiTheme[] = ["default", "success", "error", "warning"];
     const inputValues = reactive(
       themes.reduce(
         (acc, theme) => ({

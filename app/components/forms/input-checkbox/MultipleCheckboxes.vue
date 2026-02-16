@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, OptionsLayout, IFormMultipleOptions } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, OptionsLayout, IFormMultipleOptions } from "~/types/forms/types.forms";
 
 interface Props {
   dataTestid?: string;
@@ -92,7 +92,7 @@ interface Props {
   optionsLayout?: OptionsLayout;
   equalCols?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
+  theme?: FormUiTheme;
   direction?: "row" | "row-reverse";
   displayAsDisc?: boolean;
   displayAsLozenge?: boolean;
@@ -109,7 +109,7 @@ const props = withDefaults(defineProps<Props>(), {
   optionsLayout: "equal-widths",
   equalCols: true,
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
   direction: "row",
   displayAsDisc: false,
   displayAsLozenge: false,

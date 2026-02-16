@@ -1,5 +1,9 @@
 <template>
-  <div class="input-range-fancy-with-label" :data-theme="formTheme" :class="[elementClasses, { error: fieldHasError }]">
+  <div
+    class="input-range-fancy-with-label"
+    :data-theme="FormUiTheme"
+    :class="[elementClasses, { error: fieldHasError }]"
+  >
     <label class="input-range-fancy-label body-normal-bold" :for="id">{{ label }}</label>
     <template v-if="slots.description">
       <slot name="description"></slot>
@@ -31,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
@@ -46,7 +50,7 @@ interface Props {
   errorMessage: object | string;
   fieldHasError?: boolean;
   required?: boolean;
-  theme?: FormTheme;
+  theme?: FormUiTheme;
   size?: FormSize;
   weight?: FormWeight;
   styleClassPassthrough?: string | string[];
@@ -58,7 +62,7 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: "",
   fieldHasError: false,
   required: false,
-  theme: "primary",
+  theme: "default",
   size: "medium",
   weight: "wght-400",
   styleClassPassthrough: () => [],
@@ -68,7 +72,7 @@ const props = withDefaults(defineProps<Props>(), {
 const slots = useSlots();
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const formTheme = computed(() => {
+const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 

@@ -96,11 +96,11 @@
 </template>
 
 <script setup lang="ts">
-import type { QrCodeVariant } from "~/types/components"
+import type { QrCodeVariant } from "~/types/components";
 
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Index",
@@ -113,23 +113,23 @@ useHead({
   bodyAttrs: {
     class: "qr-codes-index-page",
   },
-})
+});
 
-const route = useRoute()
+const route = useRoute();
 
-type QrComponentName = "decode" | "capture" | "display"
-const componentName = computed<QrComponentName>(() => route.params.componentName as QrComponentName)
+type QrComponentName = "decode" | "capture" | "display";
+const componentName = computed<QrComponentName>(() => route.params.componentName as QrComponentName);
 
 // Component set up
-const DecodeQrCode = defineAsyncComponent(() => import("~/components/qr-code/DecodeQrCode.vue"))
-const CaptureQrCode = defineAsyncComponent(() => import("~/components/qr-code/CaptureQrCode.vue"))
-const DisplayQrCode = defineAsyncComponent(() => import("~/components/qr-code/DisplayQrCode.vue"))
+const DecodeQrCode = defineAsyncComponent(() => import("~/components/qr-code/DecodeQrCode.vue"));
+const CaptureQrCode = defineAsyncComponent(() => import("~/components/qr-code/CaptureQrCode.vue"));
+const DisplayQrCode = defineAsyncComponent(() => import("~/components/qr-code/DisplayQrCode.vue"));
 
 const components: Record<
   QrComponentName,
   {
-    component: ReturnType<typeof defineAsyncComponent>
-    props: () => Record<string, unknown>
+    component: ReturnType<typeof defineAsyncComponent>;
+    props: () => Record<string, unknown>;
   }
 > = {
   decode: {
@@ -146,43 +146,43 @@ const components: Record<
     component: DisplayQrCode,
     props: () => ({
       qrValue: qrValue.value,
-      variant: variant.value,
+      inputVariant: variant.value,
       radius: radius.value,
       blackColor: blackColor.value,
       whiteColor: whiteColor.value,
       size: size.value,
     }),
   },
-}
+};
 
 // Config for display qr code
 const pageHeader = computed(() => {
   switch (componentName.value) {
     case "decode":
-      return "Decode QR Code"
+      return "Decode QR Code";
     case "capture":
-      return "Capture QR Code"
+      return "Capture QR Code";
     case "display":
-      return "Display QR Code"
+      return "Display QR Code";
     default:
-      return "QR Code"
+      return "QR Code";
   }
-})
+});
 
-const qrValue = ref("P|7450952822|144392")
+const qrValue = ref("P|7450952822|144392");
 const variant = ref<QrCodeVariant>({
   inner: "circle",
   marker: "rounded",
   pixel: "dots",
-})
-const radius = ref(2)
-const blackColor = ref("#000000")
-const whiteColor = ref("#ffffff")
-const sizeValue = ref(300)
-const size = computed(() => `${sizeValue.value}px`)
+});
+const radius = ref(2);
+const blackColor = ref("#000000");
+const whiteColor = ref("#ffffff");
+const sizeValue = ref(300);
+const size = computed(() => `${sizeValue.value}px`);
 
-const activeComponent = computed(() => components[componentName.value]?.component)
-const activeProps = computed(() => components[componentName.value]?.props?.() ?? {})
+const activeComponent = computed(() => components[componentName.value]?.component);
+const activeProps = computed(() => components[componentName.value]?.props?.() ?? {});
 </script>
 
 <style lang="css">

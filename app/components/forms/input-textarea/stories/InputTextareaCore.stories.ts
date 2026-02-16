@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../InputTextareaCore.vue";
-import type { FormTheme, FormSize, InputVariant } from "~/types/forms/types.forms.d";
+import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputTextareaCoreStoryArgs {
   modelValue: string;
@@ -11,9 +11,9 @@ interface InputTextareaCoreStoryArgs {
   ariaDescribedby: string;
   fieldHasError: boolean;
   required: boolean;
-  theme: FormTheme;
+  theme: FormUiTheme;
   size: FormSize;
-  inputVariant: InputVariant;
+  InputUiVariant: InputUiVariant;
   styleClassPassthrough: string[];
   leftSlotContent: string;
   rightSlotContent: string;
@@ -104,7 +104,7 @@ export default {
         category: "Styling",
       },
     },
-    inputVariant: {
+    InputUiVariant: {
       control: { type: "select" },
       options: ["normal", "outlined", "underlined"],
       description: "Textarea variant style",
@@ -159,7 +159,7 @@ export default {
     ariaDescribedby: "",
     fieldHasError: false,
     required: false,
-    theme: "primary",
+    theme: "default",
     size: "default",
     inputVariant: "normal",
     styleClassPassthrough: [],
@@ -239,13 +239,13 @@ WithSlots.args = {
 
 export const Outlined = Template.bind({});
 Outlined.args = {
-  inputVariant: "outlined",
+  InputUiVariant: "outlined",
   placeholder: "Outlined textarea",
 };
 
 export const Underlined = Template.bind({});
 Underlined.args = {
-  inputVariant: "underlined",
+  InputUiVariant: "underlined",
   placeholder: "Underlined textarea",
 };
 

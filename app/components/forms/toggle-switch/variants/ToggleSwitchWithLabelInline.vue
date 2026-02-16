@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormTheme, FormSize, LabelWeight } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormSize, LabelWeight } from "~/types/forms/types.forms";
 
 interface Props {
   name: string;
@@ -33,7 +33,7 @@ interface Props {
   trueValue?: string | number | boolean;
   falseValue?: string | number | boolean;
   styleClassPassthrough?: string | string[];
-  theme?: FormTheme;
+  theme?: FormUiTheme;
   round?: boolean;
   size?: FormSize;
 }
@@ -43,7 +43,7 @@ const props = withDefaults(defineProps<Props>(), {
   trueValue: true,
   falseValue: false,
   styleClassPassthrough: () => [],
-  theme: "primary",
+  theme: "default",
   round: true,
   size: "default",
 });

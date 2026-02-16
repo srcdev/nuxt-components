@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import type { InputVariant } from "~/types/forms/types.forms";
+import type { InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   dataTestid?: string;
@@ -36,7 +36,7 @@ interface Props {
   styleClassPassthrough?: string | string[];
   compact?: boolean;
   isDetached: boolean;
-  inputVariant?: InputVariant;
+  inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {

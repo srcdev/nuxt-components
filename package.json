@@ -75,6 +75,7 @@
     }
   },
   "dependencies": {
+    "@nuxt/fonts": "0.14.0",
     "@vueuse/core": "14.2.0",
     "focus-trap-vue": "4.1.0",
     "nuxt": "4.3.0",
