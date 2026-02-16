@@ -21,6 +21,12 @@ interface InputButtonCoreStoryArgs {
   leftSlotContent: string;
   rightSlotContent: string;
   iconOnlyContent: string;
+  leftIconName: string;
+  rightIconName: string;
+  iconOnlyName: string;
+  useLeftIcon: boolean;
+  useRightIcon: boolean;
+  useIconOnly: boolean;
 }
 
 export default {
@@ -136,6 +142,50 @@ export default {
         category: "Slots",
       },
     },
+
+    // Icon Configuration
+    useLeftIcon: {
+      control: "boolean",
+      description: "Use Icon component for left slot",
+      table: {
+        category: "Icons",
+      },
+    },
+    leftIconName: {
+      control: "text",
+      description: "Icon name for left slot (e.g., 'mdi:arrow-left')",
+      table: {
+        category: "Icons",
+      },
+    },
+    useRightIcon: {
+      control: "boolean",
+      description: "Use Icon component for right slot",
+      table: {
+        category: "Icons",
+      },
+    },
+    rightIconName: {
+      control: "text",
+      description: "Icon name for right slot (e.g., 'mdi:arrow-right')",
+      table: {
+        category: "Icons",
+      },
+    },
+    useIconOnly: {
+      control: "boolean",
+      description: "Use Icon component for icon-only slot",
+      table: {
+        category: "Icons",
+      },
+    },
+    iconOnlyName: {
+      control: "text",
+      description: "Icon name for icon-only slot (e.g., 'mdi:flash')",
+      table: {
+        category: "Icons",
+      },
+    },
   },
   args: {
     type: "button",
@@ -151,6 +201,12 @@ export default {
     leftSlotContent: "👈",
     rightSlotContent: "👉",
     iconOnlyContent: "⚡",
+    useLeftIcon: false,
+    useRightIcon: false,
+    useIconOnly: false,
+    leftIconName: "mdi:arrow-left",
+    rightIconName: "mdi:arrow-right",
+    iconOnlyName: "mdi:flash",
   },
 } as Meta<typeof StorybookComponent>;
 
@@ -175,6 +231,12 @@ const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
       useLeftSlot: args.useLeftSlot,
       useRightSlot: args.useRightSlot,
       useIconOnlySlot: args.useIconOnlySlot,
+      useLeftIcon: args.useLeftIcon,
+      useRightIcon: args.useRightIcon,
+      useIconOnly: args.useIconOnly,
+      leftIconName: args.leftIconName,
+      rightIconName: args.rightIconName,
+      iconOnlyName: args.iconOnlyName,
     };
   },
   template: `
@@ -183,9 +245,18 @@ const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
         v-bind="args"
         @click="handleClick"
       >
-        <template v-if="useLeftSlot" #left>{{ leftSlotContent }}</template>
-        <template v-if="useRightSlot" #right>{{ rightSlotContent }}</template>
-        <template v-if="useIconOnlySlot" #iconOnly>{{ iconOnlyContent }}</template>
+        <template v-if="useLeftSlot || useLeftIcon" #left>
+          <Icon v-if="useLeftIcon" :name="leftIconName" class="icon" />
+          <span v-else>{{ leftSlotContent }}</span>
+        </template>
+        <template v-if="useRightSlot || useRightIcon" #right>
+          <Icon v-if="useRightIcon" :name="rightIconName" class="icon" />
+          <span v-else>{{ rightSlotContent }}</span>
+        </template>
+        <template v-if="useIconOnlySlot || useIconOnly" #iconOnly>
+          <Icon v-if="useIconOnly" :name="iconOnlyName" class="icon" />
+          <span v-else>{{ iconOnlyContent }}</span>
+        </template>
       </StorybookComponent>
       <div class="mbs-40">
         Click count: {{ clickCount }}
@@ -201,11 +272,25 @@ WithLeftIcon.args = {
   leftSlotContent: "💾",
 };
 
+export const WithLeftIconComponent = Template.bind({});
+WithLeftIconComponent.args = {
+  buttonText: "Save Document",
+  useLeftIcon: true,
+  leftIconName: "mdi:content-save",
+};
+
 export const WithRightIcon = Template.bind({});
 WithRightIcon.args = {
   buttonText: "Continue",
   useRightSlot: true,
   rightSlotContent: "→",
+};
+
+export const WithRightIconComponent = Template.bind({});
+WithRightIconComponent.args = {
+  buttonText: "Continue",
+  useRightIcon: true,
+  rightIconName: "mdi:arrow-right",
 };
 
 export const WithBothIcons = Template.bind({});
@@ -215,8 +300,15 @@ WithBothIcons.args = {
   useRightSlot: true,
   leftSlotContent: "💸",
   rightSlotContent: "✅",
-  // leftSlotContent: '<Icon name="mdi:arrow-left" class="icon" />',
-  // rightSlotContent: '<Icon name="mdi:arrow-right" class="icon" />',
+};
+
+export const WithBothIconComponents = Template.bind({});
+WithBothIconComponents.args = {
+  buttonText: "Navigate",
+  useLeftIcon: true,
+  useRightIcon: true,
+  leftIconName: "mdi:arrow-left",
+  rightIconName: "mdi:arrow-right",
 };
 
 export const IconOnly = Template.bind({});
@@ -224,4 +316,11 @@ IconOnly.args = {
   buttonText: "Icon Only Button",
   useIconOnlySlot: true,
   iconOnlyContent: "⚡",
+};
+
+export const IconOnlyComponent = Template.bind({});
+IconOnlyComponent.args = {
+  buttonText: "Icon Only Button",
+  useIconOnly: true,
+  iconOnlyName: "mdi:flash",
 };

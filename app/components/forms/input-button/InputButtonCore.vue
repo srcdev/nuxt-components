@@ -27,7 +27,7 @@
 interface Props {
   type?: "submit" | "button" | "reset";
   theme?: "default" | "success" | "error" | "warning";
-  variant?: "primary" | "secondary" | "tertiary";
+  variant?: "primary" | "secondary" | "tertiary" | "inline";
   buttonText?: string;
   isPending?: boolean;
   hasPendingEffect?: boolean;
