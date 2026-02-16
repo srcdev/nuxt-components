@@ -79,6 +79,13 @@ export default {
         category: "Styling",
       },
     },
+    isPill: {
+      control: "boolean",
+      description: "Whether button has pill shape",
+      table: {
+        category: "Styling",
+      },
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes",
@@ -251,9 +258,17 @@ const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
   `,
 });
 
-export const WithBothIcons = Template.bind({});
-WithBothIcons.args = {
-  buttonText: "Transfer",
+export const ButtonTextOnly = Template.bind({});
+ButtonTextOnly.args = {
+  buttonText: "Button Text Only",
+  inputVariant: "primary",
+  useLeftSlot: false,
+  useRightSlot: false,
+};
+
+export const WithBothEmojiIcons = Template.bind({});
+WithBothEmojiIcons.args = {
+  buttonText: "With Both Emoji Icons",
   inputVariant: "primary",
   useLeftSlot: true,
   useRightSlot: true,
@@ -261,9 +276,9 @@ WithBothIcons.args = {
   rightSlotContent: "✅",
 };
 
-export const WithBothIconComponents = Template.bind({});
-WithBothIconComponents.args = {
-  buttonText: "Navigate",
+export const WithBothNuxtIconComponents = Template.bind({});
+WithBothNuxtIconComponents.args = {
+  buttonText: "With Both Nuxt Icon Components",
   inputVariant: "primary",
   useLeftIcon: true,
   useRightIcon: true,
@@ -271,18 +286,18 @@ WithBothIconComponents.args = {
   rightIconName: "mdi:arrow-right",
 };
 
-export const IconOnly = Template.bind({});
-IconOnly.args = {
-  buttonText: "Icon Only Button",
+export const EmojiIconOnly = Template.bind({});
+EmojiIconOnly.args = {
+  buttonText: "Emoji Icon Only Button",
   inputVariant: "tertiary",
   useIconOnlySlot: true,
   iconOnlyContent: "⚡",
 };
 
-export const IconOnlyComponent = Template.bind({});
-IconOnlyComponent.args = {
-  buttonText: "Icon Only Button",
+export const NuxtIconOnlyComponent = Template.bind({});
+NuxtIconOnlyComponent.args = {
+  buttonText: "Nuxt Icon Only Button",
   inputVariant: "tertiary",
   useIconOnly: true,
-  iconOnlyName: "mdi:flash",
+  iconOnlyName: "mdi:chevron-right-circle-outline",
 };

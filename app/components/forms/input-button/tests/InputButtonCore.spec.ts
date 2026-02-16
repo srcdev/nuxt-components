@@ -77,6 +77,22 @@ describe("InputButtonCore", () => {
   });
 
   describe("Props Handling", () => {
+    it("applies pill class when isPill prop is true", async () => {
+      await createWrapper({ isPill: true });
+
+      const button = wrapper.find("button");
+      expect(button.classes()).toContain("pill");
+    });
+
+    it("does not apply pill class when isPill prop is false or omitted", async () => {
+      await createWrapper({ isPill: false });
+      const button = wrapper.find("button");
+      expect(button.classes()).not.toContain("pill");
+
+      await createWrapper();
+      const button2 = wrapper.find("button");
+      expect(button2.classes()).not.toContain("pill");
+    });
     it("handles type prop correctly", async () => {
       await createWrapper({ type: "submit" });
 

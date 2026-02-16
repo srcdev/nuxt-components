@@ -29,6 +29,7 @@ interface Props {
   type?: InputTypesButton;
   theme?: FormUiTheme;
   variant?: InputButtonVariant;
+  isPill?: boolean;
   buttonText?: string;
   isPending?: boolean;
   hasPendingEffect?: boolean;
@@ -40,6 +41,7 @@ const props = withDefaults(defineProps<Props>(), {
   type: "button",
   theme: "default",
   variant: "primary",
+  isPill: false,
   buttonText: "",
   isPending: false,
   hasPendingEffect: false,
@@ -61,6 +63,7 @@ const buttonClasses = computed(() => [
   { "icon-only": hasIconOnlySlot.value },
   { "pending-effect": props.hasPendingEffect },
   { "is-pending": props.isPending },
+  { pill: props.isPill },
 ]);
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -125,6 +128,14 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     &:focus-visible {
       border-color: var(--theme-button-tertiary-border-hover);
       outline-color: var(--theme-button-tertiary-border-active);
+    }
+  }
+
+  &.primary,
+  &.secondary,
+  &.tertiary {
+    &.pill {
+      border-radius: 100vw;
     }
   }
 
