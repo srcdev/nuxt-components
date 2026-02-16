@@ -1,19 +1,15 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
 import StorybookComponent from "../InputButtonCore.vue";
-import type { FormTheme, FormSize, FormWeight } from "~/types/forms/types.forms.d";
 
 interface InputButtonCoreStoryArgs {
   type: "submit" | "button" | "reset";
-  size: FormSize;
-  weight: FormWeight;
-  theme: FormTheme;
+  theme: "default" | "success" | "error" | "warning";
+  variant: "primary" | "secondary" | "tertiary" | "inline";
   buttonText: string;
-  dataTestid: string;
   styleClassPassthrough: string[];
-  useEffect: boolean;
-  effect: "fancy" | "pulse";
   isPending: boolean;
+  hasPendingEffect: boolean;
   readonly: boolean;
   useLeftSlot: boolean;
   useRightSlot: boolean;
@@ -49,13 +45,6 @@ export default {
         category: "Basic",
       },
     },
-    dataTestid: {
-      control: "text",
-      description: "Test ID for testing purposes",
-      table: {
-        category: "Basic",
-      },
-    },
 
     // States
     readonly: {
@@ -78,6 +67,14 @@ export default {
       control: { type: "select" },
       options: ["default", "success", "error", "warning"],
       description: "Button theme",
+      table: {
+        category: "Styling",
+      },
+    },
+    variant: {
+      control: { type: "select" },
+      options: ["primary", "secondary", "tertiary", "inline"],
+      description: "Button variant/style",
       table: {
         category: "Styling",
       },
@@ -190,6 +187,7 @@ export default {
   args: {
     type: "button",
     theme: "default",
+    variant: "primary",
     buttonText: "Click me",
     styleClassPassthrough: [],
     isPending: false,
@@ -253,37 +251,10 @@ const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
   `,
 });
 
-export const WithLeftIcon = Template.bind({});
-WithLeftIcon.args = {
-  buttonText: "Save Document",
-  useLeftSlot: true,
-  leftSlotContent: "💾",
-};
-
-export const WithLeftIconComponent = Template.bind({});
-WithLeftIconComponent.args = {
-  buttonText: "Save Document",
-  useLeftIcon: true,
-  leftIconName: "mdi:content-save",
-};
-
-export const WithRightIcon = Template.bind({});
-WithRightIcon.args = {
-  buttonText: "Continue",
-  useRightSlot: true,
-  rightSlotContent: "→",
-};
-
-export const WithRightIconComponent = Template.bind({});
-WithRightIconComponent.args = {
-  buttonText: "Continue",
-  useRightIcon: true,
-  rightIconName: "mdi:arrow-right",
-};
-
 export const WithBothIcons = Template.bind({});
 WithBothIcons.args = {
   buttonText: "Transfer",
+  variant: "primary",
   useLeftSlot: true,
   useRightSlot: true,
   leftSlotContent: "💸",
@@ -293,6 +264,7 @@ WithBothIcons.args = {
 export const WithBothIconComponents = Template.bind({});
 WithBothIconComponents.args = {
   buttonText: "Navigate",
+  variant: "primary",
   useLeftIcon: true,
   useRightIcon: true,
   leftIconName: "mdi:arrow-left",
@@ -302,6 +274,7 @@ WithBothIconComponents.args = {
 export const IconOnly = Template.bind({});
 IconOnly.args = {
   buttonText: "Icon Only Button",
+  variant: "tertiary",
   useIconOnlySlot: true,
   iconOnlyContent: "⚡",
 };
@@ -309,6 +282,7 @@ IconOnly.args = {
 export const IconOnlyComponent = Template.bind({});
 IconOnlyComponent.args = {
   buttonText: "Icon Only Button",
+  variant: "tertiary",
   useIconOnly: true,
   iconOnlyName: "mdi:flash",
 };
