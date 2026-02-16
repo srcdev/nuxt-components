@@ -24,10 +24,11 @@
 </template>
 
 <script setup lang="ts">
+import type { InputTypesButton, FormUiTheme, InputButtonVariant } from "~/types/forms/types.forms";
 interface Props {
-  type?: "submit" | "button" | "reset";
-  theme?: "default" | "success" | "error" | "warning";
-  variant?: "primary" | "secondary" | "tertiary" | "inline";
+  type?: InputTypesButton;
+  theme?: FormUiTheme;
+  variant?: InputButtonVariant;
   buttonText?: string;
   isPending?: boolean;
   hasPendingEffect?: boolean;
