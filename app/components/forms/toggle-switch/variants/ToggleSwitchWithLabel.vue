@@ -1,5 +1,5 @@
 <template>
-  <div class="toggle-switch-with-label" :class="[elementClasses]" :data-theme="FormUiTheme">
+  <div class="toggle-switch-with-label" :class="[elementClasses]" :data-theme="theme">
     <InputLabel
       :id
       :for="toggleSwitchId"

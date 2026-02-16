@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="input-range-fancy-with-label"
-    :data-theme="FormUiTheme"
-    :class="[elementClasses, { error: fieldHasError }]"
-  >
+  <div class="input-range-fancy-with-label" :data-theme="theme" :class="[elementClasses, { error: fieldHasError }]">
     <label class="input-range-fancy-label body-normal-bold" :for="id">{{ label }}</label>
     <template v-if="slots.description">
       <slot name="description"></slot>

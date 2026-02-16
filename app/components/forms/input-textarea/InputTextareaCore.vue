@@ -1,7 +1,7 @@
 <template>
   <div
     class="input-textarea-wrapper"
-    :data-theme="FormUiTheme"
+    :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
     :data-size="size"
     :class="[

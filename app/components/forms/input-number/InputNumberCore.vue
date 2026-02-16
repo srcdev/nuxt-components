@@ -1,5 +1,5 @@
 <template>
-  <div class="input-number-wrapper" :data-theme="FormUiTheme">
+  <div class="input-number-wrapper" :data-theme="theme" :data-invalid="fieldHasError ? '' : null">
     <div v-if="slots.left" class="slot left">
       <slot name="left"></slot>
     </div>
@@ -50,10 +50,6 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
-
-const FormUiTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
-});
 
 const modelValue = defineModel<number | readonly number[]>();
 

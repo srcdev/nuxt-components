@@ -192,15 +192,13 @@ describe("InputCheckboxRadioCore Component", () => {
   });
 
   describe("Error States", () => {
-    it("applies error theme when fieldHasError is true", async () => {
+    it("applies data-invalid attribute theme when fieldHasError is true", async () => {
       wrapper = await wrapperFactory({
         fieldHasError: true,
-        theme: "default",
       });
 
       const wrapperDiv = wrapper.find(".input-checkbox-radio-wrapper");
-      expect(wrapperDiv.attributes("data-theme")).toBe("error");
-      expect(wrapperDiv.classes()).toContain("error");
+      expect(wrapperDiv.attributes("data-invalid")).toBeDefined();
     });
 
     it("sets aria-invalid when fieldHasError is true", async () => {
@@ -287,7 +285,7 @@ describe("InputCheckboxRadioCore Component", () => {
       });
 
       const wrapperDiv = wrapper.find(".input-checkbox-radio-wrapper");
-      expect(wrapperDiv.attributes("data-theme")).toBe("error");
+      expect(wrapperDiv.attributes("data-invalid")).toBeDefined();
     });
   });
 

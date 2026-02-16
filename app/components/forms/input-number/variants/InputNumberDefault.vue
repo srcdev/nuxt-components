@@ -1,7 +1,8 @@
 <template>
   <div
     class="input-number-with-label"
-    :data-theme="FormUiTheme"
+    :data-theme="theme"
+    :data-invalid="fieldHasError ? '' : null"
     :data-size="size"
     :class="[elementClasses, `theme-${theme}`, { error: fieldHasError }]"
   >
@@ -104,9 +105,6 @@ const slots = useSlots();
 const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const id = useId();
-const FormUiTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
-});
 
 const modelValue = defineModel<number | readonly number[]>();
 

@@ -1,7 +1,8 @@
 <template>
   <div
     class="input-select-wrapper"
-    :data-theme="FormUiTheme"
+    :data-theme="theme"
+    :data-invalid="fieldHasError ? '' : null"
     :data-size="size"
     :class="[inputVariant, size, { dirty: isDirty }, { active: isActive }, { error: fieldHasError }]"
   >

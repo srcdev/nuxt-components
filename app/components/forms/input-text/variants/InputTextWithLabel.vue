@@ -2,7 +2,7 @@
   <div>
     <div
       class="input-text-with-label"
-      :data-theme="FormUiTheme"
+      :data-theme="theme"
       :data-invalid="fieldHasError ? '' : null"
       :class="[elementClasses, inputVariant, { dirty: isDirty }, { active: isActive }]"
     >

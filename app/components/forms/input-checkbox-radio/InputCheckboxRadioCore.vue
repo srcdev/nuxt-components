@@ -1,5 +1,11 @@
 <template>
-  <div class="input-checkbox-radio-wrapper" :data-theme="FormUiTheme" :data-size="size" :class="wrapperClasses">
+  <div
+    class="input-checkbox-radio-wrapper"
+    :data-theme="theme"
+    :data-invalid="fieldHasError ? '' : null"
+    :data-size="size"
+    :class="wrapperClasses"
+  >
     <div class="input-checked-icon-slot">
       <slot name="checkedIcon">
         <Icon :name="defaultIcon" class="input-checked-icon-checked" />
@@ -47,10 +53,6 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || []);
-
-const FormUiTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
-});
 
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
 

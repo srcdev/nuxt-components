@@ -2,7 +2,7 @@
   <div
     class="input-text-wrapper"
     data-testid="input-text-wrapper"
-    :data-theme="FormUiTheme"
+    :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
     :data-size="size"
     :data-inputmode="inputmode"

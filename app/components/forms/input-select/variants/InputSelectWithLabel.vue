@@ -4,7 +4,8 @@
       class="input-select-with-label"
       :class="[inputVariant, { dirty: isDirty }, { active: isActive }, { error: fieldHasError }]"
       :data-testid
-      :data-theme="FormUiTheme"
+      :data-theme="theme"
+      :data-invalid="fieldHasError ? '' : null"
       :data-size="size"
     >
       <InputLabel

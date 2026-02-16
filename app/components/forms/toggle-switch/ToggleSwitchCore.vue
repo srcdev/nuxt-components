@@ -1,5 +1,5 @@
 <template>
-  <div class="toggle-switch-core" :class="elementClasses" :data-size="size" :data-theme="FormUiTheme">
+  <div class="toggle-switch-core" :class="elementClasses" :data-size="size" :data-theme="theme">
     <div class="toggle-switch-wrapper" :class="wrapperClasses" :for="inputId" @click="toggleSwitchValue">
       <input
         :id="inputId"

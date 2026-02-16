@@ -1,7 +1,7 @@
 <template>
   <div
     class="input-text-with-label"
-    :data-theme="FormUiTheme"
+    :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
     :class="[inputVariant, elementClasses, { dirty: isDirty }, { active: isActive }]"
   >

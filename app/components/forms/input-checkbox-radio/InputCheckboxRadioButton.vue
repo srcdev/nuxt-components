@@ -2,7 +2,8 @@
   <label
     :for="id"
     class="input-checkbox-radio-options-button"
-    :data-theme="FormUiTheme"
+    :data-theme="theme"
+    :data-invalid="fieldHasError ? '' : null"
     :data-size="size"
     :class="[size, elementClasses, optionsLayout, { error: fieldHasError }, { lozenge: displayAsLozenge }]"
   >
@@ -67,10 +68,6 @@ const slots = useSlots();
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || []);
 
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
-
-const FormUiTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
-});
 
 const flexDirection = ref(props.direction);
 </script>

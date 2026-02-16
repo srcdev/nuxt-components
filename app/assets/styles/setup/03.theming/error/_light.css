@@ -1,4 +1,4 @@
-:where([data-error]),
+:where([data-invalid]),
 :where([data-theme="error"]) {
   /* ===========================================
      COLOR SCALE VARIABLES

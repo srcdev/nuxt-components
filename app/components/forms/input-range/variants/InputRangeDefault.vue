@@ -1,5 +1,10 @@
 <template>
-  <div class="input-range-with-label" :data-theme="FormUiTheme" :class="[elementClasses, { error: fieldHasError }]">
+  <div
+    class="input-range-with-label"
+    :data-theme="theme"
+    :data-invalid="fieldHasError ? '' : null"
+    :class="[elementClasses, { error: fieldHasError }]"
+  >
     <InputLabel
       :id
       :for="id"
