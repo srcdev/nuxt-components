@@ -16,6 +16,11 @@
   --form-input-border-radius: 0.5rem;
   --form-input-border-radius-underlined: 0.25rem;
 
+  /*.Checkboxes and Radio buttons */
+
+  --input-checked-element-size: var(--step-5);
+  --input-checked-icon-size: var(--step-4);
+
   /* Typography */
   --form-element-font-size: var(--step-0);
   --form-element-line-height: 1.5;
