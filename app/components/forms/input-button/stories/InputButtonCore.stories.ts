@@ -225,18 +225,6 @@ const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
       args,
       clickCount,
       handleClick,
-      leftSlotContent: args.leftSlotContent,
-      rightSlotContent: args.rightSlotContent,
-      iconOnlyContent: args.iconOnlyContent,
-      useLeftSlot: args.useLeftSlot,
-      useRightSlot: args.useRightSlot,
-      useIconOnlySlot: args.useIconOnlySlot,
-      useLeftIcon: args.useLeftIcon,
-      useRightIcon: args.useRightIcon,
-      useIconOnly: args.useIconOnly,
-      leftIconName: args.leftIconName,
-      rightIconName: args.rightIconName,
-      iconOnlyName: args.iconOnlyName,
     };
   },
   template: `
@@ -245,17 +233,17 @@ const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
         v-bind="args"
         @click="handleClick"
       >
-        <template v-if="useLeftSlot || useLeftIcon" #left>
-          <Icon v-if="useLeftIcon" :name="leftIconName" class="icon" />
-          <span v-else>{{ leftSlotContent }}</span>
+        <template v-if="args.useLeftSlot || args.useLeftIcon" #left>
+          <Icon v-if="args.useLeftIcon" :name="args.leftIconName" class="icon" />
+          <span v-else>{{ args.leftSlotContent }}</span>
         </template>
-        <template v-if="useRightSlot || useRightIcon" #right>
-          <Icon v-if="useRightIcon" :name="rightIconName" class="icon" />
-          <span v-else>{{ rightSlotContent }}</span>
+        <template v-if="args.useRightSlot || args.useRightIcon" #right>
+          <Icon v-if="args.useRightIcon" :name="args.rightIconName" class="icon" />
+          <span v-else>{{ args.rightSlotContent }}</span>
         </template>
-        <template v-if="useIconOnlySlot || useIconOnly" #iconOnly>
-          <Icon v-if="useIconOnly" :name="iconOnlyName" class="icon" />
-          <span v-else>{{ iconOnlyContent }}</span>
+        <template v-if="args.useIconOnlySlot || args.useIconOnly" #iconOnly>
+          <Icon v-if="args.useIconOnly" :name="args.iconOnlyName" class="icon" />
+          <span v-else>{{ args.iconOnlyContent }}</span>
         </template>
       </StorybookComponent>
       <div class="mbs-40">
