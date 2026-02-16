@@ -3,6 +3,7 @@
     <div
       class="input-textarea-with-label"
       :data-theme="FormUiTheme"
+      :data-invalid="fieldHasError ? '' : null"
       :class="[elementClasses, inputVariant, { dirty: isDirty }, { active: isActive }]"
     >
       <InputLabel

@@ -2,6 +2,7 @@
   <div
     class="input-textarea-wrapper"
     :data-theme="FormUiTheme"
+    :data-invalid="fieldHasError ? '' : null"
     :data-size="size"
     :class="[
       inputVariant,

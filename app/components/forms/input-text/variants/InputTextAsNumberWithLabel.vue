@@ -2,6 +2,7 @@
   <div
     class="input-text-with-label"
     :data-theme="FormUiTheme"
+    :data-invalid="fieldHasError ? '' : null"
     :class="[inputVariant, elementClasses, { dirty: isDirty }, { active: isActive }]"
   >
     <InputLabel
@@ -76,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms";
+import type { FormSize, FormUiTheme, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   maxlength?: number;

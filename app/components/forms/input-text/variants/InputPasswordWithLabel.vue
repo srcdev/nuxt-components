@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormSize, InputUiVariant } from "~/types/forms/types.forms";
+import type { FormSize, FormUiTheme, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   type?: "text" | "password";
@@ -45,7 +45,7 @@ interface Props {
   fieldHasError?: boolean;
   required?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: "default" | "success" | "error" | "warning";
+  theme?: FormUiTheme;
   size?: FormSize;
   inputVariant?: InputUiVariant;
 }

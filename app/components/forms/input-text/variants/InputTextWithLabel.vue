@@ -3,6 +3,7 @@
     <div
       class="input-text-with-label"
       :data-theme="FormUiTheme"
+      :data-invalid="fieldHasError ? '' : null"
       :class="[elementClasses, inputVariant, { dirty: isDirty }, { active: isActive }]"
     >
       <InputLabel
@@ -83,11 +84,11 @@
 </template>
 
 <script setup lang="ts">
-import type { FormSize, InputUiVariant, InputMode } from "~/types/forms/types.forms";
+import type { FormSize, InputTypesText, FormUiTheme, InputUiVariant, InputMode } from "~/types/forms/types.forms";
 
 interface Props {
   maxlength?: number;
-  type: "text" | "email" | "password" | "number" | "tel" | "url";
+  type: InputTypesText;
   inputmode?: InputMode;
   name: string;
   placeholder?: string;
@@ -96,7 +97,7 @@ interface Props {
   fieldHasError?: boolean;
   required?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: "default" | "success" | "error" | "warning";
+  theme?: FormUiTheme;
   size?: FormSize;
   inputVariant?: InputUiVariant;
 }

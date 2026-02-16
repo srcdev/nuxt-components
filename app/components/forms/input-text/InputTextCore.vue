@@ -3,6 +3,7 @@
     class="input-text-wrapper"
     data-testid="input-text-wrapper"
     :data-theme="FormUiTheme"
+    :data-invalid="fieldHasError ? '' : null"
     :data-size="size"
     :data-inputmode="inputmode"
     :class="[
@@ -43,10 +44,10 @@
 </template>
 
 <script setup lang="ts">
-import type { FormSize, InputUiVariant, InputMode } from "~/types/forms/types.forms";
+import type { FormSize, InputTypesText, FormUiTheme, InputUiVariant, InputMode } from "~/types/forms/types.forms";
 
 interface Props {
-  type?: "number" | "text" | "email" | "password" | "tel" | "url";
+  type?: InputTypesText;
   inputmode?: InputMode;
   maxlength?: number;
   id: string;
@@ -55,7 +56,7 @@ interface Props {
   placeholder?: string;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: "default" | "success" | "error" | "warning";
+  theme?: FormUiTheme;
   ariaDescribedby?: string;
   size?: FormSize;
   inputVariant?: InputUiVariant;
