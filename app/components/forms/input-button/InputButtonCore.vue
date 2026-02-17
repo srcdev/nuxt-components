@@ -71,7 +71,8 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 <style lang="css">
 .input-button-core {
-  display: flex;
+  display: grid;
+  grid-auto-flow: column;
   gap: var(--button-icon-gap);
   justify-content: center;
   align-items: center;

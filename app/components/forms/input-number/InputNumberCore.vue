@@ -103,7 +103,7 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
     box-shadow: none;
 
     background-color: var(--theme-input-surface);
-    color: var(--theme-form-input-text-color-normal);
+    color: var(--theme-input-text-color-normal);
     font-family: var(--font-family);
     font-size: var(--form-element-font-size);
     line-height: var(--form-element-line-height);

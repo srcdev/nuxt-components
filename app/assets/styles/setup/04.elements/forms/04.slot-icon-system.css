@@ -5,6 +5,7 @@
 
   /* Icon sizing */
   --input-icon-size: 1.8rem; /* 18px */
+  --input-icon-slot-gap: 0rem;
 
   /* Icon colours (semantic layer controls actual color) */
   --input-icon-color: currentColor;

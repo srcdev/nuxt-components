@@ -15,9 +15,9 @@
       { 'has-right-slot': slots.right },
     ]"
   >
-    <span v-if="slots.left" class="slot left-slot">
+    <div v-if="slots.left" class="slot left-slot">
       <slot name="left"></slot>
-    </span>
+    </div>
 
     <input
       :id
@@ -37,9 +37,9 @@
       @focusout="updateFocus(false)"
     />
 
-    <span v-if="slots.right" class="slot right-slot">
+    <div v-if="slots.right" class="slot right-slot">
       <slot name="right"></slot>
-    </span>
+    </div>
   </div>
 </template>
 
@@ -131,7 +131,7 @@ onMounted(() => {
 .input-text-wrapper {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--input-icon-slot-gap);
   background-color: var(--theme-input-surface);
 
   &:hover {
@@ -140,29 +140,18 @@ onMounted(() => {
 
   &:focus-within {
     background-color: var(--theme-input-surface-hover);
-    outline: var(--theme-focus-visible-outline);
-    box-shadow: var(--theme-focus-visible-shadow);
+    /* outline: var(--theme-focus-visible-outline); */
+    /* box-shadow: var(--theme-focus-visible-shadow); */
   }
 
   &.normal {
+    border: var(--form-element-border-width) solid var(--theme-input-border);
+    border-radius: var(--form-input-border-radius);
     outline: var(--form-element-outline-width) solid var(--theme-input-outline);
-
-    border-top-left-radius: var(--form-input-border-radius);
-    border-top-right-radius: var(--form-input-border-radius);
-    border-bottom-left-radius: var(--form-input-border-radius);
-    border-bottom-right-radius: var(--form-input-border-radius);
-
-    border-top: var(--form-element-border-width) solid var(--theme-input-border);
-    border-right: var(--form-element-border-width) solid var(--theme-input-border);
-    border-bottom: var(--form-element-border-width) solid var(--theme-input-border);
-    border-left: var(--form-element-border-width) solid var(--theme-input-border);
 
     padding-inline: 1rem;
 
-    &.error {
-      border-color: var(--theme-error-surface);
-    }
-
+    /*
     .slot {
       display: grid;
       place-items: center;
@@ -223,30 +212,13 @@ onMounted(() => {
         }
       }
     }
+      */
   }
 
   &.underlined {
-    /* margin-block-start: 0; */
-    /* padding-block: 0; */
-    /* padding-inline: 0; */
-    /* border-radius: 0; */
-    /* border-top: none; */
-    /* border-right: none; */
     border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-input-border);
-    /* border-left: none; */
-    /* overflow: hidden; */
 
-    &.error {
-      border-bottom-right-radius: 0;
-      border-bottom-left-radius: 0;
-
-      border-top: var(--form-element-border-width) solid var(--theme-error-surface);
-      border-right: var(--form-element-border-width) solid var(--theme-error-surface);
-      border-bottom: var(--form-element-border-width) solid var(--theme-error-surface);
-      border-left: var(--form-element-border-width) solid var(--theme-error-surface);
-    }
-
-    .slot {
+    /* .slot {
       display: grid;
       place-items: center;
       background-clip: padding-box;
@@ -287,7 +259,72 @@ onMounted(() => {
           }
         }
       }
+    } */
+  }
+
+  &[data-inputmode="numeric"] {
+    padding-inline: 0;
+  }
+
+  .slot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: content-box;
+
+    &.left-slot,
+    &.right-slot {
+      .icon {
+        width: 2.2rem;
+        height: 2.2rem;
+        margin: 1.3rem;
+      }
+
+      .input-button-core {
+        &.icon-only {
+          .btn-icon {
+            margin: 0;
+          }
+        }
+      }
     }
+
+    /*
+    &.left-slot:not([data-theme="input-action-underlined"]) {
+      .icon {
+        width: 2.2rem;
+        height: 2.2rem;
+      }
+
+      [data-theme="input-action-underlined"] {
+        width: initial;
+        height: initial;
+        padding: 0.5rem;
+
+        .icon {
+          width: 1.8rem;
+          height: 1.8rem;
+        }
+      }
+    }
+    &.right-slot:not([data-theme="input-action-underlined"]) {
+      .icon {
+        width: 2.2rem;
+        height: 2.2rem;
+      }
+
+      [data-theme="input-action-underlined"] {
+        width: initial;
+        height: initial;
+        padding: 0.5rem;
+
+        .icon {
+          width: 1.8rem;
+          height: 1.8rem;
+        }
+      }
+    }
+      */
   }
 
   .input-text-core {
@@ -295,11 +332,13 @@ onMounted(() => {
     touch-action: manipulation;
     flex-grow: 1;
 
+    color: var(--theme-input-text-color-normal);
     font-family: var(--font-family);
     font-size: var(--form-element-font-size);
     line-height: var(--form-element-line-height);
-    padding-block: var(--form-text-padding-block);
+    /* padding-block: var(--form-text-padding-block); */
     padding-inline: 1rem;
+    height: stretch;
 
     &::placeholder {
       color: var(--theme-input-placeholder);

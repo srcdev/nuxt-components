@@ -38,7 +38,7 @@
   /* Input text and placeholders */
   --theme-input-placeholder: var(--orange-8);
   --theme-input-placeholder-font-size: var(--step--1);
-  --theme-form-input-text-color-normal: var(--orange-12);
+  --theme-input-text-color-normal: var(--orange-12);
   --theme-form-input-outline: transparent;
 
   /* ===========================================
