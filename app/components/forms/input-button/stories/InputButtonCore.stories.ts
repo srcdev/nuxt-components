@@ -5,7 +5,7 @@ import StorybookComponent from "../InputButtonCore.vue";
 interface InputButtonCoreStoryArgs {
   type: "submit" | "button" | "reset";
   theme: "default" | "success" | "error" | "warning";
-  inputVariant: "primary" | "secondary" | "tertiary" | "inline";
+  variant: "primary" | "secondary" | "tertiary" | "inline";
   buttonText: string;
   styleClassPassthrough: string[];
   isPending: boolean;
@@ -71,7 +71,7 @@ export default {
         category: "Styling",
       },
     },
-    inputVariant: {
+    variant: {
       control: { type: "select" },
       options: ["primary", "secondary", "tertiary", "inline"],
       description: "Button variant/style",
@@ -194,12 +194,13 @@ export default {
   args: {
     type: "button",
     theme: "default",
-    inputVariant: "primary",
+    variant: "primary",
     buttonText: "Click me",
     styleClassPassthrough: [],
     isPending: false,
     hasPendingEffect: false,
     readonly: false,
+    isPill: false, // Ensure isPill is present and defaulted
     useLeftSlot: false,
     useRightSlot: false,
     useIconOnlySlot: false,
@@ -213,6 +214,11 @@ export default {
     rightIconName: "mdi:arrow-right",
     iconOnlyName: "mdi:flash",
   },
+  // NOTE: In your InputButtonCore.vue component, ensure you do NOT destructure props in <script setup>.
+  // Always use props.variant and props.isPill directly for reactivity.
+  // Example:
+  // const props = defineProps<{ variant: string; isPill: boolean; ... }>()
+  // // Use props.variant, props.isPill in template and script.
 } as Meta<typeof StorybookComponent>;
 
 const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
@@ -261,7 +267,6 @@ const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
 export const ButtonTextOnly = Template.bind({});
 ButtonTextOnly.args = {
   buttonText: "Button Text Only",
-  inputVariant: "primary",
   useLeftSlot: false,
   useRightSlot: false,
 };
@@ -269,7 +274,6 @@ ButtonTextOnly.args = {
 export const WithBothEmojiIcons = Template.bind({});
 WithBothEmojiIcons.args = {
   buttonText: "With Both Emoji Icons",
-  inputVariant: "primary",
   useLeftSlot: true,
   useRightSlot: true,
   leftSlotContent: "💸",
@@ -279,7 +283,6 @@ WithBothEmojiIcons.args = {
 export const WithBothNuxtIconComponents = Template.bind({});
 WithBothNuxtIconComponents.args = {
   buttonText: "With Both Nuxt Icon Components",
-  inputVariant: "primary",
   useLeftIcon: true,
   useRightIcon: true,
   leftIconName: "mdi:arrow-left",
@@ -289,7 +292,6 @@ WithBothNuxtIconComponents.args = {
 export const EmojiIconOnly = Template.bind({});
 EmojiIconOnly.args = {
   buttonText: "Emoji Icon Only Button",
-  inputVariant: "tertiary",
   useIconOnlySlot: true,
   iconOnlyContent: "⚡",
 };
@@ -297,7 +299,6 @@ EmojiIconOnly.args = {
 export const NuxtIconOnlyComponent = Template.bind({});
 NuxtIconOnlyComponent.args = {
   buttonText: "Nuxt Icon Only Button",
-  inputVariant: "tertiary",
   useIconOnly: true,
   iconOnlyName: "mdi:chevron-right-circle-outline",
 };
