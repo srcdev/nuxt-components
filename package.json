@@ -25,7 +25,9 @@
     "test:run": "vitest --run",
     "test:ui": "vitest --ui",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook-run-build": "npm run build-storybook && npx http-server storybook-static --port 6006",
+    "build-storybook": "storybook build",
+    "test:e2e": "npx playwright test && kill $!"
   },
   "files": [
     "app/",
@@ -49,6 +51,7 @@
     "@nuxtjs/i18n": "10.2.1",
     "@nuxtjs/storybook": "9.1.0-29374011.dab79ae",
     "@pinia/nuxt": "0.11.3",
+    "@playwright/test": "1.58.2",
     "@storybook/addon-a11y": "10.0.7",
     "@storybook/addon-docs": "10.0.7",
     "@storybook/builder-vite": "10.0.7",

@@ -50,7 +50,7 @@ export default defineNuxtConfig({
   fonts: {
     assets: {
       // The baseURL where font files are served.
-      prefix: "/public/_fonts/",
+      prefix: "/_fonts",
     },
     families: [
       {

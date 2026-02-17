@@ -1,4 +1,4 @@
-import type { StorybookConfig } from "@nuxtjs/storybook"
+import type { StorybookConfig } from "@nuxtjs/storybook";
 
 const config: StorybookConfig = {
   stories: ["../**/*.mdx", "../**/*.stories.ts"],
@@ -8,7 +8,7 @@ const config: StorybookConfig = {
     options: {},
   },
   async viteFinal(config) {
-    const { mergeConfig } = await import("vite")
+    const { mergeConfig } = await import("vite");
 
     return mergeConfig(config, {
       optimizeDeps: {
@@ -21,9 +21,35 @@ const config: StorybookConfig = {
         },
       },
       server: {
+        host: "127.0.0.1",
+        strictPort: true,
         proxy: {
-          // Enable Storybook to proxy Nuxt dev server assets
-          "^/(_nuxt|_ipx|_icon|__nuxt_devtools__|_fonts)": {
+          // Enable Storybook to proxy Nuxt dev server assets and fonts (explicit entries)
+          "/_nuxt": {
+            target: "http://localhost:3000",
+            changeOrigin: true,
+            secure: false,
+            ws: true,
+          },
+          "/_ipx": {
+            target: "http://localhost:3000",
+            changeOrigin: true,
+            secure: false,
+            ws: true,
+          },
+          "/_icon": {
+            target: "http://localhost:3000",
+            changeOrigin: true,
+            secure: false,
+            ws: true,
+          },
+          "/__nuxt_devtools__": {
+            target: "http://localhost:3000",
+            changeOrigin: true,
+            secure: false,
+            ws: true,
+          },
+          "/_fonts": {
             target: "http://localhost:3000",
             changeOrigin: true,
             secure: false,
@@ -31,8 +57,8 @@ const config: StorybookConfig = {
           },
         },
       },
-    })
+    });
   },
-}
+};
 
-export default config
+export default config;

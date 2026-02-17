@@ -264,8 +264,8 @@ const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
   `,
 });
 
-export const ButtonTextOnly = Template.bind({});
-ButtonTextOnly.args = {
+export const Default = Template.bind({});
+Default.args = {
   buttonText: "Button Text Only",
   useLeftSlot: false,
   useRightSlot: false,
