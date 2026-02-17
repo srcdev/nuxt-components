@@ -4,5 +4,6 @@ export default defineVitestConfig({
   test: {
     environment: "nuxt", // Use the Nuxt environment for tests
     globals: true, // Allows using describe, test, expect without imports
+    exclude: ["**/node_modules/**", "**/.nuxt/**", "**/playwright/**"], // Exclude unnecessary directories
   },
 });
