@@ -1,4 +1,6 @@
 :where(html) {
   --control-transition-duration: 240ms;
   --control-transition-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  /* Transition duration */
+  --theme-form-transition-duration: 0.2s;
 }

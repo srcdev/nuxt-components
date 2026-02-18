@@ -89,20 +89,8 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 <style lang="css">
 .input-textarea-wrapper {
   background-color: var(--theme-input-surface);
-  /*
-  outline: var(--form-element-outline-width) solid var(--theme-input-outline);
-
-  border-top-left-radius: var(--element-decorator-border-top-left-radius);
-  border-top-right-radius: var(--element-decorator-border-top-right-radius);
-  border-bottom-left-radius: var(--element-decorator-border-bottom-left-radius);
-  border-bottom-right-radius: var(--element-decorator-border-bottom-right-radius);
-
-  border-top: var(--element-decorator-border-top-default);
-  border-right: var(--element-decorator-border-right-default);
-  border-bottom: var(--element-decorator-border-bottom-default);
-  border-left: var(--element-decorator-border-left-default);
-*/
   padding-inline: var(--element-decorator-padding-inline);
+  transition: all var(--theme-form-transition-duration) ease-in-out;
 
   &:hover {
     /* background-color: lab(89.6502 -0.829279 -2.45323 / 0.1); */
@@ -151,7 +139,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     color: var(--theme-input-text-color-normal);
     font-family: var(--font-family);
     font-size: var(--form-element-font-size);
-    line-height: var(--form-element-line-height);
+    line-height: var(--input-textarea-line-height);
     padding-block: var(--form-text-padding-block);
     padding-inline: var(--form-text-padding-inline);
 

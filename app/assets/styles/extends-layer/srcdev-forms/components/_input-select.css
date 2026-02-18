@@ -85,8 +85,10 @@
       }
 
       &::picker(select) {
-        transition: display allow-discrete var(--theme-form-transition-duration),
-          opacity var(--theme-form-transition-duration), overlay var(--theme-form-transition-duration) allow-discrete;
+        transition:
+          display allow-discrete var(--theme-form-transition-duration),
+          opacity var(--theme-form-transition-duration),
+          overlay var(--theme-form-transition-duration) allow-discrete;
       }
 
       &:not(:open)::picker(select) {
@@ -116,7 +118,7 @@
 
       font-family: var(--font-family);
       font-size: var(--form-element-font-size);
-      line-height: var(--form-element-line-height);
+      line-height: var(--input-element-line-height);
       padding-block: 1.5rem;
       padding-inline: 1rem;
 

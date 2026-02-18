@@ -69,21 +69,18 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
 <style lang="css">
 .input-select-wrapper {
-  /* background-color: var(--theme-input-surface); */
-  /* outline: var(--form-element-outline-width) solid var(--theme-input-outline); */
-
-  /* border-top-left-radius: var(--element-decorator-border-top-left-radius);
-  border-top-right-radius: var(--element-decorator-border-top-right-radius);
-  border-bottom-left-radius: var(--element-decorator-border-bottom-left-radius);
-  border-bottom-right-radius: var(--element-decorator-border-bottom-right-radius);
-
-  border-top: var(--element-decorator-border-top-default);
-  border-right: var(--element-decorator-border-right-default);
-  border-bottom: var(--element-decorator-border-bottom-default);
-  border-left: var(--element-decorator-border-left-default); */
-
-  border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-input-border);
   background-color: var(--theme-input-surface);
+
+  &.normal {
+    border: var(--form-element-border-width) solid var(--theme-input-border);
+    border-radius: var(--form-input-border-radius);
+    outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+  }
+
+  &.underlined {
+    border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-input-border);
+    background-color: var(--theme-input-surface);
+  }
 
   .input-select-core {
     appearance: none;
@@ -138,13 +135,14 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
     font-family: var(--font-family);
     font-size: var(--form-element-font-size);
-    line-height: var(--form-element-line-height);
-    padding-block: 1.5rem;
-    padding-inline: 1rem;
+    line-height: var(--input-element-line-height);
+    padding-block: var(--input-padding-block);
+    padding-inline: var(--input-padding-inline);
 
     .input-select-core-option {
-      padding-block: 1rem;
-      padding-inline: 1.75rem;
+      padding-block: var(--input-select-option-padding-block);
+      padding-inline: var(--input-select-option-padding-inline);
+      line-height: var(--input-select-option-line-height);
       gap: 1.5rem;
       transition: all var(--theme-form-transition-duration) ease-in-out;
 

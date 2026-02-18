@@ -144,7 +144,7 @@ const flexDirection = ref(props.direction);
     color: var(--theme-checkbox-label-text-color);
     font-size: var(--form-element-font-size);
     width: 100%;
-    min-height: var(--form-element-line-height);
+    min-height: var(--input-element-line-height);
     align-items: center;
     justify-content: center;
     padding-block: 0.8rem;

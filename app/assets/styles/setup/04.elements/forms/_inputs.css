@@ -6,7 +6,7 @@ select {
   border: 1px solid var(--theme-input-border);
 }
 
-input::placeholder {
+/* input::placeholder {
   color: var(--theme-input-placeholder);
 }
 
@@ -24,4 +24,4 @@ input:disabled {
   background: var(--theme-input-surface-disabled);
   border-color: var(--theme-input-border-disabled);
   color: var(--theme-input-text-disabled);
-}
+} */

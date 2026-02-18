@@ -154,13 +154,40 @@ updateElementClasses(["input-text-as-number", "has-left-button", "has-right-butt
 .input-text-as-number {
   .input-text-wrapper {
     width: fit-content;
+    padding-inline: 0;
 
     &:has(.input-text-as-number) {
-      .left-slot {
+      .slot {
         margin-inline: 0;
-      }
-      .right-slot {
-        margin-inline: 0;
+
+        .input-button-core {
+          background-color: var(--theme-input-surface);
+          aspect-ratio: 1;
+          border-radius: 0;
+          padding: 1.5rem;
+
+          &:hover {
+            background-color: var(--theme-input-surface-hover);
+          }
+
+          &.icon-only {
+            .btn-icon {
+              margin: 0;
+            }
+          }
+        }
+
+        &.left-slot {
+          .input-button-core {
+            border-right: var(--form-element-border-width) solid var(--theme-input-border);
+          }
+        }
+
+        &.right-slot {
+          .input-button-core {
+            border-left: var(--form-element-border-width) solid var(--theme-input-border);
+          }
+        }
       }
     }
 

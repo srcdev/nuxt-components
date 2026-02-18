@@ -1,6 +1,6 @@
 :where(html) {
   /* Padding */
-  --input-padding-block: 1rem; /* 10px */
+  --input-padding-block: 0rem; /* 10px */
   --input-padding-inline: 1.2rem; /* 12px */
 
   /* With slots */
@@ -19,4 +19,15 @@
 
   /* Min height */
   --input-min-height: 4rem; /* ~40px tap target */
+  --input-element-line-height: 3.1;
+
+  /* Element specific */
+
+  /* Textarea */
+  --input-textarea-line-height: 1.75;
+
+  /* Select */
+  --input-select-option-line-height: 2;
+  --input-select-option-padding-block: 0.6rem;
+  --input-select-option-padding-inline: 1.75rem;
 }

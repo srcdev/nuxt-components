@@ -50,7 +50,7 @@
       display: inline-block;
       white-space: nowrap;
       font-size: var(--form-element-font-size);
-      line-height: var(--form-element-line-height);
+      line-height: var(--input-element-line-height);
     }
 
     .btn-icon {

@@ -54,7 +54,7 @@
     .input-checkbox-radio-options-button-label {
       color: var(--theme-checkbox-label-text-color);
       font-size: var(--form-element-font-size);
-      min-height: var(--form-element-line-height);
+      min-height: var(--input-element-line-height);
       padding-block: 0.8rem;
       padding-inline: 0.8rem;
 
