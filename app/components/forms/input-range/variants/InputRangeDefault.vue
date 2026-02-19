@@ -32,7 +32,7 @@
           :is-pending="false"
           button-text="Step down"
           :theme
-          size="x-small"
+          variant="secondary"
           @click.stop.prevent="updateRange(-step, Number(modelValue) > min)"
         >
           <template #iconOnly>
@@ -47,7 +47,7 @@
           :is-pending="false"
           button-text="Step up"
           :theme
-          size="x-small"
+          variant="secondary"
           @click.stop.prevent="updateRange(step, Number(modelValue) < max)"
         >
           <template #iconOnly>

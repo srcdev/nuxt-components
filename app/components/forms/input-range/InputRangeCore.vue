@@ -75,13 +75,6 @@ const modelValue = defineModel<number | readonly number[]>();
 
 <style lang="css">
 .input-range-wrapper {
-  --_gutter: 1.2rem;
-  --_border-width: var(--form-element-border-width);
-  --_outline-width: var(--form-element-outline-width);
-
-  --_input-range-height: 2.4rem;
-  --_slot-translate-y: calc(var(--_input-range-height) / 4);
-
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -89,7 +82,16 @@ const modelValue = defineModel<number | readonly number[]>();
 
   .slot {
     align-self: flex-start;
-    transform: translateY(-4px);
+
+    .input-button-core {
+      border-radius: var(--form-input-border-radius);
+      width: var(--input-range-button-size);
+      height: var(--input-range-button-size);
+
+      .btn-icon {
+        margin: initial;
+      }
+    }
   }
 
   .input-range-container {
@@ -97,6 +99,7 @@ const modelValue = defineModel<number | readonly number[]>();
 
     display: grid;
     grid-template-areas: "element-stack";
+    /* margin-top: 2px; */
 
     .input-range-markers {
       grid-area: element-stack;
@@ -129,7 +132,7 @@ const modelValue = defineModel<number | readonly number[]>();
       grid-area: element-stack;
 
       accent-color: var(--theme-form-range-accent-color);
-      height: var(--_input-range-height);
+      height: var(--input-range-button-size);
       margin: 0;
       width: 100%;
 
@@ -168,13 +171,13 @@ const modelValue = defineModel<number | readonly number[]>();
       /* For Chrome, Safari, Opera, and Edge */
       /* &::-webkit-slider-runnable-track {
         background: var(--theme-form-range-accent-color);
-        height: var(--_input-range-height);
+        height: var(--input-range-button-size);
       } */
 
       /* For Firefox */
       /* &::-moz-range-track {
         background: var(--theme-form-range-accent-color);
-        height: var(--_input-range-height);
+        height: var(--input-range-button-size);
       } */
 
       /* Stling the thumb */
@@ -206,7 +209,6 @@ const modelValue = defineModel<number | readonly number[]>();
         translate: 0 13px;
 
         &::-webkit-slider-thumb {
-          /* display: none; */
           opacity: 0;
           &:hover {
             cursor: pointer;
@@ -224,6 +226,7 @@ const modelValue = defineModel<number | readonly number[]>();
       justify-content: space-between;
       writing-mode: vertical-lr;
       width: 100%;
+
       option {
         padding: 0;
       }
