@@ -136,6 +136,9 @@ onMounted(() => {
   overflow: hidden;
   transition: all var(--theme-form-transition-duration) ease-in-out;
 
+  z-index: 2;
+  position: relative;
+
   &:has(.input-text-core:is(:hover, :focus-visible)) {
     background-color: var(--theme-input-surface-hover);
   }

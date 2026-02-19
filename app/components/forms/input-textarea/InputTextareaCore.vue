@@ -92,6 +92,9 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   padding-inline: var(--element-decorator-padding-inline);
   transition: all var(--theme-form-transition-duration) ease-in-out;
 
+  z-index: 2;
+  position: relative;
+
   &:hover {
     /* background-color: lab(89.6502 -0.829279 -2.45323 / 0.1); */
     background-color: var(--theme-input-surface-hover);

@@ -71,11 +71,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   border-radius: 0;
 
   border: var(--form-element-border-width) solid transparent;
-  border-radius: 0;
 
   background-clip: padding-box;
 
-  translate: 0 calc(-1 * var(--form-element-border-width));
+  translate: 0 calc(-1 * calc(var(--form-element-border-width) + var(--form-input-border-radius)));
 
   margin-block-start: var(--input-error-margin-block-start);
 
@@ -87,10 +86,13 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     grid-template-rows: 1fr;
     display: grid;
 
-    border: var(--form-element-border-width) solid var(--theme-error-surface);
-    border-bottom-left-radius: var(--form-input-border-radius-underlined);
-    border-bottom-right-radius: var(--form-input-border-radius-underlined);
-    outline: var(--form-element-outline-width) solid var(--theme-error-surface);
+    border: var(--form-element-border-width) solid var(--theme-error-border);
+    outline: var(--form-element-outline-width) solid var(--theme-error-outline);
+
+    &:not(.underlined) {
+      border-bottom-left-radius: var(--form-input-border-radius);
+      border-bottom-right-radius: var(--form-input-border-radius);
+    }
 
     &.detached {
       margin-block-start: 2rem;
@@ -132,11 +134,11 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
         font-family: var(--font-family);
         font-size: 1.6rem;
         font-weight: 500;
-        padding-block: 1.2rem 1rem;
+        /* padding-block: calc(1.2rem + var(--form-input-border-radius)) 1rem; */
         padding-inline: 1.2rem;
 
         .message-single {
-          color: white;
+          color: var(--input-error-color);
         }
 
         .message-list {
@@ -151,6 +153,50 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
           .message-list-item + .message-list-item {
             margin-block-start: 0.6rem;
+          }
+        }
+      }
+    }
+  }
+
+  /* Modifiers for input variants: */
+
+  &:is(.detached) {
+    &.normal {
+      .inner {
+        /* padding-block-start: calc(var(--form-element-border-width) + var(--form-input-border-radius)); */
+        /* padding-block-start: var(--form-input-border-radius); */
+
+        .inner-content {
+          .message {
+            padding-block: 1.2rem 1rem;
+          }
+        }
+      }
+    }
+  }
+
+  &:not(.detached) {
+    &.normal {
+      .inner {
+        /* padding-block-start: calc(var(--form-element-border-width) + var(--form-input-border-radius)); */
+        padding-block-start: var(--form-input-border-radius);
+
+        .inner-content {
+          .message {
+            padding-block: 1.2rem 1rem;
+          }
+        }
+      }
+    }
+    &.underlined {
+      .inner {
+        /* padding-block-start: calc(var(--form-element-border-width) + var(--form-input-border-radius)); */
+        /* padding-block-start: var(--form-input-border-radius); */
+
+        .inner-content {
+          .message {
+            padding-block: 1rem 1rem;
           }
         }
       }

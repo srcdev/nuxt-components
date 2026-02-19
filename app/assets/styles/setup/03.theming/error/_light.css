@@ -17,11 +17,17 @@
   --colour-theme-11: var(--red-11);
   --colour-theme-12: var(--red-12);
 
+  /* Form error messaging */
+  --input-error-color: white;
+  --theme-error-surface: var(--red-6);
+  --theme-error-border: var(--red-6);
+  --theme-error-outline: var(--red-1);
+
   /* ===========================================
      FORM INPUT VARIABLES
      Styling for form inputs and controls
      =========================================== */
-  --theme-input-border: var(--red-5);
+  --theme-input-border: var(--red-6);
   --theme-input-border-focus: var(--red-4);
   --theme-input-focus-ring: var(--red-4);
   --theme-input-border-hover: var(--red-4);

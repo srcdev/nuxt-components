@@ -72,6 +72,9 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
   background-color: var(--theme-input-surface);
   overflow: hidden;
 
+  z-index: 2;
+  position: relative;
+
   &.normal {
     border: var(--form-element-border-width) solid var(--theme-input-border);
     border-radius: var(--form-input-border-radius);
