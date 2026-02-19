@@ -90,6 +90,7 @@
                     <FormField v-if="countriesData !== null" width="wide" :has-gutter="false">
                       <template #default>
                         <InputSelectWithLabel
+                          id="countrySelect"
                           v-model="state.countrySelect"
                           v-model:field-data="countriesData"
                           name="countrySelect"

@@ -6,7 +6,7 @@
     :data-size="size"
     :class="[inputVariant, size, { dirty: isDirty }, { active: isActive }, { error: fieldHasError }]"
   >
-    <select :id v-model="modelValue" class="input-select-core" :name :title>
+    <select :id v-model="modelValue" :aria-invalid="fieldHasError" class="input-select-core" :name :title>
       <option v-if="placeholder" value="" readonly :selected="!modelValue" class="input-select-core-option placeholder">
         {{ placeholder }}
       </option>

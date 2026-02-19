@@ -6,9 +6,15 @@
   /* With slots */
   --input-padding-inline-with-icon: 3.2rem;
 
-  /* Border */
-  /* --input-border-width: 0.1rem; */
-  /* --input-border-radius: 0.8rem; */
+  /* Border settings */
+  --form-element-border-width: 0.1rem;
+  --form-element-border-bottom-width-underlined: 0.3rem;
+  --form-input-border-radius: 0.54rem;
+  --form-input-border-radius-underlined: 0.25rem;
+
+  /* Outline settings */
+  --form-element-outline-width: 0.1rem;
+  --form-element-outline-offset-focus: 0.2rem;
 
   /* Focus */
   --input-focus-ring-width: 0.2rem; /* 2px */
@@ -37,4 +43,5 @@
   /* Checkboxes and Radio buttons */
   --input-checked-element-size: 3rem;
   --input-checked-icon-size: 2.6rem;
+  --input-checkbox-decorator-icon-size: 1.2rem;
 }

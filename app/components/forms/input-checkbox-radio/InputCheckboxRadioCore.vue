@@ -103,7 +103,6 @@ const inputClasses = computed(() => [
   background-color: var(--theme-checkbox-symbol-surface);
   border: 0.1rem solid var(--theme-input-border);
   outline: var(--form-element-outline-width) solid var(--theme-input-outline);
-  box-shadow: var(--_box-shadow);
 
   height: var(--input-checked-element-size);
   width: var(--input-checked-element-size);

@@ -163,8 +163,25 @@ const flexDirection = ref(props.direction);
     color: var(--theme-checkbox-decorator-color);
 
     .icon {
-      height: var(--theme-checkbox-decorator-icon-size);
-      width: var(--theme-checkbox-decorator-icon-size);
+      height: var(--input-checkbox-decorator-icon-size);
+      width: var(--input-checkbox-decorator-icon-size);
+    }
+  }
+
+  .input-checkbox-radio-wrapper {
+    width: calc(var(--input-checked-icon-size) - 0.6rem);
+    height: calc(var(--input-checked-icon-size) - 0.6rem);
+
+    .input-checked-icon-slot {
+      .input-checked-icon-checked {
+        width: calc(var(--input-checked-icon-size) - 0.8rem);
+        height: calc(var(--input-checked-icon-size) - 0.8rem);
+      }
+    }
+
+    .input-checkbox-radio-core {
+      width: calc(var(--input-checked-icon-size) - 0.6rem);
+      height: calc(var(--input-checked-icon-size) - 0.6rem);
     }
   }
 }

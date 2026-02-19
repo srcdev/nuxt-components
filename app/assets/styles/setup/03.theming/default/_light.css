@@ -56,6 +56,8 @@
   --theme-input-text-disabled: var(--blue-6);
 
   --theme-checkbox-symbol-color: var(--blue-8);
+  --theme-checkbox-symbol-surface: var(--gray-0);
+  --theme-checkbox-decorator-color: var(--blue-8);
 
   /* ===========================================
      FORM BUTTON VARIABLES
