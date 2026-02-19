@@ -4,7 +4,7 @@
   --control-border-radius: 0.4rem; /* checkbox only */
 
   /* Radio */
-  --radio-border-radius: 50%;
+  --radio-border-radius: 100vw;
 
   /* Border */
   --control-border-width: 0.1rem;

@@ -44,4 +44,11 @@
   --input-checked-element-size: 3rem;
   --input-checked-icon-size: 2.6rem;
   --input-checkbox-decorator-icon-size: 1.2rem;
+
+  /* Toggle Switch */
+  --input-toggle-wrapper-padding: 0.1rem;
+  --input-toggle-symbol-size: 3rem;
+  --input-toggle-symbol-margin: 0.1rem;
+  --input-toggle-symbol-border-width: 0.1rem;
+  --input-toggle-symbol-outline-width: 0.1rem;
 }
