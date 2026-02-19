@@ -66,6 +66,7 @@ const id = useId();
 
   display: flex;
   align-items: center;
+  min-height: var(--input-min-height);
 
   transition: all var(--theme-form-transition-duration) ease-in-out;
 
@@ -75,12 +76,12 @@ const id = useId();
 
   .input-checkbox-radio-label {
     display: flex;
-    width: 100%;
-    height: 100%;
+    /* width: 100%; */
+    /* height: 100%; */
     align-items: center;
     margin-block: 0.8rem;
     padding-inline: 0.8rem;
-    white-space: var(--_white-space);
+    white-space: nowrap;
 
     &:hover {
       cursor: pointer;

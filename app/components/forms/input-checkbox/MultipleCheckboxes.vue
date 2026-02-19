@@ -132,8 +132,7 @@ const ariaDescribedby = computed(() => {
 
 <style lang="css">
 .multiple-checkboxes-items {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  display: flex;
   gap: 1.2rem;
   margin-top: 1.2rem;
 
@@ -148,7 +147,9 @@ const ariaDescribedby = computed(() => {
 
   &.equal-widths {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    /* grid-auto-flow: column; */
+
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   }
 }
 </style>

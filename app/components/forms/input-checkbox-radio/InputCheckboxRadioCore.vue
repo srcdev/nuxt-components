@@ -81,7 +81,6 @@ const wrapperClasses = computed(() => [
   props.size,
   elementClasses.value,
   {
-    error: props.fieldHasError,
     button: props.isButton,
     "display-as-disc": props.displayAsDisc,
   },
@@ -90,7 +89,6 @@ const wrapperClasses = computed(() => [
 const inputClasses = computed(() => [
   props.size,
   {
-    error: props.fieldHasError,
     "is-button": props.isButton,
   },
 ]);

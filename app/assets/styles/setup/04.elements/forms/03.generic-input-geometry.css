@@ -33,4 +33,8 @@
 
   /* Range */
   --input-range-button-size: 2.8rem;
+
+  /* Checkboxes and Radio buttons */
+  --input-checked-element-size: 3rem;
+  --input-checked-icon-size: 2.6rem;
 }

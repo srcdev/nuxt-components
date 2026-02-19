@@ -449,7 +449,7 @@
                           </template>
                           <template #description>
                             <p class="label-description">
-                              NOTE: Custom chefck icon set via slot
+                              NOTE: Custom check icon set via slot
                               <br />
                               This is description: optionsLayout = 'equal-widths/inline'
                             </p>

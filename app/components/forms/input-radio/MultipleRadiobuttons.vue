@@ -138,7 +138,7 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
   &.equal-widths {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-auto-flow: column;
   }
 }
 </style>
