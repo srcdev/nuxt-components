@@ -9,6 +9,7 @@
     "willofindie.vscode-cssvar",
     "vitest.explorer",
     "esbenp.prettier-vscode",
-    "formulahendry.auto-rename-tag"
+    "formulahendry.auto-rename-tag",
+    "anthropic.claude-code"
   ]
 }
