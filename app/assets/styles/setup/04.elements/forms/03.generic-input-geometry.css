@@ -27,7 +27,7 @@
   --input-textarea-line-height: 1.75;
 
   /* Select */
-  --input-select-option-line-height: 2;
-  --input-select-option-padding-block: 0.6rem;
+  --input-select-option-min-height: 3.6rem;
+  --input-select-option-padding-block: 0rem;
   --input-select-option-padding-inline: 1.75rem;
 }

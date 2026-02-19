@@ -70,6 +70,7 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 <style lang="css">
 .input-select-wrapper {
   background-color: var(--theme-input-surface);
+  overflow: hidden;
 
   &.normal {
     border: var(--form-element-border-width) solid var(--theme-input-border);
@@ -138,11 +139,10 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
     line-height: var(--input-element-line-height);
     padding-block: var(--input-padding-block);
     padding-inline: var(--input-padding-inline);
+    min-height: var(--input-min-height);
 
     .input-select-core-option {
-      padding-block: var(--input-select-option-padding-block);
-      padding-inline: var(--input-select-option-padding-inline);
-      line-height: var(--input-select-option-line-height);
+      min-height: var(--input-select-option-min-height);
       gap: 1.5rem;
       transition: all var(--theme-form-transition-duration) ease-in-out;
 
