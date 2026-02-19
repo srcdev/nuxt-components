@@ -642,6 +642,8 @@
 <script setup lang="ts">
 import { z } from "zod";
 import type { IFormMultipleOptions, FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms";
+// Inline fallback for ReturnTypeUseZodValidation if not exported
+type ReturnTypeUseZodValidation = ReturnType<typeof useZodValidation>;
 
 definePageMeta({
   layout: false,
@@ -707,98 +709,111 @@ const { data: tagsData } = await useFetch<IFormMultipleOptions>("/api/recipes/ta
 /*
  * Setup forms
  */
-const formSchema = reactive(
-  z
-    .object({
-      emailAddress: z
-        .string({
-          error: (issue) =>
-            issue.input === undefined ? "Email address is required" : "Email address must be a string",
-        })
-        .email({ error: "Invalid email address" })
-        .refine((email) => email !== zodFormControl.previousState.emailAddress.value, {
+const formSchema = z
+  .object({
+    emailAddress: z
+      .string({
+        error: (issue) => (issue.input === undefined ? "Email address is required" : "Email address must be a string"),
+      })
+      .email({ error: "Invalid email address" })
+      .refine(
+        (email) => {
+          // Defensive: previousState may be undefined on first run
+          return email !== (zodFormControl?.previousState?.emailAddress?.value ?? "");
+        },
+        {
           error: "This email address has already been used",
-        }),
-      username: z
-        .string({
-          error: (issue) => (issue.input === undefined ? "Username is required" : "Username must be a string"),
-        })
-        .trim()
-        .min(2, "Username is too short")
-        .max(25, "Username is too long")
-        .refine((email) => email !== zodFormControl.previousState.username.value, {
+        }
+      ),
+    username: z
+      .string({
+        error: (issue) => (issue.input === undefined ? "Username is required" : "Username must be a string"),
+      })
+      .trim()
+      .min(2, "Username is too short")
+      .max(25, "Username is too long")
+      .refine(
+        (username) => {
+          return username !== (zodFormControl?.previousState?.username?.value ?? "");
+        },
+        {
           error: "This username has already been used",
-        }),
-      password: z
-        .string()
-        .trim()
-        .min(8, "Password is too short")
-        .max(25, "Password is too long")
-        .refine((email) => email !== zodFormControl.previousState.password.value, {
+        }
+      ),
+    password: z
+      .string()
+      .trim()
+      .min(8, "Password is too short")
+      .max(25, "Password is too long")
+      .refine(
+        (password) => {
+          return password !== (zodFormControl?.previousState?.password?.value ?? "");
+        },
+        {
           error: "You've already used this password",
-        }),
-      message: z.string().trim().min(2, "Message is too short").max(255, "Message is too long"),
-      count: z
-        .number({
-          error: (issue) => (issue.input === undefined ? "Count is required" : "Count must be a number"),
-        })
-        .int({ error: "Count must be a whole number" })
-        .gte(25, "Count must be between 25 and 75")
-        .lte(75, "Count must be between 25 and 75")
-        .multipleOf(5, "Count must be a multiple of 5"),
-      count2: z
-        .number({
-          error: (issue) => (issue.input === undefined ? "Count is required" : "Count must be a number"),
-        })
-        .int({ error: "Count must be a whole number" })
-        .gte(25, "Count must be between 25 and 75")
-        .lte(75, "Count must be between 25 and 75"),
-      score: z
-        .number({
-          error: (issue) => (issue.input === undefined ? "Score is required" : "Score must be a number"),
-        })
-        .gte(0)
-        .lte(100),
-      cities: z.array(z.string()).min(1, "Please select at least one city"),
-      countries: z
-        .array(z.string())
-        .min(2, "Please select at least 2 countries")
-        .max(5, "Please select no more than 5 countries"),
-      countrySelect: z.string().min(1, { error: "Please select a country" }),
-      tags: z.array(z.string()).min(3, "Please select at least 3 tags").max(8, "Please select no more than 8 tags"),
-      tagsRadio: z.string().min(1, { error: "Please choose a tag" }),
-      darkMode: z.string().min(1, { error: "Please choose a mode" }),
-      title: z.string().min(1, { error: "Title is required" }),
-      otherTitle: z.string().min(1, { error: "Title is required" }),
-      toggleBoolean: z.boolean().refine((val) => val === true, { error: "You must tick this box" }),
-      agreed: z.boolean().refine((val) => val === true, { error: "You must tick this box" }),
-      agree: z.boolean().refine((val) => val === true, { error: "You must tick this box" }),
-      terms: z.boolean().refine((val) => val === true, { error: "You must accept our terms" }),
-    })
-    .required({
-      emailAddress: true,
-      username: true,
-      password: true,
-      message: true,
-      count: true,
-      count2: true,
-      score: true,
-      cities: true,
-      countries: true,
-      countrySelect: true,
-      tags: true,
-      tagsRadio: true,
-      title: true,
-      otherTitle: true,
-      toggleBoolean: true,
-      agreed: true,
-      agree: true,
-      terms: true,
-    })
-);
+        }
+      ),
+    message: z.string().trim().min(2, "Message is too short").max(255, "Message is too long"),
+    count: z
+      .number({
+        error: (issue) => (issue.input === undefined ? "Count is required" : "Count must be a number"),
+      })
+      .int({ error: "Count must be a whole number" })
+      .gte(25, "Count must be between 25 and 75")
+      .lte(75, "Count must be between 25 and 75")
+      .multipleOf(5, "Count must be a multiple of 5"),
+    count2: z
+      .number({
+        error: (issue) => (issue.input === undefined ? "Count is required" : "Count must be a number"),
+      })
+      .int({ error: "Count must be a whole number" })
+      .gte(25, "Count must be between 25 and 75")
+      .lte(75, "Count must be between 25 and 75"),
+    score: z
+      .number({
+        error: (issue) => (issue.input === undefined ? "Score is required" : "Score must be a number"),
+      })
+      .gte(0)
+      .lte(100),
+    cities: z.array(z.string()).min(1, "Please select at least one city"),
+    countries: z
+      .array(z.string())
+      .min(2, "Please select at least 2 countries")
+      .max(5, "Please select no more than 5 countries"),
+    countrySelect: z.string().min(1, { error: "Please select a country" }),
+    tags: z.array(z.string()).min(3, "Please select at least 3 tags").max(8, "Please select no more than 8 tags"),
+    tagsRadio: z.string().min(1, { error: "Please choose a tag" }),
+    darkMode: z.string().min(1, { error: "Please choose a mode" }),
+    title: z.string().min(1, { error: "Title is required" }),
+    otherTitle: z.string().min(1, { error: "Title is required" }),
+    toggleBoolean: z.boolean().refine((val) => val === true, { error: "You must tick this box" }),
+    agreed: z.boolean().refine((val) => val === true, { error: "You must tick this box" }),
+    agree: z.boolean().refine((val) => val === true, { error: "You must tick this box" }),
+    terms: z.boolean().refine((val) => val === true, { error: "You must accept our terms" }),
+  })
+  .required({
+    emailAddress: true,
+    username: true,
+    password: true,
+    message: true,
+    count: true,
+    count2: true,
+    score: true,
+    cities: true,
+    countries: true,
+    countrySelect: true,
+    tags: true,
+    tagsRadio: true,
+    title: true,
+    otherTitle: true,
+    toggleBoolean: true,
+    agreed: true,
+    agree: true,
+    terms: true,
+  });
 
-type formSchema = z.infer<typeof formSchema>;
-const formErrors = computed<z.ZodFormattedError<formSchema> | null>(() => zodErrorObj.value);
+type FormSchema = z.infer<typeof formSchema>;
+const formErrors = computed<z.ZodFormattedError<FormSchema> | null>(() => zodErrorObj.value);
 
 const state = reactive({
   emailAddress: "",
@@ -825,17 +840,18 @@ const state = reactive({
 
 const formRef = ref<HTMLFormElement | null>(null);
 
+// If you don't have this type, you can define it inline as:
+// type ReturnTypeUseZodValidation = ReturnType<typeof useZodValidation>;
+
 const {
   initZodForm,
   zodFormControl,
   zodErrorObj,
-  // formErrors,
   pushCustomErrors,
   doZodValidate,
   fieldMaxLength,
   scrollToFirstError,
-  // scrollToFormHead,
-} = useZodValidation(formSchema, formRef);
+} = useZodValidation<typeof formSchema>(formSchema, formRef) as ReturnTypeUseZodValidation;
 
 initZodForm();
 
