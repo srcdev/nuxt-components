@@ -167,7 +167,7 @@ onMounted(() => {
       background-color: var(--theme-input-surface);
       aspect-ratio: 1;
       border-radius: 0;
-      padding: 1.5rem;
+      width: var(--input-min-height);
 
       &:hover {
         background-color: var(--theme-input-surface-hover);
@@ -189,9 +189,13 @@ onMounted(() => {
     color: var(--theme-input-text-color-normal);
     font-family: var(--font-family);
     font-size: var(--form-element-font-size);
-    line-height: var(--input-element-line-height);
-    padding-inline: 1rem;
-    height: stretch;
+
+    /* line-height: var(--input-element-line-height); */
+
+    padding-block: var(--input-padding-block);
+    padding-inline: var(--input-padding-inline);
+    /* height: stretch; */
+    min-height: var(--input-min-height);
 
     &::placeholder {
       color: var(--theme-input-placeholder);

@@ -162,9 +162,6 @@ updateElementClasses(["input-text-as-number", "has-left-button", "has-right-butt
 
         .input-button-core {
           background-color: var(--theme-input-surface);
-          aspect-ratio: 1;
-          border-radius: 0;
-          padding: 1.5rem;
 
           &:hover {
             background-color: var(--theme-input-surface-hover);
