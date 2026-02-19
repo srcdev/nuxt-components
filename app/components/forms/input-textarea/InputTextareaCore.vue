@@ -96,7 +96,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   position: relative;
 
   &:hover {
-    /* background-color: lab(89.6502 -0.829279 -2.45323 / 0.1); */
     background-color: var(--theme-input-surface-hover);
   }
 
