@@ -441,7 +441,7 @@
                           placeholder="eg. Type something here"
                           :error-message="formErrors?.title?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.title)"
-                          options-layout="equal-widths"
+                          options-layout="inline"
                           :theme
                           :size
                         >
@@ -452,7 +452,7 @@
                             <p class="label-description">
                               NOTE: Custom check icon set via slot
                               <br />
-                              This is description: optionsLayout = 'equal-widths/inline'
+                              This is description: optionsLayout = 'inline'
                             </p>
                           </template>
                         </MultipleRadiobuttons>
@@ -476,7 +476,7 @@
                           :size
                         >
                           <template #description>
-                            <p class="label-description">This is description: optionsLayout = 'equal-widths/inline'</p>
+                            <p class="label-description">This is description: optionsLayout = 'equal-widths'</p>
                           </template>
                         </MultipleRadiobuttons>
                       </template>
@@ -657,7 +657,7 @@ useHead({
   },
 });
 
-const inputVariant = ref<InputUiVariant>("underlined");
+const inputVariant = ref<InputUiVariant>("normal");
 // const inputVariantData = ref<IFormMultipleOptions>({
 //   data: [
 //     {

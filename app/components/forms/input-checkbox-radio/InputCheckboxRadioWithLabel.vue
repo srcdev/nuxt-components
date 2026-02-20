@@ -76,12 +76,10 @@ const id = useId();
 
   .input-checkbox-radio-label {
     display: flex;
-    /* width: 100%; */
-    /* height: 100%; */
+    flex: 1;
     align-items: center;
-    margin-block: 0.8rem;
-    padding-inline: 0.8rem;
-    white-space: nowrap;
+    padding: var(--input-checkbox-label-padding);
+    /* white-space: nowrap; */
 
     &:hover {
       cursor: pointer;

@@ -13,7 +13,7 @@
     </template>
 
     <template #content>
-      <div class="multiple-radiobuttons-items" :class="[optionsLayout]">
+      <div ref="itemsContainer" class="multiple-radiobuttons-items" :class="[optionsLayout]">
         <template v-for="item in fieldData.data" :key="item.id">
           <InputCheckboxRadioButton
             v-if="isButton"
@@ -119,6 +119,22 @@ const ariaDescribedby = computed(() => {
 
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
 const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
+
+const { maxChildWidth, itemsContainer, updateMaxChildWidth } = useMaxChildWidth(
+  ".input-checkbox-radio-label, .input-checkbox-radio-with-label-label",
+  "100px"
+);
+
+onMounted(() => {
+  updateMaxChildWidth();
+});
+
+watch(
+  () => fieldData.value.data,
+  () => {
+    nextTick(updateMaxChildWidth);
+  }
+);
 </script>
 
 <style lang="css">
@@ -138,7 +154,10 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
   &.equal-widths {
     display: grid;
-    grid-auto-flow: column;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(calc((2 * var(--input-checkbox-label-padding)) + v-bind(maxChildWidth)), 1fr)
+    );
   }
 }
 </style>

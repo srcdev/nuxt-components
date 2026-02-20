@@ -18,7 +18,7 @@
     </InputDescription>
 
     <template #content>
-      <div class="multiple-checkboxes-items" :class="[optionsLayout]">
+      <div ref="itemsContainer" class="multiple-checkboxes-items" :class="[optionsLayout]">
         <template v-for="item in fieldData.data" :key="item.id">
           <InputCheckboxRadioButton
             v-if="isButton"
@@ -128,6 +128,22 @@ const ariaDescribedby = computed(() => {
   const ariaDescribedbyId = slots.descriptionText || slots.descriptionHtml ? `${id}-description` : undefined;
   return props.fieldHasError ? errorId : ariaDescribedbyId;
 });
+
+const { maxChildWidth, itemsContainer, updateMaxChildWidth } = useMaxChildWidth(
+  ".input-checkbox-radio-label, .input-checkbox-radio-with-label",
+  "100px"
+);
+
+onMounted(() => {
+  updateMaxChildWidth();
+});
+
+watch(
+  () => fieldData.value.data,
+  () => {
+    nextTick(updateMaxChildWidth);
+  }
+);
 </script>
 
 <style lang="css">
@@ -147,9 +163,10 @@ const ariaDescribedby = computed(() => {
 
   &.equal-widths {
     display: grid;
-    /* grid-auto-flow: column; */
-
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(calc((2 * var(--input-checkbox-label-padding)) + v-bind(maxChildWidth)), 1fr)
+    );
   }
 }
 </style>

@@ -44,6 +44,7 @@
   --input-checked-element-size: 3rem;
   --input-checked-icon-size: 2.6rem;
   --input-checkbox-decorator-icon-size: 1.2rem;
+  --input-checkbox-label-padding: 0.8rem;
 
   /* Toggle Switch */
   --input-toggle-wrapper-padding: 0.1rem;
