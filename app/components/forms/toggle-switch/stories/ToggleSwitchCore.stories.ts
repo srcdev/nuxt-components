@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
 import StorybookComponent from "../ToggleSwitchCore.vue";
-import type { FormUiTheme, FormSize } from "~/types/forms/types.forms.d";
+import type { FormUiTheme } from "~/types/forms/types.forms.d";
 
 interface ToggleSwitchCoreStoryArgs {
   id: string;
@@ -13,7 +13,6 @@ interface ToggleSwitchCoreStoryArgs {
   styleClassPassthrough: string[];
   theme: FormUiTheme;
   round: boolean;
-  size: FormSize;
   ariaDescribedby: string;
   useCustomIcons: boolean;
   iconOnContent: string;
@@ -77,14 +76,6 @@ export default {
       control: { type: "select" },
       options: ["primary", "secondary", "tertiary", "ghost", "error", "success", "warning"],
       description: "Toggle switch theme",
-      table: {
-        category: "Styling",
-      },
-    },
-    size: {
-      control: { type: "select" },
-      options: ["x-small", "small", "default", "medium", "large"],
-      description: "Toggle switch size",
       table: {
         category: "Styling",
       },
@@ -157,7 +148,6 @@ const Template: StoryFn<ToggleSwitchCoreStoryArgs> = (_args, { argTypes }) => ({
       :style-class-passthrough="args.styleClassPassthrough"
       :theme="args.theme"
       :round="args.round"
-      :size="args.size"
       :aria-describedby="args.ariaDescribedby"
     >
       <template v-if="args.useCustomIcons" #iconOn>
@@ -184,7 +174,6 @@ Default.args = {
   styleClassPassthrough: [],
   theme: "default",
   round: true,
-  size: "default",
   ariaDescribedby: "",
   useCustomIcons: false,
   iconOnContent: "✓",

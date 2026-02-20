@@ -4,7 +4,6 @@
     data-testid="input-text-wrapper"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
-    :data-size="size"
     :data-inputmode="inputmode"
     :class="[
       inputVariant,
@@ -44,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormSize, InputTypesText, FormUiTheme, InputUiVariant, InputMode } from "~/types/forms/types.forms";
+import type { InputTypesText, FormUiTheme, InputUiVariant, InputMode } from "~/types/forms/types.forms";
 
 interface Props {
   type?: InputTypesText;
@@ -58,7 +57,6 @@ interface Props {
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
   ariaDescribedby?: string;
-  size?: FormSize;
   inputVariant?: InputUiVariant;
 }
 
@@ -72,7 +70,6 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
   theme: "default",
   ariaDescribedby: "",
-  size: "default",
   inputVariant: "normal",
 });
 

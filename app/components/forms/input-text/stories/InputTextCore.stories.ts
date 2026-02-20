@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../InputTextCore.vue";
-import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms.d";
+import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputTextCoreStoryArgs {
   modelValue: string;
@@ -13,7 +13,6 @@ interface InputTextCoreStoryArgs {
   fieldHasError: boolean;
   required: boolean;
   theme: FormUiTheme;
-  size: FormSize;
   InputUiVariant: InputUiVariant;
   styleClassPassthrough: string[];
   leftSlotContent: string;
@@ -105,14 +104,6 @@ export default {
         category: "Styling",
       },
     },
-    size: {
-      control: { type: "select" },
-      options: ["x-small", "small", "default", "medium", "large"],
-      description: "Input size",
-      table: {
-        category: "Styling",
-      },
-    },
     InputUiVariant: {
       control: { type: "select" },
       options: ["normal", "outlined", "underlined"],
@@ -170,7 +161,6 @@ export default {
     fieldHasError: false,
     required: false,
     theme: "default",
-    size: "default",
     inputVariant: "normal",
     styleClassPassthrough: [],
     useLeftSlot: false,
@@ -248,16 +238,4 @@ export const Underlined = Template.bind({});
 Underlined.args = {
   InputUiVariant: "underlined",
   placeholder: "Underlined input",
-};
-
-export const LargeSize = Template.bind({});
-LargeSize.args = {
-  size: "large",
-  placeholder: "Large input",
-};
-
-export const SmallSize = Template.bind({});
-SmallSize.args = {
-  size: "small",
-  placeholder: "Small input",
 };

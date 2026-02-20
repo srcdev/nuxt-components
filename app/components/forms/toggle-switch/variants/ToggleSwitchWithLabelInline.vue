@@ -11,7 +11,7 @@
       <template #textLabel>{{ label }}</template>
     </InputLabel>
 
-    <ToggleSwitchCore :id v-model="modelValue" :name :true-value :false-value :theme :round :size>
+    <ToggleSwitchCore :id v-model="modelValue" :name :true-value :false-value :theme :round>
       <template v-if="slots.iconOn" #iconOn>
         <slot name="iconOn"></slot>
       </template>
@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize, LabelWeight } from "~/types/forms/types.forms";
+import type { FormUiTheme, LabelWeight } from "~/types/forms/types.forms";
 
 interface Props {
   name: string;
@@ -35,7 +35,6 @@ interface Props {
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
   round?: boolean;
-  size?: FormSize;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -45,7 +44,6 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
   theme: "default",
   round: true,
-  size: "default",
 });
 
 const slots = useSlots();

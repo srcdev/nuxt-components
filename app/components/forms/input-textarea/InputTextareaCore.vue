@@ -3,7 +3,6 @@
     class="input-textarea-wrapper"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
-    :data-size="size"
     :class="[
       inputVariant,
       { dirty: isDirty },
@@ -39,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms";
+import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   maxlength?: number;
@@ -51,7 +50,6 @@ interface Props {
   required?: boolean;
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
-  size?: FormSize;
   inputVariant?: InputUiVariant;
 }
 
@@ -63,7 +61,6 @@ const props = withDefaults(defineProps<Props>(), {
   required: false,
   styleClassPassthrough: () => [],
   theme: "default",
-  size: "default",
   inputVariant: "normal",
 });
 

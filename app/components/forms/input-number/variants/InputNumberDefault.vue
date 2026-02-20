@@ -3,7 +3,6 @@
     class="input-number-with-label"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
-    :data-size="size"
     :class="[elementClasses, `theme-${theme}`, { error: fieldHasError }]"
   >
     <InputLabel
@@ -31,7 +30,6 @@
       :step
       :theme
       :required
-      :size
       :weight
       :field-has-error
       :style-class-passthrough
@@ -72,7 +70,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormSize, FormWeight } from "~/types/forms/types.forms";
+import type { FormWeight } from "~/types/forms/types.forms";
 
 interface Props {
   name: string;
@@ -85,7 +83,6 @@ interface Props {
   fieldHasError?: boolean;
   required?: boolean;
   theme?: "default" | "success" | "error" | "warning";
-  size?: FormSize;
   weight?: FormWeight;
   styleClassPassthrough?: string | string[];
 }
@@ -96,7 +93,6 @@ const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   required: false,
   theme: "default",
-  size: "default",
   weight: "normal",
   styleClassPassthrough: () => [],
 });

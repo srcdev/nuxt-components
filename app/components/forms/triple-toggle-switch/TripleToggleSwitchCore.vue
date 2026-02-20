@@ -1,5 +1,5 @@
 <template>
-  <div class="triple-toggle-switch" :class="[elementClasses]" :data-size="size" :data-theme="theme">
+  <div class="triple-toggle-switch" :class="[elementClasses]" :data-theme="theme">
     <div class="triple-toggle-switch-wrapper">
       <div class="selected-option-marker-wrapper">
         <div class="selected-option-marker" :class="[{ show: showMarker }]"></div>
@@ -36,11 +36,10 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize, IFormMultipleOptions } from "~/types/forms/types.forms";
+import type { FormUiTheme, IFormMultipleOptions } from "~/types/forms/types.forms";
 
 interface Props {
   name?: string;
-  size?: FormSize;
   theme?: FormUiTheme;
   stepAnimationDuration?: string;
   styleClassPassthrough?: string | string[];
@@ -48,7 +47,6 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   name: "triple-toggle-switch",
-  size: "medium",
   theme: "default",
   stepAnimationDuration: "250ms",
   styleClassPassthrough: () => [],
@@ -60,7 +58,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
 // Performance optimization: provide reactive access to props for template
-const { name, theme, size, stepAnimationDuration } = toRefs(props);
+const { name, theme, stepAnimationDuration } = toRefs(props);
 
 const optionGroupRefs = useTemplateRef<HTMLDivElement>("optionGroup");
 

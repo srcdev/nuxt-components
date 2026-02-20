@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../variants/InputTextareaWithLabel.vue";
-import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms.d";
+import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputTextareaWithLabelStoryArgs {
   modelValue: string;
@@ -12,7 +12,6 @@ interface InputTextareaWithLabelStoryArgs {
   fieldHasError: boolean;
   required: boolean;
   theme: FormUiTheme;
-  size: FormSize;
   InputUiVariant: InputUiVariant;
   styleClassPassthrough: string[];
   useDescriptionTextSlot: boolean;
@@ -96,14 +95,6 @@ export default {
       control: { type: "select" },
       options: ["primary", "secondary", "tertiary", "ghost", "error", "success", "warning"],
       description: "Theme for styling",
-      table: {
-        category: "Styling",
-      },
-    },
-    size: {
-      control: { type: "select" },
-      options: ["x-small", "small", "default", "medium", "large"],
-      description: "Textarea size",
       table: {
         category: "Styling",
       },
@@ -192,7 +183,6 @@ export default {
     fieldHasError: false,
     required: false,
     theme: "default",
-    size: "default",
     inputVariant: "normal",
     styleClassPassthrough: [],
     useDescriptionTextSlot: false,
@@ -329,22 +319,6 @@ Underlined.args = {
   placeholder: "This is an underlined textarea",
 };
 
-export const Large = Template.bind({});
-Large.args = {
-  size: "large",
-  label: "Large Textarea",
-  placeholder: "This is a large textarea for longer content...",
-  maxlength: 2000,
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  size: "small",
-  label: "Small Note",
-  placeholder: "Quick note...",
-  maxlength: 100,
-};
-
 export const WithSlots = Template.bind({});
 WithSlots.args = {
   label: "Message with Icons",
@@ -447,7 +421,6 @@ FormExamples.render = (args) => ({
           name="user-feedback"
           placeholder="Share your experience..."
           :maxlength="1000"
-          size="large"
         >
           <template #descriptionHtml>Rate your experience and provide <strong>detailed feedback</strong></template>
           <template #left>⭐</template>

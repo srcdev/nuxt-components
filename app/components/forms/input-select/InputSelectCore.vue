@@ -3,8 +3,7 @@
     class="input-select-wrapper"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
-    :data-size="size"
-    :class="[inputVariant, size, { dirty: isDirty }, { active: isActive }, { error: fieldHasError }]"
+    :class="[inputVariant, { dirty: isDirty }, { active: isActive }, { error: fieldHasError }]"
   >
     <select :id v-model="modelValue" :aria-invalid="fieldHasError" class="input-select-core" :name :title>
       <option v-if="placeholder" value="" readonly :selected="!modelValue" class="input-select-core-option placeholder">
@@ -31,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize, InputUiVariant, IFormMultipleOptions } from "~/types/forms/types.forms";
+import type { FormUiTheme, InputUiVariant, IFormMultipleOptions } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
@@ -40,7 +39,6 @@ interface Props {
   title?: string;
   required?: boolean;
   fieldHasError?: boolean;
-  size?: FormSize;
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
   inputVariant?: InputUiVariant;
@@ -51,7 +49,6 @@ const props = withDefaults(defineProps<Props>(), {
   title: "Please select an option",
   required: false,
   fieldHasError: false,
-  size: "medium",
   styleClassPassthrough: () => [],
   theme: "default",
   inputVariant: "normal",

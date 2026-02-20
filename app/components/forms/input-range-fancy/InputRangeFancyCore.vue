@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormWeight } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
@@ -47,7 +47,6 @@ interface Props {
   placeholder?: string;
   required?: boolean;
   theme?: FormUiTheme;
-  size?: FormSize;
   weight?: FormWeight;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
@@ -58,7 +57,6 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: "",
   required: false,
   theme: "default",
-  size: "medium",
   weight: "wght-400",
   fieldHasError: false,
   styleClassPassthrough: () => [],
@@ -77,15 +75,15 @@ const inputRef = ref<HTMLInputElement | null>(null);
 const toolTipWidth = ref(0);
 const toolTipLowWidth = ref(0);
 const toolTipHighWidth = ref(0);
-const toolTipMargin = 20;
+// const toolTipMargin = 20;
 
-const toolTipLowContainerEnd = computed(() => {
-  return Math.floor(((toolTipHighWidth.value + toolTipMargin) / toolTipWidth.value) * 100) + "%";
-});
+// const toolTipLowContainerEnd = computed(() => {
+//   return Math.floor(((toolTipHighWidth.value + toolTipMargin) / toolTipWidth.value) * 100) + "%";
+// });
 
-const toolTipHighContainerStart = computed(() => {
-  return Math.floor(((toolTipWidth.value - (toolTipHighWidth.value + toolTipMargin)) / toolTipWidth.value) * 100) + "%";
-});
+// const toolTipHighContainerStart = computed(() => {
+//   return Math.floor(((toolTipWidth.value - (toolTipHighWidth.value + toolTipMargin)) / toolTipWidth.value) * 100) + "%";
+// });
 
 const lowValue = computed(() => {
   return Math.floor(Number(props.max) - Number(highValue.value));
@@ -105,9 +103,6 @@ const updateBoxSizes = () => {
   toolTipWidth.value = toolTip.value?.offsetWidth || 0;
   toolTipLowWidth.value = toolTipLow.value?.offsetWidth || 0;
   toolTipHighWidth.value = toolTipHigh.value?.offsetWidth || 0;
-  console.log("toolTipWidth", toolTipWidth.value);
-  console.log("toolTipLowContainerEnd", toolTipLowContainerEnd.value);
-  console.log("toolTipHighContainerStart", toolTipHighContainerStart.value);
 };
 
 onMounted(() => {

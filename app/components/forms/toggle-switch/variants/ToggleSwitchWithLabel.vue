@@ -25,7 +25,6 @@
       :false-value
       :theme
       :round
-      :size
       :aria-describedby
     >
       <template v-if="slots.iconOn" #iconOn>
@@ -41,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize } from "~/types/forms/types.forms";
+import type { FormUiTheme } from "~/types/forms/types.forms";
 
 interface Props {
   name: string;
@@ -54,7 +53,6 @@ interface Props {
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
   round?: boolean;
-  size?: FormSize;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -66,7 +64,6 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
   theme: "default",
   round: true,
-  size: "default",
 });
 
 const slots = useSlots();

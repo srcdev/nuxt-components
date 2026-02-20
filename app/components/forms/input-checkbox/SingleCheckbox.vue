@@ -23,7 +23,6 @@
           :field-has-error
           :true-value
           :false-value
-          :size
           :theme
           :aria-describedby
         >
@@ -47,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize, OptionsLayout } from "~/types/forms/types.forms";
+import type { FormUiTheme, OptionsLayout } from "~/types/forms/types.forms";
 
 interface Props {
   dataTestid?: string;
@@ -58,7 +57,6 @@ interface Props {
   required?: boolean;
   fieldHasError?: boolean;
   multipleOptions?: boolean;
-  size?: FormSize;
   trueValue?: string | number | boolean;
   falseValue?: string | number | boolean;
   optionsLayout?: OptionsLayout;
@@ -73,7 +71,6 @@ const props = withDefaults(defineProps<Props>(), {
   required: false,
   fieldHasError: false,
   multipleOptions: false,
-  size: "medium",
   trueValue: true,
   falseValue: false,
   optionsLayout: "equal-widths",

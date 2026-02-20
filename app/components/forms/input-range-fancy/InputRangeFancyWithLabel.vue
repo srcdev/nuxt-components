@@ -16,7 +16,6 @@
       :step
       :theme
       :required
-      :size
       :weight
       :field-has-error
     />
@@ -31,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormWeight } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
@@ -47,7 +46,6 @@ interface Props {
   fieldHasError?: boolean;
   required?: boolean;
   theme?: FormUiTheme;
-  size?: FormSize;
   weight?: FormWeight;
   styleClassPassthrough?: string | string[];
   deepCssClassPassthrough?: string;
@@ -59,7 +57,6 @@ const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   required: false,
   theme: "default",
-  size: "medium",
   weight: "wght-400",
   styleClassPassthrough: () => [],
   deepCssClassPassthrough: "",

@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
 import StorybookComponent from "../variants/ToggleSwitchWithLabelInline.vue";
-import type { FormUiTheme, FormSize, LabelWeight } from "~/types/forms/types.forms.d";
+import type { FormUiTheme, LabelWeight } from "~/types/forms/types.forms.d";
 
 interface ToggleSwitchWithLabelInlineStoryArgs {
   name: string;
@@ -12,7 +12,6 @@ interface ToggleSwitchWithLabelInlineStoryArgs {
   styleClassPassthrough: string[];
   theme: FormUiTheme;
   round: boolean;
-  size: FormSize;
   useCustomIcons: boolean;
   iconOnContent: string;
   iconOffContent: string;
@@ -67,14 +66,6 @@ export default {
       control: { type: "select" },
       options: ["primary", "secondary", "tertiary", "ghost", "error", "success", "warning"],
       description: "Toggle switch theme",
-      table: {
-        category: "Styling",
-      },
-    },
-    size: {
-      control: { type: "select" },
-      options: ["x-small", "small", "default", "medium", "large"],
-      description: "Toggle switch size",
       table: {
         category: "Styling",
       },
@@ -137,7 +128,6 @@ const Template: StoryFn<ToggleSwitchWithLabelInlineStoryArgs> = (_args, { argTyp
       :style-class-passthrough="args.styleClassPassthrough"
       :theme="args.theme"
       :round="args.round"
-      :size="args.size"
     >
       <template v-if="args.useCustomIcons" #iconOn>
         <span v-html="args.iconOnContent"></span>
@@ -162,7 +152,6 @@ Default.args = {
   styleClassPassthrough: [],
   theme: "default",
   round: true,
-  size: "default",
   useCustomIcons: false,
   iconOnContent: "✓",
   iconOffContent: "✗",

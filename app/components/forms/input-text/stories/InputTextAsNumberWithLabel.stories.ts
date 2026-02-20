@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../variants/InputTextAsNumberWithLabel.vue";
-import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms.d";
+import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputTextAsNumberWithLabelStoryArgs {
   modelValue: number | undefined;
@@ -12,7 +12,6 @@ interface InputTextAsNumberWithLabelStoryArgs {
   fieldHasError: boolean;
   required: boolean;
   theme: FormUiTheme;
-  size: FormSize;
   InputUiVariant: InputUiVariant;
   min: number;
   max: number;
@@ -124,14 +123,6 @@ export default {
         category: "Styling",
       },
     },
-    size: {
-      control: { type: "select" },
-      options: ["x-small", "small", "default", "medium", "large"],
-      description: "Input size",
-      table: {
-        category: "Styling",
-      },
-    },
     InputUiVariant: {
       control: { type: "select" },
       options: ["normal", "outlined", "underlined"],
@@ -202,7 +193,6 @@ export default {
     fieldHasError: false,
     required: false,
     theme: "default",
-    size: "default",
     inputVariant: "normal",
     min: 0,
     max: 100,
@@ -363,31 +353,6 @@ Underlined.args = {
   rightSlotContent: "+",
 };
 
-export const Large = Template.bind({});
-Large.args = {
-  modelValue: 500,
-  size: "large",
-  label: "Large Number Input",
-  placeholder: "Enter large number",
-  min: 0,
-  max: 10000,
-  step: 10,
-  leftSlotContent: "−",
-  rightSlotContent: "+",
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  modelValue: 5,
-  size: "small",
-  label: "Small Counter",
-  placeholder: "Count",
-  min: 0,
-  max: 20,
-  leftSlotContent: "−",
-  rightSlotContent: "+",
-};
-
 export const WithCustomIcons = Template.bind({});
 WithCustomIcons.args = {
   modelValue: 15,
@@ -399,44 +364,6 @@ WithCustomIcons.args = {
   leftSlotContent: "🔉",
   rightSlotContent: "🔊",
 };
-
-export const AllSizes = Template.bind({});
-AllSizes.storyName = "All Sizes";
-AllSizes.render = (args) => ({
-  components: { StorybookComponent },
-  setup() {
-    const sizes: FormSize[] = ["x-small", "small", "default", "medium", "large"];
-    const numberValues = reactive(
-      sizes.reduce(
-        (acc, size) => ({
-          ...acc,
-          [size]: 50,
-        }),
-        {} as Record<string, number>
-      )
-    );
-
-    return {
-      sizes,
-      numberValues,
-      args,
-    };
-  },
-  template: `
-    <div class="space-y-6">
-      <div v-for="size in sizes" :key="size" class="space-y-2">
-        <h3 class="text-lg font-semibold capitalize">{{ size }} Size</h3>
-        <StorybookComponent
-          v-model="numberValues[size]"
-          v-bind="{ ...args, size, label: size + ' Number Input', name: size + '-number', min: 0, max: 100, useLeftSlot: true, useRightSlot: true, leftSlotContent: '−', rightSlotContent: '+' }"
-        >
-          <template #left>−</template>
-          <template #right>+</template>
-        </StorybookComponent>
-      </div>
-    </div>
-  `,
-});
 
 export const InteractiveDemo = Template.bind({});
 InteractiveDemo.storyName = "Interactive Demo";

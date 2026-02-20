@@ -59,7 +59,6 @@
                   type="button"
                   button-text="Normal"
                   theme="default"
-                  size="default"
                   @click.stop.prevent="inputVariant = 'normal'"
                 />
               </li>
@@ -68,7 +67,6 @@
                   type="button"
                   button-text="Underlined"
                   theme="default"
-                  size="default"
                   @click.stop.prevent="inputVariant = 'underlined'"
                 />
               </li>
@@ -100,7 +98,6 @@
                           :error-message="formErrors?.countrySelect?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.countrySelect)"
                           :theme
-                          :size
                           :input-variant
                         >
                           <template #descriptionText>This is a descriptionText for the message input.</template>
@@ -124,7 +121,6 @@
                           :required="true"
                           :style-class-passthrough="['style-1', 'style-2']"
                           :theme
-                          :size
                           :input-variant
                         >
                           <template #descriptionText>This is a descriptionText for the email input.</template>
@@ -153,7 +149,6 @@
                           :required="true"
                           :style-class-passthrough="['style-1', 'style-2']"
                           :theme
-                          :size
                           :input-variant
                         >
                           <template #descriptionHtml>
@@ -182,7 +177,6 @@
                           :required="true"
                           :style-class-passthrough="['style-1', 'style-2']"
                           :theme
-                          :size
                           :input-variant
                         >
                           <template #right>
@@ -205,7 +199,6 @@
                           :required="true"
                           :style-class-passthrough="['style-1', 'style-2']"
                           :theme
-                          :size
                           :input-variant
                         >
                           <template #descriptionText>This is a descriptionText for the message input.</template>
@@ -228,7 +221,6 @@
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.tags)"
                           options-layout="inline"
                           :theme
-                          :size
                           :display-as-disc="false"
                         >
                           <template #descriptionText>MultipleCheckboxes description: optionsLayout = 'inline'</template>
@@ -248,7 +240,6 @@
                           true-value="dark"
                           false-value="light"
                           :theme
-                          :size
                         >
                           <template #description>
                             <p class="label-description">Light or Dark mode?</p>
@@ -270,7 +261,6 @@
                           name="anotherToggle"
                           label="Toggle Dark mode (inline)"
                           :theme
-                          size="small"
                         >
                           <template #iconOn>
                             <Icon name="radix-icons:moon" class="icon" />
@@ -291,7 +281,6 @@
                           name="toggleBoolean"
                           label="Toggle Dark mode"
                           :theme
-                          :size
                         >
                           <template #description>
                             <p class="label-description">Toggle some value</p>
@@ -316,7 +305,6 @@
                           :required="true"
                           :style-class-passthrough="['style-1', 'style-2']"
                           :theme
-                          :size
                         >
                           <template #description>
                             <p class="label-description">Input type="text" inputmode="numeric"</p>
@@ -346,7 +334,6 @@
                           :required="true"
                           :style-class-passthrough="['count-1', 'count-2']"
                           :theme
-                          :size
                         >
                           <template #description>
                             <p class="label-description">Input type="number" inputmode="numeric"</p>
@@ -376,7 +363,6 @@
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.tagsRadio)"
                           options-layout="inline"
                           :theme
-                          :size
                           direction="row-reverse"
                         >
                           <template #description>
@@ -405,7 +391,6 @@
                           :required="true"
                           :style-class-passthrough="['style-1', 'style-2']"
                           :theme
-                          :size
                         >
                           <template #description>
                             <p class="label-description">This is a description of what the user is required to do</p>
@@ -443,7 +428,6 @@
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.title)"
                           options-layout="inline"
                           :theme
-                          :size
                         >
                           <template #checkedIcon>
                             <Icon name="material-symbols:check-small" class="input-checked-icon" />
@@ -473,7 +457,6 @@
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.otherTitle)"
                           options-layout="equal-widths"
                           :theme
-                          :size
                         >
                           <template #description>
                             <p class="label-description">This is description: optionsLayout = 'equal-widths'</p>
@@ -496,7 +479,6 @@
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.cities)"
                           options-layout="inline"
                           :theme
-                          :size
                         >
                           <template #description>
                             <p class="label-description">This is description: optionsLayout = 'equal-widths'</p>
@@ -519,7 +501,6 @@
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.countries)"
                           options-layout="equal-widths"
                           :theme
-                          :size
                         >
                           <template #checkedIcon>
                             <Icon name="material-symbols:circle" class="input-checked-icon" />
@@ -546,7 +527,6 @@
                           :error-message="formErrors?.agreed?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.agreed)"
                           :theme
-                          :size
                         >
                           <template #description>
                             <p class="label-description">
@@ -570,7 +550,6 @@
                           :error-message="formErrors?.agree?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.agree)"
                           :theme
-                          :size
                         />
                       </template>
                     </FormField>
@@ -585,7 +564,6 @@
                           :error-message="formErrors?.terms?._errors[0] ?? ''"
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.terms)"
                           :theme
-                          :size
                         >
                           <template #labelContent>
                             <span class="body-normal">
@@ -606,7 +584,6 @@
                           :readonly="zodFormControl.submitDisabled"
                           button-text="Submit"
                           :theme
-                          :size
                           @click.stop.prevent="submitForm()"
                         />
                       </template>
@@ -641,7 +618,7 @@
 
 <script setup lang="ts">
 import { z } from "zod";
-import type { IFormMultipleOptions, FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms";
+import type { IFormMultipleOptions, FormUiTheme, InputUiVariant } from "~/types/forms/types.forms";
 // Inline fallback for ReturnTypeUseZodValidation if not exported
 type ReturnTypeUseZodValidation = ReturnType<typeof useZodValidation>;
 
@@ -691,11 +668,6 @@ const swapTheme = (newTheme: FormUiTheme) => {
 // const variant = ref<"primary" | "secondary" | "tertiary">("primary");
 // const swapVariant = (newVariant: "primary" | "secondary" | "tertiary") => {
 //   variant.value = newVariant;
-// };
-
-const size = ref<FormSize>("default");
-// const swapSize = (newSize: FormSize) => {
-//   size.value = newSize;
 // };
 
 /*

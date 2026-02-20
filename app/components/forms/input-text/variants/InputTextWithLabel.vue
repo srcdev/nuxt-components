@@ -51,7 +51,6 @@
         :style-class-passthrough
         :theme
         :aria-describedby
-        :size
         :input-variant
       >
         <template v-if="slots.left" #left>
@@ -84,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormSize, InputTypesText, FormUiTheme, InputUiVariant, InputMode } from "~/types/forms/types.forms";
+import type { InputTypesText, FormUiTheme, InputUiVariant, InputMode } from "~/types/forms/types.forms";
 
 interface Props {
   maxlength?: number;
@@ -98,7 +97,6 @@ interface Props {
   required?: boolean;
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
-  size?: FormSize;
   inputVariant?: InputUiVariant;
 }
 
@@ -110,7 +108,6 @@ const props = withDefaults(defineProps<Props>(), {
   required: false,
   styleClassPassthrough: () => [],
   theme: "default",
-  size: "default",
   inputVariant: "normal",
 });
 

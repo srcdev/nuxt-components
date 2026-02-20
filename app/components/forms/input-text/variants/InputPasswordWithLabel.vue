@@ -11,7 +11,6 @@
     :required
     :style-class-passthrough
     :theme
-    :size
     :input-variant
   >
     <template #right>
@@ -33,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormSize, FormUiTheme, InputUiVariant } from "~/types/forms/types.forms";
+import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   type?: "text" | "password";
@@ -46,7 +45,6 @@ interface Props {
   required?: boolean;
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
-  size?: FormSize;
   inputVariant?: InputUiVariant;
 }
 
@@ -58,7 +56,6 @@ const props = withDefaults(defineProps<Props>(), {
   required: false,
   styleClassPassthrough: () => [],
   theme: "default",
-  size: "medium",
   inputVariant: "normal",
 });
 

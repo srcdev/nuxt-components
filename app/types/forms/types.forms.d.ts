@@ -10,9 +10,6 @@ export type InputButtonVariant = "primary" | "secondary" | "tertiary" | "inline"
 // Input variant types for form components
 export type InputUiVariant = "normal" | "outlined" | "underlined";
 
-// Size types for form components
-export type FormSize = "x-small" | "small" | "default" | "medium" | "large";
-
 // Other form-specific types
 export type CheckboxAppearance = null | "with-decorator";
 export type CheckboxStyle = "check" | "cross";

@@ -6,7 +6,6 @@
       :data-testid
       :data-theme="theme"
       :data-invalid="fieldHasError ? '' : null"
-      :data-size="size"
     >
       <InputLabel
         :id
@@ -49,7 +48,6 @@
         :style-class-passthrough
         :theme="FormUiTheme"
         :aria-describedby
-        :size
         :input-variant
       />
 
@@ -80,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize, InputUiVariant, IFormMultipleOptions } from "~/types/forms/types.forms";
+import type { FormUiTheme, InputUiVariant, IFormMultipleOptions } from "~/types/forms/types.forms";
 
 interface Props {
   dataTestid?: string;
@@ -90,7 +88,6 @@ interface Props {
   errorMessage: object | string;
   required?: boolean;
   fieldHasError?: boolean;
-  size?: FormSize;
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
   inputVariant?: InputUiVariant;
@@ -101,7 +98,6 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: "",
   required: false,
   fieldHasError: false,
-  size: "medium",
   styleClassPassthrough: () => [],
   theme: "default",
   inputVariant: "normal",

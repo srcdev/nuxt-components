@@ -30,7 +30,6 @@
             :label="item.label"
             :field-has-error
             :true-value="item.value"
-            :size
             :options-layout
             :theme
             :direction
@@ -57,7 +56,6 @@
             :label="item.label"
             :field-has-error
             :true-value="item.value"
-            :size
             :options-layout
             :theme
             :aria-describedby
@@ -75,7 +73,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize, OptionsLayout, IFormMultipleOptions } from "~/types/forms/types.forms";
+import type { FormUiTheme, OptionsLayout, IFormMultipleOptions } from "~/types/forms/types.forms";
 
 interface Props {
   dataTestid?: string;
@@ -88,7 +86,6 @@ interface Props {
   required?: boolean;
   fieldHasError?: boolean;
   multipleOptions?: boolean;
-  size?: FormSize;
   optionsLayout?: OptionsLayout;
   equalCols?: boolean;
   styleClassPassthrough?: string | string[];
@@ -105,7 +102,6 @@ const props = withDefaults(defineProps<Props>(), {
   required: false,
   fieldHasError: false,
   multipleOptions: false,
-  size: "medium",
   optionsLayout: "equal-widths",
   equalCols: true,
   styleClassPassthrough: () => [],

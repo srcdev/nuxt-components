@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../variants/InputTextWithLabel.vue";
-import type { FormUiTheme, FormSize, InputUiVariant } from "~/types/forms/types.forms.d";
+import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputTextWithLabelStoryArgs {
   modelValue: string;
@@ -13,7 +13,6 @@ interface InputTextWithLabelStoryArgs {
   fieldHasError: boolean;
   required: boolean;
   theme: FormUiTheme;
-  size: FormSize;
   inputVariant: InputUiVariant;
   styleClassPassthrough: string[];
   useDescriptionSlot: boolean;
@@ -105,14 +104,6 @@ export default {
         category: "Styling",
       },
     },
-    size: {
-      control: { type: "select" },
-      options: ["x-small", "small", "default", "medium", "large"],
-      description: "Input size",
-      table: {
-        category: "Styling",
-      },
-    },
     inputVariant: {
       control: { type: "select" },
       options: ["normal", "outlined", "underlined"],
@@ -170,7 +161,6 @@ export default {
     fieldHasError: false,
     required: false,
     theme: "default",
-    size: "default",
     inputVariant: "normal",
     styleClassPassthrough: [],
     useDescriptionSlot: false,
@@ -264,22 +254,6 @@ Underlined.args = {
   label: "Website URL",
   placeholder: "https://example.com",
   type: "url",
-};
-
-export const Large = Template.bind({});
-Large.args = {
-  size: "large",
-  label: "Search Query",
-  placeholder: "Search for anything...",
-  type: "search",
-};
-
-export const Small = Template.bind({});
-Small.args = {
-  size: "small",
-  label: "Reference Code",
-  placeholder: "Enter reference code",
-  maxlength: 10,
 };
 
 export const AllThemes = Template.bind({});

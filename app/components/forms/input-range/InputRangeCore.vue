@@ -18,13 +18,7 @@
         :max
         :step
         :list="slots.datalist ? name + '-datalist' : ''"
-        :class="[
-          'input-range-core',
-          `input-range--${size}`,
-          `input-range--${weight}`,
-          styleClassPassthrough,
-          { 'has-markers': slots.markers },
-        ]"
+        :class="['input-range-core', `input-range--${weight}`, styleClassPassthrough, { 'has-markers': slots.markers }]"
       />
 
       <slot v-if="slots.datalist" name="datalist"></slot>
@@ -36,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormWeight } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
@@ -47,7 +41,6 @@ interface Props {
   placeholder?: string;
   required?: boolean;
   theme?: FormUiTheme;
-  size?: FormSize;
   weight?: FormWeight;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
@@ -58,7 +51,6 @@ const props = withDefaults(defineProps<Props>(), {
   placeholder: "",
   required: false,
   theme: "default",
-  size: "default",
   weight: "normal",
   fieldHasError: false,
   styleClassPassthrough: () => [],

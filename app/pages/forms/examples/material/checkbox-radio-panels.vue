@@ -28,7 +28,6 @@
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.tags)"
                           options-layout="inline"
                           :theme
-                          :size
                           :display-as-disc="false"
                           :display-as-lozenge="false"
                         >
@@ -55,7 +54,6 @@
                           :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.tagsRadio)"
                           options-layout="inline"
                           :theme
-                          :size
                           direction="row-reverse"
                           :display-as-lozenge="true"
                         >
@@ -77,7 +75,6 @@
                           :readonly="zodFormControl.submitDisabled"
                           button-text="Submit"
                           :theme
-                          :size
                           @click.stop.prevent="submitForm()"
                         />
                       </template>
@@ -95,7 +92,7 @@
 
 <script setup lang="ts">
 import { z } from "zod";
-import type { IFormMultipleOptions, FormUiTheme, FormSize } from "~/types/forms/types.forms";
+import type { IFormMultipleOptions, FormUiTheme } from "~/types/forms/types.forms";
 
 definePageMeta({
   layout: false,
@@ -110,7 +107,6 @@ useHead({
 });
 
 const theme = ref<FormUiTheme>("default");
-const size = ref<FormSize>("default");
 
 /*
  * Fetch some sample data

@@ -21,7 +21,7 @@
       <slot name="description"></slot>
     </template>
 
-    <InputRangeCore :id v-model="modelValue" :name :min :max :step :theme :required :size :weight :field-has-error>
+    <InputRangeCore :id v-model="modelValue" :name :min :max :step :theme :required :weight :field-has-error>
       <template v-if="slots.datalist" #datalist>
         <slot name="datalist"></slot>
       </template>
@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, FormSize, FormWeight } from "~/types/forms/types.forms";
+import type { FormUiTheme, FormWeight } from "~/types/forms/types.forms";
 
 interface Props {
   name: string;
@@ -80,7 +80,6 @@ interface Props {
   fieldHasError?: boolean;
   required?: boolean;
   theme?: FormUiTheme;
-  size?: FormSize;
   weight?: FormWeight;
   styleClassPassthrough?: string | string[];
   deepCssClassPassthrough?: string;
@@ -92,7 +91,6 @@ const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   required: false,
   theme: "default",
-  size: "medium",
   weight: "wght-400",
   styleClassPassthrough: () => [],
   deepCssClassPassthrough: "",
