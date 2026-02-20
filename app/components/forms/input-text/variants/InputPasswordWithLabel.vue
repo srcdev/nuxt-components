@@ -59,10 +59,6 @@ const props = withDefaults(defineProps<Props>(), {
   inputVariant: "normal",
 });
 
-// const buttonTheme = computed(() => {
-//   return props.InputUiVariant === "underlined" ? "input-action-underlined" : "input-action";
-// });
-
 const modelValue = defineModel<string>();
 
 const { updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);

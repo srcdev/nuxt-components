@@ -14,6 +14,7 @@
 
   /* Outline settings */
   --form-element-outline-width: 0.1rem;
+  --form-element-outline-width-focus: 0.2rem;
   --form-element-outline-offset-focus: 0.2rem;
 
   /* Focus */

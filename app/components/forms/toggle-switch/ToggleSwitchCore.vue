@@ -112,7 +112,14 @@ const toggleSwitchValue = () => {
     input {
       height: 0;
       width: 0;
-      visibility: hidden;
+      opacity: 0;
+
+      &:focus-visible {
+        + .symbol-wrapper {
+          outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+          outline-offset: var(--form-element-outline-offset-focus);
+        }
+      }
     }
 
     .symbol-wrapper {
@@ -121,7 +128,12 @@ const toggleSwitchValue = () => {
       align-items: center;
       justify-content: start;
       position: relative;
-      transition: background-color var(--theme-form-transition-duration);
+      transition:
+        background-color var(--theme-form-transition-duration) linear,
+        border-color var(--theme-form-transition-duration) linear,
+        outline var(--theme-form-transition-duration) linear,
+        outline-offset var(--theme-form-transition-duration) linear,
+        outline var(--theme-form-transition-duration) linear;
 
       /* UI */
       background-color: white;

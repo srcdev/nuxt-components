@@ -113,16 +113,23 @@ const inputClasses = computed(() => [
     border-radius: var(--form-input-border-radius);
     &.button {
       &.display-as-disc {
-        border-radius: 50%;
+        border-radius: 100vw;
       }
     }
   }
 
   &.radio {
-    border-radius: 50%;
+    border-radius: 100vw;
   }
 
-  &:has(.input-checkbox-radio-core:checked) {
+  &:not(:is(.button)) {
+    &:has(input:focus-visible) {
+      outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+      outline-offset: var(--form-element-outline-offset-focus);
+    }
+  }
+
+  &:has(input:checked) {
     .input-checked-icon-slot {
       opacity: 1;
 
@@ -131,11 +138,6 @@ const inputClasses = computed(() => [
         color: var(--theme-checkbox-symbol-color);
       }
     }
-  }
-
-  /* focus-visible */
-  &:not(.button):has(.input-checkbox-radio-core:focus-visible) {
-    outline: var(--theme-focus-visible-outline);
   }
 
   .input-checked-icon-slot {
@@ -169,13 +171,13 @@ const inputClasses = computed(() => [
       cursor: pointer;
     }
 
-    &:not(.is-button) {
+    /* &:not(.is-button) {
       &:focus-visible {
         border: var(--input-checkbox-radio-wrapper-border-on);
         outline: var(--input-checkbox-radio-wrapper-outline-on);
         box-shadow: var(--input-checkbox-radio-wrapper-box-shadow-on);
       }
-    }
+    } */
   }
 }
 </style>

@@ -96,8 +96,9 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     background-color: var(--theme-input-surface-hover);
   }
 
-  &:focus-within {
-    outline: var(--element-decorator-outline-focus);
+  &:has(textarea:focus-visible) {
+    outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+    outline-offset: var(--form-element-outline-offset-focus);
   }
 
   &.normal {

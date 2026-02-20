@@ -32,7 +32,7 @@
   /* Input outlines and focus */
   --theme-input-outline: var(--green-6);
   --theme-input-outline-focus: var(--green-4);
-  --theme-focus-visible-outline: 2px solid var(--green-4);
+  --theme-input-visible-outline: var(--green-4);
   --theme-focus-visible-shadow: 0 0 0 2px var(--green-2);
 
   /* Input text and placeholders */

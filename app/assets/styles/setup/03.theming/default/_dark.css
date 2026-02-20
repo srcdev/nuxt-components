@@ -45,7 +45,7 @@
   --theme-input-text-color-normal: var(--blue-12);
   --theme-input-outline: var(--blue-6);
   --theme-input-outline-focus: var(--blue-4);
-  --theme-focus-visible-outline: 2px solid var(--blue-4);
+  --theme-input-visible-outline: var(--blue-4);
   --theme-focus-visible-shadow: 0 0 0 2px var(--blue-2);
   --theme-form-input-outline: transparent;
   --theme-label-text: var(--blue-2);

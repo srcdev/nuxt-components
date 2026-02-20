@@ -136,8 +136,13 @@ onMounted(() => {
   z-index: 2;
   position: relative;
 
-  &:has(.input-text-core:is(:hover, :focus-visible)) {
+  &:has(input:is(:hover, :focus-visible)) {
     background-color: var(--theme-input-surface-hover);
+  }
+
+  &:has(input:focus-visible) {
+    outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+    outline-offset: var(--form-element-outline-offset-focus);
   }
 
   &.normal {
@@ -171,6 +176,11 @@ onMounted(() => {
 
       &:hover {
         background-color: var(--theme-input-surface-hover);
+      }
+
+      &:is(:focus-visible) {
+        outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+        outline-offset: -4px;
       }
 
       &.icon-only {

@@ -39,7 +39,7 @@
   /* Input outlines and focus */
   --theme-input-outline: var(--red-1);
   --theme-input-outline-focus: var(--red-4);
-  --theme-focus-visible-outline: 2px solid var(--red-4);
+  --theme-input-visible-outline: var(--red-4);
   --theme-focus-visible-shadow: 0 0 0 2px var(--red-2);
 
   /* Input text and placeholders */

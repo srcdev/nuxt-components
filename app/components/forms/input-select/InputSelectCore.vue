@@ -83,6 +83,11 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
     background-color: var(--theme-input-surface);
   }
 
+  &:has(select:focus-visible) {
+    outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+    outline-offset: var(--form-element-outline-offset-focus);
+  }
+
   .input-select-core {
     appearance: none;
     background-color: transparent;
