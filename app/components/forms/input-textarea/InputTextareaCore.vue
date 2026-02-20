@@ -105,8 +105,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     border: var(--form-element-border-width) solid var(--theme-input-border);
     border-radius: var(--form-input-border-radius);
     outline: var(--form-element-outline-width) solid var(--theme-input-outline);
-
-    padding-inline: 1rem;
   }
 
   &.underlined {
@@ -138,10 +136,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
     color: var(--theme-input-text-color-normal);
     font-family: var(--font-family);
-    font-size: var(--form-element-font-size);
+    font-size: var(--input-font-size);
     line-height: var(--input-textarea-line-height);
-    padding-block: var(--form-text-padding-block);
-    padding-inline: var(--form-text-padding-inline);
+    padding-block: var(--form-textarea-padding-block);
+    padding-inline: var(--form-textarea-padding-inline);
 
     min-height: 6lh;
 

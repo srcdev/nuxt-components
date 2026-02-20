@@ -198,7 +198,7 @@ onMounted(() => {
 
     color: var(--theme-input-text-color-normal);
     font-family: var(--font-family);
-    font-size: var(--form-element-font-size);
+    font-size: var(--input-font-size);
 
     /* line-height: var(--input-element-line-height); */
 

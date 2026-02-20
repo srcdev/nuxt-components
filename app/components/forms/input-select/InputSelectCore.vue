@@ -140,7 +140,7 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
     /* END modern Select CSS */
 
     font-family: var(--font-family);
-    font-size: var(--form-element-font-size);
+    font-size: var(--input-font-size);
     line-height: var(--input-element-line-height);
     padding-block: var(--input-padding-block);
     padding-inline: var(--input-padding-inline);
