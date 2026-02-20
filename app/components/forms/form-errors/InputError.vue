@@ -62,15 +62,18 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
   color: var(--input-error-color);
   background-color: var(--theme-error-surface);
+  opacity: 0;
 
-  transition: grid-template-rows var(--theme-form-transition-duration) linear;
+  transition:
+    grid-template-rows var(--theme-form-transition-duration) linear,
+    opacity var(--theme-form-transition-duration) linear,
+    margin-block-start var(--theme-form-transition-duration) linear;
+
   transition-behavior: allow-discrete;
 
-  outline: var(--form-element-outline-width) solid transparent;
-
   border-radius: 0;
-
   border: var(--form-element-border-width) solid transparent;
+  outline: var(--form-element-outline-width) solid transparent;
 
   background-clip: padding-box;
 
@@ -78,13 +81,25 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
   margin-block-start: var(--input-error-margin-block-start);
 
+  &.underlined {
+    outline-color: transparent;
+  }
+
   &.detached {
-    margin-block-start: 2rem;
+    margin-block-start: 0rem;
+
+    border-top: var(--form-element-border-width) solid var(--theme-error-surface);
+    border-right: var(--form-element-border-width) solid var(--theme-error-surface);
+    border-bottom: var(--form-element-border-width) solid var(--red-8);
+    border-left: var(--form-element-border-width) solid var(--theme-error-surface);
+
+    border-radius: var(--form-input-border-radius);
   }
 
   &.show {
     grid-template-rows: 1fr;
     display: grid;
+    opacity: 1;
 
     border: var(--form-element-border-width) solid var(--theme-error-border);
     outline: var(--form-element-outline-width) solid var(--theme-error-outline);
@@ -96,23 +111,12 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
     &.detached {
       margin-block-start: 2rem;
-
-      border-top: var(--form-element-border-width) solid var(--theme-error-surface);
-      border-right: var(--form-element-border-width) solid var(--theme-error-surface);
-      border-bottom: var(--form-element-border-width) solid var(--red-8);
-      border-left: var(--form-element-border-width) solid var(--theme-error-surface);
-
-      border-radius: var(--form-input-border-radius);
     }
   }
 
   .inner {
     align-items: center;
-
     overflow: hidden;
-    transition:
-      opacity var(--theme-form-transition-duration) linear,
-      display var(--theme-form-transition-duration) linear allow-discrete;
 
     .inner-content {
       display: flex;
@@ -134,7 +138,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
         font-family: var(--font-family);
         font-size: 1.6rem;
         font-weight: 500;
-        /* padding-block: calc(1.2rem + var(--form-input-border-radius)) 1rem; */
         padding-inline: 1.2rem;
 
         .message-single {
@@ -160,13 +163,9 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   }
 
   /* Modifiers for input variants: */
-
   &:is(.detached) {
     &.normal {
       .inner {
-        /* padding-block-start: calc(var(--form-element-border-width) + var(--form-input-border-radius)); */
-        /* padding-block-start: var(--form-input-border-radius); */
-
         .inner-content {
           .message {
             padding-block: 1.2rem 1rem;
@@ -179,7 +178,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   &:not(.detached) {
     &.normal {
       .inner {
-        /* padding-block-start: calc(var(--form-element-border-width) + var(--form-input-border-radius)); */
         padding-block-start: var(--form-input-border-radius);
 
         .inner-content {
@@ -191,9 +189,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     }
     &.underlined {
       .inner {
-        /* padding-block-start: calc(var(--form-element-border-width) + var(--form-input-border-radius)); */
-        /* padding-block-start: var(--form-input-border-radius); */
-
         .inner-content {
           .message {
             padding-block: 1rem 1rem;
