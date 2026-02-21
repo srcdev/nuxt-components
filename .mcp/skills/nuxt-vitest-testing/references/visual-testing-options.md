@@ -31,12 +31,12 @@ Do you need to check CSS variable output, pixel rendering, or animations?
 
 ## Option Comparison
 
-| Approach | Browser | Server needed | Nuxt context | Best for |
-|---|---|---|---|---|
-| Vitest + HTML snapshots | No (happy-dom) | No | ✅ Full | Class/attribute/structure regression |
-| `@playwright/experimental-ct-vue` | ✅ Real | No | ❌ None | Pure component pixel checks |
-| Storybook + Chromatic | ✅ Real | Storybook | Partial (via decorators) | Design system visual regression CI |
-| Playwright e2e | ✅ Real | ✅ Yes | ✅ Full | User flows, page-level checks |
+| Approach                          | Browser        | Server needed | Nuxt context             | Best for                             |
+| --------------------------------- | -------------- | ------------- | ------------------------ | ------------------------------------ |
+| Vitest + HTML snapshots           | No (happy-dom) | No            | ✅ Full                  | Class/attribute/structure regression |
+| `@playwright/experimental-ct-vue` | ✅ Real        | No            | ❌ None                  | Pure component pixel checks          |
+| Storybook + Chromatic             | ✅ Real        | Storybook     | Partial (via decorators) | Design system visual regression CI   |
+| Playwright e2e                    | ✅ Real        | ✅ Yes        | ✅ Full                  | User flows, page-level checks        |
 
 ---
 
@@ -82,9 +82,10 @@ This makes it practical only for presentational/pure components.
 
 Already in this project's devDependencies (`@nuxtjs/storybook`, `@chromatic-com/storybook`).
 
-Chromatic setup: https://www.chromatic.com/docs/nuxt
+Chromatic setup: <https://www.chromatic.com/docs/nuxt>
 
 Workflow:
+
 1. Write stories for each component visual state
 2. `npm run build-storybook`
 3. `npx chromatic --project-token=<token>`
