@@ -59,6 +59,9 @@
   --theme-checkbox-symbol-surface: var(--gray-0);
   --theme-checkbox-decorator-color: var(--blue-8);
 
+  --theme-toggle-symbol-color-default: var(--blue-0);
+  --theme-toggle-symbol-color-checked: var(--blue-8);
+
   --input-error-margin-block-start: 0.25rem;
 
   /* ===========================================

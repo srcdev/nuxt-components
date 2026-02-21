@@ -173,10 +173,13 @@ const toggleSwitchValue = () => {
         border: var(--input-toggle-symbol-border-width) solid var(--theme-checkbox-symbol-color);
         outline: var(--input-toggle-symbol-outline-width) solid var(--theme-input-outline, red);
         border-radius: 100vw;
-        background-color: lightskyblue;
-        transition: translate 0.4s ease;
+        background-color: var(--theme-toggle-symbol-color-default);
+        transition:
+          translate 0.4s ease,
+          background-color 0.4s linear;
 
         &.checked {
+          background-color: var(--theme-toggle-symbol-color-checked);
           /* left: calc(
             100% - var(--input-toggle-symbol-size) - var(--_switch-padding) - (2 * var(--_toggle-symbol-border-width))
           ); */
@@ -198,11 +201,20 @@ const toggleSwitchValue = () => {
           opacity: 0;
 
           /* UI */
-          color: var(--theme-toggle-symbol-icon-color);
           width: var(--input-toggle-symbol-size);
           height: var(--input-toggle-symbol-size);
           margin: var(--input-toggle-symbol-margin);
-          transition: opacity var(--theme-form-transition-duration);
+          transition:
+            opacity var(--theme-form-transition-duration),
+            color var(--theme-form-transition-duration);
+
+          &.icon-on {
+            color: var(--theme-toggle-symbol-color-default);
+          }
+
+          &.icon-off {
+            color: var(--theme-toggle-symbol-color-checked);
+          }
 
           &.active {
             opacity: 1;
