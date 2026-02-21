@@ -1,0 +1,72 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`InputButtonCore > Snapshots > icon-only slot 1`] = `
+"<button type="button" aria-disabled="false" data-testid="input-button-core" data-theme="default" class="input-button-core primary icon-only">
+  <!--v-if-->
+  <!--v-if--><span class="button-text sr-only">Click me</span>
+  <!--v-if--><span class="btn-icon icon-only"><span data-testid="icon-only">⚡</span></span>
+</button>"
+`;
+
+exports[`InputButtonCore > Snapshots > pending state 1`] = `
+"<button type="button" aria-disabled="false" data-testid="input-button-core" data-theme="default" class="input-button-core primary pending-effect is-pending"><svg class="pending-container" data-theme="default">
+    <rect pathLength="100" stroke-linecap="round" class="pending-blur"></rect>
+    <rect pathLength="100" stroke-linecap="round" class="pending-line"></rect>
+  </svg>
+  <!--v-if--><span class="button-text">Click me</span>
+  <!--v-if-->
+  <!--v-if-->
+</button>"
+`;
+
+exports[`InputButtonCore > Snapshots > pill 1`] = `
+"<button type="button" aria-disabled="false" data-testid="input-button-core" data-theme="default" class="input-button-core primary pill">
+  <!--v-if-->
+  <!--v-if--><span class="button-text">Click me</span>
+  <!--v-if-->
+  <!--v-if-->
+</button>"
+`;
+
+exports[`InputButtonCore > Snapshots > primary (default) 1`] = `
+"<button type="button" aria-disabled="false" data-testid="input-button-core" data-theme="default" class="input-button-core primary">
+  <!--v-if-->
+  <!--v-if--><span class="button-text">Click me</span>
+  <!--v-if-->
+  <!--v-if-->
+</button>"
+`;
+
+exports[`InputButtonCore > Snapshots > readonly 1`] = `
+"<button type="button" readonly="" aria-disabled="true" data-testid="input-button-core" data-theme="default" class="input-button-core primary">
+  <!--v-if-->
+  <!--v-if--><span class="button-text">Click me</span>
+  <!--v-if-->
+  <!--v-if-->
+</button>"
+`;
+
+exports[`InputButtonCore > Snapshots > secondary variant 1`] = `
+"<button type="button" aria-disabled="false" data-testid="input-button-core" data-theme="default" class="input-button-core secondary">
+  <!--v-if-->
+  <!--v-if--><span class="button-text">Click me</span>
+  <!--v-if-->
+  <!--v-if-->
+</button>"
+`;
+
+exports[`InputButtonCore > Snapshots > tertiary variant 1`] = `
+"<button type="button" aria-disabled="false" data-testid="input-button-core" data-theme="default" class="input-button-core tertiary">
+  <!--v-if-->
+  <!--v-if--><span class="button-text">Click me</span>
+  <!--v-if-->
+  <!--v-if-->
+</button>"
+`;
+
+exports[`InputButtonCore > Snapshots > with left and right slots 1`] = `
+"<button type="button" aria-disabled="false" data-testid="input-button-core" data-theme="default" class="input-button-core primary">
+  <!--v-if--><span class="btn-icon left"><span data-testid="left-icon">←</span></span><span class="button-text">Click me</span><span class="btn-icon right"><span data-testid="right-icon">→</span></span>
+  <!--v-if-->
+</button>"
+`;
