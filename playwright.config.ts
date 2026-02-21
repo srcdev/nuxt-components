@@ -1,10 +1,15 @@
 import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  testDir: "./tests/playwright",
-  timeout: 30 * 1000,
+  // Pick up both co-located .playwright.ts files and the legacy tests/playwright/ directory
+  testMatch: ["**/*.playwright.ts", "**/tests/playwright/**/*.ts"],
+  timeout: 5 * 1000,
   expect: {
     timeout: 5000,
+    toHaveScreenshot: {
+      // Tolerate minor sub-pixel rendering differences across platforms
+      maxDiffPixelRatio: 0.02,
+    },
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -12,7 +17,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   use: {
-    baseURL: "http://localhost:3000",
+    // Storybook for visual/component tests
+    baseURL: "http://127.0.0.1:6006",
     trace: "on-first-retry",
   },
   projects: [

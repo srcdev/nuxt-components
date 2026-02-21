@@ -166,6 +166,64 @@ The `.vscode` directory contains Visual Studio Code configuration files to ensur
 
 The `.vscode` directory includes comprehensive code snippets for rapid component development:
 
+## Testing
+
+This project has two test layers that run independently.
+
+---
+
+### Unit & Snapshot Tests (Vitest)
+
+Runs component logic, HTML structure, and snapshot regression tests. No browser or running server required.
+
+```bash
+# Run in watch mode (development)
+npm run test
+
+# Run once (CI / pre-commit)
+npm run test:run
+
+# Open the Vitest UI (browser-based test explorer)
+npm run test:ui
+
+# Update snapshots after an intentional component change
+npm run test:update
+```
+
+---
+
+### Visual Regression Tests (Playwright)
+
+Runs pixel-level screenshot comparisons against Storybook. Requires Storybook to be running first.
+
+```bash
+# 1. Start Storybook
+npm run storybook-run-build
+
+# 2. In a separate terminal, run visual tests
+npx playwright test
+
+# Update visual baselines after an intentional visual change
+npx playwright test --update-snapshots
+
+# View Playwright test report
+npx playwright show-report
+```
+
+> Visual tests run across Chromium, Firefox, and WebKit. Snapshot baselines are stored per browser — expect three PNG files per component test.
+
+---
+
+### What Each Layer Catches
+
+| Change                                | Unit tests | Visual tests |
+| ------------------------------------- | ---------- | ------------ |
+| Class added / removed                 | ✅         | ✅           |
+| HTML structure changed                | ✅         | ✅           |
+| Font weight / color / spacing changed | ❌         | ✅           |
+| Prop or slot logic broken             | ✅         | ❌           |
+| Accessibility attribute missing       | ✅         | ❌           |
+
 #### Core Components
 
 - **`srcdev-nuxt3-component-boilerplate.code-snippets`** - Base component template with prop validation

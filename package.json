@@ -25,9 +25,9 @@
     "test:run": "vitest --run",
     "test:ui": "vitest --ui",
     "storybook": "storybook dev -p 6006",
-    "storybook-run-build": "npm run build-storybook && npx http-server storybook-static --port 6006",
     "build-storybook": "storybook build",
-    "test:e2e": "npx playwright test && kill $!"
+    "storybook-run-build": "npm run build-storybook && npx http-server storybook-static --port 6006",
+    "test:playwright": "npx playwright test"
   },
   "files": [
     "app/",
