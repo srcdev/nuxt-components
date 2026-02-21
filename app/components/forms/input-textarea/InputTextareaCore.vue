@@ -119,13 +119,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     display: flex;
     place-items: center;
     background-clip: padding-box;
-
-    &.left-slot {
-      /* background-color: green; */
-    }
-    &.right-slot {
-      /* background-color: orange; */
-    }
   }
 
   .input-textarea-core {

@@ -5,7 +5,15 @@
     :data-invalid="fieldHasError ? '' : null"
     :class="[inputVariant, { dirty: isDirty }, { active: isActive }, { error: fieldHasError }]"
   >
-    <select :id v-model="modelValue" :aria-invalid="fieldHasError" class="input-select-core" :name :title>
+    <select
+      :id
+      v-model="modelValue"
+      :aria-invalid="fieldHasError ? 'true' : null"
+      class="input-select-core"
+      :name
+      :title
+      :aria-describedby="ariaDescribedby"
+    >
       <option v-if="placeholder" value="" readonly :selected="!modelValue" class="input-select-core-option placeholder">
         {{ placeholder }}
       </option>
@@ -42,6 +50,7 @@ interface Props {
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
   inputVariant?: InputUiVariant;
+  ariaDescribedby?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -52,6 +61,7 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
   theme: "default",
   inputVariant: "normal",
+  ariaDescribedby: "",
 });
 
 const FormUiTheme = computed(() => {

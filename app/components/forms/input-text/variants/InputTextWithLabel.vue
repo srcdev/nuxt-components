@@ -20,9 +20,9 @@
 
       <InputDescription
         v-if="inputVariant !== 'outlined'"
-        :id
-        :name
-        :input-variant
+        :id="id"
+        :description-id="descriptionId"
+        :input-variant="inputVariant"
         :field-has-error="fieldHasError"
         :style-class-passthrough="['input-text-description']"
       >
@@ -117,12 +117,11 @@ const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 
-const id = `${props.name}-${useId()}`;
-const errorId = `${id}-error-message`;
-const ariaDescribedby = computed(() => {
-  const ariaDescribedbyId = slots.descriptionText || slots.descriptionHtml ? `${id}-description` : undefined;
-  return props.fieldHasError ? errorId : ariaDescribedbyId;
-});
+const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
+  props.name,
+  toRef(props, "fieldHasError"),
+  slots
+);
 
 const modelValue = defineModel<string>();
 const isActive = ref<boolean>(false);

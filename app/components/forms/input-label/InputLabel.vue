@@ -1,7 +1,7 @@
 <template>
   <label :for="id" class="input-label" :class="[elementClasses, inputVariant]">
-    <slot v-if="slots.htmlLabel" name="htmlLabel"></slot>
-    <slot v-if="slots.textLabel" name="textLabel"></slot>
+    <slot v-if="hasHtmlLabelSlot" name="htmlLabel"></slot>
+    <slot v-if="hasTextLabelSlot" name="textLabel"></slot>
   </label>
 </template>
 
@@ -25,6 +25,8 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
+const hasHtmlLabelSlot = computed(() => Boolean(slots.htmlLabel));
+const hasTextLabelSlot = computed(() => Boolean(slots.textLabel));
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
@@ -42,7 +44,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   &.normal {
     color: var(--form-label-color);
     margin-block: 0.8rem;
-    font-size: var(--step-5);
     font-weight: normal;
     line-height: 1.5;
     display: block;
@@ -51,7 +52,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   &.underlined {
     color: var(--form-label-color);
     margin-block: 0.8rem;
-    font-size: var(--step-5);
     font-weight: normal;
     line-height: 1.5;
     display: block;

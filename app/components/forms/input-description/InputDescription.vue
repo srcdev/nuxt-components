@@ -19,7 +19,7 @@ import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
-  name: string;
+  descriptionId: string;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
@@ -35,7 +35,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const descriptionId = `${props.id}-description`;
+// const descriptionId = `${props.id}-description`;
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>

@@ -1,6 +1,5 @@
 /* @layer form-tokens { */
-@import "./_inputs";
-@import "./_buttons";
+@import "./00.element-defaults";
 @import "./01.field-layout-container-level.css";
 @import "./02.typography.css";
 @import "./03.generic-input-geometry";
