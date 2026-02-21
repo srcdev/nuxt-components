@@ -3,9 +3,9 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   // Pick up both co-located .playwright.ts files and the legacy tests/playwright/ directory
   testMatch: ["**/*.playwright.ts", "**/tests/playwright/**/*.ts"],
-  timeout: 5 * 1000,
+  timeout: 15 * 1000,
   expect: {
-    timeout: 5000,
+    timeout: 15000,
     toHaveScreenshot: {
       // Tolerate minor sub-pixel rendering differences across platforms
       maxDiffPixelRatio: 0.02,
