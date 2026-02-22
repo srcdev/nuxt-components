@@ -19,6 +19,7 @@
         :step
         :list="slots.datalist ? name + '-datalist' : ''"
         :class="['input-range-core', `input-range--${weight}`, styleClassPassthrough, { 'has-markers': slots.markers }]"
+        :aria-describedby
       />
 
       <slot v-if="slots.datalist" name="datalist"></slot>
@@ -44,6 +45,7 @@ interface Props {
   weight?: FormWeight;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
+  ariaDescribedby?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -54,6 +56,7 @@ const props = withDefaults(defineProps<Props>(), {
   weight: "normal",
   fieldHasError: false,
   styleClassPassthrough: () => [],
+  ariaDescribedby: "",
 });
 
 const slots = useSlots();

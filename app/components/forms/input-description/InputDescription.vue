@@ -1,14 +1,9 @@
 <template>
-  <div
-    v-if="slots.descriptionText || slots.descriptionHtml"
-    :id="descriptionId"
-    class="input-description"
-    :class="[elementClasses]"
-  >
-    <div v-if="slots.descriptionHtml" class="input-description-html">
+  <div v-if="showDescription" :id="descriptionId" class="input-description" :class="[elementClasses]">
+    <div v-if="hasDescriptionHtml" class="input-description-html">
       <slot name="descriptionHtml"></slot>
     </div>
-    <p v-if="slots.descriptionText" class="input-description-text">
+    <p v-if="hasDescriptionText" class="input-description-text">
       <slot name="descriptionText"></slot>
     </p>
   </div>
@@ -19,7 +14,7 @@ import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
-  descriptionId: string;
+  descriptionId?: string;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
@@ -27,6 +22,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  descriptionId: "",
   fieldHasError: false,
   styleClassPassthrough: () => [],
   theme: "default",
@@ -34,6 +30,9 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
+const hasDescriptionHtml = computed(() => slots.descriptionHtml);
+const hasDescriptionText = computed(() => slots.descriptionText);
+const showDescription = computed(() => hasDescriptionHtml.value || hasDescriptionText.value);
 
 // const descriptionId = `${props.id}-description`;
 

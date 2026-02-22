@@ -18,6 +18,7 @@
         :class="[elementClasses]"
         inputmode="numeric"
         pattern="[0-9]+"
+        :aria-describedby
       />
     </div>
     <div v-if="slots.right" class="slot right">
@@ -38,6 +39,7 @@ interface Props {
   theme?: "default" | "success" | "error" | "warning";
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
+  ariaDescribedby?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -47,6 +49,7 @@ const props = withDefaults(defineProps<Props>(), {
   theme: "default",
   fieldHasError: false,
   styleClassPassthrough: () => [],
+  ariaDescribedby: "",
 });
 
 const slots = useSlots();

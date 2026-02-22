@@ -6,13 +6,13 @@ export function useAriaDescribedById(name: string | Ref<string>, fieldHasError: 
   const descriptionId = `${id}-description`;
 
   const ariaDescribedby = computed(() => {
-    const hasDescription = slots.descriptionText || slots.descriptionHtml;
+    const hasDescription = slots.descriptionText || slots.descriptionHtml || slots.description;
     const ids = [];
 
     if (hasDescription) ids.push(descriptionId);
     if (fieldHasError.value) ids.push(errorId);
 
-    return ids.length ? ids.join(" ") : undefined;
+    return ids.length ? ids.join(" ") : null;
   });
 
   return { id, errorId, descriptionId, ariaDescribedby };

@@ -1,10 +1,10 @@
 <template>
   <fieldset
-    :id
+    :id="id"
     :aria-required="required"
     :aria-invalid="fieldHasError"
     role="radiogroup"
-    :name
+    :name="name"
     class="form-fieldset"
     :class="[elementClasses, { error: fieldHasError }]"
     :data-testid="dataTestid"
@@ -12,10 +12,6 @@
     <legend v-if="legend" class="form-fieldset-legend" :class="[{ 'has-description': slots.description }]">
       <slot name="legend">{{ legend }}</slot>
     </legend>
-
-    <div v-if="slots.description" :id="`${id}-description`" class="form-fieldset-description">
-      <slot name="description"></slot>
-    </div>
 
     <div class="form-fieldset-content">
       <slot name="content"></slot>

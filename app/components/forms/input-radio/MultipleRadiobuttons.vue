@@ -8,11 +8,22 @@
     :data-testid
     :style-class-passthrough="['multiple-radiobuttons-fieldset', elementClasses]"
   >
-    <template #description>
-      <slot name="description"></slot>
-    </template>
-
     <template #content>
+      <InputDescription
+        :id
+        :description-id
+        :name
+        :field-has-error="fieldHasError"
+        :style-class-passthrough="['input-text-description']"
+      >
+        <template #descriptionHtml>
+          <slot name="descriptionHtml"></slot>
+        </template>
+        <template #descriptionText>
+          <slot name="descriptionText"></slot>
+        </template>
+      </InputDescription>
+
       <div ref="itemsContainer" class="multiple-radiobuttons-items" :class="[optionsLayout]">
         <template v-for="item in fieldData.data" :key="item.id">
           <InputCheckboxRadioButton
@@ -106,12 +117,11 @@ const slots = useSlots();
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const id = `${props.name}-input-${useId()}`;
-const errorId = `${name}-error-message`;
-const ariaDescribedby = computed(() => {
-  const ariaDescribedbyId = slots.description ? `${id}-description` : undefined;
-  return props.fieldHasError ? errorId : ariaDescribedbyId;
-});
+const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
+  props.name,
+  toRef(props, "fieldHasError"),
+  slots
+);
 
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
 const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;

@@ -17,11 +17,35 @@
       <template #textLabel>{{ label }}</template>
     </InputLabel>
 
-    <template v-if="slots.description">
-      <slot name="description"></slot>
-    </template>
+    <InputDescription
+      :id
+      :description-id
+      :name
+      :field-has-error="fieldHasError"
+      :style-class-passthrough="['input-text-description']"
+    >
+      <template #descriptionHtml>
+        <slot name="descriptionHtml"></slot>
+      </template>
+      <template #descriptionText>
+        <slot name="descriptionText"></slot>
+      </template>
+    </InputDescription>
 
-    <InputRangeCore :id v-model="modelValue" :name :min :max :step :theme :required :weight :field-has-error>
+    <InputRangeCore
+      :id
+      v-model="modelValue"
+      :name
+      :min
+      :max
+      :step
+      :theme
+      :required
+      :weight
+      :field-has-error
+      :aria-describedby="ariaDescribedby"
+      :style-class-passthrough="styleClassPassthrough"
+    >
       <template v-if="slots.datalist" #datalist>
         <slot name="datalist"></slot>
       </template>
@@ -57,7 +81,7 @@
       </template>
     </InputRangeCore>
     <InputError
-      :id
+      :id="errorId"
       :error-message
       :show-error="fieldHasError"
       :is-detached="true"
@@ -99,10 +123,17 @@ const props = withDefaults(defineProps<Props>(), {
 const slots = useSlots();
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const id = useId();
-const FormUiTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
-});
+// const id = useId();
+
+const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
+  props.name,
+  toRef(props, "fieldHasError"),
+  slots
+);
+
+// const FormUiTheme = computed(() => {
+//   return props.fieldHasError ? "error" : props.theme;
+// });
 
 const modelValue = defineModel<number | readonly number[]>();
 

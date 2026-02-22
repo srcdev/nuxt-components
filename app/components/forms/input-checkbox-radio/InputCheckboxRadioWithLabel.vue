@@ -2,7 +2,6 @@
   <label
     :for="id"
     class="input-checkbox-radio-with-label"
-    :data-size="size"
     :class="[elementClasses, optionsLayout, { error: fieldHasError }]"
   >
     <InputCheckboxRadioCore
@@ -11,7 +10,6 @@
       :type
       :name
       :required
-      :size
       :true-value="trueValue"
       :false-value="falseValue"
       :field-has-error="fieldHasError"
@@ -37,11 +35,11 @@ import type { BaseCheckboxRadioProps } from "~/types/forms/types.forms";
 interface Props extends Omit<BaseCheckboxRadioProps, "id"> {
   label: string;
   optionsLayout?: string;
+  ariaDescribedby?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   required: false,
-  size: "default",
   theme: "default",
   fieldHasError: false,
   styleClassPassthrough: () => [],

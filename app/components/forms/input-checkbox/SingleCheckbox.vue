@@ -1,6 +1,7 @@
 <template>
   <FormFieldset
     :id
+    :description-id
     :name
     :legend
     :field-has-error
@@ -8,11 +9,22 @@
     :data-testid
     :style-class-passthrough="['single-checkbox-fieldset']"
   >
-    <template #description>
-      <slot name="description"></slot>
-    </template>
-
     <template #content>
+      <InputDescription
+        :id
+        :description-id
+        :name
+        :field-has-error="fieldHasError"
+        :style-class-passthrough="['input-text-description']"
+      >
+        <template #descriptionHtml>
+          <slot name="descriptionHtml"></slot>
+        </template>
+        <template #descriptionText>
+          <slot name="descriptionText"></slot>
+        </template>
+      </InputDescription>
+
       <div class="single-checkbox-items" :class="[optionsLayout]">
         <InputCheckboxRadioWithLabel
           v-model="modelValue"
@@ -83,12 +95,18 @@ const slots = useSlots();
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
 const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const id = `${props.name}-input-${useId()}`;
-const errorId = `${props.name}-error-message`;
-const ariaDescribedby = computed(() => {
-  const ariaDescribedbyId = slots.description ? `${props.name}-description` : undefined;
-  return props.fieldHasError ? errorId : ariaDescribedbyId;
-});
+// const id = `${props.name}-input-${useId()}`;
+// const errorId = `${props.name}-error-message`;
+// const ariaDescribedby = computed(() => {
+//   const ariaDescribedbyId = slots.description ? `${props.name}-description` : undefined;
+//   return props.fieldHasError ? errorId : ariaDescribedbyId;
+// });
+
+const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
+  props.name,
+  toRef(props, "fieldHasError"),
+  slots
+);
 
 watchEffect(() => {
   if (!slots.description && props.fieldHasError) {

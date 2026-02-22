@@ -17,9 +17,20 @@
       <template #textLabel>{{ label }}</template>
     </InputLabel>
 
-    <template v-if="slots.description">
-      <slot name="description"></slot>
-    </template>
+    <InputDescription
+      :id
+      :description-id
+      :name
+      :field-has-error="fieldHasError"
+      :style-class-passthrough="['input-text-description']"
+    >
+      <template #descriptionHtml>
+        <slot name="descriptionHtml"></slot>
+      </template>
+      <template #descriptionText>
+        <slot name="descriptionText"></slot>
+      </template>
+    </InputDescription>
 
     <InputNumberCore
       :id
@@ -33,6 +44,7 @@
       :weight
       :field-has-error
       :style-class-passthrough
+      :aria-describedby
     >
       <template v-if="slots.left" #left>
         <InputButtonCore
@@ -65,7 +77,7 @@
         </InputButtonCore>
       </template>
     </InputNumberCore>
-    <InputError :id :error-message :show-error="fieldHasError" :is-detached="true" />
+    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" />
   </div>
 </template>
 
@@ -100,8 +112,11 @@ const props = withDefaults(defineProps<Props>(), {
 const slots = useSlots();
 const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const id = useId();
-
+const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
+  props.name,
+  toRef(props, "fieldHasError"),
+  slots
+);
 const modelValue = defineModel<number | readonly number[]>();
 
 const updateValue = (step: number, withinRangeLimit: boolean) => {

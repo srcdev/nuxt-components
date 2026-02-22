@@ -13,6 +13,13 @@
     :theme
     :input-variant
   >
+    <template #descriptionHtml>
+      <slot name="descriptionHtml"></slot>
+    </template>
+    <template #descriptionText>
+      <slot name="descriptionText"></slot>
+    </template>
+
     <template #right>
       <InputButtonCore
         type="button"

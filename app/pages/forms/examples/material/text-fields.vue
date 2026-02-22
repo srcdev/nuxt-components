@@ -179,6 +179,7 @@
                           :theme
                           :input-variant
                         >
+                          <template #descriptionText>This is a descriptionText for the password input.</template>
                           <template #right>
                             <Icon name="radix-icons:eye-open" class="icon" />
                           </template>
@@ -223,7 +224,7 @@
                           :theme
                           :display-as-disc="false"
                         >
-                          <template #descriptionText>MultipleCheckboxes description: optionsLayout = 'inline'</template>
+                          <template #descriptionText>descriptionText slot</template>
                           <template #itemIcon>
                             <Icon name="material-symbols:bookmark-add-outline" class="icon" />
                           </template>
@@ -282,7 +283,7 @@
                           label="Toggle Dark mode"
                           :theme
                         >
-                          <template #description>
+                          <template #descriptionHtml>
                             <p class="label-description">Toggle some value</p>
                           </template>
                         </ToggleSwitchWithLabel>
@@ -306,7 +307,7 @@
                           :style-class-passthrough="['style-1', 'style-2']"
                           :theme
                         >
-                          <template #description>
+                          <template #descriptionHtml>
                             <p class="label-description">Input type="text" inputmode="numeric"</p>
                           </template>
                           <template #left>
@@ -335,7 +336,7 @@
                           :style-class-passthrough="['count-1', 'count-2']"
                           :theme
                         >
-                          <template #description>
+                          <template #descriptionHtml>
                             <p class="label-description">Input type="number" inputmode="numeric"</p>
                           </template>
                           <template #left>
@@ -392,7 +393,7 @@
                           :style-class-passthrough="['style-1', 'style-2']"
                           :theme
                         >
-                          <template #description>
+                          <template #descriptionText>
                             <p class="label-description">This is a description of what the user is required to do</p>
                           </template>
                           <template #datalist>
@@ -432,7 +433,7 @@
                           <template #checkedIcon>
                             <Icon name="material-symbols:check-small" class="input-checked-icon" />
                           </template>
-                          <template #description>
+                          <template #descriptionHtml>
                             <p class="label-description">
                               NOTE: Custom check icon set via slot
                               <br />
@@ -458,7 +459,7 @@
                           options-layout="equal-widths"
                           :theme
                         >
-                          <template #description>
+                          <template #descriptionHtml>
                             <p class="label-description">This is description: optionsLayout = 'equal-widths'</p>
                           </template>
                         </MultipleRadiobuttons>
@@ -505,7 +506,7 @@
                           <template #checkedIcon>
                             <Icon name="material-symbols:circle" class="input-checked-icon" />
                           </template>
-                          <template #description>
+                          <template #descriptionHtml>
                             <p class="label-description">
                               NOTE: Custom chefck icon set via slot
                               <br />

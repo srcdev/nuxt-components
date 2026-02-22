@@ -3,7 +3,6 @@
     class="input-checkbox-radio-wrapper"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
-    :data-size="size"
     :class="wrapperClasses"
   >
     <div class="input-checked-icon-slot">
@@ -26,21 +25,32 @@
       :class="inputClasses"
       :aria-checked="isChecked"
       :aria-describedby="ariaDescribedby"
-      :aria-invalid="fieldHasError"
+      :aria-invalid="fieldHasError ? 'true' : null"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { BaseCheckboxRadioProps } from "~/types/forms/types.forms";
+import type { FormUiTheme } from "~/types/forms/types.forms";
 
-interface Props extends BaseCheckboxRadioProps {
+interface Props {
+  type: "checkbox" | "radio";
+  id: string;
+  name: string;
+  required?: boolean;
+  theme?: FormUiTheme;
+  fieldHasError?: boolean;
+  styleClassPassthrough?: string | string[];
+  trueValue?: string | number | boolean;
+  falseValue?: string | number | boolean;
+  ariaDescribedby?: string;
+  displayAsDisc?: boolean;
+  multipleOptions?: boolean;
   isButton?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   required: false,
-  size: "default",
   theme: "default",
   fieldHasError: false,
   styleClassPassthrough: () => [],
@@ -78,7 +88,6 @@ const isChecked = computed(() => {
 // Consolidated class computations
 const wrapperClasses = computed(() => [
   props.type,
-  props.size,
   elementClasses.value,
   {
     button: props.isButton,
@@ -87,7 +96,6 @@ const wrapperClasses = computed(() => [
 ]);
 
 const inputClasses = computed(() => [
-  props.size,
   {
     "is-button": props.isButton,
   },

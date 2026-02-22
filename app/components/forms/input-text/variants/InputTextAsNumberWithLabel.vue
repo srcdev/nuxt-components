@@ -17,9 +17,20 @@
       <template #textLabel>{{ label }}</template>
     </InputLabel>
 
-    <div v-if="slots.description" :id="`${id}-description`">
-      <slot name="description"></slot>
-    </div>
+    <InputDescription
+      :id
+      :description-id
+      :name
+      :field-has-error="fieldHasError"
+      :style-class-passthrough="['input-text-description']"
+    >
+      <template #descriptionHtml>
+        <slot name="descriptionHtml"></slot>
+      </template>
+      <template #descriptionText>
+        <slot name="descriptionText"></slot>
+      </template>
+    </InputDescription>
 
     <InputTextCore
       :id
@@ -107,16 +118,11 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const FormUiTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
-});
-
-const id = useId();
-const errorId = `${id}-error-message`;
-const ariaDescribedby = computed(() => {
-  const ariaDescribedbyId = slots.description ? `${id}-description` : undefined;
-  return props.fieldHasError ? errorId : ariaDescribedbyId;
-});
+const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
+  props.name,
+  toRef(props, "fieldHasError"),
+  slots
+);
 
 const modelValue = defineModel<number>();
 const isActive = ref<boolean>(false);

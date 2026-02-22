@@ -19,17 +19,16 @@
       </InputLabel>
 
       <InputDescription
-        v-if="inputVariant !== 'outlined'"
-        :id="id"
-        :description-id="descriptionId"
-        :input-variant="inputVariant"
+        :id
+        :description-id
+        :name
         :field-has-error="fieldHasError"
         :style-class-passthrough="['input-text-description']"
       >
-        <template v-if="slots.descriptionHtml" #descriptionHtml>
+        <template #descriptionHtml>
           <slot name="descriptionHtml"></slot>
         </template>
-        <template v-if="slots.descriptionText" #descriptionText>
+        <template #descriptionText>
           <slot name="descriptionText"></slot>
         </template>
       </InputDescription>

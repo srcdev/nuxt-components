@@ -4,8 +4,7 @@
     class="input-checkbox-radio-options-button"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
-    :data-size="size"
-    :class="[size, elementClasses, optionsLayout, { error: fieldHasError }, { lozenge: displayAsLozenge }]"
+    :class="[elementClasses, optionsLayout, { error: fieldHasError }, { lozenge: displayAsLozenge }]"
   >
     <InputCheckboxRadioCore
       :id
@@ -14,7 +13,6 @@
       :type
       :name
       :required
-      :size
       :true-value="trueValue"
       :false-value="falseValue"
       :field-has-error="fieldHasError"
@@ -46,11 +44,11 @@ interface Props extends BaseCheckboxRadioProps {
   optionsLayout?: string;
   direction?: "row" | "row-reverse";
   displayAsLozenge?: boolean;
+  ariaDescribedby?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   required: false,
-  size: "default",
   theme: "default",
   fieldHasError: false,
   styleClassPassthrough: () => [],
@@ -111,32 +109,9 @@ const flexDirection = ref(props.direction);
     outline-offset: var(--form-element-outline-offset-focus);
   }
 
-  /* Sizes */
-  &.x-small {
-    padding-block: 0.2rem;
-    padding-inline: 1.6rem;
-    gap: 1rem;
-  }
-  &.small {
-    padding-block: 0.2rem;
-    padding-inline: 1.6rem;
-    gap: 1rem;
-  }
-  &.default {
-    padding-block: 0.4rem;
-    padding-inline: 1.2rem;
-    gap: 1rem;
-  }
-  &.medium {
-    padding-block: 0.4rem;
-    padding-inline: 1.2rem;
-    gap: 1rem;
-  }
-  &.large {
-    padding-block: 0.4rem;
-    padding-inline: 1.2rem;
-    gap: 1rem;
-  }
+  padding-block: 0.4rem;
+  padding-inline: 1.2rem;
+  gap: 1rem;
 
   .input-checkbox-radio-options-button-label {
     display: flex;

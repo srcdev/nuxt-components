@@ -8,16 +8,21 @@
     :data-testid
     :style-class-passthrough="['multiple-checkboxes-fieldset', elementClasses]"
   >
-    <InputDescription :id :name :field-has-error="fieldHasError" :style-class-passthrough="['input-text-description']">
-      <template v-if="slots.descriptionHtml" #descriptionHtml>
-        <slot name="descriptionHtml"></slot>
-      </template>
-      <template v-if="slots.descriptionText" #descriptionText>
-        <slot name="descriptionText"></slot>
-      </template>
-    </InputDescription>
-
     <template #content>
+      <InputDescription
+        :id
+        :description-id
+        :name
+        :field-has-error="fieldHasError"
+        :style-class-passthrough="['input-text-description']"
+      >
+        <template #descriptionHtml>
+          <slot name="descriptionHtml"></slot>
+        </template>
+        <template #descriptionText>
+          <slot name="descriptionText"></slot>
+        </template>
+      </InputDescription>
       <div ref="itemsContainer" class="multiple-checkboxes-items" :class="[optionsLayout]">
         <template v-for="item in fieldData.data" :key="item.id">
           <InputCheckboxRadioButton
@@ -118,12 +123,11 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const id = `${props.name}-${useId()}`;
-const errorId = `${id}-error-message`;
-const ariaDescribedby = computed(() => {
-  const ariaDescribedbyId = slots.descriptionText || slots.descriptionHtml ? `${id}-description` : undefined;
-  return props.fieldHasError ? errorId : ariaDescribedbyId;
-});
+const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
+  props.name,
+  toRef(props, "fieldHasError"),
+  slots
+);
 
 const { maxChildWidth, itemsContainer, updateMaxChildWidth } = useMaxChildWidth(
   ".input-checkbox-radio-label, .input-checkbox-radio-with-label",
