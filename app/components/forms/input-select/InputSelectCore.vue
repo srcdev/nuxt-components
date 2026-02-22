@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, InputUiVariant, IFormMultipleOptions } from "~/types/forms/types.forms";
+import type { IFormMultipleOptions } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
@@ -48,12 +48,12 @@ interface Props {
   required?: boolean;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: FormUiTheme;
-  inputVariant?: InputUiVariant;
+  theme?: "default" | "success" | "error" | "warning";
+  inputVariant?: "normal" | "outlined" | "underlined";
   ariaDescribedby?: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   placeholder: "",
   title: "Please select an option",
   required: false,
@@ -62,10 +62,6 @@ const props = withDefaults(defineProps<Props>(), {
   theme: "default",
   inputVariant: "normal",
   ariaDescribedby: "",
-});
-
-const FormUiTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
 });
 
 const modelValue = defineModel<string | number | readonly number[]>({ required: true });
