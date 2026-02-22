@@ -64,7 +64,7 @@ const slots = useSlots();
   grid-template-columns: auto 1fr auto;
   gap: 12px;
   align-items: center;
-  background-color: oklch(from var(--colour-theme-6) calc(l + 0.2) c h);
+  background-color: var(--colour-theme-1);
   border-start-start-radius: 8px;
   border-end-start-radius: 8px;
   padding: 12px 14px;

@@ -8,7 +8,7 @@
     <select
       :id
       v-model="modelValue"
-      :aria-invalid="fieldHasError ? 'true' : null"
+      :aria-invalid="fieldHasError ? 'true' : undefined"
       class="input-select-core"
       :name
       :title

@@ -3,6 +3,7 @@ import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { ref } from "vue";
 import ComponentUnderTest from "../InputCheckboxRadioCore.vue";
+import type { FormUiTheme } from "~/types/forms/types.forms";
 
 const initialPropsData = {
   type: "checkbox" as const,
@@ -10,7 +11,7 @@ const initialPropsData = {
   name: "testName",
   required: false,
   size: "medium",
-  theme: "default",
+  theme: "default" as FormUiTheme,
   fieldHasError: false,
   styleClassPassthrough: ["testClass"],
   trueValue: "checked",
@@ -253,18 +254,6 @@ describe("InputCheckboxRadioCore Component", () => {
 
       const input = wrapper.find("input");
       expect(input.attributes("required")).toBeUndefined();
-    });
-  });
-
-  describe("Size Variants", () => {
-    it("applies size classes correctly", async () => {
-      wrapper = await wrapperFactory({ size: "large" });
-
-      const wrapperDiv = wrapper.find(".input-checkbox-radio-wrapper");
-
-      const input = wrapper.find("input");
-      // Remove assertion for 'large' class, as component does not apply it
-      // expect(input.classes()).toContain("large");
     });
   });
 

@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import type { BaseCheckboxRadioProps } from "~/types/forms/types.forms";
+import type { BaseCheckboxRadioProps, FormUiTheme } from "~/types/forms/types.forms";
 
 interface Props extends Omit<BaseCheckboxRadioProps, "id"> {
   label: string;
@@ -40,7 +40,7 @@ interface Props extends Omit<BaseCheckboxRadioProps, "id"> {
 
 const props = withDefaults(defineProps<Props>(), {
   required: false,
-  theme: "default",
+  theme: "default" as FormUiTheme,
   fieldHasError: false,
   styleClassPassthrough: () => [],
   trueValue: true,

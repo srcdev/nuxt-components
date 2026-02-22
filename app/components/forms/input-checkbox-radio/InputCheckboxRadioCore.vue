@@ -23,9 +23,9 @@
       :value="trueValue"
       class="input-checkbox-radio-core"
       :class="inputClasses"
-      :aria-checked="isChecked"
+      :aria-checked="isChecked ? 'true' : 'false'"
       :aria-describedby="ariaDescribedby"
-      :aria-invalid="fieldHasError ? 'true' : null"
+      :aria-invalid="fieldHasError ? 'true' : undefined"
     />
   </div>
 </template>

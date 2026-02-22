@@ -28,7 +28,7 @@
       :required
       :maxlength
       :class="['input-text-core', elementClasses, { dirty: isDirty }, { active: isActive }]"
-      :aria-invalid="fieldHasError ? 'true' : null"
+      :aria-invalid="fieldHasError ? 'true' : undefined"
       :aria-describedby
       :pattern="inputPattern"
       :inputmode
