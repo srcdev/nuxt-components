@@ -47,7 +47,7 @@
      =========================================== */
 
   /* Variant Primary */
-  --theme-button-primary-surface: var(--green-9);
+  --theme-button-primary-surface: var(--green-11);
   --theme-button-primary-surface-hover: var(--green-8);
   --theme-button-primary-surface-active: var(--green-7);
   --theme-button-primary-border: var(--green-7);
