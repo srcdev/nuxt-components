@@ -27,7 +27,6 @@
             :name="name"
             class="option-input"
             :value="option.value"
-            :aria-selected="modelValue === option.value"
           />
         </label>
       </div>
