@@ -10,8 +10,6 @@ html {
     color-scheme: dark;
   }
 
-  /* background-color: var(--page-bg); */
-
   font-size: 62.5%;
 
   transition:
@@ -22,6 +20,7 @@ html {
   overflow-x: clip;
 }
 body {
+  background-color: var(--page-bg);
   color: var(--grayscale-text-body);
   font-family: var(--font-family);
   font-size: var(--step-4);

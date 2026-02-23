@@ -20,29 +20,28 @@
      GENERIC BODY VARIABLES
      Styling for form inputs and controls
      =========================================== */
-  --page-bg: var(--gray-0);
-  --surface-subtle: var(--gray-1);
-  --grayscale-text-title: var(--gray-11);
-  --grayscale-text-body: var(--gray-10);
-  --grayscale-text-subtitle: var(--gray-10);
-  --grayscale-text-caption: var(--gray-10);
-  --grayscale-text-negative: var(--gray-10);
-  --grayscale-text-disabled: var(--gray-10);
+  --page-bg: var(--slate-00);
+  --surface-subtle: var(--slate-01);
+  --grayscale-text-title: var(--slate-11);
+  --grayscale-text-body: var(--slate-10);
+  --grayscale-text-subtitle: var(--slate-10);
+  --grayscale-text-caption: var(--slate-10);
+  --grayscale-text-negative: var(--slate-10);
+  --grayscale-text-disabled: var(--slate-10);
   --theme-link-default: var(--blue-10);
 
   /* ===========================================
      FORM INPUT VARIABLES
      Styling for form inputs and controls
      =========================================== */
-  --theme-input-surface: var(--blue-0);
-  --theme-input-surface-hover: var(--blue-1);
+  --theme-input-surface: var(--slate-00);
+  --theme-input-surface-hover: var(--slate-01);
   --theme-input-border: var(--blue-6);
   --theme-input-border-hover: var(--blue-5);
   --theme-input-border-focus: var(--blue-4);
   --theme-input-focus-ring: var(--blue-4);
-  --theme-input-placeholder: var(--blue-8);
-  --theme-input-placeholder-font-size: var(--step--1);
-  --theme-input-text-color-normal: var(--blue-12);
+  --theme-input-placeholder: var(--slate-02);
+  --theme-input-text-color-normal: var(--slate-02);
   --theme-input-outline: transparent;
   --theme-input-outline-focus: var(--blue-4);
   --theme-input-visible-outline: var(--blue-12);

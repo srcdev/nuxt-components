@@ -92,11 +92,12 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   z-index: 2;
   position: relative;
 
-  &:hover {
-    background-color: var(--theme-input-surface-hover);
+  &:has(textarea:focus-visible) {
+    outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+    outline-offset: var(--form-element-outline-offset-focus);
   }
 
-  &:has(textarea:focus-visible) {
+  &:has(textarea:is(:hover)) {
     outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
     outline-offset: var(--form-element-outline-offset-focus);
   }
@@ -137,7 +138,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     min-height: 6lh;
 
     &::placeholder {
-      color: var(--input-placeholder-color);
+      color: var(--theme-input-placeholder);
       font-size: var(--input-placeholder-font-size);
       font-style: var(--input-placeholder-font-style);
       line-height: var(--input-placeholder-line-height);

@@ -57,7 +57,7 @@
   --theme-button-outline-hover: light-dark(var(--orange-10), var(--orange-5));
   --theme-button-outline-focus: light-dark(var(--orange-10), var(--orange-5));
 
-  --theme-button-text: var(--orange-0);
-  --theme-button-text-hover: var(--orange-0);
-  --theme-button-text-focus: var(--orange-0);
+  --theme-button-text: var(--orange-1);
+  --theme-button-text-hover: var(--orange-1);
+  --theme-button-text-focus: var(--orange-1);
 }

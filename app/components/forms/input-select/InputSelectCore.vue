@@ -89,7 +89,7 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
     background-color: var(--theme-input-surface);
   }
 
-  &:has(select:focus-visible) {
+  &:has(select:focus-visible, :hover) {
     outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
     outline-offset: var(--form-element-outline-offset-focus);
   }
@@ -138,10 +138,6 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
     outline: none;
     border-radius: 0;
     width: 100%;
-
-    &:hover {
-      background-color: var(--theme-input-surface-hover);
-    }
 
     /* END modern Select CSS */
 

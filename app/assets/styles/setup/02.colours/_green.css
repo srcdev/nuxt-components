@@ -1,33 +1,15 @@
 :where(html) {
-  /* HEX Set - Original */
-  /*
-  --green-0: #ebfbee;
-  --green-1: #d3f9d8;
-  --green-2: #b2f2bb;
-  --green-3: #8ce99a;
-  --green-4: #69db7c;
-  --green-5: #51cf66;
-  --green-6: #40c057;
-  --green-7: #37b24d;
-  --green-8: #2f9e44;
-  --green-9: #2b8a3e;
-  --green-10: #237032;
-  --green-11: #1b5727;
-  --green-12: #017f18;
-  */
-
-  /* OKLCH Set - Optimized for Form Success States */
-  --green-0: oklch(98% 0.01 145); /* Very light background for success containers, toast backgrounds */
-  --green-1: oklch(95% 0.04 145); /* Light background for form field success states, subtle highlights */
-  --green-2: oklch(92% 0.06 145); /* Background for success badges, pills, or cards */
-  --green-3: oklch(88% 0.08 145); /* Hover states for light success elements */
-  --green-4: oklch(83% 0.11 145); /* Success button backgrounds (light theme), form borders */
-  --green-5: oklch(77% 0.14 145); /* Primary success color, checkmarks, icons */
-  --green-6: oklch(70% 0.16 145); /* Hover state for success buttons, active form elements */
-  --green-7: oklch(48% 0.175 145); /* Active/pressed success buttons, strong emphasis */
-  --green-8: oklch(52% 0.17 145); /* Hover state for success buttons, form validation text */
-  --green-9: oklch(58% 0.18 145); /* Primary success buttons, important indicators - bright and appealing */
-  --green-10: oklch(55% 0.16 145); /* High contrast success text, form labels */
-  --green-11: oklch(30% 0.11 145); /* Very high contrast text, accessible on light backgrounds */
-  --green-12: oklch(22% 0.08 145); /* Maximum contrast success text, dark theme backgrounds */
+  --green-0: oklch(0.99 0.02 157);
+  --green-1: oklch(0.95 0.078 157);
+  --green-2: oklch(0.889 0.19 157);
+  --green-3: oklch(0.829 0.197 157);
+  --green-4: oklch(0.768 0.183 157);
+  --green-5: oklch(0.708 0.169 157);
+  --green-6: oklch(0.647 0.154 157);
+  --green-7: oklch(0.587 0.14 157);
+  --green-8: oklch(0.526 0.125 157);
+  --green-9: oklch(0.466 0.111 157);
+  --green-10: oklch(0.405 0.096 157);
+  --green-11: oklch(0.344 0.082 157);
+  --green-12: oklch(0.284 0.068 157);
 }

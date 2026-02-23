@@ -136,8 +136,9 @@ onMounted(() => {
   z-index: 2;
   position: relative;
 
-  &:has(input:is(:hover, :focus-visible)) {
-    background-color: var(--theme-input-surface-hover);
+  &:has(input:is(:hover)) {
+    outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+    outline-offset: var(--form-element-outline-offset-focus);
   }
 
   &:has(input:focus-visible) {
