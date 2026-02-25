@@ -43,6 +43,11 @@
         <slot name="layout-content">Page content goes here</slot>
       </template>
     </LayoutRow>
+    <LayoutRow id="footer-content" tag="footer" variant="full" :is-landmark="true">
+      <template #default>
+        <p>Footer content here</p>
+      </template>
+    </LayoutRow>
   </div>
 </template>
 
@@ -195,6 +200,12 @@ onMounted(() => {
 });
 </script>
 <style lang="css">
+.page-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+}
+
 /* Modifiers for ResposiveHeader  */
 .header {
   .debug-grid {

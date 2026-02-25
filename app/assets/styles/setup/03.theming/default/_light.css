@@ -13,51 +13,57 @@
   --colour-theme-8: var(--blue-8);
   --colour-theme-9: var(--blue-9);
   --colour-theme-10: var(--blue-10);
-  --colour-theme-11: var(--blue-11);
-  --colour-theme-12: var(--blue-12);
 
   /* ===========================================
      GENERIC BODY VARIABLES
      Styling for form inputs and controls
      =========================================== */
   --page-bg: var(--slate-00);
-  --surface-subtle: var(--slate-01);
-  --grayscale-text-title: var(--slate-11);
-  --grayscale-text-body: var(--slate-10);
-  --grayscale-text-subtitle: var(--slate-10);
-  --grayscale-text-caption: var(--slate-10);
-  --grayscale-text-negative: var(--slate-10);
-  --grayscale-text-disabled: var(--slate-10);
-  --theme-link-default: var(--blue-10);
+  --colour-text-default: var(--slate-09);
+
+  /* ===========================================
+     ANCHOR LINK VARIABLES
+     Styling for anchor links and interactive text
+     =========================================== */
+  --colour-link-default: var(--blue-10);
+  --colour-link-hover: var(--blue-9);
 
   /* ===========================================
      FORM INPUT VARIABLES
      Styling for form inputs and controls
      =========================================== */
+
+  /* Input surfaces and backgrounds */
   --theme-input-surface: var(--slate-00);
   --theme-input-surface-hover: var(--slate-01);
+
+  /* Input borders */
   --theme-input-border: var(--blue-6);
   --theme-input-border-hover: var(--blue-5);
   --theme-input-border-focus: var(--blue-4);
-  --theme-input-focus-ring: var(--blue-4);
-  --theme-input-placeholder: var(--slate-02);
-  --theme-input-text-color-normal: var(--slate-02);
+
+  /* Input outlines and focus */
   --theme-input-outline: transparent;
   --theme-input-outline-focus: var(--blue-4);
   --theme-input-visible-outline: var(--blue-12);
   --theme-focus-visible-shadow: 0 0 0 2px var(--blue-2);
-  --theme-form-input-outline: transparent;
-  --theme-label-text: var(--blue-2);
-  --theme-help-text: var(--blue-4);
-  --theme-input-focus-ring: var(--blue-4);
-  --theme-input-surface-disabled: var(--blue-10);
-  --theme-input-border-disabled: var(--blue-8);
-  --theme-input-text-disabled: var(--blue-6);
 
+  /* ===========================================
+     INPUT TEXT VARIABLES
+     =========================================== */
+  --theme-input-placeholder: var(--slate-05);
+  --theme-input-text-color-normal: var(--slate-09);
+
+  /* ===========================================
+     CHECKBOX AND RADIO BUTTON VARIABLES
+     =========================================== */
   --theme-checkbox-symbol-color: var(--blue-8);
-  --theme-checkbox-symbol-surface: var(--gray-0);
+  --theme-checkbox-symbol-surface: var(--theme-input-surface);
   --theme-checkbox-decorator-color: var(--blue-8);
 
+  /* ===========================================
+     TOGGLE SWITCH VARIABLES
+     =========================================== */
   --theme-toggle-symbol-color-default: var(--blue-0);
   --theme-toggle-symbol-color-checked: var(--blue-8);
 
@@ -94,44 +100,4 @@
   --theme-button-tertiary-text: var(--blue-9);
   --theme-button-tertiary-border-active: var(--blue-7);
   --theme-button-tertiary-outline-active: var(--blue-4);
-
-  /* ===========================================
-     COMPONENT SURFACE VARIABLES
-     Background colors for various UI surfaces
-     =========================================== */
-  --surface-primary: var(--blue-1);
-  --surface-secondary: var(--blue-2);
-  --surface-tertiary: var(--blue-3);
-
-  /* ===========================================
-     COMPONENT TEXT VARIABLES
-     Text color hierarchy for readability
-     =========================================== */
-  --text-primary: var(--blue-12);
-  --text-secondary: var(--blue-11);
-  --text-muted: var(--blue-10);
-
-  /* ===========================================
-     COMPONENT BORDER VARIABLES
-     Border colors for various emphasis levels
-     =========================================== */
-  --border-subtle: var(--blue-4);
-  --border-default: var(--blue-6);
-  --border-strong: var(--blue-8);
-
-  /* ===========================================
-     INTERACTIVE STATE VARIABLES
-     Colors for hover, active, and focus states
-     =========================================== */
-  --interactive-hover: var(--blue-3);
-  --interactive-active: var(--blue-5);
-  --interactive-focus: var(--blue-4);
-
-  /* ===========================================
-     SHADOW VARIABLES
-     Elevation and depth through shadows
-     =========================================== */
-  --shadow-sm: 0 1px 2px 0 rgb(var(--blue-12) / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(var(--blue-12) / 0.1), 0 2px 4px -2px rgb(var(--blue-12) / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(var(--blue-12) / 0.1), 0 4px 6px -4px rgb(var(--blue-12) / 0.1);
 }

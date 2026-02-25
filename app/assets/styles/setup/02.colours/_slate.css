@@ -1,4 +1,5 @@
 :where(html) {
+  --slate-00: oklch(0.98 0.004 256);
   --slate-01: oklch(0.932 0.004 256);
   --slate-02: oklch(0.86 0.008 256);
   --slate-03: oklch(0.716 0.016 256);

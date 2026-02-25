@@ -23,11 +23,11 @@
   --theme-input-border: var(--orange-6);
   --theme-input-border-hover: var(--orange-5);
   --theme-input-border-focus: var(--orange-4);
-  --theme-input-focus-ring: var(--orange-4);
+  /* --theme-input-focus-ring: var(--orange-4); */
 
   /* Input surfaces and backgrounds */
-  --theme-input-surface: var(--orange-1);
-  --theme-input-surface-hover: var(--orange-2);
+  /* --theme-input-surface: var(--orange-1); */
+  /* --theme-input-surface-hover: var(--orange-2); */
 
   /* Input outlines and focus */
   --theme-input-outline: var(--orange-6);
@@ -36,10 +36,10 @@
   --theme-focus-visible-shadow: 0 0 0 2px var(--orange-2);
 
   /* Input text and placeholders */
-  --theme-input-placeholder: var(--orange-8);
-  --theme-input-placeholder-font-size: var(--step--1);
+  /* --theme-input-placeholder: var(--orange-8); */
+  /* --theme-input-placeholder-font-size: var(--step--1); */
   --theme-input-text-color-normal: var(--orange-12);
-  --theme-form-input-outline: transparent;
+  /* --theme-form-input-outline: transparent; */
 
   /* ===========================================
      FORM BUTTON VARIABLES

@@ -21,10 +21,10 @@ html {
 }
 body {
   background-color: var(--page-bg);
-  color: var(--grayscale-text-body);
+  color: var(--colour-text-default);
   font-family: var(--font-family);
   font-size: var(--step-4);
-  min-height: 100vh;
+  min-height: 100dvh;
   transition:
     background-color 0.4s ease,
     color 0.4s ease;

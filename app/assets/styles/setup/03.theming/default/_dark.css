@@ -21,37 +21,47 @@
      Styling for form inputs and controls
      =========================================== */
   --page-bg: var(--slate-08);
-  --surface-subtle: var(--slate-01);
-  --grayscale-text-title: var(--slate-11);
-  --grayscale-text-body: var(--slate-01);
-  --grayscale-text-subtitle: var(--slate-10);
-  --grayscale-text-caption: var(--slate-10);
-  --grayscale-text-negative: var(--slate-10);
-  --grayscale-text-disabled: var(--slate-10);
-  --theme-link-default: var(--blue-10);
+  --colour-text-default: var(--slate-01);
+
+  /* ===========================================
+     ANCHOR LINK VARIABLES
+     Styling for anchor links and interactive text
+     =========================================== */
+  --colour-link-default: var(--blue-10);
+  --colour-link-hover: var(--blue-9);
 
   /* ===========================================
      FORM INPUT VARIABLES
      Styling for form inputs and controls
      =========================================== */
-  --theme-input-surface: var(--slate-1);
-  --theme-input-surface-hover: var(--blue-2);
+
+  /* Input surfaces and backgrounds */
+  --theme-input-surface: var(--slate-10);
+  --theme-input-surface-hover: var(--slate-09);
+
+  /* Input borders */
   --theme-input-border: var(--blue-6);
   --theme-input-border-hover: var(--blue-5);
   --theme-input-border-focus: var(--blue-4);
-  --theme-input-focus-ring: var(--blue-4);
-  --theme-input-placeholder: var(--slate-04);
-  --theme-input-text-color-normal: var(--slate-01);
+
+  /* Input outlines and focus */
   --theme-input-outline: var(--blue-6);
   --theme-input-outline-focus: var(--blue-4);
   --theme-input-visible-outline: var(--blue-4);
   --theme-focus-visible-shadow: 0 0 0 2px var(--blue-2);
-  --theme-form-input-outline: transparent;
-  --theme-label-text: var(--blue-2);
-  --theme-help-text: var(--blue-4);
-  --theme-input-surface-disabled: var(--blue-10);
-  --theme-input-border-disabled: var(--blue-8);
-  --theme-input-text-disabled: var(--blue-6);
+
+  /* ===========================================
+     INPUT TEXT VARIABLES
+     =========================================== */
+  --theme-input-placeholder: var(--slate-04);
+  --theme-input-text-color-normal: var(--slate-01);
+
+  /* ===========================================
+     CHECKBOX AND RADIO BUTTON VARIABLES
+     =========================================== */
+  --theme-checkbox-symbol-surface: var(--theme-input-surface);
+  --theme-checkbox-symbol-color: var(--blue-2);
+  --theme-checkbox-decorator-color: var(--blue-2);
 
   /* ===========================================
      FORM BUTTON VARIABLES
@@ -84,44 +94,4 @@
   --theme-button-tertiary-text: var(--blue-2);
   --theme-button-tertiary-border-active: var(--blue-7);
   --theme-button-tertiary-outline-active: var(--blue-4);
-
-  /* ===========================================
-     COMPONENT SURFACE VARIABLES
-     Background colors for various UI surfaces
-     =========================================== */
-  --surface-primary: var(--blue-2);
-  --surface-secondary: var(--blue-3);
-  --surface-tertiary: var(--blue-4);
-
-  /* ===========================================
-     COMPONENT TEXT VARIABLES
-     Text color hierarchy for readability
-     =========================================== */
-  --text-primary: var(--blue-1);
-  --text-secondary: var(--blue-2);
-  --text-muted: var(--blue-3);
-
-  /* ===========================================
-     COMPONENT BORDER VARIABLES
-     Border colors for various emphasis levels
-     =========================================== */
-  --border-subtle: var(--blue-5);
-  --border-default: var(--blue-7);
-  --border-strong: var(--blue-9);
-
-  /* ===========================================
-     INTERACTIVE STATE VARIABLES
-     Colors for hover, active, and focus states
-     =========================================== */
-  --interactive-hover: var(--blue-4);
-  --interactive-active: var(--blue-6);
-  --interactive-focus: var(--blue-4);
-
-  /* ===========================================
-     SHADOW VARIABLES
-     Elevation and depth through shadows
-     =========================================== */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.15);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.25), 0 4px 6px -4px rgb(0 0 0 / 0.2);
 }

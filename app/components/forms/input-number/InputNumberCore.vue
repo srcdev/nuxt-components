@@ -73,7 +73,7 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
   background-color: var(--theme-button-surface);
   border-radius: var(--form-element-border-width);
   border: var(--form-element-border-width) solid var(--theme-input-border);
-  outline: var(--form-element-outline-width) solid var(--theme-form-input-outline);
+  outline: var(--form-element-outline-width) solid var(--theme-input-outline);
   box-shadow: var(--_focus-box-shadow);
 
   .slot {
