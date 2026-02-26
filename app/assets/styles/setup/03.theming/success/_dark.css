@@ -32,29 +32,19 @@
      =========================================== */
 
   /* Variant Primary */
-  --theme-button-primary-surface: var(--green-11);
-  --theme-button-primary-surface-hover: var(--green-8);
-  --theme-button-primary-surface-active: var(--green-7);
   --theme-button-primary-border: var(--green-7);
   --theme-button-primary-border-active: var(--green-7);
-  --theme-button-primary-outline: var(--green-1);
-  --theme-button-primary-text: var(--green-1);
-  --theme-button-primary-text-hover: var(--green-1);
-  --theme-button-primary-outline-active: var(--green-7);
+  --theme-button-primary-text: var(--green-0);
+  --theme-button-primary-text-hover: var(--green-0);
 
   /* Variant Secondary */
   --theme-button-secondary-surface: var(--green-1);
-  --theme-button-secondary-surface-hover: var(--green-1);
-  --theme-button-secondary-surface-active: var(--green-1);
-  --theme-button-secondary-border: var(--green-7);
-  --theme-button-secondary-border-active: var(--green-7);
-  --theme-button-secondary-outline: var(--green-1);
+  --theme-button-secondary-border-active: var(--green-1);
   --theme-button-secondary-text: var(--green-9);
-  --theme-button-secondary-text-hover: var(--green-9);
-  --theme-button-secondary-outline-active: var(--green-4);
 
   /* Variant Tertiary */
-  --theme-button-tertiary-text: var(--green-2);
-  --theme-button-tertiary-border-active: var(--green-7);
-  --theme-button-tertiary-outline-active: var(--green-4);
+  --theme-button-tertiary-surface: transparent;
+  --theme-button-tertiary-text: var(--green-1);
+  --theme-button-tertiary-border-active: var(--green-1);
+  --theme-button-tertiary-outline-active: var(--green-9);
 }

@@ -38,69 +38,19 @@
      =========================================== */
 
   /* Variant Primary */
-  --theme-button-primary-surface: var(--red-9);
-  --theme-button-primary-surface-hover: var(--red-8);
-  --theme-button-primary-surface-active: var(--red-7);
   --theme-button-primary-border: var(--red-7);
   --theme-button-primary-border-active: var(--red-7);
-  --theme-button-primary-outline: var(--red-1);
   --theme-button-primary-text: var(--red-0);
   --theme-button-primary-text-hover: var(--red-0);
-  --theme-button-primary-outline-active: var(--red-7);
 
   /* Variant Secondary */
-  --theme-button-secondary-surface: var(--red-0);
-  --theme-button-secondary-surface-hover: var(--red-1);
-  --theme-button-secondary-surface-active: var(--red-1);
-  --theme-button-secondary-border: var(--red-7);
-  --theme-button-secondary-border-active: var(--red-7);
-  --theme-button-secondary-outline: var(--red-1);
+  --theme-button-secondary-surface: var(--red-1);
+  --theme-button-secondary-border-active: var(--red-1);
   --theme-button-secondary-text: var(--red-9);
-  --theme-button-secondary-text-hover: var(--red-9);
-  --theme-button-secondary-outline-active: var(--red-4);
 
   /* Variant Tertiary */
+  --theme-button-tertiary-surface: transparent;
   --theme-button-tertiary-text: var(--red-1);
-  --theme-button-tertiary-border-active: var(--red-7);
-  --theme-button-tertiary-outline-active: var(--red-4);
-
-  /* ===========================================
-     COMPONENT SURFACE VARIABLES
-     Background colors for various UI surfaces
-     =========================================== */
-  --surface-primary: var(--red-2);
-  --surface-secondary: var(--red-3);
-  --surface-tertiary: var(--red-4);
-
-  /* ===========================================
-     COMPONENT TEXT VARIABLES
-     Text color hierarchy for readability
-     =========================================== */
-  --text-primary: var(--red-1);
-  --text-secondary: var(--red-2);
-  --text-muted: var(--red-3);
-
-  /* ===========================================
-     COMPONENT BORDER VARIABLES
-     Border colors for various emphasis levels
-     =========================================== */
-  --border-subtle: var(--red-5);
-  --border-default: var(--red-7);
-  --border-strong: var(--red-9);
-
-  /* ===========================================
-     INTERACTIVE STATE VARIABLES
-     Colors for hover, active, and focus states
-     =========================================== */
-  --interactive-hover: var(--red-4);
-  --interactive-active: var(--red-6);
-  --interactive-focus: var(--red-4);
-
-  /* ===========================================
-     SHADOW VARIABLES
-     Elevation and depth through shadows
-     =========================================== */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.15);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.25), 0 4px 6px -4px rgb(0 0 0 / 0.2);
+  --theme-button-tertiary-border-active: var(--red-1);
+  --theme-button-tertiary-outline-active: var(--red-9);
 }

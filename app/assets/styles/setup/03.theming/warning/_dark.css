@@ -32,29 +32,19 @@
      =========================================== */
 
   /* Variant Primary */
-  /* --theme-button-primary-surface: var(--orange-10);
-  --theme-button-primary-surface-hover: var(--orange-8);
-  --theme-button-primary-surface-active: var(--orange-7);
-  --theme-button-primary-border: var(--orange-7);
-  --theme-button-primary-border-active: var(--orange-7);
-  --theme-button-primary-outline: var(--orange-1);
-  --theme-button-primary-text: var(--orange-1);
-  --theme-button-primary-text-hover: var(--orange-1);
-  --theme-button-primary-outline-active: var(--orange-7); */
+  --theme-button-primary-border: var(--sunset-07);
+  --theme-button-primary-border-active: var(--sunset-07);
+  --theme-button-primary-text: white;
+  --theme-button-primary-text-hover: var(--sunset-00);
 
   /* Variant Secondary */
-  /* --theme-button-secondary-surface: var(--orange-1);
-  --theme-button-secondary-surface-hover: var(--orange-1);
-  --theme-button-secondary-surface-active: var(--orange-1);
-  --theme-button-secondary-border: var(--orange-7);
-  --theme-button-secondary-border-active: var(--orange-7);
-  --theme-button-secondary-outline: var(--orange-1);
-  --theme-button-secondary-text: var(--orange-9);
-  --theme-button-secondary-text-hover: var(--orange-9);
-  --theme-button-secondary-outline-active: var(--orange-4); */
+  /* --theme-button-secondary-surface: var(--sunset-01); */
+  /* --theme-button-secondary-border-active: var(--sunset-01); */
+  --theme-button-secondary-text: var(--sunset-05);
 
   /* Variant Tertiary */
-  --theme-button-tertiary-text: var(--amber-02);
-  /* --theme-button-tertiary-border-active: var(--orange-7);
-  --theme-button-tertiary-outline-active: var(--orange-4); */
+  --theme-button-tertiary-surface: transparent;
+  --theme-button-tertiary-text: var(--sunset-05);
+  --theme-button-tertiary-border-active: var(--sunset-05);
+  --theme-button-tertiary-outline-active: var(--sunset-05);
 }
