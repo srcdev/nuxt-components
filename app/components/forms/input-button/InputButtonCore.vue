@@ -82,6 +82,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   padding-inline: var(--button-padding-inline);
   padding-block: var(--button-padding-block);
   touch-action: manipulation;
+  overflow: hidden;
   transition: all var(--control-transition-duration) var(--control-transition-ease);
 
   /*
@@ -89,15 +90,16 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   **/
   &.primary {
     background-color: var(--theme-button-primary-surface);
-    border: var(--button-border-width) solid var(--theme-button-primary-border);
     color: var(--theme-button-primary-text);
+    border: var(--button-border-width) solid var(--theme-button-primary-border);
     outline: var(--button-outline-width) solid var(--theme-button-primary-outline);
 
     &:hover,
     &:focus-visible {
       background-color: var(--theme-button-secondary-surface);
-      outline-color: var(--theme-button-primary-outline-active);
       color: var(--theme-button-secondary-text);
+      border-color: var(--theme-button-primary-border-active);
+      outline-color: var(--theme-button-primary-outline-active);
     }
 
     &.is-pending {
@@ -115,11 +117,13 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     &:focus-visible {
       background-color: var(--theme-button-primary-surface);
       color: var(--theme-button-primary-text);
+      border-color: var(--theme-button-secondary-border-active);
       outline-color: var(--theme-button-secondary-outline-active);
     }
   }
 
   &.tertiary {
+    background-color: var(--theme-button-tertiary-surface);
     border: var(--button-border-width) solid transparent;
     color: var(--theme-button-tertiary-text);
     text-decoration: underline;
@@ -127,8 +131,8 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
     &:hover,
     &:focus-visible {
-      border-color: var(--theme-button-tertiary-border-hover);
-      outline-color: var(--theme-button-tertiary-border-active);
+      border-color: var(--theme-button-tertiary-border-active);
+      outline-color: var(--theme-button-tertiary-outline-active);
     }
   }
 
