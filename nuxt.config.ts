@@ -30,6 +30,21 @@ export default defineNuxtConfig({
       bodyAttrs: {
         class: "srcdev-components-extended",
       },
+      script: [
+        {
+          // Inlined so it runs synchronously before first paint
+          innerHTML: `
+            (function() {
+              var saved = localStorage.getItem('colourScheme');
+              var valid = ['auto', 'dark', 'light'];
+              var scheme = valid.includes(saved) ? saved : 'auto';
+              document.documentElement.dataset.colorScheme = scheme;
+            })();
+          `,
+          tagPosition: "head",
+          tagPriority: "critical",
+        },
+      ],
     },
     pageTransition: {
       name: "page",

@@ -1,25 +1,18 @@
-export const useColourScheme = () => {
-  const currentColourScheme = ref<'auto' | 'dark' | 'light' | null>(null);
+import { COLOUR_SCHEME_KEY, type ColourScheme, getValidScheme, applyColourScheme } from "~/utils/colour-scheme-init";
 
-  const returnSavedColourPreferenceFromLocalStorage = () => {
-    if (import.meta.client) {
-      return localStorage.getItem('colourScheme') as 'auto' | 'dark' | 'light' | null;
-    }
-  };
+export const useColourScheme = () => {
+  const currentColourScheme = ref<ColourScheme>("auto");
 
   onMounted(() => {
-    currentColourScheme.value = returnSavedColourPreferenceFromLocalStorage() || 'auto';
+    // DOM already has correct scheme applied by the head script,
+    // this just syncs the reactive state to match
+    currentColourScheme.value = getValidScheme(localStorage.getItem(COLOUR_SCHEME_KEY));
   });
 
   watch(currentColourScheme, (newVal) => {
-    if (import.meta.client && newVal !== null) {
-      localStorage.setItem('colourScheme', newVal);
-      document.documentElement.dataset.colorScheme = newVal;
-      currentColourScheme.value = newVal;
-    }
+    localStorage.setItem(COLOUR_SCHEME_KEY, newVal);
+    applyColourScheme(newVal);
   });
 
-  return {
-    currentColourScheme,
-  };
+  return { currentColourScheme };
 };
