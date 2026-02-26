@@ -77,6 +77,7 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
   z-index: 2;
   position: relative;
+  transition: all var(--theme-form-transition-duration) ease-in-out;
 
   &.normal {
     border: var(--form-element-border-width) solid var(--theme-input-border);
