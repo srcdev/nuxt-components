@@ -20,26 +20,11 @@
      FORM INPUT VARIABLES
      Styling for form inputs and controls
      =========================================== */
-  --theme-input-border: var(--green-6);
-  --theme-input-border-hover: var(--green-5);
+  --theme-input-border: var(--green-5);
   --theme-input-border-focus: var(--green-4);
-  /* --theme-input-focus-ring: var(--green-4); */
-
-  /* Input surfaces and backgrounds */
-  /* --theme-input-surface: var(--green-1); */
-  /* --theme-input-surface-hover: var(--green-2); */
 
   /* Input outlines and focus */
-  --theme-input-outline: var(--green-6);
-  --theme-input-outline-focus: var(--green-4);
-  --theme-input-visible-outline: var(--green-4);
-  --theme-focus-visible-shadow: 0 0 0 2px var(--green-2);
-
-  /* Input text and placeholders */
-  /* --theme-input-placeholder: var(--green-8); */
-  /* --theme-input-placeholder-font-size: var(--step--1); */
-  --theme-input-text-color-normal: var(--green-12);
-  /* --theme-form-input-outline: transparent; */
+  --theme-input-outline: var(--green-5);
 
   /* ===========================================
      FORM BUTTON VARIABLES
@@ -72,44 +57,4 @@
   --theme-button-tertiary-text: var(--green-2);
   --theme-button-tertiary-border-active: var(--green-7);
   --theme-button-tertiary-outline-active: var(--green-4);
-
-  /* ===========================================
-     COMPONENT SURFACE VARIABLES
-     Background colors for various UI surfaces
-     =========================================== */
-  --surface-primary: var(--green-2);
-  --surface-secondary: var(--green-3);
-  --surface-tertiary: var(--green-4);
-
-  /* ===========================================
-     COMPONENT TEXT VARIABLES
-     Text color hierarchy for readability
-     =========================================== */
-  --text-primary: var(--green-1);
-  --text-secondary: var(--green-2);
-  --text-muted: var(--green-3);
-
-  /* ===========================================
-     COMPONENT BORDER VARIABLES
-     Border colors for various emphasis levels
-     =========================================== */
-  --border-subtle: var(--green-5);
-  --border-default: var(--green-7);
-  --border-strong: var(--green-9);
-
-  /* ===========================================
-     INTERACTIVE STATE VARIABLES
-     Colors for hover, active, and focus states
-     =========================================== */
-  --interactive-hover: var(--green-4);
-  --interactive-active: var(--green-6);
-  --interactive-focus: var(--green-4);
-
-  /* ===========================================
-     SHADOW VARIABLES
-     Elevation and depth through shadows
-     =========================================== */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.1);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.2), 0 2px 4px -2px rgb(0 0 0 / 0.15);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.25), 0 4px 6px -4px rgb(0 0 0 / 0.2);
 }
