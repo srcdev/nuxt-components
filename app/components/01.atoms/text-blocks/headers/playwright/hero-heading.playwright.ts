@@ -44,17 +44,52 @@ test.describe("HeroHeading — baseline", () => {
 });
 
 // -------------------------
-// Tag, axis, and fontSize variants (all via args on the Default story)
+// Tag variants (hold axis and fontSize at default)
 // -------------------------
-test.describe("HeroHeading — tag, axis, fontSize variants", () => {
+test.describe("HeroHeading — tag variants", () => {
   for (const tag of TAGS) {
-    for (const axis of AXES) {
-      for (const fontSize of FONT_SIZES) {
-        test(`tag-${tag}_axis-${axis}_fontSize-${fontSize}`, async ({ page }) => {
-          const heading = await getHeading(page, { tag, axis, fontSize });
-          await expect(heading).toHaveScreenshot(`tag-${tag}_axis-${axis}_fontSize-${fontSize}.png`);
-        });
-      }
+    test(`tag-${tag}`, async ({ page }) => {
+      const heading = await getHeading(page, { tag });
+      await expect(heading).toHaveScreenshot(`tag-${tag}.png`);
+    });
+  }
+});
+
+// -------------------------
+// Axis variants (hold tag and fontSize at default)
+// -------------------------
+test.describe("HeroHeading — axis variants", () => {
+  for (const axis of AXES) {
+    test(`axis-${axis}`, async ({ page }) => {
+      const heading = await getHeading(page, { axis });
+      await expect(heading).toHaveScreenshot(`axis-${axis}.png`);
+    });
+  }
+});
+
+// -------------------------
+// fontSize variants (hold tag and axis at default)
+// -------------------------
+test.describe("HeroHeading — fontSize variants", () => {
+  for (const fontSize of FONT_SIZES) {
+    test(`fontSize-${fontSize}`, async ({ page }) => {
+      const heading = await getHeading(page, { fontSize });
+      await expect(heading).toHaveScreenshot(`fontSize-${fontSize}.png`);
+    });
+  }
+});
+
+// -------------------------
+// Axis + fontSize cross variants (tag held at default)
+// These interact visually — vertical axis changes layout weight of sized text
+// -------------------------
+test.describe("HeroHeading — axis × fontSize variants", () => {
+  for (const axis of AXES) {
+    for (const fontSize of FONT_SIZES) {
+      test(`axis-${axis}_fontSize-${fontSize}`, async ({ page }) => {
+        const heading = await getHeading(page, { axis, fontSize });
+        await expect(heading).toHaveScreenshot(`axis-${axis}_fontSize-${fontSize}.png`);
+      });
     }
   }
 });

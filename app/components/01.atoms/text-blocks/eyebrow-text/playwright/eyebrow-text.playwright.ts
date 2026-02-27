@@ -43,15 +43,25 @@ test.describe("EyebrowText — baseline", () => {
 });
 
 // -------------------------
-// Tag and fontSize variants
+// Tag variants (hold fontSize at default)
 // -------------------------
-test.describe("EyebrowText — tag and fontSize variants", () => {
+test.describe("EyebrowText — tag variants", () => {
   for (const tag of TAGS) {
-    for (const fontSize of FONT_SIZES) {
-      test(`tag-${tag}_fontSize-${fontSize}`, async ({ page }) => {
-        const eyebrow = await getEyebrow(page, { tag, fontSize });
-        await expect(eyebrow).toHaveScreenshot(`tag-${tag}_fontSize-${fontSize}.png`);
-      });
-    }
+    test(`tag-${tag}`, async ({ page }) => {
+      const eyebrow = await getEyebrow(page, { tag });
+      await expect(eyebrow).toHaveScreenshot(`tag-${tag}.png`);
+    });
+  }
+});
+
+// -------------------------
+// fontSize variants (hold tag at default)
+// -------------------------
+test.describe("EyebrowText — fontSize variants", () => {
+  for (const fontSize of FONT_SIZES) {
+    test(`fontSize-${fontSize}`, async ({ page }) => {
+      const eyebrow = await getEyebrow(page, { fontSize });
+      await expect(eyebrow).toHaveScreenshot(`fontSize-${fontSize}.png`);
+    });
   }
 });
