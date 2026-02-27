@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { FocusTrap } from "focus-trap-vue"
+import { FocusTrap } from "focus-trap-vue";
 const props = defineProps({
   styleClassPassthrough: {
     type: [String, Array] as PropType<string | string[]>,
@@ -79,30 +79,30 @@ const props = defineProps({
     type: String,
     required: true,
   },
-})
+});
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const open = defineModel<boolean>()
-const bodyTag = ref<HTMLBodyElement | null>(null)
-const lockViewport = toRef<boolean>(props.lockViewport)
+const open = defineModel<boolean>();
+const bodyTag = ref<HTMLBodyElement | null>(null);
+const lockViewport = toRef<boolean>(props.lockViewport);
 
 const closeDialog = () => {
-  open.value = false
+  open.value = false;
 
   if (lockViewport.value && bodyTag.value !== null) {
-    bodyTag.value.classList.remove("lock")
+    bodyTag.value.classList.remove("lock");
   }
-}
+};
 
-const slots = useSlots()
+const slots = useSlots();
 
 onMounted(() => {
-  bodyTag.value = document.querySelector("body")
+  bodyTag.value = document.querySelector("body");
   if (lockViewport.value && bodyTag.value !== null) {
-    bodyTag.value.classList.add("lock")
+    bodyTag.value.classList.add("lock");
   }
-})
+});
 </script>
 
 <style lang="css">
@@ -121,7 +121,10 @@ onMounted(() => {
   padding: 0;
 
   display: none;
-  transition: opacity 200ms, display 200ms, overlay 200ms;
+  transition:
+    opacity 200ms,
+    display 200ms,
+    overlay 200ms;
   transition-behavior: allow-discrete;
 
   &[open] {
@@ -163,8 +166,8 @@ onMounted(() => {
     grid-template-rows: auto 1fr auto;
 
     border-radius: 8px;
-    border: 1px solid light-dark(var(--gray-10), var(--gray-2));
-    outline: 1px solid light-dark(var(--gray-12), var(--gray-0));
+    border: 1px solid light-dark(var(--slate-10), var(--slate-02));
+    outline: 1px solid light-dark(var(--slate-10), var(--slate-00));
 
     background-color: var(--dialog-inner-background);
     height: initial;
@@ -226,7 +229,9 @@ onMounted(() => {
           border-radius: var(--dialog-header-button-border-radius);
           outline: var(--dialog-header-button-outline);
 
-          transition: border-color 0.2s, outline-color 0.2s;
+          transition:
+            border-color 0.2s,
+            outline-color 0.2s;
 
           &:hover,
           &:focus-visible {

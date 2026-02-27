@@ -3,32 +3,32 @@
      COLOR SCALE VARIABLES
      Base color tokens for the warning theme
      =========================================== */
-  --colour-theme-1: var(--orange-1);
-  --colour-theme-2: var(--orange-2);
-  --colour-theme-3: var(--orange-3);
-  --colour-theme-4: var(--orange-4);
-  --colour-theme-5: var(--orange-5);
-  --colour-theme-6: var(--orange-6);
-  --colour-theme-7: var(--orange-7);
-  --colour-theme-8: var(--orange-8);
-  --colour-theme-9: var(--orange-9);
+  --colour-theme-1: var(--orange-01);
+  --colour-theme-2: var(--orange-02);
+  --colour-theme-3: var(--orange-03);
+  --colour-theme-4: var(--orange-04);
+  --colour-theme-5: var(--orange-05);
+  --colour-theme-6: var(--orange-06);
+  --colour-theme-7: var(--orange-07);
+  --colour-theme-8: var(--orange-08);
+  --colour-theme-9: var(--orange-09);
   --colour-theme-10: var(--orange-10);
-  --colour-theme-11: var(--orange-11);
-  --colour-theme-12: var(--orange-12);
+  --colour-theme-11: var(--orange-10);
+  --colour-theme-12: var(--orange-10);
 
   /* ===========================================
      FORM INPUT VARIABLES
      Styling for form inputs and controls
      =========================================== */
-  --theme-input-border: var(--orange-6);
-  --theme-input-border-focus: var(--orange-4);
-  --theme-input-border-hover: var(--orange-4);
+  --theme-input-border: var(--orange-06);
+  --theme-input-border-focus: var(--orange-04);
+  --theme-input-border-hover: var(--orange-04);
 
   /* Input outlines and focus */
-  --theme-input-outline: var(--orange-1);
-  --theme-input-outline-focus: var(--orange-4);
-  --theme-input-visible-outline: var(--orange-4);
-  --theme-focus-visible-shadow: 0 0 0 2px var(--orange-2);
+  --theme-input-outline: var(--orange-01);
+  --theme-input-outline-focus: var(--orange-04);
+  --theme-input-visible-outline: var(--orange-04);
+  --theme-focus-visible-shadow: 0 0 0 2px var(--orange-02);
 
   /* ===========================================
      FORM BUTTON VARIABLES

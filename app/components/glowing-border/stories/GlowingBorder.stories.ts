@@ -74,7 +74,7 @@ const Template: StoryFn<GlowingBorderStoryArgs> = (args) => ({
           <h3 style="margin: 0 0 12px 0; font-size: 1.5rem; font-weight: 600;">GlowingBorder Header</h3>
           <h4 style="margin: 0 0 16px 0; font-size: 1.25rem; font-weight: 500;">GlowingBorder Content</h4>
           <p style="margin: 0 0 12px 0; line-height: 1.6;">{{ args.content }}</p>
-          <p style="margin: 0; font-size: 0.875rem; color: var(--gray-9);">GlowingBorder Footer</p>
+          <p style="margin: 0; font-size: 0.875rem; color: var(--slate-09);">GlowingBorder Footer</p>
         </div>
 
         <!-- DisplayCard version -->
@@ -93,7 +93,7 @@ const Template: StoryFn<GlowingBorderStoryArgs> = (args) => ({
             <p style="margin: 0; line-height: 1.6;">This demonstrates how GlowingBorder can wrap other components.</p>
           </template>
           <template #footer>
-            <p style="margin: 0; font-size: 0.875rem; color: var(--gray-9);">DisplayCard Footer</p>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--slate-09);">DisplayCard Footer</p>
           </template>
         </DisplayCard>
       </StorybookComponent>

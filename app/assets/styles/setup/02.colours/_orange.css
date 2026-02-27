@@ -1,14 +1,12 @@
 :where(html) {
-  --orange-1: oklch(0.95 0.037 75);
-  --orange-2: oklch(0.892 0.083 75);
-  --orange-3: oklch(0.834 0.132 75);
-  --orange-4: oklch(0.775 0.149 75);
-  --orange-5: oklch(0.788 0.177 75);
-  --orange-6: oklch(0.659 0.127 75);
-  --orange-7: oklch(0.601 0.115 75);
-  --orange-8: oklch(0.543 0.104 75);
-  --orange-9: oklch(0.485 0.093 75);
+  --orange-01: oklch(0.95 0.037 75);
+  --orange-02: oklch(0.892 0.083 75);
+  --orange-03: oklch(0.834 0.132 75);
+  --orange-04: oklch(0.775 0.149 75);
+  --orange-05: oklch(0.788 0.177 75);
+  --orange-06: oklch(0.659 0.127 75);
+  --orange-07: oklch(0.601 0.115 75);
+  --orange-08: oklch(0.543 0.104 75);
+  --orange-09: oklch(0.485 0.093 75);
   --orange-10: oklch(0.426 0.082 75);
-  --orange-11: oklch(0.368 0.071 75);
-  --orange-12: oklch(0.31 0.06 75);
 }

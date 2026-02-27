@@ -170,24 +170,24 @@ onMounted(() => {
     border-bottom: var(--_tabs-border-bottom);
 
     .nav__hovered {
-      background: light-dark(var(--gray-7), var(--gray-3));
-      color: light-dark(var(--gray-0), var(--gray-12));
+      background: light-dark(var(--slate-07), var(--slate-03));
+      color: light-dark(var(--slate-00), var(--slate-10));
     }
 
     .nav__active {
-      background: light-dark(var(--gray-12), var(--gray-0));
-      color: light-dark(var(--gray-0), var(--gray-12));
+      background: light-dark(var(--slate-10), var(--slate-00));
+      color: light-dark(var(--slate-00), var(--slate-10));
     }
 
     .nav__active-indicator {
-      background: light-dark(var(--gray-12), var(--gray-0));
+      background: light-dark(var(--slate-10), var(--slate-00));
       height: 0.4rem;
     }
 
     .tabs-list-item {
       background: transparent;
       border: 0;
-      color: light-dark(var(--gray-12), var(--gray-0));
+      color: light-dark(var(--slate-10), var(--slate-00));
       cursor: pointer;
       font: inherit;
       text-transform: uppercase;
@@ -196,15 +196,15 @@ onMounted(() => {
       padding: 1em 2em;
 
       &:hover {
-        color: light-dark(var(--gray-0), var(--gray-12));
+        color: light-dark(var(--slate-00), var(--slate-10));
       }
 
       &[aria-selected="true"] {
-        color: light-dark(var(--gray-0), var(--gray-12));
+        color: light-dark(var(--slate-00), var(--slate-10));
       }
 
       &.transitioning {
-        color: light-dark(var(--gray-0), var(--gray-12));
+        color: light-dark(var(--slate-00), var(--slate-10));
       }
     }
   }
@@ -213,13 +213,13 @@ onMounted(() => {
     display: grid;
     grid-template-areas: "element-stack";
 
-    background-color: light-dark(var(--gray-9), var(--gray-10));
-    border: 0.1rem solid var(--gray-6);
+    background-color: light-dark(var(--slate-09), var(--slate-10));
+    border: 0.1rem solid var(--slate-06);
     border-start-start-radius: 0;
     border-start-end-radius: 0;
     border-end-start-radius: 0;
     border-end-end-radius: 0;
-    outline: 0.1rem solid var(--gray-6);
+    outline: 0.1rem solid var(--slate-06);
 
     .tab-content {
       grid-area: element-stack;
@@ -250,7 +250,7 @@ onMounted(() => {
         width: 100%;
 
         &:hover {
-          /* color: light-dark(var(--gray-0), var(--gray-12)); */
+          /* color: light-dark(var(--slate-00), var(--slate-10)); */
         }
 
         &[aria-selected="true"] {
@@ -258,7 +258,7 @@ onMounted(() => {
         }
 
         &.transitioning {
-          /* color: light-dark(var(--gray-0), var(--gray-12)); */
+          /* color: light-dark(var(--slate-00), var(--slate-10)); */
         }
       }
 

@@ -177,7 +177,7 @@ onMounted(() => {
         transition: all v-bind(stepAnimationDuration) ease-in-out;
         background-color: var(--_select-scheme-group-background-color);
         background-image: var(--_select-scheme-group-background-image);
-        border: var(--form-element-border-width) solid light-dark(var(--gray-12), var(--gray-0));
+        border: var(--form-element-border-width) solid light-dark(var(--slate-10), var(--slate-00));
 
         border-radius: 50%;
 
@@ -219,7 +219,7 @@ onMounted(() => {
         transition: all calc(var(--theme-form-transition-duration) / 3);
 
         &:has(.option-icon:hover) {
-          outline: var(--form-element-outline-width) solid light-dark(var(--gray-12), var(--gray-0));
+          outline: var(--form-element-outline-width) solid light-dark(var(--slate-10), var(--slate-00));
         }
         &:has(input:focus-visible) {
           outline: var(--form-element-outline-width) solid var(--theme-input-outline-hover);
@@ -232,26 +232,26 @@ onMounted(() => {
           font-size: var(--_scheme-icon-font-size);
 
           &.auto {
-            color: light-dark(var(--gray-12), var(--gray-3));
+            color: light-dark(var(--slate-10), var(--slate-03));
 
             &.active {
-              color: var(--gray-0);
+              color: var(--slate-00);
             }
           }
 
           &.light {
-            color: light-dark(var(--gray-12), var(--gray-3));
+            color: light-dark(var(--slate-10), var(--slate-03));
 
             &.active {
-              color: var(--gray-0);
+              color: var(--slate-00);
             }
           }
 
           &.dark {
-            color: light-dark(var(--gray-12), var(--gray-3));
+            color: light-dark(var(--slate-10), var(--slate-03));
 
             &.active {
-              color: var(--gray-0);
+              color: var(--slate-00);
             }
           }
 

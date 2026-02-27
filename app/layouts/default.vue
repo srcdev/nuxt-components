@@ -234,7 +234,7 @@ onMounted(() => {
       text-wrap-mode: nowrap;
       font-size: var(--step-5);
       letter-spacing: 0.2em;
-      color: var(--gray-0);
+      color: var(--slate-00);
       text-decoration: none;
 
       span {
@@ -244,7 +244,7 @@ onMounted(() => {
 
       &:hover {
         border-radius: 0.4rem;
-        outline: 2px solid var(--green-8);
+        outline: 2px solid var(--green-08);
         outline-offset: 0.4rem;
       }
     }
@@ -281,7 +281,7 @@ onMounted(() => {
         .main-navigation-link {
           position: relative;
           display: block;
-          color: var(--gray-0);
+          color: var(--slate-00);
           text-decoration: none;
           margin-inline-start: 0;
 
@@ -303,7 +303,7 @@ onMounted(() => {
             &:before {
               width: 100%;
               height: 0.2rem;
-              background-color: var(--green-8);
+              background-color: var(--green-08);
             }
           }
         }
@@ -317,7 +317,7 @@ onMounted(() => {
 
           .main-navigation-details-summary {
             position: relative;
-            color: var(--gray-0);
+            color: var(--slate-00);
             white-space: nowrap;
             border-bottom: 0.2rem solid #efefef25;
 
@@ -338,7 +338,7 @@ onMounted(() => {
               &:before {
                 width: 100%;
                 height: 0.2rem;
-                background-color: var(--green-8);
+                background-color: var(--green-08);
               }
             }
           }
@@ -368,7 +368,7 @@ onMounted(() => {
                   display: block;
                   text-wrap-mode: nowrap;
                   text-decoration: none;
-                  color: var(--gray-0);
+                  color: var(--slate-00);
                   padding: 8px 2px;
                   border-bottom: 0.2rem solid #efefef25;
                   min-width: 170px;
@@ -388,7 +388,7 @@ onMounted(() => {
                     &:before {
                       width: 100%;
                       height: 0.2rem;
-                      background-color: var(--green-8);
+                      background-color: var(--green-08);
                     }
                   }
                 }
@@ -407,7 +407,7 @@ onMounted(() => {
       .secondary-navigation-item {
         .secondary-navigation-link {
           font: inherit;
-          color: var(--gray-0);
+          color: var(--slate-00);
 
           .icon {
             height: 1.35em;
@@ -418,7 +418,7 @@ onMounted(() => {
     }
 
     .main-navigation-link {
-      color: var(--gray-0);
+      color: var(--slate-00);
 
       .icon {
         height: 1.35em;
@@ -440,7 +440,7 @@ onMounted(() => {
         border-radius: 4px;
         border: var(--_border-width) solid #ffffff90;
         outline: var(--_outline-width) solid #ffffff10;
-        background-color: var(--gray-8);
+        background-color: var(--slate-08);
 
         width: 3rem;
         height: 3rem;
@@ -448,7 +448,7 @@ onMounted(() => {
         &:hover,
         &:focus-visible {
           --_icon-zoom: 1.2;
-          outline: 2px solid var(--green-8);
+          outline: 2px solid var(--green-08);
           outline-offset: 0.3rem;
 
           .icon {
@@ -457,7 +457,7 @@ onMounted(() => {
         }
 
         .icon {
-          color: var(--gray-0);
+          color: var(--slate-00);
           width: 2.6rem;
           height: 2.6rem;
         }
@@ -504,12 +504,12 @@ onMounted(() => {
                 padding-block: var(--overflow-nav-items-padding-block);
                 padding-inline: var(--overflow-nav-padding-inline);
                 display: flex;
-                color: var(--gray-0);
+                color: var(--slate-00);
                 border-bottom: 0.2rem solid #efefef75;
 
                 &:hover {
-                  background-color: var(--gray-7);
-                  border-color: var(--green-8);
+                  background-color: var(--slate-07);
+                  border-color: var(--green-08);
                 }
               }
 
@@ -522,12 +522,12 @@ onMounted(() => {
                       padding-block: var(--overflow-nav-items-padding-block);
                       padding-inline: var(--overflow-nav-padding-inline);
                       gap: 1rem;
-                      color: var(--gray-0);
+                      color: var(--slate-00);
                       border-bottom: 0.2rem solid #efefef75;
 
                       &:hover {
-                        background-color: var(--gray-7);
-                        border-color: var(--green-8);
+                        background-color: var(--slate-07);
+                        border-color: var(--green-08);
                       }
 
                       .label-wrapper {
@@ -545,8 +545,8 @@ onMounted(() => {
                         border-color: transparent;
 
                         &:hover {
-                          background-color: var(--gray-7);
-                          border-color: var(--green-8);
+                          background-color: var(--slate-07);
+                          border-color: var(--green-08);
                         }
                       }
                       + .expanding-panel-content {
@@ -578,11 +578,11 @@ onMounted(() => {
                             padding-block: var(--overflow-nav-items-padding-block);
                             padding-inline: var(--overflow-nav-padding-inline);
                             font-size: var(--step-4);
-                            color: var(--gray-0);
+                            color: var(--slate-00);
 
                             &:hover {
-                              background-color: var(--gray-7);
-                              border-color: var(--green-8);
+                              background-color: var(--slate-07);
+                              border-color: var(--green-08);
                             }
                             .overflow-navigation-sub-nav-link {
                               text-decoration: none;

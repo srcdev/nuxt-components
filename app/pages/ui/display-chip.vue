@@ -108,7 +108,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "UI Display Chips",
@@ -116,34 +116,34 @@ useHead({
   bodyAttrs: {
     class: "ui-display-chip-page",
   },
-})
+});
 
 const chipConfig = reactive({
   size: "12px",
   maskWidth: "4px",
   offset: "2px",
   angle: "45deg",
-})
+});
 
 const changeSize = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  chipConfig.size = `${target.value}px`
-}
+  const target = e.target as HTMLInputElement;
+  chipConfig.size = `${target.value}px`;
+};
 
 const changeMaskWidth = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  chipConfig.maskWidth = `${target.value}px`
-}
+  const target = e.target as HTMLInputElement;
+  chipConfig.maskWidth = `${target.value}px`;
+};
 
 const changeOffset = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  chipConfig.offset = `${target.value}px`
-}
+  const target = e.target as HTMLInputElement;
+  chipConfig.offset = `${target.value}px`;
+};
 
 const changeAngle = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  chipConfig.angle = `${target.value}deg`
-}
+  const target = e.target as HTMLInputElement;
+  chipConfig.angle = `${target.value}deg`;
+};
 </script>
 
 <style lang="css">
@@ -164,7 +164,7 @@ const changeAngle = (e: Event) => {
 
         input {
           padding: 0.5rem;
-          border: 1px solid var(--gray-7);
+          border: 1px solid var(--slate-07);
           border-radius: 4px;
           font-size: 1rem;
         }
@@ -181,7 +181,7 @@ const changeAngle = (e: Event) => {
       align-items: center;
       justify-content: start;
 
-      /* background-color: var(--gray-5); */
+      /* background-color: var(--slate-05); */
 
       .dt {
         font-weight: bold;
@@ -195,26 +195,26 @@ const changeAngle = (e: Event) => {
           justify-content: center;
 
           .page-body-normal {
-            color: light-dark(var(--gray-12), var(--gray-11));
+            color: light-dark(var(--slate-10), var(--slate-10));
           }
 
           .icon {
             width: 24px;
             height: 24px;
-            color: light-dark(var(--gray-12), var(--gray-11));
+            color: light-dark(var(--slate-10), var(--slate-10));
           }
 
           &.round {
             width: 50px;
             height: 50px;
-            background-color: light-dark(var(--gray-3), var(--gray-4));
+            background-color: light-dark(var(--slate-03), var(--slate-04));
             border-radius: 50%;
           }
 
           &.square {
             width: 50px;
             height: 50px;
-            background-color: light-dark(var(--gray-3), var(--gray-4));
+            background-color: light-dark(var(--slate-03), var(--slate-04));
             border-radius: 4px;
           }
         }

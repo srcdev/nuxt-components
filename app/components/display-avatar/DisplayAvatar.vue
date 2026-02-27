@@ -15,12 +15,12 @@
 </template>
 
 <script setup lang="ts">
-import DisplayChip from "../display-chip/DisplayChip.vue"
-import type { DisplayChipProps } from "../../types/components"
+import DisplayChip from "../display-chip/DisplayChip.vue";
+import type { DisplayChipProps } from "../../types/components";
 
 export interface AvatarSlots {
-  default(props?: {}): any
-  icon(props?: {}): any
+  default(props?: {}): any;
+  icon(props?: {}): any;
 }
 
 const props = defineProps({
@@ -60,16 +60,16 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-defineSlots<AvatarSlots>()
+defineSlots<AvatarSlots>();
 
 const { elementClasses, resetElementClasses, updateElementClasses } = useStyleClassPassthrough(
   props.styleClassPassthrough
-)
+);
 
 if (props.chip && typeof props.chip === "object" && !("styleClassPassthrough" in props.chip)) {
-  updateElementClasses(["display-avatar", props.size])
+  updateElementClasses(["display-avatar", props.size]);
 }
 
 const fallback = computed(
@@ -80,21 +80,21 @@ const fallback = computed(
       .map((word) => word.charAt(0))
       .join("")
       .substring(0, 2)
-)
+);
 
 const chipDefaultConfig = {
   size: "12px",
   maskWidth: "4px",
   offset: "0px",
   angle: "90deg",
-}
+};
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough)
+    resetElementClasses(props.styleClassPassthrough);
   }
-)
+);
 </script>
 
 <style lang="css">
@@ -103,7 +103,7 @@ watch(
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  color: var(--gray-3);
+  color: var(--slate-03);
 
   isolation: isolate;
 

@@ -79,10 +79,10 @@
 </template>
 
 <script setup lang="ts">
-import type { MediaCanvas } from "~/types/components"
+import type { MediaCanvas } from "~/types/components";
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "UI Layout Row",
@@ -90,9 +90,9 @@ useHead({
   bodyAttrs: {
     class: "home",
   },
-})
+});
 
-const canvasName = ref<MediaCanvas>("desktopCanvas")
+const canvasName = ref<MediaCanvas>("desktopCanvas");
 </script>
 
 <style lang="css">
@@ -115,18 +115,18 @@ const canvasName = ref<MediaCanvas>("desktopCanvas")
         align-items: center;
         justify-content: center;
         padding: 5px;
-        border: 0px solid light-dark(var(--gray-10), var(--gray-2));
+        border: 0px solid light-dark(var(--slate-10), var(--slate-02));
         border-radius: 4px;
         cursor: pointer;
 
         .icon {
-          color: light-dark(var(--gray-10), var(--gray-2));
+          color: light-dark(var(--slate-10), var(--slate-02));
 
           width: 24px;
           height: 24px;
 
           &.current {
-            color: light-dark(var(--green-10), var(--green-4));
+            color: light-dark(var(--green-10), var(--green-04));
           }
         }
       }

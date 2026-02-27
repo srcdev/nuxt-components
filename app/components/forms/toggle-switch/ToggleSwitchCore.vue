@@ -98,7 +98,7 @@ const toggleSwitchValue = () => {
     --_icon-on-opacity: 0;
     --_icon-off-opacity: 1;
     --_icon-font-size: 2.4rem;
-    --_symbol-background-color: var(--blue-12);
+    --_symbol-background-color: var(--blue-10);
     --_symbol-margin-inline-start: 0;
     --_symbol-checked-offset: calc(var(--input-toggle-symbol-size) * 0.75);
 

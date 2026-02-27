@@ -176,7 +176,7 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         .carousel-flip-demo.carousel-flip .item-container {
           max-inline-size: 800px;
           margin-inline: auto;
-          outline: 1px solid light-dark(var(--gray-8, #666), var(--gray-1, #f5f5f5));
+          outline: 1px solid light-dark(var(--slate-08, #666), var(--slate-01, #f5f5f5));
           padding-block: 6px;
           padding-inline: 6px;
         }
@@ -189,12 +189,12 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         }
 
         .carousel-flip-demo.carousel-flip .item {
-          background-color: light-dark(var(--gray-5, #e5e5e5), var(--gray-6, #999));
+          background-color: light-dark(var(--slate-05, #e5e5e5), var(--slate-06, #999));
           contain: layout style paint;
         }
 
         .carousel-flip-demo.carousel-flip .item:nth-child(odd) {
-          background-color: light-dark(var(--gray-6, #999), var(--gray-5, #e5e5e5));
+          background-color: light-dark(var(--slate-06, #999), var(--slate-05, #e5e5e5));
         }
 
         .custom-carousel-item {
@@ -240,7 +240,7 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
           width: var(--marker-width);
           height: var(--marker-height);
           border-radius: var(--marker-border-radius);
-          background-color: light-dark(var(--gray-5, #e5e5e5), var(--gray-7, #666));
+          background-color: light-dark(var(--slate-05, #e5e5e5), var(--slate-07, #666));
           line-height: 3px;
           transition: all 0.3s linear;
           border: 1px solid transparent;
@@ -248,7 +248,7 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         }
 
         .carousel-flip-demo.carousel-flip .btn-marker.active {
-          background-color: light-dark(var(--gray-12, #000), var(--gray-00, #fff));
+          background-color: light-dark(var(--slate-012, #000), var(--slate-000, #fff));
           will-change: background-color;
         }
 
@@ -411,7 +411,7 @@ const RichContentTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         .carousel-flip-demo.carousel-flip .item-container {
           max-inline-size: 800px;
           margin-inline: auto;
-          outline: 1px solid light-dark(var(--gray-8, #666), var(--gray-1, #f5f5f5));
+          outline: 1px solid light-dark(var(--slate-08, #666), var(--slate-01, #f5f5f5));
           padding-block: 6px;
           padding-inline: 6px;
         }
@@ -424,12 +424,12 @@ const RichContentTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         }
 
         .carousel-flip-demo.carousel-flip .item {
-          background-color: light-dark(var(--gray-5, #e5e5e5), var(--gray-6, #999));
+          background-color: light-dark(var(--slate-05, #e5e5e5), var(--slate-06, #999));
           contain: layout style paint;
         }
 
         .carousel-flip-demo.carousel-flip .item:nth-child(odd) {
-          background-color: light-dark(var(--gray-6, #999), var(--gray-5, #e5e5e5));
+          background-color: light-dark(var(--slate-06, #999), var(--slate-05, #e5e5e5));
         }
       `;
       document.head.appendChild(style);

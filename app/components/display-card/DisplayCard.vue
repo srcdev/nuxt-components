@@ -22,7 +22,7 @@ const props = defineProps({
     type: String,
     default: "div",
     validator(value: string) {
-      return ["div", "section", "article", "aside", "main", "nav"].includes(value)
+      return ["div", "section", "article", "aside", "main", "nav"].includes(value);
     },
   },
   hasDividers: {
@@ -37,24 +37,24 @@ const props = defineProps({
     type: String,
     default: "solid",
     validator(value: string) {
-      return ["solid", "subtle", "soft", "outline"].includes(value)
+      return ["solid", "subtle", "soft", "outline"].includes(value);
     },
   },
   styleClassPassthrough: {
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
-const slots = useSlots()
+});
+const slots = useSlots();
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough)
+    resetElementClasses(props.styleClassPassthrough);
   }
-)
+);
 </script>
 
 <style lang="css">
@@ -80,23 +80,23 @@ watch(
   }
 
   &.solid {
-    --_background-color: light-dark(var(--gray-0), var(--gray-12));
-    --_border-color: light-dark(var(--gray-4), var(--gray-8));
+    --_background-color: light-dark(var(--slate-00), var(--slate-10));
+    --_border-color: light-dark(var(--slate-04), var(--slate-08));
   }
 
   &.subtle {
-    --_background-color: color-mix(in oklab, light-dark(var(--gray-1), var(--gray-8)) 50%, transparent);
-    --_border-color: light-dark(var(--gray-3), var(--gray-9));
+    --_background-color: color-mix(in oklab, light-dark(var(--slate-01), var(--slate-08)) 50%, transparent);
+    --_border-color: light-dark(var(--slate-03), var(--slate-09));
   }
 
   &.soft {
-    --_background-color: color-mix(in oklab, light-dark(var(--gray-1), var(--gray-8)) 20%, transparent);
-    --_box-shadow-color: color-mix(in oklab, light-dark(var(--gray-2), var(--gray-8)) 80%, transparent);
+    --_background-color: color-mix(in oklab, light-dark(var(--slate-01), var(--slate-08)) 20%, transparent);
+    --_box-shadow-color: color-mix(in oklab, light-dark(var(--slate-02), var(--slate-08)) 80%, transparent);
   }
 
   &.outline {
     --_background-color: transparent;
-    --_border-color: light-dark(var(--gray-4), var(--gray-8));
+    --_border-color: light-dark(var(--slate-04), var(--slate-08));
   }
 
   &.has-dividers {

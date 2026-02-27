@@ -114,7 +114,7 @@ const data = ref<IAccordianData[]>([
         --_border-radius: 0.6rem;
         --_margin-block-end: 1rem;
 
-        border: 1px solid var(--gray-0);
+        border: 1px solid var(--slate-00);
         /* transition:
           margin-block-end 300ms ease-in-out,
           border-radius 300ms ease-in-out; */

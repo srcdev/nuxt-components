@@ -3,15 +3,15 @@
     <div class="inner">
       <template v-for="(link, key) in navLinks" :key="key">
         <NuxtLink v-if="link.path" :to="link.path" class="navigation-link">{{ link.name }}</NuxtLink>
-        <details v-else class="navigation-group" name="navigation-group" ref="navigationGroupRef">
+        <details v-else ref="navigationGroupRef" class="navigation-group" name="navigation-group">
           <summary class="navigation-group-toggle">
             <span>{{ link.name }}</span>
             <Icon name="bi:caret-down-fill" class="icon" />
           </summary>
-          <div class="navigation-group-panel" :id="`popovertarget-nav-1-${key}`">
+          <div :id="`popovertarget-nav-1-${key}`" class="navigation-group-panel">
             <h4 class="page-heading-4 mb-6">{{ link.childLinksTitle }}</h4>
             <ul class="navigation-group-list">
-              <li class="navigation-group-item" v-for="childLink in link.childLinks" :key="childLink.name">
+              <li v-for="childLink in link.childLinks" :key="childLink.name" class="navigation-group-item">
                 <NuxtLink :to="childLink.path" class="navigation-group-link">{{ childLink.name }}</NuxtLink>
               </li>
             </ul>
@@ -23,14 +23,14 @@
 </template>
 
 <script setup lang="ts">
-import { onClickOutside } from "@vueuse/core"
+import { onClickOutside } from "@vueuse/core";
 
 const props = defineProps({
   tag: {
     type: String,
     default: "nav",
     validator(value: string) {
-      return ["div", "section", "nav", "ul", "ol"].includes(value)
+      return ["div", "section", "nav", "ul", "ol"].includes(value);
     },
   },
   navLinks: {
@@ -41,35 +41,35 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const navigationGroupRef = useTemplateRef<HTMLElement[]>("navigationGroupRef")
+const navigationGroupRef = useTemplateRef<HTMLElement[]>("navigationGroupRef");
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough)
+    resetElementClasses(props.styleClassPassthrough);
   }
-)
+);
 
 onMounted(() => {
   navigationGroupRef.value?.forEach((element, index) => {
     onClickOutside(element, () => {
-      navigationGroupRef.value?.[index]?.removeAttribute("open")
-    })
-  })
-})
+      navigationGroupRef.value?.[index]?.removeAttribute("open");
+    });
+  });
+});
 </script>
 
 <script lang="ts">
 interface ResponsiveHeaderNavItem {
-  name: string
-  path?: string
-  isExternal?: boolean
-  childLinksTitle?: string
-  childLinks?: ResponsiveHeaderNavItem[]
+  name: string;
+  path?: string;
+  isExternal?: boolean;
+  childLinksTitle?: string;
+  childLinks?: ResponsiveHeaderNavItem[];
 }
 </script>
 
@@ -99,15 +99,15 @@ interface ResponsiveHeaderNavItem {
 
         &:hover {
           cursor: pointer;
-          border-color: light-dark(var(--blue-12), var(--gray-0));
+          border-color: light-dark(var(--blue-10), var(--slate-00));
         }
 
         &:focus {
-          border-color: light-dark(var(--blue-12), var(--gray-0));
+          border-color: light-dark(var(--blue-10), var(--slate-00));
         }
 
         &:focus-visible {
-          border-color: light-dark(var(--blue-12), var(--gray-0));
+          border-color: light-dark(var(--blue-10), var(--slate-00));
         }
       }
 
@@ -174,7 +174,7 @@ interface ResponsiveHeaderNavItem {
           overflow: clip;
 
           h4 {
-            color: var(--gray-12);
+            color: var(--slate-10);
           }
 
           .navigation-group-list {
@@ -189,7 +189,7 @@ interface ResponsiveHeaderNavItem {
 
               a.navigation-group-link {
                 display: inline-block;
-                color: var(--gray-12);
+                color: var(--slate-10);
                 text-decoration: none;
                 padding-block: 8px;
 
@@ -199,11 +199,11 @@ interface ResponsiveHeaderNavItem {
 
                 &:hover {
                   cursor: pointer;
-                  border-color: var(--gray-12);
+                  border-color: var(--slate-10);
                 }
 
                 &:focus-visible {
-                  border-color: var(--gray-12);
+                  border-color: var(--slate-10);
                 }
               }
             }

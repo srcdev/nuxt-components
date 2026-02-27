@@ -8,15 +8,15 @@
 defineProps({
   width: {
     type: String as PropType<string>,
-    default: 'narrow',
-    validator: (val: string) => ['narrow', 'medium', 'wide'].includes(val),
+    default: "narrow",
+    validator: (val: string) => ["narrow", "medium", "wide"].includes(val),
   },
 });
 </script>
 
 <style lang="css">
 .form-wrapper {
-  outline: 0rem solid var(--gray-12);
+  outline: 0rem solid var(--slate-10);
   padding-bottom: 2rem;
   margin-trim: block;
 

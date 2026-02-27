@@ -4,33 +4,33 @@
      COLOR SCALE VARIABLES
      Base color tokens for the error theme
      =========================================== */
-  --colour-theme-1: var(--red-1);
-  --colour-theme-2: var(--red-2);
-  --colour-theme-3: var(--red-3);
-  --colour-theme-4: var(--red-4);
-  --colour-theme-5: var(--red-5);
-  --colour-theme-6: var(--red-6);
-  --colour-theme-7: var(--red-7);
-  --colour-theme-8: var(--red-8);
-  --colour-theme-9: var(--red-9);
+  --colour-theme-1: var(--red-01);
+  --colour-theme-2: var(--red-02);
+  --colour-theme-3: var(--red-03);
+  --colour-theme-4: var(--red-04);
+  --colour-theme-5: var(--red-05);
+  --colour-theme-6: var(--red-06);
+  --colour-theme-7: var(--red-07);
+  --colour-theme-8: var(--red-08);
+  --colour-theme-9: var(--red-09);
   --colour-theme-10: var(--red-10);
-  --colour-theme-11: var(--red-11);
-  --colour-theme-12: var(--red-12);
+  --colour-theme-11: var(--red-10);
+  --colour-theme-12: var(--red-10);
 
   /* ===========================================
      FORM ERROR DISPLAY
      =========================================== */
-  --theme-error-outline: var(--red-5);
+  --theme-error-outline: var(--red-05);
 
   /* ===========================================
      FORM INPUT VARIABLES
      Styling for form inputs and controls
      =========================================== */
-  --theme-input-border: var(--red-5);
-  --theme-input-border-focus: var(--red-4);
+  --theme-input-border: var(--red-05);
+  --theme-input-border-focus: var(--red-04);
 
   /* Input outlines and focus */
-  --theme-input-outline: var(--red-5);
+  --theme-input-outline: var(--red-05);
 
   /* ===========================================
      FORM BUTTON VARIABLES
@@ -38,19 +38,19 @@
      =========================================== */
 
   /* Variant Primary */
-  --theme-button-primary-border: var(--red-7);
-  --theme-button-primary-border-active: var(--red-7);
-  --theme-button-primary-text: var(--red-0);
-  --theme-button-primary-text-hover: var(--red-0);
+  --theme-button-primary-border: var(--red-07);
+  --theme-button-primary-border-active: var(--red-07);
+  --theme-button-primary-text: var(--red-00);
+  --theme-button-primary-text-hover: var(--red-00);
 
   /* Variant Secondary */
-  --theme-button-secondary-surface: var(--red-1);
-  --theme-button-secondary-border-active: var(--red-1);
-  --theme-button-secondary-text: var(--red-9);
+  --theme-button-secondary-surface: var(--red-01);
+  --theme-button-secondary-border-active: var(--red-01);
+  --theme-button-secondary-text: var(--red-09);
 
   /* Variant Tertiary */
   --theme-button-tertiary-surface: transparent;
-  --theme-button-tertiary-text: var(--red-1);
-  --theme-button-tertiary-border-active: var(--red-1);
-  --theme-button-tertiary-outline-active: var(--red-9);
+  --theme-button-tertiary-text: var(--red-01);
+  --theme-button-tertiary-border-active: var(--red-01);
+  --theme-button-tertiary-outline-active: var(--red-09);
 }

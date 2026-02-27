@@ -502,7 +502,7 @@ onMounted(() => {
             transition: background-color v-bind(transitionSpeedStr) linear;
 
             &.active {
-              background-color: light-dark(var(--gray-12), var(--gray-00));
+              background-color: light-dark(var(--slate-10), var(--slate-00));
             }
           }
         }

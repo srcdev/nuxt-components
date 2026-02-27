@@ -90,7 +90,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
     border-top: var(--form-element-border-width) solid var(--theme-error-surface);
     border-right: var(--form-element-border-width) solid var(--theme-error-surface);
-    border-bottom: var(--form-element-border-width) solid var(--red-8);
+    border-bottom: var(--form-element-border-width) solid var(--red-08);
     border-left: var(--form-element-border-width) solid var(--theme-error-surface);
 
     border-radius: var(--form-input-border-radius);

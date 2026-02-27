@@ -22,7 +22,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Display Banner",
@@ -35,7 +35,7 @@ useHead({
   bodyAttrs: {
     class: "display-banner-page",
   },
-})
+});
 </script>
 
 <style lang="css">
@@ -70,7 +70,7 @@ useHead({
       justify-self: center;
 
       h2 {
-        color: var(--gray-0);
+        color: var(--slate-00);
       }
     }
   }

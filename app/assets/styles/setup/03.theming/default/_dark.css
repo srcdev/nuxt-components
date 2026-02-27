@@ -3,18 +3,18 @@
      COLOR SCALE VARIABLES
      Base color tokens for the default theme
      =========================================== */
-  --colour-theme-1: var(--blue-1);
-  --colour-theme-2: var(--blue-2);
-  --colour-theme-3: var(--blue-3);
-  --colour-theme-4: var(--blue-4);
-  --colour-theme-5: var(--blue-5);
-  --colour-theme-6: var(--blue-6);
-  --colour-theme-7: var(--blue-7);
-  --colour-theme-8: var(--blue-8);
-  --colour-theme-9: var(--blue-9);
+  --colour-theme-1: var(--blue-01);
+  --colour-theme-2: var(--blue-02);
+  --colour-theme-3: var(--blue-03);
+  --colour-theme-4: var(--blue-04);
+  --colour-theme-5: var(--blue-05);
+  --colour-theme-6: var(--blue-06);
+  --colour-theme-7: var(--blue-07);
+  --colour-theme-8: var(--blue-08);
+  --colour-theme-9: var(--blue-09);
   --colour-theme-10: var(--blue-10);
-  --colour-theme-11: var(--blue-11);
-  --colour-theme-12: var(--blue-12);
+  --colour-theme-11: var(--blue-10);
+  --colour-theme-12: var(--blue-10);
 
   /* ===========================================
      GENERIC BODY VARIABLES
@@ -28,7 +28,7 @@
      Styling for anchor links and interactive text
      =========================================== */
   --colour-link-default: var(--blue-10);
-  --colour-link-hover: var(--blue-9);
+  --colour-link-hover: var(--blue-09);
 
   /* ===========================================
      FORM INPUT VARIABLES
@@ -40,15 +40,15 @@
   --theme-input-surface-hover: var(--slate-09);
 
   /* Input borders */
-  --theme-input-border: var(--blue-6);
-  --theme-input-border-hover: var(--blue-5);
-  --theme-input-border-focus: var(--blue-4);
+  --theme-input-border: var(--blue-06);
+  --theme-input-border-hover: var(--blue-05);
+  --theme-input-border-focus: var(--blue-04);
 
   /* Input outlines and focus */
-  --theme-input-outline: var(--blue-6);
-  --theme-input-outline-focus: var(--blue-4);
-  --theme-input-visible-outline: var(--blue-4);
-  --theme-focus-visible-shadow: 0 0 0 2px var(--blue-2);
+  --theme-input-outline: var(--blue-06);
+  --theme-input-outline-focus: var(--blue-04);
+  --theme-input-visible-outline: var(--blue-04);
+  --theme-focus-visible-shadow: 0 0 0 2px var(--blue-02);
 
   /* ===========================================
      INPUT TEXT VARIABLES
@@ -60,8 +60,8 @@
      CHECKBOX AND RADIO BUTTON VARIABLES
      =========================================== */
   --theme-checkbox-symbol-surface: var(--theme-input-surface);
-  --theme-checkbox-symbol-color: var(--blue-2);
-  --theme-checkbox-decorator-color: var(--blue-2);
+  --theme-checkbox-symbol-color: var(--blue-02);
+  --theme-checkbox-decorator-color: var(--blue-02);
 
   /* ===========================================
      FORM BUTTON VARIABLES
@@ -69,19 +69,19 @@
      =========================================== */
 
   /* Variant Primary */
-  --theme-button-primary-border: var(--blue-7);
-  --theme-button-primary-border-active: var(--blue-7);
-  --theme-button-primary-text: var(--blue-0);
-  --theme-button-primary-text-hover: var(--blue-0);
+  --theme-button-primary-border: var(--blue-07);
+  --theme-button-primary-border-active: var(--blue-07);
+  --theme-button-primary-text: var(--blue-00);
+  --theme-button-primary-text-hover: var(--blue-00);
 
   /* Variant Secondary */
-  --theme-button-secondary-surface: var(--blue-1);
-  --theme-button-secondary-border-active: var(--blue-1);
-  --theme-button-secondary-text: var(--blue-9);
+  --theme-button-secondary-surface: var(--blue-01);
+  --theme-button-secondary-border-active: var(--blue-01);
+  --theme-button-secondary-text: var(--blue-09);
 
   /* Variant Tertiary */
   --theme-button-tertiary-surface: transparent;
-  --theme-button-tertiary-text: var(--blue-1);
-  --theme-button-tertiary-border-active: var(--blue-1);
-  --theme-button-tertiary-outline-active: var(--blue-9);
+  --theme-button-tertiary-text: var(--blue-01);
+  --theme-button-tertiary-border-active: var(--blue-01);
+  --theme-button-tertiary-outline-active: var(--blue-09);
 }

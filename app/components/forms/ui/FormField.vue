@@ -1,5 +1,8 @@
 <template>
-  <div class="form-field" :class="[width, styleClassPassthrough, { 'has-gutter': hasGutter }, { error: fieldHasError }]">
+  <div
+    class="form-field"
+    :class="[width, styleClassPassthrough, { 'has-gutter': hasGutter }, { error: fieldHasError }]"
+  >
     <div class="form-field-inner">
       <slot name="default"></slot>
     </div>
@@ -10,8 +13,8 @@
 defineProps({
   width: {
     type: String as PropType<string>,
-    default: 'narrow',
-    validator: (val: string) => ['narrow', 'medium', 'wide'].includes(val),
+    default: "narrow",
+    validator: (val: string) => ["narrow", "medium", "wide"].includes(val),
   },
   fieldHasError: {
     type: Boolean as PropType<boolean>,
@@ -23,7 +26,7 @@ defineProps({
   },
   styleClassPassthrough: {
     type: String,
-    default: '',
+    default: "",
   },
 });
 </script>
@@ -41,7 +44,7 @@ defineProps({
   margin-block: 1lh;
 
   width: min(100% - calc(2 * var(--_gutter-width)), var(--_max-width));
-  outline: 0rem solid var(--gray-5);
+  outline: 0rem solid var(--slate-05);
 
   &.error {
     background-color: var(--theme-error-surface);
@@ -56,7 +59,7 @@ defineProps({
     border-radius: var(--_border-radius);
     margin-inline-start: 0rem;
     padding-inline-start: 0rem;
-    outline: 0 solid var(--gray-5);
+    outline: 0 solid var(--slate-05);
   }
 
   &.has-gutter {

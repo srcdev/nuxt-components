@@ -355,7 +355,7 @@ onBeforeRouteLeave(() => {
       grid-template-columns: auto 1fr auto;
       gap: 12px;
       align-items: center;
-      background-color: var(--gray-10);
+      background-color: var(--slate-10);
       border-start-start-radius: 8px;
       border-end-start-radius: 8px;
       padding: 12px 14px;

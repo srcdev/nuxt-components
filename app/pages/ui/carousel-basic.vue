@@ -28,11 +28,11 @@
 </template>
 
 <script setup lang="ts">
-import type { ICarouselBasic } from "~/types/components"
+import type { ICarouselBasic } from "~/types/components";
 
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Carousel (Basic)",
@@ -40,7 +40,7 @@ useHead({
   bodyAttrs: {
     class: "carousel-basic-example-page",
   },
-})
+});
 
 const {
   data: carouselData,
@@ -49,7 +49,7 @@ const {
   error: carouselError,
 } = await useFetch<ICarouselBasic>("/api/carousel", {
   immediate: true,
-})
+});
 
 const carouselDataStatic = {
   items: [
@@ -87,12 +87,12 @@ const carouselDataStatic = {
   total: 6,
   skip: 0,
   limit: 4,
-}
+};
 
 const carouselDataIds = computed(() => {
-  return carouselData.value?.items.map((item) => item.id) || []
+  return carouselData.value?.items.map((item) => item.id) || [];
   // return carouselData?.items.map((item) => item.id) || [];
-})
+});
 </script>
 
 <style lang="css">
@@ -215,8 +215,9 @@ const carouselDataIds = computed(() => {
 
         .btn-action {
           --gradient-glow-dark:
-            var(--gray-7), var(--gray-5), var(--gray-8), var(--gray-6), var(--gray-7), var(--gray-8), var(--gray-7);
-          --gradient-glow-light: var(--gray-4), var(--gray-6), var(--gray-0), var(--gray-6), var(--gray-4);
+            var(--slate-07), var(--slate-05), var(--slate-08), var(--slate-06), var(--slate-07), var(--slate-08),
+            var(--slate-07);
+          --gradient-glow-light: var(--slate-04), var(--slate-06), var(--slate-00), var(--slate-06), var(--slate-04);
 
           padding-block: 10px;
           padding-inline: 10px;
@@ -228,7 +229,7 @@ const carouselDataIds = computed(() => {
           background:
             linear-gradient(var(--surface, canvas) 0 0) padding-box,
             conic-gradient(from var(--glow-deg), var(--gradient-glow-dark)) border-box;
-          outline: 1px solid light-dark(var(--gray-9), var(--gray-7));
+          outline: 1px solid light-dark(var(--slate-09), var(--slate-07));
 
           position: relative;
           isolation: isolate;
@@ -263,7 +264,7 @@ const carouselDataIds = computed(() => {
 
           &:hover {
             animation-play-state: running;
-            outline-color: light-dark(var(--gray-9), var(--gray-4));
+            outline-color: light-dark(var(--slate-09), var(--slate-04));
           }
 
           .arrows-icon {

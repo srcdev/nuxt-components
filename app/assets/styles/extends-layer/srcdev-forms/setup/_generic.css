@@ -1,7 +1,7 @@
 :where(html) {
   --theme-form-font-familty: var(--font-family);
-  --theme-error-surface: var(--red-12);
-  --theme-error-text: var(--red-0);
+  --theme-error-surface: var(--red-10);
+  --theme-error-text: var(--red-00);
   --theme-form-button-font-size-normal: var(--form-element-font-size);
   --theme-form-transition-duration: 0.2s;
   --theme-input-placeholder-font-size: var(--step-4);

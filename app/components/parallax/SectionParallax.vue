@@ -10,7 +10,7 @@ const props = defineProps({
     type: String,
     default: "div",
     validator(value: string) {
-      return ["div", "section", "article", "aside"].includes(value)
+      return ["div", "section", "article", "aside"].includes(value);
     },
   },
   backgroundImage: {
@@ -20,20 +20,20 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 
-const backgroundImage = computed(() => `url("${props.backgroundImage}")`)
+const backgroundImage = computed(() => `url("${props.backgroundImage}")`);
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough)
+    resetElementClasses(props.styleClassPassthrough);
   }
-)
+);
 </script>
 
 <style lang="css">
@@ -47,7 +47,7 @@ watch(
   background-size: inherit;
   position: relative;
 
-  background-color: light-dark(var(--gray-1), var(--gray-8));
+  background-color: light-dark(var(--slate-01), var(--slate-08));
   width: 100%;
 
   @supports (background-attachment: fixed) {

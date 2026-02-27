@@ -128,7 +128,7 @@ onMounted(async () => {
       border-width: 0;
 
       .display-prompt-inner {
-        background-color: var(--gray-1);
+        background-color: var(--slate-01);
       }
 
       &.outlined {

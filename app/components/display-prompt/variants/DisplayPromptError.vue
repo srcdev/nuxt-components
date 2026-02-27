@@ -22,15 +22,15 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const slots = useSlots()
+const slots = useSlots();
 </script>
 
 <style lang="css">
 .display-prompt.error {
-  --bg-color: var(--red-2);
-  --text-color: var(--gray-00);
+  --bg-color: var(--red-02);
+  --text-color: var(--slate-00);
 }
 
 .display-prompt {

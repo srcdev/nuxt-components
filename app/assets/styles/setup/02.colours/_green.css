@@ -1,15 +1,13 @@
 :where(html) {
-  --green-0: oklch(0.99 0.02 157);
-  --green-1: oklch(0.95 0.078 157);
-  --green-2: oklch(0.889 0.19 157);
-  --green-3: oklch(0.829 0.197 157);
-  --green-4: oklch(0.768 0.183 157);
-  --green-5: oklch(0.708 0.169 157);
-  --green-6: oklch(0.647 0.154 157);
-  --green-7: oklch(0.587 0.14 157);
-  --green-8: oklch(0.526 0.125 157);
-  --green-9: oklch(0.466 0.111 157);
+  --green-00: oklch(0.99 0.02 157);
+  --green-01: oklch(0.95 0.078 157);
+  --green-02: oklch(0.889 0.19 157);
+  --green-03: oklch(0.829 0.197 157);
+  --green-04: oklch(0.768 0.183 157);
+  --green-05: oklch(0.708 0.169 157);
+  --green-06: oklch(0.647 0.154 157);
+  --green-07: oklch(0.587 0.14 157);
+  --green-08: oklch(0.526 0.125 157);
+  --green-09: oklch(0.466 0.111 157);
   --green-10: oklch(0.405 0.096 157);
-  --green-11: oklch(0.344 0.082 157);
-  --green-12: oklch(0.284 0.068 157);
 }

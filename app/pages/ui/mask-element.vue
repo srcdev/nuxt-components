@@ -9,7 +9,7 @@
             <AlertMaskCore
               :config="{
                 backgroundColour: 'rgba(0,0,0,0.25)',
-                borderColour: 'var(--orange-8)',
+                borderColour: 'var(--orange-08)',
                 radiusLeft: 12,
                 radiusRight: 4,
                 borderLeft: 12,

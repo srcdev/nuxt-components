@@ -143,10 +143,10 @@
 </template>
 
 <script setup lang="ts">
-import { type DisplayChipConfig } from "~/types/components"
+import { type DisplayChipConfig } from "~/types/components";
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "UI Display Avatar",
@@ -154,34 +154,34 @@ useHead({
   bodyAttrs: {
     class: "ui-display-avatar-page",
   },
-})
+});
 
 const chipConfig = reactive<DisplayChipConfig>({
   size: "12px",
   maskWidth: "4px",
   offset: "2px",
   angle: "45deg",
-})
+});
 
 const changeSize = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  chipConfig.size = `${target.value}px`
-}
+  const target = e.target as HTMLInputElement;
+  chipConfig.size = `${target.value}px`;
+};
 
 const changeMaskWidth = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  chipConfig.maskWidth = `${target.value}px`
-}
+  const target = e.target as HTMLInputElement;
+  chipConfig.maskWidth = `${target.value}px`;
+};
 
 const changeOffset = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  chipConfig.offset = `${target.value}px`
-}
+  const target = e.target as HTMLInputElement;
+  chipConfig.offset = `${target.value}px`;
+};
 
 const changeAngle = (e: Event) => {
-  const target = e.target as HTMLInputElement
-  chipConfig.angle = `${target.value}deg`
-}
+  const target = e.target as HTMLInputElement;
+  chipConfig.angle = `${target.value}deg`;
+};
 </script>
 
 <style lang="css">
@@ -202,7 +202,7 @@ const changeAngle = (e: Event) => {
 
         input {
           padding: 0.5rem;
-          border: 1px solid var(--gray-7);
+          border: 1px solid var(--slate-07);
           border-radius: 4px;
           font-size: 1rem;
         }
@@ -219,7 +219,7 @@ const changeAngle = (e: Event) => {
       align-items: center;
       justify-content: start;
 
-      /* background-color: var(--gray-5); */
+      /* background-color: var(--slate-05); */
 
       .dt {
         font-weight: bold;
@@ -235,14 +235,14 @@ const changeAngle = (e: Event) => {
           &.round {
             width: 50px;
             height: 50px;
-            background-color: var(--gray-12);
+            background-color: var(--slate-10);
             border-radius: 50%;
           }
 
           &.square {
             width: 50px;
             height: 50px;
-            background-color: var(--gray-12);
+            background-color: var(--slate-10);
             border-radius: 4px;
           }
         }

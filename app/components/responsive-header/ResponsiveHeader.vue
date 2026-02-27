@@ -447,7 +447,7 @@ watch(
     --_link-margin-inline: 0.1rem;
     --_link-focus-visible-outline-width: 0.2rem;
     --_link-border-default: 2px solid transparent;
-    --_link-border-bottom-hover: var(--green-8);
+    --_link-border-bottom-hover: var(--green-08);
 
     grid-area: navStack;
     display: flex;

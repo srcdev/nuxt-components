@@ -93,7 +93,7 @@ describe("AlertMaskCore", () => {
     // Check that computed config uses defaults
     const vm = wrapper.vm as unknown as AlertMaskCoreInstance;
     expect(vm.cfg.backgroundColour).toBe("rgba(0,0,0,0.25)");
-    expect(vm.cfg.borderColour).toBe("var(--orange-8)");
+    expect(vm.cfg.borderColour).toBe("var(--orange-08)");
     expect(vm.cfg.radiusLeft).toBe(12);
     expect(vm.cfg.radiusRight).toBe(12);
     expect(vm.cfg.borderLeft).toBe(8);
@@ -143,7 +143,7 @@ describe("AlertMaskCore", () => {
     expect(vm.cfg.backgroundColour).toBe("blue");
     expect(vm.cfg.radiusLeft).toBe(25);
     // Check defaults are maintained for other values
-    expect(vm.cfg.borderColour).toBe("var(--orange-8)");
+    expect(vm.cfg.borderColour).toBe("var(--orange-08)");
     expect(vm.cfg.radiusRight).toBe(12);
   });
 
@@ -280,7 +280,7 @@ describe("AlertMaskCore", () => {
     // Should use all defaults when empty config provided
     const vm = wrapper.vm as unknown as AlertMaskCoreInstance;
     expect(vm.cfg.backgroundColour).toBe("rgba(0,0,0,0.25)");
-    expect(vm.cfg.borderColour).toBe("var(--orange-8)");
+    expect(vm.cfg.borderColour).toBe("var(--orange-08)");
   });
 
   it("maintains reactivity with config changes", async () => {

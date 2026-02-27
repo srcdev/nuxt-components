@@ -124,7 +124,7 @@ watch(colorModeVal, (val) => {
         .selected-option-marker {
           background-color: var(--_select-scheme-group-background-color);
           background-image: var(--_select-scheme-group-background-image);
-          border: var(--form-element-border-width) solid light-dark(var(--gray-12), var(--gray-0));
+          border: var(--form-element-border-width) solid light-dark(var(--slate-10), var(--slate-00));
         }
       }
 
@@ -139,7 +139,7 @@ watch(colorModeVal, (val) => {
           padding: var(--_select-scheme-group-padding);
 
           &:has(.option-icon:hover) {
-            outline: var(--form-element-outline-width) solid light-dark(var(--gray-12), var(--gray-0));
+            outline: var(--form-element-outline-width) solid light-dark(var(--slate-10), var(--slate-00));
           }
 
           &:has(input:focus-visible) {
@@ -149,26 +149,26 @@ watch(colorModeVal, (val) => {
 
           .option-icon {
             &.auto {
-              color: light-dark(var(--gray-12), var(--gray-3));
+              color: light-dark(var(--slate-10), var(--slate-03));
 
               &.active {
-                color: var(--gray-0);
+                color: var(--slate-00);
               }
             }
 
             &.light {
-              color: light-dark(var(--gray-12), var(--gray-3));
+              color: light-dark(var(--slate-10), var(--slate-03));
 
               &.active {
-                color: var(--gray-0);
+                color: var(--slate-00);
               }
             }
 
             &.dark {
-              color: light-dark(var(--gray-12), var(--gray-3));
+              color: light-dark(var(--slate-10), var(--slate-03));
 
               &.active {
-                color: var(--gray-0);
+                color: var(--slate-00);
               }
             }
           }

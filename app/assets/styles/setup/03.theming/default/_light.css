@@ -3,15 +3,15 @@
      COLOR SCALE VARIABLES
      Base color tokens for the default theme
      =========================================== */
-  --colour-theme-1: var(--blue-1);
-  --colour-theme-2: var(--blue-2);
-  --colour-theme-3: var(--blue-3);
-  --colour-theme-4: var(--blue-4);
-  --colour-theme-5: var(--blue-5);
-  --colour-theme-6: var(--blue-6);
-  --colour-theme-7: var(--blue-7);
-  --colour-theme-8: var(--blue-8);
-  --colour-theme-9: var(--blue-9);
+  --colour-theme-1: var(--blue-01);
+  --colour-theme-2: var(--blue-02);
+  --colour-theme-3: var(--blue-03);
+  --colour-theme-4: var(--blue-04);
+  --colour-theme-5: var(--blue-05);
+  --colour-theme-6: var(--blue-06);
+  --colour-theme-7: var(--blue-07);
+  --colour-theme-8: var(--blue-08);
+  --colour-theme-9: var(--blue-09);
   --colour-theme-10: var(--blue-10);
 
   /* ===========================================
@@ -26,7 +26,7 @@
      Styling for anchor links and interactive text
      =========================================== */
   --colour-link-default: var(--blue-10);
-  --colour-link-hover: var(--blue-9);
+  --colour-link-hover: var(--blue-09);
 
   /* ===========================================
      FORM INPUT VARIABLES
@@ -38,15 +38,15 @@
   --theme-input-surface-hover: var(--slate-01);
 
   /* Input borders */
-  --theme-input-border: var(--blue-6);
-  --theme-input-border-hover: var(--blue-5);
-  --theme-input-border-focus: var(--blue-4);
+  --theme-input-border: var(--blue-06);
+  --theme-input-border-hover: var(--blue-05);
+  --theme-input-border-focus: var(--blue-04);
 
   /* Input outlines and focus */
   --theme-input-outline: transparent;
-  --theme-input-outline-focus: var(--blue-4);
-  --theme-input-visible-outline: var(--blue-12);
-  --theme-focus-visible-shadow: 0 0 0 2px var(--blue-2);
+  --theme-input-outline-focus: var(--blue-04);
+  --theme-input-visible-outline: var(--blue-10);
+  --theme-focus-visible-shadow: 0 0 0 2px var(--blue-02);
 
   /* ===========================================
      INPUT TEXT VARIABLES
@@ -57,15 +57,15 @@
   /* ===========================================
      CHECKBOX AND RADIO BUTTON VARIABLES
      =========================================== */
-  --theme-checkbox-symbol-color: var(--blue-8);
+  --theme-checkbox-symbol-color: var(--blue-08);
   --theme-checkbox-symbol-surface: var(--theme-input-surface);
-  --theme-checkbox-decorator-color: var(--blue-8);
+  --theme-checkbox-decorator-color: var(--blue-08);
 
   /* ===========================================
      TOGGLE SWITCH VARIABLES
      =========================================== */
-  --theme-toggle-symbol-color-default: var(--blue-0);
-  --theme-toggle-symbol-color-checked: var(--blue-8);
+  --theme-toggle-symbol-color-default: var(--blue-00);
+  --theme-toggle-symbol-color-checked: var(--blue-08);
 
   --input-error-margin-block-start: 0.25rem;
 
@@ -75,30 +75,30 @@
      =========================================== */
 
   /* Variant Primary */
-  --theme-button-primary-surface: var(--blue-9);
-  --theme-button-primary-surface-hover: var(--blue-8);
-  --theme-button-primary-surface-active: var(--blue-7);
-  --theme-button-primary-border: var(--blue-9);
-  --theme-button-primary-border-active: var(--blue-9);
-  --theme-button-primary-outline: var(--blue-1);
-  --theme-button-primary-outline-active: var(--blue-7);
-  --theme-button-primary-text: var(--blue-0);
-  --theme-button-primary-text-hover: var(--blue-0);
+  --theme-button-primary-surface: var(--blue-09);
+  --theme-button-primary-surface-hover: var(--blue-08);
+  --theme-button-primary-surface-active: var(--blue-07);
+  --theme-button-primary-border: var(--blue-09);
+  --theme-button-primary-border-active: var(--blue-09);
+  --theme-button-primary-outline: var(--blue-01);
+  --theme-button-primary-outline-active: var(--blue-07);
+  --theme-button-primary-text: var(--blue-00);
+  --theme-button-primary-text-hover: var(--blue-00);
 
   /* Variant Secondary */
   --theme-button-secondary-surface: transparent;
-  --theme-button-secondary-surface-hover: var(--blue-1);
-  --theme-button-secondary-surface-active: var(--blue-1);
-  --theme-button-secondary-border: var(--blue-9);
-  --theme-button-secondary-border-active: var(--blue-9);
-  --theme-button-secondary-outline: var(--blue-9);
-  --theme-button-secondary-outline-active: var(--blue-9);
-  --theme-button-secondary-text: var(--blue-9);
-  --theme-button-secondary-text-hover: var(--blue-9);
+  --theme-button-secondary-surface-hover: var(--blue-01);
+  --theme-button-secondary-surface-active: var(--blue-01);
+  --theme-button-secondary-border: var(--blue-09);
+  --theme-button-secondary-border-active: var(--blue-09);
+  --theme-button-secondary-outline: var(--blue-09);
+  --theme-button-secondary-outline-active: var(--blue-09);
+  --theme-button-secondary-text: var(--blue-09);
+  --theme-button-secondary-text-hover: var(--blue-09);
 
   /* Variant Tertiary */
   --theme-button-tertiary-surface: var(--slate-01);
-  --theme-button-tertiary-text: var(--blue-9);
-  --theme-button-tertiary-border-active: var(--blue-9);
-  --theme-button-tertiary-outline-active: var(--blue-9);
+  --theme-button-tertiary-text: var(--blue-09);
+  --theme-button-tertiary-border-active: var(--blue-09);
+  --theme-button-tertiary-outline-active: var(--blue-09);
 }

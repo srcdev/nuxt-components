@@ -82,7 +82,7 @@ const carouselDataIds = computed(() => {
       max-inline-size: 800px;
       margin-inline: auto;
 
-      outline: 1px solid light-dark(var(--gray-8), var(--gray-1));
+      outline: 1px solid light-dark(var(--slate-08), var(--slate-01));
       padding-block: 6px;
       padding-inline: 6px;
 
@@ -92,11 +92,11 @@ const carouselDataIds = computed(() => {
       }
 
       .item {
-        background-color: light-dark(var(--gray-5), var(--gray-6));
+        background-color: light-dark(var(--slate-05), var(--slate-06));
         contain: layout style paint;
 
         &:nth-child(odd) {
-          background-color: light-dark(var(--gray-6), var(--gray-5));
+          background-color: light-dark(var(--slate-06), var(--slate-05));
         }
 
         .custom-carousel-item {
@@ -141,14 +141,14 @@ const carouselDataIds = computed(() => {
               width: var(--marker-width);
               height: var(--marker-height);
               border-radius: var(--marker-border-radius);
-              background-color: light-dark(var(--gray-5), var(--gray-7));
+              background-color: light-dark(var(--slate-05), var(--slate-07));
               line-height: 3px;
               transition: all 0.3s linear;
               border: 1px solid transparent;
               outline: 1px solid transparent;
 
               &.active {
-                background-color: light-dark(var(--gray-12), var(--gray-00));
+                background-color: light-dark(var(--slate-10), var(--slate-00));
                 will-change: background-color;
               }
 
@@ -170,8 +170,9 @@ const carouselDataIds = computed(() => {
 
         .btn-action {
           --gradient-glow-dark:
-            var(--gray-7), var(--gray-5), var(--gray-8), var(--gray-6), var(--gray-7), var(--gray-8), var(--gray-7);
-          --gradient-glow-light: var(--gray-4), var(--gray-6), var(--gray-0), var(--gray-6), var(--gray-4);
+            var(--slate-07), var(--slate-05), var(--slate-08), var(--slate-06), var(--slate-07), var(--slate-08),
+            var(--slate-07);
+          --gradient-glow-light: var(--slate-04), var(--slate-06), var(--slate-00), var(--slate-06), var(--slate-04);
 
           padding-block: 6px;
           padding-inline: 6px;
@@ -181,7 +182,7 @@ const carouselDataIds = computed(() => {
           background:
             linear-gradient(var(--surface, canvas) 0 0) padding-box,
             conic-gradient(from var(--glow-deg), var(--gradient-glow-dark)) border-box;
-          outline: 1px solid light-dark(var(--gray-9), var(--gray-7));
+          outline: 1px solid light-dark(var(--slate-09), var(--slate-07));
 
           position: relative;
           isolation: isolate;
@@ -222,7 +223,7 @@ const carouselDataIds = computed(() => {
           &:hover,
           &:focus-visible {
             animation-play-state: running;
-            outline-color: light-dark(var(--gray-9), var(--gray-4));
+            outline-color: light-dark(var(--slate-09), var(--slate-04));
             will-change: transform, opacity, filter;
           }
 

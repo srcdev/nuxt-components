@@ -41,7 +41,7 @@ The setup layer provides the foundational styles and utilities:
 #### Variables (`/variables`)
 
 - **Color System** - Comprehensive color palette with semantic naming:
-  - `_blue.css` - Blue color scale (--blue-0 to --blue-12)
+  - `_blue.css` - Blue color scale (--blue-0 to --blue-10)
   - `_gray.css` - Gray color scale
   - `_green.css` - Green color scale
   - `_orange.css` - Orange color scale

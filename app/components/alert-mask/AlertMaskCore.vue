@@ -75,7 +75,7 @@ onMounted(() => {
 
 const cfg = computed(() => ({
   backgroundColour: props.config?.backgroundColour ?? "rgba(0,0,0,0.25)",
-  borderColour: props.config?.borderColour ?? "var(--orange-8)",
+  borderColour: props.config?.borderColour ?? "var(--orange-08)",
   radiusLeft: props.config?.radiusLeft ?? 12,
   radiusRight: props.config?.radiusRight ?? 12,
   borderLeft: props.config?.borderLeft ?? 8,

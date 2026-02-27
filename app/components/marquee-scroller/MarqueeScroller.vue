@@ -82,75 +82,75 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
-})
+});
 
-const displayComponent = ref(false)
-const isPaused = ref(false)
-const isFocused = ref(false)
-const prefersReducedMotion = ref(false)
+const displayComponent = ref(false);
+const isPaused = ref(false);
+const isFocused = ref(false);
+const prefersReducedMotion = ref(false);
 
-const height = computed(() => props.itemConfig.height)
-const width = computed(() => props.itemConfig.width)
-const gap = computed(() => props.itemConfig.gap || "16px")
+const height = computed(() => props.itemConfig.height);
+const width = computed(() => props.itemConfig.width);
+const gap = computed(() => props.itemConfig.gap || "16px");
 
 // Check for reduced motion preference
 const checkReducedMotion = () => {
   if (typeof window !== "undefined" && props.respectReducedMotion) {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
-    prefersReducedMotion.value = mediaQuery.matches
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    prefersReducedMotion.value = mediaQuery.matches;
 
     // Listen for changes
     mediaQuery.addEventListener("change", (e) => {
-      prefersReducedMotion.value = e.matches
+      prefersReducedMotion.value = e.matches;
       if (e.matches) {
-        isPaused.value = true
+        isPaused.value = true;
       }
-    })
+    });
   }
-}
+};
 
 const togglePause = () => {
-  isPaused.value = !isPaused.value
-}
+  isPaused.value = !isPaused.value;
+};
 
 const handleKeydown = (event: KeyboardEvent) => {
   switch (event.key) {
     case " ":
     case "Spacebar":
-      event.preventDefault()
-      togglePause()
-      break
+      event.preventDefault();
+      togglePause();
+      break;
     case "ArrowLeft":
     case "ArrowRight":
       // Could add manual stepping functionality here
-      event.preventDefault()
-      break
+      event.preventDefault();
+      break;
   }
-}
+};
 
 const handleFocus = () => {
-  isFocused.value = true
+  isFocused.value = true;
   if (props.respectReducedMotion) {
-    isPaused.value = true
+    isPaused.value = true;
   }
-}
+};
 
 const handleBlur = () => {
-  isFocused.value = false
+  isFocused.value = false;
   if (!prefersReducedMotion.value) {
-    isPaused.value = false
+    isPaused.value = false;
   }
-}
+};
 
 onMounted(() => {
-  displayComponent.value = true
-  checkReducedMotion()
+  displayComponent.value = true;
+  checkReducedMotion();
 
   // Auto-pause if user prefers reduced motion
   if (prefersReducedMotion.value) {
-    isPaused.value = true
+    isPaused.value = true;
   }
-})
+});
 </script>
 
 <style lang="css">
@@ -249,7 +249,7 @@ onMounted(() => {
     transition: filter 0.5s;
     flex-shrink: 0;
 
-    border: 1px solid light-dark(var(--gray-12), var(--gray-0));
+    border: 1px solid light-dark(var(--slate-10), var(--slate-00));
     border-radius: 4px;
 
     &:hover {

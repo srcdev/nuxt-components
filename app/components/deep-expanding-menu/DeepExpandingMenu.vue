@@ -4,16 +4,16 @@
       <template v-for="(link, key) in navLinks" :key="key">
         <NuxtLink v-if="link.path" :to="link.path" class="navigation-link">{{ link.name }}</NuxtLink>
 
-        <div v-else class="navigation-group" :style="`--_anchor-name: --anchor-nav-1-${key};`" ref="detailsRef">
+        <div v-else ref="detailsRef" class="navigation-group" :style="`--_anchor-name: --anchor-nav-1-${key};`">
           <button :popovertarget="`popovertarget-nav-1-${key}`" class="navigation-group-toggle">
             <span>{{ link.name }}</span>
             <Icon name="bi:caret-down-fill" class="icon" />
           </button>
 
-          <div class="navigation-group-panel" popover role="menu" :id="`popovertarget-nav-1-${key}`">
+          <div :id="`popovertarget-nav-1-${key}`" class="navigation-group-panel" popover role="menu">
             <h4 class="page-heading-4 mb-6">{{ link.childLinksTitle }}</h4>
             <ul class="navigation-group-list">
-              <li class="navigation-group-item" v-for="childLink in link.childLinks" :key="childLink.name">
+              <li v-for="childLink in link.childLinks" :key="childLink.name" class="navigation-group-item">
                 <NuxtLink :to="childLink.path" class="navigation-group-link">{{ childLink.name }}</NuxtLink>
               </li>
             </ul>
@@ -25,13 +25,13 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderNavItem } from "../../types/components"
+import type { ResponsiveHeaderNavItem } from "../../types/components";
 const props = defineProps({
   tag: {
     type: String,
     default: "nav",
     validator(value: string) {
-      return ["div", "section", "nav", "ul", "ol"].includes(value)
+      return ["div", "section", "nav", "ul", "ol"].includes(value);
     },
   },
   navLinks: {
@@ -42,17 +42,17 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 // const detailsRef = useTemplateRef('detailsRef');
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough)
+    resetElementClasses(props.styleClassPassthrough);
   }
-)
+);
 </script>
 
 <style lang="css">
@@ -92,15 +92,15 @@ watch(
 
         &:hover {
           cursor: pointer;
-          border-color: light-dark(var(--blue-12), var(--gray-0));
+          border-color: light-dark(var(--blue-10), var(--slate-00));
         }
 
         &:focus {
-          border-color: light-dark(var(--blue-12), var(--gray-0));
+          border-color: light-dark(var(--blue-10), var(--slate-00));
         }
 
         &:focus-visible {
-          border-color: light-dark(var(--blue-12), var(--gray-0));
+          border-color: light-dark(var(--blue-10), var(--slate-00));
         }
       }
 
@@ -160,7 +160,7 @@ watch(
           }
 
           h4 {
-            color: var(--gray-12);
+            color: var(--slate-10);
           }
 
           .navigation-group-list {
@@ -175,7 +175,7 @@ watch(
 
               a.navigation-group-link {
                 display: inline-block;
-                color: var(--gray-12);
+                color: var(--slate-10);
                 text-decoration: none;
                 padding-block: 8px;
 
@@ -185,11 +185,11 @@ watch(
 
                 &:hover {
                   cursor: pointer;
-                  border-color: var(--gray-12);
+                  border-color: var(--slate-10);
                 }
 
                 &:focus-visible {
-                  border-color: var(--gray-12);
+                  border-color: var(--slate-10);
                 }
               }
             }
