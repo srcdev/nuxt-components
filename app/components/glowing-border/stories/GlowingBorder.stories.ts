@@ -10,7 +10,7 @@ interface GlowingBorderStoryArgs {
 }
 
 export default {
-  title: "Components/Ui/GlowingBorder",
+  title: "Components/Effects/GlowingBorder",
   component: StorybookComponent,
   argTypes: {
     variant: {
@@ -65,12 +65,12 @@ const Template: StoryFn<GlowingBorderStoryArgs> = (args) => ({
     return { args };
   },
   template: `
-    <div style="padding: 40px;">
+    <div style="padding: 40px; background-color: var(--slate-10);">
       <StorybookComponent
         :variant="args.variant"
         :style-class-passthrough="['storybook-demo']"
       >
-        <div v-if="!args.showDisplayCard" style="padding: 20px;">
+        <div v-if="!args.showDisplayCard" style="padding: 20px; color: var(--slate-02);">
           <h3 style="margin: 0 0 12px 0; font-size: 1.5rem; font-weight: 600;">GlowingBorder Header</h3>
           <h4 style="margin: 0 0 16px 0; font-size: 1.25rem; font-weight: 500;">GlowingBorder Content</h4>
           <p style="margin: 0 0 12px 0; line-height: 1.6;">{{ args.content }}</p>
@@ -88,12 +88,12 @@ const Template: StoryFn<GlowingBorderStoryArgs> = (args) => ({
             <h2 style="margin: 0; font-size: 1.5rem; font-weight: 600;">DisplayCard Header</h2>
           </template>
           <template #default>
-            <h3 style="margin: 0 0 12px 0; font-size: 1.25rem; font-weight: 500;">DisplayCard Content</h3>
-            <p style="margin: 0 0 12px 0; line-height: 1.6;">{{ args.content }}</p>
-            <p style="margin: 0; line-height: 1.6;">This demonstrates how GlowingBorder can wrap other components.</p>
+            <h3 style="margin: 0 0 12px 0; font-size: 1.25rem; font-weight: 500; color: var(--slate-02);">DisplayCard Content</h3>
+            <p style="margin: 0 0 12px 0; line-height: 1.6; color: var(--slate-02);">{{ args.content }}</p>
+            <p style="margin: 0; line-height: 1.6; color: var(--slate-02);">This demonstrates how GlowingBorder can wrap other components.</p>
           </template>
           <template #footer>
-            <p style="margin: 0; font-size: 0.875rem; color: var(--slate-09);">DisplayCard Footer</p>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--slate-02);">DisplayCard Footer</p>
           </template>
         </DisplayCard>
       </StorybookComponent>
