@@ -58,6 +58,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   }
 
   &.small {
+    font-size: 2.5rem;
   }
 
   .accent {
