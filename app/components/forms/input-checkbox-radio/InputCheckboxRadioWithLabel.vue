@@ -72,6 +72,7 @@ const id = useId();
 
   display: flex;
   align-items: center;
+  gap: var(--input-checked-icon-gap);
   min-height: var(--input-min-height);
 
   transition: all var(--theme-form-transition-duration) ease-in-out;
@@ -84,7 +85,8 @@ const id = useId();
     display: flex;
     flex: 1;
     align-items: center;
-    padding: var(--input-checkbox-label-padding);
+    padding-block: var(--input-checkbox-label-padding-block);
+    padding-inline: var(--input-checkbox-label-padding-inline);
     /* white-space: nowrap; */
 
     &:hover {

@@ -165,7 +165,10 @@ watch(
     display: grid;
     grid-template-columns: repeat(
       auto-fit,
-      minmax(calc((2 * var(--input-checkbox-label-padding)) + v-bind(maxChildWidth)), 1fr)
+      minmax(
+        calc(var(--input-checked-icon-gap) + (2 * var(--input-checkbox-label-padding-inline)) + v-bind(maxChildWidth)),
+        1fr
+      )
     );
   }
 }
