@@ -18,14 +18,13 @@
 
   /* ===========================================
      GENERIC BODY VARIABLES
-     Styling for form inputs and controls
      =========================================== */
   --page-bg: var(--slate-08);
   --colour-text-default: var(--slate-01);
+  --colour-text-accent: var(--blue-05);
 
   /* ===========================================
      ANCHOR LINK VARIABLES
-     Styling for anchor links and interactive text
      =========================================== */
   --colour-link-default: var(--blue-10);
   --colour-link-hover: var(--blue-09);
