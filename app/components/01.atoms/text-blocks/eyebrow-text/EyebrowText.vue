@@ -26,15 +26,15 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   color: var(--colour-text-eyebrow);
 
   &.large {
-    font-size: 4.5rem;
+    font-size: var(--eyebrow-text-large);
   }
 
   &.medium {
-    font-size: 3.5rem;
+    font-size: var(--eyebrow-text-medium);
   }
 
   &.small {
-    font-size: 2.5rem;
+    font-size: var(--eyebrow-text-small);
   }
 }
 </style>

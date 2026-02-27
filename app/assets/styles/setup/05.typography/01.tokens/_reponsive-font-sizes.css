@@ -13,4 +13,8 @@
   --hero-header-large: clamp(4.8rem, 4vw + 2rem, 9.6rem);
   --hero-header-medium: clamp(3.6rem, 4vw + 2rem, 4.8rem);
   --hero-header-small: clamp(2.8rem, 4vw + 2rem, 3rem);
+
+  --eyebrow-text-large: 1.4rem;
+  --eyebrow-text-medium: 1.2rem;
+  --eyebrow-text-small: 1rem;
 }

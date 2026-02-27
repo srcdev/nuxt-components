@@ -41,9 +41,7 @@ const meta: Meta<typeof HeroHeading> = {
 };
 
 export default meta;
-
 type Story = StoryObj<typeof HeroHeading>;
-
 export const Default: Story = {
   args: {
     tag: "h1",
@@ -64,27 +62,3 @@ export const Default: Story = {
     template: `<HeroHeading v-bind="args" />`,
   }),
 };
-
-// export const Vertical: Story = {
-//   args: {
-//     ...Default.args,
-//     axis: "vertical",
-//   },
-//   render: Default.render,
-// };
-
-// export const Large: Story = {
-//   args: {
-//     ...Default.args,
-//     fontSize: "large",
-//   },
-//   render: Default.render,
-// };
-
-// export const Small: Story = {
-//   args: {
-//     ...Default.args,
-//     fontSize: "small",
-//   },
-//   render: Default.render,
-// };
