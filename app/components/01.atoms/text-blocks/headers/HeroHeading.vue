@@ -50,15 +50,15 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   }
 
   &.large {
-    font-size: 4.5rem;
+    font-size: var(--hero-header-large);
   }
 
   &.medium {
-    font-size: 3.5rem;
+    font-size: var(--hero-header-medium);
   }
 
   &.small {
-    font-size: 2.5rem;
+    font-size: var(--hero-header-small);
   }
 
   .accent {

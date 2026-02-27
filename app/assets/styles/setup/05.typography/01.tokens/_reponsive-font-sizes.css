@@ -9,4 +9,8 @@
   --step-3: clamp(1.125rem, 1.0815rem + 0.2174vw, 1.25rem); /* 3 */
   --step-2: clamp(0.9375rem, 0.9158rem + 0.1087vw, 1rem); /* 2 */
   --step-1: clamp(0.7813rem, 0.7747rem + 0.0326vw, 0.8rem); /* 1 */
+
+  --hero-header-large: clamp(4.8rem, 4vw + 2rem, 9.6rem);
+  --hero-header-medium: clamp(3.6rem, 4vw + 2rem, 4.8rem);
+  --hero-header-small: clamp(2.8rem, 4vw + 2rem, 3rem);
 }
