@@ -27,7 +27,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "storybook-run-build": "npm run build-storybook && npx http-server storybook-static --port 6006",
-    "test:playwright": "npx playwright test"
+    "test:playwright": "npx playwright test",
+    "test:playwright:update": "npx playwright test --update-snapshots"
   },
   "files": [
     "app/",
