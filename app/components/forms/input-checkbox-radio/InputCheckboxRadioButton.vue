@@ -4,7 +4,7 @@
     class="input-checkbox-radio-options-button"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
-    :class="[elementClasses, optionsLayout, { error: fieldHasError }, { lozenge: displayAsLozenge }]"
+    :class="[elementClasses, optionsLayout, { error: fieldHasError }, { 'is-pill': isPill }]"
   >
     <InputCheckboxRadioCore
       :id
@@ -53,7 +53,7 @@ interface Props {
   label: string;
   optionsLayout?: string;
   direction?: "row" | "row-reverse";
-  displayAsLozenge?: boolean;
+  isPill?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -68,7 +68,7 @@ const props = withDefaults(defineProps<Props>(), {
   multipleOptions: false,
   optionsLayout: "equal-widths",
   direction: "row",
-  displayAsLozenge: false,
+  isPill: false,
 });
 
 const slots = useSlots();
@@ -91,7 +91,7 @@ const flexDirection = ref(props.direction);
   border-radius: 0.4rem;
   transition: all 0.2s ease-in-out;
 
-  &.lozenge {
+  &.is-pill {
     border-radius: 100vw;
   }
 

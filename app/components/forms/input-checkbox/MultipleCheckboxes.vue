@@ -40,7 +40,7 @@
             :direction
             :aria-describedby
             :display-as-disc
-            :display-as-lozenge
+            :is-pill="isPill"
           >
             <template #checkedIcon>
               <slot name="checkedIcon"></slot>
@@ -97,7 +97,7 @@ interface Props {
   theme?: FormUiTheme;
   direction?: "row" | "row-reverse";
   displayAsDisc?: boolean;
-  displayAsLozenge?: boolean;
+  isPill?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -113,7 +113,7 @@ const props = withDefaults(defineProps<Props>(), {
   theme: "default",
   direction: "row",
   displayAsDisc: false,
-  displayAsLozenge: false,
+  isPill: false,
 });
 
 const slots = useSlots();

@@ -40,7 +40,7 @@
             :theme
             :direction
             :aria-describedby
-            :display-as-lozenge
+            :is-pill="isPill"
           >
             <template #checkedIcon>
               <slot name="checkedIcon"></slot>
@@ -86,6 +86,7 @@ interface Props {
   label: string;
   placeholder?: string;
   isButton?: boolean;
+  isPill?: boolean;
   errorMessage: object | string;
   required?: boolean;
   fieldHasError?: boolean;
@@ -102,6 +103,7 @@ const props = withDefaults(defineProps<Props>(), {
   dataTestid: "multiple-radio-buttons",
   placeholder: "",
   isButton: false,
+  isPill: false,
   required: false,
   fieldHasError: false,
   multipleOptions: false,
