@@ -136,25 +136,17 @@ const toggleSwitchValue = () => {
         outline var(--theme-form-transition-duration) linear;
 
       /* UI */
-      background-color: white;
+      background-color: var(--theme-checkbox-symbol-surface);
       border: var(--form-element-border-width) solid var(--theme-input-border);
       outline: var(--form-element-outline-width) solid var(--theme-input-outline);
       border-radius: 100vw;
-      /* width: calc(var(--input-toggle-symbol-size) * 2); */
       width: 72px;
-      /* height: calc(
-        var(--input-toggle-symbol-size) + calc(var(--_toggle-symbol-border-width) * 5) + calc(var(--_switch-padding) * 2)
-      ); */
       padding: calc(var(--input-toggle-wrapper-padding) + var(--input-toggle-symbol-outline-width));
 
       &:hover {
         background-color: var(--theme-toggle-wrapper-surface-color-hover);
         cursor: pointer;
       }
-
-      /* &.active {
-        justify-content: end;
-      } */
 
       .symbol {
         /* Geometry */
