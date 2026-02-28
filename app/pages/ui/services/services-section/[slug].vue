@@ -3,13 +3,24 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <h1 class="page-heading-1">Services Section</h1>
-          <p class="page-body-normal">Example of a services section component.</p>
+          <EyebrowText text-content="Services" />
+
+          <HeroHeading
+            tag="h1"
+            axis="vertical"
+            font-size="large"
+            :text-content="[
+              { text: 'Expert colour & ', styleClass: 'normal' },
+              { text: 'styling', styleClass: 'accent' },
+              { text: 'at your door', styleClass: 'normal' },
+            ]"
+            :style-class-passthrough="['mb-20']"
+          />
+
           <p class="page-body-normal"><NuxtLink to="/ui/services/services-card">Back to Services</NuxtLink></p>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <pre>slug: {{ serviceData?.slug }}</pre>
           <ServicesSection v-if="servicesData.length > 0 && serviceData" :service-data="serviceData!" />
         </LayoutRow>
       </template>

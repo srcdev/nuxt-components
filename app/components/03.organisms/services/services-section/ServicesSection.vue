@@ -14,6 +14,7 @@
             styleClass: 'normal',
           },
         ]"
+        :style-class-passthrough="['mb-20']"
       />
 
       <div class="price-duration">
@@ -37,6 +38,7 @@
           { text: 'What is ', styleClass: 'normal' },
           { text: 'highlights?', styleClass: 'accent' },
         ]"
+        :style-class-passthrough="['mb-20']"
       />
       <p class="page-body-normal">
         {{ serviceData.whatIsIt }}
@@ -47,6 +49,7 @@
         axis="horizontal"
         font-size="smaller"
         :text-content="[{ text: 'The Process ', styleClass: 'normal' }]"
+        :style-class-passthrough="['mb-20']"
       />
       <CounterList tag="ol" :item-count="serviceData.process.length">
         <template v-for="(item, index) in serviceData.process" #[`item-${index}`]>

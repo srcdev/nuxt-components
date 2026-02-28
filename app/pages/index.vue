@@ -10,6 +10,11 @@
           </p>
         </LayoutRow>
 
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+          <h1 class="page-heading-1">Services test pages</h1>
+          <NuxtLink class="page-body-normal" to="/ui/services/services-card">Services Card</NuxtLink>
+        </LayoutRow>
+
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">PopOver component 1</h2>
           <ClientOnly>
