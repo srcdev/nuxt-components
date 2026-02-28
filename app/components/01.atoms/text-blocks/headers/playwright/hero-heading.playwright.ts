@@ -11,7 +11,7 @@ type Args = Record<string, string>;
 // --- Constants ---
 const TAGS = ["h1", "h2", "h3", "h4", "h5", "h6"] as const;
 const AXES = ["horizontal", "vertical"] as const;
-const FONT_SIZES = ["large", "medium", "small"] as const;
+const FONT_SIZES = ["large", "medium", "small", "smaller"] as const;
 
 // --- Helpers ---
 const getStoryUrl = (args: Args = {}): string => {

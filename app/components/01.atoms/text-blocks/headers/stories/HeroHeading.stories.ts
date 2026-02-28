@@ -19,7 +19,7 @@ const meta: Meta<typeof HeroHeading> = {
     },
     fontSize: {
       control: { type: "select" },
-      options: ["large", "medium", "small"],
+      options: ["large", "medium", "small", "smaller"],
       description: "Font size",
       defaultValue: "medium",
     },

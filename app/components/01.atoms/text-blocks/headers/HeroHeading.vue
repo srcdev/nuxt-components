@@ -15,7 +15,7 @@ interface textConfig {
 interface Props {
   tag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   axis?: "horizontal" | "vertical";
-  fontSize?: "large" | "medium" | "small";
+  fontSize?: "large" | "medium" | "small" | "smaller";
   textContent: textConfig[];
   styleClassPassthrough?: string | string[];
 }
@@ -59,6 +59,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
   &.small {
     font-size: var(--hero-header-small);
+  }
+
+  &.smaller {
+    font-size: var(--hero-header-smaller);
   }
 
   .accent {
