@@ -65,7 +65,7 @@ useHead({
   title: "Typography - Block Headings",
   meta: [{ name: "description", content: "Typography - Block Headings" }],
   bodyAttrs: {
-    class: "page-typography-block-heading",
+    class: "page-typography-hero-heading",
   },
 });
 
@@ -74,7 +74,7 @@ const fontSizeOptions = ref<"large" | "medium" | "small">("large");
 </script>
 
 <style lang="css">
-.page-typography-block-heading {
+.page-typography-hero-heading {
   .demo-row {
     display: flex;
     gap: 2rem;

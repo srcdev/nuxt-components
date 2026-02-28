@@ -1,8 +1,10 @@
 <template>
-  <button
-    :type
-    :readonly
-    :aria-disabled="readonly"
+  <component
+    :is="tag"
+    :type="!isLink ? props.type : undefined"
+    :href="isLink ? props.href : undefined"
+    :readonly="!isLink ? props.readonly : undefined"
+    :aria-disabled="!isLink ? props.readonly : undefined"
     data-testid="input-button-core"
     :data-theme="theme"
     class="input-button-core"
@@ -20,13 +22,14 @@
     <span v-if="hasIconOnlySlot" class="btn-icon icon-only">
       <slot name="iconOnly"></slot>
     </span>
-  </button>
+  </component>
 </template>
 
 <script setup lang="ts">
 import type { InputTypesButton, FormUiTheme, InputButtonVariant } from "~/types/forms/types.forms";
 interface Props {
   type?: InputTypesButton;
+  href?: string;
   theme?: FormUiTheme;
   variant?: InputButtonVariant;
   isPill?: boolean;
@@ -39,6 +42,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   type: "button",
+  href: undefined,
   theme: "default",
   variant: "primary",
   isPill: false,
@@ -50,6 +54,10 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
+
+// If href is undefined tag is button, else it's a link
+const isLink = computed(() => Boolean(props.href));
+const tag = computed(() => (isLink.value ? "a" : "button"));
 
 // Cache slot computations for better performance
 const hasLeftSlot = computed(() => Boolean(slots.left && !slots.iconOnly));
@@ -64,6 +72,7 @@ const buttonClasses = computed(() => [
   { "pending-effect": props.hasPendingEffect },
   { "is-pending": props.isPending },
   { pill: props.isPill },
+  { "is-link": isLink.value },
 ]);
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -84,6 +93,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   touch-action: manipulation;
   overflow: hidden;
   transition: all var(--control-transition-duration) var(--control-transition-ease);
+
+  &.is-link {
+    display: inline-grid;
+  }
 
   /*
   * Variants

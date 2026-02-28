@@ -46,7 +46,7 @@ describe("HeroHeading", () => {
         styleClassPassthrough: [],
       },
     });
-    const el = wrapper.find(".block-heading");
+    const el = wrapper.find(".hero-heading");
     expect(el.classes()).toContain("axis-vertical");
     expect(el.classes()).toContain("small");
   });
@@ -77,7 +77,7 @@ describe("HeroHeading", () => {
         styleClassPassthrough: ["extra-class", "another-class"],
       },
     });
-    const el = wrapper.find(".block-heading");
+    const el = wrapper.find(".hero-heading");
     expect(el.classes()).toContain("extra-class");
     expect(el.classes()).toContain("another-class");
   });

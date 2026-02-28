@@ -1,0 +1,242 @@
+[
+  {
+    "slug": "balayage",
+    "title": "Balayage",
+    "subtitle": "Freehand colour artistry",
+    "price": "From £150",
+    "duration": "2.5 - 3.5 hours",
+    "image": "/images/services/service-balayage.jpg",
+    "shortDescription": "Hand-painted colour for a soft, sun-kissed gradient that grows out beautifully.",
+    "longDescription": "Balayage is a freehand hair colouring technique that creates a soft, natural-looking gradient of lightness through the hair. Unlike traditional highlights, balayage is painted on by hand without foils, allowing for a more blended and sun-kissed finish. It's perfect for those who want a low-maintenance style with depth and movement, as the regrowth line is less noticeable.",
+    "whatIsIt": "The word 'balayage' comes from the French word meaning 'to sweep'. During the technique, colour is literally swept onto sections of hair by hand using a brush or paddle. This freehand approach means no two balayage results are ever identical — each is bespoke to your hair's natural fall, texture, and the placement that best frames your face.",
+    "process": [
+      "Consultation — we discuss your desired look, assess your natural colour and hair condition, and plan placement",
+      "Sectioning — your hair is divided into panels based on where the lightness will have the most impact",
+      "Painting — lightener is hand-painted onto the surface of each section, concentrating colour towards the ends for that graduated effect",
+      "Processing — the lightener develops (typically 30-45 minutes) with or without wrapping, depending on the desired intensity",
+      "Rinsing & toning — once lifted, a toner is applied to achieve the perfect shade: warm caramel, cool ash, honey blonde, or anything in between",
+      "Blow-dry & styling — a professional finish so you can see the full dimension and movement of your new colour"
+    ],
+    "idealFor": [
+      "First-time colour clients who want a natural-looking result",
+      "Anyone wanting low-maintenance colour that grows out gracefully",
+      "Adding depth and dimension to flat or single-tone hair",
+      "Creating a sun-kissed, lived-in look year-round"
+    ],
+    "maintenance": "One of the biggest advantages of balayage is its low maintenance. Because the colour is graduated rather than starting at the root, regrowth is soft and natural. Most clients return every 12-16 weeks for a refresh, though some go even longer. Using colour-safe shampoo and a weekly hair mask will keep your balayage looking vibrant between appointments.",
+    "faqs": [
+      {
+        "question": "Will balayage damage my hair?",
+        "answer": "All lightening processes involve some chemical change, but balayage is gentler than full-head bleaching because it's applied to selected sections only. I use professional-grade products with bond-strengthening technology to minimise damage and keep your hair healthy."
+      },
+      {
+        "question": "Can I get balayage on dark hair?",
+        "answer": "Absolutely! Balayage looks stunning on dark hair. Warm toffee, rich caramel, and chestnut tones create beautiful contrast against a dark base. Very dark hair may require a two-session approach to lift gradually and avoid brassiness."
+      },
+      {
+        "question": "What's the difference between balayage and highlights?",
+        "answer": "Traditional highlights use foils to create uniform, even streaks from root to tip. Balayage is painted freehand, creating a softer, more natural gradient. Highlights tend to be more structured; balayage is more organic and lived-in."
+      },
+      {
+        "question": "How long does a balayage appointment take?",
+        "answer": "Allow 2.5 to 3.5 hours depending on hair length and thickness. This includes consultation, application, processing, toning, and styling."
+      }
+    ],
+    "seoTitle": "Balayage Hair Colour in Bath | Mobile Hairdresser",
+    "seoDescription": "Expert balayage hair colour brought to your home in Bath. Hand-painted, sun-kissed colour by Natasha at Luxury Locs. Low-maintenance, natural-looking results."
+  },
+  {
+    "slug": "highlights",
+    "title": "Highlights",
+    "subtitle": "Precision foils & face-framing",
+    "price": "From £120",
+    "duration": "2 - 3 hours",
+    "image": "/images/services/service-highlights.jpg",
+    "shortDescription": "Classic foil highlights for striking contrast and brightness, from subtle to statement.",
+    "longDescription": "Highlights use foils to isolate individual sections of hair, allowing precise control over placement, thickness, and lift. Whether you want a full head of fine, woven highlights for an all-over brightness, a half-head to freshen up the top layers, or face-framing pieces for a subtle lift, foils deliver clean, defined results.",
+    "whatIsIt": "Foil highlighting is a technique where thin sections of hair are woven out, painted with lightener, and wrapped in foil to process. The foil traps heat and keeps the lightener concentrated on just those strands, which allows for more lift than open-air techniques. This makes highlights ideal when you want noticeable contrast or need to go significantly lighter.",
+    "process": [
+      "Consultation — we determine the placement pattern (full head, half head, T-section, or face frame) and target shade",
+      "Weaving — fine sections are woven from each panel using a tail comb for precision",
+      "Application — lightener is applied to each woven section and sealed in foil",
+      "Processing — foils develop for 25-45 minutes depending on desired lift level",
+      "Removal & toning — foils are removed, hair is rinsed, and a toner is applied to refine the final shade",
+      "Blow-dry & styling — finished with a professional style to showcase the dimension"
+    ],
+    "idealFor": [
+      "Those wanting noticeable, defined brightness throughout",
+      "Blending and disguising early grey hairs",
+      "Adding dramatic contrast against a darker base",
+      "Clients who prefer a more structured, polished finish than balayage"
+    ],
+    "maintenance": "Highlights have a more defined regrowth line than balayage, so most clients return every 8-12 weeks for a root touch-up or refresh. A T-section or face-frame option can stretch this further if you're looking for lower maintenance. Purple shampoo once a week will keep blonde highlights cool and bright.",
+    "faqs": [
+      {
+        "question": "What's the difference between a full head and half head?",
+        "answer": "A full head highlights the entire head — top, sides, and underneath — for all-over brightness. A half head covers the top section and crown only, which is great for a more natural, less dramatic result and is quicker and more affordable."
+      },
+      {
+        "question": "What is a T-section?",
+        "answer": "A T-section highlights the parting area and the hairline around your face — forming a 'T' shape. It's the quickest highlight option and perfect for a subtle lift that brightens where it matters most."
+      },
+      {
+        "question": "Can highlights go wrong?",
+        "answer": "In inexperienced hands, highlights can look stripy or brassy. Professional placement, correct timing, and proper toning ensure a seamless, natural-looking result. That's why consultation is so important — I assess your hair's condition and history before we begin."
+      }
+    ],
+    "seoTitle": "Hair Highlights in Bath | Foils & Face-Framing",
+    "seoDescription": "Professional hair highlights at home in Bath. Full head, half head, T-section & face-framing foils by Natasha. Expert placement for natural-looking brightness."
+  },
+  {
+    "slug": "colour",
+    "title": "Full Colour",
+    "subtitle": "Roots, full head & fashion shades",
+    "price": "From £85",
+    "duration": "1.5 - 2.5 hours",
+    "image": "/images/services/service-colour.jpg",
+    "shortDescription": "Complete colour coverage — from root touch-ups and natural tones to bold, fashion-forward shades.",
+    "longDescription": "Full colour covers every strand from root to tip in a single, uniform shade. Whether you're refreshing your roots, going darker, covering grey, or making a bold statement with a vibrant fashion colour, this service delivers complete, even coverage with a glossy, professional finish.",
+    "whatIsIt": "Unlike highlights or balayage which target specific sections, a full colour (also called a 'tint' or 'permanent colour') applies colour throughout all of your hair. Permanent colour opens the hair cuticle to deposit pigment inside the hair shaft, meaning it lasts until it grows out. Semi-permanent and demi-permanent options are also available for those wanting a gentler, temporary change.",
+    "process": [
+      "Consultation — we choose the perfect shade from a professional colour chart, considering your skin tone, eye colour, and lifestyle",
+      "Strand test — for new clients or significant colour changes, a strand test ensures the chosen shade works beautifully with your hair",
+      "Application — colour is applied methodically, starting at the roots (where processing is fastest due to scalp heat) and pulling through to the ends if needed",
+      "Processing — colour develops for 25-45 minutes depending on the formula",
+      "Rinsing & conditioning — colour is rinsed and a colour-locking conditioner is applied to seal the cuticle and boost shine",
+      "Blow-dry & styling — a professional finish to showcase your new shade"
+    ],
+    "idealFor": [
+      "Grey coverage — whether it's your first few greys or full coverage",
+      "Going darker for autumn/winter richness",
+      "Bold fashion colours: coppers, reds, aubergines, plums",
+      "Root touch-ups to keep your colour fresh between appointments"
+    ],
+    "maintenance": "Root regrowth becomes visible from around 4-6 weeks. Root touch-up appointments are quicker and more affordable than a full head application. Using colour-safe shampoo, avoiding excessive heat styling, and limiting hair washing to 2-3 times per week will extend the vibrancy of your colour significantly.",
+    "faqs": [
+      {
+        "question": "What's the difference between permanent and semi-permanent?",
+        "answer": "Permanent colour opens the cuticle and deposits pigment inside the hair shaft — it lasts until it grows out. Semi-permanent coats the outside of the hair and gradually washes out over 6-8 shampoos. Demi-permanent sits in between, lasting around 20-28 washes."
+      },
+      {
+        "question": "Can I go lighter with a full colour?",
+        "answer": "Full colour (tint) can only go up to about 2 shades lighter than your natural colour. To go significantly lighter, a lightening/bleaching process is needed first, followed by toning. We'd discuss this during consultation."
+      },
+      {
+        "question": "Will it cover my greys completely?",
+        "answer": "Yes — permanent colour provides up to 100% grey coverage. For a softer approach, we can blend your greys with lowlights or demi-permanent colour for a more natural, salt-and-pepper effect."
+      }
+    ],
+    "seoTitle": "Hair Colour in Bath | Full Head, Roots & Fashion Shades",
+    "seoDescription": "Professional hair colour at home in Bath. Root touch-ups, full head colour, grey coverage & fashion shades by Natasha at Luxury Locs. Salon-quality results at your doorstep."
+  },
+  {
+    "slug": "lowlights",
+    "title": "Lowlights",
+    "subtitle": "Depth, dimension & richness",
+    "price": "From £110",
+    "duration": "2 - 3 hours",
+    "image": "/images/services/service-lowlights.jpg",
+    "shortDescription": "Darker tones woven through lighter hair to add depth, richness, and multi-tonal dimension.",
+    "longDescription": "Lowlights are the opposite of highlights — instead of lightening strands, darker shades are woven through the hair to create depth and dimension. They're perfect for adding richness to flat blonde hair, correcting over-highlighted hair, or creating a more natural, multi-tonal look.",
+    "whatIsIt": "While highlights lift hair lighter, lowlights deposit darker pigment onto selected strands. Using foils or open-air techniques, richer tones (chocolate, toffee, auburn, espresso) are painted through the hair. The result is a multi-dimensional, naturally textured look with depth that catches the light beautifully.",
+    "process": [
+      "Consultation — we identify which tones will create the best contrast and depth against your existing colour",
+      "Sectioning & weaving — sections are selected based on where depth and dimension are needed most",
+      "Application — a deeper colour is applied to the woven sections using foils",
+      "Processing — colour develops for 20-35 minutes",
+      "Rinsing & finishing — colour is rinsed, conditioned, and the hair is styled to reveal the full depth and movement"
+    ],
+    "idealFor": [
+      "Blonde hair that's become flat, washed out, or over-highlighted",
+      "Adding natural-looking depth and contrast",
+      "Transitioning from lighter to darker hair more gradually",
+      "Creating a richer autumn or winter look"
+    ],
+    "maintenance": "Lowlights are relatively low maintenance since the added depth tends to blend naturally as hair grows. Most clients refresh every 10-14 weeks. The darker pigments used in lowlights are also less prone to fading than lightened hair.",
+    "faqs": [
+      {
+        "question": "Can I have lowlights and highlights together?",
+        "answer": "Absolutely — combining highlights and lowlights is one of the best ways to create truly multi-dimensional, natural-looking hair. The interplay of light and dark tones creates incredible depth and movement."
+      },
+      {
+        "question": "Will lowlights make my hair look darker overall?",
+        "answer": "It depends on how many are placed. A few strategically woven lowlights add subtle depth without drastically changing your overall look. More lowlights will give a richer, darker feel. We'll discuss the balance during consultation."
+      }
+    ],
+    "seoTitle": "Lowlights Hair Colour in Bath | Depth & Dimension",
+    "seoDescription": "Professional lowlights and dimensional hair colour at home in Bath. Add richness and depth to over-highlighted or flat hair. Mobile hairdresser serving Bath."
+  },
+  {
+    "slug": "toner-gloss",
+    "title": "Toner & Gloss",
+    "subtitle": "Shine, refresh & colour correction",
+    "price": "From £45",
+    "duration": "45 mins - 1 hour",
+    "image": "/images/services/service-toner.jpg",
+    "shortDescription": "A glossing treatment that neutralises brassiness, enhances tone, and adds mirror-like shine.",
+    "longDescription": "A toner or gloss is a semi- or demi-permanent treatment applied after lightening — or on its own — to refine your shade, neutralise unwanted tones, and add incredible shine. Think of it as the finishing touch that takes hair from 'bleached' to 'beautiful'.",
+    "whatIsIt": "Toner is a low-commitment colour treatment that adjusts the tone of your hair without dramatically changing the level of lightness. It works by depositing sheer pigment onto the hair to cancel out unwanted warm or cool tones. A gloss works similarly but with an emphasis on adding shine and conditioning. Both typically last 4-8 weeks.",
+    "process": [
+      "Assessment — I evaluate your current tone and identify what needs correcting (brassiness, warmth, flatness)",
+      "Mixing — a custom toner formula is mixed to target your exact needs: ash to cool down warmth, violet to neutralise yellow, or warm gold to enrich",
+      "Application — toner is applied evenly through the hair",
+      "Processing — develops for 10-20 minutes at the basin",
+      "Rinse & finish — rinsed out and styled, leaving hair refreshed, toned, and glossy"
+    ],
+    "idealFor": [
+      "Refreshing faded balayage or highlights between appointments",
+      "Neutralising brassy or yellow tones in blonde hair",
+      "Adding warmth to cool hair or cooling down overly warm tones",
+      "A quick colour refresh with zero commitment"
+    ],
+    "maintenance": "Toners fade gradually over 4-8 weeks. To extend the life of your toner, use sulphate-free shampoo and wash with lukewarm water. Purple or blue shampoo can help maintain cool tones between toner appointments.",
+    "faqs": [
+      {
+        "question": "Is a toner the same as a dye?",
+        "answer": "No — a toner is a low-level colour deposit that adjusts tone rather than dramatically changing your hair colour. It sits on or near the surface of the hair (semi/demi-permanent) rather than penetrating deep into the cortex like permanent colour."
+      },
+      {
+        "question": "My blonde has gone brassy — will a toner fix it?",
+        "answer": "Yes! That's one of the primary uses for toner. An ash or violet-based toner will neutralise the warm, brassy tones and bring your blonde back to a cooler, cleaner shade."
+      }
+    ],
+    "seoTitle": "Hair Toner & Gloss Treatment in Bath | Brassiness Fix",
+    "seoDescription": "Hair toner and gloss treatments at home in Bath. Neutralise brassy tones, add shine, and refresh your colour. Mobile hairdresser by Natasha at Luxury Locs."
+  },
+  {
+    "slug": "cut-style",
+    "title": "Cut & Style",
+    "subtitle": "Precision cuts & blow-dries",
+    "price": "From £45",
+    "duration": "45 mins - 1.5 hours",
+    "image": "/images/services/service-cut.jpg",
+    "shortDescription": "Sharp bobs, flowing layers, or textured crops — each cut sculpted to complement your features.",
+    "longDescription": "A great cut is the foundation of great hair. Whether you're after a structural bob, soft face-framing layers, a textured crop, or simply want a trim to keep your current style fresh, I'll shape your hair to work with your natural texture, face shape, and lifestyle.",
+    "whatIsIt": "A precision cut goes beyond just trimming the ends. It involves analysing your hair's natural growth patterns, density, and texture, then cutting with intention so the hair falls into shape naturally. This means less styling effort for you day-to-day — your cut does the work.",
+    "process": [
+      "Consultation — we discuss your vision, lifestyle, and any concerns. I'll recommend shapes and lengths that complement your face shape and hair type",
+      "Wash — hair is shampooed and conditioned ready for cutting",
+      "Cutting — using a combination of techniques (point cutting, slide cutting, layering, texturising) to create the perfect shape",
+      "Blow-dry & styling — finished with a professional blow-dry and styling, plus tips on how to recreate the look at home"
+    ],
+    "idealFor": [
+      "A complete style change or new shape",
+      "Maintaining your current cut with a regular trim",
+      "Adding movement and texture to heavy, flat hair",
+      "Complementing a new colour with a fresh shape"
+    ],
+    "maintenance": "For short styles, a trim every 4-6 weeks keeps the shape sharp. Medium to long hair benefits from a trim every 8-12 weeks to prevent split ends and maintain shape. Regular cuts actually help your hair look healthier and grow stronger.",
+    "faqs": [
+      {
+        "question": "How often should I get my hair cut?",
+        "answer": "It depends on your style. Short, structured cuts need attention every 4-6 weeks. Longer styles can go 8-12 weeks. If you're growing your hair out, regular trims (just taking off the very ends) actually help it grow healthier and faster."
+      },
+      {
+        "question": "Can you cut curly or textured hair?",
+        "answer": "Yes — curly and textured hair benefits from dry cutting or cutting with the curl pattern in mind. I'll work with your hair's natural texture rather than against it."
+      }
+    ],
+    "seoTitle": "Hair Cuts & Styling in Bath | Mobile Hairdresser",
+    "seoDescription": "Precision hair cuts and professional styling at home in Bath. Bobs, layers, crops & trims by Natasha at Luxury Locs. Expert cuts tailored to your face shape."
+  }
+]

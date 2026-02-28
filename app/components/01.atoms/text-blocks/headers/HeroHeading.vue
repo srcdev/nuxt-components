@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="block-heading" :class="[elementClasses, ...componentClasses]">
+  <component :is="tag" class="hero-heading" :class="[elementClasses, ...componentClasses]">
     <span v-for="(item, index) in textContent" :key="index" :class="['text-block-' + index, item.styleClass]">
       {{ item.text }}
     </span>
@@ -33,7 +33,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
-.block-heading {
+.hero-heading {
   display: flex;
   gap: 0.2rem;
 

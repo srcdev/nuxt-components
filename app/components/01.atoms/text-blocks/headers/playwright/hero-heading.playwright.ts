@@ -28,7 +28,7 @@ const getHeading = async (page: Page, args: Args = {}): Promise<Locator> => {
   const frame = page.frameLocator("#storybook-preview-iframe");
   await frame.locator("#storybook-root > *").waitFor({ state: "visible", timeout: HEADING_TIMEOUT });
 
-  const heading = frame.locator(".block-heading");
+  const heading = frame.locator(".hero-heading");
   await heading.waitFor({ state: "visible", timeout: HEADING_TIMEOUT });
   return heading;
 };

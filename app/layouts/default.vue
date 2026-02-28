@@ -122,7 +122,7 @@ const responsiveNavLinks = {
       iconName: "material-symbols:custom-typography",
       childLinksTitle: "Typography",
       childLinks: [
-        { name: "Block Headings", path: "/typography/block-heading" },
+        { name: "Block Headings", path: "/typography/hero-heading" },
         { name: "Page Headings", path: "/typography/page-heading" },
         { name: "Page Body", path: "/typography/page-body" },
         { name: "Page Links", path: "/typography/page-link" },
