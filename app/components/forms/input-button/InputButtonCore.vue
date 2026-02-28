@@ -27,6 +27,7 @@
 
 <script setup lang="ts">
 import type { InputTypesButton, FormUiTheme, InputButtonVariant } from "~/types/forms/types.forms";
+import { NuxtLink } from "#components";
 interface Props {
   type?: InputTypesButton;
   href?: string;
@@ -57,7 +58,12 @@ const slots = useSlots();
 
 // If href is undefined tag is button, else it's a link
 const isLink = computed(() => Boolean(props.href));
-const tag = computed(() => (isLink.value ? "a" : "button"));
+const isInternalLink = computed(() => isLink.value && props.href && props.href.startsWith("/"));
+const tag = computed(() => {
+  if (isInternalLink.value) return NuxtLink;
+  if (isLink.value) return "a";
+  return "button";
+});
 
 // Cache slot computations for better performance
 const hasLeftSlot = computed(() => Boolean(slots.left && !slots.iconOnly));
