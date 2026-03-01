@@ -82,13 +82,7 @@
         :style-class-passthrough="['mb-20']"
       />
 
-      <div class="mb-12">
-        <p class="text-muted-foreground font-light leading-relaxed">
-          Highlights have a more defined regrowth line than balayage, so most clients return every 8–12 weeks for a root
-          touch-up or refresh. A T-section or face-frame option can stretch this further if you're looking for lower
-          maintenance. Purple shampoo once a week will keep blonde highlights cool and bright.
-        </p>
-      </div>
+      <p class="page-body-normal">{{ serviceData.maintenance }}</p>
 
       <HeroHeading
         tag="h2"
