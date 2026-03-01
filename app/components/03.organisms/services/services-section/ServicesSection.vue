@@ -51,31 +51,38 @@
         :text-content="[{ text: 'The Process ', styleClass: 'normal' }]"
         :style-class-passthrough="['mb-20']"
       />
-      <CounterList tag="ol" :item-count="serviceData.process.length">
+      <IndicatorList tag="ol" :item-count="serviceData.process.length">
         <template v-for="(item, index) in serviceData.process" #[`item-${index}`]>
           {{ item }}
         </template>
-      </CounterList>
+      </IndicatorList>
+
+      <HeroHeading
+        tag="h2"
+        axis="horizontal"
+        font-size="smaller"
+        :text-content="[{ text: 'Ideal For', styleClass: 'normal' }]"
+        :style-class-passthrough="['mb-20']"
+      />
 
       <div class="mb-12">
-        <h3 class="font-display text-2xl mb-6">Ideal For</h3>
         <ul class="space-y-3">
           <li class="flex items-start gap-3">
-            <Icon name="mdi:check-bold" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+            <Icon name="mdi:checkbox-marked-circle-outline" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
             <span class="text-muted-foreground font-light">
               Those wanting noticeable, defined brightness throughout
             </span>
           </li>
           <li class="flex items-start gap-3">
-            <Icon name="mdi:check-bold" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+            <Icon name="mdi:checkbox-marked-circle-outline" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
             <span class="text-muted-foreground font-light">Blending and disguising early grey hairs</span>
           </li>
           <li class="flex items-start gap-3">
-            <Icon name="mdi:check-bold" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+            <Icon name="mdi:checkbox-marked-circle-outline" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
             <span class="text-muted-foreground font-light">Adding dramatic contrast against a darker base</span>
           </li>
           <li class="flex items-start gap-3">
-            <Icon name="mdi:check-bold" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+            <Icon name="mdi:checkbox-marked-circle-outline" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
             <span class="text-muted-foreground font-light">
               Clients who prefer a more structured, polished finish than balayage
             </span>
