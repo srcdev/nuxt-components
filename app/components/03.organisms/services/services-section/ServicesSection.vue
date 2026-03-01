@@ -5,7 +5,7 @@
         <NuxtImg :src="serviceData.image" :alt="serviceData.title" class="image" />
       </div>
       <div>
-        <EyebrowText :text-content="serviceData.subtitle" />
+        <EyebrowText font-size="large" :text-content="serviceData.subtitle" />
         <HeroHeading
           tag="h1"
           font-size="medium"

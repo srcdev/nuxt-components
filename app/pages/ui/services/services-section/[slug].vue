@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <EyebrowText text-content="Services" />
+          <EyebrowText font-size="large" text-content="Services" />
 
           <HeroHeading
             tag="h1"
