@@ -22,25 +22,18 @@
 </template>
 
 <script setup lang="ts">
-// import type { PropType } from "vue";
+interface Props {
+  name?: string;
+  itemCount?: number;
+  animationDuration?: number;
+  styleClassPassthrough?: string | string[];
+}
 
-const props = defineProps({
-  name: {
-    type: String,
-    default: null,
-  },
-  itemCount: {
-    type: Number as PropType<number>,
-    default: 0,
-  },
-  animationDuration: {
-    type: Number,
-    default: 300,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+const props = withDefaults(defineProps<Props>(), {
+  name: undefined,
+  itemCount: 0,
+  animationDuration: 300,
+  styleClassPassthrough: () => [],
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
