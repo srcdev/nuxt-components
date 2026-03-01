@@ -33,7 +33,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   li {
     counter-increment: indicator-list;
     position: relative;
-    padding-inline-start: 3rem;
+    padding-inline-start: 4rem;
     padding-block: 1.2rem;
 
     &::before {
@@ -45,28 +45,34 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 1.75rem;
-      height: 1.75rem;
+      background-color: var(--indicator-list-counter-background);
+      color: var(--indicator-list-counter-text);
+      width: 3rem;
+      height: 3rem;
       border-radius: 100vw;
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       font-weight: 600;
     }
 
     &.has-indicator::before {
       display: none;
     }
+
+    .indicator-list__indicator {
+      position: absolute;
+      left: 0;
+      top: 1.2rem;
+
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+
+      .indicator-icon {
+        color: var(--indicator-list-icon);
+        width: 2.2rem;
+        height: 2.2rem;
+      }
+    }
   }
-}
-
-.indicator-list__indicator {
-  position: absolute;
-  left: 0;
-  top: 1.2rem;
-
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
 }
 </style>

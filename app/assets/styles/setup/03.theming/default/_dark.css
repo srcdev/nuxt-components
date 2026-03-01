@@ -25,6 +25,18 @@
   --colour-text-eyebrow: var(--blue-05);
 
   /* ===========================================
+     GLASS PANEL VARIABLES
+     =========================================== */
+  --glass-panel-bg: rgba(12, 12, 20, 0.45);
+  --glass-panel-border-color: rgba(255, 255, 255, 0.07);
+  --glass-panel-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  --glass-panel-highlight: rgba(255, 255, 255, 0.04);
+
+  --indicator-list-counter-background: var(--blue-02);
+  --indicator-list-counter-text: var(--blue-09);
+  --indicator-list-icon: var(--blue-02);
+
+  /* ===========================================
      ANCHOR LINK VARIABLES
      =========================================== */
   --colour-link-default: var(--blue-10);

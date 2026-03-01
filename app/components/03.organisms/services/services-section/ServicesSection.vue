@@ -1,132 +1,132 @@
 <template>
   <component :is="tag" class="services-section" :class="[elementClasses]">
     <div class="services-section__grid">
-    <div class="image-wrapper">
-      <NuxtImg :src="serviceData.image" :alt="serviceData.title" class="image" />
-    </div>
-    <div>
-      <EyebrowText :text-content="serviceData.subtitle" />
-      <HeroHeading
-        tag="h1"
-        font-size="medium"
-        :text-content="[
-          {
-            text: serviceData.title,
-            styleClass: 'normal',
-          },
-        ]"
-        :style-class-passthrough="['mb-20']"
-      />
-
-      <div class="price-duration">
-        <div class="flex-row">
-          <Icon name="mdi:clock-time-four-outline" class="decorator" />
-          <span>{{ serviceData.duration }}</span>
-        </div>
-        <div class="flex-row">
-          <Icon name="mdi:currency-gbp" class="decorator" />
-          <span>{{ serviceData.price }}</span>
-        </div>
+      <div class="image-wrapper">
+        <NuxtImg :src="serviceData.image" :alt="serviceData.title" class="image" />
       </div>
+      <div>
+        <EyebrowText :text-content="serviceData.subtitle" />
+        <HeroHeading
+          tag="h1"
+          font-size="medium"
+          :text-content="[
+            {
+              text: serviceData.title,
+              styleClass: 'normal',
+            },
+          ]"
+          :style-class-passthrough="['mb-20']"
+        />
 
-      <p class="page-body-normal">{{ serviceData.longDescription }}</p>
+        <div class="price-duration">
+          <div class="flex-row">
+            <Icon name="mdi:clock-time-four-outline" class="decorator" />
+            <span>{{ serviceData.duration }}</span>
+          </div>
+          <div class="flex-row">
+            <Icon name="mdi:currency-gbp" class="decorator" />
+            <span>{{ serviceData.price }}</span>
+          </div>
+        </div>
 
-      <HeroHeading
-        tag="h2"
-        axis="horizontal"
-        font-size="smaller"
-        :text-content="[
-          { text: 'What is ', styleClass: 'normal' },
-          { text: 'highlights?', styleClass: 'accent' },
-        ]"
-        :style-class-passthrough="['mb-20']"
-      />
-      <p class="page-body-normal">
-        {{ serviceData.whatIsIt }}
-      </p>
+        <p class="page-body-normal">{{ serviceData.longDescription }}</p>
 
-      <HeroHeading
-        tag="h2"
-        axis="horizontal"
-        font-size="smaller"
-        :text-content="[{ text: 'The Process ', styleClass: 'normal' }]"
-        :style-class-passthrough="['mb-20']"
-      />
-      <IndicatorList tag="ol" :item-count="serviceData.process.length">
-        <template v-for="(item, index) in serviceData.process" #[`item-${index}`]>
-          {{ item }}
-        </template>
-      </IndicatorList>
-
-      <HeroHeading
-        tag="h2"
-        axis="horizontal"
-        font-size="smaller"
-        :text-content="[{ text: 'Ideal For', styleClass: 'normal' }]"
-        :style-class-passthrough="['mb-20']"
-      />
-
-      <IndicatorList :item-count="serviceData.idealFor.length">
-        <template v-for="(_, index) in serviceData.idealFor" :key="index" #[`indicator-${index}`]>
-          <Icon name="mdi:checkbox-marked-circle-outline" />
-        </template>
-        <template v-for="(item, index) in serviceData.idealFor" #[`item-${index}`]>
-          {{ item }}
-        </template>
-      </IndicatorList>
-
-      <HeroHeading
-        tag="h2"
-        axis="horizontal"
-        font-size="smaller"
-        :text-content="[{ text: 'Aftercare &amp; Maintenance', styleClass: 'normal' }]"
-        :style-class-passthrough="['mb-20']"
-      />
-
-      <p class="page-body-normal">{{ serviceData.maintenance }}</p>
-
-      <HeroHeading
-        tag="h2"
-        axis="horizontal"
-        font-size="smaller"
-        :text-content="[{ text: 'Frequently Asked Questions', styleClass: 'normal' }]"
-        :style-class-passthrough="['mb-20']"
-      />
-
-      <AccordianCore
-        id="faq"
-        :item-count="serviceData.faqs.length"
-        :name="`faq-${useId()}`"
-        :style-class-passthrough="['services-faq']"
-      >
-        <template v-for="(_, key) in serviceData.faqs" :key="`summary-${key}`" #[`accordian-${key}-summary`]>
-          {{ serviceData.faqs[key]?.question }}
-        </template>
-        <template v-for="(_, key) in serviceData.faqs" :key="`icon-${key}`" #[`accordian-${key}-icon`]>
-          <Icon name="mdi:chevron-down" />
-        </template>
-        <template v-for="(_, key) in serviceData.faqs" :key="`content-${key}`" #[`accordian-${key}-content`]>
-          <p>{{ serviceData.faqs[key]?.answer }}</p>
-        </template>
-      </AccordianCore>
-
-      <div class="glass-card p-8 text-center">
         <HeroHeading
           tag="h2"
           axis="horizontal"
           font-size="smaller"
-          :text-content="[{ text: 'Ready to book your highlights appointment?', styleClass: 'normal' }]"
+          :text-content="[
+            { text: 'What is ', styleClass: 'normal' },
+            { text: 'highlights?', styleClass: 'accent' },
+          ]"
           :style-class-passthrough="['mb-20']"
         />
-        <p class="text-muted-foreground font-light text-sm mb-6">Mobile service across Bath — I come to you.</p>
-        <a
-          href="/#contact"
-          class="inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground text-sm tracking-[0.15em] uppercase hover:bg-primary/90 transition-all duration-300 glow-rose"
+        <p class="page-body-normal">
+          {{ serviceData.whatIsIt }}
+        </p>
+
+        <HeroHeading
+          tag="h2"
+          axis="horizontal"
+          font-size="smaller"
+          :text-content="[{ text: 'The Process ', styleClass: 'normal' }]"
+          :style-class-passthrough="['mb-20']"
+        />
+        <IndicatorList tag="ol" :item-count="serviceData.process.length">
+          <template v-for="(item, index) in serviceData.process" #[`item-${index}`]>
+            {{ item }}
+          </template>
+        </IndicatorList>
+
+        <HeroHeading
+          tag="h2"
+          axis="horizontal"
+          font-size="smaller"
+          :text-content="[{ text: 'Ideal For', styleClass: 'normal' }]"
+          :style-class-passthrough="['mb-20']"
+        />
+
+        <IndicatorList :item-count="serviceData.idealFor.length">
+          <template v-for="(_, index) in serviceData.idealFor" :key="index" #[`indicator-${index}`]>
+            <Icon name="mdi:checkbox-marked-circle-outline" class="indicator-icon" />
+          </template>
+          <template v-for="(item, index) in serviceData.idealFor" #[`item-${index}`]>
+            {{ item }}
+          </template>
+        </IndicatorList>
+
+        <HeroHeading
+          tag="h2"
+          axis="horizontal"
+          font-size="smaller"
+          :text-content="[{ text: 'Aftercare &amp; Maintenance', styleClass: 'normal' }]"
+          :style-class-passthrough="['mb-20']"
+        />
+
+        <p class="page-body-normal">{{ serviceData.maintenance }}</p>
+
+        <HeroHeading
+          tag="h2"
+          axis="horizontal"
+          font-size="smaller"
+          :text-content="[{ text: 'Frequently Asked Questions', styleClass: 'normal' }]"
+          :style-class-passthrough="['mb-20']"
+        />
+
+        <AccordianCore
+          id="faq"
+          :item-count="serviceData.faqs.length"
+          :name="`faq-${useId()}`"
+          :style-class-passthrough="['services-faq']"
         >
-          Get in Touch
-        </a>
+          <template v-for="(_, key) in serviceData.faqs" :key="`summary-${key}`" #[`accordian-${key}-summary`]>
+            {{ serviceData.faqs[key]?.question }}
+          </template>
+          <template v-for="(_, key) in serviceData.faqs" :key="`icon-${key}`" #[`accordian-${key}-icon`]>
+            <Icon name="mdi:chevron-down" />
+          </template>
+          <template v-for="(_, key) in serviceData.faqs" :key="`content-${key}`" #[`accordian-${key}-content`]>
+            <p>{{ serviceData.faqs[key]?.answer }}</p>
+          </template>
+        </AccordianCore>
+
+        <GlassPanel :style-class-passthrough="['p-24']">
+          <HeroHeading
+            tag="h2"
+            axis="horizontal"
+            font-size="smaller"
+            :text-content="[{ text: 'Ready to book your highlights appointment?', styleClass: 'normal' }]"
+            :style-class-passthrough="['mbs-0', 'mbe-20']"
+          />
+          <p class="text-muted-foreground font-light text-sm mb-6">Mobile service across Bath — I come to you.</p>
+          <a
+            href="/#contact"
+            class="inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground text-sm tracking-[0.15em] uppercase hover:bg-primary/90 transition-all duration-300 glow-rose"
+          >
+            Get in Touch
+          </a>
+        </GlassPanel>
       </div>
-    </div>
     </div>
   </component>
 </template>
