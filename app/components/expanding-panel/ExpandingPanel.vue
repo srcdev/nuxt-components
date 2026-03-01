@@ -6,8 +6,6 @@
         class="expanding-panel-summary"
         :aria-controls="`id-${name}-content`"
         @click.prevent.stop="handleToggle"
-        @keydown.enter.prevent="handleToggle"
-        @keydown.space.prevent="handleToggle"
       >
         <span class="label-wrapper">
           <slot name="summary"></slot>
