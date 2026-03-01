@@ -163,7 +163,8 @@ watch(
   gap: 3rem;
 
   .image-wrapper {
-    /* Image wrapper styles */
+    align-self: start;
+
     .image {
       display: block;
       width: 100%;
