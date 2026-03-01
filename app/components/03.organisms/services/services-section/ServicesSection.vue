@@ -58,80 +58,24 @@
       </CounterList>
 
       <div class="mb-12">
-        <h2 class="font-display text-2xl mb-6">Ideal For</h2>
+        <h3 class="font-display text-2xl mb-6">Ideal For</h3>
         <ul class="space-y-3">
           <li class="flex items-start gap-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-circle-check-big w-5 h-5 text-primary mt-0.5 flex-shrink-0"
-            >
-              <path d="M21.801 10A10 10 0 1 1 17 3.335" />
-              <path d="m9 11 3 3L22 4" />
-            </svg>
+            <Icon name="mdi:check-bold" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
             <span class="text-muted-foreground font-light">
               Those wanting noticeable, defined brightness throughout
             </span>
           </li>
           <li class="flex items-start gap-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-circle-check-big w-5 h-5 text-primary mt-0.5 flex-shrink-0"
-            >
-              <path d="M21.801 10A10 10 0 1 1 17 3.335" />
-              <path d="m9 11 3 3L22 4" />
-            </svg>
+            <Icon name="mdi:check-bold" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
             <span class="text-muted-foreground font-light">Blending and disguising early grey hairs</span>
           </li>
           <li class="flex items-start gap-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-circle-check-big w-5 h-5 text-primary mt-0.5 flex-shrink-0"
-            >
-              <path d="M21.801 10A10 10 0 1 1 17 3.335" />
-              <path d="m9 11 3 3L22 4" />
-            </svg>
+            <Icon name="mdi:check-bold" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
             <span class="text-muted-foreground font-light">Adding dramatic contrast against a darker base</span>
           </li>
           <li class="flex items-start gap-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-circle-check-big w-5 h-5 text-primary mt-0.5 flex-shrink-0"
-            >
-              <path d="M21.801 10A10 10 0 1 1 17 3.335" />
-              <path d="m9 11 3 3L22 4" />
-            </svg>
+            <Icon name="mdi:check-bold" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
             <span class="text-muted-foreground font-light">
               Clients who prefer a more structured, polished finish than balayage
             </span>
