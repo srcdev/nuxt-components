@@ -1,5 +1,6 @@
 <template>
   <component :is="tag" class="services-section" :class="[elementClasses]">
+    <div class="services-section__grid">
     <div class="image-wrapper">
       <NuxtImg :src="serviceData.image" :alt="serviceData.title" class="image" />
     </div>
@@ -126,6 +127,7 @@
         </a>
       </div>
     </div>
+    </div>
   </component>
 </template>
 
@@ -154,13 +156,14 @@ watch(
 
 <style lang="css">
 .services-section {
-  /* Component styles */
   container-type: inline-size;
   container-name: services-section;
 
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(446px, 1fr));
-  gap: 3rem;
+  .services-section__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(446px, 1fr));
+    gap: 3rem;
+  }
 
   .image-wrapper {
     align-self: start;
