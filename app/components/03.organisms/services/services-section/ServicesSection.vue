@@ -115,13 +115,17 @@
             :text-content="[{ text: 'Ready to book your highlights appointment?', styleClass: 'normal' }]"
             :style-class-passthrough="['mbs-0', 'mbe-20']"
           />
-          <p class="text-muted-foreground font-light text-sm mb-6">Mobile service across Bath — I come to you.</p>
-          <a
-            href="/#contact"
-            class="inline-flex items-center justify-center px-8 py-4 bg-primary text-primary-foreground text-sm tracking-[0.15em] uppercase hover:bg-primary/90 transition-all duration-300 glow-rose"
+          <p class="page-body-normal">Mobile service across Bath — I come to you.</p>
+          <InputButtonCore
+            variant="secondary"
+            button-text="Get in touch"
+            href="#"
+            :style-class-passthrough="['mbs-24']"
           >
-            Get in Touch
-          </a>
+            <template #right>
+              <Icon name="mdi:arrow-right" class="icon" />
+            </template>
+          </InputButtonCore>
         </GlassPanel>
       </div>
     </div>
