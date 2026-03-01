@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`EyebrowText > renders correct HTML structure for each fontSize variant 1`] = `"<div class="eyebrow-text">Snapshot text</div>"`;
+
+exports[`EyebrowText > renders correct HTML structure for each fontSize variant 2`] = `"<div class="eyebrow-text">Snapshot text</div>"`;
+
+exports[`EyebrowText > renders correct HTML structure for each fontSize variant 3`] = `"<div class="eyebrow-text">Snapshot text</div>"`;
+
+exports[`EyebrowText > renders correct HTML structure for each tag variant 1`] = `"<p class="eyebrow-text">Snapshot text</p>"`;
+
+exports[`EyebrowText > renders correct HTML structure for each tag variant 2`] = `"<div class="eyebrow-text">Snapshot text</div>"`;
+
+exports[`EyebrowText > renders correct HTML structure for each tag variant 3`] = `"<span class="eyebrow-text">Snapshot text</span>"`;
+
+exports[`EyebrowText > renders correct HTML structure with all props set 1`] = `"<p class="eyebrow-text custom-class">New Arrivals</p>"`;
+
+exports[`EyebrowText > renders correct HTML structure with default props 1`] = `"<div class="eyebrow-text">Featured Collection</div>"`;
