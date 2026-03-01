@@ -104,14 +104,14 @@
         :name="`faq-${useId()}`"
         :style-class-passthrough="['services-faq']"
       >
-        <template v-for="(faq, key) in serviceData.faqs" :key="`summary-${key}`" #[`accordian-${key}-summary`]>
-          {{ faq.question }}
+        <template v-for="(_, key) in serviceData.faqs" :key="`summary-${key}`" #[`accordian-${key}-summary`]>
+          {{ serviceData.faqs[key]?.question }}
         </template>
         <template v-for="(_, key) in serviceData.faqs" :key="`icon-${key}`" #[`accordian-${key}-icon`]>
           <Icon name="mdi:chevron-down" />
         </template>
-        <template v-for="(faq, key) in serviceData.faqs" :key="`content-${key}`" #[`accordian-${key}-content`]>
-          <p>{{ faq.answer }}</p>
+        <template v-for="(_, key) in serviceData.faqs" :key="`content-${key}`" #[`accordian-${key}-content`]>
+          <p>{{ serviceData.faqs[key]?.answer }}</p>
         </template>
       </AccordianCore>
 
