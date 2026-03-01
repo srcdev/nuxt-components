@@ -7,16 +7,13 @@
 </template>
 
 <script setup lang="ts">
-interface textConfig {
-  text: string;
-  styleClass?: "normal" | "accent";
-}
+import type { TextConfig } from "~/types/components/hero-heading";
 
 interface Props {
   tag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   axis?: "horizontal" | "vertical";
   fontSize?: "large" | "medium" | "small" | "smaller";
-  textContent: textConfig[];
+  textContent: TextConfig[];
   styleClassPassthrough?: string | string[];
 }
 const props = withDefaults(defineProps<Props>(), {

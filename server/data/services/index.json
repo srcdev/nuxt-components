@@ -2,6 +2,10 @@
   {
     "slug": "balayage",
     "title": "Balayage",
+    "heroHeading": [
+      { "text": "What is ", "styleClass": "normal" },
+      { "text": "Balayage?", "styleClass": "accent" }
+    ],
     "subtitle": "Freehand colour artistry",
     "price": "From £150",
     "duration": "2.5 - 3.5 hours",
@@ -48,6 +52,10 @@
   {
     "slug": "highlights",
     "title": "Highlights",
+    "heroHeading": [
+      { "text": "What are ", "styleClass": "normal" },
+      { "text": "highlights?", "styleClass": "accent" }
+    ],
     "subtitle": "Precision foils & face-framing",
     "price": "From £120",
     "duration": "2 - 3 hours",
@@ -90,6 +98,10 @@
   {
     "slug": "colour",
     "title": "Full Colour",
+    "heroHeading": [
+      { "text": "What is ", "styleClass": "normal" },
+      { "text": "Full Colour?", "styleClass": "accent" }
+    ],
     "subtitle": "Roots, full head & fashion shades",
     "price": "From £85",
     "duration": "1.5 - 2.5 hours",
@@ -132,6 +144,10 @@
   {
     "slug": "lowlights",
     "title": "Lowlights",
+    "heroHeading": [
+      { "text": "What are ", "styleClass": "normal" },
+      { "text": "Lowlights?", "styleClass": "accent" }
+    ],
     "subtitle": "Depth, dimension & richness",
     "price": "From £110",
     "duration": "2 - 3 hours",
@@ -169,6 +185,10 @@
   {
     "slug": "toner-gloss",
     "title": "Toner & Gloss",
+    "heroHeading": [
+      { "text": "What is ", "styleClass": "normal" },
+      { "text": "Toner & Gloss?", "styleClass": "accent" }
+    ],
     "subtitle": "Shine, refresh & colour correction",
     "price": "From £45",
     "duration": "45 mins - 1 hour",
@@ -206,6 +226,10 @@
   {
     "slug": "cut-style",
     "title": "Cut & Style",
+    "heroHeading": [
+      { "text": "Abount ", "styleClass": "normal" },
+      { "text": "Cut & Style", "styleClass": "accent" }
+    ],
     "subtitle": "Precision cuts & blow-dries",
     "price": "From £45",
     "duration": "45 mins - 1.5 hours",

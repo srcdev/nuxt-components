@@ -1,3 +1,5 @@
+import type { TextConfig } from "~/types/components/hero-heading";
+
 export interface Service {
   slug: string;
   title: string;
@@ -7,6 +9,7 @@ export interface Service {
   image: string;
   shortDescription: string;
   longDescription: string;
+  heroHeading: TextConfig[];
   whatIsIt: string;
   process: string[];
   idealFor: string[];

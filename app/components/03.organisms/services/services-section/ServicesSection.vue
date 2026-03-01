@@ -35,10 +35,7 @@
           tag="h2"
           axis="horizontal"
           font-size="smaller"
-          :text-content="[
-            { text: 'What is ', styleClass: 'normal' },
-            { text: 'highlights?', styleClass: 'accent' },
-          ]"
+          :text-content="serviceData.heroHeading"
           :style-class-passthrough="['mb-20']"
         />
         <p class="page-body-normal">
