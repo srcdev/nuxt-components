@@ -5,6 +5,7 @@
         :id="`id-${name}-trigger`"
         class="expanding-panel-summary"
         :aria-controls="`id-${name}-content`"
+        :aria-expanded="open"
         @click.prevent.stop="handleToggle"
       >
         <span class="label-wrapper">
