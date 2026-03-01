@@ -65,174 +65,64 @@
         :style-class-passthrough="['mb-20']"
       />
 
+      <IndicatorList :item-count="serviceData.idealFor.length">
+        <template v-for="(_, index) in serviceData.idealFor" :key="index" #[`indicator-${index}`]>
+          <Icon name="mdi:checkbox-marked-circle-outline" />
+        </template>
+        <template v-for="(item, index) in serviceData.idealFor" #[`item-${index}`]>
+          {{ item }}
+        </template>
+      </IndicatorList>
+
+      <HeroHeading
+        tag="h2"
+        axis="horizontal"
+        font-size="smaller"
+        :text-content="[{ text: 'Aftercare &amp; Maintenance', styleClass: 'normal' }]"
+        :style-class-passthrough="['mb-20']"
+      />
+
       <div class="mb-12">
-        <ul class="space-y-3">
-          <li class="flex items-start gap-3">
-            <Icon name="mdi:checkbox-marked-circle-outline" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-            <span class="text-muted-foreground font-light">
-              Those wanting noticeable, defined brightness throughout
-            </span>
-          </li>
-          <li class="flex items-start gap-3">
-            <Icon name="mdi:checkbox-marked-circle-outline" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-            <span class="text-muted-foreground font-light">Blending and disguising early grey hairs</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <Icon name="mdi:checkbox-marked-circle-outline" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-            <span class="text-muted-foreground font-light">Adding dramatic contrast against a darker base</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <Icon name="mdi:checkbox-marked-circle-outline" class="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-            <span class="text-muted-foreground font-light">
-              Clients who prefer a more structured, polished finish than balayage
-            </span>
-          </li>
-        </ul>
-      </div>
-      <div class="mb-12">
-        <h2 class="font-display text-2xl mb-4">Aftercare &amp; Maintenance</h2>
         <p class="text-muted-foreground font-light leading-relaxed">
           Highlights have a more defined regrowth line than balayage, so most clients return every 8–12 weeks for a root
           touch-up or refresh. A T-section or face-frame option can stretch this further if you're looking for lower
           maintenance. Purple shampoo once a week will keep blonde highlights cool and bright.
         </p>
       </div>
-      <div class="mb-12">
-        <h2 class="font-display text-2xl mb-6">Frequently Asked Questions</h2>
-        <div class="w-full" data-orientation="vertical">
-          <div data-state="closed" data-orientation="vertical" class="border-b border-border/30">
-            <h3 data-orientation="vertical" data-state="closed" class="flex">
-              <button
-                id="radix-:r0:"
-                type="button"
-                aria-controls="radix-:r1:"
-                aria-expanded="false"
-                data-state="closed"
-                data-orientation="vertical"
-                class="flex flex-1 items-center justify-between py-4 font-medium transition-all [&amp;[data-state=open]&gt;svg]:rotate-180 text-left font-display text-base hover:no-underline hover:text-primary"
-                data-radix-collection-item=""
-              >
-                What's the difference between a full head and half head?
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-chevron-down h-4 w-4 shrink-0 transition-transform duration-200"
-                >
-                  <path d="m6 9 6 6 6-6" />
-                </svg>
-              </button>
-            </h3>
-            <div
-              id="radix-:r1:"
-              data-state="closed"
-              hidden=""
-              role="region"
-              aria-labelledby="radix-:r0:"
-              data-orientation="vertical"
-              class="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
-              style="
-                --radix-accordion-content-height: var(--radix-collapsible-content-height);
-                --radix-accordion-content-width: var(--radix-collapsible-content-width);
-              "
-            ></div>
-          </div>
-          <div data-state="closed" data-orientation="vertical" class="border-b border-border/30">
-            <h3 data-orientation="vertical" data-state="closed" class="flex">
-              <button
-                id="radix-:r2:"
-                type="button"
-                aria-controls="radix-:r3:"
-                aria-expanded="false"
-                data-state="closed"
-                data-orientation="vertical"
-                class="flex flex-1 items-center justify-between py-4 font-medium transition-all [&amp;[data-state=open]&gt;svg]:rotate-180 text-left font-display text-base hover:no-underline hover:text-primary"
-                data-radix-collection-item=""
-              >
-                What is a T-section?
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-chevron-down h-4 w-4 shrink-0 transition-transform duration-200"
-                >
-                  <path d="m6 9 6 6 6-6" />
-                </svg>
-              </button>
-            </h3>
-            <div
-              id="radix-:r3:"
-              data-state="closed"
-              hidden=""
-              role="region"
-              aria-labelledby="radix-:r2:"
-              data-orientation="vertical"
-              class="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
-              style="
-                --radix-accordion-content-height: var(--radix-collapsible-content-height);
-                --radix-accordion-content-width: var(--radix-collapsible-content-width);
-              "
-            ></div>
-          </div>
-          <div data-state="closed" data-orientation="vertical" class="border-b border-border/30">
-            <h3 data-orientation="vertical" data-state="closed" class="flex">
-              <button
-                id="radix-:r4:"
-                type="button"
-                aria-controls="radix-:r5:"
-                aria-expanded="false"
-                data-state="closed"
-                data-orientation="vertical"
-                class="flex flex-1 items-center justify-between py-4 font-medium transition-all [&amp;[data-state=open]&gt;svg]:rotate-180 text-left font-display text-base hover:no-underline hover:text-primary"
-                data-radix-collection-item=""
-              >
-                Can highlights go wrong?
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-chevron-down h-4 w-4 shrink-0 transition-transform duration-200"
-                >
-                  <path d="m6 9 6 6 6-6" />
-                </svg>
-              </button>
-            </h3>
-            <div
-              id="radix-:r5:"
-              data-state="closed"
-              hidden=""
-              role="region"
-              aria-labelledby="radix-:r4:"
-              data-orientation="vertical"
-              class="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
-              style="
-                --radix-accordion-content-height: var(--radix-collapsible-content-height);
-                --radix-accordion-content-width: var(--radix-collapsible-content-width);
-              "
-            ></div>
-          </div>
-        </div>
-      </div>
+
+      <HeroHeading
+        tag="h2"
+        axis="horizontal"
+        font-size="smaller"
+        :text-content="[{ text: 'Frequently Asked Questions', styleClass: 'normal' }]"
+        :style-class-passthrough="['mb-20']"
+      />
+
+      <AccordianCore
+        id="faq"
+        :item-count="serviceData.faqs.length"
+        :name="`faq-${useId()}`"
+        :style-class-passthrough="['services-faq']"
+      >
+        <template v-for="(faq, key) in serviceData.faqs" :key="`summary-${key}`" #[`accordian-${key}-summary`]>
+          {{ faq.question }}
+        </template>
+        <template v-for="(_, key) in serviceData.faqs" :key="`icon-${key}`" #[`accordian-${key}-icon`]>
+          <Icon name="mdi:chevron-down" />
+        </template>
+        <template v-for="(faq, key) in serviceData.faqs" :key="`content-${key}`" #[`accordian-${key}-content`]>
+          <p>{{ faq.answer }}</p>
+        </template>
+      </AccordianCore>
+
       <div class="glass-card p-8 text-center">
-        <h3 class="font-display text-xl mb-3">Ready to book your highlights appointment?</h3>
+        <HeroHeading
+          tag="h2"
+          axis="horizontal"
+          font-size="smaller"
+          :text-content="[{ text: 'Ready to book your highlights appointment?', styleClass: 'normal' }]"
+          :style-class-passthrough="['mb-20']"
+        />
         <p class="text-muted-foreground font-light text-sm mb-6">Mobile service across Bath — I come to you.</p>
         <a
           href="/#contact"
@@ -320,6 +210,38 @@ watch(
       .decorator {
         width: 2rem;
         height: 2rem;
+      }
+    }
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.6);
+    border-radius: 1rem;
+    backdrop-filter: blur(10px);
+  }
+
+  .services-faq {
+    margin-block-end: 24px;
+
+    &.display-accordian {
+      max-width: none;
+      /* margin: 0; */
+
+      .accordian-item.expanding-panel {
+        border-block-end: 1px solid currentColor;
+        opacity: 0.7;
+
+        &:first-child {
+          border-block-start: 1px solid currentColor;
+        }
+
+        .expanding-panel-details .expanding-panel-summary {
+          padding-block: 1.2rem;
+        }
+
+        .expanding-panel-content .inner {
+          /* padding-block-end: 1.2rem; */
+        }
       }
     }
   }
