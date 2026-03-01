@@ -1,9 +1,6 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import EyebrowText from "../EyebrowText.vue";
-
-// Mock $fetch to prevent ReferenceError during test teardown
-vi.stubGlobal("$fetch", vi.fn().mockResolvedValue({}));
 
 describe("EyebrowText", () => {
   // ─── Mount ───────────────────────────────────────────────────────────────
