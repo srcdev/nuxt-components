@@ -1,6 +1,9 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import EyebrowText from "../EyebrowText.vue";
+
+// Mock $fetch to prevent ReferenceError during test teardown
+vi.stubGlobal("$fetch", vi.fn().mockResolvedValue({}));
 
 describe("EyebrowText", () => {
   // ─── Mount ───────────────────────────────────────────────────────────────
@@ -92,21 +95,21 @@ describe("EyebrowText", () => {
 
   // ─── fontSize class ──────────────────────────────────────────────────────
 
-  it.skip("applies the medium class by default", async () => {
+  it("applies the medium class by default", async () => {
     const wrapper = await mountSuspended(EyebrowText, {
       props: { textContent: "Default fontSize" },
     });
     expect(wrapper.classes()).toContain("medium");
   });
 
-  it.skip("applies the large class when fontSize='large'", async () => {
+  it("applies the large class when fontSize='large'", async () => {
     const wrapper = await mountSuspended(EyebrowText, {
       props: { fontSize: "large", textContent: "Large text" },
     });
     expect(wrapper.classes()).toContain("large");
   });
 
-  it.skip("applies the small class when fontSize='small'", async () => {
+  it("applies the small class when fontSize='small'", async () => {
     const wrapper = await mountSuspended(EyebrowText, {
       props: { fontSize: "small", textContent: "Small text" },
     });

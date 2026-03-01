@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="eyebrow-text" :class="[elementClasses]">
+  <component :is="tag" class="eyebrow-text" :class="[elementClasses, props.fontSize]">
     {{ textContent }}
   </component>
 </template>
