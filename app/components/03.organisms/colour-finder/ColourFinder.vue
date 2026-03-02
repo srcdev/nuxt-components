@@ -4,6 +4,7 @@
       <div class="colour-finder__content">
         <!-- Header -->
         <div v-motion :initial="{ opacity: 0, y: 20 }" :enter="{ opacity: 1, y: 0 }" class="colour-finder__header">
+          <EyebrowText text-content="Interactive Tool" font-size="large" />
           <p class="colour-finder__label">Interactive Tool</p>
           <h1 class="colour-finder__title">
             Find Your
@@ -213,16 +214,26 @@
             <div class="colour-finder__summary">
               <div
                 v-for="item in [
-                  { label: 'Hair Type', value: hairTypes.find((h) => h.id === hairType)?.label, swatch: undefined },
+                  {
+                    label: 'Hair Type',
+                    value: hairTypes.find((h) => h.id === hairType)?.label,
+                    swatch: undefined,
+                    image: undefined,
+                    textDark: false,
+                  },
                   {
                     label: 'Natural Colour',
                     value: naturalColours.find((n) => n.id === naturalColour)?.label,
                     swatch: naturalColours.find((n) => n.id === naturalColour)?.colour,
+                    image: naturalColours.find((n) => n.id === naturalColour)?.image,
+                    textDark: naturalColours.find((n) => n.id === naturalColour)?.textDark,
                   },
                   {
                     label: 'Dream Colour',
                     value: desiredColours.find((d) => d.id === desiredColour)?.label,
                     swatch: desiredColours.find((d) => d.id === desiredColour)?.colour,
+                    image: desiredColours.find((d) => d.id === desiredColour)?.image,
+                    textDark: desiredColours.find((d) => d.id === desiredColour)?.textDark,
                   },
                 ]"
                 :key="item.label"
@@ -231,11 +242,15 @@
                 <p class="colour-finder__summary-label">
                   {{ item.label }}
                 </p>
-                <div
-                  v-if="item.swatch"
-                  class="colour-finder__summary-swatch"
-                  :style="{ background: item.swatch }"
-                ></div>
+                <div v-if="item.swatch" class="colour-finder__summary-swatch" :style="{ background: item.swatch }">
+                  <NuxtImg
+                    v-if="item.image"
+                    :src="item.image"
+                    alt=""
+                    class="colour-finder__summary-image"
+                    :class="{ 'colour-finder__summary-image--dark': item.textDark }"
+                  />
+                </div>
                 <p class="colour-finder__summary-value">{{ item.value }}</p>
               </div>
             </div>
@@ -882,16 +897,15 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
 };
 </script>
 
-<style scoped>
+<style lan="css">
 /* CSS Custom Properties */
 .colour-finder {
-  --_primary-color: hsl(var(--primary));
+  --_primary-color: hsl(var(--colour-finder-primary-colour));
   --_primary-foreground: hsl(var(--primary-foreground));
   --_background: hsl(var(--background));
   --_foreground: hsl(var(--foreground));
   --_muted: hsl(var(--muted));
   --_muted-foreground: hsl(var(--muted-foreground));
-  --_border: hsl(var(--border));
   --_emerald-400: hsl(160 84% 39%);
   --_amber-400: hsl(43 96% 56%);
   --_orange-400: hsl(25 95% 53%);
@@ -910,11 +924,10 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
 
 /* Main Container */
 .colour-finder {
-  min-block-size: 100vh;
   background-color: var(--_background);
   color: var(--_foreground);
 
-  &__container {
+  &.colour-finder__container {
     padding-block-start: 7rem;
     padding-block-end: 5rem;
     padding-inline: var(--_spacing-lg);
@@ -924,8 +937,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
     }
   }
 
-  &__content {
-    max-inline-size: 64rem;
+  .colour-finder__content {
+    /* max-inline-size: 64rem; */
     margin-inline: auto;
   }
 }
@@ -936,7 +949,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
   margin-block-end: var(--_spacing-3xl);
 
   .colour-finder__label {
-    font-size: 0.75rem;
+    /* font-size: 0.75rem; */
     letter-spacing: 0.4em;
     text-transform: uppercase;
     color: var(--_primary-color);
@@ -986,12 +999,12 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
   .colour-finder__progress-button {
     display: flex;
     align-items: center;
-    gap: var(--_spacing-sm);
-    padding: var(--_spacing-sm) var(--_spacing-md);
-    font-size: 0.75rem;
-    letter-spacing: 0.15em;
+    gap: 1rem;
+    padding: 0.8rem 1.2rem;
+    /* font-size: 0.75rem; */
+    /* letter-spacing: 0.15em; */
     text-transform: uppercase;
-    border: 1px solid var(--_border);
+    border: 1px solid var(--colour-finder-border-colour);
     background: transparent;
     color: var(--_muted-foreground);
     transition: all var(--_transition-duration) ease;
@@ -1008,7 +1021,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
     }
 
     &--inactive {
-      border-color: var(--_border);
+      border-color: var(--colour-finder-border-colour);
       color: var(--_muted-foreground);
     }
   }
@@ -1019,7 +1032,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.625rem;
+    /* font-size: 0.625rem; */
     font-weight: 500;
     border-radius: 50%;
 
@@ -1050,7 +1063,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
   .colour-finder__progress-connector {
     inline-size: 2rem;
     block-size: 1px;
-    background-color: var(--_border);
+    background-color: var(--colour-finder-border-colour);
 
     &--completed {
       background-color: var(--_primary-color);
@@ -1062,7 +1075,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
 .colour-finder__step {
   .colour-finder__step-title {
     font-family: var(--_font-display);
-    font-size: 1.5rem;
+    /* font-size: 1.5rem; */
     text-align: center;
     margin-block-end: var(--_spacing-xl);
   }
@@ -1074,18 +1087,18 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
   gap: var(--_spacing-md);
   margin-inline: auto;
 
-  &--hair-type {
+  &.colour-finder__options--hair-type {
     grid-template-columns: repeat(2, 1fr);
-    max-inline-size: 32rem;
+    /* max-inline-size: 32rem; */
 
     @media (min-width: 768px) {
       grid-template-columns: repeat(4, 1fr);
     }
   }
 
-  &--natural-colour {
+  &.colour-finder__options--natural-colour {
     grid-template-columns: repeat(2, 1fr);
-    max-inline-size: 48rem;
+    /* max-inline-size: 48rem; */
 
     @media (min-width: 640px) {
       grid-template-columns: repeat(3, 1fr);
@@ -1096,9 +1109,9 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
     }
   }
 
-  &--desired-colour {
+  &.colour-finder__options--desired-colour {
     grid-template-columns: repeat(2, 1fr);
-    max-inline-size: 48rem;
+    /* max-inline-size: 48rem; */
 
     @media (min-width: 640px) {
       grid-template-columns: repeat(3, 1fr);
@@ -1108,7 +1121,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
 
 .colour-finder__option {
   padding: var(--_spacing-lg);
-  border: 1px solid var(--_border);
+  border: 1px solid var(--colour-finder-border-colour);
   background: transparent;
   text-align: center;
   cursor: pointer;
@@ -1126,7 +1139,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
   }
 
   .colour-finder__option-pattern {
-    font-size: 1.875rem;
+    /* font-size: 1.875rem; */
     font-weight: 300;
     letter-spacing: 0.1em;
     color: var(--_foreground);
@@ -1150,7 +1163,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
   }
 
   .colour-finder__option-label {
-    font-size: 0.75rem;
+    /* font-size: 0.75rem; */
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--_muted-foreground);
@@ -1168,7 +1181,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
 
 /* Results Section */
 .colour-finder__results {
-  max-inline-size: 32rem;
+  /* max-inline-size: 32rem; */
   margin-inline: auto;
 
   .colour-finder__results-header {
@@ -1185,7 +1198,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
 
     .colour-finder__results-title {
       font-family: var(--_font-display);
-      font-size: 1.5rem;
+      /* font-size: 1.5rem; */
       margin-block-end: var(--_spacing-sm);
     }
   }
@@ -1207,12 +1220,12 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
 
   .colour-finder__suitability-label {
     font-family: var(--_font-display);
-    font-size: 1.125rem;
+    /* font-size: 1.125rem; */
   }
 
   .colour-finder__suitability-notes {
     color: var(--_muted-foreground);
-    font-size: 0.875rem;
+    /* font-size: 0.875rem; */
     font-weight: 300;
   }
 }
@@ -1232,7 +1245,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
     margin-block-end: var(--_spacing-lg);
 
     .colour-finder__details-method-label {
-      font-size: 0.75rem;
+      /* font-size: 0.75rem; */
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--_primary-color);
@@ -1242,7 +1255,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
       padding: var(--_spacing-xs) 0.75rem;
       background-color: color-mix(in srgb, var(--_primary-color) 10%, transparent);
       color: var(--_primary-color);
-      font-size: 0.875rem;
+      /* font-size: 0.875rem; */
       border: 1px solid color-mix(in srgb, var(--_primary-color) 20%, transparent);
       border-radius: var(--_border-radius);
     }
@@ -1271,8 +1284,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
     .colour-finder__details-text {
       color: color-mix(in srgb, var(--_foreground) 80%, transparent);
       font-weight: 300;
-      font-size: 0.875rem;
-      line-height: 1.6;
+      /* font-size: 0.875rem; */
+      /* line-height: 1.6; */
     }
   }
 }
@@ -1286,11 +1299,11 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
   .colour-finder__summary-item {
     text-align: center;
     padding: var(--_spacing-md);
-    border: 1px solid var(--_border);
+    border: 1px solid var(--colour-finder-border-colour);
     border-radius: var(--_border-radius);
 
     .colour-finder__summary-label {
-      font-size: 0.625rem;
+      /* font-size: 0.625rem; */
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--_muted-foreground);
@@ -1298,16 +1311,28 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
     }
 
     .colour-finder__summary-swatch {
-      inline-size: 2rem;
-      block-size: 2rem;
+      aspect-ratio: 1 / 1;
+      block-size: 6rem;
       border-radius: 50%;
       margin-inline: auto;
       margin-block-end: var(--_spacing-sm);
       border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
+      overflow: hidden;
+
+      .colour-finder__summary-image {
+        inline-size: 100%;
+        block-size: 100%;
+        /* border-radius: 50%; */
+        object-fit: cover;
+
+        &--dark {
+          filter: brightness(0.8) contrast(1.1);
+        }
+      }
     }
 
     .colour-finder__summary-value {
-      font-size: 0.875rem;
+      /* font-size: 0.875rem; */
       color: var(--_foreground);
     }
   }
@@ -1318,7 +1343,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
 
   .colour-finder__cta-disclaimer {
     color: var(--_muted-foreground);
-    font-size: 0.875rem;
+    /* font-size: 0.875rem; */
     margin-block-end: var(--_spacing-lg);
     font-weight: 300;
   }
@@ -1340,7 +1365,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
   align-items: center;
   justify-content: center;
   padding: var(--_spacing-md) var(--_spacing-xl);
-  font-size: 0.875rem;
+  /* font-size: 0.875rem; */
   letter-spacing: 0.15em;
   text-transform: uppercase;
   text-decoration: none;
@@ -1383,7 +1408,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
     align-items: center;
     gap: var(--_spacing-sm);
     padding: 0.75rem var(--_spacing-lg);
-    font-size: 0.875rem;
+    /* font-size: 0.875rem; */
     letter-spacing: 0.1em;
     text-transform: uppercase;
     background: transparent;

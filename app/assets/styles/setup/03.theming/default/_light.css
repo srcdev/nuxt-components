@@ -30,9 +30,18 @@
   --glass-panel-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
   --glass-panel-highlight: rgba(255, 255, 255, 0.9);
 
+  /* ===========================================
+     INDICATOR LIST VARIABLES
+     =========================================== */
   --indicator-list-counter-background: var(--blue-09);
   --indicator-list-counter-text: var(--blue-01);
   --indicator-list-icon: var(--blue-09);
+
+  /* ===========================================
+     COLOUR FINDER VARIABLES
+     =========================================== */
+  --colour-finder-primary-colour: var(--blue-03);
+  --colour-finder-border-colour: var(--blue-02);
 
   /* ===========================================
      ANCHOR LINK VARIABLES

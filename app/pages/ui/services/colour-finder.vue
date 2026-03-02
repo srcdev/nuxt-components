@@ -2,11 +2,11 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">ColourFinder</h2>
         </LayoutRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <ColourFinder />
         </LayoutRow>
       </template>
@@ -35,6 +35,9 @@ useHead({
 
 <style lang="css">
 .colour-finder-page {
-  /* CSS styles */
+  .colour-finder {
+    max-inline-size: 600px;
+    margin-inline: auto;
+  }
 }
 </style>
