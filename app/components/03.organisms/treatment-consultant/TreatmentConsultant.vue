@@ -1362,18 +1362,19 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     transition: all var(--_transition-duration) ease;
     cursor: pointer;
 
-    &--active {
-      border-color: var(--_primary-color);
-      color: var(--_primary-color);
-    }
-    &--completed {
-      border-color: color-mix(in srgb, var(--_primary-color) 30%, transparent);
-      color: color-mix(in srgb, var(--_primary-color) 60%, transparent);
-    }
-    &--inactive {
-      border-color: var(--colour-finder-border-colour);
-      color: var(--_muted-foreground);
-    }
+  }
+
+  .colour-finder__progress-button--active {
+    border-color: var(--_primary-color);
+    color: var(--_primary-color);
+  }
+  .colour-finder__progress-button--completed {
+    border-color: color-mix(in srgb, var(--_primary-color) 30%, transparent);
+    color: color-mix(in srgb, var(--_primary-color) 60%, transparent);
+  }
+  .colour-finder__progress-button--inactive {
+    border-color: var(--colour-finder-border-colour);
+    color: var(--_muted-foreground);
   }
 
   .colour-finder__progress-indicator {
@@ -1385,18 +1386,19 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     font-weight: 500;
     border-radius: 50%;
 
-    &--completed {
-      background-color: var(--_primary-color);
-      color: var(--_primary-foreground);
-    }
-    &--active {
-      border: 1px solid var(--_primary-color);
-      color: var(--_primary-color);
-    }
-    &--inactive {
-      border: 1px solid var(--_muted-foreground);
-      color: var(--_muted-foreground);
-    }
+  }
+
+  .colour-finder__progress-indicator--completed {
+    background-color: var(--_primary-color);
+    color: var(--_primary-foreground);
+  }
+  .colour-finder__progress-indicator--active {
+    border: 1px solid var(--_primary-color);
+    color: var(--_primary-color);
+  }
+  .colour-finder__progress-indicator--inactive {
+    border: 1px solid var(--_muted-foreground);
+    color: var(--_muted-foreground);
   }
 
   .colour-finder__progress-label {
@@ -1410,9 +1412,9 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     inline-size: 2rem;
     block-size: 1px;
     background-color: var(--colour-finder-border-colour);
-    &--completed {
-      background-color: var(--_primary-color);
-    }
+  }
+  .colour-finder__progress-connector--completed {
+    background-color: var(--_primary-color);
   }
 }
 
@@ -1489,27 +1491,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     border-color: color-mix(in srgb, var(--_primary-color) 50%, transparent);
   }
 
-  &--selected {
-    border-color: var(--_primary-color);
-    background-color: color-mix(in srgb, var(--_primary-color) 5%, transparent);
-    box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
-  }
-
-  /* No-change / No-treatment — spans full width */
-  &--no-change {
-    grid-column: 1 / -1;
-    flex-direction: row;
-    justify-content: center;
-    gap: var(--_spacing-md);
-    padding: var(--_spacing-md) var(--_spacing-xl);
-    border-style: dashed;
-
-    .colour-finder__option-label,
-    .colour-finder__option-sublabel {
-      text-align: left;
-    }
-  }
-
   .colour-finder__option-pattern {
     /* font-size: 1.875rem; */
     font-weight: 300;
@@ -1560,10 +1541,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     flex-shrink: 0;
   }
 
-  &--selected .colour-finder__option-treatment-icon {
-    color: var(--_primary-color);
-  }
-
   .colour-finder__option-label {
     display: block;
     letter-spacing: 0.1em;
@@ -1571,9 +1548,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     color: var(--_muted-foreground);
     transition: color var(--_transition-duration) ease;
 
-    &--selected {
-      color: var(--_primary-color);
-    }
   }
 
   .colour-finder__option-sublabel {
@@ -1589,6 +1563,35 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   &:hover .colour-finder__option-label {
     color: var(--_foreground);
   }
+}
+
+.colour-finder__option--selected {
+  border-color: var(--_primary-color);
+  background-color: color-mix(in srgb, var(--_primary-color) 5%, transparent);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
+}
+
+/* No-change / No-treatment — spans full width */
+.colour-finder__option--no-change {
+  grid-column: 1 / -1;
+  flex-direction: row;
+  justify-content: center;
+  gap: var(--_spacing-md);
+  padding: var(--_spacing-md) var(--_spacing-xl);
+  border-style: dashed;
+
+  .colour-finder__option-label,
+  .colour-finder__option-sublabel {
+    text-align: left;
+  }
+}
+
+.colour-finder__option--selected .colour-finder__option-treatment-icon {
+  color: var(--_primary-color);
+}
+
+.colour-finder__option-label--selected {
+  color: var(--_primary-color);
 }
 
 /* ─── Results ──────────────────────────────────────────────────────────────── */
@@ -1624,15 +1627,15 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   color: var(--_muted-foreground);
   margin-block-end: var(--_spacing-md);
 
-  &--spaced {
-    margin-block-start: var(--_spacing-2xl);
-  }
-
   .colour-finder__results-section-icon {
     inline-size: 1rem;
     block-size: 1rem;
     color: var(--_primary-color);
   }
+}
+
+.colour-finder__results-section-title--spaced {
+  margin-block-start: var(--_spacing-2xl);
 }
 
 /* ─── Suitability Badge ────────────────────────────────────────────────────── */
@@ -1645,75 +1648,73 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   margin-block-end: var(--_spacing-xl);
   border-radius: var(--_border-radius);
 
-  /* Suitability colour variants — driven by modifier class from computed */
-  &--great {
-    background-color: color-mix(in srgb, var(--_emerald) 10%, transparent);
-    border-color: color-mix(in srgb, var(--_emerald) 30%, transparent);
-  }
-  &--possible {
-    background-color: color-mix(in srgb, var(--_amber) 10%, transparent);
-    border-color: color-mix(in srgb, var(--_amber) 30%, transparent);
-  }
-  &--difficult {
-    background-color: color-mix(in srgb, var(--_orange) 10%, transparent);
-    border-color: color-mix(in srgb, var(--_orange) 30%, transparent);
-  }
-  &--not-recommended {
-    background-color: color-mix(in srgb, var(--_red) 10%, transparent);
-    border-color: color-mix(in srgb, var(--_red) 30%, transparent);
-  }
-  &--none {
-    background-color: color-mix(in srgb, var(--_muted-foreground) 8%, transparent);
-    border-color: color-mix(in srgb, var(--_muted-foreground) 20%, transparent);
-    border-style: dashed;
-  }
-
   .colour-finder__suitability-icon {
     inline-size: 1.5rem;
     block-size: 1.5rem;
     flex-shrink: 0;
-
-    &--great {
-      color: var(--_emerald);
-    }
-    &--possible {
-      color: var(--_amber);
-    }
-    &--difficult {
-      color: var(--_orange);
-    }
-    &--not-recommended {
-      color: var(--_red);
-    }
-    &--none {
-      color: var(--_muted-foreground);
-    }
+  }
+  .colour-finder__suitability-icon--great {
+    color: var(--_emerald);
+  }
+  .colour-finder__suitability-icon--possible {
+    color: var(--_amber);
+  }
+  .colour-finder__suitability-icon--difficult {
+    color: var(--_orange);
+  }
+  .colour-finder__suitability-icon--not-recommended {
+    color: var(--_red);
+  }
+  .colour-finder__suitability-icon--none {
+    color: var(--_muted-foreground);
   }
 
   .colour-finder__suitability-label {
     font-family: var(--_font-display);
-
-    &--great {
-      color: var(--_emerald);
-    }
-    &--possible {
-      color: var(--_amber);
-    }
-    &--difficult {
-      color: var(--_orange);
-    }
-    &--not-recommended {
-      color: var(--_red);
-    }
-    &--none {
-      color: var(--_muted-foreground);
-    }
+  }
+  .colour-finder__suitability-label--great {
+    color: var(--_emerald);
+  }
+  .colour-finder__suitability-label--possible {
+    color: var(--_amber);
+  }
+  .colour-finder__suitability-label--difficult {
+    color: var(--_orange);
+  }
+  .colour-finder__suitability-label--not-recommended {
+    color: var(--_red);
+  }
+  .colour-finder__suitability-label--none {
+    color: var(--_muted-foreground);
   }
 
   .colour-finder__suitability-notes {
     color: var(--_muted-foreground);
     font-weight: 300;
   }
+}
+
+/* Suitability colour variants — driven by modifier class from computed */
+.colour-finder__suitability--great {
+  background-color: color-mix(in srgb, var(--_emerald) 10%, transparent);
+  border-color: color-mix(in srgb, var(--_emerald) 30%, transparent);
+}
+.colour-finder__suitability--possible {
+  background-color: color-mix(in srgb, var(--_amber) 10%, transparent);
+  border-color: color-mix(in srgb, var(--_amber) 30%, transparent);
+}
+.colour-finder__suitability--difficult {
+  background-color: color-mix(in srgb, var(--_orange) 10%, transparent);
+  border-color: color-mix(in srgb, var(--_orange) 30%, transparent);
+}
+.colour-finder__suitability--not-recommended {
+  background-color: color-mix(in srgb, var(--_red) 10%, transparent);
+  border-color: color-mix(in srgb, var(--_red) 30%, transparent);
+}
+.colour-finder__suitability--none {
+  background-color: color-mix(in srgb, var(--_muted-foreground) 8%, transparent);
+  border-color: color-mix(in srgb, var(--_muted-foreground) 20%, transparent);
+  border-style: dashed;
 }
 
 /* ─── Details Card ─────────────────────────────────────────────────────────── */
@@ -1724,10 +1725,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   border-radius: var(--_border-radius);
   padding: var(--_spacing-xl);
   margin-block-end: var(--_spacing-md);
-
-  &--treatment {
-    margin-block-end: var(--_spacing-sm);
-  }
 
   .colour-finder__details-header {
     display: flex;
@@ -1786,6 +1783,10 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   }
 }
 
+.colour-finder__details-card--treatment {
+  margin-block-end: var(--_spacing-sm);
+}
+
 /* ─── Compatibility Badge ──────────────────────────────────────────────────── */
 .colour-finder__compat-badge {
   margin-inline-start: auto;
@@ -1796,16 +1797,17 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   text-transform: uppercase;
   font-weight: 500;
 
-  &--ok {
-    background-color: color-mix(in srgb, var(--_emerald) 10%, transparent);
-    color: var(--_emerald);
-    border: 1px solid color-mix(in srgb, var(--_emerald) 30%, transparent);
-  }
-  &--warning {
-    background-color: color-mix(in srgb, var(--_amber) 10%, transparent);
-    color: var(--_amber);
-    border: 1px solid color-mix(in srgb, var(--_amber) 30%, transparent);
-  }
+}
+
+.colour-finder__compat-badge--ok {
+  background-color: color-mix(in srgb, var(--_emerald) 10%, transparent);
+  color: var(--_emerald);
+  border: 1px solid color-mix(in srgb, var(--_emerald) 30%, transparent);
+}
+.colour-finder__compat-badge--warning {
+  background-color: color-mix(in srgb, var(--_amber) 10%, transparent);
+  color: var(--_amber);
+  border: 1px solid color-mix(in srgb, var(--_amber) 30%, transparent);
 }
 
 /* ─── Summary ──────────────────────────────────────────────────────────────── */
@@ -1849,9 +1851,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         block-size: 100%;
         object-fit: cover;
 
-        &--dark {
-          filter: brightness(0.8) contrast(1.1);
-        }
       }
     }
 
@@ -1868,6 +1867,10 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       /* font-size: 0.75rem; */
     }
   }
+}
+
+.colour-finder__summary-image--dark {
+  filter: brightness(0.8) contrast(1.1);
 }
 
 /* ─── CTA ──────────────────────────────────────────────────────────────────── */
@@ -1905,22 +1908,23 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   cursor: pointer;
   border: 1px solid transparent;
 
-  &--primary {
-    background-color: var(--_primary-color);
-    color: var(--_primary-foreground);
-    box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
-    &:hover {
-      background-color: color-mix(in srgb, var(--_primary-color) 90%, transparent);
-    }
-  }
+}
 
-  &--secondary {
-    border-color: color-mix(in srgb, var(--_foreground) 20%, transparent);
-    color: var(--_foreground);
-    &:hover {
-      border-color: var(--_primary-color);
-      color: var(--_primary-color);
-    }
+.colour-finder__button--primary {
+  background-color: var(--_primary-color);
+  color: var(--_primary-foreground);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
+  &:hover {
+    background-color: color-mix(in srgb, var(--_primary-color) 90%, transparent);
+  }
+}
+
+.colour-finder__button--secondary {
+  border-color: color-mix(in srgb, var(--_foreground) 20%, transparent);
+  color: var(--_foreground);
+  &:hover {
+    border-color: var(--_primary-color);
+    color: var(--_primary-color);
   }
 }
 
@@ -1950,32 +1954,33 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       block-size: 1rem;
     }
 
-    &--back {
-      color: var(--_muted-foreground);
-      &:hover {
-        color: var(--_foreground);
-      }
-    }
+  }
+}
 
-    &--next {
-      padding: 0.75rem var(--_spacing-xl);
-      background-color: var(--_primary-color);
-      color: var(--_primary-foreground);
-      box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
-      &:hover {
-        background-color: color-mix(in srgb, var(--_primary-color) 90%, transparent);
-      }
-    }
+.colour-finder__nav-button--back {
+  color: var(--_muted-foreground);
+  &:hover {
+    color: var(--_foreground);
+  }
+}
 
-    &--disabled {
-      background-color: var(--_muted);
-      color: var(--_muted-foreground);
-      cursor: not-allowed;
-      box-shadow: none;
-      &:hover {
-        background-color: var(--_muted);
-      }
-    }
+.colour-finder__nav-button--next {
+  padding: 0.75rem var(--_spacing-xl);
+  background-color: var(--_primary-color);
+  color: var(--_primary-foreground);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
+  &:hover {
+    background-color: color-mix(in srgb, var(--_primary-color) 90%, transparent);
+  }
+}
+
+.colour-finder__nav-button--disabled {
+  background-color: var(--_muted);
+  color: var(--_muted-foreground);
+  cursor: not-allowed;
+  box-shadow: none;
+  &:hover {
+    background-color: var(--_muted);
   }
 }
 
