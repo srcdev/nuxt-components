@@ -82,6 +82,7 @@
     "@nuxt/fonts": "0.14.0",
     "@oddbird/css-anchor-positioning": "0.9.0",
     "@vueuse/core": "14.2.0",
+    "@vueuse/motion": "^3.0.3",
     "focus-trap-vue": "4.1.0",
     "nuxt": "4.3.0",
     "pinia": "3.0.4",

@@ -10,6 +10,7 @@ export default defineNuxtConfig({
     "@nuxtjs/i18n",
     "nuxt-qrcode",
     "@pinia/nuxt",
+    "@vueuse/motion/nuxt",
     "pinia-plugin-persistedstate/nuxt",
     "@nuxt/test-utils/module",
   ],
