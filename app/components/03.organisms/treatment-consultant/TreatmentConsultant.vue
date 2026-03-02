@@ -222,7 +222,7 @@
                   <div
                     v-for="(detail, i) in colourRecommendation.details"
                     :key="i"
-                    v-motion
+                    v-motion="`color-detail-${i}`"
                     :initial="{ opacity: 0, x: -20 }"
                     :enter="{ opacity: 1, x: 0, transition: { delay: i * 100 } }"
                     class="colour-finder__details-item"
@@ -278,7 +278,7 @@
                   <div
                     v-for="(note, j) in tr.notes"
                     :key="j"
-                    v-motion
+                    v-motion="`treatment-note-${i}-${j}`"
                     :initial="{ opacity: 0, x: -20 }"
                     :enter="{ opacity: 1, x: 0, transition: { delay: (i + j) * 80 } }"
                     class="colour-finder__details-item"
