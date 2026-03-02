@@ -3,11 +3,11 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <h2 class="page-heading-2">ColourFinder</h2>
+          <h2 class="page-heading-2">Treatment Consultant</h2>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <ColourFinder />
+          <TreatmentConsultant />
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -20,21 +20,21 @@ definePageMeta({
 });
 
 useHead({
-  title: "ColourFinder",
+  title: "Treatment Consultant - ColourFinder",
   meta: [
     {
       name: "description",
-      content: "ColourFinder Meta description content",
+      content: "Treatment Consultant Meta description content",
     },
   ],
   bodyAttrs: {
-    class: "colour-finder-page",
+    class: "treatment-consultant-page",
   },
 });
 </script>
 
 <style lang="css">
-.colour-finder-page {
+.treatment-consultant-page {
   .colour-finder {
     max-inline-size: 800px;
     margin-inline: auto;
