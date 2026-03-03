@@ -90,6 +90,11 @@ export default defineNuxtConfig({
       // },
     ],
   },
+  image: {
+    // In Storybook, use 'none' provider so images render as plain /images/... paths
+    // (avoids /_vercel/image which has no source images in storybook-static/)
+    provider: process.env.STORYBOOK ? "none" : undefined,
+  },
   vue: {
     runtimeCompiler: true,
   },

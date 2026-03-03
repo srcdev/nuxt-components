@@ -1,5 +1,8 @@
 import type { StorybookConfig } from "@nuxtjs/storybook";
 
+// Signal nuxt.config.ts to use 'none' image provider (bypasses /_vercel/image)
+process.env.STORYBOOK = "true";
+
 const config: StorybookConfig = {
   stories: ["../**/*.mdx", "../**/*.stories.ts"],
   staticDirs: ["../public"],
