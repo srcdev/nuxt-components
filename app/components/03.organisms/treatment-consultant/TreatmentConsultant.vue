@@ -64,20 +64,18 @@
           <div v-if="step === 0" key="step0" class="colour-finder__step">
             <h2 class="colour-finder__step-title">What's your hair type?</h2>
             <div class="colour-finder__options colour-finder__options--hair-type">
-              <ClientOnly>
-                <button
-                  v-for="(ht, index) in hairTypes"
-                  :key="index"
-                  :class="['colour-finder__option', { 'colour-finder__option--selected': hairType === ht.id }]"
-                  @click="selectHairType(ht.id)"
-                >
-                  <span v-if="hairType === ht.id" class="colour-finder__option-check">
-                    <Icon name="lucide:check" class="colour-finder__option-check-icon" />
-                  </span>
-                  <div class="colour-finder__option-pattern">{{ ht.pattern }}</div>
-                  <span class="colour-finder__option-label">{{ ht.label }}</span>
-                </button>
-              </ClientOnly>
+              <button
+                v-for="(ht, index) in hairTypes"
+                :key="index"
+                :class="['colour-finder__option', { 'colour-finder__option--selected': hairType === ht.id }]"
+                @click="selectHairType(ht.id)"
+              >
+                <span v-if="hairType === ht.id" class="colour-finder__option-check">
+                  <Icon name="lucide:check" class="colour-finder__option-check-icon" />
+                </span>
+                <div class="colour-finder__option-pattern">{{ ht.pattern }}</div>
+                <span class="colour-finder__option-label">{{ ht.label }}</span>
+              </button>
             </div>
           </div>
 
@@ -183,15 +181,27 @@
                   'colour-finder__option colour-finder__option--treatment',
                   { 'colour-finder__option--selected': selectedTreatments.includes(tr.id) },
                   { 'colour-finder__option--no-change': tr.id === 'none' },
+                  { 'colour-finder__option--excluded': allowMultipleTreatments && excludedTreatmentIds.has(tr.id) },
                 ]"
                 @click="toggleTreatment(tr.id)"
               >
                 <span v-if="selectedTreatments.includes(tr.id)" class="colour-finder__option-check">
                   <Icon name="lucide:check" class="colour-finder__option-check-icon" />
                 </span>
+                <Icon
+                  v-if="allowMultipleTreatments && excludedTreatmentIds.has(tr.id)"
+                  name="lucide:ban"
+                  class="colour-finder__option-excluded-icon"
+                />
                 <Icon :name="tr.icon" class="colour-finder__option-treatment-icon" />
                 <span class="colour-finder__option-label">{{ tr.label }}</span>
-                <span v-if="tr.description" class="colour-finder__option-sublabel">{{ tr.description }}</span>
+                <span
+                  v-if="allowMultipleTreatments && excludedTreatmentIds.has(tr.id)"
+                  class="colour-finder__option-conflict"
+                >
+                  Conflicts with {{ getConflictingLabel(tr.id) }}
+                </span>
+                <span v-else-if="tr.description" class="colour-finder__option-sublabel">{{ tr.description }}</span>
               </button>
             </div>
           </div>
@@ -434,6 +444,7 @@ interface Treatment {
   description?: string;
   notes: string[];
   compatibility?: boolean;
+  excludes?: TreatmentId[];
 }
 
 // ─── Static Data ──────────────────────────────────────────────────────────────
@@ -530,6 +541,7 @@ const treatments: Treatment[] = [
       "Not recommended immediately after colour — wait 2 weeks",
     ],
     compatibility: true,
+    excludes: ["perm", "japanese-straightening", "relaxer"],
   },
   {
     id: "brazilian-blowout",
@@ -542,6 +554,7 @@ const treatments: Treatment[] = [
       "Great for frizz control in humid climates",
     ],
     compatibility: true,
+    excludes: ["perm", "japanese-straightening", "relaxer"],
   },
   {
     id: "perm",
@@ -554,6 +567,7 @@ const treatments: Treatment[] = [
       "Particularly beautiful on straight or slightly wavy hair",
     ],
     compatibility: true,
+    excludes: ["japanese-straightening", "relaxer", "keratin-smoothing", "brazilian-blowout"],
   },
   {
     id: "relaxer",
@@ -566,6 +580,7 @@ const treatments: Treatment[] = [
       "Requires regular maintenance every 6–8 weeks",
     ],
     compatibility: true,
+    excludes: ["perm", "japanese-straightening", "keratin-smoothing", "brazilian-blowout"],
   },
   {
     id: "japanese-straightening",
@@ -578,6 +593,7 @@ const treatments: Treatment[] = [
       "Results last until new growth comes through",
     ],
     compatibility: true,
+    excludes: ["perm", "relaxer", "keratin-smoothing", "brazilian-blowout"],
   },
   {
     id: "deep-conditioning",
@@ -1183,6 +1199,23 @@ const naturalColour = ref<NaturalColour | null>(null);
 const desiredColour = ref<DesiredColour | null>(null);
 const selectedTreatments = ref<TreatmentId[]>([]);
 
+const excludedTreatmentIds = computed<Set<TreatmentId>>(() => {
+  const excluded = new Set<TreatmentId>();
+  for (const id of selectedTreatments.value) {
+    const treatment = treatments.find((t) => t.id === id);
+    treatment?.excludes?.forEach((e) => excluded.add(e));
+  }
+  return excluded;
+});
+
+function getConflictingLabel(id: TreatmentId): string | null {
+  for (const selectedId of selectedTreatments.value) {
+    const t = treatments.find((tr) => tr.id === selectedId);
+    if (t?.excludes?.includes(id)) return t.label;
+  }
+  return null;
+}
+
 function toggleTreatment(id: TreatmentId) {
   if (id === "none") {
     selectedTreatments.value = selectedTreatments.value.includes("none") ? [] : ["none"];
@@ -1198,7 +1231,10 @@ function toggleTreatment(id: TreatmentId) {
   if (idx > -1) {
     selectedTreatments.value.splice(idx, 1);
   } else {
-    selectedTreatments.value = selectedTreatments.value.filter((t) => t !== "none");
+    const treatment = treatments.find((t) => t.id === id);
+    selectedTreatments.value = selectedTreatments.value
+      .filter((t) => t !== "none")
+      .filter((t) => !treatment?.excludes?.includes(t));
     selectedTreatments.value.push(id);
   }
 }
@@ -1340,8 +1376,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   color: var(--_foreground);
 
   .colour-finder__container {
-    padding-block-start: 7rem;
-    padding-block-end: 5rem;
     padding-inline: var(--_spacing-lg);
 
     @container (min-width: 1024px) {
@@ -1620,28 +1654,54 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 }
 
 .colour-finder__option--selected {
-  border-color: var(--_primary-color);
-  background-color: color-mix(in srgb, var(--_primary-color) 5%, transparent);
-  box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
+  border-color: var(--colour-finder-checked-stroke-colour);
+  background-color: color-mix(in srgb, var(--colour-finder-checked-surface-colour) 20%, transparent);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--colour-finder-checked-surface-colour) 20%, transparent);
+}
+
+.colour-finder__option--excluded {
+  opacity: 0.45;
+  cursor: pointer;
+
+  .colour-finder__option-conflict {
+    display: block;
+    /* font-size: 0.65rem; */
+    letter-spacing: 0.04em;
+    color: var(--_muted-foreground);
+    font-weight: 400;
+    margin-block-start: 0.2rem;
+    font-style: italic;
+  }
+
+  .colour-finder__option-excluded-icon {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    inline-size: 1.75rem;
+    block-size: 1.75rem;
+    color: var(--colour-finder-conflict-stroke-colour);
+    opacity: 0.6;
+  }
 }
 
 .colour-finder__option-check {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  inline-size: 1.25rem;
-  block-size: 1.25rem;
-  border-radius: 50%;
-  background-color: var(--_primary-color);
+  top: 1rem;
+  right: 1rem;
+  inline-size: 2.25rem;
+  block-size: 2.25rem;
+  border-radius: 100vw;
+  background-color: var(--colour-finder-checked-surface-colour);
+  border: 1px solid var(--colour-finder-checked-stroke-colour);
   display: flex;
   align-items: center;
   justify-content: center;
   pointer-events: none;
 
   .colour-finder__option-check-icon {
-    inline-size: 0.75rem;
-    block-size: 0.75rem;
-    color: var(--_primary-foreground);
+    inline-size: 1.55rem;
+    block-size: 1.55rem;
+    color: var(--colour-finder-checked-stroke-colour);
   }
 }
 
@@ -1661,7 +1721,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 }
 
 .colour-finder__option--selected .colour-finder__option-treatment-icon {
-  color: var(--_primary-color);
+  /* color: var(--_primary-color); */
 }
 
 .colour-finder__option-label--selected {
@@ -1852,7 +1912,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     .colour-finder__details-text {
       color: color-mix(in srgb, var(--_foreground) 80%, transparent);
       font-weight: 300;
-      line-height: 1.6;
+      line-height: 1;
+      margin-block: 1rem;
     }
   }
 }

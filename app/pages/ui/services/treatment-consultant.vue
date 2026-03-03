@@ -3,10 +3,6 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <h2 class="page-heading-2">Treatment Consultant</h2>
-        </LayoutRow>
-
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <TreatmentConsultant :auto-advance="true" :allow-multiple-treatments="true" />
         </LayoutRow>
       </template>

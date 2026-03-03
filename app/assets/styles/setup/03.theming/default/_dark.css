@@ -40,10 +40,16 @@
   --indicator-list-icon: var(--blue-02);
 
   /* ===========================================
-     COLOUR FINDER VARIABLES
+     TREATMENT/COLOUR FINDER VARIABLES
      =========================================== */
   --colour-finder-primary-colour: var(--blue-03);
   --colour-finder-border-colour: var(--blue-03);
+
+  --colour-finder-checked-surface-colour: var(--green-10);
+  --colour-finder-checked-stroke-colour: var(--green-03);
+
+  --colour-finder-conflict-surface-colour: var(--sunset-09);
+  --colour-finder-conflict-stroke-colour: var(--sunset-03);
 
   /* ===========================================
      ANCHOR LINK VARIABLES
