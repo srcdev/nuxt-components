@@ -214,7 +214,7 @@
               </div>
               <div class="colour-finder__details-card">
                 <div class="colour-finder__details-header">
-                  <span class="colour-finder__details-method-label">Recommended Method</span>
+                  <span class="colour-finder__details-method-label">Processes Required</span>
                   <span class="colour-finder__details-method-badge">{{ colourRecommendation.method }}</span>
                 </div>
                 <div class="colour-finder__details-list">
@@ -1860,9 +1860,9 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     }
 
     .colour-finder__summary-swatch {
-      inline-size: 3rem;
-      block-size: 3rem;
-      border-radius: 50%;
+      aspect-ratio: 1 / 1;
+      block-size: 8rem;
+      border-radius: 100vw;
       margin-block-end: var(--_spacing-sm);
       border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
       overflow: hidden;

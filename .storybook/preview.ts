@@ -1,21 +1,17 @@
 import { defineComponent } from "vue";
 import type { Preview } from "@nuxtjs/storybook";
 
-// Decorator to globally mock NuxtImg for Storybook
+// Global NuxtImg mock for Storybook
+const NuxtImgMock = defineComponent({
+  props: ["src", "alt", "width", "height", "class", "style"],
+  template: `<img :src="src" :alt="alt" :width="width" :height="height" :class="class" :style="style" />`,
+});
+
 export const decorators = [
-  (story: any) =>
+  (story: () => unknown) =>
     defineComponent({
-      components: { story },
+      components: { story, NuxtImg: NuxtImgMock },
       template: "<story />",
-      setup() {
-        // Register NuxtImg globally using Vue's globalThis
-        if (typeof window !== "undefined" && (globalThis as any).$nuxt) {
-          (globalThis as any).$nuxt.vueApp.component("NuxtImg", {
-            props: ["src", "alt", "width", "height", "class", "style"],
-            template: `<img :src="src" :alt="alt" :width="width" :height="height" :class="class" :style="style" />`,
-          });
-        }
-      },
     }),
 ];
 
