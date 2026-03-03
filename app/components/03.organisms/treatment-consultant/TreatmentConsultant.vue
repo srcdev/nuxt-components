@@ -64,18 +64,20 @@
           <div v-if="step === 0" key="step0" class="colour-finder__step">
             <h2 class="colour-finder__step-title">What's your hair type?</h2>
             <div class="colour-finder__options colour-finder__options--hair-type">
-              <button
-                v-for="ht in hairTypes"
-                :key="ht.id"
-                :class="['colour-finder__option', { 'colour-finder__option--selected': hairType === ht.id }]"
-                @click="selectHairType(ht.id)"
-              >
-                <span v-if="hairType === ht.id" class="colour-finder__option-check">
-                  <Icon name="lucide:check" class="colour-finder__option-check-icon" />
-                </span>
-                <div class="colour-finder__option-pattern">{{ ht.pattern }}</div>
-                <span class="colour-finder__option-label">{{ ht.label }}</span>
-              </button>
+              <ClientOnly>
+                <button
+                  v-for="(ht, index) in hairTypes"
+                  :key="index"
+                  :class="['colour-finder__option', { 'colour-finder__option--selected': hairType === ht.id }]"
+                  @click="selectHairType(ht.id)"
+                >
+                  <span v-if="hairType === ht.id" class="colour-finder__option-check">
+                    <Icon name="lucide:check" class="colour-finder__option-check-icon" />
+                  </span>
+                  <div class="colour-finder__option-pattern">{{ ht.pattern }}</div>
+                  <span class="colour-finder__option-label">{{ ht.label }}</span>
+                </button>
+              </ClientOnly>
             </div>
           </div>
 
@@ -84,8 +86,8 @@
             <h2 class="colour-finder__step-title">What's your natural hair colour?</h2>
             <div class="colour-finder__options colour-finder__options--natural-colour">
               <button
-                v-for="nc in naturalColours"
-                :key="nc.id"
+                v-for="(nc, index) in naturalColours"
+                :key="index"
                 :class="[
                   'colour-finder__option colour-finder__option--colour',
                   { 'colour-finder__option--selected': naturalColour === nc.id },
@@ -123,8 +125,8 @@
             <h2 class="colour-finder__step-title">What colour are you dreaming of?</h2>
             <div class="colour-finder__options colour-finder__options--desired-colour">
               <button
-                v-for="dc in desiredColours"
-                :key="dc.id"
+                v-for="(dc, index) in desiredColours"
+                :key="index"
                 :class="[
                   'colour-finder__option',
                   dc.id === 'none' ? 'colour-finder__option--no-change' : 'colour-finder__option--colour',
@@ -175,8 +177,8 @@
             </p>
             <div class="colour-finder__options colour-finder__options--treatments">
               <button
-                v-for="tr in treatments"
-                :key="tr.id"
+                v-for="(tr, index) in treatments"
+                :key="index"
                 :class="[
                   'colour-finder__option colour-finder__option--treatment',
                   { 'colour-finder__option--selected': selectedTreatments.includes(tr.id) },
@@ -281,7 +283,7 @@
             <template v-if="hasActiveTreatments">
               <div
                 v-for="(tr, i) in chosenTreatments"
-                :key="tr.id"
+                :key="i"
                 class="colour-finder__details-card colour-finder__details-card--treatment"
               >
                 <div class="colour-finder__details-header">
