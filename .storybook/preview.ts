@@ -1,13 +1,23 @@
-import "./fonts.css";
+import { defineComponent } from "vue";
 import type { Preview } from "@nuxtjs/storybook";
 
-// Inject Bunny CDN link for Poppins font (needed because @nuxt/fonts does not inject in Storybook)
-// if (typeof window !== "undefined") {
-//   const link = document.createElement("link");
-//   link.href = "https://fonts.bunny.net/css?family=poppins:100,200,300,400,500,600,700,800,900";
-//   link.rel = "stylesheet";
-//   document.head.appendChild(link);
-// }
+// Decorator to globally mock NuxtImg for Storybook
+export const decorators = [
+  (story: any) =>
+    defineComponent({
+      components: { story },
+      template: "<story />",
+      setup() {
+        // Register NuxtImg globally using Vue's globalThis
+        if (typeof window !== "undefined" && (globalThis as any).$nuxt) {
+          (globalThis as any).$nuxt.vueApp.component("NuxtImg", {
+            props: ["src", "alt", "width", "height", "class", "style"],
+            template: `<img :src="src" :alt="alt" :width="width" :height="height" :class="class" :style="style" />`,
+          });
+        }
+      },
+    }),
+];
 
 const preview: Preview = {
   parameters: {
