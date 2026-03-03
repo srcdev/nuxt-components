@@ -174,35 +174,53 @@
               Select all that apply, or choose none to go straight to your results.
             </p>
             <div class="colour-finder__options colour-finder__options--treatments">
+              <!-- "No treatments" — full-width, outside the subgrid -->
               <button
-                v-for="(tr, index) in treatments"
-                :key="index"
                 :class="[
-                  'colour-finder__option colour-finder__option--treatment',
-                  { 'colour-finder__option--selected': selectedTreatments.includes(tr.id) },
-                  { 'colour-finder__option--no-change': tr.id === 'none' },
-                  { 'colour-finder__option--excluded': allowMultipleTreatments && excludedTreatmentIds.has(tr.id) },
+                  'colour-finder__option colour-finder__option--treatment colour-finder__option--no-change',
+                  { 'colour-finder__option--selected': selectedTreatments.includes('none') },
                 ]"
-                @click="toggleTreatment(tr.id)"
+                @click="toggleTreatment('none')"
               >
-                <span v-if="selectedTreatments.includes(tr.id)" class="colour-finder__option-check">
+                <span v-if="selectedTreatments.includes('none')" class="colour-finder__option-check">
                   <Icon name="lucide:check" class="colour-finder__option-check-icon" />
                 </span>
-                <Icon
-                  v-if="allowMultipleTreatments && excludedTreatmentIds.has(tr.id)"
-                  name="lucide:ban"
-                  class="colour-finder__option-excluded-icon"
-                />
-                <Icon :name="tr.icon" class="colour-finder__option-treatment-icon" />
-                <span class="colour-finder__option-label">{{ tr.label }}</span>
-                <span
-                  v-if="allowMultipleTreatments && excludedTreatmentIds.has(tr.id)"
-                  class="colour-finder__option-conflict"
-                >
-                  Conflicts with {{ getConflictingLabel(tr.id) }}
-                </span>
-                <span v-else-if="tr.description" class="colour-finder__option-sublabel">{{ tr.description }}</span>
+                <Icon name="lucide:minus-circle" class="colour-finder__option-treatment-icon" />
+                <span class="colour-finder__option-label">I don't want any treatments</span>
+                <span class="colour-finder__option-sublabel">Go straight to your results</span>
               </button>
+
+              <!-- Treatment options grid -->
+              <div class="colour-finder__treatments-grid">
+                <button
+                  v-for="(tr, index) in treatments.filter((t) => t.id !== 'none')"
+                  :key="index"
+                  :class="[
+                    'colour-finder__option colour-finder__option--treatment',
+                    { 'colour-finder__option--selected': selectedTreatments.includes(tr.id) },
+                    { 'colour-finder__option--excluded': allowMultipleTreatments && excludedTreatmentIds.has(tr.id) },
+                  ]"
+                  @click="toggleTreatment(tr.id)"
+                >
+                  <span v-if="selectedTreatments.includes(tr.id)" class="colour-finder__option-check">
+                    <Icon name="lucide:check" class="colour-finder__option-check-icon" />
+                  </span>
+                  <Icon
+                    v-if="allowMultipleTreatments && excludedTreatmentIds.has(tr.id)"
+                    name="lucide:ban"
+                    class="colour-finder__option-excluded-icon"
+                  />
+                  <Icon :name="tr.icon" class="colour-finder__option-treatment-icon" />
+                  <span class="colour-finder__option-label">{{ tr.label }}</span>
+                  <span
+                    v-if="allowMultipleTreatments && excludedTreatmentIds.has(tr.id)"
+                    class="colour-finder__option-conflict"
+                  >
+                    Conflicts with {{ getConflictingLabel(tr.id) }}
+                  </span>
+                  <span v-else class="colour-finder__option-sublabel">{{ tr.description }}</span>
+                </button>
+              </div>
             </div>
           </div>
 
@@ -344,18 +362,20 @@
             <div class="colour-finder__summary">
               <div v-for="item in summaryItems" :key="item.label" class="colour-finder__summary-item">
                 <p class="colour-finder__summary-label">{{ item.label }}</p>
-                <div v-if="item.swatch" class="colour-finder__summary-swatch" :style="{ background: item.swatch }">
-                  <NuxtImg
-                    v-if="item.image"
-                    :src="item.image"
-                    width="96"
-                    height="96"
-                    alt=""
-                    class="colour-finder__summary-image"
-                    :class="{ 'colour-finder__summary-image--dark': item.textDark }"
-                  />
+                <div class="colour-finder__summary-visual">
+                  <div v-if="item.swatch" class="colour-finder__summary-swatch" :style="{ background: item.swatch }">
+                    <NuxtImg
+                      v-if="item.image"
+                      :src="item.image"
+                      width="96"
+                      height="96"
+                      alt=""
+                      class="colour-finder__summary-image"
+                      :class="{ 'colour-finder__summary-image--dark': item.textDark }"
+                    />
+                  </div>
+                  <Icon v-else-if="item.icon" :name="item.icon" class="colour-finder__summary-none-icon" />
                 </div>
-                <Icon v-else-if="item.icon" :name="item.icon" class="colour-finder__summary-none-icon" />
                 <p class="colour-finder__summary-value">{{ item.value }}</p>
               </div>
             </div>
@@ -1553,12 +1573,42 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   }
 
   &.colour-finder__options--treatments {
-    grid-template-columns: repeat(2, 1fr);
-    @media (min-width: 640px) {
-      grid-template-columns: repeat(3, 1fr);
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.colour-finder__treatments-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--_spacing-md);
+
+  @media (min-width: 640px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .colour-finder__option--treatment {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    justify-items: center;
+    align-items: center;
+
+    .colour-finder__option-treatment-icon {
+      align-self: center;
     }
-    @media (min-width: 1024px) {
-      grid-template-columns: repeat(4, 1fr);
+
+    .colour-finder__option-label {
+      align-self: end;
+    }
+
+    .colour-finder__option-sublabel,
+    .colour-finder__option-conflict {
+      align-self: start;
     }
   }
 }
@@ -1721,7 +1771,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 }
 
 .colour-finder__option--selected .colour-finder__option-treatment-icon {
-  /* color: var(--_primary-color); */
+  color: var(--_primary-color);
 }
 
 .colour-finder__option-label--selected {
@@ -1948,35 +1998,43 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 .colour-finder__summary {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(6, auto);
   gap: var(--_spacing-md);
   margin-block: var(--_spacing-2xl);
 
   @media (min-width: 640px) {
     grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, auto);
   }
 
   .colour-finder__summary-item {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    align-items: center;
+    justify-items: center;
     text-align: center;
     padding: var(--_spacing-md);
     border: 1px solid var(--colour-finder-border-colour);
     border-radius: var(--_border-radius);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 
     .colour-finder__summary-label {
-      /* font-size: 0.625rem; */
+      align-self: end;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--_muted-foreground);
-      margin-block-end: var(--_spacing-sm);
+    }
+
+    .colour-finder__summary-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .colour-finder__summary-swatch {
       aspect-ratio: 1 / 1;
       block-size: 8rem;
       border-radius: 100vw;
-      margin-block-end: var(--_spacing-sm);
       border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
       overflow: hidden;
 
@@ -1991,13 +2049,12 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       inline-size: 1.5rem;
       block-size: 1.5rem;
       color: var(--_muted-foreground);
-      margin-block-end: var(--_spacing-sm);
       opacity: 0.5;
     }
 
     .colour-finder__summary-value {
+      align-self: start;
       color: var(--_foreground);
-      /* font-size: 0.75rem; */
     }
   }
 }
