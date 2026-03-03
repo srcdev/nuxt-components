@@ -93,6 +93,8 @@
                   <NuxtImg
                     v-if="nc.image"
                     :src="nc.image"
+                    width="128"
+                    height="128"
                     alt=""
                     class="colour-finder__option-image"
                     :class="{ 'colour-finder__option-image--dark': nc.textDark }"
@@ -131,7 +133,14 @@
                 </template>
                 <template v-else>
                   <div class="colour-finder__option-swatch" :style="{ background: dc.colour }">
-                    <NuxtImg v-if="dc.image" :src="dc.image" alt="" class="colour-finder__option-image" />
+                    <NuxtImg
+                      v-if="dc.image"
+                      :src="dc.image"
+                      alt=""
+                      width="128"
+                      height="128"
+                      class="colour-finder__option-image"
+                    />
                   </div>
                 </template>
                 <span
@@ -315,6 +324,8 @@
                   <NuxtImg
                     v-if="item.image"
                     :src="item.image"
+                    width="96"
+                    height="96"
                     alt=""
                     class="colour-finder__summary-image"
                     :class="{ 'colour-finder__summary-image--dark': item.textDark }"
