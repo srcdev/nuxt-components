@@ -70,6 +70,9 @@
                 :class="['colour-finder__option', { 'colour-finder__option--selected': hairType === ht.id }]"
                 @click="selectHairType(ht.id)"
               >
+                <span v-if="hairType === ht.id" class="colour-finder__option-check">
+                  <Icon name="lucide:check" class="colour-finder__option-check-icon" />
+                </span>
                 <div class="colour-finder__option-pattern">{{ ht.pattern }}</div>
                 <span class="colour-finder__option-label">{{ ht.label }}</span>
               </button>
@@ -89,6 +92,9 @@
                 ]"
                 @click="selectNaturalColour(nc.id)"
               >
+                <span v-if="naturalColour === nc.id" class="colour-finder__option-check">
+                  <Icon name="lucide:check" class="colour-finder__option-check-icon" />
+                </span>
                 <div class="colour-finder__option-swatch" :style="{ backgroundColor: nc.colour }">
                   <NuxtImg
                     v-if="nc.image"
@@ -126,6 +132,9 @@
                 ]"
                 @click="selectDesiredColour(dc.id)"
               >
+                <span v-if="desiredColour === dc.id" class="colour-finder__option-check">
+                  <Icon name="lucide:check" class="colour-finder__option-check-icon" />
+                </span>
                 <template v-if="dc.id === 'none'">
                   <div class="colour-finder__option-none-icon">
                     <Icon name="lucide:minus-circle" class="colour-finder__option-none-icon-svg" />
@@ -175,6 +184,9 @@
                 ]"
                 @click="toggleTreatment(tr.id)"
               >
+                <span v-if="selectedTreatments.includes(tr.id)" class="colour-finder__option-check">
+                  <Icon name="lucide:check" class="colour-finder__option-check-icon" />
+                </span>
                 <Icon :name="tr.icon" class="colour-finder__option-treatment-icon" />
                 <span class="colour-finder__option-label">{{ tr.label }}</span>
                 <span v-if="tr.description" class="colour-finder__option-sublabel">{{ tr.description }}</span>
@@ -358,7 +370,7 @@
             Back
           </button>
           <button
-            v-if="!autoAdvance"
+            v-if="!autoAdvance || (step === 3 && allowMultipleTreatments)"
             :disabled="!canProceed"
             :class="[
               'colour-finder__nav-button colour-finder__nav-button--next',
@@ -366,7 +378,7 @@
             ]"
             @click="next"
           >
-            Next
+            {{ autoAdvance && step === 3 && allowMultipleTreatments ? "View Results" : "Next" }}
             <Icon name="lucide:arrow-right" class="colour-finder__nav-icon" />
           </button>
         </div>
@@ -376,14 +388,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-
 // ─── Props ────────────────────────────────────────────────────────────────────
-const props = defineProps({
-  autoAdvance: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  autoAdvance?: boolean;
+  allowMultipleTreatments?: boolean;
+  styleClassPassthrough?: string | string[];
+}
+const props = withDefaults(defineProps<Props>(), {
+  autoAdvance: false,
+  allowMultipleTreatments: false,
+  styleClassPassthrough: () => [],
 });
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -1173,13 +1187,17 @@ function toggleTreatment(id: TreatmentId) {
     if (props.autoAdvance) next();
     return;
   }
+  if (!props.allowMultipleTreatments) {
+    selectedTreatments.value = selectedTreatments.value.includes(id) ? [] : [id];
+    if (props.autoAdvance) next();
+    return;
+  }
   const idx = selectedTreatments.value.indexOf(id);
   if (idx > -1) {
     selectedTreatments.value.splice(idx, 1);
   } else {
     selectedTreatments.value = selectedTreatments.value.filter((t) => t !== "none");
     selectedTreatments.value.push(id);
-    if (props.autoAdvance) next();
   }
 }
 
@@ -1510,6 +1528,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 }
 
 .colour-finder__option {
+  position: relative;
   padding: var(--_spacing-lg);
   border: 1px solid var(--colour-finder-border-colour);
   background: transparent;
@@ -1602,6 +1621,26 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   border-color: var(--_primary-color);
   background-color: color-mix(in srgb, var(--_primary-color) 5%, transparent);
   box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
+}
+
+.colour-finder__option-check {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  border-radius: 50%;
+  background-color: var(--_primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+
+  .colour-finder__option-check-icon {
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+    color: var(--_primary-foreground);
+  }
 }
 
 /* No-change / No-treatment — spans full width */

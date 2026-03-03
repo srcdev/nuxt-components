@@ -300,8 +300,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-
 // ─── Types ────────────────────────────────────────────────────────────────────
 type HairType = "straight" | "wavy" | "curly" | "coily";
 type NaturalColour = "light-blonde" | "dark-blonde" | "light-brown" | "dark-brown" | "red" | "black" | "grey-white";
