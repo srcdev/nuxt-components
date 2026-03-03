@@ -9,6 +9,10 @@ const meta: Meta<typeof TreatmentConsultant> = {
       control: "boolean",
       description: "Automatically advance to the next step after selection",
     },
+    allowMultipleTreatments: {
+      control: "boolean",
+      description: "Allow users to select multiple treatments",
+    },
   },
 };
 
@@ -20,6 +24,7 @@ type Story = StoryObj<typeof TreatmentConsultant>;
 export const Default: Story = {
   args: {
     autoAdvance: true,
+    allowMultipleTreatments: true,
   },
   render: (args) => ({
     components: { TreatmentConsultant },
