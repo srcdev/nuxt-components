@@ -7,7 +7,7 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <TreatmentConsultant />
+          <TreatmentConsultant :auto-advance="true" />
         </LayoutRow>
       </template>
     </NuxtLayout>

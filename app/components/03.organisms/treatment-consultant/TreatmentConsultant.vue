@@ -5,7 +5,6 @@
         <!-- Header -->
         <div v-motion :initial="{ opacity: 0, y: 20 }" :enter="{ opacity: 1, y: 0 }" class="colour-finder__header">
           <EyebrowText text-content="Interactive Tool" font-size="large" />
-          <p class="colour-finder__label">Interactive Tool</p>
           <h1 class="colour-finder__title">
             Find Your
             <span class="colour-finder__title-highlight">Perfect Look</span>
@@ -69,7 +68,7 @@
                 v-for="ht in hairTypes"
                 :key="ht.id"
                 :class="['colour-finder__option', { 'colour-finder__option--selected': hairType === ht.id }]"
-                @click="hairType = ht.id"
+                @click="selectHairType(ht.id)"
               >
                 <div class="colour-finder__option-pattern">{{ ht.pattern }}</div>
                 <span class="colour-finder__option-label">{{ ht.label }}</span>
@@ -88,7 +87,7 @@
                   'colour-finder__option colour-finder__option--colour',
                   { 'colour-finder__option--selected': naturalColour === nc.id },
                 ]"
-                @click="naturalColour = nc.id"
+                @click="selectNaturalColour(nc.id)"
               >
                 <div class="colour-finder__option-swatch" :style="{ backgroundColor: nc.colour }">
                   <NuxtImg
@@ -123,7 +122,7 @@
                   dc.id === 'none' ? 'colour-finder__option--no-change' : 'colour-finder__option--colour',
                   { 'colour-finder__option--selected': desiredColour === dc.id },
                 ]"
-                @click="desiredColour = dc.id"
+                @click="selectDesiredColour(dc.id)"
               >
                 <template v-if="dc.id === 'none'">
                   <div class="colour-finder__option-none-icon">
@@ -342,12 +341,13 @@
         </Transition>
 
         <!-- Navigation Buttons -->
-        <div v-if="step < 4" class="colour-finder__navigation">
+        <div v-if="step < 4 && (step > 0 || !autoAdvance)" class="colour-finder__navigation">
           <button v-if="step > 0" class="colour-finder__nav-button colour-finder__nav-button--back" @click="back">
             <Icon name="lucide:arrow-left" class="colour-finder__nav-icon" />
             Back
           </button>
           <button
+            v-if="!autoAdvance"
             :disabled="!canProceed"
             :class="[
               'colour-finder__nav-button colour-finder__nav-button--next',
@@ -366,6 +366,14 @@
 
 <script setup lang="ts">
 import { ref, computed } from "vue";
+
+// ─── Props ────────────────────────────────────────────────────────────────────
+const props = defineProps({
+  autoAdvance: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 type HairType = "straight" | "wavy" | "curly" | "coily";
@@ -444,7 +452,7 @@ const naturalColours: { id: NaturalColour; label: string; colour: string; image:
 
 // 'none' first as requested
 const desiredColours: { id: DesiredColour; label: string; colour?: string; image?: string; textDark?: boolean }[] = [
-  { id: "none", label: "No Colour Treatment" },
+  { id: "none", label: "I don't want a colour change" },
   {
     id: "blonde",
     label: "Blonde",
@@ -479,9 +487,9 @@ const desiredColours: { id: DesiredColour; label: string; colour?: string; image
 const treatments: Treatment[] = [
   {
     id: "none",
-    label: "No Treatment",
+    label: "I don't want any treatments",
     icon: "lucide:minus-circle",
-    description: "Skip to results",
+    description: "Go straight to your results",
     notes: [],
   },
   {
@@ -1151,6 +1159,7 @@ const selectedTreatments = ref<TreatmentId[]>([]);
 function toggleTreatment(id: TreatmentId) {
   if (id === "none") {
     selectedTreatments.value = selectedTreatments.value.includes("none") ? [] : ["none"];
+    if (props.autoAdvance) next();
     return;
   }
   const idx = selectedTreatments.value.indexOf(id);
@@ -1159,6 +1168,7 @@ function toggleTreatment(id: TreatmentId) {
   } else {
     selectedTreatments.value = selectedTreatments.value.filter((t) => t !== "none");
     selectedTreatments.value.push(id);
+    if (props.autoAdvance) next();
   }
 }
 
@@ -1200,6 +1210,21 @@ function reset() {
   naturalColour.value = null;
   desiredColour.value = null;
   selectedTreatments.value = [];
+}
+
+function selectHairType(id: HairType) {
+  hairType.value = id;
+  if (props.autoAdvance) next();
+}
+
+function selectNaturalColour(id: NaturalColour) {
+  naturalColour.value = id;
+  if (props.autoAdvance) next();
+}
+
+function selectDesiredColour(id: DesiredColour) {
+  desiredColour.value = id;
+  if (props.autoAdvance) next();
 }
 
 // ─── Summary Items ────────────────────────────────────────────────────────────
@@ -1361,7 +1386,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     color: var(--_muted-foreground);
     transition: all var(--_transition-duration) ease;
     cursor: pointer;
-
   }
 
   .colour-finder__progress-button--active {
@@ -1385,7 +1409,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     justify-content: center;
     font-weight: 500;
     border-radius: 50%;
-
   }
 
   .colour-finder__progress-indicator--completed {
@@ -1547,7 +1570,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     text-transform: uppercase;
     color: var(--_muted-foreground);
     transition: color var(--_transition-duration) ease;
-
   }
 
   .colour-finder__option-sublabel {
@@ -1796,7 +1818,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 500;
-
 }
 
 .colour-finder__compat-badge--ok {
@@ -1850,7 +1871,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         inline-size: 100%;
         block-size: 100%;
         object-fit: cover;
-
       }
     }
 
@@ -1907,7 +1927,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   border-radius: var(--_border-radius);
   cursor: pointer;
   border: 1px solid transparent;
-
 }
 
 .colour-finder__button--primary {
@@ -1953,7 +1972,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       inline-size: 1rem;
       block-size: 1rem;
     }
-
   }
 }
 
