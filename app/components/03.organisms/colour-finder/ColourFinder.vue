@@ -106,6 +106,8 @@
                     v-if="nc.image"
                     :src="nc.image"
                     alt=""
+                    width="128"
+                    height="128"
                     class="colour-finder__option-image"
                     :class="{ 'colour-finder__option-image--dark': nc.textDark }"
                   />
@@ -144,6 +146,8 @@
                     v-if="dc.image"
                     :src="dc.image"
                     alt=""
+                    width="128"
+                    height="128"
                     class="colour-finder__option-image"
                     :class="{ 'colour-finder__option-image--dark': dc.textDark }"
                   />
@@ -247,6 +251,8 @@
                     v-if="item.image"
                     :src="item.image"
                     alt=""
+                    width="96"
+                    height="96"
                     class="colour-finder__summary-image"
                     :class="{ 'colour-finder__summary-image--dark': item.textDark }"
                   />
