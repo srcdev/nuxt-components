@@ -49,9 +49,10 @@
           :text-content="[{ text: 'The Process ', styleClass: 'normal' }]"
           :style-class-passthrough="['mb-20']"
         />
-        <IndicatorList tag="ol" :item-count="serviceData.process.length">
-          <template v-for="(item, index) in serviceData.process" #[`item-${index}`]>
-            {{ item }}
+        <IndicatorList tag="ol" indicator-alignment="center" :item-count="serviceData.process.length">
+          <template v-for="(item, index) in serviceData.process" :key="index" #[`item-${index}`]>
+            <p class="page-body-normal">{{ item }}</p>
+            <p class="page-body-normal">{{ item }}</p>
           </template>
         </IndicatorList>
 
@@ -67,8 +68,9 @@
           <template v-for="(_, index) in serviceData.idealFor" :key="index" #[`indicator-${index}`]>
             <Icon name="mdi:checkbox-marked-circle-outline" class="indicator-icon" />
           </template>
-          <template v-for="(item, index) in serviceData.idealFor" #[`item-${index}`]>
-            {{ item }}
+          <template v-for="(item, index) in serviceData.idealFor" :key="index" #[`item-${index}`]>
+            <p class="page-body-normal">{{ item }}</p>
+            <p class="page-body-normal">{{ item }}</p>
           </template>
         </IndicatorList>
 
