@@ -4,6 +4,9 @@ import type { StorybookConfig } from "@nuxtjs/storybook";
 process.env.STORYBOOK = "true";
 
 const config: StorybookConfig = {
+  features: {
+    saveFromControls: false,
+  },
   stories: ["../**/*.mdx", "../**/*.stories.ts"],
   staticDirs: ["../public"],
   addons: ["@chromatic-com/storybook", "@storybook/addon-docs", "@storybook/addon-a11y"],

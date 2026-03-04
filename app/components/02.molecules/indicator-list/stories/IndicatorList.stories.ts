@@ -156,6 +156,7 @@ export const MixedIndicators: Story = {
   args: {
     tag: "ul",
     itemCount: 5,
+    showConnectors: true
   },
   render: (args) => ({
     components: { IndicatorList },
