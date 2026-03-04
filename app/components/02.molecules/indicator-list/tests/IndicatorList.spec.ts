@@ -156,7 +156,7 @@ describe("IndicatorList", () => {
     expect(items[2]?.classes()).not.toContain("has-indicator");
   });
 
-  it("renders the indicator wrapper div when indicator slot is provided", async () => {
+  it("renders the custom indicator wrapper when indicator slot is provided", async () => {
     const wrapper = await mountSuspended(IndicatorList, {
       props: { itemCount: 2 },
       slots: {
@@ -164,24 +164,26 @@ describe("IndicatorList", () => {
       },
     });
     const firstItem = wrapper.findAll("li")[0];
-    expect(firstItem?.find(".indicator-list__indicator").exists()).toBe(true);
+    expect(firstItem?.find(".indicator-list__indicator-custom").exists()).toBe(true);
   });
 
-  it("does not render the indicator wrapper div when no indicator slot is provided", async () => {
+  it("renders the counter wrapper when no indicator slot is provided", async () => {
     const wrapper = await mountSuspended(IndicatorList, {
       props: { itemCount: 2 },
     });
-    expect(wrapper.find(".indicator-list__indicator").exists()).toBe(false);
+    const items = wrapper.findAll("li");
+    expect(items[0]?.find(".indicator-list__indicator-counter").exists()).toBe(true);
+    expect(items[0]?.find(".indicator-list__indicator-custom").exists()).toBe(false);
   });
 
-  it("renders indicator slot content inside the indicator wrapper", async () => {
+  it("renders indicator slot content inside the custom indicator wrapper", async () => {
     const wrapper = await mountSuspended(IndicatorList, {
       props: { itemCount: 1 },
       slots: {
         "indicator-0": '<span class="indicator-icon">✓</span>',
       },
     });
-    const indicator = wrapper.find(".indicator-list__indicator");
+    const indicator = wrapper.find(".indicator-list__indicator-custom");
     expect(indicator.find(".indicator-icon").exists()).toBe(true);
   });
 
@@ -198,6 +200,45 @@ describe("IndicatorList", () => {
     expect(items[1]?.classes()).not.toContain("has-indicator");
     expect(items[2]?.classes()).not.toContain("has-indicator");
     expect(items[3]?.classes()).toContain("has-indicator");
+  });
+
+  // ─── indicatorAlignment ───────────────────────────────────────────────────
+
+  it("applies indicator-top class by default", async () => {
+    const wrapper = await mountSuspended(IndicatorList, {
+      props: { itemCount: 1 },
+    });
+    expect(wrapper.find("li")?.classes()).toContain("indicator-top");
+  });
+
+  it("applies indicator-center class when indicatorAlignment is center", async () => {
+    const wrapper = await mountSuspended(IndicatorList, {
+      props: { itemCount: 1, indicatorAlignment: "center" },
+    });
+    expect(wrapper.find("li")?.classes()).toContain("indicator-center");
+  });
+
+  // ─── indicatorVariant ─────────────────────────────────────────────────────
+
+  it("applies indicator-disc class by default", async () => {
+    const wrapper = await mountSuspended(IndicatorList, {
+      props: { itemCount: 1 },
+    });
+    expect(wrapper.find("li")?.classes()).toContain("indicator-disc");
+  });
+
+  it("applies indicator-circle class when indicatorVariant is circle", async () => {
+    const wrapper = await mountSuspended(IndicatorList, {
+      props: { itemCount: 1, indicatorVariant: "circle" },
+    });
+    expect(wrapper.find("li")?.classes()).toContain("indicator-circle");
+  });
+
+  it("applies indicator-square class when indicatorVariant is square", async () => {
+    const wrapper = await mountSuspended(IndicatorList, {
+      props: { itemCount: 1, indicatorVariant: "square" },
+    });
+    expect(wrapper.find("li")?.classes()).toContain("indicator-square");
   });
 
   // ─── Combined props ───────────────────────────────────────────────────────
