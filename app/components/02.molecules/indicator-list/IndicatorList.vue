@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="indicator-list" :class="[elementClasses]">
+  <component :is="tag" class="indicator-list" :class="[elementClasses, { 'has-connectors': props.showConnectors }]">
     <li
       v-for="index in itemCount"
       :key="index"
@@ -28,6 +28,7 @@ interface Props {
   tag?: "ul" | "ol";
   indicatorAlignment?: "top" | "center";
   indicatorVariant?: "disc" | "square" | "circle";
+  showConnectors?: boolean;
   itemCount: number;
   styleClassPassthrough?: string | string[];
 }
@@ -36,6 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
   tag: "ul",
   indicatorAlignment: "top",
   indicatorVariant: "disc",
+  showConnectors: true,
   styleClassPassthrough: () => [],
 });
 
@@ -55,6 +57,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     counter-increment: indicator-list;
     padding-inline-start: 0rem;
     padding-block: 1.2rem;
+    position: relative;
 
     &.indicator-top {
       align-items: start;
@@ -101,21 +104,54 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       display: none;
     }
 
-    .indicator-list__indicator-custom {
-      /* position: absolute; */
-      /* left: 0; */
-      /* top: 1.2rem; */
+    .indicator-list__indicator-custom,
+    .indicator-list__indicator-counter {
+      anchor-name: --indicator-bubble;
+    }
 
+    &:first-child {
+      .indicator-list__indicator-custom,
+      .indicator-list__indicator-counter {
+        anchor-name: --indicator-bubble, --first-indicator;
+      }
+    }
+
+    &:last-child {
+      .indicator-list__indicator-custom,
+      .indicator-list__indicator-counter {
+        anchor-name: --indicator-bubble, --last-indicator;
+      }
+    }
+
+    &:only-child {
+      .indicator-list__indicator-custom,
+      .indicator-list__indicator-counter {
+        anchor-name: --indicator-bubble, --first-indicator, --last-indicator;
+      }
+    }
+
+    .indicator-list__indicator-custom {
       display: inline-flex;
       align-items: center;
       justify-content: center;
 
       .indicator-icon {
         color: var(--indicator-list-icon);
-        width: 2.2rem;
-        height: 2.2rem;
+        width: 3rem;
+        height: 3rem;
       }
     }
   }
+}
+
+.indicator-list.has-connectors li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 1.5rem;
+  transform: translateX(-50%);
+  top: calc(1.2rem + 3rem);
+  bottom: calc(-1 * var(--indicator-list-item-gap, 2.4rem));
+  width: var(--indicator-list-connector-width, 2px);
+  background-color: var(--indicator-list-connector-color, currentColor);
 }
 </style>
