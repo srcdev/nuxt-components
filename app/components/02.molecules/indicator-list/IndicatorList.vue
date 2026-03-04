@@ -46,6 +46,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 <style lang="css">
 .indicator-list {
+  --_list-padding-block: 1.2rem;
+  --_counter-size: 3rem;
+  --_indicator-list-connector-width: 0.2rem;
+
   list-style: none;
   counter-reset: indicator-list;
   padding: 0;
@@ -56,7 +60,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     gap: 2.2rem;
     counter-increment: indicator-list;
     padding-inline-start: 0rem;
-    padding-block: 1.2rem;
+    padding-block: var(--_list-padding-block);
     position: relative;
 
     &.indicator-top {
@@ -70,11 +74,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     .indicator-list__indicator-counter::before {
       content: counter(indicator-list);
 
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 3rem;
-      height: 3rem;
+      display: grid;
+      place-content: center;
+      width: var(--_counter-size);
+      height: var(--_counter-size);
       font-size: 1.4rem;
       font-weight: 600;
     }
@@ -109,27 +112,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       anchor-name: --indicator-bubble;
     }
 
-    &:first-child {
-      .indicator-list__indicator-custom,
-      .indicator-list__indicator-counter {
-        anchor-name: --indicator-bubble, --first-indicator;
-      }
-    }
-
-    &:last-child {
-      .indicator-list__indicator-custom,
-      .indicator-list__indicator-counter {
-        anchor-name: --indicator-bubble, --last-indicator;
-      }
-    }
-
-    &:only-child {
-      .indicator-list__indicator-custom,
-      .indicator-list__indicator-counter {
-        anchor-name: --indicator-bubble, --first-indicator, --last-indicator;
-      }
-    }
-
     .indicator-list__indicator-custom {
       display: inline-flex;
       align-items: center;
@@ -137,21 +119,38 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
       .indicator-icon {
         color: var(--indicator-list-icon);
-        width: 3rem;
-        height: 3rem;
+        width: var(--_counter-size);
+        height: var(--_counter-size);
       }
     }
   }
 }
 
+/* Fallback: per-li connectors for browsers without anchor positioning */
+/* @supports not (anchor-name: --x) { */
 .indicator-list.has-connectors li:not(:last-child)::after {
   content: "";
   position: absolute;
-  left: 1.5rem;
+  left: calc(var(--_counter-size) / 2);
   transform: translateX(-50%);
   top: calc(1.2rem + 3rem);
-  bottom: calc(-1 * var(--indicator-list-item-gap, 2.4rem));
-  width: var(--indicator-list-connector-width, 2px);
+  bottom: calc(-1 * var(--_list-padding-block));
+  width: var(--_indicator-list-connector-width);
   background-color: var(--indicator-list-connector-color, currentColor);
 }
+/* } */
+
+/* Enhanced: anchor-based connector positioning */
+/* @supports (anchor-name: --x) {
+  .indicator-list.has-connectors li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: anchor(--indicator-bubble, center);
+    transform: translateX(-50%);
+    top: anchor(--indicator-bubble, bottom);
+    bottom: calc(-1 * var(--indicator-list-item-gap, 2.4rem));
+    width: var(--indicator-list-connector-width, 2px);
+    background-color: var(--indicator-list-connector-color, currentColor);
+  }
+} */
 </style>

@@ -49,7 +49,13 @@
           :text-content="[{ text: 'The Process ', styleClass: 'normal' }]"
           :style-class-passthrough="['mb-20']"
         />
-        <IndicatorList tag="ol" indicator-alignment="center" :item-count="serviceData.process.length">
+        <IndicatorList
+          tag="ol"
+          indicator-alignment="top"
+          indicator-variant="circle"
+          :show-connectors="true"
+          :item-count="serviceData.process.length"
+        >
           <template v-for="(item, index) in serviceData.process" :key="index" #[`item-${index}`]>
             <p class="page-body-normal">{{ item }}</p>
             <p class="page-body-normal">{{ item }}</p>

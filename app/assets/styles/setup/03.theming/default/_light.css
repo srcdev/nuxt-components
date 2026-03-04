@@ -45,6 +45,8 @@
   --indicator-list-counter-square-text: var(--blue-09);
   --indicator-list-counter-square-border: var(--blue-09);
 
+  --indicator-list-connector-color: var(--blue-01);
+
   --indicator-list-icon: var(--blue-09);
 
   /* ===========================================
