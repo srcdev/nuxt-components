@@ -202,6 +202,29 @@ describe("IndicatorList", () => {
     expect(items[3]?.classes()).toContain("has-indicator");
   });
 
+  // ─── showConnectors ──────────────────────────────────────────────────────
+
+  it("has has-connectors class by default", async () => {
+    const wrapper = await mountSuspended(IndicatorList, {
+      props: { itemCount: 1 },
+    });
+    expect(wrapper.classes()).toContain("has-connectors");
+  });
+
+  it("has has-connectors class when showConnectors is true", async () => {
+    const wrapper = await mountSuspended(IndicatorList, {
+      props: { itemCount: 1, showConnectors: true },
+    });
+    expect(wrapper.classes()).toContain("has-connectors");
+  });
+
+  it("does not have has-connectors class when showConnectors is false", async () => {
+    const wrapper = await mountSuspended(IndicatorList, {
+      props: { itemCount: 1, showConnectors: false },
+    });
+    expect(wrapper.classes()).not.toContain("has-connectors");
+  });
+
   // ─── indicatorAlignment ───────────────────────────────────────────────────
 
   it("applies indicator-top class by default", async () => {
