@@ -14,6 +14,16 @@ const meta: Meta<typeof IndicatorList> = {
       control: { type: "number", min: 0, step: 1 },
       description: "Number of list items to render",
     },
+    indicatorAlignment: {
+      control: { type: "select" },
+      options: ["top", "center"],
+      description: "Vertical alignment of the indicator relative to the list item content",
+    },
+    indicatorVariant: {
+      control: { type: "select" },
+      options: ["disc", "circle", "square"],
+      description: "Visual style of the counter indicator",
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes applied to the root element",
@@ -22,6 +32,8 @@ const meta: Meta<typeof IndicatorList> = {
   args: {
     tag: "ul",
     itemCount: 3,
+    indicatorAlignment: "top",
+    indicatorVariant: "disc",
     styleClassPassthrough: [],
   },
 };
@@ -145,6 +157,98 @@ export const MixedIndicators: Story = {
         <template #item-2><span>Completed — icon indicator</span></template>
 
         <template #item-3><span>Pending — CSS counter fallback</span></template>
+      </IndicatorList>
+    `,
+  }),
+};
+
+/** Indicator alignment — center alignment works well for single-line items. */
+export const AlignmentCenter: Story = {
+  name: "Alignment — Center",
+  args: {
+    tag: "ul",
+    itemCount: 3,
+    indicatorAlignment: "center",
+  },
+  render: (args) => ({
+    components: { IndicatorList },
+    setup() {
+      return { args };
+    },
+    template: `
+      <IndicatorList v-bind="args">
+        <template #item-0><span>First list item</span></template>
+        <template #item-1><span>Second list item</span></template>
+        <template #item-2><span>Third list item</span></template>
+      </IndicatorList>
+    `,
+  }),
+};
+
+/** Disc variant — filled circle with solid background (default). */
+export const VariantDisc: Story = {
+  name: "Variant — Disc",
+  args: {
+    tag: "ul",
+    itemCount: 3,
+    indicatorVariant: "disc",
+  },
+  render: (args) => ({
+    components: { IndicatorList },
+    setup() {
+      return { args };
+    },
+    template: `
+      <IndicatorList v-bind="args">
+        <template #item-0><span>First list item</span></template>
+        <template #item-1><span>Second list item</span></template>
+        <template #item-2><span>Third list item</span></template>
+      </IndicatorList>
+    `,
+  }),
+};
+
+/** Circle variant — transparent background with a circular border. */
+export const VariantCircle: Story = {
+  name: "Variant — Circle",
+  args: {
+    tag: "ul",
+    itemCount: 3,
+    indicatorVariant: "circle",
+  },
+  render: (args) => ({
+    components: { IndicatorList },
+    setup() {
+      return { args };
+    },
+    template: `
+      <IndicatorList v-bind="args">
+        <template #item-0><span>First list item</span></template>
+        <template #item-1><span>Second list item</span></template>
+        <template #item-2><span>Third list item</span></template>
+      </IndicatorList>
+    `,
+  }),
+};
+
+/** Square variant — number with a square border and rounded corners. */
+export const VariantSquare: Story = {
+  name: "Variant — Square",
+  args: {
+    tag: "ul",
+    itemCount: 3,
+    indicatorVariant: "square",
+  },
+  render: (args) => ({
+    components: { IndicatorList },
+    setup() {
+      return { args };
+    },
+    template: `
+      <IndicatorList v-bind="args">
+        <template #item-0><span>First list item</span></template>
+        <template #item-1><span>Second list item</span></template>
+        <template #item-2><span>Third list item</span></template>
       </IndicatorList>
     `,
   }),
