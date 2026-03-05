@@ -70,7 +70,7 @@
           :style-class-passthrough="['mb-20']"
         />
 
-        <StepperList :item-count="serviceData.idealFor.length">
+        <StepperList :connected="false" :item-count="serviceData.idealFor.length">
           <template v-for="(_, index) in serviceData.idealFor" :key="index" #[`indicator-${index}`]>
             <Icon name="mdi:checkbox-marked-circle-outline" class="indicator-icon" />
           </template>
