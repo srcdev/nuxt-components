@@ -38,6 +38,7 @@
             :true-value="item.value"
             :options-layout
             :theme
+            :input-variant
             :direction
             :aria-describedby
             :is-pill="isPill"
@@ -63,6 +64,7 @@
             :true-value="item.value"
             :options-layout
             :theme
+            :input-variant
             :aria-describedby
           >
             <template #checkedIcon>
@@ -71,13 +73,13 @@
           </InputCheckboxRadioWithLabel>
         </template>
       </div>
-      <InputError :id="errorId" :error-message="errorMessage" :show-error="fieldHasError" :is-detached="true" />
+      <InputError :id="errorId" :error-message="errorMessage" :show-error="fieldHasError" :is-detached="true" :input-variant />
     </template>
   </FormFieldset>
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, OptionsLayout, IFormMultipleOptions } from "~/types/forms/types.forms";
+import type { FormUiTheme, OptionsLayout, IFormMultipleOptions, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   dataTestid?: string;
@@ -95,6 +97,7 @@ interface Props {
   equalCols?: boolean;
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
+  inputVariant?: InputUiVariant;
   direction?: "row" | "row-reverse";
   displayAsLozenge?: boolean;
 }
@@ -111,6 +114,7 @@ const props = withDefaults(defineProps<Props>(), {
   equalCols: true,
   styleClassPassthrough: () => [],
   theme: "default",
+  inputVariant: "normal",
   direction: "row",
   displayAsLozenge: false,
 });

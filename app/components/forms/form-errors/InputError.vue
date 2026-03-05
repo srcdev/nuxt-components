@@ -94,6 +94,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     border-left: var(--form-element-border-width) solid var(--theme-error-surface);
 
     border-radius: var(--form-input-border-radius);
+
+    &.underlined {
+      border-radius: 0;
+    }
   }
 
   &.show {
@@ -138,6 +142,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
         font-family: var(--font-family);
         font-size: 1.6rem;
         font-weight: 500;
+        padding-block: 1rem 1rem;
         padding-inline: 1.2rem;
 
         .message-single {

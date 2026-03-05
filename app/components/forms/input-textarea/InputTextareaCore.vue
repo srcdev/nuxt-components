@@ -92,20 +92,20 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   z-index: 2;
   position: relative;
 
-  &:has(textarea:focus-visible) {
-    outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
-    outline-offset: var(--form-element-outline-offset-focus);
-  }
-
-  &:has(textarea:is(:hover)) {
-    outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
-    outline-offset: var(--form-element-outline-offset-focus);
-  }
-
   &.normal {
     border: var(--form-element-border-width) solid var(--theme-input-border);
     border-radius: var(--form-input-border-radius);
     outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+
+    &:has(textarea:focus-visible) {
+      outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+      outline-offset: var(--form-element-outline-offset-focus);
+    }
+
+    &:has(textarea:is(:hover)) {
+      outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+      outline-offset: var(--form-element-outline-offset-focus);
+    }
   }
 
   &.underlined {

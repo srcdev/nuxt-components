@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme } from "~/types/forms/types.forms";
+import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   type: "checkbox" | "radio";
@@ -47,6 +47,7 @@ interface Props {
   displayAsDisc?: boolean;
   multipleOptions?: boolean;
   isButton?: boolean;
+  inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -60,6 +61,7 @@ const props = withDefaults(defineProps<Props>(), {
   displayAsDisc: false,
   multipleOptions: false,
   isButton: false,
+  inputVariant: "normal",
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || []);
@@ -88,6 +90,7 @@ const isChecked = computed(() => {
 // Consolidated class computations
 const wrapperClasses = computed(() => [
   props.type,
+  props.inputVariant,
   elementClasses.value,
   {
     button: props.isButton,
@@ -119,6 +122,9 @@ const inputClasses = computed(() => [
 
   &.checkbox {
     border-radius: var(--form-input-border-radius);
+    &.underlined {
+      border-radius: 0;
+    }
     &.button {
       &.display-as-disc {
         border-radius: 100vw;

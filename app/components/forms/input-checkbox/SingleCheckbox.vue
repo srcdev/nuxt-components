@@ -36,6 +36,7 @@
           :true-value
           :false-value
           :theme
+          :input-variant
           :aria-describedby
         >
           <template #checkedIcon>
@@ -51,6 +52,7 @@
         :error-message
         :show-error="fieldHasError"
         :is-detached="true"
+        :input-variant
         :style-class-passthrough="elementClasses"
       />
     </template>
@@ -58,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme, OptionsLayout } from "~/types/forms/types.forms";
+import type { FormUiTheme, OptionsLayout, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   dataTestid?: string;
@@ -75,6 +77,7 @@ interface Props {
   equalCols?: boolean;
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
+  inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -89,6 +92,7 @@ const props = withDefaults(defineProps<Props>(), {
   equalCols: true,
   styleClassPassthrough: () => [],
   theme: "default",
+  inputVariant: "normal",
 });
 
 const slots = useSlots();

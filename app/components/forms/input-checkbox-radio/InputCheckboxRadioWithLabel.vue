@@ -14,6 +14,7 @@
       :false-value="falseValue"
       :field-has-error="fieldHasError"
       :theme
+      :input-variant
       :aria-describedby="ariaDescribedby"
       :display-as-disc="displayAsDisc"
     >
@@ -30,6 +31,8 @@
 </template>
 
 <script setup lang="ts">
+import type { InputUiVariant } from "~/types/forms/types.forms";
+
 interface Props {
   type: "checkbox" | "radio";
   name: string;
@@ -44,6 +47,7 @@ interface Props {
   multipleOptions?: boolean;
   label: string;
   optionsLayout?: string;
+  inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -57,6 +61,7 @@ const props = withDefaults(defineProps<Props>(), {
   displayAsDisc: false,
   multipleOptions: false,
   optionsLayout: "equal-widths",
+  inputVariant: "normal",
 });
 
 const slots = useSlots();

@@ -26,6 +26,7 @@
                         :error-message="formErrors?.fullName?._errors[0] ?? ''"
                         :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.fullName)"
                         :required="true"
+                        input-variant="underlined"
                       >
                         <template #left>
                           <Icon name="radix-icons:person" class="icon" />
@@ -48,6 +49,7 @@
                         :error-message="formErrors?.telNumber?._errors[0] ?? ''"
                         :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.telNumber)"
                         :required="true"
+                        input-variant="underlined"
                       >
                         <template #left>
                           <Icon name="lucide-phone" class="icon" />
@@ -70,6 +72,7 @@
                         :error-message="formErrors?.emailAddress?._errors[0] ?? ''"
                         :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.emailAddress)"
                         :required="true"
+                        input-variant="normal"
                       >
                         <template #left>
                           <Icon name="radix-icons:envelope-closed" class="icon" />
@@ -91,6 +94,7 @@
                         options-layout="inline"
                         :is-button="true"
                         :is-pill="false"
+                        input-variant="underlined"
                       >
                         <template #descriptionText>Choose one or more services you're interested in.</template>
                       </MultipleCheckboxes>
@@ -107,6 +111,7 @@
                         label="Comments"
                         :error-message="formErrors?.comments?._errors[0] ?? ''"
                         :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.comments)"
+                        input-variant="underlined"
                       >
                         <template #descriptionText>Optional — any extra information that might help us.</template>
                       </InputTextareaWithLabel>

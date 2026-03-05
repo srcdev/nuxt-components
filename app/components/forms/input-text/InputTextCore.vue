@@ -136,22 +136,22 @@ onMounted(() => {
   z-index: 2;
   position: relative;
 
-  &:has(input:is(:hover)) {
-    outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
-    outline-offset: var(--form-element-outline-offset-focus);
-  }
-
-  &:has(input:focus-visible) {
-    outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
-    outline-offset: var(--form-element-outline-offset-focus);
-  }
-
   &.normal {
     border: var(--form-element-border-width) solid var(--theme-input-border);
     border-radius: var(--form-input-border-radius);
     outline: var(--form-element-outline-width) solid var(--theme-input-outline);
 
     padding-inline: var(--input-padding-inline);
+
+    &:has(input:is(:hover)) {
+      outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+      outline-offset: var(--form-element-outline-offset-focus);
+    }
+
+    &:has(input:focus-visible) {
+      outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+      outline-offset: var(--form-element-outline-offset-focus);
+    }
   }
 
   &.underlined {
