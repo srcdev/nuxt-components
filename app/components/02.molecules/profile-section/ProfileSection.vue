@@ -70,10 +70,8 @@ watch(
 
 <style lang="css">
 .profile-section {
-  /* Component styles */
-
-  .profile-section-header {
-  }
+  /* .profile-section-header {
+  } */
   .profile-section-inner {
     @media (min-width: 768px) {
       display: grid;
@@ -93,8 +91,6 @@ watch(
     }
 
     .profile-info {
-      /* styles for profile info */
-
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
@@ -104,8 +100,8 @@ watch(
         .profile-info-block {
           margin-block-end: 1.5rem;
 
-          .experience {
-          }
+          /* .experience {
+          } */
 
           .location {
             .highlight {
