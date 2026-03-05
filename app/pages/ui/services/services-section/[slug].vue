@@ -5,10 +5,10 @@
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <EyebrowText font-size="large" text-content="Services" />
 
-          <HeroHeading
+          <HeroText
             tag="h1"
             axis="vertical"
-            font-size="large"
+            font-size="display"
             :text-content="[
               { text: 'Expert colour & ', styleClass: 'normal' },
               { text: 'styling', styleClass: 'accent' },

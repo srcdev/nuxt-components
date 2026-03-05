@@ -7,11 +7,11 @@
   >
     <header class="profile-section-header">
       <EyebrowText tag="p" text-content="About Natasha" :style-class-passthrough="['mb-0']" />
-      <HeroHeading
+      <HeroText
         :id="headingId"
         tag="h2"
         axis="vertical"
-        font-size="large"
+        font-size="display"
         :text-content="[
           { text: 'Your', styleClass: 'normal' },
           { text: 'mobile hairdresser', styleClass: 'accent' },
@@ -20,6 +20,7 @@
         :style-class-passthrough="['mb-20']"
       />
     </header>
+
     <div class="profile-section-inner">
       <div class="picture">
         <NuxtImg :src="props.profilePicture.src" :alt="props.profilePicture.alt" class="profile-picture" />

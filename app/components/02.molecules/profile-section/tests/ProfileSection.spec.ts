@@ -86,7 +86,7 @@ describe("ProfileSection", () => {
     const root = wrapper.find(".profile-section");
     const labelledBy = root.attributes("aria-labelledby");
     expect(labelledBy).toBeTruthy();
-    const heading = wrapper.find(".hero-heading");
+    const heading = wrapper.find(".hero-text");
     expect(heading.attributes("id")).toBe(labelledBy);
   });
 
@@ -97,7 +97,7 @@ describe("ProfileSection", () => {
     const root = wrapper.find(".profile-section");
     const labelledBy = root.attributes("aria-labelledby");
     expect(labelledBy).toBeTruthy();
-    const heading = wrapper.find(".hero-heading");
+    const heading = wrapper.find(".hero-text");
     expect(heading.attributes("id")).toBe(labelledBy);
   });
 

@@ -4,9 +4,9 @@
       <NuxtImg :src="serviceData.image" :alt="serviceData.title" class="image" />
     </div>
     <EyebrowText :text-content="serviceData.subtitle" />
-    <HeroHeading
+    <HeroText
       tag="h2"
-      font-size="small"
+      font-size="heading"
       :text-content="[
         {
           text: serviceData.title,
@@ -84,7 +84,7 @@ watch(
     margin-block: 0.8rem;
   }
 
-  .hero-heading {
+  .hero-text {
     margin-block: 2rem 1rem;
   }
 

@@ -13,10 +13,10 @@
             </template>
             <template #item-0>
               <div>
-                <HeroHeading
+                <HeroText
                   tag="h2"
                   axis="horizontal"
-                  font-size="card-title"
+                  font-size="label"
                   :text-content="[{ text: 'Location', styleClass: 'normal' }]"
                   :style-class-passthrough="['mbe-20']"
                 />
@@ -32,10 +32,10 @@
             </template>
             <template #item-1>
               <div>
-                <HeroHeading
+                <HeroText
                   tag="h2"
                   axis="horizontal"
-                  font-size="card-title"
+                  font-size="label"
                   :text-content="[{ text: 'Contact', styleClass: 'normal' }]"
                   :style-class-passthrough="['mbe-20']"
                 />
@@ -50,10 +50,10 @@
             </template>
             <template #item-2>
               <div>
-                <HeroHeading
+                <HeroText
                   tag="h2"
                   axis="horizontal"
-                  font-size="card-title"
+                  font-size="label"
                   :text-content="[{ text: 'Hours', styleClass: 'normal' }]"
                   :style-class-passthrough="['mbe-20']"
                 />

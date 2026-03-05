@@ -11,9 +11,9 @@
       </div>
       <div>
         <EyebrowText font-size="large" :text-content="serviceData.subtitle" />
-        <HeroHeading
+        <HeroText
           tag="h1"
-          font-size="medium"
+          font-size="title"
           :text-content="[
             {
               text: serviceData.title,
@@ -36,10 +36,10 @@
 
         <p class="page-body-normal">{{ serviceData.longDescription }}</p>
 
-        <HeroHeading
+        <HeroText
           tag="h2"
           axis="horizontal"
-          font-size="smaller"
+          font-size="subheading"
           :text-content="serviceData.heroHeading"
           :style-class-passthrough="['mb-20']"
         />
@@ -47,10 +47,10 @@
           {{ serviceData.whatIsIt }}
         </p>
 
-        <HeroHeading
+        <HeroText
           tag="h2"
           axis="horizontal"
-          font-size="smaller"
+          font-size="subheading"
           :text-content="[{ text: 'The Process ', styleClass: 'normal' }]"
           :style-class-passthrough="['mb-20']"
         />
@@ -67,10 +67,10 @@
           </template>
         </StepperList>
 
-        <HeroHeading
+        <HeroText
           tag="h2"
           axis="horizontal"
-          font-size="smaller"
+          font-size="subheading"
           :text-content="[{ text: 'Ideal For', styleClass: 'normal' }]"
           :style-class-passthrough="['mb-20']"
         />
@@ -85,20 +85,20 @@
           </template>
         </StepperList>
 
-        <HeroHeading
+        <HeroText
           tag="h2"
           axis="horizontal"
-          font-size="smaller"
+          font-size="subheading"
           :text-content="[{ text: 'Aftercare &amp; Maintenance', styleClass: 'normal' }]"
           :style-class-passthrough="['mb-20']"
         />
 
         <p class="page-body-normal">{{ serviceData.maintenance }}</p>
 
-        <HeroHeading
+        <HeroText
           tag="h2"
           axis="horizontal"
-          font-size="smaller"
+          font-size="subheading"
           :text-content="[{ text: 'Frequently Asked Questions', styleClass: 'normal' }]"
           :style-class-passthrough="['mb-20']"
         />
@@ -121,10 +121,10 @@
         </AccordianCore>
 
         <GlassPanel :style-class-passthrough="['p-24']">
-          <HeroHeading
+          <HeroText
             tag="h2"
             axis="horizontal"
-            font-size="smaller"
+            font-size="subheading"
             :text-content="[{ text: 'Ready to book your highlights appointment?', styleClass: 'normal' }]"
             :style-class-passthrough="['mbs-0', 'mbe-20']"
           />

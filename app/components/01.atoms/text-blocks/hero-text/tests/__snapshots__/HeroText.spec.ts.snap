@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`HeroText > renders correct HTML structure 1`] = `"<h2 class="hero-text custom-class display axis-vertical"><span class="text-block-0 normal">Hello</span><span class="text-block-1 accent">World</span></h2>"`;
