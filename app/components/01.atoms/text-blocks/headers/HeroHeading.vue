@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="hero-heading" :class="[elementClasses, ...componentClasses]">
+  <component :is="tag" :id="id" class="hero-heading" :class="[elementClasses, ...componentClasses]">
     <span v-for="(item, index) in textContent" :key="index" :class="['text-block-' + index, item.styleClass]">
       {{ item.text }}
     </span>
@@ -11,12 +11,14 @@ import type { TextConfig } from "~/types/components/hero-heading";
 
 interface Props {
   tag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+  id?: string;
   axis?: "horizontal" | "vertical";
   fontSize?: "large" | "medium" | "small" | "smaller";
   textContent: TextConfig[];
   styleClassPassthrough?: string | string[];
 }
 const props = withDefaults(defineProps<Props>(), {
+  id: undefined,
   axis: "horizontal",
   fontSize: "medium",
   styleClassPassthrough: () => [],

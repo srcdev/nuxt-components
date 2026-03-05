@@ -1,8 +1,9 @@
 <template>
-  <component :is="tag" class="profile-section" :class="[elementClasses]">
+  <component :is="tag" class="profile-section" :class="[elementClasses]" :aria-labelledby="needsLabel ? headingId : undefined">
     <header class="profile-section-header">
       <EyebrowText tag="p" text-content="About Natasha" :style-class-passthrough="['mb-0']" />
       <HeroHeading
+        :id="headingId"
         tag="h2"
         axis="vertical"
         font-size="large"
@@ -54,6 +55,9 @@ const props = withDefaults(defineProps<Props>(), {
   profileInfoCount: 3,
   styleClassPassthrough: () => [],
 });
+
+const headingId = useId();
+const needsLabel = computed(() => props.tag === "section" || props.tag === "article");
 
 const slots = useSlots();
 const hasProfileLinksSlot = computed(() => Boolean(slots.profileLinks));

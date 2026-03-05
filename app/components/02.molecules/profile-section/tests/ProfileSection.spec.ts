@@ -79,6 +79,42 @@ describe("ProfileSection", () => {
     expect(wrapper.html()).toContain("Second info block");
   });
 
+  it("adds aria-labelledby referencing the heading id when tag is section", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: { ...defaultProps, tag: "section" },
+    });
+    const root = wrapper.find(".profile-section");
+    const labelledBy = root.attributes("aria-labelledby");
+    expect(labelledBy).toBeTruthy();
+    const heading = wrapper.find(".hero-heading");
+    expect(heading.attributes("id")).toBe(labelledBy);
+  });
+
+  it("adds aria-labelledby referencing the heading id when tag is article", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: { ...defaultProps, tag: "article" },
+    });
+    const root = wrapper.find(".profile-section");
+    const labelledBy = root.attributes("aria-labelledby");
+    expect(labelledBy).toBeTruthy();
+    const heading = wrapper.find(".hero-heading");
+    expect(heading.attributes("id")).toBe(labelledBy);
+  });
+
+  it("does not add aria-labelledby when tag is div", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: { ...defaultProps, tag: "div" },
+    });
+    expect(wrapper.find(".profile-section").attributes("aria-labelledby")).toBeUndefined();
+  });
+
+  it("does not add aria-labelledby when tag is main", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: { ...defaultProps, tag: "main" },
+    });
+    expect(wrapper.find(".profile-section").attributes("aria-labelledby")).toBeUndefined();
+  });
+
   it("does not render profile-links section when slot is not provided", async () => {
     const wrapper = await mountSuspended(ProfileSection, {
       props: defaultProps,
