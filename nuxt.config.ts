@@ -1,6 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
+
+  // Server-only secrets — Nuxt reads matching NUXT_* env vars automatically.
+  // e.g. NUXT_RESEND_API_KEY → runtimeConfig.resendApiKey
+  // These are never sent to the browser.
+  runtimeConfig: {
+    resendApiKey: "",       // NUXT_RESEND_API_KEY
+    contactEmailTo: "",     // NUXT_CONTACT_EMAIL_TO   — inbox that receives enquiries
+    contactEmailFrom: "",   // NUXT_CONTACT_EMAIL_FROM — must be a verified Resend domain
+  },
   css: ["./app/assets/styles/main.css"],
   modules: [
     "@nuxt/eslint",

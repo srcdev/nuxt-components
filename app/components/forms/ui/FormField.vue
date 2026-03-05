@@ -1,7 +1,8 @@
 <template>
   <div
     class="form-field"
-    :class="[width, styleClassPassthrough, { 'has-gutter': hasGutter }, { error: fieldHasError }]"
+    :class="[width, styleClassPassthrough, { 'has-gutter': hasGutter }]"
+    :data-invalid="fieldHasError ? true : undefined"
   >
     <div class="form-field-inner">
       <slot name="default"></slot>
@@ -45,10 +46,6 @@ defineProps({
 
   width: min(100% - calc(2 * var(--_gutter-width)), var(--_max-width));
   outline: 0rem solid var(--slate-05);
-
-  &.error {
-    background-color: var(--theme-error-surface);
-  }
 
   &:has(.underline) {
     --_background-color: var(--theme-form-input-bg-underlined);

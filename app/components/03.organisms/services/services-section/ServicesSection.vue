@@ -1,5 +1,10 @@
 <template>
-  <component :is="tag" class="services-section" :class="[elementClasses]">
+  <component
+    :is="tag"
+    class="services-section"
+    :class="[elementClasses]"
+    :aria-labelledby="needsLabel ? headingId : undefined"
+  >
     <div class="services-section__grid">
       <div class="image-wrapper">
         <NuxtImg :src="serviceData.image" :alt="serviceData.title" class="image" />
@@ -152,6 +157,9 @@ const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   styleClassPassthrough: () => [],
 });
+
+const headingId = useId();
+const needsLabel = computed(() => props.tag === "section" || props.tag === "article");
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
