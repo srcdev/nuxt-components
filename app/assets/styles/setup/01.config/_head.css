@@ -15,7 +15,7 @@ html {
   transition:
     background-color 0.4s ease,
     color 0.4s ease;
-  scrollbar-gutter: stable;
+  /* scrollbar-gutter: stable; */
 
   overflow-x: clip;
 }
