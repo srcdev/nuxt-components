@@ -1,0 +1,119 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ContactSection > renders correct HTML structure with default props 1`] = `
+"<div class="contact-section">
+  <div class="contact-section-inner">
+    <div class="contact-section-info">
+      <ul class="stepper-list">
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"></div>
+          <div>
+            <p class="page-body-normal">Default slot content for item 1</p>
+          </div>
+        </li>
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"></div>
+          <div>
+            <p class="page-body-normal">Default slot content for item 2</p>
+          </div>
+        </li>
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"></div>
+          <div>
+            <p class="page-body-normal">Default slot content for item 3</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="contact-section-form"></div>
+  </div>
+</div>"
+`;
+
+exports[`ContactSection > renders correct HTML structure with form slot 1`] = `
+"<div class="contact-section">
+  <div class="contact-section-inner">
+    <div class="contact-section-info">
+      <ul class="stepper-list">
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"></div>
+          <div>
+            <p class="page-body-normal">Default slot content for item 1</p>
+          </div>
+        </li>
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"></div>
+          <div>
+            <p class="page-body-normal">Default slot content for item 2</p>
+          </div>
+        </li>
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"></div>
+          <div>
+            <p class="page-body-normal">Default slot content for item 3</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="contact-section-form">
+      <form><input type="text"></form>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`ContactSection > renders correct HTML structure with styleClassPassthrough 1`] = `
+"<div class="contact-section custom-class another-class">
+  <div class="contact-section-inner">
+    <div class="contact-section-info">
+      <ul class="stepper-list">
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"></div>
+          <div>
+            <p class="page-body-normal">Default slot content for item 1</p>
+          </div>
+        </li>
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"></div>
+          <div>
+            <p class="page-body-normal">Default slot content for item 2</p>
+          </div>
+        </li>
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"></div>
+          <div>
+            <p class="page-body-normal">Default slot content for item 3</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="contact-section-form"></div>
+  </div>
+</div>"
+`;
+
+exports[`ContactSection > renders correctly with all props and slots combined 1`] = `
+"<section class="contact-section combined-class">
+  <div class="contact-section-inner">
+    <div class="contact-section-info">
+      <ul class="stepper-list">
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"><span class="icon">✓</span></div>
+          <div><span>Step one</span></div>
+        </li>
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"></div>
+          <div><span>Step two</span></div>
+        </li>
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"></div>
+          <div><span>Step three</span></div>
+        </li>
+      </ul>
+    </div>
+    <div class="contact-section-form">
+      <form class="contact-form"><button>Send</button></form>
+    </div>
+  </div>
+</section>"
+`;
