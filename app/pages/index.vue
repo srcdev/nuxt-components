@@ -16,8 +16,8 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-          <h1 class="page-heading-1">Colour Finder</h1>
-          <NuxtLink class="page-body-normal" to="/ui/services/colour-finder">Colour Finder</NuxtLink>
+          <h1 class="page-heading-1">Profile page</h1>
+          <NuxtLink class="page-body-normal" to="/ui/profile-section">Profile Section</NuxtLink>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">

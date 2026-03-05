@@ -2,7 +2,7 @@ import ProfileSection from "../ProfileSection.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
 const meta: Meta<typeof ProfileSection> = {
-  title: "Molecules/Profile/ProfileSection",
+  title: "Molecules/ProfileSection",
   component: ProfileSection,
   argTypes: {
     tag: {
@@ -26,7 +26,7 @@ const meta: Meta<typeof ProfileSection> = {
   args: {
     tag: "div",
     profilePicture: {
-      src: "/images/profile.jpg",
+      src: "/images/services/service-balayage.jpg",
       alt: "Natasha — mobile hairdresser in Bath",
     },
     profileInfoCount: 3,
