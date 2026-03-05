@@ -47,6 +47,66 @@ The `.vscode` directory contains Visual Studio Code configuration files to ensur
 
 The `.vscode` directory includes comprehensive code snippets for rapid component development:
 
+## Contact Form — Resend Setup
+
+The contact form at `/ui/contact-section` sends enquiries via [Resend](https://resend.com).
+No extra packages are required — the server route calls the Resend REST API directly.
+
+### 1. Create a Resend account
+
+Sign up at [resend.com](https://resend.com). The free tier allows 3,000 emails/month (100/day),
+which is more than sufficient for a contact form.
+
+### 2. Verify a sending domain
+
+In the Resend dashboard go to **Domains → Add Domain** and follow the DNS instructions for your
+domain. This is required before you can send from a custom `from` address in production.
+
+> **Local development shortcut:** you can skip domain verification and use Resend's shared sandbox
+> address `onboarding@resend.dev` as the `from` address. Emails will only be delivered to the
+> email address registered on your Resend account, so it is safe for testing.
+
+### 3. Create an API key
+
+In the Resend dashboard go to **API Keys → Create API Key**. Copy the key — it is only shown once.
+
+### 4. Configure environment variables
+
+Copy `.env.example` to `.env` and fill in the three values:
+
+```bash
+cp .env.example .env
+```
+
+```env
+NUXT_RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+NUXT_CONTACT_EMAIL_TO=you@yourdomain.com
+NUXT_CONTACT_EMAIL_FROM=Enquiries <hello@yourdomain.com>
+```
+
+| Variable | Description |
+| --- | --- |
+| `NUXT_RESEND_API_KEY` | API key from the Resend dashboard |
+| `NUXT_CONTACT_EMAIL_TO` | The inbox that receives enquiries |
+| `NUXT_CONTACT_EMAIL_FROM` | The "from" address shown to recipients — must use a verified Resend domain |
+
+Nuxt maps `NUXT_*` variables to `runtimeConfig` automatically at runtime. The values are
+**server-only** and never included in the client bundle.
+
+### 5. Vercel deployment
+
+Rather than committing a `.env` file, add the variables directly in the Vercel dashboard:
+
+1. Open your project in [vercel.com](https://vercel.com)
+2. Go to **Settings → Environment Variables**
+3. Add each of the three `NUXT_*` variables, setting the environment to **Production**
+   (and **Preview** if you want the form to work on preview deployments too)
+4. Redeploy — Vercel injects the variables at build and runtime automatically
+
+> `.env` is listed in `.gitignore` and should never be committed to the repository.
+
+---
+
 ## Testing
 
 This project has two test layers that run independently.
