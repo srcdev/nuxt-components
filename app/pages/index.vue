@@ -16,8 +16,13 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-          <h1 class="page-heading-1">Profile page</h1>
+          <h1 class="page-heading-1">Profile Section</h1>
           <NuxtLink class="page-body-normal" to="/ui/profile-section">Profile Section</NuxtLink>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+          <h1 class="page-heading-1">Contact Section</h1>
+          <NuxtLink class="page-body-normal" to="/ui/contact-section">Contact Section</NuxtLink>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
