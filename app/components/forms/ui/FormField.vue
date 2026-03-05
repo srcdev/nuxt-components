@@ -42,10 +42,11 @@ defineProps({
   background-color: var(--_background-color);
   border-radius: var(--_border-radius);
   margin-inline: auto;
-  margin-block: 1lh;
+  margin-block: 0 1rem;
 
   width: min(100% - calc(2 * var(--_gutter-width)), var(--_max-width));
   outline: 0rem solid var(--slate-05);
+  /* overflow-block: hidden; */
 
   &:has(.underline) {
     --_background-color: var(--theme-form-input-bg-underlined);

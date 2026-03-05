@@ -13,7 +13,7 @@ interface Props {
   tag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   id?: string;
   axis?: "horizontal" | "vertical";
-  fontSize?: "large" | "medium" | "small" | "smaller";
+  fontSize?: "large" | "medium" | "small" | "smaller" | "card-title";
   textContent: TextConfig[];
   styleClassPassthrough?: string | string[];
 }
@@ -62,6 +62,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
   &.smaller {
     font-size: var(--hero-header-smaller);
+  }
+
+  &.card-title {
+    font-size: var(--hero-header-card-title);
   }
 
   .accent {

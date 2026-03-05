@@ -88,7 +88,6 @@ const responsiveNavLinks = {
         { name: "Display Chip", path: "/ui/display-chip" },
         { name: "Display Avatar", path: "/ui/display-avatar" },
         { name: "Qr Codes", path: "/ui/qr-code/display" },
-        { name: "Skeleton Loader", path: "/ui/skeleton" },
       ],
     },
     {

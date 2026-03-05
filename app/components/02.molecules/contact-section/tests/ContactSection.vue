@@ -64,6 +64,7 @@ watch(
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
+    align-items: start;
 
     @media (width >= 768px) {
       grid-template-columns: repeat(2, 1fr);
@@ -73,6 +74,11 @@ watch(
     }
 
     .contact-section-form {
+      /* outline: 1px solid green; */
+
+      form {
+        /* outline: 1px solid red; */
+      }
     }
   }
 }
