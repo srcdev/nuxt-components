@@ -170,12 +170,19 @@ watch(
 
   .services-section__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(446px, 1fr));
-    gap: 3rem;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+
+    @media (width >= 768px) {
+      grid-template-columns: repeat(auto-fit, minmax(446px, 1fr));
+      gap: 3rem;
+    }
   }
 
   .image-wrapper {
     align-self: start;
+    border-radius: 8px;
+    overflow: hidden;
 
     .image {
       display: block;

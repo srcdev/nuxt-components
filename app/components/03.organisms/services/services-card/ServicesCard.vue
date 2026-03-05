@@ -64,6 +64,7 @@ watch(
 
   .image-wrapper {
     aspect-ratio: 3/4;
+    border-radius: 8px;
     overflow: hidden;
 
     .image {

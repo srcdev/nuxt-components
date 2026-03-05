@@ -13,9 +13,9 @@
         axis="vertical"
         font-size="large"
         :text-content="[
-          { text: 'Your', styleClass: 'accent' },
+          { text: 'Your', styleClass: 'normal' },
           { text: 'mobile hairdresser', styleClass: 'accent' },
-          { text: 'in Bath', styleClass: 'accent' },
+          { text: 'in Bath', styleClass: 'normal' },
         ]"
         :style-class-passthrough="['mb-20']"
       />
@@ -99,6 +99,7 @@ watch(
 
       .profile-picture {
         object-fit: cover;
+        width: 100%;
       }
     }
 
