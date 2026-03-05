@@ -20,6 +20,18 @@ defineNuxtConfig({
 });
 ```
 
+## Known Dev Server Warnings
+
+### `[request error] [GET] http://localhost:3000/_nuxt/` (404)
+
+This error appears in the terminal when running `npm run dev` and is **harmless** — it does not affect dev server operation.
+
+**Cause**: The Vue/Nuxt browser DevTools extension probes `/_nuxt/` to detect if the page is a Nuxt app. Since `/_nuxt/` is a directory (not a file), the server returns 404 and logs it.
+
+**Resolution**: It cannot be suppressed without disabling the browser extension. Since the DevTools extension is useful for inspecting Pinia stores and component state, the recommended approach is to ignore this warning.
+
+---
+
 ## Development Environment (`.vscode`)
 
 The `.vscode` directory contains Visual Studio Code configuration files to ensure a consistent development experience across the project:
