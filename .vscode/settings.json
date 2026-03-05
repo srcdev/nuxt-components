@@ -37,8 +37,12 @@
       "editor.trimAutoWhitespace": "explicit"
     }
   },
+  // Use workspace TypeScript (5.9.x) instead of VS Code's built-in version
+  "typescript.tsdk": "node_modules/typescript/lib",
+
   // More info: https://open-props.style/#getting-started
   "cssvar.files": ["assets/styles/main.css"],
   "cssvar.ignore": [],
-  "cssvar.extensions": ["css", "sss", "postcss", "vue", "ts"]
+  "cssvar.extensions": ["css", "sss", "postcss", "vue", "ts"],
+  "js/ts.tsdk.path": "node_modules/typescript/lib"
 }
