@@ -1,5 +1,10 @@
 <template>
-  <component :is="tag" class="profile-section" :class="[elementClasses]" :aria-labelledby="needsLabel ? headingId : undefined">
+  <component
+    :is="tag"
+    class="profile-section"
+    :class="[elementClasses]"
+    :aria-labelledby="needsLabel ? headingId : undefined"
+  >
     <header class="profile-section-header">
       <EyebrowText tag="p" text-content="About Natasha" :style-class-passthrough="['mb-0']" />
       <HeroHeading
@@ -77,8 +82,11 @@ watch(
   /* .profile-section-header {
   } */
   .profile-section-inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+
     @media (min-width: 768px) {
-      display: grid;
       grid-template-columns: 384px 1fr;
       align-items: start;
       gap: 4rem;
