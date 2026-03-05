@@ -33,23 +33,23 @@
   --glass-panel-highlight: rgba(255, 255, 255, 0.04);
 
   /* ===========================================
-     INDICATOR LIST VARIABLES
+     STEPPER LIST VARIABLES
      =========================================== */
-  --indicator-list-counter-circle-background: transparent;
-  --indicator-list-counter-circle-text: var(--blue-02);
-  --indicator-list-counter-circle-border: var(--blue-02);
+  --stepper-list-counter-circle-background: transparent;
+  --stepper-list-counter-circle-text: var(--blue-02);
+  --stepper-list-counter-circle-border: var(--blue-02);
 
-  --indicator-list-counter-disc-background: var(--blue-02);
-  --indicator-list-counter-disc-text: var(--blue-09);
-  --indicator-list-counter-disc-border: var(--blue-02);
+  --stepper-list-counter-disc-background: var(--blue-02);
+  --stepper-list-counter-disc-text: var(--blue-09);
+  --stepper-list-counter-disc-border: var(--blue-02);
 
-  --indicator-list-counter-square-background: transparent;
-  --indicator-list-counter-square-text: var(--blue-02);
-  --indicator-list-counter-square-border: var(--blue-02);
+  --stepper-list-counter-square-background: transparent;
+  --stepper-list-counter-square-text: var(--blue-02);
+  --stepper-list-counter-square-border: var(--blue-02);
 
-  --indicator-list-connector-color: var(--blue-02);
+  --stepper-list-connector-color: var(--blue-02);
 
-  --indicator-list-icon: var(--blue-02);
+  --stepper-list-icon: var(--blue-02);
 
   /* ===========================================
      TREATMENT/COLOUR FINDER VARIABLES

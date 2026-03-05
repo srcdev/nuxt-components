@@ -1,9 +1,9 @@
-import IndicatorList from "../IndicatorList.vue";
+import StepperList from "../StepperList.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
-const meta: Meta<typeof IndicatorList> = {
-  title: "Molecules/Lists/IndicatorList",
-  component: IndicatorList,
+const meta: Meta<typeof StepperList> = {
+  title: "Molecules/Lists/StepperList",
+  component: StepperList,
   argTypes: {
     tag: {
       control: { type: "select" },
@@ -24,7 +24,7 @@ const meta: Meta<typeof IndicatorList> = {
       options: ["disc", "circle", "square"],
       description: "Visual style of the counter indicator",
     },
-    showConnectors: {
+    connected: {
       control: "boolean",
       description: "Whether to show connectors between indicators (only visible in supported browsers)",
     },
@@ -38,13 +38,13 @@ const meta: Meta<typeof IndicatorList> = {
     itemCount: 3,
     indicatorAlignment: "top",
     indicatorVariant: "disc",
-    showConnectors: false,
+    connected: false,
     styleClassPassthrough: [],
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof IndicatorList>;
+type Story = StoryObj<typeof StepperList>;
 
 // ─── Stories ─────────────────────────────────────────────────────────────────
 
@@ -53,21 +53,21 @@ export const Default: Story = {
   args: {
     tag: "ul",
     itemCount: 5,
-    showConnectors: false,
+    connected: false,
   },
   render: (args) => ({
-    components: { IndicatorList },
+    components: { StepperList },
     setup() {
       return { args };
     },
     template: `
-      <IndicatorList v-bind="args">
+      <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Plan your project goals and define what success looks like</p></template>
         <template #item-1><p class="page-body-normal">Set up your development environment</p></template>
         <template #item-2><p class="page-body-normal">Build core features following the sprint backlog, reviewing progress at the end of each week with the full team</p></template>
         <template #item-3><p class="page-body-normal">Write tests and review code with your team</p></template>
         <template #item-4><p class="page-body-normal">Deploy to staging, gather feedback, and iterate</p></template>
-      </IndicatorList>
+      </StepperList>
     `,
   }),
 };
@@ -80,19 +80,19 @@ export const OrderedList: Story = {
     itemCount: 6,
   },
   render: (args) => ({
-    components: { IndicatorList },
+    components: { StepperList },
     setup() {
       return { args };
     },
     template: `
-      <IndicatorList v-bind="args">
+      <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Preheat the oven to 180°C</p></template>
         <template #item-1><p class="page-body-normal">Sift together the flour, baking powder, and a pinch of salt into a large bowl</p></template>
         <template #item-2><p class="page-body-normal">Cream the butter and sugar until pale and fluffy, about 3–4 minutes with an electric mixer</p></template>
         <template #item-3><p class="page-body-normal">Beat in the eggs one at a time, adding a spoonful of flour with each egg to prevent the mixture from curdling</p></template>
         <template #item-4><p class="page-body-normal">Fold in the wet ingredients until just combined — do not overmix</p></template>
         <template #item-5><p class="page-body-normal">Bake for 25–30 minutes until a skewer inserted into the centre comes out clean</p></template>
-      </IndicatorList>
+      </StepperList>
     `,
   }),
 };
@@ -105,12 +105,12 @@ export const WithCustomIndicators: Story = {
     itemCount: 5,
   },
   render: (args) => ({
-    components: { IndicatorList },
+    components: { StepperList },
     setup() {
       return { args };
     },
     template: `
-      <IndicatorList v-bind="args">
+      <StepperList v-bind="args">
         <template #indicator-0>
           <svg class="indicator-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="20 6 9 17 4 12" />
@@ -145,7 +145,7 @@ export const WithCustomIndicators: Story = {
           </svg>
         </template>
         <template #item-4><p class="page-body-normal">Awaiting address confirmation</p></template>
-      </IndicatorList>
+      </StepperList>
     `,
   }),
 };
@@ -156,15 +156,15 @@ export const MixedIndicators: Story = {
   args: {
     tag: "ul",
     itemCount: 5,
-    showConnectors: true
+    connected: true
   },
   render: (args) => ({
-    components: { IndicatorList },
+    components: { StepperList },
     setup() {
       return { args };
     },
     template: `
-      <IndicatorList v-bind="args">
+      <StepperList v-bind="args">
         <template #indicator-0>
           <svg class="indicator-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="20 6 9 17 4 12" />
@@ -184,7 +184,7 @@ export const MixedIndicators: Story = {
         <template #item-3><p class="page-body-normal">Pending team invite acceptance — you invited 3 colleagues and are waiting for them to join</p></template>
 
         <template #item-4><p class="page-body-normal">Pending plan selection</p></template>
-      </IndicatorList>
+      </StepperList>
     `,
   }),
 };
@@ -198,18 +198,18 @@ export const AlignmentCenter: Story = {
     indicatorAlignment: "center",
   },
   render: (args) => ({
-    components: { IndicatorList },
+    components: { StepperList },
     setup() {
       return { args };
     },
     template: `
-      <IndicatorList v-bind="args">
+      <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Connect your data source</p></template>
         <template #item-1><p class="page-body-normal">Configure sync settings</p></template>
         <template #item-2><p class="page-body-normal">Map your fields</p></template>
         <template #item-3><p class="page-body-normal">Run a test import to check everything looks right</p></template>
         <template #item-4><p class="page-body-normal">Publish</p></template>
-      </IndicatorList>
+      </StepperList>
     `,
   }),
 };
@@ -223,18 +223,18 @@ export const VariantDisc: Story = {
     indicatorVariant: "disc",
   },
   render: (args) => ({
-    components: { IndicatorList },
+    components: { StepperList },
     setup() {
       return { args };
     },
     template: `
-      <IndicatorList v-bind="args">
+      <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Research and define requirements with stakeholders</p></template>
         <template #item-1><p class="page-body-normal">Wireframe key user journeys</p></template>
         <template #item-2><p class="page-body-normal">Build interactive prototypes and gather early feedback from a representative sample of users before committing to full development</p></template>
         <template #item-3><p class="page-body-normal">Implement and test</p></template>
         <template #item-4><p class="page-body-normal">Ship and monitor</p></template>
-      </IndicatorList>
+      </StepperList>
     `,
   }),
 };
@@ -248,18 +248,18 @@ export const VariantCircle: Story = {
     indicatorVariant: "circle",
   },
   render: (args) => ({
-    components: { IndicatorList },
+    components: { StepperList },
     setup() {
       return { args };
     },
     template: `
-      <IndicatorList v-bind="args">
+      <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Research and define requirements with stakeholders</p></template>
         <template #item-1><p class="page-body-normal">Wireframe key user journeys</p></template>
         <template #item-2><p class="page-body-normal">Build interactive prototypes and gather early feedback from a representative sample of users before committing to full development</p></template>
         <template #item-3><p class="page-body-normal">Implement and test</p></template>
         <template #item-4><p class="page-body-normal">Ship and monitor</p></template>
-      </IndicatorList>
+      </StepperList>
     `,
   }),
 };
@@ -273,18 +273,18 @@ export const VariantSquare: Story = {
     indicatorVariant: "square",
   },
   render: (args) => ({
-    components: { IndicatorList },
+    components: { StepperList },
     setup() {
       return { args };
     },
     template: `
-      <IndicatorList v-bind="args">
+      <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Research and define requirements with stakeholders</p></template>
         <template #item-1><p class="page-body-normal">Wireframe key user journeys</p></template>
         <template #item-2><p class="page-body-normal">Build interactive prototypes and gather early feedback from a representative sample of users before committing to full development</p></template>
         <template #item-3><p class="page-body-normal">Implement and test</p></template>
         <template #item-4><p class="page-body-normal">Ship and monitor</p></template>
-      </IndicatorList>
+      </StepperList>
     `,
   }),
 };
@@ -297,12 +297,12 @@ export const RichContent: Story = {
     itemCount: 5,
   },
   render: (args) => ({
-    components: { IndicatorList },
+    components: { StepperList },
     setup() {
       return { args };
     },
     template: `
-      <IndicatorList v-bind="args">
+      <StepperList v-bind="args">
         <template #item-0>
           <div>
             <strong>Create your account</strong>
@@ -333,7 +333,7 @@ export const RichContent: Story = {
             <p class="page-body-normal" style="margin:0.25rem 0 0">You're all set — dive into the dashboard and start your first project.</p>
           </div>
         </template>
-      </IndicatorList>
+      </StepperList>
     `,
   }),
 };
@@ -345,14 +345,14 @@ export const SingleItem: Story = {
     itemCount: 1,
   },
   render: (args) => ({
-    components: { IndicatorList },
+    components: { StepperList },
     setup() {
       return { args };
     },
     template: `
-      <IndicatorList v-bind="args">
+      <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">The only item</p></template>
-      </IndicatorList>
+      </StepperList>
     `,
   }),
 };
@@ -363,11 +363,11 @@ export const Empty: Story = {
     itemCount: 0,
   },
   render: (args) => ({
-    components: { IndicatorList },
+    components: { StepperList },
     setup() {
       return { args };
     },
-    template: `<IndicatorList v-bind="args" />`,
+    template: `<StepperList v-bind="args" />`,
   }),
 };
 
@@ -378,15 +378,15 @@ export const WithStyleClassPassthrough: Story = {
     styleClassPassthrough: ["custom-class", "another-class"],
   },
   render: (args) => ({
-    components: { IndicatorList },
+    components: { StepperList },
     setup() {
       return { args };
     },
     template: `
-      <IndicatorList v-bind="args">
+      <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">First item</p></template>
         <template #item-1><p class="page-body-normal">Second item</p></template>
-      </IndicatorList>
+      </StepperList>
     `,
   }),
 };

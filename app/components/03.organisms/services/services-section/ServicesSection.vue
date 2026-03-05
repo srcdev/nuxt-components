@@ -49,7 +49,7 @@
           :text-content="[{ text: 'The Process ', styleClass: 'normal' }]"
           :style-class-passthrough="['mb-20']"
         />
-        <IndicatorList
+        <StepperList
           tag="ol"
           indicator-alignment="top"
           indicator-variant="circle"
@@ -60,7 +60,7 @@
             <p class="page-body-normal">{{ item }}</p>
             <p class="page-body-normal">{{ item }}</p>
           </template>
-        </IndicatorList>
+        </StepperList>
 
         <HeroHeading
           tag="h2"
@@ -70,7 +70,7 @@
           :style-class-passthrough="['mb-20']"
         />
 
-        <IndicatorList :item-count="serviceData.idealFor.length">
+        <StepperList :item-count="serviceData.idealFor.length">
           <template v-for="(_, index) in serviceData.idealFor" :key="index" #[`indicator-${index}`]>
             <Icon name="mdi:checkbox-marked-circle-outline" class="indicator-icon" />
           </template>
@@ -78,7 +78,7 @@
             <p class="page-body-normal">{{ item }}</p>
             <p class="page-body-normal">{{ item }}</p>
           </template>
-        </IndicatorList>
+        </StepperList>
 
         <HeroHeading
           tag="h2"
