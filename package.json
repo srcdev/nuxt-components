@@ -24,6 +24,7 @@
     "test": "vitest",
     "test:run": "vitest --run",
     "test:ui": "vitest --ui",
+    "test:update": "vitest --update",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "storybook-run-build": "npm run build-storybook && npx http-server storybook-static --port 6006",
