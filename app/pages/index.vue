@@ -12,7 +12,13 @@
 
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">Services test pages</h1>
-          <NuxtLink class="page-body-normal" to="/ui/services/services-card">Services Card</NuxtLink>
+          <NuxtLink class="page-body-normal" to="/ui/services/services-cards">Services Cards</NuxtLink>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+          <NuxtLink class="page-body-normal" to="/ui/services/services-sections-compact">
+            Services Sections Compact
+          </NuxtLink>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">

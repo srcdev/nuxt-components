@@ -3,16 +3,12 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <h1 class="page-heading-1">Services Card</h1>
-          <p class="page-body-normal">Example of a services card component.</p>
+          <h1 class="page-heading-1">Services Section Grid</h1>
+          <p class="page-body-normal">Example of a services section grid component.</p>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <ServicesGrid :services-data="servicesData ?? []" />
-        </LayoutRow>
-
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <ServicesCard :service-data="servicesData?.[0] ?? {}" />
+          <ServicesSectionGrid :services-data="servicesData ?? []" />
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -25,10 +21,10 @@ definePageMeta({
 });
 
 useHead({
-  title: "Services Card",
-  meta: [{ name: "description", content: "Services Card" }],
+  title: "Services Section Grid",
+  meta: [{ name: "description", content: "Services Section Grid" }],
   bodyAttrs: {
-    class: "page-services-card",
+    class: "page-services-section-grid",
   },
 });
 
@@ -41,6 +37,6 @@ if (servicesData.value.length === 0) {
 </script>
 
 <style lang="css">
-.page-services-card {
+.page-services-section-grid {
 }
 </style>

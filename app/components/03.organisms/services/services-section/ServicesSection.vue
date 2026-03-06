@@ -9,7 +9,7 @@
       <div class="image-wrapper">
         <NuxtImg :src="serviceData.image" :alt="serviceData.title" class="image" />
       </div>
-      <div>
+      <div :class="{ 'is-summary': isSummary }">
         <EyebrowText font-size="large" :text-content="serviceData.subtitle" />
         <HeroText
           tag="h1"
@@ -34,9 +34,10 @@
           </div>
         </div>
 
-        <p class="page-body-normal">{{ serviceData.longDescription }}</p>
+        <p v-if="!isSummary" class="page-body-normal">{{ serviceData.longDescription }}</p>
 
         <HeroText
+          v-if="!isSummary"
           tag="h2"
           axis="horizontal"
           font-size="subheading"
@@ -48,13 +49,16 @@
         </p>
 
         <HeroText
+          v-if="!isSummary"
           tag="h2"
           axis="horizontal"
           font-size="subheading"
           :text-content="[{ text: 'The Process ', styleClass: 'normal' }]"
           :style-class-passthrough="['mb-20']"
         />
+
         <StepperList
+          v-if="!isSummary"
           tag="ol"
           indicator-alignment="top"
           indicator-variant="circle"
@@ -68,6 +72,7 @@
         </StepperList>
 
         <HeroText
+          v-if="!isSummary"
           tag="h2"
           axis="horizontal"
           font-size="subheading"
@@ -75,7 +80,7 @@
           :style-class-passthrough="['mb-20']"
         />
 
-        <StepperList :connected="false" :item-count="serviceData.idealFor.length">
+        <StepperList v-if="!isSummary" :connected="false" :item-count="serviceData.idealFor.length">
           <template v-for="(_, index) in serviceData.idealFor" :key="index" #[`indicator-${index}`]>
             <Icon name="mdi:checkbox-marked-circle-outline" class="indicator-icon" />
           </template>
@@ -86,6 +91,7 @@
         </StepperList>
 
         <HeroText
+          v-if="!isSummary"
           tag="h2"
           axis="horizontal"
           font-size="subheading"
@@ -93,9 +99,10 @@
           :style-class-passthrough="['mb-20']"
         />
 
-        <p class="page-body-normal">{{ serviceData.maintenance }}</p>
+        <p v-if="!isSummary" class="page-body-normal">{{ serviceData.maintenance }}</p>
 
         <HeroText
+          v-if="!isSummary"
           tag="h2"
           axis="horizontal"
           font-size="subheading"
@@ -104,6 +111,7 @@
         />
 
         <AccordianCore
+          v-if="!isSummary"
           id="faq"
           :item-count="serviceData.faqs.length"
           :name="`faq-${useId()}`"
@@ -120,7 +128,7 @@
           </template>
         </AccordianCore>
 
-        <GlassPanel :style-class-passthrough="['p-24']">
+        <GlassPanel v-if="!isSummary" :style-class-passthrough="['p-24']">
           <HeroText
             tag="h2"
             axis="horizontal"
@@ -151,10 +159,12 @@ import type { Service } from "~/types/types.services";
 interface Props {
   tag?: "div" | "section" | "article" | "main";
   serviceData: Service;
+  isSummary?: boolean;
   styleClassPassthrough?: string | string[];
 }
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
+  isSummary: false,
   styleClassPassthrough: () => [],
 });
 
@@ -173,85 +183,90 @@ watch(
 
 <style lang="css">
 @layer components {
-.services-section {
-  container-type: inline-size;
-  container-name: services-section;
+  .services-section {
+    container-type: inline-size;
+    container-name: services-section;
 
-  .services-section__grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    .services-section__grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
 
-    @media (width >= 768px) {
-      grid-template-columns: repeat(auto-fit, minmax(446px, 1fr));
-      gap: 3rem;
-    }
-  }
+      @media (width >= 768px) {
+        grid-template-columns: repeat(auto-fit, minmax(446px, 1fr));
+        gap: 3rem;
+      }
 
-  .image-wrapper {
-    align-self: start;
-    border-radius: 8px;
-    overflow: hidden;
+      .is-summary {
+        display: grid;
+        align-content: center;
+      }
 
-    .image {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
+      .image-wrapper {
+        align-self: start;
+        border-radius: 8px;
+        overflow: hidden;
 
-  .price-duration {
-    display: flex;
-    flex-direction: row;
-    gap: 3rem;
-    align-items: center;
-    margin-block-end: 2rem;
+        .image {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
 
-    > div {
-      display: flex;
-      flex-direction: row;
-      gap: 0.8rem;
-      align-items: center;
+      .price-duration {
+        display: flex;
+        flex-direction: row;
+        gap: 3rem;
+        align-items: center;
+        margin-block-end: 2rem;
 
-      .decorator {
-        width: 2rem;
-        height: 2rem;
+        > div {
+          display: flex;
+          flex-direction: row;
+          gap: 0.8rem;
+          align-items: center;
+
+          .decorator {
+            width: 2rem;
+            height: 2rem;
+          }
+        }
+      }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.6);
+        border-radius: 1rem;
+        backdrop-filter: blur(10px);
+      }
+
+      .services-faq {
+        margin-block-end: 24px;
+
+        &.display-accordian {
+          max-width: none;
+          /* margin: 0; */
+
+          .accordian-item.expanding-panel {
+            border-block-end: 1px solid currentColor;
+            opacity: 0.7;
+
+            &:first-child {
+              border-block-start: 1px solid currentColor;
+            }
+
+            .expanding-panel-details .expanding-panel-summary {
+              padding-block: 1.2rem;
+            }
+
+            .expanding-panel-content .inner {
+              /* padding-block-end: 1.2rem; */
+            }
+          }
+        }
       }
     }
   }
-
-  .glass-card {
-    background: rgba(255, 255, 255, 0.6);
-    border-radius: 1rem;
-    backdrop-filter: blur(10px);
-  }
-
-  .services-faq {
-    margin-block-end: 24px;
-
-    &.display-accordian {
-      max-width: none;
-      /* margin: 0; */
-
-      .accordian-item.expanding-panel {
-        border-block-end: 1px solid currentColor;
-        opacity: 0.7;
-
-        &:first-child {
-          border-block-start: 1px solid currentColor;
-        }
-
-        .expanding-panel-details .expanding-panel-summary {
-          padding-block: 1.2rem;
-        }
-
-        .expanding-panel-content .inner {
-          /* padding-block-end: 1.2rem; */
-        }
-      }
-    }
-  }
-}
 }
 </style>
