@@ -1,4 +1,5 @@
 import type { Preview } from "@nuxtjs/storybook";
+import "./fonts.css";
 
 const preview: Preview = {
   parameters: {

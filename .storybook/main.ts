@@ -8,7 +8,7 @@ const config: StorybookConfig = {
     saveFromControls: false,
   },
   stories: ["../**/*.mdx", "../**/*.stories.ts"],
-  staticDirs: ["../public"],
+  staticDirs: ["../public", "./public"],
   addons: ["@chromatic-com/storybook", "@storybook/addon-docs", "@storybook/addon-a11y"],
   framework: {
     name: "@storybook-vue/nuxt", // correct for SB 9.x + @nuxtjs/storybook@9.0.1

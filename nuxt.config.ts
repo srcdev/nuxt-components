@@ -14,7 +14,7 @@ export default defineNuxtConfig({
   modules: [
     "@nuxt/eslint",
     "@nuxt/icon",
-    "@nuxt/fonts",
+    ...(process.env.STORYBOOK ? [] : ["@nuxt/fonts"]),
     "@nuxt/image",
     "@nuxtjs/i18n",
     "nuxt-qrcode",
