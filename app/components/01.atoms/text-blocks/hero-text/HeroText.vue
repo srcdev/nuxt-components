@@ -2,7 +2,7 @@
   <component :is="tag" :id="id" class="hero-text" :class="[elementClasses, ...componentClasses]">
     <Icon v-if="props.icon" :name="props.icon" class="hero-text__icon" />
     <span v-for="(item, index) in textContent" :key="index" :class="['text-block-' + index, item.styleClass]">
-      {{ item.text }}
+      {{ trim(item.text, index) }}
     </span>
   </component>
 </template>
@@ -32,14 +32,16 @@ const componentClasses = computed(() => {
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+const trim = (text: string, index: number): string => {
+  const space = index < Math.floor(props.textContent.length - 1) ? " " : "";
+  return text.trim() + space;
+};
 </script>
 
 <style lang="css">
 @layer components {
   .hero-text {
-    display: flex;
-    gap: 0.2rem;
-
     font-family: "Playfair Display";
     font-weight: 400;
     font-variation-settings:
@@ -54,6 +56,8 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       gap: 0.5ch;
     }
     &.axis-vertical {
+      display: flex;
+      gap: 0.2rem;
       flex-direction: column;
     }
 
