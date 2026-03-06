@@ -93,3 +93,18 @@ test.describe("HeroText — axis × fontSize variants", () => {
     }
   }
 });
+
+// -------------------------
+// Icon variants
+// -------------------------
+test.describe("HeroText — icon variants", () => {
+  test("with icon", async ({ page }) => {
+    const heading = await getHeading(page, { icon: "lucide:sparkles" });
+    await expect(heading).toHaveScreenshot("icon-with.png");
+  });
+
+  test("without icon", async ({ page }) => {
+    const heading = await getHeading(page, { icon: "!undefined" });
+    await expect(heading).toHaveScreenshot("icon-without.png");
+  });
+});
