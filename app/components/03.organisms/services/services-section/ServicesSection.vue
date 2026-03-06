@@ -7,7 +7,7 @@
   >
     <div class="services-section__grid" :class="{ 'services-section__grid--reverse': reverse }">
       <div class="image-wrapper">
-        <NuxtImg :src="serviceData.image" :alt="serviceData.title" class="image" />
+        <NuxtImg :src="serviceData.image" :alt="serviceData.title" loading="lazy" class="image" />
       </div>
       <div class="info-wrapper" :class="infoWrapperClasses">
         <EyebrowText font-size="large" :text-content="serviceData.subtitle" />

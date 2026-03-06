@@ -1,7 +1,7 @@
 <template>
   <component :is="tag" class="services-card" :class="[elementClasses]">
     <div class="image-wrapper">
-      <NuxtImg :src="serviceData.image" :alt="serviceData.title" class="image" />
+      <NuxtImg :src="serviceData.image" :alt="serviceData.title" loading="lazy" class="image" />
     </div>
     <EyebrowText :text-content="serviceData.subtitle" />
     <HeroText
