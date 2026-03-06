@@ -17,7 +17,7 @@
             :style-class-passthrough="['mb-20']"
           />
 
-          <p class="page-body-normal"><NuxtLink to="/ui/services/services-card">Back to Services</NuxtLink></p>
+          <p class="page-body-normal"><NuxtLink to="/ui/services/services-cards">Back to Services</NuxtLink></p>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">

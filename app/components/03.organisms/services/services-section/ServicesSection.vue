@@ -5,11 +5,11 @@
     :class="[elementClasses]"
     :aria-labelledby="needsLabel ? headingId : undefined"
   >
-    <div class="services-section__grid">
+    <div class="services-section__grid" :class="{ 'services-section__grid--reverse': reverse }">
       <div class="image-wrapper">
         <NuxtImg :src="serviceData.image" :alt="serviceData.title" class="image" />
       </div>
-      <div :class="{ 'is-summary': isSummary }">
+      <div class="info-wrapper" :class="infoWrapperClasses">
         <EyebrowText font-size="large" :text-content="serviceData.subtitle" />
         <HeroText
           tag="h1"
@@ -160,16 +160,28 @@ interface Props {
   tag?: "div" | "section" | "article" | "main";
   serviceData: Service;
   isSummary?: boolean;
+  summaryAlignment?: "start" | "center" | "end";
+  reverse?: boolean;
   styleClassPassthrough?: string | string[];
 }
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   isSummary: false,
+  summaryAlignment: "center",
   styleClassPassthrough: () => [],
 });
 
 const headingId = useId();
 const needsLabel = computed(() => props.tag === "section" || props.tag === "article");
+
+const infoWrapperClasses = computed(() => {
+  return {
+    "is-summary": props.isSummary,
+    "align-start": props.isSummary && props.summaryAlignment === "start",
+    "align-center": props.isSummary && props.summaryAlignment === "center",
+    "align-end": props.isSummary && props.summaryAlignment === "end",
+  };
+});
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -195,11 +207,29 @@ watch(
       @media (width >= 768px) {
         grid-template-columns: repeat(auto-fit, minmax(446px, 1fr));
         gap: 3rem;
+
+        &.services-section__grid--reverse {
+          .image-wrapper {
+            /* The order: 2 on .image-wrapper pushes it after the content div, since by default both children have order: 0 and source order wins — so the content div naturally sits first. */
+            order: 2;
+          }
+        }
       }
 
-      .is-summary {
-        display: grid;
-        align-content: center;
+      .info-wrapper {
+        &.is-summary {
+          display: grid;
+
+          &.align-start {
+            align-content: start;
+          }
+          &.align-center {
+            align-content: center;
+          }
+          &.align-end {
+            align-content: end;
+          }
+        }
       }
 
       .image-wrapper {

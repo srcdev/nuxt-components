@@ -1,6 +1,13 @@
 <template>
   <component :is="tag" class="services-grid" :class="[elementClasses]">
-    <ServicesSection v-for="(item, index) in servicesData" :key="index" :service-data="item" :is-summary="true" />
+    <ServicesSection
+      v-for="(item, index) in servicesData"
+      :key="index"
+      :service-data="item"
+      :is-summary="true"
+      :reverse="props.useAlternateReverse ? index % 2 !== 0 : false"
+      :summary-alignment="summaryAlignment"
+    />
   </component>
 </template>
 
@@ -10,11 +17,15 @@ import type { Service } from "~/types/types.services";
 interface Props {
   tag?: "div" | "section" | "main";
   servicesData: Service[];
+  useAlternateReverse?: boolean;
+  summaryAlignment?: "start" | "center" | "end";
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
+  useAlternateReverse: false,
+  summaryAlignment: "center",
   styleClassPassthrough: () => [],
 });
 
