@@ -2,31 +2,34 @@ import { describe, it, expect, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import PriceList from "../PriceList.vue";
 
-const defaultProps = {
-  column1: {
+const defaultPriceListData = [
+  {
     headingtext: "Cutting & Treatment",
     items: [
       { description: "Cut & Blow Dry", price: "£45" },
       { description: "Restyle", price: "£65" },
     ],
   },
-  column2: {
+  {
     headingtext: "Hair Colouring",
     items: [
       { description: "Full Head Colour", price: "£75" },
       { description: "Balayage", price: "£95" },
     ],
   },
-};
+];
 
-const createWrapper = async (props: Record<string, unknown> = {}) => {
+const createWrapper = async (
+  priceListData = defaultPriceListData,
+  extraProps: { styleClassPassthrough?: string | string[] } = {}
+) => {
   return mountSuspended(PriceList, {
-    props: { ...defaultProps, ...props },
+    props: { priceListData, ...extraProps },
   });
 };
 
 describe("PriceList", () => {
-  let wrapper: Awaited<ReturnType<typeof createWrapper>>;
+  let wrapper: Awaited<ReturnType<typeof createWrapper>> | undefined;
 
   afterEach(() => {
     wrapper?.unmount();
@@ -42,10 +45,10 @@ describe("PriceList", () => {
     });
 
     it("custom headings", async () => {
-      wrapper = await createWrapper({
-        column1Heading: "Cuts",
-        column2Heading: "Colour",
-      });
+      wrapper = await createWrapper([
+        { headingtext: "Cuts", items: [] },
+        { headingtext: "Colour", items: [] },
+      ]);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -76,13 +79,13 @@ describe("PriceList", () => {
 
     it("renders correct number of rows in column 1", async () => {
       wrapper = await createWrapper();
-      const column1 = wrapper.findAll(".price-list__column")[0];
+      const column1 = wrapper.findAll(".price-list__column")[0]!;
       expect(column1.findAll(".price-list__row").length).toBe(2);
     });
 
     it("renders correct number of rows in column 2", async () => {
       wrapper = await createWrapper();
-      const column2 = wrapper.findAll(".price-list__column")[1];
+      const column2 = wrapper.findAll(".price-list__column")[1]!;
       expect(column2.findAll(".price-list__row").length).toBe(2);
     });
 
@@ -94,10 +97,10 @@ describe("PriceList", () => {
     });
 
     it("renders empty columns when items are empty arrays", async () => {
-      wrapper = await createWrapper({
-        column1: { headingtext: "Cutting & Treatment", items: [] },
-        column2: { headingtext: "Hair Colouring", items: [] },
-      });
+      wrapper = await createWrapper([
+        { headingtext: "Cutting & Treatment", items: [] },
+        { headingtext: "Hair Colouring", items: [] },
+      ]);
       expect(wrapper.findAll(".price-list__row").length).toBe(0);
     });
   });
@@ -106,30 +109,32 @@ describe("PriceList", () => {
   // Props
   // -------------------------
   describe("Props", () => {
-    it("renders default column 1 heading", async () => {
+    it("renders column 1 heading", async () => {
       wrapper = await createWrapper();
-      const headings = wrapper.findAll(".price-list__heading");
-      expect(headings[0].text()).toBe("Cutting & Treatment");
+      expect(wrapper.findAll(".price-list__heading")[0]!.text()).toBe("Cutting & Treatment");
     });
 
-    it("renders default column 2 heading", async () => {
+    it("renders column 2 heading", async () => {
       wrapper = await createWrapper();
-      const headings = wrapper.findAll(".price-list__heading");
-      expect(headings[1].text()).toBe("Hair Colouring");
+      expect(wrapper.findAll(".price-list__heading")[1]!.text()).toBe("Hair Colouring");
     });
 
-    it("renders custom column 1 heading", async () => {
-      wrapper = await createWrapper({ column1: { headingtext: "Cuts", items: [] } });
-      expect(wrapper.findAll(".price-list__heading")[0].text()).toBe("Cuts");
+    it("renders custom headings from priceListData", async () => {
+      wrapper = await createWrapper([
+        { headingtext: "Cuts", items: [] },
+        { headingtext: "Colour", items: [] },
+      ]);
+      expect(wrapper.findAll(".price-list__heading")[0]!.text()).toBe("Cuts");
+      expect(wrapper.findAll(".price-list__heading")[1]!.text()).toBe("Colour");
     });
 
-    it("renders custom column 2 heading", async () => {
-      wrapper = await createWrapper({ column2: { headingtext: "Colour", items: [] } });
-      expect(wrapper.findAll(".price-list__heading")[1].text()).toBe("Colour");
+    it("renders a single column when priceListData has one entry", async () => {
+      wrapper = await createWrapper([{ headingtext: "Cutting & Treatment", items: [] }]);
+      expect(wrapper.findAll(".price-list__column").length).toBe(1);
     });
 
     it("applies styleClassPassthrough classes", async () => {
-      wrapper = await createWrapper({ styleClassPassthrough: ["extra-class"] });
+      wrapper = await createWrapper(defaultPriceListData, { styleClassPassthrough: ["extra-class"] });
       expect(wrapper.find(".price-list").classes()).toContain("extra-class");
     });
   });
@@ -147,14 +152,14 @@ describe("PriceList", () => {
       wrapper = await createWrapper();
       const dts = wrapper.findAll("dt");
       expect(dts.length).toBe(4);
-      expect(dts[0].text()).toBe("Cut & Blow Dry");
+      expect(dts[0]!.text()).toBe("Cut & Blow Dry");
     });
 
     it("uses dd for prices", async () => {
       wrapper = await createWrapper();
       const dds = wrapper.findAll("dd");
       expect(dds.length).toBe(4);
-      expect(dds[0].text()).toBe("£45");
+      expect(dds[0]!.text()).toBe("£45");
     });
   });
 });

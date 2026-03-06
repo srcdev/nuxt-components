@@ -21,14 +21,9 @@ const meta: Meta<typeof PriceList> = {
   title: "Molecules/PriceList",
   component: PriceList,
   argTypes: {
-    column1: {
+    priceListData: {
       control: "object",
-      description: "Heading and items for column 1",
-      table: { category: "Content" },
-    },
-    column2: {
-      control: "object",
-      description: "Heading and items for column 2",
+      description: "Array of columns, each with a heading and list of items",
       table: { category: "Content" },
     },
     styleClassPassthrough: {
@@ -44,8 +39,10 @@ type Story = StoryObj<typeof PriceList>;
 
 export const Default: Story = {
   args: {
-    column1: { headingtext: "Cutting & Treatment", items: cuttingItems },
-    column2: { headingtext: "Hair Colouring", items: colouringItems },
+    priceListData: [
+      { headingtext: "Cutting & Treatment", items: cuttingItems },
+      { headingtext: "Hair Colouring", items: colouringItems },
+    ],
     styleClassPassthrough: [],
   },
   render: (args) => ({
@@ -60,8 +57,7 @@ export const Default: Story = {
 export const SingleColumn: Story = {
   name: "Single Column",
   args: {
-    column1: { headingtext: "Cutting & Treatment", items: cuttingItems },
-    column2: { headingtext: "", items: [] },
+    priceListData: [{ headingtext: "Cutting & Treatment", items: cuttingItems }],
   },
   render: (args) => ({
     components: { PriceList },
@@ -75,8 +71,10 @@ export const SingleColumn: Story = {
 export const EmptyState: Story = {
   name: "Empty State",
   args: {
-    column1: { headingtext: "Cutting & Treatment", items: [] },
-    column2: { headingtext: "Hair Colouring", items: [] },
+    priceListData: [
+      { headingtext: "Cutting & Treatment", items: [] },
+      { headingtext: "Hair Colouring", items: [] },
+    ],
   },
   render: (args) => ({
     components: { PriceList },
