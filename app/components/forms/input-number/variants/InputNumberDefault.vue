@@ -129,6 +129,7 @@ updateElementClasses(["has-left-button", "has-right-button"]);
 </script>
 
 <style lang="css">
+@layer components {
 .input-number-with-label {
   .input-number-label {
     display: block;
@@ -144,5 +145,6 @@ updateElementClasses(["has-left-button", "has-right-button"]);
     font-size: 1.6rem;
     margin-top: 1.2rem;
   }
+}
 }
 </style>

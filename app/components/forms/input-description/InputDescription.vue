@@ -39,6 +39,7 @@ const showDescription = computed(() => hasDescriptionHtml.value || hasDescriptio
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 <style lang="css">
+@layer components {
 .input-description {
   .input-description-html {
     margin-block: 0.4rem 0.8rem;
@@ -49,5 +50,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     margin-block: 0.4rem 0.8rem;
     line-height: var(--step-4);
   }
+}
 }
 </style>

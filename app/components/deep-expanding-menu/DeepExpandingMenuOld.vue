@@ -74,6 +74,7 @@ interface ResponsiveHeaderNavItem {
 </script>
 
 <style lang="css">
+@layer components {
 @layer popover-setup {
   .deep-expanding-menu-old {
     container-type: inline-size;
@@ -212,5 +213,6 @@ interface ResponsiveHeaderNavItem {
       }
     }
   }
+}
 }
 </style>

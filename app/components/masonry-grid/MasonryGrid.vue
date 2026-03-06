@@ -49,6 +49,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .masonry-grid-wrapper {
   --_border-color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
   --_color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
@@ -62,5 +63,6 @@ watch(
     padding: 1.2rem;
     margin-block-end: var(--_masonry-grid-gap);
   }
+}
 }
 </style>

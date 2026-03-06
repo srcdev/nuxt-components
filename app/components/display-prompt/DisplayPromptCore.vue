@@ -96,6 +96,7 @@ onMounted(async () => {
 </script>
 
 <style lang="css">
+@layer components {
 .display-prompt-core {
   display: grid;
   grid-template-rows: 1fr;
@@ -222,5 +223,6 @@ onMounted(async () => {
       }
     }
   }
+}
 }
 </style>

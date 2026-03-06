@@ -128,6 +128,7 @@ const innerPath = computed(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .alert-mask-core {
   display: grid;
   grid-template-areas: "mask";
@@ -143,5 +144,6 @@ const innerPath = computed(() => {
     margin-block: var(--insetBlockStart) var(--insetBlockEnd);
     margin-inline: var(--insetInlineStart) var(--insetInlineEnd);
   }
+}
 }
 </style>

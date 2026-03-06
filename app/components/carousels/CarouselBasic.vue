@@ -194,6 +194,7 @@ onMounted(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .carousel-basic {
   --_carousel-item-track-gap: 10px;
 
@@ -311,5 +312,6 @@ onMounted(() => {
       }
     }
   }
+}
 }
 </style>

@@ -79,6 +79,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .profile-section {
   /* .profile-section-header {
   } */
@@ -148,5 +149,6 @@ watch(
       }
     }
   }
+}
 }
 </style>

@@ -98,6 +98,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .display-avatar {
   display: flex;
   align-items: center;
@@ -142,5 +143,6 @@ watch(
   .avatar-icon {
     font-size: 24px;
   }
+}
 }
 </style>

@@ -59,6 +59,7 @@ const chipStyles = computed(() => ({
 </script>
 
 <style lang="css">
+@layer components {
 .display-chip-core {
   --computed-mask-diameter: calc(var(--chip-size) + (var(--chip-mask-width) * 2));
 
@@ -181,5 +182,6 @@ const chipStyles = computed(() => ({
       background-color: var(--color-dnd);
     }
   }
+}
 }
 </style>

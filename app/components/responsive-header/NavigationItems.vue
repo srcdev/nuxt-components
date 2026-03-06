@@ -121,6 +121,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .overflow-navigation-wrapper {
   --overflow-nav-padding-inline: 0.8rem;
   --overflow-nav-items-gap: 0px;
@@ -225,5 +226,6 @@ watch(
       }
     }
   }
+}
 }
 </style>

@@ -25,6 +25,7 @@ const slots = useSlots();
 </script>
 
 <style lang="css">
+@layer components {
 .ui-content-grid {
   --_margin-inline: 0;
   --_grid-template-columns: repeat(4, 1fr);
@@ -79,5 +80,6 @@ const slots = useSlots();
       --_grid-row: 1;
     }
   }
+}
 }
 </style>

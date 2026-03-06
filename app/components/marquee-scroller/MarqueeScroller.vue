@@ -154,6 +154,7 @@ onMounted(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .marquee-scroller {
   width: 100%;
   height: v-bind(height);
@@ -283,5 +284,6 @@ onMounted(() => {
   .marquee-scroller .marquee-track {
     animation: none !important;
   }
+}
 }
 </style>

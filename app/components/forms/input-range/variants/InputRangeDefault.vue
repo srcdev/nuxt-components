@@ -145,6 +145,7 @@ const updateRange = (step: number, withinRangeLimit: boolean) => {
 </script>
 
 <style lang="css">
+@layer components {
 .input-range-with-label {
   .input-range-label {
     display: block;
@@ -160,5 +161,6 @@ const updateRange = (step: number, withinRangeLimit: boolean) => {
     font-size: 1.6rem;
     margin-top: 1.2rem;
   }
+}
 }
 </style>

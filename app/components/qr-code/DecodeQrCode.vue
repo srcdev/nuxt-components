@@ -62,6 +62,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .decode-qr-code {
   aspect-ratio: 1 / 1;
 
@@ -73,5 +74,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     border-radius: 0.5rem;
     border: 2px dashed gray;
   }
+}
 }
 </style>

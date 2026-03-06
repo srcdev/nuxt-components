@@ -39,6 +39,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .two-column-layout-container {
   container-type: inline-size;
   container-name: two-column-layout;
@@ -53,5 +54,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       grid-template-columns: repeat(2, 1fr);
     }
   }
+}
 }
 </style>

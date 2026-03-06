@@ -1366,6 +1366,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 </script>
 
 <style lang="css">
+@layer components {
 /* ─── CSS Custom Properties ────────────────────────────────────────────────── */
 .colour-finder {
   --_primary-color: hsl(var(--colour-finder-primary-colour));
@@ -2186,5 +2187,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 .slide-leave-to {
   opacity: 0;
   transform: translateX(-50px);
+}
 }
 </style>

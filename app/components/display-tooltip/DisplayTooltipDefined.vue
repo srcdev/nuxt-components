@@ -79,6 +79,7 @@ const tooltipId = computed(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .display-tooltip-core {
   .popover {
     .popover-content {
@@ -97,5 +98,6 @@ const tooltipId = computed(() => {
       }
     }
   }
+}
 }
 </style>

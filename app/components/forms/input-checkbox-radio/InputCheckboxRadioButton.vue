@@ -80,6 +80,7 @@ const flexDirection = ref(props.direction);
 </script>
 
 <style lang="css">
+@layer components {
 .input-checkbox-radio-options-button {
   --_white-space: wrap;
 
@@ -168,5 +169,6 @@ const flexDirection = ref(props.direction);
       height: calc(var(--input-checked-icon-size) - 0.6rem);
     }
   }
+}
 }
 </style>

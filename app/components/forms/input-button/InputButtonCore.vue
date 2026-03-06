@@ -85,6 +85,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .input-button-core {
   display: grid;
   grid-auto-flow: column;
@@ -213,5 +214,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       margin: 1.2rem;
     }
   }
+}
 }
 </style>

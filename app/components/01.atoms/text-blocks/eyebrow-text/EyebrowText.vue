@@ -21,6 +21,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .eyebrow-text {
   text-transform: uppercase;
   color: var(--colour-text-eyebrow);
@@ -36,5 +37,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   &.small {
     font-size: var(--eyebrow-text-small);
   }
+}
 }
 </style>

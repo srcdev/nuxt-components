@@ -69,6 +69,7 @@ const modelValue = defineModel<number | readonly number[]>();
 </script>
 
 <style lang="css">
+@layer components {
 .input-range-wrapper {
   display: flex;
   align-items: center;
@@ -227,5 +228,6 @@ const modelValue = defineModel<number | readonly number[]>();
       }
     }
   }
+}
 }
 </style>

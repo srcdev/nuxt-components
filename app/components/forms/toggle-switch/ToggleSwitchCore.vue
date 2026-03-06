@@ -89,6 +89,7 @@ const toggleSwitchValue = () => {
 </script>
 
 <style lang="css">
+@layer components {
 .toggle-switch-core {
   .toggle-switch-label {
     display: block;
@@ -215,5 +216,6 @@ const toggleSwitchValue = () => {
       }
     }
   }
+}
 }
 </style>

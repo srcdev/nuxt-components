@@ -58,6 +58,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .display-card {
   --_inner-padding: 1rem;
   --_background-color: transparent;
@@ -116,5 +117,6 @@ watch(
   .display-card-footer {
     padding: var(--_inner-padding);
   }
+}
 }
 </style>

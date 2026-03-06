@@ -154,6 +154,7 @@ updateElementClasses(["input-text-as-number", "has-left-button", "has-right-butt
 </script>
 
 <style lang="css">
+@layer components {
 .input-text-as-number {
   .input-text-wrapper {
     width: fit-content;
@@ -197,5 +198,6 @@ updateElementClasses(["input-text-as-number", "has-left-button", "has-right-butt
       width: v-bind(minLength);
     }
   }
+}
 }
 </style>

@@ -41,6 +41,7 @@ const animationDurationStr = computed(() => `${props.animationDuration}ms`);
 </script>
 
 <style lang="css">
+@layer components {
 .display-accordian {
   max-width: 600px;
   margin: 0 auto;
@@ -52,5 +53,6 @@ const animationDurationStr = computed(() => `${props.animationDuration}ms`);
         border-radius v-bind(animationDurationStr) ease-in-out;
     }
   }
+}
 }
 </style>

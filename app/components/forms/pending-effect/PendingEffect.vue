@@ -20,6 +20,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .pending-effect {
   --pending-line-color: var(--theme-button-primary-border);
   --pending-line-thickness: 0.1rem;
@@ -95,5 +96,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   100% {
     stroke-dashoffset: -10rem;
   }
+}
 }
 </style>

@@ -145,6 +145,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="css">
+@layer components {
 /* @property --_rotate-x {
   syntax: '<angle>';
   inherits: false;
@@ -210,5 +211,6 @@ onUnmounted(() => {
       }
     }
   }
+}
 }
 </style>

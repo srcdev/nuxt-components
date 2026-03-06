@@ -125,6 +125,7 @@ onMounted(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .input-text-wrapper {
   display: flex;
   align-items: center;
@@ -216,5 +217,6 @@ onMounted(() => {
       font-weight: normal;
     }
   }
+}
 }
 </style>

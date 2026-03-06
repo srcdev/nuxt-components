@@ -57,6 +57,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .services-card {
   display: grid;
   grid-template-rows: auto 2ch auto 5lh 4.4rem;
@@ -98,5 +99,6 @@ watch(
     line-clamp: 2;
     text-overflow: ellipsis; */
   }
+}
 }
 </style>

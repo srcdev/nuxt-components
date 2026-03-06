@@ -106,6 +106,7 @@ onMounted(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .display-dialog-core {
   display: flex;
   position: fixed;
@@ -270,5 +271,6 @@ onMounted(() => {
       padding: 12px;
     }
   }
+}
 }
 </style>

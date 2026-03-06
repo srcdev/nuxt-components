@@ -46,6 +46,7 @@ const updateCanvas = (setCanvas: MediaCanvas) => {
 </script>
 
 <style lang="css">
+@layer components {
 .canvas-switcher {
   display: flex;
   align-items: center;
@@ -98,5 +99,6 @@ const updateCanvas = (setCanvas: MediaCanvas) => {
 }
 .fullWidthCanvas {
   max-width: unset;
+}
 }
 </style>

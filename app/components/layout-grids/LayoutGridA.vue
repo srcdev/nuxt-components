@@ -36,6 +36,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .layout-grid-a-wrapper {
   container-type: inline-size;
 
@@ -99,5 +100,6 @@ watch(
       }
     }
   }
+}
 }
 </style>

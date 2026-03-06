@@ -37,6 +37,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .magnetic-navigation {
   /*
   --_background-image: url("/images/rotating-carousel/image-3.webp");
@@ -156,5 +157,6 @@ watch(
       }
     }
   }
+}
 }
 </style>

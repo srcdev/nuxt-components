@@ -43,6 +43,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .display-tooltip-core {
   padding-block: 8px;
   position: relative;
@@ -164,5 +165,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       }
     }
   }
+}
 }
 </style>

@@ -15,6 +15,7 @@ defineProps({
 </script>
 
 <style lang="css">
+@layer components {
 .form-wrapper {
   outline: 0rem solid var(--slate-10);
   padding-bottom: 2rem;
@@ -31,5 +32,6 @@ defineProps({
   &.wide {
     max-width: 1200px;
   }
+}
 }
 </style>

@@ -21,6 +21,7 @@ const slots = useSlots()
 </script>
 
 <style lang="css">
+@layer components {
 .home-link-navigation {
   position: relative;
   list-style: none;
@@ -90,4 +91,5 @@ const slots = useSlots()
 .skip-link:focus {
   top: 0;
 } */
+}
 </style>

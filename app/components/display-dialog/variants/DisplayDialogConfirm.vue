@@ -29,6 +29,7 @@ const props = defineProps({
 </script>
 
 <style lang="css">
+@layer components {
 .display-dialog-core {
   .inner {
     .header {
@@ -41,5 +42,6 @@ const props = defineProps({
       /* background-color: blueviolet; */
     }
   }
+}
 }
 </style>

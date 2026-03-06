@@ -44,8 +44,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .display-qr-code {
   aspect-ratio: 1 / 1;
   width: v-bind(size);
+}
 }
 </style>

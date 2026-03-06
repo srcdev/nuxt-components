@@ -56,6 +56,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 @layer deep-expanding-menu-setup {
   @position-try --anchor-left {
     inset: auto;
@@ -202,5 +203,6 @@ watch(
       }
     }
   }
+}
 }
 </style>

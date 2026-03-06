@@ -260,6 +260,7 @@ onMounted(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .carousel-infinite {
   --_carousel-item-track-gap: 10px;
 
@@ -352,5 +353,6 @@ onMounted(() => {
       }
     }
   }
+}
 }
 </style>

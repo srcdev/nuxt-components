@@ -56,6 +56,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .layout-grid-b {
   --_border-color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
   --_color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
@@ -128,5 +129,6 @@ watch(
     grid-template-columns: repeat(2, 1fr);
     gap: var(--_gap);
   }
+}
 }
 </style>

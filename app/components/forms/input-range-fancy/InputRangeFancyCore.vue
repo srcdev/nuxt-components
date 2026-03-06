@@ -114,6 +114,7 @@ onMounted(() => {
 </script>
 
 <style lang="css">
+@layer components {
 @layer foundation {
   .control {
     position: relative;
@@ -420,5 +421,6 @@ onMounted(() => {
       }
     }
   }
+}
 }
 </style>

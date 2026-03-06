@@ -71,6 +71,7 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 </script>
 
 <style lang="css">
+@layer components {
 .input-select-wrapper {
   background-color: var(--theme-input-surface);
   overflow: hidden;
@@ -165,5 +166,6 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
       }
     }
   }
+}
 }
 </style>

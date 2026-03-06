@@ -33,6 +33,7 @@ defineProps({
 </script>
 
 <style lang="css">
+@layer components {
 .form-field {
   --_gutter-width: 0rem;
   --_max-width: 400px;
@@ -75,5 +76,6 @@ defineProps({
   &.wide {
     --_max-width: 1200px;
   }
+}
 }
 </style>

@@ -30,6 +30,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .test-storybook {
   border: 1px solid #ccc;
   padding: 16px;
@@ -43,5 +44,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     padding: 16px;
     margin-top: 12px;
   }
+}
 }
 </style>

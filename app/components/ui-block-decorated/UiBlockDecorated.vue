@@ -73,6 +73,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .ui-block-decorated {
   /* Component styles */
 }
@@ -161,5 +162,6 @@ watch(
 
 .inner-shadow-4::before {
   box-shadow: var(--inner-shadow-4), var(--inner-shadow-highlight);
+}
 }
 </style>

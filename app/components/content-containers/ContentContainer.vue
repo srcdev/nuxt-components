@@ -46,6 +46,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .content-container-wrapper {
   container-type: inline-size;
   container-name: content-container;
@@ -83,5 +84,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       }
     }
   }
+}
 }
 </style>

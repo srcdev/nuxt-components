@@ -172,6 +172,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .services-section {
   container-type: inline-size;
   container-name: services-section;
@@ -251,5 +252,6 @@ watch(
       }
     }
   }
+}
 }
 </style>

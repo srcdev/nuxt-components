@@ -54,6 +54,7 @@ const contentRef = useTemplateRef<HTMLDivElement | null>("contentRef")
 </script>
 
 <style lang="css">
+@layer components {
 .display-details {
   border: none;
   outline: none;
@@ -116,5 +117,6 @@ const contentRef = useTemplateRef<HTMLDivElement | null>("contentRef")
       overflow: hidden;
     }
   }
+}
 }
 </style>

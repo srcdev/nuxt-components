@@ -151,6 +151,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .multiple-checkboxes-items {
   display: flex;
   gap: 1.2rem;
@@ -175,5 +176,6 @@ watch(
       )
     );
   }
+}
 }
 </style>

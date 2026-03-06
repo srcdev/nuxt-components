@@ -62,6 +62,7 @@ const handleToggle = (event: Event) => {
 </script>
 
 <style lang="css">
+@layer components {
 .expanding-panel {
   .expanding-panel-details {
     &:hover {
@@ -130,5 +131,6 @@ const handleToggle = (event: Event) => {
       margin-top: 0;
     }
   }
+}
 }
 </style>

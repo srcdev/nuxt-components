@@ -175,7 +175,9 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .capture-qr-stream {
   aspect-ratio: 1 / 1;
+}
 }
 </style>

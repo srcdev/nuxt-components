@@ -96,6 +96,7 @@ onMounted(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .triple-toggle-switch {
   --_form-border-colour: var(--theme-form-radio-border);
 
@@ -284,5 +285,6 @@ onMounted(() => {
       }
     }
   }
+}
 }
 </style>

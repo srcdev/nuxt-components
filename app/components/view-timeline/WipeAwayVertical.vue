@@ -132,6 +132,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .wipe-away-vertical {
   .sticky-items-container {
     position: sticky;
@@ -174,5 +175,6 @@ onUnmounted(() => {
     opacity: 0;
     transition: opacity 0.4s ease-in-out;
   }
+}
 }
 </style>

@@ -18,6 +18,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .glass-panel {
   --_bg: var(--glass-panel-bg);
   --_border-color: var(--glass-panel-border-color);
@@ -46,5 +47,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     );
     pointer-events: none;
   }
+}
 }
 </style>

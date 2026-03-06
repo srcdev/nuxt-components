@@ -211,6 +211,7 @@ onBeforeRouteLeave(() => {
 </script>
 
 <style lang="css">
+@layer components {
 @keyframes show {
   to {
     opacity: 1;
@@ -441,5 +442,6 @@ onBeforeRouteLeave(() => {
     border-radius: inherit;
     animation: progress v-bind(displayDurationMs) linear forwards;
   }
+}
 }
 </style>

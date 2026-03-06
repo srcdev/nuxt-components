@@ -414,6 +414,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .navigation {
   ul,
   ol {
@@ -756,5 +757,6 @@ watch(
       padding: 12px;
     }
   }
+}
 }
 </style>

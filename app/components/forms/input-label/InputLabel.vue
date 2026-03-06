@@ -32,6 +32,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .input-label {
   touch-action: manipulation;
   color: var(--form-label-color);
@@ -60,5 +61,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   & + .input-description {
     margin-block-end: 0.2rem;
   }
+}
 }
 </style>

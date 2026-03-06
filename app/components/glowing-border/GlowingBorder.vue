@@ -50,6 +50,7 @@ watch(
 </script>
 
 <style scoped lang="css">
+@layer components {
 @property --glow-deg {
   syntax: "<angle>";
   inherits: true;
@@ -136,5 +137,6 @@ watch(
   100% {
     --glow-deg: 270deg;
   }
+}
 }
 </style>

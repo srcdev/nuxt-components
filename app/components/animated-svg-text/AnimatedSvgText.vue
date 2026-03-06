@@ -23,6 +23,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 
 @keyframes animatedSvgText {
   0% {
@@ -83,5 +84,6 @@ html {
     }
   }
 
+}
 }
 </style>

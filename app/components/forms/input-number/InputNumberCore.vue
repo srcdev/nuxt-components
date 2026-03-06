@@ -61,6 +61,7 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
 </script>
 
 <style lang="css">
+@layer components {
 .input-number-wrapper {
   --_focus-box-shadow: var(--box-shadow-off);
   --_min-width: v-bind(minLength);
@@ -157,5 +158,6 @@ input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
+}
 }
 </style>

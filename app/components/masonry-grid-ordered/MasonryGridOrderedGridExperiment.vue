@@ -234,6 +234,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .masonry-grid-ordered {
   --_transition-duration: 0.3s;
 
@@ -253,5 +254,6 @@ watch(
       }
     }
   }
+}
 }
 </style>

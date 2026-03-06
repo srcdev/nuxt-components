@@ -73,6 +73,7 @@ const modelValue = defineModel<number | readonly number[]>();
 </script>
 
 <style lang="css">
+@layer components {
 .input-range-fancy-with-label {
   .input-range-fancy-label {
     display: block;
@@ -88,5 +89,6 @@ const modelValue = defineModel<number | readonly number[]>();
     font-size: 1.6rem;
     margin-top: 1.2rem;
   }
+}
 }
 </style>

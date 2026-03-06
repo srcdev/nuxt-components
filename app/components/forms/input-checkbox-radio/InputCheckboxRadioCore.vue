@@ -106,6 +106,7 @@ const inputClasses = computed(() => [
 </script>
 
 <style lang="css">
+@layer components {
 .input-checkbox-radio-wrapper {
   display: grid;
   grid-template-areas: "element-stack";
@@ -193,5 +194,6 @@ const inputClasses = computed(() => [
       }
     } */
   }
+}
 }
 </style>

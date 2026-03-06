@@ -59,6 +59,7 @@ watch(colorModeVal, (val) => {
 </script>
 
 <style lang="css">
+@layer components {
 .colour-scheme-select {
   &.triple-toggle-switch {
     --_form-border-colour: var(--theme-form-radio-border);
@@ -176,5 +177,6 @@ watch(colorModeVal, (val) => {
       }
     }
   }
+}
 }
 </style>

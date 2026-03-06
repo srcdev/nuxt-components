@@ -902,6 +902,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
 </script>
 
 <style lan="css">
+@layer components {
 /* CSS Custom Properties */
 .colour-finder {
   --_primary-color: hsl(var(--colour-finder-primary-colour));
@@ -1513,5 +1514,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
 
 .text-red-400 {
   color: var(--_red-400);
+}
 }
 </style>

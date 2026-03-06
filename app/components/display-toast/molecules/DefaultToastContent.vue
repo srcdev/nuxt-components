@@ -59,6 +59,7 @@ const slots = useSlots();
 </script>
 
 <style lang="css">
+@layer components {
 .display-toast-inner {
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -157,5 +158,6 @@ const slots = useSlots();
       }
     }
   }
+}
 }
 </style>

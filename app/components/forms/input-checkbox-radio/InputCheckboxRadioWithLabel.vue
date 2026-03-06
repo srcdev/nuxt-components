@@ -72,6 +72,7 @@ const id = useId();
 </script>
 
 <style lang="css">
+@layer components {
 .input-checkbox-radio-with-label {
   --_white-space: wrap;
 
@@ -98,5 +99,6 @@ const id = useId();
       cursor: pointer;
     }
   }
+}
 }
 </style>

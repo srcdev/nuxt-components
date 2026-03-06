@@ -29,10 +29,12 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .services-grid {
   /* Component styles */
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 4rem;
+}
 }
 </style>

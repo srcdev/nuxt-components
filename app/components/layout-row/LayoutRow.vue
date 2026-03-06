@@ -69,6 +69,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 /*
 * Page Layout by https://layout-breakouts-builder.vercel.app
 **/
@@ -165,5 +166,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       padding-inline: var(--minimum-content-padding);
     }
   }
+}
 }
 </style>

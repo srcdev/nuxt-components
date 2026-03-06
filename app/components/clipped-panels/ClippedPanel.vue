@@ -50,6 +50,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .clipped-panel {
   --_foreground-color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
 
@@ -81,5 +82,6 @@ watch(
   &.circle-cutout {
     clip-path: path("M  Z");
   }
+}
 }
 </style>

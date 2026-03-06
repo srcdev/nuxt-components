@@ -258,6 +258,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .slider-gallery {
   --_animationDuration: v-bind(animationDuration + "ms");
 
@@ -780,5 +781,6 @@ onBeforeUnmount(() => {
   .slider-gallery .list .item .content .title {
     font-size: 30px;
   }
+}
 }
 </style>

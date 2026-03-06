@@ -120,6 +120,7 @@ watchEffect(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .single-checkbox-items {
   display: flex;
   gap: 1.2rem;
@@ -138,5 +139,6 @@ watchEffect(() => {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   }
+}
 }
 </style>

@@ -150,6 +150,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .multiple-radiobuttons-items {
   display: flex;
   gap: 1.2rem;
@@ -174,5 +175,6 @@ watch(
       )
     );
   }
+}
 }
 </style>

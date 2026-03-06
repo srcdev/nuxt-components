@@ -32,6 +32,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .hero-text {
   display: flex;
   gap: 0.2rem;
@@ -72,5 +73,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     font-style: italic;
     color: var(--colour-text-accent);
   }
+}
 }
 </style>

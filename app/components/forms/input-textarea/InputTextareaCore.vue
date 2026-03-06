@@ -84,6 +84,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .input-textarea-wrapper {
   background-color: var(--theme-input-surface);
   padding-inline: var(--element-decorator-padding-inline);
@@ -145,5 +146,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       font-weight: var(--input-placeholder-font-weight);
     }
   }
+}
 }
 </style>

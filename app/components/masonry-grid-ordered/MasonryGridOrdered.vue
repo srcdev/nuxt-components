@@ -114,6 +114,7 @@ watch(
 </script>
 
 <style scoped lang="css">
+@layer components {
 .masonry-grid-ordered {
   --_border-color: light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
   --_transition-duration: 0.3s;
@@ -157,5 +158,6 @@ watch(
       border-radius: 4px;
     }
   }
+}
 }
 </style>

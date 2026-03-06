@@ -168,6 +168,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .container-glow-wrapper {
   @property --start {
     syntax: "<number>";
@@ -297,5 +298,6 @@ onBeforeUnmount(() => {
       }
     }
   }
+}
 }
 </style>

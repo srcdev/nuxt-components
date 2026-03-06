@@ -59,6 +59,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .contact-section {
   .contact-section-inner {
     display: grid;
@@ -81,5 +82,6 @@ watch(
       }
     }
   }
+}
 }
 </style>

@@ -51,6 +51,7 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .clip-element-wrapper {
   position: relative;
   overflow: hidden;
@@ -59,5 +60,6 @@ onBeforeUnmount(() => {
   width: 100%;
   clip-path: var(--_clip-path);
   display: block;
+}
 }
 </style>

@@ -48,6 +48,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .display-banner {
   display: grid;
   grid-template-areas: "banner";
@@ -67,5 +68,6 @@ watch(
   .content {
     grid-area: banner;
   }
+}
 }
 </style>

@@ -29,6 +29,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style scoped lang="css">
+@layer components {
 @layer popover-setup {
   /* @position-try --right {
     inset: auto;
@@ -84,5 +85,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     /* left: unset; */
     /* width: revert; */
   }
+}
 }
 </style>

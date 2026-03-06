@@ -43,6 +43,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .form-fieldset {
   margin: 0;
   padding: 0;
@@ -69,5 +70,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     margin-block-start: 0;
     margin-block-end: 0;
   }
+}
 }
 </style>

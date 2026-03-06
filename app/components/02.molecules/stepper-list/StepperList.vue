@@ -45,6 +45,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .stepper-list {
   --_list-padding-block: 1.2rem;
   --_counter-size: 3rem;
@@ -153,4 +154,5 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     background-color: var(--stepper-list-connector-color, currentColor);
   }
 } */
+}
 </style>

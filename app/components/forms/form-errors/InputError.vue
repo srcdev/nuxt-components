@@ -54,6 +54,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .input-error-message {
   grid-row: 2;
   grid-column: 1;
@@ -202,5 +203,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       }
     }
   }
+}
 }
 </style>

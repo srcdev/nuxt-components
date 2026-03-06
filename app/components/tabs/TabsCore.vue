@@ -94,6 +94,7 @@ onMounted(() => {
 </script>
 
 <style lang="css">
+@layer components {
 .tabs-core {
   .tabs-list {
     position: relative;
@@ -300,5 +301,6 @@ onMounted(() => {
       flex-grow: 1;
     }
   }
+}
 }
 </style>

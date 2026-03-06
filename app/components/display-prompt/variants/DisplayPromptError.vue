@@ -28,6 +28,7 @@ const slots = useSlots();
 </script>
 
 <style lang="css">
+@layer components {
 .display-prompt.error {
   --bg-color: var(--red-02);
   --text-color: var(--slate-00);
@@ -47,5 +48,6 @@ const slots = useSlots();
   &-content {
     color: var(--text-color);
   }
+}
 }
 </style>

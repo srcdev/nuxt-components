@@ -89,11 +89,13 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 </script>
 
 <style lang="css">
+@layer components {
 .toggle-switch-with-label {
   --_transition-duration: 0.4s;
 
   .toggle-switch-label {
     display: block;
   }
+}
 }
 </style>

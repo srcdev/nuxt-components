@@ -37,6 +37,7 @@ watch(
 </script>
 
 <style lang="css">
+@layer components {
 .section-parallax {
   /* Component styles */
 
@@ -61,5 +62,6 @@ watch(
     background-size: cover;
     min-height: 120vh;
   } */
+}
 }
 </style>
