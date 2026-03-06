@@ -903,540 +903,483 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
 
 <style lan="css">
 @layer components {
-/* CSS Custom Properties */
-.colour-finder {
-  --_primary-color: hsl(var(--colour-finder-primary-colour));
-  --_primary-foreground: hsl(var(--primary-foreground));
-  --_background: hsl(var(--background));
-  --_foreground: hsl(var(--foreground));
-  --_muted: hsl(var(--muted));
-  --_muted-foreground: hsl(var(--muted-foreground));
-  --_emerald-400: hsl(160 84% 39%);
-  --_amber-400: hsl(43 96% 56%);
-  --_orange-400: hsl(25 95% 53%);
-  --_red-400: hsl(0 84% 60%);
-  --_transition-duration: 300ms;
-  --_border-radius: 0.5rem;
-  --_spacing-xs: 0.25rem;
-  --_spacing-sm: 0.5rem;
-  --_spacing-md: 1rem;
-  --_spacing-lg: 1.5rem;
-  --_spacing-xl: 2rem;
-  --_spacing-2xl: 3rem;
-  --_spacing-3xl: 4rem;
-  --_font-display: var(--font-display);
-}
-
-/* Main Container */
-.colour-finder {
-  background-color: var(--_background);
-  color: var(--_foreground);
-
-  &.colour-finder__container {
-    padding-block-start: 7rem;
-    padding-block-end: 5rem;
-    padding-inline: var(--_spacing-lg);
-
-    @container (min-width: 1024px) {
-      padding-inline: var(--_spacing-2xl);
-    }
+  /* CSS Custom Properties */
+  .colour-finder {
+    --_primary-color: hsl(var(--colour-finder-primary-colour));
+    --_primary-foreground: hsl(var(--primary-foreground));
+    --_background: hsl(var(--background));
+    --_foreground: hsl(var(--foreground));
+    --_muted: hsl(var(--muted));
+    --_muted-foreground: hsl(var(--muted-foreground));
+    --_emerald-400: hsl(160 84% 39%);
+    --_amber-400: hsl(43 96% 56%);
+    --_orange-400: hsl(25 95% 53%);
+    --_red-400: hsl(0 84% 60%);
+    --_transition-duration: 300ms;
+    --_border-radius: 0.5rem;
+    --_spacing-xs: 0.25rem;
+    --_spacing-sm: 0.5rem;
+    --_spacing-md: 1rem;
+    --_spacing-lg: 1.5rem;
+    --_spacing-xl: 2rem;
+    --_spacing-2xl: 3rem;
+    --_spacing-3xl: 4rem;
+    --_font-display: var(--font-display);
   }
 
-  .colour-finder__content {
-    /* max-inline-size: 64rem; */
-    margin-inline: auto;
-  }
-}
-
-/* Header Styles */
-.colour-finder__header {
-  text-align: center;
-  margin-block-end: var(--_spacing-3xl);
-
-  .colour-finder__label {
-    /* font-size: 0.75rem; */
-    letter-spacing: 0.4em;
-    text-transform: uppercase;
-    color: var(--_primary-color);
-    margin-block-end: var(--_spacing-md);
-  }
-
-  .colour-finder__title {
-    font-family: var(--_font-display);
-    font-size: clamp(2.25rem, 5vw, 3.75rem);
-    margin-block-end: var(--_spacing-md);
-
-    @media (min-width: 768px) {
-      font-size: clamp(3.75rem, 8vw, 6rem);
-    }
-
-    .colour-finder__title-highlight {
-      font-style: italic;
-      background: linear-gradient(135deg, #d4af37, #ffd700, #ffed4e);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-  }
-
-  .colour-finder__subtitle {
-    color: var(--_muted-foreground);
-    font-weight: 300;
-    max-inline-size: 28rem;
-    margin-inline: auto;
-  }
-}
-
-/* Progress Steps */
-.colour-finder__progress {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--_spacing-sm);
-  margin-block-end: var(--_spacing-3xl);
-
-  .colour-finder__progress-step {
-    display: flex;
-    align-items: center;
-    gap: var(--_spacing-sm);
-  }
-
-  .colour-finder__progress-button {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.8rem 1.2rem;
-    /* font-size: 0.75rem; */
-    /* letter-spacing: 0.15em; */
-    text-transform: uppercase;
-    border: 1px solid var(--colour-finder-border-colour);
-    background: transparent;
-    color: var(--_muted-foreground);
-    transition: all var(--_transition-duration) ease;
-    cursor: pointer;
-
-    &--active {
-      border-color: var(--_primary-color);
-      color: var(--_primary-color);
-    }
-
-    &--completed {
-      border-color: color-mix(in srgb, var(--_primary-color) 30%, transparent);
-      color: color-mix(in srgb, var(--_primary-color) 60%, transparent);
-    }
-
-    &--inactive {
-      border-color: var(--colour-finder-border-colour);
-      color: var(--_muted-foreground);
-    }
-  }
-
-  .colour-finder__progress-indicator {
-    inline-size: 1.25rem;
-    block-size: 1.25rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* font-size: 0.625rem; */
-    font-weight: 500;
-    border-radius: 50%;
-
-    &--completed {
-      background-color: var(--_primary-color);
-      color: var(--_primary-foreground);
-    }
-
-    &--active {
-      border: 1px solid var(--_primary-color);
-      color: var(--_primary-color);
-    }
-
-    &--inactive {
-      border: 1px solid var(--_muted-foreground);
-      color: var(--_muted-foreground);
-    }
-  }
-
-  .colour-finder__progress-label {
-    display: none;
-
-    @media (min-width: 640px) {
-      display: inline;
-    }
-  }
-
-  .colour-finder__progress-connector {
-    inline-size: 2rem;
-    block-size: 1px;
-    background-color: var(--colour-finder-border-colour);
-
-    &--completed {
-      background-color: var(--_primary-color);
-    }
-  }
-}
-
-/* Steps */
-.colour-finder__step {
-  .colour-finder__step-title {
-    font-family: var(--_font-display);
-    /* font-size: 1.5rem; */
-    text-align: center;
-    margin-block-end: var(--_spacing-xl);
-  }
-}
-
-/* Options Grid */
-.colour-finder__options {
-  display: grid;
-  gap: var(--_spacing-md);
-  margin-inline: auto;
-
-  &.colour-finder__options--hair-type {
-    grid-template-columns: repeat(2, 1fr);
-    /* max-inline-size: 32rem; */
-
-    @media (min-width: 768px) {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  &.colour-finder__options--natural-colour {
-    grid-template-columns: repeat(2, 1fr);
-    /* max-inline-size: 48rem; */
-
-    @media (min-width: 640px) {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    @media (min-width: 1024px) {
-      grid-template-columns: repeat(4, 1fr);
-    }
-  }
-
-  &.colour-finder__options--desired-colour {
-    grid-template-columns: repeat(2, 1fr);
-    /* max-inline-size: 48rem; */
-
-    @media (min-width: 640px) {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-}
-
-.colour-finder__option {
-  padding: var(--_spacing-lg);
-  border: 1px solid var(--colour-finder-border-colour);
-  background: transparent;
-  text-align: center;
-  cursor: pointer;
-  transition: all var(--_transition-duration) ease;
-  border-radius: var(--_border-radius);
-
-  &:hover {
-    border-color: color-mix(in srgb, var(--_primary-color) 50%, transparent);
-  }
-
-  &--selected {
-    border-color: var(--_primary-color);
-    background-color: color-mix(in srgb, var(--_primary-color) 5%, transparent);
-    box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
-  }
-
-  .colour-finder__option-pattern {
-    /* font-size: 1.875rem; */
-    font-weight: 300;
-    letter-spacing: 0.1em;
+  /* Main Container */
+  .colour-finder {
+    background-color: var(--_background);
     color: var(--_foreground);
-    margin-block-end: 0.75rem;
-  }
 
-  .colour-finder__option-swatch {
-    aspect-ratio: 1 / 1;
-    block-size: 8rem;
-    border-radius: 50%;
-    margin-inline: auto;
-    margin-block-end: 0.75rem;
-    border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
+    &.colour-finder__container {
+      padding-block-start: 7rem;
+      padding-block-end: 5rem;
+      padding-inline: var(--_spacing-lg);
 
-    .colour-finder__option-image {
-      inline-size: 100%;
-      block-size: 100%;
-      border-radius: 50%;
-      object-fit: cover;
+      @container (min-width: 1024px) {
+        padding-inline: var(--_spacing-2xl);
+      }
     }
-  }
 
-  .colour-finder__option-label {
-    /* font-size: 0.75rem; */
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--_muted-foreground);
-    transition: color var(--_transition-duration) ease;
-
-    &--selected {
-      color: var(--_primary-color);
-    }
-  }
-
-  &:hover .colour-finder__option-label {
-    color: var(--_foreground);
-  }
-}
-
-/* Results Section */
-.colour-finder__results {
-  /* max-inline-size: 32rem; */
-  margin-inline: auto;
-
-  .colour-finder__results-header {
-    text-align: center;
-    margin-block-end: 2.5rem;
-
-    .colour-finder__results-icon {
-      inline-size: 2rem;
-      block-size: 2rem;
-      color: var(--_primary-color);
+    .colour-finder__content {
+      /* max-inline-size: 64rem; */
       margin-inline: auto;
+    }
+  }
+
+  /* Header Styles */
+  .colour-finder__header {
+    text-align: center;
+    margin-block-end: var(--_spacing-3xl);
+
+    .colour-finder__label {
+      /* font-size: 0.75rem; */
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--_primary-color);
       margin-block-end: var(--_spacing-md);
     }
 
-    .colour-finder__results-title {
+    .colour-finder__title {
       font-family: var(--_font-display);
-      /* font-size: 1.5rem; */
-      margin-block-end: var(--_spacing-sm);
-    }
-  }
-}
+      font-size: clamp(2.25rem, 5vw, 3.75rem);
+      margin-block-end: var(--_spacing-md);
 
-.colour-finder__suitability {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1.25rem;
-  border: 1px solid;
-  margin-block-end: var(--_spacing-xl);
-  border-radius: var(--_border-radius);
+      @media (min-width: 768px) {
+        font-size: clamp(3.75rem, 8vw, 6rem);
+      }
 
-  .colour-finder__suitability-icon {
-    inline-size: 1.5rem;
-    block-size: 1.5rem;
-  }
-
-  .colour-finder__suitability-label {
-    font-family: var(--_font-display);
-    /* font-size: 1.125rem; */
-  }
-
-  .colour-finder__suitability-notes {
-    color: var(--_muted-foreground);
-    /* font-size: 0.875rem; */
-    font-weight: 300;
-  }
-}
-
-.colour-finder__details-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
-  border-radius: var(--_border-radius);
-  padding: var(--_spacing-xl);
-  margin-block-end: var(--_spacing-xl);
-
-  .colour-finder__details-header {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    margin-block-end: var(--_spacing-lg);
-
-    .colour-finder__details-method-label {
-      /* font-size: 0.75rem; */
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--_primary-color);
-    }
-
-    .colour-finder__details-method-badge {
-      padding: var(--_spacing-xs) 0.75rem;
-      background-color: color-mix(in srgb, var(--_primary-color) 10%, transparent);
-      color: var(--_primary-color);
-      /* font-size: 0.875rem; */
-      border: 1px solid color-mix(in srgb, var(--_primary-color) 20%, transparent);
-      border-radius: var(--_border-radius);
-    }
-  }
-
-  .colour-finder__details-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .colour-finder__details-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-
-    .colour-finder__details-bullet {
-      inline-size: 0.25rem;
-      block-size: 0.25rem;
-      border-radius: 50%;
-      background-color: var(--_primary-color);
-      margin-block-start: 0.5rem;
-      flex-shrink: 0;
-    }
-
-    .colour-finder__details-text {
-      color: color-mix(in srgb, var(--_foreground) 80%, transparent);
-      font-weight: 300;
-      /* font-size: 0.875rem; */
-      /* line-height: 1.6; */
-    }
-  }
-}
-
-.colour-finder__summary {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--_spacing-md);
-  margin-block-end: 2.5rem;
-
-  .colour-finder__summary-item {
-    text-align: center;
-    padding: var(--_spacing-md);
-    border: 1px solid var(--colour-finder-border-colour);
-    border-radius: var(--_border-radius);
-
-    .colour-finder__summary-label {
-      /* font-size: 0.625rem; */
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--_muted-foreground);
-      margin-block-end: var(--_spacing-sm);
-    }
-
-    .colour-finder__summary-swatch {
-      aspect-ratio: 1 / 1;
-      block-size: 6rem;
-      border-radius: 50%;
-      margin-inline: auto;
-      margin-block-end: var(--_spacing-sm);
-      border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
-      overflow: hidden;
-
-      .colour-finder__summary-image {
-        inline-size: 100%;
-        block-size: 100%;
-        /* border-radius: 50%; */
-        object-fit: cover;
-
-        &--dark {
-          filter: brightness(0.8) contrast(1.1);
-        }
+      .colour-finder__title-highlight {
+        font-style: italic;
+        background: linear-gradient(135deg, #d4af37, #ffd700, #ffed4e);
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
       }
     }
 
-    .colour-finder__summary-value {
-      /* font-size: 0.875rem; */
-      color: var(--_foreground);
-    }
-  }
-}
-
-.colour-finder__cta {
-  text-align: center;
-
-  .colour-finder__cta-disclaimer {
-    color: var(--_muted-foreground);
-    /* font-size: 0.875rem; */
-    margin-block-end: var(--_spacing-lg);
-    font-weight: 300;
-  }
-
-  .colour-finder__cta-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: var(--_spacing-md);
-    justify-content: center;
-
-    @media (min-width: 640px) {
-      flex-direction: row;
-    }
-  }
-}
-
-.colour-finder__button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--_spacing-md) var(--_spacing-xl);
-  /* font-size: 0.875rem; */
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: all var(--_transition-duration) ease;
-  border-radius: var(--_border-radius);
-  cursor: pointer;
-  border: 1px solid transparent;
-
-  &--primary {
-    background-color: var(--_primary-color);
-    color: var(--_primary-foreground);
-    box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
-
-    &:hover {
-      background-color: color-mix(in srgb, var(--_primary-color) 90%, transparent);
+    .colour-finder__subtitle {
+      color: var(--_muted-foreground);
+      font-weight: 300;
+      max-inline-size: 28rem;
+      margin-inline: auto;
     }
   }
 
-  &--secondary {
-    border-color: color-mix(in srgb, var(--_foreground) 20%, transparent);
-    color: var(--_foreground);
-
-    &:hover {
-      border-color: var(--_primary-color);
-      color: var(--_primary-color);
-    }
-  }
-}
-
-/* Navigation */
-.colour-finder__navigation {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--_spacing-md);
-  margin-block-start: var(--_spacing-2xl);
-
-  .colour-finder__nav-button {
+  /* Progress Steps */
+  .colour-finder__progress {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--_spacing-sm);
-    padding: 0.75rem var(--_spacing-lg);
-    /* font-size: 0.875rem; */
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    margin-block-end: var(--_spacing-3xl);
+
+    .colour-finder__progress-step {
+      display: flex;
+      align-items: center;
+      gap: var(--_spacing-sm);
+    }
+
+    .colour-finder__progress-button {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 1.2rem;
+      /* font-size: 0.75rem; */
+      /* letter-spacing: 0.15em; */
+      text-transform: uppercase;
+      border: 1px solid var(--colour-finder-border-colour);
+      background: transparent;
+      color: var(--_muted-foreground);
+      transition: all var(--_transition-duration) ease;
+      cursor: pointer;
+
+      &.colour-finder__progress-button--active {
+        border-color: var(--_primary-color);
+        color: var(--_primary-color);
+      }
+
+      &.colour-finder__progress-button--completed {
+        border-color: color-mix(in srgb, var(--_primary-color) 30%, transparent);
+        color: color-mix(in srgb, var(--_primary-color) 60%, transparent);
+      }
+
+      &.colour-finder__progress-button--inactive {
+        border-color: var(--colour-finder-border-colour);
+        color: var(--_muted-foreground);
+      }
+    }
+
+    .colour-finder__progress-indicator {
+      inline-size: 1.25rem;
+      block-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      /* font-size: 0.625rem; */
+      font-weight: 500;
+      border-radius: 50%;
+
+      &.colour-finder__progress-indicator--completed {
+        background-color: var(--_primary-color);
+        color: var(--_primary-foreground);
+      }
+
+      &.colour-finder__progress-indicator--active {
+        border: 1px solid var(--_primary-color);
+        color: var(--_primary-color);
+      }
+
+      &.colour-finder__progress-indicator--inactive {
+        border: 1px solid var(--_muted-foreground);
+        color: var(--_muted-foreground);
+      }
+    }
+
+    .colour-finder__progress-label {
+      display: none;
+
+      @media (min-width: 640px) {
+        display: inline;
+      }
+    }
+
+    .colour-finder__progress-connector {
+      inline-size: 2rem;
+      block-size: 1px;
+      background-color: var(--colour-finder-border-colour);
+
+      &.colour-finder__progress-connector--completed {
+        background-color: var(--_primary-color);
+      }
+    }
+  }
+
+  /* Steps */
+  .colour-finder__step {
+    .colour-finder__step-title {
+      font-family: var(--_font-display);
+      /* font-size: 1.5rem; */
+      text-align: center;
+      margin-block-end: var(--_spacing-xl);
+    }
+  }
+
+  /* Options Grid */
+  .colour-finder__options {
+    display: grid;
+    gap: var(--_spacing-md);
+    margin-inline: auto;
+
+    &.colour-finder__options--hair-type {
+      grid-template-columns: repeat(2, 1fr);
+      /* max-inline-size: 32rem; */
+
+      @media (min-width: 768px) {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    &.colour-finder__options--natural-colour {
+      grid-template-columns: repeat(2, 1fr);
+      /* max-inline-size: 48rem; */
+
+      @media (min-width: 640px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      @media (min-width: 1024px) {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    &.colour-finder__options--desired-colour {
+      grid-template-columns: repeat(2, 1fr);
+      /* max-inline-size: 48rem; */
+
+      @media (min-width: 640px) {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+  }
+
+  .colour-finder__option {
+    padding: var(--_spacing-lg);
+    border: 1px solid var(--colour-finder-border-colour);
     background: transparent;
-    border: 1px solid transparent;
+    text-align: center;
     cursor: pointer;
     transition: all var(--_transition-duration) ease;
     border-radius: var(--_border-radius);
 
-    .colour-finder__nav-icon {
-      inline-size: 1rem;
-      block-size: 1rem;
+    &:hover {
+      border-color: color-mix(in srgb, var(--_primary-color) 50%, transparent);
     }
 
-    &--back {
-      color: var(--_muted-foreground);
+    &.colour-finder__option--selected {
+      border-color: var(--_primary-color);
+      background-color: color-mix(in srgb, var(--_primary-color) 5%, transparent);
+      box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
+    }
 
-      &:hover {
-        color: var(--_foreground);
+    .colour-finder__option-pattern {
+      /* font-size: 1.875rem; */
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--_foreground);
+      margin-block-end: 0.75rem;
+    }
+
+    .colour-finder__option-swatch {
+      aspect-ratio: 1 / 1;
+      block-size: 8rem;
+      border-radius: 50%;
+      margin-inline: auto;
+      margin-block-end: 0.75rem;
+      border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
+
+      .colour-finder__option-image {
+        inline-size: 100%;
+        block-size: 100%;
+        border-radius: 50%;
+        object-fit: cover;
       }
     }
 
-    &--next {
-      padding: 0.75rem var(--_spacing-xl);
+    .colour-finder__option-label {
+      /* font-size: 0.75rem; */
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--_muted-foreground);
+      transition: color var(--_transition-duration) ease;
+
+      &.colour-finder__option-label--selected {
+        color: var(--_primary-color);
+      }
+    }
+
+    &:hover .colour-finder__option-label {
+      color: var(--_foreground);
+    }
+  }
+
+  /* Results Section */
+  .colour-finder__results {
+    /* max-inline-size: 32rem; */
+    margin-inline: auto;
+
+    .colour-finder__results-header {
+      text-align: center;
+      margin-block-end: 2.5rem;
+
+      .colour-finder__results-icon {
+        inline-size: 2rem;
+        block-size: 2rem;
+        color: var(--_primary-color);
+        margin-inline: auto;
+        margin-block-end: var(--_spacing-md);
+      }
+
+      .colour-finder__results-title {
+        font-family: var(--_font-display);
+        /* font-size: 1.5rem; */
+        margin-block-end: var(--_spacing-sm);
+      }
+    }
+  }
+
+  .colour-finder__suitability {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    border: 1px solid;
+    margin-block-end: var(--_spacing-xl);
+    border-radius: var(--_border-radius);
+
+    .colour-finder__suitability-icon {
+      inline-size: 1.5rem;
+      block-size: 1.5rem;
+    }
+
+    .colour-finder__suitability-label {
+      font-family: var(--_font-display);
+      /* font-size: 1.125rem; */
+    }
+
+    .colour-finder__suitability-notes {
+      color: var(--_muted-foreground);
+      /* font-size: 0.875rem; */
+      font-weight: 300;
+    }
+  }
+
+  .colour-finder__details-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
+    border-radius: var(--_border-radius);
+    padding: var(--_spacing-xl);
+    margin-block-end: var(--_spacing-xl);
+
+    .colour-finder__details-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-block-end: var(--_spacing-lg);
+
+      .colour-finder__details-method-label {
+        /* font-size: 0.75rem; */
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--_primary-color);
+      }
+
+      .colour-finder__details-method-badge {
+        padding: var(--_spacing-xs) 0.75rem;
+        background-color: color-mix(in srgb, var(--_primary-color) 10%, transparent);
+        color: var(--_primary-color);
+        /* font-size: 0.875rem; */
+        border: 1px solid color-mix(in srgb, var(--_primary-color) 20%, transparent);
+        border-radius: var(--_border-radius);
+      }
+    }
+
+    .colour-finder__details-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .colour-finder__details-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+
+      .colour-finder__details-bullet {
+        inline-size: 0.25rem;
+        block-size: 0.25rem;
+        border-radius: 50%;
+        background-color: var(--_primary-color);
+        margin-block-start: 0.5rem;
+        flex-shrink: 0;
+      }
+
+      .colour-finder__details-text {
+        color: color-mix(in srgb, var(--_foreground) 80%, transparent);
+        font-weight: 300;
+        /* font-size: 0.875rem; */
+        /* line-height: 1.6; */
+      }
+    }
+  }
+
+  .colour-finder__summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--_spacing-md);
+    margin-block-end: 2.5rem;
+
+    .colour-finder__summary-item {
+      text-align: center;
+      padding: var(--_spacing-md);
+      border: 1px solid var(--colour-finder-border-colour);
+      border-radius: var(--_border-radius);
+
+      .colour-finder__summary-label {
+        /* font-size: 0.625rem; */
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--_muted-foreground);
+        margin-block-end: var(--_spacing-sm);
+      }
+
+      .colour-finder__summary-swatch {
+        aspect-ratio: 1 / 1;
+        block-size: 6rem;
+        border-radius: 50%;
+        margin-inline: auto;
+        margin-block-end: var(--_spacing-sm);
+        border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
+        overflow: hidden;
+
+        .colour-finder__summary-image {
+          inline-size: 100%;
+          block-size: 100%;
+          /* border-radius: 50%; */
+          object-fit: cover;
+
+          &.colour-finder__summary-image--dark {
+            filter: brightness(0.8) contrast(1.1);
+          }
+        }
+      }
+
+      .colour-finder__summary-value {
+        /* font-size: 0.875rem; */
+        color: var(--_foreground);
+      }
+    }
+  }
+
+  .colour-finder__cta {
+    text-align: center;
+
+    .colour-finder__cta-disclaimer {
+      color: var(--_muted-foreground);
+      /* font-size: 0.875rem; */
+      margin-block-end: var(--_spacing-lg);
+      font-weight: 300;
+    }
+
+    .colour-finder__cta-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: var(--_spacing-md);
+      justify-content: center;
+
+      @media (min-width: 640px) {
+        flex-direction: row;
+      }
+    }
+  }
+
+  .colour-finder__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--_spacing-md) var(--_spacing-xl);
+    /* font-size: 0.875rem; */
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all var(--_transition-duration) ease;
+    border-radius: var(--_border-radius);
+    cursor: pointer;
+    border: 1px solid transparent;
+
+    &.colour-finder__button--primary {
       background-color: var(--_primary-color);
       color: var(--_primary-foreground);
       box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
@@ -1444,76 +1387,133 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string; colo
       &:hover {
         background-color: color-mix(in srgb, var(--_primary-color) 90%, transparent);
       }
+    }
 
-      &--disabled {
-        background-color: var(--_muted);
+    &.colour-finder__button--secondary {
+      border-color: color-mix(in srgb, var(--_foreground) 20%, transparent);
+      color: var(--_foreground);
+
+      &:hover {
+        border-color: var(--_primary-color);
+        color: var(--_primary-color);
+      }
+    }
+  }
+
+  /* Navigation */
+  .colour-finder__navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--_spacing-md);
+    margin-block-start: var(--_spacing-2xl);
+
+    .colour-finder__nav-button {
+      display: flex;
+      align-items: center;
+      gap: var(--_spacing-sm);
+      padding: 0.75rem var(--_spacing-lg);
+      /* font-size: 0.875rem; */
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      background: transparent;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all var(--_transition-duration) ease;
+      border-radius: var(--_border-radius);
+
+      .colour-finder__nav-icon {
+        inline-size: 1rem;
+        block-size: 1rem;
+      }
+
+      &.colour-finder__nav-button--back {
         color: var(--_muted-foreground);
-        cursor: not-allowed;
-        box-shadow: none;
 
         &:hover {
+          color: var(--_foreground);
+        }
+      }
+
+      &.colour-finder__nav-button--next {
+        padding: 0.75rem var(--_spacing-xl);
+        background-color: var(--_primary-color);
+        color: var(--_primary-foreground);
+        box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
+
+        &:hover {
+          background-color: color-mix(in srgb, var(--_primary-color) 90%, transparent);
+        }
+
+        &.colour-finder__nav-button--disabled {
           background-color: var(--_muted);
+          color: var(--_muted-foreground);
+          cursor: not-allowed;
+          box-shadow: none;
+
+          &:hover {
+            background-color: var(--_muted);
+          }
         }
       }
     }
   }
-}
 
-/* Slide transition — replaces framer-motion AnimatePresence */
-.slide-enter-active,
-.slide-leave-active {
-  transition:
-    opacity var(--_transition-duration) ease,
-    transform var(--_transition-duration) ease;
-}
-
-.slide-enter-from {
-  opacity: 0;
-  transform: translateX(50px);
-}
-
-.slide-leave-to {
-  opacity: 0;
-  transform: translateX(-50px);
-}
-
-/* Suitability specific styles that reference the suitability config */
-.colour-finder__suitability {
-  &.bg-emerald-400\/10 {
-    background-color: color-mix(in srgb, var(--_emerald-400) 10%, transparent);
-    border-color: color-mix(in srgb, var(--_emerald-400) 30%, transparent);
+  /* Slide transition — replaces framer-motion AnimatePresence */
+  .slide-enter-active,
+  .slide-leave-active {
+    transition:
+      opacity var(--_transition-duration) ease,
+      transform var(--_transition-duration) ease;
   }
 
-  &.bg-amber-400\/10 {
-    background-color: color-mix(in srgb, var(--_amber-400) 10%, transparent);
-    border-color: color-mix(in srgb, var(--_amber-400) 30%, transparent);
+  .slide-enter-from {
+    opacity: 0;
+    transform: translateX(50px);
   }
 
-  &.bg-orange-400\/10 {
-    background-color: color-mix(in srgb, var(--_orange-400) 10%, transparent);
-    border-color: color-mix(in srgb, var(--_orange-400) 30%, transparent);
+  .slide-leave-to {
+    opacity: 0;
+    transform: translateX(-50px);
   }
 
-  &.bg-red-400\/10 {
-    background-color: color-mix(in srgb, var(--_red-400) 10%, transparent);
-    border-color: color-mix(in srgb, var(--_red-400) 30%, transparent);
+  /* Suitability specific styles that reference the suitability config */
+  .colour-finder__suitability {
+    &.bg-emerald-400\/10 {
+      background-color: color-mix(in srgb, var(--_emerald-400) 10%, transparent);
+      border-color: color-mix(in srgb, var(--_emerald-400) 30%, transparent);
+    }
+
+    &.bg-amber-400\/10 {
+      background-color: color-mix(in srgb, var(--_amber-400) 10%, transparent);
+      border-color: color-mix(in srgb, var(--_amber-400) 30%, transparent);
+    }
+
+    &.bg-orange-400\/10 {
+      background-color: color-mix(in srgb, var(--_orange-400) 10%, transparent);
+      border-color: color-mix(in srgb, var(--_orange-400) 30%, transparent);
+    }
+
+    &.bg-red-400\/10 {
+      background-color: color-mix(in srgb, var(--_red-400) 10%, transparent);
+      border-color: color-mix(in srgb, var(--_red-400) 30%, transparent);
+    }
   }
-}
 
-.text-emerald-400 {
-  color: var(--_emerald-400);
-}
+  .text-emerald-400 {
+    color: var(--_emerald-400);
+  }
 
-.text-amber-400 {
-  color: var(--_amber-400);
-}
+  .text-amber-400 {
+    color: var(--_amber-400);
+  }
 
-.text-orange-400 {
-  color: var(--_orange-400);
-}
+  .text-orange-400 {
+    color: var(--_orange-400);
+  }
 
-.text-red-400 {
-  color: var(--_red-400);
-}
+  .text-red-400 {
+    color: var(--_red-400);
+  }
 }
 </style>
