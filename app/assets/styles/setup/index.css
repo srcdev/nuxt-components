@@ -1,8 +1,9 @@
-@import "./01.config";
-@import "./02.colours";
-@import "./03.theming";
-@import "./04.elements";
-@import "./05.typography";
-@import "./a11y";
-/* @import "./theming"; */
-@import "./06.utility-classes";
+@layer reset, colours, theming, form-tokens, typography, a11y, utilities;
+
+@import "./01.config/" layer(reset);
+@import "./02.colours/" layer(colours);
+@import "./03.theming/" layer(theming);
+@import "./04.elements/" layer(form-tokens);
+@import "./05.typography/" layer(typography);
+@import "./a11y/" layer(a11y);
+@import "./06.utility-classes/" layer(utilities);

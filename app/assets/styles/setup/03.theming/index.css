@@ -1,6 +1,4 @@
-/* @layer theming { */
 @import "./default/";
 @import "./error/";
 @import "./success/";
 @import "./warning/";
-/* } */

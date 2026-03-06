@@ -1,4 +1,3 @@
-/* @layer form-tokens { */
 @import "./00.element-defaults";
 @import "./01.field-layout-container-level.css";
 @import "./02.typography.css";
@@ -8,4 +7,3 @@
 @import "./06.button-geometry.css";
 @import "./07.validation-error-block-layout.css";
 @import "./09.animation-motion.css";
-/* } */
