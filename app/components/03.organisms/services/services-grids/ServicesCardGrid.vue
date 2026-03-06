@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="services-grid" :class="[elementClasses]">
+  <component :is="tag" class="services-card-grid" :class="[elementClasses]">
     <ServicesCard v-for="(item, index) in servicesData" :key="index" :service-data="item" />
   </component>
 </template>
@@ -30,11 +30,10 @@ watch(
 
 <style lang="css">
 @layer components {
-.services-grid {
-  /* Component styles */
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 4rem;
-}
+  .services-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 4rem;
+  }
 }
 </style>
