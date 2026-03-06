@@ -207,11 +207,3 @@ Remove the inner padding in Chrome and Safari on macOS.
 Interactive
 ===========
 */
-
-/*
-Add the correct display in Chrome and Safari.
-*/
-
-summary {
-  display: list-item;
-}
