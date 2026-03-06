@@ -1,5 +1,6 @@
 <template>
   <component :is="tag" :id="id" class="hero-text" :class="[elementClasses, ...componentClasses]">
+    <Icon v-if="props.icon" :name="props.icon" class="hero-text__icon" />
     <span v-for="(item, index) in textContent" :key="index" :class="['text-block-' + index, item.styleClass]">
       {{ item.text }}
     </span>
@@ -14,6 +15,7 @@ interface Props {
   id?: string;
   axis?: "horizontal" | "vertical";
   fontSize?: "display" | "title" | "heading" | "subheading" | "label";
+  icon?: string;
   textContent: TextConfig[];
   styleClassPassthrough?: string | string[];
 }
@@ -21,6 +23,7 @@ const props = withDefaults(defineProps<Props>(), {
   id: undefined,
   axis: "horizontal",
   fontSize: "title",
+  icon: undefined,
   styleClassPassthrough: () => [],
 });
 
@@ -54,6 +57,11 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       flex-direction: column;
     }
 
+    .hero-text__icon {
+      aspect-ratio: 1;
+      color: var(--colour-text-accent);
+    }
+
     &.display {
       font-size: var(--hero-text-display);
     }
@@ -68,6 +76,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
     &.subheading {
       font-size: var(--hero-text-subheading);
+
+      .hero-text__icon {
+        width: calc(var(--hero-text-subheading) * 0.75) !important;
+      }
     }
 
     &.label {

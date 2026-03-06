@@ -3,7 +3,12 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <h1 class="page-heading-1">Services Card Grid</h1>
+          <HeroText
+            :tag="'h1'"
+            font-size="display"
+            :text-content="[{ text: 'Price List' }]"
+            :style-class-passthrough="['mbe-20']"
+          />
           <p class="page-body-normal">Example of a services card grid component.</p>
         </LayoutRow>
 
@@ -31,6 +36,7 @@ useHead({
 const priceListData = [
   {
     headingtext: "Cutting & Treatment",
+    headingIcon: "lucide:sparkles",
     items: [
       { description: "Cut & Blow Dry", price: "£45" },
       { description: "Restyle", price: "£65" },
@@ -41,6 +47,7 @@ const priceListData = [
   },
   {
     headingtext: "Hair Colouring",
+    headingIcon: "lucide:sparkles",
     items: [
       { description: "Full Head Colour", price: "£75" },
       { description: "Half Head Highlights", price: "£65" },

@@ -5,12 +5,15 @@
         :tag="'h2'"
         font-size="subheading"
         :text-content="[{ text: column.headingtext }]"
+        :icon="column.headingIcon ? column.headingIcon : undefined"
         :style-class-passthrough="['price-list__heading']"
       />
+
       <dl class="price-list__list">
         <div v-for="(item, index) in column.items" :key="index" class="price-list__row">
           <dt class="price-list__description">{{ item.description }}</dt>
           <dd class="price-list__price">
+            <span v-if="item.from" class="price-list__from">from</span>
             <HeroText :tag="'h2'" font-size="label" :text-content="[{ text: item.price }]" />
           </dd>
         </div>
@@ -23,10 +26,12 @@
 export interface PriceItem {
   description: string;
   price: string;
+  from?: boolean;
 }
 
 export interface PriceListData {
   headingtext: string;
+  headingIcon?: string;
   items: PriceItem[];
 }
 
@@ -65,6 +70,12 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     .price-list__heading {
       font-weight: 600;
       margin: 0 0 var(--_price-list-heading-margin-block-end);
+
+      &.hero-text {
+        .hero-text__icon {
+          margin-inline-end: 1rem;
+        }
+      }
     }
 
     .price-list__list {
@@ -72,35 +83,35 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-    }
+      gap: 0rem;
 
-    .price-list__row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1.2rem;
-      padding-block: var(--_price-list-row-gap);
-      border-block-end: 1px solid
-        color-mix(
-          in srgb,
-          var(--_price-list-divider-color) calc(var(--_price-list-divider-opacity) * 100%),
-          transparent
-        );
+      .price-list__row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1.2rem;
+        padding-block: 1.4rem;
+        border-block-end: 1px solid
+          color-mix(
+            in srgb,
+            var(--_price-list-divider-color) calc(var(--_price-list-divider-opacity) * 100%),
+            transparent
+          );
 
-      &:last-child {
-        border-block-end: none;
-        padding-block-end: 0;
-      }
-      .price-list__description {
-        font-size: var(--_price-list-description-font-size);
-      }
+        &:last-child {
+          border-block-end: none;
+          padding-block-end: 0;
+        }
+        .price-list__description {
+          font-size: var(--_price-list-description-font-size);
+        }
 
-      .price-list__price {
-        font-size: var(--_price-list-price-font-size);
-        font-variant-numeric: tabular-nums;
-        white-space: nowrap;
-        margin: 0;
+        .price-list__price {
+          font-size: var(--_price-list-price-font-size);
+          font-variant-numeric: tabular-nums;
+          white-space: nowrap;
+          margin: 0;
+        }
       }
     }
   }
