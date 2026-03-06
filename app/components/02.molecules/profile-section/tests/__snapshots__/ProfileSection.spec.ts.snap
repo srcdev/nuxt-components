@@ -5,7 +5,7 @@ exports[`ProfileSection > renders correct HTML structure 1`] = `
   <header class="profile-section-header">
     <p class="eyebrow-text mb-0 medium">About Natasha</p>
     <h2 id="v-0-0" class="hero-text mb-20 display axis-vertical">
-      <!--v-if--><span class="text-block-0 normal">Your</span><span class="text-block-1 accent">mobile hairdresser</span><span class="text-block-2 normal">in Bath</span>
+      <!--v-if--><span class="text-block-0 normal">Your </span><span class="text-block-1 accent">mobile hairdresser </span><span class="text-block-2 normal">in Bath</span>
     </h2>
   </header>
   <div class="profile-section-inner">

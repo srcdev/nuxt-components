@@ -2,6 +2,6 @@
 
 exports[`HeroText > renders correct HTML structure 1`] = `
 "<h2 class="hero-text custom-class display axis-vertical">
-  <!--v-if--><span class="text-block-0 normal">Hello</span><span class="text-block-1 accent">World</span>
+  <!--v-if--><span class="text-block-0 normal">Hello </span><span class="text-block-1 accent">World</span>
 </h2>"
 `;

@@ -7,7 +7,7 @@
           <HeroText
             :tag="'h1'"
             font-size="display"
-            axis="vertical"
+            axis="horizontal"
             :text-content="[
               { text: 'Expert colour & ' },
               { text: 'styling', styleClass: 'accent' },
