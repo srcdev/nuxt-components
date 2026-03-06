@@ -177,6 +177,43 @@ npx playwright show-report
 | Prop or slot logic broken             | ✅         | ❌           |
 | Accessibility attribute missing       | ✅         | ❌           |
 
+---
+
+## Storybook
+
+Storybook is used for isolated component development and as the target for visual regression tests. It runs as a separate Vite-based dev server.
+
+### Scripts
+
+```bash
+# Start Storybook dev server (http://localhost:6006)
+npm run storybook
+
+# Build a static Storybook (outputs to storybook-static/)
+npm run storybook:build
+
+# Build and serve locally — used before running Playwright visual tests
+npm run storybook:serve
+
+# Clear Storybook and Vite caches — run this if styles appear stale after changes
+npm run storybook:cache:clean
+```
+
+> After clearing the cache, restart with `npm run storybook`. The cache clear is particularly
+> useful when changes inside `@layer` CSS blocks are not reflected in the running dev server.
+
+### Fonts
+
+`@nuxt/fonts` is disabled in Storybook (detected via `process.env.STORYBOOK` in `nuxt.config.ts`).
+Fonts are served instead from local files in `.storybook/public/_fonts/`, declared in `.storybook/fonts.css` and imported in `.storybook/preview.ts`.
+
+| Font             | Format | Source                                       |
+| ---------------- | ------ | -------------------------------------------- |
+| Poppins          | TTF    | `.storybook/public/_fonts/poppins/`          |
+| Playfair Display | woff2  | `.storybook/public/_fonts/playfair-display/` |
+
+To add a new font, see [.claude/skills/storybook-add-font.md](.claude/skills/storybook-add-font.md).
+
 #### Core Components
 
 - **`srcdev-nuxt3-component-boilerplate.code-snippets`** - Base component template with prop validation
