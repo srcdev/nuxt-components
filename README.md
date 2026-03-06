@@ -96,10 +96,10 @@ NUXT_CONTACT_EMAIL_TO=you@yourdomain.com
 NUXT_CONTACT_EMAIL_FROM=Enquiries <hello@yourdomain.com>
 ```
 
-| Variable | Description |
-| --- | --- |
-| `NUXT_RESEND_API_KEY` | API key from the Resend dashboard |
-| `NUXT_CONTACT_EMAIL_TO` | The inbox that receives enquiries |
+| Variable                  | Description                                                                |
+| ------------------------- | -------------------------------------------------------------------------- |
+| `NUXT_RESEND_API_KEY`     | API key from the Resend dashboard                                          |
+| `NUXT_CONTACT_EMAIL_TO`   | The inbox that receives enquiries                                          |
 | `NUXT_CONTACT_EMAIL_FROM` | The "from" address shown to recipients — must use a verified Resend domain |
 
 Nuxt maps `NUXT_*` variables to `runtimeConfig` automatically at runtime. The values are
@@ -151,13 +151,13 @@ Runs pixel-level screenshot comparisons against Storybook. Requires Storybook to
 
 ```bash
 # 1. Start Storybook
-npm run storybook-run-build
+npm run storybook:serve
 
 # 2. In a separate terminal, run visual tests
-npx playwright test
+npm run playwright
 
 # Update visual baselines after an intentional visual change
-npx playwright test --update-snapshots
+npm run playwright:update
 
 # View Playwright test report
 npx playwright show-report

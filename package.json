@@ -26,10 +26,11 @@
     "test:ui": "vitest --ui",
     "test:update": "vitest --update",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build",
-    "storybook-run-build": "npm run build-storybook && npx http-server storybook-static --port 6006",
-    "test:playwright": "npx playwright test",
-    "test:playwright:update": "npx playwright test --update-snapshots"
+    "storybook:build": "storybook build",
+    "storybook:serve": "npm run storybook:build && npx http-server storybook-static --port 6006",
+    "storybook:cache:clean": "rm -rf node_modules/.cache/storybook node_modules/.vite",
+    "playwright": "npx playwright test",
+    "playwright:update": "npx playwright test --update-snapshots"
   },
   "files": [
     "app/",

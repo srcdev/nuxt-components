@@ -33,46 +33,49 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 <style lang="css">
 @layer components {
-.hero-text {
-  display: flex;
-  gap: 0.2rem;
+  .hero-text {
+    display: flex;
+    gap: 0.2rem;
 
-  font-weight: 600;
-  font-variation-settings: "wght" 600;
-  line-height: 1;
+    font-family: "Playfair Display";
+    font-weight: 400;
+    font-variation-settings:
+      "wght" 400,
+      "ital" 1;
+    line-height: 1;
 
-  &.axis-horizontal {
-    flex-direction: row;
-    gap: 0.5ch;
-  }
-  &.axis-vertical {
-    flex-direction: column;
-  }
+    &.axis-horizontal {
+      flex-direction: row;
+      gap: 0.5ch;
+    }
+    &.axis-vertical {
+      flex-direction: column;
+    }
 
-  &.display {
-    font-size: var(--hero-text-display);
-  }
+    &.display {
+      font-size: var(--hero-text-display);
+    }
 
-  &.title {
-    font-size: var(--hero-text-title);
-  }
+    &.title {
+      font-size: var(--hero-text-title);
+    }
 
-  &.heading {
-    font-size: var(--hero-text-heading);
-  }
+    &.heading {
+      font-size: var(--hero-text-heading);
+    }
 
-  &.subheading {
-    font-size: var(--hero-text-subheading);
-  }
+    &.subheading {
+      font-size: var(--hero-text-subheading);
+    }
 
-  &.label {
-    font-size: var(--hero-text-label);
-  }
+    &.label {
+      font-size: var(--hero-text-label);
+    }
 
-  .accent {
-    font-style: italic;
-    color: var(--colour-text-accent);
+    .accent {
+      font-style: italic;
+      color: var(--colour-text-accent);
+    }
   }
-}
 }
 </style>

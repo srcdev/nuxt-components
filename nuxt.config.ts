@@ -6,9 +6,9 @@ export default defineNuxtConfig({
   // e.g. NUXT_RESEND_API_KEY → runtimeConfig.resendApiKey
   // These are never sent to the browser.
   runtimeConfig: {
-    resendApiKey: "",       // NUXT_RESEND_API_KEY
-    contactEmailTo: "",     // NUXT_CONTACT_EMAIL_TO   — inbox that receives enquiries
-    contactEmailFrom: "",   // NUXT_CONTACT_EMAIL_FROM — must be a verified Resend domain
+    resendApiKey: "", // NUXT_RESEND_API_KEY
+    contactEmailTo: "", // NUXT_CONTACT_EMAIL_TO   — inbox that receives enquiries
+    contactEmailFrom: "", // NUXT_CONTACT_EMAIL_FROM — must be a verified Resend domain
   },
   css: ["./app/assets/styles/main.css"],
   modules: [
@@ -81,6 +81,12 @@ export default defineNuxtConfig({
       {
         name: "Poppins",
         weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+        styles: ["normal", "italic"],
+        provider: "bunny",
+      },
+      {
+        name: "Playfair Display",
+        weights: [400, 500, 600, 700, 800, 900],
         styles: ["normal", "italic"],
         provider: "bunny",
       },
