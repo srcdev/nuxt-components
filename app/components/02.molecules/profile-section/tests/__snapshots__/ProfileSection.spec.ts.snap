@@ -4,7 +4,9 @@ exports[`ProfileSection > renders correct HTML structure 1`] = `
 "<div class="profile-section custom-class">
   <header class="profile-section-header">
     <p class="eyebrow-text mb-0 medium">About Natasha</p>
-    <h2 id="v-0-0" class="hero-text mb-20 display axis-vertical"><span class="text-block-0 normal">Your</span><span class="text-block-1 accent">mobile hairdresser</span><span class="text-block-2 normal">in Bath</span></h2>
+    <h2 id="v-0-0" class="hero-text mb-20 display axis-vertical">
+      <!--v-if--><span class="text-block-0 normal">Your</span><span class="text-block-1 accent">mobile hairdresser</span><span class="text-block-2 normal">in Bath</span>
+    </h2>
   </header>
   <div class="profile-section-inner">
     <div class="picture"><img data-nuxt-img="" srcset="/_ipx/_/images/test.jpg 1x, /_ipx/_/images/test.jpg 2x" alt="Test profile picture" class="profile-picture" src="/_ipx/_/images/test.jpg"></div>

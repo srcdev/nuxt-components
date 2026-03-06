@@ -13,7 +13,7 @@ const colouringItems = [
   { description: "Full Head Colour", price: "£75" },
   { description: "Half Head Highlights", price: "£65" },
   { description: "Full Head Highlights", price: "£85" },
-  { description: "Balayage", price: "£95" },
+  { description: "Balayage", price: "£95", from: true },
   { description: "Toner", price: "£35" },
 ];
 
@@ -40,8 +40,8 @@ type Story = StoryObj<typeof PriceList>;
 export const Default: Story = {
   args: {
     priceListData: [
-      { headingtext: "Cutting & Treatment", items: cuttingItems },
-      { headingtext: "Hair Colouring", items: colouringItems },
+      { headingtext: "Cutting & Treatment", headingIcon: "ph:scissors", items: cuttingItems },
+      { headingtext: "Hair Colouring", headingIcon: "ph:paint-brush", items: colouringItems },
     ],
     styleClassPassthrough: [],
   },
@@ -74,6 +74,23 @@ export const EmptyState: Story = {
     priceListData: [
       { headingtext: "Cutting & Treatment", items: [] },
       { headingtext: "Hair Colouring", items: [] },
+    ],
+  },
+  render: (args) => ({
+    components: { PriceList },
+    setup() {
+      return { args };
+    },
+    template: `<PriceList v-bind="args" />`,
+  }),
+};
+
+export const NoIcons: Story = {
+  name: "No Icons",
+  args: {
+    priceListData: [
+      { headingtext: "Cutting & Treatment", items: cuttingItems },
+      { headingtext: "Hair Colouring", items: colouringItems },
     ],
   },
   render: (args) => ({

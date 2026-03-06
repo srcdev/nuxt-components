@@ -1,6 +1,7 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import PriceList from "../PriceList.vue";
+import type { PriceListData } from "../PriceList.vue";
 
 const defaultPriceListData = [
   {
@@ -20,7 +21,7 @@ const defaultPriceListData = [
 ];
 
 const createWrapper = async (
-  priceListData = defaultPriceListData,
+  priceListData: PriceListData[] = defaultPriceListData,
   extraProps: { styleClassPassthrough?: string | string[] } = {}
 ) => {
   return mountSuspended(PriceList, {
@@ -136,6 +137,32 @@ describe("PriceList", () => {
     it("applies styleClassPassthrough classes", async () => {
       wrapper = await createWrapper(defaultPriceListData, { styleClassPassthrough: ["extra-class"] });
       expect(wrapper.find(".price-list").classes()).toContain("extra-class");
+    });
+
+    it("renders a heading icon when headingIcon is provided", async () => {
+      wrapper = await createWrapper([{ headingtext: "Cutting & Treatment", headingIcon: "mdi:scissors", items: [] }]);
+      expect(wrapper.find(".price-list__heading .hero-text__icon").exists()).toBe(true);
+    });
+
+    it("does not render a heading icon when headingIcon is omitted", async () => {
+      wrapper = await createWrapper([{ headingtext: "Cutting & Treatment", items: [] }]);
+      expect(wrapper.find(".price-list__heading .hero-text__icon").exists()).toBe(false);
+    });
+
+    it("renders a 'from' label when item.from is true", async () => {
+      wrapper = await createWrapper([
+        {
+          headingtext: "Cutting & Treatment",
+          items: [{ description: "Cut & Blow Dry", price: "£45", from: true }],
+        },
+      ]);
+      expect(wrapper.find(".price-list__from").exists()).toBe(true);
+      expect(wrapper.find(".price-list__from").text()).toBe("from");
+    });
+
+    it("does not render a 'from' label when item.from is omitted", async () => {
+      wrapper = await createWrapper();
+      expect(wrapper.find(".price-list__from").exists()).toBe(false);
     });
   });
 

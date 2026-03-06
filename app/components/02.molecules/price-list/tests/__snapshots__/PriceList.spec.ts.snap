@@ -3,11 +3,15 @@
 exports[`PriceList > Snapshots > custom headings 1`] = `
 "<div class="price-list">
   <div class="price-list__column">
-    <h2 class="hero-text price-list__heading subheading axis-horizontal"><span class="text-block-0">Cuts</span></h2>
+    <h2 class="hero-text price-list__heading subheading axis-horizontal">
+      <!--v-if--><span class="text-block-0">Cuts</span>
+    </h2>
     <dl class="price-list__list"></dl>
   </div>
   <div class="price-list__column">
-    <h2 class="hero-text price-list__heading subheading axis-horizontal"><span class="text-block-0">Colour</span></h2>
+    <h2 class="hero-text price-list__heading subheading axis-horizontal">
+      <!--v-if--><span class="text-block-0">Colour</span>
+    </h2>
     <dl class="price-list__list"></dl>
   </div>
 </div>"
@@ -16,35 +20,51 @@ exports[`PriceList > Snapshots > custom headings 1`] = `
 exports[`PriceList > Snapshots > default 1`] = `
 "<div class="price-list">
   <div class="price-list__column">
-    <h2 class="hero-text price-list__heading subheading axis-horizontal"><span class="text-block-0">Cutting &amp; Treatment</span></h2>
+    <h2 class="hero-text price-list__heading subheading axis-horizontal">
+      <!--v-if--><span class="text-block-0">Cutting &amp; Treatment</span>
+    </h2>
     <dl class="price-list__list">
       <div class="price-list__row">
         <dt class="price-list__description">Cut &amp; Blow Dry</dt>
         <dd class="price-list__price">
-          <h2 class="hero-text label axis-horizontal"><span class="text-block-0">£45</span></h2>
+          <!--v-if-->
+          <h2 class="hero-text label axis-horizontal">
+            <!--v-if--><span class="text-block-0">£45</span>
+          </h2>
         </dd>
       </div>
       <div class="price-list__row">
         <dt class="price-list__description">Restyle</dt>
         <dd class="price-list__price">
-          <h2 class="hero-text label axis-horizontal"><span class="text-block-0">£65</span></h2>
+          <!--v-if-->
+          <h2 class="hero-text label axis-horizontal">
+            <!--v-if--><span class="text-block-0">£65</span>
+          </h2>
         </dd>
       </div>
     </dl>
   </div>
   <div class="price-list__column">
-    <h2 class="hero-text price-list__heading subheading axis-horizontal"><span class="text-block-0">Hair Colouring</span></h2>
+    <h2 class="hero-text price-list__heading subheading axis-horizontal">
+      <!--v-if--><span class="text-block-0">Hair Colouring</span>
+    </h2>
     <dl class="price-list__list">
       <div class="price-list__row">
         <dt class="price-list__description">Full Head Colour</dt>
         <dd class="price-list__price">
-          <h2 class="hero-text label axis-horizontal"><span class="text-block-0">£75</span></h2>
+          <!--v-if-->
+          <h2 class="hero-text label axis-horizontal">
+            <!--v-if--><span class="text-block-0">£75</span>
+          </h2>
         </dd>
       </div>
       <div class="price-list__row">
         <dt class="price-list__description">Balayage</dt>
         <dd class="price-list__price">
-          <h2 class="hero-text label axis-horizontal"><span class="text-block-0">£95</span></h2>
+          <!--v-if-->
+          <h2 class="hero-text label axis-horizontal">
+            <!--v-if--><span class="text-block-0">£95</span>
+          </h2>
         </dd>
       </div>
     </dl>
