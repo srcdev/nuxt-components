@@ -1,8 +1,8 @@
 <template>
   <component :is="tag" :id="id" class="hero-text" :class="[elementClasses, ...componentClasses]">
     <Icon v-if="props.icon" :name="props.icon" class="hero-text__icon" />
-    <span v-for="(item, index) in textContent" :key="index" :class="['text-block-' + index, item.styleClass]">
-      {{ trim(item.text, index) }}
+    <span v-for="(item, index) in normalisedContent" :key="index" :class="['text-block-' + index, item.styleClass]">
+      {{ item.text }}
     </span>
   </component>
 </template>
@@ -33,10 +33,12 @@ const componentClasses = computed(() => {
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const trim = (text: string, index: number): string => {
-  const space = index < Math.floor(props.textContent.length - 1) ? " " : "";
-  return text.trim() + space;
-};
+const normalisedContent = computed(() =>
+  props.textContent.map((item, index) => ({
+    ...item,
+    text: item.text.trim() + (index < props.textContent.length - 1 ? " " : ""),
+  }))
+);
 </script>
 
 <style lang="css">
