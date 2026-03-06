@@ -1,20 +1,29 @@
 import PriceList from "../PriceList.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
-const cuttingItems = [
-  { description: "Cut & Blow Dry", price: "£45" },
-  { description: "Restyle", price: "£65" },
-  { description: "Wash & Blow Dry", price: "£35" },
-  { description: "Trim & Tidy", price: "£25" },
-  { description: "Keratin Treatment", price: "£120" },
-];
-
-const colouringItems = [
-  { description: "Full Head Colour", price: "£75" },
-  { description: "Half Head Highlights", price: "£65" },
-  { description: "Full Head Highlights", price: "£85" },
-  { description: "Balayage", price: "£95", from: true },
-  { description: "Toner", price: "£35" },
+const priceListData = [
+  {
+    headingtext: "Cutting & Treatment",
+    headingIcon: "lucide:sparkles",
+    items: [
+      { description: "Cut & Blow Dry", price: "£45" },
+      { description: "Restyle", price: "£65" },
+      { description: "Wash & Blow Dry", price: "£35" },
+      { description: "Trim & Tidy", price: "£25" },
+      { description: "Keratin Treatment", price: "£120" },
+    ],
+  },
+  {
+    headingtext: "Hair Colouring",
+    headingIcon: "lucide:sparkles",
+    items: [
+      { description: "Full Head Colour", price: "£75" },
+      { description: "Half Head Highlights", price: "£65" },
+      { description: "Full Head Highlights", price: "£85" },
+      { description: "Balayage", price: "£95" },
+      { description: "Toner", price: "£35" },
+    ],
+  },
 ];
 
 const meta: Meta<typeof PriceList> = {
@@ -39,10 +48,7 @@ type Story = StoryObj<typeof PriceList>;
 
 export const Default: Story = {
   args: {
-    priceListData: [
-      { headingtext: "Cutting & Treatment", headingIcon: "ph:scissors", items: cuttingItems },
-      { headingtext: "Hair Colouring", headingIcon: "ph:paint-brush", items: colouringItems },
-    ],
+    priceListData,
     styleClassPassthrough: [],
   },
   render: (args) => ({
@@ -57,7 +63,7 @@ export const Default: Story = {
 export const SingleColumn: Story = {
   name: "Single Column",
   args: {
-    priceListData: [{ headingtext: "Cutting & Treatment", items: cuttingItems }],
+    priceListData: [priceListData[0]!],
   },
   render: (args) => ({
     components: { PriceList },
@@ -71,10 +77,7 @@ export const SingleColumn: Story = {
 export const EmptyState: Story = {
   name: "Empty State",
   args: {
-    priceListData: [
-      { headingtext: "Cutting & Treatment", items: [] },
-      { headingtext: "Hair Colouring", items: [] },
-    ],
+    priceListData: priceListData.map(({ headingtext, headingIcon }) => ({ headingtext, headingIcon, items: [] })),
   },
   render: (args) => ({
     components: { PriceList },
@@ -88,10 +91,7 @@ export const EmptyState: Story = {
 export const NoIcons: Story = {
   name: "No Icons",
   args: {
-    priceListData: [
-      { headingtext: "Cutting & Treatment", items: cuttingItems },
-      { headingtext: "Hair Colouring", items: colouringItems },
-    ],
+    priceListData: priceListData.map(({ headingtext, items }) => ({ headingtext, items })),
   },
   render: (args) => ({
     components: { PriceList },
