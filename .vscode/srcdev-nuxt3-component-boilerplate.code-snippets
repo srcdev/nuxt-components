@@ -39,8 +39,10 @@
       "</script>",
       "",
       "<style lang=\"css\">",
+      "@layer components {",
       ".${TM_DIRECTORY/(.*[\\/])([^\\/]+)[\\/]?/${2:/downcase}/} {",
       "  /* Component styles */",
+      "}",
       "}",
       "</style>",
       ""
