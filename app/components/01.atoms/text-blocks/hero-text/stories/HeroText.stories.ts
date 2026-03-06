@@ -33,8 +33,9 @@ const meta: Meta<typeof HeroText> = {
       ],
     },
     icon: {
-      control: "text",
-      description: "Icon name (e.g. 'lucide:sparkles'). Leave empty to hide.",
+      control: { type: "select" },
+      options: [undefined, "lucide:sparkles"],
+      description: "Icon name",
     },
     styleClassPassthrough: {
       control: "object",
