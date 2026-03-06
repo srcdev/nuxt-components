@@ -19,7 +19,7 @@
     </div>
     <InputButtonCore
       variant="secondary"
-      button-text="Learn More"
+      :button-text="`More about ${serviceData.title}`"
       :href="`/ui/services/services-section/${serviceData.slug}`"
     >
       <template #right>
@@ -58,47 +58,47 @@ watch(
 
 <style lang="css">
 @layer components {
-.services-card {
-  display: grid;
-  grid-template-rows: auto 2ch auto 5lh 4.4rem;
-  gap: 1rem;
+  .services-card {
+    display: grid;
+    grid-template-rows: auto 2ch auto 5lh 4.4rem;
+    gap: 1rem;
 
-  .image-wrapper {
-    aspect-ratio: 3/4;
-    border-radius: 8px;
-    overflow: hidden;
+    .image-wrapper {
+      aspect-ratio: 3/4;
+      border-radius: 8px;
+      overflow: hidden;
 
-    .image {
-      display: block;
-      object-fit: cover;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.3s ease-in-out;
+      .image {
+        display: block;
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.3s ease-in-out;
 
-      &:hover {
-        transform: scale(1.1);
+        &:hover {
+          transform: scale(1.1);
+        }
       }
     }
-  }
 
-  .eyebrow-text {
-    margin-block: 0.8rem;
-  }
+    .eyebrow-text {
+      margin-block: 0.8rem;
+    }
 
-  .hero-text {
-    margin-block: 2rem 1rem;
-  }
+    .hero-text {
+      margin-block: 2rem 1rem;
+    }
 
-  .description {
-    color: var(--colour-text-secondary);
+    .description {
+      color: var(--colour-text-secondary);
 
-    /* display: -webkit-box;
+      /* display: -webkit-box;
     -webkit-box-orient: vertical;
     overflow: hidden;
     -webkit-line-clamp: 2;
     line-clamp: 2;
     text-overflow: ellipsis; */
+    }
   }
-}
 }
 </style>
