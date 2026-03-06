@@ -32,6 +32,10 @@ const meta: Meta<typeof HeroText> = {
         { text: "at Home", styleClass: "normal" },
       ],
     },
+    icon: {
+      control: "text",
+      description: "Icon name (e.g. 'lucide:sparkles'). Leave empty to hide.",
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional classes",
@@ -52,6 +56,7 @@ export const Default: Story = {
       { text: "Artistry", styleClass: "accent" },
       { text: "at Home", styleClass: "normal" },
     ],
+    icon: "lucide:sparkles",
     styleClassPassthrough: [],
   },
   render: (args) => ({
