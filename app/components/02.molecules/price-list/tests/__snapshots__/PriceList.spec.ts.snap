@@ -1,0 +1,63 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PriceList > Snapshots > custom headings 1`] = `
+"<div class="price-list" column1heading="Cuts" column2heading="Colour">
+  <div class="price-list__column">
+    <h3 class="price-list__heading">Cutting &amp; Treatment</h3>
+    <dl class="price-list__list">
+      <div class="price-list__row">
+        <dt class="price-list__description">Cut &amp; Blow Dry</dt>
+        <dd class="price-list__price">£45</dd>
+      </div>
+      <div class="price-list__row">
+        <dt class="price-list__description">Restyle</dt>
+        <dd class="price-list__price">£65</dd>
+      </div>
+    </dl>
+  </div>
+  <div class="price-list__column">
+    <h3 class="price-list__heading">Hair Colouring</h3>
+    <dl class="price-list__list">
+      <div class="price-list__row">
+        <dt class="price-list__description">Full Head Colour</dt>
+        <dd class="price-list__price">£75</dd>
+      </div>
+      <div class="price-list__row">
+        <dt class="price-list__description">Balayage</dt>
+        <dd class="price-list__price">£95</dd>
+      </div>
+    </dl>
+  </div>
+</div>"
+`;
+
+exports[`PriceList > Snapshots > default 1`] = `
+"<div class="price-list">
+  <div class="price-list__column">
+    <h3 class="price-list__heading">Cutting &amp; Treatment</h3>
+    <dl class="price-list__list">
+      <div class="price-list__row">
+        <dt class="price-list__description">Cut &amp; Blow Dry</dt>
+        <dd class="price-list__price">£45</dd>
+      </div>
+      <div class="price-list__row">
+        <dt class="price-list__description">Restyle</dt>
+        <dd class="price-list__price">£65</dd>
+      </div>
+    </dl>
+  </div>
+  <div class="price-list__column">
+    <h3 class="price-list__heading">Hair Colouring</h3>
+    <dl class="price-list__list">
+      <div class="price-list__row">
+        <dt class="price-list__description">Full Head Colour</dt>
+        <dd class="price-list__price">£75</dd>
+      </div>
+      <div class="price-list__row">
+        <dt class="price-list__description">Balayage</dt>
+        <dd class="price-list__price">£95</dd>
+      </div>
+    </dl>
+  </div>
+</div>"
+`;

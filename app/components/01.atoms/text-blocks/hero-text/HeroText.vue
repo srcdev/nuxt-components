@@ -44,6 +44,8 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       "ital" 1;
     line-height: 1;
 
+    margin: 0;
+
     &.axis-horizontal {
       flex-direction: row;
       gap: 0.5ch;
