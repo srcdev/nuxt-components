@@ -7,7 +7,7 @@
   >
     <div class="services-section__grid" :class="{ 'services-section__grid--reverse': reverse }">
       <div class="image-wrapper">
-        <NuxtImg :src="serviceData.image" :alt="serviceData.title" class="image" />
+        <NuxtImg :src="serviceData.image" :alt="serviceData.title" :loading="imageLoading" class="image" />
       </div>
       <div class="info-wrapper" :class="infoWrapperClasses">
         <EyebrowText font-size="large" :text-content="serviceData.subtitle" />
@@ -158,6 +158,7 @@ import type { Service } from "~/types/types.services";
 
 interface Props {
   tag?: "div" | "section" | "article" | "main";
+  index?: number;
   serviceData: Service;
   isSummary?: boolean;
   summaryAlignment?: "start" | "center" | "end";
@@ -166,6 +167,7 @@ interface Props {
 }
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
+  index: 0,
   isSummary: false,
   summaryAlignment: "center",
   styleClassPassthrough: () => [],
@@ -182,6 +184,9 @@ const infoWrapperClasses = computed(() => {
     "align-end": props.isSummary && props.summaryAlignment === "end",
   };
 });
+
+// Computed to return loading="lazy" if index is greater than 1, so that the first two sections prioritise image loading, but if there are more than 2 sections, the rest will lazy load their images to improve performance.
+const imageLoading = computed(() => (props.index !== undefined && props.index > 1 ? "lazy" : "eager"));
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 

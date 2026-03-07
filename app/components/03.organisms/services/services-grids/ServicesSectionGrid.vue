@@ -3,6 +3,7 @@
     <ServicesSection
       v-for="(item, index) in servicesData"
       :key="index"
+      :index="index"
       :service-data="item"
       :is-summary="true"
       :reverse="props.useAlternateReverse ? index % 2 !== 0 : false"
