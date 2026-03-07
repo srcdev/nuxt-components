@@ -33,6 +33,7 @@
     "playwright:update": "SRCDEV_STANDALONE=true npx playwright test --update-snapshots"
   },
   "files": [
+    ".claude/",
     "app/",
     "nuxt.config.ts",
     "types.d.ts"

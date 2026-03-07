@@ -20,6 +20,26 @@ defineNuxtConfig({
 });
 ```
 
+## Claude Code Skills
+
+This package ships Claude Code skills — reference docs for components and development tasks — in the `.claude/` directory.
+
+To make them available in your project, add this script to your `package.json`:
+
+```json
+"setup:claude": "cp -r node_modules/srcdev-nuxt-components/.claude/skills .claude/skills/srcdev-nuxt-components"
+```
+
+Then run it after install:
+
+```bash
+npm run setup:claude
+```
+
+Skills are copied into `.claude/skills/srcdev-nuxt-components/` so they never conflict with or overwrite skills your own project defines. Re-running the script after a package update is safe.
+
+---
+
 ## Known Dev Server Warnings
 
 ### `[request error] [GET] http://localhost:3000/_nuxt/` (404)

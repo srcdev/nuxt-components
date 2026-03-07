@@ -2,6 +2,16 @@
 
 Step-by-step guides for repeatable development tasks in this project.
 
+## For consuming apps
+
+Copy skills into your project with:
+
+```bash
+cp -r node_modules/srcdev-nuxt-components/.claude/skills .claude/skills/srcdev-nuxt-components
+```
+
+Skills land in `.claude/skills/srcdev-nuxt-components/` — safe to re-run without overwriting your own skills.
+
 ## Structure
 
 Each skill is a single markdown file named `<area>-<task>.md`.
@@ -12,7 +22,9 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── storybook-add-story.md      — create a Storybook story for a component
 ├── storybook-add-font.md       — add a new font to Storybook
 ├── testing-add-unit-test.md    — create a Vitest unit test with snapshots
-└── testing-add-playwright.md   — create a Playwright visual regression test
+├── testing-add-playwright.md   — create a Playwright visual regression test
+└── components/
+    └── hero-text.md            — HeroText props, usage patterns, styling
 ```
 
 ## Skill file template
