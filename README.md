@@ -17,8 +17,14 @@ npm install --save srcdev-nuxt-components
 ```ts
 defineNuxtConfig({
   extends: "srcdev-nuxt-components",
+  css: [
+    "srcdev-nuxt-components/app/assets/styles/main.css",
+    "./app/assets/styles/main.css",
+  ],
 });
 ```
+
+> **Note**: The layer CSS is not automatically included when installed from `node_modules`. You must explicitly add it to the `css` array as shown above. The second entry (`./app/assets/styles/main.css`) is your app's own stylesheet for overrides — create it if it doesn't exist.
 
 ## Claude Code Skills
 

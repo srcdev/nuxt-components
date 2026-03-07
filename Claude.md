@@ -152,6 +152,7 @@ expect(vm.generatedPath.length).toBeGreaterThan(0);
 **Approach**: Functional base styles, custom design via HOC style blocks
 **Theme System**: `data-theme` attributes with CSS custom property overrides
 **Responsive**: CSS Grid/Flexbox with container queries where supported
+**rem base**: `html` font-size is set to `62.5%`, making `1rem = 10px`. Use this when calculating rem values (e.g. `1.6rem = 16px`, `2.4rem = 24px`).
 
 ```css
 /* ✅ Component styling pattern */

@@ -229,6 +229,18 @@ export default defineNuxtConfig({
 
 The consuming app's CSS loads after the layer's, so your token overrides win via the cascade.
 
+## rem sizing
+
+`html` has `font-size: 62.5%` set in `app/assets/styles/setup/01.config/_head.css`, making `1rem = 10px`. Use this when writing any rem values in your theme or component styles:
+
+| px   | rem    |
+| ---- | ------ |
+| 8px  | 0.8rem |
+| 12px | 1.2rem |
+| 16px | 1.6rem |
+| 24px | 2.4rem |
+| 32px | 3.2rem |
+
 ## Notes
 
 - The `--slate-*` scale comes from the layer and does not need to be redefined — keep all neutral/background tokens pointing at `--slate-*`.
