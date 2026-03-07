@@ -19,7 +19,7 @@
     "generate": "NUXT_STANDALONE=true nuxt generate",
     "preview": "NUXT_STANDALONE=true nuxt preview",
     "lint": "eslint .",
-    "postinstall": "nuxt prepare",
+    "postinstall": "NUXT_STANDALONE=true nuxt prepare",
     "release": "release-it",
     "test": "NUXT_STANDALONE=true vitest",
     "test:run": "NUXT_STANDALONE=true vitest --run",
