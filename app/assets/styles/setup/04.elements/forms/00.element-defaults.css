@@ -1,9 +1,9 @@
 :where(html) {
   input,
   textarea,
-  /* select, */
+  select,
   button {
-    all: unset;
+    /* all: unset; */
   }
 
   input:autofill,
