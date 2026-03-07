@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+const isStandalone = !!process.env.NUXT_STANDALONE;
+
 export default defineNuxtConfig({
   devtools: { enabled: true },
 
@@ -12,21 +14,22 @@ export default defineNuxtConfig({
   },
   css: ["./app/assets/styles/main.css"],
   modules: [
-    "@nuxt/eslint",
+    // Required by consumers — always included
     "@nuxt/icon",
     ...(process.env.STORYBOOK ? [] : ["@nuxt/fonts"]),
     "@nuxt/image",
-    "@nuxtjs/i18n",
-    "nuxt-qrcode",
     "@pinia/nuxt",
     "@vueuse/motion/nuxt",
     "pinia-plugin-persistedstate/nuxt",
-    "@nuxt/test-utils/module",
+    // Dev-only — only when running the layer as a standalone app
+    ...(isStandalone ? ["@nuxt/eslint", "@nuxtjs/i18n", "nuxt-qrcode", "@nuxt/test-utils/module"] : []),
   ],
-  i18n: {
-    defaultLocale: "en",
-    locales: ["en"],
-  },
+  ...(isStandalone ? {
+    i18n: {
+      defaultLocale: "en",
+      locales: ["en"],
+    },
+  } : {}),
   imports: {
     dirs: ["./stores"],
   },
@@ -118,10 +121,12 @@ export default defineNuxtConfig({
     includeWorkspace: true,
     strict: true,
     typeCheck: "build", // Enable type checking during build only - Fixes vue-tsc dependency issues
-    tsConfig: {
-      compilerOptions: {
-        types: ["vitest/globals"], // TypeScript support for globals
+    ...(isStandalone ? {
+      tsConfig: {
+        compilerOptions: {
+          types: ["vitest/globals"], // TypeScript support for globals
+        },
       },
-    },
+    } : {}),
   },
 });
