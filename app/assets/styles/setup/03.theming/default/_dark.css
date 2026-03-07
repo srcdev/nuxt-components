@@ -52,7 +52,7 @@
   --stepper-list-icon: var(--blue-02);
 
   /* ===========================================
-     TREATMENT/COLOUR FINDER VARIABLES
+     COLOUR FINDER VARIABLES
      =========================================== */
   --colour-finder-primary-colour: var(--blue-03);
   --colour-finder-border-colour: var(--blue-03);
@@ -62,6 +62,18 @@
 
   --colour-finder-conflict-surface-colour: var(--sunset-09);
   --colour-finder-conflict-stroke-colour: var(--sunset-03);
+
+  /* ===========================================
+     TREATMENT CONSULTANT VARIABLES
+     =========================================== */
+  --treatment-consultant-primary-colour: var(--blue-03);
+  --treatment-consultant-border-colour: var(--blue-03);
+
+  --treatment-consultant-checked-surface-colour: var(--green-10);
+  --treatment-consultant-checked-stroke-colour: var(--green-03);
+
+  --treatment-consultant-conflict-surface-colour: var(--sunset-09);
+  --treatment-consultant-conflict-stroke-colour: var(--sunset-03);
 
   /* ===========================================
      ANCHOR LINK VARIABLES
