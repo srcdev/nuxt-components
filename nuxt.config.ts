@@ -22,14 +22,8 @@ export default defineNuxtConfig({
     "@vueuse/motion/nuxt",
     "pinia-plugin-persistedstate/nuxt",
     // Dev-only — only when running the layer as a standalone app
-    ...(isStandalone ? ["@nuxt/eslint", "@nuxtjs/i18n", "nuxt-qrcode", "@nuxt/test-utils/module"] : []),
+    ...(isStandalone ? ["@nuxt/eslint", "nuxt-qrcode", "@nuxt/test-utils/module"] : []),
   ],
-  ...(isStandalone ? {
-    i18n: {
-      defaultLocale: "en",
-      locales: ["en"],
-    },
-  } : {}),
   imports: {
     dirs: ["./stores"],
   },
@@ -121,12 +115,14 @@ export default defineNuxtConfig({
     includeWorkspace: true,
     strict: true,
     typeCheck: "build", // Enable type checking during build only - Fixes vue-tsc dependency issues
-    ...(isStandalone ? {
-      tsConfig: {
-        compilerOptions: {
-          types: ["vitest/globals"], // TypeScript support for globals
-        },
-      },
-    } : {}),
+    ...(isStandalone
+      ? {
+          tsConfig: {
+            compilerOptions: {
+              types: ["vitest/globals"], // TypeScript support for globals
+            },
+          },
+        }
+      : {}),
   },
 });
