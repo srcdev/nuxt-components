@@ -25,7 +25,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── testing-add-playwright.md   — create a Playwright visual regression test
 └── components/
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
-    └── hero-text.md            — HeroText props, usage patterns, styling
+    ├── hero-text.md            — HeroText props, usage patterns, styling
+    └── link-text.md            — LinkText props, slots, usage patterns, styling
 ```
 
 ## Skill file template

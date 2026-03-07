@@ -211,14 +211,15 @@ const props = defineProps({
 ## Common Pitfalls to Avoid
 
 1. **Manual Vue imports**: Don't import `ref`, `computed`, etc. (auto-imported)
-2. **Missing test coverage**: Every component needs comprehensive tests
-3. **Hardcoded styles**: Use CSS custom properties for flexibility
-4. **PropType runtime imports**: Import as type only
-5. **Missing accessibility**: Include proper ARIA attributes
-6. **Inconsistent naming**: Follow established slot/prop naming patterns
-7. **Incorrect type casting**: Use `as unknown as CustomType` for component instances
-8. **Unmocked browser APIs**: Always mock ResizeObserver, IntersectionObserver, etc.
-9. **Missing DOM element casting**: Cast to HTMLElement when accessing style properties
+2. **Self-closing HTML elements**: ESLint (`vue/html-self-closing`) disallows self-closing non-void elements — always use explicit closing tags: `<slot name="foo"></slot>`, `<span></span>`, not `<slot name="foo" />` or `<span />`
+3. **Missing test coverage**: Every component needs comprehensive tests
+4. **Hardcoded styles**: Use CSS custom properties for flexibility
+5. **PropType runtime imports**: Import as type only
+6. **Missing accessibility**: Include proper ARIA attributes
+7. **Inconsistent naming**: Follow established slot/prop naming patterns
+8. **Incorrect type casting**: Use `as unknown as CustomType` for component instances
+9. **Unmocked browser APIs**: Always mock ResizeObserver, IntersectionObserver, etc.
+10. **Missing DOM element casting**: Cast to HTMLElement when accessing style properties
 
 ## Development Workflow
 
