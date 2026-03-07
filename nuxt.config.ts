@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-const isStandalone = !!process.env.NUXT_STANDALONE;
+const isStandalone = !!process.env.SRCDEV_STANDALONE;
 
 export default defineNuxtConfig({
   devtools: { enabled: true },
