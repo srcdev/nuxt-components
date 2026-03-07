@@ -24,6 +24,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── testing-add-unit-test.md    — create a Vitest unit test with snapshots
 ├── testing-add-playwright.md   — create a Playwright visual regression test
 └── components/
+    ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
     └── hero-text.md            — HeroText props, usage patterns, styling
 ```
 
