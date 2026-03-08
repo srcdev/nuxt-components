@@ -1,95 +1,60 @@
 <template>
-  <ul class="home-link-navigation" aria-label="Home Navigation">
-    <li v-if="slots.homeLink" class="home-link">
-      <slot name="homeLink">
-        <NuxtLink to="/" class="home-link-default">Logo</NuxtLink>
-      </slot>
-    </li>
-    <li class="skip-links">
-      <ul class="skip-links-nav">
-        <li class="skip-link-item">
-          <a href="#main-content" class="skip-link" ref="skipLink">Skip to main content</a>
-        </li>
-        <li class="skip-link-item"><a href="#footer" class="skip-link">Skip to footer</a></li>
-      </ul>
-    </li>
-  </ul>
+  <div class="home-link-navigation">
+    <div v-if="slots.homeLink" class="home-link">
+      <slot name="homeLink"></slot>
+    </div>
+    <nav class="skip-links-nav" aria-label="Skip navigation">
+      <a ref="skipLink" href="#main-content" class="skip-link">Skip to main content</a>
+      <a href="#footer-content" class="skip-link">Skip to footer</a>
+    </nav>
+  </div>
 </template>
 
 <script lang="ts" setup>
-const slots = useSlots()
+const slots = useSlots();
 </script>
 
 <style lang="css">
 @layer components {
-.home-link-navigation {
-  position: relative;
-  list-style: none;
-  padding: 0;
-
-  .skip-links {
-    list-style: none;
-    background-color: black;
-    padding: 0;
-    margin: 0;
-    position: absolute;
-    top: 40px;
-    left: 0;
-    height: 0;
-    overflow: hidden;
-    transition: height 0.3s ease-in-out;
-
-    &:focus-within {
-      height: auto;
-      z-index: 1000;
-    }
+  .home-link-navigation {
+    position: relative;
 
     .skip-links-nav {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1000;
+
       display: flex;
       flex-direction: column;
       gap: 0.2rem;
       background-color: black;
-
       border: 1px solid white;
-
-      list-style: none;
       padding: 0.2rem;
       margin: 0;
 
-      .skip-link-item {
-        padding: 0.2rem;
+      /* Hidden off-screen via transform — does NOT break keyboard focusability */
+      opacity: 0;
+      transform: translateY(-100%);
+      transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
 
-        .skip-link {
-          display: block;
-          color: white;
-          text-decoration: none;
-          margin: 0.2rem;
+      &:focus-within {
+        opacity: 1;
+        transform: translateY(0);
+      }
 
-          padding: 0.8rem 1.2rem;
-          text-wrap: nowrap;
+      .skip-link {
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 0.8rem 1.2rem;
+        text-wrap: nowrap;
 
-          &:focus-visible {
-            outline: 2px solid white;
-          }
+        &:focus-visible {
+          outline: 2px solid white;
         }
       }
     }
   }
-}
-
-/* .skip-link {
-  position: absolute;
-  top: -40px;
-  left: 0;
-  background: #000;
-  color: #fff;
-  padding: 8px 12px;
-  text-decoration: none;
-  transition: top 0.3s;
-}
-
-.skip-link:focus {
-  top: 0;
-} */
 }
 </style>
