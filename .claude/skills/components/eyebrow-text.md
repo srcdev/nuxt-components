@@ -4,6 +4,17 @@
 
 `EyebrowText` renders a short uppercase label — typically used above a heading to provide context or categorisation. It outputs a single string with configurable tag, size, and colour via CSS custom properties.
 
+## Before Adding to a Page
+
+Always ask the user for the following before placing the component:
+
+1. **`textContent`** — what is the label text? (passed as-is — do not pre-uppercase)
+2. **`fontSize`** — which size? (`large` | `medium` | `small`) — default is `medium`
+3. **`tag`** — does it need to be inline? If yes, use `span`. Otherwise `p` or `div` (default).
+4. **`styleClassPassthrough`** — any extra classes to add? (layout, spacing, custom styling hooks)
+
+Do not assume placeholder text or default content.
+
 ## Props
 
 | Prop | Type | Default | Required |
@@ -59,6 +70,7 @@ Define these CSS custom properties in your consuming app to control sizes.
 ## Styling
 
 Key CSS custom properties:
+
 - `--colour-text-eyebrow` — text colour (defaults to an accent/muted tone)
 
 Text is always `text-transform: uppercase` — do not pass pre-uppercased strings, as this makes content harder to edit and search.

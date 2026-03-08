@@ -4,6 +4,17 @@
 
 `HeroText` renders a styled heading with support for mixed text styling (normal/accent segments), configurable font size, layout axis, and an optional icon. It uses Playfair Display font with italic variation for accent segments.
 
+## Before Adding to a Page
+
+Always ask the user for the following before placing the component:
+
+1. **`tag`** — what heading level? (`h1` | `h2` | `h3` | `h4` | `h5` | `h6`)
+2. **Text segments** — for each segment, what is the text and should it be `normal` (default) or `accent` (italic, `--colour-text-accent` colour)?
+3. **`fontSize`** — which size? (`display` | `title` | `heading` | `subheading` | `label`) — default is `title`
+4. **`styleClassPassthrough`** — any extra classes to add? (layout, spacing, custom styling hooks)
+
+Do not assume placeholder text or default content.
+
 ## Props
 
 | Prop | Type | Default | Required |
