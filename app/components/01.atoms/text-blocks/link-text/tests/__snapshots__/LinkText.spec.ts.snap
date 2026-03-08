@@ -1,0 +1,29 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LinkText > renders correct HTML structure with all props set 1`] = `
+"<a href="https://example.com" rel="noopener noreferrer" target="_blank" class="link-text custom-class">
+  <!--v-if--><span class="link-text__label">Visit Us</span>
+  <!--v-if-->
+</a>"
+`;
+
+exports[`LinkText > renders correct HTML structure with both slots 1`] = `"<a href="/about" class="link-text"><span class="link-text__icon link-text__icon--left"><svg data-testid="icon-left"></svg></span><span class="link-text__label">About Us</span><span class="link-text__icon link-text__icon--right"><svg data-testid="icon-right"></svg></span></a>"`;
+
+exports[`LinkText > renders correct HTML structure with default props 1`] = `
+"<a href="/about" class="link-text">
+  <!--v-if--><span class="link-text__label">About Us</span>
+  <!--v-if-->
+</a>"
+`;
+
+exports[`LinkText > renders correct HTML structure with left slot 1`] = `
+"<a href="/about" class="link-text"><span class="link-text__icon link-text__icon--left"><svg data-testid="icon-left"></svg></span><span class="link-text__label">About Us</span>
+  <!--v-if-->
+</a>"
+`;
+
+exports[`LinkText > renders correct HTML structure with right slot 1`] = `
+"<a href="/about" class="link-text">
+  <!--v-if--><span class="link-text__label">About Us</span><span class="link-text__icon link-text__icon--right"><svg data-testid="icon-right"></svg></span>
+</a>"
+`;

@@ -17,9 +17,9 @@
             <template #eyebrowText>
               <EyebrowText tag="p" font-size="large" text-content="About Natasha" :style-class-passthrough="['mb-0']" />
             </template>
-            <template #heroText>
+            <template #heroText="{ headingId }">
               <HeroText
-                :id="useId()"
+                :id="headingId"
                 tag="h2"
                 axis="vertical"
                 font-size="display"

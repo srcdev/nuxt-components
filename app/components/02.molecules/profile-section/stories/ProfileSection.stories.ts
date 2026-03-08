@@ -39,7 +39,7 @@ type Story = StoryObj<typeof ProfileSection>;
 
 // ─── Stories ─────────────────────────────────────────────────────────────────
 
-/** Default — three profile-info blocks with representative content. */
+/** Default — three profile-info blocks with eyebrow and hero text header slots. */
 export const Default: Story = {
   render: (args) => ({
     components: { ProfileSection },
@@ -48,6 +48,23 @@ export const Default: Story = {
     },
     template: `
       <ProfileSection v-bind="args">
+        <template #eyebrowText>
+          <EyebrowText tag="p" font-size="large" text-content="About Natasha" :style-class-passthrough="['mb-0']" />
+        </template>
+        <template #heroText="{ headingId }">
+          <HeroText
+            :id="headingId"
+            tag="h2"
+            axis="vertical"
+            font-size="display"
+            :text-content="[
+              { text: 'Your', styleClass: 'normal' },
+              { text: 'mobile hairdresser', styleClass: 'accent' },
+              { text: 'in Bath', styleClass: 'normal' },
+            ]"
+            :style-class-passthrough="['mb-20']"
+          />
+        </template>
         <template #profile-info-1>
           <div class="experience">
             <p class="page-body-normal">With over 10 years of experience as a mobile hairdresser, Natasha brings the salon to you — whether you're at home, in the office, or getting ready for a special occasion.</p>
@@ -78,6 +95,23 @@ export const WithProfileLinks: Story = {
     },
     template: `
       <ProfileSection v-bind="args">
+        <template #eyebrowText>
+          <EyebrowText tag="p" font-size="large" text-content="About Natasha" :style-class-passthrough="['mb-0']" />
+        </template>
+        <template #heroText="{ headingId }">
+          <HeroText
+            :id="headingId"
+            tag="h2"
+            axis="vertical"
+            font-size="display"
+            :text-content="[
+              { text: 'Your', styleClass: 'normal' },
+              { text: 'mobile hairdresser', styleClass: 'accent' },
+              { text: 'in Bath', styleClass: 'normal' },
+            ]"
+            :style-class-passthrough="['mb-20']"
+          />
+        </template>
         <template #profile-info-1>
           <div class="experience">
             <p class="page-body-normal">With over 10 years of experience as a mobile hairdresser, Natasha brings the salon to you.</p>
@@ -102,6 +136,30 @@ export const WithProfileLinks: Story = {
   }),
 };
 
+/** No header slots — renders without eyebrow or hero text. */
+export const WithoutHeader: Story = {
+  name: "Without Header Slots",
+  render: (args) => ({
+    components: { ProfileSection },
+    setup() {
+      return { args };
+    },
+    template: `
+      <ProfileSection v-bind="args">
+        <template #profile-info-1>
+          <p class="page-body-normal">Profile information block one.</p>
+        </template>
+        <template #profile-info-2>
+          <p class="page-body-normal">Profile information block two.</p>
+        </template>
+        <template #profile-info-3>
+          <p class="page-body-normal">Profile information block three.</p>
+        </template>
+      </ProfileSection>
+    `,
+  }),
+};
+
 /** Section tag — renders the root as a semantic section element. */
 export const AsSectionTag: Story = {
   name: "As section Tag",
@@ -115,6 +173,18 @@ export const AsSectionTag: Story = {
     },
     template: `
       <ProfileSection v-bind="args">
+        <template #eyebrowText>
+          <EyebrowText tag="p" font-size="large" text-content="About Natasha" :style-class-passthrough="['mb-0']" />
+        </template>
+        <template #heroText="{ headingId }">
+          <HeroText
+            :id="headingId"
+            tag="h2"
+            axis="horizontal"
+            font-size="large"
+            :text-content="[{ text: 'Profile section heading', styleClass: 'normal' }]"
+          />
+        </template>
         <template #profile-info-1>
           <p class="page-body-normal">Profile information block one.</p>
         </template>
@@ -142,6 +212,18 @@ export const CustomInfoCount: Story = {
     },
     template: `
       <ProfileSection v-bind="args">
+        <template #eyebrowText>
+          <EyebrowText tag="p" font-size="large" text-content="About Natasha" :style-class-passthrough="['mb-0']" />
+        </template>
+        <template #heroText="{ headingId }">
+          <HeroText
+            :id="headingId"
+            tag="h2"
+            axis="horizontal"
+            font-size="large"
+            :text-content="[{ text: 'Profile section heading', styleClass: 'normal' }]"
+          />
+        </template>
         <template #profile-info-1>
           <p class="page-body-normal">First block of information about this person.</p>
         </template>

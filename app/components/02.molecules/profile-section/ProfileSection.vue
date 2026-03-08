@@ -7,7 +7,7 @@
   >
     <header class="profile-section-header">
       <slot v-if="hasEyebrowTextSlot" name="eyebrowText"></slot>
-      <slot v-if="hasHeroTextSlot" name="heroText"></slot>
+      <slot v-if="hasHeroTextSlot" name="heroText" :heading-id="headingId"></slot>
     </header>
 
     <div class="profile-section-inner">
@@ -41,7 +41,6 @@ interface ProfilePicture {
 
 interface Props {
   tag?: "div" | "section" | "article" | "main";
-  id: string | null;
   profilePicture: ProfilePicture;
   profileInfoCount?: number;
   styleClassPassthrough?: string | string[];

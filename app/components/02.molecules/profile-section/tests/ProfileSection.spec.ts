@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { h } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import ProfileSection from "../ProfileSection.vue";
 
@@ -79,26 +80,69 @@ describe("ProfileSection", () => {
     expect(wrapper.html()).toContain("Second info block");
   });
 
-  it("adds aria-labelledby referencing the heading id when tag is section", async () => {
+  it("does not render eyebrowText slot area when slot is not provided", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: defaultProps,
+    });
+    expect(wrapper.html()).not.toContain("eyebrow");
+  });
+
+  it("renders eyebrowText slot content when provided", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: defaultProps,
+      slots: {
+        eyebrowText: "<p class='eyebrow'>About Natasha</p>",
+      },
+    });
+    expect(wrapper.find(".eyebrow").exists()).toBe(true);
+    expect(wrapper.html()).toContain("About Natasha");
+  });
+
+  it("does not render heroText slot area when slot is not provided", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: defaultProps,
+    });
+    expect(wrapper.find("header h1, header h2, header h3, header h4, header h5, header h6").exists()).toBe(false);
+  });
+
+  it("renders heroText slot content when provided", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: defaultProps,
+      slots: {
+        heroText: "<h2 class='hero-heading'>My Heading</h2>",
+      },
+    });
+    expect(wrapper.find(".hero-heading").exists()).toBe(true);
+    expect(wrapper.html()).toContain("My Heading");
+  });
+
+  it("adds aria-labelledby when tag is section", async () => {
     const wrapper = await mountSuspended(ProfileSection, {
       props: { ...defaultProps, tag: "section" },
     });
     const root = wrapper.find(".profile-section");
-    const labelledBy = root.attributes("aria-labelledby");
-    expect(labelledBy).toBeTruthy();
-    const heading = wrapper.find(".hero-text");
-    expect(heading.attributes("id")).toBe(labelledBy);
+    expect(root.attributes("aria-labelledby")).toBeTruthy();
   });
 
-  it("adds aria-labelledby referencing the heading id when tag is article", async () => {
+  it("adds aria-labelledby when tag is article", async () => {
     const wrapper = await mountSuspended(ProfileSection, {
       props: { ...defaultProps, tag: "article" },
     });
     const root = wrapper.find(".profile-section");
-    const labelledBy = root.attributes("aria-labelledby");
+    expect(root.attributes("aria-labelledby")).toBeTruthy();
+  });
+
+  it("exposes headingId via heroText scoped slot and aria-labelledby matches the heading id", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: { ...defaultProps, tag: "section" },
+      slots: {
+        heroText: (props: Record<string, unknown>) =>
+          h("h2", { id: props.headingId, class: "hero-heading" }, "My Heading"),
+      },
+    });
+    const labelledBy = wrapper.find(".profile-section").attributes("aria-labelledby");
     expect(labelledBy).toBeTruthy();
-    const heading = wrapper.find(".hero-text");
-    expect(heading.attributes("id")).toBe(labelledBy);
+    expect(wrapper.find(".hero-heading").attributes("id")).toBe(labelledBy);
   });
 
   it("does not add aria-labelledby when tag is div", async () => {

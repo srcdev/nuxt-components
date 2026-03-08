@@ -156,6 +156,24 @@ Playwright `STORY_BASE` slug. The slug is derived by lowercasing and replacing s
 | Enum / union   | `{ type: "select" }` + `options` |
 | Array / object | `"object"`                       |
 
+## Scoped slots
+
+When a component exposes data via slot props (e.g. an internally-generated `headingId`),
+use the scoped slot destructuring syntax directly in the inline template string:
+
+```ts
+template: `
+  <ComponentName v-bind="args">
+    <template #heroText="{ headingId }">
+      <HeroText :id="headingId" tag="h2" ... />
+    </template>
+  </ComponentName>
+`,
+```
+
+This keeps the ID wiring self-contained inside the component — the parent story just
+consumes what the slot exposes, rather than generating its own ID.
+
 ## Notes
 
 - Use `table: { category: "..." }` in `argTypes` when a component has many props — it groups

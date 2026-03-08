@@ -107,6 +107,19 @@ describe("ComponentName", () => {
       wrapper = await createWrapper({}, { default: "<span>Content</span>" });
       expect(wrapper.find("span").exists()).toBe(true);
     });
+
+    it("exposes scoped slot prop and it matches the rendered element", async () => {
+      // Import h from vue at the top of the file (not auto-imported in test files)
+      wrapper = await mountSuspended(ComponentName, {
+        props: { ...defaultProps },
+        slots: {
+          slotName: (props: Record<string, unknown>) =>
+            h("h2", { id: props.exposedId, class: "target" }, "Content"),
+        },
+      });
+      const attrValue = wrapper.find(".component-name").attributes("aria-labelledby");
+      expect(wrapper.find(".target").attributes("id")).toBe(attrValue);
+    });
   });
 
   // -------------------------
@@ -120,6 +133,31 @@ describe("ComponentName", () => {
   });
 });
 ```
+
+## Scoped slots
+
+When a component exposes data via slot props (e.g. an internally-generated `headingId`),
+import `h` from `vue` explicitly — it is **not** auto-imported in test files — and use a
+render function as the slot value so VTU receives a real VNode:
+
+```ts
+import { h } from "vue";
+
+it("exposes headingId via scoped slot", async () => {
+  const wrapper = await mountSuspended(ProfileSection, {
+    props: { tag: "section", ...defaultProps },
+    slots: {
+      heroText: (props: Record<string, unknown>) =>
+        h("h2", { id: props.headingId, class: "hero-heading" }, "Heading"),
+    },
+  });
+  const labelledBy = wrapper.find(".profile-section").attributes("aria-labelledby");
+  expect(labelledBy).toBeTruthy();
+  expect(wrapper.find(".hero-heading").attributes("id")).toBe(labelledBy);
+});
+```
+
+> Returning a plain string from a slot function does **not** produce DOM — always use `h()`.
 
 ## Key rules
 
