@@ -10,8 +10,9 @@ Always ask the user for the following before placing the component:
 
 1. **`tag`** — what heading level? (`h1` | `h2` | `h3` | `h4` | `h5` | `h6`)
 2. **Text segments** — for each segment, what is the text and should it be `normal` (default) or `accent` (italic, `--colour-text-accent` colour)?
-3. **`fontSize`** — which size? (`display` | `title` | `heading` | `subheading` | `label`) — default is `title`
-4. **`styleClassPassthrough`** — any extra classes to add? (layout, spacing, custom styling hooks)
+3. **`axis`** — should segments sit inline (`horizontal`, default) or stack in a column (`vertical`)?
+4. **`fontSize`** — which size? (`display` | `title` | `heading` | `subheading` | `label`) — default is `title`
+5. **`styleClassPassthrough`** — any extra classes to add? (layout, spacing, custom styling hooks)
 
 Do not assume placeholder text or default content.
 
@@ -98,6 +99,7 @@ Define these CSS custom properties in your consuming app to control sizes.
 Override via `styleClassPassthrough` or a parent HOC `<style>` block targeting `.hero-text`.
 
 Key CSS custom properties:
+
 - `--colour-text-accent` — colour applied to `.accent` spans and the icon
 - `--hero-text-{scale}` — font size per scale value
 
