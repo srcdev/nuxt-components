@@ -48,6 +48,8 @@
           {{ serviceData.whatIsIt }}
         </p>
 
+        <slot v-if="isSummary" name="summary-link" :service-data="serviceData"></slot>
+
         <HeroText
           v-if="!isSummary"
           tag="h2"
@@ -137,16 +139,7 @@
             :style-class-passthrough="['mbs-0', 'mbe-20']"
           />
           <p class="page-body-normal">Mobile service across Bath — I come to you.</p>
-          <InputButtonCore
-            variant="secondary"
-            button-text="Get in touch"
-            href="#"
-            :style-class-passthrough="['mbs-24']"
-          >
-            <template #right>
-              <Icon name="mdi:arrow-right" class="icon" />
-            </template>
-          </InputButtonCore>
+          <slot name="cta" :service-data="serviceData"></slot>
         </GlassPanel>
       </div>
     </div>

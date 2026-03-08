@@ -17,15 +17,7 @@
     <div class="description">
       {{ serviceData.shortDescription }}
     </div>
-    <InputButtonCore
-      variant="secondary"
-      :button-text="`More about ${serviceData.title}`"
-      :href="`/ui/services/services-section/${serviceData.slug}`"
-    >
-      <template #right>
-        <Icon name="mdi:arrow-right" class="icon" />
-      </template>
-    </InputButtonCore>
+    <slot name="actions" :service-data="serviceData"></slot>
   </component>
 </template>
 
@@ -33,7 +25,7 @@
 import type { Service } from "~/types/types.services";
 
 interface Props {
-  tag?: "div" | "section" | "article" | "main" | "header" | "footer";
+  tag?: "div" | "section" | "article";
   serviceData: Service;
   styleClassPassthrough?: string | string[];
 }
@@ -60,7 +52,7 @@ watch(
 @layer components {
   .services-card {
     display: grid;
-    grid-template-rows: auto 2ch auto 5lh 4.4rem;
+    grid-template-rows: auto 2ch auto 5lh auto;
     gap: 1rem;
 
     .image-wrapper {

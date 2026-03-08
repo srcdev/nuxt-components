@@ -1,6 +1,19 @@
 <template>
   <component :is="tag" class="services-card-grid" :class="[elementClasses]">
-    <ServicesCard v-for="(item, index) in servicesData" :key="index" :service-data="item" />
+    <ServicesCard v-for="(item, index) in servicesData" :key="index" :service-data="item">
+      <template #actions="{ serviceData }">
+        <InputButtonCore
+          variant="secondary"
+          :button-text="`Enquire about ${serviceData.title}`"
+          :href="`/services/${serviceData.slug}`"
+          :style-class-passthrough="['mbs-24']"
+        >
+          <template #right>
+            <Icon name="mdi:arrow-right" class="icon" />
+          </template>
+        </InputButtonCore>
+      </template>
+    </ServicesCard>
   </component>
 </template>
 
