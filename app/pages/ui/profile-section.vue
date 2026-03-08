@@ -14,6 +14,24 @@
             }"
             :profile-info-count="3"
           >
+            <template #eyebrowText>
+              <EyebrowText tag="p" font-size="large" text-content="About Natasha" :style-class-passthrough="['mb-0']" />
+            </template>
+            <template #heroText>
+              <HeroText
+                :id="useId()"
+                tag="h2"
+                axis="vertical"
+                font-size="display"
+                :text-content="[
+                  { text: 'Your', styleClass: 'normal' },
+                  { text: 'mobile hairdresser', styleClass: 'accent' },
+                  { text: 'in Bath', styleClass: 'normal' },
+                ]"
+                :style-class-passthrough="['mb-20']"
+              />
+            </template>
+
             <template #profile-info-1>
               <p class="page-body-medium experience">
                 With over 10 years' experience, I offer a range of professional and luxurious, one-to-one hairdressing

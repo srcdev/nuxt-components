@@ -20,8 +20,8 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 <style lang="css">
 @layer components {
   .text-block {
-    padding-block-start: var(--fluid-40-80);
-    padding-block-end: var(--fluid-40-80);
+    padding-block-start: var(--fluid-space-48-96);
+    padding-block-end: var(--fluid-space-48-96);
   }
 }
 </style>

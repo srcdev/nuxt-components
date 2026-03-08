@@ -6,19 +6,8 @@
     :aria-labelledby="needsLabel ? headingId : undefined"
   >
     <header class="profile-section-header">
-      <EyebrowText tag="p" text-content="About Natasha" :style-class-passthrough="['mb-0']" />
-      <HeroText
-        :id="headingId"
-        tag="h2"
-        axis="vertical"
-        font-size="display"
-        :text-content="[
-          { text: 'Your', styleClass: 'normal' },
-          { text: 'mobile hairdresser', styleClass: 'accent' },
-          { text: 'in Bath', styleClass: 'normal' },
-        ]"
-        :style-class-passthrough="['mb-20']"
-      />
+      <slot v-if="hasEyebrowTextSlot" name="eyebrowText"></slot>
+      <slot v-if="hasHeroTextSlot" name="heroText"></slot>
     </header>
 
     <div class="profile-section-inner">
@@ -52,6 +41,7 @@ interface ProfilePicture {
 
 interface Props {
   tag?: "div" | "section" | "article" | "main";
+  id: string | null;
   profilePicture: ProfilePicture;
   profileInfoCount?: number;
   styleClassPassthrough?: string | string[];
@@ -66,6 +56,8 @@ const headingId = useId();
 const needsLabel = computed(() => props.tag === "section" || props.tag === "article");
 
 const slots = useSlots();
+const hasEyebrowTextSlot = computed(() => Boolean(slots.eyebrowText));
+const hasHeroTextSlot = computed(() => Boolean(slots.heroText));
 const hasProfileLinksSlot = computed(() => Boolean(slots.profileLinks));
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -80,75 +72,75 @@ watch(
 
 <style lang="css">
 @layer components {
-.profile-section {
-  /* .profile-section-header {
+  .profile-section {
+    /* .profile-section-header {
   } */
-  .profile-section-inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    .profile-section-inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
 
-    @media (min-width: 768px) {
-      grid-template-columns: 384px 1fr;
-      align-items: start;
-      gap: 4rem;
-    }
-
-    .picture {
-      aspect-ratio: 3 / 4;
-      border-radius: 8px;
-      overflow: hidden;
-
-      .profile-picture {
-        object-fit: cover;
-        width: 100%;
+      @media (min-width: 768px) {
+        grid-template-columns: 384px 1fr;
+        align-items: start;
+        gap: 4rem;
       }
-    }
 
-    .profile-info {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      height: stretch;
+      .picture {
+        aspect-ratio: 3 / 4;
+        border-radius: 8px;
+        overflow: hidden;
 
-      .profile-info-content {
-        .profile-info-block {
-          margin-block-end: 1.5rem;
+        .profile-picture {
+          object-fit: cover;
+          width: 100%;
+        }
+      }
 
-          /* .experience {
+      .profile-info {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        height: stretch;
+
+        .profile-info-content {
+          .profile-info-block {
+            margin-block-end: 1.5rem;
+
+            /* .experience {
           } */
 
-          .location {
-            .highlight {
-              color: var(--colour-text-accent);
-              font-weight: 600;
-              font-variation-settings: "wght" 600;
+            .location {
+              .highlight {
+                color: var(--colour-text-accent);
+                font-weight: 600;
+                font-variation-settings: "wght" 600;
+              }
             }
-          }
 
-          .services {
-            .highlight {
-              color: var(--colour-link-default);
-              font-weight: 600;
-              font-variation-settings: "wght" 600;
+            .services {
+              .highlight {
+                color: var(--colour-link-default);
+                font-weight: 600;
+                font-variation-settings: "wght" 600;
 
-              &:hover {
-                color: var(--colour-link-hover);
+                &:hover {
+                  color: var(--colour-link-hover);
+                }
               }
             }
           }
         }
-      }
 
-      .profile-links {
-        display: flex;
-        flex-grow: 1;
-        gap: 1rem;
-        align-items: end;
-        justify-content: flex-end;
+        .profile-links {
+          display: flex;
+          flex-grow: 1;
+          gap: 1rem;
+          align-items: end;
+          justify-content: flex-end;
+        }
       }
     }
   }
-}
 }
 </style>
