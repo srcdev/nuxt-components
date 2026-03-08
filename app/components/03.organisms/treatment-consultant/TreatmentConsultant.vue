@@ -2,23 +2,6 @@
   <div class="treatment-consultant">
     <div class="treatment-consultant__container">
       <div class="treatment-consultant__content">
-        <!-- Header -->
-        <div
-          v-motion
-          :initial="{ opacity: 0, y: 20 }"
-          :enter="{ opacity: 1, y: 0 }"
-          class="treatment-consultant__header"
-        >
-          <EyebrowText text-content="Interactive Tool" font-size="large" />
-          <h1 class="treatment-consultant__title">
-            Find Your
-            <span class="treatment-consultant__title-highlight">Perfect Look</span>
-          </h1>
-          <p class="treatment-consultant__subtitle">
-            Select your hair type, current colour, dream shade, and any treatments to get personalised recommendations.
-          </p>
-        </div>
-
         <!-- Progress Steps -->
         <div class="treatment-consultant__progress">
           <template v-for="(s, i) in STEPS" :key="s">
