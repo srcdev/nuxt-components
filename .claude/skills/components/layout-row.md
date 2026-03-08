@@ -2,95 +2,178 @@
 
 ## Overview
 
-`LayoutRow` is a CSS grid-based layout wrapper that controls how wide its content sits within the page. It uses a named-column grid system (full → popout → content → inset-content) so you can precisely place content at different widths without writing custom CSS. It is the primary layout primitive for page sections.
+`LayoutRow` is a CSS grid-based layout wrapper that controls how wide its content sits within the page. It uses a named-column grid system (full → popout → content → inset-content) so content can be precisely placed at different widths without custom CSS. It is the primary layout primitive for page sections.
 
-## Before Adding to a Page
+---
 
-Always ask the user for the following before placing the component:
+## How to use this skill
 
-1. **`variant`** — how wide should this row be? (required — see variant guide below)
-2. **`tag`** — what semantic element? (`div` | `section` | `article` | `aside` | `header` | `footer` | `main` | `nav` | `ul` | `ol`) — default is `div`
-3. **`id`** — does this section need an anchor ID for navigation or skip-links?
-4. **`isLandmark`** — should this be a focusable ARIA landmark? (default `false`)
-5. **`styleClassPassthrough`** — any extra utility classes for spacing, background, etc.?
+When a developer asks to add a `LayoutRow`, follow the interactive flow below. Do not skip to writing code — work through the questions first to ensure the right variant is chosen. Developers unfamiliar with this system will not know what the options mean without guidance.
 
-Do not assume a variant — always confirm width intent with the user.
+---
 
-## Choosing a Variant
+## Step 1 — Read the current context
 
-The grid has four named tracks. Ask the user which fits their intent:
+Before asking anything, read the file the developer is working in and any parent components or pages to determine:
 
-| Variant | Max width | Description |
-|---------|-----------|-------------|
-| `inset-content` | **840px** | Narrower readable column — ideal for long-form text, articles, forms |
-| `content` | **1064px** | Standard content width — most common choice for sections |
-| `popout` | **1400px** | Wider than content — good for cards, media, feature rows |
-| `full` | **100vw** | Edge-to-edge — heroes, full-bleed images, backgrounds |
-| `full-width` | **100vw** | Alias for `full` |
-| `full-content` | **100vw** | Full width with `--minimum-content-padding` applied inline |
-| `full-content-nopad` | **100vw** | Full width, no padding at all |
+1. **Is this LayoutRow inside another LayoutRow?**
+   - If yes, note the parent's `variant`. The inner grid resets relative to the parent's inner width, not the page. Warn the developer (see side effects below).
+   - If no, this is page-level — the grid spans the full viewport.
 
-### Start/end variants
+2. **What is the effective current max width?**
+   Report this before asking any questions. Examples:
+   - "This row will sit at **page level** — the grid spans the full viewport width."
+   - "This row is nested inside a `LayoutRow variant="content"` — its maximum available width is **1064px**, not the full viewport."
+   - "This row is nested inside `variant="inset-content"` — maximum available width is **840px**."
 
-Each track also has `-start` and `-end` variants that anchor to one side of the grid (useful for asymmetric layouts):
+3. **What content is already nearby?** Note any sibling LayoutRows, headings, or components to give context for alignment.
 
-- `full-start` / `full-end`
-- `popout-start` / `popout-end`
-- `content-start` / `content-end`
-- `inset-content-start` / `inset-content-end`
+---
 
-### Suggesting a variant based on context
+## Step 2 — Ask what the row will contain
 
-Look at the surrounding page or parent component before suggesting:
+Ask the developer what is going in this row. Do not assume. Examples to listen for:
 
-- If the parent is a **hero or banner** → `full` or `full-content`
-- If the parent is a **page body / article** → `content` or `inset-content`
-- If placing a **card grid or media feature** → `popout`
-- If the component fills a **sidebar or aside** → `inset-content`
-- If there is already a `LayoutRow` parent → the inner row's variant is relative to the parent's inner column width, not the full page — clarify with the user if nesting is intentional
+| Content type | Suggested variant |
+|---|---|
+| Hero, banner, full-bleed image or video | `full` or `full-content` |
+| Coloured background band containing constrained content | `full` wrapping inner `content` |
+| Card grid, media grid, feature row | `popout` |
+| Standard page section (text + components) | `content` |
+| Long-form article, blog post, form | `inset-content` |
+| Sidebar or aside | `inset-content` |
 
-## Props
+Give a suggestion based on their answer, but confirm before proceeding.
+
+---
+
+## Step 3 — Present the width and margin consequences
+
+Once you have a candidate variant (or 2–3 options), show the developer exactly what they will get at common viewport widths. Use this reference table:
+
+### Approximate rendered widths by variant
+
+| Viewport | `inset-content` | `content` | `popout` | `full` |
+|----------|----------------|-----------|----------|--------|
+| 375px (mobile) | ~355px | ~355px | ~355px | 375px |
+| 768px (tablet) | ~748px | ~748px | ~748px | 768px |
+| 1080px | **840px** | ~1060px | ~1060px | 1080px |
+| 1280px | **840px** | **1064px** | ~1260px | 1280px |
+| 1440px | **840px** | **1064px** | **1400px** | 1440px |
+| 1920px | **840px** | **1064px** | **1400px** | 1920px |
+
+> Bold = the variant has reached its maximum and is now letterboxed. Below that threshold it fills the available width minus the minimum gutter (default `1rem` = 10px each side).
+
+### Approximate margin (space each side at wider viewports)
+
+| Variant | @ 1080px | @ 1280px | @ 1440px | @ 1920px |
+|---------|---------|---------|---------|---------|
+| `inset-content` | ~120px | ~220px | ~300px | ~540px |
+| `content` | ~10px | ~108px | ~188px | ~428px |
+| `popout` | ~10px | ~10px | ~20px | ~260px |
+| `full` | 0 | 0 | 0 | 0 |
+
+Phrase this conversationally. For example:
+> "With `content`, your section will max out at **1064px** wide. On a 1440px screen that leaves about **188px of margin on each side**. On a 1280px screen it's tighter — around **108px** each side. Does that sound right for what you're building?"
+
+If they want more breathing room → suggest `inset-content`.
+If they want the content to feel wider → suggest `popout`.
+
+---
+
+## Step 4 — Flag side effects for the chosen variant
+
+Before writing code, flag any relevant consequences:
+
+**`full` or `full-width`** — Content is completely edge-to-edge with no gutter at any viewport width. If text is placed directly inside without a nested layout wrapper it will touch screen edges on mobile. Suggest `full-content` or a nested `content` LayoutRow for the text.
+
+**`full-content`** — Adds `--minimum-content-padding` (default `1rem` = 10px) as inline padding. Still full-bleed visually at most viewport sizes. Good for coloured bands.
+
+**`full-content-nopad`** — Truly zero padding. Only use if the child component manages its own edge spacing.
+
+**`popout`** — At viewports below ~1400px the popout track shrinks. Between 1280–1440px the margin is very small (~10–20px each side). If the design needs consistent breathing room at 1280px, `content` may be a better choice.
+
+**`inset-content` or `content` nested inside a `full` LayoutRow** — This is a common and valid pattern: `full` gives edge-to-edge background, the inner row constrains the text/content. Confirm this is intentional if you see it.
+
+**Nested LayoutRow (any variant)** — The inner grid takes the parent's `.layout-row-inner` width as 100%. The `full` variant of the inner LayoutRow will only be as wide as the parent's inner column, not the viewport. Warn the developer if this is surprising.
+
+**`-start` / `-end` variants** — These only set `grid-column-start` or `grid-column-end`, not both. Content will stretch to the opposite edge of the grid unless the other end is also constrained. Best for intentional asymmetric designs.
+
+---
+
+## Step 5 — Confirm the remaining props
+
+Once the variant is agreed, ask about:
+
+1. **`tag`** — what HTML element? Default is `div`. Common choices:
+   - `section` — for a thematic page section (most common)
+   - `article` — for self-contained content
+   - `header` / `footer` — for page-level header/footer rows
+   - `main` — for the primary content area (only once per page)
+   - `nav` — for navigation rows
+
+2. **`id`** — needed if this section is a scroll target, skip-link destination, or anchor in navigation. Ask if unsure.
+
+3. **`isLandmark`** — default `false`. Only set `true` if the row is a navigable landmark that needs keyboard focus. Usually `tag="section"` is sufficient — `isLandmark` is rarely needed.
+
+4. **`styleClassPassthrough`** — any extra classes for spacing, background colour, etc.?
+
+---
+
+## Props reference
 
 | Prop | Type | Default | Required |
 |------|------|---------|----------|
-| `variant` | see variant list above | — | **yes** |
+| `variant` | see variant list | — | **yes** |
 | `tag` | `"div" \| "section" \| "article" \| "aside" \| "header" \| "footer" \| "main" \| "nav" \| "ul" \| "ol"` | `"div"` | no |
 | `id` | `string` | `null` | no |
 | `isLandmark` | `boolean` | `false` | no |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | no |
 | `dataTestid` | `string` | `"layout-row"` | no |
 
-## Basic Usage
+All valid `variant` values:
+`full` · `full-start` · `full-end` · `popout` · `popout-start` · `popout-end` · `content` · `content-start` · `content-end` · `inset-content` · `inset-content-start` · `inset-content-end` · `full-width` · `full-content` · `full-content-nopad`
+
+---
+
+## Usage examples
+
+### Standard section
 
 ```vue
 <LayoutRow variant="content" tag="section">
-  <p>Content sits within the 1064px content track.</p>
+  <p>Sits within the 1064px content track with ~188px margin at 1440px.</p>
 </LayoutRow>
 ```
 
-## Common Patterns
-
-### Full-bleed hero with inner content width
+### Full-bleed hero, text constrained inside
 
 ```vue
 <LayoutRow variant="full" tag="section">
-  <!-- Background spans full viewport -->
-  <!-- Place a nested LayoutRow or constrained div inside for text -->
+  <!-- Background is edge-to-edge -->
   <LayoutRow variant="content">
     <HeroText tag="h1" :textContent="[{ text: 'Welcome' }]" />
   </LayoutRow>
 </LayoutRow>
 ```
 
-### Article / long-form body
+### Coloured band (full width + safe padding)
 
 ```vue
-<LayoutRow variant="inset-content" tag="article">
-  <p>Comfortable reading width at 840px max.</p>
+<LayoutRow variant="full-content" tag="section" :styleClassPassthrough="['bg-brand']">
+  <p>Full-width background, content padded by --minimum-content-padding.</p>
 </LayoutRow>
 ```
 
-### Feature section (wider than body)
+### Long-form article body
+
+```vue
+<LayoutRow variant="inset-content" tag="article">
+  <p>Comfortable reading column at 840px max.</p>
+</LayoutRow>
+```
+
+### Feature / card grid (popout)
 
 ```vue
 <LayoutRow variant="popout" tag="section">
@@ -98,28 +181,24 @@ Look at the surrounding page or parent component before suggesting:
 </LayoutRow>
 ```
 
-### Full width with safe padding (e.g. coloured band)
+---
 
-```vue
-<LayoutRow variant="full-content" tag="section" :styleClassPassthrough="['bg-brand']">
-  <p>Edge-to-edge background, content padded by --minimum-content-padding.</p>
-</LayoutRow>
-```
+## CSS custom properties
 
-## CSS Custom Properties
+Override in consuming app to adjust all track sizes globally:
 
-Override these in your consuming app to adjust the grid track sizes:
-
-| Property | Default | Controls |
-|----------|---------|---------|
+| Property | Default | Effect |
+|----------|---------|--------|
 | `--popout-max-width` | `1400px` | Maximum width of the popout track |
 | `--content-max-width` | `1064px` | Maximum width of the content track |
 | `--inset-content-max-width` | `840px` | Maximum width of the inset-content track |
-| `--minimum-content-padding` | `1rem` | Minimum padding either side at small viewports |
+| `--minimum-content-padding` | `1rem` (10px) | Minimum gutter at small viewports |
+
+---
 
 ## Notes
 
-- The component is auto-imported in Nuxt — no import needed.
-- `LayoutRow` wraps content in an inner `.layout-row-inner` div with `container-type: inline-size`, so children can use container queries.
-- `isLandmark` adds `tabindex="0"` and a generic `aria-label` — only use this when the row represents a true navigational landmark. Prefer a meaningful `tag` (e.g. `section`, `main`) over `isLandmark` where possible.
-- Nesting `LayoutRow` inside another `LayoutRow` is valid but the inner grid resets relative to the inner container width — this is intentional for full-bleed sections with constrained inner content.
+- Auto-imported in Nuxt — no import needed.
+- `.layout-row-inner` has `container-type: inline-size` — children can use CSS container queries.
+- The `full`, `full-content`, and `full-width` variants all map to `grid-column: full` — the difference is only whether inline padding is applied.
+- `isLandmark` adds `tabindex="0"` and `aria-label="Layout Row Landmark"`. Prefer a semantic `tag` over this prop where possible.
