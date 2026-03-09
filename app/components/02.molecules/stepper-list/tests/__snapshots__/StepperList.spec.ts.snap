@@ -2,19 +2,19 @@
 
 exports[`StepperList > renders correct HTML structure (ol, 5 items) 1`] = `
 "<ol class="stepper-list has-connectors">
-  <li class="indicator-top indicator-disc">
+  <li class="indicator-top indicator-disc" style="--_connector-top: 0px; --_connector-height: 0px;">
     <div class="stepper-list__indicator-counter"></div>
     <div></div>
   </li>
-  <li class="indicator-top indicator-disc">
+  <li class="indicator-top indicator-disc" style="--_connector-top: 0px; --_connector-height: 0px;">
     <div class="stepper-list__indicator-counter"></div>
     <div></div>
   </li>
-  <li class="indicator-top indicator-disc">
+  <li class="indicator-top indicator-disc" style="--_connector-top: 0px; --_connector-height: 0px;">
     <div class="stepper-list__indicator-counter"></div>
     <div></div>
   </li>
-  <li class="indicator-top indicator-disc">
+  <li class="indicator-top indicator-disc" style="--_connector-top: 0px; --_connector-height: 0px;">
     <div class="stepper-list__indicator-counter"></div>
     <div></div>
   </li>
@@ -27,11 +27,24 @@ exports[`StepperList > renders correct HTML structure (ol, 5 items) 1`] = `
 
 exports[`StepperList > renders correct HTML structure (ul, 3 items) 1`] = `
 "<ul class="stepper-list has-connectors">
-  <li class="indicator-top indicator-disc">
+  <li class="indicator-top indicator-disc" style="--_connector-top: 0px; --_connector-height: 0px;">
+    <div class="stepper-list__indicator-counter"></div>
+    <div></div>
+  </li>
+  <li class="indicator-top indicator-disc" style="--_connector-top: 0px; --_connector-height: 0px;">
     <div class="stepper-list__indicator-counter"></div>
     <div></div>
   </li>
   <li class="indicator-top indicator-disc">
+    <div class="stepper-list__indicator-counter"></div>
+    <div></div>
+  </li>
+</ul>"
+`;
+
+exports[`StepperList > renders correct HTML structure with custom indicatorSize 1`] = `
+"<ul class="stepper-list has-connectors">
+  <li class="indicator-top indicator-disc" style="--_connector-top: 0px; --_connector-height: 0px;">
     <div class="stepper-list__indicator-counter"></div>
     <div></div>
   </li>
@@ -44,7 +57,7 @@ exports[`StepperList > renders correct HTML structure (ul, 3 items) 1`] = `
 
 exports[`StepperList > renders correct HTML structure with indicator slots 1`] = `
 "<ul class="stepper-list has-connectors">
-  <li class="has-indicator indicator-top indicator-disc">
+  <li class="has-indicator indicator-top indicator-disc" style="--_connector-top: 0px; --_connector-height: 0px;">
     <div class="stepper-list__indicator-custom"><span class="indicator-icon">✓</span></div>
     <div><span>First item</span></div>
   </li>
@@ -57,7 +70,7 @@ exports[`StepperList > renders correct HTML structure with indicator slots 1`] =
 
 exports[`StepperList > renders correct HTML structure with styleClassPassthrough 1`] = `
 "<ul class="stepper-list custom-class another-class has-connectors">
-  <li class="indicator-top indicator-disc">
+  <li class="indicator-top indicator-disc" style="--_connector-top: 0px; --_connector-height: 0px;">
     <div class="stepper-list__indicator-counter"></div>
     <div></div>
   </li>
@@ -70,11 +83,11 @@ exports[`StepperList > renders correct HTML structure with styleClassPassthrough
 
 exports[`StepperList > renders correctly with all props and slots combined 1`] = `
 "<ol class="stepper-list combined-class has-connectors">
-  <li class="has-indicator indicator-top indicator-disc">
+  <li class="has-indicator indicator-top indicator-disc" style="--_connector-top: 0px; --_connector-height: 0px;">
     <div class="stepper-list__indicator-custom"><span class="indicator-icon">1</span></div>
     <div><span>Step one</span></div>
   </li>
-  <li class="indicator-top indicator-disc">
+  <li class="indicator-top indicator-disc" style="--_connector-top: 0px; --_connector-height: 0px;">
     <div class="stepper-list__indicator-counter"></div>
     <div><span>Step two</span></div>
   </li>

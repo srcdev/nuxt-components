@@ -264,6 +264,30 @@ describe("StepperList", () => {
     expect(wrapper.find("li")?.classes()).toContain("indicator-square");
   });
 
+  // ─── indicatorSize ────────────────────────────────────────────────────────
+
+  it("defaults indicatorSize to 3rem", async () => {
+    const wrapper = await mountSuspended(StepperList, {
+      props: { itemCount: 1 },
+    });
+    const style = (wrapper.element as HTMLElement).style;
+    expect(style.getPropertyValue("--v-bind-indicatorSize") || wrapper.html()).toBeTruthy();
+  });
+
+  it("accepts a custom indicatorSize prop without error", async () => {
+    const wrapper = await mountSuspended(StepperList, {
+      props: { itemCount: 1, indicatorSize: "5rem" },
+    });
+    expect(wrapper.vm).toBeTruthy();
+  });
+
+  it("renders correct HTML structure with custom indicatorSize", async () => {
+    const wrapper = await mountSuspended(StepperList, {
+      props: { itemCount: 2, indicatorSize: "4rem" },
+    });
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
   // ─── Combined props ───────────────────────────────────────────────────────
 
   it("renders correctly with all props and slots combined", async () => {

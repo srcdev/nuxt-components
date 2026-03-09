@@ -24,6 +24,10 @@ const meta: Meta<typeof StepperList> = {
       options: ["disc", "circle", "square"],
       description: "Visual style of the counter indicator",
     },
+    indicatorSize: {
+      control: "text",
+      description: "Size of the indicator bubble — any valid CSS length (e.g. '3rem', '40px')",
+    },
     connected: {
       control: "boolean",
       description: "Whether to show connectors between indicators (only visible in supported browsers)",
@@ -38,6 +42,7 @@ const meta: Meta<typeof StepperList> = {
     itemCount: 3,
     indicatorAlignment: "top",
     indicatorVariant: "disc",
+    indicatorSize: "3rem",
     connected: false,
     styleClassPassthrough: [],
   },
@@ -284,6 +289,32 @@ export const VariantSquare: Story = {
         <template #item-2><p class="page-body-normal">Build interactive prototypes and gather early feedback from a representative sample of users before committing to full development</p></template>
         <template #item-3><p class="page-body-normal">Implement and test</p></template>
         <template #item-4><p class="page-body-normal">Ship and monitor</p></template>
+      </StepperList>
+    `,
+  }),
+};
+
+/** Custom indicator size — demonstrates a larger indicator bubble. */
+export const CustomIndicatorSize: Story = {
+  name: "Custom Indicator Size",
+  args: {
+    tag: "ul",
+    itemCount: 4,
+    indicatorSize: "5rem",
+    connected: true,
+    indicatorAlignment: "center",
+  },
+  render: (args) => ({
+    components: { StepperList },
+    setup() {
+      return { args };
+    },
+    template: `
+      <StepperList v-bind="args">
+        <template #item-0><p class="page-body-normal">Create your account</p></template>
+        <template #item-1><p class="page-body-normal">Verify your email and complete your profile with a photo, bio, and preferred contact details</p></template>
+        <template #item-2><p class="page-body-normal">Choose a plan</p></template>
+        <template #item-3><p class="page-body-normal">Start building</p></template>
       </StepperList>
     `,
   }),
