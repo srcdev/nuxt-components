@@ -28,6 +28,7 @@ interface Props {
   tag?: "ul" | "ol";
   indicatorAlignment?: "top" | "center";
   indicatorVariant?: "disc" | "square" | "circle";
+  indicatorSize?: string;
   connected?: boolean;
   itemCount: number;
   styleClassPassthrough?: string | string[];
@@ -37,6 +38,7 @@ const props = withDefaults(defineProps<Props>(), {
   tag: "ul",
   indicatorAlignment: "top",
   indicatorVariant: "disc",
+  indicatorSize: "3rem",
   connected: true,
   styleClassPassthrough: () => [],
 });
@@ -96,7 +98,7 @@ watch(
 @layer components {
 .stepper-list {
   --_list-padding-block: 1.2rem;
-  --_counter-size: 3rem;
+  --_counter-size: v-bind(indicatorSize);
   --_stepper-list-connector-width: 0.2rem;
 
   list-style: none;
