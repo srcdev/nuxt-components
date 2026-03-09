@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="stepper-list" :class="[elementClasses, { 'has-connectors': props.connected }]">
+  <component :is="tag" ref="listEl" class="stepper-list" :class="[elementClasses, { 'has-connectors': props.connected }]">
     <li
       v-for="index in itemCount"
       :key="index"
@@ -42,6 +42,54 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+const listEl = ref<HTMLElement | null>(null);
+let resizeObserver: ResizeObserver | null = null;
+
+function updateConnectors() {
+  if (!listEl.value || !props.connected) return;
+  const lis = Array.from(listEl.value.querySelectorAll<HTMLLIElement>(":scope > li"));
+
+  lis.forEach((li, i) => {
+    if (i >= lis.length - 1) return;
+
+    const indicator = li.querySelector<HTMLElement>(
+      ".stepper-list__indicator-counter, .stepper-list__indicator-custom",
+    );
+    const nextIndicator = lis[i + 1]?.querySelector<HTMLElement>(
+      ".stepper-list__indicator-counter, .stepper-list__indicator-custom",
+    );
+
+    if (!indicator || !nextIndicator) return;
+
+    const liRect = li.getBoundingClientRect();
+    const indicatorRect = indicator.getBoundingClientRect();
+    const nextIndicatorRect = nextIndicator.getBoundingClientRect();
+
+    li.style.setProperty("--_connector-top", `${indicatorRect.bottom - liRect.top}px`);
+    li.style.setProperty("--_connector-height", `${Math.max(0, nextIndicatorRect.top - indicatorRect.bottom)}px`);
+  });
+}
+
+onMounted(() => {
+  updateConnectors();
+  if (typeof ResizeObserver !== "undefined" && listEl.value) {
+    resizeObserver = new ResizeObserver(updateConnectors);
+    resizeObserver.observe(listEl.value);
+  }
+});
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect();
+});
+
+watch(
+  () => [props.itemCount, props.connected, props.indicatorAlignment],
+  async () => {
+    await nextTick();
+    updateConnectors();
+  },
+);
 </script>
 
 <style lang="css">
@@ -127,32 +175,18 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   }
 }
 
-/* Fallback: per-li connectors for browsers without anchor positioning */
-/* @supports not (anchor-name: --x) { */
 .stepper-list.has-connectors li:not(:last-child)::after {
   content: "";
   position: absolute;
   left: calc(var(--_counter-size) / 2);
   transform: translateX(-50%);
-  top: calc(1.2rem + 3rem);
+  /* JS sets --_connector-top and --_connector-height from measured indicator positions.
+     The fallback values handle the indicator-top case before JS runs. */
+  top: var(--_connector-top, calc(var(--_list-padding-block) + var(--_counter-size)));
+  height: var(--_connector-height, auto);
   bottom: calc(-1 * var(--_list-padding-block));
   width: var(--_stepper-list-connector-width);
   background-color: var(--stepper-list-connector-color, currentColor);
 }
-/* } */
-
-/* Enhanced: anchor-based connector positioning */
-/* @supports (anchor-name: --x) {
-  .stepper-list.has-connectors li:not(:last-child)::after {
-    content: "";
-    position: absolute;
-    left: anchor(--indicator-bubble, center);
-    transform: translateX(-50%);
-    top: anchor(--indicator-bubble, bottom);
-    bottom: calc(-1 * var(--stepper-list-item-gap, 2.4rem));
-    width: var(--stepper-list-connector-width, 2px);
-    background-color: var(--stepper-list-connector-color, currentColor);
-  }
-} */
 }
 </style>
