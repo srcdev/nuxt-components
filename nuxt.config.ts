@@ -1,4 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { createResolver } from "@nuxt/kit";
+
+const { resolve } = createResolver(import.meta.url);
 const isStandalone = !!process.env.SRCDEV_STANDALONE;
 
 export default defineNuxtConfig({
@@ -22,7 +25,7 @@ export default defineNuxtConfig({
   css: ["./app/assets/styles/main.css"],
   modules: [
     // Required by consumers — always included
-    "./modules/colour-scheme",
+    resolve("./modules/colour-scheme"),
     "@nuxt/icon",
     ...(process.env.STORYBOOK ? [] : ["@nuxt/fonts"]),
     "@nuxt/image",
