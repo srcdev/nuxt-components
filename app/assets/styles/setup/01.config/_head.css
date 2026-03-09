@@ -1,14 +1,14 @@
 html {
-  color-scheme: light dark;
+  /* color-scheme: light dark; */
   interpolate-size: allow-keywords;
 
-  &.light {
+  /* &.light {
     color-scheme: light;
   }
 
   &.dark {
     color-scheme: dark;
-  }
+  } */
 
   font-size: 62.5%;
 

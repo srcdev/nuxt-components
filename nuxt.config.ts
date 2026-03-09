@@ -11,10 +11,18 @@ export default defineNuxtConfig({
     resendApiKey: "", // NUXT_RESEND_API_KEY
     contactEmailTo: "", // NUXT_CONTACT_EMAIL_TO   — inbox that receives enquiries
     contactEmailFrom: "", // NUXT_CONTACT_EMAIL_FROM — must be a verified Resend domain
+    public: {
+      // Consumer apps that don't support dark/light mode can opt out entirely:
+      // set NUXT_PUBLIC_COLOUR_SCHEME_ENABLED=false (env var) or override in their nuxt.config.ts
+      colourScheme: {
+        enabled: true,
+      },
+    },
   },
   css: ["./app/assets/styles/main.css"],
   modules: [
     // Required by consumers — always included
+    "./modules/colour-scheme",
     "@nuxt/icon",
     ...(process.env.STORYBOOK ? [] : ["@nuxt/fonts"]),
     "@nuxt/image",
@@ -37,21 +45,6 @@ export default defineNuxtConfig({
       bodyAttrs: {
         class: "srcdev-components-extended",
       },
-      script: [
-        {
-          // Inlined so it runs synchronously before first paint
-          innerHTML: `
-            (function() {
-              var saved = localStorage.getItem('colourScheme');
-              var valid = ['auto', 'dark', 'light'];
-              var scheme = valid.includes(saved) ? saved : 'auto';
-              document.documentElement.dataset.colorScheme = scheme;
-            })();
-          `,
-          tagPosition: "head",
-          tagPriority: "critical",
-        },
-      ],
     },
     pageTransition: {
       name: "page",

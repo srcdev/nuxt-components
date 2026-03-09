@@ -46,6 +46,39 @@ Skills are copied into `.claude/skills/srcdev-nuxt-components/` so they never co
 
 ---
 
+## Consumer App Configuration
+
+Configuration options for apps extending this layer. All options go in the consumer's `nuxt.config.ts` under `runtimeConfig.public` and can also be set via environment variable.
+
+### Colour Scheme
+
+The layer ships with light/dark/auto colour scheme support. This includes a synchronous `<head>` script (FOUC prevention) and the `useColourScheme()` composable.
+
+Consumer apps that only use a single default scheme can disable it entirely:
+
+```ts
+// nuxt.config.ts
+runtimeConfig: {
+  public: {
+    colourScheme: {
+      enabled: false, // disables head script injection and composable side effects
+    },
+  },
+},
+```
+
+Or via environment variable:
+
+```bash
+NUXT_PUBLIC_COLOUR_SCHEME_ENABLED=false
+```
+
+When disabled, no `data-color-scheme` attribute is set on `<html>` and `useColourScheme()` is a no-op. The default is `true`.
+
+> See [.claude/skills/colour-scheme-disable.md](.claude/skills/colour-scheme-disable.md) for the full guide.
+
+---
+
 ## Known Dev Server Warnings
 
 ### `[request error] [GET] http://localhost:3000/_nuxt/` (404)
