@@ -5,7 +5,7 @@
         <InputButtonCore
           variant="secondary"
           :button-text="`Enquire about ${serviceData.title}`"
-          :href="`/services/${serviceData.slug}`"
+          :href="`/ui/services/services-section/${serviceData.slug}`"
           :style-class-passthrough="['mbs-24']"
         >
           <template #right>

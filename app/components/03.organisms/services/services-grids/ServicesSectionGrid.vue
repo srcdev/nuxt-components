@@ -11,7 +11,7 @@
     >
       <template #summary-link="{ serviceData }">
         <LinkText
-          :to="`/services/${serviceData.slug}`"
+          :to="`/ui/services/services-section/${serviceData.slug}`"
           :link-text="`More about ${serviceData.title}`"
           :style-class-passthrough="['mb-20']"
         />
