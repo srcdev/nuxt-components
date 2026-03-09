@@ -96,6 +96,7 @@ const responsiveNavLinks = {
       childLinksTitle: "UI Layouts",
       childLinks: [
         { name: "Block Decorators", path: "/ui/block-decorators" },
+        { name: "Navigation Horizontal", path: "/ui/navigation/navigation-horizontal" },
         { name: "Magnetic Navigation", path: "/ui/magnetic-navigation" },
         { name: "Layout Row", path: "/ui/layout-row" },
         { name: "Layout Grid A", path: "/ui/layout-grid-a" },
