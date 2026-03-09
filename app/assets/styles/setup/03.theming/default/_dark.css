@@ -78,8 +78,8 @@
   /* ===========================================
      ANCHOR LINK VARIABLES
      =========================================== */
-  --colour-link-default: var(--blue-10);
-  --colour-link-hover: var(--blue-09);
+  --colour-link-default: var(--blue-02);
+  --colour-link-hover: var(--blue-03);
 
   /* ===========================================
      FORM INPUT VARIABLES

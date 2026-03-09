@@ -1,5 +1,5 @@
 .page-link-large {
-  color: var(--theme-link-default);
+  color: var(--colour-link-default);
   font-size: var(--step-6);
   font-weight: 400;
   font-variation-settings: "wght" 400;
@@ -8,7 +8,7 @@
 }
 
 .page-link-large-semibold {
-  color: var(--theme-link-default);
+  color: var(--colour-link-default);
   font-size: var(--step-6);
   font-weight: 600;
   font-variation-settings: "wght" 600;
@@ -17,7 +17,7 @@
 }
 
 .page-link-medium {
-  color: var(--theme-link-default);
+  color: var(--colour-link-default);
   font-size: var(--step-5);
   font-weight: 400;
   font-variation-settings: "wght" 400;
@@ -26,7 +26,7 @@
 }
 
 .page-link-medium-semibold {
-  color: var(--theme-link-default);
+  color: var(--colour-link-default);
   font-size: var(--step-5);
   font-weight: 600;
   font-variation-settings: "wght" 600;
@@ -35,7 +35,7 @@
 }
 
 .page-link-normal {
-  color: var(--theme-link-default);
+  color: var(--colour-link-default);
   font-size: var(--step-4);
   font-weight: 400;
   font-variation-settings: "wght" 400;
@@ -44,7 +44,7 @@
 }
 
 .page-link-normal-semibold {
-  color: var(--theme-link-default);
+  color: var(--colour-link-default);
   font-size: var(--step-4);
   font-weight: 600;
   font-variation-settings: "wght" 600;
@@ -53,7 +53,7 @@
 }
 
 .page-link-small {
-  color: var(--theme-link-default);
+  color: var(--colour-link-default);
   font-size: var(--step-3);
   font-weight: 400;
   font-variation-settings: "wght" 400;
@@ -62,7 +62,7 @@
 }
 
 .page-link-small-semibold {
-  color: var(--theme-link-default);
+  color: var(--colour-link-default);
   font-size: var(--step-3);
   font-weight: 600;
   font-variation-settings: "wght" 600;
@@ -71,7 +71,7 @@
 }
 
 .page-link-xsmall {
-  color: var(--theme-link-default);
+  color: var(--colour-link-default);
   font-size: var(--step-2);
   font-weight: 400;
   font-variation-settings: "wght" 400;
@@ -80,7 +80,7 @@
 }
 
 .page-link-xsmall-semibold {
-  color: var(--theme-link-default);
+  color: var(--colour-link-default);
   font-size: var(--step-2);
   font-weight: 600;
   font-variation-settings: "wght" 600;
@@ -100,16 +100,16 @@
 .page-link-xsmall-semibold {
   margin: 0;
   &:visited {
-    color: var(--theme-link-default);
+    color: var(--colour-link-default);
   }
 
   &:hover {
-    color: var(--theme-link-hover);
+    color: var(--colour-link-hover);
   }
 
   &:focus-visible {
-    color: var(--theme-link-hover);
-    outline: 2px solid var(--theme-link-default);
+    color: var(--colour-link-hover);
+    outline: 2px solid var(--colour-link-default);
     outline-offset: 3px;
     border-radius: 4px;
   }
