@@ -8,7 +8,12 @@ export const getValidScheme = (value: string | null): ColourScheme => {
 };
 
 export const applyColourScheme = (scheme: ColourScheme) => {
-  document.documentElement.dataset.colorScheme = scheme;
+  const html = document.documentElement;
+  // Class drives the legacy _dark.css selectors (html.dark)
+  html.classList.remove("light", "dark");
+  if (scheme !== "auto") html.classList.add(scheme);
+  // color-scheme property drives light-dark() in the modern _modern.css files
+  html.style.colorScheme = scheme === "auto" ? "light dark" : scheme;
 };
 
 export const initColourScheme = () => {

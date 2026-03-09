@@ -1,0 +1,39 @@
+/*
+ * Modern light-dark() overrides for the error theme.
+ * See default/_modern.css for full explanation of the mechanism.
+ *
+ * Only properties that differ between _light.css and _dark.css are listed.
+ */
+
+@supports (color: light-dark(red, blue)) {
+  :where([data-invalid]),
+  :where([data-theme="error"]) {
+    /* ===========================================
+       FORM ERROR DISPLAY
+       =========================================== */
+    --theme-error-outline: light-dark(var(--red-01), var(--red-05));
+
+    /* ===========================================
+       FORM INPUT VARIABLES
+       =========================================== */
+    --theme-input-border: light-dark(var(--red-06), var(--red-05));
+    --theme-input-outline: light-dark(var(--red-01), var(--red-05));
+
+    /* ===========================================
+       FORM BUTTON VARIABLES
+       =========================================== */
+
+    /* Variant Primary */
+    --theme-button-primary-border: light-dark(var(--red-09), var(--red-07));
+    --theme-button-primary-border-active: light-dark(var(--red-09), var(--red-07));
+
+    /* Variant Secondary */
+    --theme-button-secondary-surface: light-dark(transparent, var(--red-01));
+    --theme-button-secondary-border-active: light-dark(var(--red-09), var(--red-01));
+
+    /* Variant Tertiary */
+    --theme-button-tertiary-surface: light-dark(var(--slate-01), transparent);
+    --theme-button-tertiary-text: light-dark(var(--red-09), var(--red-01));
+    --theme-button-tertiary-border-active: light-dark(var(--red-09), var(--red-01));
+  }
+}

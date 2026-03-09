@@ -1,0 +1,113 @@
+/*
+ * Modern light-dark() overrides for the default theme.
+ *
+ * Requires: @supports (color: light-dark(red, blue))
+ * Mechanism: color-scheme property on html (set by JS / _head.css)
+ *   auto  → color-scheme: light dark  (follows OS)
+ *   light → color-scheme: light       (html.light class)
+ *   dark  → color-scheme: dark        (html.dark class)
+ *
+ * Only properties that differ between _light.css and _dark.css are listed.
+ * Properties with the same value in both files are omitted — they are
+ * already correct from _light.css and don't need light-dark() wrapping.
+ *
+ * Non-color values (shadows) cannot use light-dark() and are handled via
+ * the html.dark selector inside the @supports block below.
+ */
+
+@supports (color: light-dark(red, blue)) {
+  :where(html) {
+    /* ===========================================
+       GENERIC BODY VARIABLES
+       =========================================== */
+    --page-bg: light-dark(var(--slate-00), var(--slate-08));
+    --colour-text-default: light-dark(var(--slate-09), var(--slate-01));
+    --colour-text-accent: light-dark(var(--blue-09), var(--blue-05));
+    --colour-text-eyebrow: light-dark(var(--blue-09), var(--blue-05));
+
+    /* ===========================================
+       GLASS PANEL VARIABLES (colors only — shadow below)
+       =========================================== */
+    --glass-panel-bg: light-dark(rgba(255, 255, 255, 0.55), rgba(12, 12, 20, 0.45));
+    --glass-panel-border-color: light-dark(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.07));
+    --glass-panel-highlight: light-dark(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.04));
+
+    /* ===========================================
+       STEPPER LIST VARIABLES
+       =========================================== */
+    --stepper-list-counter-circle-text: light-dark(var(--blue-09), var(--blue-02));
+    --stepper-list-counter-circle-border: light-dark(var(--blue-09), var(--blue-02));
+    --stepper-list-counter-disc-background: light-dark(var(--blue-01), var(--blue-02));
+    --stepper-list-counter-disc-border: light-dark(var(--blue-01), var(--blue-02));
+    --stepper-list-counter-square-text: light-dark(var(--blue-09), var(--blue-02));
+    --stepper-list-counter-square-border: light-dark(var(--blue-09), var(--blue-02));
+    --stepper-list-connector-color: light-dark(var(--blue-01), var(--blue-02));
+    --stepper-list-icon: light-dark(var(--blue-09), var(--blue-02));
+
+    /* ===========================================
+       COLOUR FINDER VARIABLES
+       =========================================== */
+    --colour-finder-border-colour: light-dark(var(--blue-02), var(--blue-03));
+    --colour-finder-checked-surface-colour: light-dark(var(--green-03), var(--green-10));
+    --colour-finder-checked-stroke-colour: light-dark(var(--green-09), var(--green-03));
+    --colour-finder-conflict-surface-colour: light-dark(var(--sunset-03), var(--sunset-09));
+    --colour-finder-conflict-stroke-colour: light-dark(var(--sunset-09), var(--sunset-03));
+
+    /* ===========================================
+       TREATMENT CONSULTANT VARIABLES
+       =========================================== */
+    --treatment-consultant-border-colour: light-dark(var(--blue-02), var(--blue-03));
+    --treatment-consultant-checked-surface-colour: light-dark(var(--green-03), var(--green-10));
+    --treatment-consultant-checked-stroke-colour: light-dark(var(--green-09), var(--green-03));
+    --treatment-consultant-conflict-surface-colour: light-dark(var(--sunset-03), var(--sunset-09));
+    --treatment-consultant-conflict-stroke-colour: light-dark(var(--sunset-09), var(--sunset-03));
+
+    /* ===========================================
+       FORM INPUT VARIABLES
+       =========================================== */
+    --theme-input-surface: light-dark(var(--slate-00), var(--slate-10));
+    --theme-input-surface-hover: light-dark(var(--slate-01), var(--slate-09));
+    --theme-input-outline: light-dark(transparent, var(--blue-06));
+    --theme-input-visible-outline: light-dark(var(--blue-10), var(--blue-04));
+
+    /* ===========================================
+       INPUT TEXT VARIABLES
+       =========================================== */
+    --theme-input-placeholder: light-dark(var(--slate-05), var(--slate-04));
+    --theme-input-text-color-normal: light-dark(var(--slate-09), var(--slate-01));
+
+    /* ===========================================
+       CHECKBOX AND RADIO BUTTON VARIABLES
+       =========================================== */
+    --theme-checkbox-symbol-color: light-dark(var(--blue-08), var(--blue-02));
+    --theme-checkbox-decorator-color: light-dark(var(--blue-09), var(--blue-02));
+
+    /* ===========================================
+       FORM BUTTON VARIABLES
+       =========================================== */
+
+    /* Variant Primary */
+    --theme-button-primary-border: light-dark(var(--blue-09), var(--blue-07));
+    --theme-button-primary-border-active: light-dark(var(--blue-09), var(--blue-07));
+
+    /* Variant Secondary */
+    --theme-button-secondary-surface: light-dark(transparent, var(--blue-01));
+    --theme-button-secondary-border-active: light-dark(var(--blue-09), var(--blue-01));
+
+    /* Variant Tertiary */
+    --theme-button-tertiary-surface: light-dark(var(--slate-01), transparent);
+    --theme-button-tertiary-text: light-dark(var(--blue-09), var(--blue-01));
+    --theme-button-tertiary-border-active: light-dark(var(--blue-09), var(--blue-01));
+
+    /* Dark-only additions (not in _light.css) */
+    --colour-theme-11: var(--blue-10);
+    --colour-theme-12: var(--blue-10);
+  }
+
+  /* Glass panel shadow is a non-color value — light-dark() cannot be used.
+     Still handled via the class selector, inside this @supports block so it
+     only applies in browsers that also support light-dark(). */
+  :where(html.dark) {
+    --glass-panel-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+}

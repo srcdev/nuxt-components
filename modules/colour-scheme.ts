@@ -17,7 +17,10 @@ export default defineNuxtModule({
           var saved = localStorage.getItem('colourScheme');
           var valid = ['auto', 'dark', 'light'];
           var scheme = valid.includes(saved) ? saved : 'auto';
-          document.documentElement.dataset.colorScheme = scheme;
+          var html = document.documentElement;
+          html.classList.remove('light', 'dark');
+          if (scheme !== 'auto') html.classList.add(scheme);
+          html.style.colorScheme = scheme === 'auto' ? 'light dark' : scheme;
         })();
       `,
       tagPosition: "head",

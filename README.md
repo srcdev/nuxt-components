@@ -73,7 +73,7 @@ Or via environment variable:
 NUXT_PUBLIC_COLOUR_SCHEME_ENABLED=false
 ```
 
-When disabled, no `data-color-scheme` attribute is set on `<html>` and `useColourScheme()` is a no-op. The default is `true`.
+When disabled, no `.light`/`.dark` class or `color-scheme` style is applied to `<html>` and `useColourScheme()` is a no-op. The default is `true`.
 
 > See [.claude/skills/colour-scheme-disable.md](.claude/skills/colour-scheme-disable.md) for the full guide.
 

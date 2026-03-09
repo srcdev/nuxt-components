@@ -1,0 +1,31 @@
+/*
+ * Modern light-dark() overrides for the warning theme.
+ * See default/_modern.css for full explanation of the mechanism.
+ *
+ * Only properties that differ between _light.css and _dark.css are listed.
+ */
+
+@supports (color: light-dark(red, blue)) {
+  :where([data-theme="warning"]) {
+    /* ===========================================
+       FORM INPUT VARIABLES
+       =========================================== */
+    --theme-input-border: light-dark(var(--orange-06), var(--orange-05));
+    --theme-input-outline: light-dark(var(--orange-01), var(--orange-05));
+
+    /* ===========================================
+       FORM BUTTON VARIABLES
+       =========================================== */
+
+    /* Variant Primary */
+    --theme-button-primary-border: light-dark(var(--sunset-05), var(--sunset-07));
+    --theme-button-primary-border-active: light-dark(var(--sunset-05), var(--sunset-07));
+    --theme-button-primary-text-hover: light-dark(var(--sunset-01), var(--sunset-00));
+
+    /* Variant Tertiary */
+    --theme-button-tertiary-surface: light-dark(var(--slate-01), transparent);
+    --theme-button-tertiary-text: light-dark(var(--sunset-05), var(--sunset-05));
+    --theme-button-tertiary-border-active: light-dark(var(--sunset-07), var(--sunset-05));
+    --theme-button-tertiary-outline-active: light-dark(var(--sunset-04), var(--sunset-05));
+  }
+}
