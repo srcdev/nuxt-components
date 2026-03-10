@@ -106,6 +106,11 @@ export default defineNuxtConfig({
   vue: {
     runtimeCompiler: true,
   },
+  vite: {
+    build: {
+      cssCodeSplit: false,
+    },
+  },
   compatibilityDate: "2026-01-30",
   typescript: {
     includeWorkspace: true,
