@@ -54,18 +54,20 @@ watch(
 
     anchor-name: --active-nav;
 
+    background-color: var(--page-bg);
+
     &::after {
       content: "";
       border-block-start: var(--_border-block-start-size) solid transparent;
       border-block-end: var(--_border-block-end-size) solid transparent;
 
-      /* background:
-        radial-gradient(var(--page-bg)) padding-box,
-        radial-gradient(var(--_active-link-colour), transparent) border-box; */
-
       background:
+        radial-gradient(var(--page-bg)) padding-box,
+        radial-gradient(var(--_active-link-colour), transparent) border-box;
+
+      /* background:
         radial-gradient(ellipse at 50% 100%, transparent 10%, var(--page-bg) 75%) padding-box,
-        radial-gradient(ellipse at 50% 100%, var(--_active-link-colour) 10%, transparent 75%) border-box;
+        radial-gradient(ellipse at 50% 100%, var(--_active-link-colour) 10%, transparent 75%) border-box; */
 
       position: absolute;
       position-anchor: --active-nav;
@@ -108,7 +110,7 @@ watch(
         list-style: none;
         margin: 0rem;
         padding: 2rem;
-        gap: 1rem;
+        gap: 3rem;
 
         display: flex;
         justify-content: center;

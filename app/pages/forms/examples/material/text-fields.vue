@@ -75,8 +75,6 @@
             <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
               <h1 class="page-heading-1 mbe-18">Settings</h1>
               <h2 class="page-heading-2 mbe-18">Theme Switcher</h2>
-              <p class="page-body-normal mbe-18">As of 23rd Feb '26 - Tweaking dark mode palette)</p>
-
               <DisplayThemeSwitch />
             </LayoutRow>
 
