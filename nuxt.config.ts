@@ -22,7 +22,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  css: ["./app/assets/styles/layer-order.css", "./app/assets/styles/main.css"],
+  css: ["./app/assets/styles/main.css"],
   modules: [
     // Required by consumers — always included
     resolve("./modules/colour-scheme"),
@@ -105,11 +105,6 @@ export default defineNuxtConfig({
   },
   vue: {
     runtimeCompiler: true,
-  },
-  vite: {
-    build: {
-      cssCodeSplit: false,
-    },
   },
   compatibilityDate: "2026-01-30",
   typescript: {

@@ -1,5 +1,4 @@
-/* @layer reset, colours, theming, form-tokens, typography, a11y, utilities, components; */
-/* @layer reset, colours, theming, form-tokens, typography, a11y, components, utilities; */
+@layer reset, colours, theming, form-tokens, typography, a11y, components, utilities;
 
 @import "./01.config/" layer(reset);
 @import "./02.colours/" layer(colours);
