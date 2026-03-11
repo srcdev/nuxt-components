@@ -5,8 +5,8 @@
         <div>
           <h1 class="header-1">Checkbox/Radio panels</h1>
         </div>
-        <ContentGrid>
-          <template #slot1>
+        <LayoutGridByCols :item-count="1">
+          <template #item-0>
             <FormWrapper width="medium">
               <template #default>
                 <ClientOnly>
@@ -84,7 +84,7 @@
               </template>
             </FormWrapper>
           </template>
-        </ContentGrid>
+        </LayoutGridByCols>
       </template>
     </NuxtLayout>
   </div>

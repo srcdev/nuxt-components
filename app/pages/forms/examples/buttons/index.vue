@@ -9,8 +9,8 @@
           <DisplayThemeSwitch />
         </LayoutRow>
 
-        <ContentGrid>
-          <template #slot1>
+        <LayoutGridByCols :item-count="1">
+          <template #item-0>
             <div>
               <h1>Example buttons</h1>
               <p>Primary submit</p>
@@ -115,10 +115,10 @@
               </ul>
             </div>
           </template>
-        </ContentGrid>
+        </LayoutGridByCols>
 
-        <ContentGrid>
-          <template #slot1>
+        <LayoutGridByCols :item-count="1">
+          <template #item-0>
             <div>
               <h1>Example buttons</h1>
               <p>Currently displaying {{ buttonText }}</p>
@@ -196,7 +196,7 @@
               </ul>
             </div>
           </template>
-        </ContentGrid>
+        </LayoutGridByCols>
       </template>
     </NuxtLayout>
   </div>
