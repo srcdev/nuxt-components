@@ -2,13 +2,13 @@
   <div ref="containerGlowWrapper" class="container-glow-wrapper" :class="elementClasses">
     <component
       :is="tag"
-      v-for="(item, key) in itemCount"
-      :key="key"
+      v-for="(_, name) in $slots"
+      :key="name"
       ref="containerGlowItem"
       class="container-glow-core"
     >
       <div class="glows"></div>
-      <slot :name="`container-glow-${key}`"></slot>
+      <slot :name="name"></slot>
     </component>
   </div>
 </template>
@@ -23,30 +23,23 @@ interface Config {
   inactiveOpacity: number;
 }
 
-const props = defineProps({
-  itemCount: {
-    type: Number,
-    required: true,
-  },
-  tag: {
-    type: String as PropType<string>,
-    default: "div",
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  config: {
-    type: Object as PropType<Config>,
-    default: () => ({
-      proximity: 40,
-      spread: 80,
-      blur: 20,
-      gap: 32,
-      vertical: false,
-      inactiveOpacity: 0,
-    }),
-  },
+interface Props {
+  tag?: string;
+  config?: Config;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  tag: "div",
+  config: () => ({
+    proximity: 40,
+    spread: 80,
+    blur: 20,
+    gap: 32,
+    vertical: false,
+    inactiveOpacity: 0,
+  }),
+  styleClassPassthrough: () => [],
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);

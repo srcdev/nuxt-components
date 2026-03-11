@@ -7,7 +7,7 @@
           <p>Glow will track mouse position</p>
 
           <ContainerGlowCore
-            :item-count="data.length"
+            
             tag="div"
             :style-class-passthrough="['class-scope', 'pbe-20']"
             :config="{

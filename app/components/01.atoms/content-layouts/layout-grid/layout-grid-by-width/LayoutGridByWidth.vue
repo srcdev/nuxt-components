@@ -9,8 +9,8 @@
       {{ props.label || "If tag='section' then a label is required" }}
     </p>
     <div class="layout-grid-inner">
-      <template v-for="index in itemCount" :key="index">
-        <slot :name="`item-${index - 1}`"></slot>
+      <template v-for="(_, name) in $slots" :key="name">
+        <slot :name="name"></slot>
       </template>
     </div>
   </component>
@@ -20,7 +20,6 @@
 interface Props {
   tag?: "div" | "section";
   label?: string;
-  itemCount: number;
   columnWidth?: string;
   gap?: string;
   singleColBelow?: string;
