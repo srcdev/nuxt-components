@@ -185,23 +185,65 @@ app/
 ## TypeScript Conventions
 
 - **Strict mode**: All components must pass TypeScript strict checks
-- **PropType imports**: Only import `PropType` type, not the runtime function
 - **Interface definitions**: Store in `~/types/{category}/` directories
 - **defineModel typing**: Use union types for arrays/single values
 
+### Props Pattern
+
+Always use `interface Props` + `withDefaults(defineProps<Props>(), {...})`. Never use options-style `defineProps({ propName: { type: ..., default: ... } })`.
+
 ```typescript
+// ✅ Correct — modern typed props
+interface Props {
+  tag?: "div" | "section";           // optional with union literal types
+  label?: string;
+  itemCount: number;                 // required — no `?`
+  columnCount?: 2 | 3 | 4 | 5 | 6;
+  gap?: string;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  tag: "div",
+  label: "",
+  columnCount: 2,
+  gap: "1rem",
+  styleClassPassthrough: () => [],   // array/object defaults use factory functions
+});
+
 // ✅ Proper defineModel typing
 const model = defineModel<(string | number)[] | string | undefined>();
-
-// ✅ Proper PropType usage
-import type { PropType } from "vue";
-const props = defineProps({
-  config: {
-    type: Object as PropType<ConfigInterface>,
-    default: () => ({}),
-  },
-});
 ```
+
+## Vue Template Conventions
+
+- **Prop hyphenation**: ESLint (`vue/attribute-hyphenation`) requires camelCase props to be written hyphenated in templates. Always use `:item-count`, `:column-count`, `:style-class-passthrough` — never the camelCase form.
+- **Self-closing elements**: Already covered in pitfalls — use explicit closing tags everywhere.
+- **Linting workflow**: For ESLint auto-fixable issues after an edit, save the file and let IDE auto-fix run first. Only attempt manual corrections if issues remain.
+- **Hyphenated attributes in tests**: When a component uses a hyphenated Vue prop like `:tab-index`, Vue renders it as the literal `tab-index` DOM attribute — not `tabindex`. Assert with `attributes("tab-index")`, not `attributes("tabindex")`.
+
+## Storybook
+
+### NuxtImg / @nuxt/image on Vercel
+
+`@nuxt/image` auto-detects Vercel and generates `/_vercel/image?url=...` URLs. In deployed Storybook (`storybook-static/`), source images aren't present so this fails. Three changes are required together:
+
+1. **`.storybook/main.ts`** — set `process.env.STORYBOOK = "true"` at the top of the file, and add `staticDirs: ["../public"]` inside the config.
+
+2. **`nuxt.config.ts`** — set `image: { provider: process.env.STORYBOOK ? "none" : undefined }`. The `"none"` provider passes src through unchanged; `undefined` auto-detects (uses Vercel provider in production).
+
+3. **`NuxtImg` tags** — always add explicit `width` and `height` props to avoid a `w=1536` fallback (not in Vercel's allowed widths: 640, 750, 828, 1080, 1200, 1920, 2048, 3840).
+
+### Fonts
+
+`@nuxt/fonts` is disabled in Storybook. Fonts are served instead via `.storybook/fonts.css` (imported in `.storybook/preview.ts`). Font files live in `.storybook/public/_fonts/` and are served as static assets.
+
+| Context   | Font source |
+|-----------|-------------|
+| Nuxt app  | `@nuxt/fonts` (bunny CDN) |
+| Storybook | `.storybook/fonts.css` + static files in `.storybook/public/_fonts/` |
+
+See `.claude/skills/storybook-add-font.md` for the step-by-step process to add a new font (including curl script to download woff2 files from bunny CDN).
 
 ## Documentation System
 
