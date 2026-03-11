@@ -31,7 +31,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── layout-row.md           — LayoutRow variant guide, width/margin decisions, usage patterns
     ├── link-text.md            — LinkText props, slots, usage patterns, styling
     ├── services-card.md        — ServicesCard props, actions slot, usage patterns
-    └── services-section.md     — ServicesSection props, summary-link/cta slots, summary vs full mode
+    ├── services-section.md     — ServicesSection props, summary-link/cta slots, summary vs full mode
+    └── stepper-list.md         — StepperList dynamic slots (item-{n}/indicator-{n}), props, connector behaviour
 ```
 
 ## Skill file template

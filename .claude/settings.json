@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx vitest run app/components/01.atoms/content-layouts/layout-grid/tests/LayoutGrid.spec.ts)",
+      "Bash(npx vitest run app/components/01.atoms/content-layouts/layout-grid/tests/LayoutGrid.spec.ts --update-snapshots)",
+      "Bash(npx vitest run app/components/01.atoms/content-layouts/layout-grid/tests/LayoutGrid.spec.ts -u)"
+    ]
+  }
+}
