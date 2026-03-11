@@ -1,4 +1,3 @@
-import { computed } from "vue";
 import LayoutGrid from "../LayoutGrid.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
@@ -21,17 +20,10 @@ const meta: Meta<typeof LayoutGrid> = {
       control: { type: "range", min: 0, max: 18, step: 1 },
       description: "Number of grid cells to render — must match the number of #item-{n} slots provided",
     },
-    colCount: {
+    columns: {
       control: { type: "range", min: 1, max: 8, step: 1 },
-      description: "Number of columns — used when useMinMax is false",
-    },
-    colWidth: {
-      control: { type: "range", min: 50, max: 500, step: 10 },
-      description: "Column width in px — used as a fixed track size or as the minmax minimum when useMinMax is true",
-    },
-    useMinMax: {
-      control: "boolean",
-      description: "Switch to auto-fill mode: repeat(auto-fill, minmax(colWidth, 1fr)) — columns wrap naturally based on available space",
+      description:
+        "Integer → repeat(N, 1fr) equal columns. CSS string (e.g. '200px', '15rem') → repeat(auto-fill, minmax(value, 1fr)) wrapping columns.",
     },
     gap: {
       control: "text",
@@ -39,7 +31,8 @@ const meta: Meta<typeof LayoutGrid> = {
     },
     singleColBelow: {
       control: "text",
-      description: "Container width below which the grid collapses to a single column — any valid CSS length (e.g. '600px', '40rem'). Default '0px' means never collapse.",
+      description:
+        "Container width below which the grid collapses to a single column — any valid CSS length (e.g. '600px', '40rem'). Default '0px' means never collapse.",
     },
     styleClassPassthrough: {
       table: { disable: true },
@@ -48,9 +41,7 @@ const meta: Meta<typeof LayoutGrid> = {
   args: {
     tag: "div",
     itemCount: 6,
-    colCount: 3,
-    colWidth: 200 as unknown as string,
-    useMinMax: false,
+    columns: 3,
     gap: "1rem",
     singleColBelow: "0px",
     styleClassPassthrough: [],
@@ -59,7 +50,7 @@ const meta: Meta<typeof LayoutGrid> = {
     docs: {
       description: {
         component:
-          "A CSS grid wrapper driven by props. Content is placed via dynamic named slots (#item-0, #item-1, …). Column layout is controlled by colCount/colWidth or auto-fill via useMinMax. The grid collapses to a single column below singleColBelow using a CSS container query.",
+          "A CSS grid wrapper driven by props. Content is placed via dynamic named slots (#item-0, #item-1, …). Pass an integer to columns for N equal columns, or a CSS width string for auto-fill behaviour. The grid collapses to a single column below singleColBelow using a CSS container query.",
       },
     },
   },
@@ -93,86 +84,51 @@ const allSlots = Array.from(
   (_, i) => `<template #item-${i}>${cell(`Item ${i + 1}`, i)}</template>`
 ).join("\n        ");
 
-// Merges all args and normalises colWidth from the slider number to a CSS string.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const withPxColWidth = (args: any) =>
-  computed(() => ({ ...args, colWidth: `${args.colWidth}px` }));
-
 // ─── Stories ──────────────────────────────────────────────────────────────────
 
-/** Default — three equal columns, adjust colCount, colWidth and itemCount with the controls. */
+/** Default — equal columns. Integer columns prop controls count; slider adjusts it live. */
 export const Default: Story = {
   args: {
     itemCount: 6,
-    colCount: 3,
-    colWidth: 200 as unknown as string,
+    columns: 3,
   },
   render: (args) => ({
     components: { LayoutGrid },
     setup() {
-      return { storyArgs: withPxColWidth(args) };
+      return { args };
     },
     template: `
-      <LayoutGrid v-bind="storyArgs">
+      <LayoutGrid v-bind="args">
         ${allSlots}
       </LayoutGrid>
     `,
   }),
 };
 
-/** Equal fractional columns — columns share space evenly regardless of viewport width. */
-export const FractionalColumns: Story = {
-  name: "Fractional Columns (1fr)",
-  args: {
-    itemCount: 8,
-    colCount: 4,
-  },
-  render: (args) => ({
-    components: { LayoutGrid },
-    setup() {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const storyArgs = computed(() => ({ ...(args as any), colWidth: "1fr" }));
-      return { storyArgs };
-    },
-    template: `
-      <LayoutGrid v-bind="storyArgs">
-        ${allSlots}
-      </LayoutGrid>
-    `,
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story: "colWidth set to '1fr' — all columns share available space equally.",
-      },
-    },
-  },
-};
-
-/** Auto-fill — columns fill based on a minimum width, wrapping naturally. */
+/** Auto-fill — columns prop is a CSS width string; browser fills as many as fit. */
 export const AutoFill: Story = {
-  name: "Auto-fill (useMinMax)",
+  name: "Auto-fill (CSS width string)",
   args: {
-    itemCount: 8,
-    useMinMax: true,
-    colWidth: 200 as unknown as string,
+    itemCount: 12,
+    columns: "200px" as unknown as number,
   },
   render: (args) => ({
     components: { LayoutGrid },
     setup() {
-      return { storyArgs: withPxColWidth(args) };
+      return { args };
     },
     template: `
-      <LayoutGrid v-bind="storyArgs">
+      <LayoutGrid v-bind="args">
         ${allSlots}
       </LayoutGrid>
     `,
   }),
   parameters: {
+    controls: { exclude: ["columns"] },
     docs: {
       description: {
         story:
-          "With useMinMax enabled, columns are at least colWidth wide and stretch to fill available space. The number of columns adjusts automatically — resize the viewport to see wrapping.",
+          "columns set to a CSS width string ('200px') — the browser fills as many columns as fit, each at least 200px wide. Resize the canvas to see wrapping. The columns control is excluded here as a string value is not representable on the slider.",
       },
     },
   },
@@ -183,17 +139,16 @@ export const SingleColBelow: Story = {
   name: "Single Column Below 600px",
   args: {
     itemCount: 6,
-    colCount: 3,
-    colWidth: 200 as unknown as string,
+    columns: 3,
     singleColBelow: "600px",
   },
   render: (args) => ({
     components: { LayoutGrid },
     setup() {
-      return { storyArgs: withPxColWidth(args) };
+      return { args };
     },
     template: `
-      <LayoutGrid v-bind="storyArgs">
+      <LayoutGrid v-bind="args">
         ${allSlots}
       </LayoutGrid>
     `,
@@ -213,17 +168,16 @@ export const CustomGap: Story = {
   name: "Custom Gap",
   args: {
     itemCount: 6,
-    colCount: 3,
-    colWidth: 200 as unknown as string,
+    columns: 3,
     gap: "3.2rem",
   },
   render: (args) => ({
     components: { LayoutGrid },
     setup() {
-      return { storyArgs: withPxColWidth(args) };
+      return { args };
     },
     template: `
-      <LayoutGrid v-bind="storyArgs">
+      <LayoutGrid v-bind="args">
         ${allSlots}
       </LayoutGrid>
     `,
@@ -237,16 +191,15 @@ export const SemanticSection: Story = {
     tag: "section",
     label: "Feature highlights",
     itemCount: 6,
-    colCount: 3,
-    colWidth: 200 as unknown as string,
+    columns: 3,
   },
   render: (args) => ({
     components: { LayoutGrid },
     setup() {
-      return { storyArgs: withPxColWidth(args) };
+      return { args };
     },
     template: `
-      <LayoutGrid v-bind="storyArgs">
+      <LayoutGrid v-bind="args">
         ${allSlots}
       </LayoutGrid>
     `,

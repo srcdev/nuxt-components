@@ -21,9 +21,8 @@ interface Props {
   tag?: "div" | "section";
   label?: string;
   itemCount: number;
-  colCount?: number;
-  colWidth?: string;
-  useMinMax?: boolean;
+  /** Integer → repeat(N, 1fr)  |  CSS string → repeat(auto-fill, minmax(value, 1fr)) */
+  columns?: number | string;
   gap?: string;
   singleColBelow?: string;
   styleClassPassthrough?: string | string[];
@@ -32,16 +31,16 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   label: "",
-  colCount: 2,
-  colWidth: "1fr",
-  useMinMax: false,
+  columns: 2,
   gap: "1rem",
   singleColBelow: "0px",
   styleClassPassthrough: () => [],
 });
 
 const gridTemplateColumns = computed(() =>
-  props.useMinMax ? `repeat(auto-fill, minmax(${props.colWidth}, 1fr))` : `repeat(${props.colCount}, ${props.colWidth})`
+  typeof props.columns === "number"
+    ? `repeat(${props.columns}, 1fr)`
+    : `repeat(auto-fill, minmax(${props.columns}, 1fr))`
 );
 
 const headingId = useId();

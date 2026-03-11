@@ -126,28 +126,30 @@ describe("LayoutGrid", () => {
     expect(wrapper.classes()).toContain("class-b");
   });
 
-  // ─── Prop acceptance ─────────────────────────────────────────────────────
+  // ─── columns prop ─────────────────────────────────────────────────────────
 
-  it("accepts colCount prop without error", async () => {
+  it("accepts columns as a number (count mode) without error", async () => {
     const wrapper = await mountSuspended(LayoutGrid, {
-      props: { itemCount: 3, colCount: 3 },
+      props: { itemCount: 3, columns: 3 },
     });
     expect(wrapper.vm).toBeTruthy();
   });
 
-  it("accepts colWidth prop without error", async () => {
+  it("accepts columns as a CSS string (width mode) without error", async () => {
     const wrapper = await mountSuspended(LayoutGrid, {
-      props: { itemCount: 2, colWidth: "200px" },
+      props: { itemCount: 4, columns: "200px" },
     });
     expect(wrapper.vm).toBeTruthy();
   });
 
-  it("accepts useMinMax prop without error", async () => {
+  it("accepts columns as a rem string without error", async () => {
     const wrapper = await mountSuspended(LayoutGrid, {
-      props: { itemCount: 4, useMinMax: true, colWidth: "200px" },
+      props: { itemCount: 4, columns: "15rem" },
     });
     expect(wrapper.vm).toBeTruthy();
   });
+
+  // ─── Other prop acceptance ────────────────────────────────────────────────
 
   it("accepts gap prop without error", async () => {
     const wrapper = await mountSuspended(LayoutGrid, {
@@ -178,8 +180,7 @@ describe("LayoutGrid", () => {
         tag: "section",
         label: "Services",
         itemCount: 3,
-        colCount: 3,
-        colWidth: "1fr",
+        columns: 3,
         gap: "2rem",
         singleColBelow: "768px",
         styleClassPassthrough: ["services-grid"],
