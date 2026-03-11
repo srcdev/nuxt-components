@@ -23,8 +23,9 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── storybook-add-font.md       — add a new font to Storybook
 ├── testing-add-unit-test.md    — create a Vitest unit test with snapshots
 ├── testing-add-playwright.md   — create a Playwright visual regression test
-├── theming-override-default.md — override the default theme with a custom colour scale
-├── colour-scheme-disable.md   — disable light/dark scheme support in a consumer app
+├── theming-override-default.md      — override the default theme with a custom colour scale
+├── colour-scheme-disable.md         — disable light/dark scheme support in a consumer app
+├── component-dynamic-slots.md       — named dynamic slots ($slots iteration) vs indexed dynamic slots (itemCount pattern)
 └── components/
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
     ├── hero-text.md            — HeroText props, usage patterns, styling
