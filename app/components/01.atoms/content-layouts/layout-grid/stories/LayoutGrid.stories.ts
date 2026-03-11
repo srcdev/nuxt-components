@@ -27,9 +27,10 @@ const meta: Meta<typeof LayoutGrid> = {
         "Integer → repeat(N, 1fr) equal columns. CSS string (e.g. '200px', '15rem') → repeat(auto-fill, minmax(value, 1fr)) wrapping columns.",
     },
     colWidth: {
-      control: { type: "range", min: 0, max: 45, step: 15 },
+      control: { type: "select" },
+      options: ["", "15rem", "30rem", "45rem"],
       description:
-        "Explicit column width in rem — 0 = not set, then 15rem / 30rem / 45rem (≈150px / 300px / 450px). Overrides fractional sizing from a numeric columns value. Triggers a visible dev warning when set alongside columns.",
+        "Explicit column width — empty = not set, otherwise 15rem / 30rem / 45rem (≈150px / 300px / 450px). Overrides fractional sizing from a numeric columns value. Triggers a visible dev warning when set alongside columns.",
     },
     gap: {
       control: "text",
@@ -48,7 +49,7 @@ const meta: Meta<typeof LayoutGrid> = {
     tag: "div",
     itemCount: 6,
     columns: 3,
-    colWidth: 0 as unknown as string,
+    colWidth: "",
     gap: "1rem",
     singleColBelow: "0px",
     styleClassPassthrough: [],
@@ -91,12 +92,19 @@ const allSlots = Array.from(
   (_, i) => `<template #item-${i}>${cell(`Item ${i + 1}`, i)}</template>`
 ).join("\n        ");
 
-// Normalise args: colWidth slider (number) → CSS rem string, or undefined when 0.
+// Normalise args: explicitly maps each prop so no raw slider number leaks through to the component.
+// colWidth: 0 → undefined (not set), N → "Nrem" CSS string.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const toStoryArgs = (args: any) =>
   computed(() => ({
-    ...args,
-    colWidth: args.colWidth ? `${args.colWidth}rem` : undefined,
+    tag: args.tag as "div" | "section",
+    label: args.label as string,
+    itemCount: Number(args.itemCount),
+    columns: args.columns as number | string,
+    colWidth: args.colWidth || undefined,
+    gap: args.gap as string,
+    singleColBelow: args.singleColBelow as string,
+    styleClassPassthrough: args.styleClassPassthrough as string[],
   }));
 
 // ─── Stories ──────────────────────────────────────────────────────────────────
@@ -235,7 +243,7 @@ export const ColWidthConflict: Story = {
   args: {
     itemCount: 6,
     columns: 3,
-    colWidth: 15 as unknown as string,
+    colWidth: "15rem",
   },
   render: (args) => ({
     components: { LayoutGrid },
