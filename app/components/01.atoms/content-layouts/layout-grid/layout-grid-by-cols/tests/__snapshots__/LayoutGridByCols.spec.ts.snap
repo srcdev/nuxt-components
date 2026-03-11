@@ -25,7 +25,7 @@ exports[`LayoutGridByCols > renders correct HTML structure with styleClassPassth
 `;
 
 exports[`LayoutGridByCols > renders correctly with all props and slots combined 1`] = `
-"<section class="layout-grid-by-cols services-grid" aria-labelledby="v-0-0" columns="3">
+"<section class="layout-grid-by-cols services-grid" aria-labelledby="v-0-0">
   <p id="v-0-0" class="sr-only">Services</p>
   <div class="layout-grid-inner">
     <p>One</p>

@@ -9,7 +9,7 @@
           <DisplayThemeSwitch />
         </LayoutRow>
 
-        <LayoutGridByCols :item-count="1">
+        <LayoutGridByCols>
           <template #item-0>
             <div>
               <h1>Example buttons</h1>
@@ -117,7 +117,7 @@
           </template>
         </LayoutGridByCols>
 
-        <LayoutGridByCols :item-count="1">
+        <LayoutGridByCols>
           <template #item-0>
             <div>
               <h1>Example buttons</h1>

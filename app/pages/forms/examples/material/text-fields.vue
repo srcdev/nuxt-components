@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutGridByCols :item-count="1">
+        <LayoutGridByCols>
           <template #item-0>
             <div>
               <h1 class="header-1">Example form</h1>
@@ -10,7 +10,7 @@
             </div>
           </template>
         </LayoutGridByCols>
-        <LayoutGridByCols :item-count="2">
+        <LayoutGridByCols>
           <template #item-0>
             <div>
               <p>Themes switcher</p>

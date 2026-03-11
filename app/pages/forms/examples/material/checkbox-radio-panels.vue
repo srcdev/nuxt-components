@@ -5,7 +5,7 @@
         <div>
           <h1 class="header-1">Checkbox/Radio panels</h1>
         </div>
-        <LayoutGridByCols :item-count="1">
+        <LayoutGridByCols>
           <template #item-0>
             <FormWrapper width="medium">
               <template #default>

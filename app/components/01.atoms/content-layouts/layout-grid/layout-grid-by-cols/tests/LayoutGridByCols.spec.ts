@@ -6,9 +6,7 @@ describe("LayoutGridByCols", () => {
   // ─── Mount ───────────────────────────────────────────────────────────────
 
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 2 },
-    });
+    const wrapper = await mountSuspended(LayoutGridByCols);
     expect(wrapper.vm).toBeTruthy();
   });
 
@@ -16,7 +14,6 @@ describe("LayoutGridByCols", () => {
 
   it("renders correct HTML structure (div, 2 items)", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 2 },
       slots: {
         "item-0": "<p>First</p>",
         "item-1": "<p>Second</p>",
@@ -27,14 +24,14 @@ describe("LayoutGridByCols", () => {
 
   it("renders correct HTML structure (section with label)", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { tag: "section", label: "Feature grid", itemCount: 3 },
+      props: { tag: "section", label: "Feature grid" },
     });
     expect(wrapper.html()).toMatchSnapshot();
   });
 
   it("renders correct HTML structure with styleClassPassthrough", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 2, styleClassPassthrough: ["custom-class", "another-class"] },
+      props: { styleClassPassthrough: ["custom-class", "another-class"] },
     });
     expect(wrapper.html()).toMatchSnapshot();
   });
@@ -42,13 +39,13 @@ describe("LayoutGridByCols", () => {
   // ─── Tag rendering ───────────────────────────────────────────────────────
 
   it("renders as <div> by default", async () => {
-    const wrapper = await mountSuspended(LayoutGridByCols, { props: { itemCount: 1 } });
+    const wrapper = await mountSuspended(LayoutGridByCols);
     expect(wrapper.element.tagName).toBe("DIV");
   });
 
   it("renders as <section> when tag='section'", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { tag: "section", itemCount: 1 },
+      props: { tag: "section" },
     });
     expect(wrapper.element.tagName).toBe("SECTION");
   });
@@ -56,14 +53,14 @@ describe("LayoutGridByCols", () => {
   // ─── Base class ──────────────────────────────────────────────────────────
 
   it("always has the layout-grid class", async () => {
-    const wrapper = await mountSuspended(LayoutGridByCols, { props: { itemCount: 1 } });
+    const wrapper = await mountSuspended(LayoutGridByCols);
     expect(wrapper.classes()).toContain("layout-grid-by-cols");
   });
 
   // ─── Inner div ───────────────────────────────────────────────────────────
 
   it("renders a .layout-grid-inner div", async () => {
-    const wrapper = await mountSuspended(LayoutGridByCols, { props: { itemCount: 1 } });
+    const wrapper = await mountSuspended(LayoutGridByCols);
     expect(wrapper.find(".layout-grid-inner").exists()).toBe(true);
   });
 
@@ -71,7 +68,7 @@ describe("LayoutGridByCols", () => {
 
   it("renders sr-only label and aria-labelledby when tag is section", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { tag: "section", label: "Card grid", itemCount: 2 },
+      props: { tag: "section", label: "Card grid" },
     });
     const srOnly = wrapper.find(".sr-only");
     expect(srOnly.exists()).toBe(true);
@@ -81,7 +78,7 @@ describe("LayoutGridByCols", () => {
 
   it("does not render sr-only label or aria-labelledby when tag is div", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { tag: "div", label: "Ignored", itemCount: 2 },
+      props: { tag: "div", label: "Ignored" },
     });
     expect(wrapper.find(".sr-only").exists()).toBe(false);
     expect(wrapper.attributes("aria-labelledby")).toBeUndefined();
@@ -91,7 +88,6 @@ describe("LayoutGridByCols", () => {
 
   it("renders slot content for each item inside the inner div", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 3 },
       slots: {
         "item-0": "<span>Alpha</span>",
         "item-1": "<span>Beta</span>",
@@ -104,8 +100,8 @@ describe("LayoutGridByCols", () => {
     expect(inner.text()).toContain("Gamma");
   });
 
-  it("renders no slot content when itemCount is 0", async () => {
-    const wrapper = await mountSuspended(LayoutGridByCols, { props: { itemCount: 0 } });
+  it("renders no slot content when no slots are provided", async () => {
+    const wrapper = await mountSuspended(LayoutGridByCols);
     expect(wrapper.find(".layout-grid-inner").text().trim()).toBe("");
   });
 
@@ -113,84 +109,40 @@ describe("LayoutGridByCols", () => {
 
   it("applies a single styleClassPassthrough string", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 1, styleClassPassthrough: "my-class" },
+      props: { styleClassPassthrough: "my-class" },
     });
     expect(wrapper.classes()).toContain("my-class");
   });
 
   it("applies multiple styleClassPassthrough classes from an array", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 1, styleClassPassthrough: ["class-a", "class-b"] },
+      props: { styleClassPassthrough: ["class-a", "class-b"] },
     });
     expect(wrapper.classes()).toContain("class-a");
     expect(wrapper.classes()).toContain("class-b");
   });
 
-  // ─── columns prop ─────────────────────────────────────────────────────────
+  // ─── columnCount prop ─────────────────────────────────────────────────────
 
-  it("accepts columns as a number (count mode) without error", async () => {
+  it("accepts columnCount without error", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 3, columns: 3 },
+      props: { columnCount: 3 },
     });
     expect(wrapper.vm).toBeTruthy();
-  });
-
-  it("accepts columns as a CSS string (width mode) without error", async () => {
-    const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 4, columns: "200px" },
-    });
-    expect(wrapper.vm).toBeTruthy();
-  });
-
-  it("accepts columns as a rem string without error", async () => {
-    const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 4, columns: "15rem" },
-    });
-    expect(wrapper.vm).toBeTruthy();
-  });
-
-  // ─── colWidth prop ────────────────────────────────────────────────────────
-
-  it("accepts colWidth without error when columns is a number", async () => {
-    const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 3, columns: 3, colWidth: "200px" },
-    });
-    expect(wrapper.vm).toBeTruthy();
-  });
-
-  it("accepts colWidth without error when columns is a string", async () => {
-    const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 3, columns: "250px", colWidth: "150px" },
-    });
-    expect(wrapper.vm).toBeTruthy();
-  });
-
-  it("does not render the dev warning when colWidth is not set", async () => {
-    const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 2, columns: 3 },
-    });
-    expect(wrapper.find(".layout-grid__dev-warning").exists()).toBe(false);
   });
 
   // ─── Other prop acceptance ────────────────────────────────────────────────
 
   it("accepts gap prop without error", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 2, gap: "2rem" },
+      props: { gap: "2rem" },
     });
     expect(wrapper.vm).toBeTruthy();
   });
 
-  it("accepts singleColBelow as a CSS string without error", async () => {
+  it("accepts singleColBelow prop without error", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 2, singleColBelow: "600px" },
-    });
-    expect(wrapper.vm).toBeTruthy();
-  });
-
-  it("accepts singleColBelow with rem unit without error", async () => {
-    const wrapper = await mountSuspended(LayoutGridByCols, {
-      props: { itemCount: 2, singleColBelow: "40rem" },
+      props: { singleColBelow: "600px" },
     });
     expect(wrapper.vm).toBeTruthy();
   });
@@ -202,8 +154,7 @@ describe("LayoutGridByCols", () => {
       props: {
         tag: "section",
         label: "Services",
-        itemCount: 3,
-        columns: 3,
+        columnCount: 3,
         gap: "2rem",
         singleColBelow: "768px",
         styleClassPassthrough: ["services-grid"],
