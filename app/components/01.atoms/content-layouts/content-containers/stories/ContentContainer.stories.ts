@@ -11,7 +11,7 @@ interface ContentContainerArgs {
 }
 
 export default {
-  title: "Components/Layouts/ContentContainer",
+  title: "Components/Atoms/ContentLayouts/ContentContainer",
   component: ContentContainerComponent,
   argTypes: {
     // Semantic

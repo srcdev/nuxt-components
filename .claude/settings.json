@@ -3,7 +3,12 @@
     "allow": [
       "Bash(npx vitest run app/components/01.atoms/content-layouts/layout-grid/tests/LayoutGrid.spec.ts)",
       "Bash(npx vitest run app/components/01.atoms/content-layouts/layout-grid/tests/LayoutGrid.spec.ts --update-snapshots)",
-      "Bash(npx vitest run app/components/01.atoms/content-layouts/layout-grid/tests/LayoutGrid.spec.ts -u)"
+      "Bash(npx vitest run app/components/01.atoms/content-layouts/layout-grid/tests/LayoutGrid.spec.ts -u)",
+      "Bash(npx vitest run app/components/content-containers/tests/ContentContainer.spec.ts)",
+      "Bash(node -e \":*)"
+    ],
+    "additionalDirectories": [
+      "/Users/simoncornforth/websites/nuxt-components/app/components/content-containers"
     ]
   }
 }
