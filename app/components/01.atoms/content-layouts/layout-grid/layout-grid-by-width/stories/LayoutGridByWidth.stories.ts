@@ -1,10 +1,10 @@
 import { computed } from "vue";
-import LayoutGrid from "../LayoutGrid.vue";
+import LayoutGridByWidth from "../LayoutGridByWidth.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
-const meta: Meta<typeof LayoutGrid> = {
-  title: "Atoms/Content Layouts/LayoutGrid",
-  component: LayoutGrid,
+const meta: Meta<typeof LayoutGridByWidth> = {
+  title: "Atoms/Content Layouts/LayoutGridByWidth",
+  component: LayoutGridByWidth,
   argTypes: {
     tag: {
       control: { type: "select" },
@@ -14,23 +14,19 @@ const meta: Meta<typeof LayoutGrid> = {
     },
     label: {
       control: "text",
-      description: "Accessible label for the grid — required when tag is section (rendered as a visually hidden element)",
+      description:
+        "Accessible label for the grid — required when tag is section (rendered as a visually hidden element)",
       table: { category: "Semantic" },
     },
     itemCount: {
       control: { type: "range", min: 0, max: 18, step: 1 },
       description: "Number of grid cells to render — must match the number of #item-{n} slots provided",
     },
-    columns: {
-      control: { type: "range", min: 1, max: 8, step: 1 },
-      description:
-        "Integer → repeat(N, 1fr) equal columns. CSS string (e.g. '200px', '15rem') → repeat(auto-fill, minmax(value, 1fr)) wrapping columns.",
-    },
-    colWidth: {
+    columnWidth: {
       control: { type: "select" },
-      options: ["", "15rem", "30rem", "45rem"],
+      options: ["200px", "312px", "400px", "500px"],
       description:
-        "Explicit column width — empty = not set, otherwise 15rem / 30rem / 45rem (≈150px / 300px / 450px). Overrides fractional sizing from a numeric columns value. Triggers a visible dev warning when set alongside columns.",
+        "String → value to set repeat minmax minimum value CSS string (e.g. '200px', '15rem') → repeat(auto-fill, minmax(value, 1fr)) wrapping columns.",
     },
     gap: {
       control: "text",
@@ -48,24 +44,23 @@ const meta: Meta<typeof LayoutGrid> = {
   args: {
     tag: "div",
     itemCount: 6,
-    columns: 3,
-    colWidth: "",
+    columnWidth: "312px",
     gap: "1rem",
-    singleColBelow: "0px",
+    singleColBelow: "768px",
     styleClassPassthrough: [],
   },
   parameters: {
     docs: {
       description: {
         component:
-          "A CSS grid wrapper driven by props. Content is placed via dynamic named slots (#item-0, #item-1, …). Pass an integer to columns for N equal columns, or a CSS width string for auto-fill behaviour. colWidth (rem slider) overrides fractional sizing and shows a dev warning when set. The grid collapses to a single column below singleColBelow using a CSS container query.",
+          "A CSS grid wrapper driven by props. Content is placed via dynamic named slots (#item-0, #item-1, …). Pass an integer to columnWidth for N equal columns, or a CSS width string for auto-fill behaviour. The grid collapses to a single column below singleColBelow using a CSS container query.",
       },
     },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof LayoutGrid>;
+type Story = StoryObj<typeof LayoutGridByWidth>;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -100,8 +95,7 @@ const toStoryArgs = (args: any) =>
     tag: args.tag as "div" | "section",
     label: args.label as string,
     itemCount: Number(args.itemCount),
-    columns: args.columns as number | string,
-    colWidth: args.colWidth || undefined,
+    columnWidth: args.columnWidth as string,
     gap: args.gap as string,
     singleColBelow: args.singleColBelow as string,
     styleClassPassthrough: args.styleClassPassthrough as string[],
@@ -113,48 +107,19 @@ const toStoryArgs = (args: any) =>
 export const Default: Story = {
   args: {
     itemCount: 6,
-    columns: 3,
+    columnWidth: "240px",
   },
   render: (args) => ({
-    components: { LayoutGrid },
+    components: { LayoutGridByWidth },
     setup() {
       return { storyArgs: toStoryArgs(args) };
     },
     template: `
-      <LayoutGrid v-bind="storyArgs">
+      <LayoutGridByWidth v-bind="storyArgs">
         ${allSlots}
-      </LayoutGrid>
+      </LayoutGridByWidth>
     `,
   }),
-};
-
-/** Auto-fill — columns prop is a CSS width string; browser fills as many as fit. */
-export const AutoFill: Story = {
-  name: "Auto-fill (CSS width string)",
-  args: {
-    itemCount: 12,
-    columns: "200px" as unknown as number,
-  },
-  render: (args) => ({
-    components: { LayoutGrid },
-    setup() {
-      return { storyArgs: toStoryArgs(args) };
-    },
-    template: `
-      <LayoutGrid v-bind="storyArgs">
-        ${allSlots}
-      </LayoutGrid>
-    `,
-  }),
-  parameters: {
-    controls: { exclude: ["columns"] },
-    docs: {
-      description: {
-        story:
-          "columns set to a CSS width string ('200px') — the browser fills as many columns as fit, each at least 200px wide. Resize the canvas to see wrapping. The columns control is excluded here as a string value is not representable on the slider.",
-      },
-    },
-  },
 };
 
 /** Single column below a breakpoint — collapses to stacked layout on narrow containers. */
@@ -162,18 +127,18 @@ export const SingleColBelow: Story = {
   name: "Single Column Below 600px",
   args: {
     itemCount: 6,
-    columns: 3,
+    columnWidth: "300px",
     singleColBelow: "600px",
   },
   render: (args) => ({
-    components: { LayoutGrid },
+    components: { LayoutGridByWidth },
     setup() {
       return { storyArgs: toStoryArgs(args) };
     },
     template: `
-      <LayoutGrid v-bind="storyArgs">
+      <LayoutGridByWidth v-bind="storyArgs">
         ${allSlots}
-      </LayoutGrid>
+      </LayoutGridByWidth>
     `,
   }),
   parameters: {
@@ -191,18 +156,18 @@ export const CustomGap: Story = {
   name: "Custom Gap",
   args: {
     itemCount: 6,
-    columns: 3,
+    columnWidth: "300px",
     gap: "3.2rem",
   },
   render: (args) => ({
-    components: { LayoutGrid },
+    components: { LayoutGridByWidth },
     setup() {
       return { storyArgs: toStoryArgs(args) };
     },
     template: `
-      <LayoutGrid v-bind="storyArgs">
+      <LayoutGridByWidth v-bind="storyArgs">
         ${allSlots}
-      </LayoutGrid>
+      </LayoutGridByWidth>
     `,
   }),
 };
@@ -214,17 +179,17 @@ export const SemanticSection: Story = {
     tag: "section",
     label: "Feature highlights",
     itemCount: 6,
-    columns: 3,
+    columnWidth: "300px",
   },
   render: (args) => ({
-    components: { LayoutGrid },
+    components: { LayoutGridByWidth },
     setup() {
       return { storyArgs: toStoryArgs(args) };
     },
     template: `
-      <LayoutGrid v-bind="storyArgs">
+      <LayoutGridByWidth v-bind="storyArgs">
         ${allSlots}
-      </LayoutGrid>
+      </LayoutGridByWidth>
     `,
   }),
   parameters: {
@@ -237,35 +202,6 @@ export const SemanticSection: Story = {
   },
 };
 
-/** Dev warning — colWidth set alongside a numeric columns; warning explains the resolved value. */
-export const ColWidthConflict: Story = {
-  name: "Dev Warning — colWidth overrides columns",
-  args: {
-    itemCount: 6,
-    columns: 3,
-    colWidth: "15rem",
-  },
-  render: (args) => ({
-    components: { LayoutGrid },
-    setup() {
-      return { storyArgs: toStoryArgs(args) };
-    },
-    template: `
-      <LayoutGrid v-bind="storyArgs">
-        ${allSlots}
-      </LayoutGrid>
-    `,
-  }),
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "colWidth slider set to 15rem alongside columns=3. The amber dev warning appears explaining that colWidth wins and showing the resolved repeat(3, 15rem). Slide colWidth back to 0 to clear the warning. Not rendered in production builds.",
-      },
-    },
-  },
-};
-
 /** Zero items — renders an empty grid with no cells. */
 export const ZeroItems: Story = {
   name: "Zero Items",
@@ -273,10 +209,10 @@ export const ZeroItems: Story = {
     itemCount: 0,
   },
   render: (args) => ({
-    components: { LayoutGrid },
+    components: { LayoutGridByWidth },
     setup() {
       return { storyArgs: toStoryArgs(args) };
     },
-    template: `<LayoutGrid v-bind="storyArgs" />`,
+    template: `<LayoutGridByWidth v-bind="storyArgs" />`,
   }),
 };

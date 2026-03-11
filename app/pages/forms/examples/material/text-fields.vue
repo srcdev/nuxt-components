@@ -2,16 +2,16 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <ContentGrid>
-          <template #slot1>
+        <LayoutGridByCols :item-count="1">
+          <template #item-0>
             <div>
               <h1 class="header-1">Example form</h1>
               <p class="body-normal">Use 'test@test.com' to trigger server errors</p>
             </div>
           </template>
-        </ContentGrid>
-        <ContentGrid>
-          <template #slot1>
+        </LayoutGridByCols>
+        <LayoutGridByCols :item-count="2">
+          <template #item-0>
             <p>Themes switcher</p>
             <ul class="flex-group">
               <li>
@@ -595,7 +595,7 @@
               </template>
             </FormWrapper>
           </template>
-          <template #slot2>
+          <template #item-1>
             <ClientOnly>
               <p>Client only state</p>
               <pre>
@@ -612,7 +612,7 @@
               </pre>
             </ClientOnly>
           </template>
-        </ContentGrid>
+        </LayoutGridByCols>
       </template>
     </NuxtLayout>
   </div>
@@ -883,14 +883,6 @@ watch(
 </script>
 
 <style lang="css">
-.text-fields-page {
-  .layout-row {
-    .ui-content-grid {
-      --_margin-inline: 12px;
-    }
-  }
-}
-
 .flex-group {
   align-items: flex-start;
   display: flex;

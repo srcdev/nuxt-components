@@ -28,6 +28,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 └── components/
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
     ├── hero-text.md            — HeroText props, usage patterns, styling
+    ├── layout-grid-by-cols.md  — LayoutGridByCols dynamic slots (item-{n}), props, column/gap/breakpoint decisions
     ├── layout-row.md           — LayoutRow variant guide, width/margin decisions, usage patterns
     ├── link-text.md            — LinkText props, slots, usage patterns, styling
     ├── services-card.md        — ServicesCard props, actions slot, usage patterns
