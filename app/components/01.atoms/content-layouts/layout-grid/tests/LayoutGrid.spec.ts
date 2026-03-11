@@ -149,6 +149,29 @@ describe("LayoutGrid", () => {
     expect(wrapper.vm).toBeTruthy();
   });
 
+  // ─── colWidth prop ────────────────────────────────────────────────────────
+
+  it("accepts colWidth without error when columns is a number", async () => {
+    const wrapper = await mountSuspended(LayoutGrid, {
+      props: { itemCount: 3, columns: 3, colWidth: "200px" },
+    });
+    expect(wrapper.vm).toBeTruthy();
+  });
+
+  it("accepts colWidth without error when columns is a string", async () => {
+    const wrapper = await mountSuspended(LayoutGrid, {
+      props: { itemCount: 3, columns: "250px", colWidth: "150px" },
+    });
+    expect(wrapper.vm).toBeTruthy();
+  });
+
+  it("does not render the dev warning when colWidth is not set", async () => {
+    const wrapper = await mountSuspended(LayoutGrid, {
+      props: { itemCount: 2, columns: 3 },
+    });
+    expect(wrapper.find(".layout-grid__dev-warning").exists()).toBe(false);
+  });
+
   // ─── Other prop acceptance ────────────────────────────────────────────────
 
   it("accepts gap prop without error", async () => {
