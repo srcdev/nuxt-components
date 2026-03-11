@@ -2,7 +2,7 @@ import EyebrowText from "../EyebrowText.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
 const meta: Meta<typeof EyebrowText> = {
-  title: "Atoms/Text Blocks/EyebrowText",
+  title: "Atoms/Text Blocks/Eyebrow Text",
   component: EyebrowText,
   argTypes: {
     tag: {

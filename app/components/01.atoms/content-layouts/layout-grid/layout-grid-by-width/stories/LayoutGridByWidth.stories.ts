@@ -3,7 +3,7 @@ import LayoutGridByWidth from "../LayoutGridByWidth.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
 const meta: Meta<typeof LayoutGridByWidth> = {
-  title: "Atoms/Content Layouts/LayoutGridByWidth",
+  title: "Atoms/Content Layouts/Layout Grid By Width",
   component: LayoutGridByWidth,
   argTypes: {
     tag: {

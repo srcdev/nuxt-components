@@ -2,7 +2,7 @@ import LinkText from "../LinkText.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
 const meta: Meta<typeof LinkText> = {
-  title: "Atoms/Text Blocks/LinkText",
+  title: "Atoms/Text Blocks/Link Text",
   component: LinkText,
   argTypes: {
     to: {

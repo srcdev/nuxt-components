@@ -2,7 +2,7 @@ import HeroText from "../HeroText.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
 const meta: Meta<typeof HeroText> = {
-  title: "Atoms/Text Blocks/HeroText",
+  title: "Atoms/Text Blocks/Hero Text",
   component: HeroText,
   argTypes: {
     tag: {

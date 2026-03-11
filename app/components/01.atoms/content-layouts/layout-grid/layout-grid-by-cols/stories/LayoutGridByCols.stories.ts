@@ -3,7 +3,7 @@ import LayoutGridByCols from "../LayoutGridByCols.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
 const meta: Meta<typeof LayoutGridByCols> = {
-  title: "Atoms/Content Layouts/LayoutGridByCols",
+  title: "Atoms/Content Layouts/Layout Grid By Cols",
   component: LayoutGridByCols,
   argTypes: {
     tag: {
