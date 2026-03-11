@@ -83,6 +83,7 @@ watch(
   .layout-grid {
     container-type: inline-size;
     container-name: layoutGrid;
+    overflow-x: auto;
 
     .layout-grid__dev-warning {
       padding: 1rem 1.2rem;
