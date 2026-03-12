@@ -1,0 +1,38 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ExpandingPanel > renders correct HTML structure with all props set 1`] = `
+"<div class="expanding-panel extra-class">
+  <details class="expanding-panel-details" name="snap-all" open="">
+    <summary id="id-snap-all-trigger" class="expanding-panel-summary" aria-controls="id-snap-all-content" aria-expanded="true"><span class="label-wrapper"></span>
+      <!--v-if-->
+    </summary>
+  </details>
+  <div id="id-snap-all-content" class="expanding-panel-content" aria-labelledby="id-snap-all-trigger" role="region">
+    <div class="inner"></div>
+  </div>
+</div>"
+`;
+
+exports[`ExpandingPanel > renders correct HTML structure with default props 1`] = `
+"<div class="expanding-panel">
+  <details class="expanding-panel-details" name="snap-default">
+    <summary id="id-snap-default-trigger" class="expanding-panel-summary" aria-controls="id-snap-default-content" aria-expanded="false"><span class="label-wrapper"></span><span class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></span></summary>
+  </details>
+  <div id="id-snap-default-content" class="expanding-panel-content" aria-labelledby="id-snap-default-trigger" role="region">
+    <div class="inner"></div>
+  </div>
+</div>"
+`;
+
+exports[`ExpandingPanel > renders correct HTML structure with populated slots 1`] = `
+"<div class="expanding-panel">
+  <details class="expanding-panel-details" name="snap-slots">
+    <summary id="id-snap-slots-trigger" class="expanding-panel-summary" aria-controls="id-snap-slots-content" aria-expanded="false"><span class="label-wrapper"><span>Summary text</span></span><span class="icon-wrapper"><span>▸</span></span></summary>
+  </details>
+  <div id="id-snap-slots-content" class="expanding-panel-content" aria-labelledby="id-snap-slots-trigger" role="region">
+    <div class="inner">
+      <p>Content text</p>
+    </div>
+  </div>
+</div>"
+`;
