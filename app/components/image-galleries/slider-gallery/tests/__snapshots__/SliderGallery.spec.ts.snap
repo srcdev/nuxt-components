@@ -1,0 +1,69 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SliderGallery > renders correct HTML structure after load 1`] = `
+"<div class="slider-gallery">
+  <div class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading gallery...</p>
+  </div>
+  <div class="gallery-content">
+    <div class="list">
+      <div class="item"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-1.jpg 1x, /_ipx/_/images/slide-1.jpg 2x" alt="Slide 1" src="/_ipx/_/images/slide-1.jpg">
+        <div class="content light">
+          <div class="author light">Stylist One</div>
+          <div class="title light">First Slide</div>
+          <div class="topic light">Fashion</div>
+          <div class="description light">Description for first slide</div>
+          <div class="buttons light"><button>SEE MORE</button></div>
+        </div>
+      </div>
+      <div class="item"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-2.jpg 1x, /_ipx/_/images/slide-2.jpg 2x" alt="Slide 2" src="/_ipx/_/images/slide-2.jpg">
+        <div class="content dark">
+          <div class="author dark"></div>
+          <div class="title dark">Second Slide</div>
+          <div class="topic dark">Style</div>
+          <div class="description dark"></div>
+          <div class="buttons dark"><button>SEE MORE</button></div>
+        </div>
+      </div>
+      <div class="item"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-3.jpg 1x, /_ipx/_/images/slide-3.jpg 2x" alt="Slide 3" src="/_ipx/_/images/slide-3.jpg">
+        <div class="content light">
+          <div class="author light"></div>
+          <div class="title light"></div>
+          <div class="topic light"></div>
+          <div class="description light"></div>
+          <div class="buttons light"><button>SEE MORE</button></div>
+        </div>
+      </div>
+    </div>
+    <div class="thumbnail">
+      <div class="item">
+        <div class="inner"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-1.jpg 1x, /_ipx/_/images/slide-1.jpg 2x" alt="Slide 1" loading="lazy" src="/_ipx/_/images/slide-1.jpg">
+          <div class="content light">
+            <div class="title light">Thumb 1</div>
+            <div class="description light">Thumb desc 1</div>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="inner"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-2.jpg 1x, /_ipx/_/images/slide-2.jpg 2x" alt="Slide 2" loading="lazy" src="/_ipx/_/images/slide-2.jpg">
+          <div class="content dark">
+            <div class="title dark">Thumb 2</div>
+            <div class="description dark">Thumb desc 2</div>
+          </div>
+        </div>
+      </div>
+      <div class="item">
+        <div class="inner"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-3.jpg 1x, /_ipx/_/images/slide-3.jpg 2x" alt="Slide 3" loading="lazy" src="/_ipx/_/images/slide-3.jpg">
+          <div class="content light">
+            <div class="title light"></div>
+            <div class="description light"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="arrows"><button id="prev" aria-label="Previous image"><span class="iconify i-ic:outline-keyboard-arrow-left arrows-icon" aria-hidden="true"></span></button><button id="next" aria-label="Next image"><span class="iconify i-ic:outline-keyboard-arrow-right arrows-icon" aria-hidden="true"></span></button></div>
+    <div class="time"></div>
+  </div>
+</div>"
+`;
