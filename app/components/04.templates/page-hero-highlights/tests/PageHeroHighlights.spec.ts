@@ -110,6 +110,35 @@ describe("PageHeroHighlights", () => {
     expect(wrapper.find(".page-title").attributes("id")).toBe(labelledBy);
   });
 
+  it("applies flexible-widths class by default", async () => {
+    const wrapper = await mountSuspended(PageHeroHighlights);
+    expect(wrapper.find(".highlights").classes()).toContain("flexible-widths");
+    expect(wrapper.find(".highlights").classes()).not.toContain("equal-widths");
+  });
+
+  it("applies equal-widths class when highlightsEqualWidths is true", async () => {
+    const wrapper = await mountSuspended(PageHeroHighlights, {
+      props: { highlightsEqualWidths: true },
+    });
+    expect(wrapper.find(".highlights").classes()).toContain("equal-widths");
+    expect(wrapper.find(".highlights").classes()).not.toContain("flexible-widths");
+  });
+
+  it("applies justify-start class by default", async () => {
+    const wrapper = await mountSuspended(PageHeroHighlights);
+    expect(wrapper.find(".highlights").classes()).toContain("justify-start");
+  });
+
+  it("applies the correct justify class for each highlightsJustify value", async () => {
+    const values = ["start", "center", "end", "space-between", "space-around"] as const;
+    for (const value of values) {
+      const wrapper = await mountSuspended(PageHeroHighlights, {
+        props: { highlightsJustify: value },
+      });
+      expect(wrapper.find(".highlights").classes()).toContain(`justify-${value}`);
+    }
+  });
+
   it("applies styleClassPassthrough classes", async () => {
     const wrapper = await mountSuspended(PageHeroHighlights, {
       props: { styleClassPassthrough: ["extra-class", "another-class"] },

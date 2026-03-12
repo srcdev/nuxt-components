@@ -10,6 +10,15 @@ const meta: Meta<typeof PageHeroHighlights> = {
       options: ["div", "section", "main"],
       description: "HTML element to render as the root",
     },
+    highlightsEqualWidths: {
+      control: "boolean",
+      description: "When true, highlight items share equal widths (grid). When false, items size to content (flex).",
+    },
+    highlightsJustify: {
+      control: { type: "select" },
+      options: ["start", "center", "end", "space-between", "space-around"],
+      description: "Justification of highlight items along the main axis",
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes applied to the root element",
@@ -17,6 +26,8 @@ const meta: Meta<typeof PageHeroHighlights> = {
   },
   args: {
     tag: "div",
+    highlightsEqualWidths: false,
+    highlightsJustify: "start",
     styleClassPassthrough: [],
   },
 };
@@ -88,6 +99,46 @@ export const AsSectionTag: Story = {
           <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
             <p class="page-heading-2">Active Users</p>
             <p class="page-body-normal">1,284</p>
+          </div>
+        </template>
+
+        <template #content>
+          <p class="page-heading-2">Recent Activity</p>
+          <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
+        </template>
+      </PageHeroHighlights>
+    `,
+  }),
+};
+
+/** Equal widths — highlights items share equal column widths via grid. */
+export const EqualWidthHighlights: Story = {
+  name: "Equal Width Highlights",
+  args: { highlightsEqualWidths: true },
+  render: (args) => ({
+    components: { PageHeroHighlights },
+    setup() {
+      return { args };
+    },
+    template: `
+      <PageHeroHighlights v-bind="args">
+        <template #header>
+          <p class="page-heading-1">Dashboard</p>
+          <p class="page-body-normal">Overview of your account activity and key metrics.</p>
+        </template>
+
+        <template #highlights>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Total Revenue</p>
+            <p class="page-body-normal">£24,500</p>
+          </div>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Active Users</p>
+            <p class="page-body-normal">1,284</p>
+          </div>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Open Tasks</p>
+            <p class="page-body-normal">37</p>
           </div>
         </template>
 

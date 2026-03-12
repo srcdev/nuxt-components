@@ -7,7 +7,7 @@ exports[`PageHeroHighlights > renders correct HTML structure 1`] = `
       <h1>Page Title</h1>
     </div>
   </div>
-  <div data-v-bed007d8="" class="highlights">
+  <div data-v-bed007d8="" class="highlights flexible-widths justify-start">
     <div class="highlight">Highlight 1</div>
   </div>
   <div data-v-bed007d8="" class="content">
