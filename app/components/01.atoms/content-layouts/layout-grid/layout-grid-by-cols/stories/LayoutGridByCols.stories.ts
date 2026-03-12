@@ -2,7 +2,9 @@ import { computed } from "vue";
 import LayoutGridByCols from "../LayoutGridByCols.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
-const meta: Meta<typeof LayoutGridByCols> = {
+type StoryArgs = InstanceType<typeof LayoutGridByCols>["$props"] & { itemCount?: number };
+
+const meta: Meta<StoryArgs> = {
   title: "Atoms/Content Layouts/Layout Grid By Cols",
   component: LayoutGridByCols,
   argTypes: {
@@ -59,7 +61,7 @@ const meta: Meta<typeof LayoutGridByCols> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof LayoutGridByCols>;
+type Story = StoryObj<StoryArgs>;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 

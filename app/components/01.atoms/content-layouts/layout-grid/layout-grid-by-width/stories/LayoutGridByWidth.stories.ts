@@ -2,7 +2,9 @@ import { computed } from "vue";
 import LayoutGridByWidth from "../LayoutGridByWidth.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
-const meta: Meta<typeof LayoutGridByWidth> = {
+type StoryArgs = InstanceType<typeof LayoutGridByWidth>["$props"] & { itemCount?: number };
+
+const meta: Meta<StoryArgs> = {
   title: "Atoms/Content Layouts/Layout Grid By Width",
   component: LayoutGridByWidth,
   argTypes: {
@@ -60,7 +62,7 @@ const meta: Meta<typeof LayoutGridByWidth> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof LayoutGridByWidth>;
+type Story = StoryObj<StoryArgs>;
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
