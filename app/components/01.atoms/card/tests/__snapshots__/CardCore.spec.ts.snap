@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DisplayCard > renders correct HTML structure (article, subtle, dividers) 1`] = `
-"<article class="display-card subtle has-dividers">
+exports[`CardCore > renders correct HTML structure (article, subtle, dividers) 1`] = `
+"<article class="card-core subtle has-dividers">
   <div class="card-row card-row-header">
     <h2>Title</h2>
   </div>
@@ -11,8 +11,8 @@ exports[`DisplayCard > renders correct HTML structure (article, subtle, dividers
 </article>"
 `;
 
-exports[`DisplayCard > renders correct HTML structure (default) 1`] = `
-"<div class="display-card solid">
+exports[`CardCore > renders correct HTML structure (default) 1`] = `
+"<div class="card-core solid">
   <div class="card-row card-row-header">
     <h2>Title</h2>
   </div>
@@ -25,10 +25,10 @@ exports[`DisplayCard > renders correct HTML structure (default) 1`] = `
 </div>"
 `;
 
-exports[`DisplayCard > renders correct HTML structure with styleClassPassthrough 1`] = `"<div class="display-card solid featured-card"></div>"`;
+exports[`CardCore > renders correct HTML structure with styleClassPassthrough 1`] = `"<div class="card-core solid featured-card"></div>"`;
 
-exports[`DisplayCard > renders correctly with all props and slots combined 1`] = `
-"<article class="display-card soft featured-card has-dividers no-outline">
+exports[`CardCore > renders correctly with all props and slots combined 1`] = `
+"<article class="card-core soft featured-card has-dividers no-outline">
   <div class="card-row card-row-header">
     <h2>Title</h2>
   </div>

@@ -19,7 +19,7 @@
           <form class="mb-12">
             <div>
               <label for="variant" class="form-label mie-12">Variant:</label>
-              <select id="variant" v-model="displayCardVariant" class="form-select">
+              <select id="variant" v-model="cardCoreVariant" class="form-select">
                 <option value="solid">Solid</option>
                 <option value="subtle">Subtle</option>
                 <option value="soft">Soft</option>
@@ -55,19 +55,19 @@
           <h2 class="page-heading-2">Default</h2>
 
           <GlowingBorder :variant="glowingBorderVariant" :style-class-passthrough="['mbe-20']">
-            <DisplayCard :variant="displayCardVariant" :has-dividers :no-outline>
+            <CardCore :variant="cardCoreVariant" :has-dividers :no-outline>
               <template #header>
-                <h2 class="page-heading-2">DisplayCard Header</h2>
+                <h2 class="page-heading-2">CardCore Header</h2>
               </template>
               <template #content>
-                <h3 class="page-heading-3">DisplayCard Content</h3>
-                <p class="page-body-normal">This is default slot content for the DisplayCard component.</p>
+                <h3 class="page-heading-3">CardCore Content</h3>
+                <p class="page-body-normal">This is default slot content for the CardCore component.</p>
                 <p class="page-body-normal">As it's a slot, any html content can be placed here.</p>
               </template>
               <template #footer>
-                <p class="page-body-small">DisplayCard Footer</p>
+                <p class="page-body-small">CardCore Footer</p>
               </template>
-            </DisplayCard>
+            </CardCore>
           </GlowingBorder>
         </LayoutRow>
       </template>
@@ -94,7 +94,7 @@ useHead({
 })
 
 const glowingBorderVariant = ref("vivid")
-const displayCardVariant = ref<"outline" | "solid" | "subtle" | "soft">("solid")
+const cardCoreVariant = ref<"outline" | "solid" | "subtle" | "soft">("solid")
 const hasDividers = ref(false)
 const noOutline = ref(false)
 </script>

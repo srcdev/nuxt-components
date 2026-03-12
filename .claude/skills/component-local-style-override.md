@@ -15,9 +15,9 @@ No changes to the component are required.
 ### 1. Pass a modifier class via styleClassPassthrough
 
 ```vue
-<DisplayCard :style-class-passthrough="['featured-card']">
+<CardCore :style-class-passthrough="['featured-card']">
   ...
-</DisplayCard>
+</CardCore>
 ```
 
 ### 2. Add a style block in the consuming file
@@ -27,12 +27,12 @@ is safe to delete if no overrides are needed.
 
 ```vue
 <style>
-/* ─── DisplayCard local overrides ─────────────────────────────────────
+/* ─── CardCore local overrides ─────────────────────────────────────
    Customise the appearance of this instance via CSS custom properties or
    direct overrides. Delete this block if no overrides are needed.
    Colours, borders, geometry only — do not override behaviour (display, pointer-events, etc.)
    ─────────────────────────────────────────────────────────────────────────── */
-.display-card {
+.card-core {
   &.featured-card {
     /* Colours */
     /* --_background-color: var(--brand-primary); */
@@ -122,5 +122,5 @@ The test: *should all instances of this component look the same?* If yes → the
 
 - `styleClassPassthrough` accepts a string or array — pass an array when combining multiple modifiers.
 - The modifier class lands on the component's root element, so nested element overrides need the
-  full selector path: `.display-card.featured-card .card-row-header { ... }`.
+  full selector path: `.card-core.featured-card .card-row-header { ... }`.
 - Keep the style block close to the component usage in the template — don't put it in a global stylesheet.

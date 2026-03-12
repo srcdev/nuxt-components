@@ -1,19 +1,19 @@
 import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import DisplayCard from "../DisplayCard.vue";
+import CardCore from "../CardCore.vue";
 
-describe("DisplayCard", () => {
+describe("CardCore", () => {
   // ─── Mount ───────────────────────────────────────────────────────────────
 
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(DisplayCard);
+    const wrapper = await mountSuspended(CardCore);
     expect(wrapper.vm).toBeTruthy();
   });
 
   // ─── Snapshots ───────────────────────────────────────────────────────────
 
   it("renders correct HTML structure (default)", async () => {
-    const wrapper = await mountSuspended(DisplayCard, {
+    const wrapper = await mountSuspended(CardCore, {
       slots: {
         header: "<h2>Title</h2>",
         body: "<p>Content</p>",
@@ -24,7 +24,7 @@ describe("DisplayCard", () => {
   });
 
   it("renders correct HTML structure (article, subtle, dividers)", async () => {
-    const wrapper = await mountSuspended(DisplayCard, {
+    const wrapper = await mountSuspended(CardCore, {
       props: { tag: "article", variant: "subtle", hasDividers: true },
       slots: {
         header: "<h2>Title</h2>",
@@ -35,7 +35,7 @@ describe("DisplayCard", () => {
   });
 
   it("renders correct HTML structure with styleClassPassthrough", async () => {
-    const wrapper = await mountSuspended(DisplayCard, {
+    const wrapper = await mountSuspended(CardCore, {
       props: { styleClassPassthrough: ["featured-card"] },
     });
     expect(wrapper.html()).toMatchSnapshot();
@@ -44,7 +44,7 @@ describe("DisplayCard", () => {
   // ─── Tag rendering ───────────────────────────────────────────────────────
 
   it("renders as <div> by default", async () => {
-    const wrapper = await mountSuspended(DisplayCard);
+    const wrapper = await mountSuspended(CardCore);
     expect(wrapper.element.tagName).toBe("DIV");
   });
 
@@ -55,28 +55,28 @@ describe("DisplayCard", () => {
     ["main", "MAIN"],
     ["nav", "NAV"],
   ] as const)("renders as <%s> when tag='%s'", async (tag, expected) => {
-    const wrapper = await mountSuspended(DisplayCard, { props: { tag } });
+    const wrapper = await mountSuspended(CardCore, { props: { tag } });
     expect(wrapper.element.tagName).toBe(expected);
   });
 
   // ─── Base class ──────────────────────────────────────────────────────────
 
-  it("always has the display-card class", async () => {
-    const wrapper = await mountSuspended(DisplayCard);
-    expect(wrapper.classes()).toContain("display-card");
+  it("always has the card-core class", async () => {
+    const wrapper = await mountSuspended(CardCore);
+    expect(wrapper.classes()).toContain("card-core");
   });
 
   // ─── Variant ─────────────────────────────────────────────────────────────
 
   it("applies solid class by default", async () => {
-    const wrapper = await mountSuspended(DisplayCard);
+    const wrapper = await mountSuspended(CardCore);
     expect(wrapper.classes()).toContain("solid");
   });
 
   it.each(["solid", "subtle", "soft", "outline"] as const)(
     "applies %s variant class",
     async (variant) => {
-      const wrapper = await mountSuspended(DisplayCard, { props: { variant } });
+      const wrapper = await mountSuspended(CardCore, { props: { variant } });
       expect(wrapper.classes()).toContain(variant);
     }
   );
@@ -84,12 +84,12 @@ describe("DisplayCard", () => {
   // ─── hasDividers ─────────────────────────────────────────────────────────
 
   it("does not have has-dividers class by default", async () => {
-    const wrapper = await mountSuspended(DisplayCard);
+    const wrapper = await mountSuspended(CardCore);
     expect(wrapper.classes()).not.toContain("has-dividers");
   });
 
   it("applies has-dividers class when hasDividers=true", async () => {
-    const wrapper = await mountSuspended(DisplayCard, {
+    const wrapper = await mountSuspended(CardCore, {
       props: { hasDividers: true },
     });
     expect(wrapper.classes()).toContain("has-dividers");
@@ -98,12 +98,12 @@ describe("DisplayCard", () => {
   // ─── noOutline ───────────────────────────────────────────────────────────
 
   it("does not have no-outline class by default", async () => {
-    const wrapper = await mountSuspended(DisplayCard);
+    const wrapper = await mountSuspended(CardCore);
     expect(wrapper.classes()).not.toContain("no-outline");
   });
 
   it("applies no-outline class when noOutline=true", async () => {
-    const wrapper = await mountSuspended(DisplayCard, {
+    const wrapper = await mountSuspended(CardCore, {
       props: { noOutline: true },
     });
     expect(wrapper.classes()).toContain("no-outline");
@@ -112,7 +112,7 @@ describe("DisplayCard", () => {
   // ─── Dynamic slots ───────────────────────────────────────────────────────
 
   it("renders a .card-row wrapper for each slot", async () => {
-    const wrapper = await mountSuspended(DisplayCard, {
+    const wrapper = await mountSuspended(CardCore, {
       slots: {
         header: "<h2>Header</h2>",
         body: "<p>Body</p>",
@@ -123,7 +123,7 @@ describe("DisplayCard", () => {
   });
 
   it("applies card-row-{name} class derived from the slot name", async () => {
-    const wrapper = await mountSuspended(DisplayCard, {
+    const wrapper = await mountSuspended(CardCore, {
       slots: {
         header: "<h2>Header</h2>",
         media: "<img src='x.jpg' alt='' />",
@@ -136,7 +136,7 @@ describe("DisplayCard", () => {
   });
 
   it("renders slot content inside the correct card-row", async () => {
-    const wrapper = await mountSuspended(DisplayCard, {
+    const wrapper = await mountSuspended(CardCore, {
       slots: {
         header: "<h2>My Title</h2>",
         body: "<p>My Body</p>",
@@ -147,21 +147,21 @@ describe("DisplayCard", () => {
   });
 
   it("renders no card-row elements when no slots are provided", async () => {
-    const wrapper = await mountSuspended(DisplayCard);
+    const wrapper = await mountSuspended(CardCore);
     expect(wrapper.findAll(".card-row")).toHaveLength(0);
   });
 
   // ─── styleClassPassthrough ───────────────────────────────────────────────
 
   it("applies a single styleClassPassthrough string", async () => {
-    const wrapper = await mountSuspended(DisplayCard, {
+    const wrapper = await mountSuspended(CardCore, {
       props: { styleClassPassthrough: "featured-card" },
     });
     expect(wrapper.classes()).toContain("featured-card");
   });
 
   it("applies multiple styleClassPassthrough classes from an array", async () => {
-    const wrapper = await mountSuspended(DisplayCard, {
+    const wrapper = await mountSuspended(CardCore, {
       props: { styleClassPassthrough: ["featured-card", "highlight"] },
     });
     expect(wrapper.classes()).toContain("featured-card");
@@ -169,7 +169,7 @@ describe("DisplayCard", () => {
   });
 
   it("updates classes when styleClassPassthrough prop changes", async () => {
-    const wrapper = await mountSuspended(DisplayCard, {
+    const wrapper = await mountSuspended(CardCore, {
       props: { styleClassPassthrough: ["original"] },
     });
     expect(wrapper.classes()).toContain("original");
@@ -181,7 +181,7 @@ describe("DisplayCard", () => {
   // ─── Combined ────────────────────────────────────────────────────────────
 
   it("renders correctly with all props and slots combined", async () => {
-    const wrapper = await mountSuspended(DisplayCard, {
+    const wrapper = await mountSuspended(CardCore, {
       props: {
         tag: "article",
         variant: "soft",

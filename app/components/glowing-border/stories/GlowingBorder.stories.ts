@@ -5,8 +5,8 @@ import StorybookComponent from "../GlowingBorder.vue";
 interface GlowingBorderStoryArgs {
   variant: "vivid" | "subtle" | "silver" | "steel";
   content: string;
-  showDisplayCard: boolean;
-  displayCardVariant: "solid" | "subtle" | "soft" | "outline";
+  showCardCore: boolean;
+  cardCoreVariant: "solid" | "subtle" | "soft" | "outline";
 }
 
 export default {
@@ -28,17 +28,17 @@ export default {
         category: "Content",
       },
     },
-    showDisplayCard: {
+    showCardCore: {
       control: { type: "boolean" },
-      description: "Show content wrapped in a DisplayCard component",
+      description: "Show content wrapped in a CardCore component",
       table: {
         category: "Content",
       },
     },
-    displayCardVariant: {
+    cardCoreVariant: {
       control: { type: "select" },
       options: ["solid", "subtle", "soft", "outline"],
-      description: "DisplayCard variant when showDisplayCard is true",
+      description: "CardCore variant when showCardCore is true",
       table: {
         category: "Content",
       },
@@ -54,8 +54,8 @@ export default {
     variant: "vivid",
     content:
       "This is default slot content for the GlowingBorder component. As it's a slot, any HTML content can be placed here.",
-    showDisplayCard: false,
-    displayCardVariant: "solid",
+    showCardCore: false,
+    cardCoreVariant: "solid",
   },
 } as Meta<GlowingBorderStoryArgs>;
 
@@ -70,32 +70,32 @@ const Template: StoryFn<GlowingBorderStoryArgs> = (args) => ({
         :variant="args.variant"
         :style-class-passthrough="['storybook-demo']"
       >
-        <div v-if="!args.showDisplayCard" style="padding: 20px; color: var(--slate-02);">
+        <div v-if="!args.showCardCore" style="padding: 20px; color: var(--slate-02);">
           <h3 style="margin: 0 0 12px 0; font-size: 1.5rem; font-weight: 600;">GlowingBorder Header</h3>
           <h4 style="margin: 0 0 16px 0; font-size: 1.25rem; font-weight: 500;">GlowingBorder Content</h4>
           <p style="margin: 0 0 12px 0; line-height: 1.6;">{{ args.content }}</p>
           <p style="margin: 0; font-size: 0.875rem; color: var(--slate-09);">GlowingBorder Footer</p>
         </div>
 
-        <!-- DisplayCard version -->
-        <DisplayCard
+        <!-- CardCore version -->
+        <CardCore
           v-else
-          :variant="args.displayCardVariant"
+          :variant="args.cardCoreVariant"
           :has-dividers="true"
           :no-outline="false"
         >
           <template #header>
-            <h2 style="margin: 0; font-size: 1.5rem; font-weight: 600;">DisplayCard Header</h2>
+            <h2 style="margin: 0; font-size: 1.5rem; font-weight: 600;">CardCore Header</h2>
           </template>
           <template #default>
-            <h3 style="margin: 0 0 12px 0; font-size: 1.25rem; font-weight: 500; color: var(--slate-02);">DisplayCard Content</h3>
+            <h3 style="margin: 0 0 12px 0; font-size: 1.25rem; font-weight: 500; color: var(--slate-02);">CardCore Content</h3>
             <p style="margin: 0 0 12px 0; line-height: 1.6; color: var(--slate-02);">{{ args.content }}</p>
             <p style="margin: 0; line-height: 1.6; color: var(--slate-02);">This demonstrates how GlowingBorder can wrap other components.</p>
           </template>
           <template #footer>
-            <p style="margin: 0; font-size: 0.875rem; color: var(--slate-02);">DisplayCard Footer</p>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--slate-02);">CardCore Footer</p>
           </template>
-        </DisplayCard>
+        </CardCore>
       </StorybookComponent>
     </div>
   `,
@@ -131,11 +131,11 @@ Steel.args = {
     "Steel variant provides a cool, industrial glow effect that's perfect for technical or utilitarian design themes.",
 };
 
-export const WithDisplayCard = Template.bind({});
-WithDisplayCard.args = {
+export const WithCardCore = Template.bind({});
+WithCardCore.args = {
   variant: "vivid",
   content:
-    "This example shows how GlowingBorder can enhance other components like DisplayCard, creating layered visual effects.",
-  showDisplayCard: true,
-  displayCardVariant: "solid",
+    "This example shows how GlowingBorder can enhance other components like CardCore, creating layered visual effects.",
+  showCardCore: true,
+  cardCoreVariant: "solid",
 };

@@ -57,11 +57,11 @@ Any slot names work — semantic or indexed:
 
 ```vue
 <!-- Semantic names (card) -->
-<DisplayCard variant="solid">
+<CardCore variant="solid">
   <template #header>...</template>
   <template #body>...</template>
   <template #footer>...</template>
-</DisplayCard>
+</CardCore>
 
 <!-- Indexed names (grid) — consumer still uses v-for with dynamic slot names -->
 <LayoutGridByCols :column-count="3">
@@ -75,7 +75,7 @@ Slots are rendered in document order.
 
 ### Reference components (named dynamic slots)
 
-- `app/components/display-card/DisplayCard.vue`
+- `app/components/01.atoms/card/CardCore.vue`
 - `app/components/01.atoms/content-wrappers/layout-grid/layout-grid-by-cols/LayoutGridByCols.vue`
 - `app/components/01.atoms/content-wrappers/layout-grid/layout-grid-by-width/LayoutGridByWidth.vue`
 - `app/components/container-glow/ContainerGlowCore.vue`

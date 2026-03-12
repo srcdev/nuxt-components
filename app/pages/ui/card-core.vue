@@ -3,11 +3,11 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-          <h1 class="page-heading-1">DisplayCard Component</h1>
+          <h1 class="page-heading-1">CardCore Component</h1>
           <form class="mb-12">
             <div>
               <label for="variant" class="form-label mie-12">Variant:</label>
-              <select id="variant" v-model="displayCardVariant" class="form-select">
+              <select id="variant" v-model="cardCoreVariant" class="form-select">
                 <option value="solid">Solid</option>
                 <option value="subtle">Subtle</option>
                 <option value="soft">Soft</option>
@@ -26,19 +26,19 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
-          <DisplayCard :variant="displayCardVariant" :has-dividers="hasDividers" :no-outline="noOutline">
+          <CardCore :variant="cardCoreVariant" :has-dividers="hasDividers" :no-outline="noOutline">
             <template #header>
-              <h2 class="page-heading-2">DisplayCard Header</h2>
+              <h2 class="page-heading-2">CardCore Header</h2>
             </template>
             <template #content>
-              <h3 class="page-heading-3">DisplayCard Content</h3>
-              <p class="page-body-normal">This is default slot content for the DisplayCard component.</p>
+              <h3 class="page-heading-3">CardCore Content</h3>
+              <p class="page-body-normal">This is default slot content for the CardCore component.</p>
               <p class="page-body-normal">As it's a slot, any html content can be placed here.</p>
             </template>
             <template #footer>
-              <p class="page-body-small">DisplayCard Footer</p>
+              <p class="page-body-small">CardCore Footer</p>
             </template>
-          </DisplayCard>
+          </CardCore>
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -51,32 +51,32 @@ definePageMeta({
 })
 
 useHead({
-  title: "DisplayCard Component",
+  title: "CardCore Component",
   meta: [
     {
       name: "description",
-      content: "DisplayCard Component description content",
+      content: "CardCore Component description content",
     },
   ],
   bodyAttrs: {
-    class: "display-card-page",
+    class: "card-core-page",
   },
 })
 
-const displayCardVariant = ref("solid")
+const cardCoreVariant = ref("solid")
 const hasDividers = ref(false)
 const noOutline = ref(false)
 </script>
 
 <style lang="css">
-.display-card-page {
+.card-core-page {
   form {
     display: flex;
     gap: 2rem;
     flex-wrap: wrap;
     margin-bottom: 2rem;
   }
-  .display-card {
+  .card-core {
   }
 }
 </style>

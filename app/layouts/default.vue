@@ -74,7 +74,7 @@ const responsiveNavLinks = {
         { name: "Container Glow", path: "/ui/container-glow" },
         { name: "Accordian", path: "/ui/accordian" },
         { name: "Display Details", path: "/ui/display-details" },
-        { name: "Display Card", path: "/ui/display-card" },
+        { name: "Card Core", path: "/ui/card-core" },
         { name: "Glowing Border", path: "/ui/glowing-border" },
         { name: "Display Toast", path: "/ui/display-toast" },
         { name: "Masked Alert", path: "/ui/mask-element" },

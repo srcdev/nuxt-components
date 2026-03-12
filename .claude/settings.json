@@ -9,7 +9,7 @@
       "Bash(git add app/components/01.atoms/content-wrappers/layout-grid/layout-grid-by-cols/LayoutGridByCols.vue app/components/01.atoms/content-wrappers/layout-grid/layout-grid-by-cols/tests/LayoutGridByCols.spec.ts app/components/01.atoms/content-wrappers/layout-grid/layout-grid-by-cols/tests/__snapshots__/LayoutGridByCols.spec.ts.snap app/pages/forms/examples/buttons/index.vue app/pages/forms/examples/material/checkbox-radio-panels.vue app/pages/forms/examples/material/text-fields.vue)",
       "Bash(git commit:*)",
       "Bash(npx vitest run app/components/01.atoms/content-wrappers/layout-grid/layout-grid-by-width/tests/LayoutGridByWidth.spec.ts)",
-      "Bash(npx vitest run app/components/display-card/tests/DisplayCard.spec.ts)",
+      "Bash(npx vitest run app/components/01.atoms/card/tests/CardCore.spec.ts)",
       "Bash(npx vitest run app/components/image-galleries/slider-gallery/tests/SliderGallery.spec.ts)",
       "Bash(npx vitest run)",
       "Bash(git mv:*)"
