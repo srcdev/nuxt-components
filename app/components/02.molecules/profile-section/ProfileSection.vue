@@ -3,7 +3,7 @@
     :is="tag"
     class="profile-section"
     :class="[elementClasses]"
-    :aria-labelledby="needsLabel ? headingId : undefined"
+    :aria-labelledby="ariaLabelledby"
   >
     <header class="profile-section-header">
       <slot v-if="hasEyebrowTextSlot" name="eyebrowText"></slot>
@@ -51,8 +51,7 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const headingId = useId();
-const needsLabel = computed(() => props.tag === "section" || props.tag === "article");
+const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
 
 const slots = useSlots();
 const hasEyebrowTextSlot = computed(() => Boolean(slots.eyebrowText));

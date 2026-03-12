@@ -2,10 +2,10 @@
   <component
     :is="tag"
     class="layout-grid-by-width"
-    :aria-labelledby="needsLabel ? headingId : undefined"
+    :aria-labelledby="ariaLabelledby"
     :class="[elementClasses]"
   >
-    <p v-if="needsLabel" :id="headingId" class="sr-only">
+    <p v-if="ariaLabelledby" :id="headingId" class="sr-only">
       {{ props.label || "If tag='section' then a label is required" }}
     </p>
     <div class="layout-grid-inner">
@@ -35,8 +35,7 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const headingId = useId();
-const needsLabel = computed(() => props.tag === "section");
+const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
 
 const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 

@@ -3,7 +3,7 @@
     :is="tag"
     class="services-section"
     :class="[elementClasses]"
-    :aria-labelledby="needsLabel ? headingId : undefined"
+    :aria-labelledby="ariaLabelledby"
   >
     <div class="services-section__grid" :class="{ 'services-section__grid--reverse': reverse }">
       <div class="image-wrapper">
@@ -166,8 +166,7 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const headingId = useId();
-const needsLabel = computed(() => props.tag === "section" || props.tag === "article");
+const { ariaLabelledby } = useAriaLabelledById(() => props.tag);
 
 const infoWrapperClasses = computed(() => {
   return {
