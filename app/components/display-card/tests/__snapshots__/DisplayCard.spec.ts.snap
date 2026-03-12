@@ -1,0 +1,43 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DisplayCard > renders correct HTML structure (article, subtle, dividers) 1`] = `
+"<article class="display-card subtle has-dividers">
+  <div class="card-row card-row-header">
+    <h2>Title</h2>
+  </div>
+  <div class="card-row card-row-body">
+    <p>Content</p>
+  </div>
+</article>"
+`;
+
+exports[`DisplayCard > renders correct HTML structure (default) 1`] = `
+"<div class="display-card solid">
+  <div class="card-row card-row-header">
+    <h2>Title</h2>
+  </div>
+  <div class="card-row card-row-body">
+    <p>Content</p>
+  </div>
+  <div class="card-row card-row-footer">
+    <p>Footer</p>
+  </div>
+</div>"
+`;
+
+exports[`DisplayCard > renders correct HTML structure with styleClassPassthrough 1`] = `"<div class="display-card solid featured-card"></div>"`;
+
+exports[`DisplayCard > renders correctly with all props and slots combined 1`] = `
+"<article class="display-card soft featured-card has-dividers no-outline">
+  <div class="card-row card-row-header">
+    <h2>Title</h2>
+  </div>
+  <div class="card-row card-row-media"><img src="x.jpg" alt=""></div>
+  <div class="card-row card-row-body">
+    <p>Content</p>
+  </div>
+  <div class="card-row card-row-footer">
+    <p>Footer</p>
+  </div>
+</article>"
+`;
