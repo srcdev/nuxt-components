@@ -1,5 +1,5 @@
 <template>
-  <div class="page-hero-highlights">
+  <component :is="tag" class="page-hero-highlights" :class="elementClasses">
     <div class="header">
       <div class="header-inner">
         <slot name="header"></slot>
@@ -13,8 +13,29 @@
         <slot name="content"></slot>
       </div>
     </div>
-  </div>
+  </component>
 </template>
+
+<script setup lang="ts">
+interface Props {
+  tag?: "div" | "section" | "main";
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  tag: "div",
+  styleClassPassthrough: () => [],
+});
+
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
+</script>
 
 <style scoped lang="css">
 .page-hero-highlights {
