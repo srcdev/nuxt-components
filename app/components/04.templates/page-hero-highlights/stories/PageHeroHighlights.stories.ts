@@ -1,7 +1,17 @@
+import { computed } from "vue";
 import PageHeroHighlights from "../PageHeroHighlights.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
-const meta: Meta<typeof PageHeroHighlights> = {
+type StoryArgs = {
+  tag?: "div" | "section" | "main";
+  highlightsEqualWidths?: boolean;
+  highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
+  headerBackground?: string;
+  contentBackground?: string;
+  styleClassPassthrough?: string | string[];
+};
+
+const meta: Meta<StoryArgs> = {
   title: "Templates/PageHeroHighlights",
   component: PageHeroHighlights,
   argTypes: {
@@ -47,7 +57,7 @@ type Story = StoryObj<typeof PageHeroHighlights>;
 
 // ─── Shared setup helper ──────────────────────────────────────────────────────
 
-function useStorySetup(args: Record<string, unknown>) {
+function useStorySetup(args: StoryArgs) {
   const bgStyles = computed(() => ({
     ...(args.headerBackground ? { "--phl-header-bg": args.headerBackground } : {}),
     ...(args.contentBackground ? { "--phl-content-bg": args.contentBackground } : {}),
@@ -63,7 +73,7 @@ function useStorySetup(args: Record<string, unknown>) {
 
 /** Default — header, highlights strip, and page content with all three slots filled. */
 export const Default: Story = {
-  render: (args) => ({
+  render: (args: StoryArgs) => ({
     components: { PageHeroHighlights },
     setup() {
       return useStorySetup(args);
@@ -103,7 +113,7 @@ export const Default: Story = {
 export const AsSectionTag: Story = {
   name: "As section Tag",
   args: { tag: "section" },
-  render: (args) => ({
+  render: (args: StoryArgs) => ({
     components: { PageHeroHighlights },
     setup() {
       return useStorySetup(args);
@@ -139,7 +149,7 @@ export const AsSectionTag: Story = {
 export const EqualWidthHighlights: Story = {
   name: "Equal Width Highlights",
   args: { highlightsEqualWidths: true },
-  render: (args) => ({
+  render: (args: StoryArgs) => ({
     components: { PageHeroHighlights },
     setup() {
       return useStorySetup(args);
@@ -178,7 +188,7 @@ export const EqualWidthHighlights: Story = {
 /** Minimal — renders with no slot content to show the bare grid structure. */
 export const NoSlotContent: Story = {
   name: "No Slot Content",
-  render: (args) => ({
+  render: (args: StoryArgs) => ({
     components: { PageHeroHighlights },
     setup() {
       return useStorySetup(args);
