@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import StorybookComponent from "../DisplayCardDynamic.vue";
+import StorybookComponent from "../DisplayCard.vue";
 
-interface DisplayCardDynamicArgs {
+interface DisplayCardArgs {
   tag: "div" | "section" | "article" | "aside" | "main" | "nav";
   variant: "solid" | "subtle" | "soft" | "outline";
   hasDividers: boolean;
@@ -54,9 +54,9 @@ export default {
       },
     },
   },
-} as Meta<DisplayCardDynamicArgs>;
+} as Meta<DisplayCardArgs>;
 
-const Template: StoryFn<DisplayCardDynamicArgs> = (args) => ({
+const Template: StoryFn<DisplayCardArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
     return { args };

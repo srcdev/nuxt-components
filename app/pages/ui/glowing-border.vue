@@ -55,7 +55,7 @@
           <h2 class="page-heading-2">Default</h2>
 
           <GlowingBorder :variant="glowingBorderVariant" :style-class-passthrough="['mbe-20']">
-            <DisplayCardDynamic :variant="displayCardVariant" :has-dividers :no-outline>
+            <DisplayCard :variant="displayCardVariant" :has-dividers :no-outline>
               <template #header>
                 <h2 class="page-heading-2">DisplayCard Header</h2>
               </template>
@@ -67,7 +67,7 @@
               <template #footer>
                 <p class="page-body-small">DisplayCard Footer</p>
               </template>
-            </DisplayCardDynamic>
+            </DisplayCard>
           </GlowingBorder>
         </LayoutRow>
       </template>

@@ -26,7 +26,7 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
-          <DisplayCardDynamic :variant="displayCardVariant" :has-dividers="hasDividers" :no-outline="noOutline">
+          <DisplayCard :variant="displayCardVariant" :has-dividers="hasDividers" :no-outline="noOutline">
             <template #header>
               <h2 class="page-heading-2">DisplayCard Header</h2>
             </template>
@@ -38,7 +38,7 @@
             <template #footer>
               <p class="page-body-small">DisplayCard Footer</p>
             </template>
-          </DisplayCardDynamic>
+          </DisplayCard>
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -76,7 +76,7 @@ const noOutline = ref(false)
     flex-wrap: wrap;
     margin-bottom: 2rem;
   }
-  .display-card-dynamic {
+  .display-card {
   }
 }
 </style>

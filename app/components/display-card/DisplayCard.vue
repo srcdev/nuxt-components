@@ -1,7 +1,7 @@
 <template>
   <component
     :is="tag"
-    class="display-card-dynamic"
+    class="display-card"
     :class="[variant, elementClasses, { 'has-dividers': hasDividers }, { 'no-outline': noOutline }]"
   >
     <template v-for="(_, name) in $slots" :key="name">
@@ -40,7 +40,7 @@ watch(
 
 <style lang="css">
 @layer components {
-  .display-card-dynamic {
+  .display-card {
     --_inner-padding: 1rem;
     --_background-color: white;
     --_border-color: green;

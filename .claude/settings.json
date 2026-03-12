@@ -11,7 +11,8 @@
       "Bash(npx vitest run app/components/01.atoms/content-layouts/layout-grid/layout-grid-by-width/tests/LayoutGridByWidth.spec.ts)"
     ],
     "additionalDirectories": [
-      "/Users/simoncornforth/websites/nuxt-components/app/components/content-containers"
+      "/Users/simoncornforth/websites/nuxt-components/app/components/content-containers",
+      "/Users/simoncornforth/websites/nuxt-components/.claude/skills"
     ]
   }
 }
