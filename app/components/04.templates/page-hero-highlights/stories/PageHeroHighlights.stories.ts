@@ -1,0 +1,113 @@
+import PageHeroHighlights from "../PageHeroHighlights.vue";
+import type { Meta, StoryObj } from "@nuxtjs/storybook";
+
+const meta: Meta<typeof PageHeroHighlights> = {
+  title: "Templates/PageHeroHighlights",
+  component: PageHeroHighlights,
+  argTypes: {
+    tag: {
+      control: { type: "select" },
+      options: ["div", "section", "main"],
+      description: "HTML element to render as the root",
+    },
+    styleClassPassthrough: {
+      control: "object",
+      description: "Additional CSS classes applied to the root element",
+    },
+  },
+  args: {
+    tag: "div",
+    styleClassPassthrough: [],
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof PageHeroHighlights>;
+
+// ─── Stories ─────────────────────────────────────────────────────────────────
+
+/** Default — header, highlights strip, and page content with all three slots filled. */
+export const Default: Story = {
+  render: (args) => ({
+    components: { PageHeroHighlights },
+    setup() {
+      return { args };
+    },
+    template: `
+      <PageHeroHighlights v-bind="args">
+        <template #header>
+          <p class="page-heading-1">Dashboard</p>
+          <p class="page-body-normal">Overview of your account activity and key metrics.</p>
+        </template>
+
+        <template #highlights>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Total Revenue</p>
+            <p class="page-body-normal">£24,500</p>
+          </div>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Active Users</p>
+            <p class="page-body-normal">1,284</p>
+          </div>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Open Tasks</p>
+            <p class="page-body-normal">37</p>
+          </div>
+        </template>
+
+        <template #content>
+          <p class="page-heading-2">Recent Activity</p>
+          <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
+        </template>
+      </PageHeroHighlights>
+    `,
+  }),
+};
+
+/** As section tag — root renders as a semantic section with aria-labelledby wired to the heading. */
+export const AsSectionTag: Story = {
+  name: "As section Tag",
+  args: { tag: "section" },
+  render: (args) => ({
+    components: { PageHeroHighlights },
+    setup() {
+      return { args };
+    },
+    template: `
+      <PageHeroHighlights v-bind="args">
+        <template #header="{ headingId }">
+          <h1 :id="headingId" class="page-heading-1">Dashboard</h1>
+          <p class="page-body-normal">Overview of your account activity and key metrics.</p>
+        </template>
+
+        <template #highlights>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Total Revenue</p>
+            <p class="page-body-normal">£24,500</p>
+          </div>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Active Users</p>
+            <p class="page-body-normal">1,284</p>
+          </div>
+        </template>
+
+        <template #content>
+          <p class="page-heading-2">Recent Activity</p>
+          <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
+        </template>
+      </PageHeroHighlights>
+    `,
+  }),
+};
+
+/** Minimal — renders with no slot content to show the bare grid structure. */
+export const NoSlotContent: Story = {
+  name: "No Slot Content",
+  render: (args) => ({
+    components: { PageHeroHighlights },
+    setup() {
+      return { args };
+    },
+    template: `<PageHeroHighlights v-bind="args" />`,
+  }),
+};
