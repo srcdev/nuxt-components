@@ -37,6 +37,20 @@ Best for container/card/layout components.
 
 No `useSlots()` call needed — `$slots` is available directly in the template.
 
+### Slot name as CSS class
+
+Since `name` is already available in the loop, it can be applied as a class on the wrapper element. This gives each slot section a targetable class derived automatically from the slot name — no extra props needed:
+
+```vue
+<template v-for="(_, name) in $slots" :key="name">
+  <div class="card-row" :class="`card-row-${name}`">
+    <slot :name="name"></slot>
+  </div>
+</template>
+```
+
+A consumer passing `#header` gets `<div class="card-row card-row-header">`, `#footer` gets `<div class="card-row card-row-footer">`, etc. The component's CSS can then target `.card-row-header`, `.card-row-footer` etc. for per-section styling.
+
 ### Consumer usage
 
 Any slot names work — semantic or indexed:

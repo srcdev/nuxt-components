@@ -5,7 +5,7 @@
     :class="[variant, elementClasses, { 'has-dividers': hasDividers }, { 'no-outline': noOutline }]"
   >
     <template v-for="(_, name) in $slots" :key="name">
-      <div>
+      <div class="card-row" :class="`card-row-${name}`">
         <slot :name="name"></slot>
       </div>
     </template>
@@ -42,8 +42,8 @@ watch(
 @layer components {
   .display-card-dynamic {
     --_inner-padding: 1rem;
-    --_background-color: transparent;
-    --_border-color: transparent;
+    --_background-color: white;
+    --_border-color: green;
     --_border-width: 0.2rem;
     --_box-shadow-color: transparent;
 
@@ -63,12 +63,12 @@ watch(
 
     &.solid {
       --_background-color: light-dark(var(--slate-00), var(--slate-10));
-      --_border-color: light-dark(var(--slate-04), var(--slate-08));
+      --_border-color: red;
     }
 
     &.subtle {
       --_background-color: color-mix(in oklab, light-dark(var(--slate-01), var(--slate-08)) 50%, transparent);
-      --_border-color: light-dark(var(--slate-03), var(--slate-09));
+      --_border-color: red;
     }
 
     &.soft {
@@ -78,25 +78,14 @@ watch(
 
     &.outline {
       --_background-color: transparent;
-      --_border-color: light-dark(var(--slate-04), var(--slate-08));
+      --_border-color: green;
     }
 
     &.has-dividers {
       .card-row + .card-row {
-        border-top: 0.2rem solid var(--_border-color);
+        /* border-top: 0.2rem solid var(--_border-color); */
+        border-top: 0.2rem solid green;
       }
-    }
-
-    .display-card-dynamic-header {
-      padding: var(--_inner-padding);
-    }
-
-    .display-card-dynamic-content {
-      padding: var(--_inner-padding);
-    }
-
-    .display-card-dynamic-footer {
-      padding: var(--_inner-padding);
     }
   }
 }
