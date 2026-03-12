@@ -1,8 +1,8 @@
 <template>
-  <component :is="tag" class="page-hero-highlights" :class="elementClasses">
+  <component :is="tag" class="page-hero-highlights" :class="elementClasses" :aria-labelledby="needsLabel ? headingId : undefined">
     <div class="header">
       <div class="header-inner">
-        <slot name="header"></slot>
+        <slot name="header" :heading-id="headingId"></slot>
       </div>
     </div>
     <div class="highlights">
@@ -26,6 +26,9 @@ const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   styleClassPassthrough: () => [],
 });
+
+const headingId = useId();
+const needsLabel = computed(() => props.tag === "section" || props.tag === "main");
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
