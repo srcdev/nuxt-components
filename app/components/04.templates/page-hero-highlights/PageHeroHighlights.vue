@@ -5,7 +5,7 @@
         <slot name="header" :heading-id="headingId"></slot>
       </div>
     </div>
-    <div class="highlights">
+    <div class="highlights" :class="highlightClasses">
       <slot name="highlights"></slot>
     </div>
     <div class="content">
@@ -19,16 +19,24 @@
 <script setup lang="ts">
 interface Props {
   tag?: "div" | "section" | "main";
+  highlightsEqualWidths?: boolean;
+  highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
+  highlightsEqualWidths: false,
+  highlightsJustify: "start",
   styleClassPassthrough: () => [],
 });
 
 const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
-
+const highlightClasses = computed(() => ({
+  "equal-widths": props.highlightsEqualWidths,
+  "flexible-widths": !props.highlightsEqualWidths,
+  [`justify-${props.highlightsJustify}`]: true,
+}));
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
@@ -65,13 +73,39 @@ watch(
   .highlights {
     grid-column: 2;
     grid-row: 2 / 4; /* rows 2–3: straddles header/content boundary */
-    display: grid;
-    grid-template-rows: subgrid;
-    grid-auto-columns: 1fr;
-    grid-auto-flow: column; /* lay slotted items out horizontally */
+
     gap: 1rem;
     position: relative;
     z-index: 1;
+
+    &.equal-widths {
+      display: grid;
+      grid-template-rows: subgrid;
+      grid-auto-columns: 1fr;
+      grid-auto-flow: column;
+    }
+
+    &.flexible-widths {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    &.justify-start {
+      justify-content: start;
+    }
+    &.justify-center {
+      justify-content: center;
+    }
+    &.justify-end {
+      justify-content: end;
+    }
+    &.justify-space-between {
+      justify-content: space-between;
+    }
+    &.justify-space-around {
+      justify-content: space-around;
+    }
   }
 
   .content {

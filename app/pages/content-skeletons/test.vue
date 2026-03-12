@@ -3,7 +3,11 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-          <PageHeroHighlights>
+          <PageHeroHighlights
+            :style-class-passthrough="['test-page-hero']"
+            :highlights-equal-widths="false"
+            highlights-justify="start"
+          >
             <template #header>
               <p class="page-heading-1">Header section</p>
               <p class="page-body-normal">
