@@ -29,6 +29,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── component-local-style-override.md — styleClassPassthrough + scoped style block for per-usage visual customisation
 ├── component-prop-driven-container-layout.md — vary CSS grid layout inside @container queries using data-* attribute selectors
 └── components/
+    ├── accordian-core.md       — AccordianCore indexed dynamic slots (accordian-{n}-summary/icon/content), exclusive-open grouping
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
     ├── hero-text.md            — HeroText props, usage patterns, styling
     ├── layout-grid-by-cols.md  — LayoutGridByCols dynamic slots (item-{n}), props, column/gap/breakpoint decisions
