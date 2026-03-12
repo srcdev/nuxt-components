@@ -94,7 +94,7 @@ useHead({
 })
 
 const glowingBorderVariant = ref("vivid")
-const displayCardVariant = ref("solid")
+const displayCardVariant = ref<"outline" | "solid" | "subtle" | "soft">("solid")
 const hasDividers = ref(false)
 const noOutline = ref(false)
 </script>
