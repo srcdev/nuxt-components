@@ -54,7 +54,7 @@
 </template>
 
 <script setup lang="ts">
-import type { IGalleryData } from "../../../types/components";
+import type { IGalleryData } from "../../../../types/components";
 
 interface Props {
   autoRun?: boolean;

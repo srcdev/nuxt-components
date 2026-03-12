@@ -1,6 +1,6 @@
 import SliderGallery from "../SliderGallery.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
-import type { IGalleryData } from "../../../../types/components";
+import type { IGalleryData } from "../../../../../types/components";
 
 const meta: Meta<typeof SliderGallery> = {
   title: "Organisms/Image Galleries/Slider Gallery",

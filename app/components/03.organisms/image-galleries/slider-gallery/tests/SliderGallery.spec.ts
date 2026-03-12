@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
 import SliderGallery from "../SliderGallery.vue";
-import type { IGalleryData } from "../../../../types/components";
+import type { IGalleryData } from "~/types/components";
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -61,7 +61,10 @@ describe("SliderGallery", () => {
 
   beforeEach(() => {
     mockImage = { src: "", onload: null, onerror: null };
-    vi.stubGlobal("Image", vi.fn(() => mockImage));
+    vi.stubGlobal(
+      "Image",
+      vi.fn(() => mockImage)
+    );
   });
 
   // ─── Mount ───────────────────────────────────────────────────────────────
