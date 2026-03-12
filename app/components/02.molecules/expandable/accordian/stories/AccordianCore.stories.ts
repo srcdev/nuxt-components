@@ -2,7 +2,7 @@ import AccordianCore from "../AccordianCore.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
 const meta: Meta<typeof AccordianCore> = {
-  title: "Molecules/Accordian/Accordian Core",
+  title: "Molecules/Expandable/Accordian Core",
   component: AccordianCore,
   argTypes: {
     name: {

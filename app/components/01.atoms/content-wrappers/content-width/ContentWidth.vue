@@ -2,13 +2,13 @@
   <component
     :is="tag"
     :id="id"
-    class="content-container-wrapper"
+    class="content-width-wrapper"
     :class="elementClasses"
     :tab-index="isLandmark ? 0 : null"
-    :aria-label="isLandmark ? 'Content Container Landmark' : undefined"
+    :aria-label="isLandmark ? 'Content Width Landmark' : undefined"
   >
-    <div class="content-container">
-      <div class="content-container-inner">
+    <div class="content-width" :class="justifyContent">
+      <div class="content-width-inner">
         <slot name="default"></slot>
       </div>
     </div>
@@ -20,6 +20,7 @@ interface Props {
   tag?: "div" | "section" | "article" | "aside" | "header" | "footer" | "main" | "nav";
   label?: string;
   isLandmark?: boolean;
+  justifyContent?: "start" | "center" | "end";
   styleClassPassthrough?: string | string[];
 }
 
@@ -27,6 +28,7 @@ const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   label: "",
   isLandmark: false,
+  justifyContent: "center",
   styleClassPassthrough: () => [],
 });
 
@@ -37,11 +39,11 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 <style lang="css">
 @layer components {
-  .content-container-wrapper {
+  .content-width-wrapper {
     container-type: inline-size;
-    container-name: content-container;
+    container-name: content-width;
 
-    .content-container {
+    .content-width {
       --gutter: 16px;
       --content-max-width: auto;
       --justify-content: initial;
@@ -60,18 +62,25 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       justify-content: var(--justify-content);
       box-sizing: border-box;
 
-      @container content-container (width >= 1092px) {
+      @container content-width (width >= 1092px) {
         --gutter: 0;
         --content-max-width: 1064px;
         --justify-content: center;
+
+        &.start {
+          --gutter: 16px;
+          --justify-content: start;
+        }
+
+        &.end {
+          --gutter: 16px;
+          --justify-content: end;
+        }
       }
 
-      .content-container-inner {
+      .content-width-inner {
         grid-column: content;
-
-        @container content-container (width >= 1092px) {
-          grid-column: gutter;
-        }
+        background-color: var(--page-bg);
       }
     }
   }

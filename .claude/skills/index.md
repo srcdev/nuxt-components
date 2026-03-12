@@ -27,6 +27,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── colour-scheme-disable.md         — disable light/dark scheme support in a consumer app
 ├── component-dynamic-slots.md        — named dynamic slots ($slots iteration) vs indexed dynamic slots (itemCount pattern)
 ├── component-local-style-override.md — styleClassPassthrough + scoped style block for per-usage visual customisation
+├── component-prop-driven-container-layout.md — vary CSS grid layout inside @container queries using data-* attribute selectors
 └── components/
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
     ├── hero-text.md            — HeroText props, usage patterns, styling

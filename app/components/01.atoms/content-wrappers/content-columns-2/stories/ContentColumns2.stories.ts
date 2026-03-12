@@ -2,7 +2,7 @@ import ContentColumns2 from "../ContentColumns2.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
 const meta: Meta<typeof ContentColumns2> = {
-  title: "Atoms/Content Layouts/ContentColumns2",
+  title: "Atoms/Content Wrappers/ContentColumns2",
   component: ContentColumns2,
   argTypes: {
     tag: {

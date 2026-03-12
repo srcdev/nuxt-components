@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from "@nuxtjs/storybook";
 type StoryArgs = InstanceType<typeof LayoutGridByCols>["$props"] & { itemCount?: number };
 
 const meta: Meta<StoryArgs> = {
-  title: "Atoms/Content Layouts/Layout Grid By Cols",
+  title: "Atoms/Content Wrappers/Layout Grid By Cols",
   component: LayoutGridByCols,
   argTypes: {
     tag: {
