@@ -115,6 +115,44 @@ const vm = wrapper.vm as unknown as ComponentInstance;
 expect(vm.computedProp.value).toBe("expected");
 ```
 
+**Fake Timers:**
+
+`test/vitest.setup.ts` calls `vi.useFakeTimers()` globally and cleans up in `afterEach`. Never call `vi.useFakeTimers()`, `vi.useRealTimers()`, or `vi.runAllTimers()` inside a test file — it conflicts with the global setup.
+
+Use `vi.advanceTimersByTime(ms)` rather than `vi.runAllTimers()` to avoid firing auto-run timer chains that re-queue themselves (which would loop infinitely).
+
+`nextTick` must be explicitly imported from `"vue"` in test files — auto-imports are component-only.
+
+```typescript
+// ✅ Async component with image preloading
+import { nextTick } from "vue";
+
+let mockImage: { src: string; onload: (() => void) | null; onerror: (() => void) | null };
+
+beforeEach(() => {
+  mockImage = { src: "", onload: null, onerror: null };
+  vi.stubGlobal("Image", vi.fn(() => mockImage));
+  // ⚠️ Do NOT call vi.unstubAllGlobals() in afterEach —
+  // it removes the global stubs from vitest.setup.ts ($fetch, etc.)
+});
+
+// Helper: mount then simulate first image load
+async function mountAndLoad(wrapper) {
+  mockImage.onload?.();
+  await nextTick();             // let onMounted resume after Promise.race
+  vi.advanceTimersByTime(500); // fire loading timeout, not the 7s auto-run
+  await nextTick();            // let Vue update DOM
+  return wrapper;
+}
+
+// onerror needs one extra tick vs onload — callback → resolve → Promise.race → await resume
+mockImage.onerror?.();
+await nextTick();
+await nextTick(); // extra tick for onerror promise chain
+vi.advanceTimersByTime(500);
+await nextTick();
+```
+
 **Browser API Mocking:**
 
 ```typescript
