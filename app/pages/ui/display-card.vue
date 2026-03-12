@@ -26,11 +26,11 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
-          <DisplayCard :variant="displayCardVariant" :has-dividers="hasDividers" :no-outline="noOutline">
+          <DisplayCardDynamic :variant="displayCardVariant" :has-dividers="hasDividers" :no-outline="noOutline">
             <template #header>
               <h2 class="page-heading-2">DisplayCard Header</h2>
             </template>
-            <template #default>
+            <template #content>
               <h3 class="page-heading-3">DisplayCard Content</h3>
               <p class="page-body-normal">This is default slot content for the DisplayCard component.</p>
               <p class="page-body-normal">As it's a slot, any html content can be placed here.</p>
@@ -38,7 +38,7 @@
             <template #footer>
               <p class="page-body-small">DisplayCard Footer</p>
             </template>
-          </DisplayCard>
+          </DisplayCardDynamic>
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -76,7 +76,7 @@ const noOutline = ref(false)
     flex-wrap: wrap;
     margin-bottom: 2rem;
   }
-  .display-card {
+  .display-card-dynamic {
   }
 }
 </style>

@@ -55,11 +55,11 @@
           <h2 class="page-heading-2">Default</h2>
 
           <GlowingBorder :variant="glowingBorderVariant" :style-class-passthrough="['mbe-20']">
-            <DisplayCard :variant="displayCardVariant" :has-dividers :no-outline>
+            <DisplayCardDynamic :variant="displayCardVariant" :has-dividers :no-outline>
               <template #header>
                 <h2 class="page-heading-2">DisplayCard Header</h2>
               </template>
-              <template #default>
+              <template #content>
                 <h3 class="page-heading-3">DisplayCard Content</h3>
                 <p class="page-body-normal">This is default slot content for the DisplayCard component.</p>
                 <p class="page-body-normal">As it's a slot, any html content can be placed here.</p>
@@ -67,7 +67,7 @@
               <template #footer>
                 <p class="page-body-small">DisplayCard Footer</p>
               </template>
-            </DisplayCard>
+            </DisplayCardDynamic>
           </GlowingBorder>
         </LayoutRow>
       </template>
