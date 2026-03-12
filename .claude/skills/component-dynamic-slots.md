@@ -76,8 +76,8 @@ Slots are rendered in document order.
 ### Reference components (named dynamic slots)
 
 - `app/components/display-card/DisplayCard.vue`
-- `app/components/01.atoms/content-layouts/layout-grid/layout-grid-by-cols/LayoutGridByCols.vue`
-- `app/components/01.atoms/content-layouts/layout-grid/layout-grid-by-width/LayoutGridByWidth.vue`
+- `app/components/01.atoms/content-wrappers/layout-grid/layout-grid-by-cols/LayoutGridByCols.vue`
+- `app/components/01.atoms/content-wrappers/layout-grid/layout-grid-by-width/LayoutGridByWidth.vue`
 - `app/components/container-glow/ContainerGlowCore.vue`
 
 ---
