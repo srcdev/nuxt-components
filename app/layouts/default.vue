@@ -38,7 +38,7 @@
         </header>
       </template>
     </LayoutRow>
-    <LayoutRow id="main-content" tag="main" variant="full" :is-landmark="true">
+    <LayoutRow id="main-content" class="main-content" tag="main" variant="full" :is-landmark="true">
       <template #default>
         <slot name="layout-content">Page content goes here</slot>
       </template>
@@ -206,6 +206,10 @@ onMounted(() => {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
+
+  .main-content {
+    container-type: inline-size;
+  }
 }
 
 /* Modifiers for ResposiveHeader  */
