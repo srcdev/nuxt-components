@@ -98,7 +98,7 @@ describe("ExpandingPanel", () => {
     const wrapper = await mountSuspended(ExpandingPanel, {
       props: { name: "model-default" },
     });
-    const vm = wrapper.vm as ExpandingPanelInstance;
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
     expect(vm.isPanelOpen).toBe(false);
   });
 
@@ -108,7 +108,7 @@ describe("ExpandingPanel", () => {
     const wrapper = await mountSuspended(ExpandingPanel, {
       props: { name: "anim-str", animationDuration: 750 },
     });
-    const vm = wrapper.vm as ExpandingPanelInstance;
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
     expect(vm.animationDurationStr).toBe("750ms");
   });
 
@@ -116,7 +116,7 @@ describe("ExpandingPanel", () => {
     const wrapper = await mountSuspended(ExpandingPanel, {
       props: { name: "anim-str-default" },
     });
-    const vm = wrapper.vm as ExpandingPanelInstance;
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
     expect(vm.animationDurationStr).toBe("400ms");
   });
 
@@ -124,7 +124,7 @@ describe("ExpandingPanel", () => {
     const wrapper = await mountSuspended(ExpandingPanel, {
       props: { name: "open-false", forceOpened: false },
     });
-    const vm = wrapper.vm as ExpandingPanelInstance;
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
     expect(vm.open).toBe(false);
   });
 
@@ -133,7 +133,7 @@ describe("ExpandingPanel", () => {
       props: { name: "open-model" },
       attrs: { modelValue: true },
     });
-    const vm = wrapper.vm as ExpandingPanelInstance;
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
     expect(vm.open).toBe(true);
   });
 
@@ -142,7 +142,7 @@ describe("ExpandingPanel", () => {
       props: { name: "open-forced", forceOpened: true },
       attrs: { modelValue: false },
     });
-    const vm = wrapper.vm as ExpandingPanelInstance;
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
     expect(vm.open).toBe(true);
   });
 
@@ -206,7 +206,7 @@ describe("ExpandingPanel", () => {
     const wrapper = await mountSuspended(ExpandingPanel, {
       props: { name: "toggle-test" },
     });
-    const vm = wrapper.vm as ExpandingPanelInstance;
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
     expect(vm.isPanelOpen).toBe(false);
 
     await wrapper.find("summary").trigger("click");
@@ -271,7 +271,7 @@ describe("ExpandingPanel", () => {
     const wrapper = await mountSuspended(ExpandingPanel, {
       props: { name: "force-click", forceOpened: true },
     });
-    const vm = wrapper.vm as ExpandingPanelInstance;
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
     await wrapper.find("summary").trigger("click");
     expect(vm.open).toBe(true);
   });
