@@ -152,11 +152,11 @@ describe("ProfileSection", () => {
     expect(wrapper.find(".profile-section").attributes("aria-labelledby")).toBeUndefined();
   });
 
-  it("does not add aria-labelledby when tag is main", async () => {
+  it("adds aria-labelledby when tag is main", async () => {
     const wrapper = await mountSuspended(ProfileSection, {
       props: { ...defaultProps, tag: "main" },
     });
-    expect(wrapper.find(".profile-section").attributes("aria-labelledby")).toBeUndefined();
+    expect(wrapper.find(".profile-section").attributes("aria-labelledby")).toBeTruthy();
   });
 
   it("does not render profile-links section when slot is not provided", async () => {
