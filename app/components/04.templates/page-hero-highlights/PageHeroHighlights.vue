@@ -63,6 +63,7 @@ watch(
     display: grid;
     grid-template-columns: subgrid;
     grid-template-rows: subgrid;
+    background-color: var(--phl-header-bg);
 
     .header-inner {
       grid-column: 2; /* centre column only */
@@ -114,6 +115,7 @@ watch(
     display: grid;
     grid-template-columns: subgrid;
     grid-template-rows: subgrid;
+    background-color: var(--phl-content-bg);
 
     .content-inner {
       grid-column: 2;

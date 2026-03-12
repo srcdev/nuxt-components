@@ -19,6 +19,14 @@ const meta: Meta<typeof PageHeroHighlights> = {
       options: ["start", "center", "end", "space-between", "space-around"],
       description: "Justification of highlight items along the main axis",
     },
+    headerBackground: {
+      control: "color",
+      description: "Background colour of the header zone (sets --phl-header-bg)",
+    },
+    contentBackground: {
+      control: "color",
+      description: "Background colour of the content zone (sets --phl-content-bg)",
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes applied to the root element",
@@ -28,12 +36,28 @@ const meta: Meta<typeof PageHeroHighlights> = {
     tag: "div",
     highlightsEqualWidths: false,
     highlightsJustify: "start",
+    headerBackground: "",
+    contentBackground: "",
     styleClassPassthrough: [],
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof PageHeroHighlights>;
+
+// ─── Shared setup helper ──────────────────────────────────────────────────────
+
+function useStorySetup(args: Record<string, unknown>) {
+  const bgStyles = computed(() => ({
+    ...(args.headerBackground ? { "--phl-header-bg": args.headerBackground } : {}),
+    ...(args.contentBackground ? { "--phl-content-bg": args.contentBackground } : {}),
+  }));
+  const componentArgs = computed(() => {
+    const { headerBackground: _h, contentBackground: _c, ...rest } = args;
+    return rest;
+  });
+  return { bgStyles, componentArgs };
+}
 
 // ─── Stories ─────────────────────────────────────────────────────────────────
 
@@ -42,10 +66,10 @@ export const Default: Story = {
   render: (args) => ({
     components: { PageHeroHighlights },
     setup() {
-      return { args };
+      return useStorySetup(args);
     },
     template: `
-      <PageHeroHighlights v-bind="args">
+      <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
         <template #header>
           <p class="page-heading-1">Dashboard</p>
           <p class="page-body-normal">Overview of your account activity and key metrics.</p>
@@ -82,10 +106,10 @@ export const AsSectionTag: Story = {
   render: (args) => ({
     components: { PageHeroHighlights },
     setup() {
-      return { args };
+      return useStorySetup(args);
     },
     template: `
-      <PageHeroHighlights v-bind="args">
+      <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
         <template #header="{ headingId }">
           <h1 :id="headingId" class="page-heading-1">Dashboard</h1>
           <p class="page-body-normal">Overview of your account activity and key metrics.</p>
@@ -118,10 +142,10 @@ export const EqualWidthHighlights: Story = {
   render: (args) => ({
     components: { PageHeroHighlights },
     setup() {
-      return { args };
+      return useStorySetup(args);
     },
     template: `
-      <PageHeroHighlights v-bind="args">
+      <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
         <template #header>
           <p class="page-heading-1">Dashboard</p>
           <p class="page-body-normal">Overview of your account activity and key metrics.</p>
@@ -157,8 +181,8 @@ export const NoSlotContent: Story = {
   render: (args) => ({
     components: { PageHeroHighlights },
     setup() {
-      return { args };
+      return useStorySetup(args);
     },
-    template: `<PageHeroHighlights v-bind="args" />`,
+    template: `<PageHeroHighlights v-bind="componentArgs" :style="bgStyles" />`,
   }),
 };
