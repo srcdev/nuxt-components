@@ -81,7 +81,6 @@ watch(
 
     &.equal-widths {
       display: grid;
-      grid-template-rows: subgrid;
       grid-auto-columns: 1fr;
       grid-auto-flow: column;
     }

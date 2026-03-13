@@ -99,6 +99,27 @@ row4: page content (never underflows highlights)
 `.header` spans cols 1–3, rows 1–2 (edge-to-edge bg).
 `.content` spans cols 1–3, rows 3–4 (bg fills behind highlights; `.content-inner` is placed in row 4 only).
 
+## Layout pitfall: do not use `grid-template-rows: subgrid` inside `.highlights`
+
+The `.highlights` element spans rows 2–3 of the parent grid (the "straddle"). If you add an inner grid to `.highlights` (e.g. to extend `equal-widths` behaviour) and include `grid-template-rows: subgrid`, auto-placed items will only occupy row 1 of the subgrid (= parent row 2). Parent row 3 collapses to 0-height, destroying the straddle effect — `.content` appears immediately below the highlights instead of overlapping it.
+
+```css
+/* ❌ — breaks the straddle when items are auto-placed by column flow */
+&.equal-widths {
+  display: grid;
+  grid-template-rows: subgrid; /* row 3 collapses */
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+}
+
+/* ✅ — single implicit row; items stretch to fill combined height of rows 2–3 */
+&.equal-widths {
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+}
+```
+
 ## Notes
 
 - Component is auto-imported in Nuxt — no import needed.
