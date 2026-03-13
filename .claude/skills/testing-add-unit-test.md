@@ -165,6 +165,34 @@ it("exposes headingId via scoped slot", async () => {
 - Always `afterEach(() => wrapper?.unmount())` to prevent test leaks.
 - Use a `createWrapper` helper to keep individual tests short.
 - Include at least one snapshot test per meaningful visual state.
+- `nextTick` is **not** auto-imported in test files — always import it explicitly: `import { nextTick } from "vue"`.
+
+## Fake timers
+
+`vitest.setup.ts` calls `vi.useFakeTimers()` globally and resets in `afterEach`. **Never** call `vi.useFakeTimers()`, `vi.useRealTimers()`, or `vi.runAllTimers()` inside a test file — it conflicts with the global setup and can cause infinite loops or bleed between tests.
+
+Use `vi.advanceTimersByTime(ms)` to move time forward by a specific amount. Avoid `vi.runAllTimers()` — it fires all queued timers including any that re-queue themselves, which loops infinitely.
+
+```ts
+// ✅
+vi.advanceTimersByTime(500);
+await nextTick();
+
+// ❌ — can loop infinitely if a timer re-queues itself
+vi.runAllTimers();
+```
+
+## Hyphenated prop attributes in tests
+
+When a component uses a hyphenated Vue prop like `:tab-index` or `:aria-label`, Vue renders it as the literal hyphenated DOM attribute. Assert with the hyphenated form — not the camelCase equivalent:
+
+```ts
+// ✅ — prop :tab-index renders as the DOM attribute "tab-index"
+expect(wrapper.find(".el").attributes("tab-index")).toBe("2");
+
+// ❌ — "tabindex" won't match
+expect(wrapper.find(".el").attributes("tabindex")).toBe("2");
+```
 
 ## Snapshot testing
 
