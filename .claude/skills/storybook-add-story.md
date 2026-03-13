@@ -174,6 +174,66 @@ template: `
 This keeps the ID wiring self-contained inside the component — the parent story just
 consumes what the slot exposes, rather than generating its own ID.
 
+### Extra controls that are not component props
+
+Use when you want a Storybook control that sets something other than a component prop — e.g. a CSS custom property toggle.
+
+`Meta<typeof Component>` is strict: its `argTypes`/`args` keys must match the component's actual props. Adding extras causes a TypeScript error. The fix is a `StoryArgs` type that covers both:
+
+```ts
+import { computed } from "vue"; // ← must be explicit in .ts files (not auto-imported)
+import type { Meta, StoryObj } from "@nuxtjs/storybook";
+import ComponentName from "../ComponentName.vue";
+
+type StoryArgs = {
+  // mirror the component props you want controls for
+  tag?: "div" | "section";
+  // plus any extras
+  headerBackground?: string;
+};
+
+const meta: Meta<StoryArgs> = {  // ← StoryArgs, not typeof ComponentName
+  title: "...",
+  component: ComponentName,
+  argTypes: {
+    headerBackground: { control: "color", description: "Sets --my-header-bg" },
+  },
+  args: { headerBackground: "" },
+};
+
+export default meta;
+type Story = StoryObj<typeof ComponentName>; // ← still strict for individual stories
+```
+
+Strip extra args before `v-bind` using a `useStorySetup` helper in `setup()`:
+
+```ts
+function useStorySetup(args: StoryArgs) {
+  const bgStyles = computed(() => ({
+    ...(args.headerBackground ? { "--my-header-bg": args.headerBackground } : {}),
+  }));
+  const componentArgs = computed(() => {
+    const { headerBackground: _h, ...rest } = args;
+    return rest;
+  });
+  return { bgStyles, componentArgs };
+}
+
+export const Default: Story = {
+  render: (args: StoryArgs) => ({
+    components: { ComponentName },
+    setup() { return useStorySetup(args); },
+    template: `<ComponentName v-bind="componentArgs" :style="bgStyles" />`,
+  }),
+};
+```
+
+Key points:
+
+- `computed` is **not** auto-imported in `.ts` story files — import it explicitly from `"vue"`.
+- Extra args must be stripped before `v-bind` — spreading unknown keys onto a component makes them unknown HTML attributes.
+- CSS custom properties set via `:style` on the component root are picked up by `var()` in the component's scoped CSS.
+
 ## Notes
 
 - Use `table: { category: "..." }` in `argTypes` when a component has many props — it groups

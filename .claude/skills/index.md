@@ -28,6 +28,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── component-dynamic-slots.md        — named dynamic slots ($slots iteration) vs indexed dynamic slots (itemCount pattern)
 ├── component-local-style-override.md — styleClassPassthrough + scoped style block for per-usage visual customisation
 ├── component-prop-driven-container-layout.md — vary CSS grid layout inside @container queries using data-* attribute selectors
+├── component-aria-landmark.md        — useAriaLabelledById composable: aria-labelledby for section/main/article/aside tags
 └── components/
     ├── accordian-core.md       — AccordianCore indexed dynamic slots (accordian-{n}-summary/icon/content), exclusive-open grouping
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
@@ -35,6 +36,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── layout-grid-by-cols.md  — LayoutGridByCols dynamic slots (item-{n}), props, column/gap/breakpoint decisions
     ├── layout-row.md           — LayoutRow variant guide, width/margin decisions, usage patterns
     ├── link-text.md            — LinkText props, slots, usage patterns, styling
+    ├── page-hero-highlights.md — PageHeroHighlights template: hero + highlights strip grid, CSS custom property theming
     ├── services-card.md        — ServicesCard props, actions slot, usage patterns
     ├── services-section.md     — ServicesSection props, summary-link/cta slots, summary vs full mode
     ├── stepper-list.md         — StepperList dynamic slots (item-{n}/indicator-{n}), props, connector behaviour
