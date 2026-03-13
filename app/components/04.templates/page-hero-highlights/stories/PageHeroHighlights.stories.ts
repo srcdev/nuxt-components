@@ -6,6 +6,7 @@ type StoryArgs = {
   tag?: "div" | "section" | "main";
   highlightsEqualWidths?: boolean;
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
+  maxWidth?: string;
   headerBackground?: string;
   contentBackground?: string;
   highlightCount?: 1 | 2 | 3;
@@ -30,6 +31,11 @@ const meta: Meta<StoryArgs> = {
       options: ["start", "center", "end", "space-between", "space-around"],
       description: "Justification of highlight items along the main axis",
     },
+    maxWidth: {
+      control: { type: "select" },
+      options: ["", "600px", "800px", "1024px", "1200px", "1440px"],
+      description: "Max width of the central content column. Gutters grow to enforce the constraint; below this width they hold at 16px.",
+    },
     headerBackground: {
       control: "color",
       description: "Background colour of the header zone (sets --phl-header-bg)",
@@ -52,6 +58,7 @@ const meta: Meta<StoryArgs> = {
     tag: "div",
     highlightsEqualWidths: false,
     highlightsJustify: "start",
+    maxWidth: "",
     headerBackground: "",
     contentBackground: "",
     highlightCount: 3,

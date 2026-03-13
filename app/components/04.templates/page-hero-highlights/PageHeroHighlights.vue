@@ -21,6 +21,7 @@ interface Props {
   tag?: "div" | "section" | "main";
   highlightsEqualWidths?: boolean;
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
+  maxWidth?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -28,8 +29,15 @@ const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   highlightsEqualWidths: false,
   highlightsJustify: "start",
+  maxWidth: undefined,
   styleClassPassthrough: () => [],
 });
+
+const gridColumns = computed(() =>
+  props.maxWidth
+    ? `max(16px, (100% - ${props.maxWidth}) / 2) 1fr max(16px, (100% - ${props.maxWidth}) / 2)`
+    : "16px 1fr 16px"
+);
 
 const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
 const highlightClasses = computed(() => ({
@@ -50,7 +58,7 @@ watch(
 <style scoped lang="css">
 .page-hero-highlights {
   display: grid;
-  grid-template-columns: 16px 1fr 16px;
+  grid-template-columns: v-bind(gridColumns);
   grid-template-rows: repeat(
     4,
     auto
