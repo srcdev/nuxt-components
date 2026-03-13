@@ -59,6 +59,9 @@ watch(
 
 <style scoped lang="css">
 .page-hero-highlights {
+  --phl-header-bg: darkblue;
+  --phl-content-bg: lightslategray;
+
   display: grid;
   grid-template-columns: v-bind(gridColumns);
   grid-template-rows: repeat(

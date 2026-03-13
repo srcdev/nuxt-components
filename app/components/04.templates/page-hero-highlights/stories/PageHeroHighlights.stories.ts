@@ -35,12 +35,14 @@ const meta: Meta<StoryArgs> = {
     maxWidth: {
       control: { type: "select" },
       options: ["", "600px", "800px", "1024px", "1200px", "1440px"],
-      description: "Max width of the central content column. Gutters grow to enforce the constraint; below this width they hold at 16px.",
+      description:
+        "Max width of the central content column. Gutters grow to enforce the constraint; below this width they hold at 16px.",
     },
     contentAlign: {
       control: { type: "inline-radio" },
       options: ["start", "center"],
-      description: "Align the content column to the start (left gutter stays 16px, right takes remaining space) or center (equal gutters). Only meaningful when maxWidth is set.",
+      description:
+        "Align the content column to the start (left gutter stays 16px, right takes remaining space) or center (equal gutters). Only meaningful when maxWidth is set.",
     },
     headerBackground: {
       control: "color",
@@ -68,7 +70,7 @@ const meta: Meta<StoryArgs> = {
     contentAlign: "center",
     headerBackground: "",
     contentBackground: "",
-    highlightCount: 3,
+    highlightCount: 1,
     styleClassPassthrough: [],
   },
 };
@@ -103,8 +105,10 @@ export const Default: Story = {
     template: `
       <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
         <template #header>
-          <p class="page-heading-1">Dashboard</p>
-          <p class="page-body-normal">Overview of your account activity and key metrics.</p>
+          <div style="color: white; padding-block: 1.6rem;">
+            <p class="page-heading-1">Dashboard</p>
+            <p class="page-body-normal">Overview of your account activity and key metrics.</p>
+          </div>
         </template>
 
         <template #highlights>
@@ -123,8 +127,10 @@ export const Default: Story = {
         </template>
 
         <template #content>
-          <p class="page-heading-2">Recent Activity</p>
-          <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
+          <div style="color: white; padding-block: 1.6rem; min-height: 400px;">
+            <p class="page-heading-2">Recent Activity</p>
+            <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
+          </div>
         </template>
       </PageHeroHighlights>
     `,
