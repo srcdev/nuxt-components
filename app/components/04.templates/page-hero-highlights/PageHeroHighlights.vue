@@ -22,6 +22,7 @@ interface Props {
   highlightsEqualWidths?: boolean;
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
   maxWidth?: string;
+  contentAlign?: "start" | "center";
   styleClassPassthrough?: string | string[];
 }
 
@@ -30,14 +31,15 @@ const props = withDefaults(defineProps<Props>(), {
   highlightsEqualWidths: false,
   highlightsJustify: "start",
   maxWidth: undefined,
+  contentAlign: "center",
   styleClassPassthrough: () => [],
 });
 
-const gridColumns = computed(() =>
-  props.maxWidth
-    ? `max(16px, (100% - ${props.maxWidth}) / 2) 1fr max(16px, (100% - ${props.maxWidth}) / 2)`
-    : "16px 1fr 16px"
-);
+const gridColumns = computed(() => {
+  if (!props.maxWidth) return "16px 1fr 16px";
+  if (props.contentAlign === "start") return `16px minmax(0, ${props.maxWidth}) 1fr`;
+  return `max(16px, (100% - ${props.maxWidth}) / 2) 1fr max(16px, (100% - ${props.maxWidth}) / 2)`;
+});
 
 const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
 const highlightClasses = computed(() => ({

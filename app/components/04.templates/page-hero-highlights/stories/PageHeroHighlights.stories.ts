@@ -7,6 +7,7 @@ type StoryArgs = {
   highlightsEqualWidths?: boolean;
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
   maxWidth?: string;
+  contentAlign?: "start" | "center";
   headerBackground?: string;
   contentBackground?: string;
   highlightCount?: 1 | 2 | 3;
@@ -36,6 +37,11 @@ const meta: Meta<StoryArgs> = {
       options: ["", "600px", "800px", "1024px", "1200px", "1440px"],
       description: "Max width of the central content column. Gutters grow to enforce the constraint; below this width they hold at 16px.",
     },
+    contentAlign: {
+      control: { type: "inline-radio" },
+      options: ["start", "center"],
+      description: "Align the content column to the start (left gutter stays 16px, right takes remaining space) or center (equal gutters). Only meaningful when maxWidth is set.",
+    },
     headerBackground: {
       control: "color",
       description: "Background colour of the header zone (sets --phl-header-bg)",
@@ -59,6 +65,7 @@ const meta: Meta<StoryArgs> = {
     highlightsEqualWidths: false,
     highlightsJustify: "start",
     maxWidth: "",
+    contentAlign: "center",
     headerBackground: "",
     contentBackground: "",
     highlightCount: 3,
