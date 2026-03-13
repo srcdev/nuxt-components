@@ -104,6 +104,31 @@ Both slots receive `serviceData` as a scoped prop.
 </ServicesSection>
 ```
 
+## Local style override scaffold
+
+When consuming this component, scaffold a style block using `styleClassPassthrough`. Delete the block if unused.
+
+See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
+
+```vue
+<ServicesSection :style-class-passthrough="['my-section']" :service-data="service">
+  ...
+</ServicesSection>
+
+<style>
+/* ─── ServicesSection local overrides ──────────────────────────────
+   Colours, borders, geometry only — do not override behaviour.
+   Delete this block if no overrides are needed.
+   ─────────────────────────────────────────────────────────────────── */
+.services-section {
+  &.my-section {
+    /* Geometry — image wrapper */
+    /* .image-wrapper { border-radius: 1.2rem; } */
+  }
+}
+</style>
+```
+
 ## Notes
 
 - Component is auto-imported in Nuxt — no import needed.

@@ -115,6 +115,42 @@ Override in a consuming component or theme block:
 
 ---
 
+## Local style override scaffold
+
+When consuming this component, scaffold a style block using `styleClassPassthrough`. Delete the block if unused.
+
+See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
+
+```vue
+<AccordianCore :style-class-passthrough="['my-accordian']" :item-count="3">
+  ...
+</AccordianCore>
+
+<style>
+/* ─── AccordianCore local overrides ────────────────────────────────
+   Colours, borders, geometry only — do not override behaviour.
+   Delete this block if no overrides are needed.
+   ─────────────────────────────────────────────────────────────────── */
+.display-accordian {
+  &.my-accordian {
+    /* Geometry */
+    /* max-width: none; */ /* default is 600px — remove the width cap */
+
+    /* Panel-level overrides via the .accordian-item hook */
+    .accordian-item.expanding-panel {
+      /* Border */
+      /* border-block-end: 1px solid currentColor; */
+
+      /* Geometry */
+      /* border-radius: 0.8rem; */
+    }
+  }
+}
+</style>
+```
+
+---
+
 ## Notes
 
 - `AccordianCore` always passes `style-class-passthrough="['accordian-item']"` to every inner `ExpandingPanel` — use `.accordian-item` as the hook for per-panel styling overrides.

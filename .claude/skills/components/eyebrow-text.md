@@ -77,6 +77,31 @@ Text is always `text-transform: uppercase` — do not pass pre-uppercased string
 
 Override via `styleClassPassthrough` or a parent HOC `<style>` block targeting `.eyebrow-text`.
 
+## Local style override scaffold
+
+When consuming this component, scaffold a style block using `styleClassPassthrough`. Delete the block if unused.
+
+See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
+
+```vue
+<EyebrowText :style-class-passthrough="['my-eyebrow']" text-content="Our Services" />
+
+<style>
+/* ─── EyebrowText local overrides ──────────────────────────────────
+   Colours, borders, geometry only — do not override behaviour.
+   Delete this block if no overrides are needed.
+   ─────────────────────────────────────────────────────────────────── */
+.eyebrow-text {
+  &.my-eyebrow {
+    /* Colours */
+    /* --colour-text-eyebrow: var(--brand-accent); */
+  }
+}
+</style>
+```
+
+> **Note:** Font size is controlled via the `fontSize` prop and theme tokens `--eyebrow-text-large/medium/small` — define these at theme level, not as local overrides.
+
 ## Notes
 
 - Component is auto-imported in Nuxt — no import needed.

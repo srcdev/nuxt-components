@@ -117,6 +117,36 @@ Always supply a meaningful `name` prop when using multiple panels on the same pa
 
 ---
 
+## Local style override scaffold
+
+When consuming this component, scaffold a style block using `styleClassPassthrough`. Delete the block if unused.
+
+See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
+
+```vue
+<ExpandingPanel name="my-item" :style-class-passthrough="['my-panel']">
+  ...
+</ExpandingPanel>
+
+<style>
+/* ─── ExpandingPanel local overrides ───────────────────────────────
+   Colours, borders, geometry only — do not override behaviour.
+   Delete this block if no overrides are needed.
+   ─────────────────────────────────────────────────────────────────── */
+.expanding-panel {
+  &.my-panel {
+    /* Border */
+    /* border-block-end: 1px solid currentColor; */
+
+    /* Summary row geometry */
+    /* .expanding-panel-details .expanding-panel-summary { padding-block: 1.2rem; } */
+  }
+}
+</style>
+```
+
+---
+
 ## Notes
 
 - The open/close animation uses `grid-template-rows: 0fr → 1fr` — no JS height measurement needed.

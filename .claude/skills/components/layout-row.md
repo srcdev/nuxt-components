@@ -196,6 +196,41 @@ Override in consuming app to adjust all track sizes globally:
 
 ---
 
+## Local style override scaffold
+
+When consuming this component, scaffold a style block using `styleClassPassthrough`. Delete the block if unused.
+
+See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
+
+```vue
+<LayoutRow variant="content" :style-class-passthrough="['my-row']">
+  ...
+</LayoutRow>
+
+<style>
+/* ─── LayoutRow local overrides ────────────────────────────────────
+   Colours, borders, geometry only — do not override behaviour.
+   Delete this block if no overrides are needed.
+   ─────────────────────────────────────────────────────────────────── */
+.layout-row {
+  &.my-row {
+    /* Track widths — for this instance only */
+    /* --content-max-width: 1200px; */
+    /* --popout-max-width: 1600px; */
+    /* --inset-content-max-width: 900px; */
+    /* --minimum-content-padding: 2rem; */
+
+    /* Colours */
+    /* background: var(--brand-surface); */
+  }
+}
+</style>
+```
+
+> **Note:** Track width custom properties set here affect only this instance. For site-wide changes, set them at `:root` or theme level.
+
+---
+
 ## Notes
 
 - Auto-imported in Nuxt — no import needed.

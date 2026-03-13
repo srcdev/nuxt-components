@@ -174,6 +174,51 @@ Override these in your consuming component or theme to restyle the indicators an
 
 ---
 
+## Local style override scaffold
+
+When consuming this component, scaffold a style block using `styleClassPassthrough`. Delete the block if unused.
+
+See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
+
+```vue
+<StepperList :style-class-passthrough="['my-stepper']" :item-count="3">
+  ...
+</StepperList>
+
+<style>
+/* ─── StepperList local overrides ──────────────────────────────────
+   Colours, borders, geometry only — do not override behaviour.
+   Delete this block if no overrides are needed.
+   ─────────────────────────────────────────────────────────────────── */
+.stepper-list {
+  &.my-stepper {
+    /* Counter bubble — disc variant */
+    /* --stepper-list-counter-disc-background: var(--brand-primary); */
+    /* --stepper-list-counter-disc-text: white; */
+    /* --stepper-list-counter-disc-border: transparent; */
+
+    /* Counter bubble — circle variant */
+    /* --stepper-list-counter-circle-background: transparent; */
+    /* --stepper-list-counter-circle-text: var(--brand-primary); */
+    /* --stepper-list-counter-circle-border: var(--brand-primary); */
+
+    /* Counter bubble — square variant */
+    /* --stepper-list-counter-square-background: var(--brand-primary); */
+    /* --stepper-list-counter-square-text: white; */
+    /* --stepper-list-counter-square-border: transparent; */
+
+    /* Custom indicator icon colour */
+    /* --stepper-list-icon: var(--brand-primary); */
+
+    /* Connector line */
+    /* --stepper-list-connector-color: var(--brand-primary); */
+  }
+}
+</style>
+```
+
+---
+
 ## Notes
 
 - Always keep `itemCount` in sync with the number of `#item-*` slots you provide — mismatches will render empty `<li>` rows.

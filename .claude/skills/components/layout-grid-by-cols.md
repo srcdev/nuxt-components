@@ -110,6 +110,35 @@ Uses **CSS container queries** (`container-type: inline-size`) — responds to i
 
 ---
 
+## Local style override scaffold
+
+When consuming this component, scaffold a style block using `styleClassPassthrough`. Delete the block if unused.
+
+See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
+
+```vue
+<LayoutGridByCols :style-class-passthrough="['my-grid']" :column-count="3">
+  ...
+</LayoutGridByCols>
+
+<style>
+/* ─── LayoutGridByCols local overrides ─────────────────────────────
+   Colours, borders, geometry only — do not override behaviour.
+   Delete this block if no overrides are needed.
+   ─────────────────────────────────────────────────────────────────── */
+.layout-grid-by-cols {
+  &.my-grid {
+    /* Colours */
+    /* background: var(--brand-surface); */
+  }
+}
+</style>
+```
+
+> **Note:** `gap` and `column-count` are prop-driven — use the props rather than CSS overrides for layout changes.
+
+---
+
 ## Notes
 
 - Auto-imported in Nuxt — no manual import needed.

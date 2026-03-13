@@ -103,6 +103,31 @@ Key CSS custom properties:
 - `--colour-text-accent` — colour applied to `.accent` spans and the icon
 - `--hero-text-{scale}` — font size per scale value
 
+## Local style override scaffold
+
+When consuming this component, scaffold a style block using `styleClassPassthrough`. Delete the block if unused.
+
+See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
+
+```vue
+<HeroText :style-class-passthrough="['my-hero']" tag="h1" :text-content="[...]" />
+
+<style>
+/* ─── HeroText local overrides ─────────────────────────────────────
+   Colours, borders, geometry only — do not override behaviour.
+   Delete this block if no overrides are needed.
+   ─────────────────────────────────────────────────────────────────── */
+.hero-text {
+  &.my-hero {
+    /* Colours */
+    /* --colour-text-accent: var(--brand-primary); */
+  }
+}
+</style>
+```
+
+> **Note:** Font size is controlled via the `fontSize` prop and theme tokens `--hero-text-display/title/heading/subheading/label` — define these at theme level, not as local overrides.
+
 ## Notes
 
 - Text segments are trimmed and a trailing space is automatically appended between segments in horizontal axis — do not manually pad `text` values.

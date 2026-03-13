@@ -53,6 +53,34 @@ The `actions` slot receives `serviceData` as a scoped prop so the consumer can c
 </ServicesCard>
 ```
 
+## Local style override scaffold
+
+When consuming this component, scaffold a style block using `styleClassPassthrough`. Delete the block if unused.
+
+See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
+
+```vue
+<ServicesCard :style-class-passthrough="['my-card']" :service-data="service">
+  ...
+</ServicesCard>
+
+<style>
+/* ─── ServicesCard local overrides ─────────────────────────────────
+   Colours, borders, geometry only — do not override behaviour.
+   Delete this block if no overrides are needed.
+   ─────────────────────────────────────────────────────────────────── */
+.services-card {
+  &.my-card {
+    /* Geometry — image */
+    /* .image-wrapper { border-radius: 1.2rem; } */
+
+    /* Colours */
+    /* .description { color: var(--brand-text-secondary); } */
+  }
+}
+</style>
+```
+
 ## Notes
 
 - Component is auto-imported in Nuxt — no import needed.

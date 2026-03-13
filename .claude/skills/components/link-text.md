@@ -93,6 +93,39 @@ Key CSS custom properties — define these in your consuming app to control appe
 
 Override via `styleClassPassthrough` or a parent HOC `<style>` block targeting `.link-text`.
 
+## Local style override scaffold
+
+When consuming this component, scaffold a style block using `styleClassPassthrough`. Delete the block if unused.
+
+See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
+
+```vue
+<LinkText :style-class-passthrough="['my-link']" to="/path" link-text="Learn More" />
+
+<style>
+/* ─── LinkText local overrides ─────────────────────────────────────
+   Colours, borders, geometry only — do not override behaviour.
+   Delete this block if no overrides are needed.
+   ─────────────────────────────────────────────────────────────────── */
+.link-text {
+  &.my-link {
+    /* Colours */
+    /* --link-text-colour: var(--brand-primary); */
+    /* --link-text-colour-hover: var(--brand-primary-dark); */
+
+    /* Typography */
+    /* --link-text-font-size: 1.6rem; */
+    /* --link-text-decoration: underline; */
+    /* --link-text-decoration-hover: none; */
+    /* --link-text-underline-offset: 0.3em; */
+
+    /* Geometry */
+    /* --link-text-gap: 0.6em; */
+  }
+}
+</style>
+```
+
 ## Notes
 
 - Component is auto-imported in Nuxt — no import needed.
