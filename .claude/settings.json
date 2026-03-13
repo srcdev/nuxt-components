@@ -13,7 +13,8 @@
       "Bash(npx vitest run app/components/image-galleries/slider-gallery/tests/SliderGallery.spec.ts)",
       "Bash(npx vitest run)",
       "Bash(git mv:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(npx vitest:*)"
     ],
     "additionalDirectories": [
       "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms/content-wrappers/content-width",

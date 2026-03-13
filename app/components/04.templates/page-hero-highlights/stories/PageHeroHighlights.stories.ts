@@ -222,3 +222,83 @@ export const NoSlotContent: Story = {
     template: `<PageHeroHighlights v-bind="componentArgs" :style="bgStyles" />`,
   }),
 };
+
+/** Max width centered — content column capped at 800px with equal growing gutters either side. */
+export const MaxWidthCentered: Story = {
+  name: "Max Width — Centered",
+  args: { maxWidth: "800px", contentAlign: "center" },
+  render: (args: StoryArgs) => ({
+    components: { PageHeroHighlights },
+    setup() {
+      return useStorySetup(args);
+    },
+    template: `
+      <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
+        <template #header>
+          <p class="page-heading-1">Dashboard</p>
+          <p class="page-body-normal">Content column is capped at 800px — gutters grow equally on both sides.</p>
+        </template>
+
+        <template #highlights>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Total Revenue</p>
+            <p class="page-body-normal">£24,500</p>
+          </div>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Active Users</p>
+            <p class="page-body-normal">1,284</p>
+          </div>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Open Tasks</p>
+            <p class="page-body-normal">37</p>
+          </div>
+        </template>
+
+        <template #content>
+          <p class="page-heading-2">Recent Activity</p>
+          <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
+        </template>
+      </PageHeroHighlights>
+    `,
+  }),
+};
+
+/** Max width start — content column capped at 800px, pinned to the left with a fixed 16px gutter. */
+export const MaxWidthStart: Story = {
+  name: "Max Width — Start",
+  args: { maxWidth: "800px", contentAlign: "start" },
+  render: (args: StoryArgs) => ({
+    components: { PageHeroHighlights },
+    setup() {
+      return useStorySetup(args);
+    },
+    template: `
+      <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
+        <template #header>
+          <p class="page-heading-1">Dashboard</p>
+          <p class="page-body-normal">Content column is capped at 800px, aligned to the start — right side takes the remaining space.</p>
+        </template>
+
+        <template #highlights>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Total Revenue</p>
+            <p class="page-body-normal">£24,500</p>
+          </div>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Active Users</p>
+            <p class="page-body-normal">1,284</p>
+          </div>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Open Tasks</p>
+            <p class="page-body-normal">37</p>
+          </div>
+        </template>
+
+        <template #content>
+          <p class="page-heading-2">Recent Activity</p>
+          <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
+        </template>
+      </PageHeroHighlights>
+    `,
+  }),
+};

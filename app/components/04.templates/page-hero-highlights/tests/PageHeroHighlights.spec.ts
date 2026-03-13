@@ -147,4 +147,40 @@ describe("PageHeroHighlights", () => {
     expect(el.classes()).toContain("extra-class");
     expect(el.classes()).toContain("another-class");
   });
+
+  describe("gridColumns", () => {
+    interface ComponentInstance {
+      gridColumns: string;
+    }
+
+    it("defaults to fixed 16px gutters with no maxWidth", async () => {
+      const wrapper = await mountSuspended(PageHeroHighlights);
+      const vm = wrapper.vm as unknown as ComponentInstance;
+      expect(vm.gridColumns).toBe("16px 1fr 16px");
+    });
+
+    it("returns centered max-width columns when maxWidth is set and contentAlign is center", async () => {
+      const wrapper = await mountSuspended(PageHeroHighlights, {
+        props: { maxWidth: "1064px", contentAlign: "center" },
+      });
+      const vm = wrapper.vm as unknown as ComponentInstance;
+      expect(vm.gridColumns).toBe("max(16px, (100% - 1064px) / 2) 1fr max(16px, (100% - 1064px) / 2)");
+    });
+
+    it("returns start-aligned columns when maxWidth is set and contentAlign is start", async () => {
+      const wrapper = await mountSuspended(PageHeroHighlights, {
+        props: { maxWidth: "1064px", contentAlign: "start" },
+      });
+      const vm = wrapper.vm as unknown as ComponentInstance;
+      expect(vm.gridColumns).toBe("16px minmax(0, 1064px) 1fr");
+    });
+
+    it("ignores contentAlign when maxWidth is not set", async () => {
+      const wrapper = await mountSuspended(PageHeroHighlights, {
+        props: { contentAlign: "start" },
+      });
+      const vm = wrapper.vm as unknown as ComponentInstance;
+      expect(vm.gridColumns).toBe("16px 1fr 16px");
+    });
+  });
 });
