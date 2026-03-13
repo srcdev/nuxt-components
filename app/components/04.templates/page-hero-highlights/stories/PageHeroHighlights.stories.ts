@@ -8,6 +8,7 @@ type StoryArgs = {
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
   headerBackground?: string;
   contentBackground?: string;
+  highlightCount?: 1 | 2 | 3;
   styleClassPassthrough?: string | string[];
 };
 
@@ -37,6 +38,11 @@ const meta: Meta<StoryArgs> = {
       control: "color",
       description: "Background colour of the content zone (sets --phl-content-bg)",
     },
+    highlightCount: {
+      control: { type: "select" },
+      options: [1, 2, 3],
+      description: "Number of highlight items to display in the highlights slot",
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes applied to the root element",
@@ -48,6 +54,7 @@ const meta: Meta<StoryArgs> = {
     highlightsJustify: "start",
     headerBackground: "",
     contentBackground: "",
+    highlightCount: 3,
     styleClassPassthrough: [],
   },
 };
@@ -62,11 +69,12 @@ function useStorySetup(args: StoryArgs) {
     ...(args.headerBackground ? { "--phl-header-bg": args.headerBackground } : {}),
     ...(args.contentBackground ? { "--phl-content-bg": args.contentBackground } : {}),
   }));
+  const highlightCount = computed(() => args.highlightCount ?? 3);
   const componentArgs = computed(() => {
-    const { headerBackground: _h, contentBackground: _c, ...rest } = args;
+    const { headerBackground: _h, contentBackground: _c, highlightCount: _n, ...rest } = args;
     return rest;
   });
-  return { bgStyles, componentArgs };
+  return { bgStyles, componentArgs, highlightCount };
 }
 
 // ─── Stories ─────────────────────────────────────────────────────────────────
@@ -90,11 +98,11 @@ export const Default: Story = {
             <p class="page-heading-2">Total Revenue</p>
             <p class="page-body-normal">£24,500</p>
           </div>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+          <div v-if="highlightCount >= 2" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
             <p class="page-heading-2">Active Users</p>
             <p class="page-body-normal">1,284</p>
           </div>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+          <div v-if="highlightCount >= 3" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
             <p class="page-heading-2">Open Tasks</p>
             <p class="page-body-normal">37</p>
           </div>
@@ -130,9 +138,13 @@ export const AsSectionTag: Story = {
             <p class="page-heading-2">Total Revenue</p>
             <p class="page-body-normal">£24,500</p>
           </div>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+          <div v-if="highlightCount >= 2" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
             <p class="page-heading-2">Active Users</p>
             <p class="page-body-normal">1,284</p>
+          </div>
+          <div v-if="highlightCount >= 3" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Open Tasks</p>
+            <p class="page-body-normal">37</p>
           </div>
         </template>
 
@@ -166,11 +178,11 @@ export const EqualWidthHighlights: Story = {
             <p class="page-heading-2">Total Revenue</p>
             <p class="page-body-normal">£24,500</p>
           </div>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+          <div v-if="highlightCount >= 2" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
             <p class="page-heading-2">Active Users</p>
             <p class="page-body-normal">1,284</p>
           </div>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+          <div v-if="highlightCount >= 3" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
             <p class="page-heading-2">Open Tasks</p>
             <p class="page-body-normal">37</p>
           </div>
