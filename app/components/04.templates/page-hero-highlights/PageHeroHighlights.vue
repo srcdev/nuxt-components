@@ -1,7 +1,7 @@
 <template>
   <component :is="tag" class="page-hero-highlights" :class="elementClasses" :aria-labelledby="ariaLabelledby">
     <div class="header">
-      <div class="header-inner">
+      <div class="header-column">
         <slot name="header" :heading-id="headingId"></slot>
       </div>
     </div>
@@ -10,7 +10,7 @@
     </div>
     <div class="content">
       <div class="content-column">
-        <div class="content-inner">
+        <div class="content-slot">
           <slot name="content"></slot>
         </div>
       </div>
@@ -78,7 +78,7 @@ watch(
     grid-template-rows: subgrid;
     background-color: var(--phl-header-bg);
 
-    .header-inner {
+    .header-column {
       grid-column: 2; /* centre column only */
       grid-row: 1; /* row 1 only — content height drives row 1, pushing highlights down */
     }
@@ -141,7 +141,7 @@ watch(
 
       /* z-index: -1; */
 
-      .content-inner {
+      .content-slot {
         grid-column: 2;
         grid-row: 2; /* row 4 of main grid — content never underflows highlights */
       }

@@ -3,7 +3,7 @@
 exports[`PageHeroHighlights > renders correct HTML structure 1`] = `
 "<div data-v-bed007d8="" class="page-hero-highlights">
   <div data-v-bed007d8="" class="header">
-    <div data-v-bed007d8="" class="header-inner">
+    <div data-v-bed007d8="" class="header-column">
       <h1>Page Title</h1>
     </div>
   </div>
@@ -11,8 +11,10 @@ exports[`PageHeroHighlights > renders correct HTML structure 1`] = `
     <div class="highlight">Highlight 1</div>
   </div>
   <div data-v-bed007d8="" class="content">
-    <div data-v-bed007d8="" class="content-inner">
-      <p>Content</p>
+    <div data-v-bed007d8="" class="content-column">
+      <div data-v-bed007d8="" class="content-slot">
+        <p>Content</p>
+      </div>
     </div>
   </div>
 </div>"

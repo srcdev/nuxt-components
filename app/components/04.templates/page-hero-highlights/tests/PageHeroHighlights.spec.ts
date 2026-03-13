@@ -62,18 +62,18 @@ describe("PageHeroHighlights", () => {
     expect(wrapper.html()).toContain("Page body");
   });
 
-  it("content slot is rendered inside .content-inner", async () => {
+  it("content slot is rendered inside .content-slot", async () => {
     const wrapper = await mountSuspended(PageHeroHighlights, {
       slots: { content: "<p class='body-text'>Page body</p>" },
     });
-    expect(wrapper.find(".content-inner .body-text").exists()).toBe(true);
+    expect(wrapper.find(".content-slot .body-text").exists()).toBe(true);
   });
 
-  it("header slot is rendered inside .header-inner", async () => {
+  it("header slot is rendered inside .header-column", async () => {
     const wrapper = await mountSuspended(PageHeroHighlights, {
       slots: { header: "<h1 class='page-title'>Dashboard</h1>" },
     });
-    expect(wrapper.find(".header-inner .page-title").exists()).toBe(true);
+    expect(wrapper.find(".header-column .page-title").exists()).toBe(true);
   });
 
   it("adds aria-labelledby when tag is section", async () => {
