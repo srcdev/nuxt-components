@@ -1,6 +1,6 @@
 <template>
   <div class="page-layout">
-    <LayoutRow tag="div" variant="full" :style-class-passthrough="['header', 'mbe-40']">
+    <LayoutRow tag="div" variant="full" :style-class-passthrough="['header']">
       <template #default>
         <header class="responsive-header">
           <nav class="home-navigation" aria-label="Home Navigation">

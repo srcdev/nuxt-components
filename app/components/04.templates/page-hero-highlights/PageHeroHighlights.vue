@@ -9,8 +9,10 @@
       <slot name="highlights"></slot>
     </div>
     <div class="content">
-      <div class="content-inner">
-        <slot name="content"></slot>
+      <div class="content-column">
+        <div class="content-inner">
+          <slot name="content"></slot>
+        </div>
       </div>
     </div>
   </component>
@@ -61,14 +63,12 @@ watch(
 .page-hero-highlights {
   --phl-header-bg: darkblue;
   --phl-content-bg: lightslategray;
+  --phl-content-inner: white;
 
   display: grid;
   grid-template-columns: v-bind(gridColumns);
-  grid-template-rows: repeat(
-    4,
-    auto
-  ); /* 4 rows of auto height: header content, highlights, main content, and bottom padding */
-  /*                   r1   r2   r3   r4  */
+  grid-template-rows: auto 1fr 1fr auto; /* 4 rows: header, highlights (straddling header/content boundary), content, bottom padding */
+  gap: 0;
 
   .header {
     grid-column: 1 / -1; /* edge-to-edge */
@@ -123,15 +123,28 @@ watch(
 
   .content {
     grid-column: 1 / span 3;
-    grid-row: 3 / 5; /* rows 3–4: bg fills behind highlights + real content zone */
+    grid-row: 3 / span 2; /* rows 3–4: bg fills behind highlights + real content zone */
     display: grid;
     grid-template-columns: subgrid;
     grid-template-rows: subgrid;
-    background-color: var(--phl-content-bg);
 
-    .content-inner {
+    position: relative;
+    isolation: isolate;
+
+    .content-column {
+      grid-template-columns: subgrid;
+      grid-template-rows: subgrid;
+      display: grid;
+      /* bottom padding to ensure content can scroll above highlights without reaching the end of the background */
       grid-column: 2;
-      grid-row: 2; /* row 4 of main grid — content never underflows highlights */
+      grid-row: 1 / span 2; /* rows 2–3: fills behind highlights + real content zone */
+
+      /* z-index: -1; */
+
+      .content-inner {
+        grid-column: 2;
+        grid-row: 2; /* row 4 of main grid — content never underflows highlights */
+      }
     }
   }
 }
