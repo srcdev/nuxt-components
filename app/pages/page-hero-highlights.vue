@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <PageHeroHighlights
-          max-width="800px"
+          max-width="1064px"
           content-align="start"
           :highlights-equal-widths="false"
           highlights-justify="start"
@@ -58,15 +58,8 @@ useHead({
 
 <style lang="css">
 .page-hero-highlights-page {
-  /* CSS styles */
   .page-hero-highlights {
-    --phl-header-bg: darkblue;
-    --phl-content-bg: transparent;
-    --phl-content-inner: white;
-
-    .header {
-      background-color: var(--phl-header-bg);
-
+    .header-row {
       .header-slot {
         .some-header-content {
           padding-block: 4rem 3rem;
@@ -74,41 +67,9 @@ useHead({
       }
     }
 
-    .highlights {
-      padding-inline: 1.2rem;
-
-      .highlight {
-        background-color: white;
-        border: 1px solid black;
-        border-radius: 8px;
-        color: black;
-
-        padding-inline: 1.2rem;
-
-        .title {
-        }
-        .body {
-          padding-block: 1.2rem;
-        }
-      }
-    }
-
-    .content {
-      background-color: var(--phl-content-bg);
-
-      &:before {
-        background-color: white;
-        border: 1px solid var(--slate-06);
-        outline: 1px solid var(--slate-02);
-        margin-top: 1.2rem;
-        border-radius: 0.8rem;
-      }
+    .content-row {
       .content-slot {
-        background-color: var(--phl-content-inner);
         color: black;
-
-        background-color: var(--phl-content-inner);
-        margin: 1.2rem;
 
         .some-class {
           min-height: 40svh;
