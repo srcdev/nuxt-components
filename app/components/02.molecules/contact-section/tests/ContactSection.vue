@@ -7,7 +7,7 @@
           :connected="false"
           indicator-alignment="top"
           :item-count="3"
-          :indicator-size="indicatorSize"
+          :indicator-size="stepperIndicatorSize"
         >
           <template #indicator-0>
             <slot name="indicator-0"></slot>
@@ -47,12 +47,12 @@
 <script setup lang="ts">
 interface Props {
   tag?: "div" | "section" | "article" | "main";
-  indicatorSize?: string;
+  stepperIndicatorSize?: string;
   styleClassPassthrough?: string | string[];
 }
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
-  indicatorSize: "3rem",
+  stepperIndicatorSize: "3rem",
   styleClassPassthrough: () => [],
 });
 

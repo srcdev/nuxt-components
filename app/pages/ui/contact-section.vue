@@ -7,7 +7,7 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <ContactSection tag="section" indicator-size="2.4rem" :style-class-passthrough="['mbe-20']">
+          <ContactSection tag="section" stepper-indicator-size="2.4rem" :style-class-passthrough="['mbe-20']">
             <template #indicator-0>
               <Icon name="lucide-map-pin" class="indicator-icon" />
             </template>
