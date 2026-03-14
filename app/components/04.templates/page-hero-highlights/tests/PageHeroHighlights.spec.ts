@@ -69,11 +69,11 @@ describe("PageHeroHighlights", () => {
     expect(wrapper.find(".content-slot .body-text").exists()).toBe(true);
   });
 
-  it("header slot is rendered inside .header-column", async () => {
+  it("header slot is rendered inside .header-slot", async () => {
     const wrapper = await mountSuspended(PageHeroHighlights, {
       slots: { header: "<h1 class='page-title'>Dashboard</h1>" },
     });
-    expect(wrapper.find(".header-column .page-title").exists()).toBe(true);
+    expect(wrapper.find(".header-slot .page-title").exists()).toBe(true);
   });
 
   it("adds aria-labelledby when tag is section", async () => {
@@ -112,21 +112,21 @@ describe("PageHeroHighlights", () => {
 
   it("applies flexible-widths class by default", async () => {
     const wrapper = await mountSuspended(PageHeroHighlights);
-    expect(wrapper.find(".highlights").classes()).toContain("flexible-widths");
-    expect(wrapper.find(".highlights").classes()).not.toContain("equal-widths");
+    expect(wrapper.find(".highlights-row").classes()).toContain("flexible-widths");
+    expect(wrapper.find(".highlights-row").classes()).not.toContain("equal-widths");
   });
 
   it("applies equal-widths class when highlightsEqualWidths is true", async () => {
     const wrapper = await mountSuspended(PageHeroHighlights, {
       props: { highlightsEqualWidths: true },
     });
-    expect(wrapper.find(".highlights").classes()).toContain("equal-widths");
-    expect(wrapper.find(".highlights").classes()).not.toContain("flexible-widths");
+    expect(wrapper.find(".highlights-row").classes()).toContain("equal-widths");
+    expect(wrapper.find(".highlights-row").classes()).not.toContain("flexible-widths");
   });
 
   it("applies justify-start class by default", async () => {
     const wrapper = await mountSuspended(PageHeroHighlights);
-    expect(wrapper.find(".highlights").classes()).toContain("justify-start");
+    expect(wrapper.find(".highlights-row").classes()).toContain("justify-start");
   });
 
   it("applies the correct justify class for each highlightsJustify value", async () => {
@@ -135,7 +135,7 @@ describe("PageHeroHighlights", () => {
       const wrapper = await mountSuspended(PageHeroHighlights, {
         props: { highlightsJustify: value },
       });
-      expect(wrapper.find(".highlights").classes()).toContain(`justify-${value}`);
+      expect(wrapper.find(".highlights-row").classes()).toContain(`justify-${value}`);
     }
   });
 

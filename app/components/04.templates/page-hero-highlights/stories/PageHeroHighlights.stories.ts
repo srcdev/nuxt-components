@@ -47,15 +47,16 @@ const meta: Meta<StoryArgs> = {
     },
     highlightTitleBaseline: {
       control: "boolean",
-      description: "When true, fixes the highlight title row to a set height so titles align to the header baseline. Override --highlight-title-height in the consuming page to tune the value.",
+      description:
+        "When true, fixes the highlight title row to a set height so titles align to the header baseline. Override --highlight-title-height in the consuming page to tune the value.",
     },
     headerBackground: {
       control: "color",
-      description: "Background colour of the header zone (sets --phl-header-bg)",
+      description: "Background colour of the header zone (sets --header-row-background-colour)",
     },
     contentBackground: {
       control: "color",
-      description: "Background colour of the content zone (sets --phl-content-bg)",
+      description: "Background colour of the content zone (sets --content-row-background-color)",
     },
     highlightCount: {
       control: { type: "select" },
@@ -88,8 +89,8 @@ type Story = StoryObj<typeof PageHeroHighlights>;
 
 function useStorySetup(args: StoryArgs) {
   const bgStyles = computed(() => ({
-    ...(args.headerBackground ? { "--phl-header-bg": args.headerBackground } : {}),
-    ...(args.contentBackground ? { "--phl-content-bg": args.contentBackground } : {}),
+    ...(args.headerBackground ? { "--header-row-background-colour": args.headerBackground } : {}),
+    ...(args.contentBackground ? { "--content-row-background-color": args.contentBackground } : {}),
   }));
   const highlightCount = computed(() => args.highlightCount ?? 3);
   const componentArgs = computed(() => {
