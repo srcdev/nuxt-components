@@ -104,6 +104,55 @@ function useStorySetup(args: StoryArgs) {
 
 /** Default — header, highlights strip, and page content with all three slots filled. */
 export const Default: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: `
+All layout and visual properties are customisable via CSS custom properties. Set them on \`.page-hero-highlights\` (or a scoped class via \`styleClassPassthrough\`):
+
+\`\`\`css
+.page-hero-highlights {
+  /* Header zone */
+  --header-row-background-colour: darkblue;
+
+  /* Highlights strip */
+  --highlights-row-item-gap: 1rem;
+  --highlights-row-initial-item-offset: 1.2rem;
+
+  /* Highlight cards */
+  --highlight-rows-gap: 1.2rem;
+  --highlight-title-height: 1fr; /* see: highlight-title-baseline prop */
+  --highlight-padding-block-start: 1.2rem;
+  --highlight-padding: 1.2rem;
+  --highlight-background-color: white;
+  --highlight-border: 1px solid black;
+  --highlight-border-radius: 8px;
+  --highlight-color: black;
+
+  /* Content zone */
+  --content-row-background-color: var(--slate-01); /* transparent */
+  --content-row-start-gap: 1.2rem;
+  --content-row-end-gap: 1.2rem;
+
+  /* Content slot decorative border */
+  --content-slot-margin-block-start: 2.4rem;
+  --content-slot-margin: var(--highlights-row-initial-item-offset);
+  --content-slot-background-color: var(--slate-00);
+  --content-slot-border: 1px solid var(--slate-06);
+  --content-slot-border-radius: 0.8rem;
+  --content-slot-outline: 1px solid var(--slate-02);
+
+  /* When using :highlight-title-baseline="true" */
+  &.highlight-title-baseline {
+    --highlight-title-height: 4rem; /* proportional value preferred */
+    --highlight-padding-block-start: 0;
+  }
+}
+\`\`\`
+        `,
+      },
+    },
+  },
   render: (args: StoryArgs) => ({
     components: { PageHeroHighlights },
     setup() {
@@ -134,10 +183,48 @@ export const Default: Story = {
         </template>
 
         <template #content>
-          <div style="color: white; padding-block: 1.6rem; min-height: 400px;">
-            <p class="page-heading-2">Recent Activity</p>
-            <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
-          </div>
+          <pre style="padding: 1.6rem; font-size: 1.2rem; line-height: 1.6; overflow-x: auto;">/* ─── PageHeroHighlights CSS tokens ─────────────────────────────────
+   Set on .page-hero-highlights (or a scoped styleClassPassthrough class).
+   Update values as needed. Delete tokens you are not overriding.
+   ─────────────────────────────────────────────────────────────────── */
+.page-hero-highlights {
+
+  /* Header zone */
+  --header-row-background-colour: darkblue;
+
+  /* Highlights strip */
+  --highlights-row-item-gap: 1rem;
+  --highlights-row-initial-item-offset: 1.2rem;
+
+  /* Highlight cards */
+  --highlight-rows-gap: 1.2rem;
+  --highlight-title-height: 1fr; /* see: highlight-title-baseline prop */
+  --highlight-padding-block-start: 1.2rem;
+  --highlight-padding: 1.2rem;
+  --highlight-background-color: white;
+  --highlight-border: 1px solid black;
+  --highlight-border-radius: 8px;
+  --highlight-color: black;
+
+  /* Content zone */
+  --content-row-background-color: var(--slate-01); /* transparent */
+  --content-row-start-gap: 1.2rem;
+  --content-row-end-gap: 1.2rem;
+
+  /* Content slot decorative border */
+  --content-slot-margin-block-start: 2.4rem;
+  --content-slot-margin: var(--highlights-row-initial-item-offset);
+  --content-slot-background-color: var(--slate-00);
+  --content-slot-border: 1px solid var(--slate-06);
+  --content-slot-border-radius: 0.8rem;
+  --content-slot-outline: 1px solid var(--slate-02);
+
+  /* When using :highlight-title-baseline="true" */
+  &.highlight-title-baseline {
+    --highlight-title-height: 4rem; /* proportional value preferred */
+    --highlight-padding-block-start: 0;
+  }
+}</pre>
         </template>
       </PageHeroHighlights>
     `,
