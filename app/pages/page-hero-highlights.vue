@@ -4,7 +4,7 @@
       <template #layout-content>
         <PageHeroHighlights
           max-width="800px"
-          content-align="center"
+          content-align="start"
           :highlights-equal-widths="false"
           highlights-justify="start"
           :highlight-title-baseline="true"
@@ -67,7 +67,7 @@ useHead({
     .header {
       background-color: var(--phl-header-bg);
 
-      .header-column {
+      .header-slot {
         .some-header-content {
           padding-block: 4rem 3rem;
         }
@@ -96,23 +96,22 @@ useHead({
     .content {
       background-color: var(--phl-content-bg);
 
-      .content-column {
+      &:before {
         background-color: white;
         border: 1px solid var(--slate-06);
         outline: 1px solid var(--slate-02);
         margin-top: 1.2rem;
         border-radius: 0.8rem;
+      }
+      .content-slot {
+        background-color: var(--phl-content-inner);
+        color: black;
 
-        .content-slot {
-          background-color: var(--phl-content-inner);
-          color: black;
+        background-color: var(--phl-content-inner);
+        margin: 1.2rem;
 
-          background-color: var(--phl-content-inner);
-          margin: 1.2rem;
-
-          .some-class {
-            min-height: 40svh;
-          }
+        .some-class {
+          min-height: 40svh;
         }
       }
     }

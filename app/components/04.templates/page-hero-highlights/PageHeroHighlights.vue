@@ -6,7 +6,7 @@
     :aria-labelledby="ariaLabelledby"
   >
     <div class="header">
-      <div class="header-column">
+      <div class="header-slot">
         <slot name="header" :heading-id="headingId"></slot>
       </div>
     </div>
@@ -14,10 +14,8 @@
       <slot name="highlights"></slot>
     </div>
     <div class="content">
-      <div class="content-column">
-        <div class="content-slot">
-          <slot name="content"></slot>
-        </div>
+      <div class="content-slot">
+        <slot name="content"></slot>
       </div>
     </div>
   </component>
@@ -73,8 +71,9 @@ watch(
 
 <style lang="css">
 .page-hero-highlights {
+  /* User themable tokens */
   --phl-header-bg: darkblue;
-  --phl-content-bg: lightslategray;
+  --phl-content-bg: red;
   --phl-content-inner: white;
 
   --highlight-title-height: 1fr;
@@ -98,7 +97,7 @@ watch(
     grid-template-rows: subgrid;
     background-color: var(--phl-header-bg);
 
-    .header-column {
+    .header-slot {
       grid-column: 2; /* centre column only */
       grid-row: 1; /* row 1 only — content height drives row 1, pushing highlights down */
     }
@@ -169,7 +168,8 @@ watch(
     position: relative;
     isolation: isolate;
 
-    .content-column {
+    &:before {
+      content: "";
       grid-template-columns: subgrid;
       grid-template-rows: subgrid;
       display: grid;
@@ -178,11 +178,10 @@ watch(
       grid-row: 1 / span 2; /* rows 2–3: fills behind highlights + real content zone */
 
       /* z-index: -1; */
-
-      .content-slot {
-        grid-column: 2;
-        grid-row: 2; /* row 4 of main grid — content never underflows highlights */
-      }
+    }
+    .content-slot {
+      grid-column: 2;
+      grid-row: 2; /* row 4 of main grid — content never underflows highlights */
     }
   }
 }
