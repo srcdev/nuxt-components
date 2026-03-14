@@ -78,7 +78,7 @@ watch(
   --highlights-row-initial-item-offset: 1.2rem;
 
   --highlight-rows-gap: 1.2rem;
-  --highlight-title-height: 1fr;
+  --highlight-title-height: 1fr; /* see: highlight-title-baseline class below */
   --highlight-padding-block-start: 1.2rem;
   --highlight-padding: 1.2rem;
 

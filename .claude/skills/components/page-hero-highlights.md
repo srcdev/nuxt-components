@@ -12,22 +12,22 @@ The layout uses a 4-row CSS Grid with `subgrid` — no `translate`, negative mar
 
 ## Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `tag` | `"div" \| "section" \| "main"` | `"div"` | Root element tag |
-| `highlightsEqualWidths` | `boolean` | `false` | Equal-width grid columns for highlight items |
-| `highlightsJustify` | `"start" \| "center" \| "end" \| "space-between" \| "space-around"` | `"start"` | Alignment of highlight items along the main axis |
-| `maxWidth` | `string` | `undefined` | Cap the central content column (e.g. `"1064px"`). Gutters grow to enforce the constraint; below this width they hold at `16px`. |
-| `contentAlign` | `"start" \| "center"` | `"center"` | When `maxWidth` is set: `"center"` grows gutters equally; `"start"` pins content to the left with a fixed `16px` left gutter. |
-| `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the root element |
+| Prop                    | Type                                                                | Default     | Description                                                                                                                     |
+| ----------------------- | ------------------------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `tag`                   | `"div" \| "section" \| "main"`                                      | `"div"`     | Root element tag                                                                                                                |
+| `highlightsEqualWidths` | `boolean`                                                           | `false`     | Equal-width grid columns for highlight items                                                                                    |
+| `highlightsJustify`     | `"start" \| "center" \| "end" \| "space-between" \| "space-around"` | `"start"`   | Alignment of highlight items along the main axis                                                                                |
+| `maxWidth`              | `string`                                                            | `undefined` | Cap the central content column (e.g. `"1064px"`). Gutters grow to enforce the constraint; below this width they hold at `16px`. |
+| `contentAlign`          | `"start" \| "center"`                                               | `"center"`  | When `maxWidth` is set: `"center"` grows gutters equally; `"start"` pins content to the left with a fixed `16px` left gutter.   |
+| `styleClassPassthrough` | `string \| string[]`                                                | `[]`        | Extra classes on the root element                                                                                               |
 
 ## Slots
 
-| Slot | Slot props | Purpose |
-|------|-----------|---------|
-| `header` | `{ headingId: string }` | Header zone — text, title, subtitle |
-| `highlights` | — | Highlight cards in the strip |
-| `content` | — | Page body content below the strip |
+| Slot         | Slot props              | Purpose                             |
+| ------------ | ----------------------- | ----------------------------------- |
+| `header`     | `{ headingId: string }` | Header zone — text, title, subtitle |
+| `highlights` | —                       | Highlight cards in the strip        |
+| `content`    | —                       | Page body content below the strip   |
 
 ## Basic usage
 
@@ -54,12 +54,12 @@ The layout uses a 4-row CSS Grid with `subgrid` — no `translate`, negative mar
 
 Each slot accepts any content, but these library components are natural fits:
 
-| Slot | Component | Notes |
-|------|-----------|-------|
-| `#header` | `HeroText` | Heading with accent text, icon, and configurable size — wires `headingId` for `aria-labelledby` |
-| `#highlights` | `ServicesCard` (×n) | Portrait cards with image, title, description, and CTA slot |
-| `#highlights` | `LayoutGridByCols` wrapping cards | When you want a responsive column grid rather than a single row of cards |
-| `#content` | Any content component | Below the straddle — safe to use `LayoutRow`, `ServicesSection`, etc. |
+| Slot          | Component                         | Notes                                                                                           |
+| ------------- | --------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `#header`     | `HeroText`                        | Heading with accent text, icon, and configurable size — wires `headingId` for `aria-labelledby` |
+| `#highlights` | `ServicesCard` (×n)               | Portrait cards with image, title, description, and CTA slot                                     |
+| `#highlights` | `LayoutGridByCols` wrapping cards | When you want a responsive column grid rather than a single row of cards                        |
+| `#content`    | Any content component             | Below the straddle — safe to use `LayoutRow`, `ServicesSection`, etc.                           |
 
 Example with `HeroText` in the header slot:
 
@@ -124,7 +124,7 @@ See [css-grid-max-width-gutters.md](../css-grid-max-width-gutters.md) for the fu
 
 ## Local style override scaffold
 
-When consuming this component, scaffold a style block using `styleClassPassthrough`. The comments below show every overridable property — delete the block if unused.
+When consuming this component, scaffold a style block using `styleClassPassthrough`. The block below lists every available CSS custom property — update the values you need and delete the rest.
 
 See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
 
@@ -135,23 +135,49 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 
 <style>
 /* ─── PageHeroHighlights local overrides ────────────────────────────
-   Colours, borders, geometry only — do not override behaviour.
-   Delete this block if no overrides are needed.
+   Update values as needed. Delete tokens you are not overriding.
    ─────────────────────────────────────────────────────────────────── */
 .page-hero-highlights {
   &.my-page-hero {
-    /* Colours */
-    /* --phl-header-bg: var(--brand-primary); */
-    /* --phl-content-bg: var(--brand-surface); */
+    /* Header zone */
+    /* --header-row-background-colour: darkblue; */
+
+    /* Highlights strip */
+    /* --highlights-row-item-gap: 1rem; */
+    /* --highlights-row-initial-item-offset: 1.2rem; */
+
+    /* Highlight cards */
+    /* --highlight-rows-gap: 1.2rem; */
+    /* --highlight-title-height: 1fr; */ /* see: highlight-title-baseline prop */
+    /* --highlight-padding-block-start: 1.2rem; */
+    /* --highlight-padding: 1.2rem; */
+    /* --highlight-background-color: white; */
+    /* --highlight-border: 1px solid black; */
+    /* --highlight-border-radius: 8px; */
+    /* --highlight-color: black; */
+
+    /* Content zone */
+    /* --content-row-background-color: var(--slate-01); */ /* transparent */
+    /* --content-row-start-gap: 1.2rem; */
+    /* --content-row-end-gap: 1.2rem; */
+
+    /* Content slot decorative border */
+    /* --content-slot-margin-block-start: 2.4rem; */
+    /* --content-slot-margin: var(--highlights-row-initial-item-offset); */
+    /* --content-slot-background-color: var(--slate-00); */
+    /* --content-slot-border: 1px solid var(--slate-06); */
+    /* --content-slot-border-radius: 0.8rem; */
+    /* --content-slot-outline: 1px solid var(--slate-02); */
+
+    /* When using :highlight-title-baseline="true" */
+    /* &.highlight-title-baseline { */
+    /*   --highlight-title-height: 4rem; */ /* proportional value preferred */
+    /*   --highlight-padding-block-start: 0; */
+    /* } */
   }
 }
 </style>
 ```
-
-| Custom property | Zone | Notes |
-|----------------|------|-------|
-| `--phl-header-bg` | Header background | Full edge-to-edge band behind the header slot |
-| `--phl-content-bg` | Content/highlights background | Band behind the highlights straddle and content slot |
 
 > **Note:** The minimum gutter width (`16px`) and layout behaviour are not overridable via CSS custom properties. Use the `max-width` and `content-align` props to control column constraints.
 
@@ -165,12 +191,12 @@ row3: highlights bottom half
 row4: page content (never underflows highlights)
 ```
 
-`.header` spans cols 1–3, rows 1–2 (edge-to-edge bg).
-`.content` spans cols 1–3, rows 3–4 (bg fills behind highlights; `.content-inner` is placed in row 4 only).
+`.header-row` spans cols 1–3, rows 1–2 (edge-to-edge bg). `.header-slot` is placed in row 1 only.
+`.content-row` spans cols 1–3, rows 3–4 (bg fills behind highlights; `.content-slot` is placed in row 4 only). The decorative border behind `.content-slot` is rendered via `.content-row:before` — there is no separate DOM element for it.
 
-## Layout pitfall: do not use `grid-template-rows: subgrid` inside `.highlights`
+## Layout pitfall: do not use `grid-template-rows: subgrid` inside `.highlights-row`
 
-The `.highlights` element spans rows 2–3 of the parent grid (the "straddle"). If you add an inner grid to `.highlights` (e.g. to extend `equal-widths` behaviour) and include `grid-template-rows: subgrid`, auto-placed items will only occupy row 1 of the subgrid (= parent row 2). Parent row 3 collapses to 0-height, destroying the straddle effect — `.content` appears immediately below the highlights instead of overlapping it.
+The `.highlights-row` element spans rows 2–3 of the parent grid (the "straddle"). If you add an inner grid to `.highlights-row` (e.g. to extend `equal-widths` behaviour) and include `grid-template-rows: subgrid`, auto-placed items will only occupy row 1 of the subgrid (= parent row 2). Parent row 3 collapses to 0-height, destroying the straddle effect — `.content-row` appears immediately below the highlights instead of overlapping it.
 
 ```css
 /* ❌ — breaks the straddle when items are auto-placed by column flow */
