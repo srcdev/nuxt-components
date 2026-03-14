@@ -7,7 +7,7 @@
           content-align="center"
           :highlights-equal-widths="false"
           highlights-justify="start"
-          :highlight-title-tracks-header-bsaeline="false"
+          :highlight-title-baseline="true"
           :style-class-passthrough="['mbe-32']"
         >
           <template #header>

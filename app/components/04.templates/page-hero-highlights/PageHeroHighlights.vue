@@ -30,7 +30,7 @@ interface Props {
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
   maxWidth?: string;
   contentAlign?: "start" | "center";
-  highlightTitleTracksHeaderBsaeline?: boolean;
+  highlightTitleBaseline?: boolean;
   styleClassPassthrough?: string | string[];
 }
 
@@ -40,7 +40,7 @@ const props = withDefaults(defineProps<Props>(), {
   highlightsJustify: "start",
   maxWidth: undefined,
   contentAlign: "center",
-  highlightTitleTracksHeaderBsaeline: false,
+  highlightTitleBaseline: false,
   styleClassPassthrough: () => [],
 });
 
@@ -52,7 +52,7 @@ const gridColumns = computed(() => {
 
 const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
 const componentClasses = computed(() => ({
-  "highlight-title-tracks-header-bsaeline": props.highlightTitleTracksHeaderBsaeline,
+  "highlight-title-baseline": props.highlightTitleBaseline,
 }));
 
 const highlightClasses = computed(() => ({
@@ -80,7 +80,7 @@ watch(
   --highlight-title-height: 1fr;
   --highlight-padding: 1.2rem;
 
-  &.highlight-title-tracks-header-bsaeline {
+  &.highlight-title-baseline {
     --highlight-title-height: 4rem; /* We need to manually tweak height, preferrably a proportional value as we're not setting an top padding when not prop.highlight-title-tracks-header-bsaeline */
     --highlight-padding: 0; /* We're setting the title height via row height, so this should be exposed for override in consuming page */
   }
