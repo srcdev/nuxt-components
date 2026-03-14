@@ -30,6 +30,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── component-prop-driven-container-layout.md — vary CSS grid layout inside @container queries using data-* attribute selectors
 ├── css-grid-max-width-gutters.md             — cap a centre grid column width by growing gutters, with start/center alignment variants
 ├── component-aria-landmark.md        — useAriaLabelledById composable: aria-labelledby for section/main/article/aside tags
+├── component-export-types.md         — move inline component types to app/types/components/ barrel for consumer imports
 └── components/
     ├── accordian-core.md       — AccordianCore indexed dynamic slots (accordian-{n}-summary/icon/content), exclusive-open grouping
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling

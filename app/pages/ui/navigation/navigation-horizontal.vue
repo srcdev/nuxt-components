@@ -229,7 +229,7 @@
 </template>
 
 <script setup lang="ts">
-import type { NavItemData } from "~/components/02.molecules/navigation/navigation-horizontal/NavigationHorizontal.vue";
+import type { NavItemData } from "~/types/components/navigation-horizontal.d";
 definePageMeta({
   layout: false,
 });
