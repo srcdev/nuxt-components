@@ -2,7 +2,13 @@
   <component :is="tag" class="contact-section" :class="[elementClasses]">
     <div class="contact-section-inner">
       <div class="contact-section-info">
-        <StepperList tag="ul" :connected="false" indicator-alignment="top" :item-count="3">
+        <StepperList
+          tag="ul"
+          :connected="false"
+          indicator-alignment="top"
+          :item-count="3"
+          :indicator-size="indicatorSize"
+        >
           <template #indicator-0>
             <slot name="indicator-0"></slot>
           </template>
@@ -41,10 +47,12 @@
 <script setup lang="ts">
 interface Props {
   tag?: "div" | "section" | "article" | "main";
+  indicatorSize?: string;
   styleClassPassthrough?: string | string[];
 }
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
+  indicatorSize: "3rem",
   styleClassPassthrough: () => [],
 });
 
@@ -60,28 +68,28 @@ watch(
 
 <style lang="css">
 @layer components {
-.contact-section {
-  .contact-section-inner {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    align-items: start;
+  .contact-section {
+    .contact-section-inner {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: start;
 
-    @media (width >= 768px) {
-      grid-template-columns: repeat(2, 1fr);
-    }
+      @media (width >= 768px) {
+        grid-template-columns: repeat(2, 1fr);
+      }
 
-    .contact-section-info {
-    }
+      .contact-section-info {
+      }
 
-    .contact-section-form {
-      /* outline: 1px solid green; */
+      .contact-section-form {
+        /* outline: 1px solid green; */
 
-      form {
-        /* outline: 1px solid red; */
+        form {
+          /* outline: 1px solid red; */
+        }
       }
     }
   }
-}
 }
 </style>

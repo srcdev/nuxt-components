@@ -1,5 +1,10 @@
 <template>
-  <component :is="tag" ref="listEl" class="stepper-list" :class="[elementClasses, { 'has-connectors': props.connected }]">
+  <component
+    :is="tag"
+    ref="listEl"
+    class="stepper-list"
+    :class="[elementClasses, { 'has-connectors': props.connected }]"
+  >
     <li
       v-for="index in itemCount"
       :key="index"
@@ -10,9 +15,7 @@
       ]"
     >
       <div
-        :class="
-          $slots[`indicator-${index - 1}`] ? 'stepper-list__indicator-custom' : 'stepper-list__indicator-counter'
-        "
+        :class="$slots[`indicator-${index - 1}`] ? 'stepper-list__indicator-custom' : 'stepper-list__indicator-counter'"
       >
         <slot :name="`indicator-${index - 1}`"></slot>
       </div>
@@ -56,10 +59,10 @@ function updateConnectors() {
     if (i >= lis.length - 1) return;
 
     const indicator = li.querySelector<HTMLElement>(
-      ".stepper-list__indicator-counter, .stepper-list__indicator-custom",
+      ".stepper-list__indicator-counter, .stepper-list__indicator-custom"
     );
     const nextIndicator = lis[i + 1]?.querySelector<HTMLElement>(
-      ".stepper-list__indicator-counter, .stepper-list__indicator-custom",
+      ".stepper-list__indicator-counter, .stepper-list__indicator-custom"
     );
 
     if (!indicator || !nextIndicator) return;
@@ -90,105 +93,105 @@ watch(
   async () => {
     await nextTick();
     updateConnectors();
-  },
+  }
 );
 </script>
 
 <style lang="css">
 @layer components {
-.stepper-list {
-  --_list-padding-block: 1.2rem;
-  --_counter-size: v-bind(indicatorSize);
-  --_stepper-list-connector-width: 0.2rem;
+  .stepper-list {
+    --_list-padding-block: 1.2rem;
+    --_counter-size: v-bind(indicatorSize);
+    --_stepper-list-connector-width: 0.2rem;
 
-  list-style: none;
-  counter-reset: stepper-list;
-  padding: 0;
+    list-style: none;
+    counter-reset: stepper-list;
+    padding: 0;
 
-  li {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 2.2rem;
-    counter-increment: stepper-list;
-    padding-inline-start: 0rem;
-    padding-block: var(--_list-padding-block);
-    position: relative;
-
-    &.indicator-top {
-      align-items: start;
-    }
-
-    &.indicator-center {
-      align-items: center;
-    }
-
-    .stepper-list__indicator-counter::before {
-      content: counter(stepper-list);
-
+    li {
       display: grid;
-      place-content: center;
-      width: var(--_counter-size);
-      height: var(--_counter-size);
-      font-size: 1.4rem;
-      font-weight: 600;
-    }
+      grid-template-columns: auto 1fr;
+      gap: 2.2rem;
+      counter-increment: stepper-list;
+      padding-inline-start: 0rem;
+      padding-block: var(--_list-padding-block);
+      position: relative;
 
-    &.indicator-circle .stepper-list__indicator-counter::before {
-      background-color: var(--stepper-list-counter-circle-background);
-      color: var(--stepper-list-counter-circle-text);
-      border: 2px solid var(--stepper-list-counter-circle-border);
-      border-radius: 100vw;
-    }
+      &.indicator-top {
+        align-items: start;
+      }
 
-    &.indicator-disc .stepper-list__indicator-counter::before {
-      background-color: var(--stepper-list-counter-disc-background);
-      color: var(--stepper-list-counter-disc-text);
-      border: 2px solid var(--stepper-list-counter-disc-border);
-      border-radius: 100vw;
-    }
+      &.indicator-center {
+        align-items: center;
+      }
 
-    &.indicator-square .stepper-list__indicator-counter::before {
-      background-color: var(--stepper-list-counter-square-background);
-      color: var(--stepper-list-counter-square-text);
-      border: 2px solid var(--stepper-list-counter-square-border);
-      border-radius: 0.25rem;
-    }
+      .stepper-list__indicator-counter::before {
+        content: counter(stepper-list);
 
-    &.has-indicator::before {
-      display: none;
-    }
-
-    .stepper-list__indicator-custom,
-    .stepper-list__indicator-counter {
-      anchor-name: --indicator-bubble;
-    }
-
-    .stepper-list__indicator-custom {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-
-      .indicator-icon {
-        color: var(--stepper-list-icon);
+        display: grid;
+        place-content: center;
         width: var(--_counter-size);
         height: var(--_counter-size);
+        font-size: 1.4rem;
+        font-weight: 600;
+      }
+
+      &.indicator-circle .stepper-list__indicator-counter::before {
+        background-color: var(--stepper-list-counter-circle-background);
+        color: var(--stepper-list-counter-circle-text);
+        border: 2px solid var(--stepper-list-counter-circle-border);
+        border-radius: 100vw;
+      }
+
+      &.indicator-disc .stepper-list__indicator-counter::before {
+        background-color: var(--stepper-list-counter-disc-background);
+        color: var(--stepper-list-counter-disc-text);
+        border: 2px solid var(--stepper-list-counter-disc-border);
+        border-radius: 100vw;
+      }
+
+      &.indicator-square .stepper-list__indicator-counter::before {
+        background-color: var(--stepper-list-counter-square-background);
+        color: var(--stepper-list-counter-square-text);
+        border: 2px solid var(--stepper-list-counter-square-border);
+        border-radius: 0.25rem;
+      }
+
+      &.has-indicator::before {
+        display: none;
+      }
+
+      .stepper-list__indicator-custom,
+      .stepper-list__indicator-counter {
+        anchor-name: --indicator-bubble;
+      }
+
+      .stepper-list__indicator-custom {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        .indicator-icon {
+          color: var(--stepper-list-icon);
+          width: var(--_counter-size) !important;
+          height: var(--_counter-size) !important;
+        }
       }
     }
   }
-}
 
-.stepper-list.has-connectors li:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  left: calc(var(--_counter-size) / 2);
-  transform: translateX(-50%);
-  /* JS sets --_connector-top and --_connector-height from measured indicator positions.
+  .stepper-list.has-connectors li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: calc(var(--_counter-size) / 2);
+    transform: translateX(-50%);
+    /* JS sets --_connector-top and --_connector-height from measured indicator positions.
      The fallback values handle the indicator-top case before JS runs. */
-  top: var(--_connector-top, calc(var(--_list-padding-block) + var(--_counter-size)));
-  height: var(--_connector-height, auto);
-  bottom: calc(-1 * var(--_list-padding-block));
-  width: var(--_stepper-list-connector-width);
-  background-color: var(--stepper-list-connector-color, currentColor);
-}
+    top: var(--_connector-top, calc(var(--_list-padding-block) + var(--_counter-size)));
+    height: var(--_connector-height, auto);
+    bottom: calc(-1 * var(--_list-padding-block));
+    width: var(--_stepper-list-connector-width);
+    background-color: var(--stepper-list-connector-color, currentColor);
+  }
 }
 </style>
