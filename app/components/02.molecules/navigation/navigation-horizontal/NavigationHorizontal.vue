@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import type { NavItem, NavItemData } from "~/types/components/navigation-horizontal.d";
+import type { NavItemData } from "~/types/components/navigation-horizontal.d";
 
 interface Props {
   tag?: "ol" | "ul" | "div";
@@ -37,14 +37,43 @@ watch(
 <style lang="css">
 @layer components {
   .navigation-horizontal {
-    --_border-block-start-size: 0;
-    --_border-block-end-size: 3px;
+    /* ─── Public token API ─────────────────────────────────────────── */
 
-    --_active-link-colour: lime;
+    /* Colours */
+    --_nav-canvas-colour: var(--page-bg);
+    --_active-link-colour: var(--nav-active-colour, lime);
+    --_link-colour: var(--nav-link-colour, light-dark(hsl(0 0% 10%), hsl(0 0% 100%)));
+    --_link-bg: var(--nav-link-bg, light-dark(hsl(0 0% 88%), hsl(0 0% 20%)));
+    --_border-colour: var(--nav-border-colour, light-dark(hsl(0 0% 0% / 0.15), hsl(0 0% 100% / 0.2)));
+
+    /* Borders */
+    --_border-block-start-size: var(--nav-border-start, 0);
+    --_border-block-end-size: var(--nav-border-end, 3px);
+
+    /* Layout */
+    --_list-padding: var(--nav-list-padding, 2rem);
+    --_list-gap: var(--nav-list-gap, 1rem);
+    --_link-padding-block: var(--nav-link-padding-block, 0.5rem);
+    --_link-padding-inline: var(--nav-link-padding-inline, 1rem);
+    --_link-border-radius: var(--nav-link-border-radius, 0.2rem);
+
+    /* Glow effect */
+    --_glow-pos-x: var(--nav-glow-pos-x, 50%);
+    --_glow-pos-y: var(--nav-glow-pos-y, 100%);
+    --_glow-inner-stop: var(--nav-glow-inner-stop, 10%);
+    --_glow-outer-stop: var(--nav-glow-outer-stop, 75%);
+    --_glow-size: var(--nav-glow-size, 32px);
+    --_glow-opacity: var(--nav-glow-opacity, 0.5);
+    --_anchor-offset: var(--nav-anchor-offset, 40px);
+
+    /* Animation */
+    --_transition-duration: var(--nav-transition-duration, 300ms);
+
+    /* ─────────────────────────────────────────────────────────────── */
 
     anchor-name: --active-nav;
 
-    background-color: var(--page-bg);
+    background-color: var(--_nav-canvas-colour);
 
     &::after {
       content: "";
@@ -52,18 +81,24 @@ watch(
       border-block-end: var(--_border-block-end-size) solid transparent;
 
       background:
-        radial-gradient(var(--page-bg)) padding-box,
-        radial-gradient(var(--_active-link-colour), transparent) border-box;
-
-      /* background:
-        radial-gradient(ellipse at 50% 100%, transparent 10%, var(--page-bg) 75%) padding-box,
-        radial-gradient(ellipse at 50% 100%, var(--_active-link-colour) 10%, transparent 75%) border-box; */
+        radial-gradient(
+            ellipse at var(--_glow-pos-x) var(--_glow-pos-y),
+            transparent var(--_glow-inner-stop),
+            var(--page-bg) var(--_glow-outer-stop)
+          )
+          padding-box,
+        radial-gradient(
+            ellipse at var(--_glow-pos-x) var(--_glow-pos-y),
+            var(--_active-link-colour) var(--_glow-inner-stop),
+            transparent var(--_glow-outer-stop)
+          )
+          border-box;
 
       position: absolute;
       position-anchor: --active-nav;
 
-      left: calc(anchor(left) - 40px);
-      right: calc(anchor(right) - 40px);
+      left: calc(anchor(left) - var(--_anchor-offset));
+      right: calc(anchor(right) - var(--_anchor-offset));
       top: anchor(top --nav-ul);
       bottom: anchor(bottom --nav-ul);
 
@@ -72,7 +107,7 @@ watch(
 
       opacity: 0;
       transition:
-        inset 300ms,
+        inset var(--_transition-duration),
         opacity 700ms;
       transition-delay: 700ms, 0ms;
     }
@@ -80,8 +115,8 @@ watch(
     .navigation-horizontal-list {
       anchor-name: --nav-ul;
 
-      border-block-start: var(--_border-block-start-size) solid hsl(0 0% 100% / 0.2);
-      border-block-end: var(--_border-block-end-size) solid hsl(0 0% 100% / 0.2);
+      border-block-start: var(--_border-block-start-size) solid var(--_border-colour);
+      border-block-end: var(--_border-block-end-size) solid var(--_border-colour);
 
       a:is(:hover, :focus) {
         anchor-name: --active-nav;
@@ -99,29 +134,27 @@ watch(
       .navigation-horizontal-list {
         list-style: none;
         margin: 0rem;
-        padding: 2rem;
-        gap: 3rem;
+        padding: var(--_list-padding);
+        gap: var(--_list-gap);
 
         display: flex;
         justify-content: center;
       }
 
       a {
-        color: white;
+        color: var(--_link-colour);
         text-decoration: none;
-        padding: 0.5rem 1rem;
+        padding: var(--_link-padding-block) var(--_link-padding-inline);
 
-        border-radius: 0.2rem;
-        /* border: 2px solid hsl(0 0 100% / 0.25); */
+        border-radius: var(--_link-border-radius);
         border-bottom: 2px solid transparent;
-        background: hsl(0 0 20%);
-        transition: background-color 300ms;
+        background: var(--_link-bg);
+        transition: background-color var(--_transition-duration);
       }
 
       a:is(:hover, :focus) {
-        /* background: var(--_active-link-colour); */
         border-color: var(--_active-link-colour);
-        box-shadow: 0 0 32px oklch(from var(--_active-link-colour) l c h / 0.5);
+        box-shadow: 0 0 var(--_glow-size) oklch(from var(--_active-link-colour) l c h / var(--_glow-opacity));
       }
     }
   }

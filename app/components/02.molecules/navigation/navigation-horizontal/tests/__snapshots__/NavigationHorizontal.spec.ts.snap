@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NavigationHorizontal > renders correct HTML structure 1`] = `
+"<nav class="navigation-horizontal">
+  <ul class="navigation-horizontal-list">
+    <li class=""><a href="/">
+        <!--v-if--> Home
+      </a></li>
+    <li class=""><a href="/about">
+        <!--v-if--> About
+      </a></li>
+    <li class=""><a href="/contact">
+        <!--v-if--> Contact
+      </a></li>
+  </ul>
+</nav>"
+`;

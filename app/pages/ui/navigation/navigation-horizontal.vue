@@ -13,19 +13,10 @@
 
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-4']">
           <LayoutRow tag="div" variant="content">
-            <h3 class="page-heading-3">Control settings</h3>
-          </LayoutRow>
-          <div class="nav-preview" :class="`theme-${theme}`" :style="navStyle">
-            <NavigationHorizontal :nav-item-data="navItemData" />
-          </div>
-        </LayoutRow>
-
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-4']">
-          <LayoutRow tag="div" variant="content">
             <h3 class="page-heading-3">User controllable</h3>
           </LayoutRow>
           <div class="nav-preview" :class="`theme-${theme}`" :style="navStyle">
-            <NavigationHorizontalAdvanced :nav-item-data="navItemData" />
+            <NavigationHorizontal :nav-item-data="navItemData" />
           </div>
         </LayoutRow>
 
