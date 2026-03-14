@@ -10,6 +10,10 @@ const meta: Meta<typeof ContactSection> = {
       options: ["div", "section", "article", "main"],
       description: "HTML element to render as the root",
     },
+    stepperIndicatorSize: {
+      control: "text",
+      description: "Size of the StepperList indicator bubble (any valid CSS length)",
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes applied to the root element",
@@ -17,6 +21,7 @@ const meta: Meta<typeof ContactSection> = {
   },
   args: {
     tag: "div",
+    stepperIndicatorSize: "3rem",
     styleClassPassthrough: [],
   },
 };

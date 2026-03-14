@@ -14,7 +14,8 @@
       "Bash(npx vitest run)",
       "Bash(git mv:*)",
       "Bash(npx tsc:*)",
-      "Bash(npx vitest:*)"
+      "Bash(npx vitest:*)",
+      "Bash(git show:*)"
     ],
     "additionalDirectories": [
       "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms/content-wrappers/content-width",

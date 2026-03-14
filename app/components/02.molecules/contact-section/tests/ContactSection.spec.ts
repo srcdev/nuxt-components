@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import ContactSection from "./ContactSection.vue";
+import StepperList from "../../stepper-list/StepperList.vue";
 
 describe("ContactSection", () => {
   // ─── Mount ───────────────────────────────────────────────────────────────
@@ -172,6 +173,20 @@ describe("ContactSection", () => {
   it("renders cleanly with no styleClassPassthrough prop", async () => {
     const wrapper = await mountSuspended(ContactSection);
     expect(wrapper.classes()).toContain("contact-section");
+  });
+
+  // ─── stepperIndicatorSize ─────────────────────────────────────────────────
+
+  it("passes stepperIndicatorSize to the internal StepperList", async () => {
+    const wrapper = await mountSuspended(ContactSection, {
+      props: { stepperIndicatorSize: "4rem" },
+    });
+    expect(wrapper.findComponent(StepperList).props("indicatorSize")).toBe("4rem");
+  });
+
+  it("uses the default stepperIndicatorSize of 3rem", async () => {
+    const wrapper = await mountSuspended(ContactSection);
+    expect(wrapper.findComponent(StepperList).props("indicatorSize")).toBe("3rem");
   });
 
   // ─── Combined ─────────────────────────────────────────────────────────────

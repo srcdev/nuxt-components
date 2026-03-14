@@ -223,6 +223,34 @@ const style = (el.element as HTMLElement).style;
 expect(style.getPropertyValue("--custom-prop")).toBe("expected-value");
 ```
 
+**`v-bind()` in CSS — root component only.** Vue's `v-bind(propName)` in a component's `<style>` block sets `--v-bind-propName` on that component's root element in JSDOM. This only works when the component under test **is** the root wrapper. When the component is rendered as a **child** inside a parent, JSDOM does not apply those inline styles — `getPropertyValue` returns `""`.
+
+```ts
+// ❌ Won't work — StepperList is a child; JSDOM doesn't apply its v-bind() styles
+const list = wrapper.find(".stepper-list");
+expect((list.element as HTMLElement).style.getPropertyValue("--v-bind-indicatorSize")).toBe("4rem");
+
+// ✅ Use findComponent + props() to test prop pass-through to a child component
+expect(wrapper.findComponent(StepperList).props("indicatorSize")).toBe("4rem");
+```
+
+## Testing prop pass-through to child components
+
+When a parent component forwards a prop to a child, use `findComponent` + `.props()` rather than inspecting the DOM:
+
+```ts
+import ChildComponent from "../../child/ChildComponent.vue";
+
+it("passes myProp to ChildComponent", async () => {
+  const wrapper = await mountSuspended(ParentComponent, {
+    props: { myProp: "value" },
+  });
+  expect(wrapper.findComponent(ChildComponent).props("myProp")).toBe("value");
+});
+```
+
+Import the child component directly in the test file — it is not auto-imported there.
+
 ## Mocking browser APIs
 
 Mock before the `describe` block if the component uses ResizeObserver, IntersectionObserver, etc.:
