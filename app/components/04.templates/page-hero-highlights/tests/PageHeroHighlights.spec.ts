@@ -139,6 +139,18 @@ describe("PageHeroHighlights", () => {
     }
   });
 
+  it("does not apply highlight-title-baseline class by default", async () => {
+    const wrapper = await mountSuspended(PageHeroHighlights);
+    expect(wrapper.find(".page-hero-highlights").classes()).not.toContain("highlight-title-baseline");
+  });
+
+  it("applies highlight-title-baseline class when highlightTitleBaseline is true", async () => {
+    const wrapper = await mountSuspended(PageHeroHighlights, {
+      props: { highlightTitleBaseline: true },
+    });
+    expect(wrapper.find(".page-hero-highlights").classes()).toContain("highlight-title-baseline");
+  });
+
   it("applies styleClassPassthrough classes", async () => {
     const wrapper = await mountSuspended(PageHeroHighlights, {
       props: { styleClassPassthrough: ["extra-class", "another-class"] },

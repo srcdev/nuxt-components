@@ -8,6 +8,7 @@ type StoryArgs = {
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
   maxWidth?: string;
   contentAlign?: "start" | "center";
+  highlightTitleBaseline?: boolean;
   headerBackground?: string;
   contentBackground?: string;
   highlightCount?: 1 | 2 | 3;
@@ -44,6 +45,10 @@ const meta: Meta<StoryArgs> = {
       description:
         "Align the content column to the start (left gutter stays 16px, right takes remaining space) or center (equal gutters). Only meaningful when maxWidth is set.",
     },
+    highlightTitleBaseline: {
+      control: "boolean",
+      description: "When true, fixes the highlight title row to a set height so titles align to the header baseline. Override --highlight-title-height in the consuming page to tune the value.",
+    },
     headerBackground: {
       control: "color",
       description: "Background colour of the header zone (sets --phl-header-bg)",
@@ -68,6 +73,7 @@ const meta: Meta<StoryArgs> = {
     highlightsJustify: "start",
     maxWidth: "",
     contentAlign: "center",
+    highlightTitleBaseline: false,
     headerBackground: "",
     contentBackground: "",
     highlightCount: 1,
