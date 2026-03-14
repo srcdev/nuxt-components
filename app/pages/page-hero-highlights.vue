@@ -7,6 +7,7 @@
           content-align="center"
           :highlights-equal-widths="false"
           highlights-justify="start"
+          :highlight-title-tracks-header-bsaeline="false"
           :style-class-passthrough="['mbe-32']"
         >
           <template #header>
@@ -17,8 +18,11 @@
           </template>
           <template #highlights>
             <div class="highlight">
-              <h3 class="page-heading-3 mbe-8">Key Metrics</h3>
-              <p class="page-body-normal">Your most important stats at a glance.</p>
+              <div class="title"><h3 class="page-heading-3 m-0">Key Metrics</h3></div>
+              <div class="body">
+                <p class="page-body-normal">Your most important stats at a glance.</p>
+                <p class="page-body-normal">Your most important stats at a glance.</p>
+              </div>
             </div>
           </template>
           <template #content>
@@ -57,13 +61,13 @@ useHead({
   /* CSS styles */
   .page-hero-highlights {
     --phl-header-bg: darkblue;
-    --phl-content-bg: white;
+    --phl-content-bg: transparent;
     --phl-content-inner: white;
 
     .header {
       background-color: var(--phl-header-bg);
 
-      .header-inner {
+      .header-column {
         .some-header-content {
           padding-block: 4rem 3rem;
         }
@@ -79,7 +83,13 @@ useHead({
         border-radius: 8px;
         color: black;
 
-        padding: 1.2rem;
+        padding-inline: 1.2rem;
+
+        .title {
+        }
+        .body {
+          padding-block: 1.2rem;
+        }
       }
     }
 
@@ -93,15 +103,15 @@ useHead({
         margin-top: 1.2rem;
         border-radius: 0.8rem;
 
-        .content-inner {
+        .content-slot {
           background-color: var(--phl-content-inner);
           color: black;
-          min-height: 75svh;
 
           background-color: var(--phl-content-inner);
           margin: 1.2rem;
 
           .some-class {
+            min-height: 40svh;
           }
         }
       }

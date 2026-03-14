@@ -1,5 +1,10 @@
 <template>
-  <component :is="tag" class="page-hero-highlights" :class="elementClasses" :aria-labelledby="ariaLabelledby">
+  <component
+    :is="tag"
+    class="page-hero-highlights"
+    :class="[elementClasses, componentClasses]"
+    :aria-labelledby="ariaLabelledby"
+  >
     <div class="header">
       <div class="header-column">
         <slot name="header" :heading-id="headingId"></slot>
@@ -25,6 +30,7 @@ interface Props {
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
   maxWidth?: string;
   contentAlign?: "start" | "center";
+  highlightTitleTracksHeaderBsaeline?: boolean;
   styleClassPassthrough?: string | string[];
 }
 
@@ -34,6 +40,7 @@ const props = withDefaults(defineProps<Props>(), {
   highlightsJustify: "start",
   maxWidth: undefined,
   contentAlign: "center",
+  highlightTitleTracksHeaderBsaeline: false,
   styleClassPassthrough: () => [],
 });
 
@@ -44,11 +51,16 @@ const gridColumns = computed(() => {
 });
 
 const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
+const componentClasses = computed(() => ({
+  "highlight-title-tracks-header-bsaeline": props.highlightTitleTracksHeaderBsaeline,
+}));
+
 const highlightClasses = computed(() => ({
   "equal-widths": props.highlightsEqualWidths,
   "flexible-widths": !props.highlightsEqualWidths,
   [`justify-${props.highlightsJustify}`]: true,
 }));
+
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
@@ -59,15 +71,23 @@ watch(
 );
 </script>
 
-<style scoped lang="css">
+<style lang="css">
 .page-hero-highlights {
   --phl-header-bg: darkblue;
   --phl-content-bg: lightslategray;
   --phl-content-inner: white;
 
+  --highlight-title-height: 1fr;
+  --highlight-padding: 1.2rem;
+
+  &.highlight-title-tracks-header-bsaeline {
+    --highlight-title-height: 4rem; /* We need to manually tweak height, preferrably a proportional value as we're not setting an top padding when not prop.highlight-title-tracks-header-bsaeline */
+    --highlight-padding: 0; /* We're setting the title height via row height, so this should be exposed for override in consuming page */
+  }
+
   display: grid;
   grid-template-columns: v-bind(gridColumns);
-  grid-template-rows: auto 1fr 1fr auto; /* 4 rows: header, highlights (straddling header/content boundary), content, bottom padding */
+  grid-template-rows: auto var(--highlight-title-height) 1fr auto;
   gap: 0;
 
   .header {
@@ -118,6 +138,24 @@ watch(
     }
     &.justify-space-around {
       justify-content: space-around;
+    }
+
+    .highlight {
+      display: grid;
+      grid-template-rows: subgrid;
+      grid-auto-flow: row;
+
+      padding-block-start: var(--highlight-padding);
+
+      .title {
+        display: grid;
+        grid-row: 2;
+        align-items: end;
+        height: var(--highlight-title-height);
+      }
+      .body {
+        grid-row: 3;
+      }
     }
   }
 
