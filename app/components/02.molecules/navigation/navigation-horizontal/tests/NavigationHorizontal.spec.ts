@@ -70,9 +70,9 @@ describe("NavigationHorizontal", () => {
       props: { navItemData: defaultNavItemData },
     });
     const links = wrapper.findAll("a");
-    expect(links[0].text()).toContain("Home");
-    expect(links[1].text()).toContain("About");
-    expect(links[2].text()).toContain("Contact");
+    expect(links[0]!.text()).toContain("Home");
+    expect(links[1]!.text()).toContain("About");
+    expect(links[2]!.text()).toContain("Contact");
   });
 
   it("renders item href correctly", async () => {
@@ -80,8 +80,8 @@ describe("NavigationHorizontal", () => {
       props: { navItemData: defaultNavItemData },
     });
     const links = wrapper.findAll("a");
-    expect(links[0].attributes("href")).toBe("/");
-    expect(links[1].attributes("href")).toBe("/about");
+    expect(links[0]!.attributes("href")).toBe("/");
+    expect(links[1]!.attributes("href")).toBe("/about");
   });
 
   it("applies cssName as a class on the li element", async () => {
@@ -109,7 +109,7 @@ describe("NavigationHorizontal", () => {
       props: { navItemData: defaultNavItemData },
     });
     // No Icon component should be rendered for items without iconName
-    expect(wrapper.findAll("li")[0].find("[name]").exists()).toBe(false);
+    expect(wrapper.findAll("li")[0]!.find("[name]").exists()).toBe(false);
   });
 
   it("sets external attribute on external links", async () => {
