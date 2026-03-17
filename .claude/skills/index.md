@@ -32,6 +32,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── component-aria-landmark.md        — useAriaLabelledById composable: aria-labelledby for section/main/article/aside tags
 ├── component-export-types.md         — move inline component types to app/types/components/ barrel for consumer imports
 ├── icon-sets.md                      — icon set packages required by layer components, FOUC prevention, component→package map
+├── robots-env-aware.md               — @nuxtjs/robots: allow crawling on prod domain only, block on preview/staging via env var
 └── components/
     ├── accordian-core.md       — AccordianCore indexed dynamic slots (accordian-{n}-summary/icon/content), exclusive-open grouping
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
