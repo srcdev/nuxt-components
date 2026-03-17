@@ -33,6 +33,16 @@
   --glass-panel-highlight: rgba(255, 255, 255, 0.04);
 
   /* ===========================================
+     HERO TEXT VARIABLES
+     =========================================== */
+  --hero-text-bg-img: linear-gradient(135deg, #c2a770, #b4747e, #d1bd94);
+
+  /* ===========================================
+     EYEBROW TEXT VARIABLES
+     =========================================== */
+  --eyebrow-text-bg-img: linear-gradient(135deg, #c2a770, #b4747e, #d1bd94);
+
+  /* ===========================================
      STEPPER LIST VARIABLES
      =========================================== */
   --stepper-list-counter-circle-background: transparent;
@@ -66,8 +76,16 @@
   /* ===========================================
      TREATMENT CONSULTANT VARIABLES
      =========================================== */
-  --treatment-consultant-primary-colour: var(--blue-03);
-  --treatment-consultant-border-colour: var(--blue-03);
+  --treatment-consultant-primary-colour: var(--amber-02);
+  --treatment-consultant-primary-foreground: var(--amber-02);
+
+  --treatment-consultant-muted-colour: var(--amber-05);
+  --treatment-consultant-muted-foreground: var(--amber-05);
+
+  --treatment-consultant-background: var(--amber-10);
+  --treatment-consultant-foreground: var(--amber-02);
+
+  --treatment-consultant-border-colour: var(--amber-03);
 
   --treatment-consultant-checked-surface-colour: var(--green-10);
   --treatment-consultant-checked-stroke-colour: var(--green-03);

@@ -5,14 +5,14 @@
         <!-- Progress Steps -->
         <div class="treatment-consultant__progress">
           <template v-for="(s, i) in STEPS" :key="s">
-            <div class="treatment-consultant__progress-step">
+            <div class="step">
               <button
                 :class="[
-                  'treatment-consultant__progress-button',
+                  'button',
                   {
-                    'treatment-consultant__progress-button--active': i === step,
-                    'treatment-consultant__progress-button--completed': i < step,
-                    'treatment-consultant__progress-button--inactive': i > step,
+                    'active': i === step,
+                    'completed': i < step,
+                    'inactive': i > step,
                   },
                 ]"
                 @click="
@@ -23,24 +23,25 @@
               >
                 <span
                   :class="[
-                    'treatment-consultant__progress-indicator',
+                    'indicator',
                     {
-                      'treatment-consultant__progress-indicator--completed': i < step,
-                      'treatment-consultant__progress-indicator--active': i === step,
-                      'treatment-consultant__progress-indicator--inactive': i > step,
+                      'completed': i < step,
+                      'active': i === step,
+                      'inactive': i > step,
                     },
                   ]"
                 >
                   {{ i < step ? "✓" : i + 1 }}
                 </span>
-                <span class="treatment-consultant__progress-label">{{ s }}</span>
+                <span class="label">{{ s }}</span>
               </button>
               <div
                 v-if="i < STEPS.length - 1"
                 :class="[
-                  'treatment-consultant__progress-connector',
-                  { 'treatment-consultant__progress-connector--completed': i < step },
+                  'connector',
+                  { 'completed': i < step },
                 ]"
+                aria-hidden="true"
               ></div>
             </div>
           </template>
@@ -257,22 +258,22 @@
                   <p class="treatment-consultant__suitability-notes">{{ colourRecommendation.notes }}</p>
                 </div>
               </div>
-              <div class="treatment-consultant__details-card">
-                <div class="treatment-consultant__details-header">
-                  <span class="treatment-consultant__details-method-label">Processes Required</span>
-                  <span class="treatment-consultant__details-method-badge">{{ colourRecommendation.method }}</span>
+              <div class="card">
+                <div class="header">
+                  <span class="method-label">Processes Required</span>
+                  <span class="method-badge">{{ colourRecommendation.method }}</span>
                 </div>
-                <div class="treatment-consultant__details-list">
+                <div class="treatment-consultant__details">
                   <div
                     v-for="(detail, i) in colourRecommendation.details"
                     :key="i"
                     v-motion="`color-detail-${i}`"
                     :initial="{ opacity: 0, x: -20 }"
                     :enter="{ opacity: 1, x: 0, transition: { delay: i * 100 } }"
-                    class="treatment-consultant__details-item"
+                    class="item"
                   >
-                    <div class="treatment-consultant__details-bullet"></div>
-                    <p class="treatment-consultant__details-text">{{ detail }}</p>
+                    <div class="bullet"></div>
+                    <p class="text">{{ detail }}</p>
                   </div>
                 </div>
               </div>
@@ -306,11 +307,11 @@
               <div
                 v-for="(tr, i) in chosenTreatments"
                 :key="i"
-                class="treatment-consultant__details-card treatment-consultant__details-card--treatment"
+                class="card card--treatment"
               >
-                <div class="treatment-consultant__details-header">
+                <div class="header">
                   <Icon :name="tr.icon" class="treatment-consultant__treatment-icon" />
-                  <span class="treatment-consultant__details-method-label">{{ tr.label }}</span>
+                  <span class="method-label">{{ tr.label }}</span>
                   <span
                     v-if="tr.compatibility && desiredColour !== 'none'"
                     :class="[
@@ -321,17 +322,17 @@
                     {{ getCompatibilityLabel(tr.id) }}
                   </span>
                 </div>
-                <div class="treatment-consultant__details-list">
+                <div class="treatment-consultant__details">
                   <div
                     v-for="(note, j) in tr.notes"
                     :key="j"
                     v-motion="`treatment-note-${i}-${j}`"
                     :initial="{ opacity: 0, x: -20 }"
                     :enter="{ opacity: 1, x: 0, transition: { delay: (i + j) * 80 } }"
-                    class="treatment-consultant__details-item"
+                    class="item"
                   >
-                    <div class="treatment-consultant__details-bullet"></div>
-                    <p class="treatment-consultant__details-text">{{ note }}</p>
+                    <div class="bullet"></div>
+                    <p class="text">{{ note }}</p>
                   </div>
                 </div>
               </div>
@@ -1381,7 +1382,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 @layer components {
   /* ─── CSS Custom Properties ────────────────────────────────────────────────── */
   .treatment-consultant {
-    --_primary-color: hsl(var(--treatment-consultant-primary-colour));
+    --_primary-color: var(--treatment-consultant-primary-colour);
     --_primary-foreground: hsl(var(--primary-foreground));
     --_background: hsl(var(--background));
     --_foreground: hsl(var(--foreground));
@@ -1391,6 +1392,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     --_amber: hsl(43 96% 56%);
     --_orange: hsl(25 95% 53%);
     --_red: hsl(0 84% 60%);
+
     --_transition-duration: 300ms;
     --_border-radius: 0.5rem;
     --_spacing-xs: 0.25rem;
@@ -1407,14 +1409,18 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   .treatment-consultant {
     background-color: var(--_background);
     color: var(--_foreground);
+    border: 1px solid var(--treatment-consultant-border-colour);
+    border-radius: var(--_border-radius);
+    padding: var(--_spacing-2xl);
+    overflow: clip;
 
-    .treatment-consultant__container {
+    /* .treatment-consultant__container {
       padding-inline: var(--_spacing-lg);
 
       @container (min-width: 1024px) {
         padding-inline: var(--_spacing-2xl);
       }
-    }
+    } */
 
     .treatment-consultant__content {
       margin-inline: auto;
@@ -1467,75 +1473,89 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     gap: var(--_spacing-sm);
     margin-block-end: var(--_spacing-3xl);
 
-    .treatment-consultant__progress-step {
+    .step {
       display: flex;
       align-items: center;
       gap: var(--_spacing-sm);
-    }
 
-    .treatment-consultant__progress-button {
-      display: flex;
-      align-items: center;
-      gap: var(--_spacing-sm);
-      padding: 0.8rem 1.2rem;
-      text-transform: uppercase;
-      border: 1px solid var(--treatment-consultant-border-colour);
-      background: transparent;
-      color: var(--_muted-foreground);
-      transition: all var(--_transition-duration) ease;
-      cursor: pointer;
-    }
+      .button {
+        display: flex;
+        align-items: center;
+        gap: var(--_spacing-sm);
+        padding: 0.8rem 1.2rem;
+        text-transform: uppercase;
+        border: 1px solid var(--_primary-color);
+        background: transparent;
+        color: var(--_muted-foreground);
+        transition: all var(--_transition-duration) ease;
+        cursor: pointer;
 
-    .treatment-consultant__progress-button--active {
-      border-color: var(--_primary-color);
-      color: var(--_primary-color);
-    }
-    .treatment-consultant__progress-button--completed {
-      border-color: color-mix(in srgb, var(--_primary-color) 30%, transparent);
-      color: color-mix(in srgb, var(--_primary-color) 60%, transparent);
-    }
-    .treatment-consultant__progress-button--inactive {
-      border-color: var(--treatment-consultant-border-colour);
-      color: var(--_muted-foreground);
-    }
+        &.active {
+          border-color: var(--_primary-color);
+          color: var(--_primary-color);
 
-    .treatment-consultant__progress-indicator {
-      inline-size: 1.25rem;
-      block-size: 1.25rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 500;
-      border-radius: 50%;
-    }
+          &:hover {
+            cursor: default;
+          }
+        }
+        &.completed {
+          border-color: color-mix(in srgb, var(--_primary-color) 30%, transparent);
+          color: color-mix(in srgb, var(--_primary-color) 60%, transparent);
+        }
+        &.inactive {
+          border-color: var(--_primary-color);
+          color: var(--_muted-foreground);
 
-    .treatment-consultant__progress-indicator--completed {
-      background-color: var(--_primary-color);
-      color: var(--_primary-foreground);
-    }
-    .treatment-consultant__progress-indicator--active {
-      border: 1px solid var(--_primary-color);
-      color: var(--_primary-color);
-    }
-    .treatment-consultant__progress-indicator--inactive {
-      border: 1px solid var(--_muted-foreground);
-      color: var(--_muted-foreground);
-    }
+          &:hover {
+            cursor: default;
+          }
+        }
 
-    .treatment-consultant__progress-label {
-      display: none;
-      @media (min-width: 640px) {
-        display: inline;
+        .indicator {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          aspect-ratio: 1 / 1;
+          inline-size: 3.5rem;
+          font-size: 1.4rem;
+          font-weight: 500;
+          border-radius: 100vw;
+
+          &.completed {
+            /* background-color: var(--_background); */
+            border: 1px solid var(--_primary-color);
+            color: var(--_primary-foreground);
+          }
+          &.active {
+            border: 1px solid var(--_primary-color);
+            color: var(--_primary-color);
+          }
+          &.inactive {
+            border: 1px solid var(--_muted-foreground);
+            color: var(--_muted-foreground);
+          }
+
+        }
+
+        .label {
+          display: none;
+
+          @media (width >= 640px) {
+            display: inline;
+          }
+        }
       }
-    }
 
-    .treatment-consultant__progress-connector {
-      inline-size: 2rem;
-      block-size: 1px;
-      background-color: var(--treatment-consultant-border-colour);
-    }
-    .treatment-consultant__progress-connector--completed {
-      background-color: var(--_primary-color);
+
+      .connector {
+        inline-size: 2rem;
+        block-size: 1px;
+        background-color: var(--_primary-color);
+
+        &.completed {
+          background-color: var(--_primary-color);
+        }
+      }
     }
   }
 
@@ -1544,7 +1564,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     .treatment-consultant__step-title {
       font-family: var(--_font-display);
       text-align: center;
-      margin-block-end: var(--_spacing-sm);
+      margin-block-end: var(--_spacing-2xl);
     }
 
     .treatment-consultant__step-subtitle {
@@ -1629,7 +1649,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   .treatment-consultant__option {
     position: relative;
     padding: var(--_spacing-lg);
-    border: 1px solid var(--treatment-consultant-border-colour);
+    border: 1px solid var(--_primary-color);
     background: transparent;
     text-align: center;
     cursor: pointer;
@@ -1915,7 +1935,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   }
 
   /* ─── Details Card ─────────────────────────────────────────────────────────── */
-  .treatment-consultant__details-card {
+  .card {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
@@ -1923,21 +1943,21 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     padding: var(--_spacing-xl);
     margin-block-end: var(--_spacing-md);
 
-    .treatment-consultant__details-header {
+    .header {
       display: flex;
       align-items: center;
       gap: 0.75rem;
       margin-block-end: var(--_spacing-lg);
       flex-wrap: wrap;
 
-      .treatment-consultant__details-method-label {
+      .method-label {
         /* font-size: 0.75rem; */
         letter-spacing: 0.2em;
         text-transform: uppercase;
         color: var(--_primary-color);
       }
 
-      .treatment-consultant__details-method-badge {
+      .method-badge {
         padding: var(--_spacing-xs) 0.75rem;
         background-color: color-mix(in srgb, var(--_primary-color) 10%, transparent);
         color: var(--_primary-color);
@@ -1952,36 +1972,35 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       }
     }
 
-    .treatment-consultant__details-list {
+    .treatment-consultant__details {
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-    }
 
-    .treatment-consultant__details-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
+      .item {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
 
-      .treatment-consultant__details-bullet {
-        inline-size: 0.25rem;
-        block-size: 0.25rem;
-        border-radius: 50%;
-        background-color: var(--_primary-color);
-        margin-block-start: 0.5rem;
-        flex-shrink: 0;
-      }
+        .bullet {
+          inline-size: 0.5rem;
+          block-size: 0.5rem;
+          border-radius: 100vw;
+          background-color: var(--_primary-color);
+          flex-shrink: 0;
+        }
 
-      .treatment-consultant__details-text {
-        color: color-mix(in srgb, var(--_foreground) 80%, transparent);
-        font-weight: 300;
-        line-height: 1;
-        margin-block: 1rem;
+        .text {
+          color: color-mix(in srgb, var(--_foreground) 80%, transparent);
+          font-weight: 300;
+          line-height: 1;
+          margin-block: 1rem;
+        }
       }
     }
   }
 
-  .treatment-consultant__details-card--treatment {
+  .card--treatment {
     margin-block-end: var(--_spacing-sm);
   }
 
@@ -2028,7 +2047,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       justify-items: center;
       text-align: center;
       padding: var(--_spacing-md);
-      border: 1px solid var(--treatment-consultant-border-colour);
+      border: 1px solid var(--_primary-color);
       border-radius: var(--_border-radius);
 
       .treatment-consultant__summary-label {

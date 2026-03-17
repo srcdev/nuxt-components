@@ -93,8 +93,10 @@ const normalisedContent = computed(() =>
     }
 
     .accent {
+      background-clip: text;
+      background-image: var(--hero-text-bg-img);
       font-style: italic;
-      color: var(--colour-text-accent);
+      color: transparent;
     }
   }
 }

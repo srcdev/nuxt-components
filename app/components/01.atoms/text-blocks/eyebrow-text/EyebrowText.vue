@@ -22,21 +22,24 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 <style lang="css">
 @layer components {
-.eyebrow-text {
-  text-transform: uppercase;
-  color: var(--colour-text-eyebrow);
+  .eyebrow-text {
+    text-transform: uppercase;
+    background-clip: text;
+    background-image: var(--eyebrow-text-bg-img);
+    font-style: italic;
+    color: transparent;
 
-  &.large {
-    font-size: var(--eyebrow-text-large);
-  }
+    &.large {
+      font-size: var(--eyebrow-text-large);
+    }
 
-  &.medium {
-    font-size: var(--eyebrow-text-medium);
-  }
+    &.medium {
+      font-size: var(--eyebrow-text-medium);
+    }
 
-  &.small {
-    font-size: var(--eyebrow-text-small);
+    &.small {
+      font-size: var(--eyebrow-text-small);
+    }
   }
-}
 }
 </style>
