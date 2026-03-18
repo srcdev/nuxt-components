@@ -15,6 +15,7 @@
             ]"
             :style-class-passthrough="['mbe-20']"
           />
+          <p>Select your hair type, current colour, and dream shade to get personalised recommendations.</p>
         </LayoutRow>
 
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
@@ -46,7 +47,7 @@ useHead({
 
 <style lang="css">
 .treatment-consultant-page {
-  .treatment-consultant {
+  .XX-treatment-consultant {
     --_primary-color: var(--treatment-consultant-primary-colour);
     --_primary-foreground: var(--treatment-consultant-primary-foreground);
     --_background: var(--treatment-consultant-background);
@@ -70,7 +71,6 @@ useHead({
 
     /* Page styles */
     margin-block-start: var(--_spacing-3xl);
-
 
     .treatment-consultant__container {
     }

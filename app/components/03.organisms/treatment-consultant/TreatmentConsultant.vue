@@ -10,9 +10,9 @@
                 :class="[
                   'button',
                   {
-                    'active': i === step,
-                    'completed': i < step,
-                    'inactive': i > step,
+                    active: i === step,
+                    completed: i < step,
+                    inactive: i > step,
                   },
                 ]"
                 @click="
@@ -25,9 +25,9 @@
                   :class="[
                     'indicator',
                     {
-                      'completed': i < step,
-                      'active': i === step,
-                      'inactive': i > step,
+                      completed: i < step,
+                      active: i === step,
+                      inactive: i > step,
                     },
                   ]"
                 >
@@ -35,14 +35,7 @@
                 </span>
                 <span class="label">{{ s }}</span>
               </button>
-              <div
-                v-if="i < STEPS.length - 1"
-                :class="[
-                  'connector',
-                  { 'completed': i < step },
-                ]"
-                aria-hidden="true"
-              ></div>
+              <div v-if="i < STEPS.length - 1" :class="['connector', { completed: i < step }]" aria-hidden="true"></div>
             </div>
           </template>
         </div>
@@ -304,11 +297,7 @@
             </h3>
 
             <template v-if="hasActiveTreatments">
-              <div
-                v-for="(tr, i) in chosenTreatments"
-                :key="i"
-                class="card card--treatment"
-              >
+              <div v-for="(tr, i) in chosenTreatments" :key="i" class="card card--treatment">
                 <div class="header">
                   <Icon :name="tr.icon" class="treatment-consultant__treatment-icon" />
                   <span class="method-label">{{ tr.label }}</span>
@@ -1382,6 +1371,9 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 @layer components {
   /* ─── CSS Custom Properties ────────────────────────────────────────────────── */
   .treatment-consultant {
+    --_step-border-radius: 0.2rem;
+
+    /** Previous */
     --_primary-color: var(--treatment-consultant-primary-colour);
     --_primary-foreground: hsl(var(--primary-foreground));
     --_background: hsl(var(--background));
@@ -1407,9 +1399,10 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 
   /* ─── Main Container ───────────────────────────────────────────────────────── */
   .treatment-consultant {
-    background-color: var(--_background);
-    color: var(--_foreground);
-    border: 1px solid var(--treatment-consultant-border-colour);
+    background-color: var(--_canvas-color);
+    color: var(--_canvas-text);
+    border: 1px solid var(--_border-inactive);
+    outline: 1px solid var(--_outline-inactive);
     border-radius: var(--_border-radius);
     padding: var(--_spacing-2xl);
     overflow: clip;
@@ -1423,44 +1416,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     } */
 
     .treatment-consultant__content {
-      margin-inline: auto;
-    }
-  }
-
-  /* ─── Header ───────────────────────────────────────────────────────────────── */
-  .treatment-consultant__header {
-    text-align: center;
-    margin-block-end: var(--_spacing-3xl);
-
-    .treatment-consultant__label {
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--_primary-color);
-      margin-block-end: var(--_spacing-md);
-    }
-
-    .treatment-consultant__title {
-      font-family: var(--_font-display);
-      font-size: clamp(2.25rem, 5vw, 3.75rem);
-      margin-block-end: var(--_spacing-md);
-
-      @media (min-width: 768px) {
-        font-size: clamp(3.75rem, 8vw, 6rem);
-      }
-
-      .treatment-consultant__title-highlight {
-        font-style: italic;
-        background: linear-gradient(135deg, #d4af37, #ffd700, #ffed4e);
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
-      }
-    }
-
-    .treatment-consultant__subtitle {
-      color: var(--_muted-foreground);
-      font-weight: 300;
-      max-inline-size: 34rem;
       margin-inline: auto;
     }
   }
@@ -1484,27 +1439,46 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         gap: var(--_spacing-sm);
         padding: 0.8rem 1.2rem;
         text-transform: uppercase;
-        border: 1px solid var(--_primary-color);
-        background: transparent;
-        color: var(--_muted-foreground);
         transition: all var(--_transition-duration) ease;
         cursor: pointer;
+        border-radius: var(--_step-border-radius);
+
+        background-color: var(--_surface-active);
+        color: var(--_step-active);
+        border: 1px solid var(--_border-active);
+        outline: 1px solid var(--_outline-active);
 
         &.active {
-          border-color: var(--_primary-color);
-          color: var(--_primary-color);
+          outline-offset: 0.2rem;
+
+          color: var(--_step-active);
+          border: 1px solid var(--_border-active);
+          outline: 1px solid var(--_outline-active);
 
           &:hover {
             cursor: default;
           }
         }
         &.completed {
-          border-color: color-mix(in srgb, var(--_primary-color) 30%, transparent);
-          color: color-mix(in srgb, var(--_primary-color) 60%, transparent);
+          background-color: color-mix(in srgb, var(--_surface-active) 30%, transparent);
+          color: color-mix(in srgb, var(--_step-active) 60%, transparent);
+          border-color: color-mix(in srgb, var(--_border-active) 30%, transparent);
+          outline-color: color-mix(in srgb, var(--_outline-active) 30%, transparent);
+
+          &:hover {
+            outline-offset: 0.2rem;
+
+            color: var(--_step-active);
+            border: 1px solid var(--_border-active);
+            outline: 1px solid var(--_outline-active);
+          }
         }
         &.inactive {
-          border-color: var(--_primary-color);
-          color: var(--_muted-foreground);
+          /* background-color: color-mix(in srgb, var(--_surface-active) 30%, transparent); */
+          border-color: color-mix(in srgb, var(--_border-active) 60%, transparent);
+          outline-color: color-mix(in srgb, var(--_outline-active) 60%, transparent);
+          color: color-mix(in srgb, var(--_step-active) 60%, transparent);
+          outline-color: transparent;
 
           &:hover {
             cursor: default;
@@ -1521,20 +1495,29 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
           font-weight: 500;
           border-radius: 100vw;
 
-          &.completed {
-            /* background-color: var(--_background); */
-            border: 1px solid var(--_primary-color);
-            color: var(--_primary-foreground);
-          }
+          background-color: var(--_surface-active);
+          color: var(--_step-active);
+          border: 1px solid var(--_border-active);
+          outline: 1px solid var(--_outline-active);
+
           &.active {
-            border: 1px solid var(--_primary-color);
-            color: var(--_primary-color);
+            background-color: var(--_surface-active);
+            color: var(--_step-active);
+            border: 1px solid var(--_border-active);
+            outline: 1px solid var(--_outline-active);
+          }
+          &.completed {
+            background-color: color-mix(in srgb, var(--_surface-active) 30%, transparent);
+            color: color-mix(in srgb, var(--_step-active) 60%, transparent);
+            border-color: color-mix(in srgb, var(--_border-active) 30%, transparent);
+            outline-color: color-mix(in srgb, var(--_outline-active) 30%, transparent);
           }
           &.inactive {
-            border: 1px solid var(--_muted-foreground);
-            color: var(--_muted-foreground);
+            /* background-color: color-mix(in srgb, var(--_surface-active) 30%, transparent); */
+            border-color: color-mix(in srgb, var(--_border-active) 60%, transparent);
+            outline-color: color-mix(in srgb, var(--_outline-active) 60%, transparent);
+            color: color-mix(in srgb, var(--_step-active) 60%, transparent);
           }
-
         }
 
         .label {
@@ -1546,14 +1529,13 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         }
       }
 
-
       .connector {
         inline-size: 2rem;
         block-size: 1px;
-        background-color: var(--_primary-color);
+        background-color: color-mix(in srgb, var(--_border-active) 60%, transparent);
 
         &.completed {
-          background-color: var(--_primary-color);
+          background-color: color-mix(in srgb, var(--_border-active) 30%, transparent);
         }
       }
     }

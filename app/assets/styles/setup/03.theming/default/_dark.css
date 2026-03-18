@@ -93,6 +93,41 @@
   --treatment-consultant-conflict-surface-colour: var(--sunset-09);
   --treatment-consultant-conflict-stroke-colour: var(--sunset-03);
 
+  .treatment-consultant {
+    /** Surfaces */
+    --_canvas-color: var(--amber-09);
+
+    --_surface-active: var(--amber-10);
+    --_surface-inactive: var(--amber-09);
+    --_surface-completed: var(--amber-09);
+
+    --_surface-checked: var(--green-09);
+    --_surface-conflict: var(--sunset-09);
+
+    /** Strokes */
+    --_border-active: var(--amber-02);
+    --_border-inactive: var(--amber-04);
+    --_border-completed: var(--amber-09);
+    --_border-checked: var(--green-09);
+    --_border-conflict: var(--sunset-09);
+
+    --_outline-active: var(--amber-06);
+    --_outline-inactive: var(--amber-06);
+    --_outline-completed: var(--amber-09);
+    --_outline-checked: var(--green-09);
+    --_outline-conflict: var(--sunset-09);
+
+    /** Text */
+    --_canvas-text: var(--amber-09);
+    --_step-active: var(--amber-02);
+    --_step-inactive: var(--amber-09);
+    --_step-completed: var(--amber-09);
+
+    --_option-active: var(--amber-09);
+    --_option-inactive: var(--amber-09);
+    --_option-completed: var(--amber-09);
+  }
+
   /* ===========================================
      ANCHOR LINK VARIABLES
      =========================================== */
