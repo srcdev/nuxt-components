@@ -1630,27 +1630,38 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   }
 
   .treatment-consultant__option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--_spacing-sm);
+
     position: relative;
     padding: var(--_spacing-lg);
-    border: 1px solid var(--_primary-color);
     background: transparent;
     text-align: center;
     cursor: pointer;
     transition: all var(--_transition-duration) ease;
     border-radius: var(--_border-radius);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+
+    background-color: var(--_surface-active);
+    color: var(--_step-active);
+    border: 1px solid var(--_border-active);
+    outline: 1px solid var(--_outline-active);
 
     &:hover {
-      border-color: color-mix(in srgb, var(--_primary-color) 50%, transparent);
+      outline-offset: 0.2rem;
+      outline-color: var(--_border-active);
+
+      .treatment-consultant__option-swatch {
+        outline-offset: 0.2rem;
+      }
     }
 
     .treatment-consultant__option-pattern {
-      /* font-size: 1.875rem; */
+      font-size: 2.875rem;
       font-weight: 300;
       letter-spacing: 0.1em;
-      color: var(--_foreground);
+      color: var(--_canvas-text);
       margin-block-end: 0.75rem;
     }
 
@@ -1660,7 +1671,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       inline-size: 8rem;
       border-radius: 50%;
       margin-block-end: 0.75rem;
-      border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
+      border: 1px solid var(--_border-active);
+      outline: 1px solid var(--_outline-active);
       overflow: hidden;
 
       .treatment-consultant__option-image {
@@ -1728,6 +1740,10 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   .treatment-consultant__option--excluded {
     opacity: 0.45;
     cursor: pointer;
+
+    background-color: var(--_surface-excluded);
+    border-color: var(--_border-excluded);
+    outline-color: var(--_outline-excluded);
 
     .treatment-consultant__option-conflict {
       display: block;
@@ -2061,15 +2077,15 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       }
 
       .treatment-consultant__summary-none-icon {
-        inline-size: 1.5rem;
-        block-size: 1.5rem;
-        color: var(--_muted-foreground);
+        inline-size: 3.5rem;
+        block-size: 3.5rem;
+        color: var(--_canvas-text);
         opacity: 0.5;
       }
 
       .treatment-consultant__summary-value {
         align-self: start;
-        color: var(--_foreground);
+        color: var(--_canvas-text);
       }
     }
   }

@@ -103,6 +103,7 @@
 
     --_surface-checked: var(--green-09);
     --_surface-conflict: var(--sunset-09);
+    --_surface-excluded: var(--sunset-09);
 
     /** Strokes */
     --_border-active: var(--amber-02);
@@ -110,12 +111,14 @@
     --_border-completed: color-mix(in srgb, var(--_border-active) 30%, transparent);
     --_border-checked: var(--green-09);
     --_border-conflict: var(--sunset-09);
+    --_border-excluded: var(--sunset-07);
 
     --_outline-active: var(--amber-06);
     --_outline-inactive: color-mix(in srgb, var(--_outline-active) 60%, transparent);
     --_outline-completed: color-mix(in srgb, var(--_outline-active) 30%, transparent);
     --_outline-checked: var(--green-09);
     --_outline-conflict: var(--sunset-09);
+    --_outline-excluded: var(--sunset-07);
 
     /** Text */
     --_canvas-text: var(--amber-02);
