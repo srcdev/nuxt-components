@@ -1451,19 +1451,20 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         &.active {
           outline-offset: 0.2rem;
 
-          color: var(--_step-active);
-          border: 1px solid var(--_border-active);
-          outline: 1px solid var(--_outline-active);
+          /* color: var(--_step-active); */
+          /* border: 1px solid var(--_border-active); */
+          /* outline: 1px solid var(--_outline-active); */
 
           &:hover {
             cursor: default;
           }
         }
         &.completed {
-          background-color: color-mix(in srgb, var(--_surface-active) 30%, transparent);
-          color: color-mix(in srgb, var(--_step-active) 60%, transparent);
-          border-color: color-mix(in srgb, var(--_border-active) 30%, transparent);
-          outline-color: color-mix(in srgb, var(--_outline-active) 30%, transparent);
+          background-color: var(--_surface-completed);
+          color: var(--_step-completed);
+
+          border-color: var(--_border-completed);
+          outline-color: var(--_outline-completed);
 
           &:hover {
             outline-offset: 0.2rem;
@@ -1474,10 +1475,10 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
           }
         }
         &.inactive {
-          /* background-color: color-mix(in srgb, var(--_surface-active) 30%, transparent); */
-          border-color: color-mix(in srgb, var(--_border-active) 60%, transparent);
-          outline-color: color-mix(in srgb, var(--_outline-active) 60%, transparent);
-          color: color-mix(in srgb, var(--_step-active) 60%, transparent);
+          color: var(--_step-inactive);
+
+          border-color: var(--_border-inactive§);
+          outline-color: var(--_outline-inactive);
           outline-color: transparent;
 
           &:hover {
@@ -1501,22 +1502,22 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
           outline: 1px solid var(--_outline-active);
 
           &.active {
-            background-color: var(--_surface-active);
+            /* background-color: var(--_surface-active); */
             color: var(--_step-active);
-            border: 1px solid var(--_border-active);
-            outline: 1px solid var(--_outline-active);
+            /* border: 1px solid var(--_border-active); */
+            /* outline: 1px solid var(--_outline-active); */
           }
           &.completed {
-            background-color: color-mix(in srgb, var(--_surface-active) 30%, transparent);
-            color: color-mix(in srgb, var(--_step-active) 60%, transparent);
-            border-color: color-mix(in srgb, var(--_border-active) 30%, transparent);
-            outline-color: color-mix(in srgb, var(--_outline-active) 30%, transparent);
+            background-color: var(--_surface-completed);
+            color: var(--_step-completed);
+            border-color: var(--_border-completed);
+            outline-color: var(--_outline-completed);
           }
           &.inactive {
             /* background-color: color-mix(in srgb, var(--_surface-active) 30%, transparent); */
-            border-color: color-mix(in srgb, var(--_border-active) 60%, transparent);
-            outline-color: color-mix(in srgb, var(--_outline-active) 60%, transparent);
-            color: color-mix(in srgb, var(--_step-active) 60%, transparent);
+            border-color: var(--_border-inactive);
+            outline-color: var(--_outline-inactive);
+            color: var(--_step-inactive);
           }
         }
 
@@ -1532,10 +1533,10 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       .connector {
         inline-size: 2rem;
         block-size: 1px;
-        background-color: color-mix(in srgb, var(--_border-active) 60%, transparent);
+        background-color: var(--_border-inactive);
 
         &.completed {
-          background-color: color-mix(in srgb, var(--_border-active) 30%, transparent);
+          background-color: var(--_border-completed);
         }
       }
     }
