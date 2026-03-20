@@ -15,6 +15,8 @@
                     inactive: i > step,
                   },
                 ]"
+                :aria-disabled="i > step ? true : undefined"
+                :tabindex="i > step ? -1 : 0"
                 @click="
                   () => {
                     if (i < step) step = i;
@@ -1434,7 +1436,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         &.active {
           outline-offset: 0.2rem;
 
-          &:hover {
+          &:hover,
+          &:focus-visible {
             cursor: default;
           }
         }
@@ -1445,7 +1448,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
           border-color: var(--_border-completed);
           outline-color: var(--_outline-completed);
 
-          &:hover {
+          &:hover,
+          &:focus-visible {
             outline-offset: 0.2rem;
 
             color: var(--_step-active);
@@ -1542,6 +1546,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 
     &.treatment-consultant__options--hair-type {
       grid-template-columns: repeat(2, 1fr);
+
       @media (min-width: 768px) {
         grid-template-columns: repeat(4, 1fr);
       }
@@ -1549,9 +1554,11 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 
     &.treatment-consultant__options--natural-colour {
       grid-template-columns: repeat(2, 1fr);
+
       @media (min-width: 640px) {
         grid-template-columns: repeat(3, 1fr);
       }
+
       @media (min-width: 1024px) {
         grid-template-columns: repeat(4, 1fr);
       }
@@ -1559,6 +1566,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 
     &.treatment-consultant__options--desired-colour {
       grid-template-columns: repeat(2, 1fr);
+
       @media (min-width: 640px) {
         grid-template-columns: repeat(3, 1fr);
       }
@@ -1625,7 +1633,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     border: 1px solid var(--_border-active);
     outline: 1px solid var(--_outline-active);
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       outline-offset: 0.2rem;
       outline-color: var(--_border-active);
 
@@ -1702,8 +1711,11 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       opacity: 0.7;
     }
 
-    &:hover .treatment-consultant__option-label {
-      color: var(--_canvas-text);
+    &:hover,
+    &:focus-visible {
+      .treatment-consultant__option-label {
+        color: var(--_canvas-text);
+      }
     }
   }
 
@@ -1723,7 +1735,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 
     .treatment-consultant__option-conflict {
       display: block;
-      /* font-size: 0.65rem; */
       letter-spacing: 0.04em;
       color: var(--_canvas-text);
       font-weight: 400;
@@ -1813,7 +1824,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     align-items: center;
     gap: 1.2rem;
     font-family: var(--_font-display);
-    /* font-size: 0.875rem; */
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--_canvas-text);
@@ -1926,7 +1936,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       flex-wrap: wrap;
 
       .method-label {
-        /* font-size: 0.75rem; */
         letter-spacing: 0.2em;
         text-transform: uppercase;
         color: var(--_border-active);
@@ -2112,7 +2121,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     background-color: var(--_surface-active);
     color: var(--_step-active);
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
       outline-color: var(--_border-active);
       outline-offset: 0.2rem;
     }
@@ -2148,7 +2158,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       }
 
       &.back {
-        &:hover {
+        &:hover,
+        &:focus-visible {
           outline-offset: 0.2rem;
           outline-color: var(--_border-active);
         }
@@ -2159,7 +2170,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         background-color: var(--_surface-active);
         color: var(--_step-active);
 
-        &:not(.disabled):hover {
+        &:not(.disabled):hover,
+        &:not(.disabled):focus-visible {
           outline-offset: 0.2rem;
           outline-color: var(--_border-active);
         }
