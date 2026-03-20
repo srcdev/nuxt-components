@@ -1552,7 +1552,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 
     .treatment-consultant__step-subtitle {
       text-align: center;
-      color: var(--_muted-foreground);
+      color: var(--_canvas-text);
       font-weight: 300;
       margin-block-end: var(--_spacing-xl);
     }
@@ -1687,7 +1687,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       inline-size: 3.5rem;
       block-size: 3.5rem;
       border-radius: 50%;
-      border: 1px dashed color-mix(in srgb, var(--_muted-foreground) 50%, transparent);
+      border: 1px dashed color-mix(in srgb, var(--_canvas-text) 50%, transparent);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1696,14 +1696,14 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       .treatment-consultant__option-none-icon-svg {
         inline-size: 1.25rem;
         block-size: 1.25rem;
-        color: var(--_muted-foreground);
+        color: var(--_canvas-text);
       }
     }
 
     .treatment-consultant__option-treatment-icon {
       inline-size: 3rem !important;
       block-size: 3rem !important;
-      color: var(--_muted-foreground);
+      color: var(--_canvas-text);
       margin-block-end: var(--_spacing-sm);
       transition: color var(--_transition-duration) ease;
       flex-shrink: 0;
@@ -1713,7 +1713,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       display: block;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--_muted-foreground);
+      color: var(--_canvas-text);
       transition: color var(--_transition-duration) ease;
     }
 
@@ -1721,7 +1721,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       display: block;
       /* font-size: 0.7rem; */
       letter-spacing: 0.05em;
-      color: var(--_muted-foreground);
+      color: var(--_canvas-text);
       font-weight: 300;
       margin-block-start: 0.2rem;
       opacity: 0.7;
@@ -1750,7 +1750,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       display: block;
       /* font-size: 0.65rem; */
       letter-spacing: 0.04em;
-      color: var(--_muted-foreground);
+      color: var(--_canvas-text);
       font-weight: 400;
       margin-block-start: 0.2rem;
       font-style: italic;
@@ -1841,7 +1841,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     /* font-size: 0.875rem; */
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: var(--_muted-foreground);
+    color: var(--_canvas-text);
     margin-block-end: var(--_spacing-md);
 
     .treatment-consultant__results-section-icon {
@@ -1883,7 +1883,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       color: var(--_red);
     }
     .treatment-consultant__suitability-icon--none {
-      color: var(--_muted-foreground);
+      color: var(--_canvas-text);
     }
 
     .treatment-consultant__suitability-label {
@@ -1902,11 +1902,11 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       color: var(--_red);
     }
     .treatment-consultant__suitability-label--none {
-      color: var(--_muted-foreground);
+      color: var(--_canvas-text);
     }
 
     .treatment-consultant__suitability-notes {
-      color: var(--_muted-foreground);
+      color: var(--_canvas-text);
       font-weight: 300;
     }
   }
@@ -1929,8 +1929,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     border-color: color-mix(in srgb, var(--_red) 30%, transparent);
   }
   .treatment-consultant__suitability--none {
-    background-color: color-mix(in srgb, var(--_muted-foreground) 8%, transparent);
-    border-color: color-mix(in srgb, var(--_muted-foreground) 20%, transparent);
+    background-color: color-mix(in srgb, var(--_canvas-text) 8%, transparent);
+    border-color: color-mix(in srgb, var(--_canvas-text) 20%, transparent);
     border-style: dashed;
   }
 
@@ -2054,7 +2054,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         align-self: end;
         letter-spacing: 0.2em;
         text-transform: uppercase;
-        color: var(--_muted-foreground);
+        color: var(--_canvas-text);
       }
 
       .treatment-consultant__summary-visual {
@@ -2100,7 +2100,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     text-align: center;
 
     .treatment-consultant__cta-disclaimer {
-      color: var(--_muted-foreground);
+      color: var(--_canvas-text);
       margin-block-end: var(--_spacing-lg);
       font-weight: 300;
     }
@@ -2201,7 +2201,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 
   .treatment-consultant__nav-button--disabled {
     background-color: var(--_muted);
-    color: var(--_muted-foreground);
+    color: var(--_canvas-text);
     cursor: not-allowed;
     box-shadow: none;
     &:hover {
