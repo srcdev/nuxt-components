@@ -1613,6 +1613,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       grid-template-rows: subgrid;
       justify-items: center;
       align-items: center;
+      gap: 1rem;
 
       .treatment-consultant__option-treatment-icon {
         align-self: center;
@@ -1700,8 +1701,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     }
 
     .treatment-consultant__option-treatment-icon {
-      inline-size: 1.5rem;
-      block-size: 1.5rem;
+      inline-size: 3rem !important;
+      block-size: 3rem !important;
       color: var(--_muted-foreground);
       margin-block-end: var(--_spacing-sm);
       transition: color var(--_transition-duration) ease;
@@ -1803,11 +1804,11 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   }
 
   .treatment-consultant__option--selected .treatment-consultant__option-treatment-icon {
-    color: var(--_primary-color);
+    color: var(--_canvas-text);
   }
 
   .treatment-consultant__option-label--selected {
-    color: var(--_primary-color);
+    color: var(--_canvas-text);
   }
 
   /* ─── Results ──────────────────────────────────────────────────────────────── */
@@ -2163,11 +2164,14 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       padding: 0.75rem var(--_spacing-lg);
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      background: transparent;
-      border: 1px solid transparent;
       cursor: pointer;
       transition: all var(--_transition-duration) ease;
       border-radius: var(--_border-radius);
+
+      background: var(--_surface-active);
+      color: var(--_step-active);
+      border: 1px solid var(--_border-active);
+      outline: 1px solid var(--_outline-active);
 
       .treatment-consultant__nav-icon {
         inline-size: 1rem;
@@ -2177,9 +2181,9 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   }
 
   .treatment-consultant__nav-button--back {
-    color: var(--_muted-foreground);
     &:hover {
-      color: var(--_foreground);
+      outline-offset: 0.2rem;
+      outline-color: var(--_border-active);
     }
   }
 
@@ -2188,8 +2192,10 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     background-color: var(--_primary-color);
     color: var(--_primary-foreground);
     box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
+
     &:hover {
-      background-color: color-mix(in srgb, var(--_primary-color) 90%, transparent);
+      outline-offset: 0.2rem;
+      outline-color: var(--_border-active);
     }
   }
 
