@@ -377,12 +377,8 @@
                 This is a guide — every head of hair is unique. Book a consultation for tailored advice.
               </p>
               <div class="treatment-consultant__cta-buttons">
-                <a href="/#contact" class="treatment-consultant__button treatment-consultant__button--primary">
-                  Book Consultation
-                </a>
-                <button class="treatment-consultant__button treatment-consultant__button--secondary" @click="reset">
-                  Start Again
-                </button>
+                <a href="/#contact" class="treatment-consultant__button primary">Book Consultation</a>
+                <button class="treatment-consultant__button secondary" @click="reset">Start Again</button>
               </div>
             </div>
           </div>
@@ -390,22 +386,15 @@
 
         <!-- Navigation Buttons -->
         <div v-if="step < 4 && (step > 0 || !autoAdvance)" class="treatment-consultant__navigation">
-          <button
-            v-if="step > 0"
-            class="treatment-consultant__nav-button treatment-consultant__nav-button--back"
-            @click="back"
-          >
+          <button v-if="step > 0" class="treatment-consultant__nav-button back" @click="back">
             <Icon name="lucide:arrow-left" class="treatment-consultant__nav-icon" />
             Back
           </button>
           <button
             v-if="!autoAdvance || (step === 3 && allowMultipleTreatments)"
             :disabled="!canProceed"
-            :class="[
-              'treatment-consultant__nav-button treatment-consultant__nav-button--next',
-              { 'treatment-consultant__nav-button--disabled': !canProceed },
-            ]"
-            @click="next"
+            :class="['treatment-consultant__nav-button next', { disabled: !canProceed }]"
+            @click="canProceed ? next() : null"
           >
             {{ autoAdvance && step === 3 && allowMultipleTreatments ? "View Results" : "Next" }}
             <Icon name="lucide:arrow-right" class="treatment-consultant__nav-icon" />
@@ -1374,12 +1363,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     --_step-border-radius: 0.2rem;
 
     /** Previous */
-    --_primary-color: var(--treatment-consultant-primary-colour);
-    --_primary-foreground: hsl(var(--primary-foreground));
-    --_background: hsl(var(--background));
-    --_foreground: hsl(var(--foreground));
-    --_muted: hsl(var(--muted));
-    --_muted-foreground: hsl(var(--muted-foreground));
     --_emerald: hsl(160 84% 39%);
     --_amber: hsl(43 96% 56%);
     --_orange: hsl(25 95% 53%);
@@ -1451,10 +1434,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         &.active {
           outline-offset: 0.2rem;
 
-          /* color: var(--_step-active); */
-          /* border: 1px solid var(--_border-active); */
-          /* outline: 1px solid var(--_outline-active); */
-
           &:hover {
             cursor: default;
           }
@@ -1502,11 +1481,9 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
           outline: 1px solid var(--_outline-active);
 
           &.active {
-            /* background-color: var(--_surface-active); */
             color: var(--_step-active);
-            /* border: 1px solid var(--_border-active); */
-            /* outline: 1px solid var(--_outline-active); */
           }
+
           &.completed {
             background-color: var(--_surface-completed);
             color: var(--_step-completed);
@@ -1514,7 +1491,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
             outline-color: var(--_outline-completed);
           }
           &.inactive {
-            /* background-color: color-mix(in srgb, var(--_surface-active) 30%, transparent); */
             border-color: var(--_border-inactive);
             outline-color: var(--_outline-inactive);
             color: var(--_step-inactive);
@@ -1719,7 +1695,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 
     .treatment-consultant__option-sublabel {
       display: block;
-      /* font-size: 0.7rem; */
       letter-spacing: 0.05em;
       color: var(--_canvas-text);
       font-weight: 300;
@@ -1728,7 +1703,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     }
 
     &:hover .treatment-consultant__option-label {
-      color: var(--_foreground);
+      color: var(--_canvas-text);
     }
   }
 
@@ -1820,11 +1795,11 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       margin-block-end: var(--_spacing-xl);
 
       .treatment-consultant__results-icon {
-        inline-size: 2rem;
-        block-size: 2rem;
-        color: var(--_primary-color);
+        inline-size: 3.5rem !important;
+        block-size: 3.5rem !important;
+        color: var(--_canvas-text);
         margin-inline: auto;
-        margin-block-end: var(--_spacing-md);
+        margin-block-end: 2rem;
       }
 
       .treatment-consultant__results-title {
@@ -1836,18 +1811,18 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   .treatment-consultant__results-section-title {
     display: flex;
     align-items: center;
-    gap: var(--_spacing-sm);
+    gap: 1.2rem;
     font-family: var(--_font-display);
     /* font-size: 0.875rem; */
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: var(--_canvas-text);
-    margin-block-end: var(--_spacing-md);
+    margin-block-end: 2rem;
 
     .treatment-consultant__results-section-icon {
-      inline-size: 1rem;
-      block-size: 1rem;
-      color: var(--_primary-color);
+      inline-size: 2rem !important;
+      block-size: 2rem !important;
+      color: var(--_canvas-text);
     }
   }
 
@@ -1859,15 +1834,15 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   .treatment-consultant__suitability {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 2.75rem;
     padding: 1.25rem;
     border: 1px solid;
     margin-block-end: var(--_spacing-xl);
     border-radius: var(--_border-radius);
 
     .treatment-consultant__suitability-icon {
-      inline-size: 1.5rem;
-      block-size: 1.5rem;
+      inline-size: 3.5rem !important;
+      block-size: 3.5rem !important;
       flex-shrink: 0;
     }
     .treatment-consultant__suitability-icon--great {
@@ -1938,7 +1913,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   .card {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
-    border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--_canvas-text) 10%, transparent);
     border-radius: var(--_border-radius);
     padding: var(--_spacing-xl);
     margin-block-end: var(--_spacing-md);
@@ -1954,21 +1929,21 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         /* font-size: 0.75rem; */
         letter-spacing: 0.2em;
         text-transform: uppercase;
-        color: var(--_primary-color);
+        color: var(--_border-active);
       }
 
       .method-badge {
         padding: var(--_spacing-xs) 0.75rem;
-        background-color: color-mix(in srgb, var(--_primary-color) 10%, transparent);
-        color: var(--_primary-color);
-        border: 1px solid color-mix(in srgb, var(--_primary-color) 20%, transparent);
+        background-color: var(--_surface-inactive);
+        color: var(--_canvas-text);
+        border: 1px solid var(--_border-inactive);
         border-radius: var(--_border-radius);
       }
 
       .treatment-consultant__treatment-icon {
-        inline-size: 1rem;
-        block-size: 1rem;
-        color: var(--_primary-color);
+        inline-size: 2rem !important;
+        block-size: 2rem !important;
+        color: var(--_canvas-text);
       }
     }
 
@@ -1983,15 +1958,18 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         gap: 1.2rem;
 
         .bullet {
-          inline-size: 0.5rem;
-          block-size: 0.5rem;
+          inline-size: 0.8rem;
+          block-size: 0.8rem;
           border-radius: 100vw;
-          background-color: var(--_primary-color);
+          background-color: var(--_border-active);
+          border: 1px solid var(--_canvas-color);
+          outline: 1px solid var(--_border-active);
+          outline-offset: 0.1rem;
           flex-shrink: 0;
         }
 
         .text {
-          color: color-mix(in srgb, var(--_foreground) 80%, transparent);
+          color: color-mix(in srgb, var(--_canvas-text) 80%, transparent);
           font-weight: 300;
           line-height: 1;
           margin-block: 1rem;
@@ -2009,7 +1987,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     margin-inline-start: auto;
     padding: var(--_spacing-xs) var(--_spacing-sm);
     border-radius: var(--_border-radius);
-    /* font-size: 0.65rem; */
     letter-spacing: 0.08em;
     text-transform: uppercase;
     font-weight: 500;
@@ -2047,7 +2024,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       justify-items: center;
       text-align: center;
       padding: var(--_spacing-md);
-      border: 1px solid var(--_primary-color);
+      border: 1px solid var(--_border-active);
+      outline: 1px solid var(--_outline-completed);
       border-radius: var(--_border-radius);
 
       .treatment-consultant__summary-label {
@@ -2067,7 +2045,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         aspect-ratio: 1 / 1;
         block-size: 8rem;
         border-radius: 100vw;
-        border: 1px solid color-mix(in srgb, var(--_foreground) 10%, transparent);
+        border: 1px solid color-mix(in srgb, var(--_canvas-text) 10%, transparent);
         overflow: hidden;
 
         .treatment-consultant__summary-image {
@@ -2078,10 +2056,10 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       }
 
       .treatment-consultant__summary-none-icon {
-        inline-size: 3.5rem;
-        block-size: 3.5rem;
+        inline-size: 3.5rem !important;
+        block-size: 3.5rem !important;
         color: var(--_canvas-text);
-        opacity: 0.5;
+        opacity: 0.75;
       }
 
       .treatment-consultant__summary-value {
@@ -2128,24 +2106,15 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     transition: all var(--_transition-duration) ease;
     border-radius: var(--_border-radius);
     cursor: pointer;
-    border: 1px solid transparent;
-  }
 
-  .treatment-consultant__button--primary {
-    background-color: var(--_primary-color);
-    color: var(--_primary-foreground);
-    box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
-    &:hover {
-      background-color: color-mix(in srgb, var(--_primary-color) 90%, transparent);
-    }
-  }
+    border: 1px solid var(--_border-active);
+    outline: 1px solid var(--_outline-active);
+    background-color: var(--_surface-active);
+    color: var(--_step-active);
 
-  .treatment-consultant__button--secondary {
-    border-color: color-mix(in srgb, var(--_foreground) 20%, transparent);
-    color: var(--_foreground);
     &:hover {
-      border-color: var(--_primary-color);
-      color: var(--_primary-color);
+      outline-color: var(--_border-active);
+      outline-offset: 0.2rem;
     }
   }
 
@@ -2177,35 +2146,33 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         inline-size: 1rem;
         block-size: 1rem;
       }
-    }
-  }
 
-  .treatment-consultant__nav-button--back {
-    &:hover {
-      outline-offset: 0.2rem;
-      outline-color: var(--_border-active);
-    }
-  }
+      &.back {
+        &:hover {
+          outline-offset: 0.2rem;
+          outline-color: var(--_border-active);
+        }
+      }
 
-  .treatment-consultant__nav-button--next {
-    padding: 0.75rem var(--_spacing-xl);
-    background-color: var(--_primary-color);
-    color: var(--_primary-foreground);
-    box-shadow: 0 4px 20px color-mix(in srgb, var(--_primary-color) 20%, transparent);
+      &.next {
+        padding: 0.75rem var(--_spacing-xl);
+        background-color: var(--_surface-active);
+        color: var(--_step-active);
 
-    &:hover {
-      outline-offset: 0.2rem;
-      outline-color: var(--_border-active);
-    }
-  }
+        &:not(.disabled):hover {
+          outline-offset: 0.2rem;
+          outline-color: var(--_border-active);
+        }
 
-  .treatment-consultant__nav-button--disabled {
-    background-color: var(--_muted);
-    color: var(--_canvas-text);
-    cursor: not-allowed;
-    box-shadow: none;
-    &:hover {
-      background-color: var(--_muted);
+        &.disabled {
+          background-color: var(--_surface-inactive);
+          color: var(--_step-inactive);
+          cursor: not-allowed;
+          box-shadow: none;
+          border-color: var(--_border-inactive);
+          outline-color: var(--_outline-inactive);
+        }
+      }
     }
   }
 

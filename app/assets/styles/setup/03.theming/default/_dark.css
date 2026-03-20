@@ -98,7 +98,7 @@
     --_canvas-color: var(--amber-09);
 
     --_surface-active: var(--amber-10);
-    --_surface-inactive: var(--amber-09);
+    --_surface-inactive: color-mix(in srgb, var(--_surface-active) 10%, transparent);
     --_surface-completed: color-mix(in srgb, var(--_surface-active) 30%, transparent);
 
     --_surface-checked: var(--green-09);
