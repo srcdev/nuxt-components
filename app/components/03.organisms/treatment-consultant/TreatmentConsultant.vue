@@ -575,7 +575,7 @@ const treatments: Treatment[] = [
     icon: "lucide:waves",
     description: "Long-lasting curls or waves",
     notes: [
-      "Creates curls or waves that last 3–6 months",
+      "Creates curls or waves that last 3 to 6 months",
       "Should not be done on the same day as colour",
       "Particularly beautiful on straight or slightly wavy hair",
     ],
@@ -590,7 +590,7 @@ const treatments: Treatment[] = [
     notes: [
       "Permanently relaxes curly or coily texture",
       "Should not be combined with colour on the same visit",
-      "Requires regular maintenance every 6–8 weeks",
+      "Requires regular maintenance every 6 to 8 weeks",
     ],
     compatibility: true,
     excludes: ["perm", "japanese-straightening", "keratin-smoothing", "brazilian-blowout"],
@@ -638,7 +638,7 @@ const treatments: Treatment[] = [
     notes: [
       "Boosts vibrancy and adds a glassy finish",
       "Excellent follow-up to colour treatments",
-      "Semi-permanent — fades naturally over 4–6 weeks",
+      "Semi-permanent — fades naturally over 4 to 6 weeks",
     ],
   },
   {
@@ -728,7 +728,7 @@ function getColourRecommendation(natural: NaturalColour, desired: DesiredColour,
         details: [
           "Pastels like lilac, rose, and mint are ideal",
           "No bleaching needed — a rare advantage",
-          "Colours fade within 4–8 washes typically",
+          "Colours fade within 4 to 8 washes typically",
         ],
       },
       balayage: {
@@ -1379,7 +1379,9 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     --_spacing-xl: 2rem;
     --_spacing-2xl: 3rem;
     --_spacing-3xl: 4rem;
-    --_font-display: var(--font-display);
+
+    --_font-display: "Inter", sans-serif;
+    --_font-accent: "Playfair Display", serif;
   }
 
   /* ─── Main Container ───────────────────────────────────────────────────────── */
@@ -1422,7 +1424,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
         display: flex;
         align-items: center;
         gap: var(--_spacing-sm);
-        padding: 0.8rem 1.2rem;
+        padding: 1rem 1.2rem;
         text-transform: uppercase;
         transition: all var(--_transition-duration) ease;
         cursor: pointer;
@@ -1474,8 +1476,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
           align-items: center;
           justify-content: center;
           aspect-ratio: 1 / 1;
-          inline-size: 3.5rem;
-          font-size: 1.4rem;
+          inline-size: 3rem;
+          font-size: 1.2rem;
           font-weight: 500;
           border-radius: 100vw;
 
@@ -1525,7 +1527,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   /* ─── Step ─────────────────────────────────────────────────────────────────── */
   .treatment-consultant__step {
     .treatment-consultant__step-title {
-      font-family: var(--_font-display);
       text-align: center;
       margin-block-end: var(--_spacing-2xl);
     }
@@ -1610,6 +1611,7 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       .treatment-consultant__option-sublabel,
       .treatment-consultant__option-conflict {
         align-self: start;
+        min-block-size: 2lh;
       }
     }
   }
@@ -1720,18 +1722,35 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   }
 
   .treatment-consultant__option--selected {
-    border-color: var(--treatment-consultant-checked-stroke-colour);
     background-color: color-mix(in srgb, var(--treatment-consultant-checked-surface-colour) 20%, transparent);
-    box-shadow: 0 4px 20px color-mix(in srgb, var(--treatment-consultant-checked-surface-colour) 20%, transparent);
+    color: var(--_option-selected);
+
+    border-color: var(--_border-checked);
+    outline-color: var(--_outline-checked);
+
+    &:hover,
+    &:focus-visible {
+      outline-color: var(--_border-checked);
+    }
+
+    .treatment-consultant__option-pattern,
+    .treatment-consultant__option-label {
+      color: var(--_option-selected);
+    }
   }
 
   .treatment-consultant__option--excluded {
-    opacity: 0.45;
+    /* opacity: 0.45; */
     cursor: pointer;
 
     background-color: var(--_surface-excluded);
     border-color: var(--_border-excluded);
     outline-color: var(--_outline-excluded);
+
+    &:hover,
+    &:focus-visible {
+      outline-color: var(--_border-excluded);
+    }
 
     .treatment-consultant__option-conflict {
       display: block;
@@ -1746,10 +1765,10 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       position: absolute;
       top: 0.5rem;
       right: 0.5rem;
-      inline-size: 1.75rem;
-      block-size: 1.75rem;
-      color: var(--treatment-consultant-conflict-stroke-colour);
-      opacity: 0.6;
+      inline-size: 2.25rem !important;
+      block-size: 2.25rem !important;
+      color: var(--_border-excluded);
+      /* opacity: 0.6; */
     }
   }
 
@@ -1786,6 +1805,8 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     .treatment-consultant__option-label,
     .treatment-consultant__option-sublabel {
       text-align: left;
+      text-wrap-style: balance;
+      min-block-size: 2lh;
     }
   }
 
