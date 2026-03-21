@@ -14,7 +14,7 @@
   --theme-input-surface-hover: light-dark(var(--slate-01), var(--slate-10));
   --theme-input-surface-focus: light-dark(var(--slate-01), var(--slate-10));
 
-  --theme-input-border: var(--red-10);
+  --theme-input-border: var(--red-06);
   --theme-input-border-hover: light-dark(var(--slate-10), var(--slate-05));
   --theme-input-border-focus: light-dark(var(--slate-10), var(--slate-05));
 

@@ -26,7 +26,7 @@
      FORM INPUT VARIABLES
      Styling for form inputs and controls
      =========================================== */
-  --theme-input-border: var(--red-05);
+  --theme-input-border: var(--red-06);
   --theme-input-border-focus: var(--red-04);
 
   /* Input outlines and focus */
