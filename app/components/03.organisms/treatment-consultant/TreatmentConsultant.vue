@@ -1777,7 +1777,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
   }
 
   .treatment-consultant__option--excluded {
-    /* opacity: 0.45; */
     cursor: pointer;
 
     background-color: var(--_surface-excluded);
@@ -1805,7 +1804,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
       inline-size: 2.25rem !important;
       block-size: 2.25rem !important;
       color: var(--_border-excluded);
-      /* opacity: 0.6; */
     }
   }
 
@@ -1842,8 +1840,6 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
     .treatment-consultant__option-label,
     .treatment-consultant__option-sublabel {
       text-align: left;
-      text-wrap-style: balance;
-      min-block-size: 2lh;
     }
   }
 
