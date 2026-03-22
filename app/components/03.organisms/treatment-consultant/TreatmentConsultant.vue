@@ -1362,6 +1362,43 @@ const suitabilityConfig: Record<Suitability, { icon: string; label: string }> = 
 @layer components {
   /* ─── CSS Custom Properties ────────────────────────────────────────────────── */
   .treatment-consultant {
+    /** Surfaces */
+    --_canvas-color: var(--amber-09);
+
+    --_surface-active: var(--amber-10);
+    --_surface-inactive: color-mix(in srgb, var(--_surface-active) 10%, transparent);
+    --_surface-completed: color-mix(in srgb, var(--_surface-active) 30%, transparent);
+
+    --_surface-checked: var(--green-09);
+    --_surface-conflict: var(--sunset-09);
+    --_surface-excluded: color-mix(in srgb, var(--red-07) 10%, transparent);
+
+    /** Strokes */
+    --_border-active: var(--amber-02);
+    --_border-inactive: color-mix(in srgb, var(--_border-active) 60%, transparent);
+    --_border-completed: color-mix(in srgb, var(--_border-active) 30%, transparent);
+    --_border-checked: var(--green-02);
+    --_border-conflict: var(--sunset-09);
+    --_border-excluded: var(--red-05);
+
+    --_outline-active: var(--amber-06);
+    --_outline-inactive: color-mix(in srgb, var(--_outline-active) 60%, transparent);
+    --_outline-completed: color-mix(in srgb, var(--_outline-active) 30%, transparent);
+    --_outline-checked: var(--green-09);
+    --_outline-conflict: var(--sunset-09);
+    --_outline-excluded: var(--sunset-09);
+
+    /** Text */
+    --_canvas-text: var(--amber-02);
+    --_step-active: var(--amber-02);
+    --_step-inactive: color-mix(in srgb, var(--_step-active) 60%, transparent);
+    --_step-completed: color-mix(in srgb, var(--_step-active) 60%, transparent);
+
+    --_option-active: var(--amber-02);
+    --_option-inactive: var(--amber-09);
+    --_option-completed: var(--amber-09);
+    --_option-selected: var(--green-02);
+
     --_step-border-radius: 0.2rem;
 
     /** Previous */
