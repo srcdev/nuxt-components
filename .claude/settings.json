@@ -15,7 +15,8 @@
       "Bash(git mv:*)",
       "Bash(npx tsc:*)",
       "Bash(npx vitest:*)",
-      "Bash(git show:*)"
+      "Bash(git show:*)",
+      "Edit(/.claude/skills/components/**)"
     ],
     "additionalDirectories": [
       "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms/content-wrappers/content-width",

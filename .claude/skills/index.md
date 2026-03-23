@@ -46,7 +46,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── contact-section.md      — ContactSection props (stepperIndicatorSize pass-through), 3-item info+form layout, slot API
     ├── stepper-list.md         — StepperList dynamic slots (item-{n}/indicator-{n}), props, connector behaviour
     ├── expanding-panel.md      — ExpandingPanel v-model, forceOpened, slots (summary/icon/content), ARIA wiring
-    └── navigation-horizontal.md — NavigationHorizontal props, NavItemData type, CSS token API, import path gotcha
+    ├── navigation-horizontal.md — NavigationHorizontal props, NavItemData type, CSS token API, import path gotcha
+    └── treatment-consultant.md — TreatmentConsultant 5-step wizard: props, step flow, treatment exclusion logic, recommendation matrix, image paths
 ```
 
 ## Skill file template
