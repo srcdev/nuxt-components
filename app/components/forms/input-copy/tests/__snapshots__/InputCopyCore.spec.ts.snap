@@ -1,0 +1,28 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`InputCopyCore > Snapshots > custom labels 1`] = `
+"<div class="input-copy-core" data-testid="input-copy-core"><input id="copy-input" type="text" readonly="" aria-readonly="true" class="input-copy-field" value="sk_live_abc123def456"><button type="button" aria-disabled="false" data-testid="input-button-core" data-theme="default" class="input-button-core inline input-copy-button" aria-label="Copy key">
+    <!--v-if-->
+    <!--v-if--><span class="button-text">Copy key</span>
+    <!--v-if-->
+    <!--v-if-->
+  </button></div>"
+`;
+
+exports[`InputCopyCore > Snapshots > default 1`] = `
+"<div class="input-copy-core" data-testid="input-copy-core"><input id="copy-input" type="text" readonly="" aria-readonly="true" class="input-copy-field" value="sk_live_abc123def456"><button type="button" aria-disabled="false" data-testid="input-button-core" data-theme="default" class="input-button-core inline input-copy-button" aria-label="Copy">
+    <!--v-if-->
+    <!--v-if--><span class="button-text">Copy</span>
+    <!--v-if-->
+    <!--v-if-->
+  </button></div>"
+`;
+
+exports[`InputCopyCore > Snapshots > with styleClassPassthrough 1`] = `
+"<div class="input-copy-core my-copy-input" data-testid="input-copy-core"><input id="copy-input" type="text" readonly="" aria-readonly="true" class="input-copy-field" value="sk_live_abc123def456"><button type="button" aria-disabled="false" data-testid="input-button-core" data-theme="default" class="input-button-core inline input-copy-button" aria-label="Copy">
+    <!--v-if-->
+    <!--v-if--><span class="button-text">Copy</span>
+    <!--v-if-->
+    <!--v-if-->
+  </button></div>"
+`;
