@@ -32,6 +32,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── css-grid-max-width-gutters.md             — cap a centre grid column width by growing gutters, with start/center alignment variants
 ├── component-aria-landmark.md        — useAriaLabelledById composable: aria-labelledby for section/main/article/aside tags
 ├── component-export-types.md         — move inline component types to app/types/components/ barrel for consumer imports
+├── component-inline-action-button.md — InputButtonCore variant="inline" pattern for buttons embedded in custom input wrappers
 ├── icon-sets.md                      — icon set packages required by layer components, FOUC prevention, component→package map
 ├── robots-env-aware.md               — @nuxtjs/robots: allow crawling on prod domain only, block on preview/staging via env var
 └── components/
@@ -48,6 +49,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── stepper-list.md         — StepperList dynamic slots (item-{n}/indicator-{n}), props, connector behaviour
     ├── expanding-panel.md      — ExpandingPanel v-model, forceOpened, slots (summary/icon/content), ARIA wiring
     ├── navigation-horizontal.md — NavigationHorizontal props, NavItemData type, CSS token API, import path gotcha
+    ├── input-copy-core.md      — InputCopyCore: readonly copy-to-clipboard input; props, emits, slots, CSS classes, usage
     └── treatment-consultant.md — TreatmentConsultant 5-step wizard: props, step flow, treatment exclusion logic, recommendation matrix, image paths
 ```
 
