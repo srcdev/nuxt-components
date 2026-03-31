@@ -1,0 +1,73 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SiteNavigation > Snapshots > align center 1`] = `
+"<nav class="site-navigation site-navigation--center is-loaded" aria-label="Site navigation">
+  <!--
+      List stays in the DOM while not collapsed (or before first measurement)
+      so we can measure its natural width. Once collapsed it's removed entirely —
+      no hidden element occupying layout space.
+    -->
+  <ul class="site-nav-list">
+    <li class=""><a href="/" class="site-nav-link">Home</a></li>
+    <li class=""><a href="/services" class="site-nav-link">Services</a></li>
+    <li class=""><a href="/contact" class="site-nav-link">Contact</a></li>
+  </ul><!-- Burger toggle — three lines animate to ✕ -->
+  <!--v-if-->
+  <!--
+      Mobile drop panel.
+      NOTE: position: absolute here is relative to the nearest positioned ancestor
+      (e.g. .responsive-header), not .site-navigation, giving full header width.
+      If this component is used inside a layout where the nearest positioned ancestor
+      is not the header, a <Teleport> may be needed.
+    -->
+  <!--v-if-->
+</nav>"
+`;
+
+exports[`SiteNavigation > Snapshots > align right 1`] = `
+"<nav class="site-navigation site-navigation--right is-loaded" aria-label="Site navigation">
+  <!--
+      List stays in the DOM while not collapsed (or before first measurement)
+      so we can measure its natural width. Once collapsed it's removed entirely —
+      no hidden element occupying layout space.
+    -->
+  <ul class="site-nav-list">
+    <li class=""><a href="/" class="site-nav-link">Home</a></li>
+    <li class=""><a href="/services" class="site-nav-link">Services</a></li>
+    <li class=""><a href="/contact" class="site-nav-link">Contact</a></li>
+  </ul><!-- Burger toggle — three lines animate to ✕ -->
+  <!--v-if-->
+  <!--
+      Mobile drop panel.
+      NOTE: position: absolute here is relative to the nearest positioned ancestor
+      (e.g. .responsive-header), not .site-navigation, giving full header width.
+      If this component is used inside a layout where the nearest positioned ancestor
+      is not the header, a <Teleport> may be needed.
+    -->
+  <!--v-if-->
+</nav>"
+`;
+
+exports[`SiteNavigation > Snapshots > default (expanded) 1`] = `
+"<nav class="site-navigation site-navigation--left is-loaded" aria-label="Site navigation">
+  <!--
+      List stays in the DOM while not collapsed (or before first measurement)
+      so we can measure its natural width. Once collapsed it's removed entirely —
+      no hidden element occupying layout space.
+    -->
+  <ul class="site-nav-list">
+    <li class=""><a href="/" class="site-nav-link">Home</a></li>
+    <li class=""><a href="/services" class="site-nav-link">Services</a></li>
+    <li class=""><a href="/contact" class="site-nav-link">Contact</a></li>
+  </ul><!-- Burger toggle — three lines animate to ✕ -->
+  <!--v-if-->
+  <!--
+      Mobile drop panel.
+      NOTE: position: absolute here is relative to the nearest positioned ancestor
+      (e.g. .responsive-header), not .site-navigation, giving full header width.
+      If this component is used inside a layout where the nearest positioned ancestor
+      is not the header, a <Teleport> may be needed.
+    -->
+  <!--v-if-->
+</nav>"
+`;
