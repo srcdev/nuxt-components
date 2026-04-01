@@ -95,7 +95,7 @@ const navRef = ref<HTMLElement | null>(null)
 const navListRef = ref<HTMLUListElement | null>(null)
 
 const isCollapsed = ref(false)
-const isLoaded = ref(false)
+const isLoaded = useState('site-nav-loaded', () => false)
 const isMenuOpen = ref(false)
 
 // Stored natural width of the list — used when the list is not in the DOM
