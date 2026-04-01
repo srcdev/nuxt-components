@@ -13,10 +13,16 @@
           :style-class-passthrough="['mbe-32']"
         >
           <template #header="{ headingId }">
-            <div class="some-header-content">
-              <h1 :id="headingId" class="page-heading-1">Dashboard</h1>
-              <p class="page-body-normal">Overview of your account activity and key metrics.</p>
-            </div>
+            <PageHeroHighlightsHeader>
+              <template #start>
+                <h1 :id="headingId" class="page-heading-1">Dashboard</h1>
+                <p class="page-body-normal">Overview of your account activity and key metrics.</p>
+              </template>
+              <template #end>
+                <h1 :id="headingId" class="page-heading-1">Dashboard</h1>
+                <p class="page-body-normal">Overview of your account activity and key metrics.</p>
+              </template>
+            </PageHeroHighlightsHeader>
           </template>
           <template #highlights>
             <div class="highlight">
@@ -61,12 +67,8 @@ useHead({
 <style lang="css">
 .page-hero-highlights-page {
   .page-hero-highlights {
-    .header-row {
-      .header-slot {
-        .some-header-content {
-          padding-block: 4rem 3rem;
-        }
-      }
+    .page-hero-highlights-header {
+      padding-block: 4rem 3rem;
     }
 
     .content-row {

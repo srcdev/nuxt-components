@@ -46,7 +46,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const gridColumns = computed(() => {
   if (!props.maxWidth) return "16px 1fr 16px";
-  if (props.contentAlign === "start") return `16px minmax(0, ${props.maxWidth}) 1fr`;
+  if (props.contentAlign === "start") return `16px minmax(0, ${props.maxWidth}) minmax(16px, 1fr)`;
   return `max(16px, (100% - ${props.maxWidth}) / 2) 1fr max(16px, (100% - ${props.maxWidth}) / 2)`;
 });
 
@@ -124,6 +124,7 @@ watch(
     .header-slot {
       grid-column: 2;
       grid-row: 1;
+      container-type: inline-size;
     }
   }
 
@@ -213,26 +214,6 @@ watch(
     background-color: var(--content-row-background-color);
     padding-block-end: var(--content-row-end-gap);
 
-    &.has-background-BAK {
-      &:before {
-        /* Element geometry */
-        content: "";
-        grid-template-columns: subgrid;
-        grid-template-rows: subgrid;
-        display: grid;
-        grid-column: 2;
-        grid-row: 1 / span 2;
-
-        /* Element theme */
-        margin-top: var(--content-row-start-gap);
-
-        background-color: var(--content-slot-background-color);
-        border: var(--content-slot-border);
-        outline: var(--content-slot-outline);
-        border-radius: var(--content-slot-border-radius);
-      }
-    }
-
     .content-slot {
       grid-column: 2;
       grid-row: 2;
@@ -243,7 +224,7 @@ watch(
 
   &.has-content-panel {
     .highlights-row {
-      margin-inline-start: var(--highlights-row-initial-item-offset);
+      margin-inline: var(--highlights-row-initial-item-offset);
     }
     .content-row {
       &:before {
