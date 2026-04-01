@@ -19,6 +19,8 @@ The layout uses a 4-row CSS Grid with `subgrid` — no `translate`, negative mar
 | `highlightsJustify`     | `"start" \| "center" \| "end" \| "space-between" \| "space-around"` | `"start"`   | Alignment of highlight items along the main axis                                                                                |
 | `maxWidth`              | `string`                                                            | `undefined` | Cap the central content column (e.g. `"1064px"`). Gutters grow to enforce the constraint; below this width they hold at `16px`. |
 | `contentAlign`          | `"start" \| "center"`                                               | `"center"`  | When `maxWidth` is set: `"center"` grows gutters equally; `"start"` pins content to the left with a fixed `16px` left gutter.   |
+| `contentPanel`          | `boolean`                                                           | `true`      | When `true`, renders a decorative panel behind the content slot and offsets the highlights strip. Set to `false` for a flat layout with no backdrop. |
+| `highlightTitleBaseline`| `boolean`                                                           | `false`     | When `true`, fixes the highlight title row to a set height so titles align at a common baseline. Override `--highlight-title-height` to tune. |
 | `styleClassPassthrough` | `string \| string[]`                                                | `[]`        | Extra classes on the root element                                                                                               |
 
 ## Slots
@@ -81,6 +83,64 @@ Example with `HeroText` in the header slot:
     <!-- page body -->
   </template>
 </PageHeroHighlights>
+```
+
+## PageHeroHighlightsHeader companion component
+
+A co-located companion component for laying out the `#header` slot. Provides a responsive two-area layout: `#start` (title/description) and `#end` (action buttons), stacking vertically on mobile and sitting side-by-side on wider viewports.
+
+Located at: `app/components/04.templates/page-hero-highlights/PageHeroHighlightsHeader.vue`
+
+### PageHeroHighlightsHeader props
+
+| Prop                    | Type                 | Default | Description                       |
+| ----------------------- | -------------------- | ------- | --------------------------------- |
+| `styleClassPassthrough` | `string \| string[]` | `[]`    | Extra classes on the root element |
+
+### PageHeroHighlightsHeader slots
+
+| Slot    | Purpose                                                   |
+| ------- | --------------------------------------------------------- |
+| `start` | Title and description — always rendered, fills full width when `#end` is absent |
+| `end`   | Action buttons — `.phh-end` is only mounted when this slot is provided |
+
+### CSS tokens
+
+| Token              | Default  | Description                              |
+| ------------------ | -------- | ---------------------------------------- |
+| `--phh-padding-block` | `1.6rem` | Block padding on the header              |
+| `--phh-gap`        | `1.6rem` | Gap between `#start` and `#end` areas    |
+| `--phh-end-gap`    | `0.8rem` | Gap between items within `#end`          |
+
+### Usage
+
+```vue
+<PageHeroHighlights tag="section">
+  <template #header="{ headingId }">
+    <PageHeroHighlightsHeader>
+      <template #start>
+        <h1 :id="headingId" class="page-heading-1">Surplus needs</h1>
+        <p class="page-body-normal">Let us know what you need help with.</p>
+      </template>
+      <template #end>
+        <HelpButton />
+        <Button>Create new need</Button>
+      </template>
+    </PageHeroHighlightsHeader>
+  </template>
+  ...
+</PageHeroHighlights>
+```
+
+Omit `#end` for a single-element header — `#start` fills full width with no layout change needed:
+
+```vue
+<PageHeroHighlightsHeader>
+  <template #start>
+    <h1 :id="headingId">Dashboard</h1>
+    <p>Overview of your account activity.</p>
+  </template>
+</PageHeroHighlightsHeader>
 ```
 
 ## With aria-labelledby (section tag)
