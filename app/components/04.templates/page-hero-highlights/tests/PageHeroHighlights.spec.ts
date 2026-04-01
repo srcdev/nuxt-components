@@ -45,10 +45,7 @@ describe("PageHeroHighlights", () => {
   it("renders highlights slot content", async () => {
     const wrapper = await mountSuspended(PageHeroHighlights, {
       slots: {
-        highlights: [
-          "<div class='highlight-card'>Card 1</div>",
-          "<div class='highlight-card'>Card 2</div>",
-        ].join(""),
+        highlights: ["<div class='highlight-card'>Card 1</div>", "<div class='highlight-card'>Card 2</div>"].join(""),
       },
     });
     expect(wrapper.findAll(".highlight-card").length).toBe(2);
@@ -101,8 +98,7 @@ describe("PageHeroHighlights", () => {
     const wrapper = await mountSuspended(PageHeroHighlights, {
       props: { tag: "section" },
       slots: {
-        header: (props: Record<string, unknown>) =>
-          h("h1", { id: props.headingId, class: "page-title" }, "Dashboard"),
+        header: (props: Record<string, unknown>) => h("h1", { id: props.headingId, class: "page-title" }, "Dashboard"),
       },
     });
     const labelledBy = wrapper.find(".page-hero-highlights").attributes("aria-labelledby");
@@ -196,7 +192,7 @@ describe("PageHeroHighlights", () => {
         props: { maxWidth: "1064px", contentAlign: "start" },
       });
       const vm = wrapper.vm as unknown as ComponentInstance;
-      expect(vm.gridColumns).toBe("16px minmax(0, 1064px) 1fr");
+      expect(vm.gridColumns).toBe("16px minmax(0, 1064px) minmax(16px, 1fr)");
     });
 
     it("ignores contentAlign when maxWidth is not set", async () => {

@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`PageHeroHighlights > renders correct HTML structure 1`] = `
-"<div class="page-hero-highlights">
+"<div class="page-hero-highlights has-content-panel">
   <div class="header-row">
     <div class="header-slot">
       <h1>Page Title</h1>

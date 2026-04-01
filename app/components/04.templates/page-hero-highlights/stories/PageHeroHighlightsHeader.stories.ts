@@ -35,8 +35,10 @@ export const Default: Story = {
         <template #header>
           <PageHeroHighlightsHeader v-bind="args">
             <template #start>
-              <p class="page-heading-1" style="color: white;">Surplus needs</p>
-              <p class="page-body-normal" style="color: white;">Let us know what you need help with so we can advertise your charity to our donor network.</p>
+              <div style="color: white; padding-block: 1.6rem;">
+                <h1 class="page-heading-1" style="color: white;">Dashboard</h1>
+                <p class="page-body-normal" style="color: white;">Overview of your account activity and key metrics.</p>
+              </div>
             </template>
           </PageHeroHighlightsHeader>
         </template>
@@ -58,12 +60,14 @@ export const WithActions: Story = {
         <template #header>
           <PageHeroHighlightsHeader v-bind="args">
             <template #start>
-              <p class="page-heading-1" style="color: white;">Surplus needs</p>
-              <p class="page-body-normal" style="color: white;">Let us know what you need help with so we can advertise your charity to our donor network.</p>
+              <div style="color: white; padding-block: 1.6rem;">
+                <h1 class="page-heading-1" style="color: white;">Dashboard</h1>
+                <p class="page-body-normal" style="color: white;">Overview of your account activity and key metrics.</p>
+              </div>
             </template>
             <template #end>
               <button style="border: 2px solid white; color: white; background: transparent; border-radius: 50%; width: 4rem; height: 4rem; cursor: pointer;">?</button>
-              <button style="border: 2px solid white; color: white; background: transparent; border-radius: 0.8rem; padding: 1rem 1.6rem; cursor: pointer;">Create new need</button>
+              <button style="border: 2px solid white; color: white; background: transparent; border-radius: 0.8rem; padding: 1rem 1.6rem; cursor: pointer;">Create something new</button>
             </template>
           </PageHeroHighlightsHeader>
         </template>

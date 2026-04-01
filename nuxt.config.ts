@@ -106,6 +106,11 @@ export default defineNuxtConfig({
     // (avoids /_vercel/image which has no source images in storybook-static/)
     provider: process.env.STORYBOOK ? "none" : undefined,
   },
+  vite: {
+    optimizeDeps: {
+      include: ["@oddbird/css-anchor-positioning"],
+    },
+  },
   vue: {
     runtimeCompiler: true,
   },

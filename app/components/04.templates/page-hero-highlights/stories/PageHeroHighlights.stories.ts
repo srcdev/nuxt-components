@@ -36,7 +36,7 @@ const meta: Meta<StoryArgs> = {
     },
     maxWidth: {
       control: { type: "select" },
-      options: ["", "600px", "800px", "1024px", "1200px", "1440px"],
+      options: ["", "600px", "800px", "1024px", "1064px", "1200px", "1440px"],
       description:
         "Max width of the central content column. Gutters grow to enforce the constraint; below this width they hold at 16px.",
     },
@@ -169,8 +169,8 @@ All layout and visual properties are customisable via CSS custom properties. Set
       <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
         <template #header>
           <div style="color: white; padding-block: 1.6rem;">
-            <p class="page-heading-1">Dashboard</p>
-            <p class="page-body-normal">Overview of your account activity and key metrics.</p>
+            <h1 class="page-heading-1" style="color: white;">Dashboard</h1>
+            <p class="page-body-normal" style="color: white;">Overview of your account activity and key metrics.</p>
           </div>
         </template>
 
