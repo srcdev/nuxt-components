@@ -49,7 +49,7 @@
         :class="{ 'is-open': isMenuOpen }"
         aria-hidden="true"
         @click="closeMenu"
-      />
+      ></div>
     </Teleport>
 
     <div
@@ -86,269 +86,269 @@
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver, onClickOutside } from "@vueuse/core"
-import type { NavItemData } from "srcdev-nuxt-components"
+import { useResizeObserver, onClickOutside } from "@vueuse/core";
+import type { NavItemData } from "~/types/components";
 
 interface Props {
-  navItemData: NavItemData
-  navAlign?: "left" | "center" | "right"
-  styleClassPassthrough?: string | string[]
+  navItemData: NavItemData;
+  navAlign?: "left" | "center" | "right";
+  styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   navAlign: "left",
   styleClassPassthrough: () => [],
-})
+});
 
-const navRef = ref<HTMLElement | null>(null)
-const navListRef = ref<HTMLUListElement | null>(null)
+const navRef = ref<HTMLElement | null>(null);
+const navListRef = ref<HTMLUListElement | null>(null);
 
-const isCollapsed = ref(false)
-const isLoaded = useState("site-nav-loaded", () => false)
-const isMenuOpen = ref(false)
+const isCollapsed = ref(false);
+const isLoaded = useState("site-nav-loaded", () => false);
+const isMenuOpen = ref(false);
 
 // Stored natural width of the list — used when the list is not in the DOM
-const navListNaturalWidth = ref(0)
+const navListNaturalWidth = ref(0);
 
 const checkOverflow = () => {
-  if (!navRef.value) return
+  if (!navRef.value) return;
 
   // Measure and store the list width whenever it's in the DOM
   if (navListRef.value) {
-    navListNaturalWidth.value = navListRef.value.scrollWidth
+    navListNaturalWidth.value = navListRef.value.scrollWidth;
   }
 
-  isCollapsed.value = navListNaturalWidth.value > navRef.value.clientWidth
-}
+  isCollapsed.value = navListNaturalWidth.value > navRef.value.clientWidth;
+};
 
 const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value
-}
+  isMenuOpen.value = !isMenuOpen.value;
+};
 
 const closeMenu = () => {
-  isMenuOpen.value = false
-}
+  isMenuOpen.value = false;
+};
 
 // ─── Nav decorators (active / hover indicators) ─────────────────────────────
 
-const NAV_DECORATOR_DURATION = 200
+const NAV_DECORATOR_DURATION = 200;
 
 // Single pending snap timer — cancel the previous one when a new move starts
-let navSnapTimer: ReturnType<typeof setTimeout> | null = null
-let panelSnapTimer: ReturnType<typeof setTimeout> | null = null
+let navSnapTimer: ReturnType<typeof setTimeout> | null = null;
+let panelSnapTimer: ReturnType<typeof setTimeout> | null = null;
 
-const currentActiveNavLink = ref<HTMLElement | null>(null)
-const currentHoveredNavLink = ref<HTMLElement | null>(null)
-const previousHoveredNavLink = ref<HTMLElement | null>(null)
+const currentActiveNavLink = ref<HTMLElement | null>(null);
+const currentHoveredNavLink = ref<HTMLElement | null>(null);
+const previousHoveredNavLink = ref<HTMLElement | null>(null);
 
 const getNavLinks = () =>
-  navListRef.value ? Array.from(navListRef.value.querySelectorAll<HTMLElement>("[data-nav-item]")) : []
+  navListRef.value ? Array.from(navListRef.value.querySelectorAll<HTMLElement>("[data-nav-item]")) : [];
 
 const setFinalNavActivePositions = (instant = false) => {
-  if (!navListRef.value || !currentActiveNavLink.value) return
-  const list = navListRef.value
-  const el = currentActiveNavLink.value
-  list.style.setProperty("--_transition-duration", instant ? "0ms" : NAV_DECORATOR_DURATION + "ms")
-  list.style.setProperty("--_x-active", el.offsetLeft + "px")
-  list.style.setProperty("--_width-active", String(el.offsetWidth / list.offsetWidth))
-}
+  if (!navListRef.value || !currentActiveNavLink.value) return;
+  const list = navListRef.value;
+  const el = currentActiveNavLink.value;
+  list.style.setProperty("--_transition-duration", instant ? "0ms" : NAV_DECORATOR_DURATION + "ms");
+  list.style.setProperty("--_x-active", el.offsetLeft + "px");
+  list.style.setProperty("--_width-active", String(el.offsetWidth / list.offsetWidth));
+};
 
 const setFinalNavHoveredPositions = (instant = false) => {
-  if (!navListRef.value || !currentHoveredNavLink.value) return
-  const list = navListRef.value
-  const el = currentHoveredNavLink.value
-  list.style.setProperty("--_transition-duration", instant ? "0ms" : NAV_DECORATOR_DURATION + "ms")
-  list.style.setProperty("--_x-hovered", el.offsetLeft + "px")
-  list.style.setProperty("--_width-hovered", String(el.offsetWidth / list.offsetWidth))
-}
+  if (!navListRef.value || !currentHoveredNavLink.value) return;
+  const list = navListRef.value;
+  const el = currentHoveredNavLink.value;
+  list.style.setProperty("--_transition-duration", instant ? "0ms" : NAV_DECORATOR_DURATION + "ms");
+  list.style.setProperty("--_x-hovered", el.offsetLeft + "px");
+  list.style.setProperty("--_width-hovered", String(el.offsetWidth / list.offsetWidth));
+};
 
 const moveNavHoveredIndicator = () => {
-  if (!navListRef.value || !currentHoveredNavLink.value || !previousHoveredNavLink.value) return
-  const list = navListRef.value
-  const curr = currentHoveredNavLink.value
-  const prev = previousHoveredNavLink.value
-  list.style.setProperty("--_transition-duration", NAV_DECORATOR_DURATION + "ms")
-  const isMovingRight = prev.compareDocumentPosition(curr) === 4
-  let transitionWidth: number
+  if (!navListRef.value || !currentHoveredNavLink.value || !previousHoveredNavLink.value) return;
+  const list = navListRef.value;
+  const curr = currentHoveredNavLink.value;
+  const prev = previousHoveredNavLink.value;
+  list.style.setProperty("--_transition-duration", NAV_DECORATOR_DURATION + "ms");
+  const isMovingRight = prev.compareDocumentPosition(curr) === 4;
+  let transitionWidth: number;
   if (isMovingRight) {
-    transitionWidth = curr.offsetLeft + curr.offsetWidth - prev.offsetLeft
+    transitionWidth = curr.offsetLeft + curr.offsetWidth - prev.offsetLeft;
   } else {
-    transitionWidth = prev.offsetLeft + prev.offsetWidth - curr.offsetLeft
-    list.style.setProperty("--_x-hovered", curr.offsetLeft + "px")
+    transitionWidth = prev.offsetLeft + prev.offsetWidth - curr.offsetLeft;
+    list.style.setProperty("--_x-hovered", curr.offsetLeft + "px");
   }
-  list.style.setProperty("--_width-hovered", String(transitionWidth / list.offsetWidth))
-  if (navSnapTimer !== null) clearTimeout(navSnapTimer)
+  list.style.setProperty("--_width-hovered", String(transitionWidth / list.offsetWidth));
+  if (navSnapTimer !== null) clearTimeout(navSnapTimer);
   navSnapTimer = setTimeout(() => {
-    navSnapTimer = null
-    setFinalNavHoveredPositions()
-  }, NAV_DECORATOR_DURATION + 20)
-}
+    navSnapTimer = null;
+    setFinalNavHoveredPositions();
+  }, NAV_DECORATOR_DURATION + 20);
+};
 
 const handleNavLinkClick = (event: MouseEvent) => {
-  const target = (event.target as HTMLElement).closest<HTMLElement>("[data-nav-item]")
-  if (!target) return
-  currentActiveNavLink.value = target
-  currentHoveredNavLink.value = target
-  previousHoveredNavLink.value = target
-}
+  const target = (event.target as HTMLElement).closest<HTMLElement>("[data-nav-item]");
+  if (!target) return;
+  currentActiveNavLink.value = target;
+  currentHoveredNavLink.value = target;
+  previousHoveredNavLink.value = target;
+};
 
 const handleNavHover = (event: MouseEvent) => {
-  const target = (event.target as HTMLElement).closest<HTMLElement>("[data-nav-item]")
-  if (!target || target === currentHoveredNavLink.value) return
-  previousHoveredNavLink.value = currentHoveredNavLink.value
-  currentHoveredNavLink.value = target
-  moveNavHoveredIndicator()
-}
+  const target = (event.target as HTMLElement).closest<HTMLElement>("[data-nav-item]");
+  if (!target || target === currentHoveredNavLink.value) return;
+  previousHoveredNavLink.value = currentHoveredNavLink.value;
+  currentHoveredNavLink.value = target;
+  moveNavHoveredIndicator();
+};
 
 const resetHoverNavToActive = () => {
-  if (!currentActiveNavLink.value || currentHoveredNavLink.value === currentActiveNavLink.value) return
-  previousHoveredNavLink.value = currentHoveredNavLink.value
-  currentHoveredNavLink.value = currentActiveNavLink.value
-  moveNavHoveredIndicator()
-}
+  if (!currentActiveNavLink.value || currentHoveredNavLink.value === currentActiveNavLink.value) return;
+  previousHoveredNavLink.value = currentHoveredNavLink.value;
+  currentHoveredNavLink.value = currentActiveNavLink.value;
+  moveNavHoveredIndicator();
+};
 
 const initNavDecorators = () => {
-  if (!navListRef.value) return
-  const links = getNavLinks()
-  if (!links.length) return
+  if (!navListRef.value) return;
+  const links = getNavLinks();
+  if (!links.length) return;
 
   // Cancel any in-flight snap timer before resetting positions
   if (navSnapTimer !== null) {
-    clearTimeout(navSnapTimer)
-    navSnapTimer = null
+    clearTimeout(navSnapTimer);
+    navSnapTimer = null;
   }
 
-  navListRef.value.querySelectorAll(".nav-indicator-li").forEach((el) => el.remove())
+  navListRef.value.querySelectorAll(".nav-indicator-li").forEach((el) => el.remove());
 
-  const activeLink = links.find((el) => el.classList.contains("router-link-active")) ?? links[0]
-  if (!activeLink) return
+  const activeLink = links.find((el) => el.classList.contains("router-link-active")) ?? links[0];
+  if (!activeLink) return;
 
-  currentActiveNavLink.value = activeLink
-  currentHoveredNavLink.value = activeLink
-  previousHoveredNavLink.value = activeLink
+  currentActiveNavLink.value = activeLink;
+  currentHoveredNavLink.value = activeLink;
+  previousHoveredNavLink.value = activeLink;
 
-  setFinalNavActivePositions(true)
-  setFinalNavHoveredPositions(true)
+  setFinalNavActivePositions(true);
+  setFinalNavHoveredPositions(true);
 
   // Wrap each indicator in a <li> so the <ul> contains only valid children
-  ;["nav__active-indicator", "nav__active", "nav__hovered"].forEach((cls) => {
-    const li = document.createElement("li")
-    li.classList.add("nav-indicator-li")
-    li.setAttribute("aria-hidden", "true")
-    li.setAttribute("role", "none")
-    const div = document.createElement("div")
-    div.classList.add(cls)
-    li.appendChild(div)
-    navListRef.value!.appendChild(li)
-  })
-}
+  ["nav__active-indicator", "nav__active", "nav__hovered"].forEach((cls) => {
+    const li = document.createElement("li");
+    li.classList.add("nav-indicator-li");
+    li.setAttribute("aria-hidden", "true");
+    li.setAttribute("role", "none");
+    const div = document.createElement("div");
+    div.classList.add(cls);
+    li.appendChild(div);
+    navListRef.value!.appendChild(li);
+  });
+};
 
 // ─── Panel decorators (y-axis active / hover indicators) ─────────────────────
 
-const panelListRef = ref<HTMLUListElement | null>(null)
+const panelListRef = ref<HTMLUListElement | null>(null);
 
-const currentActivePanelLink = ref<HTMLElement | null>(null)
-const currentHoveredPanelLink = ref<HTMLElement | null>(null)
-const previousHoveredPanelLink = ref<HTMLElement | null>(null)
+const currentActivePanelLink = ref<HTMLElement | null>(null);
+const currentHoveredPanelLink = ref<HTMLElement | null>(null);
+const previousHoveredPanelLink = ref<HTMLElement | null>(null);
 
 const getPanelLinks = () =>
-  panelListRef.value ? Array.from(panelListRef.value.querySelectorAll<HTMLElement>("[data-panel-nav-item]")) : []
+  panelListRef.value ? Array.from(panelListRef.value.querySelectorAll<HTMLElement>("[data-panel-nav-item]")) : [];
 
 const setFinalPanelActivePositions = (instant = false) => {
-  if (!panelListRef.value || !currentActivePanelLink.value) return
-  const list = panelListRef.value
-  const el = currentActivePanelLink.value
-  list.style.setProperty("--_panel-transition-duration", instant ? "0ms" : NAV_DECORATOR_DURATION + "ms")
-  list.style.setProperty("--_panel-y-active", el.offsetTop + "px")
-  list.style.setProperty("--_panel-height-active", String(el.offsetHeight / list.offsetHeight))
-}
+  if (!panelListRef.value || !currentActivePanelLink.value) return;
+  const list = panelListRef.value;
+  const el = currentActivePanelLink.value;
+  list.style.setProperty("--_panel-transition-duration", instant ? "0ms" : NAV_DECORATOR_DURATION + "ms");
+  list.style.setProperty("--_panel-y-active", el.offsetTop + "px");
+  list.style.setProperty("--_panel-height-active", String(el.offsetHeight / list.offsetHeight));
+};
 
 const setFinalPanelHoveredPositions = (instant = false) => {
-  if (!panelListRef.value || !currentHoveredPanelLink.value) return
-  const list = panelListRef.value
-  const el = currentHoveredPanelLink.value
-  list.style.setProperty("--_panel-transition-duration", instant ? "0ms" : NAV_DECORATOR_DURATION + "ms")
-  list.style.setProperty("--_panel-y-hovered", el.offsetTop + "px")
-  list.style.setProperty("--_panel-height-hovered", String(el.offsetHeight / list.offsetHeight))
-}
+  if (!panelListRef.value || !currentHoveredPanelLink.value) return;
+  const list = panelListRef.value;
+  const el = currentHoveredPanelLink.value;
+  list.style.setProperty("--_panel-transition-duration", instant ? "0ms" : NAV_DECORATOR_DURATION + "ms");
+  list.style.setProperty("--_panel-y-hovered", el.offsetTop + "px");
+  list.style.setProperty("--_panel-height-hovered", String(el.offsetHeight / list.offsetHeight));
+};
 
 const movePanelHoveredIndicator = () => {
-  if (!panelListRef.value || !currentHoveredPanelLink.value || !previousHoveredPanelLink.value) return
-  const list = panelListRef.value
-  const curr = currentHoveredPanelLink.value
-  const prev = previousHoveredPanelLink.value
-  list.style.setProperty("--_panel-transition-duration", NAV_DECORATOR_DURATION + "ms")
-  const isMovingDown = prev.compareDocumentPosition(curr) === 4
-  let transitionHeight: number
+  if (!panelListRef.value || !currentHoveredPanelLink.value || !previousHoveredPanelLink.value) return;
+  const list = panelListRef.value;
+  const curr = currentHoveredPanelLink.value;
+  const prev = previousHoveredPanelLink.value;
+  list.style.setProperty("--_panel-transition-duration", NAV_DECORATOR_DURATION + "ms");
+  const isMovingDown = prev.compareDocumentPosition(curr) === 4;
+  let transitionHeight: number;
   if (isMovingDown) {
-    transitionHeight = curr.offsetTop + curr.offsetHeight - prev.offsetTop
+    transitionHeight = curr.offsetTop + curr.offsetHeight - prev.offsetTop;
   } else {
-    transitionHeight = prev.offsetTop + prev.offsetHeight - curr.offsetTop
-    list.style.setProperty("--_panel-y-hovered", curr.offsetTop + "px")
+    transitionHeight = prev.offsetTop + prev.offsetHeight - curr.offsetTop;
+    list.style.setProperty("--_panel-y-hovered", curr.offsetTop + "px");
   }
-  list.style.setProperty("--_panel-height-hovered", String(transitionHeight / list.offsetHeight))
-  if (panelSnapTimer !== null) clearTimeout(panelSnapTimer)
+  list.style.setProperty("--_panel-height-hovered", String(transitionHeight / list.offsetHeight));
+  if (panelSnapTimer !== null) clearTimeout(panelSnapTimer);
   panelSnapTimer = setTimeout(() => {
-    panelSnapTimer = null
-    setFinalPanelHoveredPositions()
-  }, NAV_DECORATOR_DURATION + 20)
-}
+    panelSnapTimer = null;
+    setFinalPanelHoveredPositions();
+  }, NAV_DECORATOR_DURATION + 20);
+};
 
 const handlePanelLinkClick = (event: MouseEvent) => {
-  const target = (event.target as HTMLElement).closest<HTMLElement>("[data-panel-nav-item]")
-  if (!target) return
-  currentActivePanelLink.value = target
-  currentHoveredPanelLink.value = target
-  previousHoveredPanelLink.value = target
-}
+  const target = (event.target as HTMLElement).closest<HTMLElement>("[data-panel-nav-item]");
+  if (!target) return;
+  currentActivePanelLink.value = target;
+  currentHoveredPanelLink.value = target;
+  previousHoveredPanelLink.value = target;
+};
 
 const handlePanelHover = (event: MouseEvent) => {
-  const target = (event.target as HTMLElement).closest<HTMLElement>("[data-panel-nav-item]")
-  if (!target || target === currentHoveredPanelLink.value) return
-  previousHoveredPanelLink.value = currentHoveredPanelLink.value
-  currentHoveredPanelLink.value = target
-  movePanelHoveredIndicator()
-}
+  const target = (event.target as HTMLElement).closest<HTMLElement>("[data-panel-nav-item]");
+  if (!target || target === currentHoveredPanelLink.value) return;
+  previousHoveredPanelLink.value = currentHoveredPanelLink.value;
+  currentHoveredPanelLink.value = target;
+  movePanelHoveredIndicator();
+};
 
 const resetHoverPanelToActive = () => {
-  if (!currentActivePanelLink.value || currentHoveredPanelLink.value === currentActivePanelLink.value) return
-  previousHoveredPanelLink.value = currentHoveredPanelLink.value
-  currentHoveredPanelLink.value = currentActivePanelLink.value
-  movePanelHoveredIndicator()
-}
+  if (!currentActivePanelLink.value || currentHoveredPanelLink.value === currentActivePanelLink.value) return;
+  previousHoveredPanelLink.value = currentHoveredPanelLink.value;
+  currentHoveredPanelLink.value = currentActivePanelLink.value;
+  movePanelHoveredIndicator();
+};
 
 const initPanelDecorators = () => {
-  if (!panelListRef.value) return
-  const links = getPanelLinks()
-  if (!links.length) return
+  if (!panelListRef.value) return;
+  const links = getPanelLinks();
+  if (!links.length) return;
 
   if (panelSnapTimer !== null) {
-    clearTimeout(panelSnapTimer)
-    panelSnapTimer = null
+    clearTimeout(panelSnapTimer);
+    panelSnapTimer = null;
   }
 
-  panelListRef.value.querySelectorAll(".nav-indicator-li").forEach((el) => el.remove())
+  panelListRef.value.querySelectorAll(".nav-indicator-li").forEach((el) => el.remove());
 
-  const activeLink = links.find((el) => el.classList.contains("router-link-active")) ?? links[0]
-  if (!activeLink) return
+  const activeLink = links.find((el) => el.classList.contains("router-link-active")) ?? links[0];
+  if (!activeLink) return;
 
-  currentActivePanelLink.value = activeLink
-  currentHoveredPanelLink.value = activeLink
-  previousHoveredPanelLink.value = activeLink
+  currentActivePanelLink.value = activeLink;
+  currentHoveredPanelLink.value = activeLink;
+  previousHoveredPanelLink.value = activeLink;
 
-  setFinalPanelActivePositions(true)
-  setFinalPanelHoveredPositions(true)
-  ;["nav__active-indicator", "nav__active", "nav__hovered"].forEach((cls) => {
-    const li = document.createElement("li")
-    li.classList.add("nav-indicator-li")
-    li.setAttribute("aria-hidden", "true")
-    li.setAttribute("role", "none")
-    const div = document.createElement("div")
-    div.classList.add(cls)
-    li.appendChild(div)
-    panelListRef.value!.appendChild(li)
-  })
-}
+  setFinalPanelActivePositions(true);
+  setFinalPanelHoveredPositions(true);
+  ["nav__active-indicator", "nav__active", "nav__hovered"].forEach((cls) => {
+    const li = document.createElement("li");
+    li.classList.add("nav-indicator-li");
+    li.setAttribute("aria-hidden", "true");
+    li.setAttribute("role", "none");
+    const div = document.createElement("div");
+    div.classList.add(cls);
+    li.appendChild(div);
+    panelListRef.value!.appendChild(li);
+  });
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -356,57 +356,57 @@ const initPanelDecorators = () => {
 // flush: 'post' ensures router-link-active classes are applied.
 // requestAnimationFrame defers the measurement until after browser layout,
 // preventing stale offsetLeft reads and racing with hover setTimeouts.
-const route = useRoute()
+const route = useRoute();
 watch(
   () => route.path,
   () => {
-    closeMenu()
+    closeMenu();
     requestAnimationFrame(() => {
-      initNavDecorators()
-    })
+      initNavDecorators();
+    });
   },
   { flush: "post" }
-)
+);
 
 useResizeObserver(navRef, () => {
-  checkOverflow()
-  if (!isCollapsed.value) closeMenu()
-  setFinalNavActivePositions(true)
-  setFinalNavHoveredPositions(true)
-  setFinalPanelActivePositions(true)
-  setFinalPanelHoveredPositions(true)
-})
+  checkOverflow();
+  if (!isCollapsed.value) closeMenu();
+  setFinalNavActivePositions(true);
+  setFinalNavHoveredPositions(true);
+  setFinalPanelActivePositions(true);
+  setFinalPanelHoveredPositions(true);
+});
 
-onClickOutside(navRef, closeMenu)
+onClickOutside(navRef, closeMenu);
 
 onMounted(async () => {
-  await nextTick()
-  checkOverflow()
-  isLoaded.value = true
-  await nextTick()
-  initNavDecorators()
-})
+  await nextTick();
+  checkOverflow();
+  isLoaded.value = true;
+  await nextTick();
+  initNavDecorators();
+});
 
 watch(isCollapsed, async (collapsed) => {
   if (!collapsed) {
-    await nextTick()
-    initNavDecorators()
+    await nextTick();
+    initNavDecorators();
   }
-})
+});
 
 watch(isMenuOpen, async (open) => {
   if (open) {
-    await nextTick()
-    initPanelDecorators()
+    await nextTick();
+    initPanelDecorators();
   }
-})
+});
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
   () => props.styleClassPassthrough,
   () => resetElementClasses(props.styleClassPassthrough)
-)
+);
 </script>
 
 <style lang="css">

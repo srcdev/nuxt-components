@@ -20,7 +20,8 @@
     ],
     "additionalDirectories": [
       "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms/content-wrappers/content-width",
-      "/Users/simoncornforth/websites/nuxt-components/.claude/skills"
+      "/Users/simoncornforth/websites/nuxt-components/.claude/skills",
+      "/Users/simoncornforth/websites/nuxt-components/app/components/02.molecules/navigation/site-navigation/tests"
     ]
   }
 }

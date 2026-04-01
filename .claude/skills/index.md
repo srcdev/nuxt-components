@@ -49,7 +49,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── stepper-list.md         — StepperList dynamic slots (item-{n}/indicator-{n}), props, connector behaviour
     ├── expanding-panel.md      — ExpandingPanel v-model, forceOpened, slots (summary/icon/content), ARIA wiring
     ├── navigation-horizontal.md — NavigationHorizontal props, NavItemData type, CSS token API, import path gotcha
-    └── input-copy-core.md      — InputCopyCore: readonly copy-to-clipboard input; props, emits, slots, CSS classes, usage
+    ├── input-copy-core.md      — InputCopyCore: readonly copy-to-clipboard input; props, emits, slots, CSS classes, usage
+    └── site-navigation.md      — SiteNavigation: responsive nav with auto-collapse, burger menu, decorator indicators, CSS token API
 ```
 
 ## Skill file template

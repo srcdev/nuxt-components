@@ -1,0 +1,30 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SiteNavigation > renders correct HTML structure 1`] = `
+"<nav class="site-navigation site-navigation--left is-loaded" aria-label="Site navigation">
+  <ul class="site-nav-list" style="--_transition-duration: 0ms; --_x-active: 0px; --_width-active: NaN; --_x-hovered: 0px; --_width-hovered: NaN;">
+    <li class=""><a href="/" class="site-nav-link" data-nav-item="">
+        <!--v-if--> Home
+      </a></li>
+    <li class=""><a href="/about" class="site-nav-link" data-nav-item="">
+        <!--v-if--> About
+      </a></li>
+    <li class=""><a href="/contact" class="site-nav-link" data-nav-item="">
+        <!--v-if--> Contact
+      </a></li>
+    <li class="nav-indicator-li" aria-hidden="true" role="none">
+      <div class="nav__active-indicator"></div>
+    </li>
+    <li class="nav-indicator-li" aria-hidden="true" role="none">
+      <div class="nav__active"></div>
+    </li>
+    <li class="nav-indicator-li" aria-hidden="true" role="none">
+      <div class="nav__hovered"></div>
+    </li>
+  </ul>
+  <!--v-if-->
+  <!--teleport start-->
+  <!--teleport end-->
+  <!--v-if-->
+</nav>"
+`;
