@@ -3,16 +3,18 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <PageHeroHighlights
+          tag="section"
           max-width="1064px"
           content-align="start"
+          :content-panel="true"
           :highlights-equal-widths="false"
           highlights-justify="start"
           :highlight-title-baseline="true"
           :style-class-passthrough="['mbe-32']"
         >
-          <template #header>
+          <template #header="{ headingId }">
             <div class="some-header-content">
-              <p class="page-heading-1">Dashboard</p>
+              <h1 :id="headingId" class="page-heading-1">Dashboard</h1>
               <p class="page-body-normal">Overview of your account activity and key metrics.</p>
             </div>
           </template>

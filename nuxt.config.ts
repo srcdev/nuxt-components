@@ -5,6 +5,8 @@ const { resolve } = createResolver(import.meta.url);
 const isStandalone = !!process.env.SRCDEV_STANDALONE;
 
 export default defineNuxtConfig({
+  // debug: !isProduction,
+  debug: false,
   devtools: { enabled: true },
 
   // Server-only secrets — Nuxt reads matching NUXT_* env vars automatically.

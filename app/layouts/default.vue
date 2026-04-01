@@ -106,6 +106,7 @@ const responsiveNavLinks = {
         { name: "Masonry Grid Sorted", path: "/ui/masonry-grid-sorted" },
         { name: "Masonry Grid Ordered", path: "/ui/masonry-grid-ordered" },
         { name: "Masonry Columns", path: "/ui/masonry-columns" },
+        { name: "Page Hero Highlights", path: "/page-hero-highlights" },
       ],
     },
     {

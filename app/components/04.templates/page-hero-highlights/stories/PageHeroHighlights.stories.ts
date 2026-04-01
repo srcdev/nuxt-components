@@ -8,6 +8,7 @@ type StoryArgs = {
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
   maxWidth?: string;
   contentAlign?: "start" | "center";
+  contentPanel?: boolean;
   highlightTitleBaseline?: boolean;
   headerBackground?: string;
   contentBackground?: string;
@@ -45,6 +46,11 @@ const meta: Meta<StoryArgs> = {
       description:
         "Align the content column to the start (left gutter stays 16px, right takes remaining space) or center (equal gutters). Only meaningful when maxWidth is set.",
     },
+    contentPanel: {
+      control: "boolean",
+      description:
+        "When true (default), renders a decorative panel behind the content slot and offsets the highlights strip. Set to false for a flat layout with no backdrop.",
+    },
     highlightTitleBaseline: {
       control: "boolean",
       description:
@@ -74,6 +80,7 @@ const meta: Meta<StoryArgs> = {
     highlightsJustify: "start",
     maxWidth: "",
     contentAlign: "center",
+    contentPanel: true,
     highlightTitleBaseline: false,
     headerBackground: "",
     contentBackground: "",
@@ -389,6 +396,46 @@ export const MaxWidthStart: Story = {
             <p class="page-body-normal">1,284</p>
           </div>
           <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Open Tasks</p>
+            <p class="page-body-normal">37</p>
+          </div>
+        </template>
+
+        <template #content>
+          <p class="page-heading-2">Recent Activity</p>
+          <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
+        </template>
+      </PageHeroHighlights>
+    `,
+  }),
+};
+
+/** No content panel — flat layout with no backdrop or highlight offset behind the content slot. */
+export const NoContentPanel: Story = {
+  name: "No Content Panel",
+  args: { contentPanel: false },
+  render: (args: StoryArgs) => ({
+    components: { PageHeroHighlights },
+    setup() {
+      return useStorySetup(args);
+    },
+    template: `
+      <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
+        <template #header>
+          <p class="page-heading-1">Dashboard</p>
+          <p class="page-body-normal">Flat layout — no decorative panel behind the content slot.</p>
+        </template>
+
+        <template #highlights>
+          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Total Revenue</p>
+            <p class="page-body-normal">£24,500</p>
+          </div>
+          <div v-if="highlightCount >= 2" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
+            <p class="page-heading-2">Active Users</p>
+            <p class="page-body-normal">1,284</p>
+          </div>
+          <div v-if="highlightCount >= 3" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
             <p class="page-heading-2">Open Tasks</p>
             <p class="page-body-normal">37</p>
           </div>

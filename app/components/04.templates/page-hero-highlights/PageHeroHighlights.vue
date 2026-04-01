@@ -2,7 +2,7 @@
   <component
     :is="tag"
     class="page-hero-highlights"
-    :class="[elementClasses, componentClasses]"
+    :class="[elementClasses, componentClasses, { 'has-content-panel': contentPanel }]"
     :aria-labelledby="ariaLabelledby"
   >
     <div class="header-row">
@@ -28,6 +28,7 @@ interface Props {
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
   maxWidth?: string;
   contentAlign?: "start" | "center";
+  contentPanel?: boolean;
   highlightTitleBaseline?: boolean;
   styleClassPassthrough?: string | string[];
 }
@@ -38,6 +39,7 @@ const props = withDefaults(defineProps<Props>(), {
   highlightsJustify: "start",
   maxWidth: undefined,
   contentAlign: "center",
+  contentPanel: true,
   highlightTitleBaseline: false,
   styleClassPassthrough: () => [],
 });
@@ -135,7 +137,7 @@ watch(
 
     /* Element theme */
     gap: var(--highlights-row-item-gap);
-    margin-inline-start: var(--highlights-row-initial-item-offset);
+    margin-inline-start: 0;
 
     &.equal-widths {
       display: grid;
@@ -211,28 +213,60 @@ watch(
     background-color: var(--content-row-background-color);
     padding-block-end: var(--content-row-end-gap);
 
-    &:before {
-      /* Element geometry */
-      content: "";
-      grid-template-columns: subgrid;
-      grid-template-rows: subgrid;
-      display: grid;
-      grid-column: 2;
-      grid-row: 1 / span 2;
+    &.has-background-BAK {
+      &:before {
+        /* Element geometry */
+        content: "";
+        grid-template-columns: subgrid;
+        grid-template-rows: subgrid;
+        display: grid;
+        grid-column: 2;
+        grid-row: 1 / span 2;
 
-      /* Element theme */
-      margin-top: var(--content-row-start-gap);
+        /* Element theme */
+        margin-top: var(--content-row-start-gap);
 
-      background-color: var(--content-slot-background-color);
-      border: var(--content-slot-border);
-      outline: var(--content-slot-outline);
-      border-radius: var(--content-slot-border-radius);
+        background-color: var(--content-slot-background-color);
+        border: var(--content-slot-border);
+        outline: var(--content-slot-outline);
+        border-radius: var(--content-slot-border-radius);
+      }
     }
+
     .content-slot {
       grid-column: 2;
       grid-row: 2;
       margin-block: var(--content-slot-margin-block-start) var(--content-slot-margin);
-      margin-inline: var(--content-slot-margin);
+      margin-inline: 0;
+    }
+  }
+
+  &.has-content-panel {
+    .highlights-row {
+      margin-inline-start: var(--highlights-row-initial-item-offset);
+    }
+    .content-row {
+      &:before {
+        /* Element geometry */
+        content: "";
+        grid-template-columns: subgrid;
+        grid-template-rows: subgrid;
+        display: grid;
+        grid-column: 2;
+        grid-row: 1 / span 2;
+
+        /* Element theme */
+        margin-top: var(--content-row-start-gap);
+
+        background-color: var(--content-slot-background-color);
+        border: var(--content-slot-border);
+        outline: var(--content-slot-outline);
+        border-radius: var(--content-slot-border-radius);
+      }
+
+      .content-slot {
+        margin-inline: var(--content-slot-margin);
+      }
     }
   }
 }

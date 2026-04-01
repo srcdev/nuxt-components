@@ -139,6 +139,18 @@ describe("PageHeroHighlights", () => {
     }
   });
 
+  it("applies has-content-panel class by default", async () => {
+    const wrapper = await mountSuspended(PageHeroHighlights);
+    expect(wrapper.find(".page-hero-highlights").classes()).toContain("has-content-panel");
+  });
+
+  it("does not apply has-content-panel class when contentPanel is false", async () => {
+    const wrapper = await mountSuspended(PageHeroHighlights, {
+      props: { contentPanel: false },
+    });
+    expect(wrapper.find(".page-hero-highlights").classes()).not.toContain("has-content-panel");
+  });
+
   it("does not apply highlight-title-baseline class by default", async () => {
     const wrapper = await mountSuspended(PageHeroHighlights);
     expect(wrapper.find(".page-hero-highlights").classes()).not.toContain("highlight-title-baseline");
