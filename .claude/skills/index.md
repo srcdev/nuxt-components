@@ -49,6 +49,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── contact-section.md      — ContactSection props (stepperIndicatorSize pass-through), 3-item info+form layout, slot API
     ├── stepper-list.md         — StepperList dynamic slots (item-{n}/indicator-{n}), props, connector behaviour
     ├── expanding-panel.md      — ExpandingPanel v-model, forceOpened, slots (summary/icon/content), ARIA wiring
+    ├── glass-panel.md          — GlassPanel props, slots, CSS token API (--glass-panel-bg/border-color/shadow/highlight), theming override
     ├── navigation-horizontal.md — NavigationHorizontal props, NavItemData type, CSS token API, import path gotcha
     ├── input-copy-core.md      — InputCopyCore: readonly copy-to-clipboard input; props, emits, slots, CSS classes, usage
     └── site-navigation.md      — SiteNavigation: responsive nav with auto-collapse, burger menu, decorator indicators, CSS token API
@@ -60,19 +61,24 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 # <Title>
 
 ## Overview
+
 Brief description of what this skill does and why it exists.
 
 ## Prerequisites
+
 What needs to be in place before starting (optional section).
 
 ## Steps
 
 ### 1. <Step name>
+
 ...
 
 ### 2. <Step name>
+
 ...
 
 ## Notes
+
 Edge cases, gotchas, or links to related files (optional section).
 ```
