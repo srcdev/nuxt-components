@@ -43,7 +43,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── layout-row.md           — LayoutRow variant guide, width/margin decisions, usage patterns
     ├── link-text.md            — LinkText props, slots, usage patterns, styling
     ├── page-hero-highlights.md — PageHeroHighlights template: hero + highlights strip grid, CSS custom property theming
-    ├── services-card.md        — ServicesCard props, actions slot, usage patterns
+    ├── services-card.md        — ServicesCard props (incl. eyebrowConfig/heroConfig), actions slot, CSS tokens, page boilerplate
+    ├── services-card-grid.md   — ServicesCardGrid props, config pass-through, CSS tokens, full page boilerplate
     ├── services-section.md     — ServicesSection props, summary-link/cta slots, summary vs full mode
     ├── contact-section.md      — ContactSection props (stepperIndicatorSize pass-through), 3-item info+form layout, slot API
     ├── stepper-list.md         — StepperList dynamic slots (item-{n}/indicator-{n}), props, connector behaviour

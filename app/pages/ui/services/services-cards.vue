@@ -8,7 +8,11 @@
         </LayoutRow>
 
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <ServicesCardGrid :services-data="servicesData ?? []" />
+          <ServicesCardGrid
+            :services-data="servicesData ?? []"
+            :eyebrow-config="{ fontSize: 'large' }"
+            :hero-config="{ tag: 'h2', fontSize: 'heading' }"
+          />
         </LayoutRow>
       </template>
     </NuxtLayout>
@@ -38,5 +42,16 @@ if (servicesData.value.length === 0) {
 
 <style lang="css">
 .page-services-card-grid {
+  /* Page specific styles here */
+  .services-card-grid {
+    --_gap: 4rem;
+    --_column-min-width: 250px;
+
+    .services-card {
+      --_eyebrow-text-margin-block: 0.8rem 0;
+      --_hero-text-margin-block: 2rem 1rem;
+      --_description-text-colour: var(--colour-text-secondary);
+    }
+  }
 }
 </style>
