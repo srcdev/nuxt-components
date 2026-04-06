@@ -1,10 +1,5 @@
 <template>
-  <component
-    :is="tag"
-    class="services-section"
-    :class="[elementClasses]"
-    :aria-labelledby="ariaLabelledby"
-  >
+  <component :is="tag" class="services-section" :class="[elementClasses]" :aria-labelledby="ariaLabelledby">
     <div class="services-section__grid" :class="{ 'services-section__grid--reverse': reverse }">
       <div class="image-wrapper">
         <NuxtImg :src="serviceData.image" :alt="serviceData.title" :loading="imageLoading" class="image" />
@@ -67,8 +62,7 @@
           :show-connectors="true"
           :item-count="serviceData.process.length"
         >
-          <template v-for="(item, index) in serviceData.process" :key="index" #[`item-${index}`]>
-            <p class="page-body-normal">{{ item }}</p>
+          <template v-for="(item, i) in serviceData.process" :key="i" #[`item-${i}`]>
             <p class="page-body-normal">{{ item }}</p>
           </template>
         </StepperList>
@@ -83,11 +77,10 @@
         />
 
         <StepperList v-if="!isSummary" :connected="false" :item-count="serviceData.idealFor.length">
-          <template v-for="(_, index) in serviceData.idealFor" :key="index" #[`indicator-${index}`]>
+          <template v-for="(_, i) in serviceData.idealFor" :key="i" #[`indicator-${i}`]>
             <Icon name="mdi:checkbox-marked-circle-outline" class="indicator-icon" />
           </template>
-          <template v-for="(item, index) in serviceData.idealFor" :key="index" #[`item-${index}`]>
-            <p class="page-body-normal">{{ item }}</p>
+          <template v-for="(item, i) in serviceData.idealFor" :key="i" #[`item-${i}`]>
             <p class="page-body-normal">{{ item }}</p>
           </template>
         </StepperList>

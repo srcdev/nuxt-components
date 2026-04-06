@@ -12,14 +12,14 @@ exports[`SiteNavigation > renders correct HTML structure 1`] = `
     <li class=""><a href="/contact" class="site-nav-link" data-nav-item="">
         <!--v-if--> Contact
       </a></li>
-    <li class="nav-indicator-li" aria-hidden="true" role="none">
-      <div class="nav__active-indicator"></div>
+    <li aria-hidden="true" role="none" class="nav-indicator-li">
+      <div class="nav__hovered"></div>
     </li>
-    <li class="nav-indicator-li" aria-hidden="true" role="none">
+    <li aria-hidden="true" role="none" class="nav-indicator-li">
       <div class="nav__active"></div>
     </li>
-    <li class="nav-indicator-li" aria-hidden="true" role="none">
-      <div class="nav__hovered"></div>
+    <li aria-hidden="true" role="none" class="nav-indicator-li">
+      <div class="nav__active-indicator"></div>
     </li>
   </ul>
   <!--v-if-->
