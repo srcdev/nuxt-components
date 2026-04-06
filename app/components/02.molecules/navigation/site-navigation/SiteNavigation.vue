@@ -220,7 +220,10 @@ const initNavDecorators = () => {
 
   navListRef.value.querySelectorAll(".nav-indicator-li").forEach((el) => el.remove());
 
-  const activeLink = links.find((el) => el.classList.contains("router-link-active")) ?? links[0];
+  const activeLink =
+    links.find((el) => el.classList.contains("router-link-exact-active")) ??
+    links.find((el) => el.classList.contains("router-link-active")) ??
+    links[0];
   if (!activeLink) return;
 
   currentActiveNavLink.value = activeLink;
@@ -329,7 +332,10 @@ const initPanelDecorators = () => {
 
   panelListRef.value.querySelectorAll(".nav-indicator-li").forEach((el) => el.remove());
 
-  const activeLink = links.find((el) => el.classList.contains("router-link-active")) ?? links[0];
+  const activeLink =
+    links.find((el) => el.classList.contains("router-link-exact-active")) ??
+    links.find((el) => el.classList.contains("router-link-active")) ??
+    links[0];
   if (!activeLink) return;
 
   currentActivePanelLink.value = activeLink;
@@ -579,7 +585,7 @@ watch(
           outline: none;
         }
 
-        &.router-link-active {
+        &.router-link-exact-active {
           color: var(--_link-active-color);
         }
       }
@@ -772,7 +778,7 @@ watch(
             outline: none;
           }
 
-          &.router-link-active {
+          &.router-link-exact-active {
             color: var(--_panel-link-active-color);
           }
         }
