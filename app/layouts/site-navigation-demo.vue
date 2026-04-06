@@ -1,7 +1,7 @@
 <template>
   <div class="site-nav-demo-layout">
     <header class="site-nav-demo-header">
-      <NuxtLink to="/ui/navigation/site-navigation" class="site-nav-demo-logo">SiteNav Demo</NuxtLink>
+      <NuxtLink to="/" class="site-nav-demo-logo">SiteNav Demo</NuxtLink>
       <SiteNavigation :nav-item-data="navItemData" nav-align="right" />
     </header>
     <main class="site-nav-demo-main">
@@ -69,7 +69,9 @@ const navItemData: NavItemData = {
 
 /* Shared demo page styles */
 .snav-demo-page {
-  h1, h2, h3 {
+  h1,
+  h2,
+  h3 {
     margin-block-end: 1.6rem;
   }
   h2 {
@@ -130,8 +132,14 @@ const navItemData: NavItemData = {
   margin-block-end: 4rem;
 
   &__text {
-    h2, h3 { margin-block-start: 2.4rem; }
-    p { line-height: 1.6; margin-block-end: 1.6rem; }
+    h2,
+    h3 {
+      margin-block-start: 2.4rem;
+    }
+    p {
+      line-height: 1.6;
+      margin-block-end: 1.6rem;
+    }
   }
 
   &__img {
@@ -165,8 +173,14 @@ const navItemData: NavItemData = {
 
   &__body {
     padding: 1.6rem;
-    h3 { margin-block-end: 0.8rem; }
-    p { font-size: 1.4rem; line-height: 1.6; opacity: 0.8; }
+    h3 {
+      margin-block-end: 0.8rem;
+    }
+    p {
+      font-size: 1.4rem;
+      line-height: 1.6;
+      opacity: 0.8;
+    }
   }
 }
 </style>
