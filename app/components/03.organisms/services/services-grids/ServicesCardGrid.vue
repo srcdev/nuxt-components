@@ -11,7 +11,7 @@
         <InputButtonCore
           variant="secondary"
           :button-text="`Enquire about ${serviceData.title}`"
-          :href="`/ui/services/services-section/${serviceData.slug}`"
+          :href="`${hrefBase}${serviceData.slug}`"
           :style-class-passthrough="['mbs-24']"
         >
           <template #right>
@@ -41,6 +41,7 @@ interface Props {
   servicesData: Service[];
   eyebrowConfig?: EyebrowConfig;
   heroConfig?: HeroConfig;
+  hrefBase?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -48,6 +49,7 @@ const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   eyebrowConfig: () => ({}),
   heroConfig: () => ({}),
+  hrefBase: "/ui/services/services-section/",
   styleClassPassthrough: () => [],
 });
 
