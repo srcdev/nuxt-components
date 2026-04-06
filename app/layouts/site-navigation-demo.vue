@@ -66,4 +66,107 @@ const navItemData: NavItemData = {
     width: 100%;
   }
 }
+
+/* Shared demo page styles */
+.snav-demo-page {
+  h1, h2, h3 {
+    margin-block-end: 1.6rem;
+  }
+  h2 {
+    margin-block-start: 4rem;
+  }
+  > p {
+    margin-block-end: 2.4rem;
+    line-height: 1.6;
+  }
+  ul {
+    padding-inline-start: 2rem;
+    margin-block-end: 2.4rem;
+    line-height: 2;
+  }
+}
+
+.snav-demo-hero {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  border-radius: 0.8rem;
+  display: block;
+  margin-block-end: 2.4rem;
+}
+
+.snav-demo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.6rem;
+
+  &--wide {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+    &--wide {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.snav-demo-img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+  border-radius: 0.4rem;
+  display: block;
+}
+
+.snav-demo-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.2rem;
+  align-items: start;
+  margin-block-end: 4rem;
+
+  &__text {
+    h2, h3 { margin-block-start: 2.4rem; }
+    p { line-height: 1.6; margin-block-end: 1.6rem; }
+  }
+
+  &__img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: 0.4rem;
+    display: block;
+  }
+
+  @media (max-width: 650px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.snav-demo-services {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.4rem;
+
+  @media (max-width: 650px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.snav-demo-service-card {
+  border-radius: 0.8rem;
+  overflow: hidden;
+  background: oklch(100% 0 0 / 5%);
+
+  &__body {
+    padding: 1.6rem;
+    h3 { margin-block-end: 0.8rem; }
+    p { font-size: 1.4rem; line-height: 1.6; opacity: 0.8; }
+  }
+}
 </style>
