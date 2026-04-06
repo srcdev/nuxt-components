@@ -437,23 +437,23 @@ watch(
     /* Decorators — horizontal nav */
     --_decorator-hovered-bg: transparent;
     --_decorator-active-bg: transparent;
-    --_decorator-indicator-color: var(--site-nav-decorator-indicator-color, var(--rose-05, currentColor));
+    --_decorator-indicator-color: var(--site-nav-decorator-indicator-color, var(--slate-01, currentColor));
 
     /* Decorators — panel */
     --_panel-decorator-hovered-bg: var(--site-nav-panel-decorator-hovered-bg, transparent);
     --_panel-decorator-active-bg: var(--site-nav-panel-decorator-active-bg, transparent);
-    --_panel-decorator-indicator-color: var(--site-nav-panel-decorator-indicator-color, var(--rose-05, currentColor));
+    --_panel-decorator-indicator-color: var(--site-nav-panel-decorator-indicator-color, var(--slate-01, currentColor));
     --_panel-indicator-left: var(--site-nav-panel-indicator-left, 0);
     --_panel-indicator-right: var(--site-nav-panel-indicator-right, auto);
 
     /* Horizontal nav */
-    --_link-color: var(--site-nav-link-color, var(--warm-01, currentColor));
-    --_link-hover-color: var(--site-nav-link-hover-color, var(--rose-04, var(--_link-color)));
-    --_link-active-color: var(--site-nav-link-active-color, var(--rose-05, var(--_link-color)));
+    --_link-color: var(--site-nav-link-color, var(--slate-01, currentColor));
+    --_link-hover-color: var(--site-nav-link-hover-color, var(--slate-04, var(--_link-color)));
+    --_link-active-color: var(--site-nav-link-active-color, var(--slate-01, var(--_link-color)));
     --_link-size: var(--site-nav-link-size, 1.6rem);
     --_link-tracking: var(--site-nav-link-tracking, 0.06em);
     --_link-weight: var(--site-nav-link-weight, 400);
-    --_link-accent: var(--site-nav-link-accent, var(--rose-05, currentColor));
+    --_link-accent: var(--site-nav-link-accent, var(--slate-01, currentColor));
     --_nav-gap: var(--site-nav-gap, 2.2rem);
     --_nav-transition: var(--site-nav-transition, 250ms ease);
 
@@ -461,12 +461,15 @@ watch(
     --_panel-bg: var(--site-nav-panel-bg, var(--page-bg, #1a1614));
     --_panel-border-color: var(
       --site-nav-panel-border-color,
-      color-mix(in oklch, var(--rose-05, #c0847a) 35%, transparent)
+      color-mix(in oklch, var(--slate-01, #c0847a) 35%, transparent)
     );
-    --_panel-item-border: var(--site-nav-panel-item-border, color-mix(in oklch, var(--warm-01, white) 8%, transparent));
-    --_panel-link-color: var(--site-nav-panel-link-color, var(--warm-01, currentColor));
-    --_panel-link-hover-color: var(--site-nav-panel-link-hover-color, var(--rose-04, var(--_panel-link-color)));
-    --_panel-link-active-color: var(--site-nav-panel-link-active-color, var(--rose-05, var(--_panel-link-color)));
+    --_panel-item-border: var(
+      --site-nav-panel-item-border,
+      color-mix(in oklch, var(--slate-01, white) 8%, transparent)
+    );
+    --_panel-link-color: var(--site-nav-panel-link-color, var(--slate-01, currentColor));
+    --_panel-link-hover-color: var(--site-nav-panel-link-hover-color, var(--slate-04, var(--_panel-link-color)));
+    --_panel-link-active-color: var(--site-nav-panel-link-active-color, var(--slate-01, var(--_panel-link-color)));
     --_panel-padding-block: var(--site-nav-panel-padding-block, 1.4rem);
     --_panel-padding-inline: var(--site-nav-panel-padding-inline, 1.5rem);
     --_panel-slide-duration: var(--site-nav-panel-slide-duration, 350ms);
@@ -476,7 +479,7 @@ watch(
     --_burger-bar-width: var(--site-nav-burger-width, 22px);
     --_burger-bar-height: var(--site-nav-burger-height, 1.5px);
     --_burger-bar-gap: var(--site-nav-burger-gap, 5px);
-    --_burger-color: var(--site-nav-burger-color, var(--warm-01, currentColor));
+    --_burger-color: var(--site-nav-burger-color, var(--slate-01, currentColor));
     --_burger-transition: var(--site-nav-burger-transition, 300ms ease);
 
     /* ─────────────────────────────────────────────────────────────────── */
