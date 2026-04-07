@@ -15,19 +15,31 @@ html {
   transition:
     background-color 0.4s ease,
     color 0.4s ease;
-  /* scrollbar-gutter: stable; */
+  scrollbar-gutter: stable;
 
   overflow-x: clip;
-}
-body {
-  background-color: var(--page-bg, lightgray);
-  color: var(--colour-text-default);
-  font-family: var(--font-family);
-  font-size: var(--step-4);
-  min-height: 100dvh;
-  transition:
-    background-color 0.4s ease,
-    color 0.4s ease;
 
-  overflow-x: clip;
+  body {
+    background-color: var(--page-bg, lightgray);
+    color: var(--colour-text-default);
+    font-family: var(--font-family);
+    font-size: var(--step-4);
+    /* min-height: 100dvh; */
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease;
+
+    overflow-x: clip;
+
+    #__nuxt {
+      height: 100%;
+      div {
+        .page-layout {
+          min-block-size: 100svh;
+          display: grid;
+          grid-template-rows: auto 1fr auto;
+        }
+      }
+    }
+  }
 }

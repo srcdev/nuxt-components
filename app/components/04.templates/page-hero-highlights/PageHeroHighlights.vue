@@ -26,7 +26,7 @@ interface Props {
   tag?: "div" | "section" | "main";
   highlightsEqualWidths?: boolean;
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
-  maxWidth?: boolean;
+  widthConstrained?: boolean;
   contentAlign?: "start" | "center";
   contentPanel?: boolean;
   highlightTitleBaseline?: boolean;
@@ -37,7 +37,7 @@ const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   highlightsEqualWidths: false,
   highlightsJustify: "start",
-  maxWidth: false,
+  widthConstrained: false,
   contentAlign: "center",
   contentPanel: true,
   highlightTitleBaseline: false,
@@ -48,7 +48,7 @@ const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
 const componentClasses = computed(() => ({
   "highlight-title-baseline": props.highlightTitleBaseline,
   [props.contentAlign]: true,
-  "max-width": props.maxWidth,
+  "width-constrained": props.widthConstrained,
   "has-content-panel": props.contentPanel,
 }));
 
@@ -124,11 +124,11 @@ watch(
   grid-template-rows: auto var(--highlight-title-height) 1fr auto;
   gap: 0;
 
-  &.max-width {
+  &.width-constrained {
     grid-template-columns: var(--page-hero-highlights-gutter) 1fr var(--page-hero-highlights-gutter);
   }
 
-  &:not(.max-width) {
+  &:not(.width-constrained) {
     &.start {
       grid-template-columns: var(--page-hero-highlights-gutter) minmax(0, var(--max-width)) minmax(
           var(--page-hero-highlights-gutter),

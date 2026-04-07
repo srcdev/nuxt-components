@@ -174,16 +174,16 @@ describe("PageHeroHighlights", () => {
       expect(wrapper.find(".page-hero-highlights").classes()).toContain("center");
     });
 
-    it("does not apply max-width class by default", async () => {
+    it("does not apply width-constrained class by default", async () => {
       const wrapper = await mountSuspended(PageHeroHighlights);
-      expect(wrapper.find(".page-hero-highlights").classes()).not.toContain("max-width");
+      expect(wrapper.find(".page-hero-highlights").classes()).not.toContain("width-constrained");
     });
 
-    it("applies max-width class when maxWidth is true", async () => {
+    it("applies width-constrained class when widthConstrained is true", async () => {
       const wrapper = await mountSuspended(PageHeroHighlights, {
-        props: { maxWidth: true },
+        props: { widthConstrained: true },
       });
-      expect(wrapper.find(".page-hero-highlights").classes()).toContain("max-width");
+      expect(wrapper.find(".page-hero-highlights").classes()).toContain("width-constrained");
     });
 
     it("applies start class when contentAlign is start", async () => {

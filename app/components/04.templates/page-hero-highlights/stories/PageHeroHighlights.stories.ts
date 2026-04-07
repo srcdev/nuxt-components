@@ -6,7 +6,7 @@ type StoryArgs = {
   tag?: "div" | "section" | "main";
   highlightsEqualWidths?: boolean;
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
-  maxWidth?: boolean;
+  widthConstrained?: boolean;
   contentAlign?: "start" | "center";
   contentPanel?: boolean;
   highlightTitleBaseline?: boolean;
@@ -34,7 +34,7 @@ const meta: Meta<StoryArgs> = {
       options: ["start", "center", "end", "space-between", "space-around"],
       description: "Justification of highlight items along the main axis",
     },
-    maxWidth: {
+    widthConstrained: {
       control: "boolean",
       description:
         "When true, caps the central column at --max-width (default 1064px). Gutters grow responsively to enforce the constraint. Override --max-width via styleClassPassthrough to change the cap value.",
@@ -77,7 +77,7 @@ const meta: Meta<StoryArgs> = {
     tag: "div",
     highlightsEqualWidths: false,
     highlightsJustify: "start",
-    maxWidth: false,
+    widthConstrained: false,
     contentAlign: "center",
     contentPanel: true,
     highlightTitleBaseline: false,
@@ -344,7 +344,7 @@ export const NoSlotContent: Story = {
 /** Max width centered — content column capped at --max-width (1064px) with equal growing gutters either side. */
 export const MaxWidthCentered: Story = {
   name: "Max Width — Centered",
-  args: { maxWidth: true, contentAlign: "center" },
+  args: { widthConstrained: true, contentAlign: "center" },
   render: (args: StoryArgs) => ({
     components: { PageHeroHighlights },
     setup() {
@@ -384,7 +384,7 @@ export const MaxWidthCentered: Story = {
 /** Max width start — content column capped at --max-width (1064px), pinned to the left. */
 export const MaxWidthStart: Story = {
   name: "Max Width — Start",
-  args: { maxWidth: true, contentAlign: "start" },
+  args: { widthConstrained: true, contentAlign: "start" },
   render: (args: StoryArgs) => ({
     components: { PageHeroHighlights },
     setup() {

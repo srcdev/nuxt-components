@@ -17,8 +17,8 @@ The layout uses a 4-row CSS Grid with `subgrid` — no `translate`, negative mar
 | `tag`                   | `"div" \| "section" \| "main"`                                      | `"div"`     | Root element tag                                                                                                                |
 | `highlightsEqualWidths` | `boolean`                                                           | `false`     | Equal-width grid columns for highlight items                                                                                    |
 | `highlightsJustify`     | `"start" \| "center" \| "end" \| "space-between" \| "space-around"` | `"start"`   | Alignment of highlight items along the main axis                                                                                |
-| `maxWidth`              | `boolean`                                                           | `false`     | When `true`, caps the central column at `--max-width` (default `1064px`). Gutters grow responsively to enforce the constraint. |
-| `contentAlign`          | `"start" \| "center"`                                               | `"center"`  | When `maxWidth` is `true`: `"center"` grows gutters equally; `"start"` pins content to the left with a fixed left gutter.      |
+| `widthConstrained`              | `boolean`                                                           | `false`     | When `true`, caps the central column at `--width-constrained` (default `1064px`). Gutters grow responsively to enforce the constraint. |
+| `contentAlign`          | `"start" \| "center"`                                               | `"center"`  | When `widthConstrained` is `true`: `"center"` grows gutters equally; `"start"` pins content to the left with a fixed left gutter.      |
 | `contentPanel`          | `boolean`                                                           | `true`      | When `true`, renders a decorative panel behind the content slot and offsets the highlights strip. Set to `false` for a flat layout with no backdrop. |
 | `highlightTitleBaseline`| `boolean`                                                           | `false`     | When `true`, fixes the highlight title row to a set height so titles align at a common baseline. Override `--highlight-title-height` to tune. |
 | `styleClassPassthrough` | `string \| string[]`                                                | `[]`        | Extra classes on the root element                                                                                               |
@@ -66,7 +66,7 @@ Each slot accepts any content, but these library components are natural fits:
 Example with `HeroText` in the header slot:
 
 ```vue
-<PageHeroHighlights tag="section" :max-width="true">
+<PageHeroHighlights tag="section" :width-constrained="true">
   <template #header="{ headingId }">
     <HeroText :heading-id="headingId" text="Welcome back" accent-text="Simon" />
   </template>
@@ -172,26 +172,26 @@ By default, highlight items size to their content (`flex-wrap`). Pass `:highligh
 
 ## Constraining the central column width
 
-Pass `:max-width="true"` to cap the content column at `--max-width` (default `1064px`). The gutters grow responsively to enforce it — full-bleed backgrounds are unaffected and `subgrid` continues to work. Use `content-align` to pin to the left or centre:
+Pass `:width-constrained="true"` to cap the content column at `--width-constrained` (default `1064px`). The gutters grow responsively to enforce it — full-bleed backgrounds are unaffected and `subgrid` continues to work. Use `content-align` to pin to the left or centre:
 
 ```vue
-<!-- Centred, capped at --max-width (1064px) -->
-<PageHeroHighlights :max-width="true" content-align="center">...</PageHeroHighlights>
+<!-- Centred, capped at --width-constrained (1064px) -->
+<PageHeroHighlights :width-constrained="true" content-align="center">...</PageHeroHighlights>
 
 <!-- Left-pinned (right side takes remaining space) -->
-<PageHeroHighlights :max-width="true" content-align="start">...</PageHeroHighlights>
+<PageHeroHighlights :width-constrained="true" content-align="start">...</PageHeroHighlights>
 ```
 
 The maximum width value and gutter sizes are all CSS tokens — override them via `styleClassPassthrough` if you need different values:
 
 ```css
 .my-page-hero {
-  --max-width: 1200px;
+  --width-constrained: 1200px;
   --page-hero-highlights-gutter-desktop: 48px;
 }
 ```
 
-See [css-grid-max-width-gutters.md](../css-grid-max-width-gutters.md) for the underlying pattern explanation.
+See [css-grid-width-constrained-gutters.md](../css-grid-width-constrained-gutters.md) for the underlying pattern explanation.
 
 ## Local style override scaffold
 
@@ -211,7 +211,7 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 .page-hero-highlights {
   &.my-page-hero {
     /* Grid layout */
-    /* --max-width: 1064px; */
+    /* --width-constrained: 1064px; */
     /* --page-hero-highlights-gutter-mobile: 16px; */
     /* --page-hero-highlights-gutter-tablet: 40px; */
     /* --page-hero-highlights-gutter-desktop: 32px; */
@@ -269,7 +269,7 @@ row4: page content (never underflows highlights)
 `.header-row` spans cols 1–3, rows 1–2 (edge-to-edge bg). `.header-slot` is placed in row 1 only.
 `.content-row` spans cols 1–3, rows 3–4 (bg fills behind highlights; `.content-slot` is placed in row 4 only). The decorative border behind `.content-slot` is rendered via `.content-row:before` — there is no separate DOM element for it.
 
-Grid columns are determined entirely by CSS — no `v-bind`. The `maxWidth` and `contentAlign` props add CSS classes (`max-width`, `start`, `center`) which select the appropriate `grid-template-columns` rule.
+Grid columns are determined entirely by CSS — no `v-bind`. The `widthConstrained` and `contentAlign` props add CSS classes (`width-constrained`, `start`, `center`) which select the appropriate `grid-template-columns` rule.
 
 ## Layout pitfall: do not use `grid-template-rows: subgrid` inside `.highlights-row`
 
@@ -297,5 +297,5 @@ The `.highlights-row` element spans rows 2–3 of the parent grid (the "straddle
 - Component is auto-imported in Nuxt — no import needed.
 - Lives in `app/components/04.templates/page-hero-highlights/`.
 - Storybook title: `"Templates/PageHeroHighlights"`.
-- **`contentAlign` has no effect when `maxWidth` is `false`** — both gutters hold their responsive default.
+- **`contentAlign` has no effect when `widthConstrained` is `false`** — both gutters hold their responsive default.
 - **Gutter sizes are CSS tokens** — `--page-hero-highlights-gutter-mobile/tablet/desktop` are all overridable. The responsive switching between them (via `@container`) is handled internally and cannot be overridden.
