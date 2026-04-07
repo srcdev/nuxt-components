@@ -31,10 +31,47 @@ Left gutter stays fixed, content column is capped at `MAX_WIDTH`, remaining spac
 
 ## In Vue with a prop
 
+### Option A — CSS tokens + class selectors (preferred when max-width is a fixed design value)
+
+When the max-width and gutter values are fixed design tokens (not arbitrary consumer strings), express the logic entirely in CSS using a boolean `maxWidth` prop that adds a class:
+
+```ts
+interface Props {
+  maxWidth?: boolean;
+  contentAlign?: "start" | "center";
+}
+```
+
+```css
+.component {
+  --max-width: 1064px;
+  --gutter: 16px;
+
+  display: grid;
+
+  &.max-width {
+    grid-template-columns: var(--gutter) 1fr var(--gutter);
+  }
+
+  &:not(.max-width) {
+    &.start {
+      grid-template-columns: var(--gutter) minmax(0, var(--max-width)) minmax(var(--gutter), 1fr);
+    }
+    &.center {
+      grid-template-columns: max(var(--gutter), (100% - var(--max-width)) / 2) 1fr
+        max(var(--gutter), (100% - var(--max-width)) / 2);
+    }
+  }
+}
+```
+
+Consumers can override `--max-width` and `--gutter` via `styleClassPassthrough` without touching the prop. This is the approach used by `PageHeroHighlights`.
+
+### Option B — computed string with `v-bind` (use when max-width is a dynamic consumer prop)
+
 Because `v-bind()` in `<style>` can't be nested inside CSS functions like `max()`, build the column string as a computed and bind the whole value:
 
 ```ts
-// Props
 interface Props {
   maxWidth?: string;        // e.g. "1064px"
   contentAlign?: "start" | "center";
@@ -45,7 +82,6 @@ const props = withDefaults(defineProps<Props>(), {
   contentAlign: "center",
 });
 
-// Computed column string
 const gridColumns = computed(() => {
   if (!props.maxWidth) return "16px 1fr 16px";
   if (props.contentAlign === "start") return `16px minmax(0, ${props.maxWidth}) 1fr`;

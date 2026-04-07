@@ -168,39 +168,30 @@ describe("PageHeroHighlights", () => {
     expect(el.classes()).toContain("another-class");
   });
 
-  describe("gridColumns", () => {
-    interface ComponentInstance {
-      gridColumns: string;
-    }
-
-    it("defaults to fixed 16px gutters with no maxWidth", async () => {
+  describe("grid layout classes", () => {
+    it("applies center class by default", async () => {
       const wrapper = await mountSuspended(PageHeroHighlights);
-      const vm = wrapper.vm as unknown as ComponentInstance;
-      expect(vm.gridColumns).toBe("16px 1fr 16px");
+      expect(wrapper.find(".page-hero-highlights").classes()).toContain("center");
     });
 
-    it("returns centered max-width columns when maxWidth is set and contentAlign is center", async () => {
+    it("does not apply max-width class by default", async () => {
+      const wrapper = await mountSuspended(PageHeroHighlights);
+      expect(wrapper.find(".page-hero-highlights").classes()).not.toContain("max-width");
+    });
+
+    it("applies max-width class when maxWidth is true", async () => {
       const wrapper = await mountSuspended(PageHeroHighlights, {
-        props: { maxWidth: "1064px", contentAlign: "center" },
+        props: { maxWidth: true },
       });
-      const vm = wrapper.vm as unknown as ComponentInstance;
-      expect(vm.gridColumns).toBe("max(16px, (100% - 1064px) / 2) 1fr max(16px, (100% - 1064px) / 2)");
+      expect(wrapper.find(".page-hero-highlights").classes()).toContain("max-width");
     });
 
-    it("returns start-aligned columns when maxWidth is set and contentAlign is start", async () => {
-      const wrapper = await mountSuspended(PageHeroHighlights, {
-        props: { maxWidth: "1064px", contentAlign: "start" },
-      });
-      const vm = wrapper.vm as unknown as ComponentInstance;
-      expect(vm.gridColumns).toBe("16px minmax(0, 1064px) minmax(16px, 1fr)");
-    });
-
-    it("ignores contentAlign when maxWidth is not set", async () => {
+    it("applies start class when contentAlign is start", async () => {
       const wrapper = await mountSuspended(PageHeroHighlights, {
         props: { contentAlign: "start" },
       });
-      const vm = wrapper.vm as unknown as ComponentInstance;
-      expect(vm.gridColumns).toBe("16px 1fr 16px");
+      expect(wrapper.find(".page-hero-highlights").classes()).toContain("start");
+      expect(wrapper.find(".page-hero-highlights").classes()).not.toContain("center");
     });
   });
 });

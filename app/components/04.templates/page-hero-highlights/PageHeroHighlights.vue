@@ -44,12 +44,6 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-// const gridColumns = computed(() => {
-//   if (!props.maxWidth) return "16px 1fr 16px";
-//   if (props.contentAlign === "start") return `16px minmax(0, ${props.maxWidth}) minmax(16px, 1fr)`;
-//   return `max(16px, (100% - ${props.maxWidth}) / 2) 1fr max(16px, (100% - ${props.maxWidth}) / 2)`;
-// });
-
 const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
 const componentClasses = computed(() => ({
   "highlight-title-baseline": props.highlightTitleBaseline,

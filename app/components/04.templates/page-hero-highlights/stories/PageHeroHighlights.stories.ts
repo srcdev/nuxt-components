@@ -6,7 +6,7 @@ type StoryArgs = {
   tag?: "div" | "section" | "main";
   highlightsEqualWidths?: boolean;
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
-  maxWidth?: string;
+  maxWidth?: boolean;
   contentAlign?: "start" | "center";
   contentPanel?: boolean;
   highlightTitleBaseline?: boolean;
@@ -35,10 +35,9 @@ const meta: Meta<StoryArgs> = {
       description: "Justification of highlight items along the main axis",
     },
     maxWidth: {
-      control: { type: "select" },
-      options: ["", "600px", "800px", "1024px", "1064px", "1200px", "1440px"],
+      control: "boolean",
       description:
-        "Max width of the central content column. Gutters grow to enforce the constraint; below this width they hold at 16px.",
+        "When true, caps the central column at --max-width (default 1064px). Gutters grow responsively to enforce the constraint. Override --max-width via styleClassPassthrough to change the cap value.",
     },
     contentAlign: {
       control: { type: "inline-radio" },
@@ -78,7 +77,7 @@ const meta: Meta<StoryArgs> = {
     tag: "div",
     highlightsEqualWidths: false,
     highlightsJustify: "start",
-    maxWidth: "",
+    maxWidth: false,
     contentAlign: "center",
     contentPanel: true,
     highlightTitleBaseline: false,
@@ -119,6 +118,12 @@ All layout and visual properties are customisable via CSS custom properties. Set
 
 \`\`\`css
 .page-hero-highlights {
+  /* Grid layout */
+  --max-width: 1064px;
+  --page-hero-highlights-gutter-mobile: 16px;
+  --page-hero-highlights-gutter-tablet: 40px;
+  --page-hero-highlights-gutter-desktop: 32px;
+
   /* Header zone */
   --header-row-background-colour: darkblue;
 
@@ -195,6 +200,12 @@ All layout and visual properties are customisable via CSS custom properties. Set
    Update values as needed. Delete tokens you are not overriding.
    ─────────────────────────────────────────────────────────────────── */
 .page-hero-highlights {
+
+  /* Grid layout */
+  --max-width: 1064px;
+  --page-hero-highlights-gutter-mobile: 16px;
+  --page-hero-highlights-gutter-tablet: 40px;
+  --page-hero-highlights-gutter-desktop: 32px;
 
   /* Header zone */
   --header-row-background-colour: darkblue;
@@ -330,10 +341,10 @@ export const NoSlotContent: Story = {
   }),
 };
 
-/** Max width centered — content column capped at 800px with equal growing gutters either side. */
+/** Max width centered — content column capped at --max-width (1064px) with equal growing gutters either side. */
 export const MaxWidthCentered: Story = {
   name: "Max Width — Centered",
-  args: { maxWidth: "800px", contentAlign: "center" },
+  args: { maxWidth: true, contentAlign: "center" },
   render: (args: StoryArgs) => ({
     components: { PageHeroHighlights },
     setup() {
@@ -343,7 +354,7 @@ export const MaxWidthCentered: Story = {
       <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
         <template #header>
           <p class="page-heading-1">Dashboard</p>
-          <p class="page-body-normal">Content column is capped at 800px — gutters grow equally on both sides.</p>
+          <p class="page-body-normal">Content column is capped at --max-width (1064px by default) — gutters grow equally on both sides.</p>
         </template>
 
         <template #highlights>
@@ -370,10 +381,10 @@ export const MaxWidthCentered: Story = {
   }),
 };
 
-/** Max width start — content column capped at 800px, pinned to the left with a fixed 16px gutter. */
+/** Max width start — content column capped at --max-width (1064px), pinned to the left. */
 export const MaxWidthStart: Story = {
   name: "Max Width — Start",
-  args: { maxWidth: "800px", contentAlign: "start" },
+  args: { maxWidth: true, contentAlign: "start" },
   render: (args: StoryArgs) => ({
     components: { PageHeroHighlights },
     setup() {
@@ -383,7 +394,7 @@ export const MaxWidthStart: Story = {
       <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
         <template #header>
           <p class="page-heading-1">Dashboard</p>
-          <p class="page-body-normal">Content column is capped at 800px, aligned to the start — right side takes the remaining space.</p>
+          <p class="page-body-normal">Content column is capped at --max-width (1064px by default), aligned to the start — right side takes the remaining space.</p>
         </template>
 
         <template #highlights>
