@@ -156,7 +156,7 @@ watch(
 
     .header-slot {
       grid-column: 2;
-      grid-row: 1 / span 2;
+      grid-row: 1;
       container-type: inline-size;
     }
   }
