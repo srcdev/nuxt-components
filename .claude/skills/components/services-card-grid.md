@@ -6,21 +6,31 @@
 
 ## Props
 
-| Prop                    | Type                              | Default  | Required |
-| ----------------------- | --------------------------------- | -------- | -------- |
-| `servicesData`          | `Service[]`                       | —        | **yes**  |
-| `tag`                   | `"div" \| "section" \| "main"`    | `"div"`  | no       |
-| `eyebrowConfig`         | `EyebrowConfig`                   | `{}`     | no       |
-| `heroConfig`            | `HeroConfig`                      | `{}`     | no       |
-| `styleClassPassthrough` | `string \| string[]`              | `[]`     | no       |
+| Prop                    | Type                              | Default                          | Required |
+| ----------------------- | --------------------------------- | -------------------------------- | -------- |
+| `servicesData`          | `Service[]`                       | —                                | **yes**  |
+| `tag`                   | `"div" \| "section" \| "main"`    | `"div"`                          | no       |
+| `eyebrowConfig`         | `EyebrowConfig`                   | `{}`                             | no       |
+| `heroConfig`            | `HeroConfig`                      | `{}`                             | no       |
+| `hrefBase`              | `string`                          | `"/ui/services/services-section/"` | no     |
+| `buttonTextPrefix`      | `string`                          | `"Enquire about"`                | no       |
+| `styleClassPassthrough` | `string \| string[]`              | `[]`                             | no       |
 
 Both config props are passed through to every `ServicesCard` in the grid unchanged. See [services-card.md](./services-card.md) for the full `EyebrowConfig` / `HeroConfig` key reference.
 
-## Slots
+### Button link and text
 
-| Slot      | Slot props                 | Purpose                                          |
-| --------- | -------------------------- | ------------------------------------------------ |
-| `actions` | `{ serviceData: Service }` | CTA rendered inside each card below description  |
+Each card's CTA button is built internally as `${buttonTextPrefix} ${service.title}` linking to `${hrefBase}${service.slug}`. Override both at the call site:
+
+```vue
+<ServicesCardGrid
+  :services-data="servicesData ?? []"
+  href-base="/services/"
+  button-text-prefix="More on"
+/>
+```
+
+> **Note**: `ServicesCardGrid` does **not** forward a consumer `#actions` slot to its internal `ServicesCard` instances. Use `hrefBase` / `buttonTextPrefix` props to customise the CTA.
 
 ## CSS custom properties
 
@@ -47,20 +57,9 @@ Set on `.services-card-grid` (or scoped to a page class):
             :services-data="servicesData ?? []"
             :eyebrow-config="{ fontSize: 'large' }"
             :hero-config="{ tag: 'h2', fontSize: 'heading' }"
-          >
-            <template #actions="{ serviceData }">
-              <InputButtonCore
-                variant="secondary"
-                :button-text="`Enquire about ${serviceData.title}`"
-                :href="`/services/${serviceData.slug}`"
-                :style-class-passthrough="['mbs-24']"
-              >
-                <template #right>
-                  <Icon name="mdi:arrow-right" class="icon" />
-                </template>
-              </InputButtonCore>
-            </template>
-          </ServicesCardGrid>
+            href-base="/services/"
+            button-text-prefix="More on"
+          />
         </LayoutRow>
       </template>
     </NuxtLayout>

@@ -20,6 +20,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 .claude/skills/
 ├── index.md                    — this file
 ├── performance-review.md       — spawn a subagent to inspect recently written code for Vue/Nuxt performance issues before dev handoff
+├── security-review.md          — spawn a subagent to inspect recently written code for security vulnerabilities (XSS, injection, data exposure, etc.) before dev handoff
 ├── storybook-add-story.md      — create a Storybook story for a component
 ├── storybook-add-font.md       — add a new font to Storybook
 ├── testing-add-unit-test.md    — create a Vitest unit test with snapshots
