@@ -34,14 +34,24 @@ watch(
 <style lang="css">
 .page-hero-highlights-header {
   /* User themable tokens */
-  --phh-padding-block: 1.6rem;
+  --phh-padding-block-mobile: 1.6rem 3.2rem;
+  --phh-padding-block-tablet: 2.4rem 4.8rem;
+  --phh-padding-block-desktop: 3.2rem 6.4rem;
   --phh-gap: 1.6rem;
   --phh-end-gap: 0.8rem;
 
   display: flex;
   flex-direction: column;
   gap: var(--phh-gap);
-  padding-block: var(--phh-padding-block);
+
+  padding-block: var(--phh-padding-block-mobile);
+
+  @container (width >= 768px) {
+    padding-block: var(--phh-padding-block-tablet);
+  }
+  @container (width >= 1024px) {
+    padding-block: var(--phh-padding-block-desktop);
+  }
 
   &:has(.phh-end) {
     @container (width >= 768px) {

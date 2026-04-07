@@ -4,7 +4,7 @@
       <template #layout-content>
         <PageHeroHighlights
           tag="section"
-          max-width="1064px"
+          :max-width="false"
           content-align="start"
           :content-panel="true"
           :highlights-equal-widths="false"
@@ -67,8 +67,17 @@ useHead({
 <style lang="css">
 .page-hero-highlights-page {
   .page-hero-highlights {
+    /* Layout tokens */
+    --max-width: 1064px;
+    --page-hero-highlights-gutter-mobile: 16px;
+    --page-hero-highlights-gutter-tablet: 40px;
+    --page-hero-highlights-gutter-desktop: 32px;
+
     .page-hero-highlights-header {
-      padding-block: 4rem 3rem;
+      /* User themable tokens */
+      --phh-padding-block-mobile: 1.6rem 6rem;
+      --phh-padding-block-tablet: 2.4rem 6rem;
+      --phh-padding-block-desktop: 4.2rem 7.4rem;
     }
 
     .content-row {

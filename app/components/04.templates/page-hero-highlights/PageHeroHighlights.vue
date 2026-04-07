@@ -2,7 +2,7 @@
   <component
     :is="tag"
     class="page-hero-highlights"
-    :class="[elementClasses, componentClasses, { 'has-content-panel': contentPanel }]"
+    :class="[elementClasses, componentClasses]"
     :aria-labelledby="ariaLabelledby"
   >
     <div class="header-row">
@@ -26,7 +26,7 @@ interface Props {
   tag?: "div" | "section" | "main";
   highlightsEqualWidths?: boolean;
   highlightsJustify?: "start" | "center" | "end" | "space-between" | "space-around";
-  maxWidth?: string;
+  maxWidth?: boolean;
   contentAlign?: "start" | "center";
   contentPanel?: boolean;
   highlightTitleBaseline?: boolean;
@@ -37,22 +37,25 @@ const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   highlightsEqualWidths: false,
   highlightsJustify: "start",
-  maxWidth: undefined,
+  maxWidth: false,
   contentAlign: "center",
   contentPanel: true,
   highlightTitleBaseline: false,
   styleClassPassthrough: () => [],
 });
 
-const gridColumns = computed(() => {
-  if (!props.maxWidth) return "16px 1fr 16px";
-  if (props.contentAlign === "start") return `16px minmax(0, ${props.maxWidth}) minmax(16px, 1fr)`;
-  return `max(16px, (100% - ${props.maxWidth}) / 2) 1fr max(16px, (100% - ${props.maxWidth}) / 2)`;
-});
+// const gridColumns = computed(() => {
+//   if (!props.maxWidth) return "16px 1fr 16px";
+//   if (props.contentAlign === "start") return `16px minmax(0, ${props.maxWidth}) minmax(16px, 1fr)`;
+//   return `max(16px, (100% - ${props.maxWidth}) / 2) 1fr max(16px, (100% - ${props.maxWidth}) / 2)`;
+// });
 
 const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
 const componentClasses = computed(() => ({
   "highlight-title-baseline": props.highlightTitleBaseline,
+  [props.contentAlign]: true,
+  "max-width": props.maxWidth,
+  "has-content-panel": props.contentPanel,
 }));
 
 const highlightClasses = computed(() => ({
@@ -73,7 +76,14 @@ watch(
 
 <style lang="css">
 .page-hero-highlights {
+  /* Layout tokens */
+  --max-width: 1064px;
+  --page-hero-highlights-gutter-mobile: 16px;
+  --page-hero-highlights-gutter-tablet: 40px;
+  --page-hero-highlights-gutter-desktop: 32px;
+
   /* User themable tokens */
+
   --header-row-background-colour: darkblue;
 
   --highlights-row-item-gap: 1rem;
@@ -105,10 +115,39 @@ watch(
     --highlight-padding-block-start: 0; /* We're setting the title height via row height, so this should be exposed for override in consuming page */
   }
 
+  /* Internal layout variables */
+  --page-hero-highlights-gutter: var(--page-hero-highlights-gutter-mobile);
+
+  @container (width >= 768px) {
+    --page-hero-highlights-gutter: var(--page-hero-highlights-gutter-tablet);
+  }
+  @container (width >= 1024px) {
+    --page-hero-highlights-gutter: var(--page-hero-highlights-gutter-desktop);
+  }
+
   display: grid;
-  grid-template-columns: v-bind(gridColumns);
+  /* grid-template-columns: v-bind(gridColumns); */
   grid-template-rows: auto var(--highlight-title-height) 1fr auto;
   gap: 0;
+
+  &.max-width {
+    grid-template-columns: var(--page-hero-highlights-gutter) 1fr var(--page-hero-highlights-gutter);
+  }
+
+  &:not(.max-width) {
+    &.start {
+      grid-template-columns: var(--page-hero-highlights-gutter) minmax(0, var(--max-width)) minmax(
+          var(--page-hero-highlights-gutter),
+          1fr
+        );
+    }
+    &.center {
+      grid-template-columns: max(var(--page-hero-highlights-gutter), (100% - var(--max-width)) / 2) 1fr max(
+          var(--page-hero-highlights-gutter),
+          (100% - var(--max-width)) / 2
+        );
+    }
+  }
 
   .header-row {
     /* Element geometry */
@@ -123,7 +162,7 @@ watch(
 
     .header-slot {
       grid-column: 2;
-      grid-row: 1;
+      grid-row: 1 / span 2;
       container-type: inline-size;
     }
   }
