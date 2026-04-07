@@ -65,6 +65,52 @@ Read each file in full, then check for the following issues. Report only issues 
 □ Dynamic `import()` paths constructed from user input
 □ Imports from non-registry URLs (e.g. raw GitHub, CDN) rather than npm packages
 
+─── Broken Access Control (OWASP A01) ───────────────────────────
+□ `v-if` used as the sole gate for sensitive UI — this is cosmetic only, not a real access check
+□ Route middleware (`definePageMeta({ middleware })`) that can be bypassed by navigating directly
+□ Server routes or API handlers that trust `event.context.auth` / headers set by the client
+□ Permissions or roles derived solely from client-side reactive state with no server validation
+
+─── Cryptographic Failures (OWASP A02) ──────────────────────────
+□ `Math.random()` used to generate tokens, IDs, or nonces (not cryptographically secure — use `crypto.randomUUID()` or `crypto.getRandomValues()`)
+□ `btoa()` / `atob()` used to "encode" sensitive values (this is encoding, not encryption)
+□ Sensitive values hashed with MD5 or SHA-1 (use SHA-256+ or bcrypt/argon2 for passwords)
+□ Passwords or secrets stored in plain text in state, localStorage, or cookies
+
+─── Security Misconfiguration (OWASP A05) ───────────────────────
+□ `nuxt.config.ts` missing security headers (`Content-Security-Policy`, `X-Frame-Options`, `Referrer-Policy`)
+□ CORS configured with `origin: "*"` on routes that return sensitive data
+□ Verbose error messages or stack traces returned to the client from server routes
+□ `devtools: true` or debug flags that could be active in production builds
+□ `runtimeConfig` values that mix public/private — anything in `public:` is exposed to the client bundle
+
+─── Authentication Failures (OWASP A07) ─────────────────────────
+□ Auth tokens stored in `localStorage` or `sessionStorage` (vulnerable to XSS — prefer `httpOnly` cookies)
+□ Auth state held only in client-side reactive state (`useState`, `ref`) with no server-side verification
+□ JWTs decoded client-side without signature verification before trusting claims
+□ Session IDs or tokens exposed in URL query parameters or `data-*` attributes
+□ No expiry enforced on tokens or session state
+
+─── Software & Data Integrity (OWASP A08) ───────────────────────
+□ `JSON.parse()` called on untrusted/external data without a validation step (schema check or try/catch with type guard)
+□ `Object.assign({}, userInput)` or `{ ...userInput }` spread onto internal objects — risk of prototype pollution if input is not sanitised
+□ External `<script>` tags added via `useHead` without a `crossorigin` and `integrity` (SRI) attribute
+□ Dynamic `import()` resolved from user-supplied strings (supply chain / path traversal risk)
+
+─── Logging & Monitoring (OWASP A09) ────────────────────────────
+□ `console.log` / `console.error` statements that output tokens, passwords, or PII
+□ Error handlers that re-throw raw server errors (including DB messages) to the client response
+□ Caught exceptions silently swallowed with no logging — makes incidents invisible
+
+─── Server-Side Request Forgery (OWASP A10) ─────────────────────
+□ `$fetch` / `useFetch` / `ofetch` called server-side with a URL constructed from user input (SSRF — attacker can target internal services)
+□ Proxy or redirect endpoints that forward to a caller-supplied URL without an allowlist check
+□ `useAsyncData` key derived from user input used to construct a server-side fetch URL
+
+─── CSRF ────────────────────────────────────────────────────────
+□ State-mutating server routes (POST/PUT/DELETE) that rely solely on cookies without a CSRF token or `SameSite=Strict`
+□ Forms that submit to API routes with no CSRF protection and no `Content-Type: application/json` enforcement (which prevents simple-form cross-origin attacks)
+
 ─── Nuxt-specific ───────────────────────────────────────────────
 □ Server routes or API handlers that trust client-sent data without validation
 □ `useFetch` / `$fetch` URLs built from user input without sanitisation
