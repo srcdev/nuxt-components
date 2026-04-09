@@ -7,7 +7,7 @@
       <div class="info-wrapper" :class="infoWrapperClasses">
         <EyebrowText font-size="large" :text-content="serviceData.subtitle" />
         <HeroText
-          tag="h1"
+          :tag="headerTag"
           font-size="title"
           :text-content="[
             {
@@ -33,7 +33,7 @@
 
         <HeroText
           v-if="!isSummary"
-          tag="h2"
+          :tag="headerTag"
           axis="horizontal"
           font-size="subheading"
           :text-content="serviceData.heroHeading"
@@ -47,7 +47,7 @@
 
         <HeroText
           v-if="!isSummary"
-          tag="h2"
+          :tag="headerTag"
           axis="horizontal"
           font-size="subheading"
           :text-content="[{ text: 'The Process ', styleClass: 'normal' }]"
@@ -69,7 +69,7 @@
 
         <HeroText
           v-if="!isSummary"
-          tag="h2"
+          :tag="headerTag"
           axis="horizontal"
           font-size="subheading"
           :text-content="[{ text: 'Ideal For', styleClass: 'normal' }]"
@@ -87,7 +87,7 @@
 
         <HeroText
           v-if="!isSummary"
-          tag="h2"
+          :tag="headerTag"
           axis="horizontal"
           font-size="subheading"
           :text-content="[{ text: 'Aftercare &amp; Maintenance', styleClass: 'normal' }]"
@@ -98,7 +98,7 @@
 
         <HeroText
           v-if="!isSummary"
-          tag="h2"
+          :tag="headerTag"
           axis="horizontal"
           font-size="subheading"
           :text-content="[{ text: 'Frequently Asked Questions', styleClass: 'normal' }]"
@@ -144,6 +144,7 @@ import type { Service } from "~/types/types.services";
 
 interface Props {
   tag?: "div" | "section" | "article" | "main";
+  headerTag?: "h1" | "h2" | "h3";
   index?: number;
   serviceData: Service;
   isSummary?: boolean;
@@ -153,6 +154,7 @@ interface Props {
 }
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
+  headerTag: "h2",
   index: 0,
   isSummary: false,
   summaryAlignment: "center",
