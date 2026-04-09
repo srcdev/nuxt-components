@@ -119,6 +119,12 @@ watch(
     --page-hero-highlights-gutter: var(--page-hero-highlights-gutter-desktop);
   }
 
+  /* Private geometry */
+  --header-slot-grid-row: 1;
+  &.highlight-title-baseline {
+    --header-slot-grid-row: 1 / span 2;
+  }
+
   display: grid;
   /* grid-template-columns: v-bind(gridColumns); */
   grid-template-rows: auto var(--highlight-title-height) 1fr auto;
@@ -156,7 +162,7 @@ watch(
 
     .header-slot {
       grid-column: 2;
-      grid-row: 1;
+      grid-row: var(--header-slot-grid-row);
       container-type: inline-size;
     }
   }
