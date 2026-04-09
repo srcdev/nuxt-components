@@ -379,12 +379,16 @@ useResizeObserver(navRef, () => {
 
 onClickOutside(navRef, closeMenu);
 
+const router = useRouter();
+
 onMounted(async () => {
   await nextTick();
   checkOverflow();
   isLoaded.value = true;
-  await nextTick();
-  initNavDecorators();
+  await router.isReady();
+  requestAnimationFrame(() => {
+    initNavDecorators();
+  });
 });
 
 watch(isCollapsed, async (collapsed) => {
