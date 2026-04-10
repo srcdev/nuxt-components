@@ -199,6 +199,7 @@ const resetHoverNavToActive = () => {
 };
 
 const initNavDecorators = () => {
+  cachedNavLinks = []; // invalidate — list may have been re-rendered (collapse toggle)
   if (!navListRef.value) return;
   const links = getNavLinks();
   if (!links.length) return;
@@ -326,11 +327,13 @@ const initPanelDecorators = () => {
 
 const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, activeHref, isActiveItem, toggleMenu, closeMenu } =
   useNavCollapse("site-nav-loaded", {
-    onResize: () => {
-      setFinalNavActivePositions(true);
-      setFinalNavHoveredPositions(true);
-      setFinalPanelActivePositions(true);
-      setFinalPanelHoveredPositions(true);
+    onResize: async () => {
+      await nextTick(); // wait for Vue to re-render after any isCollapsed change
+      initNavDecorators();
+      if (isMenuOpen.value) {
+        setFinalPanelActivePositions(true);
+        setFinalPanelHoveredPositions(true);
+      }
     },
     onRouteChange: () => {
       requestAnimationFrame(() => {

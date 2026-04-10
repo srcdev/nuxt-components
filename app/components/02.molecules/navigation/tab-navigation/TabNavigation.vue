@@ -13,7 +13,6 @@
       v-if="!isCollapsed || !isLoaded"
       ref="navListRef"
       class="tab-nav-list"
-      @mousemove="handleNavMousemove"
       @mouseleave="hoveredItemHref = null"
     >
       <li
@@ -21,6 +20,7 @@
         :key="item.href"
         :data-href="item.href"
         :class="[item.cssName, { 'is-active': isActiveItem(item.href), 'is-hovered': hoveredItemHref === item.href }]"
+        @mouseenter="hoveredItemHref = item.href ?? null"
       >
         <NuxtLink
           :href="item.href"
@@ -37,7 +37,7 @@
     </ul>
 
     <InputButtonCore
-      v-if="isCollapsed && isLoaded"
+      v-if="showCollapsed"
       class="tab-nav-burger"
       :class="{ 'is-open': isMenuOpen }"
       variant="tertiary"
@@ -55,7 +55,7 @@
 
     <Teleport to="body">
       <div
-        v-if="isCollapsed && isLoaded"
+        v-if="showCollapsed"
         class="tab-nav-backdrop"
         :class="{ 'is-open': isMenuOpen }"
         aria-hidden="true"
@@ -64,7 +64,7 @@
     </Teleport>
 
     <div
-      v-if="isCollapsed && isLoaded"
+      v-if="showCollapsed"
       id="tab-nav-panel"
       class="tab-nav-panel"
       :class="{ 'is-open': isMenuOpen }"
@@ -107,12 +107,7 @@ const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, isActiveItem, tog
   useNavCollapse("tab-nav-loaded");
 
 const hoveredItemHref = ref<string | null>(null);
-
-const handleNavMousemove = (event: MouseEvent) => {
-  const li = (event.target as HTMLElement).closest<HTMLElement>("li[data-href]");
-  if (!li) return;
-  hoveredItemHref.value = li.dataset.href ?? null;
-};
+const showCollapsed = computed(() => isCollapsed.value && isLoaded.value);
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -149,8 +144,7 @@ watch(
 
     /* Decorators — horizontal nav */
     --_decorator-hovered-bg: var(--tab-nav-decorator-hovered-bg, transparent);
-    /* --_decorator-indicator-color: var(--tab-nav-decorator-indicator-color, var(--slate-01, currentColor)); */
-    --_decorator-indicator-color: red;
+    --_decorator-indicator-color: var(--tab-nav-decorator-indicator-color, var(--slate-01, currentColor));
 
     /* Horizontal nav */
     --_link-color: var(--tab-nav-link-color, var(--slate-01, currentColor));
