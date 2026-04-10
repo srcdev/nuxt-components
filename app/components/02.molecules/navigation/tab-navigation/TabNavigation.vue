@@ -132,12 +132,13 @@ const route = useRoute();
 // Compute the active nav item href from the current route.
 // Prefers an exact match; falls back to the longest prefix match.
 const activeHref = computed(() => {
-  const exact = props.navItemData.main.find((item) => route.path === item.href);
-  if (exact) return exact.href;
+  const items = props.navItemData.main ?? [];
+  const exact = items.find((item) => item.href && route.path === item.href);
+  if (exact) return exact.href ?? null;
   return (
-    props.navItemData.main
-      .filter((item) => route.path.startsWith(item.href + "/"))
-      .sort((a, b) => b.href.length - a.href.length)[0]?.href ?? null
+    items
+      .filter((item) => item.href && route.path.startsWith(item.href + "/"))
+      .sort((a, b) => (b.href?.length ?? 0) - (a.href?.length ?? 0))[0]?.href ?? null
   );
 });
 
