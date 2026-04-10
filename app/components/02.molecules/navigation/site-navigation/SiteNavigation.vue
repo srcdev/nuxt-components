@@ -5,7 +5,7 @@
     :class="[
       elementClasses,
       `site-navigation--${navAlign}`,
-      { 'is-collapsed': isCollapsed, 'is-loaded': isLoaded, 'menu-open': isMenuOpen },
+      { 'is-collapsed': isCollapsed, 'is-loaded': isLoaded, 'menu-open': isMenuOpen, 'is-animated': isAnimated },
     ]"
     aria-label="Site navigation"
   >
@@ -112,6 +112,10 @@ const props = withDefaults(defineProps<Props>(), {
   navAlign: "left",
   styleClassPassthrough: () => [],
 });
+
+// ─── Animation gate — prevents indicator from transitioning on first paint ───
+
+const isAnimated = ref(false);
 
 // ─── Nav decorators (active / hover indicators) ─────────────────────────────
 
@@ -336,12 +340,19 @@ const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, activeHref, isAct
       }
     },
     onRouteChange: () => {
+      isAnimated.value = false;
       requestAnimationFrame(() => {
         initNavDecorators();
+        nextTick(() => {
+          isAnimated.value = true;
+        });
       });
     },
     onMounted: () => {
       initNavDecorators();
+      nextTick(() => {
+        isAnimated.value = true;
+      });
     },
   });
 
@@ -473,10 +484,15 @@ watch(
         scale: var(--_width-hovered, 0.001) 1;
         translate: var(--_x-hovered, 0) 0;
         transform-origin: left;
+        pointer-events: none;
+      }
+
+      .site-navigation.is-animated & .nav__hovered,
+      .site-navigation.is-animated & .nav__active,
+      .site-navigation.is-animated & .nav__active-indicator {
         transition:
           scale var(--_transition-duration, 200ms),
           translate var(--_transition-duration, 200ms);
-        pointer-events: none;
       }
 
       .nav__active {
@@ -661,10 +677,15 @@ watch(
           scale: 1 var(--_panel-height-hovered, 0.001);
           translate: 0 var(--_panel-y-hovered, 0);
           transform-origin: top;
+          pointer-events: none;
+        }
+
+        .site-navigation.is-animated & .nav__hovered,
+        .site-navigation.is-animated & .nav__active,
+        .site-navigation.is-animated & .nav__active-indicator {
           transition:
             scale var(--_panel-transition-duration, 200ms),
             translate var(--_panel-transition-duration, 200ms);
-          pointer-events: none;
         }
 
         .nav__active {
