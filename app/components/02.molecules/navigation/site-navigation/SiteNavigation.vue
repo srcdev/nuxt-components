@@ -339,7 +339,9 @@ const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, activeHref, isAct
       initNavDecorators();
       if (!hasFirstLayout) {
         hasFirstLayout = true;
-        nextTick(() => {
+        // RAF here (not nextTick) ensures the browser paints the snapped position
+        // before transitions are enabled — avoids animating from x=0 on first layout.
+        requestAnimationFrame(() => {
           isAnimated.value = true;
         });
       }
@@ -350,9 +352,12 @@ const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, activeHref, isAct
     },
     onRouteChange: () => {
       isAnimated.value = false;
+      // Double RAF: RAF1 sets the new position and lets the browser paint it
+      // without transitions. RAF2 re-enables transitions only after that frame
+      // has committed — so there is no position delta left to animate.
       requestAnimationFrame(() => {
         initNavDecorators();
-        nextTick(() => {
+        requestAnimationFrame(() => {
           isAnimated.value = true;
         });
       });
