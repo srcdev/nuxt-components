@@ -17,7 +17,7 @@
       @mouseleave="resetHoverNavToActive"
       @mouseover="handleNavHover"
     >
-      <li v-for="item in navItemData.main" :key="item.href" :class="item.cssName">
+      <li v-for="item in navItemData.main" :key="item.href" :class="[item.cssName, { 'is-active': activeHref === item.href }]">
         <NuxtLink :href="item.href" :external="item.isExternal || undefined" class="site-nav-link" data-nav-item>
           <Icon v-if="item.iconName" :name="item.iconName" aria-hidden="true" />
           {{ item.text }}
@@ -70,7 +70,7 @@
           @mouseover="handlePanelHover"
           @mouseleave="resetHoverPanelToActive"
         >
-          <li v-for="item in navItemData.main" :key="item.href" :class="item.cssName">
+          <li v-for="item in navItemData.main" :key="item.href" :class="[item.cssName, { 'is-active': activeHref === item.href }]">
             <NuxtLink
               :href="item.href"
               :external="item.isExternal || undefined"
@@ -231,9 +231,7 @@ const initNavDecorators = () => {
   }
 
   const activeLink =
-    links.find((el) => el.classList.contains("router-link-exact-active")) ??
-    links.find((el) => el.classList.contains("router-link-active")) ??
-    links[0];
+    links.find((el) => el.getAttribute("href") === activeHref.value) ?? links[0];
   if (!activeLink) return;
 
   currentActiveNavLink = activeLink;
@@ -337,9 +335,7 @@ const initPanelDecorators = () => {
   }
 
   const activeLink =
-    links.find((el) => el.classList.contains("router-link-exact-active")) ??
-    links.find((el) => el.classList.contains("router-link-active")) ??
-    links[0];
+    links.find((el) => el.getAttribute("href") === activeHref.value) ?? links[0];
   if (!activeLink) return;
 
   currentActivePanelLink = activeLink;
@@ -352,11 +348,20 @@ const initPanelDecorators = () => {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Close panel on navigation and re-init decorators.
-// flush: 'post' ensures router-link-active classes are applied.
-// requestAnimationFrame defers the measurement until after browser layout,
-// preventing stale offsetLeft reads and racing with hover setTimeouts.
+// Compute active href from route directly — avoids racing against Vue Router's
+// class application timing when reading router-link-exact-active from the DOM.
 const route = useRoute();
+
+const activeHref = computed(() => {
+  const items = props.navItemData.main ?? [];
+  const exact = items.find((item) => item.href && route.path === item.href);
+  if (exact) return exact.href ?? null;
+  return (
+    items
+      .filter((item) => item.href && route.path.startsWith(item.href + "/"))
+      .sort((a, b) => (b.href?.length ?? 0) - (a.href?.length ?? 0))[0]?.href ?? null
+  );
+});
 watch(
   () => route.path,
   () => {
@@ -584,9 +589,9 @@ watch(
           outline: none;
         }
 
-        &.router-link-exact-active {
-          color: var(--_link-active-color);
-        }
+      }
+      li.is-active .site-nav-link {
+        color: var(--_link-active-color);
       }
     }
 
@@ -777,9 +782,9 @@ watch(
             outline: none;
           }
 
-          &.router-link-exact-active {
-            color: var(--_panel-link-active-color);
-          }
+        }
+        li.is-active .site-nav-panel-link {
+          color: var(--_panel-link-active-color);
         }
       }
     }
