@@ -116,6 +116,9 @@ const props = withDefaults(defineProps<Props>(), {
 // ─── Animation gate — prevents indicator from transitioning on first paint ───
 
 const isAnimated = ref(false);
+// Stays false until ResizeObserver confirms the nav has been laid out (stronger
+// guarantee than nextTick / RAF which don't ensure layout is complete).
+let hasFirstLayout = false;
 
 // ─── Nav decorators (active / hover indicators) ─────────────────────────────
 
@@ -334,6 +337,12 @@ const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, activeHref, isAct
     onResize: async () => {
       await nextTick(); // wait for Vue to re-render after any isCollapsed change
       initNavDecorators();
+      if (!hasFirstLayout) {
+        hasFirstLayout = true;
+        nextTick(() => {
+          isAnimated.value = true;
+        });
+      }
       if (isMenuOpen.value) {
         setFinalPanelActivePositions(true);
         setFinalPanelHoveredPositions(true);
@@ -350,9 +359,8 @@ const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, activeHref, isAct
     },
     onMounted: () => {
       initNavDecorators();
-      nextTick(() => {
-        isAnimated.value = true;
-      });
+      // isAnimated is set in onResize — ResizeObserver guarantees layout is
+      // complete before we enable transitions, unlike nextTick / RAF.
     },
   });
 
