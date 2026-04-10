@@ -1,5 +1,4 @@
 import { useResizeObserver, onClickOutside } from "@vueuse/core";
-import type { NavItemData } from "~/types/components";
 
 interface NavCollapseOptions {
   onResize?: () => void;
@@ -7,14 +6,13 @@ interface NavCollapseOptions {
   onMounted?: () => void;
 }
 
-export const useNavCollapse = (navItemData: NavItemData, stateKey: string, options: NavCollapseOptions = {}) => {
+export const useNavCollapse = (stateKey: string, options: NavCollapseOptions = {}) => {
   const navRef = ref<HTMLElement | null>(null);
   const navListRef = ref<HTMLUListElement | null>(null);
 
   const isCollapsed = ref(false);
   const isLoaded = useState(stateKey, () => false);
   const isMenuOpen = ref(false);
-  const isMounted = ref(false);
 
   // Stored natural width of the list — used when the list is not in the DOM
   let navListNaturalWidth = 0;
@@ -35,13 +33,12 @@ export const useNavCollapse = (navItemData: NavItemData, stateKey: string, optio
     isMenuOpen.value = false;
   };
 
-  const navigationStore = useNavigationStore();
+  // useRoute() in Nuxt is SSR-aware — route.path is consistent on server and client,
+  // so isActiveItem can be used directly without a isMounted guard.
   const route = useRoute();
 
-  const activeHref = computed(() => navigationStore.currentActiveHref);
-
-  // Client-side only active state check to prevent hydration mismatch
-  const isActiveItem = (href?: string) => isMounted.value && activeHref.value === href;
+  const activeHref = computed(() => route.path);
+  const isActiveItem = (href?: string) => href === route.path;
 
   watch(
     () => route.path,
@@ -67,8 +64,6 @@ export const useNavCollapse = (navItemData: NavItemData, stateKey: string, optio
     checkOverflow();
     isLoaded.value = true;
     await router.isReady();
-    navigationStore.initializeFromRoute(navItemData.main ?? [], route.path);
-    isMounted.value = true;
     options.onMounted?.();
   });
 
@@ -78,12 +73,10 @@ export const useNavCollapse = (navItemData: NavItemData, stateKey: string, optio
     isCollapsed,
     isLoaded,
     isMenuOpen,
-    isMounted,
     activeHref,
     checkOverflow,
     toggleMenu,
     closeMenu,
     isActiveItem,
-    navigationStore,
   };
 };

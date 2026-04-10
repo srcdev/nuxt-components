@@ -27,7 +27,6 @@
           :external="item.isExternal || undefined"
           class="tab-nav-link"
           data-nav-item
-          @click="handleNavLinkClick"
         >
           <Icon v-if="item.iconName" :name="item.iconName" aria-hidden="true" />
           {{ item.text }}
@@ -78,7 +77,7 @@
               :href="item.href"
               :external="item.isExternal || undefined"
               class="tab-nav-panel-link"
-              @click="handlePanelLinkClick"
+              @click="closeMenu"
             >
               <Icon v-if="item.iconName" :name="item.iconName" aria-hidden="true" />
               {{ item.text }}
@@ -104,25 +103,8 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, isActiveItem, toggleMenu, closeMenu, navigationStore } =
-  useNavCollapse(props.navItemData, "tab-nav-loaded");
-
-// Handle navigation link clicks to update store
-const handleNavLinkClick = (event: MouseEvent) => {
-  const target = (event.target as HTMLElement).closest<HTMLElement>("[href]");
-  if (!target) return;
-  const href = target.getAttribute("href");
-  if (href) navigationStore.handleNavLinkClick(href);
-};
-
-// Handle panel link clicks to update store and close menu
-const handlePanelLinkClick = (event: MouseEvent) => {
-  const target = (event.target as HTMLElement).closest<HTMLElement>("[href]");
-  if (!target) return;
-  const href = target.getAttribute("href");
-  if (href) navigationStore.handleNavLinkClick(href);
-  closeMenu();
-};
+const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, isActiveItem, toggleMenu, closeMenu } =
+  useNavCollapse("tab-nav-loaded");
 
 const hoveredItemHref = ref<string | null>(null);
 

@@ -178,13 +178,6 @@ const moveNavHoveredIndicator = () => {
 const handleNavLinkClick = (event: MouseEvent) => {
   const target = (event.target as HTMLElement).closest<HTMLElement>("[data-nav-item]");
   if (!target) return;
-
-  // Update store with clicked href for reliable active state tracking
-  const href = target.getAttribute("href");
-  if (href) {
-    navigationStore.handleNavLinkClick(href);
-  }
-
   currentActiveNavLink = target;
   currentHoveredNavLink = target;
   previousHoveredNavLink = target;
@@ -287,13 +280,6 @@ const movePanelHoveredIndicator = () => {
 const handlePanelLinkClick = (event: MouseEvent) => {
   const target = (event.target as HTMLElement).closest<HTMLElement>("[data-panel-nav-item]");
   if (!target) return;
-
-  // Update store with clicked href for reliable active state tracking
-  const href = target.getAttribute("href");
-  if (href) {
-    navigationStore.handleNavLinkClick(href);
-  }
-
   currentActivePanelLink = target;
   currentHoveredPanelLink = target;
   previousHoveredPanelLink = target;
@@ -338,8 +324,8 @@ const initPanelDecorators = () => {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, activeHref, isActiveItem, toggleMenu, closeMenu, navigationStore } =
-  useNavCollapse(props.navItemData, "site-nav-loaded", {
+const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, activeHref, isActiveItem, toggleMenu, closeMenu } =
+  useNavCollapse("site-nav-loaded", {
     onResize: () => {
       setFinalNavActivePositions(true);
       setFinalNavHoveredPositions(true);
