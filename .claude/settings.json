@@ -16,7 +16,9 @@
       "Bash(npx tsc:*)",
       "Bash(npx vitest:*)",
       "Bash(git show:*)",
-      "Edit(/.claude/skills/components/**)"
+      "Edit(/.claude/skills/components/**)",
+      "Bash(npx nuxi:*)",
+      "Bash(node -e \"const t = require\\('/Users/simoncornforth/websites/nuxt-components/node_modules/pinia-plugin-persistedstate'\\); console.log\\(Object.keys\\(t\\)\\)\")"
     ],
     "additionalDirectories": [
       "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms/content-wrappers/content-width",

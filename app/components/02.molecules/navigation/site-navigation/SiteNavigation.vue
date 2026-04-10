@@ -17,7 +17,11 @@
       @mouseleave="resetHoverNavToActive"
       @mouseover="handleNavHover"
     >
-      <li v-for="item in navItemData.main" :key="item.href" :class="[item.cssName, { 'is-active': activeHref === item.href }]">
+      <li
+        v-for="item in navItemData.main"
+        :key="item.href"
+        :class="[item.cssName, { 'is-active': isActiveItem(item.href) }]"
+      >
         <NuxtLink :href="item.href" :external="item.isExternal || undefined" class="site-nav-link" data-nav-item>
           <Icon v-if="item.iconName" :name="item.iconName" aria-hidden="true" />
           {{ item.text }}
@@ -70,7 +74,11 @@
           @mouseover="handlePanelHover"
           @mouseleave="resetHoverPanelToActive"
         >
-          <li v-for="item in navItemData.main" :key="item.href" :class="[item.cssName, { 'is-active': activeHref === item.href }]">
+          <li
+            v-for="item in navItemData.main"
+            :key="item.href"
+            :class="[item.cssName, { 'is-active': isActiveItem(item.href) }]"
+          >
             <NuxtLink
               :href="item.href"
               :external="item.isExternal || undefined"
@@ -92,7 +100,6 @@
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver, onClickOutside } from "@vueuse/core";
 import type { NavItemData } from "~/types/components";
 
 interface Props {
@@ -105,35 +112,6 @@ const props = withDefaults(defineProps<Props>(), {
   navAlign: "left",
   styleClassPassthrough: () => [],
 });
-
-const navRef = ref<HTMLElement | null>(null);
-const navListRef = ref<HTMLUListElement | null>(null);
-
-const isCollapsed = ref(false);
-const isLoaded = useState("site-nav-loaded", () => false);
-const isMenuOpen = ref(false);
-
-// Stored natural width of the list — used when the list is not in the DOM
-let navListNaturalWidth = 0;
-
-const checkOverflow = () => {
-  if (!navRef.value) return;
-
-  // Measure and store the list width whenever it's in the DOM
-  if (navListRef.value) {
-    navListNaturalWidth = navListRef.value.scrollWidth;
-  }
-
-  isCollapsed.value = navListNaturalWidth > navRef.value.clientWidth;
-};
-
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value;
-};
-
-const closeMenu = () => {
-  isMenuOpen.value = false;
-};
 
 // ─── Nav decorators (active / hover indicators) ─────────────────────────────
 
@@ -200,6 +178,13 @@ const moveNavHoveredIndicator = () => {
 const handleNavLinkClick = (event: MouseEvent) => {
   const target = (event.target as HTMLElement).closest<HTMLElement>("[data-nav-item]");
   if (!target) return;
+
+  // Update store with clicked href for reliable active state tracking
+  const href = target.getAttribute("href");
+  if (href) {
+    navigationStore.handleNavLinkClick(href);
+  }
+
   currentActiveNavLink = target;
   currentHoveredNavLink = target;
   previousHoveredNavLink = target;
@@ -230,8 +215,7 @@ const initNavDecorators = () => {
     navSnapTimer = null;
   }
 
-  const activeLink =
-    links.find((el) => el.getAttribute("href") === activeHref.value) ?? links[0];
+  const activeLink = links.find((el) => el.getAttribute("href") === activeHref.value) ?? links[0];
   if (!activeLink) return;
 
   currentActiveNavLink = activeLink;
@@ -303,6 +287,13 @@ const movePanelHoveredIndicator = () => {
 const handlePanelLinkClick = (event: MouseEvent) => {
   const target = (event.target as HTMLElement).closest<HTMLElement>("[data-panel-nav-item]");
   if (!target) return;
+
+  // Update store with clicked href for reliable active state tracking
+  const href = target.getAttribute("href");
+  if (href) {
+    navigationStore.handleNavLinkClick(href);
+  }
+
   currentActivePanelLink = target;
   currentHoveredPanelLink = target;
   previousHoveredPanelLink = target;
@@ -334,8 +325,7 @@ const initPanelDecorators = () => {
     panelSnapTimer = null;
   }
 
-  const activeLink =
-    links.find((el) => el.getAttribute("href") === activeHref.value) ?? links[0];
+  const activeLink = links.find((el) => el.getAttribute("href") === activeHref.value) ?? links[0];
   if (!activeLink) return;
 
   currentActivePanelLink = activeLink;
@@ -348,61 +338,23 @@ const initPanelDecorators = () => {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Compute active href from route directly — avoids racing against Vue Router's
-// class application timing when reading router-link-exact-active from the DOM.
-const route = useRoute();
-
-const activeHref = computed(() => {
-  const items = props.navItemData.main ?? [];
-  const exact = items.find((item) => item.href && route.path === item.href);
-  if (exact) return exact.href ?? null;
-  return (
-    items
-      .filter((item) => item.href && route.path.startsWith(item.href + "/"))
-      .sort((a, b) => (b.href?.length ?? 0) - (a.href?.length ?? 0))[0]?.href ?? null
-  );
-});
-watch(
-  () => route.path,
-  () => {
-    closeMenu();
-    requestAnimationFrame(() => {
+const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, activeHref, isActiveItem, toggleMenu, closeMenu, navigationStore } =
+  useNavCollapse(props.navItemData, "site-nav-loaded", {
+    onResize: () => {
+      setFinalNavActivePositions(true);
+      setFinalNavHoveredPositions(true);
+      setFinalPanelActivePositions(true);
+      setFinalPanelHoveredPositions(true);
+    },
+    onRouteChange: () => {
+      requestAnimationFrame(() => {
+        initNavDecorators();
+      });
+    },
+    onMounted: () => {
       initNavDecorators();
-    });
-  },
-  { flush: "post" }
-);
-
-useResizeObserver(navRef, () => {
-  checkOverflow();
-  if (!isCollapsed.value) closeMenu();
-  setFinalNavActivePositions(true);
-  setFinalNavHoveredPositions(true);
-  setFinalPanelActivePositions(true);
-  setFinalPanelHoveredPositions(true);
-});
-
-onClickOutside(navRef, closeMenu);
-
-const router = useRouter();
-
-onMounted(async () => {
-  await nextTick();
-  checkOverflow();
-  isLoaded.value = true;
-  await router.isReady();
-  requestAnimationFrame(() => {
-    initNavDecorators();
+    },
   });
-});
-
-watch(isCollapsed, async (collapsed) => {
-  if (!collapsed) {
-    cachedNavLinks = []; // nav <ul> was re-rendered — invalidate cache
-    await nextTick();
-    initNavDecorators();
-  }
-});
 
 watch(isMenuOpen, async (open) => {
   if (open) {
@@ -588,7 +540,6 @@ watch(
           color: var(--_link-hover-color);
           outline: none;
         }
-
       }
       li.is-active .site-nav-link {
         color: var(--_link-active-color);
@@ -781,7 +732,6 @@ watch(
             color: var(--_panel-link-hover-color);
             outline: none;
           }
-
         }
         li.is-active .site-nav-panel-link {
           color: var(--_panel-link-active-color);

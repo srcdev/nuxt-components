@@ -20,9 +20,15 @@
         v-for="item in navItemData.main"
         :key="item.href"
         :data-href="item.href"
-        :class="[item.cssName, { 'is-active': activeHref === item.href, 'is-hovered': hoveredItemHref === item.href }]"
+        :class="[item.cssName, { 'is-active': isActiveItem(item.href), 'is-hovered': hoveredItemHref === item.href }]"
       >
-        <NuxtLink :href="item.href" :external="item.isExternal || undefined" class="tab-nav-link" data-nav-item>
+        <NuxtLink
+          :href="item.href"
+          :external="item.isExternal || undefined"
+          class="tab-nav-link"
+          data-nav-item
+          @click="handleNavLinkClick"
+        >
           <Icon v-if="item.iconName" :name="item.iconName" aria-hidden="true" />
           {{ item.text }}
         </NuxtLink>
@@ -72,7 +78,7 @@
               :href="item.href"
               :external="item.isExternal || undefined"
               class="tab-nav-panel-link"
-              @click="closeMenu"
+              @click="handlePanelLinkClick"
             >
               <Icon v-if="item.iconName" :name="item.iconName" aria-hidden="true" />
               {{ item.text }}
@@ -85,7 +91,6 @@
 </template>
 
 <script setup lang="ts">
-import { useResizeObserver, onClickOutside } from "@vueuse/core";
 import type { NavItemData } from "~/types/components";
 
 interface Props {
@@ -99,48 +104,25 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const navRef = ref<HTMLElement | null>(null);
-const navListRef = ref<HTMLUListElement | null>(null);
+const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, isActiveItem, toggleMenu, closeMenu, navigationStore } =
+  useNavCollapse(props.navItemData, "tab-nav-loaded");
 
-const isCollapsed = ref(false);
-const isLoaded = useState("tab-nav-loaded", () => false);
-const isMenuOpen = ref(false);
-
-// Stored natural width of the list — used when the list is not in the DOM
-let navListNaturalWidth = 0;
-
-const checkOverflow = () => {
-  if (!navRef.value) return;
-
-  if (navListRef.value) {
-    navListNaturalWidth = navListRef.value.scrollWidth;
-  }
-
-  isCollapsed.value = navListNaturalWidth > navRef.value.clientWidth;
+// Handle navigation link clicks to update store
+const handleNavLinkClick = (event: MouseEvent) => {
+  const target = (event.target as HTMLElement).closest<HTMLElement>("[href]");
+  if (!target) return;
+  const href = target.getAttribute("href");
+  if (href) navigationStore.handleNavLinkClick(href);
 };
 
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value;
+// Handle panel link clicks to update store and close menu
+const handlePanelLinkClick = (event: MouseEvent) => {
+  const target = (event.target as HTMLElement).closest<HTMLElement>("[href]");
+  if (!target) return;
+  const href = target.getAttribute("href");
+  if (href) navigationStore.handleNavLinkClick(href);
+  closeMenu();
 };
-
-const closeMenu = () => {
-  isMenuOpen.value = false;
-};
-
-const route = useRoute();
-
-// Compute the active nav item href from the current route.
-// Prefers an exact match; falls back to the longest prefix match.
-const activeHref = computed(() => {
-  const items = props.navItemData.main ?? [];
-  const exact = items.find((item) => item.href && route.path === item.href);
-  if (exact) return exact.href ?? null;
-  return (
-    items
-      .filter((item) => item.href && route.path.startsWith(item.href + "/"))
-      .sort((a, b) => (b.href?.length ?? 0) - (a.href?.length ?? 0))[0]?.href ?? null
-  );
-});
 
 const hoveredItemHref = ref<string | null>(null);
 
@@ -149,27 +131,6 @@ const handleNavMousemove = (event: MouseEvent) => {
   if (!li) return;
   hoveredItemHref.value = li.dataset.href ?? null;
 };
-
-watch(
-  () => route.path,
-  () => {
-    closeMenu();
-  },
-  { flush: "post" }
-);
-
-useResizeObserver(navRef, () => {
-  checkOverflow();
-  if (!isCollapsed.value) closeMenu();
-});
-
-onClickOutside(navRef, closeMenu);
-
-onMounted(async () => {
-  await nextTick();
-  checkOverflow();
-  isLoaded.value = true;
-});
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 

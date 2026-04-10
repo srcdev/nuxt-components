@@ -1,0 +1,27 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TabNavigation > renders correct HTML structure 1`] = `
+"<nav class="tab-navigation tab-navigation--left is-loaded" aria-label="Site navigation">
+  <ul class="tab-nav-list">
+    <li data-href="/" class=""><a href="/" class="tab-nav-link" data-nav-item="">
+        <!--v-if--> Home
+      </a></li>
+    <li data-href="/about" class=""><a href="/about" class="tab-nav-link" data-nav-item="">
+        <!--v-if--> About
+      </a></li>
+    <li data-href="/contact" class=""><a href="/contact" class="tab-nav-link" data-nav-item="">
+        <!--v-if--> Contact
+      </a></li>
+    <li aria-hidden="true" role="none" class="nav-indicator-li">
+      <div class="nav__hovered"></div>
+    </li>
+    <li aria-hidden="true" role="none" class="nav-indicator-li">
+      <div class="nav__active-indicator"></div>
+    </li>
+  </ul>
+  <!--v-if-->
+  <!--teleport start-->
+  <!--teleport end-->
+  <!--v-if-->
+</nav>"
+`;
