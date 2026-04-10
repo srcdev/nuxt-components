@@ -54,31 +54,6 @@ export const useNavigationStore = defineStore(
     };
 
     /**
-     * Sync with route changes (for programmatic navigation)
-     * Re-runs the route matching logic when route changes
-     */
-    const syncWithRoute = (navItems: Array<{ href?: string }>, routePath: string) => {
-      const items = navItems.filter((item): item is { href: string } => Boolean(item.href));
-
-      // Try exact match first
-      const exact = items.find((item) => routePath === item.href);
-      if (exact) {
-        activeHref.value = exact.href;
-        return;
-      }
-
-      // Fall back to longest prefix match
-      const prefixMatches = items
-        .filter((item) => routePath.startsWith(item.href + "/"))
-        .sort((a, b) => b.href.length - a.href.length);
-
-      if (prefixMatches.length > 0) {
-        activeHref.value = prefixMatches[0]!.href;
-      }
-      // Don't reset to null if no matches - preserve existing active state
-    };
-
-    /**
      * Reset store state (useful for testing or when navigation data changes)
      */
     const reset = () => {
@@ -98,7 +73,6 @@ export const useNavigationStore = defineStore(
       setActiveHref,
       initializeFromRoute,
       handleNavLinkClick,
-      syncWithRoute,
       reset,
     };
   },

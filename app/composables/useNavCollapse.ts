@@ -45,9 +45,8 @@ export const useNavCollapse = (navItemData: NavItemData, stateKey: string, optio
 
   watch(
     () => route.path,
-    (newPath) => {
+    () => {
       closeMenu();
-      navigationStore.syncWithRoute(navItemData.main ?? [], newPath);
       options.onRouteChange?.();
     },
     { flush: "post" }
