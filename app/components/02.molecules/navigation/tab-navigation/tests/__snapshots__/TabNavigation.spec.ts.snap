@@ -3,7 +3,7 @@
 exports[`TabNavigation > renders correct HTML structure 1`] = `
 "<nav class="tab-navigation tab-navigation--left is-loaded" aria-label="Site navigation">
   <ul class="tab-nav-list">
-    <li data-href="/" class=""><a href="/" class="tab-nav-link" data-nav-item="">
+    <li data-href="/" class="is-active"><a href="/" class="tab-nav-link" data-nav-item="">
         <!--v-if--> Home
       </a></li>
     <li data-href="/about" class=""><a href="/about" class="tab-nav-link" data-nav-item="">

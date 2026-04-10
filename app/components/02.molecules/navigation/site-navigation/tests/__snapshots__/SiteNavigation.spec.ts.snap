@@ -3,7 +3,7 @@
 exports[`SiteNavigation > renders correct HTML structure 1`] = `
 "<nav class="site-navigation site-navigation--left is-loaded" aria-label="Site navigation">
   <ul class="site-nav-list" style="--_transition-duration: 0ms; --_x-active: 0px; --_width-active: NaN; --_x-hovered: 0px; --_width-hovered: NaN;">
-    <li class=""><a href="/" class="site-nav-link" data-nav-item="">
+    <li class="is-active"><a href="/" class="site-nav-link" data-nav-item="">
         <!--v-if--> Home
       </a></li>
     <li class=""><a href="/about" class="site-nav-link" data-nav-item="">
