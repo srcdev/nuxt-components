@@ -5,7 +5,7 @@
     :class="[
       elementClasses,
       `tab-navigation--${navAlign}`,
-      { 'is-collapsed': isCollapsed, 'is-loaded': isLoaded, 'menu-open': isMenuOpen },
+      { 'is-collapsed': isCollapsed, 'is-loaded': isLoaded, 'menu-open': isMenuOpen, 'is-animated': isAnimated },
     ]"
     aria-label="Site navigation"
   >
@@ -105,6 +105,28 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, isActiveItem, toggleMenu, closeMenu } =
   useNavCollapse("tab-nav-loaded");
+
+// ─── Animation gate — disables indicator transitions during route changes ────
+// Starts true: CSS anchor positioning resolves before first paint so there is
+// no previous position to animate from on initial render.
+// Uses flush:"pre" so isAnimated = false lands in the same DOM update as the
+// is-active class moving — the browser never sees the anchor shift with
+// transitions active.
+const isAnimated = ref(true);
+const route = useRoute();
+
+watch(
+  () => route.path,
+  () => {
+    isAnimated.value = false;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        isAnimated.value = true;
+      });
+    });
+  },
+  { flush: "pre" }
+);
 
 const hoveredItemHref = ref<string | null>(null);
 const showCollapsed = computed(() => isCollapsed.value && isLoaded.value);
@@ -426,13 +448,16 @@ watch(
     bottom: 0;
     opacity: 0;
     pointer-events: none;
+    background: var(--tab-nav-decorator-hovered-bg, transparent);
+    border-radius: 4px;
+    z-index: 1;
+  }
+
+  .tab-navigation.is-animated .tab-nav-list .nav__hovered {
     transition:
       left 200ms ease,
       right 200ms ease,
       opacity 150ms ease;
-    background: var(--tab-nav-decorator-hovered-bg, transparent);
-    border-radius: 4px;
-    z-index: 1;
   }
 
   .tab-navigation .tab-nav-list:has(.is-hovered) .nav__hovered {
@@ -449,11 +474,14 @@ watch(
     bottom: 0;
     height: 2px;
     pointer-events: none;
+    background-color: var(--tab-nav-decorator-indicator-color, var(--slate-01, currentColor));
+    z-index: 3;
+  }
+
+  .tab-navigation.is-animated .tab-nav-list .nav__active-indicator {
     transition:
       left 200ms ease,
       right 200ms ease;
-    background-color: var(--tab-nav-decorator-indicator-color, var(--slate-01, currentColor));
-    z-index: 3;
   }
   /* } */
 }
