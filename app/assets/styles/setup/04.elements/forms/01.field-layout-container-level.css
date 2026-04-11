@@ -1,4 +1,6 @@
 :where(html) {
+  --field-margin-block: 0 1.6rem; /* space between field and other elements */
+
   /* Field spacing */
   --field-gap-block: 0.8rem; /* space between stacked fields */
   --field-gap-inline: 0;

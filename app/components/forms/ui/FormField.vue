@@ -34,48 +34,48 @@ defineProps({
 
 <style lang="css">
 @layer components {
-.form-field {
-  --_gutter-width: 0rem;
-  --_max-width: 400px;
-  --_background-color: transparent;
-  --_border-radius: 0.4rem;
+  .form-field {
+    --_gutter-width: 0rem;
+    --_max-width: 400px;
+    --_background-color: transparent;
+    --_border-radius: 0.4rem;
 
-  background-color: var(--_background-color);
-  border-radius: var(--_border-radius);
-  margin-inline: auto;
-  margin-block: 0 1rem;
-
-  width: min(100% - calc(2 * var(--_gutter-width)), var(--_max-width));
-  outline: 0rem solid var(--slate-05);
-  /* overflow-block: hidden; */
-
-  &:has(.underline) {
-    --_background-color: var(--theme-form-input-bg-underlined);
-  }
-
-  .form-field-inner {
     background-color: var(--_background-color);
     border-radius: var(--_border-radius);
-    margin-inline-start: 0rem;
-    padding-inline-start: 0rem;
-    outline: 0 solid var(--slate-05);
-  }
+    margin-inline: auto;
+    margin-block: var(--field-margin-block);
 
-  &.has-gutter {
-    --_gutter-width: 1.6rem;
-  }
+    width: min(100% - calc(2 * var(--_gutter-width)), var(--_max-width));
+    outline: 0rem solid var(--slate-05);
+    /* overflow-block: hidden; */
 
-  &.narrow {
-    max-width: 400px;
-  }
+    &:has(.underline) {
+      --_background-color: var(--theme-form-input-bg-underlined);
+    }
 
-  &.medium {
-    --_max-width: 800px;
-  }
+    .form-field-inner {
+      background-color: var(--_background-color);
+      border-radius: var(--_border-radius);
+      margin-inline-start: 0rem;
+      padding-inline-start: 0rem;
+      outline: 0 solid var(--slate-05);
+    }
 
-  &.wide {
-    --_max-width: 1200px;
+    &.has-gutter {
+      --_gutter-width: 1.6rem;
+    }
+
+    &.narrow {
+      max-width: 400px;
+    }
+
+    &.medium {
+      --_max-width: 800px;
+    }
+
+    &.wide {
+      --_max-width: 1200px;
+    }
   }
-}
 }
 </style>

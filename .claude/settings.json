@@ -20,7 +20,8 @@
       "Bash(npx nuxi:*)",
       "Bash(node -e \"const t = require\\('/Users/simoncornforth/websites/nuxt-components/node_modules/pinia-plugin-persistedstate'\\); console.log\\(Object.keys\\(t\\)\\)\")",
       "Bash(npx vue-tsc:*)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components log --oneline -5)"
+      "Bash(git -C /Users/simoncornforth/websites/nuxt-components log --oneline -5)",
+      "Bash(git -C /Users/simoncornforth/websites/nuxt-components show 16ac4ef --stat)"
     ],
     "additionalDirectories": [
       "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms/content-wrappers/content-width",
