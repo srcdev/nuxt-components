@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`TabNavigation > renders correct HTML structure 1`] = `
-"<nav class="tab-navigation tab-navigation--left is-loaded" aria-label="Site navigation">
+"<nav class="tab-navigation tab-navigation--left is-loaded is-animated" aria-label="Site navigation">
   <ul class="tab-nav-list">
     <li data-href="/" class="is-active"><a href="/" class="tab-nav-link" data-nav-item="">
         <!--v-if--> Home
