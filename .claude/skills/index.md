@@ -59,7 +59,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── glass-panel.md          — GlassPanel props, slots, CSS token API (--glass-panel-bg/border-color/shadow/highlight), theming override
     ├── navigation-horizontal.md — NavigationHorizontal props, NavItemData type, CSS token API, import path gotcha
     ├── input-copy-core.md      — InputCopyCore: readonly copy-to-clipboard input; props, emits, slots, CSS classes, usage
-    └── site-navigation.md      — SiteNavigation: responsive nav with auto-collapse, burger menu, decorator indicators, CSS token API
+    ├── site-navigation.md      — SiteNavigation: responsive nav with auto-collapse, burger menu, decorator indicators, CSS token API
+    └── social-icons-list.md    — SocialIconsList: data-driven social icon links, ISocialIcon type, logos: icon names, CSS tokens
 ```
 
 ## Skill file template

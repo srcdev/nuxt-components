@@ -48,10 +48,19 @@ import type { NavItem, NavItemData } from "~/types/components/navigation-horizon
 
 ## Consuming app usage
 
-Once published, consumers import from the package barrel:
+The chain that makes this work:
+
+```text
+app/types/components/<component>.d.ts
+  → app/types/components/index.ts   (export * from "./<component>.d")
+  → types.d.ts                      (export * from "./app/types/components")
+  → consumer import
+```
+
+`types.d.ts` is the `"types"` entry point in `package.json`, so once a type is added to the barrel it is importable directly from the package name:
 
 ```ts
-import type { NavItem, NavItemData } from "nuxt-components/app/types/components";
+import type { NavItem, NavItemData } from "srcdev-nuxt-components";
 ```
 
 ## Notes

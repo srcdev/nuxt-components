@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SocialIconsList > renders the correct HTML structure 1`] = `
+"<ul class="social-icons-list" aria-label="Social media profiles">
+  <li class="social-icon-item"><a href="https://www.facebook.com/testprofile" class="social-icon-link" aria-label="Facebook profile" rel="noopener noreferrer" target="_blank"><span class="iconify i-logos:facebook social-icon" aria-hidden="true" style="width: var(--_icon-size); height: var(--_icon-size);"></span></a></li>
+  <li class="social-icon-item"><a href="https://www.instagram.com/testhandle" class="social-icon-link" aria-label="Instagram profile" rel="noopener noreferrer" target="_blank"><span class="iconify i-logos:instagram-icon social-icon" aria-hidden="true" style="width: var(--_icon-size); height: var(--_icon-size);"></span></a></li>
+  <li class="social-icon-item"><a href="https://www.youtube.com/@testchannel" class="social-icon-link" aria-label="YouTube profile" rel="noopener noreferrer" target="_blank"><span class="iconify i-logos:youtube-icon social-icon" aria-hidden="true" style="width: var(--_icon-size); height: var(--_icon-size);"></span></a></li>
+</ul>"
+`;

@@ -12,6 +12,7 @@ const ICON_SETS = [
   "@iconify-json/bitcoin-icons",
   "@iconify-json/gravity-ui",
   "@iconify-json/ic",
+  "@iconify-json/logos",
   "@iconify-json/lucide",
   "@iconify-json/material-symbols",
   "@iconify-json/mdi",

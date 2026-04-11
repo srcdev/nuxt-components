@@ -20,9 +20,19 @@ Both the horizontal list and the panel include animated active/hover indicator d
 
 ## NavItemData type
 
+**Within the layer:**
+
 ```ts
 import type { NavItemData } from "~/types/components/navigation-horizontal.d";
+```
 
+**In a consuming app:**
+
+```ts
+import type { NavItemData } from "srcdev-nuxt-components";
+```
+
+```ts
 const navItemData: NavItemData = {
   main: [
     { text: "Home",     href: "/" },

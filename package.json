@@ -45,6 +45,7 @@
     "@iconify-json/bitcoin-icons": "*",
     "@iconify-json/gravity-ui": "*",
     "@iconify-json/ic": "*",
+    "@iconify-json/logos": "*",
     "@iconify-json/lucide": "*",
     "@iconify-json/material-symbols": "*",
     "@iconify-json/mdi": "*",
@@ -64,6 +65,9 @@
       "optional": true
     },
     "@iconify-json/ic": {
+      "optional": true
+    },
+    "@iconify-json/logos": {
       "optional": true
     },
     "@iconify-json/lucide": {
@@ -86,6 +90,7 @@
     "@iconify-json/bitcoin-icons": "1.2.4",
     "@iconify-json/gravity-ui": "1.2.12",
     "@iconify-json/ic": "*",
+    "@iconify-json/logos": "1.2.11",
     "@iconify-json/lucide": "*",
     "@iconify-json/material-symbols": "1.2.64",
     "@iconify-json/mdi": "1.2.3",

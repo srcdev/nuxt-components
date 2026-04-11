@@ -1,5 +1,3 @@
-// composables/useWhatsApp.ts
-
 export const useWhatsApp = () => {
   const config = useRuntimeConfig();
 
