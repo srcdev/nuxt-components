@@ -17,6 +17,7 @@ export default defineNuxtConfig({
     contactEmailTo: "", // NUXT_CONTACT_EMAIL_TO   — inbox that receives enquiries
     contactEmailFrom: "", // NUXT_CONTACT_EMAIL_FROM — must be a verified Resend domain
     public: {
+      whatsappNumber: "", // NUXT_PUBLIC_WHATSAPP_NUMBER — in international format, no + or spaces, e.g. 447700900000
       // Consumer apps that don't support dark/light mode can opt out entirely:
       // set NUXT_PUBLIC_COLOUR_SCHEME_ENABLED=false (env var) or override in their nuxt.config.ts
       colourScheme: {
