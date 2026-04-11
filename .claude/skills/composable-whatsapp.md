@@ -4,32 +4,38 @@
 
 `useWhatsApp` opens a pre-filled WhatsApp conversation in a new tab via the `wa.me` deep-link API. It formats an array of labelled fields into a bold-label WhatsApp message and requires a phone number configured in runtime config.
 
-Composable location: `app/composables/useWhatsApp.ts`
+**This composable ships inside the `srcdev-nuxt-components` layer** (`app/composables/useWhatsApp.ts`). Consuming apps get it via Nuxt's layer auto-import — **do not create a local copy** in the consuming app.
 
 ## Prerequisites
 
 - `NUXT_PUBLIC_WHATSAPP_NUMBER` env var set to the recipient number in international format, no `+` or spaces (e.g. `447700900000`).
 
-## Runtime Config
+## Setup in the consuming app
 
-`whatsappNumber` must live in `runtimeConfig.public` — **not** the private root block — because `openWhatsApp` runs client-side and private keys are server-only.
+### 1. Runtime config
+
+Add `whatsappNumber` to `runtimeConfig.public` in the consuming app's `nuxt.config.ts`. It must be in `public` — **not** the private root block — because `openWhatsApp` runs client-side and private keys are server-only.
 
 ```ts
 // nuxt.config.ts
 runtimeConfig: {
-  // private server-only keys (Resend, etc.)
   public: {
     whatsappNumber: "", // NUXT_PUBLIC_WHATSAPP_NUMBER
   },
 },
 ```
 
-Env var name follows Nuxt convention: `NUXT_PUBLIC_` prefix + SCREAMING_SNAKE of the key path.
+Env var name follows Nuxt convention: `NUXT_PUBLIC_` prefix + SCREAMING_SNAKE of the key path. Set `NUXT_PUBLIC_WHATSAPP_NUMBER` in `.env` locally and in your hosting provider's environment variables (e.g. Vercel) for production.
 
-## Composable
+### 2. No import needed
+
+`useWhatsApp` is auto-imported by Nuxt from the layer. Use it directly in `<script setup>` or any composable without an explicit import.
+
+## Composable reference
+
+Source lives at `app/composables/useWhatsApp.ts` in the layer. Shown here for reference only — do not recreate it in the consuming app.
 
 ```ts
-// app/composables/useWhatsApp.ts
 export const useWhatsApp = () => {
   const config = useRuntimeConfig(); // must be inside the function, not at module scope
 

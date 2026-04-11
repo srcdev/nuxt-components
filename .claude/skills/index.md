@@ -37,6 +37,10 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── icon-sets.md                      — icon set packages required by layer components, FOUC prevention, component→package map
 ├── robots-env-aware.md               — @nuxtjs/robots: allow crawling on prod domain only, block on preview/staging via env var
 ├── composable-whatsapp.md            — useWhatsApp: open pre-filled wa.me link from form payload; runtime config, security, usage
+├── composable-zod-validation.md      — useZodValidation: schema-driven form validation, error binding, submit flow, API error push
+├── composable-colour-scheme.md       — useColourScheme: reactive light/dark/auto switching, localStorage persistence, runtime config
+├── composable-dialog-controls.md     — useDialogControls: named dialog open/close state with confirm/cancel callbacks
+├── composable-tooltips-guide.md      — useTooltipsGuide: sequential popover guide with auto-start, dismiss-to-advance, manual controls
 └── components/
     ├── accordian-core.md       — AccordianCore indexed dynamic slots (accordian-{n}-summary/icon/content), exclusive-open grouping
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
