@@ -11,7 +11,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .entry-slide-in {
-    animation: entrySlideInAnimation both;
+    animation: entrySlideInAnimation forwards;
     animation-timeline: view(70% 5%);
   }
 }
