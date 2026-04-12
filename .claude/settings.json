@@ -27,7 +27,12 @@
       "Bash(git -C /Users/simoncornforth/websites/nuxt-components show 5597a15 -- \"*.vue\" \"*.css\")",
       "Bash(npm install:*)",
       "Bash(npm run:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(ls /Users/simoncornforth/websites/nuxt-components/*.md)",
+      "Bash(gh release:*)",
+      "Bash(git -C /Users/simoncornforth/websites/nuxt-components status)",
+      "Bash(git -C /Users/simoncornforth/websites/nuxt-components add .claude/skills/components/services-section.md .claude/skills/components/services-section-grid.md .claude/skills/index.md app/components/03.organisms/services/services-grids/ServicesSectionGrid.vue app/components/03.organisms/services/services-section/ServicesSection.vue app/components/03.organisms/services/services-card/stories/ app/components/03.organisms/services/services-card/tests/ app/components/03.organisms/services/services-grids/stories/ app/components/03.organisms/services/services-grids/tests/ app/components/03.organisms/services/services-section/stories/ app/components/03.organisms/services/services-section/tests/)",
+      "Bash(git -C /Users/simoncornforth/websites/nuxt-components commit -m ':*)"
     ],
     "additionalDirectories": [
       "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms/content-wrappers/content-width",
