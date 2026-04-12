@@ -2,28 +2,81 @@
 
 ## Overview
 
-When including a component in a page or consuming component, visual customisation can be applied
-locally using `styleClassPassthrough` combined with a scoped style block in the consuming file.
-This avoids adding one-off props to the component and keeps customisation co-located with the usage.
+When including a component in a consuming page or component, visual customisation (theming and
+geometry) can be applied locally without modifying the component. Two patterns exist depending
+on context.
 
-No changes to the component are required.
+No changes to the layer component are required for either pattern.
 
 ---
 
-## Pattern
+## Pattern 1 — Page-level scoping (preferred for single-use or section-scoped instances)
 
-### 1. Pass a modifier class via styleClassPassthrough
+The consuming page has a unique wrapper or body class. The `<style>` block is **unscoped** — no
+`scoped` attribute — so component class names are targeted directly by nesting within the page
+scope. No `:deep()` is needed.
+
+```vue
+<!-- In page template or parent component -->
+<template>
+  <div class="contact-page">
+    <div class="hero-section">
+      <SocialIconsList :items="socialItems" />
+    </div>
+  </div>
+</template>
+
+<!-- Unscoped style block — no `scoped` attribute -->
+<style lang="css">
+.contact-page {
+  .hero-section {
+    .social-icons-list {
+      /* Theming */
+      --theme-social-icon-size: 3.2rem;
+      --theme-social-icon-gap: 2rem;
+      color: var(--colour-brand-primary); /* drives currentColor on icons */
+
+      /* Geometry */
+      margin-block-start: 1.6rem;
+
+      .social-icon-link {
+        border-radius: 0.4rem;
+        padding: 0.4rem;
+      }
+    }
+  }
+}
+</style>
+```
+
+**Body class pattern**: Pages often set a unique class via `bodyAttrs.class` in `useHead()`, then
+use that as the root scope for all page-specific overrides:
+
+```ts
+useHead({ bodyAttrs: { class: "contact-page" } })
+```
+
+```css
+/* All overrides for the page nested under the body class */
+.contact-page {
+  .social-icons-list { ... }
+  .hero-text { ... }
+}
+```
+
+---
+
+## Pattern 2 — Per-instance modifier via styleClassPassthrough
+
+Use when the same component appears multiple times on a page and you need to target a specific
+instance, or when the consuming file uses `<style scoped>` and needs an anchor class that survives
+scoping.
 
 ```vue
 <CardCore :style-class-passthrough="['featured-card']">
   ...
 </CardCore>
 ```
-
-### 2. Add a style block in the consuming file
-
-Scaffold this block when adding the component. Include a comment so future developers know it
-is safe to delete if no overrides are needed.
 
 ```vue
 <style>
@@ -40,13 +93,22 @@ is safe to delete if no overrides are needed.
 
     /* Geometry */
     /* border-radius: 1.6rem; */
-
-    /* Border / outline */
-    /* --_border-width: 0.3rem; */
   }
 }
 </style>
 ```
+
+The modifier class lands on the component's root element — nested element overrides use the full
+path: `.card-core.featured-card .card-row-header { ... }`.
+
+---
+
+## When to offer a scaffold
+
+After placing a component in a consuming page or component, offer a CSS override scaffold. Use the
+component's own class name and any `--theme-*` tokens it exposes as commented stubs. Cover theming
+(colours, tokens) and geometry (sizes, spacing, borders) — not behaviour (`display`, `pointer-events`,
+`z-index`, animations).
 
 ---
 
@@ -54,40 +116,36 @@ is safe to delete if no overrides are needed.
 
 | Category | Examples | Approach |
 |---|---|---|
-| Colours | backgrounds, borders, text | CSS custom properties if the component exposes them, otherwise direct values |
-| Geometry | border-radius, padding, gap | Direct property or `--_` private variable |
+| Theming | icon colour, background, border colour | `--theme-*` tokens where exposed; otherwise direct values |
+| Geometry | border-radius, padding, gap, size | Direct property or `--_` private variable |
 | Border / outline | width, style, colour | Direct property or `--_` private variable |
 
 **Do not override behaviour** — `display`, `visibility`, `pointer-events`, `z-index`, animations.
-Those belong in the component or a structural parent, not a style modifier.
+Those belong in the component or a structural parent.
 
 ---
 
 ## CSS custom property targeting
 
-Components use `--_` prefixed private custom properties internally. These can be targeted via
-a modifier class at higher specificity:
+Components expose `--theme-*` public tokens and use `--_` private tokens internally:
 
 ```css
-/* Component internally defines: */
-.my-component {
-  --_background-color: white;
-  background-color: var(--_background-color);
+/* Component internally: --_icon-size: var(--theme-social-icon-size, 2.4rem) */
+
+/* Override via --theme-* (stable, recommended): */
+.social-icons-list {
+  --theme-social-icon-size: 3.2rem;
 }
 
-/* Consumer overrides via modifier: */
-.my-component {
+/* Override via --_ private token (fragile — may break on component update): */
+.social-icons-list {
   &.my-modifier {
-    --_background-color: var(--brand-surface); /* CSS token */
-    /* or */
-    --_background-color: #f5f0eb;              /* direct value */
+    --_icon-size: 3.2rem;
   }
 }
 ```
 
-Note: `--_` properties are component-internal. If the component is updated and renames them,
-the override will silently stop working. For shared/themeable overrides, prefer components that
-expose `--theme-*` public variables instead.
+Prefer `--theme-*` tokens. Only target `--_` private variables when no `--theme-*` equivalent exists.
 
 ---
 
@@ -115,12 +173,3 @@ expose `--theme-*` public variables instead.
 - Anything where visual inconsistency between instances would be a bug
 
 The test: *should all instances of this component look the same?* If yes → theme. If instances are expected to look different → local override.
-
----
-
-## Notes
-
-- `styleClassPassthrough` accepts a string or array — pass an array when combining multiple modifiers.
-- The modifier class lands on the component's root element, so nested element overrides need the
-  full selector path: `.card-core.featured-card .card-row-header { ... }`.
-- Keep the style block close to the component usage in the template — don't put it in a global stylesheet.

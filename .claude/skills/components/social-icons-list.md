@@ -93,22 +93,37 @@ import type { ISocialIcon } from "srcdev-nuxt-components";
 
 ## Local style override scaffold
 
-```vue
-<SocialIconsList :style-class-passthrough="['my-social-icons']" :items="items" />
+Offer this scaffold when placing the component in a consuming page or section. The style block is
+**unscoped** — no `:deep()` needed. Scope by the page or section's existing wrapper class.
 
-<style>
+```vue
+<template>
+  <SocialIconsList :items="items" />
+</template>
+
+<style lang="css">
 /* ─── SocialIconsList local overrides ──────────────────────────────
    Geometry and size only — brand colours are baked into logos: SVGs.
    Delete this block if no overrides are needed.
    ─────────────────────────────────────────────────────────────────── */
-.social-icons-list {
-  &.my-social-icons {
+.my-page-or-section {
+  .social-icons-list {
     /* --theme-social-icon-size: 3.2rem; */
-    /* --theme-social-icon-gap: 2rem; */
+    /* --theme-social-icon-gap: 1.6rem; */
+    /* margin-block-start: 1.6rem; */
+
+    .social-icon-link {
+      /* border-radius: 0.4rem; */
+      /* padding: 0.4rem; */
+      /* outline: 1px solid transparent; */
+    }
   }
 }
 </style>
 ```
+
+Use `styleClassPassthrough` only if the same component appears multiple times on the page and you
+need to target a specific instance. See `component-local-style-override.md` for full pattern guidance.
 
 ---
 
