@@ -97,6 +97,8 @@ const normalisedContent = computed(() =>
       background-image: var(--hero-text-bg-img);
       font-style: italic;
       color: transparent;
+      padding-bottom: 0.2em;
+      margin-bottom: -0.2em;
     }
   }
 }
