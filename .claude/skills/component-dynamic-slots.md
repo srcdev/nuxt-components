@@ -138,6 +138,72 @@ Some components pair multiple slot types per index (e.g. TabsCore):
 
 ---
 
+## Pattern 3 — Prefixed Slot Inference
+
+The component iterates over a **named subset** of provided slots, filtered by a prefix pattern. Consumer adds `profile-info-1`, `profile-info-2`, etc. and the component renders exactly those — no count prop required.
+
+Use this when:
+
+- Slot names follow a predictable prefix+index convention (`prefix-N`)
+- The component should render however many the consumer passes, without needing a count prop kept in sync
+- A fallback count is still useful for demos/Storybook when no matching slots are provided
+
+### Implementation
+
+```vue
+<template>
+  <div v-for="slotName in prefixedSlots" :key="slotName" class="item-block">
+    <slot :name="slotName">
+      <p>Fallback content for {{ slotName }}</p>
+    </slot>
+  </div>
+</template>
+
+<script setup lang="ts">
+interface Props {
+  itemCount?: number; // fallback only — used when no matching slots are provided
+}
+const props = withDefaults(defineProps<Props>(), { itemCount: 3 });
+
+const slots = useSlots();
+
+const prefixedSlots = computed(() => {
+  const provided = Object.keys(slots)
+    .filter((key) => /^my-prefix-\d+$/.test(key))
+    .sort((a, b) => parseInt(a.split("-")[2] ?? "0") - parseInt(b.split("-")[2] ?? "0"));
+  return provided.length > 0
+    ? provided
+    : Array.from({ length: props.itemCount }, (_, i) => `my-prefix-${i + 1}`);
+});
+</script>
+```
+
+### Key details
+
+- `useSlots()` is required (not `$slots`) because the filtering logic lives in `<script setup>`
+- Sort numerically, not lexicographically — `"10"` must come after `"9"`
+- The `itemCount` fallback keeps demos and Storybook working without needing real slot content
+- Do **not** pass `:heading-id` or other scoped props via these slots unless the consumer genuinely needs them — it creates duplicate-id risk when the same value is forwarded to multiple slots
+
+### Consumer usage
+
+No count prop needed — just add slots:
+
+```vue
+<ProfileSection>
+  <template #profile-info-1>...</template>
+  <template #profile-info-2>...</template>
+  <template #profile-info-3>...</template>
+  <template #profile-info-4>...</template>  <!-- automatically picked up -->
+</ProfileSection>
+```
+
+### Examples (prefixed slot inference)
+
+- `app/components/02.molecules/profile-section/ProfileSection.vue`
+
+---
+
 ## Comparison
 
 | | Named dynamic slots | Indexed dynamic slots |
