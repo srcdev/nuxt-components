@@ -9,7 +9,9 @@
   }
 }
 
-.entry-slide-in {
-  animation: entrySlideInAnimation both;
-  animation-timeline: view(70% 5%);
+@media (prefers-reduced-motion: no-preference) {
+  .entry-slide-in {
+    animation: entrySlideInAnimation both;
+    animation-timeline: view(70% 5%);
+  }
 }
