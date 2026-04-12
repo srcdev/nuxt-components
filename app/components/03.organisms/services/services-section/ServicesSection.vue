@@ -2,7 +2,7 @@
   <component :is="tag" class="services-section" :class="[elementClasses]" :aria-labelledby="ariaLabelledby">
     <div class="services-section__grid" :class="{ 'services-section__grid--reverse': reverse }">
       <div class="image-wrapper">
-        <NuxtImg :src="serviceData.image" :alt="serviceData.title" :loading="imageLoading" class="image" />
+        <NuxtImg :src="serviceData.image" :alt="serviceData.title" :loading="imageLoading" :fetchpriority="imageFetchPriority" class="image" />
       </div>
       <div class="info-wrapper" :class="infoWrapperClasses">
         <EyebrowText font-size="large" :text-content="serviceData.subtitle" />
@@ -178,6 +178,9 @@ const infoWrapperClasses = computed(() => {
 
 // Computed to return loading="lazy" if index is greater than 1, so that the first two sections prioritise image loading, but if there are more than 2 sections, the rest will lazy load their images to improve performance.
 const imageLoading = computed(() => (props.index !== undefined && props.index > 1 ? "lazy" : "eager"));
+
+// Only the first image (LCP candidate) gets fetchpriority="high" to reduce resource load delay.
+const imageFetchPriority = computed(() => (props.index === 0 ? "high" : "auto"));
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
