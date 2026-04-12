@@ -8,7 +8,7 @@
 
           <AccordianCore
             :item-count="data.length ?? 0"
-            :animation-duration="3000"
+            :animation-duration="1000"
             :style-class-passthrough="['class-modifier-narrow']"
           >
             <template v-for="(item, key) in data" :key="`summary-${key}`" #[`accordian-${key}-summary`]>
