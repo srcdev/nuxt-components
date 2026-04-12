@@ -20,11 +20,11 @@
 
         <div class="price-duration">
           <div class="flex-row">
-            <Icon name="mdi:clock-time-four-outline" class="decorator" />
+            <Icon :name="durationIcon" class="decorator" />
             <span>{{ serviceData.duration }}</span>
           </div>
           <div class="flex-row">
-            <Icon name="mdi:currency-gbp" class="decorator" />
+            <Icon :name="priceIcon" class="decorator" />
             <span>{{ serviceData.price }}</span>
           </div>
         </div>
@@ -150,6 +150,8 @@ interface Props {
   isSummary?: boolean;
   summaryAlignment?: "start" | "center" | "end";
   reverse?: boolean;
+  durationIcon?: string;
+  priceIcon?: string;
   styleClassPassthrough?: string | string[];
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -158,6 +160,8 @@ const props = withDefaults(defineProps<Props>(), {
   index: 0,
   isSummary: false,
   summaryAlignment: "center",
+  durationIcon: "mdi:clock-time-four-outline",
+  priceIcon: "mdi:currency-gbp",
   styleClassPassthrough: () => [],
 });
 

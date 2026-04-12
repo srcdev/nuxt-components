@@ -19,7 +19,23 @@ All routing and CTA decisions are delegated to the consumer via slots.
 | `isSummary` | `boolean` | `false` | no |
 | `summaryAlignment` | `"start" \| "center" \| "end"` | `"center"` | no |
 | `reverse` | `boolean` | `false` | no |
+| `durationIcon` | `string` | `"mdi:clock-time-four-outline"` | no |
+| `priceIcon` | `string` | `"mdi:currency-gbp"` | no |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | no |
+
+### Icon customisation
+
+The two icons in the price/duration row default to `mdi:clock-time-four-outline` and `mdi:currency-gbp`. Override them for a different currency or icon style:
+
+```vue
+<ServicesSection
+  :service-data="service"
+  duration-icon="mdi:timer-outline"
+  price-icon="mdi:currency-eur"
+/>
+```
+
+Any [Iconify](https://icon-sets.iconify.design/) icon name is accepted. See `.claude/skills/icon-sets.md` for the icon packages available in this layer.
 
 ### `index` and image loading
 

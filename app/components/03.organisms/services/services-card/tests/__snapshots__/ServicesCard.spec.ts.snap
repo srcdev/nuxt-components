@@ -1,0 +1,12 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ServicesCard > renders correct HTML structure 1`] = `
+"<div class="services-card">
+  <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/test.jpg 1x, /_ipx/_/images/test.jpg 2x" alt="Test Service" loading="lazy" class="image" src="/_ipx/_/images/test.jpg"></div>
+  <div class="eyebrow-text large">A subtitle</div>
+  <h2 class="hero-text heading axis-horizontal">
+    <!--v-if--><span class="text-block-0 normal">Test Service</span>
+  </h2>
+  <div class="description">A short description of the service.</div>
+</div>"
+`;

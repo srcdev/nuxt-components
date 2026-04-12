@@ -1,0 +1,42 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
+"<div class="services-card-grid">
+  <div class="services-card">
+    <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/locs-installation.jpg 1x, /_ipx/_/images/locs-installation.jpg 2x" alt="Locs Installation" loading="lazy" class="image" src="/_ipx/_/images/locs-installation.jpg"></div>
+    <div class="eyebrow-text large">Subtitle for Locs Installation</div>
+    <h2 class="hero-text heading axis-horizontal">
+      <!--v-if--><span class="text-block-0 normal">Locs Installation</span>
+    </h2>
+    <div class="description">Short description for Locs Installation.</div><a href="/ui/services/services-section/locs-installation" data-testid="input-button-core" data-theme="default" class="input-button-core secondary mbs-24 is-link">
+      <!--v-if-->
+      <!--v-if--><span class="button-text">Enquire about Locs Installation</span><span class="btn-icon right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
+      <!--v-if-->
+    </a>
+  </div>
+  <div class="services-card">
+    <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/locs-retwist.jpg 1x, /_ipx/_/images/locs-retwist.jpg 2x" alt="Locs Retwist" loading="lazy" class="image" src="/_ipx/_/images/locs-retwist.jpg"></div>
+    <div class="eyebrow-text large">Subtitle for Locs Retwist</div>
+    <h2 class="hero-text heading axis-horizontal">
+      <!--v-if--><span class="text-block-0 normal">Locs Retwist</span>
+    </h2>
+    <div class="description">Short description for Locs Retwist.</div><a href="/ui/services/services-section/locs-retwist" data-testid="input-button-core" data-theme="default" class="input-button-core secondary mbs-24 is-link">
+      <!--v-if-->
+      <!--v-if--><span class="button-text">Enquire about Locs Retwist</span><span class="btn-icon right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
+      <!--v-if-->
+    </a>
+  </div>
+  <div class="services-card">
+    <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/colour-treatment.jpg 1x, /_ipx/_/images/colour-treatment.jpg 2x" alt="Colour Treatment" loading="lazy" class="image" src="/_ipx/_/images/colour-treatment.jpg"></div>
+    <div class="eyebrow-text large">Subtitle for Colour Treatment</div>
+    <h2 class="hero-text heading axis-horizontal">
+      <!--v-if--><span class="text-block-0 normal">Colour Treatment</span>
+    </h2>
+    <div class="description">Short description for Colour Treatment.</div><a href="/ui/services/services-section/colour-treatment" data-testid="input-button-core" data-theme="default" class="input-button-core secondary mbs-24 is-link">
+      <!--v-if-->
+      <!--v-if--><span class="button-text">Enquire about Colour Treatment</span><span class="btn-icon right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
+      <!--v-if-->
+    </a>
+  </div>
+</div>"
+`;

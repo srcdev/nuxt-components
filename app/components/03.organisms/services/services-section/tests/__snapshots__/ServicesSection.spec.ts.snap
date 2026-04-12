@@ -1,0 +1,84 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ServicesSection > renders correct HTML structure 1`] = `
+"<div class="services-section">
+  <div class="services-section__grid">
+    <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/test.jpg 1x, /_ipx/_/images/test.jpg 2x" alt="Test Service" loading="eager" class="image" src="/_ipx/_/images/test.jpg"></div>
+    <div class="info-wrapper">
+      <div class="eyebrow-text large">A subtitle</div>
+      <h2 class="hero-text mb-20 title axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">Test Service</span>
+      </h2>
+      <div class="price-duration">
+        <div class="flex-row"><span class="iconify i-mdi:clock-time-four-outline decorator" aria-hidden="true"></span><span>60 mins</span></div>
+        <div class="flex-row"><span class="iconify i-mdi:currency-gbp decorator" aria-hidden="true"></span><span>£50</span></div>
+      </div>
+      <p class="page-body-normal">Long description text</p>
+      <h2 class="hero-text mb-20 subheading axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">A great heading</span>
+      </h2>
+      <p class="page-body-normal">What this service is</p>
+      <!--v-if-->
+      <h2 class="hero-text mb-20 subheading axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">The Process</span>
+      </h2>
+      <ol class="stepper-list has-connectors" show-connectors="true">
+        <li class="indicator-top indicator-circle" style="--_connector-top: 0px; --_connector-height: 0px;">
+          <div class="stepper-list__indicator-counter"></div>
+          <div>
+            <p class="page-body-normal">Step one</p>
+          </div>
+        </li>
+        <li class="indicator-top indicator-circle">
+          <div class="stepper-list__indicator-counter"></div>
+          <div>
+            <p class="page-body-normal">Step two</p>
+          </div>
+        </li>
+      </ol>
+      <h2 class="hero-text mb-20 subheading axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">Ideal For</span>
+      </h2>
+      <ul class="stepper-list">
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"><span class="iconify i-mdi:checkbox-marked-circle-outline indicator-icon" aria-hidden="true"></span></div>
+          <div>
+            <p class="page-body-normal">Person A</p>
+          </div>
+        </li>
+        <li class="has-indicator indicator-top indicator-disc">
+          <div class="stepper-list__indicator-custom"><span class="iconify i-mdi:checkbox-marked-circle-outline indicator-icon" aria-hidden="true"></span></div>
+          <div>
+            <p class="page-body-normal">Person B</p>
+          </div>
+        </li>
+      </ul>
+      <h2 class="hero-text mb-20 subheading axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">Aftercare &amp; Maintenance</span>
+      </h2>
+      <p class="page-body-normal">Maintenance advice</p>
+      <h2 class="hero-text mb-20 subheading axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">Frequently Asked Questions</span>
+      </h2>
+      <div class="display-accordian services-faq" id="faq">
+        <div class="expanding-panel accordian-item" icon-size="medium">
+          <details class="expanding-panel-details" name="faq-v-0-0-0">
+            <summary id="id-faq-v-0-0-0-trigger" class="expanding-panel-summary" aria-controls="id-faq-v-0-0-0-content" aria-expanded="false"><span class="label-wrapper">FAQ question?</span><span class="icon-wrapper"><span class="iconify i-mdi:chevron-down" aria-hidden="true"></span></span></summary>
+          </details>
+          <div id="id-faq-v-0-0-0-content" class="expanding-panel-content" aria-labelledby="id-faq-v-0-0-0-trigger" role="region">
+            <div class="inner">
+              <p>FAQ answer.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="glass-panel p-24">
+        <h2 class="hero-text mbs-0 mbe-20 subheading axis-horizontal">
+          <!--v-if--><span class="text-block-0 normal">Ready to book your highlights appointment?</span>
+        </h2>
+        <p class="page-body-normal">Mobile service across Bath — I come to you.</p>
+      </div>
+    </div>
+  </div>
+</div>"
+`;

@@ -10,23 +10,7 @@
       :summary-alignment="summaryAlignment"
     >
       <template #summary-link="{ serviceData }">
-        <LinkText
-          :to="`/ui/services/services-section/${serviceData.slug}`"
-          :link-text="`More about ${serviceData.title}`"
-          :style-class-passthrough="['mb-20']"
-        />
-      </template>
-      <template #cta="{ serviceData }">
-        <InputButtonCore
-          variant="secondary"
-          :button-text="`Enquire about ${serviceData.title}`"
-          href="#"
-          :style-class-passthrough="['mbs-24']"
-        >
-          <template #right>
-            <Icon name="mdi:arrow-right" class="icon" />
-          </template>
-        </InputButtonCore>
+        <slot name="summary-link" :service-data="serviceData"></slot>
       </template>
     </ServicesSection>
   </component>
