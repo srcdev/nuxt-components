@@ -11,13 +11,13 @@ exports[`ProfileSection > renders correct HTML structure 1`] = `
     <div class="profile-info">
       <div class="profile-info-content">
         <div class="profile-info-block">
-          <p>Profile info content 1</p>
+          <p>Profile info content profile-info-1</p>
         </div>
         <div class="profile-info-block">
-          <p>Profile info content 2</p>
+          <p>Profile info content profile-info-2</p>
         </div>
         <div class="profile-info-block">
-          <p>Profile info content 3</p>
+          <p>Profile info content profile-info-3</p>
         </div>
       </div>
       <!--v-if-->
