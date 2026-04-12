@@ -39,7 +39,7 @@ Any [Iconify](https://icon-sets.iconify.design/) icon name is accepted. See `.cl
 
 ### `index` and image loading
 
-The `index` prop controls eager vs lazy image loading. The first two sections (`index` 0 and 1) load eagerly; all others load lazily. Pass the loop index when rendering a list of sections.
+The `index` prop controls both eager/lazy loading and fetch priority. The first two sections (`index` 0 and 1) load eagerly; all others load lazily. Only `index 0` gets `fetchpriority="high"` (LCP candidate). Pass the loop index when rendering a list of sections.
 
 ### `reverse`
 

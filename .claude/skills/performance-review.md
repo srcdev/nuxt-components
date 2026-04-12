@@ -59,6 +59,7 @@ Read each file in full, then check for the following issues. Report only issues 
 ─── Images / Assets ─────────────────────────────────────────────
 □ `NuxtImg` without explicit `width` and `height` (causes layout shift + Vercel width fallback)
 □ Images without `loading="lazy"` where above-the-fold loading is not required
+□ First image in a list-rendered component missing `fetchpriority="high"` (LCP candidate — see `performance-lcp-image-priority.md`)
 □ Large inline SVGs that could be icon components
 
 ─── Bundle / Imports ────────────────────────────────────────────
