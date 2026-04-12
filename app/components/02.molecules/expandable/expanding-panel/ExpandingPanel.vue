@@ -1,6 +1,6 @@
 <template>
   <div class="expanding-panel" :class="[elementClasses]">
-    <details class="expanding-panel-details" :name :open>
+    <details class="expanding-panel-details" :name :open @toggle="onDetailsToggle">
       <summary
         :id="`id-${name}-trigger`"
         class="expanding-panel-summary"
@@ -58,6 +58,10 @@ const handleToggle = (event: Event) => {
     event.preventDefault();
   }
   isPanelOpen.value = !isPanelOpen.value;
+};
+
+const onDetailsToggle = (event: Event) => {
+  isPanelOpen.value = (event.target as HTMLDetailsElement).open;
 };
 </script>
 

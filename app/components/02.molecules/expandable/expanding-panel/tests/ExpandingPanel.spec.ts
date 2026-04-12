@@ -225,6 +225,39 @@ describe("ExpandingPanel", () => {
     expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([true]);
   });
 
+  it("syncs isPanelOpen to false when <details> is closed externally via toggle event", async () => {
+    const wrapper = await mountSuspended(ExpandingPanel, {
+      props: { name: "external-close" },
+      attrs: { modelValue: true },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
+    expect(vm.isPanelOpen).toBe(true);
+
+    // Simulate browser closing <details> externally (e.g. exclusive accordion name group)
+    const details = wrapper.find("details").element as HTMLDetailsElement;
+    details.open = false;
+    await wrapper.find("details").trigger("toggle");
+    await nextTick();
+
+    expect(vm.isPanelOpen).toBe(false);
+  });
+
+  it("syncs isPanelOpen to true when <details> is opened externally via toggle event", async () => {
+    const wrapper = await mountSuspended(ExpandingPanel, {
+      props: { name: "external-open" },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
+    expect(vm.isPanelOpen).toBe(false);
+
+    // Simulate browser opening <details> externally
+    const details = wrapper.find("details").element as HTMLDetailsElement;
+    details.open = true;
+    await wrapper.find("details").trigger("toggle");
+    await nextTick();
+
+    expect(vm.isPanelOpen).toBe(true);
+  });
+
   it("updates aria-expanded after toggle", async () => {
     const wrapper = await mountSuspended(ExpandingPanel, {
       props: { name: "aria-toggle" },
