@@ -1,10 +1,5 @@
 <template>
-  <component
-    :is="tag"
-    class="profile-section"
-    :class="[elementClasses]"
-    :aria-labelledby="ariaLabelledby"
-  >
+  <component :is="tag" class="profile-section" :class="[elementClasses]" :aria-labelledby="ariaLabelledby">
     <header class="profile-section-header">
       <slot v-if="hasEyebrowTextSlot" name="eyebrowText"></slot>
       <slot v-if="hasHeroTextSlot" name="heroText" :heading-id="headingId"></slot>
@@ -16,9 +11,9 @@
       </div>
       <div class="profile-info">
         <div class="profile-info-content">
-          <div v-for="index in props.profileInfoCount" :key="index" class="profile-info-block">
-            <slot :name="'profile-info-' + index">
-              <p>Profile info content {{ index }}</p>
+          <div v-for="slotName in profileInfoSlots" :key="slotName" class="profile-info-block">
+            <slot :name="slotName">
+              <p>Profile info content {{ slotName }}</p>
             </slot>
           </div>
         </div>
@@ -57,6 +52,15 @@ const slots = useSlots();
 const hasEyebrowTextSlot = computed(() => Boolean(slots.eyebrowText));
 const hasHeroTextSlot = computed(() => Boolean(slots.heroText));
 const hasProfileLinksSlot = computed(() => Boolean(slots.profileLinks));
+
+const profileInfoSlots = computed(() => {
+  const provided = Object.keys(slots)
+    .filter((key) => /^profile-info-\d+$/.test(key))
+    .sort((a, b) => parseInt(a.split("-")[2] ?? "0") - parseInt(b.split("-")[2] ?? "0"));
+  return provided.length > 0
+    ? provided
+    : Array.from({ length: props.profileInfoCount }, (_, i) => `profile-info-${i + 1}`);
+});
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 

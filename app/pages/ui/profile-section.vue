@@ -12,7 +12,6 @@
               src: '/images/services/service-balayage.jpg',
               alt: 'Profile picture of Natasha, the mobile hairdresser in Bath',
             }"
-            :profile-info-count="3"
           >
             <template #eyebrowText>
               <EyebrowText tag="p" font-size="large" text-content="About Natasha" :style-class-passthrough="['mb-0']" />
@@ -64,6 +63,35 @@
                 the need to step outside. Perfect for busy schedules, home comfort, or anyone who prefers a one-on-one
                 hair experience - wherever you are in Bath.
               </p>
+            </template>
+
+            <template #profile-info-4>
+              <HeroText
+                tag="h3"
+                axis="horizontal"
+                font-size="heading"
+                :text-content="[
+                  { text: 'Follow me on', styleClass: 'normal' },
+                  { text: 'social media', styleClass: 'accent' },
+                ]"
+                :style-class-passthrough="['mb-20']"
+              />
+              <SocialIconsList
+                :items="[
+                  {
+                    networkName: 'Facebook',
+                    iconName: 'logos:facebook',
+                    baseHref: 'https://www.facebook.com/',
+                    profileId: 'luxurylocsbynatasha',
+                  },
+                  {
+                    networkName: 'Instagram',
+                    iconName: 'skill-icons:instagram',
+                    baseHref: 'https://www.instagram.com/',
+                    profileId: 'luxurylocsbynatasha',
+                  },
+                ]"
+              />
             </template>
 
             <template #profileLinks>
