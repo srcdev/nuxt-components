@@ -7,6 +7,7 @@ import type { Service } from "~/types/types.services";
 
 const makeService = (slug: string, title: string): Service => ({
   slug,
+  category: "hair",
   title,
   subtitle: `Subtitle for ${title}`,
   price: "£50",

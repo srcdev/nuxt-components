@@ -2,6 +2,7 @@ import type { TextConfig } from "~/types/components/hero-text";
 
 export interface Service {
   slug: string;
+  category: string;
   title: string;
   subtitle: string;
   price: string;

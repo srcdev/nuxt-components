@@ -4,7 +4,7 @@ exports[`ServicesSectionGrid > renders correct HTML structure 1`] = `
 "<div class="services-grid">
   <div class="services-section">
     <div class="services-section__grid">
-      <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/locs-installation.jpg 1x, /_ipx/_/images/locs-installation.jpg 2x" alt="Locs Installation" loading="eager" class="image" src="/_ipx/_/images/locs-installation.jpg"></div>
+      <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/locs-installation.jpg 1x, /_ipx/_/images/locs-installation.jpg 2x" alt="Locs Installation" loading="eager" fetchpriority="high" class="image" src="/_ipx/_/images/locs-installation.jpg"></div>
       <div class="info-wrapper is-summary align-center">
         <div class="eyebrow-text large">Subtitle for Locs Installation</div>
         <h2 class="hero-text mb-20 title axis-horizontal">
@@ -31,7 +31,7 @@ exports[`ServicesSectionGrid > renders correct HTML structure 1`] = `
   </div>
   <div class="services-section">
     <div class="services-section__grid">
-      <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/locs-retwist.jpg 1x, /_ipx/_/images/locs-retwist.jpg 2x" alt="Locs Retwist" loading="eager" class="image" src="/_ipx/_/images/locs-retwist.jpg"></div>
+      <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/locs-retwist.jpg 1x, /_ipx/_/images/locs-retwist.jpg 2x" alt="Locs Retwist" loading="eager" fetchpriority="auto" class="image" src="/_ipx/_/images/locs-retwist.jpg"></div>
       <div class="info-wrapper is-summary align-center">
         <div class="eyebrow-text large">Subtitle for Locs Retwist</div>
         <h2 class="hero-text mb-20 title axis-horizontal">
@@ -58,7 +58,7 @@ exports[`ServicesSectionGrid > renders correct HTML structure 1`] = `
   </div>
   <div class="services-section">
     <div class="services-section__grid">
-      <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/colour-treatment.jpg 1x, /_ipx/_/images/colour-treatment.jpg 2x" alt="Colour Treatment" loading="lazy" class="image" src="/_ipx/_/images/colour-treatment.jpg"></div>
+      <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/colour-treatment.jpg 1x, /_ipx/_/images/colour-treatment.jpg 2x" alt="Colour Treatment" loading="lazy" fetchpriority="auto" class="image" src="/_ipx/_/images/colour-treatment.jpg"></div>
       <div class="info-wrapper is-summary align-center">
         <div class="eyebrow-text large">Subtitle for Colour Treatment</div>
         <h2 class="hero-text mb-20 title axis-horizontal">
