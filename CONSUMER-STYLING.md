@@ -8,7 +8,7 @@ How to customise the appearance of `nuxt-components` in your own application.
 
 All library styles sit inside named `@layer` blocks. In CSS, **unlayered styles always win over layered styles**, regardless of specificity. This means any CSS you write in your app automatically takes priority — no `!important`, no specificity tricks required.
 
-```
+```text
 @layer reset          (lowest priority)
 @layer colours
 @layer theming
@@ -131,16 +131,16 @@ No wrapper class needed. No `!important`. Your selectors win because they are un
 // nuxt.config.ts
 export default defineNuxtConfig({
   css: [
-    'nuxt-components/assets/styles/main.css',  // library base styles
-    '~/assets/styles/theme.css',               // your token overrides
-    '~/assets/styles/overrides.css',           // your structural overrides (optional)
+    'srcdev-nuxt-components/app/assets/styles/main.css',  // library base styles
+    '~/assets/styles/theme.css',                          // your token overrides
+    '~/assets/styles/overrides.css',                      // your structural overrides (optional)
   ]
 })
 ```
 
 ### 2. Token overrides file structure (suggested)
 
-```
+```text
 your-app/assets/styles/
 ├── theme.css          ← global token overrides (:root)
 ├── themes/

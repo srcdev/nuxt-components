@@ -8,7 +8,7 @@
 
 Althought this repo is public and feel free to do what you wish with it, this has been developed for use with websites we develop.
 
-## Install Nuxt Forms layer
+## Install Nuxt Components layer
 
 ```bash
 npm install --save srcdev-nuxt-components
@@ -17,10 +17,7 @@ npm install --save srcdev-nuxt-components
 ```ts
 defineNuxtConfig({
   extends: "srcdev-nuxt-components",
-  css: [
-    "srcdev-nuxt-components/app/assets/styles/main.css",
-    "./app/assets/styles/main.css",
-  ],
+  css: ["srcdev-nuxt-components/app/assets/styles/main.css", "./app/assets/styles/main.css"],
 });
 ```
 
