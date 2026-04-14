@@ -15,8 +15,8 @@ All library styles sit inside named `@layer` blocks. In CSS, **unlayered styles 
 @layer form-tokens
 @layer typography
 @layer a11y
-@layer utilities
-@layer components     (highest library priority)
+@layer components
+@layer utilities      (highest library priority)
 ──────────────────────────────────────────────
 Your unlayered CSS    (wins over everything above)
 ```
@@ -34,22 +34,22 @@ Components expose CSS custom properties for all configurable values: colours, sp
 
 :root {
   /* Accent colour used in hero text, eyebrow labels, links */
-  --colour-text-accent: #e63946;
-  --colour-text-eyebrow: #e63946;
+  --colour-text-accent: oklch(0.612 0.208 22.2);
+  --colour-text-eyebrow: oklch(0.612 0.208 22.2);
 
   /* Hero text scale */
   --hero-text-display: clamp(3rem, 8vw, 7rem);
   --hero-text-title: clamp(2rem, 5vw, 4rem);
 
   /* Form input appearance */
-  --theme-input-border: #334155;
-  --theme-input-border-focus: #6366f1;
-  --theme-input-surface: #f8fafc;
+  --theme-input-border: oklch(0.372 0.039 257.3);
+  --theme-input-border-focus: oklch(0.585 0.204 277.1);
+  --theme-input-surface: oklch(0.984 0.003 247.9);
 
-  /* Button colours (default/primary variant) */
-  --theme-button-primary-surface: #6366f1;
-  --theme-button-primary-surface-hover: #4f46e5;
-  --theme-button-primary-text: #ffffff;
+  /* Button colours (primary variant) */
+  --theme-button-primary-surface: oklch(0.585 0.204 277.1);
+  --theme-button-primary-surface-hover: oklch(0.511 0.230 277.0);
+  --theme-button-primary-text: oklch(1 0 0);
 }
 ```
 
@@ -60,7 +60,7 @@ Wrap a section in any selector and tokens override only within that scope:
 ```css
 /* Override just inside a hero section */
 .my-hero-section {
-  --colour-text-accent: #f97316;
+  --colour-text-accent: oklch(0.705 0.187 47.6);
   --hero-text-title: clamp(3rem, 6vw, 5rem);
 }
 ```
@@ -78,12 +78,12 @@ Components accept a `theme` prop that maps to `data-theme` on the element. You c
 ```css
 /* your-app/assets/styles/themes/brand.css */
 [data-theme="brand"] {
-  --theme-input-border: #7c3aed;
-  --theme-input-border-focus: #5b21b6;
-  --theme-input-surface: #faf5ff;
-  --theme-button-primary-surface: #7c3aed;
-  --theme-button-primary-surface-hover: #6d28d9;
-  --theme-checkbox-symbol-color: #7c3aed;
+  --theme-input-border: oklch(0.541 0.247 293.0);
+  --theme-input-border-focus: oklch(0.432 0.211 292.8);
+  --theme-input-surface: oklch(0.977 0.014 308.3);
+  --theme-button-primary-surface: oklch(0.541 0.247 293.0);
+  --theme-button-primary-surface-hover: oklch(0.491 0.241 292.6);
+  --theme-checkbox-symbol-color: oklch(0.541 0.247 293.0);
 }
 ```
 
@@ -144,10 +144,11 @@ export default defineNuxtConfig({
 your-app/assets/styles/
 ├── theme.css          ← global token overrides (:root)
 ├── themes/
-│   ├── brand.css      ← [data-theme="brand"] overrides
-│   └── dark.css       ← [data-theme="dark"] overrides
+│   └── brand.css      ← [data-theme="brand"] overrides
 └── overrides.css      ← structural class overrides (if needed)
 ```
+
+> **Dark mode** is controlled via the `html.dark` class, not a `data-theme` attribute. Override dark-mode tokens by targeting `:where(html.dark) { ... }` in your `theme.css`.
 
 ### 3. Import order matters
 
@@ -166,6 +167,11 @@ Your override files must be imported **after** the library styles so they take e
 | `--hero-text-heading` | HeroText heading size |
 | `--hero-text-subheading` | HeroText subheading size |
 | `--hero-text-label` | HeroText label size |
+| `--hero-text-bg-img` | HeroText gradient (accent/shimmer effect) |
+| `--eyebrow-text-large` | EyebrowText large size |
+| `--eyebrow-text-medium` | EyebrowText medium size |
+| `--eyebrow-text-small` | EyebrowText small size |
+| `--eyebrow-text-bg-img` | EyebrowText gradient (accent/shimmer effect) |
 
 ### Colours
 
@@ -177,6 +183,7 @@ Your override files must be imported **after** the library styles so they take e
 | `--colour-link-default` | Anchor link colour |
 | `--colour-link-hover` | Anchor link hover colour |
 | `--page-bg` | Page background |
+| `--colour-theme-1` … `--colour-theme-12` | Colour scale (maps to the active theme palette) |
 
 ### Form inputs
 
@@ -184,10 +191,14 @@ Your override files must be imported **after** the library styles so they take e
 |---|---|
 | `--theme-input-surface` | Input background |
 | `--theme-input-surface-hover` | Input background on hover |
+| `--theme-input-surface-focus` | Input background on focus |
 | `--theme-input-border` | Input border |
 | `--theme-input-border-hover` | Input border on hover |
 | `--theme-input-border-focus` | Input border on focus |
-| `--theme-input-outline-focus` | Focus ring colour |
+| `--theme-input-outline` | Input outline (default state) |
+| `--theme-input-outline-focus` | Input outline on focus |
+| `--theme-input-visible-outline` | Visible outline (e.g. keyboard nav) |
+| `--theme-focus-visible-shadow` | Focus-visible box shadow |
 | `--theme-input-placeholder` | Placeholder text colour |
 | `--theme-input-text-color-normal` | Input text colour |
 
@@ -195,12 +206,28 @@ Your override files must be imported **after** the library styles so they take e
 
 | Token | Controls |
 |---|---|
-| `--theme-button-primary-surface` | Primary button background |
-| `--theme-button-primary-surface-hover` | Primary button background hover |
-| `--theme-button-primary-text` | Primary button text |
-| `--theme-button-secondary-surface` | Secondary button background |
-| `--theme-button-secondary-border` | Secondary button border |
-| `--theme-button-secondary-text` | Secondary button text |
+| `--theme-button-primary-surface` | Primary background |
+| `--theme-button-primary-surface-hover` | Primary background hover |
+| `--theme-button-primary-surface-active` | Primary background active |
+| `--theme-button-primary-border` | Primary border |
+| `--theme-button-primary-border-active` | Primary border active |
+| `--theme-button-primary-outline` | Primary outline |
+| `--theme-button-primary-outline-active` | Primary outline active |
+| `--theme-button-primary-text` | Primary text |
+| `--theme-button-primary-text-hover` | Primary text hover |
+| `--theme-button-secondary-surface` | Secondary background |
+| `--theme-button-secondary-surface-hover` | Secondary background hover |
+| `--theme-button-secondary-surface-active` | Secondary background active |
+| `--theme-button-secondary-border` | Secondary border |
+| `--theme-button-secondary-border-active` | Secondary border active |
+| `--theme-button-secondary-outline` | Secondary outline |
+| `--theme-button-secondary-outline-active` | Secondary outline active |
+| `--theme-button-secondary-text` | Secondary text |
+| `--theme-button-secondary-text-hover` | Secondary text hover |
+| `--theme-button-tertiary-surface` | Tertiary background |
+| `--theme-button-tertiary-text` | Tertiary text |
+| `--theme-button-tertiary-border-active` | Tertiary border active |
+| `--theme-button-tertiary-outline-active` | Tertiary outline active |
 
 ### Checkboxes & radio buttons
 
@@ -211,6 +238,13 @@ Your override files must be imported **after** the library styles so they take e
 | `--theme-checkbox-decorator-color` | Border/decorator colour |
 | `--theme-checkbox-label-text-color` | Label text colour |
 
+### Toggle switch
+
+| Token | Controls |
+|---|---|
+| `--theme-toggle-symbol-color-default` | Toggle knob colour (off) |
+| `--theme-toggle-symbol-color-checked` | Toggle knob colour (on) |
+
 ### Glass panel
 
 | Token | Controls |
@@ -218,6 +252,23 @@ Your override files must be imported **after** the library styles so they take e
 | `--glass-panel-bg` | Panel background (rgba) |
 | `--glass-panel-border-color` | Panel border (rgba) |
 | `--glass-panel-shadow` | Panel drop shadow |
+| `--glass-panel-highlight` | Panel highlight overlay (rgba) |
+
+### StepperList
+
+| Token | Controls |
+|---|---|
+| `--stepper-list-counter-circle-background` | Circle counter background |
+| `--stepper-list-counter-circle-text` | Circle counter text |
+| `--stepper-list-counter-circle-border` | Circle counter border |
+| `--stepper-list-counter-disc-background` | Disc counter background |
+| `--stepper-list-counter-disc-text` | Disc counter text |
+| `--stepper-list-counter-disc-border` | Disc counter border |
+| `--stepper-list-counter-square-background` | Square counter background |
+| `--stepper-list-counter-square-text` | Square counter text |
+| `--stepper-list-counter-square-border` | Square counter border |
+| `--stepper-list-connector-color` | Line connecting steps |
+| `--stepper-list-icon` | Icon colour |
 
 ---
 

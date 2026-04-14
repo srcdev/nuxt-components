@@ -241,6 +241,12 @@ The consuming app's CSS loads after the layer's, so your token overrides win via
 | 24px | 2.4rem |
 | 32px | 3.2rem |
 
+## Token reference
+
+See `CONSUMER-STYLING.md` in the layer package root for the full list of available tokens grouped
+by category. This is the authoritative reference when deciding which tokens to include in your
+override files.
+
 ## Notes
 
 - The `--slate-*` scale comes from the layer and does not need to be redefined — keep all neutral/background tokens pointing at `--slate-*`.

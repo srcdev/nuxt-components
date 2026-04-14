@@ -26,7 +26,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── storybook-add-font.md       — add a new font to Storybook
 ├── testing-add-unit-test.md    — create a Vitest unit test with snapshots
 ├── testing-add-playwright.md   — create a Playwright visual regression test
-├── theming-override-default.md      — override the default theme with a custom colour scale
+├── theming-override-default.md      — replace the entire default theme with a custom colour scale (full palette swap)
+├── theming-partial-override.md      — override a specific token category (forms, buttons, colours) without a full theme replacement
 ├── colour-scheme-disable.md         — disable light/dark scheme support in a consumer app
 ├── component-dynamic-slots.md        — named dynamic slots ($slots iteration) vs indexed dynamic slots (itemCount pattern)
 ├── component-local-style-override.md — styleClassPassthrough + scoped style block for per-usage visual customisation

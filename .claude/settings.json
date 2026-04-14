@@ -36,13 +36,15 @@
       "Bash(git -C /Users/simoncornforth/websites/nuxt-components log --oneline v9.1.22..HEAD)",
       "Bash(git -C /Users/simoncornforth/websites/nuxt-components log --oneline c401cea..HEAD)",
       "Bash(git -C /Users/simoncornforth/websites/nuxt-components show 3058d63 --stat)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components show 0f99d7a --stat)"
+      "Bash(git -C /Users/simoncornforth/websites/nuxt-components show 0f99d7a --stat)",
+      "Bash(node -e ':*)"
     ],
     "additionalDirectories": [
       "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms/content-wrappers/content-width",
       "/Users/simoncornforth/websites/nuxt-components/.claude/skills",
       "/Users/simoncornforth/websites/nuxt-components/app/components/02.molecules/navigation/site-navigation/tests",
-      "/Users/simoncornforth/websites/luxury-locs-by-natasha-nuxt3/app/pages"
+      "/Users/simoncornforth/websites/luxury-locs-by-natasha-nuxt3/app/pages",
+      "/Users/simoncornforth/websites/nuxt-components/app/assets/styles/extends-layer"
     ]
   }
 }
