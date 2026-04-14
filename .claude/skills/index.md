@@ -26,6 +26,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── storybook-add-font.md       — add a new font to Storybook
 ├── testing-add-unit-test.md    — create a Vitest unit test with snapshots
 ├── testing-add-playwright.md   — create a Playwright visual regression test
+├── setup-postinstall.md             — automate nuxt prepare + Claude skills copy via postinstall so neither is forgotten after npm install
 ├── theming-override-default.md      — replace the entire default theme with a custom colour scale (full palette swap)
 ├── theming-partial-override.md      — override a specific token category (forms, buttons, colours) without a full theme replacement
 ├── colour-scheme-disable.md         — disable light/dark scheme support in a consumer app

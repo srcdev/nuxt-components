@@ -41,6 +41,19 @@ npm run setup:claude
 
 Skills are copied into `.claude/skills/srcdev-nuxt-components/` so they never conflict with or overwrite skills your own project defines. Re-running the script after a package update is safe.
 
+### Automate with postinstall (recommended)
+
+To ensure skills are always up to date and `nuxt prepare` is never forgotten, combine both into a `postinstall` script. npm runs this automatically after every `npm install`:
+
+```json
+"scripts": {
+  "setup:claude": "cp -r node_modules/srcdev-nuxt-components/.claude/skills .claude/skills/srcdev-nuxt-components",
+  "postinstall": "nuxt prepare && npm run setup:claude"
+}
+```
+
+> If your app uses a standalone env flag for `nuxt prepare` (e.g. `NUXT_STANDALONE=true`), include it in the `postinstall` command. This is project-specific — check your own `nuxt.config.ts` to confirm whether it is needed.
+
 ---
 
 ## Consumer App Configuration
