@@ -69,6 +69,7 @@ type Story = StoryObj<typeof ServicesSection>;
 
 const sampleService: Service = {
   slug: "locs-installation",
+  category: "locs",
   title: "Locs Installation",
   subtitle: "Start your loc journey",
   price: "£120",

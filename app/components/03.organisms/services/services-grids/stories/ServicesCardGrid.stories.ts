@@ -57,6 +57,7 @@ type Story = StoryObj<typeof ServicesCardGrid>;
 
 const makeService = (slug: string, title: string, subtitle: string, image: string): Service => ({
   slug,
+  category: "locs",
   title,
   subtitle,
   price: "£120",

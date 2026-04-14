@@ -7,6 +7,7 @@ import type { Service } from "~/types/types.services";
 
 const mockService: Service = {
   slug: "test-service",
+  category: "hair",
   title: "Test Service",
   subtitle: "A subtitle",
   price: "£50",
