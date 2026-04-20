@@ -62,6 +62,7 @@ const responsiveNavLinks = {
       childLinksTitle: "UI Components",
       childLinks: [
         { name: "Wipe Away Vertical", path: "/ui/wipe-away-vertical" },
+        { name: "Scroll Reveal Image", path: "/ui/scroll-reveal-image" },
         { name: "Tooltips", path: "/ui/tooltips" },
         { name: "Marquee Scroller", path: "/ui/marquee-scroller" },
         { name: "Banner", path: "/ui/display-banner" },
