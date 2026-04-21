@@ -1,13 +1,10 @@
 <template>
-  <figure
-    class="reveal-frame"
-    :class="[elementClasses]"
-    :style="{
-      '--_frame-height': frameHeight,
-      '--_parallax-offset': parallaxOffset,
-      '--_radius': radius,
-      '--_focal-x': focalX,
-    }"
+  <ScrollRevealFrame
+    :frame-height="frameHeight"
+    :parallax-offset="parallaxOffset"
+    :radius="radius"
+    :style-class-passthrough="styleClassPassthrough"
+    :style="{ '--_focal-x': focalX }"
   >
     <NuxtImg
       class="reveal-image"
@@ -18,28 +15,18 @@
       loading="lazy"
       decoding="async"
     />
-  </figure>
+  </ScrollRevealFrame>
 </template>
 
 <script setup lang="ts">
 /**
  * ScrollRevealImage
  *
- * A parallax-style scroll reveal effect using CSS Scroll-driven Animations.
- * No scroll listeners, no requestAnimationFrame, no IntersectionObserver.
+ * A single-image convenience wrapper around ScrollRevealFrame.
+ * Adds NuxtImg optimisation (src, alt, intrinsic dimensions) and horizontal
+ * focal-point control (focalX → CSS object-position x-axis).
  *
- * How it works:
- *   - The <figure> is a fixed-height clipping window (overflow: hidden).
- *   - It registers a named view-timeline scoped to itself.
- *   - The <img> inside is taller than the frame by `parallaxOffset`.
- *   - As the frame scrolls through the viewport, the img translates upward
- *     by `parallaxOffset`, revealing different vertical slices of the image.
- *   - The browser drives the animation entirely from its scroll position —
- *     no JS style recalculation on each frame.
- *
- * Browser support (as of 2026):
- *   Chrome 115+, Edge 115+, Firefox 114+, Safari 17.2+
- *   Falls back gracefully to a static cropped image in older browsers.
+ * For a grid of images or arbitrary slot content use ScrollRevealFrame directly.
  */
 
 interface Props {
@@ -54,8 +41,6 @@ interface Props {
   /**
    * How far the image travels vertically as the frame scrolls through the
    * viewport. Larger = more image revealed = stronger parallax feel.
-   * The image is made taller than the frame by this amount so there is
-   * always content to reveal.
    */
   parallaxOffset?: string;
   /**
@@ -69,7 +54,7 @@ interface Props {
   styleClassPassthrough?: string | string[];
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   alt: "",
   imgWidth: 1920,
   imgHeight: 1080,
@@ -79,78 +64,32 @@ const props = withDefaults(defineProps<Props>(), {
   radius: "0px",
   styleClassPassthrough: () => [],
 });
-
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-
-watch(
-  () => props.styleClassPassthrough,
-  () => resetElementClasses(props.styleClassPassthrough)
-);
 </script>
 
 <style lang="css">
 @layer components {
-  .reveal-frame {
-    /* Public tokens (overridable by consumer) */
-    --_frame-height: 540px;
-    --_parallax-offset: 36rem;
-    --_radius: 0px;
-    --_focal-x: 50%;
-
-    position: relative;
-    height: var(--_frame-height);
-    width: 100%;
-    overflow: hidden;
-    border-radius: var(--_radius);
-
-    /*
-     * Named view-timeline lets the child image reference this element's
-     * scroll progress rather than its own (which would be distorted by the
-     * artificially inflated height).
-     */
-    view-timeline: --reveal-frame-timeline block;
-  }
-
   .reveal-image {
     display: block;
     width: 100%;
-    /*
-     * Image is taller than the frame by parallaxOffset so there is always
-     * content to travel into as the animation progresses.
-     */
-    height: calc(100% + var(--_parallax-offset));
+    height: 100%;
     object-fit: cover;
     /*
-     * Y is always 0% — the animation handles vertical travel via translateY.
-     * focalX lets the consumer pin the horizontal crop point.
+     * Y is always 0% — ScrollRevealFrame's translateY handles vertical travel.
+     * focalX (--_focal-x) lets the consumer pin the horizontal crop point.
      */
-    object-position: var(--_focal-x) 0%;
-
-    animation: reveal-pan linear both;
-    animation-timeline: --reveal-frame-timeline;
-    animation-range: entry 0% exit 100%;
+    object-position: var(--_focal-x, 50%) 0%;
   }
 
-  @keyframes reveal-pan {
-    from { transform: translateY(0); }
-    to   { transform: translateY(calc(-1 * var(--_parallax-offset))); }
-  }
-
-  /* ── Fallback: browsers without Scroll-driven Animations ── */
+  /* ── Fallback: centre the crop vertically when there is no animation ── */
   @supports not (animation-timeline: scroll()) {
     .reveal-image {
-      animation: none;
-      height: 100%;
-      object-position: var(--_focal-x) 50%;
+      object-position: var(--_focal-x, 50%) 50%;
     }
   }
 
-  /* ── Reduced-motion: static centered crop, no travel ── */
   @media (prefers-reduced-motion: reduce) {
     .reveal-image {
-      animation: none;
-      height: 100%;
-      object-position: var(--_focal-x) 50%;
+      object-position: var(--_focal-x, 50%) 50%;
     }
   }
 }

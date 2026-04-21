@@ -4,11 +4,19 @@
       <template #layout-content>
         <!-- ── Page header ──────────────────────────────────────────────── -->
         <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-48']">
-          <h1 class="page-heading-1">ScrollRevealImage</h1>
+          <h1 class="page-heading-1">ScrollRevealImage / ScrollRevealFrame</h1>
           <p class="page-body-normal">
             A pure-CSS parallax reveal. No scroll listeners, no JS animation — driven entirely by
             <code>animation-timeline: view()</code>
             . Scroll down to see each variant in action.
+          </p>
+          <p class="page-body-normal">
+            <code>ScrollRevealFrame</code>
+            is the generic primitive — it accepts any slot content (images, grids, video).
+            <code>ScrollRevealImage</code>
+            is a convenience wrapper that adds
+            <code>NuxtImg</code>
+            optimisation and a horizontal focal-point prop.
           </p>
         </LayoutRow>
 
@@ -193,7 +201,7 @@
         </LayoutRow>
 
         <!-- Tall frame -->
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-48']">
+        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-32']">
           <div class="sri-demo-row">
             <div class="sri-demo-row__info">
               <h3 class="page-heading-3 mbe-8">Tall frame — maximum travel</h3>
@@ -219,6 +227,102 @@
             />
           </div>
         </LayoutRow>
+
+        <!-- ScrollRevealFrame: image grid -->
+        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-48']">
+          <div class="sri-demo-row">
+            <div class="sri-demo-row__info">
+              <h3 class="page-heading-3 mbe-8">Image grid — ScrollRevealFrame</h3>
+              <p class="page-body-normal mbe-12">
+                <code>ScrollRevealFrame</code>
+                accepts arbitrary slot content. Here a six-image CSS grid scrolls as a single unit inside the
+                clipping frame — no
+                <code>focalX</code>
+                or
+                <code>NuxtImg</code>
+                wiring needed.
+              </p>
+              <dl class="sri-props">
+                <dt>component</dt>
+                <dd>ScrollRevealFrame</dd>
+                <dt>frameHeight</dt>
+                <dd>480px</dd>
+                <dt>parallaxOffset</dt>
+                <dd>36rem</dd>
+              </dl>
+            </div>
+            <ScrollRevealFrame frame-height="480px" parallax-offset="36rem">
+              <div class="sri-image-grid">
+                <div class="sri-image-grid__cell">
+                  <NuxtImg
+                    src="/images/services/service-balayage.jpg"
+                    alt="Balayage service"
+                    :width="800"
+                    :height="800"
+                    loading="lazy"
+                    decoding="async"
+                    class="sri-image-grid__img"
+                  />
+                </div>
+                <div class="sri-image-grid__cell">
+                  <NuxtImg
+                    src="/images/services/service-colour.jpg"
+                    alt="Colour service"
+                    :width="800"
+                    :height="800"
+                    loading="lazy"
+                    decoding="async"
+                    class="sri-image-grid__img"
+                  />
+                </div>
+                <div class="sri-image-grid__cell">
+                  <NuxtImg
+                    src="/images/services/service-cut.jpg"
+                    alt="Cut service"
+                    :width="800"
+                    :height="800"
+                    loading="lazy"
+                    decoding="async"
+                    class="sri-image-grid__img"
+                  />
+                </div>
+                <div class="sri-image-grid__cell">
+                  <NuxtImg
+                    src="/images/services/service-highlights.jpg"
+                    alt="Highlights service"
+                    :width="800"
+                    :height="800"
+                    loading="lazy"
+                    decoding="async"
+                    class="sri-image-grid__img"
+                  />
+                </div>
+                <div class="sri-image-grid__cell">
+                  <NuxtImg
+                    src="/images/services/service-lowlights.jpg"
+                    alt="Lowlights service"
+                    :width="800"
+                    :height="800"
+                    loading="lazy"
+                    decoding="async"
+                    class="sri-image-grid__img"
+                  />
+                </div>
+                <div class="sri-image-grid__cell">
+                  <NuxtImg
+                    src="/images/services/service-toner.jpg"
+                    alt="Toner service"
+                    :width="800"
+                    :height="800"
+                    loading="lazy"
+                    decoding="async"
+                    class="sri-image-grid__img"
+                  />
+                </div>
+              </div>
+            </ScrollRevealFrame>
+          </div>
+        </LayoutRow>
       </template>
     </NuxtLayout>
   </div>
@@ -232,11 +336,11 @@ definePageMeta({
 });
 
 useHead({
-  title: "ScrollRevealImage Component",
+  title: "ScrollRevealImage / ScrollRevealFrame",
   meta: [
     {
       name: "description",
-      content: "ScrollRevealImage — pure-CSS parallax scroll reveal effect demo",
+      content: "ScrollRevealImage and ScrollRevealFrame — pure-CSS parallax scroll reveal effect demo",
     },
   ],
   bodyAttrs: {
@@ -332,6 +436,26 @@ const radiusData = ref<IFormMultipleOptions>({
       font-family: monospace;
       color: var(--slate-10);
     }
+  }
+
+  .sri-image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 0.4rem;
+    height: 100%;
+  }
+
+  .sri-image-grid__cell {
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .sri-image-grid__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .demo-controls {
