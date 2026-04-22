@@ -62,9 +62,16 @@ const meta: Meta<typeof BannerVideo> = {
       description: "How the video and fallback image fill the banner frame",
       table: { category: "Appearance" },
     },
-    objectPosition: {
-      control: "text",
-      description: "Focal point within the video and fallback image — any valid CSS object-position value",
+    verticalPosition: {
+      control: "select",
+      options: ["start", "center", "end"],
+      description: "Vertical crop position — start (top), center, or end (bottom). Maps to align-self on the video and object-position on the fallback image",
+      table: { category: "Appearance" },
+    },
+    horizontalPosition: {
+      control: "select",
+      options: ["start", "center", "end"],
+      description: "Horizontal crop position — start (left), center, or end (right). Maps to object-position on the fallback image",
       table: { category: "Appearance" },
     },
     styleClassPassthrough: {
@@ -75,7 +82,7 @@ const meta: Meta<typeof BannerVideo> = {
     docs: {
       description: {
         component:
-          "A full-width banner that plays a muted, looping mp4 video. The poster image is shown before the video loads, when the video fails to play, and whenever the user has `prefers-reduced-motion: reduce` set. The banner is sized via `aspect-ratio` with per-breakpoint `max-height` caps — no fixed pixel heights. Both `objectFit` and `objectPosition` apply to the video element (a CSS replaced element) just as they do to images.",
+          "A full-width banner that plays a muted, looping mp4 video. The poster image is shown before the video loads, when the video fails to play, and whenever the user has `prefers-reduced-motion: reduce` set. The banner is sized via `aspect-ratio` with per-breakpoint `max-height` caps — no fixed pixel heights. `objectFit` controls how media fills the frame. `verticalPosition` and `horizontalPosition` control the crop focal point — the video uses CSS grid alignment (`align-self`/`justify-self`) while the fallback image uses `object-position`.",
       },
     },
   },
@@ -95,7 +102,8 @@ export const Default: Story = {
     maxHeight: "56rem",
     aspectRatio: "21/9",
     objectFit: "cover",
-    objectPosition: "50% 50%",
+    verticalPosition: "center",
+    horizontalPosition: "center",
   },
   parameters: {
     docs: {
@@ -140,12 +148,12 @@ export const ShortBanner: Story = {
   args: {
     ...Default.args,
     maxHeight: "32rem",
-    objectPosition: "50% 75%",
+    verticalPosition: "end",
   },
   parameters: {
     docs: {
       description: {
-        story: "A shallower banner capped at 32rem. objectPosition shifts the crop toward the lower third of the frame.",
+        story: "A shallower banner capped at 32rem. verticalPosition: 'end' shifts the crop to show the bottom of the frame.",
       },
     },
   },

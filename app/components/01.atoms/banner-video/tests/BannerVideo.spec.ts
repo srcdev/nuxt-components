@@ -272,32 +272,70 @@ describe("BannerVideo", () => {
     expect(style.objectFit).toBe("contain");
   });
 
-  it("sets object-position to 50% 50% on the video element by default", async () => {
+  it("video element does not have object-position style", async () => {
     const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
     const style = (wrapper.find("video").element as HTMLElement).style;
-    expect(style.objectPosition).toBe("50% 50%");
+    expect(style.objectPosition).toBe("");
   });
 
-  it("reflects objectPosition prop on the video element", async () => {
-    const wrapper = await mountSuspended(BannerVideo, {
-      props: { ...defaultProps, objectPosition: "top center" },
-    });
-    const style = (wrapper.find("video").element as HTMLElement).style;
-    expect(style.objectPosition).toBe("top center");
+  it("sets --_align-self to center by default", async () => {
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    const style = (wrapper.element as HTMLElement).style;
+    expect(style.getPropertyValue("--_align-self")).toBe("center");
   });
 
-  it("sets object-position to 50% 50% on the fallback image by default", async () => {
+  it("reflects verticalPosition prop in --_align-self", async () => {
+    for (const [prop, expected] of [["start", "start"], ["end", "end"]] as const) {
+      const wrapper = await mountSuspended(BannerVideo, {
+        props: { ...defaultProps, verticalPosition: prop },
+      });
+      expect((wrapper.element as HTMLElement).style.getPropertyValue("--_align-self")).toBe(expected);
+    }
+  });
+
+  it("sets --_justify-self to center by default", async () => {
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    const style = (wrapper.element as HTMLElement).style;
+    expect(style.getPropertyValue("--_justify-self")).toBe("center");
+  });
+
+  it("reflects horizontalPosition prop in --_justify-self", async () => {
+    for (const [prop, expected] of [["start", "start"], ["end", "end"]] as const) {
+      const wrapper = await mountSuspended(BannerVideo, {
+        props: { ...defaultProps, horizontalPosition: prop },
+      });
+      expect((wrapper.element as HTMLElement).style.getPropertyValue("--_justify-self")).toBe(expected);
+    }
+  });
+
+  it("fallback image object-position defaults to center center", async () => {
     const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
     const style = (wrapper.find("img[data-nuxt-img]").element as HTMLElement).style;
-    expect(style.objectPosition).toBe("50% 50%");
+    expect(style.objectPosition).toBe("center center");
   });
 
-  it("reflects objectPosition prop on the fallback image", async () => {
+  it("fallback image object-position reflects verticalPosition", async () => {
     const wrapper = await mountSuspended(BannerVideo, {
-      props: { ...defaultProps, objectPosition: "top center" },
+      props: { ...defaultProps, verticalPosition: "start" },
     });
     const style = (wrapper.find("img[data-nuxt-img]").element as HTMLElement).style;
-    expect(style.objectPosition).toBe("top center");
+    expect(style.objectPosition).toBe("center top");
+  });
+
+  it("fallback image object-position reflects horizontalPosition", async () => {
+    const wrapper = await mountSuspended(BannerVideo, {
+      props: { ...defaultProps, horizontalPosition: "end" },
+    });
+    const style = (wrapper.find("img[data-nuxt-img]").element as HTMLElement).style;
+    expect(style.objectPosition).toBe("right center");
+  });
+
+  it("fallback image object-position reflects both verticalPosition and horizontalPosition", async () => {
+    const wrapper = await mountSuspended(BannerVideo, {
+      props: { ...defaultProps, verticalPosition: "end", horizontalPosition: "start" },
+    });
+    const style = (wrapper.find("img[data-nuxt-img]").element as HTMLElement).style;
+    expect(style.objectPosition).toBe("left bottom");
   });
 
   // ─── styleClassPassthrough ───────────────────────────────────────────────

@@ -8,6 +8,8 @@
       '--_max-height-tablet': maxHeightTablet,
       '--_max-height-mobile': maxHeightMobile,
       '--_aspect-ratio': aspectRatio,
+      '--_align-self': verticalPosition,
+      '--_justify-self': horizontalPosition,
     }"
   >
     <video
@@ -17,7 +19,7 @@
       loop
       playsinline
       :poster="poster"
-      :style="{ objectFit: props.objectFit, objectPosition: props.objectPosition }"
+      :style="{ objectFit: props.objectFit }"
       @error="videoFailed = true"
     >
       <source :src="src" type="video/mp4" @error="videoFailed = true" />
@@ -30,7 +32,7 @@
       :height="imgHeight"
       loading="eager"
       decoding="async"
-      :style="{ objectFit: props.objectFit, objectPosition: props.objectPosition }"
+      :style="{ objectFit: props.objectFit, objectPosition: imgObjectPosition }"
     />
   </component>
 </template>
@@ -62,11 +64,10 @@ interface Props {
   aspectRatio?: string;
   /** How the video and fallback image fill the banner frame. Defaults to `"cover"`. */
   objectFit?: "cover" | "contain" | "fill" | "none" | "scale-down";
-  /**
-   * Focal point within the video and fallback image. Any valid CSS `object-position` value.
-   * Examples: `"50% 50%"`, `"top"`, `"center bottom"`, `"25% 75%"`.
-   */
-  objectPosition?: string;
+  /** Vertical crop position within the banner. Maps to `align-self` on the video and `object-position` on the fallback image. Defaults to `"center"`. */
+  verticalPosition?: "start" | "center" | "end";
+  /** Horizontal crop position within the banner. Maps to `object-position` on the fallback image. Defaults to `"center"`. */
+  horizontalPosition?: "start" | "center" | "end";
   styleClassPassthrough?: string | string[];
 }
 
@@ -80,9 +81,20 @@ const props = withDefaults(defineProps<Props>(), {
   maxHeightMobile: undefined,
   aspectRatio: "21/9",
   objectFit: "cover",
-  objectPosition: "50% 50%",
+  verticalPosition: "center",
+  horizontalPosition: "center",
   styleClassPassthrough: () => [],
 });
+
+const positionKeywordMap = {
+  vertical: { start: "top", center: "center", end: "bottom" },
+  horizontal: { start: "left", center: "center", end: "right" },
+} as const;
+
+const imgObjectPosition = computed(
+  () =>
+    `${positionKeywordMap.horizontal[props.horizontalPosition]} ${positionKeywordMap.vertical[props.verticalPosition]}`
+);
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -112,16 +124,21 @@ const videoFailed = ref(false);
       max-height: var(--_max-height, 56rem);
     }
 
-    .video,
-    .fallback {
+    .video {
       grid-area: media;
       display: block;
       width: 100%;
-      height: 100%;
+      height: auto;
+      min-height: 100%;
+      align-self: var(--_align-self, center);
+      justify-self: var(--_justify-self, center);
     }
 
     .fallback {
+      grid-area: media;
       display: none;
+      width: 100%;
+      height: 100%;
     }
 
     &.video-failed {

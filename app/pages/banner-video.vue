@@ -12,7 +12,8 @@
           :aspect-ratio="aspectRatio"
           :tag="tag"
           :object-fit="objectFit"
-          :object-position="objectPosition"
+          :vertical-position="verticalPosition"
+          :horizontal-position="horizontalPosition"
           :style-class-passthrough="['mbe-32']"
         />
 
@@ -97,11 +98,26 @@
 
             <div class="demo-controls__row">
               <MultipleRadiobuttons
-                v-model="objectPosition"
-                v-model:field-data="objectPositionData"
-                name="objectPosition"
-                label="objectPosition"
-                legend="objectPosition"
+                v-model="verticalPosition"
+                v-model:field-data="verticalPositionData"
+                name="verticalPosition"
+                label="verticalPosition"
+                legend="verticalPosition"
+                error-message=""
+                :is-button="true"
+                :is-pill="true"
+                :field-has-error="false"
+                options-layout="inline"
+              />
+            </div>
+
+            <div class="demo-controls__row">
+              <MultipleRadiobuttons
+                v-model="horizontalPosition"
+                v-model:field-data="horizontalPositionData"
+                name="horizontalPosition"
+                label="horizontalPosition"
+                legend="horizontalPosition"
                 error-message=""
                 :is-button="true"
                 :is-pill="true"
@@ -150,7 +166,8 @@ const maxHeightMobile = ref("");
 const aspectRatio = ref("21/9");
 const tag = ref<"section" | "div" | "header" | "main" | "article">("section");
 const objectFit = ref<"cover" | "contain" | "fill" | "none" | "scale-down">("cover");
-const objectPosition = ref("50% 50%");
+const verticalPosition = ref<"start" | "center" | "end">("center");
+const horizontalPosition = ref<"start" | "center" | "end">("center");
 
 const maxHeightData = ref<IFormMultipleOptions>({
   data: [
@@ -227,17 +244,26 @@ const objectFitData = ref<IFormMultipleOptions>({
   limit: 5,
 });
 
-const objectPositionData = ref<IFormMultipleOptions>({
+const verticalPositionData = ref<IFormMultipleOptions>({
   data: [
-    { id: "pos-center", name: "objectPosition", value: "50% 50%", label: "center" },
-    { id: "pos-top", name: "objectPosition", value: "50% 0%", label: "top" },
-    { id: "pos-bottom", name: "objectPosition", value: "50% 100%", label: "bottom" },
-    { id: "pos-left", name: "objectPosition", value: "0% 50%", label: "left" },
-    { id: "pos-right", name: "objectPosition", value: "100% 50%", label: "right" },
+    { id: "vp-start", name: "verticalPosition", value: "start", label: "start (top)" },
+    { id: "vp-center", name: "verticalPosition", value: "center", label: "center" },
+    { id: "vp-end", name: "verticalPosition", value: "end", label: "end (bottom)" },
   ],
-  total: 5,
+  total: 3,
   skip: 0,
-  limit: 5,
+  limit: 3,
+});
+
+const horizontalPositionData = ref<IFormMultipleOptions>({
+  data: [
+    { id: "hp-start", name: "horizontalPosition", value: "start", label: "start (left)" },
+    { id: "hp-center", name: "horizontalPosition", value: "center", label: "center" },
+    { id: "hp-end", name: "horizontalPosition", value: "end", label: "end (right)" },
+  ],
+  total: 3,
+  skip: 0,
+  limit: 3,
 });
 </script>
 
