@@ -37,6 +37,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── component-aria-landmark.md        — useAriaLabelledById composable: aria-labelledby for section/main/article/aside tags
 ├── component-export-types.md         — move inline component types to app/types/components/ barrel for consumer imports
 ├── component-inline-action-button.md — InputButtonCore variant="inline" pattern for buttons embedded in custom input wrappers
+├── vue-video-autoplay.md             — autoplay on client-side navigation: use <source> child (not :src on <video>), :key, and explicit v.load()
 ├── icon-sets.md                      — icon set packages required by layer components, FOUC prevention, component→package map
 ├── robots-env-aware.md               — @nuxtjs/robots: allow crawling on prod domain only, block on preview/staging via env var
 ├── release-notes.md                  — produce release notes as a fenced markdown block from git log
