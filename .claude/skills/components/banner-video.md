@@ -1,6 +1,6 @@
 ---
 name: BannerVideo
-description: BannerVideo full-width hero video banner — props, objectFit/objectPosition, responsive max-height, reduced-motion fallback, CSS tokens, consumer styling
+description: BannerVideo full-width hero video banner — props, verticalPosition/horizontalPosition, responsive max-height, reduced-motion fallback, CSS tokens, consumer styling
 type: reference
 ---
 
@@ -8,29 +8,31 @@ type: reference
 
 ## Overview
 
-`BannerVideo` renders a full-width banner section that plays a muted, looping mp4 video. A poster image is shown as fallback when:
+`BannerVideo` renders a full-width banner section that plays a muted, looping mp4 video. A poster image is shown as fallback when the user has `prefers-reduced-motion: reduce` set — handled entirely in CSS, no JS.
 
-- The video fails to load or play
-- The user has `prefers-reduced-motion: reduce` set (handled entirely in CSS — no JS)
+The banner is sized via `aspect-ratio` so it scales naturally, with `max-height` props capping height at each breakpoint.
 
-The banner is sized via `aspect-ratio` so it scales naturally, with `max-height` props capping height at each breakpoint. Both `objectFit` and `objectPosition` apply directly to the `<video>` element, which is a CSS replaced element and behaves exactly like `<img>`.
+### Autoplay mechanism
+
+The video uses `autoplay muted loop playsinline preload="auto"` attributes on the `<video>` element with the src in a `<source>` child. A `:key="src"` on the video element forces Vue to remount it on src changes. `@loadeddata` and `@canplay` events call `tryPlay()`, and a `watch(() => props.src, ..., { immediate: true, flush: 'post' })` calls `kickOffLoad()` (which calls `v.load()` then `tryPlay()`) on mount and src change. `onActivated` handles keep-alive re-activation.
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `src` | `string` | — | Path to the mp4 video source. **Required.** |
-| `poster` | `string` | — | Path to the fallback/poster image. **Required.** Used as the video poster attribute and as the visible fallback. |
+| `poster` | `string` | — | Path to the fallback/poster image. **Required.** Used as the video `poster` attribute and as the `prefers-reduced-motion` fallback. |
 | `alt` | `string` | `""` | Alt text for the fallback `NuxtImg`. |
 | `imgWidth` | `number` | `1920` | Intrinsic width of the poster image — required for NuxtImg/IPX optimisation. |
 | `imgHeight` | `number` | `1080` | Intrinsic height of the poster image — required for NuxtImg/IPX optimisation. |
 | `tag` | `"section" \| "div" \| "header" \| "main" \| "article"` | `"section"` | HTML element rendered as the root. |
 | `maxHeight` | `string` | `"56rem"` | Maximum height at desktop (≥64em / 1024px). |
-| `maxHeightTablet` | `string` | `undefined` | Maximum height at tablet (48em–64em / 768px–1024px). Falls back to `maxHeight`. |
-| `maxHeightMobile` | `string` | `undefined` | Maximum height on mobile (<48em / 768px). Falls back through tablet → desktop. |
+| `maxHeightTablet` | `string` | `undefined` | Maximum height at tablet (48em–64em). Falls back to `maxHeight`. |
+| `maxHeightMobile` | `string` | `undefined` | Maximum height on mobile (<48em). Falls back through tablet → desktop. |
 | `aspectRatio` | `string` | `"21/9"` | CSS `aspect-ratio` of the container (e.g. `"16/9"`, `"21/9"`, `"4/3"`). |
 | `objectFit` | `"cover" \| "contain" \| "fill" \| "none" \| "scale-down"` | `"cover"` | How the video and fallback image fill the banner frame. |
-| `objectPosition` | `string` | `"50% 50%"` | Focal point within the video and fallback image — any valid CSS `object-position` value. |
+| `verticalPosition` | `"start" \| "center" \| "end"` | `"center"` | Vertical crop position. Maps to `align-self` on the video element and `object-position` Y on the fallback image. |
+| `horizontalPosition` | `"start" \| "center" \| "end"` | `"center"` | Horizontal crop position. Maps to `object-position` X on the fallback image. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root element. |
 
 ## Basic usage
@@ -70,17 +72,6 @@ The banner is sized via `aspect-ratio` so it scales naturally, with `max-height`
 />
 ```
 
-### Standard 16/9 crop
-
-```vue
-<BannerVideo
-  src="/videos/hero.mp4"
-  poster="/images/hero-poster.jpg"
-  alt="Studio interior"
-  aspect-ratio="16/9"
-/>
-```
-
 ### Custom focal point
 
 ```vue
@@ -88,7 +79,8 @@ The banner is sized via `aspect-ratio` so it scales naturally, with `max-height`
   src="/videos/hero.mp4"
   poster="/images/hero-poster.jpg"
   alt="Studio interior"
-  object-position="50% 75%"
+  vertical-position="end"
+  horizontal-position="center"
 />
 ```
 
@@ -103,19 +95,23 @@ The banner is sized via `aspect-ratio` so it scales naturally, with `max-height`
 />
 ```
 
-## objectPosition explained
+## Positioning explained
 
-`objectPosition` only produces a visible result when the video is **cropped** — i.e. when the container's aspect ratio differs from the video's native ratio, causing `object-fit: cover` to overflow.
+The video element uses `height: auto; min-height: 100%` so it overflows the container naturally when aspect ratios differ. `overflow: hidden` on the root clips it. `verticalPosition` maps to `align-self` on the video (shifting which portion of the overflow is visible) and to `object-position` Y on the fallback image.
 
-- Default `aspectRatio: "21/9"` with a 16:9 video → always crops vertically → `objectPosition` Y value controls which vertical slice is shown.
-- `aspectRatio: "16/9"` with a 16:9 video → no overflow → `objectPosition` has no visible effect.
+`horizontalPosition` only affects the fallback image via `object-position` X — the video fills full width so horizontal alignment is a no-op on the video element itself.
 
-| objectPosition | Effect with 21/9 container + 16:9 video |
+| verticalPosition | align-self | object-position Y |
+|---|---|---|
+| `"start"` | `start` | `top` |
+| `"center"` (default) | `center` | `center` |
+| `"end"` | `end` | `bottom` |
+
+| horizontalPosition | object-position X |
 |---|---|
-| `"50% 0%"` | Top of the frame locked in view |
-| `"50% 50%"` (default) | Centre of the frame |
-| `"50% 100%"` | Bottom of the frame locked in view |
-| `"0% 50%"` | Left-biased horizontal crop |
+| `"start"` | `left` |
+| `"center"` (default) | `center` |
+| `"end"` | `right` |
 
 ## imgWidth / imgHeight
 
@@ -129,7 +125,7 @@ Always match the intrinsic dimensions of the poster file. NuxtImg uses them to a
 
 ## CSS custom properties
 
-All set from props via inline `:style` on the root element. Override in a scoped style block for responsive or contextual control.
+All set from props via inline `:style` on the root element.
 
 | Property | Default | Set by prop |
 |---|---|---|
@@ -137,6 +133,8 @@ All set from props via inline `:style` on the root element. Override in a scoped
 | `--_max-height-tablet` | *(unset)* | `maxHeightTablet` |
 | `--_max-height-mobile` | *(unset)* | `maxHeightMobile` |
 | `--_aspect-ratio` | `21/9` | `aspectRatio` |
+| `--_align-self` | `center` | `verticalPosition` |
+| `--_justify-self` | `center` | `horizontalPosition` |
 
 **Responsive override example:**
 
@@ -162,10 +160,7 @@ All set from props via inline `:style` on the root element. Override in a scoped
 |---|---|
 | `.banner-video` | Always — the root element |
 | `.video` | The `<video>` element |
-| `.fallback` | The `<NuxtImg>` fallback element |
-| `.video-failed` | Added to root when the video or source fires an error event |
-
-When `.video-failed` is present, `.video` is hidden and `.fallback` is shown via CSS. The same swap happens at `@media (prefers-reduced-motion: reduce)` — no JS involved.
+| `.fallback` | The `<NuxtImg>` fallback — hidden by default, shown via `prefers-reduced-motion` CSS |
 
 ## Consumer styling
 
@@ -175,7 +170,6 @@ Use an unscoped style block scoped by a page or section wrapper class. No `:deep
 <style>
 .my-page {
   .banner-video {
-    /* Override max-height at a custom breakpoint */
     @media (width < 900px) {
       --_max-height: 36rem;
     }
@@ -187,7 +181,6 @@ Use an unscoped style block scoped by a page or section wrapper class. No `:deep
 ## Notes
 
 - `loading="eager"` and `decoding="async"` are hardcoded on the fallback `NuxtImg` — it is above the fold by definition.
-- The video has `autoplay muted loop playsinline` attributes. These are intentional and not configurable — this component is for ambient background video only, not user-controlled media.
+- The video has `autoplay muted loop playsinline preload="auto"` — intentional and not configurable. This component is for ambient background video only, not user-controlled media.
 - `prefers-reduced-motion` is handled in CSS (`.video { display: none }` + `.fallback { display: block }`), not via JS.
-- Error detection covers both `@error` on `<video>` and `@error` on `<source>` for cross-browser reliability.
 - Storybook: the `"none"` image provider is active, so `poster` paths pass through unchanged. Always provide explicit `img-width` and `img-height` to avoid the `w=1536` fallback in deployed Storybook.

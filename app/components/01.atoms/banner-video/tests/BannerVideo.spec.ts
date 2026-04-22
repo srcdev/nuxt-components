@@ -96,14 +96,35 @@ describe("BannerVideo", () => {
     expect(wrapper.find("video").attributes("poster")).toBe(defaultProps.poster);
   });
 
-  it("video element has the correct src", async () => {
-    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
-    expect(wrapper.find("video").attributes("src")).toBe(defaultProps.src);
-  });
-
   it("video element has preload=auto", async () => {
     const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
     expect(wrapper.find("video").attributes("preload")).toBe("auto");
+  });
+
+  it("source element has the correct src", async () => {
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    expect(wrapper.find("source").attributes("src")).toBe(defaultProps.src);
+  });
+
+  it("source element has type video/mp4", async () => {
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    expect(wrapper.find("source").attributes("type")).toBe("video/mp4");
+  });
+
+  it("calls play() when loadeddata fires", async () => {
+    const play = vi.fn().mockResolvedValue(undefined);
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    (wrapper.find("video").element as HTMLVideoElement).play = play;
+    await wrapper.find("video").trigger("loadeddata");
+    expect(play).toHaveBeenCalled();
+  });
+
+  it("calls play() when canplay fires", async () => {
+    const play = vi.fn().mockResolvedValue(undefined);
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    (wrapper.find("video").element as HTMLVideoElement).play = play;
+    await wrapper.find("video").trigger("canplay");
+    expect(play).toHaveBeenCalled();
   });
 
   // ─── Fallback image ──────────────────────────────────────────────────────
