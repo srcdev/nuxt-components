@@ -96,14 +96,14 @@ describe("BannerVideo", () => {
     expect(wrapper.find("video").attributes("poster")).toBe(defaultProps.poster);
   });
 
-  it("source element has the correct src", async () => {
+  it("video element has the correct src", async () => {
     const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
-    expect(wrapper.find("source").attributes("src")).toBe(defaultProps.src);
+    expect(wrapper.find("video").attributes("src")).toBe(defaultProps.src);
   });
 
-  it("source element has type video/mp4", async () => {
+  it("video element has preload=auto", async () => {
     const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
-    expect(wrapper.find("source").attributes("type")).toBe("video/mp4");
+    expect(wrapper.find("video").attributes("preload")).toBe("auto");
   });
 
   // ─── Fallback image ──────────────────────────────────────────────────────
@@ -163,27 +163,6 @@ describe("BannerVideo", () => {
   it("fallback image has decoding=async", async () => {
     const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
     expect(wrapper.find("img[data-nuxt-img]").attributes("decoding")).toBe("async");
-  });
-
-  // ─── Video error handling ────────────────────────────────────────────────
-
-  it("does not have video-failed class initially", async () => {
-    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
-    expect(wrapper.classes()).not.toContain("video-failed");
-  });
-
-  it("adds video-failed class when video fires an error event", async () => {
-    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
-    await wrapper.find("video").trigger("error");
-    await nextTick();
-    expect(wrapper.classes()).toContain("video-failed");
-  });
-
-  it("adds video-failed class when source fires an error event", async () => {
-    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
-    await wrapper.find("source").trigger("error");
-    await nextTick();
-    expect(wrapper.classes()).toContain("video-failed");
   });
 
   // ─── CSS custom properties ───────────────────────────────────────────────

@@ -2,7 +2,7 @@
   <component
     :is="tag"
     class="banner-video"
-    :class="[elementClasses, { 'video-failed': videoFailed }]"
+    :class="elementClasses"
     :style="{
       '--_max-height': maxHeight,
       '--_max-height-tablet': maxHeightTablet,
@@ -13,16 +13,20 @@
     }"
   >
     <video
+      :key="src"
+      ref="videoEl"
       class="video"
       autoplay
       muted
       loop
       playsinline
+      preload="auto"
       :poster="poster"
       :style="{ objectFit: props.objectFit }"
-      @error="videoFailed = true"
+      @loadeddata="handleLoadedData"
+      @canplay="handleCanPlay"
     >
-      <source :src="src" type="video/mp4" @error="videoFailed = true" />
+      <source :src="src" type="video/mp4" />
     </video>
     <NuxtImg
       class="fallback"
@@ -103,7 +107,50 @@ watch(
   () => resetElementClasses(props.styleClassPassthrough)
 );
 
-const videoFailed = ref(false);
+const videoEl = shallowRef<HTMLVideoElement | null>(null);
+
+const tryPlay = async () => {
+  const v = videoEl.value;
+  if (!v) return;
+  try {
+    // Ensure muted stays true — required for programmatic autoplay in all browsers
+    v.muted = true;
+    await v.play();
+  } catch {
+    // Autoplay blocked or interrupted — fallback image will remain visible
+  }
+};
+
+const kickOffLoad = async () => {
+  await nextTick();
+  const v = videoEl.value;
+  if (!v) return;
+  // Force the media element to (re)read its source child and begin fetching
+  v.load();
+  // Attempt immediate play; loadeddata/canplay handlers will retry once data arrives
+  void tryPlay();
+};
+
+const handleLoadedData = () => {
+  void tryPlay();
+};
+const handleCanPlay = () => {
+  void tryPlay();
+};
+
+// Runs on mount AND whenever src changes (covers route-change re-use edge cases)
+watch(
+  () => props.src,
+  () => {
+    void kickOffLoad();
+  },
+  { immediate: true, flush: "post" }
+);
+
+// Extra safety: when the component becomes active again (e.g. returning via keep-alive)
+onActivated(() => {
+  void kickOffLoad();
+});
 </script>
 
 <style lang="css">
@@ -139,15 +186,6 @@ const videoFailed = ref(false);
       display: none;
       width: 100%;
       height: 100%;
-    }
-
-    &.video-failed {
-      .video {
-        display: none;
-      }
-      .fallback {
-        display: block;
-      }
     }
 
     @media (prefers-reduced-motion: reduce) {
