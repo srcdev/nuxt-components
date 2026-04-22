@@ -46,7 +46,8 @@
       "/Users/simoncornforth/websites/luxury-locs-by-natasha-nuxt3/app/pages",
       "/Users/simoncornforth/websites/nuxt-components/app/assets/styles/extends-layer",
       "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms",
-      "/private/tmp"
+      "/private/tmp",
+      "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms/banner-video"
     ]
   }
 }

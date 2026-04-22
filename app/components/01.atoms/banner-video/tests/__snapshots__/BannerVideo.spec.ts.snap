@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`BannerVideo > renders correct HTML structure (all props set) 1`] = `
+"<header class="banner-video full-bleed" style="--_max-height: 56rem; --_aspect-ratio: 21/9;" height="40rem"><video class="video" autoplay="" muted="" loop="" playsinline="" poster="/images/banners/video/lake-banner.jpg" style="object-fit: cover; object-position: 50% 50%;">
+    <source src="/images/banners/video/lake-banner.mp4" type="video/mp4">
+  </video><img width="1280" height="720" data-nuxt-img="" srcset="/_ipx/s_1280x720/images/banners/video/lake-banner.jpg 1x, /_ipx/s_2560x1440/images/banners/video/lake-banner.jpg 2x" class="fallback" alt="Lake banner" loading="eager" decoding="async" style="object-fit: cover; object-position: 50% 50%;" src="/_ipx/s_1280x720/images/banners/video/lake-banner.jpg"></header>"
+`;
+
+exports[`BannerVideo > renders correct HTML structure (default props) 1`] = `
+"<section class="banner-video" style="--_max-height: 56rem; --_aspect-ratio: 21/9;"><video class="video" autoplay="" muted="" loop="" playsinline="" poster="/images/banners/video/lake-banner.jpg" style="object-fit: cover; object-position: 50% 50%;">
+    <source src="/images/banners/video/lake-banner.mp4" type="video/mp4">
+  </video><img width="1920" height="1080" data-nuxt-img="" srcset="/_ipx/s_1920x1080/images/banners/video/lake-banner.jpg 1x, /_ipx/s_3840x2160/images/banners/video/lake-banner.jpg 2x" class="fallback" alt="" loading="eager" decoding="async" style="object-fit: cover; object-position: 50% 50%;" src="/_ipx/s_1920x1080/images/banners/video/lake-banner.jpg"></section>"
+`;
