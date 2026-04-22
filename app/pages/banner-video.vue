@@ -25,6 +25,7 @@
                 v-model="maxHeight"
                 v-model:field-data="maxHeightData"
                 name="maxHeight"
+                label="maxHeight"
                 legend="maxHeight (desktop)"
                 error-message=""
                 :is-button="true"
@@ -39,6 +40,7 @@
                 v-model="maxHeightTablet"
                 v-model:field-data="maxHeightTabletData"
                 name="maxHeightTablet"
+                label="maxHeightTablet"
                 legend="maxHeightTablet (≥768px, falls back to maxHeight)"
                 error-message=""
                 :is-button="true"
@@ -53,6 +55,7 @@
                 v-model="maxHeightMobile"
                 v-model:field-data="maxHeightMobileData"
                 name="maxHeightMobile"
+                label="maxHeightMobile"
                 legend="maxHeightMobile (<768px, falls back through tablet → desktop)"
                 error-message=""
                 :is-button="true"
@@ -67,6 +70,7 @@
                 v-model="aspectRatio"
                 v-model:field-data="aspectRatioData"
                 name="aspectRatio"
+                label="aspectRatio"
                 legend="aspectRatio"
                 error-message=""
                 :is-button="true"
@@ -81,6 +85,7 @@
                 v-model="objectFit"
                 v-model:field-data="objectFitData"
                 name="objectFit"
+                label="objectFit"
                 legend="objectFit"
                 error-message=""
                 :is-button="true"
@@ -95,6 +100,7 @@
                 v-model="objectPosition"
                 v-model:field-data="objectPositionData"
                 name="objectPosition"
+                label="objectPosition"
                 legend="objectPosition"
                 error-message=""
                 :is-button="true"
@@ -109,6 +115,7 @@
                 v-model="tag"
                 v-model:field-data="tagData"
                 name="tag"
+                label="tag"
                 legend="tag"
                 error-message=""
                 :is-button="true"
@@ -240,7 +247,7 @@ const objectPositionData = ref<IFormMultipleOptions>({
     padding: 1.6rem;
     border: 1px solid var(--slate-06);
     border-radius: 0.8rem;
-    background: var(--slate-01);
+    /* background: var(--slate-01); */
 
     .demo-controls__heading {
       font-size: 1.1rem;
