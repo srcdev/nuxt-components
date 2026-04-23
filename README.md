@@ -56,6 +56,21 @@ To ensure skills are always up to date and `nuxt prepare` is never forgotten, co
 
 ---
 
+## Scaffolding a New App
+
+A Claude Code skill is included to scaffold a new Nuxt consumer app from scratch. It generates
+`package.json`, `nuxt.config.ts`, ESLint/Prettier config, the full `app/` directory structure,
+and a `CLAUDE.md` — all pre-wired to extend this layer correctly.
+
+**Trigger it by saying to Claude Code:**
+
+> "Scaffold a new layer consumer app. Repo: `/path/to/repo`, name: `my-app`, domain: `myapp.co.uk`, fonts: `Fraunces, Manrope`."
+
+The skill is available at `.claude/skills/new-app-scaffold.md` once copied into your project
+via `npm run setup:claude`.
+
+---
+
 ## Consumer App Configuration
 
 Configuration options for apps extending this layer. All options go in the consumer's `nuxt.config.ts` under `runtimeConfig.public` and can also be set via environment variable.
