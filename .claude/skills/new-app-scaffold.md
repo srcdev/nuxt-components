@@ -124,7 +124,7 @@ export default defineNuxtConfig({
     strict: true,
     shim: true,
     typeCheck: false,
-    tsConfig: { compilerOptions: { types: ["srcdev-nuxt-components"] } },
+    tsConfig: { compilerOptions: { types: ["srcdev-nuxt-components", "node"] } },
   },
   eslint: { config: {} },
   security: {
@@ -231,7 +231,7 @@ app/
 }
 ```
 
-**`app/layouts/default.vue`** — minimal:
+**`app/layouts/default.vue`** — minimal, with canonical URL head tag:
 
 ```vue
 <template>
@@ -239,6 +239,10 @@ app/
     <main><slot></slot></main>
   </div>
 </template>
+
+<script setup lang="ts">
+useCanonicalUrl()
+</script>
 ```
 
 **`app/pages/index.vue`** — placeholder with `useSeoMeta`.

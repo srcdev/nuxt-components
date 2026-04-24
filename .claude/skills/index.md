@@ -42,6 +42,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── robots-env-aware.md               — @nuxtjs/robots: allow crawling on prod domain only, block on preview/staging via env var
 ├── new-app-scaffold.md               — scaffold a new Nuxt consumer app extending this layer (package.json, nuxt.config, app structure, CLAUDE.md)
 ├── release-notes.md                  — produce release notes as a fenced markdown block from git log
+├── composable-canonical-url.md       — useCanonicalUrl: set <link rel="canonical"> from runtimeConfig.public.canonicalHost; layout setup, node types
 ├── composable-whatsapp.md            — useWhatsApp: open pre-filled wa.me link from form payload; runtime config, security, usage
 ├── composable-zod-validation.md      — useZodValidation: schema-driven form validation, error binding, submit flow, API error push
 ├── composable-colour-scheme.md       — useColourScheme: reactive light/dark/auto switching, localStorage persistence, runtime config
