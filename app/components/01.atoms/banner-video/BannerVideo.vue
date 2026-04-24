@@ -19,6 +19,7 @@
       loop
       playsinline
       preload="auto"
+      fetchpriority="high"
       :poster="poster"
       :style="{ objectFit: props.objectFit }"
       @loadeddata="handleLoadedData"
@@ -33,6 +34,7 @@
       :width="imgWidth"
       :height="imgHeight"
       loading="eager"
+      fetchpriority="high"
       decoding="async"
       :style="{ objectFit: props.objectFit, objectPosition: imgObjectPosition }"
     />
