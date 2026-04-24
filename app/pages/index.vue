@@ -3,6 +3,11 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+          <h2 class="page-heading-2">GridStack</h2>
+          <NuxtLink class="page-body-normal" to="/grid-stack">GridStack</NuxtLink>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">Nuxt3 Components Layer</h1>
           <p>
             A collection of hand rolled UI components for Nuxt3 that can be added as a layer (extended into another
