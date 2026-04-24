@@ -1,6 +1,6 @@
 ---
 name: BannerVideo
-description: BannerVideo full-width hero video banner — props, verticalPosition/horizontalPosition, responsive max-height, reduced-motion fallback, CSS tokens, consumer styling
+description: BannerVideo full-width hero video banner — props, depth tier system, verticalPosition/horizontalPosition, reduced-motion fallback, CSS tokens, consumer styling
 type: reference
 ---
 
@@ -10,7 +10,7 @@ type: reference
 
 `BannerVideo` renders a full-width banner section that plays a muted, looping mp4 video. A poster image is shown as fallback when the user has `prefers-reduced-motion: reduce` set — handled entirely in CSS, no JS.
 
-The banner is sized via `aspect-ratio` so it scales naturally, with `max-height` props capping height at each breakpoint.
+The banner is sized via `aspect-ratio` so it scales naturally. The `depth` prop selects a responsive `max-height` tier (`xs` → `xl`) implemented with `clamp()` — no breakpoint props needed. Each tier exposes a `--theme-banner-video-max-height-{depth}` CSS token that consuming pages can override.
 
 ### Autoplay mechanism
 
@@ -26,9 +26,7 @@ The video uses `autoplay muted loop playsinline preload="auto"` attributes on th
 | `imgWidth` | `number` | `1920` | Intrinsic width of the poster image — required for NuxtImg/IPX optimisation. |
 | `imgHeight` | `number` | `1080` | Intrinsic height of the poster image — required for NuxtImg/IPX optimisation. |
 | `tag` | `"section" \| "div" \| "header" \| "main" \| "article"` | `"section"` | HTML element rendered as the root. |
-| `maxHeight` | `string` | `"56rem"` | Maximum height at desktop (≥64em / 1024px). |
-| `maxHeightTablet` | `string` | `undefined` | Maximum height at tablet (48em–64em). Falls back to `maxHeight`. |
-| `maxHeightMobile` | `string` | `undefined` | Maximum height on mobile (<48em). Falls back through tablet → desktop. |
+| `depth` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `"md"` | Responsive max-height tier. Each maps to a `clamp()` scale; override via `--theme-banner-video-max-height-{depth}`. |
 | `aspectRatio` | `string` | `"21/9"` | CSS `aspect-ratio` of the container (e.g. `"16/9"`, `"21/9"`, `"4/3"`). |
 | `objectFit` | `"cover" \| "contain" \| "fill" \| "none" \| "scale-down"` | `"cover"` | How the video and fallback image fill the banner frame. |
 | `verticalPosition` | `"start" \| "center" \| "end"` | `"center"` | Vertical crop position. Maps to `align-self` on the video element and `object-position` Y on the fallback image. |
@@ -47,29 +45,23 @@ The video uses `autoplay muted loop playsinline preload="auto"` attributes on th
 
 ## Common variants
 
-### Responsive max-height per breakpoint
+### Depth tiers
 
 ```vue
-<BannerVideo
-  src="/videos/hero.mp4"
-  poster="/images/hero-poster.jpg"
-  alt="Studio interior"
-  max-height="56rem"
-  max-height-tablet="40rem"
-  max-height-mobile="24rem"
-/>
-```
+<!-- xs: clamp(12rem, 15vw, 24rem) — thin strip -->
+<BannerVideo src="…" poster="…" depth="xs" />
 
-### Tall viewport-filling banner
+<!-- sm: clamp(18rem, 22vw, 36rem) -->
+<BannerVideo src="…" poster="…" depth="sm" />
 
-```vue
-<BannerVideo
-  src="/videos/hero.mp4"
-  poster="/images/hero-poster.jpg"
-  alt="Studio interior"
-  max-height="100vh"
-  aspect-ratio="16/9"
-/>
+<!-- md (default): clamp(28rem, 38vw, 56rem) -->
+<BannerVideo src="…" poster="…" />
+
+<!-- lg: clamp(40rem, 52vw, 72rem) -->
+<BannerVideo src="…" poster="…" depth="lg" />
+
+<!-- xl: clamp(52rem, 65vw, 90rem) — near full-screen hero -->
+<BannerVideo src="…" poster="…" depth="xl" aspect-ratio="16/9" />
 ```
 
 ### Custom focal point
@@ -125,32 +117,35 @@ Always match the intrinsic dimensions of the poster file. NuxtImg uses them to a
 
 ## CSS custom properties
 
-All set from props via inline `:style` on the root element.
+Private tokens (set via `data-depth` + CSS selectors, not inline style):
+
+| Property | Default (md tier) | Controlled by |
+|---|---|---|
+| `--_max-height` | `clamp(28rem, 38vw, 56rem)` | `data-depth` selector |
+
+Inline style tokens (set from props):
 
 | Property | Default | Set by prop |
 |---|---|---|
-| `--_max-height` | `56rem` | `maxHeight` |
-| `--_max-height-tablet` | *(unset)* | `maxHeightTablet` |
-| `--_max-height-mobile` | *(unset)* | `maxHeightMobile` |
 | `--_aspect-ratio` | `21/9` | `aspectRatio` |
 | `--_align-self` | `center` | `verticalPosition` |
 | `--_justify-self` | `center` | `horizontalPosition` |
 
-**Responsive override example:**
+### Depth token defaults
+
+| depth | token | clamp value |
+|---|---|---|
+| `xs` | `--theme-banner-video-max-height-xs` | `clamp(12rem, 15vw, 24rem)` |
+| `sm` | `--theme-banner-video-max-height-sm` | `clamp(18rem, 22vw, 36rem)` |
+| `md` | `--theme-banner-video-max-height-md` | `clamp(28rem, 38vw, 56rem)` |
+| `lg` | `--theme-banner-video-max-height-lg` | `clamp(40rem, 52vw, 72rem)` |
+| `xl` | `--theme-banner-video-max-height-xl` | `clamp(52rem, 65vw, 90rem)` |
+
+**Override a tier in a consuming page:**
 
 ```css
 .my-page {
-  .banner-video {
-    --_max-height: 56rem;
-
-    @media (width < 1024px) {
-      --_max-height: 40rem;
-    }
-
-    @media (width < 768px) {
-      --_max-height: 24rem;
-    }
-  }
+  --theme-banner-video-max-height-md: clamp(32rem, 45vw, 64rem);
 }
 ```
 
@@ -169,11 +164,8 @@ Use an unscoped style block scoped by a page or section wrapper class. No `:deep
 ```vue
 <style>
 .my-page {
-  .banner-video {
-    @media (width < 900px) {
-      --_max-height: 36rem;
-    }
-  }
+  /* Override the md tier's clamp range for this page */
+  --theme-banner-video-max-height-md: clamp(32rem, 45vw, 64rem);
 }
 </style>
 ```

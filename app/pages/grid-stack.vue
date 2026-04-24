@@ -10,7 +10,6 @@
                 src="/images/banners/video/lake-banner.mp4"
                 poster="/images/banners/video/lake-banner.jpg"
                 alt="A serene lake landscape"
-                max-height="56rem"
                 aspect-ratio="4/3"
                 object-fit="cover"
                 vertical-position="center"

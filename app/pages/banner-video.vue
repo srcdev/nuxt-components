@@ -6,9 +6,7 @@
           src="/images/banners/video/lake-banner.mp4"
           poster="/images/banners/video/lake-banner.jpg"
           alt="A serene lake landscape"
-          :max-height="maxHeight"
-          :max-height-tablet="maxHeightTablet || undefined"
-          :max-height-mobile="maxHeightMobile || undefined"
+          :depth="depth"
           :aspect-ratio="aspectRatio"
           :tag="tag"
           :object-fit="objectFit"
@@ -23,41 +21,11 @@
 
             <div class="demo-controls__row">
               <MultipleRadiobuttons
-                v-model="maxHeight"
-                v-model:field-data="maxHeightData"
-                name="maxHeight"
-                label="maxHeight"
-                legend="maxHeight (desktop)"
-                error-message=""
-                :is-button="true"
-                :is-pill="true"
-                :field-has-error="false"
-                options-layout="inline"
-              />
-            </div>
-
-            <div class="demo-controls__row">
-              <MultipleRadiobuttons
-                v-model="maxHeightTablet"
-                v-model:field-data="maxHeightTabletData"
-                name="maxHeightTablet"
-                label="maxHeightTablet"
-                legend="maxHeightTablet (≥768px, falls back to maxHeight)"
-                error-message=""
-                :is-button="true"
-                :is-pill="true"
-                :field-has-error="false"
-                options-layout="inline"
-              />
-            </div>
-
-            <div class="demo-controls__row">
-              <MultipleRadiobuttons
-                v-model="maxHeightMobile"
-                v-model:field-data="maxHeightMobileData"
-                name="maxHeightMobile"
-                label="maxHeightMobile"
-                legend="maxHeightMobile (<768px, falls back through tablet → desktop)"
+                v-model="depth"
+                v-model:field-data="depthData"
+                name="depth"
+                label="depth"
+                legend="depth"
                 error-message=""
                 :is-button="true"
                 :is-pill="true"
@@ -160,50 +128,24 @@ useHead({
   bodyAttrs: { class: "banner-video-page" },
 });
 
-const maxHeight = ref("56rem");
-const maxHeightTablet = ref("");
-const maxHeightMobile = ref("");
+const depth = ref<"xs" | "sm" | "md" | "lg" | "xl">("md");
 const aspectRatio = ref("21/9");
 const tag = ref<"section" | "div" | "header" | "main" | "article">("section");
 const objectFit = ref<"cover" | "contain" | "fill" | "none" | "scale-down">("cover");
 const verticalPosition = ref<"start" | "center" | "end">("center");
 const horizontalPosition = ref<"start" | "center" | "end">("center");
 
-const maxHeightData = ref<IFormMultipleOptions>({
+const depthData = ref<IFormMultipleOptions>({
   data: [
-    { id: "mh-40rem", name: "maxHeight", value: "40rem", label: "40rem" },
-    { id: "mh-56rem", name: "maxHeight", value: "56rem", label: "56rem" },
-    { id: "mh-80rem", name: "maxHeight", value: "80rem", label: "80rem" },
-    { id: "mh-100vh", name: "maxHeight", value: "100vh", label: "100vh" },
-    { id: "mh-none", name: "maxHeight", value: "none", label: "none" },
+    { id: "depth-xs", name: "depth", value: "xs", label: "xs" },
+    { id: "depth-sm", name: "depth", value: "sm", label: "sm" },
+    { id: "depth-md", name: "depth", value: "md", label: "md" },
+    { id: "depth-lg", name: "depth", value: "lg", label: "lg" },
+    { id: "depth-xl", name: "depth", value: "xl", label: "xl" },
   ],
   total: 5,
   skip: 0,
   limit: 5,
-});
-
-const maxHeightTabletData = ref<IFormMultipleOptions>({
-  data: [
-    { id: "mht-unset", name: "maxHeightTablet", value: "", label: "unset" },
-    { id: "mht-32rem", name: "maxHeightTablet", value: "32rem", label: "32rem" },
-    { id: "mht-40rem", name: "maxHeightTablet", value: "40rem", label: "40rem" },
-    { id: "mht-56rem", name: "maxHeightTablet", value: "56rem", label: "56rem" },
-  ],
-  total: 4,
-  skip: 0,
-  limit: 4,
-});
-
-const maxHeightMobileData = ref<IFormMultipleOptions>({
-  data: [
-    { id: "mhm-unset", name: "maxHeightMobile", value: "", label: "unset" },
-    { id: "mhm-24rem", name: "maxHeightMobile", value: "24rem", label: "24rem" },
-    { id: "mhm-32rem", name: "maxHeightMobile", value: "32rem", label: "32rem" },
-    { id: "mhm-40rem", name: "maxHeightMobile", value: "40rem", label: "40rem" },
-  ],
-  total: 4,
-  skip: 0,
-  limit: 4,
 });
 
 const aspectRatioData = ref<IFormMultipleOptions>({

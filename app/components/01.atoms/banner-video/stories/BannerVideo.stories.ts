@@ -36,19 +36,10 @@ const meta: Meta<typeof BannerVideo> = {
       description: "HTML element rendered as the root",
       table: { category: "Markup" },
     },
-    maxHeight: {
-      control: "text",
-      description: "Maximum height at desktop (≥64em). Defaults to 56rem",
-      table: { category: "Layout" },
-    },
-    maxHeightTablet: {
-      control: "text",
-      description: "Maximum height at tablet (48em–64em). Falls back to maxHeight when unset",
-      table: { category: "Layout" },
-    },
-    maxHeightMobile: {
-      control: "text",
-      description: "Maximum height on mobile (<48em). Falls back through tablet → desktop when unset",
+    depth: {
+      control: "select",
+      options: ["xs", "sm", "md", "lg", "xl"],
+      description: "Responsive max-height tier. Each maps to a clamp() scale; override via --theme-banner-video-max-height-{depth}",
       table: { category: "Layout" },
     },
     aspectRatio: {
@@ -82,7 +73,7 @@ const meta: Meta<typeof BannerVideo> = {
     docs: {
       description: {
         component:
-          "A full-width banner that plays a muted, looping mp4 video. The poster image is shown before the video loads, when the video fails to play, and whenever the user has `prefers-reduced-motion: reduce` set. The banner is sized via `aspect-ratio` with per-breakpoint `max-height` caps — no fixed pixel heights. `objectFit` controls how media fills the frame. `verticalPosition` and `horizontalPosition` control the crop focal point — the video uses CSS grid alignment (`align-self`/`justify-self`) while the fallback image uses `object-position`.",
+          "A full-width banner that plays a muted, looping mp4 video. The poster image is shown before the video loads, when the video fails to play, and whenever the user has `prefers-reduced-motion: reduce` set. The banner is sized via `aspect-ratio` with a responsive `max-height` driven by the `depth` tier (`xs` → `xl`). Each tier uses a `clamp()` scale and exposes a `--theme-banner-video-max-height-{depth}` token for consuming pages to override. `objectFit` controls how media fills the frame. `verticalPosition` and `horizontalPosition` control the crop focal point.",
       },
     },
   },
@@ -99,7 +90,7 @@ export const Default: Story = {
     imgWidth: 1920,
     imgHeight: 1080,
     tag: "section",
-    maxHeight: "56rem",
+    depth: "md",
     aspectRatio: "21/9",
     objectFit: "cover",
     verticalPosition: "center",
@@ -108,22 +99,66 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Default props. The lake video plays muted and looped at a 21/9 aspect ratio, capped at 56rem on desktop.",
+        story: "Default props. The lake video plays muted and looped at a 21/9 aspect ratio with the md depth tier (clamp 28rem → 56rem).",
       },
     },
   },
 };
 
-export const Widescreen: Story = {
+export const Compact: Story = {
   args: {
     ...Default.args,
-    aspectRatio: "21/9",
-    maxHeight: "80rem",
+    depth: "xs",
+    verticalPosition: "end",
   },
   parameters: {
     docs: {
       description: {
-        story: "A wider cinematic crop with a raised maxHeight, giving the banner more vertical presence on large screens.",
+        story: "xs depth tier (clamp 12rem → 24rem) — a thin strip banner. verticalPosition: 'end' crops to the bottom of the frame.",
+      },
+    },
+  },
+};
+
+export const Shallow: Story = {
+  args: {
+    ...Default.args,
+    depth: "sm",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "sm depth tier (clamp 18rem → 36rem) — a shorter banner suitable for secondary sections.",
+      },
+    },
+  },
+};
+
+export const Deep: Story = {
+  args: {
+    ...Default.args,
+    depth: "lg",
+    aspectRatio: "21/9",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "lg depth tier (clamp 40rem → 72rem) — a tall cinematic banner with more vertical presence on large screens.",
+      },
+    },
+  },
+};
+
+export const Hero: Story = {
+  args: {
+    ...Default.args,
+    depth: "xl",
+    aspectRatio: "16/9",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "xl depth tier (clamp 52rem → 90rem) — near full-screen hero. Pair with a 16/9 ratio to maximise coverage.",
       },
     },
   },
@@ -133,58 +168,12 @@ export const Standard169: Story = {
   args: {
     ...Default.args,
     aspectRatio: "16/9",
-    maxHeight: "56rem",
+    depth: "md",
   },
   parameters: {
     docs: {
       description: {
-        story: "Standard 16/9 aspect ratio — matches a typical video's native ratio, so objectPosition has minimal visible effect unless the frame is very narrow.",
-      },
-    },
-  },
-};
-
-export const ShortBanner: Story = {
-  args: {
-    ...Default.args,
-    maxHeight: "32rem",
-    verticalPosition: "end",
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "A shallower banner capped at 32rem. verticalPosition: 'end' shifts the crop to show the bottom of the frame.",
-      },
-    },
-  },
-};
-
-export const FullViewportHeight: Story = {
-  args: {
-    ...Default.args,
-    maxHeight: "100vh",
-    aspectRatio: "16/9",
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "maxHeight set to 100vh — the banner fills the full viewport height on large screens and aspect-ratio controls height on smaller ones.",
-      },
-    },
-  },
-};
-
-export const ResponsiveBreakpoints: Story = {
-  args: {
-    ...Default.args,
-    maxHeight: "56rem",
-    maxHeightTablet: "40rem",
-    maxHeightMobile: "24rem",
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Per-breakpoint max-height: 56rem desktop, 40rem tablet (≥48em), 24rem mobile (<48em). Resize the viewport to see each cap take effect.",
+        story: "Standard 16/9 aspect ratio with md depth — matches a typical video's native ratio.",
       },
     },
   },

@@ -3,10 +3,8 @@
     :is="tag"
     class="banner-video"
     :class="elementClasses"
+    :data-depth="depth"
     :style="{
-      '--_max-height': maxHeight,
-      '--_max-height-tablet': maxHeightTablet,
-      '--_max-height-mobile': maxHeightMobile,
       '--_aspect-ratio': aspectRatio,
       '--_align-self': verticalPosition,
       '--_justify-self': horizontalPosition,
@@ -55,12 +53,12 @@ interface Props {
   imgWidth?: number;
   /** Intrinsic height of the poster image — required for NuxtImg optimisation. */
   imgHeight?: number;
-  /** Maximum height at desktop (≥64em). Defaults to `"56rem"`. */
-  maxHeight?: string;
-  /** Maximum height at tablet (48em–64em). Falls back to `maxHeight` when unset. */
-  maxHeightTablet?: string;
-  /** Maximum height on mobile (<48em). Falls back to `maxHeightTablet` then `maxHeight` when unset. */
-  maxHeightMobile?: string;
+  /**
+   * Depth tier controlling the responsive max-height via a `clamp()` scale.
+   * Each tier maps to a `--theme-banner-video-max-height-{depth}` CSS token that
+   * consuming pages can override. Defaults to `"md"`.
+   */
+  depth?: "xs" | "sm" | "md" | "lg" | "xl";
   /**
    * CSS aspect-ratio of the banner container (e.g. `"16/9"`, `"21/9"`, `"4/3"`).
    * Provides the intrinsic height that `max-height` caps at larger viewport widths.
@@ -80,9 +78,7 @@ const props = withDefaults(defineProps<Props>(), {
   alt: "",
   imgWidth: 1920,
   imgHeight: 1080,
-  maxHeight: "56rem",
-  maxHeightTablet: undefined,
-  maxHeightMobile: undefined,
+  depth: "md",
   aspectRatio: "21/9",
   objectFit: "cover",
   verticalPosition: "center",
@@ -156,20 +152,20 @@ onActivated(() => {
 <style lang="css">
 @layer components {
   .banner-video {
+    --_max-height: var(--theme-banner-video-max-height, clamp(28rem, 38vw, 56rem));
+
     display: grid;
     grid-template-areas: "media";
     aspect-ratio: var(--_aspect-ratio, 16/9);
-    max-height: var(--_max-height-mobile, var(--_max-height, 56rem));
+    max-height: var(--_max-height);
     width: 100%;
     overflow: hidden;
 
-    @media (min-width: 48em) {
-      max-height: var(--_max-height-tablet, var(--_max-height, 56rem));
-    }
-
-    @media (min-width: 64em) {
-      max-height: var(--_max-height, 56rem);
-    }
+    &[data-depth="xs"] { --_max-height: var(--theme-banner-video-max-height-xs, clamp(12rem, 15vw, 24rem)); }
+    &[data-depth="sm"] { --_max-height: var(--theme-banner-video-max-height-sm, clamp(18rem, 22vw, 36rem)); }
+    &[data-depth="md"] { --_max-height: var(--theme-banner-video-max-height-md, clamp(28rem, 38vw, 56rem)); }
+    &[data-depth="lg"] { --_max-height: var(--theme-banner-video-max-height-lg, clamp(40rem, 52vw, 72rem)); }
+    &[data-depth="xl"] { --_max-height: var(--theme-banner-video-max-height-xl, clamp(52rem, 65vw, 90rem)); }
 
     .video {
       grid-area: media;

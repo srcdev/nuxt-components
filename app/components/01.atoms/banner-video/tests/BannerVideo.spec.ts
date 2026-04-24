@@ -31,7 +31,8 @@ describe("BannerVideo", () => {
         alt: "Lake banner",
         imgWidth: 1280,
         imgHeight: 720,
-        height: "40rem",
+        depth: "xl",
+        aspectRatio: "16/9",
         styleClassPassthrough: ["full-bleed"],
       },
     });
@@ -186,49 +187,24 @@ describe("BannerVideo", () => {
     expect(wrapper.find("img[data-nuxt-img]").attributes("decoding")).toBe("async");
   });
 
+  // ─── depth / data-depth ──────────────────────────────────────────────────
+
+  it("sets data-depth to md by default", async () => {
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    expect(wrapper.attributes("data-depth")).toBe("md");
+  });
+
+  it.each(["xs", "sm", "md", "lg", "xl"] as const)(
+    "sets data-depth to %s when depth prop is %s",
+    async (depth) => {
+      const wrapper = await mountSuspended(BannerVideo, {
+        props: { ...defaultProps, depth },
+      });
+      expect(wrapper.attributes("data-depth")).toBe(depth);
+    }
+  );
+
   // ─── CSS custom properties ───────────────────────────────────────────────
-
-  it("sets --_max-height to 56rem by default", async () => {
-    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
-    const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_max-height")).toBe("56rem");
-  });
-
-  it("reflects maxHeight prop in --_max-height", async () => {
-    const wrapper = await mountSuspended(BannerVideo, {
-      props: { ...defaultProps, maxHeight: "80rem" },
-    });
-    const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_max-height")).toBe("80rem");
-  });
-
-  it("does not set --_max-height-tablet when maxHeightTablet is not provided", async () => {
-    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
-    const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_max-height-tablet")).toBe("");
-  });
-
-  it("reflects maxHeightTablet prop in --_max-height-tablet", async () => {
-    const wrapper = await mountSuspended(BannerVideo, {
-      props: { ...defaultProps, maxHeightTablet: "48rem" },
-    });
-    const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_max-height-tablet")).toBe("48rem");
-  });
-
-  it("does not set --_max-height-mobile when maxHeightMobile is not provided", async () => {
-    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
-    const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_max-height-mobile")).toBe("");
-  });
-
-  it("reflects maxHeightMobile prop in --_max-height-mobile", async () => {
-    const wrapper = await mountSuspended(BannerVideo, {
-      props: { ...defaultProps, maxHeightMobile: "32rem" },
-    });
-    const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_max-height-mobile")).toBe("32rem");
-  });
 
   it("sets --_aspect-ratio to 21/9 by default", async () => {
     const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
