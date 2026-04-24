@@ -65,7 +65,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── glass-panel.md          — GlassPanel props, slots, CSS token API (--glass-panel-bg/border-color/shadow/highlight), theming override
     ├── navigation-horizontal.md — NavigationHorizontal props, NavItemData type, CSS token API, import path gotcha
     ├── input-copy-core.md      — InputCopyCore: readonly copy-to-clipboard input; props, emits, slots, CSS classes, usage
-    ├── banner-video.md         — BannerVideo: full-width hero video banner, objectFit/objectPosition, responsive max-height, reduced-motion fallback, CSS tokens
+    ├── banner-video.md         — BannerVideo: full-width hero video banner, depth tier system, objectFit/objectPosition, reduced-motion fallback, CSS tokens
+    ├── grid-stack.md           — GridStack: CSS Grid z-axis stacking, slot API, z-order rules, sizing, video+overlay and image+text patterns
     ├── scroll-reveal-frame.md  — ScrollRevealFrame: generic parallax clipping frame, slot API, image grid pattern, CSS tokens, browser support
     ├── scroll-reveal-image.md  — ScrollRevealImage: single-image parallax reveal, focalX, imgWidth/imgHeight, responsive frame height
     ├── site-navigation.md      — SiteNavigation: responsive nav with auto-collapse, burger menu, decorator indicators, CSS token API

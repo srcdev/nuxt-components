@@ -74,7 +74,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  tag: "section",
+  tag: "div",
   alt: "",
   imgWidth: 1920,
   imgHeight: 1080,
@@ -161,11 +161,21 @@ onActivated(() => {
     width: 100%;
     overflow: hidden;
 
-    &[data-depth="xs"] { --_max-height: var(--theme-banner-video-max-height-xs, clamp(12rem, 15vw, 24rem)); }
-    &[data-depth="sm"] { --_max-height: var(--theme-banner-video-max-height-sm, clamp(18rem, 22vw, 36rem)); }
-    &[data-depth="md"] { --_max-height: var(--theme-banner-video-max-height-md, clamp(28rem, 38vw, 56rem)); }
-    &[data-depth="lg"] { --_max-height: var(--theme-banner-video-max-height-lg, clamp(40rem, 52vw, 72rem)); }
-    &[data-depth="xl"] { --_max-height: var(--theme-banner-video-max-height-xl, clamp(52rem, 65vw, 90rem)); }
+    &[data-depth="xs"] {
+      --_max-height: var(--theme-banner-video-max-height-xs, clamp(12rem, 15vw, 24rem));
+    }
+    &[data-depth="sm"] {
+      --_max-height: var(--theme-banner-video-max-height-sm, clamp(18rem, 22vw, 36rem));
+    }
+    &[data-depth="md"] {
+      --_max-height: var(--theme-banner-video-max-height-md, clamp(28rem, 38vw, 56rem));
+    }
+    &[data-depth="lg"] {
+      --_max-height: var(--theme-banner-video-max-height-lg, clamp(40rem, 52vw, 72rem));
+    }
+    &[data-depth="xl"] {
+      --_max-height: var(--theme-banner-video-max-height-xl, clamp(52rem, 65vw, 90rem));
+    }
 
     .video {
       grid-area: media;
