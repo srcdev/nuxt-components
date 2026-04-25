@@ -41,7 +41,7 @@ watch(
 .section-parallax {
   /* Component styles */
 
-  min-height: 120vh;
+  min-height: 100svh;
   background-image: v-bind(backgroundImage);
   background-position: center;
   background-repeat: no-repeat;
