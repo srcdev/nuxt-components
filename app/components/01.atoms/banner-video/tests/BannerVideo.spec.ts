@@ -1,6 +1,5 @@
 import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { nextTick } from "vue";
 import BannerVideo from "../BannerVideo.vue";
 
 const defaultProps = {
@@ -41,9 +40,9 @@ describe("BannerVideo", () => {
 
   // ─── Root element ────────────────────────────────────────────────────────
 
-  it("renders a <section> as the root element by default", async () => {
+  it("renders a <div> as the root element by default", async () => {
     const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
-    expect(wrapper.element.tagName).toBe("SECTION");
+    expect(wrapper.element.tagName).toBe("DIV");
   });
 
   it("renders the specified tag as root", async () => {
@@ -194,15 +193,12 @@ describe("BannerVideo", () => {
     expect(wrapper.attributes("data-depth")).toBe("md");
   });
 
-  it.each(["xs", "sm", "md", "lg", "xl"] as const)(
-    "sets data-depth to %s when depth prop is %s",
-    async (depth) => {
-      const wrapper = await mountSuspended(BannerVideo, {
-        props: { ...defaultProps, depth },
-      });
-      expect(wrapper.attributes("data-depth")).toBe(depth);
-    }
-  );
+  it.each(["xs", "sm", "md", "lg", "xl"] as const)("sets data-depth to %s when depth prop is %s", async (depth) => {
+    const wrapper = await mountSuspended(BannerVideo, {
+      props: { ...defaultProps, depth },
+    });
+    expect(wrapper.attributes("data-depth")).toBe(depth);
+  });
 
   // ─── CSS custom properties ───────────────────────────────────────────────
 
@@ -261,7 +257,10 @@ describe("BannerVideo", () => {
   });
 
   it("reflects verticalPosition prop in --_align-self", async () => {
-    for (const [prop, expected] of [["start", "start"], ["end", "end"]] as const) {
+    for (const [prop, expected] of [
+      ["start", "start"],
+      ["end", "end"],
+    ] as const) {
       const wrapper = await mountSuspended(BannerVideo, {
         props: { ...defaultProps, verticalPosition: prop },
       });
@@ -276,7 +275,10 @@ describe("BannerVideo", () => {
   });
 
   it("reflects horizontalPosition prop in --_justify-self", async () => {
-    for (const [prop, expected] of [["start", "start"], ["end", "end"]] as const) {
+    for (const [prop, expected] of [
+      ["start", "start"],
+      ["end", "end"],
+    ] as const) {
       const wrapper = await mountSuspended(BannerVideo, {
         props: { ...defaultProps, horizontalPosition: prop },
       });
