@@ -5,21 +5,15 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  tag: {
-    type: String,
-    default: "div",
-    validator(value: string) {
-      return ["div", "section", "article", "aside"].includes(value);
-    },
-  },
-  backgroundImage: {
-    type: String,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+interface Props {
+  tag?: "div" | "section" | "article" | "aside";
+  backgroundImage: string;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  tag: "div",
+  styleClassPassthrough: () => [],
 });
 
 const slots = useSlots();
@@ -38,25 +32,25 @@ watch(
 
 <style lang="css">
 @layer components {
-.section-parallax {
-  /* Component styles */
+  .section-parallax {
+    /* Component styles */
 
-  min-height: 100svh;
-  background-image: v-bind(backgroundImage);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
+    min-height: 100svh;
+    background-image: v-bind(backgroundImage);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
 
-  background-color: light-dark(var(--slate-01), var(--slate-08));
-  width: 100%;
+    background-color: light-dark(var(--slate-01), var(--slate-08));
+    width: 100%;
 
-  @media (hover: hover) and (pointer: fine) {
-    @supports (background-attachment: fixed) {
-      background-attachment: fixed;
-      min-height: 120vh;
+    @media (hover: hover) and (pointer: fine) {
+      @supports (background-attachment: fixed) {
+        background-attachment: fixed;
+        min-height: 120vh;
+      }
     }
   }
-}
 }
 </style>

@@ -37,7 +37,10 @@
       "Bash(git -C /Users/simoncornforth/websites/nuxt-components log --oneline c401cea..HEAD)",
       "Bash(git -C /Users/simoncornforth/websites/nuxt-components show 3058d63 --stat)",
       "Bash(git -C /Users/simoncornforth/websites/nuxt-components show 0f99d7a --stat)",
-      "Bash(node -e ':*)"
+      "Bash(node -e ':*)",
+      "Bash(git -C /Users/simoncornforth/websites/nuxt-components diff app/components/parallax/SectionParallax.vue)",
+      "Bash(git -C /Users/simoncornforth/websites/nuxt-components diff HEAD app/components/parallax/SectionParallax.vue)",
+      "Bash(git -C /Users/simoncornforth/websites/nuxt-components diff --cached)"
     ],
     "additionalDirectories": [
       "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms/content-wrappers/content-width",
