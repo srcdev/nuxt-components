@@ -18,39 +18,12 @@
       "Bash(git show:*)",
       "Edit(/.claude/skills/components/**)",
       "Bash(npx nuxi:*)",
-      "Bash(node -e \"const t = require\\('/Users/simoncornforth/websites/nuxt-components/node_modules/pinia-plugin-persistedstate'\\); console.log\\(Object.keys\\(t\\)\\)\")",
       "Bash(npx vue-tsc:*)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components log --oneline -5)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components show 16ac4ef --stat)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components log --oneline -8)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components show 5597a15 --stat)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components show 5597a15 -- \"*.vue\" \"*.css\")",
       "Bash(npm install:*)",
       "Bash(npm run:*)",
       "Bash(git add:*)",
-      "Bash(ls /Users/simoncornforth/websites/nuxt-components/*.md)",
       "Bash(gh release:*)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components status)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components add .claude/skills/components/services-section.md .claude/skills/components/services-section-grid.md .claude/skills/index.md app/components/03.organisms/services/services-grids/ServicesSectionGrid.vue app/components/03.organisms/services/services-section/ServicesSection.vue app/components/03.organisms/services/services-card/stories/ app/components/03.organisms/services/services-card/tests/ app/components/03.organisms/services/services-grids/stories/ app/components/03.organisms/services/services-grids/tests/ app/components/03.organisms/services/services-section/stories/ app/components/03.organisms/services/services-section/tests/)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components commit -m ':*)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components log --oneline v9.1.22..HEAD)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components log --oneline c401cea..HEAD)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components show 3058d63 --stat)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components show 0f99d7a --stat)",
-      "Bash(node -e ':*)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components diff app/components/parallax/SectionParallax.vue)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components diff HEAD app/components/parallax/SectionParallax.vue)",
-      "Bash(git -C /Users/simoncornforth/websites/nuxt-components diff --cached)"
-    ],
-    "additionalDirectories": [
-      "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms/content-wrappers/content-width",
-      "/Users/simoncornforth/websites/nuxt-components/.claude/skills",
-      "/Users/simoncornforth/websites/nuxt-components/app/components/02.molecules/navigation/site-navigation/tests",
-      "/Users/simoncornforth/websites/luxury-locs-by-natasha-nuxt3/app/pages",
-      "/Users/simoncornforth/websites/nuxt-components/app/assets/styles/extends-layer",
-      "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms",
-      "/private/tmp",
-      "/Users/simoncornforth/websites/nuxt-components/app/components/01.atoms/banner-video"
+      "Bash(node -e ':*)"
     ]
   }
 }

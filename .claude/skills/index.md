@@ -68,6 +68,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── input-copy-core.md      — InputCopyCore: readonly copy-to-clipboard input; props, emits, slots, CSS classes, usage
     ├── banner-video.md         — BannerVideo: full-width hero video banner, depth tier system, objectFit/objectPosition, reduced-motion fallback, CSS tokens
     ├── grid-stack.md           — GridStack: CSS Grid z-axis stacking, slot API, z-order rules, sizing, video+overlay and image+text patterns
+    ├── scroll-parallax-section.md — ScrollParallaxSection: JS-driven parallax background section, parallaxStrength guide, height token, reduced-motion pattern
     ├── scroll-reveal-frame.md  — ScrollRevealFrame: generic parallax clipping frame, slot API, image grid pattern, CSS tokens, browser support
     ├── scroll-reveal-image.md  — ScrollRevealImage: single-image parallax reveal, focalX, imgWidth/imgHeight, responsive frame height
     ├── site-navigation.md      — SiteNavigation: responsive nav with auto-collapse, burger menu, decorator indicators, CSS token API
