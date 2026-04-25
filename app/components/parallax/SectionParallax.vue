@@ -45,23 +45,18 @@ watch(
   background-image: v-bind(backgroundImage);
   background-position: center;
   background-repeat: no-repeat;
-  background-size: inherit;
+  background-size: cover;
   position: relative;
 
   background-color: light-dark(var(--slate-01), var(--slate-08));
   width: 100%;
 
-  @supports (background-attachment: fixed) {
-    background-attachment: fixed;
-    background-size: cover;
-    min-height: 120vh;
+  @media (hover: hover) and (pointer: fine) {
+    @supports (background-attachment: fixed) {
+      background-attachment: fixed;
+      min-height: 120vh;
+    }
   }
-
-  /* &.use-fixed-bg {
-    background-attachment: fixed;
-    background-size: cover;
-    min-height: 120vh;
-  } */
 }
 }
 </style>
