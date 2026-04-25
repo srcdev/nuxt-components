@@ -121,9 +121,9 @@ type QrComponentName = "decode" | "capture" | "display";
 const componentName = computed<QrComponentName>(() => route.params.componentName as QrComponentName);
 
 // Component set up
-const DecodeQrCode = defineAsyncComponent(() => import("~/components/qr-code/DecodeQrCode.vue"));
-const CaptureQrCode = defineAsyncComponent(() => import("~/components/qr-code/CaptureQrCode.vue"));
-const DisplayQrCode = defineAsyncComponent(() => import("~/components/qr-code/DisplayQrCode.vue"));
+const DecodeQrCode = defineAsyncComponent(() => import("~/components/02.molecules/qr-code/DecodeQrCode.vue"));
+const CaptureQrCode = defineAsyncComponent(() => import("~/components/02.molecules/qr-code/CaptureQrCode.vue"));
+const DisplayQrCode = defineAsyncComponent(() => import("~/components/01.atoms/qr-code/DisplayQrCode.vue"));
 
 const components: Record<
   QrComponentName,
