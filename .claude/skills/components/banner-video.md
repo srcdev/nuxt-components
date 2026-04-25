@@ -170,6 +170,38 @@ Use an unscoped style block scoped by a page or section wrapper class. No `:deep
 </style>
 ```
 
+## Gotcha: aspect-ratio is overridden by max-height at wide viewports
+
+`max-height` from the depth tier silently wins over `aspect-ratio` once the viewport is wide enough. For example, at `depth="md"` the max-height clamp caps at `56rem` — so changing `aspectRatio` from `"21/9"` to `"1/1"` produces no visible change on a wide desktop because `max-height` is the binding constraint.
+
+**If you need `aspect-ratio` to dominate**, override all depth tokens to a large fixed value on the parent:
+
+```css
+.my-page {
+  --theme-banner-video-max-height-xs: 80rem;
+  --theme-banner-video-max-height-sm: 80rem;
+  --theme-banner-video-max-height-md: 80rem;
+  --theme-banner-video-max-height-lg: 80rem;
+  --theme-banner-video-max-height-xl: 80rem;
+}
+```
+
+Or via inline `:style` on the parent element (useful for dev QA exploration):
+
+```vue
+<div :style="{
+  '--theme-banner-video-max-height-xs': '80rem',
+  '--theme-banner-video-max-height-sm': '80rem',
+  '--theme-banner-video-max-height-md': '80rem',
+  '--theme-banner-video-max-height-lg': '80rem',
+  '--theme-banner-video-max-height-xl': '80rem',
+}">
+  <BannerVideo aspect-ratio="1/1" depth="lg" ... />
+</div>
+```
+
+You must override **all five tier tokens** — overriding only the active depth token is not sufficient because the component resolves the token by name.
+
 ## Notes
 
 - `loading="eager"` and `decoding="async"` are hardcoded on the fallback `NuxtImg` — it is above the fold by definition.

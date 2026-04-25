@@ -59,7 +59,7 @@ const normalisedContent = computed(() =>
     }
     &.axis-vertical {
       display: flex;
-      gap: 0.2rem;
+      gap: var(--hero-text-vertical-gap, 0.4em);
       flex-direction: column;
     }
 

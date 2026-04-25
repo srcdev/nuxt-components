@@ -73,6 +73,7 @@ watch(
     --_parallax-offset: 36rem;
     --_radius: 0px;
 
+    margin: 0; /* reset browser <figure> default margin */
     position: relative;
     height: var(--_frame-height);
     width: 100%;

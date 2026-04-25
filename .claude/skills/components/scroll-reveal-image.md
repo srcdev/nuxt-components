@@ -15,7 +15,7 @@ For arbitrary slot content — a grid of images, video, markup — use `ScrollRe
 ## Props
 
 | Prop | Type | Default | Description |
-|------|------|---------|-------------|
+| ---- | ---- | ------- | ----------- |
 | `src` | `string` | — | Image source path. **Required.** |
 | `alt` | `string` | `""` | Alt text for the image. |
 | `imgWidth` | `number` | `1920` | Intrinsic width of the source image — required for NuxtImg optimisation. |
@@ -95,7 +95,7 @@ For arbitrary slot content — a grid of images, video, markup — use `ScrollRe
 The vertical position of the image is driven by the scroll animation (`translateY`). `focalX` controls the **horizontal** crop so the subject stays centred when the frame is narrower than the image.
 
 | Value | Crops toward |
-|-------|-------------|
+| ----- | ----------- |
 | `"0%"` or `"left"` | Left edge |
 | `"50%"` (default) | Centre |
 | `"75%"` | Right of centre — useful for a subject offset to the right |
@@ -106,13 +106,14 @@ Internally, `focalX` sets `object-position: <focalX> 0%` on the `<img>`. The `Y`
 ## imgWidth / imgHeight
 
 Always provide these to match the intrinsic dimensions of the source file. NuxtImg uses them to:
+
 - Generate the correct `srcset` via the IPX pipeline
 - Avoid the `w=1536` fallback (not in Vercel's allowed widths: 640, 750, 828, 1080, 1200, 1920, 2048, 3840)
 
 Common pairs:
 
 | Image type | imgWidth | imgHeight |
-|-----------|----------|-----------|
+| ---------- | -------- | --------- |
 | Portrait (3:4) | `1280` | `1920` |
 | Landscape / banner (16:9) | `1920` | `1080` |
 | Wide banner (12:5) | `1920` | `800` |
@@ -143,7 +144,7 @@ Override `--_frame-height` in a scoped style block for responsive control:
 Set from props via inline `:style` — override in CSS for responsive or contextual control.
 
 | Property | Default | Set by prop |
-|----------|---------|-------------|
+| -------- | ------- | ----------- |
 | `--_frame-height` | `540px` | `frameHeight` |
 | `--_parallax-offset` | `36rem` | `parallaxOffset` |
 | `--_radius` | `0px` | `radius` |
@@ -155,6 +156,7 @@ See `scroll-reveal-frame.md` for the full guide. For portrait images the default
 
 ## Notes
 
+- The root `<figure>` has `margin: 0` set in the component — browser default `<figure>` margins are neutralised at source.
 - `loading="lazy"` and `decoding="async"` are hardcoded on the `<img>`. If this component is the LCP image, override with `loading="eager"` via a CSS-only approach is not possible — use `ScrollRevealFrame` with a manual `NuxtImg` instead and set `:loading="'eager'"`.
 - Do not place inside a container with `overflow: hidden` or `overflow: clip` — breaks the `view-timeline` scroll detection inherited from `ScrollRevealFrame`.
 - Reduced-motion: animation is disabled and the image falls back to a static crop centred at `object-position: <focalX> 50%`.

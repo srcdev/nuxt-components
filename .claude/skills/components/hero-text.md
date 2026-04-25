@@ -100,8 +100,21 @@ Override via `styleClassPassthrough` or a parent HOC `<style>` block targeting `
 
 Key CSS custom properties:
 
-- `--colour-text-accent` — colour applied to `.accent` spans and the icon
-- `--hero-text-{scale}` — font size per scale value
+| Property | Default | Controls |
+| -------- | ------- | -------- |
+| `--colour-text-accent` | — | Colour of `.accent` spans and the icon |
+| `--hero-text-{scale}` | — | Font size per `fontSize` prop value |
+| `--hero-text-vertical-gap` | `0.4em` | Gap between segments in `axis="vertical"` mode |
+
+**`--hero-text-vertical-gap`** controls `gap` on the flex column in vertical axis. Override at theme or page level:
+
+```css
+.my-page {
+  .hero-text.axis-vertical {
+    --hero-text-vertical-gap: 0.6em;
+  }
+}
+```
 
 ## Local style override scaffold
 
