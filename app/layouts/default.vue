@@ -68,7 +68,6 @@ const responsiveNavLinks = {
         { name: "Banner", path: "/ui/display-banner" },
         { name: "Banner Video", path: "/banner-video" },
         { name: "Section Parallax", path: "/ui/section-parallax" },
-        { name: "Scroll Parallax Section", path: "/ui/scroll-parallax-section" },
         { name: "Animated SVG Text", path: "/ui/animated-svg-text" },
         { name: "Carousel (Basic)", path: "/ui/carousel-basic" },
         { name: "Carousel (Infinite)", path: "/ui/carousel-infinite" },
