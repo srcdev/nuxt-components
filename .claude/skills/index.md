@@ -41,6 +41,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── icon-sets.md                      — icon set packages required by layer components, FOUC prevention, component→package map
 ├── robots-env-aware.md               — @nuxtjs/robots: allow crawling on prod domain only, block on preview/staging via env var
 ├── new-app-scaffold.md               — scaffold a new Nuxt consumer app extending this layer (package.json, nuxt.config, app structure, CLAUDE.md)
+├── qa-panel.md                       — collapsible dev-only panel for toggling component props live on a page (demo pages and consuming apps)
 ├── release-notes.md                  — produce release notes as a fenced markdown block from git log
 ├── composable-canonical-url.md       — useCanonicalUrl: set <link rel="canonical"> from runtimeConfig.public.canonicalHost; layout setup, node types
 ├── composable-whatsapp.md            — useWhatsApp: open pre-filled wa.me link from form payload; runtime config, security, usage

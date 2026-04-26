@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import GridStackComponent from "../GridStack.vue";
-import BannerVideoComponent from "../../banner-video/BannerVideo.vue";
+import BannerVideoComponent from "../../../banner-video/BannerVideo.vue";
 
 interface GridStackArgs {
   tag: "div" | "section" | "article" | "main";

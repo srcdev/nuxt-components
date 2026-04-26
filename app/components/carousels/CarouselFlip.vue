@@ -10,84 +10,77 @@
       Item {{ currentActiveIndex + 1 }} of {{ itemCount }}
     </div>
 
-    <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+    <div
+      ref="carouselContainerRef"
+      tabindex="0"
+      class="item-container"
+      :class="{ 'allow-overflow': allowCarouselOverflow }"
+      role="group"
+      aria-label="Carousel items"
+    >
       <div
-        ref="carouselContainerRef"
-        tabindex="0"
-        class="item-container"
-        :class="{ 'allow-overflow': allowCarouselOverflow }"
-        role="group"
-        aria-label="Carousel items"
+        v-for="(item, index) in carouselDataIds"
+        :key="index"
+        ref="carouselItems"
+        class="item"
+        :class="{ loaded: carouselInitComplete && userHasInteracted }"
+        :data-id="item"
+        :aria-current="currentActiveIndex === index ? 'true' : 'false'"
       >
-        <div
-          v-for="(item, index) in carouselDataIds"
-          :key="index"
-          ref="carouselItems"
-          class="item"
-          :class="{ loaded: carouselInitComplete && userHasInteracted }"
-          :data-id="item"
-          :aria-current="currentActiveIndex === index ? 'true' : 'false'"
-        >
-          <slot :name="item"></slot>
-        </div>
+        <slot :name="item"></slot>
       </div>
-    </LayoutRow>
+    </div>
 
-    <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
-      <div ref="controlsContainerRef" tabindex="0" class="controls-container">
-        <div class="markers-container">
-          <ul class="markers-list">
-            <li v-for="index in itemCount" :key="index" class="markers-item">
-              <button
-                class="btn-marker"
-                :class="[{ active: displayActiveIndex === index - 1 }]"
-                :aria-label="`Jump to item ${index}`"
-                @click.prevent="jumpToFrame(index - 1)"
-              ></button>
-            </li>
-          </ul>
-        </div>
-        <div class="buttons-container">
-          <button type="button" class="btn-action" aria-label="Go to previous item" @click.prevent="actionPrevious()">
-            <Icon name="ic:outline-keyboard-arrow-left" class="arrows-icon" />
-          </button>
-          <button type="button" class="btn-action" aria-label="Go to next item" @click.prevent="actionNext()">
-            <Icon name="ic:outline-keyboard-arrow-right" class="arrows-icon" />
-          </button>
-        </div>
+    <div ref="controlsContainerRef" tabindex="0" class="controls-container">
+      <div class="markers-container">
+        <ul class="markers-list">
+          <li v-for="index in itemCount" :key="index" class="markers-item">
+            <button
+              class="btn-marker"
+              :class="[{ active: displayActiveIndex === index - 1 }]"
+              :aria-label="`Jump to item ${index}`"
+              @click.prevent="jumpToFrame(index - 1)"
+            ></button>
+          </li>
+        </ul>
       </div>
-    </LayoutRow>
+    </div>
+
+    <div class="buttons-container">
+      <button
+        type="button"
+        class="btn-action btn-prev"
+        aria-label="Go to previous item"
+        @click.prevent="actionPrevious()"
+      >
+        <Icon name="ic:outline-keyboard-arrow-left" class="arrows-icon" />
+      </button>
+      <button type="button" class="btn-action btn-next" aria-label="Go to next item" @click.prevent="actionNext()">
+        <Icon name="ic:outline-keyboard-arrow-right" class="arrows-icon" />
+      </button>
+    </div>
   </section>
 </template>
 
 <script setup lang="ts">
 import { useEventListener, useResizeObserver, useSwipe } from "@vueuse/core";
 
-const props = defineProps({
-  carouselDataIds: {
-    type: Array as PropType<string[]>,
-    default: () => [],
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  transitionSpeed: {
-    type: Number,
-    default: 200,
-  },
-  allowCarouselOverflow: {
-    type: Boolean,
-    default: false,
-  },
-  useFlipAnimation: {
-    type: Boolean,
-    default: false,
-  },
-  useSpringEffect: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  carouselDataIds?: string[];
+  styleClassPassthrough?: string | string[];
+  transitionSpeed?: number;
+  allowCarouselOverflow?: boolean;
+  useFlipAnimation?: boolean;
+  useSpringEffect?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  carouselDataIds: () => [],
+  styleClassPassthrough: () => [],
+  transitionSpeed: 200,
+  allowCarouselOverflow: false,
+  useFlipAnimation: false,
+  useSpringEffect: false,
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -417,93 +410,100 @@ onMounted(() => {
 
 <style lang="css">
 @layer components {
-.carousel-flip {
-  --_carousel-item-track-gap: 10px;
+  .carousel-flip {
+    --_carousel-item-track-gap: 10px;
 
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-  opacity: 0;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-rows: 1fr auto;
+    grid-template-areas:
+      "prev  carousel  next"
+      ".     controls  .   ";
+    gap: 10px;
+    opacity: 0;
 
-  &.mounted {
-    opacity: 1;
-  }
-
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
-
-  .item-container {
-    display: flex;
-    gap: var(--_carousel-item-track-gap);
-    overflow-x: hidden;
-    position: relative;
-    isolation: isolate;
-
-    max-inline-size: var(--_carousel-display-max-width);
-    margin-inline: auto;
-
-    &.allow-overflow {
-      overflow-x: initial;
+    &.mounted {
+      opacity: 1;
     }
 
-    .item {
-      display: flex;
-      flex: 0 0 100%;
-      position: relative;
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
+    .item-container {
+      grid-area: carousel;
+      display: flex;
+      gap: var(--_carousel-item-track-gap);
+      overflow-x: hidden;
+      position: relative;
+      isolation: isolate;
+
+      max-inline-size: var(--_carousel-display-max-width);
       margin-inline: auto;
 
-      max-inline-size: calc(
-        var(--_carousel-container-max-inline-size) + var(--_carousel-item-track-gap) -
-          (2 * var(--_carousel-item-edge-preview-width))
-      );
+      &.allow-overflow {
+        overflow-x: initial;
+      }
 
-      translate: calc(
-          v-bind(itemWidthOffsetStr) - var(--_carousel-item-track-gap) + var(--_carousel-item-edge-preview-width)
-        )
-        0;
+      .item {
+        display: flex;
+        flex: 0 0 100%;
+        position: relative;
 
-      &.loaded {
-        transition: transform v-bind(transitionSpeedStr) ease;
+        margin-inline: auto;
+
+        max-inline-size: calc(
+          var(--_carousel-container-max-inline-size) + var(--_carousel-item-track-gap) -
+            (2 * var(--_carousel-item-edge-preview-width))
+        );
+
+        translate: calc(
+            v-bind(itemWidthOffsetStr) - var(--_carousel-item-track-gap) + var(--_carousel-item-edge-preview-width)
+          )
+          0;
+
+        &.loaded {
+          transition: transform v-bind(transitionSpeedStr) ease;
+        }
       }
     }
-  }
 
-  .controls-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    max-inline-size: var(--_carousel-display-max-width);
-    margin-inline: auto;
+    .controls-container {
+      grid-area: controls;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      max-inline-size: var(--_carousel-display-max-width);
+      margin-inline: auto;
 
-    .markers-container {
-      .markers-list {
-        display: flex;
-        flex-direction: row;
-        gap: 10px;
-        list-style-type: none;
-        margin: unset;
-        padding: unset;
+      .markers-container {
+        .markers-list {
+          display: flex;
+          flex-direction: row;
+          gap: 10px;
+          list-style-type: none;
+          margin: unset;
+          padding: unset;
 
-        .markers-item {
-          .btn-marker {
-            border: 1px solid transparent;
-            outline: 1px solid transparent;
-            box-shadow: none;
-            cursor: pointer;
-            transition: background-color v-bind(transitionSpeedStr) linear;
+          .markers-item {
+            .btn-marker {
+              border: 1px solid transparent;
+              outline: 1px solid transparent;
+              box-shadow: none;
+              cursor: pointer;
+              transition: background-color v-bind(transitionSpeedStr) linear;
 
-            &.active {
-              background-color: light-dark(var(--slate-10), var(--slate-00));
+              &.active {
+                background-color: light-dark(var(--slate-10), var(--slate-00));
+              }
             }
           }
         }
@@ -511,26 +511,38 @@ onMounted(() => {
     }
 
     .buttons-container {
+      display: contents;
+    }
+
+    .btn-prev {
+      grid-area: prev;
+      align-self: center;
+      z-index: 1;
+    }
+
+    .btn-next {
+      grid-area: next;
+      align-self: center;
+      z-index: 1;
+    }
+
+    .btn-action {
       display: flex;
       align-items: center;
-      justify-content: end;
-      gap: 20px;
+      justify-content: center;
+      cursor: pointer;
+      height: fit-content;
 
-      .btn-action {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      background-color: white;
+      border: 1px solid light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
+      border-radius: 100vw;
+      padding: 8px;
 
-        cursor: pointer;
-        height: fit-content;
-
-        .arrows-icon {
-          width: 24px;
-          height: 24px;
-        }
+      .arrows-icon {
+        width: 24px;
+        height: 24px;
       }
     }
   }
-}
 }
 </style>

@@ -6,14 +6,87 @@
           <h1 class="page-heading-2">Carousel</h1>
         </LayoutRow>
 
+        <!-- ── QA Panel (dev only) ───────────────────────────────── -->
+        <div v-if="isDev" class="qa-panel">
+          <details class="qa-panel__details">
+            <summary class="qa-panel__summary">
+              <span class="qa-panel__title">QA — CarouselFlip</span>
+              <code class="qa-panel__status">
+                overflow:{{ qaAllowOverflow ? "on" : "off" }} · speed:{{ qaTransitionSpeed }}ms · flip:{{
+                  qaUseFlipAnimation ? "on" : "off"
+                }}
+                · spring:{{ qaUseSpringEffect ? "on" : "off" }}
+              </code>
+            </summary>
+            <div class="qa-panel__body">
+              <div class="qa-panel__group">
+                <span class="qa-panel__label">Allow Overflow</span>
+                <div class="qa-panel__chips">
+                  <button
+                    v-for="opt in [true, false]"
+                    :key="String(opt)"
+                    class="qa-panel__chip"
+                    :class="{ 'is-active': qaAllowOverflow === opt }"
+                    @click="qaAllowOverflow = opt"
+                  >
+                    {{ opt ? "on" : "off" }}
+                  </button>
+                </div>
+              </div>
+              <div class="qa-panel__group">
+                <span class="qa-panel__label">Transition Speed</span>
+                <div class="qa-panel__chips">
+                  <button
+                    v-for="preset in transitionSpeedPresets"
+                    :key="preset"
+                    class="qa-panel__chip"
+                    :class="{ 'is-active': qaTransitionSpeed === preset }"
+                    @click="qaTransitionSpeed = preset"
+                  >
+                    {{ preset }}ms
+                  </button>
+                </div>
+              </div>
+              <div class="qa-panel__group">
+                <span class="qa-panel__label">Flip Animation</span>
+                <div class="qa-panel__chips">
+                  <button
+                    v-for="opt in [true, false]"
+                    :key="String(opt)"
+                    class="qa-panel__chip"
+                    :class="{ 'is-active': qaUseFlipAnimation === opt }"
+                    @click="qaUseFlipAnimation = opt"
+                  >
+                    {{ opt ? "on" : "off" }}
+                  </button>
+                </div>
+              </div>
+              <div class="qa-panel__group">
+                <span class="qa-panel__label">Spring Effect</span>
+                <div class="qa-panel__chips">
+                  <button
+                    v-for="opt in [true, false]"
+                    :key="String(opt)"
+                    class="qa-panel__chip"
+                    :class="{ 'is-active': qaUseSpringEffect === opt }"
+                    @click="qaUseSpringEffect = opt"
+                  >
+                    {{ opt ? "on" : "off" }}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+
         <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <CarouselFlip
             v-if="carouselStatus === 'success'"
             :carousel-data-ids
-            :allow-carousel-overflow="true"
-            :transition-speed="1000"
-            :use-flip-animation="true"
-            :use-spring-effect="false"
+            :allow-carousel-overflow="qaAllowOverflow"
+            :transition-speed="qaTransitionSpeed"
+            :use-flip-animation="qaUseFlipAnimation"
+            :use-spring-effect="qaUseSpringEffect"
             :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
           >
             <template v-for="(item, index) in carouselData?.items" :key="index" #[item.id]>
@@ -31,6 +104,14 @@
 
 <script setup lang="ts">
 import type { ICarouselBasic } from "~/types/components";
+
+// ── QA controls (dev only) ────────────────────────────────────────
+const isDev = import.meta.dev;
+const qaAllowOverflow = ref(true);
+const qaTransitionSpeed = ref(1000);
+const qaUseFlipAnimation = ref(true);
+const qaUseSpringEffect = ref(false);
+const transitionSpeedPresets = [100, 200, 400, 600, 1000, 2000];
 
 definePageMeta({
   layout: false,
@@ -54,6 +135,97 @@ const carouselDataIds = computed(() => {
 </script>
 
 <style lang="css">
+.carousel-flip-page {
+  /* ── QA Panel ──────────────────────────────────────────────────── */
+
+  .qa-panel {
+    background: oklch(15% 0 0);
+    color: white;
+    font-size: 1.3rem;
+  }
+
+  .qa-panel__details {
+    padding: 1rem 2rem;
+  }
+
+  .qa-panel__summary {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    list-style: none;
+    user-select: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  .qa-panel__title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .qa-panel__status {
+    font-family: monospace;
+    font-size: 1.2rem;
+    background: oklch(0% 0 0 / 0.3);
+    padding: 0.2rem 0.8rem;
+    border-radius: 0.4rem;
+    user-select: text;
+    cursor: text;
+  }
+
+  .qa-panel__body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.4rem;
+    padding-block: 1.2rem 0.4rem;
+  }
+
+  .qa-panel__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .qa-panel__label {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.55;
+  }
+
+  .qa-panel__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .qa-panel__chip {
+    font-family: monospace;
+    font-size: 1.2rem;
+    color: white;
+    background: oklch(0% 0 0 / 0.25);
+    border: 1px solid oklch(100% 0 0 / 0.18);
+    padding: 0.3rem 1rem;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+      background: oklch(0% 0 0 / 0.4);
+    }
+
+    &.is-active {
+      background: oklch(55% 0.18 240);
+      border-color: oklch(55% 0.18 240);
+    }
+  }
+}
+
 @property --glow-deg {
   syntax: "<angle>";
   inherits: true;
