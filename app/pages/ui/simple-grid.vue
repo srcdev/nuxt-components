@@ -6,7 +6,7 @@
           <h1 class="page-heading-3">Simple Grid</h1>
           <p class="page-body-normal">Simple grid displaying dummy posts data</p>
 
-          <DisplayGridCore
+          <GridCore
             v-if="status === 'success'"
             :grid-data="postsData?.posts.slice(0, displayCount) ?? ({} as Posts)"
             :style-class-passthrough="['display-posts']"
@@ -18,7 +18,7 @@
                 <div>{{ item.body }}</div>
               </div>
             </template>
-          </DisplayGridCore>
+          </GridCore>
 
           <p v-else class="page-body-normal">&hellip;Loading</p>
         </LayoutRow>

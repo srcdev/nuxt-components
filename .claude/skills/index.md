@@ -74,7 +74,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── social-icons-list.md    — SocialIconsList: data-driven social icon links, ISocialIcon type, logos: icon names, CSS tokens
     ├── display-qr-code.md      — DisplayQrCode: QR code SVG from a string value, colour/size/variant/radius props, currentColor default
     ├── capture-qr-code.md      — CaptureQrCode: live camera scanner, error state, visibility/route/KeepAlive lifecycle, media stream cleanup
-    └── decode-qr-code.md       — DecodeQrCode: file picker + drag-and-drop image decoder, shared results list, CSS override points
+    ├── decode-qr-code.md       — DecodeQrCode: file picker + drag-and-drop image decoder, shared results list, CSS override points
+    └── data-grid.md            — DataGrid: auto-fit responsive grid, $slots iteration, --data-grid-columns/gap tokens, semantic tag + aria
 ```
 
 ## Skill file template

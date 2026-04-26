@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DataGrid > renders correct HTML structure (all props and slots set) 1`] = `
+"<section class="data-grid custom-class" aria-labelledby="v-0-0">
+  <div>Item 1</div>
+  <div>Item 2</div>
+  <div>Item 3</div>
+</section>"
+`;
+
+exports[`DataGrid > renders correct HTML structure (default props) 1`] = `"<div class="data-grid"></div>"`;
