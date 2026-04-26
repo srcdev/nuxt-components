@@ -3,6 +3,7 @@
     ref="carouselWrapperRef"
     class="carousel-flip"
     :class="[elementClasses]"
+    :data-button-layout="buttonLayout"
     role="region"
     aria-label="Image carousel"
   >
@@ -72,6 +73,7 @@ interface Props {
   allowCarouselOverflow?: boolean;
   useFlipAnimation?: boolean;
   useSpringEffect?: boolean;
+  buttonLayout?: "sides" | "controls-flanking" | "controls-grouped-right" | "overlay";
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -81,6 +83,7 @@ const props = withDefaults(defineProps<Props>(), {
   allowCarouselOverflow: false,
   useFlipAnimation: false,
   useSpringEffect: false,
+  buttonLayout: "sides",
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -541,6 +544,46 @@ onMounted(() => {
       .arrows-icon {
         width: 24px;
         height: 24px;
+      }
+    }
+
+    /* ── controls-flanking: buttons flank the controls row ─────── */
+    &[data-button-layout="controls-flanking"] {
+      .btn-prev {
+        grid-area: unset;
+        grid-column: 1;
+        grid-row: 2;
+      }
+
+      .btn-next {
+        grid-area: unset;
+        grid-column: 3;
+        grid-row: 2;
+      }
+    }
+
+    /* ── controls-grouped-right: markers + both buttons right ───── */
+    &[data-button-layout="controls-grouped-right"] {
+      .controls-container {
+        grid-column: 1 / 3;
+      }
+
+      .buttons-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        grid-column: 3;
+        grid-row: 2;
+      }
+    }
+
+    /* ── overlay: controls float at the bottom edge of the frame ── */
+    &[data-button-layout="overlay"] {
+      .controls-container {
+        grid-area: carousel;
+        align-self: end;
+        z-index: 1;
+        padding-block-end: 1rem;
       }
     }
   }

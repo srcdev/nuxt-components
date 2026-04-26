@@ -76,7 +76,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── display-qr-code.md      — DisplayQrCode: QR code SVG from a string value, colour/size/variant/radius props, currentColor default
     ├── capture-qr-code.md      — CaptureQrCode: live camera scanner, error state, visibility/route/KeepAlive lifecycle, media stream cleanup
     ├── decode-qr-code.md       — DecodeQrCode: file picker + drag-and-drop image decoder, shared results list, CSS override points
-    └── data-grid.md            — DataGrid: auto-fit responsive grid, $slots iteration, --data-grid-columns/gap tokens, semantic tag + aria
+    ├── data-grid.md            — DataGrid: auto-fit responsive grid, $slots iteration, --data-grid-columns/gap tokens, semantic tag + aria
+    └── carousel-flip.md        — CarouselFlip: FLIP-animated carousel, carouselDataIds slot API, buttonLayout variants (sides/controls-flanking/controls-grouped-right/overlay), CSS tokens
 ```
 
 ## Skill file template
