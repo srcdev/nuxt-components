@@ -48,7 +48,7 @@ A common pattern is to derive both `carouselDataIds` and the slot loop from the 
 
 Set via `:button-layout`. The component renders on a CSS grid with named areas:
 
-```
+```text
 "prev  carousel  next"   ← row 1 (1fr)
 ".     controls  .   "   ← row 2 (auto)
 ```
@@ -57,7 +57,7 @@ Set via `:button-layout`. The component renders on a CSS grid with named areas:
 |---|---|
 | `"sides"` | Default. Prev/next buttons occupy the `prev`/`next` areas in row 1, vertically centred on the carousel frame |
 | `"controls-flanking"` | Buttons move to row 2 — prev left of markers, next right of markers |
-| `"controls-grouped-right"` | Markers span cols 1–2; buttons grouped together in col 3 of row 2 |
+| `"controls-grouped-right"` | Single-column grid; buttons share the `controls` grid area with `justify-self: end`, markers remain centred |
 | `"overlay"` | Markers bar overlaid at the bottom edge of the carousel frame (row 2 collapses); buttons remain on sides |
 
 The variant is applied via a `data-button-layout` attribute on the root, so consumers can also switch layouts with CSS alone:
@@ -88,7 +88,7 @@ Override these on `.carousel-flip` (or a wrapper) to control sizing:
 
 ## HTML structure
 
-```
+```text
 section.carousel-flip               ← grid root, data-button-layout="..."
   div.item-container                ← grid-area: carousel — flex row of items
     div.item[data-id]               ← one per carouselDataIds entry

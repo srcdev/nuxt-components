@@ -93,25 +93,23 @@
           </details>
         </div>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
-          <CarouselFlip
-            v-if="carouselStatus === 'success'"
-            :carousel-data-ids
-            :allow-carousel-overflow="qaAllowOverflow"
-            :transition-speed="qaTransitionSpeed"
-            :use-flip-animation="qaUseFlipAnimation"
-            :use-spring-effect="qaUseSpringEffect"
-            :button-layout="qaButtonLayout"
-            :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
-          >
-            <template v-for="(item, index) in carouselData?.items" :key="index" #[item.id]>
-              <div class="custom-carousel-item">
-                <h3>{{ index + 1 }}</h3>
-                <p>{{ item.alt }}</p>
-              </div>
-            </template>
-          </CarouselFlip>
-        </LayoutRow>
+        <CarouselFlip
+          v-if="carouselStatus === 'success'"
+          :carousel-data-ids
+          :allow-carousel-overflow="qaAllowOverflow"
+          :transition-speed="qaTransitionSpeed"
+          :use-flip-animation="qaUseFlipAnimation"
+          :use-spring-effect="qaUseSpringEffect"
+          :button-layout="qaButtonLayout"
+          :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
+        >
+          <template v-for="(item, index) in carouselData?.items" :key="index" #[item.id]>
+            <div class="custom-carousel-item">
+              <h3>{{ index + 1 }}</h3>
+              <p>{{ item.alt }}</p>
+            </div>
+          </template>
+        </CarouselFlip>
       </template>
     </NuxtLayout>
   </div>

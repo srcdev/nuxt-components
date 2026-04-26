@@ -562,18 +562,19 @@ onMounted(() => {
       }
     }
 
-    /* ── controls-grouped-right: markers + both buttons right ───── */
+    /* ── controls-grouped-right: markers centred, buttons end ────── */
     &[data-button-layout="controls-grouped-right"] {
-      .controls-container {
-        grid-column: 1 / 3;
-      }
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        "carousel"
+        "controls";
 
       .buttons-container {
         display: flex;
         align-items: center;
         gap: 10px;
-        grid-column: 3;
-        grid-row: 2;
+        grid-area: controls;
+        justify-self: end;
       }
     }
 
