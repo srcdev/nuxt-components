@@ -232,6 +232,44 @@ describe("CarouselFlip", () => {
       expect(component).toBeDefined();
       // Spring effect is applied during transitions
     });
+
+    it("shows controls container by default", async () => {
+      await createWrapper();
+
+      expect(wrapper.find(".controls-container").exists()).toBe(true);
+      expect(wrapper.findAll(".btn-marker").length).toBe(6);
+    });
+
+    it("hides controls container when showControls is false", async () => {
+      await createWrapper({ showControls: false });
+
+      expect(wrapper.find(".controls-container").exists()).toBe(false);
+      expect(wrapper.findAll(".btn-marker").length).toBe(0);
+    });
+
+    it("still renders navigation buttons when showControls is false", async () => {
+      await createWrapper({ showControls: false });
+
+      expect(wrapper.find('[aria-label="Go to previous item"]').exists()).toBe(true);
+      expect(wrapper.find('[aria-label="Go to next item"]').exists()).toBe(true);
+    });
+
+    it("navigation still works when showControls is false", async () => {
+      await createWrapper({ showControls: false });
+      await nextTick();
+
+      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      await nextButton.trigger("click");
+      await nextTick();
+
+      expect(component.currentActiveIndex).toBe(1);
+    });
+
+    it("sets data-button-layout attribute from buttonLayout prop", async () => {
+      await createWrapper({ buttonLayout: "overlay" });
+
+      expect(wrapper.attributes("data-button-layout")).toBe("overlay");
+    });
   });
 
   describe("Initial Setup", () => {

@@ -15,7 +15,9 @@
                 overflow:{{ qaAllowOverflow ? "on" : "off" }} · speed:{{ qaTransitionSpeed }}ms · flip:{{
                   qaUseFlipAnimation ? "on" : "off"
                 }}
-                · spring:{{ qaUseSpringEffect ? "on" : "off" }} · {{ qaButtonLayout }}
+                · spring:{{ qaUseSpringEffect ? "on" : "off" }} · {{ qaButtonLayout }} · controls:{{
+                  qaShowControls ? "on" : "off"
+                }}
               </code>
             </summary>
             <div class="qa-panel__body">
@@ -89,6 +91,20 @@
                   </button>
                 </div>
               </div>
+              <div class="qa-panel__group">
+                <span class="qa-panel__label">Show Controls</span>
+                <div class="qa-panel__chips">
+                  <button
+                    v-for="opt in [true, false]"
+                    :key="String(opt)"
+                    class="qa-panel__chip"
+                    :class="{ 'is-active': qaShowControls === opt }"
+                    @click="qaShowControls = opt"
+                  >
+                    {{ opt ? "on" : "off" }}
+                  </button>
+                </div>
+              </div>
             </div>
           </details>
         </div>
@@ -101,6 +117,7 @@
           :use-flip-animation="qaUseFlipAnimation"
           :use-spring-effect="qaUseSpringEffect"
           :button-layout="qaButtonLayout"
+          :show-controls="qaShowControls"
           :style-class-passthrough="['carousel-flip-demo', 'mbe-20']"
         >
           <template v-for="(item, index) in carouselData?.items" :key="index" #[item.id]>
@@ -125,6 +142,7 @@ const qaTransitionSpeed = ref(1000);
 const qaUseFlipAnimation = ref(true);
 const qaUseSpringEffect = ref(false);
 const qaButtonLayout = ref<"sides" | "controls-flanking" | "controls-grouped-right" | "overlay">("sides");
+const qaShowControls = ref(true);
 const transitionSpeedPresets = [100, 200, 400, 600, 1000, 2000];
 const buttonLayoutPresets = ["sides", "controls-flanking", "controls-grouped-right", "overlay"] as const;
 

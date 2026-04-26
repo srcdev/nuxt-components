@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <div ref="controlsContainerRef" tabindex="0" class="controls-container">
+    <div v-if="showControls" ref="controlsContainerRef" tabindex="0" class="controls-container">
       <div class="markers-container">
         <ul class="markers-list">
           <li v-for="index in itemCount" :key="index" class="markers-item">
@@ -74,6 +74,7 @@ interface Props {
   useFlipAnimation?: boolean;
   useSpringEffect?: boolean;
   buttonLayout?: "sides" | "controls-flanking" | "controls-grouped-right" | "overlay";
+  showControls?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -84,6 +85,7 @@ const props = withDefaults(defineProps<Props>(), {
   useFlipAnimation: false,
   useSpringEffect: false,
   buttonLayout: "sides",
+  showControls: true,
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);

@@ -16,6 +16,8 @@ interface CarouselFlipStoryArgs {
   transitionSpeed: number;
   useFlipAnimation: boolean;
   useSpringEffect: boolean;
+  buttonLayout: "sides" | "controls-flanking" | "controls-grouped-right" | "overlay";
+  showControls: boolean;
   styleClassPassthrough: string[];
   // Mock data for stories
   carouselData: CarouselItem[];
@@ -105,6 +107,21 @@ export default {
         category: "Animation",
       },
     },
+    buttonLayout: {
+      control: { type: "select" },
+      options: ["sides", "controls-flanking", "controls-grouped-right", "overlay"],
+      description: "Placement of prev/next buttons relative to the carousel and controls bar",
+      table: {
+        category: "Layout",
+      },
+    },
+    showControls: {
+      control: { type: "boolean" },
+      description: "Show or hide the markers/controls bar",
+      table: {
+        category: "Layout",
+      },
+    },
     styleClassPassthrough: {
       control: { type: "object" },
       description: "Additional CSS classes to pass through",
@@ -127,6 +144,8 @@ export default {
     transitionSpeed: 1000,
     useFlipAnimation: true,
     useSpringEffect: false,
+    buttonLayout: "sides",
+    showControls: true,
     styleClassPassthrough: ["carousel-flip-demo"],
     carouselData: sampleCarouselItems,
   },
@@ -289,6 +308,8 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         :transition-speed="args.transitionSpeed"
         :use-flip-animation="args.useFlipAnimation"
         :use-spring-effect="args.useSpringEffect"
+        :button-layout="args.buttonLayout"
+        :show-controls="args.showControls"
         :style-class-passthrough="args.styleClassPassthrough"
       >
         <template v-for="(item, index) in filteredCarouselData" #[item.id] :key="index">
@@ -348,6 +369,16 @@ NoOverflow.args = {
   useSpringEffect: false,
   allowCarouselOverflow: false,
   styleClassPassthrough: ["carousel-flip-demo", "no-overflow"],
+};
+
+export const NoControls = Template.bind({});
+NoControls.args = {
+  carouselDataIds: [1, 2, 3, 4, 5],
+  transitionSpeed: 1000,
+  useFlipAnimation: true,
+  useSpringEffect: false,
+  allowCarouselOverflow: true,
+  showControls: false,
 };
 
 export const ManyItems = Template.bind({});
@@ -452,6 +483,8 @@ const RichContentTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         :transition-speed="args.transitionSpeed"
         :use-flip-animation="args.useFlipAnimation"
         :use-spring-effect="args.useSpringEffect"
+        :button-layout="args.buttonLayout"
+        :show-controls="args.showControls"
         :style-class-passthrough="args.styleClassPassthrough"
       >
         <template v-for="(item, index) in filteredCarouselData" #[item.id] :key="index">
@@ -592,6 +625,8 @@ const AnimationShowcaseTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         :transition-speed="args.transitionSpeed"
         :use-flip-animation="args.useFlipAnimation"
         :use-spring-effect="args.useSpringEffect"
+        :button-layout="args.buttonLayout"
+        :show-controls="args.showControls"
         :style-class-passthrough="args.styleClassPassthrough"
       >
         <template v-for="(item, index) in filteredCarouselData" #[item.id] :key="index">
