@@ -2,12 +2,6 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width">
-          <div class="samaritan-stage">
-            <SamaritanPrompt :messages="messages" :effect="qaEffect" />
-          </div>
-        </LayoutRow>
-
         <div v-if="isDev" class="qa-panel">
           <details class="qa-panel__details">
             <summary class="qa-panel__summary">
@@ -24,12 +18,20 @@
                     class="qa-panel__chip"
                     :class="{ 'is-active': qaEffect === opt }"
                     @click="qaEffect = opt"
-                  >{{ opt }}</button>
+                  >
+                    {{ opt }}
+                  </button>
                 </div>
               </div>
             </div>
           </details>
         </div>
+
+        <LayoutRow tag="div" variant="full-width">
+          <div class="samaritan-stage">
+            <SamaritanPrompt :messages="messages" :effect="qaEffect" />
+          </div>
+        </LayoutRow>
       </template>
     </NuxtLayout>
   </div>
@@ -95,7 +97,9 @@ const qaEffect = ref<"typewriter" | "word-pulse">("typewriter");
     list-style: none;
     user-select: none;
 
-    &::-webkit-details-marker { display: none; }
+    &::-webkit-details-marker {
+      display: none;
+    }
   }
 
   .qa-panel__title {
@@ -152,7 +156,9 @@ const qaEffect = ref<"typewriter" | "word-pulse">("typewriter");
     cursor: pointer;
     transition: background 0.15s;
 
-    &:hover { background: oklch(0% 0 0 / 0.4); }
+    &:hover {
+      background: oklch(0% 0 0 / 0.4);
+    }
 
     &.is-active {
       background: oklch(55% 0.18 240);

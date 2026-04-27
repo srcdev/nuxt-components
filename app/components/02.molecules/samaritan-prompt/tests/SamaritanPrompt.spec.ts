@@ -1,17 +1,10 @@
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
 import SamaritanPrompt from "../SamaritanPrompt.vue";
 
 const messages: string[] = ["Hello, world.", "Surveillance active.", "Threat detected."];
 const [firstMessage, secondMessage] = messages as [string, string, string];
-
-beforeEach(() => {
-  vi.stubGlobal(
-    "ResizeObserver",
-    vi.fn(() => ({ observe: vi.fn(), unobserve: vi.fn(), disconnect: vi.fn() }))
-  );
-});
 
 // ─── Typewriter ────────────────────────────────────────────────────────────
 

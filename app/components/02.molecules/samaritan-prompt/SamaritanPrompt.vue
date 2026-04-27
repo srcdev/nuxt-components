@@ -2,10 +2,11 @@
   <div :class="['samaritan-prompt', elementClasses]">
     <div class="samaritan-prompt__stage">
       <span
-        ref="textRef"
         class="samaritan-prompt__text"
         :style="effect === 'word-pulse' ? { opacity: textOpacity } : undefined"
-      >{{ displayText }}</span>
+      >
+        {{ displayText }}
+      </span>
     </div>
     <div class="samaritan-prompt__underline"></div>
     <span class="samaritan-prompt__cursor" aria-hidden="true">▲</span>
@@ -38,25 +39,43 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const textRef = ref<HTMLElement | null>(null);
 const displayText = ref("");
-const textWidth = ref(0);
 const textOpacity = ref(1);
-
-const underlineWidthCss = computed(() => `${textWidth.value}px`);
 const fadeDurationCss = computed(() => `${props.fadeDuration}ms`);
 
-let resizeObserver: ResizeObserver | null = null;
 let isActive = true;
 let timeoutId: ReturnType<typeof setTimeout> | null = null;
+let rejectCurrent: (() => void) | null = null;
 
 const wait = (ms: number): Promise<void> =>
   new Promise((resolve, reject) => {
     if (!isActive) { reject(); return; }
+    rejectCurrent = reject;
     timeoutId = setTimeout(() => {
+      rejectCurrent = null;
       if (isActive) resolve(); else reject();
     }, ms);
   });
+
+const stopCurrent = () => {
+  isActive = false;
+  if (timeoutId !== null) { clearTimeout(timeoutId); timeoutId = null; }
+  rejectCurrent?.();
+  rejectCurrent = null;
+};
+
+const startEffect = () => {
+  isActive = true;
+  displayText.value = "";
+  textOpacity.value = 1;
+  phase.value = "typing";
+  messageIndex.value = 0;
+  if (props.effect === "typewriter") {
+    schedule(typeTick, props.typeSpeed);
+  } else {
+    runWordPulse();
+  }
+};
 
 // --- Typewriter ---
 type Phase = "typing" | "holding" | "deleting" | "pausing";
@@ -68,6 +87,7 @@ const schedule = (fn: () => void, ms: number) => {
 };
 
 const typeTick = () => {
+  if (!isActive) return;
   const message = props.messages[messageIndex.value];
   if (!message) return;
 
@@ -115,8 +135,6 @@ const runWordPulse = async () => {
         displayText.value = message;
         textOpacity.value = 0;
         await nextTick();
-
-        // Allow ResizeObserver + underline transition to start before revealing text
         await wait(120);
 
         textOpacity.value = 1;
@@ -126,7 +144,6 @@ const runWordPulse = async () => {
         await wait(props.fadeDuration);
       }
 
-      // Collapse underline between cycles
       displayText.value = "";
       await nextTick();
       await wait(props.pauseDuration);
@@ -136,27 +153,14 @@ const runWordPulse = async () => {
   }
 };
 
-onMounted(() => {
-  if (textRef.value) {
-    resizeObserver = new ResizeObserver((entries) => {
-      const entry = entries[0];
-      if (entry) textWidth.value = entry.contentRect.width;
-    });
-    resizeObserver.observe(textRef.value);
-  }
-
-  if (props.effect === "typewriter") {
-    schedule(typeTick, props.typeSpeed);
-  } else {
-    runWordPulse();
-  }
+watch(() => props.effect, () => {
+  stopCurrent();
+  startEffect();
 });
 
-onUnmounted(() => {
-  isActive = false;
-  resizeObserver?.disconnect();
-  if (timeoutId !== null) clearTimeout(timeoutId);
-});
+onMounted(startEffect);
+
+onUnmounted(stopCurrent);
 </script>
 
 <style scoped>
@@ -190,11 +194,9 @@ onUnmounted(() => {
 }
 
 .samaritan-prompt__underline {
-  width: v-bind(underlineWidthCss);
+  width: 100%;
   height: 0.15rem;
   background: var(--_color-underline);
-  transition: width 0.15s ease;
-  min-width: 0;
 }
 
 .samaritan-prompt__cursor {
