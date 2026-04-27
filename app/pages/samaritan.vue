@@ -150,7 +150,7 @@
 
         <LayoutRow tag="div" variant="full-width">
           <div class="samaritan-stage samaritan-stage--mixed">
-            <SamaritanPromptMixed :message-configs="mixedMessages" />
+            <SamaritanPromptMixed :message-configs="mixedMessages" :hide-cursor-in-cycle="false" />
           </div>
         </LayoutRow>
 
@@ -186,22 +186,25 @@ useHead({
 });
 
 const messages = [
-  "Surveillance Active",
-  "Threat Assessment Complete",
-  "All Persons of Interest Identified",
-  "Monitoring All Communication Channels",
-  "Samaritan Is Watching",
+  "What do I do?",
+  "Bring your imaginaton to life",
+  "Craft beautiful interfaces",
+  "Keep it simple",
+  "My work is?",
+  "Performance tested",
+  "Penetration tested",
+  "Accessible",
 ];
 
 const mixedMessages = [
-  { text: "What srcdev does?", effect: "typewriter" as const, holdDuration: 4000 },
-  { text: "Brings your imaginaton to life", effect: "word-pulse" as const, holdDuration: 2000 },
-  { text: "Craft beautiful interfaces", effect: "word-pulse" as const, wordDuration: 2000 },
-  { text: "Keeps things simple", effect: "word-pulse" as const, wordDuration: 2000 },
-  { text: "My work is?", effect: "typewriter" as const, wordDuration: 2500, fadeDuration: 4000 },
-  { text: "Performance tested", effect: "word-pulse" as const, holdDuration: 2000 },
-  { text: "Penetration tested", effect: "word-pulse" as const, wordDuration: 2000 },
-  { text: "Accessible", effect: "word-pulse" as const, wordDuration: 2000 },
+  { text: "What do I do?", effect: "typewriter" as const, holdDuration: 7000, pauseDuration: 3000 },
+  { text: "Bring your imaginaton to life", effect: "word-pulse" as const, wordDuration: 7000, pauseDuration: 3000 },
+  { text: "Craft beautiful interfaces", effect: "word-pulse" as const, wordDuration: 7000, pauseDuration: 3000 },
+  { text: "Keep it simple", effect: "word-pulse" as const, wordDuration: 7000, pauseDuration: 3000 },
+  { text: "My work is?", effect: "typewriter" as const, holdDuration: 7000, pauseDuration: 3000 },
+  { text: "Performance tested", effect: "word-pulse" as const, wordDuration: 7000, pauseDuration: 3000 },
+  { text: "Penetration tested", effect: "word-pulse" as const, wordDuration: 7000, pauseDuration: 3000 },
+  { text: "Accessible", effect: "word-pulse" as const, wordDuration: 7000, pauseDuration: 3000 },
 ];
 
 // ── QA controls (dev only) ────────────────────────────────────────

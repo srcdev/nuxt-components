@@ -32,6 +32,7 @@ interface Props {
   pauseDuration?: number;
   wordDuration?: number;
   fadeDuration?: number;
+  introDelay?: number;
   hideCursorInCycle?: boolean;
   styleClassPassthrough?: string | string[];
 }
@@ -40,10 +41,11 @@ const props = withDefaults(defineProps<Props>(), {
   effect: "typewriter",
   typeSpeed: 80,
   deleteSpeed: 40,
-  holdDuration: 2000,
-  pauseDuration: 5000,
+  holdDuration: 7000,
+  pauseDuration: 1000,
   wordDuration: 1200,
   fadeDuration: 400,
+  introDelay: 2000,
   hideCursorInCycle: true,
   styleClassPassthrough: () => [],
 });
@@ -126,6 +128,10 @@ const runWordPulse = async (config: ResolvedConfig) => {
 const runLoop = async () => {
   try {
     while (true) {
+      if (props.introDelay > 0) await wait(props.introDelay);
+
+      // if (props.hideCursorInCycle) cursorVisible.value = false;
+
       for (const msg of props.messageConfigs) {
         const config = resolveConfig(msg);
         if (config.effect === "typewriter") {
@@ -134,6 +140,8 @@ const runLoop = async () => {
           await runWordPulse(config);
         }
       }
+
+      // if (props.hideCursorInCycle) cursorVisible.value = true;
     }
   } catch {
     // component unmounted — exit cleanly
