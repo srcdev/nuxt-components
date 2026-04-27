@@ -224,8 +224,8 @@ const qaHideCursorInCycle = ref(true);
 
 <style lang="css">
 .samaritan-page {
-  background: #0a0a0a;
-
+  --samaritan-color-text: light-dark(black, white);
+  --samaritan-color-underline: light-dark(black, white);
   --samaritan-font-size: clamp(1.4rem, 2.5vw, 2.8rem);
   --samaritan-letter-spacing: 0.14em;
 
