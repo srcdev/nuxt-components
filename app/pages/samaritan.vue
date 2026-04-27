@@ -6,9 +6,15 @@
           <details class="qa-panel__details">
             <summary class="qa-panel__summary">
               <span class="qa-panel__title">QA — SamaritanPrompt</span>
-              <code class="qa-panel__status">effect:{{ qaEffect }}</code>
+              <code v-if="qaEffect === 'typewriter'" class="qa-panel__status">
+                effect:typewriter · type:{{ qaTypeSpeed }}ms · hold:{{ qaHoldDuration }}ms · del:{{ qaDeleteSpeed }}ms · pause:{{ qaPauseDuration }}ms
+              </code>
+              <code v-else class="qa-panel__status">
+                effect:word-pulse · fade:{{ qaFadeDuration }}ms · visible:{{ qaWordDuration }}ms · pause:{{ qaPauseDuration }}ms
+              </code>
             </summary>
             <div class="qa-panel__body">
+
               <div class="qa-panel__group">
                 <span class="qa-panel__label">Effect</span>
                 <div class="qa-panel__chips">
@@ -18,18 +24,111 @@
                     class="qa-panel__chip"
                     :class="{ 'is-active': qaEffect === opt }"
                     @click="qaEffect = opt"
-                  >
-                    {{ opt }}
-                  </button>
+                  >{{ opt }}</button>
                 </div>
               </div>
+
+              <!-- Typewriter controls -->
+              <template v-if="qaEffect === 'typewriter'">
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Type speed (ms/char)</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="n in [40, 80, 120, 200]"
+                      :key="n"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaTypeSpeed === n }"
+                      @click="qaTypeSpeed = n"
+                    >{{ n }}</button>
+                  </div>
+                </div>
+
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Hold duration (ms)</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="n in [500, 1000, 2000, 4000]"
+                      :key="n"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaHoldDuration === n }"
+                      @click="qaHoldDuration = n"
+                    >{{ n }}</button>
+                  </div>
+                </div>
+
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Delete speed (ms/char)</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="n in [20, 40, 80]"
+                      :key="n"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaDeleteSpeed === n }"
+                      @click="qaDeleteSpeed = n"
+                    >{{ n }}</button>
+                  </div>
+                </div>
+              </template>
+
+              <!-- Word-pulse controls -->
+              <template v-else>
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Fade duration (ms)</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="n in [200, 400, 600, 1000]"
+                      :key="n"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaFadeDuration === n }"
+                      @click="qaFadeDuration = n"
+                    >{{ n }}</button>
+                  </div>
+                </div>
+
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Visible duration (ms)</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="n in [800, 1200, 2000, 3000]"
+                      :key="n"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaWordDuration === n }"
+                      @click="qaWordDuration = n"
+                    >{{ n }}</button>
+                  </div>
+                </div>
+              </template>
+
+              <!-- Shared: pause before restart -->
+              <div class="qa-panel__group">
+                <span class="qa-panel__label">Pause before restart (ms)</span>
+                <div class="qa-panel__chips">
+                  <button
+                    v-for="n in [300, 500, 1000, 2000]"
+                    :key="n"
+                    class="qa-panel__chip"
+                    :class="{ 'is-active': qaPauseDuration === n }"
+                    @click="qaPauseDuration = n"
+                  >{{ n }}</button>
+                </div>
+              </div>
+
             </div>
           </details>
         </div>
 
         <LayoutRow tag="div" variant="full-width">
           <div class="samaritan-stage">
-            <SamaritanPrompt :messages="messages" :effect="qaEffect" />
+            <SamaritanPrompt
+              :messages="messages"
+              :effect="qaEffect"
+              :type-speed="qaTypeSpeed"
+              :delete-speed="qaDeleteSpeed"
+              :hold-duration="qaHoldDuration"
+              :pause-duration="qaPauseDuration"
+              :word-duration="qaWordDuration"
+              :fade-duration="qaFadeDuration"
+            />
           </div>
         </LayoutRow>
       </template>
@@ -61,6 +160,13 @@ const isDev = import.meta.dev;
 
 const effectOptions = ["typewriter", "word-pulse"] as const;
 const qaEffect = ref<"typewriter" | "word-pulse">("typewriter");
+
+const qaTypeSpeed = ref(80);
+const qaDeleteSpeed = ref(40);
+const qaHoldDuration = ref(2000);
+const qaPauseDuration = ref(500);
+const qaWordDuration = ref(1200);
+const qaFadeDuration = ref(400);
 </script>
 
 <style lang="css">

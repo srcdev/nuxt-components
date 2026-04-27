@@ -1,9 +1,6 @@
 <template>
   <div :class="['samaritan-prompt', elementClasses]">
-    <div
-      class="samaritan-prompt__content"
-      :style="effect === 'word-pulse' ? { opacity: textOpacity } : undefined"
-    >
+    <div class="samaritan-prompt__content" :style="effect === 'word-pulse' ? { opacity: textOpacity } : undefined">
       <div class="samaritan-prompt__stage">
         <span class="samaritan-prompt__text">{{ displayText }}</span>
       </div>
@@ -49,17 +46,24 @@ let rejectCurrent: (() => void) | null = null;
 
 const wait = (ms: number): Promise<void> =>
   new Promise((resolve, reject) => {
-    if (!isActive) { reject(); return; }
+    if (!isActive) {
+      reject();
+      return;
+    }
     rejectCurrent = reject;
     timeoutId = setTimeout(() => {
       rejectCurrent = null;
-      if (isActive) resolve(); else reject();
+      if (isActive) resolve();
+      else reject();
     }, ms);
   });
 
 const stopCurrent = () => {
   isActive = false;
-  if (timeoutId !== null) { clearTimeout(timeoutId); timeoutId = null; }
+  if (timeoutId !== null) {
+    clearTimeout(timeoutId);
+    timeoutId = null;
+  }
   rejectCurrent?.();
   rejectCurrent = null;
 };
@@ -129,11 +133,17 @@ const typeTick = () => {
 const runWordPulse = async () => {
   try {
     while (isActive) {
+      // Underline stays visible during the pre-cycle pause
+      await wait(props.pauseDuration);
+
+      // Fade out the underline before the first word appears
+      textOpacity.value = 0;
+      await wait(props.fadeDuration);
+
       for (const message of props.messages) {
         if (!isActive) return;
 
         displayText.value = message;
-        textOpacity.value = 0;
         await nextTick();
         await wait(120);
 
@@ -144,19 +154,23 @@ const runWordPulse = async () => {
         await wait(props.fadeDuration);
       }
 
+      // Reset between cycles — underline becomes visible again for next pause
       displayText.value = "";
+      textOpacity.value = 1;
       await nextTick();
-      await wait(props.pauseDuration);
     }
   } catch {
     // component unmounted — exit cleanly
   }
 };
 
-watch(() => props.effect, () => {
-  stopCurrent();
-  startEffect();
-});
+watch(
+  () => props.effect,
+  () => {
+    stopCurrent();
+    startEffect();
+  }
+);
 
 onMounted(startEffect);
 
@@ -179,39 +193,40 @@ onUnmounted(stopCurrent);
   font-family: var(--_font-family);
   font-size: var(--_font-size);
   letter-spacing: var(--_letter-spacing);
-}
 
-.samaritan-prompt__content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  row-gap: 0.6rem;
-  width: 100%;
-  transition: opacity v-bind(fadeDurationCss) ease;
-}
+  .samaritan-prompt__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    row-gap: 0.6rem;
+    width: 100%;
+    transition: opacity v-bind(fadeDurationCss) ease;
 
-.samaritan-prompt__stage {
-  display: flex;
-  justify-content: center;
-  min-height: 1.2em;
-}
+    .samaritan-prompt__stage {
+      display: flex;
+      justify-content: center;
+      min-height: 1.2em;
 
-.samaritan-prompt__text {
-  color: var(--_color-text);
-  white-space: nowrap;
-}
+      .samaritan-prompt__text {
+        color: var(--_color-text);
+        white-space: nowrap;
+      }
+    }
 
-.samaritan-prompt__underline {
-  width: 100%;
-  height: 0.15rem;
-  background: var(--_color-underline);
-}
+    .samaritan-prompt__underline {
+      width: 100%;
+      min-width: 4ch;
+      height: 0.15rem;
+      background: var(--_color-underline);
+    }
+  }
 
-.samaritan-prompt__cursor {
-  color: var(--_color-cursor);
-  font-size: 1.2em;
-  line-height: 1;
-  animation: samaritan-pulse 2.5s ease-in-out infinite;
+  .samaritan-prompt__cursor {
+    color: var(--_color-cursor);
+    font-size: 1.2em;
+    line-height: 1;
+    animation: samaritan-pulse 2.5s ease-in-out infinite;
+  }
 }
 
 @keyframes samaritan-pulse {

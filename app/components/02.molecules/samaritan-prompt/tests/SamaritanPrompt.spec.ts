@@ -126,50 +126,79 @@ describe("SamaritanPrompt — word-pulse", () => {
     expect(wrapper.vm).toBeTruthy();
   });
 
-  it("sets the first message immediately on mount", async () => {
+  it("starts with empty display text and content visible", async () => {
     const wrapper = await mountSuspended(SamaritanPrompt, {
-      props: { messages, effect: "word-pulse", fadeDuration: 400, wordDuration: 1200 },
+      props: { messages, effect: "word-pulse", pauseDuration: 500 },
     });
     await nextTick();
-    expect(wrapper.find(".samaritan-prompt__text").text()).toBe(firstMessage);
+    expect(wrapper.find(".samaritan-prompt__text").text()).toBe("");
+    const style = wrapper.find(".samaritan-prompt__content").attributes("style");
+    expect(style).toContain("opacity: 1");
   });
 
-  it("starts with text invisible (opacity 0)", async () => {
+  it("makes content invisible when cycle starts after pause", async () => {
     const wrapper = await mountSuspended(SamaritanPrompt, {
-      props: { messages, effect: "word-pulse", fadeDuration: 400, wordDuration: 1200 },
+      props: { messages, effect: "word-pulse", pauseDuration: 500, fadeDuration: 400, wordDuration: 1200 },
     });
     await nextTick();
+
+    vi.advanceTimersByTime(500); // pauseDuration fires
+    await Promise.resolve();
+    await nextTick(); // textOpacity=0, schedules wait(fadeDuration)
+
+    // Text not yet set — underline is transitioning out
+    expect(wrapper.find(".samaritan-prompt__text").text()).toBe("");
     const style = wrapper.find(".samaritan-prompt__content").attributes("style");
     expect(style).toContain("opacity: 0");
   });
 
-  it("makes text visible after underline expansion delay", async () => {
+  it("makes content visible after expansion delay", async () => {
     const wrapper = await mountSuspended(SamaritanPrompt, {
-      props: { messages, effect: "word-pulse", fadeDuration: 400, wordDuration: 1200 },
+      props: { messages, effect: "word-pulse", pauseDuration: 500, fadeDuration: 400, wordDuration: 1200 },
     });
     await nextTick();
 
-    vi.advanceTimersByTime(120);
+    vi.advanceTimersByTime(500); // pauseDuration fires
     await Promise.resolve();
-    await nextTick();
+    await nextTick(); // textOpacity=0, schedules wait(fadeDuration)
+
+    vi.advanceTimersByTime(400); // fadeDuration fires
+    await Promise.resolve();
+    await nextTick(); // displayText=firstMessage, component awaits nextTick
+    await Promise.resolve();
+    await nextTick(); // component nextTick resolves, schedules wait(120)
+
+    vi.advanceTimersByTime(120); // wait(120) fires
+    await Promise.resolve();
+    await nextTick(); // textOpacity=1
 
     const style = wrapper.find(".samaritan-prompt__content").attributes("style");
     expect(style).toContain("opacity: 1");
   });
 
-  it("fades text back out after word duration", async () => {
+  it("fades content back out after word duration", async () => {
     const wrapper = await mountSuspended(SamaritanPrompt, {
-      props: { messages, effect: "word-pulse", fadeDuration: 400, wordDuration: 1200 },
+      props: { messages, effect: "word-pulse", pauseDuration: 500, fadeDuration: 400, wordDuration: 1200 },
     });
     await nextTick();
 
+    vi.advanceTimersByTime(500); // pauseDuration
+    await Promise.resolve();
+    await nextTick(); // textOpacity=0, schedules wait(fadeDuration)
+
+    vi.advanceTimersByTime(400); // fadeDuration (initial fade out)
+    await Promise.resolve();
+    await nextTick(); // displayText=firstMessage, component nextTick
+    await Promise.resolve();
+    await nextTick(); // schedules wait(120)
+
     vi.advanceTimersByTime(120);
     await Promise.resolve();
-    await nextTick();
+    await nextTick(); // textOpacity=1, schedules wait(1200)
 
     vi.advanceTimersByTime(1200);
     await Promise.resolve();
-    await nextTick();
+    await nextTick(); // textOpacity=0
 
     const style = wrapper.find(".samaritan-prompt__content").attributes("style");
     expect(style).toContain("opacity: 0");
@@ -177,50 +206,69 @@ describe("SamaritanPrompt — word-pulse", () => {
 
   it("advances to the next message after fade out", async () => {
     const wrapper = await mountSuspended(SamaritanPrompt, {
-      props: { messages, effect: "word-pulse", fadeDuration: 400, wordDuration: 1200 },
+      props: { messages, effect: "word-pulse", pauseDuration: 500, fadeDuration: 400, wordDuration: 1200 },
     });
     await nextTick();
 
-    // Each await wait() in the async chain only schedules the NEXT timer after microtasks
-    // flush — so each step must be advanced individually with microtask flushes between.
-    vi.advanceTimersByTime(120); // wait(120) fires
+    vi.advanceTimersByTime(500); // pauseDuration
     await Promise.resolve();
-    await nextTick(); // async resumes: textOpacity=1, schedules wait(1200)
+    await nextTick(); // textOpacity=0, schedules wait(fadeDuration)
 
-    vi.advanceTimersByTime(1200); // wait(1200) fires
+    vi.advanceTimersByTime(400); // initial fadeDuration (underline fade)
     await Promise.resolve();
-    await nextTick(); // async resumes: textOpacity=0, schedules wait(400)
+    await nextTick(); // displayText=firstMessage, component nextTick
+    await Promise.resolve();
+    await nextTick(); // schedules wait(120)
 
-    vi.advanceTimersByTime(400); // wait(400) fires
+    vi.advanceTimersByTime(120);
     await Promise.resolve();
-    await nextTick(); // async resumes: sets displayText=secondMessage, await nextTick()
+    await nextTick(); // textOpacity=1, schedules wait(1200)
+
+    vi.advanceTimersByTime(1200);
     await Promise.resolve();
-    await nextTick(); // component nextTick resolves, schedules wait(120)
+    await nextTick(); // textOpacity=0, schedules wait(fadeDuration)
+
+    vi.advanceTimersByTime(400); // first message fade complete
+    await Promise.resolve();
+    await nextTick(); // displayText=secondMessage, component nextTick
+    await Promise.resolve();
+    await nextTick(); // schedules wait(120)
 
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe(secondMessage);
   });
 
-  it("collapses displayText at end of cycle", async () => {
+  it("collapses displayText and restores opacity at end of cycle", async () => {
     const singleMsg = "Only.";
     const wrapper = await mountSuspended(SamaritanPrompt, {
-      props: { messages: [singleMsg], effect: "word-pulse", fadeDuration: 200, wordDuration: 500, pauseDuration: 300 },
+      props: { messages: [singleMsg], effect: "word-pulse", pauseDuration: 300, fadeDuration: 200, wordDuration: 500 },
     });
     await nextTick();
 
-    vi.advanceTimersByTime(120); // wait(120) fires
+    vi.advanceTimersByTime(300); // pauseDuration
     await Promise.resolve();
-    await nextTick(); // async resumes: textOpacity=1, schedules wait(500)
+    await nextTick(); // textOpacity=0, schedules wait(fadeDuration=200)
 
-    vi.advanceTimersByTime(500); // wait(500) fires
+    vi.advanceTimersByTime(200); // initial fadeDuration
     await Promise.resolve();
-    await nextTick(); // async resumes: textOpacity=0, schedules wait(200)
+    await nextTick(); // displayText=singleMsg, component nextTick
+    await Promise.resolve();
+    await nextTick(); // schedules wait(120)
 
-    vi.advanceTimersByTime(200); // wait(200) fires
+    vi.advanceTimersByTime(120);
     await Promise.resolve();
-    await nextTick(); // async resumes: end of for loop, displayText="", await nextTick()
+    await nextTick(); // textOpacity=1, schedules wait(500)
+
+    vi.advanceTimersByTime(500);
     await Promise.resolve();
-    await nextTick(); // component nextTick resolves, schedules wait(300)
+    await nextTick(); // textOpacity=0, schedules wait(200)
+
+    vi.advanceTimersByTime(200);
+    await Promise.resolve();
+    await nextTick(); // end of for loop: displayText="", textOpacity=1, await nextTick()
+    await Promise.resolve();
+    await nextTick(); // while loop top: schedules wait(300)
 
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("");
+    expect(wrapper.find(".samaritan-prompt__content").attributes("style")).toContain("opacity: 1");
   });
 });
