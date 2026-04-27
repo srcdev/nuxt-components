@@ -1,12 +1,13 @@
 <template>
   <div :class="['samaritan-prompt', elementClasses]">
-    <div class="samaritan-prompt__content" :style="{ opacity: textOpacity }">
+    <div class="samaritan-prompt__content" :style="{ opacity: textOpacity }" aria-hidden="true">
       <div class="samaritan-prompt__stage">
         <span class="samaritan-prompt__text">{{ displayText }}</span>
       </div>
       <div class="samaritan-prompt__underline"></div>
     </div>
     <span class="samaritan-prompt__cursor" :style="{ opacity: cursorOpacity }" aria-hidden="true">▲</span>
+    <span class="samaritan-prompt__sr-text" aria-live="polite" aria-atomic="true">{{ announcedText }}</span>
   </div>
 </template>
 
@@ -53,6 +54,7 @@ const props = withDefaults(defineProps<Props>(), {
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const displayText = ref("");
+const announcedText = ref("");
 const textOpacity = ref(1);
 const cursorVisible = ref(true);
 const activeFadeDuration = ref(props.fadeDuration);
@@ -85,7 +87,9 @@ const runTypewriter = async (config: ResolvedConfig) => {
     await wait(typeSpeed);
   }
 
+  announcedText.value = text;
   await wait(holdDuration);
+  announcedText.value = "";
 
   while (displayText.value.length > 0) {
     displayText.value = displayText.value.slice(0, -1);
@@ -112,8 +116,10 @@ const runWordPulse = async (config: ResolvedConfig) => {
   await wait(120);
 
   textOpacity.value = 1;
+  announcedText.value = text;
   await wait(wordDuration);
 
+  announcedText.value = "";
   textOpacity.value = 0;
   await wait(fadeDuration);
 
@@ -220,6 +226,30 @@ onUnmounted(stop);
     line-height: 1;
     animation: samaritan-pulse 2.5s ease-in-out infinite;
     transition: opacity 400ms ease;
+  }
+
+  .samaritan-prompt__sr-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .samaritan-prompt {
+    .samaritan-prompt__content {
+      transition: none;
+    }
+
+    .samaritan-prompt__cursor {
+      animation: none;
+    }
   }
 }
 
