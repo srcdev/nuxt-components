@@ -1,14 +1,14 @@
 <template>
   <div :class="['samaritan-prompt', elementClasses]">
-    <div class="samaritan-prompt__stage">
-      <span
-        class="samaritan-prompt__text"
-        :style="effect === 'word-pulse' ? { opacity: textOpacity } : undefined"
-      >
-        {{ displayText }}
-      </span>
+    <div
+      class="samaritan-prompt__content"
+      :style="effect === 'word-pulse' ? { opacity: textOpacity } : undefined"
+    >
+      <div class="samaritan-prompt__stage">
+        <span class="samaritan-prompt__text">{{ displayText }}</span>
+      </div>
+      <div class="samaritan-prompt__underline"></div>
     </div>
-    <div class="samaritan-prompt__underline"></div>
     <span class="samaritan-prompt__cursor" aria-hidden="true">▲</span>
   </div>
 </template>
@@ -181,6 +181,15 @@ onUnmounted(stopCurrent);
   letter-spacing: var(--_letter-spacing);
 }
 
+.samaritan-prompt__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 0.6rem;
+  width: 100%;
+  transition: opacity v-bind(fadeDurationCss) ease;
+}
+
 .samaritan-prompt__stage {
   display: flex;
   justify-content: center;
@@ -190,7 +199,6 @@ onUnmounted(stopCurrent);
 .samaritan-prompt__text {
   color: var(--_color-text);
   white-space: nowrap;
-  transition: opacity v-bind(fadeDurationCss) ease;
 }
 
 .samaritan-prompt__underline {

@@ -139,7 +139,7 @@ describe("SamaritanPrompt — word-pulse", () => {
       props: { messages, effect: "word-pulse", fadeDuration: 400, wordDuration: 1200 },
     });
     await nextTick();
-    const style = wrapper.find(".samaritan-prompt__text").attributes("style");
+    const style = wrapper.find(".samaritan-prompt__content").attributes("style");
     expect(style).toContain("opacity: 0");
   });
 
@@ -153,7 +153,7 @@ describe("SamaritanPrompt — word-pulse", () => {
     await Promise.resolve();
     await nextTick();
 
-    const style = wrapper.find(".samaritan-prompt__text").attributes("style");
+    const style = wrapper.find(".samaritan-prompt__content").attributes("style");
     expect(style).toContain("opacity: 1");
   });
 
@@ -171,7 +171,7 @@ describe("SamaritanPrompt — word-pulse", () => {
     await Promise.resolve();
     await nextTick();
 
-    const style = wrapper.find(".samaritan-prompt__text").attributes("style");
+    const style = wrapper.find(".samaritan-prompt__content").attributes("style");
     expect(style).toContain("opacity: 0");
   });
 
