@@ -235,7 +235,7 @@ const qaHideCursorInCycle = ref(true);
     justify-content: center;
     min-block-size: 100dvh;
 
-    &--mixed {
+    .samaritan-stage--mixed {
       border-top: 1px solid oklch(100% 0 0 / 0.08);
     }
   }
