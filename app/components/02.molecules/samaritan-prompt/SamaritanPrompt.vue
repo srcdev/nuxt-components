@@ -6,7 +6,7 @@
       </div>
       <div class="samaritan-prompt__underline"></div>
     </div>
-    <span class="samaritan-prompt__cursor" aria-hidden="true">▲</span>
+    <span class="samaritan-prompt__cursor" :style="{ opacity: cursorOpacity }" aria-hidden="true">▲</span>
   </div>
 </template>
 
@@ -20,6 +20,7 @@ interface Props {
   pauseDuration?: number;
   wordDuration?: number;
   fadeDuration?: number;
+  hideCursorInCycle?: boolean;
   styleClassPassthrough?: string | string[];
 }
 
@@ -31,6 +32,7 @@ const props = withDefaults(defineProps<Props>(), {
   pauseDuration: 500,
   wordDuration: 1200,
   fadeDuration: 400,
+  hideCursorInCycle: true,
   styleClassPassthrough: () => [],
 });
 
@@ -38,7 +40,9 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 const displayText = ref("");
 const textOpacity = ref(1);
+const cursorVisible = ref(true);
 const fadeDurationCss = computed(() => `${props.fadeDuration}ms`);
+const cursorOpacity = computed(() => (props.hideCursorInCycle && !cursorVisible.value ? 0 : 1));
 
 let isActive = true;
 let timeoutId: ReturnType<typeof setTimeout> | null = null;
@@ -72,6 +76,7 @@ const startEffect = () => {
   isActive = true;
   displayText.value = "";
   textOpacity.value = 1;
+  cursorVisible.value = true;
   phase.value = "typing";
   messageIndex.value = 0;
   if (props.effect === "typewriter") {
@@ -97,6 +102,9 @@ const typeTick = () => {
 
   switch (phase.value) {
     case "typing":
+      if (displayText.value.length === 0 && props.hideCursorInCycle) {
+        cursorVisible.value = false;
+      }
       if (displayText.value.length < message.length) {
         displayText.value = message.slice(0, displayText.value.length + 1);
         schedule(typeTick, props.typeSpeed);
@@ -117,6 +125,7 @@ const typeTick = () => {
         schedule(typeTick, props.deleteSpeed);
       } else {
         phase.value = "pausing";
+        if (props.hideCursorInCycle) cursorVisible.value = true;
         schedule(typeTick, props.pauseDuration);
       }
       break;
@@ -133,8 +142,10 @@ const typeTick = () => {
 const runWordPulse = async () => {
   try {
     while (isActive) {
-      // Underline stays visible during the pre-cycle pause
+      // Underline and cursor visible during the pre-cycle pause
       await wait(props.pauseDuration);
+
+      if (props.hideCursorInCycle) cursorVisible.value = false;
 
       // Fade out the underline before the first word appears
       textOpacity.value = 0;
@@ -154,9 +165,10 @@ const runWordPulse = async () => {
         await wait(props.fadeDuration);
       }
 
-      // Reset between cycles — underline becomes visible again for next pause
+      // Reset between cycles — underline and cursor visible again for next pause
       displayText.value = "";
       textOpacity.value = 1;
+      if (props.hideCursorInCycle) cursorVisible.value = true;
       await nextTick();
     }
   } catch {
@@ -234,6 +246,7 @@ onUnmounted(stopCurrent);
     font-size: 1.2em;
     line-height: 1;
     animation: samaritan-pulse 2.5s ease-in-out infinite;
+    transition: opacity 400ms ease;
   }
 }
 

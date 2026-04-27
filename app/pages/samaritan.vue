@@ -7,14 +7,16 @@
             <summary class="qa-panel__summary">
               <span class="qa-panel__title">QA — SamaritanPrompt</span>
               <code v-if="qaEffect === 'typewriter'" class="qa-panel__status">
-                effect:typewriter · type:{{ qaTypeSpeed }}ms · hold:{{ qaHoldDuration }}ms · del:{{ qaDeleteSpeed }}ms · pause:{{ qaPauseDuration }}ms
+                effect:typewriter · type:{{ qaTypeSpeed }}ms · hold:{{ qaHoldDuration }}ms · del:{{ qaDeleteSpeed }}ms ·
+                pause:{{ qaPauseDuration }}ms
               </code>
               <code v-else class="qa-panel__status">
-                effect:word-pulse · fade:{{ qaFadeDuration }}ms · visible:{{ qaWordDuration }}ms · pause:{{ qaPauseDuration }}ms
+                effect:word-pulse · fade:{{ qaFadeDuration }}ms · visible:{{ qaWordDuration }}ms · pause:{{
+                  qaPauseDuration
+                }}ms
               </code>
             </summary>
             <div class="qa-panel__body">
-
               <div class="qa-panel__group">
                 <span class="qa-panel__label">Effect</span>
                 <div class="qa-panel__chips">
@@ -24,7 +26,9 @@
                     class="qa-panel__chip"
                     :class="{ 'is-active': qaEffect === opt }"
                     @click="qaEffect = opt"
-                  >{{ opt }}</button>
+                  >
+                    {{ opt }}
+                  </button>
                 </div>
               </div>
 
@@ -39,7 +43,9 @@
                       class="qa-panel__chip"
                       :class="{ 'is-active': qaTypeSpeed === n }"
                       @click="qaTypeSpeed = n"
-                    >{{ n }}</button>
+                    >
+                      {{ n }}
+                    </button>
                   </div>
                 </div>
 
@@ -52,7 +58,9 @@
                       class="qa-panel__chip"
                       :class="{ 'is-active': qaHoldDuration === n }"
                       @click="qaHoldDuration = n"
-                    >{{ n }}</button>
+                    >
+                      {{ n }}
+                    </button>
                   </div>
                 </div>
 
@@ -65,7 +73,9 @@
                       class="qa-panel__chip"
                       :class="{ 'is-active': qaDeleteSpeed === n }"
                       @click="qaDeleteSpeed = n"
-                    >{{ n }}</button>
+                    >
+                      {{ n }}
+                    </button>
                   </div>
                 </div>
               </template>
@@ -81,7 +91,9 @@
                       class="qa-panel__chip"
                       :class="{ 'is-active': qaFadeDuration === n }"
                       @click="qaFadeDuration = n"
-                    >{{ n }}</button>
+                    >
+                      {{ n }}
+                    </button>
                   </div>
                 </div>
 
@@ -94,7 +106,9 @@
                       class="qa-panel__chip"
                       :class="{ 'is-active': qaWordDuration === n }"
                       @click="qaWordDuration = n"
-                    >{{ n }}</button>
+                    >
+                      {{ n }}
+                    </button>
                   </div>
                 </div>
               </template>
@@ -104,15 +118,32 @@
                 <span class="qa-panel__label">Pause before restart (ms)</span>
                 <div class="qa-panel__chips">
                   <button
-                    v-for="n in [300, 500, 1000, 2000]"
+                    v-for="n in [300, 500, 1000, 2000, 5000, 10000]"
                     :key="n"
                     class="qa-panel__chip"
                     :class="{ 'is-active': qaPauseDuration === n }"
                     @click="qaPauseDuration = n"
-                  >{{ n }}</button>
+                  >
+                    {{ n }}
+                  </button>
                 </div>
               </div>
 
+              <!-- Shared: hide cursor in cycle -->
+              <div class="qa-panel__group">
+                <span class="qa-panel__label">Hide cursor in cycle</span>
+                <div class="qa-panel__chips">
+                  <button
+                    v-for="opt in [true, false]"
+                    :key="String(opt)"
+                    class="qa-panel__chip"
+                    :class="{ 'is-active': qaHideCursorInCycle === opt }"
+                    @click="qaHideCursorInCycle = opt"
+                  >
+                    {{ opt ? "on" : "off" }}
+                  </button>
+                </div>
+              </div>
             </div>
           </details>
         </div>
@@ -128,6 +159,7 @@
               :pause-duration="qaPauseDuration"
               :word-duration="qaWordDuration"
               :fade-duration="qaFadeDuration"
+              :hide-cursor-in-cycle="qaHideCursorInCycle"
             />
           </div>
         </LayoutRow>
@@ -164,9 +196,10 @@ const qaEffect = ref<"typewriter" | "word-pulse">("typewriter");
 const qaTypeSpeed = ref(80);
 const qaDeleteSpeed = ref(40);
 const qaHoldDuration = ref(2000);
-const qaPauseDuration = ref(500);
+const qaPauseDuration = ref(5000);
 const qaWordDuration = ref(1200);
 const qaFadeDuration = ref(400);
+const qaHideCursorInCycle = ref(true);
 </script>
 
 <style lang="css">

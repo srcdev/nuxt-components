@@ -114,6 +114,51 @@ describe("SamaritanPrompt — typewriter", () => {
     });
     expect(wrapper.find(".samaritan-prompt").classes()).toContain("custom-class");
   });
+
+  it("cursor is visible before typing starts", async () => {
+    const wrapper = await mountSuspended(SamaritanPrompt, {
+      props: { messages, typeSpeed: 100 },
+    });
+    expect(wrapper.find(".samaritan-prompt__cursor").attributes("style")).toContain("opacity: 1");
+  });
+
+  it("cursor hides when typewriter starts typing first character", async () => {
+    const wrapper = await mountSuspended(SamaritanPrompt, {
+      props: { messages, typeSpeed: 100 },
+    });
+
+    vi.advanceTimersByTime(100);
+    await nextTick();
+
+    expect(wrapper.find(".samaritan-prompt__cursor").attributes("style")).toContain("opacity: 0");
+  });
+
+  it("cursor returns when typewriter enters pause phase", async () => {
+    const wrapper = await mountSuspended(SamaritanPrompt, {
+      props: { messages, typeSpeed: 10, holdDuration: 100, deleteSpeed: 10, pauseDuration: 100 },
+    });
+
+    // Type full first message + hold + delete all + enter pausing phase
+    vi.advanceTimersByTime(10 * (firstMessage.length + 1)); // typing → holding
+    await nextTick();
+    vi.advanceTimersByTime(100); // hold → deleting
+    await nextTick();
+    vi.advanceTimersByTime(10 * (firstMessage.length + 1)); // deleting → pausing (cursorVisible=true)
+    await nextTick();
+
+    expect(wrapper.find(".samaritan-prompt__cursor").attributes("style")).toContain("opacity: 1");
+  });
+
+  it("cursor is always visible when hideCursorInCycle is false", async () => {
+    const wrapper = await mountSuspended(SamaritanPrompt, {
+      props: { messages, typeSpeed: 100, hideCursorInCycle: false },
+    });
+
+    vi.advanceTimersByTime(100);
+    await nextTick();
+
+    expect(wrapper.find(".samaritan-prompt__cursor").attributes("style")).toContain("opacity: 1");
+  });
 });
 
 // ─── Word pulse ────────────────────────────────────────────────────────────
@@ -270,5 +315,54 @@ describe("SamaritanPrompt — word-pulse", () => {
 
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("");
     expect(wrapper.find(".samaritan-prompt__content").attributes("style")).toContain("opacity: 1");
+  });
+
+  it("cursor hides when word-pulse cycle starts", async () => {
+    const wrapper = await mountSuspended(SamaritanPrompt, {
+      props: { messages, effect: "word-pulse", pauseDuration: 500, fadeDuration: 400, wordDuration: 1200 },
+    });
+    await nextTick();
+
+    expect(wrapper.find(".samaritan-prompt__cursor").attributes("style")).toContain("opacity: 1");
+
+    vi.advanceTimersByTime(500); // pauseDuration fires → cursorVisible=false
+    await Promise.resolve();
+    await nextTick();
+
+    expect(wrapper.find(".samaritan-prompt__cursor").attributes("style")).toContain("opacity: 0");
+  });
+
+  it("cursor returns after word-pulse cycle resets", async () => {
+    const singleMsg = "Only.";
+    const wrapper = await mountSuspended(SamaritanPrompt, {
+      props: { messages: [singleMsg], effect: "word-pulse", pauseDuration: 300, fadeDuration: 200, wordDuration: 500 },
+    });
+    await nextTick();
+
+    vi.advanceTimersByTime(300); // pauseDuration → cursorVisible=false
+    await Promise.resolve();
+    await nextTick();
+
+    vi.advanceTimersByTime(200); // initial fadeDuration
+    await Promise.resolve();
+    await nextTick();
+    await Promise.resolve();
+    await nextTick();
+
+    vi.advanceTimersByTime(120);
+    await Promise.resolve();
+    await nextTick();
+
+    vi.advanceTimersByTime(500);
+    await Promise.resolve();
+    await nextTick();
+
+    vi.advanceTimersByTime(200); // message fade out complete → cycle resets: cursorVisible=true
+    await Promise.resolve();
+    await nextTick();
+    await Promise.resolve();
+    await nextTick();
+
+    expect(wrapper.find(".samaritan-prompt__cursor").attributes("style")).toContain("opacity: 1");
   });
 });
