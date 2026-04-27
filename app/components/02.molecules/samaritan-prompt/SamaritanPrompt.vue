@@ -44,36 +44,10 @@ const cursorVisible = ref(true);
 const fadeDurationCss = computed(() => `${props.fadeDuration}ms`);
 const cursorOpacity = computed(() => (props.hideCursorInCycle && !cursorVisible.value ? 0 : 1));
 
-let isActive = true;
-let timeoutId: ReturnType<typeof setTimeout> | null = null;
-let rejectCurrent: (() => void) | null = null;
-
-const wait = (ms: number): Promise<void> =>
-  new Promise((resolve, reject) => {
-    if (!isActive) {
-      reject();
-      return;
-    }
-    rejectCurrent = reject;
-    timeoutId = setTimeout(() => {
-      rejectCurrent = null;
-      if (isActive) resolve();
-      else reject();
-    }, ms);
-  });
-
-const stopCurrent = () => {
-  isActive = false;
-  if (timeoutId !== null) {
-    clearTimeout(timeoutId);
-    timeoutId = null;
-  }
-  rejectCurrent?.();
-  rejectCurrent = null;
-};
+const { wait, schedule, stop, start } = useCancellableTimer();
 
 const startEffect = () => {
-  isActive = true;
+  start();
   displayText.value = "";
   textOpacity.value = 1;
   cursorVisible.value = true;
@@ -91,12 +65,7 @@ type Phase = "typing" | "holding" | "deleting" | "pausing";
 const phase = ref<Phase>("typing");
 const messageIndex = ref(0);
 
-const schedule = (fn: () => void, ms: number) => {
-  timeoutId = setTimeout(fn, ms);
-};
-
 const typeTick = () => {
-  if (!isActive) return;
   const message = props.messages[messageIndex.value];
   if (!message) return;
 
@@ -141,7 +110,7 @@ const typeTick = () => {
 // --- Word pulse ---
 const runWordPulse = async () => {
   try {
-    while (isActive) {
+    while (true) {
       // Underline and cursor visible during the pre-cycle pause
       await wait(props.pauseDuration);
 
@@ -152,8 +121,6 @@ const runWordPulse = async () => {
       await wait(props.fadeDuration);
 
       for (const message of props.messages) {
-        if (!isActive) return;
-
         displayText.value = message;
         await nextTick();
         await wait(120);
@@ -179,14 +146,14 @@ const runWordPulse = async () => {
 watch(
   () => props.effect,
   () => {
-    stopCurrent();
+    stop();
     startEffect();
   }
 );
 
 onMounted(startEffect);
 
-onUnmounted(stopCurrent);
+onUnmounted(stop);
 </script>
 
 <style scoped>
@@ -202,7 +169,7 @@ onUnmounted(stopCurrent);
   --_font-size: var(--samaritan-font-size, 2rem);
   --_color-text: var(--samaritan-color-text, #ffffff);
   --_color-underline: var(--samaritan-color-underline, #ffffff);
-  --_color-cursor: var(--samaritan-color-cursor, #cc2200);
+  --_color-cursor: var(--samaritan-color-cursor, #cc0000);
   --_font-family: var(--samaritan-font-family, "Mono MMM 5", "Nova Mono", "Courier New", monospace);
   --_letter-spacing: var(--samaritan-letter-spacing, 0.08em);
 
@@ -230,6 +197,7 @@ onUnmounted(stopCurrent);
       .samaritan-prompt__text {
         color: var(--_color-text);
         white-space: nowrap;
+        text-transform: uppercase;
       }
     }
 
@@ -243,7 +211,7 @@ onUnmounted(stopCurrent);
 
   .samaritan-prompt__cursor {
     color: var(--_color-cursor);
-    font-size: 1.2em;
+    font-size: 2.4rem;
     line-height: 1;
     animation: samaritan-pulse 2.5s ease-in-out infinite;
     transition: opacity 400ms ease;
@@ -256,7 +224,7 @@ onUnmounted(stopCurrent);
     color: var(--_color-cursor);
   }
   50% {
-    color: #0d0000;
+    color: #330000;
   }
 }
 </style>

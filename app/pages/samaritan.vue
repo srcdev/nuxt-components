@@ -149,6 +149,12 @@
         </div>
 
         <LayoutRow tag="div" variant="full-width">
+          <div class="samaritan-stage samaritan-stage--mixed">
+            <SamaritanPromptMixed :message-configs="mixedMessages" />
+          </div>
+        </LayoutRow>
+
+        <LayoutRow tag="div" variant="full-width">
           <div class="samaritan-stage">
             <SamaritanPrompt
               :messages="messages"
@@ -180,11 +186,22 @@ useHead({
 });
 
 const messages = [
-  "SURVEILLANCE ACTIVE.",
-  "THREAT ASSESSMENT COMPLETE.",
-  "ALL PERSONS OF INTEREST IDENTIFIED.",
-  "MONITORING ALL COMMUNICATION CHANNELS.",
-  "SAMARITAN IS WATCHING.",
+  "Surveillance Active",
+  "Threat Assessment Complete",
+  "All Persons of Interest Identified",
+  "Monitoring All Communication Channels",
+  "Samaritan Is Watching",
+];
+
+const mixedMessages = [
+  { text: "What srcdev does?", effect: "typewriter" as const, holdDuration: 4000 },
+  { text: "Brings your imaginaton to life", effect: "word-pulse" as const, holdDuration: 2000 },
+  { text: "Craft beautiful interfaces", effect: "word-pulse" as const, wordDuration: 2000 },
+  { text: "Keeps things simple", effect: "word-pulse" as const, wordDuration: 2000 },
+  { text: "My work is?", effect: "typewriter" as const, wordDuration: 2500, fadeDuration: 4000 },
+  { text: "Performance tested", effect: "word-pulse" as const, holdDuration: 2000 },
+  { text: "Penetration tested", effect: "word-pulse" as const, wordDuration: 2000 },
+  { text: "Accessible", effect: "word-pulse" as const, wordDuration: 2000 },
 ];
 
 // ── QA controls (dev only) ────────────────────────────────────────
@@ -214,6 +231,10 @@ const qaHideCursorInCycle = ref(true);
     align-items: center;
     justify-content: center;
     min-block-size: 100dvh;
+
+    &--mixed {
+      border-top: 1px solid oklch(100% 0 0 / 0.08);
+    }
   }
 
   /* ── QA Panel ──────────────────────────────────────────────────── */

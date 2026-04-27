@@ -182,6 +182,38 @@ await nextTick();
 vi.runAllTimers();
 ```
 
+## `mountSuspended` flushes component async setup — initial state may be past the first `await`
+
+`mountSuspended` calls `flushPromises()` internally, draining all pending microtasks including `await nextTick()` calls inside the component's async functions. If a component's async lifecycle starts with `await nextTick()` (e.g. to let a CSS `v-bind` update before beginning a transition), **the component will have already executed past it by the time `mountSuspended` returns**.
+
+Assert the post-flush state, not the state before the first await:
+
+```ts
+// Component's runEffect() starts with: await nextTick(); opacity.value = 0;
+// ❌ — by the time mountSuspended returns, opacity is already 0
+const wrapper = await mountSuspended(MyComponent, { props });
+expect(wrapper.find(".content").attributes("style")).toContain("opacity: 1");
+
+// ✅ — assert the state that exists after mountSuspended's flush
+const wrapper = await mountSuspended(MyComponent, { props });
+expect(wrapper.find(".content").attributes("style")).toContain("opacity: 0");
+```
+
+## `.then().catch()` requires two microtask hops; use `.then(onFulfilled, onRejected)` for one
+
+When asserting Promise settlement with a single `await Promise.resolve()`, put both handlers in the two-argument form of `.then()`. Chaining `.then().catch()` creates an intermediate Promise that adds a second hop, so `settled` won't be `true` after only one drain:
+
+```ts
+// ❌ needs two await Promise.resolve() to settle
+promise.then(() => { settled = true; }).catch(() => { settled = true; });
+
+// ✅ settles after one await Promise.resolve()
+promise.then(
+  () => { settled = true; },
+  () => { settled = true; },
+);
+```
+
 ## Hyphenated prop attributes in tests
 
 When a component uses a hyphenated Vue prop like `:tab-index` or `:aria-label`, Vue renders it as the literal hyphenated DOM attribute. Assert with the hyphenated form — not the camelCase equivalent:
