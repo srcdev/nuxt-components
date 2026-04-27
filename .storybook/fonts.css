@@ -1,4 +1,12 @@
 @font-face {
+  font-family: "Mono MMM 5";
+  src: url("/fonts/monoMMM_5.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Poppins";
   src: url("/_fonts/poppins/Poppins-Thin.ttf") format("truetype");
   font-weight: 100;

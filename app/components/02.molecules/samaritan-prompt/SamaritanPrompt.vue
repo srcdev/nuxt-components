@@ -178,12 +178,20 @@ onUnmounted(stopCurrent);
 </script>
 
 <style scoped>
+@font-face {
+  font-family: "Mono MMM 5";
+  src: url("/fonts/monoMMM_5.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 .samaritan-prompt {
   --_font-size: var(--samaritan-font-size, 2rem);
   --_color-text: var(--samaritan-color-text, #ffffff);
   --_color-underline: var(--samaritan-color-underline, #ffffff);
   --_color-cursor: var(--samaritan-color-cursor, #cc2200);
-  --_font-family: var(--samaritan-font-family, "Nova Mono", "Courier New", monospace);
+  --_font-family: var(--samaritan-font-family, "Mono MMM 5", "Nova Mono", "Courier New", monospace);
   --_letter-spacing: var(--samaritan-letter-spacing, 0.08em);
 
   display: flex;
