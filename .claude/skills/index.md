@@ -34,6 +34,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── component-local-style-override.md — styleClassPassthrough + scoped style block for per-usage visual customisation
 ├── component-prop-driven-container-layout.md — vary CSS grid layout inside @container queries using data-* attribute selectors
 ├── css-grid-max-width-gutters.md             — cap a centre grid column width by growing gutters, with start/center alignment variants
+├── css-animation-utilities.md                — scroll-driven animation utility classes: scroller-x (carousel), entry-zoom-reveal, entry-slide-in, entry-exit-blur, auto-rotate
 ├── component-aria-landmark.md        — useAriaLabelledById composable: aria-labelledby for section/main/article/aside tags
 ├── component-export-types.md         — move inline component types to app/types/components/ barrel for consumer imports
 ├── component-inline-action-button.md — InputButtonCore variant="inline" pattern for buttons embedded in custom input wrappers
@@ -76,7 +77,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── display-qr-code.md      — DisplayQrCode: QR code SVG from a string value, colour/size/variant/radius props, currentColor default
     ├── capture-qr-code.md      — CaptureQrCode: live camera scanner, error state, visibility/route/KeepAlive lifecycle, media stream cleanup
     ├── decode-qr-code.md       — DecodeQrCode: file picker + drag-and-drop image decoder, shared results list, CSS override points
-    ├── data-grid.md            — DataGrid: auto-fit responsive grid, $slots iteration, --data-grid-columns/gap tokens, semantic tag + aria
+    ├── auto-grid.md            — AutoGrid: auto-fit responsive grid, $slots iteration, --auto-grid-min-col-size/gap tokens, semantic tag + aria
     ├── carousel-flip.md        — CarouselFlip: FLIP-animated carousel, carouselDataIds slot API, buttonLayout variants (sides/controls-flanking/controls-grouped-right/overlay), CSS tokens
     └── samaritan-prompt-mixed.md — SamaritanPromptMixed: animated text prompt, typewriter/word-pulse effects, MessageConfig API, aria-live accessibility, CSS tokens
 ```

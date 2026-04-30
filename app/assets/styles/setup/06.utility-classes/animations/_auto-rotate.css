@@ -7,7 +7,9 @@
   }
 }
 
-.auto-rotate {
-  animation: autoRotateAnimation;
-  animation-timeline: view();
+@media (prefers-reduced-motion: no-preference) {
+  .auto-rotate {
+    animation: autoRotateAnimation;
+    animation-timeline: view();
+  }
 }

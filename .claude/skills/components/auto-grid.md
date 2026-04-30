@@ -1,8 +1,8 @@
-# DataGrid Component
+# AutoGrid Component
 
 ## Overview
 
-`DataGrid` is a responsive auto-fit CSS grid wrapper. It renders whatever named slots the consumer provides, auto-fitting columns to a minimum of `250px` each. Column count and gap are controlled via CSS custom properties, making layout adjustments a single-line style override rather than a prop change.
+`AutoGrid` is a responsive auto-fit CSS grid wrapper. It renders whatever named slots the consumer provides, auto-fitting columns to a minimum of `250px` each. Column count and gap are controlled via CSS custom properties, making layout adjustments a single-line style override rather than a prop change.
 
 ---
 
@@ -11,21 +11,21 @@
 Pass any number of named slots — the component renders each one in document order inside the grid.
 
 ```vue
-<DataGrid>
+<AutoGrid>
   <template #item-1><StatCard label="Revenue" value="£24,500" /></template>
   <template #item-2><StatCard label="Clients" value="142" /></template>
   <template #item-3><StatCard label="Bookings" value="38" /></template>
-</DataGrid>
+</AutoGrid>
 ```
 
 When filling from a data array, use a dynamic slot name in a `v-for`:
 
 ```vue
-<DataGrid>
+<AutoGrid>
   <template v-for="(item, i) in stats" #[`item-${i}`] :key="i">
     <StatCard :label="item.label" :value="item.value" />
   </template>
-</DataGrid>
+</AutoGrid>
 ```
 
 ---
@@ -34,10 +34,10 @@ When filling from a data array, use a dynamic slot name in a `v-for`:
 
 > **Hyphenation rule**: Vue's ESLint config enforces `vue/attribute-hyphenation`. Always write camelCase prop names hyphenated in templates: `:style-class-passthrough`.
 
-| Prop (template form) | Type | Default | Notes |
-|---|---|---|---|
-| `tag` | `"div" \| "section" \| "article" \| "main"` | `"div"` | Use a semantic tag for page landmark regions. |
-| `:style-class-passthrough` | `string \| string[]` | `[]` | Extra CSS classes on the root element. |
+| Prop (template form)       | Type                                        | Default | Notes                                         |
+| -------------------------- | ------------------------------------------- | ------- | --------------------------------------------- |
+| `tag`                      | `"div" \| "section" \| "article" \| "main"` | `"div"` | Use a semantic tag for page landmark regions. |
+| `:style-class-passthrough` | `string \| string[]`                        | `[]`    | Extra CSS classes on the root element.        |
 
 ---
 
@@ -45,25 +45,27 @@ When filling from a data array, use a dynamic slot name in a `v-for`:
 
 Override these via `style` attribute or a `styleClassPassthrough` class in a consuming `<style>` block.
 
-| Property | Default | Notes |
-|---|---|---|
-| `--data-grid-columns` | `repeat(auto-fit, minmax(250px, 1fr))` | Full `grid-template-columns` value. Override to fix column count or change min width. |
-| `--data-grid-gap` | `1rem` | Grid gap between items. |
+| Property                  | Default  | Notes                                                                                    |
+| ------------------------- | -------- | ---------------------------------------------------------------------------------------- |
+| `--auto-grid-min-col-size` | `250px` | Minimum column width; browser auto-fits as many columns as will fit.                    |
+| `--auto-grid-gap`          | `1rem`  | Grid gap between items.                                                                  |
 
 ### Fixed column count
 
+Override `grid-template-columns` directly — there is no single token for this:
+
 ```vue
-<DataGrid style="--data-grid-columns: repeat(3, 1fr); --data-grid-gap: 2.4rem;">
+<AutoGrid style="grid-template-columns: repeat(3, 1fr); --auto-grid-gap: 2.4rem;">
   ...
-</DataGrid>
+</AutoGrid>
 ```
 
 ### Narrower minimum item width
 
 ```vue
-<DataGrid style="--data-grid-columns: repeat(auto-fit, minmax(180px, 1fr));">
+<AutoGrid style="--auto-grid-min-col-size: 180px;">
   ...
-</DataGrid>
+</AutoGrid>
 ```
 
 ---
@@ -73,7 +75,7 @@ Override these via `style` attribute or a `styleClassPassthrough` class in a con
 ### Stat cards (default auto-fit)
 
 ```vue
-<DataGrid>
+<AutoGrid>
   <template #revenue>
     <div class="stat-card">
       <span class="stat-card-label">Revenue</span>
@@ -86,17 +88,17 @@ Override these via `style` attribute or a `styleClassPassthrough` class in a con
       <span class="stat-card-value">142</span>
     </div>
   </template>
-</DataGrid>
+</AutoGrid>
 ```
 
 ### Semantic section with auto aria-labelledby
 
 ```vue
-<DataGrid tag="section">
+<AutoGrid tag="section">
   <!-- aria-labelledby is wired automatically via useAriaLabelledById -->
   <template #item-1><div>Item 1</div></template>
   <template #item-2><div>Item 2</div></template>
-</DataGrid>
+</AutoGrid>
 ```
 
 ### Data-driven grid
@@ -105,20 +107,20 @@ Override these via `style` attribute or a `styleClassPassthrough` class in a con
 <script setup lang="ts">
 const stats = [
   { id: "revenue", label: "Revenue", value: "£24,500" },
-  { id: "clients", label: "Clients",  value: "142" },
+  { id: "clients", label: "Clients", value: "142" },
   { id: "bookings", label: "Bookings", value: "38" },
 ];
 </script>
 
 <template>
-  <DataGrid>
+  <AutoGrid>
     <template v-for="stat in stats" #[stat.id] :key="stat.id">
       <div class="stat-card">
         <span class="stat-card-label">{{ stat.label }}</span>
         <span class="stat-card-value">{{ stat.value }}</span>
       </div>
     </template>
-  </DataGrid>
+  </AutoGrid>
 </template>
 ```
 
@@ -137,19 +139,19 @@ See [component-aria-landmark.md](../component-aria-landmark.md) for the full lan
 ## Local style override scaffold
 
 ```vue
-<DataGrid :style-class-passthrough="['my-data-grid']">
+<AutoGrid :style-class-passthrough="['my-auto-grid']">
   ...
-</DataGrid>
+</AutoGrid>
 
 <style>
-/* ─── DataGrid local overrides ──────────────────────────────────────
+/* ─── AutoGrid local overrides ──────────────────────────────────────
    Use CSS custom properties for layout, not utility classes.
    Delete this block if no overrides are needed.
    ─────────────────────────────────────────────────────────────────── */
-.data-grid {
-  &.my-data-grid {
-    --data-grid-columns: repeat(auto-fit, minmax(200px, 1fr));
-    --data-grid-gap: 2rem;
+.auto-grid {
+  &.my-auto-grid {
+    --auto-grid-min-col-size: 200px;
+    --auto-grid-gap: 2rem;
   }
 }
 </style>
@@ -163,5 +165,5 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 
 - Auto-imported in Nuxt — no manual import needed.
 - Slot names can be anything — semantic (`#revenue`) or indexed (`#item-0`). Document order determines render order.
-- `--data-grid-columns` accepts any valid `grid-template-columns` value, including named tracks and `subgrid`.
-- The component does not impose a column count — `auto-fit` with `minmax` means the browser decides. Use `repeat(N, 1fr)` in `--data-grid-columns` to fix the count.
+- `--auto-grid-min-col-size` controls the minimum column width; `auto-fit` fills as many columns as will fit.
+- To fix the column count, override `grid-template-columns` directly (e.g. `style="grid-template-columns: repeat(3, 1fr)"`) — there is no single token for this.

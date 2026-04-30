@@ -1,24 +1,24 @@
 import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import DataGrid from "../DataGrid.vue";
+import AutoGrid from "../AutoGrid.vue";
 
-describe("DataGrid", () => {
+describe("AutoGrid", () => {
   // ─── Mount ───────────────────────────────────────────────────────────────
 
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(DataGrid);
+    const wrapper = await mountSuspended(AutoGrid);
     expect(wrapper.vm).toBeTruthy();
   });
 
   // ─── Snapshots ───────────────────────────────────────────────────────────
 
   it("renders correct HTML structure (default props)", async () => {
-    const wrapper = await mountSuspended(DataGrid);
+    const wrapper = await mountSuspended(AutoGrid);
     expect(wrapper.html()).toMatchSnapshot();
   });
 
   it("renders correct HTML structure (all props and slots set)", async () => {
-    const wrapper = await mountSuspended(DataGrid, {
+    const wrapper = await mountSuspended(AutoGrid, {
       props: {
         tag: "section",
         styleClassPassthrough: ["custom-class"],
@@ -35,58 +35,58 @@ describe("DataGrid", () => {
   // ─── Root element ────────────────────────────────────────────────────────
 
   it("renders a <div> as the root element by default", async () => {
-    const wrapper = await mountSuspended(DataGrid);
+    const wrapper = await mountSuspended(AutoGrid);
     expect(wrapper.element.tagName).toBe("DIV");
   });
 
-  it("always has the data-grid class", async () => {
-    const wrapper = await mountSuspended(DataGrid);
-    expect(wrapper.classes()).toContain("data-grid");
+  it("always has the auto-grid class", async () => {
+    const wrapper = await mountSuspended(AutoGrid);
+    expect(wrapper.classes()).toContain("auto-grid");
   });
 
   // ─── Tag prop ────────────────────────────────────────────────────────────
 
   it("renders a <section> when tag is section", async () => {
-    const wrapper = await mountSuspended(DataGrid, { props: { tag: "section" } });
+    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "section" } });
     expect(wrapper.element.tagName).toBe("SECTION");
   });
 
   it("renders an <article> when tag is article", async () => {
-    const wrapper = await mountSuspended(DataGrid, { props: { tag: "article" } });
+    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "article" } });
     expect(wrapper.element.tagName).toBe("ARTICLE");
   });
 
   it("renders a <main> when tag is main", async () => {
-    const wrapper = await mountSuspended(DataGrid, { props: { tag: "main" } });
+    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "main" } });
     expect(wrapper.element.tagName).toBe("MAIN");
   });
 
   // ─── Aria ─────────────────────────────────────────────────────────────────
 
   it("does not set aria-labelledby when tag is div", async () => {
-    const wrapper = await mountSuspended(DataGrid, { props: { tag: "div" } });
+    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "div" } });
     expect(wrapper.attributes("aria-labelledby")).toBeUndefined();
   });
 
   it("sets aria-labelledby when tag is section", async () => {
-    const wrapper = await mountSuspended(DataGrid, { props: { tag: "section" } });
+    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "section" } });
     expect(wrapper.attributes("aria-labelledby")).toBeTruthy();
   });
 
   it("sets aria-labelledby when tag is article", async () => {
-    const wrapper = await mountSuspended(DataGrid, { props: { tag: "article" } });
+    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "article" } });
     expect(wrapper.attributes("aria-labelledby")).toBeTruthy();
   });
 
   it("sets aria-labelledby when tag is main", async () => {
-    const wrapper = await mountSuspended(DataGrid, { props: { tag: "main" } });
+    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "main" } });
     expect(wrapper.attributes("aria-labelledby")).toBeTruthy();
   });
 
   // ─── Slots ───────────────────────────────────────────────────────────────
 
   it("renders a named slot", async () => {
-    const wrapper = await mountSuspended(DataGrid, {
+    const wrapper = await mountSuspended(AutoGrid, {
       slots: { "item-1": "<div class='card'>Card 1</div>" },
     });
     expect(wrapper.find(".card").exists()).toBe(true);
@@ -94,7 +94,7 @@ describe("DataGrid", () => {
   });
 
   it("renders multiple named slots", async () => {
-    const wrapper = await mountSuspended(DataGrid, {
+    const wrapper = await mountSuspended(AutoGrid, {
       slots: {
         "item-1": "<div class='card-1'>Card 1</div>",
         "item-2": "<div class='card-2'>Card 2</div>",
@@ -107,21 +107,21 @@ describe("DataGrid", () => {
   });
 
   it("renders no slot content when no slots are provided", async () => {
-    const wrapper = await mountSuspended(DataGrid);
+    const wrapper = await mountSuspended(AutoGrid);
     expect(wrapper.text()).toBe("");
   });
 
   // ─── styleClassPassthrough ───────────────────────────────────────────────
 
   it("applies a single styleClassPassthrough string to the root", async () => {
-    const wrapper = await mountSuspended(DataGrid, {
+    const wrapper = await mountSuspended(AutoGrid, {
       props: { styleClassPassthrough: "my-grid" },
     });
     expect(wrapper.classes()).toContain("my-grid");
   });
 
   it("applies multiple styleClassPassthrough classes from an array", async () => {
-    const wrapper = await mountSuspended(DataGrid, {
+    const wrapper = await mountSuspended(AutoGrid, {
       props: { styleClassPassthrough: ["my-grid", "mbe-32"] },
     });
     expect(wrapper.classes()).toContain("my-grid");
@@ -129,7 +129,7 @@ describe("DataGrid", () => {
   });
 
   it("updates classes when styleClassPassthrough prop changes", async () => {
-    const wrapper = await mountSuspended(DataGrid, {
+    const wrapper = await mountSuspended(AutoGrid, {
       props: { styleClassPassthrough: ["original"] },
     });
     expect(wrapper.classes()).toContain("original");

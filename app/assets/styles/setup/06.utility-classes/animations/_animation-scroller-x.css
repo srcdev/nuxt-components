@@ -1,0 +1,21 @@
+@keyframes scroller {
+  0%,
+  100% {
+    opacity: 0.25;
+    scale: 0.5;
+  }
+  35%,
+  65% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* Used to scroll scale elements when scrolling x-axis like a carousel. */
+
+@media (prefers-reduced-motion: no-preference) {
+  .animation-scroller-x {
+    animation: scroller linear both;
+    animation-timeline: view(x);
+  }
+}

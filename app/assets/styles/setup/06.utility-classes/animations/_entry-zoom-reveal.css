@@ -9,7 +9,9 @@
   }
 }
 
-.entry-zoom-reveal {
-  animation: entryZoomRevealAnimation both;
-  animation-timeline: view(70% 5%);
+@media (prefers-reduced-motion: no-preference) {
+  .entry-zoom-reveal {
+    animation: entryZoomRevealAnimation both;
+    animation-timeline: view(70% 5%);
+  }
 }
