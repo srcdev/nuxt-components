@@ -21,6 +21,7 @@ describe("AutoGrid", () => {
     const wrapper = await mountSuspended(AutoGrid, {
       props: {
         tag: "section",
+        isResponsive: true,
         styleClassPassthrough: ["custom-class"],
       },
       slots: {
@@ -81,6 +82,25 @@ describe("AutoGrid", () => {
   it("sets aria-labelledby when tag is main", async () => {
     const wrapper = await mountSuspended(AutoGrid, { props: { tag: "main" } });
     expect(wrapper.attributes("aria-labelledby")).toBeTruthy();
+  });
+
+  // ─── isResponsive ────────────────────────────────────────────────────────
+
+  it("does not have is-responsive class by default", async () => {
+    const wrapper = await mountSuspended(AutoGrid);
+    expect(wrapper.classes()).not.toContain("is-responsive");
+  });
+
+  it("adds is-responsive class when isResponsive is true", async () => {
+    const wrapper = await mountSuspended(AutoGrid, { props: { isResponsive: true } });
+    expect(wrapper.classes()).toContain("is-responsive");
+  });
+
+  it("removes is-responsive class when isResponsive changes to false", async () => {
+    const wrapper = await mountSuspended(AutoGrid, { props: { isResponsive: true } });
+    expect(wrapper.classes()).toContain("is-responsive");
+    await wrapper.setProps({ isResponsive: false });
+    expect(wrapper.classes()).not.toContain("is-responsive");
   });
 
   // ─── Slots ───────────────────────────────────────────────────────────────
