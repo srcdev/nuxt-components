@@ -9,33 +9,35 @@
 <script setup lang="ts">
 import type { DisplayChipConfig } from "~/types/components";
 
-const props = defineProps({
-  tag: {
-    type: String as PropType<"div" | "span">,
-    default: "div",
-  },
-  shape: {
-    type: String as PropType<"circle" | "square">,
-    default: "circle",
-  },
-  config: {
-    type: Object as PropType<DisplayChipConfig>,
-    default: () => ({
-      size: "12px",
-      maskWidth: "4px",
-      offset: "0px",
-      angle: "90deg",
-      icon: undefined,
-      label: undefined,
-    }),
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+interface Props {
+  tag?: "div" | "span";
+  shape?: "circle" | "square";
+  config?: DisplayChipConfig;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  tag: "span",
+  shape: "circle",
+  config: () => ({
+    size: "12px",
+    maskWidth: "4px",
+    offset: "0px",
+    angle: "90deg",
+    icon: undefined,
+    label: undefined,
+  }),
+  styleClassPassthrough: () => [],
 });
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 
 const validatedLabel = computed(() => {
   if (!props.config?.label) return props.config?.label;

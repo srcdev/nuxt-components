@@ -1,0 +1,12 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DisplayChip > renders correct HTML structure (default) 1`] = `"<span class="display-chip-core circle" style="--chip-size: 12px; --chip-mask-width: 4px; --chip-offset: 0px; --chip-angle: 90deg;"><!--v-if--><!--v-if--></span>"`;
+
+exports[`DisplayChip > renders correct HTML structure (square + styleClassPassthrough) 1`] = `"<span class="display-chip-core square online" style="--chip-size: 12px; --chip-mask-width: 4px; --chip-offset: 0px; --chip-angle: 90deg;"><!--v-if--><!--v-if--></span>"`;
+
+exports[`DisplayChip > renders correct HTML structure (with icon) 1`] = `
+"<span class="display-chip-core circle" style="--chip-size: 12px; --chip-mask-width: 4px; --chip-offset: 0px; --chip-angle: 90deg;"><span class="iconify i-mdi:check chip-icon" aria-hidden="true"></span>
+<!--v-if--></span>"
+`;
+
+exports[`DisplayChip > renders correct HTML structure (with label) 1`] = `"<span class="display-chip-core circle" style="--chip-size: 12px; --chip-mask-width: 4px; --chip-offset: 0px; --chip-angle: 90deg;"><!--v-if--><span class="chip-label length-1">5</span></span>"`;

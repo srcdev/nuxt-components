@@ -1,7 +1,13 @@
 <template>
   <component
     :is="props.chip ? DisplayChip : as"
-    v-bind="props.chip ? (typeof props.chip === 'object' ? { config: props.chip } : { config: chipDefaultConfig }) : {}"
+    v-bind="
+      props.chip
+        ? typeof props.chip === 'object'
+          ? { tag: chipTag, config: props.chip }
+          : { tag: chipTag, config: chipDefaultConfig }
+        : {}
+    "
     class="display-avatar"
     :class="[size, elementClasses]"
     :style-class-passthrough="elementClasses"
@@ -15,8 +21,8 @@
 </template>
 
 <script setup lang="ts">
-import DisplayChip from "../../display-chip/DisplayChip.vue";
-import type { DisplayChipProps } from "~/types/components";
+import DisplayChip from "../../02.molecules/display-chip/DisplayChip.vue";
+import type { DisplayChipConfig } from "~/types/components";
 
 interface Props {
   as?: string | object;
@@ -24,7 +30,7 @@ interface Props {
   alt?: string;
   text?: string;
   size?: "xs" | "s" | "md" | "lg" | "xl" | string;
-  chip?: boolean | DisplayChipProps;
+  chip?: boolean | DisplayChipConfig;
   styleClassPassthrough?: string | string[];
 }
 
@@ -56,12 +62,14 @@ const fallback = computed(
       .substring(0, 2)
 );
 
-const chipDefaultConfig = {
+const chipDefaultConfig: DisplayChipConfig = {
   size: "12px",
   maskWidth: "4px",
   offset: "0px",
   angle: "90deg",
 };
+
+const chipTag = computed((): "div" | "span" => (props.as === "div" || props.as === "span" ? props.as : "span"));
 
 watch(
   () => props.styleClassPassthrough,

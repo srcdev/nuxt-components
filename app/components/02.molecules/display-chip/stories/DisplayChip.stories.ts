@@ -1,6 +1,7 @@
+import { computed } from "vue";
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../DisplayChip.vue";
-import type { DisplayChipConfig } from "../../../types/components";
+import type { DisplayChipConfig } from "~/types/components";
 
 // Custom interface for story args
 interface ChipStoryArgs {
@@ -129,7 +130,7 @@ export default {
     label: "",
     status: "offline",
     useSlot: true,
-    slotContent: "Avatar content",
+    slotContent: "SRC",
     styleClassPassthrough: [],
   },
 } as Meta<typeof StorybookComponent>;
@@ -137,30 +138,43 @@ export default {
 const Template: StoryFn<ChipStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
-    const chipConfig: DisplayChipConfig = {
-      size: `${args.chipSize}px`,
-      maskWidth: `${args.chipMaskWidth}px`,
-      offset: `${args.chipOffset}px`,
-      angle: `${args.chipAngle}deg`,
-      icon: args.icon || undefined,
-      label: args.label || undefined,
-    };
+    const chipConfig = computed(
+      (): DisplayChipConfig => ({
+        size: `${args.chipSize}px`,
+        maskWidth: `${args.chipMaskWidth}px`,
+        offset: `${args.chipOffset}px`,
+        angle: `${args.chipAngle}deg`,
+        icon: args.icon || undefined,
+        label: args.label || undefined,
+      })
+    );
 
-    const classes = [...(args.styleClassPassthrough || []), args.status];
+    const classes = computed(() => [...(args.styleClassPassthrough || []), args.status]);
 
     return { args, chipConfig, classes };
   },
   template: `
-    <div style="padding: 40px; display: flex; align-items: center; justify-content: center; min-height: 200px;">
+    <div style="display: flex; align-items: center; justify-content: center; height: 100vh;">
       <StorybookComponent
         :tag="args.tag"
         :shape="args.shape"
         :config="chipConfig"
         :style-class-passthrough="classes"
-        style="width: 100px; height: 100px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 500;"
       >
         <template v-if="args.useSlot" #default>
-          {{ args.slotContent }}
+          <div :style="{
+            width: '50px',
+            height: '50px',
+            background: '#64748b',
+            borderRadius: args.shape === 'circle' ? '50%' : '4px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#f8fafc',
+            fontWeight: '600',
+            fontSize: '1.3rem',
+            fontFamily: 'sans-serif',
+          }">{{ args.slotContent }}</div>
         </template>
       </StorybookComponent>
     </div>
@@ -179,7 +193,6 @@ export const WithIcon = Template.bind({});
 WithIcon.args = {
   status: "online",
   icon: "mdi:check",
-  slotContent: "Icon Chip",
 };
 
 // Different Statuses
@@ -257,7 +270,6 @@ SquareShape.args = {
   shape: "square",
   status: "online",
   label: "□",
-  slotContent: "Square Parent",
 };
 
 // With Offset
@@ -266,7 +278,6 @@ WithOffset.args = {
   status: "online",
   chipOffset: 10,
   label: "10",
-  slotContent: "Offset Example",
 };
 
 // Multiple Chips Demo
@@ -276,61 +287,34 @@ const MultipleChipsTemplate: StoryFn<ChipStoryArgs> = (args) => ({
     return { args };
   },
   template: `
-    <div style="padding: 40px; display: flex; gap: 40px; align-items: center; justify-content: center; flex-wrap: wrap;">
+    <div style="display: flex; gap: 40px; align-items: center; justify-content: center; height: 100vh; flex-wrap: wrap;">
       <StorybookComponent
-        :config="{
-          size: '12px',
-          maskWidth: '4px',
-          offset: '0px',
-          angle: '45deg',
-          label: '5'
-        }"
+        :config="{ size: '12px', maskWidth: '4px', offset: '0px', angle: '45deg', label: '5' }"
         :style-class-passthrough="['online']"
-        style="width: 80px; height: 80px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white;"
       >
-        Online
+        <div style="width: 50px; height: 50px; background: #64748b; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #f8fafc; font-weight: 600; font-size: 1.3rem; font-family: sans-serif;">SRC</div>
       </StorybookComponent>
 
       <StorybookComponent
-        :config="{
-          size: '10px',
-          maskWidth: '3px',
-          offset: '2px',
-          angle: '315deg',
-          icon: 'mdi:pause'
-        }"
+        :config="{ size: '10px', maskWidth: '3px', offset: '2px', angle: '315deg', icon: 'mdi:pause' }"
         :style-class-passthrough="['idle']"
-        style="width: 80px; height: 80px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white;"
       >
-        Idle
+        <div style="width: 50px; height: 50px; background: #64748b; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #f8fafc; font-weight: 600; font-size: 1.3rem; font-family: sans-serif;">SRC</div>
       </StorybookComponent>
 
       <StorybookComponent
         shape="square"
-        :config="{
-          size: '14px',
-          maskWidth: '2px',
-          offset: '-5px',
-          angle: '135deg',
-          label: 'DND'
-        }"
+        :config="{ size: '14px', maskWidth: '2px', offset: '-5px', angle: '135deg', label: 'DND' }"
         :style-class-passthrough="['dnd']"
-        style="width: 80px; height: 80px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white;"
       >
-        DND
+        <div style="width: 50px; height: 50px; background: #64748b; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #f8fafc; font-weight: 600; font-size: 1.3rem; font-family: sans-serif;">SRC</div>
       </StorybookComponent>
 
       <StorybookComponent
-        :config="{
-          size: '16px',
-          maskWidth: '6px',
-          offset: '8px',
-          angle: '90deg'
-        }"
+        :config="{ size: '16px', maskWidth: '6px', offset: '8px', angle: '90deg' }"
         :style-class-passthrough="['offline']"
-        style="width: 80px; height: 80px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; color: white;"
       >
-        Offline
+        <div style="width: 50px; height: 50px; background: #64748b; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #f8fafc; font-weight: 600; font-size: 1.3rem; font-family: sans-serif;">SRC</div>
       </StorybookComponent>
     </div>
   `,

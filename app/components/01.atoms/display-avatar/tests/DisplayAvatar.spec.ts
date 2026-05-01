@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import DisplayAvatar from "../DisplayAvatar.vue";
-import DisplayChip from "../../../display-chip/DisplayChip.vue";
+import DisplayChip from "../../../02.molecules/display-chip/DisplayChip.vue";
 
 describe("DisplayAvatar", () => {
   // ─── Mount ───────────────────────────────────────────────────────────────
@@ -69,13 +69,10 @@ describe("DisplayAvatar", () => {
     expect(wrapper.classes()).toContain("md");
   });
 
-  it.each(["xs", "s", "md", "lg", "xl"] as const)(
-    "applies %s size class when size='%s'",
-    async (size) => {
-      const wrapper = await mountSuspended(DisplayAvatar, { props: { size } });
-      expect(wrapper.classes()).toContain(size);
-    }
-  );
+  it.each(["xs", "s", "md", "lg", "xl"] as const)("applies %s size class when size='%s'", async (size) => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { size } });
+    expect(wrapper.classes()).toContain(size);
+  });
 
   // ─── Fallback text ────────────────────────────────────────────────────────
 

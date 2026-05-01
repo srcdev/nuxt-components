@@ -17,7 +17,7 @@
 | `alt`                       | `string`                                  | —        | Alt text for the image; also used to derive initials.             |
 | `text`                      | `string`                                  | —        | Override the auto-derived initials with an explicit string.       |
 | `size`                      | `"xs" \| "s" \| "md" \| "lg" \| "xl"`   | `"md"`   | Controls width, height, and font-size.                            |
-| `chip`                      | `boolean \| DisplayChipProps`            | —        | Add a status chip. `true` uses defaults; pass an object to customise. |
+| `chip`                      | `boolean \| DisplayChipConfig`           | —        | Add a status chip. `true` uses defaults; pass a config object to customise. |
 | `:style-class-passthrough`  | `string \| string[]`                      | `[]`     | Extra CSS classes on the root element.                            |
 
 ### Size dimensions
@@ -116,21 +116,16 @@ Default chip config: `{ size: "12px", maskWidth: "4px", offset: "0px", angle: "9
 />
 ```
 
-Full `DisplayChipProps` shape:
+Full `DisplayChipConfig` shape (pass directly as the `chip` value):
 
 ```ts
-interface DisplayChipProps {
-  tag?: "div" | "span"
-  shape?: "circle" | "square"
-  config?: {
-    size: string       // chip diameter
-    maskWidth: string  // cutout border width
-    offset: string     // distance from avatar edge
-    angle: string      // position around avatar (0–360deg)
-    icon?: string      // iconify icon name
-    label?: string     // short label string
-  }
-  styleClassPassthrough?: string | string[]
+interface DisplayChipConfig {
+  size: string       // chip diameter, e.g. "12px"
+  maskWidth: string  // cutout ring width, e.g. "4px"
+  offset: string     // distance from avatar edge, e.g. "0px"
+  angle: string      // position around avatar (0–360deg), e.g. "45deg"
+  icon?: string      // Iconify icon name
+  label?: string     // short text (max 3 characters)
 }
 ```
 
