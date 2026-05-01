@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DisplayPill > renders correct HTML structure (default) 1`] = `"<span class="display-pill md default"><span class="pill-label">Status</span></span>"`;
+
+exports[`DisplayPill > renders correct HTML structure (reversed) 1`] = `"<span class="display-pill md default is-reversed"><span class="icon">✓</span><span class="pill-label">Status</span></span>"`;
+
+exports[`DisplayPill > renders correct HTML structure (with icon slot) 1`] = `"<span class="display-pill lg success"><span class="icon">✓</span><span class="pill-label">Status</span></span>"`;

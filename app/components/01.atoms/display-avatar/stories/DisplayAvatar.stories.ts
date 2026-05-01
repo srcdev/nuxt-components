@@ -2,7 +2,7 @@ import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../DisplayAvatar.vue";
 
 export default {
-  title: "Components/UI/DisplayAvatar",
+  title: "Atoms/DisplayAvatar",
   component: StorybookComponent,
   argTypes: {
     size: {

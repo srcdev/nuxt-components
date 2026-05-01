@@ -20,7 +20,7 @@ interface ChipStoryArgs {
 }
 
 export default {
-  title: "Components/UI/DisplayChip",
+  title: "Molecules/DisplayChip",
   component: StorybookComponent,
   argTypes: {
     // Basic Configuration
