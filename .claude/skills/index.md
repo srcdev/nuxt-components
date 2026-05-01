@@ -78,6 +78,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── capture-qr-code.md      — CaptureQrCode: live camera scanner, error state, visibility/route/KeepAlive lifecycle, media stream cleanup
     ├── decode-qr-code.md       — DecodeQrCode: file picker + drag-and-drop image decoder, shared results list, CSS override points
     ├── auto-grid.md            — AutoGrid: auto-fit responsive grid, $slots iteration, --auto-grid-min-col-size/gap tokens, semantic tag + aria
+    ├── display-avatar.md       — DisplayAvatar: circular avatar with image/initials fallback, size variants, chip badge, icon slot, styleClassPassthrough
     ├── carousel-flip.md        — CarouselFlip: FLIP-animated carousel, carouselDataIds slot API, buttonLayout variants (sides/controls-flanking/controls-grouped-right/overlay), CSS tokens
     └── samaritan-prompt-mixed.md — SamaritanPromptMixed: animated text prompt, typewriter/word-pulse effects, MessageConfig API, aria-live accessibility, CSS tokens
 ```

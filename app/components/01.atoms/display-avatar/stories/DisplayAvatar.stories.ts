@@ -5,6 +5,14 @@ export default {
   title: "Components/UI/DisplayAvatar",
   component: StorybookComponent,
   argTypes: {
+    size: {
+      control: { type: "inline-radio" },
+      options: ["xs", "s", "md", "lg", "xl"],
+      description: "Avatar size",
+      table: {
+        category: "Avatar",
+      },
+    },
     src: {
       control: { type: "text" },
       description: "Avatar image source URL",
@@ -61,6 +69,7 @@ export default {
     },
   },
   args: {
+    size: "md",
     src: "https://github.com/srcdev.png",
     alt: "SrcDev Avatar",
     chipSize: 12,
@@ -77,7 +86,9 @@ const Template: StoryFn<typeof StorybookComponent> = (args) => ({
     return { args };
   },
   template: `
+    <div style="display: flex; align-items: center; justify-content: center; height: 100vh;">
     <StorybookComponent
+      :size="args.size"
       :src="args.src"
       :alt="args.alt"
       :chip="{
@@ -88,6 +99,7 @@ const Template: StoryFn<typeof StorybookComponent> = (args) => ({
       }"
       :style-class-passthrough="args.styleClassPassthrough"
     />
+    </div>
   `,
 });
 
