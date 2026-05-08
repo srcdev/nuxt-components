@@ -172,72 +172,80 @@ onUnmounted(stop);
   src: url("/fonts/monoMMM_5.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
 }
 
-.samaritan-prompt {
-  --_font-size: var(--samaritan-font-size, 2rem);
-  --_color-text: var(--samaritan-color-text, #ffffff);
-  --_color-underline: var(--samaritan-color-underline, #ffffff);
-  --_color-cursor: var(--samaritan-color-cursor, #cc0000);
-  --_color-cursor-off: var(--samaritan-color-cursor-off, transparent);
-  --_font-family: var(--samaritan-font-family, "Mono MMM 5", "Nova Mono", "Courier New", monospace);
-  --_letter-spacing: var(--samaritan-letter-spacing, 0.08em);
-
+.samaritan-stage {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  row-gap: 0.6rem;
-  font-family: var(--_font-family);
-  font-size: var(--_font-size);
-  letter-spacing: var(--_letter-spacing);
+  justify-content: center;
+  min-block-size: 100dvh;
+  width: 100%;
 
-  .samaritan-prompt__content {
+  .samaritan-prompt {
+    --_font-size: var(--samaritan-font-size, 2rem);
+    --_color-text: var(--samaritan-color-text, #ffffff);
+    --_color-underline: var(--samaritan-color-underline, #ffffff);
+    --_color-cursor: var(--samaritan-color-cursor, #cc0000);
+    --_color-cursor-off: var(--samaritan-color-cursor-off, transparent);
+    --_font-family: var(--samaritan-font-family, "Mono MMM 5", "Nova Mono", "Courier New", monospace);
+    --_letter-spacing: var(--samaritan-letter-spacing, 0.08em);
+
     display: flex;
     flex-direction: column;
     align-items: center;
     row-gap: 0.6rem;
-    width: 100%;
-    transition: opacity v-bind(fadeDurationCss) ease;
+    font-family: var(--_font-family);
+    font-size: var(--_font-size);
+    letter-spacing: var(--_letter-spacing);
 
-    .samaritan-prompt__stage {
+    .samaritan-prompt__content {
       display: flex;
-      justify-content: center;
-      min-height: 1.2em;
+      flex-direction: column;
+      align-items: center;
+      row-gap: 0.6rem;
+      width: 100%;
+      transition: opacity v-bind(fadeDurationCss) ease;
 
-      .samaritan-prompt__text {
-        color: var(--_color-text);
-        white-space: nowrap;
-        text-transform: uppercase;
+      .samaritan-prompt__stage {
+        display: flex;
+        justify-content: center;
+        min-height: 1.2em;
+
+        .samaritan-prompt__text {
+          color: var(--_color-text);
+          white-space: nowrap;
+          text-transform: uppercase;
+        }
+      }
+
+      .samaritan-prompt__underline {
+        width: 100%;
+        min-width: 4ch;
+        height: 0.15rem;
+        background: var(--_color-underline);
       }
     }
 
-    .samaritan-prompt__underline {
-      width: 100%;
-      min-width: 4ch;
-      height: 0.15rem;
-      background: var(--_color-underline);
+    .samaritan-prompt__cursor {
+      color: var(--_color-cursor);
+      font-size: 2.4rem;
+      line-height: 1;
+      animation: samaritan-pulse 2.5s ease-in-out infinite;
+      transition: opacity 400ms ease;
     }
-  }
 
-  .samaritan-prompt__cursor {
-    color: var(--_color-cursor);
-    font-size: 2.4rem;
-    line-height: 1;
-    animation: samaritan-pulse 2.5s ease-in-out infinite;
-    transition: opacity 400ms ease;
-  }
-
-  .samaritan-prompt__sr-text {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
+    .samaritan-prompt__sr-text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
   }
 }
 

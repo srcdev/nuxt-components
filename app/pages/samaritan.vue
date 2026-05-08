@@ -230,11 +230,6 @@ const qaHideCursorInCycle = ref(true);
   --samaritan-letter-spacing: 0.14em;
 
   .samaritan-stage {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-block-size: 100dvh;
-
     .samaritan-stage--mixed {
       border-top: 1px solid oklch(100% 0 0 / 0.08);
     }
