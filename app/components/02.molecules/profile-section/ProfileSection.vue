@@ -100,11 +100,6 @@ watch(
       }
 
       .profile-info {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        height: stretch;
-
         .profile-info-content {
           .profile-info-block {
             margin-block-end: 1.5rem;
