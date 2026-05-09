@@ -24,6 +24,7 @@ For arbitrary slot content — a grid of images, video, markup — use `ScrollRe
 | `parallaxOffset` | `string` | `"36rem"` | Distance the image travels vertically across the full scroll range. Larger = more dramatic reveal. |
 | `focalX` | `string` | `"50%"` | Horizontal focal point — CSS `object-position` x-axis value. Controls which horizontal slice stays in view. |
 | `radius` | `string` | `"0px"` | `border-radius` applied to the clipping frame. |
+| `loading` | `"lazy" \| "eager"` | `"lazy"` | Image loading strategy. Use `"eager"` if this is the LCP image (e.g. partially in view on load). |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root `<figure>`. |
 
 ## Basic usage
@@ -157,7 +158,7 @@ See `scroll-reveal-frame.md` for the full guide. For portrait images the default
 ## Notes
 
 - The root `<figure>` has `margin: 0` set in the component — browser default `<figure>` margins are neutralised at source.
-- `loading="lazy"` and `decoding="async"` are hardcoded on the `<img>`. If this component is the LCP image, override with `loading="eager"` via a CSS-only approach is not possible — use `ScrollRevealFrame` with a manual `NuxtImg` instead and set `:loading="'eager'"`.
+- `decoding="async"` is always set on the `<img>`. Use `:loading="'eager'"` if this component is the LCP image (e.g. a hero partially in view on load) — the default `"lazy"` is correct for below-fold usage.
 - Do not place inside a container with `overflow: hidden` or `overflow: clip` — breaks the `view-timeline` scroll detection inherited from `ScrollRevealFrame`.
 - Reduced-motion: animation is disabled and the image falls back to a static crop centred at `object-position: <focalX> 50%`.
 - Storybook: the `"none"` image provider is active (`nuxt.config.ts`), so `src` paths pass through unchanged. Always provide explicit `img-width` and `img-height` props to avoid the `w=1536` fallback in deployed Storybook.

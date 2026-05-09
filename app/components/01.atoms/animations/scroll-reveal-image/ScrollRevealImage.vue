@@ -12,7 +12,7 @@
       :alt="alt"
       :width="imgWidth"
       :height="imgHeight"
-      loading="lazy"
+      :loading="loading"
       decoding="async"
     />
   </ScrollRevealFrame>
@@ -51,6 +51,7 @@ interface Props {
   focalX?: string;
   /** Optional rounded corners on the frame. */
   radius?: string;
+  loading?: "lazy" | "eager";
   styleClassPassthrough?: string | string[];
 }
 
@@ -62,6 +63,7 @@ withDefaults(defineProps<Props>(), {
   parallaxOffset: "36rem",
   focalX: "50%",
   radius: "0px",
+  loading: "lazy",
   styleClassPassthrough: () => [],
 });
 </script>

@@ -32,6 +32,7 @@ describe("ScrollRevealImage", () => {
         parallaxOffset: "20rem",
         focalX: "30%",
         radius: "1.6rem",
+        loading: "eager",
         styleClassPassthrough: ["custom-class"],
       },
     });
@@ -179,11 +180,18 @@ describe("ScrollRevealImage", () => {
     expect(img.attributes("height")).toBe("1920");
   });
 
-  it("sets loading=lazy on the image element", async () => {
+  it("sets loading=lazy on the image element by default", async () => {
     const wrapper = await mountSuspended(ScrollRevealImage, {
       props: { src: "/images/test.jpg" },
     });
     expect(wrapper.find("img[data-nuxt-img]").attributes("loading")).toBe("lazy");
+  });
+
+  it("passes loading=eager to the image element when set", async () => {
+    const wrapper = await mountSuspended(ScrollRevealImage, {
+      props: { src: "/images/test.jpg", loading: "eager" },
+    });
+    expect(wrapper.find("img[data-nuxt-img]").attributes("loading")).toBe("eager");
   });
 
   it("sets decoding=async on the image element", async () => {
