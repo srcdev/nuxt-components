@@ -29,6 +29,46 @@ Auto-imported by Nuxt — **do not create a local copy**.
 |---|---|---|
 | `handleNavClick` | `(event: MouseEvent, href: string) => void` | Attach to click handlers. No-ops silently for non-`#` hrefs — safe on all links. |
 | `scrollToAnchor` | `(hash: string) => void` | Scroll programmatically. Accepts `"#section"` or `"section"`. Respects motion preference and offset. |
+| `activeHash` | `Ref<string>` | Reactive ref tracking the currently active hash. Starts `""` on server and after hydration is set from `window.location.hash`. Updated on every `handleNavClick` call. Use this to drive `is-active` classes — **do not use `route.hash`**, which is not updated by `history.pushState`. |
+
+---
+
+## Active state
+
+`activeHash` is the correct way to drive active-state styling on anchor nav links.
+
+**Why not `route.hash`?** `handleNavClick` calls `history.pushState` directly (to avoid triggering Vue Router's scroll behaviour). `pushState` does not update Vue Router's reactive `route.hash`, so `route.hash` stays stale after clicks.
+
+**Hydration safety:** `activeHash` is initialised to `""` on both server and client so the SSR-rendered HTML always matches the pre-mount client vdom. The real hash is applied in `onMounted`, after hydration, to avoid mismatches.
+
+**Default active item:** `activeHash` is empty until `onMounted` fires. If no hash is in the URL, set a default in the component's own `onMounted` (which runs after the composable's `onMounted`):
+
+```ts
+const { handleNavClick, activeHash } = useAnchorScroll({ offset: 64 });
+
+onMounted(() => {
+  // Default to first section when no hash is in the URL
+  if (!activeHash.value && sections[0]) activeHash.value = `#${sections[0].id}`;
+});
+```
+
+### Binding active state in a template
+
+```vue
+<a
+  v-for="section in sections"
+  :key="section.id"
+  :href="`#${section.id}`"
+  :class="{ 'is-active': `#${section.id}` === activeHash }"
+  @click="(e) => handleNavClick(e, `#${section.id}`)"
+>{{ section.label }}</a>
+```
+
+### Active state in TabNavigation
+
+`TabNavigation` handles `activeHash` internally for hash nav items. No extra work needed —
+just pass anchor hrefs in `navItemData` and the active indicator moves automatically on click
+and on initial load (defaulting to the first hash item when the URL has no hash).
 
 ---
 
@@ -92,19 +132,25 @@ It reads `offsetHeight` at scroll time, so resize changes are always captured.
 ```ts
 const stickyNavRef = ref<HTMLElement | null>(null);
 
-const { handleNavClick } = useAnchorScroll({ offsetElement: stickyNavRef });
+const { handleNavClick, activeHash } = useAnchorScroll({ offsetElement: stickyNavRef });
+
+onMounted(() => {
+  if (!activeHash.value && sections[0]) activeHash.value = `#${sections[0].id}`;
+});
 ```
 
 ```vue
 <nav ref="stickyNavRef" class="sticky-section-nav">
-  <a href="#overview" @click="(e) => handleNavClick(e, '#overview')">Overview</a>
-  <a href="#pricing"  @click="(e) => handleNavClick(e, '#pricing')">Pricing</a>
-  <a href="#contact"  @click="(e) => handleNavClick(e, '#contact')">Contact</a>
+  <a
+    v-for="section in sections"
+    :key="section.id"
+    :href="`#${section.id}`"
+    :class="{ 'is-active': `#${section.id}` === activeHash }"
+    @click="(e) => handleNavClick(e, `#${section.id}`)"
+  >{{ section.label }}</a>
 </nav>
 
-<section id="overview">…</section>
-<section id="pricing">…</section>
-<section id="contact">…</section>
+<section v-for="section in sections" :key="section.id" :id="section.id">…</section>
 ```
 
 CSS to make the nav sticky:
@@ -125,7 +171,7 @@ Same pattern as above — useful for terms, privacy policy, or documentation pag
 sidebar links to in-document sections.
 
 ```ts
-const { handleNavClick } = useAnchorScroll({ offset: 24 }); // fixed header height
+const { handleNavClick, activeHash } = useAnchorScroll({ offset: 24 }); // fixed header height
 ```
 
 ```vue
@@ -133,6 +179,7 @@ const { handleNavClick } = useAnchorScroll({ offset: 24 }); // fixed header heig
   <nav>
     <a v-for="section in termsSections" :key="section.id"
        :href="`#${section.id}`"
+       :class="{ 'is-active': `#${section.id}` === activeHash }"
        @click="(e) => handleNavClick(e, `#${section.id}`)">
       {{ section.title }}
     </a>
@@ -195,15 +242,15 @@ height does not overlap the section heading.
 
 ```ts
 // ✅ offsetElement — reads offsetHeight at click time, no boilerplate
-const { handleNavClick } = useAnchorScroll({ offsetElement: navRef });
+const { handleNavClick, activeHash } = useAnchorScroll({ offsetElement: navRef });
 
 // ✅ offset getter — equivalent, useful when the offset is derived from more than one element
-const { handleNavClick } = useAnchorScroll({
+const { handleNavClick, activeHash } = useAnchorScroll({
   offset: () => navRef.value?.offsetHeight ?? 0,
 });
 
 // ✗ Static offset — stale if the bar changes height later
-const { handleNavClick } = useAnchorScroll({
+const { handleNavClick, activeHash } = useAnchorScroll({
   offset: navRef.value?.offsetHeight ?? 0,
 });
 ```
@@ -229,6 +276,11 @@ takes effect immediately on the next click.
 
 ## Notes
 
+- **`activeHash` vs `route.hash`** — always use `activeHash` for active-state classes. `route.hash`
+  is not updated by `history.pushState` and will be stale after clicks.
+- **Hydration mismatches** — `activeHash` is always `""` at render time; the real value is set in
+  `onMounted`. Never initialise it from `window.location.hash` in setup — that causes a server/client
+  class mismatch.
 - **`history.pushState`** — `handleNavClick` pushes the hash into the URL so the back button and
   deep links work correctly. This runs after `preventDefault` stops Vue Router from navigating,
   so the URL stays in sync without triggering a router scroll.
