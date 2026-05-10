@@ -26,9 +26,7 @@
       "Bash(node -e ':*)",
       "Bash(git ls-tree *)",
       "Bash(node -p \"require\\('./package.json'\\).version\")",
-      "Bash(git status *)",
-      "Bash(cp /Users/simoncornforth/websites/nuxt-components/.claude/skills/components/data-grid.md /Users/simoncornforth/websites/nuxt-components/.claude/skills/components/auto-grid.md)",
-      "Bash(rm /Users/simoncornforth/websites/nuxt-components/.claude/skills/components/data-grid.md)"
+      "Bash(git status *)"
     ],
     "additionalDirectories": []
   }
