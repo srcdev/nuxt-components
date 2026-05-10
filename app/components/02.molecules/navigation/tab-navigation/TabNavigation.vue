@@ -27,6 +27,7 @@
           :external="item.isExternal || undefined"
           class="tab-nav-link"
           data-nav-item
+          @click="(e) => item.href && handleNavClick(e, item.href)"
         >
           <Icon v-if="item.iconName" :name="item.iconName" aria-hidden="true" />
           {{ item.text }}
@@ -77,7 +78,7 @@
               :href="item.href"
               :external="item.isExternal || undefined"
               class="tab-nav-panel-link"
-              @click="closeMenu"
+              @click="(e) => { item.href && handleNavClick(e, item.href); closeMenu(); }"
             >
               <Icon v-if="item.iconName" :name="item.iconName" aria-hidden="true" />
               {{ item.text }}
@@ -105,6 +106,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, isActiveItem, toggleMenu, closeMenu } =
   useNavCollapse("tab-nav-loaded");
+
+const { handleNavClick } = useAnchorScroll();
 
 // ─── Animation gate — disables indicator transitions during route changes ────
 // Starts true: CSS anchor positioning resolves before first paint so there is
