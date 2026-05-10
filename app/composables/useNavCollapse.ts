@@ -38,7 +38,11 @@ export const useNavCollapse = (stateKey: string, options: NavCollapseOptions = {
   const route = useRoute();
 
   const activeHref = computed(() => route.path);
-  const isActiveItem = (href?: string) => href === route.path;
+  const isActiveItem = (href?: string) => {
+    if (!href) return false;
+    if (href.startsWith("#")) return href === route.hash;
+    return href === route.path;
+  };
 
   watch(
     () => route.path,

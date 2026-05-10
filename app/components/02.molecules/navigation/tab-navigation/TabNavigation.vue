@@ -19,10 +19,22 @@
         v-for="item in navItemData.main"
         :key="item.href"
         :data-href="item.href"
-        :class="[item.cssName, { 'is-active': isActiveItem(item.href), 'is-hovered': hoveredItemHref === item.href }]"
+        :class="[item.cssName, { 'is-active': item.href?.startsWith('#') ? item.href === activeHash : isActiveItem(item.href), 'is-hovered': hoveredItemHref === item.href }]"
         @mouseenter="hoveredItemHref = item.href ?? null"
       >
+        <!-- Plain <a> for hash links — keeps Vue Router out of the smooth-scroll path -->
+        <a
+          v-if="item.href?.startsWith('#')"
+          :href="item.href"
+          class="tab-nav-link"
+          data-nav-item
+          @click="(e) => item.href && handleNavClick(e, item.href)"
+        >
+          <Icon v-if="item.iconName" :name="item.iconName" aria-hidden="true" />
+          {{ item.text }}
+        </a>
         <NuxtLink
+          v-else
           :href="item.href"
           :external="item.isExternal || undefined"
           class="tab-nav-link"
@@ -74,7 +86,17 @@
       <div class="tab-nav-panel-inner">
         <ul class="tab-nav-panel-list">
           <li v-for="item in navItemData.main" :key="item.href" :class="item.cssName">
+            <a
+              v-if="item.href?.startsWith('#')"
+              :href="item.href"
+              class="tab-nav-panel-link"
+              @click="(e) => { item.href && handleNavClick(e, item.href); closeMenu(); }"
+            >
+              <Icon v-if="item.iconName" :name="item.iconName" aria-hidden="true" />
+              {{ item.text }}
+            </a>
             <NuxtLink
+              v-else
               :href="item.href"
               :external="item.isExternal || undefined"
               class="tab-nav-panel-link"
@@ -97,17 +119,26 @@ interface Props {
   navItemData: NavItemData;
   navAlign?: "left" | "center" | "right";
   styleClassPassthrough?: string | string[];
+  anchorScrollOffset?: number | (() => number);
 }
 
 const props = withDefaults(defineProps<Props>(), {
   navAlign: "left",
   styleClassPassthrough: () => [],
+  anchorScrollOffset: undefined,
 });
 
 const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, isActiveItem, toggleMenu, closeMenu } =
   useNavCollapse("tab-nav-loaded");
 
-const { handleNavClick } = useAnchorScroll();
+const { handleNavClick, activeHash } = useAnchorScroll({ offset: props.anchorScrollOffset });
+
+onMounted(() => {
+  if (!activeHash.value) {
+    const firstHashItem = props.navItemData.main?.find((item) => item.href?.startsWith("#"));
+    if (firstHashItem?.href) activeHash.value = firstHashItem.href;
+  }
+});
 
 // ─── Animation gate — disables indicator transitions during route changes ────
 // Starts true: CSS anchor positioning resolves before first paint so there is

@@ -92,6 +92,7 @@ const responsiveNavLinks = {
         { name: "Display Pill", path: "/ui/display-pill" },
         { name: "Qr Codes", path: "/ui/qr-code/display" },
         { name: "Anchor Scroll", path: "/ui/anchor-scroll" },
+        { name: "Anchor Scroll (TabNavigation)", path: "/ui/anchor-scroll-tab-navigation" },
       ],
     },
     {

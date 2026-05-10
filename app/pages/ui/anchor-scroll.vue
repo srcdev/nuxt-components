@@ -26,6 +26,7 @@
                   <a
                     :href="`#${section.id}`"
                     class="anchor-nav-link"
+                    :class="{ 'is-active': `#${section.id}` === activeHash }"
                     @click="(e) => handleNavClick(e, `#${section.id}`)"
                   >{{ section.label }}</a>
                 </li>
@@ -216,8 +217,12 @@ const sections = [
   { id: "motion", label: "Reduced Motion" },
 ];
 
-const { handleNavClick } = useAnchorScroll({
+const { handleNavClick, activeHash } = useAnchorScroll({
   offset: () => stickyNavRef.value?.offsetHeight ?? 0,
+});
+
+onMounted(() => {
+  if (!activeHash.value && sections[0]) activeHash.value = `#${sections[0].id}`;
 });
 </script>
 
@@ -254,6 +259,11 @@ const { handleNavClick } = useAnchorScroll({
     color: var(--slate-00, currentColor);
     border-block-end-color: currentColor;
     outline: none;
+  }
+
+  &.is-active {
+    color: var(--slate-00, currentColor);
+    border-block-end-color: currentColor;
   }
 }
 

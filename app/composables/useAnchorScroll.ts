@@ -1,16 +1,20 @@
 interface UseAnchorScrollOptions {
   offset?: number | (() => number);
+  offsetElement?: Ref<HTMLElement | null>;
 }
 
 export const useAnchorScroll = (options: UseAnchorScrollOptions = {}) => {
-  const { offset = 0 } = options;
+  const { offset = 0, offsetElement } = options;
 
   const prefersReducedMotion = (): boolean => {
     if (import.meta.server) return false;
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   };
 
-  const resolveOffset = (): number => (typeof offset === "function" ? offset() : offset);
+  const resolveOffset = (): number => {
+    if (offsetElement) return offsetElement.value?.offsetHeight ?? 0;
+    return typeof offset === "function" ? offset() : offset;
+  };
 
   const scrollToAnchor = (hash: string): void => {
     if (import.meta.server) return;
@@ -29,6 +33,14 @@ export const useAnchorScroll = (options: UseAnchorScrollOptions = {}) => {
     }
   };
 
+  // Starts empty so server and client render identically (no hydration mismatch).
+  // onMounted sets the real value after hydration, client-only.
+  const activeHash = ref("");
+
+  onMounted(() => {
+    activeHash.value = window.location.hash;
+  });
+
   // Intercepts anchor (#hash) clicks only. Routes and external links are left
   // to NuxtLink/router unchanged. When reduced motion is preferred, the default
   // browser/router anchor jump is preserved; otherwise we prevent that default
@@ -38,9 +50,10 @@ export const useAnchorScroll = (options: UseAnchorScrollOptions = {}) => {
     if (prefersReducedMotion()) return;
 
     event.preventDefault();
+    activeHash.value = href;
     history.pushState(null, "", href);
     scrollToAnchor(href);
   };
 
-  return { handleNavClick, scrollToAnchor };
+  return { handleNavClick, scrollToAnchor, activeHash };
 };

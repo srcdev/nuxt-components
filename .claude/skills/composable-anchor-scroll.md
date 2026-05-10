@@ -20,7 +20,8 @@ Auto-imported by Nuxt — **do not create a local copy**.
 
 | Option | Type | Default | Description |
 |---|---|---|---|
-| `offset` | `number \| (() => number)` | `0` | Pixels subtracted from the final scroll position. Pass a getter function to read a sticky element's height at scroll time rather than at composable init. |
+| `offset` | `number &#124; (() => number)` | `0` | Pixels subtracted from the final scroll position. Pass a getter function to read a sticky element's height at scroll time rather than at composable init. |
+| `offsetElement` | `Ref<HTMLElement &#124; null>` | — | Convenience alternative to `offset`. Reads `element.offsetHeight` at scroll time. Takes priority over `offset` when both are supplied. |
 
 ### Returns
 
@@ -33,12 +34,24 @@ Auto-imported by Nuxt — **do not create a local copy**.
 
 ## Usage patterns
 
-### 1. TabNavigation with anchor links (no extra code needed)
+### 1. TabNavigation with a sticky site header
 
-`TabNavigation` has `useAnchorScroll` wired up internally. Pass anchor hrefs in
-`navItemData.main` and smooth scrolling works automatically.
+`TabNavigation` accepts an `anchorScrollOffset` prop that is passed directly to `useAnchorScroll`.
+Pass a getter so the live header height is read at scroll time — this stays correct if the
+header resizes on different viewports.
+
+```vue
+<header ref="headerRef">
+  <TabNavigation
+    :nav-item-data="navItemData"
+    :anchor-scroll-offset="() => headerRef?.offsetHeight ?? 0"
+  />
+</header>
+```
 
 ```ts
+const headerRef = ref<HTMLElement | null>(null);
+
 const navItemData = {
   main: [
     { text: "About",    href: "#about" },
@@ -49,27 +62,37 @@ const navItemData = {
 };
 ```
 
-```vue
-<TabNavigation :nav-item-data="navItemData" />
+**CSS alternative** — if you want all anchor links site-wide to respect the sticky header
+(not just the ones inside `TabNavigation`), add `scroll-padding-top` to `html` instead and
+skip the prop:
+
+```css
+/* ─ app/assets/styles/setup/01.config/_head.css ─ */
+html {
+  scroll-padding-top: var(--sticky-header-height, 64px);
+}
 ```
 
-No offset is applied here. If your site header is fixed/sticky and obscures section headings,
-use pattern 2 below to build a custom nav with an explicit offset.
+```css
+/* ─ app/assets/styles/main.css ─ */
+:root {
+  --sticky-header-height: 64px; /* adjust to match actual header height */
+}
+```
+
+`scrollIntoView` respects `scroll-padding-top`, so this works with the no-offset code path.
 
 ---
 
-### 2. Sticky section nav with dynamic offset
+### 2. Sticky section nav with dynamic offset (using offsetElement)
 
-The most common single-page pattern: a sticky bar at the top of the content area, where
-each link scrolls to a section below it. Pass a getter for `offset` so the bar's live height
-is read at scroll time — this stays correct if the bar resizes (e.g. on viewport changes).
+The `offsetElement` option is the clearest way to derive an offset from an element ref.
+It reads `offsetHeight` at scroll time, so resize changes are always captured.
 
 ```ts
 const stickyNavRef = ref<HTMLElement | null>(null);
 
-const { handleNavClick } = useAnchorScroll({
-  offset: () => stickyNavRef.value?.offsetHeight ?? 0,
-});
+const { handleNavClick } = useAnchorScroll({ offsetElement: stickyNavRef });
 ```
 
 ```vue
@@ -156,10 +179,10 @@ onMounted(() => {
 
 ## How offset works
 
-Without `offset`, the composable calls `el.scrollIntoView({ behavior, block: "start" })` —
+Without `offset` or `offsetElement`, the composable calls `el.scrollIntoView({ behavior, block: "start" })` —
 the element's top edge aligns with the viewport top.
 
-With `offset`, it uses `window.scrollTo` with a calculated position:
+With an offset, it uses `window.scrollTo` with a calculated position:
 
 ```
 top = el.getBoundingClientRect().top + window.scrollY - offset
@@ -168,15 +191,18 @@ top = el.getBoundingClientRect().top + window.scrollY - offset
 This shifts the final resting position downward by `offset` pixels, so a sticky bar of that
 height does not overlap the section heading.
 
-**Use a getter when the bar can resize:**
+**`offsetElement` vs `offset` getter:**
 
 ```ts
-// ✅ Read height at click time
+// ✅ offsetElement — reads offsetHeight at click time, no boilerplate
+const { handleNavClick } = useAnchorScroll({ offsetElement: navRef });
+
+// ✅ offset getter — equivalent, useful when the offset is derived from more than one element
 const { handleNavClick } = useAnchorScroll({
   offset: () => navRef.value?.offsetHeight ?? 0,
 });
 
-// ✗ Captured at init — stale if the bar changes height later
+// ✗ Static offset — stale if the bar changes height later
 const { handleNavClick } = useAnchorScroll({
   offset: navRef.value?.offsetHeight ?? 0,
 });
@@ -194,6 +220,10 @@ When `window.matchMedia("(prefers-reduced-motion: reduce)").matches` is `true`:
 
 No configuration needed — the check happens at call time, so toggling the OS preference mid-session
 takes effect immediately on the next click.
+
+> **Debugging tip:** If clicks produce an instant jump instead of smooth scroll, check whether
+> "Reduce Motion" is enabled in your OS accessibility settings (macOS: System Preferences →
+> Accessibility → Display → Reduce Motion). This is intentional behaviour, not a bug.
 
 ---
 
