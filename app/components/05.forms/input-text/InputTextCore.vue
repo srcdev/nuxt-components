@@ -126,97 +126,97 @@ onMounted(() => {
 
 <style lang="css">
 @layer components {
-.input-text-wrapper {
-  display: flex;
-  align-items: center;
-  gap: var(--input-icon-slot-gap);
-  background-color: var(--theme-input-surface);
-  overflow: hidden;
-  transition: all var(--theme-form-transition-duration) ease-in-out;
-
-  z-index: 2;
-  position: relative;
-
-  &.normal {
-    border: var(--form-element-border-width) solid var(--theme-input-border);
-    border-radius: var(--form-input-border-radius);
-    outline: var(--form-element-outline-width) solid var(--theme-input-outline);
-
-    padding-inline: var(--input-padding-inline);
-
-    &:has(input:is(:hover)) {
-      outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
-      outline-offset: var(--form-element-outline-offset-focus);
-    }
-
-    &:has(input:focus-visible) {
-      outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
-      outline-offset: var(--form-element-outline-offset-focus);
-    }
-  }
-
-  &.underlined {
-    border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-input-border);
-    padding-inline: var(--input-padding-inline);
-  }
-
-  &.has-right-slot:has(.input-button-core) {
-    padding-inline-end: 0;
-  }
-
-  .slot {
+  .input-text-wrapper {
     display: flex;
     align-items: center;
-    justify-content: center;
-    box-sizing: content-box;
+    gap: var(--input-icon-slot-gap);
+    background-color: var(--theme-input-surface);
+    overflow: hidden;
+    transition: all var(--theme-form-transition-duration) ease-in-out;
 
-    .input-button-core {
-      background-color: var(--theme-input-surface);
-      aspect-ratio: 1;
-      border-radius: 0;
-      width: var(--input-min-height);
+    z-index: 2;
+    position: relative;
 
-      &:hover {
-        background-color: var(--theme-input-surface-hover);
-      }
+    &.normal {
+      border: var(--form-element-border-width) solid var(--theme-input-border);
+      border-radius: var(--form-input-border-radius);
+      outline: var(--form-element-outline-width) solid var(--theme-input-outline);
 
-      &:is(:focus-visible) {
+      padding-inline: var(--input-padding-inline);
+
+      &:has(input:is(:hover), button:is(:hover)) {
         outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
-        outline-offset: -4px;
+        outline-offset: var(--form-element-outline-offset-focus);
       }
 
-      &.icon-only {
-        .btn-icon {
-          margin: 0;
+      &:has(input:focus-visible, button:focus-visible) {
+        outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+        outline-offset: var(--form-element-outline-offset-focus);
+      }
+    }
+
+    &.underlined {
+      border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-input-border);
+      padding-inline: var(--input-padding-inline);
+    }
+
+    &.has-right-slot:has(.input-button-core) {
+      padding-inline-end: 0;
+    }
+
+    .slot {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: content-box;
+
+      .input-button-core {
+        background-color: var(--theme-input-surface);
+        aspect-ratio: 1;
+        border-radius: 0;
+        width: var(--input-min-height);
+
+        &:hover {
+          background-color: var(--theme-input-surface-hover);
+        }
+
+        &:is(:focus-visible) {
+          outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+          outline-offset: -4px;
+        }
+
+        &.icon-only {
+          .btn-icon {
+            margin: 0;
+          }
         }
       }
     }
-  }
 
-  .input-text-core {
-    all: unset;
-    touch-action: manipulation;
-    flex-grow: 1;
+    .input-text-core {
+      all: unset;
+      touch-action: manipulation;
+      flex-grow: 1;
 
-    color: var(--theme-input-text-color-normal);
-    font-family: var(--font-family);
-    font-size: var(--input-font-size);
+      color: var(--theme-input-text-color-normal);
+      font-family: var(--font-family);
+      font-size: var(--input-font-size);
 
-    /* line-height: var(--input-element-line-height); */
+      /* line-height: var(--input-element-line-height); */
 
-    padding-block: var(--input-padding-block);
-    padding-inline: var(--input-padding-inline);
-    /* height: stretch; */
-    min-height: var(--input-min-height);
+      padding-block: var(--input-padding-block);
+      padding-inline: var(--input-padding-inline);
+      /* height: stretch; */
+      min-height: var(--input-min-height);
 
-    &::placeholder {
-      color: var(--theme-input-placeholder);
-      font-size: var(--theme-input-placeholder-font-size);
-      font-style: italic;
-      line-height: 1;
-      font-weight: normal;
+      &::placeholder {
+        color: var(--theme-input-placeholder);
+        font-size: var(--theme-input-placeholder-font-size);
+        font-style: italic;
+        line-height: 1;
+        font-weight: normal;
+      }
     }
   }
-}
 }
 </style>

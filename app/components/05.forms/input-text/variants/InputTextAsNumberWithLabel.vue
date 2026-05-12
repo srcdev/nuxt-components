@@ -155,49 +155,49 @@ updateElementClasses(["input-text-as-number", "has-left-button", "has-right-butt
 
 <style lang="css">
 @layer components {
-.input-text-as-number {
-  .input-text-wrapper {
-    width: fit-content;
-    padding-inline: 0;
+  .input-text-as-number {
+    .input-text-wrapper {
+      width: fit-content;
+      padding-inline: 0;
 
-    &:has(.input-text-as-number) {
-      .slot {
-        margin-inline: 0;
+      &:has(.input-text-as-number) {
+        .slot {
+          margin-inline: 0;
 
-        .input-button-core {
-          background-color: var(--theme-input-surface);
+          .input-button-core {
+            background-color: var(--theme-input-surface);
 
-          &:hover {
-            background-color: var(--theme-input-surface-hover);
+            &:hover {
+              background-color: var(--theme-input-surface-hover);
+            }
+
+            &.icon-only {
+              .btn-icon {
+                margin: 0;
+              }
+            }
           }
 
-          &.icon-only {
-            .btn-icon {
-              margin: 0;
+          &.left-slot {
+            .input-button-core {
+              border-right: var(--form-element-border-width) solid var(--theme-input-border);
+            }
+          }
+
+          &.right-slot {
+            .input-button-core {
+              border-left: var(--form-element-border-width) solid var(--theme-input-border);
             }
           }
         }
+      }
 
-        &.left-slot {
-          .input-button-core {
-            border-right: var(--form-element-border-width) solid var(--theme-input-border);
-          }
-        }
-
-        &.right-slot {
-          .input-button-core {
-            border-left: var(--form-element-border-width) solid var(--theme-input-border);
-          }
-        }
+      .input-text-core.input-text-as-number {
+        flex-grow: initial;
+        text-align: center;
+        width: v-bind(minLength);
       }
     }
-
-    .input-text-core.input-text-as-number {
-      flex-grow: initial;
-      text-align: center;
-      width: v-bind(minLength);
-    }
   }
-}
 }
 </style>

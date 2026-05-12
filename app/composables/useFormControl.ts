@@ -6,8 +6,6 @@ import type {
   ICustomErrorMessage,
   IErrorMessagesArr,
 } from "../types/forms/types.forms"
-// import { formFieldC12 } from '@/components/forms/c12/utils';
-
 // export function useFormControl(name: string = '') {
 export function useFormControl(name: string = "") {
   let savedInitialState = {}

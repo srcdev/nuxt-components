@@ -5,12 +5,12 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
-  width: {
-    type: String as PropType<string>,
-    default: "narrow",
-    validator: (val: string) => ["narrow", "medium", "wide"].includes(val),
-  },
+interface Props {
+  width?: "narrow" | "medium" | "wide";
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  width: "narrow",
 });
 </script>
 

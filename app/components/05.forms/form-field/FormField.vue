@@ -11,24 +11,18 @@
 </template>
 
 <script setup lang="ts">
-defineProps({
-  width: {
-    type: String as PropType<string>,
-    default: "narrow",
-    validator: (val: string) => ["narrow", "medium", "wide"].includes(val),
-  },
-  fieldHasError: {
-    type: Boolean as PropType<boolean>,
-    default: false,
-  },
-  hasGutter: {
-    type: Boolean as PropType<boolean>,
-    default: true,
-  },
-  styleClassPassthrough: {
-    type: String,
-    default: "",
-  },
+interface Props {
+  width?: "narrow" | "medium" | "wide";
+  fieldHasError?: boolean;
+  hasGutter?: boolean;
+  styleClassPassthrough?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  width: "narrow",
+  fieldHasError: false,
+  hasGutter: true,
+  styleClassPassthrough: "",
 });
 </script>
 
@@ -47,7 +41,6 @@ defineProps({
 
     width: min(100% - calc(2 * var(--_gutter-width)), var(--_max-width));
     outline: 0rem solid var(--slate-05);
-    /* overflow-block: hidden; */
 
     &:has(.underline) {
       --_background-color: var(--theme-form-input-bg-underlined);

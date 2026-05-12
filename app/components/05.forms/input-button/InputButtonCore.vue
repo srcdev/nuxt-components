@@ -87,6 +87,8 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 <style lang="css">
 @layer components {
   .input-button-core {
+    all: unset;
+
     display: grid;
     grid-auto-flow: column;
     gap: var(--button-icon-gap);

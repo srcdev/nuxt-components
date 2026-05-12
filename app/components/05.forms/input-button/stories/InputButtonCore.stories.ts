@@ -239,7 +239,7 @@ const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
     };
   },
   template: `
-    <div class="space-y-4">
+    <div style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;margin: 36px;">
       <StorybookComponent
         v-bind="args"
         @click="handleClick"
