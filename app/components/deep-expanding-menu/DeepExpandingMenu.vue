@@ -57,152 +57,152 @@ watch(
 
 <style lang="css">
 @layer components {
-@layer deep-expanding-menu-setup {
-  @position-try --anchor-left {
-    inset: auto;
-    top: calc(anchor(bottom) + 10px);
-    left: calc(anchor(left) + 10px);
-  }
+  @layer deep-expanding-menu-setup {
+    @position-try --anchor-left {
+      inset: auto;
+      top: calc(anchor(bottom) + 10px);
+      left: calc(anchor(left) + 10px);
+    }
 
-  @position-try-fallbacks --anchor-right {
-    inset: auto;
-    top: calc(anchor(bottom) + 10px);
-    right: calc(anchor(right) + 10px);
-  }
+    @position-try-fallbacks --anchor-right {
+      inset: auto;
+      top: calc(anchor(bottom) + 10px);
+      right: calc(anchor(right) + 10px);
+    }
 
-  .deep-expanding-menu {
-    --_gap-between-top-level-items: 24px;
+    .deep-expanding-menu {
+      --_gap-between-top-level-items: 24px;
 
-    container-type: inline-size;
-    display: grid;
-    grid-template-areas: "element-stack";
+      container-type: inline-size;
+      display: grid;
+      grid-template-areas: "element-stack";
 
-    .inner {
-      grid-area: element-stack;
-      display: flex;
-      gap: var(--_gap-between-top-level-items);
-      align-items: center;
+      .inner {
+        grid-area: element-stack;
+        display: flex;
+        gap: var(--_gap-between-top-level-items);
+        align-items: center;
 
-      .navigation-link,
-      .navigation-group-toggle {
-        all: unset;
-        border-bottom: 2px solid transparent;
-        padding-block: 8px;
-
-        transition: border-color 200ms;
-
-        &:hover {
-          cursor: pointer;
-          border-color: light-dark(var(--blue-10), var(--slate-00));
-        }
-
-        &:focus {
-          border-color: light-dark(var(--blue-10), var(--slate-00));
-        }
-
-        &:focus-visible {
-          border-color: light-dark(var(--blue-10), var(--slate-00));
-        }
-      }
-
-      .navigation-group {
-        --_icon-transform: scaleY(1);
-        position: relative;
-
+        .navigation-link,
         .navigation-group-toggle {
-          anchor-name: var(--_anchor-name);
+          all: unset;
+          border-bottom: 2px solid transparent;
+          padding-block: 8px;
 
-          display: flex;
-          align-items: center;
-          gap: 12px;
+          transition: border-color 200ms;
 
-          .icon {
-            display: block;
-            font-size: 1.2rem;
+          &:hover {
+            cursor: pointer;
+            border-color: light-dark(var(--blue-10), var(--slate-00));
+          }
 
-            transform: var(--_icon-transform);
-            transition: transform 200ms;
+          &:focus {
+            border-color: light-dark(var(--blue-10), var(--slate-00));
+          }
+
+          &:focus-visible {
+            border-color: light-dark(var(--blue-10), var(--slate-00));
           }
         }
 
-        .navigation-group-panel {
-          display: none;
-          position: absolute;
-          position-anchor: var(--_anchor-name);
-          margin: 0;
-          /* inset: auto; */
-          top: calc(anchor(bottom) + 10px);
-          left: calc(anchor(left) + 0px);
+        .navigation-group {
+          --_icon-transform: scaleY(1);
+          position: relative;
 
-          opacity: 0;
-          transition:
-            opacity 200ms,
-            display 200ms,
-            overlay 200ms;
-          transition-behavior: allow-discrete;
+          .navigation-group-toggle {
+            anchor-name: var(--_anchor-name);
 
-          width: min(100%, 50vw);
+            display: flex;
+            align-items: center;
+            gap: 12px;
 
-          background-color: white;
-          border: 1px solid black;
-          border-radius: 12px;
-          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          padding: 12px;
-          overflow: clip;
-
-          &:popover-open {
-            display: block;
-            opacity: 1;
-
-            @starting-style {
+            .icon {
               display: block;
-              opacity: 0;
+              font-size: 1.2rem;
+
+              transform: var(--_icon-transform);
+              transition: transform 200ms;
             }
           }
 
-          h4 {
-            color: var(--slate-10);
-          }
+          .navigation-group-panel {
+            display: none;
+            position: absolute;
+            position-anchor: var(--_anchor-name);
+            margin: 0;
+            /* inset: auto; */
+            top: calc(anchor(bottom) + 10px);
+            left: calc(anchor(left) + 0px);
 
-          .navigation-group-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 12px;
-            padding-inline-start: 0;
-            margin-block-end: 8px;
+            opacity: 0;
+            transition:
+              opacity 200ms,
+              display 200ms,
+              overlay 200ms;
+            transition-behavior: allow-discrete;
 
-            .navigation-group-item {
+            width: min(100%, 50vw);
+
+            background-color: white;
+            border: 1px solid black;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 12px;
+            overflow: clip;
+
+            &:popover-open {
               display: block;
+              opacity: 1;
 
-              a.navigation-group-link {
-                display: inline-block;
-                color: var(--slate-10);
-                text-decoration: none;
-                padding-block: 8px;
+              @starting-style {
+                display: block;
+                opacity: 0;
+              }
+            }
 
-                border-bottom: 2px solid transparent;
+            h4 {
+              color: var(--slate-10);
+            }
 
-                transition: border-color 200ms;
+            .navigation-group-list {
+              display: grid;
+              grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+              gap: 12px;
+              padding-inline-start: 0;
+              margin-block-end: 8px;
 
-                &:hover {
-                  cursor: pointer;
-                  border-color: var(--slate-10);
-                }
+              .navigation-group-item {
+                display: block;
 
-                &:focus-visible {
-                  border-color: var(--slate-10);
+                a.navigation-group-link {
+                  display: inline-block;
+                  color: var(--slate-10);
+                  text-decoration: none;
+                  padding-block: 8px;
+
+                  border-bottom: 2px solid transparent;
+
+                  transition: border-color 200ms;
+
+                  &:hover {
+                    cursor: pointer;
+                    border-color: var(--slate-10);
+                  }
+
+                  &:focus-visible {
+                    border-color: var(--slate-10);
+                  }
                 }
               }
             }
           }
-        }
 
-        &:has(.navigation-group-panel:popover-open) {
-          --_icon-transform: scaleY(-1);
+          &:has(.navigation-group-panel:popover-open) {
+            --_icon-transform: scaleY(-1);
+          }
         }
       }
     }
   }
-}
 }
 </style>
