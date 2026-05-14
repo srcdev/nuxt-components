@@ -80,6 +80,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── decode-qr-code.md       — DecodeQrCode: file picker + drag-and-drop image decoder, shared results list, CSS override points
     ├── auto-grid.md            — AutoGrid: auto-fit responsive grid, $slots iteration, --auto-grid-min-col-size/gap tokens, semantic tag + aria
     ├── display-avatar.md       — DisplayAvatar: circular avatar with image/initials fallback, size variants, chip badge, icon slot, styleClassPassthrough
+    ├── card-core.md            — CardCore: generic card container, dynamic named slots as rows, 4 variants, blurred backdrop layer, full CSS token API
     ├── display-chip.md         — DisplayChip: status indicator chip overlay, CSS trig positioning, circle/square shapes, status colours, icon/label content
     ├── display-pill.md         — DisplayPill: pill/badge label with icon slot, 6 variants, 3 sizes, reversible order, full CSS token API for border/outline/colour
     ├── carousel-flip.md        — CarouselFlip: FLIP-animated carousel, carouselDataIds slot API, buttonLayout variants (sides/controls-flanking/controls-grouped-right/overlay), CSS tokens

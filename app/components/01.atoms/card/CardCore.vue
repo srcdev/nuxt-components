@@ -41,50 +41,77 @@ watch(
 <style lang="css">
 @layer components {
   .card-core {
-    --_inner-padding: 1rem;
-    --_background-color: white;
-    --_border-color: green;
-    --_border-width: 0.2rem;
-    --_box-shadow-color: transparent;
+    --_card-row-gap: var(--card-core-row-gap, 1rem);
+    --_card-padding: var(--card-core-inner-padding, 1rem);
+    --_card-lower-background-image: var(--card-core-lower-background-image, none);
+    --_card-lower-background-position: var(--card-core-lower-background-position, center);
+    --_card-lower-background-color: var(--card-core-lower-background-color, transparent);
+    --_card-lower-background-blur: var(--card-core-lower-background-blur, 16px);
+    --_card-lower-scale: var(--card-core-lower-scale, 1.1);
+    --_card-background-image: var(--card-core-background-image, none);
+    --_card-background-color: var(--card-core-background-color, transparent);
+    --_card-border: var(--card-core-border, 0.2rem solid var(--slate-08));
+    --_card-border-radius: var(--card-core-border-radius, 0.5rem);
+    --_card-box-shadow: var(--card-core-box-shadow, 0.1rem 0.1rem 0.4rem oklch(from var(--slate-08) l c h / 0.45));
 
     display: grid;
     grid-auto-flow: row;
-    /* gap: 1rem; */
-    border-radius: 0.5rem;
+    gap: var(--_card-row-gap);
+    border-radius: var(--_card-border-radius);
     overflow: hidden;
+    position: relative;
 
-    background-color: var(--_background-color, transparent);
-    border: var(--_border-width) solid var(--_border-color, transparent);
-    box-shadow: 0 0 0.4rem var(--_border-width) var(--_box-shadow-color, transparent);
+    background-color: var(--_card-background-color, transparent);
+    border: var(--_card-border);
+    box-shadow: var(--_card-box-shadow);
+
+    &::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-color: var(--_card-lower-background-color);
+      background-image: var(--_card-lower-background-image);
+      background-position: var(--_card-lower-background-position, center);
+      background-size: cover;
+      background-repeat: no-repeat;
+      filter: blur(var(--_card-lower-background-blur));
+      scale: var(--_card-lower-scale);
+      z-index: 0;
+    }
+
+    > * {
+      position: relative;
+      z-index: 1;
+    }
 
     &.no-outline {
-      --_border-width: 0;
+      --_card-border: 0 solid transparent;
+      --_card-box-shadow: none;
     }
 
     &.solid {
-      --_background-color: light-dark(var(--slate-00), var(--slate-10));
-      --_border-color: red;
+      --_card-background-color: light-dark(var(--slate-00), var(--slate-10));
+      --_card-border: 0.2rem solid var(--slate-08);
     }
 
     &.subtle {
-      --_background-color: color-mix(in oklab, light-dark(var(--slate-01), var(--slate-08)) 50%, transparent);
-      --_border-color: red;
+      --_card-background-color: color-mix(in oklab, light-dark(var(--slate-01), var(--slate-08)) 50%, transparent);
+      --_card-border: 0.2rem solid var(--slate-08);
     }
 
     &.soft {
-      --_background-color: color-mix(in oklab, light-dark(var(--slate-01), var(--slate-08)) 20%, transparent);
-      --_box-shadow-color: color-mix(in oklab, light-dark(var(--slate-02), var(--slate-08)) 80%, transparent);
+      --_card-background-color: color-mix(in oklab, light-dark(var(--slate-01), var(--slate-08)) 20%, transparent);
+      --_card-box-shadow-color: color-mix(in oklab, light-dark(var(--slate-02), var(--slate-08)) 80%, transparent);
     }
 
     &.outline {
-      --_background-color: transparent;
-      --_border-color: green;
+      --_card-background-color: transparent;
+      --_card-border: 0.2rem solid var(--slate-08);
     }
 
     &.has-dividers {
       .card-row + .card-row {
-        /* border-top: 0.2rem solid var(--_border-color); */
-        border-top: 0.2rem solid green;
+        border-top: 0.2rem solid var(--slate-08);
       }
     }
   }
