@@ -57,6 +57,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── hero-text.md            — HeroText props, usage patterns, styling
     ├── layout-grid-by-cols.md  — LayoutGridByCols dynamic slots (item-{n}), props, column/gap/breakpoint decisions
     ├── layout-row.md           — LayoutRow variant guide, width/margin decisions, usage patterns
+    ├── page-row.md             — PageRow layout primitive: CSS grid named lines, nesting pattern, align prop, aria-labelledby, CSS token API
     ├── link-text.md            — LinkText props, slots, usage patterns, styling
     ├── page-hero-highlights.md — PageHeroHighlights template: hero + highlights strip grid, CSS custom property theming
     ├── services-card.md        — ServicesCard props (incl. eyebrowConfig/heroConfig), actions slot, CSS tokens, page boilerplate

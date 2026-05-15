@@ -27,7 +27,6 @@
       "Bash(git ls-tree *)",
       "Bash(node -p \"require\\('./package.json'\\).version\")",
       "Bash(git status *)"
-    ],
-    "additionalDirectories": []
+    ]
   }
 }

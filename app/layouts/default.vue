@@ -1,6 +1,6 @@
 <template>
   <div class="page-layout">
-    <LayoutRow tag="div" variant="full" :style-class-passthrough="['header']">
+    <PageRow tag="div" variant="full" :style-class-passthrough="['header']">
       <template #default>
         <header class="responsive-header">
           <nav class="home-navigation" aria-label="Home Navigation">
@@ -37,17 +37,17 @@
           </ResponsiveHeader>
         </header>
       </template>
-    </LayoutRow>
-    <LayoutRow id="main-content" class="main-content" tag="main" variant="full" :is-landmark="true">
+    </PageRow>
+    <PageRow id="main-content" class="main-content" tag="main" variant="full" :is-landmark="true">
       <template #default>
         <slot name="layout-content">Page content goes here</slot>
       </template>
-    </LayoutRow>
-    <LayoutRow id="footer-content" tag="footer" variant="full" :is-landmark="true">
+    </PageRow>
+    <PageRow id="footer-content" tag="footer" variant="full" :is-landmark="true">
       <template #default>
         <p>Footer content here</p>
       </template>
-    </LayoutRow>
+    </PageRow>
   </div>
 </template>
 
