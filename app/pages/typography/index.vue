@@ -2,11 +2,11 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">Typography</h1>
           <h2 class="page-heading-2">Example styles used within page content</h2>
           <p class="page-body-normal">Use within main body content</p>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -15,7 +15,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Typography",
@@ -23,7 +23,7 @@ useHead({
   bodyAttrs: {
     class: "page-typography",
   },
-})
+});
 </script>
 
 <style lang="css">

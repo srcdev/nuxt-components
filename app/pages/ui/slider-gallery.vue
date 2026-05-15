@@ -2,11 +2,11 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['display-details-section', 'mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['display-details-section', 'mbe-20']">
           <h1 class="page-heading-2">Slider Gallery Component</h1>
 
           <SliderGallery v-model:gallery-data="galleryData" :auto-run="false" />
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -15,7 +15,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Slider Gallery Component",
@@ -28,7 +28,7 @@ useHead({
   bodyAttrs: {
     class: "slider-gallery-page",
   },
-})
+});
 
 const galleryData = ref([
   {
@@ -201,7 +201,7 @@ const galleryData = ref([
     },
     textBrightness: "light",
   },
-])
+]);
 </script>
 
 <style lang="css">

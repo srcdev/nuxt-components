@@ -2,25 +2,25 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Navigation Horizontal</h2>
           <p class="page-body-medium">This navigation has a reflective glow effect</p>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <DisplayThemeSwitch />
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-4']">
-          <LayoutRow tag="div" variant="content">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-4']">
+          <PageRow tag="div" variant="content">
             <h3 class="page-heading-3">User controllable</h3>
-          </LayoutRow>
+          </PageRow>
           <div class="nav-preview" :class="`theme-${theme}`" :style="navStyle">
             <NavigationHorizontal :nav-item-data="navItemData" />
           </div>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <div class="nav-playground">
             <fieldset>
               <legend>Theme</legend>
@@ -203,9 +203,9 @@
               </div>
             </fieldset>
           </div>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <div class="css-snippet">
             <div class="css-snippet-header">
               <h3 class="page-heading-3">CSS Token Snippet</h3>
@@ -213,7 +213,7 @@
             </div>
             <pre class="css-snippet-code">{{ cssSnippet }}</pre>
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

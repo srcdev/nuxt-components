@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-3">Simple Grid</h1>
           <p class="page-body-normal">Simple grid displaying dummy posts data</p>
 
@@ -21,7 +21,7 @@
           </GridCore>
 
           <p v-else class="page-body-normal">&hellip;Loading</p>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

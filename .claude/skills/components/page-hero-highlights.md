@@ -61,7 +61,7 @@ Each slot accepts any content, but these library components are natural fits:
 | `#header`     | `HeroText`                        | Heading with accent text, icon, and configurable size — wires `headingId` for `aria-labelledby` |
 | `#highlights` | `ServicesCard` (×n)               | Portrait cards with image, title, description, and CTA slot                                     |
 | `#highlights` | `LayoutGridByCols` wrapping cards | When you want a responsive column grid rather than a single row of cards                        |
-| `#content`    | Any content component             | Below the straddle — safe to use `LayoutRow`, `ServicesSection`, etc.                           |
+| `#content`    | Any content component             | Below the straddle — safe to use `PageRow`, `ServicesSection`, etc.                             |
 
 Example with `HeroText` in the header slot:
 

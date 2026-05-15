@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <HeroText
             :tag="'h1'"
             font-size="display"
@@ -10,11 +10,11 @@
             :style-class-passthrough="['mbe-20']"
           />
           <p class="page-body-normal">Example of a services card grid component.</p>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <PriceList :price-list-data="priceListData" :style-class-passthrough="['mbe-20']" />
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

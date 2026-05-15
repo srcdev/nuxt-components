@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">Typography - Heading Text</h1>
           <p class="page-body-normal">Page heading styles</p>
           <p class="page-body-normal">Use within main body content</p>
@@ -39,7 +39,7 @@
             <strong>page-heading-6</strong>
             <div class="class-demo page-heading-6">Lorum ipsum dolor sit amet, consectetur adipiscing elit.</div>
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Typography",
@@ -56,7 +56,7 @@ useHead({
   bodyAttrs: {
     class: "page-typography-heading",
   },
-})
+});
 </script>
 
 <style lang="css">

@@ -2,118 +2,129 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-4']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-4']">
           <h1 class="page-heading-1">Anchor Scroll — TabNavigation</h1>
           <p class="page-body-medium">
-            Tests <code class="inline-code">TabNavigation</code> with anchor hrefs. The nav uses
-            plain <code class="inline-code">&lt;a&gt;</code> tags for hash links (not
-            <code class="inline-code">NuxtLink</code>) to keep Vue Router out of the
-            smooth-scroll path. The <code class="inline-code">:anchor-scroll-offset</code> prop
-            passes a getter so the sticky bar height is read at scroll time.
+            Tests
+            <code class="inline-code">TabNavigation</code>
+            with anchor hrefs. The nav uses plain
+            <code class="inline-code">&lt;a&gt;</code>
+            tags for hash links (not
+            <code class="inline-code">NuxtLink</code>
+            ) to keep Vue Router out of the smooth-scroll path. The
+            <code class="inline-code">:anchor-scroll-offset</code>
+            prop passes a getter so the sticky bar height is read at scroll time.
           </p>
-        </LayoutRow>
+        </PageRow>
 
         <div ref="stickyNavRef" class="anchor-tab-nav-sticky">
-          <LayoutRow tag="div" variant="content">
+          <PageRow tag="div" variant="content">
             <TabNavigation
               :nav-item-data="anchorNavData"
               :anchor-scroll-offset="() => stickyNavRef?.offsetHeight ?? 0"
             />
-          </LayoutRow>
+          </PageRow>
         </div>
 
         <section id="overview" class="anchor-tab-section">
-          <LayoutRow tag="div" variant="content">
+          <PageRow tag="div" variant="content">
             <h2 class="page-heading-2">Overview</h2>
             <p class="page-body-medium">
-              This section verifies that clicking the <strong>Overview</strong> link above scrolls
-              here smoothly, with the heading landing below the sticky nav bar rather than behind it.
+              This section verifies that clicking the
+              <strong>Overview</strong>
+              link above scrolls here smoothly, with the heading landing below the sticky nav bar rather than behind it.
             </p>
             <p class="page-body-medium">
               The sticky nav's height is resolved at click time via the getter passed to
-              <code class="inline-code">:anchor-scroll-offset</code>. Resize the viewport — the
-              offset adjusts automatically.
+              <code class="inline-code">:anchor-scroll-offset</code>
+              . Resize the viewport — the offset adjusts automatically.
             </p>
             <p class="page-body-medium">
-              Hash links in <code class="inline-code">TabNavigation</code> render as plain
-              <code class="inline-code">&lt;a&gt;</code> elements (not
-              <code class="inline-code">NuxtLink</code>), which prevents Vue Router from
-              intercepting the click and triggering its own scroll behaviour.
+              Hash links in
+              <code class="inline-code">TabNavigation</code>
+              render as plain
+              <code class="inline-code">&lt;a&gt;</code>
+              elements (not
+              <code class="inline-code">NuxtLink</code>
+              ), which prevents Vue Router from intercepting the click and triggering its own scroll behaviour.
             </p>
-          </LayoutRow>
+          </PageRow>
         </section>
 
         <section id="api" class="anchor-tab-section">
-          <LayoutRow tag="div" variant="content">
+          <PageRow tag="div" variant="content">
             <h2 class="page-heading-2">API</h2>
             <p class="page-body-medium">
-              This section verifies the <strong>API</strong> link. Confirm the heading lands
-              below the sticky nav after scrolling.
+              This section verifies the
+              <strong>API</strong>
+              link. Confirm the heading lands below the sticky nav after scrolling.
             </p>
             <p class="page-body-medium">
-              The <code class="inline-code">anchorScrollOffset</code> prop on
-              <code class="inline-code">TabNavigation</code> accepts
-              <code class="inline-code">number | (() => number)</code> — the same type as the
-              <code class="inline-code">offset</code> option on <code class="inline-code">useAnchorScroll</code>
+              The
+              <code class="inline-code">anchorScrollOffset</code>
+              prop on
+              <code class="inline-code">TabNavigation</code>
+              accepts
+              <code class="inline-code">number | (() => number)</code>
+              — the same type as the
+              <code class="inline-code">offset</code>
+              option on
+              <code class="inline-code">useAnchorScroll</code>
               directly. It is forwarded verbatim to the composable.
             </p>
-            <div class="demo-code">const navItemData = {
-  main: [
-    { text: "Overview", href: "#overview" },
-    { text: "API",      href: "#api" },
-    { text: "Usage",    href: "#usage" },
-    { text: "Motion",   href: "#motion" },
-  ],
-};</div>
-            <div class="demo-code">&lt;div ref="stickyNavRef"&gt;
-  &lt;TabNavigation
-    :nav-item-data="navItemData"
-    :anchor-scroll-offset="() => stickyNavRef?.offsetHeight ?? 0"
-  /&gt;
-&lt;/div&gt;</div>
-          </LayoutRow>
+            <div class="demo-code">
+              const navItemData = { main: [ { text: "Overview", href: "#overview" }, { text: "API", href: "#api" }, {
+              text: "Usage", href: "#usage" }, { text: "Motion", href: "#motion" }, ], };
+            </div>
+            <div class="demo-code">
+              &lt;div ref="stickyNavRef"&gt; &lt;TabNavigation :nav-item-data="navItemData" :anchor-scroll-offset="() =>
+              stickyNavRef?.offsetHeight ?? 0" /&gt; &lt;/div&gt;
+            </div>
+          </PageRow>
         </section>
 
         <section id="usage" class="anchor-tab-section">
-          <LayoutRow tag="div" variant="content">
+          <PageRow tag="div" variant="content">
             <h2 class="page-heading-2">Usage</h2>
             <p class="page-body-medium">
-              This section verifies the <strong>Usage</strong> link. Confirm the heading lands
-              below the sticky nav after scrolling.
+              This section verifies the
+              <strong>Usage</strong>
+              link. Confirm the heading lands below the sticky nav after scrolling.
             </p>
             <p class="page-body-medium">
               Mixed navigation — routes and anchor hrefs in the same
-              <code class="inline-code">navItemData</code> — is supported. Route items render
-              as <code class="inline-code">NuxtLink</code>; anchor items render as plain
-              <code class="inline-code">&lt;a&gt;</code>. The handler is a no-op for routes
-              so both types can share the same click binding.
+              <code class="inline-code">navItemData</code>
+              — is supported. Route items render as
+              <code class="inline-code">NuxtLink</code>
+              ; anchor items render as plain
+              <code class="inline-code">&lt;a&gt;</code>
+              . The handler is a no-op for routes so both types can share the same click binding.
             </p>
-            <div class="demo-code">const navItemData = {
-  main: [
-    { text: "About",    href: "#about" },    // anchor — plain &lt;a&gt;
-    { text: "Services", href: "#services" }, // anchor — plain &lt;a&gt;
-    { text: "Blog",     href: "/blog" },     // route  — NuxtLink
-    { text: "Contact",  href: "#contact" },  // anchor — plain &lt;a&gt;
-  ],
-};</div>
-          </LayoutRow>
+            <div class="demo-code">
+              const navItemData = { main: [ { text: "About", href: "#about" }, // anchor — plain &lt;a&gt; { text:
+              "Services", href: "#services" }, // anchor — plain &lt;a&gt; { text: "Blog", href: "/blog" }, // route —
+              NuxtLink { text: "Contact", href: "#contact" }, // anchor — plain &lt;a&gt; ], };
+            </div>
+          </PageRow>
         </section>
 
         <section id="motion" class="anchor-tab-section">
-          <LayoutRow tag="div" variant="content">
+          <PageRow tag="div" variant="content">
             <h2 class="page-heading-2">Reduced Motion</h2>
             <p class="page-body-medium">
-              This section verifies the <strong>Reduced Motion</strong> link. With
-              <em>Reduce Motion</em> enabled in OS accessibility settings, clicks should
-              produce an instant jump rather than a smooth scroll — and the offset should still
-              be respected.
+              This section verifies the
+              <strong>Reduced Motion</strong>
+              link. With
+              <em>Reduce Motion</em>
+              enabled in OS accessibility settings, clicks should produce an instant jump rather than a smooth scroll —
+              and the offset should still be respected.
             </p>
             <p class="page-body-medium">
-              To test on macOS: <strong>System Settings → Accessibility → Display → Reduce
-              Motion</strong>. Refresh the page after toggling, then click any section link
-              above.
+              To test on macOS:
+              <strong>System Settings → Accessibility → Display → Reduce Motion</strong>
+              . Refresh the page after toggling, then click any section link above.
             </p>
-          </LayoutRow>
+          </PageRow>
         </section>
       </template>
     </NuxtLayout>

@@ -2,13 +2,13 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']">
           <h1 class="page-heading-2">Layout Grid 'A'</h1>
 
           <CanvasSwitcher v-model:canvasName="canvasName" />
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
           <LayoutGridA :styleClassPassthrough="[canvasName]">
             <template #slot1>
               <h3 class="page-heading-3">Slot 1</h3>
@@ -54,9 +54,9 @@
               </p>
             </template>
           </LayoutGridA>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']">
           <h2 class="page-heading-2">Full Width</h2>
           <p>
             Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit
@@ -72,7 +72,7 @@
             suscipit quisque convallis eget? Dignissim mattis luctus enim habitant porta pretium litora. Parturient
             montes imperdiet massa; sollicitudin varius hac aptent. Eleifend parturient mattis tellus nisi a montes.
           </p>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

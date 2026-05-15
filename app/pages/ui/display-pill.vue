@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout">
+        <PageRow tag="div" variant="popout">
           <h1 class="page-heading-2">Display Pill</h1>
 
           <!-- ── QA Panel (dev only) ───────────────────────────────── -->
@@ -15,7 +15,6 @@
                 </code>
               </summary>
               <div class="qa-panel__body">
-
                 <div class="qa-panel__group">
                   <span class="qa-panel__label">Variant</span>
                   <div class="qa-panel__chips">
@@ -25,7 +24,9 @@
                       class="qa-panel__chip"
                       :class="{ 'is-active': qaVariant === v }"
                       @click="qaVariant = v"
-                    >{{ v }}</button>
+                    >
+                      {{ v }}
+                    </button>
                   </div>
                 </div>
 
@@ -38,23 +39,21 @@
                       class="qa-panel__chip"
                       :class="{ 'is-active': qaSize === s }"
                       @click="qaSize = s"
-                    >{{ s }}</button>
+                    >
+                      {{ s }}
+                    </button>
                   </div>
                 </div>
 
                 <div class="qa-panel__group">
                   <span class="qa-panel__label">Reversed</span>
                   <div class="qa-panel__chips">
-                    <button
-                      class="qa-panel__chip"
-                      :class="{ 'is-active': !qaReversed }"
-                      @click="qaReversed = false"
-                    >icon → text</button>
-                    <button
-                      class="qa-panel__chip"
-                      :class="{ 'is-active': qaReversed }"
-                      @click="qaReversed = true"
-                    >text → icon</button>
+                    <button class="qa-panel__chip" :class="{ 'is-active': !qaReversed }" @click="qaReversed = false">
+                      icon → text
+                    </button>
+                    <button class="qa-panel__chip" :class="{ 'is-active': qaReversed }" @click="qaReversed = true">
+                      text → icon
+                    </button>
                   </div>
                 </div>
 
@@ -67,10 +66,11 @@
                       class="qa-panel__chip"
                       :class="{ 'is-active': qaTag === t }"
                       @click="qaTag = t"
-                    >&lt;{{ t }}&gt;</button>
+                    >
+                      &lt;{{ t }}&gt;
+                    </button>
                   </div>
                 </div>
-
               </div>
             </details>
           </div>
@@ -79,13 +79,7 @@
           <section>
             <h2 class="page-heading-3">Interactive preview</h2>
             <div class="demo-row">
-              <DisplayPill
-                :tag="qaTag"
-                label="Label text"
-                :variant="qaVariant"
-                :size="qaSize"
-                :reversed="qaReversed"
-              >
+              <DisplayPill :tag="qaTag" label="Label text" :variant="qaVariant" :size="qaSize" :reversed="qaReversed">
                 <template #icon>
                   <Icon name="material-symbols:star-outline-rounded" class="demo-icon" aria-hidden="true" />
                 </template>
@@ -138,12 +132,7 @@
 
               <div class="dt">Dashed border</div>
               <div class="dd">
-                <DisplayPill
-                  label="Dashed"
-                  :variant="qaVariant"
-                  :size="qaSize"
-                  style-class-passthrough="demo-dashed"
-                >
+                <DisplayPill label="Dashed" :variant="qaVariant" :size="qaSize" style-class-passthrough="demo-dashed">
                   <template #icon>
                     <Icon name="material-symbols:circle-outline" class="demo-icon" aria-hidden="true" />
                   </template>
@@ -210,12 +199,13 @@
                   <template #icon>
                     <Icon name="material-symbols:info-outline-rounded" class="demo-icon" aria-hidden="true" />
                   </template>
-                  <strong>Custom</strong>&nbsp;slot
+                  <strong>Custom</strong>
+                  &nbsp;slot
                 </DisplayPill>
               </div>
             </div>
           </section>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -271,7 +261,9 @@ const qaTag = ref<Tag>("span");
     list-style: none;
     user-select: none;
 
-    &::-webkit-details-marker { display: none; }
+    &::-webkit-details-marker {
+      display: none;
+    }
   }
 
   .qa-panel__title {
@@ -328,7 +320,9 @@ const qaTag = ref<Tag>("span");
     cursor: pointer;
     transition: background 0.15s;
 
-    &:hover { background: oklch(0% 0 0 / 0.4); }
+    &:hover {
+      background: oklch(0% 0 0 / 0.4);
+    }
 
     &.is-active {
       background: oklch(55% 0.18 240);

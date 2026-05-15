@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['display-details-section', 'mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['display-details-section', 'mbe-20']">
           <h1 class="page-heading-2">Details element - Unlinked</h1>
           <p class="mbe-12">Following 2 details block behave independantly.</p>
 
@@ -53,13 +53,9 @@
               </div>
             </template>
           </DisplayDetailsCore>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow
-          tag="div"
-          variant="full-width"
-          :style-class-passthrough="['display-details-section', 'mbe-20', 'hidden']"
-        >
+        <PageRow tag="div" variant="full" :style-class-passthrough="['display-details-section', 'mbe-20', 'hidden']">
           <h2 class="page-heading-2">Details element - Linked</h2>
           <p class="mbe-12">Details panels are linked, only 1 can be open at a time.</p>
 
@@ -108,7 +104,7 @@
               </div>
             </template>
           </DisplayDetailsCore>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -117,7 +113,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Browser title tag",
@@ -127,7 +123,7 @@ useHead({
       content: "Meta description content",
     },
   ],
-})
+});
 </script>
 
 <style lang="css">

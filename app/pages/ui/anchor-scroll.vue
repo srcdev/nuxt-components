@@ -2,24 +2,26 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-4']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-4']">
           <h1 class="page-heading-1">useAnchorScroll</h1>
           <p class="page-body-medium">
-            Intercepts <code class="inline-code">#hash</code> link clicks and smooth-scrolls to
-            the target element. Routes and external links pass through to NuxtLink unchanged.
-            Respects <code class="inline-code">prefers-reduced-motion</code> — when the user opts
-            out of motion, the default browser anchor jump is preserved with no custom scroll code
+            Intercepts
+            <code class="inline-code">#hash</code>
+            link clicks and smooth-scrolls to the target element. Routes and external links pass through to NuxtLink
+            unchanged. Respects
+            <code class="inline-code">prefers-reduced-motion</code>
+            — when the user opts out of motion, the default browser anchor jump is preserved with no custom scroll code
             involved.
           </p>
           <p class="page-body-medium">
             This page demonstrates the composable directly: the sticky bar below uses
-            <code class="inline-code">useAnchorScroll</code> with a dynamic offset so section
-            headings always land just below the bar after scrolling.
+            <code class="inline-code">useAnchorScroll</code>
+            with a dynamic offset so section headings always land just below the bar after scrolling.
           </p>
-        </LayoutRow>
+        </PageRow>
 
         <div ref="stickyNavRef" class="anchor-scroll-sticky-nav">
-          <LayoutRow tag="div" variant="content">
+          <PageRow tag="div" variant="content">
             <nav aria-label="Page sections">
               <ul class="anchor-nav-list">
                 <li v-for="section in sections" :key="section.id">
@@ -28,40 +30,46 @@
                     class="anchor-nav-link"
                     :class="{ 'is-active': `#${section.id}` === activeHash }"
                     @click="(e) => handleNavClick(e, `#${section.id}`)"
-                  >{{ section.label }}</a>
+                  >
+                    {{ section.label }}
+                  </a>
                 </li>
               </ul>
             </nav>
-          </LayoutRow>
+          </PageRow>
         </div>
 
         <section id="overview" class="anchor-demo-section">
-          <LayoutRow tag="div" variant="content">
+          <PageRow tag="div" variant="content">
             <h2 class="page-heading-2">Overview</h2>
             <p class="page-body-medium">
               Single-page and anchor-linked layouts need a bridge between
-              <code class="inline-code">NuxtLink</code> (which handles routes) and the browser's
-              native anchor scrolling (which has no smooth-scroll guarantee).
-              <code class="inline-code">useAnchorScroll</code> fills that gap.
+              <code class="inline-code">NuxtLink</code>
+              (which handles routes) and the browser's native anchor scrolling (which has no smooth-scroll guarantee).
+              <code class="inline-code">useAnchorScroll</code>
+              fills that gap.
             </p>
             <p class="page-body-medium">
-              Pass any <code class="inline-code">#hash</code> href to
-              <code class="inline-code">handleNavClick</code> — it prevents the default jump,
-              pushes the hash into the URL, and scrolls to the matching element. Every other href
-              (routes, external URLs) is a no-op, so the same handler is safe to attach to all
-              navigation links without conditional logic in the template.
+              Pass any
+              <code class="inline-code">#hash</code>
+              href to
+              <code class="inline-code">handleNavClick</code>
+              — it prevents the default jump, pushes the hash into the URL, and scrolls to the matching element. Every
+              other href (routes, external URLs) is a no-op, so the same handler is safe to attach to all navigation
+              links without conditional logic in the template.
             </p>
             <p class="page-body-medium">
-              An optional <code class="inline-code">offset</code> shifts the final scroll position
-              upward — useful when a sticky bar would otherwise obscure the section heading. Pass a
-              number for a fixed bar height or a getter function to read the bar's live height at
-              scroll time.
+              An optional
+              <code class="inline-code">offset</code>
+              shifts the final scroll position upward — useful when a sticky bar would otherwise obscure the section
+              heading. Pass a number for a fixed bar height or a getter function to read the bar's live height at scroll
+              time.
             </p>
-          </LayoutRow>
+          </PageRow>
         </section>
 
         <section id="api" class="anchor-demo-section">
-          <LayoutRow tag="div" variant="content">
+          <PageRow tag="div" variant="content">
             <h2 class="page-heading-2">API</h2>
 
             <h3 class="page-heading-3">Options</h3>
@@ -81,8 +89,8 @@
                     <td><code class="inline-code">number | (() =&gt; number)</code></td>
                     <td><code class="inline-code">0</code></td>
                     <td>
-                      Pixels subtracted from the scroll-to position. Pass a getter to read a sticky
-                      element's height at scroll time rather than at composable init.
+                      Pixels subtracted from the scroll-to position. Pass a getter to read a sticky element's height at
+                      scroll time rather than at composable init.
                     </td>
                   </tr>
                 </tbody>
@@ -103,37 +111,38 @@
                   <tr>
                     <td><code class="inline-code">handleNavClick</code></td>
                     <td><code class="inline-code">(event: MouseEvent, href: string) =&gt; void</code></td>
-                    <td>
-                      Attach to click handlers. No-ops silently for non-anchor hrefs so it is safe
-                      on all links.
-                    </td>
+                    <td>Attach to click handlers. No-ops silently for non-anchor hrefs so it is safe on all links.</td>
                   </tr>
                   <tr>
                     <td><code class="inline-code">scrollToAnchor</code></td>
                     <td><code class="inline-code">(hash: string) =&gt; void</code></td>
                     <td>
                       Programmatically scroll to a hash string (with or without the leading
-                      <code class="inline-code">#</code>). Respects the same motion preference and
-                      offset.
+                      <code class="inline-code">#</code>
+                      ). Respects the same motion preference and offset.
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-          </LayoutRow>
+          </PageRow>
         </section>
 
         <section id="usage" class="anchor-demo-section">
-          <LayoutRow tag="div" variant="content">
+          <PageRow tag="div" variant="content">
             <h2 class="page-heading-2">Usage</h2>
 
             <h3 class="page-heading-3">In TabNavigation</h3>
             <p class="page-body-medium">
-              <code class="inline-code">TabNavigation</code> already has
-              <code class="inline-code">useAnchorScroll</code> wired up internally. Pass anchor
-              hrefs in <code class="inline-code">navItemData</code> and it works automatically.
+              <code class="inline-code">TabNavigation</code>
+              already has
+              <code class="inline-code">useAnchorScroll</code>
+              wired up internally. Pass anchor hrefs in
+              <code class="inline-code">navItemData</code>
+              and it works automatically.
             </p>
-            <pre class="demo-code">const navItemData = {
+            <pre class="demo-code">
+const navItemData = {
   main: [
     { text: "About",    href: "#about" },
     { text: "Services", href: "#services" },
@@ -141,64 +150,77 @@
     { text: "Blog",     href: "/blog" },      // route — handled by NuxtLink as normal
   ],
 };
-</pre>
-            <pre class="demo-code">&lt;TabNavigation :nav-item-data="navItemData" /&gt;
-</pre>
+</pre
+            >
+            <pre class="demo-code">
+&lt;TabNavigation :nav-item-data="navItemData" /&gt;
+</pre
+            >
 
             <h3 class="page-heading-3">Standalone (this page)</h3>
             <p class="page-body-medium">
-              For custom anchor navs — like a sticky section bar or a terms-page sidebar — call
-              the composable directly. Pass a getter for
-              <code class="inline-code">offset</code> so it reads the element height at scroll
-              time rather than on mount.
+              For custom anchor navs — like a sticky section bar or a terms-page sidebar — call the composable directly.
+              Pass a getter for
+              <code class="inline-code">offset</code>
+              so it reads the element height at scroll time rather than on mount.
             </p>
-            <pre class="demo-code">const stickyNavRef = ref&lt;HTMLElement | null&gt;(null);
+            <pre class="demo-code">
+const stickyNavRef = ref&lt;HTMLElement | null&gt;(null);
 
 const { handleNavClick } = useAnchorScroll({
   offset: () =&gt; stickyNavRef.value?.offsetHeight ?? 0,
 });
-</pre>
-            <pre class="demo-code">&lt;div ref="stickyNavRef" class="sticky-nav"&gt;
+</pre
+            >
+            <pre class="demo-code">
+&lt;div ref="stickyNavRef" class="sticky-nav"&gt;
   &lt;a href="#overview" @click="(e) =&gt; handleNavClick(e, '#overview')"&gt;Overview&lt;/a&gt;
   &lt;a href="#api"      @click="(e) =&gt; handleNavClick(e, '#api')"&gt;API&lt;/a&gt;
 &lt;/div&gt;
-</pre>
+</pre
+            >
 
             <h3 class="page-heading-3">Programmatic scroll</h3>
             <p class="page-body-medium">
-              Use <code class="inline-code">scrollToAnchor</code> when you need to scroll without
-              a click event — for example, after a form submission or on route entry.
+              Use
+              <code class="inline-code">scrollToAnchor</code>
+              when you need to scroll without a click event — for example, after a form submission or on route entry.
             </p>
-            <pre class="demo-code">const { scrollToAnchor } = useAnchorScroll({ offset: 64 });
+            <pre class="demo-code">
+const { scrollToAnchor } = useAnchorScroll({ offset: 64 });
 
 onMounted(() =&gt; {
   if (route.hash) scrollToAnchor(route.hash);
 });
-</pre>
-          </LayoutRow>
+</pre
+            >
+          </PageRow>
         </section>
 
         <section id="motion" class="anchor-demo-section">
-          <LayoutRow tag="div" variant="content">
+          <PageRow tag="div" variant="content">
             <h2 class="page-heading-2">Reduced Motion</h2>
             <p class="page-body-medium">
-              When <code class="inline-code">prefers-reduced-motion: reduce</code> is active,
-              <code class="inline-code">handleNavClick</code> returns early without calling
-              <code class="inline-code">preventDefault</code>. The browser or Vue Router handles
-              the anchor navigation natively — an instant jump with no custom scroll code
-              involved. No special configuration needed.
+              When
+              <code class="inline-code">prefers-reduced-motion: reduce</code>
+              is active,
+              <code class="inline-code">handleNavClick</code>
+              returns early without calling
+              <code class="inline-code">preventDefault</code>
+              . The browser or Vue Router handles the anchor navigation natively — an instant jump with no custom scroll
+              code involved. No special configuration needed.
             </p>
             <p class="page-body-medium">
-              To test: open your OS accessibility settings, enable Reduce Motion, then click
-              a section link in the bar above. The page will jump immediately instead of
-              scrolling.
+              To test: open your OS accessibility settings, enable Reduce Motion, then click a section link in the bar
+              above. The page will jump immediately instead of scrolling.
             </p>
             <p class="page-body-medium">
-              <code class="inline-code">scrollToAnchor</code> respects the same preference:
-              it uses <code class="inline-code">behavior: "instant"</code> when reduced motion
-              is detected, so programmatic scrolls are equally accessible.
+              <code class="inline-code">scrollToAnchor</code>
+              respects the same preference: it uses
+              <code class="inline-code">behavior: "instant"</code>
+              when reduced motion is detected, so programmatic scrolls are equally accessible.
             </p>
-          </LayoutRow>
+          </PageRow>
         </section>
       </template>
     </NuxtLayout>
@@ -252,7 +274,9 @@ onMounted(() => {
   text-decoration: none;
   padding-block: 0.4rem;
   border-block-end: 1.5px solid transparent;
-  transition: color 200ms ease, border-color 200ms ease;
+  transition:
+    color 200ms ease,
+    border-color 200ms ease;
 
   &:hover,
   &:focus-visible {

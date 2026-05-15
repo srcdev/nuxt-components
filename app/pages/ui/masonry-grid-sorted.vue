@@ -2,12 +2,12 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Masonry Grid</h1>
           <CanvasSwitcher v-model:canvas-name="canvasName" />
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <MasonryGridSorted
             :grid-data="quotesData?.quotes.slice(0, qoutesDisplayCount) ?? []"
             :item-min-width="350"
@@ -26,7 +26,7 @@
               </div>
             </template>
           </MasonryGridSorted>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

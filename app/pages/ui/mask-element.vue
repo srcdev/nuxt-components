@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Mask Element</h2>
 
           <div class="test-mask-element">
@@ -24,7 +24,7 @@
               </div>
             </AlertMaskCore>
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

@@ -2,12 +2,11 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Container Glow Effect</h1>
           <p>Glow will track mouse position</p>
 
           <ContainerGlowCore
-            
             tag="div"
             :style-class-passthrough="['class-scope', 'pbe-20']"
             :config="{
@@ -26,7 +25,7 @@
               </div>
             </template>
           </ContainerGlowCore>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

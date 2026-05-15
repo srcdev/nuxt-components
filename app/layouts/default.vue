@@ -105,7 +105,7 @@ const responsiveNavLinks = {
         { name: "Site Navigation", path: "/ui/navigation/site-navigation" },
         { name: "Deep Expanding Menu", path: "/ui/deep-expanding-menu" },
         { name: "Magnetic Navigation", path: "/ui/magnetic-navigation" },
-        { name: "Layout Row", path: "/ui/layout-row" },
+        { name: "Page Row", path: "/ui/page-row" },
         { name: "Layout Grid A", path: "/ui/layout-grid-a" },
         { name: "Layout Grid B", path: "/ui/layout-grid-b" },
         { name: "Simple Grid", path: "/ui/simple-grid" },

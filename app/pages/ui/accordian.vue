@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Accordian</h1>
           <p>Any item open and/closed</p>
 
@@ -21,9 +21,9 @@
               <p class="pb-12">{{ item.content }}</p>
             </template>
           </AccordianCore>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Accordian</h2>
           <p>Only 1 item open, pass a name prop</p>
 
@@ -49,7 +49,7 @@
               <p class="pb-12">This is content slot 2</p>
             </template>
           </AccordianCore>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

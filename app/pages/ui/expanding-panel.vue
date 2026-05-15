@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['expanding-panel-section', 'mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['expanding-panel-section', 'mbe-20']">
           <h1 class="page-heading-2">Details element - Unlinked</h1>
           <p class="mbe-12">Following 2 details block behave independantly.</p>
 
@@ -41,13 +41,9 @@
               </div>
             </template>
           </ExpandingPanel>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow
-          tag="div"
-          variant="full-width"
-          :style-class-passthrough="['expanding-panel-section', 'mbe-20', 'hidden']"
-        >
+        <PageRow tag="div" variant="full" :style-class-passthrough="['expanding-panel-section', 'mbe-20', 'hidden']">
           <h2 class="page-heading-2">Details element - Linked</h2>
           <p class="mbe-12">Details panels are linked, only 1 can be open at a time.</p>
 
@@ -96,9 +92,9 @@
               </div>
             </template>
           </ExpandingPanel>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['expanding-panel-section', 'mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['expanding-panel-section', 'mbe-20']">
           <h1 class="page-heading-2">Details element - forceOpened</h1>
           <p class="page-body-normal">Will be displayed as force opened via prop forceOpened</p>
           <p class="page-body-normal">Also contains a button and link within content which toggles to closed</p>
@@ -134,7 +130,7 @@
               </div>
             </template>
           </ExpandingPanel>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -143,7 +139,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Browser title tag",
@@ -153,14 +149,14 @@ useHead({
       content: "Meta description content",
     },
   ],
-})
+});
 
-const forceOpened = ref(false)
-const isPanelOpen = ref(false)
+const forceOpened = ref(false);
+const isPanelOpen = ref(false);
 
 const closePanel = () => {
-  isPanelOpen.value = false
-}
+  isPanelOpen.value = false;
+};
 </script>
 
 <style lang="css">

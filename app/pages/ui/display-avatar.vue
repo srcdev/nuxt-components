@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout">
+        <PageRow tag="div" variant="popout">
           <h1 class="page-heading-2">Display Avatar</h1>
 
           <form>
@@ -136,7 +136,7 @@
               </div>
             </div>
           </section>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

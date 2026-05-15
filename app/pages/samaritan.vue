@@ -148,13 +148,13 @@
           </details>
         </div>
 
-        <LayoutRow tag="div" variant="full-width">
+        <PageRow tag="div" variant="full">
           <div class="samaritan-stage samaritan-stage--mixed">
             <SamaritanPromptMixed :message-configs="mixedMessages" :hide-cursor-in-cycle="false" />
           </div>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width">
+        <PageRow tag="div" variant="full">
           <div class="samaritan-stage">
             <SamaritanPrompt
               :messages="messages"
@@ -168,7 +168,7 @@
               :hide-cursor-in-cycle="qaHideCursorInCycle"
             />
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <EyebrowText font-size="large" text-content="Services" />
 
           <HeroText
@@ -20,11 +20,11 @@
           <p class="page-body-normal">
             <NuxtLink to="/ui/services/services-cards" class="page-link-normal">Back to Services</NuxtLink>
           </p>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <ServicesSection v-if="servicesData.length > 0 && serviceData" :service-data="serviceData!" />
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

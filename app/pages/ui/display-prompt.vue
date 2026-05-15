@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" style-class-passthrough="['pb-12']">
+        <PageRow tag="div" variant="popout" style-class-passthrough="['pb-12']">
           <h1 class="page-heading-2">Display Prompts</h1>
 
           <section class="prompt-examples pb-12">
@@ -55,7 +55,7 @@
               <template #content>This is prompt content, it can contain html or plain text.</template>
             </DisplayPromptCore>
           </section>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -64,12 +64,12 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "UI Display Prompts",
   meta: [{ name: "description", content: "Examples of UI Display Prompts" }],
-})
+});
 </script>
 
 <style lang="css">

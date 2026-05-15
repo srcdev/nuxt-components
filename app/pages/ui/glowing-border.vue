@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">GlowingBorder Component</h1>
           <form class="mb-12">
             <div>
@@ -35,9 +35,9 @@
               <input type="checkbox" id="noOutline" v-model="noOutline" class="form-checkbox" />
             </div>
           </form>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Default</h2>
 
           <GlowingBorder :variant="glowingBorderVariant" :style-class-passthrough="['mbe-20']">
@@ -49,9 +49,9 @@
               <p class="page-body-small">GlowingBorder Footer</p>
             </div>
           </GlowingBorder>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Default</h2>
 
           <GlowingBorder :variant="glowingBorderVariant" :style-class-passthrough="['mbe-20']">
@@ -69,7 +69,7 @@
               </template>
             </CardCore>
           </GlowingBorder>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -78,7 +78,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "GlowingBorder Component",
@@ -91,12 +91,12 @@ useHead({
   bodyAttrs: {
     class: "glowing-border-page",
   },
-})
+});
 
-const glowingBorderVariant = ref("vivid")
-const cardCoreVariant = ref<"outline" | "solid" | "subtle" | "soft">("solid")
-const hasDividers = ref(false)
-const noOutline = ref(false)
+const glowingBorderVariant = ref("vivid");
+const cardCoreVariant = ref<"outline" | "solid" | "subtle" | "soft">("solid");
+const hasDividers = ref(false);
+const noOutline = ref(false);
 </script>
 
 <style lang="css">

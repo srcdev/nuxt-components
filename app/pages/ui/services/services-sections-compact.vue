@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <EyebrowText font-size="large" text-content="Services" />
           <HeroText
             :tag="'h1'"
@@ -15,23 +15,23 @@
             ]"
             :style-class-passthrough="['mbe-20']"
           />
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <p class="page-body-medium">
             I'm a mobile hair artist bringing bold, custom hair transformations straight to your doorstep in Bath. From
             lived-in balayage and dimensional lowlights to face-framing highlights and precision cuts — salon-quality
             results, zero hassle.
           </p>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <ServicesSectionGrid
             :services-data="servicesData ?? []"
             :use-alternate-reverse="true"
             summary-alignment="center"
           />
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

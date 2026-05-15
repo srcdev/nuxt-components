@@ -2,14 +2,14 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['view-transition-banner']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['view-transition-banner']">
           <h2 class="page-heading-2">Wipe Away Vertical</h2>
-        </LayoutRow>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['view-transition-banner']">
+        </PageRow>
+        <PageRow tag="div" variant="full" :style-class-passthrough="['view-transition-banner']">
           <p class="page-body-normal">Some dummy content</p>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full">
+        <PageRow tag="div" variant="full">
           <WipeAwayVertical :item-count="scrollingSection.length">
             <template v-for="(item, index) in stickyItems" :key="`sticky-${index}`" v-slot:[`stickyItem-${index}`]>
               <div class="sticky-item-container">
@@ -32,15 +32,15 @@
               </div>
             </template>
           </WipeAwayVertical>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['view-transition-banner']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['view-transition-banner']">
           <p class="page-body-normal">Some dummy content</p>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['view-transition-banner']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['view-transition-banner']">
           <p class="page-body-normal">Some dummy content</p>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -49,7 +49,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Wipe Away Vertical",
@@ -62,7 +62,7 @@ useHead({
   bodyAttrs: {
     class: "wipe-away-vertical-page",
   },
-})
+});
 
 const stickyItems = [
   {
@@ -85,7 +85,7 @@ const stickyItems = [
     src: "/images/rotating-carousel/image-6.webp",
     alt: "Sample Image 6",
   },
-]
+];
 
 const scrollingSection = [
   { title: "View Timeline 1" },
@@ -93,7 +93,7 @@ const scrollingSection = [
   { title: "View Timeline 3" },
   { title: "View Timeline 4" },
   { title: "View Timeline 5" },
-]
+];
 </script>
 
 <style lang="css">

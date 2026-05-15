@@ -2,26 +2,27 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-32']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-32']">
           <h1 class="page-heading-1">AutoGrid</h1>
           <p class="page-body-normal">
             Responsive auto-fit CSS grid wrapper. Columns auto-fit to a minimum width; when
-            <code>is-responsive</code> is enabled, the minimum shifts at container breakpoints via
-            <code>@container</code> queries.
+            <code>is-responsive</code>
+            is enabled, the minimum shifts at container breakpoints via
+            <code>@container</code>
+            queries.
           </p>
-        </LayoutRow>
+        </PageRow>
 
         <div v-if="isDev" class="qa-panel">
           <details class="qa-panel__details">
             <summary class="qa-panel__summary">
               <span class="qa-panel__title">QA — AutoGrid</span>
               <code class="qa-panel__status">
-                tag:{{ qaTag }} · responsive:{{ qaIsResponsive ? "on" : "off" }} · small:{{ qaMinColSizeSmall }} · default:{{ qaMinColSizeDefault }} · large:{{ qaMinColSizeLarge }} · gap:{{ qaGap }}
+                tag:{{ qaTag }} · responsive:{{ qaIsResponsive ? "on" : "off" }} · small:{{ qaMinColSizeSmall }} ·
+                default:{{ qaMinColSizeDefault }} · large:{{ qaMinColSizeLarge }} · gap:{{ qaGap }}
               </code>
             </summary>
             <div class="qa-panel__body">
-
               <div class="qa-panel__group">
                 <span class="qa-panel__label">tag</span>
                 <div class="qa-panel__chips">
@@ -31,7 +32,9 @@
                     class="qa-panel__chip"
                     :class="{ 'is-active': qaTag === opt }"
                     @click="qaTag = opt"
-                  >{{ opt }}</button>
+                  >
+                    {{ opt }}
+                  </button>
                 </div>
               </div>
 
@@ -44,7 +47,9 @@
                     class="qa-panel__chip"
                     :class="{ 'is-active': qaIsResponsive === opt }"
                     @click="qaIsResponsive = opt"
-                  >{{ opt ? "on" : "off" }}</button>
+                  >
+                    {{ opt ? "on" : "off" }}
+                  </button>
                 </div>
               </div>
 
@@ -57,7 +62,9 @@
                     class="qa-panel__chip"
                     :class="{ 'is-active': qaMinColSizeSmall === preset }"
                     @click="qaMinColSizeSmall = preset"
-                  >{{ preset }}</button>
+                  >
+                    {{ preset }}
+                  </button>
                 </div>
                 <input v-model="qaMinColSizeSmall" placeholder="e.g. 200px" class="qa-panel__input" />
               </div>
@@ -71,7 +78,9 @@
                     class="qa-panel__chip"
                     :class="{ 'is-active': qaMinColSizeDefault === preset }"
                     @click="qaMinColSizeDefault = preset"
-                  >{{ preset }}</button>
+                  >
+                    {{ preset }}
+                  </button>
                 </div>
                 <input v-model="qaMinColSizeDefault" placeholder="e.g. 300px" class="qa-panel__input" />
               </div>
@@ -85,7 +94,9 @@
                     class="qa-panel__chip"
                     :class="{ 'is-active': qaMinColSizeLarge === preset }"
                     @click="qaMinColSizeLarge = preset"
-                  >{{ preset }}</button>
+                  >
+                    {{ preset }}
+                  </button>
                 </div>
                 <input v-model="qaMinColSizeLarge" placeholder="e.g. 350px" class="qa-panel__input" />
               </div>
@@ -99,16 +110,17 @@
                     class="qa-panel__chip"
                     :class="{ 'is-active': qaGap === preset }"
                     @click="qaGap = preset"
-                  >{{ preset }}</button>
+                  >
+                    {{ preset }}
+                  </button>
                 </div>
                 <input v-model="qaGap" placeholder="e.g. 2rem" class="qa-panel__input" />
               </div>
-
             </div>
           </details>
         </div>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-32']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-32']">
           <div class="auto-grid-demo-container">
             <AutoGrid
               :tag="qaTag"
@@ -126,8 +138,7 @@
               </template>
             </AutoGrid>
           </div>
-        </LayoutRow>
-
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -230,7 +241,9 @@ const statCards = [
     list-style: none;
     user-select: none;
 
-    &::-webkit-details-marker { display: none; }
+    &::-webkit-details-marker {
+      display: none;
+    }
   }
 
   .qa-panel__title {
@@ -287,7 +300,9 @@ const statCards = [
     cursor: pointer;
     transition: background 0.15s;
 
-    &:hover { background: oklch(0% 0 0 / 0.4); }
+    &:hover {
+      background: oklch(0% 0 0 / 0.4);
+    }
 
     &.is-active {
       background: oklch(55% 0.18 240);
@@ -305,7 +320,9 @@ const statCards = [
     border-radius: 0.4rem;
     width: 18rem;
 
-    &::placeholder { opacity: 0.45; }
+    &::placeholder {
+      opacity: 0.45;
+    }
   }
 }
 </style>

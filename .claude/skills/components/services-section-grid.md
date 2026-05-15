@@ -71,11 +71,11 @@ The slot is forwarded from the inner `ServicesSection` and receives the current 
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">Our Services</h1>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <ServicesSectionGrid
             :services-data="servicesData ?? []"
             :use-alternate-reverse="true"
@@ -89,7 +89,7 @@ The slot is forwarded from the inner `ServicesSection` and receives the current 
               />
             </template>
           </ServicesSectionGrid>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

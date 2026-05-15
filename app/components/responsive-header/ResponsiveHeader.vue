@@ -89,21 +89,6 @@
       </details>
       <slot v-if="slots.secondaryNavigation" name="secondaryNavigation"></slot>
     </nav>
-    <LayoutRow tag="div" variant="full" :style-class-passthrough="['mb-20', 'debug-grid']">
-      <ClientOnly>
-        <div>
-          <h2 class="page-heading-4">navigationWrapperRects</h2>
-          <pre>{{ navigationWrapperRects }}</pre>
-          <hr />
-          <h2 class="page-heading-4">secondaryNavRects</h2>
-          <pre>{{ secondaryNavRects }}</pre>
-        </div>
-        <div>
-          <h2 class="page-heading-4">mainNavigationState</h2>
-          <pre>{{ mainNavigationState }}</pre>
-        </div>
-      </ClientOnly>
-    </LayoutRow>
   </div>
 </template>
 
@@ -415,348 +400,331 @@ watch(
 
 <style lang="css">
 @layer components {
-.navigation {
-  ul,
-  ol {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+  .navigation {
+    ul,
+    ol {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
 
-    li {
-      /* text-box-trim: trim-both; */
-      /* text-box-edge: cap alphabetic; */
-      display: flex;
-      align-items: center;
-    }
-  }
-
-  --_link-visibility-transition: none;
-
-  &.loaded {
-    --_link-visibility-transition: all 0.2s ease-in-out;
-  }
-
-  /* flex-grow: 1; */
-  display: grid;
-  grid-template-areas: "navStack";
-
-  .main-navigation {
-    /* Set up some global vars */
-    --_link-padding-block: 0.8rem;
-    --_link-padding-inline: 0.2rem;
-    --_link-margin-block: 0.1rem;
-    --_link-margin-inline: 0.1rem;
-    --_link-focus-visible-outline-width: 0.2rem;
-    --_link-border-default: 2px solid transparent;
-    --_link-border-bottom-hover: var(--green-08);
-
-    grid-area: navStack;
-    display: flex;
-    flex-wrap: nowrap;
-    flex-grow: 1;
-    justify-content: space-between;
-    gap: 60px;
-
-    overflow-x: hidden;
-    margin-inline-end: v-bind(mainNavigationMarginBlockEndStr);
-
-    &.collapsed {
-      justify-content: flex-start;
+      li {
+        /* text-box-trim: trim-both; */
+        /* text-box-edge: cap alphabetic; */
+        display: flex;
+        align-items: center;
+      }
     }
 
-    .main-navigation-list {
+    --_link-visibility-transition: none;
+
+    &.loaded {
+      --_link-visibility-transition: all 0.2s ease-in-out;
+    }
+
+    /* flex-grow: 1; */
+    display: grid;
+    grid-template-areas: "navStack";
+
+    .main-navigation {
+      /* Set up some global vars */
+      --_link-padding-block: 0.8rem;
+      --_link-padding-inline: 0.2rem;
+      --_link-margin-block: 0.1rem;
+      --_link-margin-inline: 0.1rem;
+      --_link-focus-visible-outline-width: 0.2rem;
+      --_link-border-default: 2px solid transparent;
+      --_link-border-bottom-hover: var(--green-08);
+
+      grid-area: navStack;
       display: flex;
       flex-wrap: nowrap;
+      flex-grow: 1;
+      justify-content: space-between;
+      gap: 60px;
 
-      &:nth-of-type(1) {
-        gap: 30px;
+      overflow-x: hidden;
+      margin-inline-end: v-bind(mainNavigationMarginBlockEndStr);
+
+      &.collapsed {
+        justify-content: flex-start;
       }
 
-      &:nth-of-type(2) {
-        gap: 30px;
-      }
+      .main-navigation-list {
+        display: flex;
+        flex-wrap: nowrap;
 
-      .main-navigation-item {
-        /* width: var(--_main-navigation-item-width); */
-        overflow: hidden;
-        transition:
-          opacity 0.2s ease-in-out,
-          visibility 0.2s ease-in-out;
-        padding-block: var(--_link-focus-visible-outline-width);
-        padding-inline: var(--_link-focus-visible-outline-width);
-
-        .main-navigation-link {
-          display: flex;
-          gap: 6px;
-          text-wrap-mode: nowrap;
-          color: inherit;
-          text-decoration: none;
-          margin-inline-start: 0;
-          /* transition: var(--_link-visibility-transition); */
-
-          padding-block: var(--_link-padding-block);
-          padding-inline: var(--_link-padding-inline);
-          margin-block: var(--_link-margin-block);
-          margin-inline: var(--_link-margin-inline);
-          border-bottom: var(--_link-border-default);
-
-          &:hover {
-            cursor: pointer;
-            border-bottom-color: var(--_link-border-bottom-hover);
-          }
+        &:nth-of-type(1) {
+          gap: 30px;
         }
 
-        .main-navigation-details {
-          --_icon-transform: scaleY(1);
+        &:nth-of-type(2) {
+          gap: 30px;
+        }
 
-          margin-inline-start: 0;
-          /* transition: var(--_link-visibility-transition); */
+        .main-navigation-item {
+          /* width: var(--_main-navigation-item-width); */
+          overflow: hidden;
+          transition:
+            opacity 0.2s ease-in-out,
+            visibility 0.2s ease-in-out;
+          padding-block: var(--_link-focus-visible-outline-width);
+          padding-inline: var(--_link-focus-visible-outline-width);
 
-          &[open] {
-            --_icon-transform: scaleY(-1);
-
-            .main-navigation-details-summary {
-              border-bottom-color: var(--_link-border-bottom-hover);
-            }
-          }
-
-          .has-toggle-icon {
+          .main-navigation-link {
             display: flex;
             gap: 6px;
             text-wrap-mode: nowrap;
+            color: inherit;
+            text-decoration: none;
+            margin-inline-start: 0;
+            /* transition: var(--_link-visibility-transition); */
 
-            .icon {
-              display: block;
-              transform: var(--_icon-transform);
-              transition: transform 0.2s ease-in-out;
-            }
-          }
-
-          .main-navigation-details-summary {
             padding-block: var(--_link-padding-block);
             padding-inline: var(--_link-padding-inline);
             margin-block: var(--_link-margin-block);
             margin-inline: var(--_link-margin-inline);
             border-bottom: var(--_link-border-default);
-            white-space: nowrap;
-
-            &::-webkit-details-marker,
-            &::marker {
-              display: none;
-            }
 
             &:hover {
               cursor: pointer;
               border-bottom-color: var(--_link-border-bottom-hover);
             }
-
-            .decorator-icon {
-              margin-inline-start: 8px;
-            }
           }
 
-          .main-navigation-sub-nav {
-            position: absolute;
-            padding: 12px;
-            border: 1px solid #efefef75;
-            border-radius: 8px;
-            background-color: #000;
-            translate: 0 12px;
+          .main-navigation-details {
+            --_icon-transform: scaleY(1);
 
-            min-width: var(--_main-navigation-item-width);
+            margin-inline-start: 0;
+            /* transition: var(--_link-visibility-transition); */
 
-            .main-navigation-sub-nav-list {
-              display: grid;
-              grid-template-columns: repeat(2, auto);
-              gap: 12px;
+            &[open] {
+              --_icon-transform: scaleY(-1);
 
-              .main-navigation-sub-nav-item {
-                margin-bottom: 8px;
+              .main-navigation-details-summary {
+                border-bottom-color: var(--_link-border-bottom-hover);
+              }
+            }
 
-                &:last-child {
-                  margin-bottom: 0;
-                }
+            .has-toggle-icon {
+              display: flex;
+              gap: 6px;
+              text-wrap-mode: nowrap;
 
-                .main-navigation-sub-nav-link {
-                  display: block;
-                  text-wrap-mode: nowrap;
-                  text-decoration: none;
-                  color: inherit;
+              .icon {
+                display: block;
+                transform: var(--_icon-transform);
+                transition: transform 0.2s ease-in-out;
+              }
+            }
+
+            .main-navigation-details-summary {
+              padding-block: var(--_link-padding-block);
+              padding-inline: var(--_link-padding-inline);
+              margin-block: var(--_link-margin-block);
+              margin-inline: var(--_link-margin-inline);
+              border-bottom: var(--_link-border-default);
+              white-space: nowrap;
+
+              &::-webkit-details-marker,
+              &::marker {
+                display: none;
+              }
+
+              &:hover {
+                cursor: pointer;
+                border-bottom-color: var(--_link-border-bottom-hover);
+              }
+
+              .decorator-icon {
+                margin-inline-start: 8px;
+              }
+            }
+
+            .main-navigation-sub-nav {
+              position: absolute;
+              padding: 12px;
+              border: 1px solid #efefef75;
+              border-radius: 8px;
+              background-color: #000;
+              translate: 0 12px;
+
+              min-width: var(--_main-navigation-item-width);
+
+              .main-navigation-sub-nav-list {
+                display: grid;
+                grid-template-columns: repeat(2, auto);
+                gap: 12px;
+
+                .main-navigation-sub-nav-item {
+                  margin-bottom: 8px;
+
+                  &:last-child {
+                    margin-bottom: 0;
+                  }
+
+                  .main-navigation-sub-nav-link {
+                    display: block;
+                    text-wrap-mode: nowrap;
+                    text-decoration: none;
+                    color: inherit;
+                  }
                 }
               }
             }
           }
-        }
 
-        &.visually-hidden {
-          visibility: hidden;
-          opacity: 0;
+          &.visually-hidden {
+            visibility: hidden;
+            opacity: 0;
 
-          .main-navigation-details,
-          .main-navigation-link {
-            margin-inline-start: var(--_main-navigation-item-width);
+            .main-navigation-details,
+            .main-navigation-link {
+              margin-inline-start: var(--_main-navigation-item-width);
+            }
           }
         }
-      }
 
-      &:last-child {
-        .main-navigation-item {
-          /* border: 2px solid red; */
+        &:last-child {
+          .main-navigation-item {
+            /* border: 2px solid red; */
 
-          .main-navigation-details {
-            /* border: 2px solid blue; */
-            /* position: relative; */
-            /* isolation: isolate; */
+            .main-navigation-details {
+              /* border: 2px solid blue; */
+              /* position: relative; */
+              /* isolation: isolate; */
 
-            .main-navigation-sub-nav {
-              /* border: 2px solid yellow; */
-              /* left: initial; */
-              /* right: 0; */
-              translate: calc(-1 * var(--_main-navigation-item-width)) 12px;
+              .main-navigation-sub-nav {
+                /* border: 2px solid yellow; */
+                /* left: initial; */
+                /* right: 0; */
+                translate: calc(-1 * var(--_main-navigation-item-width)) 12px;
+              }
             }
           }
         }
       }
     }
-  }
 
-  .secondary-navigation {
-    grid-area: navStack;
-    justify-self: end;
+    .secondary-navigation {
+      grid-area: navStack;
+      justify-self: end;
 
-    display: flex;
-    gap: 12px;
-    align-items: center;
+      display: flex;
+      gap: 12px;
+      align-items: center;
 
-    .secondary-navigation-list {
-      .secondary-navigation-item {
-        .secondary-navigation-link {
-          display: flex;
+      .secondary-navigation-list {
+        .secondary-navigation-item {
+          .secondary-navigation-link {
+            display: flex;
+            align-items: center;
+            font: inherit;
+            color: inherit;
+
+            .icon {
+              height: 1.35em;
+              width: 1.35em;
+            }
+          }
+        }
+      }
+
+      .main-navigation-link {
+        .icon {
+          height: 1.35em;
+          width: 1.35em;
+        }
+      }
+
+      .overflow-details {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        position: relative;
+        cursor: pointer;
+        width: fit-content;
+
+        transition: all 0.2s ease-in-out;
+
+        &.visually-hidden {
+          opacity: 0;
+          visibility: hidden;
+          width: 0;
+        }
+
+        .overflow-details-summary {
+          --_icon-zoom: 1;
+          --_icon-size: 20px;
+          --_border-width: 1px;
+          --_outline-width: 1px;
+          --_transition-duration: 0.2s;
+
+          display: grid;
+          grid-template-areas: "icon";
           align-items: center;
-          font: inherit;
-          color: inherit;
+          justify-content: center;
+          padding-inline: 5px;
+          text-wrap: nowrap;
+
+          aspect-ratio: 1;
+          border-radius: 4px;
+          border: var(--_border-width) solid #ffffff90;
+          outline: var(--_outline-width) solid #ffffff10;
+          background-color: Canvas;
+
+          width: var(--_icon-size);
+          overflow: hidden;
+          transition-property: all;
+          transition-timing-function: linear;
+          transition-duration: var(--_transition-duration);
+
+          &::-webkit-details-marker,
+          &::marker {
+            display: none;
+          }
+
+          &:hover,
+          &:focus-visible {
+            --_icon-zoom: 1.2;
+            outline: var(--_outline-width) solid #ffffff;
+          }
 
           .icon {
-            height: 1.35em;
-            width: 1.35em;
+            grid-area: icon;
+            scale: var(--_icon-zoom);
+            transition: scale 0.2s ease-in-out;
+            width: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
+            height: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
+
+            opacity: 0;
+            transition-property: opacity, transform; /* For reference */
+            transition-timing-function: linear; /* For reference */
+            transition-duration: var(--_transition-duration); /* For reference */
+
+            &.show {
+              opacity: 1;
+            }
           }
         }
-      }
-    }
 
-    .main-navigation-link {
-      .icon {
-        height: 1.35em;
-        width: 1.35em;
-      }
-    }
+        .overflow-details-nav {
+          position: absolute;
+          top: 135%;
+          right: 0;
+          background-color: #000;
+          border: 1px solid #ffffff90;
+          border-radius: 8px;
+          padding-block: 12px;
+          margin: 0;
+          z-index: 999;
+          min-width: var(--_overflow-drop-down-width, fit-content);
 
-    .overflow-details {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      position: relative;
-      cursor: pointer;
-      width: fit-content;
-
-      transition: all 0.2s ease-in-out;
-
-      &.visually-hidden {
-        opacity: 0;
-        visibility: hidden;
-        width: 0;
-      }
-
-      .overflow-details-summary {
-        --_icon-zoom: 1;
-        --_icon-size: 20px;
-        --_border-width: 1px;
-        --_outline-width: 1px;
-        --_transition-duration: 0.2s;
-
-        display: grid;
-        grid-template-areas: "icon";
-        align-items: center;
-        justify-content: center;
-        padding-inline: 5px;
-        text-wrap: nowrap;
-
-        aspect-ratio: 1;
-        border-radius: 4px;
-        border: var(--_border-width) solid #ffffff90;
-        outline: var(--_outline-width) solid #ffffff10;
-        background-color: Canvas;
-
-        width: var(--_icon-size);
-        overflow: hidden;
-        transition-property: all;
-        transition-timing-function: linear;
-        transition-duration: var(--_transition-duration);
-
-        &::-webkit-details-marker,
-        &::marker {
-          display: none;
+          display: grid;
+          grid-auto-flow: row;
+          gap: 8px;
         }
-
-        &:hover,
-        &:focus-visible {
-          --_icon-zoom: 1.2;
-          outline: var(--_outline-width) solid #ffffff;
-        }
-
-        .icon {
-          grid-area: icon;
-          scale: var(--_icon-zoom);
-          transition: scale 0.2s ease-in-out;
-          width: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
-          height: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
-
-          opacity: 0;
-          transition-property: opacity, transform; /* For reference */
-          transition-timing-function: linear; /* For reference */
-          transition-duration: var(--_transition-duration); /* For reference */
-
-          &.show {
-            opacity: 1;
-          }
-        }
-      }
-
-      .overflow-details-nav {
-        position: absolute;
-        top: 135%;
-        right: 0;
-        background-color: #000;
-        border: 1px solid #ffffff90;
-        border-radius: 8px;
-        padding-block: 12px;
-        margin: 0;
-        z-index: 999;
-        min-width: var(--_overflow-drop-down-width, fit-content);
-
-        display: grid;
-        grid-auto-flow: row;
-        gap: 8px;
       }
     }
   }
-}
-
-.debug-grid {
-  display: none;
-
-  .layout-row-inner > div {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-
-    margin-inline: 12px;
-
-    > div {
-      outline: 1px solid gray;
-      padding: 12px;
-    }
-  }
-}
 }
 </style>

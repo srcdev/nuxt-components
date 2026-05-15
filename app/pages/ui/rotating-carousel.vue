@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']">
           <h1 class="page-heading-2">Rotating Carousel</h1>
           <div class="display-flex mbe-12" align-content="center-center" gap="12px" flex-wrap="wrap">
             <div class="display-flex mbe-12" align-content="center-center" gap="12px" flex-wrap="wrap">
@@ -31,9 +31,9 @@
               <span>{{ useParallaxEffect }}</span>
             </div>
           </div>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']" style="margin-block: 300px">
+        <PageRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']" style="margin-block: 300px">
           <RotatingCarouselImage
             :data
             :rotateX="Number(rotateX)"
@@ -42,9 +42,9 @@
             :pauseOnHover
             :useParallaxEffect
           />
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']" style="margin-block-end: 600px">
+        <PageRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']" style="margin-block-end: 600px">
           <div class="display-flex mbe-12" align-content="center-center" gap="12px" flex-wrap="wrap">
             <div class="display-flex mbe-12" align-content="center-center" gap="12px" flex-wrap="wrap">
               <label for="rotateX">rotateX</label>
@@ -72,7 +72,7 @@
               <span>{{ useParallaxEffect }}</span>
             </div>
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -81,7 +81,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Browser title tag",
@@ -94,17 +94,17 @@ useHead({
   bodyAttrs: {
     class: "classname-for-namespacing-if-desired",
   },
-})
+});
 
-const perspective = ref<number>(1000)
-const rotateX = ref<number>(-13)
-const translateZ = ref<number>(550)
-const pauseOnHover = ref<boolean>(false)
-const useParallaxEffect = ref<boolean>(true)
+const perspective = ref<number>(1000);
+const rotateX = ref<number>(-13);
+const translateZ = ref<number>(550);
+const pauseOnHover = ref<boolean>(false);
+const useParallaxEffect = ref<boolean>(true);
 
 interface IAccordianData {
-  src: string
-  alt: string
+  src: string;
+  alt: string;
 }
 
 const data = ref<IAccordianData[]>([
@@ -144,7 +144,7 @@ const data = ref<IAccordianData[]>([
     src: "/images/rotating-carousel/image-9.webp",
     alt: "Image 9",
   },
-])
+]);
 </script>
 
 <style lang="css">

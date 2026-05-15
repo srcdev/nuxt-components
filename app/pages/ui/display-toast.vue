@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20', 'p-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20', 'p-20']">
           <h2 class="page-heading-2">DisplayToast Component</h2>
           <HeaderBlock :tag-level="3" :class-level="3" :style-class-passthrough="['mbe-10']">
             Toast notification component (HeaderBlock)
@@ -93,7 +93,7 @@
               />
             </p>
           </form>
-        </LayoutRow>
+        </PageRow>
 
         <DisplayToast
           v-model="firstToastActive"

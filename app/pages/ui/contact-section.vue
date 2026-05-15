@@ -2,11 +2,11 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Profile Section</h2>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <ContactSection tag="section" stepper-indicator-size="2.4rem" :style-class-passthrough="['mbe-20']">
             <template #indicator-0>
               <Icon name="lucide-map-pin" class="indicator-icon" />
@@ -199,7 +199,7 @@
               </ClientOnly>
             </template>
           </ContactSection>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

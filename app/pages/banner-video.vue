@@ -15,7 +15,7 @@
           :style-class-passthrough="['mbe-32']"
         />
 
-        <LayoutRow tag="div" variant="full-width">
+        <PageRow tag="div" variant="full">
           <div class="banner-video-demo-controls">
             <p class="demo-controls__heading">Props</p>
 
@@ -109,7 +109,7 @@
               />
             </div>
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

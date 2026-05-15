@@ -2,34 +2,34 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
           <h1 class="page-heading-2">Deep Expanding Menu</h1>
           <p>
             A horizontal navigation menu using the CSS Popover API. Top-level items can be direct links or toggle a
             panel of child links below them.
           </p>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
           <h2 class="page-heading-3 mbe-16">Basic example</h2>
           <div class="demo-surface">
             <DeepExpandingMenu :nav-links="basicLinks" />
           </div>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
           <h2 class="page-heading-3 mbe-16">Mixed links and groups</h2>
           <div class="demo-surface">
             <DeepExpandingMenu :nav-links="mixedLinks" />
           </div>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32', 'mbe-64']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbs-32', 'mbe-64']">
           <h2 class="page-heading-3 mbe-16">Many child links</h2>
           <div class="demo-surface">
             <DeepExpandingMenu :nav-links="richLinks" />
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -109,7 +109,6 @@ const richLinks: ResponsiveHeaderNavItem[] = [
     name: "Layouts",
     childLinksTitle: "Layout Components",
     childLinks: [
-      { name: "Layout Row", path: "/ui/layout-row" },
       { name: "Simple Grid", path: "/ui/simple-grid" },
       { name: "Masonry Grid", path: "/ui/masonry-grid" },
       { name: "Block Decorators", path: "/ui/block-decorators" },

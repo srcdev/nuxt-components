@@ -2,12 +2,12 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Layout Grid 'B'</h1>
           <CanvasSwitcher v-model:canvas-name="canvasName" />
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <LayoutGridB :top-row-slot1-item-count="6" :bottom-row-item-count="4" :style-class-passthrough="[canvasName]">
             <template #[`top-row-slot1-1-content`]>
               <p class="p-24">This is content slot 1</p>
@@ -107,7 +107,7 @@
               </p>
             </template>
           </LayoutGridB>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

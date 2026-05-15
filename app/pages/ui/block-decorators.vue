@@ -2,10 +2,10 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Block Decorators</h2>
-        </LayoutRow>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        </PageRow>
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h3 class="page-heading-3">Configuration options</h3>
           <p class="page-body-normal">
             Use the select drop down to adjust the shadow, inner shadow, and border strength.
@@ -50,8 +50,8 @@
               </select>
             </div>
           </div>
-        </LayoutRow>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        </PageRow>
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <UiBlockDecorated
             tag="div"
             :shadow-strength
@@ -61,7 +61,7 @@
           >
             <p class="page-body-normal">1</p>
           </UiBlockDecorated>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -70,7 +70,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Block Decorators",
@@ -83,11 +83,11 @@ useHead({
   bodyAttrs: {
     class: "block-decorators-page",
   },
-})
+});
 
-const shadowStrength = ref(3)
-const innerShadowStrength = ref(4)
-const borderStrength = ref(0)
+const shadowStrength = ref(3);
+const innerShadowStrength = ref(4);
+const borderStrength = ref(0);
 </script>
 
 <style lang="css">

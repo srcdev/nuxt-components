@@ -2,13 +2,13 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Magnetic Navigation</h2>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <MagneticNavigation />
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -17,7 +17,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Magnetic Navigation",
@@ -30,7 +30,7 @@ useHead({
   bodyAttrs: {
     class: "magnetic-navigation-page",
   },
-})
+});
 </script>
 
 <style lang="css">

@@ -2,48 +2,48 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1 mbe-18">Settings</h1>
           <h2 class="page-heading-2 mbe-18">Theme Switcher</h2>
 
           <DisplayThemeSwitch />
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1 mbe-18">Default button elements</h1>
 
           <div class="mb-12">
             <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="default"</code></p>
             <button class="input-button-core" type="button">This is a button</button>
           </div>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1 mbe-18">Primary button elements</h1>
 
           <div class="mb-12" data-theme="default">
             <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="default"</code></p>
             <button class="input-button-core" type="button">This is a button</button>
           </div>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1 mbe-18">Error button elements</h1>
 
           <div class="mb-12" data-theme="default" data-error>
             <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="error"</code></p>
             <button class="input-button-core" type="button">This is a button</button>
           </div>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1 mbe-18">Success button elements</h1>
 
           <div class="mb-12" data-theme="success">
             <p class="page-body-normal mbe-12"><code>class="test-button" data-theme="success"</code></p>
             <button class="input-button-core" type="button">This is a button</button>
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

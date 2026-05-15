@@ -2,9 +2,9 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Carousel</h1>
-        </LayoutRow>
+        </PageRow>
 
         <!-- ── QA Panel (dev only) ───────────────────────────────── -->
         <div v-if="isDev" class="qa-panel">

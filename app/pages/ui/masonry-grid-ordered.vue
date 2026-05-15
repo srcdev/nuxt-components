@@ -2,13 +2,13 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-3">Masonry Grid Ordered</h1>
           <p class="page-body-normal">Masonry grid ordered displaying dummy posts data</p>
           <CanvasSwitcher v-model:canvas-name="canvasName" />
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <MasonryGridOrdered
             v-if="status === 'success'"
             :grid-data="quotesData?.quotes.slice(0, displayCount) ?? []"
@@ -25,7 +25,7 @@
             </template>
           </MasonryGridOrdered>
           <p v-else class="page-body-normal">&hellip;Loading</p>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

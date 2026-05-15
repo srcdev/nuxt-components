@@ -2,14 +2,14 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :styleClassPassthrough="['tooltips-page-row', 'mbe-20']">
+        <PageRow tag="div" variant="full" :styleClassPassthrough="['tooltips-page-row', 'mbe-20']">
           <h1 class="page-heading-2">Tooltips</h1>
           <button @click.prevent="restartGuide" :disabled="isGuideRunning">
             {{ isGuideRunning ? "Guide running..." : "Run guide again?" }}
           </button>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Full Track (1fr)</h2>
 
           <div ref="tooltipGuide">
@@ -55,7 +55,7 @@
               </template>
             </DisplayTooltip>
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -64,7 +64,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "UI Tooltips - Nuxt Components",
@@ -72,16 +72,16 @@ useHead({
   // bodyAttrs: {
   //   class: "home",
   // },
-})
+});
 
-const hideTooltipTrigger = ref(false)
-const tooltipGuide = useTemplateRef<HTMLElement | null>("tooltipGuide")
+const hideTooltipTrigger = ref(false);
+const tooltipGuide = useTemplateRef<HTMLElement | null>("tooltipGuide");
 
 // Use the tooltip guide composable
 const { isGuideRunning, restartGuide } = useTooltipsGuide(tooltipGuide, {
   autoStart: true,
   startDelay: 2000,
-})
+});
 </script>
 
 <style lang="css">

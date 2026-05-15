@@ -2,46 +2,46 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">GridStack</h2>
           <NuxtLink class="page-body-normal" to="/grid-stack">GridStack</NuxtLink>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">AutoGrid</h2>
           <NuxtLink class="page-body-normal" to="/auto-grid">AutoGrid</NuxtLink>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">Nuxt3 Components Layer</h1>
           <p>
             A collection of hand rolled UI components for Nuxt3 that can be added as a layer (extended into another
             Nuxt3 app)
           </p>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">Services test pages</h1>
           <NuxtLink class="page-body-normal" to="/ui/services/services-cards">Services Cards</NuxtLink>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <NuxtLink class="page-body-normal" to="/ui/services/services-sections-compact">
             Services Sections Compact
           </NuxtLink>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">Profile Section</h1>
           <NuxtLink class="page-body-normal" to="/ui/profile-section">Profile Section</NuxtLink>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">Contact Section</h1>
           <NuxtLink class="page-body-normal" to="/ui/contact-section">Contact Section</NuxtLink>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">PopOver component 1</h2>
           <ClientOnly>
             <p>popoverSupported({{ popoverSupported }})</p>
@@ -55,9 +55,9 @@
               <h2>Popover content 1</h2>
             </template>
           </PopOver>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">PopOver component 2</h2>
           <div class="justify-end">
             <PopOver popovertarget="profile2">
@@ -69,9 +69,9 @@
               </template>
             </PopOver>
           </div>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Masonry Grid</h2>
           <MasonryGrid :grid-data="quotesData?.quotes.slice(0, qoutesDisplayCount) ?? {}">
             <template
@@ -85,7 +85,7 @@
               </div>
             </template>
           </MasonryGrid>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

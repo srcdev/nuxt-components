@@ -73,11 +73,11 @@
                 </li>
               </ul>
 
-              <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+              <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
                 <h1 class="page-heading-1 mbe-18">Settings</h1>
                 <h2 class="page-heading-2 mbe-18">Theme Switcher</h2>
                 <DisplayThemeSwitch />
-              </LayoutRow>
+              </PageRow>
 
               <FormWrapper width="medium">
                 <template #default>

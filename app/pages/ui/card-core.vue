@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">CardCore Component</h1>
           <form class="mb-12">
             <div>
@@ -23,9 +23,9 @@
               <input type="checkbox" id="noOutline" v-model="noOutline" class="form-checkbox" />
             </div>
           </form>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="inset-content" :style-class-passthrough="['mbe-20']">
           <CardCore :variant="cardCoreVariant" :has-dividers="hasDividers" :no-outline="noOutline">
             <template #header>
               <h2 class="page-heading-2">CardCore Header</h2>
@@ -39,7 +39,7 @@
               <p class="page-body-small">CardCore Footer</p>
             </template>
           </CardCore>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "CardCore Component",
@@ -61,11 +61,11 @@ useHead({
   bodyAttrs: {
     class: "card-core-page",
   },
-})
+});
 
-const cardCoreVariant = ref("solid")
-const hasDividers = ref(false)
-const noOutline = ref(false)
+const cardCoreVariant = ref("solid");
+const hasDividers = ref(false);
+const noOutline = ref(false);
 </script>
 
 <style lang="css">

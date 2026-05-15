@@ -9,7 +9,7 @@
     <!-- Screen reader announcement for current item -->
     <div aria-live="polite" aria-atomic="true" class="sr-only">Item {{ currentIndex + 1 }} of {{ itemCount }}</div>
 
-    <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+    <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
       <div
         ref="carouselContainerRef"
         tabindex="0"
@@ -28,17 +28,17 @@
           <slot :name="item"></slot>
         </div>
       </div>
-    </LayoutRow>
+    </PageRow>
 
-    <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+    <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
       <div class="timeline-container">
         <div v-for="index in itemCount" :key="index" class="timeline-item">
           <div class="count">Step {{ index }}</div>
         </div>
       </div>
-    </LayoutRow>
+    </PageRow>
 
-    <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+    <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
       <div ref="controlsContainerRef" tabindex="0" class="controls-container">
         <div class="markers-container">
           <ul class="markers-list">
@@ -61,7 +61,7 @@
           </button>
         </div>
       </div>
-    </LayoutRow>
+    </PageRow>
   </section>
 </template>
 
@@ -195,123 +195,123 @@ onMounted(() => {
 
 <style lang="css">
 @layer components {
-.carousel-basic {
-  --_carousel-item-track-gap: 10px;
+  .carousel-basic {
+    --_carousel-item-track-gap: 10px;
 
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
 
-  .sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
 
-  .timeline-container {
-    display: flex;
-    gap: var(--_carousel-item-track-gap);
-    overflow-x: hidden;
-
-    .timeline-item {
+    .timeline-container {
       display: flex;
-      flex: 0 0 100%;
-      max-inline-size: 800px;
-      align-items: center;
-      transform: v-bind(itemTransform);
+      gap: var(--_carousel-item-track-gap);
+      overflow-x: hidden;
+
+      .timeline-item {
+        display: flex;
+        flex: 0 0 100%;
+        max-inline-size: 800px;
+        align-items: center;
+        transform: v-bind(itemTransform);
+        position: relative;
+
+        &::before {
+          content: "";
+          position: absolute;
+          height: 2px;
+          background-color: #fff;
+          left: 70px;
+          right: 0;
+        }
+
+        .count {
+          width: fit-content;
+        }
+      }
+    }
+
+    .item-container {
+      display: flex;
+      gap: var(--_carousel-item-track-gap);
+      overflow-x: hidden;
       position: relative;
 
-      &::before {
-        content: "";
-        position: absolute;
-        height: 2px;
-        background-color: #fff;
-        left: 70px;
-        right: 0;
+      &.allow-overflow {
+        overflow-x: initial;
       }
 
-      .count {
-        width: fit-content;
-      }
-    }
-  }
-
-  .item-container {
-    display: flex;
-    gap: var(--_carousel-item-track-gap);
-    overflow-x: hidden;
-    position: relative;
-
-    &.allow-overflow {
-      overflow-x: initial;
-    }
-
-    .item {
-      display: flex;
-      flex: 0 0 100%;
-      max-inline-size: 800px;
-      transition: transform v-bind(transitionSpeedStr) ease;
-      transform: v-bind(itemTransform);
-    }
-  }
-
-  .controls-container {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    .markers-container {
-      .markers-list {
+      .item {
         display: flex;
-        flex-direction: row;
-        gap: 10px;
-        list-style-type: none;
-        margin: unset;
-        padding: unset;
+        flex: 0 0 100%;
+        max-inline-size: 800px;
+        transition: transform v-bind(transitionSpeedStr) ease;
+        transform: v-bind(itemTransform);
+      }
+    }
 
-        .markers-item {
-          .btn-marker {
-            border: none;
-            outline: none;
-            box-shadow: none;
-            cursor: pointer;
-            transition: background-color v-bind(transitionSpeedStr) linear;
+    .controls-container {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
 
-            &.active {
-              background-color: red;
+      .markers-container {
+        .markers-list {
+          display: flex;
+          flex-direction: row;
+          gap: 10px;
+          list-style-type: none;
+          margin: unset;
+          padding: unset;
+
+          .markers-item {
+            .btn-marker {
+              border: none;
+              outline: none;
+              box-shadow: none;
+              cursor: pointer;
+              transition: background-color v-bind(transitionSpeedStr) linear;
+
+              &.active {
+                background-color: red;
+              }
             }
           }
         }
       }
-    }
 
-    .buttons-container {
-      display: flex;
-      align-items: center;
-      justify-content: end;
-      gap: 20px;
-
-      .btn-action {
+      .buttons-container {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: end;
+        gap: 20px;
 
-        cursor: pointer;
-        height: fit-content;
+        .btn-action {
+          display: flex;
+          align-items: center;
+          justify-content: center;
 
-        .arrows-icon {
-          width: 24px;
-          height: 24px;
+          cursor: pointer;
+          height: fit-content;
+
+          .arrows-icon {
+            width: 24px;
+            height: 24px;
+          }
         }
       }
     }
   }
-}
 }
 </style>

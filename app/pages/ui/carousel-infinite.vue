@@ -2,11 +2,11 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Carousel (Infinite)</h1>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
           <CarouselInfinite
             v-if="carouselStatus === 'success'"
             :carousel-data-ids
@@ -22,7 +22,7 @@
               </div>
             </template>
           </CarouselInfinite>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

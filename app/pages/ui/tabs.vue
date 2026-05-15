@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
           <h1 class="page-heading-2">Tabs #1</h1>
           <p>Static tabs</p>
 
@@ -25,9 +25,9 @@
               <p class="p-24">This is content slot 2</p>
             </template>
           </TabsCore>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
           <h2 class="page-heading-2">Tabs #2</h2>
           <p>Data driven tabs</p>
 
@@ -46,9 +46,9 @@
               <p class="p-24">This is content slot 3</p>
             </template>
           </TabsCore>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
           <h2 class="page-heading-2">Tabs #3</h2>
           <p>Data driven accordian navigation with custom content</p>
 
@@ -73,7 +73,7 @@
               <p class="p-24">This is content slot 5</p>
             </template>
           </TabsCore>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -100,20 +100,17 @@ interface ITabNav {
 
 const navLinks3: ITabNav[] = [
   { name: "Home", path: "/" },
-  { name: "Layout Row", path: "/ui/layout-row" },
   { name: "Dialogs", path: "/ui/dialog" },
 ];
 
 const navLinks4: ITabNav[] = [
   { name: "Home", path: "/" },
-  { name: "Layout Row", path: "/ui/layout-row" },
   { name: "Dialogs", path: "/ui/dialog" },
   { name: "Tabs", path: "/ui/tabs" },
 ];
 
 const navLinks6: ITabNav[] = [
   { name: "Home", path: "/" },
-  { name: "Layout Row", path: "/ui/layout-row" },
   { name: "Dialogs", path: "/ui/dialog" },
   { name: "Tabs", path: "/ui/tabs" },
   { name: "Something Else", path: "/ui/something" },

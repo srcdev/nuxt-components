@@ -2,33 +2,33 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Clipped Panels</h1>
-        </LayoutRow>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        </PageRow>
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Rectangle</h2>
           <ClippedPanel variant="rectangle">
             <template #default>
               <p>Clipped Panels Rectangle</p>
             </template>
           </ClippedPanel>
-        </LayoutRow>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        </PageRow>
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Square</h2>
           <ClippedPanel variant="square">
             <template #default>
               <p>Clipped Panels Square</p>
             </template>
           </ClippedPanel>
-        </LayoutRow>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        </PageRow>
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Circle</h2>
           <div class="counter-panel">
             <div class="counter-panel__counter">1</div>
             <div class="counter-panel__title">Title</div>
             <div class="counter-panel__content">This will be the content</div>
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -37,7 +37,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "Browser title tag",
@@ -47,7 +47,7 @@ useHead({
       content: "Meta description content",
     },
   ],
-})
+});
 </script>
 
 <style scoped lang="css">

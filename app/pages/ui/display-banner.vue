@@ -2,9 +2,9 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">DisplayBanner</h1>
-        </LayoutRow>
+        </PageRow>
 
         <DisplayBanner tag="div" :style-class-passthrough="['mbe-20']">
           <template #canvas>

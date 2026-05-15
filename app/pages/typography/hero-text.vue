@@ -2,12 +2,12 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">Typography - Hero Text</h1>
           <p class="page-body-normal">Hero text styles</p>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Change variants</h2>
           <div class="demo-row">
             <div>
@@ -28,9 +28,9 @@
               </select>
             </div>
           </div>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">{{ axisOptions }}: {{ fontSizeOptions }} Variant</h2>
           <HeroText
             tag="h1"
@@ -52,7 +52,7 @@
             ]"
             :style-class-passthrough="['class-demo']"
           />
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

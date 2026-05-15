@@ -48,11 +48,11 @@ Set on `.services-card-grid` (or scoped to a page class):
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">Services</h1>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <ServicesCardGrid
             :services-data="servicesData ?? []"
             :eyebrow-config="{ fontSize: 'large' }"
@@ -60,7 +60,7 @@ Set on `.services-card-grid` (or scoped to a page class):
             href-base="/services/"
             button-text-prefix="More on"
           />
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout">
+        <PageRow tag="div" variant="popout">
           <h1 class="page-heading-2">Display Chip</h1>
 
           <!-- ── QA Panel (dev only) ───────────────────────────────── -->
@@ -15,7 +15,6 @@
                 </code>
               </summary>
               <div class="qa-panel__body">
-
                 <div class="qa-panel__group">
                   <span class="qa-panel__label">Size</span>
                   <div class="qa-panel__chips">
@@ -25,7 +24,9 @@
                       class="qa-panel__chip"
                       :class="{ 'is-active': qaSize === preset }"
                       @click="qaSize = preset"
-                    >{{ preset }}px</button>
+                    >
+                      {{ preset }}px
+                    </button>
                   </div>
                 </div>
 
@@ -38,7 +39,9 @@
                       class="qa-panel__chip"
                       :class="{ 'is-active': qaMaskWidth === preset }"
                       @click="qaMaskWidth = preset"
-                    >{{ preset }}px</button>
+                    >
+                      {{ preset }}px
+                    </button>
                   </div>
                 </div>
 
@@ -51,22 +54,16 @@
                       class="qa-panel__chip"
                       :class="{ 'is-active': qaOffset === preset }"
                       @click="qaOffset = preset"
-                    >{{ preset }}px</button>
+                    >
+                      {{ preset }}px
+                    </button>
                   </div>
                 </div>
 
                 <div class="qa-panel__group">
                   <span class="qa-panel__label">Angle — {{ qaAngle }}deg</span>
-                  <input
-                    v-model.number="qaAngle"
-                    type="range"
-                    min="0"
-                    max="360"
-                    step="1"
-                    class="qa-panel__range"
-                  />
+                  <input v-model.number="qaAngle" type="range" min="0" max="360" step="1" class="qa-panel__range" />
                 </div>
-
               </div>
             </details>
           </div>
@@ -144,7 +141,7 @@
               </div>
             </div>
           </section>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -177,12 +174,14 @@ const sizePresets = [8, 10, 12, 16, 20, 24];
 const maskWidthPresets = [0, 2, 4, 6, 8];
 const offsetPresets = [-4, 0, 2, 4, 8];
 
-const chipConfig = computed((): DisplayChipConfig => ({
-  size: `${qaSize.value}px`,
-  maskWidth: `${qaMaskWidth.value}px`,
-  offset: `${qaOffset.value}px`,
-  angle: `${qaAngle.value}deg`,
-}));
+const chipConfig = computed(
+  (): DisplayChipConfig => ({
+    size: `${qaSize.value}px`,
+    maskWidth: `${qaMaskWidth.value}px`,
+    offset: `${qaOffset.value}px`,
+    angle: `${qaAngle.value}deg`,
+  })
+);
 </script>
 
 <style lang="css">
@@ -207,7 +206,9 @@ const chipConfig = computed((): DisplayChipConfig => ({
     list-style: none;
     user-select: none;
 
-    &::-webkit-details-marker { display: none; }
+    &::-webkit-details-marker {
+      display: none;
+    }
   }
 
   .qa-panel__title {
@@ -264,7 +265,9 @@ const chipConfig = computed((): DisplayChipConfig => ({
     cursor: pointer;
     transition: background 0.15s;
 
-    &:hover { background: oklch(0% 0 0 / 0.4); }
+    &:hover {
+      background: oklch(0% 0 0 / 0.4);
+    }
 
     &.is-active {
       background: oklch(55% 0.18 240);
@@ -301,8 +304,12 @@ const chipConfig = computed((): DisplayChipConfig => ({
       transition: background 0.15s;
     }
 
-    &:hover::-webkit-slider-thumb { background: oklch(62% 0.18 240); }
-    &:hover::-moz-range-thumb { background: oklch(62% 0.18 240); }
+    &:hover::-webkit-slider-thumb {
+      background: oklch(62% 0.18 240);
+    }
+    &:hover::-moz-range-thumb {
+      background: oklch(62% 0.18 240);
+    }
   }
 
   /* ── Demo grid ─────────────────────────────────────────────────── */

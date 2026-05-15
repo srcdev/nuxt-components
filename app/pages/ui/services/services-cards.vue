@@ -2,18 +2,18 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-1">Services Card Grid</h1>
           <p class="page-body-normal">Example of a services card grid component.</p>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <ServicesCardGrid
             :services-data="servicesData ?? []"
             :eyebrow-config="{ fontSize: 'large' }"
             :hero-config="{ tag: 'h2', fontSize: 'heading' }"
           />
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

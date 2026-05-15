@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <!-- ── Page header ──────────────────────────────────────────────── -->
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-48']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-48']">
           <h1 class="page-heading-1">ScrollRevealImage / ScrollRevealFrame</h1>
           <p class="page-body-normal">
             A pure-CSS parallax reveal. No scroll listeners, no JS animation — driven entirely by
@@ -18,10 +18,10 @@
             <code>NuxtImg</code>
             optimisation and a horizontal focal-point prop.
           </p>
-        </LayoutRow>
+        </PageRow>
 
         <!-- ── Interactive demo ──────────────────────────────────────────── -->
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-48']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-48']">
           <h2 class="page-heading-2 mbe-8">Interactive demo</h2>
           <p class="page-body-normal mbe-16">Adjust the props then scroll through the image on the right.</p>
           <div class="demo-controls">
@@ -77,15 +77,15 @@
               />
             </div>
           </div>
-        </LayoutRow>
+        </PageRow>
 
         <!-- ── Variants ──────────────────────────────────────────────────── -->
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-24']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-24']">
           <h2 class="page-heading-2">Variants</h2>
-        </LayoutRow>
+        </PageRow>
 
         <!-- Default -->
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-32']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-32']">
           <div class="sri-demo-row">
             <div class="sri-demo-row__info">
               <h3 class="page-heading-3 mbe-8">Default</h3>
@@ -109,10 +109,10 @@
               :img-height="1920"
             />
           </div>
-        </LayoutRow>
+        </PageRow>
 
         <!-- Short frame / banner -->
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-32']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-32']">
           <div class="sri-demo-row">
             <div class="sri-demo-row__info">
               <h3 class="page-heading-3 mbe-8">Short frame — landscape image</h3>
@@ -137,10 +137,10 @@
               parallax-offset="24rem"
             />
           </div>
-        </LayoutRow>
+        </PageRow>
 
         <!-- Rounded corners -->
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-32']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-32']">
           <div class="sri-demo-row">
             <div class="sri-demo-row__info">
               <h3 class="page-heading-3 mbe-8">Rounded corners</h3>
@@ -169,10 +169,10 @@
               radius="2.4rem"
             />
           </div>
-        </LayoutRow>
+        </PageRow>
 
         <!-- Focal point -->
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-32']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-32']">
           <div class="sri-demo-row">
             <div class="sri-demo-row__info">
               <h3 class="page-heading-3 mbe-8">Horizontal focal point</h3>
@@ -198,10 +198,10 @@
               focal-x="75%"
             />
           </div>
-        </LayoutRow>
+        </PageRow>
 
         <!-- Tall frame -->
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-32']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-32']">
           <div class="sri-demo-row">
             <div class="sri-demo-row__info">
               <h3 class="page-heading-3 mbe-8">Tall frame — maximum travel</h3>
@@ -226,17 +226,17 @@
               parallax-offset="60rem"
             />
           </div>
-        </LayoutRow>
+        </PageRow>
 
         <!-- ScrollRevealFrame: image grid -->
-        <LayoutRow tag="div" variant="content" :style-class-passthrough="['mbe-48']">
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-48']">
           <div class="sri-demo-row">
             <div class="sri-demo-row__info">
               <h3 class="page-heading-3 mbe-8">Image grid — ScrollRevealFrame</h3>
               <p class="page-body-normal mbe-12">
                 <code>ScrollRevealFrame</code>
-                accepts arbitrary slot content. Here a six-image CSS grid scrolls as a single unit inside the
-                clipping frame — no
+                accepts arbitrary slot content. Here a six-image CSS grid scrolls as a single unit inside the clipping
+                frame — no
                 <code>focalX</code>
                 or
                 <code>NuxtImg</code>
@@ -322,7 +322,7 @@
               </div>
             </ScrollRevealFrame>
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

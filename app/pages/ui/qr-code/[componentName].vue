@@ -2,20 +2,20 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Index</h2>
           <p class="page-body-normal">This is the index page for the QR Code component: {{ componentName }}</p>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <ul class="qr-code-index-links-list">
             <li><NuxtLink to="/ui/qr-code/display">Display QR Code</NuxtLink></li>
             <li><NuxtLink to="/ui/qr-code/capture">Capture QR Code</NuxtLink></li>
             <li><NuxtLink to="/ui/qr-code/decode">Decode QR Code</NuxtLink></li>
           </ul>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2 pbe-20">{{ pageHeader }}</h2>
           <div class="demo-panel">
             <div class="qr-code-col">
@@ -89,7 +89,7 @@
               </div>
             </form>
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

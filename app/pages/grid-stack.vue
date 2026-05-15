@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <!-- Demo 3: BannerVideo + overlay -->
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-48']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-48']">
           <GridStack :tag="tag" class="grid-stack-video-demo">
             <template #layer-1>
               <BannerVideo
@@ -30,9 +30,9 @@
               </div>
             </template>
           </GridStack>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-32']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-32']">
           <h1 class="page-heading-1">GridStack</h1>
           <p class="page-body-normal">
             Stacks slot content in the z-axis using
@@ -41,10 +41,10 @@
             <code>position: absolute</code>
             . Layers share a single grid area; DOM order determines z-order (last slot is on top).
           </p>
-        </LayoutRow>
+        </PageRow>
 
         <!-- Demo 1: Two layers -->
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-48']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-48']">
           <h2 class="page-heading-2 mbe-16">Two layers</h2>
           <GridStack class="grid-stack-demo">
             <template #layer-1>
@@ -54,10 +54,10 @@
               <div class="demo-layer demo-layer--overlay">layer-2 (overlay)</div>
             </template>
           </GridStack>
-        </LayoutRow>
+        </PageRow>
 
         <!-- Demo 2: Three layers -->
-        <LayoutRow tag="div" variant="full-width" :style-class-passthrough="['mbe-48']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-48']">
           <h2 class="page-heading-2 mbe-16">Three layers</h2>
           <GridStack class="grid-stack-demo">
             <template #layer-1>
@@ -70,10 +70,10 @@
               <div class="demo-layer demo-layer--overlay">layer-3 (overlay)</div>
             </template>
           </GridStack>
-        </LayoutRow>
+        </PageRow>
 
         <!-- Controls -->
-        <LayoutRow tag="div" variant="full-width">
+        <PageRow tag="div" variant="full">
           <div class="grid-stack-demo-controls">
             <p class="demo-controls__heading">Props (video demo)</p>
             <div class="demo-controls__row">
@@ -91,7 +91,7 @@
               />
             </div>
           </div>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>

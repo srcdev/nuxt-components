@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbs-32']">
           <h1 class="page-heading-2">Tabs #3</h1>
           <p>Data driven accordian navigation with custom content</p>
 
@@ -27,7 +27,7 @@
               <p class="p-24">This is content slot 5</p>
             </template>
           </TabsCore>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -49,7 +49,6 @@ useHead({
 
 const navLinks6: ITabNav[] = [
   { name: "Home", path: "/" },
-  { name: "Layout Row", path: "/ui/layout-row" },
   { name: "Dialogs", path: "/ui/dialog" },
   { name: "Tabs", path: "/ui/tabs" },
   { name: "Something Else", path: "/ui/something" },

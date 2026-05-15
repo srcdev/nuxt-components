@@ -2,7 +2,7 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
           <h1 class="page-heading-2">Dialog withscrollable content</h1>
           <p><button @click.prevent="controlDialogs('sample1', true)" type="button">Show Dialog</button></p>
 
@@ -78,9 +78,9 @@
               <button @click.prevent="controlDialogs('sample1', false, 'confirm')" type="submit">Confirm</button>
             </template>
           </DisplayDialogScrollableContent>
-        </LayoutRow>
+        </PageRow>
 
-        <LayoutRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
+        <PageRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
           <h2 class="page-heading-2">Confirm Dialog</h2>
           <p><button @click.prevent="controlDialogs('logout', true)" type="button">Show Dialog Prompt</button></p>
 
@@ -106,7 +106,7 @@
               <button @click.prevent="controlDialogs('logout', false, 'confirm')" type="submit">Confirm</button>
             </template>
           </DisplayDialogConfirm>
-        </LayoutRow>
+        </PageRow>
       </template>
     </NuxtLayout>
   </div>
@@ -115,7 +115,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: false,
-})
+});
 
 useHead({
   title: "UI Dialogs",
@@ -123,32 +123,32 @@ useHead({
   bodyAttrs: {
     class: "home",
   },
-})
+});
 
 const dialogBtnSampleAction = () => {
-  console.log("Dialog button action clicked")
-}
+  console.log("Dialog button action clicked");
+};
 
-const { dialogsConfig, controlDialogs, initialiseDialogs, registerDialogCallbacks } = useDialogControls()
+const { dialogsConfig, controlDialogs, initialiseDialogs, registerDialogCallbacks } = useDialogControls();
 
 onMounted(() => {
-  const dialogIds = ["logout", "sample1"]
-  initialiseDialogs(dialogIds)
+  const dialogIds = ["logout", "sample1"];
+  initialiseDialogs(dialogIds);
 
   // Register callbacks for each dialog
   registerDialogCallbacks("sample1", {
     onConfirm: dialogBtnSampleAction,
     onCancel: () => console.log("Sample1 dialog cancelled"),
-  })
+  });
 
   registerDialogCallbacks("logout", {
     onConfirm: () => {
-      dialogBtnSampleAction()
-      console.log("User logged out")
+      dialogBtnSampleAction();
+      console.log("User logged out");
     },
     onCancel: () => console.log("Logout cancelled"),
-  })
-})
+  });
+});
 </script>
 
 <style lang="css">
