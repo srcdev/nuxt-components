@@ -1,44 +1,30 @@
-export const useDialogControls = () => {
-  interface DialogConfig {
-    [key: string]: boolean;
-  }
+type DialogCallbacks = {
+  onConfirm?: () => void;
+  onCancel?: () => void;
+};
 
-  interface DialogCallbacks {
-    [key: string]: {
-      onConfirm?: () => void;
-      onCancel?: () => void;
-    };
-  }
+type DialogsSetupConfig = Record<string, DialogCallbacks>;
 
-  const dialogsConfig = reactive<DialogConfig>({});
-  const dialogCallbacks = reactive<DialogCallbacks>({});
+export const useDialogControls = (config: DialogsSetupConfig = {}) => {
+  const dialogsConfig = reactive<Record<string, boolean>>(
+    Object.fromEntries(Object.keys(config).map((id) => [id, false]))
+  );
 
-  function initialiseDialogs(dialogIds: string[]) {
-    dialogIds.forEach((id) => {
-      dialogsConfig[id] = false;
-    });
-  }
+  const openDialog = (name: string) => {
+    dialogsConfig[name] = true;
+  };
 
-  function registerDialogCallbacks(dialogId: string, callbacks: { onConfirm?: () => void; onCancel?: () => void }) {
-    dialogCallbacks[dialogId] = callbacks;
-  }
-
-  const controlDialogs = (name: string, state: boolean, action?: 'confirm' | 'cancel') => {
-    if (!state && action && dialogCallbacks[name]) {
-      // Execute callback before closing dialog
-      if (action === 'confirm' && dialogCallbacks[name].onConfirm) {
-        dialogCallbacks[name].onConfirm!();
-      } else if (action === 'cancel' && dialogCallbacks[name].onCancel) {
-        dialogCallbacks[name].onCancel!();
-      }
+  const closeDialog = (name: string, action?: "confirm" | "cancel") => {
+    if (action && config[name]) {
+      if (action === "confirm") config[name].onConfirm?.();
+      else if (action === "cancel") config[name].onCancel?.();
     }
-    dialogsConfig[name] = state;
+    dialogsConfig[name] = false;
   };
 
   return {
     dialogsConfig,
-    controlDialogs,
-    initialiseDialogs,
-    registerDialogCallbacks,
+    openDialog,
+    closeDialog,
   };
 };

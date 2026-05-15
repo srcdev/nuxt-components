@@ -8,7 +8,7 @@
           <CanvasSwitcher v-model:canvas-name="canvasName" />
         </PageRow>
 
-        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <MasonryGridOrderedGridExperiment
             v-if="status === 'success'"
             :grid-data="quotesData?.quotes?.slice(0, displayCount).map((q) => ({ ...q, id: String(q.id) })) ?? []"

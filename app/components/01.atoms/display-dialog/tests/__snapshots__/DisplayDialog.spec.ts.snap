@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DisplayDialog > renders correct HTML structure with all slots 1`] = `
+"<dialog class="display-dialog" role="dialog" align-dialog="center" justify-dialog="center" open="" data-dialog-id="test">
+  <div class="inner dialog">
+    <div class="header">
+      <div class="col-left">
+        <p>Title</p>
+      </div>
+      <div class="col-right"><button data-test-id="display-dialog-header-close" class="display-prompt-action"><span class="iconify i-bitcoin-icons:cross-filled icon" aria-hidden="true"></span><span class="sr-only">Close</span></button></div>
+    </div>
+    <div class="dialog-content">
+      <p>Content</p>
+    </div>
+    <div class="footer"><button>Cancel</button><button>Confirm</button></div>
+  </div>
+</dialog>"
+`;
