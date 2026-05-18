@@ -139,7 +139,8 @@ const props = withDefaults(defineProps<Props>(), {
   anchorScrollOffset: undefined,
 });
 
-const { isCollapsed, isLoaded, isMenuOpen, isActiveItem, toggleMenu, closeMenu } = useNavCollapse("tab-nav-loaded");
+const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, isActiveItem, toggleMenu, closeMenu } =
+  useNavCollapse("tab-nav-loaded");
 
 const { handleNavClick, activeHash } = useAnchorScroll({ offset: props.anchorScrollOffset });
 
