@@ -9,17 +9,18 @@
     ]"
     aria-label="Site navigation"
   >
-    <ul
-      v-if="!isCollapsed || !isLoaded"
-      ref="navListRef"
-      class="tab-nav-list"
-      @mouseleave="hoveredItemHref = null"
-    >
+    <ul v-if="!isCollapsed || !isLoaded" ref="navListRef" class="tab-nav-list" @mouseleave="hoveredItemHref = null">
       <li
         v-for="item in navItemData.main"
         :key="item.href"
         :data-href="item.href"
-        :class="[item.cssName, { 'is-active': item.href?.startsWith('#') ? item.href === activeHash : isActiveItem(item.href), 'is-hovered': hoveredItemHref === item.href }]"
+        :class="[
+          item.cssName,
+          {
+            'is-active': item.href?.startsWith('#') ? item.href === activeHash : isActiveItem(item.href),
+            'is-hovered': hoveredItemHref === item.href,
+          },
+        ]"
         @mouseenter="hoveredItemHref = item.href ?? null"
       >
         <!-- Plain <a> for hash links — keeps Vue Router out of the smooth-scroll path -->
@@ -90,7 +91,12 @@
               v-if="item.href?.startsWith('#')"
               :href="item.href"
               class="tab-nav-panel-link"
-              @click="(e) => { item.href && handleNavClick(e, item.href); closeMenu(); }"
+              @click="
+                (e) => {
+                  item.href && handleNavClick(e, item.href);
+                  closeMenu();
+                }
+              "
             >
               <Icon v-if="item.iconName" :name="item.iconName" aria-hidden="true" />
               {{ item.text }}
@@ -100,7 +106,12 @@
               :href="item.href"
               :external="item.isExternal || undefined"
               class="tab-nav-panel-link"
-              @click="(e) => { item.href && handleNavClick(e, item.href); closeMenu(); }"
+              @click="
+                (e) => {
+                  item.href && handleNavClick(e, item.href);
+                  closeMenu();
+                }
+              "
             >
               <Icon v-if="item.iconName" :name="item.iconName" aria-hidden="true" />
               {{ item.text }}
@@ -128,8 +139,7 @@ const props = withDefaults(defineProps<Props>(), {
   anchorScrollOffset: undefined,
 });
 
-const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, isActiveItem, toggleMenu, closeMenu } =
-  useNavCollapse("tab-nav-loaded");
+const { isCollapsed, isLoaded, isMenuOpen, isActiveItem, toggleMenu, closeMenu } = useNavCollapse("tab-nav-loaded");
 
 const { handleNavClick, activeHash } = useAnchorScroll({ offset: props.anchorScrollOffset });
 

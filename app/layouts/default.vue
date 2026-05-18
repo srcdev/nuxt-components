@@ -103,6 +103,7 @@ const responsiveNavLinks = {
         { name: "Block Decorators", path: "/ui/block-decorators" },
         { name: "Navigation Horizontal", path: "/ui/navigation/navigation-horizontal" },
         { name: "Site Navigation", path: "/ui/navigation/site-navigation" },
+        { name: "Tab Navigation", path: "/ui/navigation/tab-navigation" },
         { name: "Deep Expanding Menu", path: "/ui/deep-expanding-menu" },
         { name: "Magnetic Navigation", path: "/ui/magnetic-navigation" },
         { name: "Page Row", path: "/ui/page-row" },

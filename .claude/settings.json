@@ -26,7 +26,8 @@
       "Bash(node -e ':*)",
       "Bash(git ls-tree *)",
       "Bash(node -p \"require\\('./package.json'\\).version\")",
-      "Bash(git status *)"
+      "Bash(git status *)",
+      "Bash(xargs ls -1)"
     ]
   }
 }
