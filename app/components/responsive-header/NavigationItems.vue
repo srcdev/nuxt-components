@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-navigation-wrapper" :class="elementClasses" role="menu" aria-label="Overflow navigation menu" @mouseleave="hoveredItemKey = null; hoveredChildKey = null">
+  <div class="overflow-navigation-wrapper" :class="[elementClasses, { 'is-panel-animating': isPanelAnimating }]" role="menu" aria-label="Overflow navigation menu" @mouseleave="hoveredItemKey = null; hoveredChildKey = null">
     <ul
       v-for="(navGroup, groupKey) in mainNavigationState.clonedNavLinks"
       :key="groupKey"
@@ -48,6 +48,7 @@
           @mouseenter="hoveredItemKey = `${String(groupKey)}-${localIndex}`"
         >
           <ExpandingPanel
+            v-model="panelOpenStates[`${String(groupKey)}-${localIndex}`]"
             name="overflow-navigation-group"
             :animation-duration="DETAILS_ANIMATION_DURATION"
             icon-size="medium"
@@ -113,6 +114,24 @@ const props = withDefaults(defineProps<Props>(), {
 const hoveredItemKey = ref<string | null>(null);
 const hoveredChildKey = ref<string | null>(null);
 
+const DETAILS_ANIMATION_DURATION = 200 as const;
+
+const panelOpenStates = reactive<Record<string, boolean>>({});
+const isPanelAnimating = ref(false);
+let panelAnimationTimer: ReturnType<typeof setTimeout> | null = null;
+
+watch(panelOpenStates, () => {
+  isPanelAnimating.value = true;
+  if (panelAnimationTimer) clearTimeout(panelAnimationTimer);
+  panelAnimationTimer = setTimeout(() => {
+    isPanelAnimating.value = false;
+  }, DETAILS_ANIMATION_DURATION);
+}, { deep: true });
+
+onUnmounted(() => {
+  if (panelAnimationTimer) clearTimeout(panelAnimationTimer);
+});
+
 const route = useRoute();
 
 const isActiveNavItem = (link: ResponsiveHeaderNavItem): boolean => {
@@ -120,9 +139,6 @@ const isActiveNavItem = (link: ResponsiveHeaderNavItem): boolean => {
   if (link.childLinks) return link.childLinks.some((child) => child.path && route.path === child.path);
   return false;
 };
-
-// Performance: Use const assertion for static values
-const DETAILS_ANIMATION_DURATION = 200 as const;
 // const DETAILS_ANIMATION_DURATION_STRING = `${DETAILS_ANIMATION_DURATION}ms` as const;
 
 // Performance: Memoize expensive computed with proper dependencies
@@ -259,6 +275,15 @@ watch(
     }
   }
 }
+
+  /* Freeze all indicator transitions for the duration of a panel open/close animation
+     so the indicators snap to position rather than sliding through intermediate states. */
+  .overflow-navigation-wrapper.is-panel-animating .overflow-nav-indicator-hovered,
+  .overflow-navigation-wrapper.is-panel-animating .overflow-nav-indicator-active,
+  .overflow-navigation-wrapper.is-panel-animating .overflow-sub-nav-indicator-hovered,
+  .overflow-navigation-wrapper.is-panel-animating .overflow-sub-nav-indicator-active {
+    transition: none;
+  }
 
   /* ─── Anchor positioning for overflow-nav indicators ─────────────────────
      Single --overflow-nav-indicator: sits on is-hovered, falls back to
