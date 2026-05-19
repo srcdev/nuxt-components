@@ -444,6 +444,7 @@ watch(
     }
 
     --_link-visibility-transition: none;
+    position: relative;
 
     &.loaded {
       --_link-visibility-transition: all 0.2s ease-in-out;
@@ -469,7 +470,7 @@ watch(
       flex-grow: 1;
       justify-content: space-between;
       gap: 60px;
-      position: relative;
+      overflow-x: hidden;
       margin-inline-end: v-bind(mainNavigationMarginBlockEndStr);
 
       &.collapsed {
