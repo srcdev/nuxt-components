@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-navigation-wrapper" :class="elementClasses" role="menu" aria-label="Overflow navigation menu" @mouseleave="hoveredItemKey = null">
+  <div class="overflow-navigation-wrapper" :class="elementClasses" role="menu" aria-label="Overflow navigation menu" @mouseleave="hoveredItemKey = null; hoveredChildKey = null">
     <ul
       v-for="(navGroup, groupKey) in mainNavigationState.clonedNavLinks"
       :key="groupKey"
@@ -68,17 +68,24 @@
             </template>
             <template #content>
               <div class="overflow-navigation-sub-nav-inner">
-                <ul class="overflow-navigation-sub-nav-list">
+                <ul class="overflow-navigation-sub-nav-list" @mouseleave="hoveredChildKey = null">
                   <li
-                    v-for="childLink in link.childLinks"
+                    v-for="(childLink, childIndex) in link.childLinks"
                     :key="childLink.name"
                     class="overflow-navigation-sub-nav-item"
+                    :class="{
+                      'is-hovered': hoveredChildKey === `${String(groupKey)}-${localIndex}-${childIndex}`,
+                      'is-active': isActiveNavItem(childLink),
+                    }"
+                    @mouseenter="hoveredChildKey = `${String(groupKey)}-${localIndex}-${childIndex}`"
                   >
                     <NuxtLink :to="childLink.path" class="overflow-navigation-sub-nav-link" role="menuitem">
                       <span class="overflow-navigation-sub-nav-text">{{ childLink.name }}</span>
                     </NuxtLink>
                   </li>
                 </ul>
+                <div aria-hidden="true" class="overflow-sub-nav-indicator-hovered"></div>
+                <div aria-hidden="true" class="overflow-sub-nav-indicator-active"></div>
               </div>
             </template>
           </ExpandingPanel>
@@ -104,6 +111,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const hoveredItemKey = ref<string | null>(null);
+const hoveredChildKey = ref<string | null>(null);
 
 const route = useRoute();
 
@@ -225,6 +233,7 @@ watch(
 
               .overflow-navigation-sub-nav-inner {
                 margin-top: 0;
+                position: relative;
 
                 .overflow-navigation-sub-nav-list {
                   display: flex;
@@ -256,11 +265,26 @@ watch(
      is-active. Vertical list so indicators slide up/down rather than left/right.
   ──────────────────────────────────────────────────────────────────────── */
 
-  .overflow-navigation-wrapper .overflow-navigation-item.is-hovered {
+  /* Anchor to the inner row element, not the <li>, so an open submenu panel
+     doesn't stretch the indicator down into the expanded content. */
+
+  /* Plain link — hovered */
+  .overflow-navigation-wrapper .overflow-navigation-item.is-hovered:not(:has(.overflow-navigation-details)) .overflow-navigation-link {
     anchor-name: --overflow-nav-indicator;
   }
 
-  .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered)) .overflow-navigation-item.is-active {
+  /* Submenu — hovered: anchor to summary row only */
+  .overflow-navigation-wrapper .overflow-navigation-item.is-hovered .overflow-navigation-details .expanding-panel-summary {
+    anchor-name: --overflow-nav-indicator;
+  }
+
+  /* Plain link — active (no hover) */
+  .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered)) .overflow-navigation-item.is-active:not(:has(.overflow-navigation-details)) .overflow-navigation-link {
+    anchor-name: --overflow-nav-indicator;
+  }
+
+  /* Submenu — active (no hover): anchor to summary row only */
+  .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered)) .overflow-navigation-item.is-active .overflow-navigation-details .expanding-panel-summary {
     anchor-name: --overflow-nav-indicator;
   }
 
@@ -282,8 +306,8 @@ watch(
     z-index: 1;
     opacity: 0;
     transition:
-      top 200ms ease,
-      bottom 200ms ease,
+      top 200ms ease-in-out,
+      bottom 200ms ease-in-out,
       opacity 150ms ease;
   }
 
@@ -302,8 +326,63 @@ watch(
     background: var(--overflow-nav-decorator-indicator-color, currentColor);
     z-index: 3;
     transition:
-      top 200ms ease,
-      bottom 200ms ease;
+      top 200ms ease-in-out,
+      bottom 200ms ease-in-out;
+  }
+
+  /* ─── Anchor positioning for sub-nav child indicators ────────────────────
+     Separate --overflow-sub-nav-indicator scoped to the inner wrapper so
+     parent and child indicators are fully independent.
+  ──────────────────────────────────────────────────────────────────────── */
+
+  .overflow-navigation-sub-nav-item.is-hovered {
+    anchor-name: --overflow-sub-nav-indicator;
+  }
+
+  .overflow-navigation-sub-nav-list:not(:has(.overflow-navigation-sub-nav-item.is-hovered)) .overflow-navigation-sub-nav-item.is-active {
+    anchor-name: --overflow-sub-nav-indicator;
+  }
+
+  .overflow-sub-nav-indicator-hovered,
+  .overflow-sub-nav-indicator-active {
+    display: none;
+    pointer-events: none;
+  }
+
+  .overflow-sub-nav-indicator-hovered {
+    display: block;
+    position: absolute;
+    position-anchor: --overflow-sub-nav-indicator;
+    left: 0;
+    right: 0;
+    top: anchor(top);
+    bottom: anchor(bottom);
+    background: var(--overflow-nav-decorator-hovered-bg, oklch(100% 0 0 / 6%));
+    z-index: 1;
+    opacity: 0;
+    transition:
+      top 200ms ease-in-out,
+      bottom 200ms ease-in-out,
+      opacity 150ms ease;
+  }
+
+  .overflow-navigation-sub-nav-inner:has(.overflow-navigation-sub-nav-item.is-hovered) .overflow-sub-nav-indicator-hovered {
+    opacity: 1;
+  }
+
+  .overflow-sub-nav-indicator-active {
+    display: block;
+    position: absolute;
+    position-anchor: --overflow-sub-nav-indicator;
+    left: 0;
+    width: 2px;
+    top: anchor(top);
+    bottom: anchor(bottom);
+    background: var(--overflow-nav-decorator-indicator-color, currentColor);
+    z-index: 3;
+    transition:
+      top 200ms ease-in-out,
+      bottom 200ms ease-in-out;
   }
 }
 </style>
