@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-navigation-wrapper" :class="elementClasses" role="menu" aria-label="Overflow navigation menu">
+  <div class="overflow-navigation-wrapper" :class="elementClasses" role="menu" aria-label="Overflow navigation menu" @mouseleave="hoveredItemKey = null">
     <ul
       v-for="(navGroup, groupKey) in mainNavigationState.clonedNavLinks"
       :key="groupKey"
@@ -12,7 +12,11 @@
         <li
           v-if="link.path"
           class="overflow-navigation-item"
-          :class="{ visible: !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
+          :class="{
+            visible: !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible,
+            'is-hovered': hoveredItemKey === `${String(groupKey)}-${localIndex}`,
+            'is-active': isActiveNavItem(link),
+          }"
           :style="{
             '--_main-navigation-item-width':
               mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
@@ -20,6 +24,7 @@
           :data-group-key="groupKey"
           :data-local-index="localIndex"
           role="none"
+          @mouseenter="hoveredItemKey = `${String(groupKey)}-${localIndex}`"
         >
           <NuxtLink class="overflow-navigation-link" :to="link.path" role="menuitem">
             <span class="overflow-navigation-text">{{ link.name }}</span>
@@ -28,7 +33,11 @@
         <li
           v-else
           class="overflow-navigation-item"
-          :class="{ visible: !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
+          :class="{
+            visible: !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible,
+            'is-hovered': hoveredItemKey === `${String(groupKey)}-${localIndex}`,
+            'is-active': isActiveNavItem(link),
+          }"
           :style="{
             '--_main-navigation-item-width':
               mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
@@ -36,6 +45,7 @@
           :data-group-key="groupKey"
           :data-local-index="localIndex"
           role="none"
+          @mouseenter="hoveredItemKey = `${String(groupKey)}-${localIndex}`"
         >
           <ExpandingPanel
             name="overflow-navigation-group"
@@ -75,11 +85,13 @@
         </li>
       </template>
     </ul>
+    <div aria-hidden="true" class="overflow-nav-indicator-hovered"></div>
+    <div aria-hidden="true" class="overflow-nav-indicator-active"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderState } from "../../types/components";
+import type { ResponsiveHeaderState, ResponsiveHeaderNavItem } from "../../types/components";
 
 interface Props {
   mainNavigationState?: ResponsiveHeaderState;
@@ -90,6 +102,16 @@ const props = withDefaults(defineProps<Props>(), {
   mainNavigationState: () => ({ clonedNavLinks: {}, navListVisibility: {}, hasSecondNav: false }),
   styleClassPassthrough: () => [],
 });
+
+const hoveredItemKey = ref<string | null>(null);
+
+const route = useRoute();
+
+const isActiveNavItem = (link: ResponsiveHeaderNavItem): boolean => {
+  if (link.path) return route.path === link.path;
+  if (link.childLinks) return link.childLinks.some((child) => child.path && route.path === child.path);
+  return false;
+};
 
 // Performance: Use const assertion for static values
 const DETAILS_ANIMATION_DURATION = 200 as const;
@@ -129,6 +151,7 @@ watch(
   display: flex;
   flex-direction: column;
   gap: var(--overflow-nav-items-gap);
+  position: relative;
 
   .overflow-navigation-list {
     display: none;
@@ -227,5 +250,60 @@ watch(
     }
   }
 }
+
+  /* ─── Anchor positioning for overflow-nav indicators ─────────────────────
+     Single --overflow-nav-indicator: sits on is-hovered, falls back to
+     is-active. Vertical list so indicators slide up/down rather than left/right.
+  ──────────────────────────────────────────────────────────────────────── */
+
+  .overflow-navigation-wrapper .overflow-navigation-item.is-hovered {
+    anchor-name: --overflow-nav-indicator;
+  }
+
+  .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered)) .overflow-navigation-item.is-active {
+    anchor-name: --overflow-nav-indicator;
+  }
+
+  .overflow-navigation-wrapper .overflow-nav-indicator-hovered,
+  .overflow-navigation-wrapper .overflow-nav-indicator-active {
+    display: none;
+    pointer-events: none;
+  }
+
+  .overflow-navigation-wrapper .overflow-nav-indicator-hovered {
+    display: block;
+    position: absolute;
+    position-anchor: --overflow-nav-indicator;
+    left: 0;
+    right: 0;
+    top: anchor(top);
+    bottom: anchor(bottom);
+    background: var(--overflow-nav-decorator-hovered-bg, oklch(100% 0 0 / 6%));
+    z-index: 1;
+    opacity: 0;
+    transition:
+      top 200ms ease,
+      bottom 200ms ease,
+      opacity 150ms ease;
+  }
+
+  .overflow-navigation-wrapper:has(.overflow-navigation-item.is-hovered) .overflow-nav-indicator-hovered {
+    opacity: 1;
+  }
+
+  .overflow-navigation-wrapper .overflow-nav-indicator-active {
+    display: block;
+    position: absolute;
+    position-anchor: --overflow-nav-indicator;
+    left: 0;
+    width: 2px;
+    top: anchor(top);
+    bottom: anchor(bottom);
+    background: var(--overflow-nav-decorator-indicator-color, currentColor);
+    z-index: 3;
+    transition:
+      top 200ms ease,
+      bottom 200ms ease;
+  }
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div ref="navigationWrapper" class="navigation" :class="[elementClasses, { loaded: navLoaded }]" role="banner">
-    <nav ref="mainNav" class="main-navigation" aria-label="Main navigation">
+    <nav ref="mainNav" class="main-navigation" :class="{ 'is-animated': isAnimated }" aria-label="Main navigation" @mouseleave="hoveredItemKey = null">
       <ul
         v-for="(navGroup, groupKey) in responsiveNavLinks"
         :key="groupKey"
@@ -16,6 +16,8 @@
           class="main-navigation-item"
           :class="{
             'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible,
+            'is-hovered': hoveredItemKey === `${String(groupKey)}-${localIndex}`,
+            'is-active': isActiveNavItem(link),
           }"
           :style="{
             '--_main-navigation-item-width':
@@ -23,8 +25,8 @@
           }"
           :data-group-key="groupKey"
           :data-local-index="localIndex"
-          @mouseenter="handleNavigationItemHover"
-          @focusin="handleNavigationItemHover"
+          @mouseenter="handleNavigationItemHover(`${String(groupKey)}-${localIndex}`)"
+          @focusin="handleNavigationItemHover(`${String(groupKey)}-${localIndex}`)"
         >
           <NuxtLink
             v-if="link.path"
@@ -61,6 +63,8 @@
           </details>
         </li>
       </ul>
+      <div aria-hidden="true" class="nav-indicator-hovered"></div>
+      <div aria-hidden="true" class="nav-indicator-active"></div>
     </nav>
     <nav ref="secondaryNav" class="secondary-navigation" aria-label="Secondary navigation">
       <details
@@ -93,7 +97,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderProp, ResponsiveHeaderState, IFlooredRect } from "../../types/components";
+import type { ResponsiveHeaderProp, ResponsiveHeaderState, IFlooredRect, ResponsiveHeaderNavItem } from "../../types/components";
 import { useResizeObserver, onClickOutside } from "@vueuse/core";
 
 interface Props {
@@ -176,18 +180,42 @@ const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
   toggleDetailsElement(event);
 };
 
-const handleNavigationItemHover = () => {
+const handleNavigationItemHover = (key: string) => {
+  hoveredItemKey.value = key;
   if (!props.allowExpandOnGesture) {
     return;
   }
-
-  // Close all open navigation details when hovering over regular nav items
   closeAllNavigationDetails();
 };
 
 const handleSummaryAction = (event: MouseEvent | KeyboardEvent) => {
   toggleDetailsElement(event);
 };
+
+const hoveredItemKey = ref<string | null>(null);
+
+const route = useRoute();
+
+const isActiveNavItem = (link: ResponsiveHeaderNavItem): boolean => {
+  if (link.path) return route.path === link.path;
+  if (link.childLinks) return link.childLinks.some((child) => child.path && route.path === child.path);
+  return false;
+};
+
+const isAnimated = ref(true);
+
+watch(
+  () => route.path,
+  () => {
+    isAnimated.value = false;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        isAnimated.value = true;
+      });
+    });
+  },
+  { flush: "pre" }
+);
 
 // Initialize main navigation state
 const mainNavigationState = ref<ResponsiveHeaderState>({
@@ -441,8 +469,7 @@ watch(
       flex-grow: 1;
       justify-content: space-between;
       gap: 60px;
-
-      overflow-x: hidden;
+      position: relative;
       margin-inline-end: v-bind(mainNavigationMarginBlockEndStr);
 
       &.collapsed {
@@ -476,19 +503,16 @@ watch(
             text-wrap-mode: nowrap;
             color: inherit;
             text-decoration: none;
+            cursor: pointer;
             margin-inline-start: 0;
-            /* transition: var(--_link-visibility-transition); */
+            position: relative;
+            z-index: 4;
 
             padding-block: var(--_link-padding-block);
             padding-inline: var(--_link-padding-inline);
             margin-block: var(--_link-margin-block);
             margin-inline: var(--_link-margin-inline);
             border-bottom: var(--_link-border-default);
-
-            &:hover {
-              cursor: pointer;
-              border-bottom-color: var(--_link-border-bottom-hover);
-            }
           }
 
           .main-navigation-details {
@@ -499,10 +523,6 @@ watch(
 
             &[open] {
               --_icon-transform: scaleY(-1);
-
-              .main-navigation-details-summary {
-                border-bottom-color: var(--_link-border-bottom-hover);
-              }
             }
 
             .has-toggle-icon {
@@ -524,15 +544,13 @@ watch(
               margin-inline: var(--_link-margin-inline);
               border-bottom: var(--_link-border-default);
               white-space: nowrap;
+              cursor: pointer;
+              position: relative;
+              z-index: 4;
 
               &::-webkit-details-marker,
               &::marker {
                 display: none;
-              }
-
-              &:hover {
-                cursor: pointer;
-                border-bottom-color: var(--_link-border-bottom-hover);
               }
 
               .decorator-icon {
@@ -725,6 +743,70 @@ watch(
         }
       }
     }
+  }
+
+  /* ─── Anchor positioning for main-nav indicators ─────────────────────────
+     Single --responsive-main-nav-indicator anchor: sits on is-hovered when
+     something is hovered, falls back to is-active when nothing is hovered.
+  ──────────────────────────────────────────────────────────────────────── */
+
+  .main-navigation li.is-hovered {
+    anchor-name: --responsive-main-nav-indicator;
+  }
+
+  .main-navigation:not(:has(li.is-hovered)) li.is-active {
+    anchor-name: --responsive-main-nav-indicator;
+  }
+
+  .main-navigation .nav-indicator-hovered,
+  .main-navigation .nav-indicator-active {
+    display: none;
+    pointer-events: none;
+  }
+
+  .main-navigation .nav-indicator-hovered {
+    display: block;
+    position: absolute;
+    position-anchor: --responsive-main-nav-indicator;
+    left: anchor(left);
+    right: anchor(right);
+    top: anchor(top);
+    bottom: anchor(bottom);
+    background: var(--responsive-nav-decorator-hovered-bg, oklch(100% 0 0 / 8%));
+    border-radius: 4px;
+    z-index: 1;
+    opacity: 0;
+    transition:
+      left 200ms ease,
+      right 200ms ease,
+      opacity 150ms ease;
+  }
+
+  .main-navigation:not(.is-animated) .nav-indicator-hovered {
+    transition: none;
+  }
+
+  .main-navigation:has(li.is-hovered) .nav-indicator-hovered {
+    opacity: 1;
+  }
+
+  .main-navigation .nav-indicator-active {
+    display: block;
+    position: absolute;
+    position-anchor: --responsive-main-nav-indicator;
+    left: anchor(left);
+    right: anchor(right);
+    bottom: 0;
+    height: 2px;
+    background: var(--responsive-nav-decorator-indicator-color, var(--_link-border-bottom-hover));
+    z-index: 3;
+    transition:
+      left 200ms ease,
+      right 200ms ease;
+  }
+
+  .main-navigation:not(.is-animated) .nav-indicator-active {
+    transition: none;
   }
 }
 </style>

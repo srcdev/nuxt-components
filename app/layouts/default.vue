@@ -301,7 +301,7 @@ onMounted(() => {
           margin-inline-start: 0;
 
           padding: 8px 2px;
-          border-bottom: 0.2rem solid #efefef25;
+          /* border-bottom: 0.2rem solid #efefef25; */
 
           &:before {
             content: "";
@@ -312,6 +312,7 @@ onMounted(() => {
             height: 0.2rem;
             background-color: transparent;
             transition: all 0.3s;
+            display: none;
           }
 
           &:hover {
@@ -319,6 +320,7 @@ onMounted(() => {
               width: 100%;
               height: 0.2rem;
               background-color: var(--green-08);
+              display: none;
             }
           }
         }
@@ -334,7 +336,7 @@ onMounted(() => {
             position: relative;
             color: var(--slate-00);
             white-space: nowrap;
-            border-bottom: 0.2rem solid #efefef25;
+            /* border-bottom: 0.2rem solid #efefef25; */
 
             &:before {
               content: "";
@@ -345,6 +347,7 @@ onMounted(() => {
               height: 0.2rem;
               background-color: transparent;
               transition: all 0.3s;
+              display: none;
             }
           }
 
@@ -354,6 +357,7 @@ onMounted(() => {
                 width: 100%;
                 height: 0.2rem;
                 background-color: var(--green-08);
+                display: none;
               }
             }
           }
@@ -385,7 +389,7 @@ onMounted(() => {
                   text-decoration: none;
                   color: var(--slate-00);
                   padding: 8px 2px;
-                  border-bottom: 0.2rem solid #efefef25;
+                  /* border-bottom: 0.2rem solid #efefef25; */
                   min-width: 170px;
 
                   &:before {
@@ -397,6 +401,7 @@ onMounted(() => {
                     height: 0.2rem;
                     background-color: transparent;
                     transition: all 0.3s;
+                    display: none;
                   }
 
                   &:hover {
@@ -404,6 +409,7 @@ onMounted(() => {
                       width: 100%;
                       height: 0.2rem;
                       background-color: var(--green-08);
+                      display: none;
                     }
                   }
                 }
