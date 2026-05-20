@@ -39,6 +39,10 @@ describe("ActionMenu", () => {
 
   afterEach(() => {
     wrapper?.unmount();
+    vi.restoreAllMocks();
+    // Object.defineProperty stubs are not touched by vi.restoreAllMocks() — remove explicitly
+    delete (HTMLElement.prototype as unknown as Record<string, unknown>)["hidePopover"];
+    delete (HTMLElement.prototype as unknown as Record<string, unknown>)["showPopover"];
   });
 
   // -------------------------

@@ -125,6 +125,11 @@ Quick reference:
   emitting `click` triggers normally before the menu closes.
 - **Focus management** — on open the `toggle` event fires `handleToggle`, which moves focus to the
   first `[role="menuitem"]` inside the popover.
+- **Keyboard navigation `currentIndex === -1` guard** — `handleKeydown` computes the current
+  position via `items.indexOf(document.activeElement)`. When focus is outside the menu this returns
+  `-1`. Always guard explicitly before applying wrap-around math: `ArrowDown` should focus
+  `items[0]`; `ArrowUp` should focus `items[items.length - 1]`. Without the guard, the modulo
+  formula gives `items[n-2]` for `ArrowUp` — the second-to-last item instead of the last.
 - **Right-aligned by default** — the menu's right edge aligns with the trigger's right edge
   (`right: anchor(right)`). Flips above the trigger near the bottom of the viewport
   (`position-try-fallbacks: flip-block`).

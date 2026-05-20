@@ -20,6 +20,7 @@ describe("ActionMenuItemCore", () => {
 
   afterEach(() => {
     wrapper?.unmount();
+    vi.restoreAllMocks();
   });
 
   // -------------------------
