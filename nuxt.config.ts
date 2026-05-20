@@ -111,13 +111,13 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      include: ["@oddbird/css-anchor-positioning"],
+      include: ["@oddbird/css-anchor-positioning", "@vue/devtools-core", "@vue/devtools-kit", "vue-qrcode-reader"],
     },
   },
   vue: {
     runtimeCompiler: true,
   },
-  compatibilityDate: "2026-01-30",
+  compatibilityDate: "2026-05-20",
   typescript: {
     includeWorkspace: true,
     strict: true,

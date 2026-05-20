@@ -27,7 +27,11 @@
       "Bash(git ls-tree *)",
       "Bash(node -p \"require\\('./package.json'\\).version\")",
       "Bash(git status *)",
-      "Bash(xargs ls -1)"
+      "Bash(xargs ls -1)",
+      "Bash(npm audit *)",
+      "Bash(node -e \"const p=require\\('./package.json'\\); console.log\\('DEPS:', JSON.stringify\\(p.dependencies||{}, null, 2\\)\\); console.log\\('PEER:', JSON.stringify\\(p.peerDependencies||{}, null, 2\\)\\);\")",
+      "Bash(npm ls *)",
+      "Bash(SRCDEV_STANDALONE=true npx vitest run app/components/05.forms/input-button --reporter=verbose)"
     ]
   }
 }
