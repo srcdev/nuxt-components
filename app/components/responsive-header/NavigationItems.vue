@@ -86,7 +86,6 @@
                   </li>
                 </ul>
                 <div aria-hidden="true" class="overflow-sub-nav-indicator-hovered"></div>
-                <div aria-hidden="true" class="overflow-sub-nav-indicator-active"></div>
               </div>
             </template>
           </ExpandingPanel>
@@ -280,8 +279,7 @@ watch(
      so the indicators snap to position rather than sliding through intermediate states. */
   .overflow-navigation-wrapper.is-panel-animating .overflow-nav-indicator-hovered,
   .overflow-navigation-wrapper.is-panel-animating .overflow-nav-indicator-active,
-  .overflow-navigation-wrapper.is-panel-animating .overflow-sub-nav-indicator-hovered,
-  .overflow-navigation-wrapper.is-panel-animating .overflow-sub-nav-indicator-active {
+  .overflow-navigation-wrapper.is-panel-animating .overflow-sub-nav-indicator-hovered {
     transition: none;
   }
 
@@ -368,8 +366,11 @@ watch(
     anchor-name: --overflow-sub-nav-indicator;
   }
 
-  .overflow-sub-nav-indicator-hovered,
-  .overflow-sub-nav-indicator-active {
+  .overflow-navigation-sub-nav-item.is-active {
+    border-inline-start: 2px solid var(--overflow-nav-decorator-indicator-color, currentColor);
+  }
+
+  .overflow-sub-nav-indicator-hovered {
     display: none;
     pointer-events: none;
   }
@@ -395,19 +396,6 @@ watch(
     opacity: 1;
   }
 
-  .overflow-sub-nav-indicator-active {
-    display: block;
-    position: absolute;
-    position-anchor: --overflow-sub-nav-indicator;
-    left: 0;
-    width: 2px;
-    top: anchor(top);
-    bottom: anchor(bottom);
-    background: var(--overflow-nav-decorator-indicator-color, currentColor);
-    z-index: 3;
-    transition:
-      top 200ms ease-in-out,
-      bottom 200ms ease-in-out;
-  }
+
 }
 </style>
