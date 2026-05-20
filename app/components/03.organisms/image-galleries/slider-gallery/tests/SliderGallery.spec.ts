@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
 import SliderGallery from "../SliderGallery.vue";
@@ -65,6 +65,10 @@ describe("SliderGallery", () => {
       "Image",
       vi.fn(() => mockImage)
     );
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   // ─── Mount ───────────────────────────────────────────────────────────────

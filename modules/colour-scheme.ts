@@ -6,7 +6,7 @@ export default defineNuxtModule({
     configKey: "colourScheme",
   },
   setup(_, nuxt) {
-    const enabled = (nuxt.options.runtimeConfig.public?.colourScheme as { enabled?: boolean } | undefined)?.enabled ?? true;
+    const enabled = ((nuxt.options.runtimeConfig.public as Record<string, unknown>).colourScheme as { enabled?: boolean } | undefined)?.enabled ?? true;
 
     if (!enabled) return;
 

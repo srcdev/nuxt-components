@@ -1,0 +1,27 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ActionMenuItemCore > Snapshots > as external link 1`] = `
+"<a href="https://example.com" class="action-menu-item-core" role="menuitem">
+  <!--v-if--><span class="action-menu-item-label">Edit item</span><span class="action-menu-item-arrow" aria-hidden="true"><span class="iconify i-lucide:arrow-right action-menu-item-arrow-icon" aria-hidden="true"></span></span>
+</a>"
+`;
+
+exports[`ActionMenuItemCore > Snapshots > as internal link 1`] = `
+"<a href="/about" class="action-menu-item-core" role="menuitem">
+  <!--v-if--><span class="action-menu-item-label">Edit item</span><span class="action-menu-item-arrow" aria-hidden="true"><span class="iconify i-lucide:arrow-right action-menu-item-arrow-icon" aria-hidden="true"></span></span>
+</a>"
+`;
+
+exports[`ActionMenuItemCore > Snapshots > default button (no href) 1`] = `
+"<button type="button" class="action-menu-item-core" role="menuitem">
+  <!--v-if--><span class="action-menu-item-label">Edit item</span><span class="action-menu-item-arrow" aria-hidden="true"><span class="iconify i-lucide:arrow-right action-menu-item-arrow-icon" aria-hidden="true"></span></span>
+</button>"
+`;
+
+exports[`ActionMenuItemCore > Snapshots > with icon slot 1`] = `"<button type="button" class="action-menu-item-core" role="menuitem"><span class="action-menu-item-icon" aria-hidden="true"><span data-testid="test-icon">⚡</span></span><span class="action-menu-item-label">Edit item</span><span class="action-menu-item-arrow" aria-hidden="true"><span class="iconify i-lucide:arrow-right action-menu-item-arrow-icon" aria-hidden="true"></span></span></button>"`;
+
+exports[`ActionMenuItemCore > Snapshots > with styleClassPassthrough 1`] = `
+"<button type="button" class="action-menu-item-core custom-class another-class" role="menuitem">
+  <!--v-if--><span class="action-menu-item-label">Edit item</span><span class="action-menu-item-arrow" aria-hidden="true"><span class="iconify i-lucide:arrow-right action-menu-item-arrow-icon" aria-hidden="true"></span></span>
+</button>"
+`;
