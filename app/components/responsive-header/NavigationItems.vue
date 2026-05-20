@@ -371,11 +371,10 @@ watch(
   }
 
   .overflow-sub-nav-indicator-hovered {
-    display: none;
+    /* pointer-events: none is critical — without it the indicator (z-index:1) sits
+       over the list items and swallows mouse events, clearing hoveredChildKey and
+       causing a flicker loop. */
     pointer-events: none;
-  }
-
-  .overflow-sub-nav-indicator-hovered {
     display: block;
     position: absolute;
     position-anchor: --overflow-sub-nav-indicator;
