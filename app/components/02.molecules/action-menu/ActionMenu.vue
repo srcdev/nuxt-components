@@ -1,6 +1,7 @@
 <template>
   <div class="action-menu" :class="[elementClasses]" :style="`--_anchor-name: ${anchorName}`">
     <button
+      ref="triggerRef"
       :popovertarget="menuId"
       popovertargetaction="toggle"
       type="button"
@@ -17,6 +18,7 @@
       popover
       class="action-menu-popover"
       @toggle="handleToggle"
+      @keydown="handleKeydown"
     >
       <ul class="action-menu-list" role="menu" :aria-label="label">
         <li
@@ -50,17 +52,67 @@ const id = useId();
 const menuId = `action-menu-${id}`;
 const anchorName = `--action-menu-anchor-${id}`;
 
+const triggerRef = ref<HTMLButtonElement | null>(null);
 const popoverRef = ref<HTMLDivElement | null>(null);
 
+/** Returns all focusable menuitems in DOM order. */
+const getMenuItems = (): HTMLElement[] =>
+  Array.from(popoverRef.value?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []);
+
+/**
+ * Close the menu and return focus to the trigger.
+ * Called on item click — Escape is handled natively by the Popover API
+ * (which also restores focus to the trigger automatically).
+ */
 const closeMenu = () => {
   popoverRef.value?.hidePopover();
+  triggerRef.value?.focus();
 };
 
 const handleToggle = (event: Event) => {
   const toggleEvent = event as ToggleEvent;
   if (toggleEvent.newState === "open") {
-    const firstItem = popoverRef.value?.querySelector<HTMLElement>('[role="menuitem"]');
-    firstItem?.focus();
+    getMenuItems()[0]?.focus();
+  }
+};
+
+/**
+ * Keyboard navigation following the WAI-ARIA menu pattern.
+ *
+ * ArrowDown / ArrowUp  — move between items (wraps around).
+ * Home / End           — jump to first / last item.
+ * Tab                  — close the menu; let the browser Tab naturally
+ *                        (do NOT focus the trigger — Tab should advance
+ *                        to the next element in the page).
+ * Escape               — handled natively by the Popover API.
+ */
+const handleKeydown = (event: KeyboardEvent) => {
+  const items = getMenuItems();
+  if (!items.length) return;
+
+  const currentIndex = items.indexOf(document.activeElement as HTMLElement);
+
+  switch (event.key) {
+    case "ArrowDown":
+      event.preventDefault();
+      items[(currentIndex + 1) % items.length]?.focus();
+      break;
+    case "ArrowUp":
+      event.preventDefault();
+      items[(currentIndex - 1 + items.length) % items.length]?.focus();
+      break;
+    case "Home":
+      event.preventDefault();
+      items[0]?.focus();
+      break;
+    case "End":
+      event.preventDefault();
+      items[items.length - 1]?.focus();
+      break;
+    case "Tab":
+      // Close without stealing focus — Tab exits to the next DOM element naturally.
+      popoverRef.value?.hidePopover();
+      break;
   }
 };
 

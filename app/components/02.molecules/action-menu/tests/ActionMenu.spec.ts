@@ -9,6 +9,8 @@ interface ActionMenuInstance {
   anchorName: string;
   closeMenu: () => void;
   handleToggle: (event: Event) => void;
+  handleKeydown: (event: KeyboardEvent) => void;
+  getMenuItems: () => HTMLElement[];
 }
 
 // --- Helpers ---
@@ -233,6 +235,169 @@ describe("ActionMenu", () => {
       vm.handleToggle(Object.assign(new Event("toggle"), { newState: "open" }));
 
       await nextTick();
+      expect(focusSpy).toHaveBeenCalledOnce();
+    });
+  });
+
+  // -------------------------
+  // Keyboard navigation
+  // -------------------------
+  describe("Keyboard navigation (handleKeydown)", () => {
+    /**
+     * Mount with three real button menuitems and return focused test helpers.
+     *
+     * Because the popover is hidden (display:none) in jsdom, calling .focus()
+     * on children does not update document.activeElement. Instead we:
+     *   • spy on each item's .focus() to assert the right element is targeted
+     *   • mock document.activeElement to simulate the current focused position
+     */
+    const mountWithItems = async () => {
+      const w = await mountSuspended(ActionMenu, {
+        props: { itemCount: 3, label: "Actions" },
+        slots: {
+          "item-0": '<button role="menuitem" data-idx="0">First</button>',
+          "item-1": '<button role="menuitem" data-idx="1">Second</button>',
+          "item-2": '<button role="menuitem" data-idx="2">Third</button>',
+        },
+      });
+      const vm = w.vm as unknown as ActionMenuInstance;
+      const items = vm.getMenuItems();
+      const focusSpies = items.map((el) => vi.spyOn(el, "focus"));
+
+      /** Fire a keydown event directly through the handler. */
+      const fire = (key: string) =>
+        vm.handleKeydown(
+          Object.assign(new KeyboardEvent("keydown", { key, bubbles: true }), {
+            preventDefault: vi.fn(),
+          })
+        );
+
+      /**
+       * Mock document.activeElement so the handler calculates currentIndex
+       * from the supplied item index rather than the real (unusable) DOM state.
+       */
+      const setActiveItem = (index: number) =>
+        vi.spyOn(document, "activeElement", "get").mockReturnValue(items[index]!);
+
+      return { w, vm, items, focusSpies, fire, setActiveItem };
+    };
+
+    it("ArrowDown moves focus to the next item", async () => {
+      const { w, focusSpies, fire, setActiveItem } = await mountWithItems();
+      const getter = setActiveItem(0);
+      fire("ArrowDown");
+      expect(focusSpies[1]).toHaveBeenCalledOnce();
+      getter.mockRestore();
+      w.unmount();
+    });
+
+    it("ArrowDown wraps from last to first item", async () => {
+      const { w, focusSpies, fire, setActiveItem } = await mountWithItems();
+      const getter = setActiveItem(2);
+      fire("ArrowDown");
+      expect(focusSpies[0]).toHaveBeenCalledOnce();
+      getter.mockRestore();
+      w.unmount();
+    });
+
+    it("ArrowUp moves focus to the previous item", async () => {
+      const { w, focusSpies, fire, setActiveItem } = await mountWithItems();
+      const getter = setActiveItem(2);
+      fire("ArrowUp");
+      expect(focusSpies[1]).toHaveBeenCalledOnce();
+      getter.mockRestore();
+      w.unmount();
+    });
+
+    it("ArrowUp wraps from first to last item", async () => {
+      const { w, focusSpies, fire, setActiveItem } = await mountWithItems();
+      const getter = setActiveItem(0);
+      fire("ArrowUp");
+      expect(focusSpies[2]).toHaveBeenCalledOnce();
+      getter.mockRestore();
+      w.unmount();
+    });
+
+    it("Home moves focus to the first item regardless of starting position", async () => {
+      const { w, focusSpies, fire, setActiveItem } = await mountWithItems();
+      const getter = setActiveItem(2);
+      fire("Home");
+      expect(focusSpies[0]).toHaveBeenCalledOnce();
+      getter.mockRestore();
+      w.unmount();
+    });
+
+    it("End moves focus to the last item regardless of starting position", async () => {
+      const { w, focusSpies, fire, setActiveItem } = await mountWithItems();
+      const getter = setActiveItem(0);
+      fire("End");
+      expect(focusSpies[2]).toHaveBeenCalledOnce();
+      getter.mockRestore();
+      w.unmount();
+    });
+
+    it("Tab calls hidePopover without returning focus to the trigger", async () => {
+      const { w, fire } = await mountWithItems();
+      const popoverEl = w.find(".action-menu-popover").element as HTMLElement;
+      const hidePopoverSpy = vi.spyOn(popoverEl, "hidePopover");
+      const triggerEl = w.find(".action-menu-trigger").element as HTMLElement;
+      const focusSpy = vi.spyOn(triggerEl, "focus");
+
+      fire("Tab");
+
+      expect(hidePopoverSpy).toHaveBeenCalledOnce();
+      expect(focusSpy).not.toHaveBeenCalled();
+      w.unmount();
+    });
+
+    it("navigation keys call preventDefault; Tab does not", async () => {
+      const { w, vm, setActiveItem } = await mountWithItems();
+      const getter = setActiveItem(0);
+      const preventDefaultSpy = vi.fn();
+      const makeEvent = (key: string) =>
+        Object.assign(new KeyboardEvent("keydown", { key, bubbles: true }), {
+          preventDefault: preventDefaultSpy,
+        });
+
+      vm.handleKeydown(makeEvent("ArrowDown"));
+      vm.handleKeydown(makeEvent("ArrowUp"));
+      vm.handleKeydown(makeEvent("Home"));
+      vm.handleKeydown(makeEvent("End"));
+      vm.handleKeydown(makeEvent("Tab"));
+
+      // Arrow/Home/End prevent default scroll; Tab does not
+      expect(preventDefaultSpy).toHaveBeenCalledTimes(4);
+      getter.mockRestore();
+      w.unmount();
+    });
+
+    it("does nothing when there are no menuitems", async () => {
+      const w = await mountSuspended(ActionMenu, { props: { itemCount: 0 } });
+      const vm = w.vm as unknown as ActionMenuInstance;
+      expect(() =>
+        vm.handleKeydown(new KeyboardEvent("keydown", { key: "ArrowDown" }))
+      ).not.toThrow();
+      w.unmount();
+    });
+  });
+
+  // -------------------------
+  // closeMenu — focus return
+  // -------------------------
+  describe("closeMenu — focus return", () => {
+    it("returns focus to the trigger button after closing", async () => {
+      wrapper = await mountSuspended(ActionMenu, {
+        props: { itemCount: 1 },
+        slots: { "item-0": '<button role="menuitem">Action</button>' },
+      });
+      const triggerEl = wrapper.find(".action-menu-trigger").element as HTMLElement;
+      const focusSpy = vi.spyOn(triggerEl, "focus");
+      const popoverEl = wrapper.find(".action-menu-popover").element as HTMLElement;
+      vi.spyOn(popoverEl, "hidePopover");
+
+      const vm = wrapper.vm as unknown as ActionMenuInstance;
+      vm.closeMenu();
+
       expect(focusSpy).toHaveBeenCalledOnce();
     });
   });
