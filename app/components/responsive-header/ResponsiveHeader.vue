@@ -477,8 +477,9 @@ watch(
        --responsive-header-overflow-nav-border-radius   (default: 8px)
        --responsive-header-overflow-nav-padding-block   (default: 12px)
 
-       --responsive-nav-decorator-indicator-color  (default: currentColor)
-       --responsive-nav-decorator-hovered-bg       (default: oklch(100% 0 0 / 8%))
+       --responsive-nav-decorator-indicator-color         (default: currentColor)
+       --responsive-nav-decorator-hovered-indicator-color (default: inherits --responsive-nav-decorator-indicator-color)
+       --responsive-nav-decorator-hovered-bg              (default: oklch(100% 0 0 / 8%))
     ──────────────────────────────────────────────────────────────────────── */
 
     --_link-visibility-transition: none;
@@ -864,6 +865,15 @@ watch(
 
   .main-navigation:not(.is-animated) .nav-indicator-active {
     transition: none;
+  }
+
+  /* When something is hovered, the active bar has moved to the hovered item —
+     switch it to the hover colour so active (white) and hover (green) are distinct. */
+  .main-navigation:has(li.is-hovered) .nav-indicator-active {
+    background: var(
+      --responsive-nav-decorator-hovered-indicator-color,
+      var(--responsive-nav-decorator-indicator-color, currentColor)
+    );
   }
 }
 </style>

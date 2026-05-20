@@ -195,8 +195,9 @@ watch(
        --overflow-nav-sub-item-color         (default: inherit)
        --overflow-nav-sub-item-font-size     (default: inherit)
 
-       --overflow-nav-decorator-indicator-color  (default: currentColor)
-       --overflow-nav-decorator-hovered-bg       (default: oklch(100% 0 0 / 6%))
+       --overflow-nav-decorator-indicator-color         (default: currentColor)
+       --overflow-nav-decorator-hovered-indicator-color (default: inherits --overflow-nav-decorator-indicator-color)
+       --overflow-nav-decorator-hovered-bg              (default: oklch(100% 0 0 / 6%))
     ──────────────────────────────────────────────────────────────────────── */
 
     display: flex;
@@ -392,6 +393,14 @@ watch(
       bottom 200ms ease-in-out;
   }
 
+  /* When something is hovered the active bar tracks the hovered item — use hover colour. */
+  .overflow-navigation-wrapper:has(.overflow-navigation-item.is-hovered) .overflow-nav-indicator-active {
+    background: var(
+      --overflow-nav-decorator-hovered-indicator-color,
+      var(--overflow-nav-decorator-indicator-color, currentColor)
+    );
+  }
+
   /* ─── Anchor positioning for sub-nav child indicators ────────────────────
      Separate --overflow-sub-nav-indicator scoped to the inner wrapper so
      parent and child indicators are fully independent.
@@ -423,7 +432,10 @@ watch(
     top: anchor(top);
     bottom: anchor(bottom);
     background: var(--overflow-nav-decorator-hovered-bg, oklch(100% 0 0 / 6%));
-    border-inline-start: 2px solid var(--overflow-nav-decorator-indicator-color, currentColor);
+    border-inline-start: 2px solid var(
+      --overflow-nav-decorator-hovered-indicator-color,
+      var(--overflow-nav-decorator-indicator-color, currentColor)
+    );
     z-index: 1;
     opacity: 0;
     transition:

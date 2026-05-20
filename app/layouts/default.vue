@@ -299,9 +299,11 @@ onMounted(() => {
   --overflow-nav-sub-item-color: var(--slate-00);
   --overflow-nav-sub-item-font-size: var(--step-4);
 
-  --responsive-nav-decorator-indicator-color: var(--green-08);
+  --responsive-nav-decorator-indicator-color: var(--slate-00);
+  --responsive-nav-decorator-hovered-indicator-color: var(--green-08);
   --responsive-nav-decorator-hovered-bg: oklch(100% 0 0 / 8%);
-  --overflow-nav-decorator-indicator-color: var(--green-08);
+  --overflow-nav-decorator-indicator-color: var(--slate-00);
+  --overflow-nav-decorator-hovered-indicator-color: var(--green-08);
   --overflow-nav-decorator-hovered-bg: oklch(100% 0 0 / 6%);
 }
 </style>
