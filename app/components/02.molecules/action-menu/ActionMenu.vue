@@ -95,11 +95,11 @@ const handleKeydown = (event: KeyboardEvent) => {
   switch (event.key) {
     case "ArrowDown":
       event.preventDefault();
-      items[(currentIndex + 1) % items.length]?.focus();
+      items[currentIndex === -1 ? 0 : (currentIndex + 1) % items.length]?.focus();
       break;
     case "ArrowUp":
       event.preventDefault();
-      items[(currentIndex - 1 + items.length) % items.length]?.focus();
+      items[currentIndex === -1 ? items.length - 1 : (currentIndex - 1 + items.length) % items.length]?.focus();
       break;
     case "Home":
       event.preventDefault();

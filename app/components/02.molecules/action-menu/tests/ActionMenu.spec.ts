@@ -318,6 +318,22 @@ describe("ActionMenu", () => {
       w.unmount();
     });
 
+    it("ArrowDown focuses the first item when focus is outside the menu (currentIndex = -1)", async () => {
+      const { w, focusSpies, fire } = await mountWithItems();
+      // No setActiveItem call — document.activeElement is <body>, indexOf returns -1
+      fire("ArrowDown");
+      expect(focusSpies[0]).toHaveBeenCalledOnce();
+      w.unmount();
+    });
+
+    it("ArrowUp focuses the last item when focus is outside the menu (currentIndex = -1)", async () => {
+      const { w, focusSpies, fire } = await mountWithItems();
+      // No setActiveItem call — document.activeElement is <body>, indexOf returns -1
+      fire("ArrowUp");
+      expect(focusSpies[2]).toHaveBeenCalledOnce();
+      w.unmount();
+    });
+
     it("Home moves focus to the first item regardless of starting position", async () => {
       const { w, focusSpies, fire, setActiveItem } = await mountWithItems();
       const getter = setActiveItem(2);
