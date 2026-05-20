@@ -1,8 +1,12 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import DisplayChip from "../DisplayChip.vue";
 
 describe("DisplayChip", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   // ─── Mount ───────────────────────────────────────────────────────────────
 
   it("mounts without error", async () => {

@@ -23,5 +23,6 @@ coverage/
 # Storybook
 storybook-static/
 
-# Claude Code local settings (machine-specific)
+# Claude Code settings (both are machine-specific, neither belongs in the repo)
+.claude/settings.json
 .claude/settings.local.json

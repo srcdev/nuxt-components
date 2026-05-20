@@ -27,7 +27,6 @@
 
 <script setup lang="ts">
 import type { InputTypesButton, FormUiTheme, InputButtonVariant } from "~/types/forms/types.forms";
-import { NuxtLink } from "#components";
 interface Props {
   type?: InputTypesButton;
   href?: string;
@@ -55,6 +54,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
+const NuxtLink = resolveComponent("NuxtLink");
 
 // If href is undefined tag is button, else it's a link
 const isLink = computed(() => Boolean(props.href));

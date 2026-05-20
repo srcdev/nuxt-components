@@ -37,6 +37,7 @@ describe("ComponentName", () => {
 
   afterEach(() => {
     wrapper?.unmount();
+    vi.restoreAllMocks(); // always restore vi.spyOn() stubs after each test
   });
 
   // -------------------------
@@ -162,7 +163,7 @@ it("exposes headingId via scoped slot", async () => {
 ## Key rules
 
 - Always `mountSuspended` — never `mount` or `shallowMount` from `@vue/test-utils` directly.
-- Always `afterEach(() => wrapper?.unmount())` to prevent test leaks.
+- Always call both `wrapper?.unmount()` and `vi.restoreAllMocks()` in `afterEach`. The unmount cleans up Vue; the restore cleans up any `vi.spyOn()` stubs so they don't leak into later test files.
 - Use a `createWrapper` helper to keep individual tests short.
 - Include at least one snapshot test per meaningful visual state.
 - `nextTick` is **not** auto-imported in test files — always import it explicitly: `import { nextTick } from "vue"`.
@@ -285,7 +286,9 @@ Import the child component directly in the test file — it is not auto-imported
 
 ## Mocking browser APIs
 
-Mock before the `describe` block if the component uses ResizeObserver, IntersectionObserver, etc.:
+### Global constructors (ResizeObserver, IntersectionObserver, etc.)
+
+Use `vi.stubGlobal` before the `describe` block. Do **not** call `vi.unstubAllGlobals()` in `afterEach` — it removes stubs from `vitest.setup.ts` (`$fetch`, etc.):
 
 ```ts
 const mockResizeObserver = vi.fn(() => ({
@@ -295,6 +298,41 @@ const mockResizeObserver = vi.fn(() => ({
 }));
 vi.stubGlobal("ResizeObserver", mockResizeObserver);
 ```
+
+### Prototype methods (Popover API, Canvas, etc.)
+
+When an API is missing from jsdom entirely (e.g. `hidePopover`, `showPopover`) use `Object.defineProperty` in `beforeEach`. **`vi.restoreAllMocks()` does not clean these up** — delete them explicitly in `afterEach`:
+
+```ts
+beforeEach(() => {
+  // vi.spyOn stubs are cleaned by vi.restoreAllMocks() in afterEach
+  vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({} as never);
+
+  // Object.defineProperty stubs are NOT cleaned by vi.restoreAllMocks() —
+  // must be deleted explicitly to prevent leaking into other test files
+  Object.defineProperty(HTMLElement.prototype, "hidePopover", {
+    value: vi.fn(),
+    writable: true,
+    configurable: true,
+  });
+  Object.defineProperty(HTMLElement.prototype, "showPopover", {
+    value: vi.fn(),
+    writable: true,
+    configurable: true,
+  });
+});
+
+afterEach(() => {
+  wrapper?.unmount();
+  vi.restoreAllMocks(); // cleans up vi.spyOn stubs
+  // Remove Object.defineProperty prototype stubs — vi.restoreAllMocks() won't touch these
+  delete (HTMLElement.prototype as unknown as Record<string, unknown>)["hidePopover"];
+  delete (HTMLElement.prototype as unknown as Record<string, unknown>)["showPopover"];
+});
+```
+
+The `as unknown as Record<string, unknown>` double-cast is required because TypeScript's
+`HTMLElement` type has no index signature — cast through `unknown` first.
 
 ## Describe section conventions
 
