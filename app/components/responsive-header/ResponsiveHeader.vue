@@ -443,8 +443,56 @@ watch(
       }
     }
 
+    /* ─── Public CSS tokens ─────────────────────────────────────────────────
+       Override these on the consumer's scope class to theme the nav.
+       Tokens are read via var(--token, default) — defaults are NOT declared
+       on this element to avoid source-order cascade conflicts with consumers.
+
+       --responsive-header-margin               (default: 0)
+       --responsive-header-bg                   (default: transparent)
+       --responsive-header-border               (default: none)
+       --responsive-header-border-radius        (default: 0)
+       --responsive-header-padding-block        (default: 0)
+       --responsive-header-padding-inline       (default: 0)
+       --responsive-header-max-height           (default: none)
+       --responsive-header-inline-size          (default: 100%)
+
+       --responsive-header-color                (default: inherit)
+       --responsive-header-link-color           (default: inherit)
+
+       --responsive-header-sub-nav-bg           (default: Canvas)
+       --responsive-header-sub-nav-border       (default: 1px solid #efefef75)
+       --responsive-header-sub-nav-border-radius (default: 8px)
+       --responsive-header-sub-nav-padding      (default: 12px)
+
+       --responsive-header-overflow-btn-bg              (default: Canvas)
+       --responsive-header-overflow-btn-size            (default: 20px)
+       --responsive-header-overflow-btn-border          (default: 1px solid #ffffff90)
+       --responsive-header-overflow-btn-outline         (default: 1px solid #ffffff10)
+       --responsive-header-overflow-btn-icon-color      (default: inherit)
+       --responsive-header-overflow-btn-hover-outline   (default: 1px solid #ffffff)
+
+       --responsive-header-overflow-nav-bg              (default: Canvas)
+       --responsive-header-overflow-nav-border          (default: 1px solid #ffffff90)
+       --responsive-header-overflow-nav-border-radius   (default: 8px)
+       --responsive-header-overflow-nav-padding-block   (default: 12px)
+
+       --responsive-nav-decorator-indicator-color  (default: currentColor)
+       --responsive-nav-decorator-hovered-bg       (default: oklch(100% 0 0 / 8%))
+    ──────────────────────────────────────────────────────────────────────── */
+
     --_link-visibility-transition: none;
     position: relative;
+    color: var(--responsive-header-color, inherit);
+
+    margin: var(--responsive-header-margin, 0);
+    background-color: var(--responsive-header-bg, transparent);
+    border: var(--responsive-header-border, none);
+    border-radius: var(--responsive-header-border-radius, 0);
+    padding-block: var(--responsive-header-padding-block, 0);
+    padding-inline: var(--responsive-header-padding-inline, 0);
+    max-height: var(--responsive-header-max-height, none);
+    inline-size: var(--responsive-header-inline-size, 100%);
 
     &.loaded {
       --_link-visibility-transition: all 0.2s ease-in-out;
@@ -502,7 +550,7 @@ watch(
             display: flex;
             gap: 6px;
             text-wrap-mode: nowrap;
-            color: inherit;
+            color: var(--responsive-header-link-color, inherit);
             text-decoration: none;
             cursor: pointer;
             margin-inline-start: 0;
@@ -548,6 +596,7 @@ watch(
               cursor: pointer;
               position: relative;
               z-index: 4;
+              color: var(--responsive-header-link-color, inherit);
 
               &::-webkit-details-marker,
               &::marker {
@@ -561,10 +610,10 @@ watch(
 
             .main-navigation-sub-nav {
               position: absolute;
-              padding: 12px;
-              border: 1px solid #efefef75;
-              border-radius: 8px;
-              background-color: #000;
+              padding: var(--responsive-header-sub-nav-padding, 12px);
+              border: var(--responsive-header-sub-nav-border, 1px solid #efefef75);
+              border-radius: var(--responsive-header-sub-nav-border-radius, 8px);
+              background-color: var(--responsive-header-sub-nav-bg, Canvas);
               translate: 0 12px;
 
               min-width: var(--_main-navigation-item-width);
@@ -585,7 +634,7 @@ watch(
                     display: block;
                     text-wrap-mode: nowrap;
                     text-decoration: none;
-                    color: inherit;
+                    color: var(--responsive-header-link-color, inherit);
                   }
                 }
               }
@@ -595,6 +644,12 @@ watch(
           &.visually-hidden {
             visibility: hidden;
             opacity: 0;
+            /* Pin the outer <li> to its originally-measured width so re-measurements
+               while hidden don't pick up an inflated value from the shifted inner
+               content. Without this, each hide→measure cycle compounds the width
+               (feedback loop → 7995px → items never recover). */
+            inline-size: var(--_main-navigation-item-width);
+            overflow: hidden;
 
             .main-navigation-details,
             .main-navigation-link {
@@ -638,7 +693,7 @@ watch(
             display: flex;
             align-items: center;
             font: inherit;
-            color: inherit;
+            color: var(--responsive-header-link-color, inherit);
 
             .icon {
               height: 1.35em;
@@ -673,7 +728,7 @@ watch(
 
         .overflow-details-summary {
           --_icon-zoom: 1;
-          --_icon-size: 20px;
+          --_icon-size: var(--responsive-header-overflow-btn-size, 20px);
           --_border-width: 1px;
           --_outline-width: 1px;
           --_transition-duration: 0.2s;
@@ -687,9 +742,9 @@ watch(
 
           aspect-ratio: 1;
           border-radius: 4px;
-          border: var(--_border-width) solid #ffffff90;
-          outline: var(--_outline-width) solid #ffffff10;
-          background-color: Canvas;
+          border: var(--responsive-header-overflow-btn-border, 1px solid #ffffff90);
+          outline: var(--responsive-header-overflow-btn-outline, 1px solid #ffffff10);
+          background-color: var(--responsive-header-overflow-btn-bg, Canvas);
 
           width: var(--_icon-size);
           overflow: hidden;
@@ -705,12 +760,13 @@ watch(
           &:hover,
           &:focus-visible {
             --_icon-zoom: 1.2;
-            outline: var(--_outline-width) solid #ffffff;
+            outline: var(--responsive-header-overflow-btn-hover-outline, 1px solid #ffffff);
           }
 
           .icon {
             grid-area: icon;
             scale: var(--_icon-zoom);
+            color: var(--responsive-header-overflow-btn-icon-color, inherit);
             transition: scale 0.2s ease-in-out;
             width: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
             height: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
@@ -730,10 +786,10 @@ watch(
           position: absolute;
           top: 135%;
           right: 0;
-          background-color: #000;
-          border: 1px solid #ffffff90;
-          border-radius: 8px;
-          padding-block: 12px;
+          background-color: var(--responsive-header-overflow-nav-bg, Canvas);
+          border: var(--responsive-header-overflow-nav-border, 1px solid #ffffff90);
+          border-radius: var(--responsive-header-overflow-nav-border-radius, 8px);
+          padding-block: var(--responsive-header-overflow-nav-padding-block, 12px);
           margin: 0;
           z-index: 999;
           min-width: var(--_overflow-drop-down-width, fit-content);
@@ -799,7 +855,7 @@ watch(
     right: anchor(right);
     bottom: 0;
     height: 2px;
-    background: var(--responsive-nav-decorator-indicator-color, var(--_link-border-bottom-hover));
+    background: var(--responsive-nav-decorator-indicator-color, currentColor);
     z-index: 3;
     transition:
       left 200ms ease,

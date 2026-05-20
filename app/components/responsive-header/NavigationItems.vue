@@ -181,12 +181,27 @@ watch(
 <style lang="css">
 @layer components {
   .overflow-navigation-wrapper {
-    --overflow-nav-padding-inline: 0.8rem;
-    --overflow-nav-items-gap: 0px;
-    --overflow-nav-items-padding-block: 0.8rem;
+    /* ─── Public CSS tokens ─────────────────────────────────────────────────
+       Override on the consumer's scope class to theme the overflow nav.
+       Tokens are read via var(--token, default) — defaults are NOT declared
+       on this element to avoid cascade conflicts with ancestor overrides.
+
+       --overflow-nav-padding-inline         (default: 0.8rem)
+       --overflow-nav-items-gap              (default: 0px)
+       --overflow-nav-items-padding-block    (default: 0.8rem)
+
+       --overflow-nav-link-color             (default: inherit)
+       --overflow-nav-link-border-color      (default: #efefef75)
+       --overflow-nav-sub-item-color         (default: inherit)
+       --overflow-nav-sub-item-font-size     (default: inherit)
+
+       --overflow-nav-decorator-indicator-color  (default: currentColor)
+       --overflow-nav-decorator-hovered-bg       (default: oklch(100% 0 0 / 6%))
+    ──────────────────────────────────────────────────────────────────────── */
+
     display: flex;
     flex-direction: column;
-    gap: var(--overflow-nav-items-gap);
+    gap: var(--overflow-nav-items-gap, 0px);
     position: relative;
 
     .overflow-navigation-list {
@@ -195,7 +210,7 @@ watch(
       &.visible {
         display: flex;
         flex-direction: column;
-        gap: var(--overflow-nav-items-gap);
+        gap: var(--overflow-nav-items-gap, 0px);
         min-width: var(--_overflow-navigation-list-min-width, auto);
       }
 
@@ -208,12 +223,11 @@ watch(
 
         .overflow-navigation-link {
           text-decoration: none;
-          color: inherit;
-          padding-block: var(--overflow-nav-items-padding-block);
-          padding-inline: var(--overflow-nav-padding-inline);
+          color: var(--overflow-nav-link-color, inherit);
+          padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
+          padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
           display: flex;
-          /* background-color: red; */
-          border-bottom: 0.1rem solid #efefef75;
+          border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
         }
 
         .overflow-navigation-details {
@@ -222,11 +236,11 @@ watch(
 
             .expanding-panel-details {
               .expanding-panel-summary {
-                padding-block: var(--overflow-nav-items-padding-block);
-                padding-inline: var(--overflow-nav-padding-inline);
+                padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
+                padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
                 gap: 1rem;
-                /* background-color: red; */
-                border-bottom: 0.1rem solid #efefef75;
+                color: var(--overflow-nav-link-color, inherit);
+                border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
 
                 .label-wrapper {
                   .overflow-navigation-text {
@@ -243,10 +257,10 @@ watch(
                   border-bottom: 0.1rem solid transparent;
                 }
                 + .expanding-panel-content {
-                  border-bottom: 0.1rem solid #efefef75;
+                  border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
                   .inner {
                     .overflow-navigation-sub-nav-inner {
-                      margin-top: var(--overflow-nav-items-gap);
+                      margin-top: var(--overflow-nav-items-gap, 0px);
                     }
                   }
                 }
@@ -269,8 +283,10 @@ watch(
                     gap: 2px;
 
                     .overflow-navigation-sub-nav-item {
-                      padding-block: var(--overflow-nav-items-padding-block);
-                      padding-inline: var(--overflow-nav-padding-inline);
+                      padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
+                      padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
+                      font-size: var(--overflow-nav-sub-item-font-size, inherit);
+                      color: var(--overflow-nav-sub-item-color, inherit);
 
                       .overflow-navigation-sub-nav-link {
                         display: block;
@@ -406,8 +422,8 @@ watch(
     right: 0;
     top: anchor(top);
     bottom: anchor(bottom);
-    background: var(--overflow-nav-decorator-hovered-bg, oklch(100% 0 0 / 20%));
-    border-inline-start: 2px solid var(--overflow-nav-decorator-indicator-color, var(--green-06));
+    background: var(--overflow-nav-decorator-hovered-bg, oklch(100% 0 0 / 6%));
+    border-inline-start: 2px solid var(--overflow-nav-decorator-indicator-color, currentColor);
     z-index: 1;
     opacity: 0;
     transition:
