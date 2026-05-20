@@ -1,5 +1,14 @@
 <template>
-  <div class="overflow-navigation-wrapper" :class="[elementClasses, { 'is-panel-animating': isPanelAnimating }]" role="menu" aria-label="Overflow navigation menu" @mouseleave="hoveredItemKey = null; hoveredChildKey = null">
+  <div
+    class="overflow-navigation-wrapper"
+    :class="[elementClasses, { 'is-panel-animating': isPanelAnimating }]"
+    role="menu"
+    aria-label="Overflow navigation menu"
+    @mouseleave="
+      hoveredItemKey = null;
+      hoveredChildKey = null;
+    "
+  >
     <ul
       v-for="(navGroup, groupKey) in mainNavigationState.clonedNavLinks"
       :key="groupKey"
@@ -119,13 +128,17 @@ const panelOpenStates = reactive<Record<string, boolean>>({});
 const isPanelAnimating = ref(false);
 let panelAnimationTimer: ReturnType<typeof setTimeout> | null = null;
 
-watch(panelOpenStates, () => {
-  isPanelAnimating.value = true;
-  if (panelAnimationTimer) clearTimeout(panelAnimationTimer);
-  panelAnimationTimer = setTimeout(() => {
-    isPanelAnimating.value = false;
-  }, DETAILS_ANIMATION_DURATION);
-}, { deep: true });
+watch(
+  panelOpenStates,
+  () => {
+    isPanelAnimating.value = true;
+    if (panelAnimationTimer) clearTimeout(panelAnimationTimer);
+    panelAnimationTimer = setTimeout(() => {
+      isPanelAnimating.value = false;
+    }, DETAILS_ANIMATION_DURATION);
+  },
+  { deep: true }
+);
 
 onUnmounted(() => {
   if (panelAnimationTimer) clearTimeout(panelAnimationTimer);
@@ -167,102 +180,103 @@ watch(
 
 <style lang="css">
 @layer components {
-.overflow-navigation-wrapper {
-  --overflow-nav-padding-inline: 0.8rem;
-  --overflow-nav-items-gap: 0px;
-  --overflow-nav-items-padding-block: 0.8rem;
-  display: flex;
-  flex-direction: column;
-  gap: var(--overflow-nav-items-gap);
-  position: relative;
+  .overflow-navigation-wrapper {
+    --overflow-nav-padding-inline: 0.8rem;
+    --overflow-nav-items-gap: 0px;
+    --overflow-nav-items-padding-block: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: var(--overflow-nav-items-gap);
+    position: relative;
 
-  .overflow-navigation-list {
-    display: none;
-
-    &.visible {
-      display: flex;
-      flex-direction: column;
-      gap: var(--overflow-nav-items-gap);
-      min-width: var(--_overflow-navigation-list-min-width, auto);
-    }
-
-    .overflow-navigation-item {
+    .overflow-navigation-list {
       display: none;
 
       &.visible {
-        display: block;
-      }
-
-      .overflow-navigation-link {
-        text-decoration: none;
-        color: inherit;
-        padding-block: var(--overflow-nav-items-padding-block);
-        padding-inline: var(--overflow-nav-padding-inline);
         display: flex;
-        /* background-color: red; */
-        border-bottom: 0.1rem solid #efefef75;
+        flex-direction: column;
+        gap: var(--overflow-nav-items-gap);
+        min-width: var(--_overflow-navigation-list-min-width, auto);
       }
 
-      .overflow-navigation-details {
-        &.expanding-panel {
-          margin-block-end: 0;
+      .overflow-navigation-item {
+        display: none;
 
-          .expanding-panel-details {
-            .expanding-panel-summary {
-              padding-block: var(--overflow-nav-items-padding-block);
-              padding-inline: var(--overflow-nav-padding-inline);
-              gap: 1rem;
-              /* background-color: red; */
-              border-bottom: 0.1rem solid #efefef75;
+        &.visible {
+          display: block;
+        }
 
-              .label-wrapper {
-                .overflow-navigation-text {
-                  text-wrap: nowrap;
+        .overflow-navigation-link {
+          text-decoration: none;
+          color: inherit;
+          padding-block: var(--overflow-nav-items-padding-block);
+          padding-inline: var(--overflow-nav-padding-inline);
+          display: flex;
+          /* background-color: red; */
+          border-bottom: 0.1rem solid #efefef75;
+        }
+
+        .overflow-navigation-details {
+          &.expanding-panel {
+            margin-block-end: 0;
+
+            .expanding-panel-details {
+              .expanding-panel-summary {
+                padding-block: var(--overflow-nav-items-padding-block);
+                padding-inline: var(--overflow-nav-padding-inline);
+                gap: 1rem;
+                /* background-color: red; */
+                border-bottom: 0.1rem solid #efefef75;
+
+                .label-wrapper {
+                  .overflow-navigation-text {
+                    text-wrap: nowrap;
+                  }
+                }
+                .icon-wrapper {
+                  padding: 0;
                 }
               }
-              .icon-wrapper {
-                padding: 0;
-              }
-            }
 
-            &[open] {
-              .expanding-panel-summary {
-                border-bottom: 0.1rem solid transparent;
-              }
-              + .expanding-panel-content {
-                border-bottom: 0.1rem solid #efefef75;
-                .inner {
-                  .overflow-navigation-sub-nav-inner {
-                    margin-top: var(--overflow-nav-items-gap);
+              &[open] {
+                .expanding-panel-summary {
+                  border-bottom: 0.1rem solid transparent;
+                }
+                + .expanding-panel-content {
+                  border-bottom: 0.1rem solid #efefef75;
+                  .inner {
+                    .overflow-navigation-sub-nav-inner {
+                      margin-top: var(--overflow-nav-items-gap);
+                    }
                   }
                 }
               }
             }
-          }
 
-          .expanding-panel-content {
-            border-bottom: 0.1rem solid transparent;
+            .expanding-panel-content {
+              border-bottom: 0.1rem solid transparent;
 
-            .inner {
-              margin-top: 0;
-
-              .overflow-navigation-sub-nav-inner {
+              .inner {
                 margin-top: 0;
-                position: relative;
 
-                .overflow-navigation-sub-nav-list {
-                  display: flex;
-                  flex-direction: column;
-                  gap: 2px;
+                .overflow-navigation-sub-nav-inner {
+                  margin-top: 0;
+                  position: relative;
 
-                  .overflow-navigation-sub-nav-item {
-                    padding-block: var(--overflow-nav-items-padding-block);
-                    padding-inline: var(--overflow-nav-padding-inline);
+                  .overflow-navigation-sub-nav-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
 
-                    .overflow-navigation-sub-nav-link {
-                      display: block;
-                      text-decoration: none;
-                      color: inherit;
+                    .overflow-navigation-sub-nav-item {
+                      padding-block: var(--overflow-nav-items-padding-block);
+                      padding-inline: var(--overflow-nav-padding-inline);
+
+                      .overflow-navigation-sub-nav-link {
+                        display: block;
+                        text-decoration: none;
+                        color: inherit;
+                      }
                     }
                   }
                 }
@@ -273,7 +287,6 @@ watch(
       }
     }
   }
-}
 
   /* Freeze all indicator transitions for the duration of a panel open/close animation
      so the indicators snap to position rather than sliding through intermediate states. */
@@ -292,22 +305,32 @@ watch(
      doesn't stretch the indicator down into the expanded content. */
 
   /* Plain link — hovered */
-  .overflow-navigation-wrapper .overflow-navigation-item.is-hovered:not(:has(.overflow-navigation-details)) .overflow-navigation-link {
+  .overflow-navigation-wrapper
+    .overflow-navigation-item.is-hovered:not(:has(.overflow-navigation-details))
+    .overflow-navigation-link {
     anchor-name: --overflow-nav-indicator;
   }
 
   /* Submenu — hovered: anchor to summary row only */
-  .overflow-navigation-wrapper .overflow-navigation-item.is-hovered .overflow-navigation-details .expanding-panel-summary {
+  .overflow-navigation-wrapper
+    .overflow-navigation-item.is-hovered
+    .overflow-navigation-details
+    .expanding-panel-summary {
     anchor-name: --overflow-nav-indicator;
   }
 
   /* Plain link — active (no hover) */
-  .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered)) .overflow-navigation-item.is-active:not(:has(.overflow-navigation-details)) .overflow-navigation-link {
+  .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered))
+    .overflow-navigation-item.is-active:not(:has(.overflow-navigation-details))
+    .overflow-navigation-link {
     anchor-name: --overflow-nav-indicator;
   }
 
   /* Submenu — active (no hover): anchor to summary row only */
-  .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered)) .overflow-navigation-item.is-active .overflow-navigation-details .expanding-panel-summary {
+  .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered))
+    .overflow-navigation-item.is-active
+    .overflow-navigation-details
+    .expanding-panel-summary {
     anchor-name: --overflow-nav-indicator;
   }
 
@@ -362,7 +385,8 @@ watch(
     anchor-name: --overflow-sub-nav-indicator;
   }
 
-  .overflow-navigation-sub-nav-list:not(:has(.overflow-navigation-sub-nav-item.is-hovered)) .overflow-navigation-sub-nav-item.is-active {
+  .overflow-navigation-sub-nav-list:not(:has(.overflow-navigation-sub-nav-item.is-hovered))
+    .overflow-navigation-sub-nav-item.is-active {
     anchor-name: --overflow-sub-nav-indicator;
   }
 
@@ -382,7 +406,8 @@ watch(
     right: 0;
     top: anchor(top);
     bottom: anchor(bottom);
-    background: var(--overflow-nav-decorator-hovered-bg, oklch(100% 0 0 / 6%));
+    background: var(--overflow-nav-decorator-hovered-bg, oklch(100% 0 0 / 20%));
+    border-inline-start: 2px solid var(--overflow-nav-decorator-indicator-color, var(--green-06));
     z-index: 1;
     opacity: 0;
     transition:
@@ -391,10 +416,9 @@ watch(
       opacity 150ms ease;
   }
 
-  .overflow-navigation-sub-nav-inner:has(.overflow-navigation-sub-nav-item.is-hovered) .overflow-sub-nav-indicator-hovered {
+  .overflow-navigation-sub-nav-inner:has(.overflow-navigation-sub-nav-item.is-hovered)
+    .overflow-sub-nav-indicator-hovered {
     opacity: 1;
   }
-
-
 }
 </style>

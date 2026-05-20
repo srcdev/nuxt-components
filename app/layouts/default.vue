@@ -602,8 +602,8 @@ onMounted(() => {
                             color: var(--slate-00);
 
                             &:hover {
-                              background-color: var(--slate-07);
-                              border-color: var(--green-08);
+                              /* background-color: var(--slate-07); */
+                              /* border-color: var(--green-08); */
                             }
                             .overflow-navigation-sub-nav-link {
                               text-decoration: none;
