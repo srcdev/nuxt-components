@@ -119,6 +119,7 @@ describe("CarouselFlip", () => {
 
   afterEach(() => {
     wrapper?.unmount();
+    vi.restoreAllMocks();
   });
 
   describe("Component Rendering", () => {
