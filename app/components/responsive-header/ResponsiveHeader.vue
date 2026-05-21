@@ -1,6 +1,12 @@
 <template>
-  <div ref="navigationWrapper" class="navigation" :class="[elementClasses, { loaded: navLoaded }]" role="banner">
-    <nav ref="mainNav" class="main-navigation" :class="{ 'is-animated': isAnimated }" aria-label="Main navigation" @mouseleave="hoveredItemKey = null">
+  <div ref="navigationWrapper" class="navigation" :class="[elementClasses, { loaded: navLoaded, 'geometry-ready': isGeometryReady }]" role="banner">
+    <nav
+      ref="mainNav"
+      class="main-navigation"
+      :class="{ 'is-animated': isAnimated }"
+      aria-label="Main navigation"
+      @mouseleave="hoveredItemKey = null"
+    >
       <ul
         v-for="(navGroup, groupKey) in responsiveNavLinks"
         :key="groupKey"
@@ -70,7 +76,7 @@
       <details
         ref="overflowDetails"
         class="overflow-details"
-        :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]"
+        :class="overflowDetailsClass ? [overflowDetailsClass] : []"
         name="overflow-group"
       >
         <summary class="overflow-details-summary has-toggle-icon">
@@ -97,7 +103,12 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderProp, ResponsiveHeaderState, IFlooredRect, ResponsiveHeaderNavItem } from "../../types/components";
+import type {
+  ResponsiveHeaderProp,
+  ResponsiveHeaderState,
+  IFlooredRect,
+  ResponsiveHeaderNavItem,
+} from "../../types/components";
 import { useResizeObserver, onClickOutside } from "@vueuse/core";
 
 interface Props {
@@ -203,6 +214,39 @@ const isActiveNavItem = (link: ResponsiveHeaderNavItem): boolean => {
 };
 
 const isAnimated = ref(true);
+
+// Local (non-useState) flag — resets to false on every mount.
+// Gates two things:
+// 1. The `.geometry-ready` wrapper class that enables nav-item visibility transitions,
+//    preventing items from animating in on every route change.
+// 2. Whether the overflow button is shown (via overflowDetailsHidden below).
+const isGeometryReady = ref(false);
+
+// Set to true only during Phase 2 of the initial geometry pass (see useResizeObserver).
+// Allows the overflow button to be temporarily revealed at its natural size so that
+// secondaryNavRects can be measured accurately before the final visibility pass runs.
+const isOverflowVisibleForMeasurement = ref(false);
+
+// Single source of truth for the overflow button's CSS class:
+//
+//   'visually-hidden'  → width: 0 — removed from layout entirely (early boot, between
+//                        the first and second measurement phases)
+//   'is-measuring'     → opacity:0 / visibility:hidden, but NATURAL width — button is
+//                        present in layout so secondaryNavRects captures its real width,
+//                        but invisible to the user (phase 2 of the geometry pass)
+//   null               → fully visible (isGeometryReady + showOverflowDetails)
+//
+// Note: we never conditionally skip phase 2 with a peek check. A peek using
+// determineNavigationItemVisibility() after phase 1 gives the wrong answer at the
+// breakpoint because the CSS v-bind(mainNavigationMarginBlockEndStr) hasn't been
+// flushed to the DOM yet — positions lag the reactive update by one tick.
+const overflowDetailsClass = computed<string | null>(() => {
+  if (!navLoaded.value) return "visually-hidden";
+  if (!isGeometryReady.value) {
+    return isOverflowVisibleForMeasurement.value ? "is-measuring" : "visually-hidden";
+  }
+  return showOverflowDetails.value ? null : "visually-hidden";
+});
 
 watch(
   () => route.path,
@@ -376,6 +420,10 @@ const initMainNavigationState = () => {
       mainNavigationState.value.navListVisibility[groupKey] = true;
     }
   });
+
+  // Geometry pass is complete. The overflow button can now appear (if needed)
+  // and nav-item transitions can play from this point forward.
+  isGeometryReady.value = true;
 };
 
 // Function to set up click outside listeners
@@ -394,26 +442,67 @@ const setupClickOutsideListeners = () => {
 };
 
 onMounted(async () => {
-  // If navigation is already initialized and loaded, skip the template refs setup
-  if (navigationInitialized.value && navLoaded.value) {
-    // But still set up click outside listeners as DOM elements may have changed
-    await nextTick();
-    setupClickOutsideListeners();
-    return;
-  }
+  // Always reset on every mount — this is a local ref so it naturally resets,
+  // but being explicit here makes the intent clear: geometry must be re-verified
+  // on every route change before the overflow button appears or transitions play.
+  isGeometryReady.value = false;
 
-  await initTemplateRefs().then(() => {
+  // Always (re-)populate the local nav refs — firstNavRef / secondNavRef are local
+  // refs that reset on unmount, so they must be re-assigned on every mount even
+  // when the useState flags say we're already initialized.
+  await initTemplateRefs();
+
+  if (!navigationInitialized.value || !navLoaded.value) {
     navLoaded.value = true;
     navigationInitialized.value = true;
-  });
+  }
 
+  // Geometry recalculation is handled by useResizeObserver which fires when the
+  // element first becomes observed. isGeometryReady is set there after the pass.
   setupClickOutsideListeners();
 });
 
 useResizeObserver(navigationWrapperRef, async () => {
-  await updateNavigationConfig("useResizeObserver").then(() => {
+  if (!isGeometryReady.value) {
+    // ─── Two-pass measurement on initial mount / route change ──────────────
+    //
+    // We never use a "peek" check to decide whether phase 2 is needed.
+    // A peek after phase 1 gives the wrong answer at the breakpoint because:
+    //   • updateNavigationConfig() sets secondaryNavRects reactively, but
+    //     v-bind(mainNavigationMarginBlockEndStr) isn't flushed to the DOM until
+    //     the next Vue render tick — so item rects are still measured against the
+    //     OLD margin, producing a stale DOM/computed mismatch.
+    //   • Even with correct timing, checking without the button reserved will
+    //     always pass marginal items (those that fit only when button is absent).
+    //
+    // Phase 1: button is 'visually-hidden' (width:0).
+    // Measure the wrapper and secondary-nav rects without the button.
+    await updateNavigationConfig("phase1");
+
+    // Phase 2: switch button to 'is-measuring' — opacity:0 / visibility:hidden
+    // but natural width — so secondaryNavRects captures the button's real width.
+    // The button is invisible to the user; nav items are still visually-hidden.
+    isOverflowVisibleForMeasurement.value = true;
+    await nextTick(); // let Vue render the 'is-measuring' class (button at natural width)
+    await updateNavigationConfig("phase2"); // secondaryNavRects now includes button width
+
+    // Wait for Vue to flush the updated mainNavigationMarginBlockEndStr via v-bind
+    // before reading item positions — without this tick, getBoundingClientRect()
+    // in initMainNavigationState would see the pre-phase-2 margin-inline-end.
+    await nextTick();
+
+    // Final visibility pass — reads item rects against the correct margin.
+    // Also sets isGeometryReady = true.
     initMainNavigationState();
-  });
+    // Hand control back to showOverflowDetails; measurement flag no longer needed.
+    isOverflowVisibleForMeasurement.value = false;
+  } else {
+    // ─── Normal resize after geometry is settled ───────────────────────────
+    // The button's state is already correct (driven by showOverflowDetails),
+    // so a single-pass measurement gives accurate secondaryNavRects.
+    await updateNavigationConfig("useResizeObserver");
+    initMainNavigationState();
+  }
 });
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -541,9 +630,9 @@ watch(
         .main-navigation-item {
           /* width: var(--_main-navigation-item-width); */
           overflow: hidden;
-          transition:
-            opacity 0.2s ease-in-out,
-            visibility 0.2s ease-in-out;
+          /* Transition is intentionally absent here — it is only enabled after
+             the first geometry pass via .navigation.geometry-ready below, so
+             items don't animate in on every route change. */
           padding-block: var(--_link-focus-visible-outline-width);
           padding-inline: var(--_link-focus-visible-outline-width);
 
@@ -727,6 +816,18 @@ watch(
           width: 0;
         }
 
+        /* Applied during phase 2 of the geometry pass only.
+           Button is invisible but at natural width so secondaryNavRects
+           captures its real footprint for margin-inline-end calculation.
+           transition:none prevents a width animation from 0→natural that
+           would make the mid-animation measurement inaccurate. */
+        &.is-measuring {
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+          transition: none;
+        }
+
         .overflow-details-summary {
           --_icon-zoom: 1;
           --_icon-size: var(--responsive-header-overflow-btn-size, 20px);
@@ -799,6 +900,17 @@ watch(
           grid-auto-flow: row;
           gap: 8px;
         }
+      }
+    }
+
+    /* Once geometry has been calculated for this mount, enable item transitions.
+       This prevents nav items from animating in on every route change while still
+       providing smooth hide/show transitions when the viewport is resized. */
+    &.geometry-ready {
+      .main-navigation-item {
+        transition:
+          opacity 0.2s ease-in-out,
+          visibility 0.2s ease-in-out;
       }
     }
   }

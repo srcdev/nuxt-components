@@ -21,7 +21,7 @@
               more: 'gravity-ui:ellipsis',
               burger: 'gravity-ui:bars',
             }"
-            :collapse-at-main-nav-intersection="true"
+            :collapse-at-main-nav-intersection="false"
             :allow-expand-on-gesture="false"
           >
             <template #secondaryNavigation>
