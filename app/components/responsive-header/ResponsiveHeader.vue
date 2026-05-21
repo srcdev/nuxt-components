@@ -1,6 +1,13 @@
 <template>
-  <div ref="navigationWrapper" class="navigation" :class="[elementClasses, { loaded: navLoaded }]" role="banner">
-    <nav ref="mainNav" class="main-navigation" aria-label="Main navigation">
+  <div ref="navigationWrapper" class="navigation" :class="[elementClasses, { loaded: navLoaded, 'geometry-ready': isGeometryReady }]" role="banner">
+    <nav
+      ref="mainNav"
+      class="main-navigation"
+      :class="{ 'is-animated': isAnimated }"
+      aria-label="Main navigation"
+      @mouseleave="hoveredItemKey = null"
+      @focusout="handleNavFocusout"
+    >
       <ul
         v-for="(navGroup, groupKey) in responsiveNavLinks"
         :key="groupKey"
@@ -16,6 +23,8 @@
           class="main-navigation-item"
           :class="{
             'visually-hidden': !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible,
+            'is-hovered': hoveredItemKey === `${String(groupKey)}-${localIndex}`,
+            'is-active': isActiveNavItem(link),
           }"
           :style="{
             '--_main-navigation-item-width':
@@ -23,8 +32,8 @@
           }"
           :data-group-key="groupKey"
           :data-local-index="localIndex"
-          @mouseenter="handleNavigationItemHover"
-          @focusin="handleNavigationItemHover"
+          @mouseenter="handleNavigationItemHover(`${String(groupKey)}-${localIndex}`)"
+          @focusin="handleNavigationItemHover(`${String(groupKey)}-${localIndex}`)"
         >
           <NuxtLink
             v-if="link.path"
@@ -61,12 +70,14 @@
           </details>
         </li>
       </ul>
+      <div aria-hidden="true" class="nav-indicator-hovered"></div>
+      <div aria-hidden="true" class="nav-indicator-active"></div>
     </nav>
     <nav ref="secondaryNav" class="secondary-navigation" aria-label="Secondary navigation">
       <details
         ref="overflowDetails"
         class="overflow-details"
-        :class="[{ 'visually-hidden': !navLoaded || !showOverflowDetails }]"
+        :class="overflowDetailsClass ? [overflowDetailsClass] : []"
         name="overflow-group"
       >
         <summary class="overflow-details-summary has-toggle-icon">
@@ -93,7 +104,12 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderProp, ResponsiveHeaderState, IFlooredRect } from "../../types/components";
+import type {
+  ResponsiveHeaderProp,
+  ResponsiveHeaderState,
+  IFlooredRect,
+  ResponsiveHeaderNavItem,
+} from "../../types/components";
 import { useResizeObserver, onClickOutside } from "@vueuse/core";
 
 interface Props {
@@ -176,18 +192,83 @@ const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
   toggleDetailsElement(event);
 };
 
-const handleNavigationItemHover = () => {
+const handleNavigationItemHover = (key: string) => {
+  hoveredItemKey.value = key;
   if (!props.allowExpandOnGesture) {
     return;
   }
-
-  // Close all open navigation details when hovering over regular nav items
   closeAllNavigationDetails();
+};
+
+const handleNavFocusout = (event: FocusEvent) => {
+  // Only clear when focus moves outside the nav entirely, not between nav items.
+  const nav = event.currentTarget as HTMLElement;
+  if (!event.relatedTarget || !nav.contains(event.relatedTarget as Node)) {
+    hoveredItemKey.value = null;
+  }
 };
 
 const handleSummaryAction = (event: MouseEvent | KeyboardEvent) => {
   toggleDetailsElement(event);
 };
+
+const hoveredItemKey = ref<string | null>(null);
+
+const route = useRoute();
+
+const isActiveNavItem = (link: ResponsiveHeaderNavItem): boolean => {
+  if (link.path) return route.path === link.path;
+  if (link.childLinks) return link.childLinks.some((child) => child.path && route.path === child.path);
+  return false;
+};
+
+const isAnimated = ref(true);
+
+// Local (non-useState) flag — resets to false on every mount.
+// Gates two things:
+// 1. The `.geometry-ready` wrapper class that enables nav-item visibility transitions,
+//    preventing items from animating in on every route change.
+// 2. Whether the overflow button is shown (via overflowDetailsHidden below).
+const isGeometryReady = ref(false);
+
+// Set to true only during Phase 2 of the initial geometry pass (see useResizeObserver).
+// Allows the overflow button to be temporarily revealed at its natural size so that
+// secondaryNavRects can be measured accurately before the final visibility pass runs.
+const isOverflowVisibleForMeasurement = ref(false);
+
+// Single source of truth for the overflow button's CSS class:
+//
+//   'visually-hidden'  → width: 0 — removed from layout entirely (early boot, between
+//                        the first and second measurement phases)
+//   'is-measuring'     → opacity:0 / visibility:hidden, but NATURAL width — button is
+//                        present in layout so secondaryNavRects captures its real width,
+//                        but invisible to the user (phase 2 of the geometry pass)
+//   null               → fully visible (isGeometryReady + showOverflowDetails)
+//
+// Note: we never conditionally skip phase 2 with a peek check. A peek using
+// determineNavigationItemVisibility() after phase 1 gives the wrong answer at the
+// breakpoint because the CSS v-bind(mainNavigationMarginBlockEndStr) hasn't been
+// flushed to the DOM yet — positions lag the reactive update by one tick.
+const overflowDetailsClass = computed<string | null>(() => {
+  if (!navLoaded.value) return "visually-hidden";
+  if (!isGeometryReady.value) {
+    return isOverflowVisibleForMeasurement.value ? "is-measuring" : "visually-hidden";
+  }
+  return showOverflowDetails.value ? null : "visually-hidden";
+});
+
+watch(
+  () => route.path,
+  () => {
+    isAnimated.value = false;
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        isAnimated.value = true;
+      });
+    });
+  },
+  { flush: "pre" }
+);
 
 // Initialize main navigation state
 const mainNavigationState = ref<ResponsiveHeaderState>({
@@ -348,6 +429,10 @@ const initMainNavigationState = () => {
       mainNavigationState.value.navListVisibility[groupKey] = true;
     }
   });
+
+  // Geometry pass is complete. The overflow button can now appear (if needed)
+  // and nav-item transitions can play from this point forward.
+  isGeometryReady.value = true;
 };
 
 // Function to set up click outside listeners
@@ -366,26 +451,95 @@ const setupClickOutsideListeners = () => {
 };
 
 onMounted(async () => {
-  // If navigation is already initialized and loaded, skip the template refs setup
-  if (navigationInitialized.value && navLoaded.value) {
-    // But still set up click outside listeners as DOM elements may have changed
-    await nextTick();
-    setupClickOutsideListeners();
-    return;
-  }
+  // Always reset on every mount — this is a local ref so it naturally resets,
+  // but being explicit here makes the intent clear: geometry must be re-verified
+  // on every route change before the overflow button appears or transitions play.
+  isGeometryReady.value = false;
 
-  await initTemplateRefs().then(() => {
+  // Always (re-)populate the local nav refs — firstNavRef / secondNavRef are local
+  // refs that reset on unmount, so they must be re-assigned on every mount even
+  // when the useState flags say we're already initialized.
+  await initTemplateRefs();
+
+  if (!navigationInitialized.value || !navLoaded.value) {
     navLoaded.value = true;
     navigationInitialized.value = true;
-  });
+  }
 
+  // Geometry recalculation is handled by useResizeObserver which fires when the
+  // element first becomes observed. isGeometryReady is set there after the pass.
   setupClickOutsideListeners();
 });
 
+// ─── Re-entrancy guard for the ResizeObserver callback ────────────────────
+// The observer fires an async callback that awaits multiple ticks and toggles
+// layout-affecting state. If the observer fires again while the first pass is
+// still in flight, two concurrent passes would race on isOverflowVisibleForMeasurement
+// and mainNavigationState.
+//
+// Pattern: "run-latest" queue.
+//   • isMeasuring gates entry — any new observer call while a pass is running
+//     sets pendingMeasure = true and returns immediately.
+//   • The do/while re-runs once after the pass completes if a new resize arrived,
+//     so we never silently drop the final geometry update.
+let isMeasuring = false;
+let pendingMeasure = false;
+
 useResizeObserver(navigationWrapperRef, async () => {
-  await updateNavigationConfig("useResizeObserver").then(() => {
-    initMainNavigationState();
-  });
+  if (isMeasuring) {
+    pendingMeasure = true;
+    return;
+  }
+
+  isMeasuring = true;
+  try {
+    do {
+      pendingMeasure = false;
+
+      if (!isGeometryReady.value) {
+        // ─── Two-pass measurement on initial mount / route change ──────────────
+        //
+        // We never use a "peek" check to decide whether phase 2 is needed.
+        // A peek after phase 1 gives the wrong answer at the breakpoint because:
+        //   • updateNavigationConfig() sets secondaryNavRects reactively, but
+        //     v-bind(mainNavigationMarginBlockEndStr) isn't flushed to the DOM until
+        //     the next Vue render tick — so item rects are still measured against the
+        //     OLD margin, producing a stale DOM/computed mismatch.
+        //   • Even with correct timing, checking without the button reserved will
+        //     always pass marginal items (those that fit only when button is absent).
+        //
+        // Phase 1: button is 'visually-hidden' (width:0).
+        // Measure the wrapper and secondary-nav rects without the button.
+        await updateNavigationConfig("phase1");
+
+        // Phase 2: switch button to 'is-measuring' — opacity:0 / visibility:hidden
+        // but natural width — so secondaryNavRects captures the button's real width.
+        // The button is invisible to the user; nav items are still visually-hidden.
+        isOverflowVisibleForMeasurement.value = true;
+        await nextTick(); // let Vue render the 'is-measuring' class (button at natural width)
+        await updateNavigationConfig("phase2"); // secondaryNavRects now includes button width
+
+        // Wait for Vue to flush the updated mainNavigationMarginBlockEndStr via v-bind
+        // before reading item positions — without this tick, getBoundingClientRect()
+        // in initMainNavigationState would see the pre-phase-2 margin-inline-end.
+        await nextTick();
+
+        // Final visibility pass — reads item rects against the correct margin.
+        // Also sets isGeometryReady = true.
+        initMainNavigationState();
+        // Hand control back to showOverflowDetails; measurement flag no longer needed.
+        isOverflowVisibleForMeasurement.value = false;
+      } else {
+        // ─── Normal resize after geometry is settled ───────────────────────────
+        // The button's state is already correct (driven by showOverflowDetails),
+        // so a single-pass measurement gives accurate secondaryNavRects.
+        await updateNavigationConfig("useResizeObserver");
+        initMainNavigationState();
+      }
+    } while (pendingMeasure);
+  } finally {
+    isMeasuring = false;
+  }
 });
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -415,7 +569,57 @@ watch(
       }
     }
 
+    /* ─── Public CSS tokens ─────────────────────────────────────────────────
+       Override these on the consumer's scope class to theme the nav.
+       Tokens are read via var(--token, default) — defaults are NOT declared
+       on this element to avoid source-order cascade conflicts with consumers.
+
+       --responsive-header-margin               (default: 0)
+       --responsive-header-bg                   (default: transparent)
+       --responsive-header-border               (default: none)
+       --responsive-header-border-radius        (default: 0)
+       --responsive-header-padding-block        (default: 0)
+       --responsive-header-padding-inline       (default: 0)
+       --responsive-header-max-height           (default: none)
+       --responsive-header-inline-size          (default: 100%)
+
+       --responsive-header-color                (default: inherit)
+       --responsive-header-link-color           (default: inherit)
+
+       --responsive-header-sub-nav-bg           (default: Canvas)
+       --responsive-header-sub-nav-border       (default: 1px solid #efefef75)
+       --responsive-header-sub-nav-border-radius (default: 8px)
+       --responsive-header-sub-nav-padding      (default: 12px)
+
+       --responsive-header-overflow-btn-bg              (default: Canvas)
+       --responsive-header-overflow-btn-size            (default: 20px)
+       --responsive-header-overflow-btn-border          (default: 1px solid #ffffff90)
+       --responsive-header-overflow-btn-outline         (default: 1px solid #ffffff10)
+       --responsive-header-overflow-btn-icon-color      (default: inherit)
+       --responsive-header-overflow-btn-hover-outline   (default: 1px solid #ffffff)
+
+       --responsive-header-overflow-nav-bg              (default: Canvas)
+       --responsive-header-overflow-nav-border          (default: 1px solid #ffffff90)
+       --responsive-header-overflow-nav-border-radius   (default: 8px)
+       --responsive-header-overflow-nav-padding-block   (default: 12px)
+
+       --responsive-nav-decorator-indicator-color         (default: currentColor)
+       --responsive-nav-decorator-hovered-indicator-color (default: inherits --responsive-nav-decorator-indicator-color)
+       --responsive-nav-decorator-hovered-bg              (default: oklch(100% 0 0 / 8%))
+    ──────────────────────────────────────────────────────────────────────── */
+
     --_link-visibility-transition: none;
+    position: relative;
+    color: var(--responsive-header-color, inherit);
+
+    margin: var(--responsive-header-margin, 0);
+    background-color: var(--responsive-header-bg, transparent);
+    border: var(--responsive-header-border, none);
+    border-radius: var(--responsive-header-border-radius, 0);
+    padding-block: var(--responsive-header-padding-block, 0);
+    padding-inline: var(--responsive-header-padding-inline, 0);
+    max-height: var(--responsive-header-max-height, none);
+    inline-size: var(--responsive-header-inline-size, 100%);
 
     &.loaded {
       --_link-visibility-transition: all 0.2s ease-in-out;
@@ -441,7 +645,6 @@ watch(
       flex-grow: 1;
       justify-content: space-between;
       gap: 60px;
-
       overflow-x: hidden;
       margin-inline-end: v-bind(mainNavigationMarginBlockEndStr);
 
@@ -464,9 +667,9 @@ watch(
         .main-navigation-item {
           /* width: var(--_main-navigation-item-width); */
           overflow: hidden;
-          transition:
-            opacity 0.2s ease-in-out,
-            visibility 0.2s ease-in-out;
+          /* Transition is intentionally absent here — it is only enabled after
+             the first geometry pass via .navigation.geometry-ready below, so
+             items don't animate in on every route change. */
           padding-block: var(--_link-focus-visible-outline-width);
           padding-inline: var(--_link-focus-visible-outline-width);
 
@@ -474,21 +677,18 @@ watch(
             display: flex;
             gap: 6px;
             text-wrap-mode: nowrap;
-            color: inherit;
+            color: var(--responsive-header-link-color, inherit);
             text-decoration: none;
+            cursor: pointer;
             margin-inline-start: 0;
-            /* transition: var(--_link-visibility-transition); */
+            position: relative;
+            z-index: 4;
 
             padding-block: var(--_link-padding-block);
             padding-inline: var(--_link-padding-inline);
             margin-block: var(--_link-margin-block);
             margin-inline: var(--_link-margin-inline);
             border-bottom: var(--_link-border-default);
-
-            &:hover {
-              cursor: pointer;
-              border-bottom-color: var(--_link-border-bottom-hover);
-            }
           }
 
           .main-navigation-details {
@@ -499,10 +699,6 @@ watch(
 
             &[open] {
               --_icon-transform: scaleY(-1);
-
-              .main-navigation-details-summary {
-                border-bottom-color: var(--_link-border-bottom-hover);
-              }
             }
 
             .has-toggle-icon {
@@ -524,15 +720,14 @@ watch(
               margin-inline: var(--_link-margin-inline);
               border-bottom: var(--_link-border-default);
               white-space: nowrap;
+              cursor: pointer;
+              position: relative;
+              z-index: 4;
+              color: var(--responsive-header-link-color, inherit);
 
               &::-webkit-details-marker,
               &::marker {
                 display: none;
-              }
-
-              &:hover {
-                cursor: pointer;
-                border-bottom-color: var(--_link-border-bottom-hover);
               }
 
               .decorator-icon {
@@ -542,10 +737,10 @@ watch(
 
             .main-navigation-sub-nav {
               position: absolute;
-              padding: 12px;
-              border: 1px solid #efefef75;
-              border-radius: 8px;
-              background-color: #000;
+              padding: var(--responsive-header-sub-nav-padding, 12px);
+              border: var(--responsive-header-sub-nav-border, 1px solid #efefef75);
+              border-radius: var(--responsive-header-sub-nav-border-radius, 8px);
+              background-color: var(--responsive-header-sub-nav-bg, Canvas);
               translate: 0 12px;
 
               min-width: var(--_main-navigation-item-width);
@@ -566,7 +761,7 @@ watch(
                     display: block;
                     text-wrap-mode: nowrap;
                     text-decoration: none;
-                    color: inherit;
+                    color: var(--responsive-header-link-color, inherit);
                   }
                 }
               }
@@ -576,6 +771,12 @@ watch(
           &.visually-hidden {
             visibility: hidden;
             opacity: 0;
+            /* Pin the outer <li> to its originally-measured width so re-measurements
+               while hidden don't pick up an inflated value from the shifted inner
+               content. Without this, each hide→measure cycle compounds the width
+               (feedback loop → 7995px → items never recover). */
+            inline-size: var(--_main-navigation-item-width);
+            overflow: hidden;
 
             .main-navigation-details,
             .main-navigation-link {
@@ -619,7 +820,7 @@ watch(
             display: flex;
             align-items: center;
             font: inherit;
-            color: inherit;
+            color: var(--responsive-header-link-color, inherit);
 
             .icon {
               height: 1.35em;
@@ -652,9 +853,21 @@ watch(
           width: 0;
         }
 
+        /* Applied during phase 2 of the geometry pass only.
+           Button is invisible but at natural width so secondaryNavRects
+           captures its real footprint for margin-inline-end calculation.
+           transition:none prevents a width animation from 0→natural that
+           would make the mid-animation measurement inaccurate. */
+        &.is-measuring {
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
+          transition: none;
+        }
+
         .overflow-details-summary {
           --_icon-zoom: 1;
-          --_icon-size: 20px;
+          --_icon-size: var(--responsive-header-overflow-btn-size, 20px);
           --_border-width: 1px;
           --_outline-width: 1px;
           --_transition-duration: 0.2s;
@@ -668,9 +881,9 @@ watch(
 
           aspect-ratio: 1;
           border-radius: 4px;
-          border: var(--_border-width) solid #ffffff90;
-          outline: var(--_outline-width) solid #ffffff10;
-          background-color: Canvas;
+          border: var(--responsive-header-overflow-btn-border, 1px solid #ffffff90);
+          outline: var(--responsive-header-overflow-btn-outline, 1px solid #ffffff10);
+          background-color: var(--responsive-header-overflow-btn-bg, Canvas);
 
           width: var(--_icon-size);
           overflow: hidden;
@@ -686,12 +899,13 @@ watch(
           &:hover,
           &:focus-visible {
             --_icon-zoom: 1.2;
-            outline: var(--_outline-width) solid #ffffff;
+            outline: var(--responsive-header-overflow-btn-hover-outline, 1px solid #ffffff);
           }
 
           .icon {
             grid-area: icon;
             scale: var(--_icon-zoom);
+            color: var(--responsive-header-overflow-btn-icon-color, inherit);
             transition: scale 0.2s ease-in-out;
             width: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
             height: calc(var(--_icon-size) - var(--_border-width) * 2 - var(--_outline-width) * 2);
@@ -711,10 +925,10 @@ watch(
           position: absolute;
           top: 135%;
           right: 0;
-          background-color: #000;
-          border: 1px solid #ffffff90;
-          border-radius: 8px;
-          padding-block: 12px;
+          background-color: var(--responsive-header-overflow-nav-bg, Canvas);
+          border: var(--responsive-header-overflow-nav-border, 1px solid #ffffff90);
+          border-radius: var(--responsive-header-overflow-nav-border-radius, 8px);
+          padding-block: var(--responsive-header-overflow-nav-padding-block, 12px);
           margin: 0;
           z-index: 999;
           min-width: var(--_overflow-drop-down-width, fit-content);
@@ -725,6 +939,90 @@ watch(
         }
       }
     }
+
+    /* Once geometry has been calculated for this mount, enable item transitions.
+       This prevents nav items from animating in on every route change while still
+       providing smooth hide/show transitions when the viewport is resized. */
+    &.geometry-ready {
+      .main-navigation-item {
+        transition:
+          opacity 0.2s ease-in-out,
+          visibility 0.2s ease-in-out;
+      }
+    }
+  }
+
+  /* ─── Anchor positioning for main-nav indicators ─────────────────────────
+     Single --responsive-main-nav-indicator anchor: sits on is-hovered when
+     something is hovered, falls back to is-active when nothing is hovered.
+  ──────────────────────────────────────────────────────────────────────── */
+
+  .main-navigation li.is-hovered {
+    anchor-name: --responsive-main-nav-indicator;
+  }
+
+  .main-navigation:not(:has(li.is-hovered)) li.is-active {
+    anchor-name: --responsive-main-nav-indicator;
+  }
+
+  .main-navigation .nav-indicator-hovered,
+  .main-navigation .nav-indicator-active {
+    display: none;
+    pointer-events: none;
+  }
+
+  .main-navigation .nav-indicator-hovered {
+    display: block;
+    position: absolute;
+    position-anchor: --responsive-main-nav-indicator;
+    left: anchor(left);
+    right: anchor(right);
+    top: anchor(top);
+    bottom: anchor(bottom);
+    background: var(--responsive-nav-decorator-hovered-bg, oklch(100% 0 0 / 8%));
+    border-radius: 4px;
+    z-index: 1;
+    opacity: 0;
+    transition:
+      left 200ms ease,
+      right 200ms ease,
+      opacity 150ms ease;
+  }
+
+  .main-navigation:not(.is-animated) .nav-indicator-hovered {
+    transition: none;
+  }
+
+  .main-navigation:has(li.is-hovered) .nav-indicator-hovered {
+    opacity: 1;
+  }
+
+  .main-navigation .nav-indicator-active {
+    display: block;
+    position: absolute;
+    position-anchor: --responsive-main-nav-indicator;
+    left: anchor(left);
+    right: anchor(right);
+    bottom: 0;
+    height: 2px;
+    background: var(--responsive-nav-decorator-indicator-color, currentColor);
+    z-index: 3;
+    transition:
+      left 200ms ease,
+      right 200ms ease;
+  }
+
+  .main-navigation:not(.is-animated) .nav-indicator-active {
+    transition: none;
+  }
+
+  /* When something is hovered, the active bar has moved to the hovered item —
+     switch it to the hover colour so active (white) and hover (green) are distinct. */
+  .main-navigation:has(li.is-hovered) .nav-indicator-active {
+    background: var(
+      --responsive-nav-decorator-hovered-indicator-color,
+      var(--responsive-nav-decorator-indicator-color, currentColor)
+    );
   }
 }
 </style>

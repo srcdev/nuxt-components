@@ -413,7 +413,7 @@ const radiusData = ref<IFormMultipleOptions>({
       grid-template-columns: 1fr 2fr;
     }
 
-    &__info {
+    & .sri-demo-row__info {
       position: sticky;
       top: 2.4rem;
     }
@@ -464,7 +464,7 @@ const radiusData = ref<IFormMultipleOptions>({
     border-radius: 0.8rem;
     margin-block: 2.4rem;
 
-    &__heading {
+    & .demo-controls__heading {
       font-size: 1.1rem;
       font-weight: 600;
       text-transform: uppercase;
@@ -473,7 +473,7 @@ const radiusData = ref<IFormMultipleOptions>({
       margin-block-end: 1.2rem;
     }
 
-    &__fields {
+    & .demo-controls__fields {
       display: flex;
       flex-direction: column;
       gap: 1.2rem;

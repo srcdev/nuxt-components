@@ -1,5 +1,14 @@
 <template>
-  <div class="overflow-navigation-wrapper" :class="elementClasses" role="menu" aria-label="Overflow navigation menu">
+  <div
+    class="overflow-navigation-wrapper"
+    :class="[elementClasses, { 'is-panel-animating': isPanelAnimating }]"
+    role="menu"
+    aria-label="Overflow navigation menu"
+    @mouseleave="
+      hoveredItemKey = null;
+      hoveredChildKey = null;
+    "
+  >
     <ul
       v-for="(navGroup, groupKey) in mainNavigationState.clonedNavLinks"
       :key="groupKey"
@@ -12,7 +21,11 @@
         <li
           v-if="link.path"
           class="overflow-navigation-item"
-          :class="{ visible: !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
+          :class="{
+            visible: !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible,
+            'is-hovered': hoveredItemKey === `${String(groupKey)}-${localIndex}`,
+            'is-active': isActiveNavItem(link),
+          }"
           :style="{
             '--_main-navigation-item-width':
               mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
@@ -20,6 +33,7 @@
           :data-group-key="groupKey"
           :data-local-index="localIndex"
           role="none"
+          @mouseenter="hoveredItemKey = `${String(groupKey)}-${localIndex}`"
         >
           <NuxtLink class="overflow-navigation-link" :to="link.path" role="menuitem">
             <span class="overflow-navigation-text">{{ link.name }}</span>
@@ -28,7 +42,11 @@
         <li
           v-else
           class="overflow-navigation-item"
-          :class="{ visible: !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible }"
+          :class="{
+            visible: !mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.visible,
+            'is-hovered': hoveredItemKey === `${String(groupKey)}-${localIndex}`,
+            'is-active': isActiveNavItem(link),
+          }"
           :style="{
             '--_main-navigation-item-width':
               mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
@@ -36,8 +54,10 @@
           :data-group-key="groupKey"
           :data-local-index="localIndex"
           role="none"
+          @mouseenter="hoveredItemKey = `${String(groupKey)}-${localIndex}`"
         >
           <ExpandingPanel
+            v-model="panelOpenStates[`${String(groupKey)}-${localIndex}`]"
             name="overflow-navigation-group"
             :animation-duration="DETAILS_ANIMATION_DURATION"
             icon-size="medium"
@@ -58,28 +78,36 @@
             </template>
             <template #content>
               <div class="overflow-navigation-sub-nav-inner">
-                <ul class="overflow-navigation-sub-nav-list">
+                <ul class="overflow-navigation-sub-nav-list" @mouseleave="hoveredChildKey = null">
                   <li
-                    v-for="childLink in link.childLinks"
+                    v-for="(childLink, childIndex) in link.childLinks"
                     :key="childLink.name"
                     class="overflow-navigation-sub-nav-item"
+                    :class="{
+                      'is-hovered': hoveredChildKey === `${String(groupKey)}-${localIndex}-${childIndex}`,
+                      'is-active': isActiveNavItem(childLink),
+                    }"
+                    @mouseenter="hoveredChildKey = `${String(groupKey)}-${localIndex}-${childIndex}`"
                   >
                     <NuxtLink :to="childLink.path" class="overflow-navigation-sub-nav-link" role="menuitem">
                       <span class="overflow-navigation-sub-nav-text">{{ childLink.name }}</span>
                     </NuxtLink>
                   </li>
                 </ul>
+                <div aria-hidden="true" class="overflow-sub-nav-indicator-hovered"></div>
               </div>
             </template>
           </ExpandingPanel>
         </li>
       </template>
     </ul>
+    <div aria-hidden="true" class="overflow-nav-indicator-hovered"></div>
+    <div aria-hidden="true" class="overflow-nav-indicator-active"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderState } from "../../types/components";
+import type { ResponsiveHeaderState, ResponsiveHeaderNavItem } from "../../types/components";
 
 interface Props {
   mainNavigationState?: ResponsiveHeaderState;
@@ -91,8 +119,38 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-// Performance: Use const assertion for static values
+const hoveredItemKey = ref<string | null>(null);
+const hoveredChildKey = ref<string | null>(null);
+
 const DETAILS_ANIMATION_DURATION = 200 as const;
+
+const panelOpenStates = reactive<Record<string, boolean>>({});
+const isPanelAnimating = ref(false);
+let panelAnimationTimer: ReturnType<typeof setTimeout> | null = null;
+
+watch(
+  panelOpenStates,
+  () => {
+    isPanelAnimating.value = true;
+    if (panelAnimationTimer) clearTimeout(panelAnimationTimer);
+    panelAnimationTimer = setTimeout(() => {
+      isPanelAnimating.value = false;
+    }, DETAILS_ANIMATION_DURATION);
+  },
+  { deep: true }
+);
+
+onUnmounted(() => {
+  if (panelAnimationTimer) clearTimeout(panelAnimationTimer);
+});
+
+const route = useRoute();
+
+const isActiveNavItem = (link: ResponsiveHeaderNavItem): boolean => {
+  if (link.path) return route.path === link.path;
+  if (link.childLinks) return link.childLinks.some((child) => child.path && route.path === child.path);
+  return false;
+};
 // const DETAILS_ANIMATION_DURATION_STRING = `${DETAILS_ANIMATION_DURATION}ms` as const;
 
 // Performance: Memoize expensive computed with proper dependencies
@@ -122,100 +180,120 @@ watch(
 
 <style lang="css">
 @layer components {
-.overflow-navigation-wrapper {
-  --overflow-nav-padding-inline: 0.8rem;
-  --overflow-nav-items-gap: 0px;
-  --overflow-nav-items-padding-block: 0.8rem;
-  display: flex;
-  flex-direction: column;
-  gap: var(--overflow-nav-items-gap);
+  .overflow-navigation-wrapper {
+    /* ─── Public CSS tokens ─────────────────────────────────────────────────
+       Override on the consumer's scope class to theme the overflow nav.
+       Tokens are read via var(--token, default) — defaults are NOT declared
+       on this element to avoid cascade conflicts with ancestor overrides.
 
-  .overflow-navigation-list {
-    display: none;
+       --overflow-nav-padding-inline         (default: 0.8rem)
+       --overflow-nav-items-gap              (default: 0px)
+       --overflow-nav-items-padding-block    (default: 0.8rem)
 
-    &.visible {
-      display: flex;
-      flex-direction: column;
-      gap: var(--overflow-nav-items-gap);
-      min-width: var(--_overflow-navigation-list-min-width, auto);
-    }
+       --overflow-nav-link-color             (default: inherit)
+       --overflow-nav-link-border-color      (default: #efefef75)
+       --overflow-nav-sub-item-color         (default: inherit)
+       --overflow-nav-sub-item-font-size     (default: inherit)
 
-    .overflow-navigation-item {
+       --overflow-nav-decorator-indicator-color         (default: currentColor)
+       --overflow-nav-decorator-hovered-indicator-color (default: inherits --overflow-nav-decorator-indicator-color)
+       --overflow-nav-decorator-hovered-bg              (default: oklch(100% 0 0 / 6%))
+    ──────────────────────────────────────────────────────────────────────── */
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--overflow-nav-items-gap, 0px);
+    position: relative;
+
+    .overflow-navigation-list {
       display: none;
 
       &.visible {
-        display: block;
-      }
-
-      .overflow-navigation-link {
-        text-decoration: none;
-        color: inherit;
-        padding-block: var(--overflow-nav-items-padding-block);
-        padding-inline: var(--overflow-nav-padding-inline);
         display: flex;
-        /* background-color: red; */
-        border-bottom: 0.1rem solid #efefef75;
+        flex-direction: column;
+        gap: var(--overflow-nav-items-gap, 0px);
+        min-width: var(--_overflow-navigation-list-min-width, auto);
       }
 
-      .overflow-navigation-details {
-        &.expanding-panel {
-          margin-block-end: 0;
+      .overflow-navigation-item {
+        display: none;
 
-          .expanding-panel-details {
-            .expanding-panel-summary {
-              padding-block: var(--overflow-nav-items-padding-block);
-              padding-inline: var(--overflow-nav-padding-inline);
-              gap: 1rem;
-              /* background-color: red; */
-              border-bottom: 0.1rem solid #efefef75;
+        &.visible {
+          display: block;
+        }
 
-              .label-wrapper {
-                .overflow-navigation-text {
-                  text-wrap: nowrap;
+        .overflow-navigation-link {
+          text-decoration: none;
+          color: var(--overflow-nav-link-color, inherit);
+          padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
+          padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
+          display: flex;
+          border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
+        }
+
+        .overflow-navigation-details {
+          &.expanding-panel {
+            margin-block-end: 0;
+
+            .expanding-panel-details {
+              .expanding-panel-summary {
+                padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
+                padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
+                gap: 1rem;
+                color: var(--overflow-nav-link-color, inherit);
+                border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
+
+                .label-wrapper {
+                  .overflow-navigation-text {
+                    text-wrap: nowrap;
+                  }
+                }
+                .icon-wrapper {
+                  padding: 0;
                 }
               }
-              .icon-wrapper {
-                padding: 0;
-              }
-            }
 
-            &[open] {
-              .expanding-panel-summary {
-                border-bottom: 0.1rem solid transparent;
-              }
-              + .expanding-panel-content {
-                border-bottom: 0.1rem solid #efefef75;
-                .inner {
-                  .overflow-navigation-sub-nav-inner {
-                    margin-top: var(--overflow-nav-items-gap);
+              &[open] {
+                .expanding-panel-summary {
+                  border-bottom: 0.1rem solid transparent;
+                }
+                + .expanding-panel-content {
+                  border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
+                  .inner {
+                    .overflow-navigation-sub-nav-inner {
+                      margin-top: var(--overflow-nav-items-gap, 0px);
+                    }
                   }
                 }
               }
             }
-          }
 
-          .expanding-panel-content {
-            border-bottom: 0.1rem solid transparent;
+            .expanding-panel-content {
+              border-bottom: 0.1rem solid transparent;
 
-            .inner {
-              margin-top: 0;
-
-              .overflow-navigation-sub-nav-inner {
+              .inner {
                 margin-top: 0;
 
-                .overflow-navigation-sub-nav-list {
-                  display: flex;
-                  flex-direction: column;
-                  gap: 2px;
+                .overflow-navigation-sub-nav-inner {
+                  margin-top: 0;
+                  position: relative;
 
-                  .overflow-navigation-sub-nav-item {
-                    padding-block: var(--overflow-nav-items-padding-block);
-                    padding-inline: var(--overflow-nav-padding-inline);
+                  .overflow-navigation-sub-nav-list {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2px;
 
-                    .overflow-navigation-sub-nav-link {
-                      display: block;
-                      text-decoration: none;
-                      color: inherit;
+                    .overflow-navigation-sub-nav-item {
+                      padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
+                      padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
+                      font-size: var(--overflow-nav-sub-item-font-size, inherit);
+                      color: var(--overflow-nav-sub-item-color, inherit);
+
+                      .overflow-navigation-sub-nav-link {
+                        display: block;
+                        text-decoration: none;
+                        color: inherit;
+                      }
                     }
                   }
                 }
@@ -226,6 +304,149 @@ watch(
       }
     }
   }
-}
+
+  /* Freeze all indicator transitions for the duration of a panel open/close animation
+     so the indicators snap to position rather than sliding through intermediate states. */
+  .overflow-navigation-wrapper.is-panel-animating .overflow-nav-indicator-hovered,
+  .overflow-navigation-wrapper.is-panel-animating .overflow-nav-indicator-active,
+  .overflow-navigation-wrapper.is-panel-animating .overflow-sub-nav-indicator-hovered {
+    transition: none;
+  }
+
+  /* ─── Anchor positioning for overflow-nav indicators ─────────────────────
+     Single --overflow-nav-indicator: sits on is-hovered, falls back to
+     is-active. Vertical list so indicators slide up/down rather than left/right.
+  ──────────────────────────────────────────────────────────────────────── */
+
+  /* Anchor to the inner row element, not the <li>, so an open submenu panel
+     doesn't stretch the indicator down into the expanded content. */
+
+  /* Plain link — hovered */
+  .overflow-navigation-wrapper
+    .overflow-navigation-item.is-hovered:not(:has(.overflow-navigation-details))
+    .overflow-navigation-link {
+    anchor-name: --overflow-nav-indicator;
+  }
+
+  /* Submenu — hovered: anchor to summary row only */
+  .overflow-navigation-wrapper
+    .overflow-navigation-item.is-hovered
+    .overflow-navigation-details
+    .expanding-panel-summary {
+    anchor-name: --overflow-nav-indicator;
+  }
+
+  /* Plain link — active (no hover) */
+  .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered))
+    .overflow-navigation-item.is-active:not(:has(.overflow-navigation-details))
+    .overflow-navigation-link {
+    anchor-name: --overflow-nav-indicator;
+  }
+
+  /* Submenu — active (no hover): anchor to summary row only */
+  .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered))
+    .overflow-navigation-item.is-active
+    .overflow-navigation-details
+    .expanding-panel-summary {
+    anchor-name: --overflow-nav-indicator;
+  }
+
+  .overflow-navigation-wrapper .overflow-nav-indicator-hovered,
+  .overflow-navigation-wrapper .overflow-nav-indicator-active {
+    display: none;
+    pointer-events: none;
+  }
+
+  .overflow-navigation-wrapper .overflow-nav-indicator-hovered {
+    display: block;
+    position: absolute;
+    position-anchor: --overflow-nav-indicator;
+    left: 0;
+    right: 0;
+    top: anchor(top);
+    bottom: anchor(bottom);
+    background: var(--overflow-nav-decorator-hovered-bg, oklch(100% 0 0 / 6%));
+    z-index: 1;
+    opacity: 0;
+    transition:
+      top 200ms ease-in-out,
+      bottom 200ms ease-in-out,
+      opacity 150ms ease;
+  }
+
+  .overflow-navigation-wrapper:has(.overflow-navigation-item.is-hovered) .overflow-nav-indicator-hovered {
+    opacity: 1;
+  }
+
+  .overflow-navigation-wrapper .overflow-nav-indicator-active {
+    display: block;
+    position: absolute;
+    position-anchor: --overflow-nav-indicator;
+    left: 0;
+    width: 2px;
+    top: anchor(top);
+    bottom: anchor(bottom);
+    background: var(--overflow-nav-decorator-indicator-color, currentColor);
+    z-index: 3;
+    transition:
+      top 200ms ease-in-out,
+      bottom 200ms ease-in-out;
+  }
+
+  /* When something is hovered the active bar tracks the hovered item — use hover colour. */
+  .overflow-navigation-wrapper:has(.overflow-navigation-item.is-hovered) .overflow-nav-indicator-active {
+    background: var(
+      --overflow-nav-decorator-hovered-indicator-color,
+      var(--overflow-nav-decorator-indicator-color, currentColor)
+    );
+  }
+
+  /* ─── Anchor positioning for sub-nav child indicators ────────────────────
+     Separate --overflow-sub-nav-indicator scoped to the inner wrapper so
+     parent and child indicators are fully independent.
+  ──────────────────────────────────────────────────────────────────────── */
+
+  .overflow-navigation-sub-nav-item.is-hovered {
+    anchor-name: --overflow-sub-nav-indicator;
+  }
+
+  .overflow-navigation-sub-nav-list:not(:has(.overflow-navigation-sub-nav-item.is-hovered))
+    .overflow-navigation-sub-nav-item.is-active {
+    anchor-name: --overflow-sub-nav-indicator;
+  }
+
+  .overflow-navigation-sub-nav-item.is-active {
+    border-inline-start: 2px solid var(--overflow-nav-decorator-indicator-color, currentColor);
+  }
+
+  .overflow-sub-nav-indicator-hovered {
+    /* pointer-events: none is critical — without it the indicator (z-index:1) sits
+       over the list items and swallows mouse events, clearing hoveredChildKey and
+       causing a flicker loop. */
+    pointer-events: none;
+    display: block;
+    position: absolute;
+    position-anchor: --overflow-sub-nav-indicator;
+    left: 0;
+    right: 0;
+    top: anchor(top);
+    bottom: anchor(bottom);
+    background: var(--overflow-nav-decorator-hovered-bg, oklch(100% 0 0 / 6%));
+    border-inline-start: 2px solid var(
+      --overflow-nav-decorator-hovered-indicator-color,
+      var(--overflow-nav-decorator-indicator-color, currentColor)
+    );
+    z-index: 1;
+    opacity: 0;
+    transition:
+      top 200ms ease-in-out,
+      bottom 200ms ease-in-out,
+      opacity 150ms ease;
+  }
+
+  .overflow-navigation-sub-nav-inner:has(.overflow-navigation-sub-nav-item.is-hovered)
+    .overflow-sub-nav-indicator-hovered {
+    opacity: 1;
+  }
 }
 </style>
