@@ -6,12 +6,7 @@
           <h1 class="page-heading-3">Simple Grid</h1>
           <p class="page-body-normal">Simple grid displaying dummy posts data</p>
 
-          <LayoutGridByWidth
-            v-if="status === 'success'"
-            column-width="300px"
-            gap="2rem"
-            :style-class-passthrough="['display-posts']"
-          >
+          <LayoutGridByWidth v-if="status === 'success'" column-width="300px" gap="2rem">
             <template v-for="(item, index) in postsData?.posts.slice(0, displayCount)" :key="item.id" #[item.id]>
               <div class="display-post-item">
                 <div>Views: {{ item.views }}</div>

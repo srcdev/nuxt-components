@@ -6,6 +6,7 @@
       :class="{ 'is-animated': isAnimated }"
       aria-label="Main navigation"
       @mouseleave="hoveredItemKey = null"
+      @focusout="handleNavFocusout"
     >
       <ul
         v-for="(navGroup, groupKey) in responsiveNavLinks"
@@ -197,6 +198,14 @@ const handleNavigationItemHover = (key: string) => {
     return;
   }
   closeAllNavigationDetails();
+};
+
+const handleNavFocusout = (event: FocusEvent) => {
+  // Only clear when focus moves outside the nav entirely, not between nav items.
+  const nav = event.currentTarget as HTMLElement;
+  if (!event.relatedTarget || !nav.contains(event.relatedTarget as Node)) {
+    hoveredItemKey.value = null;
+  }
 };
 
 const handleSummaryAction = (event: MouseEvent | KeyboardEvent) => {
@@ -462,46 +471,74 @@ onMounted(async () => {
   setupClickOutsideListeners();
 });
 
+// ─── Re-entrancy guard for the ResizeObserver callback ────────────────────
+// The observer fires an async callback that awaits multiple ticks and toggles
+// layout-affecting state. If the observer fires again while the first pass is
+// still in flight, two concurrent passes would race on isOverflowVisibleForMeasurement
+// and mainNavigationState.
+//
+// Pattern: "run-latest" queue.
+//   • isMeasuring gates entry — any new observer call while a pass is running
+//     sets pendingMeasure = true and returns immediately.
+//   • The do/while re-runs once after the pass completes if a new resize arrived,
+//     so we never silently drop the final geometry update.
+let isMeasuring = false;
+let pendingMeasure = false;
+
 useResizeObserver(navigationWrapperRef, async () => {
-  if (!isGeometryReady.value) {
-    // ─── Two-pass measurement on initial mount / route change ──────────────
-    //
-    // We never use a "peek" check to decide whether phase 2 is needed.
-    // A peek after phase 1 gives the wrong answer at the breakpoint because:
-    //   • updateNavigationConfig() sets secondaryNavRects reactively, but
-    //     v-bind(mainNavigationMarginBlockEndStr) isn't flushed to the DOM until
-    //     the next Vue render tick — so item rects are still measured against the
-    //     OLD margin, producing a stale DOM/computed mismatch.
-    //   • Even with correct timing, checking without the button reserved will
-    //     always pass marginal items (those that fit only when button is absent).
-    //
-    // Phase 1: button is 'visually-hidden' (width:0).
-    // Measure the wrapper and secondary-nav rects without the button.
-    await updateNavigationConfig("phase1");
+  if (isMeasuring) {
+    pendingMeasure = true;
+    return;
+  }
 
-    // Phase 2: switch button to 'is-measuring' — opacity:0 / visibility:hidden
-    // but natural width — so secondaryNavRects captures the button's real width.
-    // The button is invisible to the user; nav items are still visually-hidden.
-    isOverflowVisibleForMeasurement.value = true;
-    await nextTick(); // let Vue render the 'is-measuring' class (button at natural width)
-    await updateNavigationConfig("phase2"); // secondaryNavRects now includes button width
+  isMeasuring = true;
+  try {
+    do {
+      pendingMeasure = false;
 
-    // Wait for Vue to flush the updated mainNavigationMarginBlockEndStr via v-bind
-    // before reading item positions — without this tick, getBoundingClientRect()
-    // in initMainNavigationState would see the pre-phase-2 margin-inline-end.
-    await nextTick();
+      if (!isGeometryReady.value) {
+        // ─── Two-pass measurement on initial mount / route change ──────────────
+        //
+        // We never use a "peek" check to decide whether phase 2 is needed.
+        // A peek after phase 1 gives the wrong answer at the breakpoint because:
+        //   • updateNavigationConfig() sets secondaryNavRects reactively, but
+        //     v-bind(mainNavigationMarginBlockEndStr) isn't flushed to the DOM until
+        //     the next Vue render tick — so item rects are still measured against the
+        //     OLD margin, producing a stale DOM/computed mismatch.
+        //   • Even with correct timing, checking without the button reserved will
+        //     always pass marginal items (those that fit only when button is absent).
+        //
+        // Phase 1: button is 'visually-hidden' (width:0).
+        // Measure the wrapper and secondary-nav rects without the button.
+        await updateNavigationConfig("phase1");
 
-    // Final visibility pass — reads item rects against the correct margin.
-    // Also sets isGeometryReady = true.
-    initMainNavigationState();
-    // Hand control back to showOverflowDetails; measurement flag no longer needed.
-    isOverflowVisibleForMeasurement.value = false;
-  } else {
-    // ─── Normal resize after geometry is settled ───────────────────────────
-    // The button's state is already correct (driven by showOverflowDetails),
-    // so a single-pass measurement gives accurate secondaryNavRects.
-    await updateNavigationConfig("useResizeObserver");
-    initMainNavigationState();
+        // Phase 2: switch button to 'is-measuring' — opacity:0 / visibility:hidden
+        // but natural width — so secondaryNavRects captures the button's real width.
+        // The button is invisible to the user; nav items are still visually-hidden.
+        isOverflowVisibleForMeasurement.value = true;
+        await nextTick(); // let Vue render the 'is-measuring' class (button at natural width)
+        await updateNavigationConfig("phase2"); // secondaryNavRects now includes button width
+
+        // Wait for Vue to flush the updated mainNavigationMarginBlockEndStr via v-bind
+        // before reading item positions — without this tick, getBoundingClientRect()
+        // in initMainNavigationState would see the pre-phase-2 margin-inline-end.
+        await nextTick();
+
+        // Final visibility pass — reads item rects against the correct margin.
+        // Also sets isGeometryReady = true.
+        initMainNavigationState();
+        // Hand control back to showOverflowDetails; measurement flag no longer needed.
+        isOverflowVisibleForMeasurement.value = false;
+      } else {
+        // ─── Normal resize after geometry is settled ───────────────────────────
+        // The button's state is already correct (driven by showOverflowDetails),
+        // so a single-pass measurement gives accurate secondaryNavRects.
+        await updateNavigationConfig("useResizeObserver");
+        initMainNavigationState();
+      }
+    } while (pendingMeasure);
+  } finally {
+    isMeasuring = false;
   }
 });
 
