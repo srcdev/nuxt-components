@@ -109,6 +109,15 @@ export default defineNuxtConfig({
     // (avoids /_vercel/image which has no source images in storybook-static/)
     provider: process.env.STORYBOOK ? "none" : undefined,
   },
+  nitro: {
+    externals: {
+      // Nitro's dependency tracer only copies vue's CJS build but Node.js 22 (ESM)
+      // resolves the "import"+"node" export condition → ./index.mjs, which doesn't exist
+      // in the output. Inlining forces Nitro/Rollup to bundle Vue directly, avoiding the
+      // runtime resolution entirely.
+      inline: ["vue", "@vue/runtime-core", "@vue/runtime-dom", "@vue/reactivity", "@vue/shared", "@vue/server-renderer"],
+    },
+  },
   vite: {
     optimizeDeps: {
       include: ["@oddbird/css-anchor-positioning", "@vue/devtools-core", "@vue/devtools-kit", "vue-qrcode-reader"],

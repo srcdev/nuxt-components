@@ -104,15 +104,36 @@ When disabled, no `data-color-scheme` attribute is set on `<html>` and `useColou
 
 ---
 
-## Known Dev Server Warnings
+## Known Build / Production Issues
 
-### `[request error] [GET] http://localhost:3000/_nuxt/` (404)
+### `ERR_MODULE_NOT_FOUND: vue/index.mjs` — 500 on every request (Node 22)
 
-This error appears in the terminal when running `npm run dev` and is **harmless** — it does not affect dev server operation.
+**Symptom**: After `npm run build`, running `node .output/server/index.mjs` returns HTTP 500 on every page. The terminal shows:
 
-**Cause**: The Vue/Nuxt browser DevTools extension probes `/_nuxt/` to detect if the page is a Nuxt app. Since `/_nuxt/` is a directory (not a file), the server returns 404 and logs it.
+```text
+Error [ERR_MODULE_NOT_FOUND]: Cannot find module
+  '.output/server/node_modules/vue/index.mjs'
+Did you mean to import
+  '.output/server/node_modules/.nitro/vue@3.5.34/dist/vue.cjs.prod.js'?
+```
 
-**Resolution**: It cannot be suppressed without disabling the browser extension. Since the DevTools extension is useful for inspecting Pinia stores and component state, the recommended approach is to ignore this warning.
+**Root cause**: Nitro's dependency tracer externalises `vue` and copies it to `.output/server/node_modules/vue/`, but only traces the CJS build (`dist/vue.cjs.prod.js`). Vue's `package.json` exports map resolves the `"import"` + `"node"` condition (used by Node 22 when importing from an ES module) to `./index.mjs` — a file that was never copied. This is a Nitro tracing bug exposed by Node 22's stricter ESM condition matching, made more likely by `vue.runtimeCompiler: true` (which changes how Nuxt aliases Vue at build time, causing Nitro to fall back to externalising it as a node_modules package).
+
+**Fix** (already applied in this repo's `nuxt.config.ts`):
+
+```ts
+nitro: {
+  externals: {
+    inline: ["vue", "@vue/runtime-core", "@vue/runtime-dom", "@vue/reactivity", "@vue/shared", "@vue/server-renderer"],
+  },
+},
+```
+
+This tells Nitro to bundle these packages inline rather than externalise them, which sidesteps the runtime resolution entirely.
+
+**Consumer apps**: This config is not gated behind `isStandalone`, so it is inherited automatically by any app that extends this layer. No consumer-side action is required.
+
+**When it's safe to remove**: If a future Nitro release fixes the dependency tracer so that all export-condition files are copied correctly, the `inline` list can be removed. Verify by checking that `.output/server/node_modules/vue/index.mjs` exists after a clean build without the config.
 
 ---
 
