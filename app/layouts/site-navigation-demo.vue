@@ -103,15 +103,16 @@ const navItemData: NavItemData = {
   grid-template-columns: repeat(3, 1fr);
   gap: 1.6rem;
 
-  &--wide {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   @media (max-width: 600px) {
     grid-template-columns: repeat(2, 1fr);
-    &--wide {
-      grid-template-columns: 1fr;
-    }
+  }
+}
+
+.snav-demo-grid--wide {
+  grid-template-columns: repeat(2, 1fr);
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -131,29 +132,29 @@ const navItemData: NavItemData = {
   align-items: start;
   margin-block-end: 4rem;
 
-  &__text {
-    h2,
-    h3 {
-      margin-block-start: 2.4rem;
-    }
-    p {
-      line-height: 1.6;
-      margin-block-end: 1.6rem;
-    }
-  }
-
-  &__img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
-    border-radius: 0.4rem;
-    display: block;
-  }
-
   @media (max-width: 650px) {
     grid-template-columns: 1fr;
   }
+}
+
+.snav-demo-split__text {
+  h2,
+  h3 {
+    margin-block-start: 2.4rem;
+  }
+  p {
+    line-height: 1.6;
+    margin-block-end: 1.6rem;
+  }
+}
+
+.snav-demo-split__img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 0.4rem;
+  display: block;
 }
 
 .snav-demo-services {
@@ -170,17 +171,18 @@ const navItemData: NavItemData = {
   border-radius: 0.8rem;
   overflow: hidden;
   background: oklch(100% 0 0 / 5%);
+}
 
-  &__body {
-    padding: 1.6rem;
-    h3 {
-      margin-block-end: 0.8rem;
-    }
-    p {
-      font-size: 1.4rem;
-      line-height: 1.6;
-      opacity: 0.8;
-    }
+.snav-demo-service-card__body {
+  padding: 1.6rem;
+
+  h3 {
+    margin-block-end: 0.8rem;
+  }
+  p {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    opacity: 0.8;
   }
 }
 </style>

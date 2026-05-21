@@ -33,6 +33,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── component-dynamic-slots.md        — named dynamic slots ($slots iteration) vs indexed dynamic slots (itemCount pattern)
 ├── component-local-style-override.md — styleClassPassthrough + scoped style block for per-usage visual customisation
 ├── component-prop-driven-container-layout.md — vary CSS grid layout inside @container queries using data-* attribute selectors
+├── css-nesting-conventions.md                — native CSS nesting rules: why &__child Sass BEM concatenation silently breaks, correct patterns
 ├── css-grid-max-width-gutters.md             — cap a centre grid column width by growing gutters, with start/center alignment variants
 ├── css-animation-utilities.md                — scroll-driven animation utility classes: scroller-x (carousel), entry-zoom-reveal, entry-slide-in, entry-exit-blur, auto-rotate
 ├── component-aria-landmark.md        — useAriaLabelledById composable: aria-labelledby for section/main/article/aside tags
@@ -44,6 +45,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── new-app-scaffold.md               — scaffold a new Nuxt consumer app extending this layer (package.json, nuxt.config, app structure, CLAUDE.md)
 ├── qa-panel.md                       — collapsible dev-only panel for toggling component props live on a page (demo pages and consuming apps)
 ├── release-notes.md                  — produce release notes as a fenced markdown block from git log
+├── pull-request-description.md       — produce a PR description as a fenced markdown block from git diff vs main
 ├── composable-canonical-url.md       — useCanonicalUrl: set <link rel="canonical"> from runtimeConfig.public.canonicalHost; layout setup, node types
 ├── composable-whatsapp.md            — useWhatsApp: open pre-filled wa.me link from form payload; runtime config, security, usage
 ├── composable-zod-validation.md      — useZodValidation: schema-driven form validation, error binding, submit flow, API error push

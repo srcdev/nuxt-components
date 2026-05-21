@@ -178,7 +178,7 @@ const highlightsJustifyData = ref<IFormMultipleOptions>({
     border-radius: 0.8rem;
     background: var(--slate-01);
 
-    &__heading {
+    .demo-controls__heading {
       font-size: 1.1rem;
       font-weight: 600;
       text-transform: uppercase;
@@ -187,14 +187,14 @@ const highlightsJustifyData = ref<IFormMultipleOptions>({
       margin-block-end: 1.2rem;
     }
 
-    &__toggles {
+    .demo-controls__toggles {
       display: flex;
       flex-wrap: wrap;
       gap: 0.4rem 2.4rem;
       margin-block-end: 1.6rem;
     }
 
-    &__selects {
+    .demo-controls__selects {
       display: flex;
       flex-direction: column;
       gap: 0.8rem;

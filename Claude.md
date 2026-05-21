@@ -301,6 +301,7 @@ See `.claude/skills/storybook-add-font.md` for the step-by-step process to add a
 8. **Incorrect type casting**: Use `as unknown as CustomType` for component instances
 9. **Unmocked browser APIs**: Always mock ResizeObserver, IntersectionObserver, etc.
 10. **Missing DOM element casting**: Cast to HTMLElement when accessing style properties
+11. **Sass-style BEM nesting in native CSS**: Never use `&__child` or `&-modifier` concatenation — this is Sass syntax and does not work in native CSS. esbuild silently converts `&__foo` to `:is(__foo)` which matches nothing. Use `& .block__child` (descendant selector) or a top-level `.block__child {}` rule instead. See `.claude/skills/css-nesting-conventions.md`.
 
 ## Development Workflow
 
