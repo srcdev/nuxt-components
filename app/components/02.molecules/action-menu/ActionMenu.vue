@@ -37,16 +37,19 @@
 
 <script setup lang="ts">
 interface Props {
-  itemCount?: number;
   label?: string;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  itemCount: 0,
   label: "Open actions menu",
   styleClassPassthrough: () => [],
 });
+
+const slots = useSlots();
+const itemCount = computed(() =>
+  Object.keys(slots).filter((name) => /^item-\d+$/.test(name)).length
+);
 
 const id = useId();
 const menuId = `action-menu-${id}`;

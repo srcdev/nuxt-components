@@ -16,7 +16,7 @@ exports[`ActionMenu > Snapshots > with custom label 1`] = `
 </div>"
 `;
 
-exports[`ActionMenu > Snapshots > with itemCount and slot content 1`] = `
+exports[`ActionMenu > Snapshots > with slot content 1`] = `
 "<div class="action-menu" style="--_anchor-name: --action-menu-anchor-v-0-0;"><button popovertarget="action-menu-v-0-0" popovertargetaction="toggle" type="button" class="action-menu-trigger" aria-label="Open actions menu" aria-haspopup="menu"><span class="iconify i-lucide:ellipsis action-menu-trigger-icon" aria-hidden="true"></span></button>
   <div id="action-menu-v-0-0" popover="" class="action-menu-popover">
     <ul class="action-menu-list" role="menu" aria-label="Open actions menu">

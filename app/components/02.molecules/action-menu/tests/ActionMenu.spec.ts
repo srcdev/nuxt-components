@@ -54,9 +54,9 @@ describe("ActionMenu", () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it("with itemCount and slot content", async () => {
+    it("with slot content", async () => {
       wrapper = await createWrapper(
-        { itemCount: 2 },
+        {},
         {
           "item-0": '<button role="menuitem">Edit</button>',
           "item-1": '<button role="menuitem">Delete</button>',
@@ -149,18 +149,31 @@ describe("ActionMenu", () => {
   // Dynamic item slots
   // -------------------------
   describe("Dynamic item slots", () => {
-    it("renders zero list items when itemCount is 0 (default)", async () => {
+    it("renders zero list items when no slots are provided", async () => {
       wrapper = await createWrapper();
       expect(wrapper.findAll(".action-menu-list-item")).toHaveLength(0);
     });
 
-    it("renders correct number of list items from itemCount", async () => {
-      wrapper = await createWrapper({ itemCount: 3 });
+    it("renders the correct number of list items from provided slots", async () => {
+      wrapper = await createWrapper(
+        {},
+        {
+          "item-0": '<button role="menuitem">A</button>',
+          "item-1": '<button role="menuitem">B</button>',
+          "item-2": '<button role="menuitem">C</button>',
+        }
+      );
       expect(wrapper.findAll(".action-menu-list-item")).toHaveLength(3);
     });
 
     it("each list item has role='none'", async () => {
-      wrapper = await createWrapper({ itemCount: 2 });
+      wrapper = await createWrapper(
+        {},
+        {
+          "item-0": '<button role="menuitem">A</button>',
+          "item-1": '<button role="menuitem">B</button>',
+        }
+      );
       const items = wrapper.findAll(".action-menu-list-item");
       items.forEach((item) => {
         expect(item.attributes("role")).toBe("none");
@@ -169,7 +182,7 @@ describe("ActionMenu", () => {
 
     it("renders slot content inside the correct list item", async () => {
       wrapper = await createWrapper(
-        { itemCount: 2 },
+        {},
         {
           "item-0": '<span data-testid="item-zero">First</span>',
           "item-1": '<span data-testid="item-one">Second</span>',
@@ -204,7 +217,7 @@ describe("ActionMenu", () => {
   describe("closeMenu", () => {
     it("calls hidePopover on the popover element when a list item is clicked", async () => {
       wrapper = await createWrapper(
-        { itemCount: 1 },
+        {},
         { "item-0": '<button role="menuitem">Action</button>' }
       );
       const listItem = wrapper.find(".action-menu-list-item");
@@ -222,7 +235,7 @@ describe("ActionMenu", () => {
   describe("handleToggle focus management", () => {
     it("focuses the first menuitem when the popover opens", async () => {
       wrapper = await createWrapper(
-        { itemCount: 1 },
+        {},
         { "item-0": '<button role="menuitem" data-testid="first-item">Action</button>' }
       );
 
@@ -257,7 +270,7 @@ describe("ActionMenu", () => {
      */
     const mountWithItems = async () => {
       const w = await mountSuspended(ActionMenu, {
-        props: { itemCount: 3, label: "Actions" },
+        props: { label: "Actions" },
         slots: {
           "item-0": '<button role="menuitem" data-idx="0">First</button>',
           "item-1": '<button role="menuitem" data-idx="1">Second</button>',
@@ -392,7 +405,7 @@ describe("ActionMenu", () => {
     });
 
     it("does nothing when there are no menuitems", async () => {
-      const w = await mountSuspended(ActionMenu, { props: { itemCount: 0 } });
+      const w = await mountSuspended(ActionMenu, { props: {} });
       const vm = w.vm as unknown as ActionMenuInstance;
       expect(() =>
         vm.handleKeydown(new KeyboardEvent("keydown", { key: "ArrowDown" }))
@@ -407,7 +420,7 @@ describe("ActionMenu", () => {
   describe("closeMenu — focus return", () => {
     it("returns focus to the trigger button after closing", async () => {
       wrapper = await mountSuspended(ActionMenu, {
-        props: { itemCount: 1 },
+        props: {},
         slots: { "item-0": '<button role="menuitem">Action</button>' },
       });
       const triggerEl = wrapper.find(".action-menu-trigger").element as HTMLElement;

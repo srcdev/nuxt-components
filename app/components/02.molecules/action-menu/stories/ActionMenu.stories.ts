@@ -5,13 +5,19 @@ import ActionMenuItemCore from "../ActionMenuItemCore.vue";
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 
-const meta: Meta<typeof ActionMenu> = {
+interface StoryArgs {
+  itemCount?: number;
+  label?: string;
+  styleClassPassthrough?: string | string[];
+}
+
+const meta: Meta<StoryArgs> = {
   title: "Molecules/ActionMenu",
   component: ActionMenu,
   argTypes: {
     itemCount: {
       control: { type: "number", min: 0, max: 8, step: 1 },
-      description: "Number of `item-{n}` slots to render",
+      description: "Number of items to show (story control — not a component prop)",
       table: { category: "Content" },
     },
     label: {
@@ -42,7 +48,7 @@ const meta: Meta<typeof ActionMenu> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ActionMenu>;
+type Story = StoryObj<StoryArgs>;
 
 // ─── Shared data ──────────────────────────────────────────────────────────────
 
@@ -68,18 +74,19 @@ export const Default: Story = {
   render: (args) => ({
     components: { ActionMenu, ActionMenuItemCore },
     setup() {
+      const { itemCount, ...componentArgs } = args;
       const lastAction = ref<string | null>(null);
       const items = computed(() =>
-        actionItems.slice(0, args.itemCount ?? 5).map((item, i) => ({
+        actionItems.slice(0, itemCount ?? 5).map((item, i) => ({
           ...item,
           slotName: `item-${i}`,
         }))
       );
-      return { args, items, lastAction };
+      return { componentArgs, items, lastAction };
     },
     template: `
       <div style="padding: 4rem 8rem; display: flex; flex-direction: column; align-items: flex-end; gap: 2rem;">
-        <ActionMenu v-bind="args">
+        <ActionMenu v-bind="componentArgs">
           <template v-for="item in items" :key="item.slotName" #[item.slotName]>
             <ActionMenuItemCore :label="item.label" @click="lastAction = item.label">
               <template #icon>
@@ -103,7 +110,6 @@ export const Default: Story = {
 export const MixedItems: Story = {
   name: "Mixed — Buttons and Links",
   args: {
-    itemCount: 4,
     label: "Record actions",
   },
   render: (args) => ({
@@ -145,9 +151,7 @@ export const MixedItems: Story = {
  */
 export const NoIcons: Story = {
   name: "No Icons",
-  args: {
-    itemCount: 3,
-  },
+  args: {},
   render: (args) => ({
     components: { ActionMenu, ActionMenuItemCore },
     setup() {
@@ -179,7 +183,6 @@ export const NoIcons: Story = {
 export const InContext: Story = {
   name: "In Context — Data Row",
   args: {
-    itemCount: 4,
     label: "User actions",
   },
   render: (args) => ({
@@ -264,9 +267,7 @@ export const InContext: Story = {
  */
 export const ItemCoreStandalone: Story = {
   name: "ActionMenuItemCore — Standalone",
-  args: {
-    itemCount: 3,
-  },
+  args: {},
   render: () => ({
     components: { ActionMenuItemCore },
     setup() {

@@ -94,7 +94,6 @@ visual style, pass a modifier class:
 
 ```vue
 <ActionMenu
-  :item-count="3"
   :style-class-passthrough="['danger-actions']"
 >
   ...
