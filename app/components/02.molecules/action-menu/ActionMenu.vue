@@ -21,13 +21,7 @@
       @keydown="handleKeydown"
     >
       <ul class="action-menu-list" role="menu" :aria-label="label">
-        <li
-          v-for="n in itemCount"
-          :key="n - 1"
-          class="action-menu-list-item"
-          role="none"
-          @click="closeMenu"
-        >
+        <li v-for="n in itemCount" :key="n - 1" class="action-menu-list-item" role="none" @click="closeMenu">
           <slot :name="`item-${n - 1}`"></slot>
         </li>
       </ul>
@@ -47,9 +41,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
-const itemCount = computed(() =>
-  Object.keys(slots).filter((name) => /^item-\d+$/.test(name)).length
-);
+const itemCount = computed(() => Object.keys(slots).filter((name) => /^item-\d+$/.test(name)).length);
 
 const id = useId();
 const menuId = `action-menu-${id}`;
@@ -129,17 +121,17 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     --_trigger-size: var(--action-menu-trigger-size, 3.2rem);
     --_trigger-border-radius: var(--action-menu-trigger-border-radius, var(--button-border-radius-icon-only, 50%));
     --_trigger-surface: var(--action-menu-trigger-surface, transparent);
-    --_trigger-surface-hover: var(--action-menu-trigger-surface-hover, light-dark(var(--slate-01), var(--slate-09)));
+    --_trigger-surface-hover: var(--action-menu-trigger-surface-hover, var(--slate-01));
     --_trigger-icon-size: var(--action-menu-trigger-icon-size, 2rem);
-    --_trigger-icon-color: var(--action-menu-trigger-icon-color, light-dark(var(--slate-07), var(--slate-03)));
+    --_trigger-icon-color: var(--action-menu-trigger-icon-color, var(--slate-07));
 
-    --_popover-background: var(--action-menu-popover-background, light-dark(var(--slate-00), var(--slate-10)));
-    --_popover-border: var(--action-menu-popover-border, 0.1rem solid light-dark(var(--slate-03), var(--slate-07)));
+    --_popover-background: var(--action-menu-popover-background, var(--slate-00));
+    --_popover-border: var(--action-menu-popover-border, 0.1rem solid var(--slate-03));
     --_popover-border-radius: var(--action-menu-popover-border-radius, 0.8rem);
     --_popover-min-width: var(--action-menu-popover-min-width, 20rem);
-    --_popover-shadow: var(--action-menu-popover-shadow, 0 0.4rem 1.6rem light-dark(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)));
+    --_popover-shadow: var(--action-menu-popover-shadow, 0 0.4rem 1.6rem rgba(0, 0, 0, 0.1));
     --_popover-transition-duration: var(--action-menu-popover-transition-duration, 200ms);
-    --_item-divider: var(--action-menu-item-divider, 0.1rem solid light-dark(var(--slate-02), var(--slate-08)));
+    --_item-divider: var(--action-menu-item-divider, 0.1rem solid var(--slate-02));
 
     position: relative;
     display: inline-block;

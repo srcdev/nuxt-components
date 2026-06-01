@@ -94,7 +94,7 @@ Counter bubbles are rendered automatically via CSS — no `#indicator-*` slots n
 </StepperList>
 ```
 
-Custom indicator SVGs should use the `indicator-icon` class — it applies `color: var(--stepper-list-icon)` and sizes the icon to match `indicatorSize`.
+Custom indicator SVGs should use the `indicator-icon` class — it applies `color: var(--stepper-list-icon-color)` and sizes the icon to match `indicatorSize`.
 
 ### Mixed — custom icons for completed steps, counters for pending
 
@@ -146,21 +146,44 @@ Custom indicator SVGs should use the `indicator-icon` class — it applies `colo
 
 ## CSS custom properties
 
-Override these in your consuming component or theme to restyle the indicators and connectors:
+All `--stepper-list-*` tokens are the stable consumer override surface. See
+[CONSUMER-STYLING.md](../../../app/components/02.molecules/stepper-list/CONSUMER-STYLING.md)
+for full examples (global theming, page-scoped, and per-instance overrides).
 
-| Property | Used by |
-|----------|---------|
-| `--stepper-list-counter-disc-background` | Disc variant counter bubble background |
-| `--stepper-list-counter-disc-text` | Disc variant counter number colour |
-| `--stepper-list-counter-disc-border` | Disc variant counter border colour |
-| `--stepper-list-counter-circle-background` | Circle variant counter bubble background |
-| `--stepper-list-counter-circle-text` | Circle variant counter number colour |
-| `--stepper-list-counter-circle-border` | Circle variant counter border colour |
-| `--stepper-list-counter-square-background` | Square variant counter bubble background |
-| `--stepper-list-counter-square-text` | Square variant counter number colour |
-| `--stepper-list-counter-square-border` | Square variant counter border colour |
-| `--stepper-list-connector-color` | Connector line colour (defaults to `currentColor`) |
-| `--stepper-list-icon` | Icon colour for custom `indicator-icon` SVGs |
+### Layout & sizing
+
+| Token | Default | Controls |
+|---|---|---|
+| `--stepper-list-padding-block` | `1.2rem` | Vertical padding for each list item |
+| `--stepper-list-gap` | `2.2rem` | Horizontal gap between indicator and content |
+| `--stepper-list-counter-size` | prop `indicatorSize` (`3rem`) | Counter bubble / icon width and height |
+| `--stepper-list-counter-font-size` | `1.4rem` | Counter number font size |
+| `--stepper-list-counter-font-weight` | `600` | Counter number font weight |
+| `--stepper-list-connector-width` | `0.2rem` | Connector line thickness |
+
+### Colours
+
+| Token | Default | Controls |
+|---|---|---|
+| `--stepper-list-connector-color` | `currentColor` | Connector line colour |
+| `--stepper-list-icon-color` | `currentColor` | Icon colour for custom `indicator-icon` elements |
+
+### Per-variant tokens
+
+| Token | Default | Controls |
+|---|---|---|
+| `--stepper-list-counter-circle-background` | `transparent` | Circle bubble fill |
+| `--stepper-list-counter-circle-text` | `currentColor` | Circle counter number colour |
+| `--stepper-list-counter-circle-border` | `currentColor` | Circle bubble border colour |
+| `--stepper-list-counter-circle-border-radius` | `100vw` | Circle bubble corner rounding |
+| `--stepper-list-counter-disc-background` | `transparent` | Disc bubble fill |
+| `--stepper-list-counter-disc-text` | `currentColor` | Disc counter number colour |
+| `--stepper-list-counter-disc-border` | `transparent` | Disc bubble border colour |
+| `--stepper-list-counter-disc-border-radius` | `100vw` | Disc bubble corner rounding |
+| `--stepper-list-counter-square-background` | `transparent` | Square bubble fill |
+| `--stepper-list-counter-square-text` | `currentColor` | Square counter number colour |
+| `--stepper-list-counter-square-border` | `transparent` | Square bubble border colour |
+| `--stepper-list-counter-square-border-radius` | `0.25rem` | Square bubble corner rounding |
 
 ---
 
@@ -192,23 +215,34 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
    ─────────────────────────────────────────────────────────────────── */
 .stepper-list {
   &.my-stepper {
+    /* Layout & sizing */
+    /* --stepper-list-padding-block: 1.2rem; */
+    /* --stepper-list-gap: 2.2rem; */
+    /* --stepper-list-counter-size: 3rem; */
+    /* --stepper-list-counter-font-size: 1.4rem; */
+    /* --stepper-list-counter-font-weight: 600; */
+    /* --stepper-list-connector-width: 0.2rem; */
+
     /* Counter bubble — disc variant */
     /* --stepper-list-counter-disc-background: var(--brand-primary); */
     /* --stepper-list-counter-disc-text: white; */
     /* --stepper-list-counter-disc-border: transparent; */
+    /* --stepper-list-counter-disc-border-radius: 100vw; */
 
     /* Counter bubble — circle variant */
     /* --stepper-list-counter-circle-background: transparent; */
     /* --stepper-list-counter-circle-text: var(--brand-primary); */
     /* --stepper-list-counter-circle-border: var(--brand-primary); */
+    /* --stepper-list-counter-circle-border-radius: 100vw; */
 
     /* Counter bubble — square variant */
     /* --stepper-list-counter-square-background: var(--brand-primary); */
     /* --stepper-list-counter-square-text: white; */
     /* --stepper-list-counter-square-border: transparent; */
+    /* --stepper-list-counter-square-border-radius: 0.25rem; */
 
     /* Custom indicator icon colour */
-    /* --stepper-list-icon: var(--brand-primary); */
+    /* --stepper-list-icon-color: var(--brand-primary); */
 
     /* Connector line */
     /* --stepper-list-connector-color: var(--brand-primary); */
@@ -223,5 +257,5 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 
 - Always keep `itemCount` in sync with the number of `#item-*` slots you provide — mismatches will render empty `<li>` rows.
 - Slot names are **zero-indexed** — `#item-0` not `#item-1`.
-- The `indicator-icon` class is defined inside the component CSS and sizes the SVG to `var(--_counter-size)` (driven by `indicatorSize`). Always add it to custom SVGs.
+- The `indicator-icon` class is defined inside the component CSS and sizes the SVG to `var(--_counter-size)` (driven by `indicatorSize` or `--stepper-list-counter-size`). Always add it to custom SVGs.
 - Auto-imported in Nuxt — no manual import needed.

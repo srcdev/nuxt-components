@@ -100,9 +100,35 @@ watch(
 <style lang="css">
 @layer components {
   .stepper-list {
-    --_list-padding-block: 1.2rem;
-    --_counter-size: v-bind(indicatorSize);
-    --_stepper-list-connector-width: 0.2rem;
+    /* Layout */
+    --_padding-block: var(--stepper-list-padding-block, 1.2rem);
+    --_gap: var(--stepper-list-gap, 2.2rem);
+    --_counter-size: var(--stepper-list-counter-size, v-bind(indicatorSize));
+    --_counter-font-size: var(--stepper-list-counter-font-size, 1.4rem);
+    --_counter-font-weight: var(--stepper-list-counter-font-weight, 600);
+    --_connector-width: var(--stepper-list-connector-width, 0.2rem);
+
+    /* Colours */
+    --_connector-color: var(--stepper-list-connector-color, currentColor);
+    --_icon-color: var(--stepper-list-icon-color, currentColor);
+
+    /* Circle indicator */
+    --_counter-circle-background: var(--stepper-list-counter-circle-background, transparent);
+    --_counter-circle-text: var(--stepper-list-counter-circle-text, currentColor);
+    --_counter-circle-border-color: var(--stepper-list-counter-circle-border, currentColor);
+    --_counter-circle-border-radius: var(--stepper-list-counter-circle-border-radius, 100vw);
+
+    /* Disc indicator */
+    --_counter-disc-background: var(--stepper-list-counter-disc-background, transparent);
+    --_counter-disc-text: var(--stepper-list-counter-disc-text, currentColor);
+    --_counter-disc-border-color: var(--stepper-list-counter-disc-border, transparent);
+    --_counter-disc-border-radius: var(--stepper-list-counter-disc-border-radius, 100vw);
+
+    /* Square indicator */
+    --_counter-square-background: var(--stepper-list-counter-square-background, transparent);
+    --_counter-square-text: var(--stepper-list-counter-square-text, currentColor);
+    --_counter-square-border-color: var(--stepper-list-counter-square-border, transparent);
+    --_counter-square-border-radius: var(--stepper-list-counter-square-border-radius, 0.25rem);
 
     list-style: none;
     counter-reset: stepper-list;
@@ -111,10 +137,10 @@ watch(
     li {
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 2.2rem;
+      gap: var(--_gap);
       counter-increment: stepper-list;
       padding-inline-start: 0rem;
-      padding-block: var(--_list-padding-block);
+      padding-block: var(--_padding-block);
       position: relative;
 
       &.indicator-top {
@@ -132,29 +158,29 @@ watch(
         place-content: center;
         width: var(--_counter-size);
         height: var(--_counter-size);
-        font-size: 1.4rem;
-        font-weight: 600;
+        font-size: var(--_counter-font-size);
+        font-weight: var(--_counter-font-weight);
       }
 
       &.indicator-circle .stepper-list__indicator-counter::before {
-        background-color: var(--stepper-list-counter-circle-background);
-        color: var(--stepper-list-counter-circle-text);
-        border: 2px solid var(--stepper-list-counter-circle-border);
-        border-radius: 100vw;
+        background-color: var(--_counter-circle-background);
+        color: var(--_counter-circle-text);
+        border: 2px solid var(--_counter-circle-border-color);
+        border-radius: var(--_counter-circle-border-radius);
       }
 
       &.indicator-disc .stepper-list__indicator-counter::before {
-        background-color: var(--stepper-list-counter-disc-background);
-        color: var(--stepper-list-counter-disc-text);
-        border: 2px solid var(--stepper-list-counter-disc-border);
-        border-radius: 100vw;
+        background-color: var(--_counter-disc-background);
+        color: var(--_counter-disc-text);
+        border: 2px solid var(--_counter-disc-border-color);
+        border-radius: var(--_counter-disc-border-radius);
       }
 
       &.indicator-square .stepper-list__indicator-counter::before {
-        background-color: var(--stepper-list-counter-square-background);
-        color: var(--stepper-list-counter-square-text);
-        border: 2px solid var(--stepper-list-counter-square-border);
-        border-radius: 0.25rem;
+        background-color: var(--_counter-square-background);
+        color: var(--_counter-square-text);
+        border: 2px solid var(--_counter-square-border-color);
+        border-radius: var(--_counter-square-border-radius);
       }
 
       &.has-indicator::before {
@@ -172,7 +198,7 @@ watch(
         justify-content: center;
 
         .indicator-icon {
-          color: var(--stepper-list-icon);
+          color: var(--_icon-color);
           width: var(--_counter-size) !important;
           height: var(--_counter-size) !important;
         }
@@ -187,11 +213,11 @@ watch(
     transform: translateX(-50%);
     /* JS sets --_connector-top and --_connector-height from measured indicator positions.
      The fallback values handle the indicator-top case before JS runs. */
-    top: var(--_connector-top, calc(var(--_list-padding-block) + var(--_counter-size)));
+    top: var(--_connector-top, calc(var(--_padding-block) + var(--_counter-size)));
     height: var(--_connector-height, auto);
-    bottom: calc(-1 * var(--_list-padding-block));
-    width: var(--_stepper-list-connector-width);
-    background-color: var(--stepper-list-connector-color, currentColor);
+    bottom: calc(-1 * var(--_padding-block));
+    width: var(--_connector-width);
+    background-color: var(--_connector-color);
   }
 }
 </style>
