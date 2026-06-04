@@ -1,5 +1,10 @@
 <template>
-  <div ref="navigationWrapper" class="navigation" :class="[elementClasses, { loaded: navLoaded, 'geometry-ready': isGeometryReady }]" role="banner">
+  <div
+    ref="navigationWrapper"
+    class="navigation"
+    :class="[elementClasses, { loaded: navLoaded, 'geometry-ready': isGeometryReady }]"
+    role="banner"
+  >
     <nav
       ref="mainNav"
       class="main-navigation"
@@ -737,6 +742,7 @@ watch(
 
             .main-navigation-sub-nav {
               position: absolute;
+
               padding: var(--responsive-header-sub-nav-padding, 12px);
               border: var(--responsive-header-sub-nav-border, 1px solid #efefef75);
               border-radius: var(--responsive-header-sub-nav-border-radius, 8px);
@@ -971,58 +977,58 @@ watch(
     pointer-events: none;
   }
 
-  .main-navigation .nav-indicator-hovered {
-    display: block;
-    position: absolute;
-    position-anchor: --responsive-main-nav-indicator;
-    left: anchor(left);
-    right: anchor(right);
-    top: anchor(top);
-    bottom: anchor(bottom);
-    background: var(--responsive-nav-decorator-hovered-bg, oklch(100% 0 0 / 8%));
-    border-radius: 4px;
-    z-index: 1;
-    opacity: 0;
-    transition:
-      left 200ms ease,
-      right 200ms ease,
-      opacity 150ms ease;
-  }
+  .main-navigation {
+    .nav-indicator-hovered {
+      display: block;
+      position: absolute;
+      position-anchor: --responsive-main-nav-indicator;
+      left: anchor(left);
+      right: anchor(right);
+      top: anchor(top);
+      bottom: anchor(bottom);
+      background: var(--responsive-nav-decorator-hovered-bg, oklch(100% 0 0 / 8%));
+      border-radius: 4px;
+      z-index: 1;
+      opacity: 0;
+      transition:
+        left 200ms ease,
+        right 200ms ease,
+        opacity 150ms ease;
+    }
 
-  .main-navigation:not(.is-animated) .nav-indicator-hovered {
-    transition: none;
-  }
+    &:not(.is-animated) .nav-indicator-hovered {
+      transition: none;
+    }
 
-  .main-navigation:has(li.is-hovered) .nav-indicator-hovered {
-    opacity: 1;
-  }
+    &:has(li.is-hovered) .nav-indicator-hovered {
+      opacity: 1;
+    }
 
-  .main-navigation .nav-indicator-active {
-    display: block;
-    position: absolute;
-    position-anchor: --responsive-main-nav-indicator;
-    left: anchor(left);
-    right: anchor(right);
-    bottom: 0;
-    height: 2px;
-    background: var(--responsive-nav-decorator-indicator-color, currentColor);
-    z-index: 3;
-    transition:
-      left 200ms ease,
-      right 200ms ease;
-  }
+    .nav-indicator-active {
+      display: block;
+      position: absolute;
+      position-anchor: --responsive-main-nav-indicator;
+      left: anchor(left);
+      right: anchor(right);
+      bottom: calc(anchor(bottom) - 2px);
+      height: 2px;
+      background: var(--responsive-nav-decorator-indicator-color, currentColor);
+      z-index: 3;
+      transition:
+        left 200ms ease,
+        right 200ms ease;
+    }
 
-  .main-navigation:not(.is-animated) .nav-indicator-active {
-    transition: none;
-  }
+    &:not(.is-animated) .nav-indicator-active {
+      transition: none;
+    }
 
-  /* When something is hovered, the active bar has moved to the hovered item —
-     switch it to the hover colour so active (white) and hover (green) are distinct. */
-  .main-navigation:has(li.is-hovered) .nav-indicator-active {
-    background: var(
-      --responsive-nav-decorator-hovered-indicator-color,
-      var(--responsive-nav-decorator-indicator-color, currentColor)
-    );
+    &:has(li.is-hovered) .nav-indicator-active {
+      background: var(
+        --responsive-nav-decorator-hovered-indicator-color,
+        var(--responsive-nav-decorator-indicator-color, currentColor)
+      );
+    }
   }
 }
 </style>

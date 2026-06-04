@@ -215,6 +215,7 @@ onMounted(() => {
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto 1fr auto;
+  align-items: start;
 
   .main-content {
     container-type: inline-size;
