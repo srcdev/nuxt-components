@@ -5,16 +5,12 @@
   "main": "nuxt.config.ts",
   "types": "types.d.ts",
   "license": "MIT",
-  "engines": {
-    "node": ">=20.19.0 <23",
-    "npm": ">=10.0.0"
-  },
   "scripts": {
     "clean": "rm -rf .nuxt && rm -rf .output",
     "cleanall": "rm -rf node_modules && rm -rf .nuxt && rm -rf .output && rm package-lock.json",
     "reinstall": "rm -rf node_modules && npm install",
     "cleaninstall": "npm run clean && npm run reinstall",
-    "dev": "SRCDEV_STANDALONE=true TMPDIR=/tmp  nuxi dev",
+    "dev": "SRCDEV_STANDALONE=true nuxt dev",
     "build": "SRCDEV_STANDALONE=true nuxt build",
     "generate": "SRCDEV_STANDALONE=true nuxt generate",
     "preview": "SRCDEV_STANDALONE=true nuxt preview",
@@ -134,7 +130,7 @@
     "@pinia/nuxt": "0.11.3",
     "@vueuse/motion": "3.0.3",
     "focus-trap-vue": "4.1.0",
-    "nuxt": "4.4.7",
+    "nuxt": "4.4.6",
     "pinia": "3.0.4",
     "pinia-plugin-persistedstate": "4.7.1",
     "zod": "4.4.3"
