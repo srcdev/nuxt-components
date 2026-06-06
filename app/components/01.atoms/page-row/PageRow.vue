@@ -46,7 +46,15 @@ const { headingId, ariaLabelledby } = useAriaLabelledById(props.tag);
     --_content-max-width: var(--page-row-content-max-width, 1064px);
     --_inset-content-max-width: var(--page-row-inset-content-max-width, 840px);
 
-    --full: minmax(var(--_minimum-content-padding), 1fr);
+    /* Minimum gutter for the outer (full) track: 1rem on narrow viewports, dissolves to 0
+       once the viewport exceeds --_content-max-width + 2 × --_minimum-content-padding,
+       at which point 1fr already provides centering space with no forced floor needed. */
+    --_full-track-min: min(
+      var(--_minimum-content-padding),
+      max(0px, calc((var(--_content-max-width) + var(--_minimum-content-padding) * 2 - 100%) / 2))
+    );
+
+    --full: minmax(var(--_full-track-min), 1fr);
     --popout: minmax(0, calc((var(--_popout-max-width) - var(--_content-max-width)) * 0.5));
     --content: clamp(
       0px,
@@ -87,16 +95,30 @@ const { headingId, ariaLabelledby } = useAriaLabelledById(props.tag);
    * its own children span full width, not just control placement when nested.
    * Specificity (0,2,0) — nested .page-row variant overrides below win at (0,3,0).
    */
-  .page-row.full > *         { grid-column: full; }
-  .page-row.popout > *       { grid-column: popout; }
-  .page-row.inset-content > * { grid-column: inset-content; }
+  .page-row.full > * {
+    grid-column: full;
+  }
+  .page-row.popout > * {
+    grid-column: popout;
+  }
+  .page-row.inset-content > * {
+    grid-column: inset-content;
+  }
 
   /* Nested page-rows: symmetric placement by variant class */
   .page-row > .page-row {
-    &.full         { grid-column: full; }
-    &.popout       { grid-column: popout; }
-    &.content      { grid-column: content; }
-    &.inset-content { grid-column: inset-content; }
+    &.full {
+      grid-column: full;
+    }
+    &.popout {
+      grid-column: popout;
+    }
+    &.content {
+      grid-column: content;
+    }
+    &.inset-content {
+      grid-column: inset-content;
+    }
   }
 
   /*
@@ -105,15 +127,27 @@ const { headingId, ariaLabelledby } = useAriaLabelledById(props.tag);
    * Specificity (0,4,0) beats the symmetric rules above at (0,3,0).
    */
   .page-row > .page-row[data-align="start"] {
-    &.popout        { grid-column: full-start / popout-end; }
-    &.content       { grid-column: full-start / content-end; }
-    &.inset-content { grid-column: full-start / inset-content-end; }
+    &.popout {
+      grid-column: full-start / popout-end;
+    }
+    &.content {
+      grid-column: full-start / content-end;
+    }
+    &.inset-content {
+      grid-column: full-start / inset-content-end;
+    }
   }
 
   .page-row > .page-row[data-align="end"] {
-    &.popout        { grid-column: popout-start / full-end; }
-    &.content       { grid-column: content-start / full-end; }
-    &.inset-content { grid-column: inset-content-start / full-end; }
+    &.popout {
+      grid-column: popout-start / full-end;
+    }
+    &.content {
+      grid-column: content-start / full-end;
+    }
+    &.inset-content {
+      grid-column: inset-content-start / full-end;
+    }
   }
 }
 </style>
