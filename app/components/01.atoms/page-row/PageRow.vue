@@ -48,7 +48,11 @@ const { headingId, ariaLabelledby } = useAriaLabelledById(props.tag);
 
     --full: minmax(var(--_minimum-content-padding), 1fr);
     --popout: minmax(0, calc((var(--_popout-max-width) - var(--_content-max-width)) * 0.5));
-    --content: minmax(0, calc((var(--_content-max-width) - var(--_inset-content-max-width)) * 0.5));
+    --content: clamp(
+      0px,
+      calc((100% - var(--_minimum-content-padding) * 2 - var(--_inset-content-max-width)) * 0.5),
+      calc((var(--_content-max-width) - var(--_inset-content-max-width)) * 0.5)
+    );
     --inset-content: min(var(--_inset-content-max-width), 100% - var(--_minimum-content-padding) * 2);
 
     display: grid;
