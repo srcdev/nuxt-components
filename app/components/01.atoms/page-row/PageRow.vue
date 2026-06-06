@@ -105,6 +105,11 @@ const { headingId, ariaLabelledby } = useAriaLabelledById(props.tag);
     grid-column: inset-content;
   }
 
+  /* Nested page-rows: no additional viewport gutter — the outermost page-row already handles edge padding */
+  .page-row > .page-row {
+    --_minimum-content-padding: var(--page-row-minimum-content-padding, 0px);
+  }
+
   /* Nested page-rows: symmetric placement by variant class */
   .page-row > .page-row {
     &.full {
