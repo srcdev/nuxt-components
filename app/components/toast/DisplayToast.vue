@@ -54,33 +54,32 @@ import type {
   DisplayToastPosition,
   DisplayToastAlignment,
   ToastSlots,
-} from "../../types/components";
+} from "~/types/components";
 
-const props = defineProps({
-  config: {
-    type: Object as PropType<DisplayToastConfig>,
-    default: () => ({
-      appearance: {
-        theme: "ghost" as DisplayToastTheme,
-        position: "top" as DisplayToastPosition,
-        alignment: "right" as DisplayToastAlignment,
-        fullWidth: false,
-      },
-      behavior: {
-        autoDismiss: true,
-        duration: 5000,
-        revealDuration: 550,
-      },
-      content: {
-        text: "",
-        customIcon: undefined,
-      },
-    }),
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+interface Props {
+  config?: DisplayToastConfig;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  config: () => ({
+    appearance: {
+      theme: "ghost" as DisplayToastTheme,
+      position: "top" as DisplayToastPosition,
+      alignment: "right" as DisplayToastAlignment,
+      fullWidth: false,
+    },
+    behavior: {
+      autoDismiss: true,
+      duration: 5000,
+      revealDuration: 550,
+    },
+    content: {
+      text: "",
+      customIcon: undefined,
+    },
+  }),
+  styleClassPassthrough: () => [],
 });
 
 const slots = defineSlots<ToastSlots>();
@@ -212,146 +211,146 @@ onBeforeRouteLeave(() => {
 
 <style lang="css">
 @layer components {
-@keyframes show {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  @keyframes show {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
-}
 
-@keyframes hideTop {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
+  @keyframes hideTop {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
   }
-  100% {
+
+  @keyframes hideBottom {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+  }
+
+  @keyframes progress {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  .display-toast {
+    --_toast-gutter: 12px;
+    @media (width >= 600px) {
+      --_toast-gutter: 24px;
+    }
+
+    display: block;
+    overflow: hidden;
+    position: fixed;
+    margin: 0;
     opacity: 0;
-    transform: translateY(-30px);
-  }
-}
 
-@keyframes hideBottom {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-}
+    z-index: 100;
 
-@keyframes progress {
-  to {
-    transform: scaleX(1);
-  }
-}
-
-.display-toast {
-  --_toast-gutter: 12px;
-  @media (width >= 600px) {
-    --_toast-gutter: 24px;
-  }
-
-  display: block;
-  overflow: hidden;
-  position: fixed;
-  margin: 0;
-  opacity: 0;
-
-  z-index: 100;
-
-  /* Focus styles for accessibility */
-  &:focus {
-    outline: 2px solid var(--colour-theme-3, #007acc);
-    outline-offset: 2px;
-  }
-
-  &:focus:not(:focus-visible) {
-    outline: none;
-  }
-
-  &.show {
-    @supports (animation-timing-function: linear(0, 1)) {
-      animation: show v-bind(revealDurationMs) var(--spring-easing) forwards;
+    /* Focus styles for accessibility */
+    &:focus {
+      outline: 2px solid var(--colour-theme-3, #007acc);
+      outline-offset: 2px;
     }
 
-    @supports not (animation-timing-function: linear(0, 1)) {
-      animation: show calc(v-bind(revealDurationMs) / 2) linear forwards;
-    }
-  }
-
-  &.hide {
-    @supports (animation-timing-function: linear(0, 1)) {
-      animation: hideTop v-bind(revealDurationMs) var(--spring-easing) forwards;
+    &:focus:not(:focus-visible) {
+      outline: none;
     }
 
-    @supports not (animation-timing-function: linear(0, 1)) {
-      animation: hideTop calc(v-bind(revealDurationMs) / 2) linear forwards;
-    }
-
-    &.bottom {
+    &.show {
       @supports (animation-timing-function: linear(0, 1)) {
-        animation: hideBottom v-bind(revealDurationMs) var(--spring-easing) forwards;
+        animation: show v-bind(revealDurationMs) var(--spring-easing) forwards;
       }
 
       @supports not (animation-timing-function: linear(0, 1)) {
-        animation: hideBottom calc(v-bind(revealDurationMs) / 2) linear forwards;
+        animation: show calc(v-bind(revealDurationMs) / 2) linear forwards;
       }
     }
-  }
 
-  /*
+    &.hide {
+      @supports (animation-timing-function: linear(0, 1)) {
+        animation: hideTop v-bind(revealDurationMs) var(--spring-easing) forwards;
+      }
+
+      @supports not (animation-timing-function: linear(0, 1)) {
+        animation: hideTop calc(v-bind(revealDurationMs) / 2) linear forwards;
+      }
+
+      &.bottom {
+        @supports (animation-timing-function: linear(0, 1)) {
+          animation: hideBottom v-bind(revealDurationMs) var(--spring-easing) forwards;
+        }
+
+        @supports not (animation-timing-function: linear(0, 1)) {
+          animation: hideBottom calc(v-bind(revealDurationMs) / 2) linear forwards;
+        }
+      }
+    }
+
+    /*
   * Default is centre for smaller screens
   */
-  inset-inline: var(--_toast-gutter);
-  margin-inline: auto;
+    inset-inline: var(--_toast-gutter);
+    margin-inline: auto;
 
-  @media (width >= 600px) {
-    &.left {
-      inset-inline-start: var(--_toast-gutter);
-      inset-inline-end: unset;
-    }
+    @media (width >= 600px) {
+      &.left {
+        inset-inline-start: var(--_toast-gutter);
+        inset-inline-end: unset;
+      }
 
-    &.right {
-      inset-inline-end: var(--_toast-gutter);
-      inset-inline-start: unset;
-    }
+      &.right {
+        inset-inline-end: var(--_toast-gutter);
+        inset-inline-start: unset;
+      }
 
-    &.center {
-      &:not(.full-width) {
-        inset-inline: 0;
-        margin-inline: auto;
-        width: max-content;
+      &.center {
+        &:not(.full-width) {
+          inset-inline: 0;
+          margin-inline: auto;
+          width: max-content;
+        }
       }
     }
-  }
 
-  &.top {
-    inset-block-start: var(--_toast-gutter);
-    transform: translateY(-30px);
-  }
-  &.bottom {
-    inset-block-end: var(--_toast-gutter);
-    transform: translateY(30px);
-  }
+    &.top {
+      inset-block-start: var(--_toast-gutter);
+      transform: translateY(-30px);
+    }
+    &.bottom {
+      inset-block-end: var(--_toast-gutter);
+      transform: translateY(30px);
+    }
 
-  /*
+    /*
   * Styles for the display toast component if slot is empty
   */
-  &.has-theme {
-    padding-inline-start: 6px;
-    background-color: var(--colour-theme-8);
+    &.has-theme {
+      padding-inline-start: 6px;
+      background-color: var(--colour-theme-8);
 
-    border: 0.1rem solid var(--colour-theme-8);
-    border-start-start-radius: 8px;
-    border-end-start-radius: 8px;
-    border-start-end-radius: 4px;
-    border-end-end-radius: 4px;
+      border: 0.1rem solid var(--colour-theme-8);
+      border-start-start-radius: 8px;
+      border-end-start-radius: 8px;
+      border-start-end-radius: 4px;
+      border-end-end-radius: 4px;
 
-    overflow: hidden;
+      overflow: hidden;
 
-    /* .display-toast-inner {
+      /* .display-toast-inner {
       display: grid;
       grid-template-columns: auto 1fr auto;
       gap: 12px;
@@ -429,19 +428,19 @@ onBeforeRouteLeave(() => {
         }
       }
     } */
-  }
+    }
 
-  .display-toast-progress {
-    position: absolute;
-    inset-block-end: 4px;
-    inset-inline: 15px 8px;
-    height: 3px;
-    transform: scaleX(0);
-    transform-origin: right;
-    background: linear-gradient(to right, var(--colour-theme-2), var(--colour-theme-8));
-    border-radius: inherit;
-    animation: progress v-bind(displayDurationMs) linear forwards;
+    .display-toast-progress {
+      position: absolute;
+      inset-block-end: 4px;
+      inset-inline: 15px 8px;
+      height: 3px;
+      transform: scaleX(0);
+      transform-origin: right;
+      background: linear-gradient(to right, var(--colour-theme-2), var(--colour-theme-8));
+      border-radius: inherit;
+      animation: progress v-bind(displayDurationMs) linear forwards;
+    }
   }
-}
 }
 </style>

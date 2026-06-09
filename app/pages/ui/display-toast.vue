@@ -203,7 +203,7 @@
         <DisplayToast
           v-model="customIconToastActive"
           :config="{
-            appearance: { theme: 'success', position: 'top', alignment: 'left' },
+            appearance: { theme: 'error', position: 'top', alignment: 'left' },
             behavior: { autoDismiss: false, returnFocusTo: customIconToastButton },
             content: {
               title: 'Warning Alert',
