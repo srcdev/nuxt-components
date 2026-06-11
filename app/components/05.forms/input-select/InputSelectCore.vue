@@ -81,18 +81,18 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
   transition: all var(--theme-form-transition-duration) ease-in-out;
 
   &.normal {
-    border: var(--form-element-border-width) solid var(--theme-input-border);
+    border: var(--form-element-border-width) solid var(--theme-border);
     border-radius: var(--form-input-border-radius);
-    outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+    outline: var(--form-element-outline-width) solid transparent;
   }
 
   &.underlined {
-    border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-input-border);
+    border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-border);
     background-color: var(--theme-input-surface);
   }
 
   &:has(select:focus-visible, :hover) {
-    outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+    outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
     outline-offset: var(--form-element-outline-offset-focus);
   }
 
@@ -105,7 +105,7 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
       content: '';
       width: 0.8em;
       height: 0.5em;
-      background-color: var(--theme-input-border);
+      background-color: var(--theme-border);
       clip-path: polygon(100% 0%, 0 0%, 50% 100%);
     } */
 
@@ -128,7 +128,7 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
     &:open::picker(select) {
       opacity: 1;
-      border: var(--form-element-border-width) solid var(--theme-input-border);
+      border: var(--form-element-border-width) solid var(--theme-border);
       outline: var(--form-element-outline-width) solid var(--_input-select-outline-color);
 
       @starting-style {

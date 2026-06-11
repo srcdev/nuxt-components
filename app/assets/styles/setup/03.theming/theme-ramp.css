@@ -1,0 +1,19 @@
+/* GENERATED — edit ramps.config.mjs, not this file */
+/* Parametric theme-colour slot. Set --theme-hue and --theme-chroma on a
+   theme selector; these vars automatically pick up the right palette. */
+:where(html, [data-theme], [data-invalid]) {
+  --colour-theme-0: oklch(98% calc(var(--theme-chroma) * 0.045) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (0)));
+  --colour-theme-1: oklch(94% calc(var(--theme-chroma) * 0.18) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (1 / 10)));
+  --colour-theme-2: oklch(88% calc(var(--theme-chroma) * 0.32) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (2 / 10)));
+  --colour-theme-3: oklch(80% calc(var(--theme-chroma) * 0.5) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (3 / 10)));
+  --colour-theme-4: oklch(72% calc(var(--theme-chroma) * 0.68) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (4 / 10)));
+  --colour-theme-5: oklch(64% calc(var(--theme-chroma) * 0.86) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (5 / 10)));
+  --colour-theme-6: oklch(56% calc(var(--theme-chroma) * 1) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (6 / 10)));
+  --colour-theme-7: oklch(48% calc(var(--theme-chroma) * 0.95) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (7 / 10)));
+  --colour-theme-8: oklch(40% calc(var(--theme-chroma) * 0.86) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (8 / 10)));
+  --colour-theme-9: oklch(32% calc(var(--theme-chroma) * 0.77) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (9 / 10)));
+  --colour-theme-10: oklch(25% calc(var(--theme-chroma) * 0.64) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (1)));
+  /* Aliases for legacy --colour-theme-11 / -12 references */
+  --colour-theme-11: var(--colour-theme-10);
+  --colour-theme-12: var(--colour-theme-10);
+}

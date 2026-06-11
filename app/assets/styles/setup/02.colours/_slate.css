@@ -1,13 +1,14 @@
+/* GENERATED — edit ramps.config.mjs, not this file */
 :where(html) {
-  --slate-00: oklch(0.98 0.004 256);
-  --slate-01: oklch(0.932 0.004 256);
-  --slate-02: oklch(0.86 0.008 256);
-  --slate-03: oklch(0.716 0.016 256);
-  --slate-04: oklch(0.645 0.018 256);
-  --slate-05: oklch(0.548 0.02 264);
-  --slate-06: oklch(0.459 0.018 264);
-  --slate-07: oklch(0.396 0.016 264);
-  --slate-08: oklch(0.349 0.014 264);
-  --slate-09: oklch(0.303 0.013 264);
-  --slate-10: oklch(0.256 0.011 264);
+  --slate-00: oklch(98% 0.0009 260);
+  --slate-01: oklch(94% 0.0036 260);
+  --slate-02: oklch(88% 0.0064 260);
+  --slate-03: oklch(80% 0.01 260);
+  --slate-04: oklch(72% 0.0136 260);
+  --slate-05: oklch(64% 0.0172 260);
+  --slate-06: oklch(56% 0.02 260);
+  --slate-07: oklch(48% 0.019 260);
+  --slate-08: oklch(40% 0.0172 260);
+  --slate-09: oklch(32% 0.0154 260);
+  --slate-10: oklch(25% 0.0128 260);
 }

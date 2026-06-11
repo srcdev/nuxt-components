@@ -1,12 +1,14 @@
+/* GENERATED — edit ramps.config.mjs, not this file */
 :where(html) {
-  --sunset-01: oklch(0.98 0.06 45);
-  --sunset-02: oklch(0.92 0.08 50);
-  --sunset-03: oklch(0.82 0.12 55);
-  --sunset-04: oklch(0.75 0.18 50);
-  --sunset-05: oklch(0.7 0.2 48);
-  --sunset-06: oklch(0.65 0.22 45);
-  --sunset-07: oklch(0.6 0.22 40);
-  --sunset-08: oklch(0.5 0.2 35);
-  --sunset-09: oklch(0.4 0.18 30);
-  --sunset-10: oklch(0.3 0.15 25);
+  --sunset-00: oklch(98% 0.0099 50);
+  --sunset-01: oklch(94% 0.0396 47.5);
+  --sunset-02: oklch(88% 0.0704 45);
+  --sunset-03: oklch(80% 0.11 42.5);
+  --sunset-04: oklch(72% 0.1496 40);
+  --sunset-05: oklch(64% 0.1892 37.5);
+  --sunset-06: oklch(56% 0.22 35);
+  --sunset-07: oklch(48% 0.209 32.5);
+  --sunset-08: oklch(40% 0.1892 30);
+  --sunset-09: oklch(32% 0.1694 27.5);
+  --sunset-10: oklch(25% 0.1408 25);
 }

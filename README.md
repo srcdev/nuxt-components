@@ -104,6 +104,101 @@ When disabled, no `data-color-scheme` attribute is set on `<html>` and `useColou
 
 ---
 
+## Colour System
+
+The layer ships a parametric oklch colour ramp. Two CSS custom properties — `--theme-hue` and
+`--theme-chroma` — drive an 11-step colour scale (`--colour-theme-0` to `--colour-theme-10`) that
+all themed components (buttons, inputs, prompts, toasts) read through a shared set of semantic
+slots. Switching the palette is a two-variable change; no token-by-token remapping is required.
+
+### How it works
+
+A formula declared on every potential theme host (`html`, `[data-theme]`, `[data-invalid]`)
+computes the scale from the two params:
+
+```css
+--colour-theme-6: oklch(56% calc(var(--theme-chroma) * 1.00) var(--theme-hue)); /* peak chroma */
+--colour-theme-0: oklch(98% calc(var(--theme-chroma) * 0.045) var(--theme-hue)); /* near-white */
+--colour-theme-10: oklch(25% calc(var(--theme-chroma) * 0.64) var(--theme-hue)); /* near-black */
+```
+
+Scale direction: **00 = lightest, 10 = darkest**. Chroma tapers at both ends and peaks at step 06.
+
+Eight semantic slots (`--theme-surface`, `--theme-text`, `--theme-ring`, etc.) are derived from the
+scale using `light-dark()` and are shared by all components. Theme variants (`data-theme="success"`,
+`"warning"`, `"error"`) swap `--theme-hue` and `--theme-chroma` on their element; the formula
+re-evaluates locally so each themed element gets its own full palette without affecting the page.
+
+### Changing the default palette in your app
+
+Override just the two params in your app's CSS — the rest recalculates automatically:
+
+```css
+/* app/assets/styles/setup/03.theming/_default.css */
+:where(html) {
+  --theme-hue: 85;       /* oklch hue angle (degrees) — warm gold */
+  --theme-chroma: 0.20;  /* peak saturation at step 06 */
+
+  /* Update any page tokens that referenced the old blue palette */
+  --colour-text-accent:  light-dark(oklch(32% 0.16 85), oklch(64% 0.18 85));
+  --colour-text-eyebrow: light-dark(oklch(32% 0.16 85), oklch(64% 0.18 85));
+}
+```
+
+No `!important`, no separate light/dark files, no manual step definitions.
+
+### Hue quick reference
+
+| Range   | Colour         |
+|---------|----------------|
+| 0–30    | Red / pink     |
+| 30–70   | Orange / amber |
+| 70–100  | Yellow / gold  |
+| 100–160 | Green          |
+| 220–270 | Blue           |
+| 270–310 | Violet         |
+
+Use [oklch.com](https://oklch.com) to preview values before committing.
+
+### Built-in named palettes
+
+The layer ships seven named palettes used by component `theme` props:
+
+| Name   | Hue | Used for                    |
+|--------|-----|-----------------------------|
+| blue   | 255 | Default (page-level)        |
+| red    | 30  | Error / `data-theme="error"` |
+| green  | 157 | Success / `data-theme="success"` |
+| amber  | 75  | Available for consumer use  |
+| orange | 60  | Available for consumer use  |
+| sunset | 50  | Warning / `data-theme="warning"` (with hue drift) |
+| slate  | 260 | Near-neutral grey           |
+
+### Generator (for library contributors)
+
+Named palettes are maintained in `ramps.config.mjs` at the repo root and built to CSS:
+
+```bash
+npm run generate:ramps   # rebuild all generated CSS
+npm run check:ramps      # CI: fail if generated CSS is out of date
+```
+
+Consumer apps do **not** need to run the generator — they only need to override `--theme-hue` and
+`--theme-chroma`.
+
+### Further reading
+
+| Guide | Location |
+|-------|----------|
+| Full ramp architecture, formula details, adding a named palette | `.claude/skills/theming-colour-ramps.md` |
+| Full palette swap for a consumer app | `.claude/skills/theming-override-default.md` |
+| Partial token override (buttons, inputs, page) | `.claude/skills/theming-partial-override.md` |
+| Disable light/dark mode support | `.claude/skills/colour-scheme-disable.md` |
+
+Skills are available in your project after running `npm run setup:claude`.
+
+---
+
 ## Known Build / Production Issues
 
 ### `ERR_MODULE_NOT_FOUND: vue/index.mjs` — 500 on every request (Node 22)

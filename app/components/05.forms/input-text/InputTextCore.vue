@@ -138,25 +138,25 @@ onMounted(() => {
     position: relative;
 
     &.normal {
-      border: var(--form-element-border-width) solid var(--theme-input-border);
+      border: var(--form-element-border-width) solid var(--theme-border);
       border-radius: var(--form-input-border-radius);
-      outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+      outline: var(--form-element-outline-width) solid transparent;
 
       padding-inline: var(--input-padding-inline);
 
       &:has(input:is(:hover), button:is(:hover)) {
-        outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+        outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
         outline-offset: var(--form-element-outline-offset-focus);
       }
 
       &:has(input:focus-visible, button:focus-visible) {
-        outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+        outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
         outline-offset: var(--form-element-outline-offset-focus);
       }
     }
 
     &.underlined {
-      border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-input-border);
+      border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-border);
       padding-inline: var(--input-padding-inline);
     }
 
@@ -181,7 +181,7 @@ onMounted(() => {
         }
 
         &:is(:focus-visible) {
-          outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+          outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
           outline-offset: -4px;
         }
 

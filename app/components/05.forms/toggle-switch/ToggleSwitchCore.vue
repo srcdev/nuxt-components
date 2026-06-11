@@ -117,7 +117,7 @@ const toggleSwitchValue = () => {
 
       &:focus-visible {
         + .symbol-wrapper {
-          outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+          outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
           outline-offset: var(--form-element-outline-offset-focus);
         }
       }
@@ -138,14 +138,14 @@ const toggleSwitchValue = () => {
 
       /* UI */
       background-color: var(--theme-checkbox-symbol-surface);
-      border: var(--form-element-border-width) solid var(--theme-input-border);
-      outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+      border: var(--form-element-border-width) solid var(--theme-border);
+      outline: var(--form-element-outline-width) solid transparent;
       border-radius: 100vw;
       width: 72px;
       padding: calc(var(--input-toggle-wrapper-padding) + var(--input-toggle-symbol-outline-width));
 
       &:hover {
-        background-color: var(--theme-toggle-wrapper-surface-color-hover);
+        background-color: var(--theme-surface-subtle);
         cursor: pointer;
       }
 
@@ -163,16 +163,16 @@ const toggleSwitchValue = () => {
 
         /* UI */
         /* padding: calc(calc(var(--input-toggle-symbol-size) - var(--_icon-font-size)) / 2); */
-        border: var(--input-toggle-symbol-border-width) solid var(--theme-checkbox-symbol-color);
-        outline: var(--input-toggle-symbol-outline-width) solid var(--theme-input-outline, red);
+        border: var(--input-toggle-symbol-border-width) solid var(--theme-text);
+        outline: var(--input-toggle-symbol-outline-width) solid transparent;
         border-radius: 100vw;
-        background-color: var(--theme-toggle-symbol-color-default);
+        background-color: var(--theme-on-surface);
         transition:
           translate 0.4s ease,
           background-color 0.4s linear;
 
         &.checked {
-          background-color: var(--theme-toggle-symbol-color-checked);
+          background-color: var(--theme-surface);
           /* left: calc(
             100% - var(--input-toggle-symbol-size) - var(--_switch-padding) - (2 * var(--_toggle-symbol-border-width))
           ); */
@@ -202,11 +202,11 @@ const toggleSwitchValue = () => {
             color var(--theme-form-transition-duration);
 
           &.icon-on {
-            color: var(--theme-toggle-symbol-color-default);
+            color: var(--theme-on-surface);
           }
 
           &.icon-off {
-            color: var(--theme-toggle-symbol-color-checked);
+            color: var(--theme-surface);
           }
 
           &.active {

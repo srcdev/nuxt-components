@@ -1,0 +1,13 @@
+/* Warning theme uses the full sunset ramp with hue drift.
+   Steps 00–05 sit in amber/orange territory; steps 06–10 shift toward red-orange.
+   --theme-surface overrides to step 5 (mid-light) so warning CTAs read as
+   warm/alert rather than the dark-filled default. */
+:where([data-theme="warning"]) {
+  --theme-hue: var(--palette-sunset-hue);
+  --theme-chroma: var(--palette-sunset-chroma);
+  --theme-hue-drift: var(--palette-sunset-drift);
+
+  /* Lighter surface than the default step-9 — keeps warning buttons warm, not heavy */
+  --theme-surface:       light-dark(var(--colour-theme-5), var(--colour-theme-4));
+  --theme-surface-hover: light-dark(var(--colour-theme-7), var(--colour-theme-5));
+}

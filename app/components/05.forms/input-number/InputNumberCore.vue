@@ -71,10 +71,10 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
 
   width: fit-content;
 
-  background-color: var(--theme-button-surface);
+  background-color: var(--theme-input-surface);
   border-radius: var(--form-element-border-width);
-  border: var(--form-element-border-width) solid var(--theme-input-border);
-  outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+  border: var(--form-element-border-width) solid var(--theme-border);
+  outline: var(--form-element-outline-width) solid transparent;
   box-shadow: var(--_focus-box-shadow);
 
   .slot {
@@ -144,12 +144,12 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
 
     .left-slot {
       margin-inline-end: 0;
-      border-right: 2px solid var(--theme-button-surface-hover);
+      border-right: 2px solid var(--theme-input-surface-hover);
     }
 
     .right-slot {
       margin-inline-end: 0;
-      border-left: 2px solid var(--theme-button-surface-hover);
+      border-left: 2px solid var(--theme-input-surface-hover);
     }
   }
 }

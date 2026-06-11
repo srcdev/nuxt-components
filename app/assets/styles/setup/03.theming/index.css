@@ -1,4 +1,6 @@
-@import "./default/";
-@import "./error/";
-@import "./success/";
-@import "./warning/";
+@import "./theme-ramp";
+@import "./_theme-slots";
+@import "./_default";
+@import "./_error";
+@import "./_success";
+@import "./_warning";

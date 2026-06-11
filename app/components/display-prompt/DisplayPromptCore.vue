@@ -97,132 +97,132 @@ onMounted(async () => {
 
 <style lang="css">
 @layer components {
-.display-prompt-core {
-  display: grid;
-  grid-template-rows: 1fr;
-  opacity: 1;
-  transition: all 200ms ease-in-out;
+  .display-prompt-core {
+    display: grid;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition: all 200ms ease-in-out;
 
-  &.closed {
-    grid-template-rows: 0fr;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .display-prompt-wrapper {
-    background-color: var(--colour-theme-8);
-    border: 0px solid transparent;
-    border-radius: 4px;
-    border-start-start-radius: 8px;
-    border-end-start-radius: 8px;
-    padding-inline-start: 8px;
-
-    overflow: hidden;
-
-    &:not(.dark) {
-      &.outlined {
-        border: 1px solid var(--colour-theme-8);
-      }
+    &.closed {
+      grid-template-rows: 0fr;
+      opacity: 0;
+      pointer-events: none;
     }
 
-    &.dark {
-      border-width: 0;
-
-      .display-prompt-inner {
-        background-color: var(--slate-01);
-      }
-
-      &.outlined {
-        border: 1px solid var(--colour-theme-8);
-      }
-    }
-
-    .display-prompt-inner {
-      align-items: center;
-      display: flex;
-      gap: 12px;
-      justify-content: space-between;
-      padding-block: 1rem;
-      padding-inline: 1.5rem;
-
+    .display-prompt-wrapper {
+      background-color: var(--colour-theme-8);
+      border: 0px solid transparent;
+      border-radius: 4px;
       border-start-start-radius: 8px;
       border-end-start-radius: 8px;
-      background-color: var(--colour-theme-10);
+      padding-inline-start: 8px;
 
-      .display-prompt-icon {
-        display: inline-flex;
-        .icon {
-          color: var(--colour-theme-8);
-          display: inline-block;
-          font-size: 3rem;
-          font-style: normal;
-          font-weight: normal;
-          overflow: hidden;
+      overflow: hidden;
+
+      &:not(.dark) {
+        &.outlined {
+          border: 1px solid var(--colour-theme-8);
         }
       }
 
-      .display-prompt-content {
-        display: block flex;
-        flex-direction: column;
-        flex-grow: 1;
-        gap: 1rem;
-        margin: 0;
-        padding: 0.2rem;
+      &.dark {
+        border-width: 0;
 
-        .title {
-          font-size: var(--step-5);
-          font-weight: bold;
-          line-height: 1.3;
-          color: var(--colour-theme-8);
-          margin: 0;
-          padding: 0;
+        .display-prompt-inner {
+          background-color: var(--slate-01);
         }
 
-        .text {
-          font-size: var(--step-4);
-          font-weight: normal;
-          line-height: 1.3;
-          color: var(--colour-theme-8);
-          margin: 0;
-          padding: 0;
+        &.outlined {
+          border: 1px solid var(--colour-theme-8);
         }
       }
-      .display-prompt-action {
-        background-color: transparent;
-        display: block flex;
+
+      .display-prompt-inner {
         align-items: center;
-        justify-content: center;
-        margin: 1rem;
-        padding: 0.5rem;
-        border: 0.1rem solid var(--colour-theme-8);
-        border-radius: 50%;
-        outline: 1px solid var(--colour-theme-3);
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        padding-block: 1rem;
+        padding-inline: 1.5rem;
 
-        transition:
-          border 200ms ease-in-out,
-          outline 200ms ease-in-out;
+        border-start-start-radius: 8px;
+        border-end-start-radius: 8px;
+        background-color: var(--colour-theme-10);
 
-        &:hover {
-          cursor: pointer;
-          border: 0.1rem solid var(--colour-theme-12);
-          outline: 2px solid var(--colour-theme-6);
+        .display-prompt-icon {
+          display: inline-flex;
+          .icon {
+            color: var(--colour-theme-8);
+            display: inline-block;
+            font-size: 3rem;
+            font-style: normal;
+            font-weight: normal;
+            overflow: hidden;
+          }
         }
 
-        &:focus-visible {
-          box-shadow: var(--focus-box-shadow-colour-on);
-          border: 0.1rem solid var(--colour-theme-12);
-          outline: 2px solid var(--colour-theme-6);
-        }
+        .display-prompt-content {
+          display: block flex;
+          flex-direction: column;
+          flex-grow: 1;
+          gap: 1rem;
+          margin: 0;
+          padding: 0.2rem;
 
-        .icon {
-          color: var(--colour-theme-8);
-          display: block;
-          font-size: var(--step-5);
-          padding: 1rem;
+          .title {
+            font-size: var(--step-5);
+            font-weight: bold;
+            line-height: 1.3;
+            color: var(--colour-theme-8);
+            margin: 0;
+            padding: 0;
+          }
+
+          .text {
+            font-size: var(--step-4);
+            font-weight: normal;
+            line-height: 1.3;
+            color: var(--colour-theme-8);
+            margin: 0;
+            padding: 0;
+          }
+        }
+        .display-prompt-action {
+          background-color: transparent;
+          display: block flex;
+          align-items: center;
+          justify-content: center;
+          margin: 1rem;
+          padding: 0.5rem;
+          border: 0.1rem solid var(--colour-theme-8);
+          border-radius: 50%;
+          outline: 1px solid var(--colour-theme-3);
+
+          transition:
+            border 200ms ease-in-out,
+            outline 200ms ease-in-out;
+
+          &:hover {
+            cursor: pointer;
+            border: 0.1rem solid var(--colour-theme-10);
+            outline: 2px solid var(--colour-theme-6);
+          }
+
+          &:focus-visible {
+            box-shadow: var(--focus-box-shadow-colour-on);
+            border: 0.1rem solid var(--colour-theme-10);
+            outline: 2px solid var(--colour-theme-6);
+          }
+
+          .icon {
+            color: var(--colour-theme-8);
+            display: block;
+            font-size: var(--step-5);
+            padding: 1rem;
+          }
         }
       }
     }
   }
-}
 }
 </style>

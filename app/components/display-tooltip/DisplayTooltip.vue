@@ -137,8 +137,8 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
         all: unset;
         cursor: pointer;
         color: var(--nuxt-text-accessibility-blue);
-        border: 1px solid var(--theme-button-border);
-        outline: 1px solid var(--theme-button-outline);
+        border: 1px solid var(--theme-border);
+        outline: 1px solid var(--theme-ring);
 
         font-weight: 600;
         padding: 8px 12px;
@@ -146,8 +146,8 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
         &:hover,
         &:focus {
           text-decoration: underline;
-          border: 1px solid var(--theme-button-border-hover);
-          outline: 1px solid var(--theme-button-outline-hover);
+          border: 1px solid var(--theme-surface);
+          outline: 1px solid var(--theme-surface);
           outline-offset: 2px;
         }
       }

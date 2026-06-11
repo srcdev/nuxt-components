@@ -79,7 +79,7 @@ watch(
     display: flex;
     align-items: stretch;
     overflow: hidden;
-    border: var(--form-element-border-width) solid var(--theme-input-border);
+    border: var(--form-element-border-width) solid var(--theme-border);
     border-radius: var(--form-input-border-radius);
     background-color: var(--theme-input-surface);
     transition: all var(--theme-form-transition-duration) ease-in-out;
@@ -101,19 +101,19 @@ watch(
 
     .input-copy-button.input-button-core {
       border-radius: 0;
-      border-inline-start: var(--form-element-border-width) solid var(--theme-input-border);
+      border-inline-start: var(--form-element-border-width) solid var(--theme-border);
       padding-inline: var(--input-padding-inline);
       min-width: var(--input-min-height);
-      background-color: var(--theme-button-secondary-surface);
-      color: var(--theme-button-secondary-text);
+      background-color: transparent;
+      color: var(--theme-text);
 
       &:hover {
-        background-color: var(--theme-button-primary-surface);
-        color: var(--theme-button-primary-text);
+        background-color: var(--theme-surface);
+        color: var(--theme-on-surface);
       }
 
       &:focus-visible {
-        outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+        outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
         outline-offset: -4px;
       }
     }
