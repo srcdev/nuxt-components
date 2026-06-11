@@ -140,7 +140,7 @@ export const ramps = {
 };
 ```
 
-2. Regenerate:
+1. Regenerate:
 
 ```bash
 npm run generate:ramps
@@ -149,7 +149,7 @@ npm run generate:ramps
 Produces `_gold.css` with `--gold-00` … `--gold-10`, and adds `--palette-gold-hue` /
 `--palette-gold-chroma` to `_theme-params.css`.
 
-3. Reference from a theme selector:
+1. Reference from a theme selector:
 
 ```css
 [data-theme="gold"] {
@@ -158,41 +158,102 @@ Produces `_gold.css` with `--gold-00` … `--gold-10`, and adds `--palette-gold-
 }
 ```
 
-## Consumer app: changing the default palette
+## Consumer app: generating a custom palette
 
-Consumer apps do **not** need to edit `ramps.config.mjs`. Just override `--theme-hue` and
-`--theme-chroma` — the full 11-step ramp and all semantic slots recalculate automatically:
+The recommended approach is to generate named colour files so you can reference clean step
+variables (`--gold-09`, `--gold-04`) in your theme overrides rather than raw oklch values.
+
+### 1. Create `ramps.config.mjs` in your project root
+
+Export only your own palettes — the layer's built-in ones (blue, red, green, etc.) are already
+present via the layer CSS:
+
+```js
+// ramps.config.mjs
+export const ramps = {
+  gold: { hue: 85, chroma: 0.20 },
+  // with hue drift (colour rotates across the 11 steps):
+  // copper: { hue: 45, chroma: 0.21, drift: -15 },
+};
+```
+
+### 2. Add the generator to `package.json`
+
+The script lives in the layer's `node_modules` — no copying required:
+
+```json
+"scripts": {
+  "generate:ramps": "node node_modules/srcdev-nuxt-components/scripts/generate-consumer-ramps.mjs"
+}
+```
+
+### 3. Run the generator
+
+```bash
+npm run generate:ramps
+```
+
+Produces in `app/assets/styles/setup/02.colours/`:
+
+- `_gold.css` — `--gold-00` … `--gold-10` (literal oklch values, same lightness/chroma curve as the layer)
+- `_palette-params.css` — `--palette-gold-hue`, `--palette-gold-chroma`
+
+### 4. Import the generated files
+
+In `app/assets/styles/setup/02.colours/index.css` (create if it doesn't exist):
+
+```css
+@import "./_palette-params";
+@import "./_gold";
+```
+
+### 5. Set the palette as the theme default
 
 ```css
 /* app/assets/styles/setup/03.theming/_default.css */
 :where(html) {
-  --theme-hue: 85;       /* oklch hue angle (degrees) — warm gold */
-  --theme-chroma: 0.20;  /* peak chroma at step 06 */
-}
-```
-
-To also name it for reuse on `data-theme` elements:
-
-```css
-:where(html) {
-  --palette-gold-hue: 85;
-  --palette-gold-chroma: 0.20;
   --theme-hue:    var(--palette-gold-hue);
   --theme-chroma: var(--palette-gold-chroma);
+
+  /* Page-level tokens — readable named steps, not raw oklch */
+  --colour-text-accent:  light-dark(var(--gold-09), var(--gold-04));
+  --colour-text-eyebrow: light-dark(var(--gold-09), var(--gold-04));
 }
 
+/* Optional: make it available as a data-theme variant too */
 [data-theme="gold"] {
   --theme-hue:    var(--palette-gold-hue);
   --theme-chroma: var(--palette-gold-chroma);
 }
 ```
 
-Wire it up after the layer styles (the cascade handles priority — no `!important` needed):
+### 6. Wire up in your setup index
+
+```css
+/* app/assets/styles/setup/index.css */
+@import "./02.colours/";
+@import "./03.theming/_default.css";
+```
 
 ```css
 /* app/assets/styles/main.css */
-@import "./setup/03.theming/_default.css";
+@import "./setup/";
 ```
+
+### Quick palette-only override (no generator)
+
+If you only need to shift the hue without named step references, you can skip the generator and
+set the params directly. All components recalculate automatically:
+
+```css
+:where(html) {
+  --theme-hue: 85;
+  --theme-chroma: 0.20;
+}
+```
+
+This works for components but gives you no named steps for page-level tokens — use the generator
+approach whenever you need `--gold-09` style references in your CSS.
 
 ## Light / dark mode
 

@@ -2,9 +2,10 @@
 
 ## Overview
 
-The layer ships a default blue theme. To replace it with your own palette, override two CSS custom
-properties: `--theme-hue` and `--theme-chroma`. The full 11-step colour scale and all semantic
-slots (buttons, inputs, prompts, toasts) recalculate automatically — no manual step mapping needed.
+The layer ships a default blue theme. The recommended way to replace it is to generate your own
+named colour files — this gives you clean step variables (`--gold-09`, `--gold-04`) to reference
+in your theme overrides rather than raw oklch values. Setting `--theme-hue` and `--theme-chroma`
+drives the parametric ramp; the generated files give you named aliases for every step.
 
 For the full architecture see `theming-colour-ramps.md`.
 
@@ -15,98 +16,109 @@ For the full architecture see `theming-colour-ramps.md`.
 
 ## Steps
 
-### 1. Choose your hue and chroma
+### 1. Create `ramps.config.mjs` in your project root
 
-Open [oklch.com](https://oklch.com) and pick a hue angle and peak chroma:
+Export only your own palettes — the layer's built-in ones (blue, red, green, etc.) are already
+present via the layer CSS:
 
-| Value     | Controls                                    |
-|-----------|---------------------------------------------|
-| `--theme-hue`    | Colour direction (0–360°). See hue table below. |
-| `--theme-chroma` | Saturation intensity at peak (step 06). Typical range: 0.12–0.25. Near 0 = grey. |
+```js
+// ramps.config.mjs
+export const ramps = {
+  gold: { hue: 85, chroma: 0.20 },
+  // Optional — add hue drift to rotate colour across the scale:
+  // copper: { hue: 45, chroma: 0.21, drift: -15 },
+};
+```
+
+Choose your hue and peak chroma using [oklch.com](https://oklch.com). The `chroma` value controls
+saturation at the peak step (06); typical range is 0.12–0.25.
 
 Hue quick reference:
 
-| Range  | Colour         |
-|--------|----------------|
-| 30–70  | Orange / amber |
-| 70–100 | Yellow / gold  |
-| 100–160| Green          |
-| 220–270| Blue           |
-| 270–310| Violet         |
+| Range   | Colour         |
+|---------|----------------|
+| 0–30    | Red / pink     |
+| 30–70   | Orange / amber |
+| 70–100  | Yellow / gold  |
+| 100–160 | Green          |
+| 220–270 | Blue           |
+| 270–310 | Violet         |
 
-### 2. Create the default theme override file
+### 2. Add the generator to `package.json`
 
-Create `app/assets/styles/setup/03.theming/_default.css` in your consuming app:
+The script lives in the layer's `node_modules` — no copying required:
+
+```json
+"scripts": {
+  "generate:ramps": "node node_modules/srcdev-nuxt-components/scripts/generate-consumer-ramps.mjs"
+}
+```
+
+To run it automatically after every install, add it to `postinstall`:
+
+```json
+"postinstall": "nuxt prepare && npm run generate:ramps && npm run setup:claude"
+```
+
+### 3. Run the generator
+
+```bash
+npm run generate:ramps
+```
+
+Produces in `app/assets/styles/setup/02.colours/`:
+
+- `_gold.css` — `--gold-00` … `--gold-10` (literal oklch values, using the layer's lightness/chroma curve)
+- `_palette-params.css` — `--palette-gold-hue`, `--palette-gold-chroma`
+
+### 4. Import the generated files
+
+Create `app/assets/styles/setup/02.colours/index.css`:
 
 ```css
-/* Override the layer's blue palette with warm gold */
-:where(html) {
-  --theme-hue: 85;       /* oklch hue angle — warm gold */
-  --theme-chroma: 0.20;  /* peak chroma at step 06 */
+@import "./_palette-params";
+@import "./_gold";
+```
 
-  /* Page-level tokens — update any that reference the old palette */
+### 5. Set the palette as the theme default
+
+Create `app/assets/styles/setup/03.theming/_default.css`:
+
+```css
+:where(html) {
+  --theme-hue:    var(--palette-gold-hue);
+  --theme-chroma: var(--palette-gold-chroma);
+
+  /* Page-level tokens — readable named steps, not raw oklch */
   --page-bg: light-dark(var(--slate-00), var(--slate-08));
-  --colour-text-default: light-dark(var(--slate-09), var(--slate-01));
-  --colour-text-accent: light-dark(oklch(32% 0.16 85), oklch(64% 0.18 85));
-  --colour-text-eyebrow: light-dark(oklch(32% 0.16 85), oklch(64% 0.18 85));
+  --colour-text-default:  light-dark(var(--slate-09), var(--slate-01));
+  --colour-text-accent:   light-dark(var(--gold-09), var(--gold-04));
+  --colour-text-eyebrow:  light-dark(var(--gold-09), var(--gold-04));
 }
 ```
 
 Only `--theme-hue` and `--theme-chroma` are strictly required — all component tokens update
-automatically from there. Add page-level overrides only if their values reference the old palette.
+automatically from there. Add page-level overrides only for tokens that reference the old blue
+palette by name.
 
-### 3. (Optional) Name the palette for reuse
+### 6. Create the setup index
 
-If you want to reference the palette from `[data-theme]` elements or component themes, name it:
-
-```css
-:where(html) {
-  /* Named palette params */
-  --palette-gold-hue: 85;
-  --palette-gold-chroma: 0.20;
-
-  /* Wire as default */
-  --theme-hue:    var(--palette-gold-hue);
-  --theme-chroma: var(--palette-gold-chroma);
-
-  /* Page tokens */
-  --page-bg: light-dark(var(--slate-00), var(--slate-08));
-  --colour-text-default: light-dark(var(--slate-09), var(--slate-01));
-  --colour-text-accent: light-dark(oklch(32% 0.16 85), oklch(64% 0.18 85));
-}
-
-/* Custom data-theme variant */
-[data-theme="gold"] {
-  --theme-hue:    var(--palette-gold-hue);
-  --theme-chroma: var(--palette-gold-chroma);
-}
-```
-
-### 4. Create the theming index
-
-Create `app/assets/styles/setup/03.theming/index.css`:
+`app/assets/styles/setup/index.css`:
 
 ```css
-@import "./_default";
+@import "./02.colours/";
+@import "./03.theming/_default.css";
 ```
 
-### 5. Create the setup index
+### 7. Wire up the CSS entry point
 
-Create `app/assets/styles/setup/index.css`:
-
-```css
-@import "./03.theming/";
-```
-
-### 6. Wire up the CSS entry point
-
-In `app/assets/styles/main.css`:
+`app/assets/styles/main.css`:
 
 ```css
 @import "./setup/";
 ```
 
-Register in `nuxt.config.ts`:
+Registered in `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
@@ -118,23 +130,24 @@ export default defineNuxtConfig({
 });
 ```
 
-The layer's CSS loads first via `extends`; your override CSS loads after — the cascade handles
-priority automatically. No `!important` needed.
-
 ## How it works
 
 The layer's `theme-ramp.css` declares the formula on `:where(html, [data-theme], [data-invalid])`.
-When your override sets `--theme-hue: 85` on `:where(html)`, every `--colour-theme-*` step
-recalculates to the gold palette. Semantic slots (`--theme-surface`, `--theme-text`, etc.) are
-also declared on that same selector and use `light-dark()` against the recalculated steps — so
-light/dark mode continues to work without any extra declarations.
+When your override sets `--theme-hue`/`--theme-chroma` on `:where(html)`, every `--colour-theme-*`
+step recalculates to your palette. Semantic slots (`--theme-surface`, `--theme-text`, etc.) are
+declared on that same selector using `light-dark()` — light/dark mode continues to work without
+any extra declarations.
+
+The generated `_gold.css` gives you a named alias for each step (`--gold-09` etc.) so your
+page-level token values stay readable. The values match what the formula would produce for
+that hue/chroma pair.
 
 ## What you do NOT need to do
 
-- Define `--colour-theme-0` through `--colour-theme-10` individually — the formula handles it
-- Redeclare any `--theme-surface`, `--theme-border`, `--theme-ring`, etc. — they auto-update
-- Separate light/dark files — use `light-dark()` in a single file instead
-- Override button or input tokens — they all consume the semantic slots
+- Define `--colour-theme-0` through `--colour-theme-10` — the formula handles it
+- Redeclare `--theme-surface`, `--theme-border`, `--theme-ring` etc. — they auto-update
+- Write separate light/dark files — use `light-dark()` in a single file
+- Override any button or input component tokens — they all consume semantic slots
 
 ## rem sizing
 
@@ -150,7 +163,6 @@ light/dark mode continues to work without any extra declarations.
 
 ## Notes
 
-- `--slate-*` neutrals ship with the layer — no need to redefine them for backgrounds/text
-- To add a named palette with hue drift (e.g. sunset-style progression), see `theming-colour-ramps.md`
-- The warning theme overrides `--theme-surface` steps directly to keep the amber feel — this pattern
-  is available for any custom theme that needs a non-default surface step
+- `--slate-*` neutrals ship with the layer — no need to redefine for page backgrounds/text
+- To add a custom `[data-theme]` variant using your generated palette, see `theming-colour-ramps.md`
+- The `warning` theme overrides `--theme-surface` steps directly for a different surface intensity — this pattern is available for any custom theme that needs a non-default surface step

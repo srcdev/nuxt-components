@@ -129,23 +129,94 @@ scale using `light-dark()` and are shared by all components. Theme variants (`da
 `"warning"`, `"error"`) swap `--theme-hue` and `--theme-chroma` on their element; the formula
 re-evaluates locally so each themed element gets its own full palette without affecting the page.
 
-### Changing the default palette in your app
+### Built-in named palettes
 
-Override just the two params in your app's CSS — the rest recalculates automatically:
+| Name   | Hue | Used for                                          |
+|--------|-----|---------------------------------------------------|
+| blue   | 255 | Default (page-level)                              |
+| red    | 30  | Error / `data-theme="error"`                      |
+| green  | 157 | Success / `data-theme="success"`                  |
+| amber  | 75  | Available for consumer use                        |
+| orange | 60  | Available for consumer use                        |
+| sunset | 50  | Warning / `data-theme="warning"` (with hue drift) |
+| slate  | 260 | Near-neutral grey                                 |
+
+### Consumer app: generating a custom palette
+
+The recommended approach for a consuming app is to generate your own named colour files. This gives
+you clean step variables (`--gold-09`, `--gold-04`) rather than raw oklch values in your theme
+overrides.
+
+#### 1. Create `ramps.config.mjs` in your project root
+
+Export only your own palettes — the layer's built-in ones are already present via the layer CSS:
+
+```js
+// ramps.config.mjs
+export const ramps = {
+  gold: { hue: 85, chroma: 0.20 },
+  // Optional — add hue drift to rotate colour across the scale:
+  // copper: { hue: 45, chroma: 0.21, drift: -15 },
+};
+```
+
+#### 2. Add the generator script to `package.json`
+
+The script lives in the layer's `node_modules` — no copying required:
+
+```json
+"scripts": {
+  "generate:ramps": "node node_modules/srcdev-nuxt-components/scripts/generate-consumer-ramps.mjs"
+}
+```
+
+#### 3. Run it
+
+```bash
+npm run generate:ramps
+```
+
+Produces in `app/assets/styles/setup/02.colours/`:
+
+- `_gold.css` — `--gold-00` … `--gold-10` (literal oklch values)
+- `_palette-params.css` — `--palette-gold-hue`, `--palette-gold-chroma`
+
+#### 4. Import the generated files
+
+In your `app/assets/styles/setup/02.colours/index.css` (create if it doesn't exist):
+
+```css
+@import "./_palette-params";
+@import "./_gold";
+```
+
+#### 5. Set the palette as your theme default
 
 ```css
 /* app/assets/styles/setup/03.theming/_default.css */
 :where(html) {
-  --theme-hue: 85;       /* oklch hue angle (degrees) — warm gold */
-  --theme-chroma: 0.20;  /* peak saturation at step 06 */
+  --theme-hue:    var(--palette-gold-hue);
+  --theme-chroma: var(--palette-gold-chroma);
 
-  /* Update any page tokens that referenced the old blue palette */
-  --colour-text-accent:  light-dark(oklch(32% 0.16 85), oklch(64% 0.18 85));
-  --colour-text-eyebrow: light-dark(oklch(32% 0.16 85), oklch(64% 0.18 85));
+  /* Page-level tokens — readable named steps, not raw oklch */
+  --colour-text-accent:  light-dark(var(--gold-09), var(--gold-04));
+  --colour-text-eyebrow: light-dark(var(--gold-09), var(--gold-04));
 }
 ```
 
-No `!important`, no separate light/dark files, no manual step definitions.
+#### 6. Wire up in your setup index
+
+```css
+/* app/assets/styles/setup/index.css */
+@import "./02.colours/";
+@import "./03.theming/_default.css";
+```
+
+And in `app/assets/styles/main.css`:
+
+```css
+@import "./setup/";
+```
 
 ### Hue quick reference
 
@@ -160,39 +231,22 @@ No `!important`, no separate light/dark files, no manual step definitions.
 
 Use [oklch.com](https://oklch.com) to preview values before committing.
 
-### Built-in named palettes
-
-The layer ships seven named palettes used by component `theme` props:
-
-| Name   | Hue | Used for                    |
-|--------|-----|-----------------------------|
-| blue   | 255 | Default (page-level)        |
-| red    | 30  | Error / `data-theme="error"` |
-| green  | 157 | Success / `data-theme="success"` |
-| amber  | 75  | Available for consumer use  |
-| orange | 60  | Available for consumer use  |
-| sunset | 50  | Warning / `data-theme="warning"` (with hue drift) |
-| slate  | 260 | Near-neutral grey           |
-
 ### Generator (for library contributors)
 
-Named palettes are maintained in `ramps.config.mjs` at the repo root and built to CSS:
+Named palettes in the layer itself are maintained in `ramps.config.mjs` at the repo root:
 
 ```bash
-npm run generate:ramps   # rebuild all generated CSS
+npm run generate:ramps   # rebuild all layer CSS from ramps.config.mjs
 npm run check:ramps      # CI: fail if generated CSS is out of date
 ```
-
-Consumer apps do **not** need to run the generator — they only need to override `--theme-hue` and
-`--theme-chroma`.
 
 ### Further reading
 
 | Guide | Location |
 |-------|----------|
-| Full ramp architecture, formula details, adding a named palette | `.claude/skills/theming-colour-ramps.md` |
+| Full ramp architecture, formula details, hue drift | `.claude/skills/theming-colour-ramps.md` |
 | Full palette swap for a consumer app | `.claude/skills/theming-override-default.md` |
-| Partial token override (buttons, inputs, page) | `.claude/skills/theming-partial-override.md` |
+| Partial token override (palette shift, buttons, inputs) | `.claude/skills/theming-partial-override.md` |
 | Disable light/dark mode support | `.claude/skills/colour-scheme-disable.md` |
 
 Skills are available in your project after running `npm run setup:claude`.
