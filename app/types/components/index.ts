@@ -1,4 +1,5 @@
 // Export types from the components directory
+export * from "./semantic-theme.d"
 export * from "./carousel-basic.d"
 export * from "./slider-gallery.d"
 export * from "./canvas-switcher.d"
@@ -6,6 +7,7 @@ export * from "./display-chip.d"
 export * from "./tabs.d"
 export * from "./responsive-header.d"
 export * from "./display-toast.d"
+export * from "./display-prompt.d"
 export * from "./qr-code.d"
 export * from "./alert-mask-core.d"
 export * from "./hero-text"

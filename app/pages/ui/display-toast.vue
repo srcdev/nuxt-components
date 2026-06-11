@@ -114,7 +114,7 @@
             behavior: { returnFocusTo: secondToastButton },
           }"
         >
-          <DisplayPromptCore
+          <DisplayPrompt
             v-model="secondToastActive"
             theme="error"
             :dismissible="false"
@@ -125,7 +125,7 @@
             </template>
             <template #title>Info Prompt Title with content (Dismissable)</template>
             <template #content>This is prompt content, it can contain html or plain text.</template>
-          </DisplayPromptCore>
+          </DisplayPrompt>
         </DisplayToast>
 
         <DisplayToast
@@ -135,7 +135,7 @@
             behavior: { autoDismiss: false, returnFocusTo: thirdToastButton },
           }"
         >
-          <DisplayPromptCore
+          <DisplayPrompt
             v-model="thirdToastActive"
             theme="success"
             :dismissible="true"
@@ -151,7 +151,7 @@
               <Icon name="material-symbols:close-small" class="icon" />
             </template>
             <template #customTitle>Dismiss</template>
-          </DisplayPromptCore>
+          </DisplayPrompt>
         </DisplayToast>
 
         <DisplayToast
@@ -161,7 +161,7 @@
             behavior: { returnFocusTo: fourthToastButton },
           }"
         >
-          <DisplayPromptCore
+          <DisplayPrompt
             v-model="fourthToastActive"
             theme="info"
             :dismissible="false"
@@ -173,7 +173,7 @@
               <Icon name="material-symbols:close-small" class="icon" />
             </template>
             <template #customTitle>Dismiss</template>
-          </DisplayPromptCore>
+          </DisplayPrompt>
         </DisplayToast>
 
         <DisplayToast

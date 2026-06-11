@@ -4,7 +4,7 @@ import StorybookComponent from "../DisplayToast.vue";
 
 // Custom interface for story args
 interface ToastStoryArgs {
-  theme: "primary" | "secondary" | "success" | "warning" | "error" | "info";
+  theme: "info" | "success" | "warning" | "error";
   position: "top" | "bottom";
   alignment: "left" | "center" | "right";
   fullWidth: boolean;
@@ -13,9 +13,9 @@ interface ToastStoryArgs {
   revealDuration: number;
   text: string;
   customIcon: string;
-  // DisplayPromptCore specific props
+  // DisplayPrompt specific props
   usePrompt: boolean;
-  promptTheme: "primary" | "secondary" | "success" | "warning" | "error" | "info";
+  promptTheme: "info" | "success" | "warning" | "error";
   dismissible: boolean;
   promptTitle: string;
   promptContent: string;
@@ -24,13 +24,13 @@ interface ToastStoryArgs {
 }
 
 export default {
-  title: "Components/UI/DisplayToast",
+  title: "Atoms/DisplayToast",
   component: StorybookComponent,
   argTypes: {
     // Appearance Config
     theme: {
       control: { type: "select" },
-      options: ["primary", "secondary", "success", "warning", "error", "info"],
+      options: ["info", "success", "warning", "error"],
       description: "Toast theme/variant",
       table: {
         category: "Appearance",
@@ -96,53 +96,53 @@ export default {
         category: "Content",
       },
     },
-    // DisplayPromptCore Config
+    // DisplayPrompt Config
     usePrompt: {
       control: { type: "boolean" },
-      description: "Use DisplayPromptCore instead of simple text",
+      description: "Use DisplayPrompt instead of simple text",
       table: {
         category: "Prompt",
       },
     },
     promptTheme: {
       control: { type: "select" },
-      options: ["primary", "secondary", "success", "warning", "error", "info"],
-      description: "Theme for DisplayPromptCore",
+      options: ["info", "success", "warning", "error"],
+      description: "Theme for DisplayPrompt",
       table: {
         category: "Prompt",
       },
     },
     dismissible: {
       control: { type: "boolean" },
-      description: "Whether DisplayPromptCore is dismissible",
+      description: "Whether DisplayPrompt is dismissible",
       table: {
         category: "Prompt",
       },
     },
     promptTitle: {
       control: { type: "text" },
-      description: "Title for DisplayPromptCore",
+      description: "Title for DisplayPrompt",
       table: {
         category: "Prompt",
       },
     },
     promptContent: {
       control: { type: "text" },
-      description: "Content for DisplayPromptCore",
+      description: "Content for DisplayPrompt",
       table: {
         category: "Prompt",
       },
     },
     useAutoFocus: {
       control: { type: "boolean" },
-      description: "Auto focus DisplayPromptCore",
+      description: "Auto focus DisplayPrompt",
       table: {
         category: "Prompt",
       },
     },
     styleClassPassthrough: {
       control: { type: "object" },
-      description: "Style classes for DisplayPromptCore (e.g., ['dark', 'outlined'])",
+      description: "Style classes for DisplayPrompt (e.g., ['dark', 'outlined'])",
       table: {
         category: "Prompt",
       },
@@ -160,7 +160,7 @@ export default {
     },
   },
   args: {
-    theme: "primary",
+    theme: "info",
     position: "top",
     alignment: "right",
     fullWidth: false,
@@ -170,7 +170,7 @@ export default {
     text: "This is a toast notification message",
     customIcon: "",
     usePrompt: false,
-    promptTheme: "primary",
+    promptTheme: "info",
     dismissible: true,
     promptTitle: "Prompt Title",
     promptContent: "This is prompt content, it can contain html or plain text.",
@@ -199,7 +199,7 @@ const Template: StoryFn<ToastStoryArgs> = (args) => ({
     <div style="position: relative; height: 200px; padding: 20px;">
       <p style="margin-bottom: 20px;">Toast will appear and demonstrate the configured behavior:</p>
       <p v-if="args.usePrompt" style="margin-bottom: 10px; font-style: italic; color: #666;">
-        Note: DisplayPromptCore examples require component to be properly loaded in the environment.
+        Note: DisplayPrompt examples require component to be properly loaded in the environment.
       </p>
       <button
         @click="isActive = true"
@@ -288,7 +288,7 @@ FullWidthToast.args = {
   customIcon: "",
 };
 
-// DisplayPromptCore Examples - Based on Playground
+// DisplayPrompt Examples - Based on Playground
 export const ErrorPromptToast = Template.bind({});
 ErrorPromptToast.args = {
   theme: "error",
@@ -361,9 +361,9 @@ WarningPromptBottomCenter.args = {
   styleClassPassthrough: ["outlined"],
 };
 
-export const PrimaryPromptCustomStyles = Template.bind({});
-PrimaryPromptCustomStyles.args = {
-  theme: "primary",
+export const InfoPromptCustomStyles = Template.bind({});
+InfoPromptCustomStyles.args = {
+  theme: "info",
   position: "top",
   alignment: "left",
   fullWidth: false,
@@ -371,9 +371,9 @@ PrimaryPromptCustomStyles.args = {
   duration: 3000,
   revealDuration: 500,
   usePrompt: true,
-  promptTheme: "primary",
+  promptTheme: "info",
   dismissible: true,
-  promptTitle: "Primary Prompt with Custom Styles",
+  promptTitle: "Info Prompt with Custom Styles",
   promptContent: "This prompt uses custom style configurations and slower reveal animation.",
   useAutoFocus: false,
   styleClassPassthrough: ["dark"],

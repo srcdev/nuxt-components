@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import type { DisplayToastTheme } from "../../../types/components";
+import type { DisplayToastTheme } from "~/types/components";
 
 interface Props {
   theme: DisplayToastTheme;
@@ -45,14 +45,10 @@ interface Props {
 defineProps<Props>();
 
 const defaultThemeIcons = {
-  primary: "akar-icons:info",
-  secondary: "akar-icons:info",
-  tertiary: "akar-icons:info",
-  ghost: "akar-icons:info",
-  error: "akar-icons:circle-alert",
   info: "akar-icons:info",
-  success: "akar-icons:info",
+  success: "akar-icons:check",
   warning: "akar-icons:circle-alert",
+  error: "akar-icons:circle-alert",
 };
 
 const slots = useSlots();
@@ -65,7 +61,7 @@ const slots = useSlots();
   grid-template-columns: auto 1fr auto;
   gap: 12px;
   align-items: center;
-  background-color: var(--colour-theme-1);
+  background-color: light-dark(var(--colour-theme-0), var(--colour-theme-10));
   border-start-start-radius: 8px;
   border-end-start-radius: 8px;
   padding: 12px 14px;
@@ -78,7 +74,7 @@ const slots = useSlots();
     margin-right: 12px;
 
     .icon {
-      color: var(--colour-theme-0);
+      color: var(--theme-surface);
       display: inline-block;
       font-size: 2.5rem;
       font-style: normal;
@@ -94,7 +90,7 @@ const slots = useSlots();
     font-size: var(--step-4);
     font-weight: normal;
     line-height: 1.3;
-    color: var(--colour-theme-0);
+    color: var(--theme-text);
     margin: 0;
     padding: 0;
 
@@ -129,12 +125,12 @@ const slots = useSlots();
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--colour-theme-10);
-      border: 0.1rem solid var(--colour-theme-8);
+      background: light-dark(var(--colour-theme-1), var(--colour-theme-9));
+      border: 0.1rem solid var(--theme-border);
       outline: 0.1rem solid transparent;
       border-radius: 50%;
       box-shadow: none;
-      color: var(--colour-theme-1);
+      color: var(--theme-text);
       cursor: pointer;
       font-size: var(--step-4);
       font-weight: bold;
@@ -151,9 +147,9 @@ const slots = useSlots();
       &:hover,
       &:focus-visible {
         box-shadow: none;
-        background-color: var(--colour-theme-8);
-        color: var(--colour-theme-0);
-        outline: 0.1rem solid var(--colour-theme-3);
+        background-color: var(--theme-surface);
+        color: var(--theme-on-surface);
+        outline: 0.1rem solid var(--theme-ring);
         outline-offset: 0.2rem;
       }
     }

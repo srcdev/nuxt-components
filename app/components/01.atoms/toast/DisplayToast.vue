@@ -32,13 +32,13 @@
         :auto-dismiss="autoDismiss"
         :set-dismiss-toast="setDismissToast"
       >
-        <template #customToastIcon>
+        <template v-if="slots.customToastIcon" #customToastIcon>
           <slot name="customToastIcon"></slot>
         </template>
-        <template #title>
+        <template v-if="slots.title" #title>
           <slot name="title"></slot>
         </template>
-        <template #description>
+        <template v-if="slots.description" #description>
           <slot name="description"></slot>
         </template>
       </DefaultToastContent>
@@ -64,7 +64,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   config: () => ({
     appearance: {
-      theme: "ghost" as DisplayToastTheme,
+      theme: "info" as DisplayToastTheme,
       position: "top" as DisplayToastPosition,
       alignment: "right" as DisplayToastAlignment,
       fullWidth: false,
@@ -87,7 +87,7 @@ const slots = defineSlots<ToastSlots>();
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 // Computed properties for accessing config values with defaults
-const theme = computed(() => props.config?.appearance?.theme ?? "ghost");
+const theme = computed(() => props.config?.appearance?.theme ?? "info");
 const position = computed(() => props.config?.appearance?.position ?? "top");
 const alignment = computed(() => props.config?.appearance?.alignment ?? "right");
 const fullWidth = computed(() => props.config?.appearance?.fullWidth ?? false);
@@ -262,7 +262,7 @@ onBeforeRouteLeave(() => {
 
     /* Focus styles for accessibility */
     &:focus {
-      outline: 2px solid var(--colour-theme-3, #007acc);
+      outline: 2px solid var(--theme-ring);
       outline-offset: 2px;
     }
 
@@ -340,94 +340,15 @@ onBeforeRouteLeave(() => {
   */
     &.has-theme {
       padding-inline-start: 6px;
-      background-color: var(--colour-theme-8);
+      background-color: var(--theme-surface);
 
-      border: 0.1rem solid var(--colour-theme-8);
+      border: 0.1rem solid var(--theme-border);
       border-start-start-radius: 8px;
       border-end-start-radius: 8px;
       border-start-end-radius: 4px;
       border-end-end-radius: 4px;
 
       overflow: hidden;
-
-      /* .display-toast-inner {
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 12px;
-      align-items: center;
-      background-color: var(--slate-10);
-      border-start-start-radius: 8px;
-      border-end-start-radius: 8px;
-      padding: 12px 14px;
-      overflow: hidden;
-
-      .toast-icon {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 12px;
-
-        .icon {
-          color: var(--colour-theme-0);
-          display: inline-block;
-          font-size: 2.5rem;
-          font-style: normal;
-          font-weight: normal;
-          overflow: hidden;
-        }
-      }
-
-      .toast-message {
-        display: flex;
-        align-items: center;
-        font-size: var(--step-4);
-        font-weight: normal;
-        line-height: 1.3;
-        color: var(--colour-theme-0);
-        margin: 0;
-        padding: 0;
-      }
-
-      .toast-action {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-left: 12px;
-
-        button {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          background: var(--colour-theme-10);
-          border: 0.1rem solid var(--colour-theme-8);
-          outline: 0.1rem solid transparent;
-          border-radius: 50%;
-          box-shadow: none;
-          color: var(--colour-theme-0);
-          cursor: pointer;
-          font-size: var(--step-4);
-          font-weight: bold;
-          padding: 0.5rem;
-          text-decoration: underline;
-
-          transition: all 0.3s ease;
-
-          .icon {
-            font-size: 1.5rem;
-            vertical-align: middle;
-          }
-
-          &:hover,
-          &:focus-visible {
-            box-shadow: none;
-            background-color: var(--colour-theme-8);
-            color: var(--colour-theme-0);
-            outline: 0.1rem solid var(--colour-theme-3);
-            outline-offset: 0.2rem;
-          }
-        }
-      }
-    } */
     }
 
     .display-toast-progress {
@@ -437,7 +358,7 @@ onBeforeRouteLeave(() => {
       height: 3px;
       transform: scaleX(0);
       transform-origin: right;
-      background: linear-gradient(to right, var(--colour-theme-2), var(--colour-theme-8));
+      background: var(--theme-surface);
       border-radius: inherit;
       animation: progress v-bind(displayDurationMs) linear forwards;
     }

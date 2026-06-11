@@ -2,7 +2,7 @@
   <div
     ref="promptElementRef"
     class="display-prompt-core"
-    :class="[{ closed: !compopnentOpen }]"
+    :class="[{ closed: !componentOpen }]"
     :data-test-id="`display-prompt-core-${theme}`"
     tabindex="0"
   >
@@ -10,7 +10,7 @@
       <div class="display-prompt-inner">
         <div class="display-prompt-icon" data-test-id="prompt-icon" aria-hidden="true">
           <slot name="customDecoratorIcon">
-            <Icon :name="displayPromptIcons[theme] ?? 'akar-icons:circle-alert'" class="icon" :color="iconColor" />
+            <Icon :name="themeIcons[theme]" class="icon" />
           </slot>
         </div>
         <div class="display-prompt-content" :aria-live="useAutoFocus ? 'polite' : undefined">
@@ -40,43 +40,33 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  dismissible: {
-    type: Boolean,
-    default: false,
-  },
-  theme: {
-    type: String,
-    default: "error",
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-  iconColor: {
-    type: String as PropType<string>,
-    default: "dark-grey",
-  },
-  displayPromptIcons: {
-    type: Object as PropType<Record<string, string>>,
-    default: () => ({
-      error: "akar-icons:circle-alert",
-      info: "akar-icons:info",
-      success: "akar-icons:check",
-      warning: "akar-icons:circle-alert",
-      secondary: "akar-icons:info",
-    }),
-  },
-  useAutoFocus: {
-    type: Boolean,
-    default: false,
-  },
+import type { DisplayPromptTheme } from "~/types/components";
+
+interface Props {
+  theme?: DisplayPromptTheme;
+  dismissible?: boolean;
+  useAutoFocus?: boolean;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  theme: "info",
+  dismissible: false,
+  useAutoFocus: false,
+  styleClassPassthrough: () => [],
 });
+
+const themeIcons: Record<DisplayPromptTheme, string> = {
+  info: "akar-icons:info",
+  success: "akar-icons:check",
+  warning: "akar-icons:circle-alert",
+  error: "akar-icons:circle-alert",
+};
 
 const slots = useSlots();
 const promptElementRef = useTemplateRef<HTMLElement>("promptElementRef");
 const parentComponentState = defineModel<boolean>({ default: false });
-const compopnentOpen = ref(true);
+const componentOpen = ref(true);
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const updateComponentState = () => {
@@ -85,7 +75,7 @@ const updateComponentState = () => {
     return;
   }
 
-  compopnentOpen.value = false;
+  componentOpen.value = false;
 };
 
 onMounted(async () => {
@@ -110,7 +100,7 @@ onMounted(async () => {
     }
 
     .display-prompt-wrapper {
-      background-color: var(--colour-theme-8);
+      background-color: var(--theme-surface);
       border: 0px solid transparent;
       border-radius: 4px;
       border-start-start-radius: 8px;
@@ -119,22 +109,8 @@ onMounted(async () => {
 
       overflow: hidden;
 
-      &:not(.dark) {
-        &.outlined {
-          border: 1px solid var(--colour-theme-8);
-        }
-      }
-
-      &.dark {
-        border-width: 0;
-
-        .display-prompt-inner {
-          background-color: var(--slate-01);
-        }
-
-        &.outlined {
-          border: 1px solid var(--colour-theme-8);
-        }
+      &.outlined {
+        border: 1px solid var(--theme-border);
       }
 
       .display-prompt-inner {
@@ -147,12 +123,12 @@ onMounted(async () => {
 
         border-start-start-radius: 8px;
         border-end-start-radius: 8px;
-        background-color: var(--colour-theme-10);
+        background-color: light-dark(var(--colour-theme-0), var(--colour-theme-10));
 
         .display-prompt-icon {
           display: inline-flex;
           .icon {
-            color: var(--colour-theme-8);
+            color: var(--theme-surface);
             display: inline-block;
             font-size: 3rem;
             font-style: normal;
@@ -173,7 +149,7 @@ onMounted(async () => {
             font-size: var(--step-5);
             font-weight: bold;
             line-height: 1.3;
-            color: var(--colour-theme-8);
+            color: var(--theme-text);
             margin: 0;
             padding: 0;
           }
@@ -182,7 +158,7 @@ onMounted(async () => {
             font-size: var(--step-4);
             font-weight: normal;
             line-height: 1.3;
-            color: var(--colour-theme-8);
+            color: var(--theme-text);
             margin: 0;
             padding: 0;
           }
@@ -194,9 +170,9 @@ onMounted(async () => {
           justify-content: center;
           margin: 1rem;
           padding: 0.5rem;
-          border: 0.1rem solid var(--colour-theme-8);
+          border: 0.1rem solid var(--theme-border);
           border-radius: 50%;
-          outline: 1px solid var(--colour-theme-3);
+          outline: 1px solid var(--theme-ring);
 
           transition:
             border 200ms ease-in-out,
@@ -204,18 +180,18 @@ onMounted(async () => {
 
           &:hover {
             cursor: pointer;
-            border: 0.1rem solid var(--colour-theme-10);
-            outline: 2px solid var(--colour-theme-6);
+            border: 0.1rem solid var(--theme-surface);
+            outline: 2px solid var(--theme-border-focus);
           }
 
           &:focus-visible {
             box-shadow: var(--focus-box-shadow-colour-on);
-            border: 0.1rem solid var(--colour-theme-10);
-            outline: 2px solid var(--colour-theme-6);
+            border: 0.1rem solid var(--theme-surface);
+            outline: 2px solid var(--theme-border-focus);
           }
 
           .icon {
-            color: var(--colour-theme-8);
+            color: var(--theme-text);
             display: block;
             font-size: var(--step-5);
             padding: 1rem;

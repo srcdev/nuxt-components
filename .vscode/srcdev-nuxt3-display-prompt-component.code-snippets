@@ -3,7 +3,7 @@
     "description": "Display Prompt Component HTML Template",
     "scope": "vue, html",
     "body": [
-      "<DisplayPromptCore theme=\"$0['error', 'info', 'success', 'warning', 'secondary']\" :dismissible=\"true\" :use-local-style-overrides=\"true\" :style-class-passthrough=\"['your-scope-class']\">",
+      "<DisplayPrompt theme=\"$0['error', 'info', 'success', 'warning', 'secondary']\" :dismissible=\"true\" :use-local-style-overrides=\"true\" :style-class-passthrough=\"['your-scope-class']\">",
       "  <template #customDecoratorIcon>",
       "    <Icon name=\"akar-icons:info\" class=\"icon\" />",
       "  </template>",
@@ -13,7 +13,7 @@
       "    <Icon name=\"material-symbols:close-small\" class=\"icon\" />",
       "  </template>",
       "  <template #customTitle>Dismiss</template>",
-      "</DisplayPromptCore>",
+      "</DisplayPrompt>",
     ],
   },
   "SRCDEV Nuxt Display Prompt Script Setup Template": {
