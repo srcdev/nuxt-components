@@ -24,7 +24,7 @@ export default {
     },
     styleClassPassthrough: {
       control: { type: "object" },
-      description: "Extra classes applied to the prompt wrapper (e.g. ['outlined', 'dark'])",
+      description: "Extra classes applied to the prompt wrapper. Supported modifier: 'outlined' (adds a border).",
       table: { category: "Styling" },
     },
     modelValue: { table: { disable: true } },
@@ -95,11 +95,11 @@ Dismissible.args = {
   dismissible: true,
 };
 
-export const DarkOutlined = Template.bind({});
-DarkOutlined.args = {
+export const Outlined = Template.bind({});
+Outlined.args = {
   theme: "info",
   dismissible: true,
-  styleClassPassthrough: ["dark", "outlined"],
+  styleClassPassthrough: ["outlined"],
 };
 
 export const AllThemesDismissible: StoryFn<typeof StorybookComponent> = () => ({

@@ -27,7 +27,7 @@
  */
 
 import { writeFileSync, mkdirSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { dirname, join } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -35,12 +35,12 @@ const LAYER_ROOT = join(__dirname, "..");
 const CONSUMER_ROOT = process.cwd();
 
 // Lightness / chroma curves come from the layer so all ramps share the same curve shape
-const { LIGHTNESS, CHROMA_MULTIPLIERS } = await import(join(LAYER_ROOT, "ramps.config.mjs"));
+const { LIGHTNESS, CHROMA_MULTIPLIERS } = await import(pathToFileURL(join(LAYER_ROOT, "ramps.config.mjs")).href);
 
 // Consumer's palette definitions
 let consumerRamps;
 try {
-  const config = await import(join(CONSUMER_ROOT, "ramps.config.mjs"));
+  const config = await import(pathToFileURL(join(CONSUMER_ROOT, "ramps.config.mjs")).href);
   consumerRamps = config.ramps;
   if (!consumerRamps || typeof consumerRamps !== "object") throw new Error("ramps export missing");
 } catch {

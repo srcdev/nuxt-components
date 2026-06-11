@@ -6,7 +6,7 @@
 
 import { execSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+import { dirname } from "node:path";
 
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 
@@ -26,7 +26,9 @@ console.log("Running generator…");
 execSync("node scripts/generate-ramps.mjs", { cwd: ROOT, stdio: "inherit" });
 
 console.log("Checking for diff…");
-const diff = execSync(`git diff --name-only ${GENERATED.join(" ")}`, { cwd: ROOT }).toString().trim();
+const diff = execSync(`git diff --name-only ${GENERATED.join(" ")}`, { cwd: ROOT })
+  .toString()
+  .trim();
 
 if (diff) {
   console.error("\n✗ Generated files are out of date. Run `npm run generate:ramps` and commit:\n");

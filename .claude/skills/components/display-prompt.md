@@ -16,7 +16,7 @@ the DOM. Dismiss can be controlled locally (closes itself) or by a parent via `v
 | `theme` | `SemanticTheme` | `"info"` | `"info" \| "success" \| "warning" \| "error"` |
 | `dismissible` | `boolean` | `false` | Shows a close button. |
 | `useAutoFocus` | `boolean` | `false` | Focuses the prompt root element on mount. |
-| `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the inner wrapper (e.g. `"outlined"`). |
+| `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the inner wrapper. Supported modifier: `"outlined"`. |
 | `v-model` | `boolean` | `false` | Optional parent control — see dismiss behaviour below. |
 
 ## Slots

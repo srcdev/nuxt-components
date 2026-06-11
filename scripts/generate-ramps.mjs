@@ -8,13 +8,13 @@
  */
 
 import { writeFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { dirname, join } from "node:path";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
 
-const { LIGHTNESS, CHROMA_MULTIPLIERS, ramps } = await import(join(ROOT, "ramps.config.mjs"));
+const { LIGHTNESS, CHROMA_MULTIPLIERS, ramps } = await import(pathToFileURL(join(ROOT, "ramps.config.mjs")).href);
 
 const COLOURS_DIR = join(ROOT, "app/assets/styles/setup/02.colours");
 const THEMING_DIR = join(ROOT, "app/assets/styles/setup/03.theming");
@@ -76,7 +76,7 @@ for (let i = 0; i <= 10; i++) {
   const M = CHROMA_MULTIPLIERS[i];
   const fraction = i === 0 ? "0" : i === 10 ? "1" : `${i} / 10`;
   rampLines.push(
-    `  --colour-theme-${i}: oklch(${L}% calc(var(--theme-chroma) * ${M}) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (${fraction})));`,
+    `  --colour-theme-${i}: oklch(${L}% calc(var(--theme-chroma) * ${M}) calc(var(--theme-hue) + var(--theme-hue-drift, 0) * (${fraction})));`
   );
 }
 
