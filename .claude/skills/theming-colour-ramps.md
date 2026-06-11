@@ -188,13 +188,26 @@ export const ramps = {
 
 ### 2. Add the generator to `package.json`
 
-The script lives in the layer's `node_modules` — no copying required:
+The script lives in the layer's `node_modules` — no copying required. Prepend it to `dev`,
+`build`, and `generate` so generated CSS never drifts out of sync with `ramps.config.mjs`:
 
 ```json
 "scripts": {
-  "generate:ramps": "node node_modules/srcdev-nuxt-components/scripts/generate-consumer-ramps.mjs"
+  "generate:ramps": "node node_modules/srcdev-nuxt-components/scripts/generate-consumer-ramps.mjs",
+  "dev":      "npm run generate:ramps && nuxt dev",
+  "build":    "npm run generate:ramps && nuxt build",
+  "generate": "npm run generate:ramps && nuxt generate"
 }
 ```
+
+Also add it to `postinstall` so it runs automatically after every `npm install`:
+
+```json
+"postinstall": "nuxt prepare && npm run generate:ramps && npm run setup:claude"
+```
+
+> **Do not manually edit generated files.** They carry a `/* GENERATED */` comment at the top
+> and are overwritten every time the generator runs. All changes belong in `ramps.config.mjs`.
 
 ### 3. Run the generator
 
