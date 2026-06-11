@@ -149,12 +149,22 @@ overrides.
 
 #### 1. Create `ramps.config.mjs` in your project root
 
-Export only your own palettes — the layer's built-in ones are already present via the layer CSS:
+Define the palettes you want. You can add new ones, reuse a built-in name to override the
+layer's values, or do both. Consumer CSS loads after the layer, so your generated files win
+the cascade automatically:
 
 ```js
 // ramps.config.mjs
 export const ramps = {
+  // New palette — adds --gold-00..10 and --palette-gold-* vars
   gold: { hue: 85, chroma: 0.20 },
+
+  // Override a built-in — replaces the layer's --blue-00..10 with your values
+  // blue: { hue: 240, chroma: 0.18 },
+
+  // Override the error palette — all error/invalid states use your red
+  // red: { hue: 15, chroma: 0.26 },
+
   // Optional — add hue drift to rotate colour across the scale:
   // copper: { hue: 45, chroma: 0.21, drift: -15 },
 };

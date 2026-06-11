@@ -165,14 +165,23 @@ variables (`--gold-09`, `--gold-04`) in your theme overrides rather than raw okl
 
 ### 1. Create `ramps.config.mjs` in your project root
 
-Export only your own palettes — the layer's built-in ones (blue, red, green, etc.) are already
-present via the layer CSS:
+Define the palettes you want. You can add new ones, reuse a built-in name to override the
+layer's values, or both. Consumer CSS loads after the layer, so generated files win the
+cascade automatically:
 
 ```js
 // ramps.config.mjs
 export const ramps = {
+  // New palette — adds --gold-00..10 and --palette-gold-* vars
   gold: { hue: 85, chroma: 0.20 },
-  // with hue drift (colour rotates across the 11 steps):
+
+  // Override a built-in — replaces the layer's --blue-00..10 with your values
+  // blue: { hue: 240, chroma: 0.18 },
+
+  // Override the error/invalid palette — all error states use your red
+  // red: { hue: 15, chroma: 0.26 },
+
+  // Optional — hue drift rotates colour linearly across the 11 steps:
   // copper: { hue: 45, chroma: 0.21, drift: -15 },
 };
 ```

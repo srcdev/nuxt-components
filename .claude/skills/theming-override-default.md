@@ -18,14 +18,23 @@ For the full architecture see `theming-colour-ramps.md`.
 
 ### 1. Create `ramps.config.mjs` in your project root
 
-Export only your own palettes — the layer's built-in ones (blue, red, green, etc.) are already
-present via the layer CSS:
+Define the palettes you want. You can add brand-new ones, reuse a built-in name to replace
+the layer's values, or both. Consumer CSS loads after the layer, so your generated files win
+the cascade automatically — no `!important` needed:
 
 ```js
 // ramps.config.mjs
 export const ramps = {
+  // New palette — adds --gold-00..10 and --palette-gold-* vars
   gold: { hue: 85, chroma: 0.20 },
-  // Optional — add hue drift to rotate colour across the scale:
+
+  // Override a built-in — your generated _blue.css replaces the layer's --blue-00..10
+  // blue: { hue: 240, chroma: 0.18 },
+
+  // Override the error/invalid palette — all red error states use your values
+  // red: { hue: 15, chroma: 0.26 },
+
+  // Optional — add hue drift (colour rotates linearly across the 11 steps):
   // copper: { hue: 45, chroma: 0.21, drift: -15 },
 };
 ```

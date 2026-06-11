@@ -8,8 +8,10 @@
  * Reads:   ramps.config.mjs in your project root
  * Writes:  app/assets/styles/setup/02.colours/ in your project root
  *
- * Your ramps.config.mjs should export only YOUR palettes — the layer's built-in
- * palettes (blue, red, green, etc.) are already shipped via the layer CSS.
+ * Your ramps.config.mjs can contain any combination of:
+ *   - New palettes (e.g. gold, copper) — adds --gold-00..10 and --palette-gold-* vars
+ *   - Built-in names (e.g. blue, red, green) — your generated file overrides the layer's
+ *     values because consumer CSS loads after layer CSS in the cascade
  *
  * Example ramps.config.mjs:
  *   export const ramps = {
