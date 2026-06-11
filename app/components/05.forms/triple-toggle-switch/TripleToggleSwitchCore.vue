@@ -153,15 +153,15 @@ onMounted(() => {
     width: fit-content;
 
     background-color: var(--theme-input-surface);
-    border: var(--form-element-border-width) solid var(--theme-input-border);
-    outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+    border: var(--form-element-border-width) solid var(--theme-border);
+    outline: var(--form-element-outline-width) solid transparent;
     border-radius: 100vw;
     padding: var(--_form-padding);
 
     transition: all var(--theme-form-transition-duration) ease-in-out;
 
     &:has(input:focus-visible) {
-      outline: var(--form-element-outline-width) solid var(--theme-input-outline-hover);
+      outline: var(--form-element-outline-width) solid var(--theme-ring);
       outline-offset: 0.2rem;
     }
 
@@ -223,7 +223,7 @@ onMounted(() => {
           outline: var(--form-element-outline-width) solid light-dark(var(--slate-10), var(--slate-00));
         }
         &:has(input:focus-visible) {
-          outline: var(--form-element-outline-width) solid var(--theme-input-outline-hover);
+          outline: var(--form-element-outline-width) solid var(--theme-ring);
           outline-offset: 0.2rem;
         }
 

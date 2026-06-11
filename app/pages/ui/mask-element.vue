@@ -9,7 +9,7 @@
             <AlertMaskCore
               :config="{
                 backgroundColour: 'rgba(0,0,0,0.25)',
-                borderColour: 'var(--orange-08)',
+                borderColour: 'var(--orange-06)',
                 radiusLeft: 12,
                 radiusRight: 4,
                 borderLeft: 12,
@@ -23,6 +23,27 @@
                 <p>Constant-radius masked border demo, and some more text</p>
               </div>
             </AlertMaskCore>
+
+            <div class="test-mask-element">
+              <AlertMaskCore
+                :left-border-only="true"
+                :config="{
+                  backgroundColour: 'rgba(0,0,0,0.25)',
+                  borderColour: 'var(--red-06)',
+                  radiusLeft: 12,
+                  radiusRight: 4,
+                  borderLeft: 12,
+                  borderTop: 1,
+                  borderRight: 1,
+                  borderBottom: 1,
+                }"
+                :style-class-passthrough="['test-alert']"
+              >
+                <div class="some-local-class">
+                  <p>Compact</p>
+                </div>
+              </AlertMaskCore>
+            </div>
           </div>
         </PageRow>
       </template>
@@ -67,12 +88,13 @@ useHead({
 
     .alert-mask-core {
       &.test-alert {
-        width: 600px;
+        /* width: 600px; */
 
         .alert-mask-content-slot {
           .some-local-class {
             color: white;
-            padding: 1.2rem;
+            padding-block: 0.4rem;
+            padding-inline: 0.8rem;
           }
         }
       }

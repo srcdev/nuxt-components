@@ -1,11 +1,4 @@
 :where(html) {
-  input,
-  textarea,
-  select,
-  button {
-    /* all: unset; */
-  }
-
   input:autofill,
   input:-internal-autofill-selected,
   input:-webkit-autofill-strong-password,

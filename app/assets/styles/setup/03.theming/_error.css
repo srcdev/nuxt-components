@@ -1,0 +1,14 @@
+:where([data-invalid]),
+:where([data-theme="error"]) {
+  --theme-hue: var(--palette-red-hue);
+  --theme-chroma: var(--palette-red-chroma);
+
+  /* ===========================================
+     FORM ERROR DISPLAY TOKENS
+     These are always error-red regardless of nesting context.
+     =========================================== */
+  --input-error-color: white;
+  --theme-error-surface: light-dark(var(--red-06), var(--red-07));
+  --theme-error-border: light-dark(var(--red-06), var(--red-07));
+  --theme-error-outline: light-dark(var(--red-01), var(--red-05));
+}

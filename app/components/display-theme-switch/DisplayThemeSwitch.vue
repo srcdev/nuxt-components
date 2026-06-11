@@ -112,12 +112,12 @@ watch(colorModeVal, (val) => {
 
     .triple-toggle-switch-wrapper {
       background-color: var(--theme-input-surface);
-      border: var(--form-element-border-width) solid var(--theme-input-border);
-      outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+      border: var(--form-element-border-width) solid var(--theme-border);
+      outline: var(--form-element-outline-width) solid transparent;
       padding: var(--_form-padding);
 
       &:has(input:focus-visible) {
-        outline: var(--form-element-outline-width) solid var(--theme-input-outline-hover);
+        outline: var(--form-element-outline-width) solid var(--theme-ring);
         outline-offset: 0.2rem;
       }
 
@@ -144,7 +144,7 @@ watch(colorModeVal, (val) => {
           }
 
           &:has(input:focus-visible) {
-            outline: var(--form-element-outline-width) solid var(--theme-input-outline-hover);
+            outline: var(--form-element-outline-width) solid var(--theme-ring);
             outline-offset: 0.2rem;
           }
 

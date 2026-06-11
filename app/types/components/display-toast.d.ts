@@ -1,14 +1,7 @@
 import type { VNode, ComponentPublicInstance } from "vue"
+import type { SemanticTheme } from "./semantic-theme.d"
 
-export type DisplayToastTheme =
-  | "primary"
-  | "secondary"
-  | "tertiary"
-  | "ghost"
-  | "error"
-  | "info"
-  | "success"
-  | "warning"
+export type DisplayToastTheme = SemanticTheme
 
 export type DisplayToastPosition = "top" | "bottom"
 export type DisplayToastAlignment = "left" | "center" | "right"

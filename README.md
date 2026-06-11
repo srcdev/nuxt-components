@@ -104,6 +104,172 @@ When disabled, no `data-color-scheme` attribute is set on `<html>` and `useColou
 
 ---
 
+## Colour System
+
+The layer ships a parametric oklch colour ramp. Two CSS custom properties — `--theme-hue` and
+`--theme-chroma` — drive an 11-step colour scale (`--colour-theme-0` to `--colour-theme-10`) that
+all themed components (buttons, inputs, prompts, toasts) read through a shared set of semantic
+slots. Switching the palette is a two-variable change; no token-by-token remapping is required.
+
+### How it works
+
+A formula declared on every potential theme host (`html`, `[data-theme]`, `[data-invalid]`)
+computes the scale from the two params:
+
+```css
+--colour-theme-6: oklch(56% calc(var(--theme-chroma) * 1.00) var(--theme-hue)); /* peak chroma */
+--colour-theme-0: oklch(98% calc(var(--theme-chroma) * 0.045) var(--theme-hue)); /* near-white */
+--colour-theme-10: oklch(25% calc(var(--theme-chroma) * 0.64) var(--theme-hue)); /* near-black */
+```
+
+Scale direction: **00 = lightest, 10 = darkest**. Chroma tapers at both ends and peaks at step 06.
+
+Eight semantic slots (`--theme-surface`, `--theme-text`, `--theme-ring`, etc.) are derived from the
+scale using `light-dark()` and are shared by all components. Theme variants (`data-theme="success"`,
+`"warning"`, `"error"`) swap `--theme-hue` and `--theme-chroma` on their element; the formula
+re-evaluates locally so each themed element gets its own full palette without affecting the page.
+
+### Built-in named palettes
+
+| Name   | Hue | Used for                                          |
+|--------|-----|---------------------------------------------------|
+| blue   | 255 | Default (page-level)                              |
+| red    | 30  | Error / `data-theme="error"`                      |
+| green  | 157 | Success / `data-theme="success"`                  |
+| amber  | 75  | Available for consumer use                        |
+| orange | 60  | Available for consumer use                        |
+| sunset | 50  | Warning / `data-theme="warning"` (with hue drift) |
+| slate  | 260 | Near-neutral grey                                 |
+
+### Consumer app: generating a custom palette
+
+The recommended approach for a consuming app is to generate your own named colour files. This gives
+you clean step variables (`--gold-09`, `--gold-04`) rather than raw oklch values in your theme
+overrides.
+
+#### 1. Create `ramps.config.mjs` in your project root
+
+Define the palettes you want. You can add new ones, reuse a built-in name to override the
+layer's values, or do both. Consumer CSS loads after the layer, so your generated files win
+the cascade automatically:
+
+```js
+// ramps.config.mjs
+export const ramps = {
+  // New palette — adds --gold-00..10 and --palette-gold-* vars
+  gold: { hue: 85, chroma: 0.20 },
+
+  // Override a built-in — replaces the layer's --blue-00..10 with your values
+  // blue: { hue: 240, chroma: 0.18 },
+
+  // Override the error palette — all error/invalid states use your red
+  // red: { hue: 15, chroma: 0.26 },
+
+  // Optional — add hue drift to rotate colour across the scale:
+  // copper: { hue: 45, chroma: 0.21, drift: -15 },
+};
+```
+
+#### 2. Add the generator script to `package.json`
+
+The script lives in the layer's `node_modules` — no copying required. Prepending it to `dev`,
+`build`, and `generate` prevents generated CSS from drifting out of sync with `ramps.config.mjs`:
+
+```json
+"scripts": {
+  "generate:ramps": "node node_modules/srcdev-nuxt-components/scripts/generate-consumer-ramps.mjs",
+  "dev":      "npm run generate:ramps && nuxt dev",
+  "build":    "npm run generate:ramps && nuxt build",
+  "generate": "npm run generate:ramps && nuxt generate"
+}
+```
+
+> **Do not manually edit generated files.** They carry a `/* GENERATED */` comment at the top
+> and are rebuilt every time the generator runs. Put all changes in `ramps.config.mjs` instead.
+
+#### 3. Run it
+
+```bash
+npm run generate:ramps
+```
+
+Produces in `app/assets/styles/setup/02.colours/`:
+
+- `_gold.css` — `--gold-00` … `--gold-10` (literal oklch values)
+- `_palette-params.css` — `--palette-gold-hue`, `--palette-gold-chroma`
+
+#### 4. Import the generated files
+
+In your `app/assets/styles/setup/02.colours/index.css` (create if it doesn't exist):
+
+```css
+@import "./_palette-params";
+@import "./_gold";
+```
+
+#### 5. Set the palette as your theme default
+
+```css
+/* app/assets/styles/setup/03.theming/_default.css */
+:where(html) {
+  --theme-hue:    var(--palette-gold-hue);
+  --theme-chroma: var(--palette-gold-chroma);
+
+  /* Page-level tokens — readable named steps, not raw oklch */
+  --colour-text-accent:  light-dark(var(--gold-09), var(--gold-04));
+  --colour-text-eyebrow: light-dark(var(--gold-09), var(--gold-04));
+}
+```
+
+#### 6. Wire up in your setup index
+
+```css
+/* app/assets/styles/setup/index.css */
+@import "./02.colours/";
+@import "./03.theming/_default.css";
+```
+
+And in `app/assets/styles/main.css`:
+
+```css
+@import "./setup/";
+```
+
+### Hue quick reference
+
+| Range   | Colour         |
+|---------|----------------|
+| 0–30    | Red / pink     |
+| 30–70   | Orange / amber |
+| 70–100  | Yellow / gold  |
+| 100–160 | Green          |
+| 220–270 | Blue           |
+| 270–310 | Violet         |
+
+Use [oklch.com](https://oklch.com) to preview values before committing.
+
+### Generator (for library contributors)
+
+Named palettes in the layer itself are maintained in `ramps.config.mjs` at the repo root:
+
+```bash
+npm run generate:ramps   # rebuild all layer CSS from ramps.config.mjs
+npm run check:ramps      # CI: fail if generated CSS is out of date
+```
+
+### Further reading
+
+| Guide | Location |
+|-------|----------|
+| Full ramp architecture, formula details, hue drift | `.claude/skills/theming-colour-ramps.md` |
+| Full palette swap for a consumer app | `.claude/skills/theming-override-default.md` |
+| Partial token override (palette shift, buttons, inputs) | `.claude/skills/theming-partial-override.md` |
+| Disable light/dark mode support | `.claude/skills/colour-scheme-disable.md` |
+
+Skills are available in your project after running `npm run setup:claude`.
+
+---
+
 ## Known Build / Production Issues
 
 ### `ERR_MODULE_NOT_FOUND: vue/index.mjs` — 500 on every request (Node 22)

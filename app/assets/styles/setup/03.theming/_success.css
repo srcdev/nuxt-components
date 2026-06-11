@@ -1,0 +1,4 @@
+:where([data-theme="success"]) {
+  --theme-hue: var(--palette-green-hue);
+  --theme-chroma: var(--palette-green-chroma);
+}

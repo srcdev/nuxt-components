@@ -2,255 +2,183 @@
 
 ## Overview
 
-The layer ships a default blue theme. This skill covers how to replace it with your own colour palette in a consuming Nuxt app — including adding a new colour scale and remapping all semantic tokens for light and dark modes.
+The layer ships a default blue theme. The recommended way to replace it is to generate your own
+named colour files — this gives you clean step variables (`--gold-09`, `--gold-04`) to reference
+in your theme overrides rather than raw oklch values. Setting `--theme-hue` and `--theme-chroma`
+drives the parametric ramp; the generated files give you named aliases for every step.
+
+For the full architecture see `theming-colour-ramps.md`.
 
 ## Prerequisites
 
-- Consuming app has `srcdev-nuxt-components` installed as a Nuxt layer
-- The consuming app has its own CSS entry point (e.g. `app/assets/styles/main.css`) registered in `nuxt.config.ts` via `css: [...]`
+- `srcdev-nuxt-components` installed as a Nuxt layer
+- A CSS entry point registered in `nuxt.config.ts` (e.g. `app/assets/styles/main.css`)
 
 ## Steps
 
-### 1. Create the colour scale file
+### 1. Create `ramps.config.mjs` in your project root
 
-Create `app/assets/styles/setup/02.colours/_gold.css` (or your colour name).
+Define the palettes you want. You can add brand-new ones, reuse a built-in name to replace
+the layer's values, or both. Consumer CSS loads after the layer, so your generated files win
+the cascade automatically — no `!important` needed:
 
-Colours use the `oklch` colour space. The scale runs from `00` (lightest) to `10` (darkest) — `00` is optional and only needed if you require a near-white tint.
+```js
+// ramps.config.mjs
+export const ramps = {
+  // New palette — adds --gold-00..10 and --palette-gold-* vars
+  gold: { hue: 85, chroma: 0.20 },
 
-```css
-:where(html) {
-  --gold-00: oklch(98% 0.01 85);
-  --gold-01: oklch(94% 0.04 85);
-  --gold-02: oklch(88% 0.09 85);
-  --gold-03: oklch(80% 0.14 85);
-  --gold-04: oklch(72% 0.18 85);
-  --gold-05: oklch(64% 0.20 85);
-  --gold-06: oklch(56% 0.19 85);
-  --gold-07: oklch(48% 0.17 85);
-  --gold-08: oklch(40% 0.15 85);
-  --gold-09: oklch(32% 0.12 85);
-  --gold-10: oklch(25% 0.09 85);
+  // Override a built-in — your generated _blue.css replaces the layer's --blue-00..10
+  // blue: { hue: 240, chroma: 0.18 },
+
+  // Override the error/invalid palette — all red error states use your values
+  // red: { hue: 15, chroma: 0.26 },
+
+  // Optional — add hue drift (colour rotates linearly across the 11 steps):
+  // copper: { hue: 45, chroma: 0.21, drift: -15 },
+};
+```
+
+Choose your hue and peak chroma using [oklch.com](https://oklch.com). The `chroma` value controls
+saturation at the peak step (06); typical range is 0.12–0.25.
+
+Hue quick reference:
+
+| Range   | Colour         |
+|---------|----------------|
+| 0–30    | Red / pink     |
+| 30–70   | Orange / amber |
+| 70–100  | Yellow / gold  |
+| 100–160 | Green          |
+| 220–270 | Blue           |
+| 270–310 | Violet         |
+
+### 2. Add the generator to `package.json`
+
+The script lives in the layer's `node_modules` — no copying required. Prepend it to `dev`,
+`build`, and `generate` so generated CSS never drifts out of sync with `ramps.config.mjs`:
+
+```json
+"scripts": {
+  "generate:ramps": "node node_modules/srcdev-nuxt-components/scripts/generate-consumer-ramps.mjs",
+  "dev":      "npm run generate:ramps && nuxt dev",
+  "build":    "npm run generate:ramps && nuxt build",
+  "generate": "npm run generate:ramps && nuxt generate"
 }
 ```
 
-Adjust the hue angle (third value) to taste — `85` is a warm gold. Use an oklch colour picker to preview the scale.
+Also add it to `postinstall` so it runs automatically after every `npm install`:
 
-### 2. Create the colours index
+```json
+"postinstall": "nuxt prepare && npm run generate:ramps && npm run setup:claude"
+```
 
-Create `app/assets/styles/setup/02.colours/index.css` and import your scale:
+> **Do not manually edit generated files.** They carry a `/* GENERATED */` comment at the top
+> and are overwritten every time the generator runs. All changes belong in `ramps.config.mjs`.
+
+### 3. Run the generator
+
+```bash
+npm run generate:ramps
+```
+
+Produces in `app/assets/styles/setup/02.colours/`:
+
+- `_gold.css` — `--gold-00` … `--gold-10` (literal oklch values, using the layer's lightness/chroma curve)
+- `_palette-params.css` — `--palette-gold-hue`, `--palette-gold-chroma`
+
+### 4. Import the generated files
+
+Create `app/assets/styles/setup/02.colours/index.css`:
 
 ```css
+@import "./_palette-params";
 @import "./_gold";
 ```
 
-### 3. Create the light theme override
+### 5. Set the palette as the theme default
 
-Create `app/assets/styles/setup/03.theming/default/_light.css`.
-
-This file uses `:where(html)` and maps semantic tokens to your colour scale. Copy the full token list from the layer and replace `--blue-*` references with `--gold-*`:
+Create `app/assets/styles/setup/03.theming/_default.css`:
 
 ```css
 :where(html) {
-  /* Color scale */
-  --colour-theme-1: var(--gold-01);
-  --colour-theme-2: var(--gold-02);
-  --colour-theme-3: var(--gold-03);
-  --colour-theme-4: var(--gold-04);
-  --colour-theme-5: var(--gold-05);
-  --colour-theme-6: var(--gold-06);
-  --colour-theme-7: var(--gold-07);
-  --colour-theme-8: var(--gold-08);
-  --colour-theme-9: var(--gold-09);
-  --colour-theme-10: var(--gold-10);
+  --theme-hue:    var(--palette-gold-hue);
+  --theme-chroma: var(--palette-gold-chroma);
 
-  /* Body */
-  --page-bg: var(--slate-00);
-  --colour-text-default: var(--slate-09);
-  --colour-text-accent: var(--gold-09);
-  --colour-text-eyebrow: var(--gold-09);
-
-  /* Links */
-  --colour-link-default: var(--gold-10);
-  --colour-link-hover: var(--gold-09);
-
-  /* Form inputs */
-  --theme-input-surface: var(--slate-00);
-  --theme-input-surface-hover: var(--slate-01);
-  --theme-input-border: var(--gold-06);
-  --theme-input-border-hover: var(--gold-05);
-  --theme-input-border-focus: var(--gold-04);
-  --theme-input-outline: transparent;
-  --theme-input-outline-focus: var(--gold-04);
-  --theme-input-visible-outline: var(--gold-10);
-  --theme-focus-visible-shadow: 0 0 0 2px var(--gold-02);
-  --theme-input-placeholder: var(--slate-05);
-  --theme-input-text-color-normal: var(--slate-09);
-
-  /* Checkbox / radio */
-  --theme-checkbox-symbol-color: var(--gold-08);
-  --theme-checkbox-symbol-surface: var(--theme-input-surface);
-  --theme-checkbox-decorator-color: var(--gold-09);
-
-  /* Toggle */
-  --theme-toggle-symbol-color-default: var(--gold-00);
-  --theme-toggle-symbol-color-checked: var(--gold-08);
-
-  /* Buttons — primary */
-  --theme-button-primary-surface: var(--gold-09);
-  --theme-button-primary-surface-hover: var(--gold-08);
-  --theme-button-primary-surface-active: var(--gold-07);
-  --theme-button-primary-border: var(--gold-09);
-  --theme-button-primary-border-active: var(--gold-09);
-  --theme-button-primary-outline: var(--gold-01);
-  --theme-button-primary-outline-active: var(--gold-07);
-  --theme-button-primary-text: var(--gold-00);
-  --theme-button-primary-text-hover: var(--gold-00);
-
-  /* Buttons — secondary */
-  --theme-button-secondary-surface: transparent;
-  --theme-button-secondary-surface-hover: var(--gold-01);
-  --theme-button-secondary-surface-active: var(--gold-01);
-  --theme-button-secondary-border: var(--gold-09);
-  --theme-button-secondary-border-active: var(--gold-09);
-  --theme-button-secondary-outline: var(--gold-09);
-  --theme-button-secondary-outline-active: var(--gold-09);
-  --theme-button-secondary-text: var(--gold-09);
-  --theme-button-secondary-text-hover: var(--gold-09);
-
-  /* Buttons — tertiary */
-  --theme-button-tertiary-surface: var(--slate-01);
-  --theme-button-tertiary-text: var(--gold-09);
-  --theme-button-tertiary-border-active: var(--gold-09);
-  --theme-button-tertiary-outline-active: var(--gold-09);
+  /* Page-level tokens — readable named steps, not raw oklch */
+  --page-bg: light-dark(var(--slate-00), var(--slate-08));
+  --colour-text-default:  light-dark(var(--slate-09), var(--slate-01));
+  --colour-text-accent:   light-dark(var(--gold-09), var(--gold-04));
+  --colour-text-eyebrow:  light-dark(var(--gold-09), var(--gold-04));
 }
 ```
 
-### 4. Create the dark theme override
-
-Create `app/assets/styles/setup/03.theming/default/_dark.css`.
-
-Selector is `:where(html.dark)`. Dark mode typically inverts the scale direction — light values for text/borders, dark values for backgrounds:
-
-```css
-:where(html.dark) {
-  /* Color scale */
-  --colour-theme-1: var(--gold-01);
-  --colour-theme-2: var(--gold-02);
-  --colour-theme-3: var(--gold-03);
-  --colour-theme-4: var(--gold-04);
-  --colour-theme-5: var(--gold-05);
-  --colour-theme-6: var(--gold-06);
-  --colour-theme-7: var(--gold-07);
-  --colour-theme-8: var(--gold-08);
-  --colour-theme-9: var(--gold-09);
-  --colour-theme-10: var(--gold-10);
-
-  /* Body */
-  --page-bg: var(--slate-08);
-  --colour-text-default: var(--slate-01);
-  --colour-text-accent: var(--gold-05);
-  --colour-text-eyebrow: var(--gold-05);
-
-  /* Links */
-  --colour-link-default: var(--gold-03);
-  --colour-link-hover: var(--gold-04);
-
-  /* Form inputs */
-  --theme-input-surface: var(--slate-10);
-  --theme-input-surface-hover: var(--slate-09);
-  --theme-input-border: var(--gold-06);
-  --theme-input-border-hover: var(--gold-05);
-  --theme-input-border-focus: var(--gold-04);
-  --theme-input-outline: var(--gold-06);
-  --theme-input-outline-focus: var(--gold-04);
-  --theme-input-visible-outline: var(--gold-04);
-  --theme-focus-visible-shadow: 0 0 0 2px var(--gold-02);
-  --theme-input-placeholder: var(--slate-04);
-  --theme-input-text-color-normal: var(--slate-01);
-
-  /* Checkbox / radio */
-  --theme-checkbox-symbol-surface: var(--theme-input-surface);
-  --theme-checkbox-symbol-color: var(--gold-02);
-  --theme-checkbox-decorator-color: var(--gold-02);
-
-  /* Buttons — primary */
-  --theme-button-primary-border: var(--gold-07);
-  --theme-button-primary-border-active: var(--gold-07);
-  --theme-button-primary-text: var(--gold-00);
-  --theme-button-primary-text-hover: var(--gold-00);
-
-  /* Buttons — secondary */
-  --theme-button-secondary-surface: var(--gold-01);
-  --theme-button-secondary-border-active: var(--gold-01);
-  --theme-button-secondary-text: var(--gold-09);
-
-  /* Buttons — tertiary */
-  --theme-button-tertiary-surface: transparent;
-  --theme-button-tertiary-text: var(--gold-01);
-  --theme-button-tertiary-border-active: var(--gold-01);
-  --theme-button-tertiary-outline-active: var(--gold-09);
-}
-```
-
-### 5. Create the theming index
-
-Create `app/assets/styles/setup/03.theming/default/index.css`:
-
-```css
-@import "./_light";
-@import "./_dark";
-```
+Only `--theme-hue` and `--theme-chroma` are strictly required — all component tokens update
+automatically from there. Add page-level overrides only for tokens that reference the old blue
+palette by name.
 
 ### 6. Create the setup index
 
-Create `app/assets/styles/setup/index.css` that imports colours then theming (order matters — colours must be defined before theming references them):
+`app/assets/styles/setup/index.css`:
 
 ```css
 @import "./02.colours/";
-@import "./03.theming/default/";
+@import "./03.theming/_default.css";
 ```
 
 ### 7. Wire up the CSS entry point
 
-In your consuming app's `app/assets/styles/main.css` (or equivalent), import your setup after the layer's styles are applied:
+`app/assets/styles/main.css`:
 
 ```css
 @import "./setup/";
 ```
 
-Then register it in `nuxt.config.ts`:
+Registered in `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
   extends: "srcdev-nuxt-components",
-  css: ["~/assets/styles/main.css"],
+  css: [
+    "srcdev-nuxt-components/app/assets/styles/main.css",
+    "~/assets/styles/main.css",
+  ],
 });
 ```
 
-The consuming app's CSS loads after the layer's, so your token overrides win via the cascade.
+## How it works
+
+The layer's `theme-ramp.css` declares the formula on `:where(html, [data-theme], [data-invalid])`.
+When your override sets `--theme-hue`/`--theme-chroma` on `:where(html)`, every `--colour-theme-*`
+step recalculates to your palette. Semantic slots (`--theme-surface`, `--theme-text`, etc.) are
+declared on that same selector using `light-dark()` — light/dark mode continues to work without
+any extra declarations.
+
+The generated `_gold.css` gives you a named alias for each step (`--gold-09` etc.) so your
+page-level token values stay readable. The values match what the formula would produce for
+that hue/chroma pair.
+
+## What you do NOT need to do
+
+- Define `--colour-theme-0` through `--colour-theme-10` — the formula handles it
+- Redeclare `--theme-surface`, `--theme-border`, `--theme-ring` etc. — they auto-update
+- Write separate light/dark files — use `light-dark()` in a single file
+- Override any button or input component tokens — they all consume semantic slots
 
 ## rem sizing
 
-`html` has `font-size: 62.5%` set in `app/assets/styles/setup/01.config/_head.css`, making `1rem = 10px`. Use this when writing any rem values in your theme or component styles:
+`html` has `font-size: 62.5%` set by the layer, making `1rem = 10px`:
 
 | px   | rem    |
-| ---- | ------ |
+|------|--------|
 | 8px  | 0.8rem |
 | 12px | 1.2rem |
 | 16px | 1.6rem |
 | 24px | 2.4rem |
 | 32px | 3.2rem |
 
-## Token reference
-
-See `CONSUMER-STYLING.md` in the layer package root for the full list of available tokens grouped
-by category. This is the authoritative reference when deciding which tokens to include in your
-override files.
-
 ## Notes
 
-- The `--slate-*` scale comes from the layer and does not need to be redefined — keep all neutral/background tokens pointing at `--slate-*`.
-- Only redefine tokens that change. You do not need to copy tokens that stay identical between layer and your override.
-- Dark mode is triggered by the `dark` class on `<html>`. The layer handles toggling this via `data-color-scheme` and the colour scheme store.
-- If you need additional component-specific tokens (e.g. `--stepper-list-*`, `--glass-panel-*`), add them to `_light.css` and `_dark.css` following the same pattern.
-- Use an oklch colour picker (e.g. oklch.com) to build and preview your scale before committing values.
+- `--slate-*` neutrals ship with the layer — no need to redefine for page backgrounds/text
+- To add a custom `[data-theme]` variant using your generated palette, see `theming-colour-ramps.md`
+- The `warning` theme overrides `--theme-surface` steps directly for a different surface intensity — this pattern is available for any custom theme that needs a non-default surface step

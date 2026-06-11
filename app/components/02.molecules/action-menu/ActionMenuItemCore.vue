@@ -87,7 +87,7 @@ watch(
     }
 
     &:focus-visible {
-      outline: var(--button-outline-width, 0.2rem) solid var(--theme-button-primary-outline, currentcolor);
+      outline: var(--button-outline-width, 0.2rem) solid var(--theme-ring, currentcolor);
       outline-offset: -0.2rem;
     }
 

@@ -100,22 +100,22 @@ const flexDirection = ref(props.direction);
     --_white-space: nowrap;
   }
   background-color: var(--theme-input-surface);
-  border: var(--form-element-border-width) solid var(--theme-input-border);
-  outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+  border: var(--form-element-border-width) solid var(--theme-border);
+  outline: var(--form-element-outline-width) solid transparent;
 
   box-shadow: 0.1rem 0.1rem 0.8rem 0.1rem transparent;
 
   &:hover {
     background-color: var(--theme-input-surface-hover);
-    border-color: var(--theme-input-border);
-    outline-color: var(--theme-input-outline-hover);
+    border-color: var(--theme-border);
+    outline-color: var(--theme-ring);
     outline-offset: var(--form-element-outline-offset-focus);
     cursor: pointer;
   }
 
   &:has(.input-checkbox-radio-core:focus-visible) {
-    background-color: var(--theme-input-surface-focus);
-    outline-color: var(--theme-input-outline-focus);
+    background-color: var(--theme-surface-subtle);
+    outline-color: var(--theme-border-focus);
     outline-offset: var(--form-element-outline-offset-focus);
   }
 
@@ -126,7 +126,7 @@ const flexDirection = ref(props.direction);
   .input-checkbox-radio-options-button-label {
     display: flex;
     flex-grow: 1;
-    color: var(--theme-checkbox-label-text-color);
+    color: var(--colour-text-default);
     font-size: var(--input-font-size);
     width: 100%;
     min-height: var(--input-element-line-height);
@@ -145,7 +145,7 @@ const flexDirection = ref(props.direction);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--theme-checkbox-decorator-color);
+    color: var(--theme-text);
 
     .icon {
       height: var(--input-checkbox-decorator-icon-size);

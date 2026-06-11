@@ -27,8 +27,9 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── testing-add-unit-test.md    — create a Vitest unit test with snapshots
 ├── testing-add-playwright.md   — create a Playwright visual regression test
 ├── setup-postinstall.md             — automate nuxt prepare + Claude skills copy via postinstall so neither is forgotten after npm install
-├── theming-override-default.md      — replace the entire default theme with a custom colour scale (full palette swap)
-├── theming-partial-override.md      — override a specific token category (forms, buttons, colours) without a full theme replacement
+├── theming-colour-ramps.md          — parametric oklch ramp system: formula, named palettes, semantic slots, generator, consumer setup
+├── theming-override-default.md      — replace the entire default theme with a custom palette (set --theme-hue/--theme-chroma)
+├── theming-partial-override.md      — override a specific token category (palette, buttons, inputs) without a full theme replacement
 ├── colour-scheme-disable.md         — disable light/dark scheme support in a consumer app
 ├── component-dynamic-slots.md        — named dynamic slots ($slots iteration) vs indexed dynamic slots (itemCount pattern)
 ├── component-local-style-override.md — styleClassPassthrough + scoped style block for per-usage visual customisation
@@ -90,7 +91,9 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── display-chip.md         — DisplayChip: status indicator chip overlay, CSS trig positioning, circle/square shapes, status colours, icon/label content
     ├── display-pill.md         — DisplayPill: pill/badge label with icon slot, 6 variants, 3 sizes, reversible order, full CSS token API for border/outline/colour
     ├── carousel-flip.md        — CarouselFlip: FLIP-animated carousel, carouselDataIds slot API, buttonLayout variants (sides/controls-flanking/controls-grouped-right/overlay), CSS tokens
-    └── samaritan-prompt-mixed.md — SamaritanPromptMixed: animated text prompt, typewriter/word-pulse effects, MessageConfig API, aria-live accessibility, CSS tokens
+    ├── samaritan-prompt-mixed.md — SamaritanPromptMixed: animated text prompt, typewriter/word-pulse effects, MessageConfig API, aria-live accessibility, CSS tokens
+    ├── display-toast.md          — DisplayToast: Teleport-based notification toast, SemanticTheme × 4, config object API, autoDismiss, position/alignment, slot forwarding gotcha
+    └── display-prompt.md         — DisplayPrompt: inline notification banner, SemanticTheme × 4, local vs parent-controlled dismiss, outlined modifier, CSS token override
 ```
 
 ## Skill file template

@@ -111,50 +111,50 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   * Variants
   **/
     &.primary {
-      background-color: var(--theme-button-primary-surface);
-      color: var(--theme-button-primary-text);
-      border: var(--button-border-width) solid var(--theme-button-primary-border);
-      outline: var(--button-outline-width) solid var(--theme-button-primary-outline);
+      background-color: var(--theme-surface);
+      color: var(--theme-on-surface);
+      border: var(--button-border-width) solid var(--theme-surface);
+      outline: var(--button-outline-width) solid var(--theme-ring);
 
       &:hover,
       &:focus-visible {
-        background-color: var(--theme-button-secondary-surface);
-        color: var(--theme-button-secondary-text);
-        border-color: var(--theme-button-primary-border-active);
-        outline-color: var(--theme-button-primary-outline-active);
+        background-color: transparent;
+        color: var(--theme-text);
+        border-color: var(--theme-surface);
+        outline-color: var(--theme-surface);
       }
 
       &.is-pending {
-        background-color: color-mix(in oklab, var(--theme-button-primary-surface) 50%, transparent);
+        background-color: color-mix(in oklab, var(--theme-surface) 50%, transparent);
       }
     }
 
     &.secondary {
-      background-color: var(--theme-button-secondary-surface);
-      border: var(--button-border-width) solid var(--theme-button-secondary-border);
-      color: var(--theme-button-secondary-text);
-      outline: var(--button-outline-width) solid var(--theme-button-secondary-outline);
+      background-color: transparent;
+      border: var(--button-border-width) solid var(--theme-surface);
+      color: var(--theme-text);
+      outline: var(--button-outline-width) solid var(--theme-ring);
 
       &:hover,
       &:focus-visible {
-        background-color: var(--theme-button-primary-surface);
-        color: var(--theme-button-primary-text);
-        border-color: var(--theme-button-secondary-border-active);
-        outline-color: var(--theme-button-secondary-outline-active);
+        background-color: var(--theme-surface);
+        color: var(--theme-on-surface);
+        border-color: var(--theme-surface);
+        outline-color: var(--theme-surface);
       }
     }
 
     &.tertiary {
-      background-color: var(--theme-button-tertiary-surface);
+      background-color: light-dark(var(--slate-01), transparent);
       border: var(--button-border-width) solid transparent;
-      color: var(--theme-button-tertiary-text);
+      color: var(--theme-text);
       text-decoration: underline;
       outline: var(--button-outline-width) solid transparent;
 
       &:hover,
       &:focus-visible {
-        border-color: var(--theme-button-tertiary-border-active);
-        outline-color: var(--theme-button-tertiary-outline-active);
+        border-color: var(--theme-surface);
+        outline-color: var(--theme-surface);
       }
     }
 

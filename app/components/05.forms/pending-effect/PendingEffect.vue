@@ -22,10 +22,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 <style lang="css">
 @layer components {
 .pending-effect {
-  --pending-line-color: var(--theme-button-primary-border);
+  --pending-line-color: var(--theme-surface);
   --pending-line-thickness: 0.1rem;
   --pending-line-length: 2rem;
-  --pending-blur-color: var(--theme-button-primary-border);
+  --pending-blur-color: var(--theme-surface);
   --pending-blur-size: 0rem; /* 0.3rem */
   --pending-offset: 1rem;
   --animation-speed: 3000ms;

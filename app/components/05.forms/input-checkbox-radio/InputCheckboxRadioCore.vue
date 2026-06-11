@@ -113,8 +113,8 @@ const inputClasses = computed(() => [
   place-content: center;
 
   background-color: var(--theme-checkbox-symbol-surface);
-  border: 0.1rem solid var(--theme-input-border);
-  outline: var(--form-element-outline-width) solid var(--theme-input-outline);
+  border: 0.1rem solid var(--theme-border);
+  outline: var(--form-element-outline-width) solid transparent;
 
   height: var(--input-checked-element-size);
   width: var(--input-checked-element-size);
@@ -139,7 +139,7 @@ const inputClasses = computed(() => [
 
   &:not(:is(.button)) {
     &:has(input:focus-visible) {
-      outline: var(--form-element-outline-width-focus) solid var(--theme-input-outline-focus);
+      outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
       outline-offset: var(--form-element-outline-offset-focus);
     }
   }
@@ -150,7 +150,7 @@ const inputClasses = computed(() => [
 
       .input-checked-icon-checked,
       .icon {
-        color: var(--theme-checkbox-symbol-color);
+        color: var(--theme-text);
       }
     }
   }
@@ -164,7 +164,7 @@ const inputClasses = computed(() => [
 
     .input-checked-icon-checked,
     .icon {
-      color: var(--theme-checkbox-symbol-color);
+      color: var(--theme-text);
       height: var(--input-checked-icon-size);
       width: var(--input-checked-icon-size);
       box-shadow: var(--_box-shadow);

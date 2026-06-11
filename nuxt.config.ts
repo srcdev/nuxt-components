@@ -1,8 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { createResolver } from "@nuxt/kit";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
 
 const { resolve } = createResolver(import.meta.url);
 const isStandalone = !!process.env.SRCDEV_STANDALONE;
+const execFileAsync = promisify(execFile);
 
 export default defineNuxtConfig({
   // debug: !isProduction,
@@ -126,6 +129,19 @@ export default defineNuxtConfig({
   vue: {
     runtimeCompiler: true,
   },
+  // Re-generate ramps on config change during local dev.
+  // Guarded by isStandalone so consumers extending this layer never trigger
+  // generation inside node_modules (they never set SRCDEV_STANDALONE).
+  hooks: isStandalone
+    ? {
+        async "builder:watch"(_event, path) {
+          if (!path.endsWith("ramps.config.mjs")) return;
+          console.log("[ramps] ramps.config.mjs changed, regenerating…");
+          await execFileAsync("node", ["scripts/generate-ramps.mjs"], { cwd: resolve("./") });
+          console.log("[ramps] done.");
+        },
+      }
+    : {},
   compatibilityDate: "2026-05-20",
   typescript: {
     includeWorkspace: true,

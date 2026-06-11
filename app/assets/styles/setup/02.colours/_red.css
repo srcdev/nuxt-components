@@ -1,13 +1,14 @@
+/* GENERATED — edit ramps.config.mjs, not this file */
 :where(html) {
-  --red-00: oklch(98% 0.01 30);
-  --red-01: oklch(94% 0.04 30);
-  --red-02: oklch(88% 0.07 30);
+  --red-00: oklch(98% 0.0108 30);
+  --red-01: oklch(94% 0.0432 30);
+  --red-02: oklch(88% 0.0768 30);
   --red-03: oklch(80% 0.12 30);
-  --red-04: oklch(72% 0.17 30);
-  --red-05: oklch(64% 0.21 30);
+  --red-04: oklch(72% 0.1632 30);
+  --red-05: oklch(64% 0.2064 30);
   --red-06: oklch(56% 0.24 30);
-  --red-07: oklch(42% 0.23 30);
-  --red-08: oklch(46% 0.21 30);
-  --red-09: oklch(52% 0.22 30);
-  --red-10: oklch(25% 0.16 30);
+  --red-07: oklch(48% 0.228 30);
+  --red-08: oklch(40% 0.2064 30);
+  --red-09: oklch(32% 0.1848 30);
+  --red-10: oklch(25% 0.1536 30);
 }

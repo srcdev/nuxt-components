@@ -180,13 +180,13 @@ updateElementClasses(["input-text-as-number", "has-left-button", "has-right-butt
 
           &.left-slot {
             .input-button-core {
-              border-right: var(--form-element-border-width) solid var(--theme-input-border);
+              border-right: var(--form-element-border-width) solid var(--theme-border);
             }
           }
 
           &.right-slot {
             .input-button-core {
-              border-left: var(--form-element-border-width) solid var(--theme-input-border);
+              border-left: var(--form-element-border-width) solid var(--theme-border);
             }
           }
         }
