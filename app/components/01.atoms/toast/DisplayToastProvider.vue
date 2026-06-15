@@ -11,7 +11,6 @@
       <div
         v-for="entry in visibleEntries"
         :key="entry.id"
-        :ref="(el) => setItemRef(entry.id, el as HTMLElement | null)"
         class="display-toast-provider-item has-theme"
         :style="{
           '--_reveal': revealDurationFor(entry) + 'ms',
