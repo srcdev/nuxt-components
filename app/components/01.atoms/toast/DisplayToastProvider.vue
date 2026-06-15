@@ -136,6 +136,28 @@ onUnmounted(() => {
 
 <style lang="css">
 @layer components {
+  @keyframes showTop {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes showBottom {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .display-toast-provider {
     --_gutter: 12px;
     @media (width >= 600px) {
@@ -212,6 +234,16 @@ onUnmounted(() => {
         transform: translateY(-30px);
       }
 
+      &.v-enter-active {
+        @supports (animation-timing-function: linear(0, 1)) {
+          animation: showTop var(--_reveal) var(--spring-easing) forwards;
+        }
+
+        @supports not (animation-timing-function: linear(0, 1)) {
+          animation: showTop calc(var(--_reveal) / 2) linear forwards;
+        }
+      }
+
       &.v-leave-active {
         position: absolute;
 
@@ -231,6 +263,16 @@ onUnmounted(() => {
         transform: translateY(30px);
       }
 
+      &.v-enter-active {
+        @supports (animation-timing-function: linear(0, 1)) {
+          animation: showBottom var(--_reveal) var(--spring-easing) forwards;
+        }
+
+        @supports not (animation-timing-function: linear(0, 1)) {
+          animation: showBottom calc(var(--_reveal) / 2) linear forwards;
+        }
+      }
+
       &.v-leave-active {
         position: absolute;
 
@@ -241,16 +283,6 @@ onUnmounted(() => {
         @supports not (animation-timing-function: linear(0, 1)) {
           animation: hideBottom calc(var(--_reveal) / 2) linear forwards;
         }
-      }
-    }
-
-    &.v-enter-active {
-      @supports (animation-timing-function: linear(0, 1)) {
-        animation: show var(--_reveal) var(--spring-easing) forwards;
-      }
-
-      @supports not (animation-timing-function: linear(0, 1)) {
-        animation: show calc(var(--_reveal) / 2) linear forwards;
       }
     }
 
