@@ -4,6 +4,7 @@
       tag="div"
       class="display-toast-provider"
       :class="[position, fullWidth ? 'full-width' : alignment]"
+      @before-leave="onBeforeLeave"
       @after-enter="onAfterEnter"
     >
       <div
@@ -117,6 +118,12 @@ const setItemRef = (id: string, el: HTMLElement | null) => {
   else itemRefs.delete(id);
 };
 
+const onBeforeLeave = (el: Element) => {
+  const htmlEl = el as HTMLElement;
+  htmlEl.style.top = `${htmlEl.offsetTop}px`;
+  htmlEl.style.width = `${htmlEl.offsetWidth}px`;
+};
+
 const onAfterEnter = (el: Element) => {
   (el as HTMLElement).focus();
 };
@@ -206,6 +213,8 @@ onUnmounted(() => {
       }
 
       &.v-leave-active {
+        position: absolute;
+
         @supports (animation-timing-function: linear(0, 1)) {
           animation: hideTop var(--_reveal) var(--spring-easing) forwards;
         }
@@ -223,6 +232,8 @@ onUnmounted(() => {
       }
 
       &.v-leave-active {
+        position: absolute;
+
         @supports (animation-timing-function: linear(0, 1)) {
           animation: hideBottom var(--_reveal) var(--spring-easing) forwards;
         }
