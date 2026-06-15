@@ -1,25 +1,38 @@
-# DisplayToast
+# DisplayToast / DisplayToastProvider
 
 ## Overview
 
-`DisplayToast` is a notification toast that teleports to `<body>` and is triggered via `v-model`.
-It supports four semantic themes, configurable position/alignment, auto-dismiss with a progress bar,
-and optional custom slot content. The inner content is rendered by `DefaultToastContent` unless a
-default slot is provided.
+Two patterns are available depending on the use case:
 
-**Location**: `app/components/01.atoms/toast/DisplayToast.vue`
-**Inner molecule**: `app/components/01.atoms/toast/molecules/DefaultToastContent.vue`
-**Types**: `~/types/components` — `DisplayToastConfig`, `DisplayToastTheme`, `SemanticTheme`
+| Pattern | Component | When to use |
+|---|---|---|
+| **Standalone** | `DisplayToast` | One-off toast tied to a specific UI action; no queueing needed |
+| **App-wide queue** | `DisplayToastProvider` + `useToastQueue` | Multiple toasts across the app, stacking, queue management |
 
-## Props
+**Locations**:
+
+- `app/components/01.atoms/toast/DisplayToast.vue`
+- `app/components/01.atoms/toast/DisplayToastProvider.vue`
+- `app/composables/useToastQueue.ts`
+- `app/components/01.atoms/toast/molecules/DefaultToastContent.vue`
+
+**Types**: `~/types/components` — `DisplayToastConfig`, `DisplayToastTheme`, `ToastQueueEntry`, `ToastQueueStatus`
+
+---
+
+## Pattern 1 — Standalone (`DisplayToast`)
+
+Triggered via `v-model`. Each instance manages its own visibility and position.
+
+### Props
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|
-| `v-model` | `boolean` | `false` | Setting to `true` shows the toast; setting back to `false` hides it. |
-| `config` | `DisplayToastConfig` | see below | Full config object — all sub-keys are optional. |
-| `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the toast root element. |
+| `v-model` | `boolean` | `false` | `true` shows; `false` hides. |
+| `config` | `DisplayToastConfig` | see below | All sub-keys optional. |
+| `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the root element. |
 
-### config shape
+### Config shape
 
 ```ts
 interface DisplayToastConfig {
@@ -44,34 +57,16 @@ interface DisplayToastConfig {
 }
 ```
 
-## Slots
+### Slots
 
 | Slot | Description |
 |---|---|
-| `default` | Replaces `DefaultToastContent` entirely — use for fully custom toast bodies. `has-theme` class and accessibility attributes are omitted when this slot is used. |
-| `#customToastIcon` | Replaces the default theme icon. Only forwarded to `DefaultToastContent` when provided. |
-| `#title` | Replaces the `config.content.title` text. Only forwarded when provided — do not provide both slot and `config.content.title`. |
-| `#description` | Replaces the `config.content.description` text. Only forwarded when provided. |
+| `default` | Replaces `DefaultToastContent` entirely. `has-theme`, `tabindex`, and `aria-describedby` are omitted — accessibility is the caller's responsibility. |
+| `#customToastIcon` | Replaces the default theme icon. |
+| `#title` | Replaces `config.content.title`. Do not provide both slot and config value. |
+| `#description` | Replaces `config.content.description`. Do not provide both slot and config value. |
 
-> **Slot forwarding note**: `#title`, `#description`, and `#customToastIcon` are conditionally
-> forwarded to `DefaultToastContent`. If you provide the slot, `DefaultToastContent` uses the slot;
-> if not, it falls back to the `config.content.*` value. Never provide both — the slot wins.
-
-## Themes and ARIA
-
-Theme drives both colour and ARIA behaviour:
-
-| Theme | ARIA role | aria-live |
-|---|---|---|
-| `"info"` | `status` | `polite` |
-| `"success"` | `status` | `polite` |
-| `"warning"` | `alert` | `assertive` |
-| `"error"` | `alert` | `assertive` |
-
-The `data-theme` attribute on the root element activates the CSS palette via the project's
-theming system (`--theme-surface`, `--theme-text`, `--theme-border`, etc.).
-
-## Basic usage — simple text
+### Basic usage
 
 ```vue
 <script setup lang="ts">
@@ -92,71 +87,121 @@ const toastVisible = ref(false)
 </template>
 ```
 
-## Title + description
+### Notes
+
+- `onBeforeRouteLeave` dismisses the toast on navigation. This emits a Vue Router warning in Vitest (no active route record) — harmless.
+- `returnFocusTo` accepts an `HTMLElement` or a component instance with `$el`.
+- The toast uses `<Teleport to="body">`. In tests, query `document.querySelector(".display-toast")` not `wrapper.find()`.
+
+---
+
+## Pattern 2 — App-wide queue (`DisplayToastProvider` + `useToastQueue`)
+
+Place `DisplayToastProvider` once in the app layout. Trigger toasts from anywhere using `useToastQueue`. The provider promotes pending entries to visible up to `maxVisible`, manages timers, and handles stacked FLIP animations.
+
+### Setup — layout
 
 ```vue
-<DisplayToast
-  v-model="toastVisible"
-  :config="{
-    appearance: { theme: 'error', position: 'top', alignment: 'right' },
-    behavior: { autoDismiss: false },
-    content: {
-      title: 'Save failed',
-      description: 'Check your connection and try again.',
-    },
-  }"
-/>
-```
-
-## Custom slot content
-
-When the `default` slot is used, `has-theme`, `tabindex`, and `aria-describedby` are removed —
-full accessibility is the caller's responsibility.
-
-```vue
-<DisplayToast v-model="toastVisible">
-  <div class="my-toast-body">
-    <p>Custom content here</p>
+<!-- layouts/default.vue -->
+<template>
+  <div>
+    <slot />
+    <DisplayToastProvider position="top" alignment="right" :max-visible="1" />
   </div>
-</DisplayToast>
+</template>
 ```
 
-## Position and alignment
+Only one `DisplayToastProvider` should be mounted at a time. It uses `<Teleport to="body">` so its placement in the layout tree does not affect visual output.
 
-| Config | Result |
-|---|---|
-| `position: "top"`, `alignment: "right"` | Top-right (default) |
-| `position: "bottom"`, `alignment: "center"` | Bottom-centre |
-| `fullWidth: true` | Spans full viewport width; alignment is ignored |
+### `DisplayToastProvider` props
 
-On screens narrower than 600 px the toast always spans the full inline width regardless of `alignment`.
+| Prop | Type | Default | Notes |
+|---|---|---|---|
+| `position` | `"top" \| "bottom"` | `"top"` | Vertical screen edge |
+| `alignment` | `"left" \| "center" \| "right"` | `"right"` | Horizontal alignment (ignored when `fullWidth`) |
+| `fullWidth` | `boolean` | `false` | Toast spans the full viewport width |
+| `maxVisible` | `number` | `1` | Max toasts visible simultaneously; rest queue as pending |
 
-## Progress bar
+### `useToastQueue` API
 
-When `autoDismiss: true` a thin progress bar animates across the bottom of the toast over
-`duration` ms. It is removed when `autoDismiss: false`.
+```ts
+const { show, dismiss, clear, queue } = useToastQueue()
+```
 
-## CSS
+| Method | Signature | Notes |
+|---|---|---|
+| `show(config)` | `(config: DisplayToastConfig) => string` | Adds a toast to the queue; returns its ID |
+| `dismiss(id)` | `(id: string) => void` | Removes a specific toast by ID |
+| `clear()` | `() => void` | Flushes all pending and visible toasts |
+| `queue` | `Readonly<Ref<ToastQueueEntry[]>>` | Reactive read-only queue state |
 
-The toast uses `--theme-*` semantic slots from the theming system. Direct token overrides via
-`styleClassPassthrough`:
+The composable uses a **module-level singleton** — state is shared across all callers without Pinia. Safe for client-only ephemeral UI state.
+
+> **Internal API**: `DisplayToastProvider` uses `useToastQueueProvider()` (a separate export from the same file) which additionally exposes `promote`. Do not call `useToastQueueProvider` from consuming app code — manually promoting without a timer puts the queue into an inconsistent state.
+
+### Triggering toasts
 
 ```vue
-<DisplayToast style-class-passthrough="my-toast" ... />
+<script setup lang="ts">
+const { show } = useToastQueue()
+
+const onSave = async () => {
+  try {
+    await save()
+    show({
+      appearance: { theme: 'success' },
+      behavior: { autoDismiss: true, duration: 4000 },
+      content: { title: 'Saved', description: 'Your changes have been saved.' },
+    })
+  } catch {
+    show({
+      appearance: { theme: 'error' },
+      behavior: { autoDismiss: false },
+      content: { title: 'Save failed', description: 'Check your connection and try again.' },
+    })
+  }
+}
+</script>
 ```
+
+### Stacking (`maxVisible > 1`)
+
+```vue
+<DisplayToastProvider :max-visible="3" position="top" alignment="right" />
+```
+
+With `maxVisible: 3` and 5 toasts triggered:
+
+- Toasts 1–3 are visible immediately
+- Toasts 4–5 queue as `pending`
+- When toast 1 is dismissed, toast 4 is promoted and animates in
+
+Stacked dismissals use a FLIP animation — remaining toasts slide smoothly to fill the gap rather than snapping.
+
+### Themes and ARIA
+
+| Theme | ARIA role | aria-live |
+|---|---|---|
+| `"info"` | `status` | `polite` |
+| `"success"` | `status` | `polite` |
+| `"warning"` | `alert` | `assertive` |
+| `"error"` | `alert` | `assertive` |
+
+### CSS / styling
+
+Override tokens via an unscoped style block scoped to a page or layout class:
 
 ```css
-.my-toast.display-toast {
-  --theme-surface: oklch(60% 0.15 140);
+.my-page .display-toast-provider-item {
+  --theme-surface: oklch(15% 0 0);
+  --theme-text: oklch(95% 0 0);
 }
 ```
 
-## Notes
+### Provider notes
 
-- The component uses `<Teleport to="body">` — the toast DOM is always a direct child of
-  `<body>`, not inside the mounting component's subtree. In tests, use
-  `document.querySelector(".display-toast")` not `wrapper.find()`.
-- `onBeforeRouteLeave` dismisses the toast on navigation. This emits a Vue Router warning in
-  Vitest environments (no active route record) — it is harmless and can be ignored.
-- `returnFocusTo` accepts either an `HTMLElement` or a component instance with `$el`.
-- Type: `DisplayToastTheme` is an alias for `SemanticTheme` (`"info" | "success" | "warning" | "error"`).
+- `useToastQueue` state persists across route changes — no `onBeforeRouteLeave` cleanup needed.
+- `crypto.randomUUID()` generates toast IDs (`toast-<uuid>`). IDs are returned by `show()` for targeted `dismiss(id)` calls.
+- In tests, query via `document.querySelector(".display-toast-provider-item")` — the Teleport renders outside the component wrapper.
+- The progress bar (`.display-toast-provider-progress`) is only rendered when `autoDismiss: true`.
+- Dismissal can be triggered by: close button click, Escape key (when the toast item has focus), `dismiss(id)`, auto-dismiss timer, or `clear()`.

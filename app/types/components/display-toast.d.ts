@@ -38,6 +38,14 @@ export interface DisplayToastProps {
   styleClassPassthrough?: string | string[]
 }
 
+export type ToastQueueStatus = "pending" | "visible"
+
+export interface ToastQueueEntry {
+  id: string
+  config: DisplayToastConfig
+  status: ToastQueueStatus
+}
+
 export interface ToastSlots {
   default?(props?: Record<string, never>): VNode[]
   customToastIcon?(props?: Record<string, never>): VNode[]
