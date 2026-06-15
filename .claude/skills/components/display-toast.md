@@ -131,6 +131,7 @@ const { show, dismiss, clear, queue } = useToastQueue()
 | Method | Signature | Notes |
 |---|---|---|
 | `show(config)` | `(config: DisplayToastConfig) => string` | Adds a toast to the queue; returns its ID |
+| `promote(id)` | `(id: string) => void` | Internal: marks a queued toast as `visible` (used by `DisplayToastProvider`) |
 | `dismiss(id)` | `(id: string) => void` | Removes a specific toast by ID |
 | `clear()` | `() => void` | Flushes all pending and visible toasts |
 | `queue` | `Readonly<Ref<ToastQueueEntry[]>>` | Reactive read-only queue state |
