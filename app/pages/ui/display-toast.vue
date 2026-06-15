@@ -195,7 +195,7 @@ const queueMultiple = () => {
 };
 </script>
 
-<style scoped lang="css">
+<style lang="css">
 .demo-buttons {
   display: flex;
   flex-wrap: wrap;

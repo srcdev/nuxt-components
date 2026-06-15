@@ -61,7 +61,7 @@ const props = withDefaults(defineProps<Props>(), {
   maxVisible: 1,
 });
 
-const { queue, promote, dismiss } = useToastQueue();
+const { queue, promote, dismiss } = useToastQueueProvider();
 
 const visibleEntries = computed<ToastQueueEntry[]>(() =>
   (queue.value as ToastQueueEntry[]).filter((e) => e.status === "visible")

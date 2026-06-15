@@ -131,12 +131,13 @@ const { show, dismiss, clear, queue } = useToastQueue()
 | Method | Signature | Notes |
 |---|---|---|
 | `show(config)` | `(config: DisplayToastConfig) => string` | Adds a toast to the queue; returns its ID |
-| `promote(id)` | `(id: string) => void` | Internal: marks a queued toast as `visible` (used by `DisplayToastProvider`) |
 | `dismiss(id)` | `(id: string) => void` | Removes a specific toast by ID |
 | `clear()` | `() => void` | Flushes all pending and visible toasts |
 | `queue` | `Readonly<Ref<ToastQueueEntry[]>>` | Reactive read-only queue state |
 
 The composable uses a **module-level singleton** — state is shared across all callers without Pinia. Safe for client-only ephemeral UI state.
+
+> **Internal API**: `DisplayToastProvider` uses `useToastQueueProvider()` (a separate export from the same file) which additionally exposes `promote`. Do not call `useToastQueueProvider` from consuming app code — manually promoting without a timer puts the queue into an inconsistent state.
 
 ### Triggering toasts
 
