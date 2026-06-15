@@ -92,7 +92,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── display-pill.md         — DisplayPill: pill/badge label with icon slot, 6 variants, 3 sizes, reversible order, full CSS token API for border/outline/colour
     ├── carousel-flip.md        — CarouselFlip: FLIP-animated carousel, carouselDataIds slot API, buttonLayout variants (sides/controls-flanking/controls-grouped-right/overlay), CSS tokens
     ├── samaritan-prompt-mixed.md — SamaritanPromptMixed: animated text prompt, typewriter/word-pulse effects, MessageConfig API, aria-live accessibility, CSS tokens
-    ├── display-toast.md          — DisplayToast: Teleport-based notification toast, SemanticTheme × 4, config object API, autoDismiss, position/alignment, slot forwarding gotcha
+    ├── display-toast.md          — DisplayToast (standalone v-model) + DisplayToastProvider + useToastQueue (app-wide queue): stacking, FLIP dismiss, maxVisible, SemanticTheme × 4
     └── display-prompt.md         — DisplayPrompt: inline notification banner, SemanticTheme × 4, local vs parent-controlled dismiss, outlined modifier, CSS token override
 ```
 
