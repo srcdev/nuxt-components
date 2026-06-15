@@ -121,12 +121,6 @@ watch(
   { immediate: true }
 );
 
-const itemRefs = new Map<string, HTMLElement>();
-
-const setItemRef = (id: string, el: HTMLElement | null) => {
-  if (el) itemRefs.set(id, el);
-  else itemRefs.delete(id);
-};
 
 let _leavingCount = 0;
 let _containerEl: HTMLElement | null = null;
