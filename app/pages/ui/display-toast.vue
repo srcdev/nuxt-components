@@ -2,331 +2,293 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20', 'p-20']">
-          <h2 class="page-heading-2">DisplayToast Component</h2>
-          <HeaderBlock :tag-level="3" :class-level="3" :style-class-passthrough="['mbe-10']">
-            Toast notification component (HeaderBlock)
-          </HeaderBlock>
-          <p class="page-body-normal">Trigger default toast with manual dismiss</p>
+        <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20', 'p-20']">
+          <h2 class="page-heading-2">DisplayToast / DisplayToastProvider</h2>
+
+          <div v-if="isDev" class="qa-panel">
+            <details class="qa-panel__details">
+              <summary class="qa-panel__summary">
+                <span class="qa-panel__title">QA — DisplayToastProvider</span>
+                <code class="qa-panel__status">
+                  {{ qaTheme }} · {{ qaPosition }}-{{ qaAlignment }} ·
+                  {{ qaAutoDismiss ? `auto ${qaDuration}ms` : "manual" }} · max:{{ qaMaxVisible }}
+                </code>
+              </summary>
+              <div class="qa-panel__body">
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Theme</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="opt in themes"
+                      :key="opt"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaTheme === opt }"
+                      @click="qaTheme = opt"
+                    >
+                      {{ opt }}
+                    </button>
+                  </div>
+                </div>
+
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Position</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="opt in positions"
+                      :key="opt"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaPosition === opt }"
+                      @click="qaPosition = opt"
+                    >
+                      {{ opt }}
+                    </button>
+                  </div>
+                </div>
+
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Alignment</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="opt in alignments"
+                      :key="opt"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaAlignment === opt }"
+                      @click="qaAlignment = opt"
+                    >
+                      {{ opt }}
+                    </button>
+                  </div>
+                </div>
+
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Full Width</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="opt in [true, false]"
+                      :key="String(opt)"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaFullWidth === opt }"
+                      @click="qaFullWidth = opt"
+                    >
+                      {{ opt ? "yes" : "no" }}
+                    </button>
+                  </div>
+                </div>
+
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Auto Dismiss</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="opt in [true, false]"
+                      :key="String(opt)"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaAutoDismiss === opt }"
+                      @click="qaAutoDismiss = opt"
+                    >
+                      {{ opt ? "yes" : "no" }}
+                    </button>
+                  </div>
+                </div>
+
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Duration</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="opt in durations"
+                      :key="opt"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaDuration === opt }"
+                      @click="qaDuration = opt"
+                    >
+                      {{ opt }}ms
+                    </button>
+                  </div>
+                </div>
+
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Max Visible</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="opt in [1, 2, 3]"
+                      :key="opt"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaMaxVisible === opt }"
+                      @click="qaMaxVisible = opt"
+                    >
+                      {{ opt }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </details>
+          </div>
+
           <form class="form-wrapper">
-            <p>
-              <InputButtonCore
-                ref="firstToastButton"
-                :readonly="firstToastActive"
-                button-text="Trigger First Toast (current value: {{ firstToastActive }})"
-                theme="default"
-                :style-class-passthrough="['mbe-10']"
-                @click.prevent="triggerFirstToast()"
-              />
-            </p>
-            <hr class="mbe-20" />
-            <p class="page-body-normal">Trigger ERROR prompt as toast with auto dismiss</p>
-            <p>
-              <InputButtonCore
-                ref="secondToastButton"
-                :readonly="secondToastActive"
-                button-text="Trigger Second Toast (current value: {{ secondToastActive }})"
-                theme="default"
-                :style-class-passthrough="['mbe-10']"
-                @click.prevent="triggerSecondToast()"
-              />
-            </p>
-            <hr class="mbe-20" />
-            <p class="page-body-normal">Trigger SUCCESS prompt as toast with manual dismiss</p>
-            <p>
-              <InputButtonCore
-                ref="thirdToastButton"
-                :readonly="thirdToastActive"
-                button-text="Trigger Third Toast (current value: {{ thirdToastActive }})"
-                theme="default"
-                :style-class-passthrough="['mbe-10']"
-                @click.prevent="triggerThirdToast()"
-              />
-            </p>
-            <hr class="mbe-20" />
-            <p class="page-body-normal">Trigger INFO prompt as toast with auto dismiss (full-width)</p>
-            <p>
-              <InputButtonCore
-                ref="fourthToastButton"
-                :readonly="fourthToastActive"
-                button-text="Trigger Fourth Toast (current value: {{ fourthToastActive }})"
-                theme="default"
-                :style-class-passthrough="['mbe-10']"
-                @click.prevent="triggerFourthToast()"
-              />
-            </p>
-            <hr class="mbe-20" />
-            <p class="page-body-normal">New config-based positioning examples:</p>
-            <div class="button-grid">
-              <InputButtonCore
-                ref="bottomLeftToastButton"
-                :readonly="bottomLeftToastActive"
-                button-text="Bottom Left Toast"
-                theme="default"
-                @click.prevent="triggerBottomLeftToast()"
-              />
-              <InputButtonCore
-                ref="bottomCenterToastButton"
-                :readonly="bottomCenterToastActive"
-                button-text="Bottom Center Toast"
-                theme="default"
-                @click.prevent="triggerBottomCenterToast()"
-              />
-              <InputButtonCore
-                ref="customIconToastButton"
-                :readonly="customIconToastActive"
-                button-text="Custom Icon Toast"
-                theme="default"
-                @click.prevent="triggerCustomIconToast()"
-              />
+            <div class="demo-buttons">
+              <InputButtonCore button-text="Trigger Toast" theme="default" @click.prevent="triggerToast" />
+              <InputButtonCore button-text="Queue Multiple" theme="default" @click.prevent="queueMultiple" />
             </div>
-            <hr class="mbe-20" />
-            <p class="page-body-normal">Toast with title and content slots:</p>
-            <p>
-              <InputButtonCore
-                ref="slottedToastButton"
-                :readonly="slottedToastActive"
-                button-text="Trigger Slotted Toast (current value: {{ slottedToastActive }})"
-                theme="default"
-                :style-class-passthrough="['mbe-10']"
-                @click.prevent="triggerSlottedToast()"
-              />
-            </p>
           </form>
         </PageRow>
 
-        <DisplayToast
-          v-model="firstToastActive"
-          :config="{
-            appearance: { theme: 'warning', position: 'top', alignment: 'right' },
-            behavior: { autoDismiss: false, returnFocusTo: firstToastButton },
-            content: {
-              title: 'Warning Alert',
-              description: 'This is a toast notification message with structured content.',
-            },
-          }"
+        <DisplayToastProvider
+          :position="qaPosition"
+          :alignment="qaAlignment"
+          :full-width="qaFullWidth"
+          :max-visible="qaMaxVisible"
         />
-
-        <DisplayToast
-          v-model="secondToastActive"
-          :config="{
-            appearance: { theme: 'error', position: 'top', alignment: 'right' },
-            behavior: { returnFocusTo: secondToastButton },
-          }"
-        >
-          <DisplayPrompt
-            v-model="secondToastActive"
-            theme="error"
-            :dismissible="false"
-            :style-class-passthrough="['dark', 'outlined']"
-          >
-            <template #customDecoratorIcon>
-              <Icon name="akar-icons:info" class="icon" />
-            </template>
-            <template #title>Info Prompt Title with content (Dismissable)</template>
-            <template #content>This is prompt content, it can contain html or plain text.</template>
-          </DisplayPrompt>
-        </DisplayToast>
-
-        <DisplayToast
-          v-model="thirdToastActive"
-          :config="{
-            appearance: { theme: 'success', position: 'top', alignment: 'right' },
-            behavior: { autoDismiss: false, returnFocusTo: thirdToastButton },
-          }"
-        >
-          <DisplayPrompt
-            v-model="thirdToastActive"
-            theme="success"
-            :dismissible="true"
-            :style-class-passthrough="['dark', 'outlined']"
-            :use-auto-focus="true"
-          >
-            <template #customDecoratorIcon>
-              <Icon name="akar-icons:info" class="icon" />
-            </template>
-            <template #title>Success Prompt Title with content (Dismissable)</template>
-            <template #content>This is prompt content, it can contain html or plain text.</template>
-            <template #customCloseIcon>
-              <Icon name="material-symbols:close-small" class="icon" />
-            </template>
-            <template #customTitle>Dismiss</template>
-          </DisplayPrompt>
-        </DisplayToast>
-
-        <DisplayToast
-          v-model="fourthToastActive"
-          :config="{
-            appearance: { theme: 'info', position: 'top', fullWidth: true },
-            behavior: { returnFocusTo: fourthToastButton },
-          }"
-        >
-          <DisplayPrompt
-            v-model="fourthToastActive"
-            theme="info"
-            :dismissible="false"
-            :style-class-passthrough="['dark', 'outlined']"
-          >
-            <template #title>Warning Prompt Title with content (Auto Dismiss)</template>
-            <template #content>This is prompt content, it can contain html or plain text.</template>
-            <template #customCloseIcon>
-              <Icon name="material-symbols:close-small" class="icon" />
-            </template>
-            <template #customTitle>Dismiss</template>
-          </DisplayPrompt>
-        </DisplayToast>
-
-        <DisplayToast
-          v-model="bottomLeftToastActive"
-          :config="{
-            appearance: { theme: 'primary', position: 'bottom', alignment: 'left' },
-            behavior: { autoDismiss: true, duration: 3000, returnFocusTo: bottomLeftToastButton },
-            content: {
-              title: 'Warning Alert',
-              description: 'This is a toast notification message with structured content.',
-            },
-          }"
-        />
-
-        <DisplayToast
-          v-model="bottomCenterToastActive"
-          :config="{
-            appearance: { theme: 'secondary', position: 'bottom', alignment: 'center' },
-            behavior: { autoDismiss: true, duration: 4000, returnFocusTo: bottomCenterToastButton },
-            content: {
-              title: 'Warning Alert',
-              description: 'This is a toast notification message with structured content.',
-            },
-          }"
-        />
-
-        <DisplayToast
-          v-model="customIconToastActive"
-          :config="{
-            appearance: { theme: 'error', position: 'top', alignment: 'left' },
-            behavior: { autoDismiss: false, returnFocusTo: customIconToastButton },
-            content: {
-              title: 'Warning Alert',
-              description: 'This is a toast notification message with structured content.',
-            },
-          }"
-        />
-
-        <DisplayToast
-          v-model="slottedToastActive"
-          :config="{
-            appearance: { theme: 'info', position: 'top', alignment: 'right' },
-            behavior: { autoDismiss: false, returnFocusTo: slottedToastButton },
-          }"
-        >
-          <template #title>
-            <strong>New Feature Available!</strong>
-          </template>
-          <template #description>
-            You can now use title and content slots to create more structured toast notifications with better typography
-            and layout.
-          </template>
-        </DisplayToast>
       </template>
     </NuxtLayout>
   </div>
 </template>
 
 <script setup lang="ts">
-/**
- * DisplayToast Playground - Updated to use new config-based props system
- *
- * This playground demonstrates:
- * 1. Legacy examples converted to new config structure
- * 2. New positioning capabilities (bottom left, bottom center)
- * 3. Custom icon support through config
- * 4. Different behavior configurations (autoDismiss, duration)
- * 5. Return focus functionality for accessibility
- *
- * The new config system groups props into logical sections:
- * - appearance: theme, position, alignment, fullWidth
- * - behavior: autoDismiss, duration, revealDuration, returnFocusTo
- * - content: text, customIcon
- *
- * The returnFocusTo property accepts an HTMLElement or ComponentPublicInstance
- * and will focus that element when the toast is dismissed, improving accessibility.
- */
+import type { DisplayToastTheme, DisplayToastPosition, DisplayToastAlignment } from "~/types/components";
 
-definePageMeta({
-  layout: false,
-});
+definePageMeta({ layout: false });
 
 useHead({
   title: "DisplayToast",
-  meta: [
-    {
-      name: "description",
-      content: "DisplayToast Meta description content",
-    },
-  ],
-  bodyAttrs: {
-    class: "displayToast-page",
-  },
+  meta: [{ name: "description", content: "DisplayToast component demo" }],
+  bodyAttrs: { class: "displayToast-page" },
 });
 
-// Toast state variables
-const firstToastActive = ref(false);
-const secondToastActive = ref(false);
-const thirdToastActive = ref(false);
-const fourthToastActive = ref(false);
-const bottomLeftToastActive = ref(false);
-const bottomCenterToastActive = ref(false);
-const customIconToastActive = ref(false);
-const slottedToastActive = ref(false);
+const isDev = import.meta.dev;
+const { show } = useToastQueue();
 
-// Template refs for focus return
-const firstToastButton = useTemplateRef<HTMLButtonElement>("firstToastButton");
-const secondToastButton = useTemplateRef<HTMLButtonElement>("secondToastButton");
-const thirdToastButton = useTemplateRef<HTMLButtonElement>("thirdToastButton");
-const fourthToastButton = useTemplateRef<HTMLButtonElement>("fourthToastButton");
-const bottomLeftToastButton = useTemplateRef<HTMLButtonElement>("bottomLeftToastButton");
-const bottomCenterToastButton = useTemplateRef<HTMLButtonElement>("bottomCenterToastButton");
-const customIconToastButton = useTemplateRef<HTMLButtonElement>("customIconToastButton");
-const slottedToastButton = useTemplateRef<HTMLButtonElement>("slottedToastButton");
+const themes = ["info", "success", "warning", "error"] as const;
+const positions = ["top", "bottom"] as const;
+const alignments = ["left", "center", "right"] as const;
+const durations = [2000, 3000, 5000, 8000] as const;
 
-const triggerFirstToast = () => {
-  firstToastActive.value = true;
+const qaTheme = ref<DisplayToastTheme>("info");
+const qaPosition = ref<DisplayToastPosition>("top");
+const qaAlignment = ref<DisplayToastAlignment>("right");
+const qaFullWidth = ref(false);
+const qaAutoDismiss = ref(true);
+const qaDuration = ref(5000);
+const qaMaxVisible = ref(1);
+
+const messages: Record<DisplayToastTheme, { title: string; description: string }> = {
+  info: { title: "Information", description: "This is an informational notification." },
+  success: { title: "Success!", description: "Your action completed successfully." },
+  warning: { title: "Warning", description: "Please review this before continuing." },
+  error: { title: "Error", description: "Something went wrong. Please try again." },
 };
 
-const triggerSecondToast = () => {
-  secondToastActive.value = true;
+const triggerToast = () => {
+  show({
+    appearance: { theme: qaTheme.value },
+    behavior: { autoDismiss: qaAutoDismiss.value, duration: qaDuration.value },
+    content: messages[qaTheme.value],
+  });
 };
 
-const triggerThirdToast = () => {
-  thirdToastActive.value = true;
-};
-
-const triggerFourthToast = () => {
-  fourthToastActive.value = true;
-};
-
-const triggerBottomLeftToast = () => {
-  bottomLeftToastActive.value = true;
-};
-
-const triggerBottomCenterToast = () => {
-  bottomCenterToastActive.value = true;
-};
-
-const triggerCustomIconToast = () => {
-  customIconToastActive.value = true;
-};
-
-const triggerSlottedToast = () => {
-  slottedToastActive.value = true;
+const queueMultiple = () => {
+  themes.forEach((theme) => {
+    show({
+      appearance: { theme },
+      behavior: { autoDismiss: qaAutoDismiss.value, duration: qaDuration.value },
+      content: messages[theme],
+    });
+  });
 };
 </script>
 
 <style scoped lang="css">
-.button-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 1rem;
+.demo-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+}
+
+.displayToast-page {
+  .qa-panel {
+    background: oklch(15% 0 0);
+    color: white;
+    font-size: 1.3rem;
+    margin-block: 1.2rem;
+  }
+
+  .qa-panel__details {
+    padding: 1rem 2rem;
+  }
+
+  .qa-panel__summary {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    list-style: none;
+    user-select: none;
+
+    &::-webkit-details-marker {
+      display: none;
+    }
+  }
+
+  .qa-panel__title {
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .qa-panel__status {
+    font-family: monospace;
+    font-size: 1.2rem;
+    background: oklch(0% 0 0 / 0.3);
+    padding: 0.2rem 0.8rem;
+    border-radius: 0.4rem;
+    user-select: text;
+    cursor: text;
+  }
+
+  .qa-panel__body {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.4rem;
+    padding-block: 1.2rem 0.4rem;
+  }
+
+  .qa-panel__group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .qa-panel__label {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.55;
+  }
+
+  .qa-panel__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .qa-panel__chip {
+    font-family: monospace;
+    font-size: 1.2rem;
+    color: white;
+    background: oklch(0% 0 0 / 0.25);
+    border: 1px solid oklch(100% 0 0 / 0.18);
+    padding: 0.3rem 1rem;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+      background: oklch(0% 0 0 / 0.4);
+    }
+
+    &.is-active {
+      background: oklch(55% 0.18 240);
+      border-color: oklch(55% 0.18 240);
+    }
+  }
 }
 </style>
