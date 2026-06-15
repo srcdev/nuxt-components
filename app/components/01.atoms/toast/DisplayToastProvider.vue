@@ -5,6 +5,7 @@
       class="display-toast-provider"
       :class="[position, fullWidth ? 'full-width' : alignment]"
       @before-leave="onBeforeLeave"
+      @after-leave="onAfterLeave"
       @after-enter="onAfterEnter"
     >
       <div
@@ -118,10 +119,28 @@ const setItemRef = (id: string, el: HTMLElement | null) => {
   else itemRefs.delete(id);
 };
 
+let _leavingCount = 0;
+let _containerEl: HTMLElement | null = null;
+
 const onBeforeLeave = (el: Element) => {
   const htmlEl = el as HTMLElement;
+  if (_leavingCount === 0) {
+    _containerEl = htmlEl.parentElement as HTMLElement;
+    if (_containerEl) {
+      _containerEl.style.minWidth = `${_containerEl.offsetWidth}px`;
+    }
+  }
+  _leavingCount++;
   htmlEl.style.top = `${htmlEl.offsetTop}px`;
   htmlEl.style.width = `${htmlEl.offsetWidth}px`;
+};
+
+const onAfterLeave = () => {
+  _leavingCount--;
+  if (_leavingCount === 0 && _containerEl) {
+    _containerEl.style.minWidth = "";
+    _containerEl = null;
+  }
 };
 
 const onAfterEnter = (el: Element) => {
