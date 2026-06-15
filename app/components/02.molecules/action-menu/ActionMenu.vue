@@ -202,11 +202,18 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       }
 
       .action-menu-list {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+
         list-style: none;
         padding: 0;
         margin: 0;
 
         .action-menu-list-item {
+          grid-column: 1 / -1;
+          display: grid;
+          grid-template-columns: subgrid;
+
           &:not(:last-child) {
             border-bottom: var(--_item-divider);
           }

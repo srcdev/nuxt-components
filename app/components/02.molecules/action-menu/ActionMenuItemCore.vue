@@ -57,6 +57,7 @@ watch(
 <style lang="css">
 @layer components {
   .action-menu-item-core {
+    --_gap: var(--action-menu-item-gap, 1.2rem);
     --_surface-hover: var(--action-menu-item-surface-hover, light-dark(var(--slate-01), var(--slate-09)));
     --_text-color: var(--action-menu-item-text-color, light-dark(var(--slate-09), var(--slate-01)));
     --_icon-size: var(--action-menu-item-icon-size, 2rem);
@@ -67,9 +68,9 @@ watch(
     box-sizing: border-box;
     cursor: pointer;
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: subgrid;
     align-items: center;
-    gap: 1.2rem;
+
     width: 100%;
     padding-inline: var(--_padding-inline);
     padding-block: var(--_padding-block);
@@ -92,6 +93,9 @@ watch(
     }
 
     .action-menu-item-icon {
+      grid-column: 1;
+      margin-inline-end: var(--_gap);
+
       display: flex;
       align-items: center;
       justify-content: center;
@@ -101,12 +105,16 @@ watch(
     }
 
     .action-menu-item-label {
+      grid-column: 2;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
 
     .action-menu-item-arrow {
+      grid-column: 3;
+      margin-inline-start: var(--_gap);
+
       display: flex;
       align-items: center;
       flex-shrink: 0;
