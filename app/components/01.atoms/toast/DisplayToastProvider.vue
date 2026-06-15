@@ -101,6 +101,16 @@ watch(
   queue,
   (newQueue) => {
     const entries = newQueue as ToastQueueEntry[];
+
+    // Clear timers for entries that no longer exist (e.g. clear()).
+    const entryIds = new Set(entries.map((e) => e.id));
+    for (const [id, timer] of timers) {
+      if (!entryIds.has(id)) {
+        clearTimeout(timer);
+        timers.delete(id);
+      }
+    }
+
     const visibleCount = entries.filter((e) => e.status === "visible").length;
     const slots = props.maxVisible - visibleCount;
     const pending = entries.filter((e) => e.status === "pending");
