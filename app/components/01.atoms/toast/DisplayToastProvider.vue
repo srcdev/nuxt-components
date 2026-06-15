@@ -158,6 +158,34 @@ onUnmounted(() => {
 
 <style lang="css">
 @layer components {
+  @keyframes hideTop {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+  }
+
+  @keyframes hideBottom {
+    0% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+  }
+
+  @keyframes progress {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
   @keyframes showTop {
     from {
       opacity: 0;
