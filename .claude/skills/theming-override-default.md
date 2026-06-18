@@ -181,4 +181,5 @@ that hue/chroma pair.
 
 - `--slate-*` neutrals ship with the layer — no need to redefine for page backgrounds/text
 - To add a custom `[data-theme]` variant using your generated palette, see `theming-colour-ramps.md`
-- The `warning` theme overrides `--theme-surface` steps directly for a different surface intensity — this pattern is available for any custom theme that needs a non-default surface step
+- The `warning` theme overrides `--theme-surface` and `--theme-surface-hover` to lighter steps (5/4 and 7/5) so warning buttons read as warm/alert rather than the default dark surface — this pattern is available for any custom theme that needs a non-default surface step
+- `--theme-accent` (step 5/4) is separate from `--theme-surface` (step 7/9) — accent is for decorative strips in `DisplayPrompt` and `DisplayToast`; surface is for interactive elements like buttons

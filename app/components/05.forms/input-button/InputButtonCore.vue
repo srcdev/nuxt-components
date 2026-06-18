@@ -10,7 +10,7 @@
     class="input-button-core"
     :class="buttonClasses"
   >
-    <PendingEffect v-if="hasPendingEffect" />
+    <PendingEffect v-if="hasPendingEffect" :theme="theme" />
 
     <span v-if="hasLeftSlot" class="btn-icon left">
       <slot name="left"></slot>
@@ -87,7 +87,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 <style lang="css">
 @layer components {
   .input-button-core {
-    all: unset;
+    /* all: unset; */
 
     display: grid;
     grid-auto-flow: column;
@@ -108,9 +108,29 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     }
 
     /*
-  * Variants
-  **/
-    &.primary {
+    * Theming
+    **/
+    background-color: var(--theme-surface);
+    color: var(--theme-on-surface);
+    border: var(--button-border-width) solid var(--theme-border);
+    outline: var(--button-outline-width) solid var(--theme-ring);
+
+    &:hover,
+    &:focus-visible {
+      background-color: var(--theme-surface-hover);
+      color: var(--theme-text);
+      border-color: var(--theme-border-focus);
+      outline-color: var(--theme-ring);
+    }
+
+    &.is-pending {
+      background-color: color-mix(in oklab, var(--theme-surface) 50%, transparent);
+    }
+
+    /*
+    * Variants
+    **/
+    &.primary-X {
       background-color: var(--theme-surface);
       color: var(--theme-on-surface);
       border: var(--button-border-width) solid var(--theme-surface);
@@ -118,7 +138,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
       &:hover,
       &:focus-visible {
-        background-color: transparent;
+        background-color: var(--theme-surface-hover);
         color: var(--theme-text);
         border-color: var(--theme-surface);
         outline-color: var(--theme-surface);
@@ -129,7 +149,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       }
     }
 
-    &.secondary {
+    &.secondary-X {
       background-color: transparent;
       border: var(--button-border-width) solid var(--theme-surface);
       color: var(--theme-text);
@@ -180,11 +200,8 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
     &[readonly] {
       opacity: 0.5;
-      &:hover,
-      &:focus-visible {
-        cursor: not-allowed;
-        pointer-events: none;
-      }
+      cursor: not-allowed;
+      pointer-events: none;
     }
 
     .button-text {

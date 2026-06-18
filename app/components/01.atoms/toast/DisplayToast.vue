@@ -336,11 +336,11 @@ onBeforeRouteLeave(() => {
     }
 
     /*
-  * Styles for the display toast component if slot is empty
-  */
+    * Styles for the display toast component if slot is empty
+    */
     &.has-theme {
       padding-inline-start: 6px;
-      background-color: var(--theme-surface);
+      background-color: var(--theme-accent);
 
       border: 0.1rem solid var(--theme-border);
       border-start-start-radius: 8px;
@@ -358,7 +358,7 @@ onBeforeRouteLeave(() => {
       height: 3px;
       transform: scaleX(0);
       transform-origin: right;
-      background: var(--theme-surface);
+      background: var(--theme-accent);
       border-radius: inherit;
       animation: progress v-bind(displayDurationMs) linear forwards;
     }

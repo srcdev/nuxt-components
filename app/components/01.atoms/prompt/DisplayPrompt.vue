@@ -100,7 +100,7 @@ onMounted(async () => {
     }
 
     .display-prompt-wrapper {
-      background-color: var(--theme-surface);
+      background-color: var(--theme-accent);
       border: 0px solid transparent;
       border-radius: 4px;
       border-start-start-radius: 8px;
@@ -123,12 +123,12 @@ onMounted(async () => {
 
         border-start-start-radius: 8px;
         border-end-start-radius: 8px;
-        background-color: light-dark(var(--colour-theme-0), var(--colour-theme-10));
+        background-color: var(--theme-surface-subtle);
 
         .display-prompt-icon {
           display: inline-flex;
           .icon {
-            color: var(--theme-surface);
+            color: var(--theme-text);
             display: inline-block;
             font-size: 3rem;
             font-style: normal;

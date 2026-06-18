@@ -342,7 +342,7 @@ onUnmounted(() => {
 
     &.has-theme {
       padding-inline-start: 6px;
-      background-color: var(--theme-surface);
+      background-color: var(--theme-accent);
       border: 0.1rem solid var(--theme-border);
       border-start-start-radius: 8px;
       border-end-start-radius: 8px;
@@ -358,7 +358,7 @@ onUnmounted(() => {
       height: 3px;
       transform: scaleX(0);
       transform-origin: right;
-      background: var(--theme-surface);
+      background: var(--theme-accent);
       border-radius: inherit;
       animation: progress var(--_duration) linear forwards;
     }

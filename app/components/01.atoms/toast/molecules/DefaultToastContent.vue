@@ -56,104 +56,104 @@ const slots = useSlots();
 
 <style lang="css">
 @layer components {
-.display-toast-inner {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 12px;
-  align-items: center;
-  background-color: light-dark(var(--colour-theme-0), var(--colour-theme-10));
-  border-start-start-radius: 8px;
-  border-end-start-radius: 8px;
-  padding: 12px 14px;
-  overflow: hidden;
-
-  .toast-icon {
-    display: inline-flex;
+  .display-toast-inner {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
     align-items: center;
-    justify-content: center;
-    margin-right: 12px;
+    background-color: var(--theme-surface-subtle);
+    border-start-start-radius: 8px;
+    border-end-start-radius: 8px;
+    padding: 12px 14px;
+    overflow: hidden;
 
-    .icon {
-      color: var(--theme-surface);
-      display: inline-block;
-      font-size: 2.5rem;
-      font-style: normal;
-      font-weight: normal;
-      overflow: hidden;
+    .toast-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 12px;
+
+      .icon {
+        color: var(--theme-text);
+        display: inline-block;
+        font-size: 2.5rem;
+        font-style: normal;
+        font-weight: normal;
+        overflow: hidden;
+      }
     }
-  }
 
-  .toast-message {
-    display: flex;
-    align-items: center;
-    gap: var(--step-1);
-    font-size: var(--step-4);
-    font-weight: normal;
-    line-height: 1.3;
-    color: var(--theme-text);
-    margin: 0;
-    padding: 0;
-
-    .title {
-      margin: 0;
-      font-weight: 600;
+    .toast-message {
+      display: flex;
+      align-items: center;
+      gap: var(--step-1);
       font-size: var(--step-4);
-      line-height: 1.2;
-    }
-
-    .description {
+      font-weight: normal;
+      line-height: 1.3;
+      color: var(--theme-text);
       margin: 0;
-      font-size: var(--step-3);
-      line-height: 1.4;
-      opacity: 0.9;
+      padding: 0;
+
+      .title {
+        margin: 0;
+        font-weight: 600;
+        font-size: var(--step-4);
+        line-height: 1.2;
+      }
+
+      .description {
+        margin: 0;
+        font-size: var(--step-3);
+        line-height: 1.4;
+        opacity: 0.9;
+      }
+
+      /* When using slots, change flex direction to column */
+      &:has(.title, .text) {
+        flex-direction: column;
+        align-items: flex-start;
+      }
     }
 
-    /* When using slots, change flex direction to column */
-    &:has(.title, .text) {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
-
-  .toast-action {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 12px;
-
-    button {
+    .toast-action {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: light-dark(var(--colour-theme-1), var(--colour-theme-9));
-      border: 0.1rem solid var(--theme-border);
-      outline: 0.1rem solid transparent;
-      border-radius: 50%;
-      box-shadow: none;
-      color: var(--theme-text);
-      cursor: pointer;
-      font-size: var(--step-4);
-      font-weight: bold;
-      padding: 0.5rem;
-      text-decoration: underline;
+      margin-left: 12px;
 
-      transition: all 0.3s ease;
-
-      .icon {
-        font-size: 1.5rem;
-        vertical-align: middle;
-      }
-
-      &:hover,
-      &:focus-visible {
+      button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: 0.1rem solid var(--theme-border);
+        outline: 0.1rem solid transparent;
+        border-radius: 50%;
         box-shadow: none;
-        background-color: var(--theme-surface);
-        color: var(--theme-on-surface);
-        outline: 0.1rem solid var(--theme-ring);
-        outline-offset: 0.2rem;
+        color: var(--theme-text);
+        cursor: pointer;
+        font-size: var(--step-4);
+        font-weight: bold;
+        padding: 0.5rem;
+        text-decoration: underline;
+
+        transition: all 0.3s ease;
+
+        .icon {
+          font-size: 1.5rem;
+          vertical-align: middle;
+        }
+
+        &:hover,
+        &:focus-visible {
+          box-shadow: none;
+          background-color: var(--theme-surface-hover);
+          color: var(--theme-on-surface);
+          outline: 0.1rem solid var(--theme-ring);
+          outline-offset: 0.2rem;
+        }
       }
     }
   }
-}
 }
 </style>

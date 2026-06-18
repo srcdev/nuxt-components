@@ -38,8 +38,9 @@ the DOM. Dismiss can be controlled locally (closes itself) or by a parent via `v
 | `"warning"` | `akar-icons:circle-alert` |
 | `"error"` | `akar-icons:circle-alert` |
 
-`data-theme` is set on the inner wrapper, activating the CSS palette (`--theme-surface`,
-`--theme-text`, `--theme-border`, `--theme-ring`, etc.).
+`data-theme` is set on `.display-prompt-wrapper`, activating the CSS palette (`--theme-accent`,
+`--theme-text`, `--theme-border`, `--theme-ring`, etc.). The wrapper's left-edge accent uses
+`--theme-accent` (step 5/4) — not `--theme-surface` — so it stays visually distinct from buttons.
 
 ## Dismiss behaviour
 
@@ -111,7 +112,7 @@ Scope overrides using your page or section wrapper class — no `:deep()` needed
 
 ```css
 .my-section .display-prompt-wrapper {
-  --theme-surface: oklch(60% 0.18 140);
+  --theme-accent: oklch(60% 0.18 140); /* left-edge accent strip */
   border-radius: 0.8rem;
 }
 ```

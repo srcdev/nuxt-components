@@ -109,7 +109,7 @@
                   <span class="qa-panel__label">Max Visible</span>
                   <div class="qa-panel__chips">
                     <button
-                      v-for="opt in [1, 2, 3]"
+                      v-for="opt in [1, 2, 3, 4, 5]"
                       :key="opt"
                       class="qa-panel__chip"
                       :class="{ 'is-active': qaMaxVisible === opt }"
