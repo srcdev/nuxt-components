@@ -23,16 +23,20 @@
         :aria-describedby="'toast-message-' + entry.id"
         @keydown.escape="handleDismiss(entry.id)"
       >
-        <DefaultToastContent
+        <AlertContent
           :theme="themeFor(entry)"
           :custom-icon="entry.config.content?.customIcon"
-          :toast-id="entry.id"
-          :toast-display-text="entry.config.content?.text ?? ''"
-          :toast-title="entry.config.content?.title ?? ''"
-          :toast-description="entry.config.content?.description ?? ''"
-          :auto-dismiss="autoDismissFor(entry)"
-          :set-dismiss-toast="() => handleDismiss(entry.id)"
-        />
+          :content-id="'toast-message-' + entry.id"
+          :dismissible="!autoDismissFor(entry)"
+          @dismiss="handleDismiss(entry.id)"
+        >
+          <template v-if="entry.config.content?.title || entry.config.content?.text" #title>
+            {{ entry.config.content?.title || entry.config.content?.text }}
+          </template>
+          <template v-if="entry.config.content?.description" #content>
+            {{ entry.config.content?.description }}
+          </template>
+        </AlertContent>
         <div v-if="autoDismissFor(entry)" class="display-toast-provider-progress"></div>
       </div>
     </TransitionGroup>

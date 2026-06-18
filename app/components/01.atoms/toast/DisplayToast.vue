@@ -21,27 +21,24 @@
     >
       <slot v-if="slots.default"></slot>
 
-      <DefaultToastContent
+      <AlertContent
         v-else
         :theme="theme"
         :custom-icon="customIcon"
-        :toast-id="toastId"
-        :toast-display-text="toastDisplayText"
-        :toast-title="toastTitle"
-        :toast-description="toastDescription"
-        :auto-dismiss="autoDismiss"
-        :set-dismiss-toast="setDismissToast"
+        :content-id="'toast-message-' + toastId"
+        :dismissible="!autoDismiss"
+        @dismiss="setDismissToast"
       >
-        <template v-if="slots.customToastIcon" #customToastIcon>
+        <template v-if="slots.customToastIcon" #icon>
           <slot name="customToastIcon"></slot>
         </template>
-        <template v-if="slots.title" #title>
-          <slot name="title"></slot>
+        <template v-if="slots.title || toastTitle || toastDisplayText" #title>
+          <slot name="title">{{ toastTitle || toastDisplayText }}</slot>
         </template>
-        <template v-if="slots.description" #description>
-          <slot name="description"></slot>
+        <template v-if="slots.description || toastDescription" #content>
+          <slot name="description">{{ toastDescription }}</slot>
         </template>
-      </DefaultToastContent>
+      </AlertContent>
       <div v-if="autoDismiss" class="display-toast-progress"></div>
     </div>
   </Teleport>

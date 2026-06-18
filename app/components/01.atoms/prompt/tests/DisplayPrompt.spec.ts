@@ -65,7 +65,7 @@ describe("DisplayPrompt", () => {
 
   it("renders the icon region", async () => {
     const w = await mountSuspended(DisplayPrompt);
-    expect(w.find("[data-test-id='prompt-icon']").exists()).toBe(true);
+    expect(w.find("[data-test-id='alert-icon']").exists()).toBe(true);
   });
 
   it("renders a custom icon via the customDecoratorIcon slot", async () => {
@@ -81,39 +81,39 @@ describe("DisplayPrompt", () => {
     const w = await mountSuspended(DisplayPrompt, {
       slots: { title: "Important notice" },
     });
-    expect(w.find("[data-test-id='display-prompt-title']").text()).toContain("Important notice");
+    expect(w.find("[data-test-id='alert-title']").text()).toContain("Important notice");
   });
 
   it("renders content slot when provided", async () => {
     const w = await mountSuspended(DisplayPrompt, {
       slots: { content: "Detailed explanation here" },
     });
-    expect(w.find("[data-test-id='display-prompt-content']").exists()).toBe(true);
-    expect(w.find("[data-test-id='display-prompt-content']").text()).toContain("Detailed explanation here");
+    expect(w.find("[data-test-id='alert-content']").exists()).toBe(true);
+    expect(w.find("[data-test-id='alert-content']").text()).toContain("Detailed explanation here");
   });
 
   it("does not render content element when content slot is empty", async () => {
     const w = await mountSuspended(DisplayPrompt);
-    expect(w.find("[data-test-id='display-prompt-content']").exists()).toBe(false);
+    expect(w.find("[data-test-id='alert-content']").exists()).toBe(false);
   });
 
   // ─── Dismiss button ───────────────────────────────────────────────────────
 
   it("does not render the dismiss button when dismissible is false", async () => {
     const w = await mountSuspended(DisplayPrompt, { props: { dismissible: false } });
-    expect(w.find("[data-test-id='display-prompt-action']").exists()).toBe(false);
+    expect(w.find("[data-test-id='alert-dismiss']").exists()).toBe(false);
   });
 
   it("renders the dismiss button when dismissible is true", async () => {
     const w = await mountSuspended(DisplayPrompt, { props: { dismissible: true } });
-    expect(w.find("[data-test-id='display-prompt-action']").exists()).toBe(true);
+    expect(w.find("[data-test-id='alert-dismiss']").exists()).toBe(true);
   });
 
   // ─── Dismiss behaviour (no parent model) ─────────────────────────────────
 
   it("adds the closed class after the dismiss button is clicked", async () => {
     const w = await mountSuspended(DisplayPrompt, { props: { dismissible: true } });
-    await w.find("[data-test-id='display-prompt-action']").trigger("click");
+    await w.find("[data-test-id='alert-dismiss']").trigger("click");
     await nextTick();
     expect(root(w).classes()).toContain("closed");
   });
@@ -124,7 +124,7 @@ describe("DisplayPrompt", () => {
     const w = await mountSuspended(DisplayPrompt, {
       props: { dismissible: true, modelValue: true },
     });
-    await w.find("[data-test-id='display-prompt-action']").trigger("click");
+    await w.find("[data-test-id='alert-dismiss']").trigger("click");
     await nextTick();
     const emitted = w.emitted("update:modelValue");
     expect(emitted).toBeTruthy();
@@ -135,7 +135,7 @@ describe("DisplayPrompt", () => {
     const w = await mountSuspended(DisplayPrompt, {
       props: { dismissible: true, modelValue: true },
     });
-    await w.find("[data-test-id='display-prompt-action']").trigger("click");
+    await w.find("[data-test-id='alert-dismiss']").trigger("click");
     await nextTick();
     // componentOpen is unchanged — parent controls visibility via modelValue
     expect(root(w).classes()).not.toContain("closed");
