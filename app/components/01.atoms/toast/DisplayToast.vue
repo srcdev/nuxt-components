@@ -4,14 +4,7 @@
       v-if="privateDisplayToast"
       ref="toastElementRef"
       class="display-toast"
-      :class="[
-        elementClasses,
-        cssStateClass,
-        positionClasses,
-        {
-          'has-theme': !slots.default,
-        },
-      ]"
+      :class="[elementClasses, cssStateClass, positionClasses]"
       :data-theme="theme"
       :role="toastRole"
       :aria-live="ariaLive"
@@ -330,22 +323,6 @@ onBeforeRouteLeave(() => {
     &.bottom {
       inset-block-end: var(--_toast-gutter);
       transform: translateY(30px);
-    }
-
-    /*
-    * Styles for the display toast component if slot is empty
-    */
-    &.has-theme {
-      padding-inline-start: 6px;
-      background-color: var(--theme-accent);
-
-      border: 0.1rem solid var(--theme-border);
-      border-start-start-radius: 8px;
-      border-end-start-radius: 8px;
-      border-start-end-radius: 4px;
-      border-end-end-radius: 4px;
-
-      overflow: hidden;
     }
 
     .display-toast-progress {

@@ -98,18 +98,6 @@ describe("DisplayToast", () => {
     expect(toast()!.classList).not.toContain("left");
   });
 
-  // ─── has-theme class ──────────────────────────────────────────────────────
-
-  it("has the has-theme class when no default slot is used", async () => {
-    await mountAndShow();
-    expect(toast()!.classList).toContain("has-theme");
-  });
-
-  it("does not have the has-theme class when a default slot is used", async () => {
-    await mountAndShow({}, { default: "<div>Custom</div>" });
-    expect(toast()!.classList).not.toContain("has-theme");
-  });
-
   // ─── tabindex / aria-describedby ──────────────────────────────────────────
 
   it("sets tabindex='0' when no default slot is used", async () => {

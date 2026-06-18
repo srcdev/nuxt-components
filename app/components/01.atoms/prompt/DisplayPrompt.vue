@@ -87,19 +87,7 @@ onMounted(async () => {
     }
 
     .display-prompt-wrapper {
-      background-color: var(--theme-accent);
-      border: 0px solid transparent;
-      border-radius: 4px;
-      border-start-start-radius: 8px;
-      border-end-start-radius: 8px;
-      padding-inline-start: 8px;
-
       overflow: hidden;
-
-      &.outlined {
-        border: 1px solid var(--theme-border);
-      }
-
     }
   }
 }
