@@ -11,7 +11,7 @@
       <div
         v-for="entry in visibleEntries"
         :key="entry.id"
-        class="display-toast-provider-item has-theme"
+        class="display-toast-provider-item"
         :style="{
           '--_reveal': revealDurationFor(entry) + 'ms',
           '--_duration': displayDurationFor(entry) + 'ms',
@@ -75,8 +75,7 @@ const themeFor = (entry: ToastQueueEntry): DisplayToastTheme => entry.config.app
 const autoDismissFor = (entry: ToastQueueEntry) => entry.config.behavior?.autoDismiss ?? true;
 const displayDurationFor = (entry: ToastQueueEntry) => entry.config.behavior?.duration ?? 5000;
 const revealDurationFor = (entry: ToastQueueEntry) => entry.config.behavior?.revealDuration ?? 550;
-const roleFor = (entry: ToastQueueEntry) =>
-  ["error", "warning"].includes(themeFor(entry)) ? "alert" : "status";
+const roleFor = (entry: ToastQueueEntry) => (["error", "warning"].includes(themeFor(entry)) ? "alert" : "status");
 const ariaLiveFor = (entry: ToastQueueEntry) =>
   ["error", "warning"].includes(themeFor(entry)) ? "assertive" : "polite";
 
@@ -124,7 +123,6 @@ watch(
   },
   { immediate: true }
 );
-
 
 let _leavingCount = 0;
 let _containerEl: HTMLElement | null = null;
@@ -342,17 +340,6 @@ onUnmounted(() => {
 
     &.v-move {
       transition: transform 0.3s ease;
-    }
-
-    &.has-theme {
-      padding-inline-start: 6px;
-      background-color: var(--theme-accent);
-      border: 0.1rem solid var(--theme-border);
-      border-start-start-radius: 8px;
-      border-end-start-radius: 8px;
-      border-start-end-radius: 4px;
-      border-end-end-radius: 4px;
-      overflow: hidden;
     }
 
     .display-toast-provider-progress {
