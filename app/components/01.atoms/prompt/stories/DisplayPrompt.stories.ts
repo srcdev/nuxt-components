@@ -24,7 +24,7 @@ export default {
     },
     styleClassPassthrough: {
       control: { type: "object" },
-      description: "Extra classes applied to the prompt wrapper. Supported modifier: 'outlined' (adds a border).",
+      description: "Extra classes applied to the prompt wrapper",
       table: { category: "Styling" },
     },
     modelValue: { table: { disable: true } },
@@ -65,41 +65,30 @@ export const InfoTheme = Template.bind({});
 InfoTheme.args = {
   theme: "info",
   dismissible: true,
-  styleClassPassthrough: ["outlined"],
 };
 
 export const SuccessTheme = Template.bind({});
 SuccessTheme.args = {
   theme: "success",
   dismissible: true,
-  styleClassPassthrough: ["outlined"],
 };
 
 export const WarningTheme = Template.bind({});
 WarningTheme.args = {
   theme: "warning",
   dismissible: true,
-  styleClassPassthrough: ["outlined"],
 };
 
 export const ErrorTheme = Template.bind({});
 ErrorTheme.args = {
   theme: "error",
   dismissible: true,
-  styleClassPassthrough: ["outlined"],
 };
 
 export const Dismissible = Template.bind({});
 Dismissible.args = {
   theme: "info",
   dismissible: true,
-};
-
-export const Outlined = Template.bind({});
-Outlined.args = {
-  theme: "info",
-  dismissible: true,
-  styleClassPassthrough: ["outlined"],
 };
 
 export const AllThemesDismissible: StoryFn<typeof StorybookComponent> = () => ({
@@ -114,7 +103,6 @@ export const AllThemesDismissible: StoryFn<typeof StorybookComponent> = () => ({
         :key="theme"
         :theme="theme"
         :dismissible="true"
-        :style-class-passthrough="['outlined']"
       >
         <template #title>{{ theme.charAt(0).toUpperCase() + theme.slice(1) }} prompt</template>
         <template #content>This is the {{ theme }} variant of the prompt component.</template>
