@@ -11,7 +11,8 @@
                 <span class="qa-panel__title">QA — DisplayPrompt</span>
                 <code class="qa-panel__status">
                   {{ qaTheme }} · {{ qaDismissible ? "dismissible" : "static" }} ·
-                  {{ qaOutlined ? "outlined" : "no-outline" }} · {{ qaHighContrast ? "high-contrast" : "standard" }}
+                  {{ qaOutlined ? "outlined" : "no-outline" }} · {{ qaHighContrast ? "high-contrast" : "standard" }} ·
+                  {{ qaMasked ? "masked" : "unmasked" }}
                 </code>
               </summary>
               <div class="qa-panel__body">
@@ -89,24 +90,42 @@
                     </button>
                   </div>
                 </div>
+
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Masked</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="opt in [true, false]"
+                      :key="String(opt)"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaMasked === opt }"
+                      @click="qaMasked = opt"
+                    >
+                      {{ opt ? "yes" : "no" }}
+                    </button>
+                  </div>
+                </div>
               </div>
             </details>
           </div>
 
           <section class="prompt-examples pb-12">
-            <DisplayPrompt
-              :key="promptKey"
-              :theme="qaTheme"
-              :dismissible="qaDismissible"
-              :use-auto-focus="qaAutoFocus"
-              :style-class-passthrough="styleClasses"
-            >
-              <template #customDecoratorIcon>
-                <Icon :name="themeIcons[qaTheme]" class="icon" />
-              </template>
-              <template #title>{{ themeLabels[qaTheme] }} Prompt Title</template>
-              <template #content>This is prompt content, it can contain html or plain text.</template>
-            </DisplayPrompt>
+            <div :class="{ 'masked-bg': qaMasked }">
+              <DisplayPrompt
+                :key="promptKey"
+                :theme="qaTheme"
+                :dismissible="qaDismissible"
+                :use-auto-focus="qaAutoFocus"
+                :masked="qaMasked"
+                :style-class-passthrough="styleClasses"
+              >
+                <template #customDecoratorIcon>
+                  <Icon :name="themeIcons[qaTheme]" class="icon" />
+                </template>
+                <template #title>{{ themeLabels[qaTheme] }} Prompt Title</template>
+                <template #content>This is prompt content, it can contain html or plain text.</template>
+              </DisplayPrompt>
+            </div>
           </section>
         </PageRow>
       </template>
@@ -134,6 +153,7 @@ const qaDismissible = ref(true);
 const qaOutlined = ref(false);
 const qaHighContrast = ref(false);
 const qaAutoFocus = ref(false);
+const qaMasked = ref(false);
 
 const themeIcons: Record<DisplayPromptTheme, string> = {
   info: "akar-icons:info",
@@ -156,7 +176,7 @@ const styleClasses = computed(() => {
   return classes;
 });
 
-const promptKey = computed(() => `${qaTheme.value}-${qaDismissible.value}`);
+const promptKey = computed(() => `${qaTheme.value}-${qaDismissible.value}-${qaMasked.value}`);
 </script>
 
 <style lang="css">
@@ -164,6 +184,12 @@ const promptKey = computed(() => `${qaTheme.value}-${qaDismissible.value}`);
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
+  .masked-bg {
+    padding: 2rem;
+    border-radius: 0.8rem;
+    background: linear-gradient(135deg, oklch(40% 0.15 250), oklch(25% 0.1 300));
+  }
 }
 
 .displayPrompt-page {

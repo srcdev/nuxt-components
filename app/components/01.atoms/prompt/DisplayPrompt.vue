@@ -7,7 +7,8 @@
     tabindex="0"
   >
     <div class="display-prompt-wrapper" :data-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
-      <AlertContent
+      <component
+        :is="contentComponent"
         :theme="theme"
         :dismissible="dismissible"
         :aria-live="useAutoFocus ? 'polite' : undefined"
@@ -28,18 +29,21 @@
         <template #dismissLabel>
           <slot name="customTitle">Close this prompt</slot>
         </template>
-      </AlertContent>
+      </component>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import AlertContent from "~/components/02.molecules/alert-content/AlertContent.vue";
+import AlertMaskedContent from "~/components/02.molecules/alert-masked-content/AlertMaskedContent.vue";
 import type { DisplayPromptTheme } from "~/types/components";
 
 interface Props {
   theme?: DisplayPromptTheme;
   dismissible?: boolean;
   useAutoFocus?: boolean;
+  masked?: boolean;
   styleClassPassthrough?: string | string[];
 }
 
@@ -47,8 +51,11 @@ const props = withDefaults(defineProps<Props>(), {
   theme: "info",
   dismissible: false,
   useAutoFocus: false,
+  masked: false,
   styleClassPassthrough: () => [],
 });
+
+const contentComponent = computed(() => (props.masked ? AlertMaskedContent : AlertContent));
 
 const slots = useSlots();
 const promptElementRef = useTemplateRef<HTMLElement>("promptElementRef");

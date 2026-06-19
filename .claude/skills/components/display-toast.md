@@ -41,6 +41,7 @@ interface DisplayToastConfig {
     position?: "top" | "bottom"  // default: "top"
     alignment?: "left" | "center" | "right" // default: "right"
     fullWidth?: boolean          // default: false — overrides alignment
+    masked?: boolean             // SVG glass border — semi-transparent background — default: false
   }
   behavior?: {
     autoDismiss?: boolean        // default: true
@@ -197,6 +198,14 @@ Override tokens via an unscoped style block scoped to a page or layout class:
   --theme-text: oklch(95% 0 0);
 }
 ```
+
+### Masked variant
+
+Setting `appearance.masked: true` swaps `AlertContent` for `AlertMaskedContent`, which uses an SVG-based border and a semi-transparent background (`rgba(0,0,0,0.3)`) so page content is faintly visible beneath the toast.
+
+The SVG border shape matches the standard toast exactly (8px left radius, 4px right, 6px accent-colour left bar via `--theme-accent`). Override any dimension or colour via a `maskConfig` prop if using `AlertMaskedContent` standalone.
+
+The inner content layout is handled by the shared `AlertContentInner` molecule — both variants reuse it. `AlertMaskedContent` overrides `--_alert-content-inner-bg: transparent` so the glass effect shows through.
 
 ### Provider notes
 

@@ -14,7 +14,8 @@
     >
       <slot v-if="slots.default"></slot>
 
-      <AlertContent
+      <component
+        :is="contentComponent"
         v-else
         :theme="theme"
         :custom-icon="customIcon"
@@ -31,13 +32,15 @@
         <template v-if="slots.description || toastDescription" #content>
           <slot name="description">{{ toastDescription }}</slot>
         </template>
-      </AlertContent>
+      </component>
       <div v-if="autoDismiss" class="display-toast-progress"></div>
     </div>
   </Teleport>
 </template>
 
 <script setup lang="ts">
+import AlertContent from "~/components/02.molecules/alert-content/AlertContent.vue";
+import AlertMaskedContent from "~/components/02.molecules/alert-masked-content/AlertMaskedContent.vue";
 import type {
   DisplayToastConfig,
   DisplayToastTheme,
@@ -81,6 +84,8 @@ const theme = computed(() => props.config?.appearance?.theme ?? "info");
 const position = computed(() => props.config?.appearance?.position ?? "top");
 const alignment = computed(() => props.config?.appearance?.alignment ?? "right");
 const fullWidth = computed(() => props.config?.appearance?.fullWidth ?? false);
+const masked = computed(() => props.config?.appearance?.masked ?? false);
+const contentComponent = computed(() => (masked.value ? AlertMaskedContent : AlertContent));
 const autoDismiss = computed(() => props.config?.behavior?.autoDismiss ?? true);
 const duration = computed(() => props.config?.behavior?.duration ?? 5000);
 const revealDuration = computed(() => props.config?.behavior?.revealDuration ?? 550);

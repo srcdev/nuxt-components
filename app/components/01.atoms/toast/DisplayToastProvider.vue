@@ -23,7 +23,8 @@
         :aria-describedby="'toast-message-' + entry.id"
         @keydown.escape="handleDismiss(entry.id)"
       >
-        <AlertContent
+        <component
+          :is="maskedFor(entry) ? AlertMaskedContent : AlertContent"
           :theme="themeFor(entry)"
           :custom-icon="entry.config.content?.customIcon"
           :content-id="'toast-message-' + entry.id"
@@ -36,7 +37,7 @@
           <template v-if="entry.config.content?.description" #content>
             {{ entry.config.content?.description }}
           </template>
-        </AlertContent>
+        </component>
         <div v-if="autoDismissFor(entry)" class="display-toast-provider-progress"></div>
       </div>
     </TransitionGroup>
@@ -44,6 +45,8 @@
 </template>
 
 <script setup lang="ts">
+import AlertContent from "~/components/02.molecules/alert-content/AlertContent.vue";
+import AlertMaskedContent from "~/components/02.molecules/alert-masked-content/AlertMaskedContent.vue";
 import type {
   DisplayToastTheme,
   DisplayToastPosition,
@@ -72,6 +75,7 @@ const visibleEntries = computed<ToastQueueEntry[]>(() =>
 );
 
 const themeFor = (entry: ToastQueueEntry): DisplayToastTheme => entry.config.appearance?.theme ?? "info";
+const maskedFor = (entry: ToastQueueEntry) => entry.config.appearance?.masked ?? false;
 const autoDismissFor = (entry: ToastQueueEntry) => entry.config.behavior?.autoDismiss ?? true;
 const displayDurationFor = (entry: ToastQueueEntry) => entry.config.behavior?.duration ?? 5000;
 const revealDurationFor = (entry: ToastQueueEntry) => entry.config.behavior?.revealDuration ?? 550;

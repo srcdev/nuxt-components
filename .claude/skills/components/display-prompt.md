@@ -16,6 +16,7 @@ the DOM. Dismiss can be controlled locally (closes itself) or by a parent via `v
 | `theme` | `SemanticTheme` | `"info"` | `"info" \| "success" \| "warning" \| "error"` |
 | `dismissible` | `boolean` | `false` | Shows a close button. |
 | `useAutoFocus` | `boolean` | `false` | Focuses the prompt root element on mount. |
+| `masked` | `boolean` | `false` | SVG glass border — swaps `AlertContent` for `AlertMaskedContent`. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the inner wrapper. Supported modifier: `"outlined"`. |
 | `v-model` | `boolean` | `false` | Optional parent control — see dismiss behaviour below. |
 
@@ -115,6 +116,20 @@ Scope overrides using your page or section wrapper class — no `:deep()` needed
   --theme-accent: oklch(60% 0.18 140); /* left-edge accent strip */
   border-radius: 0.8rem;
 }
+```
+
+## Masked variant
+
+Setting `:masked="true"` swaps `AlertContent` for `AlertMaskedContent`, giving the prompt an SVG-based
+border and a semi-transparent background so content behind it is faintly visible. The inner layout is
+identical — all the same slots apply. Place the prompt over a coloured or image background for the
+glass effect to be visible.
+
+```vue
+<DisplayPrompt theme="info" :masked="true">
+  <template #title>Glass prompt</template>
+  <template #content>Semi-transparent, backed by AlertMaskedContent.</template>
+</DisplayPrompt>
 ```
 
 ## Notes

@@ -11,6 +11,7 @@ export interface DisplayToastAppearanceConfig {
   position?: DisplayToastPosition
   alignment?: DisplayToastAlignment
   fullWidth?: boolean
+  masked?: boolean
 }
 
 export interface DisplayToastBehaviorConfig {

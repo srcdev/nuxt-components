@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20', 'p-20']">
-          <h2 class="page-heading-2">DisplayToast / DisplayToastProvider</h2>
+          <h2 class="page-heading-2">DisplayToast Masked / DisplayToastProvider</h2>
 
           <div v-if="isDev" class="qa-panel">
             <details class="qa-panel__details">
@@ -11,7 +11,8 @@
                 <span class="qa-panel__title">QA — DisplayToastProvider</span>
                 <code class="qa-panel__status">
                   {{ qaTheme }} · {{ qaPosition }}-{{ qaAlignment }} ·
-                  {{ qaAutoDismiss ? `auto ${qaDuration}ms` : "manual" }} · max:{{ qaMaxVisible }}
+                  {{ qaAutoDismiss ? `auto ${qaDuration}ms` : "manual" }} · max:{{ qaMaxVisible }} ·
+                  {{ qaIsMasked ? "masked" : "solid" }}
                 </code>
               </summary>
               <div class="qa-panel__body">
@@ -56,6 +57,21 @@
                       @click="qaAlignment = opt"
                     >
                       {{ opt }}
+                    </button>
+                  </div>
+                </div>
+
+                <div class="qa-panel__group">
+                  <span class="qa-panel__label">Masked</span>
+                  <div class="qa-panel__chips">
+                    <button
+                      v-for="opt in [true, false]"
+                      :key="String(opt)"
+                      class="qa-panel__chip"
+                      :class="{ 'is-active': qaIsMasked === opt }"
+                      @click="qaIsMasked = opt"
+                    >
+                      {{ opt ? "yes" : "no" }}
                     </button>
                   </div>
                 </div>
@@ -148,8 +164,8 @@ import type { DisplayToastTheme, DisplayToastPosition, DisplayToastAlignment } f
 definePageMeta({ layout: false });
 
 useHead({
-  title: "DisplayToast",
-  meta: [{ name: "description", content: "DisplayToast component demo" }],
+  title: "DisplayToast Masked / DisplayToastProvider",
+  meta: [{ name: "description", content: "DisplayToast Masked component demo" }],
   bodyAttrs: { class: "displayToast-page" },
 });
 
@@ -164,6 +180,7 @@ const durations = [2000, 3000, 5000, 8000] as const;
 const qaTheme = ref<DisplayToastTheme>("info");
 const qaPosition = ref<DisplayToastPosition>("top");
 const qaAlignment = ref<DisplayToastAlignment>("right");
+const qaIsMasked = ref(true);
 const qaFullWidth = ref(false);
 const qaAutoDismiss = ref(true);
 const qaDuration = ref(5000);
@@ -178,7 +195,7 @@ const messages: Record<DisplayToastTheme, { title: string; description: string }
 
 const triggerToast = () => {
   show({
-    appearance: { theme: qaTheme.value },
+    appearance: { theme: qaTheme.value, masked: qaIsMasked.value },
     behavior: { autoDismiss: qaAutoDismiss.value, duration: qaDuration.value },
     content: messages[qaTheme.value],
   });
@@ -187,7 +204,7 @@ const triggerToast = () => {
 const queueMultiple = () => {
   themes.forEach((theme) => {
     show({
-      appearance: { theme },
+      appearance: { theme, masked: qaIsMasked.value },
       behavior: { autoDismiss: qaAutoDismiss.value, duration: qaDuration.value },
       content: messages[theme],
     });
@@ -274,19 +291,19 @@ const queueMultiple = () => {
     font-family: monospace;
     font-size: 1.2rem;
     color: white;
-    background: oklch(0% 0 0 / 0.25);
+    background-color: oklch(0% 0 0 / 0.25);
     border: 1px solid oklch(100% 0 0 / 0.18);
     padding: 0.3rem 1rem;
     border-radius: 0.4rem;
     cursor: pointer;
-    transition: background 0.15s;
+    transition: background-color 0.15s;
 
     &:hover {
-      background: oklch(0% 0 0 / 0.4);
+      background-color: oklch(0% 0 0 / 0.4);
     }
 
     &.is-active {
-      background: oklch(55% 0.18 240);
+      background-color: oklch(55% 0.18 240);
       border-color: oklch(55% 0.18 240);
     }
   }
