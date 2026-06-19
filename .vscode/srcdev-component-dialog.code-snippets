@@ -1,0 +1,126 @@
+{
+  "SRCDEV DisplayDialog Script Setup": {
+    "description": "useDialogControls setup for one or more DisplayDialog instances",
+    "scope": "javascript,typescript",
+    "body": [
+      "const { dialogsConfig, openDialog, closeDialog } = useDialogControls({",
+      "  $1myDialog: {",
+      "    onConfirm: () => {},",
+      "    onCancel: () => {},",
+      "  },",
+      "});"
+    ]
+  },
+  "SRCDEV DisplayDialog Trigger Button": {
+    "description": "Button that opens a DisplayDialog",
+    "scope": "vue,html",
+    "body": [
+      "<button type=\"button\" @click.prevent=\"openDialog('$1myDialog')\">$2Open dialog</button>"
+    ]
+  },
+  "SRCDEV DisplayDialog Confirm Template": {
+    "description": "DisplayDialog confirm variant — content-sized, requires explicit action",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayDialog",
+      "  v-if=\"dialogsConfig['$1myDialog']\"",
+      "  v-model=\"dialogsConfig['$1myDialog']\"",
+      "  variant=\"confirm\"",
+      "  data-dialog-id=\"$1myDialog\"",
+      ">",
+      "  <template #dialogTitle>",
+      "    <p class=\"text-normal wght-700 m-0\">$2Confirm action?</p>",
+      "  </template>",
+      "  <template #dialogContent>",
+      "    <div class=\"m-0\">",
+      "      <p class=\"text-normal\">$3Are you sure you want to continue?</p>",
+      "    </div>",
+      "  </template>",
+      "  <template #actionButtonLeft>",
+      "    <button type=\"button\" @click=\"closeDialog('$1myDialog', 'cancel')\">Cancel</button>",
+      "  </template>",
+      "  <template #actionButtonRight>",
+      "    <button type=\"button\" @click=\"closeDialog('$1myDialog', 'confirm')\">Confirm</button>",
+      "  </template>",
+      "</DisplayDialog>"
+    ]
+  },
+  "SRCDEV DisplayDialog Alert Template": {
+    "description": "DisplayDialog alert variant — cannot be dismissed by Escape or outside-click",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayDialog",
+      "  v-if=\"dialogsConfig['$1myDialog']\"",
+      "  v-model=\"dialogsConfig['$1myDialog']\"",
+      "  variant=\"alert\"",
+      "  theme=\"error\"",
+      "  data-dialog-id=\"$1myDialog\"",
+      ">",
+      "  <template #dialogTitle>",
+      "    <p class=\"text-normal wght-700 m-0\">$2Delete item?</p>",
+      "  </template>",
+      "  <template #dialogContent>",
+      "    <div class=\"m-0\">",
+      "      <p class=\"text-normal\">$3This action is permanent and cannot be undone.</p>",
+      "    </div>",
+      "  </template>",
+      "  <template #actionButtonLeft>",
+      "    <button type=\"button\" @click=\"closeDialog('$1myDialog', 'cancel')\">Cancel</button>",
+      "  </template>",
+      "  <template #actionButtonRight>",
+      "    <button type=\"button\" @click=\"closeDialog('$1myDialog', 'confirm')\">$4Delete</button>",
+      "  </template>",
+      "</DisplayDialog>"
+    ]
+  },
+  "SRCDEV DisplayDialog Scrollable Template": {
+    "description": "DisplayDialog dialog variant — tall panel with scrollable content area",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayDialog",
+      "  v-if=\"dialogsConfig['$1myDialog']\"",
+      "  v-model=\"dialogsConfig['$1myDialog']\"",
+      "  variant=\"dialog\"",
+      "  :allow-content-scroll=\"true\"",
+      "  data-dialog-id=\"$1myDialog\"",
+      ">",
+      "  <template #dialogTitle>",
+      "    <p class=\"text-normal wght-700 m-0\">$2Dialog title</p>",
+      "  </template>",
+      "  <template #dialogContent>",
+      "    <div class=\"pt-12 pb-12\">",
+      "      $3",
+      "    </div>",
+      "  </template>",
+      "  <template #actionButtonLeft>",
+      "    <button type=\"button\" @click=\"closeDialog('$1myDialog', 'cancel')\">Cancel</button>",
+      "  </template>",
+      "  <template #actionButtonRight>",
+      "    <button type=\"button\" @click=\"closeDialog('$1myDialog', 'confirm')\">Confirm</button>",
+      "  </template>",
+      "</DisplayDialog>"
+    ]
+  },
+  "SRCDEV DisplayDialog CSS Override": {
+    "description": "CSS override scaffold for DisplayDialog — scope to a page or section class",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .display-dialog {",
+      "    --display-dialog-inner-border-radius: ;",
+      "    --display-dialog-inner-background: ;",
+      "    --display-dialog-inner-border: ;",
+      "    --display-dialog-backdrop-background: ;",
+      "    --display-dialog-backdrop-blur: ;",
+      "    --display-dialog-transition-duration: ;",
+      "",
+      "    .inner {",
+      "      .header {}",
+      "      .dialog-content {}",
+      "      .footer {}",
+      "    }",
+      "  }",
+      "}"
+    ]
+  }
+}

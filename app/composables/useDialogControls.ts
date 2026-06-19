@@ -3,27 +3,27 @@ type DialogCallbacks = {
   onCancel?: () => void;
 };
 
-type DialogsSetupConfig = Record<string, DialogCallbacks>;
-
-export const useDialogControls = (config: DialogsSetupConfig = {}) => {
-  const dialogsConfig = reactive<Record<string, boolean>>(
-    Object.fromEntries(Object.keys(config).map((id) => [id, false]))
+export const useDialogControls = <T extends string>(config: Record<T, DialogCallbacks>) => {
+  const dialogsConfig = reactive<Record<T, boolean>>(
+    Object.fromEntries(Object.keys(config).map((id) => [id, false])) as Record<T, boolean>
   );
 
-  const openDialog = (name: string) => {
-    dialogsConfig[name] = true;
+  const state = dialogsConfig as Record<T, boolean>;
+
+  const openDialog = (name: T) => {
+    state[name] = true;
   };
 
-  const closeDialog = (name: string, action?: "confirm" | "cancel") => {
-    if (action && config[name]) {
+  const closeDialog = (name: T, action?: "confirm" | "cancel") => {
+    if (action) {
       if (action === "confirm") config[name].onConfirm?.();
       else if (action === "cancel") config[name].onCancel?.();
     }
-    dialogsConfig[name] = false;
+    state[name] = false;
   };
 
   return {
-    dialogsConfig,
+    dialogsConfig: state,
     openDialog,
     closeDialog,
   };

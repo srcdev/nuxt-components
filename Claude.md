@@ -310,7 +310,8 @@ See `.claude/skills/storybook-add-font.md` for the step-by-step process to add a
 3. **Style**: Functional base styles with CSS custom properties
 4. **Test**: Comprehensive test suite with `mountSuspended`
 5. **Document**: Update MCP reference for new patterns
-6. **Verify**: Ensure TypeScript strict mode compliance
+6. **Snippet**: Create or update `.vscode/srcdev-component-{name}.code-snippets` — required for every new or changed component
+7. **Verify**: Ensure TypeScript strict mode compliance
 
 ## CI/CD
 

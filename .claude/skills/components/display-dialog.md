@@ -14,6 +14,7 @@ open/close state management.
 |---|---|---|---|
 | `dataDialogId` | `string` | — | **Required.** Unique identifier rendered as `data-dialog-id` attribute. |
 | `variant` | `'dialog' \| 'modal' \| 'confirm' \| 'alert' \| 'fullscreen'` | `'dialog'` | Controls panel sizing and ARIA role. |
+| `theme` | `SemanticTheme` | `undefined` | Optional header accent — `data-theme` on `.header` only; adds a coloured bottom border and tints the close icon. |
 | `v-model` | `boolean` | — | Controls open/closed state. |
 | `allowContentScroll` | `boolean` | `false` | Enables independent scroll on `.dialog-content`. |
 | `lockViewport` | `boolean` | `true` | Adds/removes `lock` class on `<body>` on mount/close. |
@@ -118,6 +119,62 @@ CSS over per-instance overrides — dialogs are site-wide UI:
   --display-dialog-transition-duration: 250ms;
 }
 ```
+
+## Nested dialogs
+
+When a dialog needs to launch its own sub-dialog (e.g. "Discard changes?" before closing an edit
+form), the cleanest approach is to call `useDialogControls` **inside the dialog component itself**.
+The sub-dialog is entirely self-contained — the parent page doesn't need to know about it.
+
+```vue
+<!-- EditProfileDialog.vue -->
+<script setup lang="ts">
+const emit = defineEmits<{ close: [] }>();
+
+const { dialogsConfig, openDialog, closeDialog } = useDialogControls({
+  confirmDiscard: {
+    onConfirm: () => emit("close"),
+    onCancel: () => {},
+  },
+});
+
+const handleClose = () => {
+  if (hasUnsavedChanges.value) {
+    openDialog("confirmDiscard");
+  } else {
+    emit("close");
+  }
+};
+</script>
+
+<template>
+  <!-- main dialog content, close button calls handleClose() -->
+
+  <!-- sub-dialog rendered inside the same component -->
+  <DisplayDialog
+    v-if="dialogsConfig['confirmDiscard']"
+    v-model="dialogsConfig['confirmDiscard']"
+    variant="confirm"
+    theme="warning"
+    data-dialog-id="confirmDiscard"
+  >
+    <template #dialogTitle><p>Discard changes?</p></template>
+    <template #dialogContent><p>Your unsaved changes will be lost.</p></template>
+    <template #actionButtonLeft>
+      <button @click="closeDialog('confirmDiscard', 'cancel')">Keep editing</button>
+    </template>
+    <template #actionButtonRight>
+      <button @click="closeDialog('confirmDiscard', 'confirm')">Discard</button>
+    </template>
+  </DisplayDialog>
+</template>
+```
+
+Both dialogs are open simultaneously — native `<dialog>` stacking order ensures the confirm
+renders on top. The confirm resolves first; its `onConfirm` callback triggers the parent close.
+
+**Avoid** registering the sub-dialog on the page level — that couples the page to the dialog's
+internal concern and leaks implementation detail upward.
 
 ## Notes
 

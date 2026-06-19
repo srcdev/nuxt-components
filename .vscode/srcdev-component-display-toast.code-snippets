@@ -1,0 +1,78 @@
+{
+  "SRCDEV DisplayToastProvider Layout Setup": {
+    "description": "DisplayToastProvider — place once in your default layout",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayToastProvider",
+      "  position=\"$1top\"",
+      "  alignment=\"$2right\"",
+      "  :max-visible=\"1\"",
+      "/>"
+    ]
+  },
+  "SRCDEV useToastQueue Script Setup": {
+    "description": "useToastQueue — trigger app-wide toasts from anywhere",
+    "scope": "javascript,typescript",
+    "body": [
+      "const { show, dismiss, clear } = useToastQueue();",
+      "",
+      "const show$1Success = () => {",
+      "  show({",
+      "    appearance: { theme: 'success' },",
+      "    behavior: { autoDismiss: true, duration: 4000 },",
+      "    content: { title: '$2Done', description: '$3Your changes have been saved.' },",
+      "  });",
+      "};",
+      "",
+      "const show$1Error = () => {",
+      "  show({",
+      "    appearance: { theme: 'error' },",
+      "    behavior: { autoDismiss: false },",
+      "    content: { title: '$4Something went wrong', description: '$5Please try again.' },",
+      "  });",
+      "};"
+    ]
+  },
+  "SRCDEV DisplayToast Standalone Template": {
+    "description": "DisplayToast standalone — v-model driven, no queue",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayToast",
+      "  v-model=\"$1toastVisible\"",
+      "  :config=\"{",
+      "    appearance: { theme: '$2info' },",
+      "    behavior: { autoDismiss: true, duration: 4000 },",
+      "    content: { title: '$3Title', description: '$4Description.' },",
+      "  }\"",
+      "/>"
+    ]
+  },
+  "SRCDEV DisplayToast Standalone Script Setup": {
+    "description": "Script ref for standalone DisplayToast v-model",
+    "scope": "javascript,typescript",
+    "body": [
+      "const $1toastVisible = ref(false);"
+    ]
+  },
+  "SRCDEV DisplayToast Masked Config": {
+    "description": "Masked SVG glass variant — add to any toast config appearance block",
+    "scope": "javascript,typescript",
+    "body": [
+      "appearance: { theme: '$1info', masked: true },"
+    ]
+  },
+  "SRCDEV DisplayToast CSS Override": {
+    "description": "CSS override scaffold for DisplayToastProvider items",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .display-toast-provider-item {",
+      "    --theme-surface: ;",
+      "    --theme-text: ;",
+      "    --theme-accent: ;",
+      "    --theme-border: ;",
+      "  }",
+      "}"
+    ]
+  }
+}
