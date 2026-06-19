@@ -124,7 +124,7 @@ computes the scale from the two params:
 
 Scale direction: **00 = lightest, 10 = darkest**. Chroma tapers at both ends and peaks at step 06.
 
-Eight semantic slots (`--theme-surface`, `--theme-text`, `--theme-ring`, etc.) are derived from the
+Nine semantic slots (`--theme-surface`, `--theme-accent`, `--theme-text`, `--theme-ring`, etc.) are derived from the
 scale using `light-dark()` and are shared by all components. Theme variants (`data-theme="success"`,
 `"warning"`, `"error"`) swap `--theme-hue` and `--theme-chroma` on their element; the formula
 re-evaluates locally so each themed element gets its own full palette without affecting the page.

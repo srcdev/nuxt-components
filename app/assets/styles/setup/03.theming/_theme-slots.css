@@ -2,12 +2,15 @@
    Declared on the same selector as theme-ramp.css so the formula re-evaluates
    per [data-theme] element rather than being inherited from html. */
 :where(html, [data-theme], [data-invalid]) {
-  --theme-surface:          light-dark(var(--colour-theme-9), var(--colour-theme-7));
-  --theme-surface-hover:    light-dark(var(--colour-theme-8), var(--colour-theme-6));
-  --theme-surface-subtle:   light-dark(var(--colour-theme-1), var(--colour-theme-9));
-  --theme-border:           light-dark(var(--colour-theme-6), var(--colour-theme-5));
-  --theme-border-focus:     light-dark(var(--colour-theme-4), var(--colour-theme-3));
-  --theme-ring:             var(--colour-theme-2);
-  --theme-on-surface:       var(--colour-theme-0);
-  --theme-text:             light-dark(var(--colour-theme-9), var(--colour-theme-2));
+  --theme-surface: light-dark(var(--colour-theme-7), var(--colour-theme-9));
+  --theme-surface-inverted: light-dark(var(--colour-theme-9), var(--colour-theme-2));
+  --theme-surface-hover: light-dark(var(--colour-theme-9), var(--colour-theme-7));
+  --theme-accent: light-dark(var(--colour-theme-5), var(--colour-theme-4));
+  --theme-surface-subtle: light-dark(var(--colour-theme-1), var(--colour-theme-9));
+  --theme-border: light-dark(var(--colour-theme-6), var(--colour-theme-5));
+  --theme-border-focus: light-dark(var(--colour-theme-4), var(--colour-theme-3));
+  --theme-ring: light-dark(var(--colour-theme-1), var(--colour-theme-9));
+  --theme-on-surface: var(--colour-theme-0);
+  --theme-text: light-dark(var(--colour-theme-9), var(--colour-theme-2));
+  --theme-text-inverted: light-dark(var(--colour-theme-9), var(--colour-theme-7));
 }

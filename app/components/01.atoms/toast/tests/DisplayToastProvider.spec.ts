@@ -60,21 +60,21 @@ describe("DisplayToastProvider", () => {
     await mountSuspended(DisplayToastProvider);
     show({ content: { text: "Toast message" } });
     await nextTick();
-    expect(document.querySelector(".toast-message")!.textContent).toContain("Toast message");
+    expect(document.querySelector(".alert-content-body")!.textContent).toContain("Toast message");
   });
 
   it("renders the toast title", async () => {
     await mountSuspended(DisplayToastProvider);
     show({ content: { title: "My Title" } });
     await nextTick();
-    expect(document.querySelector("[data-test-id='toast-title']")!.textContent).toContain("My Title");
+    expect(document.querySelector("[data-test-id='alert-title']")!.textContent).toContain("My Title");
   });
 
   it("renders the toast description", async () => {
     await mountSuspended(DisplayToastProvider);
     show({ content: { description: "My description" } });
     await nextTick();
-    expect(document.querySelector("[data-test-id='toast-description']")!.textContent).toContain("My description");
+    expect(document.querySelector("[data-test-id='alert-content']")!.textContent).toContain("My description");
   });
 
   // ─── data-theme ───────────────────────────────────────────────────────────
@@ -158,7 +158,7 @@ describe("DisplayToastProvider", () => {
     show({ content: { text: "Second" } });
     await nextTick();
     expect(items().length).toBe(1);
-    expect(document.querySelector(".toast-message")!.textContent).toContain("First");
+    expect(document.querySelector(".alert-content-body")!.textContent).toContain("First");
   });
 
   it("shows up to maxVisible items simultaneously", async () => {
@@ -176,7 +176,7 @@ describe("DisplayToastProvider", () => {
     await mountSuspended(DisplayToastProvider);
     show({ behavior: { autoDismiss: false } });
     await nextTick();
-    (document.querySelector(".toast-action button") as HTMLElement).click();
+    (document.querySelector("[data-test-id='alert-dismiss']") as HTMLElement).click();
     await nextTick();
     expect(items().length).toBe(0);
   });
@@ -218,11 +218,11 @@ describe("DisplayToastProvider", () => {
     show({ content: { text: "First" }, behavior: { autoDismiss: false } });
     show({ content: { text: "Second" }, behavior: { autoDismiss: false } });
     await nextTick();
-    expect(document.querySelector(".toast-message")!.textContent).toContain("First");
+    expect(document.querySelector(".alert-content-body")!.textContent).toContain("First");
 
     item()!.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
     await nextTick();
-    expect(document.querySelector(".toast-message")!.textContent).toContain("Second");
+    expect(document.querySelector(".alert-content-body")!.textContent).toContain("Second");
   });
 
   // ─── Progress bar ─────────────────────────────────────────────────────────

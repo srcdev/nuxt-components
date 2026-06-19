@@ -70,17 +70,18 @@ These are used by components that need a specific step by name (e.g. error state
 
 ## Semantic slots
 
-Eight shared colour roles are declared in `_theme-slots.css` on the same selector as the ramp.
+Nine shared colour roles are declared in `_theme-slots.css` on the same selector as the ramp.
 All themed components (buttons, inputs, prompts, toasts) read only these tokens:
 
 | Token                   | Light (step) | Dark (step) | Role                              |
 |-------------------------|--------------|-------------|-----------------------------------|
-| `--theme-surface`       | 9            | 7           | Filled button/chip surface        |
-| `--theme-surface-hover` | 8            | 6           | Hover state of filled surface     |
-| `--theme-surface-subtle`| 1            | 9           | Hover bg for outline elements     |
+| `--theme-surface`       | 7            | 9           | Filled button/chip surface        |
+| `--theme-surface-hover` | 9            | 7           | Hover state of filled surface     |
+| `--theme-accent`        | 5            | 4           | Decorative accent strip (prompt/toast left edge) |
+| `--theme-surface-subtle`| 1            | 9           | Subtle body bg for prompt/toast, outline element hover |
 | `--theme-border`        | 6            | 5           | Input/card border                 |
 | `--theme-border-focus`  | 4            | 3           | Focused border                    |
-| `--theme-ring`          | 2            | 2           | Focus ring (outline)              |
+| `--theme-ring`          | 1            | 9           | Focus ring (outline)              |
 | `--theme-on-surface`    | 0            | 0           | Text/icon on filled surface       |
 | `--theme-text`          | 9            | 2           | Text on page, outline element text|
 

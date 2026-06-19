@@ -11,7 +11,7 @@
       <div
         v-for="entry in visibleEntries"
         :key="entry.id"
-        class="display-toast-provider-item has-theme"
+        class="display-toast-provider-item"
         :style="{
           '--_reveal': revealDurationFor(entry) + 'ms',
           '--_duration': displayDurationFor(entry) + 'ms',
@@ -23,16 +23,21 @@
         :aria-describedby="'toast-message-' + entry.id"
         @keydown.escape="handleDismiss(entry.id)"
       >
-        <DefaultToastContent
+        <component
+          :is="maskedFor(entry) ? AlertMaskedContent : AlertContent"
           :theme="themeFor(entry)"
           :custom-icon="entry.config.content?.customIcon"
-          :toast-id="entry.id"
-          :toast-display-text="entry.config.content?.text ?? ''"
-          :toast-title="entry.config.content?.title ?? ''"
-          :toast-description="entry.config.content?.description ?? ''"
-          :auto-dismiss="autoDismissFor(entry)"
-          :set-dismiss-toast="() => handleDismiss(entry.id)"
-        />
+          :content-id="'toast-message-' + entry.id"
+          :dismissible="!autoDismissFor(entry)"
+          @dismiss="handleDismiss(entry.id)"
+        >
+          <template v-if="entry.config.content?.title || entry.config.content?.text" #title>
+            {{ entry.config.content?.title || entry.config.content?.text }}
+          </template>
+          <template v-if="entry.config.content?.description" #content>
+            {{ entry.config.content?.description }}
+          </template>
+        </component>
         <div v-if="autoDismissFor(entry)" class="display-toast-provider-progress"></div>
       </div>
     </TransitionGroup>
@@ -40,6 +45,8 @@
 </template>
 
 <script setup lang="ts">
+import AlertContent from "~/components/02.molecules/alert-content/AlertContent.vue";
+import AlertMaskedContent from "~/components/02.molecules/alert-masked-content/AlertMaskedContent.vue";
 import type {
   DisplayToastTheme,
   DisplayToastPosition,
@@ -68,11 +75,11 @@ const visibleEntries = computed<ToastQueueEntry[]>(() =>
 );
 
 const themeFor = (entry: ToastQueueEntry): DisplayToastTheme => entry.config.appearance?.theme ?? "info";
+const maskedFor = (entry: ToastQueueEntry) => entry.config.appearance?.masked ?? false;
 const autoDismissFor = (entry: ToastQueueEntry) => entry.config.behavior?.autoDismiss ?? true;
 const displayDurationFor = (entry: ToastQueueEntry) => entry.config.behavior?.duration ?? 5000;
 const revealDurationFor = (entry: ToastQueueEntry) => entry.config.behavior?.revealDuration ?? 550;
-const roleFor = (entry: ToastQueueEntry) =>
-  ["error", "warning"].includes(themeFor(entry)) ? "alert" : "status";
+const roleFor = (entry: ToastQueueEntry) => (["error", "warning"].includes(themeFor(entry)) ? "alert" : "status");
 const ariaLiveFor = (entry: ToastQueueEntry) =>
   ["error", "warning"].includes(themeFor(entry)) ? "assertive" : "polite";
 
@@ -120,7 +127,6 @@ watch(
   },
   { immediate: true }
 );
-
 
 let _leavingCount = 0;
 let _containerEl: HTMLElement | null = null;
@@ -340,17 +346,6 @@ onUnmounted(() => {
       transition: transform 0.3s ease;
     }
 
-    &.has-theme {
-      padding-inline-start: 6px;
-      background-color: var(--theme-surface);
-      border: 0.1rem solid var(--theme-border);
-      border-start-start-radius: 8px;
-      border-end-start-radius: 8px;
-      border-start-end-radius: 4px;
-      border-end-end-radius: 4px;
-      overflow: hidden;
-    }
-
     .display-toast-provider-progress {
       position: absolute;
       inset-block-end: 4px;
@@ -358,7 +353,7 @@ onUnmounted(() => {
       height: 3px;
       transform: scaleX(0);
       transform-origin: right;
-      background: var(--theme-surface);
+      background: var(--theme-accent);
       border-radius: inherit;
       animation: progress var(--_duration) linear forwards;
     }

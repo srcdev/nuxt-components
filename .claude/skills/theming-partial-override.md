@@ -14,17 +14,18 @@ after the layer styles.
 
 ## Semantic slots — the tokens to override
 
-All themed components share the same 8-slot vocabulary. Overriding these affects buttons, inputs,
+All themed components share a 9-slot vocabulary. Overriding these affects buttons, inputs,
 prompts, and toasts simultaneously:
 
 | Token                   | Default (light → dark)     | Role                              |
 |-------------------------|----------------------------|-----------------------------------|
-| `--theme-surface`       | `--colour-theme-9` / `7`   | Filled button/chip surface        |
-| `--theme-surface-hover` | `--colour-theme-8` / `6`   | Hover state of filled surface     |
-| `--theme-surface-subtle`| `--colour-theme-1` / `9`   | Hover bg for outline elements     |
+| `--theme-surface`       | `--colour-theme-7` / `9`   | Filled button/chip surface        |
+| `--theme-surface-hover` | `--colour-theme-9` / `7`   | Hover state of filled surface     |
+| `--theme-accent`        | `--colour-theme-5` / `4`   | Decorative accent strip (prompt/toast left edge) |
+| `--theme-surface-subtle`| `--colour-theme-1` / `9`   | Subtle body bg for prompt/toast, outline element hover |
 | `--theme-border`        | `--colour-theme-6` / `5`   | Input/card border                 |
 | `--theme-border-focus`  | `--colour-theme-4` / `3`   | Focused border                    |
-| `--theme-ring`          | `--colour-theme-2`         | Focus ring (outline)              |
+| `--theme-ring`          | `--colour-theme-1` / `9`   | Focus ring (outline)              |
 | `--theme-on-surface`    | `--colour-theme-0`         | Text/icon on filled surface       |
 | `--theme-text`          | `--colour-theme-9` / `2`   | Text on page, outline element text|
 
@@ -64,10 +65,10 @@ Page-level tokens:
 #### Override button surface only
 
 ```css
-/* Make primary buttons darker/more saturated */
+/* Make primary buttons darker/more saturated (step-7/9 defaults, step-9/7 hover) */
 :where(html) {
-  --theme-surface:       light-dark(oklch(28% 0.18 85), oklch(45% 0.20 85));
-  --theme-surface-hover: light-dark(oklch(22% 0.16 85), oklch(38% 0.18 85));
+  --theme-surface:       light-dark(oklch(48% 0.18 85), oklch(32% 0.20 85));
+  --theme-surface-hover: light-dark(oklch(32% 0.18 85), oklch(48% 0.20 85));
 }
 ```
 
@@ -118,8 +119,8 @@ To restrict an override to a specific section, scope to a wrapper class instead 
 
 .hero-cta {
   /* Just these buttons use a different surface colour */
-  --theme-surface:       light-dark(oklch(32% 0.16 85), oklch(55% 0.18 85));
-  --theme-surface-hover: light-dark(oklch(25% 0.14 85), oklch(48% 0.16 85));
+  --theme-surface:       light-dark(oklch(48% 0.16 85), oklch(32% 0.18 85));
+  --theme-surface-hover: light-dark(oklch(32% 0.14 85), oklch(48% 0.16 85));
 }
 ```
 

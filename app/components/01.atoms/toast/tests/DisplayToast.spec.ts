@@ -98,18 +98,6 @@ describe("DisplayToast", () => {
     expect(toast()!.classList).not.toContain("left");
   });
 
-  // ─── has-theme class ──────────────────────────────────────────────────────
-
-  it("has the has-theme class when no default slot is used", async () => {
-    await mountAndShow();
-    expect(toast()!.classList).toContain("has-theme");
-  });
-
-  it("does not have the has-theme class when a default slot is used", async () => {
-    await mountAndShow({}, { default: "<div>Custom</div>" });
-    expect(toast()!.classList).not.toContain("has-theme");
-  });
-
   // ─── tabindex / aria-describedby ──────────────────────────────────────────
 
   it("sets tabindex='0' when no default slot is used", async () => {
@@ -136,17 +124,17 @@ describe("DisplayToast", () => {
 
   it("renders text content from config", async () => {
     await mountAndShow({ config: { content: { text: "Hello toast" } } });
-    expect(document.querySelector(".toast-message")!.textContent).toContain("Hello toast");
+    expect(document.querySelector(".alert-content-body")!.textContent).toContain("Hello toast");
   });
 
   it("renders title from config", async () => {
     await mountAndShow({ config: { content: { title: "Toast Title" } } });
-    expect(document.querySelector("[data-test-id='toast-title']")!.textContent).toContain("Toast Title");
+    expect(document.querySelector("[data-test-id='alert-title']")!.textContent).toContain("Toast Title");
   });
 
   it("renders description from config", async () => {
     await mountAndShow({ config: { content: { description: "Toast description" } } });
-    expect(document.querySelector("[data-test-id='toast-description']")!.textContent).toContain(
+    expect(document.querySelector("[data-test-id='alert-content']")!.textContent).toContain(
       "Toast description"
     );
   });
@@ -155,16 +143,16 @@ describe("DisplayToast", () => {
     await mountAndShow({
       config: { content: { title: "Title", description: "Desc" } },
     });
-    expect(document.querySelector("[data-test-id='toast-title']")).not.toBeNull();
-    expect(document.querySelector("[data-test-id='toast-description']")).not.toBeNull();
+    expect(document.querySelector("[data-test-id='alert-title']")).not.toBeNull();
+    expect(document.querySelector("[data-test-id='alert-content']")).not.toBeNull();
   });
 
   // ─── Default slot ─────────────────────────────────────────────────────────
 
-  it("renders default slot content instead of DefaultToastContent", async () => {
+  it("renders default slot content instead of AlertContent", async () => {
     await mountAndShow({}, { default: '<p class="custom-content">Custom</p>' });
     expect(document.querySelector(".custom-content")).not.toBeNull();
-    expect(document.querySelector(".display-toast-inner")).toBeNull();
+    expect(document.querySelector(".alert-content")).toBeNull();
   });
 
   // ─── Progress bar ─────────────────────────────────────────────────────────
@@ -183,12 +171,12 @@ describe("DisplayToast", () => {
 
   it("renders the close button in the toast content when autoDismiss is false", async () => {
     await mountAndShow({ config: { behavior: { autoDismiss: false } } });
-    expect(document.querySelector(".toast-action button")).not.toBeNull();
+    expect(document.querySelector("[data-test-id='alert-dismiss']")).not.toBeNull();
   });
 
   it("does not render the close button when autoDismiss is true", async () => {
     await mountAndShow({ config: { behavior: { autoDismiss: true } } });
-    expect(document.querySelector(".toast-action")).toBeNull();
+    expect(document.querySelector("[data-test-id='alert-dismiss']")).toBeNull();
   });
 
   // ─── Dismiss via Escape key ────────────────────────────────────────────────
@@ -208,7 +196,7 @@ describe("DisplayToast", () => {
     await mountAndShow({ config: { behavior: { autoDismiss: false } } });
     vi.advanceTimersByTime(100);
     await nextTick();
-    (document.querySelector(".toast-action button") as HTMLElement).click();
+    (document.querySelector("[data-test-id='alert-dismiss']") as HTMLElement).click();
     await nextTick();
     expect(toast()!.classList).toContain("hide");
   });

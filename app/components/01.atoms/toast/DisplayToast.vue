@@ -4,14 +4,7 @@
       v-if="privateDisplayToast"
       ref="toastElementRef"
       class="display-toast"
-      :class="[
-        elementClasses,
-        cssStateClass,
-        positionClasses,
-        {
-          'has-theme': !slots.default,
-        },
-      ]"
+      :class="[elementClasses, cssStateClass, positionClasses]"
       :data-theme="theme"
       :role="toastRole"
       :aria-live="ariaLive"
@@ -21,33 +14,33 @@
     >
       <slot v-if="slots.default"></slot>
 
-      <DefaultToastContent
+      <component
+        :is="contentComponent"
         v-else
         :theme="theme"
         :custom-icon="customIcon"
-        :toast-id="toastId"
-        :toast-display-text="toastDisplayText"
-        :toast-title="toastTitle"
-        :toast-description="toastDescription"
-        :auto-dismiss="autoDismiss"
-        :set-dismiss-toast="setDismissToast"
+        :content-id="'toast-message-' + toastId"
+        :dismissible="!autoDismiss"
+        @dismiss="setDismissToast"
       >
-        <template v-if="slots.customToastIcon" #customToastIcon>
+        <template v-if="slots.customToastIcon" #icon>
           <slot name="customToastIcon"></slot>
         </template>
-        <template v-if="slots.title" #title>
-          <slot name="title"></slot>
+        <template v-if="slots.title || toastTitle || toastDisplayText" #title>
+          <slot name="title">{{ toastTitle || toastDisplayText }}</slot>
         </template>
-        <template v-if="slots.description" #description>
-          <slot name="description"></slot>
+        <template v-if="slots.description || toastDescription" #content>
+          <slot name="description">{{ toastDescription }}</slot>
         </template>
-      </DefaultToastContent>
+      </component>
       <div v-if="autoDismiss" class="display-toast-progress"></div>
     </div>
   </Teleport>
 </template>
 
 <script setup lang="ts">
+import AlertContent from "~/components/02.molecules/alert-content/AlertContent.vue";
+import AlertMaskedContent from "~/components/02.molecules/alert-masked-content/AlertMaskedContent.vue";
 import type {
   DisplayToastConfig,
   DisplayToastTheme,
@@ -91,6 +84,8 @@ const theme = computed(() => props.config?.appearance?.theme ?? "info");
 const position = computed(() => props.config?.appearance?.position ?? "top");
 const alignment = computed(() => props.config?.appearance?.alignment ?? "right");
 const fullWidth = computed(() => props.config?.appearance?.fullWidth ?? false);
+const masked = computed(() => props.config?.appearance?.masked ?? false);
+const contentComponent = computed(() => (masked.value ? AlertMaskedContent : AlertContent));
 const autoDismiss = computed(() => props.config?.behavior?.autoDismiss ?? true);
 const duration = computed(() => props.config?.behavior?.duration ?? 5000);
 const revealDuration = computed(() => props.config?.behavior?.revealDuration ?? 550);
@@ -335,22 +330,6 @@ onBeforeRouteLeave(() => {
       transform: translateY(30px);
     }
 
-    /*
-  * Styles for the display toast component if slot is empty
-  */
-    &.has-theme {
-      padding-inline-start: 6px;
-      background-color: var(--theme-surface);
-
-      border: 0.1rem solid var(--theme-border);
-      border-start-start-radius: 8px;
-      border-end-start-radius: 8px;
-      border-start-end-radius: 4px;
-      border-end-end-radius: 4px;
-
-      overflow: hidden;
-    }
-
     .display-toast-progress {
       position: absolute;
       inset-block-end: 4px;
@@ -358,7 +337,7 @@ onBeforeRouteLeave(() => {
       height: 3px;
       transform: scaleX(0);
       transform-origin: right;
-      background: var(--theme-surface);
+      background: var(--theme-accent);
       border-radius: inherit;
       animation: progress v-bind(displayDurationMs) linear forwards;
     }
