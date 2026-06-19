@@ -1,5 +1,5 @@
 <template>
-  <div class="alert-content">
+  <div class="alert-content" :data-theme="theme">
     <div class="alert-content-inner">
       <div class="alert-content-icon" data-test-id="alert-icon" aria-hidden="true">
         <slot name="icon">
@@ -18,6 +18,7 @@
 
       <button
         v-if="dismissible"
+        type="button"
         class="alert-content-dismiss"
         data-test-id="alert-dismiss"
         @click.prevent="emit('dismiss')"

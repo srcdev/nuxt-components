@@ -127,54 +127,33 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       background-color: color-mix(in oklab, var(--theme-surface) 50%, transparent);
     }
 
-    /*
-    * Variants
-    **/
-    &.primary-X {
-      background-color: var(--theme-surface);
-      color: var(--theme-on-surface);
-      border: var(--button-border-width) solid var(--theme-surface);
-      outline: var(--button-outline-width) solid var(--theme-ring);
-
-      &:hover,
-      &:focus-visible {
-        background-color: var(--theme-surface-hover);
-        color: var(--theme-text);
-        border-color: var(--theme-surface);
-        outline-color: var(--theme-surface);
-      }
-
-      &.is-pending {
-        background-color: color-mix(in oklab, var(--theme-surface) 50%, transparent);
-      }
-    }
-
-    &.secondary-X {
-      background-color: transparent;
-      border: var(--button-border-width) solid var(--theme-surface);
-      color: var(--theme-text);
+    &.secondary {
+      background-color: var(--theme-surface-inverted);
+      border: var(--button-border-width) solid var(--theme-border);
+      color: var(--theme-text-inverted);
       outline: var(--button-outline-width) solid var(--theme-ring);
 
       &:hover,
       &:focus-visible {
         background-color: var(--theme-surface);
         color: var(--theme-on-surface);
-        border-color: var(--theme-surface);
+        border-color: var(--theme-border-focus);
         outline-color: var(--theme-surface);
       }
     }
 
     &.tertiary {
       background-color: light-dark(var(--slate-01), transparent);
-      border: var(--button-border-width) solid transparent;
+      border: var(--button-border-width) solid var(--theme-border);
       color: var(--theme-text);
       text-decoration: underline;
-      outline: var(--button-outline-width) solid transparent;
+      outline: var(--button-outline-width) solid var(--theme-border-focus);
 
       &:hover,
       &:focus-visible {
-        border-color: var(--theme-surface);
-        outline-color: var(--theme-surface);
+        background-color: var(--theme-surface-hover);
+        border-color: var(--theme-border-focus);
+        outline-color: var(--theme-border-focus);
       }
     }
 
