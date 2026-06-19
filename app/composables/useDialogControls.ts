@@ -3,7 +3,7 @@ type DialogCallbacks = {
   onCancel?: () => void;
 };
 
-export const useDialogControls = <T extends string>(config: Record<T, DialogCallbacks>) => {
+export const useDialogControls = <T extends string>(config: Record<T, DialogCallbacks> = {} as Record<T, DialogCallbacks>) => {
   const dialogsConfig = reactive<Record<T, boolean>>(
     Object.fromEntries(Object.keys(config).map((id) => [id, false])) as Record<T, boolean>
   );

@@ -80,20 +80,20 @@ describe("DisplayDialog", () => {
 
   // ─── role ─────────────────────────────────────────────────────────────────
 
-  it("has role='dialog' by default", async () => {
+  it("has no explicit role by default — implicit from <dialog> element", async () => {
     const wrapper = await mountSuspended(DisplayDialog, {
       props: { dataDialogId: "test" },
     });
-    expect(wrapper.attributes("role")).toBe("dialog");
+    expect(wrapper.attributes("role")).toBeUndefined();
   });
 
   it.each(["dialog", "modal", "confirm", "fullscreen"] as const)(
-    "has role='dialog' for variant='%s'",
+    "has no explicit role for variant='%s' — implicit from <dialog> element",
     async (variant) => {
       const wrapper = await mountSuspended(DisplayDialog, {
         props: { dataDialogId: "test", variant },
       });
-      expect(wrapper.attributes("role")).toBe("dialog");
+      expect(wrapper.attributes("role")).toBeUndefined();
     }
   );
 
