@@ -84,9 +84,6 @@ const open = defineModel<boolean>();
 
 const closeDialog = () => {
   open.value = false;
-  if (props.lockViewport) {
-    document.body.classList.remove("lock");
-  }
 };
 
 const slots = useSlots();
@@ -94,15 +91,20 @@ const hasTitle = computed(() => !!slots.dialogTitle);
 const hasContent = computed(() => !!slots.dialogContent);
 const hasFooter = computed(() => !!(slots.actionButtonLeft || slots.actionButtonRight));
 
+const { lock, unlock } = useBodyLock();
+let hasLocked = false;
+
 onMounted(() => {
   if (props.lockViewport) {
-    document.body.classList.add("lock");
+    lock();
+    hasLocked = true;
   }
 });
 
 onUnmounted(() => {
-  if (props.lockViewport) {
-    document.body.classList.remove("lock");
+  if (hasLocked) {
+    unlock();
+    hasLocked = false;
   }
 });
 </script>
@@ -126,9 +128,18 @@ onUnmounted(() => {
     --_header-button-border: var(--display-dialog-header-button-border, 0.1rem solid transparent);
     --_header-button-border-radius: var(--display-dialog-header-button-border-radius, 0.4rem);
     --_header-button-outline: var(--display-dialog-header-button-outline, 0.1rem solid transparent);
-    --_header-button-border-hover: var(--display-dialog-header-button-border-hover, 0.1rem solid light-dark(var(--slate-08), var(--slate-04)));
-    --_header-button-outline-hover: var(--display-dialog-header-button-outline-hover, 0.1rem solid light-dark(var(--slate-08), var(--slate-04)));
-    --_header-button-icon-color: var(--display-dialog-header-button-icon-color, light-dark(var(--slate-09), var(--slate-02)));
+    --_header-button-border-hover: var(
+      --display-dialog-header-button-border-hover,
+      0.1rem solid light-dark(var(--slate-08), var(--slate-04))
+    );
+    --_header-button-outline-hover: var(
+      --display-dialog-header-button-outline-hover,
+      0.1rem solid light-dark(var(--slate-08), var(--slate-04))
+    );
+    --_header-button-icon-color: var(
+      --display-dialog-header-button-icon-color,
+      light-dark(var(--slate-09), var(--slate-02))
+    );
     --_header-button-icon-size: var(--display-dialog-header-button-icon-size, 2.4rem);
 
     --_content-padding: var(--display-dialog-content-padding, 1.2rem);

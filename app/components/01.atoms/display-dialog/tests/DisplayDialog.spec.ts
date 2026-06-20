@@ -1,5 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
-import { nextTick } from "vue";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import DisplayDialog from "../DisplayDialog.vue";
 
@@ -13,6 +12,11 @@ vi.mock("focus-trap-vue", () => ({
 }));
 
 describe("DisplayDialog", () => {
+  afterEach(() => {
+    document.body.classList.remove("lock");
+    delete document.body.dataset.lockCount;
+  });
+
   // ─── Mount ────────────────────────────────────────────────────────────────
 
   it("mounts without error", async () => {
@@ -238,11 +242,11 @@ describe("DisplayDialog", () => {
   // ─── Body viewport lock ───────────────────────────────────────────────────
 
   it("adds lock class to body on mount when lockViewport=true", async () => {
-    await mountSuspended(DisplayDialog, {
+    const wrapper = await mountSuspended(DisplayDialog, {
       props: { dataDialogId: "test", lockViewport: true },
     });
     expect(document.body.classList.contains("lock")).toBe(true);
-    document.body.classList.remove("lock");
+    wrapper.unmount();
   });
 
   it("does not add lock class to body when lockViewport=false", async () => {
@@ -252,13 +256,26 @@ describe("DisplayDialog", () => {
     expect(document.body.classList.contains("lock")).toBe(false);
   });
 
-  it("removes lock class from body when close button is clicked", async () => {
-    document.body.classList.add("lock");
+  it("removes lock class from body on unmount when lockViewport=true", async () => {
     const wrapper = await mountSuspended(DisplayDialog, {
-      props: { dataDialogId: "test", modelValue: true, lockViewport: true },
+      props: { dataDialogId: "test", lockViewport: true },
     });
-    await wrapper.find('[data-test-id="display-dialog-header-close"]').trigger("click");
-    await nextTick();
+    expect(document.body.classList.contains("lock")).toBe(true);
+    wrapper.unmount();
+    expect(document.body.classList.contains("lock")).toBe(false);
+  });
+
+  it("does not remove lock when a second locking dialog is still open", async () => {
+    const wrapper1 = await mountSuspended(DisplayDialog, {
+      props: { dataDialogId: "a", lockViewport: true },
+    });
+    const wrapper2 = await mountSuspended(DisplayDialog, {
+      props: { dataDialogId: "b", lockViewport: true },
+    });
+    expect(document.body.classList.contains("lock")).toBe(true);
+    wrapper2.unmount();
+    expect(document.body.classList.contains("lock")).toBe(true);
+    wrapper1.unmount();
     expect(document.body.classList.contains("lock")).toBe(false);
   });
 });
