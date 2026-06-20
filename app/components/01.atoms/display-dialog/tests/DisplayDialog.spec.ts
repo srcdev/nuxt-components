@@ -5,7 +5,7 @@ import type { SemanticTheme } from "~/types/components";
 
 const { useAppConfigMock } = vi.hoisted(() => ({
   // icon: {} is required — @nuxt/icon reads useAppConfig().icon.collections internally.
-  useAppConfigMock: vi.fn(() => ({ srcdev: undefined, icon: {} })),
+  useAppConfigMock: vi.fn(() => ({ srcdev: undefined as Record<string, unknown> | undefined, icon: {} as object })),
 }));
 
 mockNuxtImport("useAppConfig", () => useAppConfigMock);
@@ -305,7 +305,7 @@ describe("DisplayDialog", () => {
       wrapper
         .find('[data-test-id="display-dialog-header-close"] .iconify')
         .classes()
-        .find((c) => c !== "iconify" && c !== "icon") ?? "";
+        .find((c: string) => c !== "iconify" && c !== "icon") ?? "";
 
     it("uses hardcoded fallbacks when app.config has no displayDialog key", async () => {
       const wrapper = await mountSuspended(DisplayDialog, {

@@ -5,7 +5,7 @@ import DisplayPrompt from "../DisplayPrompt.vue";
 
 const { useAppConfigMock } = vi.hoisted(() => ({
   // icon: {} is required — @nuxt/icon reads useAppConfig().icon.collections internally.
-  useAppConfigMock: vi.fn(() => ({ srcdev: undefined, icon: {} })),
+  useAppConfigMock: vi.fn(() => ({ srcdev: undefined as Record<string, unknown> | undefined, icon: {} as object })),
 }));
 
 mockNuxtImport("useAppConfig", () => useAppConfigMock);
