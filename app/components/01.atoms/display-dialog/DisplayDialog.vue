@@ -5,8 +5,8 @@
     :role="isAlert ? 'alertdialog' : undefined"
     :aria-modal="true"
     :aria-labelledby="hasTitle ? dialogTitleId : undefined"
-    :align-dialog
-    :justify-dialog
+    :align-dialog="resolved.alignDialog"
+    :justify-dialog="resolved.justifyDialog"
     :open
     :data-dialog-id="dataDialogId"
   >
@@ -16,8 +16,8 @@
       :click-outside-deactivates="!isAlert"
       @deactivate="closeDialog()"
     >
-      <div class="inner" :class="[variant]">
-        <div class="header" :data-theme="theme">
+      <div class="inner" :class="[resolved.variant]">
+        <div class="header" :data-theme="resolved.theme">
           <div v-if="hasTitle" :id="dialogTitleId" class="col-left">
             <slot name="dialogTitle"></slot>
           </div>
@@ -28,7 +28,7 @@
               class="display-dialog-close"
               @click.prevent="closeDialog()"
             >
-              <Icon name="bitcoin-icons:cross-filled" class="icon" />
+              <Icon :name="resolved.closeIcon" class="icon" />
               <span class="sr-only">Close</span>
             </button>
           </div>
@@ -36,8 +36,8 @@
         <div
           v-if="hasContent"
           class="dialog-content"
-          :class="[{ 'allow-content-scroll': allowContentScroll }]"
-          :tabindex="allowContentScroll ? 0 : undefined"
+          :class="[{ 'allow-content-scroll': resolved.allowContentScroll }]"
+          :tabindex="resolved.allowContentScroll ? 0 : undefined"
         >
           <slot name="dialogContent"></slot>
         </div>
@@ -67,17 +67,32 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
-  variant: "dialog",
-  justifyDialog: "center",
-  alignDialog: "center",
-  lockViewport: true,
-  allowContentScroll: false,
+  variant: undefined,
+  justifyDialog: undefined,
+  alignDialog: undefined,
+  lockViewport: undefined,
+  allowContentScroll: undefined,
   theme: undefined,
+});
+
+const appConfig = useAppConfig();
+
+const resolved = computed(() => {
+  const config = appConfig.srcdev?.displayDialog;
+  return {
+    variant: props.variant ?? config?.variant ?? "dialog",
+    justifyDialog: props.justifyDialog ?? config?.justifyDialog ?? "center",
+    alignDialog: props.alignDialog ?? config?.alignDialog ?? "center",
+    lockViewport: props.lockViewport ?? config?.lockViewport ?? true,
+    allowContentScroll: props.allowContentScroll ?? config?.allowContentScroll ?? false,
+    theme: props.theme ?? config?.theme,
+    closeIcon: config?.closeIcon ?? "bitcoin-icons:cross-filled",
+  } as const;
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const isAlert = computed(() => props.variant === "alert");
+const isAlert = computed(() => resolved.value.variant === "alert");
 const dialogTitleId = useId();
 
 const open = defineModel<boolean>();
@@ -95,7 +110,7 @@ const { lock, unlock } = useBodyLock();
 let hasLocked = false;
 
 onMounted(() => {
-  if (props.lockViewport) {
+  if (resolved.value.lockViewport) {
     lock();
     hasLocked = true;
   }
