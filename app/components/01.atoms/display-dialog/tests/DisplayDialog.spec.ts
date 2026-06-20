@@ -1,6 +1,14 @@
-import { describe, it, expect, vi, afterEach } from "vitest";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { mountSuspended, mockNuxtImport } from "@nuxt/test-utils/runtime";
 import DisplayDialog from "../DisplayDialog.vue";
+import type { SemanticTheme } from "~/types/components";
+
+const { useAppConfigMock } = vi.hoisted(() => ({
+  // icon: {} is required — @nuxt/icon reads useAppConfig().icon.collections internally.
+  useAppConfigMock: vi.fn(() => ({ srcdev: undefined as Record<string, unknown> | undefined, icon: {} as object })),
+}));
+
+mockNuxtImport("useAppConfig", () => useAppConfigMock);
 
 vi.mock("focus-trap-vue", () => ({
   FocusTrap: {
@@ -277,5 +285,114 @@ describe("DisplayDialog", () => {
     expect(document.body.classList.contains("lock")).toBe(true);
     wrapper1.unmount();
     expect(document.body.classList.contains("lock")).toBe(false);
+  });
+
+  // ─── app.config resolution ────────────────────────────────────────────────
+  // Icon renders as <span class="iconify undefined{name} icon"> in jsdom.
+  // All assertions are DOM-based — setupState is private API in <script setup>.
+
+  describe("app.config resolution", () => {
+    beforeEach(() => {
+      useAppConfigMock.mockReturnValue({ srcdev: undefined, icon: {} });
+    });
+
+    afterEach(() => {
+      document.body.classList.remove("lock");
+      delete document.body.dataset.lockCount;
+    });
+
+    const iconName = (wrapper: Awaited<ReturnType<typeof mountSuspended>>) =>
+      wrapper
+        .find('[data-test-id="display-dialog-header-close"] .iconify')
+        .classes()
+        .find((c: string) => c !== "iconify" && c !== "icon") ?? "";
+
+    it("uses hardcoded fallbacks when app.config has no displayDialog key", async () => {
+      const wrapper = await mountSuspended(DisplayDialog, {
+        props: { dataDialogId: "test" },
+        slots: { dialogContent: "<p>Content</p>" },
+      });
+      expect(wrapper.find(".inner").classes()).toContain("dialog");
+      expect(wrapper.attributes("align-dialog")).toBe("center");
+      expect(wrapper.attributes("justify-dialog")).toBe("center");
+      expect(document.body.classList.contains("lock")).toBe(true);
+      expect(wrapper.find(".dialog-content").classes()).not.toContain("allow-content-scroll");
+      expect(wrapper.find(".header").attributes("data-theme")).toBeUndefined();
+      expect(iconName(wrapper)).toContain("bitcoin-icons:cross-filled");
+    });
+
+    it("uses app.config values when no props are supplied", async () => {
+      useAppConfigMock.mockReturnValue({
+        icon: {},
+        srcdev: {
+          displayDialog: {
+            variant: "modal",
+            justifyDialog: "start",
+            alignDialog: "end",
+            lockViewport: false,
+            allowContentScroll: true,
+            theme: "info" as SemanticTheme,
+            closeIcon: "heroicons:x-mark",
+          },
+        },
+      });
+      const wrapper = await mountSuspended(DisplayDialog, {
+        props: { dataDialogId: "test" },
+        slots: { dialogContent: "<p>Content</p>" },
+      });
+      expect(wrapper.find(".inner").classes()).toContain("modal");
+      expect(wrapper.attributes("align-dialog")).toBe("end");
+      expect(wrapper.attributes("justify-dialog")).toBe("start");
+      expect(document.body.classList.contains("lock")).toBe(false);
+      expect(wrapper.find(".dialog-content").classes()).toContain("allow-content-scroll");
+      expect(wrapper.find(".header").attributes("data-theme")).toBe("info");
+      expect(iconName(wrapper)).toContain("heroicons:x-mark");
+    });
+
+    it("explicit props take precedence over app.config", async () => {
+      useAppConfigMock.mockReturnValue({
+        icon: {},
+        srcdev: {
+          displayDialog: {
+            variant: "modal",
+            justifyDialog: "start",
+            alignDialog: "end",
+            lockViewport: false,
+            allowContentScroll: true,
+            theme: "info" as SemanticTheme,
+            closeIcon: "heroicons:x-mark",
+          },
+        },
+      });
+      const wrapper = await mountSuspended(DisplayDialog, {
+        props: {
+          dataDialogId: "test",
+          variant: "fullscreen",
+          justifyDialog: "end",
+          alignDialog: "start",
+          lockViewport: true,
+          allowContentScroll: false,
+          theme: "error" as SemanticTheme,
+          closeIcon: "material-symbols:close",
+        },
+        slots: { dialogContent: "<p>Content</p>" },
+      });
+      expect(wrapper.find(".inner").classes()).toContain("fullscreen");
+      expect(wrapper.attributes("align-dialog")).toBe("start");
+      expect(wrapper.attributes("justify-dialog")).toBe("end");
+      expect(document.body.classList.contains("lock")).toBe(true);
+      expect(wrapper.find(".dialog-content").classes()).not.toContain("allow-content-scroll");
+      expect(wrapper.find(".header").attributes("data-theme")).toBe("error");
+      expect(iconName(wrapper)).toContain("material-symbols:close");
+    });
+
+    it("lockViewport:false in app.config skips body lock on mount", async () => {
+      useAppConfigMock.mockReturnValue({
+        icon: {},
+        srcdev: { displayDialog: { lockViewport: false } },
+      });
+      await mountSuspended(DisplayDialog, { props: { dataDialogId: "test" } });
+      expect(document.body.classList.contains("lock")).toBe(false);
+    });
   });
 });

@@ -7,7 +7,7 @@ exports[`DisplayDialog > renders correct HTML structure with all slots 1`] = `
       <div id="v-0-0" class="col-left">
         <p>Title</p>
       </div>
-      <div class="col-right"><button data-test-id="display-dialog-header-close" class="display-dialog-close"><span class="iconify i-bitcoin-icons:cross-filled icon" aria-hidden="true"></span><span class="sr-only">Close</span></button></div>
+      <div class="col-right"><button data-test-id="display-dialog-header-close" class="display-dialog-close"><span class="iconify undefinedbitcoin-icons:cross-filled icon"></span><span class="sr-only">Close</span></button></div>
     </div>
     <div class="dialog-content">
       <p>Content</p>

@@ -41,13 +41,7 @@
 <script setup lang="ts">
 import AlertContent from "~/components/02.molecules/alert-content/AlertContent.vue";
 import AlertMaskedContent from "~/components/02.molecules/alert-masked-content/AlertMaskedContent.vue";
-import type {
-  DisplayToastConfig,
-  DisplayToastTheme,
-  DisplayToastPosition,
-  DisplayToastAlignment,
-  ToastSlots,
-} from "~/types/components";
+import type { DisplayToastConfig, ToastSlots } from "~/types/components";
 
 interface Props {
   config?: DisplayToastConfig;
@@ -55,23 +49,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  config: () => ({
-    appearance: {
-      theme: "info" as DisplayToastTheme,
-      position: "top" as DisplayToastPosition,
-      alignment: "right" as DisplayToastAlignment,
-      fullWidth: false,
-    },
-    behavior: {
-      autoDismiss: true,
-      duration: 5000,
-      revealDuration: 550,
-    },
-    content: {
-      text: "",
-      customIcon: undefined,
-    },
-  }),
+  config: undefined,
   styleClassPassthrough: () => [],
 });
 
@@ -79,16 +57,19 @@ const slots = defineSlots<ToastSlots>();
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
+const appConfig = useAppConfig();
+
 // Computed properties for accessing config values with defaults
-const theme = computed(() => props.config?.appearance?.theme ?? "info");
-const position = computed(() => props.config?.appearance?.position ?? "top");
-const alignment = computed(() => props.config?.appearance?.alignment ?? "right");
-const fullWidth = computed(() => props.config?.appearance?.fullWidth ?? false);
-const masked = computed(() => props.config?.appearance?.masked ?? false);
+// Resolution chain: prop config → app.config → hardcoded fallback
+const theme = computed(() => props.config?.appearance?.theme ?? appConfig.srcdev?.displayToast?.appearance?.theme ?? "info");
+const position = computed(() => props.config?.appearance?.position ?? appConfig.srcdev?.displayToast?.appearance?.position ?? "top");
+const alignment = computed(() => props.config?.appearance?.alignment ?? appConfig.srcdev?.displayToast?.appearance?.alignment ?? "right");
+const fullWidth = computed(() => props.config?.appearance?.fullWidth ?? appConfig.srcdev?.displayToast?.appearance?.fullWidth ?? false);
+const masked = computed(() => props.config?.appearance?.masked ?? appConfig.srcdev?.displayToast?.appearance?.masked ?? false);
 const contentComponent = computed(() => (masked.value ? AlertMaskedContent : AlertContent));
-const autoDismiss = computed(() => props.config?.behavior?.autoDismiss ?? true);
-const duration = computed(() => props.config?.behavior?.duration ?? 5000);
-const revealDuration = computed(() => props.config?.behavior?.revealDuration ?? 550);
+const autoDismiss = computed(() => props.config?.behavior?.autoDismiss ?? appConfig.srcdev?.displayToast?.behavior?.autoDismiss ?? true);
+const duration = computed(() => props.config?.behavior?.duration ?? appConfig.srcdev?.displayToast?.behavior?.duration ?? 5000);
+const revealDuration = computed(() => props.config?.behavior?.revealDuration ?? appConfig.srcdev?.displayToast?.behavior?.revealDuration ?? 550);
 const returnFocusTo = computed(() => props.config?.behavior?.returnFocusTo ?? null);
 const toastDisplayText = computed(() => props.config?.content?.text ?? "");
 const toastTitle = computed(() => props.config?.content?.title ?? "");

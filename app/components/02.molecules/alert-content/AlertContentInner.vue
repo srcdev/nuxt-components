@@ -2,7 +2,7 @@
   <div class="alert-content-inner">
     <div class="alert-content-icon" data-test-id="alert-icon" aria-hidden="true">
       <slot name="icon">
-        <Icon :name="customIcon || defaultThemeIcons[theme]" class="icon" />
+        <Icon :name="customIcon || themeIcon" class="icon" />
       </slot>
     </div>
 
@@ -23,7 +23,7 @@
       @click.prevent="emit('dismiss')"
     >
       <slot name="dismissIcon">
-        <Icon name="material-symbols:close" class="icon" />
+        <Icon :name="dismissIcon" class="icon" />
       </slot>
       <span class="sr-only">
         <slot name="dismissLabel">Close</slot>
@@ -43,7 +43,7 @@ interface Props {
   ariaLive?: "polite" | "assertive" | "off";
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   customIcon: undefined,
   dismissible: false,
   contentId: undefined,
@@ -54,12 +54,20 @@ const emit = defineEmits<{ dismiss: [] }>();
 
 const slots = useSlots();
 
-const defaultThemeIcons: Record<SemanticTheme, string> = {
+const appConfig = useAppConfig();
+
+const fallbackIcons: Record<SemanticTheme, string> = {
   info: "akar-icons:info",
   success: "akar-icons:check",
   warning: "akar-icons:circle-alert",
   error: "akar-icons:circle-alert",
 };
+
+const themeIcon = computed(() => {
+  const icons = appConfig.srcdev?.alertContent?.icons as Partial<Record<SemanticTheme, string>> | undefined;
+  return icons?.[props.theme] ?? fallbackIcons[props.theme];
+});
+const dismissIcon = computed(() => appConfig.srcdev?.alertContent?.dismissIcon ?? "material-symbols:close");
 </script>
 
 <style lang="css">

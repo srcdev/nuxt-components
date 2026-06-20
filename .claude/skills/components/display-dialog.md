@@ -20,6 +20,7 @@ open/close state management.
 | `lockViewport` | `boolean` | `true` | Adds/removes `lock` class on `<body>` on mount/close. |
 | `justifyDialog` | `'start' \| 'center' \| 'end'` | `'center'` | Horizontal position of panel within overlay. |
 | `alignDialog` | `'start' \| 'center' \| 'end'` | `'center'` | Vertical position of panel within overlay. |
+| `closeIcon` | `string` | app.config | Icon name for the header close button. Override per-instance or set globally via `app.config`. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root `<dialog>` element. |
 
 ## Slots
@@ -104,6 +105,28 @@ are both disabled — the user must act via the footer buttons.
   </template>
 </DisplayDialog>
 ```
+
+## app.config defaults
+
+All props except `dataDialogId` and `styleClassPassthrough` can be set globally via `app.config`.
+The resolution chain is: **explicit prop → app.config → hardcoded fallback**.
+
+```ts
+// app.config.ts in the consumer app
+export default defineAppConfig({
+  srcdev: {
+    displayDialog: {
+      variant: "modal",
+      alignDialog: "end",
+      lockViewport: true,
+      closeIcon: "heroicons:x-mark",
+      theme: "info",
+    },
+  },
+})
+```
+
+Per-instance props always win — app.config only fills in when a prop is absent.
 
 ## CSS token API
 
