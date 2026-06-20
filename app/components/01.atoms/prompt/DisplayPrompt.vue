@@ -3,15 +3,15 @@
     ref="promptElementRef"
     class="display-prompt-core"
     :class="[{ closed: !componentOpen }]"
-    :data-test-id="`display-prompt-core-${theme}`"
+    :data-test-id="`display-prompt-core-${resolved.theme}`"
     tabindex="0"
   >
-    <div class="display-prompt-wrapper" :data-theme="theme" :class="[elementClasses]" data-test-id="display-prompt">
+    <div class="display-prompt-wrapper" :data-theme="resolved.theme" :class="[elementClasses]" data-test-id="display-prompt">
       <component
         :is="contentComponent"
-        :theme="theme"
-        :dismissible="dismissible"
-        :aria-live="useAutoFocus ? 'polite' : undefined"
+        :theme="resolved.theme"
+        :dismissible="resolved.dismissible"
+        :aria-live="resolved.useAutoFocus ? 'polite' : undefined"
         @dismiss="updateComponentState()"
       >
         <template v-if="slots.customDecoratorIcon" #icon>
@@ -48,14 +48,26 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  theme: "info",
-  dismissible: false,
-  useAutoFocus: false,
-  masked: false,
   styleClassPassthrough: () => [],
+  theme: undefined,
+  dismissible: undefined,
+  useAutoFocus: undefined,
+  masked: undefined,
 });
 
-const contentComponent = computed(() => (props.masked ? AlertMaskedContent : AlertContent));
+const appConfig = useAppConfig();
+
+const resolved = computed(() => {
+  const config = appConfig.srcdev?.displayPrompt;
+  return {
+    theme: props.theme ?? config?.theme ?? "info",
+    dismissible: props.dismissible ?? config?.dismissible ?? false,
+    useAutoFocus: props.useAutoFocus ?? config?.useAutoFocus ?? false,
+    masked: props.masked ?? config?.masked ?? false,
+  } as const;
+});
+
+const contentComponent = computed(() => (resolved.value.masked ? AlertMaskedContent : AlertContent));
 
 const slots = useSlots();
 const promptElementRef = useTemplateRef<HTMLElement>("promptElementRef");
@@ -73,7 +85,7 @@ const updateComponentState = () => {
 };
 
 onMounted(async () => {
-  if (props.useAutoFocus && promptElementRef.value) {
+  if (resolved.value.useAutoFocus && promptElementRef.value) {
     promptElementRef.value.focus();
   }
 });

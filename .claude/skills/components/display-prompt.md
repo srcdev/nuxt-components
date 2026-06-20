@@ -55,6 +55,27 @@ Two modes depending on whether `v-model` is bound:
 The `.closed` class triggers a CSS grid row animation (`grid-template-rows: 1fr → 0fr`) with
 `opacity: 0` and `pointer-events: none`.
 
+## app.config defaults
+
+All props except `styleClassPassthrough` can be set globally so every prompt in the app inherits
+the same defaults without repeating them at each usage site.
+
+```ts
+// Consumer's app.config.ts
+export default defineAppConfig({
+  srcdev: {
+    displayPrompt: {
+      theme: "info",
+      dismissible: true,
+      masked: false,
+      useAutoFocus: false,
+    },
+  },
+})
+```
+
+Resolution chain: **explicit prop → app.config → hardcoded fallback**.
+
 ## Basic usage
 
 ```vue

@@ -58,6 +58,25 @@ interface DisplayToastConfig {
 }
 ```
 
+### app.config defaults
+
+`appearance` and `behavior` keys (not `content` — that's per-instance) can be set globally so
+every toast in the app inherits the same defaults without repeating them in every `config` prop.
+
+```ts
+// Consumer's app.config.ts
+export default defineAppConfig({
+  srcdev: {
+    displayToast: {
+      appearance: { theme: "success", position: "bottom", alignment: "left" },
+      behavior: { autoDismiss: true, duration: 4000 },
+    },
+  },
+})
+```
+
+Resolution chain: **`config` prop → app.config → hardcoded fallback**.
+
 ### Slots
 
 | Slot | Description |
