@@ -2,7 +2,9 @@
   <dialog
     class="display-dialog"
     :class="[elementClasses]"
-    :role="isAlert ? 'alertdialog' : 'dialog'"
+    :role="isAlert ? 'alertdialog' : undefined"
+    :aria-modal="true"
+    :aria-labelledby="hasTitle ? dialogTitleId : undefined"
     :align-dialog
     :justify-dialog
     :open
@@ -15,15 +17,15 @@
       @deactivate="closeDialog()"
     >
       <div class="inner" :class="[variant]">
-        <div class="header">
-          <div v-if="hasTitle" class="col-left">
+        <div class="header" :data-theme="theme">
+          <div v-if="hasTitle" :id="dialogTitleId" class="col-left">
             <slot name="dialogTitle"></slot>
           </div>
 
           <div class="col-right">
             <button
               data-test-id="display-dialog-header-close"
-              class="display-prompt-action"
+              class="display-dialog-close"
               @click.prevent="closeDialog()"
             >
               <Icon name="bitcoin-icons:cross-filled" class="icon" />
@@ -35,6 +37,7 @@
           v-if="hasContent"
           class="dialog-content"
           :class="[{ 'allow-content-scroll': allowContentScroll }]"
+          :tabindex="allowContentScroll ? 0 : undefined"
         >
           <slot name="dialogContent"></slot>
         </div>
@@ -49,6 +52,8 @@
 
 <script setup lang="ts">
 import { FocusTrap } from "focus-trap-vue";
+import type { SemanticTheme } from "~/types/components";
+
 interface Props {
   styleClassPassthrough?: string | string[];
   variant?: "dialog" | "modal" | "confirm" | "alert" | "fullscreen";
@@ -57,6 +62,7 @@ interface Props {
   lockViewport?: boolean;
   allowContentScroll?: boolean;
   dataDialogId: string;
+  theme?: SemanticTheme;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -66,19 +72,18 @@ const props = withDefaults(defineProps<Props>(), {
   alignDialog: "center",
   lockViewport: true,
   allowContentScroll: false,
+  theme: undefined,
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const isAlert = computed(() => props.variant === "alert");
+const dialogTitleId = useId();
 
 const open = defineModel<boolean>();
 
 const closeDialog = () => {
   open.value = false;
-  if (props.lockViewport) {
-    document.body.classList.remove("lock");
-  }
 };
 
 const slots = useSlots();
@@ -86,9 +91,20 @@ const hasTitle = computed(() => !!slots.dialogTitle);
 const hasContent = computed(() => !!slots.dialogContent);
 const hasFooter = computed(() => !!(slots.actionButtonLeft || slots.actionButtonRight));
 
+const { lock, unlock } = useBodyLock();
+let hasLocked = false;
+
 onMounted(() => {
   if (props.lockViewport) {
-    document.body.classList.add("lock");
+    lock();
+    hasLocked = true;
+  }
+});
+
+onUnmounted(() => {
+  if (hasLocked) {
+    unlock();
+    hasLocked = false;
   }
 });
 </script>
@@ -112,9 +128,18 @@ onMounted(() => {
     --_header-button-border: var(--display-dialog-header-button-border, 0.1rem solid transparent);
     --_header-button-border-radius: var(--display-dialog-header-button-border-radius, 0.4rem);
     --_header-button-outline: var(--display-dialog-header-button-outline, 0.1rem solid transparent);
-    --_header-button-border-hover: var(--display-dialog-header-button-border-hover, 0.1rem solid light-dark(var(--slate-08), var(--slate-04)));
-    --_header-button-outline-hover: var(--display-dialog-header-button-outline-hover, 0.1rem solid light-dark(var(--slate-08), var(--slate-04)));
-    --_header-button-icon-color: var(--display-dialog-header-button-icon-color, light-dark(var(--slate-09), var(--slate-02)));
+    --_header-button-border-hover: var(
+      --display-dialog-header-button-border-hover,
+      0.1rem solid light-dark(var(--slate-08), var(--slate-04))
+    );
+    --_header-button-outline-hover: var(
+      --display-dialog-header-button-outline-hover,
+      0.1rem solid light-dark(var(--slate-08), var(--slate-04))
+    );
+    --_header-button-icon-color: var(
+      --display-dialog-header-button-icon-color,
+      light-dark(var(--slate-09), var(--slate-02))
+    );
     --_header-button-icon-size: var(--display-dialog-header-button-icon-size, 2.4rem);
 
     --_content-padding: var(--display-dialog-content-padding, 1.2rem);
@@ -215,6 +240,14 @@ onMounted(() => {
         align-items: center;
         padding: var(--_header-padding);
 
+        &[data-theme] {
+          border-block-end: 0.2rem solid var(--theme-accent);
+
+          .display-dialog-close .icon {
+            color: var(--theme-accent);
+          }
+        }
+
         .col-left {
           flex: 1;
         }
@@ -222,7 +255,7 @@ onMounted(() => {
         .col-right {
           margin-inline-start: auto;
 
-          .display-prompt-action {
+          .display-dialog-close {
             background-color: transparent;
             display: block flex;
             align-items: center;
