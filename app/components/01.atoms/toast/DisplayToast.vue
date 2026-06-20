@@ -41,13 +41,7 @@
 <script setup lang="ts">
 import AlertContent from "~/components/02.molecules/alert-content/AlertContent.vue";
 import AlertMaskedContent from "~/components/02.molecules/alert-masked-content/AlertMaskedContent.vue";
-import type {
-  DisplayToastConfig,
-  DisplayToastTheme,
-  DisplayToastPosition,
-  DisplayToastAlignment,
-  ToastSlots,
-} from "~/types/components";
+import type { DisplayToastConfig, ToastSlots } from "~/types/components";
 
 interface Props {
   config?: DisplayToastConfig;
@@ -55,23 +49,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  config: () => ({
-    appearance: {
-      theme: "info" as DisplayToastTheme,
-      position: "top" as DisplayToastPosition,
-      alignment: "right" as DisplayToastAlignment,
-      fullWidth: false,
-    },
-    behavior: {
-      autoDismiss: true,
-      duration: 5000,
-      revealDuration: 550,
-    },
-    content: {
-      text: "",
-      customIcon: undefined,
-    },
-  }),
+  config: undefined,
   styleClassPassthrough: () => [],
 });
 

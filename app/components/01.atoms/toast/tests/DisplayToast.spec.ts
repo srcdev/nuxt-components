@@ -1,6 +1,13 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { nextTick } from "vue";
-import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { mountSuspended, mockNuxtImport } from "@nuxt/test-utils/runtime";
+
+const { useAppConfigMock } = vi.hoisted(() => ({
+  // icon: {} is required — @nuxt/icon reads useAppConfig().icon.collections internally.
+  useAppConfigMock: vi.fn(() => ({ srcdev: undefined, icon: {} })),
+}));
+
+mockNuxtImport("useAppConfig", () => useAppConfigMock);
 import DisplayToast from "../DisplayToast.vue";
 
 // Helper: mount the toast and activate it so the teleported element is in the DOM.
@@ -212,5 +219,48 @@ describe("DisplayToast", () => {
     await mountAndShow({ styleClassPassthrough: ["class-a", "class-b"] });
     expect(toast()!.classList).toContain("class-a");
     expect(toast()!.classList).toContain("class-b");
+  });
+
+  // ─── app.config resolution ────────────────────────────────────────────────
+  // Combines mockNuxtImport (#imports path) + vi.stubGlobal (global path) to
+  // cover both routes Nuxt may use to resolve useAppConfig in this test env.
+
+  describe("app.config resolution", () => {
+    beforeEach(() => {
+      // Stub the global so the component's useAppConfig() call is intercepted
+      // regardless of whether Nuxt resolves it via #imports or the global scope.
+      vi.stubGlobal("useAppConfig", useAppConfigMock);
+      useAppConfigMock.mockImplementation(() => ({ srcdev: undefined, icon: {} }));
+    });
+
+    it("uses hardcoded fallbacks when app.config has no displayToast key", async () => {
+      await mountAndShow();
+      expect(toast()!.getAttribute("data-theme")).toBe("info");
+      expect(toast()!.classList).toContain("top");
+      expect(toast()!.classList).toContain("right");
+      expect(document.querySelector(".display-toast-progress")).not.toBeNull();
+    });
+
+    it("uses app.config autoDismiss:false when no config prop is supplied", async () => {
+      // autoDismiss defaults to true (both hardcoded and real app.config), so false
+      // is the only value that proves the mock is being read.
+      useAppConfigMock.mockImplementation(() => ({
+        icon: {},
+        srcdev: { displayToast: { behavior: { autoDismiss: false } } },
+      }));
+      await mountAndShow();
+      expect(document.querySelector(".display-toast-progress")).toBeNull();
+      expect(document.querySelector("[data-test-id='alert-dismiss']")).not.toBeNull();
+    });
+
+    it("config prop takes precedence over app.config", async () => {
+      useAppConfigMock.mockImplementation(() => ({
+        icon: {},
+        srcdev: { displayToast: { appearance: { theme: "success", position: "bottom" } } },
+      }));
+      await mountAndShow({ config: { appearance: { theme: "warning", position: "top" } } });
+      expect(toast()!.getAttribute("data-theme")).toBe("warning");
+      expect(toast()!.classList).toContain("top");
+    });
   });
 });

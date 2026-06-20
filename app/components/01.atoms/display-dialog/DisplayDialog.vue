@@ -63,6 +63,7 @@ interface Props {
   allowContentScroll?: boolean;
   dataDialogId: string;
   theme?: SemanticTheme;
+  closeIcon?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -73,6 +74,7 @@ const props = withDefaults(defineProps<Props>(), {
   lockViewport: undefined,
   allowContentScroll: undefined,
   theme: undefined,
+  closeIcon: undefined,
 });
 
 const appConfig = useAppConfig();
@@ -86,7 +88,7 @@ const resolved = computed(() => {
     lockViewport: props.lockViewport ?? config?.lockViewport ?? true,
     allowContentScroll: props.allowContentScroll ?? config?.allowContentScroll ?? false,
     theme: props.theme ?? config?.theme,
-    closeIcon: config?.closeIcon ?? "bitcoin-icons:cross-filled",
+    closeIcon: props.closeIcon ?? config?.closeIcon ?? "bitcoin-icons:cross-filled",
   } as const;
 });
 
