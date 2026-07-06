@@ -220,3 +220,52 @@ the component source folder for the full token reference.
   stacking-context constraint.
 - `--tab-nav-panel-bg` should match `--page-bg` for a seamless panel appearance in the collapsed
   state.
+
+## Known issue: SSR/hydration layout shift when the nav needs to collapse (2026-07-07)
+
+**Symptom:** on first page load (hard reload/direct navigation), the header briefly renders taller
+than its settled state, then shrinks — visibly shifting all content below it up. Most noticeable on
+short pages (little content below the fold makes the jump occupy a large fraction of the viewport),
+but the same underlying reflow happens on every page where the nav actually needs to collapse at
+the viewport's width; it's just less visible on long pages or when the timing happens to resolve
+before first paint.
+
+**Root cause:** `useNavCollapse`'s `isLoaded` ref (and therefore `isCollapsed`) can only be
+determined client-side — the server has no way to measure real DOM/viewport widths. So:
+
+```vue
+<ul v-if="!isCollapsed || !isLoaded" ...>
+```
+
+SSR and the very first client paint always render the **full, uncollapsed** `<ul>` (since
+`!isLoaded` is true pre-mount), regardless of whether it will actually fit. Once mounted,
+`checkOverflow()` runs (in `onMounted`, after `nextTick()`), and if the nav overflows, sets
+`isCollapsed = true` — swapping the full list out for the shorter collapsed/burger variant. That
+swap is what shrinks the header and shifts everything below it.
+
+Confirmed via `PerformanceObserver({type: "layout-shift"})` plus DOM `MutationObserver` tracing in a
+consuming app (`luxury-locs-by-natasha-nuxt3`): the class mutation on `.tab-navigation` (adding
+`is-loaded is-animated`) lines up exactly with `.main-content`'s bounding-rect top moving by the
+header's full height delta, at a variable point (roughly 100ms–800ms after first paint depending on
+hydration timing) after first paint.
+
+**Candidate fixes (not yet implemented — pick up later):**
+
+1. **CSS-only collapse instead of JS-measured overflow.** Use a `@container` or `@media` breakpoint
+   to switch between the full nav and the burger button, so the correct variant renders on the very
+   first paint (both server and client agree, no measurement round-trip needed). Loses the
+   "collapse exactly when it overflows, regardless of item count" precision of the current
+   JS-measured approach, gains zero-reflow correctness. Probably the most robust fix if a
+   reasonably conservative breakpoint can be chosen.
+2. **Reserve height instead of eliminating the swap.** Give the header a `min-height` matching the
+   taller (uncollapsed) state so the swap doesn't change the header's box size — trades a visible
+   "jump" for a slightly awkward gap during the pre-collapse window, but never moves content below
+   it. Cheap, but doesn't fix the actual root cause, just its visible symptom.
+3. **Suppress the flash rather than the shift**, e.g. hide the header's nav content entirely
+   (`visibility: hidden` or `opacity: 0`) until `isLoaded` is true, then fade in — avoids showing
+   the "wrong" state at all, but delays when the nav becomes visible/interactive, and would need
+   care to avoid its own CLS/accessibility issues (e.g. focus order, screen readers encountering
+   hidden nav).
+4. Investigate whether a plausible default guess for `isCollapsed` could be derived from something
+   SSR does have access to (e.g. a `Sec-CH-Viewport-Width` client hint header, if the deployment
+   target reliably sends one) — likely not worth the complexity/fragility versus option 1.
