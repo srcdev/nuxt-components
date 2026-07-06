@@ -2,11 +2,11 @@ html {
   color-scheme: light dark;
   interpolate-size: allow-keywords;
 
-  &.light {
+  &[data-color-scheme="light"] {
     color-scheme: light;
   }
 
-  &.dark {
+  &[data-color-scheme="dark"] {
     color-scheme: dark;
   }
 

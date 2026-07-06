@@ -2,7 +2,7 @@
 
 ## Overview
 
-`useColourScheme` provides reactive dark/light/auto mode switching, persisted in `localStorage` and applied via a CSS class on `<html>`. It reads an `enabled` flag from runtime config so consuming apps can disable the feature entirely.
+`useColourScheme` provides reactive dark/light/auto mode switching, persisted in `localStorage` and applied via a `data-color-scheme` attribute on `<html>`. It reads an `enabled` flag from runtime config so consuming apps can disable the feature entirely.
 
 **This composable ships inside the `srcdev-nuxt-components` layer** (`app/composables/useColourScheme.ts`). It is auto-imported via the Nuxt layer — **do not create a local copy** in the consuming app.
 
@@ -45,11 +45,11 @@ To let the user toggle the scheme, bind `currentColourScheme` to a control:
 </select>
 ```
 
-Setting `currentColourScheme.value` triggers the watcher, which writes to `localStorage` and calls `applyColourScheme()` to update the `<html>` class immediately.
+Setting `currentColourScheme.value` triggers the watcher, which writes to `localStorage` and calls `applyColourScheme()` to update the `<html>` `data-color-scheme` attribute immediately.
 
 ## How scheme application works
 
-The layer ships a head script (`utils/colour-scheme-init.ts`) that runs before paint to read `localStorage` and apply the correct class to `<html>`, preventing flash of wrong theme. `useColourScheme` then syncs its reactive state to match on `onMounted`.
+The layer ships a head script (`utils/colour-scheme-init.ts`) that runs before paint to read `localStorage` and apply the correct `data-color-scheme` attribute to `<html>`, preventing flash of wrong theme. `useColourScheme` then syncs its reactive state to match on `onMounted`.
 
 The three valid values are:
 
