@@ -34,6 +34,8 @@
     ".claude/",
     "app/",
     "modules/",
+    "scripts/",
+    "ramps.config.mjs",
     "nuxt.config.ts",
     "types.d.ts"
   ],
