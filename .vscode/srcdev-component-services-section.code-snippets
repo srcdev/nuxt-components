@@ -1,0 +1,84 @@
+{
+  "SRCDEV ServicesSection Full Mode": {
+    "description": "ServicesSection full mode — complete content with CTA",
+    "scope": "vue,html",
+    "body": [
+      "<ServicesSection",
+      "  :service-data=\"$1service\"",
+      "  :index=\"$2index\"",
+      ">",
+      "  <template #cta>",
+      "    <button type=\"button\">$3Book Now</button>",
+      "  </template>",
+      "</ServicesSection>"
+    ]
+  },
+  "SRCDEV ServicesSection Summary Mode": {
+    "description": "ServicesSection summary mode — compact card with summary-link slot",
+    "scope": "vue,html",
+    "body": [
+      "<ServicesSection",
+      "  :service-data=\"$1service\"",
+      "  is-summary",
+      "  summary-alignment=\"$2center\"",
+      ">",
+      "  <template #summary-link=\"{ serviceData }\">",
+      "    <NuxtLink :to=\"`/services/${serviceData.slug}`\">$3More about {{ serviceData.title }} →</NuxtLink>",
+      "  </template>",
+      "</ServicesSection>"
+    ]
+  },
+  "SRCDEV ServicesSection Custom Headings And Cta": {
+    "description": "ServicesSection with custom section headings and CTA copy props",
+    "scope": "vue,html",
+    "body": [
+      "<ServicesSection",
+      "  :service-data=\"$1service\"",
+      "  process-heading=\"$2How It Works\"",
+      "  ideal-for-heading=\"$3Who Is This For\"",
+      "  maintenance-heading=\"$4Aftercare\"",
+      "  faqs-heading=\"$5FAQs\"",
+      "  cta-heading=\"$6Ready to book?\"",
+      "  cta-body=\"$7Get in touch to book your appointment.\"",
+      ">",
+      "  <template #cta>",
+      "    <button type=\"button\">$8Book Now</button>",
+      "  </template>",
+      "</ServicesSection>"
+    ]
+  },
+  "SRCDEV ServicesSection Custom Cta Panel Slot": {
+    "description": "ServicesSection with the cta-panel slot fully replacing the default GlassPanel",
+    "scope": "vue,html",
+    "body": [
+      "<ServicesSection :service-data=\"$1service\">",
+      "  <template #cta-panel=\"{ serviceData, ctaHeading, ctaBody }\">",
+      "    $2",
+      "  </template>",
+      "</ServicesSection>"
+    ]
+  },
+  "SRCDEV ServicesSection CSS Override": {
+    "description": "CSS override scaffold for ServicesSection — scope to a page or section class",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .services-section {",
+      "    --services-section-grid-gap: ;",
+      "    --services-section-grid-gap-desktop: ;",
+      "    --services-section-image-border-radius: ;",
+      "    --services-section-price-duration-gap: ;",
+      "    --services-section-decorator-size: ;",
+      "    --services-section-faq-divider-color: ;",
+      "    --services-section-faq-answer-line-height: ;",
+      "",
+      "    .services-section__image-wrapper {}",
+      "    .services-section__info-wrapper {}",
+      "    .services-section__price-duration {}",
+      "    .services-section__faq {}",
+      "    .services-section__glass-panel {}",
+      "  }",
+      "}"
+    ]
+  }
+}

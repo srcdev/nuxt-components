@@ -3,15 +3,15 @@
 exports[`ServicesSection > renders correct HTML structure 1`] = `
 "<div class="services-section">
   <div class="services-section__grid">
-    <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/test.jpg 1x, /_ipx/_/images/test.jpg 2x" alt="Test Service" loading="eager" fetchpriority="high" class="image" src="/_ipx/_/images/test.jpg"></div>
-    <div class="info-wrapper">
+    <div class="services-section__image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/test.jpg 1x, /_ipx/_/images/test.jpg 2x" alt="Test Service" loading="eager" fetchpriority="high" class="services-section__image" src="/_ipx/_/images/test.jpg"></div>
+    <div class="services-section__info-wrapper">
       <div class="eyebrow-text large">A subtitle</div>
       <h2 class="hero-text mb-20 title axis-horizontal">
         <!--v-if--><span class="text-block-0 normal">Test Service</span>
       </h2>
-      <div class="price-duration">
-        <div class="flex-row"><span class="iconify i-mdi:clock-time-four-outline decorator" aria-hidden="true"></span><span>60 mins</span></div>
-        <div class="flex-row"><span class="iconify i-mdi:currency-gbp decorator" aria-hidden="true"></span><span>£50</span></div>
+      <div class="services-section__price-duration">
+        <div class="flex-row"><span class="iconify i-mdi:clock-time-four-outline services-section__decorator" aria-hidden="true"></span><span>60 mins</span></div>
+        <div class="flex-row"><span class="iconify i-mdi:currency-gbp services-section__decorator" aria-hidden="true"></span><span>£50</span></div>
       </div>
       <p class="page-body-normal">Long description text</p>
       <h2 class="hero-text mb-20 subheading axis-horizontal">
@@ -60,23 +60,23 @@ exports[`ServicesSection > renders correct HTML structure 1`] = `
       <h2 class="hero-text mb-20 subheading axis-horizontal">
         <!--v-if--><span class="text-block-0 normal">Frequently Asked Questions</span>
       </h2>
-      <div class="display-accordian services-faq" id="faq">
+      <div class="display-accordian services-section__faq" id="faq">
         <div class="expanding-panel accordian-item" icon-size="medium">
           <details class="expanding-panel-details" name="faq-v-0-0-0">
             <summary id="id-faq-v-0-0-0-trigger" class="expanding-panel-summary" aria-controls="id-faq-v-0-0-0-content" aria-expanded="false"><span class="label-wrapper">FAQ question?</span><span class="icon-wrapper"><span class="iconify i-mdi:chevron-down" aria-hidden="true"></span></span></summary>
           </details>
           <div id="id-faq-v-0-0-0-content" class="expanding-panel-content" aria-labelledby="id-faq-v-0-0-0-trigger" role="region">
             <div class="inner">
-              <p>FAQ answer.</p>
+              <p class="services-section__faq-answer">FAQ answer.</p>
             </div>
           </div>
         </div>
       </div>
-      <div class="glass-panel p-24">
+      <div class="glass-panel services-section__glass-panel p-24">
         <h2 class="hero-text mbs-0 mbe-20 subheading axis-horizontal">
-          <!--v-if--><span class="text-block-0 normal">Ready to book your highlights appointment?</span>
+          <!--v-if--><span class="text-block-0 normal">Ready to book your appointment?</span>
         </h2>
-        <p class="page-body-normal">Mobile service across Bath — I come to you.</p>
+        <p class="page-body-normal">Get in touch to book your appointment.</p>
       </div>
     </div>
   </div>

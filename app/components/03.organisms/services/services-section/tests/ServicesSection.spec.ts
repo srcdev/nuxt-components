@@ -211,4 +211,75 @@ describe("ServicesSection", () => {
     expect(wrapper.classes()).not.toContain("original");
     expect(wrapper.classes()).toContain("updated");
   });
+
+  // ─── Headings ───────────────────────────────────────────────────────────
+
+  it("renders default section headings", async () => {
+    const wrapper = await mountSuspended(ServicesSection, {
+      props: { serviceData: mockService },
+    });
+    expect(wrapper.text()).toContain("The Process");
+    expect(wrapper.text()).toContain("Ideal For");
+    expect(wrapper.text()).toContain("Aftercare & Maintenance");
+    expect(wrapper.text()).toContain("Frequently Asked Questions");
+  });
+
+  it("overrides section headings via props", async () => {
+    const wrapper = await mountSuspended(ServicesSection, {
+      props: {
+        serviceData: mockService,
+        processHeading: "How It Works",
+        idealForHeading: "Who Is This For",
+        maintenanceHeading: "Aftercare",
+        faqsHeading: "FAQs",
+      },
+    });
+    expect(wrapper.text()).toContain("How It Works");
+    expect(wrapper.text()).toContain("Who Is This For");
+    expect(wrapper.text()).toContain("Aftercare");
+    expect(wrapper.text()).toContain("FAQs");
+  });
+
+  // ─── CTA panel ──────────────────────────────────────────────────────────
+
+  it("renders default CTA heading and body", async () => {
+    const wrapper = await mountSuspended(ServicesSection, {
+      props: { serviceData: mockService },
+    });
+    expect(wrapper.text()).toContain("Ready to book your appointment?");
+    expect(wrapper.text()).toContain("Get in touch to book your appointment.");
+  });
+
+  it("overrides CTA heading and body via props", async () => {
+    const wrapper = await mountSuspended(ServicesSection, {
+      props: {
+        serviceData: mockService,
+        ctaHeading: "Book your locs consultation",
+        ctaBody: "Mobile service across Bath — I come to you.",
+      },
+    });
+    expect(wrapper.text()).toContain("Book your locs consultation");
+    expect(wrapper.text()).toContain("Mobile service across Bath — I come to you.");
+  });
+
+  it("replaces the whole CTA panel via the cta-panel slot", async () => {
+    const wrapper = await mountSuspended(ServicesSection, {
+      props: { serviceData: mockService },
+      slots: {
+        "cta-panel": '<div class="test-custom-cta">Custom CTA</div>',
+      },
+    });
+    expect(wrapper.find(".test-custom-cta").exists()).toBe(true);
+    expect(wrapper.text()).not.toContain("Ready to book your appointment?");
+  });
+
+  it("does not render cta-panel slot in summary mode", async () => {
+    const wrapper = await mountSuspended(ServicesSection, {
+      props: { serviceData: mockService, isSummary: true },
+      slots: {
+        "cta-panel": '<div class="test-custom-cta">Custom CTA</div>',
+      },
+    });
+    expect(wrapper.find(".test-custom-cta").exists()).toBe(false);
+  });
 });

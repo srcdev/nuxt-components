@@ -15,13 +15,39 @@ All routing and CTA decisions are delegated to the consumer via slots.
 |------|------|---------|----------|
 | `serviceData` | `Service` | — | **yes** |
 | `tag` | `"div" \| "section" \| "article" \| "main"` | `"div"` | no |
+| `headerTag` | `"h1" \| "h2" \| "h3"` | `"h2"` | no |
 | `index` | `number` | `0` | no |
 | `isSummary` | `boolean` | `false` | no |
 | `summaryAlignment` | `"start" \| "center" \| "end"` | `"center"` | no |
 | `reverse` | `boolean` | `false` | no |
 | `durationIcon` | `string` | `"mdi:clock-time-four-outline"` | no |
 | `priceIcon` | `string` | `"mdi:currency-gbp"` | no |
+| `processHeading` | `string` | `"The Process"` | no |
+| `idealForHeading` | `string` | `"Ideal For"` | no |
+| `maintenanceHeading` | `string` | `"Aftercare & Maintenance"` | no |
+| `faqsHeading` | `string` | `"Frequently Asked Questions"` | no |
+| `ctaHeading` | `string` | `"Ready to book your appointment?"` | no |
+| `ctaBody` | `string` | `"Get in touch to book your appointment."` | no |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | no |
+
+### Heading and CTA copy props
+
+All section subheadings and the default CTA panel's heading/body are props, not hardcoded
+text — override them with wording specific to the consuming business:
+
+```vue
+<ServicesSection
+  :service-data="service"
+  process-heading="How It Works"
+  cta-heading="Ready to book your colour appointment?"
+  cta-body="Mobile service across Bath — I come to you."
+/>
+```
+
+Name the actual service in `ctaHeading` (rather than a generic phrase) if every service page
+shares one CTA wrapper — a single hardcoded heading applied to every service previously caused
+a real bug in production, where a "Colour" service page's CTA read "Ready to book your
+**highlights** appointment?" regardless of which service was being viewed.
 
 ### Icon customisation
 
@@ -51,8 +77,12 @@ Flips the image to the right column and content to the left (CSS `order: 2` on t
 |------|-----------|---------------|---------|
 | `summary-link` | `{ serviceData: Service }` | `isSummary` is `true` | Navigation link below the `whatIsIt` text in summary mode |
 | `cta` | `{ serviceData: Service }` | `isSummary` is `false` | CTA button/link inside the closing `GlassPanel` in full mode |
+| `cta-panel` | `{ serviceData: Service, ctaHeading: string, ctaBody: string }` | `isSummary` is `false` | Replaces the entire default `GlassPanel` CTA block — use when a consumer needs a different component or layout, not just different copy |
 
-Both slots receive `serviceData` as a scoped prop.
+All three slots receive `serviceData` as a scoped prop. `cta-panel`'s default content *is*
+the `GlassPanel` + `ctaHeading`/`ctaBody` + `cta` slot combination described above — providing
+`cta-panel` replaces that whole block, so the `ctaHeading`/`ctaBody` props and `cta` slot are
+only useful if the `cta-panel` slot fallback (or the consumer's own override) still renders them.
 
 ## Summary mode usage
 
@@ -102,6 +132,21 @@ Both slots receive `serviceData` as a scoped prop.
 </ServicesSection>
 ```
 
+## Replacing the whole CTA panel (slot override)
+
+Use `cta-panel` instead of `ctaHeading`/`ctaBody` when the CTA needs a different component
+entirely — not just different text inside `GlassPanel`:
+
+```vue
+<ServicesSection :service-data="service">
+  <template #cta-panel="{ serviceData, ctaHeading, ctaBody }">
+    <MyPromoBanner :heading="ctaHeading" :body="ctaBody">
+      <template #cta><InputButtonCore button-text="Enquire Now" href="/contact" /></template>
+    </MyPromoBanner>
+  </template>
+</ServicesSection>
+```
+
 ## Rendering a list (summary mode)
 
 ```vue
@@ -122,9 +167,12 @@ Both slots receive `serviceData` as a scoped prop.
 
 ## Local style override scaffold
 
-When consuming this component, scaffold a style block using `styleClassPassthrough`. Delete the block if unused.
+When consuming this component, prefer the `--services-section-*` CSS custom properties
+documented in `CONSUMER-STYLING.md` (in the component's own folder) over raw class overrides.
+For anything the tokens don't cover, scaffold a style block using `styleClassPassthrough`.
+Delete the block if unused.
 
-See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
+See [component-local-style-override.md](../component-local-style-override.md) for the general pattern.
 
 ```vue
 <ServicesSection :style-class-passthrough="['my-section']" :service-data="service">
@@ -138,8 +186,10 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
    ─────────────────────────────────────────────────────────────────── */
 .services-section {
   &.my-section {
-    /* Geometry — image wrapper */
-    /* .image-wrapper { border-radius: 1.2rem; } */
+    --services-section-image-border-radius: 1.2rem;
+
+    /* Deeper overrides target the BEM element classes directly, e.g.: */
+    /* .services-section__faq { } */
   }
 }
 </style>
@@ -150,6 +200,12 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 - Component is auto-imported in Nuxt — no import needed.
 - The `Service` type is imported from `~/types/types.services`.
 - `summary-link` slot is guarded by `v-if="isSummary"` — it will not render in full mode even if provided.
-- `cta` slot lives inside a `v-if="!isSummary"` `GlassPanel` — it will not render in summary mode.
+- `cta` and `cta-panel` slots live inside `v-if="!isSummary"` — neither renders in summary mode.
+- Internal element classes are BEM-namespaced: `services-section__image-wrapper`,
+  `services-section__info-wrapper`, `services-section__price-duration`,
+  `services-section__decorator`, `services-section__faq`, `services-section__faq-answer`,
+  `services-section__glass-panel`. If a consuming app has CSS overrides referencing older
+  unprefixed names (`.image-wrapper`, `.price-duration`, `.services-faq`, etc. — from before
+  this component's classnames were namespaced), those selectors need updating to match.
 - The section gets `aria-labelledby` automatically when `tag` is `"section"` or `"article"`, pointing to the internal heading id.
 - `summaryAlignment` only has effect when `isSummary` is `true` — it aligns the info-wrapper content vertically within the grid cell.

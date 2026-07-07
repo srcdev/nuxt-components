@@ -4,15 +4,15 @@ exports[`ServicesSectionGrid > renders correct HTML structure 1`] = `
 "<div class="services-grid">
   <div class="services-section">
     <div class="services-section__grid">
-      <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/locs-installation.jpg 1x, /_ipx/_/images/locs-installation.jpg 2x" alt="Locs Installation" loading="eager" fetchpriority="high" class="image" src="/_ipx/_/images/locs-installation.jpg"></div>
-      <div class="info-wrapper is-summary align-center">
+      <div class="services-section__image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/locs-installation.jpg 1x, /_ipx/_/images/locs-installation.jpg 2x" alt="Locs Installation" loading="eager" fetchpriority="high" class="services-section__image" src="/_ipx/_/images/locs-installation.jpg"></div>
+      <div class="services-section__info-wrapper services-section__info-wrapper--summary services-section__info-wrapper--align-center">
         <div class="eyebrow-text large">Subtitle for Locs Installation</div>
         <h2 class="hero-text mb-20 title axis-horizontal">
           <!--v-if--><span class="text-block-0 normal">Locs Installation</span>
         </h2>
-        <div class="price-duration">
-          <div class="flex-row"><span class="iconify i-mdi:clock-time-four-outline decorator" aria-hidden="true"></span><span>60 mins</span></div>
-          <div class="flex-row"><span class="iconify i-mdi:currency-gbp decorator" aria-hidden="true"></span><span>£50</span></div>
+        <div class="services-section__price-duration">
+          <div class="flex-row"><span class="iconify i-mdi:clock-time-four-outline services-section__decorator" aria-hidden="true"></span><span>60 mins</span></div>
+          <div class="flex-row"><span class="iconify i-mdi:currency-gbp services-section__decorator" aria-hidden="true"></span><span>£50</span></div>
         </div>
         <!--v-if-->
         <!--v-if-->
@@ -31,15 +31,15 @@ exports[`ServicesSectionGrid > renders correct HTML structure 1`] = `
   </div>
   <div class="services-section">
     <div class="services-section__grid">
-      <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/locs-retwist.jpg 1x, /_ipx/_/images/locs-retwist.jpg 2x" alt="Locs Retwist" loading="eager" fetchpriority="auto" class="image" src="/_ipx/_/images/locs-retwist.jpg"></div>
-      <div class="info-wrapper is-summary align-center">
+      <div class="services-section__image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/locs-retwist.jpg 1x, /_ipx/_/images/locs-retwist.jpg 2x" alt="Locs Retwist" loading="eager" fetchpriority="auto" class="services-section__image" src="/_ipx/_/images/locs-retwist.jpg"></div>
+      <div class="services-section__info-wrapper services-section__info-wrapper--summary services-section__info-wrapper--align-center">
         <div class="eyebrow-text large">Subtitle for Locs Retwist</div>
         <h2 class="hero-text mb-20 title axis-horizontal">
           <!--v-if--><span class="text-block-0 normal">Locs Retwist</span>
         </h2>
-        <div class="price-duration">
-          <div class="flex-row"><span class="iconify i-mdi:clock-time-four-outline decorator" aria-hidden="true"></span><span>60 mins</span></div>
-          <div class="flex-row"><span class="iconify i-mdi:currency-gbp decorator" aria-hidden="true"></span><span>£50</span></div>
+        <div class="services-section__price-duration">
+          <div class="flex-row"><span class="iconify i-mdi:clock-time-four-outline services-section__decorator" aria-hidden="true"></span><span>60 mins</span></div>
+          <div class="flex-row"><span class="iconify i-mdi:currency-gbp services-section__decorator" aria-hidden="true"></span><span>£50</span></div>
         </div>
         <!--v-if-->
         <!--v-if-->
@@ -58,15 +58,15 @@ exports[`ServicesSectionGrid > renders correct HTML structure 1`] = `
   </div>
   <div class="services-section">
     <div class="services-section__grid">
-      <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/colour-treatment.jpg 1x, /_ipx/_/images/colour-treatment.jpg 2x" alt="Colour Treatment" loading="lazy" fetchpriority="auto" class="image" src="/_ipx/_/images/colour-treatment.jpg"></div>
-      <div class="info-wrapper is-summary align-center">
+      <div class="services-section__image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/colour-treatment.jpg 1x, /_ipx/_/images/colour-treatment.jpg 2x" alt="Colour Treatment" loading="lazy" fetchpriority="auto" class="services-section__image" src="/_ipx/_/images/colour-treatment.jpg"></div>
+      <div class="services-section__info-wrapper services-section__info-wrapper--summary services-section__info-wrapper--align-center">
         <div class="eyebrow-text large">Subtitle for Colour Treatment</div>
         <h2 class="hero-text mb-20 title axis-horizontal">
           <!--v-if--><span class="text-block-0 normal">Colour Treatment</span>
         </h2>
-        <div class="price-duration">
-          <div class="flex-row"><span class="iconify i-mdi:clock-time-four-outline decorator" aria-hidden="true"></span><span>60 mins</span></div>
-          <div class="flex-row"><span class="iconify i-mdi:currency-gbp decorator" aria-hidden="true"></span><span>£50</span></div>
+        <div class="services-section__price-duration">
+          <div class="flex-row"><span class="iconify i-mdi:clock-time-four-outline services-section__decorator" aria-hidden="true"></span><span>60 mins</span></div>
+          <div class="flex-row"><span class="iconify i-mdi:currency-gbp services-section__decorator" aria-hidden="true"></span><span>£50</span></div>
         </div>
         <!--v-if-->
         <!--v-if-->
