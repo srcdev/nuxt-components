@@ -158,6 +158,24 @@ it("exposes headingId via scoped slot", async () => {
 });
 ```
 
+### Testing the aria-labelledby dev-warning (useAriaLabelledById)
+
+Components using `useAriaLabelledById` (see [component-aria-landmark.md](component-aria-landmark.md))
+`console.warn` on mount if `aria-labelledby` is set but no element in `document` has the matching
+id. To assert this warning (or its absence) in a test, `mountSuspended` must attach to the real
+document — by default VTU mounts into a detached container, so `document.getElementById` will
+never find the slotted heading even when it's correctly bound, producing a false-positive warning:
+
+```ts
+const wrapper = await mountSuspended(ComponentName, {
+  props: { tag: "section" },
+  attachTo: document.body, // required — see note above
+  slots: {
+    default: (props: { headingId: string }) => h("h2", { id: props.headingId }, "Title"),
+  },
+});
+```
+
 > Returning a plain string from a slot function does **not** produce DOM — always use `h()`.
 
 ## Key rules

@@ -67,6 +67,18 @@ describe("ServicesSection", () => {
     expect(wrapper.element.tagName).toBe("SECTION");
   });
 
+  // ─── Aria ───────────────────────────────────────────────────────────────
+
+  it("binds aria-labelledby to the title HeroText's own id when tag is section", async () => {
+    const wrapper = await mountSuspended(ServicesSection, {
+      props: { serviceData: mockService, tag: "section" },
+      attachTo: document.body,
+    });
+    const ariaLabelledby = wrapper.attributes("aria-labelledby");
+    expect(ariaLabelledby).toBeTruthy();
+    expect(document.getElementById(ariaLabelledby!)?.textContent).toContain(mockService.title);
+  });
+
   // ─── Icons ──────────────────────────────────────────────────────────────
 
   it("renders the default duration icon name in the template", async () => {

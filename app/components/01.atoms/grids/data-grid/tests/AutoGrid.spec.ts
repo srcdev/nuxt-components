@@ -64,25 +64,17 @@ describe("AutoGrid", () => {
 
   // ─── Aria ─────────────────────────────────────────────────────────────────
 
-  it("does not set aria-labelledby when tag is div", async () => {
-    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "div" } });
-    expect(wrapper.attributes("aria-labelledby")).toBeUndefined();
-  });
-
-  it("sets aria-labelledby when tag is section", async () => {
-    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "section" } });
-    expect(wrapper.attributes("aria-labelledby")).toBeTruthy();
-  });
-
-  it("sets aria-labelledby when tag is article", async () => {
-    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "article" } });
-    expect(wrapper.attributes("aria-labelledby")).toBeTruthy();
-  });
-
-  it("sets aria-labelledby when tag is main", async () => {
-    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "main" } });
-    expect(wrapper.attributes("aria-labelledby")).toBeTruthy();
-  });
+  // AutoGrid has no heading of its own, so it never auto-generates an
+  // aria-labelledby regardless of tag — doing so would always be a broken
+  // ARIA reference, since there is no way for a consumer to bind a heading
+  // to it. Pass an explicit aria-label if a landmark tag needs a name.
+  it.each(["div", "section", "article", "main"] as const)(
+    "does not set aria-labelledby when tag is %s",
+    async (tag) => {
+      const wrapper = await mountSuspended(AutoGrid, { props: { tag } });
+      expect(wrapper.attributes("aria-labelledby")).toBeUndefined();
+    }
+  );
 
   // ─── isResponsive ────────────────────────────────────────────────────────
 

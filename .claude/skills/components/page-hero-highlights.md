@@ -147,7 +147,7 @@ Omit `#end` for a single-element header — `#start` fills full width with no la
 
 ## With aria-labelledby (section tag)
 
-When `tag="section"`, `aria-labelledby` is set automatically. Wire the heading id via the scoped slot prop:
+When `tag="section"`, `aria-labelledby` is set automatically. Wire the heading id via the scoped slot prop — if you don't, a console warning fires (from `useAriaLabelledById`) flagging the broken ARIA reference; see [component-aria-landmark.md](../component-aria-landmark.md):
 
 ```vue
 <PageHeroHighlights tag="section">
@@ -157,6 +157,8 @@ When `tag="section"`, `aria-labelledby` is set automatically. Wire the heading i
   ...
 </PageHeroHighlights>
 ```
+
+`tag="main"` renders a `<main>` element but is never auto-labelled — a `<main>` landmark doesn't need an accessible name unless a page has more than one.
 
 See [component-aria-landmark.md](../component-aria-landmark.md) for the full pattern.
 

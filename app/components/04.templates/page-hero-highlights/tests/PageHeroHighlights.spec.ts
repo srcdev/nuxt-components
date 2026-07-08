@@ -80,11 +80,11 @@ describe("PageHeroHighlights", () => {
     expect(wrapper.find(".page-hero-highlights").attributes("aria-labelledby")).toBeTruthy();
   });
 
-  it("adds aria-labelledby when tag is main", async () => {
+  it("does not add aria-labelledby when tag is main (main never needs an accessible name)", async () => {
     const wrapper = await mountSuspended(PageHeroHighlights, {
       props: { tag: "main" },
     });
-    expect(wrapper.find(".page-hero-highlights").attributes("aria-labelledby")).toBeTruthy();
+    expect(wrapper.find(".page-hero-highlights").attributes("aria-labelledby")).toBeUndefined();
   });
 
   it("does not add aria-labelledby when tag is div", async () => {

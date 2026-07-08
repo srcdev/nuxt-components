@@ -8,7 +8,7 @@ type: reference
 
 ## Overview
 
-`ProfileSection` is a molecule that renders a practitioner/author profile: a header area (eyebrow + heading), a profile picture, and a flexible set of bio/info blocks alongside optional profile links. It is landmark-aware — the root element automatically gets `aria-labelledby` wired to the heading inside the `#heroText` slot.
+`ProfileSection` is a molecule that renders a practitioner/author profile: a header area (eyebrow + heading), a profile picture, and a flexible set of bio/info blocks alongside optional profile links. It is landmark-aware — when `tag` is `section`, `article`, or `aside`, the root element automatically gets `aria-labelledby` wired to the heading inside the `#heroText` slot (**you must bind `headingId` yourself, and a console warning fires if you forget** — see [component-aria-landmark.md](../component-aria-landmark.md)). `tag="main"` is never auto-labelled.
 
 ## Props
 

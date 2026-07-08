@@ -13,6 +13,7 @@
       <div class="services-section__info-wrapper" :class="infoWrapperClasses">
         <EyebrowText font-size="large" :text-content="serviceData.subtitle" />
         <HeroText
+          :id="headingId"
           :tag="headerTag"
           font-size="title"
           :text-content="[
@@ -191,7 +192,7 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const { ariaLabelledby } = useAriaLabelledById(() => props.tag);
+const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
 
 const infoWrapperClasses = computed(() => {
   return {

@@ -6,7 +6,7 @@ exports[`ServicesSection > renders correct HTML structure 1`] = `
     <div class="services-section__image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/test.jpg 1x, /_ipx/_/images/test.jpg 2x" alt="Test Service" loading="eager" fetchpriority="high" class="services-section__image" src="/_ipx/_/images/test.jpg"></div>
     <div class="services-section__info-wrapper">
       <div class="eyebrow-text large">A subtitle</div>
-      <h2 class="hero-text mb-20 title axis-horizontal">
+      <h2 id="v-0-0" class="hero-text mb-20 title axis-horizontal">
         <!--v-if--><span class="text-block-0 normal">Test Service</span>
       </h2>
       <div class="services-section__price-duration">

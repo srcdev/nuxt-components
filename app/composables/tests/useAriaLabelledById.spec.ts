@@ -28,7 +28,7 @@ describe("useAriaLabelledById", () => {
   // ─── Labelled tags ────────────────────────────────────────────────────────
 
   describe("labelled tags", () => {
-    it.each(["section", "main", "article", "aside"])(
+    it.each(["section", "article", "aside"])(
       '"%s" returns ariaLabelledby = headingId',
       (tag) => {
         const { headingId, ariaLabelledby } = useAriaLabelledById(tag);
@@ -40,13 +40,18 @@ describe("useAriaLabelledById", () => {
   // ─── Non-labelled tags ────────────────────────────────────────────────────
 
   describe("non-labelled tags", () => {
-    it.each(["div", "span", "h1", "p", "ul", "nav"])(
+    it.each(["div", "span", "h1", "p", "ul", "nav", "main"])(
       '"%s" returns ariaLabelledby = undefined',
       (tag) => {
         const { ariaLabelledby } = useAriaLabelledById(tag);
         expect(ariaLabelledby.value).toBeUndefined();
       }
     );
+
+    it('"main" is never auto-labelled, even though it is a landmark', () => {
+      const { ariaLabelledby } = useAriaLabelledById("main");
+      expect(ariaLabelledby.value).toBeUndefined();
+    });
   });
 
   // ─── Reactivity ───────────────────────────────────────────────────────────

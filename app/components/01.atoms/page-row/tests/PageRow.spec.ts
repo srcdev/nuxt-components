@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { h } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import PageRow from "../PageRow.vue";
 
@@ -18,6 +19,9 @@ describe("PageRow", () => {
     wrapper = await mountSuspended(PageRow, {
       props: { ...props },
       slots,
+      // Attached to the real document so the aria-labelledby dev-warning check
+      // (which uses document.getElementById) can actually find slotted headings.
+      attachTo: document.body,
     });
     return wrapper;
   };
@@ -132,7 +136,7 @@ describe("PageRow", () => {
       expect(wrapper.attributes("aria-labelledby")).toBeUndefined();
     });
 
-    it.each(["section", "main", "article", "aside"] as const)(
+    it.each(["section", "article", "aside"] as const)(
       "sets aria-labelledby on <%s>",
       async (tag) => {
         await createWrapper({ tag });
@@ -140,8 +144,8 @@ describe("PageRow", () => {
       }
     );
 
-    it("does not set aria-labelledby on header, footer, nav", async () => {
-      for (const tag of ["header", "footer", "nav"] as const) {
+    it("does not set aria-labelledby on header, footer, nav, main", async () => {
+      for (const tag of ["header", "footer", "nav", "main"] as const) {
         await createWrapper({ tag });
         expect(wrapper.attributes("aria-labelledby")).toBeUndefined();
         wrapper.unmount();
@@ -166,6 +170,27 @@ describe("PageRow", () => {
     it("preserves ARIA attributes on slot content", async () => {
       await createWrapper({}, { default: '<nav aria-label="Main navigation">Nav</nav>' });
       expect(wrapper.find("nav").attributes("aria-label")).toBe("Main navigation");
+    });
+
+    it("warns when aria-labelledby is set but no element binds headingId", async () => {
+      const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      await createWrapper({ tag: "section" }, { default: "<p>No heading here</p>" });
+      await nextTick();
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining("broken ARIA reference"));
+      warnSpy.mockRestore();
+    });
+
+    it("does not warn when the heading-id slot prop is bound to a real heading", async () => {
+      const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+      await createWrapper(
+        { tag: "section" },
+        {
+          default: (slotProps: { headingId: string }) => h("h2", { id: slotProps.headingId }, "Title"),
+        }
+      );
+      await nextTick();
+      expect(warnSpy).not.toHaveBeenCalled();
+      warnSpy.mockRestore();
     });
   });
 

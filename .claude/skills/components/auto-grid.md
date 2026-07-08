@@ -91,11 +91,16 @@ Override `grid-template-columns` directly — there is no single token for this:
 </AutoGrid>
 ```
 
-### Semantic section with auto aria-labelledby
+### Semantic section with an accessible name
+
+`AutoGrid` has no heading concept of its own — its slots are arbitrary named items, not a
+header + body — so it does **not** auto-generate `aria-labelledby` the way `PageRow` or
+`ServicesSection` do (an earlier version of this component did attempt to, and it produced a
+guaranteed broken ARIA reference, since there was never any way to bind a heading to it). If
+`tag="section"` needs an accessible name, pass `aria-label` directly:
 
 ```vue
-<AutoGrid tag="section">
-  <!-- aria-labelledby is wired automatically via useAriaLabelledById -->
+<AutoGrid tag="section" aria-label="Practice stats">
   <template #item-1><div>Item 1</div></template>
   <template #item-2><div>Item 2</div></template>
 </AutoGrid>
@@ -128,9 +133,10 @@ const stats = [
 
 ## Accessibility
 
-- When `tag` is `section`, `article`, or `main`, `aria-labelledby` is automatically set via `useAriaLabelledById`, pointing to a generated heading ID.
-- When `tag="div"`, no ARIA attributes are added.
-- Ensure a heading element with the matching ID is present inside the grid when using semantic tags.
+- `AutoGrid` never sets `aria-labelledby` automatically, regardless of `tag` — it has no heading
+  to point to. Pass `aria-label` (or wrap it in a `PageRow`/other component that does own a
+  heading) if a landmark tag needs an accessible name.
+- No ARIA attributes are added by default for any `tag` value.
 
 See [component-aria-landmark.md](../component-aria-landmark.md) for the full landmark pattern.
 

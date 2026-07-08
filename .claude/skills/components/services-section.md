@@ -207,5 +207,5 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
   `services-section__glass-panel`. If a consuming app has CSS overrides referencing older
   unprefixed names (`.image-wrapper`, `.price-duration`, `.services-faq`, etc. — from before
   this component's classnames were namespaced), those selectors need updating to match.
-- The section gets `aria-labelledby` automatically when `tag` is `"section"` or `"article"`, pointing to the internal heading id.
+- The section gets `aria-labelledby` automatically when `tag` is `"section"`, `"article"`, or `"aside"`, pointing at the id ServicesSection binds to its own title `HeroText` internally — no consumer action needed. (`tag="main"` renders a `<main>` element but is never auto-labelled; see [component-aria-landmark.md](../component-aria-landmark.md).)
 - `summaryAlignment` only has effect when `isSummary` is `true` — it aligns the info-wrapper content vertically within the grid cell.

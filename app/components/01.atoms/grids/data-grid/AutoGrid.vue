@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="auto-grid" :class="[elementClasses, { 'is-responsive': isResponsive }]" :aria-labelledby="ariaLabelledby">
+  <component :is="tag" class="auto-grid" :class="[elementClasses, { 'is-responsive': isResponsive }]">
     <slot v-for="(_, name) in $slots" :key="name" :name="name"></slot>
   </component>
 </template>
@@ -18,7 +18,6 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-const { ariaLabelledby } = useAriaLabelledById(props.tag);
 
 watch(
   () => props.styleClassPassthrough,

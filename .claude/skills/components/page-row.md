@@ -84,9 +84,13 @@ boundary at the track line. Useful for asymmetric imagery, pull-quotes, or decor
 
 ## Accessibility — aria-labelledby
 
-When `tag` is `section`, `main`, or `article`, `PageRow` automatically generates an
-`aria-labelledby` attribute pointing to the first heading inside. Bind the `headingId` slot prop
-to that heading's `id` to complete the association.
+When `tag` is `section`, `article`, or `aside`, `PageRow` automatically generates an
+`aria-labelledby` attribute pointing to the first heading inside. **You must bind the
+`headingId` slot prop to that heading's `id`** — `PageRow` cannot verify you did this, since the
+slot content is arbitrary. If you forget, the section gets an `aria-labelledby` pointing at an id
+that exists nowhere in the DOM, which accessibility audits (WAVE, axe) flag as a broken ARIA
+reference. A console warning fires in the browser (from `useAriaLabelledById`) the moment a
+mounted instance is missing its matching heading — check the console if you see this warning.
 
 ```vue
 <PageRow tag="section">
@@ -97,8 +101,13 @@ to that heading's `id` to complete the association.
 </PageRow>
 ```
 
-Non-landmark tags (`div`, `header`, `footer`, `nav`) do not receive `aria-labelledby`. The
-`headingId` slot prop is still provided but can be ignored.
+`tag="main"` is deliberately **not** auto-labelled — a `<main>` landmark doesn't need an
+accessible name unless a page has more than one. Other non-landmark tags (`div`, `header`,
+`footer`, `nav`) also do not receive `aria-labelledby`. The `headingId` slot prop is still
+provided in both cases but can be ignored.
+
+See [component-aria-landmark.md](../component-aria-landmark.md) for the full pattern and the
+list of components that share it.
 
 ---
 
