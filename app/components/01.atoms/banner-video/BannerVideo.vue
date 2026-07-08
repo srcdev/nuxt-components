@@ -24,6 +24,8 @@
       :style="{ objectFit: props.objectFit }"
       @loadeddata="handleLoadedData"
       @canplay="handleCanPlay"
+      @play="isPlaying = true"
+      @pause="isPlaying = false"
     >
       <source :src="src" type="video/mp4" />
     </video>
@@ -38,40 +40,34 @@
       decoding="async"
       :style="{ objectFit: props.objectFit, objectPosition: imgObjectPosition }"
     />
+    <button
+      type="button"
+      class="banner-video__toggle"
+      :aria-label="isPlaying ? 'Pause background video' : 'Play background video'"
+      @click="togglePlayback"
+    >
+      <slot name="toggle-icon" :is-playing="isPlaying">
+        <Icon :name="isPlaying ? pauseIcon : playIcon" aria-hidden="true" />
+      </slot>
+    </button>
   </component>
 </template>
 
 <script setup lang="ts">
 interface Props {
-  /** HTML element to render as the root. Defaults to `section` for landmark semantics. */
   tag?: "section" | "div" | "header" | "main" | "article";
-  /** Path to the video source file (mp4). */
   src: string;
-  /** Path to the fallback/poster image. Used as video poster and as the visible fallback
-   *  when the video cannot play or when the user prefers reduced motion. */
   poster: string;
   alt?: string;
-  /** Intrinsic width of the poster image — required for NuxtImg optimisation. */
   imgWidth?: number;
-  /** Intrinsic height of the poster image — required for NuxtImg optimisation. */
   imgHeight?: number;
-  /**
-   * Depth tier controlling the responsive max-height via a `clamp()` scale.
-   * Each tier maps to a `--theme-banner-video-max-height-{depth}` CSS token that
-   * consuming pages can override. Defaults to `"md"`.
-   */
   depth?: "xs" | "sm" | "md" | "lg" | "xl";
-  /**
-   * CSS aspect-ratio of the banner container (e.g. `"16/9"`, `"21/9"`, `"4/3"`).
-   * Provides the intrinsic height that `max-height` caps at larger viewport widths.
-   */
   aspectRatio?: string;
-  /** How the video and fallback image fill the banner frame. Defaults to `"cover"`. */
   objectFit?: "cover" | "contain" | "fill" | "none" | "scale-down";
-  /** Vertical crop position within the banner. Maps to `align-self` on the video and `object-position` on the fallback image. Defaults to `"center"`. */
   verticalPosition?: "start" | "center" | "end";
-  /** Horizontal crop position within the banner. Maps to `object-position` on the fallback image. Defaults to `"center"`. */
   horizontalPosition?: "start" | "center" | "end";
+  playIcon?: string;
+  pauseIcon?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -85,6 +81,8 @@ const props = withDefaults(defineProps<Props>(), {
   objectFit: "cover",
   verticalPosition: "center",
   horizontalPosition: "center",
+  playIcon: "mdi:play",
+  pauseIcon: "mdi:pause",
   styleClassPassthrough: () => [],
 });
 
@@ -106,12 +104,22 @@ watch(
 );
 
 const videoEl = shallowRef<HTMLVideoElement | null>(null);
+const isPlaying = ref(false);
+
+const togglePlayback = () => {
+  const v = videoEl.value;
+  if (!v) return;
+  if (v.paused) {
+    void v.play();
+  } else {
+    v.pause();
+  }
+};
 
 const tryPlay = async () => {
   const v = videoEl.value;
   if (!v) return;
   try {
-    // Ensure muted stays true — required for programmatic autoplay in all browsers
     v.muted = true;
     await v.play();
   } catch {
@@ -123,9 +131,7 @@ const kickOffLoad = async () => {
   await nextTick();
   const v = videoEl.value;
   if (!v) return;
-  // Force the media element to (re)read its source child and begin fetching
   v.load();
-  // Attempt immediate play; loadeddata/canplay handlers will retry once data arrives
   void tryPlay();
 };
 
@@ -136,7 +142,6 @@ const handleCanPlay = () => {
   void tryPlay();
 };
 
-// Runs on mount AND whenever src changes (covers route-change re-use edge cases)
 watch(
   () => props.src,
   () => {
@@ -145,7 +150,6 @@ watch(
   { immediate: true, flush: "post" }
 );
 
-// Extra safety: when the component becomes active again (e.g. returning via keep-alive)
 onActivated(() => {
   void kickOffLoad();
 });
@@ -154,7 +158,7 @@ onActivated(() => {
 <style lang="css">
 @layer components {
   .banner-video {
-    --_max-height: var(--theme-banner-video-max-height, clamp(28rem, 38vw, 56rem));
+    --_max-height: var(--banner-video-max-height, clamp(28rem, 38vw, 56rem));
 
     display: grid;
     grid-template-areas: "media";
@@ -164,19 +168,19 @@ onActivated(() => {
     overflow: hidden;
 
     &[data-depth="xs"] {
-      --_max-height: var(--theme-banner-video-max-height-xs, clamp(12rem, 15vw, 24rem));
+      --_max-height: var(--banner-video-max-height-xs, clamp(12rem, 15vw, 24rem));
     }
     &[data-depth="sm"] {
-      --_max-height: var(--theme-banner-video-max-height-sm, clamp(18rem, 22vw, 36rem));
+      --_max-height: var(--banner-video-max-height-sm, clamp(18rem, 22vw, 36rem));
     }
     &[data-depth="md"] {
-      --_max-height: var(--theme-banner-video-max-height-md, clamp(28rem, 38vw, 56rem));
+      --_max-height: var(--banner-video-max-height-md, clamp(28rem, 38vw, 56rem));
     }
     &[data-depth="lg"] {
-      --_max-height: var(--theme-banner-video-max-height-lg, clamp(40rem, 52vw, 72rem));
+      --_max-height: var(--banner-video-max-height-lg, clamp(40rem, 52vw, 72rem));
     }
     &[data-depth="xl"] {
-      --_max-height: var(--theme-banner-video-max-height-xl, clamp(52rem, 65vw, 90rem));
+      --_max-height: var(--banner-video-max-height-xl, clamp(52rem, 65vw, 90rem));
     }
 
     .video {
@@ -196,12 +200,41 @@ onActivated(() => {
       height: 100%;
     }
 
+    .banner-video__toggle {
+      grid-area: media;
+      align-self: end;
+      justify-self: end;
+      margin: var(--banner-video-toggle-offset, 1.2rem);
+      z-index: 1;
+
+      display: grid;
+      place-items: center;
+      width: var(--banner-video-toggle-size, 3.2rem);
+      height: var(--banner-video-toggle-size, 3.2rem);
+      padding: 0;
+
+      background-color: var(--banner-video-toggle-background, oklch(0% 0 0 / 0.4));
+      color: var(--banner-video-toggle-icon-color, white);
+      border: none;
+      border-radius: 100vw;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+
+      &:hover,
+      &:focus-visible {
+        background-color: var(--banner-video-toggle-background-hover, oklch(0% 0 0 / 0.6));
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       .video {
         display: none;
       }
       .fallback {
         display: block;
+      }
+      .banner-video__toggle {
+        display: none;
       }
     }
   }

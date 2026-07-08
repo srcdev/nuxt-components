@@ -1,0 +1,59 @@
+{
+  "SRCDEV BannerVideo Basic": {
+    "description": "BannerVideo — full-width autoplaying hero video with poster fallback",
+    "scope": "vue,html",
+    "body": [
+      "<BannerVideo",
+      "  src=\"$1/videos/hero.mp4\"",
+      "  poster=\"$2/images/hero-poster.jpg\"",
+      "  alt=\"$3Studio interior\"",
+      "  :img-width=\"1920\"",
+      "  :img-height=\"1080\"",
+      "  depth=\"$4md\"",
+      "/>"
+    ]
+  },
+  "SRCDEV BannerVideo Custom Toggle Icons": {
+    "description": "BannerVideo with playIcon/pauseIcon props swapped",
+    "scope": "vue,html",
+    "body": [
+      "<BannerVideo",
+      "  src=\"$1/videos/hero.mp4\"",
+      "  poster=\"$2/images/hero-poster.jpg\"",
+      "  play-icon=\"$3mdi:play-circle\"",
+      "  pause-icon=\"$4mdi:pause-circle\"",
+      "/>"
+    ]
+  },
+  "SRCDEV BannerVideo Custom Toggle Icon Slot": {
+    "description": "BannerVideo with the toggle-icon slot fully replacing the toggle button's icon",
+    "scope": "vue,html",
+    "body": [
+      "<BannerVideo src=\"$1/videos/hero.mp4\" poster=\"$2/images/hero-poster.jpg\">",
+      "  <template #toggle-icon=\"{ isPlaying }\">",
+      "    $3",
+      "  </template>",
+      "</BannerVideo>"
+    ]
+  },
+  "SRCDEV BannerVideo CSS Override": {
+    "description": "CSS override scaffold for BannerVideo — scope to a page or section class",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .banner-video {",
+      "    --banner-video-max-height-xs: ;",
+      "    --banner-video-max-height-sm: ;",
+      "    --banner-video-max-height-md: ;",
+      "    --banner-video-max-height-lg: ;",
+      "    --banner-video-max-height-xl: ;",
+      "    --banner-video-toggle-size: ;",
+      "    --banner-video-toggle-offset: ;",
+      "    --banner-video-toggle-background: ;",
+      "    --banner-video-toggle-background-hover: ;",
+      "    --banner-video-toggle-icon-color: ;",
+      "  }",
+      "}"
+    ]
+  }
+}

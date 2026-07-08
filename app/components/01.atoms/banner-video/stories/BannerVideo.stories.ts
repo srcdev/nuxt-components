@@ -39,7 +39,7 @@ const meta: Meta<typeof BannerVideo> = {
     depth: {
       control: "select",
       options: ["xs", "sm", "md", "lg", "xl"],
-      description: "Responsive max-height tier. Each maps to a clamp() scale; override via --theme-banner-video-max-height-{depth}",
+      description: "Responsive max-height tier. Each maps to a clamp() scale; override via --banner-video-max-height-{depth}",
       table: { category: "Layout" },
     },
     aspectRatio: {
@@ -65,6 +65,16 @@ const meta: Meta<typeof BannerVideo> = {
       description: "Horizontal crop position — start (left), center, or end (right). Maps to object-position on the fallback image",
       table: { category: "Appearance" },
     },
+    playIcon: {
+      control: "text",
+      description: "Icon name for the toggle button before playback starts (any Iconify icon)",
+      table: { category: "Appearance" },
+    },
+    pauseIcon: {
+      control: "text",
+      description: "Icon name for the toggle button once playback starts (any Iconify icon)",
+      table: { category: "Appearance" },
+    },
     styleClassPassthrough: {
       table: { disable: true },
     },
@@ -73,7 +83,7 @@ const meta: Meta<typeof BannerVideo> = {
     docs: {
       description: {
         component:
-          "A full-width banner that plays a muted, looping mp4 video. The poster image is shown before the video loads, when the video fails to play, and whenever the user has `prefers-reduced-motion: reduce` set. The banner is sized via `aspect-ratio` with a responsive `max-height` driven by the `depth` tier (`xs` → `xl`). Each tier uses a `clamp()` scale and exposes a `--theme-banner-video-max-height-{depth}` token for consuming pages to override. `objectFit` controls how media fills the frame. `verticalPosition` and `horizontalPosition` control the crop focal point.",
+          "A full-width banner that plays a muted, looping mp4 video. The poster image is shown before the video loads, when the video fails to play, and whenever the user has `prefers-reduced-motion: reduce` set. The banner is sized via `aspect-ratio` with a responsive `max-height` driven by the `depth` tier (`xs` → `xl`). Each tier uses a `clamp()` scale and exposes a `--banner-video-max-height-{depth}` token for consuming pages to override. `objectFit` controls how media fills the frame. `verticalPosition` and `horizontalPosition` control the crop focal point. The pause/play toggle's icon is configurable via `playIcon`/`pauseIcon` props, or fully replaceable via the `toggle-icon` scoped slot.",
       },
     },
   },
@@ -174,6 +184,47 @@ export const Standard169: Story = {
     docs: {
       description: {
         story: "Standard 16/9 aspect ratio with md depth — matches a typical video's native ratio.",
+      },
+    },
+  },
+};
+
+export const CustomToggleIcons: Story = {
+  args: {
+    ...Default.args,
+    playIcon: "mdi:play-circle",
+    pauseIcon: "mdi:pause-circle",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Custom icon names passed via playIcon and pauseIcon props — swaps the toggle button's icon without touching markup.",
+      },
+    },
+  },
+};
+
+export const CustomToggleIconSlot: Story = {
+  args: {
+    ...Default.args,
+  },
+  render: (args) => ({
+    components: { BannerVideo },
+    setup() {
+      return { args };
+    },
+    template: `
+      <BannerVideo v-bind="args">
+        <template #toggle-icon="{ isPlaying }">
+          <span style="font-size:1.4rem;font-weight:700;">{{ isPlaying ? 'II' : '▶' }}</span>
+        </template>
+      </BannerVideo>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: "The toggle-icon scoped slot replaces the toggle button's icon entirely, receiving isPlaying — use when an Iconify icon name isn't enough (a custom SVG, or a different icon set).",
       },
     },
   },

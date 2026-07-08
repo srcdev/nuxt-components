@@ -127,6 +127,51 @@ describe("BannerVideo", () => {
     expect(play).toHaveBeenCalled();
   });
 
+  // ─── Pause/play toggle (WCAG 2.2.2) ─────────────────────────────────────
+
+  it("renders a pause/play toggle button", async () => {
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    expect(wrapper.find(".banner-video__toggle").exists()).toBe(true);
+  });
+
+  it("toggle defaults to a 'Pause background video' label once playback starts", async () => {
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    await wrapper.find("video").trigger("play");
+    expect(wrapper.find(".banner-video__toggle").attributes("aria-label")).toBe("Pause background video");
+  });
+
+  it("toggle reads 'Play background video' before playback has started", async () => {
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    expect(wrapper.find(".banner-video__toggle").attributes("aria-label")).toBe("Play background video");
+  });
+
+  it("clicking the toggle calls pause() while playing", async () => {
+    const pause = vi.fn();
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    const videoElement = wrapper.find("video").element as HTMLVideoElement;
+    videoElement.pause = pause;
+    Object.defineProperty(videoElement, "paused", { value: false, configurable: true });
+    await wrapper.find(".banner-video__toggle").trigger("click");
+    expect(pause).toHaveBeenCalled();
+  });
+
+  it("clicking the toggle calls play() while paused", async () => {
+    const play = vi.fn().mockResolvedValue(undefined);
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    const videoElement = wrapper.find("video").element as HTMLVideoElement;
+    videoElement.play = play;
+    Object.defineProperty(videoElement, "paused", { value: true, configurable: true });
+    await wrapper.find(".banner-video__toggle").trigger("click");
+    expect(play).toHaveBeenCalled();
+  });
+
+  it("updates aria-label to 'Play background video' after the video pauses", async () => {
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    await wrapper.find("video").trigger("play");
+    await wrapper.find("video").trigger("pause");
+    expect(wrapper.find(".banner-video__toggle").attributes("aria-label")).toBe("Play background video");
+  });
+
   // ─── Fallback image ──────────────────────────────────────────────────────
 
   it("renders a NuxtImg fallback element", async () => {
@@ -348,5 +393,55 @@ describe("BannerVideo", () => {
     await wrapper.setProps({ styleClassPassthrough: ["updated"] });
     expect(wrapper.classes()).not.toContain("original");
     expect(wrapper.classes()).toContain("updated");
+  });
+
+  // ─── Toggle icon ─────────────────────────────────────────────────────────
+
+  it("renders the default play icon before playback starts", async () => {
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    expect(wrapper.find(".banner-video__toggle").html()).toContain("mdi:play");
+  });
+
+  it("renders the default pause icon once playback starts", async () => {
+    const wrapper = await mountSuspended(BannerVideo, { props: defaultProps });
+    await wrapper.find("video").trigger("play");
+    expect(wrapper.find(".banner-video__toggle").html()).toContain("mdi:pause");
+  });
+
+  it("renders a custom playIcon", async () => {
+    const wrapper = await mountSuspended(BannerVideo, {
+      props: { ...defaultProps, playIcon: "mdi:play-circle" },
+    });
+    expect(wrapper.find(".banner-video__toggle").html()).toContain("mdi:play-circle");
+  });
+
+  it("renders a custom pauseIcon", async () => {
+    const wrapper = await mountSuspended(BannerVideo, {
+      props: { ...defaultProps, pauseIcon: "mdi:pause-circle" },
+    });
+    await wrapper.find("video").trigger("play");
+    expect(wrapper.find(".banner-video__toggle").html()).toContain("mdi:pause-circle");
+  });
+
+  it("replaces the toggle icon via the toggle-icon slot", async () => {
+    const wrapper = await mountSuspended(BannerVideo, {
+      props: defaultProps,
+      slots: {
+        "toggle-icon": '<span class="test-custom-icon">custom</span>',
+      },
+    });
+    expect(wrapper.find(".test-custom-icon").exists()).toBe(true);
+  });
+
+  it("passes isPlaying to the toggle-icon slot", async () => {
+    const wrapper = await mountSuspended(BannerVideo, {
+      props: defaultProps,
+      slots: {
+        "toggle-icon": `<span class="test-is-playing">{{ params.isPlaying }}</span>`,
+      },
+    });
+    expect(wrapper.find(".test-is-playing").text()).toBe("false");
+    await wrapper.find("video").trigger("play");
+    expect(wrapper.find(".test-is-playing").text()).toBe("true");
   });
 });
