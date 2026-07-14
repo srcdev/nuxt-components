@@ -19,13 +19,21 @@
       </slot>
     </ul>
 
-    <button
-      class="pricing-card__cta"
-      :disabled="ctaDisabled"
-      @click="handleSelect"
-    >
-      {{ ctaText }}
-    </button>
+    <div class="pricing-card__cta">
+      <slot
+        name="cta"
+        :cta-text="ctaText"
+        :is-disabled="ctaDisabled"
+        :plan-name="planName"
+        :on-select="handleSelect"
+      >
+        <InputButtonCore
+          :button-text="ctaText"
+          :readonly="ctaDisabled"
+          @click="handleSelect"
+        />
+      </slot>
+    </div>
   </component>
 </template>
 
@@ -199,22 +207,17 @@ watch(
 
     .pricing-card__cta {
       align-self: flex-start;
-      padding: var(--_cta-padding);
-      background-color: var(--_cta-bg);
-      color: var(--_cta-text);
-      border: none;
-      border-radius: var(--_cta-border-radius);
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
 
-      &:hover:not(:disabled) {
-        background-color: var(--_cta-bg-hover);
-      }
+      :deep(.input-button-core) {
+        padding: var(--_cta-padding);
+        background-color: var(--_cta-bg);
+        color: var(--_cta-text);
+        border-radius: var(--_cta-border-radius);
+        font-weight: 600;
 
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
+        &:hover:not([aria-disabled="true"]) {
+          background-color: var(--_cta-bg-hover);
+        }
       }
     }
   }
