@@ -1,0 +1,96 @@
+{
+  "SRCDEV PricingCard Single": {
+    "description": "Single PricingCard component with basic props",
+    "scope": "vue,html",
+    "body": [
+      "<PricingCard",
+      "  planName=\"$1Single Site\"",
+      "  :price=\"$2199\"",
+      "  billingPeriod=\"$3one-time\"",
+      "  description=\"$4Perfect for freelancers and solo practitioners.\"",
+      "  :features=\"[",
+      "    '$5Feature 1',",
+      "    '$6Feature 2',",
+      "    '$7Feature 3',",
+      "  ]\"",
+      "  @select=\"$8handleSelect\"",
+      "/>"
+    ]
+  },
+  "SRCDEV PricingCard Highlighted": {
+    "description": "PricingCard with 'Most Popular' highlight",
+    "scope": "vue,html",
+    "body": [
+      "<PricingCard",
+      "  planName=\"$1Agency\"",
+      "  :price=\"$2499\"",
+      "  billingPeriod=\"$3one-time\"",
+      "  description=\"$4Best for growing teams.\"",
+      "  :is-highlighted=\"true\"",
+      "  :features=\"[",
+      "    '$5Feature 1',",
+      "    '$6Feature 2',",
+      "    '$7Feature 3',",
+      "  ]\"",
+      "  @select=\"$8handleSelect\"",
+      "/>"
+    ]
+  },
+  "SRCDEV PricingCard Grid": {
+    "description": "Three-card pricing comparison grid",
+    "scope": "vue,html",
+    "body": [
+      "<div class=\"pricing-cards-grid\">",
+      "  <PricingCard",
+      "    planName=\"Single Site\"",
+      "    :price=\"$1199\"",
+      "    billingPeriod=\"one-time\"",
+      "    description=\"$2For freelancers.\"",
+      "    :features=\"['$3Feature 1', '$4Feature 2']\"",
+      "    @select=\"handleSelect\"",
+      "  />",
+      "  <PricingCard",
+      "    planName=\"Agency\"",
+      "    :price=\"$5499\"",
+      "    billingPeriod=\"one-time\"",
+      "    description=\"$6For growing teams.\"",
+      "    :is-highlighted=\"true\"",
+      "    :features=\"['$7Feature 1', '$8Feature 2', '$9Feature 3']\"",
+      "    @select=\"handleSelect\"",
+      "  />",
+      "  <PricingCard",
+      "    planName=\"Unlimited\"",
+      "    :price=\"$10999\"",
+      "    billingPeriod=\"one-time\"",
+      "    description=\"$11Enterprise plan.\"",
+      "    :features=\"['$12Feature 1', '$13Feature 2', '$14Feature 3', '$15Feature 4']\"",
+      "    @select=\"handleSelect\"",
+      "  />",
+      "</div>"
+    ]
+  },
+  "SRCDEV PricingCard CSS Override": {
+    "description": "CSS override scaffold for PricingCard tokens",
+    "scope": "css",
+    "body": [
+      ".$1pricing-page {",
+      "  .pricing-card {",
+      "    --pricing-card-border-radius: $2;",
+      "    --pricing-card-padding: $3;",
+      "    --pricing-card-gap: $4;",
+      "    --pricing-card-shadow: $5;",
+      "    --pricing-card-name-color: $6;",
+      "    --pricing-card-amount-color: $7;",
+      "    --pricing-card-cta-bg: $8;",
+      "    --pricing-card-cta-bg-hover: $9;",
+      "",
+      "    &.is-highlighted {",
+      "      --pricing-card-highlight-border: $10;",
+      "      --pricing-card-highlight-shadow: $11;",
+      "      --pricing-card-highlight-scale: $12;",
+      "    }",
+      "  }",
+      "}"
+    ]
+  }
+}
