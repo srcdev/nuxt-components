@@ -6,6 +6,7 @@
   "types": "types.d.ts",
   "license": "MIT",
   "scripts": {
+    "postinstall": "node scripts/copy-snippets.mjs",
     "clean": "rm -rf .nuxt && rm -rf .output",
     "cleanall": "rm -rf node_modules && rm -rf .nuxt && rm -rf .output && rm package-lock.json",
     "reinstall": "rm -rf node_modules && npm install",

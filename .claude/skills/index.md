@@ -48,6 +48,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── qa-panel.md                       — collapsible dev-only panel for toggling component props live on a page (demo pages and consuming apps)
 ├── release-notes.md                  — produce release notes as a fenced markdown block from git log
 ├── pull-request-description.md       — produce a PR description as a fenced markdown block from git diff vs main
+├── using-component-skills.md         — discover and use component skills in consumer apps: where skills land, browsing patterns, workflow for deciding build vs. compose
 ├── composable-canonical-url.md       — useCanonicalUrl: set <link rel="canonical"> from runtimeConfig.public.canonicalHost; layout setup, node types
 ├── composable-whatsapp.md            — useWhatsApp: open pre-filled wa.me link from form payload; runtime config, security, usage
 ├── composable-zod-validation.md      — useZodValidation: schema-driven form validation, error binding, submit flow, API error push
@@ -73,7 +74,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── expanding-panel.md      — ExpandingPanel v-model, forceOpened, slots (summary/icon/content), ARIA wiring
     ├── glass-panel.md          — GlassPanel props, slots, CSS token API (--glass-panel-bg/border-color/shadow/highlight), theming override
     ├── navigation-horizontal.md — NavigationHorizontal props, NavItemData type, CSS token API, import path gotcha
-    ├── input-copy-core.md      — InputCopyCore: readonly copy-to-clipboard input; props, emits, slots, CSS classes, usage
+    ├── pricing-card.md         — PricingCard: SaaS-style plan card with highlight, feature list, #cta slot for button customization, CSS token API
+    ├── input-copy.md           — InputCopy: readonly copy-to-clipboard input, visual feedback, Clipboard API, accessibility, CSS token API
     ├── banner-video.md         — BannerVideo: full-width hero video banner, depth tier system, objectFit/objectPosition, playIcon/pauseIcon/toggle-icon slot, reduced-motion fallback, CSS tokens
     ├── grid-stack.md           — GridStack: CSS Grid z-axis stacking, slot API, z-order rules, sizing, video+overlay and image+text patterns
     ├── scroll-reveal-frame.md  — ScrollRevealFrame: generic parallax clipping frame, slot API, image grid pattern, CSS tokens, browser support

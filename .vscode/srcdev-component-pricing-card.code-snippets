@@ -18,7 +18,7 @@
     ]
   },
   "SRCDEV PricingCard Highlighted": {
-    "description": "PricingCard with 'Most Popular' highlight",
+    "description": "PricingCard with 'Most Popular' highlight and custom button",
     "scope": "vue,html",
     "body": [
       "<PricingCard",
@@ -33,7 +33,16 @@
       "    '$7Feature 3',",
       "  ]\"",
       "  @select=\"$8handleSelect\"",
-      "/>"
+      ">",
+      "  <template #cta=\"{ ctaText, isDisabled, onSelect }\">",
+      "    <InputButtonCore",
+      "      :button-text=\"ctaText\"",
+      "      variant=\"$9primary\"",
+      "      :readonly=\"isDisabled\"",
+      "      @click=\"onSelect\"",
+      "    />",
+      "  </template>",
+      "</PricingCard>"
     ]
   },
   "SRCDEV PricingCard Grid": {
@@ -67,6 +76,30 @@
       "    @select=\"handleSelect\"",
       "  />",
       "</div>"
+    ]
+  },
+  "SRCDEV PricingCard Custom Button": {
+    "description": "PricingCard with custom button variant via #cta slot",
+    "scope": "vue,html",
+    "body": [
+      "<PricingCard",
+      "  planName=\"$1Premium\"",
+      "  :price=\"$2799\"",
+      "  billingPeriod=\"$3one-time\"",
+      "  description=\"$4All features included.\"",
+      "  :features=\"['$5Feature 1', '$6Feature 2']\"",
+      "  @select=\"$7handleSelect\"",
+      ">",
+      "  <template #cta=\"{ ctaText, isDisabled, onSelect }\">",
+      "    <InputButtonCore",
+      "      :button-text=\"ctaText\"",
+      "      variant=\"$8secondary\"",
+      "      theme=\"$9default\"",
+      "      :readonly=\"isDisabled\"",
+      "      @click=\"onSelect\"",
+      "    />",
+      "  </template>",
+      "</PricingCard>"
     ]
   },
   "SRCDEV PricingCard CSS Override": {

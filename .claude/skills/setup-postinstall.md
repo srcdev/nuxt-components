@@ -2,12 +2,14 @@
 
 ## Overview
 
-Prevent two common "forgot to run after install" problems in a consuming app:
+Prevent common "forgot to run after install" problems in a consuming app:
 
 1. `nuxt prepare` — generates Nuxt type declarations. Skipping it causes TypeScript errors after install or package updates.
 2. `npm run setup:claude` — copies the latest `srcdev-nuxt-components` skills into `.claude/skills/srcdev-nuxt-components/`. Skipping it leaves Claude working from stale skill docs after a package update.
 
-A `postinstall` script runs both automatically after every `npm install`.
+Additionally, `srcdev-nuxt-components` automatically copies VSCode snippet files (`.code-snippets`) to your `.vscode/` folder during its own postinstall, so components' code snippets are available immediately.
+
+A consumer app's `postinstall` script runs both automatically after every `npm install`.
 
 ## Steps
 
@@ -41,5 +43,6 @@ From this point on, `npm install` and `npm ci` trigger both steps automatically.
 ## Notes
 
 - Skills land in `.claude/skills/srcdev-nuxt-components/` — safe to re-run without overwriting your own project's skills.
+- VSCode snippets are copied to `.vscode/` automatically by the layer's postinstall — no extra step needed on the consumer's side. They're available in VSCode's autocomplete immediately after `npm install`.
 - `postinstall` also fires on `npm ci`, so CI environments get the skills too if they have a `.claude/` directory in the project.
 - If you do not want `postinstall` running in CI, guard it: `"postinstall": "[ \"$CI\" = \"true\" ] || (nuxt prepare && npm run setup:claude)"`.
