@@ -123,7 +123,12 @@ export default defineNuxtConfig({
   },
   vite: {
     optimizeDeps: {
-      include: ["@oddbird/css-anchor-positioning", "@vue/devtools-core", "@vue/devtools-kit", "vue-qrcode-reader"],
+      include: [
+        "@oddbird/css-anchor-positioning",
+        "@vue/devtools-core",
+        "@vue/devtools-kit",
+        ...(isStandalone ? ["vue-qrcode-reader"] : []),
+      ],
     },
   },
   vue: {
