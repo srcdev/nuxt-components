@@ -43,16 +43,22 @@ Skills are copied into `.claude/skills/srcdev-nuxt-components/` so they never co
 
 ### Automate with postinstall (recommended)
 
-To ensure skills are always up to date and `nuxt prepare` is never forgotten, combine both into a `postinstall` script. npm runs this automatically after every `npm install`:
+To ensure skills are always up to date, VSCode snippets are installed, and `nuxt prepare` is never forgotten, add a `postinstall` script. npm runs this automatically after every `npm install`:
 
 ```json
 "scripts": {
-  "setup:claude": "cp -r node_modules/srcdev-nuxt-components/.claude/skills .claude/skills/srcdev-nuxt-components",
-  "postinstall": "nuxt prepare && npm run setup:claude"
+  "setup:claude": "mkdir -p .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components",
+  "postinstall": "node node_modules/srcdev-nuxt-components/scripts/copy-snippets.mjs && nuxt prepare && npm run setup:claude"
 }
 ```
 
-> If your app uses a standalone env flag for `nuxt prepare` (e.g. `NUXT_STANDALONE=true`), include it in the `postinstall` command. This is project-specific — check your own `nuxt.config.ts` to confirm whether it is needed.
+**What this does:**
+
+1. `copy-snippets.mjs` — copies VSCode snippets (`.code-snippets` files) from the layer to your `.vscode/` folder
+2. `nuxt prepare` — generates Nuxt type declarations
+3. `setup:claude` — copies skills into `.claude/skills/srcdev-nuxt-components/`
+
+> **Note**: The snippet copy must run from your consumer app's postinstall, not the layer's. npm doesn't invoke postinstall hooks for dependencies, so each consumer app is responsible for copying snippets into its own `.vscode/` folder. If your app uses a standalone env flag for `nuxt prepare` (e.g. `NUXT_STANDALONE=true`), add it before `nuxt prepare`. This is project-specific — check your own `nuxt.config.ts` to confirm whether it is needed.
 
 ---
 
