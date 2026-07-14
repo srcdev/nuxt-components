@@ -32,6 +32,7 @@
   },
   "files": [
     ".claude/",
+    ".vscode/",
     "app/",
     "modules/",
     "scripts/",
