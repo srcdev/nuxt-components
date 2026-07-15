@@ -5,6 +5,9 @@
 All `--pricing-card-*` tokens are the stable override surface. Set them at any scope (global, page,
 or instance) without touching the component itself.
 
+Note: the price amount defaults to a `$` prefix. Pass `currency-symbol="£"` (or any other symbol) to
+override it — there is no locale-aware formatting, just a literal prefix character.
+
 | Token | Default | Controls |
 |---|---|---|
 | `--pricing-card-border` | `1px solid var(--slate-03)` | Card border |
@@ -26,6 +29,7 @@ or instance) without touching the component itself.
 | `--pricing-card-period-color` | `#666` | Billing period text colour |
 | `--pricing-card-description-color` | `#555` | Plan description text colour |
 | `--pricing-card-feature-color` | `#333` | Feature list text colour |
+| `--pricing-card-cta-align` | `flex-start` | CTA wrapper `align-self` — set to `stretch`, `center`, or `flex-end` to change CTA alignment/width within the card |
 | `--pricing-card-cta-bg` | `var(--theme-button-primary-surface)` | CTA button background |
 | `--pricing-card-cta-bg-hover` | `var(--theme-button-primary-surface-hover)` | CTA button background on hover |
 | `--pricing-card-cta-text` | `var(--theme-button-primary-text)` | CTA button text colour |

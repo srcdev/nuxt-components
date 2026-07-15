@@ -19,6 +19,19 @@ describe("PricingCard", () => {
     expect(wrapper.text()).toContain("Get started");
   });
 
+  it("uses custom currency symbol when provided", () => {
+    const wrapper = mount(PricingCard, {
+      props: {
+        planName: "Single Site",
+        price: 49,
+        currencySymbol: "£",
+      },
+    });
+
+    expect(wrapper.text()).toContain("£49");
+    expect(wrapper.text()).not.toContain("$49");
+  });
+
   it("renders features from props", () => {
     const features = ["Feature 1", "Feature 2", "Feature 3"];
     const wrapper = mount(PricingCard, {

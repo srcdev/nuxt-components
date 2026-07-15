@@ -5,7 +5,7 @@
     <h3 class="pricing-card__name">{{ planName }}</h3>
 
     <div class="pricing-card__price">
-      <span class="pricing-card__amount">${{ price }}</span>
+      <span class="pricing-card__amount">{{ currencySymbol }}{{ price }}</span>
       <span v-if="billingPeriod" class="pricing-card__period">{{ billingPeriod }}</span>
     </div>
 
@@ -42,6 +42,7 @@ interface Props {
   tag?: "div" | "section" | "article";
   planName: string;
   price: number;
+  currencySymbol?: string;
   billingPeriod?: string;
   description?: string;
   features?: string[];
@@ -53,6 +54,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   tag: "article",
+  currencySymbol: "$",
   billingPeriod: "one-time",
   description: undefined,
   features: () => [],
@@ -108,6 +110,7 @@ watch(
     --_description-color: var(--pricing-card-description-color, #555);
     --_feature-color: var(--pricing-card-feature-color, #333);
 
+    --_cta-align: var(--pricing-card-cta-align, flex-start);
     --_cta-bg: var(--pricing-card-cta-bg, var(--theme-button-primary-surface));
     --_cta-bg-hover: var(--pricing-card-cta-bg-hover, var(--theme-button-primary-surface-hover));
     --_cta-text: var(--pricing-card-cta-text, var(--theme-button-primary-text));
@@ -206,7 +209,7 @@ watch(
     }
 
     .pricing-card__cta {
-      align-self: flex-start;
+      align-self: var(--_cta-align);
 
       :deep(.input-button-core) {
         padding: var(--_cta-padding);
