@@ -3,8 +3,8 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <PageRow tag="div" variant="content" :style-class-passthrough="['expanding-panel-section', 'mb-20']">
-          <!-- ── QA Panel (dev only) ───────────────────────────────── -->
-          <div v-if="isDev" class="qa-panel">
+          <!-- ── QA Panel ─────────────────────────────────────────────── -->
+          <div class="qa-panel">
             <details class="qa-panel__details" open>
               <summary class="qa-panel__summary">
                 <span class="qa-panel__title">QA — ExpandingPanel</span>
@@ -129,9 +129,7 @@
                 </template>
                 <template #content>
                   <div class="qa-preview-panel-body">
-                    <p class="mt-0">
-                      When "Linked" is on, opening this panel closes panel 1, and vice versa.
-                    </p>
+                    <p class="mt-0">When "Linked" is on, opening this panel closes panel 1, and vice versa.</p>
                     <p class="mb-0">Also driven by the controls above.</p>
                   </div>
                 </template>
@@ -163,8 +161,6 @@ useHead({
     class: "ui-expanding-panel-page",
   },
 });
-
-const isDev = import.meta.dev;
 
 const animationDurations = [0, 300, 800] as const;
 type AnimationDuration = (typeof animationDurations)[number];

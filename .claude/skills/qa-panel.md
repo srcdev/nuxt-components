@@ -2,7 +2,7 @@
 
 ## Overview
 
-A collapsible dev-only panel that lets you toggle component props live on a page — without touching the component or breaking the visual layout. Hidden in production via `import.meta.dev`. Uses a native `<details>`/`<summary>` so it takes up no space when collapsed. Useful on both demo pages in this library and on pages in consuming apps.
+A collapsible panel that lets you toggle component props live on a page — without touching the component or breaking the visual layout. Uses a native `<details>`/`<summary>` so it takes up no space when collapsed. Every page under `app/pages/ui/` in this library is a demo-only page already, so the panel always renders there — no `isDev` gate needed. If you add one to a page in a consuming app that also serves real production traffic, gate it behind that app's own dev/staging check.
 
 ## Structure
 
@@ -19,8 +19,7 @@ Each group controls one prop. The status `<code>` in the summary mirrors the cur
 ### 1. Add the reactive state to `<script setup>`
 
 ```ts
-// ── QA controls (dev only) ────────────────────────────────────────
-const isDev = import.meta.dev;
+// ── QA controls ────────────────────────────────────────────────────
 
 // One ref per controllable prop
 const qaMyBoolean = ref(true);
@@ -47,8 +46,8 @@ const myStringPresets = ["a", "b", "c"] as const;
 Place directly above (or below) the component being QA'd, outside any layout wrapper that clips content:
 
 ```vue
-<!-- ── QA Panel (dev only) ───────────────────────────────── -->
-<div v-if="isDev" class="qa-panel">
+<!-- ── QA Panel ─────────────────────────────────────────────── -->
+<div class="qa-panel">
   <details class="qa-panel__details">
     <summary class="qa-panel__summary">
       <span class="qa-panel__title">QA — MyComponent</span>
@@ -219,7 +218,7 @@ Scope inside your page body class (e.g. `.my-page`) so styles don't bleed. The p
 
 ## Notes
 
-- **Production safety**: `import.meta.dev` is `false` in production builds — the entire `v-if="isDev"` block is tree-shaken. No runtime cost.
+- **Consuming apps on real production traffic**: if the page hosting the panel isn't demo-only (unlike everything under `app/pages/ui/` in this library), gate the panel with that app's own dev/staging check, e.g. `v-if="isDev"` with `const isDev = import.meta.dev;`. `import.meta.dev` is `false` in production builds, so the gated block is tree-shaken with no runtime cost.
 - **Consuming apps**: The active chip color (`oklch(55% 0.18 240)`) is a neutral blue. Replace with a brand accent token if preferred: `background: var(--color-brand-accent)`.
 - **Panel placement**: Outside any `overflow: hidden` or clipping container, otherwise the panel may be clipped or push layout unexpectedly. Placing it as a direct sibling of the component row works well.
 - **Computed CSS vars**: When a prop controls a CSS custom property (e.g. max-height tiers), use a `computed` that returns a style object and bind it with `:style` on the component wrapper:
