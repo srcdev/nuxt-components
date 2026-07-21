@@ -13,6 +13,7 @@
 | `name` | `string` | `useId()` | Identifies the panel. Used in ARIA attributes (`id-{name}-trigger`, `id-{name}-content`). If omitted, a unique id is generated automatically. |
 | `animationDuration` | `number` | `400` | Expand/collapse transition duration in milliseconds. Pass `0` to disable animation. |
 | `forceOpened` | `boolean` | `false` | When `true`, the panel is always open. The toggle icon is hidden and clicks do not close the panel. |
+| `contentIsOnTop` | `boolean` | `false` | When `true`, the content region is taken out of flow and absolutely positioned directly below the summary, raised above surrounding page content via `z-index` — instead of pushing layout down when it opens. Applies a `content-is-on-top` class to the root `.expanding-panel` element (not the content div). |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the root `.expanding-panel` element. |
 
 ## Model
@@ -98,6 +99,29 @@ const isOpen = ref(false);
 </ExpandingPanel>
 ```
 
+### Content on top (overlay instead of pushing layout)
+
+```vue
+<ExpandingPanel name="overlay" :content-is-on-top="true" :style-class-passthrough="['my-overlay-panel']">
+  <template #summary><span>Open me — content overlays what's below</span></template>
+  <template #content>
+    <!-- Wrapper INSIDE the slot carries the visual styling — see
+         "Styling the content when contentIsOnTop" below for why it can't go on .inner -->
+    <div class="my-overlay-panel-body">
+      <p>Positioned absolutely below the summary, doesn't push page content down.</p>
+    </div>
+  </template>
+</ExpandingPanel>
+
+<style>
+.my-overlay-panel-body {
+  background-color: white;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+}
+</style>
+```
+
 ---
 
 ## ARIA / accessibility
@@ -114,6 +138,36 @@ The component wires ARIA automatically from the `name` prop:
 | content div | `role` | `region` |
 
 Always supply a meaningful `name` prop when using multiple panels on the same page to avoid duplicate IDs.
+
+---
+
+## Styling the content when contentIsOnTop
+
+When `contentIsOnTop` is `true`, the component deliberately does **not** set `background-color`, `padding`, or a shadow on `.inner` — and consumers must not set them on `.inner` either. Always style a wrapper element placed *inside* the `#content` slot (see example above).
+
+Why: `.expanding-panel-content` collapses via `grid-template-rows: 0fr → 1fr`, and `.inner` relies on `overflow: hidden` on its own box to clip its *children* to 0px when collapsed. `overflow: hidden` clips overflow content, but does not shrink the element's own padding/border/background — those are part of `.inner`'s own box model and still render at full size even while the row track is `0fr` and the panel is closed, producing a visible gap under the summary. A wrapper placed inside the slot is a *child* of `.inner`, so its box — including any padding/background/shadow — is correctly clipped to 0px by `.inner`'s `overflow: hidden` while closed. Baking styling into `.inner` itself would require also gating it on the open state (e.g. `.expanding-panel-details[open] ~ .expanding-panel-content .inner`), which is unnecessary complexity — styling the slot content is the correct fix, not a workaround.
+
+---
+
+## Constraint: don't stack contentIsOnTop panels as direct siblings
+
+`contentIsOnTop` takes the content out of document flow (`position: absolute`) specifically so opening the panel does **not** push whatever comes after it down the page — that's the entire point of the prop. The tradeoff: the panel's own container still only occupies the height of its `<summary>` row, so a *sibling* element positioned directly after it in the DOM sits exactly where the overlay renders. When that sibling is another `ExpandingPanel`, opening the first one visually covers the second one's summary — this happens whether or not the two are grouped via a shared `name` (linked accordion) or opened simultaneously; it isn't specific to linking.
+
+`contentIsOnTop` is designed for a **single** panel overlaying unrelated trailing page content (e.g. a promo banner, a footer strip) — not for stacking multiple `contentIsOnTop` panels beside each other expecting normal accordion behaviour. If you need several linked/stacked panels, leave `contentIsOnTop` off (the default, in-flow layout handles that case correctly).
+
+---
+
+## CSS Token Customization
+
+All `--expanding-panel-*` tokens can be overridden at global, page, or instance scope. See `CONSUMER-STYLING.md` in the component directory for full token documentation and examples.
+
+**Tokens:**
+
+- `--expanding-panel-summary-gap` — gap between summary label and icon
+- `--expanding-panel-summary-padding-block` — summary row vertical padding
+- `--expanding-panel-icon-size` — toggle icon size
+- `--expanding-panel-content-z-index` — stacking order when `contentIsOnTop` is `true`
+- `--expanding-panel-content-gap` — space between summary and content when `contentIsOnTop` is `true`
 
 ---
 
@@ -150,6 +204,7 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 ## Notes
 
 - The open/close animation uses `grid-template-rows: 0fr → 1fr` — no JS height measurement needed.
+- `content-is-on-top` is applied to the root `.expanding-panel` element, not `.expanding-panel-content` — style overrides must scope through it, e.g. `.expanding-panel.my-panel .expanding-panel-content .inner { ... }`.
 - When `forceOpened` is `true`, `open` stays `true` regardless of `v-model`, but `v-model` still updates internally on clicks (useful if you later set `forceOpened` back to `false`).
 - Group panels into a native accordion (only one open at a time) by passing the same `name` to multiple panels or use `AccordianCore` which handles this automatically.
 - Auto-imported in Nuxt — no manual import needed.

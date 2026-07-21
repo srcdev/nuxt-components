@@ -13,6 +13,17 @@ exports[`ExpandingPanel > renders correct HTML structure with all props set 1`] 
 </div>"
 `;
 
+exports[`ExpandingPanel > renders correct HTML structure with contentIsOnTop true 1`] = `
+"<div class="expanding-panel content-is-on-top">
+  <details class="expanding-panel-details" name="snap-content-on-top">
+    <summary id="id-snap-content-on-top-trigger" class="expanding-panel-summary" aria-controls="id-snap-content-on-top-content" aria-expanded="false"><span class="label-wrapper"></span><span class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></span></summary>
+  </details>
+  <div id="id-snap-content-on-top-content" class="expanding-panel-content" aria-labelledby="id-snap-content-on-top-trigger" role="region">
+    <div class="inner"></div>
+  </div>
+</div>"
+`;
+
 exports[`ExpandingPanel > renders correct HTML structure with default props 1`] = `
 "<div class="expanding-panel">
   <details class="expanding-panel-details" name="snap-default">

@@ -28,6 +28,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── testing-add-playwright.md   — create a Playwright visual regression test
 ├── setup-postinstall.md             — automate nuxt prepare + Claude skills copy via postinstall so neither is forgotten after npm install
 ├── theming-colour-ramps.md          — parametric oklch ramp system: formula, named palettes, semantic slots, generator, consumer setup
+├── theming-typography-tokens.md     — --step-N fluid font-size scale, 62.5% root reset gotcha (1rem=10px, not 16px), page-heading-*/page-body-* utility classes
 ├── theming-override-default.md      — replace the entire default theme with a custom palette (set --theme-hue/--theme-chroma)
 ├── theming-partial-override.md      — override a specific token category (palette, buttons, inputs) without a full theme replacement
 ├── colour-scheme-disable.md         — disable light/dark scheme support in a consumer app
@@ -71,7 +72,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── services-section.md          — ServicesSection props (incl. heading/CTA copy), summary-link/cta/cta-panel slots, summary vs full mode
     ├── contact-section.md      — ContactSection props (stepperIndicatorSize pass-through), 3-item info+form layout, slot API
     ├── stepper-list.md         — StepperList dynamic slots (item-{n}/indicator-{n}), props, connector behaviour
-    ├── expanding-panel.md      — ExpandingPanel v-model, forceOpened, slots (summary/icon/content), ARIA wiring
+    ├── expanding-panel.md      — ExpandingPanel v-model, forceOpened, contentIsOnTop overlay mode, slots (summary/icon/content), ARIA wiring, CSS token API
     ├── glass-panel.md          — GlassPanel props, slots, CSS token API (--glass-panel-bg/border-color/shadow/highlight), theming override
     ├── navigation-horizontal.md — NavigationHorizontal props, NavItemData type, CSS token API, import path gotcha
     ├── pricing-card.md         — PricingCard: SaaS-style plan card with highlight, feature list, #cta slot for button customization, CSS token API

@@ -41,6 +41,13 @@ describe("ExpandingPanel", () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
+  it("renders correct HTML structure with contentIsOnTop true", async () => {
+    const wrapper = await mountSuspended(ExpandingPanel, {
+      props: { name: "snap-content-on-top", contentIsOnTop: true },
+    });
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
   it("renders correct HTML structure with populated slots", async () => {
     const wrapper = await mountSuspended(ExpandingPanel, {
       props: { name: "snap-slots" },
@@ -91,6 +98,7 @@ describe("ExpandingPanel", () => {
     });
     expect(wrapper.props("animationDuration")).toBe(400);
     expect(wrapper.props("forceOpened")).toBe(false);
+    expect(wrapper.props("contentIsOnTop")).toBe(false);
     expect(wrapper.props("styleClassPassthrough")).toEqual([]);
   });
 
@@ -362,6 +370,40 @@ describe("ExpandingPanel", () => {
       props: { name: "scp-string", styleClassPassthrough: "single-class" },
     });
     expect(wrapper.find(".expanding-panel").classes()).toContain("single-class");
+  });
+
+  // ─── contentIsOnTop ───────────────────────────────────────────────────────
+
+  it("does not apply content-is-on-top class to root by default", async () => {
+    const wrapper = await mountSuspended(ExpandingPanel, {
+      props: { name: "content-on-top-default" },
+    });
+    expect(wrapper.find(".expanding-panel").classes()).not.toContain("content-is-on-top");
+  });
+
+  it("applies content-is-on-top class to root when contentIsOnTop is true", async () => {
+    const wrapper = await mountSuspended(ExpandingPanel, {
+      props: { name: "content-on-top-true", contentIsOnTop: true },
+    });
+    expect(wrapper.find(".expanding-panel").classes()).toContain("content-is-on-top");
+  });
+
+  it("does not apply content-is-on-top class to the content region itself", async () => {
+    const wrapper = await mountSuspended(ExpandingPanel, {
+      props: { name: "content-on-top-scope", contentIsOnTop: true },
+    });
+    expect(wrapper.find(".expanding-panel-content").classes()).not.toContain("content-is-on-top");
+  });
+
+  it("still toggles open state when summary is clicked with contentIsOnTop true", async () => {
+    const wrapper = await mountSuspended(ExpandingPanel, {
+      props: { name: "content-on-top-click", contentIsOnTop: true },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
+    expect(vm.isPanelOpen).toBe(false);
+
+    await wrapper.find("summary").trigger("click");
+    expect(vm.isPanelOpen).toBe(true);
   });
 
   // ─── name prop / useId fallback ───────────────────────────────────────────

@@ -7,8 +7,7 @@ const meta: Meta<typeof ExpandingPanel> = {
   argTypes: {
     name: {
       control: { type: "text" },
-      description:
-        "Unique name used for ARIA attributes and to group panels in a native <details> accordion",
+      description: "Unique name used for ARIA attributes and to group panels in a native <details> accordion",
     },
     animationDuration: {
       control: { type: "number", min: 0, step: 50 },
@@ -17,6 +16,11 @@ const meta: Meta<typeof ExpandingPanel> = {
     forceOpened: {
       control: { type: "boolean" },
       description: "When true, the panel is always open and the toggle icon is hidden",
+    },
+    contentIsOnTop: {
+      control: { type: "boolean" },
+      description:
+        "When true, the content region is positioned absolutely below the summary and raised above surrounding page content via z-index, instead of pushing layout down",
     },
     styleClassPassthrough: {
       control: "object",
@@ -27,6 +31,7 @@ const meta: Meta<typeof ExpandingPanel> = {
     name: "panel-demo",
     animationDuration: 400,
     forceOpened: false,
+    contentIsOnTop: false,
     styleClassPassthrough: [],
   },
 };
@@ -214,6 +219,49 @@ export const RichContent: Story = {
           </ul>
         </template>
       </ExpandingPanel>
+    `,
+  }),
+};
+
+export const ContentIsOnTop: Story = {
+  name: "Content Is On Top",
+  args: {
+    name: "content-is-on-top",
+    contentIsOnTop: true,
+  },
+  render: (args) => ({
+    components: { ExpandingPanel },
+    setup() {
+      return { args };
+    },
+    template: `
+      <div style="position:relative;padding-bottom:4rem">
+        <ExpandingPanel v-bind="args">
+          <template #summary>
+            <span>Open me — content overlays what's below</span>
+          </template>
+          <template #content>
+            <!--
+              The background/border/shadow live on this wrapper — never on .inner
+              itself. .inner has no explicit height when collapsed (grid-template-rows: 0fr)
+              and relies on overflow:hidden to clip its children to 0px; but padding/border/
+              background set directly on .inner are part of ITS OWN box, not overflow content,
+              so they'd still render as a visible gap under the summary while closed. Styling
+              a wrapper *inside* the slot keeps it clipped correctly by .inner's overflow:hidden.
+            -->
+            <div style="color: #808080; background-color:#fff;border:1px solid #ddd;border-radius:0.4rem;padding:1rem;box-shadow:0 4px 12px rgb(0 0 0 / 15%)">
+              <p style="margin:0">
+                With <code>contentIsOnTop</code>, this content is absolutely positioned below the
+                summary and raised above surrounding page content via <code>z-index</code>,
+                instead of pushing the "Page content below" text further down.
+              </p>
+            </div>
+          </template>
+        </ExpandingPanel>
+        <p style="margin-top:1rem;padding:1rem;">
+          Page content below — stays in place when the panel opens.
+        </p>
+      </div>
     `,
   }),
 };

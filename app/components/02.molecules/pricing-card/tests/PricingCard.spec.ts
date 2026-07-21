@@ -109,7 +109,8 @@ describe("PricingCard", () => {
     });
 
     const button = wrapper.find("button");
-    expect(button.attributes("disabled")).toBeDefined();
+    expect(button.attributes("readonly")).toBeDefined();
+    expect(button.attributes("aria-disabled")).toBe("true");
   });
 
   it("renders custom features via slot", () => {
