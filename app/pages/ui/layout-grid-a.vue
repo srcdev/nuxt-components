@@ -2,14 +2,14 @@
   <div>
     <NuxtLayout name="default">
       <template #layout-content>
-        <PageRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h1 class="page-heading-2">Layout Grid 'A'</h1>
 
-          <CanvasSwitcher v-model:canvasName="canvasName" />
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
         </PageRow>
 
-        <PageRow tag="div" variant="popout" :styleClassPassthrough="['mbe-20']">
-          <LayoutGridA :styleClassPassthrough="[canvasName]">
+        <PageRow tag="div" variant="popout" :style-class-passthrough="['mbe-20']">
+          <LayoutGridA :style-class-passthrough="[canvasName]">
             <template #slot1>
               <h3 class="page-heading-3">Slot 1</h3>
               <p>
@@ -56,7 +56,7 @@
           </LayoutGridA>
         </PageRow>
 
-        <PageRow tag="div" variant="full" :styleClassPassthrough="['mbe-20']">
+        <PageRow tag="div" variant="full" :style-class-passthrough="['mbe-20']">
           <h2 class="page-heading-2">Full Width</h2>
           <p>
             Lorem ipsum odor amet, consectetuer adipiscing elit. Nec elementum maecenas placerat laoreet curae elit
@@ -94,56 +94,3 @@ useHead({
 
 const canvasName = ref<MediaCanvas>("desktopCanvas");
 </script>
-
-<style lang="css">
-.canvas-switcher {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-
-  ul {
-    display: flex;
-    gap: 10px;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-
-    li {
-      button {
-        all: unset;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 5px;
-        border: 0px solid light-dark(var(--slate-10), var(--slate-02));
-        border-radius: 4px;
-        cursor: pointer;
-
-        .icon {
-          color: light-dark(var(--slate-10), var(--slate-02));
-
-          width: 24px;
-          height: 24px;
-
-          &.current {
-            color: light-dark(var(--green-10), var(--green-04));
-          }
-        }
-      }
-    }
-  }
-}
-
-.layout-grid-a-wrapper {
-  margin-inline: auto;
-  &.mobile {
-    max-width: 412px;
-  }
-  &.tablet {
-    max-width: 768px;
-  }
-  &.desktop {
-    max-width: 1060px;
-  }
-}
-</style>
