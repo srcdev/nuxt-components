@@ -423,4 +423,18 @@ describe("ExpandingPanel", () => {
     expect(summaryId).toMatch(/^id-.+-trigger$/);
     expect(contentId).toMatch(/^id-.+-content$/);
   });
+
+  it("updates the details name and ARIA ids when the name prop changes after mount", async () => {
+    const wrapper = await mountSuspended(ExpandingPanel, {
+      props: { name: "panel-a" },
+    });
+    expect(wrapper.find("details").attributes("name")).toBe("panel-a");
+    expect(wrapper.find("summary").attributes("id")).toBe("id-panel-a-trigger");
+
+    await wrapper.setProps({ name: "panel-b" });
+
+    expect(wrapper.find("details").attributes("name")).toBe("panel-b");
+    expect(wrapper.find("summary").attributes("id")).toBe("id-panel-b-trigger");
+    expect(wrapper.find(".expanding-panel-content").attributes("id")).toBe("id-panel-b-content");
+  });
 });

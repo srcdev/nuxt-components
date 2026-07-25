@@ -48,7 +48,8 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const name = props.name || useId();
+const fallbackName = useId();
+const name = computed(() => props.name || fallbackName);
 const isPanelOpen = defineModel<boolean>({ default: false });
 const animationDurationStr = computed(() => `${props.animationDuration}ms`);
 const open = computed(() => props.forceOpened || isPanelOpen.value);
