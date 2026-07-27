@@ -317,6 +317,23 @@ describe("ExpandingPanel", () => {
     expect(vm.open).toBe(true);
   });
 
+  it("does not leak forceOpened into isPanelOpen, so open reverts to false when forceOpened turns back off", async () => {
+    const wrapper = await mountSuspended(ExpandingPanel, {
+      props: { name: "force-then-unforce", forceOpened: true },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
+    expect(vm.open).toBe(true);
+
+    // The <details> element's `open` attribute changing (driven by forceOpened) fires
+    // its own native 'toggle' event, independent of any user click.
+    await wrapper.find("details").trigger("toggle");
+    await nextTick();
+    expect(vm.isPanelOpen).toBe(false);
+
+    await wrapper.setProps({ forceOpened: false });
+    expect(vm.open).toBe(false);
+  });
+
   // ─── Slots ────────────────────────────────────────────────────────────────
 
   it("renders summary slot content inside .label-wrapper", async () => {

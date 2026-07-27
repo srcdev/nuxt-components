@@ -81,6 +81,10 @@ const handleToggle = (event: Event) => {
 };
 
 const onDetailsToggle = (event: Event) => {
+  // forceOpened drives the native `open` attribute directly, which fires its own
+  // 'toggle' event — ignore it here or it leaks into isPanelOpen and gets stuck
+  // once forceOpened later reverts to false.
+  if (props.forceOpened) return;
   isPanelOpen.value = (event.target as HTMLDetailsElement).open;
 };
 </script>
