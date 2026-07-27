@@ -73,6 +73,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── contact-section.md      — ContactSection props (stepperIndicatorSize pass-through), 3-item info+form layout, slot API
     ├── stepper-list.md         — StepperList dynamic slots (item-{n}/indicator-{n}), props, connector behaviour
     ├── expanding-panel.md      — ExpandingPanel v-model, forceOpened, contentIsOnTop overlay mode, slots (summary/icon/content), ARIA wiring, CSS token API
+    ├── content-docs.md         — ContentDocs docs-page shell: prop-driven docsNav/docsPageNav (not slots), DocsNavItem icons, container-width breakpoint behaviour, shared/per-side CSS token API
     ├── glass-panel.md          — GlassPanel props, slots, CSS token API (--glass-panel-bg/border-color/shadow/highlight), theming override
     ├── navigation-horizontal.md — NavigationHorizontal props, NavItemData type, CSS token API, import path gotcha
     ├── pricing-card.md         — PricingCard: SaaS-style plan card with highlight, feature list, #cta slot for button customization, CSS token API

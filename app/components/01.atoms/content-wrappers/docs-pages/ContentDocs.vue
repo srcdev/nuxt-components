@@ -1,6 +1,6 @@
 <template>
   <component :is="tag" ref="rootEl" class="content-docs" :class="[elementClasses]">
-    <div class="inner">
+    <div class="content-docs-inner">
       <div v-if="hasDocsNav" class="docs-nav">
         <ExpandingPanel
           :name="docsNavPanelName"
@@ -145,6 +145,12 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? "docsPanelGroup" :
     --_panel-padding-inline: var(--content-docs-panel-padding-inline, 0.8rem);
     --_panel-border-radius: var(--content-docs-panel-border-radius, 0.5rem);
 
+    /* Fixed-width grid tracks — the docsNav/docsPageNav columns at tablet/desktop.
+       docsPageNav gets a narrower track at tablet since docsNav is full-width there. */
+    --_nav-column-width: var(--content-docs-nav-column-width, 23rem);
+    --_page-nav-column-width: var(--content-docs-page-nav-column-width, 22rem);
+    --_page-nav-column-width-tablet: var(--content-docs-page-nav-column-width-tablet, 20rem);
+
     --_link-font-size: var(--content-docs-link-font-size, 1.4rem);
     --_link-padding-block: var(--content-docs-link-padding-block, 0.6rem);
     --_link-padding-inline: var(--content-docs-link-padding-inline, 0.8rem);
@@ -198,7 +204,7 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? "docsPanelGroup" :
     container-type: inline-size;
     container-name: contentDocs;
 
-    .inner {
+    .content-docs-inner {
       display: grid;
       grid-template-areas:
         "docsNav"
@@ -212,14 +218,14 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? "docsPanelGroup" :
           "docsNav docsPageNav"
           "docsContent docsPageNav";
         gap: 1.6rem;
-        grid-template-columns: 1fr 200px;
+        grid-template-columns: 1fr var(--_page-nav-column-width-tablet);
         grid-template-rows: auto 1fr;
       }
 
       @container contentDocs (width >= 1024px) {
         grid-template-areas: "docsNav docsContent  docsPageNav";
         gap: 1.6rem;
-        grid-template-columns: 23rem 1fr 22rem;
+        grid-template-columns: var(--_nav-column-width) 1fr var(--_page-nav-column-width);
       }
 
       .docs-nav {
@@ -255,11 +261,11 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? "docsPanelGroup" :
       padding-inline: var(--_page-nav-heading-padding-inline);
     }
 
-    .docs-nav-list,
-    .docs-page-nav-list {
+    .docs-nav-list {
       border-radius: var(--_panel-border-radius);
       padding-block: var(--_panel-padding-block);
       padding-inline: var(--_panel-padding-inline);
+      background-color: var(--_nav-panel-bg);
 
       ul {
         list-style: none;
@@ -270,18 +276,32 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? "docsPanelGroup" :
         gap: 0.4rem;
       }
     }
-    .docs-nav-list {
-      background-color: var(--_nav-panel-bg);
-    }
     .docs-page-nav-list {
+      border-radius: var(--_panel-border-radius);
+      padding-block: var(--_panel-padding-block);
+      padding-inline: var(--_panel-padding-inline);
       background-color: var(--_page-nav-panel-bg);
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
     }
 
     /* Grid (not flex) so the label column stays aligned at a fixed offset whether or
        not an item has an icon — an icon-less item's label still starts in column 2,
-       instead of collapsing back to column 1 like it would with flex. */
-    .docs-nav-link,
-    .docs-page-nav-link {
+       instead of collapsing back to column 1 like it would with flex.
+
+       Icon at the end: set --docs-nav-link-icon-order to rtl. This mirrors which
+       physical side each grid column renders on without touching column sizing —
+       swapping grid-column values directly would leave the label squeezed into the
+       icon-sized track instead. The label/icon direction resets further down undo
+       the mirroring for their own content so text and icon glyphs don't visually flip. */
+    .docs-nav-link {
       display: grid;
       grid-template-columns: var(--docs-nav-link-icon-size, 1.6rem) 1fr;
       align-items: center;
@@ -293,6 +313,8 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? "docsPanelGroup" :
       margin-block: var(--_link-margin-block);
       background-color: var(--_link-bg);
       text-decoration: none;
+      direction: var(--docs-nav-link-icon-order, ltr);
+      color: var(--_nav-link-color);
       transition:
         background-color var(--control-transition-duration, 200ms) var(--control-transition-ease, ease),
         color var(--control-transition-duration, 200ms) var(--control-transition-ease, ease);
@@ -301,16 +323,6 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? "docsPanelGroup" :
         outline: 0.2rem solid var(--theme-ring, currentcolor);
         outline-offset: -0.2rem;
       }
-    }
-
-    /* Icon at the end: set --docs-nav-link-icon-order to rtl. This mirrors which
-       physical side each grid column renders on without touching column sizing —
-       swapping grid-column values directly would leave the label squeezed into the
-       icon-sized track instead. The label/icon direction resets below undo the
-       mirroring for their own content so text and icon glyphs don't visually flip. */
-    .docs-nav-link {
-      direction: var(--docs-nav-link-icon-order, ltr);
-      color: var(--_nav-link-color);
 
       &:hover {
         background-color: var(--_nav-link-hover-bg);
@@ -324,8 +336,27 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? "docsPanelGroup" :
       }
     }
     .docs-page-nav-link {
+      display: grid;
+      grid-template-columns: var(--docs-nav-link-icon-size, 1.6rem) 1fr;
+      align-items: center;
+      gap: var(--docs-nav-link-icon-gap, 0.6rem);
+      border-radius: var(--_link-border-radius);
+      font-size: var(--_link-font-size);
+      padding-block: var(--_link-padding-block);
+      padding-inline: var(--_link-padding-inline);
+      margin-block: var(--_link-margin-block);
+      background-color: var(--_link-bg);
+      text-decoration: none;
       direction: var(--docs-page-nav-link-icon-order, ltr);
       color: var(--_page-nav-link-color);
+      transition:
+        background-color var(--control-transition-duration, 200ms) var(--control-transition-ease, ease),
+        color var(--control-transition-duration, 200ms) var(--control-transition-ease, ease);
+
+      &:focus-visible {
+        outline: 0.2rem solid var(--theme-ring, currentcolor);
+        outline-offset: -0.2rem;
+      }
 
       &:hover {
         background-color: var(--_page-nav-link-hover-bg);

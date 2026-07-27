@@ -99,6 +99,10 @@
       "    --content-docs-link-hover-bg: $11;",
       "    --content-docs-link-active-bg: $12;",
       "    --content-docs-link-active-color: $13;",
+      "",
+      "    --content-docs-nav-column-width: $14;",
+      "    --content-docs-page-nav-column-width: $15;",
+      "    --content-docs-page-nav-column-width-tablet: $16;",
       "  }",
       "}"
     ]
