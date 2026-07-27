@@ -9,30 +9,13 @@
         </PageRow>
 
         <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <div ref="contentDocsContainer" :class="[canvasName]">
-            <ContentDocs>
-              <template #docsNav>
-                <ExpandingPanel
-                  :name="docsNavPanelName"
-                  :animation-duration="200"
-                  :force-opened="docsNavForceOpen"
-                  :content-is-on-top="docsNavOnTop"
-                >
-                  <template #summary>
-                    <h3 class="page-heading-3 mb-2">docsNav panel</h3>
-                  </template>
-                  <template #content>
-                    <!-- Wrapper INSIDE the slot carries visual styling — never .inner itself,
-                           see .claude/skills/components/expanding-panel.md for why -->
-                    <div class="qa-preview-panel-body">
-                      <p class="mt-0">Content driven by the controls above.</p>
-                      <p class="mb-0">
-                        Toggle "Content Is On Top" to see it overlay the text below instead of pushing it down.
-                      </p>
-                    </div>
-                  </template>
-                </ExpandingPanel>
-              </template>
+          <div :class="[canvasName]">
+            <ContentDocs
+              v-model:active-nav-item="activeNavItem"
+              v-model:active-page-nav-item="activePageNavItem"
+              :docs-nav-items="docsNavItems"
+              :docs-page-nav-items="docsPageNavItems"
+            >
               <template #docsContent>
                 <h3 class="page-heading-3">Docs Content</h3>
                 <p>
@@ -44,28 +27,6 @@
                   parturient mattis tellus nisi a montes.
                 </p>
               </template>
-              <template #docsPageNav>
-                <ExpandingPanel
-                  :name="docsPageNavPanelName"
-                  :animation-duration="200"
-                  :force-opened="docsPageNavForceOpen"
-                  :content-is-on-top="docsPageNavOnTop"
-                >
-                  <template #summary>
-                    <h3 class="page-heading-3 mb-2">docsPageNav panel</h3>
-                  </template>
-                  <template #content>
-                    <!-- Wrapper INSIDE the slot carries visual styling — never .inner itself,
-                           see .claude/skills/components/expanding-panel.md for why -->
-                    <div class="qa-preview-panel-body">
-                      <p class="mt-0">Content driven by the controls above.</p>
-                      <p class="mb-0">
-                        Toggle "Content Is On Top" to see it overlay the text below instead of pushing it down.
-                      </p>
-                    </div>
-                  </template>
-                </ExpandingPanel>
-              </template>
             </ContentDocs>
           </div>
         </PageRow>
@@ -75,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import type { MediaCanvas } from "~/types/components";
+import type { MediaCanvas, DocsNavItem } from "~/types/components";
 definePageMeta({
   layout: false,
 });
@@ -90,20 +51,22 @@ useHead({
 
 const canvasName = ref<MediaCanvas>("mobileCanvas");
 
-// Matches the breakpoints ContentDocs.vue itself defines for its "contentDocs" container.
-const contentDocsContainer = ref<HTMLElement | null>(null);
-const { greaterOrEqual, smaller } = useContainerBreakpoints({ tablet: 768, desktop: 1024 }, contentDocsContainer);
-const isDesktop = greaterOrEqual("desktop");
-const isMobile = smaller("tablet");
+const docsNavItems: DocsNavItem[] = [
+  { label: "Getting started", to: "/ui/layout-content-docs", icon: "lucide:rocket" },
+  { label: "Installation", to: "/ui/layout-content-docs#installation", icon: "lucide:download" },
+  { label: "Configuration", to: "/ui/layout-content-docs#configuration" },
+  { label: "Theming", to: "/ui/layout-content-docs#theming", icon: "lucide:palette" },
+  { label: "Accessibility", to: "/ui/layout-content-docs#accessibility" },
+  { label: "Troubleshooting", to: "/ui/layout-content-docs#troubleshooting", icon: "lucide:life-buoy" },
+];
 
-const docsNavForceOpen = computed(() => isDesktop.value);
-const docsNavOnTop = computed(() => !isDesktop.value);
-const docsPageNavForceOpen = computed(() => !isMobile.value);
-const docsPageNavOnTop = computed(() => isMobile.value);
+const docsPageNavItems: DocsNavItem[] = [
+  { label: "Overview", to: "/ui/layout-content-docs#overview", icon: "lucide:eye" },
+  { label: "Examples", to: "/ui/layout-content-docs#examples" },
+  { label: "Props", to: "/ui/layout-content-docs#props", icon: "lucide:settings-2" },
+  { label: "Slots", to: "/ui/layout-content-docs#slots" },
+];
 
-// Shared `name` groups the two <details> into a mutually-exclusive native accordion —
-// wanted on mobile (neither is forceOpened), wrong on tablet/desktop where both are
-// forceOpened simultaneously: a shared name would make the browser force-close one.
-const docsNavPanelName = computed(() => (isMobile.value ? "docsPanelGroup" : "docsNav"));
-const docsPageNavPanelName = computed(() => (isMobile.value ? "docsPanelGroup" : "docsPageNav"));
+const activeNavItem = ref<string | undefined>(docsNavItems[0]?.to);
+const activePageNavItem = ref<string | undefined>(undefined);
 </script>
