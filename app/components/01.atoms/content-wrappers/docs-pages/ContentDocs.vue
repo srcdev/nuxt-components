@@ -124,8 +124,9 @@ const docsPageNavOnTop = computed(() => isMobile.value);
 // Shared `name` groups the two <details> into a mutually-exclusive native accordion —
 // wanted on mobile (neither is forceOpened), wrong on tablet/desktop where both are
 // forceOpened simultaneously: a shared name would make the browser force-close one.
-const docsNavPanelName = computed(() => (isMobile.value ? "docsPanelGroup" : "docsNav"));
-const docsPageNavPanelName = computed(() => (isMobile.value ? "docsPanelGroup" : "docsPageNav"));
+const panelGroupId = useId();
+const docsNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${panelGroupId}-docsNav`));
+const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${panelGroupId}-docsPageNav`));
 </script>
 
 <style lang="css">
