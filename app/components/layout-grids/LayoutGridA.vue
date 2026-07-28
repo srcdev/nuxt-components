@@ -23,83 +23,83 @@ const props = defineProps({
     type: [String, Array] as PropType<string | string[]>,
     default: () => [],
   },
-})
+});
 
-const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
   () => props.styleClassPassthrough,
   () => {
-    resetElementClasses(props.styleClassPassthrough)
+    resetElementClasses(props.styleClassPassthrough);
   }
-)
+);
 </script>
 
 <style lang="css">
 @layer components {
-.layout-grid-a-wrapper {
-  container-type: inline-size;
+  .layout-grid-a-wrapper {
+    container-type: inline-size;
 
-  .layout-grid-a {
-    display: grid;
-    gap: 20px;
+    .layout-grid-a {
+      display: grid;
+      gap: 20px;
 
-    & > div {
-      padding: 20px;
-      outline: 1px solid light-dark(black, white);
-      border-radius: 5px;
-    }
-
-    @container (min-width: 768px) {
-      grid-template-columns: repeat(2, auto);
-      grid-template-rows: repeat(3, auto);
-
-      .slot1 {
-        grid-column: 1 / span 2;
-        grid-row: 1;
+      & > div {
+        padding: 20px;
+        outline: 1px solid light-dark(black, white);
+        border-radius: 5px;
       }
 
-      .slot2 {
-        grid-column: 1 / span 2;
-        grid-row: 2;
+      @container (min-width: 768px) {
+        grid-template-columns: repeat(2, auto);
+        grid-template-rows: repeat(3, auto);
+
+        .slot1 {
+          grid-column: 1 / span 2;
+          grid-row: 1;
+        }
+
+        .slot2 {
+          grid-column: 1 / span 2;
+          grid-row: 2;
+        }
+
+        .slot3 {
+          grid-column: 1;
+          grid-row: 3;
+        }
+
+        .slot4 {
+          grid-column: 2;
+          grid-row: 3;
+        }
       }
 
-      .slot3 {
-        grid-column: 1;
-        grid-row: 3;
-      }
+      @container (min-width: 1060px) {
+        grid-template-columns: repeat(3, auto);
+        grid-template-rows: repeat(2, auto);
 
-      .slot4 {
-        grid-column: 2;
-        grid-row: 3;
-      }
-    }
+        .slot1 {
+          grid-column: 1;
+          grid-row: 1 / span 2;
+        }
 
-    @container (min-width: 1060px) {
-      grid-template-columns: repeat(3, auto);
-      grid-template-rows: repeat(2, auto);
+        .slot2 {
+          grid-column: 2 / span 2;
+          grid-row: 1;
+        }
 
-      .slot1 {
-        grid-column: 1;
-        grid-row: 1 / span 2;
-      }
+        .slot3 {
+          grid-column: 2;
+          grid-row: 2;
+        }
 
-      .slot2 {
-        grid-column: 2 / span 2;
-        grid-row: 1;
-      }
-
-      .slot3 {
-        grid-column: 2;
-        grid-row: 2;
-      }
-
-      .slot4 {
-        grid-column: 3;
-        grid-row: 2;
+        .slot4 {
+          grid-column: 3;
+          grid-row: 2;
+        }
       }
     }
   }
-}
 }
 </style>

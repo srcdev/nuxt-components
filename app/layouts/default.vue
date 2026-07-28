@@ -110,6 +110,7 @@ const responsiveNavLinks = {
         { name: "Layout Grid A", path: "/ui/layout-grid-a" },
         { name: "Layout Grid B", path: "/ui/layout-grid-b" },
         { name: "Simple Grid", path: "/ui/simple-grid" },
+        { name: "Layout Content Docs", path: "/ui/layout-content-docs" },
         { name: "Masonry Grid Simple", path: "/ui/masonry-grid" },
         { name: "Masonry Grid Sorted", path: "/ui/masonry-grid-sorted" },
         { name: "Masonry Grid Ordered", path: "/ui/masonry-grid-ordered" },

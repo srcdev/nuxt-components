@@ -8,14 +8,14 @@
         :aria-expanded="open"
         @click.prevent.stop="handleToggle"
       >
-        <span class="label-wrapper">
+        <div class="label-wrapper">
           <slot name="summary"></slot>
-        </span>
-        <span v-if="!forceOpened" class="icon-wrapper">
+        </div>
+        <div class="icon-wrapper" :class="{ 'icon-wrapper--hidden': forceOpened }">
           <slot name="icon">
             <Icon name="bi:caret-down-fill" class="icon mi-12" />
           </slot>
-        </span>
+        </div>
       </summary>
     </details>
     <div
@@ -66,10 +66,10 @@ if (import.meta.dev) {
           "The content overlay is absolutely positioned and does not reserve space, so a sibling " +
           "element (e.g. another ExpandingPanel) placed directly after this one will be visually " +
           "covered when this panel opens. Intended for a single panel overlaying unrelated trailing " +
-          "page content — avoid stacking multiple contentIsOnTop panels as direct siblings.",
+          "page content — avoid stacking multiple contentIsOnTop panels as direct siblings."
       );
     },
-    { immediate: true },
+    { immediate: true }
   );
 }
 
@@ -81,6 +81,10 @@ const handleToggle = (event: Event) => {
 };
 
 const onDetailsToggle = (event: Event) => {
+  // forceOpened drives the native `open` attribute directly, which fires its own
+  // 'toggle' event — ignore it here or it leaks into isPanelOpen and gets stuck
+  // once forceOpened later reverts to false.
+  if (props.forceOpened) return;
   isPanelOpen.value = (event.target as HTMLDetailsElement).open;
 };
 </script>
@@ -119,6 +123,12 @@ const onDetailsToggle = (event: Event) => {
 
           aspect-ratio: 1;
           overflow: hidden;
+
+          /* Space is always reserved (not v-if'd away) so a forceOpened panel's summary
+             row stays the same height as a toggleable sibling's — only the glyph hides. */
+          &.icon-wrapper--hidden {
+            visibility: hidden;
+          }
 
           .icon {
             display: block;

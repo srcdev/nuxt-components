@@ -1,0 +1,129 @@
+{
+  "SRCDEV ContentDocs Basic": {
+    "description": "ContentDocs with nav + on-this-page items and active-item v-models",
+    "scope": "vue,html",
+    "body": [
+      "<ContentDocs",
+      "  v-model:active-nav-item=\"$1activeNavItem\"",
+      "  v-model:active-page-nav-item=\"$2activePageNavItem\"",
+      "  :docs-nav-items=\"$3docsNavItems\"",
+      "  :docs-page-nav-items=\"$4docsPageNavItems\"",
+      ">",
+      "  <template #docsContent>",
+      "    <p>$5Page content goes here.</p>",
+      "  </template>",
+      "</ContentDocs>"
+    ]
+  },
+  "SRCDEV ContentDocs Custom Labels" : {
+    "description": "ContentDocs with custom docsNav / docsPageNav panel headings",
+    "scope": "vue,html",
+    "body": [
+      "<ContentDocs",
+      "  v-model:active-nav-item=\"$1activeNavItem\"",
+      "  v-model:active-page-nav-item=\"$2activePageNavItem\"",
+      "  :docs-nav-items=\"$3docsNavItems\"",
+      "  :docs-page-nav-items=\"$4docsPageNavItems\"",
+      "  docs-nav-label=\"$5Sections\"",
+      "  docs-page-nav-label=\"$6Contents\"",
+      ">",
+      "  <template #docsContent>",
+      "    <p>$7Page content goes here.</p>",
+      "  </template>",
+      "</ContentDocs>"
+    ]
+  },
+  "SRCDEV ContentDocs Items Script": {
+    "description": "docsNavItems / docsPageNavItems + active-item refs for ContentDocs",
+    "scope": "typescript,vue",
+    "body": [
+      "const docsNavItems: DocsNavItem[] = [",
+      "  { label: \"$1Getting started\", to: \"$2/docs\" },",
+      "];",
+      "",
+      "const docsPageNavItems: DocsNavItem[] = [",
+      "  { label: \"$3Overview\", to: \"$2/docs#overview\" },",
+      "];",
+      "",
+      "const activeNavItem = ref<string | undefined>(docsNavItems[0]?.to);",
+      "const activePageNavItem = ref<string | undefined>(undefined);"
+    ]
+  },
+  "SRCDEV ContentDocs Items With Icons Script": {
+    "description": "docsNavItems / docsPageNavItems with per-item icons for ContentDocs",
+    "scope": "typescript,vue",
+    "body": [
+      "const docsNavItems: DocsNavItem[] = [",
+      "  { label: \"$1Getting started\", to: \"$2/docs\", icon: \"$3lucide:rocket\" },",
+      "];",
+      "",
+      "const docsPageNavItems: DocsNavItem[] = [",
+      "  { label: \"$4Overview\", to: \"$2/docs#overview\", icon: \"$5lucide:list\" },",
+      "];",
+      "",
+      "const activeNavItem = ref<string | undefined>(docsNavItems[0]?.to);",
+      "const activePageNavItem = ref<string | undefined>(undefined);"
+    ]
+  },
+  "SRCDEV ContentDocs CSS Override — Icons": {
+    "description": "CSS override scaffold for ContentDocs nav-link icon tokens (gap, size, and start/end order)",
+    "scope": "css",
+    "body": [
+      ".$1my-content-docs {",
+      "  .content-docs {",
+      "    --docs-nav-link-icon-gap: $2;",
+      "    --docs-nav-link-icon-size: $3;",
+      "    --docs-nav-link-icon-order: $4rtl; /* icon at the end */",
+      "    --docs-page-nav-link-icon-order: $5ltr; /* icon at the start (default) */",
+      "  }",
+      "}"
+    ]
+  },
+  "SRCDEV ContentDocs CSS Override — Shared Theme": {
+    "description": "CSS override scaffold for ContentDocs heading/panel/link tokens, applied to both docsNav and docsPageNav at once",
+    "scope": "css",
+    "body": [
+      ".$1my-content-docs {",
+      "  .content-docs {",
+      "    --content-docs-heading-font-size: $2;",
+      "    --content-docs-heading-color: $3;",
+      "    --content-docs-heading-bg: $4;",
+      "    --content-docs-heading-padding-block: $5;",
+      "",
+      "    --content-docs-panel-bg: $6;",
+      "    --content-docs-panel-padding-block: $7;",
+      "    --content-docs-panel-padding-inline: $8;",
+      "",
+      "    --content-docs-link-font-size: $9;",
+      "    --content-docs-link-color: $10;",
+      "    --content-docs-link-hover-bg: $11;",
+      "    --content-docs-link-active-bg: $12;",
+      "    --content-docs-link-active-color: $13;",
+      "",
+      "    --content-docs-nav-column-width: $14;",
+      "    --content-docs-page-nav-column-width: $15;",
+      "    --content-docs-page-nav-column-width-tablet: $16;",
+      "  }",
+      "}"
+    ]
+  },
+  "SRCDEV ContentDocs CSS Override — Per Side": {
+    "description": "CSS override scaffold for independently theming docsNav vs docsPageNav heading/panel/link tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-content-docs {",
+      "  .content-docs {",
+      "    /* docsNav (primary) */",
+      "    --content-docs-nav-heading-color: $2;",
+      "    --content-docs-nav-panel-bg: $3;",
+      "    --content-docs-nav-link-active-bg: $4;",
+      "",
+      "    /* docsPageNav (on-this-page / secondary) */",
+      "    --content-docs-page-nav-heading-color: $5;",
+      "    --content-docs-page-nav-panel-bg: $6;",
+      "    --content-docs-page-nav-link-active-bg: $7;",
+      "  }",
+      "}"
+    ]
+  }
+}
