@@ -232,6 +232,16 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       .docs-nav {
         grid-area: docsNav;
         align-items: start;
+
+        @container contentDocs (width >= 1024px) {
+          .expanding-panel {
+            & .expanding-panel-details {
+              .expanding-panel-summary {
+                cursor: default;
+              }
+            }
+          }
+        }
       }
       .docs-content {
         grid-area: docsContent;
@@ -240,6 +250,16 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       .docs-page-nav {
         grid-area: docsPageNav;
         align-items: start;
+
+        @container contentDocs (width >= 768px) {
+          .expanding-panel {
+            & .expanding-panel-details {
+              .expanding-panel-summary {
+                cursor: default;
+              }
+            }
+          }
+        }
       }
     }
 

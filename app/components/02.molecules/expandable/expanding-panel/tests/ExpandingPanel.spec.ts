@@ -294,11 +294,14 @@ describe("ExpandingPanel", () => {
 
   // ─── forceOpened ──────────────────────────────────────────────────────────
 
-  it("hides the icon-wrapper when forceOpened is true", async () => {
+  it("visually hides the icon-wrapper when forceOpened is true, without removing it from layout", async () => {
     const wrapper = await mountSuspended(ExpandingPanel, {
       props: { name: "force-icon", forceOpened: true },
     });
-    expect(wrapper.find(".icon-wrapper").exists()).toBe(false);
+    // Kept in the DOM (not v-if'd away) so the summary row height stays consistent
+    // with a toggleable sibling panel's — only visually hidden via the modifier class.
+    expect(wrapper.find(".icon-wrapper").exists()).toBe(true);
+    expect(wrapper.find(".icon-wrapper").classes()).toContain("icon-wrapper--hidden");
   });
 
   it("shows the icon-wrapper when forceOpened is false", async () => {
@@ -306,6 +309,7 @@ describe("ExpandingPanel", () => {
       props: { name: "icon-visible", forceOpened: false },
     });
     expect(wrapper.find(".icon-wrapper").exists()).toBe(true);
+    expect(wrapper.find(".icon-wrapper").classes()).not.toContain("icon-wrapper--hidden");
   });
 
   it("keeps open true after click when forceOpened is true", async () => {

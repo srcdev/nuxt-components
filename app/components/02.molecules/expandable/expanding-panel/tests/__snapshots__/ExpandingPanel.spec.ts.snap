@@ -3,8 +3,9 @@
 exports[`ExpandingPanel > renders correct HTML structure with all props set 1`] = `
 "<div class="expanding-panel extra-class">
   <details class="expanding-panel-details" name="snap-all" open="">
-    <summary id="id-snap-all-trigger" class="expanding-panel-summary" aria-controls="id-snap-all-content" aria-expanded="true"><span class="label-wrapper"></span>
-      <!--v-if-->
+    <summary id="id-snap-all-trigger" class="expanding-panel-summary" aria-controls="id-snap-all-content" aria-expanded="true">
+      <div class="label-wrapper"></div>
+      <div class="icon-wrapper icon-wrapper--hidden"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
     </summary>
   </details>
   <div id="id-snap-all-content" class="expanding-panel-content" aria-labelledby="id-snap-all-trigger" role="region">
@@ -16,7 +17,10 @@ exports[`ExpandingPanel > renders correct HTML structure with all props set 1`] 
 exports[`ExpandingPanel > renders correct HTML structure with contentIsOnTop true 1`] = `
 "<div class="expanding-panel content-is-on-top">
   <details class="expanding-panel-details" name="snap-content-on-top">
-    <summary id="id-snap-content-on-top-trigger" class="expanding-panel-summary" aria-controls="id-snap-content-on-top-content" aria-expanded="false"><span class="label-wrapper"></span><span class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></span></summary>
+    <summary id="id-snap-content-on-top-trigger" class="expanding-panel-summary" aria-controls="id-snap-content-on-top-content" aria-expanded="false">
+      <div class="label-wrapper"></div>
+      <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
+    </summary>
   </details>
   <div id="id-snap-content-on-top-content" class="expanding-panel-content" aria-labelledby="id-snap-content-on-top-trigger" role="region">
     <div class="inner"></div>
@@ -27,7 +31,10 @@ exports[`ExpandingPanel > renders correct HTML structure with contentIsOnTop tru
 exports[`ExpandingPanel > renders correct HTML structure with default props 1`] = `
 "<div class="expanding-panel">
   <details class="expanding-panel-details" name="snap-default">
-    <summary id="id-snap-default-trigger" class="expanding-panel-summary" aria-controls="id-snap-default-content" aria-expanded="false"><span class="label-wrapper"></span><span class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></span></summary>
+    <summary id="id-snap-default-trigger" class="expanding-panel-summary" aria-controls="id-snap-default-content" aria-expanded="false">
+      <div class="label-wrapper"></div>
+      <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
+    </summary>
   </details>
   <div id="id-snap-default-content" class="expanding-panel-content" aria-labelledby="id-snap-default-trigger" role="region">
     <div class="inner"></div>
@@ -38,7 +45,10 @@ exports[`ExpandingPanel > renders correct HTML structure with default props 1`] 
 exports[`ExpandingPanel > renders correct HTML structure with populated slots 1`] = `
 "<div class="expanding-panel">
   <details class="expanding-panel-details" name="snap-slots">
-    <summary id="id-snap-slots-trigger" class="expanding-panel-summary" aria-controls="id-snap-slots-content" aria-expanded="false"><span class="label-wrapper"><span>Summary text</span></span><span class="icon-wrapper"><span>▸</span></span></summary>
+    <summary id="id-snap-slots-trigger" class="expanding-panel-summary" aria-controls="id-snap-slots-content" aria-expanded="false">
+      <div class="label-wrapper"><span>Summary text</span></div>
+      <div class="icon-wrapper"><span>▸</span></div>
+    </summary>
   </details>
   <div id="id-snap-slots-content" class="expanding-panel-content" aria-labelledby="id-snap-slots-trigger" role="region">
     <div class="inner">

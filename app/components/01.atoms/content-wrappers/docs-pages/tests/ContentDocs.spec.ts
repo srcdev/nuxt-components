@@ -163,8 +163,8 @@ describe("ContentDocs", () => {
       triggerResize(wrapper.find(".content-docs").element as HTMLElement, 900);
       await nextTick();
 
-      expect(wrapper.find(".docs-nav .icon-wrapper").exists()).toBe(true);
-      expect(wrapper.find(".docs-page-nav .icon-wrapper").exists()).toBe(false);
+      expect(wrapper.find(".docs-nav .icon-wrapper").classes()).not.toContain("icon-wrapper--hidden");
+      expect(wrapper.find(".docs-page-nav .icon-wrapper").classes()).toContain("icon-wrapper--hidden");
     });
 
     it("both panels are forceOpened at 1024px and above (desktop)", async () => {
@@ -174,8 +174,8 @@ describe("ContentDocs", () => {
       triggerResize(wrapper.find(".content-docs").element as HTMLElement, 1200);
       await nextTick();
 
-      expect(wrapper.find(".docs-nav .icon-wrapper").exists()).toBe(false);
-      expect(wrapper.find(".docs-page-nav .icon-wrapper").exists()).toBe(false);
+      expect(wrapper.find(".docs-nav .icon-wrapper").classes()).toContain("icon-wrapper--hidden");
+      expect(wrapper.find(".docs-page-nav .icon-wrapper").classes()).toContain("icon-wrapper--hidden");
     });
   });
 
