@@ -3,7 +3,7 @@
     <NuxtLayout name="default">
       <template #layout-content>
         <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
-          <h1 class="page-heading-2">Layout Content Docs'</h1>
+          <h1 class="page-heading-2">Layout Content Docs</h1>
 
           <CanvasSwitcher v-model:canvas-name="canvasName" />
         </PageRow>
