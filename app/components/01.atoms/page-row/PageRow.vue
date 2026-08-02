@@ -112,6 +112,8 @@ const { headingId, ariaLabelledby } = useAriaLabelledById(props.tag);
 
   /* Nested page-rows: symmetric placement by variant class */
   .page-row > .page-row {
+    align-content: start;
+
     &.full {
       grid-column: full;
     }

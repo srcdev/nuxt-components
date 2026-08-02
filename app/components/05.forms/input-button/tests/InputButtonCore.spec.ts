@@ -243,6 +243,34 @@ describe("InputButtonCore", () => {
   });
 
   // -------------------------
+  // Link rendering
+  // -------------------------
+  describe("Link rendering", () => {
+    it("renders a plain anchor for a non-internal href", async () => {
+      wrapper = await createWrapper({ href: "https://example.com" });
+      const link = wrapper.find("a");
+      expect(link.exists()).toBe(true);
+      expect(link.attributes("href")).toBe("https://example.com");
+    });
+
+    it("renders a real anchor with the exact href for a '/'-prefixed href when external is true", async () => {
+      // Regression test: InputButtonCore used to always route a leading-"/" href through
+      // NuxtLink (client-side router.push), which silently fails for non-page paths like a
+      // Nitro server route ("/api/auth/github") since no Vue Router route matches it. The
+      // `external` prop forces a real anchor so the browser makes an actual request instead.
+      wrapper = await createWrapper({ href: "/api/auth/github", external: true });
+      const link = wrapper.find("a");
+      expect(link.exists()).toBe(true);
+      expect(link.attributes("href")).toBe("/api/auth/github");
+    });
+
+    it("applies the is-link class for a link", async () => {
+      wrapper = await createWrapper({ href: "/api/auth/github", external: true });
+      expect(wrapper.find("a").classes()).toContain("is-link");
+    });
+  });
+
+  // -------------------------
   // Computed (vm internals)
   // -------------------------
   describe("Computed properties", () => {

@@ -30,6 +30,14 @@ import type { InputTypesButton, FormUiTheme, InputButtonVariant } from "~/types/
 interface Props {
   type?: InputTypesButton;
   href?: string;
+  /**
+   * Force a real browser navigation instead of client-side routing, even for a same-origin
+   * href starting with "/". Needed for hrefs that aren't Vue Router pages — e.g. a Nitro
+   * server route like "/api/auth/github" — since NuxtLink otherwise treats any leading-"/"
+   * href as an internal route and does a client-side router.push, which fails silently
+   * (no matching route) instead of hitting the server.
+   */
+  external?: boolean;
   theme?: FormUiTheme;
   variant?: InputButtonVariant;
   isPill?: boolean;
@@ -43,6 +51,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   type: "button",
   href: undefined,
+  external: false,
   theme: "default",
   variant: "primary",
   isPill: false,
@@ -58,7 +67,9 @@ const NuxtLink = resolveComponent("NuxtLink");
 
 // If href is undefined tag is button, else it's a link
 const isLink = computed(() => Boolean(props.href));
-const isInternalLink = computed(() => isLink.value && props.href && props.href.startsWith("/"));
+const isInternalLink = computed(
+  () => isLink.value && props.href && props.href.startsWith("/") && !props.external
+);
 const tag = computed(() => {
   if (isInternalLink.value) return NuxtLink;
   if (isLink.value) return "a";
