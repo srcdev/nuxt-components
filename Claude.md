@@ -50,7 +50,7 @@ import type { PropType } from "vue";
   - `updateElementClasses(classes)`: Toggle classes on/off dynamically
   - `resetElementClasses(props.styleClassPassthrough)`: Reset to initial prop value
   - Watch prop changes and reset classes accordingly
-- Dynamic slot patterns (e.g., `component-{index}-{type}`)
+- Dynamic slot patterns (e.g., `component-{index}-{type}`) — **default to named dynamic slots** (`v-for="(_, name) in $slots"`, consumer controls slot names). Only use indexed slots (`itemCount` prop) when the count is needed for logic beyond the slot loop itself (e.g. aria linking across two parallel loops, z-index math). See `.claude/skills/component-dynamic-slots.md` for the full decision guide and a third "prefixed slot inference" pattern.
 - Leverage existing components when possible (composition over creation)
 - CSS custom properties with `v-bind()` for dynamic values
 - Functional base styles, allow HOC customization
@@ -225,6 +225,7 @@ app/
 - **Strict mode**: All components must pass TypeScript strict checks
 - **Interface definitions**: Store in `~/types/{category}/` directories
 - **defineModel typing**: Use union types for arrays/single values
+- **Consumer-facing component types**: If a component defines an interface consumers need to import (e.g. a data-shape prop), don't leave it inline in the `.vue` file — inline types aren't importable by consuming apps. Move it to `app/types/components/<component-name>.d.ts` and export it from `app/types/components/index.ts` so it's reachable as `import type { X } from "srcdev-nuxt-components"`. See `.claude/skills/component-export-types.md`.
 
 ### Props Pattern
 
@@ -302,6 +303,7 @@ See `.claude/skills/storybook-add-font.md` for the step-by-step process to add a
 9. **Unmocked browser APIs**: Always mock ResizeObserver, IntersectionObserver, etc.
 10. **Missing DOM element casting**: Cast to HTMLElement when accessing style properties
 11. **Sass-style BEM nesting in native CSS**: Never use `&__child` or `&-modifier` concatenation — this is Sass syntax and does not work in native CSS. esbuild silently converts `&__foo` to `:is(__foo)` which matches nothing. Use `& .block__child` (descendant selector) or a top-level `.block__child {}` rule instead. See `.claude/skills/css-nesting-conventions.md`.
+12. **`:src` on `<video>`**: Binding `:src` directly on a `<video>` element silently skips the browser fetch when Vue patches it on client-side navigation — no error, no network request, poster just sits there. Always use a `<source :src="src">` child instead, combined with `:key="src"` and an explicit `videoEl.load()` call. See `.claude/skills/vue-video-autoplay.md`.
 
 ## Development Workflow
 
