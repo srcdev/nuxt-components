@@ -48,7 +48,6 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── robots-env-aware.md               — @nuxtjs/robots: allow crawling on prod domain only, block on preview/staging via env var
 ├── new-app-scaffold.md               — scaffold a new Nuxt consumer app extending this layer (package.json, nuxt.config, app structure, CLAUDE.md)
 ├── qa-panel.md                       — collapsible panel for toggling component props live on a page (always on for /pages/ui/ demo pages; gate with isDev in consuming apps)
-├── create-release-notes.md           — produce release notes as a fenced markdown block from git log (named to avoid colliding with the built-in /release-notes command)
 ├── pull-request-description.md       — produce a PR description as a fenced markdown block from git diff vs main
 ├── using-component-skills.md         — discover and use component skills in consumer apps: where skills land, browsing patterns, workflow for deciding build vs. compose
 ├── composable-canonical-url.md       — useCanonicalUrl: set <link rel="canonical"> from runtimeConfig.public.canonicalHost; layout setup, node types
