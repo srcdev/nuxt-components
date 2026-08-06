@@ -111,6 +111,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     padding-inline: var(--button-padding-inline);
     padding-block: var(--button-padding-block);
     touch-action: manipulation;
+    user-select: none;
     overflow: hidden;
     transition: all var(--control-transition-duration) var(--control-transition-ease);
 

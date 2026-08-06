@@ -103,6 +103,7 @@ const onDetailsToggle = (event: Event) => {
         flex-direction: row;
         gap: var(--expanding-panel-summary-gap, 1rem);
         list-style: none;
+        user-select: none;
 
         padding-block: var(--expanding-panel-summary-padding-block, 0.5rem);
 

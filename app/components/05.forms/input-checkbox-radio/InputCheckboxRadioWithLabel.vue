@@ -80,6 +80,7 @@ const id = useId();
   align-items: center;
   gap: var(--input-checked-icon-gap);
   min-height: var(--input-min-height);
+  user-select: none;
 
   transition: all var(--theme-form-transition-duration) ease-in-out;
 

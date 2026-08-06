@@ -90,6 +90,7 @@ const flexDirection = ref(props.direction);
   justify-content: space-between;
   gap: 1rem;
   border-radius: 0.4rem;
+  user-select: none;
   transition: all 0.2s ease-in-out;
 
   &.is-pill {
