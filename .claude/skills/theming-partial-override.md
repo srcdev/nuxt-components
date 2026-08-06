@@ -4,7 +4,9 @@
 
 Use this skill when you need to tweak a specific colour role (page background, text, buttons,
 inputs) without replacing the entire default theme. For a full palette swap see
-`theming-override-default.md`. For the full architecture see `theming-colour-ramps.md`.
+`theming-override-default.md`. For the full architecture see `theming-colour-ramps.md`. For
+non-colour form geometry (padding, border-radius, gaps, etc.) see `theming-form-geometry-tokens.md`
+— same override mechanism, different token set.
 
 ## How it works
 
@@ -14,20 +16,22 @@ after the layer styles.
 
 ## Semantic slots — the tokens to override
 
-All themed components share a 9-slot vocabulary. Overriding these affects buttons, inputs,
-prompts, and toasts simultaneously:
+All themed components share an 11-slot vocabulary (see `_theme-slots.css`). Overriding these
+affects buttons, inputs, prompts, and toasts simultaneously:
 
-| Token                   | Default (light → dark)     | Role                              |
-|-------------------------|----------------------------|-----------------------------------|
-| `--theme-surface`       | `--colour-theme-7` / `9`   | Filled button/chip surface        |
-| `--theme-surface-hover` | `--colour-theme-9` / `7`   | Hover state of filled surface     |
-| `--theme-accent`        | `--colour-theme-5` / `4`   | Decorative accent strip (prompt/toast left edge) |
-| `--theme-surface-subtle`| `--colour-theme-1` / `9`   | Subtle body bg for prompt/toast, outline element hover |
-| `--theme-border`        | `--colour-theme-6` / `5`   | Input/card border                 |
-| `--theme-border-focus`  | `--colour-theme-4` / `3`   | Focused border                    |
-| `--theme-ring`          | `--colour-theme-1` / `9`   | Focus ring (outline)              |
-| `--theme-on-surface`    | `--colour-theme-0`         | Text/icon on filled surface       |
-| `--theme-text`          | `--colour-theme-9` / `2`   | Text on page, outline element text|
+| Token                       | Default (light → dark)   | Role                                                                                                                    |
+| --------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `--theme-surface`           | `--colour-theme-7` / `9` | Filled button/chip surface                                                                                              |
+| `--theme-surface-hover`     | `--colour-theme-9` / `7` | Hover state of filled surface                                                                                            |
+| `--theme-surface-inverted`  | `--colour-theme-9` / `2` | Inverted surface (`InputButtonCore`'s `.secondary` background)                                                          |
+| `--theme-accent`            | `--colour-theme-5` / `4` | Decorative accent strip (prompt/toast left edge)                                                                        |
+| `--theme-surface-subtle`    | `--colour-theme-1` / `9` | Subtle body bg for prompt/toast, outline element hover                                                                  |
+| `--theme-border`            | `--colour-theme-6` / `5` | Input/card border                                                                                                        |
+| `--theme-border-focus`      | `--colour-theme-4` / `3` | Focused border                                                                                                           |
+| `--theme-ring`               | `--colour-theme-1` / `9` | Focus ring (outline)                                                                                                     |
+| `--theme-on-surface`        | `--colour-theme-0`       | Text/icon on filled/inverted surface (fixed light value in both modes — pair this with any dark-in-light-mode surface, not `--theme-text`) |
+| `--theme-text`               | `--colour-theme-9` / `2` | Text on page, outline element text (assumes a *light* surface — don't pair with `--theme-surface-hover`/`-inverted`, see pitfall #13 in `Claude.md`) |
+| `--theme-text-inverted`     | `--colour-theme-0` / `7` | Text on `--theme-surface-inverted` (fixed to a light value in light mode as of 2026-08-03 — was `--colour-theme-9`, identical to the surface it sits on) |
 
 Input-specific tokens:
 

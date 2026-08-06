@@ -129,7 +129,13 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     &:hover,
     &:focus-visible {
       background-color: var(--theme-surface-hover);
-      color: var(--theme-text);
+      /* --theme-on-surface, not --theme-text: --theme-surface-hover's light-mode branch is a
+         dark step (by design — this button stays a bold colour even in light mode), and
+         --theme-text's light-mode branch is dark too (it's meant for text on a light surface
+         elsewhere, e.g. AlertContentInner). Pairing them made hover text invisible in light
+         mode. --theme-on-surface is a fixed light value regardless of scheme, matching how
+         AlertContentInner's own dismiss-button hover and .secondary:hover below already do it. */
+      color: var(--theme-on-surface);
       border-color: var(--theme-border-focus);
       outline-color: var(--theme-ring);
     }
@@ -163,6 +169,9 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       &:hover,
       &:focus-visible {
         background-color: var(--theme-surface-hover);
+        /* Same fix as the base :hover above — background goes dark in light mode, so text
+           needs to switch off --theme-text (dark in light mode) to stay visible. */
+        color: var(--theme-on-surface);
         border-color: var(--theme-border-focus);
         outline-color: var(--theme-border-focus);
       }

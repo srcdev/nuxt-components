@@ -30,7 +30,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── theming-colour-ramps.md          — parametric oklch ramp system: formula, named palettes, semantic slots, generator, consumer setup
 ├── theming-typography-tokens.md     — --step-N fluid font-size scale, 62.5% root reset gotcha (1rem=10px, not 16px), page-heading-*/page-body-* utility classes
 ├── theming-override-default.md      — replace the entire default theme with a custom palette (set --theme-hue/--theme-chroma)
-├── theming-partial-override.md      — override a specific token category (palette, buttons, inputs) without a full theme replacement
+├── theming-partial-override.md      — override a specific colour token category (palette, buttons, inputs) without a full theme replacement
+├── theming-form-geometry-tokens.md  — non-colour form/button/input tokens (padding, border-radius, gaps): full inventory, why partial override doesn't need duplicating the source files
 ├── colour-scheme-disable.md         — disable light/dark scheme support in a consumer app
 ├── component-dynamic-slots.md        — named dynamic slots ($slots iteration) vs indexed dynamic slots (itemCount pattern)
 ├── component-local-style-override.md — styleClassPassthrough + scoped style block for per-usage visual customisation

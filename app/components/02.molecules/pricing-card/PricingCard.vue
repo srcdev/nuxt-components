@@ -2,6 +2,10 @@
   <component :is="tag" class="pricing-card" :class="[elementClasses, { 'is-highlighted': isHighlighted }]">
     <div v-if="isHighlighted" class="pricing-card__badge">Most Popular</div>
 
+    <div v-if="ribbonText" class="pricing-card__ribbon-clip">
+      <span class="pricing-card__ribbon">{{ ribbonText }}</span>
+    </div>
+
     <h3 class="pricing-card__name">{{ planName }}</h3>
 
     <div class="pricing-card__price">
@@ -20,18 +24,8 @@
     </ul>
 
     <div class="pricing-card__cta">
-      <slot
-        name="cta"
-        :cta-text="ctaText"
-        :is-disabled="ctaDisabled"
-        :plan-name="planName"
-        :on-select="handleSelect"
-      >
-        <InputButtonCore
-          :button-text="ctaText"
-          :readonly="ctaDisabled"
-          @click="handleSelect"
-        />
+      <slot name="cta" :cta-text="ctaText" :is-disabled="ctaDisabled" :plan-name="planName" :on-select="handleSelect">
+        <InputButtonCore :button-text="ctaText" :readonly="ctaDisabled" @click="handleSelect" />
       </slot>
     </div>
   </component>
@@ -49,6 +43,7 @@ interface Props {
   isHighlighted?: boolean;
   ctaText?: string;
   ctaDisabled?: boolean;
+  ribbonText?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -61,6 +56,7 @@ const props = withDefaults(defineProps<Props>(), {
   isHighlighted: false,
   ctaText: "Get started",
   ctaDisabled: false,
+  ribbonText: undefined,
   styleClassPassthrough: () => [],
 });
 
@@ -78,7 +74,7 @@ watch(
   () => props.styleClassPassthrough,
   () => {
     resetElementClasses(props.styleClassPassthrough);
-  },
+  }
 );
 </script>
 
@@ -93,11 +89,15 @@ watch(
     --_card-gap: var(--pricing-card-gap, 1.2rem);
 
     --_highlight-border: var(--pricing-card-highlight-border, 2px solid var(--teal-06));
-    --_highlight-shadow: var(--pricing-card-highlight-shadow, 0 8px 24px oklch(from var(--teal-06) l c h / 0.20));
+    --_highlight-shadow: var(--pricing-card-highlight-shadow, 0 8px 24px oklch(from var(--teal-06) l c h / 0.2));
     --_highlight-scale: var(--pricing-card-highlight-scale, 1.05);
 
     --_badge-bg: var(--pricing-card-badge-bg, var(--teal-06));
     --_badge-text: var(--pricing-card-badge-text, var(--teal-00));
+
+    --_ribbon-bg: var(--pricing-card-ribbon-bg, var(--red-06));
+    --_ribbon-text: var(--pricing-card-ribbon-text, var(--red-00, white));
+    --_ribbon-size: var(--pricing-card-ribbon-size, 20rem);
 
     --_name-font-size: var(--pricing-card-name-font-size, 1.8rem);
     --_name-color: var(--pricing-card-name-color, #1a1a1a);
@@ -151,6 +151,37 @@ watch(
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+    }
+
+    .pricing-card__ribbon-clip {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: var(--_ribbon-size);
+      height: var(--_ribbon-size);
+      overflow: hidden;
+      pointer-events: none;
+      /* Sits above card content but stays clear of the top-centred "Most Popular" badge. */
+      z-index: 1;
+
+      .pricing-card__ribbon {
+        position: absolute;
+        top: 1.6rem;
+        right: -1.4rem;
+        width: calc(var(--_ribbon-size) + 2rem);
+        transform: rotate(23deg);
+        transform-origin: center;
+
+        display: block;
+        padding: 0.6rem 1.4rem 0.6rem 0;
+        background-color: var(--_ribbon-bg);
+        color: var(--_ribbon-text);
+        text-align: right;
+        font-size: 1.2rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+      }
     }
 
     .pricing-card__name {

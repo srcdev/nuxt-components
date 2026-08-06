@@ -13,6 +13,7 @@ const meta: Meta<typeof PricingCard> = {
     isHighlighted: { control: "boolean" },
     ctaText: { control: "text" },
     ctaDisabled: { control: "boolean" },
+    ribbonText: { control: "text" },
   },
   args: {
     planName: "Single Site",
@@ -23,6 +24,7 @@ const meta: Meta<typeof PricingCard> = {
     isHighlighted: false,
     ctaText: "Get started",
     ctaDisabled: false,
+    ribbonText: undefined,
   },
   parameters: {
     docs: {
@@ -30,6 +32,8 @@ const meta: Meta<typeof PricingCard> = {
         component:
           "A SaaS pricing plan card displaying plan name, price, features, and a CTA button. " +
           "Supports a 'Most Popular' highlight state with scaled/emphasized styling. " +
+          "Supports an optional `ribbonText` prop that renders a diagonal corner ribbon (top-right, " +
+          "45°) for marketing callouts like a discount — leave it unset for no ribbon. " +
           "Emits a `select` event when the CTA button is clicked. " +
           "Use multiple cards in a grid layout to build a pricing comparison table.",
       },
@@ -107,6 +111,23 @@ export const Disabled: Story = {
     features: ["Feature 1", "Feature 2", "Feature 3"],
     ctaDisabled: true,
     ctaText: "Coming soon",
+  },
+  render: (args) => {
+    const handleSelect = (planName: string) => {
+      console.log(`Selected plan: ${planName}`);
+    };
+    return storyWrapper(args, handleSelect);
+  },
+};
+
+export const WithDiscountRibbon: Story = {
+  args: {
+    planName: "Annual",
+    price: 49,
+    billingPeriod: "per year",
+    description: "Early adopter pricing on the annual plan.",
+    features: ["Embed on one domain", "Unlimited consultations", "Email support", "Priced annually"],
+    ribbonText: "EARLYBIRD50 · 50% off",
   },
   render: (args) => {
     const handleSelect = (planName: string) => {

@@ -1,13 +1,18 @@
+/* Was --theme-button-surface, a token never declared anywhere in this codebase (confirmed via
+   git blame — introduced in 065f254 alongside this rule, before _theme-slots.css even existed,
+   and never matched afterwards) — a plain typo/omission, not an intentional distinct token.
+   Autofill background/box-shadow silently had no effect since an undefined var() with no
+   fallback resolves to the property's initial value. Fixed to the real token, 2026-08-03. */
 :where(html) {
   input:autofill,
   input:-internal-autofill-selected,
   input:-webkit-autofill-strong-password,
   input:-webkit-autofill-strong-password-viewable,
   input:-webkit-autofill-and-obscured {
-    background-color: var(--theme-button-surface) !important;
+    background-color: var(--theme-surface) !important;
     background-image: none !important;
     color: var(--_input-text-core-color) !important;
-    -webkit-box-shadow: 0 0 0rem 1000px var(--theme-button-surface) inset;
+    -webkit-box-shadow: 0 0 0rem 1000px var(--theme-surface) inset;
     -webkit-text-fill-color: var(--_input-text-core-color);
     transition: background-color 5000s ease-in-out 0s;
   }
