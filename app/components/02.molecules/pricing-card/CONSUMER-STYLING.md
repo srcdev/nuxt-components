@@ -21,6 +21,9 @@ override it — there is no locale-aware formatting, just a literal prefix chara
 | `--pricing-card-highlight-scale` | `1.05` | Scale transform when highlighted |
 | `--pricing-card-badge-bg` | `var(--teal-06)` | "Most Popular" badge background |
 | `--pricing-card-badge-text` | `var(--teal-00)` | Badge text colour |
+| `--pricing-card-ribbon-bg` | `var(--red-06)` | Diagonal corner ribbon background (rendered when `ribbon-text` is set) |
+| `--pricing-card-ribbon-text` | `var(--red-00, white)` | Ribbon text colour |
+| `--pricing-card-ribbon-size` | `20rem` | Width/height of the ribbon's clipping box — controls how far it extends from the top-right corner |
 | `--pricing-card-name-font-size` | `1.8rem` | Plan name heading size |
 | `--pricing-card-name-color` | `#1a1a1a` | Plan name text colour |
 | `--pricing-card-amount-font-size` | `3.2rem` | Price amount size |
@@ -122,6 +125,32 @@ When displaying multiple cards side-by-side (common in pricing pages), wrap in a
   /* Alternate: fixed 3-column layout */
   &.three-col {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+```
+
+---
+
+## Discount ribbon
+
+Pass `ribbon-text` to render a diagonal corner ribbon (top-right, 45°) for marketing callouts —
+leave it unset for no ribbon. It renders independently of `isHighlighted`, so both can be combined.
+
+```vue
+<PricingCard
+  planName="Annual"
+  :price="49"
+  billing-period="per year"
+  ribbon-text="EARLYBIRD50 · 50% off"
+  @select="handleSelect"
+/>
+```
+
+```css
+.pricing-page {
+  .pricing-card {
+    --pricing-card-ribbon-bg: var(--brand-accent);
+    --pricing-card-ribbon-text: white;
   }
 }
 ```

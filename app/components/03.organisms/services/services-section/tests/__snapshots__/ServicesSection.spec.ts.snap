@@ -63,7 +63,10 @@ exports[`ServicesSection > renders correct HTML structure 1`] = `
       <div class="display-accordian services-section__faq" id="faq">
         <div class="expanding-panel accordian-item" icon-size="medium">
           <details class="expanding-panel-details" name="faq-v-0-0-0">
-            <summary id="id-faq-v-0-0-0-trigger" class="expanding-panel-summary" aria-controls="id-faq-v-0-0-0-content" aria-expanded="false"><span class="label-wrapper">FAQ question?</span><span class="icon-wrapper"><span class="iconify i-mdi:chevron-down" aria-hidden="true"></span></span></summary>
+            <summary id="id-faq-v-0-0-0-trigger" class="expanding-panel-summary" aria-controls="id-faq-v-0-0-0-content" aria-expanded="false">
+              <div class="label-wrapper">FAQ question?</div>
+              <div class="icon-wrapper"><span class="iconify i-mdi:chevron-down" aria-hidden="true"></span></div>
+            </summary>
           </details>
           <div id="id-faq-v-0-0-0-content" class="expanding-panel-content" aria-labelledby="id-faq-v-0-0-0-trigger" role="region">
             <div class="inner">

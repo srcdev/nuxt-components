@@ -150,4 +150,29 @@ describe("PricingCard", () => {
 
     expect(wrapper.element.tagName).toBe("SECTION");
   });
+
+  it("does not render a ribbon when ribbonText is unset", () => {
+    const wrapper = mount(PricingCard, {
+      props: {
+        planName: "Test Plan",
+        price: 100,
+      },
+    });
+
+    expect(wrapper.find(".pricing-card__ribbon-clip").exists()).toBe(false);
+  });
+
+  it("renders ribbon text when ribbonText is provided", () => {
+    const wrapper = mount(PricingCard, {
+      props: {
+        planName: "Test Plan",
+        price: 100,
+        ribbonText: "EARLYBIRD50 · 50% off",
+      },
+    });
+
+    const ribbon = wrapper.find(".pricing-card__ribbon-clip");
+    expect(ribbon.exists()).toBe(true);
+    expect(ribbon.text()).toContain("EARLYBIRD50 · 50% off");
+  });
 });
