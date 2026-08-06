@@ -141,6 +141,9 @@ watch(
       top: -0.6rem;
       left: 50%;
       transform: translateX(-50%);
+      /* Above .pricing-card__ribbon-clip (z-index: 1) — without this the badge has no stacking
+         context of its own and the ribbon, which does, paints over it regardless of DOM order. */
+      z-index: 2;
 
       display: inline-block;
       padding: 0.4rem 1rem;
