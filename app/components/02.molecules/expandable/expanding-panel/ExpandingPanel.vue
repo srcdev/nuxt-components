@@ -1,5 +1,5 @@
 <template>
-  <div class="expanding-panel" :class="[elementClasses, { 'content-is-on-top': contentIsOnTop }]">
+  <div ref="rootEl" class="expanding-panel" :class="[elementClasses, { 'content-is-on-top': contentIsOnTop }]">
     <details class="expanding-panel-details" :name :open @toggle="onDetailsToggle">
       <summary
         :id="`id-${name}-trigger`"
@@ -32,6 +32,8 @@
 </template>
 
 <script setup lang="ts">
+import { onClickOutside } from "@vueuse/core";
+
 interface Props {
   name?: string;
   animationDuration?: number;
@@ -55,6 +57,17 @@ const animationDurationStr = computed(() => `${props.animationDuration}ms`);
 const open = computed(() => props.forceOpened || isPanelOpen.value);
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+// contentIsOnTop panels behave like a dropdown/overlay (e.g. ContentDocs' mobile nav) rather
+// than an inline accordion — clicking outside is the expected way to dismiss those, matching
+// native <select>/menu behaviour. Not wanted for ordinary accordions (forceOpened is always
+// false here too — a forceOpened panel isn't meant to be dismissible by any interaction).
+const rootEl = ref<HTMLElement | null>(null);
+onClickOutside(rootEl, () => {
+  if (props.contentIsOnTop && !props.forceOpened && isPanelOpen.value) {
+    isPanelOpen.value = false;
+  }
+});
 
 if (import.meta.dev) {
   watch(
@@ -97,10 +110,9 @@ const onDetailsToggle = (event: Event) => {
         cursor: pointer;
       }
       .expanding-panel-summary {
-        display: flex;
+        display: grid;
         align-items: center;
-        justify-content: space-between;
-        flex-direction: row;
+        grid-template-columns: 1fr auto;
         gap: var(--expanding-panel-summary-gap, 1rem);
         list-style: none;
         user-select: none;

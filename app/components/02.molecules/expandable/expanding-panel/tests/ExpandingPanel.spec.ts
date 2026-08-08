@@ -427,6 +427,53 @@ describe("ExpandingPanel", () => {
     expect(vm.isPanelOpen).toBe(true);
   });
 
+  it("closes an open contentIsOnTop panel on outside click", async () => {
+    const wrapper = await mountSuspended(ExpandingPanel, {
+      props: { name: "content-on-top-outside-click", contentIsOnTop: true },
+      attachTo: document.body,
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
+
+    await wrapper.find("summary").trigger("click");
+    expect(vm.isPanelOpen).toBe(true);
+
+    document.body.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await nextTick();
+
+    expect(vm.isPanelOpen).toBe(false);
+    wrapper.unmount();
+  });
+
+  it("does not close on outside click when contentIsOnTop is false (ordinary accordion)", async () => {
+    const wrapper = await mountSuspended(ExpandingPanel, {
+      props: { name: "content-on-top-outside-click-inline" },
+      attachTo: document.body,
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelInstance;
+
+    await wrapper.find("summary").trigger("click");
+    expect(vm.isPanelOpen).toBe(true);
+
+    document.body.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await nextTick();
+
+    expect(vm.isPanelOpen).toBe(true);
+    wrapper.unmount();
+  });
+
+  it("does not close a forceOpened contentIsOnTop panel on outside click", async () => {
+    const wrapper = await mountSuspended(ExpandingPanel, {
+      props: { name: "content-on-top-outside-click-forced", contentIsOnTop: true, forceOpened: true },
+      attachTo: document.body,
+    });
+
+    document.body.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await nextTick();
+
+    expect(wrapper.find("details").attributes("open")).toBeDefined();
+    wrapper.unmount();
+  });
+
   // ─── name prop / useId fallback ───────────────────────────────────────────
 
   it("uses the provided name in ARIA attributes", async () => {
