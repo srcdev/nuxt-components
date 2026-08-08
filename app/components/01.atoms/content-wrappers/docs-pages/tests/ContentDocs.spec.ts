@@ -74,6 +74,16 @@ describe("ContentDocs", () => {
     expect(wrapper.find('[data-testid="body"]').text()).toBe("Body");
   });
 
+  it("places docsContent before docsNav and docsPageNav in DOM order, so a consumer's h1 is reachable before either nav panel's h3 heading (visual position is unaffected — grid-template-areas places all three, not source order)", async () => {
+    const wrapper = await mountSuspended(ContentDocs, {
+      props: { docsNavItems: navItems, docsPageNavItems: pageNavItems },
+      slots: { docsContent: "<h1>Title</h1>" },
+    });
+    const inner = wrapper.find(".content-docs-inner").element;
+    const children = [...inner.children].map((el) => el.className);
+    expect(children).toEqual(["docs-content", "docs-nav", "docs-page-nav"]);
+  });
+
   // ─── labels ─────────────────────────────────────────────────────────────
 
   it("defaults docsNavLabel to 'Navigation' and docsPageNavLabel to 'On this page'", async () => {
@@ -140,6 +150,28 @@ describe("ContentDocs", () => {
     const wrapper = await mountSuspended(ContentDocs, { props: { docsPageNavItems: pageNavItems } });
     await wrapper.find(".docs-page-nav").find("a").trigger("click");
     expect(wrapper.emitted("update:activePageNavItem")?.[0]).toEqual(["/one#overview"]);
+  });
+
+  // ─── closing on link click (mobile overlay behaviour) ─────────────────────
+
+  it("closes the docsNav panel when a link inside it is clicked", async () => {
+    const wrapper = await mountSuspended(ContentDocs, { props: { docsNavItems: navItems } });
+
+    await wrapper.find(".docs-nav summary").trigger("click");
+    expect(wrapper.find(".docs-nav details").attributes("open")).toBeDefined();
+
+    await wrapper.find(".docs-nav").findAll("a")[0]?.trigger("click");
+    expect(wrapper.find(".docs-nav details").attributes("open")).toBeUndefined();
+  });
+
+  it("closes the docsPageNav panel when a link inside it is clicked", async () => {
+    const wrapper = await mountSuspended(ContentDocs, { props: { docsPageNavItems: pageNavItems } });
+
+    await wrapper.find(".docs-page-nav summary").trigger("click");
+    expect(wrapper.find(".docs-page-nav details").attributes("open")).toBeDefined();
+
+    await wrapper.find(".docs-page-nav").find("a").trigger("click");
+    expect(wrapper.find(".docs-page-nav details").attributes("open")).toBeUndefined();
   });
 
   // ─── container-width-driven forceOpened ────────────────────────────────────

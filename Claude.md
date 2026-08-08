@@ -314,7 +314,8 @@ See `.claude/skills/storybook-add-font.md` for the step-by-step process to add a
 4. **Test**: Comprehensive test suite with `mountSuspended`
 5. **Document**: Update MCP reference for new patterns
 6. **Snippet**: Create or update `.vscode/srcdev-component-{name}.code-snippets` — required for every new or changed component
-7. **Verify**: Ensure TypeScript strict mode compliance
+7. **Skill**: Update `.claude/skills/components/<component-name>.md` — required for every new or changed component, same as the snippet in step 6. Covers any change to props/slots/models, defaults, new behaviour, or a bug fix that changes what the component observably does (e.g. it now closes on outside click when it didn't before). Skills are what an AI agent (including Claude Code, in this repo or a consumer app) reads to know how to use the component correctly — a stale skill silently teaches wrong usage. If the component has no skill doc yet, create one following the pattern of an existing one in `.claude/skills/components/`.
+8. **Verify**: Ensure TypeScript strict mode compliance
 
 ## CI/CD
 

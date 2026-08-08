@@ -1,8 +1,12 @@
 <template>
   <component :is="tag" ref="rootEl" class="content-docs" :class="[elementClasses]">
     <div class="content-docs-inner">
+      <div v-if="hasDocsContent" class="docs-content">
+        <slot name="docsContent"></slot>
+      </div>
       <div v-if="hasDocsNav" class="docs-nav">
         <ExpandingPanel
+          v-model="docsNavPanelOpen"
           :name="docsNavPanelName"
           :animation-duration="200"
           :force-opened="docsNavForceOpen"
@@ -21,7 +25,10 @@
                     class="docs-nav-link"
                     :class="{ 'is-active': item.to === activeNavItem }"
                     :aria-current="item.to === activeNavItem ? 'page' : undefined"
-                    @click="activeNavItem = item.to"
+                    @click="
+                      activeNavItem = item.to;
+                      docsNavPanelOpen = false;
+                    "
                   >
                     <Icon v-if="item.icon" :name="item.icon" class="docs-nav-link-icon" aria-hidden="true" />
                     <span class="docs-nav-link-label">{{ item.label }}</span>
@@ -32,11 +39,9 @@
           </template>
         </ExpandingPanel>
       </div>
-      <div v-if="hasDocsContent" class="docs-content">
-        <slot name="docsContent"></slot>
-      </div>
       <div v-if="hasDocsPageNav" class="docs-page-nav">
         <ExpandingPanel
+          v-model="docsPageNavPanelOpen"
           :name="docsPageNavPanelName"
           :animation-duration="200"
           :force-opened="docsPageNavForceOpen"
@@ -55,7 +60,10 @@
                     class="docs-page-nav-link"
                     :class="{ 'is-active': item.to === activePageNavItem }"
                     :aria-current="item.to === activePageNavItem ? 'page' : undefined"
-                    @click="activePageNavItem = item.to"
+                    @click="
+                      activePageNavItem = item.to;
+                      docsPageNavPanelOpen = false;
+                    "
                   >
                     <Icon v-if="item.icon" :name="item.icon" class="docs-page-nav-link-icon" aria-hidden="true" />
                     <span class="docs-page-nav-link-label">{{ item.label }}</span>
@@ -121,9 +129,9 @@ const docsNavOnTop = computed(() => !isDesktop.value);
 const docsPageNavForceOpen = computed(() => !isMobile.value);
 const docsPageNavOnTop = computed(() => isMobile.value);
 
-// Shared `name` groups the two <details> into a mutually-exclusive native accordion —
-// wanted on mobile (neither is forceOpened), wrong on tablet/desktop where both are
-// forceOpened simultaneously: a shared name would make the browser force-close one.
+const docsNavPanelOpen = ref(false);
+const docsPageNavPanelOpen = ref(false);
+
 const panelGroupId = useId();
 const docsNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${panelGroupId}-docsNav`));
 const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${panelGroupId}-docsPageNav`));
@@ -132,7 +140,6 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
 <style lang="css">
 @layer components {
   .content-docs {
-    /* Shared defaults — theme both docsNav and docsPageNav at once */
     --_heading-font-size: var(--content-docs-heading-font-size, 1.4rem);
     --_heading-font-weight: var(--content-docs-heading-font-weight, 700);
     --_heading-color: var(--content-docs-heading-color, light-dark(var(--slate-10), var(--slate-01)));
@@ -146,8 +153,6 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
     --_panel-padding-inline: var(--content-docs-panel-padding-inline, 0.8rem);
     --_panel-border-radius: var(--content-docs-panel-border-radius, 0.5rem);
 
-    /* Fixed-width grid tracks — the docsNav/docsPageNav columns at tablet/desktop.
-       docsPageNav gets a narrower track at tablet since docsNav is full-width there. */
     --_nav-column-width: var(--content-docs-nav-column-width, 23rem);
     --_page-nav-column-width: var(--content-docs-page-nav-column-width, 22rem);
     --_page-nav-column-width-tablet: var(--content-docs-page-nav-column-width-tablet, 20rem);
@@ -164,7 +169,6 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
     --_link-active-bg: var(--content-docs-link-active-bg, light-dark(var(--green-01), var(--green-09)));
     --_link-active-color: var(--content-docs-link-active-color, light-dark(var(--green-10), var(--green-04)));
 
-    /* Per-side overrides — each falls back to the shared token above */
     --_nav-heading-font-size: var(--content-docs-nav-heading-font-size, var(--_heading-font-size));
     --_nav-heading-font-weight: var(--content-docs-nav-heading-font-weight, var(--_heading-font-weight));
     --_nav-heading-color: var(--content-docs-nav-heading-color, var(--_heading-color));
@@ -313,15 +317,6 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       }
     }
 
-    /* Grid (not flex) so the label column stays aligned at a fixed offset whether or
-       not an item has an icon — an icon-less item's label still starts in column 2,
-       instead of collapsing back to column 1 like it would with flex.
-
-       Icon at the end: set --docs-nav-link-icon-order to rtl. This mirrors which
-       physical side each grid column renders on without touching column sizing —
-       swapping grid-column values directly would leave the label squeezed into the
-       icon-sized track instead. The label/icon direction resets further down undo
-       the mirroring for their own content so text and icon glyphs don't visually flip. */
     .docs-nav-link {
       display: grid;
       grid-template-columns: var(--docs-nav-link-icon-size, 1.6rem) 1fr;

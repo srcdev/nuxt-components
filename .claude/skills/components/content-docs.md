@@ -36,7 +36,7 @@ interface DocsNavItem {
 | `v-model:activeNavItem` | `string \| undefined` | `undefined` | The `to` of the currently-active `docsNav` item. Updates automatically on click; bind externally (e.g. to route matching) to control it. |
 | `v-model:activePageNavItem` | `string \| undefined` | `undefined` | Same, for `docsPageNav`. |
 
-Open/expanded state of the two panels is **not** exposed as a model — it's driven entirely by the container-width breakpoint logic (see below), not user-controllable.
+Open/expanded state of the two panels is **not** exposed as a model to `ContentDocs`' own consumers — externally it's driven entirely by the container-width breakpoint logic (see below), not user-controllable. Internally, each panel is still a controlled `ExpandingPanel` (`v-model`, not left uncontrolled) so it can be closed programmatically — see "Mobile overlay dismissal" below.
 
 ---
 
@@ -92,6 +92,21 @@ Widths are measured on the component's own root element (`useContainerBreakpoint
 | < 768px (mobile) | collapsible, closed by default | collapsible, closed by default |
 | 768–1023px (tablet) | collapsible, closed by default | **forced open**, no toggle icon |
 | ≥ 1024px (desktop) | **forced open**, no toggle icon | **forced open**, no toggle icon |
+
+Below 1024px (i.e. whenever a panel isn't `forceOpened`), it's also `contentIsOnTop` — an overlay, not in-flow — since a collapsible nav panel pushing page content down/up as it opens reads as janky on mobile/tablet. See "Mobile overlay dismissal" below for how these are closed.
+
+### Mobile overlay dismissal
+
+Below 1024px, `docsNav`/`docsPageNav` are `contentIsOnTop` `ExpandingPanel`s (see the breakpoint table above), so they need an explicit way to close again beyond just toggling the summary:
+
+- **Click outside** — inherited for free from `ExpandingPanel`'s own `contentIsOnTop` behaviour (see `expanding-panel.md`), no extra wiring in `ContentDocs` itself.
+- **Clicking a nav link inside the open panel** — `ContentDocs` does not leave either `ExpandingPanel` uncontrolled: it holds its own `docsNavPanelOpen`/`docsPageNavPanelOpen` refs, bound via `v-model`, and each nav link's click handler sets its panel's ref to `false` in addition to updating `activeNavItem`/`activePageNavItem`. Without this, selecting a link would leave the overlay open on top of the page it just navigated to.
+
+Both are no-ops at desktop/tablet where a panel is `forceOpened` — `open` there is `forceOpened || isPanelOpen`, so `forceOpened` wins regardless of what these refs are set to.
+
+### DOM order vs visual order (accessibility)
+
+In the template, `docsContent` is placed **before** `docsNav`/`docsPageNav` — the reverse of their left-to-right visual position at desktop. This is deliberate: `docsNav`/`docsPageNav` each render an `<h3>` heading (`docsNavLabel`/`docsPageNavLabel`), and if they came first in the DOM, a screen-reader user navigating by heading would hit one of those h3s *before* the consuming page's own `h1` inside `docsContent` — a broken heading outline. Visual position is unaffected because layout comes from `grid-template-areas` (see the `<style>` block), not source order. The trade-off: default Tab order now reaches main content before the side nav — an accepted consequence, not a regression to "fix" back by reverting the order.
 
 ### Why the two panels share a `name` only on mobile
 

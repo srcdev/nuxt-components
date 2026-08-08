@@ -13,7 +13,7 @@
 | `name` | `string` | `useId()` | Identifies the panel. Used in ARIA attributes (`id-{name}-trigger`, `id-{name}-content`). If omitted, a unique id is generated automatically. |
 | `animationDuration` | `number` | `400` | Expand/collapse transition duration in milliseconds. Pass `0` to disable animation. |
 | `forceOpened` | `boolean` | `false` | When `true`, the panel is always open. The toggle icon is hidden and clicks do not close the panel. |
-| `contentIsOnTop` | `boolean` | `false` | When `true`, the content region is taken out of flow and absolutely positioned directly below the summary, raised above surrounding page content via `z-index` — instead of pushing layout down when it opens. Applies a `content-is-on-top` class to the root `.expanding-panel` element (not the content div). |
+| `contentIsOnTop` | `boolean` | `false` | When `true`, the content region is taken out of flow and absolutely positioned directly below the summary, raised above surrounding page content via `z-index` — instead of pushing layout down when it opens. Applies a `content-is-on-top` class to the root `.expanding-panel` element (not the content div). Also enables click-outside-to-close (see below) — not applied when `forceOpened` is `true`. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the root `.expanding-panel` element. |
 
 ## Model
@@ -154,6 +154,14 @@ Why: `.expanding-panel-content` collapses via `grid-template-rows: 0fr → 1fr`,
 `contentIsOnTop` takes the content out of document flow (`position: absolute`) specifically so opening the panel does **not** push whatever comes after it down the page — that's the entire point of the prop. The tradeoff: the panel's own container still only occupies the height of its `<summary>` row, so a *sibling* element positioned directly after it in the DOM sits exactly where the overlay renders. When that sibling is another `ExpandingPanel`, opening the first one visually covers the second one's summary — this happens whether or not the two are grouped via a shared `name` (linked accordion) or opened simultaneously; it isn't specific to linking.
 
 `contentIsOnTop` is designed for a **single** panel overlaying unrelated trailing page content (e.g. a promo banner, a footer strip) — not for stacking multiple `contentIsOnTop` panels beside each other expecting normal accordion behaviour. If you need several linked/stacked panels, leave `contentIsOnTop` off (the default, in-flow layout handles that case correctly).
+
+---
+
+## Click-outside-to-close (contentIsOnTop only)
+
+When `contentIsOnTop` is `true` and the panel is open, clicking anywhere outside the panel's root element closes it (via `@vueuse/core`'s `onClickOutside`, sets `v-model` to `false`) — matching the dismissal behaviour of a native `<select>` or dropdown menu, since that's what an overlay panel functionally is. This does **not** apply to ordinary in-flow panels (`contentIsOnTop: false`, the default) — an inline accordion staying open when you click elsewhere on the page is expected, not a bug. It also never applies when `forceOpened` is `true`, regardless of `contentIsOnTop` — a forced-open panel isn't dismissible by any interaction.
+
+If you also want the panel to close when something *inside* it is activated (e.g. a nav link) — clicking outside doesn't cover that case — set `v-model` to `false` from that element's own click handler, same as any other controlled usage. See `ContentDocs`' `docsNav`/`docsPageNav` panels for a real example: both are `contentIsOnTop` on mobile, and each nav link closes its panel on click in addition to relying on click-outside.
 
 ---
 
