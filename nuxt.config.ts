@@ -130,6 +130,15 @@ export default defineNuxtConfig({
         ...(isStandalone ? ["vue-qrcode-reader"] : []),
       ],
     },
+    // Vite 8 (pulled in by Nuxt 4.5) defaults build.cssMinify to "lightningcss" instead of
+    // "esbuild". lightningcss has an open bug where it drops the unprefixed `backdrop-filter`
+    // once autoprefixer adds `-webkit-backdrop-filter` alongside it, breaking glass/blur effects
+    // (see https://github.com/vitejs/vite/issues/22649) — this repo relies on backdrop-filter in
+    // several components (GlassPanel, SiteNavigation, TabNavigation, DisplayDialog, ColourFinder,
+    // MagneticNavigation). Pin back to esbuild until upstream fixes it.
+    build: {
+      cssMinify: "esbuild",
+    },
   },
   vue: {
     runtimeCompiler: true,

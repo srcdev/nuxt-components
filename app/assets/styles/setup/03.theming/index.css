@@ -1,6 +1,6 @@
-@import "./theme-ramp";
-@import "./_theme-slots";
-@import "./_default";
-@import "./_error";
-@import "./_success";
-@import "./_warning";
+@import "./theme-ramp.css";
+@import "./_theme-slots.css";
+@import "./_default.css";
+@import "./_error.css";
+@import "./_success.css";
+@import "./_warning.css";

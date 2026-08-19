@@ -1,9 +1,9 @@
 @layer reset, colours, theming, form-tokens, typography, a11y, components, utilities, consumer;
 
-@import "./01.config/" layer(reset);
-@import "./02.colours/" layer(colours);
-@import "./03.theming/" layer(theming);
-@import "./04.elements/" layer(form-tokens);
-@import "./05.typography/" layer(typography);
-@import "./a11y/" layer(a11y);
-@import "./06.utility-classes/" layer(utilities);
+@import "./01.config/index.css" layer(reset);
+@import "./02.colours/index.css" layer(colours);
+@import "./03.theming/index.css" layer(theming);
+@import "./04.elements/index.css" layer(form-tokens);
+@import "./05.typography/index.css" layer(typography);
+@import "./a11y/index.css" layer(a11y);
+@import "./06.utility-classes/index.css" layer(utilities);

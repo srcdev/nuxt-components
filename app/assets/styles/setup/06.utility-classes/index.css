@@ -1,4 +1,4 @@
-@import "./animations/";
-@import "./spacing/";
+@import "./animations/index.css";
+@import "./spacing/index.css";
 /* @import "./layout/"; */
-@import "./_a11y";
+@import "./_a11y.css";

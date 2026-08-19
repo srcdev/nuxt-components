@@ -1,8 +1,8 @@
-@import "./_theme-params";
-@import "./_amber";
-@import "./_blue";
-@import "./_green";
-@import "./_orange";
-@import "./_red";
-@import "./_slate";
-@import "./_sunset";
+@import "./_theme-params.css";
+@import "./_amber.css";
+@import "./_blue.css";
+@import "./_green.css";
+@import "./_orange.css";
+@import "./_red.css";
+@import "./_slate.css";
+@import "./_sunset.css";

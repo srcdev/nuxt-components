@@ -1,9 +1,9 @@
-@import "./_font-classes-page-heading";
-@import "./_font-classes-page-body";
-@import "./_font-classes-page-link";
-@import "./_font-classes-section";
-@import "./_font-classes-article";
-@import "./_font-classes-card";
+@import "./_font-classes-page-heading.css";
+@import "./_font-classes-page-body.css";
+@import "./_font-classes-page-link.css";
+@import "./_font-classes-section.css";
+@import "./_font-classes-article.css";
+@import "./_font-classes-card.css";
 @import "./_generic-font-classes.css";
 @import "./_generic-font-variation-settings.css";
 @import "./_generic-font-weights.css";

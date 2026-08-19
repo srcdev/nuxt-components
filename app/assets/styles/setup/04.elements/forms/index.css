@@ -1,7 +1,7 @@
-@import "./00.element-defaults";
+@import "./00.element-defaults.css";
 @import "./01.field-layout-container-level.css";
 @import "./02.typography.css";
-@import "./03.generic-input-geometry";
+@import "./03.generic-input-geometry.css";
 @import "./04.slot-icon-system.css";
 @import "./05.checkbox-radio-geometry.css";
 @import "./06.button-geometry.css";

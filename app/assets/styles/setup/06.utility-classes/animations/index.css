@@ -1,5 +1,5 @@
-@import "./_entry-zoom-reveal";
-@import "./_entry-slide-in";
-@import "./_entry-exit-blur";
-@import "./_auto-rotate";
+@import "./_entry-zoom-reveal.css";
+@import "./_entry-slide-in.css";
+@import "./_entry-exit-blur.css";
+@import "./_auto-rotate.css";
 @import "./_animation-scroller-x.css";
