@@ -2,11 +2,15 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import AlertMaskedContent from "../AlertMaskedContent.vue";
 
-const mockResizeObserver = vi.fn(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
+// Vitest 4: a mock's implementation must be a regular function (not an
+// arrow function) to remain constructible via `new`.
+const mockResizeObserver = vi.fn(function () {
+  return {
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+  };
+});
 
 vi.stubGlobal("ResizeObserver", mockResizeObserver);
 

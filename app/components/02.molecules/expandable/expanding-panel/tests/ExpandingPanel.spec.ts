@@ -437,6 +437,12 @@ describe("ExpandingPanel", () => {
     await wrapper.find("summary").trigger("click");
     expect(vm.isPanelOpen).toBe(true);
 
+    // vueuse's onClickOutside debounces re-entrant clicks via a real setTimeout(0) that
+    // flips an internal "isProcessingClick" flag back off. With fake timers active
+    // (test/vitest.setup.ts) that flag never resets on its own, so the summary click
+    // above would otherwise permanently suppress the very next click. Advance past it.
+    vi.advanceTimersByTime(0);
+
     document.body.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     await nextTick();
 

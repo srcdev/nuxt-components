@@ -5,11 +5,15 @@ import SiteNavigation from "../SiteNavigation.vue";
 import type { NavItemData } from "~/types/components/navigation-horizontal.d";
 
 // useResizeObserver (from @vueuse/core) requires ResizeObserver
-const mockResizeObserver = vi.fn(() => ({
-  observe: vi.fn(),
-  unobserve: vi.fn(),
-  disconnect: vi.fn(),
-}));
+// Vitest 4: a mock's implementation must be a regular function (not an
+// arrow function) to remain constructible via `new`.
+const mockResizeObserver = vi.fn(function () {
+  return {
+    observe: vi.fn(),
+    unobserve: vi.fn(),
+    disconnect: vi.fn(),
+  };
+});
 
 beforeEach(() => {
   vi.stubGlobal("ResizeObserver", mockResizeObserver);

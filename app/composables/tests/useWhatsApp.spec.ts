@@ -6,8 +6,14 @@ const PHONE_NUMBER = "447700900000";
 
 // mockNuxtImport intercepts Nuxt's auto-import resolution — vi.stubGlobal cannot.
 // Use vi.hoisted so the mock function is available before module evaluation.
+// Nuxt's own router plugin also calls useRuntimeConfig() during app init and
+// reads `.app.baseURL` — the mock must include that shape too, or app
+// initialization throws before the test body runs.
 const { useRuntimeConfigMock } = vi.hoisted(() => ({
-  useRuntimeConfigMock: vi.fn(() => ({ public: { whatsappNumber: PHONE_NUMBER } })),
+  useRuntimeConfigMock: vi.fn(() => ({
+    public: { whatsappNumber: PHONE_NUMBER },
+    app: { baseURL: "/" },
+  })),
 }));
 
 mockNuxtImport("useRuntimeConfig", () => useRuntimeConfigMock);
@@ -17,7 +23,7 @@ describe("useWhatsApp", () => {
 
   beforeEach(() => {
     windowOpenSpy = vi.spyOn(window, "open").mockImplementation(() => null);
-    useRuntimeConfigMock.mockReturnValue({ public: { whatsappNumber: PHONE_NUMBER } });
+    useRuntimeConfigMock.mockReturnValue({ public: { whatsappNumber: PHONE_NUMBER }, app: { baseURL: "/" } });
   });
 
   afterEach(() => {
@@ -85,14 +91,14 @@ describe("useWhatsApp", () => {
     });
 
     it("does not call window.open when number is not configured", () => {
-      useRuntimeConfigMock.mockReturnValue({ public: { whatsappNumber: "" } });
+      useRuntimeConfigMock.mockReturnValue({ public: { whatsappNumber: "" }, app: { baseURL: "/" } });
       const { openWhatsApp } = useWhatsApp();
       openWhatsApp([{ label: "Name", value: "Jane" }]);
       expect(windowOpenSpy).not.toHaveBeenCalled();
     });
 
     it("logs a warning when number is not configured", () => {
-      useRuntimeConfigMock.mockReturnValue({ public: { whatsappNumber: "" } });
+      useRuntimeConfigMock.mockReturnValue({ public: { whatsappNumber: "" }, app: { baseURL: "/" } });
       const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
       const { openWhatsApp } = useWhatsApp();
       openWhatsApp([{ label: "Name", value: "Jane" }]);

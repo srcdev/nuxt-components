@@ -1,4 +1,4 @@
-import type { SemanticTheme, DisplayPromptTheme, DisplayToastTheme, DisplayToastPosition, DisplayToastAlignment } from "~/types/components";
+import type { SemanticTheme, DisplayPromptTheme, DisplayToastTheme, DisplayToastPosition, DisplayToastAlignment } from "../types/components";
 
 export default defineAppConfig({
   srcdev: {

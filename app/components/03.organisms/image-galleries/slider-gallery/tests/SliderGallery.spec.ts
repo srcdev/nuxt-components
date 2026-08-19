@@ -63,7 +63,11 @@ describe("SliderGallery", () => {
     mockImage = { src: "", onload: null, onerror: null };
     vi.stubGlobal(
       "Image",
-      vi.fn(() => mockImage)
+      // Vitest 4: a mock's implementation must be a regular function (not an
+      // arrow function) to remain constructible via `new`.
+      vi.fn(function () {
+        return mockImage;
+      })
     );
   });
 
