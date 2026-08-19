@@ -23,6 +23,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Upgrade npm
+        # actions/setup-node bundles an older npm with each Node version (Node 20/22's images
+        # ship npm ~10.8/10.9). That older npm's arborist has known crashes resolving this
+        # repo's `overrides` field against the storybook peer-conflict chain (e.g.
+        # "Cannot read properties of null (reading 'edgesOut')") that a current npm doesn't hit.
+        run: npm install -g npm@latest
+
       - name: Install dependencies (with npm bug workaround)
         run: |
           rm -rf node_modules package-lock.json
@@ -43,6 +50,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+
+      - name: Upgrade npm
+        # actions/setup-node bundles an older npm with each Node version (Node 20/22's images
+        # ship npm ~10.8/10.9). That older npm's arborist has known crashes resolving this
+        # repo's `overrides` field against the storybook peer-conflict chain (e.g.
+        # "Cannot read properties of null (reading 'edgesOut')") that a current npm doesn't hit.
+        run: npm install -g npm@latest
 
       - name: Install dependencies (with npm bug workaround)
         run: |
