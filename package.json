@@ -5,6 +5,9 @@
   "main": "nuxt.config.ts",
   "types": "types.d.ts",
   "license": "MIT",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "postinstall": "node scripts/copy-snippets.mjs",
     "clean": "rm -rf .nuxt && rm -rf .output",

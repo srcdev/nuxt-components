@@ -10,24 +10,24 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [20, 22]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          # Reads .nvmrc directly — bump that file and both this job and the build job below
+          # follow automatically, no version duplicated here to fall out of sync.
+          node-version-file: ".nvmrc"
 
       - name: Upgrade npm
         # actions/setup-node bundles an older npm with each Node version (Node 20/22's images
         # ship npm ~10.8/10.9). That older npm's arborist has known crashes resolving this
         # repo's `overrides` field against the storybook peer-conflict chain (e.g.
         # "Cannot read properties of null (reading 'edgesOut')") that a current npm doesn't hit.
+        # Node 20 was dropped entirely (see .nvmrc) because npm@latest now requires
+        # Node ^22.22.2 || ^24.15.0 || >=26.0.0 and can't run on Node 20 at all (EBADENGINE).
         run: npm install -g npm@latest
 
       - name: Install dependencies (with npm bug workaround)
@@ -49,13 +49,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version-file: ".nvmrc"
 
       - name: Upgrade npm
-        # actions/setup-node bundles an older npm with each Node version (Node 20/22's images
-        # ship npm ~10.8/10.9). That older npm's arborist has known crashes resolving this
-        # repo's `overrides` field against the storybook peer-conflict chain (e.g.
-        # "Cannot read properties of null (reading 'edgesOut')") that a current npm doesn't hit.
         run: npm install -g npm@latest
 
       - name: Install dependencies (with npm bug workaround)
