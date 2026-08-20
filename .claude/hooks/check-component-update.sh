@@ -1,21 +1,7 @@
 #!/usr/bin/env bash
-# PostToolUse hook (Write|Edit) for app/components/*.vue files.
-#
-# Reminds the agent, via additionalContext, about everything Claude.md's Development
-# Workflow expects alongside a component change: the skill doc, a Storybook story, a
-# test spec, a CONSUMER-STYLING.md (when the component has a real styling surface), a
-# .vscode snippet, and two "this component is stale" signals: living outside the
-# 01-05 tier folders, or using the pre-modern options-style defineProps({...}) pattern.
-#
-# All checks are advisory nudges (missing != wrong) — a component genuinely without
-# a token API doesn't need CONSUMER-STYLING.md, and a variant sub-component sharing its
-# parent's story/tests isn't broken. Judgement on whether to act still lives with the
-# agent (and, where it's a real call, the user) — this just makes sure nothing gets
-# silently skipped because nobody looked.
-#
-# Files inside a variants/ subfolder (e.g. input-text/variants/InputTextWithLabel.vue) get
-# skill-doc/CONSUMER-STYLING.md treated as part of their parent component, not as their own
-# standalone entries — per-variant skill files are deprecated as noise (2026-08-21).
+# PostToolUse hook (Write|Edit) for app/components/*.vue files. Advisory nudges only
+# (missing != wrong): skill doc, story, test, CONSUMER-STYLING.md, .vscode snippet,
+# legacy tier-folder location, options-style defineProps.
 
 root="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 
@@ -34,11 +20,7 @@ skill=$(printf '%s' "$name" | sed -E 's/([a-z0-9])([A-Z])/\1-\2/g; s/([A-Z]+)([A
 dir=$(dirname "$f")
 pdir=$(dirname "$dir")
 
-# A file directly inside a variants/ folder (e.g. input-text/variants/InputTextWithLabel.vue)
-# is documented as part of its parent component, not as a standalone entry — per-variant
-# skill.md/CONSUMER-STYLING.md files are deprecated as noise. Point the skill-doc reminder at
-# the parent instead of the variant's own name, and skip the standalone CONSUMER-STYLING.md
-# nudge entirely (it's covered by the parent component's own check when that file is touched).
+# variants/ files are documented under their parent component, not standalone.
 is_variant=false
 if [[ "$(basename "$dir")" == "variants" ]]; then
   is_variant=true
