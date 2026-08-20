@@ -16,6 +16,20 @@ For the full architecture see `theming-colour-ramps.md`.
 
 ## Steps
 
+> **⚠️ Keep every file in this skill unlayered — never wrap them in `@layer consumer` (or any
+> named layer)**, even though the library reserves `consumer` as the last name in its own
+> `@layer reset, colours, theming, form-tokens, typography, a11y, components, utilities, consumer;`
+> stack. Cascade layer priority is fixed by whichever layer name is first referenced *anywhere in
+> the document*, not by its position in that pre-declaration. Nuxt/Nitro inlines many small
+> per-component/per-page CSS chunks as `<style>` tags directly in `<head>` for SSR performance —
+> if one of those happens to declare `@layer consumer` before the library's main stylesheet (which
+> carries the master `@layer` statement) loads via its `<link>`, `consumer` gets registered first
+> and pushed to the *lowest* priority, so `@layer theming` silently wins instead — e.g. every
+> button reverting to the library's default blue with no build error. Confirmed by reproducing
+> against a real `npm run build` + preview, not just `nuxt dev`. Unlayered CSS always wins over
+> every named layer regardless of document order, which is what makes the "wins the cascade
+> automatically" claim below actually true.
+
 ### 1. Create `ramps.config.mjs` in your project root
 
 Define the palettes you want. You can add brand-new ones, reuse a built-in name to replace

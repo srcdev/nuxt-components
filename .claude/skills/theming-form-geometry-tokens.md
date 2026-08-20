@@ -17,6 +17,18 @@ imported before or after this layer's `main.css` in `nuxt.config.ts`'s `css` arr
 always wins either way. `theming-override-default.md`/`theming-partial-override.md` already rely
 on this same mechanism for colour tokens; it applies identically here.
 
+> **⚠️ Do not "fix" this by wrapping your override in `@layer consumer`** to mirror the library's
+> own `@layer reset, colours, theming, form-tokens, typography, a11y, components, utilities,
+> consumer;` stack — it looks like the intended slot but is unsafe in practice. Cascade layer
+> priority is fixed by whichever layer name is first referenced *anywhere in the document*, not by
+> its position in that pre-declaration. Nuxt/Nitro inlines many small per-component/per-page CSS
+> chunks as `<style>` tags directly in `<head>` for SSR performance — if an inlined chunk declares
+> `@layer consumer` before the library's main stylesheet (which carries the master statement) loads
+> via its `<link>`, `consumer` gets registered first and pushed to the *lowest* priority instead of
+> the highest, so `@layer form-tokens`/`theming` silently win instead, with no build error.
+> Confirmed by reproducing against a real `npm run build` + preview, not just `nuxt dev`. Stay
+> unlayered — that's what makes the guarantee above hold.
+
 So: to change one geometry value, redeclare just that one custom property in your app's own CSS
 (e.g. `app/assets/styles/setup/03.theming/_default.css`, or a new file imported the same way).
 There is no dependency between these tokens — overriding `--button-padding-inline` alone does not

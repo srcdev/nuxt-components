@@ -36,6 +36,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── component-dynamic-slots.md        — named dynamic slots ($slots iteration) vs indexed dynamic slots (itemCount pattern)
 ├── component-local-style-override.md — styleClassPassthrough + scoped style block for per-usage visual customisation
 ├── component-prop-driven-container-layout.md — vary CSS grid layout inside @container queries using data-* attribute selectors
+├── page-transitions.md               — pageTransition/layoutTransition setup; the self-wrapped <NuxtLayout> + layout:false anti-pattern that pulls the header/nav into the transition boundary; fade CSS
 ├── css-nesting-conventions.md                — native CSS nesting rules: why &__child Sass BEM concatenation silently breaks, correct patterns
 ├── css-grid-max-width-gutters.md             — cap a centre grid column width by growing gutters, with start/center alignment variants
 ├── css-animation-utilities.md                — scroll-driven animation utility classes: scroller-x (carousel), entry-zoom-reveal, entry-slide-in, entry-exit-blur, auto-rotate

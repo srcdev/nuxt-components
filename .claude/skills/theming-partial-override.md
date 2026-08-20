@@ -14,6 +14,23 @@ All library tokens are declared inside `@layer theming`. Any CSS written outside
 automatically — no `!important` or specificity tricks required. Override files just need to load
 after the layer styles.
 
+> **⚠️ Never wrap your override CSS in a named `@layer` (e.g. `@layer consumer`), even though the
+> library reserves `consumer` as the last name in its own `@layer reset, colours, theming,
+> form-tokens, typography, a11y, components, utilities, consumer;` stack and it looks like the
+> "correct" slot to write into.
+>
+> Cascade layer *priority* order is fixed by whichever layer name is first referenced anywhere in
+> the document — not by where it sits in a later `@layer a, b, c;` pre-declaration. Nuxt/Nitro
+> inlines many small per-component/per-page CSS chunks as `<style>` tags directly in `<head>` for
+> SSR performance. If an inlined chunk declares `@layer consumer { ... }` before the library's
+> main stylesheet (which carries the master `@layer` statement) has loaded via its `<link>`,
+> `consumer` gets registered *first* — pushed to the *lowest* priority instead of the intended
+> highest — and `@layer theming`/`@layer components` silently win instead, with no build error.
+> This reproduces in a real `npm run build` + preview, not just `nuxt dev`.
+>
+> Keep all consumer-app override CSS **unlayered**. Unlayered CSS always wins over every named
+> layer regardless of document/inlining order, which is what "wins automatically" above relies on.
+
 ## Semantic slots — the tokens to override
 
 All themed components share an 11-slot vocabulary (see `_theme-slots.css`). Overriding these
