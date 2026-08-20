@@ -8,6 +8,7 @@ interface AccordianCoreInstance extends ComponentPublicInstance {
   name: string | undefined;
   itemCount: number;
   animationDuration: number;
+  variant: "modern" | "legacy";
   styleClassPassthrough: string | string[];
 }
 
@@ -92,6 +93,35 @@ describe("AccordianCore", () => {
     expect(wrapper.findAllComponents({ name: "ExpandingPanel" })).toHaveLength(0);
   });
 
+  // ─── variant ──────────────────────────────────────────────────────────────
+
+  it("renders ExpandingPanel by default (variant: modern)", async () => {
+    const wrapper = await mountSuspended(AccordianCore, {
+      props: { itemCount: 2 },
+    });
+    expect(wrapper.findAllComponents({ name: "ExpandingPanel" })).toHaveLength(2);
+    expect(wrapper.findAllComponents({ name: "ExpandingPanelLegacy" })).toHaveLength(0);
+  });
+
+  it("renders ExpandingPanelLegacy when variant is legacy", async () => {
+    const wrapper = await mountSuspended(AccordianCore, {
+      props: { itemCount: 2, variant: "legacy" },
+    });
+    expect(wrapper.findAllComponents({ name: "ExpandingPanelLegacy" })).toHaveLength(2);
+    expect(wrapper.findAllComponents({ name: "ExpandingPanel" })).toHaveLength(0);
+  });
+
+  it("forwards props identically to ExpandingPanelLegacy when variant is legacy", async () => {
+    const wrapper = await mountSuspended(AccordianCore, {
+      props: { itemCount: 2, name: "legacy-accordian", animationDuration: 500, variant: "legacy" },
+    });
+    wrapper.findAllComponents({ name: "ExpandingPanelLegacy" }).forEach((panel) => {
+      expect(panel.props("name")).toBe("legacy-accordian");
+      expect(panel.props("animationDuration")).toBe(500);
+      expect(panel.props("styleClassPassthrough")).toEqual(["accordian-item"]);
+    });
+  });
+
   // ─── Props forwarded to ExpandingPanel ───────────────────────────────────
 
   it("forwards animationDuration to every ExpandingPanel", async () => {
@@ -137,6 +167,7 @@ describe("AccordianCore", () => {
     expect(vm.name).toBeUndefined();
     expect(vm.itemCount).toBe(0);
     expect(vm.animationDuration).toBe(300);
+    expect(vm.variant).toBe("modern");
     expect(vm.styleClassPassthrough).toEqual([]);
   });
 

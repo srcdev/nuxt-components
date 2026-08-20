@@ -7,10 +7,8 @@ exports[`ExpandingPanel > renders correct HTML structure with all props set 1`] 
       <div class="label-wrapper"></div>
       <div class="icon-wrapper icon-wrapper--hidden"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
     </summary>
+    <div id="id-snap-all-content" class="expanding-panel-content" aria-labelledby="id-snap-all-trigger" role="region"></div>
   </details>
-  <div id="id-snap-all-content" class="expanding-panel-content" aria-labelledby="id-snap-all-trigger" role="region">
-    <div class="inner"></div>
-  </div>
 </div>"
 `;
 
@@ -21,10 +19,8 @@ exports[`ExpandingPanel > renders correct HTML structure with contentIsOnTop tru
       <div class="label-wrapper"></div>
       <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
     </summary>
+    <div id="id-snap-content-on-top-content" class="expanding-panel-content" aria-labelledby="id-snap-content-on-top-trigger" role="region"></div>
   </details>
-  <div id="id-snap-content-on-top-content" class="expanding-panel-content" aria-labelledby="id-snap-content-on-top-trigger" role="region">
-    <div class="inner"></div>
-  </div>
 </div>"
 `;
 
@@ -35,10 +31,8 @@ exports[`ExpandingPanel > renders correct HTML structure with default props 1`] 
       <div class="label-wrapper"></div>
       <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
     </summary>
+    <div id="id-snap-default-content" class="expanding-panel-content" aria-labelledby="id-snap-default-trigger" role="region"></div>
   </details>
-  <div id="id-snap-default-content" class="expanding-panel-content" aria-labelledby="id-snap-default-trigger" role="region">
-    <div class="inner"></div>
-  </div>
 </div>"
 `;
 
@@ -49,11 +43,9 @@ exports[`ExpandingPanel > renders correct HTML structure with populated slots 1`
       <div class="label-wrapper"><span>Summary text</span></div>
       <div class="icon-wrapper"><span>▸</span></div>
     </summary>
-  </details>
-  <div id="id-snap-slots-content" class="expanding-panel-content" aria-labelledby="id-snap-slots-trigger" role="region">
-    <div class="inner">
+    <div id="id-snap-slots-content" class="expanding-panel-content" aria-labelledby="id-snap-slots-trigger" role="region">
       <p>Content text</p>
     </div>
-  </div>
+  </details>
 </div>"
 `;

@@ -1,9 +1,9 @@
-import ExpandingPanel from "../ExpandingPanel.vue";
+import ExpandingPanelLegacy from "../ExpandingPanelLegacy.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
-const meta: Meta<typeof ExpandingPanel> = {
-  title: "Molecules/Expandable/Expanding Panel",
-  component: ExpandingPanel,
+const meta: Meta<typeof ExpandingPanelLegacy> = {
+  title: "Molecules/Expandable/Expanding Panel Legacy",
+  component: ExpandingPanelLegacy,
   argTypes: {
     name: {
       control: { type: "text" },
@@ -37,18 +37,18 @@ const meta: Meta<typeof ExpandingPanel> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ExpandingPanel>;
+type Story = StoryObj<typeof ExpandingPanelLegacy>;
 
 // ─── Stories ─────────────────────────────────────────────────────────────────
 
 export const Default: Story = {
   render: (args) => ({
-    components: { ExpandingPanel },
+    components: { ExpandingPanelLegacy },
     setup() {
       return { args };
     },
     template: `
-      <ExpandingPanel v-bind="args">
+      <ExpandingPanelLegacy v-bind="args">
         <template #summary>
           <span>Panel Summary</span>
         </template>
@@ -57,7 +57,7 @@ export const Default: Story = {
             This is the panel content. It can contain any markup — text, images, or components.
           </p>
         </template>
-      </ExpandingPanel>
+      </ExpandingPanelLegacy>
     `,
   }),
 };
@@ -68,13 +68,13 @@ export const InitiallyOpen: Story = {
     name: "initially-open",
   },
   render: (args) => ({
-    components: { ExpandingPanel },
+    components: { ExpandingPanelLegacy },
     setup() {
       const isOpen = ref(true);
       return { args, isOpen };
     },
     template: `
-      <ExpandingPanel v-bind="args" v-model="isOpen">
+      <ExpandingPanelLegacy v-bind="args" v-model="isOpen">
         <template #summary>
           <span>This panel starts open</span>
         </template>
@@ -83,7 +83,7 @@ export const InitiallyOpen: Story = {
             The panel was opened via v-model on mount.
           </p>
         </template>
-      </ExpandingPanel>
+      </ExpandingPanelLegacy>
     `,
   }),
 };
@@ -95,12 +95,12 @@ export const ForceOpened: Story = {
     forceOpened: true,
   },
   render: (args) => ({
-    components: { ExpandingPanel },
+    components: { ExpandingPanelLegacy },
     setup() {
       return { args };
     },
     template: `
-      <ExpandingPanel v-bind="args">
+      <ExpandingPanelLegacy v-bind="args">
         <template #summary>
           <span>Always open — toggle icon hidden</span>
         </template>
@@ -109,7 +109,7 @@ export const ForceOpened: Story = {
             When <code>forceOpened</code> is true the panel stays open and the icon is not rendered.
           </p>
         </template>
-      </ExpandingPanel>
+      </ExpandingPanelLegacy>
     `,
   }),
 };
@@ -120,12 +120,12 @@ export const CustomIcon: Story = {
     name: "custom-icon",
   },
   render: (args) => ({
-    components: { ExpandingPanel },
+    components: { ExpandingPanelLegacy },
     setup() {
       return { args };
     },
     template: `
-      <ExpandingPanel v-bind="args">
+      <ExpandingPanelLegacy v-bind="args">
         <template #summary>
           <span>Panel with a custom icon</span>
         </template>
@@ -137,7 +137,7 @@ export const CustomIcon: Story = {
             Replace the default caret with any element via the <code>icon</code> slot.
           </p>
         </template>
-      </ExpandingPanel>
+      </ExpandingPanelLegacy>
     `,
   }),
 };
@@ -149,12 +149,12 @@ export const SlowAnimation: Story = {
     animationDuration: 800,
   },
   render: (args) => ({
-    components: { ExpandingPanel },
+    components: { ExpandingPanelLegacy },
     setup() {
       return { args };
     },
     template: `
-      <ExpandingPanel v-bind="args">
+      <ExpandingPanelLegacy v-bind="args">
         <template #summary>
           <span>Slow animation panel</span>
         </template>
@@ -163,7 +163,7 @@ export const SlowAnimation: Story = {
             The expand/collapse transition runs over 800 ms.
           </p>
         </template>
-      </ExpandingPanel>
+      </ExpandingPanelLegacy>
     `,
   }),
 };
@@ -175,12 +175,12 @@ export const NoAnimation: Story = {
     animationDuration: 0,
   },
   render: (args) => ({
-    components: { ExpandingPanel },
+    components: { ExpandingPanelLegacy },
     setup() {
       return { args };
     },
     template: `
-      <ExpandingPanel v-bind="args">
+      <ExpandingPanelLegacy v-bind="args">
         <template #summary>
           <span>Instant toggle</span>
         </template>
@@ -189,7 +189,7 @@ export const NoAnimation: Story = {
             The panel opens and closes with no transition.
           </p>
         </template>
-      </ExpandingPanel>
+      </ExpandingPanelLegacy>
     `,
   }),
 };
@@ -201,12 +201,12 @@ export const RichContent: Story = {
     animationDuration: 400,
   },
   render: (args) => ({
-    components: { ExpandingPanel },
+    components: { ExpandingPanelLegacy },
     setup() {
       return { args };
     },
     template: `
-      <ExpandingPanel v-bind="args">
+      <ExpandingPanelLegacy v-bind="args">
         <template #summary>
           <strong>Materials &amp; Care</strong>
         </template>
@@ -218,7 +218,7 @@ export const RichContent: Story = {
             <li>Iron on low heat</li>
           </ul>
         </template>
-      </ExpandingPanel>
+      </ExpandingPanelLegacy>
     `,
   }),
 };
@@ -230,23 +230,24 @@ export const ContentIsOnTop: Story = {
     contentIsOnTop: true,
   },
   render: (args) => ({
-    components: { ExpandingPanel },
+    components: { ExpandingPanelLegacy },
     setup() {
       return { args };
     },
     template: `
       <div style="position:relative;padding-bottom:4rem">
-        <ExpandingPanel v-bind="args">
+        <ExpandingPanelLegacy v-bind="args">
           <template #summary>
             <span>Open me — content overlays what's below</span>
           </template>
           <template #content>
             <!--
-              Background/border/shadow can go directly on .expanding-panel-content (or, as
-              here, a wrapper inside the slot — either works). ::details-content (the native
-              anonymous box wrapping this content) is what clips to 0 height when collapsed,
-              via overflow:clip on the parent — so this element's own box, including padding
-              and background, is clipped correctly regardless of where the styling lives.
+              The background/border/shadow live on this wrapper — never on .inner
+              itself. .inner has no explicit height when collapsed (grid-template-rows: 0fr)
+              and relies on overflow:hidden to clip its children to 0px; but padding/border/
+              background set directly on .inner are part of ITS OWN box, not overflow content,
+              so they'd still render as a visible gap under the summary while closed. Styling
+              a wrapper *inside* the slot keeps it clipped correctly by .inner's overflow:hidden.
             -->
             <div style="color: #808080; background-color:#fff;border:1px solid #ddd;border-radius:0.4rem;padding:1rem;box-shadow:0 4px 12px rgb(0 0 0 / 15%)">
               <p style="margin:0">
@@ -256,7 +257,7 @@ export const ContentIsOnTop: Story = {
               </p>
             </div>
           </template>
-        </ExpandingPanel>
+        </ExpandingPanelLegacy>
         <p style="margin-top:1rem;padding:1rem;">
           Page content below — stays in place when the panel opens.
         </p>
@@ -272,12 +273,12 @@ export const WithStyleClassPassthrough: Story = {
     styleClassPassthrough: ["custom-class", "another-class"],
   },
   render: (args) => ({
-    components: { ExpandingPanel },
+    components: { ExpandingPanelLegacy },
     setup() {
       return { args };
     },
     template: `
-      <ExpandingPanel v-bind="args">
+      <ExpandingPanelLegacy v-bind="args">
         <template #summary>
           <span>Custom classes applied to root</span>
         </template>
@@ -286,7 +287,7 @@ export const WithStyleClassPassthrough: Story = {
             Inspect the root element to see <code>custom-class</code> and <code>another-class</code>.
           </p>
         </template>
-      </ExpandingPanel>
+      </ExpandingPanelLegacy>
     `,
   }),
 };

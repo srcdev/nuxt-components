@@ -1,6 +1,7 @@
 <template>
   <div class="display-accordian" :class="[elementClasses]">
-    <ExpandingPanel
+    <component
+      :is="panelComponent"
       v-for="(item, key) in itemCount"
       :key="key"
       :name
@@ -17,15 +18,19 @@
       <template #content>
         <slot :name="`accordian-${key}-content`"></slot>
       </template>
-    </ExpandingPanel>
+    </component>
   </div>
 </template>
 
 <script setup lang="ts">
+import ExpandingPanel from "../expanding-panel/ExpandingPanel.vue";
+import ExpandingPanelLegacy from "../expanding-panel-legacy/ExpandingPanelLegacy.vue";
+
 interface Props {
   name?: string;
   itemCount?: number;
   animationDuration?: number;
+  variant?: "modern" | "legacy";
   styleClassPassthrough?: string | string[];
 }
 
@@ -33,26 +38,29 @@ const props = withDefaults(defineProps<Props>(), {
   name: undefined,
   itemCount: 0,
   animationDuration: 300,
+  variant: "modern",
   styleClassPassthrough: () => [],
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 const animationDurationStr = computed(() => `${props.animationDuration}ms`);
+const panelComponent = computed(() => (props.variant === "legacy" ? ExpandingPanelLegacy : ExpandingPanel));
 </script>
 
 <style lang="css">
 @layer components {
-.display-accordian {
-  max-width: 600px;
-  margin: 0 auto;
+  .display-accordian {
+    max-width: 600px;
+    margin: 0 auto;
 
-  .accordian-item {
-    &.expanding-panel {
-      transition:
-        margin-block-end v-bind(animationDurationStr) ease-in-out,
-        border-radius v-bind(animationDurationStr) ease-in-out;
+    .accordian-item {
+      &.expanding-panel,
+      &.expanding-panel-legacy {
+        transition:
+          margin-block-end v-bind(animationDurationStr) ease-in-out,
+          border-radius v-bind(animationDurationStr) ease-in-out;
+      }
     }
   }
-}
 }
 </style>

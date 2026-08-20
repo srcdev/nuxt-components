@@ -1,9 +1,9 @@
 <template>
-  <div ref="rootEl" class="expanding-panel" :class="[elementClasses, { 'content-is-on-top': contentIsOnTop }]">
-    <details class="expanding-panel-details" :name :open @toggle="onDetailsToggle">
+  <div ref="rootEl" class="expanding-panel-legacy" :class="[elementClasses, { 'content-is-on-top': contentIsOnTop }]">
+    <details class="expanding-panel-legacy-details" :name :open @toggle="onDetailsToggle">
       <summary
         :id="`id-${name}-trigger`"
-        class="expanding-panel-summary"
+        class="expanding-panel-legacy-summary"
         :aria-controls="`id-${name}-content`"
         :aria-expanded="open"
         @click.prevent.stop="handleToggle"
@@ -17,15 +17,17 @@
           </slot>
         </div>
       </summary>
-      <div
-        :id="`id-${name}-content`"
-        class="expanding-panel-content"
-        :aria-labelledby="`id-${name}-trigger`"
-        role="region"
-      >
+    </details>
+    <div
+      :id="`id-${name}-content`"
+      class="expanding-panel-legacy-content"
+      :aria-labelledby="`id-${name}-trigger`"
+      role="region"
+    >
+      <div class="inner">
         <slot name="content"></slot>
       </div>
-    </details>
+    </div>
   </div>
 </template>
 
@@ -69,9 +71,9 @@ if (import.meta.dev) {
     (value) => {
       if (!value) return;
       console.warn(
-        `ExpandingPanel${props.name ? ` "${props.name}"` : ""}: contentIsOnTop is enabled. ` +
+        `ExpandingPanelLegacy${props.name ? ` "${props.name}"` : ""}: contentIsOnTop is enabled. ` +
           "The content overlay is absolutely positioned and does not reserve space, so a sibling " +
-          "element (e.g. another ExpandingPanel) placed directly after this one will be visually " +
+          "element (e.g. another ExpandingPanelLegacy) placed directly after this one will be visually " +
           "covered when this panel opens. Intended for a single panel overlaying unrelated trailing " +
           "page content — avoid stacking multiple contentIsOnTop panels as direct siblings."
       );
@@ -95,20 +97,20 @@ const onDetailsToggle = (event: Event) => {
 
 <style lang="css">
 @layer components {
-  .expanding-panel {
-    .expanding-panel-details {
+  .expanding-panel-legacy {
+    .expanding-panel-legacy-details {
       &:hover {
         cursor: pointer;
       }
-      .expanding-panel-summary {
+      .expanding-panel-legacy-summary {
         display: grid;
         align-items: center;
         grid-template-columns: 1fr auto;
-        gap: var(--expanding-panel-summary-gap, 1rem);
+        gap: var(--expanding-panel-legacy-summary-gap, 1rem);
         list-style: none;
         user-select: none;
 
-        padding-block: var(--expanding-panel-summary-padding-block, 0.5rem);
+        padding-block: var(--expanding-panel-legacy-summary-padding-block, 0.5rem);
 
         &::-webkit-details-marker,
         &::marker {
@@ -136,49 +138,46 @@ const onDetailsToggle = (event: Event) => {
             display: block;
             transform: scaleY(1);
             transition: transform v-bind(animationDurationStr) ease-in-out;
-            font-size: var(--expanding-panel-icon-size, 1.2rem);
+            font-size: var(--expanding-panel-legacy-icon-size, 1.2rem);
             will-change: transform;
           }
         }
       }
 
       &[open] {
-        .expanding-panel-summary {
+        .expanding-panel-legacy-summary {
           .icon-wrapper {
             .icon {
               transform: scaleY(-1);
             }
           }
         }
-      }
-
-      &::details-content {
-        overflow: clip;
-        height: 0;
-        transition:
-          height v-bind(animationDurationStr) ease-in-out,
-          content-visibility v-bind(animationDurationStr) ease-in-out allow-discrete;
-      }
-
-      @supports (interpolate-size: allow-keywords) {
-        interpolate-size: allow-keywords;
-
-        &[open]::details-content {
-          height: auto;
+        + .expanding-panel-legacy-content {
+          grid-template-rows: 1fr;
         }
       }
     }
 
-    &.content-is-on-top {
-      .expanding-panel-details {
-        position: relative;
+    .expanding-panel-legacy-content {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows v-bind(animationDurationStr) ease-in-out;
+      will-change: grid-template-rows;
 
-        &::details-content {
-          position: absolute;
-          top: calc(100% + var(--expanding-panel-content-gap, 0px));
-          inset-inline: 0;
-          z-index: var(--expanding-panel-content-z-index, 10);
-        }
+      .inner {
+        overflow: hidden;
+        margin-top: 0;
+      }
+    }
+
+    &.content-is-on-top {
+      position: relative;
+
+      .expanding-panel-legacy-content {
+        position: absolute;
+        top: calc(100% + var(--expanding-panel-legacy-content-gap, 0px));
+        inset-inline: 0;
+        z-index: var(--expanding-panel-legacy-content-z-index, 10);
       }
     }
   }

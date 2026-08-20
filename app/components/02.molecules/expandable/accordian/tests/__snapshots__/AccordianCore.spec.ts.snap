@@ -8,10 +8,8 @@ exports[`AccordianCore > renders correct HTML structure with all props set 1`] =
         <div class="label-wrapper"></div>
         <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
       </summary>
+      <div id="id-snapshot-accordian-content" class="expanding-panel-content" aria-labelledby="id-snapshot-accordian-trigger" role="region"></div>
     </details>
-    <div id="id-snapshot-accordian-content" class="expanding-panel-content" aria-labelledby="id-snapshot-accordian-trigger" role="region">
-      <div class="inner"></div>
-    </div>
   </div>
   <div class="expanding-panel accordian-item" icon-size="medium">
     <details class="expanding-panel-details" name="snapshot-accordian">
@@ -19,10 +17,8 @@ exports[`AccordianCore > renders correct HTML structure with all props set 1`] =
         <div class="label-wrapper"></div>
         <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
       </summary>
+      <div id="id-snapshot-accordian-content" class="expanding-panel-content" aria-labelledby="id-snapshot-accordian-trigger" role="region"></div>
     </details>
-    <div id="id-snapshot-accordian-content" class="expanding-panel-content" aria-labelledby="id-snapshot-accordian-trigger" role="region">
-      <div class="inner"></div>
-    </div>
   </div>
   <div class="expanding-panel accordian-item" icon-size="medium">
     <details class="expanding-panel-details" name="snapshot-accordian">
@@ -30,10 +26,8 @@ exports[`AccordianCore > renders correct HTML structure with all props set 1`] =
         <div class="label-wrapper"></div>
         <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
       </summary>
+      <div id="id-snapshot-accordian-content" class="expanding-panel-content" aria-labelledby="id-snapshot-accordian-trigger" role="region"></div>
     </details>
-    <div id="id-snapshot-accordian-content" class="expanding-panel-content" aria-labelledby="id-snapshot-accordian-trigger" role="region">
-      <div class="inner"></div>
-    </div>
   </div>
 </div>"
 `;
@@ -46,10 +40,8 @@ exports[`AccordianCore > renders correct HTML structure with default props 1`] =
         <div class="label-wrapper"></div>
         <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
       </summary>
+      <div id="id-v-0-0-0-content" class="expanding-panel-content" aria-labelledby="id-v-0-0-0-trigger" role="region"></div>
     </details>
-    <div id="id-v-0-0-0-content" class="expanding-panel-content" aria-labelledby="id-v-0-0-0-trigger" role="region">
-      <div class="inner"></div>
-    </div>
   </div>
   <div class="expanding-panel accordian-item" icon-size="medium">
     <details class="expanding-panel-details" name="v-0-0-1">
@@ -57,10 +49,8 @@ exports[`AccordianCore > renders correct HTML structure with default props 1`] =
         <div class="label-wrapper"></div>
         <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
       </summary>
+      <div id="id-v-0-0-1-content" class="expanding-panel-content" aria-labelledby="id-v-0-0-1-trigger" role="region"></div>
     </details>
-    <div id="id-v-0-0-1-content" class="expanding-panel-content" aria-labelledby="id-v-0-0-1-trigger" role="region">
-      <div class="inner"></div>
-    </div>
   </div>
 </div>"
 `;
@@ -73,10 +63,8 @@ exports[`AccordianCore > renders correct HTML structure with populated slots 1`]
         <div class="label-wrapper"><span>Summary 0</span></div>
         <div class="icon-wrapper"><span>Icon 0</span></div>
       </summary>
+      <div id="id-v-0-0-0-content" class="expanding-panel-content" aria-labelledby="id-v-0-0-0-trigger" role="region"><span>Content 0</span></div>
     </details>
-    <div id="id-v-0-0-0-content" class="expanding-panel-content" aria-labelledby="id-v-0-0-0-trigger" role="region">
-      <div class="inner"><span>Content 0</span></div>
-    </div>
   </div>
   <div class="expanding-panel accordian-item" icon-size="medium">
     <details class="expanding-panel-details" name="v-0-0-1">
@@ -84,10 +72,8 @@ exports[`AccordianCore > renders correct HTML structure with populated slots 1`]
         <div class="label-wrapper"><span>Summary 1</span></div>
         <div class="icon-wrapper"><span>Icon 1</span></div>
       </summary>
+      <div id="id-v-0-0-1-content" class="expanding-panel-content" aria-labelledby="id-v-0-0-1-trigger" role="region"><span>Content 1</span></div>
     </details>
-    <div id="id-v-0-0-1-content" class="expanding-panel-content" aria-labelledby="id-v-0-0-1-trigger" role="region">
-      <div class="inner"><span>Content 1</span></div>
-    </div>
   </div>
 </div>"
 `;

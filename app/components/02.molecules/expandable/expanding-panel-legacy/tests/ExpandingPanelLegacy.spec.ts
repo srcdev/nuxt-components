@@ -1,0 +1,514 @@
+import { describe, it, expect } from "vitest";
+import { nextTick } from "vue";
+import { mountSuspended } from "@nuxt/test-utils/runtime";
+import type { ComponentPublicInstance } from "vue";
+import ExpandingPanelLegacy from "../ExpandingPanelLegacy.vue";
+
+interface ExpandingPanelLegacyInstance extends ComponentPublicInstance {
+  animationDurationStr: string;
+  open: boolean;
+  isPanelOpen: boolean;
+}
+
+describe("ExpandingPanelLegacy", () => {
+  // ─── Mount ───────────────────────────────────────────────────────────────
+
+  it("mounts without error", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "test" },
+    });
+    expect(wrapper.vm).toBeTruthy();
+  });
+
+  // ─── Snapshots ───────────────────────────────────────────────────────────
+
+  it("renders correct HTML structure with default props", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "snap-default" },
+    });
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it("renders correct HTML structure with all props set", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: {
+        name: "snap-all",
+        animationDuration: 500,
+        forceOpened: true,
+        styleClassPassthrough: ["extra-class"],
+      },
+    });
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it("renders correct HTML structure with contentIsOnTop true", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "snap-content-on-top", contentIsOnTop: true },
+    });
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it("renders correct HTML structure with populated slots", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "snap-slots" },
+      slots: {
+        summary: "<span>Summary text</span>",
+        icon: "<span>▸</span>",
+        content: "<p>Content text</p>",
+      },
+    });
+    expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  // ─── Root element ─────────────────────────────────────────────────────────
+
+  it("renders the root .expanding-panel-legacy element", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "root-test" },
+    });
+    expect(wrapper.find(".expanding-panel-legacy").exists()).toBe(true);
+  });
+
+  it("renders a <details> element inside the root", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "details-test" },
+    });
+    expect(wrapper.find("details.expanding-panel-legacy-details").exists()).toBe(true);
+  });
+
+  it("renders a <summary> element inside <details>", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "summary-test" },
+    });
+    expect(wrapper.find("summary.expanding-panel-legacy-summary").exists()).toBe(true);
+  });
+
+  it("renders the content region div", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "content-test" },
+    });
+    expect(wrapper.find(".expanding-panel-legacy-content").exists()).toBe(true);
+  });
+
+  // ─── Default prop values ──────────────────────────────────────────────────
+
+  it("uses correct default prop values on the component instance", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "defaults-test" },
+    });
+    expect(wrapper.props("animationDuration")).toBe(400);
+    expect(wrapper.props("forceOpened")).toBe(false);
+    expect(wrapper.props("contentIsOnTop")).toBe(false);
+    expect(wrapper.props("styleClassPassthrough")).toEqual([]);
+  });
+
+  it("defaults model value (isPanelOpen) to false", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "model-default" },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+    expect(vm.isPanelOpen).toBe(false);
+  });
+
+  // ─── Computed ─────────────────────────────────────────────────────────────
+
+  it("computes animationDurationStr as '<value>ms'", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "anim-str", animationDuration: 750 },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+    expect(vm.animationDurationStr).toBe("750ms");
+  });
+
+  it("computes animationDurationStr using the default duration", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "anim-str-default" },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+    expect(vm.animationDurationStr).toBe("400ms");
+  });
+
+  it("open is false when forceOpened is false and model is false", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "open-false", forceOpened: false },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+    expect(vm.open).toBe(false);
+  });
+
+  it("open is true when model is true", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "open-model" },
+      attrs: { modelValue: true },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+    expect(vm.open).toBe(true);
+  });
+
+  it("open is true when forceOpened is true regardless of model", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "open-forced", forceOpened: true },
+      attrs: { modelValue: false },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+    expect(vm.open).toBe(true);
+  });
+
+  // ─── ARIA & IDs ───────────────────────────────────────────────────────────
+
+  it("sets id on summary to id-{name}-trigger", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "aria-panel" },
+    });
+    expect(wrapper.find("summary").attributes("id")).toBe("id-aria-panel-trigger");
+  });
+
+  it("sets aria-controls on summary to id-{name}-content", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "aria-panel" },
+    });
+    expect(wrapper.find("summary").attributes("aria-controls")).toBe("id-aria-panel-content");
+  });
+
+  it("sets aria-expanded to false when closed", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "aria-expanded" },
+    });
+    expect(wrapper.find("summary").attributes("aria-expanded")).toBe("false");
+  });
+
+  it("sets aria-expanded to true when open", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "aria-expanded-open" },
+      attrs: { modelValue: true },
+    });
+    expect(wrapper.find("summary").attributes("aria-expanded")).toBe("true");
+  });
+
+  it("sets id on content region to id-{name}-content", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "aria-panel" },
+    });
+    expect(wrapper.find(".expanding-panel-legacy-content").attributes("id")).toBe("id-aria-panel-content");
+  });
+
+  it("sets aria-labelledby on content region to id-{name}-trigger", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "aria-panel" },
+    });
+    expect(wrapper.find(".expanding-panel-legacy-content").attributes("aria-labelledby")).toBe(
+      "id-aria-panel-trigger",
+    );
+  });
+
+  it("sets role='region' on the content div", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "role-test" },
+    });
+    expect(wrapper.find(".expanding-panel-legacy-content").attributes("role")).toBe("region");
+  });
+
+  // ─── Toggle behaviour ─────────────────────────────────────────────────────
+
+  it("toggles open state when summary is clicked", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "toggle-test" },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+    expect(vm.isPanelOpen).toBe(false);
+
+    await wrapper.find("summary").trigger("click");
+    expect(vm.isPanelOpen).toBe(true);
+
+    await wrapper.find("summary").trigger("click");
+    expect(vm.isPanelOpen).toBe(false);
+  });
+
+  it("emits update:modelValue when summary is clicked", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "emit-test" },
+    });
+    await wrapper.find("summary").trigger("click");
+    expect(wrapper.emitted("update:modelValue")).toBeTruthy();
+    expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([true]);
+  });
+
+  it("syncs isPanelOpen to false when <details> is closed externally via toggle event", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "external-close" },
+      attrs: { modelValue: true },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+    expect(vm.isPanelOpen).toBe(true);
+
+    // Simulate browser closing <details> externally (e.g. exclusive accordion name group)
+    const details = wrapper.find("details").element as HTMLDetailsElement;
+    details.open = false;
+    await wrapper.find("details").trigger("toggle");
+    await nextTick();
+
+    expect(vm.isPanelOpen).toBe(false);
+  });
+
+  it("syncs isPanelOpen to true when <details> is opened externally via toggle event", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "external-open" },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+    expect(vm.isPanelOpen).toBe(false);
+
+    // Simulate browser opening <details> externally
+    const details = wrapper.find("details").element as HTMLDetailsElement;
+    details.open = true;
+    await wrapper.find("details").trigger("toggle");
+    await nextTick();
+
+    expect(vm.isPanelOpen).toBe(true);
+  });
+
+  it("updates aria-expanded after toggle", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "aria-toggle" },
+    });
+    expect(wrapper.find("summary").attributes("aria-expanded")).toBe("false");
+
+    await wrapper.find("summary").trigger("click");
+    await nextTick();
+    expect(wrapper.find("summary").attributes("aria-expanded")).toBe("true");
+  });
+
+  it("sets open attribute on <details> when panel is open", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "details-open" },
+      attrs: { modelValue: true },
+    });
+    expect(wrapper.find("details").attributes("open")).toBeDefined();
+  });
+
+  it("does not set open attribute on <details> when panel is closed", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "details-closed" },
+    });
+    expect(wrapper.find("details").attributes("open")).toBeUndefined();
+  });
+
+  // ─── forceOpened ──────────────────────────────────────────────────────────
+
+  it("visually hides the icon-wrapper when forceOpened is true, without removing it from layout", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "force-icon", forceOpened: true },
+    });
+    // Kept in the DOM (not v-if'd away) so the summary row height stays consistent
+    // with a toggleable sibling panel's — only visually hidden via the modifier class.
+    expect(wrapper.find(".icon-wrapper").exists()).toBe(true);
+    expect(wrapper.find(".icon-wrapper").classes()).toContain("icon-wrapper--hidden");
+  });
+
+  it("shows the icon-wrapper when forceOpened is false", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "icon-visible", forceOpened: false },
+    });
+    expect(wrapper.find(".icon-wrapper").exists()).toBe(true);
+    expect(wrapper.find(".icon-wrapper").classes()).not.toContain("icon-wrapper--hidden");
+  });
+
+  it("keeps open true after click when forceOpened is true", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "force-click", forceOpened: true },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+    await wrapper.find("summary").trigger("click");
+    expect(vm.open).toBe(true);
+  });
+
+  it("does not leak forceOpened into isPanelOpen, so open reverts to false when forceOpened turns back off", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "force-then-unforce", forceOpened: true },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+    expect(vm.open).toBe(true);
+
+    // The <details> element's `open` attribute changing (driven by forceOpened) fires
+    // its own native 'toggle' event, independent of any user click.
+    await wrapper.find("details").trigger("toggle");
+    await nextTick();
+    expect(vm.isPanelOpen).toBe(false);
+
+    await wrapper.setProps({ forceOpened: false });
+    expect(vm.open).toBe(false);
+  });
+
+  // ─── Slots ────────────────────────────────────────────────────────────────
+
+  it("renders summary slot content inside .label-wrapper", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "slot-summary" },
+      slots: { summary: '<span data-testid="sum">My Summary</span>' },
+    });
+    expect(wrapper.find('[data-testid="sum"]').text()).toBe("My Summary");
+  });
+
+  it("renders content slot content inside .inner", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "slot-content" },
+      slots: { content: '<p data-testid="body">My Content</p>' },
+    });
+    expect(wrapper.find('[data-testid="body"]').text()).toBe("My Content");
+  });
+
+  it("renders custom icon slot content inside .icon-wrapper", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "slot-icon" },
+      slots: { icon: '<span data-testid="custom-icon">▸</span>' },
+    });
+    expect(wrapper.find('[data-testid="custom-icon"]').exists()).toBe(true);
+  });
+
+  it("renders the default icon when no icon slot is provided", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "default-icon" },
+    });
+    expect(wrapper.find(".icon-wrapper").exists()).toBe(true);
+    expect(wrapper.find(".icon-wrapper .icon").exists()).toBe(true);
+  });
+
+  // ─── styleClassPassthrough ────────────────────────────────────────────────
+
+  it("applies a styleClassPassthrough array to the root element", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: {
+        name: "scp-array",
+        styleClassPassthrough: ["custom-class", "another-class"],
+      },
+    });
+    const root = wrapper.find(".expanding-panel-legacy");
+    expect(root.classes()).toContain("custom-class");
+    expect(root.classes()).toContain("another-class");
+  });
+
+  it("applies a single styleClassPassthrough string to the root element", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "scp-string", styleClassPassthrough: "single-class" },
+    });
+    expect(wrapper.find(".expanding-panel-legacy").classes()).toContain("single-class");
+  });
+
+  // ─── contentIsOnTop ───────────────────────────────────────────────────────
+
+  it("does not apply content-is-on-top class to root by default", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "content-on-top-default" },
+    });
+    expect(wrapper.find(".expanding-panel-legacy").classes()).not.toContain("content-is-on-top");
+  });
+
+  it("applies content-is-on-top class to root when contentIsOnTop is true", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "content-on-top-true", contentIsOnTop: true },
+    });
+    expect(wrapper.find(".expanding-panel-legacy").classes()).toContain("content-is-on-top");
+  });
+
+  it("does not apply content-is-on-top class to the content region itself", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "content-on-top-scope", contentIsOnTop: true },
+    });
+    expect(wrapper.find(".expanding-panel-legacy-content").classes()).not.toContain("content-is-on-top");
+  });
+
+  it("still toggles open state when summary is clicked with contentIsOnTop true", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "content-on-top-click", contentIsOnTop: true },
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+    expect(vm.isPanelOpen).toBe(false);
+
+    await wrapper.find("summary").trigger("click");
+    expect(vm.isPanelOpen).toBe(true);
+  });
+
+  it("closes an open contentIsOnTop panel on outside click", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "content-on-top-outside-click", contentIsOnTop: true },
+      attachTo: document.body,
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+
+    await wrapper.find("summary").trigger("click");
+    expect(vm.isPanelOpen).toBe(true);
+
+    // vueuse's onClickOutside debounces re-entrant clicks via a real setTimeout(0) that
+    // flips an internal "isProcessingClick" flag back off. With fake timers active
+    // (test/vitest.setup.ts) that flag never resets on its own, so the summary click
+    // above would otherwise permanently suppress the very next click. Advance past it.
+    vi.advanceTimersByTime(0);
+
+    document.body.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await nextTick();
+
+    expect(vm.isPanelOpen).toBe(false);
+    wrapper.unmount();
+  });
+
+  it("does not close on outside click when contentIsOnTop is false (ordinary accordion)", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "content-on-top-outside-click-inline" },
+      attachTo: document.body,
+    });
+    const vm = wrapper.vm as unknown as ExpandingPanelLegacyInstance;
+
+    await wrapper.find("summary").trigger("click");
+    expect(vm.isPanelOpen).toBe(true);
+
+    document.body.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await nextTick();
+
+    expect(vm.isPanelOpen).toBe(true);
+    wrapper.unmount();
+  });
+
+  it("does not close a forceOpened contentIsOnTop panel on outside click", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "content-on-top-outside-click-forced", contentIsOnTop: true, forceOpened: true },
+      attachTo: document.body,
+    });
+
+    document.body.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    await nextTick();
+
+    expect(wrapper.find("details").attributes("open")).toBeDefined();
+    wrapper.unmount();
+  });
+
+  // ─── name prop / useId fallback ───────────────────────────────────────────
+
+  it("uses the provided name in ARIA attributes", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "my-panel" },
+    });
+    expect(wrapper.find("summary").attributes("id")).toBe("id-my-panel-trigger");
+    expect(wrapper.find(".expanding-panel-legacy-content").attributes("id")).toBe("id-my-panel-content");
+  });
+
+  it("generates ARIA ids when no name prop is supplied", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy);
+    const summaryId = wrapper.find("summary").attributes("id") ?? "";
+    const contentId = wrapper.find(".expanding-panel-legacy-content").attributes("id") ?? "";
+    expect(summaryId).toMatch(/^id-.+-trigger$/);
+    expect(contentId).toMatch(/^id-.+-content$/);
+  });
+
+  it("updates the details name and ARIA ids when the name prop changes after mount", async () => {
+    const wrapper = await mountSuspended(ExpandingPanelLegacy, {
+      props: { name: "panel-a" },
+    });
+    expect(wrapper.find("details").attributes("name")).toBe("panel-a");
+    expect(wrapper.find("summary").attributes("id")).toBe("id-panel-a-trigger");
+
+    await wrapper.setProps({ name: "panel-b" });
+
+    expect(wrapper.find("details").attributes("name")).toBe("panel-b");
+    expect(wrapper.find("summary").attributes("id")).toBe("id-panel-b-trigger");
+    expect(wrapper.find(".expanding-panel-legacy-content").attributes("id")).toBe("id-panel-b-content");
+  });
+});

@@ -2,7 +2,7 @@
 
 ## Overview
 
-`AccordianCore` renders a group of `ExpandingPanel` components. When a shared `name` prop is supplied, the native `<details>` behaviour ensures only one panel can be open at a time. Content is filled via **indexed dynamic slots** — one set per panel, driven by `itemCount`.
+`AccordianCore` renders a group of `ExpandingPanel` components (or `ExpandingPanelLegacy`, via the `variant` prop). When a shared `name` prop is supplied, the native `<details>` behaviour ensures only one panel can be open at a time. Content is filled via **indexed dynamic slots** — one set per panel, driven by `itemCount`.
 
 ---
 
@@ -35,6 +35,7 @@ For `itemCount="3"` the following slots exist:
 | `name` | `string` | `undefined` | Shared `name` passed to every `ExpandingPanel`. When set, native `<details>` grouping means only one panel can be open at a time. Omit for independent panels. |
 | `itemCount` | `number` | `0` | Number of `ExpandingPanel` components to render. |
 | `animationDuration` | `number` | `300` | Expand/collapse animation duration in ms, forwarded to every panel. |
+| `variant` | `"modern" \| "legacy"` | `"modern"` | `"modern"` renders each panel as `ExpandingPanel` (`::details-content`-based, Baseline "newly available" Sept 2025 — the animation itself only runs where `interpolate-size` is supported, Chromium only as of 2026). `"legacy"` renders `ExpandingPanelLegacy` instead (`grid-template-rows`-based, animates identically in every browser). Applies to every panel in the group — mixing variants within one `AccordianCore` isn't supported. See [expanding-panel-legacy.md](expanding-panel-legacy.md). |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the root `.display-accordian` element. |
 
 ---
@@ -90,6 +91,18 @@ Passing `name="faq"` groups all panels so only one can be open at a time.
 </AccordianCore>
 ```
 
+### Legacy variant (animation must run in every browser)
+
+```vue
+<AccordianCore name="faq" :item-count="2" variant="legacy">
+  <template #accordian-0-summary><span>Question one?</span></template>
+  <template #accordian-0-content><p>Answer one.</p></template>
+
+  <template #accordian-1-summary><span>Question two?</span></template>
+  <template #accordian-1-content><p>Answer two.</p></template>
+</AccordianCore>
+```
+
 ### Programmatic slot rendering (many items)
 
 ```vue
@@ -107,11 +120,16 @@ Passing `name="faq"` groups all panels so only one can be open at a time.
 
 ## CSS custom properties
 
+`AccordianCore` has no `--accordian-*` tokens of its own — its panels are `ExpandingPanel`
+(or `ExpandingPanelLegacy`, per `variant`) underneath, so `--expanding-panel-*` tokens apply
+directly. See `CONSUMER-STYLING.md` in the component directory for the full override reference,
+including the `.accordian-item` hook and the variant-dependent root class.
+
 Override in a consuming component or theme block:
 
 | Property | Effect |
 |----------|--------|
-| Applied via `accordian-item` class on each `ExpandingPanel` | Panels animate `margin-block-end` and `border-radius` alongside the expand transition — duration follows `animationDuration`. |
+| Applied via `accordian-item` class on each panel | Panels animate `margin-block-end` and `border-radius` alongside the expand transition — duration follows `animationDuration`. |
 
 ---
 
@@ -136,7 +154,9 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
     /* Geometry */
     /* max-width: none; */ /* default is 600px — remove the width cap */
 
-    /* Panel-level overrides via the .accordian-item hook */
+    /* Panel-level overrides via the .accordian-item hook — .expanding-panel is the
+       root class rendered by the default "modern" variant; swap in
+       .expanding-panel-legacy if this instance uses variant="legacy" */
     .accordian-item.expanding-panel {
       /* Border */
       /* border-block-end: 1px solid currentColor; */
@@ -153,7 +173,8 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 
 ## Notes
 
-- `AccordianCore` always passes `style-class-passthrough="['accordian-item']"` to every inner `ExpandingPanel` — use `.accordian-item` as the hook for per-panel styling overrides.
-- For a single standalone expand/collapse panel, use `ExpandingPanel` directly instead.
+- `AccordianCore` always passes `style-class-passthrough="['accordian-item']"` to every inner panel — use `.accordian-item` as the hook for per-panel styling overrides.
+- `variant` applies to the whole group — every panel in a given `AccordianCore` renders as the same component. Switching `variant` at runtime swaps every panel's underlying component (via `<component :is>`), which resets each panel's open/closed state.
+- For a single standalone expand/collapse panel, use `ExpandingPanel` (or `ExpandingPanelLegacy`) directly instead.
 - Auto-imported in Nuxt — no manual import needed.
 - File: `app/components/02.molecules/expandable/accordian/AccordianCore.vue`

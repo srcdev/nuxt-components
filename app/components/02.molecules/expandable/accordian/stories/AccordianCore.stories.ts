@@ -18,6 +18,14 @@ const meta: Meta<typeof AccordianCore> = {
       control: { type: "number", min: 0, step: 50 },
       description: "Expand/collapse animation duration in milliseconds",
     },
+    variant: {
+      control: { type: "radio" },
+      options: ["modern", "legacy"],
+      description:
+        "Which panel implementation to render: 'modern' (ExpandingPanel, ::details-content based) or " +
+        "'legacy' (ExpandingPanelLegacy, grid-template-rows based) — use legacy when the open/close " +
+        "animation must run identically in every browser today",
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes applied to the root element",
@@ -27,6 +35,7 @@ const meta: Meta<typeof AccordianCore> = {
     name: undefined,
     itemCount: 3,
     animationDuration: 300,
+    variant: "modern",
     styleClassPassthrough: [],
   },
 };
@@ -55,6 +64,28 @@ export const Default: Story = {
   args: {
     itemCount: 3,
     animationDuration: 300,
+  },
+  render: (args) => ({
+    components: { AccordianCore },
+    setup() {
+      return { args, slots: buildGenericSlots(args.itemCount ?? 3) };
+    },
+    template: `
+      <AccordianCore v-bind="args">
+        <template v-for="(content, name) in slots" #[name] :key="name">
+          <span v-html="content" />
+        </template>
+      </AccordianCore>
+    `,
+  }),
+};
+
+export const LegacyVariant: Story = {
+  name: "Legacy Variant",
+  args: {
+    itemCount: 3,
+    animationDuration: 300,
+    variant: "legacy",
   },
   render: (args) => ({
     components: { AccordianCore },

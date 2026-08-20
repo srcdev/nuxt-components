@@ -1,0 +1,74 @@
+{
+  "SRCDEV AccordianCore Basic": {
+    "description": "AccordianCore grouped into an exclusive-open accordion (shared name)",
+    "scope": "vue,html",
+    "body": [
+      "<AccordianCore name=\"$1faq\" :item-count=\"$2\">",
+      "  <template #accordian-0-summary>",
+      "    <span>$3Question one?</span>",
+      "  </template>",
+      "  <template #accordian-0-content>",
+      "    <p>$4Answer one.</p>",
+      "  </template>",
+      "",
+      "  <template #accordian-1-summary>",
+      "    <span>$5Question two?</span>",
+      "  </template>",
+      "  <template #accordian-1-content>",
+      "    <p>$6Answer two.</p>",
+      "  </template>",
+      "</AccordianCore>"
+    ]
+  },
+  "SRCDEV AccordianCore Legacy Variant": {
+    "description": "AccordianCore using ExpandingPanelLegacy panels (animation runs in every browser)",
+    "scope": "vue,html",
+    "body": [
+      "<AccordianCore name=\"$1faq\" :item-count=\"$2\" variant=\"legacy\">",
+      "  <template #accordian-0-summary>",
+      "    <span>$3Question one?</span>",
+      "  </template>",
+      "  <template #accordian-0-content>",
+      "    <p>$4Answer one.</p>",
+      "  </template>",
+      "",
+      "  <template #accordian-1-summary>",
+      "    <span>$5Question two?</span>",
+      "  </template>",
+      "  <template #accordian-1-content>",
+      "    <p>$6Answer two.</p>",
+      "  </template>",
+      "</AccordianCore>"
+    ]
+  },
+  "SRCDEV AccordianCore Programmatic Slots": {
+    "description": "AccordianCore with slots generated from an items array via v-for",
+    "scope": "vue,html",
+    "body": [
+      "<AccordianCore :item-count=\"$1items.length\">",
+      "  <template v-for=\"(item, i) in $1items\" #[`accordian-\\${i}-summary`] :key=\"i\">",
+      "    <span>{{ item.$2title }}</span>",
+      "  </template>",
+      "  <template v-for=\"(item, i) in $1items\" #[`accordian-\\${i}-content`] :key=\"i\">",
+      "    <p>{{ item.$3body }}</p>",
+      "  </template>",
+      "</AccordianCore>"
+    ]
+  },
+  "SRCDEV AccordianCore CSS Override": {
+    "description": "CSS override scaffold for AccordianCore panel-level styling",
+    "scope": "css",
+    "body": [
+      ".$1my-accordian {",
+      "  .display-accordian {",
+      "    /* max-width: none; */",
+      "",
+      "    .accordian-item.expanding-panel {",
+      "      /* border-block-end: 1px solid currentColor; */",
+      "      /* border-radius: $2; */",
+      "    }",
+      "  }",
+      "}"
+    ]
+  }
+}

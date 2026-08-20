@@ -13,9 +13,10 @@ All `--expanding-panel-*` tokens are the stable override surface. Set them at an
 | `--expanding-panel-content-z-index` | `10` | Stacking order of the content region when `contentIsOnTop` is `true` |
 | `--expanding-panel-content-gap` | `0px` | Space between the summary and the content region when `contentIsOnTop` is `true` |
 
-Note: `background-color`, `padding`, and shadow are **not** tokenised, and must never be applied
-to `.inner` itself — see [expanding-panel.md](../../../../.claude/skills/components/expanding-panel.md#styling-the-content-when-contentisontop)
-for why, and style a wrapper *inside* the `#content` slot instead.
+Note: `background-color`, `padding`, and shadow are **not** tokenised. They can be applied directly
+to `.expanding-panel-content`, or to a wrapper inside the `#content` slot — see
+[expanding-panel.md](../../../../.claude/skills/components/expanding-panel.md#styling-the-content-when-contentisontop)
+for why both are safe.
 
 ---
 
@@ -64,7 +65,6 @@ visual style, pass a modifier class:
 >
   <template #summary>...</template>
   <template #content>
-    <!-- Wrapper INSIDE the slot carries the visual styling — never .inner itself -->
     <div class="promo-panel-body">...</div>
   </template>
 </ExpandingPanel>
@@ -89,12 +89,12 @@ visual style, pass a modifier class:
 
 - `--expanding-panel-content-gap` and `--expanding-panel-content-z-index` only take effect when
   `contentIsOnTop` is `true` — they're no-ops for the default (in-flow) layout.
-- Never set `background-color`, `padding`, `border`, or a shadow directly on `.inner`. `.inner`
-  has no explicit height when collapsed (`grid-template-rows: 0fr`) and relies on
-  `overflow: hidden` to clip its *children* to 0px — but padding/border/background on `.inner`'s
-  own box are not "overflow content", so they'd still render as a visible gap under the summary
-  while closed. Always style a wrapper element placed *inside* the `#content` slot instead; that
-  wrapper is a child of `.inner` and gets clipped correctly.
+- `background-color`, `padding`, `border`, and shadow are all safe to set directly on
+  `.expanding-panel-content`. The open/close animation clips via `overflow: clip` on
+  `::details-content` (the native anonymous box wrapping everything after `<summary>`), and
+  `.expanding-panel-content` is a child of that box — so its own box is correctly clipped to the
+  animated height while closed/closing. A wrapper inside the `#content` slot works equally well
+  if you prefer to keep the styling scoped to your own markup.
 - Don't stack multiple `contentIsOnTop` panels as direct siblings (linked via a shared `name` or
   not). The overlay is absolutely positioned so it doesn't push the next element down — which
   means a sibling `ExpandingPanel` placed right after it sits exactly where the overlay renders,
