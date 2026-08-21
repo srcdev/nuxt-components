@@ -63,7 +63,7 @@
 
               {{ link.childLinksTitle }}
             </summary>
-            <div class="main-navigation-sub-nav" role="menu">
+            <div class="main-navigation-sub-nav" role="menu" @mouseenter="handleSubNavHover">
               <ul class="main-navigation-sub-nav-list">
                 <li v-for="childLink in link.childLinks" :key="childLink.name" class="main-navigation-sub-nav-item">
                   <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link" role="menuitem">
@@ -164,6 +164,51 @@ const closeAllNavigationDetails = () => {
   overflowDetailsRef.value?.removeAttribute("open");
 };
 
+// ─── Hover-intent delay for the "safe triangle" problem ───────────────────
+// handleNavigationItemHover() used to call closeAllNavigationDetails() the
+// instant the mouse entered ANY .main-navigation-item — including a sibling
+// crossed only in transit while moving diagonally from an open dropdown's
+// summary down into its own .main-navigation-sub-nav panel, closing it
+// before the user got there.
+//
+// A pure-CSS "safe triangle" bridge was tried first and reverted: for the
+// bridge to escape .main-navigation-item's overflow:hidden the same way
+// .main-navigation-sub-nav does, its containing block must resolve to
+// .navigation (the only positioned ancestor above the clipping box) — but
+// any element it's attached to that's already positioned (the summary)
+// terminates that search at itself, landing the bridge back inside the
+// clipped box; anything not already positioned falls back to the CSS
+// static-position algorithm, which doesn't reliably land a generated
+// pseudo-element where the visible content is. Neither is fixable without
+// restructuring the panel's positioning, which the collapse-measurement
+// pipeline depends on (see the measurement-pipeline note above).
+//
+// This delay sidesteps that entirely: closing is scheduled, not immediate,
+// and cancelled if the cursor reaches the summary or the sub-nav panel
+// before it fires — so a brief diagonal dip through a sibling's hit area
+// survives, while genuinely moving elsewhere still closes promptly.
+const HOVER_CLOSE_DELAY = 200;
+let closeAllTimer: ReturnType<typeof setTimeout> | null = null;
+
+const cancelScheduledClose = () => {
+  if (closeAllTimer) {
+    clearTimeout(closeAllTimer);
+    closeAllTimer = null;
+  }
+};
+
+const scheduleCloseAllNavigationDetails = () => {
+  cancelScheduledClose();
+  closeAllTimer = setTimeout(() => {
+    closeAllNavigationDetails();
+    closeAllTimer = null;
+  }, HOVER_CLOSE_DELAY);
+};
+
+onUnmounted(() => {
+  cancelScheduledClose();
+});
+
 const toggleDetailsElement = (event: Event) => {
   const summaryElement = event.currentTarget as HTMLElement;
   const parentDetailsElement = summaryElement.closest("details");
@@ -182,6 +227,10 @@ const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
     return;
   }
 
+  // The cursor reached a summary — any close scheduled while it was in
+  // transit (see handleNavigationItemHover) no longer applies.
+  cancelScheduledClose();
+
   // Close all other open navigation details first
   const summaryElement = event.currentTarget as HTMLElement;
   const parentDetailsElement = summaryElement.closest("details");
@@ -193,8 +242,16 @@ const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
   });
   overflowDetailsRef.value?.removeAttribute("open");
 
-  // Then toggle the current one
-  toggleDetailsElement(event);
+  // Ensure THIS one is open — never toggle it closed here. A real mouse click
+  // moves focus to the summary before the click event fires, so a single
+  // click on an already-(hover-)open item fires focusin (this handler) AND
+  // click (handleSummaryAction, which does its own toggle) in quick
+  // succession. If this handler also toggled, an already-open item would
+  // flip closed here and then flip back open in handleSummaryAction — a
+  // visible open→closed→open (or the reverse) flicker on every click.
+  // Hover/focus only ever guarantees "this one is open"; only an explicit
+  // click is allowed to close it.
+  parentDetailsElement?.setAttribute("open", "");
 };
 
 const handleNavigationItemHover = (key: string) => {
@@ -202,7 +259,13 @@ const handleNavigationItemHover = (key: string) => {
   if (!props.allowExpandOnGesture) {
     return;
   }
-  closeAllNavigationDetails();
+  scheduleCloseAllNavigationDetails();
+};
+
+// Reaching the actual destination panel cancels the scheduled close from
+// handleNavigationItemHover — same reasoning as handleSummaryHover above.
+const handleSubNavHover = () => {
+  cancelScheduledClose();
 };
 
 const handleNavFocusout = (event: FocusEvent) => {

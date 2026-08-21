@@ -170,6 +170,111 @@ describe("ResponsiveHeader", () => {
     expect(details.attributes("open")).toBeUndefined();
   });
 
+  it("does not close an open dropdown instantly when a sibling item is only briefly hovered in transit", async () => {
+    const wrapper = await mountSuspended(ResponsiveHeader, {
+      props: { responsiveNavLinks: navLinks },
+    });
+    const details = wrapper.find(".main-navigation-details");
+    await wrapper.find(".main-navigation-details-summary").trigger("click");
+    expect(details.attributes("open")).toBe("");
+
+    const siblingItem = wrapper.find('[data-group-key="firstNav"][data-local-index="0"]');
+    await siblingItem.trigger("mouseenter");
+    // Close is scheduled, not immediate — still open right after the hover.
+    expect(details.attributes("open")).toBe("");
+  });
+
+  it("closes an open dropdown after the hover-intent delay once the cursor moved on", async () => {
+    const wrapper = await mountSuspended(ResponsiveHeader, {
+      props: { responsiveNavLinks: navLinks },
+    });
+    const details = wrapper.find(".main-navigation-details");
+    await wrapper.find(".main-navigation-details-summary").trigger("click");
+    expect(details.attributes("open")).toBe("");
+
+    const siblingItem = wrapper.find('[data-group-key="firstNav"][data-local-index="0"]');
+    await siblingItem.trigger("mouseenter");
+    vi.advanceTimersByTime(200);
+    await nextTick();
+    expect(details.attributes("open")).toBeUndefined();
+  });
+
+  it("cancels the scheduled close when the sub-nav panel itself is reached", async () => {
+    const wrapper = await mountSuspended(ResponsiveHeader, {
+      props: { responsiveNavLinks: navLinks },
+    });
+    const details = wrapper.find(".main-navigation-details");
+    await wrapper.find(".main-navigation-details-summary").trigger("click");
+    expect(details.attributes("open")).toBe("");
+
+    const siblingItem = wrapper.find('[data-group-key="firstNav"][data-local-index="0"]');
+    await siblingItem.trigger("mouseenter");
+    await wrapper.find(".main-navigation-sub-nav").trigger("mouseenter");
+
+    vi.advanceTimersByTime(200);
+    await nextTick();
+    expect(details.attributes("open")).toBe("");
+  });
+
+  // A real mouse click moves focus to the clicked element before the click event
+  // fires — so a click on a summary the mouse already hover-opened dispatches
+  // BOTH a `focusin` (handleSummaryHover) and a `click` (handleSummaryAction) in
+  // quick succession. vue-test-utils' `.trigger("click")` doesn't synthesize that
+  // implicit focus side effect on its own, so these tests fire both events
+  // explicitly to reproduce what a real click actually does.
+  it("closes cleanly (no reopen) when clicking a summary the mouse had just hover-opened", async () => {
+    const wrapper = await mountSuspended(ResponsiveHeader, {
+      props: { responsiveNavLinks: navLinks },
+    });
+    const summary = wrapper.find(".main-navigation-details-summary");
+    const details = wrapper.find(".main-navigation-details");
+
+    await summary.trigger("mouseenter");
+    expect(details.attributes("open")).toBe("");
+
+    // Simulate the real browser sequence a click produces: focus moves first,
+    // then the click event itself fires.
+    await summary.trigger("focusin");
+    await summary.trigger("click");
+
+    expect(details.attributes("open")).toBeUndefined();
+  });
+
+  it("closes cleanly (no reopen) when clicking to close a dropdown switched-to via hovering away from another", async () => {
+    const responsiveNavLinksTwoDropdowns: ResponsiveHeaderProp = {
+      firstNav: [
+        {
+          name: "Components",
+          childLinksTitle: "UI Components",
+          childLinks: [{ name: "Buttons", path: "/forms/examples/buttons" }],
+        },
+        {
+          name: "Layouts",
+          childLinksTitle: "UI Layouts",
+          childLinks: [{ name: "Page Row", path: "/ui/page-row" }],
+        },
+      ],
+    };
+    const wrapper = await mountSuspended(ResponsiveHeader, {
+      props: { responsiveNavLinks: responsiveNavLinksTwoDropdowns },
+    });
+    const summaries = wrapper.findAll(".main-navigation-details-summary");
+    const detailsElements = wrapper.findAll(".main-navigation-details");
+
+    await summaries[0]!.trigger("mouseenter");
+    expect(detailsElements[0]!.attributes("open")).toBe("");
+
+    // Hover away to the second dropdown — closes the first, opens the second.
+    await summaries[1]!.trigger("mouseenter");
+    expect(detailsElements[0]!.attributes("open")).toBeUndefined();
+    expect(detailsElements[1]!.attributes("open")).toBe("");
+
+    await summaries[1]!.trigger("focusin");
+    await summaries[1]!.trigger("click");
+
+    expect(detailsElements[1]!.attributes("open")).toBeUndefined();
+  });
+
   it("does not auto-open a dropdown on hover when allowExpandOnGesture is false", async () => {
     const wrapper = await mountSuspended(ResponsiveHeader, {
       props: { responsiveNavLinks: navLinks, allowExpandOnGesture: false },

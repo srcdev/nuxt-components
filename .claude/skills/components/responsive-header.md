@@ -44,6 +44,58 @@ known failure modes, both fixed 2026-08-21 — keep them in mind before adding n
 
 ---
 
+## The dropdown "safe triangle" (read this before touching hover-close logic)
+
+`handleNavigationItemHover()` used to close every open top-bar dropdown the instant the mouse
+entered **any** `.main-navigation-item` — including a sibling item the cursor only crossed in
+transit. Moving the mouse diagonally from a dropdown's summary down into its own
+`.main-navigation-sub-nav` panel briefly dips through the 12px gap between them
+(`.main-navigation-sub-nav`'s `translate: 0 12px`), and at some cursor angles through a
+neighbouring item's hit area — closing the dropdown before the user reached it.
+
+**A pure-CSS "safe triangle" bridge (`clip-path` on a pseudo-element) was tried first and
+reverted — don't reintroduce it without solving the problem below first.** For such a bridge to
+escape `.main-navigation-item`'s `overflow: hidden` the same way `.main-navigation-sub-nav`
+does, its *containing block* must resolve to `.navigation` (the only positioned ancestor above
+the clipping box). But `.main-navigation-sub-nav` only manages this because it has no explicit
+`top`/`left` (containing-block choice is irrelevant to where it visually lands) — a bridge
+placed to *visually* sit under a specific trigger needs `top`/`left`/`inline-size` that resolve
+against something local, which forces it onto a positioned ancestor, which is always either
+already inside the `overflow: hidden` box (gets clipped, invisible, protects nothing) or itself
+becomes the sub-nav's new containing block (moves the *panel* inside the clipped box instead —
+the first attempt's mistake). A commented-out `/* position: relative; */` still sitting in the
+`:last-child` override is evidence someone hit this exact trap once before, independently.
+Neither approach is fixable without restructuring how the panel escapes clipping, which the
+collapse-measurement pipeline depends on.
+
+**Fixed (2026-08-21) with a JS hover-intent delay instead.** `handleNavigationItemHover()` now
+calls `scheduleCloseAllNavigationDetails()`, which delays the actual close by
+`HOVER_CLOSE_DELAY` (200ms) rather than firing it immediately. Two things cancel the pending
+close before it fires:
+
+- `handleSummaryHover()` (reaching a summary — cancels, then does its own close-others/toggle)
+- a `mouseenter` on `.main-navigation-sub-nav` itself, via `handleSubNavHover()`
+
+So a brief diagonal dip through a sibling's hit area survives (the close never actually runs
+before the cursor reaches its destination), while genuinely moving to a different part of the
+page still closes the dropdown promptly. `closeAllTimer` is cleared `onUnmounted` to avoid a
+stray close firing against stale refs after the component's gone.
+
+**`handleSummaryHover` never toggles — it only ever ensures the summary it's called on is
+open.** A real mouse click moves focus to the clicked element *before* the click event fires, so
+clicking a summary the mouse had just hover-opened dispatches both a `focusin` (→
+`handleSummaryHover`) and a `click` (→ `handleSummaryAction`) in quick succession. If
+`handleSummaryHover` toggled (as it did until 2026-08-21), that focusin would flip an
+already-open item closed, and the click's own toggle would immediately flip it back open — a
+visible open→closed→open flicker on every click, and the click effectively did nothing. Only
+`handleSummaryAction` (the explicit click) is allowed to close a dropdown; hover/focus is
+idempotent-safe to fire redundantly. `@vue/test-utils`' `.trigger("click")` doesn't synthesize
+this implicit focus side effect on its own — a test asserting click-to-close must explicitly
+`.trigger("focusin")` before `.trigger("click")` to reproduce it, or it'll pass against the
+buggy toggle-based version too.
+
+---
+
 ## Props reference
 
 | Prop | Type | Default | Notes |
