@@ -6,7 +6,7 @@
 
 `::details-content` is Baseline "newly available" (Sept 2025) — Chrome, Firefox, and Safari all generate the box. The height *animation* itself depends on `interpolate-size: allow-keywords`, which as of 2026 only runs in Chromium; other browsers still open/close correctly, just without the transition (accepted progressive-enhancement trade-off, not a bug).
 
-If a consumer needs the animation to run identically in every browser today, use [`ExpandingPanelLegacy`](expanding-panel-legacy.md) instead — same props/model/slots API, older `grid-template-rows` implementation with no Baseline-2025 dependency.
+If a consumer needs the animation to run identically in every browser today, use [`ExpandingPanelClassic`](expanding-panel-classic.md) instead — same props/model/slots API, older `grid-template-rows` implementation with no Baseline-2025 dependency.
 
 ---
 

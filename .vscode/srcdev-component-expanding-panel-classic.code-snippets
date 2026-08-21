@@ -1,73 +1,73 @@
 {
-  "SRCDEV ExpandingPanelLegacy Basic": {
-    "description": "Basic uncontrolled ExpandingPanelLegacy with summary and content slots",
+  "SRCDEV ExpandingPanelClassic Basic": {
+    "description": "Basic uncontrolled ExpandingPanelClassic with summary and content slots",
     "scope": "vue,html",
     "body": [
-      "<ExpandingPanelLegacy name=\"$1delivery\">",
+      "<ExpandingPanelClassic name=\"$1delivery\">",
       "  <template #summary>",
       "    <span>$2Delivery &amp; Returns</span>",
       "  </template>",
       "  <template #content>",
       "    <p>$3Free standard delivery on orders over £50.</p>",
       "  </template>",
-      "</ExpandingPanelLegacy>"
+      "</ExpandingPanelClassic>"
     ]
   },
-  "SRCDEV ExpandingPanelLegacy Controlled": {
-    "description": "ExpandingPanelLegacy controlled via v-model with external toggle",
+  "SRCDEV ExpandingPanelClassic Controlled": {
+    "description": "ExpandingPanelClassic controlled via v-model with external toggle",
     "scope": "vue,html",
     "body": [
-      "<ExpandingPanelLegacy name=\"$1faq-1\" v-model=\"$2isOpen\">",
+      "<ExpandingPanelClassic name=\"$1faq-1\" v-model=\"$2isOpen\">",
       "  <template #summary>",
       "    <span>$3What is your returns policy?</span>",
       "  </template>",
       "  <template #content>",
       "    <p>$4You can return any item within 30 days.</p>",
       "  </template>",
-      "</ExpandingPanelLegacy>"
+      "</ExpandingPanelClassic>"
     ]
   },
-  "SRCDEV ExpandingPanelLegacy Accordion Group": {
-    "description": "Multiple ExpandingPanelLegacy panels grouped into a native accordion (shared name, only one open at a time)",
+  "SRCDEV ExpandingPanelClassic Accordion Group": {
+    "description": "Multiple ExpandingPanelClassic panels grouped into a native accordion (shared name, only one open at a time)",
     "scope": "vue,html",
     "body": [
-      "<ExpandingPanelLegacy name=\"$1faq\">",
+      "<ExpandingPanelClassic name=\"$1faq\">",
       "  <template #summary>",
       "    <span>$2Question one?</span>",
       "  </template>",
       "  <template #content>",
       "    <p>$3Answer one.</p>",
       "  </template>",
-      "</ExpandingPanelLegacy>",
-      "<ExpandingPanelLegacy name=\"$1faq\">",
+      "</ExpandingPanelClassic>",
+      "<ExpandingPanelClassic name=\"$1faq\">",
       "  <template #summary>",
       "    <span>$4Question two?</span>",
       "  </template>",
       "  <template #content>",
       "    <p>$5Answer two.</p>",
       "  </template>",
-      "</ExpandingPanelLegacy>"
+      "</ExpandingPanelClassic>"
     ]
   },
-  "SRCDEV ExpandingPanelLegacy Force Opened": {
-    "description": "ExpandingPanelLegacy locked open, no toggle icon, cannot be collapsed",
+  "SRCDEV ExpandingPanelClassic Force Opened": {
+    "description": "ExpandingPanelClassic locked open, no toggle icon, cannot be collapsed",
     "scope": "vue,html",
     "body": [
-      "<ExpandingPanelLegacy name=\"$1notice\" :force-opened=\"true\">",
+      "<ExpandingPanelClassic name=\"$1notice\" :force-opened=\"true\">",
       "  <template #summary>",
       "    <strong>$2Important notice</strong>",
       "  </template>",
       "  <template #content>",
       "    <p>$3This panel cannot be collapsed.</p>",
       "  </template>",
-      "</ExpandingPanelLegacy>"
+      "</ExpandingPanelClassic>"
     ]
   },
-  "SRCDEV ExpandingPanelLegacy Content Is On Top": {
-    "description": "ExpandingPanelLegacy with content overlaying page content instead of pushing layout down",
+  "SRCDEV ExpandingPanelClassic Content Is On Top": {
+    "description": "ExpandingPanelClassic with content overlaying page content instead of pushing layout down",
     "scope": "vue,html",
     "body": [
-      "<ExpandingPanelLegacy",
+      "<ExpandingPanelClassic",
       "  name=\"$1overlay\"",
       "  :content-is-on-top=\"true\"",
       "  :style-class-passthrough=\"['$2my-overlay-panel']\"",
@@ -80,14 +80,14 @@
       "      <p>$4Positioned absolutely below the summary, doesn't push page content down.</p>",
       "    </div>",
       "  </template>",
-      "</ExpandingPanelLegacy>"
+      "</ExpandingPanelClassic>"
     ]
   },
-  "SRCDEV ExpandingPanelLegacy Custom Icon": {
-    "description": "ExpandingPanelLegacy with a custom toggle icon via #icon slot",
+  "SRCDEV ExpandingPanelClassic Custom Icon": {
+    "description": "ExpandingPanelClassic with a custom toggle icon via #icon slot",
     "scope": "vue,html",
     "body": [
-      "<ExpandingPanelLegacy name=\"$1custom-icon\">",
+      "<ExpandingPanelClassic name=\"$1custom-icon\">",
       "  <template #summary>",
       "    <span>$2Section title</span>",
       "  </template>",
@@ -97,22 +97,22 @@
       "  <template #content>",
       "    <p>$4Content here.</p>",
       "  </template>",
-      "</ExpandingPanelLegacy>"
+      "</ExpandingPanelClassic>"
     ]
   },
-  "SRCDEV ExpandingPanelLegacy CSS Override": {
-    "description": "CSS override scaffold for ExpandingPanelLegacy tokens",
+  "SRCDEV ExpandingPanelClassic CSS Override": {
+    "description": "CSS override scaffold for ExpandingPanelClassic tokens",
     "scope": "css",
     "body": [
       ".$1my-panel {",
-      "  .expanding-panel-legacy {",
-      "    --expanding-panel-legacy-summary-gap: $2;",
-      "    --expanding-panel-legacy-summary-padding-block: $3;",
-      "    --expanding-panel-legacy-icon-size: $4;",
+      "  .expanding-panel-classic {",
+      "    --expanding-panel-classic-summary-gap: $2;",
+      "    --expanding-panel-classic-summary-padding-block: $3;",
+      "    --expanding-panel-classic-icon-size: $4;",
       "",
       "    &.content-is-on-top {",
-      "      --expanding-panel-legacy-content-gap: $5;",
-      "      --expanding-panel-legacy-content-z-index: $6;",
+      "      --expanding-panel-classic-content-gap: $5;",
+      "      --expanding-panel-classic-content-z-index: $6;",
       "    }",
       "  }",
       "}"

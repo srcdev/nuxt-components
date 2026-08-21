@@ -259,10 +259,8 @@ watch(
                 }
                 + .expanding-panel-content {
                   border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
-                  .inner {
-                    .overflow-navigation-sub-nav-inner {
-                      margin-top: var(--overflow-nav-items-gap, 0px);
-                    }
+                  .overflow-navigation-sub-nav-inner {
+                    margin-top: var(--overflow-nav-items-gap, 0px);
                   }
                 }
               }
@@ -271,29 +269,25 @@ watch(
             .expanding-panel-content {
               border-bottom: 0.1rem solid transparent;
 
-              .inner {
+              .overflow-navigation-sub-nav-inner {
                 margin-top: 0;
+                position: relative;
 
-                .overflow-navigation-sub-nav-inner {
-                  margin-top: 0;
-                  position: relative;
+                .overflow-navigation-sub-nav-list {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 2px;
 
-                  .overflow-navigation-sub-nav-list {
-                    display: flex;
-                    flex-direction: column;
-                    gap: 2px;
+                  .overflow-navigation-sub-nav-item {
+                    padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
+                    padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
+                    font-size: var(--overflow-nav-sub-item-font-size, inherit);
+                    color: var(--overflow-nav-sub-item-color, inherit);
 
-                    .overflow-navigation-sub-nav-item {
-                      padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
-                      padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
-                      font-size: var(--overflow-nav-sub-item-font-size, inherit);
-                      color: var(--overflow-nav-sub-item-color, inherit);
-
-                      .overflow-navigation-sub-nav-link {
-                        display: block;
-                        text-decoration: none;
-                        color: inherit;
-                      }
+                    .overflow-navigation-sub-nav-link {
+                      display: block;
+                      text-decoration: none;
+                      color: inherit;
                     }
                   }
                 }

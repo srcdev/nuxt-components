@@ -24,13 +24,13 @@
 
 <script setup lang="ts">
 import ExpandingPanel from "../expanding-panel/ExpandingPanel.vue";
-import ExpandingPanelLegacy from "../expanding-panel-legacy/ExpandingPanelLegacy.vue";
+import ExpandingPanelClassic from "../expanding-panel-classic/ExpandingPanelClassic.vue";
 
 interface Props {
   name?: string;
   itemCount?: number;
   animationDuration?: number;
-  variant?: "modern" | "legacy";
+  variant?: "modern" | "classic";
   styleClassPassthrough?: string | string[];
 }
 
@@ -44,7 +44,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 const animationDurationStr = computed(() => `${props.animationDuration}ms`);
-const panelComponent = computed(() => (props.variant === "legacy" ? ExpandingPanelLegacy : ExpandingPanel));
+const panelComponent = computed(() => (props.variant === "classic" ? ExpandingPanelClassic : ExpandingPanel));
 </script>
 
 <style lang="css">
@@ -55,7 +55,7 @@ const panelComponent = computed(() => (props.variant === "legacy" ? ExpandingPan
 
     .accordian-item {
       &.expanding-panel,
-      &.expanding-panel-legacy {
+      &.expanding-panel-classic {
         transition:
           margin-block-end v-bind(animationDurationStr) ease-in-out,
           border-radius v-bind(animationDurationStr) ease-in-out;

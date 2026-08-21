@@ -20,10 +20,10 @@ const meta: Meta<typeof AccordianCore> = {
     },
     variant: {
       control: { type: "radio" },
-      options: ["modern", "legacy"],
+      options: ["modern", "classic"],
       description:
         "Which panel implementation to render: 'modern' (ExpandingPanel, ::details-content based) or " +
-        "'legacy' (ExpandingPanelLegacy, grid-template-rows based) — use legacy when the open/close " +
+        "'classic' (ExpandingPanelClassic, grid-template-rows based) — use classic when the open/close " +
         "animation must run identically in every browser today",
     },
     styleClassPassthrough: {
@@ -80,12 +80,12 @@ export const Default: Story = {
   }),
 };
 
-export const LegacyVariant: Story = {
-  name: "Legacy Variant",
+export const ClassicVariant: Story = {
+  name: "Classic Variant",
   args: {
     itemCount: 3,
     animationDuration: 300,
-    variant: "legacy",
+    variant: "classic",
   },
   render: (args) => ({
     components: { AccordianCore },

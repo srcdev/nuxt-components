@@ -1,35 +1,35 @@
-# ExpandingPanelLegacy — Consumer Styling Guide
+# ExpandingPanelClassic — Consumer Styling Guide
 
 ## Public token API
 
-All `--expanding-panel-legacy-*` tokens are the stable override surface. Set them at any scope
+All `--expanding-panel-classic-*` tokens are the stable override surface. Set them at any scope
 (global, page, or instance) without touching the component itself.
 
 | Token | Default | Controls |
 |---|---|---|
-| `--expanding-panel-legacy-summary-gap` | `1rem` | Gap between the summary label and the toggle icon |
-| `--expanding-panel-legacy-summary-padding-block` | `0.5rem` | Vertical padding on the clickable summary row |
-| `--expanding-panel-legacy-icon-size` | `1.2rem` | Toggle icon `font-size` |
-| `--expanding-panel-legacy-content-z-index` | `10` | Stacking order of the content region when `contentIsOnTop` is `true` |
-| `--expanding-panel-legacy-content-gap` | `0px` | Space between the summary and the content region when `contentIsOnTop` is `true` |
+| `--expanding-panel-classic-summary-gap` | `1rem` | Gap between the summary label and the toggle icon |
+| `--expanding-panel-classic-summary-padding-block` | `0.5rem` | Vertical padding on the clickable summary row |
+| `--expanding-panel-classic-icon-size` | `1.2rem` | Toggle icon `font-size` |
+| `--expanding-panel-classic-content-z-index` | `10` | Stacking order of the content region when `contentIsOnTop` is `true` |
+| `--expanding-panel-classic-content-gap` | `0px` | Space between the summary and the content region when `contentIsOnTop` is `true` |
 
 Note: `background-color`, `padding`, and shadow are **not** tokenised, and must never be applied
-to `.inner` itself — see [expanding-panel-legacy.md](../../../../.claude/skills/components/expanding-panel-legacy.md#styling-the-content-when-contentisontop)
+to `.inner` itself — see [expanding-panel-classic.md](../../../../.claude/skills/components/expanding-panel-classic.md#styling-the-content-when-contentisontop)
 for why, and style a wrapper *inside* the `#content` slot instead.
 
 ---
 
 ## Global theming — recommended approach
 
-Create `assets/styles/setup/07.components/expanding-panel-legacy.css` in the consuming app and set
-tokens on `:root`. This applies to every `ExpandingPanelLegacy` across the site.
+Create `assets/styles/setup/07.components/expanding-panel-classic.css` in the consuming app and set
+tokens on `:root`. This applies to every `ExpandingPanelClassic` across the site.
 
 ```css
-/* assets/styles/setup/07.components/expanding-panel-legacy.css */
+/* assets/styles/setup/07.components/expanding-panel-classic.css */
 :root {
-  --expanding-panel-legacy-summary-gap: 1.6rem;
-  --expanding-panel-legacy-summary-padding-block: 1.2rem;
-  --expanding-panel-legacy-icon-size: 1.4rem;
+  --expanding-panel-classic-summary-gap: 1.6rem;
+  --expanding-panel-classic-summary-padding-block: 1.2rem;
+  --expanding-panel-classic-icon-size: 1.4rem;
 }
 ```
 
@@ -43,8 +43,8 @@ No `:deep()` is required (component styles are unscoped).
 ```css
 /* In the consuming page's unscoped <style> block */
 .faq-section {
-  .expanding-panel-legacy {
-    --expanding-panel-legacy-summary-padding-block: 1.6rem;
+  .expanding-panel-classic {
+    --expanding-panel-classic-summary-padding-block: 1.6rem;
   }
 }
 ```
@@ -57,7 +57,7 @@ Use sparingly — prefer global or page-scoped CSS. When a single instance needs
 visual style, pass a modifier class:
 
 ```vue
-<ExpandingPanelLegacy
+<ExpandingPanelClassic
   name="promo"
   :content-is-on-top="true"
   :style-class-passthrough="['promo-panel']"
@@ -67,13 +67,13 @@ visual style, pass a modifier class:
     <!-- Wrapper INSIDE the slot carries the visual styling — never .inner itself -->
     <div class="promo-panel-body">...</div>
   </template>
-</ExpandingPanelLegacy>
+</ExpandingPanelClassic>
 ```
 
 ```css
-.expanding-panel-legacy.promo-panel {
-  --expanding-panel-legacy-content-gap: 0.4rem;
-  --expanding-panel-legacy-content-z-index: 20;
+.expanding-panel-classic.promo-panel {
+  --expanding-panel-classic-content-gap: 0.4rem;
+  --expanding-panel-classic-content-z-index: 20;
 }
 
 .promo-panel-body {
@@ -87,7 +87,7 @@ visual style, pass a modifier class:
 
 ## Notes
 
-- `--expanding-panel-legacy-content-gap` and `--expanding-panel-legacy-content-z-index` only take effect when
+- `--expanding-panel-classic-content-gap` and `--expanding-panel-classic-content-z-index` only take effect when
   `contentIsOnTop` is `true` — they're no-ops for the default (in-flow) layout.
 - Never set `background-color`, `padding`, `border`, or a shadow directly on `.inner`. `.inner`
   has no explicit height when collapsed (`grid-template-rows: 0fr`) and relies on
@@ -97,7 +97,7 @@ visual style, pass a modifier class:
   wrapper is a child of `.inner` and gets clipped correctly.
 - Don't stack multiple `contentIsOnTop` panels as direct siblings (linked via a shared `name` or
   not). The overlay is absolutely positioned so it doesn't push the next element down — which
-  means a sibling `ExpandingPanelLegacy` placed right after it sits exactly where the overlay renders,
+  means a sibling `ExpandingPanelClassic` placed right after it sits exactly where the overlay renders,
   and gets visually covered when the first panel opens. `contentIsOnTop` is for a single panel
   overlaying unrelated trailing page content, not for grouped/stacked accordion panels — use the
   default in-flow layout for those.

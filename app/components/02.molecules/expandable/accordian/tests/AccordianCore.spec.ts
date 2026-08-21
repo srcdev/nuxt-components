@@ -8,7 +8,7 @@ interface AccordianCoreInstance extends ComponentPublicInstance {
   name: string | undefined;
   itemCount: number;
   animationDuration: number;
-  variant: "modern" | "legacy";
+  variant: "modern" | "classic";
   styleClassPassthrough: string | string[];
 }
 
@@ -100,23 +100,23 @@ describe("AccordianCore", () => {
       props: { itemCount: 2 },
     });
     expect(wrapper.findAllComponents({ name: "ExpandingPanel" })).toHaveLength(2);
-    expect(wrapper.findAllComponents({ name: "ExpandingPanelLegacy" })).toHaveLength(0);
+    expect(wrapper.findAllComponents({ name: "ExpandingPanelClassic" })).toHaveLength(0);
   });
 
-  it("renders ExpandingPanelLegacy when variant is legacy", async () => {
+  it("renders ExpandingPanelClassic when variant is classic", async () => {
     const wrapper = await mountSuspended(AccordianCore, {
-      props: { itemCount: 2, variant: "legacy" },
+      props: { itemCount: 2, variant: "classic" },
     });
-    expect(wrapper.findAllComponents({ name: "ExpandingPanelLegacy" })).toHaveLength(2);
+    expect(wrapper.findAllComponents({ name: "ExpandingPanelClassic" })).toHaveLength(2);
     expect(wrapper.findAllComponents({ name: "ExpandingPanel" })).toHaveLength(0);
   });
 
-  it("forwards props identically to ExpandingPanelLegacy when variant is legacy", async () => {
+  it("forwards props identically to ExpandingPanelClassic when variant is classic", async () => {
     const wrapper = await mountSuspended(AccordianCore, {
-      props: { itemCount: 2, name: "legacy-accordian", animationDuration: 500, variant: "legacy" },
+      props: { itemCount: 2, name: "classic-accordian", animationDuration: 500, variant: "classic" },
     });
-    wrapper.findAllComponents({ name: "ExpandingPanelLegacy" }).forEach((panel) => {
-      expect(panel.props("name")).toBe("legacy-accordian");
+    wrapper.findAllComponents({ name: "ExpandingPanelClassic" }).forEach((panel) => {
+      expect(panel.props("name")).toBe("classic-accordian");
       expect(panel.props("animationDuration")).toBe(500);
       expect(panel.props("styleClassPassthrough")).toEqual(["accordian-item"]);
     });

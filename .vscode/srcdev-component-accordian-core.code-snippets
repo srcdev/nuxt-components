@@ -20,11 +20,11 @@
       "</AccordianCore>"
     ]
   },
-  "SRCDEV AccordianCore Legacy Variant": {
-    "description": "AccordianCore using ExpandingPanelLegacy panels (animation runs in every browser)",
+  "SRCDEV AccordianCore Classic Variant": {
+    "description": "AccordianCore using ExpandingPanelClassic panels (animation runs in every browser)",
     "scope": "vue,html",
     "body": [
-      "<AccordianCore name=\"$1faq\" :item-count=\"$2\" variant=\"legacy\">",
+      "<AccordianCore name=\"$1faq\" :item-count=\"$2\" variant=\"classic\">",
       "  <template #accordian-0-summary>",
       "    <span>$3Question one?</span>",
       "  </template>",
