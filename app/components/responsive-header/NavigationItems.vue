@@ -60,7 +60,6 @@
             v-model="panelOpenStates[`${String(groupKey)}-${localIndex}`]"
             name="overflow-navigation-group"
             :animation-duration="DETAILS_ANIMATION_DURATION"
-            icon-size="medium"
             :style-class-passthrough="['overflow-navigation-details']"
           >
             <template #summary>

@@ -455,42 +455,21 @@ const setupClickOutsideListeners = () => {
   }
 };
 
-onMounted(async () => {
-  // Always reset on every mount — this is a local ref so it naturally resets,
-  // but being explicit here makes the intent clear: geometry must be re-verified
-  // on every route change before the overflow button appears or transitions play.
-  isGeometryReady.value = false;
-
-  // Always (re-)populate the local nav refs — firstNavRef / secondNavRef are local
-  // refs that reset on unmount, so they must be re-assigned on every mount even
-  // when the useState flags say we're already initialized.
-  await initTemplateRefs();
-
-  if (!navigationInitialized.value || !navLoaded.value) {
-    navLoaded.value = true;
-    navigationInitialized.value = true;
-  }
-
-  // Geometry recalculation is handled by useResizeObserver which fires when the
-  // element first becomes observed. isGeometryReady is set there after the pass.
-  setupClickOutsideListeners();
-});
-
-// ─── Re-entrancy guard for the ResizeObserver callback ────────────────────
-// The observer fires an async callback that awaits multiple ticks and toggles
-// layout-affecting state. If the observer fires again while the first pass is
-// still in flight, two concurrent passes would race on isOverflowVisibleForMeasurement
-// and mainNavigationState.
+// ─── Re-entrancy guard for the geometry pass ──────────────────────────────
+// The pass is async and awaits multiple ticks while toggling layout-affecting
+// state. If it's triggered again (resize, or the post-fonts-ready recheck
+// below) while a pass is still in flight, two concurrent passes would race on
+// isOverflowVisibleForMeasurement and mainNavigationState.
 //
 // Pattern: "run-latest" queue.
-//   • isMeasuring gates entry — any new observer call while a pass is running
+//   • isMeasuring gates entry — any new trigger while a pass is running
 //     sets pendingMeasure = true and returns immediately.
-//   • The do/while re-runs once after the pass completes if a new resize arrived,
-//     so we never silently drop the final geometry update.
+//   • The do/while re-runs once after the pass completes if a new trigger
+//     arrived, so we never silently drop the final geometry update.
 let isMeasuring = false;
 let pendingMeasure = false;
 
-useResizeObserver(navigationWrapperRef, async () => {
+const runGeometryPass = async () => {
   if (isMeasuring) {
     pendingMeasure = true;
     return;
@@ -538,14 +517,50 @@ useResizeObserver(navigationWrapperRef, async () => {
         // ─── Normal resize after geometry is settled ───────────────────────────
         // The button's state is already correct (driven by showOverflowDetails),
         // so a single-pass measurement gives accurate secondaryNavRects.
-        await updateNavigationConfig("useResizeObserver");
+        await updateNavigationConfig("resize-or-fonts-ready");
         initMainNavigationState();
       }
     } while (pendingMeasure);
   } finally {
     isMeasuring = false;
   }
+};
+
+onMounted(async () => {
+  // Always reset on every mount — this is a local ref so it naturally resets,
+  // but being explicit here makes the intent clear: geometry must be re-verified
+  // on every route change before the overflow button appears or transitions play.
+  isGeometryReady.value = false;
+
+  // Always (re-)populate the local nav refs — firstNavRef / secondNavRef are local
+  // refs that reset on unmount, so they must be re-assigned on every mount even
+  // when the useState flags say we're already initialized.
+  await initTemplateRefs();
+
+  if (!navigationInitialized.value || !navLoaded.value) {
+    navLoaded.value = true;
+    navigationInitialized.value = true;
+  }
+
+  // Geometry recalculation is handled by useResizeObserver which fires when the
+  // element first becomes observed. isGeometryReady is set there after the pass.
+  setupClickOutsideListeners();
+
+  // ─── Re-verify geometry once webfonts have settled ────────────────────────
+  // The initial ResizeObserver-driven pass can run before self-hosted fonts
+  // (see nuxt.config.ts `fonts.families`) have swapped in, measuring nav-item
+  // widths against fallback-font metrics. That undercounts item width, letting
+  // one extra item fit that shouldn't — the wrapper's own size hasn't changed,
+  // so the ResizeObserver never refires on its own to correct it. document.fonts
+  // isn't available in SSR/non-browser test environments, so this is a no-op there.
+  if (typeof document !== "undefined" && document.fonts) {
+    document.fonts.ready.then(() => {
+      if (isGeometryReady.value) runGeometryPass();
+    });
+  }
 });
+
+useResizeObserver(navigationWrapperRef, runGeometryPass);
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -611,7 +626,16 @@ watch(
        --responsive-nav-decorator-indicator-color         (default: currentColor)
        --responsive-nav-decorator-hovered-indicator-color (default: inherits --responsive-nav-decorator-indicator-color)
        --responsive-nav-decorator-hovered-bg              (default: oklch(100% 0 0 / 8%))
+
+       --responsive-header-link-font-size       (default: inherit)
     ──────────────────────────────────────────────────────────────────────── */
+
+    /* `inherit` means a viewport-relative (vw/clamp) ancestor font-size silently
+       flows into the overflow-collapse width measurement — the ResizeObserver
+       only watches this element's own box size, so a scrollbar-driven vw shift
+       can change nav-item text width without ever re-triggering a re-measurement.
+       Set this token to a fixed value (or a small set of breakpoint-based values)
+       to avoid it. */
 
     --_link-visibility-transition: none;
     position: relative;
@@ -682,6 +706,7 @@ watch(
             display: flex;
             gap: 6px;
             text-wrap-mode: nowrap;
+            font-size: var(--responsive-header-link-font-size, inherit);
             color: var(--responsive-header-link-color, inherit);
             text-decoration: none;
             cursor: pointer;
@@ -694,6 +719,17 @@ watch(
             margin-block: var(--_link-margin-block);
             margin-inline: var(--_link-margin-inline);
             border-bottom: var(--_link-border-default);
+          }
+
+          /* Reserved so the icon's async-loaded SVG (Icon component) can't widen
+             the item after the initial geometry-measurement pass has already run —
+             an unsized icon measures at ~0 width until its content arrives, which
+             the overflow-collapse ResizeObserver has no way to detect afterwards
+             (the wrapper's own box doesn't necessarily change size when it happens). */
+          .decorator-icon {
+            flex-shrink: 0;
+            width: 1.35em;
+            height: 1.35em;
           }
 
           .main-navigation-details {
@@ -711,8 +747,13 @@ watch(
               gap: 6px;
               text-wrap-mode: nowrap;
 
+              /* Reserved for the same reason as .decorator-icon above — an
+                 unsized chevron would widen the summary once its SVG loads. */
               .icon {
                 display: block;
+                flex-shrink: 0;
+                width: 1.35em;
+                height: 1.35em;
                 transform: var(--_icon-transform);
                 transition: transform 0.2s ease-in-out;
               }
@@ -728,6 +769,7 @@ watch(
               cursor: pointer;
               position: relative;
               z-index: 4;
+              font-size: var(--responsive-header-link-font-size, inherit);
               color: var(--responsive-header-link-color, inherit);
 
               &::-webkit-details-marker,
@@ -833,13 +875,6 @@ watch(
               width: 1.35em;
             }
           }
-        }
-      }
-
-      .main-navigation-link {
-        .icon {
-          height: 1.35em;
-          width: 1.35em;
         }
       }
 

@@ -266,6 +266,19 @@ onMounted(() => {
   --responsive-header-color: var(--slate-00);
   --responsive-header-link-color: var(--slate-00);
 
+  /* Fixed (non-fluid) nav-link font-size — deliberately NOT var(--step-*).
+     A vw-based clamp() here drifts with the scrollbar (see
+     ResponsiveHeader.vue's token comment) without ever re-triggering the
+     overflow-collapse ResizeObserver, silently letting one extra item fit
+     that shouldn't. Values TBC after a visual pass. */
+  --responsive-header-link-font-size: 1.2rem;
+  @media (min-width: 768px) {
+    --responsive-header-link-font-size: 1.4rem;
+  }
+  @media (min-width: 1024px) {
+    --responsive-header-link-font-size: 1.5rem;
+  }
+
   --responsive-header-sub-nav-bg: #000;
   --responsive-header-sub-nav-border: 1px solid #efefef75;
 

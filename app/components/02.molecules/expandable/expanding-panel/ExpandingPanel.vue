@@ -120,11 +120,17 @@ const onDetailsToggle = (event: Event) => {
         .label-wrapper {
           display: inline-block;
         }
+        /* inline-size is reserved explicitly — the grid's align-items:center
+           doesn't stretch this item to row height, so with only aspect-ratio:1
+           and no content yet (icon SVG not loaded), the wrapper has nothing to
+           size itself against and collapses to 0 until the icon arrives, then
+           pops in and shifts the "auto" grid column's width. */
         .icon-wrapper {
           display: flex;
           align-items: center;
           justify-content: space-between;
 
+          inline-size: var(--expanding-panel-icon-size, 1.2rem);
           aspect-ratio: 1;
           overflow: hidden;
 
