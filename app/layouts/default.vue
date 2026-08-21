@@ -1,43 +1,35 @@
 <template>
   <div class="page-layout">
-    <PageRow tag="div" variant="full" :style-class-passthrough="['header']">
-      <template #default>
-        <header class="responsive-header">
-          <nav class="home-navigation" aria-label="Home Navigation">
-            <SkipLinks>
-              <template #homeLink>
-                <NuxtLink to="/" class="home-link">
-                  SRCDEV
-                  <span>components</span>
-                </NuxtLink>
-              </template>
-            </SkipLinks>
-          </nav>
-          <ResponsiveHeader
-            :responsive-nav-links
-            :gap-between-first-and-second-nav="12"
-            :style-class-passthrough="['site-header-nav']"
-            :overflow-details-summary-icons="{
-              more: 'gravity-ui:ellipsis',
-              burger: 'gravity-ui:bars',
-            }"
-            :collapse-at-main-nav-intersection="false"
-            :allow-expand-on-gesture="false"
-          >
-            <template #secondaryNavigation>
-              <ul class="secondary-navigation-list">
-                <li class="secondary-navigation-item">
-                  <NuxtLink class="secondary-navigation-link" to="/">
-                    <Icon name="material-symbols:settings-outline-rounded" class="icon" aria-hidden="true" />
-                    <span class="sr-only">Settings</span>
-                  </NuxtLink>
-                </li>
-              </ul>
-            </template>
-          </ResponsiveHeader>
-        </header>
+    <SiteHeader
+      :responsive-nav-links
+      :gap-between-first-and-second-nav="12"
+      page-row-variant="full"
+      :style-class-passthrough="['header']"
+      :nav-style-class-passthrough="['site-header-nav']"
+      :overflow-details-summary-icons="{
+        more: 'gravity-ui:ellipsis',
+        burger: 'gravity-ui:bars',
+      }"
+      :collapse-at-main-nav-intersection="false"
+      :allow-expand-on-gesture="false"
+    >
+      <template #branding>
+        <NuxtLink to="/" class="home-link">
+          SRCDEV
+          <span>components</span>
+        </NuxtLink>
       </template>
-    </PageRow>
+      <template #secondaryNavigation>
+        <ul class="secondary-navigation-list">
+          <li class="secondary-navigation-item">
+            <NuxtLink class="secondary-navigation-link" to="/">
+              <Icon name="material-symbols:settings-outline-rounded" class="icon" aria-hidden="true" />
+              <span class="sr-only">Settings</span>
+            </NuxtLink>
+          </li>
+        </ul>
+      </template>
+    </SiteHeader>
     <PageRow id="main-content" class="main-content" tag="main" variant="full" :is-landmark="true">
       <template #default>
         <slot name="layout-content">Page content goes here</slot>
@@ -231,39 +223,31 @@ onMounted(() => {
 
   width: 100%;
 
-  .responsive-header {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 24px;
-    align-items: center;
-    padding-block: 0;
-    padding-inline: 24px;
-    background-color: #000;
+  /* SiteHeader token overrides — see .claude/skills/components/site-header.md */
+  --site-header-gap: 2.4rem;
+  --site-header-padding-inline: 2.4rem;
+  --site-header-bg: #000;
+  --site-header-position: relative;
+  --site-header-z-index: 9;
 
-    position: relative;
-    z-index: 9;
+  .home-link {
+    display: flex;
+    flex-direction: column;
+    text-wrap-mode: nowrap;
+    font-size: var(--step-5);
+    letter-spacing: 0.2em;
+    color: var(--slate-00);
+    text-decoration: none;
 
-    width: 100%;
+    span {
+      font-size: var(--step-3);
+      letter-spacing: initial;
+    }
 
-    .home-link {
-      display: flex;
-      flex-direction: column;
-      text-wrap-mode: nowrap;
-      font-size: var(--step-5);
-      letter-spacing: 0.2em;
-      color: var(--slate-00);
-      text-decoration: none;
-
-      span {
-        font-size: var(--step-3);
-        letter-spacing: initial;
-      }
-
-      &:hover {
-        border-radius: 0.4rem;
-        outline: 2px solid var(--green-08);
-        outline-offset: 0.4rem;
-      }
+    &:hover {
+      border-radius: 0.4rem;
+      outline: 2px solid var(--green-08);
+      outline-offset: 0.4rem;
     }
   }
 }

@@ -1,0 +1,74 @@
+{
+  "SRCDEV SiteHeader Basic": {
+    "description": "SiteHeader wrapping PageRow + SkipLinks + ResponsiveHeader, with a branding slot",
+    "scope": "vue,html",
+    "body": [
+      "<SiteHeader",
+      "  :responsive-nav-links=\"$1responsiveNavLinks\"",
+      "  :style-class-passthrough=\"['header']\"",
+      "  :nav-style-class-passthrough=\"['site-header-nav']\"",
+      ">",
+      "  <template #branding>",
+      "    <NuxtLink to=\"/\" class=\"home-link\">$2Brand</NuxtLink>",
+      "  </template>",
+      "</SiteHeader>"
+    ]
+  },
+  "SRCDEV SiteHeader With Secondary Navigation": {
+    "description": "SiteHeader with the secondaryNavigation slot (e.g. a settings icon link)",
+    "scope": "vue,html",
+    "body": [
+      "<SiteHeader :responsive-nav-links=\"$1responsiveNavLinks\">",
+      "  <template #branding>",
+      "    <NuxtLink to=\"/\" class=\"home-link\">$2Brand</NuxtLink>",
+      "  </template>",
+      "  <template #secondaryNavigation>",
+      "    <NuxtLink to=\"$3/settings\" aria-label=\"$4Settings\">",
+      "      <Icon name=\"$5material-symbols:settings-outline-rounded\" />",
+      "    </NuxtLink>",
+      "  </template>",
+      "</SiteHeader>"
+    ]
+  },
+  "SRCDEV SiteHeader Nav Data (flat)": {
+    "description": "Simple flat responsiveNavLinks data with no dropdowns, for a few-page site",
+    "scope": "typescript,vue",
+    "body": [
+      "const $1responsiveNavLinks = {",
+      "  main: [",
+      "    { name: \"$2Home\", path: \"$3/\" },",
+      "    { name: \"$4About\", path: \"$5/about\" },",
+      "    { name: \"$6Contact\", path: \"$7/contact\" },",
+      "  ],",
+      "};"
+    ]
+  },
+  "SRCDEV SiteHeader Nav Data (with dropdown)": {
+    "description": "responsiveNavLinks data with a dropdown group, for the full overflow-nav experience",
+    "scope": "typescript,vue",
+    "body": [
+      "const $1responsiveNavLinks = {",
+      "  firstNav: [",
+      "    {",
+      "      name: \"$2Components\",",
+      "      childLinksTitle: \"$3UI Components\",",
+      "      childLinks: [{ name: \"$4Item\", path: \"$5/path\" }],",
+      "    },",
+      "    { name: \"$6Typography\", path: \"$7/typography\" },",
+      "  ],",
+      "};"
+    ]
+  },
+  "SRCDEV SiteHeader CSS Override": {
+    "description": "CSS override scaffold for SiteHeader token styling",
+    "scope": "css",
+    "body": [
+      ".$1header {",
+      "  --site-header-gap: $2 2.4rem;",
+      "  --site-header-padding-inline: $3 2.4rem;",
+      "  --site-header-bg: $4transparent;",
+      "  /* --site-header-position: sticky; */",
+      "}"
+    ]
+  }
+}
