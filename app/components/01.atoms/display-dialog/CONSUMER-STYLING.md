@@ -1,5 +1,17 @@
 # DisplayDialog — Consumer Styling Guide
 
+## Structural class names (2026-08-22)
+
+`DisplayDialog` renders `<dialog>` inline in the component tree, not via `<Teleport>` — so it's a
+genuine descendant of wherever it's used in the page, and any ancestor's CSS selectors reach it.
+Before 2026-08-22 its internal sections used bare generic class names (`.inner`, `.header`,
+`.footer`, `.col-left`, `.col-right`, `.dialog-content`) — a consumer app with its own `.header`/
+`.footer` layout classes (extremely common names) had its unlayered site CSS silently override the
+dialog's own footer layout (button alignment, padding) purely by class-name collision, since
+unlayered CSS always beats `@layer components` regardless of specificity. All six renamed to
+`.display-dialog-*` prefixed variants (`.display-dialog-inner`, `.display-dialog-header`, etc.) —
+update any consumer overrides written against the old names.
+
 ## Public token API
 
 All `--display-dialog-*` tokens are the stable override surface. Because dialogs are site-wide UI
@@ -75,11 +87,11 @@ on `:root`. This applies to every `DisplayDialog` across the site.
 
 The `fullscreen` variant bypasses `--_inner-border-radius`, `--_inner-border`, and
 `--_inner-outline` directly (setting them to `0`/`none`). To restyle the fullscreen panel,
-target the private tokens on `.inner.fullscreen`:
+target the private tokens on `.display-dialog-inner.fullscreen`:
 
 ```css
 .display-dialog {
-  .inner {
+  .display-dialog-inner {
     &.confirm {
       /* e.g. constrain confirm panel width further */
       max-width: 40rem;
@@ -101,19 +113,19 @@ target the private tokens on `.inner.fullscreen`:
 
 ## Section targeting
 
-Target `.header`, `.dialog-content`, and `.footer` directly to adjust layout within the panel:
+Target `.display-dialog-header`, `.display-dialog-content`, and `.display-dialog-footer` directly to adjust layout within the panel:
 
 ```css
 .display-dialog {
-  .header {
+  .display-dialog-header {
     border-bottom: 0.1rem solid var(--brand-border);
   }
 
-  .dialog-content {
+  .display-dialog-content {
     /* content area uses --display-dialog-content-padding */
   }
 
-  .footer {
+  .display-dialog-footer {
     border-top: 0.1rem solid var(--brand-border);
     justify-content: space-between; /* override default flex-end */
   }
@@ -134,7 +146,7 @@ you can scope overrides to a specific page without affecting the rest of the sit
     --display-dialog-inner-border-radius: 0;
     --display-dialog-backdrop-background: rgba(0, 0, 0, 0.8);
 
-    .footer {
+    .display-dialog-footer {
       justify-content: stretch;
     }
   }
@@ -156,7 +168,7 @@ needs a different look, pass a modifier class and target it alongside `.display-
 .display-dialog.danger-dialog {
   --display-dialog-backdrop-background: rgba(180, 0, 0, 0.4);
 
-  .inner {
+  .display-dialog-inner {
     --display-dialog-inner-border: 0.2rem solid var(--color-danger);
   }
 }

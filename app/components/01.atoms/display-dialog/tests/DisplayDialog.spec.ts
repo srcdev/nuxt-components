@@ -116,81 +116,81 @@ describe("DisplayDialog", () => {
     expect(wrapper.attributes("role")).toBe("alertdialog");
   });
 
-  // ─── Variant class on .inner ──────────────────────────────────────────────
+  // ─── Variant class on .display-dialog-inner ──────────────────────────────────────────────
 
-  it("applies 'dialog' class to .inner by default", async () => {
+  it("applies 'dialog' class to .display-dialog-inner by default", async () => {
     const wrapper = await mountSuspended(DisplayDialog, {
       props: { dataDialogId: "test" },
     });
-    expect(wrapper.find(".inner").classes()).toContain("dialog");
+    expect(wrapper.find(".display-dialog-inner").classes()).toContain("dialog");
   });
 
   it.each(["dialog", "modal", "confirm", "alert", "fullscreen"] as const)(
-    "applies '%s' class to .inner",
+    "applies '%s' class to .display-dialog-inner",
     async (variant) => {
       const wrapper = await mountSuspended(DisplayDialog, {
         props: { dataDialogId: "test", variant },
       });
-      expect(wrapper.find(".inner").classes()).toContain(variant);
+      expect(wrapper.find(".display-dialog-inner").classes()).toContain(variant);
     }
   );
 
   // ─── Slots ────────────────────────────────────────────────────────────────
 
-  it("renders dialogTitle slot in .col-left", async () => {
+  it("renders dialogTitle slot in .display-dialog-col-left", async () => {
     const wrapper = await mountSuspended(DisplayDialog, {
       props: { dataDialogId: "test" },
       slots: { dialogTitle: "<p>My Title</p>" },
     });
-    expect(wrapper.find(".col-left").text()).toBe("My Title");
+    expect(wrapper.find(".display-dialog-col-left").text()).toBe("My Title");
   });
 
-  it("omits .col-left when dialogTitle slot is not provided", async () => {
+  it("omits .display-dialog-col-left when dialogTitle slot is not provided", async () => {
     const wrapper = await mountSuspended(DisplayDialog, {
       props: { dataDialogId: "test" },
     });
-    expect(wrapper.find(".col-left").exists()).toBe(false);
+    expect(wrapper.find(".display-dialog-col-left").exists()).toBe(false);
   });
 
-  it("renders dialogContent slot in .dialog-content", async () => {
+  it("renders dialogContent slot in .display-dialog-content", async () => {
     const wrapper = await mountSuspended(DisplayDialog, {
       props: { dataDialogId: "test" },
       slots: { dialogContent: "<p>Content</p>" },
     });
-    expect(wrapper.find(".dialog-content").text()).toBe("Content");
+    expect(wrapper.find(".display-dialog-content").text()).toBe("Content");
   });
 
-  it("omits .dialog-content when dialogContent slot is not provided", async () => {
+  it("omits .display-dialog-content when dialogContent slot is not provided", async () => {
     const wrapper = await mountSuspended(DisplayDialog, {
       props: { dataDialogId: "test" },
     });
-    expect(wrapper.find(".dialog-content").exists()).toBe(false);
+    expect(wrapper.find(".display-dialog-content").exists()).toBe(false);
   });
 
-  it("renders .footer when actionButtonLeft slot is provided", async () => {
+  it("renders .display-dialog-footer when actionButtonLeft slot is provided", async () => {
     const wrapper = await mountSuspended(DisplayDialog, {
       props: { dataDialogId: "test" },
       slots: { actionButtonLeft: "<button>Cancel</button>" },
     });
-    expect(wrapper.find(".footer").exists()).toBe(true);
+    expect(wrapper.find(".display-dialog-footer").exists()).toBe(true);
   });
 
-  it("renders .footer when actionButtonRight slot is provided", async () => {
+  it("renders .display-dialog-footer when actionButtonRight slot is provided", async () => {
     const wrapper = await mountSuspended(DisplayDialog, {
       props: { dataDialogId: "test" },
       slots: { actionButtonRight: "<button>Confirm</button>" },
     });
-    expect(wrapper.find(".footer").exists()).toBe(true);
+    expect(wrapper.find(".display-dialog-footer").exists()).toBe(true);
   });
 
-  it("omits .footer when neither action button slot is provided", async () => {
+  it("omits .display-dialog-footer when neither action button slot is provided", async () => {
     const wrapper = await mountSuspended(DisplayDialog, {
       props: { dataDialogId: "test" },
     });
-    expect(wrapper.find(".footer").exists()).toBe(false);
+    expect(wrapper.find(".display-dialog-footer").exists()).toBe(false);
   });
 
-  it("renders both action button slots inside .footer", async () => {
+  it("renders both action button slots inside .display-dialog-footer", async () => {
     const wrapper = await mountSuspended(DisplayDialog, {
       props: { dataDialogId: "test" },
       slots: {
@@ -198,8 +198,8 @@ describe("DisplayDialog", () => {
         actionButtonRight: "<button>Confirm</button>",
       },
     });
-    expect(wrapper.find(".footer").text()).toContain("Cancel");
-    expect(wrapper.find(".footer").text()).toContain("Confirm");
+    expect(wrapper.find(".display-dialog-footer").text()).toContain("Cancel");
+    expect(wrapper.find(".display-dialog-footer").text()).toContain("Confirm");
   });
 
   // ─── allowContentScroll ───────────────────────────────────────────────────
@@ -209,7 +209,7 @@ describe("DisplayDialog", () => {
       props: { dataDialogId: "test" },
       slots: { dialogContent: "<p>Content</p>" },
     });
-    expect(wrapper.find(".dialog-content").classes()).not.toContain("allow-content-scroll");
+    expect(wrapper.find(".display-dialog-content").classes()).not.toContain("allow-content-scroll");
   });
 
   it("applies allow-content-scroll class when allowContentScroll=true", async () => {
@@ -217,7 +217,7 @@ describe("DisplayDialog", () => {
       props: { dataDialogId: "test", allowContentScroll: true },
       slots: { dialogContent: "<p>Content</p>" },
     });
-    expect(wrapper.find(".dialog-content").classes()).toContain("allow-content-scroll");
+    expect(wrapper.find(".display-dialog-content").classes()).toContain("allow-content-scroll");
   });
 
   // ─── Close button ─────────────────────────────────────────────────────────
@@ -312,12 +312,12 @@ describe("DisplayDialog", () => {
         props: { dataDialogId: "test" },
         slots: { dialogContent: "<p>Content</p>" },
       });
-      expect(wrapper.find(".inner").classes()).toContain("dialog");
+      expect(wrapper.find(".display-dialog-inner").classes()).toContain("dialog");
       expect(wrapper.attributes("align-dialog")).toBe("center");
       expect(wrapper.attributes("justify-dialog")).toBe("center");
       expect(document.body.classList.contains("lock")).toBe(true);
-      expect(wrapper.find(".dialog-content").classes()).not.toContain("allow-content-scroll");
-      expect(wrapper.find(".header").attributes("data-theme")).toBeUndefined();
+      expect(wrapper.find(".display-dialog-content").classes()).not.toContain("allow-content-scroll");
+      expect(wrapper.find(".display-dialog-header").attributes("data-theme")).toBeUndefined();
       expect(iconName(wrapper)).toContain("bitcoin-icons:cross-filled");
     });
 
@@ -340,12 +340,12 @@ describe("DisplayDialog", () => {
         props: { dataDialogId: "test" },
         slots: { dialogContent: "<p>Content</p>" },
       });
-      expect(wrapper.find(".inner").classes()).toContain("modal");
+      expect(wrapper.find(".display-dialog-inner").classes()).toContain("modal");
       expect(wrapper.attributes("align-dialog")).toBe("end");
       expect(wrapper.attributes("justify-dialog")).toBe("start");
       expect(document.body.classList.contains("lock")).toBe(false);
-      expect(wrapper.find(".dialog-content").classes()).toContain("allow-content-scroll");
-      expect(wrapper.find(".header").attributes("data-theme")).toBe("info");
+      expect(wrapper.find(".display-dialog-content").classes()).toContain("allow-content-scroll");
+      expect(wrapper.find(".display-dialog-header").attributes("data-theme")).toBe("info");
       expect(iconName(wrapper)).toContain("heroicons:x-mark");
     });
 
@@ -377,12 +377,12 @@ describe("DisplayDialog", () => {
         },
         slots: { dialogContent: "<p>Content</p>" },
       });
-      expect(wrapper.find(".inner").classes()).toContain("fullscreen");
+      expect(wrapper.find(".display-dialog-inner").classes()).toContain("fullscreen");
       expect(wrapper.attributes("align-dialog")).toBe("start");
       expect(wrapper.attributes("justify-dialog")).toBe("end");
       expect(document.body.classList.contains("lock")).toBe(true);
-      expect(wrapper.find(".dialog-content").classes()).not.toContain("allow-content-scroll");
-      expect(wrapper.find(".header").attributes("data-theme")).toBe("error");
+      expect(wrapper.find(".display-dialog-content").classes()).not.toContain("allow-content-scroll");
+      expect(wrapper.find(".display-dialog-header").attributes("data-theme")).toBe("error");
       expect(iconName(wrapper)).toContain("material-symbols:close");
     });
 

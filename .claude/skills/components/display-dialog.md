@@ -14,9 +14,9 @@ open/close state management.
 |---|---|---|---|
 | `dataDialogId` | `string` | — | **Required.** Unique identifier rendered as `data-dialog-id` attribute. |
 | `variant` | `'dialog' \| 'modal' \| 'confirm' \| 'alert' \| 'fullscreen'` | `'dialog'` | Controls panel sizing and ARIA role. |
-| `theme` | `SemanticTheme` | `undefined` | Optional header accent — `data-theme` on `.header` only; adds a coloured bottom border and tints the close icon. |
+| `theme` | `SemanticTheme` | `undefined` | Optional header accent — `data-theme` on `.display-dialog-header` only; adds a coloured bottom border and tints the close icon. |
 | `v-model` | `boolean` | — | Controls open/closed state. |
-| `allowContentScroll` | `boolean` | `false` | Enables independent scroll on `.dialog-content`. |
+| `allowContentScroll` | `boolean` | `false` | Enables independent scroll on `.display-dialog-content`. |
 | `lockViewport` | `boolean` | `true` | Adds/removes `lock` class on `<body>` on mount/close. |
 | `justifyDialog` | `'start' \| 'center' \| 'end'` | `'center'` | Horizontal position of panel within overlay. |
 | `alignDialog` | `'start' \| 'center' \| 'end'` | `'center'` | Vertical position of panel within overlay. |
@@ -27,12 +27,12 @@ open/close state management.
 
 | Slot | Renders in |
 |---|---|
-| `#dialogTitle` | `.col-left` in the header (hidden when slot is empty) |
-| `#dialogContent` | `.dialog-content` (hidden when slot is empty) |
-| `#actionButtonLeft` | Left side of `.footer` |
-| `#actionButtonRight` | Right side of `.footer` |
+| `#dialogTitle` | `.display-dialog-col-left` in the header (hidden when slot is empty) |
+| `#dialogContent` | `.display-dialog-content` (hidden when slot is empty) |
+| `#actionButtonLeft` | Left side of `.display-dialog-footer` |
+| `#actionButtonRight` | Right side of `.display-dialog-footer` |
 
-`.footer` is omitted entirely when neither action button slot is provided.
+`.display-dialog-footer` is omitted entirely when neither action button slot is provided.
 
 ## Variants
 

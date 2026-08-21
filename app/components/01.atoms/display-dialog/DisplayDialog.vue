@@ -16,13 +16,13 @@
       :click-outside-deactivates="!isAlert"
       @deactivate="closeDialog()"
     >
-      <div class="inner" :class="[resolved.variant]">
-        <div class="header" :data-theme="resolved.theme">
-          <div v-if="hasTitle" :id="dialogTitleId" class="col-left">
+      <div class="display-dialog-inner" :class="[resolved.variant]">
+        <div class="display-dialog-header" :data-theme="resolved.theme">
+          <div v-if="hasTitle" :id="dialogTitleId" class="display-dialog-col-left">
             <slot name="dialogTitle"></slot>
           </div>
 
-          <div class="col-right">
+          <div class="display-dialog-col-right">
             <button
               data-test-id="display-dialog-header-close"
               class="display-dialog-close"
@@ -35,13 +35,13 @@
         </div>
         <div
           v-if="hasContent"
-          class="dialog-content"
+          class="display-dialog-content"
           :class="[{ 'allow-content-scroll': resolved.allowContentScroll }]"
           :tabindex="resolved.allowContentScroll ? 0 : undefined"
         >
           <slot name="dialogContent"></slot>
         </div>
-        <div v-if="hasFooter" class="footer">
+        <div v-if="hasFooter" class="display-dialog-footer">
           <slot name="actionButtonLeft"></slot>
           <slot name="actionButtonRight"></slot>
         </div>
@@ -216,7 +216,7 @@ onUnmounted(() => {
       align-items: flex-end;
     }
 
-    .inner {
+    .display-dialog-inner {
       display: grid;
       grid-template-rows: auto 1fr auto;
       border-radius: var(--_inner-border-radius);
@@ -232,7 +232,11 @@ onUnmounted(() => {
       }
 
       &.confirm {
-        width: initial;
+        /* Matches .alert's cap. Plain `width: initial` (== auto) makes this a shrink-to-fit flex
+           item with no wrapping constraint, so a long confirm sentence renders as one unbroken
+           line and drags the whole dialog (and its footer buttons) out to that width instead of
+           wrapping normally — visible once a real confirm message runs more than a few words. */
+        width: min(90%, 48rem);
       }
 
       &.dialog {
@@ -252,7 +256,7 @@ onUnmounted(() => {
         width: initial;
       }
 
-      .header {
+      .display-dialog-header {
         display: flex;
         align-items: center;
         padding: var(--_header-padding);
@@ -265,11 +269,11 @@ onUnmounted(() => {
           }
         }
 
-        .col-left {
+        .display-dialog-col-left {
           flex: 1;
         }
 
-        .col-right {
+        .display-dialog-col-right {
           margin-inline-start: auto;
 
           .display-dialog-close {
@@ -303,7 +307,7 @@ onUnmounted(() => {
         }
       }
 
-      .dialog-content {
+      .display-dialog-content {
         overflow: hidden;
         padding: var(--_content-padding);
 
@@ -315,7 +319,7 @@ onUnmounted(() => {
         }
       }
 
-      .footer {
+      .display-dialog-footer {
         display: flex;
         gap: var(--_footer-gap);
         justify-content: flex-end;
