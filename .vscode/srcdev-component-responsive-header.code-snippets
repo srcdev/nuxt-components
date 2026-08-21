@@ -1,0 +1,46 @@
+{
+  "SRCDEV ResponsiveHeader Basic": {
+    "description": "ResponsiveHeader with dropdown groups and a secondaryNavigation slot",
+    "scope": "vue,html",
+    "body": [
+      "<ResponsiveHeader",
+      "  :responsive-nav-links=\"$1responsiveNavLinks\"",
+      "  :style-class-passthrough=\"['site-header-nav']\"",
+      ">",
+      "  <template #secondaryNavigation>",
+      "    <NuxtLink to=\"$2/settings\" aria-label=\"$3Settings\">",
+      "      <Icon name=\"$4material-symbols:settings-outline-rounded\" />",
+      "    </NuxtLink>",
+      "  </template>",
+      "</ResponsiveHeader>"
+    ]
+  },
+  "SRCDEV ResponsiveHeader Nav Data (with dropdown)": {
+    "description": "responsiveNavLinks data with a dropdown group",
+    "scope": "typescript,vue",
+    "body": [
+      "const $1responsiveNavLinks = {",
+      "  firstNav: [",
+      "    { name: \"$2Home\", path: \"$3/\" },",
+      "    {",
+      "      name: \"$4Components\",",
+      "      childLinksTitle: \"$5UI Components\",",
+      "      childLinks: [{ name: \"$6Item\", path: \"$7/path\" }],",
+      "    },",
+      "  ],",
+      "};"
+    ]
+  },
+  "SRCDEV ResponsiveHeader CSS Override": {
+    "description": "CSS override scaffold for ResponsiveHeader token styling — sets a fixed (non-fluid) link font-size",
+    "scope": "css",
+    "body": [
+      ".$1site-header-nav {",
+      "  --responsive-header-link-color: $2inherit;",
+      "  --responsive-header-bg: $3transparent;",
+      "  /* Fixed, NOT var(--step-*) — see responsive-header.md's measurement-pipeline note. */",
+      "  --responsive-header-link-font-size: ${4:1.4rem};",
+      "}"
+    ]
+  }
+}

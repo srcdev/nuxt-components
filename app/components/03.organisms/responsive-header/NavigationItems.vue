@@ -106,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderState, ResponsiveHeaderNavItem } from "../../types/components";
+import type { ResponsiveHeaderState, ResponsiveHeaderNavItem } from "../../../types/components";
 
 interface Props {
   mainNavigationState?: ResponsiveHeaderState;

@@ -1,0 +1,34 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`NavigationItems > renders correct HTML structure with default props 1`] = `
+"<div class="overflow-navigation-wrapper" role="menu" aria-label="Overflow navigation menu">
+  <ul class="overflow-navigation-list visible" style="--_overflow-navigation-list-min-width: 0px;" role="none">
+    <li class="overflow-navigation-item is-active" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="0" role="none"><a href="/" class="overflow-navigation-link" role="menuitem"><span class="overflow-navigation-text">Home</span></a></li>
+    <li class="overflow-navigation-item visible" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="1" role="none"><a href="/about" class="overflow-navigation-link" role="menuitem"><span class="overflow-navigation-text">About</span></a></li>
+    <li class="overflow-navigation-item visible" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="2" role="none">
+      <div class="expanding-panel overflow-navigation-details">
+        <details class="expanding-panel-details" name="overflow-navigation-group">
+          <summary id="id-overflow-navigation-group-trigger" class="expanding-panel-summary" aria-controls="id-overflow-navigation-group-content" aria-expanded="false">
+            <div class="label-wrapper"><span class="overflow-navigation-text" aria-label="UI Components submenu" role="menuitem" aria-haspopup="true">UI Components</span></div>
+            <div class="icon-wrapper"><span class="iconify i-mdi:chevron-down icon" aria-hidden="true"></span></div>
+          </summary>
+          <div id="id-overflow-navigation-group-content" class="expanding-panel-content" aria-labelledby="id-overflow-navigation-group-trigger" role="region">
+            <div class="overflow-navigation-sub-nav-inner">
+              <ul class="overflow-navigation-sub-nav-list">
+                <li class="overflow-navigation-sub-nav-item"><a href="/forms/examples/buttons" class="overflow-navigation-sub-nav-link" role="menuitem"><span class="overflow-navigation-sub-nav-text">Buttons</span></a></li>
+                <li class="overflow-navigation-sub-nav-item"><a href="/ui/tabs" class="overflow-navigation-sub-nav-link" role="menuitem"><span class="overflow-navigation-sub-nav-text">Tabs</span></a></li>
+              </ul>
+              <div aria-hidden="true" class="overflow-sub-nav-indicator-hovered"></div>
+            </div>
+          </div>
+        </details>
+      </div>
+    </li>
+  </ul>
+  <ul class="overflow-navigation-list" style="--_overflow-navigation-list-min-width: 0px;" role="none">
+    <li class="overflow-navigation-item" style="--_main-navigation-item-width: 0px;" data-group-key="secondNav" data-local-index="0" role="none"><a href="/contact" class="overflow-navigation-link" role="menuitem"><span class="overflow-navigation-text">Contact</span></a></li>
+  </ul>
+  <div aria-hidden="true" class="overflow-nav-indicator-hovered"></div>
+  <div aria-hidden="true" class="overflow-nav-indicator-active"></div>
+</div>"
+`;

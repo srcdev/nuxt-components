@@ -114,7 +114,7 @@ import type {
   ResponsiveHeaderState,
   IFlooredRect,
   ResponsiveHeaderNavItem,
-} from "../../types/components";
+} from "../../../types/components";
 import { useResizeObserver, onClickOutside } from "@vueuse/core";
 
 interface Props {

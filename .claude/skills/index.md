@@ -99,7 +99,11 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── carousel-flip.md        — CarouselFlip: FLIP-animated carousel, carouselDataIds slot API, buttonLayout variants (sides/controls-flanking/controls-grouped-right/overlay), CSS tokens
     ├── samaritan-prompt-mixed.md — SamaritanPromptMixed: animated text prompt, typewriter/word-pulse effects, MessageConfig API, aria-live accessibility, CSS tokens
     ├── display-toast.md          — DisplayToast (standalone v-model) + DisplayToastProvider + useToastQueue (app-wide queue): stacking, FLIP dismiss, maxVisible, SemanticTheme × 4, masked SVG glass variant
-    └── display-prompt.md         — DisplayPrompt: inline notification banner, SemanticTheme × 4, local vs parent-controlled dismiss, outlined modifier, CSS token override
+    ├── display-prompt.md         — DisplayPrompt: inline notification banner, SemanticTheme × 4, local vs parent-controlled dismiss, outlined modifier, CSS token override
+    ├── expanding-panel-classic.md — ExpandingPanelClassic: grid-template-rows animation (no Baseline-2025 dependency), same API as ExpandingPanel, cross-browser animation parity trade-off
+    ├── site-header.md            — SiteHeader: PageRow + SkipLinks + ResponsiveHeader composition, #branding/#secondaryNavigation slots, dual styleClassPassthrough hooks
+    ├── responsive-header.md      — ResponsiveHeader: overflow-collapsing adaptive nav, measurement-pipeline gotchas (unsized icons, vw font-size drift), full CSS token API
+    └── navigation-items.md       — NavigationItems: internal overflow-panel renderer for ResponsiveHeader, complement-visibility logic, not used standalone
 ```
 
 ## Skill file template
