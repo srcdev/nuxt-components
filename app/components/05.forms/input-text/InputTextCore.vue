@@ -127,10 +127,19 @@ onMounted(() => {
 <style lang="css">
 @layer components {
   .input-text-wrapper {
+    /* Local overrides, one indirection step below the global --theme-* tokens they default from
+       — a consumer can target `.input-text-wrapper { --_input-text-border: ...; }` directly for
+       a guaranteed-specific override, instead of relying solely on redefining the global token.
+       See CONSUMER-STYLING.md. */
+    --_input-text-surface: var(--theme-input-surface);
+    --_input-text-surface-hover: var(--theme-input-surface-hover);
+    --_input-text-border: var(--theme-border);
+    --_input-text-border-focus: var(--theme-border-focus);
+
     display: flex;
     align-items: center;
     gap: var(--input-icon-slot-gap);
-    background-color: var(--theme-input-surface);
+    background-color: var(--_input-text-surface);
     overflow: hidden;
     transition: all var(--theme-form-transition-duration) ease-in-out;
 
@@ -138,25 +147,25 @@ onMounted(() => {
     position: relative;
 
     &.normal {
-      border: var(--form-element-border-width) solid var(--theme-border);
+      border: var(--form-element-border-width) solid var(--_input-text-border);
       border-radius: var(--form-input-border-radius);
       outline: var(--form-element-outline-width) solid transparent;
 
       padding-inline: var(--input-padding-inline);
 
       &:has(input:is(:hover), button:is(:hover)) {
-        outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
+        outline: var(--form-element-outline-width-focus) solid var(--_input-text-border-focus);
         outline-offset: var(--form-element-outline-offset-focus);
       }
 
       &:has(input:focus-visible, button:focus-visible) {
-        outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
+        outline: var(--form-element-outline-width-focus) solid var(--_input-text-border-focus);
         outline-offset: var(--form-element-outline-offset-focus);
       }
     }
 
     &.underlined {
-      border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-border);
+      border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--_input-text-border);
       padding-inline: var(--input-padding-inline);
     }
 
@@ -171,17 +180,17 @@ onMounted(() => {
       box-sizing: content-box;
 
       .input-button-core {
-        background-color: var(--theme-input-surface);
+        background-color: var(--_input-text-surface);
         aspect-ratio: 1;
         border-radius: 0;
         width: var(--input-min-height);
 
         &:hover {
-          background-color: var(--theme-input-surface-hover);
+          background-color: var(--_input-text-surface-hover);
         }
 
         &:is(:focus-visible) {
-          outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
+          outline: var(--form-element-outline-width-focus) solid var(--_input-text-border-focus);
           outline-offset: -4px;
         }
 
