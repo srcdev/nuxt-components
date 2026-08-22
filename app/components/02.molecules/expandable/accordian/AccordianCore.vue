@@ -34,11 +34,15 @@ interface Props {
   styleClassPassthrough?: string | string[];
 }
 
+// Defaults to "classic" (not "modern") — ExpandingPanel's animation/positioning relies on
+// ::details-content, which WebKit (Safari/iOS) doesn't support (see ExpandingPanel's own dev-mode
+// warning and CLAUDE.md pitfall #19). "modern" is opt-in for consumers who've confirmed it works
+// for their audience, not the safe default.
 const props = withDefaults(defineProps<Props>(), {
   name: undefined,
   itemCount: 0,
   animationDuration: 300,
-  variant: "modern",
+  variant: "classic",
   styleClassPassthrough: () => [],
 });
 

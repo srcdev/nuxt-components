@@ -56,7 +56,8 @@
           role="none"
           @mouseenter="hoveredItemKey = `${String(groupKey)}-${localIndex}`"
         >
-          <ExpandingPanel
+          <component
+            :is="panelComponent"
             v-model="panelOpenStates[`${String(groupKey)}-${localIndex}`]"
             name="overflow-navigation-group"
             :animation-duration="DETAILS_ANIMATION_DURATION"
@@ -96,7 +97,7 @@
                 <div aria-hidden="true" class="overflow-sub-nav-indicator-hovered"></div>
               </div>
             </template>
-          </ExpandingPanel>
+          </component>
         </li>
       </template>
     </ul>
@@ -107,16 +108,25 @@
 
 <script setup lang="ts">
 import type { ResponsiveHeaderState, ResponsiveHeaderNavItem } from "../../../types/components";
+import ExpandingPanel from "../../02.molecules/expandable/expanding-panel/ExpandingPanel.vue";
+import ExpandingPanelClassic from "../../02.molecules/expandable/expanding-panel-classic/ExpandingPanelClassic.vue";
 
 interface Props {
   mainNavigationState?: ResponsiveHeaderState;
+  panelVariant?: "modern" | "classic";
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   mainNavigationState: () => ({ clonedNavLinks: {}, navListVisibility: {}, hasSecondNav: false }),
+  // Defaults to "classic" — see ExpandingPanel's own dev-mode warning and CLAUDE.md pitfall #19:
+  // its ::details-content-based implementation doesn't work correctly on WebKit (Safari/iOS).
+  // "modern" is opt-in.
+  panelVariant: "classic",
   styleClassPassthrough: () => [],
 });
+
+const panelComponent = computed(() => (props.panelVariant === "modern" ? ExpandingPanel : ExpandingPanelClassic));
 
 const hoveredItemKey = ref<string | null>(null);
 const hoveredChildKey = ref<string | null>(null);
@@ -231,6 +241,12 @@ watch(
         }
 
         .overflow-navigation-details {
+          /* Two variants share this styling, one full block each rather than a merged
+             selector list — their DOM shapes differ (modern nests .expanding-panel-content
+             *inside* .expanding-panel-details; classic renders .expanding-panel-classic-content
+             as a *sibling* of .expanding-panel-classic-details), so the [open] + ... sibling
+             combinator below is only structurally correct for the classic block. See
+             ExpandingPanel vs ExpandingPanelClassic's own templates. */
           &.expanding-panel {
             margin-block-end: 0;
 
@@ -293,6 +309,69 @@ watch(
               }
             }
           }
+
+          &.expanding-panel-classic {
+            margin-block-end: 0;
+
+            .expanding-panel-classic-details {
+              .expanding-panel-classic-summary {
+                padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
+                padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
+                gap: 1rem;
+                color: var(--overflow-nav-link-color, inherit);
+                border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
+
+                .label-wrapper {
+                  .overflow-navigation-text {
+                    text-wrap: nowrap;
+                  }
+                }
+                .icon-wrapper {
+                  padding: 0;
+                }
+              }
+
+              &[open] {
+                .expanding-panel-classic-summary {
+                  border-bottom: 0.1rem solid transparent;
+                }
+                + .expanding-panel-classic-content {
+                  border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
+                  .overflow-navigation-sub-nav-inner {
+                    margin-top: var(--overflow-nav-items-gap, 0px);
+                  }
+                }
+              }
+            }
+
+            .expanding-panel-classic-content {
+              border-bottom: 0.1rem solid transparent;
+
+              .overflow-navigation-sub-nav-inner {
+                margin-top: 0;
+                position: relative;
+
+                .overflow-navigation-sub-nav-list {
+                  display: flex;
+                  flex-direction: column;
+                  gap: 2px;
+
+                  .overflow-navigation-sub-nav-item {
+                    padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
+                    padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
+                    font-size: var(--overflow-nav-sub-item-font-size, inherit);
+                    color: var(--overflow-nav-sub-item-color, inherit);
+
+                    .overflow-navigation-sub-nav-link {
+                      display: block;
+                      text-decoration: none;
+                      color: inherit;
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -325,7 +404,11 @@ watch(
   .overflow-navigation-wrapper
     .overflow-navigation-item.is-hovered
     .overflow-navigation-details
-    .expanding-panel-summary {
+    .expanding-panel-summary,
+  .overflow-navigation-wrapper
+    .overflow-navigation-item.is-hovered
+    .overflow-navigation-details
+    .expanding-panel-classic-summary {
     anchor-name: --overflow-nav-indicator;
   }
 
@@ -340,7 +423,11 @@ watch(
   .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered))
     .overflow-navigation-item.is-active
     .overflow-navigation-details
-    .expanding-panel-summary {
+    .expanding-panel-summary,
+  .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered))
+    .overflow-navigation-item.is-active
+    .overflow-navigation-details
+    .expanding-panel-classic-summary {
     anchor-name: --overflow-nav-indicator;
   }
 

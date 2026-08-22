@@ -318,6 +318,25 @@ watch(
               }
             }
           }
+
+          .accordian-item.expanding-panel-classic {
+            border-block-end: 1px solid var(--services-section-faq-divider-color, currentColor);
+            opacity: var(--services-section-faq-divider-opacity, 0.7);
+
+            &:first-child {
+              border-block-start: 1px solid var(--services-section-faq-divider-color, currentColor);
+            }
+
+            .expanding-panel-classic-details .expanding-panel-classic-summary {
+              padding-block: 1.2rem;
+            }
+
+            .expanding-panel-classic-content .inner {
+              .services-section__faq-answer {
+                line-height: var(--services-section-faq-answer-line-height, 1.6);
+              }
+            }
+          }
         }
       }
     }

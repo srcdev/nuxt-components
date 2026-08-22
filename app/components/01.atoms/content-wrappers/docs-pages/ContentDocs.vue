@@ -5,7 +5,8 @@
         <slot name="docsContent"></slot>
       </div>
       <div v-if="hasDocsNav" class="docs-nav">
-        <ExpandingPanel
+        <component
+          :is="panelComponent"
           v-model="docsNavPanelOpen"
           :name="docsNavPanelName"
           :animation-duration="200"
@@ -37,10 +38,11 @@
               </ul>
             </nav>
           </template>
-        </ExpandingPanel>
+        </component>
       </div>
       <div v-if="hasDocsPageNav" class="docs-page-nav">
-        <ExpandingPanel
+        <component
+          :is="panelComponent"
           v-model="docsPageNavPanelOpen"
           :name="docsPageNavPanelName"
           :animation-duration="200"
@@ -72,7 +74,7 @@
               </ul>
             </nav>
           </template>
-        </ExpandingPanel>
+        </component>
       </div>
     </div>
   </component>
@@ -80,6 +82,8 @@
 
 <script setup lang="ts">
 import type { DocsNavItem } from "~/types/components";
+import ExpandingPanel from "~/components/02.molecules/expandable/expanding-panel/ExpandingPanel.vue";
+import ExpandingPanelClassic from "~/components/02.molecules/expandable/expanding-panel-classic/ExpandingPanelClassic.vue";
 
 interface Props {
   tag?: "div" | "section" | "article" | "main";
@@ -87,6 +91,7 @@ interface Props {
   docsPageNavItems?: DocsNavItem[];
   docsNavLabel?: string;
   docsPageNavLabel?: string;
+  panelVariant?: "modern" | "classic";
   styleClassPassthrough?: string | string[];
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -95,8 +100,15 @@ const props = withDefaults(defineProps<Props>(), {
   docsPageNavItems: () => [],
   docsNavLabel: "Navigation",
   docsPageNavLabel: "On this page",
+  // Defaults to "classic" — the docs/admin nav toggle relies on contentIsOnTop on mobile, and
+  // ExpandingPanel's ::details-content-based positioning silently fails on WebKit (Safari/iOS),
+  // making the nav unreachable there. See AccordianCore's own variant prop and CLAUDE.md
+  // pitfall #19 for the full mechanism. "modern" is opt-in.
+  panelVariant: "classic",
   styleClassPassthrough: () => [],
 });
+
+const panelComponent = computed(() => (props.panelVariant === "modern" ? ExpandingPanel : ExpandingPanelClassic));
 
 const activeNavItem = defineModel<string | undefined>("activeNavItem");
 const activePageNavItem = defineModel<string | undefined>("activePageNavItem");
@@ -238,12 +250,9 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
         align-items: start;
 
         @container contentDocs (width >= 1024px) {
-          .expanding-panel {
-            & .expanding-panel-details {
-              .expanding-panel-summary {
-                cursor: default;
-              }
-            }
+          .expanding-panel-summary,
+          .expanding-panel-classic-summary {
+            cursor: default;
           }
         }
       }
@@ -256,12 +265,9 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
         align-items: start;
 
         @container contentDocs (width >= 768px) {
-          .expanding-panel {
-            & .expanding-panel-details {
-              .expanding-panel-summary {
-                cursor: default;
-              }
-            }
+          .expanding-panel-summary,
+          .expanding-panel-classic-summary {
+            cursor: default;
           }
         }
       }

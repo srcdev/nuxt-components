@@ -90,16 +90,14 @@ visual style, pass a modifier class:
 - `--expanding-panel-content-gap` and `--expanding-panel-content-z-index` only take effect when
   `contentIsOnTop` is `true` — they're no-ops for the default (in-flow) layout.
 - `background-color`, `padding`, `border`, and shadow are all safe to set directly on
-  `.expanding-panel-content`. Where `::details-content` is supported (not WebKit — see below), the
-  open/close animation clips via `overflow: clip` on that pseudo-element, and
-  `.expanding-panel-content` is a child of it, so its own box is correctly clipped to the animated
-  height while closed/closing. A wrapper inside the `#content` slot works equally well if you
-  prefer to keep the styling scoped to your own markup.
-- WebKit (Safari/iOS) doesn't support `::details-content` — `ExpandingPanel` falls back to
-  `ExpandingPanelClassic`'s `grid-template-rows` technique there automatically, no consumer action
-  needed. That path wraps the `#content` slot in an internal `.inner` div (an implementation
-  detail of the collapse mechanism, not a styling hook) but styling on `.expanding-panel-content`
-  itself still works correctly, same as the `::details-content` path.
+  `.expanding-panel-content`. The open/close animation clips via `overflow: clip` on
+  `::details-content`, and `.expanding-panel-content` is a child of it, so its own box is
+  correctly clipped to the animated height while closed/closing. A wrapper inside the `#content`
+  slot works equally well if you prefer to keep the styling scoped to your own markup.
+- **WebKit (Safari/iOS) doesn't support `::details-content` at all**, and `ExpandingPanel` has no
+  fallback for it (an `@supports`-based CSS fallback was tried and reverted 2026-08-22 — it didn't
+  reliably work). If this panel needs to work correctly on real Apple devices, use
+  `ExpandingPanelClassic` instead — see its own `CONSUMER-STYLING.md`.
 - Don't stack multiple `contentIsOnTop` panels as direct siblings (linked via a shared `name` or
   not). The overlay is absolutely positioned so it doesn't push the next element down — which
   means a sibling `ExpandingPanel` placed right after it sits exactly where the overlay renders,

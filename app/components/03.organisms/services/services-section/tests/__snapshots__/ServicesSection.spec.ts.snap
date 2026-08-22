@@ -61,18 +61,18 @@ exports[`ServicesSection > renders correct HTML structure 1`] = `
         <!--v-if--><span class="text-block-0 normal">Frequently Asked Questions</span>
       </h2>
       <div class="display-accordian services-section__faq" id="faq">
-        <div class="expanding-panel accordian-item" icon-size="medium">
-          <details class="expanding-panel-details" name="faq-v-0-0-0">
-            <summary id="id-faq-v-0-0-0-trigger" class="expanding-panel-summary" aria-controls="id-faq-v-0-0-0-content" aria-expanded="false">
+        <div class="expanding-panel-classic accordian-item" icon-size="medium">
+          <details class="expanding-panel-classic-details" name="faq-v-0-0-0">
+            <summary id="id-faq-v-0-0-0-trigger" class="expanding-panel-classic-summary" aria-controls="id-faq-v-0-0-0-content" aria-expanded="false">
               <div class="label-wrapper">FAQ question?</div>
               <div class="icon-wrapper"><span class="iconify i-mdi:chevron-down" aria-hidden="true"></span></div>
             </summary>
-            <div id="id-faq-v-0-0-0-content" class="expanding-panel-content" aria-labelledby="id-faq-v-0-0-0-trigger" role="region">
-              <div class="inner">
-                <p class="services-section__faq-answer">FAQ answer.</p>
-              </div>
-            </div>
           </details>
+          <div id="id-faq-v-0-0-0-content" class="expanding-panel-classic-content" aria-labelledby="id-faq-v-0-0-0-trigger" role="region">
+            <div class="inner">
+              <p class="services-section__faq-answer">FAQ answer.</p>
+            </div>
+          </div>
         </div>
       </div>
       <div class="glass-panel services-section__glass-panel p-24">

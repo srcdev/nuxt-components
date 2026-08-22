@@ -138,10 +138,10 @@ describe("NavigationItems", () => {
     const wrapper = await mountSuspended(NavigationItems, {
       props: { mainNavigationState },
     });
-    const details = wrapper.find(".expanding-panel-details");
+    const details = wrapper.find(".expanding-panel-classic-details");
     expect(details.attributes("open")).toBeUndefined();
 
-    await wrapper.find(".expanding-panel-summary").trigger("click");
+    await wrapper.find(".expanding-panel-classic-summary").trigger("click");
     await nextTick();
     expect(details.attributes("open")).toBe("");
   });

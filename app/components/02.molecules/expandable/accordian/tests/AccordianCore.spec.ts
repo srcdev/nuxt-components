@@ -74,11 +74,11 @@ describe("AccordianCore", () => {
 
   // ─── Item count ───────────────────────────────────────────────────────────
 
-  it("renders the correct number of ExpandingPanel components", async () => {
+  it("renders the correct number of panel components", async () => {
     const wrapper = await mountSuspended(AccordianCore, {
       props: { itemCount: 4 },
     });
-    expect(wrapper.findAll(".expanding-panel")).toHaveLength(4);
+    expect(wrapper.findAll(".accordian-item")).toHaveLength(4);
   });
 
   it("renders no ExpandingPanel components when itemCount is 0", async () => {
@@ -95,20 +95,28 @@ describe("AccordianCore", () => {
 
   // ─── variant ──────────────────────────────────────────────────────────────
 
-  it("renders ExpandingPanel by default (variant: modern)", async () => {
+  it("renders ExpandingPanelClassic by default (variant: classic)", async () => {
     const wrapper = await mountSuspended(AccordianCore, {
       props: { itemCount: 2 },
     });
-    expect(wrapper.findAllComponents({ name: "ExpandingPanel" })).toHaveLength(2);
-    expect(wrapper.findAllComponents({ name: "ExpandingPanelClassic" })).toHaveLength(0);
+    expect(wrapper.findAllComponents({ name: "ExpandingPanelClassic" })).toHaveLength(2);
+    expect(wrapper.findAllComponents({ name: "ExpandingPanel" })).toHaveLength(0);
   });
 
-  it("renders ExpandingPanelClassic when variant is classic", async () => {
+  it("renders ExpandingPanelClassic when variant is classic (explicit)", async () => {
     const wrapper = await mountSuspended(AccordianCore, {
       props: { itemCount: 2, variant: "classic" },
     });
     expect(wrapper.findAllComponents({ name: "ExpandingPanelClassic" })).toHaveLength(2);
     expect(wrapper.findAllComponents({ name: "ExpandingPanel" })).toHaveLength(0);
+  });
+
+  it("renders ExpandingPanel when variant is modern", async () => {
+    const wrapper = await mountSuspended(AccordianCore, {
+      props: { itemCount: 2, variant: "modern" },
+    });
+    expect(wrapper.findAllComponents({ name: "ExpandingPanel" })).toHaveLength(2);
+    expect(wrapper.findAllComponents({ name: "ExpandingPanelClassic" })).toHaveLength(0);
   });
 
   it("forwards props identically to ExpandingPanelClassic when variant is classic", async () => {
@@ -122,11 +130,11 @@ describe("AccordianCore", () => {
     });
   });
 
-  // ─── Props forwarded to ExpandingPanel ───────────────────────────────────
+  // ─── Props forwarded to ExpandingPanel (variant: modern) ─────────────────
 
   it("forwards animationDuration to every ExpandingPanel", async () => {
     const wrapper = await mountSuspended(AccordianCore, {
-      props: { itemCount: 3, animationDuration: 500 },
+      props: { itemCount: 3, animationDuration: 500, variant: "modern" },
     });
     wrapper.findAllComponents({ name: "ExpandingPanel" }).forEach((panel) => {
       expect(panel.props("animationDuration")).toBe(500);
@@ -135,7 +143,7 @@ describe("AccordianCore", () => {
 
   it("forwards name to every ExpandingPanel", async () => {
     const wrapper = await mountSuspended(AccordianCore, {
-      props: { itemCount: 2, name: "test-accordian" },
+      props: { itemCount: 2, name: "test-accordian", variant: "modern" },
     });
     wrapper.findAllComponents({ name: "ExpandingPanel" }).forEach((panel) => {
       expect(panel.props("name")).toBe("test-accordian");
@@ -144,7 +152,7 @@ describe("AccordianCore", () => {
 
   it("passes accordian-item styleClassPassthrough to every ExpandingPanel", async () => {
     const wrapper = await mountSuspended(AccordianCore, {
-      props: { itemCount: 2 },
+      props: { itemCount: 2, variant: "modern" },
     });
     wrapper.findAllComponents({ name: "ExpandingPanel" }).forEach((panel) => {
       expect(panel.props("styleClassPassthrough")).toEqual(["accordian-item"]);
@@ -153,11 +161,11 @@ describe("AccordianCore", () => {
 
   // ─── Default prop values ──────────────────────────────────────────────────
 
-  it("defaults animationDuration to 300 on ExpandingPanel when not provided", async () => {
+  it("defaults animationDuration to 300 on ExpandingPanelClassic when not provided", async () => {
     const wrapper = await mountSuspended(AccordianCore, {
       props: { itemCount: 1 },
     });
-    const panel = wrapper.findComponent({ name: "ExpandingPanel" });
+    const panel = wrapper.findComponent({ name: "ExpandingPanelClassic" });
     expect(panel.props("animationDuration")).toBe(300);
   });
 
@@ -167,7 +175,7 @@ describe("AccordianCore", () => {
     expect(vm.name).toBeUndefined();
     expect(vm.itemCount).toBe(0);
     expect(vm.animationDuration).toBe(300);
-    expect(vm.variant).toBe("modern");
+    expect(vm.variant).toBe("classic");
     expect(vm.styleClassPassthrough).toEqual([]);
   });
 
@@ -241,7 +249,7 @@ describe("AccordianCore", () => {
         "accordian-2-summary": "<span>Gamma</span>",
       },
     });
-    const panels = wrapper.findAllComponents({ name: "ExpandingPanel" });
+    const panels = wrapper.findAllComponents({ name: "ExpandingPanelClassic" });
     expect(panels[0]?.text()).toContain("Alpha");
     expect(panels[1]?.text()).toContain("Beta");
     expect(panels[2]?.text()).toContain("Gamma");

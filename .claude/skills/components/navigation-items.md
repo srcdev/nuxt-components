@@ -16,6 +16,7 @@ active-route highlighting, hover indicator).
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
 | `mainNavigationState` | `ResponsiveHeaderState` | `{ clonedNavLinks: {}, navListVisibility: {}, hasSecondNav: false }` | Shared geometry/visibility state, normally supplied by the parent `ResponsiveHeader` — not something a consumer constructs by hand outside of tests/stories. |
+| `panelVariant` | `"modern" \| "classic"` | `"classic"` | Which panel component renders a dropdown's submenu: `ExpandingPanel` (`"modern"`) or `ExpandingPanelClassic` (`"classic"`, default). `"modern"` is known not to work correctly on WebKit. Normally set via `ResponsiveHeader`'s own `panelVariant` prop rather than directly. See CLAUDE.md pitfall #19. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the root `.overflow-navigation-wrapper` element. |
 
 ---

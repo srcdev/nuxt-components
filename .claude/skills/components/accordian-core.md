@@ -35,7 +35,7 @@ For `itemCount="3"` the following slots exist:
 | `name` | `string` | `undefined` | Shared `name` passed to every `ExpandingPanel`. When set, native `<details>` grouping means only one panel can be open at a time. Omit for independent panels. |
 | `itemCount` | `number` | `0` | Number of `ExpandingPanel` components to render. |
 | `animationDuration` | `number` | `300` | Expand/collapse animation duration in ms, forwarded to every panel. |
-| `variant` | `"modern" \| "classic"` | `"modern"` | `"modern"` renders each panel as `ExpandingPanel` (`::details-content`-based, Baseline "newly available" Sept 2025 — the animation itself only runs where `interpolate-size` is supported, Chromium only as of 2026). `"classic"` renders `ExpandingPanelClassic` instead (`grid-template-rows`-based, animates identically in every browser). Applies to every panel in the group — mixing variants within one `AccordianCore` isn't supported. See [expanding-panel-classic.md](expanding-panel-classic.md). |
+| `variant` | `"modern" \| "classic"` | `"classic"` | `"classic"` renders each panel as `ExpandingPanelClassic` (`grid-template-rows`-based, animates identically in every browser). `"modern"` renders `ExpandingPanel` instead (`::details-content`-based) — **known not to work correctly on WebKit (Safari/iOS)**, confirmed via real-device testing (2026-08); the animation silently fails and, worse, `contentIsOnTop` positioning never applies there. `"modern"` is opt-in for consumers who've confirmed it works for their audience, not the safe default. Applies to every panel in the group — mixing variants within one `AccordianCore` isn't supported. See [expanding-panel-classic.md](expanding-panel-classic.md) and CLAUDE.md pitfall #19. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the root `.display-accordian` element. |
 
 ---
@@ -91,10 +91,10 @@ Passing `name="faq"` groups all panels so only one can be open at a time.
 </AccordianCore>
 ```
 
-### Classic variant (animation must run in every browser)
+### Modern variant (opt-in, not WebKit-safe)
 
 ```vue
-<AccordianCore name="faq" :item-count="2" variant="classic">
+<AccordianCore name="faq" :item-count="2" variant="modern">
   <template #accordian-0-summary><span>Question one?</span></template>
   <template #accordian-0-content><p>Answer one.</p></template>
 
@@ -154,10 +154,10 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
     /* Geometry */
     /* max-width: none; */ /* default is 600px — remove the width cap */
 
-    /* Panel-level overrides via the .accordian-item hook — .expanding-panel is the
-       root class rendered by the default "modern" variant; swap in
-       .expanding-panel-classic if this instance uses variant="classic" */
-    .accordian-item.expanding-panel {
+    /* Panel-level overrides via the .accordian-item hook — .expanding-panel-classic is
+       the root class rendered by the default "classic" variant; swap in .expanding-panel
+       if this instance uses variant="modern" */
+    .accordian-item.expanding-panel-classic {
       /* Border */
       /* border-block-end: 1px solid currentColor; */
 

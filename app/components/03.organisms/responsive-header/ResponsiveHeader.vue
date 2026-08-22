@@ -100,7 +100,7 @@
           />
         </summary>
         <div class="overflow-details-nav" role="menu">
-          <NavigationItems :main-navigation-state="mainNavigationState" />
+          <NavigationItems :main-navigation-state="mainNavigationState" :panel-variant="panelVariant" />
         </div>
       </details>
       <slot v-if="slots.secondaryNavigation" name="secondaryNavigation"></slot>
@@ -125,6 +125,7 @@ interface Props {
   collapseAtMainNavIntersection?: boolean;
   styleClassPassthrough?: string | string[];
   allowExpandOnGesture?: boolean;
+  panelVariant?: "modern" | "classic";
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -138,6 +139,9 @@ const props = withDefaults(defineProps<Props>(), {
   collapseAtMainNavIntersection: false,
   styleClassPassthrough: () => [],
   allowExpandOnGesture: true,
+  // Forwarded to NavigationItems' overflow submenu panels — see its own default for why
+  // "classic" is the safe default (CLAUDE.md pitfall #19).
+  panelVariant: "classic",
 });
 
 const collapseNavigationBelowWidth = computed(
