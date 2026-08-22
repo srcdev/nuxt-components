@@ -13,7 +13,7 @@
         </div>
         <div class="icon-wrapper" :class="{ 'icon-wrapper--hidden': forceOpened }">
           <slot name="icon">
-            <Icon name="bi:caret-down-fill" class="icon mi-12" />
+            <Icon name="bi:caret-down-fill" class="icon" />
           </slot>
         </div>
       </summary>

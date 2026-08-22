@@ -5,7 +5,7 @@ exports[`ExpandingPanelClassic > renders correct HTML structure with all props s
   <details class="expanding-panel-classic-details" name="snap-all" open="">
     <summary id="id-snap-all-trigger" class="expanding-panel-classic-summary" aria-controls="id-snap-all-content" aria-expanded="true">
       <div class="label-wrapper"></div>
-      <div class="icon-wrapper icon-wrapper--hidden"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
+      <div class="icon-wrapper icon-wrapper--hidden"><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></div>
     </summary>
   </details>
   <div id="id-snap-all-content" class="expanding-panel-classic-content" aria-labelledby="id-snap-all-trigger" role="region">
@@ -19,7 +19,7 @@ exports[`ExpandingPanelClassic > renders correct HTML structure with contentIsOn
   <details class="expanding-panel-classic-details" name="snap-content-on-top">
     <summary id="id-snap-content-on-top-trigger" class="expanding-panel-classic-summary" aria-controls="id-snap-content-on-top-content" aria-expanded="false">
       <div class="label-wrapper"></div>
-      <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
+      <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></div>
     </summary>
   </details>
   <div id="id-snap-content-on-top-content" class="expanding-panel-classic-content" aria-labelledby="id-snap-content-on-top-trigger" role="region">
@@ -33,7 +33,7 @@ exports[`ExpandingPanelClassic > renders correct HTML structure with default pro
   <details class="expanding-panel-classic-details" name="snap-default">
     <summary id="id-snap-default-trigger" class="expanding-panel-classic-summary" aria-controls="id-snap-default-content" aria-expanded="false">
       <div class="label-wrapper"></div>
-      <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
+      <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></div>
     </summary>
   </details>
   <div id="id-snap-default-content" class="expanding-panel-classic-content" aria-labelledby="id-snap-default-trigger" role="region">

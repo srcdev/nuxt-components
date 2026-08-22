@@ -5,7 +5,7 @@
         <slot name="summary"></slot>
       </span>
       <slot name="summaryIcon">
-        <Icon name="bi:caret-down-fill" class="icon mi-12" :class="iconSize" />
+        <Icon name="bi:caret-down-fill" class="icon" :class="iconSize" />
       </slot>
     </summary>
     <div class="display-details-content" :aria-labelledby="triggerId" :id="contentId" role="region" ref="contentRef">

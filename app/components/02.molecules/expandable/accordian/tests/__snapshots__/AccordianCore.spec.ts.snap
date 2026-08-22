@@ -6,7 +6,7 @@ exports[`AccordianCore > renders correct HTML structure with all props set 1`] =
     <details class="expanding-panel-details" name="snapshot-accordian">
       <summary id="id-snapshot-accordian-trigger" class="expanding-panel-summary" aria-controls="id-snapshot-accordian-content" aria-expanded="false">
         <div class="label-wrapper"></div>
-        <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
+        <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></div>
       </summary>
       <div id="id-snapshot-accordian-content" class="expanding-panel-content" aria-labelledby="id-snapshot-accordian-trigger" role="region"></div>
     </details>
@@ -15,7 +15,7 @@ exports[`AccordianCore > renders correct HTML structure with all props set 1`] =
     <details class="expanding-panel-details" name="snapshot-accordian">
       <summary id="id-snapshot-accordian-trigger" class="expanding-panel-summary" aria-controls="id-snapshot-accordian-content" aria-expanded="false">
         <div class="label-wrapper"></div>
-        <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
+        <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></div>
       </summary>
       <div id="id-snapshot-accordian-content" class="expanding-panel-content" aria-labelledby="id-snapshot-accordian-trigger" role="region"></div>
     </details>
@@ -24,7 +24,7 @@ exports[`AccordianCore > renders correct HTML structure with all props set 1`] =
     <details class="expanding-panel-details" name="snapshot-accordian">
       <summary id="id-snapshot-accordian-trigger" class="expanding-panel-summary" aria-controls="id-snapshot-accordian-content" aria-expanded="false">
         <div class="label-wrapper"></div>
-        <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
+        <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></div>
       </summary>
       <div id="id-snapshot-accordian-content" class="expanding-panel-content" aria-labelledby="id-snapshot-accordian-trigger" role="region"></div>
     </details>
@@ -38,7 +38,7 @@ exports[`AccordianCore > renders correct HTML structure with default props 1`] =
     <details class="expanding-panel-details" name="v-0-0-0">
       <summary id="id-v-0-0-0-trigger" class="expanding-panel-summary" aria-controls="id-v-0-0-0-content" aria-expanded="false">
         <div class="label-wrapper"></div>
-        <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
+        <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></div>
       </summary>
       <div id="id-v-0-0-0-content" class="expanding-panel-content" aria-labelledby="id-v-0-0-0-trigger" role="region"></div>
     </details>
@@ -47,7 +47,7 @@ exports[`AccordianCore > renders correct HTML structure with default props 1`] =
     <details class="expanding-panel-details" name="v-0-0-1">
       <summary id="id-v-0-0-1-trigger" class="expanding-panel-summary" aria-controls="id-v-0-0-1-content" aria-expanded="false">
         <div class="label-wrapper"></div>
-        <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon mi-12" aria-hidden="true"></span></div>
+        <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></div>
       </summary>
       <div id="id-v-0-0-1-content" class="expanding-panel-content" aria-labelledby="id-v-0-0-1-trigger" role="region"></div>
     </details>
