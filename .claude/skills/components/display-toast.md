@@ -218,6 +218,10 @@ Override tokens via an unscoped style block scoped to a page or layout class:
 }
 ```
 
+Stacking order: `--display-toast-z-index` / `--display-toast-provider-z-index`, both default
+`999999` (matches `DisplayDialog`'s own default) — see `CONSUMER-STYLING.md` if a toast is
+appearing behind a consumer's own sticky header.
+
 ### Masked variant
 
 Setting `appearance.masked: true` swaps `AlertContent` for `AlertMaskedContent`, which uses an SVG-based border and a semi-transparent background (`rgba(0,0,0,0.3)`) so page content is faintly visible beneath the toast.

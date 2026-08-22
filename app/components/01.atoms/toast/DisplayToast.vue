@@ -228,13 +228,16 @@ onBeforeRouteLeave(() => {
       --_toast-gutter: 24px;
     }
 
+    /* See the matching comment in DisplayToastProvider.vue — same fix, same rationale. */
+    --_z-index: var(--display-toast-z-index, 999999);
+
     display: block;
     overflow: hidden;
     position: fixed;
     margin: 0;
     opacity: 0;
 
-    z-index: 100;
+    z-index: var(--_z-index);
 
     /* Focus styles for accessibility */
     &:focus {

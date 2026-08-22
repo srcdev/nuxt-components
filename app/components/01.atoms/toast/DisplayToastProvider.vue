@@ -220,11 +220,18 @@ onUnmounted(() => {
       --_gutter: 24px;
     }
 
+    /* No public token before 2026-08-22 and hardcoded far below DisplayDialog's own
+       --display-dialog-z-index default (999999) — a toast is meant to float above ordinary page
+       chrome, but 100 loses to any consumer's sticky header. Matches DisplayDialog's default so
+       toasts also clear a modal's own overlay; the two ties on DOM/paint order if both happen to
+       be visible at once, which is an acceptable edge case for a transient notification. */
+    --_z-index: var(--display-toast-provider-z-index, 999999);
+
     position: fixed;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    z-index: 100;
+    z-index: var(--_z-index);
 
     inset-inline: var(--_gutter);
     margin-inline: auto;
