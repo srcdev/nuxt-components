@@ -2,11 +2,11 @@
 
 ## Overview
 
-`ExpandingPanel` is a single expand/collapse panel built on the native `<details>`/`<summary>` element. It animates open/close by styling the `::details-content` pseudo-element (the browser's own anonymous box wrapping everything after `<summary>`), supports `v-model` for controlled state, and can be locked open with `forceOpened`. Multiple panels can be grouped into a native accordion by sharing the same `name` prop (see `AccordianCore`).
+`ExpandingPanel` is a single expand/collapse panel built on the native `<details>`/`<summary>` element. It animates open/close by styling the `::details-content` pseudo-element (the browser's own anonymous box wrapping everything after `<summary>`) where supported, supports `v-model` for controlled state, and can be locked open with `forceOpened`. Multiple panels can be grouped into a native accordion by sharing the same `name` prop (see `AccordianCore`).
 
-`::details-content` is Baseline "newly available" (Sept 2025) — Chrome, Firefox, and Safari all generate the box. The height *animation* itself depends on `interpolate-size: allow-keywords`, which as of 2026 only runs in Chromium; other browsers still open/close correctly, just without the transition (accepted progressive-enhancement trade-off, not a bug).
+**WebKit (Safari/iOS) does not support `::details-content`** as of 2026-08, confirmed via real-device testing — Chrome's device-emulation mode cannot catch this, since it's still the Blink engine underneath regardless of which browser UI it's simulating. WebKit silently drops the whole rule block: no console warning, no error, just no animation and (more seriously) `content-is-on-top`'s `position: absolute` never applying, so an overlay panel renders in normal document flow and can break the surrounding layout. Fixed 2026-08-22: `ExpandingPanel` now carries an `@supports not selector(::details-content)` fallback block that reproduces `ExpandingPanelClassic`'s `grid-template-rows` technique automatically — no consumer action needed, this works transparently on every browser. See pitfall #19 in the repo's `CLAUDE.md` for the full mechanism.
 
-If a consumer needs the animation to run identically in every browser today, use [`ExpandingPanelClassic`](expanding-panel-classic.md) instead — same props/model/slots API, older `grid-template-rows` implementation with no Baseline-2025 dependency.
+`ExpandingPanelClassic` still exists as a standalone option — same props/model/slots API, always uses the `grid-template-rows` implementation with no pseudo-element dependency at all — but there's no longer a compatibility reason to prefer it over `ExpandingPanel`.
 
 ---
 
@@ -145,7 +145,9 @@ Always supply a meaningful `name` prop when using multiple panels on the same pa
 
 ## Styling the content when contentIsOnTop
 
-`background-color`, `padding`, and a shadow can be set directly on `.expanding-panel-content` (or on a wrapper inside the `#content` slot — either works). The clipping boundary is now `::details-content` itself (`overflow: clip`, animated `height`), and `.expanding-panel-content` is a *child* of that box — so its own box, including padding/border/background, is correctly clipped to the animated height regardless of where the styling lives. This is a change from the previous `.inner`-based implementation, which had to clip its own box and so couldn't carry visual styling directly.
+`background-color`, `padding`, and a shadow can be set directly on `.expanding-panel-content` (or on a wrapper inside the `#content` slot — either works) in browsers that support `::details-content`: the clipping boundary there is `::details-content` itself (`overflow: clip`, animated `height`), and `.expanding-panel-content` is a *child* of that box, so its own box is correctly clipped regardless of where the styling lives.
+
+In the WebKit fallback path (no `::details-content` support), `.expanding-panel-content` itself is the animated grid track (`grid-template-rows: 0fr → 1fr`) and remains the element being sized — so styling placed directly on it is still clipped correctly there too. The one structural difference: the fallback wraps the `#content` slot in an internal `.inner` div (needed so a plain child's `min-height: auto` doesn't stop the row collapsing to true `0`) — this is purely an implementation detail for the collapse mechanism and isn't a styling hook; don't target `.inner` directly, style `.expanding-panel-content` or the slot's own markup instead, same as the `::details-content` path.
 
 ---
 
@@ -211,7 +213,7 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 
 ## Notes
 
-- The open/close animation targets `::details-content` (`height: 0 → auto`, `overflow: clip`) — no JS height measurement needed. Requires `interpolate-size: allow-keywords` support (Chromium only as of 2026); other browsers still toggle correctly, just instantly.
+- The open/close animation targets `::details-content` (`height: 0 → auto`, `overflow: clip`) where supported — no JS height measurement needed. Requires `interpolate-size: allow-keywords` for the height transition itself (Chromium only as of 2026; other browsers with `::details-content` support still toggle correctly, just instantly). WebKit has neither, and falls back to `ExpandingPanelClassic`'s `grid-template-rows` technique automatically (see the Overview section above) — that path animates in every browser regardless of `interpolate-size`.
 - `content-is-on-top` is applied to the root `.expanding-panel` element, not `.expanding-panel-content` — style overrides must scope through it, e.g. `.expanding-panel.my-panel .expanding-panel-content { ... }`.
 - When `forceOpened` is `true`, `open` stays `true` regardless of `v-model`, but `v-model` still updates internally on clicks (useful if you later set `forceOpened` back to `false`).
 - Group panels into a native accordion (only one open at a time) by passing the same `name` to multiple panels or use `AccordianCore` which handles this automatically.

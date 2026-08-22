@@ -23,7 +23,9 @@
         :aria-labelledby="`id-${name}-trigger`"
         role="region"
       >
-        <slot name="content"></slot>
+        <div class="inner">
+          <slot name="content"></slot>
+        </div>
       </div>
     </details>
   </div>
@@ -184,6 +186,50 @@ const onDetailsToggle = (event: Event) => {
           top: calc(100% + var(--expanding-panel-content-gap, 0px));
           inset-inline: 0;
           z-index: var(--expanding-panel-content-z-index, 10);
+        }
+      }
+    }
+
+    /* ::details-content isn't supported in WebKit (Safari/iOS) as of 2026-08 — the two rule
+       blocks above are silently dropped there entirely (no error, no animation, and crucially
+       content-is-on-top's position: absolute never applies, so the overlay renders in normal
+       document flow instead). This reproduces both using ExpandingPanelClassic's
+       grid-template-rows technique (broadly supported, including Safari), targeting the real
+       .expanding-panel-content element (and its .inner child, matching Classic's structure —
+       .inner's own overflow:hidden is what lets the grid row actually collapse to 0, since a
+       plain block child's default min-height:auto would otherwise floor it at content height)
+       instead of the pseudo-element. */
+    @supports not selector(::details-content) {
+      .expanding-panel-details {
+        .expanding-panel-content {
+          display: grid;
+          grid-template-rows: 0fr;
+          transition: grid-template-rows v-bind(animationDurationStr) ease-in-out;
+          will-change: grid-template-rows;
+
+          .inner {
+            overflow: hidden;
+            margin-top: 0;
+          }
+        }
+
+        &[open] .expanding-panel-content {
+          grid-template-rows: 1fr;
+        }
+      }
+    }
+
+    &.content-is-on-top {
+      @supports not selector(::details-content) {
+        .expanding-panel-details {
+          position: relative;
+
+          .expanding-panel-content {
+            position: absolute;
+            top: calc(100% + var(--expanding-panel-content-gap, 0px));
+            inset-inline: 0;
+            z-index: var(--expanding-panel-content-z-index, 10);
+          }
         }
       }
     }

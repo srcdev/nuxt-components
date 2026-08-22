@@ -67,12 +67,12 @@ exports[`ServicesSection > renders correct HTML structure 1`] = `
               <div class="label-wrapper">FAQ question?</div>
               <div class="icon-wrapper"><span class="iconify i-mdi:chevron-down" aria-hidden="true"></span></div>
             </summary>
-          </details>
-          <div id="id-faq-v-0-0-0-content" class="expanding-panel-content" aria-labelledby="id-faq-v-0-0-0-trigger" role="region">
-            <div class="inner">
-              <p class="services-section__faq-answer">FAQ answer.</p>
+            <div id="id-faq-v-0-0-0-content" class="expanding-panel-content" aria-labelledby="id-faq-v-0-0-0-trigger" role="region">
+              <div class="inner">
+                <p class="services-section__faq-answer">FAQ answer.</p>
+              </div>
             </div>
-          </div>
+          </details>
         </div>
       </div>
       <div class="glass-panel services-section__glass-panel p-24">

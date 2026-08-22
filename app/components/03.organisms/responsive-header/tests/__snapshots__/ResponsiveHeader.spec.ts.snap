@@ -46,12 +46,14 @@ exports[`ResponsiveHeader > renders correct HTML structure with default props 1`
                     <div class="icon-wrapper"><span class="iconify i-mdi:chevron-down icon" aria-hidden="true"></span></div>
                   </summary>
                   <div id="id-overflow-navigation-group-content" class="expanding-panel-content" aria-labelledby="id-overflow-navigation-group-trigger" role="region">
-                    <div class="overflow-navigation-sub-nav-inner">
-                      <ul class="overflow-navigation-sub-nav-list">
-                        <li class="overflow-navigation-sub-nav-item"><a href="/forms/examples/buttons" class="overflow-navigation-sub-nav-link" role="menuitem"><span class="overflow-navigation-sub-nav-text">Buttons</span></a></li>
-                        <li class="overflow-navigation-sub-nav-item"><a href="/ui/tabs" class="overflow-navigation-sub-nav-link" role="menuitem"><span class="overflow-navigation-sub-nav-text">Tabs</span></a></li>
-                      </ul>
-                      <div aria-hidden="true" class="overflow-sub-nav-indicator-hovered"></div>
+                    <div class="inner">
+                      <div class="overflow-navigation-sub-nav-inner">
+                        <ul class="overflow-navigation-sub-nav-list">
+                          <li class="overflow-navigation-sub-nav-item"><a href="/forms/examples/buttons" class="overflow-navigation-sub-nav-link" role="menuitem"><span class="overflow-navigation-sub-nav-text">Buttons</span></a></li>
+                          <li class="overflow-navigation-sub-nav-item"><a href="/ui/tabs" class="overflow-navigation-sub-nav-link" role="menuitem"><span class="overflow-navigation-sub-nav-text">Tabs</span></a></li>
+                        </ul>
+                        <div aria-hidden="true" class="overflow-sub-nav-indicator-hovered"></div>
+                      </div>
                     </div>
                   </div>
                 </details>
