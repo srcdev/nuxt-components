@@ -1,0 +1,108 @@
+{
+  "SRCDEV ServicesCard Basic": {
+    "description": "ServicesCard basic usage with actions slot",
+    "scope": "vue,html",
+    "body": [
+      "<ServicesCard :service-data=\"$1service\">",
+      "  <template #actions=\"{ serviceData }\">",
+      "    <InputButtonCore",
+      "      variant=\"secondary\"",
+      "      :button-text=\"`More about ${serviceData.title}`\"",
+      "      :href=\"`/services/${serviceData.slug}`\"",
+      "    >",
+      "      <template #right>",
+      "        <Icon name=\"mdi:arrow-right\" class=\"icon\" />",
+      "      </template>",
+      "    </InputButtonCore>",
+      "  </template>",
+      "</ServicesCard>"
+    ]
+  },
+  "SRCDEV ServicesCard Whole Card Clickable": {
+    "description": "ServicesCard with href and no actions slot — whole card is clickable",
+    "scope": "vue,html",
+    "body": [
+      "<ServicesCard :service-data=\"$1service\" :href=\"`/services/${$1service.slug}`\" />"
+    ]
+  },
+  "SRCDEV ServicesCard With Config Overrides": {
+    "description": "ServicesCard with eyebrowConfig/heroConfig overrides",
+    "scope": "vue,html",
+    "body": [
+      "<ServicesCard",
+      "  :service-data=\"$1service\"",
+      "  :eyebrow-config=\"{ fontSize: '$2small' }\"",
+      "  :hero-config=\"{ tag: '$3h3', fontSize: '$4title' }\"",
+      ">",
+      "  <template #actions=\"{ serviceData }\">",
+      "    <InputButtonCore variant=\"secondary\" button-text=\"$5Enquire\" :href=\"`/services/${serviceData.slug}`\" />",
+      "  </template>",
+      "</ServicesCard>"
+    ]
+  },
+  "SRCDEV ServicesCard With Custom Meta Row": {
+    "description": "ServicesCard with custom duration/price slot content (e.g. icons)",
+    "scope": "vue,html",
+    "body": [
+      "<ServicesCard :service-data=\"$1service\">",
+      "  <template #duration=\"{ serviceData }\">",
+      "    <Icon name=\"mdi:clock-time-four-outline\" class=\"icon\" />",
+      "    <span>{{ serviceData.duration }}</span>",
+      "  </template>",
+      "  <template #price=\"{ serviceData }\">",
+      "    <Icon name=\"mdi:currency-gbp\" class=\"icon\" />",
+      "    <span>From {{ serviceData.price }}</span>",
+      "  </template>",
+      "  <template #actions=\"{ serviceData }\">",
+      "    <InputButtonCore variant=\"secondary\" button-text=\"$2Enquire\" :href=\"`/services/${serviceData.slug}`\" />",
+      "  </template>",
+      "</ServicesCard>"
+    ]
+  },
+  "SRCDEV ServicesCard CSS Override": {
+    "description": "CSS override scaffold for ServicesCard — scope to a page or section class. See CONSUMER-STYLING.md for the full token list.",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .services-card {",
+      "    /* Public tokens — could also be set globally on :root instead */",
+      "    /* Interaction states — only visible in whole-card-clickable mode (is-clickable) */",
+      "    --services-card-border-radius: ;",
+      "    --services-card-border-width: ;",
+      "    --services-card-border-colour: ;",
+      "    --services-card-border-colour-hover: ;",
+      "    --services-card-outline-width: ;",
+      "    --services-card-outline-colour: ;",
+      "    --services-card-outline-colour-hover: ;",
+      "    --services-card-outline-offset: ;",
+      "    --services-card-outline-offset-hover: ;",
+      "",
+      "    --services-card-gap: ;",
+      "    --image-wrapper-aspect-ratio: ;",
+      "    --image-wrapper-border-radius: ;",
+      "    --image-wrapper-padding-block: ;",
+      "    --image-wrapper-padding-inline: ;",
+      "    --image-wrapper-border-image-zoom-transform: ;",
+      "    --details-wrapper-grid-gap: ;",
+      "    --details-wrapper-padding-block: ;",
+      "    --details-wrapper-padding-inline: ;",
+      "    --description-padding-block: ;",
+      "    --description-line-height: ;",
+      "    --description-line-clamp: ;",
+      "    --meta-padding-block: ;",
+      "    --meta-text-transform: ;",
+      "    --footer-padding-block: ;",
+      "    --footer-wrapper-grid-gap: ;",
+      "",
+      "    /* Local-only tokens — page-scoped override only, no :root fallback */",
+      "    --_eyebrow-text-padding-block: ;",
+      "    --_hero-text-padding-block: ;",
+      "    --_description-text-colour: ;",
+      "    --_meta-border-colour: ;",
+      "    --_meta-text-colour: ;",
+      "    --_meta-font-size: ;",
+      "  }",
+      "}"
+    ]
+  }
+}

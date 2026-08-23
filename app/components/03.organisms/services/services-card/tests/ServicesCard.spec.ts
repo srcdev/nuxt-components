@@ -108,6 +108,44 @@ describe("ServicesCard", () => {
     expect(wrapper.find(".image-wrapper img").attributes("loading")).toBe("lazy");
   });
 
+  // ─── Meta row (duration / price) ───────────────────────────────────────
+
+  it("renders serviceData.duration and serviceData.price by default", async () => {
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: mockService },
+    });
+    expect(wrapper.find(".meta-duration").text()).toBe(mockService.duration);
+    expect(wrapper.find(".meta-price").text()).toBe(mockService.price);
+  });
+
+  it("overrides duration/price text with durationText/priceText props", async () => {
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: mockService, durationText: "1 hour", priceText: "£75" },
+    });
+    expect(wrapper.find(".meta-duration").text()).toBe("1 hour");
+    expect(wrapper.find(".meta-price").text()).toBe("£75");
+  });
+
+  it("overrides duration/price content with duration/price slots", async () => {
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: mockService },
+      slots: {
+        duration: '<span class="custom-duration">Quick</span>',
+        price: '<span class="custom-price">Free</span>',
+      },
+    });
+    expect(wrapper.find(".custom-duration").text()).toBe("Quick");
+    expect(wrapper.find(".custom-price").text()).toBe("Free");
+  });
+
+  it("hides the meta row when there is no duration, price, or slot content", async () => {
+    const serviceWithoutMeta: Service = { ...mockService, duration: "", price: "" };
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: serviceWithoutMeta },
+    });
+    expect(wrapper.find(".meta").exists()).toBe(false);
+  });
+
   // ─── Actions slot ───────────────────────────────────────────────────────
 
   it("renders the actions slot", async () => {
@@ -126,6 +164,50 @@ describe("ServicesCard", () => {
       props: { serviceData: mockService },
     });
     expect(wrapper.vm).toBeTruthy();
+  });
+
+  // ─── Whole-card clickable (href, no actions slot) ──────────────────────
+
+  it("stays as the tag prop when href is not set", async () => {
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: mockService },
+    });
+    expect(wrapper.element.tagName).toBe("DIV");
+    expect(wrapper.attributes("href")).toBeUndefined();
+  });
+
+  it("stays as the tag prop when href is set but an actions slot is provided", async () => {
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: mockService, href: "/services/test-service" },
+      slots: { actions: '<button class="test-cta">Book now</button>' },
+    });
+    expect(wrapper.element.tagName).toBe("DIV");
+    expect(wrapper.attributes("href")).toBeUndefined();
+  });
+
+  it("renders as an anchor with href when href is set and no actions slot is provided", async () => {
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: mockService, href: "https://example.com/book" },
+    });
+    expect(wrapper.element.tagName).toBe("A");
+    expect(wrapper.attributes("href")).toBe("https://example.com/book");
+    expect(wrapper.classes()).toContain("is-clickable");
+  });
+
+  it("renders as NuxtLink for an internal href", async () => {
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: mockService, href: "/services/test-service" },
+    });
+    expect(wrapper.element.tagName).toBe("A");
+    expect(wrapper.attributes("href")).toBe("/services/test-service");
+  });
+
+  it("renders as a plain anchor for an internal href when external is true", async () => {
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: mockService, href: "/api/auth/github", external: true },
+    });
+    expect(wrapper.element.tagName).toBe("A");
+    expect(wrapper.attributes("href")).toBe("/api/auth/github");
   });
 
   // ─── eyebrowConfig ──────────────────────────────────────────────────────

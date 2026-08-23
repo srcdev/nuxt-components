@@ -19,6 +19,22 @@ const meta: Meta<typeof ServicesCard> = {
       control: "object",
       description: "Override hero tag and fontSize — omit keys to use defaults",
     },
+    href: {
+      control: "text",
+      description: "When set and no actions slot is provided, the whole card becomes a link",
+    },
+    external: {
+      control: "boolean",
+      description: "Force a plain <a> instead of NuxtLink for an internal-looking href",
+    },
+    durationText: {
+      control: "text",
+      description: "Overrides serviceData.duration in the meta row",
+    },
+    priceText: {
+      control: "text",
+      description: "Overrides serviceData.price in the meta row",
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes applied to the root element",
@@ -64,6 +80,26 @@ const sampleService: Service = {
   faqs: [{ question: "How long do locs take to mature?", answer: "12–18 months." }],
   seoTitle: "Locs Installation",
   seoDescription: "Professional locs installation service.",
+};
+
+const balayageService: Service = {
+  slug: "balayage",
+  category: "hair",
+  title: "Balayage",
+  subtitle: "Freehand Colour Artistry",
+  price: "From £95",
+  duration: "2.5 - 3.5 hours",
+  image: "https://picsum.photos/seed/balayage-card/600/800",
+  shortDescription: "Colour swept on by hand, bespoke to your hair's natural fall and texture.",
+  longDescription: "Full description not used in card view.",
+  heroHeading: [{ text: "Why choose balayage?", styleClass: "normal" }],
+  whatIsIt: "A freehand colour technique for a natural, sun-kissed result.",
+  process: ["Consultation", "Freehand application", "Toner", "Finish & style"],
+  idealFor: ["Low-maintenance colour", "Natural-looking dimension"],
+  maintenance: "Refresh every 3–4 months.",
+  faqs: [{ question: "Does balayage damage hair?", answer: "No more than any other lightening service when done correctly." }],
+  seoTitle: "Balayage",
+  seoDescription: "Freehand balayage colour service.",
 };
 
 // ─── Stories ──────────────────────────────────────────────────────────────────
@@ -188,6 +224,29 @@ export const AsArticle: Story = {
       description: {
         story:
           "Use tag=\"article\" with heroConfig.tag=\"h3\" when cards are inside a section that already has an h2 — keeps the heading hierarchy correct.",
+      },
+    },
+  },
+};
+
+export const DesignReplica: Story = {
+  name: "Design Replica — Dark Card With Meta Row",
+  render: (args) => ({
+    components: { ServicesCard },
+    setup() {
+      return { args, balayageService };
+    },
+    template: `
+      <div style="color-scheme:dark; background:#141414; max-width:360px; padding:2.4rem;">
+        <ServicesCard v-bind="args" :service-data="balayageService" />
+      </div>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Reproduces the reference design: dark background, no actions slot, and the duration/price meta row sourced from serviceData.duration/serviceData.price (uppercased via CSS).",
       },
     },
   },

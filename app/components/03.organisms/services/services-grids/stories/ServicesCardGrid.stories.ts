@@ -1,8 +1,23 @@
+import { computed } from "vue";
 import ServicesCardGrid from "../ServicesCardGrid.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import type { Service } from "~/types/types.services";
 
-const meta: Meta<typeof ServicesCardGrid> = {
+type StoryArgs = {
+  tag?: "div" | "section" | "main";
+  eyebrowConfig?: { tag?: "p" | "div" | "span"; fontSize?: "large" | "medium" | "small" };
+  heroConfig?: {
+    tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+    fontSize?: "display" | "title" | "heading" | "subheading" | "label";
+  };
+  hrefBase?: string;
+  buttonTextPrefix?: string;
+  styleClassPassthrough?: string | string[];
+  /** Story-only — not a real ServicesCardGrid prop, see useStorySetup below. */
+  lineClamp?: number;
+};
+
+const meta: Meta<StoryArgs> = {
   title: "Organisms/Services/Services Card Grid",
   component: ServicesCardGrid,
   argTypes: {
@@ -31,6 +46,11 @@ const meta: Meta<typeof ServicesCardGrid> = {
       control: "object",
       description: "Additional CSS classes applied to the root element",
     },
+    lineClamp: {
+      control: { type: "number", min: 1, max: 10, step: 1 },
+      description:
+        "Story-only control — sets ServicesCard's --description-line-clamp custom property on the grid wrapper (not a real component prop) to demo description clamping across cards",
+    },
   },
   args: {
     tag: "div",
@@ -39,6 +59,7 @@ const meta: Meta<typeof ServicesCardGrid> = {
     hrefBase: "/services/",
     buttonTextPrefix: "Enquire about",
     styleClassPassthrough: [],
+    lineClamp: 3,
   },
   parameters: {
     docs: {
@@ -51,7 +72,7 @@ const meta: Meta<typeof ServicesCardGrid> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ServicesCardGrid>;
+type Story = StoryObj<StoryArgs>;
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -81,7 +102,78 @@ const sampleServices: Service[] = [
   makeService("colour-treatment", "Colour Treatment", "Add dimension and depth", "https://picsum.photos/seed/card-c/600/800"),
 ];
 
+const makeServiceWithDescription = (
+  slug: string,
+  title: string,
+  subtitle: string,
+  image: string,
+  shortDescription: string
+): Service => ({ ...makeService(slug, title, subtitle, image), shortDescription });
+
+// Six cards with progressively longer shortDescription text, to demo how the same
+// lineClamp value clips each card's description at a different point.
+const lineClampServices: Service[] = [
+  makeServiceWithDescription(
+    "one-liner",
+    "Fringe Trim",
+    "A quick refresh",
+    "https://picsum.photos/seed/clamp-1/600/800",
+    "A quick tidy-up."
+  ),
+  makeServiceWithDescription(
+    "short-desc",
+    "Blow Dry",
+    "Salon finish, fast",
+    "https://picsum.photos/seed/clamp-2/600/800",
+    "A smooth, voluminous blow dry finished with a light-hold spray for lasting body."
+  ),
+  makeServiceWithDescription(
+    "medium-desc",
+    "Balayage",
+    "Freehand colour artistry",
+    "https://picsum.photos/seed/clamp-3/600/800",
+    "Colour swept on by hand, bespoke to your hair's natural fall and texture. Creates soft, sun-kissed dimension that grows out gracefully with minimal upkeep."
+  ),
+  makeServiceWithDescription(
+    "long-desc",
+    "Locs Installation",
+    "Start your loc journey",
+    "https://picsum.photos/seed/clamp-4/600/800",
+    "Professional loc installation tailored to your hair type. We work with all textures and lengths to create beautiful, long-lasting locs, with a full consultation beforehand to agree size, style, and maintenance schedule."
+  ),
+  makeServiceWithDescription(
+    "very-long-desc",
+    "Keratin Treatment",
+    "Smooth, frizz-free hair",
+    "https://picsum.photos/seed/clamp-5/600/800",
+    "A deep-conditioning keratin treatment that smooths the hair cuticle, reduces frizz, and cuts down on daily styling time. Results typically last three to five months depending on hair type, porosity, and aftercare routine, and can be combined with a colour service for a full transformation."
+  ),
+  makeServiceWithDescription(
+    "extra-long-desc",
+    "Full Colour Correction",
+    "Rebuild from the roots",
+    "https://picsum.photos/seed/clamp-6/600/800",
+    "A multi-session colour correction service for hair that's had previous colour go wrong — box dye build-up, uneven tone, brassiness, or over-processed ends. We start with a full strand test and consultation, then work in stages to lift, tone, and rebuild condition safely, protecting hair integrity at every step rather than rushing to a single-visit result that risks further damage."
+  ),
+];
+
 // ─── Stories ──────────────────────────────────────────────────────────────────
+
+/**
+ * lineClamp is a story-only control (not a real ServicesCardGrid prop) that sets
+ * --description-line-clamp on the grid wrapper — the global custom property each
+ * ServicesCard's .description reads for its -webkit-line-clamp value.
+ */
+function useStorySetup(args: StoryArgs) {
+  const clampStyle = computed(() => ({
+    "--description-line-clamp": String(args.lineClamp ?? 3),
+  }));
+  const componentArgs = computed(() => {
+    const { lineClamp: _lineClamp, ...rest } = args;
+    return rest;
+  });
+  return { clampStyle, componentArgs };
+}
 
 export const Default: Story = {
   render: (args) => ({
@@ -176,6 +268,32 @@ export const EmptyData: Story = {
     docs: {
       description: {
         story: "When servicesData is empty the grid renders with no children — pass an empty array as a safe fallback while data loads.",
+      },
+    },
+  },
+};
+
+export const DescriptionLineClamp: Story = {
+  name: "Description Line Clamp",
+  args: {
+    lineClamp: 3,
+  },
+  render: (args) => ({
+    components: { ServicesCardGrid },
+    setup() {
+      return { ...useStorySetup(args), lineClampServices };
+    },
+    template: `
+      <div :style="clampStyle">
+        <ServicesCardGrid v-bind="componentArgs" :services-data="lineClampServices" />
+      </div>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Six cards with progressively longer shortDescription text, all sharing one --description-line-clamp value set via the lineClamp control. Use the control to see how the same clamp value affects a one-line description (no visible clamping) versus a long paragraph (clamped with an ellipsis) — card heights stay equal since the meta row and actions slot sit below the clamped description rather than growing with it.",
       },
     },
   },
