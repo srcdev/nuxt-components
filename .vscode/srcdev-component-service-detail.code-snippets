@@ -1,0 +1,49 @@
+{
+  "SRCDEV ServiceDetail": {
+    "description": "ServiceDetail full page — hero banner, content, sticky sidebar, closing CTA",
+    "scope": "vue,html",
+    "body": [
+      "<ServiceDetail",
+      "  :service-data=\"$1service\"",
+      "  location=\"$2Mobile — across Bath\"",
+      "  :related-services=\"$3relatedServices\"",
+      ">",
+      "  <template #book-cta>",
+      "    <button type=\"button\">$4Book Now</button>",
+      "  </template>",
+      "  <template #sidebar-note>",
+      "    $5",
+      "  </template>",
+      "  <template #final-cta>",
+      "    <button type=\"button\">$6Book Now</button>",
+      "  </template>",
+      "</ServiceDetail>"
+    ]
+  },
+  "SRCDEV ServiceDetail Custom Breadcrumb": {
+    "description": "ServiceDetail with explicit breadcrumb routes instead of the auto-built category/title trail",
+    "scope": "vue,html",
+    "body": [
+      "<ServiceDetail",
+      "  :service-data=\"$1service\"",
+      "  :breadcrumb-items=\"[",
+      "    { label: '$2Services', to: '$3/services' },",
+      "    { label: '$4${TM_FILENAME_BASE}' },",
+      "  ]\"",
+      ">",
+      "  <template #book-cta>",
+      "    <button type=\"button\">$5Book Now</button>",
+      "  </template>",
+      "</ServiceDetail>"
+    ]
+  },
+  "SRCDEV ServiceDetail Related Service Link Slot": {
+    "description": "ServiceDetail related-service scoped slot — wraps each related item in a real link",
+    "scope": "vue,html",
+    "body": [
+      "<template #related-service=\"{ service }\">",
+      "  <NuxtLink :to=\"`/services/${service.slug}`\">$1{{ service.title }}</NuxtLink>",
+      "</template>"
+    ]
+  }
+}

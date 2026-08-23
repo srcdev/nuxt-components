@@ -1,0 +1,99 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ServiceDetail > renders correct HTML structure 1`] = `
+"<div class="service-detail">
+  <div class="service-detail__hero"><img data-nuxt-img="" srcset="/_ipx/_/images/balayage.jpg 1x, /_ipx/_/images/balayage.jpg 2x" alt="Balayage" loading="eager" fetchpriority="high" class="service-detail__hero-image" src="/_ipx/_/images/balayage.jpg">
+    <div class="service-detail__hero-overlay">
+      <div class="service-detail__hero-content">
+        <nav class="breadcrumb service-detail__breadcrumb" aria-label="Breadcrumb">
+          <ol class="breadcrumb__list">
+            <li class="breadcrumb__item"><span class="breadcrumb__label">Colour</span><span class="breadcrumb__separator" aria-hidden="true">/</span></li>
+            <li class="breadcrumb__item"><span class="breadcrumb__label" aria-current="page">Balayage</span>
+              <!--v-if-->
+            </li>
+          </ol>
+        </nav>
+        <div class="eyebrow-text large">Freehand colour artistry</div>
+        <h1 id="v-0-0" class="hero-text mb-20 display axis-horizontal">
+          <!--v-if--><span class="text-block-0 normal">Balayage</span>
+        </h1>
+        <div class="service-detail__hero-pills"><span class="display-pill md neutral"><span class="pill-label">2.5 - 3.5 hours</span></span><span class="display-pill md neutral"><span class="pill-label">From £95</span></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="service-detail__body">
+    <div class="service-detail__main">
+      <p class="page-body-normal">Balayage is a freehand hair colouring technique that creates a soft gradient.</p>
+      <h2 class="hero-text mb-20 subheading axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">What is Balayage?</span>
+      </h2>
+      <p class="page-body-normal">The word balayage comes from the French for 'to sweep'.</p>
+      <h2 class="hero-text mb-20 subheading axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">The Process</span>
+      </h2>
+      <ol class="stepper-list has-connectors service-detail__process">
+        <li class="indicator-top indicator-circle" style="--_connector-top: 0px; --_connector-height: 0px;">
+          <div class="stepper-list__indicator-counter"></div>
+          <div>
+            <p class="page-body-normal">Consultation</p>
+          </div>
+        </li>
+        <li class="indicator-top indicator-circle" style="--_connector-top: 0px; --_connector-height: 0px;">
+          <div class="stepper-list__indicator-counter"></div>
+          <div>
+            <p class="page-body-normal">Sectioning</p>
+          </div>
+        </li>
+        <li class="indicator-top indicator-circle">
+          <div class="stepper-list__indicator-counter"></div>
+          <div>
+            <p class="page-body-normal">Painting</p>
+          </div>
+        </li>
+      </ol>
+      <h2 class="hero-text mb-20 subheading axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">Ideal For</span>
+      </h2>
+      <ul class="service-detail__ideal-for">
+        <li class="service-detail__ideal-for-item"><span class="iconify i-mdi:diamond-stone service-detail__ideal-for-icon" aria-hidden="true"></span>
+          <p class="page-body-normal">First-time colour clients</p>
+        </li>
+        <li class="service-detail__ideal-for-item"><span class="iconify i-mdi:diamond-stone service-detail__ideal-for-icon" aria-hidden="true"></span>
+          <p class="page-body-normal">Low-maintenance colour</p>
+        </li>
+      </ul>
+      <h2 class="hero-text mb-20 subheading axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">Aftercare &amp; Maintenance</span>
+      </h2>
+      <p class="page-body-normal">Balayage is low maintenance since regrowth is soft and natural.</p>
+      <h2 class="hero-text mb-20 subheading axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">Frequently Asked Questions</span>
+      </h2>
+      <div class="service-detail__faqs">
+        <div class="service-detail__faq">
+          <h3 class="service-detail__faq-question">Will it damage my hair?</h3>
+          <p class="page-body-normal">Balayage is gentler than full-head bleaching.</p>
+        </div>
+      </div>
+    </div>
+    <aside class="service-detail__sidebar">
+      <div class="glass-panel service-detail__booking-card">
+        <p class="service-detail__sidebar-label">Book This Service</p>
+        <div class="service-detail__sidebar-row"><span>Price</span><span>£95</span></div>
+        <div class="service-detail__sidebar-row"><span>Duration</span><span>2.5 - 3.5 hours</span></div>
+        <!--v-if-->
+        <div class="service-detail__sidebar-note"></div>
+      </div>
+      <!--v-if-->
+    </aside>
+  </div>
+  <div class="service-detail__final-cta">
+    <div class="service-detail__final-cta-copy">
+      <h2 class="hero-text mbs-0 mbe-8 subheading axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">Ready to book your appointment?</span>
+      </h2>
+      <p class="page-body-normal">Get in touch to book your appointment.</p>
+    </div>
+  </div>
+</div>"
+`;

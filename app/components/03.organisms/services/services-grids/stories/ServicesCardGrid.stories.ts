@@ -62,6 +62,12 @@ const meta: Meta<StoryArgs> = {
     lineClamp: 3,
   },
   parameters: {
+    backgrounds: {
+      default: "storybook-canvas",
+      options: {
+        "storybook-canvas": { name: "Canvas", value: "oklch(0.163 0.005 17)" },
+      },
+    },
     docs: {
       description: {
         component:

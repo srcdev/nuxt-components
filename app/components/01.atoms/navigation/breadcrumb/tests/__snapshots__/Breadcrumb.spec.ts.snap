@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Breadcrumb > renders correct HTML structure 1`] = `
+"<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol class="breadcrumb__list">
+    <li class="breadcrumb__item"><a href="/services" class="breadcrumb__link">Services</a><span class="breadcrumb__separator" aria-hidden="true">/</span></li>
+    <li class="breadcrumb__item"><a href="/services/balayage" class="breadcrumb__link">Balayage</a><span class="breadcrumb__separator" aria-hidden="true">/</span></li>
+    <li class="breadcrumb__item"><span class="breadcrumb__label" aria-current="page">Highlights</span>
+      <!--v-if-->
+    </li>
+  </ol>
+</nav>"
+`;

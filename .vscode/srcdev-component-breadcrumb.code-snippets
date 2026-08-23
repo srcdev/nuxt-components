@@ -1,0 +1,14 @@
+{
+  "SRCDEV Breadcrumb": {
+    "description": "Breadcrumb trail — items without a `to` render as plain current-page text",
+    "scope": "vue,html",
+    "body": [
+      "<Breadcrumb",
+      "  :items=\"[",
+      "    { label: '$1Services', to: '$2/services' },",
+      "    { label: '$3${TM_FILENAME_BASE}' },",
+      "  ]\"",
+      "/>"
+    ]
+  }
+}
