@@ -178,4 +178,4 @@ All `--content-docs-*` tokens can be overridden at global, page, or instance sco
 - File: `app/components/01.atoms/content-wrappers/docs-pages/ContentDocs.vue`
 - Types: `app/types/components/content-docs.d.ts` (`DocsNavItem`)
 - Tests: `app/components/01.atoms/content-wrappers/docs-pages/tests/ContentDocs.spec.ts`
-- Demo page: `app/pages/ui/layout-content-docs.vue`
+- Storybook: `app/components/01.atoms/content-wrappers/docs-pages/stories/ContentDocs.stories.ts`

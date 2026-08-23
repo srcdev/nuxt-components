@@ -12,7 +12,7 @@
 | `tag`                   | `"div" \| "section" \| "main"`    | `"div"`                          | no       |
 | `eyebrowConfig`         | `EyebrowConfig`                   | `{}`                             | no       |
 | `heroConfig`            | `HeroConfig`                      | `{}`                             | no       |
-| `hrefBase`              | `string`                          | `"/ui/services/services-section/"` | no     |
+| `hrefBase`              | `string`                          | `"/services/"`                    | no     |
 | `buttonTextPrefix`      | `string`                          | `"Enquire about"`                | no       |
 | `styleClassPassthrough` | `string \| string[]`              | `[]`                             | no       |
 
@@ -38,8 +38,8 @@ Set on `.services-card-grid` (or scoped to a page class):
 
 | Token                  | Default   | Controls                              |
 | ---------------------- | --------- | ------------------------------------- |
-| `--_gap`               | `4rem`    | Gap between grid cells                |
-| `--_column-min-width`  | `250px`   | Minimum column width before wrapping  |
+| `--services-card-grid-gap`               | `4rem`    | Gap between grid cells                |
+| `--services-card-grid-column-min-width`  | `250px`   | Minimum column width before wrapping  |
 
 ## Consumer page boilerplate
 
@@ -87,13 +87,13 @@ if (servicesData.value.length === 0) {
 .page-services {
   /* Page-level CSS token overrides — delete any you don't need */
   .services-card-grid {
-    --_gap: 4rem;
-    --_column-min-width: 250px;
+    --services-card-grid-gap: 4rem;
+    --services-card-grid-column-min-width: 250px;
 
     .services-card {
-      --_eyebrow-text-margin-block: 0.8rem 0;
-      --_hero-text-margin-block: 2rem 1rem;
-      --_description-text-colour: var(--colour-text-secondary);
+      --eyebrow-text-padding-block: 0.8rem 0;
+      --hero-text-padding-block: 2rem 1rem;
+      --description-text-colour: var(--colour-text-secondary);
     }
   }
 }
@@ -104,6 +104,6 @@ if (servicesData.value.length === 0) {
 
 - Component is auto-imported in Nuxt — no import needed.
 - The `Service` type is imported from `~/types/types.services`.
-- Uses `repeat(auto-fit, minmax(var(--_column-min-width), 1fr))` — columns grow to fill available space and wrap when below the minimum width.
+- Uses `repeat(auto-fit, minmax(var(--services-card-grid-column-min-width, 250px), 1fr))` — columns grow to fill available space and wrap when below the minimum width.
 - The `#actions` slot template is passed down into each `ServicesCard`; `serviceData` is the scoped prop for the current iteration item.
 - Data fetching is the page's responsibility — pass an empty array as fallback while loading (`servicesData ?? []`).

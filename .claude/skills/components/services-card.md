@@ -145,15 +145,17 @@ scaffold a style block using `styleClassPassthrough` instead — see
   .services-card {
     --services-card-gap: 1.4rem;
     --description-line-clamp: 3;
-    --_eyebrow-text-padding-block: 0.8rem 0;
-    --_hero-text-padding-block: 2rem 1rem;
-    --_meta-border-colour: var(--brand-border);
+    --eyebrow-text-padding-block: 0.8rem 0;
+    --hero-text-padding-block: 2rem 1rem;
+    --meta-border-colour: var(--brand-border);
   }
 }
 </style>
 ```
 
-See `CONSUMER-STYLING.md` for the full token list, including which have a global `:root` fallback (like `--services-card-gap` above) versus page-scoped-only local tokens (like `--_eyebrow-text-padding-block` above).
+See `CONSUMER-STYLING.md` for the full token list — every token is a plain public custom property
+consumed directly at its point of use (no `--_`-prefixed private indirection layer), so all of
+them work both globally (`:root`) and scoped like the example above.
 
 ## Whole-card clickable usage
 

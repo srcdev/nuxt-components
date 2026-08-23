@@ -2,10 +2,11 @@
 
 ## Public token API
 
-Each of these has a `--_`-prefixed local token internally that falls back to the public,
-non-prefixed name shown below (e.g. `--_services-card-gap: var(--services-card-gap, 1rem)`).
-Set the **public** name globally in a theme file, scoped to a page wrapper, or per-instance
-via `styleClassPassthrough` — no `:deep()` needed, component styles are unscoped.
+Every token below is consumed directly at its point of use (`var(--services-card-gap, 1rem)`,
+etc.) — there is no `--_`-prefixed private indirection layer, since none of these values are
+reused across multiple declarations or computed from something else. Set the token globally in
+a theme file, scoped to a page wrapper, or per-instance via `styleClassPassthrough` — no
+`:deep()` needed, component styles are unscoped.
 
 ### Interaction states (whole-card-clickable only)
 
@@ -47,10 +48,16 @@ i.e. `is-clickable` is on the root — since these all default to `transparent`/
 | `--details-wrapper-grid-gap` | `1rem` | Gap between eyebrow/title/description/footer |
 | `--details-wrapper-padding-block` | `0` | Padding inside the details wrapper (block axis) |
 | `--details-wrapper-padding-inline` | `0` | Padding inside the details wrapper (inline axis) |
+| `--eyebrow-text-padding-block` | `0.8rem 0` | Padding above/below the eyebrow |
+| `--hero-text-padding-block` | `2rem 1rem` | Padding above/below the title |
 | `--description-padding-block` | `0 0` | Padding on the description text |
+| `--description-text-colour` | `var(--colour-text-secondary)` | Description paragraph colour |
 | `--description-line-height` | `1.4` | Description line height |
 | `--description-line-clamp` | `100` | Number of lines the description clamps to — default is effectively unclamped; set e.g. `3` to clamp |
 | `--meta-padding-block` | `1.6rem 0` | Padding above/below the meta row's divider line |
+| `--meta-border-colour` | `var(--theme-border)` | Meta row's top divider colour |
+| `--meta-text-colour` | `inherit` | Duration/price text colour |
+| `--meta-font-size` | `1.4rem` | Duration/price text size |
 | `--meta-text-transform` | `uppercase` | Text transform on the duration/price meta row |
 | `--footer-padding-block` | `0` | Padding on the `.footer` wrapper (meta row + actions slot) |
 | `--footer-wrapper-grid-gap` | `1rem` | Gap between the meta row and the actions slot inside `.footer` |
@@ -61,31 +68,6 @@ i.e. `is-clickable` is on the root — since these all default to `transparent`/
   --services-card-gap: 1.4rem;
   --description-line-clamp: 3;
   --meta-text-transform: none;
-}
-```
-
-### Local-only tokens (no global fallback)
-
-These have a `--_`-prefixed local token but **no** matching public non-prefixed variable —
-override them only by scoping to `.services-card` (page-scoped or `styleClassPassthrough`),
-not from `:root`:
-
-| Token | Default | Controls |
-|---|---|---|
-| `--_eyebrow-text-padding-block` | `0.8rem 0` | Padding above/below the eyebrow |
-| `--_hero-text-padding-block` | `2rem 1rem` | Padding above/below the title |
-| `--_description-text-colour` | `var(--colour-text-secondary)` | Description paragraph colour |
-| `--_meta-border-colour` | `var(--theme-border)` | Meta row's top divider colour |
-| `--_meta-text-colour` | `inherit` | Duration/price text colour |
-| `--_meta-font-size` | `1.4rem` | Duration/price text size |
-
-```css
-/* In the consuming page's unscoped <style> block */
-.our-services-page {
-  .services-card {
-    --_meta-font-size: 1.6rem;
-    --_meta-border-colour: var(--brand-border);
-  }
 }
 ```
 
@@ -111,7 +93,7 @@ Use sparingly — prefer global or page-scoped CSS. When a single instance needs
 ```css
 .services-card.featured-service {
   --services-card-gap: 1.6rem;
-  --_meta-border-colour: var(--color-accent);
+  --meta-border-colour: var(--color-accent);
 }
 ```
 

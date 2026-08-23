@@ -50,7 +50,7 @@ const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   eyebrowConfig: () => ({}),
   heroConfig: () => ({}),
-  hrefBase: "/ui/services/services-section/",
+  hrefBase: "/services/",
   buttonTextPrefix: "Enquire about",
   styleClassPassthrough: () => [],
 });
@@ -68,13 +68,9 @@ watch(
 <style lang="css">
 @layer components {
   .services-card-grid {
-    /* Consumer definable css tokens */
-    --_gap: 4rem;
-    --_column-min-width: 250px;
-
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--_column-min-width), 1fr));
-    gap: var(--_gap);
+    grid-template-columns: repeat(auto-fit, minmax(var(--services-card-grid-column-min-width, 250px), 1fr));
+    gap: var(--services-card-grid-gap, 4rem);
   }
 }
 </style>

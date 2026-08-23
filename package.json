@@ -16,7 +16,7 @@
     "cleaninstall": "npm run clean && npm run reinstall",
     "generate:ramps": "node scripts/generate-ramps.mjs",
     "check:ramps": "node scripts/check-ramps.mjs",
-    "dev": "npm run generate:ramps && SRCDEV_STANDALONE=true nuxt dev",
+    "dev": "npm run generate:ramps && SRCDEV_STANDALONE=true storybook dev -p 6006",
     "build": "npm run generate:ramps && SRCDEV_STANDALONE=true nuxt build",
     "generate": "npm run generate:ramps && SRCDEV_STANDALONE=true nuxt generate",
     "preview": "SRCDEV_STANDALONE=true nuxt preview",

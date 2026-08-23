@@ -118,53 +118,15 @@ watch(
 <style lang="css">
 @layer components {
   .services-card {
-    --_services-card-border-radius: var(--services-card-border-radius, 0);
-    --_services-card-border-width: var(--services-card-border-width, 1px);
-    --_services-card-border-colour: var(--services-card-border-colour, transparent);
-    /* Falls back to the resting border colour (not transparent) so setting only
-       --services-card-border-colour doesn't make the border vanish on hover/focus. */
-    --_services-card-border-colour-hover: var(--services-card-border-colour-hover, var(--_services-card-border-colour));
-    --_services-card-outline-width: var(--services-card-outline-width, 2px);
-    --_services-card-outline-colour: var(--services-card-outline-colour, transparent);
-    --_services-card-outline-colour-hover: var(--services-card-outline-colour-hover, transparent);
-
-    --_services-card-outline-offset: var(--services-card-outline-offset, 0px);
-    --_services-card-outline-offset-hover: var(--services-card-outline-offset-hover, 0px);
-    --_services-card-gap: var(--services-card-gap, 1rem);
-
-    --_image-wrapper-aspect-ratio: var(--image-wrapper-aspect-ratio, 3/4);
-    --_image-wrapper-border-radius: var(--image-wrapper-border-radius, 8px);
-    --_image-wrapper-padding-block: var(--image-wrapper-padding-block, 0 0);
-    --_image-wrapper-padding-inline: var(--image-wrapper-padding-inline, 0 0);
-    --_image-wrapper-border-image-zoom-transform: var(--image-wrapper-border-image-zoom-transform, scale(1.05));
-
-    --_details-wrapper-grid-gap: var(--details-wrapper-grid-gap, 1rem);
-    --_details-wrapper-padding-block: var(--details-wrapper-padding-block, 0);
-    --_details-wrapper-padding-inline: var(--details-wrapper-padding-inline, 0);
-
-    --_eyebrow-text-padding-block: 0.8rem 0;
-    --_hero-text-padding-block: 2rem 1rem;
-    --_description-padding-block: var(--description-padding-block, 0 0);
-    --_description-text-colour: var(--colour-text-secondary);
-    --_description-line-height: var(--description-line-height, 1.4);
-    --_description-line-clamp: var(--description-line-clamp, 100);
-    --_meta-border-colour: var(--theme-border);
-    --_meta-padding-block: var(--meta-padding-block, 1.6rem 0);
-    --_meta-text-colour: inherit;
-    --_meta-font-size: 1.4rem;
-    --_meta-text-transform: var(--meta-text-transform, uppercase);
-    --_footer-padding-block: var(--footer-padding-block, 0);
-    --_footer-wrapper-grid-gap: var(--footer-wrapper-grid-gap, 1rem);
-
     display: grid;
     grid-template-rows: auto 1fr;
-    gap: var(--_services-card-gap);
+    gap: var(--services-card-gap, 1rem);
     min-inline-size: 0;
 
-    border-radius: var(--_services-card-border-radius);
-    border: var(--_services-card-border-width) solid var(--_services-card-border-colour);
-    outline: var(--_services-card-outline-width) solid var(--_services-card-outline-colour);
-    outline-offset: var(--_services-card-outline-offset);
+    border-radius: var(--services-card-border-radius, 0);
+    border: var(--services-card-border-width, 1px) solid var(--services-card-border-colour, transparent);
+    outline: var(--services-card-outline-width, 2px) solid var(--services-card-outline-colour, transparent);
+    outline-offset: var(--services-card-outline-offset, 0px);
     overflow: hidden;
 
     transition:
@@ -179,19 +141,21 @@ watch(
 
       &:hover,
       &:focus-visible {
-        border-color: var(--_services-card-border-colour-hover);
-        outline-color: var(--_services-card-outline-colour-hover);
-        outline-offset: var(--_services-card-outline-offset-hover);
+        /* Falls back to the resting border colour (not transparent) so setting only
+           --services-card-border-colour doesn't make the border vanish on hover/focus. */
+        border-color: var(--services-card-border-colour-hover, var(--services-card-border-colour, transparent));
+        outline-color: var(--services-card-outline-colour-hover, transparent);
+        outline-offset: var(--services-card-outline-offset-hover, 0px);
       }
     }
 
     .image-wrapper {
-      aspect-ratio: var(--_image-wrapper-aspect-ratio);
-      border-radius: var(--_image-wrapper-border-radius);
+      aspect-ratio: var(--image-wrapper-aspect-ratio, 3/4);
+      border-radius: var(--image-wrapper-border-radius, 8px);
       overflow: hidden;
       min-inline-size: 0;
-      padding-block: var(--_image-wrapper-padding-block);
-      padding-inline: var(--_image-wrapper-padding-inline);
+      padding-block: var(--image-wrapper-padding-block, 0 0);
+      padding-inline: var(--image-wrapper-padding-inline, 0 0);
 
       .image {
         display: block;
@@ -201,7 +165,7 @@ watch(
         transition: transform 0.3s ease-in-out;
 
         &:hover {
-          transform: var(--_image-wrapper-border-image-zoom-transform);
+          transform: var(--image-wrapper-border-image-zoom-transform, scale(1.05));
         }
       }
     }
@@ -209,40 +173,40 @@ watch(
     .details-wrapper {
       display: flex;
       flex-direction: column;
-      gap: var(--_details-wrapper-grid-gap);
+      gap: var(--details-wrapper-grid-gap, 1rem);
       min-inline-size: 0;
 
-      padding-block: var(--_details-wrapper-padding-block);
-      padding-inline: var(--_details-wrapper-padding-inline);
+      padding-block: var(--details-wrapper-padding-block, 0);
+      padding-inline: var(--details-wrapper-padding-inline, 0);
 
       .eyebrow-text {
-        padding-block: var(--_eyebrow-text-padding-block);
+        padding-block: var(--eyebrow-text-padding-block, 0.8rem 0);
       }
 
       .hero-text {
-        padding-block: var(--_hero-text-padding-block);
+        padding-block: var(--hero-text-padding-block, 2rem 1rem);
       }
 
       .description {
-        color: var(--_description-text-colour);
-        line-height: var(--_description-line-height);
-        padding-block: var(--_description-padding-block);
+        color: var(--description-text-colour, var(--colour-text-secondary));
+        line-height: var(--description-line-height, 1.4);
+        padding-block: var(--description-padding-block, 0 0);
 
         display: -webkit-box;
         -webkit-box-orient: vertical;
         overflow: hidden;
-        -webkit-line-clamp: var(--_description-line-clamp);
-        line-clamp: var(--_description-line-clamp);
+        -webkit-line-clamp: var(--description-line-clamp, 100);
+        line-clamp: var(--description-line-clamp, 100);
         text-overflow: ellipsis;
       }
 
       .footer {
         display: flex;
         flex-direction: column;
-        gap: var(--_footer-wrapper-grid-gap);
+        gap: var(--footer-wrapper-grid-gap, 1rem);
         margin-block-start: auto;
         min-inline-size: 0;
-        padding-block: var(--_footer-padding-block);
+        padding-block: var(--footer-padding-block, 0);
       }
 
       .meta {
@@ -250,11 +214,11 @@ watch(
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
-        padding-block: var(--_meta-padding-block);
-        border-block-start: 1px solid var(--_meta-border-colour);
-        color: var(--_meta-text-colour);
-        font-size: var(--_meta-font-size);
-        text-transform: var(--_meta-text-transform);
+        padding-block: var(--meta-padding-block, 1.6rem 0);
+        border-block-start: 1px solid var(--meta-border-colour, var(--theme-border));
+        color: var(--meta-text-colour, inherit);
+        font-size: var(--meta-font-size, 1.4rem);
+        text-transform: var(--meta-text-transform, uppercase);
       }
     }
   }

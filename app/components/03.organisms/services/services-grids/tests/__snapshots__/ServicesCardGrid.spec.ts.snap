@@ -14,7 +14,7 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
         <div class="meta">
           <div class="meta-duration">60 mins</div>
           <div class="meta-price">£50</div>
-        </div><a href="/ui/services/services-section/locs-installation" data-testid="input-button-core" data-theme="default" class="input-button-core secondary mbs-24 is-link">
+        </div><a href="/services/locs-installation" data-testid="input-button-core" data-theme="default" class="input-button-core secondary mbs-24 is-link">
           <!--v-if-->
           <!--v-if--><span class="button-text">Enquire about Locs Installation</span><span class="btn-icon right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
           <!--v-if-->
@@ -34,7 +34,7 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
         <div class="meta">
           <div class="meta-duration">60 mins</div>
           <div class="meta-price">£50</div>
-        </div><a href="/ui/services/services-section/locs-retwist" data-testid="input-button-core" data-theme="default" class="input-button-core secondary mbs-24 is-link">
+        </div><a href="/services/locs-retwist" data-testid="input-button-core" data-theme="default" class="input-button-core secondary mbs-24 is-link">
           <!--v-if-->
           <!--v-if--><span class="button-text">Enquire about Locs Retwist</span><span class="btn-icon right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
           <!--v-if-->
@@ -54,7 +54,7 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
         <div class="meta">
           <div class="meta-duration">60 mins</div>
           <div class="meta-price">£50</div>
-        </div><a href="/ui/services/services-section/colour-treatment" data-testid="input-button-core" data-theme="default" class="input-button-core secondary mbs-24 is-link">
+        </div><a href="/services/colour-treatment" data-testid="input-button-core" data-theme="default" class="input-button-core secondary mbs-24 is-link">
           <!--v-if-->
           <!--v-if--><span class="button-text">Enquire about Colour Treatment</span><span class="btn-icon right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
           <!--v-if-->

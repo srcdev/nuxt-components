@@ -2,7 +2,7 @@
 
 ## Overview
 
-A collapsible panel that lets you toggle component props live on a page — without touching the component or breaking the visual layout. Uses a native `<details>`/`<summary>` so it takes up no space when collapsed. Every page under `app/pages/ui/` in this library is a demo-only page already, so the panel always renders there — no `isDev` gate needed. If you add one to a page in a consuming app that also serves real production traffic, gate it behind that app's own dev/staging check.
+A collapsible panel that lets you toggle component props live on a page — without touching the component or breaking the visual layout. Uses a native `<details>`/`<summary>` so it takes up no space when collapsed. This library no longer ships its own demo pages (`app/pages/`) — component demos live entirely in Storybook now, which has its own live prop-toggling via args/controls, so this panel isn't needed there. It's still useful in a **consuming app's own pages**: gate it behind that app's dev/staging check unless the page is genuinely demo-only.
 
 ## Structure
 
@@ -218,7 +218,7 @@ Scope inside your page body class (e.g. `.my-page`) so styles don't bleed. The p
 
 ## Notes
 
-- **Consuming apps on real production traffic**: if the page hosting the panel isn't demo-only (unlike everything under `app/pages/ui/` in this library), gate the panel with that app's own dev/staging check, e.g. `v-if="isDev"` with `const isDev = import.meta.dev;`. `import.meta.dev` is `false` in production builds, so the gated block is tree-shaken with no runtime cost.
+- **Consuming apps on real production traffic**: if the page hosting the panel isn't demo-only, gate the panel with that app's own dev/staging check, e.g. `v-if="isDev"` with `const isDev = import.meta.dev;`. `import.meta.dev` is `false` in production builds, so the gated block is tree-shaken with no runtime cost.
 - **Consuming apps**: The active chip color (`oklch(55% 0.18 240)`) is a neutral blue. Replace with a brand accent token if preferred: `background: var(--color-brand-accent)`.
 - **Panel placement**: Outside any `overflow: hidden` or clipping container, otherwise the panel may be clipped or push layout unexpectedly. Placing it as a direct sibling of the component row works well.
 - **Computed CSS vars**: When a prop controls a CSS custom property (e.g. max-height tiers), use a `computed` that returns a style object and bind it with `:style` on the component wrapper:

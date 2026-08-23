@@ -192,17 +192,34 @@ expect(vm.generatedPath.length).toBeGreaterThan(0);
 **Responsive**: CSS Grid/Flexbox with container queries where supported
 **rem base**: `html` font-size is set to `62.5%`, making `1rem = 10px`. Use this when calculating rem values (e.g. `1.6rem = 16px`, `2.4rem = 24px`).
 
-```css
-/* ✅ Component styling pattern */
-.component-name {
-  --_border-radius: var(--theme-border-radius, 0.5rem);
-  --_transition-duration: var(--theme-transition-duration, 300ms);
+**Public token pattern**: default to consuming the public token directly at its one point of
+use — `var(--component-name-border-radius, 0.5rem)` — with no `--_`-prefixed private variable
+in between. Only introduce a private `--_x` var when the value is genuinely **reused across
+multiple declarations/selectors**, **composed from something else** (a `v-bind()` JS value
+combined with a public override, a fallback chain built on another private var), or **swapped
+by a state** (`:hover`, `data-theme`, etc.) in a way that's clearer with one named intermediate.
+A private var that maps 1:1 to a single property usage is pure indirection — inline it instead.
 
-  /* Functional base styles */
-  border-radius: var(--_border-radius);
-  transition: all var(--_transition-duration) ease;
+```css
+/* ✅ Single-use token — inline it, no private var */
+.component-name {
+  border-radius: var(--component-name-border-radius, 0.5rem);
+  transition: all var(--component-name-transition-duration, 300ms) ease;
+}
+
+/* ✅ Reused across a resting/hover pair — the private var earns its keep here */
+.component-name {
+  --_border-colour: var(--component-name-border-colour, transparent);
+  border-color: var(--_border-colour);
+
+  &:hover {
+    border-color: var(--component-name-border-colour-hover, var(--_border-colour));
+  }
 }
 ```
+
+See pitfall #20 for the concrete case (`ServicesCard` had ~20 private vars, nearly all single-use
+noise) and its fix.
 
 ## File Organization
 
@@ -263,6 +280,29 @@ const model = defineModel<(string | number)[] | string | undefined>();
 
 ## Storybook
 
+### Storybook is the only demo surface
+
+This library does **not** ship its own `app/pages/` demo pages — Storybook stories are the only
+place components get demonstrated. `app/pages/` was removed entirely on 2026-08-23 (75 files: a
+mix of `app/pages/ui/*` component demos and a few one-off top-level pages) after realizing they'd
+been shipping with the layer package unintentionally. When creating or touching a component:
+
+- Never add a new page under `app/pages/` to demo it — add or update its Storybook story instead
+  (`.claude/skills/storybook-add-story.md`).
+- If you find a leftover demo page for a component you're touching (there shouldn't be any after
+  the 2026-08-23 removal, but check), delete it as part of that change, and grep the rest of the
+  repo (`.claude/skills/`, other component docs) for routes/paths pointing at it — `ServicesCardGrid`'s
+  `hrefBase` default (`"/ui/services/services-section/"` → `"/services/"`) and a `content-docs.md`
+  "Demo page" reference both needed fixing when this was done, so check prop defaults and skill-doc
+  "Demo page:" lines specifically, not just the page file itself.
+- `app/pages/` can still legitimately exist for a **consuming app** (an app that extends this
+  layer) — this rule is about this library's own repo only. `new-app-scaffold.md`'s
+  `app/pages/index.vue` placeholder is unaffected.
+- `npm run dev` now launches Storybook (`storybook dev -p 6006`) directly, not the Nuxt dev
+  server — changed 2026-08-23 alongside the `app/pages/` removal. Use `npm run storybook` (same
+  command) or `npm run dev`, either works; there is no longer a `nuxt dev` script entry point in
+  this repo. The `hair-treatments` consumer app got the same `dev` script change at the same time.
+
 ### NuxtImg / @nuxt/image on Vercel
 
 `@nuxt/image` auto-detects Vercel and generates `/_vercel/image?url=...` URLs. In deployed Storybook (`storybook-static/`), source images aren't present so this fails. Three changes are required together:
@@ -315,6 +355,7 @@ See `.claude/skills/storybook-add-font.md` for the step-by-step process to add a
     - **Actual fix (2026-08-22)**: `ExpandingPanel` reverted to its original `::details-content`-only implementation (no CSS fallback) and now logs a `console.warn` on every dev-mode mount describing the WebKit gap. Every consumer that previously hardcoded `ExpandingPanel` now instead picks between `ExpandingPanel`/`ExpandingPanelClassic` via `<component :is>`, controlled by a prop **defaulting to the classic/safe implementation**: `AccordianCore`'s existing `variant` prop had its default flipped from `"modern"` to `"classic"`; `ContentDocs` and `ResponsiveHeader`/`NavigationItems` each gained a new `panelVariant: "modern" | "classic"` prop, also defaulting to `"classic"`. `"modern"` (i.e. `ExpandingPanel`) is now opt-in everywhere, not the default anywhere in the library. Any consumer CSS scoped to `.expanding-panel-*` classes (e.g. `ContentDocs`'s own nav styling, `NavigationItems`'s overflow-menu styling) needed a parallel `.expanding-panel-classic-*` block added, since switching the rendered component changes the class names and Classic's DOM shape differs slightly (its content div is a *sibling* of `.expanding-panel-classic-details`, not nested inside it like modern's `.expanding-panel-content`).
     - When adding a prop like this to a new component, name it `panelVariant` (not bare `variant`) unless the component has no other plausible use for that name — `ContentDocs` needed the more specific name since it's a multi-concern component.
     - General lesson: when relying on a very new CSS feature (an experimental pseudo-element, `@starting-style`, `appearance: base-select`, etc.) for anything load-bearing rather than purely decorative, check WebKit support specifically — Chrome's device-emulation mode cannot catch a WebKit-only gap, only a real Safari/iOS session (or Safari's remote Web Inspector against a real device) can. And when a browser-support fix doesn't hold up under real-device retesting, prefer routing consumers to an already-proven-working alternative implementation over trying to patch the failing one further — a working fallback you can point people to beats chasing a CSS-only fix for an engine gap you can't directly test against.
+20. **`ServicesCard` wrapped ~20 CSS custom properties in a `--_`-prefixed private layer** (`--_services-card-gap: var(--services-card-gap, 1rem)`, then `gap: var(--_services-card-gap)`, repeated for nearly every token) where almost none of them were reused across more than one declaration — the private var was pure indirection, adding ~20 lines with no behavioural benefit. `ServiceDetail` (built the same session, 2026-08-23) never adopted this layer — it consumes public tokens directly at their one point of use (`gap: var(--service-detail-body-gap, 3rem)`) — and side-by-side the difference in readability prompted fixing `ServicesCard` to match. Fixed 2026-08-23: removed the private layer entirely; six tokens that had **no** public fallback at all (`--_meta-font-size`, `--_meta-border-colour`, `--_meta-text-colour`, `--_eyebrow-text-padding-block`, `--_hero-text-padding-block`, `--_description-text-colour` — these were local-only override hooks, documented as such in `CONSUMER-STYLING.md`'s old "Local-only tokens" section) were promoted to full public tokens (`--meta-font-size`, etc.) rather than dropped, so consumers keep the override capability and gain a global `:root` fallback they didn't have before. The one case that stayed as an inline chain rather than a bare literal: the border-colour hover fallback, which nests directly (`var(--services-card-border-colour-hover, var(--services-card-border-colour, transparent))`) instead of needing a named private var. See the **Public token pattern** rule above (Styling Methodology) for when a private `--_x` var is still justified — reused across declarations, composed from a `v-bind()` value, or swapped by a state.
 
 ## Development Workflow
 
