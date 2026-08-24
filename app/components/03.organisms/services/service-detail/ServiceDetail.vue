@@ -282,6 +282,7 @@ watch(
         .service-detail__hero-image-row,
         .service-detail__hero-overlay {
           height: 100%;
+          grid-template-rows: 100%;
         }
       }
 

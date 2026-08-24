@@ -25,6 +25,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   .grid-stack {
     display: grid;
     grid-template-areas: "stack";
+    grid-template-rows: 100%;
 
     .grid-stack__layer {
       grid-area: stack;
