@@ -1,165 +1,181 @@
 <template>
   <component :is="tag" class="service-detail" :class="[elementClasses]" :aria-labelledby="ariaLabelledby">
-    <div class="service-detail__hero">
-      <NuxtImg
-        :src="serviceData.image"
-        :alt="serviceData.title"
-        :loading="imageLoading"
-        :fetchpriority="imageFetchPriority"
-        class="service-detail__hero-image"
-      />
-      <div class="service-detail__hero-overlay">
-        <div class="service-detail__hero-content">
-          <Breadcrumb :items="resolvedBreadcrumbItems" class="service-detail__breadcrumb" />
-          <EyebrowText font-size="large" :text-content="serviceData.subtitle" />
+    <GridStack tag="div" class="service-detail__hero">
+      <template #image>
+        <PageRow tag="div" :variant="heroImageVariant" class="service-detail__hero-image-row">
+          <NuxtImg
+            :src="serviceData.image"
+            :alt="serviceData.title"
+            :loading="imageLoading"
+            :fetchpriority="imageFetchPriority"
+            class="service-detail__hero-image"
+          />
+        </PageRow>
+      </template>
+      <template #content>
+        <PageRow tag="div" :variant="heroContentVariant" class="service-detail__hero-overlay">
+          <div class="service-detail__hero-content">
+            <Breadcrumb :items="resolvedBreadcrumbItems" class="service-detail__breadcrumb" />
+            <EyebrowText font-size="large" :text-content="serviceData.subtitle" />
+            <HeroText
+              :id="headingId"
+              :tag="headerTag"
+              font-size="display"
+              :text-content="[{ text: serviceData.title, styleClass: 'normal' }]"
+              :style-class-passthrough="['mb-20']"
+            />
+            <div class="service-detail__hero-pills">
+              <DisplayPill :label="serviceData.duration" size="md" variant="neutral" />
+              <DisplayPill :label="`From ${serviceData.price}`" size="md" variant="neutral" />
+            </div>
+          </div>
+        </PageRow>
+      </template>
+    </GridStack>
+
+    <PageRow tag="div" :variant="bodyVariant" class="service-detail__body-row">
+      <div class="service-detail__body">
+        <div class="service-detail__main">
+          <p class="page-body-normal">{{ serviceData.longDescription }}</p>
+
           <HeroText
-            :id="headingId"
-            :tag="headerTag"
-            font-size="display"
-            :text-content="[{ text: serviceData.title, styleClass: 'normal' }]"
+            :tag="subheadingTag"
+            axis="horizontal"
+            font-size="subheading"
+            :text-content="serviceData.heroHeading"
             :style-class-passthrough="['mb-20']"
           />
-          <div class="service-detail__hero-pills">
-            <DisplayPill :label="serviceData.duration" size="md" variant="neutral" />
-            <DisplayPill :label="`From ${serviceData.price}`" size="md" variant="neutral" />
-          </div>
-        </div>
-      </div>
-    </div>
+          <p class="page-body-normal">{{ serviceData.whatIsIt }}</p>
 
-    <div class="service-detail__body">
-      <div class="service-detail__main">
-        <p class="page-body-normal">{{ serviceData.longDescription }}</p>
+          <HeroText
+            :tag="subheadingTag"
+            axis="horizontal"
+            font-size="subheading"
+            :text-content="[{ text: processHeading, styleClass: 'normal' }]"
+            :style-class-passthrough="['mb-20']"
+          />
+          <StepperList
+            tag="ol"
+            indicator-alignment="top"
+            indicator-variant="circle"
+            :connected="true"
+            :item-count="serviceData.process.length"
+            class="service-detail__process"
+          >
+            <template v-for="(step, i) in serviceData.process" :key="i" #[`item-${i}`]>
+              <p class="page-body-normal">{{ step }}</p>
+            </template>
+          </StepperList>
 
-        <HeroText
-          :tag="subheadingTag"
-          axis="horizontal"
-          font-size="subheading"
-          :text-content="serviceData.heroHeading"
-          :style-class-passthrough="['mb-20']"
-        />
-        <p class="page-body-normal">{{ serviceData.whatIsIt }}</p>
+          <HeroText
+            :tag="subheadingTag"
+            axis="horizontal"
+            font-size="subheading"
+            :text-content="[{ text: idealForHeading, styleClass: 'normal' }]"
+            :style-class-passthrough="['mb-20']"
+          />
+          <ul class="service-detail__ideal-for">
+            <li v-for="(item, i) in serviceData.idealFor" :key="i" class="service-detail__ideal-for-item">
+              <Icon name="mdi:diamond-stone" class="service-detail__ideal-for-icon" />
+              <p class="page-body-normal">{{ item }}</p>
+            </li>
+          </ul>
 
-        <HeroText
-          :tag="subheadingTag"
-          axis="horizontal"
-          font-size="subheading"
-          :text-content="[{ text: processHeading, styleClass: 'normal' }]"
-          :style-class-passthrough="['mb-20']"
-        />
-        <StepperList
-          tag="ol"
-          indicator-alignment="top"
-          indicator-variant="circle"
-          :connected="true"
-          :item-count="serviceData.process.length"
-          class="service-detail__process"
-        >
-          <template v-for="(step, i) in serviceData.process" :key="i" #[`item-${i}`]>
-            <p class="page-body-normal">{{ step }}</p>
-          </template>
-        </StepperList>
+          <HeroText
+            :tag="subheadingTag"
+            axis="horizontal"
+            font-size="subheading"
+            :text-content="[{ text: maintenanceHeading, styleClass: 'normal' }]"
+            :style-class-passthrough="['mb-20']"
+          />
+          <p class="page-body-normal">{{ serviceData.maintenance }}</p>
 
-        <HeroText
-          :tag="subheadingTag"
-          axis="horizontal"
-          font-size="subheading"
-          :text-content="[{ text: idealForHeading, styleClass: 'normal' }]"
-          :style-class-passthrough="['mb-20']"
-        />
-        <ul class="service-detail__ideal-for">
-          <li v-for="(item, i) in serviceData.idealFor" :key="i" class="service-detail__ideal-for-item">
-            <Icon name="mdi:diamond-stone" class="service-detail__ideal-for-icon" />
-            <p class="page-body-normal">{{ item }}</p>
-          </li>
-        </ul>
-
-        <HeroText
-          :tag="subheadingTag"
-          axis="horizontal"
-          font-size="subheading"
-          :text-content="[{ text: maintenanceHeading, styleClass: 'normal' }]"
-          :style-class-passthrough="['mb-20']"
-        />
-        <p class="page-body-normal">{{ serviceData.maintenance }}</p>
-
-        <HeroText
-          :tag="subheadingTag"
-          axis="horizontal"
-          font-size="subheading"
-          :text-content="[{ text: faqsHeading, styleClass: 'normal' }]"
-          :style-class-passthrough="['mb-20']"
-        />
-        <div class="service-detail__faqs">
-          <div v-for="(faq, i) in serviceData.faqs" :key="i" class="service-detail__faq">
-            <h3 class="service-detail__faq-question">{{ faq.question }}</h3>
-            <p class="page-body-normal">{{ faq.answer }}</p>
-          </div>
-        </div>
-      </div>
-
-      <aside class="service-detail__sidebar">
-        <GlassPanel :style-class-passthrough="['service-detail__booking-card']">
-          <p class="service-detail__sidebar-label">{{ bookingHeading }}</p>
-
-          <div class="service-detail__sidebar-row">
-            <span>{{ priceLabel }}</span>
-            <span>{{ serviceData.price }}</span>
-          </div>
-          <div class="service-detail__sidebar-row">
-            <span>{{ durationLabel }}</span>
-            <span>{{ serviceData.duration }}</span>
-          </div>
-          <div v-if="location" class="service-detail__sidebar-row">
-            <span>{{ locationLabel }}</span>
-            <span>{{ location }}</span>
-          </div>
-
-          <slot name="book-cta" :service-data="serviceData"></slot>
-
-          <div class="service-detail__sidebar-note">
-            <slot name="sidebar-note"></slot>
-          </div>
-        </GlassPanel>
-
-        <div v-if="relatedServices.length" class="service-detail__related">
-          <p class="service-detail__sidebar-label">{{ relatedServicesHeading }}</p>
-
-          <div class="service-detail__related-items">
-            <div v-for="(related, i) in relatedServices" :key="related.slug" class="service-detail__related-item-slot">
-              <slot name="related-service" :service="related" :index="i">
-                <div class="service-detail__related-item">
-                  <NuxtImg
-                    :src="related.image"
-                    :alt="related.title"
-                    loading="lazy"
-                    class="service-detail__related-image"
-                  />
-                  <div class="service-detail__related-details">
-                    <p class="service-detail__related-title">{{ related.title }}</p>
-                    <p class="service-detail__related-price">{{ related.price }}</p>
-                  </div>
-                </div>
-              </slot>
+          <HeroText
+            :tag="subheadingTag"
+            axis="horizontal"
+            font-size="subheading"
+            :text-content="[{ text: faqsHeading, styleClass: 'normal' }]"
+            :style-class-passthrough="['mb-20']"
+          />
+          <div class="service-detail__faqs">
+            <div v-for="(faq, i) in serviceData.faqs" :key="i" class="service-detail__faq">
+              <h3 class="service-detail__faq-question">{{ faq.question }}</h3>
+              <p class="page-body-normal">{{ faq.answer }}</p>
             </div>
           </div>
         </div>
-      </aside>
-    </div>
 
-    <div class="service-detail__final-cta">
-      <div class="service-detail__final-cta-copy">
-        <HeroText
-          :tag="subheadingTag"
-          axis="horizontal"
-          font-size="subheading"
-          :text-content="[{ text: finalCtaHeading, styleClass: 'normal' }]"
-          :style-class-passthrough="['mbs-0', 'mbe-8']"
-        />
-        <p class="page-body-normal">{{ finalCtaBody }}</p>
+        <aside class="service-detail__sidebar">
+          <GlassPanel :style-class-passthrough="['service-detail__booking-card']">
+            <p class="service-detail__sidebar-label">{{ bookingHeading }}</p>
+
+            <div class="service-detail__sidebar-row">
+              <span>{{ priceLabel }}</span>
+              <span>{{ serviceData.price }}</span>
+            </div>
+            <div class="service-detail__sidebar-row">
+              <span>{{ durationLabel }}</span>
+              <span>{{ serviceData.duration }}</span>
+            </div>
+            <div v-if="location" class="service-detail__sidebar-row">
+              <span>{{ locationLabel }}</span>
+              <span>{{ location }}</span>
+            </div>
+
+            <div v-if="$slots['book-cta']" class="service-detail__sidebar-row book-cta">
+              <slot name="book-cta" :service-data="serviceData"></slot>
+            </div>
+
+            <div class="service-detail__sidebar-note">
+              <slot name="sidebar-note"></slot>
+            </div>
+          </GlassPanel>
+
+          <div v-if="relatedServices.length" class="service-detail__related">
+            <p class="service-detail__sidebar-label">{{ relatedServicesHeading }}</p>
+
+            <div class="service-detail__related-items">
+              <div
+                v-for="(related, i) in relatedServices"
+                :key="related.slug"
+                class="service-detail__related-item-slot"
+              >
+                <slot name="related-service" :service="related" :index="i">
+                  <div class="service-detail__related-item">
+                    <NuxtImg
+                      :src="related.image"
+                      :alt="related.title"
+                      loading="lazy"
+                      class="service-detail__related-image"
+                    />
+                    <div class="service-detail__related-details">
+                      <p class="service-detail__related-title">{{ related.title }}</p>
+                      <p class="service-detail__related-price">{{ related.price }}</p>
+                    </div>
+                  </div>
+                </slot>
+              </div>
+            </div>
+          </div>
+        </aside>
       </div>
-      <slot name="final-cta" :service-data="serviceData"></slot>
-    </div>
+    </PageRow>
+
+    <PageRow tag="div" :variant="finalCtaVariant" class="service-detail__final-cta-row">
+      <div class="service-detail__final-cta">
+        <div class="service-detail__final-cta-copy">
+          <HeroText
+            :tag="subheadingTag"
+            axis="horizontal"
+            font-size="subheading"
+            :text-content="[{ text: finalCtaHeading, styleClass: 'normal' }]"
+            :style-class-passthrough="['mbs-0', 'mbe-8']"
+          />
+          <p class="page-body-normal">{{ finalCtaBody }}</p>
+        </div>
+        <slot name="final-cta" :service-data="serviceData"></slot>
+      </div>
+    </PageRow>
   </component>
 </template>
 
@@ -173,6 +189,10 @@ interface Props {
   subheadingTag?: "h2" | "h3";
   serviceData: Service;
   breadcrumbItems?: BreadcrumbItem[];
+  heroImageVariant?: "full" | "popout" | "content" | "inset-content";
+  heroContentVariant?: "full" | "popout" | "content" | "inset-content";
+  bodyVariant?: "full" | "popout" | "content" | "inset-content";
+  finalCtaVariant?: "full" | "popout" | "content" | "inset-content";
   processHeading?: string;
   idealForHeading?: string;
   maintenanceHeading?: string;
@@ -196,6 +216,10 @@ const props = withDefaults(defineProps<Props>(), {
   headerTag: "h1",
   subheadingTag: "h2",
   breadcrumbItems: undefined,
+  heroImageVariant: "full",
+  heroContentVariant: "content",
+  bodyVariant: "content",
+  finalCtaVariant: "content",
   processHeading: "The Process",
   idealForHeading: "Ideal For",
   maintenanceHeading: "Aftercare & Maintenance",
@@ -239,49 +263,71 @@ watch(
     container-name: service-detail;
 
     .service-detail__hero {
-      position: relative;
       border-radius: var(--service-detail-hero-border-radius, 0.8rem);
       overflow: hidden;
-      min-height: var(--service-detail-hero-min-height, 32rem);
+      height: var(--service-detail-hero-min-height-mobile, 32rem);
+
+      @container (width >= 768px) {
+        height: var(--service-detail-hero-min-height-tablet, 36rem);
+      }
+
+      @container (width >= 1024px) {
+        height: var(--service-detail-hero-min-height-desktop, 42rem);
+      }
+
+      .grid-stack__layer {
+        height: 100%;
+        overflow: hidden;
+
+        .service-detail__hero-image-row,
+        .service-detail__hero-overlay {
+          height: 100%;
+        }
+      }
 
       .service-detail__hero-image {
         display: block;
         width: 100%;
         height: 100%;
         object-fit: cover;
-        position: absolute;
-        inset: 0;
+        object-position: var(--service-detail-hero-image-position-small, bottom);
+
+        @container (width >= 768px) {
+          object-fit: contain;
+          object-position: var(--service-detail-hero-image-position-medium, center);
+        }
       }
 
       .service-detail__hero-overlay {
-        position: relative;
-        display: flex;
-        align-items: flex-end;
-        min-height: var(--service-detail-hero-min-height, 32rem);
-        padding: var(--service-detail-hero-padding, 2.4rem);
+        display: grid;
+        height: 100%;
+        align-content: var(--service-detail-hero-content-align, end);
+        padding-block: var(--service-detail-hero-padding, 3.2rem);
         background: var(
           --service-detail-hero-scrim,
           linear-gradient(0deg, rgb(0 0 0 / 70%) 0%, rgb(0 0 0 / 10%) 60%, transparent 100%)
         );
 
-        .service-detail__breadcrumb {
-          --breadcrumb-colour: var(--service-detail-hero-text-colour, white);
-          margin-block-end: var(--service-detail-breadcrumb-margin-block-end, 0.8rem);
-        }
+        .service-detail__hero-content {
+          .service-detail__breadcrumb {
+            --breadcrumb-colour: var(--service-detail-hero-text-colour, white);
+            margin-block-end: var(--service-detail-breadcrumb-margin-block-end, 0.8rem);
+          }
 
-        .eyebrow-text,
-        .hero-text {
-          color: var(--service-detail-hero-text-colour, white);
-        }
+          .eyebrow-text,
+          .hero-text {
+            color: var(--service-detail-hero-text-colour, white);
+          }
 
-        .service-detail__hero-pills {
-          display: flex;
-          flex-wrap: wrap;
-          gap: var(--service-detail-hero-pills-gap, 0.8rem);
+          .service-detail__hero-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--service-detail-hero-pills-gap, 0.8rem);
 
-          --theme-pill-bg: var(--service-detail-hero-pill-bg, transparent);
-          --theme-pill-color: var(--service-detail-hero-text-colour, white);
-          --theme-pill-border-color: var(--service-detail-hero-pill-border-colour, currentColor);
+            --theme-pill-bg: var(--service-detail-hero-pill-bg, transparent);
+            --theme-pill-color: var(--service-detail-hero-text-colour, white);
+            --theme-pill-border-color: var(--service-detail-hero-pill-border-colour, currentColor);
+          }
         }
       }
     }
@@ -339,6 +385,7 @@ watch(
             width: var(--service-detail-ideal-for-icon-size, 1.6rem);
             height: var(--service-detail-ideal-for-icon-size, 1.6rem);
             color: var(--service-detail-ideal-for-icon-colour, var(--colour-text-accent));
+            transform: var(--service-detail-ideal-for-icon-transform, translateY(0.4rem));
           }
 
           p {
@@ -396,6 +443,12 @@ watch(
         padding-block: var(--service-detail-sidebar-row-padding-block, 1rem);
         border-block-start: 1px solid var(--service-detail-sidebar-row-divider-colour, currentColor);
 
+        &.book-cta {
+          padding-block: var(--service-detail-sidebar-row-book-cta-padding-block, 2rem);
+          border-block-start: none;
+          justify-content: var(--service-detail-sidebar-row-book-cta-justify-content, end);
+        }
+
         span:first-child {
           text-transform: uppercase;
           font-size: var(--service-detail-sidebar-row-label-font-size, 1.2rem);
@@ -423,55 +476,58 @@ watch(
             padding: var(--service-detail-related-item-padding, 1rem);
             border: 1px solid var(--service-detail-related-item-border-colour, var(--slate-06));
             border-radius: var(--service-detail-related-item-border-radius, 0.4rem);
-          }
 
-          .service-detail__related-item {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: var(--service-detail-related-item-gap, 1.2rem);
-            align-items: center;
+            .service-detail__related-item {
+              display: grid;
+              grid-template-columns: auto 1fr;
+              gap: var(--service-detail-related-item-gap, 1.2rem);
+              align-items: center;
 
-            .service-detail__related-image {
-              width: var(--service-detail-related-image-size, 5.6rem);
-              height: var(--service-detail-related-image-size, 5.6rem);
-              border-radius: var(--service-detail-related-image-border-radius, 0.4rem);
-              object-fit: cover;
-              display: block;
-            }
+              .service-detail__related-image {
+                width: var(--service-detail-related-image-size, 5.6rem);
+                height: var(--service-detail-related-image-size, 5.6rem);
+                border-radius: var(--service-detail-related-image-border-radius, 0.4rem);
+                object-fit: cover;
+                display: block;
+              }
 
-            .service-detail__related-title,
-            .service-detail__related-price {
-              margin: 0;
-            }
+              .service-detail__related-title,
+              .service-detail__related-price {
+                margin: 0;
+              }
 
-            .service-detail__related-price {
-              font-size: var(--service-detail-related-price-font-size, 1.2rem);
-              opacity: var(--service-detail-muted-opacity, 0.7);
+              .service-detail__related-price {
+                margin-block-start: var(--service-detail-related-price-margin-block-start, 0.6rem);
+                font-size: var(--service-detail-related-price-font-size, 1.2rem);
+                opacity: var(--service-detail-muted-opacity, 0.7);
+              }
             }
           }
         }
       }
     }
 
-    .service-detail__final-cta {
-      display: flex;
-      flex-direction: column;
-      gap: var(--service-detail-final-cta-gap, 1.6rem);
-      align-items: flex-start;
-      justify-content: space-between;
-      margin-block-start: var(--service-detail-final-cta-margin-block-start, 4rem);
-      padding-block-start: var(--service-detail-final-cta-padding-block-start, 3.2rem);
-      border-block-start: 1px solid var(--service-detail-final-cta-divider-colour, currentColor);
+    .service-detail__final-cta-row {
+      .service-detail__final-cta {
+        display: flex;
+        flex-direction: column;
+        gap: var(--service-detail-final-cta-gap, 1.6rem);
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-block-start: var(--service-detail-final-cta-margin-block-start, 3.2rem);
+        padding-block: var(--service-detail-final-cta-padding-block, 3.2rem 3.2rem);
+        border-block-start: 1px solid var(--service-detail-final-cta-divider-colour, currentColor);
 
-      @container (width >= 700px) {
-        flex-direction: row;
-        align-items: center;
-      }
+        @container (width >= 700px) {
+          flex-direction: row;
+          align-items: center;
+        }
 
-      .service-detail__final-cta-copy {
-        p {
-          margin: 0;
-          opacity: var(--service-detail-muted-opacity, 0.7);
+        .service-detail__final-cta-copy {
+          p {
+            margin: 0;
+            opacity: var(--service-detail-muted-opacity, 0.7);
+          }
         }
       }
     }

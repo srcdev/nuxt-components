@@ -27,6 +27,26 @@ const meta: Meta<typeof ServiceDetail> = {
       description:
         "Items for the Breadcrumb atom. Defaults to a plain (non-linked) [category, title] trail built from serviceData when omitted",
     },
+    heroImageVariant: {
+      control: { type: "select" },
+      options: ["full", "popout", "content", "inset-content"],
+      description: "PageRow variant applied to the hero image layer",
+    },
+    heroContentVariant: {
+      control: { type: "select" },
+      options: ["full", "popout", "content", "inset-content"],
+      description: "PageRow variant applied to the hero content layer (breadcrumb/title/pills over the image)",
+    },
+    bodyVariant: {
+      control: { type: "select" },
+      options: ["full", "popout", "content", "inset-content"],
+      description: "PageRow variant applied to the two-column body (main content + sidebar)",
+    },
+    finalCtaVariant: {
+      control: { type: "select" },
+      options: ["full", "popout", "content", "inset-content"],
+      description: "PageRow variant applied to the closing full-width CTA banner",
+    },
     processHeading: { control: "text", description: "Heading text for the process section" },
     idealForHeading: { control: "text", description: "Heading text for the ideal-for section" },
     maintenanceHeading: { control: "text", description: "Heading text for the maintenance/aftercare section" },
@@ -46,6 +66,10 @@ const meta: Meta<typeof ServiceDetail> = {
     tag: "article",
     headerTag: "h1",
     subheadingTag: "h2",
+    heroImageVariant: "full",
+    heroContentVariant: "content",
+    bodyVariant: "content",
+    finalCtaVariant: "content",
     styleClassPassthrough: [],
   },
   parameters: {

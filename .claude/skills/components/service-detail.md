@@ -10,6 +10,17 @@ related-services list), and a closing full-width CTA banner. The process steps r
 markup — Ideal For and FAQs are still bespoke (2-column card grid, plain Q&A list) since neither
 matches an existing molecule as directly.
 
+The hero is a [GridStack](grid-stack.md) of two [PageRow](page-row.md) layers — an `image` layer
+(default `variant="full"`, prop `heroImageVariant`) behind a `content` layer (default
+`variant="content"`, prop `heroContentVariant`) — so the photo can bleed to whatever width
+`ServiceDetail` itself is placed at (true edge-to-edge if there's no content-constraining wrapper
+around it) while the breadcrumb/title/pills stay aligned to the page's normal content column by
+default, independent of how wide the photo bleeds. The two-column body and the closing full-width
+CTA banner are each their own `PageRow` too, with their own variant props (`bodyVariant`,
+`finalCtaVariant`). All four variant props default to the values described above — override them
+if a particular page wants a section to sit in a different track (e.g.
+`heroContentVariant="inset-content"` for a narrower hero text column).
+
 It is a different shape from [ServicesSection](services-section.md): `ServicesSection` renders
 image-beside-content (used both as a compact summary card in a list and, in full mode, as a
 same-page detail block); `ServiceDetail` is meant to *be* the whole page for one service —
@@ -26,6 +37,10 @@ rendered.
 | `headerTag` | `"h1" \| "h2" \| "h3"` | `"h1"` | no |
 | `subheadingTag` | `"h2" \| "h3"` | `"h2"` | no |
 | `breadcrumbItems` | `BreadcrumbItem[]` | auto-built from `serviceData` | no |
+| `heroImageVariant` | `"full" \| "popout" \| "content" \| "inset-content"` | `"full"` | no |
+| `heroContentVariant` | `"full" \| "popout" \| "content" \| "inset-content"` | `"content"` | no |
+| `bodyVariant` | `"full" \| "popout" \| "content" \| "inset-content"` | `"content"` | no |
+| `finalCtaVariant` | `"full" \| "popout" \| "content" \| "inset-content"` | `"content"` | no |
 | `processHeading` | `string` | `"The Process"` | no |
 | `idealForHeading` | `string` | `"Ideal For"` | no |
 | `maintenanceHeading` | `string` | `"Aftercare & Maintenance"` | no |
@@ -80,7 +95,7 @@ Defaults to a plain, non-linked two-item trail built from `serviceData.category`
 
 | Slot | Slot props | Purpose |
 |------|-----------|---------|
-| `book-cta` | `{ serviceData: Service }` | Booking button inside the sidebar's booking card |
+| `book-cta` | `{ serviceData: Service }` | Booking button inside the sidebar's booking card — its row (`v-if="$slots['book-cta']"`) only renders when content is passed |
 | `sidebar-note` | — | Freeform note under the booking button (e.g. patch-test wording) — empty by default, deliberately not hardcoded since this library also serves non-hair-and-beauty apps |
 | `related-service` | `{ service: Service, index: number }` | Replaces one related-service item's whole default (non-clickable) thumbnail/title/price markup — use to wrap it in a real link |
 | `final-cta` | `{ serviceData: Service }` | Button in the closing full-width CTA banner |
@@ -150,6 +165,16 @@ pattern, and `CONSUMER-STYLING.md` in the component's own folder for the full to
 - Internal element classes are BEM-namespaced under `service-detail__*` (`service-detail__hero`,
   `service-detail__process`, `service-detail__sidebar`, `service-detail__related`, etc.) — see
   `CONSUMER-STYLING.md` for the full list alongside their tokens.
+- `bodyVariant` (default `"content"`) sets the `PageRow` variant wrapping the two-column body, and
+  `finalCtaVariant` (default `"content"`) sets the `PageRow` variant wrapping the closing CTA
+  banner — a consumer no longer needs to wrap `ServiceDetail` in its own outer `PageRow` purely to
+  constrain either section's width, though wrapping it in a wider outer `PageRow` is still the way
+  to unlock a genuinely full-bleed hero image (see the GridStack/PageRow note above).
+- `heroImageVariant` (default `"full"`) and `heroContentVariant` (default `"content"`) are each a
+  `PageRow` variant in their own right, not a wrapper around one — a `PageRow`'s own box always
+  spans the full width of its parent regardless of variant, only its children default into the
+  variant's grid column, so `.service-detail__hero-overlay` (the `heroContentVariant` element) can
+  carry the full-bleed scrim while its child still lands in the configured column.
 - The section gets `aria-labelledby` automatically when `tag` is `"section"`, `"article"`, or
   `"aside"`, pointing at the id `ServiceDetail` binds to its own title `HeroText` internally —
   same mechanism as `ServicesSection`. `tag="main"` renders a `<main>` element but is never

@@ -37,6 +37,16 @@
       "</ServiceDetail>"
     ]
   },
+  "SRCDEV ServiceDetail Layout Variants": {
+    "description": "ServiceDetail PageRow variant props — hero image/content layers, the two-column body, and the closing CTA banner",
+    "scope": "vue,html",
+    "body": [
+      "hero-image-variant=\"$1full\"",
+      "hero-content-variant=\"$2content\"",
+      "body-variant=\"$3content\"",
+      "final-cta-variant=\"$4content\""
+    ]
+  },
   "SRCDEV ServiceDetail Related Service Link Slot": {
     "description": "ServiceDetail related-service scoped slot — wraps each related item in a real link",
     "scope": "vue,html",
