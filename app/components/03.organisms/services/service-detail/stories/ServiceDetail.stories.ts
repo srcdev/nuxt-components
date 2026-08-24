@@ -82,7 +82,7 @@ const meta: Meta<typeof ServiceDetail> = {
     docs: {
       description: {
         component:
-          "Renders a full service detail page: a full-bleed hero banner (breadcrumb, eyebrow, title, price/duration pills over the service image), a two-column body (long-form content plus a sticky sidebar booking card and related-services list), and a closing full-width CTA banner. Routing (breadcrumb links, book-cta, related-service links, final-cta) is delegated to the consumer via slots, same pattern as ServicesSection.",
+          "Renders a full service detail page: a full-bleed hero banner (breadcrumb, eyebrow, title, price/duration pills over the service image), a two-column body (long-form content plus a sticky sidebar booking card and related-services list), and a closing full-width CTA banner. Routing (breadcrumb links, book-cta, related-service links, final-cta) is delegated to the consumer via slots, same pattern as ServiceSummary.",
       },
     },
   },
@@ -299,7 +299,7 @@ export const CustomRelatedServiceLink: Story = {
     docs: {
       description: {
         story:
-          "The related-service scoped slot replaces each related item's default (non-clickable) markup — use it to wrap the item in a real link, matching the pattern of ServicesSection's summary-link slot.",
+          "The related-service scoped slot replaces each related item's default (non-clickable) markup — use it to wrap the item in a real link, matching the pattern of ServiceSummary's summary-link slot.",
       },
     },
   },

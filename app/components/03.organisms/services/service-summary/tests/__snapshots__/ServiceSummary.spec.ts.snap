@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ServiceSummary > renders correct HTML structure 1`] = `
+"<div class="service-summary">
+  <div class="service-summary__grid">
+    <div class="service-summary__image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/test.jpg 1x, /_ipx/_/images/test.jpg 2x" alt="Test Service" loading="eager" fetchpriority="high" class="service-summary__image" src="/_ipx/_/images/test.jpg"></div>
+    <div class="service-summary__info-wrapper service-summary__info-wrapper--align-center">
+      <div class="eyebrow-text large">A subtitle</div>
+      <h2 id="v-0-0" class="hero-text mb-20 title axis-horizontal">
+        <!--v-if--><span class="text-block-0 normal">Test Service</span>
+      </h2>
+      <div class="service-summary__pills"><span class="display-pill md neutral"><span class="pill-label">60 mins</span></span><span class="display-pill md neutral"><span class="pill-label">From £50</span></span></div>
+      <p class="page-body-normal">What this service is</p>
+    </div>
+  </div>
+</div>"
+`;

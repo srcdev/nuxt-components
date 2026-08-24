@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import ServicesSectionGrid from "../ServicesSectionGrid.vue";
+import ServiceSummaryGrid from "../ServiceSummaryGrid.vue";
 import type { Service } from "~/types/types.services";
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
@@ -33,18 +33,18 @@ const mockServices: Service[] = [
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
-describe("ServicesSectionGrid", () => {
+describe("ServiceSummaryGrid", () => {
   // ─── Mount ─────────────────────────────────────────────────────────────
 
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: mockServices },
     });
     expect(wrapper.vm).toBeTruthy();
   });
 
   it("renders correct HTML structure", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: mockServices },
     });
     expect(wrapper.html()).toMatchSnapshot();
@@ -52,15 +52,15 @@ describe("ServicesSectionGrid", () => {
 
   // ─── Root element ───────────────────────────────────────────────────────
 
-  it("has services-grid class on root", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+  it("has service-summary-grid class on root", async () => {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: mockServices },
     });
-    expect(wrapper.classes()).toContain("services-grid");
+    expect(wrapper.classes()).toContain("service-summary-grid");
   });
 
   it("renders as a div by default", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: mockServices },
     });
     expect(wrapper.element.tagName).toBe("DIV");
@@ -68,7 +68,7 @@ describe("ServicesSectionGrid", () => {
 
   it("renders the tag prop as the root element", async () => {
     for (const tag of ["section", "main"] as const) {
-      const wrapper = await mountSuspended(ServicesSectionGrid, {
+      const wrapper = await mountSuspended(ServiceSummaryGrid, {
         props: { servicesData: mockServices, tag },
       });
       expect(wrapper.element.tagName).toBe(tag.toUpperCase());
@@ -78,51 +78,51 @@ describe("ServicesSectionGrid", () => {
   // ─── Children ───────────────────────────────────────────────────────────
 
   it("renders the correct number of service sections", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: mockServices },
     });
-    expect(wrapper.findAll(".services-section")).toHaveLength(mockServices.length);
+    expect(wrapper.findAll(".service-summary")).toHaveLength(mockServices.length);
   });
 
   it("renders no sections when servicesData is empty", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: [] },
     });
-    expect(wrapper.findAll(".services-section")).toHaveLength(0);
+    expect(wrapper.findAll(".service-summary")).toHaveLength(0);
   });
 
   it("renders a single section correctly", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: [mockServices[0]!] },
     });
-    expect(wrapper.findAll(".services-section")).toHaveLength(1);
+    expect(wrapper.findAll(".service-summary")).toHaveLength(1);
   });
 
   // ─── useAlternateReverse ────────────────────────────────────────────────
 
   it("does not apply reverse to any section by default", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: mockServices },
     });
-    wrapper.findAll(".services-section__grid").forEach((grid) => {
-      expect(grid.classes()).not.toContain("services-section__grid--reverse");
+    wrapper.findAll(".service-summary__grid").forEach((grid) => {
+      expect(grid.classes()).not.toContain("service-summary__grid--reverse");
     });
   });
 
   it("applies reverse to odd-indexed sections when useAlternateReverse is true", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: mockServices, useAlternateReverse: true },
     });
-    const grids = wrapper.findAll(".services-section__grid");
-    expect(grids[0]?.classes()).not.toContain("services-section__grid--reverse"); // index 0 — even
-    expect(grids[1]?.classes()).toContain("services-section__grid--reverse"); // index 1 — odd
-    expect(grids[2]?.classes()).not.toContain("services-section__grid--reverse"); // index 2 — even
+    const grids = wrapper.findAll(".service-summary__grid");
+    expect(grids[0]?.classes()).not.toContain("service-summary__grid--reverse"); // index 0 — even
+    expect(grids[1]?.classes()).toContain("service-summary__grid--reverse"); // index 1 — odd
+    expect(grids[2]?.classes()).not.toContain("service-summary__grid--reverse"); // index 2 — even
   });
 
   // ─── Slots ─────────────────────────────────────────────────────────────
 
   it("renders summary-link slot content in each section", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: mockServices },
       slots: {
         "summary-link": '<a class="test-link" href="/services/test">View service</a>',
@@ -132,7 +132,7 @@ describe("ServicesSectionGrid", () => {
   });
 
   it("renders nothing in summary-link when slot is not provided", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: [mockServices[0]!] },
     });
     // isSummary=true, so summary-link slot is rendered — but empty since no content was provided
@@ -142,14 +142,14 @@ describe("ServicesSectionGrid", () => {
   // ─── styleClassPassthrough ──────────────────────────────────────────────
 
   it("applies a single styleClassPassthrough string", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: mockServices, styleClassPassthrough: "custom-grid" },
     });
     expect(wrapper.classes()).toContain("custom-grid");
   });
 
   it("applies multiple styleClassPassthrough classes from an array", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: mockServices, styleClassPassthrough: ["class-a", "class-b"] },
     });
     expect(wrapper.classes()).toContain("class-a");
@@ -157,7 +157,7 @@ describe("ServicesSectionGrid", () => {
   });
 
   it("updates classes when styleClassPassthrough prop changes", async () => {
-    const wrapper = await mountSuspended(ServicesSectionGrid, {
+    const wrapper = await mountSuspended(ServiceSummaryGrid, {
       props: { servicesData: mockServices, styleClassPassthrough: ["original"] },
     });
     expect(wrapper.classes()).toContain("original");

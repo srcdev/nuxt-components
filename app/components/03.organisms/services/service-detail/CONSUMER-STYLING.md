@@ -26,7 +26,7 @@ The closing full-width CTA banner is wrapped the same way via `finalCtaVariant` 
 outer `PageRow` purely to constrain either section's width — pass `body-variant`/`final-cta-variant`
 directly. It's still fine (and necessary for a genuine full-bleed hero) to place `ServiceDetail`
 inside an outer, wider `PageRow` — see
-[services-section.md](../../../../../.claude/skills/components/services-section.md)-style nesting
+[service-summary.md](../../../../../.claude/skills/components/service-summary.md)-style nesting
 notes in [page-row.md](../../../../../.claude/skills/components/page-row.md) for how nested page-rows
 compose.
 
@@ -210,7 +210,7 @@ Section headings, sidebar labels, and CTA copy are **props**, not hardcoded stri
 
 - Routing is entirely delegated to the consumer via slots: `book-cta` (scoped `serviceData`),
   `final-cta` (scoped `serviceData`), and `related-service` (scoped `service`, `index`) — same
-  pattern as `ServicesSection`'s `cta`/`summary-link` slots. Only `sidebar-note` has no scoped
+  pattern as `ServiceSummary`'s `summary-link` slot. Only `sidebar-note` has no scoped
   data (it's plain content, e.g. patch-test wording).
 - `related-service`'s fallback content is a non-clickable thumbnail + title + price — pass the
   slot yourself to wrap it in a real link once you have a routing convention.
@@ -223,11 +223,11 @@ Section headings, sidebar labels, and CTA copy are **props**, not hardcoded stri
   `serviceData` — pass real `to` routes once your app's URL structure is known.
 - `headerTag` (default `"h1"`) controls only the hero title; `subheadingTag` (default `"h2"`)
   controls every other heading in the component (What Is It, Process, Ideal For, Aftercare, FAQs,
-  final CTA) — unlike `ServicesSection`, which uses one `headerTag` prop for all of them. This
+  final CTA) — unlike `ServiceSummary`, which uses one `headerTag` prop for its (single) title heading. This
   component is meant to be the whole page's `<h1>`, so its subheadings need their own level.
 - The FAQ question is a hardcoded `<h3>` — if you set `subheadingTag="h3"`, the FAQ questions will
   sit at the same level as their own section heading rather than one below it.
 - Two-/three-column breakpoints (900px body, 500px ideal-for grid, 700px final CTA) use
   `@container` queries against the component's own width, not the viewport — they are not tokens
   since resizing them would need corresponding `minmax()`/`grid-template-columns` changes too, not
-  just spacing (same rationale as `ServicesSection`'s `--services-section-grid-gap-desktop`).
+  just spacing (same rationale as `ServiceSummary`'s `--service-summary-grid-gap-desktop`).

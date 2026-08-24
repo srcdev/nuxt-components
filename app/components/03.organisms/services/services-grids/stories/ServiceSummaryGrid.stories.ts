@@ -1,10 +1,10 @@
-import ServicesSectionGrid from "../ServicesSectionGrid.vue";
+import ServiceSummaryGrid from "../ServiceSummaryGrid.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import type { Service } from "~/types/types.services";
 
-const meta: Meta<typeof ServicesSectionGrid> = {
-  title: "Organisms/Services/Services Section Grid",
-  component: ServicesSectionGrid,
+const meta: Meta<typeof ServiceSummaryGrid> = {
+  title: "Organisms/Services/Service Summary Grid",
+  component: ServiceSummaryGrid,
   argTypes: {
     tag: {
       control: { type: "select" },
@@ -15,7 +15,7 @@ const meta: Meta<typeof ServicesSectionGrid> = {
       control: { type: "boolean" },
       description: "Alternate image/content column order on every other section",
     },
-    summaryAlignment: {
+    alignment: {
       control: { type: "select" },
       options: ["start", "center", "end"],
       description: "Vertical alignment of the info column in each section",
@@ -28,7 +28,7 @@ const meta: Meta<typeof ServicesSectionGrid> = {
   args: {
     tag: "div",
     useAlternateReverse: false,
-    summaryAlignment: "center",
+    alignment: "center",
     styleClassPassthrough: [],
   },
   parameters: {
@@ -41,14 +41,14 @@ const meta: Meta<typeof ServicesSectionGrid> = {
     docs: {
       description: {
         component:
-          "Renders a vertical stack of `ServicesSection` components (summary mode) from a `Service[]` array. Each section includes a summary-link and a CTA button. Alternate image/content column order is controlled via `useAlternateReverse`.",
+          "Renders a vertical stack of `ServiceSummary` components from a `Service[]` array. Each summary includes a summary-link slot. Alternate image/content column order is controlled via `useAlternateReverse`.",
       },
     },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof ServicesSectionGrid>;
+type Story = StoryObj<typeof ServiceSummaryGrid>;
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
 
@@ -82,12 +82,12 @@ const sampleServices: Service[] = [
 
 export const Default: Story = {
   render: (args) => ({
-    components: { ServicesSectionGrid },
+    components: { ServiceSummaryGrid },
     setup() {
       return { args, sampleServices };
     },
     template: `
-      <ServicesSectionGrid v-bind="args" :services-data="sampleServices">
+      <ServiceSummaryGrid v-bind="args" :services-data="sampleServices">
         <template #summary-link="{ serviceData }">
           <a
             :href="'/services/' + serviceData.slug"
@@ -96,7 +96,7 @@ export const Default: Story = {
             More about {{ serviceData.title }} →
           </a>
         </template>
-      </ServicesSectionGrid>
+      </ServiceSummaryGrid>
     `,
   }),
   parameters: {
@@ -115,18 +115,18 @@ export const AlternateReverse: Story = {
     useAlternateReverse: true,
   },
   render: (args) => ({
-    components: { ServicesSectionGrid },
+    components: { ServiceSummaryGrid },
     setup() {
       return { args, sampleServices };
     },
     template: `
-      <ServicesSectionGrid v-bind="args" :services-data="sampleServices">
+      <ServiceSummaryGrid v-bind="args" :services-data="sampleServices">
         <template #summary-link="{ serviceData }">
           <a :href="'/services/' + serviceData.slug" style="display:inline-flex;margin-top:1.6rem;color:inherit;">
             More about {{ serviceData.title }} →
           </a>
         </template>
-      </ServicesSectionGrid>
+      </ServiceSummaryGrid>
     `,
   }),
   parameters: {
@@ -142,11 +142,11 @@ export const AlternateReverse: Story = {
 export const NoSlots: Story = {
   name: "No Slots (empty sections)",
   render: (args) => ({
-    components: { ServicesSectionGrid },
+    components: { ServiceSummaryGrid },
     setup() {
       return { args, sampleServices };
     },
-    template: `<ServicesSectionGrid v-bind="args" :services-data="sampleServices" />`,
+    template: `<ServiceSummaryGrid v-bind="args" :services-data="sampleServices" />`,
   }),
   parameters: {
     docs: {
@@ -161,18 +161,18 @@ export const NoSlots: Story = {
 export const SingleService: Story = {
   name: "Single Service",
   render: (args) => ({
-    components: { ServicesSectionGrid },
+    components: { ServiceSummaryGrid },
     setup() {
       return { args, sampleServices };
     },
     template: `
-      <ServicesSectionGrid v-bind="args" :services-data="[sampleServices[0]]">
+      <ServiceSummaryGrid v-bind="args" :services-data="[sampleServices[0]]">
         <template #summary-link="{ serviceData }">
           <a :href="'/services/' + serviceData.slug" style="display:inline-flex;margin-top:1.6rem;color:inherit;">
             More about {{ serviceData.title }} →
           </a>
         </template>
-      </ServicesSectionGrid>
+      </ServiceSummaryGrid>
     `,
   }),
   parameters: {
@@ -187,11 +187,11 @@ export const SingleService: Story = {
 export const EmptyData: Story = {
   name: "Empty Data",
   render: (args) => ({
-    components: { ServicesSectionGrid },
+    components: { ServiceSummaryGrid },
     setup() {
       return { args };
     },
-    template: `<ServicesSectionGrid v-bind="args" :services-data="[]" />`,
+    template: `<ServiceSummaryGrid v-bind="args" :services-data="[]" />`,
   }),
   parameters: {
     docs: {

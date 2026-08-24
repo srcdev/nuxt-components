@@ -21,12 +21,11 @@ CTA banner are each their own `PageRow` too, with their own variant props (`body
 if a particular page wants a section to sit in a different track (e.g.
 `heroContentVariant="inset-content"` for a narrower hero text column).
 
-It is a different shape from [ServicesSection](services-section.md): `ServicesSection` renders
-image-beside-content (used both as a compact summary card in a list and, in full mode, as a
-same-page detail block); `ServiceDetail` is meant to *be* the whole page for one service —
-`headerTag` defaults to `"h1"` accordingly, and there is no summary/compact mode. There is no
-`isSummary` prop and no `v-if` gating of content — everything the component renders is always
-rendered.
+It is a different shape from [ServiceSummary](service-summary.md): `ServiceSummary` renders a
+compact image-beside-content preview for a listing page; `ServiceDetail` is meant to *be* the
+whole page for one service — `headerTag` defaults to `"h1"` accordingly, and there is no
+summary/compact mode. There is no `v-if` gating of content — everything the component renders is
+always rendered.
 
 ## Props
 
@@ -63,12 +62,12 @@ type** — neither is universal enough to belong on `~/types/types.services`. Th
 the whole "You may also like" block simply don't render when they're omitted.
 
 `imageLoading`/`imageFetchPriority` default to eager/high because a `ServiceDetail` page normally
-has exactly one hero image and it's always the LCP candidate — unlike `ServicesSection`, which is
+has exactly one hero image and it's always the LCP candidate — unlike `ServiceSummary`, which is
 often looped and needs the `index` prop to lazy-load everything past the first two instances.
 
 ### `headerTag` vs `subheadingTag`
 
-Unlike `ServicesSection` (one `headerTag` prop applied to every heading, title included),
+Unlike `ServiceSummary` (one `headerTag` prop applied to its single title heading),
 `ServiceDetail` splits these: `headerTag` controls only the hero `<h1>` title; `subheadingTag`
 controls every other heading (What Is It, Process, Ideal For, Aftercare, FAQs, final CTA heading).
 This keeps the page's heading hierarchy correct when `ServiceDetail` is the page's own `<h1>`.
@@ -101,7 +100,7 @@ Defaults to a plain, non-linked two-item trail built from `serviceData.category`
 | `final-cta` | `{ serviceData: Service }` | Button in the closing full-width CTA banner |
 
 All routing decisions (breadcrumb links, book-cta href, related-service links, final-cta href)
-are delegated to the consumer, matching `ServicesSection`'s slot-based routing pattern.
+are delegated to the consumer, matching `ServiceSummary`'s slot-based routing pattern.
 
 ## Usage
 
@@ -155,10 +154,10 @@ pattern, and `CONSUMER-STYLING.md` in the component's own folder for the full to
 - Component is auto-imported in Nuxt — no import needed.
 - The `Service` type is imported from `~/types/types.services`; `BreadcrumbItem` from
   `~/types/components/breadcrumb`.
-- No `isSummary` mode and no content gating — this component always renders everything it's
-  given. If you need a compact summary card for a services listing page, use
-  [ServicesSection](services-section.md) in summary mode or [ServicesCard](services-card.md)
-  instead, and reserve `ServiceDetail` for the individual `/services/[slug]` page.
+- No content gating — this component always renders everything it's given. If you need a compact
+  summary card for a services listing page, use [ServiceSummary](service-summary.md) (via
+  [ServiceSummaryGrid](service-summary-grid.md)) or [ServicesCard](services-card.md) instead, and
+  reserve `ServiceDetail` for the individual `/services/[slug]` page.
 - Uses [Breadcrumb](breadcrumb.md) internally for the hero banner breadcrumb.
 - The two-/three-column layout breakpoints (body columns, ideal-for grid, final CTA row) are
   `@container` queries against the component's own width, not the viewport.
@@ -177,5 +176,5 @@ pattern, and `CONSUMER-STYLING.md` in the component's own folder for the full to
   carry the full-bleed scrim while its child still lands in the configured column.
 - The section gets `aria-labelledby` automatically when `tag` is `"section"`, `"article"`, or
   `"aside"`, pointing at the id `ServiceDetail` binds to its own title `HeroText` internally —
-  same mechanism as `ServicesSection`. `tag="main"` renders a `<main>` element but is never
+  same mechanism as `ServiceSummary`. `tag="main"` renders a `<main>` element but is never
   auto-labelled.

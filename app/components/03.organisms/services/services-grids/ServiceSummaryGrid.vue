@@ -1,18 +1,17 @@
 <template>
-  <component :is="tag" class="services-grid" :class="[elementClasses]">
-    <ServicesSection
+  <component :is="tag" class="service-summary-grid" :class="[elementClasses]">
+    <ServiceSummary
       v-for="(item, index) in servicesData"
       :key="index"
       :index="index"
       :service-data="item"
-      :is-summary="true"
       :reverse="props.useAlternateReverse ? index % 2 !== 0 : false"
-      :summary-alignment="summaryAlignment"
+      :alignment="alignment"
     >
       <template #summary-link="{ serviceData }">
         <slot name="summary-link" :service-data="serviceData"></slot>
       </template>
-    </ServicesSection>
+    </ServiceSummary>
   </component>
 </template>
 
@@ -23,14 +22,14 @@ interface Props {
   tag?: "div" | "section" | "main";
   servicesData: Service[];
   useAlternateReverse?: boolean;
-  summaryAlignment?: "start" | "center" | "end";
+  alignment?: "start" | "center" | "end";
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   useAlternateReverse: false,
-  summaryAlignment: "center",
+  alignment: "center",
   styleClassPassthrough: () => [],
 });
 
@@ -46,11 +45,10 @@ watch(
 
 <style lang="css">
 @layer components {
-  .services-grid {
-    /* Component styles */
+  .service-summary-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 4rem;
+    gap: var(--service-summary-grid-row-gap, 4rem);
   }
 }
 </style>

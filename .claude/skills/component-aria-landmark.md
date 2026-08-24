@@ -31,9 +31,9 @@ correctly** — always check the console (or run an accessibility audit) after a
 
 This bug class previously shipped to production undetected: eight sections across one site had
 `aria-labelledby` pointing at ids that were never applied to anything, only surfaced by a WAVE
-audit. Two components (`ServicesSection`, `AutoGrid`) were also found to be *structurally* broken
+audit. Two components (`ServiceSummary` (formerly ServicesSection), `AutoGrid`) were also found to be *structurally* broken
 — they set `aria-labelledby` from `tag` alone without ever exposing `headingId` anywhere a
-consumer could bind it, so it was impossible to satisfy correctly. `ServicesSection` now binds
+consumer could bind it, so it was impossible to satisfy correctly. `ServiceSummary` now binds
 `headingId` to its own internal title heading; `AutoGrid` has no heading concept at all, so it no
 longer sets `aria-labelledby` under any circumstance (pass `aria-label` directly if needed).
 
@@ -87,7 +87,7 @@ must bind it to their own heading):
 Self-bound (the component renders its own heading and binds `headingId` internally — no consumer
 action needed):
 
-- `ServicesSection` (03.organisms) — binds it to its own title `HeroText`
+- `ServiceSummary` (03.organisms) — binds it to its own title `HeroText`
 - `LayoutGridByCols` / `LayoutGridByWidth` (01.atoms) — render their own visually-hidden `<p>` from the `label` prop
 
 Not using this pattern:

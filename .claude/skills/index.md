@@ -69,8 +69,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── page-hero-highlights.md — PageHeroHighlights template: hero + highlights strip grid, CSS custom property theming
     ├── services-card.md        — ServicesCard props (incl. eyebrowConfig/heroConfig), actions slot, CSS tokens, page boilerplate
     ├── services-card-grid.md        — ServicesCardGrid props, config pass-through, CSS tokens, full page boilerplate
-    ├── services-section-grid.md     — ServicesSectionGrid props, useAlternateReverse zigzag layout, page boilerplate
-    ├── services-section.md          — ServicesSection props (incl. heading/CTA copy), summary-link/cta/cta-panel slots, summary vs full mode
+    ├── service-summary-grid.md      — ServiceSummaryGrid props, useAlternateReverse zigzag layout, page boilerplate
+    ├── service-summary.md           — ServiceSummary props, summary-link slot, DisplayPill duration/price (renamed/stripped from ServicesSection — full mode is now ServiceDetail)
     ├── service-detail.md            — ServiceDetail: full service detail page (hero banner, sticky sidebar booking card + related services, closing CTA), headerTag vs subheadingTag split, book-cta/sidebar-note/related-service/final-cta slots
     ├── breadcrumb.md                — Breadcrumb: items (BreadcrumbItem[]) trail, link vs current-page text, CSS token API
     ├── contact-section.md      — ContactSection props (stepperIndicatorSize pass-through), 3-item info+form layout, slot API

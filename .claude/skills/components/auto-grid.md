@@ -95,7 +95,7 @@ Override `grid-template-columns` directly — there is no single token for this:
 
 `AutoGrid` has no heading concept of its own — its slots are arbitrary named items, not a
 header + body — so it does **not** auto-generate `aria-labelledby` the way `PageRow` or
-`ServicesSection` do (an earlier version of this component did attempt to, and it produced a
+`ServiceSummary` do (an earlier version of this component did attempt to, and it produced a
 guaranteed broken ARIA reference, since there was never any way to bind a heading to it). If
 `tag="section"` needs an accessible name, pass `aria-label` directly:
 

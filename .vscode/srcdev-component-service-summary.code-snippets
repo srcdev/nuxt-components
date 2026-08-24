@@ -1,0 +1,67 @@
+{
+  "SRCDEV ServiceSummary": {
+    "description": "ServiceSummary — compact preview with summary-link slot",
+    "scope": "vue,html",
+    "body": [
+      "<ServiceSummary",
+      "  :service-data=\"$1service\"",
+      "  :index=\"$2index\"",
+      "  alignment=\"$3center\"",
+      ">",
+      "  <template #summary-link=\"{ serviceData }\">",
+      "    <NuxtLink :to=\"`/services/${serviceData.slug}`\">$4More about {{ serviceData.title }} →</NuxtLink>",
+      "  </template>",
+      "</ServiceSummary>"
+    ]
+  },
+  "SRCDEV ServiceSummary Reversed": {
+    "description": "ServiceSummary with image/content columns swapped",
+    "scope": "vue,html",
+    "body": [
+      "<ServiceSummary :service-data=\"$1service\" :reverse=\"$2true\">",
+      "  <template #summary-link=\"{ serviceData }\">",
+      "    <NuxtLink :to=\"`/services/${serviceData.slug}`\">$3More about {{ serviceData.title }} →</NuxtLink>",
+      "  </template>",
+      "</ServiceSummary>"
+    ]
+  },
+  "SRCDEV ServiceSummaryGrid": {
+    "description": "ServiceSummaryGrid — alternating zigzag listing from a Service[] array",
+    "scope": "vue,html",
+    "body": [
+      "<ServiceSummaryGrid",
+      "  :services-data=\"$1servicesData ?? []\"",
+      "  :use-alternate-reverse=\"$2true\"",
+      ">",
+      "  <template #summary-link=\"{ serviceData }\">",
+      "    <NuxtLink :to=\"`/services/${serviceData.slug}`\">$3More about {{ serviceData.title }} →</NuxtLink>",
+      "  </template>",
+      "</ServiceSummaryGrid>"
+    ]
+  },
+  "SRCDEV ServiceSummary CSS Override": {
+    "description": "CSS override scaffold for ServiceSummary — scope to a page or section class",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .service-summary {",
+      "    --service-summary-grid-gap: ;",
+      "    --service-summary-grid-gap-desktop: ;",
+      "    --service-summary-image-border-radius: ;",
+      "    --service-summary-height-mobile: ;",
+      "    --service-summary-height-tablet: ;",
+      "    --service-summary-height-desktop: ;",
+      "    --service-summary-image-aspect-ratio: ;",
+      "    --service-summary-image-padding-block-mobile: ;",
+      "    --service-summary-image-padding-inline-mobile: ;",
+      "    --service-summary-pills-gap: ;",
+      "    --service-summary-pill-border-colour: ;",
+      "",
+      "    .service-summary__image-wrapper {}",
+      "    .service-summary__info-wrapper {}",
+      "    .service-summary__pills {}",
+      "  }",
+      "}"
+    ]
+  }
+}

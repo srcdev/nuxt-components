@@ -23,7 +23,7 @@ The layer's `modules/icon-sets.ts` runs at dev/build time and logs an info messa
 | `gravity-ui` | `@iconify-json/gravity-ui` | NavigationItems (burger/ellipsis overflow) |
 | `ic` | `@iconify-json/ic` | CarouselBasic, CarouselFlip, CarouselInfinite, SliderGallery, CanvasSwitcher |
 | `lucide` | `@iconify-json/lucide` | ColourFinder, TreatmentConsultant |
-| `material-symbols` | `@iconify-json/material-symbols` | ServicesSection, form components |
+| `material-symbols` | `@iconify-json/material-symbols` | form components |
 | `mdi` | `@iconify-json/mdi` | NavigationHorizontal, form components, ServicesCard |
 | `radix-icons` | `@iconify-json/radix-icons` | InputPasswordWithLabel, InputError, DisplayThemeSwitch |
 
