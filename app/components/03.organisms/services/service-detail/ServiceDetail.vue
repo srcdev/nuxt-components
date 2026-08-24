@@ -302,7 +302,6 @@ watch(
       .service-detail__hero-overlay {
         display: grid;
         height: 100%;
-        align-content: var(--service-detail-hero-content-align, end);
         padding-block: var(--service-detail-hero-padding, 3.2rem);
         background: var(
           --service-detail-hero-scrim,
@@ -310,6 +309,9 @@ watch(
         );
 
         .service-detail__hero-content {
+          display: grid;
+          align-content: var(--service-detail-hero-content-align, end);
+
           .service-detail__breadcrumb {
             --breadcrumb-colour: var(--service-detail-hero-text-colour, white);
             margin-block-end: var(--service-detail-breadcrumb-margin-block-end, 0.8rem);

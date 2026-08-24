@@ -37,7 +37,7 @@ compose.
 | Token | Default | Controls |
 |---|---|---|
 | `--service-detail-hero-border-radius` | `0.8rem` | Corner rounding on the hero (clips the image/content layers — set to `0` for a true edge-to-edge bleed hero) |
-| `--service-detail-hero-content-align` | `end` | `align-content` of the content overlay grid — where the breadcrumb/title/pills sit within the hero's block axis (`end` = bottom-anchored) |
+| `--service-detail-hero-content-align` | `end` | `align-content` on `.service-detail__hero-content` (the breadcrumb/title/pills wrapper) — where that content sits within the hero's block axis (`end` = bottom-anchored) |
 | `--service-detail-hero-min-height-mobile` | `32rem` | Hero banner height below the `768px` container breakpoint. The hero image always fills this height (`object-fit`/`object-position` control cropping) |
 | `--service-detail-hero-min-height-tablet` | `36rem` | Hero banner height from the `768px` container breakpoint |
 | `--service-detail-hero-min-height-desktop` | `42rem` | Hero banner height from the `1024px` container breakpoint |
