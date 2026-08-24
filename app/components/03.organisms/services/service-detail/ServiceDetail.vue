@@ -294,7 +294,6 @@ watch(
         object-position: var(--service-detail-hero-image-position-small, bottom);
 
         @container (width >= 768px) {
-          object-fit: contain;
           object-position: var(--service-detail-hero-image-position-medium, center);
         }
       }

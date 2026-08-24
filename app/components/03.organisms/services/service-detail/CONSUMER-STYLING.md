@@ -49,11 +49,10 @@ compose.
 | `--service-detail-hero-pill-bg` | `transparent` | Background of the price/duration pills (via `DisplayPill`'s `--theme-pill-bg`) |
 | `--service-detail-hero-pill-border-colour` | `currentColor` | Border colour of the price/duration pills |
 
-The hero image's crop behaviour also changes responsively (position only, not tokened as fit
-itself): below the `768px` container breakpoint it's `object-fit: cover` anchored with
+The hero image is always `object-fit: cover` (not tokened) — only its anchor point changes
+responsively: below the `768px` container breakpoint it's anchored with
 `--service-detail-hero-image-position-small` (default `bottom`); from `768px` up it switches to
-`object-fit: contain` anchored with `--service-detail-hero-image-position-medium` (default
-`center`) so the full photo stays visible once there's room for it, rather than continuing to crop.
+`--service-detail-hero-image-position-medium` (default `center`).
 
 For anything not covered by these (e.g. the `full`/`content` variant tracks themselves), target
 `--page-row-*` tokens under `.service-detail__hero-image-row`/`.service-detail__hero-overlay` — see
