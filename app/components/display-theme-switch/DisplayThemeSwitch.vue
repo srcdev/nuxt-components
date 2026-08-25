@@ -62,9 +62,13 @@ watch(colorModeVal, (val) => {
 @layer components {
 .colour-scheme-select {
   &.triple-toggle-switch {
-    --_form-border-colour: var(--theme-form-radio-border);
-    --_form-outline-colour: var(--theme-form-radio-outline);
-
+    /* --_form-border-colour/--_form-outline-colour used to sit here referencing
+       --theme-form-radio-border/-outline — dead tokens declared nowhere in the layer, and
+       neither local var was itself ever read by any property below either; removed rather than
+       migrated. --_select-scheme-group-background-color below is repointed at the new public
+       --triple-toggle-switch-marker-surface token instead of the other dead reference it used
+       to carry (--theme-form-checkbox-bg) — see TripleToggleSwitchCore.vue and
+       theming-component-token-pattern.md. */
     --_form-items-gap: 0.4rem;
     --_form-padding: 0.4rem;
     --_select-scheme-group-padding: 0.4rem;
@@ -77,10 +81,13 @@ watch(colorModeVal, (val) => {
       --_scheme-icon-font-size: 1.6rem;
     }
 
-    --_select-scheme-group-background-color: var(--theme-form-checkbox-bg);
+    --_select-scheme-group-background-color: var(--triple-toggle-switch-marker-surface, var(--theme-input-surface));
     --_select-scheme-group-background-image: none;
 
-    &:has(input[value="auto"]:checked) {
+    /* "system", matching sampleFieldData's actual id/value below — was "auto" here, which never
+       matched (this component's own data never used it), so this gradient never fired for the
+       system option in practice. */
+    &:has(input[value="system"]:checked) {
       --_select-scheme-group-background-color: transparent;
       --_select-scheme-group-background-image: radial-gradient(
         circle,
@@ -149,7 +156,7 @@ watch(colorModeVal, (val) => {
           }
 
           .option-icon {
-            &.auto {
+            &.system {
               color: light-dark(var(--slate-10), var(--slate-03));
 
               &.active {

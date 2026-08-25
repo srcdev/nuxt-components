@@ -96,16 +96,23 @@ const toggleSwitchValue = () => {
   }
 
   .toggle-switch-wrapper {
-    --_icon-on-opacity: 0;
-    --_icon-off-opacity: 1;
+    /* --_icon-font-size, --_switch-padding, --_toggle-symbol-border-width are the only locals
+       actually read anywhere below — --_icon-on-opacity, --_icon-off-opacity,
+       --_symbol-background-color, --_symbol-margin-inline-start, --_symbol-checked-offset were
+       declared here but never referenced by any property in this file; removed as dead code
+       rather than migrated, since migrating an unread token would just create a new unread
+       public one. */
     --_icon-font-size: 2.4rem;
-    --_symbol-background-color: var(--blue-10);
-    --_symbol-margin-inline-start: 0;
-    --_symbol-checked-offset: calc(var(--input-toggle-symbol-size) * 0.75);
-
-    /* New vars */
     --_switch-padding: 0.2rem;
     --_toggle-symbol-border-width: 0.1rem;
+
+    /* Public --toggle-switch-* tokens, inline-fallback to the shared --theme-* tokens (see
+       theming-component-token-pattern.md) — overriding one here doesn't touch every other
+       themed input/control that also reads --theme-checkbox-symbol-surface/--theme-border. */
+    --_surface: var(--toggle-switch-surface, var(--theme-checkbox-symbol-surface));
+    --_surface-hover: var(--toggle-switch-surface-hover, var(--theme-surface-subtle));
+    --_border: var(--toggle-switch-border, var(--theme-border));
+    --_border-focus: var(--toggle-switch-border-focus, var(--theme-border-focus));
 
     display: flex;
     flex-direction: column;
@@ -117,7 +124,7 @@ const toggleSwitchValue = () => {
 
       &:focus-visible {
         + .symbol-wrapper {
-          outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
+          outline: var(--form-element-outline-width-focus) solid var(--_border-focus);
           outline-offset: var(--form-element-outline-offset-focus);
         }
       }
@@ -137,15 +144,15 @@ const toggleSwitchValue = () => {
         outline var(--theme-form-transition-duration) linear;
 
       /* UI */
-      background-color: var(--theme-checkbox-symbol-surface);
-      border: var(--form-element-border-width) solid var(--theme-border);
+      background-color: var(--_surface);
+      border: var(--form-element-border-width) solid var(--_border);
       outline: var(--form-element-outline-width) solid transparent;
       border-radius: 100vw;
       width: 72px;
       padding: calc(var(--input-toggle-wrapper-padding) + var(--input-toggle-symbol-outline-width));
 
       &:hover {
-        background-color: var(--theme-surface-subtle);
+        background-color: var(--_surface-hover);
         cursor: pointer;
       }
 
@@ -163,16 +170,16 @@ const toggleSwitchValue = () => {
 
         /* UI */
         /* padding: calc(calc(var(--input-toggle-symbol-size) - var(--_icon-font-size)) / 2); */
-        border: var(--input-toggle-symbol-border-width) solid var(--theme-text);
+        border: var(--input-toggle-symbol-border-width) solid var(--toggle-switch-symbol-border, var(--theme-text));
         outline: var(--input-toggle-symbol-outline-width) solid transparent;
         border-radius: 100vw;
-        background-color: var(--theme-on-surface);
+        background-color: var(--toggle-switch-symbol-surface-off, var(--theme-on-surface));
         transition:
           translate 0.4s ease,
           background-color 0.4s linear;
 
         &.checked {
-          background-color: var(--theme-surface);
+          background-color: var(--toggle-switch-symbol-surface-on, var(--theme-surface));
           /* left: calc(
             100% - var(--input-toggle-symbol-size) - var(--_switch-padding) - (2 * var(--_toggle-symbol-border-width))
           ); */
@@ -202,11 +209,11 @@ const toggleSwitchValue = () => {
             color var(--theme-form-transition-duration);
 
           &.icon-on {
-            color: var(--theme-on-surface);
+            color: var(--toggle-switch-icon-on-color, var(--theme-on-surface));
           }
 
           &.icon-off {
-            color: var(--theme-surface);
+            color: var(--toggle-switch-icon-off-color, var(--theme-surface));
           }
 
           &.active {

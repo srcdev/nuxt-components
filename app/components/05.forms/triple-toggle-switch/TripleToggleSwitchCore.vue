@@ -98,9 +98,16 @@ onMounted(() => {
 <style lang="css">
 @layer components {
 .triple-toggle-switch {
-  --_form-border-colour: var(--theme-form-radio-border);
-
-  --_form-outline-colour: var(--theme-form-radio-outline);
+  /* Public --triple-toggle-switch-* tokens, inline-fallback to the shared --theme-* tokens (see
+     theming-component-token-pattern.md). --_form-border-colour/--_form-outline-colour used to
+     sit here referencing --theme-form-radio-border/-outline — dead tokens, declared nowhere in
+     this layer at all (confirmed by grep), and --_form-border-colour/--_form-outline-colour
+     themselves were never read by any property below either, so removed outright rather than
+     migrated. --_marker-surface replaces the one dead reference that WAS actually read:
+     --_select-scheme-group-background-color used to default from --theme-form-checkbox-bg,
+     equally undeclared anywhere — real (if narrow) bug, since it only rendered visibly when
+     none of the auto/light/dark :has() overrides below matched. */
+  --_marker-surface: var(--triple-toggle-switch-marker-surface, var(--theme-input-surface));
 
   --_form-border-radius: calc(
     (var(--_scheme-icon-font-size) / 2) + var(--form-element-border-width) + var(--form-element-outline-width) +
@@ -111,13 +118,18 @@ onMounted(() => {
   --_form-items-gap: 1rem;
   --_form-padding: 0.6rem;
 
-  --_select-scheme-group-background-color: var(--theme-form-checkbox-bg);
+  --_select-scheme-group-background-color: var(--_marker-surface);
   --_select-scheme-group-background-image: none;
   --_select-scheme-group-padding: 0.5rem;
   --_scheme-icon-font-size: 2rem;
   /* --_scheme-icon-colour: black; */
 
-  &:has(input[value="auto"]:checked) {
+  /* "system" not "auto" — matches useSettingsStore's actual colourScheme value/CSS class
+     ("system" | "dark" | "light"), which DisplayThemeSwitch's real option data uses. Was
+     "auto" here, a name that never matched any real consumer's data, so this gradient never
+     fired in practice (confirmed by grep across the whole layer — nothing anywhere emits value
+     "auto"). Presentational-only rename; the store's own type/class-name contract is untouched. */
+  &:has(input[value="system"]:checked) {
     --_select-scheme-group-background-color: transparent;
     --_select-scheme-group-background-image: radial-gradient(
       circle,
@@ -152,8 +164,8 @@ onMounted(() => {
     grid-template-areas: "select-stack";
     width: fit-content;
 
-    background-color: var(--theme-input-surface);
-    border: var(--form-element-border-width) solid var(--theme-border);
+    background-color: var(--triple-toggle-switch-surface, var(--theme-input-surface));
+    border: var(--form-element-border-width) solid var(--triple-toggle-switch-border, var(--theme-border));
     outline: var(--form-element-outline-width) solid transparent;
     border-radius: 100vw;
     padding: var(--_form-padding);
@@ -161,7 +173,7 @@ onMounted(() => {
     transition: all var(--theme-form-transition-duration) ease-in-out;
 
     &:has(input:focus-visible) {
-      outline: var(--form-element-outline-width) solid var(--theme-ring);
+      outline: var(--form-element-outline-width) solid var(--triple-toggle-switch-ring-focus, var(--theme-ring));
       outline-offset: 0.2rem;
     }
 
@@ -178,7 +190,8 @@ onMounted(() => {
         transition: all v-bind(stepAnimationDuration) ease-in-out;
         background-color: var(--_select-scheme-group-background-color);
         background-image: var(--_select-scheme-group-background-image);
-        border: var(--form-element-border-width) solid light-dark(var(--slate-10), var(--slate-00));
+        border: var(--form-element-border-width) solid
+          var(--triple-toggle-switch-marker-border, light-dark(var(--slate-10), var(--slate-00)));
 
         border-radius: 50%;
 
@@ -211,7 +224,8 @@ onMounted(() => {
         grid-template-areas: "icon-stack";
         place-content: center;
         background: transparent;
-        border: var(--form-element-border-width) solid light-dark(#00000025, #ffffff50);
+        border: var(--form-element-border-width) solid
+          var(--triple-toggle-switch-option-border, light-dark(#00000025, #ffffff50));
         outline: var(--form-element-outline-width) solid transparent;
         border-radius: 50%;
         padding: var(--_select-scheme-group-padding);
@@ -220,39 +234,47 @@ onMounted(() => {
         transition: all calc(var(--theme-form-transition-duration) / 3);
 
         &:has(.option-icon:hover) {
-          outline: var(--form-element-outline-width) solid light-dark(var(--slate-10), var(--slate-00));
+          outline: var(--form-element-outline-width) solid
+            var(--triple-toggle-switch-option-border-hover, light-dark(var(--slate-10), var(--slate-00)));
         }
         &:has(input:focus-visible) {
-          outline: var(--form-element-outline-width) solid var(--theme-ring);
+          outline: var(--form-element-outline-width) solid var(--triple-toggle-switch-option-ring-focus, var(--theme-ring));
           outline-offset: 0.2rem;
         }
 
+        /* .system/.light/.dark all share the exact same colour values today — kept as three
+           selectors (rather than collapsed to one) since DisplayThemeSwitch and any other
+           consumer may already target these class names directly; only the repeated literal
+           values became tokens. This class is bound to each option's `id` in the template
+           (:class="[option.id, ...]"), not a hardcoded literal — "auto" here never matched
+           anything real for the same reason the :has(input[value="auto"]) selector above didn't:
+           the only known consumer's data uses id "system". */
         .option-icon {
           grid-area: icon-stack;
           display: block;
           font-size: var(--_scheme-icon-font-size);
 
-          &.auto {
-            color: light-dark(var(--slate-10), var(--slate-03));
+          &.system {
+            color: var(--triple-toggle-switch-option-icon-color, light-dark(var(--slate-10), var(--slate-03)));
 
             &.active {
-              color: var(--slate-00);
+              color: var(--triple-toggle-switch-option-icon-color-active, var(--slate-00));
             }
           }
 
           &.light {
-            color: light-dark(var(--slate-10), var(--slate-03));
+            color: var(--triple-toggle-switch-option-icon-color, light-dark(var(--slate-10), var(--slate-03)));
 
             &.active {
-              color: var(--slate-00);
+              color: var(--triple-toggle-switch-option-icon-color-active, var(--slate-00));
             }
           }
 
           &.dark {
-            color: light-dark(var(--slate-10), var(--slate-03));
+            color: var(--triple-toggle-switch-option-icon-color, light-dark(var(--slate-10), var(--slate-03)));
 
             &.active {
-              color: var(--slate-00);
+              color: var(--triple-toggle-switch-option-icon-color-active, var(--slate-00));
             }
           }
 
@@ -271,7 +293,7 @@ onMounted(() => {
           }
         }
 
-        /* &:has(input[value="auto"]:checked) {
+        /* &:has(input[value="system"]:checked) {
           --_scheme-icon-colour: white;
         }
 
