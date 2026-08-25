@@ -186,7 +186,18 @@ onMounted(() => {
       box-sizing: content-box;
 
       .input-button-core {
+        /* variant="inline" ships with zero border/colour styling by design (see
+           component-inline-action-button.md) — the parent supplies all of it. This rule was
+           always missing the border/colour half of that contract, only ever setting
+           background-color; harmless before InputButtonCore's flat-button redesign, which
+           removed the unscoped base rule that used to accidentally give every variant a real
+           border regardless. Without its own border/color/outline reset, this button now falls
+           through to the browser's UA default <button> chrome (a stark outset border and
+           black/white text) instead of sitting flush with the input. */
         background-color: var(--_surface);
+        color: var(--input-text-color, var(--theme-input-text-color-normal));
+        border: none;
+        outline: none;
         aspect-ratio: 1;
         border-radius: 0;
         width: var(--input-min-height);
