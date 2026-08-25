@@ -84,7 +84,21 @@ consuming app having declared anything.
   Pure token-rename pass, no visual/default changes (unlike `InputButtonCore`'s redesign above).
   Added Storybook stories for both (`InputCheckboxRadioCore`, `InputCheckboxRadioButton`) —
   neither had one before.
+- ✅ `InputTextCore`, `InputSelectCore`, `InputNumberCore` — migrated 2026-08-25, see their
+  `CONSUMER-STYLING.md`. `InputTextCore`/`InputSelectCore` also had this exact problem's original
+  form: a private `--_input-text-*`/`--_input-select-*` naming scheme documented as a second
+  "local override path" alongside the global tokens, added 2026-08-22 (three days before this
+  pattern was formalised) as a workaround for a global-override-not-landing report that was never
+  root-caused. That private-var-as-override-point shape is exactly what this pattern replaces —
+  renamed public with real fallbacks, old two-path docs removed. `InputNumberCore` had no
+  component-scoped tokens at all before this (bare `--theme-input-*` throughout). Added a
+  Storybook story for `InputSelectCore` (didn't have one); `InputNumberCore` still doesn't.
+  `InputTextCore`/`InputSelectCore`'s `.normal` variant also had hover and `:focus-visible` share
+  one token (literally the same rule content duplicated under two selectors) — split into
+  `--input-text-border-hover`/`--input-select-border-hover` alongside the existing `-border-focus`
+  pair, both still defaulting to `--theme-border-focus` so default rendering is unchanged, but
+  mouse and assistive-tech interaction can now be themed independently. `InputNumberCore` has no
+  hover state on its border at all (only a `:focus-visible` box-shadow toggle), so there was
+  nothing to split there.
 - ⏳ Not yet migrated: `ToggleSwitchCore`, `TripleToggleSwitchCore` (still read bare
-  `--theme-toggle-symbol-color-*`, which are dead — nothing declares them by default), and the
-  shared `--theme-input-surface`-family tokens used by `InputTextCore`/`InputSelectCore`/
-  `InputNumberCore` (still Tier 2, not yet split into per-component Tier 3 tokens).
+  `--theme-toggle-symbol-color-*`, which are dead — nothing declares them by default).

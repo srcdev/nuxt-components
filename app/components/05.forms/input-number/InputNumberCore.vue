@@ -66,14 +66,20 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
   --_focus-box-shadow: var(--box-shadow-off);
   --_min-width: v-bind(minLength);
 
+  /* Public --input-number-* tokens, inline-fallback to the shared --theme-* tokens (see
+     theming-component-token-pattern.md) — overriding one here doesn't touch every other themed
+     input/control that also reads --theme-input-surface/--theme-border. */
+  --_surface: var(--input-number-surface, var(--theme-input-surface));
+  --_border: var(--input-number-border, var(--theme-border));
+
   display: flex;
   align-items: center;
 
   width: fit-content;
 
-  background-color: var(--theme-input-surface);
+  background-color: var(--_surface);
   border-radius: var(--form-element-border-width);
-  border: var(--form-element-border-width) solid var(--theme-border);
+  border: var(--form-element-border-width) solid var(--_border);
   outline: var(--form-element-outline-width) solid transparent;
   box-shadow: var(--_focus-box-shadow);
 
@@ -106,8 +112,8 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
     outline: none;
     box-shadow: none;
 
-    background-color: var(--theme-input-surface);
-    color: var(--theme-input-text-color-normal);
+    background-color: var(--_surface);
+    color: var(--input-number-text-color, var(--theme-input-text-color-normal));
     font-family: var(--font-family);
     font-size: var(--input-font-size);
     line-height: var(--input-element-line-height);
@@ -144,12 +150,12 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
 
     .left-slot {
       margin-inline-end: 0;
-      border-right: 2px solid var(--theme-input-surface-hover);
+      border-right: 2px solid var(--input-number-divider-color, var(--theme-input-surface-hover));
     }
 
     .right-slot {
       margin-inline-end: 0;
-      border-left: 2px solid var(--theme-input-surface-hover);
+      border-left: 2px solid var(--input-number-divider-color, var(--theme-input-surface-hover));
     }
   }
 }

@@ -73,17 +73,24 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 <style lang="css">
 @layer components {
 .input-select-wrapper {
-  /* Local overrides, one indirection step below the global --theme-* tokens they default from —
-     a consumer can target `.input-select-wrapper { --_input-select-border: ...; }` directly for
-     a guaranteed-specific override, instead of relying solely on redefining the global token.
-     See CONSUMER-STYLING.md. */
-  --_input-select-surface: var(--theme-input-surface);
-  --_input-select-surface-hover: var(--theme-input-surface-hover);
-  --_input-select-border: var(--theme-border);
-  --_input-select-border-focus: var(--theme-border-focus);
-  --_input-select-outline-color: var(--_input-select-border-focus);
+  /* Public --input-select-* tokens, inline-fallback to the shared --theme-* tokens (see
+     theming-component-token-pattern.md) — overriding one here doesn't touch every other themed
+     input/control that also reads --theme-input-surface/--theme-border. --_surface etc. are
+     private locals purely so the rest of this rule can reuse the resolved value without
+     repeating the fallback chain at every property — they are not themselves an override point,
+     see CONSUMER-STYLING.md. --_outline-color stays private/computed: it's always just an alias
+     for --_border-focus with no independent meaning of its own. */
+  --_surface: var(--input-select-surface, var(--theme-input-surface));
+  --_surface-hover: var(--input-select-surface-hover, var(--theme-input-surface-hover));
+  --_border: var(--input-select-border, var(--theme-border));
+  /* Split so hover (mouse) and :focus-visible (keyboard/assistive) can diverge — both default to
+     the same --theme-border-focus today, identical appearance to before this token existed, but
+     each now has its own override point. */
+  --_border-hover: var(--input-select-border-hover, var(--theme-border-focus));
+  --_border-focus: var(--input-select-border-focus, var(--theme-border-focus));
+  --_outline-color: var(--_border-focus);
 
-  background-color: var(--_input-select-surface);
+  background-color: var(--_surface);
   overflow: hidden;
 
   z-index: 2;
@@ -91,18 +98,23 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
   transition: all var(--theme-form-transition-duration) ease-in-out;
 
   &.normal {
-    border: var(--form-element-border-width) solid var(--_input-select-border);
+    border: var(--form-element-border-width) solid var(--_border);
     border-radius: var(--form-input-border-radius);
     outline: var(--form-element-outline-width) solid transparent;
   }
 
   &.underlined {
-    border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--_input-select-border);
-    background-color: var(--_input-select-surface);
+    border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--_border);
+    background-color: var(--_surface);
   }
 
-  &:has(select:focus-visible, :hover) {
-    outline: var(--form-element-outline-width-focus) solid var(--_input-select-border-focus);
+  &:has(:hover) {
+    outline: var(--form-element-outline-width-focus) solid var(--_border-hover);
+    outline-offset: var(--form-element-outline-offset-focus);
+  }
+
+  &:has(select:focus-visible) {
+    outline: var(--form-element-outline-width-focus) solid var(--_border-focus);
     outline-offset: var(--form-element-outline-offset-focus);
   }
 
@@ -117,7 +129,7 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
       content: '';
       width: 0.8em;
       height: 0.5em;
-      background-color: var(--_input-select-border);
+      background-color: var(--_border);
       clip-path: polygon(100% 0%, 0 0%, 50% 100%);
     } */
 
@@ -140,8 +152,8 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
     &:open::picker(select) {
       opacity: 1;
-      border: var(--form-element-border-width) solid var(--_input-select-border);
-      outline: var(--form-element-outline-width) solid var(--_input-select-outline-color);
+      border: var(--form-element-border-width) solid var(--_border);
+      outline: var(--form-element-outline-width) solid var(--_outline-color);
 
       @starting-style {
         opacity: 0;
@@ -168,7 +180,7 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
       transition: all var(--theme-form-transition-duration) ease-in-out;
 
       &:hover {
-        background-color: var(--_input-select-surface-hover);
+        background-color: var(--_surface-hover);
       }
 
       .input-select-core-option-decorator-icon {

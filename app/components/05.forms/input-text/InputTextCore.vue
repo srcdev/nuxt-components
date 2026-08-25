@@ -127,19 +127,25 @@ onMounted(() => {
 <style lang="css">
 @layer components {
   .input-text-wrapper {
-    /* Local overrides, one indirection step below the global --theme-* tokens they default from
-       — a consumer can target `.input-text-wrapper { --_input-text-border: ...; }` directly for
-       a guaranteed-specific override, instead of relying solely on redefining the global token.
-       See CONSUMER-STYLING.md. */
-    --_input-text-surface: var(--theme-input-surface);
-    --_input-text-surface-hover: var(--theme-input-surface-hover);
-    --_input-text-border: var(--theme-border);
-    --_input-text-border-focus: var(--theme-border-focus);
+    /* Public --input-text-* tokens, inline-fallback to the shared --theme-* tokens (see
+       theming-component-token-pattern.md) — overriding one here doesn't touch every other themed
+       input/control that also reads --theme-input-surface/--theme-border. --_surface etc. are
+       private locals purely so the rest of this rule can reuse the resolved value without
+       repeating the fallback chain at every property — they are not themselves an override point,
+       see CONSUMER-STYLING.md. */
+    --_surface: var(--input-text-surface, var(--theme-input-surface));
+    --_surface-hover: var(--input-text-surface-hover, var(--theme-input-surface-hover));
+    --_border: var(--input-text-border, var(--theme-border));
+    /* Split so hover (mouse) and :focus-visible (keyboard/assistive) can diverge — both default
+       to the same --theme-border-focus today, identical appearance to before this token existed,
+       but each now has its own override point. */
+    --_border-hover: var(--input-text-border-hover, var(--theme-border-focus));
+    --_border-focus: var(--input-text-border-focus, var(--theme-border-focus));
 
     display: flex;
     align-items: center;
     gap: var(--input-icon-slot-gap);
-    background-color: var(--_input-text-surface);
+    background-color: var(--_surface);
     overflow: hidden;
     transition: all var(--theme-form-transition-duration) ease-in-out;
 
@@ -147,25 +153,25 @@ onMounted(() => {
     position: relative;
 
     &.normal {
-      border: var(--form-element-border-width) solid var(--_input-text-border);
+      border: var(--form-element-border-width) solid var(--_border);
       border-radius: var(--form-input-border-radius);
       outline: var(--form-element-outline-width) solid transparent;
 
       padding-inline: var(--input-padding-inline);
 
       &:has(input:is(:hover), button:is(:hover)) {
-        outline: var(--form-element-outline-width-focus) solid var(--_input-text-border-focus);
+        outline: var(--form-element-outline-width-focus) solid var(--_border-hover);
         outline-offset: var(--form-element-outline-offset-focus);
       }
 
       &:has(input:focus-visible, button:focus-visible) {
-        outline: var(--form-element-outline-width-focus) solid var(--_input-text-border-focus);
+        outline: var(--form-element-outline-width-focus) solid var(--_border-focus);
         outline-offset: var(--form-element-outline-offset-focus);
       }
     }
 
     &.underlined {
-      border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--_input-text-border);
+      border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--_border);
       padding-inline: var(--input-padding-inline);
     }
 
@@ -180,17 +186,17 @@ onMounted(() => {
       box-sizing: content-box;
 
       .input-button-core {
-        background-color: var(--_input-text-surface);
+        background-color: var(--_surface);
         aspect-ratio: 1;
         border-radius: 0;
         width: var(--input-min-height);
 
         &:hover {
-          background-color: var(--_input-text-surface-hover);
+          background-color: var(--_surface-hover);
         }
 
         &:is(:focus-visible) {
-          outline: var(--form-element-outline-width-focus) solid var(--_input-text-border-focus);
+          outline: var(--form-element-outline-width-focus) solid var(--_border-focus);
           outline-offset: -4px;
         }
 
@@ -207,7 +213,7 @@ onMounted(() => {
       touch-action: manipulation;
       flex-grow: 1;
 
-      color: var(--theme-input-text-color-normal);
+      color: var(--input-text-color, var(--theme-input-text-color-normal));
       font-family: var(--font-family);
       font-size: var(--input-font-size);
 
@@ -219,7 +225,7 @@ onMounted(() => {
       min-height: var(--input-min-height);
 
       &::placeholder {
-        color: var(--theme-input-placeholder);
+        color: var(--input-text-placeholder-color, var(--theme-input-placeholder));
         font-size: var(--theme-input-placeholder-font-size);
         font-style: italic;
         line-height: 1;
