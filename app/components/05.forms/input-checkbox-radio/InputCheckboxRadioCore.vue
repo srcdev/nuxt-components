@@ -112,8 +112,11 @@ const inputClasses = computed(() => [
   grid-template-areas: "element-stack";
   place-content: center;
 
-  background-color: var(--theme-checkbox-symbol-surface);
-  border: 0.1rem solid var(--theme-border);
+  /* Public --input-checkbox-* tokens, inline-fallback to the shared theme tokens (see
+     theming-component-token-pattern.md) — overriding one here doesn't touch every other
+     themed input/control that also reads --theme-checkbox-symbol-surface/--theme-border. */
+  background-color: var(--input-checkbox-surface, var(--theme-checkbox-symbol-surface));
+  border: 0.1rem solid var(--input-checkbox-border, var(--theme-border));
   outline: var(--form-element-outline-width) solid transparent;
 
   height: var(--input-checked-element-size);
@@ -139,7 +142,7 @@ const inputClasses = computed(() => [
 
   &:not(:is(.button)) {
     &:has(input:focus-visible) {
-      outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
+      outline: var(--form-element-outline-width-focus) solid var(--input-checkbox-border-focus, var(--theme-border-focus));
       outline-offset: var(--form-element-outline-offset-focus);
     }
   }
@@ -150,7 +153,7 @@ const inputClasses = computed(() => [
 
       .input-checked-icon-checked,
       .icon {
-        color: var(--theme-text);
+        color: var(--input-checkbox-icon-color, var(--theme-text));
       }
     }
   }
@@ -164,7 +167,7 @@ const inputClasses = computed(() => [
 
     .input-checked-icon-checked,
     .icon {
-      color: var(--theme-text);
+      color: var(--input-checkbox-icon-color, var(--theme-text));
       height: var(--input-checked-icon-size);
       width: var(--input-checked-icon-size);
       box-shadow: var(--_box-shadow);

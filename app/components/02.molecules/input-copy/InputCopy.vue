@@ -102,9 +102,15 @@ onUnmounted(() => {
     --_input-placeholder-color: var(--input-copy-input-placeholder-color, #999);
     --_input-font-size: var(--input-copy-input-font-size, 0.95rem);
 
-    --_button-bg: var(--input-copy-button-bg, var(--theme-button-primary-surface));
-    --_button-bg-hover: var(--input-copy-button-bg-hover, var(--theme-button-primary-surface-hover));
-    --_button-text-color: var(--input-copy-button-text-color, var(--theme-button-primary-text));
+    --_button-bg: var(--input-copy-button-bg, var(--input-button-primary-surface, var(--theme-surface)));
+    --_button-bg-hover: var(
+      --input-copy-button-bg-hover,
+      var(--input-button-primary-surface-hover, var(--theme-surface-hover))
+    );
+    --_button-text-color: var(
+      --input-copy-button-text-color,
+      var(--input-button-primary-text, var(--theme-on-surface))
+    );
     --_button-padding: var(--input-copy-button-padding, 0.8rem 1.2rem);
     --_button-border-radius: var(--input-copy-button-border-radius, 0.4rem);
     --_button-gap: var(--input-copy-button-gap, 0.6rem);

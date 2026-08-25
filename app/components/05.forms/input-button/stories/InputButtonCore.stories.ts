@@ -1,6 +1,7 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
 import StorybookComponent from "../InputButtonCore.vue";
+import InputTextCore from "../../input-text/InputTextCore.vue";
 
 interface InputButtonCoreStoryArgs {
   type: "submit" | "button" | "reset";
@@ -302,3 +303,27 @@ NuxtIconOnlyComponent.args = {
   useIconOnly: true,
   iconOnlyName: "mdi:chevron-right-circle-outline",
 };
+
+// Composition check, not a props demo: confirms InputButtonCore's --button-min-height (defaults
+// to var(--input-min-height)) actually keeps it height-aligned with an inline text input, the
+// most common "usual suspect" pairing (e.g. newsletter signup, search bar). Textareas are the
+// deliberate exception to this alignment and aren't part of this story.
+const InlineTemplate: StoryFn = () => ({
+  components: { StorybookComponent, InputTextCore },
+  template: `
+    <div style="margin: 36px; max-width: 480px;">
+      <div style="display: flex; align-items: flex-start; gap: 0.8rem;">
+        <InputTextCore
+          id="inline-email"
+          name="email"
+          type="email"
+          placeholder="you@example.com"
+          style="flex: 1;"
+        />
+        <StorybookComponent type="submit" variant="primary" button-text="Subscribe" />
+      </div>
+    </div>
+  `,
+});
+
+export const InlineWithTextInput = InlineTemplate.bind({});

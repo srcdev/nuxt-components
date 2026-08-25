@@ -100,23 +100,28 @@ const flexDirection = ref(props.direction);
   &.inline {
     --_white-space: nowrap;
   }
-  background-color: var(--theme-input-surface);
-  border: var(--form-element-border-width) solid var(--theme-border);
+
+  /* Public --input-checkbox-button-* tokens, inline-fallback to the shared theme tokens (see
+     theming-component-token-pattern.md) — overriding one here doesn't touch every other themed
+     input/control that also reads --theme-input-surface/--theme-border, etc. Defaults are
+     unchanged from before this migration — this is a token-rename pass, not a redesign. */
+  background-color: var(--input-checkbox-button-surface, var(--theme-input-surface));
+  border: var(--form-element-border-width) solid var(--input-checkbox-button-border, var(--theme-border));
   outline: var(--form-element-outline-width) solid transparent;
 
   box-shadow: 0.1rem 0.1rem 0.8rem 0.1rem transparent;
 
   &:hover {
-    background-color: var(--theme-input-surface-hover);
-    border-color: var(--theme-border);
-    outline-color: var(--theme-ring);
+    background-color: var(--input-checkbox-button-surface-hover, var(--theme-input-surface-hover));
+    border-color: var(--input-checkbox-button-border, var(--theme-border));
+    outline-color: var(--input-checkbox-button-ring-hover, var(--theme-ring));
     outline-offset: var(--form-element-outline-offset-focus);
     cursor: pointer;
   }
 
   &:has(.input-checkbox-radio-core:focus-visible) {
-    background-color: var(--theme-surface-subtle);
-    outline-color: var(--theme-border-focus);
+    background-color: var(--input-checkbox-button-surface-focus, var(--theme-surface-subtle));
+    outline-color: var(--input-checkbox-button-ring-focus, var(--theme-border-focus));
     outline-offset: var(--form-element-outline-offset-focus);
   }
 
@@ -127,12 +132,17 @@ const flexDirection = ref(props.direction);
   .input-checkbox-radio-options-button-label {
     display: flex;
     flex-grow: 1;
-    color: var(--colour-text-default);
+    color: var(--input-checkbox-button-label-color, var(--colour-text-default));
     font-size: var(--input-font-size);
     width: 100%;
     min-height: var(--input-element-line-height);
     align-items: center;
     justify-content: center;
+    /* justify-content only centers the label as a single block — once text actually wraps
+       (e.g. "Half Head Highlights"), that block fills the full available width and each
+       individual line falls back to its default left-alignment inside it. text-align is what
+       centers wrapped lines relative to each other. */
+    text-align: center;
     padding-block: 0.8rem;
     padding-inline: 0.8rem;
     white-space: var(--_white-space);
@@ -146,7 +156,7 @@ const flexDirection = ref(props.direction);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--theme-text);
+    color: var(--input-checkbox-button-icon-color, var(--theme-text));
 
     .icon {
       height: var(--input-checkbox-decorator-icon-size);

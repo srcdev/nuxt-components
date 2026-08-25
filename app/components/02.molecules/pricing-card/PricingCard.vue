@@ -111,9 +111,12 @@ watch(
     --_feature-color: var(--pricing-card-feature-color, #333);
 
     --_cta-align: var(--pricing-card-cta-align, flex-start);
-    --_cta-bg: var(--pricing-card-cta-bg, var(--theme-button-primary-surface));
-    --_cta-bg-hover: var(--pricing-card-cta-bg-hover, var(--theme-button-primary-surface-hover));
-    --_cta-text: var(--pricing-card-cta-text, var(--theme-button-primary-text));
+    --_cta-bg: var(--pricing-card-cta-bg, var(--input-button-primary-surface, var(--theme-surface)));
+    --_cta-bg-hover: var(
+      --pricing-card-cta-bg-hover,
+      var(--input-button-primary-surface-hover, var(--theme-surface-hover))
+    );
+    --_cta-text: var(--pricing-card-cta-text, var(--input-button-primary-text, var(--theme-on-surface)));
     --_cta-padding: var(--pricing-card-cta-padding, 1rem 1.6rem);
     --_cta-border-radius: var(--pricing-card-cta-border-radius, 0.4rem);
 

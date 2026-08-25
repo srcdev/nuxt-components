@@ -33,9 +33,9 @@ override it — there is no locale-aware formatting, just a literal prefix chara
 | `--pricing-card-description-color` | `#555` | Plan description text colour |
 | `--pricing-card-feature-color` | `#333` | Feature list text colour |
 | `--pricing-card-cta-align` | `flex-start` | CTA wrapper `align-self` — set to `stretch`, `center`, or `flex-end` to change CTA alignment/width within the card |
-| `--pricing-card-cta-bg` | `var(--theme-button-primary-surface)` | CTA button background |
-| `--pricing-card-cta-bg-hover` | `var(--theme-button-primary-surface-hover)` | CTA button background on hover |
-| `--pricing-card-cta-text` | `var(--theme-button-primary-text)` | CTA button text colour |
+| `--pricing-card-cta-bg` | `var(--input-button-primary-surface)` | CTA button background |
+| `--pricing-card-cta-bg-hover` | `var(--input-button-primary-surface-hover)` | CTA button background on hover |
+| `--pricing-card-cta-text` | `var(--input-button-primary-text)` | CTA button text colour |
 | `--pricing-card-cta-padding` | `1rem 1.6rem` | CTA button padding |
 | `--pricing-card-cta-border-radius` | `0.4rem` | CTA button corner rounding |
 

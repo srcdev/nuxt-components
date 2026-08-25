@@ -14,9 +14,9 @@ or instance) without touching the component itself.
 | `--input-copy-input-text-color` | `#333` | Input text colour |
 | `--input-copy-input-placeholder-color` | `#999` | Placeholder text colour |
 | `--input-copy-input-font-size` | `0.95rem` | Input field font size |
-| `--input-copy-button-bg` | `var(--theme-button-primary-surface)` | Copy button background |
-| `--input-copy-button-bg-hover` | `var(--theme-button-primary-surface-hover)` | Copy button background on hover |
-| `--input-copy-button-text-color` | `var(--theme-button-primary-text)` | Copy button text colour |
+| `--input-copy-button-bg` | `var(--input-button-primary-surface)` | Copy button background |
+| `--input-copy-button-bg-hover` | `var(--input-button-primary-surface-hover)` | Copy button background on hover |
+| `--input-copy-button-text-color` | `var(--input-button-primary-text)` | Copy button text colour |
 | `--input-copy-button-padding` | `0.8rem 1.2rem` | Copy button padding |
 | `--input-copy-button-border-radius` | `0.4rem` | Copy button corner rounding |
 | `--input-copy-button-gap` | `0.6rem` | Gap between icon and text in button |

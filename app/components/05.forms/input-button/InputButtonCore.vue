@@ -106,6 +106,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     justify-content: center;
     align-items: center;
     box-sizing: content-box;
+    min-height: var(--button-min-height);
     border-radius: var(--button-border-radius);
     font-family: var(--font-family);
     padding-inline: var(--button-padding-inline);
@@ -121,60 +122,105 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
     /*
     * Theming
+    * Every colour is a public --input-button-{variant}-{property} token, inline-fallback to
+    * the shared theme slot (see theming-component-token-pattern.md for why: overriding one
+    * variant here never touches the --theme-* slots other components read).
+    *
+    * Flat by default: border defaults to the variant's own surface colour (so the resting state
+    * shows no visible edge) and outline defaults to fully transparent — outline is reserved for
+    * the focus-visible ring, not used to reinforce the flat look. Hover darkens the surface via
+    * color-mix (always darker, regardless of which direction the underlying theme ramp runs in
+    * light vs dark mode — no more "hover looks lighter" surprises) and carries the border along
+    * with it, still flat; outline stays transparent through hover too.
+    * focus-visible is deliberately its own block, not grouped with :hover — it's the one state
+    * that gets a real, separately-themeable a11y indicator, and its outline-width/-offset (set
+    * below, in Shared States) give it a visible ring regardless of the border/outline being
+    * invisible everywhere else.
+    * --_surface is a private local (not a public token) — it exists purely so -hover/-border/-ring
+    * can color-mix() off the SAME resolved value a consumer's --input-button-{variant}-surface
+    * override produces, without every derived token repeating that fallback chain itself.
     **/
-    background-color: var(--theme-surface);
-    color: var(--theme-on-surface);
-    border: var(--button-border-width) solid var(--theme-border);
-    outline: var(--button-outline-width) solid var(--theme-ring);
+    &.primary {
+      --_surface: var(--input-button-primary-surface, var(--theme-surface));
+      --_surface-hover: var(--input-button-primary-surface-hover, color-mix(in oklab, var(--_surface) 85%, black));
 
-    &:hover,
-    &:focus-visible {
-      background-color: var(--theme-surface-hover);
-      /* --theme-on-surface, not --theme-text: --theme-surface-hover's light-mode branch is a
-         dark step (by design — this button stays a bold colour even in light mode), and
-         --theme-text's light-mode branch is dark too (it's meant for text on a light surface
-         elsewhere, e.g. AlertContentInner). Pairing them made hover text invisible in light
-         mode. --theme-on-surface is a fixed light value regardless of scheme, matching how
-         AlertContentInner's own dismiss-button hover and .secondary:hover below already do it. */
-      color: var(--theme-on-surface);
-      border-color: var(--theme-border-focus);
-      outline-color: var(--theme-ring);
+      background-color: var(--_surface);
+      color: var(--input-button-primary-text, var(--theme-on-surface));
+      border: var(--button-border-width) solid var(--input-button-primary-border, var(--_surface));
+      outline: var(--button-outline-width) solid var(--input-button-primary-ring, transparent);
+
+      &:hover {
+        background-color: var(--_surface-hover);
+        border-color: var(--input-button-primary-border-hover, var(--_surface-hover));
+        outline-color: var(--input-button-primary-ring-hover, transparent);
+      }
+
+      &:focus-visible {
+        border-color: var(--input-button-primary-border-focus, var(--theme-border-focus));
+        outline-color: var(--input-button-primary-ring-focus, var(--theme-ring));
+      }
     }
 
     &.is-pending {
-      background-color: color-mix(in oklab, var(--theme-surface) 50%, transparent);
+      /* Always the primary surface regardless of variant — pre-existing behaviour, not
+         something this migration changes. */
+      background-color: color-mix(
+        in oklab,
+        var(--input-button-primary-surface, var(--theme-surface)) 50%,
+        transparent
+      );
     }
 
     &.secondary {
-      background-color: var(--theme-surface-inverted);
-      border: var(--button-border-width) solid var(--theme-border);
-      color: var(--theme-text-inverted);
-      outline: var(--button-outline-width) solid var(--theme-ring);
+      --_surface: var(--input-button-secondary-surface, var(--theme-surface-inverted));
+      --_surface-hover: var(
+        --input-button-secondary-surface-hover,
+        color-mix(in oklab, var(--_surface) 85%, black)
+      );
 
-      &:hover,
+      background-color: var(--_surface);
+      color: var(--input-button-secondary-text, var(--theme-text-inverted));
+      border: var(--button-border-width) solid var(--input-button-secondary-border, var(--_surface));
+      outline: var(--button-outline-width) solid var(--input-button-secondary-ring, transparent);
+
+      &:hover {
+        background-color: var(--_surface-hover);
+        border-color: var(--input-button-secondary-border-hover, var(--_surface-hover));
+        outline-color: var(--input-button-secondary-ring-hover, transparent);
+      }
+
       &:focus-visible {
-        background-color: var(--theme-surface);
-        color: var(--theme-on-surface);
-        border-color: var(--theme-border-focus);
-        outline-color: var(--theme-surface);
+        border-color: var(--input-button-secondary-border-focus, var(--theme-border-focus));
+        outline-color: var(--input-button-secondary-ring-focus, var(--theme-ring));
       }
     }
 
     &.tertiary {
-      background-color: light-dark(var(--slate-01), transparent);
-      border: var(--button-border-width) solid var(--theme-border);
-      color: var(--theme-text);
-      text-decoration: underline;
-      outline: var(--button-outline-width) solid var(--theme-border-focus);
+      /* --_surface can resolve to literal transparent (dark mode default) — color-mix() still
+         darkens correctly here: mixing transparent with black lowers the alpha channel rather
+         than the lightness, so it reads as a faint dark tint over whatever's behind the button
+         instead of a flat fill. Same formula, no special-casing needed. */
+      --_surface: var(--input-button-tertiary-surface, light-dark(var(--slate-01), transparent));
+      --_surface-hover: var(
+        --input-button-tertiary-surface-hover,
+        color-mix(in oklab, var(--_surface) 85%, black)
+      );
 
-      &:hover,
+      background-color: var(--_surface);
+      color: var(--input-button-tertiary-text, var(--theme-text));
+      border: var(--button-border-width) solid var(--input-button-tertiary-border, var(--_surface));
+      outline: var(--button-outline-width) solid var(--input-button-tertiary-ring, transparent);
+      text-decoration: underline;
+
+      &:hover {
+        background-color: var(--_surface-hover);
+        border-color: var(--input-button-tertiary-border-hover, var(--_surface-hover));
+        outline-color: var(--input-button-tertiary-ring-hover, transparent);
+      }
+
       &:focus-visible {
-        background-color: var(--theme-surface-hover);
-        /* Same fix as the base :hover above — background goes dark in light mode, so text
-           needs to switch off --theme-text (dark in light mode) to stay visible. */
-        color: var(--theme-on-surface);
-        border-color: var(--theme-border-focus);
-        outline-color: var(--theme-border-focus);
+        border-color: var(--input-button-tertiary-border-focus, var(--theme-border-focus));
+        outline-color: var(--input-button-tertiary-ring-focus, var(--theme-ring));
       }
     }
 
