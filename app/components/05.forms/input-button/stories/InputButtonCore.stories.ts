@@ -241,7 +241,17 @@ const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
   },
   template: `
     <div style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;margin: 36px;">
+      <!-- :key forces a remount when any slot-visibility arg changes. Verified the args
+           themselves ARE reactive here (a plain {{ args.useLeftSlot }} interpolation updates
+           live on toggle) — the bug is narrower: Vue's compiled-at-runtime string template
+           doesn't reliably re-evaluate a <template v-if="..."> conditionally attached to a named
+           slot when only the v-if's condition changes, on this component/Storybook combination.
+           Toggling a control changed the fallthrough attribute (confirmed via useleftslot="true"
+           in the rendered DOM) but never actually added/removed the slot content until a hard
+           refresh. Remounting sidesteps whatever the underlying slot-stability quirk is, rather
+           than chasing it further. -->
       <StorybookComponent
+        :key="[args.useLeftSlot, args.useLeftIcon, args.useRightSlot, args.useRightIcon, args.useIconOnlySlot, args.useIconOnly].join(',')"
         v-bind="args"
         @click="handleClick"
       >
