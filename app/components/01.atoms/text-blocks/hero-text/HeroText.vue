@@ -44,18 +44,18 @@ const normalisedContent = computed(() =>
 <style lang="css">
 @layer components {
   .hero-text {
-    font-family: "Playfair Display";
+    font-family: var(--hero-text-font-family, "Playfair Display");
     font-weight: 400;
     font-variation-settings:
       "wght" 400,
       "ital" 1;
     line-height: 1;
 
-    margin: 0;
+    margin: var(--hero-text-margin, 0);
 
     &.axis-horizontal {
       flex-direction: row;
-      gap: 0.5ch;
+      gap: var(--hero-text-horizontal-gap, 0.5ch);
     }
     &.axis-vertical {
       display: flex;
@@ -93,12 +93,14 @@ const normalisedContent = computed(() =>
     }
 
     .accent {
+      --_hero-text-accent-offset: var(--hero-text-accent-offset, 0.2em);
+
       background-clip: text;
       background-image: var(--hero-text-bg-img);
       font-style: italic;
       color: transparent;
-      padding-bottom: 0.2em;
-      margin-bottom: -0.2em;
+      padding-bottom: var(--_hero-text-accent-offset);
+      margin-bottom: calc(var(--_hero-text-accent-offset) * -1);
     }
   }
 }

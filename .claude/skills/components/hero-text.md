@@ -104,7 +104,11 @@ Key CSS custom properties:
 | -------- | ------- | -------- |
 | `--colour-text-accent` | — | Colour of `.accent` spans and the icon |
 | `--hero-text-{scale}` | — | Font size per `fontSize` prop value |
+| `--hero-text-font-family` | `"Playfair Display"` | Font family of the whole component |
+| `--hero-text-margin` | `0` | Margin on the root element |
+| `--hero-text-horizontal-gap` | `0.5ch` | Gap between segments in `axis="horizontal"` mode |
 | `--hero-text-vertical-gap` | `0.4em` | Gap between segments in `axis="vertical"` mode |
+| `--hero-text-accent-offset` | `0.2em` | Underline-clearance offset on `.accent` spans (`padding-bottom` and the matching negative `margin-bottom`) |
 
 **`--hero-text-vertical-gap`** controls `gap` on the flex column in vertical axis. Override at theme or page level:
 

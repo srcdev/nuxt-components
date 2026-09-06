@@ -1,0 +1,16 @@
+{
+  "SRCDEV HeroText": {
+    "description": "HeroText — mixed normal/accent heading with configurable size and axis",
+    "scope": "vue,html",
+    "body": [
+      "<HeroText",
+      "  tag=\"$1h1\"",
+      "  fontSize=\"$2title\"",
+      "  :textContent=\"[",
+      "    { text: '$3Designing', styleClass: 'normal' },",
+      "    { text: '$4Artistry', styleClass: 'accent' },",
+      "  ]\"",
+      "/>"
+    ]
+  }
+}
