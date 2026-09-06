@@ -29,18 +29,18 @@ export default {
         // reloads. Each story below has "Show banner again" (resets state
         // in-place) and "Delete cookie" (clears document.cookie directly, for
         // verifying the cookie itself is actually gone, e.g. in devtools).
-        component: "Reads/writes a real 'cookie-consent' cookie via useCookieConsent(). Use the story's reset controls to bring the banner back.",
+        component: "Reads/writes a real 'privacy-notice-consent' cookie via useCookieConsent(). Use the story's reset controls to bring the banner back.",
       },
     },
   },
 } as Meta<typeof StorybookComponent>;
 
-// Resets the same "cookie-consent" cookie useCookieConsent() reads, so the
+// Resets the same "privacy-notice-consent" cookie useCookieConsent() reads, so the
 // banner's status goes back to "unset" and reappears without a page reload
 // (Nuxt dedupes useCookie() by key, so this shares the ref CookieConsentBanner
 // itself reads).
 function useResetConsent() {
-  const consentCookie = useCookie<"granted" | "denied" | null>("cookie-consent");
+  const consentCookie = useCookie<"granted" | "denied" | null>("privacy-notice-consent");
   const showAgain = () => {
     consentCookie.value = null;
   };
@@ -48,7 +48,7 @@ function useResetConsent() {
   // rather than just the in-memory ref, so devtools/Application tab reflects
   // it too, not only the story's live re-render.
   const deleteCookie = () => {
-    document.cookie = "cookie-consent=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+    document.cookie = "privacy-notice-consent=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
     consentCookie.value = null;
   };
   return { showAgain, deleteCookie };

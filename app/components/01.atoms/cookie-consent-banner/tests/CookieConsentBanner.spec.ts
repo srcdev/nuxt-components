@@ -23,15 +23,15 @@ mockNuxtImport("useCookieConsent", () => () => ({
 }));
 
 function banner() {
-  return document.querySelector(".cookie-consent-banner");
+  return document.querySelector(".privacy-notice-banner");
 }
 
 function acceptButton() {
-  return document.querySelector("[data-test-id='cookie-consent-banner-accept']") as HTMLElement;
+  return document.querySelector("[data-test-id='privacy-notice-banner-accept']") as HTMLElement;
 }
 
 function rejectButton() {
-  return document.querySelector("[data-test-id='cookie-consent-banner-reject']") as HTMLElement;
+  return document.querySelector("[data-test-id='privacy-notice-banner-reject']") as HTMLElement;
 }
 
 describe("CookieConsentBanner", () => {

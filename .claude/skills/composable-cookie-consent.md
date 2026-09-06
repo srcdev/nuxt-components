@@ -2,7 +2,7 @@
 
 ## Overview
 
-`useCookieConsent` tracks the visitor's cookie-consent decision (`unset` / `granted` / `denied`), persists it in a `cookie-consent` cookie, and wraps `@nuxt/scripts`' `useScriptTriggerConsent()` gate so any consent-dependent script (Google Analytics via [[composable-google-analytics]], or anything else added later) can be wired to it.
+`useCookieConsent` tracks the visitor's cookie-consent decision (`unset` / `granted` / `denied`), persists it in a `privacy-notice-consent` cookie, and wraps `@nuxt/scripts`' `useScriptTriggerConsent()` gate so any consent-dependent script (Google Analytics via [[composable-google-analytics]], or anything else added later) can be wired to it.
 
 **This composable ships inside the `srcdev-nuxt-components` layer** (`app/composables/useCookieConsent.ts`). Consuming apps get it via Nuxt's layer auto-import — **do not create a local copy** in the consuming app.
 
@@ -28,7 +28,7 @@ Source lives at `app/composables/useCookieConsent.ts` in the layer. Shown here f
 const consentTrigger = useScriptTriggerConsent(); // module-scope singleton
 
 export function useCookieConsent() {
-  const stored = useCookie<"granted" | "denied" | null>("cookie-consent", {
+  const stored = useCookie<"granted" | "denied" | null>("privacy-notice-consent", {
     maxAge: 60 * 60 * 24 * 365,
     sameSite: "lax",
     default: () => null,
@@ -70,9 +70,9 @@ if (status.value === "unset") {
 }
 ```
 
-To let a user change their mind later (e.g. a "cookie preferences" link in the footer or a cookie-policy page), call `rejectAll()` or clear the `cookie-consent` cookie to bring the banner back.
+To let a user change their mind later (e.g. a "cookie preferences" link in the footer or a cookie-policy page), call `rejectAll()` or clear the `privacy-notice-consent` cookie to bring the banner back.
 
 ## Notes
 
-- Cookie name `cookie-consent` is fixed by the layer, not configurable per app.
+- Cookie name `privacy-notice-consent` is fixed by the layer, not configurable per app.
 - This composable only tracks the yes/no decision — it does not itself load any script. See [[composable-google-analytics]] for the GA4 integration that consumes `trigger`.

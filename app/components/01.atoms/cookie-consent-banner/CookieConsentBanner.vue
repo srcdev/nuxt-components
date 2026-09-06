@@ -1,28 +1,28 @@
 <template>
   <Teleport to="body">
     <div
-      class="cookie-consent-banner"
+      class="privacy-notice-banner"
       :class="[{ closed: status !== 'unset' }, elementClasses]"
       :data-theme="resolved.theme"
-      data-test-id="cookie-consent-banner"
+      data-test-id="privacy-notice-banner"
     >
-      <div class="cookie-consent-banner-inner" role="region" :aria-label="ariaLabel">
-        <div class="cookie-consent-banner-message">
+      <div class="privacy-notice-banner-inner" role="region" :aria-label="ariaLabel">
+        <div class="privacy-notice-banner-message">
           <slot name="message">This site uses cookies to understand how it's used. You can accept or reject them.</slot>
         </div>
-        <div class="cookie-consent-banner-actions">
+        <div class="privacy-notice-banner-actions">
           <button
             type="button"
-            class="cookie-consent-banner-reject"
-            data-test-id="cookie-consent-banner-reject"
+            class="privacy-notice-banner-reject"
+            data-test-id="privacy-notice-banner-reject"
             @click="rejectAll()"
           >
             <slot name="rejectLabel">Reject</slot>
           </button>
           <button
             type="button"
-            class="cookie-consent-banner-accept"
-            data-test-id="cookie-consent-banner-accept"
+            class="privacy-notice-banner-accept"
+            data-test-id="privacy-notice-banner-accept"
             @click="acceptAll()"
           >
             <slot name="acceptLabel">Accept</slot>
@@ -57,17 +57,17 @@ const ariaLabel = "Cookie consent";
 
 <style lang="css">
 @layer components {
-  .cookie-consent-banner {
+  .privacy-notice-banner {
     /* Matches DisplayToastProvider/DisplayDialog's z-index convention so
        this clears ordinary page chrome (and a consumer's sticky header) but
        still sits below an active modal dialog if one somehow overlaps. */
-    --_z-index: var(--cookie-consent-banner-z-index, 999999);
-    --_gutter: var(--cookie-consent-banner-gutter, 1.6rem);
-    --_max-width: var(--cookie-consent-banner-max-width, 64rem);
-    --_border-radius: var(--cookie-consent-banner-border-radius, 0.8rem);
-    --_border: var(--cookie-consent-banner-border, 0.1rem solid light-dark(var(--slate-10), var(--slate-02)));
-    --_background: var(--cookie-consent-banner-background, light-dark(var(--slate-00), var(--slate-10)));
-    --_transition-duration: var(--cookie-consent-banner-transition-duration, 200ms);
+    --_z-index: var(--privacy-notice-banner-z-index, 999999);
+    --_gutter: var(--privacy-notice-banner-gutter, 1.6rem);
+    --_max-width: var(--privacy-notice-banner-max-width, 64rem);
+    --_border-radius: var(--privacy-notice-banner-border-radius, 0.8rem);
+    --_border: var(--privacy-notice-banner-border, 0.1rem solid light-dark(var(--slate-10), var(--slate-02)));
+    --_background: var(--privacy-notice-banner-background, light-dark(var(--slate-00), var(--slate-10)));
+    --_transition-duration: var(--privacy-notice-banner-transition-duration, 200ms);
 
     position: fixed;
     inset-inline: var(--_gutter);
@@ -87,7 +87,7 @@ const ariaLabel = "Cookie consent";
       pointer-events: none;
     }
 
-    .cookie-consent-banner-inner {
+    .privacy-notice-banner-inner {
       overflow: hidden;
       display: flex;
       flex-wrap: wrap;
@@ -103,18 +103,18 @@ const ariaLabel = "Cookie consent";
       }
     }
 
-    .cookie-consent-banner-message {
+    .privacy-notice-banner-message {
       flex: 1 1 24rem;
     }
 
-    .cookie-consent-banner-actions {
+    .privacy-notice-banner-actions {
       display: flex;
       gap: 0.8rem;
       margin-inline-start: auto;
     }
 
-    .cookie-consent-banner-reject,
-    .cookie-consent-banner-accept {
+    .privacy-notice-banner-reject,
+    .privacy-notice-banner-accept {
       padding: 0.8rem 1.6rem;
       border-radius: 0.4rem;
       border: 0.1rem solid transparent;
@@ -124,7 +124,7 @@ const ariaLabel = "Cookie consent";
         background-color var(--_transition-duration);
     }
 
-    .cookie-consent-banner-reject {
+    .privacy-notice-banner-reject {
       background-color: transparent;
       border: 0.1rem solid light-dark(var(--slate-08), var(--slate-04));
 
@@ -134,7 +134,7 @@ const ariaLabel = "Cookie consent";
       }
     }
 
-    .cookie-consent-banner-accept {
+    .privacy-notice-banner-accept {
       background-color: var(--theme-accent);
       color: light-dark(var(--slate-00), var(--slate-12));
 

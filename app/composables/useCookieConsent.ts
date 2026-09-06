@@ -18,7 +18,7 @@ export function useCookieConsent() {
   // Persists the decision across visits. Read fresh on every call so this
   // stays request-safe during SSR (Nuxt dedupes useCookie() by key within a
   // request, so this is cheap to call repeatedly).
-  const stored = useCookie<"granted" | "denied" | null>("cookie-consent", {
+  const stored = useCookie<"granted" | "denied" | null>("privacy-notice-consent", {
     maxAge: 60 * 60 * 24 * 365,
     sameSite: "lax",
     default: () => null,

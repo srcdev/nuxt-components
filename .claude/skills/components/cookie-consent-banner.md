@@ -68,21 +68,21 @@ useGoogleAnalytics();
 
 ## CSS / styling
 
-Public tokens (all on `.cookie-consent-banner`, `var(--cookie-consent-banner-*, fallback)` pattern):
+Public tokens (all on `.privacy-notice-banner`, `var(--privacy-notice-banner-*, fallback)` pattern):
 
 | Token | Default |
 |---|---|
-| `--cookie-consent-banner-z-index` | `999999` |
-| `--cookie-consent-banner-gutter` | `1.6rem` |
-| `--cookie-consent-banner-max-width` | `64rem` |
-| `--cookie-consent-banner-border-radius` | `0.8rem` |
-| `--cookie-consent-banner-border` | `0.1rem solid light-dark(var(--slate-10), var(--slate-02))` |
-| `--cookie-consent-banner-background` | `light-dark(var(--slate-00), var(--slate-10))` |
-| `--cookie-consent-banner-transition-duration` | `200ms` |
+| `--privacy-notice-banner-z-index` | `999999` |
+| `--privacy-notice-banner-gutter` | `1.6rem` |
+| `--privacy-notice-banner-max-width` | `64rem` |
+| `--privacy-notice-banner-border-radius` | `0.8rem` |
+| `--privacy-notice-banner-border` | `0.1rem solid light-dark(var(--slate-10), var(--slate-02))` |
+| `--privacy-notice-banner-background` | `light-dark(var(--slate-00), var(--slate-10))` |
+| `--privacy-notice-banner-transition-duration` | `200ms` |
 
 ## Notes
 
-- **Teleported to `<body>`** — like `DisplayToastProvider`, query it in tests via `document.querySelector(".cookie-consent-banner")`, not `wrapper.find(...)`.
+- **Teleported to `<body>`** — like `DisplayToastProvider`, query it in tests via `document.querySelector(".privacy-notice-banner")`, not `wrapper.find(...)`.
 - **No focus trap / backdrop** — this is a dismiss-by-decision banner, not a modal. It collapses via a `grid-template-rows` transition (same mechanic as `DisplayPrompt`) once `status` leaves `"unset"`, rather than unmounting.
 - **Only ever one instance** — `useCookieConsent()`'s underlying state is a module-scope singleton, so mounting the banner twice in one app just duplicates the UI, it doesn't create separate consent state.
 - To let a visitor change their mind later (e.g. from a cookie-policy page), call `useCookieConsent().rejectAll()` or clear the `cookie-consent` cookie — the banner reappears since `status` returns to `"unset"` only once the cookie is gone; `rejectAll()` itself sets it to `"denied"`, which keeps the banner hidden but stops GA. Expose a dedicated "reset my choice" affordance if you want the banner itself to resurface.
