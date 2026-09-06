@@ -72,11 +72,19 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
     privCount += m ? new Set(m).size : 0;
   }
   const hasVariants = files.some((f) => path.basename(path.dirname(f)) === "variants");
+  // Legacy options-style props: `defineProps({ ... })` rather than `defineProps<Props>(...)`.
+  // A plain regex on `defineProps<` is enough to clear a file — anything calling defineProps
+  // without that generic is assumed options-style.
+  const hasLegacyProps = files.some((f) => {
+    const content = fs.readFileSync(f, "utf-8");
+    return /defineProps\s*\(/.test(content) && !/defineProps\s*<.+?>\s*\(/s.test(content);
+  });
   rows.push({
     compdir: relDir,
     tier,
     n_vue: files.length,
     variants: hasVariants,
+    legacy_props: hasLegacyProps,
     consumer_styling: hasConsumerStyling,
     tests: hasTests,
     stories: hasStoriesDir || hasStoriesFile,

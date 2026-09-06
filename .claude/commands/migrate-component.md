@@ -18,6 +18,9 @@ Otherwise, auto-pick the next worst offender:
 2. Read `.claude/component-ledger/audit.json`. Pick in this priority order, first match wins:
    - Any group with `"tier": "NONE"` (unplaced) — pick the one with the lowest `score`, ties broken alphabetically by `compdir`.
    - Else any group with `"variants": true` — same tie-break.
+   - Else any group with `"legacy_props": true` (still options-style `defineProps({...})`, not
+     `defineProps<Props>()`) — same tie-break. This one doesn't move the 5-point `score`, so it
+     would otherwise hide forever behind an already-complete-looking component.
    - Else the lowest `score` overall — same tie-break.
 3. State which component was picked and why in one line (e.g. "Picked `input-select` — unplaced isn't the issue here, it forks a `variants/` subfolder and scores 2/5.") before doing anything else, so the user can redirect you if they'd rather do a different one next.
 

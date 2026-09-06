@@ -1,0 +1,15 @@
+{
+  "SRCDEV AnimatedSvgText": {
+    "description": "AnimatedSvgText — stroke-draw-then-fill animation for inline SVG text/path content",
+    "scope": "vue,html",
+    "body": [
+      "<AnimatedSvgText>",
+      "  <template #text>",
+      "    <svg viewBox=\"0 0 $1600 $2150\">",
+      "      <path d=\"$3\" />",
+      "    </svg>",
+      "  </template>",
+      "</AnimatedSvgText>"
+    ]
+  }
+}

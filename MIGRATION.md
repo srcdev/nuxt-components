@@ -19,6 +19,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 
 | Component | File | CS | SN |
 |---|---|---|---|
+| AnimatedSvgText | `animations/animated-svg-text/AnimatedSvgText.vue` | ✅ | ✅ `animated-svg-text` |
 | EntryAnimation | `animations/entry/EntryAnimation.vue` | ☐ | ☐ |
 | ScrollRevealFrame | `animations/scroll-reveal-frame/ScrollRevealFrame.vue` | ☐ | ☐ |
 | ScrollRevealImage | `animations/scroll-reveal-image/ScrollRevealImage.vue` | ☐ | ☐ |
@@ -174,7 +175,6 @@ These components still live in the root `app/components/` folder and need to be 
 | Component | File | Notes |
 |---|---|---|
 | AlertMaskCore | `alert-mask/AlertMaskCore.vue` | SVG mask utility — may stay internal |
-| AnimatedSvgText | `animated-svg-text/AnimatedSvgText.vue` | |
 | CanvasSwitcher | `canvas-switcher/CanvasSwitcher.vue` | |
 | CarouselBasic | `carousels/CarouselBasic.vue` | |
 | CarouselFlip | `carousels/CarouselFlip.vue` | |

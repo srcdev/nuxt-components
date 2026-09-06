@@ -388,6 +388,7 @@ footer.note code{
           <th data-key="skill" data-type="bool">Skill doc</th>
           <th data-key="snippet" data-type="bool">Snippet</th>
           <th data-key="variants" data-type="bool" title="Uses a variants/ subfolder">Variants folder</th>
+          <th data-key="legacy_props" data-type="bool" title="Still options-style defineProps({...}), not defineProps&lt;Props&gt;()">Legacy props</th>
           <th data-key="score" data-type="num">Score</th>
         </tr>
       </thead>
@@ -396,7 +397,7 @@ footer.note code{
   </div>
 
   <footer class="note">
-    <p><strong>Methodology:</strong> "Styling doc", "Tests", "Story" and "Variants folder" are filesystem checks (<code>CONSUMER-STYLING.md</code>, a <code>tests/</code> dir, a <code>stories/</code> dir or <code>*.stories.ts</code> file, a <code>variants/</code> subfolder). "Skill doc" and "Snippet" match the component's kebab-case name against <code>.claude/skills/components/*.md</code> and <code>.vscode/*.code-snippets</code> &mdash; a small number of near-miss names may read as false negatives and are worth a manual glance before acting. "Score" is the count of the five doc/test/story/skill/snippet checks passed, out of 5, and is what "reference-quality" and "only incomplete" are based on.</p>
+    <p><strong>Methodology:</strong> "Styling doc", "Tests", "Story" and "Variants folder" are filesystem checks (<code>CONSUMER-STYLING.md</code>, a <code>tests/</code> dir, a <code>stories/</code> dir or <code>*.stories.ts</code> file, a <code>variants/</code> subfolder). "Skill doc" and "Snippet" match the component's kebab-case name against <code>.claude/skills/components/*.md</code> and <code>.vscode/*.code-snippets</code> &mdash; a small number of near-miss names may read as false negatives and are worth a manual glance before acting. "Score" is the count of the five doc/test/story/skill/snippet checks passed, out of 5, and is what "reference-quality" and "only incomplete" are based on. "Legacy props" is a source check for options-style <code>defineProps({...})</code> rather than <code>defineProps&lt;Props&gt;()</code> &mdash; like "Variants folder" it is <em>not</em> counted in the 5-point score (deliberately, so it stays visible instead of vanishing into an already-high score), but it does factor into "reference-quality" and "only incomplete", same as "Variants folder".</p>
     <p style="margin-top:0.8rem;"><strong>On <code>--_</code> vars:</strong> the public/private split is decided by consumer relevance, not reuse count &mdash; a private var is correct even used once, as long as the value has no plausible consumer override. This column is a raw count of <code>--_</code>-prefixed CSS custom properties per group; it is <em>not</em> scored and doesn't factor into "reference-quality" or "score." A high count is only a prompt to check each one by hand for a value that should have been public (a colour, size, or per-state variant with no override token) &mdash; the bug class the <code>ServicesCard</code> fix (CLAUDE.md pitfall #20) caught, not the presence of the prefix itself.</p>
     <p style="margin-top:0.8rem;"><strong>This page regenerates from <code>.claude/component-ledger/build.mjs</code></strong>, triggered whenever a staged commit touches <code>app/components/</code> (see the <code>create-commit-message</code> skill's hook). All numbers on this page, including the narrative above, are computed live from the latest scan &mdash; nothing here is hand-written prose that can drift out of date.</p>
   </footer>
@@ -436,9 +437,10 @@ statDefs.forEach(sd => {
 });
 
 // ---- dynamic narrative (every number computed from DATA, nothing hand-written) ----
-const fullyCompliant = DATA.filter(d => d.score === 5 && d.tier !== "NONE" && !d.variants);
+const fullyCompliant = DATA.filter(d => d.score === 5 && d.tier !== "NONE" && !d.variants && !d.legacy_props);
 const unplaced = DATA.filter(d => d.tier === "NONE");
 const forkedVariants = DATA.filter(d => d.variants);
+const legacyProps = DATA.filter(d => d.legacy_props);
 const noSkillAndUnplaced = unplaced.filter(d => !d.skill).length;
 const topPrivate = DATA.filter(d => d.priv_tokens > 0).sort((a,b) => b.priv_tokens - a.priv_tokens).slice(0, 3);
 
@@ -448,6 +450,7 @@ narrativeEl.innerHTML = `
   <p>Only <strong>${fullyCompliant.length} of ${DATA.length}</strong> component groups clear every check. The gaps cluster in a predictable order: the older a component, the less likely it ever got a skill doc or CONSUMER-STYLING.md written for it, because both postdate a lot of what's in this tree.</p>
   <p><strong>${unplaced.length} groups</strong> still sit loose at <code class="mono">app/components/</code> top level rather than inside a numbered tier. ${noSkillAndUnplaced} of those ${unplaced.length} also have no skill doc &mdash; an unplaced component tends to also be an undocumented one.</p>
   <p>${forkedVariants.length ? `<strong>${forkedVariants.length} group${forkedVariants.length===1?"":"s"}</strong> still fork${forkedVariants.length===1?"s":""} variants into a <code class="mono">variants/</code> subfolder &mdash; deprecated in favour of documenting the variation in the parent skill.md.` : `No component groups currently fork variants into a <code class="mono">variants/</code> subfolder.`}</p>
+  <p>${legacyProps.length ? `<strong>${legacyProps.length} group${legacyProps.length===1?"":"s"}</strong> still use${legacyProps.length===1?"s":""} options-style <code class="mono">defineProps({...})</code> instead of <code class="mono">defineProps&lt;Props&gt;()</code> &mdash; this doesn't move the 5-point score, so it can hide behind an otherwise-complete-looking group.` : `No component groups currently use options-style defineProps.`}</p>
   <p><strong>${topPrivate.length ? "On --_ vars:" : ""}</strong> ${topPrivate.length
     ? `the largest private-token surfaces right now are ${topPrivate.map(d => `<code class="mono">${d.compdir.split("/").pop()}</code> (${d.priv_tokens})`).join(", ")} &mdash; worth a manual look for a value that should have been public, per the corrected rule in the footer below. A high count on its own isn't a defect.`
     : ""}</p>
@@ -514,7 +517,7 @@ function tierLabel(t){ return t === "NONE" ? "unplaced" : t; }
 function render(){
   let rows = DATA.slice();
   if (activeTier !== "all") rows = rows.filter(d => d.tier === activeTier);
-  if (onlyIncomplete) rows = rows.filter(d => d.score < 5 || d.tier === "NONE" || d.variants);
+  if (onlyIncomplete) rows = rows.filter(d => d.score < 5 || d.tier === "NONE" || d.variants || d.legacy_props);
   const q = searchEl.value.trim().toLowerCase();
   if (q) rows = rows.filter(d => d.compdir.toLowerCase().includes(q));
 
@@ -542,6 +545,7 @@ function render(){
       <td class="check">${check(d.skill)}</td>
       <td class="check">${check(d.snippet)}</td>
       <td class="check">${d.variants ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : '<span class="no">–</span>'}</td>
+      <td class="check">${d.legacy_props ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : '<span class="no">–</span>'}</td>
       <td><span class="score-bar">${dots}</span></td>
     </tr>`;
   }).join("");

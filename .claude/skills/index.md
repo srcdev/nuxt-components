@@ -63,6 +63,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── composable-analytics.md           — useAnalytics: provider-agnostic trackEvent/page-view tracking (google-analytics only implemented), consent-gated, single call site for setup + firing events
 └── components/
     ├── alert-content-inner.md    — AlertContentInner: shared icon/body/dismiss molecule under AlertContent + AlertMaskedContent; app.config icon map (alertContent.icons + dismissIcon) covers all consumers
+    ├── animated-svg-text.md    — AnimatedSvgText: inline SVG stroke-draw-then-fill animation, text slot, CSS token API
     ├── accordian-core.md       — AccordianCore indexed dynamic slots (accordian-{n}-summary/icon/content), exclusive-open grouping
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
     ├── hero-text.md            — HeroText props, usage patterns, styling
