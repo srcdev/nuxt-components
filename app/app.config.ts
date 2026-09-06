@@ -1,4 +1,10 @@
-import type { SemanticTheme, DisplayPromptTheme, DisplayToastTheme, DisplayToastPosition, DisplayToastAlignment } from "./types/components";
+import type {
+  SemanticTheme,
+  DisplayPromptTheme,
+  DisplayToastTheme,
+  DisplayToastPosition,
+  DisplayToastAlignment,
+} from "./types/components";
 
 export default defineAppConfig({
   srcdev: {
@@ -39,6 +45,9 @@ export default defineAppConfig({
       allowContentScroll: false,
       theme: undefined as SemanticTheme | undefined,
       closeIcon: "bitcoin-icons:cross-filled",
+    },
+    cookieConsentBanner: {
+      theme: "info" as SemanticTheme,
     },
   },
 });

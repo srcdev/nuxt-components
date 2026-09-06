@@ -26,6 +26,11 @@ export default defineNuxtConfig({
       colourScheme: {
         enabled: true,
       },
+      // Consumer apps set NUXT_PUBLIC_GOOGLE_ANALYTICS_ID to their GA4 measurement ID
+      // (G-XXXXXXXXXX) to enable useGoogleAnalytics(); left empty it no-ops.
+      googleAnalytics: {
+        id: "",
+      },
     },
   },
   css: ["./app/assets/styles/main.css"],
@@ -36,6 +41,7 @@ export default defineNuxtConfig({
     "@nuxt/icon",
     ...(process.env.STORYBOOK ? [] : ["@nuxt/fonts"]),
     "@nuxt/image",
+    "@nuxt/scripts",
     "@pinia/nuxt",
     "@vueuse/motion/nuxt",
     "pinia-plugin-persistedstate/nuxt",

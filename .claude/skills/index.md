@@ -59,6 +59,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── composable-dialog-controls.md     — useDialogControls: single-call setup with config object, openDialog/closeDialog API, confirm/cancel callbacks
 ├── composable-anchor-scroll.md       — useAnchorScroll: smooth anchor scrolling with reduced-motion support, dynamic offset, and TabNavigation integration
 ├── composable-tooltips-guide.md      — useTooltipsGuide: sequential popover guide with auto-start, dismiss-to-advance, manual controls
+├── composable-cookie-consent.md      — useCookieConsent: unset/granted/denied state, cookie persistence, wraps @nuxt/scripts' useScriptTriggerConsent
+├── composable-google-analytics.md    — useGoogleAnalytics: GA4 via @nuxt/scripts' useScriptGoogleAnalytics, Consent Mode v2 defaultConsent, gated on useCookieConsent
 └── components/
     ├── alert-content-inner.md    — AlertContentInner: shared icon/body/dismiss molecule under AlertContent + AlertMaskedContent; app.config icon map (alertContent.icons + dismissIcon) covers all consumers
     ├── accordian-core.md       — AccordianCore indexed dynamic slots (accordian-{n}-summary/icon/content), exclusive-open grouping
@@ -106,7 +108,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── expanding-panel-classic.md — ExpandingPanelClassic: grid-template-rows animation (no Baseline-2025 dependency), same API as ExpandingPanel, cross-browser animation parity trade-off
     ├── site-header.md            — SiteHeader: PageRow + SkipLinks + ResponsiveHeader composition, #branding/#secondaryNavigation slots, dual styleClassPassthrough hooks
     ├── responsive-header.md      — ResponsiveHeader: overflow-collapsing adaptive nav, measurement-pipeline gotchas (unsized icons, vw font-size drift), full CSS token API
-    └── navigation-items.md       — NavigationItems: internal overflow-panel renderer for ResponsiveHeader, complement-visibility logic, not used standalone
+    ├── navigation-items.md       — NavigationItems: internal overflow-panel renderer for ResponsiveHeader, complement-visibility logic, not used standalone
+    └── cookie-consent-banner.md  — CookieConsentBanner: fixed non-modal Accept/Reject banner driven by useCookieConsent, message/acceptLabel/rejectLabel slots, CSS token API
 ```
 
 ## Skill file template
