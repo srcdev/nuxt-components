@@ -26,10 +26,16 @@ export default defineNuxtConfig({
       colourScheme: {
         enabled: true,
       },
-      // Consumer apps set NUXT_PUBLIC_GOOGLE_ANALYTICS_ID to their GA4 measurement ID
-      // (G-XXXXXXXXXX) to enable useGoogleAnalytics(); left empty it no-ops.
-      googleAnalytics: {
-        id: "",
+      // Consumer apps call useAnalytics() to fire events / track page views. `provider`
+      // selects the backend — only "google-analytics" is implemented today, but call sites
+      // never reference a provider directly, so adding a second one later is additive.
+      // Set NUXT_PUBLIC_ANALYTICS_GOOGLE_ANALYTICS_ID to a GA4 measurement ID (G-XXXXXXXXXX)
+      // to enable it; left empty it no-ops.
+      analytics: {
+        provider: "google-analytics",
+        googleAnalytics: {
+          id: "",
+        },
       },
     },
   },

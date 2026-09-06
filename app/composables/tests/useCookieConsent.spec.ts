@@ -79,7 +79,7 @@ describe("useCookieConsent", () => {
     expect(revokeSpy).toHaveBeenCalled();
   });
 
-  it("exposes the raw trigger for useGoogleAnalytics to consume", () => {
+  it("exposes the raw trigger for useAnalytics to consume", () => {
     const { trigger } = useCookieConsent();
     expect(trigger).toBeTruthy();
     expect(typeof trigger.accept).toBe("function");

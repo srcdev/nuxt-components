@@ -60,7 +60,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── composable-anchor-scroll.md       — useAnchorScroll: smooth anchor scrolling with reduced-motion support, dynamic offset, and TabNavigation integration
 ├── composable-tooltips-guide.md      — useTooltipsGuide: sequential popover guide with auto-start, dismiss-to-advance, manual controls
 ├── composable-cookie-consent.md      — useCookieConsent: unset/granted/denied state, cookie persistence, wraps @nuxt/scripts' useScriptTriggerConsent
-├── composable-google-analytics.md    — useGoogleAnalytics: GA4 via @nuxt/scripts' useScriptGoogleAnalytics, Consent Mode v2 defaultConsent, gated on useCookieConsent
+├── composable-analytics.md           — useAnalytics: provider-agnostic trackEvent/page-view tracking (google-analytics only implemented), consent-gated, single call site for setup + firing events
 └── components/
     ├── alert-content-inner.md    — AlertContentInner: shared icon/body/dismiss molecule under AlertContent + AlertMaskedContent; app.config icon map (alertContent.icons + dismissIcon) covers all consumers
     ├── accordian-core.md       — AccordianCore indexed dynamic slots (accordian-{n}-summary/icon/content), exclusive-open grouping

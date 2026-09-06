@@ -2,7 +2,7 @@
 
 ## Overview
 
-`useCookieConsent` tracks the visitor's cookie-consent decision (`unset` / `granted` / `denied`), persists it in a `privacy-notice-consent` cookie, and wraps `@nuxt/scripts`' `useScriptTriggerConsent()` gate so any consent-dependent script (Google Analytics via [[composable-google-analytics]], or anything else added later) can be wired to it.
+`useCookieConsent` tracks the visitor's cookie-consent decision (`unset` / `granted` / `denied`), persists it in a `privacy-notice-consent` cookie, and wraps `@nuxt/scripts`' `useScriptTriggerConsent()` gate so any consent-dependent script (Google Analytics via [[composable-analytics]], or anything else added later) can be wired to it.
 
 **This composable ships inside the `srcdev-nuxt-components` layer** (`app/composables/useCookieConsent.ts`). Consuming apps get it via Nuxt's layer auto-import — **do not create a local copy** in the consuming app.
 
@@ -57,7 +57,7 @@ export function useCookieConsent() {
 ### Key rules
 
 - **`useScriptTriggerConsent()` is called once at module scope**, mirroring `@nuxt/scripts`' own documented pattern — it's a single shared gate for the app's lifetime, not a fresh instance per call-site. `useCookie()` is read fresh inside the function body on every call instead, which stays SSR-request-safe (Nuxt dedupes `useCookie()` by key within a single request).
-- **`status` is the public read API.** `trigger` is exposed only so `useGoogleAnalytics` (or another consent-gated script composable) can pass it straight into `scriptOptions.trigger` — don't read/mutate `trigger` directly from app code, use `status`/`acceptAll`/`rejectAll`.
+- **`status` is the public read API.** `trigger` is exposed only so `useAnalytics` (or another consent-gated script composable) can pass it straight into `scriptOptions.trigger` — don't read/mutate `trigger` directly from app code, use `status`/`acceptAll`/`rejectAll`.
 - A prior "granted" cookie is replayed into the trigger on init, since the in-memory trigger resets on every full page load but the cookie doesn't.
 
 ## Usage
@@ -75,4 +75,4 @@ To let a user change their mind later (e.g. a "cookie preferences" link in the f
 ## Notes
 
 - Cookie name `privacy-notice-consent` is fixed by the layer, not configurable per app.
-- This composable only tracks the yes/no decision — it does not itself load any script. See [[composable-google-analytics]] for the GA4 integration that consumes `trigger`.
+- This composable only tracks the yes/no decision — it does not itself load any script. See [[composable-analytics]] for the GA4 integration that consumes `trigger`.

@@ -2,7 +2,7 @@
 
 ## Overview
 
-Fixed, non-modal banner shown while cookie consent is undecided (`useCookieConsent().status === 'unset'`). Accept/Reject buttons call `acceptAll()`/`rejectAll()` on [[composable-cookie-consent]] directly — no `v-model`, no emits to wire up. Pair with [[composable-google-analytics]] (or any other consent-gated script) which reads the same consent state.
+Fixed, non-modal banner shown while cookie consent is undecided (`useCookieConsent().status === 'unset'`). Accept/Reject buttons call `acceptAll()`/`rejectAll()` on [[composable-cookie-consent]] directly — no `v-model`, no emits to wire up. Pair with [[composable-analytics]] (or any other consent-gated script) which reads the same consent state.
 
 **Location**: `app/components/01.atoms/cookie-consent-banner/CookieConsentBanner.vue`
 
@@ -44,13 +44,13 @@ Per [[feedback_i18n_required]] in consuming apps, always fill these slots with `
 
 ## Basic usage
 
-Register once, in the app's default layout, alongside `DisplayToastProvider` and a call to `useGoogleAnalytics()`:
+Register once, in the app's default layout, alongside `DisplayToastProvider` and a call to `useAnalytics()`:
 
 ```vue
 <!-- layouts/default.vue -->
 <script setup lang="ts">
 const { t } = useI18n();
-useGoogleAnalytics();
+useAnalytics();
 </script>
 
 <template>

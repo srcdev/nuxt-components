@@ -2,7 +2,7 @@ import type { CookieConsentStatus } from "~/types/components";
 
 // Singleton, same pattern @nuxt/scripts itself documents for
 // useScriptTriggerConsent (a single shared gate for the app's lifetime, not a
-// fresh instance per call-site). This is what useGoogleAnalytics()'s
+// fresh instance per call-site). This is what useAnalytics()'s
 // `trigger` option is wired to.
 //
 // Built lazily on first call rather than at module scope — module-scope
@@ -47,7 +47,7 @@ export function useCookieConsent() {
     acceptAll,
     rejectAll,
     // Internal API: pass straight into useScriptGoogleAnalytics's
-    // scriptOptions.trigger (see useGoogleAnalytics()). Not for consuming
+    // scriptOptions.trigger (see useAnalytics()). Not for consuming
     // app code to read/mutate directly — use status/acceptAll/rejectAll.
     trigger,
   };
