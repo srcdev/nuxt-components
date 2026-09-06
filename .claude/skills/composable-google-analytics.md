@@ -60,9 +60,9 @@ export const useGoogleAnalytics = () => {
     return;
   }
 
-  const { trigger } = useCookieConsent();
+  const { status, trigger } = useCookieConsent();
 
-  useScriptGoogleAnalytics({
+  const { consent } = useScriptGoogleAnalytics({
     id,
     scriptOptions: { trigger },
     defaultConsent: {
@@ -72,13 +72,31 @@ export const useGoogleAnalytics = () => {
       analytics_storage: "denied",
     },
   });
+
+  // trigger only gates whether gtag.js *loads* — consent.update() is the separate API that
+  // actually reports the visitor's decision back to gtag.js for every hit it sends.
+  watch(
+    status,
+    (value) => {
+      if (value === "unset" || !consent) return;
+      const granted = value === "granted";
+      consent.update({
+        ad_storage: granted ? "granted" : "denied",
+        ad_user_data: granted ? "granted" : "denied",
+        ad_personalization: granted ? "granted" : "denied",
+        analytics_storage: granted ? "granted" : "denied",
+      });
+    },
+    { immediate: true }
+  );
 };
 ```
 
 ### Key rules
 
 - **`useRuntimeConfig()` inside the function body**, not module scope — same reasoning as `useWhatsApp` (see [[composable-whatsapp]]).
-- **`defaultConsent` is all `"denied"`** — this is what makes the script Consent Mode v2 compliant: gtag.js can load (if triggered) but won't set cookies or send identifiable pings until `useCookieConsent().acceptAll()` calls `trigger.accept()`, which flips consent to granted via `@nuxt/scripts`' own consent-update wiring.
+- **`defaultConsent` is all `"denied"`** — sets the initial Consent Mode v2 state before gtag.js has any real signal. `trigger` (passed to `scriptOptions.trigger`) only controls when the script *loads*; it does **not** itself update the Consent Mode signals. Without the `consent.update()` watcher, hits fire successfully once loaded but stay tagged as denied forever, which GA4 excludes from standard reporting — this was a real bug (hits visible in Network, "no data received" in the GA4 dashboard) until the watcher was added.
+- The `watch(status, ..., { immediate: true })` also covers a returning visitor whose `cookie-consent` cookie already says "granted" on this page load, before any click happens.
 - Does not return anything — it's a side-effecting setup call, not a value composable. Read GA-related state (if ever needed) via `useCookieConsent()` instead.
 
 ## Notes
