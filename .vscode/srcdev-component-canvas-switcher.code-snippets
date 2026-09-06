@@ -1,0 +1,9 @@
+{
+  "SRCDEV CanvasSwitcher": {
+    "description": "CanvasSwitcher — v-model:canvas-name icon button group for MediaCanvas preview widths",
+    "scope": "vue,html",
+    "body": [
+      "<CanvasSwitcher v-model:canvas-name=\"${1:canvasName}\" />"
+    ]
+  }
+}

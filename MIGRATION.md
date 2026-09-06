@@ -24,6 +24,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | ScrollRevealFrame | `animations/scroll-reveal-frame/ScrollRevealFrame.vue` | ☐ | ☐ |
 | ScrollRevealImage | `animations/scroll-reveal-image/ScrollRevealImage.vue` | ☐ | ☐ |
 | BannerVideo | `banner-video/BannerVideo.vue` | ☐ | ☐ |
+| CanvasSwitcher | `canvas-switcher/CanvasSwitcher.vue` | ✅ | ✅ `canvas-switcher` |
 | CardCore | `card/CardCore.vue` | ✅ | ☐ |
 | ContentColumns2 | `content-wrappers/content-columns-2/ContentColumns2.vue` | ☐ | ☐ |
 | ContentWidth | `content-wrappers/content-width/ContentWidth.vue` | ☐ | ☐ |
@@ -175,7 +176,6 @@ These components still live in the root `app/components/` folder and need to be 
 | Component | File | Notes |
 |---|---|---|
 | AlertMaskCore | `alert-mask/AlertMaskCore.vue` | SVG mask utility — may stay internal |
-| CanvasSwitcher | `canvas-switcher/CanvasSwitcher.vue` | |
 | CarouselBasic | `carousels/CarouselBasic.vue` | |
 | CarouselFlip | `carousels/CarouselFlip.vue` | |
 | CarouselInfinite | `carousels/CarouselInfinite.vue` | |
