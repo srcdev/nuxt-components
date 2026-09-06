@@ -23,6 +23,23 @@ token-rename pass, not a redesign.
 Geometry (`--input-toggle-*`, `--form-element-*`) is shared across every `05.forms` component and
 untouched by this — see `theming-form-geometry-tokens.md`.
 
+### Track width
+
+`--toggle-switch-track-width` overrides the track's width directly. Left unset, the track derives
+its width from the shared `--input-toggle-*`/`--form-element-*` geometry tokens so it always scales
+with `--input-toggle-symbol-size` — resize the thumb and the track resizes to match, no separate
+width to keep in sync:
+
+```css
+.my-compact-toggle {
+  --input-toggle-symbol-size: 2.2rem;
+  /* Track width now follows automatically — no --toggle-switch-track-width override needed. */
+}
+```
+
+Only set `--toggle-switch-track-width` if you need a width the formula doesn't produce (e.g. a
+fixed width independent of symbol size).
+
 > Five private locals (`--_icon-on-opacity`, `--_icon-off-opacity`, `--_symbol-background-color`,
 > `--_symbol-margin-inline-start`, `--_symbol-checked-offset`) were removed during this migration —
 > declared but never actually read by any property in the component, confirmed by grep. Not part

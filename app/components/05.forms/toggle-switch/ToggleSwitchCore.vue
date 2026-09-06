@@ -132,6 +132,23 @@ const toggleSwitchValue = () => {
 
     .symbol-wrapper {
       /* Geometry */
+
+      /* Track width has no direct public token — it's derived from the same geometry tokens
+         that size the thumb, so the track always scales with --input-toggle-symbol-size instead
+         of clipping/floating it. Breakdown at the default 0.1rem tokens (= 72px total):
+         2×symbol-size (6rem) + 2×form-element-border-width (0.2rem, wrapper border) +
+         2×wrapper-padding (0.2rem) + 3×symbol-outline-width (0.3rem) +
+         3×symbol-border-width (0.3rem) + 2×symbol-margin (0.2rem). Override
+         --toggle-switch-track-width directly if you need a value the formula doesn't produce. */
+      --_track-width: var(
+        --toggle-switch-track-width,
+        calc(
+          (2 * var(--input-toggle-symbol-size)) + (2 * var(--form-element-border-width)) +
+            (2 * var(--input-toggle-wrapper-padding)) + (3 * var(--input-toggle-symbol-outline-width)) +
+            (3 * var(--input-toggle-symbol-border-width)) + (2 * var(--input-toggle-symbol-margin))
+        )
+      );
+
       display: inline-flex;
       align-items: center;
       justify-content: start;
@@ -148,7 +165,7 @@ const toggleSwitchValue = () => {
       border: var(--form-element-border-width) solid var(--_border);
       outline: var(--form-element-outline-width) solid transparent;
       border-radius: 100vw;
-      width: 72px;
+      width: var(--_track-width);
       padding: calc(var(--input-toggle-wrapper-padding) + var(--input-toggle-symbol-outline-width));
 
       &:hover {

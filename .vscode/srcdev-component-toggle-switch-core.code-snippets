@@ -1,0 +1,13 @@
+{
+  "SRCDEV ToggleSwitchCore": {
+    "description": "ToggleSwitchCore — bare toggle switch (no label, use ToggleSwitchWithLabel for that)",
+    "scope": "vue,html",
+    "body": [
+      "<ToggleSwitchCore",
+      "  v-model=\"$1modelValue\"",
+      "  id=\"$2toggle-id\"",
+      "  name=\"$3toggleName\"",
+      "/>"
+    ]
+  }
+}

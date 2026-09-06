@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import StorybookComponent from "../ToggleSwitchCore.vue";
 import type { FormUiTheme } from "~/types/forms/types.forms.d";
 
@@ -17,6 +17,7 @@ interface ToggleSwitchCoreStoryArgs {
   useCustomIcons: boolean;
   iconOnContent: string;
   iconOffContent: string;
+  symbolSize: string;
 }
 
 export default {
@@ -126,6 +127,15 @@ export default {
         category: "Icons",
       },
     },
+    symbolSize: {
+      control: { type: "select" },
+      options: ["2rem", "2.2rem", "2.4rem", "3rem", "3.6rem"],
+      description:
+        "`--input-toggle-symbol-size` — thumb size. Track width has no separate control: it's derived from this token (see ToggleSwitchCore's `--_track-width` comment), so it scales automatically.",
+      table: {
+        category: "Styling",
+      },
+    },
   },
 } as Meta<ToggleSwitchCoreStoryArgs>;
 
@@ -134,7 +144,10 @@ const Template: StoryFn<ToggleSwitchCoreStoryArgs> = (_args, { argTypes }) => ({
   props: Object.keys(argTypes),
   setup() {
     const modelValue = ref(false);
-    return { args: _args, modelValue };
+    const cssTokenStyle = computed(() => ({
+      "--input-toggle-symbol-size": _args.symbolSize,
+    }));
+    return { args: _args, modelValue, cssTokenStyle };
   },
   template: `
     <StorybookComponent
@@ -149,6 +162,7 @@ const Template: StoryFn<ToggleSwitchCoreStoryArgs> = (_args, { argTypes }) => ({
       :theme="args.theme"
       :round="args.round"
       :aria-describedby="args.ariaDescribedby"
+      :style="cssTokenStyle"
     >
       <template v-if="args.useCustomIcons" #iconOn>
         <span v-html="args.iconOnContent"></span>
@@ -178,6 +192,7 @@ Default.args = {
   useCustomIcons: false,
   iconOnContent: "✓",
   iconOffContent: "✗",
+  symbolSize: "3rem",
 };
 
 export const WithCustomIcons = Template.bind({});
