@@ -32,3 +32,7 @@ test-results/
 .claude/settings.local.json
 # Claude Code session/memory data (machine-specific, generated at runtime)
 .claude/projects/
+
+# Component Ledger — regenerated build output, not source
+.claude/component-ledger/audit.json
+.claude/component-ledger/output.html
