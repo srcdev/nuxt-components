@@ -185,7 +185,6 @@ These components still live in the root `app/components/` folder and need to be 
 | DeepExpandingMenu | `deep-expanding-menu/DeepExpandingMenu.vue` | |
 | DeepExpandingMenuOld | `deep-expanding-menu/DeepExpandingMenuOld.vue` | Likely deprecated — review before migrating |
 | DisplayBanner | `display-banner/DisplayBanner.vue` | |
-| DisplayDetailsCore | `display-details/DisplayDetailsCore.vue` | |
 | DisplayThemeSwitch | `display-theme-switch/DisplayThemeSwitch.vue` | |
 | DisplayTooltip | `display-tooltip/DisplayTooltip.vue` | |
 | DisplayTooltipDefined | `display-tooltip/DisplayTooltipDefined.vue` | |
