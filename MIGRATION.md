@@ -27,6 +27,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | BannerVideo | `banner-video/BannerVideo.vue` | ☐ | ☐ |
 | CanvasSwitcher | `canvas-switcher/CanvasSwitcher.vue` | ✅ | ✅ `canvas-switcher` |
 | CardCore | `card/CardCore.vue` | ✅ | ☐ |
+| ClippedPanel | `clipped-panel/ClippedPanel.vue` | ✅ | ✅ `clipped-panel` |
 | ContentColumns2 | `content-wrappers/content-columns-2/ContentColumns2.vue` | ☐ | ☐ |
 | ContentWidth | `content-wrappers/content-width/ContentWidth.vue` | ☐ | ☐ |
 | LayoutGridByCols | `content-wrappers/layout-grid/layout-grid-by-cols/` | ☐ | ☐ |
@@ -180,7 +181,6 @@ These components still live in the root `app/components/` folder and need to be 
 | CarouselBasic | `carousels/CarouselBasic.vue` | |
 | CarouselFlip | `carousels/CarouselFlip.vue` | |
 | CarouselInfinite | `carousels/CarouselInfinite.vue` | |
-| ClippedPanel | `clipped-panels/ClippedPanel.vue` | |
 | ContainerGlowCore | `container-glow/ContainerGlowCore.vue` | |
 | DeepExpandingMenu | `deep-expanding-menu/DeepExpandingMenu.vue` | |
 | DeepExpandingMenuOld | `deep-expanding-menu/DeepExpandingMenuOld.vue` | Likely deprecated — review before migrating |

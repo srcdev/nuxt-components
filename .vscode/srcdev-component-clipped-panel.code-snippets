@@ -1,0 +1,23 @@
+{
+  "SRCDEV ClippedPanel Basic": {
+    "description": "ClippedPanel — fixed-size notched/cutout shape panel",
+    "scope": "vue,html",
+    "body": [
+      "<ClippedPanel variant=\"$1square\">",
+      "  $0",
+      "</ClippedPanel>"
+    ]
+  },
+  "SRCDEV ClippedPanel Custom Colours": {
+    "description": "ClippedPanel with background/outline colour overrides",
+    "scope": "vue,html",
+    "body": [
+      "<ClippedPanel",
+      "  variant=\"$1square\"",
+      "  style=\"--clipped-panel-background-colour: $2#fef3e7; --clipped-panel-outline-colour: $3#b5651d;\"",
+      ">",
+      "  $0",
+      "</ClippedPanel>"
+    ]
+  }
+}
