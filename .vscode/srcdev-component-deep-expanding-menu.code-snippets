@@ -1,0 +1,9 @@
+{
+  "SRCDEV DeepExpandingMenu Basic": {
+    "description": "DeepExpandingMenu — anchor-positioned popover nav panels",
+    "scope": "vue,html",
+    "body": [
+      "<DeepExpandingMenu :nav-links=\"$1navLinks\" />"
+    ]
+  }
+}

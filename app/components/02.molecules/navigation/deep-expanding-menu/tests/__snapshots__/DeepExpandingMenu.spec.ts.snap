@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DeepExpandingMenu > renders correct HTML structure 1`] = `
+"<nav class="deep-expanding-menu">
+  <div class="inner"><a href="/" class="navigation-link">Home</a>
+    <div class="navigation-group" style="--_anchor-name: --anchor-v-0-0-1;"><button popovertarget="popovertarget-v-0-0-1" class="navigation-group-toggle"><span>Services</span><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></button>
+      <div id="popovertarget-v-0-0-1" class="navigation-group-panel" popover="" role="menu">
+        <h4 class="page-heading-4 mb-6">Our services</h4>
+        <ul class="navigation-group-list">
+          <li class="navigation-group-item"><a href="/services/haircuts" class="navigation-group-link">Haircuts</a></li>
+          <li class="navigation-group-item"><a href="/services/colouring" class="navigation-group-link">Colouring</a></li>
+        </ul>
+      </div>
+    </div><a href="/contact" class="navigation-link">Contact</a>
+  </div>
+</nav>"
+`;

@@ -4,13 +4,13 @@
       <template v-for="(link, key) in navLinks" :key="key">
         <NuxtLink v-if="link.path" :to="link.path" class="navigation-link">{{ link.name }}</NuxtLink>
 
-        <div v-else ref="detailsRef" class="navigation-group" :style="`--_anchor-name: --anchor-nav-1-${key};`">
-          <button :popovertarget="`popovertarget-nav-1-${key}`" class="navigation-group-toggle">
+        <div v-else class="navigation-group" :style="`--_anchor-name: --anchor-${uid}-${key};`">
+          <button :popovertarget="`popovertarget-${uid}-${key}`" class="navigation-group-toggle">
             <span>{{ link.name }}</span>
             <Icon name="bi:caret-down-fill" class="icon" />
           </button>
 
-          <div :id="`popovertarget-nav-1-${key}`" class="navigation-group-panel" popover role="menu">
+          <div :id="`popovertarget-${uid}-${key}`" class="navigation-group-panel" popover role="menu">
             <h4 class="page-heading-4 mb-6">{{ link.childLinksTitle }}</h4>
             <ul class="navigation-group-list">
               <li v-for="childLink in link.childLinks" :key="childLink.name" class="navigation-group-item">
@@ -25,27 +25,24 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderNavItem } from "../../types/components";
-const props = defineProps({
-  tag: {
-    type: String,
-    default: "nav",
-    validator(value: string) {
-      return ["div", "section", "nav", "ul", "ol"].includes(value);
-    },
-  },
-  navLinks: {
-    type: Array as PropType<ResponsiveHeaderNavItem[]>,
-    default: () => [],
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+import type { ResponsiveHeaderNavItem } from "~/types/components";
+
+interface Props {
+  tag?: "div" | "section" | "nav" | "ul" | "ol";
+  navLinks?: ResponsiveHeaderNavItem[];
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  tag: "nav",
+  navLinks: () => [],
+  styleClassPassthrough: () => [],
 });
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-// const detailsRef = useTemplateRef('detailsRef');
+
+// Scopes anchor-name/popovertarget ids so multiple instances on one page don't collide.
+const uid = useId();
 
 watch(
   () => props.styleClassPassthrough,
@@ -60,19 +57,17 @@ watch(
   @layer deep-expanding-menu-setup {
     @position-try --anchor-left {
       inset: auto;
-      top: calc(anchor(bottom) + 10px);
-      left: calc(anchor(left) + 10px);
+      top: calc(anchor(bottom) + 1rem);
+      left: calc(anchor(left) + 1rem);
     }
 
     @position-try-fallbacks --anchor-right {
       inset: auto;
-      top: calc(anchor(bottom) + 10px);
-      right: calc(anchor(right) + 10px);
+      top: calc(anchor(bottom) + 1rem);
+      right: calc(anchor(right) + 1rem);
     }
 
     .deep-expanding-menu {
-      --_gap-between-top-level-items: 24px;
-
       container-type: inline-size;
       display: grid;
       grid-template-areas: "element-stack";
@@ -80,28 +75,25 @@ watch(
       .inner {
         grid-area: element-stack;
         display: flex;
-        gap: var(--_gap-between-top-level-items);
+        gap: var(--deep-expanding-menu-gap, 2.4rem);
         align-items: center;
 
         .navigation-link,
         .navigation-group-toggle {
           all: unset;
-          border-bottom: 2px solid transparent;
-          padding-block: 8px;
+          border-bottom: var(--deep-expanding-menu-link-border-width, 0.2rem) solid transparent;
+          padding-block: var(--deep-expanding-menu-link-padding-block, 0.8rem);
 
           transition: border-color 200ms;
 
-          &:hover {
-            cursor: pointer;
-            border-color: light-dark(var(--blue-10), var(--slate-00));
-          }
-
-          &:focus {
-            border-color: light-dark(var(--blue-10), var(--slate-00));
-          }
-
+          &:hover,
+          &:focus,
           &:focus-visible {
-            border-color: light-dark(var(--blue-10), var(--slate-00));
+            cursor: pointer;
+            border-color: var(
+              --deep-expanding-menu-link-border-colour-hover,
+              light-dark(var(--blue-10), var(--slate-00))
+            );
           }
         }
 
@@ -114,11 +106,11 @@ watch(
 
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 1.2rem;
 
             .icon {
               display: block;
-              font-size: 1.2rem;
+              font-size: var(--deep-expanding-menu-icon-size, 1.2rem);
 
               transform: var(--_icon-transform);
               transition: transform 200ms;
@@ -130,9 +122,8 @@ watch(
             position: absolute;
             position-anchor: var(--_anchor-name);
             margin: 0;
-            /* inset: auto; */
-            top: calc(anchor(bottom) + 10px);
-            left: calc(anchor(left) + 0px);
+            top: calc(anchor(bottom) + 1rem);
+            left: calc(anchor(left) + 0rem);
 
             opacity: 0;
             transition:
@@ -141,13 +132,14 @@ watch(
               overlay 200ms;
             transition-behavior: allow-discrete;
 
-            width: min(100%, 50vw);
+            width: var(--deep-expanding-menu-panel-width, min(100%, 50vw));
 
-            background-color: white;
-            border: 1px solid black;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 12px;
+            background-color: var(--deep-expanding-menu-panel-background-colour, white);
+            border: var(--deep-expanding-menu-panel-border-width, 0.1rem) solid
+              var(--deep-expanding-menu-panel-border-colour, black);
+            border-radius: var(--deep-expanding-menu-panel-border-radius, 1.2rem);
+            box-shadow: var(--deep-expanding-menu-panel-shadow, 0 0 1rem rgba(0, 0, 0, 0.1));
+            padding: var(--deep-expanding-menu-panel-padding, 1.2rem);
             overflow: clip;
 
             &:popover-open {
@@ -161,36 +153,33 @@ watch(
             }
 
             h4 {
-              color: var(--slate-10);
+              color: var(--deep-expanding-menu-panel-heading-colour, var(--slate-10));
             }
 
             .navigation-group-list {
               display: grid;
-              grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-              gap: 12px;
+              grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+              gap: var(--deep-expanding-menu-panel-list-gap, 1.2rem);
               padding-inline-start: 0;
-              margin-block-end: 8px;
+              margin-block-end: 0.8rem;
 
               .navigation-group-item {
                 display: block;
 
                 a.navigation-group-link {
                   display: inline-block;
-                  color: var(--slate-10);
+                  color: var(--deep-expanding-menu-group-link-colour, var(--slate-10));
                   text-decoration: none;
-                  padding-block: 8px;
+                  padding-block: 0.8rem;
 
-                  border-bottom: 2px solid transparent;
+                  border-bottom: var(--deep-expanding-menu-link-border-width, 0.2rem) solid transparent;
 
                   transition: border-color 200ms;
 
-                  &:hover {
-                    cursor: pointer;
-                    border-color: var(--slate-10);
-                  }
-
+                  &:hover,
                   &:focus-visible {
-                    border-color: var(--slate-10);
+                    cursor: pointer;
+                    border-color: var(--deep-expanding-menu-group-link-border-colour-hover, var(--slate-10));
                   }
                 }
               }

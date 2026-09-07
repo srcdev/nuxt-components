@@ -1,0 +1,9 @@
+{
+  "SRCDEV DeepExpandingMenuClassic Basic": {
+    "description": "DeepExpandingMenuClassic — <details>-based fallback nav",
+    "scope": "vue,html",
+    "body": [
+      "<DeepExpandingMenuClassic :nav-links=\"$1navLinks\" />"
+    ]
+  }
+}
