@@ -110,7 +110,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── site-header.md            — SiteHeader: PageRow + SkipLinks + ResponsiveHeader composition, #branding/#secondaryNavigation slots, dual styleClassPassthrough hooks
     ├── responsive-header.md      — ResponsiveHeader: overflow-collapsing adaptive nav, measurement-pipeline gotchas (unsized icons, vw font-size drift), full CSS token API
     ├── navigation-items.md       — NavigationItems: internal overflow-panel renderer for ResponsiveHeader, complement-visibility logic, not used standalone
-    └── cookie-consent-banner.md  — CookieConsentBanner: fixed non-modal Accept/Reject banner driven by useCookieConsent, message/acceptLabel/rejectLabel slots, CSS token API
+    ├── cookie-consent-banner.md  — CookieConsentBanner: fixed non-modal Accept/Reject banner driven by useCookieConsent, message/acceptLabel/rejectLabel slots, CSS token API
+    └── display-banner.md         — DisplayBanner: canvas/content stacked overlay banner, conditional slot wrappers, CSS token API
 ```
 
 ## Skill file template

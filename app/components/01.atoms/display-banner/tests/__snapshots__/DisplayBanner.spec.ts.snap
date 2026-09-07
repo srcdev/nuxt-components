@@ -1,0 +1,8 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DisplayBanner > renders correct HTML structure (default props) 1`] = `
+"<div class="display-banner">
+  <!--v-if-->
+  <!--v-if-->
+</div>"
+`;

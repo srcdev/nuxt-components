@@ -1,0 +1,30 @@
+{
+  "SRCDEV DisplayBanner Basic": {
+    "description": "DisplayBanner — canvas/content stacked overlay banner",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayBanner>",
+      "  <template #canvas>",
+      "    $1",
+      "  </template>",
+      "  <template #content>",
+      "    $0",
+      "  </template>",
+      "</DisplayBanner>"
+    ]
+  },
+  "SRCDEV DisplayBanner Min Height": {
+    "description": "DisplayBanner with min-height override",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayBanner style=\"--display-banner-min-height: $140rem;\">",
+      "  <template #canvas>",
+      "    $2",
+      "  </template>",
+      "  <template #content>",
+      "    $0",
+      "  </template>",
+      "</DisplayBanner>"
+    ]
+  }
+}
