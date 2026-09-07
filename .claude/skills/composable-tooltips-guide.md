@@ -89,6 +89,16 @@ await startGuide()
 | `stopGuide()` | `() => void` | Close any open popovers and stop the guide |
 | `initializePopovers()` | `() => void` | Re-scan the container for `[popover]` elements; call if popovers are added dynamically |
 
+## Example with DisplayTooltip / DisplayTooltipDefined
+
+[`DisplayTooltip`](components/display-tooltip.md) and
+[`DisplayTooltipDefined`](components/display-tooltip-defined.md) already emit the
+`[popover]`/`popovertarget`/`popovertargetaction` markup this composable expects, so no extra
+wiring is needed beyond passing their shared container's ref in. See the `GuidedTour` story in
+`DisplayTooltipDefined.stories.ts` for a full working example — it recreates the old
+`app/pages/ui/tooltips.vue` demo page (removed 2026-08-23 when Storybook became the only demo
+surface), mixing one of each component as guide steps.
+
 ## Notes
 
 - If no trigger button is found for a popover, `togglePopover(true)` is called directly as a fallback — anchor positioning may not apply in this case.

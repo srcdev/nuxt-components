@@ -43,7 +43,7 @@ export const Default: Story = {
       <div style="padding: 8rem;">
         <DisplayTooltip v-bind="args">
           <template #tooltipContent>
-            <p style="padding: 1.2rem;">This is some helpful additional information.</p>
+            <p>This is some helpful additional information.</p>
           </template>
         </DisplayTooltip>
       </div>
@@ -64,7 +64,7 @@ export const WithTriggerContent: Story = {
             <span>Delivery cost</span>
           </template>
           <template #tooltipContent>
-            <p style="padding: 1.2rem;">Free delivery on orders over £50.</p>
+            <p>Free delivery on orders over £50.</p>
           </template>
         </DisplayTooltip>
       </div>
@@ -85,7 +85,7 @@ export const CustomColours: Story = {
           style="--display-tooltip-popover-background-colour: #1a1a1a; --display-tooltip-popover-text-colour: white; --display-tooltip-popover-outline-colour: transparent;"
         >
           <template #tooltipContent>
-            <p style="padding: 1.2rem;">Overriding the public tokens via inline custom properties.</p>
+            <p>Overriding the public tokens via inline custom properties.</p>
           </template>
         </DisplayTooltip>
       </div>

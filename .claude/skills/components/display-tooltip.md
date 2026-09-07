@@ -69,4 +69,16 @@ popover width/colours/radius, and the close-button tokens `DisplayTooltipDefined
   component in this library but missing here); promoted ~20 previously-hardcoded values to public
   CSS tokens; the previously-dead `hideTooltipTrigger` ref (declared, never mutated) is now the
   `hideTrigger` prop.
+- 2026-09-07 (same day, follow-up): the initial migration carried over the original's bare,
+  under-styled look (raw `light-dark(black, white)` outline/text/background, no padding on the
+  content wrapper, no shadow) — it worked but didn't read as "a tooltip." Reworked the popover's
+  default appearance: background/text/border now use the library's neutral `--slate-*` scale
+  instead of pure black/white; `.display-tooltip-popover-content` gained default `padding`,
+  `display: flex; flex-direction: column;`, and `gap` (new `--display-tooltip-popover-padding`/
+  `-content-gap` tokens); the popover gained a default elevation `box-shadow` (new
+  `--display-tooltip-popover-shadow` token); the close button's permanent resting outline was
+  dropped in favour of a normal border, with the outline reserved for hover/focus (matching the
+  trigger button's own convention). All existing token names are unchanged — only their default
+  values and two new tokens were added, so this is non-breaking for anyone who already overrode a
+  token.
 - File: `app/components/01.atoms/display-tooltip/DisplayTooltip.vue`
