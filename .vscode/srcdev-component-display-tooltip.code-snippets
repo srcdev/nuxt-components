@@ -1,0 +1,27 @@
+{
+  "SRCDEV DisplayTooltip Basic": {
+    "description": "DisplayTooltip — anchor-positioned popover trigger",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayTooltip>",
+      "  <template #tooltipContent>",
+      "    <p>$0</p>",
+      "  </template>",
+      "</DisplayTooltip>"
+    ]
+  },
+  "SRCDEV DisplayTooltip With Trigger Content": {
+    "description": "DisplayTooltip with a triggerContent label",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayTooltip>",
+      "  <template #triggerContent>",
+      "    <span>$1</span>",
+      "  </template>",
+      "  <template #tooltipContent>",
+      "    <p>$0</p>",
+      "  </template>",
+      "</DisplayTooltip>"
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "SRCDEV DisplayTooltipDefined Basic": {
+    "description": "DisplayTooltipDefined — structured title/body/action tooltip",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayTooltipDefined",
+      "  :content-text=\"{",
+      "    tooltipTitle: { tag: 'h4', text: '$1' },",
+      "    tooltipContent: { tag: 'p', text: '$0' },",
+      "  }\"",
+      "/>"
+    ]
+  }
+}

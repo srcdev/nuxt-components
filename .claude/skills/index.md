@@ -113,7 +113,9 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── cookie-consent-banner.md  — CookieConsentBanner: fixed non-modal Accept/Reject banner driven by useCookieConsent, message/acceptLabel/rejectLabel slots, CSS token API
     ├── display-banner.md         — DisplayBanner: canvas/content stacked overlay banner, conditional slot wrappers, CSS token API
     ├── deep-expanding-menu.md         — DeepExpandingMenu: anchor-positioned popover nav panels, browser support caveat, CSS token API
-    └── deep-expanding-menu-classic.md — DeepExpandingMenuClassic: <details>-based fallback nav, click-outside close, CSS token API
+    ├── deep-expanding-menu-classic.md — DeepExpandingMenuClassic: <details>-based fallback nav, click-outside close, CSS token API
+    ├── display-tooltip.md         — DisplayTooltip: anchor-positioned popover trigger, browser support caveat, CSS token API
+    └── display-tooltip-defined.md — DisplayTooltipDefined: structured title/body/action tooltip content with close button, composes DisplayTooltip
 ```
 
 ## Skill file template
