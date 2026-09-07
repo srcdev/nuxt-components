@@ -1,0 +1,20 @@
+{
+  "SRCDEV ClipElement Basic": {
+    "description": "ClipElement — scroll-driven clip-path reveal for a single image or block",
+    "scope": "vue,html",
+    "body": [
+      "<ClipElement :max-clip=\"$1100\">",
+      "  <img src=\"$2/images/hero.jpg\" alt=\"$3Hero\" style=\"width: 100%; display: block;\" />",
+      "</ClipElement>"
+    ]
+  },
+  "SRCDEV ClipElement With Passthrough": {
+    "description": "ClipElement with styleClassPassthrough for a custom wrapper class",
+    "scope": "vue,html",
+    "body": [
+      "<ClipElement :max-clip=\"$1150\" style-class-passthrough=\"$2my-clip-wrapper\">",
+      "  $0",
+      "</ClipElement>"
+    ]
+  }
+}

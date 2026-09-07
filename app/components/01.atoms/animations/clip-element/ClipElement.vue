@@ -7,18 +7,23 @@
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
-  maxClip: {
-    type: Number,
-    default: 100,
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
-})
+interface Props {
+  /** Scroll distance (px) over which the element clips in/out. */
+  maxClip?: number;
+  styleClassPassthrough?: string | string[];
+}
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const props = withDefaults(defineProps<Props>(), {
+  maxClip: 100,
+  styleClassPassthrough: () => [],
+});
+
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 
 const container = ref(null)
 const clipElement = ref<HTMLDivElement | null>(null)

@@ -240,3 +240,33 @@ Key points:
   them in the Storybook controls panel (e.g. `"Model"`, `"Basic"`, `"Validation"`, `"Styling"`, `"Slots"`).
 - Export multiple named stories (`Default`, `WithError`, `Outlined`, etc.) when you want
   Playwright to test distinct visual states via separate story URLs.
+
+## Scroll/animation-driven effects need surrounding chrome, not just the bare component
+
+A story that renders a scroll- or timer-driven component with no other markup often fails to
+show the effect at all — not because the component is broken, but because the demo gives the
+viewer nothing to judge it against. Things that make an animated/scroll-driven effect illegible
+in isolation:
+
+- The effect resolves over a short distance/time relative to the page (e.g. a 100px scroll
+  window on an otherwise-long page) — easy to scroll straight past it.
+- The visual change is a subtle crop/shift on photographic content, where the eye has no
+  reference point to notice a boundary moving.
+- There's no indicator of *where* or *when* the effect completes.
+
+Add scaffolding around the component to fix this, rather than assuming a bigger/slower prop
+value alone solves it:
+
+- A fixed marker (a line, label) at the point in the viewport where the effect's key transition
+  happens (e.g. `position: fixed; top: 0` for a component that resolves when its own top hits
+  the viewport top).
+- A ruled/striped overlay or contrasting background behind the animated content so a boundary
+  (clip edge, wipe line, fade) is visible against it, not just a crop of photo pixels.
+- Short on-page instructions telling the viewer what to do and what to watch for ("scroll
+  slowly — the image clips in over the last 100px before the red line").
+- A second story with an exaggerated prop value (larger distance/duration) purely so the effect
+  is easy to preview without precise scrolling/timing — see `ClipElement`'s `LargeClipDistance`
+  story for the pattern (`.claude/skills/components/clip-element.md`).
+
+This is a documentation-only concern — it doesn't change the component's default props, just
+how the story demonstrates it.

@@ -23,6 +23,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | EntryAnimation | `animations/entry/EntryAnimation.vue` | ☐ | ☐ |
 | ScrollRevealFrame | `animations/scroll-reveal-frame/ScrollRevealFrame.vue` | ☐ | ☐ |
 | ScrollRevealImage | `animations/scroll-reveal-image/ScrollRevealImage.vue` | ☐ | ☐ |
+| ClipElement | `animations/clip-element/ClipElement.vue` | ✅ | ✅ `clip-element` |
 | BannerVideo | `banner-video/BannerVideo.vue` | ☐ | ☐ |
 | CanvasSwitcher | `canvas-switcher/CanvasSwitcher.vue` | ✅ | ✅ `canvas-switcher` |
 | CardCore | `card/CardCore.vue` | ✅ | ☐ |
@@ -179,7 +180,6 @@ These components still live in the root `app/components/` folder and need to be 
 | CarouselBasic | `carousels/CarouselBasic.vue` | |
 | CarouselFlip | `carousels/CarouselFlip.vue` | |
 | CarouselInfinite | `carousels/CarouselInfinite.vue` | |
-| ClipElement | `clip-element/ClipElement.vue` | |
 | ClippedPanel | `clipped-panels/ClippedPanel.vue` | |
 | ContainerGlowCore | `container-glow/ContainerGlowCore.vue` | |
 | DeepExpandingMenu | `deep-expanding-menu/DeepExpandingMenu.vue` | |
