@@ -76,6 +76,25 @@ briefly) — don't skip silently.
    variant files yourself without asking, since consumers may still import them directly; flag it
    to the user as a follow-up decision instead.
 8. **VS Code snippet** — create or update `.vscode/srcdev-component-{name}.code-snippets`.
+9. **Accessibility** — check for gaps beyond what already-passing tests would catch:
+   - Interactive controls (buttons, toggles, custom form-like widgets) have an accessible name —
+     visible text, `aria-label`, or `aria-labelledby`.
+   - Keyboard behaviour matches what's actually implemented — no keydown case that only calls
+     `event.preventDefault()` with a comment like "could add this later", and no screen-reader
+     copy (visible or `sr-only`) that describes an interaction the component doesn't actually
+     perform. Cross-check every claim in the copy against the handler that's supposed to back it.
+   - Focus is visible (`:focus-visible`, not a suppressed outline) on anything focusable.
+   - Live-updating or auto-advancing content (carousels, marquees, auto-dismissing toasts) has a
+     way to pause it, per WCAG 2.2.2 — a visible control, or pause-on-hover/focus at minimum.
+   - `prefers-reduced-motion` is respected for any animation that isn't purely decorative.
+10. **Localisation (no hardcoded consumer-facing text)** — grep the template and script for
+    user-visible string literals (button copy, `aria-label`/`aria-description` text, placeholder
+    text, empty-state messages, etc.) that aren't already props. This library has no i18n
+    framework dependency (see `MarqueeScroller`'s `playLabel`/`pauseLabel`/`ariaLabel`/
+    `ariaDescription` for the pattern) — promote any hardcoded copy to a string prop with the
+    existing English text as its default, so a consumer can pass translated strings from their own
+    i18n solution. Icon-only controls should also get an icon-override prop or slot (see
+    `playIcon`/`pauseIcon`/`toggle-icon`) alongside the label prop, not just the label.
 
 ## 4. Wrap up
 
