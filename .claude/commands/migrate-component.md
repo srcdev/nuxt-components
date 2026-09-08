@@ -24,7 +24,26 @@ Otherwise, auto-pick the next worst offender:
    - Else the lowest `score` overall — same tie-break.
 3. State which component was picked and why in one line (e.g. "Picked `input-select` — unplaced isn't the issue here, it forks a `variants/` subfolder and scores 2/5.") before doing anything else, so the user can redirect you if they'd rather do a different one next.
 
-## 2. Work the checklist
+## 2. Confirm it's still wanted
+
+Before starting the checklist, confirm with the user that this component should actually be
+migrated — a low score isn't proof it's still needed. Use AskUserQuestion with these options:
+
+- **Migrate it** (recommended default) — proceed to step 3.
+- **Leave it untouched** — skip it this run. If it was auto-picked, say so and go back to step 1
+  to pick the next worst offender instead; if the user named it explicitly, just stop.
+- **Delete it** — it's unused, superseded by another component, or otherwise no longer wanted.
+  Run the `check-component-usage` skill against the component's name first, across every consumer
+  repo, and report the results before deleting anything. A clean scan is good evidence, not proof
+  (see the skill's own caveat on dynamic `:is` usage etc.) — if it finds a real consumer, surface
+  that back to the user with an `AskUserQuestion` rather than auto-aborting or auto-proceeding;
+  the user may still want it deleted (e.g. the consumer repo is itself defunct or being retired).
+  Once confirmed, delete the component file(s) and every trace this command would otherwise have
+  created or touched for it — tests, stories, `CONSUMER-STYLING.md`, skill doc, VS Code snippet,
+  any `.claude/skills/index.md` entry, and any direct references elsewhere in the repo (e.g. a
+  `MIGRATION.md` row) — then skip the rest of this command for that component.
+
+## 3. Work the checklist
 
 Go through each point below. Skip a point only when it genuinely doesn't apply (state why,
 briefly) — don't skip silently.
@@ -58,7 +77,7 @@ briefly) — don't skip silently.
    to the user as a follow-up decision instead.
 8. **VS Code snippet** — create or update `.vscode/srcdev-component-{name}.code-snippets`.
 
-## 3. Wrap up
+## 4. Wrap up
 
 - Run the relevant test file(s) and `npx vue-tsc` (or the project's usual type-check command) to
   confirm nothing broke.
