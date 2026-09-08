@@ -1,0 +1,93 @@
+{
+  "SRCDEV MarqueeScroller Basic": {
+    "description": "MarqueeScroller — infinite horizontal logo/badge scroller with per-item slots",
+    "scope": "vue,html",
+    "body": [
+      "<MarqueeScroller",
+      "  :marquee-data=\"[",
+      "    { id: 1, content: '$1logo-a' },",
+      "    { id: 2, content: '$2logo-b' },",
+      "  ]\"",
+      "  :item-config=\"{ width: '${3:120px}', height: '${4:60px}', gap: '${5:24px}' }\"",
+      ">",
+      "  <template #1>",
+      "    $6",
+      "  </template>",
+      "  <template #2>",
+      "    $7",
+      "  </template>",
+      "</MarqueeScroller>"
+    ]
+  },
+  "SRCDEV MarqueeScroller With Controls": {
+    "description": "MarqueeScroller with the visible pause/play control button (WCAG 2.2.2)",
+    "scope": "vue,html",
+    "body": [
+      "<MarqueeScroller",
+      "  :marquee-data=\"$1items\"",
+      "  show-controls",
+      "  aria-label=\"$2Scrolling client logos\"",
+      ">",
+      "  <template v-for=\"item in $1items\" #[item.id] :key=\"item.id\">",
+      "    $3",
+      "  </template>",
+      "</MarqueeScroller>"
+    ]
+  },
+  "SRCDEV MarqueeScroller Custom Control Icon/Copy": {
+    "description": "MarqueeScroller control button with custom icons and localised aria-labels",
+    "scope": "vue,html",
+    "body": [
+      "<MarqueeScroller",
+      "  :marquee-data=\"$1items\"",
+      "  show-controls",
+      "  play-icon=\"${2:mdi:play-circle}\"",
+      "  pause-icon=\"${3:mdi:pause-circle}\"",
+      "  play-label=\"${4:Play}\"",
+      "  pause-label=\"${5:Pause}\"",
+      ">",
+      "  <template v-for=\"item in $1items\" #[item.id] :key=\"item.id\">",
+      "    $6",
+      "  </template>",
+      "</MarqueeScroller>"
+    ]
+  },
+  "SRCDEV MarqueeScroller Custom Toggle Icon Slot": {
+    "description": "MarqueeScroller with the toggle-icon slot fully replacing the control button's icon",
+    "scope": "vue,html",
+    "body": [
+      "<MarqueeScroller :marquee-data=\"$1items\" show-controls>",
+      "  <template #toggle-icon=\"{ isPaused }\">",
+      "    $2",
+      "  </template>",
+      "</MarqueeScroller>"
+    ]
+  },
+  "SRCDEV MarqueeScroller CSS Override": {
+    "description": "CSS override scaffold for MarqueeScroller — scope to a page or section class",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .marquee-scroller {",
+      "    --marquee-scroller-fade-width: ;",
+      "    --marquee-scroller-focus-outline-width: ;",
+      "    --marquee-scroller-focus-outline-offset: ;",
+      "    --marquee-scroller-item-border-colour: ;",
+      "    --marquee-scroller-item-border-width: ;",
+      "    --marquee-scroller-item-border-radius: ;",
+      "    --marquee-scroller-item-transition-duration: ;",
+      "    --marquee-scroller-group-hover-filter: ;",
+      "    --marquee-scroller-item-hover-filter: ;",
+      "    --marquee-scroller-control-offset: ;",
+      "    --marquee-scroller-control-background-colour: ;",
+      "    --marquee-scroller-control-background-colour-hover: ;",
+      "    --marquee-scroller-control-text-colour: ;",
+      "    --marquee-scroller-control-border-radius: ;",
+      "    --marquee-scroller-control-border-width: ;",
+      "    --marquee-scroller-control-padding: ;",
+      "    --marquee-scroller-control-font-size: ;",
+      "  }",
+      "}"
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`MarqueeScroller > renders correct HTML structure (all props set) 1`] = `
+"<div class="marquee-scroller reverse" role="region" aria-label="Client logos" aria-live="off" tabindex="0">
+  <div class="sr-only">Custom instructions</div><button class="control-btn" aria-label="Pause animation" type="button"><span class="iconify i-mdi:pause" aria-hidden="true"></span></button>
+  <div class="marquee-track" aria-hidden="true">
+    <div class="marquee-group">
+      <div class="item"></div>
+      <div class="item"></div>
+    </div>
+    <div class="marquee-group" aria-hidden="true">
+      <div class="item"></div>
+      <div class="item"></div>
+    </div>
+  </div>
+</div>"
+`;
+
+exports[`MarqueeScroller > renders correct HTML structure (default props) 1`] = `
+"<div class="marquee-scroller" role="region" aria-label="Scrolling content" aria-live="off" tabindex="0">
+  <div class="sr-only">Use spacebar to pause or play the animation.</div>
+  <!--v-if-->
+  <div class="marquee-track" aria-hidden="true">
+    <div class="marquee-group"></div>
+    <div class="marquee-group" aria-hidden="true"></div>
+  </div>
+</div>"
+`;
