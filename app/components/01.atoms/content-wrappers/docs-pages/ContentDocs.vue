@@ -17,7 +17,7 @@
             <h3 class="docs-nav-heading">{{ docsNavLabel }}</h3>
           </template>
           <template #content>
-            <nav class="docs-nav-list" aria-label="Docs navigation">
+            <nav class="docs-nav-list" :aria-label="docsNavAriaLabel">
               <ul>
                 <li v-for="item in docsNavItems" :key="item.to">
                   <component
@@ -53,7 +53,7 @@
             <h3 class="docs-page-nav-heading">{{ docsPageNavLabel }}</h3>
           </template>
           <template #content>
-            <nav class="docs-page-nav-list" aria-label="On this page">
+            <nav class="docs-page-nav-list" :aria-label="docsPageNavAriaLabel">
               <ul>
                 <li v-for="item in docsPageNavItems" :key="item.to">
                   <component
@@ -91,6 +91,10 @@ interface Props {
   docsPageNavItems?: DocsNavItem[];
   docsNavLabel?: string;
   docsPageNavLabel?: string;
+  /** aria-label on the docs-nav <nav> landmark — override for localisation. */
+  docsNavAriaLabel?: string;
+  /** aria-label on the page-nav <nav> landmark — override for localisation. */
+  docsPageNavAriaLabel?: string;
   panelVariant?: "modern" | "classic";
   styleClassPassthrough?: string | string[];
 }
@@ -100,6 +104,8 @@ const props = withDefaults(defineProps<Props>(), {
   docsPageNavItems: () => [],
   docsNavLabel: "Navigation",
   docsPageNavLabel: "On this page",
+  docsNavAriaLabel: "Docs navigation",
+  docsPageNavAriaLabel: "On this page",
   // Defaults to "classic" — the docs/admin nav toggle relies on contentIsOnTop on mobile, and
   // ExpandingPanel's ::details-content-based positioning silently fails on WebKit (Safari/iOS),
   // making the nav unreachable there. See AccordianCore's own variant prop and CLAUDE.md

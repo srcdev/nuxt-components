@@ -1,5 +1,9 @@
 <template>
-  <DisplayTooltip :tooltip-id="tooltipId" :style-class-passthrough="styleClassPassthrough">
+  <DisplayTooltip
+    :tooltip-id="tooltipId"
+    :trigger-aria-label="triggerAriaLabel"
+    :style-class-passthrough="styleClassPassthrough"
+  >
     <template v-if="$slots.triggerContent" #triggerContent>
       <slot name="triggerContent"></slot>
     </template>
@@ -26,9 +30,9 @@
           :popovertarget="tooltipId"
           popovertargetaction="hide"
           class="display-tooltip-close-button"
-          aria-label="Close tool tip"
+          :aria-label="closeButtonAriaLabel"
         >
-          Close
+          {{ closeButtonText }}
         </button>
       </div>
     </template>
@@ -41,12 +45,21 @@ import type { TooltipContentText } from "~/types/components";
 interface Props {
   tooltipId?: string;
   contentText?: TooltipContentText;
+  /** aria-label on the trigger button — override for localisation. */
+  triggerAriaLabel?: string;
+  /** Visible text on the close button — override for localisation. */
+  closeButtonText?: string;
+  /** aria-label on the close button — override for localisation. */
+  closeButtonAriaLabel?: string;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   tooltipId: "",
   contentText: () => ({}),
+  triggerAriaLabel: "Toggle the popover",
+  closeButtonText: "Close",
+  closeButtonAriaLabel: "Close tool tip",
   styleClassPassthrough: () => [],
 });
 

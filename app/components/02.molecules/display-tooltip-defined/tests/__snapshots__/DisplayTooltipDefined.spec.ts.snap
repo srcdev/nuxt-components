@@ -9,7 +9,7 @@ exports[`DisplayTooltipDefined > renders correct HTML structure 1`] = `
     <div class="display-tooltip-popover-content">
       <div class="popover-content-defined">
         <h4 class="tooltip-title subtitle-sm">Title</h4>
-        <p class="tooltip-body body-sm">Body copy</p><span class="tooltip-action input-value">Learn more</span><button popovertarget="nuxt-tooltip-fixed" popovertargetaction="hide" class="display-tooltip-close-button" aria-label="Close tool tip"> Close </button>
+        <p class="tooltip-body body-sm">Body copy</p><span class="tooltip-action input-value">Learn more</span><button popovertarget="nuxt-tooltip-fixed" popovertargetaction="hide" class="display-tooltip-close-button" aria-label="Close tool tip">Close</button>
       </div>
     </div>
   </div>

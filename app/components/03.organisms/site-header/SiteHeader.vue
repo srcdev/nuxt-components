@@ -2,7 +2,7 @@
   <PageRow tag="div" :variant="pageRowVariant" :style-class-passthrough="styleClassPassthrough">
     <template #default>
       <header class="site-header">
-        <nav class="home-navigation" aria-label="Home Navigation">
+        <nav class="home-navigation" :aria-label="homeNavAriaLabel">
           <SkipLinks>
             <template #homeLink>
               <slot name="branding"></slot>
@@ -17,6 +17,9 @@
           :collapse-at-main-nav-intersection="collapseAtMainNavIntersection"
           :allow-expand-on-gesture="allowExpandOnGesture"
           :style-class-passthrough="navStyleClassPassthrough"
+          :main-nav-aria-label="mainNavAriaLabel"
+          :secondary-nav-aria-label="secondaryNavAriaLabel"
+          :overflow-menu-aria-label="overflowMenuAriaLabel"
         >
           <template v-if="slots.secondaryNavigation" #secondaryNavigation>
             <slot name="secondaryNavigation"></slot>
@@ -43,6 +46,14 @@ interface Props {
   pageRowVariant?: "full" | "popout" | "content" | "inset-content";
   styleClassPassthrough?: string | string[];
   navStyleClassPassthrough?: string | string[];
+  /** aria-label on the home/branding nav landmark — override for localisation. */
+  homeNavAriaLabel?: string;
+  /** Forwarded to ResponsiveHeader's mainNavAriaLabel — override for localisation. */
+  mainNavAriaLabel?: string;
+  /** Forwarded to ResponsiveHeader's secondaryNavAriaLabel — override for localisation. */
+  secondaryNavAriaLabel?: string;
+  /** Forwarded to ResponsiveHeader's overflowMenuAriaLabel — override for localisation. */
+  overflowMenuAriaLabel?: string;
 }
 
 withDefaults(defineProps<Props>(), {
@@ -58,6 +69,10 @@ withDefaults(defineProps<Props>(), {
   pageRowVariant: "content",
   styleClassPassthrough: () => [],
   navStyleClassPassthrough: () => [],
+  homeNavAriaLabel: "Home Navigation",
+  mainNavAriaLabel: "Main navigation",
+  secondaryNavAriaLabel: "Secondary navigation",
+  overflowMenuAriaLabel: "Overflow navigation menu",
 });
 
 const slots = useSlots();

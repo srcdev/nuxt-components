@@ -13,6 +13,7 @@ current page).
 |------|------|---------|----------|
 | `items` | `BreadcrumbItem[]` | — | **yes** |
 | `separator` | `string` | `"/"` | no |
+| `ariaLabel` | `string` | `"Breadcrumb"` | no — override for localisation |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | no |
 
 `BreadcrumbItem` is exported from `~/types/components/breadcrumb` (and re-exported from

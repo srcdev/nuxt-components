@@ -1,0 +1,30 @@
+{
+  "SRCDEV TabNavigation Basic": {
+    "description": "TabNavigation with route/hash links",
+    "scope": "vue,html",
+    "body": [
+      "<TabNavigation :nav-item-data=\"$1navData\" nav-align=\"${2:center}\" />"
+    ]
+  },
+  "SRCDEV TabNavigation Localised": {
+    "description": "TabNavigation with a localised aria-label",
+    "scope": "vue,html",
+    "body": [
+      "<TabNavigation :nav-item-data=\"$1navData\" aria-label=\"${2:Site navigation}\" />"
+    ]
+  },
+  "SRCDEV TabNavigation Nav Data Script": {
+    "description": "navItemData for TabNavigation",
+    "scope": "typescript,vue",
+    "body": [
+      "import type { NavItemData } from \"srcdev-nuxt-components\";",
+      "",
+      "const $1navData: NavItemData = {",
+      "  main: [",
+      "    { text: \"$2Home\", href: \"$3/\" },",
+      "    { text: \"$4Overview\", href: \"$5#overview\" },",
+      "  ],",
+      "};"
+    ]
+  }
+}

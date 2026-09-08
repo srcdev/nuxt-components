@@ -7,7 +7,7 @@
         popovertargetaction="toggle"
         class="display-tooltip-trigger-button"
         :class="{ hide: hideTrigger }"
-        aria-label="Toggle the popover"
+        :aria-label="triggerAriaLabel"
       >
         <Icon name="fa7-solid:circle-question" class="display-tooltip-trigger-icon" aria-hidden="true" />
       </button>
@@ -24,12 +24,15 @@
 interface Props {
   tooltipId?: string;
   hideTrigger?: boolean;
+  /** aria-label on the trigger button — override for localisation. */
+  triggerAriaLabel?: string;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   tooltipId: "",
   hideTrigger: false,
+  triggerAriaLabel: "Toggle the popover",
   styleClassPassthrough: () => [],
 });
 

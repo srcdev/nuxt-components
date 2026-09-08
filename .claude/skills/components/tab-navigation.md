@@ -40,6 +40,7 @@ interface NavItemData {
 | `nav-item-data` | `NavItemData` | required | Navigation link data — only `main` key is read |
 | `nav-align` | `"left" \| "center" \| "right"` | `"left"` | Positions the tab list within the nav container |
 | `anchor-scroll-offset` | `number \| (() => number)` | — | Pixel offset subtracted from scroll target; pass a getter so it is re-evaluated at click time |
+| `aria-label` | `string` | `"Site navigation"` | aria-label on the root `<nav>` landmark — override for localisation |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the root `<nav>` element |
 
 ---

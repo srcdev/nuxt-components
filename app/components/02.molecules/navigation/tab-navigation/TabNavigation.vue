@@ -7,7 +7,7 @@
       `tab-navigation--${navAlign}`,
       { 'is-collapsed': isCollapsed, 'is-loaded': isLoaded, 'menu-open': isMenuOpen, 'is-animated': isAnimated },
     ]"
-    aria-label="Site navigation"
+    :aria-label="ariaLabel"
   >
     <ul v-if="!isCollapsed || !isLoaded" ref="navListRef" class="tab-nav-list" @mouseleave="hoveredItemHref = null">
       <li
@@ -131,12 +131,15 @@ interface Props {
   navAlign?: "left" | "center" | "right";
   styleClassPassthrough?: string | string[];
   anchorScrollOffset?: number | (() => number);
+  /** aria-label on the nav landmark — override for localisation. */
+  ariaLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   navAlign: "left",
   styleClassPassthrough: () => [],
   anchorScrollOffset: undefined,
+  ariaLabel: "Site navigation",
 });
 
 const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, isActiveItem, toggleMenu, closeMenu } =

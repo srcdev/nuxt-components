@@ -18,6 +18,8 @@
 | `docsNavLabel` | `string` | `"Navigation"` | Heading text for the `docsNav` panel's `#summary`. |
 | `docsPageNavLabel` | `string` | `"On this page"` | Heading text for the `docsPageNav` panel's `#summary`. |
 | `panelVariant` | `"modern" \| "classic"` | `"classic"` | Which panel component renders `docsNav`/`docsPageNav`: `ExpandingPanel` (`"modern"`) or `ExpandingPanelClassic` (`"classic"`, default). `"modern"` is known not to work correctly on WebKit — the mobile nav (which relies on `contentIsOnTop`) becomes unreachable there. See CLAUDE.md pitfall #19. |
+| `docsNavAriaLabel` | `string` | `"Docs navigation"` | aria-label on the `docsNav` `<nav>` landmark — override for localisation. |
+| `docsPageNavAriaLabel` | `string` | `"On this page"` | aria-label on the `docsPageNav` `<nav>` landmark — override for localisation. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the root `.content-docs` element. |
 
 `DocsNavItem` (from `~/types/components`):

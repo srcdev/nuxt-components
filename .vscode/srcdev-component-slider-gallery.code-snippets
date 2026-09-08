@@ -1,0 +1,38 @@
+{
+  "SRCDEV SliderGallery Basic": {
+    "description": "SliderGallery full-screen image slider with thumbnails and prev/next arrows",
+    "scope": "vue,html",
+    "body": [
+      "<SliderGallery v-model:gallery-data=\"$1galleryData\" />"
+    ]
+  },
+  "SRCDEV SliderGallery Localised": {
+    "description": "SliderGallery with localised loading/CTA/arrow copy",
+    "scope": "vue,html",
+    "body": [
+      "<SliderGallery",
+      "  v-model:gallery-data=\"$1galleryData\"",
+      "  loading-text=\"${2:Loading gallery...}\"",
+      "  see-more-text=\"${3:SEE MORE}\"",
+      "  prev-aria-label=\"${4:Previous image}\"",
+      "  next-aria-label=\"${5:Next image}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV SliderGallery Data Script": {
+    "description": "galleryData ref for SliderGallery",
+    "scope": "typescript,vue",
+    "body": [
+      "import type { IGalleryData } from \"srcdev-nuxt-components\";",
+      "",
+      "const $1galleryData = ref<IGalleryData[]>([",
+      "  {",
+      "    src: \"$2/images/slide-1.jpg\",",
+      "    alt: \"$3\",",
+      "    title: \"$4\",",
+      "    textBrightness: \"${5:light}\",",
+      "  },",
+      "]);"
+    ]
+  }
+}

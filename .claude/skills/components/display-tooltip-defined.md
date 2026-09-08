@@ -20,6 +20,9 @@ directly when you need full control over the popover's content.
 |------|------|---------|-------------|
 | `tooltipId` | `string` | `""` | Base id for the popover. Prefixed with `nuxt-tooltip-` when provided; auto-generated via `useId()` (also prefixed) when omitted. |
 | `contentText` | `TooltipContentText` | `{}` | Title/body/action content. Each field is optional — omitted fields render nothing. |
+| `triggerAriaLabel` | `string` | `"Toggle the popover"` | Forwarded to the underlying `DisplayTooltip`'s `triggerAriaLabel` — override for localisation. |
+| `closeButtonText` | `string` | `"Close"` | Visible text on the close button — override for localisation. |
+| `closeButtonAriaLabel` | `string` | `"Close tool tip"` | aria-label on the close button — override for localisation. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the underlying `DisplayTooltip` root element. |
 
 `TooltipContentText` is exported from `~/types/components`:

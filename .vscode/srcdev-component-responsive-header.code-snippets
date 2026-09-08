@@ -15,6 +15,18 @@
       "</ResponsiveHeader>"
     ]
   },
+  "SRCDEV ResponsiveHeader Localised Nav Labels": {
+    "description": "ResponsiveHeader with localised aria-labels on the main/secondary nav landmarks and overflow menu",
+    "scope": "vue,html",
+    "body": [
+      "<ResponsiveHeader",
+      "  :responsive-nav-links=\"$1responsiveNavLinks\"",
+      "  main-nav-aria-label=\"${2:Main navigation}\"",
+      "  secondary-nav-aria-label=\"${3:Secondary navigation}\"",
+      "  overflow-menu-aria-label=\"${4:Overflow navigation menu}\"",
+      "/>"
+    ]
+  },
   "SRCDEV ResponsiveHeader Nav Data (with dropdown)": {
     "description": "responsiveNavLinks data with a dropdown group",
     "scope": "typescript,vue",

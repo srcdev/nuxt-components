@@ -2,7 +2,7 @@
   <div ref="sliderGalleryWrapper" class="slider-gallery" :class="[elementClasses]">
     <div class="loading-state" :class="[{ galleryLoaded: !galleryLoaded }]">
       <div class="loading-spinner"></div>
-      <p>Loading gallery...</p>
+      <p>{{ loadingText }}</p>
     </div>
 
     <div v-if="showGallery" class="gallery-content" :class="[{ galleryLoaded: !galleryLoaded }]">
@@ -17,7 +17,7 @@
               {{ item.description }}
             </div>
             <div class="buttons" :class="item.textBrightness">
-              <button>SEE MORE</button>
+              <button>{{ seeMoreText }}</button>
             </div>
           </div>
         </div>
@@ -40,10 +40,10 @@
       </div>
 
       <div class="arrows">
-        <button id="prev" ref="prevDom" aria-label="Previous image" @click.prevent="doPrevious()">
+        <button id="prev" ref="prevDom" :aria-label="prevAriaLabel" @click.prevent="doPrevious()">
           <Icon name="ic:outline-keyboard-arrow-left" class="arrows-icon" />
         </button>
-        <button id="next" ref="nextDom" aria-label="Next image" @click.prevent="doNext()">
+        <button id="next" ref="nextDom" :aria-label="nextAriaLabel" @click.prevent="doNext()">
           <Icon name="ic:outline-keyboard-arrow-right" class="arrows-icon" />
         </button>
       </div>
@@ -60,6 +60,14 @@ interface Props {
   autoRun?: boolean;
   autoRunInterval?: number;
   animationDuration?: number;
+  /** Loading-state copy — override for localisation. */
+  loadingText?: string;
+  /** Per-slide call-to-action button copy — override for localisation. */
+  seeMoreText?: string;
+  /** aria-label on the previous-image button — override for localisation. */
+  prevAriaLabel?: string;
+  /** aria-label on the next-image button — override for localisation. */
+  nextAriaLabel?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -67,6 +75,10 @@ const props = withDefaults(defineProps<Props>(), {
   autoRun: true,
   autoRunInterval: 7000,
   animationDuration: 3000,
+  loadingText: "Loading gallery...",
+  seeMoreText: "SEE MORE",
+  prevAriaLabel: "Previous image",
+  nextAriaLabel: "Next image",
   styleClassPassthrough: () => [],
 });
 

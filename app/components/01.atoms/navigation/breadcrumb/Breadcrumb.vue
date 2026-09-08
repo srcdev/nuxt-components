@@ -1,5 +1,5 @@
 <template>
-  <nav class="breadcrumb" :class="[elementClasses]" aria-label="Breadcrumb">
+  <nav class="breadcrumb" :class="[elementClasses]" :aria-label="ariaLabel">
     <ol class="breadcrumb__list">
       <li v-for="(item, index) in items" :key="`${item.label}-${index}`" class="breadcrumb__item">
         <NuxtLink v-if="item.to" :to="item.to" class="breadcrumb__link">{{ item.label }}</NuxtLink>
@@ -18,11 +18,14 @@ import type { BreadcrumbItem } from "~/types/components/breadcrumb";
 interface Props {
   items: BreadcrumbItem[];
   separator?: string;
+  /** aria-label on the nav landmark — override for localisation. */
+  ariaLabel?: string;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   separator: "/",
+  ariaLabel: "Breadcrumb",
   styleClassPassthrough: () => [],
 });
 

@@ -1,0 +1,30 @@
+{
+  "SRCDEV SiteNavigation Basic": {
+    "description": "SiteNavigation horizontal nav with sliding active/hover indicator",
+    "scope": "vue,html",
+    "body": [
+      "<SiteNavigation :nav-item-data=\"$1navData\" nav-align=\"${2:left}\" />"
+    ]
+  },
+  "SRCDEV SiteNavigation Localised": {
+    "description": "SiteNavigation with a localised aria-label",
+    "scope": "vue,html",
+    "body": [
+      "<SiteNavigation :nav-item-data=\"$1navData\" aria-label=\"${2:Site navigation}\" />"
+    ]
+  },
+  "SRCDEV SiteNavigation Nav Data Script": {
+    "description": "navItemData for SiteNavigation",
+    "scope": "typescript,vue",
+    "body": [
+      "import type { NavItemData } from \"srcdev-nuxt-components\";",
+      "",
+      "const $1navData: NavItemData = {",
+      "  main: [",
+      "    { text: \"$2Home\", href: \"$3/\" },",
+      "    { text: \"$4About\", href: \"$5/about\" },",
+      "  ],",
+      "};"
+    ]
+  }
+}

@@ -33,6 +33,24 @@
       "</ContentDocs>"
     ]
   },
+  "SRCDEV ContentDocs Localised Nav Labels": {
+    "description": "ContentDocs with localised aria-labels on the docsNav/docsPageNav <nav> landmarks",
+    "scope": "vue,html",
+    "body": [
+      "<ContentDocs",
+      "  v-model:active-nav-item=\"$1activeNavItem\"",
+      "  v-model:active-page-nav-item=\"$2activePageNavItem\"",
+      "  :docs-nav-items=\"$3docsNavItems\"",
+      "  :docs-page-nav-items=\"$4docsPageNavItems\"",
+      "  docs-nav-aria-label=\"${5:Docs navigation}\"",
+      "  docs-page-nav-aria-label=\"${6:On this page}\"",
+      ">",
+      "  <template #docsContent>",
+      "    <p>$7Page content goes here.</p>",
+      "  </template>",
+      "</ContentDocs>"
+    ]
+  },
   "SRCDEV ContentDocs Items Script": {
     "description": "docsNavItems / docsPageNavItems + active-item refs for ContentDocs",
     "scope": "typescript,vue",

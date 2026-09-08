@@ -3,7 +3,7 @@
     class="overflow-navigation-wrapper"
     :class="[elementClasses, { 'is-panel-animating': isPanelAnimating }]"
     role="menu"
-    aria-label="Overflow navigation menu"
+    :aria-label="ariaLabel"
     @mouseleave="
       hoveredItemKey = null;
       hoveredChildKey = null;
@@ -115,6 +115,8 @@ interface Props {
   mainNavigationState?: ResponsiveHeaderState;
   panelVariant?: "modern" | "classic";
   styleClassPassthrough?: string | string[];
+  /** aria-label on the overflow menu — override for localisation. */
+  ariaLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -124,6 +126,7 @@ const props = withDefaults(defineProps<Props>(), {
   // "modern" is opt-in.
   panelVariant: "classic",
   styleClassPassthrough: () => [],
+  ariaLabel: "Overflow navigation menu",
 });
 
 const panelComponent = computed(() => (props.panelVariant === "modern" ? ExpandingPanel : ExpandingPanelClassic));

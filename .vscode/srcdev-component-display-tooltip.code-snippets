@@ -23,5 +23,16 @@
       "  </template>",
       "</DisplayTooltip>"
     ]
+  },
+  "SRCDEV DisplayTooltip Localised Trigger Label": {
+    "description": "DisplayTooltip with a localised triggerAriaLabel",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayTooltip trigger-aria-label=\"${1:Toggle the popover}\">",
+      "  <template #tooltipContent>",
+      "    <p>$0</p>",
+      "  </template>",
+      "</DisplayTooltip>"
+    ]
   }
 }

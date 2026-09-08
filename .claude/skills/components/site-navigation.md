@@ -16,6 +16,7 @@ Both the horizontal list and the panel include animated active/hover indicator d
 |---|---|---|---|
 | `navItemData` | `NavItemData` | — (required) | Navigation items — see type below |
 | `navAlign` | `"left" \| "center" \| "right"` | `"left"` | Alignment of the horizontal nav list |
+| `ariaLabel` | `string` | `"Site navigation"` | aria-label on the root `<nav>` landmark — override for localisation |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root `<nav>` |
 
 ## NavItemData type

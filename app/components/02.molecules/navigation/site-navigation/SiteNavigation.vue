@@ -7,7 +7,7 @@
       `site-navigation--${navAlign}`,
       { 'is-collapsed': isCollapsed, 'is-loaded': isLoaded, 'menu-open': isMenuOpen, 'is-animated': isAnimated },
     ]"
-    aria-label="Site navigation"
+    :aria-label="ariaLabel"
   >
     <ul
       v-if="!isCollapsed || !isLoaded"
@@ -106,11 +106,14 @@ interface Props {
   navItemData: NavItemData;
   navAlign?: "left" | "center" | "right";
   styleClassPassthrough?: string | string[];
+  /** aria-label on the nav landmark — override for localisation. */
+  ariaLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   navAlign: "left",
   styleClassPassthrough: () => [],
+  ariaLabel: "Site navigation",
 });
 
 // ─── Animation gate — prevents indicator from transitioning on first paint ───

@@ -10,5 +10,20 @@
       "  }\"",
       "/>"
     ]
+  },
+  "SRCDEV DisplayTooltipDefined Localised Copy": {
+    "description": "DisplayTooltipDefined with localised trigger/close-button copy",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayTooltipDefined",
+      "  :content-text=\"{",
+      "    tooltipTitle: { tag: 'h4', text: '$1' },",
+      "    tooltipContent: { tag: 'p', text: '$2' },",
+      "  }\"",
+      "  trigger-aria-label=\"${3:Toggle the popover}\"",
+      "  close-button-text=\"${4:Close}\"",
+      "  close-button-aria-label=\"${5:Close tool tip}\"",
+      "/>"
+    ]
   }
 }

@@ -24,6 +24,7 @@ requirement, same caution as `DeepExpandingMenu`'s equivalent gap.
 |------|------|---------|-------------|
 | `tooltipId` | `string` | `""` | Id linking the trigger button (`popovertarget`) to the popover panel (`id`). Auto-generated via `useId()` when omitted. |
 | `hideTrigger` | `boolean` | `false` | Visually hides the trigger button (kept in the DOM, not removed) — e.g. when an equivalent trigger is supplied via the `triggerContent` slot. |
+| `triggerAriaLabel` | `string` | `"Toggle the popover"` | aria-label on the trigger button — override for localisation. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root element. |
 
 ## Slots

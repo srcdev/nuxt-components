@@ -9,7 +9,7 @@ exports[`SiteHeader > renders correct HTML structure with default props 1`] = `
         <nav class="skip-links-nav" aria-label="Skip navigation"><a href="#main-content" class="skip-link">Skip to main content</a><a href="#footer-content" class="skip-link">Skip to footer</a></nav>
       </div>
     </nav>
-    <div class="responsive-header-stub"></div>
+    <div class="responsive-header-stub" main-nav-aria-label="Main navigation" secondary-nav-aria-label="Secondary navigation" overflow-menu-aria-label="Overflow navigation menu"></div>
   </header>
 </div>"
 `;

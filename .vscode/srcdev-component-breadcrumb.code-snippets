@@ -10,5 +10,18 @@
       "  ]\"",
       "/>"
     ]
+  },
+  "SRCDEV Breadcrumb Localised": {
+    "description": "Breadcrumb with a localised aria-label",
+    "scope": "vue,html",
+    "body": [
+      "<Breadcrumb",
+      "  :items=\"[",
+      "    { label: '$1Services', to: '$2/services' },",
+      "    { label: '$3${TM_FILENAME_BASE}' },",
+      "  ]\"",
+      "  aria-label=\"${4:Breadcrumb}\"",
+      "/>"
+    ]
   }
 }

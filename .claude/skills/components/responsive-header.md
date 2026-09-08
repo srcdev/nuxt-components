@@ -107,6 +107,9 @@ buggy toggle-based version too.
 | `collapseAtMainNavIntersection` | `boolean` | `false` | Like `collapseBreakpoint`, but the breakpoint is derived automatically from the main nav's own measured width rather than a fixed number. |
 | `allowExpandOnGesture` | `boolean` | `true` | When `true`, hovering/focusing a dropdown summary opens it (in addition to click). When `false`, only click toggles it. |
 | `panelVariant` | `"modern" \| "classic"` | `"classic"` | Forwarded to `NavigationItems` for its dropdown submenu panels: `ExpandingPanel` (`"modern"`) or `ExpandingPanelClassic` (`"classic"`, default). `"modern"` is known not to work correctly on WebKit. See CLAUDE.md pitfall #19. |
+| `mainNavAriaLabel` | `string` | `"Main navigation"` | aria-label on the primary nav landmark — override for localisation. |
+| `secondaryNavAriaLabel` | `string` | `"Secondary navigation"` | aria-label on the secondary (overflow) nav landmark — override for localisation. |
+| `overflowMenuAriaLabel` | `string` | `"Overflow navigation menu"` | Forwarded to `NavigationItems`' `ariaLabel` — override for localisation. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the root `.navigation` element. |
 
 ## Slots

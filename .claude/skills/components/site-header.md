@@ -23,6 +23,10 @@ Branding (logo/wordmark) is entirely consumer-authored via the `#branding` slot 
 | `pageRowVariant` | `"full" \| "popout" \| "content" \| "inset-content"` | `"content"` | Forwarded to the root `PageRow`'s `variant` prop. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes on the root `PageRow` — targets `--site-header-*` tokens (see `CONSUMER-STYLING.md`). |
 | `navStyleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes on the nested `ResponsiveHeader` — targets its own `--responsive-header-*`/`--overflow-nav-*` tokens. |
+| `homeNavAriaLabel` | `string` | `"Home Navigation"` | aria-label on the home/branding nav landmark — override for localisation. |
+| `mainNavAriaLabel` | `string` | `"Main navigation"` | Forwarded to `ResponsiveHeader`'s `mainNavAriaLabel` — override for localisation. |
+| `secondaryNavAriaLabel` | `string` | `"Secondary navigation"` | Forwarded to `ResponsiveHeader`'s `secondaryNavAriaLabel` — override for localisation. |
+| `overflowMenuAriaLabel` | `string` | `"Overflow navigation menu"` | Forwarded to `ResponsiveHeader`'s `overflowMenuAriaLabel` — override for localisation. |
 
 ---
 

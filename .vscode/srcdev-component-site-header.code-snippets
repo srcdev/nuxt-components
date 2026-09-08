@@ -30,6 +30,23 @@
       "</SiteHeader>"
     ]
   },
+  "SRCDEV SiteHeader Localised Nav Labels": {
+    "description": "SiteHeader with localised aria-labels on all its nav landmarks (home, main, secondary, overflow)",
+    "scope": "vue,html",
+    "body": [
+      "<SiteHeader",
+      "  :responsive-nav-links=\"$1responsiveNavLinks\"",
+      "  home-nav-aria-label=\"${2:Home Navigation}\"",
+      "  main-nav-aria-label=\"${3:Main navigation}\"",
+      "  secondary-nav-aria-label=\"${4:Secondary navigation}\"",
+      "  overflow-menu-aria-label=\"${5:Overflow navigation menu}\"",
+      ">",
+      "  <template #branding>",
+      "    <NuxtLink to=\"/\" class=\"home-link\">$6Brand</NuxtLink>",
+      "  </template>",
+      "</SiteHeader>"
+    ]
+  },
   "SRCDEV SiteHeader Nav Data (flat)": {
     "description": "Simple flat responsiveNavLinks data with no dropdowns, for a few-page site",
     "scope": "typescript,vue",

@@ -9,7 +9,7 @@
       ref="mainNav"
       class="main-navigation"
       :class="{ 'is-animated': isAnimated }"
-      aria-label="Main navigation"
+      :aria-label="mainNavAriaLabel"
       @mouseleave="hoveredItemKey = null"
       @focusout="handleNavFocusout"
     >
@@ -78,7 +78,7 @@
       <div aria-hidden="true" class="nav-indicator-hovered"></div>
       <div aria-hidden="true" class="nav-indicator-active"></div>
     </nav>
-    <nav ref="secondaryNav" class="secondary-navigation" aria-label="Secondary navigation">
+    <nav ref="secondaryNav" class="secondary-navigation" :aria-label="secondaryNavAriaLabel">
       <details
         ref="overflowDetails"
         class="overflow-details"
@@ -100,7 +100,11 @@
           />
         </summary>
         <div class="overflow-details-nav" role="menu">
-          <NavigationItems :main-navigation-state="mainNavigationState" :panel-variant="panelVariant" />
+          <NavigationItems
+            :main-navigation-state="mainNavigationState"
+            :panel-variant="panelVariant"
+            :aria-label="overflowMenuAriaLabel"
+          />
         </div>
       </details>
       <slot v-if="slots.secondaryNavigation" name="secondaryNavigation"></slot>
@@ -126,6 +130,12 @@ interface Props {
   styleClassPassthrough?: string | string[];
   allowExpandOnGesture?: boolean;
   panelVariant?: "modern" | "classic";
+  /** aria-label on the primary nav landmark — override for localisation. */
+  mainNavAriaLabel?: string;
+  /** aria-label on the secondary (overflow) nav landmark — override for localisation. */
+  secondaryNavAriaLabel?: string;
+  /** aria-label on the overflow menu itself (forwarded to NavigationItems) — override for localisation. */
+  overflowMenuAriaLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -142,6 +152,9 @@ const props = withDefaults(defineProps<Props>(), {
   // Forwarded to NavigationItems' overflow submenu panels — see its own default for why
   // "classic" is the safe default (CLAUDE.md pitfall #19).
   panelVariant: "classic",
+  mainNavAriaLabel: "Main navigation",
+  secondaryNavAriaLabel: "Secondary navigation",
+  overflowMenuAriaLabel: "Overflow navigation menu",
 });
 
 const collapseNavigationBelowWidth = computed(
