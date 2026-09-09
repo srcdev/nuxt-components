@@ -21,7 +21,7 @@
         v-for="item in fieldData.data"
         :key="item.id"
         :value="item.value"
-        :selected="Number(item.value) === modelValue"
+        :selected="String(item.value) === String(modelValue)"
         class="input-select-core-option"
       >
         <Icon
