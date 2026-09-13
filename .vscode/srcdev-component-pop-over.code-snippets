@@ -1,0 +1,44 @@
+{
+  "SRCDEV PopOver Basic": {
+    "description": "PopOver — generic anchor-positioned disclosure panel",
+    "scope": "vue,html",
+    "body": [
+      "<PopOver>",
+      "  <template #trigger>",
+      "    <span>$1</span>",
+      "  </template>",
+      "  <template #content>",
+      "    <p>$0</p>",
+      "  </template>",
+      "</PopOver>"
+    ]
+  },
+  "SRCDEV PopOver Placement": {
+    "description": "PopOver with an explicit placement",
+    "scope": "vue,html",
+    "body": [
+      "<PopOver placement=\"${1|top,right,bottom,left|}\">",
+      "  <template #trigger>",
+      "    <span>$2</span>",
+      "  </template>",
+      "  <template #content>",
+      "    <p>$0</p>",
+      "  </template>",
+      "</PopOver>"
+    ]
+  },
+  "SRCDEV PopOver Icon Trigger": {
+    "description": "PopOver with an icon-only trigger and localised labels",
+    "scope": "vue,html",
+    "body": [
+      "<PopOver trigger-aria-label=\"${1:Show more}\" popover-aria-label=\"${2:More information}\">",
+      "  <template #trigger>",
+      "    <Icon name=\"${3:lucide:info}\" aria-hidden=\"true\" />",
+      "  </template>",
+      "  <template #content>",
+      "    <p>$0</p>",
+      "  </template>",
+      "</PopOver>"
+    ]
+  }
+}

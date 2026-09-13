@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PopOver > renders correct HTML structure 1`] = `
+"<div class="pop-over" style="--_anchor-name: --pop-over-anchor-v-0-0;" data-placement="right"><button popovertarget="pop-over-v-0-0" popovertargetaction="toggle" type="button" class="pop-over-trigger"><span>Open</span></button>
+  <div id="pop-over-v-0-0" popover="" class="pop-over-popover"><button popovertarget="pop-over-v-0-0" popovertargetaction="hide" type="button" class="pop-over-close-button" aria-label="Close"><span class="iconify i-lucide:x pop-over-close-button-icon" aria-hidden="true"></span></button>
+    <div class="pop-over-content">
+      <p>Details</p>
+    </div>
+  </div>
+</div>"
+`;
