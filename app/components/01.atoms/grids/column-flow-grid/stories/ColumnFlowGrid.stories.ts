@@ -1,18 +1,17 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import MasonryGrid from "../MasonryGrid.vue";
+import ColumnFlowGrid from "../ColumnFlowGrid.vue";
 
-interface MasonryGridArgs {
+interface ColumnFlowGridArgs {
   tag: "div" | "section" | "article" | "main";
   itemMinWidth: number;
   gap: number;
-  fixedWidth: boolean;
-  justify: "left" | "center" | "right";
+  unit: string;
   styleClassPassthrough: string[];
 }
 
-const meta: Meta<MasonryGridArgs> = {
-  title: "Atoms/Grids/MasonryGrid",
-  component: MasonryGrid,
+const meta: Meta<ColumnFlowGridArgs> = {
+  title: "Atoms/Grids/ColumnFlowGrid",
+  component: ColumnFlowGrid,
   argTypes: {
     tag: {
       control: { type: "select" },
@@ -23,24 +22,18 @@ const meta: Meta<MasonryGridArgs> = {
     itemMinWidth: {
       control: { type: "select" },
       options: [160, 200, 240, 300, 360, 450],
-      description: "Minimum tile width in pixels — also the fixed tile width when fixedWidth is set",
+      description: "Minimum column width in pixels — drives `columns: auto <value>px`",
       table: { category: "Props" },
     },
     gap: {
       control: { type: "select" },
-      options: [0, 4, 8, 12, 16, 24, 32],
-      description: "Gap between tiles in pixels",
+      options: [0, 0.4, 0.8, 1.2, 1.6, 2, 3],
+      description: "Gap between columns/items, in `unit`",
       table: { category: "Props" },
     },
-    fixedWidth: {
-      control: { type: "boolean" },
-      description: "Keep every tile at exactly itemMinWidth instead of stretching to fill each column",
-      table: { category: "Props" },
-    },
-    justify: {
-      control: { type: "select" },
-      options: ["left", "center", "right"],
-      description: "How the block of tiles aligns within the wrapper — only visible when fixedWidth is set",
+    unit: {
+      control: { type: "text" },
+      description: "CSS unit applied to `gap` (e.g. `rem`, `px`)",
       table: { category: "Props" },
     },
     styleClassPassthrough: {
@@ -50,22 +43,19 @@ const meta: Meta<MasonryGridArgs> = {
   args: {
     tag: "div",
     itemMinWidth: 300,
-    gap: 12,
-    fixedWidth: false,
-    justify: "left",
+    gap: 1.2,
+    unit: "rem",
     styleClassPassthrough: [],
   },
   parameters: {
     docs: {
       description: {
         component:
-          "A real masonry layout: each item is measured and placed into whichever column is " +
-          "currently shortest (a greedy bin-pack), not CSS `columns`' column-fill. Renders " +
-          "whatever slots the consumer passes, in natural DOM/reading order — no count/data prop " +
-          "needed, and no reordering trick required (unlike a `columns`-based masonry) since " +
-          "placement already follows the order items were authored in. Resize-reactive: items " +
-          "animate into their new position (respecting `prefers-reduced-motion`) as the container " +
-          "resizes. See `ColumnFlowGrid` for the lighter, non-measuring CSS `columns` alternative.",
+          "A CSS `columns` (multi-column text flow) layout. Renders whatever slots the consumer " +
+          "passes — no count/data prop needed (named dynamic slots, like `AutoGrid`/`GridStack`). " +
+          "Items flow into columns in DOM order, filling one column fully before starting the " +
+          "next — this does **not** reorder content, so DOM/reading order and visual order can " +
+          "diverge. Use `MasonryGrid` instead when reading order needs to match the visual layout.",
       },
     },
   },
@@ -80,18 +70,19 @@ const badgeStyle =
   "margin-bottom: 0.8rem; border-radius: 50%; background: #111827; color: white; font-weight: 700; " +
   "font-size: 1.3rem; font-family: monospace;";
 
-// Each item shows its DOM/reading order as a numbered badge. Unlike a reading-order effect based
-// on rearranging DOM order to match a visual grid, here the number is simply the authoring order —
-// tab/screen-reader order always reads 1, 2, 3... regardless of which column an item's measured
-// height ends up placing it in visually.
+// Each item shows its DOM order (slot index) as a numbered badge so you can see how the column-fill
+// algorithm actually orders items — it's not simple row-by-row order, so an item's position in the
+// visual grid doesn't always match its number sequentially top-to-bottom.
+const itemBadge = (n: number) => `<span style="${badgeStyle}">${n}</span><br />`;
+
 const paragraphPool = [
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio praesent libero sed cursus ante.",
   "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
   "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
   "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem.",
+  "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit sed quia consequuntur magni dolores.",
 ];
-
-const itemBadge = (n: number) => `<span style="${badgeStyle}">${n}</span><br />`;
 
 interface DemoItem {
   slotName: string;
@@ -99,9 +90,10 @@ interface DemoItem {
   bodyHtml: string;
 }
 
-// Built once per mount (not on every render) so a Controls-panel change doesn't reshuffle the
-// demo content underneath it. Random paragraph counts (1-4) give genuinely uneven heights —
-// necessary to actually see the shortest-column packing at work, unlike uniform-height tiles.
+// Generates a random number of paragraphs (1-4) per item so item heights vary unpredictably —
+// closer to real content than a handful of hand-written examples, and enough items (12) to
+// actually show multi-column flow. Built once per mount, not on every render, so a
+// Controls-panel change (itemMinWidth/gap) doesn't reshuffle the demo content underneath it.
 function buildDemoItems(count: number): DemoItem[] {
   return Array.from({ length: count }, (_, i) => {
     const paragraphCount = Math.floor(Math.random() * 4) + 1; // 1-4
@@ -113,22 +105,22 @@ function buildDemoItems(count: number): DemoItem[] {
   });
 }
 
-const Template: StoryFn<MasonryGridArgs> = (args) => ({
-  components: { MasonryGrid },
+const Template: StoryFn<ColumnFlowGridArgs> = (args) => ({
+  components: { ColumnFlowGrid },
   setup() {
     const items = buildDemoItems(12);
     return { args, items };
   },
   template: `
     <div style="padding: 3.2rem; background: #f9fafb;">
-      <MasonryGrid v-bind="args">
+      <ColumnFlowGrid v-bind="args">
         <template v-for="item in items" :key="item.slotName" #[item.slotName]>
           <div style="${itemStyle}">
             <span style="${badgeStyle}">{{ item.index }}</span><br />
             <div v-html="item.bodyHtml"></div>
           </div>
         </template>
-      </MasonryGrid>
+      </ColumnFlowGrid>
     </div>
   `,
 });
@@ -138,15 +130,16 @@ Default.parameters = {
   docs: {
     description: {
       story:
-        "12 numbered items with 1-4 random paragraphs each, flowing into whichever column is " +
-        "currently shortest. Resize the preview panel — items animate into their new positions, " +
-        "and DOM/tab order always stays 1, 2, 3... regardless of which column each ends up in.",
+        "12 items with a random 1-4 paragraphs each, flowing into auto-sized columns at least " +
+        "300px wide. Each item is numbered with its slot/DOM order — resize the preview to change " +
+        "the column count and see how the numbering no longer reads strictly top-to-bottom per " +
+        "column once items wrap, since column-fill picks whichever column is currently shortest.",
     },
   },
 };
 
 export const NarrowColumns = Template.bind({});
-NarrowColumns.args = { itemMinWidth: 160, gap: 8 };
+NarrowColumns.args = { itemMinWidth: 160, gap: 0.8 };
 NarrowColumns.parameters = {
   docs: {
     description: { story: "A smaller `itemMinWidth` fits more, narrower columns." },
@@ -154,35 +147,21 @@ NarrowColumns.parameters = {
 };
 
 export const WideColumns = Template.bind({});
-WideColumns.args = { itemMinWidth: 450, gap: 16 };
+WideColumns.args = { itemMinWidth: 450, gap: 2 };
 WideColumns.parameters = {
   docs: {
     description: { story: "A larger `itemMinWidth` fits fewer, wider columns." },
   },
 };
 
-export const FixedWidthCentered = Template.bind({});
-FixedWidthCentered.storyName = "Fixed Width, Centered";
-FixedWidthCentered.args = { fixedWidth: true, justify: "center", itemMinWidth: 240 };
-FixedWidthCentered.parameters = {
-  docs: {
-    description: {
-      story:
-        "`fixedWidth` keeps every tile at exactly `itemMinWidth` instead of stretching to fill " +
-        "each column — `justify` then controls how the resulting (narrower) block of tiles " +
-        "aligns within the available width.",
-    },
-  },
-};
-
-export const TwoItems: StoryFn<MasonryGridArgs> = (args) => ({
-  components: { MasonryGrid },
+export const TwoItems: StoryFn<ColumnFlowGridArgs> = (args) => ({
+  components: { ColumnFlowGrid },
   setup() {
     return { args };
   },
   template: `
     <div style="padding: 3.2rem; background: #f9fafb;">
-      <MasonryGrid v-bind="args">
+      <ColumnFlowGrid v-bind="args">
         <template #item-1>
           <div style="${itemStyle}">${itemBadge(1)}Only two items provided</div>
         </template>
@@ -192,7 +171,7 @@ export const TwoItems: StoryFn<MasonryGridArgs> = (args) => ({
             slots you give it.
           </div>
         </template>
-      </MasonryGrid>
+      </ColumnFlowGrid>
     </div>
   `,
 });

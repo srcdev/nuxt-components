@@ -38,7 +38,8 @@ Tracks progress toward a fully migrated component library. A component is consid
 | GlassPanel | `glass-panel/GlassPanel.vue` | ☐ | ☐ |
 | AutoGrid | `grids/data-grid/AutoGrid.vue` | ☐ | ☐ |
 | GridStack | `grids/grid-stack/GridStack.vue` | ☐ | ☐ |
-| MasonryGrid | `grids/masonry-grid/MasonryGrid.vue` | ✅ | ✅ `masonry-grid` |
+| ColumnFlowGrid | `grids/column-flow-grid/ColumnFlowGrid.vue` (renamed from MasonryGrid) | ✅ | ✅ `column-flow-grid` |
+| MasonryGrid | `grids/masonry-grid/MasonryGrid.vue` (renamed from MasonryGridReadingOrder, itself renamed from MasonryGridSorted) | ✅ | ✅ `masonry-grid` |
 | PageRow | `page-row/PageRow.vue` | ✅ | ☐ |
 | DisplayPrompt | `prompt/DisplayPrompt.vue` | ☐ | ✅ `display-prompt` |
 | DisplayQrCode | `qr-code/DisplayQrCode.vue` | ☐ | ☐ |
@@ -194,9 +195,6 @@ These components still live in the root `app/components/` folder and need to be 
 | LayoutGridB | `layout-grids/LayoutGridB.vue` | |
 | MagneticNavigation | `magnetic-navigation/MagneticNavigation.vue` | |
 | MarqueeScroller | `marquee-scroller/MarqueeScroller.vue` | |
-| MasonryGridOrdered | `masonry-grid-ordered/MasonryGridOrdered.vue` | |
-| MasonryGridOrderedGridExperiment | `masonry-grid-ordered/MasonryGridOrderedGridExperiment.vue` | Experimental — review before migrating |
-| MasonryGridSorted | `masonry-grid-sorted/MasonryGridSorted.vue` | |
 | SectionParallax | `parallax/SectionParallax.vue` | |
 | PopOver | `pop-over/PopOver.vue` | |
 | ResponsiveHeader | `responsive-header/ResponsiveHeader.vue` | |

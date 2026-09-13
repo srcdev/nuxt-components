@@ -1,0 +1,39 @@
+{
+  "SRCDEV ColumnFlowGrid Basic": {
+    "description": "Basic ColumnFlowGrid with a few named item slots",
+    "scope": "vue,html",
+    "body": [
+      "<ColumnFlowGrid :item-min-width=\"$1300\" :gap=\"$21.2\">",
+      "  <template #item-1>",
+      "    $3",
+      "  </template>",
+      "  <template #item-2>",
+      "    $4",
+      "  </template>",
+      "</ColumnFlowGrid>"
+    ]
+  },
+  "SRCDEV ColumnFlowGrid Looped": {
+    "description": "ColumnFlowGrid rendering a v-for list via dynamic slot names (no count prop needed)",
+    "scope": "vue,html",
+    "body": [
+      "<ColumnFlowGrid :item-min-width=\"$1280\" :gap=\"$21.6\">",
+      "  <template v-for=\"($3item, $4index) in $5items\" :key=\"$3item.id\" #[`item-${$4index}`]>",
+      "    $6",
+      "  </template>",
+      "</ColumnFlowGrid>"
+    ]
+  },
+  "SRCDEV ColumnFlowGrid CSS Override": {
+    "description": "CSS override scaffold for ColumnFlowGrid tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .column-flow-grid-wrapper {",
+      "    --column-flow-grid-item-border-colour: $2;",
+      "    --column-flow-grid-item-padding: $3;",
+      "  }",
+      "}"
+    ]
+  }
+}

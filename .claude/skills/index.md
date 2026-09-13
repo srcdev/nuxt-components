@@ -119,7 +119,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── display-tooltip-defined.md — DisplayTooltipDefined: structured title/body/action tooltip content with close button, composes DisplayTooltip
     ├── input-text-core.md        — InputTextCore: native text/date/number input primitive, min/max pass-through (date-picker range), CSS token API; Variants section covers InputTextWithLabel/InputPasswordWithLabel/InputTextAsNumberWithLabel
     ├── entry-animation.md         — EntryAnimation: scroll-driven entry animation wrapper (slide-in/zoom-reveal/exit-blur utility classes), skipAnimation for above-the-fold loop items, reduced-motion handled at the CSS layer
-    └── masonry-grid.md            — MasonryGrid: CSS-columns masonry layout, named dynamic slots (no count/data prop — replaces the old gridData object prop), itemMinWidth/gap/unit sizing, CSS token API
+    ├── column-flow-grid.md        — ColumnFlowGrid (renamed from MasonryGrid): CSS multi-column text-flow layout, named dynamic slots (no count/data prop), itemMinWidth/gap/unit sizing, CSS token API; not a true masonry, see "which one do I want?"
+    └── masonry-grid.md            — MasonryGrid: real measured-height masonry (greedy shortest-column packing, animated resize) absorbed from the now-retired MasonryGridOrdered; named dynamic slots, fixedWidth/justify, CSS token API
 ```
 
 ## Skill file template

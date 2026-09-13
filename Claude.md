@@ -316,6 +316,13 @@ been shipping with the layer package unintentionally. When creating or touching 
   server — changed 2026-08-23 alongside the `app/pages/` removal. Use `npm run storybook` (same
   command) or `npm run dev`, either works; there is no longer a `nuxt dev` script entry point in
   this repo. The `hair-treatments` consumer app got the same `dev` script change at the same time.
+- `app/layouts/` had the same problem and was missed by the 2026-08-23 pass: `default.vue` and
+  `site-navigation-demo.vue` were both leftover demo shells built entirely around now-dead
+  `/ui/*` routes (the removed pages), with zero references anywhere in the repo or in Storybook —
+  removed 2026-09-13. Every consuming app already ships its own `app/layouts/default.vue` (which a
+  Nuxt layer's extending app always wins over the layer's own file of the same name), so this was
+  never actually reaching a live app, but check for a layer-only `app/layouts/` file the same way
+  you'd check for a leftover `app/pages/` one whenever you're touching layout-adjacent code.
 
 ### NuxtImg / @nuxt/image on Vercel
 
