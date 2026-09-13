@@ -178,4 +178,45 @@ describe("InputCopy", () => {
     expect(wrapper.classes()).toContain("custom-class");
     expect(wrapper.classes()).toContain("another-class");
   });
+
+  it("auto-generates an id and mirrors it as the name when neither is provided", () => {
+    const wrapper = mount(InputCopy, {
+      props: {
+        value: "test-key",
+      },
+    });
+
+    const input = wrapper.find("input");
+    const id = input.attributes("id");
+
+    expect(id).toBeTruthy();
+    expect(input.attributes("name")).toBe(id);
+  });
+
+  it("uses the provided id prop instead of auto-generating one", () => {
+    const wrapper = mount(InputCopy, {
+      props: {
+        value: "test-key",
+        id: "license-key-input",
+      },
+    });
+
+    const input = wrapper.find("input");
+    expect(input.attributes("id")).toBe("license-key-input");
+    expect(input.attributes("name")).toBe("license-key-input");
+  });
+
+  it("uses the provided name prop instead of falling back to the id", () => {
+    const wrapper = mount(InputCopy, {
+      props: {
+        value: "test-key",
+        id: "license-key-input",
+        name: "licenseKey",
+      },
+    });
+
+    const input = wrapper.find("input");
+    expect(input.attributes("id")).toBe("license-key-input");
+    expect(input.attributes("name")).toBe("licenseKey");
+  });
 });

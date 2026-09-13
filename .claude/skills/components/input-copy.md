@@ -13,6 +13,8 @@
 | Prop (template form)       | Type                   | Default          | Notes                                                        |
 | -------------------------- | ---------------------- | ---------------- | ------------------------------------------------------------ |
 | `:value`                   | `string`               | (required)       | The text to copy to clipboard (e.g., license key, API token).|
+| `:id`                      | `string`               | auto-generated   | Id applied to the input. Only pass one if something needs to target this input directly. |
+| `:name`                    | `string`               | falls back to `id` | Name applied to the input. Falls back to the resolved `id` (auto-generated or explicit) when not provided. |
 | `:label`                   | `string`               | (optional)       | Short label for the field; used in aria-label if ariaLabel not set. |
 | `:aria-label`              | `string`               | (optional)       | Custom aria-label for the input; overrides label.           |
 | `:description`             | `string`               | (optional)       | Helper text displayed below the input.                       |

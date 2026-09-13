@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
+import { computed } from "vue";
 import StorybookComponent from "../variants/InputTextAsNumberWithLabel.vue";
 import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
@@ -12,7 +13,7 @@ interface InputTextAsNumberWithLabelStoryArgs {
   fieldHasError: boolean;
   required: boolean;
   theme: FormUiTheme;
-  InputUiVariant: InputUiVariant;
+  inputVariant: InputUiVariant;
   min: number;
   max: number;
   step: number;
@@ -23,6 +24,8 @@ interface InputTextAsNumberWithLabelStoryArgs {
   useRightSlot: boolean;
   leftSlotContent: string;
   rightSlotContent: string;
+  stepDownText: string;
+  stepUpText: string;
 }
 
 export default {
@@ -123,7 +126,7 @@ export default {
         category: "Styling",
       },
     },
-    InputUiVariant: {
+    inputVariant: {
       control: { type: "select" },
       options: ["normal", "outlined", "underlined"],
       description: "Input variant style",
@@ -182,6 +185,22 @@ export default {
         category: "Slots",
       },
     },
+
+    // Localisation
+    stepDownText: {
+      control: "text",
+      description: "Accessible name for the decrement button",
+      table: {
+        category: "Localisation",
+      },
+    },
+    stepUpText: {
+      control: "text",
+      description: "Accessible name for the increment button",
+      table: {
+        category: "Localisation",
+      },
+    },
   },
   args: {
     modelValue: undefined,
@@ -204,37 +223,37 @@ export default {
     useRightSlot: true,
     leftSlotContent: "−",
     rightSlotContent: "+",
+    stepDownText: "Step down",
+    stepUpText: "Step up",
   },
 } as Meta<typeof StorybookComponent>;
 
+// `args` is Storybook's own reactive object — bind to it directly (`args.x`) rather than
+// destructuring it into local variables/refs, which would snapshot the values once at setup()
+// and stop reflecting later Controls-panel changes. `componentArgs` strips the non-prop
+// slot-toggle args so they don't leak onto the component as unknown attributes.
 const Template: StoryFn<InputTextAsNumberWithLabelStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
-    const { modelValue, ...otherArgs } = args;
-    const numberValue = ref(modelValue);
+    const componentArgs = computed(() => {
+      const { useDescriptionSlot, descriptionContent, useLeftSlot, useRightSlot, leftSlotContent, rightSlotContent, ...rest } =
+        args;
+      return rest;
+    });
 
-    return {
-      numberValue,
-      args: otherArgs,
-      descriptionContent: args.descriptionContent,
-      useDescriptionSlot: args.useDescriptionSlot,
-      leftSlotContent: args.leftSlotContent,
-      rightSlotContent: args.rightSlotContent,
-      useLeftSlot: args.useLeftSlot,
-      useRightSlot: args.useRightSlot,
-    };
+    return { args, componentArgs };
   },
   template: `
     <StorybookComponent
-      v-model="numberValue"
-      v-bind="args"
+      v-model="args.modelValue"
+      v-bind="componentArgs"
     >
-      <template v-if="useDescriptionSlot" #description>{{ descriptionContent }}</template>
-      <template v-if="useLeftSlot" #left>{{ leftSlotContent }}</template>
-      <template v-if="useRightSlot" #right>{{ rightSlotContent }}</template>
+      <template v-if="args.useDescriptionSlot" #description>{{ args.descriptionContent }}</template>
+      <template v-if="args.useLeftSlot" #left>{{ args.leftSlotContent }}</template>
+      <template v-if="args.useRightSlot" #right>{{ args.rightSlotContent }}</template>
     </StorybookComponent>
     <div class="mt-4 text-sm text-gray-600">
-      Current value: {{ numberValue ?? 'undefined' }}
+      Current value: {{ args.modelValue ?? 'undefined' }}
     </div>
   `,
 });
@@ -331,7 +350,7 @@ Required.args = {
 export const Outlined = Template.bind({});
 Outlined.args = {
   modelValue: 42,
-  InputUiVariant: "outlined",
+  inputVariant: "outlined",
   label: "Temperature (°C)",
   placeholder: "Enter temperature",
   min: -50,
@@ -344,7 +363,7 @@ Outlined.args = {
 export const Underlined = Template.bind({});
 Underlined.args = {
   modelValue: 10,
-  InputUiVariant: "underlined",
+  inputVariant: "underlined",
   label: "Items Count",
   placeholder: "Number of items",
   min: 0,

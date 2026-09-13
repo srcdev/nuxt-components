@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
+import { computed } from "vue";
 import StorybookComponent from "../variants/InputPasswordWithLabel.vue";
 import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
@@ -12,12 +13,14 @@ interface InputPasswordWithLabelStoryArgs {
   fieldHasError: boolean;
   required: boolean;
   theme: FormUiTheme;
-  InputUiVariant: InputUiVariant;
+  inputVariant: InputUiVariant;
   styleClassPassthrough: string[];
   useDescriptionSlot: boolean;
   useDescriptionHtmlSlot: boolean;
   descriptionContent: string;
   descriptionHtmlContent: string;
+  showPasswordText: string;
+  hidePasswordText: string;
 }
 
 export default {
@@ -95,7 +98,7 @@ export default {
         category: "Styling",
       },
     },
-    InputUiVariant: {
+    inputVariant: {
       control: { type: "select" },
       options: ["normal", "outlined", "underlined"],
       description: "Input variant style",
@@ -140,6 +143,22 @@ export default {
         category: "Slots",
       },
     },
+
+    // Localisation
+    showPasswordText: {
+      control: "text",
+      description: "Accessible name for the toggle button while the password is hidden",
+      table: {
+        category: "Localisation",
+      },
+    },
+    hidePasswordText: {
+      control: "text",
+      description: "Accessible name for the toggle button while the password is visible",
+      table: {
+        category: "Localisation",
+      },
+    },
   },
   args: {
     modelValue: "",
@@ -158,34 +177,35 @@ export default {
     descriptionContent: "Password should be at least 8 characters long",
     descriptionHtmlContent:
       "Password must contain: <strong>8+ characters</strong>, <em>uppercase</em>, <em>lowercase</em>, <em>numbers</em>",
+    showPasswordText: "Show password",
+    hidePasswordText: "Hide password",
   },
 } as Meta<typeof StorybookComponent>;
 
+// `args` is Storybook's own reactive object — bind to it directly (`args.x`) rather than
+// destructuring it into local variables/refs, which would snapshot the values once at setup()
+// and stop reflecting later Controls-panel changes. `componentArgs` strips the non-prop
+// slot-toggle args so they don't leak onto the component as unknown attributes.
 const Template: StoryFn<InputPasswordWithLabelStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
-    const { modelValue, ...otherArgs } = args;
-    const passwordValue = ref(modelValue);
+    const componentArgs = computed(() => {
+      const { useDescriptionSlot, useDescriptionHtmlSlot, descriptionContent, descriptionHtmlContent, ...rest } = args;
+      return rest;
+    });
 
-    return {
-      passwordValue,
-      args: otherArgs,
-      descriptionContent: args.descriptionContent,
-      descriptionHtmlContent: args.descriptionHtmlContent,
-      useDescriptionSlot: args.useDescriptionSlot,
-      useDescriptionHtmlSlot: args.useDescriptionHtmlSlot,
-    };
+    return { args, componentArgs };
   },
   template: `
     <StorybookComponent
-      v-model="passwordValue"
-      v-bind="args"
+      v-model="args.modelValue"
+      v-bind="componentArgs"
     >
-      <template v-if="useDescriptionSlot" #description>{{ descriptionContent }}</template>
-      <template v-if="useDescriptionHtmlSlot" #descriptionHtml v-html="descriptionHtmlContent"></template>
+      <template v-if="args.useDescriptionSlot" #description>{{ args.descriptionContent }}</template>
+      <template v-if="args.useDescriptionHtmlSlot" #descriptionHtml v-html="args.descriptionHtmlContent"></template>
     </StorybookComponent>
     <div class="mt-4 text-sm text-gray-600">
-      Current value: {{ passwordValue ? '•'.repeat(passwordValue.length) : 'Empty' }}
+      Current value: {{ args.modelValue ? '•'.repeat(args.modelValue.length) : 'Empty' }}
     </div>
   `,
 });
@@ -239,16 +259,25 @@ PasswordTooShort.args = {
 
 export const Outlined = Template.bind({});
 Outlined.args = {
-  InputUiVariant: "outlined",
+  inputVariant: "outlined",
   label: "Confirm Password",
   placeholder: "Confirm your password",
 };
 
 export const Underlined = Template.bind({});
 Underlined.args = {
-  InputUiVariant: "underlined",
+  inputVariant: "underlined",
   label: "Master Password",
   placeholder: "Enter master password",
+};
+
+export const LocalisedToggleText = Template.bind({});
+LocalisedToggleText.storyName = "Localised Toggle Text";
+LocalisedToggleText.args = {
+  label: "Mot de passe",
+  placeholder: "Saisissez votre mot de passe",
+  showPasswordText: "Afficher le mot de passe",
+  hidePasswordText: "Masquer le mot de passe",
 };
 
 export const AllVariants = Template.bind({});
@@ -279,7 +308,7 @@ AllVariants.render = (args) => ({
         <h3 class="text-lg font-semibold capitalize">{{ variant }} Variant</h3>
         <StorybookComponent
           v-model="passwordValues[variant]"
-          v-bind="{ ...args, InputUiVariant: variant, label: variant + ' Password', name: variant + '-password' }"
+          v-bind="{ ...args, inputVariant: variant, label: variant + ' Password', name: variant + '-password' }"
         />
       </div>
     </div>

@@ -27,6 +27,8 @@
       :name
       :required
       :maxlength
+      :min
+      :max
       :class="['input-text-core', elementClasses, { dirty: isDirty }, { active: isActive }]"
       :aria-invalid="fieldHasError ? 'true' : undefined"
       :aria-describedby
@@ -49,6 +51,10 @@ interface Props {
   type?: InputTypesText;
   inputmode?: InputMode;
   maxlength?: number;
+  /** Passed straight through to the native input — meaningful for type="date"/"number" etc. */
+  min?: string | number;
+  /** Passed straight through to the native input — meaningful for type="date"/"number" etc. */
+  max?: string | number;
   id: string;
   name: string;
   required?: boolean;

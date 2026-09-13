@@ -16,7 +16,7 @@ export type CheckboxStyle = "check" | "cross";
 export type RadioAppearance = null | "with-decorator";
 export type OptionsLayout = "block" | "inline" | "equal-widths";
 export type LabelWeight = "normal" | "semi-bold" | "bold";
-export type InputTypesText = "text" | "email" | "password" | "number" | "tel" | "url";
+export type InputTypesText = "text" | "email" | "password" | "number" | "tel" | "url" | "date";
 export type InputMode = "text" | "email" | "tel" | "url" | "search" | "numeric" | "none" | "decimal";
 
 // Weight types for form components

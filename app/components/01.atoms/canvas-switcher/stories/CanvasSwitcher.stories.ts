@@ -37,17 +37,18 @@ export default {
   },
 } as Meta<typeof CanvasSwitcher>;
 
+// `args` is Storybook's own reactive object — bind to it directly (`args.x`) rather than
+// destructuring it into local variables/refs, which would snapshot the values once at setup()
+// and stop reflecting later Controls-panel changes.
 const Template: StoryFn<CanvasSwitcherStoryArgs> = (args) => ({
   components: { CanvasSwitcher },
   setup() {
-    const { canvasName, ...otherArgs } = args;
-    const selected = ref(canvasName);
-    return { selected, args: otherArgs };
+    return { args };
   },
   template: `
     <div>
-      <CanvasSwitcher v-model:canvas-name="selected" v-bind="args" />
-      <p style="margin-top: 1.6rem;">Selected: {{ selected }}</p>
+      <CanvasSwitcher v-model:canvas-name="args.canvasName" v-bind="args" />
+      <p style="margin-top: 1.6rem;">Selected: {{ args.canvasName }}</p>
     </div>
   `,
 });
@@ -60,14 +61,12 @@ PreviewWidthDemo.args = {};
 PreviewWidthDemo.render = (args) => ({
   components: { CanvasSwitcher },
   setup() {
-    const { canvasName } = args;
-    const selected = ref(canvasName);
-    return { selected };
+    return { args };
   },
   template: `
     <div>
-      <CanvasSwitcher v-model:canvas-name="selected" />
-      <div :class="selected" style="border: 1px dashed currentColor; margin-top: 1.6rem; padding: 1.6rem;">
+      <CanvasSwitcher v-model:canvas-name="args.canvasName" />
+      <div :class="args.canvasName" style="border: 1px dashed currentColor; margin-top: 1.6rem; padding: 1.6rem;">
         This box is constrained by the selected canvas's utility class.
       </div>
     </div>

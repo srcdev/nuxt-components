@@ -53,6 +53,10 @@ interface Props {
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
   inputVariant?: InputUiVariant;
+  /** Accessible name for the toggle button while the password is hidden. */
+  showPasswordText?: string;
+  /** Accessible name for the toggle button while the password is visible. */
+  hidePasswordText?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -64,6 +68,8 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
   theme: "default",
   inputVariant: "normal",
+  showPasswordText: "Show password",
+  hidePasswordText: "Hide password",
 });
 
 const modelValue = defineModel<string>();
@@ -76,7 +82,7 @@ const inputType = computed<"text" | "password">(() => {
 
 const displayPassword = ref(false);
 const buttonText = computed(() => {
-  return displayPassword.value ? "Hide password" : "Show password";
+  return displayPassword.value ? props.hidePasswordText : props.showPasswordText;
 });
 const toggleDisplayPassword = () => {
   displayPassword.value = !displayPassword.value;

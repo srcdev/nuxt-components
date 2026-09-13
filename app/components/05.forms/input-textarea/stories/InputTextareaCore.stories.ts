@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
+import { computed } from "vue";
 import StorybookComponent from "../InputTextareaCore.vue";
 import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
@@ -12,7 +13,7 @@ interface InputTextareaCoreStoryArgs {
   fieldHasError: boolean;
   required: boolean;
   theme: FormUiTheme;
-  InputUiVariant: InputUiVariant;
+  inputVariant: InputUiVariant;
   styleClassPassthrough: string[];
   leftSlotContent: string;
   rightSlotContent: string;
@@ -95,7 +96,7 @@ export default {
         category: "Styling",
       },
     },
-    InputUiVariant: {
+    inputVariant: {
       control: { type: "select" },
       options: ["normal", "outlined", "underlined"],
       description: "Textarea variant style",
@@ -160,31 +161,30 @@ export default {
   },
 } as Meta<typeof StorybookComponent>;
 
+// `args` is Storybook's own reactive object — bind to it directly (`args.x`) rather than
+// destructuring it into local variables/refs, which would snapshot the values once at setup()
+// and stop reflecting later Controls-panel changes. `componentArgs` strips the non-prop
+// slot-toggle args so they don't leak onto the component as unknown attributes.
 const Template: StoryFn<InputTextareaCoreStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
-    const { modelValue, ...otherArgs } = args;
-    const textareaValue = ref(modelValue);
+    const componentArgs = computed(() => {
+      const { useLeftSlot, useRightSlot, leftSlotContent, rightSlotContent, ...rest } = args;
+      return rest;
+    });
 
-    return {
-      textareaValue,
-      args: otherArgs,
-      leftSlotContent: args.leftSlotContent,
-      rightSlotContent: args.rightSlotContent,
-      useLeftSlot: args.useLeftSlot,
-      useRightSlot: args.useRightSlot,
-    };
+    return { args, componentArgs };
   },
   template: `
     <StorybookComponent
-      v-model="textareaValue"
-      v-bind="args"
+      v-model="args.modelValue"
+      v-bind="componentArgs"
     >
-      <template v-if="useLeftSlot" #left>{{ leftSlotContent }}</template>
-      <template v-if="useRightSlot" #right>{{ rightSlotContent }}</template>
+      <template v-if="args.useLeftSlot" #left>{{ args.leftSlotContent }}</template>
+      <template v-if="args.useRightSlot" #right>{{ args.rightSlotContent }}</template>
     </StorybookComponent>
     <div class="mt-4 text-sm text-gray-600">
-      Character count: {{ textareaValue.length }}
+      Character count: {{ args.modelValue.length }}
     </div>
   `,
 });
@@ -229,13 +229,13 @@ WithSlots.args = {
 
 export const Outlined = Template.bind({});
 Outlined.args = {
-  InputUiVariant: "outlined",
+  inputVariant: "outlined",
   placeholder: "Outlined textarea",
 };
 
 export const Underlined = Template.bind({});
 Underlined.args = {
-  InputUiVariant: "underlined",
+  inputVariant: "underlined",
   placeholder: "Underlined textarea",
 };
 

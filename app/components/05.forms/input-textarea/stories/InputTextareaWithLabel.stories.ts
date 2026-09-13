@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
+import { computed } from "vue";
 import StorybookComponent from "../variants/InputTextareaWithLabel.vue";
 import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
@@ -12,7 +13,7 @@ interface InputTextareaWithLabelStoryArgs {
   fieldHasError: boolean;
   required: boolean;
   theme: FormUiTheme;
-  InputUiVariant: InputUiVariant;
+  inputVariant: InputUiVariant;
   styleClassPassthrough: string[];
   useDescriptionTextSlot: boolean;
   useDescriptionHtmlSlot: boolean;
@@ -99,7 +100,7 @@ export default {
         category: "Styling",
       },
     },
-    InputUiVariant: {
+    inputVariant: {
       control: { type: "select" },
       options: ["normal", "outlined", "underlined"],
       description: "Textarea variant style",
@@ -196,37 +197,42 @@ export default {
   },
 } as Meta<typeof StorybookComponent>;
 
+// `args` is Storybook's own reactive object — bind to it directly (`args.x`) rather than
+// destructuring it into local variables/refs, which would snapshot the values once at setup()
+// and stop reflecting later Controls-panel changes. `componentArgs` strips the non-prop
+// slot-toggle args so they don't leak onto the component as unknown attributes.
 const Template: StoryFn<InputTextareaWithLabelStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
-    const { modelValue, ...otherArgs } = args;
-    const textareaValue = ref(modelValue);
+    const componentArgs = computed(() => {
+      const {
+        useDescriptionTextSlot,
+        useDescriptionHtmlSlot,
+        descriptionTextContent,
+        descriptionHtmlContent,
+        useLeftSlot,
+        useRightSlot,
+        leftSlotContent,
+        rightSlotContent,
+        ...rest
+      } = args;
+      return rest;
+    });
 
-    return {
-      textareaValue,
-      args: otherArgs,
-      descriptionTextContent: args.descriptionTextContent,
-      descriptionHtmlContent: args.descriptionHtmlContent,
-      useDescriptionTextSlot: args.useDescriptionTextSlot,
-      useDescriptionHtmlSlot: args.useDescriptionHtmlSlot,
-      leftSlotContent: args.leftSlotContent,
-      rightSlotContent: args.rightSlotContent,
-      useLeftSlot: args.useLeftSlot,
-      useRightSlot: args.useRightSlot,
-    };
+    return { args, componentArgs };
   },
   template: `
     <StorybookComponent
-      v-model="textareaValue"
-      v-bind="args"
+      v-model="args.modelValue"
+      v-bind="componentArgs"
     >
-      <template v-if="useDescriptionTextSlot" #descriptionText>{{ descriptionTextContent }}</template>
-      <template v-if="useDescriptionHtmlSlot" #descriptionHtml v-html="descriptionHtmlContent"></template>
-      <template v-if="useLeftSlot" #left>{{ leftSlotContent }}</template>
-      <template v-if="useRightSlot" #right>{{ rightSlotContent }}</template>
+      <template v-if="args.useDescriptionTextSlot" #descriptionText>{{ args.descriptionTextContent }}</template>
+      <template v-if="args.useDescriptionHtmlSlot" #descriptionHtml v-html="args.descriptionHtmlContent"></template>
+      <template v-if="args.useLeftSlot" #left>{{ args.leftSlotContent }}</template>
+      <template v-if="args.useRightSlot" #right>{{ args.rightSlotContent }}</template>
     </StorybookComponent>
     <div class="mt-4 text-sm text-gray-600">
-      Character count: {{ textareaValue.length }} / {{ args.maxlength }}
+      Character count: {{ args.modelValue.length }} / {{ args.maxlength }}
     </div>
   `,
 });
@@ -305,7 +311,7 @@ Required.args = {
 
 export const Outlined = Template.bind({});
 Outlined.args = {
-  InputUiVariant: "outlined",
+  inputVariant: "outlined",
   label: "Outlined Textarea",
   placeholder: "This is an outlined textarea",
   useDescriptionTextSlot: true,
@@ -314,7 +320,7 @@ Outlined.args = {
 
 export const Underlined = Template.bind({});
 Underlined.args = {
-  InputUiVariant: "underlined",
+  inputVariant: "underlined",
   label: "Underlined Textarea",
   placeholder: "This is an underlined textarea",
 };
@@ -359,7 +365,7 @@ AllVariants.render = (args) => ({
         <h3 class="text-lg font-semibold capitalize">{{ variant }} Variant</h3>
         <StorybookComponent
           v-model="textareaValues[variant]"
-          v-bind="{ ...args, InputUiVariant: variant, label: variant + ' Textarea', name: variant + '-textarea' }"
+          v-bind="{ ...args, inputVariant: variant, label: variant + ' Textarea', name: variant + '-textarea' }"
         />
       </div>
     </div>

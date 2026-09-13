@@ -1,4 +1,5 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
+import { computed } from "vue";
 import ContentDocs from "../ContentDocs.vue";
 import type { DocsNavItem } from "~/types/components";
 
@@ -86,19 +87,19 @@ export default {
 
 // ─── Stories ─────────────────────────────────────────────────────────────────
 
+// `args` is Storybook's own reactive object — bind to it directly (`args.x`) rather than
+// destructuring it into local variables/refs, which would snapshot the values once at setup()
+// and stop reflecting later Controls-panel changes.
 const Template: StoryFn<ContentDocsStoryArgs> = (args) => ({
   components: { ContentDocs },
   setup() {
-    const { activeNavItem, activePageNavItem, ...rest } = args;
-    const activeNav = ref(activeNavItem);
-    const activePageNav = ref(activePageNavItem);
-    return { args: rest, activeNav, activePageNav };
+    return { args };
   },
   template: `
     <ContentDocs
       v-bind="args"
-      v-model:active-nav-item="activeNav"
-      v-model:active-page-nav-item="activePageNav"
+      v-model:active-nav-item="args.activeNavItem"
+      v-model:active-page-nav-item="args.activePageNavItem"
     >
       <template #docsContent>
         <h3 style="margin-top:0">Docs Content</h3>
@@ -140,10 +141,8 @@ CustomLabels.args = {
 export const IconAtEnd: StoryFn<ContentDocsStoryArgs> = (args) => ({
   components: { ContentDocs },
   setup() {
-    const { activeNavItem, activePageNavItem, ...rest } = args;
-    const activeNav = ref(activeNavItem);
-    const activePageNav = ref(activePageNavItem);
-    return { args: { ...rest, styleClassPassthrough: ["icon-at-end-demo"] }, activeNav, activePageNav };
+    const componentArgs = computed(() => ({ ...args, styleClassPassthrough: ["icon-at-end-demo"] }));
+    return { args, componentArgs };
   },
   template: `
     <div>
@@ -154,9 +153,9 @@ export const IconAtEnd: StoryFn<ContentDocsStoryArgs> = (args) => ({
         }
       </style>
       <ContentDocs
-        v-bind="args"
-        v-model:active-nav-item="activeNav"
-        v-model:active-page-nav-item="activePageNav"
+        v-bind="componentArgs"
+        v-model:active-nav-item="args.activeNavItem"
+        v-model:active-page-nav-item="args.activePageNavItem"
       >
         <template #docsContent>
           <h3 style="margin-top:0">Docs Content</h3>

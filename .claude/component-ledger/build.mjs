@@ -79,12 +79,39 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
     const content = fs.readFileSync(f, "utf-8");
     return /defineProps\s*\(/.test(content) && !/defineProps\s*<.+?>\s*\(/s.test(content);
   });
+  // Storybook Controls-panel reactivity bug: @storybook/vue3 mounts the story component ONCE
+  // and, on every Controls change, mutates the same reactive `args` object in place — it never
+  // re-runs setup(). A story that destructures/spreads `args` into local variables/a ref at
+  // setup-time (e.g. `const { modelValue, ...otherArgs } = args;`) takes a one-time snapshot, so
+  // most Controls silently stop updating the rendered story after first render. The fix wraps any
+  // such destructuring in a `computed(() => {...})` and keeps the template bound through the live
+  // `args` object (`args.x`) — so a spread-from-`args` assignment is only a bug when it is NOT
+  // inside a `computed()`.
+  const storySpreadFromArgsRe = /\{[^{}]*\.\.\.[A-Za-z0-9_]+[^{}]*\}\s*=\s*args;/g;
+  const computedWrapsIt = (before) => /computed\s*\(\s*\(\)\s*=>\s*\{[^{}]*$/.test(before);
+  const storyFiles = fs.existsSync(path.join(compdir, "stories"))
+    ? fs
+        .readdirSync(path.join(compdir, "stories"))
+        .filter((f) => f.endsWith(".stories.ts"))
+        .map((f) => path.join(compdir, "stories", f))
+    : fs.readdirSync(compdir).filter((f) => f.endsWith(".stories.ts")).map((f) => path.join(compdir, f));
+  const hasStoryArgsBug = storyFiles.some((f) => {
+    const content = fs.readFileSync(f, "utf-8");
+    let match;
+    storySpreadFromArgsRe.lastIndex = 0;
+    while ((match = storySpreadFromArgsRe.exec(content))) {
+      const before = content.slice(Math.max(0, match.index - 150), match.index);
+      if (!computedWrapsIt(before)) return true;
+    }
+    return false;
+  });
   rows.push({
     compdir: relDir,
     tier,
     n_vue: files.length,
     variants: hasVariants,
     legacy_props: hasLegacyProps,
+    story_args_bug: hasStoryArgsBug,
     consumer_styling: hasConsumerStyling,
     tests: hasTests,
     stories: hasStoriesDir || hasStoriesFile,

@@ -1,0 +1,107 @@
+{
+  "SRCDEV InputTextCore Basic": {
+    "description": "Basic InputTextCore native input (no label/error wrapper)",
+    "scope": "vue,html",
+    "body": [
+      "<InputTextCore",
+      "  id=\"$1fieldId\"",
+      "  name=\"$2fieldName\"",
+      "  v-model=\"$3fieldValue\"",
+      "  type=\"$4text\"",
+      "  placeholder=\"$5Enter value...\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputTextCore Date with min/max": {
+    "description": "InputTextCore date input constrained to a min/max range (e.g. no dates in the past)",
+    "scope": "vue,html",
+    "body": [
+      "<InputTextCore",
+      "  id=\"$1appointment-date\"",
+      "  name=\"$2appointmentDate\"",
+      "  v-model=\"$3appointmentDate\"",
+      "  type=\"date\"",
+      "  :min=\"new Date().toISOString().split('T')[0]\"",
+      "  max=\"$42027-12-31\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputTextWithLabel Basic": {
+    "description": "InputTextWithLabel: labelled text field with error/description support",
+    "scope": "vue,html",
+    "body": [
+      "<InputTextWithLabel",
+      "  v-model=\"$1fieldValue\"",
+      "  id=\"$2fieldId\"",
+      "  name=\"$3fieldName\"",
+      "  type=\"$4text\"",
+      "  label=\"$5Field label\"",
+      "  :error-message=\"$6errors.fieldName\"",
+      "  :field-has-error=\"!!$6errors.fieldName\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputTextWithLabel Date with min/max": {
+    "description": "InputTextWithLabel date field constrained to a min/max range",
+    "scope": "vue,html",
+    "body": [
+      "<InputTextWithLabel",
+      "  v-model=\"$1appointmentDate\"",
+      "  id=\"$2appointment-date\"",
+      "  name=\"$2appointmentDate\"",
+      "  type=\"date\"",
+      "  label=\"$3Appointment date\"",
+      "  :min=\"new Date().toISOString().split('T')[0]\"",
+      "  max=\"$42027-12-31\"",
+      "  :error-message=\"$5errors.appointmentDate\"",
+      "  :field-has-error=\"!!$5errors.appointmentDate\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputPasswordWithLabel": {
+    "description": "InputPasswordWithLabel with show/hide toggle",
+    "scope": "vue,html",
+    "body": [
+      "<InputPasswordWithLabel",
+      "  v-model=\"$1password\"",
+      "  name=\"$2password\"",
+      "  label=\"$3Password\"",
+      "  :error-message=\"$4errors.password\"",
+      "  :field-has-error=\"!!$4errors.password\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputTextAsNumberWithLabel": {
+    "description": "InputTextAsNumberWithLabel numeric stepper with min/max/step",
+    "scope": "vue,html",
+    "body": [
+      "<InputTextAsNumberWithLabel",
+      "  v-model=\"$1quantity\"",
+      "  name=\"$2quantity\"",
+      "  label=\"$3Quantity\"",
+      "  :min=\"$41\"",
+      "  :max=\"$599\"",
+      "  :step=\"$61\"",
+      "  :error-message=\"$7errors.quantity\"",
+      "  :field-has-error=\"!!$7errors.quantity\"",
+      ">",
+      "  <template #left>−</template>",
+      "  <template #right>+</template>",
+      "</InputTextAsNumberWithLabel>"
+    ]
+  },
+  "SRCDEV InputText CSS Override": {
+    "description": "CSS override scaffold for InputTextCore tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .input-text-wrapper {",
+      "    --input-text-surface: $2;",
+      "    --input-text-border: $3;",
+      "    --input-text-border-focus: $4;",
+      "    --input-text-color: $5;",
+      "  }",
+      "}"
+    ]
+  }
+}

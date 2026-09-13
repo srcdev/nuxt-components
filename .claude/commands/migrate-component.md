@@ -8,9 +8,22 @@ and `feedback_private_token_convention_clarified` in memory for the token rule s
 
 ## 1. Pick the component
 
-If the user gave an argument (a component name or path), resolve it against `app/components/`
-(match on folder name or `.vue` filename, case-insensitively). If it doesn't resolve uniquely,
-ask which one they meant.
+If the user gave an argument (a component name or path — e.g. `/migrate-component input-copy`),
+resolve it against `app/components/` (match on folder name or `.vue` filename, case-insensitively).
+If it doesn't resolve uniquely, ask which one they meant.
+
+**Check before you migrate.** Whenever a component was named explicitly — or the user's wording is
+a status question ("is X done?", "check X", "does X still need work?") rather than an instruction
+to migrate — run `node .claude/component-ledger/build.mjs` and look up that component's row in
+`.claude/component-ledger/audit.json` first:
+
+- **Already fully compliant** (`score: 5`, placed in a real tier, `variants: false`,
+  `legacy_props: false`, `story_args_bug: false`): skip straight to reporting — state its ledger
+  row (tier, score, and confirmation the three non-scored checks are also clean) and stop. Don't
+  run step 2's `AskUserQuestion` or the step 3 checklist for a component that already passes every
+  check; that flow is for when there's actual work to decide about.
+- **Not fully compliant, or the user asked to migrate/fix it outright** (not just check): proceed
+  to step 2 as normal.
 
 Otherwise, auto-pick the next worst offender:
 
@@ -21,6 +34,9 @@ Otherwise, auto-pick the next worst offender:
    - Else any group with `"legacy_props": true` (still options-style `defineProps({...})`, not
      `defineProps<Props>()`) — same tie-break. This one doesn't move the 5-point `score`, so it
      would otherwise hide forever behind an already-complete-looking component.
+   - Else any group with `"story_args_bug": true` (a story destructures/refs Storybook's `args` at
+     setup-time — see checklist item 6a) — same tie-break. Also doesn't move the 5-point `score`,
+     for the same reason as `legacy_props`.
    - Else the lowest `score` overall — same tie-break.
 3. State which component was picked and why in one line (e.g. "Picked `input-select` — unplaced isn't the issue here, it forks a `variants/` subfolder and scores 2/5.") before doing anything else, so the user can redirect you if they'd rather do a different one next.
 
@@ -70,6 +86,21 @@ briefly) — don't skip silently.
    no logic worth testing — say so explicitly if you skip.
 6. **Storybook story** — create or update `stories/*.stories.ts` with controls for props/slots
    that warrant them (see `.claude/skills/storybook-add-story.md`).
+6a. **Storybook Controls-panel reactivity** — check every story `Template`/`render` function in
+    the component's `stories/*.stories.ts` files for this bug: `@storybook/vue3` mounts the story
+    component **once** and, on every Controls-panel change, mutates the same reactive `args`
+    object in place — it never re-runs `setup()`. A story that destructures or spreads `args` into
+    local variables/a ref at setup-time (the tell-tale shape: `const { modelValue, ...otherArgs }
+    = args;`, whether or not it's then fed into a `ref()`) takes a one-time snapshot, so most
+    Controls silently stop updating the rendered story after first render — often alongside a
+    prop-name typo in `argTypes` that compounds it (e.g. a control literally named differently
+    from the real component prop it's meant to drive — check that too). Fix by binding the
+    template directly to the live object (`v-model="args.modelValue"`, `v-bind="componentArgs"`
+    where `componentArgs` is a `computed()` that strips only genuinely non-prop extra args) rather
+    than copying values out in `setup()` — a destructure/spread from `args` is only safe when it's
+    inside a `computed()`. The ledger's `story_args_bug` column flags this automatically (any
+    `{...} = args;` spread not wrapped in a `computed()`); still eyeball each story file yourself,
+    since a differently-shaped variant of the same mistake may not match that exact heuristic.
 7. **Skill doc** — create or update `.claude/skills/components/<component-name>.md`. If the
    component still forks `variants/` files, fold each variant's behaviour into this doc as a
    "Variants" section per `feedback_variants_deprecated_as_own_skill_docs` — don't delete the

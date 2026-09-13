@@ -41,6 +41,8 @@
         :type
         :inputmode
         :maxlength
+        :min
+        :max
         :name
         :placeholder
         :label
@@ -86,6 +88,10 @@ import type { InputTypesText, FormUiTheme, InputUiVariant, InputMode } from "~/t
 
 interface Props {
   maxlength?: number;
+  /** Passed straight through to the native input — meaningful for type="date"/"number" etc. */
+  min?: string | number;
+  /** Passed straight through to the native input — meaningful for type="date"/"number" etc. */
+  max?: string | number;
   type: InputTypesText;
   inputmode?: InputMode;
   name: string;

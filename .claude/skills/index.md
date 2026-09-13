@@ -116,7 +116,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── deep-expanding-menu.md         — DeepExpandingMenu: anchor-positioned popover nav panels, browser support caveat, CSS token API
     ├── deep-expanding-menu-classic.md — DeepExpandingMenuClassic: <details>-based fallback nav, click-outside close, CSS token API
     ├── display-tooltip.md         — DisplayTooltip: anchor-positioned popover trigger, browser support caveat, CSS token API
-    └── display-tooltip-defined.md — DisplayTooltipDefined: structured title/body/action tooltip content with close button, composes DisplayTooltip
+    ├── display-tooltip-defined.md — DisplayTooltipDefined: structured title/body/action tooltip content with close button, composes DisplayTooltip
+    └── input-text-core.md        — InputTextCore: native text/date/number input primitive, min/max pass-through (date-picker range), CSS token API; Variants section covers InputTextWithLabel/InputPasswordWithLabel/InputTextAsNumberWithLabel
 ```
 
 ## Skill file template

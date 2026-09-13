@@ -74,10 +74,16 @@ export const Default: Story = {
   render: (args) => ({
     components: { ActionMenu, ActionMenuItemCore },
     setup() {
-      const { itemCount, ...componentArgs } = args;
+      // `args` is Storybook's own reactive object — read from it directly (`args.x`) inside
+      // these computeds rather than destructuring it into local variables at setup-time, which
+      // would snapshot the values once and stop reflecting later Controls-panel changes.
+      const componentArgs = computed(() => {
+        const { itemCount, ...rest } = args;
+        return rest;
+      });
       const lastAction = ref<string | null>(null);
       const items = computed(() =>
-        actionItems.slice(0, itemCount ?? 5).map((item, i) => ({
+        actionItems.slice(0, args.itemCount ?? 5).map((item, i) => ({
           ...item,
           slotName: `item-${i}`,
         }))

@@ -56,7 +56,7 @@
           type="button"
           :readonly="(modelValue ?? 0) <= min"
           :is-pending="false"
-          button-text="Step down"
+          :button-text="stepDownText"
           theme="default"
           variant="inline"
           @click.stop.prevent="updateValue(-step, (modelValue ?? 0) > min)"
@@ -71,7 +71,7 @@
           type="button"
           :readonly="(modelValue ?? 0) >= max"
           :is-pending="false"
-          button-text="Step up"
+          :button-text="stepUpText"
           theme="default"
           variant="inline"
           @click.stop.prevent="updateValue(step, (modelValue ?? 0) < max)"
@@ -103,6 +103,10 @@ interface Props {
   max: number;
   step?: number;
   inputVariant?: InputUiVariant;
+  /** Accessible name for the decrement button. */
+  stepDownText?: string;
+  /** Accessible name for the increment button. */
+  stepUpText?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -114,6 +118,8 @@ const props = withDefaults(defineProps<Props>(), {
   theme: "default",
   step: 1,
   inputVariant: "normal",
+  stepDownText: "Step down",
+  stepUpText: "Step up",
 });
 
 const slots = useSlots();

@@ -2,8 +2,10 @@
   <div class="input-copy" :class="elementClasses">
     <div class="input-copy__wrapper">
       <input
+        :id="resolvedId"
         type="text"
         class="input-copy__input"
+        :name="name || resolvedId"
         :value="value"
         :aria-label="ariaLabel || label"
         readonly
@@ -26,6 +28,9 @@
 <script setup lang="ts">
 interface Props {
   value: string;
+  /** Defaults to an auto-generated id — pass one explicitly only if something needs to target this input. */
+  id?: string;
+  name?: string;
   label?: string;
   ariaLabel?: string;
   description?: string;
@@ -37,6 +42,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  id: undefined,
+  name: undefined,
   label: undefined,
   ariaLabel: undefined,
   description: undefined,
@@ -46,6 +53,13 @@ const props = withDefaults(defineProps<Props>(), {
   isDisabled: false,
   styleClassPassthrough: () => [],
 });
+
+// Readonly text inputs still need an id/name to satisfy "a form field element should have an
+// id or name attribute" — auto-generated so every existing call site (none of which pass one)
+// gets a valid, unique id for free. Named resolvedId, not id, so it can't be confused with (or
+// silently shadow) the `id` prop it falls back to.
+const autoId = useId();
+const resolvedId = computed(() => props.id ?? autoId);
 
 const emit = defineEmits<{
   copy: [value: string];

@@ -7,6 +7,11 @@ const meta: Meta<typeof InputCopy> = {
   tags: ["autodocs"],
   argTypes: {
     value: { control: "text" },
+    id: {
+      control: "text",
+      description: "Defaults to an auto-generated id — pass one only if something needs to target this input.",
+    },
+    name: { control: "text", description: "Defaults to the resolved id if not provided." },
     label: { control: "text" },
     description: { control: "text" },
     buttonText: { control: "text" },
@@ -98,6 +103,16 @@ export const NoDescription: Story = {
     value: "sk_test_51234567890abcdef",
     label: "Secret key",
     description: undefined,
+  },
+};
+
+export const WithExplicitIdAndName: Story = {
+  args: {
+    value: "sk_live_abc123defgh456xyz789uvw",
+    id: "checkout-license-key",
+    name: "licenseKey",
+    label: "License key",
+    description: "Demonstrates passing explicit id/name instead of relying on the auto-generated one.",
   },
 };
 

@@ -1,11 +1,14 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
+import { computed } from "vue";
 import StorybookComponent from "../InputTextCore.vue";
 import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputTextCoreStoryArgs {
   modelValue: string;
-  type: "text" | "email" | "password" | "tel" | "url" | "search";
+  type: "text" | "email" | "password" | "tel" | "url" | "search" | "date";
   maxlength: number;
+  min: string | number;
+  max: string | number;
   name: string;
   placeholder: string;
   label: string;
@@ -13,7 +16,7 @@ interface InputTextCoreStoryArgs {
   fieldHasError: boolean;
   required: boolean;
   theme: FormUiTheme;
-  InputUiVariant: InputUiVariant;
+  inputVariant: InputUiVariant;
   styleClassPassthrough: string[];
   leftSlotContent: string;
   rightSlotContent: string;
@@ -37,7 +40,7 @@ export default {
     // Basic Configuration
     type: {
       control: { type: "select" },
-      options: ["text", "email", "password", "tel", "url", "search"],
+      options: ["text", "email", "password", "tel", "url", "search", "date"],
       description: "Input type",
       table: {
         category: "Basic",
@@ -46,6 +49,20 @@ export default {
     maxlength: {
       control: { type: "number", min: 1, max: 1000 },
       description: "Maximum length of input",
+      table: {
+        category: "Basic",
+      },
+    },
+    min: {
+      control: "text",
+      description: 'Passed straight through to the native input — e.g. earliest allowed date for type="date", or lowest number for type="number".',
+      table: {
+        category: "Basic",
+      },
+    },
+    max: {
+      control: "text",
+      description: 'Passed straight through to the native input — e.g. latest allowed date for type="date", or highest number for type="number".',
       table: {
         category: "Basic",
       },
@@ -104,7 +121,7 @@ export default {
         category: "Styling",
       },
     },
-    InputUiVariant: {
+    inputVariant: {
       control: { type: "select" },
       options: ["normal", "outlined", "underlined"],
       description: "Input variant style",
@@ -170,31 +187,30 @@ export default {
   },
 } as Meta<typeof StorybookComponent>;
 
+// `args` is Storybook's own reactive object — bind to it directly (`args.x`) rather than
+// destructuring it into local variables/refs, which would snapshot the values once at setup()
+// and stop reflecting later Controls-panel changes. `componentArgs` strips the non-prop
+// slot-toggle args so they don't leak onto the component as unknown attributes.
 const Template: StoryFn<InputTextCoreStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
-    const { modelValue, ...otherArgs } = args;
-    const inputValue = ref(modelValue);
+    const componentArgs = computed(() => {
+      const { useLeftSlot, useRightSlot, leftSlotContent, rightSlotContent, ...rest } = args;
+      return rest;
+    });
 
-    return {
-      inputValue,
-      args: otherArgs,
-      leftSlotContent: args.leftSlotContent,
-      rightSlotContent: args.rightSlotContent,
-      useLeftSlot: args.useLeftSlot,
-      useRightSlot: args.useRightSlot,
-    };
+    return { args, componentArgs };
   },
   template: `
     <StorybookComponent
-      v-model="inputValue"
-      v-bind="args"
+      v-model="args.modelValue"
+      v-bind="componentArgs"
     >
-      <template v-if="useLeftSlot" #left>{{ leftSlotContent }}</template>
-      <template v-if="useRightSlot" #right>{{ rightSlotContent }}</template>
+      <template v-if="args.useLeftSlot" #left>{{ args.leftSlotContent }}</template>
+      <template v-if="args.useRightSlot" #right>{{ args.rightSlotContent }}</template>
     </StorybookComponent>
     <div class="mt-4 text-sm text-gray-600">
-      Current value: {{ inputValue }}
+      Current value: {{ args.modelValue }}
     </div>
   `,
 });
@@ -230,12 +246,22 @@ WithSlots.args = {
 
 export const Outlined = Template.bind({});
 Outlined.args = {
-  InputUiVariant: "outlined",
+  inputVariant: "outlined",
   placeholder: "Outlined input",
 };
 
 export const Underlined = Template.bind({});
 Underlined.args = {
-  InputUiVariant: "underlined",
+  inputVariant: "underlined",
   placeholder: "Underlined input",
+};
+
+export const DateWithMinMax = Template.bind({});
+DateWithMinMax.args = {
+  type: "date",
+  label: "Appointment date",
+  name: "appointmentDate",
+  // Prevents picking a date in the past in the native browser date picker.
+  min: new Date().toISOString().split("T")[0],
+  max: "2027-12-31",
 };
