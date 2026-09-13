@@ -1,0 +1,29 @@
+{
+  "SRCDEV EntryAnimation Basic": {
+    "description": "Basic EntryAnimation wrapper with a default slide-in animation",
+    "scope": "vue,html",
+    "body": [
+      "<EntryAnimation animation-type=\"$1entry-slide-in\">",
+      "  <template #default>",
+      "    $2",
+      "  </template>",
+      "</EntryAnimation>"
+    ]
+  },
+  "SRCDEV EntryAnimation Looped, Skip First": {
+    "description": "EntryAnimation in a v-for loop, skipping the first (above-the-fold) item",
+    "scope": "vue,html",
+    "body": [
+      "<EntryAnimation",
+      "  v-for=\"($1item, $2index) in $3items\"",
+      "  :key=\"$1item.id\"",
+      "  :skip-animation=\"$2index === 0\"",
+      "  animation-type=\"$4entry-slide-in\"",
+      ">",
+      "  <template #default>",
+      "    $5",
+      "  </template>",
+      "</EntryAnimation>"
+    ]
+  }
+}
