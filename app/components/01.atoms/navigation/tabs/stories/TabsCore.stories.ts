@@ -75,6 +75,24 @@ const tabSlots = panels
   )
   .join("\n");
 
+const fivePanels = [
+  { label: "Overview", content: "A short summary of the product goes here." },
+  { label: "Specs", content: "Technical specifications and dimensions." },
+  { label: "Reviews", content: "Customer reviews and ratings." },
+  { label: "Shipping", content: "Delivery estimates and carrier options." },
+  { label: "Returns", content: "Return window and refund policy." },
+];
+
+const fiveTabSlots = fivePanels
+  .map(
+    (panel, index) => `
+    <template #tab-${index}-trigger>${panel.label}</template>
+    <template #tab-${index}-content>
+      <div style="padding: 1.6rem;">${panel.content}</div>
+    </template>`
+  )
+  .join("\n");
+
 // ─── Stories ──────────────────────────────────────────────────────────────────
 
 export const Horizontal: Story = {
@@ -123,6 +141,30 @@ export const IndicatorsOff: Story = {
   }),
 };
 
+export const FiveTabs: Story = {
+  name: "Five Tabs (regression check)",
+  args: { itemCount: fivePanels.length },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "itemCount raised to 5 as a regression check — the original hand-rolled version of this component had an indicator-positioning issue that only showed up with more than 3 tabs. Try hovering quickly across several tabs in a row, then clicking a tab several positions away from the active one (e.g. tab 1 → tab 5), to confirm the hover/active/underline indicators land in the right place without jumping or lagging behind.",
+      },
+    },
+  },
+  render: (args) => ({
+    components: { TabsCore },
+    setup() {
+      return { args };
+    },
+    template: `
+      <TabsCore v-bind="args">
+        ${fiveTabSlots}
+      </TabsCore>
+    `,
+  }),
+};
+
 export const IndicatorColours: Story = {
   name: "Indicator Colours (demo)",
   args: { itemCount: panels.length },
@@ -130,7 +172,7 @@ export const IndicatorColours: Story = {
     docs: {
       description: {
         story:
-          "Each moving indicator given a distinct colour via its public CSS token, purely to make the three separate states (hover / active / underline) easy to tell apart. Hover a tab to see the green highlight move independently of the blue active highlight.",
+          "Each moving indicator given a distinct colour via its public CSS token, purely to make the three separate states (hover / active / underline) easy to tell apart. Hover a tab to see the green highlight move independently of the blue active highlight — the label text stays white against both backgrounds via the matching --tabs-hover-indicator-text-colour / --tabs-active-indicator-text-colour tokens (see CONSUMER-STYLING.md), which previously had no effect since they were wired to the wrong element.",
       },
     },
   },

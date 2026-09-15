@@ -18,7 +18,7 @@
           aria-selected="false"
           class="tabs-list-item"
           @click.prevent="navItemClicked($event)"
-          @mouseover="navItemHovered($event)"
+          @mouseenter="navItemHovered($event)"
           @keydown="navItemKeydown($event)"
         >
           <slot :name="`tab-${key}-trigger`"></slot>
@@ -45,19 +45,19 @@
 
 <script setup lang="ts">
 interface Props {
-  axis?: "x" | "y"
-  transitionDuration?: number
+  axis?: "x" | "y";
+  transitionDuration?: number;
   /** Number of tabs to render — drives both the trigger and content indexed slots. */
-  itemCount: number
+  itemCount: number;
   /** Shows a moving highlight behind the hovered tab. */
-  trackHover?: boolean
+  trackHover?: boolean;
   /** Shows a moving highlight behind the active tab. */
-  trackActive?: boolean
+  trackActive?: boolean;
   /** Shows a moving underline/sideline indicator beneath the active tab. */
-  trackIndicator?: boolean
+  trackIndicator?: boolean;
   /** aria-label on the tablist — override for localisation. */
-  ariaLabel?: string
-  styleClassPassthrough?: string | string[]
+  ariaLabel?: string;
+  styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -68,12 +68,12 @@ const props = withDefaults(defineProps<Props>(), {
   trackIndicator: true,
   ariaLabel: "Tabs",
   styleClassPassthrough: () => [],
-})
+});
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const tabsNavRef = ref<HTMLElement | null>(null)
-const tabsContentRefs = ref<HTMLElement[] | null>(null)
+const tabsNavRef = ref<HTMLElement | null>(null);
+const tabsContentRefs = ref<HTMLElement[] | null>(null);
 
 const { initNavDecorators, navItemClicked, navItemHovered, navItemKeydown, resetHoverToActivePosition } = useTabs(
   props.axis,
@@ -81,11 +81,11 @@ const { initNavDecorators, navItemClicked, navItemHovered, navItemKeydown, reset
   tabsContentRefs,
   props.transitionDuration,
   { trackHover: props.trackHover, trackActive: props.trackActive, trackIndicator: props.trackIndicator }
-)
+);
 
 onMounted(() => {
-  initNavDecorators()
-})
+  initNavDecorators();
+});
 </script>
 
 <style lang="css">
@@ -117,8 +117,7 @@ onMounted(() => {
           scale var(--_transition-duration),
           translate var(--_transition-duration);
         z-index: 1;
-        background: var(--tabs-hover-indicator-colour, light-dark(var(--slate-07), var(--slate-03)));
-        color: var(--tabs-hover-indicator-text-colour, light-dark(var(--slate-00), var(--slate-10)));
+        background: var(--tabs-hover-indicator-colour, var(--slate-07));
       }
 
       .nav__active {
@@ -135,8 +134,7 @@ onMounted(() => {
           scale var(--_transition-duration),
           translate var(--_transition-duration);
         z-index: 2;
-        background: var(--tabs-active-indicator-colour, light-dark(var(--slate-10), var(--slate-00)));
-        color: var(--tabs-active-indicator-text-colour, light-dark(var(--slate-00), var(--slate-10)));
+        background: var(--tabs-active-indicator-colour, var(--slate-09));
       }
 
       .nav__active-indicator {
@@ -152,7 +150,7 @@ onMounted(() => {
           scale var(--_transition-duration),
           translate var(--_transition-duration);
         z-index: 3;
-        background: var(--tabs-underline-indicator-colour, light-dark(var(--slate-10), var(--slate-00)));
+        background: var(--tabs-underline-indicator-colour, var(--slate-10));
         height: var(--tabs-underline-indicator-height, 0.4rem);
       }
 
@@ -163,7 +161,7 @@ onMounted(() => {
         z-index: 4;
         background: transparent;
         border: 0;
-        color: var(--tabs-list-item-colour, light-dark(var(--slate-10), var(--slate-00)));
+        color: var(--tabs-list-item-colour, var(--slate-10));
         cursor: pointer;
         font: inherit;
         text-transform: var(--tabs-list-item-text-transform, uppercase);
@@ -171,11 +169,18 @@ onMounted(() => {
         margin: 0;
         padding: var(--tabs-list-item-padding-block, 1em) var(--tabs-list-item-padding-inline, 2em);
 
-        &:hover,
-        &[aria-selected="true"],
-        &.transitioning {
+        /* Text colour tracks the indicator actually behind it — hover and active can differ. */
+        &:hover {
           opacity: 1;
-          color: var(--tabs-list-item-colour-selected, light-dark(var(--slate-00), var(--slate-10)));
+          color: var(--tabs-hover-indicator-text-colour, var(--slate-00));
+        }
+
+        &[aria-selected="true"] {
+          opacity: 1;
+          color: var(
+            --tabs-list-item-colour-selected,
+            var(--tabs-active-indicator-text-colour, var(--slate-00))
+          );
         }
 
         &:focus-visible {
@@ -189,7 +194,7 @@ onMounted(() => {
       display: grid;
       grid-template-areas: "element-stack";
 
-      background-color: var(--tabs-content-background-colour, light-dark(var(--slate-09), var(--slate-10)));
+      background-color: var(--tabs-content-background-colour, var(--slate-09));
       border: var(--tabs-content-border-width, 0.1rem) solid var(--tabs-content-border-colour, var(--slate-06));
       border-radius: var(--tabs-content-border-radius, 0);
       outline: var(--tabs-content-border-width, 0.1rem) solid var(--tabs-content-border-colour, var(--slate-06));

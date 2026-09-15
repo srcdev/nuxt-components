@@ -17,6 +17,14 @@ const slots = {
   "tab-2-content": "<p class='panel-2'>Content three</p>",
 };
 
+const fiveSlots = {
+  ...slots,
+  "tab-3-trigger": "Tab Four",
+  "tab-3-content": "<p class='panel-3'>Content four</p>",
+  "tab-4-trigger": "Tab Five",
+  "tab-4-content": "<p class='panel-4'>Content five</p>",
+};
+
 describe("TabsCore", () => {
   beforeEach(() => {
     vi.stubGlobal("ResizeObserver", MockResizeObserver);
@@ -178,5 +186,89 @@ describe("TabsCore", () => {
   it("omits the underline indicator when trackIndicator is false", async () => {
     const wrapper = await mountSuspended(TabsCore, { props: { itemCount: 3, trackIndicator: false }, slots });
     expect(wrapper.find(".nav__active-indicator").exists()).toBe(false);
+  });
+
+  // ─── Hover indicator movement ────────────────────────────────────────────
+
+  it("moves the hover indicator position on mouseenter", async () => {
+    const wrapper = await mountSuspended(TabsCore, { props: { itemCount: 3 }, slots });
+    const tabsList = wrapper.find(".tabs-list").element as HTMLElement;
+    const triggers = wrapper.findAll(".tabs-list-item");
+
+    expect(tabsList.style.getPropertyValue("--_width-hovered")).toBe("");
+
+    await triggers[1]!.trigger("mouseenter");
+
+    expect(tabsList.style.getPropertyValue("--_width-hovered")).not.toBe("");
+  });
+
+  it("resets the hover indicator to the active tab on mouseleave", async () => {
+    const wrapper = await mountSuspended(TabsCore, { props: { itemCount: 3 }, slots });
+    const tabsList = wrapper.find(".tabs-list");
+    const triggers = wrapper.findAll(".tabs-list-item");
+
+    await triggers[1]!.trigger("mouseenter");
+    await tabsList.trigger("mouseleave");
+
+    // Should not throw, and the hover indicator settles back onto the active (first) tab.
+    expect((tabsList.element as HTMLElement).style.getPropertyValue("--_x-hovered")).toBe("0px");
+  });
+
+  it("clears a pending settle timeout when hovering a second tab before the first settles", async () => {
+    const wrapper = await mountSuspended(TabsCore, { props: { itemCount: 3 }, slots });
+    const triggers = wrapper.findAll(".tabs-list-item");
+    const clearTimeoutSpy = vi.spyOn(global, "clearTimeout");
+
+    await triggers[1]!.trigger("mouseenter");
+    await triggers[2]!.trigger("mouseenter");
+
+    expect(clearTimeoutSpy).toHaveBeenCalled();
+  });
+
+  // ─── Regression: more than 3 tabs ────────────────────────────────────────
+  // The original hand-rolled version of this component had an indicator-positioning issue
+  // that only showed up with itemCount > 3 — these lock in correct behaviour at 5.
+
+  it("activates a distant tab (index 0 -> index 4) directly via click", async () => {
+    const wrapper = await mountSuspended(TabsCore, { props: { itemCount: 5 }, slots: fiveSlots });
+    const triggers = wrapper.findAll(".tabs-list-item");
+
+    await triggers[4]!.trigger("click");
+
+    expect(triggers[0]!.attributes("aria-selected")).toBe("false");
+    expect(triggers[4]!.attributes("aria-selected")).toBe("true");
+    expect(triggers[4]!.attributes("tabindex")).toBe("0");
+    expect(wrapper.findAll(".tab-content")[4]!.attributes("aria-hidden")).toBe("false");
+  });
+
+  it("does not recolour tabs spanned by a distant activation jump (regression: intermediate labels going invisible)", async () => {
+    // The old implementation force-applied a "transitioning" class to every tab spanned by a
+    // jump, forcing it to the active-indicator's text colour for the whole transition — even
+    // though the sliding indicator only visually reaches each spanned tab partway through, and
+    // for a forward jump doesn't reach the middle tabs until late in the transition. That made
+    // intermediate labels flash a colour matching neither their own background nor (yet) the
+    // indicator's, going invisible. Spanned tabs should only ever carry aria-selected/hover
+    // state of their own — never a class forcing them to look active.
+    const wrapper = await mountSuspended(TabsCore, { props: { itemCount: 5 }, slots: fiveSlots });
+    const triggers = wrapper.findAll(".tabs-list-item");
+
+    // Active tab starts at index 0, so activating index 4 spans every tab in between.
+    await triggers[4]!.trigger("click");
+
+    [1, 2, 3].forEach((index) => {
+      expect(triggers[index]!.attributes("aria-selected")).toBe("false");
+      expect(triggers[index]!.classes()).not.toContain("transitioning");
+    });
+  });
+
+  it("wraps correctly with End then ArrowRight across 5 tabs", async () => {
+    const wrapper = await mountSuspended(TabsCore, { props: { itemCount: 5 }, slots: fiveSlots });
+    const triggers = wrapper.findAll(".tabs-list-item");
+
+    await triggers[0]!.trigger("keydown", { key: "End" });
+    expect(triggers[4]!.attributes("aria-selected")).toBe("true");
+
+    await triggers[4]!.trigger("keydown", { key: "ArrowRight" });
+    expect(triggers[0]!.attributes("aria-selected")).toBe("true");
   });
 });
