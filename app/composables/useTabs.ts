@@ -1,10 +1,17 @@
 import { useResizeObserver } from "@vueuse/core"
 
+interface UseTabsOptions {
+  trackHover: boolean
+  trackActive: boolean
+  trackIndicator: boolean
+}
+
 const useTabs = (
   axis: string,
   tabsNavRef: Ref<HTMLElement | null>,
   tabsContentRefs: Ref<HTMLElement[] | null>,
-  duration: number
+  duration: number,
+  options: UseTabsOptions = { trackHover: true, trackActive: true, trackIndicator: true }
 ) => {
   const navItems = ref<HTMLElement[] | null>(null)
   const previousActiveTab = useState<HTMLElement | null>("previousActiveTab", () => null)
@@ -16,7 +23,7 @@ const useTabs = (
 
   const initNavDecorators = () => {
     navItems.value = tabsNavRef.value
-      ? (Array.from(tabsNavRef.value.querySelectorAll("[data-nav-item")) as HTMLElement[])
+      ? (Array.from(tabsNavRef.value.querySelectorAll("[data-nav-item]")) as HTMLElement[])
       : []
 
     if (!navItems.value || navItems.value.length === 0) {
@@ -51,25 +58,34 @@ const useTabs = (
     previousActiveTab.value = activeElement
     previousHoveredTab.value = activeElement
 
+    setRovingTabindex()
     addNavDecorators()
     setActiveTabContent()
   }
 
   const addNavDecorators = () => {
-    const elementClasses = ["nav__active-indicator", "nav__active", "nav__hovered"]
-    if (tabsNavRef.value) {
-      for (let i = 0; i < 3; i++) {
-        const div = document.createElement("div")
-        const className = elementClasses[i]
-        if (className) {
-          div.classList.add(className)
-        }
-        tabsNavRef.value.appendChild(div)
-      }
+    if (!tabsNavRef.value) return
+
+    if (options.trackIndicator) {
+      tabsNavRef.value.appendChild(Object.assign(document.createElement("div"), { className: "nav__active-indicator" }))
+    }
+    if (options.trackActive) {
+      tabsNavRef.value.appendChild(Object.assign(document.createElement("div"), { className: "nav__active" }))
+    }
+    if (options.trackHover) {
+      tabsNavRef.value.appendChild(Object.assign(document.createElement("div"), { className: "nav__hovered" }))
     }
   }
 
+  const setRovingTabindex = () => {
+    navItems.value?.forEach((tab) => {
+      tab.setAttribute("tabindex", tab === currentActiveTab.value ? "0" : "-1")
+    })
+  }
+
   const navItemHovered = (event: Event) => {
+    if (!options.trackHover) return
+
     const target = event.target as HTMLElement
     const newTabPosition = currentHoveredTab.value ? currentHoveredTab.value.compareDocumentPosition(target) : 0
 
@@ -81,13 +97,15 @@ const useTabs = (
   }
 
   const resetHoverToActivePosition = () => {
+    if (!options.trackHover) return
+
     previousHoveredTab.value = currentHoveredTab.value
     currentHoveredTab.value = currentActiveTab.value
     moveHoveredIndicator()
   }
 
-  const navItemClicked = (event: Event) => {
-    const target = event.target as HTMLElement
+  const activateTab = (target: HTMLElement) => {
+    if (target === currentActiveTab.value) return
 
     previousActiveTab.value = currentActiveTab.value || null
     currentActiveTab.value = target
@@ -96,19 +114,50 @@ const useTabs = (
       tab.setAttribute("aria-selected", currentActiveTab.value === tab ? "true" : "false")
     })
 
+    setRovingTabindex()
     moveActiveIndicator()
     setActiveTabContent()
   }
 
-  const handleTransitioningClass = (transitionDuration: number = 200) => {
+  const navItemClicked = (event: Event) => {
+    activateTab(event.target as HTMLElement)
+  }
+
+  // WAI-ARIA Tabs pattern: arrow keys move focus and activate (automatic activation);
+  // Home/End jump to the first/last tab.
+  const navItemKeydown = (event: KeyboardEvent) => {
+    if (!navItems.value || navItems.value.length === 0) return
+
+    const previousKey = axis === "y" ? "ArrowUp" : "ArrowLeft"
+    const nextKey = axis === "y" ? "ArrowDown" : "ArrowRight"
+
+    let targetIndex: number | null = null
+    const currentIndex = currentActiveTab.value ? navItems.value.indexOf(currentActiveTab.value) : 0
+
+    if (event.key === nextKey) {
+      targetIndex = (currentIndex + 1) % navItems.value.length
+    } else if (event.key === previousKey) {
+      targetIndex = (currentIndex - 1 + navItems.value.length) % navItems.value.length
+    } else if (event.key === "Home") {
+      targetIndex = 0
+    } else if (event.key === "End") {
+      targetIndex = navItems.value.length - 1
+    }
+
+    if (targetIndex === null) return
+
+    event.preventDefault()
+    const targetTab = navItems.value[targetIndex]
+    if (!targetTab) return
+
+    targetTab.focus()
+    activateTab(targetTab)
+  }
+
+  const handleTransitioningClass = () => {
     if (previousHoveredTab.value && currentHoveredTab.value && navItems.value) {
       const newTabPosition = previousHoveredTab.value.compareDocumentPosition(currentHoveredTab.value)
       const navItemsArray = navItems.value
-
-      const timeout = Math.floor(
-        transitionDuration /
-          Math.abs(navItemsArray.indexOf(currentHoveredTab.value) - navItemsArray.indexOf(previousHoveredTab.value))
-      )
 
       if (newTabPosition === 4) {
         for (
@@ -188,6 +237,7 @@ const useTabs = (
 
   const moveActiveIndicator = () => {
     if (!tabsNavRef.value || !currentActiveTab.value) return
+    if (!options.trackActive && !options.trackIndicator) return
 
     tabsNavRef.value.style.setProperty("--_transition-duration", duration + "ms")
 
@@ -215,7 +265,7 @@ const useTabs = (
 
     tabsNavRef.value.style.setProperty("--_width-active", String(transitionWidth / tabsNavRef.value.offsetWidth))
 
-    handleTransitioningClass(duration)
+    handleTransitioningClass()
 
     setTimeout(
       () => {
@@ -258,7 +308,7 @@ const useTabs = (
 
     tabsNavRef.value.style.setProperty("--_width-hovered", String(transitionWidth / tabsNavRef.value.offsetWidth))
 
-    handleTransitioningClass(duration)
+    handleTransitioningClass()
 
     setTimeout(
       () => {
@@ -271,7 +321,9 @@ const useTabs = (
   const setActiveTabContent = () => {
     const activeIndex = navItems.value?.findIndex((el) => el === currentActiveTab.value)
     tabsContentRefs.value?.forEach((tabContent: HTMLElement, index: number) => {
-      tabContent.style.display = activeIndex === index ? "block" : "none"
+      const isActive = activeIndex === index
+      tabContent.style.display = isActive ? "block" : "none"
+      tabContent.setAttribute("aria-hidden", isActive ? "false" : "true")
     })
   }
 
@@ -284,6 +336,7 @@ const useTabs = (
     initNavDecorators,
     navItemClicked,
     navItemHovered,
+    navItemKeydown,
     resetHoverToActivePosition,
   }
 }

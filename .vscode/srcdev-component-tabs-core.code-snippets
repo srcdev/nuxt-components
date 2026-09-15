@@ -1,0 +1,78 @@
+{
+  "SRCDEV TabsCore Basic": {
+    "description": "TabsCore — horizontal tablist with indexed trigger/content slots",
+    "scope": "vue,html",
+    "body": [
+      "<TabsCore :item-count=\"${1:3}\">",
+      "  <template #tab-0-trigger>${2:Overview}</template>",
+      "  <template #tab-0-content>",
+      "    $3",
+      "  </template>",
+      "  <template #tab-1-trigger>${4:Specs}</template>",
+      "  <template #tab-1-content>",
+      "    $5",
+      "  </template>",
+      "  <template #tab-2-trigger>${6:Reviews}</template>",
+      "  <template #tab-2-content>",
+      "    $7",
+      "  </template>",
+      "</TabsCore>"
+    ]
+  },
+  "SRCDEV TabsCore Vertical": {
+    "description": "TabsCore with axis=\"y\" for a vertical tab column",
+    "scope": "vue,html",
+    "body": [
+      "<TabsCore axis=\"y\" :item-count=\"${1:3}\" aria-label=\"${2:Settings}\">",
+      "  <template #tab-0-trigger>$3</template>",
+      "  <template #tab-0-content>$4</template>",
+      "</TabsCore>"
+    ]
+  },
+  "SRCDEV TabsCore Indicators Off": {
+    "description": "TabsCore with the moving hover/active/underline decorators all disabled",
+    "scope": "vue,html",
+    "body": [
+      "<TabsCore",
+      "  :item-count=\"${1:3}\"",
+      "  :track-hover=\"false\"",
+      "  :track-active=\"false\"",
+      "  :track-indicator=\"false\"",
+      ">",
+      "  $2",
+      "</TabsCore>"
+    ]
+  },
+  "SRCDEV TabsCore CSS Override": {
+    "description": "CSS override scaffold for TabsCore — scope to a page or section class",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .tabs-core {",
+      "    --tabs-nav-border: ;",
+      "    --tabs-hover-indicator-colour: ;",
+      "    --tabs-hover-indicator-text-colour: ;",
+      "    --tabs-active-indicator-colour: ;",
+      "    --tabs-active-indicator-text-colour: ;",
+      "    --tabs-underline-indicator-colour: ;",
+      "    --tabs-underline-indicator-height: ;",
+      "    --tabs-list-item-opacity: ;",
+      "    --tabs-list-item-colour: ;",
+      "    --tabs-list-item-colour-selected: ;",
+      "    --tabs-list-item-text-transform: ;",
+      "    --tabs-list-item-font-weight: ;",
+      "    --tabs-list-item-padding-block: ;",
+      "    --tabs-list-item-padding-inline: ;",
+      "    --tabs-list-item-colour-transition-duration: ;",
+      "    --tabs-list-item-focus-outline-width: ;",
+      "    --tabs-list-item-focus-outline-offset: ;",
+      "    --tabs-content-background-colour: ;",
+      "    --tabs-content-border-width: ;",
+      "    --tabs-content-border-colour: ;",
+      "    --tabs-content-border-radius: ;",
+      "    --tabs-axis-y-gap: ;",
+      "  }",
+      "}"
+    ]
+  }
+}
