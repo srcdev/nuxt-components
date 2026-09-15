@@ -37,7 +37,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | DisplayDialog | `display-dialog/DisplayDialog.vue` | ✅ | ✅ `dialog` |
 | DisplayPill | `display-pill/DisplayPill.vue` | ☐ | ☐ |
 | GlassPanel | `glass-panel/GlassPanel.vue` | ☐ | ☐ |
-| AutoGrid | `grids/data-grid/AutoGrid.vue` | ☐ | ☐ |
+| AutoGrid | `grids/auto-grid/AutoGrid.vue` | ☐ | ☐ |
 | GridStack | `grids/grid-stack/GridStack.vue` | ☐ | ☐ |
 | ColumnFlowGrid | `grids/column-flow-grid/ColumnFlowGrid.vue` (renamed from MasonryGrid) | ✅ | ✅ `column-flow-grid` |
 | MasonryGrid | `grids/masonry-grid/MasonryGrid.vue` (renamed from MasonryGridReadingOrder, itself renamed from MasonryGridSorted) | ✅ | ✅ `masonry-grid` |
