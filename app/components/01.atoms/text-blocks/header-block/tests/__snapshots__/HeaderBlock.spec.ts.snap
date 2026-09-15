@@ -1,0 +1,5 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`HeaderBlock > renders correct HTML structure with all props set 1`] = `"<h3 id="section-heading" class="page-heading-5 custom-class">Custom heading</h3>"`;
+
+exports[`HeaderBlock > renders correct HTML structure with default props 1`] = `"<h1 class="page-heading-1">Default heading</h1>"`;

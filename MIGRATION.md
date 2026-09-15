@@ -200,6 +200,5 @@ These components still live in the root `app/components/` folder and need to be 
 | PopOver | `pop-over/PopOver.vue` | |
 | ResponsiveHeader | `responsive-header/ResponsiveHeader.vue` | |
 | NavigationItems | `responsive-header/NavigationItems.vue` | Internal sub-component of ResponsiveHeader |
-| HeaderBlock | `typography/HeaderBlock.vue` | |
 | UiBlockDecorated | `ui-block-decorated/UiBlockDecorated.vue` | |
 | WipeAwayVertical | `view-timeline/WipeAwayVertical.vue` | |

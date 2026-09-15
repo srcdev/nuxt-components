@@ -31,5 +31,6 @@
   font-weight: 600;
   font-variation-settings: "wght" 600;
   line-height: 1;
-  margin: 0;
+  margin-block: 0rem;
+  padding-block: 0rem;
 }
