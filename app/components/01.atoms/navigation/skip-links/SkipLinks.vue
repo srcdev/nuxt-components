@@ -57,8 +57,13 @@ watch(
       padding: var(--skip-links-padding, 0.2rem);
       margin: 0;
 
-      /* Hidden off-screen via transform — does NOT break keyboard focusability */
+      /* Hidden off-screen via transform — does NOT break keyboard focusability. pointer-events is
+         off in this state too: translateY(-100%) puts this at the same position as .skip-links__home
+         (the homeLink slot), and opacity:0 alone doesn't stop it from catching hover/clicks meant
+         for whatever sits underneath it. Keyboard tab focus doesn't need pointer-events, so this
+         doesn't affect focusability. */
       opacity: 0;
+      pointer-events: none;
       transform: translateY(-100%);
       transition:
         transform var(--skip-links-transition-duration, 0.3s) ease-in-out,
@@ -66,6 +71,7 @@ watch(
 
       &:focus-within {
         opacity: 1;
+        pointer-events: auto;
         transform: translateY(0);
       }
     }
