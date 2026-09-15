@@ -34,7 +34,7 @@ describe("SiteHeader", () => {
       slots: { branding: "<a href='/' class='brand-link'>Brand</a>" },
       global: { stubs: { ResponsiveHeader: responsiveHeaderStub } },
     });
-    expect(wrapper.find(".home-link .brand-link").exists()).toBe(true);
+    expect(wrapper.find(".skip-links__home .brand-link").exists()).toBe(true);
   });
 
   it("does not render the secondaryNavigation slot when not provided", async () => {

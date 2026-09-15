@@ -4,9 +4,9 @@ exports[`SiteHeader > renders correct HTML structure with default props 1`] = `
 "<div class="page-row content">
   <header class="site-header">
     <nav class="home-navigation" aria-label="Home Navigation">
-      <div class="home-link-navigation">
-        <div class="home-link"></div>
-        <nav class="skip-links-nav" aria-label="Skip navigation"><a href="#main-content" class="skip-link">Skip to main content</a><a href="#footer-content" class="skip-link">Skip to footer</a></nav>
+      <div class="skip-links">
+        <div class="skip-links__home"></div>
+        <nav class="skip-links__nav" aria-label="Skip navigation"><a href="#main-content" class="skip-links__link">Skip to main content</a><a href="#footer-content" class="skip-links__link">Skip to footer</a></nav>
       </div>
     </nav>
     <div class="responsive-header-stub" main-nav-aria-label="Main navigation" secondary-nav-aria-label="Secondary navigation" overflow-menu-aria-label="Overflow navigation menu"></div>

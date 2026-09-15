@@ -77,6 +77,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── service-summary.md           — ServiceSummary props, summary-link slot, DisplayPill duration/price (renamed/stripped from ServicesSection — full mode is now ServiceDetail)
     ├── service-detail.md            — ServiceDetail: full service detail page (hero banner, sticky sidebar booking card + related services, closing CTA), headerTag vs subheadingTag split, book-cta/sidebar-note/related-service/final-cta slots
     ├── breadcrumb.md                — Breadcrumb: items (BreadcrumbItem[]) trail, link vs current-page text, CSS token API
+    ├── skip-links.md                — SkipLinks: focus-revealed accessibility skip-nav, links (SkipLink[]) data-driven, homeLink slot, CSS token API
     ├── contact-section.md      — ContactSection props (stepperIndicatorSize pass-through), 3-item info+form layout, slot API
     ├── stepper-list.md         — StepperList dynamic slots (item-{n}/indicator-{n}), props, connector behaviour
     ├── expanding-panel.md      — ExpandingPanel v-model, forceOpened, contentIsOnTop overlay mode, slots (summary/icon/content), ARIA wiring, CSS token API

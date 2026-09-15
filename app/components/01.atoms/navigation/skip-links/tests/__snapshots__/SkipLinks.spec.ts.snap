@@ -1,0 +1,15 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SkipLinks > renders correct HTML structure (all props set) 1`] = `
+"<div class="skip-links">
+  <!--v-if-->
+  <nav class="skip-links__nav" aria-label="Custom skip nav"><a href="#content" class="skip-links__link">Skip to content</a></nav>
+</div>"
+`;
+
+exports[`SkipLinks > renders correct HTML structure (default props) 1`] = `
+"<div class="skip-links">
+  <!--v-if-->
+  <nav class="skip-links__nav" aria-label="Skip navigation"><a href="#main-content" class="skip-links__link">Skip to main content</a><a href="#footer-content" class="skip-links__link">Skip to footer</a></nav>
+</div>"
+`;

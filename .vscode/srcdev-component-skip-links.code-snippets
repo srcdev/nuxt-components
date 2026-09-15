@@ -1,0 +1,55 @@
+{
+  "SRCDEV SkipLinks Basic": {
+    "description": "SkipLinks — accessibility skip-navigation utility, default main-content/footer links",
+    "scope": "vue,html",
+    "body": [
+      "<SkipLinks />"
+    ]
+  },
+  "SRCDEV SkipLinks Custom Links": {
+    "description": "SkipLinks with a custom list of skip targets",
+    "scope": "vue,html",
+    "body": [
+      "<SkipLinks",
+      "  :links=\"[",
+      "    { href: '${1:#site-navigation}', label: '${2:Skip to navigation}' },",
+      "    { href: '${3:#main-content}', label: '${4:Skip to main content}' },",
+      "    { href: '${5:#footer-content}', label: '${6:Skip to footer}' },",
+      "  ]\"",
+      "/>"
+    ]
+  },
+  "SRCDEV SkipLinks With Home Link Slot": {
+    "description": "SkipLinks with the homeLink slot for a logo/home link before the skip-nav",
+    "scope": "vue,html",
+    "body": [
+      "<SkipLinks>",
+      "  <template #homeLink>",
+      "    $1",
+      "  </template>",
+      "</SkipLinks>"
+    ]
+  },
+  "SRCDEV SkipLinks CSS Override": {
+    "description": "CSS override scaffold for SkipLinks — scope to a page or section class",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .skip-links {",
+      "    --skip-links-z-index: ;",
+      "    --skip-links-gap: ;",
+      "    --skip-links-background-colour: ;",
+      "    --skip-links-border-colour: ;",
+      "    --skip-links-border-width: ;",
+      "    --skip-links-padding: ;",
+      "    --skip-links-text-colour: ;",
+      "    --skip-links-link-padding-block: ;",
+      "    --skip-links-link-padding-inline: ;",
+      "    --skip-links-transition-duration: ;",
+      "    --skip-links-focus-outline-width: ;",
+      "    --skip-links-focus-outline-colour: ;",
+      "  }",
+      "}"
+    ]
+  }
+}

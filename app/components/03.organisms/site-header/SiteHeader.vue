@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import type { ResponsiveHeaderProp } from "../../../types/components";
 import PageRow from "../../01.atoms/page-row/PageRow.vue";
-import SkipLinks from "../../skip-links/SkipLinks.vue";
+import SkipLinks from "../../01.atoms/navigation/skip-links/SkipLinks.vue";
 import ResponsiveHeader from "../responsive-header/ResponsiveHeader.vue";
 
 interface Props {
