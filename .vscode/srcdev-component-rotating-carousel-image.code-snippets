@@ -1,0 +1,74 @@
+{
+  "SRCDEV RotatingCarouselImage Basic": {
+    "description": "RotatingCarouselImage — 3D rotating image carousel with scroll-parallax tilt",
+    "scope": "vue,html",
+    "body": [
+      "<RotatingCarouselImage",
+      "  :data=\"[",
+      "    { src: '${1:/carousel/1.jpg}', alt: '${2:Image 1}' },",
+      "    { src: '${3:/carousel/2.jpg}', alt: '${4:Image 2}' },",
+      "  ]\"",
+      ">$5</RotatingCarouselImage>"
+    ]
+  },
+  "SRCDEV RotatingCarouselImage With Controls": {
+    "description": "RotatingCarouselImage with the visible pause/play control button (WCAG 2.2.2)",
+    "scope": "vue,html",
+    "body": [
+      "<RotatingCarouselImage",
+      "  :data=\"$1images\"",
+      "  show-controls",
+      "  aria-label=\"$2Rotating product photos\"",
+      "/>"
+    ]
+  },
+  "SRCDEV RotatingCarouselImage Static Tilt": {
+    "description": "RotatingCarouselImage with scroll-parallax disabled, using a fixed rotateX instead",
+    "scope": "vue,html",
+    "body": [
+      "<RotatingCarouselImage",
+      "  :data=\"$1images\"",
+      "  :use-parallax-effect=\"false\"",
+      "  :rotate-x=\"${2:10}\"",
+      "  show-controls",
+      "/>"
+    ]
+  },
+  "SRCDEV RotatingCarouselImage Custom Toggle Icon Slot": {
+    "description": "RotatingCarouselImage with the toggle-icon slot fully replacing the control button's icon",
+    "scope": "vue,html",
+    "body": [
+      "<RotatingCarouselImage :data=\"$1images\" show-controls>",
+      "  <template #toggle-icon=\"{ isPaused }\">",
+      "    $2",
+      "  </template>",
+      "</RotatingCarouselImage>"
+    ]
+  },
+  "SRCDEV RotatingCarouselImage CSS Override": {
+    "description": "CSS override scaffold for RotatingCarouselImage — scope to a page or section class",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .rotating-carousel {",
+      "    --rotating-carousel-height: ;",
+      "    --rotating-carousel-item-width: ;",
+      "    --rotating-carousel-item-height: ;",
+      "    --rotating-carousel-offset-bottom: ;",
+      "    --rotating-carousel-rotation-duration: ;",
+      "    --rotating-carousel-z-index: ;",
+      "    --rotating-carousel-focus-outline-width: ;",
+      "    --rotating-carousel-focus-outline-offset: ;",
+      "    --rotating-carousel-control-offset: ;",
+      "    --rotating-carousel-control-background-colour: ;",
+      "    --rotating-carousel-control-background-colour-hover: ;",
+      "    --rotating-carousel-control-text-colour: ;",
+      "    --rotating-carousel-control-border-radius: ;",
+      "    --rotating-carousel-control-border-width: ;",
+      "    --rotating-carousel-control-padding: ;",
+      "    --rotating-carousel-control-font-size: ;",
+      "  }",
+      "}"
+    ]
+  }
+}

@@ -23,6 +23,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | EntryAnimation | `animations/entry/EntryAnimation.vue` | ☐ | ☐ |
 | ScrollRevealFrame | `animations/scroll-reveal-frame/ScrollRevealFrame.vue` | ☐ | ☐ |
 | ScrollRevealImage | `animations/scroll-reveal-image/ScrollRevealImage.vue` | ☐ | ☐ |
+| RotatingCarouselImage | `animations/rotating-carousel-image/RotatingCarouselImage.vue` | ✅ | ✅ `rotating-carousel-image` |
 | ClipElement | `animations/clip-element/ClipElement.vue` | ✅ | ✅ `clip-element` |
 | BannerVideo | `banner-video/BannerVideo.vue` | ☐ | ☐ |
 | CanvasSwitcher | `canvas-switcher/CanvasSwitcher.vue` | ✅ | ✅ `canvas-switcher` |
@@ -199,7 +200,6 @@ These components still live in the root `app/components/` folder and need to be 
 | PopOver | `pop-over/PopOver.vue` | |
 | ResponsiveHeader | `responsive-header/ResponsiveHeader.vue` | |
 | NavigationItems | `responsive-header/NavigationItems.vue` | Internal sub-component of ResponsiveHeader |
-| RotatingCarouselImage | `rotating-carousel/RotatingCarouselImage.vue` | |
 | SkipLinks | `skip-links/SkipLinks.vue` | |
 | TabsCore | `tabs/TabsCore.vue` | |
 | HeaderBlock | `typography/HeaderBlock.vue` | |

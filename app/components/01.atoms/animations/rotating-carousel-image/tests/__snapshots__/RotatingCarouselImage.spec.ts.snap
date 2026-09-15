@@ -1,0 +1,19 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RotatingCarouselImage > renders correct HTML structure (all props set) 1`] = `
+"<section class="rotating-carousel hover-pauses" style="--_rotate-x: 10deg; --_perspective: 1200px; --_translateZ: 1200px;" role="region" aria-label="Custom carousel" tabindex="0">
+  <div class="sr-only">Custom instructions</div><button class="control-btn" type="button" aria-label="Pause rotation"><span class="iconify i-mdi:pause" aria-hidden="true"></span></button>
+  <div class="slider" style="--_quantity: 2;">
+    <div class="item" style="--_position: 0;"><img data-nuxt-img="" srcset="/_ipx/_/a.jpg 1x, /_ipx/_/a.jpg 2x" alt="A" src="/_ipx/_/a.jpg"></div>
+    <div class="item" style="--_position: 1;"><img data-nuxt-img="" srcset="/_ipx/_/b.jpg 1x, /_ipx/_/b.jpg 2x" alt="B" src="/_ipx/_/b.jpg"></div>
+  </div>
+</section>"
+`;
+
+exports[`RotatingCarouselImage > renders correct HTML structure (default props) 1`] = `
+"<div class="rotating-carousel" style="--_rotate-x: 0deg; --_perspective: 1000px; --_translateZ: 1000px;" role="region" aria-label="Rotating image carousel" tabindex="0">
+  <div class="sr-only">Use spacebar to pause or play the rotation.</div>
+  <!--v-if-->
+  <div class="slider" style="--_quantity: 0;"></div>
+</div>"
+`;

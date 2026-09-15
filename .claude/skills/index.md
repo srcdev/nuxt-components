@@ -90,6 +90,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── scroll-reveal-frame.md  — ScrollRevealFrame: generic parallax clipping frame, slot API, image grid pattern, CSS tokens, browser support
     ├── scroll-reveal-image.md  — ScrollRevealImage: single-image parallax reveal, focalX, imgWidth/imgHeight, responsive frame height
     ├── marquee-scroller.md     — MarqueeScroller: infinite logo/badge scroller, per-item dynamic slots (marqueeData id), hover/focus/keyboard pause, reduced-motion, CSS tokens
+    ├── rotating-carousel-image.md — RotatingCarouselImage: 3D rotating image carousel, scroll-parallax tilt, focus/keyboard/hover pause, reduced-motion, CSS tokens
     ├── site-navigation.md      — SiteNavigation: responsive nav with auto-collapse, burger menu, decorator indicators, CSS token API
     ├── tab-navigation.md       — TabNavigation: horizontal tab nav with CSS anchor-positioning indicators, anchor scroll, burger collapse, full CSS token API
     ├── social-icons-list.md    — SocialIconsList: data-driven social icon links, ISocialIcon type, logos: icon names, CSS tokens
