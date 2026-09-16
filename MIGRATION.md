@@ -50,6 +50,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | LinkText | `text-blocks/link-text/LinkText.vue` | ☐ | ☐ |
 | DisplayToast | `toast/DisplayToast.vue` | ☐ | ✅ `display-toast` |
 | DisplayToastProvider | `toast/DisplayToastProvider.vue` | ☐ | ✅ `display-toast` |
+| UiBlockDecorated | `ui-block-decorated/UiBlockDecorated.vue` | ✅ | ✅ `ui-block-decorated` |
 
 ---
 
@@ -200,5 +201,4 @@ These components still live in the root `app/components/` folder and need to be 
 | PopOver | `pop-over/PopOver.vue` | |
 | ResponsiveHeader | `responsive-header/ResponsiveHeader.vue` | |
 | NavigationItems | `responsive-header/NavigationItems.vue` | Internal sub-component of ResponsiveHeader |
-| UiBlockDecorated | `ui-block-decorated/UiBlockDecorated.vue` | |
 | WipeAwayVertical | `view-timeline/WipeAwayVertical.vue` | |
