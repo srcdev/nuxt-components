@@ -123,7 +123,7 @@ A formula declared on every potential theme host (`html`, `[data-theme]`, `[data
 computes the scale from the two params:
 
 ```css
---colour-theme-6: oklch(56% calc(var(--theme-chroma) * 1.00) var(--theme-hue)); /* peak chroma */
+--colour-theme-6: oklch(56% calc(var(--theme-chroma) * 1) var(--theme-hue)); /* peak chroma */
 --colour-theme-0: oklch(98% calc(var(--theme-chroma) * 0.045) var(--theme-hue)); /* near-white */
 --colour-theme-10: oklch(25% calc(var(--theme-chroma) * 0.64) var(--theme-hue)); /* near-black */
 ```
@@ -138,7 +138,7 @@ re-evaluates locally so each themed element gets its own full palette without af
 ### Built-in named palettes
 
 | Name   | Hue | Used for                                          |
-|--------|-----|---------------------------------------------------|
+| ------ | --- | ------------------------------------------------- |
 | blue   | 255 | Default (page-level)                              |
 | red    | 30  | Error / `data-theme="error"`                      |
 | green  | 157 | Success / `data-theme="success"`                  |
@@ -163,7 +163,7 @@ the cascade automatically:
 // ramps.config.mjs
 export const ramps = {
   // New palette — adds --gold-00..10 and --palette-gold-* vars
-  gold: { hue: 85, chroma: 0.20 },
+  gold: { hue: 85, chroma: 0.2 },
 
   // Override a built-in — replaces the layer's --blue-00..10 with your values
   // blue: { hue: 240, chroma: 0.18 },
@@ -218,11 +218,11 @@ In your `app/assets/styles/setup/02.colours/index.css` (create if it doesn't exi
 ```css
 /* app/assets/styles/setup/03.theming/_default.css */
 :where(html) {
-  --theme-hue:    var(--palette-gold-hue);
+  --theme-hue: var(--palette-gold-hue);
   --theme-chroma: var(--palette-gold-chroma);
 
   /* Page-level tokens — readable named steps, not raw oklch */
-  --colour-text-accent:  light-dark(var(--gold-09), var(--gold-04));
+  --colour-text-accent: light-dark(var(--gold-09), var(--gold-04));
   --colour-text-eyebrow: light-dark(var(--gold-09), var(--gold-04));
 }
 ```
@@ -244,7 +244,7 @@ And in `app/assets/styles/main.css`:
 ### Hue quick reference
 
 | Range   | Colour         |
-|---------|----------------|
+| ------- | -------------- |
 | 0–30    | Red / pink     |
 | 30–70   | Orange / amber |
 | 70–100  | Yellow / gold  |
@@ -265,12 +265,12 @@ npm run check:ramps      # CI: fail if generated CSS is out of date
 
 ### Further reading
 
-| Guide | Location |
-|-------|----------|
-| Full ramp architecture, formula details, hue drift | `.claude/skills/theming-colour-ramps.md` |
-| Full palette swap for a consumer app | `.claude/skills/theming-override-default.md` |
+| Guide                                                   | Location                                     |
+| ------------------------------------------------------- | -------------------------------------------- |
+| Full ramp architecture, formula details, hue drift      | `.claude/skills/theming-colour-ramps.md`     |
+| Full palette swap for a consumer app                    | `.claude/skills/theming-override-default.md` |
 | Partial token override (palette shift, buttons, inputs) | `.claude/skills/theming-partial-override.md` |
-| Disable light/dark mode support | `.claude/skills/colour-scheme-disable.md` |
+| Disable light/dark mode support                         | `.claude/skills/colour-scheme-disable.md`    |
 
 Skills are available in your project after running `npm run setup:claude`.
 
@@ -330,15 +330,19 @@ The `.vscode` directory contains Visual Studio Code configuration files to ensur
   - **CSS Development**: `willofindie.vscode-cssvar` - CSS custom property IntelliSense
   - **Testing**: `vitest.explorer` - Vitest test runner integration
   - **Markdown**: `davidanson.vscode-markdownlint` - Markdown linting
-  - **Productivity**: `jkjustjoshing.vscode-text-pastry`, `formulahendry.auto-rename-tag`
+  - **Productivity**: `jkjustjoshing.vscode-text-pastry`, `formulahendry.auto-rename-tag`, `nixon.env-cmd-file-syntax`
+  - **AI-assisted development**: `anthropic.claude-code`
 
 ### Code Snippets
 
-The `.vscode` directory includes comprehensive code snippets for rapid component development:
+Every component ships a matching `.vscode/srcdev-component-{name}.code-snippets` file — one per
+component, kept up to date as part of this project's component migration workflow (see
+`CLAUDE.md`). Consumer apps get all of them copied into their own `.vscode/` folder automatically
+via the `postinstall` setup described above; there's nothing to configure manually.
 
 ## Contact Form — Resend Setup
 
-The contact form at `/ui/contact-section` sends enquiries via [Resend](https://resend.com).
+The `ContactSection` component (see it in Storybook under **Molecules/ContactSection**) sends enquiries via [Resend](https://resend.com).
 No extra packages are required — the server route calls the Resend REST API directly.
 
 ### 1. Create a Resend account
@@ -490,26 +494,3 @@ Fonts are served instead from local files in `.storybook/public/_fonts/`, declar
 | Playfair Display | woff2  | `.storybook/public/_fonts/playfair-display/` |
 
 To add a new font, see [.claude/skills/storybook-add-font.md](.claude/skills/storybook-add-font.md).
-
-#### Core Components
-
-- **`srcdev-nuxt3-component-boilerplate.code-snippets`** - Base component template with prop validation
-- **`srcdev-nuxt3-page-layout.code-snippets`** - Page layout scaffolding
-- **`srcdev-nuxt3-pinia-store-setup.code-snippets`** - Pinia store configuration
-
-#### UI Components
-
-- **`srcdev-nuxt3-accordian-component.code-snippets`** - Accordion component templates
-- **`srcdev-nuxt3-carousel-basic-component.code-snippets`** - Basic carousel implementation
-- **`srcdev-nuxt3-carousel-flip-component.code-snippets`** - Flip carousel variant
-- **`srcdev-nuxt3-container-glow-component.code-snippets`** - Container with glow effects
-- **`srcdev-nuxt3-dialog-component.code-snippets`** - Modal dialog templates
-- **`srcdev-nuxt3-display-banner-component.code-snippets`** - Display banner component
-- **`srcdev-nuxt3-display-details-component.code-snippets`** - Collapsible details component
-- **`srcdev-nuxt3-display-prompt-component.code-snippets`** - Alert/notification prompts
-- **`srcdev-nuxt3-expanding-panel-component.code-snippets`** - Expandable panel component
-- **`srcdev-nuxt3-layout-row.code-snippets`** - Layout row component
-- **`srcdev-nuxt3-responsive-header-component.code-snippets`** - Responsive navigation header
-- **`srcdev-nuxt3-tabs-component.code-snippets`** - Tab component system
-
-Each snippet provides both HTML template usage examples and TypeScript setup code, enabling developers to quickly implement components with proper typing and configuration.
