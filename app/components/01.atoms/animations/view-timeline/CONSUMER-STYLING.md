@@ -61,8 +61,8 @@ the last panel and whatever content follows the component.
 
 ## Reduced motion
 
-The wipe animation and fallback opacity transition are both disabled under
-`prefers-reduced-motion: reduce` — content is shown fully opaque with no clip/fade.
+The wipe animation is disabled under `prefers-reduced-motion: reduce` (`animation: none;
+clip-path: none;`) — panels render fully visible with no clip.
 
 ## Class passthrough
 

@@ -1,6 +1,6 @@
 ---
 name: WipeAwayVertical
-description: WipeAwayVertical scroll-driven vertical wipe-away effect — props, dynamic slot API, CSS tokens, fallback behaviour
+description: WipeAwayVertical scroll-driven vertical wipe-away effect — props, dynamic slot API, CSS grid overlay mechanics, CSS tokens
 type: reference
 ---
 
@@ -10,69 +10,73 @@ type: reference
 
 `WipeAwayVertical` is a scroll-driven "wipe away" effect: a stack of sticky panels, each of
 which wipes away (via a `clip-path` animation) to reveal the panel underneath as the user
-scrolls past its paired tracking section. Built on CSS `animation-timeline: view()`, with a JS
-`scroll`-event opacity crossfade as a fallback for browsers that don't support it.
+scrolls past its paired tracking section. Pure CSS — built on `animation-timeline: view()`, a
+single-column CSS grid overlay, and no JavaScript scroll listeners or measurement at all.
 
 ## How it works
 
-- The root renders a `.sticky-items-container` holding `itemCount` `.sticky-item` panels,
-  stacked with descending `z-index` (item 0 on top).
-- Alongside it, `itemCount` `.scrolling-section` elements act as scroll trackers — each one's
-  entry into the viewport drives the wipe-out animation of its paired sticky item via a named
-  `view-timeline`.
-- The last sticky item never wipes away (`animation-timeline: none`) — it's the final state
-  the stack settles on.
-- Where `CSS.supports("animation-timeline: view()")` is `false`, the component falls back to a
-  `scroll` listener that crossfades each sticky item's `opacity` based on whether its paired
-  scrolling section is at the vertical midpoint of the viewport.
-- `.sticky-items-container` is sized by `--wipe-away-vertical-height` (default `100vh`) — this
-  is the visible height of the sticky panel stack, independent of the root element's own height
-  (which should span the full scroll distance, e.g. `itemCount * 100vh`).
-- An invisible `.trailing-buffer` spacer renders after the last scrolling section, sized by
-  `--wipe-away-vertical-trailing-buffer` (default `50vh`) — a cushion so the sticky container has
-  a moment to settle on the final panel before it un-sticks and scrolls away with the rest of
-  the page. Don't remove this without verifying the final transition still completes cleanly.
-- `.sticky-items-container` centers itself with `top: 50vh; transform: translateY(-50%);` — the
-  `50vh` (not `50%`) is deliberate. For `position: sticky`, a percentage `top` resolves against
-  the *containing block's* height, and here the containing block is the whole component, which
-  is many viewport-heights tall by design (it holds every scroll-tracking section). `top: 50%`
-  would compute to an enormous, unreachable offset instead of "50% down the viewport," producing
-  broken, erratic sticky-engagement timing — this is exactly what caused the last two panels to
-  appear to "lock together" and scroll away as one, discovered via the FivePanels story
-  (2026-09-20). Don't reintroduce a percentage here; use viewport units (`vh`) for any offset
-  meant to be relative to the viewport, and only the transform (which resolves against the
-  element's own box) for the "correct my own height" half of the centering trick.
+- The root is a single-column CSS grid. `.sticky-items-container` spans every row as an overlay
+  (`grid-row: 1 / -1`), holding `itemCount` `.sticky-item` panels stacked with descending
+  `z-index` (item 0 on top).
+- Each real `.scrolling-section` gets its own explicit grid row and acts as a scroll tracker —
+  its entry into the viewport drives the wipe-out animation of its paired sticky item via a
+  named `view-timeline`. Only `itemCount - 1` sections are rendered: the **last** sticky item
+  has nothing left to reveal, so it has no wipe animation (`animation-timeline: none`) and no
+  scrolling section of its own.
+- A `.leading-buffer` (fixed `100vh`) renders before the first scrolling section, so section 0
+  isn't already partway through its `entry` timeline range at page load, whatever content
+  precedes the component.
+- A `.trailing-buffer`, sized by `--wipe-away-vertical-trailing-buffer` (default `20vh`), renders
+  after the last real scrolling section — just enough room for the sticky container to release
+  cleanly once the final panel is fully revealed.
+- `.sticky-items-container` is sized by `--wipe-away-vertical-height` (default `100vh`) and
+  centers itself with `top: calc((100vh - var(--wipe-away-vertical-height, 100vh)) / 2)` — a
+  plain `calc()`, deliberately **not** a `transform: translateY()`. `position: sticky`'s
+  stick/release threshold is computed from the element's *untransformed* layout position, so a
+  transform-based visual shift releases the sticky panel early by the transformed amount,
+  leaving a gap after the last panel. `.scrolling-section`'s `view-timeline-inset` uses the same
+  `calc()` so the entry/exit range lines up with the same visual offset. (An earlier version
+  used `top: 50%` — also wrong, since a percentage `top` on `position: sticky` resolves against
+  the containing block's height, not the viewport, and this component's containing block is
+  deliberately many viewport-heights tall.)
+- Where `@supports not (animation-timeline: view())`, the grid/sticky/animation machinery is
+  dropped entirely: the root becomes `display: block`, the leading/trailing buffers and
+  scrolling sections are hidden, and the sticky items render as plain stacked panels in normal
+  document flow. No JS fallback, no opacity crossfade — just a flat, static stack.
 
 ## Props
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `tag` | `"div" \| "section" \| "main" \| "article" \| "aside"` | `"div"` | Root element tag. |
-| `itemCount` | `number` | — (required) | Number of sticky/scrolling section pairs. Drives both the slot loop and the per-item `z-index`/`view-timeline` naming. |
+| `itemCount` | `number` | — (required) | Number of sticky panels. Drives the sticky-item slot loop, `itemCount - 1` scrolling sections, per-item `z-index`, and `view-timeline` naming. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root element. |
 
 ## Slots
 
-Dynamic named slots, indexed `0` to `itemCount - 1`:
+Dynamic named slots:
 
 | Slot | Description |
 |------|-------------|
-| `stickyItem-{n}` | Content for sticky panel `n`. |
-| `scrollingItem-{n}` | Content (or an empty spacer) for scroll-tracking section `n`. Typically an empty `100vh`-tall `div` — its height determines how much scroll distance the wipe covers. |
+| `stickyItem-{n}` | Content for sticky panel `n`, indexed `0` to `itemCount - 1`. |
+| `scrollingItem-{n}` | Content (or an empty spacer) for scroll-tracking section `n`, indexed `0` to `itemCount - 2` only — the last panel has no scrolling section of its own. Typically an empty `100vh`-tall `div`; its height determines how much scroll distance that panel's wipe covers. |
 
 ## Basic usage
 
 ```vue
-<WipeAwayVertical :item-count="3" style="height: 300vh;">
+<WipeAwayVertical :item-count="3">
   <template #stickyItem-0><PanelOne /></template>
   <template #stickyItem-1><PanelTwo /></template>
   <template #stickyItem-2><PanelThree /></template>
 
   <template #scrollingItem-0><div style="height: 100vh;"></div></template>
   <template #scrollingItem-1><div style="height: 100vh;"></div></template>
-  <template #scrollingItem-2><div style="height: 100vh;"></div></template>
 </WipeAwayVertical>
 ```
+
+Leave the root's own `height` unset — it's a grid that sizes itself from its children (leading
+buffer + scrolling sections + trailing buffer). Setting an explicit height undersizes the root
+relative to its real content and releases the sticky panel mid-wipe.
 
 ## CSS custom properties
 
@@ -81,18 +85,14 @@ Dynamic named slots, indexed `0` to `itemCount - 1`:
 | `--wipe-away-vertical-height` | `100vh` | `.sticky-items-container` height (the visible sticky panel stack) |
 | `--wipe-away-vertical-border-radius` | `0.5rem` | `.sticky-item` corner radius |
 | `--wipe-away-vertical-animation-duration` | `1s` | `wipe-out` keyframe duration (view-timeline-supporting browsers) |
-| `--wipe-away-vertical-fallback-transition-duration` | `0.4s` | opacity crossfade duration (fallback browsers) |
-| `--wipe-away-vertical-trailing-buffer` | `50vh` | height of the invisible spacer after the last scrolling section |
-
-`--_wipe-away-vertical-calculated-inset` is a private, JS-computed token (the sticky container's
-viewport inset) — not consumer-overridable.
+| `--wipe-away-vertical-trailing-buffer` | `20vh` | height of the release cushion after the last real scrolling section |
 
 ## Notes
 
 - Uses indexed dynamic slots (not the library's default named-dynamic-slot pattern) because
-  `itemCount` also drives non-slot logic: per-item `z-index` and the `view-timeline-name`/
-  `animation-timeline` CSS variable naming, not just the slot loop itself.
-- Reduced motion: the wipe animation and fallback opacity transition are both disabled under
-  `prefers-reduced-motion: reduce` — all panels render fully opaque with no clip/fade.
+  `itemCount` also drives non-slot logic: per-item `z-index`, grid rows, and the
+  `view-timeline-name`/`animation-timeline` CSS variable naming, not just the slot loop itself.
+- Reduced motion: the wipe animation is disabled under `prefers-reduced-motion: reduce`
+  (`animation: none; clip-path: none;`) — all panels render fully visible with no clip.
 - No hardcoded consumer-facing text — this is a purely structural/animation wrapper around
   consumer-supplied slot content.

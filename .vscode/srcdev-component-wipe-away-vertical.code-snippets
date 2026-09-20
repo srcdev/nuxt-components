@@ -3,14 +3,13 @@
     "description": "WipeAwayVertical — scroll-driven vertical wipe-away effect with sticky/scrolling section pairs",
     "scope": "vue,html",
     "body": [
-      "<WipeAwayVertical :item-count=\"$13\" style=\"height: 300vh;\">",
+      "<WipeAwayVertical :item-count=\"$13\">",
       "  <template #stickyItem-0>$2</template>",
       "  <template #stickyItem-1>$3</template>",
       "  <template #stickyItem-2>$4</template>",
       "",
       "  <template #scrollingItem-0><div style=\"height: 100vh;\"></div></template>",
       "  <template #scrollingItem-1><div style=\"height: 100vh;\"></div></template>",
-      "  <template #scrollingItem-2><div style=\"height: 100vh;\"></div></template>",
       "</WipeAwayVertical>$0"
     ]
   },
