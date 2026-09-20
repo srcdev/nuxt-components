@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import AlertMaskCore from "../AlertMaskCore.vue";
-import type { AlertMaskConfig } from "../../../types/components/alert-mask-core.d";
+import type { AlertMaskConfig } from "../../../../types/components/alert-mask-core.d";
 
 // Type interface for AlertMaskCore component instance
 interface AlertMaskCoreInstance {
@@ -193,10 +193,10 @@ describe("AlertMaskCore", () => {
     const contentEl = wrapper.find(".alert-mask-content");
     const style = (contentEl.element as HTMLElement).style;
 
-    expect(style.getPropertyValue("--insetInlineStart")).toBe("15px");
-    expect(style.getPropertyValue("--insetBlockStart")).toBe("20px");
-    expect(style.getPropertyValue("--insetInlineEnd")).toBe("25px");
-    expect(style.getPropertyValue("--insetBlockEnd")).toBe("30px");
+    expect(style.getPropertyValue("--_inset-inline-start")).toBe("15px");
+    expect(style.getPropertyValue("--_inset-block-start")).toBe("20px");
+    expect(style.getPropertyValue("--_inset-inline-end")).toBe("25px");
+    expect(style.getPropertyValue("--_inset-block-end")).toBe("30px");
   });
 
   it("handles zero border values correctly", async () => {
@@ -214,10 +214,10 @@ describe("AlertMaskCore", () => {
     const contentEl = wrapper.find(".alert-mask-content");
     const style = (contentEl.element as HTMLElement).style;
 
-    expect(style.getPropertyValue("--insetInlineStart")).toBe("0px");
-    expect(style.getPropertyValue("--insetBlockStart")).toBe("0px");
-    expect(style.getPropertyValue("--insetInlineEnd")).toBe("0px");
-    expect(style.getPropertyValue("--insetBlockEnd")).toBe("0px");
+    expect(style.getPropertyValue("--_inset-inline-start")).toBe("0px");
+    expect(style.getPropertyValue("--_inset-block-start")).toBe("0px");
+    expect(style.getPropertyValue("--_inset-inline-end")).toBe("0px");
+    expect(style.getPropertyValue("--_inset-block-end")).toBe("0px");
   });
 
   it("sets up ResizeObserver on mount", async () => {
@@ -271,7 +271,7 @@ describe("AlertMaskCore", () => {
 
     const svg = wrapper.find(".alert-mask-decorator");
     const style = (svg.element as HTMLElement).style;
-    expect(style.getPropertyValue("--alertHeight")).toBe("150px");
+    expect(style.getPropertyValue("--_height")).toBe("150px");
   });
 
   it("handles empty configuration object", async () => {

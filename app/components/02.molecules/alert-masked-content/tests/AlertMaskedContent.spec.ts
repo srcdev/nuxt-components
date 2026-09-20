@@ -135,11 +135,11 @@ describe("AlertMaskedContent", () => {
     const wrapper = await mountSuspended(AlertMaskedContent, { props: { theme: "info" } });
     const contentEl = wrapper.find(".alert-mask-content");
     const style = (contentEl.element as HTMLElement).style;
-    // Default borderLeft: 6 → --insetInlineStart: 6px
-    expect(style.getPropertyValue("--insetInlineStart")).toBe("6px");
-    expect(style.getPropertyValue("--insetBlockStart")).toBe("1px");
-    expect(style.getPropertyValue("--insetInlineEnd")).toBe("1px");
-    expect(style.getPropertyValue("--insetBlockEnd")).toBe("1px");
+    // Default borderLeft: 6 → --_inset-inline-start: 6px
+    expect(style.getPropertyValue("--_inset-inline-start")).toBe("6px");
+    expect(style.getPropertyValue("--_inset-block-start")).toBe("1px");
+    expect(style.getPropertyValue("--_inset-inline-end")).toBe("1px");
+    expect(style.getPropertyValue("--_inset-block-end")).toBe("1px");
   });
 
   it("merges custom maskConfig over defaults", async () => {
@@ -148,6 +148,6 @@ describe("AlertMaskedContent", () => {
     });
     const contentEl = wrapper.find(".alert-mask-content");
     const style = (contentEl.element as HTMLElement).style;
-    expect(style.getPropertyValue("--insetInlineStart")).toBe("12px");
+    expect(style.getPropertyValue("--_inset-inline-start")).toBe("12px");
   });
 });

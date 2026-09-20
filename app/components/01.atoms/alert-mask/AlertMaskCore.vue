@@ -1,6 +1,6 @@
 <template>
   <div class="alert-mask-core" :class="[elementClasses]">
-    <svg class="alert-mask-decorator" :style="{ '--alertHeight': svgHeight + 'px' }" xmlns="http://www.w3.org/2000/svg">
+    <svg class="alert-mask-decorator" :style="{ '--_height': svgHeight + 'px' }" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <mask id="borderMask" maskUnits="userSpaceOnUse">
           <path :d="outerPath" fill="white" />
@@ -15,10 +15,10 @@
     <div
       class="alert-mask-content"
       :style="{
-        '--insetInlineStart': (props.config?.borderLeft ?? 0) + 'px',
-        '--insetInlineEnd': (props.config?.borderRight ?? 0) + 'px',
-        '--insetBlockStart': (props.config?.borderTop ?? 0) + 'px',
-        '--insetBlockEnd': (props.config?.borderBottom ?? 0) + 'px',
+        '--_inset-inline-start': (props.config?.borderLeft ?? 0) + 'px',
+        '--_inset-inline-end': (props.config?.borderRight ?? 0) + 'px',
+        '--_inset-block-start': (props.config?.borderTop ?? 0) + 'px',
+        '--_inset-block-end': (props.config?.borderBottom ?? 0) + 'px',
       }"
     >
       <div ref="alertContentRef" class="alert-mask-content-slot">
@@ -31,15 +31,14 @@
 <script setup lang="ts">
 import type { AlertMaskConfig } from "~/types/components";
 
-const props = defineProps({
-  config: {
-    type: Object as PropType<AlertMaskConfig>,
-    default: () => ({}),
-  },
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+interface Props {
+  config?: AlertMaskConfig;
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  config: () => ({}),
+  styleClassPassthrough: () => [],
 });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -136,13 +135,13 @@ const innerPath = computed(() => {
   .alert-mask-decorator {
     grid-area: mask;
     width: 100%;
-    height: var(--alertHeight);
+    height: var(--_height);
   }
 
   .alert-mask-content {
     grid-area: mask;
-    margin-block: var(--insetBlockStart) var(--insetBlockEnd);
-    margin-inline: var(--insetInlineStart) var(--insetInlineEnd);
+    margin-block: var(--_inset-block-start) var(--_inset-block-end);
+    margin-inline: var(--_inset-inline-start) var(--_inset-inline-end);
   }
 }
 }
