@@ -1,26 +1,8 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import WipeAwayVertical from "../WipeAwayVertical.vue";
 
 describe("WipeAwayVertical", () => {
-  let addEventListenerSpy: ReturnType<typeof vi.spyOn>;
-  let removeEventListenerSpy: ReturnType<typeof vi.spyOn>;
-
-  beforeEach(() => {
-    vi.stubGlobal(
-      "CSS",
-      { supports: vi.fn(() => true) }
-    );
-    addEventListenerSpy = vi.spyOn(window, "addEventListener");
-    removeEventListenerSpy = vi.spyOn(window, "removeEventListener");
-  });
-
-  afterEach(() => {
-    vi.unstubAllGlobals();
-    addEventListenerSpy.mockRestore();
-    removeEventListenerSpy.mockRestore();
-  });
-
   // ─── Mount ───────────────────────────────────────────────────────────────
 
   it("mounts without error", async () => {
@@ -47,24 +29,32 @@ describe("WipeAwayVertical", () => {
     expect(wrapper.classes()).toContain("wipe-away-vertical");
   });
 
-  // ─── Trailing buffer ─────────────────────────────────────────────────────
+  // ─── Slots ───────────────────────────────────────────────────────────────
+
+  it("renders one sticky-item per itemCount but one fewer scrolling-section (the last item has no wipe of its own)", async () => {
+    const wrapper = await mountSuspended(WipeAwayVertical, { props: { itemCount: 3 } });
+    expect(wrapper.findAll(".sticky-item")).toHaveLength(3);
+    expect(wrapper.findAll(".scrolling-section")).toHaveLength(2);
+  });
+
+  it("assigns each scrolling-section its own grid-row after the leading buffer", async () => {
+    const wrapper = await mountSuspended(WipeAwayVertical, { props: { itemCount: 3 } });
+    const sections = wrapper.findAll(".scrolling-section");
+    expect((sections[0]!.element as HTMLElement).style.gridRow).toBe("2");
+    expect((sections[1]!.element as HTMLElement).style.gridRow).toBe("3");
+  });
+
+  it("renders a leading buffer spacer before the first scrolling section", async () => {
+    const wrapper = await mountSuspended(WipeAwayVertical, { props: { itemCount: 3 } });
+    expect(wrapper.find(".leading-buffer").exists()).toBe(true);
+    expect(wrapper.find(".leading-buffer").attributes("aria-hidden")).toBe("true");
+  });
 
   it("renders a trailing buffer spacer after the last scrolling section", async () => {
     const wrapper = await mountSuspended(WipeAwayVertical, { props: { itemCount: 3 } });
     expect(wrapper.find(".trailing-buffer").exists()).toBe(true);
-  });
-
-  it("marks the trailing buffer as aria-hidden", async () => {
-    const wrapper = await mountSuspended(WipeAwayVertical, { props: { itemCount: 3 } });
     expect(wrapper.find(".trailing-buffer").attributes("aria-hidden")).toBe("true");
-  });
-
-  // ─── Slots ───────────────────────────────────────────────────────────────
-
-  it("renders one sticky-item and one scrolling-section per itemCount", async () => {
-    const wrapper = await mountSuspended(WipeAwayVertical, { props: { itemCount: 3 } });
-    expect(wrapper.findAll(".sticky-item")).toHaveLength(3);
-    expect(wrapper.findAll(".scrolling-section")).toHaveLength(3);
+    expect((wrapper.find(".trailing-buffer").element as HTMLElement).style.gridRow).toBe("4");
   });
 
   it("renders named stickyItem-{key} slot content", async () => {
@@ -79,16 +69,18 @@ describe("WipeAwayVertical", () => {
     expect(wrapper.find(".sticky-1").exists()).toBe(true);
   });
 
-  it("renders named scrollingItem-{key} slot content", async () => {
+  it("renders named scrollingItem-{key} slot content for all but the last item", async () => {
     const wrapper = await mountSuspended(WipeAwayVertical, {
-      props: { itemCount: 2 },
+      props: { itemCount: 3 },
       slots: {
         "scrollingItem-0": "<p class='scroll-0'>First</p>",
         "scrollingItem-1": "<p class='scroll-1'>Second</p>",
+        "scrollingItem-2": "<p class='scroll-2'>Third</p>",
       },
     });
     expect(wrapper.find(".scroll-0").exists()).toBe(true);
     expect(wrapper.find(".scroll-1").exists()).toBe(true);
+    expect(wrapper.find(".scroll-2").exists()).toBe(false);
   });
 
   // ─── Per-item styles ─────────────────────────────────────────────────────
@@ -131,24 +123,5 @@ describe("WipeAwayVertical", () => {
     await wrapper.setProps({ styleClassPassthrough: ["updated"] });
     expect(wrapper.classes()).not.toContain("original");
     expect(wrapper.classes()).toContain("updated");
-  });
-
-  // ─── Scroll handling ─────────────────────────────────────────────────────
-
-  it("attaches a scroll listener on mount when animation-timeline is supported", async () => {
-    await mountSuspended(WipeAwayVertical, { props: { itemCount: 2 } });
-    expect(addEventListenerSpy).toHaveBeenCalledWith("scroll", expect.any(Function));
-  });
-
-  it("attaches the fallback scroll listener when animation-timeline is unsupported", async () => {
-    vi.stubGlobal("CSS", { supports: vi.fn(() => false) });
-    await mountSuspended(WipeAwayVertical, { props: { itemCount: 2 } });
-    expect(addEventListenerSpy).toHaveBeenCalledWith("scroll", expect.any(Function));
-  });
-
-  it("removes its scroll listener on unmount", async () => {
-    const wrapper = await mountSuspended(WipeAwayVertical, { props: { itemCount: 2 } });
-    wrapper.unmount();
-    expect(removeEventListenerSpy).toHaveBeenCalledWith("scroll", expect.any(Function));
   });
 });

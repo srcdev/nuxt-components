@@ -23,7 +23,7 @@ const meta: Meta<typeof WipeAwayVertical> = {
     docs: {
       description: {
         component:
-          "Scroll-driven vertical wipe effect: each sticky panel wipes away to reveal the next as its paired scrolling section crosses the viewport. Uses CSS `animation-timeline: view()` where supported, falling back to a JS opacity crossfade elsewhere. Consumers supply `stickyItem-{n}` and `scrollingItem-{n}` named slots for each of `itemCount` sections. The sticky panel's own visible height is `--wipe-away-vertical-height` (default `100vh`) — leave the root's own `height` unset (`auto`) so it sizes itself from its children; the sticky panel occupies its own slot in normal flow ahead of the scrolling sections, so a manually-set height of `itemCount * 100vh` undersizes the root and releases the sticky panel mid-wipe.",
+          "Scroll-driven vertical wipe effect: each sticky panel wipes away to reveal the next as its paired scrolling section crosses the viewport. Pure CSS — a single-column grid overlays `.sticky-items-container` across all `.scrolling-section` rows via `animation-timeline: view()`, so there's no scroll listener or JS measurement involved. Consumers supply `stickyItem-{n}` slots for each of `itemCount` panels, and `scrollingItem-{n}` slots for only the first `itemCount - 1` — the last panel has nothing left to reveal, so it has no wipe animation or scrolling section of its own, just a small built-in trailing buffer to release cleanly. The sticky panel's own visible height is `--wipe-away-vertical-height` (default `100vh`) — leave the root's own `height` unset (`auto`) so it sizes itself from its children. Browsers without `animation-timeline: view()` support (via `@supports not (...)`) just get the sticky items stacked in normal document flow instead.",
       },
     },
   },
@@ -63,7 +63,6 @@ export const Default: Story = {
           <template #stickyItem-2>${panel("Panel Three", "#2fb380")}</template>
           <template #scrollingItem-0><div style="height: 100vh;"></div></template>
           <template #scrollingItem-1><div style="height: 100vh;"></div></template>
-          <template #scrollingItem-2><div style="height: 100vh;"></div></template>
         </WipeAwayVertical>
         <p style="text-align: center; font-size: 1.4rem; opacity: 0.5; padding-block: 2rem;">End of timeline</p>
       </div>
@@ -73,7 +72,7 @@ export const Default: Story = {
     docs: {
       description: {
         story:
-          "Three panels wiping in sequence as the page scrolls. The root's height is left as `auto` so it sizes itself from the sticky panel plus its 3 scrolling sections plus the trailing buffer.",
+          "Three panels wiping in sequence as the page scrolls. The root's height is left as `auto` so it sizes itself from its scrolling sections — no manual height calculation needed.",
       },
     },
   },
@@ -98,7 +97,6 @@ export const RoundedPanels: Story = {
           <template #stickyItem-2>${panel("Rounded Three", "#2fb380")}</template>
           <template #scrollingItem-0><div style="height: 100vh;"></div></template>
           <template #scrollingItem-1><div style="height: 100vh;"></div></template>
-          <template #scrollingItem-2><div style="height: 100vh;"></div></template>
         </WipeAwayVertical>
         <p style="text-align: center; font-size: 1.4rem; opacity: 0.5; padding-block: 2rem;">End of timeline</p>
       </div>
@@ -130,7 +128,6 @@ export const SlowWipe: Story = {
           <template #stickyItem-0>${panel("Slow One", "#5b8def")}</template>
           <template #stickyItem-1>${panel("Slow Two", "#e0576b")}</template>
           <template #scrollingItem-0><div style="height: 100vh;"></div></template>
-          <template #scrollingItem-1><div style="height: 100vh;"></div></template>
         </WipeAwayVertical>
         <p style="text-align: center; font-size: 1.4rem; opacity: 0.5; padding-block: 2rem;">End of timeline</p>
       </div>
@@ -163,7 +160,6 @@ export const CompactHeight: Story = {
           <template #stickyItem-0>${panel("Compact One", "#5b8def")}</template>
           <template #stickyItem-1>${panel("Compact Two", "#e0576b")}</template>
           <template #scrollingItem-0><div style="height: 100vh;"></div></template>
-          <template #scrollingItem-1><div style="height: 100vh;"></div></template>
         </WipeAwayVertical>
         <p style="text-align: center; font-size: 1.4rem; opacity: 0.5; padding-block: 2rem;">End of timeline</p>
       </div>
@@ -202,7 +198,6 @@ export const FivePanels: Story = {
           <template #scrollingItem-1><div style="height: 100vh;"></div></template>
           <template #scrollingItem-2><div style="height: 100vh;"></div></template>
           <template #scrollingItem-3><div style="height: 100vh;"></div></template>
-          <template #scrollingItem-4><div style="height: 100vh;"></div></template>
         </WipeAwayVertical>
         <p style="text-align: center; font-size: 1.4rem; opacity: 0.5; padding-block: 2rem;">End of timeline</p>
       </div>
@@ -213,6 +208,61 @@ export const FivePanels: Story = {
       description: {
         story:
           "Five panels wiping in sequence — itemCount scales cleanly: the root's height stays auto regardless of itemCount, and z-index/view-timeline naming are generated per item automatically.",
+      },
+    },
+  },
+};
+
+const loremParagraph = `
+  <p style="max-width: 60ch; margin-inline: auto; font-size: 1.6rem; line-height: 1.6; padding-block: 2rem;">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+    labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+    laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+    voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+  </p>
+`;
+
+const loremHeading = (text: string) => `
+  <h2 style="max-width: 60ch; margin-inline: auto; font-size: 2.4rem; padding-top: 3rem;">${text}</h2>
+`;
+
+export const InRealisticPage: Story = {
+  args: {
+    tag: "div",
+    itemCount: 3,
+  },
+  render: (args) => ({
+    components: { WipeAwayVertical },
+    setup() {
+      return { args };
+    },
+    template: `
+      <div>
+        ${loremHeading("Before the effect")}
+        ${loremParagraph}
+        ${loremParagraph}
+        ${loremHeading("Another section")}
+        ${loremParagraph}
+        <WipeAwayVertical v-bind="args">
+          <template #stickyItem-0>${panel("Panel One", "#5b8def")}</template>
+          <template #stickyItem-1>${panel("Panel Two", "#e0576b")}</template>
+          <template #stickyItem-2>${panel("Panel Three", "#2fb380")}</template>
+          <template #scrollingItem-0><div style="height: 100vh;"></div></template>
+          <template #scrollingItem-1><div style="height: 100vh;"></div></template>
+        </WipeAwayVertical>
+        ${loremHeading("After the effect")}
+        ${loremParagraph}
+        ${loremParagraph}
+        ${loremHeading("More reading")}
+        ${loremParagraph}
+      </div>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The component dropped into a realistic page: several rows of unrelated heading/paragraph content both before and after it, rather than the minimal scroll-note used by the other stories. Demonstrates that the wipe still starts fully un-wiped at initial page load and the sticky panel releases cleanly afterwards, regardless of how much content precedes or follows it.",
       },
     },
   },
