@@ -134,7 +134,7 @@ Some components pair multiple slot types per index (e.g. TabsCore):
 - `app/components/01.atoms/navigation/tabs/TabsCore.vue`
 - `app/components/accordian/AccordianCore.vue`
 - `app/components/02.molecules/stepper-list/StepperList.vue`
-- `app/components/view-timeline/WipeAwayVertical.vue`
+- `app/components/01.atoms/animations/view-timeline/WipeAwayVertical.vue`
 
 ---
 

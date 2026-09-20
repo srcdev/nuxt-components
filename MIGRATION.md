@@ -25,6 +25,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | ScrollRevealImage | `animations/scroll-reveal-image/ScrollRevealImage.vue` | ☐ | ☐ |
 | RotatingCarouselImage | `animations/rotating-carousel-image/RotatingCarouselImage.vue` | ✅ | ✅ `rotating-carousel-image` |
 | ClipElement | `animations/clip-element/ClipElement.vue` | ✅ | ✅ `clip-element` |
+| WipeAwayVertical | `animations/view-timeline/WipeAwayVertical.vue` | ✅ | ✅ `wipe-away-vertical` |
 | BannerVideo | `banner-video/BannerVideo.vue` | ☐ | ☐ |
 | CanvasSwitcher | `canvas-switcher/CanvasSwitcher.vue` | ✅ | ✅ `canvas-switcher` |
 | CardCore | `card/CardCore.vue` | ✅ | ☐ |
@@ -201,4 +202,3 @@ These components still live in the root `app/components/` folder and need to be 
 | PopOver | `pop-over/PopOver.vue` | |
 | ResponsiveHeader | `responsive-header/ResponsiveHeader.vue` | |
 | NavigationItems | `responsive-header/NavigationItems.vue` | Internal sub-component of ResponsiveHeader |
-| WipeAwayVertical | `view-timeline/WipeAwayVertical.vue` | |

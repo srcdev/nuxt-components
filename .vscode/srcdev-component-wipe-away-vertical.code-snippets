@@ -1,0 +1,26 @@
+{
+  "SRCDEV WipeAwayVertical Basic": {
+    "description": "WipeAwayVertical — scroll-driven vertical wipe-away effect with sticky/scrolling section pairs",
+    "scope": "vue,html",
+    "body": [
+      "<WipeAwayVertical :item-count=\"$13\" style=\"height: 300vh;\">",
+      "  <template #stickyItem-0>$2</template>",
+      "  <template #stickyItem-1>$3</template>",
+      "  <template #stickyItem-2>$4</template>",
+      "",
+      "  <template #scrollingItem-0><div style=\"height: 100vh;\"></div></template>",
+      "  <template #scrollingItem-1><div style=\"height: 100vh;\"></div></template>",
+      "  <template #scrollingItem-2><div style=\"height: 100vh;\"></div></template>",
+      "</WipeAwayVertical>$0"
+    ]
+  },
+  "SRCDEV WipeAwayVertical With Passthrough": {
+    "description": "WipeAwayVertical with styleClassPassthrough for a custom wrapper class",
+    "scope": "vue,html",
+    "body": [
+      "<WipeAwayVertical :item-count=\"$12\" style-class-passthrough=\"$2my-wipe-wrapper\">",
+      "  $0",
+      "</WipeAwayVertical>"
+    ]
+  }
+}
