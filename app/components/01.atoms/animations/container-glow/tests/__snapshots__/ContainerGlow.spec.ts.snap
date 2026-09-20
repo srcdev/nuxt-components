@@ -1,0 +1,14 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ContainerGlow > renders correct HTML structure (default) 1`] = `
+"<div class="container-glow-wrapper" style="--_gap: 32; --_blur: 20; --_spread: 80; --_direction: row;">
+  <div class="container-glow">
+    <div class="glows"></div>
+    <p>One</p>
+  </div>
+  <div class="container-glow">
+    <div class="glows"></div>
+    <p>Two</p>
+  </div>
+</div>"
+`;

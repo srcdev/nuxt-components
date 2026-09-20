@@ -186,7 +186,6 @@ These components still live in the root `app/components/` folder and need to be 
 | CarouselBasic | `carousels/CarouselBasic.vue` | |
 | CarouselFlip | `carousels/CarouselFlip.vue` | |
 | CarouselInfinite | `carousels/CarouselInfinite.vue` | |
-| ContainerGlowCore | `container-glow/ContainerGlowCore.vue` | |
 | DeepExpandingMenu | `deep-expanding-menu/DeepExpandingMenu.vue` | |
 | DeepExpandingMenuOld | `deep-expanding-menu/DeepExpandingMenuOld.vue` | Likely deprecated — review before migrating |
 | DisplayBanner | `display-banner/DisplayBanner.vue` | |

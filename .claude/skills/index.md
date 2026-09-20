@@ -130,7 +130,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── column-flow-grid.md        — ColumnFlowGrid (renamed from MasonryGrid): CSS multi-column text-flow layout, named dynamic slots (no count/data prop), itemMinWidth/gap/unit sizing, CSS token API; not a true masonry, see "which one do I want?"
     ├── masonry-grid.md            — MasonryGrid: real measured-height masonry (greedy shortest-column packing, animated resize) absorbed from the now-retired MasonryGridOrdered; named dynamic slots, fixedWidth/justify, CSS token API
     ├── glowing-border.md          — GlowingBorder: animated conic-gradient glow border, 5 colour variants, tag prop, full CSS token API for width/radius/surface/duration/per-variant colour stops, reduced-motion guard
-    └── section-parallax.md        — SectionParallax: CSS fixed-background parallax section, iOS Safari limitation, when to use vs ScrollRevealImage, CSS token API, reduced-motion guard
+    ├── section-parallax.md        — SectionParallax: CSS fixed-background parallax section, iOS Safari limitation, when to use vs ScrollRevealImage, CSS token API, reduced-motion guard
+    └── container-glow.md          — ContainerGlow (renamed from ContainerGlowCore): pointer-proximity glow-border cards, named dynamic slots (one card per slot), config-prop-driven layout/interaction, full CSS token API for static visuals, reduced-motion guard
 ```
 
 ## Skill file template

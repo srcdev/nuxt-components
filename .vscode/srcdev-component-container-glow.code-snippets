@@ -1,0 +1,33 @@
+{
+  "SRCDEV ContainerGlow Basic": {
+    "description": "ContainerGlow — pointer-proximity glow-border card(s), one card per named slot",
+    "scope": "vue,html",
+    "body": [
+      "<ContainerGlow>",
+      "  <template #${1:one}>",
+      "    $0",
+      "  </template>",
+      "</ContainerGlow>"
+    ]
+  },
+  "SRCDEV ContainerGlow With Config": {
+    "description": "ContainerGlow with custom proximity/spread/blur/gap/vertical config",
+    "scope": "vue,html",
+    "body": [
+      "<ContainerGlow",
+      "  :config=\"{",
+      "    proximity: ${1:40},",
+      "    spread: ${2:80},",
+      "    blur: ${3:20},",
+      "    gap: ${4:32},",
+      "    vertical: ${5:false},",
+      "    inactiveOpacity: ${6:0},",
+      "  }\"",
+      ">",
+      "  <template #${7:one}>",
+      "    $0",
+      "  </template>",
+      "</ContainerGlow>"
+    ]
+  }
+}
