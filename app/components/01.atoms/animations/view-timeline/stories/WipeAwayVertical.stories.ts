@@ -23,7 +23,7 @@ const meta: Meta<typeof WipeAwayVertical> = {
     docs: {
       description: {
         component:
-          "Scroll-driven vertical wipe effect: each sticky panel wipes away to reveal the next as its paired scrolling section crosses the viewport. Uses CSS `animation-timeline: view()` where supported, falling back to a JS opacity crossfade elsewhere. Consumers supply `stickyItem-{n}` and `scrollingItem-{n}` named slots for each of `itemCount` sections. The sticky panel's own visible height is `--wipe-away-vertical-height` (default `100vh`) — set the root's height (e.g. via `style`) to the full scroll distance, typically `itemCount * 100vh`.",
+          "Scroll-driven vertical wipe effect: each sticky panel wipes away to reveal the next as its paired scrolling section crosses the viewport. Uses CSS `animation-timeline: view()` where supported, falling back to a JS opacity crossfade elsewhere. Consumers supply `stickyItem-{n}` and `scrollingItem-{n}` named slots for each of `itemCount` sections. The sticky panel's own visible height is `--wipe-away-vertical-height` (default `100vh`) — leave the root's own `height` unset (`auto`) so it sizes itself from its children; the sticky panel occupies its own slot in normal flow ahead of the scrolling sections, so a manually-set height of `itemCount * 100vh` undersizes the root and releases the sticky panel mid-wipe.",
       },
     },
   },
@@ -57,7 +57,7 @@ export const Default: Story = {
     template: `
       <div>
         ${scrollNote}
-        <WipeAwayVertical v-bind="args" style="height: 300vh;">
+        <WipeAwayVertical v-bind="args">
           <template #stickyItem-0>${panel("Panel One", "#5b8def")}</template>
           <template #stickyItem-1>${panel("Panel Two", "#e0576b")}</template>
           <template #stickyItem-2>${panel("Panel Three", "#2fb380")}</template>
@@ -73,7 +73,7 @@ export const Default: Story = {
     docs: {
       description: {
         story:
-          "Three panels wiping in sequence as the page scrolls. The root spans 300vh (3 scrolling sections of 100vh each); the sticky panel itself defaults to 100vh via --wipe-away-vertical-height.",
+          "Three panels wiping in sequence as the page scrolls. The root's height is left as `auto` so it sizes itself from the sticky panel plus its 3 scrolling sections plus the trailing buffer.",
       },
     },
   },
@@ -92,7 +92,7 @@ export const RoundedPanels: Story = {
     template: `
       <div>
         ${scrollNote}
-        <WipeAwayVertical v-bind="args" style="height: 300vh; --wipe-away-vertical-border-radius: 2.4rem;">
+        <WipeAwayVertical v-bind="args" style="--wipe-away-vertical-border-radius: 2.4rem;">
           <template #stickyItem-0>${panel("Rounded One", "#5b8def")}</template>
           <template #stickyItem-1>${panel("Rounded Two", "#e0576b")}</template>
           <template #stickyItem-2>${panel("Rounded Three", "#2fb380")}</template>
@@ -126,7 +126,7 @@ export const SlowWipe: Story = {
     template: `
       <div>
         ${scrollNote}
-        <WipeAwayVertical v-bind="args" style="height: 200vh; --wipe-away-vertical-animation-duration: 3s;">
+        <WipeAwayVertical v-bind="args" style="--wipe-away-vertical-animation-duration: 3s;">
           <template #stickyItem-0>${panel("Slow One", "#5b8def")}</template>
           <template #stickyItem-1>${panel("Slow Two", "#e0576b")}</template>
           <template #scrollingItem-0><div style="height: 100vh;"></div></template>
@@ -159,7 +159,7 @@ export const CompactHeight: Story = {
     template: `
       <div>
         ${scrollNote}
-        <WipeAwayVertical v-bind="args" style="height: 200vh; --wipe-away-vertical-height: 50vh;">
+        <WipeAwayVertical v-bind="args" style="--wipe-away-vertical-height: 50vh;">
           <template #stickyItem-0>${panel("Compact One", "#5b8def")}</template>
           <template #stickyItem-1>${panel("Compact Two", "#e0576b")}</template>
           <template #scrollingItem-0><div style="height: 100vh;"></div></template>
@@ -173,7 +173,7 @@ export const CompactHeight: Story = {
     docs: {
       description: {
         story:
-          "`--wipe-away-vertical-height` sizes the visible sticky panel independently of the root's total scroll height — here it's shrunk to 50vh instead of the 100vh default.",
+          "`--wipe-away-vertical-height` sizes the visible sticky panel independently of the root's total scroll height — here it's shrunk to 50vh instead of the 100vh default. The root's height is still left as `auto`.",
       },
     },
   },
@@ -192,7 +192,7 @@ export const FivePanels: Story = {
     template: `
       <div>
         ${scrollNote}
-        <WipeAwayVertical v-bind="args" style="height: 500vh;">
+        <WipeAwayVertical v-bind="args">
           <template #stickyItem-0>${panel("Panel One", "#5b8def")}</template>
           <template #stickyItem-1>${panel("Panel Two", "#e0576b")}</template>
           <template #stickyItem-2>${panel("Panel Three", "#2fb380")}</template>
@@ -212,7 +212,7 @@ export const FivePanels: Story = {
     docs: {
       description: {
         story:
-          "Five panels wiping in sequence — itemCount scales cleanly: the root spans 500vh (5 scrolling sections of 100vh each), and z-index/view-timeline naming are generated per item automatically.",
+          "Five panels wiping in sequence — itemCount scales cleanly: the root's height stays auto regardless of itemCount, and z-index/view-timeline naming are generated per item automatically.",
       },
     },
   },

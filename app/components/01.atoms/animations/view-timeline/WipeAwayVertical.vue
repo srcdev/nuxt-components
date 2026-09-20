@@ -151,7 +151,7 @@ onUnmounted(() => {
     }
 
     .trailing-buffer {
-      height: var(--wipe-away-vertical-trailing-buffer, 50vh);
+      height: var(--wipe-away-vertical-trailing-buffer, 20vh);
     }
   }
 
