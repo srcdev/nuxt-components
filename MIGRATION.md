@@ -193,7 +193,6 @@ These components still live in the root `app/components/` folder and need to be 
 | DisplayThemeSwitch | `display-theme-switch/DisplayThemeSwitch.vue` | |
 | DisplayTooltip | `display-tooltip/DisplayTooltip.vue` | |
 | DisplayTooltipDefined | `display-tooltip/DisplayTooltipDefined.vue` | |
-| GlowingBorder | `glowing-border/GlowingBorder.vue` | |
 | LayoutGridA | `layout-grids/LayoutGridA.vue` | |
 | LayoutGridB | `layout-grids/LayoutGridB.vue` | |
 | MagneticNavigation | `magnetic-navigation/MagneticNavigation.vue` | |

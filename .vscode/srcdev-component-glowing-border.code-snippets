@@ -1,0 +1,23 @@
+{
+  "SRCDEV GlowingBorder Basic": {
+    "description": "GlowingBorder — animated conic-gradient glow border",
+    "scope": "vue,html",
+    "body": [
+      "<GlowingBorder variant=\"${1|subtle,vivid,silver,steel,green|}\">",
+      "  $0",
+      "</GlowingBorder>"
+    ]
+  },
+  "SRCDEV GlowingBorder Custom Tokens": {
+    "description": "GlowingBorder with custom width/radius/animation-duration CSS tokens",
+    "scope": "vue,html",
+    "body": [
+      "<GlowingBorder",
+      "  variant=\"${1|subtle,vivid,silver,steel,green|}\"",
+      "  style=\"--glowing-border-width: ${2:3px}; --glowing-border-radius: ${3:30px}; --glowing-border-animation-duration: ${4:10s};\"",
+      ">",
+      "  $0",
+      "</GlowingBorder>"
+    ]
+  }
+}
