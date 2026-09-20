@@ -1,0 +1,13 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`SectionParallax > renders correct HTML structure (default) 1`] = `
+"<div class="section-parallax">
+  <!--v-if-->
+</div>"
+`;
+
+exports[`SectionParallax > renders correct HTML structure (with slot content) 1`] = `
+"<div class="section-parallax">
+  <p class="overlay-text">A quiet moment.</p>
+</div>"
+`;

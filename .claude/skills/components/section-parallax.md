@@ -53,19 +53,34 @@ type: reference
 
 The component sets:
 - `background-image: url(...)` via `v-bind`
-- `background-position: center`
-- `background-size: inherit` (fallback when fixed is not supported)
-- `min-height: 120vh`
-- `background-color: light-dark(var(--slate-01), var(--slate-08))` (visible if image fails to load)
+- `background-position: var(--section-parallax-background-position, center)`
+- `background-size: var(--section-parallax-background-size, cover)`
+- `min-height: var(--section-parallax-min-height, 100svh)`
+- `background-color: var(--section-parallax-background-colour, light-dark(var(--slate-01), var(--slate-08)))` (visible if image fails to load)
 
-Inside `@supports (background-attachment: fixed)`:
+Inside `@media (hover: hover) and (pointer: fine) { @supports (background-attachment: fixed) { ... } }`:
 - `background-attachment: fixed` — pins the image to the viewport
-- `background-size: cover` — ensures the image fills the viewport
-- `min-height: 120vh` — ensures enough scroll travel to see the parallax motion
+- `min-height: var(--section-parallax-min-height-fixed, 120vh)` — ensures enough scroll travel to see the parallax motion
 
-## Controlling height
+Under `@media (prefers-reduced-motion: reduce)`, the parallax is disabled regardless of hover/
+`@supports` support: `background-attachment` reverts to `scroll` and height reverts to
+`--section-parallax-min-height`.
 
-Override `min-height` with a consuming-page style:
+## Styling
+
+Height, background position/size/colour are all public CSS custom properties — see
+`CONSUMER-STYLING.md` for the full token table.
+
+```vue
+<SectionParallax
+  background-image="/images/candle-and-stones.jpg"
+  style="--section-parallax-min-height: 60vh; --section-parallax-min-height-fixed: 70vh;"
+>
+  <p>Shorter atmospheric break</p>
+</SectionParallax>
+```
+
+Alternatively, override `min-height` with a consuming-page style:
 
 ```css
 .my-page {
@@ -100,3 +115,9 @@ Override `min-height` with a consuming-page style:
 - The `@supports` guard means the parallax activates only when the browser supports `background-attachment: fixed`. No JS is involved.
 - Slot content is only rendered when the `default` slot is provided (`v-if="slots.default"`).
 - The component has no built-in overlay or gradient — add one via the slot or a `::before` pseudo-element in your consuming-page styles.
+- 2026-09-20 migration: moved from `app/components/parallax/` (unplaced) into
+  `01.atoms/animations/section-parallax/`; props pattern was already `interface Props` +
+  `withDefaults` (no change needed); promoted min-height/background-position/background-size/
+  background-colour (previously hardcoded) to public `--section-parallax-*` tokens; added a
+  `prefers-reduced-motion: reduce` guard that disables the fixed-attachment parallax. No behaviour
+  change beyond the new override surface and the reduced-motion opt-out.

@@ -1,0 +1,27 @@
+{
+  "SRCDEV SectionParallax Basic": {
+    "description": "SectionParallax — fixed-background parallax section",
+    "scope": "vue,html",
+    "body": [
+      "<SectionParallax",
+      "  tag=\"${1|section,div,article,aside|}\"",
+      "  background-image=\"${2:/images/example.jpg}\"",
+      ">",
+      "  $0",
+      "</SectionParallax>"
+    ]
+  },
+  "SRCDEV SectionParallax Custom Height": {
+    "description": "SectionParallax with custom min-height CSS tokens",
+    "scope": "vue,html",
+    "body": [
+      "<SectionParallax",
+      "  tag=\"${1|section,div,article,aside|}\"",
+      "  background-image=\"${2:/images/example.jpg}\"",
+      "  style=\"--section-parallax-min-height: ${3:60vh}; --section-parallax-min-height-fixed: ${4:70vh};\"",
+      ">",
+      "  $0",
+      "</SectionParallax>"
+    ]
+  }
+}

@@ -197,7 +197,6 @@ These components still live in the root `app/components/` folder and need to be 
 | LayoutGridB | `layout-grids/LayoutGridB.vue` | |
 | MagneticNavigation | `magnetic-navigation/MagneticNavigation.vue` | |
 | MarqueeScroller | `marquee-scroller/MarqueeScroller.vue` | |
-| SectionParallax | `parallax/SectionParallax.vue` | |
 | PopOver | `pop-over/PopOver.vue` | |
 | ResponsiveHeader | `responsive-header/ResponsiveHeader.vue` | |
 | NavigationItems | `responsive-header/NavigationItems.vue` | Internal sub-component of ResponsiveHeader |

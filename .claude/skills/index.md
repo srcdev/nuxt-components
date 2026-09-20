@@ -129,7 +129,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── entry-animation.md         — EntryAnimation: scroll-driven entry animation wrapper (slide-in/zoom-reveal/exit-blur utility classes), skipAnimation for above-the-fold loop items, reduced-motion handled at the CSS layer
     ├── column-flow-grid.md        — ColumnFlowGrid (renamed from MasonryGrid): CSS multi-column text-flow layout, named dynamic slots (no count/data prop), itemMinWidth/gap/unit sizing, CSS token API; not a true masonry, see "which one do I want?"
     ├── masonry-grid.md            — MasonryGrid: real measured-height masonry (greedy shortest-column packing, animated resize) absorbed from the now-retired MasonryGridOrdered; named dynamic slots, fixedWidth/justify, CSS token API
-    └── glowing-border.md          — GlowingBorder: animated conic-gradient glow border, 5 colour variants, tag prop, full CSS token API for width/radius/surface/duration/per-variant colour stops, reduced-motion guard
+    ├── glowing-border.md          — GlowingBorder: animated conic-gradient glow border, 5 colour variants, tag prop, full CSS token API for width/radius/surface/duration/per-variant colour stops, reduced-motion guard
+    └── section-parallax.md        — SectionParallax: CSS fixed-background parallax section, iOS Safari limitation, when to use vs ScrollRevealImage, CSS token API, reduced-motion guard
 ```
 
 ## Skill file template
