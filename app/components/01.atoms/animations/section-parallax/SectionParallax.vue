@@ -1,6 +1,6 @@
 <template>
   <component :is="tag" class="section-parallax" :class="[elementClasses]">
-    <slot v-if="slots.default" name="default"></slot>
+    <slot name="default"></slot>
   </component>
 </template>
 
@@ -15,8 +15,6 @@ const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   styleClassPassthrough: () => [],
 });
-
-const slots = useSlots();
 
 const backgroundImage = computed(() => `url("${props.backgroundImage}")`);
 

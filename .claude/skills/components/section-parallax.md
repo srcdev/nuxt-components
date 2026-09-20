@@ -52,6 +52,7 @@ type: reference
 ## How it works
 
 The component sets:
+
 - `background-image: url(...)` via `v-bind`
 - `background-position: var(--section-parallax-background-position, center)`
 - `background-size: var(--section-parallax-background-size, cover)`
@@ -59,6 +60,7 @@ The component sets:
 - `background-color: var(--section-parallax-background-colour, light-dark(var(--slate-01), var(--slate-08)))` (visible if image fails to load)
 
 Inside `@media (hover: hover) and (pointer: fine) { @supports (background-attachment: fixed) { ... } }`:
+
 - `background-attachment: fixed` — pins the image to the viewport
 - `min-height: var(--section-parallax-min-height-fixed, 120vh)` — ensures enough scroll travel to see the parallax motion
 
@@ -113,7 +115,6 @@ Alternatively, override `min-height` with a consuming-page style:
 ## Notes
 
 - The `@supports` guard means the parallax activates only when the browser supports `background-attachment: fixed`. No JS is involved.
-- Slot content is only rendered when the `default` slot is provided (`v-if="slots.default"`).
 - The component has no built-in overlay or gradient — add one via the slot or a `::before` pseudo-element in your consuming-page styles.
 - 2026-09-20 migration: moved from `app/components/parallax/` (unplaced) into
   `01.atoms/animations/section-parallax/`; props pattern was already `interface Props` +
