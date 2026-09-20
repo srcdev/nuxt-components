@@ -115,13 +115,15 @@ onMounted(() => {
       var(--form-element-outline-width)
   );
 
-  --_form-items-gap: 1rem;
-  --_form-padding: 0.6rem;
+  /* Sizing/spacing, publicly overridable — DisplayThemeSwitch's compact "small" styleClassPassthrough
+     variant sets these directly rather than reaching into the --_ locals below. */
+  --_form-items-gap: var(--triple-toggle-switch-gap, 1rem);
+  --_form-padding: var(--triple-toggle-switch-padding, 0.6rem);
 
   --_select-scheme-group-background-color: var(--_marker-surface);
   --_select-scheme-group-background-image: none;
-  --_select-scheme-group-padding: 0.5rem;
-  --_scheme-icon-font-size: 2rem;
+  --_select-scheme-group-padding: var(--triple-toggle-switch-option-padding, 0.5rem);
+  --_scheme-icon-font-size: var(--triple-toggle-switch-icon-size, 2rem);
   /* --_scheme-icon-colour: black; */
 
   /* "system" not "auto" — matches useSettingsStore's actual colourScheme value/CSS class

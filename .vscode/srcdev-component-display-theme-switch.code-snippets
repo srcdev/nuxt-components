@@ -1,0 +1,27 @@
+{
+  "SRCDEV DisplayThemeSwitch Basic": {
+    "description": "DisplayThemeSwitch — system/light/dark theme picker",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayThemeSwitch />"
+    ]
+  },
+  "SRCDEV DisplayThemeSwitch Small": {
+    "description": "DisplayThemeSwitch compact size, for a header/nav slot",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayThemeSwitch style-class-passthrough=\"small\" />"
+    ]
+  },
+  "SRCDEV DisplayThemeSwitch Custom Labels": {
+    "description": "DisplayThemeSwitch with translated/custom option labels",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayThemeSwitch",
+      "  system-label=\"$1System\"",
+      "  light-label=\"$2Light\"",
+      "  dark-label=\"$3Dark\"",
+      "/>"
+    ]
+  }
+}

@@ -45,8 +45,22 @@ the shared `--theme-*` token every other themed component also falls back to. Se
 > themselves are otherwise unchanged (so anything already targeting them by their corrected names
 > keeps working). Making the component genuinely value-agnostic would be a larger, separate change.
 
-Geometry (`--_form-*` sizing locals, `--form-element-*`) is shared/component-internal and untouched
-by this — see `theming-form-geometry-tokens.md` for the shared half.
+## Sizing tokens
+
+| Token | Default | Controls |
+|---|---|---|
+| `--triple-toggle-switch-gap` | `1rem` | Gap between the three option circles |
+| `--triple-toggle-switch-padding` | `0.6rem` | Wrapper padding |
+| `--triple-toggle-switch-option-padding` | `0.5rem` | Padding inside each option circle |
+| `--triple-toggle-switch-icon-size` | `2rem` | Icon font-size inside each option |
+
+Added 2026-09-20 when `DisplayThemeSwitch`'s `small` variant was found reaching directly into this
+component's private `--_form-items-gap`/`--_form-padding`/`--_select-scheme-group-padding`/
+`--_scheme-icon-font-size` locals via selector specificity — a consumer-relevant value (compact
+sizing) hidden behind a private var with no public override hook, the same bug class as CLAUDE.md
+pitfall #20. These four now wrap those locals as real public tokens; the shared geometry from
+`--form-element-*` (border width, outline width) is still shared/component-internal and untouched
+by this — see `theming-form-geometry-tokens.md` for that half.
 
 ---
 
