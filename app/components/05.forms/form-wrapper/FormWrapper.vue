@@ -9,7 +9,7 @@ interface Props {
   width?: "narrow" | "medium" | "wide";
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   width: "narrow",
 });
 </script>

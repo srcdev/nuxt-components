@@ -54,7 +54,7 @@
           type="button"
           :readonly="Number(modelValue) === min"
           :is-pending="false"
-          button-text="Step down"
+          :button-text="stepDownLabel"
           :theme
           variant="secondary"
           @click.stop.prevent="updateRange(-step, Number(modelValue) > min)"
@@ -69,7 +69,7 @@
           type="button"
           :readonly="Number(modelValue) === max"
           :is-pending="false"
-          button-text="Step up"
+          :button-text="stepUpLabel"
           :theme
           variant="secondary"
           @click.stop.prevent="updateRange(step, Number(modelValue) < max)"
@@ -106,7 +106,8 @@ interface Props {
   theme?: FormUiTheme;
   weight?: FormWeight;
   styleClassPassthrough?: string | string[];
-  deepCssClassPassthrough?: string;
+  stepDownLabel?: string;
+  stepUpLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -117,13 +118,12 @@ const props = withDefaults(defineProps<Props>(), {
   theme: "default",
   weight: "wght-400",
   styleClassPassthrough: () => [],
-  deepCssClassPassthrough: "",
+  stepDownLabel: "Step down",
+  stepUpLabel: "Step up",
 });
 
 const slots = useSlots();
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-
-// const id = useId();
 
 const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   props.name,
@@ -131,11 +131,9 @@ const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   slots
 );
 
-// const FormUiTheme = computed(() => {
-//   return props.fieldHasError ? "error" : props.theme;
-// });
-
-const modelValue = defineModel<number | readonly number[]>();
+const modelValue = defineModel<number>({
+  required: true,
+});
 
 const updateRange = (step: number, withinRangeLimit: boolean) => {
   if (withinRangeLimit) {
@@ -143,24 +141,3 @@ const updateRange = (step: number, withinRangeLimit: boolean) => {
   }
 };
 </script>
-
-<style lang="css">
-@layer components {
-.input-range-with-label {
-  .input-range-label {
-    display: block;
-    margin-block: 0.8rem;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  .label-description {
-    font-family: var(--font-family);
-    font-size: 1.6rem;
-    margin-top: 1.2rem;
-  }
-}
-}
-</style>

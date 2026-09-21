@@ -390,6 +390,7 @@ footer.note code{
           <th data-key="variants" data-type="bool" title="Uses a variants/ subfolder">Variants folder</th>
           <th data-key="legacy_props" data-type="bool" title="Still options-style defineProps({...}), not defineProps&lt;Props&gt;()">Legacy props</th>
           <th data-key="story_args_bug" data-type="bool" title="A story destructures/refs Storybook's reactive args at setup-time, so most Controls-panel changes silently stop updating the rendered story after first render">Story args bug</th>
+          <th data-key="eslint_issues" data-type="bool" title="npx eslint reports at least one error or warning on a .vue file in this group">ESLint issues</th>
           <th data-key="score" data-type="num">Score</th>
         </tr>
       </thead>
@@ -400,6 +401,7 @@ footer.note code{
   <footer class="note">
     <p><strong>Methodology:</strong> "Styling doc", "Tests", "Story" and "Variants folder" are filesystem checks (<code>CONSUMER-STYLING.md</code>, a <code>tests/</code> dir, a <code>stories/</code> dir or <code>*.stories.ts</code> file, a <code>variants/</code> subfolder). "Skill doc" and "Snippet" match the component's kebab-case name against <code>.claude/skills/components/*.md</code> and <code>.vscode/*.code-snippets</code> &mdash; a small number of near-miss names may read as false negatives and are worth a manual glance before acting. "Score" is the count of the five doc/test/story/skill/snippet checks passed, out of 5, and is what "reference-quality" and "only incomplete" are based on. "Legacy props" is a source check for options-style <code>defineProps({...})</code> rather than <code>defineProps&lt;Props&gt;()</code> &mdash; like "Variants folder" it is <em>not</em> counted in the 5-point score (deliberately, so it stays visible instead of vanishing into an already-high score), but it does factor into "reference-quality" and "only incomplete", same as "Variants folder".</p>
     <p style="margin-top:0.8rem;"><strong>"Story args bug"</strong> flags a story whose <code>setup()</code> destructures or spreads Storybook's <code>args</code> into local variables/refs at mount time (e.g. <code>const { modelValue, ...otherArgs } = args;</code> then <code>ref(modelValue)</code>). @storybook/vue3 mounts the story component once and mutates the same <code>args</code> object in place on every Controls change &mdash; it does not re-run <code>setup()</code> &mdash; so a destructured copy freezes at its initial value and most Controls silently stop updating the rendered story after first render. The fix is to bind the template straight to <code>args.x</code> (optionally through a <code>computed()</code> that strips non-prop extra args), never to a value copied out in <code>setup()</code>. Also not counted in the 5-point score, for the same reason as "Legacy props".</p>
+    <p style="margin-top:0.8rem;"><strong>"ESLint issues"</strong> runs <code>npx eslint</code> across every <code>.vue</code> file under <code>app/components/</code> once per build and flags a group if any of its files reported an error or a warning. Added 2026-09-21 after fixing a dead <code>const props = withDefaults(...)</code> in <code>InputRangeCore</code> (the assignment's value was never read once its only reference &mdash; a since-removed dead computed &mdash; was cleaned up) and finding the same pattern live in <code>FormField</code>/<code>FormWrapper</code>. It also currently flags 13 groups for <code>vue/require-default-prop</code> firing on <code>defineModel()</code>-declared props, an eslint-plugin-vue rule with no options to exempt models (it predates <code>defineModel</code>) &mdash; the fix there is <code>defineModel&lt;T&gt;({'{'} required: true {'}'})</code> where the native element genuinely can't be meaningfully "empty" (matching what <code>InputRangeCore</code>/<code>InputRangeDefault</code> now do), not a blanket rule disable or an artificial default value. Not counted in the 5-point score, same reasoning as "Legacy props"/"Story args bug".</p>
     <p style="margin-top:0.8rem;"><strong>On <code>--_</code> vars:</strong> the public/private split is decided by consumer relevance, not reuse count &mdash; a private var is correct even used once, as long as the value has no plausible consumer override. This column is a raw count of <code>--_</code>-prefixed CSS custom properties per group; it is <em>not</em> scored and doesn't factor into "reference-quality" or "score." A high count is only a prompt to check each one by hand for a value that should have been public (a colour, size, or per-state variant with no override token) &mdash; the bug class the <code>ServicesCard</code> fix (CLAUDE.md pitfall #20) caught, not the presence of the prefix itself.</p>
     <p style="margin-top:0.8rem;"><strong>This page regenerates from <code>.claude/component-ledger/build.mjs</code></strong>, triggered whenever a staged commit touches <code>app/components/</code> (see the <code>create-commit-message</code> skill's hook). All numbers on this page, including the narrative above, are computed live from the latest scan &mdash; nothing here is hand-written prose that can drift out of date.</p>
   </footer>
@@ -439,11 +441,12 @@ statDefs.forEach(sd => {
 });
 
 // ---- dynamic narrative (every number computed from DATA, nothing hand-written) ----
-const fullyCompliant = DATA.filter(d => d.score === 5 && d.tier !== "NONE" && !d.variants && !d.legacy_props && !d.story_args_bug);
+const fullyCompliant = DATA.filter(d => d.score === 5 && d.tier !== "NONE" && !d.variants && !d.legacy_props && !d.story_args_bug && !d.eslint_issues);
 const unplaced = DATA.filter(d => d.tier === "NONE");
 const forkedVariants = DATA.filter(d => d.variants);
 const legacyProps = DATA.filter(d => d.legacy_props);
 const storyArgsBug = DATA.filter(d => d.story_args_bug);
+const eslintIssues = DATA.filter(d => d.eslint_issues);
 const noSkillAndUnplaced = unplaced.filter(d => !d.skill).length;
 const topPrivate = DATA.filter(d => d.priv_tokens > 0).sort((a,b) => b.priv_tokens - a.priv_tokens).slice(0, 3);
 
@@ -455,6 +458,7 @@ narrativeEl.innerHTML = `
   <p>${forkedVariants.length ? `<strong>${forkedVariants.length} group${forkedVariants.length===1?"":"s"}</strong> still fork${forkedVariants.length===1?"s":""} variants into a <code class="mono">variants/</code> subfolder &mdash; deprecated in favour of documenting the variation in the parent skill.md.` : `No component groups currently fork variants into a <code class="mono">variants/</code> subfolder.`}</p>
   <p>${legacyProps.length ? `<strong>${legacyProps.length} group${legacyProps.length===1?"":"s"}</strong> still use${legacyProps.length===1?"s":""} options-style <code class="mono">defineProps({...})</code> instead of <code class="mono">defineProps&lt;Props&gt;()</code> &mdash; this doesn't move the 5-point score, so it can hide behind an otherwise-complete-looking group.` : `No component groups currently use options-style defineProps.`}</p>
   <p>${storyArgsBug.length ? `<strong>${storyArgsBug.length} group${storyArgsBug.length===1?"":"s"}</strong> ha${storyArgsBug.length===1?"s":"ve"} a story that destructures/refs Storybook's <code class="mono">args</code> at setup-time (${storyArgsBug.map(d => `<code class="mono">${d.compdir.split("/").pop()}</code>`).join(", ")}) &mdash; the Controls panel silently stops updating most props on that story after first render. This doesn't move the 5-point score either, for the same reason as "Legacy props".` : `No component groups currently have this Storybook Controls reactivity bug.`}</p>
+  <p>${eslintIssues.length ? `<strong>${eslintIssues.length} group${eslintIssues.length===1?"":"s"}</strong> ha${eslintIssues.length===1?"s":"ve"} at least one live <code class="mono">npx eslint</code> finding (${eslintIssues.map(d => `<code class="mono">${d.compdir.split("/").pop()}</code>`).join(", ")}) &mdash; a component can score 5/5 on docs/tests/story/skill/snippet and still carry these. Not counted in the 5-point score, same reasoning as "Legacy props"/"Story args bug".` : `No component groups currently have a live ESLint finding.`}</p>
   <p><strong>${topPrivate.length ? "On --_ vars:" : ""}</strong> ${topPrivate.length
     ? `the largest private-token surfaces right now are ${topPrivate.map(d => `<code class="mono">${d.compdir.split("/").pop()}</code> (${d.priv_tokens})`).join(", ")} &mdash; worth a manual look for a value that should have been public, per the corrected rule in the footer below. A high count on its own isn't a defect.`
     : ""}</p>
@@ -521,7 +525,7 @@ function tierLabel(t){ return t === "NONE" ? "unplaced" : t; }
 function render(){
   let rows = DATA.slice();
   if (activeTier !== "all") rows = rows.filter(d => d.tier === activeTier);
-  if (onlyIncomplete) rows = rows.filter(d => d.score < 5 || d.tier === "NONE" || d.variants || d.legacy_props || d.story_args_bug);
+  if (onlyIncomplete) rows = rows.filter(d => d.score < 5 || d.tier === "NONE" || d.variants || d.legacy_props || d.story_args_bug || d.eslint_issues);
   const q = searchEl.value.trim().toLowerCase();
   if (q) rows = rows.filter(d => d.compdir.toLowerCase().includes(q));
 
@@ -551,6 +555,7 @@ function render(){
       <td class="check">${d.variants ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : '<span class="no">–</span>'}</td>
       <td class="check">${d.legacy_props ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : '<span class="no">–</span>'}</td>
       <td class="check">${d.story_args_bug ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : '<span class="no">–</span>'}</td>
+      <td class="check">${d.eslint_issues ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : '<span class="no">–</span>'}</td>
       <td><span class="score-bar">${dots}</span></td>
     </tr>`;
   }).join("");

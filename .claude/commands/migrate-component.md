@@ -18,10 +18,11 @@ to migrate — run `node .claude/component-ledger/build.mjs` and look up that co
 `.claude/component-ledger/audit.json` first:
 
 - **Already fully compliant** (`score: 5`, placed in a real tier, `variants: false`,
-  `legacy_props: false`, `story_args_bug: false`): skip straight to reporting — state its ledger
-  row (tier, score, and confirmation the three non-scored checks are also clean) and stop. Don't
-  run step 2's `AskUserQuestion` or the step 3 checklist for a component that already passes every
-  check; that flow is for when there's actual work to decide about.
+  `legacy_props: false`, `story_args_bug: false`, `eslint_issues: false`): skip straight to
+  reporting — state its ledger row (tier, score, and confirmation the four non-scored checks are
+  also clean) and stop. Don't run step 2's `AskUserQuestion` or the step 3 checklist for a
+  component that already passes every check; that flow is for when there's actual work to decide
+  about.
 - **Not fully compliant, or the user asked to migrate/fix it outright** (not just check): proceed
   to step 2 as normal.
 
@@ -37,6 +38,19 @@ Otherwise, auto-pick the next worst offender:
    - Else any group with `"story_args_bug": true` (a story destructures/refs Storybook's `args` at
      setup-time — see checklist item 6a) — same tie-break. Also doesn't move the 5-point `score`,
      for the same reason as `legacy_props`.
+   - Else any group with `"eslint_issues": true` (`npx eslint` reports at least one error or
+     warning on a `.vue` file in the group) — same tie-break. Also doesn't move the 5-point
+     `score`, for the same reason as `legacy_props`/`story_args_bug`. Run
+     `npx eslint <files in the group>` to see the actual finding(s) before deciding the fix — don't
+     guess. A common one: `const props = withDefaults(defineProps<Props>(), {...})` where nothing
+     ever reads `.props` because the template uses Vue's automatic prop-shorthand binding
+     (`:id`, `:name`, etc. resolve directly, no destructuring needed) — fix by dropping the
+     `props =` assignment, not by inventing a use for it. Another common one on this specific
+     ruleset: `vue/require-default-prop` firing on a `defineModel()`-declared prop — this is a
+     known false positive (the rule predates `defineModel` and has no way to exempt model props);
+     the fix is `defineModel<T>({ required: true })` where the native element genuinely can't be
+     meaningfully empty (see `InputRangeCore`/`InputRangeDefault`), not a blanket rule disable and
+     not an artificial default value that would change real behaviour.
    - Else the lowest `score` overall — same tie-break.
 3. State which component was picked and why in one line (e.g. "Picked `input-select` — unplaced isn't the issue here, it forks a `variants/` subfolder and scores 2/5.") before doing anything else, so the user can redirect you if they'd rather do a different one next.
 
@@ -129,8 +143,8 @@ briefly) — don't skip silently.
 
 ## 4. Wrap up
 
-- Run the relevant test file(s) and `npx vue-tsc` (or the project's usual type-check command) to
-  confirm nothing broke.
+- Run the relevant test file(s), `npx eslint <touched files>`, and `npx vue-tsc` (or the project's
+  usual type-check command) to confirm nothing broke.
 - Summarize what changed and what you deliberately skipped (with reasons).
 - Don't stage, commit, or push — that's the user's call. Mention that running
   `/create-commit-message` next will trigger the Component Ledger refresh automatically via the

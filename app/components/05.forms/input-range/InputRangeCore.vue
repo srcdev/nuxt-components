@@ -48,7 +48,7 @@ interface Props {
   ariaDescribedby?: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   step: 1,
   placeholder: "",
   required: false,
@@ -61,173 +61,109 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const FormUiTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
+const modelValue = defineModel<number>({
+  required: true,
 });
-
-const modelValue = defineModel<number | readonly number[]>();
 </script>
 
 <style lang="css">
 @layer components {
-.input-range-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  .input-range-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
 
-  .slot {
-    align-self: flex-start;
+    .slot {
+      align-self: flex-start;
 
-    .input-button-core {
-      border-radius: var(--form-input-border-radius);
-      width: var(--input-range-button-size);
-      height: var(--input-range-button-size);
+      .input-button-core {
+        border-radius: var(--form-input-border-radius);
+        width: var(--input-range-button-size);
+        height: var(--input-range-button-size);
 
-      .btn-icon {
-        margin: initial;
-      }
-    }
-  }
-
-  .input-range-container {
-    flex-grow: 1;
-
-    display: grid;
-    grid-template-areas: "element-stack";
-    /* margin-top: 2px; */
-
-    .input-range-markers {
-      grid-area: element-stack;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-      z-index: 2;
-
-      .marker {
-        background-color: black;
-        padding: 0.5rem;
-        border-radius: 50%;
-        overflow: hidden;
-        outline: 1px solid gray;
-
-        &:hover {
-          cursor: pointer;
-        }
-
-        .marker-icon {
-          font-size: 2rem;
-          display: block;
-          color: var(--theme-form-range-accent-color);
+        .btn-icon {
+          margin: initial;
         }
       }
     }
 
-    .input-range-core {
-      grid-area: element-stack;
+    .input-range-container {
+      flex-grow: 1;
 
-      accent-color: var(--theme-form-range-accent-color);
-      height: var(--input-range-button-size);
-      margin: 0;
-      width: 100%;
+      display: grid;
+      grid-template-areas: "element-stack";
 
-      /*
-      &:hover {
-        cursor: -webkit-grab;
-        outline-color: red;
-      }
-      &:active {
-        cursor: -webkit-grabbing;
-        outline-color: blue;
-      }
-      &:focus-visible {
-        outline-offset: 0.25rem;
-        outline-color: transparent;
-      }
-      */
-
-      &::-webkit-slider-thumb {
-        /* appearance: none; */
-        /* -webkit-appearance: none; */
-        accent-color: blue;
-        color: blue;
-        background-color: 0.1rem solid green;
-        outline: 0.1rem solid blue;
-        border-radius: 50%;
-      }
-
-      &::-webkit-slider-runnable-track {
-        appearance: none;
-        -webkit-appearance: none;
-        /* background: hsl(10 80% 50% / 0.5); */
-        /* box-shadow: 0.1rem 0.1rem 0.1rem #fff, 0rem 0rem 0.1rem #fff; */
-      }
-
-      /* For Chrome, Safari, Opera, and Edge */
-      /* &::-webkit-slider-runnable-track {
-        background: var(--theme-form-range-accent-color);
-        height: var(--input-range-button-size);
-      } */
-
-      /* For Firefox */
-      /* &::-moz-range-track {
-        background: var(--theme-form-range-accent-color);
-        height: var(--input-range-button-size);
-      } */
-
-      /* Stling the thumb */
-      /* &::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        background: #5cd5eb;
-        height: 2rem;
-        width: 1rem;
-        border-radius: 1rem;
-      } */
-
-      /* For Firefox */
-      /* &::-moz-range-thumb {
-        background: #5cd5eb;
-        height: 2rem;
-        width: 1rem;
-        border-radius: 1rem;
-        border: none;
-      } */
-
-      &:focus-visible {
-        box-shadow: var(--form-focus-box-shadow);
-      }
-
-      &.has-markers {
-        accent-color: var(--theme-form-range-accent-color);
-        height: 2px;
+      .input-range-markers {
+        grid-area: element-stack;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
         z-index: 2;
-        translate: 0 13px;
 
-        &::-webkit-slider-thumb {
-          opacity: 0;
+        .marker {
+          background-color: var(--input-range-marker-background-colour, light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%)));
+          padding: var(--input-range-marker-padding, 0.5rem);
+          border-radius: var(--input-range-marker-border-radius, 50%);
+          overflow: hidden;
+          outline: var(--input-range-marker-outline-width, 0.1rem) solid
+            var(--input-range-marker-outline-colour, light-dark(var(--slate-04), var(--slate-06)));
+
           &:hover {
             cursor: pointer;
           }
+
+          .marker-icon {
+            font-size: var(--input-range-marker-icon-size, 2rem);
+            display: block;
+            color: var(--input-range-marker-icon-colour, var(--input-range-accent-colour, var(--theme-accent)));
+          }
+        }
+      }
+
+      .input-range-core {
+        grid-area: element-stack;
+
+        accent-color: var(--input-range-accent-colour, var(--theme-accent));
+        height: var(--input-range-button-size);
+        margin: 0;
+        width: 100%;
+
+        &:focus-visible {
+          box-shadow: var(--form-focus-box-shadow);
+        }
+
+        &.has-markers {
+          accent-color: var(--input-range-accent-colour, var(--theme-accent));
+          height: 0.2rem;
+          z-index: 2;
+          translate: 0 1.3rem;
+
+          &::-webkit-slider-thumb {
+            opacity: 0;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+
+      .input-range-datalist {
+        display: flex;
+        flex-direction: column;
+        font-family: var(--font-family);
+        font-size: var(--input-range-datalist-font-size, 1.4rem);
+        font-weight: var(--input-range-datalist-font-weight, 500);
+        justify-content: space-between;
+        writing-mode: vertical-lr;
+        width: 100%;
+
+        option {
+          padding: 0;
         }
       }
     }
-
-    .input-range-datalist {
-      display: flex;
-      flex-direction: column;
-      font-family: var(--font-family);
-      font-size: 1.4rem;
-      font-weight: 500;
-      justify-content: space-between;
-      writing-mode: vertical-lr;
-      width: 100%;
-
-      option {
-        padding: 0;
-      }
-    }
   }
-}
 }
 </style>

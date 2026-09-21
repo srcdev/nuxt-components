@@ -18,7 +18,7 @@ interface Props {
   styleClassPassthrough?: string;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   width: "narrow",
   fieldHasError: false,
   hasGutter: true,

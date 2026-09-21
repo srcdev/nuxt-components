@@ -1,0 +1,85 @@
+{
+  "SRCDEV InputRangeCore Basic": {
+    "description": "Basic InputRangeCore native range input (no label/error wrapper)",
+    "scope": "vue,html",
+    "body": [
+      "<InputRangeCore",
+      "  id=\"$1fieldId\"",
+      "  name=\"$2fieldName\"",
+      "  v-model=\"$3fieldValue\"",
+      "  :min=\"$40\"",
+      "  :max=\"$5100\"",
+      "  :step=\"$61\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputRangeCore With Markers": {
+    "description": "InputRangeCore with custom tick-mark markers overlaid on the track",
+    "scope": "vue,html",
+    "body": [
+      "<InputRangeCore",
+      "  id=\"$1fieldId\"",
+      "  name=\"$2fieldName\"",
+      "  v-model=\"$3fieldValue\"",
+      "  :min=\"$40\"",
+      "  :max=\"$52\"",
+      "  :step=\"$61\"",
+      ">",
+      "  <template #markers>",
+      "    <div class=\"input-range-markers\">",
+      "      <div class=\"marker\"><span class=\"marker-icon\">$7\\ud83d\\ude00</span></div>",
+      "      <div class=\"marker\"><span class=\"marker-icon\">$8\\ud83d\\ude10</span></div>",
+      "      <div class=\"marker\"><span class=\"marker-icon\">$9\\ud83d\\ude1e</span></div>",
+      "    </div>",
+      "  </template>",
+      "</InputRangeCore>"
+    ]
+  },
+  "SRCDEV InputRangeDefault Basic": {
+    "description": "InputRangeDefault: labelled range slider with error/description support",
+    "scope": "vue,html",
+    "body": [
+      "<InputRangeDefault",
+      "  v-model=\"$1fieldValue\"",
+      "  name=\"$2fieldName\"",
+      "  label=\"$3Field label\"",
+      "  :min=\"$40\"",
+      "  :max=\"$5100\"",
+      "  :step=\"$61\"",
+      "  :error-message=\"$7errors.fieldName\"",
+      "  :field-has-error=\"!!$7errors.fieldName\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputRangeDefault With Step Buttons": {
+    "description": "InputRangeDefault with step-down/step-up buttons wired into the left/right slots",
+    "scope": "vue,html",
+    "body": [
+      "<InputRangeDefault",
+      "  v-model=\"$1fieldValue\"",
+      "  name=\"$2fieldName\"",
+      "  label=\"$3Field label\"",
+      "  :min=\"$40\"",
+      "  :max=\"$5100\"",
+      "  :step=\"$61\"",
+      "  :error-message=\"$7errors.fieldName\"",
+      "  :field-has-error=\"!!$7errors.fieldName\"",
+      ">",
+      "  <template #left>\\u2212</template>",
+      "  <template #right>+</template>",
+      "</InputRangeDefault>"
+    ]
+  },
+  "SRCDEV InputRange CSS Override": {
+    "description": "CSS override scaffold for InputRangeCore tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .input-range-wrapper {",
+      "    --input-range-accent-colour: $2;",
+      "    --input-range-marker-background-colour: $3;",
+      "  }",
+      "}"
+    ]
+  }
+}

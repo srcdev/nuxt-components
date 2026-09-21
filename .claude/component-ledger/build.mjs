@@ -8,10 +8,33 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { execFileSync } from "child_process";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "../.."); // repo root
 const componentsRoot = path.join(root, "app/components");
+
+// ESLint diagnostics (errors AND warnings — e.g. a dead `const props = withDefaults(...)` that
+// nothing references, or a stray unused import) per .vue file, run once across the whole tree
+// rather than per group for speed. `execFileSync` throws when eslint exits non-zero (i.e. any
+// error-level finding), so the JSON is read from the error object's stdout in that case too.
+function collectEslintIssues() {
+  const args = ["eslint", componentsRoot, "--format", "json"];
+  let stdout;
+  try {
+    stdout = execFileSync("npx", args, { cwd: root, maxBuffer: 1024 * 1024 * 50 });
+  } catch (err) {
+    stdout = err.stdout;
+  }
+  if (!stdout) return new Map();
+  const results = JSON.parse(stdout.toString());
+  const byFile = new Map();
+  for (const r of results) {
+    if (r.messages.length > 0) byFile.set(r.filePath, r.messages.length);
+  }
+  return byFile;
+}
+const eslintIssuesByFile = collectEslintIssues();
 
 function walk(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -105,6 +128,8 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
     }
     return false;
   });
+  const hasEslintIssues = files.some((f) => eslintIssuesByFile.has(f));
+
   rows.push({
     compdir: relDir,
     tier,
@@ -112,6 +137,7 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
     variants: hasVariants,
     legacy_props: hasLegacyProps,
     story_args_bug: hasStoryArgsBug,
+    eslint_issues: hasEslintIssues,
     consumer_styling: hasConsumerStyling,
     tests: hasTests,
     stories: hasStoriesDir || hasStoriesFile,
