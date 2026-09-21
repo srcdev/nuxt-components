@@ -47,7 +47,7 @@ const canvasName = ref<MediaCanvas>("desktopCanvas");
 The selected value doubles as a utility class name: `CanvasSwitcher`'s stylesheet also declares
 `.mobileCanvas`/`.tabletCanvas`/`.laptopCanvas`/`.desktopCanvas`/`.fullWidthCanvas` (max-width
 utilities, not scoped to `.canvas-switcher`), so binding `:class="canvasName"` directly onto a
-preview wrapper constrains it to match — see `LayoutGridA`/`LayoutGridB` stories for the pattern.
+preview wrapper constrains it to match — see `DashboardQuadGrid`/`DashboardStatsGrid` stories for the pattern.
 These classes only ship in the bundle once `CanvasSwitcher` (or another importer of them) is
 actually imported somewhere, since Nuxt only bundles a component's SFC styles when it's used.
 

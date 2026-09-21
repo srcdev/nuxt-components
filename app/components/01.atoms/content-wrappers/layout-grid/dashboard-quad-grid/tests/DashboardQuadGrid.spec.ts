@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import type { DOMWrapper } from "@vue/test-utils";
-import LayoutGridA from "../LayoutGridA.vue";
+import DashboardQuadGrid from "../DashboardQuadGrid.vue";
 
 // Mock useStyleClassPassthrough composable
 const mockElementClasses = { value: "" };
@@ -16,7 +16,7 @@ vi.mock("#imports", () => ({
   useStyleClassPassthrough: mockUseStyleClassPassthrough,
 }));
 
-describe("LayoutGridA", () => {
+describe("DashboardQuadGrid", () => {
   let wrapper: ReturnType<typeof mountSuspended>;
 
   const createWrapper = async (props = {}, slots = {}) => {
@@ -25,7 +25,7 @@ describe("LayoutGridA", () => {
       ...props,
     };
 
-    wrapper = await mountSuspended(LayoutGridA, {
+    wrapper = await mountSuspended(DashboardQuadGrid, {
       props: defaultProps,
       slots,
     });
@@ -46,14 +46,14 @@ describe("LayoutGridA", () => {
     it("mounts without error", async () => {
       await createWrapper();
 
-      expect(wrapper.find(".layout-grid-a-wrapper")).toBeTruthy();
-      expect(wrapper.find(".layout-grid-a")).toBeTruthy();
+      expect(wrapper.find(".dashboard-quad-grid-wrapper")).toBeTruthy();
+      expect(wrapper.find(".dashboard-quad-grid")).toBeTruthy();
     });
 
     it("renders all four slot containers", async () => {
       await createWrapper();
 
-      const slots = wrapper.findAll(".layout-grid-a > div");
+      const slots = wrapper.findAll(".dashboard-quad-grid > div");
       expect(slots).toHaveLength(4);
 
       expect(wrapper.find(".slot1")).toBeTruthy();
@@ -65,12 +65,12 @@ describe("LayoutGridA", () => {
     it("has correct grid container structure", async () => {
       await createWrapper();
 
-      const wrapper_element = wrapper.find(".layout-grid-a-wrapper");
-      const grid = wrapper.find(".layout-grid-a");
+      const wrapper_element = wrapper.find(".dashboard-quad-grid-wrapper");
+      const grid = wrapper.find(".dashboard-quad-grid");
 
       expect(wrapper_element.exists()).toBe(true);
       expect(grid.exists()).toBe(true);
-      expect(grid.classes()).toContain("layout-grid-a");
+      expect(grid.classes()).toContain("dashboard-quad-grid");
     });
   });
 
@@ -156,7 +156,7 @@ describe("LayoutGridA", () => {
         }
       );
 
-      const slots = wrapper.findAll(".layout-grid-a > div");
+      const slots = wrapper.findAll(".dashboard-quad-grid > div");
       expect(slots).toHaveLength(4);
 
       slots.forEach((slot: DOMWrapper<Element>) => {
@@ -171,7 +171,7 @@ describe("LayoutGridA", () => {
       await createWrapper({ styleClassPassthrough: className });
 
       // Component should mount without error with string class
-      expect(wrapper.find(".layout-grid-a")).toBeTruthy();
+      expect(wrapper.find(".dashboard-quad-grid")).toBeTruthy();
     });
 
     it("accepts array styleClassPassthrough", async () => {
@@ -179,22 +179,22 @@ describe("LayoutGridA", () => {
       await createWrapper({ styleClassPassthrough: classNames });
 
       // Component should mount without error with array of classes
-      expect(wrapper.find(".layout-grid-a")).toBeTruthy();
+      expect(wrapper.find(".dashboard-quad-grid")).toBeTruthy();
     });
 
     it("uses default empty array for styleClassPassthrough", async () => {
       await createWrapper();
 
       // Component should mount without error with default props
-      expect(wrapper.find(".layout-grid-a")).toBeTruthy();
+      expect(wrapper.find(".dashboard-quad-grid")).toBeTruthy();
     });
 
     it("renders correctly with various props", async () => {
       await createWrapper({ styleClassPassthrough: ["test-class", "another-class"] });
 
-      const wrapper_element = wrapper.find(".layout-grid-a-wrapper");
+      const wrapper_element = wrapper.find(".dashboard-quad-grid-wrapper");
       expect(wrapper_element.exists()).toBe(true);
-      expect(wrapper_element.classes()).toContain("layout-grid-a-wrapper");
+      expect(wrapper_element.classes()).toContain("dashboard-quad-grid-wrapper");
     });
   });
 
@@ -203,9 +203,9 @@ describe("LayoutGridA", () => {
       await createWrapper({ styleClassPassthrough: ["initial"] });
 
       // Component should maintain its structure
-      expect(wrapper.find(".layout-grid-a-wrapper")).toBeTruthy();
-      expect(wrapper.find(".layout-grid-a")).toBeTruthy();
-      expect(wrapper.findAll(".layout-grid-a > div")).toHaveLength(4);
+      expect(wrapper.find(".dashboard-quad-grid-wrapper")).toBeTruthy();
+      expect(wrapper.find(".dashboard-quad-grid")).toBeTruthy();
+      expect(wrapper.findAll(".dashboard-quad-grid > div")).toHaveLength(4);
     });
   });
 
@@ -213,15 +213,15 @@ describe("LayoutGridA", () => {
     it("has correct CSS classes applied", async () => {
       await createWrapper();
 
-      const wrapper_element = wrapper.find(".layout-grid-a-wrapper");
-      const grid = wrapper.find(".layout-grid-a");
+      const wrapper_element = wrapper.find(".dashboard-quad-grid-wrapper");
+      const grid = wrapper.find(".dashboard-quad-grid");
       const slot1 = wrapper.find(".slot1");
       const slot2 = wrapper.find(".slot2");
       const slot3 = wrapper.find(".slot3");
       const slot4 = wrapper.find(".slot4");
 
-      expect(wrapper_element.classes()).toContain("layout-grid-a-wrapper");
-      expect(grid.classes()).toContain("layout-grid-a");
+      expect(wrapper_element.classes()).toContain("dashboard-quad-grid-wrapper");
+      expect(grid.classes()).toContain("dashboard-quad-grid");
       expect(slot1.classes()).toContain("slot1");
       expect(slot2.classes()).toContain("slot2");
       expect(slot3.classes()).toContain("slot3");
@@ -231,8 +231,8 @@ describe("LayoutGridA", () => {
     it("maintains correct DOM hierarchy", async () => {
       await createWrapper();
 
-      const wrapper_element = wrapper.find(".layout-grid-a-wrapper");
-      const grid = wrapper_element.find(".layout-grid-a");
+      const wrapper_element = wrapper.find(".dashboard-quad-grid-wrapper");
+      const grid = wrapper_element.find(".dashboard-quad-grid");
 
       expect(grid.exists()).toBe(true);
 
@@ -341,7 +341,7 @@ describe("LayoutGridA", () => {
         }
       );
 
-      const slots = wrapper.findAll(".layout-grid-a > div");
+      const slots = wrapper.findAll(".dashboard-quad-grid > div");
       expect(slots).toHaveLength(4);
 
       slots.forEach((slot: DOMWrapper<Element>) => {

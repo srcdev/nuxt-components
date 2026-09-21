@@ -1,0 +1,34 @@
+{
+  "SRCDEV DashboardQuadGrid Basic": {
+    "description": "DashboardQuadGrid with all four fixed slots",
+    "scope": "vue,html",
+    "body": [
+      "<DashboardQuadGrid>",
+      "  <template #slot1>",
+      "    $1",
+      "  </template>",
+      "  <template #slot2>",
+      "    $2",
+      "  </template>",
+      "  <template #slot3>",
+      "    $3",
+      "  </template>",
+      "  <template #slot4>",
+      "    $4",
+      "  </template>",
+      "</DashboardQuadGrid>"
+    ]
+  },
+  "SRCDEV DashboardQuadGrid CSS Override": {
+    "description": "CSS override scaffold for DashboardQuadGrid tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .dashboard-quad-grid-wrapper {",
+      "    --dashboard-quad-grid-gap: $2;",
+      "    --dashboard-quad-grid-outline-colour: $3;",
+      "  }",
+      "}"
+    ]
+  }
+}

@@ -31,7 +31,7 @@ export default {
     docs: {
       description: {
         component:
-          "An icon button group for switching between MediaCanvas preview widths (mobile/tablet/laptop/desktop/full width). Also declares the `.mobileCanvas`/`.tabletCanvas`/etc. utility classes a consumer can apply to a preview wrapper to constrain it to the matching width — see LayoutGridA/LayoutGridB stories.",
+          "An icon button group for switching between MediaCanvas preview widths (mobile/tablet/laptop/desktop/full width). Also declares the `.mobileCanvas`/`.tabletCanvas`/etc. utility classes a consumer can apply to a preview wrapper to constrain it to the matching width — see DashboardQuadGrid/DashboardStatsGrid stories.",
       },
     },
   },

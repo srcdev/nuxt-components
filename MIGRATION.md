@@ -32,6 +32,8 @@ Tracks progress toward a fully migrated component library. A component is consid
 | ClippedPanel | `clipped-panel/ClippedPanel.vue` | ✅ | ✅ `clipped-panel` |
 | ContentColumns2 | `content-wrappers/content-columns-2/ContentColumns2.vue` | ☐ | ☐ |
 | ContentWidth | `content-wrappers/content-width/ContentWidth.vue` | ☐ | ☐ |
+| DashboardQuadGrid | `content-wrappers/layout-grid/dashboard-quad-grid/` | ✅ | ✅ `dashboard-quad-grid` |
+| DashboardStatsGrid | `content-wrappers/layout-grid/dashboard-stats-grid/` | ✅ | ✅ `dashboard-stats-grid` |
 | LayoutGridByCols | `content-wrappers/layout-grid/layout-grid-by-cols/` | ☐ | ☐ |
 | LayoutGridByWidth | `content-wrappers/layout-grid/layout-grid-by-width/` | ☐ | ☐ |
 | DisplayAvatar | `display-avatar/DisplayAvatar.vue` | ☐ | ☐ |
@@ -192,8 +194,6 @@ These components still live in the root `app/components/` folder and need to be 
 | DisplayThemeSwitch | `display-theme-switch/DisplayThemeSwitch.vue` | |
 | DisplayTooltip | `display-tooltip/DisplayTooltip.vue` | |
 | DisplayTooltipDefined | `display-tooltip/DisplayTooltipDefined.vue` | |
-| LayoutGridA | `layout-grids/LayoutGridA.vue` | |
-| LayoutGridB | `layout-grids/LayoutGridB.vue` | |
 | MagneticNavigation | `magnetic-navigation/MagneticNavigation.vue` | |
 | MarqueeScroller | `marquee-scroller/MarqueeScroller.vue` | |
 | PopOver | `pop-over/PopOver.vue` | |

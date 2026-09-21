@@ -1,16 +1,16 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import LayoutGridAComponent from "../LayoutGridA.vue";
-import type { MediaCanvas } from "../../../types/components";
+import DashboardQuadGridComponent from "../DashboardQuadGrid.vue";
+import type { MediaCanvas } from "~/types/components";
 
 // Define the args interface
-interface LayoutGridAArgs {
+interface DashboardQuadGridArgs {
   mediaCanvas: MediaCanvas;
   styleClassPassthrough: string[];
 }
 
 export default {
-  title: "Components/Layouts/LayoutGridA",
-  component: LayoutGridAComponent,
+  title: "Atoms/Content Wrappers/Dashboard Quad Grid",
+  component: DashboardQuadGridComponent,
   argTypes: {
     // Canvas/Media Query Testing
     mediaCanvas: {
@@ -40,10 +40,10 @@ export default {
       },
     },
   },
-} as Meta<LayoutGridAArgs>;
+} as Meta<DashboardQuadGridArgs>;
 
-const Template: StoryFn<LayoutGridAArgs> = (args) => ({
-  components: { LayoutGridAComponent },
+const Template: StoryFn<DashboardQuadGridArgs> = (args) => ({
+  components: { DashboardQuadGridComponent },
   setup() {
     const sampleContent = {
       shortText: "Brief sample content for this slot.",
@@ -57,7 +57,7 @@ const Template: StoryFn<LayoutGridAArgs> = (args) => ({
   },
   template: `
     <div style="padding: 20px;" :class="args.mediaCanvas">
-      <LayoutGridAComponent :style-class-passthrough="[args.mediaCanvas, ...args.styleClassPassthrough]">
+      <DashboardQuadGridComponent :style-class-passthrough="[args.mediaCanvas, ...args.styleClassPassthrough]">
         <template #slot1>
           <h3 style="margin: 0 0 16px 0; color: #374151; font-size: 18px;">Primary Content</h3>
           <p style="margin: 0 0 12px 0; color: #6b7280; line-height: 1.5;">{{ sampleContent.longText }}</p>
@@ -78,7 +78,7 @@ const Template: StoryFn<LayoutGridAArgs> = (args) => ({
           <h3 style="margin: 0 0 16px 0; color: #dc2626; font-size: 18px;">Additional Details</h3>
           <p style="margin: 0; color: #ef4444; line-height: 1.5;">{{ sampleContent.mediumText }}</p>
         </template>
-      </LayoutGridAComponent>
+      </DashboardQuadGridComponent>
     </div>
   `,
 });
@@ -155,14 +155,14 @@ FullWidthView.parameters = {
 
 // ===== CONTENT VARIATION STORIES =====
 
-const ContentVariationsTemplate: StoryFn<LayoutGridAArgs> = (args) => ({
-  components: { LayoutGridAComponent },
+const ContentVariationsTemplate: StoryFn<DashboardQuadGridArgs> = (args) => ({
+  components: { DashboardQuadGridComponent },
   setup() {
     return { args };
   },
   template: `
     <div style="padding: 20px;" :class="args.mediaCanvas">
-      <LayoutGridAComponent :style-class-passthrough="[args.mediaCanvas]">
+      <DashboardQuadGridComponent :style-class-passthrough="[args.mediaCanvas]">
         <!-- Slot 1 - Main article content -->
         <template #slot1>
           <article style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 24px; border-radius: 12px; margin: -20px; height: calc(100% + 40px); display: flex; flex-direction: column;">
@@ -254,7 +254,7 @@ const ContentVariationsTemplate: StoryFn<LayoutGridAArgs> = (args) => ({
             </div>
           </div>
         </template>
-      </LayoutGridAComponent>
+      </DashboardQuadGridComponent>
     </div>
   `,
 });
@@ -267,21 +267,21 @@ DashboardExample.parameters = {
   docs: {
     description: {
       story:
-        "Complete dashboard example showcasing LayoutGridA with a featured article, performance metrics, quick actions, and activity feed. Demonstrates real-world usage with rich content.",
+        "Complete dashboard example showcasing DashboardQuadGrid with a featured article, performance metrics, quick actions, and activity feed. Demonstrates real-world usage with rich content.",
     },
   },
 };
 
 // ===== CONTENT LENGTH VARIATIONS =====
 
-const ContentLengthTemplate: StoryFn<LayoutGridAArgs> = (args) => ({
-  components: { LayoutGridAComponent },
+const ContentLengthTemplate: StoryFn<DashboardQuadGridArgs> = (args) => ({
+  components: { DashboardQuadGridComponent },
   setup() {
     return { args };
   },
   template: `
     <div style="padding: 20px;" :class="args.mediaCanvas">
-      <LayoutGridAComponent :style-class-passthrough="[args.mediaCanvas]">
+      <DashboardQuadGridComponent :style-class-passthrough="[args.mediaCanvas]">
         <!-- Slot 1 - Short content -->
         <template #slot1>
           <h3 style="margin: 0 0 16px 0; color: #374151;">Short Content</h3>
@@ -317,7 +317,7 @@ const ContentLengthTemplate: StoryFn<LayoutGridAArgs> = (args) => ({
             <li>List item three</li>
           </ul>
         </template>
-      </LayoutGridAComponent>
+      </DashboardQuadGridComponent>
     </div>
   `,
 });
@@ -338,7 +338,7 @@ ContentLengthVariations.parameters = {
 // ===== COMPARISON STORY =====
 
 const ComparisonTemplate: StoryFn = () => ({
-  components: { LayoutGridAComponent },
+  components: { DashboardQuadGridComponent },
   setup() {
     const canvases: MediaCanvas[] = ["mobileCanvas", "tabletCanvas", "laptopCanvas", "desktopCanvas"];
     return { canvases };
@@ -353,7 +353,7 @@ const ComparisonTemplate: StoryFn = () => ({
             {{ canvas === 'mobileCanvas' ? '(< 768px)' : canvas === 'tabletCanvas' ? '(768px - 1059px)' : '(≥ 1060px)' }}
           </h3>
           <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; background: #fafafa;">
-            <LayoutGridAComponent :style-class-passthrough="[canvas]">
+            <DashboardQuadGridComponent :style-class-passthrough="[canvas]">
               <template #slot1>
                 <div style="background: #dbeafe; padding: 16px; border-radius: 8px; text-align: center; font-weight: bold; color: #1e40af; margin: -20px; height: calc(100% + 40px); display: flex; align-items: center; justify-content: center;">
                   Slot 1
@@ -383,7 +383,7 @@ const ComparisonTemplate: StoryFn = () => ({
                   Slot 4
                 </div>
               </template>
-            </LayoutGridAComponent>
+            </DashboardQuadGridComponent>
           </div>
         </div>
       </div>
@@ -396,7 +396,7 @@ ResponsiveComparison.parameters = {
   docs: {
     description: {
       story:
-        "Side-by-side comparison showing how LayoutGridA transforms across different responsive breakpoints. Notice how the layout changes from stacked (mobile) to 2×3 grid (tablet) to 3×2 grid with spanning elements (desktop).",
+        "Side-by-side comparison showing how DashboardQuadGrid transforms across different responsive breakpoints. Notice how the layout changes from stacked (mobile) to 2×3 grid (tablet) to 3×2 grid with spanning elements (desktop).",
     },
   },
 };

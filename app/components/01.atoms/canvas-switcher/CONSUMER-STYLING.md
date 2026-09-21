@@ -22,6 +22,6 @@ CanvasSwitcher itself exposes the following public tokens:
 `.mobileCanvas`, `.tabletCanvas`, `.laptopCanvas`, `.desktopCanvas`, `.fullWidthCanvas` are also
 declared in this component's stylesheet (not scoped to `.canvas-switcher`) so a consumer can apply
 the same `MediaCanvas` value returned by `v-model:canvas-name` directly as a class on a preview
-wrapper to constrain its width — see `LayoutGridA`/`LayoutGridB` stories for the pattern. These are
+wrapper to constrain its width — see `DashboardQuadGrid`/`DashboardStatsGrid` stories for the pattern. These are
 plain global utility classes, not overridable via a CSS custom property; import `CanvasSwitcher`
 (or otherwise ensure its styles are bundled) wherever you rely on them.

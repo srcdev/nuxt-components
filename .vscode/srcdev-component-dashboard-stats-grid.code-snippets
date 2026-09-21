@@ -1,0 +1,34 @@
+{
+  "SRCDEV DashboardStatsGrid Basic": {
+    "description": "DashboardStatsGrid with looped top-row cluster, both static top-row slots, and looped bottom row",
+    "scope": "vue,html",
+    "body": [
+      "<DashboardStatsGrid :top-row-slot1-item-count=\"$1items.length\" :bottom-row-item-count=\"$2features.length\">",
+      "  <template v-for=\"($3item, $4index) in $1items\" :key=\"$3item.id\" #[`top-row-slot1-\\${$4index + 1}-content`]>",
+      "    $5",
+      "  </template>",
+      "  <template #top-row-slot-2>",
+      "    $6",
+      "  </template>",
+      "  <template #top-row-slot-3>",
+      "    $7",
+      "  </template>",
+      "  <template v-for=\"($8feature, $9findex) in $2features\" :key=\"$8feature.id\" #[`bottom-row-\\${$9findex + 1}-content`]>",
+      "    $10",
+      "  </template>",
+      "</DashboardStatsGrid>"
+    ]
+  },
+  "SRCDEV DashboardStatsGrid CSS Override": {
+    "description": "CSS override scaffold for DashboardStatsGrid tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .dashboard-stats-grid {",
+      "    --dashboard-stats-grid-gap: $2;",
+      "    --dashboard-stats-grid-border-colour: $3;",
+      "  }",
+      "}"
+    ]
+  }
+}

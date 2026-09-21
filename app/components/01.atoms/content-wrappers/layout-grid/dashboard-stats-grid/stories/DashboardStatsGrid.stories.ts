@@ -1,9 +1,9 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import LayoutGridBComponent from "../LayoutGridB.vue";
-import type { MediaCanvas } from "../../../types/components";
+import DashboardStatsGridComponent from "../DashboardStatsGrid.vue";
+import type { MediaCanvas } from "~/types/components";
 
 // Define the args interface
-interface LayoutGridBArgs {
+interface DashboardStatsGridArgs {
   topRowSlot1ItemCount: number;
   bottomRowItemCount: number;
   mediaCanvas: MediaCanvas;
@@ -11,8 +11,8 @@ interface LayoutGridBArgs {
 }
 
 export default {
-  title: "Components/Layouts/LayoutGridB",
-  component: LayoutGridBComponent,
+  title: "Atoms/Content Wrappers/Dashboard Stats Grid",
+  component: DashboardStatsGridComponent,
   argTypes: {
     // Configuration
     topRowSlot1ItemCount: {
@@ -59,10 +59,10 @@ export default {
       },
     },
   },
-} as Meta<LayoutGridBArgs>;
+} as Meta<DashboardStatsGridArgs>;
 
-const Template: StoryFn<LayoutGridBArgs> = (args) => ({
-  components: { LayoutGridBComponent },
+const Template: StoryFn<DashboardStatsGridArgs> = (args) => ({
+  components: { DashboardStatsGridComponent },
   setup() {
     const sampleContent = {
       shortText: "Sample content panel",
@@ -76,9 +76,9 @@ const Template: StoryFn<LayoutGridBArgs> = (args) => ({
   },
   template: `
     <div style="padding: 20px;" :class="args.mediaCanvas">
-      <LayoutGridBComponent
-        :topRowSlot1ItemCount="args.topRowSlot1ItemCount"
-        :bottomRowItemCount="args.bottomRowItemCount"
+      <DashboardStatsGridComponent
+        :top-row-slot1-item-count="args.topRowSlot1ItemCount"
+        :bottom-row-item-count="args.bottomRowItemCount"
         :style-class-passthrough="[args.mediaCanvas, ...args.styleClassPassthrough]"
       >
         <!-- Dynamic top row slot 1 content -->
@@ -113,7 +113,7 @@ const Template: StoryFn<LayoutGridBArgs> = (args) => ({
             <p style="margin: 0; color: #b45309; font-size: 14px; line-height: 1.4;">{{ sampleContent.mediumText }}</p>
           </div>
         </template>
-      </LayoutGridBComponent>
+      </DashboardStatsGridComponent>
     </div>
   `,
 });
@@ -209,16 +209,16 @@ FullWidthView.parameters = {
 
 // ===== CONTENT VARIATION STORIES =====
 
-const ContentVariationsTemplate: StoryFn<LayoutGridBArgs> = (args) => ({
-  components: { LayoutGridBComponent },
+const ContentVariationsTemplate: StoryFn<DashboardStatsGridArgs> = (args) => ({
+  components: { DashboardStatsGridComponent },
   setup() {
     return { args };
   },
   template: `
     <div style="padding: 20px;" :class="args.mediaCanvas">
-      <LayoutGridBComponent
-        :topRowSlot1ItemCount="args.topRowSlot1ItemCount"
-        :bottomRowItemCount="args.bottomRowItemCount"
+      <DashboardStatsGridComponent
+        :top-row-slot1-item-count="args.topRowSlot1ItemCount"
+        :bottom-row-item-count="args.bottomRowItemCount"
         :style-class-passthrough="[args.mediaCanvas]"
       >
         <!-- Top row slot 1 - Different content types -->
@@ -335,7 +335,7 @@ const ContentVariationsTemplate: StoryFn<LayoutGridBArgs> = (args) => ({
             <button style="padding: 8px 16px; background: #7c3aed; color: white; border: none; border-radius: 6px; font-size: 14px; cursor: pointer;">Upgrade</button>
           </div>
         </template>
-      </LayoutGridBComponent>
+      </DashboardStatsGridComponent>
     </div>
   `,
 });
@@ -350,7 +350,7 @@ DashboardExample.parameters = {
   docs: {
     description: {
       story:
-        "Complete dashboard example showing how LayoutGridB can be used for admin interfaces with statistics, main content, activity feeds, and feature cards.",
+        "Complete dashboard example showing how DashboardStatsGrid can be used for admin interfaces with statistics, main content, activity feeds, and feature cards.",
     },
   },
 };
@@ -358,7 +358,7 @@ DashboardExample.parameters = {
 // ===== COMPARISON STORY =====
 
 const ComparisonTemplate: StoryFn = () => ({
-  components: { LayoutGridBComponent },
+  components: { DashboardStatsGridComponent },
   setup() {
     const canvases: MediaCanvas[] = ["mobileCanvas", "tabletCanvas", "laptopCanvas", "desktopCanvas"];
     return { canvases };
@@ -372,9 +372,9 @@ const ComparisonTemplate: StoryFn = () => ({
             {{ canvas.replace('Canvas', '') }} View
           </h3>
           <div style="border: 2px solid #e5e7eb; border-radius: 12px; padding: 20px; background: #fafafa;">
-            <LayoutGridBComponent
-              :topRowSlot1ItemCount="6"
-              :bottomRowItemCount="4"
+            <DashboardStatsGridComponent
+              :top-row-slot1-item-count="6"
+              :bottom-row-item-count="4"
               :style-class-passthrough="[canvas]"
             >
               <!-- Simplified content for comparison -->
@@ -401,7 +401,7 @@ const ComparisonTemplate: StoryFn = () => ({
                   Bottom {{ i }}
                 </div>
               </template>
-            </LayoutGridBComponent>
+            </DashboardStatsGridComponent>
           </div>
         </div>
       </div>

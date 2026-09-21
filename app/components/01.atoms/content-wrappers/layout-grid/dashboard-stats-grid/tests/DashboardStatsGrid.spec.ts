@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import LayoutGridB from "../LayoutGridB.vue";
+import DashboardStatsGrid from "../DashboardStatsGrid.vue";
 
 // Mock useStyleClassPassthrough composable
 const mockElementClasses = { value: "" };
@@ -15,7 +15,7 @@ vi.mock("#imports", () => ({
   useStyleClassPassthrough: mockUseStyleClassPassthrough,
 }));
 
-describe("LayoutGridB", () => {
+describe("DashboardStatsGrid", () => {
   let wrapper: ReturnType<typeof mountSuspended>;
 
   const createWrapper = async (props = {}, slots = {}) => {
@@ -26,7 +26,7 @@ describe("LayoutGridB", () => {
       ...props,
     };
 
-    wrapper = await mountSuspended(LayoutGridB, {
+    wrapper = await mountSuspended(DashboardStatsGrid, {
       props: defaultProps,
       slots,
     });
@@ -47,8 +47,8 @@ describe("LayoutGridB", () => {
     it("mounts without error", async () => {
       await createWrapper();
 
-      expect(wrapper.find(".layout-grid-b-wrapper")).toBeTruthy();
-      expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid-wrapper")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
     });
 
     it("renders top row structure correctly", async () => {
@@ -69,10 +69,10 @@ describe("LayoutGridB", () => {
     it("has correct grid container structure", async () => {
       await createWrapper();
 
-      const grid = wrapper.find(".layout-grid-b");
+      const grid = wrapper.find(".dashboard-stats-grid");
 
       expect(grid.exists()).toBe(true);
-      expect(grid.classes()).toContain("layout-grid-b");
+      expect(grid.classes()).toContain("dashboard-stats-grid");
     });
   });
 
@@ -82,7 +82,7 @@ describe("LayoutGridB", () => {
       await createWrapper({ topRowSlot1ItemCount: itemCount });
 
       // Component should render without error with custom item count
-      expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
     });
 
     it("accepts bottomRowItemCount prop", async () => {
@@ -90,7 +90,7 @@ describe("LayoutGridB", () => {
       await createWrapper({ bottomRowItemCount: itemCount });
 
       // Component should render without error with custom item count
-      expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
     });
 
     it("uses default props when not provided", async () => {
@@ -100,7 +100,7 @@ describe("LayoutGridB", () => {
       });
 
       // Should use default values (6 and 4)
-      expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
     });
 
     it("accepts string styleClassPassthrough", async () => {
@@ -108,7 +108,7 @@ describe("LayoutGridB", () => {
       await createWrapper({ styleClassPassthrough: className });
 
       // Component should mount without error with string class
-      expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
     });
 
     it("accepts array styleClassPassthrough", async () => {
@@ -116,7 +116,7 @@ describe("LayoutGridB", () => {
       await createWrapper({ styleClassPassthrough: classNames });
 
       // Component should mount without error with array of classes
-      expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
     });
 
     it("applies element classes to wrapper", async () => {
@@ -125,7 +125,7 @@ describe("LayoutGridB", () => {
       await createWrapper();
 
       // Check that the component renders
-      expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
     });
   });
 
@@ -157,7 +157,7 @@ describe("LayoutGridB", () => {
         const { unmount } = await createWrapper({ topRowSlot1ItemCount: count }, slots);
 
         // Should render without error
-        expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+        expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
 
         // Check that content is rendered
         for (let i = 1; i <= count; i++) {
@@ -239,7 +239,7 @@ describe("LayoutGridB", () => {
         const { unmount } = await createWrapper({ bottomRowItemCount: count }, slots);
 
         // Should render without error
-        expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+        expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
 
         // Check that content is rendered
         for (let i = 1; i <= count; i++) {
@@ -294,7 +294,7 @@ describe("LayoutGridB", () => {
       await createWrapper({ styleClassPassthrough: ["initial"] });
 
       // Component should maintain structure with different props
-      expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
       expect(wrapper.find(".top-row")).toBeTruthy();
       expect(wrapper.find(".bottom-row")).toBeTruthy();
     });
@@ -315,7 +315,7 @@ describe("LayoutGridB", () => {
       expect(wrapper.html()).toContain("Bottom 1");
 
       // Component should render properly
-      expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
 
       unmount();
     });
@@ -325,11 +325,11 @@ describe("LayoutGridB", () => {
     it("has correct CSS classes applied", async () => {
       await createWrapper();
 
-      const grid = wrapper.find(".layout-grid-b");
+      const grid = wrapper.find(".dashboard-stats-grid");
       const topRow = wrapper.find(".top-row");
       const bottomRow = wrapper.find(".bottom-row");
 
-      expect(grid.classes()).toContain("layout-grid-b");
+      expect(grid.classes()).toContain("dashboard-stats-grid");
       expect(topRow.classes()).toContain("top-row");
       expect(bottomRow.classes()).toContain("bottom-row");
     });
@@ -337,7 +337,7 @@ describe("LayoutGridB", () => {
     it("maintains correct DOM hierarchy", async () => {
       await createWrapper();
 
-      const grid = wrapper.find(".layout-grid-b");
+      const grid = wrapper.find(".dashboard-stats-grid");
       const topRow = grid.find(".top-row");
       const bottomRow = grid.find(".bottom-row");
 
@@ -359,7 +359,7 @@ describe("LayoutGridB", () => {
         bottomRowItemCount: 0,
       });
 
-      expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
       expect(wrapper.find(".top-row")).toBeTruthy();
       expect(wrapper.find(".bottom-row")).toBeTruthy();
     });
@@ -382,7 +382,7 @@ describe("LayoutGridB", () => {
         slots
       );
 
-      expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
       expect(wrapper.html()).toContain("Large Panel 1");
       expect(wrapper.html()).toContain("Large Bottom 1");
     });
@@ -436,7 +436,7 @@ describe("LayoutGridB", () => {
         }
       );
 
-      expect(wrapper.find(".layout-grid-b")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
       expect(wrapper.find(".top-row")).toBeTruthy();
       expect(wrapper.find(".bottom-row")).toBeTruthy();
     });

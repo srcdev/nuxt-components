@@ -1,6 +1,6 @@
 <template>
-  <div class="layout-grid-a-wrapper" :class="[elementClasses]">
-    <div class="layout-grid-a">
+  <div class="dashboard-quad-grid-wrapper" :class="[elementClasses]">
+    <div class="dashboard-quad-grid">
       <div class="slot1">
         <slot name="slot1"></slot>
       </div>
@@ -18,11 +18,12 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  styleClassPassthrough: {
-    type: [String, Array] as PropType<string | string[]>,
-    default: () => [],
-  },
+interface Props {
+  styleClassPassthrough?: string | string[];
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  styleClassPassthrough: () => [],
 });
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -37,17 +38,18 @@ watch(
 
 <style lang="css">
 @layer components {
-  .layout-grid-a-wrapper {
+  .dashboard-quad-grid-wrapper {
     container-type: inline-size;
 
-    .layout-grid-a {
+    .dashboard-quad-grid {
       display: grid;
-      gap: 20px;
+      gap: var(--dashboard-quad-grid-gap, 2rem);
 
       & > div {
-        padding: 20px;
-        outline: 1px solid light-dark(black, white);
-        border-radius: 5px;
+        padding: var(--dashboard-quad-grid-padding, 2rem);
+        outline: var(--dashboard-quad-grid-outline-width, 0.1rem) solid
+          var(--dashboard-quad-grid-outline-colour, light-dark(black, white));
+        border-radius: var(--dashboard-quad-grid-border-radius, 0.5rem);
       }
 
       @container (min-width: 768px) {
