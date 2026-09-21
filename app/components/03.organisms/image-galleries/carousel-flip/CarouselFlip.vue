@@ -5,10 +5,10 @@
     :class="[elementClasses]"
     :data-button-layout="buttonLayout"
     role="region"
-    aria-label="Image carousel"
+    :aria-label="ariaLabel"
   >
     <div aria-live="polite" aria-atomic="true" class="sr-only">
-      Item {{ currentActiveIndex + 1 }} of {{ itemCount }}
+      {{ props.itemPositionAnnouncement(currentActiveIndex + 1, itemCount) }}
     </div>
 
     <div
@@ -17,7 +17,7 @@
       class="item-container"
       :class="{ 'allow-overflow': allowCarouselOverflow }"
       role="group"
-      aria-label="Carousel items"
+      :aria-label="itemsAriaLabel"
     >
       <div
         v-for="(item, index) in carouselDataIds"
@@ -39,7 +39,7 @@
             <button
               class="btn-marker"
               :class="[{ active: displayActiveIndex === index - 1 }]"
-              :aria-label="`Jump to item ${index}`"
+              :aria-label="`${jumpToItemLabel} ${index}`"
               @click.prevent="jumpToFrame(index - 1)"
             ></button>
           </li>
@@ -48,16 +48,15 @@
     </div>
 
     <div class="buttons-container">
-      <button
-        type="button"
-        class="btn-action btn-prev"
-        aria-label="Go to previous item"
-        @click.prevent="actionPrevious()"
-      >
-        <Icon name="ic:outline-keyboard-arrow-left" class="arrows-icon" />
+      <button type="button" class="btn-action btn-prev" :aria-label="previousLabel" @click.prevent="actionPrevious()">
+        <slot name="prev-icon">
+          <Icon :name="prevIcon" class="arrows-icon" />
+        </slot>
       </button>
-      <button type="button" class="btn-action btn-next" aria-label="Go to next item" @click.prevent="actionNext()">
-        <Icon name="ic:outline-keyboard-arrow-right" class="arrows-icon" />
+      <button type="button" class="btn-action btn-next" :aria-label="nextLabel" @click.prevent="actionNext()">
+        <slot name="next-icon">
+          <Icon :name="nextIcon" class="arrows-icon" />
+        </slot>
       </button>
     </div>
   </section>
@@ -75,6 +74,14 @@ interface Props {
   useSpringEffect?: boolean;
   buttonLayout?: "sides" | "controls-flanking" | "controls-grouped-right" | "overlay";
   showControls?: boolean;
+  ariaLabel?: string;
+  itemsAriaLabel?: string;
+  previousLabel?: string;
+  nextLabel?: string;
+  jumpToItemLabel?: string;
+  itemPositionAnnouncement?: (current: number, total: number) => string;
+  prevIcon?: string;
+  nextIcon?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -86,7 +93,16 @@ const props = withDefaults(defineProps<Props>(), {
   useSpringEffect: false,
   buttonLayout: "sides",
   showControls: true,
+  ariaLabel: "Image carousel",
+  itemsAriaLabel: "Carousel items",
+  previousLabel: "Go to previous item",
+  nextLabel: "Go to next item",
+  jumpToItemLabel: "Jump to item",
+  itemPositionAnnouncement: (current: number, total: number) => `Item ${current} of ${total}`,
+  prevIcon: "ic:outline-keyboard-arrow-left",
+  nextIcon: "ic:outline-keyboard-arrow-right",
 });
+
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -107,19 +123,11 @@ const transitionSpeedStr = props.transitionSpeed + "ms";
 
 const itemWidth = ref(0);
 const itemWidthOffsetStr = computed(() => {
-  // if (props.allowCarouselOverflow) {
   if (props.useFlipAnimation) {
-    return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - var(--_carousel-item-track-gap))`; // Good
+    return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - var(--_carousel-item-track-gap))`;
   } else {
-    return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - (2 * var(--_carousel-item-track-gap)))`; // Good
+    return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - (2 * var(--_carousel-item-track-gap)))`;
   }
-  // } else {
-  //   if (props.useFlipAnimation) {
-  //     return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - var(--_carousel-item-track-gap))` // Goof
-  //   } else {
-  //     return `calc(-${initialItemOffset.value} * ${itemWidth.value}px - (2 * var(--_carousel-item-track-gap)))` // Good
-  //   }
-  // }
 });
 const currentActiveIndex = ref(0);
 
@@ -256,7 +264,10 @@ const reorderItems = (skipAnimation: boolean = false) => {
         item.style.transform = `translateX(${deltaX}px)`;
 
         requestAnimationFrame(() => {
-          const shouldTransition = carouselInitComplete.value && userHasInteracted.value;
+          const shouldTransition =
+            carouselInitComplete.value &&
+            userHasInteracted.value &&
+            !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
           let transitionProperties = "none";
 
           if (shouldTransition) {
@@ -416,7 +427,7 @@ onMounted(() => {
 <style lang="css">
 @layer components {
   .carousel-flip {
-    --_carousel-item-track-gap: 10px;
+    --_carousel-item-track-gap: var(--carousel-flip-gap, 1rem);
 
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -424,7 +435,7 @@ onMounted(() => {
     grid-template-areas:
       "prev  carousel  next"
       ".     controls  .   ";
-    gap: 10px;
+    gap: var(--carousel-flip-layout-gap, 1rem);
     opacity: 0;
 
     &.mounted {
@@ -451,7 +462,7 @@ onMounted(() => {
       position: relative;
       isolation: isolate;
 
-      max-inline-size: var(--_carousel-display-max-width);
+      max-inline-size: var(--carousel-flip-display-max-width, 80rem);
       margin-inline: auto;
 
       &.allow-overflow {
@@ -466,17 +477,20 @@ onMounted(() => {
         margin-inline: auto;
 
         max-inline-size: calc(
-          var(--_carousel-container-max-inline-size) + var(--_carousel-item-track-gap) -
-            (2 * var(--_carousel-item-edge-preview-width))
+          var(--carousel-flip-item-max-width, 80rem) + var(--_carousel-item-track-gap) -
+            (2 * var(--carousel-flip-edge-preview-width, 4rem))
         );
 
         translate: calc(
-            v-bind(itemWidthOffsetStr) - var(--_carousel-item-track-gap) + var(--_carousel-item-edge-preview-width)
+            v-bind(itemWidthOffsetStr) - var(--_carousel-item-track-gap) +
+              var(--carousel-flip-edge-preview-width, 4rem)
           )
           0;
 
         &.loaded {
-          transition: transform v-bind(transitionSpeedStr) ease;
+          @media (prefers-reduced-motion: no-preference) {
+            transition: transform v-bind(transitionSpeedStr) ease;
+          }
         }
       }
     }
@@ -486,14 +500,14 @@ onMounted(() => {
       display: flex;
       align-items: center;
       justify-content: center;
-      max-inline-size: var(--_carousel-display-max-width);
+      max-inline-size: var(--carousel-flip-display-max-width, 80rem);
       margin-inline: auto;
 
       .markers-container {
         .markers-list {
           display: flex;
           flex-direction: row;
-          gap: 10px;
+          gap: var(--carousel-flip-marker-gap, 1rem);
           list-style-type: none;
           margin: unset;
           padding: unset;
@@ -507,7 +521,13 @@ onMounted(() => {
               transition: background-color v-bind(transitionSpeedStr) linear;
 
               &.active {
-                background-color: light-dark(var(--slate-10), var(--slate-00));
+                background-color: var(--carousel-flip-marker-active-colour, light-dark(var(--slate-10), var(--slate-00)));
+              }
+
+              &:focus-visible {
+                outline: var(--carousel-flip-focus-outline-width, 0.2rem) solid
+                  var(--carousel-flip-focus-outline-colour, var(--theme-ring));
+                outline-offset: var(--carousel-flip-focus-outline-offset, 0.2rem);
               }
             }
           }
@@ -538,14 +558,15 @@ onMounted(() => {
       cursor: pointer;
       height: fit-content;
 
-      background-color: white;
-      border: 1px solid light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%));
-      border-radius: 100vw;
-      padding: 8px;
+      background-color: var(--carousel-flip-button-background-colour, light-dark(white, var(--slate-08)));
+      border: var(--carousel-flip-button-border-width, 0.1rem) solid
+        var(--carousel-flip-button-border-colour, light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%)));
+      border-radius: var(--carousel-flip-button-border-radius, 100vw);
+      padding: var(--carousel-flip-button-padding, 0.8rem);
 
       .arrows-icon {
-        width: 24px;
-        height: 24px;
+        width: var(--carousel-flip-button-icon-size, 2.4rem);
+        height: var(--carousel-flip-button-icon-size, 2.4rem);
       }
     }
 
@@ -574,7 +595,7 @@ onMounted(() => {
       .buttons-container {
         display: flex;
         align-items: center;
-        gap: 10px;
+        gap: var(--carousel-flip-buttons-gap, 1rem);
         grid-area: controls;
         justify-self: end;
       }
@@ -586,7 +607,7 @@ onMounted(() => {
         grid-area: carousel;
         align-self: end;
         z-index: 1;
-        padding-block-end: 1rem;
+        padding-block-end: var(--carousel-flip-overlay-controls-offset, 1rem);
       }
     }
   }

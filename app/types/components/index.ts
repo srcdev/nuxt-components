@@ -1,6 +1,5 @@
 // Export types from the components directory
 export * from "./semantic-theme.d"
-export * from "./carousel-basic.d"
 export * from "./slider-gallery.d"
 export * from "./canvas-switcher.d"
 export * from "./display-chip.d"

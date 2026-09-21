@@ -3,6 +3,16 @@ import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
 import CarouselFlip from "../CarouselFlip.vue";
 
+const stubMatchMedia = (prefersReducedMotion: boolean) => {
+  vi.stubGlobal(
+    "matchMedia",
+    vi.fn().mockReturnValue({
+      matches: prefersReducedMotion,
+      addEventListener: vi.fn(),
+    })
+  );
+};
+
 interface CarouselFlipInstance {
   carouselWrapperRef: HTMLDivElement | null;
   carouselContainerRef: HTMLDivElement | null;
@@ -115,6 +125,7 @@ describe("CarouselFlip", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockDirection.value = "";
+    stubMatchMedia(false);
   });
 
   afterEach(() => {
@@ -270,6 +281,75 @@ describe("CarouselFlip", () => {
       await createWrapper({ buttonLayout: "overlay" });
 
       expect(wrapper.attributes("data-button-layout")).toBe("overlay");
+    });
+
+    it("overrides accessible labels via props", async () => {
+      await createWrapper({
+        ariaLabel: "Featured looks",
+        itemsAriaLabel: "Look slides",
+        previousLabel: "Previous look",
+        nextLabel: "Next look",
+        jumpToItemLabel: "View look",
+      });
+
+      expect(wrapper.find('[role="region"]').attributes("aria-label")).toBe("Featured looks");
+      expect(wrapper.find('[role="group"]').attributes("aria-label")).toBe("Look slides");
+      expect(wrapper.find('[aria-label="Previous look"]').exists()).toBe(true);
+      expect(wrapper.find('[aria-label="Next look"]').exists()).toBe(true);
+      expect(wrapper.find('[aria-label="View look 1"]').exists()).toBe(true);
+    });
+
+    it("overrides the screen-reader position announcement via prop", async () => {
+      await createWrapper({
+        itemPositionAnnouncement: (current: number, total: number) => `Slide ${current} / ${total}`,
+      });
+
+      expect(wrapper.find('[aria-live="polite"]').text()).toBe("Slide 1 / 6");
+    });
+
+    it("overrides prev/next icons via props", async () => {
+      await createWrapper({ prevIcon: "mdi:chevron-left", nextIcon: "mdi:chevron-right" });
+
+      const prevButton = wrapper.find('[aria-label="Go to previous item"]');
+      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+
+      expect(prevButton.html()).toContain("i-mdi:chevron-left");
+      expect(nextButton.html()).toContain("i-mdi:chevron-right");
+    });
+
+    it("allows overriding the prev/next icon via slots", async () => {
+      wrapper = await mountSuspended(CarouselFlip, {
+        props: { carouselDataIds: mockCarouselData },
+        slots: {
+          "prev-icon": '<span data-testid="custom-prev">Prev</span>',
+          "next-icon": '<span data-testid="custom-next">Next</span>',
+        },
+        global: {
+          components: {
+            Icon: {
+              template: '<svg data-testid="icon" :class="$attrs.class"><title>{{ name }}</title></svg>',
+              props: ["name"],
+            },
+          },
+        },
+      });
+
+      expect(wrapper.find('[data-testid="custom-prev"]').exists()).toBe(true);
+      expect(wrapper.find('[data-testid="custom-next"]').exists()).toBe(true);
+    });
+  });
+
+  describe("Reduced Motion", () => {
+    it("skips the JS-driven transition when prefers-reduced-motion is set", async () => {
+      stubMatchMedia(true);
+      await createWrapper();
+      await nextTick();
+
+      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      await nextButton.trigger("click");
+      await nextTick();
+
+      expect(component.currentActiveIndex).toBe(1);
     });
   });
 

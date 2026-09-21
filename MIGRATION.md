@@ -88,6 +88,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 
 | Component | File | CS | SN |
 |---|---|---|---|
+| CarouselFlip | `image-galleries/carousel-flip/CarouselFlip.vue` | ✅ | ✅ `carousel-flip` |
 | ColourFinder | `colour-finder/ColourFinder.vue` | ☐ | ☐ |
 | SliderGallery | `image-galleries/slider-gallery/SliderGallery.vue` | ☐ | ☐ |
 | ServicesCard | `services/services-card/ServicesCard.vue` | ☐ | ☐ |
@@ -185,9 +186,7 @@ These components still live in the root `app/components/` folder and need to be 
 | Component | File | Notes |
 |---|---|---|
 | AlertMaskCore | `alert-mask/AlertMaskCore.vue` | SVG mask utility — may stay internal |
-| CarouselBasic | `carousels/CarouselBasic.vue` | |
 | CarouselFlip | `carousels/CarouselFlip.vue` | |
-| CarouselInfinite | `carousels/CarouselInfinite.vue` | |
 | DeepExpandingMenu | `deep-expanding-menu/DeepExpandingMenu.vue` | |
 | DeepExpandingMenuOld | `deep-expanding-menu/DeepExpandingMenuOld.vue` | Likely deprecated — review before migrating |
 | DisplayBanner | `display-banner/DisplayBanner.vue` | |

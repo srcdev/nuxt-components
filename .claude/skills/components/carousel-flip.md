@@ -1,188 +1,132 @@
+---
+name: CarouselFlip
+description: CarouselFlip FLIP-animated multi-item carousel — named dynamic slots (per data id), swipe/keyboard/marker navigation, button layout variants, CSS tokens, consumer styling
+type: reference
+---
+
 # CarouselFlip
 
 ## Overview
 
-A FLIP-animated carousel that reorders items in the DOM using CSS `order` and animates transitions with the FLIP technique (First, Last, Invert, Play). Supports swipe, keyboard navigation, and marker dots. The prev/next buttons and controls bar can be placed in several layouts via a single prop.
+`CarouselFlip` is a multi-item carousel that reorders its items via the FLIP animation technique
+(First-Last-Invert-Play) on navigation, rather than a simple track-translate. Items are named
+dynamic slots keyed by `carouselDataIds`. It supports swipe, arrow-key, marker-click, and
+prev/next-button navigation, and four `buttonLayout` variants for positioning the prev/next
+buttons relative to the marker controls.
 
----
+Has live production usage on instepreflexology — check before making a breaking change to its
+default rendered output.
 
-## Implementation guide
-
-When a dev asks to implement CarouselFlip, work through the following questions before writing any code. Each answer maps directly to a prop or CSS decision. You do not need to ask all questions at once — use context clues where the answer is obvious.
-
-### Step 1 — Data source
-
-Ask: **"Where is the carousel data coming from — a static array, an API, or a Nuxt `useFetch`?"**
-
-- **Static array**: Define `carouselDataIds` directly as a `const`.
-- **API / useFetch**: Derive `carouselDataIds` as a `computed` from the response. Gate the component with `v-if="status === 'success'"` to avoid a flash of empty slots.
-
-```vue
-<!-- API pattern -->
-const { data, status } = await useFetch<MyType>("/api/items");
-const carouselDataIds = computed(() => data.value?.items.map(i => i.id) ?? []);
-
-<CarouselFlip v-if="status === 'success'" :carousel-data-ids="carouselDataIds">
-  <template v-for="item in data.items" :key="item.id" #[item.id]>
-    <!-- slot content -->
-  </template>
-</CarouselFlip>
-```
-
-### Step 2 — Button layout
-
-Ask: **"Where should the prev/next buttons sit?"** Show these options:
-
-| Value | Visual description |
-|---|---|
-| `"sides"` | Buttons float on the left and right edges of the carousel frame, centred vertically — the classic look |
-| `"controls-flanking"` | Buttons move down into the controls row: prev · markers · next |
-| `"controls-grouped-right"` | Markers stretch left, both buttons grouped together at the far right of the controls row |
-| `"overlay"` | Buttons stay on the sides; the markers bar overlays the bottom edge of the carousel frame |
-
-Set via `:button-layout="..."`. Default is `"sides"`.
-
-### Step 3 — Show or hide the markers bar
-
-Ask: **"Do you want the dot/marker navigation bar visible?"**
-
-- **Yes** (default): omit the prop or pass `:show-controls="true"`.
-- **No**: pass `:show-controls="false"`. The element is fully removed from the DOM — no layout space, no keyboard listener.
-
-> If `showControls` is false and `buttonLayout` is `"controls-flanking"` or `"controls-grouped-right"`, the controls row collapses entirely — only the buttons remain. Recommend switching `buttonLayout` to `"sides"` or `"overlay"` in that case.
-
-### Step 4 — Edge peek (overflow)
-
-Ask: **"Should adjacent carousel items peek in from the sides?"**
-
-- **No peek** (default): `:allow-carousel-overflow="false"` — clean, contained look.
-- **Peek visible**: `:allow-carousel-overflow="true"` — items bleed slightly out of the container. Requires CSS custom properties to control how much:
-
-```css
-.my-carousel.carousel-flip {
-  --_carousel-item-track-gap: 16px;
-  --_carousel-item-edge-preview-width: 32px; /* keep at 2× track-gap */
-  --_carousel-container-max-inline-size: 900px;
-}
-```
-
-### Step 5 — Animation style
-
-Ask: **"What animation feel are you going for?"**
-
-| Prop | Effect |
-|---|---|
-| `:use-flip-animation="false"` (default) | Slides — items translate horizontally |
-| `:use-flip-animation="true"` | FLIP reorder — items swap position with a physics-aware delta animation |
-| `:use-spring-effect="true"` | Adds spring easing to FLIP transitions. Requires `var(--spring-easing)` in the theme |
-| `:transition-speed="400"` | Duration in ms. Default `200`. Recommended range: `200`–`1200` |
-
-### Step 6 — Minimal working implementation
-
-Once the above decisions are made, assemble the component:
-
-```vue
-<CarouselFlip
-  :carousel-data-ids="carouselDataIds"
-  :allow-carousel-overflow="true"
-  :transition-speed="600"
-  :use-flip-animation="true"
-  :use-spring-effect="false"
-  button-layout="sides"
-  :show-controls="true"
-  :style-class-passthrough="['my-carousel']"
->
-  <template v-for="item in items" :key="item.id" #[item.id]>
-    <div class="my-carousel__item">
-      <!-- item content -->
-    </div>
-  </template>
-</CarouselFlip>
-```
-
-### Step 7 — Style the component
-
-Always scope overrides using `styleClassPassthrough` + a page/section wrapper class. Required tokens for a usable carousel:
-
-```css
-.my-carousel.carousel-flip {
-  --_carousel-item-track-gap: 16px;
-  --_carousel-container-max-inline-size: 900px;
-  --_carousel-item-edge-preview-width: 32px; /* 2× track-gap when overflow is on */
-
-  /* Items */
-  .item {
-    border-radius: 1.2rem;
-    overflow: hidden;
-  }
-
-  /* Markers */
-  .btn-marker {
-    width: 10px;
-    height: 10px;
-    border-radius: 100vw;
-    background: oklch(70% 0 0);
-
-    &.active { background: white; }
-  }
-
-  /* Prev/next buttons */
-  .btn-action {
-    padding: 10px;
-    background: oklch(0% 0 0 / 0.4);
-    border: none;
-    border-radius: 100vw;
-    color: white;
-  }
-}
-```
-
----
-
-## Props reference
+## Props
 
 | Prop | Type | Default | Description |
-|---|---|---|---|
-| `carouselDataIds` | `string[]` | `[]` | Ordered list of unique IDs — each becomes a named slot |
-| `transitionSpeed` | `number` | `200` | Animation duration in ms |
-| `allowCarouselOverflow` | `boolean` | `false` | Allows peeking items outside the container bounds |
-| `useFlipAnimation` | `boolean` | `false` | Enables FLIP reorder animation on prev/next |
-| `useSpringEffect` | `boolean` | `false` | Uses spring easing (`var(--spring-easing)`) instead of `ease` |
-| `buttonLayout` | `"sides" \| "controls-flanking" \| "controls-grouped-right" \| "overlay"` | `"sides"` | Controls placement of prev/next buttons relative to the carousel frame and controls bar |
-| `showControls` | `boolean` | `true` | Show or hide the markers/controls bar. When `false` the element is removed from the DOM; `controlsContainerRef` becomes null and its keyboard listener detaches automatically |
-| `styleClassPassthrough` | `string \| string[]` | `[]` | Classes applied to the root element |
+|------|------|---------|-------------|
+| `carouselDataIds` | `string[]` | `[]` | Slot names, in display order. One item renders per id. |
+| `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes on the root element. |
+| `transitionSpeed` | `number` | `200` | Transition duration in ms. |
+| `allowCarouselOverflow` | `boolean` | `false` | Allows items to overflow the item track horizontally instead of clipping. |
+| `useFlipAnimation` | `boolean` | `false` | Changes the initial item offset used in the FLIP reorder calculation. |
+| `useSpringEffect` | `boolean` | `false` | Uses `var(--spring-easing)` as the transition timing function instead of `ease`. |
+| `buttonLayout` | `"sides" \| "controls-flanking" \| "controls-grouped-right" \| "overlay"` | `"sides"` | Where the prev/next buttons sit relative to the carousel/controls. |
+| `showControls` | `boolean` | `true` | Shows/hides the marker (dot) controls bar. Prev/next buttons remain regardless. |
+| `ariaLabel` | `string` | `"Image carousel"` | `aria-label` on the root region — override for localisation. |
+| `itemsAriaLabel` | `string` | `"Carousel items"` | `aria-label` on the item group — override for localisation. |
+| `previousLabel` | `string` | `"Go to previous item"` | Prev button `aria-label` — override for localisation. |
+| `nextLabel` | `string` | `"Go to next item"` | Next button `aria-label` — override for localisation. |
+| `jumpToItemLabel` | `string` | `"Jump to item"` | Marker button `aria-label` prefix — the 1-based index is appended (`"Jump to item 3"`). |
+| `itemPositionAnnouncement` | `(current: number, total: number) => string` | `` (current, total) => `Item ${current} of ${total}` `` | Builds the screen-reader live-region text on navigation — override for localisation or a different phrasing. |
+| `prevIcon` | `string` | `"ic:outline-keyboard-arrow-left"` | Iconify name for the previous button icon. Ignored if the `prev-icon` slot is used. |
+| `nextIcon` | `string` | `"ic:outline-keyboard-arrow-right"` | Iconify name for the next button icon. Ignored if the `next-icon` slot is used. |
 
-## CSS custom properties
+## Slots
 
-| Property | Purpose |
-|---|---|
-| `--_carousel-item-track-gap` | Gap between carousel items (default `10px`) |
-| `--_carousel-container-max-inline-size` | Max width of the visible carousel window |
-| `--_carousel-item-edge-preview-width` | How much of adjacent items to reveal (edge peek). Keep at `2× --_carousel-item-track-gap` |
-| `--_carousel-display-max-width` | Max width of the whole component inc. controls |
+One dynamically-named slot per `carouselDataIds` entry, named after that id:
 
-## HTML structure
-
-```text
-section.carousel-flip               ← grid root, data-button-layout="..."
-  div.item-container                ← grid-area: carousel — flex row of items
-    div.item[data-id]               ← one per carouselDataIds entry
-  div.controls-container            ← grid-area: controls — markers bar (v-if="showControls")
-    div.markers-container
-      ul.markers-list
-        li.markers-item
-          button.btn-marker
-  div.buttons-container             ← display: contents by default (transparent to grid)
-    button.btn-action.btn-prev      ← grid-area: prev (row 1, col 1)
-    button.btn-action.btn-next      ← grid-area: next (row 1, col 3)
+```vue
+<CarouselFlip :carousel-data-ids="['slide-1', 'slide-2', 'slide-3']">
+  <template #slide-1><img src="/a.jpg" alt="A" /></template>
+  <template #slide-2><img src="/b.jpg" alt="B" /></template>
+  <template #slide-3><img src="/c.jpg" alt="C" /></template>
+</CarouselFlip>
 ```
 
-`buttons-container` uses `display: contents` so `.btn-prev`/`.btn-next` participate directly in the parent grid. In the `controls-grouped-right` variant the component sets `display: flex` on it, making it the grid child instead.
+`prev-icon`/`next-icon` replace the prev/next button icon entirely — use these instead of
+`prevIcon`/`nextIcon` when an Iconify name isn't enough (custom SVG, a different icon set):
+
+```vue
+<CarouselFlip :carousel-data-ids="ids">
+  <template #prev-icon><MyCustomArrowLeft /></template>
+  <template #next-icon><MyCustomArrowRight /></template>
+  ...
+</CarouselFlip>
+```
+
+## Navigation
+
+- **Swipe** (touch): left swipe → next, right swipe → previous.
+- **Keyboard**: `ArrowLeft`/`ArrowRight` on either the item track or the controls bar (both are
+  `tabindex="0"`).
+- **Marker click**: jumps directly to that item.
+- **Prev/next buttons**: always rendered, regardless of `showControls`.
+- All navigation wraps around at the ends.
+
+## `buttonLayout` variants
+
+- `"sides"` (default): prev/next buttons flank the item track (CSS grid areas `prev`/`next`).
+- `"controls-flanking"`: prev/next buttons sit in the row below, flanking the marker controls.
+- `"controls-grouped-right"`: markers centred, prev/next buttons grouped to the right of them.
+- `"overlay"`: markers float over the bottom edge of the item track instead of occupying their
+  own grid row.
+
+## CSS token API
+
+See [CONSUMER-STYLING.md](../../app/components/03.organisms/image-galleries/carousel-flip/CONSUMER-STYLING.md).
+
+| Token | Default | Controls |
+|---|---|---|
+| `--carousel-flip-gap` | `1rem` | Gap between items inside the item track |
+| `--carousel-flip-layout-gap` | `1rem` | Grid gap between the prev/carousel/next/controls areas |
+| `--carousel-flip-display-max-width` | `80rem` | Max width of the item track and the controls bar |
+| `--carousel-flip-item-max-width` | `80rem` | Max width of a single item, before subtracting the edge-preview width |
+| `--carousel-flip-edge-preview-width` | `4rem` | How much of the neighbouring items peek in at each edge |
+| `--carousel-flip-marker-gap` | `1rem` | Gap between marker (dot) buttons |
+| `--carousel-flip-marker-active-colour` | `light-dark(var(--slate-10), var(--slate-00))` | Active marker background colour |
+| `--carousel-flip-button-background-colour` | `light-dark(white, var(--slate-08))` | Prev/next button background colour |
+| `--carousel-flip-button-border-width` | `0.1rem` | Prev/next button border width |
+| `--carousel-flip-button-border-colour` | `light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%))` | Prev/next button border colour |
+| `--carousel-flip-button-border-radius` | `100vw` | Prev/next button corner radius |
+| `--carousel-flip-button-padding` | `0.8rem` | Prev/next button padding |
+| `--carousel-flip-button-icon-size` | `2.4rem` | Prev/next button icon glyph size |
+| `--carousel-flip-buttons-gap` | `1rem` | Gap between prev/next buttons in the `controls-grouped-right` layout |
+| `--carousel-flip-overlay-controls-offset` | `1rem` | Distance of the controls bar from the bottom edge in the `overlay` layout |
+| `--carousel-flip-focus-outline-width` | `0.2rem` | Marker button focus-visible outline width |
+| `--carousel-flip-focus-outline-colour` | `var(--theme-ring)` | Marker button focus-visible outline colour |
+| `--carousel-flip-focus-outline-offset` | `0.2rem` | Marker button focus-visible outline offset |
+
+## Accessibility
+
+- Reduced motion: both the CSS transform transition and the JS-driven FLIP reorder transition
+  are skipped when `prefers-reduced-motion: reduce` is set — items still reorder, just instantly.
+- Marker buttons previously had `outline: 1px solid transparent`, which suppressed the focus ring
+  with no replacement. Fixed 2026-09-21 — they now get a visible `:focus-visible` outline via
+  `--carousel-flip-focus-outline-*`.
+- All interactive controls have accessible names via the label props above.
 
 ## Notes
 
-- **Opacity fade-in**: The root starts at `opacity: 0` and gets `.mounted` (opacity 1) after `initialSetup()` completes. This prevents a flash of unstyled layout on mount.
-- **z-index**: `.btn-prev`/`.btn-next` have `z-index: 1` to sit above `.item-container` which uses `isolation: isolate` (carousel items are translated and can overlap the button columns).
-- **ResizeObserver**: `initialSetup()` re-runs on resize to recalculate item widths. CSS `translate` on `.item` is driven by the measured `itemWidth` via `v-bind`.
-- **Spring easing**: `useSpringEffect` switches to `var(--spring-easing)`. Make sure this custom property is defined in your theme or global CSS when enabling it.
-- **buttonLayout + showControls combo**: `"controls-flanking"` and `"controls-grouped-right"` place buttons in the controls row. If `showControls` is false that row collapses — use `"sides"` or `"overlay"` instead.
+- Migrated from `app/components/carousels/CarouselFlip.vue` (unplaced, legacy location) to
+  `03.organisms/image-galleries/carousel-flip/` on 2026-09-21, alongside `SliderGallery`.
+- Sibling components `CarouselBasic` and `CarouselInfinite` were deleted in the same migration —
+  they had no consumer usage anywhere and were never fully built out (no tests/story/skill for
+  `CarouselInfinite`; `CarouselBasic`'s active-marker colour was hardcoded to plain `red`).
+- **Bug fixed 2026-09-21**: `--carousel-flip-display-max-width`/`--carousel-flip-item-max-width`/
+  `--carousel-flip-edge-preview-width` were previously referenced as `--_carousel-display-max-width`
+  /`--_carousel-container-max-inline-size`/`--_carousel-item-edge-preview-width` — private custom
+  properties that were never declared anywhere, with no fallback. Per CSS spec this makes the
+  whole declaration invalid at computed-value time, so the item edge-preview offset and the
+  width caps were silently never applying in production. Now declared as real public tokens with
+  real defaults (`80rem`/`80rem`/`4rem`) — this is a visible change to the live carousel on
+  instepreflexology, done deliberately after confirming with the maintainer.
+- Removed dead commented-out code in `itemWidthOffsetStr`'s computed (an unreachable
+  `if (props.allowCarouselOverflow)` branch, entirely commented out, that duplicated the live
+  branch's logic).

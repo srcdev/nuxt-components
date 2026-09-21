@@ -1,0 +1,41 @@
+{
+  "SRCDEV CarouselFlip Basic": {
+    "description": "CarouselFlip with looped item slots",
+    "scope": "vue,html",
+    "body": [
+      "<CarouselFlip :carousel-data-ids=\"$1items.map((item) => item.id)\">",
+      "  <template v-for=\"$2item in $1items\" :key=\"$2item.id\" #[$2item.id]>",
+      "    $3",
+      "  </template>",
+      "</CarouselFlip>"
+    ]
+  },
+  "SRCDEV CarouselFlip Overlay Controls": {
+    "description": "CarouselFlip with markers floating over the item track",
+    "scope": "vue,html",
+    "body": [
+      "<CarouselFlip",
+      "  :carousel-data-ids=\"$1items.map((item) => item.id)\"",
+      "  button-layout=\"overlay\"",
+      "  :use-flip-animation=\"true\"",
+      ">",
+      "  <template v-for=\"$2item in $1items\" :key=\"$2item.id\" #[$2item.id]>",
+      "    $3",
+      "  </template>",
+      "</CarouselFlip>"
+    ]
+  },
+  "SRCDEV CarouselFlip CSS Override": {
+    "description": "CSS override scaffold for CarouselFlip tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .carousel-flip {",
+      "    --carousel-flip-gap: $2;",
+      "    --carousel-flip-marker-active-colour: $3;",
+      "    --carousel-flip-button-background-colour: $4;",
+      "  }",
+      "}"
+    ]
+  }
+}

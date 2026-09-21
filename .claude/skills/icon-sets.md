@@ -21,7 +21,7 @@ The layer's `modules/icon-sets.ts` runs at dev/build time and logs an info messa
 | `bi` | `@iconify-json/bi` | NavigationItems (overflow caret) |
 | `bitcoin-icons` | `@iconify-json/bitcoin-icons` | Display components |
 | `gravity-ui` | `@iconify-json/gravity-ui` | NavigationItems (burger/ellipsis overflow) |
-| `ic` | `@iconify-json/ic` | CarouselBasic, CarouselFlip, CarouselInfinite, SliderGallery, CanvasSwitcher |
+| `ic` | `@iconify-json/ic` | CarouselFlip, SliderGallery, CanvasSwitcher |
 | `lucide` | `@iconify-json/lucide` | ColourFinder, TreatmentConsultant |
 | `material-symbols` | `@iconify-json/material-symbols` | form components |
 | `mdi` | `@iconify-json/mdi` | NavigationHorizontal, form components, ServicesCard |

@@ -19,6 +19,13 @@ interface CarouselFlipStoryArgs {
   buttonLayout: "sides" | "controls-flanking" | "controls-grouped-right" | "overlay";
   showControls: boolean;
   styleClassPassthrough: string[];
+  ariaLabel: string;
+  itemsAriaLabel: string;
+  previousLabel: string;
+  nextLabel: string;
+  jumpToItemLabel: string;
+  prevIcon: string;
+  nextIcon: string;
   // Mock data for stories
   carouselData: CarouselItem[];
 }
@@ -68,7 +75,7 @@ const sampleCarouselItems: CarouselItem[] = [
 ];
 
 export default {
-  title: "Components/UI/CarouselFlip",
+  title: "Organisms/Image Galleries/Carousel Flip",
   component: StorybookComponent,
   argTypes: {
     // Carousel Configuration
@@ -129,6 +136,56 @@ export default {
         category: "Layout",
       },
     },
+    // Accessibility / localisation
+    ariaLabel: {
+      control: { type: "text" },
+      description: "Accessible name for the carousel region",
+      table: {
+        category: "Accessibility",
+      },
+    },
+    itemsAriaLabel: {
+      control: { type: "text" },
+      description: "Accessible name for the item group",
+      table: {
+        category: "Accessibility",
+      },
+    },
+    previousLabel: {
+      control: { type: "text" },
+      description: "Accessible label for the previous button",
+      table: {
+        category: "Accessibility",
+      },
+    },
+    nextLabel: {
+      control: { type: "text" },
+      description: "Accessible label for the next button",
+      table: {
+        category: "Accessibility",
+      },
+    },
+    jumpToItemLabel: {
+      control: { type: "text" },
+      description: "Accessible label prefix for marker buttons (index is appended)",
+      table: {
+        category: "Accessibility",
+      },
+    },
+    prevIcon: {
+      control: { type: "text" },
+      description: "Iconify name for the previous button icon",
+      table: {
+        category: "Icons",
+      },
+    },
+    nextIcon: {
+      control: { type: "text" },
+      description: "Iconify name for the next button icon",
+      table: {
+        category: "Icons",
+      },
+    },
     // Display data for reference
     carouselData: {
       control: { type: "object" },
@@ -147,6 +204,13 @@ export default {
     buttonLayout: "sides",
     showControls: true,
     styleClassPassthrough: ["carousel-flip-demo"],
+    ariaLabel: "Image carousel",
+    itemsAriaLabel: "Carousel items",
+    previousLabel: "Go to previous item",
+    nextLabel: "Go to next item",
+    jumpToItemLabel: "Jump to item",
+    prevIcon: "ic:outline-keyboard-arrow-left",
+    nextIcon: "ic:outline-keyboard-arrow-right",
     carouselData: sampleCarouselItems,
   },
 } as Meta<CarouselFlipStoryArgs>;
@@ -180,15 +244,15 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         }
 
         .carousel-flip-demo.carousel-flip {
-          --_carousel-item-track-gap: 12px;
-          --_carousel-container-max-inline-size: 800px;
-          --_carousel-item-edge-preview-width: 12px;
+          --carousel-flip-gap: 12px;
+          --carousel-flip-item-max-width: 800px;
+          --carousel-flip-edge-preview-width: 12px;
         }
 
         @media (width >= 768px) {
           .carousel-flip-demo.carousel-flip {
-            --_carousel-item-track-gap: 24px;
-            --_carousel-item-edge-preview-width: 80px;
+            --carousel-flip-gap: 24px;
+            --carousel-flip-edge-preview-width: 80px;
           }
         }
 
@@ -311,6 +375,13 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         :button-layout="args.buttonLayout"
         :show-controls="args.showControls"
         :style-class-passthrough="args.styleClassPassthrough"
+        :aria-label="args.ariaLabel"
+        :items-aria-label="args.itemsAriaLabel"
+        :previous-label="args.previousLabel"
+        :next-label="args.nextLabel"
+        :jump-to-item-label="args.jumpToItemLabel"
+        :prev-icon="args.prevIcon"
+        :next-icon="args.nextIcon"
       >
         <template v-for="(item, index) in filteredCarouselData" #[item.id] :key="index">
           <div class="custom-carousel-item">
@@ -427,15 +498,15 @@ const RichContentTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
       style.id = styleId;
       style.textContent = `
         .carousel-flip-demo.carousel-flip {
-          --_carousel-item-track-gap: 12px;
-          --_carousel-container-max-inline-size: 800px;
-          --_carousel-item-edge-preview-width: 12px;
+          --carousel-flip-gap: 12px;
+          --carousel-flip-item-max-width: 800px;
+          --carousel-flip-edge-preview-width: 12px;
         }
 
         @media (width >= 768px) {
           .carousel-flip-demo.carousel-flip {
-            --_carousel-item-track-gap: 24px;
-            --_carousel-item-edge-preview-width: 80px;
+            --carousel-flip-gap: 24px;
+            --carousel-flip-edge-preview-width: 80px;
           }
         }
 
@@ -486,6 +557,13 @@ const RichContentTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         :button-layout="args.buttonLayout"
         :show-controls="args.showControls"
         :style-class-passthrough="args.styleClassPassthrough"
+        :aria-label="args.ariaLabel"
+        :items-aria-label="args.itemsAriaLabel"
+        :previous-label="args.previousLabel"
+        :next-label="args.nextLabel"
+        :jump-to-item-label="args.jumpToItemLabel"
+        :prev-icon="args.prevIcon"
+        :next-icon="args.nextIcon"
       >
         <template v-for="(item, index) in filteredCarouselData" #[item.id] :key="index">
           <div
@@ -628,6 +706,13 @@ const AnimationShowcaseTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         :button-layout="args.buttonLayout"
         :show-controls="args.showControls"
         :style-class-passthrough="args.styleClassPassthrough"
+        :aria-label="args.ariaLabel"
+        :items-aria-label="args.itemsAriaLabel"
+        :previous-label="args.previousLabel"
+        :next-label="args.nextLabel"
+        :jump-to-item-label="args.jumpToItemLabel"
+        :prev-icon="args.prevIcon"
+        :next-icon="args.nextIcon"
       >
         <template v-for="(item, index) in filteredCarouselData" #[item.id] :key="index">
           <div
