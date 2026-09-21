@@ -36,6 +36,9 @@
       "editor.trimAutoWhitespace": "explicit"
     }
   },
+  // Recognises CSS properties too new for VS Code's built-in CSS language service (e.g. Gap Decorations' rule/rule-break/rule-inset)
+  "css.customData": [".vscode/css-custom-data.json"],
+
   // More info: https://open-props.style/#getting-started
   "cssvar.files": ["assets/styles/main.css"],
   "cssvar.ignore": [],

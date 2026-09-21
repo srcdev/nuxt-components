@@ -272,6 +272,134 @@ DashboardExample.parameters = {
   },
 };
 
+// ===== RULE DECORATIONS (CSS GAP DECORATIONS) =====
+
+const RuleDecorationsTemplate: StoryFn<DashboardQuadGridArgs> = (args) => ({
+  components: { DashboardQuadGridComponent },
+  setup() {
+    const ruleTokenStyle = [
+      "--dashboard-quad-grid-outline-width: 0",
+      "--dashboard-quad-grid-border-width: 0",
+      "--dashboard-quad-grid-border-radius: 0",
+      "--dashboard-quad-grid-rule-width: 0.2rem",
+      "--dashboard-quad-grid-rule-colour: light-dark(#cbd5e1, #475569)",
+      "--dashboard-quad-grid-rule-inset: 0",
+    ].join("; ");
+
+    return { args, ruleTokenStyle };
+  },
+  template: `
+    <div style="padding: 20px;" :class="args.mediaCanvas">
+      <DashboardQuadGridComponent :style-class-passthrough="[args.mediaCanvas]" :style="ruleTokenStyle">
+        <!-- Slot 1 - Main article content -->
+        <template #slot1>
+          <article style="color: inherit; padding: 24px; height: 100%; display: flex; flex-direction: column;">
+            <h2 style="margin: 0 0 16px 0; font-size: 24px;">Featured Article</h2>
+            <div style="flex: 1;">
+              <p style="margin: 0 0 16px 0; opacity: 0.85; line-height: 1.6;">
+                Discover the latest insights and trends in modern web development. This comprehensive guide covers
+                everything you need to know about building scalable, responsive applications.
+              </p>
+              <p style="margin: 0 0 20px 0; opacity: 0.75; line-height: 1.6;">
+                From CSS Grid and Container Queries to Vue 3 composition patterns, learn how to create stunning
+                user interfaces that work seamlessly across all devices and screen sizes.
+              </p>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <span style="opacity: 0.6; font-size: 14px;">Published: Feb 5, 2026</span>
+              <button style="padding: 10px 20px; background: transparent; color: inherit; border: 1px solid currentColor; border-radius: 6px; cursor: pointer;">
+                Read More
+              </button>
+            </div>
+          </article>
+        </template>
+
+        <!-- Slot 2 - Statistics dashboard -->
+        <template #slot2>
+          <div style="padding: 24px; height: 100%;">
+            <h3 style="margin: 0 0 20px 0; font-size: 18px;">Performance Overview</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px;">
+              <div style="text-align: center; padding: 16px;">
+                <div style="font-size: 28px; font-weight: bold; color: #059669; margin-bottom: 4px;">98.5%</div>
+                <div style="font-size: 12px; opacity: 0.7;">Uptime</div>
+              </div>
+              <div style="text-align: center; padding: 16px;">
+                <div style="font-size: 28px; font-weight: bold; color: #3b82f6; margin-bottom: 4px;">1,247</div>
+                <div style="font-size: 12px; opacity: 0.7;">Active Users</div>
+              </div>
+              <div style="text-align: center; padding: 16px;">
+                <div style="font-size: 28px; font-weight: bold; color: #f59e0b; margin-bottom: 4px;">342ms</div>
+                <div style="font-size: 12px; opacity: 0.7;">Avg Response</div>
+              </div>
+            </div>
+          </div>
+        </template>
+
+        <!-- Slot 3 - Quick actions -->
+        <template #slot3>
+          <div style="padding: 20px; height: 100%;">
+            <h3 style="margin: 0 0 16px 0; font-size: 16px;">Quick Actions</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <button style="width: 100%; padding: 12px; background: transparent; color: inherit; border: 1px solid currentColor; border-radius: 6px; cursor: pointer; text-align: left;">
+                📊 View Analytics
+              </button>
+              <button style="width: 100%; padding: 12px; background: transparent; color: inherit; border: 1px solid currentColor; border-radius: 6px; cursor: pointer; text-align: left;">
+                ⚙️ Settings
+              </button>
+              <button style="width: 100%; padding: 12px; background: transparent; color: inherit; border: 1px solid currentColor; border-radius: 6px; cursor: pointer; text-align: left;">
+                👥 Manage Users
+              </button>
+            </div>
+          </div>
+        </template>
+
+        <!-- Slot 4 - Recent activity -->
+        <template #slot4>
+          <div style="padding: 20px; height: 100%;">
+            <h3 style="margin: 0 0 16px 0; font-size: 16px;">Recent Activity</h3>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <div style="display: flex; align-items: center; padding: 8px 0;">
+                <div style="width: 8px; height: 8px; background: #059669; border-radius: 50%; margin-right: 12px;"></div>
+                <div style="flex: 1;">
+                  <div style="font-size: 13px;">New user registered</div>
+                  <div style="font-size: 11px; opacity: 0.6;">2 minutes ago</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; padding: 8px 0;">
+                <div style="width: 8px; height: 8px; background: #3b82f6; border-radius: 50%; margin-right: 12px;"></div>
+                <div style="flex: 1;">
+                  <div style="font-size: 13px;">System backup completed</div>
+                  <div style="font-size: 11px; opacity: 0.6;">15 minutes ago</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; padding: 8px 0;">
+                <div style="width: 8px; height: 8px; background: #f59e0b; border-radius: 50%; margin-right: 12px;"></div>
+                <div style="flex: 1;">
+                  <div style="font-size: 13px;">Update available</div>
+                  <div style="font-size: 11px; opacity: 0.6;">1 hour ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+      </DashboardQuadGridComponent>
+    </div>
+  `,
+});
+
+export const RuleDecorations = RuleDecorationsTemplate.bind({});
+RuleDecorations.args = {
+  mediaCanvas: "desktopCanvas",
+};
+RuleDecorations.parameters = {
+  docs: {
+    description: {
+      story:
+        "Same dashboard content as DashboardExample, but with --dashboard-quad-grid-outline-width, -border-width and -border-radius set to 0 and the CSS Gap Decorations rule tokens (--dashboard-quad-grid-rule-width/-colour/-inset) driving the panel dividers instead. Requires a browser that supports the CSS Gap Decorations spec (rule/rule-break/rule-inset) — limited support as of 2026, so the divider lines may not render everywhere.",
+    },
+  },
+};
+
 // ===== CONTENT LENGTH VARIATIONS =====
 
 const ContentLengthTemplate: StoryFn<DashboardQuadGridArgs> = (args) => ({

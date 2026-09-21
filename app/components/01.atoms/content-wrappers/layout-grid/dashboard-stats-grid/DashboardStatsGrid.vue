@@ -70,6 +70,11 @@ watch(
     width: 100%;
     margin-inline: auto;
 
+    /* CSS Gap Decorations (rule/rule-break/rule-inset) — limited browser support as of 2026, transparent by default */
+    rule: var(--dashboard-stats-grid-rule-width, 0.1rem) solid var(--dashboard-stats-grid-rule-colour, transparent);
+    rule-break: intersection;
+    rule-inset: var(--dashboard-stats-grid-rule-inset, 0);
+
     .top-row {
       display: grid;
       gap: var(--dashboard-stats-grid-gap, 1.2rem);

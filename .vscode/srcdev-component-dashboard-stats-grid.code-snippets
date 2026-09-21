@@ -27,6 +27,7 @@
       "  .dashboard-stats-grid {",
       "    --dashboard-stats-grid-gap: $2;",
       "    --dashboard-stats-grid-border-colour: $3;",
+      "    --dashboard-stats-grid-rule-colour: $4;",
       "  }",
       "}"
     ]

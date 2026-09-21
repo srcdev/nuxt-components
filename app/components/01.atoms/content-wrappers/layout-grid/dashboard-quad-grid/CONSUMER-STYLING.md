@@ -8,7 +8,13 @@
 | `--dashboard-quad-grid-padding` | `2rem` | Padding inside each slot panel |
 | `--dashboard-quad-grid-outline-width` | `0.1rem` | Slot panel outline width |
 | `--dashboard-quad-grid-outline-colour` | `light-dark(black, white)` | Slot panel outline colour |
+| `--dashboard-quad-grid-outline-offset` | `0` | Slot panel outline offset |
+| `--dashboard-quad-grid-border-width` | `0` | Slot panel border width (off by default — the panel edge is drawn by the outline) |
+| `--dashboard-quad-grid-border-colour` | `light-dark(black, white)` | Slot panel border colour, only visible once `--dashboard-quad-grid-border-width` is set |
 | `--dashboard-quad-grid-border-radius` | `0.5rem` | Slot panel corner radius |
+| `--dashboard-quad-grid-rule-width` | `0.1rem` | Width of the grid gap rule line (CSS Gap Decorations — see Notes) |
+| `--dashboard-quad-grid-rule-colour` | `transparent` | Colour of the grid gap rule line, invisible by default |
+| `--dashboard-quad-grid-rule-inset` | `0` | Inset of the grid gap rule line from the panel edges |
 
 ```css
 .my-page {
@@ -30,3 +36,7 @@ Or scope to a single instance via `styleClassPassthrough`:
   tokens/props — this is a fixed dashboard shape, not a general-purpose grid. Use
   `LayoutGridByCols`/`LayoutGridByWidth` instead if you need an arbitrary column count.
 - Responds to its own container width (`container-type: inline-size`), not the viewport.
+- Also declares a `rule`/`rule-break`/`rule-inset` gap-decoration line between grid cells (the
+  CSS Gap Decorations spec) via `--dashboard-quad-grid-rule-*` tokens. Browser support is limited
+  as of 2026, so it's transparent by default and safe to ignore — set
+  `--dashboard-quad-grid-rule-colour` to opt in where supported.

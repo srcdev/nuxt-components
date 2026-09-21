@@ -27,6 +27,8 @@
       "  .dashboard-quad-grid-wrapper {",
       "    --dashboard-quad-grid-gap: $2;",
       "    --dashboard-quad-grid-outline-colour: $3;",
+      "    --dashboard-quad-grid-border-width: $4;",
+      "    --dashboard-quad-grid-border-colour: $5;",
       "  }",
       "}"
     ]

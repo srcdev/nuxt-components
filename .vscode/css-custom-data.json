@@ -1,0 +1,38 @@
+{
+  "version": 1.1,
+  "properties": [
+    {
+      "name": "rule",
+      "status": "experimental",
+      "description": "CSS Gap Decorations: shorthand for row-rule/column-rule width, style, and colour — draws lines in the gaps between grid/flex items. Limited browser support as of 2026.",
+      "references": [
+        {
+          "name": "MDN Reference",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/rule"
+        }
+      ]
+    },
+    {
+      "name": "rule-break",
+      "status": "experimental",
+      "description": "CSS Gap Decorations: controls whether gap rule lines break at grid item intersections (e.g. \"intersection\", \"spanning-item\"). Limited browser support as of 2026.",
+      "references": [
+        {
+          "name": "MDN Reference",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/rule-break"
+        }
+      ]
+    },
+    {
+      "name": "rule-inset",
+      "status": "experimental",
+      "description": "CSS Gap Decorations: insets gap rule lines from the edges of the items they run between. Limited browser support as of 2026.",
+      "references": [
+        {
+          "name": "MDN Reference",
+          "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/rule-inset"
+        }
+      ]
+    }
+  ]
+}

@@ -69,6 +69,9 @@ See [CONSUMER-STYLING.md](../../app/components/01.atoms/content-wrappers/layout-
 | `--dashboard-stats-grid-border-width` | `0.1rem` | Panel border width |
 | `--dashboard-stats-grid-border-colour` | `light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%))` | Panel border colour |
 | `--dashboard-stats-grid-border-radius` | `1.2rem` | Panel corner radius |
+| `--dashboard-stats-grid-rule-width` | `0.1rem` | Width of the grid gap rule line (CSS Gap Decorations, limited browser support) |
+| `--dashboard-stats-grid-rule-colour` | `transparent` | Colour of the grid gap rule line, invisible by default |
+| `--dashboard-stats-grid-rule-inset` | `0` | Inset of the grid gap rule line from the panel edges |
 
 ---
 
