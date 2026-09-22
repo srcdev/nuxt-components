@@ -163,6 +163,22 @@ Extra props: `min: number` (required), `max: number` (required), `step?: number`
 `stepDownText`/`stepUpText` (default `"Step down"`/`"Step up"`) — the decrement/increment buttons'
 accessible names. Requires `left`/`right` slot content for the step icons (no default icon).
 
+**Fixed 2026-09-22**: `updateElementClasses(["input-text-as-number", "has-left-button",
+"has-right-button"])` computes marker classes onto this component's own `elementClasses`, which is
+bound to the outer `.input-text-with-label` wrapper — but the nested `<InputTextCore>` was passed
+`:style-class-passthrough` as a bare shorthand, which resolves to the raw incoming
+`styleClassPassthrough` **prop**, not the local `elementClasses`. So the marker classes never
+reached the actual `<input>`, the scoped `.input-text-core.input-text-as-number { width:
+fit-content; text-align: center; ... }` CSS never matched anything, and the input silently fell
+back to `InputTextCore`'s default full-width, left-aligned styling instead of the intended
+compact, centered numeric stepper box. Fixed by changing that binding to
+`:style-class-passthrough="elementClasses"` — `elementClasses` still carries any consumer-supplied
+`styleClassPassthrough` too, since the composable seeds it from the prop before the marker classes
+are toggled on top. When a component computes its own marker/state classes via
+`updateElementClasses()` and needs them on a *child* component rather than its own root element,
+always pass the computed `elementClasses` explicitly — the `:x` shorthand only ever resolves to
+the prop of that exact name, never a same-named local composable output.
+
 ---
 
 ## Accessibility

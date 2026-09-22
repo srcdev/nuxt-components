@@ -58,4 +58,18 @@ describe("InputTextAsNumberWithLabel", () => {
 
     expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([6]);
   });
+
+  it("forwards the input-text-as-number marker class down to InputTextCore's own input", async () => {
+    // Regression test: the marker classes toggled via updateElementClasses() must reach the
+    // inner <input> (not just the outer wrapper), or the scoped .input-text-core.input-text-as-number
+    // CSS (compact fit-content width, centered text) silently never matches.
+    wrapper = await wrapperFactory();
+    expect(wrapper.find("input").classes()).toContain("input-text-as-number");
+  });
+
+  it("still forwards a consumer-supplied styleClassPassthrough down to the input", async () => {
+    wrapper = await wrapperFactory({ styleClassPassthrough: ["custom-number-class"] });
+    expect(wrapper.find("input").classes()).toContain("custom-number-class");
+    expect(wrapper.find("input").classes()).toContain("input-text-as-number");
+  });
 });

@@ -45,7 +45,7 @@
       :error-message
       :field-has-error
       :required
-      :style-class-passthrough
+      :style-class-passthrough="elementClasses"
       :theme
       inputmode="numeric"
       :aria-describedby

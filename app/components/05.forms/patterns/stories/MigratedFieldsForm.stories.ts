@@ -2,6 +2,7 @@ import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { reactive } from "vue";
 import InputTextWithLabel from "../../input-text/variants/InputTextWithLabel.vue";
 import InputRangeDefault from "../../input-range/variants/InputRangeDefault.vue";
+import InputNumberDefault from "../../input-number/variants/InputNumberDefault.vue";
 import InputButtonCore from "../../input-button/InputButtonCore.vue";
 import FormField from "../../form-field/FormField.vue";
 import HeroText from "../../../01.atoms/text-blocks/hero-text/HeroText.vue";
@@ -13,9 +14,10 @@ interface MigratedFieldsFormStoryArgs {
 
 // Living reference, not a component of its own — one field per 05.forms component group that
 // currently scores 5/5 in the Component Ledger (.claude/component-ledger/audit.json: tier folder,
-// tests, story, skill doc, CONSUMER-STYLING.md, VS Code snippet). As of 2026-09-21 that's
-// InputTextCore (via InputTextWithLabel) and InputRangeCore (via InputRangeDefault) — every other
-// 05.forms component (select, number, checkbox, radio, toggle-switch, ...) is still mid-migration.
+// tests, story, skill doc, CONSUMER-STYLING.md, VS Code snippet). As of 2026-09-22 that's
+// InputTextCore (via InputTextWithLabel), InputRangeCore (via InputRangeDefault), and
+// InputNumberCore (via InputNumberDefault) — every other 05.forms component (select, checkbox,
+// radio, toggle-switch, ...) is still mid-migration.
 // Add a field here each time /migrate-component brings another 05.forms component up to 5/5, so
 // this story doubles as a visible migration-progress tracker rather than living only in the
 // ledger's HTML output. No validation wiring (useZodValidation/zod) here — that's the consuming
@@ -39,6 +41,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
   components: {
     InputTextWithLabel,
     InputRangeDefault,
+    InputNumberDefault,
     InputButtonCore,
     FormField,
     HeroText,
@@ -47,25 +50,29 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     const state = reactive({
       fullName: "",
       budget: 50,
+      quantity: 1,
     });
 
     // Demo-only "validation" — a real consuming app would wire this through something like
     // useZodValidation instead (see this file's top comment). Kept deliberately simple so the
-    // Continue button has an obvious, reliable way to trigger both fields' error states for
-    // exercising InputTextWithLabel/InputRangeDefault's error UI in Storybook.
+    // Continue button has an obvious, reliable way to trigger each field's error state for
+    // exercising InputTextWithLabel/InputRangeDefault/InputNumberDefault's error UI in Storybook.
     const errors = reactive({
       fullName: "",
       budget: "",
+      quantity: "",
     });
 
     const validate = () => {
       errors.fullName = state.fullName.trim() ? "" : "Full name is required";
       errors.budget = state.budget >= 100 ? "" : "Budget must be at least £100";
+      errors.quantity = state.quantity >= 1 ? "" : "Quantity must be at least 1";
     };
 
     const clearErrors = () => {
       errors.fullName = "";
       errors.budget = "";
+      errors.quantity = "";
     };
 
     return { args, state, errors, validate, clearErrors };
@@ -80,7 +87,8 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       />
       <p style="margin: 0 0 2rem 0; color: #475569; font-size: 1.4rem;">
         One field per 05.forms component that's fully migrated (5/5 on the Component Ledger).
-        Click Continue with an empty name or a budget under £100 to see the error states.
+        Click Continue with an empty name, a budget under £100, or a quantity under 1 to see the
+        error states.
       </p>
 
       <form novalidate @submit.prevent="validate">
@@ -115,6 +123,22 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         </FormField>
 
         <FormField width="wide" :has-gutter="false">
+          <InputNumberDefault
+            v-model="state.quantity"
+            name="quantity"
+            label="Quantity"
+            :min="1"
+            :max="10"
+            :error-message="errors.quantity"
+            :field-has-error="!!errors.quantity"
+            :input-variant="args.inputVariant"
+          >
+            <template #left><span aria-hidden="true">−</span></template>
+            <template #right><span aria-hidden="true">+</span></template>
+          </InputNumberDefault>
+        </FormField>
+
+        <FormField width="wide" :has-gutter="false">
           <div style="display: flex; gap: 1.2rem;">
             <InputButtonCore type="submit" variant="primary" button-text="Continue" />
             <InputButtonCore type="button" variant="tertiary" button-text="Clear errors" @click="clearErrors" />
@@ -127,6 +151,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       >
         <div>fullName: {{ state.fullName || '""' }}</div>
         <div>budget: £{{ state.budget }}</div>
+        <div>quantity: {{ state.quantity }}</div>
       </div>
     </div>
   `,

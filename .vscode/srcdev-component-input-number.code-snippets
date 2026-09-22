@@ -1,0 +1,65 @@
+{
+  "SRCDEV InputNumberCore Basic": {
+    "description": "Basic InputNumberCore native number input (no label/error wrapper)",
+    "scope": "vue,html",
+    "body": [
+      "<InputNumberCore",
+      "  id=\"$1fieldId\"",
+      "  name=\"$2fieldName\"",
+      "  v-model=\"$3fieldValue\"",
+      "  :min=\"$40\"",
+      "  :max=\"$5100\"",
+      "  :step=\"$61\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputNumberDefault Basic": {
+    "description": "InputNumberDefault: labelled number input with error/description support",
+    "scope": "vue,html",
+    "body": [
+      "<InputNumberDefault",
+      "  v-model=\"$1fieldValue\"",
+      "  name=\"$2fieldName\"",
+      "  label=\"$3Field label\"",
+      "  :min=\"$40\"",
+      "  :max=\"$5100\"",
+      "  :step=\"$61\"",
+      "  :error-message=\"$7errors.fieldName\"",
+      "  :field-has-error=\"!!$7errors.fieldName\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputNumberDefault With Step Buttons": {
+    "description": "InputNumberDefault with step-down/step-up buttons wired into the left/right slots",
+    "scope": "vue,html",
+    "body": [
+      "<InputNumberDefault",
+      "  v-model=\"$1fieldValue\"",
+      "  name=\"$2fieldName\"",
+      "  label=\"$3Field label\"",
+      "  :min=\"$40\"",
+      "  :max=\"$5100\"",
+      "  :step=\"$61\"",
+      "  :error-message=\"$7errors.fieldName\"",
+      "  :field-has-error=\"!!$7errors.fieldName\"",
+      ">",
+      "  <template #left>\\u2212</template>",
+      "  <template #right>+</template>",
+      "</InputNumberDefault>"
+    ]
+  },
+  "SRCDEV InputNumber CSS Override": {
+    "description": "CSS override scaffold for InputNumberCore tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .input-number-wrapper {",
+      "    --input-number-surface: $2;",
+      "    --input-number-border: $3;",
+      "    --input-number-border-hover: $4;",
+      "    --input-number-border-focus: $5;",
+      "  }",
+      "}"
+    ]
+  }
+}

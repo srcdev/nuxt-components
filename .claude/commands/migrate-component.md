@@ -149,6 +149,15 @@ briefly) — don't skip silently.
     The mechanism stays available for consumers: a consumer app is free to define its own public
     token overrides using `light-dark()` inside its own CSS, since that's their own browser-support
     decision to make, not this library's default.
+12. **Add the component to the Migrated Fields Form story** — once the component reaches 5/5,
+    add one field for it to
+    `app/components/05.forms/patterns/stories/MigratedFieldsForm.stories.ts` (import the
+    component, add a field to the demo form, wire minimal state/error handling matching the
+    existing fields). This story is a living migration-progress tracker, not just a demo — its own
+    top-of-file comment lists which components are currently included and must be updated too
+    (add the new component to the list, bump the "As of `<date>`" note). Skip only if the
+    component's shape genuinely doesn't fit a form field (e.g. a non-form-input `05.forms` helper
+    component) — state why if you skip.
 
 ## 4. Wrap up
 
