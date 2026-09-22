@@ -66,11 +66,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const FormUiTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
+const modelValue = defineModel<string | number | readonly string[] | null | undefined>({
+  required: true,
 });
-
-const modelValue = defineModel<string | number | readonly string[] | null | undefined>();
 const isDirty = defineModel<boolean>("isDirty");
 const isActive = defineModel<boolean>("isActive");
 
@@ -86,31 +84,41 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 <style lang="css">
 @layer components {
 .input-textarea-wrapper {
-  background-color: var(--theme-input-surface);
-  padding-inline: var(--element-decorator-padding-inline);
+  /* Public --input-textarea-* tokens, inline-fallback to the shared --theme-* tokens (see
+     theming-component-token-pattern.md) — mirrors InputTextCore's token shape. --_border is
+     genuinely reused (both the .normal border and the .underlined border-bottom read it); the
+     hover/focus border colours are each used only once, so they're inlined directly rather than
+     wrapped in a private var (see the Public token pattern rule in CLAUDE.md's Styling
+     Methodology). */
+  --_border: var(--input-textarea-border, var(--theme-border));
+
+  background-color: var(--input-textarea-surface, var(--theme-input-surface));
+  padding-inline: var(--input-padding-inline);
   transition: all var(--theme-form-transition-duration) ease-in-out;
 
   z-index: 2;
   position: relative;
 
   &.normal {
-    border: var(--form-element-border-width) solid var(--theme-border);
+    border: var(--form-element-border-width) solid var(--_border);
     border-radius: var(--form-input-border-radius);
     outline: var(--form-element-outline-width) solid transparent;
 
     &:has(textarea:focus-visible) {
-      outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
+      outline: var(--form-element-outline-width-focus) solid
+        var(--input-textarea-border-focus, var(--theme-border-focus));
       outline-offset: var(--form-element-outline-offset-focus);
     }
 
     &:has(textarea:is(:hover)) {
-      outline: var(--form-element-outline-width-focus) solid var(--theme-border-focus);
+      outline: var(--form-element-outline-width-focus) solid
+        var(--input-textarea-border-hover, var(--theme-border-focus));
       outline-offset: var(--form-element-outline-offset-focus);
     }
   }
 
   &.underlined {
-    border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--theme-border);
+    border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--_border);
   }
 
   display: flex;
@@ -129,7 +137,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     flex-grow: 1;
     field-sizing: content;
 
-    color: var(--theme-input-text-color-normal);
+    color: var(--input-textarea-text-color, var(--theme-input-text-color-normal));
     font-family: var(--font-family);
     font-size: var(--input-font-size);
     line-height: var(--input-textarea-line-height);
@@ -139,11 +147,11 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     min-height: 6lh;
 
     &::placeholder {
-      color: var(--theme-input-placeholder);
-      font-size: var(--input-placeholder-font-size);
-      font-style: var(--input-placeholder-font-style);
-      line-height: var(--input-placeholder-line-height);
-      font-weight: var(--input-placeholder-font-weight);
+      color: var(--input-textarea-placeholder-color, var(--theme-input-placeholder));
+      font-size: var(--theme-input-placeholder-font-size);
+      font-style: italic;
+      line-height: 1;
+      font-weight: normal;
     }
   }
 }

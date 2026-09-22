@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import { computed } from "vue";
+import { computed, reactive } from "vue";
 import StorybookComponent from "../variants/InputTextareaWithLabel.vue";
 import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 

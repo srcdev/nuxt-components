@@ -42,7 +42,6 @@
         :maxlength
         :name
         :placeholder
-        :label
         :field-has-error
         :required
         :style-class-passthrough
@@ -106,24 +105,15 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const FormUiTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
-});
-
-// const id = `${props.name}-${useId()}`;
-// const errorId = `${id}-error-message`;
-// const ariaDescribedby = computed(() => {
-//   const ariaDescribedbyId = slots.descriptionText || slots.descriptionHtml ? `${id}-description` : undefined;
-//   return props.fieldHasError ? errorId : ariaDescribedbyId;
-// });
-
 const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   props.name,
   toRef(props, "fieldHasError"),
   slots
 );
 
-const modelValue = defineModel<string | number | readonly string[] | null | undefined>();
+const modelValue = defineModel<string | number | readonly string[] | null | undefined>({
+  required: true,
+});
 const isActive = ref<boolean>(false);
 const isDirty = ref<boolean>(false);
 

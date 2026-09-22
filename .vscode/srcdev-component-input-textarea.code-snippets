@@ -1,0 +1,40 @@
+{
+  "SRCDEV InputTextareaCore Basic": {
+    "description": "Basic InputTextareaCore native textarea (no label/error wrapper)",
+    "scope": "vue,html",
+    "body": [
+      "<InputTextareaCore",
+      "  id=\"$1fieldId\"",
+      "  name=\"$2fieldName\"",
+      "  v-model=\"$3fieldValue\"",
+      "  placeholder=\"$4Placeholder text\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputTextareaWithLabel Basic": {
+    "description": "InputTextareaWithLabel: labelled textarea with error/description support",
+    "scope": "vue,html",
+    "body": [
+      "<InputTextareaWithLabel",
+      "  v-model=\"$1fieldValue\"",
+      "  name=\"$2fieldName\"",
+      "  label=\"$3Field label\"",
+      "  placeholder=\"$4Placeholder text\"",
+      "  :error-message=\"$5errors.fieldName\"",
+      "  :field-has-error=\"!!$5errors.fieldName\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputTextarea CSS Override": {
+    "description": "CSS override scaffold for InputTextareaCore tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .input-textarea-wrapper {",
+      "    --input-textarea-surface: $2;",
+      "    --input-textarea-border: $3;",
+      "  }",
+      "}"
+    ]
+  }
+}
