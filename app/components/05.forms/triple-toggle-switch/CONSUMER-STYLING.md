@@ -13,11 +13,11 @@ the shared `--theme-*` token every other themed component also falls back to. Se
 | `--triple-toggle-switch-border` | `var(--theme-border)` | Wrapper border colour |
 | `--triple-toggle-switch-ring-focus` | `var(--theme-ring)` | Wrapper outline colour on `:focus-visible` |
 | `--triple-toggle-switch-marker-surface` | `var(--theme-input-surface)` | Selected-option marker background, when none of the `system`/`light`/`dark` `:has()` overrides below match |
-| `--triple-toggle-switch-marker-border` | `light-dark(var(--slate-10), var(--slate-00))` | Selected-option marker border colour |
-| `--triple-toggle-switch-option-border` | `light-dark(#00000025, #ffffff50)` | Each option's resting border colour |
-| `--triple-toggle-switch-option-border-hover` | `light-dark(var(--slate-10), var(--slate-00))` | Each option's outline colour on hover |
+| `--triple-toggle-switch-marker-border` | `var(--slate-10)` | Selected-option marker border colour |
+| `--triple-toggle-switch-option-border` | `#00000025` | Each option's resting border colour |
+| `--triple-toggle-switch-option-border-hover` | `var(--slate-10)` | Each option's outline colour on hover |
 | `--triple-toggle-switch-option-ring-focus` | `var(--theme-ring)` | Each option's outline colour on `:focus-visible` |
-| `--triple-toggle-switch-option-icon-color` | `light-dark(var(--slate-10), var(--slate-03))` | Option icon colour, resting (shared by the `.system`/`.light`/`.dark` selectors — see note) |
+| `--triple-toggle-switch-option-icon-color` | `var(--slate-10)` | Option icon colour, resting (shared by the `.system`/`.light`/`.dark` selectors — see note) |
 | `--triple-toggle-switch-option-icon-color-active` | `var(--slate-00)` | Option icon colour, selected |
 
 > **Two bugs fixed in this migration**:

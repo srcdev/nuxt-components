@@ -53,11 +53,11 @@ Same shape, falls back to the inverted-surface slots instead:
 
 ### Tertiary
 
-Same shape again; resting surface is transparent by default in dark mode (see note below):
+Same shape again:
 
 | Token | Falls back to |
 |---|---|
-| `--input-button-tertiary-surface` | `light-dark(var(--slate-01), transparent)` |
+| `--input-button-tertiary-surface` | `var(--slate-01)` |
 | `--input-button-tertiary-text` | `var(--theme-text)` |
 | `--input-button-tertiary-border` | the resolved surface above (flat) |
 | `--input-button-tertiary-ring` / `-ring-hover` | `transparent` |
@@ -65,11 +65,6 @@ Same shape again; resting surface is transparent by default in dark mode (see no
 | `--input-button-tertiary-border-hover` | the resolved hover surface above |
 | `--input-button-tertiary-border-focus` | `var(--theme-border-focus)` |
 | `--input-button-tertiary-ring-focus` | `var(--theme-ring)` |
-
-> `--input-button-tertiary-surface`'s dark-mode default is literal `transparent`. `color-mix()`
-> still produces a correct darker hover from that — mixing `transparent` with `black` lowers the
-> alpha channel rather than the lightness, so hover reads as a faint dark tint over whatever's
-> behind the button, not a flat fill swap.
 
 `.is-pending` always dims the *primary* surface regardless of variant — a pre-existing quirk, not
 something this token set changes.

@@ -193,7 +193,7 @@ onMounted(() => {
         background-color: var(--_select-scheme-group-background-color);
         background-image: var(--_select-scheme-group-background-image);
         border: var(--form-element-border-width) solid
-          var(--triple-toggle-switch-marker-border, light-dark(var(--slate-10), var(--slate-00)));
+          var(--triple-toggle-switch-marker-border, var(--slate-10));
 
         border-radius: 50%;
 
@@ -227,7 +227,7 @@ onMounted(() => {
         place-content: center;
         background: transparent;
         border: var(--form-element-border-width) solid
-          var(--triple-toggle-switch-option-border, light-dark(#00000025, #ffffff50));
+          var(--triple-toggle-switch-option-border, #00000025);
         outline: var(--form-element-outline-width) solid transparent;
         border-radius: 50%;
         padding: var(--_select-scheme-group-padding);
@@ -237,7 +237,7 @@ onMounted(() => {
 
         &:has(.option-icon:hover) {
           outline: var(--form-element-outline-width) solid
-            var(--triple-toggle-switch-option-border-hover, light-dark(var(--slate-10), var(--slate-00)));
+            var(--triple-toggle-switch-option-border-hover, var(--slate-10));
         }
         &:has(input:focus-visible) {
           outline: var(--form-element-outline-width) solid var(--triple-toggle-switch-option-ring-focus, var(--theme-ring));
@@ -257,7 +257,7 @@ onMounted(() => {
           font-size: var(--_scheme-icon-font-size);
 
           &.system {
-            color: var(--triple-toggle-switch-option-icon-color, light-dark(var(--slate-10), var(--slate-03)));
+            color: var(--triple-toggle-switch-option-icon-color, var(--slate-10));
 
             &.active {
               color: var(--triple-toggle-switch-option-icon-color-active, var(--slate-00));
@@ -265,7 +265,7 @@ onMounted(() => {
           }
 
           &.light {
-            color: var(--triple-toggle-switch-option-icon-color, light-dark(var(--slate-10), var(--slate-03)));
+            color: var(--triple-toggle-switch-option-icon-color, var(--slate-10));
 
             &.active {
               color: var(--triple-toggle-switch-option-icon-color-active, var(--slate-00));
@@ -273,7 +273,7 @@ onMounted(() => {
           }
 
           &.dark {
-            color: var(--triple-toggle-switch-option-icon-color, light-dark(var(--slate-10), var(--slate-03)));
+            color: var(--triple-toggle-switch-option-icon-color, var(--slate-10));
 
             &.active {
               color: var(--triple-toggle-switch-option-icon-color-active, var(--slate-00));

@@ -196,11 +196,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     }
 
     &.tertiary {
-      /* --_surface can resolve to literal transparent (dark mode default) — color-mix() still
-         darkens correctly here: mixing transparent with black lowers the alpha channel rather
-         than the lightness, so it reads as a faint dark tint over whatever's behind the button
-         instead of a flat fill. Same formula, no special-casing needed. */
-      --_surface: var(--input-button-tertiary-surface, light-dark(var(--slate-01), transparent));
+      --_surface: var(--input-button-tertiary-surface, var(--slate-01));
       --_surface-hover: var(
         --input-button-tertiary-surface-hover,
         color-mix(in oklab, var(--_surface) 85%, black)

@@ -140,6 +140,15 @@ briefly) — don't skip silently.
     existing English text as its default, so a consumer can pass translated strings from their own
     i18n solution. Icon-only controls should also get an icon-override prop or slot (see
     `playIcon`/`pauseIcon`/`toggle-icon`) alongside the label prop, not just the label.
+11. **No `light-dark()` CSS function in the component's own values** — grep the `<style>` block
+    (and any `v-bind()`-fed script constants) for `light-dark(`. Older iPads/Safari versions don't
+    support it, so this library's own default values must never rely on it — use the existing
+    `--theme-*` token convention (pitfall #14) where one already fits. Where none fits and you're
+    replacing a literal `light-dark(light-value, dark-value)` call directly, keep the **light**
+    value only — don't invent a dark-mode fallback scheme, and don't ask which of the two to keep.
+    The mechanism stays available for consumers: a consumer app is free to define its own public
+    token overrides using `light-dark()` inside its own CSS, since that's their own browser-support
+    decision to make, not this library's default.
 
 ## 4. Wrap up
 

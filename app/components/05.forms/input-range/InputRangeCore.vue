@@ -103,12 +103,12 @@ const modelValue = defineModel<number>({
         z-index: 2;
 
         .marker {
-          background-color: var(--input-range-marker-background-colour, light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%)));
+          background-color: var(--input-range-marker-background-colour, hsl(0, 29%, 3%));
           padding: var(--input-range-marker-padding, 0.5rem);
           border-radius: var(--input-range-marker-border-radius, 50%);
           overflow: hidden;
           outline: var(--input-range-marker-outline-width, 0.1rem) solid
-            var(--input-range-marker-outline-colour, light-dark(var(--slate-04), var(--slate-06)));
+            var(--input-range-marker-outline-colour, var(--slate-04));
 
           &:hover {
             cursor: pointer;

@@ -78,7 +78,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         :text-content="[{ text: 'Migrated fields', styleClass: 'normal' }]"
         :style-class-passthrough="['mbe-20']"
       />
-      <p style="margin: 0 0 2rem 0; color: light-dark(#475569, #94a3b8); font-size: 1.4rem;">
+      <p style="margin: 0 0 2rem 0; color: #475569; font-size: 1.4rem;">
         One field per 05.forms component that's fully migrated (5/5 on the Component Ledger).
         Click Continue with an empty name or a budget under £100 to see the error states.
       </p>
@@ -123,7 +123,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       </form>
 
       <div
-        style="margin-top: 2rem; padding: 1.6rem; border-radius: 0.8rem; background: light-dark(#f8fafc, #1e293b); font-family: monospace; font-size: 1.3rem;"
+        style="margin-top: 2rem; padding: 1.6rem; border-radius: 0.8rem; background: #f8fafc; font-family: monospace; font-size: 1.3rem;"
       >
         <div>fullName: {{ state.fullName || '""' }}</div>
         <div>budget: £{{ state.budget }}</div>

@@ -5,11 +5,11 @@
 | Token | Default | Controls |
 |---|---|---|
 | `--input-range-accent-colour` | `var(--theme-accent)` | Native `accent-color` of the range input (track/thumb tint) |
-| `--input-range-marker-background-colour` | `light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%))` | Background colour of each `markers` slot dot |
+| `--input-range-marker-background-colour` | `hsl(0, 29%, 3%)` | Background colour of each `markers` slot dot |
 | `--input-range-marker-padding` | `0.5rem` | Padding of each marker dot |
 | `--input-range-marker-border-radius` | `50%` | Corner radius of each marker dot |
 | `--input-range-marker-outline-width` | `0.1rem` | Marker dot outline width |
-| `--input-range-marker-outline-colour` | `light-dark(var(--slate-04), var(--slate-06))` | Marker dot outline colour |
+| `--input-range-marker-outline-colour` | `var(--slate-04)` | Marker dot outline colour |
 | `--input-range-marker-icon-size` | `2rem` | Font size of the marker icon (`.marker-icon`) |
 | `--input-range-marker-icon-colour` | `var(--input-range-accent-colour, var(--theme-accent))` | Marker icon colour |
 | `--input-range-datalist-font-size` | `1.4rem` | Font size of the `datalist` slot's option labels |
