@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
 import StorybookComponent from "../InputSelectCore.vue";
-import type { IFormMultipleOptions } from "~/types/forms/types.forms.d";
+import type { IFormMultipleOptions, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputSelectCoreStoryArgs {
   id: string;
@@ -9,7 +9,7 @@ interface InputSelectCoreStoryArgs {
   placeholder: string;
   required: boolean;
   fieldHasError: boolean;
-  inputVariant: "normal" | "outlined" | "underlined";
+  inputVariant: InputUiVariant;
 }
 
 export default {

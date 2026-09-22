@@ -9,12 +9,16 @@
       :id
       v-model="modelValue"
       :aria-invalid="fieldHasError ? 'true' : undefined"
-      class="input-select-core"
+      :class="['input-select-core', elementClasses]"
       :name
       :title
+      :required
       :aria-describedby="ariaDescribedby"
+      @focusin="isActive = true"
+      @focusout="isActive = false"
+      @change="isDirty = true"
     >
-      <option v-if="placeholder" value="" readonly :selected="!modelValue" class="input-select-core-option placeholder">
+      <option v-if="placeholder" value="" disabled :selected="!modelValue" class="input-select-core-option placeholder">
         {{ placeholder }}
       </option>
       <option
@@ -38,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import type { IFormMultipleOptions } from "~/types/forms/types.forms";
+import type { IFormMultipleOptions, FormUiTheme, InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   id: string;
@@ -48,12 +52,12 @@ interface Props {
   required?: boolean;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
-  theme?: "default" | "success" | "error" | "warning";
-  inputVariant?: "normal" | "outlined" | "underlined";
+  theme?: FormUiTheme;
+  inputVariant?: InputUiVariant;
   ariaDescribedby?: string;
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   placeholder: "",
   title: "Please select an option",
   required: false,
@@ -67,7 +71,9 @@ withDefaults(defineProps<Props>(), {
 const modelValue = defineModel<string | number | readonly number[]>({ required: true });
 const isDirty = defineModel<boolean>("isDirty");
 const isActive = defineModel<boolean>("isActive");
-const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
+const fieldData = defineModel<IFormMultipleOptions>("fieldData", { required: true });
+
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">
@@ -75,22 +81,18 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 .input-select-wrapper {
   /* Public --input-select-* tokens, inline-fallback to the shared --theme-* tokens (see
      theming-component-token-pattern.md) — overriding one here doesn't touch every other themed
-     input/control that also reads --theme-input-surface/--theme-border. --_surface etc. are
-     private locals purely so the rest of this rule can reuse the resolved value without
-     repeating the fallback chain at every property — they are not themselves an override point,
-     see CONSUMER-STYLING.md. --_outline-color stays private/computed: it's always just an alias
-     for --_border-focus with no independent meaning of its own. */
-  --_surface: var(--input-select-surface, var(--theme-input-surface));
-  --_surface-hover: var(--input-select-surface-hover, var(--theme-input-surface-hover));
+     input/control that also reads --theme-input-surface/--theme-border. --_border is the one
+     genuinely reused value (border, underlined border-bottom, open-picker border); the rest of
+     this component's tokens are used at exactly one point each, so they're inlined directly
+     rather than wrapped in a private var with no composition or state-swap behind it (see
+     pitfall #20 in CLAUDE.md). */
   --_border: var(--input-select-border, var(--theme-border));
   /* Split so hover (mouse) and :focus-visible (keyboard/assistive) can diverge — both default to
      the same --theme-border-focus today, identical appearance to before this token existed, but
      each now has its own override point. */
-  --_border-hover: var(--input-select-border-hover, var(--theme-border-focus));
   --_border-focus: var(--input-select-border-focus, var(--theme-border-focus));
-  --_outline-color: var(--_border-focus);
 
-  background-color: var(--_surface);
+  background-color: var(--input-select-surface, var(--theme-input-surface));
   overflow: hidden;
 
   z-index: 2;
@@ -105,11 +107,11 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
   &.underlined {
     border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--_border);
-    background-color: var(--_surface);
   }
 
   &:has(:hover) {
-    outline: var(--form-element-outline-width-focus) solid var(--_border-hover);
+    outline: var(--form-element-outline-width-focus) solid
+      var(--input-select-border-hover, var(--theme-border-focus));
     outline-offset: var(--form-element-outline-offset-focus);
   }
 
@@ -123,15 +125,6 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
     background-color: transparent;
     display: flex;
     align-items: center;
-
-    /* For legacy support - eg, Safari */
-    /* &::after {
-      content: '';
-      width: 0.8em;
-      height: 0.5em;
-      background-color: var(--_border);
-      clip-path: polygon(100% 0%, 0 0%, 50% 100%);
-    } */
 
     /* Start modern Select CSS */
     &,
@@ -153,7 +146,7 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
     &:open::picker(select) {
       opacity: 1;
       border: var(--form-element-border-width) solid var(--_border);
-      outline: var(--form-element-outline-width) solid var(--_outline-color);
+      outline: var(--form-element-outline-width) solid var(--_border-focus);
 
       @starting-style {
         opacity: 0;
@@ -180,7 +173,7 @@ const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
       transition: all var(--theme-form-transition-duration) ease-in-out;
 
       &:hover {
-        background-color: var(--_surface-hover);
+        background-color: var(--input-select-surface-hover, var(--theme-input-surface-hover));
       }
 
       .input-select-core-option-decorator-icon {

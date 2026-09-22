@@ -117,5 +117,5 @@ const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
 const modelValue = defineModel<string | number | readonly number[]>({ required: true });
 const isDirty = defineModel<boolean>("isDirty");
 const isActive = defineModel<boolean>("isActive");
-const fieldData = defineModel<IFormMultipleOptions>("fieldData");
+const fieldData = defineModel<IFormMultipleOptions>("fieldData", { required: true });
 </script>
