@@ -13,6 +13,7 @@ interface StoryArgs {
   showLabel?: boolean;
   showChevron?: boolean;
   multiple?: boolean;
+  showSelectionInTrigger?: boolean;
   modelValue?: string | number | (string | number)[];
   styleClassPassthrough?: string | string[];
 }
@@ -49,6 +50,11 @@ const meta: Meta<StoryArgs> = {
     multiple: {
       control: { type: "boolean" },
       description: "Allow selecting more than one option. Each option gets a checkbox indicator and v-model becomes an array. Selecting an option leaves the popover open.",
+      table: { category: "Content" },
+    },
+    showSelectionInTrigger: {
+      control: { type: "boolean" },
+      description: "In multiple mode, update the trigger text to a comma-separated list of the currently checked options instead of leaving it fixed on placeholder/label. No effect outside multiple mode.",
       table: { category: "Content" },
     },
     styleClassPassthrough: {
@@ -270,6 +276,37 @@ export const MultiSelect: Story = {
     components: { SelectMenu },
     setup() {
       const value = ref<string[]>([]);
+      return { args, value, treatmentOptions };
+    },
+    template: `
+      <div style="padding: 4rem 8rem;">
+        <SelectMenu v-bind="args" v-model="value" :options="treatmentOptions" />
+        <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
+          modelValue: <strong>{{ value.length ? value.join(', ') : '[]' }}</strong>
+        </p>
+      </div>
+    `,
+  }),
+};
+
+/**
+ * Multi-select with the trigger showing the current selection —
+ * `showSelectionInTrigger` opts out of the static-label default, so the
+ * trigger updates to a comma-joined list of checked options as they're
+ * toggled, falling back to `label`/`placeholder` when nothing is checked.
+ */
+export const MultiSelectShowingSelection: Story = {
+  name: "Multi-Select — Trigger Shows Selection",
+  args: {
+    label: "Services required",
+    showIcon: false,
+    multiple: true,
+    showSelectionInTrigger: true,
+  },
+  render: (args) => ({
+    components: { SelectMenu },
+    setup() {
+      const value = ref<string[]>(["layers", "restyle"]);
       return { args, value, treatmentOptions };
     },
     template: `

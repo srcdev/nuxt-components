@@ -412,6 +412,26 @@ describe("SelectMenu", () => {
       expect(wrapper.find(".select-menu-trigger-label").text()).toBe("Select languages");
     });
 
+    it("shows a comma-joined selection list in the trigger when showSelectionInTrigger is true", async () => {
+      wrapper = await createWrapper({
+        multiple: true,
+        modelValue: ["en", "de"],
+        label: "Services required",
+        showSelectionInTrigger: true,
+      });
+      expect(wrapper.find(".select-menu-trigger-label").text()).toBe("English, Deutsch");
+    });
+
+    it("falls back to label/placeholder when showSelectionInTrigger is true but nothing is selected", async () => {
+      wrapper = await createWrapper({
+        multiple: true,
+        modelValue: [],
+        label: "Services required",
+        showSelectionInTrigger: true,
+      });
+      expect(wrapper.find(".select-menu-trigger-label").text()).toBe("Services required");
+    });
+
     it("does not render a trigger icon in multiple mode", async () => {
       wrapper = await createWrapper({ multiple: true, modelValue: ["en"] });
       expect(wrapper.find(".select-menu-trigger-icon").exists()).toBe(false);

@@ -28,6 +28,7 @@ open between picks.
 | `showLabel` | `boolean` | `true` | Show the selected option's label (or placeholder/label fallback) text in the trigger. Set `false` for an icon-only compact trigger. |
 | `showChevron` | `boolean` | `true` | Show the trailing chevron in the trigger. |
 | `multiple` | `boolean` | `false` | Allow selecting more than one option. Each option gets a checkbox indicator, `v-model` becomes an array, and picking an option leaves the popover open so more can be toggled. Trigger icon is not shown when `true` (no single option to represent). |
+| `showSelectionInTrigger` | `boolean` | `false` | Multiple mode only. When `true`, the trigger text updates to a comma-separated list of the currently checked options instead of staying fixed on `placeholder`/`label`. No effect outside `multiple`. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the root `<div>`. |
 
 **v-model**
@@ -109,10 +110,24 @@ const treatmentOptions = [
 </template>
 ```
 
-Unlike single-select, the trigger text stays fixed on `placeholder`/`label` as a static category
-tag regardless of the current selection — it never updates to list checked options, so
+Unlike single-select, the trigger text stays fixed by default on `placeholder`/`label` as a static
+category tag regardless of the current selection — it doesn't update to list checked options, so
 `label="Services required"` remains visible in the trigger the whole time. Use the checkboxes
 inside the open popover to see what's currently selected.
+
+Set `showSelectionInTrigger` to opt out of that and have the trigger update instead:
+
+```vue
+<SelectMenu
+  v-model="treatments"
+  :options="treatmentOptions"
+  label="Services required"
+  multiple
+  show-selection-in-trigger
+/>
+<!-- Trigger reads e.g. "Layers, Restyle" once those two are checked, falling back to
+     "Services required" again if everything is unchecked. -->
+```
 
 ---
 

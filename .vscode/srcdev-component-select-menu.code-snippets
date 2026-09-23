@@ -47,5 +47,19 @@
       "  multiple",
       "/>"
     ]
+  },
+  "SRCDEV SelectMenu Multi-Select Showing Selection": {
+    "description": "SelectMenu — multi-select where the trigger updates to list checked options",
+    "scope": "vue,html",
+    "body": [
+      "<SelectMenu",
+      "  v-model=\"${1:selectedValues}\"",
+      "  :options=\"${2:options}\"",
+      "  label=\"${3:Services required}\"",
+      "  :show-icon=\"false\"",
+      "  multiple",
+      "  show-selection-in-trigger",
+      "/>"
+    ]
   }
 }

@@ -119,9 +119,10 @@ option shows a checkmark, and picking one closes the popover.
 Set `multiple` for a checkbox-per-option multi-select instead: `v-model` becomes
 `(string | number)[]`, every option shows a checkbox (checked/unchecked), and picking an option
 toggles it in the array without closing the popover — so several can be picked in one open/close
-cycle. The trigger text stays fixed on `placeholder`/`label` as a static category tag (e.g.
-`"Services required"`) regardless of how many options are checked — it does not update to list the
-current selection, since a comma-joined list of checked options would grow unpredictably long. The
+cycle. By default the trigger text stays fixed on `placeholder`/`label` as a static category tag
+(e.g. `"Services required"`) regardless of how many options are checked, since a comma-joined list
+of checked options would grow unpredictably long. Set `showSelectionInTrigger` to opt into that
+comma-joined list instead (falling back to `placeholder`/`label` when nothing is checked). The
 trigger icon is not shown in multi-select mode (`showIcon` has no effect), since there's no single
 selected option to represent.
 
@@ -138,6 +139,15 @@ const treatmentOptions = [
 
 <template>
   <SelectMenu v-model="treatments" :options="treatmentOptions" label="Services required" multiple />
+
+  <!-- Trigger updates to "Layers, Restyle" etc. as options are checked -->
+  <SelectMenu
+    v-model="treatments"
+    :options="treatmentOptions"
+    label="Services required"
+    multiple
+    show-selection-in-trigger
+  />
 </template>
 ```
 

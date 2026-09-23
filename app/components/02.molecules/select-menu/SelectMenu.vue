@@ -77,6 +77,8 @@ interface Props {
   showChevron?: boolean;
   /** Allow selecting more than one option. Each option gets a checkbox indicator, and v-model becomes an array. Selecting an option leaves the popover open so more can be toggled. */
   multiple?: boolean;
+  /** In multiple mode, update the trigger text to a comma-separated list of the currently checked options instead of leaving it fixed on placeholder/label. No effect outside multiple mode. */
+  showSelectionInTrigger?: boolean;
   styleClassPassthrough?: string | string[];
 }
 
@@ -86,6 +88,7 @@ const props = withDefaults(defineProps<Props>(), {
   showLabel: true,
   showChevron: true,
   multiple: false,
+  showSelectionInTrigger: false,
   styleClassPassthrough: () => [],
 });
 
@@ -103,15 +106,22 @@ const selectedValues = computed(() => (props.multiple && Array.isArray(modelValu
 const selectedOption = computed(() =>
   props.multiple ? undefined : props.options.find((option) => option.value === modelValue.value)
 );
+const selectedOptions = computed(() => props.options.filter((option) => selectedValues.value.includes(option.value)));
 
 /**
- * In multi-select mode the trigger always shows `placeholder`/`label` as a
- * static category tag (e.g. "Services required") — it does not update to
- * reflect the current selection, since a comma-joined list of checked
- * options would grow unpredictably long and push on adjacent triggers.
+ * In multi-select mode the trigger shows `placeholder`/`label` as a static
+ * category tag (e.g. "Services required") by default — it does not update
+ * to reflect the current selection, since a comma-joined list of checked
+ * options would grow unpredictably long and push on adjacent triggers. Set
+ * `showSelectionInTrigger` to opt into the comma-joined list instead.
  */
 const triggerLabelText = computed(() => {
-  if (props.multiple) return props.placeholder ?? props.label;
+  if (props.multiple) {
+    if (props.showSelectionInTrigger && selectedOptions.value.length) {
+      return selectedOptions.value.map((option) => option.label).join(", ");
+    }
+    return props.placeholder ?? props.label;
+  }
   return selectedOption.value?.label ?? props.placeholder ?? props.label;
 });
 
