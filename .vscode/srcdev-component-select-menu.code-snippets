@@ -1,0 +1,38 @@
+{
+  "SRCDEV SelectMenu Basic": {
+    "description": "SelectMenu — v-model single-select popover listbox",
+    "scope": "vue,html",
+    "body": [
+      "<SelectMenu",
+      "  v-model=\"${1:selectedValue}\"",
+      "  :options=\"${2:options}\"",
+      "  label=\"${3:Choose an option}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV SelectMenu Icon Only": {
+    "description": "SelectMenu — icon-only compact trigger (e.g. language switcher)",
+    "scope": "vue,html",
+    "body": [
+      "<SelectMenu",
+      "  v-model=\"${1:language}\"",
+      "  :options=\"${2:languageOptions}\"",
+      "  label=\"${3:Language}\"",
+      "  :show-label=\"false\"",
+      "  :show-chevron=\"false\"",
+      "/>"
+    ]
+  },
+  "SRCDEV SelectMenu Category Filter": {
+    "description": "SelectMenu — text + chevron category filter, no per-option icons",
+    "scope": "vue,html",
+    "body": [
+      "<SelectMenu",
+      "  v-model=\"${1:filterValue}\"",
+      "  :options=\"${2:filterOptions}\"",
+      "  label=\"${3:Choose a service}\"",
+      "  :show-icon=\"false\"",
+      "/>"
+    ]
+  }
+}
