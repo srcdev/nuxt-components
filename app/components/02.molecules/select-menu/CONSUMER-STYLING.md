@@ -111,13 +111,46 @@ the three common shapes:
 
 ---
 
+## Single-select vs multi-select
+
+By default `SelectMenu` is single-select: `v-model` is `string | number | undefined`, the selected
+option shows a checkmark, and picking one closes the popover.
+
+Set `multiple` for a checkbox-per-option multi-select instead: `v-model` becomes
+`(string | number)[]`, every option shows a checkbox (checked/unchecked), and picking an option
+toggles it in the array without closing the popover — so several can be picked in one open/close
+cycle. The trigger text stays fixed on `placeholder`/`label` as a static category tag (e.g.
+`"Services required"`) regardless of how many options are checked — it does not update to list the
+current selection, since a comma-joined list of checked options would grow unpredictably long. The
+trigger icon is not shown in multi-select mode (`showIcon` has no effect), since there's no single
+selected option to represent.
+
+```vue
+<script setup lang="ts">
+const treatments = ref<string[]>([]);
+const treatmentOptions = [
+  { value: "trim", label: "Trim" },
+  { value: "layers", label: "Layers" },
+  { value: "restyle", label: "Restyle" },
+  { value: "straightening", label: "Straightening" },
+];
+</script>
+
+<template>
+  <SelectMenu v-model="treatments" :options="treatmentOptions" label="Services required" multiple />
+</template>
+```
+
+For several independent single-select filter categories (rather than one multi-select category),
+place multiple single-select `SelectMenu` instances side by side instead — see the "Filter Bar"
+story.
+
+---
+
 ## Notes
 
 - **Popover API + CSS anchor positioning** — same mechanism as `ActionMenu`. Broadly supported
   (Chrome 114+, Firefox 125+, Safari 17+). No polyfill is included.
-- **Single-select only** — `v-model` is `string | number | undefined`. For a filter bar with
-  several independent categories, place multiple `SelectMenu` instances side by side, each with
-  its own `v-model` and `options` — see the "Filter Bar" story.
 - **Popover left-aligns with the trigger** by default (`left: anchor(left)`), unlike `ActionMenu`
   which right-aligns — matches native `<select>` dropdown behaviour. Flips above the trigger near
   the bottom of the viewport (`position-try-fallbacks: flip-block`).

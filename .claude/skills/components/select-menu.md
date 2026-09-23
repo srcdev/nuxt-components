@@ -2,12 +2,14 @@
 
 ## Overview
 
-`SelectMenu` is a trigger-and-popover component for single-value selection from a list of
-options — a custom, fully token-styled alternative to a native `<select>` or `InputSelectCore`,
-built for non-form contexts (language switchers, category filters, faceted filter bars). It reuses
-the same Popover API + CSS anchor-positioning mechanism as `ActionMenu` (see that skill doc), but
-its items carry a `value`/`label`/optional `icon`, the selected option shows a checkmark, and the
-whole thing is driven by `v-model` instead of slotted actions.
+`SelectMenu` is a trigger-and-popover component for selecting from a list of options — a custom,
+fully token-styled alternative to a native `<select>` or `InputSelectCore`, built for non-form
+contexts (language switchers, category filters, faceted filter bars, multi-pick treatment lists).
+It reuses the same Popover API + CSS anchor-positioning mechanism as `ActionMenu` (see that skill
+doc), but its items carry a `value`/`label`/optional `icon`, and the whole thing is driven by
+`v-model` instead of slotted actions. Defaults to single-select (checkmark, closes on pick); set
+`multiple` for a checkbox-per-option multi-select where `v-model` is an array and the popover stays
+open between picks.
 
 **Location**: `app/components/02.molecules/select-menu/`
 
@@ -25,18 +27,21 @@ whole thing is driven by `v-model` instead of slotted actions.
 | `showIcon` | `boolean` | `true` | Show the selected option's icon in the trigger. |
 | `showLabel` | `boolean` | `true` | Show the selected option's label (or placeholder/label fallback) text in the trigger. Set `false` for an icon-only compact trigger. |
 | `showChevron` | `boolean` | `true` | Show the trailing chevron in the trigger. |
+| `multiple` | `boolean` | `false` | Allow selecting more than one option. Each option gets a checkbox indicator, `v-model` becomes an array, and picking an option leaves the popover open so more can be toggled. Trigger icon is not shown when `true` (no single option to represent). |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the root `<div>`. |
 
 **v-model**
 
-`defineModel<string | number | undefined>({ default: undefined })` — the selected option's
-`value`. `undefined` is a valid, expected state (renders the placeholder) — unlike
-`InputSelectCore`'s `modelValue`, which uses `{ required: true }` because a native form field
-genuinely can't be meaningfully empty, this model is optional by design, so `{ default: undefined }`
-is the right `vue/require-default-prop` fix here (it satisfies the rule without making the prop
-required — see that rule's `defineModel` gap noted in the repo's ledger `eslint_issues` docs).
-Single-select only; for a filter bar with several independent categories, place multiple
-`SelectMenu` instances side by side, each with its own `v-model`.
+`defineModel<string | number | (string | number)[] | undefined>({ default: undefined })` — the
+selected value(s). In single-select mode (default) it's the one selected option's `value`, or
+`undefined` if nothing is selected — a valid, expected state that renders the placeholder. With
+`multiple`, it's an array of selected values (`[]` when nothing is selected). `{ default: undefined }`
+is this repo's fix for the `vue/require-default-prop` false positive on `defineModel`-declared
+props that are legitimately optional — unlike `InputSelectCore`'s `modelValue`, which uses
+`{ required: true }` because a native form field genuinely can't be meaningfully empty, this model
+is optional by design (see that rule's `defineModel` gap noted in the repo's ledger `eslint_issues`
+docs). For several independent single-select categories, place multiple `SelectMenu` instances
+side by side rather than using `multiple` on one instance — see the "Filter bar" section below.
 
 **Type import**
 
@@ -80,6 +85,34 @@ When nothing is selected, the trigger shows `placeholder` (or `label` if no plac
 — this is what makes it work as a filter-category tag, e.g. a `SelectMenu` with
 `label="Choose a service"` and no `placeholder` shows "Choose a service" until an option is
 picked, then swaps to the selected option's label.
+
+---
+
+## Multi-select (checkboxes)
+
+Set `multiple` to turn every option into a checkbox row. `v-model` becomes an array, and clicking
+an option toggles it without closing the popover:
+
+```vue
+<script setup lang="ts">
+const treatments = ref<string[]>([]);
+const treatmentOptions = [
+  { value: "trim", label: "Trim" },
+  { value: "layers", label: "Layers" },
+  { value: "restyle", label: "Restyle" },
+  { value: "straightening", label: "Straightening" },
+];
+</script>
+
+<template>
+  <SelectMenu v-model="treatments" :options="treatmentOptions" label="Services required" multiple />
+</template>
+```
+
+Unlike single-select, the trigger text stays fixed on `placeholder`/`label` as a static category
+tag regardless of the current selection — it never updates to list checked options, so
+`label="Services required"` remains visible in the trigger the whole time. Use the checkboxes
+inside the open popover to see what's currently selected.
 
 ---
 
@@ -128,12 +161,14 @@ Quick reference:
   native `<select>` dropdown behaviour. Flips above the trigger near the bottom of the viewport.
 - **Keyboard navigation** follows the WAI-ARIA listbox pattern: `ArrowDown`/`ArrowUp` move between
   options (wraps around), `Home`/`End` jump to first/last, `Enter`/`Space` select the focused
-  option and close, `Tab` closes without stealing focus back to the trigger (matches `ActionMenu`'s
+  option, `Tab` closes without stealing focus back to the trigger (matches `ActionMenu`'s
   `handleKeydown` convention — see that skill doc's note on the `currentIndex === -1` guard, which
-  applies identically here).
-- **Opens focused on the current selection** — `handleToggle` focuses the selected `[role="option"]`
-  if one exists, otherwise the first option (unlike `ActionMenu`, which always focuses the first
-  item since it has no selection state).
+  applies identically here). `Enter`/`Space` close the popover in single-select mode but only
+  toggle the checkbox (leaving it open) when `multiple` is set.
+- **Opens focused on the current selection** — `handleToggle` focuses the first selected
+  `[role="option"]` if one exists (in `multiple` mode, the first checked item), otherwise the first
+  option (unlike `ActionMenu`, which always focuses the first item since it has no selection state).
+- **`aria-multiselectable="true"`** is set on the listbox only when `multiple` is `true`.
 - **Chevron rotation is pure CSS** via `:has(.select-menu-popover:popover-open)` on the root — no
   JS state drives the visual. `isOpen` is still tracked internally, but only to set `aria-expanded`
   on the trigger.

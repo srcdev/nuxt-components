@@ -12,7 +12,8 @@ interface StoryArgs {
   showIcon?: boolean;
   showLabel?: boolean;
   showChevron?: boolean;
-  modelValue?: string | number;
+  multiple?: boolean;
+  modelValue?: string | number | (string | number)[];
   styleClassPassthrough?: string | string[];
 }
 
@@ -45,6 +46,11 @@ const meta: Meta<StoryArgs> = {
       description: "Show the trailing chevron in the trigger.",
       table: { category: "Trigger content" },
     },
+    multiple: {
+      control: { type: "boolean" },
+      description: "Allow selecting more than one option. Each option gets a checkbox indicator and v-model becomes an array. Selecting an option leaves the popover open.",
+      table: { category: "Content" },
+    },
     styleClassPassthrough: {
       table: { disable: true },
     },
@@ -60,12 +66,14 @@ const meta: Meta<StoryArgs> = {
       description: {
         component:
           "A custom listbox trigger + popover, built on the same Popover API / CSS anchor-positioning " +
-          "approach as `ActionMenu`, but for single-value selection rather than actions: options carry a " +
-          "value/label/icon, the selected option shows a checkmark, and `v-model` drives the current value. " +
-          "The trigger's content (icon, text, chevron) is independently togglable, so the same component " +
-          "covers an icon-only switcher, a text+chevron category filter, or a full icon+text+chevron select. " +
-          "Defaults to a look consistent with the library's other select-like inputs. " +
-          "Set shared CSS tokens globally — see `CONSUMER-STYLING.md` in the component folder.",
+          "approach as `ActionMenu`, but for value selection rather than actions: options carry a " +
+          "value/label/icon, and `v-model` drives the current selection. By default it's single-select " +
+          "(the selected option shows a checkmark, picking one closes the menu); set `multiple` for a " +
+          "checkbox-per-option multi-select where `v-model` becomes an array and the menu stays open " +
+          "between picks. The trigger's content (icon, text, chevron) is independently togglable, so the " +
+          "same component covers an icon-only switcher, a text+chevron category filter, or a full " +
+          "icon+text+chevron select. Defaults to a look consistent with the library's other select-like " +
+          "inputs. Set shared CSS tokens globally — see `CONSUMER-STYLING.md` in the component folder.",
       },
     },
   },
@@ -90,6 +98,13 @@ const serviceOptions: SelectMenuOption[] = [
   { value: "cut-and-finish", label: "Cut & Finish" },
 ];
 
+const treatmentOptions: SelectMenuOption[] = [
+  { value: "trim", label: "Trim" },
+  { value: "layers", label: "Layers" },
+  { value: "restyle", label: "Restyle" },
+  { value: "straightening", label: "Straightening" },
+];
+
 // ─── Stories ──────────────────────────────────────────────────────────────────
 
 /**
@@ -108,6 +123,9 @@ export const Default: Story = {
     template: `
       <div style="padding: 4rem 8rem;">
         <SelectMenu v-bind="args" v-model="value" :options="languageOptions" />
+        <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
+          modelValue: <strong>{{ value === undefined ? 'undefined' : value }}</strong>
+        </p>
       </div>
     `,
   }),
@@ -133,6 +151,9 @@ export const IconOnly: Story = {
     template: `
       <div style="padding: 4rem 8rem;">
         <SelectMenu v-bind="args" v-model="value" :options="languageOptions" />
+        <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
+          modelValue: <strong>{{ value === undefined ? 'undefined' : value }}</strong>
+        </p>
       </div>
     `,
   }),
@@ -159,6 +180,9 @@ export const IconWithChevron: Story = {
     template: `
       <div style="padding: 4rem 8rem;">
         <SelectMenu v-bind="args" v-model="value" :options="languageOptions" />
+        <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
+          modelValue: <strong>{{ value === undefined ? 'undefined' : value }}</strong>
+        </p>
       </div>
     `,
   }),
@@ -185,6 +209,9 @@ export const CategoryFilter: Story = {
     template: `
       <div style="padding: 4rem 8rem;">
         <SelectMenu v-bind="args" v-model="value" :options="serviceOptions" />
+        <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
+          modelValue: <strong>{{ value === undefined ? 'undefined' : value }}</strong>
+        </p>
       </div>
     `,
   }),
@@ -211,9 +238,46 @@ export const FilterBar: Story = {
       return { service, stylist, serviceOptions, stylistOptions };
     },
     template: `
-      <div style="padding: 4rem 8rem; display: flex; gap: 1.2rem; flex-wrap: wrap;">
-        <SelectMenu label="Choose a service" v-model="service" :options="serviceOptions" />
-        <SelectMenu label="Choose a stylist" v-model="stylist" :options="stylistOptions" />
+      <div style="padding: 4rem 8rem;">
+        <div style="display: flex; gap: 1.2rem; flex-wrap: wrap;">
+          <SelectMenu label="Choose a service" v-model="service" :options="serviceOptions" />
+          <SelectMenu label="Choose a stylist" v-model="stylist" :options="stylistOptions" />
+        </div>
+        <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
+          service: <strong>{{ service === undefined ? 'undefined' : service }}</strong>,
+          stylist: <strong>{{ stylist === undefined ? 'undefined' : stylist }}</strong>
+        </p>
+      </div>
+    `,
+  }),
+};
+
+/**
+ * Multi-select — `multiple` turns each option into a checkbox row and
+ * `v-model` becomes an array. Picking an option toggles it and leaves the
+ * popover open so more can be selected. The trigger text stays fixed on
+ * `label` (e.g. "Services required") as a static category tag regardless of
+ * how many options are checked — it does not update to list the selection.
+ */
+export const MultiSelect: Story = {
+  name: "Multi-Select — Checkboxes",
+  args: {
+    label: "Services required",
+    showIcon: false,
+    multiple: true,
+  },
+  render: (args) => ({
+    components: { SelectMenu },
+    setup() {
+      const value = ref<string[]>([]);
+      return { args, value, treatmentOptions };
+    },
+    template: `
+      <div style="padding: 4rem 8rem;">
+        <SelectMenu v-bind="args" v-model="value" :options="treatmentOptions" />
+        <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
+          modelValue: <strong>{{ value.length ? value.join(', ') : '[]' }}</strong>
+        </p>
       </div>
     `,
   }),
@@ -249,6 +313,9 @@ export const CustomTokens: Story = {
           }
         </style>
         <SelectMenu v-bind="args" v-model="value" :options="languageOptions" :style-class-passthrough="['dark-pill']" />
+        <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
+          modelValue: <strong>{{ value === undefined ? 'undefined' : value }}</strong>
+        </p>
       </div>
     `,
   }),

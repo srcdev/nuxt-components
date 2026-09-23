@@ -11,7 +11,7 @@
       :aria-expanded="isOpen"
     >
       <Icon
-        v-if="showIcon && selectedOption?.icon"
+        v-if="showIcon && !multiple && selectedOption?.icon"
         :name="selectedOption.icon"
         class="select-menu-trigger-icon"
         aria-hidden="true"
@@ -33,18 +33,23 @@
       @toggle="handleToggle"
       @keydown="handleKeydown"
     >
-      <ul class="select-menu-list" role="listbox" :aria-label="label">
+      <ul class="select-menu-list" role="listbox" :aria-label="label" :aria-multiselectable="multiple || undefined">
         <li
           v-for="option in options"
           :key="option.value"
           class="select-menu-list-item"
           role="option"
           tabindex="-1"
-          :aria-selected="option.value === modelValue"
+          :aria-selected="isSelected(option)"
           @click="selectOption(option)"
         >
           <span class="select-menu-item-check" aria-hidden="true">
-            <Icon v-if="option.value === modelValue" name="lucide:check" class="select-menu-item-check-icon" />
+            <Icon
+              v-if="multiple"
+              :name="isSelected(option) ? 'lucide:square-check' : 'lucide:square'"
+              class="select-menu-item-check-icon"
+            />
+            <Icon v-else-if="isSelected(option)" name="lucide:check" class="select-menu-item-check-icon" />
           </span>
           <Icon v-if="option.icon" :name="option.icon" class="select-menu-item-icon" aria-hidden="true" />
           <span class="select-menu-item-label">{{ option.label }}</span>
@@ -70,6 +75,8 @@ interface Props {
   showLabel?: boolean;
   /** Show the trailing chevron in the trigger. */
   showChevron?: boolean;
+  /** Allow selecting more than one option. Each option gets a checkbox indicator, and v-model becomes an array. Selecting an option leaves the popover open so more can be toggled. */
+  multiple?: boolean;
   styleClassPassthrough?: string | string[];
 }
 
@@ -78,10 +85,11 @@ const props = withDefaults(defineProps<Props>(), {
   showIcon: true,
   showLabel: true,
   showChevron: true,
+  multiple: false,
   styleClassPassthrough: () => [],
 });
 
-const modelValue = defineModel<string | number | undefined>({ default: undefined });
+const modelValue = defineModel<string | number | (string | number)[] | undefined>({ default: undefined });
 
 const id = useId();
 const menuId = `select-menu-${id}`;
@@ -91,14 +99,37 @@ const triggerRef = ref<HTMLButtonElement | null>(null);
 const popoverRef = ref<HTMLDivElement | null>(null);
 const isOpen = ref(false);
 
-const selectedOption = computed(() => props.options.find((option) => option.value === modelValue.value));
-const triggerLabelText = computed(() => selectedOption.value?.label ?? props.placeholder ?? props.label);
+const selectedValues = computed(() => (props.multiple && Array.isArray(modelValue.value) ? modelValue.value : []));
+const selectedOption = computed(() =>
+  props.multiple ? undefined : props.options.find((option) => option.value === modelValue.value)
+);
+
+/**
+ * In multi-select mode the trigger always shows `placeholder`/`label` as a
+ * static category tag (e.g. "Services required") — it does not update to
+ * reflect the current selection, since a comma-joined list of checked
+ * options would grow unpredictably long and push on adjacent triggers.
+ */
+const triggerLabelText = computed(() => {
+  if (props.multiple) return props.placeholder ?? props.label;
+  return selectedOption.value?.label ?? props.placeholder ?? props.label;
+});
+
+const isSelected = (option: SelectMenuOption): boolean =>
+  props.multiple ? selectedValues.value.includes(option.value) : option.value === modelValue.value;
 
 /** Returns all options in DOM order. */
 const getMenuItems = (): HTMLElement[] =>
   Array.from(popoverRef.value?.querySelectorAll<HTMLElement>('[role="option"]') ?? []);
 
 const selectOption = (option: SelectMenuOption) => {
+  if (props.multiple) {
+    const next = selectedValues.value.includes(option.value)
+      ? selectedValues.value.filter((value) => value !== option.value)
+      : [...selectedValues.value, option.value];
+    modelValue.value = next;
+    return;
+  }
   modelValue.value = option.value;
   popoverRef.value?.hidePopover();
   triggerRef.value?.focus();
@@ -119,7 +150,8 @@ const handleToggle = (event: Event) => {
  *
  * ArrowDown / ArrowUp  — move between options (wraps around).
  * Home / End           — jump to first / last option.
- * Enter / Space        — select the focused option and close.
+ * Enter / Space        — select the focused option. Closes the menu in single-select mode;
+ *                        toggles the checkbox and keeps the menu open in multi-select mode.
  * Tab                  — close the menu; let the browser Tab naturally.
  * Escape               — handled natively by the Popover API.
  */

@@ -34,5 +34,18 @@
       "  :show-icon=\"false\"",
       "/>"
     ]
+  },
+  "SRCDEV SelectMenu Multi-Select": {
+    "description": "SelectMenu — checkbox-per-option multi-select, v-model is an array",
+    "scope": "vue,html",
+    "body": [
+      "<SelectMenu",
+      "  v-model=\"${1:selectedValues}\"",
+      "  :options=\"${2:options}\"",
+      "  label=\"${3:Services required}\"",
+      "  :show-icon=\"false\"",
+      "  multiple",
+      "/>"
+    ]
   }
 }

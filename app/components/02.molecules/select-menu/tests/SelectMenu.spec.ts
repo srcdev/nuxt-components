@@ -344,6 +344,96 @@ describe("SelectMenu", () => {
   });
 
   // -------------------------
+  // Multiple selection
+  // -------------------------
+  describe("Multiple selection (multiple=true)", () => {
+    it("list has aria-multiselectable='true'", async () => {
+      wrapper = await createWrapper({ multiple: true });
+      expect(wrapper.find(".select-menu-list").attributes("aria-multiselectable")).toBe("true");
+    });
+
+    it("omits aria-multiselectable in single-select mode", async () => {
+      wrapper = await createWrapper();
+      expect(wrapper.find(".select-menu-list").attributes("aria-multiselectable")).toBeUndefined();
+    });
+
+    it("renders a checkbox icon for every option, checked or unchecked", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: ["fr"] });
+      const items = wrapper.findAll(".select-menu-list-item");
+      expect(items[0]!.find(".select-menu-item-check-icon").exists()).toBe(true);
+      expect(items[1]!.find(".select-menu-item-check-icon").exists()).toBe(true);
+    });
+
+    it("adds a value to the array on first click", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: [] });
+      await wrapper.findAll(".select-menu-list-item")[0]!.trigger("click");
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([["en"]]);
+    });
+
+    it("removes a value from the array when clicked again", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: ["en", "fr"] });
+      await wrapper.findAll(".select-menu-list-item")[0]!.trigger("click");
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([["fr"]]);
+    });
+
+    it("does not close the popover when an option is toggled", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: [] });
+      const popoverEl = wrapper.find(".select-menu-popover").element as HTMLElement;
+      const hidePopoverSpy = vi.spyOn(popoverEl, "hidePopover");
+      await wrapper.findAll(".select-menu-list-item")[0]!.trigger("click");
+      expect(hidePopoverSpy).not.toHaveBeenCalled();
+    });
+
+    it("marks each selected option with aria-selected='true'", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: ["en", "de"] });
+      const items = wrapper.findAll(".select-menu-list-item");
+      expect(items[0]!.attributes("aria-selected")).toBe("true");
+      expect(items[1]!.attributes("aria-selected")).toBe("false");
+      expect(items[2]!.attributes("aria-selected")).toBe("true");
+    });
+
+    it("keeps the static label as the trigger text once options are selected", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: ["en", "de"], label: "Services required" });
+      expect(wrapper.find(".select-menu-trigger-label").text()).toBe("Services required");
+    });
+
+    it("shows the label/placeholder as the trigger text when nothing is selected", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: [], label: "Services required" });
+      expect(wrapper.find(".select-menu-trigger-label").text()).toBe("Services required");
+    });
+
+    it("prefers placeholder over label as the static trigger text, regardless of selection", async () => {
+      wrapper = await createWrapper({
+        multiple: true,
+        modelValue: ["en"],
+        label: "Language",
+        placeholder: "Select languages",
+      });
+      expect(wrapper.find(".select-menu-trigger-label").text()).toBe("Select languages");
+    });
+
+    it("does not render a trigger icon in multiple mode", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: ["en"] });
+      expect(wrapper.find(".select-menu-trigger-icon").exists()).toBe(false);
+    });
+
+    it("Enter toggles the focused option without closing the popover", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: [] });
+      const vm = wrapper.vm as unknown as SelectMenuInstance;
+      const items = vm.getMenuItems();
+      const getter = vi.spyOn(document, "activeElement", "get").mockReturnValue(items[1]!);
+      const popoverEl = wrapper.find(".select-menu-popover").element as HTMLElement;
+      const hidePopoverSpy = vi.spyOn(popoverEl, "hidePopover");
+
+      vm.handleKeydown(Object.assign(new KeyboardEvent("keydown", { key: "Enter" }), { preventDefault: vi.fn() }));
+
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([["fr"]]);
+      expect(hidePopoverSpy).not.toHaveBeenCalled();
+      getter.mockRestore();
+    });
+  });
+
+  // -------------------------
   // styleClassPassthrough
   // -------------------------
   describe("styleClassPassthrough", () => {
