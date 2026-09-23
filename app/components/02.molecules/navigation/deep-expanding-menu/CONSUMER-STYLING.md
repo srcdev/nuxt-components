@@ -7,7 +7,7 @@
 | `--deep-expanding-menu-gap` | `2.4rem` | Gap between top-level items |
 | `--deep-expanding-menu-link-border-width` | `0.2rem` | Bottom border width on links and group toggles |
 | `--deep-expanding-menu-link-padding-block` | `0.8rem` | Vertical padding on links and group toggles |
-| `--deep-expanding-menu-link-border-colour-hover` | `light-dark(var(--blue-10), var(--slate-00))` | Bottom border colour on hover/focus |
+| `--deep-expanding-menu-link-border-colour-hover` | `var(--blue-10)` | Bottom border colour on hover/focus |
 | `--deep-expanding-menu-icon-size` | `1.2rem` | Caret icon size |
 | `--deep-expanding-menu-panel-width` | `min(100%, 50vw)` | Popover panel width |
 | `--deep-expanding-menu-panel-background-colour` | `white` | Popover panel background |

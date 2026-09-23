@@ -33,7 +33,7 @@ const logoSlots = logoData
   .map(
     (item) => `
     <template #${item.id}>
-      <div style="display: grid; place-items: center; width: 100%; height: 100%; background: light-dark(#eee, #333); font-weight: 600;">
+      <div style="display: grid; place-items: center; width: 100%; height: 100%; background: #eee; font-weight: 600;">
         ${item.content}
       </div>
     </template>`

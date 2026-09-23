@@ -9,8 +9,8 @@ CanvasSwitcher itself exposes the following public tokens:
 | `--canvas-switcher-gap` | `2rem` | Gap between the switcher's own children (currently just the list) |
 | `--canvas-switcher-item-gap` | `1rem` | Gap between each button in the list |
 | `--canvas-switcher-icon-size` | `2.4rem` | Width/height of each icon |
-| `--canvas-switcher-icon-colour` | `light-dark(var(--slate-10), var(--slate-02))` | Icon colour, resting state |
-| `--canvas-switcher-icon-colour-current` | `light-dark(var(--green-10), var(--green-04))` | Icon colour when that button's canvas is selected (`aria-pressed="true"`) |
+| `--canvas-switcher-icon-colour` | `var(--slate-10)` | Icon colour, resting state |
+| `--canvas-switcher-icon-colour-current` | `var(--green-10)` | Icon colour when that button's canvas is selected (`aria-pressed="true"`) |
 
 ## Class passthrough
 

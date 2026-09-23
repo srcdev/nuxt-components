@@ -259,7 +259,7 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         .carousel-flip-demo.carousel-flip .item-container {
           max-inline-size: 800px;
           margin-inline: auto;
-          outline: 1px solid light-dark(var(--slate-08, #666), var(--slate-01, #f5f5f5));
+          outline: 1px solid var(--slate-08, #666);
           padding-block: 6px;
           padding-inline: 6px;
         }
@@ -272,12 +272,12 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         }
 
         .carousel-flip-demo.carousel-flip .item {
-          background-color: light-dark(var(--slate-05, #e5e5e5), var(--slate-06, #999));
+          background-color: var(--slate-05, #e5e5e5);
           contain: layout style paint;
         }
 
         .carousel-flip-demo.carousel-flip .item:nth-child(odd) {
-          background-color: light-dark(var(--slate-06, #999), var(--slate-05, #e5e5e5));
+          background-color: var(--slate-06, #999);
         }
 
         .custom-carousel-item {
@@ -287,11 +287,11 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
           justify-content: center;
           aspect-ratio: 4 / 3;
           inline-size: 100%;
-          color: light-dark(#aaa, #333);
+          color: #aaa;
           padding-block: 10px;
           padding-inline: 10px;
           border-radius: 4px;
-          outline: 1px solid light-dark(#00000090, #ffffff90);
+          outline: 1px solid #00000090;
         }
 
         .carousel-flip-demo.carousel-flip .controls-container {
@@ -323,7 +323,7 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
           width: var(--marker-width);
           height: var(--marker-height);
           border-radius: var(--marker-border-radius);
-          background-color: light-dark(var(--slate-05, #e5e5e5), var(--slate-07, #666));
+          background-color: var(--slate-05, #e5e5e5);
           line-height: 3px;
           transition: all 0.3s linear;
           border: 1px solid transparent;
@@ -331,13 +331,13 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         }
 
         .carousel-flip-demo.carousel-flip .btn-marker.active {
-          background-color: light-dark(var(--slate-012, #000), var(--slate-000, #fff));
+          background-color: var(--slate-012, #000);
           will-change: background-color;
         }
 
         .carousel-flip-demo.carousel-flip .btn-marker:hover,
         .carousel-flip-demo.carousel-flip .btn-marker:focus-visible {
-          outline-color: light-dark(#000, #fff);
+          outline-color: #000;
           will-change: background-color, outline-color;
         }
       `;
@@ -354,13 +354,13 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
           Displaying {{ args.carouselDataIds.length }} carousel items with {{ args.transitionSpeed }}ms transition speed
         </p>
         <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
-          <div style="padding: 4px 8px; border: 1px solid light-dark(#ccc, #666); border-radius: 4px; font-size: 12px; color: light-dark(#333, #ddd);">
+          <div style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; color: #333;">
             Overflow: {{ args.allowCarouselOverflow ? 'Enabled' : 'Disabled' }}
           </div>
-          <div style="padding: 4px 8px; border: 1px solid light-dark(#ccc, #666); border-radius: 4px; font-size: 12px; color: light-dark(#333, #ddd);">
+          <div style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; color: #333;">
             Flip Animation: {{ args.useFlipAnimation ? 'Enabled' : 'Disabled' }}
           </div>
-          <div style="padding: 4px 8px; border: 1px solid light-dark(#ccc, #666); border-radius: 4px; font-size: 12px; color: light-dark(#333, #ddd);">
+          <div style="padding: 4px 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 12px; color: #333;">
             Spring Effect: {{ args.useSpringEffect ? 'Enabled' : 'Disabled' }}
           </div>
         </div>
@@ -513,7 +513,7 @@ const RichContentTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         .carousel-flip-demo.carousel-flip .item-container {
           max-inline-size: 800px;
           margin-inline: auto;
-          outline: 1px solid light-dark(var(--slate-08, #666), var(--slate-01, #f5f5f5));
+          outline: 1px solid var(--slate-08, #666);
           padding-block: 6px;
           padding-inline: 6px;
         }
@@ -526,12 +526,12 @@ const RichContentTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         }
 
         .carousel-flip-demo.carousel-flip .item {
-          background-color: light-dark(var(--slate-05, #e5e5e5), var(--slate-06, #999));
+          background-color: var(--slate-05, #e5e5e5);
           contain: layout style paint;
         }
 
         .carousel-flip-demo.carousel-flip .item:nth-child(odd) {
-          background-color: light-dark(var(--slate-06, #999), var(--slate-05, #e5e5e5));
+          background-color: var(--slate-06, #999);
         }
       `;
       document.head.appendChild(style);
@@ -682,16 +682,16 @@ const AnimationShowcaseTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
           Testing different animation combinations and timing
         </p>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 20px;">
-          <div style="padding: 8px; border: 1px solid light-dark(#ccc, #666); border-radius: 6px; text-align: center; font-size: 12px; color: light-dark(#333, #ddd); background: args.useFlipAnimation ? 'light-dark(#e7f5e7, #2d4a2d)' : 'transparent';">
+          <div style="padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 12px; color: #333; background: args.useFlipAnimation ? '#e7f5e7' : 'transparent';">
             Flip: {{ args.useFlipAnimation ? '✓' : '✗' }}
           </div>
-          <div style="padding: 8px; border: 1px solid light-dark(#ccc, #666); border-radius: 6px; text-align: center; font-size: 12px; color: light-dark(#333, #ddd); background: args.useSpringEffect ? 'light-dark(#e7f5e7, #2d4a2d)' : 'transparent';">
+          <div style="padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 12px; color: #333; background: args.useSpringEffect ? '#e7f5e7' : 'transparent';">
             Spring: {{ args.useSpringEffect ? '✓' : '✗' }}
           </div>
-          <div style="padding: 8px; border: 1px solid light-dark(#ccc, #666); border-radius: 6px; text-align: center; font-size: 12px; color: light-dark(#333, #ddd); background: args.allowCarouselOverflow ? 'light-dark(#e7f5e7, #2d4a2d)' : 'transparent';">
+          <div style="padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 12px; color: #333; background: args.allowCarouselOverflow ? '#e7f5e7' : 'transparent';">
             Overflow: {{ args.allowCarouselOverflow ? '✓' : '✗' }}
           </div>
-          <div style="padding: 8px; border: 1px solid light-dark(#ccc, #666); border-radius: 6px; text-align: center; font-size: 12px; color: light-dark(#333, #ddd);">
+          <div style="padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 12px; color: #333;">
             Speed: {{ args.transitionSpeed }}ms
           </div>
         </div>

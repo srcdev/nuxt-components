@@ -30,9 +30,9 @@ watch(
 <style lang="css">
 @layer components {
 .clipped-panel {
-  --_outline-colour: var(--clipped-panel-outline-colour, light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%)));
+  --_outline-colour: var(--clipped-panel-outline-colour, hsl(0, 29%, 3%));
 
-  background-color: var(--clipped-panel-background-colour, light-dark(hsl(0, 0%, 96%), hsl(0, 0%, 12%)));
+  background-color: var(--clipped-panel-background-colour, hsl(0, 0%, 96%));
   color: var(--_outline-colour);
   outline: var(--clipped-panel-outline-width, 1px) solid var(--_outline-colour);
 

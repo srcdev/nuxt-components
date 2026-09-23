@@ -78,10 +78,10 @@ watch(
   }
 
   .canvas-switcher-button.input-button-core {
-    color: var(--canvas-switcher-icon-colour, light-dark(var(--slate-10), var(--slate-02)));
+    color: var(--canvas-switcher-icon-colour, var(--slate-10));
 
     &[aria-pressed="true"] {
-      color: var(--canvas-switcher-icon-colour-current, light-dark(var(--green-10), var(--green-04)));
+      color: var(--canvas-switcher-icon-colour-current, var(--green-10));
     }
 
     .icon {

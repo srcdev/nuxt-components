@@ -53,10 +53,10 @@ watch(
       & > div {
         padding: var(--dashboard-quad-grid-padding, 2rem);
         outline: var(--dashboard-quad-grid-outline-width, 0.1rem) solid
-          var(--dashboard-quad-grid-outline-colour, light-dark(black, white));
+          var(--dashboard-quad-grid-outline-colour, black);
         outline-offset: var(--dashboard-quad-grid-outline-offset, 0);
         border: var(--dashboard-quad-grid-border-width, 0) solid
-          var(--dashboard-quad-grid-border-colour, light-dark(black, white));
+          var(--dashboard-quad-grid-border-colour, black);
         border-radius: var(--dashboard-quad-grid-border-radius, 0.5rem);
       }
 

@@ -10,10 +10,10 @@
 | `--carousel-flip-item-max-width` | `80rem` | Max width of a single item, before subtracting the edge-preview width |
 | `--carousel-flip-edge-preview-width` | `4rem` | How much of the neighbouring items peek in at each edge |
 | `--carousel-flip-marker-gap` | `1rem` | Gap between marker (dot) buttons |
-| `--carousel-flip-marker-active-colour` | `light-dark(var(--slate-10), var(--slate-00))` | Active marker background colour |
-| `--carousel-flip-button-background-colour` | `light-dark(white, var(--slate-08))` | Prev/next button background colour |
+| `--carousel-flip-marker-active-colour` | `var(--slate-10)` | Active marker background colour |
+| `--carousel-flip-button-background-colour` | `white` | Prev/next button background colour |
 | `--carousel-flip-button-border-width` | `0.1rem` | Prev/next button border width |
-| `--carousel-flip-button-border-colour` | `light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%))` | Prev/next button border colour |
+| `--carousel-flip-button-border-colour` | `hsl(0, 29%, 3%)` | Prev/next button border colour |
 | `--carousel-flip-button-border-radius` | `100vw` | Prev/next button corner radius |
 | `--carousel-flip-button-padding` | `0.8rem` | Prev/next button padding |
 | `--carousel-flip-button-icon-size` | `2.4rem` | Prev/next button icon glyph size |

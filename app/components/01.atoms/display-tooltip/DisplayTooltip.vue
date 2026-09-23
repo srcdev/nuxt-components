@@ -115,13 +115,13 @@ watch(
       width: var(--display-tooltip-popover-width, 30rem);
 
       outline: var(--display-tooltip-popover-outline-width, 0.1rem) solid
-        var(--display-tooltip-popover-outline-colour, light-dark(var(--slate-02), var(--slate-06)));
-      color: var(--display-tooltip-popover-text-colour, light-dark(var(--slate-09), var(--slate-01)));
-      background-color: var(--display-tooltip-popover-background-colour, light-dark(var(--slate-00), var(--slate-07)));
+        var(--display-tooltip-popover-outline-colour, var(--slate-02));
+      color: var(--display-tooltip-popover-text-colour, var(--slate-09));
+      background-color: var(--display-tooltip-popover-background-colour, var(--slate-00));
       border-radius: var(--display-tooltip-popover-border-radius, 0.8rem);
       box-shadow: var(
         --display-tooltip-popover-shadow,
-        light-dark(0 0.4rem 1.6rem rgba(0, 0, 0, 0.12), 0 0.4rem 1.6rem rgba(0, 0, 0, 0.5))
+        0 0.4rem 1.6rem rgba(0, 0, 0, 0.12)
       );
 
       position-anchor: var(--_anchor-name);
@@ -147,9 +147,9 @@ watch(
         .display-tooltip-close-button {
           all: unset;
           cursor: pointer;
-          color: var(--display-tooltip-close-button-colour, light-dark(var(--slate-09), var(--slate-01)));
+          color: var(--display-tooltip-close-button-colour, var(--slate-09));
           border: var(--display-tooltip-close-button-border-width, 0.1rem) solid
-            var(--display-tooltip-close-button-border-colour, light-dark(var(--slate-03), var(--slate-06)));
+            var(--display-tooltip-close-button-border-colour, var(--slate-03));
           outline: var(--display-tooltip-close-button-outline-width, 0.1rem) solid transparent;
 
           font-weight: 600;
@@ -160,11 +160,11 @@ watch(
             text-decoration: underline;
             border-color: var(
               --display-tooltip-close-button-border-colour-hover,
-              light-dark(var(--slate-06), var(--slate-03))
+              var(--slate-06)
             );
             outline-color: var(
               --display-tooltip-close-button-outline-colour-hover,
-              light-dark(var(--slate-06), var(--slate-03))
+              var(--slate-06)
             );
             outline-offset: 0.2rem;
           }

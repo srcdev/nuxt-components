@@ -7,7 +7,7 @@ consuming page's own stylesheet:
 
 | Token | Default | Description |
 |---|---|---|
-| `--container-glow-background` | `light-dark(white, hsl(246 44% 7%))` | Card background colour. |
+| `--container-glow-background` | `white` | Card background colour. |
 | `--container-glow-padding` | `2rem` | Card inner padding. |
 | `--container-glow-aspect-ratio` | `330 / 400` | Card aspect ratio. |
 | `--container-glow-border-radius` | `12px` | Card and glow-effect corner radius (shared by the card and every glow layer). |

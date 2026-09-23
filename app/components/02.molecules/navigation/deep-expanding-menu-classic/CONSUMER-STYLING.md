@@ -8,7 +8,7 @@
 | `--deep-expanding-menu-classic-item-gap` | `2.4rem` | Gap between top-level items |
 | `--deep-expanding-menu-classic-link-border-width` | `0.2rem` | Bottom border width on links and group toggles |
 | `--deep-expanding-menu-classic-link-padding-block` | `0.8rem` | Vertical padding on links and group toggles |
-| `--deep-expanding-menu-classic-link-border-colour-hover` | `light-dark(var(--blue-10), var(--slate-00))` | Bottom border colour on hover/focus |
+| `--deep-expanding-menu-classic-link-border-colour-hover` | `var(--blue-10)` | Bottom border colour on hover/focus |
 | `--deep-expanding-menu-classic-icon-size` | `1.2rem` | Caret icon size |
 | `--deep-expanding-menu-classic-panel-offset-top` | `4rem` | Panel offset from the toggle |
 | `--deep-expanding-menu-classic-panel-width` | `20rem` | Panel width below the `768px` breakpoint |

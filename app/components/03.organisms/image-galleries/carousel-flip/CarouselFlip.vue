@@ -521,7 +521,7 @@ onMounted(() => {
               transition: background-color v-bind(transitionSpeedStr) linear;
 
               &.active {
-                background-color: var(--carousel-flip-marker-active-colour, light-dark(var(--slate-10), var(--slate-00)));
+                background-color: var(--carousel-flip-marker-active-colour, var(--slate-10));
               }
 
               &:focus-visible {
@@ -558,9 +558,9 @@ onMounted(() => {
       cursor: pointer;
       height: fit-content;
 
-      background-color: var(--carousel-flip-button-background-colour, light-dark(white, var(--slate-08)));
+      background-color: var(--carousel-flip-button-background-colour, white);
       border: var(--carousel-flip-button-border-width, 0.1rem) solid
-        var(--carousel-flip-button-border-colour, light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%)));
+        var(--carousel-flip-button-border-colour, hsl(0, 29%, 3%));
       border-radius: var(--carousel-flip-button-border-radius, 100vw);
       padding: var(--carousel-flip-button-padding, 0.8rem);
 

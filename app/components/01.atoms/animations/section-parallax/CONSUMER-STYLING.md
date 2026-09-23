@@ -8,7 +8,7 @@
 | `--section-parallax-min-height-fixed` | `120vh` | Section height once the parallax effect is active — taller than the base height to give enough scroll travel to see the motion. |
 | `--section-parallax-background-position` | `center` | `background-position` of the image. |
 | `--section-parallax-background-size` | `cover` | `background-size` of the image. |
-| `--section-parallax-background-colour` | `light-dark(var(--slate-01), var(--slate-08))` | Fallback colour visible if the image fails to load or hasn't loaded yet. |
+| `--section-parallax-background-colour` | `var(--slate-01)` | Fallback colour visible if the image fails to load or hasn't loaded yet. |
 
 ```vue
 <SectionParallax

@@ -191,7 +191,7 @@ onBeforeUnmount(() => {
       position: relative;
 
       height: 100%;
-      background: var(--container-glow-background, light-dark(white, hsl(246 44% 7%)));
+      background: var(--container-glow-background, white);
       padding: var(--container-glow-padding, 2rem);
       aspect-ratio: var(--container-glow-aspect-ratio, 330 / 400);
       border-radius: var(--container-glow-border-radius, 12px);

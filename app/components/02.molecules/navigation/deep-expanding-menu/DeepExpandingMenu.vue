@@ -92,7 +92,7 @@ watch(
             cursor: pointer;
             border-color: var(
               --deep-expanding-menu-link-border-colour-hover,
-              light-dark(var(--blue-10), var(--slate-00))
+              var(--blue-10)
             );
           }
         }

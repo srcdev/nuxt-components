@@ -57,7 +57,7 @@ watch(
   .dashboard-stats-grid {
     .panel {
       border: var(--dashboard-stats-grid-border-width, 0.1rem) solid
-        var(--dashboard-stats-grid-border-colour, light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%)));
+        var(--dashboard-stats-grid-border-colour, hsl(0, 29%, 3%));
       border-radius: var(--dashboard-stats-grid-border-radius, 1.2rem);
       padding: var(--dashboard-stats-grid-panel-padding, 1.2rem);
       height: auto;

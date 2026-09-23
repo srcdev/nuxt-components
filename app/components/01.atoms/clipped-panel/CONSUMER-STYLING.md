@@ -4,8 +4,8 @@
 
 | Token | Default | Controls |
 |---|---|---|
-| `--clipped-panel-background-colour` | `light-dark(hsl(0, 0%, 96%), hsl(0, 0%, 12%))` | Panel background |
-| `--clipped-panel-outline-colour` | `light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%))` | Outline colour, and the panel's text/icon colour (`color`) |
+| `--clipped-panel-background-colour` | `hsl(0, 0%, 96%)` | Panel background |
+| `--clipped-panel-outline-colour` | `hsl(0, 29%, 3%)` | Outline colour, and the panel's text/icon colour (`color`) |
 | `--clipped-panel-outline-width` | `1px` | Outline width |
 
 ```css

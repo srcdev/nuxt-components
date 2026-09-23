@@ -282,7 +282,7 @@ const RuleDecorationsTemplate: StoryFn<DashboardQuadGridArgs> = (args) => ({
       "--dashboard-quad-grid-border-width: 0",
       "--dashboard-quad-grid-border-radius: 0",
       "--dashboard-quad-grid-rule-width: 0.2rem",
-      "--dashboard-quad-grid-rule-colour: light-dark(#cbd5e1, #475569)",
+      "--dashboard-quad-grid-rule-colour: #cbd5e1",
       "--dashboard-quad-grid-rule-inset: 0",
     ].join("; ");
 

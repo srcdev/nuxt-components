@@ -89,7 +89,7 @@ onMounted(() => {
             cursor: pointer;
             border-color: var(
               --deep-expanding-menu-classic-link-border-colour-hover,
-              light-dark(var(--blue-10), var(--slate-00))
+              var(--blue-10)
             );
           }
         }

@@ -291,7 +291,7 @@ onUnmounted(() => {
       flex-shrink: 0;
 
       border: var(--marquee-scroller-item-border-width, 1px) solid
-        var(--marquee-scroller-item-border-colour, light-dark(var(--slate-10), var(--slate-00)));
+        var(--marquee-scroller-item-border-colour, var(--slate-10));
       border-radius: var(--marquee-scroller-item-border-radius, 4px);
 
       &:hover {

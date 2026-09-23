@@ -11,7 +11,7 @@
 | `--marquee-scroller-item-hover-filter` | `grayscale(0)` | Filter applied to a single item when it is individually hovered (overrides the group filter for that item) |
 | `--marquee-scroller-item-transition-duration` | `0.5s` | Transition duration for the item hover filter change |
 | `--marquee-scroller-item-border-width` | `1px` | Item border width |
-| `--marquee-scroller-item-border-colour` | `light-dark(var(--slate-10), var(--slate-00))` | Item border colour |
+| `--marquee-scroller-item-border-colour` | `var(--slate-10)` | Item border colour |
 | `--marquee-scroller-item-border-radius` | `4px` | Item border radius |
 | `--marquee-scroller-control-offset` | `8px` | Distance of the pause/play button from the top and end edges |
 | `--marquee-scroller-control-background-colour` | `rgba(0, 0, 0, 0.7)` | Pause/play button background |

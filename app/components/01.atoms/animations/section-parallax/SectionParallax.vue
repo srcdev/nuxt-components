@@ -38,7 +38,7 @@ watch(
     background-size: var(--section-parallax-background-size, cover);
     position: relative;
 
-    background-color: var(--section-parallax-background-colour, light-dark(var(--slate-01), var(--slate-08)));
+    background-color: var(--section-parallax-background-colour, var(--slate-01));
     width: 100%;
 
     @media (hover: hover) and (pointer: fine) {

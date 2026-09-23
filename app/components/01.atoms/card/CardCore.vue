@@ -90,18 +90,18 @@ watch(
     }
 
     &.solid {
-      --_card-background-color: light-dark(var(--slate-00), var(--slate-10));
+      --_card-background-color: var(--slate-00);
       --_card-border: 0.2rem solid var(--slate-08);
     }
 
     &.subtle {
-      --_card-background-color: color-mix(in oklab, light-dark(var(--slate-01), var(--slate-08)) 50%, transparent);
+      --_card-background-color: color-mix(in oklab, var(--slate-01) 50%, transparent);
       --_card-border: 0.2rem solid var(--slate-08);
     }
 
     &.soft {
-      --_card-background-color: color-mix(in oklab, light-dark(var(--slate-01), var(--slate-08)) 20%, transparent);
-      --_card-box-shadow-color: color-mix(in oklab, light-dark(var(--slate-02), var(--slate-08)) 80%, transparent);
+      --_card-background-color: color-mix(in oklab, var(--slate-01) 20%, transparent);
+      --_card-box-shadow-color: color-mix(in oklab, var(--slate-02) 80%, transparent);
     }
 
     &.outline {

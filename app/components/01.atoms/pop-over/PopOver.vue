@@ -102,13 +102,13 @@ watch(
       margin: 0;
       inset: auto;
       border: var(--pop-over-border-width, 0.1rem) solid
-        var(--pop-over-border-colour, light-dark(var(--slate-02), var(--slate-06)));
+        var(--pop-over-border-colour, var(--slate-02));
       border-radius: var(--pop-over-border-radius, 0.8rem);
-      background-color: var(--pop-over-background-colour, light-dark(var(--slate-00), var(--slate-07)));
-      color: var(--pop-over-text-colour, light-dark(var(--slate-09), var(--slate-01)));
+      background-color: var(--pop-over-background-colour, var(--slate-00));
+      color: var(--pop-over-text-colour, var(--slate-09));
       box-shadow: var(
         --pop-over-shadow,
-        light-dark(0 0.4rem 1.6rem rgba(0, 0, 0, 0.12), 0 0.4rem 1.6rem rgba(0, 0, 0, 0.5))
+        0 0.4rem 1.6rem rgba(0, 0, 0, 0.12)
       );
       width: var(--pop-over-width, 30rem);
 
@@ -139,12 +139,12 @@ watch(
         width: var(--pop-over-close-button-size, 2.4rem);
         height: var(--pop-over-close-button-size, 2.4rem);
         border-radius: var(--pop-over-close-button-border-radius, 50%);
-        color: var(--pop-over-close-button-colour, light-dark(var(--slate-06), var(--slate-03)));
+        color: var(--pop-over-close-button-colour, var(--slate-06));
         outline: var(--pop-over-close-button-outline-width, 0.1rem) solid transparent;
 
         &:hover,
         &:focus-visible {
-          background-color: var(--pop-over-close-button-surface-hover, light-dark(var(--slate-01), var(--slate-06)));
+          background-color: var(--pop-over-close-button-surface-hover, var(--slate-01));
           outline-color: var(--pop-over-close-button-outline-colour-hover, var(--theme-ring));
           outline-offset: 0.1rem;
         }

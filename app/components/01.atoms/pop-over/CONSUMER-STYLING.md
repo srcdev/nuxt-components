@@ -9,21 +9,21 @@
 | `--pop-over-trigger-outline-colour-hover` | `var(--theme-ring)` | Trigger outline colour on focus-visible |
 | `--pop-over-width` | `30rem` | Popover panel width |
 | `--pop-over-border-width` | `0.1rem` | Popover panel border width |
-| `--pop-over-border-colour` | `light-dark(var(--slate-02), var(--slate-06))` | Popover panel border colour |
+| `--pop-over-border-colour` | `var(--slate-02)` | Popover panel border colour |
 | `--pop-over-border-radius` | `0.8rem` | Popover panel corner radius |
-| `--pop-over-background-colour` | `light-dark(var(--slate-00), var(--slate-07))` | Popover panel background |
-| `--pop-over-text-colour` | `light-dark(var(--slate-09), var(--slate-01))` | Popover panel text colour |
-| `--pop-over-shadow` | `light-dark(0 0.4rem 1.6rem rgba(0,0,0,.12), 0 0.4rem 1.6rem rgba(0,0,0,.5))` | Popover panel elevation shadow |
+| `--pop-over-background-colour` | `var(--slate-00)` | Popover panel background |
+| `--pop-over-text-colour` | `var(--slate-09)` | Popover panel text colour |
+| `--pop-over-shadow` | `0 0.4rem 1.6rem rgba(0,0,0,.12)` | Popover panel elevation shadow |
 | `--pop-over-transition-duration` | `200ms` | Open/close fade duration |
 | `--pop-over-content-padding` | `1.6rem` | Padding around the `content` slot |
 | `--pop-over-content-padding-block-start` | `3.2rem` | Extra top padding so content clears the close button |
 | `--pop-over-close-button-offset` | `0.8rem` | Distance of the close button from the panel's top/right edges |
 | `--pop-over-close-button-size` | `2.4rem` | Close button box width/height |
 | `--pop-over-close-button-border-radius` | `50%` | Close button corner radius |
-| `--pop-over-close-button-colour` | `light-dark(var(--slate-06), var(--slate-03))` | Close button icon colour |
+| `--pop-over-close-button-colour` | `var(--slate-06)` | Close button icon colour |
 | `--pop-over-close-button-icon-size` | `1.4rem` | Close button icon glyph size |
 | `--pop-over-close-button-outline-width` | `0.1rem` | Close button focus/hover outline width |
-| `--pop-over-close-button-surface-hover` | `light-dark(var(--slate-01), var(--slate-06))` | Close button background on hover/focus-visible |
+| `--pop-over-close-button-surface-hover` | `var(--slate-01)` | Close button background on hover/focus-visible |
 | `--pop-over-close-button-outline-colour-hover` | `var(--theme-ring)` | Close button outline colour on hover/focus-visible |
 
 ```css
