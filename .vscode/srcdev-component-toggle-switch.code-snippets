@@ -1,0 +1,49 @@
+{
+  "SRCDEV ToggleSwitchCore": {
+    "description": "ToggleSwitchCore — bare toggle switch (no label, use ToggleSwitchWithLabel for that)",
+    "scope": "vue,html",
+    "body": [
+      "<ToggleSwitchCore",
+      "  v-model=\"$1modelValue\"",
+      "  id=\"$2toggle-id\"",
+      "  name=\"$3toggleName\"",
+      "/>"
+    ]
+  },
+  "SRCDEV ToggleSwitchWithLabel": {
+    "description": "ToggleSwitchWithLabel: labelled toggle switch with description/error support",
+    "scope": "vue,html",
+    "body": [
+      "<ToggleSwitchWithLabel",
+      "  v-model=\"$1fieldValue\"",
+      "  name=\"$2fieldName\"",
+      "  label=\"$3Field label\"",
+      "  :error-message=\"$4errors.fieldName\"",
+      "  :field-has-error=\"!!$4errors.fieldName\"",
+      "/>"
+    ]
+  },
+  "SRCDEV ToggleSwitchWithLabelInline": {
+    "description": "ToggleSwitchWithLabelInline: compact label + toggle switch side by side, no error support",
+    "scope": "vue,html",
+    "body": [
+      "<ToggleSwitchWithLabelInline",
+      "  v-model=\"$1fieldValue\"",
+      "  name=\"$2fieldName\"",
+      "  label=\"$3Field label\"",
+      "/>"
+    ]
+  },
+  "SRCDEV ToggleSwitch CSS Override": {
+    "description": "CSS override scaffold for ToggleSwitchCore tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .toggle-switch-wrapper {",
+      "    --toggle-switch-surface: $2;",
+      "    --toggle-switch-symbol-surface-on: $3;",
+      "  }",
+      "}"
+    ]
+  }
+}

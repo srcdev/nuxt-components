@@ -5,6 +5,7 @@ import InputRangeDefault from "../../input-range/variants/InputRangeDefault.vue"
 import InputNumberDefault from "../../input-number/variants/InputNumberDefault.vue";
 import InputTextareaWithLabel from "../../input-textarea/variants/InputTextareaWithLabel.vue";
 import InputSelectWithLabel from "../../input-select/variants/InputSelectWithLabel.vue";
+import ToggleSwitchWithLabel from "../../toggle-switch/variants/ToggleSwitchWithLabel.vue";
 import InputButtonCore from "../../input-button/InputButtonCore.vue";
 import FormField from "../../form-field/FormField.vue";
 import HeroText from "../../../01.atoms/text-blocks/hero-text/HeroText.vue";
@@ -16,11 +17,11 @@ interface MigratedFieldsFormStoryArgs {
 
 // Living reference, not a component of its own — one field per 05.forms component group that
 // currently scores 5/5 in the Component Ledger (.claude/component-ledger/audit.json: tier folder,
-// tests, story, skill doc, CONSUMER-STYLING.md, VS Code snippet). As of 2026-09-22 that's
+// tests, story, skill doc, CONSUMER-STYLING.md, VS Code snippet). As of 2026-09-23 that's
 // InputTextCore (via InputTextWithLabel), InputRangeCore (via InputRangeDefault), InputNumberCore
-// (via InputNumberDefault), InputTextareaCore (via InputTextareaWithLabel), and InputSelectCore
-// (via InputSelectWithLabel) — every other 05.forms component (checkbox, radio, toggle-switch,
-// ...) is still mid-migration.
+// (via InputNumberDefault), InputTextareaCore (via InputTextareaWithLabel), InputSelectCore
+// (via InputSelectWithLabel), and ToggleSwitchCore (via ToggleSwitchWithLabel) — every other
+// 05.forms component (checkbox, radio, ...) is still mid-migration.
 // Add a field here each time /migrate-component brings another 05.forms component up to 5/5, so
 // this story doubles as a visible migration-progress tracker rather than living only in the
 // ledger's HTML output. No validation wiring (useZodValidation/zod) here — that's the consuming
@@ -47,6 +48,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     InputNumberDefault,
     InputTextareaWithLabel,
     InputSelectWithLabel,
+    ToggleSwitchWithLabel,
     InputButtonCore,
     FormField,
     HeroText,
@@ -58,6 +60,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       quantity: 1,
       notes: "",
       colour: "",
+      subscribe: false,
     });
 
     const colourOptions = reactive<IFormMultipleOptions>({
@@ -189,6 +192,10 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         </FormField>
 
         <FormField width="wide" :has-gutter="false">
+          <ToggleSwitchWithLabel v-model="state.subscribe" name="subscribe" label="Subscribe to updates" />
+        </FormField>
+
+        <FormField width="wide" :has-gutter="false">
           <div style="display: flex; gap: 1.2rem;">
             <InputButtonCore type="submit" variant="primary" button-text="Continue" />
             <InputButtonCore type="button" variant="tertiary" button-text="Clear errors" @click="clearErrors" />
@@ -204,6 +211,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         <div>quantity: {{ state.quantity }}</div>
         <div>notes: {{ state.notes || '""' }}</div>
         <div>colour: {{ state.colour || '""' }}</div>
+        <div>subscribe: {{ state.subscribe }}</div>
       </div>
     </div>
   `,

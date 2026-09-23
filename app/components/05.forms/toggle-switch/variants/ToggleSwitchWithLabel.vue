@@ -1,5 +1,5 @@
 <template>
-  <div class="toggle-switch-with-label" :class="[elementClasses]" :data-theme="theme">
+  <div class="toggle-switch-with-label" :class="[elementClasses]" :data-theme="formUiTheme">
     <InputLabel
       :id
       :for="toggleSwitchId"
@@ -68,7 +68,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const FormUiTheme = computed(() => {
+const formUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 
@@ -84,15 +84,13 @@ const ariaDescribedby = computed(() => {
   return props.fieldHasError ? errorId.value : ariaDescribedbyId;
 });
 
-const modelValue = defineModel<string | number | boolean>();
+const modelValue = defineModel<string | number | boolean>({ required: true });
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">
 @layer components {
 .toggle-switch-with-label {
-  --_transition-duration: 0.4s;
-
   .toggle-switch-label {
     display: block;
   }

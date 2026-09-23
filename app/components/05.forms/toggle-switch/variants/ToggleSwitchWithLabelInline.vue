@@ -63,14 +63,13 @@ const labelWeightClass = computed(() => {
   return labelWeightClassMap[props.labelWeight] || "body-normal-semibold";
 });
 
-const modelValue = defineModel<string | number | boolean>();
+const modelValue = defineModel<string | number | boolean>({ required: true });
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>
 
 <style lang="css">
 @layer components {
 .toggle-switch-with-label-inline {
-  --_transition-duration: 0.4s;
   display: flex;
   align-items: center;
   gap: 12px;

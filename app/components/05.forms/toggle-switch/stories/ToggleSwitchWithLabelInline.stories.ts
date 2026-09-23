@@ -64,7 +64,7 @@ export default {
     // Styling
     theme: {
       control: { type: "select" },
-      options: ["primary", "secondary", "tertiary", "ghost", "error", "success", "warning"],
+      options: ["default", "success", "error", "warning"],
       description: "Toggle switch theme",
       table: {
         category: "Styling",
@@ -243,7 +243,7 @@ export const InlineFormExample: StoryFn = () => ({
           name="darkMode"
           label="Dark mode"
           label-weight="normal"
-          theme="secondary"
+          theme="default"
         />
 
         <StorybookComponent
