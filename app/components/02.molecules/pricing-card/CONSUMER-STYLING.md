@@ -131,6 +131,17 @@ When displaying multiple cards side-by-side (common in pricing pages), wrap in a
 
 ---
 
+## Highlight badge text
+
+`isHighlighted` shows a top-centred badge reading "Most Popular". Pass `badge-text` to change it,
+e.g. for localisation:
+
+```vue
+<PricingCard planName="Standard" :price="99" is-highlighted :badge-text="t('pricing.mostPopular')" />
+```
+
+---
+
 ## Discount ribbon
 
 Pass `ribbon-text` to render a diagonal corner ribbon (top-right, 45°) for marketing callouts —

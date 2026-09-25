@@ -1,6 +1,6 @@
 <template>
   <component :is="tag" class="pricing-card" :class="[elementClasses, { 'is-highlighted': isHighlighted }]">
-    <div v-if="isHighlighted" class="pricing-card__badge">Most Popular</div>
+    <div v-if="isHighlighted" class="pricing-card__badge">{{ badgeText }}</div>
 
     <div v-if="ribbonText" class="pricing-card__ribbon-clip">
       <span class="pricing-card__ribbon">{{ ribbonText }}</span>
@@ -41,6 +41,7 @@ interface Props {
   description?: string;
   features?: string[];
   isHighlighted?: boolean;
+  badgeText?: string;
   ctaText?: string;
   ctaDisabled?: boolean;
   ribbonText?: string;
@@ -54,6 +55,7 @@ const props = withDefaults(defineProps<Props>(), {
   description: undefined,
   features: () => [],
   isHighlighted: false,
+  badgeText: "Most Popular",
   ctaText: "Get started",
   ctaDisabled: false,
   ribbonText: undefined,

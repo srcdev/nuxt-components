@@ -84,6 +84,19 @@ describe("PricingCard", () => {
     expect(wrapper.text()).toContain("Most Popular");
   });
 
+  it("renders custom badge text when highlighted", () => {
+    const wrapper = mount(PricingCard, {
+      props: {
+        planName: "Test Plan",
+        price: 100,
+        isHighlighted: true,
+        badgeText: "Le plus populaire",
+      },
+    });
+
+    expect(wrapper.find(".pricing-card__badge").text()).toBe("Le plus populaire");
+  });
+
   it("emits select event with plan name on CTA click", async () => {
     const wrapper = mount(PricingCard, {
       props: {
