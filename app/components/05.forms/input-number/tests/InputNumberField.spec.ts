@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/getting-started/testing#unit-testing
 import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import ComponentUnderTest from "../InputNumberDefault.vue";
+import ComponentUnderTest from "../InputNumberField.vue";
 
 const initialPropsData = {
   name: "testName",
@@ -23,7 +23,7 @@ const wrapperFactory = (propsData = {}, slots = {}) => {
   });
 };
 
-describe("InputNumberDefault", () => {
+describe("InputNumberField", () => {
   it("mounts without error", async () => {
     wrapper = await wrapperFactory();
     expect(wrapper.vm).toBeTruthy();
@@ -46,8 +46,8 @@ describe("InputNumberDefault", () => {
 
   it("sets data-invalid and the error class when fieldHasError is true", async () => {
     wrapper = await wrapperFactory({ fieldHasError: true });
-    expect(wrapper.find(".input-number-with-label").attributes("data-invalid")).toBe("");
-    expect(wrapper.find(".input-number-with-label").classes()).toContain("error");
+    expect(wrapper.find(".input-number-field").attributes("data-invalid")).toBe("");
+    expect(wrapper.find(".input-number-field").classes()).toContain("error");
   });
 
   it("does not render step buttons when the left/right slots are not used", async () => {
@@ -132,12 +132,12 @@ describe("InputNumberDefault", () => {
 
   it("applies styleClassPassthrough", async () => {
     wrapper = await wrapperFactory({ styleClassPassthrough: "custom-number" });
-    expect(wrapper.find(".input-number-with-label").classes()).toContain("custom-number");
+    expect(wrapper.find(".input-number-field").classes()).toContain("custom-number");
   });
 
-  it("forwards inputVariant to the wrapper, InputLabel, and InputNumberCore", async () => {
+  it("forwards inputVariant to the wrapper, InputLabel, and InputNumber", async () => {
     wrapper = await wrapperFactory({ inputVariant: "underlined" });
-    expect(wrapper.find(".input-number-with-label").classes()).toContain("underlined");
+    expect(wrapper.find(".input-number-field").classes()).toContain("underlined");
     expect(wrapper.find(".input-number-wrapper").classes()).toContain("underlined");
   });
 });

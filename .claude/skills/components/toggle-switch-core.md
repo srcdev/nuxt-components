@@ -99,7 +99,7 @@ full table with defaults.
 
 ### ToggleSwitchWithLabel
 
-`ToggleSwitchWithLabel` (`variants/ToggleSwitchWithLabel.vue`) composes `ToggleSwitchCore` with
+`ToggleSwitchWithLabel` (`ToggleSwitchWithLabel.vue`) composes `ToggleSwitchCore` with
 `InputLabel`, an optional `description` slot, and `InputError`.
 
 **Additional props over ToggleSwitchCore:**
@@ -129,7 +129,7 @@ Note this wrapper passes `id`/`name`/`required`/`field-has-error`/`true-value`/`
 
 ### ToggleSwitchWithLabelInline
 
-`ToggleSwitchWithLabelInline` (`variants/ToggleSwitchWithLabelInline.vue`) composes
+`ToggleSwitchWithLabelInline` (`ToggleSwitchWithLabelInline.vue`) composes
 `ToggleSwitchCore` with `InputLabel` laid out inline (label and switch side by side, no
 description/error-message support — this variant is for compact settings-row usage).
 

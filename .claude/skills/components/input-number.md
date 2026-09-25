@@ -1,13 +1,17 @@
-# InputNumberCore Component
+# InputNumber Component
+
+> **Renamed 2026-09-25**: `InputNumberCore` → `InputNumber`, `InputNumberDefault` → `InputNumberField`
+> (DOM classes `.input-number-core` → `.input-number`, `.input-number-with-label` → `.input-number-field`).
+> First component moved to the Control/Field naming convention, see `.claude/skills/component-naming.md`.
 
 ## Overview
 
-`InputNumberCore` is the low-level native `<input type="number">` primitive for the `05.forms`
+`InputNumber` is the low-level native `<input type="number">` primitive for the `05.forms`
 number-input family. It renders a single native number input with left/right button slots (for
 step-down/step-up controls). It has no label, description, or error-message rendering of its
-own — that's composed by the `InputNumberDefault` variant below.
+own — that's composed by the `InputNumberField` variant below.
 
-Most consumers should reach for **InputNumberDefault** rather than `InputNumberCore` directly.
+Most consumers should reach for **InputNumberField** rather than `InputNumber` directly.
 
 ---
 
@@ -63,6 +67,7 @@ See [CONSUMER-STYLING.md](../../app/components/05.forms/input-number/CONSUMER-ST
 full table with defaults.
 
 **Common tokens:**
+
 - `--input-number-surface` / `-surface-hover` — wrapper/input/embedded-button background, resting and hover, falls back to `--theme-input-surface`/`-surface-hover`
 - `--input-number-border` / `-border-hover` / `-border-focus` — border colour resting, mouse-hover outline, and `:focus-visible` outline (also the divider colour and the embedded button's own focus outline), falls back to `--theme-border`/`--theme-border-focus`
 - `--input-number-text-color` — input text colour, falls back to `--theme-input-text-color-normal`
@@ -72,11 +77,11 @@ full table with defaults.
 
 ## Fixed 2026-09-22: dead CSS from a missing base class and mismatched selectors
 
-`InputNumberCore` migrated to full compliance from a `variants:true`, `eslint_issues:true`,
+`InputNumber` migrated to full compliance from a `variants:true`, `eslint_issues:true`,
 score-1/5 state. Several latent bugs were fixed alongside the standard checklist:
 
-- The native `<input>` had no static `input-number-core` class — only the dynamic
-  `elementClasses` passthrough — so the entire `.input-number-core { ... }` style block (font,
+- The native `<input>` had no static `input-number` class — only the dynamic
+  `elementClasses` passthrough — so the entire `.input-number { ... }` style block (font,
   padding, colour, focus box-shadow) never matched anything. Fixed by adding the class directly.
 - `placeholder` was declared as a prop but never bound on the `<input>` — unlike `InputRangeCore`
   (where a range input genuinely has no placeholder concept and the no-op is intentional and
@@ -89,20 +94,20 @@ score-1/5 state. Several latent bugs were fixed alongside the standard checklist
   `slot left-slot`/`slot right-slot` and adding `has-left-slot`/`has-right-slot` to the wrapper
   directly from `slots.left`/`slots.right` (Vue's own `useSlots()`), rather than a fragile,
   cross-component class-toggling relay.
-- Relatedly, `InputNumberDefault` called `updateElementClasses(["has-left-button",
+- Relatedly, `InputNumberField` called `updateElementClasses(["has-left-button",
   "has-right-button"])` unconditionally on mount, which permanently added those two classes to
-  its own outer `.input-number-with-label` wrapper — a different element than
-  `InputNumberCore`'s `.input-number-wrapper`, so the `:has()` selector that was meant to key off
+  its own outer `.input-number-field` wrapper — a different element than
+  `InputNumber`'s `.input-number-wrapper`, so the `:has()` selector that was meant to key off
   those classes could never match (the class lived on an ancestor, not a descendant). Replaced
-  entirely: `InputNumberCore` now detects an embedded button directly via
+  entirely: `InputNumber` now detects an embedded button directly via
   `:has(.left-slot .input-button-core)` / `:has(.right-slot .input-button-core)`, so no
   JS-driven class relay is needed at all.
 - `theme` was typed as an inline `"default" | "success" | "error" | "warning"` union in both
-  `InputNumberCore` and `InputNumberDefault` instead of importing the shared `FormUiTheme` type —
+  `InputNumber` and `InputNumberField` instead of importing the shared `FormUiTheme` type —
   aligned with the rest of `05.forms`.
-- `weight` was passed from `InputNumberDefault` to `InputNumberCore` but `InputNumberCore` had no
+- `weight` was passed from `InputNumberField` to `InputNumber` but `InputNumber` had no
   matching prop, so it fell through as a raw, meaningless `weight="normal"` HTML attribute on the
-  wrapper `<div>`. Fixed by declaring the prop on `InputNumberCore` too, matching `InputRangeCore`.
+  wrapper `<div>`. Fixed by declaring the prop on `InputNumber` too, matching `InputRangeCore`.
 - `defineModel()` had no default, tripping `vue/require-default-prop` — fixed the same way as
   `InputRangeCore`: `defineModel({ required: true })`, not a rule disable or an artificial default.
 - A single-use private token, `--_border`, was inlined to the public
@@ -114,18 +119,18 @@ score-1/5 state. Several latent bugs were fixed alongside the standard checklist
 
 ## Fixed 2026-09-22 (follow-up): rewritten to visually mirror InputTextCore
 
-The first migration pass above only made `InputNumberCore`'s *own* (pre-existing, previously dead)
+The first migration pass above only made `InputNumber`'s *own* (pre-existing, previously dead)
 CSS active — it didn't reconsider whether that CSS was actually the right design. Once live, it
 was visually inconsistent with the rest of `05.forms`: no border-radius, no hover/focus outline
 state, wrong padding-token family (`--form-textarea-padding-*` instead of the shared input
 padding tokens), and a box-shadow-toggle focus mechanism instead of the `:has()`-based outline
-approach every other input in this library uses. `InputNumberCore` is meant to be a native
+approach every other input in this library uses. `InputNumber` is meant to be a native
 `<input type="number">` sibling to the text-based `InputTextAsNumberWithLabel` variant (see
 `input-text-core.md`'s Variants section) — both should look and behave the same. The CSS was rewritten
 to mirror `InputTextCore` directly:
 
 - Added `:input-variant` (`"normal"` / `"outlined"` / `"underlined"`), matching `InputTextCore`'s
-  prop and wrapper-class shape (`InputNumberDefault` forwards it the same way
+  prop and wrapper-class shape (`InputNumberField` forwards it the same way
   `InputTextWithLabel` forwards it to `InputTextCore`, including to `InputLabel`).
 - Replaced the flat, unconditional border/radius/box-shadow with `InputTextCore`'s `.normal`
   variant shape: border + `border-radius: var(--form-input-border-radius)` (previously this read
@@ -152,7 +157,7 @@ to mirror `InputTextCore` directly:
   private wrappers. `--_border-focus` stayed private since it's now genuinely reused (the
   wrapper's own focus outline *and* the embedded button's focus outline both read it).
 
-**Separately found in the same investigation** (not an `InputNumberCore` bug, but what the visual
+**Separately found in the same investigation** (not an `InputNumber` bug, but what the visual
 comparison was originally checking against): `InputTextAsNumberWithLabel.vue` had its own,
 unrelated pre-existing bug — see `input-text-core.md`'s Variants section for the fix.
 
@@ -173,13 +178,13 @@ result that's easy to miss without a side-by-side screenshot comparison.
 
 ## Variants
 
-### InputNumberDefault
+### InputNumberField
 
-`InputNumberDefault` (`variants/InputNumberDefault.vue`) composes `InputNumberCore` with
+`InputNumberField` (`InputNumberField.vue`) composes `InputNumber` with
 `InputLabel`, `InputDescription`, and `InputError`, plus optional step-down/step-up buttons
 (`InputButtonCore`) wired into the `left`/`right` slots.
 
-**Additional props over InputNumberCore:**
+**Additional props over InputNumber:**
 
 | Prop (template form) | Type | Default | Notes |
 |------|------|---------|-------|
@@ -189,12 +194,12 @@ result that's easy to miss without a side-by-side screenshot comparison.
 | `:step-up-label` | `string` | `"Step up"` | `button-text` on the step-up `InputButtonCore` — override for localisation. |
 
 **Slots**: `descriptionHtml`, `descriptionText` (both forwarded to `InputDescription`), plus
-`left`/`right` (forwarded straight through to the underlying `InputNumberCore` — the
+`left`/`right` (forwarded straight through to the underlying `InputNumber` — the
 step-down/step-up buttons only render when you use the `left`/`right` slots yourself, since the
 button icon content itself is consumer-supplied).
 
 ```vue
-<InputNumberDefault
+<InputNumberField
   name="quantity"
   label="Quantity"
   v-model="quantity"
@@ -205,10 +210,10 @@ button icon content itself is consumer-supplied).
 >
   <template #left><Icon name="mdi:minus" /></template>
   <template #right><Icon name="mdi:plus" /></template>
-</InputNumberDefault>
+</InputNumberField>
 ```
 
-`v-model` is `number | readonly number[]`, **required** — same as `InputNumberCore` above.
+`v-model` is `number | readonly number[]`, **required** — same as `InputNumber` above.
 
 Step-down is disabled (`readonly` on its `InputButtonCore`) once the value reaches `min`, and
 step-up once it reaches `max`; clicking either button while at that boundary is a no-op.

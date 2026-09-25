@@ -21,15 +21,25 @@ skill=$(printf '%s' "$name" | sed -E 's/([a-z0-9])([A-Z])/\1-\2/g; s/([A-Z]+)([A
 dir=$(dirname "$f")
 pdir=$(dirname "$dir")
 
-# variants/ files are documented under their parent component, not standalone.
+# Wrapper variants (e.g. input-number/InputNumberField.vue next to InputNumber.vue, or a legacy non-Core .vue next to a *Core.vue)
+# are documented under their Core component's skill doc, not standalone. They used to live in a
+# variants/ subfolder; those folders were flattened into the parent on 2026-09-25.
 is_variant=false
-if [[ "$(basename "$dir")" == "variants" ]]; then
+if [[ "$name" == *Field && -f "$dir/${name%Field}.vue" ]]; then
   is_variant=true
-  parent_name=$(basename "$pdir")
+  parent_name=$(printf '%s' "${name%Field}" | sed -E 's/([a-z0-9])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]')
+elif [[ "$name" != *Core ]]; then
+  shopt -s nullglob
+  cores=("$dir"/*Core.vue)
+  shopt -u nullglob
+  if [[ ${#cores[@]} -gt 0 ]]; then
+    is_variant=true
+    parent_name=$(basename "${cores[0]}" .vue | sed -E 's/([a-z0-9])([A-Z])/\1-\2/g' | tr '[:upper:]' '[:lower:]')
+  fi
 fi
 
 if [[ "$is_variant" == true ]]; then
-  msg="Component file $f was edited/written. This is a variant of $parent_name — per project convention, document it inside .claude/skills/components/$parent_name.md (e.g. a \"Variants\" section) rather than creating a separate .claude/skills/components/$skill.md for it."
+  msg="Component file $f was edited/written. This is a wrapper variant of $parent_name — per project convention, document it inside .claude/skills/components/$parent_name.md (e.g. a \"Variants\" section) rather than creating a separate .claude/skills/components/$skill.md for it."
 else
   msg="Component file $f was edited/written. Per Claude.md Development Workflow step 7, check whether .claude/skills/components/$skill.md needs updating to reflect this change (props/slots/models/defaults/behaviour)."
 fi
@@ -51,7 +61,7 @@ if [[ "$is_variant" != true && ! -f "$dir/CONSUMER-STYLING.md" && ! -f "$pdir/CO
   msg="$msg No CONSUMER-STYLING.md found for this component; create one if it exposes a real --token API or class override hook (skip it if the component genuinely has neither)."
 fi
 
-if [[ ! -f "$root/.vscode/srcdev-component-$skill.code-snippets" ]]; then
+if [[ ! -f "$root/.vscode/srcdev-component-$skill.code-snippets" && ! ( "$is_variant" == true && -f "$root/.vscode/srcdev-component-${parent_name%-core}.code-snippets" ) ]]; then
   msg="$msg No .vscode/srcdev-component-$skill.code-snippets found; create/update it per Development Workflow step 6."
 fi
 

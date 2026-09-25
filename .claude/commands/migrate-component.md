@@ -116,10 +116,11 @@ briefly) — don't skip silently.
     `{...} = args;` spread not wrapped in a `computed()`); still eyeball each story file yourself,
     since a differently-shaped variant of the same mistake may not match that exact heuristic.
 7. **Skill doc** — create or update `.claude/skills/components/<component-name>.md`. If the
-   component still forks `variants/` files, fold each variant's behaviour into this doc as a
-   "Variants" section per `feedback_variants_deprecated_as_own_skill_docs` — don't delete the
-   variant files yourself without asking, since consumers may still import them directly; flag it
-   to the user as a follow-up decision instead.
+   component has wrapper variants (non-Core `.vue` files next to its `*Core.vue`), fold each one's
+   behaviour into this doc as a "Variants" section per `feedback_variants_deprecated_as_own_skill_docs`.
+   If you find a `variants/` subfolder, flatten it into the parent folder (`git mv` the `.vue`
+   files plus their stories/tests up one level, fix relative imports); `pathPrefix: false` keeps
+   the auto-import names unchanged. All existing `variants/` folders were flattened 2026-09-25.
 8. **VS Code snippet** — create or update `.vscode/srcdev-component-{name}.code-snippets`.
 9. **Accessibility** — check for gaps beyond what already-passing tests would catch:
    - Interactive controls (buttons, toggles, custom form-like widgets) have an accessible name —
@@ -158,6 +159,14 @@ briefly) — don't skip silently.
     (add the new component to the list, bump the "As of `<date>`" note). Skip only if the
     component's shape genuinely doesn't fit a form field (e.g. a non-form-input `05.forms` helper
     component) — state why if you skip.
+13. **Naming** — if the component (or its wrapper variants) still uses a `Core`, `Default` or
+    `WithLabel` suffix, rename it per `.claude/skills/component-naming.md`: bare control `<Name>`,
+    labelled wrapper `<Name>Field`, root DOM class following the new name. Its backlog table gives
+    the proposed name and which consumer repos use the old one. Rows marked **decide**
+    (collision-prone generic names like `Card`/`Tabs`) need an `AskUserQuestion` before renaming.
+    Follow the doc's rename procedure (including updating consumer repos) and tick the row off.
+    Do this as the last checklist step, so the earlier steps' edits don't have to track a
+    mid-flight rename.
 
 ## 4. Wrap up
 

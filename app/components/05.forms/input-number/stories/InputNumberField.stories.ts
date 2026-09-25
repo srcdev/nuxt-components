@@ -1,8 +1,8 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import StorybookComponent from "../InputNumberDefault.vue";
+import StorybookComponent from "../InputNumberField.vue";
 import type { FormUiTheme } from "~/types/forms/types.forms.d";
 
-interface InputNumberDefaultStoryArgs {
+interface InputNumberFieldStoryArgs {
   modelValue: number;
   name: string;
   label: string;
@@ -21,7 +21,7 @@ interface InputNumberDefaultStoryArgs {
 }
 
 export default {
-  title: "Components/Forms/Input Number/InputNumberDefault",
+  title: "Components/Forms/Input Number/InputNumberField",
   component: StorybookComponent,
   argTypes: {
     modelValue: { control: "number", table: { category: "Model" } },
@@ -65,9 +65,9 @@ export default {
     stepUpLabel: "Step up",
     useStepButtons: false,
   },
-} as Meta<InputNumberDefaultStoryArgs>;
+} as Meta<InputNumberFieldStoryArgs>;
 
-const Template: StoryFn<InputNumberDefaultStoryArgs> = (args) => ({
+const Template: StoryFn<InputNumberFieldStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
     return { args };

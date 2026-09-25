@@ -1,4 +1,4 @@
-# InputNumberCore — Consumer Styling Guide
+# InputNumber — Consumer Styling Guide
 
 ## Public token API
 
@@ -7,7 +7,7 @@ to override just this component; leave it unset and it inherits the shared `--th
 `--theme-*` token every other themed component also falls back to. See
 `theming-component-token-pattern.md` for why this two-tier shape exists.
 
-This shape mirrors `InputTextCore`'s token set (see its own CONSUMER-STYLING.md) — `InputNumberCore`
+This shape mirrors `InputTextCore`'s token set (see its own CONSUMER-STYLING.md) — `InputNumber`
 is a native `<input type="number">` sibling to the text-based `InputTextAsNumberWithLabel` variant,
 and both are meant to look and behave the same way. Border colour also doubles as the divider
 colour between the input and an embedded left/right `InputButtonCore` — there's no separate divider
@@ -35,7 +35,7 @@ component and untouched by this — see `theming-form-geometry-tokens.md`.
 `InputTextCore`. Only `normal` (bordered box, with hover/focus outline) and `underlined`
 (bottom-border only) have CSS today; `outlined` has no styling in `InputTextCore` either (no
 `&.outlined` rule exists there), so passing it renders with no border/outline at all — a
-pre-existing gap in the type, not something specific to `InputNumberCore`. Declared for prop-shape
+pre-existing gap in the type, not something specific to `InputNumber`. Declared for prop-shape
 consistency with the rest of `05.forms`.
 
 ---
@@ -57,5 +57,5 @@ Only declare the tokens you want to change — everything else keeps inheriting 
 ## Per-instance overrides
 
 ```vue
-<InputNumberCore id="quantity" name="quantity" :min="1" :max="10" style="--input-number-border: var(--gold-04);" />
+<InputNumber id="quantity" name="quantity" :min="1" :max="10" style="--input-number-border: var(--gold-04);" />
 ```

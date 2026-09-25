@@ -21,7 +21,7 @@
         :max
         :step
         :placeholder
-        :class="['input-number-core', `input-number--${weight}`, elementClasses]"
+        :class="['input-number', `input-number--${weight}`, elementClasses]"
         inputmode="numeric"
         pattern="[0-9]+"
         :aria-describedby
@@ -83,7 +83,7 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
      theming-component-token-pattern.md) — overriding one here doesn't touch every other themed
      input/control that also reads --theme-input-surface/--theme-border. Mirrors InputTextCore's
      token shape so a native number input and the text-based InputTextAsNumberWithLabel variant
-     look and behave the same way (see input-number-core.md's "Fixed 2026-09-22" note). */
+     look and behave the same way (see input-number.md's "Fixed 2026-09-22" note). */
     --_surface: var(--input-number-surface, var(--theme-input-surface));
     --_border: var(--input-number-border, var(--theme-border));
     --_border-focus: var(--input-number-border-focus, var(--theme-border-focus));
@@ -175,7 +175,7 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
       border-left: var(--form-element-border-width) solid var(--_border);
     }
 
-    .input-number-core {
+    .input-number {
       all: unset;
       touch-action: manipulation;
 

@@ -35,6 +35,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── theming-component-token-pattern.md — standard shape for overridable component colours: public token + inline fallback, no bare var()/no private-only indirection; the three tiers (theme slots / cross-component families / component-scoped); rollout status
 ├── colour-scheme-disable.md         — disable light/dark scheme support in a consumer app
 ├── component-dynamic-slots.md        — named dynamic slots ($slots iteration) vs indexed dynamic slots (itemCount pattern)
+├── component-naming.md               — Control/Field naming convention (InputNumber + InputNumberField, no Core/Default/WithLabel suffixes), rename procedure, backlog with consumer usage
 ├── component-local-style-override.md — styleClassPassthrough + scoped style block for per-usage visual customisation
 ├── component-prop-driven-container-layout.md — vary CSS grid layout inside @container queries using data-* attribute selectors
 ├── page-transitions.md               — pageTransition/layoutTransition setup; the self-wrapped <NuxtLayout> + layout:false anti-pattern that pulls the header/nav into the transition boundary; fade CSS
@@ -129,7 +130,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── pop-over.md                — PopOver: generic anchor-positioned disclosure panel, consumer-supplied trigger/content slots, placement prop, CSS token API
     ├── input-text-core.md        — InputTextCore: native text/date/number input primitive, min/max pass-through (date-picker range), CSS token API; Variants section covers InputTextWithLabel/InputPasswordWithLabel/InputTextAsNumberWithLabel
     ├── input-range-core.md       — InputRangeCore: native range-slider primitive, markers/datalist slots, dead --theme-form-range-accent-color token fixed, CSS token API; Variants section covers InputRangeDefault
-    ├── input-number-core.md      — InputNumberCore: native number-input primitive, left/right step-button slots, missing base class/placeholder/mismatched slot-selector bugs fixed, CSS token API; Variants section covers InputNumberDefault
+    ├── input-number.md           — InputNumber: native number-input primitive, left/right step-button slots, missing base class/placeholder/mismatched slot-selector bugs fixed, CSS token API; Variants section covers InputNumberField
     ├── input-textarea-core.md    — InputTextareaCore: native textarea primitive, left/right decorative slots, undefined-token/dead-code/label-leak bugs fixed, CSS token API; Variants section covers InputTextareaWithLabel
     ├── input-select-core.md      — InputSelectCore: native select primitive, data-driven options with icon decorator, dead required/styleClassPassthrough/isDirty-isActive functionality fixed, appearance:base-select browser-support note, CSS token API; Variants section covers InputSelectWithLabel
     ├── input-checkbox.md         — MultipleCheckboxes/SingleCheckbox: fieldset-wrapped checkbox group (data-driven, button or labelled) and single checkbox, per-box native-required/styleClassPassthrough/data-testid bugs fixed, spacing token API

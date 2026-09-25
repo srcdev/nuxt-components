@@ -95,7 +95,7 @@ was itself commented out.
 
 ### InputRangeDefault
 
-`InputRangeDefault` (`variants/InputRangeDefault.vue`) composes `InputRangeCore` with `InputLabel`,
+`InputRangeDefault` (`InputRangeDefault.vue`) composes `InputRangeCore` with `InputLabel`,
 `InputDescription`, and `InputError`, plus optional step-down/step-up buttons (`InputButtonCore`)
 wired into the `left`/`right` slots.
 

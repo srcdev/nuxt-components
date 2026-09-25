@@ -1,9 +1,9 @@
 {
-  "SRCDEV InputNumberCore Basic": {
-    "description": "Basic InputNumberCore native number input (no label/error wrapper)",
+  "SRCDEV InputNumber Basic": {
+    "description": "Basic InputNumber native number input (no label/error wrapper)",
     "scope": "vue,html",
     "body": [
-      "<InputNumberCore",
+      "<InputNumber",
       "  id=\"$1fieldId\"",
       "  name=\"$2fieldName\"",
       "  v-model=\"$3fieldValue\"",
@@ -13,11 +13,11 @@
       "/>"
     ]
   },
-  "SRCDEV InputNumberDefault Basic": {
-    "description": "InputNumberDefault: labelled number input with error/description support",
+  "SRCDEV InputNumberField Basic": {
+    "description": "InputNumberField: labelled number input with error/description support",
     "scope": "vue,html",
     "body": [
-      "<InputNumberDefault",
+      "<InputNumberField",
       "  v-model=\"$1fieldValue\"",
       "  name=\"$2fieldName\"",
       "  label=\"$3Field label\"",
@@ -29,11 +29,11 @@
       "/>"
     ]
   },
-  "SRCDEV InputNumberDefault With Step Buttons": {
-    "description": "InputNumberDefault with step-down/step-up buttons wired into the left/right slots",
+  "SRCDEV InputNumberField With Step Buttons": {
+    "description": "InputNumberField with step-down/step-up buttons wired into the left/right slots",
     "scope": "vue,html",
     "body": [
-      "<InputNumberDefault",
+      "<InputNumberField",
       "  v-model=\"$1fieldValue\"",
       "  name=\"$2fieldName\"",
       "  label=\"$3Field label\"",
@@ -45,11 +45,11 @@
       ">",
       "  <template #left>\\u2212</template>",
       "  <template #right>+</template>",
-      "</InputNumberDefault>"
+      "</InputNumberField>"
     ]
   },
   "SRCDEV InputNumber CSS Override": {
-    "description": "CSS override scaffold for InputNumberCore tokens",
+    "description": "CSS override scaffold for InputNumber tokens",
     "scope": "css",
     "body": [
       ".$1my-page {",

@@ -1,8 +1,8 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { reactive, ref } from "vue";
-import InputTextWithLabel from "../../input-text/variants/InputTextWithLabel.vue";
-import InputSelectWithLabel from "../../input-select/variants/InputSelectWithLabel.vue";
-import InputTextareaWithLabel from "../../input-textarea/variants/InputTextareaWithLabel.vue";
+import InputTextWithLabel from "../../input-text/InputTextWithLabel.vue";
+import InputSelectWithLabel from "../../input-select/InputSelectWithLabel.vue";
+import InputTextareaWithLabel from "../../input-textarea/InputTextareaWithLabel.vue";
 import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
 import InputButtonCore from "../../input-button/InputButtonCore.vue";
 import FormField from "../../form-field/FormField.vue";

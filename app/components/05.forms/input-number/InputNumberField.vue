@@ -1,6 +1,6 @@
 <template>
   <div
-    class="input-number-with-label"
+    class="input-number-field"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
     :class="[elementClasses, inputVariant, `theme-${theme}`, { error: fieldHasError }]"
@@ -32,7 +32,7 @@
       </template>
     </InputDescription>
 
-    <InputNumberCore
+    <InputNumber
       :id
       v-model="modelValue"
       :name
@@ -78,7 +78,7 @@
           </template>
         </InputButtonCore>
       </template>
-    </InputNumberCore>
+    </InputNumber>
     <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" />
   </div>
 </template>
@@ -138,7 +138,7 @@ const updateValue = (step: number, withinRangeLimit: boolean) => {
 
 <style lang="css">
 @layer components {
-  .input-number-with-label {
+  .input-number-field {
     .input-number-label {
       display: block;
       margin-block: 0.8rem;

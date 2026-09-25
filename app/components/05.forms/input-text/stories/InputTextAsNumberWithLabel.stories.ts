@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { computed } from "vue";
-import StorybookComponent from "../variants/InputTextAsNumberWithLabel.vue";
+import StorybookComponent from "../InputTextAsNumberWithLabel.vue";
 import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputTextAsNumberWithLabelStoryArgs {

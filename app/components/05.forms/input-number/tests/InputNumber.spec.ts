@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/getting-started/testing#unit-testing
 import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import ComponentUnderTest from "../InputNumberCore.vue";
+import ComponentUnderTest from "../InputNumber.vue";
 
 const initialPropsData = {
   id: "test-number",
@@ -22,7 +22,7 @@ const wrapperFactory = (propsData = {}, slots = {}) => {
   });
 };
 
-describe("InputNumberCore", () => {
+describe("InputNumber", () => {
   it("mounts without error", async () => {
     wrapper = await wrapperFactory();
     expect(wrapper.vm).toBeTruthy();

@@ -1,11 +1,11 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { reactive } from "vue";
-import InputTextWithLabel from "../../input-text/variants/InputTextWithLabel.vue";
-import InputRangeDefault from "../../input-range/variants/InputRangeDefault.vue";
-import InputNumberDefault from "../../input-number/variants/InputNumberDefault.vue";
-import InputTextareaWithLabel from "../../input-textarea/variants/InputTextareaWithLabel.vue";
-import InputSelectWithLabel from "../../input-select/variants/InputSelectWithLabel.vue";
-import ToggleSwitchWithLabel from "../../toggle-switch/variants/ToggleSwitchWithLabel.vue";
+import InputTextWithLabel from "../../input-text/InputTextWithLabel.vue";
+import InputRangeDefault from "../../input-range/InputRangeDefault.vue";
+import InputNumberField from "../../input-number/InputNumberField.vue";
+import InputTextareaWithLabel from "../../input-textarea/InputTextareaWithLabel.vue";
+import InputSelectWithLabel from "../../input-select/InputSelectWithLabel.vue";
+import ToggleSwitchWithLabel from "../../toggle-switch/ToggleSwitchWithLabel.vue";
 import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
 import SingleCheckbox from "../../input-checkbox/SingleCheckbox.vue";
 import InputButtonCore from "../../input-button/InputButtonCore.vue";
@@ -20,8 +20,8 @@ interface MigratedFieldsFormStoryArgs {
 // Living reference, not a component of its own — one field per 05.forms component group that
 // currently scores 5/5 in the Component Ledger (.claude/component-ledger/audit.json: tier folder,
 // tests, story, skill doc, CONSUMER-STYLING.md, VS Code snippet). As of 2026-09-25 that's
-// InputTextCore (via InputTextWithLabel), InputRangeCore (via InputRangeDefault), InputNumberCore
-// (via InputNumberDefault), InputTextareaCore (via InputTextareaWithLabel), InputSelectCore
+// InputTextCore (via InputTextWithLabel), InputRangeCore (via InputRangeDefault), InputNumber
+// (via InputNumberField), InputTextareaCore (via InputTextareaWithLabel), InputSelectCore
 // (via InputSelectWithLabel), ToggleSwitchCore (via ToggleSwitchWithLabel), and input-checkbox
 // (MultipleCheckboxes + SingleCheckbox) — every other 05.forms component (radio, ...) is still
 // mid-migration.
@@ -48,7 +48,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
   components: {
     InputTextWithLabel,
     InputRangeDefault,
-    InputNumberDefault,
+    InputNumberField,
     InputTextareaWithLabel,
     InputSelectWithLabel,
     ToggleSwitchWithLabel,
@@ -95,7 +95,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     // Demo-only "validation" — a real consuming app would wire this through something like
     // useZodValidation instead (see this file's top comment). Kept deliberately simple so the
     // Continue button has an obvious, reliable way to trigger each field's error state for
-    // exercising InputTextWithLabel/InputRangeDefault/InputNumberDefault/InputTextareaWithLabel/
+    // exercising InputTextWithLabel/InputRangeDefault/InputNumberField/InputTextareaWithLabel/
     // InputSelectWithLabel/MultipleCheckboxes/SingleCheckbox's error UI in Storybook.
     const errors = reactive({
       fullName: "",
@@ -175,7 +175,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         </FormField>
 
         <FormField width="wide" :has-gutter="false">
-          <InputNumberDefault
+          <InputNumberField
             v-model="state.quantity"
             name="quantity"
             label="Quantity"
@@ -187,7 +187,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
           >
             <template #left><span aria-hidden="true">−</span></template>
             <template #right><span aria-hidden="true">+</span></template>
-          </InputNumberDefault>
+          </InputNumberField>
         </FormField>
 
         <FormField width="wide" :has-gutter="false">

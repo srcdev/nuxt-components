@@ -116,7 +116,7 @@ score-2/5 state (no tests, no skill doc, no snippet).
 
 ### InputSelectWithLabel
 
-`InputSelectWithLabel` (`variants/InputSelectWithLabel.vue`) composes `InputSelectCore` with
+`InputSelectWithLabel` (`InputSelectWithLabel.vue`) composes `InputSelectCore` with
 `InputLabel`, `InputDescription` (positioned before or after the field depending on
 `inputVariant === "outlined"`, matching `InputTextWithLabel`'s exact placement rule), and
 `InputError`.

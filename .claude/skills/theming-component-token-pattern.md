@@ -26,7 +26,7 @@ overrides (2026-08-25):
    `var()` with an undefined custom property and no fallback just resolves to the property's
    initial value; there is no error, no warning, ever.
 2. **Tokens that were "shared" only by accident.** `InputTextCore`, `InputSelectCore`,
-   `InputNumberCore` and the checkbox button all read the exact same `--theme-input-surface`, so a
+   `InputNumber` and the checkbox button all read the exact same `--theme-input-surface`, so a
    consumer wanting to restyle just text inputs had no way to do that without also restyling every
    other input type. The private `--_input-text-surface: var(--theme-input-surface);` indirection
    made this look like it had its own override point when it didn't.
@@ -84,20 +84,20 @@ consuming app having declared anything.
   Pure token-rename pass, no visual/default changes (unlike `InputButtonCore`'s redesign above).
   Added Storybook stories for both (`InputCheckboxRadioCore`, `InputCheckboxRadioButton`) —
   neither had one before.
-- ✅ `InputTextCore`, `InputSelectCore`, `InputNumberCore` — migrated 2026-08-25, see their
+- ✅ `InputTextCore`, `InputSelectCore`, `InputNumber` — migrated 2026-08-25, see their
   `CONSUMER-STYLING.md`. `InputTextCore`/`InputSelectCore` also had this exact problem's original
   form: a private `--_input-text-*`/`--_input-select-*` naming scheme documented as a second
   "local override path" alongside the global tokens, added 2026-08-22 (three days before this
   pattern was formalised) as a workaround for a global-override-not-landing report that was never
   root-caused. That private-var-as-override-point shape is exactly what this pattern replaces —
-  renamed public with real fallbacks, old two-path docs removed. `InputNumberCore` had no
+  renamed public with real fallbacks, old two-path docs removed. `InputNumber` had no
   component-scoped tokens at all before this (bare `--theme-input-*` throughout). Added a
-  Storybook story for `InputSelectCore` (didn't have one); `InputNumberCore` still doesn't.
+  Storybook story for `InputSelectCore` (didn't have one); `InputNumber` still doesn't.
   `InputTextCore`/`InputSelectCore`'s `.normal` variant also had hover and `:focus-visible` share
   one token (literally the same rule content duplicated under two selectors) — split into
   `--input-text-border-hover`/`--input-select-border-hover` alongside the existing `-border-focus`
   pair, both still defaulting to `--theme-border-focus` so default rendering is unchanged, but
-  mouse and assistive-tech interaction can now be themed independently. `InputNumberCore` has no
+  mouse and assistive-tech interaction can now be themed independently. `InputNumber` has no
   hover state on its border at all (only a `:focus-visible` box-shadow toggle), so there was
   nothing to split there.
 - ✅ `ToggleSwitchCore`, `TripleToggleSwitchCore`, `DisplayThemeSwitch` — migrated 2026-08-25, see

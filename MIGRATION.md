@@ -131,11 +131,11 @@ Tracks progress toward a fully migrated component library. A component is consid
 | Component | File | CS | SN |
 |---|---|---|---|
 | InputTextCore | `input-text/InputTextCore.vue` | ☐ | ☐ |
-| InputTextWithLabel | `input-text/variants/InputTextWithLabel.vue` | ☐ | ☐ |
-| InputTextAsNumberWithLabel | `input-text/variants/InputTextAsNumberWithLabel.vue` | ☐ | ☐ |
-| InputPasswordWithLabel | `input-text/variants/InputPasswordWithLabel.vue` | ☐ | ☐ |
+| InputTextWithLabel | `input-text/InputTextWithLabel.vue` | ☐ | ☐ |
+| InputTextAsNumberWithLabel | `input-text/InputTextAsNumberWithLabel.vue` | ☐ | ☐ |
+| InputPasswordWithLabel | `input-text/InputPasswordWithLabel.vue` | ☐ | ☐ |
 | InputTextareaCore | `input-textarea/InputTextareaCore.vue` | ☐ | ☐ |
-| InputTextareaWithLabel | `input-textarea/variants/InputTextareaWithLabel.vue` | ☐ | ☐ |
+| InputTextareaWithLabel | `input-textarea/InputTextareaWithLabel.vue` | ☐ | ☐ |
 | InputCopyCore | `input-copy/InputCopyCore.vue` | ☐ | ☐ |
 
 ### Select & Number
@@ -143,9 +143,9 @@ Tracks progress toward a fully migrated component library. A component is consid
 | Component | File | CS | SN |
 |---|---|---|---|
 | InputSelectCore | `input-select/InputSelectCore.vue` | ☐ | ☐ |
-| InputSelectWithLabel | `input-select/variants/InputSelectWithLabel.vue` | ☐ | ☐ |
-| InputNumberCore | `input-number/InputNumberCore.vue` | ☐ | ☐ |
-| InputNumberDefault | `input-number/variants/InputNumberDefault.vue` | ☐ | ☐ |
+| InputSelectWithLabel | `input-select/InputSelectWithLabel.vue` | ☐ | ☐ |
+| InputNumber | `input-number/InputNumber.vue` | ☐ | ☐ |
+| InputNumberField | `input-number/InputNumberField.vue` | ☐ | ☐ |
 
 ### Checkboxes & Radios
 
@@ -163,11 +163,11 @@ Tracks progress toward a fully migrated component library. A component is consid
 | Component | File | CS | SN |
 |---|---|---|---|
 | ToggleSwitchCore | `toggle-switch/ToggleSwitchCore.vue` | ☐ | ☐ |
-| ToggleSwitchWithLabel | `toggle-switch/variants/ToggleSwitchWithLabel.vue` | ☐ | ☐ |
-| ToggleSwitchWithLabelInline | `toggle-switch/variants/ToggleSwitchWithLabelInline.vue` | ☐ | ☐ |
+| ToggleSwitchWithLabel | `toggle-switch/ToggleSwitchWithLabel.vue` | ☐ | ☐ |
+| ToggleSwitchWithLabelInline | `toggle-switch/ToggleSwitchWithLabelInline.vue` | ☐ | ☐ |
 | TripleToggleSwitchCore | `triple-toggle-switch/TripleToggleSwitchCore.vue` | ☐ | ☐ |
 | InputRangeCore | `input-range/InputRangeCore.vue` | ✅ | ✅ `input-range` |
-| InputRangeDefault | `input-range/variants/InputRangeDefault.vue` | ✅ | ✅ `input-range` |
+| InputRangeDefault | `input-range/InputRangeDefault.vue` | ✅ | ✅ `input-range` |
 
 ### Utility
 

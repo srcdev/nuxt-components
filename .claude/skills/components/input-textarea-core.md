@@ -33,7 +33,7 @@ directly.
 
 - `v-model` — `string | number | readonly string[] | null | undefined`, **required**
   (`defineModel({ required: true })`, satisfying `vue/require-default-prop` the same way as
-  `InputRangeCore`/`InputNumberCore` — see `project_ledger_eslint_issues_column` in memory).
+  `InputRangeCore`/`InputNumber` — see `project_ledger_eslint_issues_column` in memory).
   "Required" here means a consumer must bind `v-model`, not that the value can't be an empty
   string — `""` is a perfectly valid textarea value.
 - `v-model:is-dirty` — `boolean`. Set once by `InputTextareaWithLabel` the first time the value
@@ -50,7 +50,7 @@ directly.
 | `left` | Rendered before the textarea (decorative — e.g. an icon). Adds `has-left-slot` to the wrapper. |
 | `right` | Rendered after the textarea (decorative). Adds `has-right-slot` to the wrapper. |
 
-Unlike `InputNumberCore`/`InputRangeCore`, these slots have no built-in `InputButtonCore`
+Unlike `InputNumber`/`InputRangeCore`, these slots have no built-in `InputButtonCore`
 divider/embedded-button styling — they're plain decorative content (see the Storybook stories,
 which use emoji), not a stepper control.
 
@@ -105,7 +105,7 @@ score-1/5 state (no public tokens, no CONSUMER-STYLING.md, no tests, no skill do
   `InputLabel` (which does have a real `label` concept) already renders it correctly. Covered by
   a regression test.
 - **`defineModel()` had no default**, tripping `vue/require-default-prop` in both files — fixed
-  with `{ required: true }`, same pattern as `InputRangeCore`/`InputNumberCore` (see the v-model
+  with `{ required: true }`, same pattern as `InputRangeCore`/`InputNumber` (see the v-model
   note above for why this is still correct even though an empty string is a valid value here).
 - **`InputTextareaWithLabel.stories.ts` used `reactive()` in two render functions
   (`AllVariants`/`FormExamples`) without importing it** — only `computed` was imported from
@@ -119,7 +119,7 @@ score-1/5 state (no public tokens, no CONSUMER-STYLING.md, no tests, no skill do
 
 ### InputTextareaWithLabel
 
-`InputTextareaWithLabel` (`variants/InputTextareaWithLabel.vue`) composes `InputTextareaCore` with
+`InputTextareaWithLabel` (`InputTextareaWithLabel.vue`) composes `InputTextareaCore` with
 `InputLabel`, `InputDescription` (positioned before or after the field depending on
 `inputVariant === "outlined"`, matching `InputTextWithLabel`'s exact placement rule), and
 `InputError`.

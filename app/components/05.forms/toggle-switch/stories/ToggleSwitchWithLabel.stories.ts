@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
-import StorybookComponent from "../variants/ToggleSwitchWithLabel.vue";
+import StorybookComponent from "../ToggleSwitchWithLabel.vue";
 import type { FormUiTheme } from "~/types/forms/types.forms.d";
 
 interface ToggleSwitchWithLabelStoryArgs {

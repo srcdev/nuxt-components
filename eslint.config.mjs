@@ -22,5 +22,13 @@ export default withNuxt(
         },
       ],
     },
+  },
+  {
+    // Single-word names can collide with native HTML elements (Dialog, Button, Select...), which is
+    // why the Core suffix crept in. See .claude/skills/component-naming.md.
+    files: ["app/components/**/*.vue"],
+    rules: {
+      "vue/multi-word-component-names": ["error", { ignores: ["Breadcrumb"] }],
+    },
   }
 );

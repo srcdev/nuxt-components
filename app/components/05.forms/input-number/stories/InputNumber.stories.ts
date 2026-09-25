@@ -1,8 +1,8 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
-import StorybookComponent from "../InputNumberCore.vue";
+import StorybookComponent from "../InputNumber.vue";
 
-interface InputNumberCoreStoryArgs {
+interface InputNumberStoryArgs {
   id: string;
   name: string;
   min: number;
@@ -16,7 +16,7 @@ interface InputNumberCoreStoryArgs {
 }
 
 export default {
-  title: "Components/Forms/Input Number/InputNumberCore",
+  title: "Components/Forms/Input Number/InputNumber",
   component: StorybookComponent,
   argTypes: {
     id: { control: "text", table: { category: "Basic" } },
@@ -46,9 +46,9 @@ export default {
     weight: "normal",
     inputVariant: "normal",
   },
-} as Meta<InputNumberCoreStoryArgs>;
+} as Meta<InputNumberStoryArgs>;
 
-const Template: StoryFn<InputNumberCoreStoryArgs> = (args) => ({
+const Template: StoryFn<InputNumberStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
     const modelValue = ref(50);
@@ -66,7 +66,7 @@ export const Default = Template.bind({});
 export const ErrorState = Template.bind({});
 ErrorState.args = { fieldHasError: true };
 
-const WithStepButtonsTemplate: StoryFn<InputNumberCoreStoryArgs> = (args) => ({
+const WithStepButtonsTemplate: StoryFn<InputNumberStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
     const modelValue = ref(50);

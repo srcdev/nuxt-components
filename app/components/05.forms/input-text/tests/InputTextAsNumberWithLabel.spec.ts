@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/getting-started/testing#unit-testing
 import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import ComponentUnderTest from "../variants/InputTextAsNumberWithLabel.vue";
+import ComponentUnderTest from "../InputTextAsNumberWithLabel.vue";
 
 const initialPropsData = {
   name: "quantity",

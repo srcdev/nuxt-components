@@ -89,7 +89,7 @@ constraint is a UX affordance, not a substitute for validating the submitted val
 
 ## Variants
 
-The `variants/` folder composes `InputTextCore` with `InputLabel`, `InputDescription`, and
+Three sibling wrappers compose `InputTextCore` with `InputLabel`, `InputDescription`, and
 `InputError` for the common "labelled field" case. Each forwards `min`/`max` straight through if
 you pass them.
 

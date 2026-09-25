@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { computed } from "vue";
-import StorybookComponent from "../variants/InputTextWithLabel.vue";
+import StorybookComponent from "../InputTextWithLabel.vue";
 import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
 interface InputTextWithLabelStoryArgs {
