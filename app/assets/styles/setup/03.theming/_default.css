@@ -44,16 +44,6 @@
   --stepper-list-icon: light-dark(var(--blue-09), var(--blue-02));
 
   /* ===========================================
-     COLOUR FINDER VARIABLES
-     =========================================== */
-  --colour-finder-primary-colour: var(--blue-03);
-  --colour-finder-border-colour: light-dark(var(--blue-02), var(--blue-03));
-  --colour-finder-checked-surface-colour: light-dark(var(--green-03), var(--green-10));
-  --colour-finder-checked-stroke-colour: light-dark(var(--green-09), var(--green-03));
-  --colour-finder-conflict-surface-colour: light-dark(var(--sunset-03), var(--sunset-09));
-  --colour-finder-conflict-stroke-colour: light-dark(var(--sunset-09), var(--sunset-03));
-
-  /* ===========================================
      TREATMENT CONSULTANT VARIABLES
      =========================================== */
   --treatment-consultant-primary-colour: light-dark(var(--amber-05), var(--amber-02));

@@ -89,7 +89,6 @@ Tracks progress toward a fully migrated component library. A component is consid
 | Component | File | CS | SN |
 |---|---|---|---|
 | CarouselFlip | `image-galleries/carousel-flip/CarouselFlip.vue` | ✅ | ✅ `carousel-flip` |
-| ColourFinder | `colour-finder/ColourFinder.vue` | ☐ | ☐ |
 | SliderGallery | `image-galleries/slider-gallery/SliderGallery.vue` | ☐ | ☐ |
 | ServicesCard | `services/services-card/ServicesCard.vue` | ☐ | ☐ |
 | ServicesCardGrid | `services/services-grids/ServicesCardGrid.vue` | ☐ | ☐ |

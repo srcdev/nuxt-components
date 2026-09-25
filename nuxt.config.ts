@@ -146,7 +146,7 @@ export default defineNuxtConfig({
     // "esbuild". lightningcss has an open bug where it drops the unprefixed `backdrop-filter`
     // once autoprefixer adds `-webkit-backdrop-filter` alongside it, breaking glass/blur effects
     // (see https://github.com/vitejs/vite/issues/22649) — this repo relies on backdrop-filter in
-    // several components (GlassPanel, SiteNavigation, TabNavigation, DisplayDialog, ColourFinder,
+    // several components (GlassPanel, SiteNavigation, TabNavigation, DisplayDialog,
     // MagneticNavigation). Pin back to esbuild until upstream fixes it.
     build: {
       cssMinify: "esbuild",

@@ -22,7 +22,7 @@ The layer's `modules/icon-sets.ts` runs at dev/build time and logs an info messa
 | `bitcoin-icons` | `@iconify-json/bitcoin-icons` | Display components |
 | `gravity-ui` | `@iconify-json/gravity-ui` | NavigationItems (burger/ellipsis overflow) |
 | `ic` | `@iconify-json/ic` | CarouselFlip, SliderGallery, CanvasSwitcher |
-| `lucide` | `@iconify-json/lucide` | ColourFinder, TreatmentConsultant |
+| `lucide` | `@iconify-json/lucide` | ActionMenu, InputCopy, PopOver, SelectMenu |
 | `material-symbols` | `@iconify-json/material-symbols` | form components |
 | `mdi` | `@iconify-json/mdi` | NavigationHorizontal, form components, ServicesCard |
 | `radix-icons` | `@iconify-json/radix-icons` | InputPasswordWithLabel, InputError, DisplayThemeSwitch |
@@ -41,5 +41,5 @@ Only install the sets you actually need — unused ones cost nothing either way,
 
 - The layer's build-time info message only lists sets missing from the **consumer's own project**. It is not a hard error.
 - A consumer app can install any additional icon sets it needs for its own components — these won't conflict.
-- If you're not using a particular layer component (e.g. `ColourFinder`), missing `@iconify-json/lucide` won't cause any visible problem.
+- If you're not using a particular layer component (e.g. `SelectMenu`), missing `@iconify-json/lucide` won't cause any visible problem.
 - The `peerDependencies` + `peerDependenciesMeta (optional: true)` in the layer's `package.json` is the npm-standard signal — package managers like npm 7+ will show a notice for missing optional peers during install.
