@@ -521,6 +521,8 @@ const ComparisonTemplate: StoryFn = () => ({
 
 export const ResponsiveComparison = ComparisonTemplate.bind({});
 ResponsiveComparison.parameters = {
+  // Fixed showcase: hardcoded values, so Controls would do nothing here.
+  controls: { disable: true },
   docs: {
     description: {
       story:

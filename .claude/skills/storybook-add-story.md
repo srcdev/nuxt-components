@@ -240,6 +240,13 @@ Key points:
   them in the Storybook controls panel (e.g. `"Model"`, `"Basic"`, `"Validation"`, `"Styling"`, `"Slots"`).
 - Export multiple named stories (`Default`, `WithError`, `Outlined`, etc.) when you want
   Playwright to test distinct visual states via separate story URLs.
+- **Every story inherits the meta's `argTypes`**, so its Controls panel shows them even if the
+  story ignores `args`. A template written as `StoryFn = () => ({...})` never receives `args`, so
+  those controls silently do nothing (found 2026-09-25 on `InputCheckboxRadioButton`'s
+  `OptionGroup`: switching `type` to `radio` changed nothing). Either take `(args)` and bind the
+  controls that make sense (hide irrelevant ones with `Story.argTypes = { x: { table: { disable: true } } }`),
+  or, for a fixed showcase (comparisons, all-themes grids, composition examples), add
+  `controls: { disable: true }` to that story's `parameters`.
 
 ## Scroll/animation-driven effects need surrounding chrome, not just the bare component
 

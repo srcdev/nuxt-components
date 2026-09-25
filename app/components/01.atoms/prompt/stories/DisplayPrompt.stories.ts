@@ -110,3 +110,6 @@ export const AllThemesDismissible: StoryFn<typeof StorybookComponent> = () => ({
     </div>
   `,
 });
+
+// Fixed showcase: hardcoded values, so Controls would do nothing here.
+AllThemesDismissible.parameters = { controls: { disable: true } };

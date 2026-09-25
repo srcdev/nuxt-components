@@ -278,3 +278,6 @@ export const InlineFormExample: StoryFn = () => ({
     </div>
   `,
 });
+
+// Fixed showcase: hardcoded values, so Controls would do nothing here.
+InlineFormExample.parameters = { controls: { disable: true } };

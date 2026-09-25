@@ -1,5 +1,5 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import StorybookComponent from "../InputCheckboxRadioButton.vue";
 
 interface InputCheckboxRadioButtonStoryArgs {
@@ -59,7 +59,7 @@ export const Default = Template.bind({});
 
 // "Services of interest" pattern — the actual multi-option checkbox-pill layout this component
 // is normally used in (as opposed to Default's single isolated control).
-const OptionGroupTemplate: StoryFn = () => ({
+const OptionGroupTemplate: StoryFn<InputCheckboxRadioButtonStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
     const services = [
@@ -70,8 +70,16 @@ const OptionGroupTemplate: StoryFn = () => ({
       "Lowlights",
       "Toner & Gloss",
     ];
-    const selected = ref<string[]>([]);
-    return { services, selected };
+    // Checkbox groups hold an array of values, radio groups a single value.
+    const emptySelection = () => (args.type === "checkbox" ? [] : "");
+    const selected = ref<string[] | string>(emptySelection());
+    watch(
+      () => args.type,
+      () => {
+        selected.value = emptySelection();
+      }
+    );
+    return { args, services, selected };
   },
   template: `
     <div style="margin: 36px; max-width: 480px; display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem;">
@@ -80,14 +88,19 @@ const OptionGroupTemplate: StoryFn = () => ({
         :key="service"
         :id="'service-' + service"
         name="services"
-        type="checkbox"
+        :type="args.type"
         :label="service"
         :true-value="service"
-        :multiple-options="true"
+        :multiple-options="args.type === 'checkbox'"
+        :is-pill="args.isPill"
+        :field-has-error="args.fieldHasError"
+        :display-as-disc="args.displayAsDisc"
         v-model="selected"
       />
     </div>
+    <p style="margin: 0 36px; font-family: monospace;">selected: {{ JSON.stringify(selected) }}</p>
   `,
 });
 
 export const OptionGroup = OptionGroupTemplate.bind({});
+OptionGroup.argTypes = { label: { table: { disable: true } } };

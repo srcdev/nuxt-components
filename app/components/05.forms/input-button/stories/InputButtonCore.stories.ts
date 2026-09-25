@@ -337,3 +337,6 @@ const InlineTemplate: StoryFn = () => ({
 });
 
 export const InlineWithTextInput = InlineTemplate.bind({});
+
+// Fixed showcase: hardcoded values, so Controls would do nothing here.
+InlineWithTextInput.parameters = { controls: { disable: true } };

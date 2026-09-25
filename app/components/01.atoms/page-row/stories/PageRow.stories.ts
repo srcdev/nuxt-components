@@ -147,6 +147,8 @@ const NestingTemplate: StoryFn = () => ({
 
 export const NestingPattern = NestingTemplate.bind({});
 NestingPattern.parameters = {
+  // Fixed showcase: hardcoded values, so Controls would do nothing here.
+  controls: { disable: true },
   docs: {
     description: {
       story:
@@ -199,6 +201,8 @@ const ComparisonTemplate: StoryFn = () => ({
 
 export const WidthComparison = ComparisonTemplate.bind({});
 WidthComparison.parameters = {
+  // Fixed showcase: hardcoded values, so Controls would do nothing here.
+  controls: { disable: true },
   docs: {
     description: {
       story: "Side-by-side comparison of all four main track widths.",
@@ -260,6 +264,8 @@ const AlignTemplate: StoryFn = () => ({
 
 export const Alignment = AlignTemplate.bind({});
 Alignment.parameters = {
+  // Fixed showcase: hardcoded values, so Controls would do nothing here.
+  controls: { disable: true },
   docs: {
     description: {
       story:
@@ -302,6 +308,8 @@ const A11yTemplate: StoryFn = () => ({
 
 export const AriaLabelledBy = A11yTemplate.bind({});
 AriaLabelledBy.parameters = {
+  // Fixed showcase: hardcoded values, so Controls would do nothing here.
+  controls: { disable: true },
   docs: {
     description: {
       story:
