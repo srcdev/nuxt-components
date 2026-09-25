@@ -1,22 +1,19 @@
 // https://nuxt.com/docs/getting-started/testing#unit-testing
 import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { ref } from "vue";
 import type { FormUiTheme, OptionsLayout } from "~/types/forms/types.forms";
 import ComponentUnderTest from "../MultipleCheckboxes.vue";
 import tagsData from "./data/tags.json";
 
 const initialPropsData = {
   dataTestid: "multiple-checkboxes",
-  id: "tags",
   name: "tags",
   legend: "Choose tags (as checkboxes)",
   required: true,
-  label: "Check between 3 and 8 tags",
-  placeholder: "eg. Type something here",
   isButton: true,
   errorMessage: "Please select between 3 and 8 tags",
   fieldHasError: false,
+  modelValue: [] as string[],
   fieldData: tagsData,
   optionsLayout: "inline" as OptionsLayout,
   styleClassPassthrough: ["testClass"],
@@ -25,7 +22,6 @@ const initialPropsData = {
 
 const initialSlots = {
   checkedIcon: () => ``,
-  itemIcon: () => `<Icon name="material-symbols:add-2" class="icon" />`,
 };
 
 let wrapper: VueWrapper<InstanceType<typeof ComponentUnderTest>>;
@@ -46,56 +42,98 @@ describe("MultipleCheckboxes Component", () => {
     expect(wrapper).toBeTruthy();
   });
 
-  it("renders properly", async () => {
+  it("renders the data-testid and applies styleClassPassthrough to the fieldset", async () => {
     wrapper = await wrapperFactory();
-    const dataTestIdElem = wrapper.attributes("data-testid");
-    expect(dataTestIdElem).toBe(initialPropsData.dataTestid);
-    // The styleClassPassthrough is applied to the FormFieldset component, not the root
-    expect(wrapper.find(".form-fieldset").classes()).toContain("testClass");
+    expect(wrapper.attributes("data-testid")).toBe(initialPropsData.dataTestid);
+    const fieldset = wrapper.find(".form-fieldset");
+    expect(fieldset.classes()).toContain("multiple-checkboxes-fieldset");
+    expect(fieldset.classes()).toContain("testClass");
   });
 
-  it("updates checkbox modelValue when items clicked", async () => {
-    const modelValue = ref<string[]>([]);
-    const propsData = {
-      modelValue,
-    };
-    wrapper = await wrapperFactory(propsData);
-    const checkboxElements = wrapper.findAll('input[type="checkbox"]');
+  it("renders the legend", async () => {
+    wrapper = await wrapperFactory();
+    expect(wrapper.find("legend").text()).toBe(initialPropsData.legend);
+  });
 
-    /*
-     * Test the first checkbox checked
-     **/
-    const firstCheckbox = checkboxElements[0];
-    expect(firstCheckbox).toBeDefined();
-    expect(firstCheckbox!.attributes("aria-checked")).toBe("false");
-    const firstCheckboxTrueValue = firstCheckbox!.attributes("true-value");
+  it("renders one checkbox per fieldData item", async () => {
+    wrapper = await wrapperFactory();
+    expect(wrapper.findAll('input[type="checkbox"]').length).toBe(tagsData.data.length);
+  });
 
-    await firstCheckbox!.trigger("click");
+  it("uses the button presentation when isButton is true", async () => {
+    wrapper = await wrapperFactory({ isButton: true });
+    expect(wrapper.findAll(".input-checkbox-radio-options-button").length).toBe(tagsData.data.length);
+  });
 
-    expect(wrapper.emitted()).toHaveProperty("update:modelValue");
-    const firstEmittedEvents = wrapper.emitted("update:modelValue");
-    if (firstEmittedEvents && firstEmittedEvents[0]) {
-      expect(firstEmittedEvents[0]).includes(firstCheckboxTrueValue);
-    }
+  it("uses the labelled presentation when isButton is false", async () => {
+    wrapper = await wrapperFactory({ isButton: false });
+    expect(wrapper.find(".input-checkbox-radio-options-button").exists()).toBe(false);
+    expect(wrapper.findAll(".input-checkbox-radio-with-label").length).toBe(tagsData.data.length);
+  });
 
-    expect(firstCheckbox!.attributes("aria-checked")).toBe("true");
+  it("applies optionsLayout as a class on the items container", async () => {
+    wrapper = await wrapperFactory({ optionsLayout: "block" as OptionsLayout });
+    expect(wrapper.find(".multiple-checkboxes-items").classes()).toContain("block");
+  });
 
-    /*
-     * Test the second checkbox chekced
-     **/
-    const secondCheckbox = checkboxElements[1];
-    expect(secondCheckbox).toBeDefined();
-    expect(secondCheckbox!.attributes("aria-checked")).toBe("false");
-    const secondCheckboxTrueValue = secondCheckbox!.attributes("true-value");
+  it("does not put native required on each checkbox in the group", async () => {
+    wrapper = await wrapperFactory({ required: true, isButton: false });
+    const checkboxes = wrapper.findAll('input[type="checkbox"]');
+    checkboxes.forEach((checkbox) => {
+      expect(checkbox.attributes("required")).toBeUndefined();
+    });
+  });
 
-    await secondCheckbox!.trigger("click");
+  it("gives each checkbox an id derived from name and value", async () => {
+    wrapper = await wrapperFactory();
+    const first = wrapper.find('input[type="checkbox"]');
+    expect(first.attributes("id")).toBe(`tags-${tagsData.data[0]!.value}`);
+  });
 
-    expect(wrapper.emitted()).toHaveProperty("update:modelValue");
-    const secondEmittedEvents = wrapper.emitted("update:modelValue");
-    if (secondEmittedEvents && secondEmittedEvents[0]) {
-      expect(secondEmittedEvents[1]).includes(secondCheckboxTrueValue);
-    }
+  it("adds each clicked value to the model", async () => {
+    wrapper = await wrapperFactory({
+      "onUpdate:modelValue": (value: string[]) => wrapper.setProps({ modelValue: value }),
+    });
+    const checkboxes = wrapper.findAll('input[type="checkbox"]');
 
-    expect(secondCheckbox!.attributes("aria-checked")).toBe("true");
+    await checkboxes[0]!.setValue(true);
+    expect(wrapper.props("modelValue")).toEqual([tagsData.data[0]!.value]);
+    expect(checkboxes[0]!.attributes("aria-checked")).toBe("true");
+
+    await checkboxes[1]!.setValue(true);
+    expect(wrapper.props("modelValue")).toEqual([tagsData.data[0]!.value, tagsData.data[1]!.value]);
+    expect(checkboxes[1]!.attributes("aria-checked")).toBe("true");
+  });
+
+  it("removes a value from the model when unchecked", async () => {
+    wrapper = await wrapperFactory({
+      modelValue: [tagsData.data[0]!.value],
+      "onUpdate:modelValue": (value: string[]) => wrapper.setProps({ modelValue: value }),
+    });
+    const first = wrapper.find('input[type="checkbox"]');
+    expect(first.attributes("aria-checked")).toBe("true");
+
+    await first.setValue(false);
+    expect(wrapper.props("modelValue")).toEqual([]);
+  });
+
+  it("shows the error message and marks the fieldset invalid when fieldHasError is true", async () => {
+    wrapper = await wrapperFactory({ fieldHasError: true });
+    const error = wrapper.find(".input-error-message");
+    expect(error.classes()).toContain("show");
+    expect(error.text()).toContain(initialPropsData.errorMessage);
+    expect(wrapper.find(".form-fieldset").attributes("aria-invalid")).toBe("true");
+  });
+
+  it("points each checkbox's aria-describedby at the error message when in error", async () => {
+    wrapper = await wrapperFactory({ fieldHasError: true, isButton: false });
+    const errorId = wrapper.find(".input-error-message").attributes("id");
+    expect(errorId).toBeTruthy();
+    expect(wrapper.find('input[type="checkbox"]').attributes("aria-describedby")).toContain(errorId);
+  });
+
+  it("hides the error message when fieldHasError is false", async () => {
+    wrapper = await wrapperFactory({ fieldHasError: false });
+    expect(wrapper.find(".input-error-message").classes()).not.toContain("show");
   });
 });

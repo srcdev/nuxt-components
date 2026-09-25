@@ -6,6 +6,8 @@ import InputNumberDefault from "../../input-number/variants/InputNumberDefault.v
 import InputTextareaWithLabel from "../../input-textarea/variants/InputTextareaWithLabel.vue";
 import InputSelectWithLabel from "../../input-select/variants/InputSelectWithLabel.vue";
 import ToggleSwitchWithLabel from "../../toggle-switch/variants/ToggleSwitchWithLabel.vue";
+import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
+import SingleCheckbox from "../../input-checkbox/SingleCheckbox.vue";
 import InputButtonCore from "../../input-button/InputButtonCore.vue";
 import FormField from "../../form-field/FormField.vue";
 import HeroText from "../../../01.atoms/text-blocks/hero-text/HeroText.vue";
@@ -17,11 +19,12 @@ interface MigratedFieldsFormStoryArgs {
 
 // Living reference, not a component of its own — one field per 05.forms component group that
 // currently scores 5/5 in the Component Ledger (.claude/component-ledger/audit.json: tier folder,
-// tests, story, skill doc, CONSUMER-STYLING.md, VS Code snippet). As of 2026-09-23 that's
+// tests, story, skill doc, CONSUMER-STYLING.md, VS Code snippet). As of 2026-09-25 that's
 // InputTextCore (via InputTextWithLabel), InputRangeCore (via InputRangeDefault), InputNumberCore
 // (via InputNumberDefault), InputTextareaCore (via InputTextareaWithLabel), InputSelectCore
-// (via InputSelectWithLabel), and ToggleSwitchCore (via ToggleSwitchWithLabel) — every other
-// 05.forms component (checkbox, radio, ...) is still mid-migration.
+// (via InputSelectWithLabel), ToggleSwitchCore (via ToggleSwitchWithLabel), and input-checkbox
+// (MultipleCheckboxes + SingleCheckbox) — every other 05.forms component (radio, ...) is still
+// mid-migration.
 // Add a field here each time /migrate-component brings another 05.forms component up to 5/5, so
 // this story doubles as a visible migration-progress tracker rather than living only in the
 // ledger's HTML output. No validation wiring (useZodValidation/zod) here — that's the consuming
@@ -49,6 +52,8 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     InputTextareaWithLabel,
     InputSelectWithLabel,
     ToggleSwitchWithLabel,
+    MultipleCheckboxes,
+    SingleCheckbox,
     InputButtonCore,
     FormField,
     HeroText,
@@ -61,6 +66,19 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       notes: "",
       colour: "",
       subscribe: false,
+      services: [] as string[],
+      terms: false,
+    });
+
+    const serviceOptions = reactive<IFormMultipleOptions>({
+      data: [
+        { id: "1", name: "services", value: "cut", label: "Cut" },
+        { id: "2", name: "services", value: "colour", label: "Colour" },
+        { id: "3", name: "services", value: "styling", label: "Styling" },
+      ],
+      total: 3,
+      skip: 0,
+      limit: 10,
     });
 
     const colourOptions = reactive<IFormMultipleOptions>({
@@ -78,13 +96,15 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     // useZodValidation instead (see this file's top comment). Kept deliberately simple so the
     // Continue button has an obvious, reliable way to trigger each field's error state for
     // exercising InputTextWithLabel/InputRangeDefault/InputNumberDefault/InputTextareaWithLabel/
-    // InputSelectWithLabel's error UI in Storybook.
+    // InputSelectWithLabel/MultipleCheckboxes/SingleCheckbox's error UI in Storybook.
     const errors = reactive({
       fullName: "",
       budget: "",
       quantity: "",
       notes: "",
       colour: "",
+      services: "",
+      terms: "",
     });
 
     const validate = () => {
@@ -93,6 +113,8 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       errors.quantity = state.quantity >= 1 ? "" : "Quantity must be at least 1";
       errors.notes = state.notes.trim() ? "" : "Notes are required";
       errors.colour = state.colour ? "" : "Please choose a colour";
+      errors.services = state.services.length ? "" : "Choose at least one service";
+      errors.terms = state.terms ? "" : "You must agree to the terms";
     };
 
     const clearErrors = () => {
@@ -101,9 +123,11 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       errors.quantity = "";
       errors.notes = "";
       errors.colour = "";
+      errors.services = "";
+      errors.terms = "";
     };
 
-    return { args, state, errors, validate, clearErrors, colourOptions };
+    return { args, state, errors, validate, clearErrors, colourOptions, serviceOptions };
   },
   template: `
     <div style="margin: 36px; max-width: 480px;">
@@ -196,6 +220,33 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         </FormField>
 
         <FormField width="wide" :has-gutter="false">
+          <MultipleCheckboxes
+            v-model="state.services"
+            v-model:field-data="serviceOptions"
+            name="services"
+            legend="Services of interest"
+            options-layout="inline"
+            :is-button="true"
+            :error-message="errors.services"
+            :field-has-error="!!errors.services"
+            :input-variant="args.inputVariant"
+          />
+        </FormField>
+
+        <FormField width="wide" :has-gutter="false">
+          <SingleCheckbox
+            v-model="state.terms"
+            name="terms"
+            legend="Terms and conditions"
+            label="I agree to the terms"
+            :required="true"
+            :error-message="errors.terms"
+            :field-has-error="!!errors.terms"
+            :input-variant="args.inputVariant"
+          />
+        </FormField>
+
+        <FormField width="wide" :has-gutter="false">
           <div style="display: flex; gap: 1.2rem;">
             <InputButtonCore type="submit" variant="primary" button-text="Continue" />
             <InputButtonCore type="button" variant="tertiary" button-text="Clear errors" @click="clearErrors" />
@@ -212,6 +263,8 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         <div>notes: {{ state.notes || '""' }}</div>
         <div>colour: {{ state.colour || '""' }}</div>
         <div>subscribe: {{ state.subscribe }}</div>
+        <div>services: {{ JSON.stringify(state.services) }}</div>
+        <div>terms: {{ state.terms }}</div>
       </div>
     </div>
   `,

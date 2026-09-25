@@ -32,6 +32,7 @@
             type="checkbox"
             :name
             :required
+            :multiple-options="true"
             :label="item.label"
             :field-has-error
             :true-value="item.value"
@@ -59,6 +60,7 @@
             type="checkbox"
             :name
             :required
+            :multiple-options="true"
             :label="item.label"
             :field-has-error
             :true-value="item.value"
@@ -86,15 +88,12 @@ interface Props {
   dataTestid?: string;
   name: string;
   legend: string;
-  label: string;
-  placeholder?: string;
+  label?: string;
   isButton?: boolean;
   errorMessage: string | object;
   required?: boolean;
   fieldHasError?: boolean;
-  multipleOptions?: boolean;
   optionsLayout?: OptionsLayout;
-  equalCols?: boolean;
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
   inputVariant?: InputUiVariant;
@@ -105,13 +104,11 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   dataTestid: "multiple-checkboxes",
-  placeholder: "",
+  label: "",
   isButton: false,
   required: false,
   fieldHasError: false,
-  multipleOptions: false,
   optionsLayout: "equal-widths",
-  equalCols: true,
   styleClassPassthrough: () => [],
   theme: "default",
   inputVariant: "normal",
@@ -122,8 +119,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
-const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
+const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({ required: true });
+const fieldData = defineModel<IFormMultipleOptions>("fieldData", { required: true });
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -154,8 +151,8 @@ watch(
 @layer components {
 .multiple-checkboxes-items {
   display: flex;
-  gap: 1.2rem;
-  margin-top: 1.2rem;
+  gap: var(--multiple-checkboxes-gap, 1.2rem);
+  margin-block-start: var(--multiple-checkboxes-margin-block-start, 1.2rem);
 
   &.inline {
     flex-direction: row;

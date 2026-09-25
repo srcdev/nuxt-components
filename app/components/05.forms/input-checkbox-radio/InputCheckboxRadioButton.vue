@@ -13,6 +13,7 @@
       :type
       :name
       :required
+      :multiple-options
       :true-value="trueValue"
       :false-value="falseValue"
       :field-has-error="fieldHasError"

@@ -46,6 +46,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── component-inline-action-button.md — InputButtonCore variant="inline" pattern for buttons embedded in custom input wrappers
 ├── vue-video-autoplay.md             — autoplay on client-side navigation: use <source> child (not :src on <video>), :key, and explicit v.load()
 ├── icon-sets.md                      — icon set packages required by layer components, FOUC prevention, component→package map
+├── icon-sizing.md                    — size <Icon> with font-size, never width/height: @nuxt/icon's unlayered CSS beats @layer components; possible global cssLayer fix
 ├── vercel-node-version.md            — .nvmrc pinned to Node 24 is required; without it Vercel uses npm 10 which crashes on versionless optional stubs
 ├── robots-env-aware.md               — @nuxtjs/robots: allow crawling on prod domain only, block on preview/staging via env var
 ├── new-app-scaffold.md               — scaffold a new Nuxt consumer app extending this layer (package.json, nuxt.config, app structure, CLAUDE.md)
@@ -131,6 +132,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── input-number-core.md      — InputNumberCore: native number-input primitive, left/right step-button slots, missing base class/placeholder/mismatched slot-selector bugs fixed, CSS token API; Variants section covers InputNumberDefault
     ├── input-textarea-core.md    — InputTextareaCore: native textarea primitive, left/right decorative slots, undefined-token/dead-code/label-leak bugs fixed, CSS token API; Variants section covers InputTextareaWithLabel
     ├── input-select-core.md      — InputSelectCore: native select primitive, data-driven options with icon decorator, dead required/styleClassPassthrough/isDirty-isActive functionality fixed, appearance:base-select browser-support note, CSS token API; Variants section covers InputSelectWithLabel
+    ├── input-checkbox.md         — MultipleCheckboxes/SingleCheckbox: fieldset-wrapped checkbox group (data-driven, button or labelled) and single checkbox, per-box native-required/styleClassPassthrough/data-testid bugs fixed, spacing token API
     ├── toggle-switch-core.md      — ToggleSwitchCore: pill/square checkbox-backed toggle primitive, dead round-prop/data-theme-error functionality and story theme-options bugs fixed, CSS token API; Variants section covers ToggleSwitchWithLabel/ToggleSwitchWithLabelInline
     ├── entry-animation.md         — EntryAnimation: scroll-driven entry animation wrapper (slide-in/zoom-reveal/exit-blur utility classes), skipAnimation for above-the-fold loop items, reduced-motion handled at the CSS layer
     ├── column-flow-grid.md        — ColumnFlowGrid (renamed from MasonryGrid): CSS multi-column text-flow layout, named dynamic slots (no count/data prop), itemMinWidth/gap/unit sizing, CSS token API; not a true masonry, see "which one do I want?"

@@ -1,13 +1,12 @@
 <template>
   <FormFieldset
     :id
-    :description-id
     :name
     :legend
     :field-has-error
     :required
     :data-testid
-    :style-class-passthrough="['single-checkbox-fieldset']"
+    :style-class-passthrough="['single-checkbox-fieldset', elementClasses]"
   >
     <template #content>
       <InputDescription
@@ -47,14 +46,7 @@
           </template>
         </InputCheckboxRadioWithLabel>
       </div>
-      <InputError
-        :id="errorId"
-        :error-message
-        :show-error="fieldHasError"
-        :is-detached="true"
-        :input-variant
-        :style-class-passthrough="elementClasses"
-      />
+      <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" :input-variant />
     </template>
   </FormFieldset>
 </template>
@@ -70,61 +62,44 @@ interface Props {
   errorMessage: string | object;
   required?: boolean;
   fieldHasError?: boolean;
-  multipleOptions?: boolean;
   trueValue?: string | number | boolean;
   falseValue?: string | number | boolean;
   optionsLayout?: OptionsLayout;
-  equalCols?: boolean;
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
   inputVariant?: InputUiVariant;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  dataTestid: "multiple-radio-buttons",
+  dataTestid: "single-checkbox",
   label: "",
   required: false,
   fieldHasError: false,
-  multipleOptions: false,
   trueValue: true,
   falseValue: false,
   optionsLayout: "equal-widths",
-  equalCols: true,
   styleClassPassthrough: () => [],
   theme: "default",
   inputVariant: "normal",
 });
 
 const slots = useSlots();
-const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
-const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-
-// const id = `${props.name}-input-${useId()}`;
-// const errorId = `${props.name}-error-message`;
-// const ariaDescribedby = computed(() => {
-//   const ariaDescribedbyId = slots.description ? `${props.name}-description` : undefined;
-//   return props.fieldHasError ? errorId : ariaDescribedbyId;
-// });
+const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({ required: true });
+const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   props.name,
   toRef(props, "fieldHasError"),
   slots
 );
-
-watchEffect(() => {
-  if (!slots.description && props.fieldHasError) {
-    updateElementClasses(["mbs-12"]);
-  }
-});
 </script>
 
 <style lang="css">
 @layer components {
 .single-checkbox-items {
   display: flex;
-  gap: 1.2rem;
-  margin-top: 1.2rem;
+  gap: var(--single-checkbox-gap, 1.2rem);
+  margin-block-start: var(--single-checkbox-margin-block-start, 1.2rem);
 
   &.inline {
     flex-direction: row;
@@ -137,7 +112,7 @@ watchEffect(() => {
 
   &.equal-widths {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(var(--single-checkbox-column-min-width, 100px), 1fr));
   }
 }
 }

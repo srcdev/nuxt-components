@@ -1,0 +1,48 @@
+{
+  "SRCDEV MultipleCheckboxes Basic": {
+    "description": "MultipleCheckboxes: checkbox group built from a data list, with legend and error",
+    "scope": "vue,html",
+    "body": [
+      "<MultipleCheckboxes",
+      "  v-model=\"$1state.fieldName\"",
+      "  v-model:field-data=\"$2fieldOptions\"",
+      "  name=\"$3fieldName\"",
+      "  legend=\"$4Choose all that apply\"",
+      "  :error-message=\"$5errors.fieldName\"",
+      "  :field-has-error=\"!!$5errors.fieldName\"",
+      "  options-layout=\"${6|equal-widths,inline,block|}\"",
+      "  :is-button=\"${7|false,true|}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV SingleCheckbox Basic": {
+    "description": "SingleCheckbox: one labelled checkbox, e.g. terms agreement",
+    "scope": "vue,html",
+    "body": [
+      "<SingleCheckbox",
+      "  v-model=\"$1state.terms\"",
+      "  name=\"$2terms\"",
+      "  legend=\"$3Terms and conditions\"",
+      "  label=\"$4I agree to the terms\"",
+      "  :required=\"true\"",
+      "  :error-message=\"$5errors.terms\"",
+      "  :field-has-error=\"!!$5errors.terms\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputCheckbox CSS Override": {
+    "description": "CSS override scaffold for MultipleCheckboxes/SingleCheckbox spacing tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .multiple-checkboxes-fieldset {",
+      "    --multiple-checkboxes-gap: $2;",
+      "    --multiple-checkboxes-margin-block-start: $3;",
+      "  }",
+      "  .single-checkbox-fieldset {",
+      "    --single-checkbox-margin-block-start: $4;",
+      "  }",
+      "}"
+    ]
+  }
+}

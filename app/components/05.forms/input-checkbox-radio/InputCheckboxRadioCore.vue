@@ -107,96 +107,97 @@ const inputClasses = computed(() => [
 
 <style lang="css">
 @layer components {
-.input-checkbox-radio-wrapper {
-  display: grid;
-  grid-template-areas: "element-stack";
-  place-content: center;
+  .input-checkbox-radio-wrapper {
+    display: grid;
+    grid-template-areas: "element-stack";
+    place-content: center;
 
-  /* Public --input-checkbox-* tokens, inline-fallback to the shared theme tokens (see
+    /* Public --input-checkbox-* tokens, inline-fallback to the shared theme tokens (see
      theming-component-token-pattern.md) — overriding one here doesn't touch every other
      themed input/control that also reads --theme-checkbox-symbol-surface/--theme-border. */
-  background-color: var(--input-checkbox-surface, var(--theme-checkbox-symbol-surface));
-  border: 0.1rem solid var(--input-checkbox-border, var(--theme-border));
-  outline: var(--form-element-outline-width) solid transparent;
-
-  height: var(--input-checked-element-size);
-  width: var(--input-checked-element-size);
-
-  transition: all var(--theme-form-transition-duration) ease-in-out;
-
-  &.checkbox {
-    border-radius: var(--form-input-border-radius);
-    &.underlined {
-      border-radius: 0;
-    }
-    &.button {
-      &.display-as-disc {
-        border-radius: 100vw;
-      }
-    }
-  }
-
-  &.radio {
-    border-radius: 100vw;
-  }
-
-  &:not(:is(.button)) {
-    &:has(input:focus-visible) {
-      outline: var(--form-element-outline-width-focus) solid var(--input-checkbox-border-focus, var(--theme-border-focus));
-      outline-offset: var(--form-element-outline-offset-focus);
-    }
-  }
-
-  &:has(input:checked) {
-    .input-checked-icon-slot {
-      opacity: 1;
-
-      .input-checked-icon-checked,
-      .icon {
-        color: var(--input-checkbox-icon-color, var(--theme-text));
-      }
-    }
-  }
-
-  .input-checked-icon-slot {
-    grid-area: element-stack;
-    display: grid;
-    place-content: center;
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-
-    .input-checked-icon-checked,
-    .icon {
-      color: var(--input-checkbox-icon-color, var(--theme-text));
-      height: var(--input-checked-icon-size);
-      width: var(--input-checked-icon-size);
-      box-shadow: var(--_box-shadow);
-    }
-  }
-
-  .input-checkbox-radio-core {
-    touch-action: manipulation;
-    grid-area: element-stack;
-    appearance: none;
-    margin: 0;
-    overflow: hidden;
-    opacity: 0;
+    background-color: var(--input-checkbox-surface, var(--theme-checkbox-symbol-surface));
+    border: 0.1rem solid var(--input-checkbox-border, var(--theme-border));
+    outline: var(--form-element-outline-width) solid transparent;
 
     height: var(--input-checked-element-size);
     width: var(--input-checked-element-size);
 
-    &:hover {
-      cursor: pointer;
+    transition: all var(--theme-form-transition-duration) ease-in-out;
+
+    &.checkbox {
+      border-radius: var(--form-input-border-radius);
+      &.underlined {
+        border-radius: 0;
+      }
+      &.button {
+        &.display-as-disc {
+          border-radius: 100vw;
+        }
+      }
     }
 
-    /* &:not(.is-button) {
+    &.radio {
+      border-radius: 100vw;
+    }
+
+    &:not(:is(.button)) {
+      &:has(input:focus-visible) {
+        outline: var(--form-element-outline-width-focus) solid
+          var(--input-checkbox-border-focus, var(--theme-border-focus));
+        outline-offset: var(--form-element-outline-offset-focus);
+      }
+    }
+
+    &:has(input:checked) {
+      .input-checked-icon-slot {
+        opacity: 1;
+
+        .input-checked-icon-checked,
+        .icon {
+          color: var(--input-checkbox-icon-color, var(--theme-text));
+          font-size: var(--input-checked-icon-size);
+        }
+      }
+    }
+
+    .input-checked-icon-slot {
+      grid-area: element-stack;
+      display: grid;
+      place-content: center;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+
+      .input-checked-icon-checked,
+      .icon {
+        color: var(--input-checkbox-icon-color, var(--theme-text));
+        font-size: var(--input-checked-icon-size);
+        box-shadow: var(--_box-shadow);
+      }
+    }
+
+    .input-checkbox-radio-core {
+      touch-action: manipulation;
+      grid-area: element-stack;
+      appearance: none;
+      margin: 0;
+      overflow: hidden;
+      opacity: 0;
+
+      height: var(--input-checked-element-size);
+      width: var(--input-checked-element-size);
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      /* &:not(.is-button) {
       &:focus-visible {
         border: var(--input-checkbox-radio-wrapper-border-on);
         outline: var(--input-checkbox-radio-wrapper-outline-on);
         box-shadow: var(--input-checkbox-radio-wrapper-box-shadow-on);
       }
     } */
+    }
   }
-}
 }
 </style>
