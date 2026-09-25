@@ -1,0 +1,7 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`TextBlock > renders correct HTML structure with default props 1`] = `
+"<div class="text-block">
+  <p>Lead copy</p>
+</div>"
+`;

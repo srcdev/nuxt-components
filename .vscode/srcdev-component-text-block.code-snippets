@@ -1,0 +1,31 @@
+{
+  "SRCDEV TextBlock Basic": {
+    "description": "TextBlock: vertical-rhythm wrapper for a block of text (page lead, intro copy)",
+    "scope": "vue,html",
+    "body": [
+      "<TextBlock :style-class-passthrough=\"['${1:page-lead}']\">",
+      "  $2",
+      "</TextBlock>"
+    ]
+  },
+  "SRCDEV TextBlock Labelled Section": {
+    "description": "TextBlock rendered as a <section> labelled by its heading via the heading-id slot prop",
+    "scope": "vue,html",
+    "body": [
+      "<TextBlock tag=\"${1|section,article|}\" v-slot=\"{ headingId }\">",
+      "  <HeaderBlock :id=\"headingId\" :tag-level=\"${2:2}\" :class-level=\"${3:2}\">${4:Heading}</HeaderBlock>",
+      "  $5",
+      "</TextBlock>"
+    ]
+  },
+  "SRCDEV TextBlock CSS Tokens": {
+    "description": "CSS override scaffold for TextBlock padding tokens",
+    "scope": "css",
+    "body": [
+      ".${1:page-lead} {",
+      "  --text-block-padding-block-start: ${2:var(--fluid-space-48-96)};",
+      "  --text-block-padding-block-end: ${3:var(--fluid-space-48-96)};",
+      "}"
+    ]
+  }
+}

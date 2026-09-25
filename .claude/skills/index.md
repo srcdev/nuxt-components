@@ -74,6 +74,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── page-row.md             — PageRow layout primitive: CSS grid named lines, nesting pattern, align prop, aria-labelledby, CSS token API
     ├── link-text.md            — LinkText props, slots, usage patterns, styling
     ├── header-block.md         — HeaderBlock: tagLevel/classLevel semantic-vs-visual heading decoupling, page-heading-N utility classes
+    ├── text-block.md           — TextBlock: vertical-rhythm text wrapper, --text-block-padding-block-start/-end tokens, heading-id slot prop for section/article aria-labelledby
     ├── page-hero-highlights.md — PageHeroHighlights template: hero + highlights strip grid, CSS custom property theming
     ├── services-card.md        — ServicesCard props (incl. eyebrowConfig/heroConfig), actions slot, CSS tokens, page boilerplate
     ├── services-card-grid.md        — ServicesCardGrid props, config pass-through, CSS tokens, full page boilerplate
