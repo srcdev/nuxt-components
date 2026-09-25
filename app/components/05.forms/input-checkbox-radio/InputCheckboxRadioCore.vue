@@ -66,7 +66,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || []);
 
-const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
+const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({
+  required: true,
+});
 
 const inputField = ref<HTMLInputElement | null>(null);
 

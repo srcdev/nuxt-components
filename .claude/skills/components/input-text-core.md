@@ -36,7 +36,7 @@ Most consumers should reach for one of the **Variants** rather than `InputTextCo
 
 | Model             | Type      | Notes                                                     |
 | ----------------- | --------- | ---------------------------------------------------------- |
-| `v-model`          | `string`  | The input value.                                            |
+| `v-model`          | `string`  | The input value. **Required** (`defineModel({ required: true })`, 2026-09-25), same for `InputTextWithLabel` and `InputPasswordWithLabel`. |
 | `v-model:is-dirty` | `boolean` | Set to `true` once the wrapper variant detects a non-empty value at mount or on change. |
 | `v-model:is-active`| `boolean` | Tracks focus state (`focusin`/`focusout`).                   |
 
@@ -158,6 +158,8 @@ value by `step`, disabled once `min`/`max` is reached.
   <template #right>+</template>
 </InputTextAsNumberWithLabel>
 ```
+
+`v-model` is `number | undefined` (`defineModel({ default: undefined })`): clearing the field sets it to `undefined`, so bind a `ref<number | undefined>` rather than assuming a number.
 
 Extra props: `min: number` (required), `max: number` (required), `step?: number` (default `1`),
 `stepDownText`/`stepUpText` (default `"Step down"`/`"Step up"`) — the decrement/increment buttons'

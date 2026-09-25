@@ -16,6 +16,7 @@ const initialPropsData = {
   styleClassPassthrough: ["testClass"],
   trueValue: "checked",
   falseValue: "unchecked",
+  modelValue: "unchecked",
   ariaDescribedby: "test-description",
   displayAsDisc: false,
   multipleOptions: false,

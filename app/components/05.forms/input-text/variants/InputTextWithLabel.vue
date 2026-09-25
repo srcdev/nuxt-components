@@ -107,6 +107,8 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   maxlength: 255,
+  min: undefined,
+  max: undefined,
   inputmode: "text",
   placeholder: "",
   fieldHasError: false,
@@ -128,7 +130,7 @@ const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   slots
 );
 
-const modelValue = defineModel<string>();
+const modelValue = defineModel<string>({ required: true });
 const isActive = ref<boolean>(false);
 const isDirty = ref<boolean>(false);
 

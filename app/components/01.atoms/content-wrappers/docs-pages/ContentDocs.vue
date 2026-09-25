@@ -116,8 +116,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 const panelComponent = computed(() => (props.panelVariant === "modern" ? ExpandingPanel : ExpandingPanelClassic));
 
-const activeNavItem = defineModel<string | undefined>("activeNavItem");
-const activePageNavItem = defineModel<string | undefined>("activePageNavItem");
+const activeNavItem = defineModel<string | undefined>("activeNavItem", { default: undefined });
+const activePageNavItem = defineModel<string | undefined>("activePageNavItem", { default: undefined });
 
 const NuxtLink = resolveComponent("NuxtLink");
 

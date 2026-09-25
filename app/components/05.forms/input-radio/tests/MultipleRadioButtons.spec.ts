@@ -8,6 +8,7 @@ import tagsData from "./data/tags.json";
 
 const initialPropsData = {
   dataTestid: "multiple-radio-buttons",
+  modelValue: "",
   id: "tags",
   name: "tags",
   legend: "Choose tags (as checkboxes)",

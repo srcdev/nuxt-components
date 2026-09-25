@@ -1,6 +1,6 @@
 <template>
-  <div class="clip-element-wrapper" ref="container" :class="elementClasses">
-    <div class="clipped-element" :style="`--_clip-path: inset(${clipOffset}px 0 0 0)`" ref="clipElement">
+  <div ref="container" class="clip-element-wrapper" :class="elementClasses">
+    <div ref="clipElement" class="clipped-element" :style="`--_clip-path: inset(${clipOffset}px 0 0 0)`">
       <slot name="default"></slot>
     </div>
   </div>

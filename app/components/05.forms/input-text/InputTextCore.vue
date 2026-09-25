@@ -70,6 +70,8 @@ const props = withDefaults(defineProps<Props>(), {
   type: "text",
   inputmode: "text",
   maxlength: 255,
+  min: undefined,
+  max: undefined,
   required: false,
   placeholder: "",
   fieldHasError: false,
@@ -85,7 +87,7 @@ const FormUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
 });
 
-const modelValue = defineModel<string>();
+const modelValue = defineModel<string>({ required: true });
 const isDirty = defineModel<boolean>("isDirty");
 const isActive = defineModel<boolean>("isActive");
 

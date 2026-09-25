@@ -16,7 +16,7 @@ describe("CaptureQrCode", () => {
   // jsdom defines HTMLCanvasElement but returns null for getContext, which
   // causes the library to throw. We provide a minimal non-null mock.
   beforeEach(() => {
-    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({} as any);
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({} as unknown as RenderingContext);
   });
 
   afterEach(() => {

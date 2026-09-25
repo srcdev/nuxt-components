@@ -8,6 +8,7 @@ const initialPropsData = {
   name: "testName",
   label: "Test label",
   errorMessage: "",
+  modelValue: "",
 };
 
 let wrapper: VueWrapper<InstanceType<typeof ComponentUnderTest>>;

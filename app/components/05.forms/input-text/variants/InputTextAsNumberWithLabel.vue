@@ -130,7 +130,7 @@ const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   slots
 );
 
-const modelValue = defineModel<number>();
+const modelValue = defineModel<number | undefined>({ default: undefined });
 const isActive = ref<boolean>(false);
 const isDirty = ref<boolean>(false);
 

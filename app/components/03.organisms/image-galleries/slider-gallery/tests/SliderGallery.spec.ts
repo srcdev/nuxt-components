@@ -199,14 +199,14 @@ describe("SliderGallery", () => {
 
   it("applies a single styleClassPassthrough string", async () => {
     const wrapper = await mountSuspended(SliderGallery, {
-      props: { styleClassPassthrough: "custom-gallery" },
+      props: { galleryData: [], styleClassPassthrough: "custom-gallery" },
     });
     expect(wrapper.classes()).toContain("custom-gallery");
   });
 
   it("applies multiple styleClassPassthrough classes from an array", async () => {
     const wrapper = await mountSuspended(SliderGallery, {
-      props: { styleClassPassthrough: ["class-a", "class-b"] },
+      props: { galleryData: [], styleClassPassthrough: ["class-a", "class-b"] },
     });
     expect(wrapper.classes()).toContain("class-a");
     expect(wrapper.classes()).toContain("class-b");
@@ -214,7 +214,7 @@ describe("SliderGallery", () => {
 
   it("updates classes when styleClassPassthrough prop changes", async () => {
     const wrapper = await mountSuspended(SliderGallery, {
-      props: { styleClassPassthrough: ["original"] },
+      props: { galleryData: [], styleClassPassthrough: ["original"] },
     });
     expect(wrapper.classes()).toContain("original");
     await wrapper.setProps({ styleClassPassthrough: ["updated"] });

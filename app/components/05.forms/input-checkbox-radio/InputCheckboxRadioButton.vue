@@ -75,7 +75,7 @@ const props = withDefaults(defineProps<Props>(), {
 const slots = useSlots();
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || []);
 
-const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
+const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({ required: true });
 
 const flexDirection = ref(props.direction);
 </script>

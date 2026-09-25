@@ -129,7 +129,7 @@ const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   slots
 );
 
-const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>();
+const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({ required: true });
 const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
 
 const { maxChildWidth, itemsContainer, updateMaxChildWidth } = useMaxChildWidth(

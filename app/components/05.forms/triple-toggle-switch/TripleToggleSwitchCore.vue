@@ -51,7 +51,7 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const modelValue = defineModel<string | number | boolean>();
+const modelValue = defineModel<string | number | boolean>({ required: true });
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;

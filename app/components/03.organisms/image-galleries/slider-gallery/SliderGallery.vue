@@ -83,7 +83,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-const galleryData = defineModel<IGalleryData[]>("galleryData");
+const galleryData = defineModel<IGalleryData[]>("galleryData", { required: true });
 
 const sliderGalleryWrapper = useTemplateRef("sliderGalleryWrapper");
 const sliderGalleryImagesList = useTemplateRef("sliderGalleryImagesList");

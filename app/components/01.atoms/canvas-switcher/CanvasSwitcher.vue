@@ -11,7 +11,7 @@
           @click="updateCanvas(option.value)"
         >
           <template #iconOnly>
-            <Icon :name="option.icon" class="icon"></Icon>
+            <Icon :name="option.icon" class="icon"/>
           </template>
         </InputButtonCore>
       </li>
@@ -36,7 +36,7 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const canvasName = defineModel<MediaCanvas>("canvasName");
+const canvasName = defineModel<MediaCanvas | undefined>("canvasName", { default: undefined });
 
 const canvasOptions: CanvasOption[] = [
   { value: "mobileCanvas", label: "Mobile", icon: "ic:baseline-phone-iphone" },

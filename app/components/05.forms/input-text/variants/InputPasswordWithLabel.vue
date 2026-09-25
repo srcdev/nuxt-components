@@ -72,7 +72,7 @@ const props = withDefaults(defineProps<Props>(), {
   hidePasswordText: "Hide password",
 });
 
-const modelValue = defineModel<string>();
+const modelValue = defineModel<string>({ required: true });
 
 const { updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 

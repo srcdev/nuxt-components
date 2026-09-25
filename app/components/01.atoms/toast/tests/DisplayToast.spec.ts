@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { nextTick } from "vue";
 import { mountSuspended, mockNuxtImport } from "@nuxt/test-utils/runtime";
+import DisplayToast from "../DisplayToast.vue";
 
 const { useAppConfigMock } = vi.hoisted(() => ({
   // icon: {} is required — @nuxt/icon reads useAppConfig().icon.collections internally.
@@ -8,7 +9,6 @@ const { useAppConfigMock } = vi.hoisted(() => ({
 }));
 
 mockNuxtImport("useAppConfig", () => useAppConfigMock);
-import DisplayToast from "../DisplayToast.vue";
 
 // Helper: mount the toast and activate it so the teleported element is in the DOM.
 async function mountAndShow(props: Record<string, unknown> = {}, slots: Record<string, string> = {}) {
