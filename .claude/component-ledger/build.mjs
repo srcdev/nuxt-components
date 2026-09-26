@@ -129,6 +129,11 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
     return false;
   });
   const hasEslintIssues = files.some((f) => eslintIssuesByFile.has(f));
+  // CONSUMER-STYLING.md predating the fixed layout (added 2026-09-26): flagged only when the doc
+  // exists but has no "## Local overrides" section. A missing doc is already counted in the score.
+  const hasStylingDocOutdated =
+    hasConsumerStyling &&
+    !/^## Local overrides\s*$/m.test(fs.readFileSync(path.join(compdir, "CONSUMER-STYLING.md"), "utf-8"));
 
   rows.push({
     compdir: relDir,
@@ -138,6 +143,7 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
     legacy_props: hasLegacyProps,
     story_args_bug: hasStoryArgsBug,
     eslint_issues: hasEslintIssues,
+    styling_doc_outdated: hasStylingDocOutdated,
     consumer_styling: hasConsumerStyling,
     tests: hasTests,
     stories: hasStoriesDir || hasStoriesFile,

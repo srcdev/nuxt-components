@@ -18,16 +18,14 @@
     </InputLabel>
 
     <InputDescription
-      :id
       :description-id
-      :name
       :field-has-error="fieldHasError"
       :style-class-passthrough="['input-text-description']"
     >
-      <template #descriptionHtml>
+      <template v-if="slots.descriptionHtml" #descriptionHtml>
         <slot name="descriptionHtml"></slot>
       </template>
-      <template #descriptionText>
+      <template v-if="slots.descriptionText" #descriptionText>
         <slot name="descriptionText"></slot>
       </template>
     </InputDescription>

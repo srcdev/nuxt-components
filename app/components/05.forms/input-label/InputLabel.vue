@@ -57,10 +57,6 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     line-height: 1.5;
     display: block;
   }
-
-  & + .input-description {
-    margin-block-end: 0.2rem;
-  }
 }
 }
 </style>

@@ -1,0 +1,44 @@
+{
+  "SRCDEV InputDescription Basic": {
+    "description": "InputDescription help text for a custom field wrapper (link its id via aria-describedby)",
+    "scope": "vue,html",
+    "body": [
+      "<InputDescription :description-id=\"${1:descriptionId}\" :field-has-error=\"${2:fieldHasError}\" input-variant=\"${3|normal,outlined,underlined|}\">",
+      "  <template #descriptionText>${4:Help text}</template>",
+      "</InputDescription>$0"
+    ]
+  },
+  "SRCDEV InputDescription Forwarded Slots": {
+    "description": "InputDescription inside a wrapper, forwarding description slots only when provided",
+    "scope": "vue,html",
+    "body": [
+      "<InputDescription :description-id :input-variant :field-has-error>",
+      "  <template v-if=\"slots.descriptionHtml\" #descriptionHtml>",
+      "    <slot name=\"descriptionHtml\"></slot>",
+      "  </template>",
+      "  <template v-if=\"slots.descriptionText\" #descriptionText>",
+      "    <slot name=\"descriptionText\"></slot>",
+      "  </template>",
+      "</InputDescription>$0"
+    ]
+  },
+  "SRCDEV InputDescription CSS Override": {
+    "description": "CSS override scaffold for InputDescription tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --input-description-color: $2;",
+      "  --input-description-font-size: $3;",
+      "  --input-description-line-height: $4;",
+      "  --input-description-background-color: $5;",
+      "  --input-description-margin-block: $6;",
+      "  --input-description-padding-block: $7;",
+      "  --input-description-padding-inline: $8;",
+      "  --input-description-border: $9;",
+      "  --input-description-border-radius: $10;",
+      "  --input-description-slot-margin-block-start: $11;",
+      "  --input-description-slot-margin-block-end: $12;",
+      "}"
+    ]
+  }
+}

@@ -36,7 +36,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── colour-scheme-disable.md         — disable light/dark scheme support in a consumer app
 ├── component-dynamic-slots.md        — named dynamic slots ($slots iteration) vs indexed dynamic slots (itemCount pattern)
 ├── component-naming.md               — Control/Field naming convention (InputNumber + InputNumberField, no Core/Default/WithLabel suffixes), rename procedure, backlog with consumer usage
-├── component-local-style-override.md — styleClassPassthrough + scoped style block for per-usage visual customisation
+├── component-local-style-override.md — overriding a component from a consumer app: public tokens on an ancestor, unscoped page blocks, per-instance class/passthrough, consumer `<style scoped>` + :deep() rules, never @layer overrides
 ├── component-prop-driven-container-layout.md — vary CSS grid layout inside @container queries using data-* attribute selectors
 ├── page-transitions.md               — pageTransition/layoutTransition setup; the self-wrapped <NuxtLayout> + layout:false anti-pattern that pulls the header/nav into the transition boundary; fade CSS
 ├── css-nesting-conventions.md                — native CSS nesting rules: why &__child Sass BEM concatenation silently breaks, correct patterns
@@ -135,6 +135,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── form-field.md             — FormField: layout wrapper for one form control (width cap, gutter, field spacing), data-width/data-has-gutter/data-invalid hooks, dead .underline rule removed, CSS token API
     ├── form-fieldset.md          — FormFieldset: shared fieldset+legend for checkbox/radio groups, groupRole prop (hardcoded radiogroup bug fixed), aria-required only on radiogroup, dead description slot removed, legend token API
     ├── input-error.md            — InputError: red error strip every *Field wrapper renders under its control, data-visible/data-detached/data-input-variant hooks, generic .inner/.message class names prefixed, dead compact prop and hidden-state border CSS removed, icon prop, CSS token API
+    ├── input-description.md      — InputDescription: field help text (descriptionText/descriptionHtml slots), renders nothing without a slot, wrappers' unconditional slot forwarding/outlined double-render/missing aria id fixed, dead id/theme props removed, data-input-variant/data-invalid hooks, CSS token API
     ├── form-wrapper.md           — FormWrapper: width-capped outer container for a whole form, data-width hook, named inline-size container, not centred by default (--form-wrapper-margin-inline), CSS token API
     ├── pending-effect.md         — PendingEffect: animated dashed border InputButtonCore draws while is-pending (has-pending-effect), tokens renamed to --pending-effect-* and read at point of use, animation moved off the host button, aria-hidden
     ├── input-textarea-core.md    — InputTextareaCore: native textarea primitive, left/right decorative slots, undefined-token/dead-code/label-leak bugs fixed, CSS token API; Variants section covers InputTextareaWithLabel

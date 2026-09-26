@@ -20,8 +20,7 @@
 
       <InputDescription
         v-if="inputVariant !== 'outlined'"
-        :id
-        :description-id="descriptionId"
+        :description-id
         :input-variant
         :field-has-error="fieldHasError"
         :style-class-passthrough="['input-text-description']"
@@ -61,8 +60,7 @@
 
     <InputDescription
       v-if="inputVariant === 'outlined'"
-      :id
-      :name
+      :description-id
       :input-variant
       :field-has-error="fieldHasError"
       :style-class-passthrough="['input-text-description']"

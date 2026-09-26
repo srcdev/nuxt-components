@@ -18,8 +18,9 @@ to migrate — run `node .claude/component-ledger/build.mjs` and look up that co
 `.claude/component-ledger/audit.json` first:
 
 - **Already fully compliant** (`score: 5`, placed in a real tier, `variants: false`,
-  `legacy_props: false`, `story_args_bug: false`, `eslint_issues: false`): skip straight to
-  reporting — state its ledger row (tier, score, and confirmation the four non-scored checks are
+  `legacy_props: false`, `story_args_bug: false`, `eslint_issues: false`,
+  `styling_doc_outdated: false`): skip straight to
+  reporting — state its ledger row (tier, score, and confirmation the five non-scored checks are
   also clean) and stop. Don't run step 2's `AskUserQuestion` or the step 3 checklist for a
   component that already passes every check; that flow is for when there's actual work to decide
   about.
@@ -51,6 +52,10 @@ Otherwise, auto-pick the next worst offender:
      the fix is `defineModel<T>({ required: true })` where the native element genuinely can't be
      meaningfully empty (see `InputRangeCore`/`InputRangeDefault`), not a blanket rule disable and
      not an artificial default value that would change real behaviour.
+   - Else any group with `"styling_doc_outdated": true` (its `CONSUMER-STYLING.md` exists but has
+     no `## Local overrides` section, so it predates the fixed layout in checklist item 4) — same
+     tie-break. Also doesn't move the 5-point `score`. Usually a doc-only pass: restructure the
+     existing doc to the layout, checking the rest of the checklist as normal while you're there.
    - Else the lowest `score` overall — same tie-break.
 3. State which component was picked and why in one line (e.g. "Picked `input-select` — unplaced isn't the issue here, it forks a `variants/` subfolder and scores 2/5.") before doing anything else, so the user can redirect you if they'd rather do a different one next.
 
@@ -94,7 +99,32 @@ briefly) — don't skip silently.
      with no public fallback. That's the thing to promote, not every `--_` var you find.
 4. **CONSUMER-STYLING.md** — create or update so every public token the component exposes is
    documented, with its default. Skip only if the component genuinely has no override surface at
-   all (no CSS custom properties, no class passthrough).
+   all (no CSS custom properties, no class passthrough). Use this fixed layout, in this order
+   (`app/components/05.forms/input-description/CONSUMER-STYLING.md` is the reference):
+   - `## Public token API` — token tables (split into `###` groups by element when there are
+     several), each token with its default; list any private `--_` tokens as "not public API", or
+     say there are none.
+   - `## State hooks` — `data-*` attributes / state selectors and the inner element class names.
+     Omit only if the component has neither.
+   - `## Global theming` — a `:where(html) { ... }` block for an app-level stylesheet.
+   - `## Local overrides` — required heading (the ledger's `styling_doc_outdated` check looks for
+     it). A two-line intro (set tokens on an element you own that wraps the component; keep the
+     block unlayered; link `.claude/skills/component-local-style-override.md`), then:
+     - `### Page or section` — an unscoped `<style>` example nested under a consumer wrapper class.
+     - `### One instance` (or "One field" for form components) — how to target a single usage:
+       `style-class-passthrough` when the consumer renders the component directly, or a plain
+       `class` on a wrapper component that falls through to its root when the passthrough isn't
+       forwarded. Check `inheritAttrs` and single-root before claiming the fallthrough works.
+     - `### If your page or component uses <style scoped>` — make clear this library's styles are
+       unscoped, so this is about the **consumer's** scoped file: tokens set on the consumer's own
+       element still work; selectors reaching into the component need `:deep()` or an unscoped
+       block. Show one of each.
+   - `## Recipe: <name>` — optional, for component-specific patterns that need several tokens
+     working together (e.g. InputDescription's panel/callout).
+   - `## Class passthrough` — what `style-class-passthrough` targets and whether it's actually
+     reachable in normal use.
+
+   Dated "Changed YYYY-MM-DD" migration notes go as blockquotes inside the relevant section.
 5. **Tests** — create or bring up to date in `tests/`, following the Testing Requirements section
    (mountSuspended, fake-timer rules, etc.). Skip only for a trivial presentational component with
    no logic worth testing — say so explicitly if you skip.

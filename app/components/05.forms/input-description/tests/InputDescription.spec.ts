@@ -1,429 +1,105 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import type { InputUiVariant } from "~/types/forms/types.forms";
+import { nextTick } from "vue";
 import InputDescription from "../InputDescription.vue";
 
-// Mock useStyleClassPassthrough composable
-vi.mock("#imports", () => ({
-  useStyleClassPassthrough: vi.fn((classes) => ({
-    elementClasses: { value: Array.isArray(classes) ? classes.join(" ") : classes || "" },
-  })),
-}));
+type Wrapper = Awaited<ReturnType<typeof mountSuspended>>;
 
 describe("InputDescription", () => {
-  let wrapper: ReturnType<typeof mountSuspended>;
+  let wrapper: Wrapper | undefined;
 
-  const createWrapper = async (props = {}, slots = {}) => {
-    const defaultProps = {
-      id: "test-input",
-      descriptionId: "test-input-description",
-      name: "testInput",
-      inputVariant: "normal" as InputUiVariant, // Set valid default with proper typing
-      ...props,
-    };
-
+  const createWrapper = async (props: Record<string, unknown> = {}, slots: Record<string, string> = {}) => {
     wrapper = await mountSuspended(InputDescription, {
-      props: defaultProps,
+      props: { descriptionId: "email-description", ...props },
       slots,
     });
-
     return wrapper;
   };
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     wrapper?.unmount();
+    wrapper = undefined;
   });
 
-  describe("Component Rendering", () => {
-    it("does not render when no slots are provided", async () => {
-      await createWrapper();
-
-      expect(wrapper.html()).toBe("<!--v-if-->");
+  describe("rendering", () => {
+    it("renders nothing when neither slot is provided", async () => {
+      const w = await createWrapper();
+      expect(w.find(".input-description").exists()).toBe(false);
     });
 
-    it("renders with descriptionText slot", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionText: "This is a text description",
-        }
-      );
-
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
-      // expect(container.attributes("id")).toBe("test-input-description");
-
-      const textElement = wrapper.find(".input-description-text");
-      expect(textElement.exists()).toBe(true);
-      expect(textElement.text()).toBe("This is a text description");
-      expect(textElement.element.tagName).toBe("P");
+    it("renders descriptionText inside a paragraph", async () => {
+      const w = await createWrapper({}, { descriptionText: "We never share your email" });
+      const text = w.find(".input-description-text");
+      expect(text.exists()).toBe(true);
+      expect(text.element.tagName).toBe("P");
+      expect(text.text()).toBe("We never share your email");
+      expect(w.find(".input-description-html").exists()).toBe(false);
     });
 
-    it("renders with descriptionHtml slot", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionHtml: "<strong>Bold description</strong> with <em>emphasis</em>",
-        }
-      );
-
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
-
-      const htmlElement = wrapper.find(".input-description-html");
-      expect(htmlElement.exists()).toBe(true);
-      expect(htmlElement.html()).toContain("<strong>Bold description</strong>");
-      expect(htmlElement.html()).toContain("<em>emphasis</em>");
+    it("renders descriptionHtml inside a div, preserving markup", async () => {
+      const w = await createWrapper({}, { descriptionHtml: "<ul><li>At least 8 characters</li></ul>" });
+      const html = w.find(".input-description-html");
+      expect(html.exists()).toBe(true);
+      expect(html.element.tagName).toBe("DIV");
+      expect(html.find("li").text()).toBe("At least 8 characters");
+      expect(w.find(".input-description-text").exists()).toBe(false);
     });
 
-    it("renders both slots when provided", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionText: "Text description",
-          descriptionHtml: "<strong>HTML description</strong>",
-        }
-      );
-
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
-
-      const textElement = wrapper.find(".input-description-text");
-      const htmlElement = wrapper.find(".input-description-html");
-
-      expect(textElement.exists()).toBe(true);
-      expect(htmlElement.exists()).toBe(true);
-      expect(textElement.text()).toBe("Text description");
-      expect(htmlElement.html()).toContain("<strong>HTML description</strong>");
+    it("renders the HTML slot before the text slot when both are provided", async () => {
+      const w = await createWrapper({}, { descriptionText: "Text", descriptionHtml: "<span>Html</span>" });
+      const children = w.find(".input-description").element.children;
+      expect(children).toHaveLength(2);
+      expect(children[0]!.classList.contains("input-description-html")).toBe(true);
+      expect(children[1]!.classList.contains("input-description-text")).toBe(true);
     });
   });
 
-  describe("Props Handling", () => {
-    it.skip("generates correct description ID from input ID", async () => {
-      await createWrapper(
-        { descriptionId: "my-input-field" },
-        {
-          descriptionText: "Test description",
-        }
-      );
-
-      const container = wrapper.find(".input-description");
-      expect(container.attributes("id")).toBe("my-input-field-description");
+  describe("aria-describedby target", () => {
+    it("puts descriptionId on the root", async () => {
+      const w = await createWrapper({ descriptionId: "field-1-description" }, { descriptionText: "Help" });
+      expect(w.find(".input-description").attributes("id")).toBe("field-1-description");
     });
 
-    it("applies styleClassPassthrough as string", async () => {
-      await createWrapper(
-        {
-          styleClassPassthrough: "custom-class",
-        },
-        {
-          descriptionText: "Test description",
-        }
-      );
-
-      const container = wrapper.find(".input-description");
-      expect(container.classes()).toContain("custom-class");
-    });
-
-    it("applies styleClassPassthrough as array", async () => {
-      await createWrapper(
-        {
-          styleClassPassthrough: ["custom-class", "another-class"],
-        },
-        {
-          descriptionText: "Test description",
-        }
-      );
-
-      const container = wrapper.find(".input-description");
-      expect(container.classes()).toContain("custom-class");
-      expect(container.classes()).toContain("another-class");
-    });
-
-    it("handles theme prop correctly", async () => {
-      await createWrapper(
-        {
-          theme: "success",
-        },
-        {
-          descriptionText: "Success description",
-        }
-      );
-
-      // Component should render successfully with valid theme
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
-    });
-
-    it("handles InputUiVariant prop correctly", async () => {
-      await createWrapper(
-        {
-          InputUiVariant: "outlined",
-        },
-        {
-          descriptionText: "Outlined variant description",
-        }
-      );
-
-      // Component should render successfully with valid input variant
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
-    });
-
-    it("handles fieldHasError prop", async () => {
-      await createWrapper(
-        {
-          fieldHasError: true,
-        },
-        {
-          descriptionText: "Error state description",
-        }
-      );
-
-      // Component should render successfully with error state
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
+    it("omits the id attribute when descriptionId is empty", async () => {
+      const w = await createWrapper({ descriptionId: "" }, { descriptionText: "Help" });
+      expect(w.find(".input-description").attributes("id")).toBeUndefined();
     });
   });
 
-  describe("Required Props", () => {
-    it.skip("requires id prop", async () => {
-      await createWrapper(
-        { id: "required-id" },
-        {
-          descriptionText: "Test",
-        }
-      );
+  describe("state hooks", () => {
+    it("reflects inputVariant as data-input-variant, defaulting to normal", async () => {
+      const w = await createWrapper({}, { descriptionText: "Help" });
+      expect(w.find(".input-description").attributes("data-input-variant")).toBe("normal");
 
-      const container = wrapper.find(".input-description");
-      expect(container.attributes("id")).toBe("required-id-description");
+      await w.setProps({ inputVariant: "outlined" });
+      expect(w.find(".input-description").attributes("data-input-variant")).toBe("outlined");
     });
 
-    it("requires name prop", async () => {
-      await createWrapper(
-        {
-          id: "test-id",
-          name: "required-name",
-        },
-        {
-          descriptionText: "Test",
-        }
-      );
+    it("sets data-invalid only while fieldHasError is true", async () => {
+      const w = await createWrapper({}, { descriptionText: "Help" });
+      expect(w.find(".input-description").attributes("data-invalid")).toBeUndefined();
 
-      // Component should render successfully with required name
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
+      await w.setProps({ fieldHasError: true });
+      expect(w.find(".input-description").attributes("data-invalid")).toBe("");
     });
   });
 
-  describe("Default Props", () => {
-    it("applies default theme value", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionText: "Default theme test",
-        }
-      );
-
-      // Component should work with default theme 'primary'
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
+  describe("styleClassPassthrough", () => {
+    it("has only the base class by default", async () => {
+      const w = await createWrapper({}, { descriptionText: "Help" });
+      expect(w.find(".input-description").classes()).toEqual(["input-description"]);
     });
 
-    it("applies default InputUiVariant value", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionText: "Default variant test",
-        }
-      );
+    it("accepts a string or an array", async () => {
+      const w = await createWrapper({ styleClassPassthrough: "one" }, { descriptionText: "Help" });
+      expect(w.find(".input-description").classes()).toContain("one");
 
-      // Component should work with default InputUiVariant 'default'
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
-    });
-
-    it("applies default fieldHasError value", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionText: "No error by default",
-        }
-      );
-
-      // Component should work with default fieldHasError false
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
-    });
-
-    it("applies default styleClassPassthrough value", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionText: "No custom classes by default",
-        }
-      );
-
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
-      // Should only have the base class
-      expect(container.classes()).toEqual(["input-description"]);
-    });
-  });
-
-  describe("Accessibility", () => {
-    it.skip("provides proper ID for aria-describedby linking", async () => {
-      await createWrapper(
-        {
-          id: "email-input",
-        },
-        {
-          descriptionText: "Enter your email address",
-        }
-      );
-
-      const container = wrapper.find(".input-description");
-      expect(container.attributes("id")).toBe("email-input-description");
-      // This ID can be used in aria-describedby on the actual input
-    });
-
-    it("supports rich HTML content for complex descriptions", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionHtml: `
-          <p>Password must contain:</p>
-          <ul>
-            <li>At least 8 characters</li>
-            <li>One uppercase letter</li>
-            <li>One number</li>
-          </ul>
-        `,
-        }
-      );
-
-      const htmlElement = wrapper.find(".input-description-html");
-      expect(htmlElement.html()).toContain("<ul>");
-      expect(htmlElement.html()).toContain("<li>");
-      expect(htmlElement.html()).toContain("At least 8 characters");
-    });
-  });
-
-  describe("Conditional Rendering", () => {
-    it("only renders descriptionText when only text slot provided", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionText: "Only text description",
-        }
-      );
-
-      expect(wrapper.find(".input-description-text").exists()).toBe(true);
-      expect(wrapper.find(".input-description-html").exists()).toBe(false);
-    });
-
-    it("only renders descriptionHtml when only HTML slot provided", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionHtml: "<span>Only HTML description</span>",
-        }
-      );
-
-      expect(wrapper.find(".input-description-html").exists()).toBe(true);
-      expect(wrapper.find(".input-description-text").exists()).toBe(false);
-    });
-
-    it("renders both sections when both slots provided", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionText: "Text part",
-          descriptionHtml: "<span>HTML part</span>",
-        }
-      );
-
-      expect(wrapper.find(".input-description-text").exists()).toBe(true);
-      expect(wrapper.find(".input-description-html").exists()).toBe(true);
-    });
-
-    it("maintains proper DOM order when both slots present", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionText: "Second: Text content",
-          descriptionHtml: "<span>First: HTML content</span>",
-        }
-      );
-
-      const container = wrapper.find(".input-description");
-      const children = container.element.children;
-
-      // HTML slot should come first in DOM
-      expect(children[0].classList.contains("input-description-html")).toBe(true);
-      expect(children[1].classList.contains("input-description-text")).toBe(true);
-    });
-  });
-
-  describe("Edge Cases", () => {
-    it("handles empty slot content gracefully", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionText: "",
-        }
-      );
-
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
-
-      const textElement = wrapper.find(".input-description-text");
-      expect(textElement.text()).toBe("");
-    });
-
-    it("handles whitespace-only slot content", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionText: "   ",
-        }
-      );
-
-      const container = wrapper.find(".input-description");
-      expect(container.exists()).toBe(true);
-
-      const textElement = wrapper.find(".input-description-text");
-      expect(textElement.text().trim()).toBe("");
-    });
-
-    it("handles special characters in descriptions", async () => {
-      await createWrapper(
-        {},
-        {
-          descriptionText: "Special chars: & < > \" ' / \\",
-        }
-      );
-
-      const textElement = wrapper.find(".input-description-text");
-      expect(textElement.text()).toContain("Special chars: & < > \" ' / \\");
-    });
-
-    it.skip("works with complex ID values", async () => {
-      await createWrapper(
-        {
-          id: "complex-id_with.dots-and_underscores123",
-        },
-        {
-          descriptionText: "Complex ID test",
-        }
-      );
-
-      const container = wrapper.find(".input-description");
-      expect(container.attributes("id")).toBe("complex-id_with.dots-and_underscores123-description");
+      await w.setProps({ styleClassPassthrough: ["two", "three"] });
+      await nextTick();
+      const classes = w.find(".input-description").classes();
+      expect(classes).toContain("two");
+      expect(classes).toContain("three");
+      expect(classes).not.toContain("one");
     });
   });
 });

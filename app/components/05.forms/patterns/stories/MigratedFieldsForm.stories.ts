@@ -28,7 +28,8 @@ interface MigratedFieldsFormStoryArgs {
 // around every field below, and FormFieldset (5/5 as of 2026-09-26) is rendered inside the
 // checkbox fields, FormWrapper (5/5 as of 2026-09-26) wraps the form itself, and InputError
 // (5/5 as of 2026-09-26) is the error strip every field below renders, so none of the four
-// gets a field of its own. Every other 05.forms component
+// gets a field of its own. InputDescription (5/5 as of 2026-09-26) is the help text under the
+// "Full name" field, rendered through InputTextWithLabel's descriptionText slot. Every other 05.forms component
 // (radio, ...) is still mid-migration.
 // Add a field here each time /migrate-component brings another 05.forms component up to 5/5, so
 // this story doubles as a visible migration-progress tracker rather than living only in the
@@ -162,7 +163,9 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
               :field-has-error="!!errors.fullName"
               :required="true"
               :input-variant="args.inputVariant"
-            />
+            >
+              <template #descriptionText>As it appears on your ID</template>
+            </InputTextWithLabel>
           </FormField>
 
           <FormField width="wide" :has-gutter="false">

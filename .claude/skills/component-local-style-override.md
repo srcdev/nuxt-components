@@ -8,6 +8,16 @@ on context.
 
 No changes to the layer component are required for either pattern.
 
+The main mechanism is the component's **public tokens** (`--component-name-*`, listed in its
+`CONSUMER-STYLING.md`). They're only ever read with a fallback, never declared on the component's
+own elements, so setting them on any ancestor you own reaches the component by normal custom
+property inheritance. Every compliant `CONSUMER-STYLING.md` has a **Local overrides** section
+applying this guide to that component.
+
+> **This library's own component styles are never `scoped`.** Everything below about
+> `<style scoped>` concerns the **consumer's** file (a page or component in the app that extends
+> this layer), not the library.
+
 > **⚠️ Never wrap consumer-app override `<style>` blocks in a named `@layer`** (e.g.
 > `@layer consumer`), even though library components wrap their own styles in `@layer components`
 > and it's tempting to mirror that. Cascade layer priority is fixed by whichever layer name is
@@ -34,7 +44,7 @@ scope. No `:deep()` is needed.
 <template>
   <div class="contact-page">
     <div class="hero-section">
-      <SocialIconsList :items="socialItems" />
+      <CardCore>...</CardCore>
     </div>
   </div>
 </template>
@@ -43,19 +53,13 @@ scope. No `:deep()` is needed.
 <style lang="css">
 .contact-page {
   .hero-section {
-    .social-icons-list {
-      /* Theming */
-      --theme-social-icon-size: 3.2rem;
-      --theme-social-icon-gap: 2rem;
-      color: var(--colour-brand-primary); /* drives currentColor on icons */
+    /* Public tokens: set on your own element, inherited by the component */
+    --card-core-background-color: var(--colour-brand-surface);
+    --card-core-border-radius: 1.6rem;
 
-      /* Geometry */
+    /* Direct property on the component root, only where no token covers it */
+    .card-core {
       margin-block-start: 1.6rem;
-
-      .social-icon-link {
-        border-radius: 0.4rem;
-        padding: 0.4rem;
-      }
     }
   }
 }
@@ -72,7 +76,7 @@ useHead({ bodyAttrs: { class: "contact-page" } })
 ```css
 /* All overrides for the page nested under the body class */
 .contact-page {
-  .social-icons-list { ... }
+  --card-core-border-radius: 1.6rem;
   .hero-text { ... }
 }
 ```
@@ -114,8 +118,13 @@ useHead({ bodyAttrs: { class: "contact-page" } })
 ## Pattern 2 — Per-instance modifier via styleClassPassthrough
 
 Use when the same component appears multiple times on a page and you need to target a specific
-instance, or when the consuming file uses `<style scoped>` and needs an anchor class that survives
-scoping.
+instance.
+
+If the component you're rendering is a **wrapper** that doesn't forward `styleClassPassthrough` to
+the inner component you want to style (e.g. `InputDescription` inside `InputTextWithLabel`), put a
+plain `class` on the wrapper instead. Vue falls it through to the wrapper's root element, which is
+an ancestor of the inner component, so tokens set there inherit down. This needs the wrapper to
+have a single root element and not set `inheritAttrs: false`.
 
 ```vue
 <CardCore :style-class-passthrough="['featured-card']">
@@ -133,11 +142,11 @@ scoping.
 .card-core {
   &.featured-card {
     /* Colours */
-    /* --_background-color: var(--brand-primary); */
-    /* --_border-color: var(--brand-secondary); */
+    /* --card-core-background-color: var(--brand-primary); */
+    /* --card-core-border: 0.1rem solid var(--brand-secondary); */
 
     /* Geometry */
-    /* border-radius: 1.6rem; */
+    /* --card-core-border-radius: 1.6rem; */
   }
 }
 </style>
@@ -148,10 +157,40 @@ path: `.card-core.featured-card .card-row-header { ... }`.
 
 ---
 
+## Consumer files using `<style scoped>`
+
+Vue adds the consuming file's scope attribute (`[data-v-xxxx]`) to the last compound selector of
+every rule in a scoped block. Your own template elements carry that attribute; the library
+component's elements don't. So:
+
+| Override | In a consumer's scoped block |
+|---|---|
+| Public token set on **your own** element (`.contact-page { --card-core-border-radius: 1.6rem; }`) | Works unchanged: your element matches, and the token inherits into the component |
+| Class/attribute on the component's **root** passed from your template (`:style-class-passthrough`, or `class` fallthrough) | Works: Vue also puts your scope attribute on a child component's root element |
+| Anything **inside** the component (`.card-core-header`, `.input-description[data-invalid]` when the description is nested in a wrapper) | Doesn't match. Wrap it in `:deep()`, or move it to an unscoped `<style>` block |
+
+```vue
+<style scoped>
+.contact-page {
+  --input-description-font-size: 1.4rem; /* works as-is */
+
+  :deep(.input-description[data-invalid]) {
+    --input-description-color: var(--theme-error-border);
+  }
+}
+</style>
+```
+
+Prefer tokens on your own element wherever one exists: it works the same in scoped and unscoped
+files and doesn't depend on the component's internal class names.
+
+---
+
 ## When to offer a scaffold
 
 After placing a component in a consuming page or component, offer a CSS override scaffold. Use the
-component's own class name and any `--theme-*` tokens it exposes as commented stubs. Cover theming
+component's own class name and the public `--component-name-*` tokens listed in its
+`CONSUMER-STYLING.md` as commented stubs. Cover theming
 (colours, tokens) and geometry (sizes, spacing, borders) — not behaviour (`display`, `pointer-events`,
 `z-index`, animations).
 
@@ -161,9 +200,9 @@ component's own class name and any `--theme-*` tokens it exposes as commented st
 
 | Category | Examples | Approach |
 |---|---|---|
-| Theming | icon colour, background, border colour | `--theme-*` tokens where exposed; otherwise direct values |
-| Geometry | border-radius, padding, gap, size | Direct property or `--_` private variable |
-| Border / outline | width, style, colour | Direct property or `--_` private variable |
+| Theming | icon colour, background, border colour | The component's public tokens; otherwise a direct property |
+| Geometry | border-radius, padding, gap, size | The component's public tokens; otherwise a direct property |
+| Border / outline | width, style, colour | The component's public tokens; otherwise a direct property |
 
 **Do not override behaviour** — `display`, `visibility`, `pointer-events`, `z-index`, animations.
 Those belong in the component or a structural parent.
@@ -172,25 +211,23 @@ Those belong in the component or a structural parent.
 
 ## CSS custom property targeting
 
-Components expose `--theme-*` public tokens and use `--_` private tokens internally:
+Components expose **public** tokens named after the component (`--card-core-border-radius`,
+`--input-description-color`) and may use **private** `--_` tokens internally:
 
 ```css
-/* Component internally: --_icon-size: var(--theme-social-icon-size, 2.4rem) */
-
-/* Override via --theme-* (stable, recommended): */
-.social-icons-list {
-  --theme-social-icon-size: 3.2rem;
-}
-
-/* Override via --_ private token (fragile — may break on component update): */
-.social-icons-list {
-  &.my-modifier {
-    --_icon-size: 3.2rem;
-  }
+/* Public token (stable API, recommended): set on any ancestor you own */
+.contact-page {
+  --card-core-border-radius: 1.6rem;
 }
 ```
 
-Prefer `--theme-*` tokens. Only target `--_` private variables when no `--theme-*` equivalent exists.
+Private `--_` tokens are internal implementation detail and can change or disappear in any
+release. Don't override them. If a value you need has no public token, that's a gap in the
+component: raise it (or fix it in the library) rather than depending on the private name.
+
+Some older, not-yet-migrated components still read global `--theme-*` tokens directly instead of
+their own component tokens (see CLAUDE.md pitfall #14). Those work as ancestor overrides too, but
+they're shared by every component reading them, so scope the override tightly.
 
 ---
 
@@ -211,10 +248,13 @@ Prefer `--theme-*` tokens. Only target `--_` private variables when no `--theme-
 - Layout wrappers used in a specific visual context (e.g. a grid section with a tinted background)
 - Any component whose appearance legitimately varies per page or usage context
 
-**Keep styling global (theme/config) for:**
+**Usually better themed globally:**
 
 - Form elements and interactive controls — inputs, buttons, toggles, checkboxes
 - Typography components used for consistency across the site
 - Anything where visual inconsistency between instances would be a bug
+
+These all expose the same public tokens, so a local override is still available when a context
+genuinely calls for it (e.g. a form on a dark hero section). The point is the default, not a ban.
 
 The test: *should all instances of this component look the same?* If yes → theme. If instances are expected to look different → local override.

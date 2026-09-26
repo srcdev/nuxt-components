@@ -117,7 +117,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | FormField | `form-field/FormField.vue` | ✅ | ✅ |
 | InputError | `form-errors/InputError.vue` | ✅ | ✅ |
 | InputLabel | `input-label/InputLabel.vue` | — | — |
-| InputDescription | `input-description/InputDescription.vue` | — | — |
+| InputDescription | `input-description/InputDescription.vue` | ✅ | ✅ |
 
 ### Button
 
