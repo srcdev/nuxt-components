@@ -36,3 +36,6 @@ test-results/
 # Component Ledger — regenerated build output, not source
 .claude/component-ledger/audit.json
 .claude/component-ledger/output.html
+
+# Private claude.ai artifact link for the Component Ledger (read by .claude/hooks/refresh-component-ledger.sh)
+.claude/component-ledger/artifact-url.txt

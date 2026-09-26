@@ -41,7 +41,7 @@ fi
 if [[ "$is_variant" == true ]]; then
   msg="Component file $f was edited/written. This is a wrapper variant of $parent_name — per project convention, document it inside .claude/skills/components/$parent_name.md (e.g. a \"Variants\" section) rather than creating a separate .claude/skills/components/$skill.md for it."
 else
-  msg="Component file $f was edited/written. Per Claude.md Development Workflow step 7, check whether .claude/skills/components/$skill.md needs updating to reflect this change (props/slots/models/defaults/behaviour)."
+  msg="Component file $f was edited/written. Per Claude.md Development Workflow step 6, check whether .claude/skills/components/$skill.md needs updating to reflect this change (props/slots/models/defaults/behaviour)."
 fi
 
 shopt -s nullglob
@@ -62,7 +62,7 @@ if [[ "$is_variant" != true && ! -f "$dir/CONSUMER-STYLING.md" && ! -f "$pdir/CO
 fi
 
 if [[ ! -f "$root/.vscode/srcdev-component-$skill.code-snippets" && ! ( "$is_variant" == true && -f "$root/.vscode/srcdev-component-${parent_name%-core}.code-snippets" ) ]]; then
-  msg="$msg No .vscode/srcdev-component-$skill.code-snippets found; create/update it per Development Workflow step 6."
+  msg="$msg No .vscode/srcdev-component-$skill.code-snippets found; create/update it per Development Workflow step 5."
 fi
 
 case "$f" in

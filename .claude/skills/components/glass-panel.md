@@ -72,7 +72,7 @@ old dark defaults were:
 }
 ```
 
-cnv-hairdressing and luxury-locs both set their own values in
+Consumer apps typically set their own values in
 `app/assets/styles/setup/03.theming/_glass-panel.css`.
 
 ## Notes

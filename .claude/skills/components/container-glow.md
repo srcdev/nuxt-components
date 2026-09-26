@@ -93,8 +93,8 @@ apply instantly instead of fading).
 - 2026-09-20 migration: renamed from `ContainerGlowCore` to `ContainerGlow` — the `Core` suffix in
   this library denotes a primitive with a non-Core wrapper built on top of it (`InputTextCore` →
   `InputTextWithLabel`, `AlertMaskCore` → `AlertMaskedContent`), and this component has no such
-  sibling. Checked all consumer repos first; found one real usage in the defunct
-  `nuxt-extend-nuxt-forms` demo app, left as a follow-up for that repo rather than edited here.
+  sibling. Checked all consumer repos first; found one real usage in a defunct
+  demo app, left as a follow-up for that repo rather than edited here.
 - Moved from `app/components/container-glow/` (unplaced) into
   `01.atoms/animations/container-glow/`.
 - The `Config` type was previously an inline, non-exported interface with **all fields required**,

@@ -38,7 +38,7 @@ Vercel reads `.nvmrc` and provisions Node 24 (npm 11), which handles the version
 
 If `.nvmrc` is ever accidentally deleted, recreate it immediately. This applies to:
 - `nuxt-components` (the layer)
-- Every consumer app (`instepreflexology`, `luxury-locs-by-natasha-nuxt3`, etc.)
+- Every consumer app
 
 ## Notes
 

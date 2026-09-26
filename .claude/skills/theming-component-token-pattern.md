@@ -16,7 +16,7 @@ practice.
 
 ## Why this replaced the old pattern
 
-Two things used to go wrong, both found while auditing `luxury-locs-by-natasha`'s theming
+Two things used to go wrong, both found while auditing a consumer app's theming
 overrides (2026-08-25):
 
 1. **Bare `var(--theme-checkbox-symbol-color)` with no fallback anywhere.** The only way for this

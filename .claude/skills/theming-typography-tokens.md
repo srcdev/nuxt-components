@@ -104,6 +104,6 @@ labels), and so on upward for headings.
   needs the same `var(--step-N)` treatment, since it inherits the same `62.5%` root reset via the
   layer's global CSS.
 - Caught in the wild: a docs-page sidebar/TOC/code-block set of components in a consumer app
-  (`guidemyhair`) shipped with raw `0.75rem`/`0.85rem`/`0.9rem` font-sizes, assuming a 16px root —
+  shipped with raw `0.75rem`/`0.85rem`/`0.9rem` font-sizes, assuming a 16px root —
   rendered far too small once the layer's `62.5%` reset applied. Fixed by switching every one to the
   matching `--step-N` token.

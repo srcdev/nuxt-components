@@ -14,7 +14,7 @@ dynamic slots keyed by `carouselDataIds`. It supports swipe, arrow-key, marker-c
 prev/next-button navigation, and four `buttonLayout` variants for positioning the prev/next
 buttons relative to the marker controls.
 
-Has live production usage on instepreflexology — check before making a breaking change to its
+Has live production usage in a consumer app — check before making a breaking change to its
 default rendered output.
 
 ## Props
@@ -125,8 +125,8 @@ See [CONSUMER-STYLING.md](../../app/components/03.organisms/image-galleries/caro
   properties that were never declared anywhere, with no fallback. Per CSS spec this makes the
   whole declaration invalid at computed-value time, so the item edge-preview offset and the
   width caps were silently never applying in production. Now declared as real public tokens with
-  real defaults (`80rem`/`80rem`/`4rem`) — this is a visible change to the live carousel on
-  instepreflexology, done deliberately after confirming with the maintainer.
+  real defaults (`80rem`/`80rem`/`4rem`) — this is a visible change to the live carousel in
+  a consumer app, done deliberately after confirming with the maintainer.
 - Removed dead commented-out code in `itemWidthOffsetStr`'s computed (an unreachable
   `if (props.allowCarouselOverflow)` branch, entirely commented out, that duplicated the live
   branch's logic).

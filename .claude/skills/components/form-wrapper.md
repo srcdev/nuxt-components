@@ -62,7 +62,7 @@ Full table in `app/components/05.forms/form-wrapper/CONSUMER-STYLING.md`. Public
 
 - Width modifier moved from bare classes (`.narrow`, `.medium`, `.wide`) to `data-width`, the
   same fix as `FormField` (the bare names collide with consumer utility classes). The only known
-  consumer, guidemyhair, only targets plain `.form-wrapper`, which still works.
+  consumer only targets plain `.form-wrapper`, which still works.
 - Removed a zero-width debug `outline`.
 - Hardcoded max widths and `padding-bottom: 2rem` (now `--form-wrapper-padding-block: 0 2rem`) became public tokens, with the old values as
   defaults. Added margin-block, margin-inline, padding-inline, border, border-radius, outline and outline-offset tokens defaulting to `0`, so nothing changes visually.

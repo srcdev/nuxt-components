@@ -245,7 +245,7 @@ SSR and the very first client paint always render the **full, uncollapsed** `<ul
 swap is what shrinks the header and shifts everything below it.
 
 Confirmed via `PerformanceObserver({type: "layout-shift"})` plus DOM `MutationObserver` tracing in a
-consuming app (`luxury-locs-by-natasha-nuxt3`): the class mutation on `.tab-navigation` (adding
+consuming app: the class mutation on `.tab-navigation` (adding
 `is-loaded is-animated`) lines up exactly with `.main-content`'s bounding-rect top moving by the
 header's full height delta, at a variable point (roughly 100ms–800ms after first paint depending on
 hydration timing) after first paint.

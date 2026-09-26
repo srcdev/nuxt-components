@@ -35,7 +35,7 @@
     "playwright:update": "SRCDEV_STANDALONE=true npx playwright test --update-snapshots"
   },
   "files": [
-    ".claude/",
+    ".claude/skills/",
     ".vscode/",
     "app/",
     "modules/",

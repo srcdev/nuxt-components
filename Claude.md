@@ -316,7 +316,7 @@ been shipping with the layer package unintentionally. When creating or touching 
 - `npm run dev` now launches Storybook (`storybook dev -p 6006`) directly, not the Nuxt dev
   server — changed 2026-08-23 alongside the `app/pages/` removal. Use `npm run storybook` (same
   command) or `npm run dev`, either works; there is no longer a `nuxt dev` script entry point in
-  this repo. The `hair-treatments` consumer app got the same `dev` script change at the same time.
+  this repo. Consumer apps with their own Storybook got the same `dev` script change.
 - `app/layouts/` had the same problem and was missed by the 2026-08-23 pass: `default.vue` and
   `site-navigation-demo.vue` were both leftover demo shells built entirely around now-dead
   `/ui/*` routes (the removed pages), with zero references anywhere in the repo or in Storybook —
@@ -348,7 +348,7 @@ See `.claude/skills/storybook-add-font.md` for the step-by-step process to add a
 
 ## Documentation System
 
-**MCP Reference**: Structured documentation in `.mcp/component-patterns.json`
+**Skills**: `.claude/skills/` (start from `.claude/skills/index.md`), per-component docs in `.claude/skills/components/`
 **Purpose**: AI agent integration and pattern reference
 **Coverage**: Component APIs, styling systems, common tasks, best practices
 
@@ -385,14 +385,13 @@ See `.claude/skills/storybook-add-font.md` for the step-by-step process to add a
 
 ## Development Workflow
 
-1. **Plan**: Check existing patterns in MCP documentation
+1. **Plan**: Check existing patterns in `.claude/skills/`
 2. **Create**: Follow established component patterns
 3. **Style**: Functional base styles with CSS custom properties
 4. **Test**: Comprehensive test suite with `mountSuspended`
-5. **Document**: Update MCP reference for new patterns
-6. **Snippet**: Create or update `.vscode/srcdev-component-{name}.code-snippets` — required for every new or changed component
-7. **Skill**: Update `.claude/skills/components/<component-name>.md` — required for every new or changed component, same as the snippet in step 6. Covers any change to props/slots/models, defaults, new behaviour, or a bug fix that changes what the component observably does (e.g. it now closes on outside click when it didn't before). Skills are what an AI agent (including Claude Code, in this repo or a consumer app) reads to know how to use the component correctly — a stale skill silently teaches wrong usage. If the component has no skill doc yet, create one following the pattern of an existing one in `.claude/skills/components/`.
-8. **Verify**: Ensure TypeScript strict mode compliance
+5. **Snippet**: Create or update `.vscode/srcdev-component-{name}.code-snippets` — required for every new or changed component
+6. **Skill**: Update `.claude/skills/components/<component-name>.md` — required for every new or changed component, same as the snippet in step 5. Covers any change to props/slots/models, defaults, new behaviour, or a bug fix that changes what the component observably does (e.g. it now closes on outside click when it didn't before). Skills are what an AI agent (including Claude Code, in this repo or a consumer app) reads to know how to use the component correctly — a stale skill silently teaches wrong usage. If the component has no skill doc yet, create one following the pattern of an existing one in `.claude/skills/components/`.
+7. **Verify**: Ensure TypeScript strict mode compliance
 
 ## CI/CD
 

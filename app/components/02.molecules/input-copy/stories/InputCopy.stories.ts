@@ -75,7 +75,7 @@ export const LicenseKey: Story = {
 
 export const APIToken: Story = {
   args: {
-    value: "ghp_16C7e42F292c6912E7710c838347Ae178B4a",
+    value: "example_token_not_real_0123456789abcdef",
     label: "API token",
     description: "Your API token for authentication. Do not share this token.",
   },

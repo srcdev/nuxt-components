@@ -63,6 +63,6 @@ See [CONSUMER-STYLING.md](../../../app/components/01.atoms/text-block/CONSUMER-S
 - **Migrated 2026-09-25** (0/5 → 5/5): padding moved from hardcoded `--fluid-space-48-96` to the two
   public tokens above (same defaults, no visual change); `section`/`article` now get
   `aria-labelledby` plus the `heading-id` slot prop (previously an unnamed landmark);
-  `styleClassPassthrough` is now reactive to prop changes. Consumer apps (cnv-hairdressing,
-  luxury-locs) redeclare `.text-block { padding-block-*: var(--fluid-space-48-96) }` in their
-  `price-list.vue`; that duplicates the default and can be deleted.
+  `styleClassPassthrough` is now reactive to prop changes. Some consumer apps
+  redeclare `.text-block { padding-block-*: var(--fluid-space-48-96) }` in their
+  own pages; that duplicates the default and can be deleted.

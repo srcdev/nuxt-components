@@ -13,10 +13,9 @@ interface ContactFormStoryArgs {
   inputVariant: InputUiVariant;
 }
 
-// Demo composition, not a component of its own — a richer variant of the pattern the real
-// luxury-locs-by-natasha-nuxt3 /contact page uses (see that repo's app/pages/contact.vue): same
-// name/phone/email + multi-select services + comments shape, plus an InputSelectWithLabel
-// "How did you hear about us?" field that page doesn't have, to also exercise the select
+// Demo composition, not a component of its own — a richer variant of a typical contact page
+// pattern: name/phone/email + multi-select services + comments shape, plus an InputSelectWithLabel
+// "How did you hear about us?" field, to also exercise the select
 // component alongside the others in one composed form. No validation wiring
 // (useZodValidation/zod) here — that's the consuming app's concern, this is a visual/composition
 // reference only.

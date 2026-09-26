@@ -70,35 +70,35 @@ stripping `Core`.
 
 ## Backlog
 
-Consumer column = repos under `~/websites` using the name as of 2026-09-25 (excluding this repo and
-the retired `nuxt-extend-nuxt-forms`/`nuxt-forms`). `-` = no external consumer, free to rename.
+Consumers column = whether a consuming app used the name as of 2026-09-25 (`yes`), or `-` for no
+external consumer, free to rename. Run `/check-component-usage` for the current list before renaming.
 
 | Current | Proposed | Consumers |
 |---------|----------|-----------|
 | ~~InputNumberCore~~ | ✅ `InputNumber` (2026-09-25) | - |
 | ~~InputNumberDefault~~ | ✅ `InputNumberField` (2026-09-25) | - |
-| InputTextCore | `InputText` | guidemyhair, nuxt3-pinia-i18n-storybook |
-| InputTextWithLabel | `InputTextField` | cnv-hairdressing, guidemyhair, luxury-locs-by-natasha-nuxt3, srcdev-design-system |
-| InputPasswordWithLabel | `InputPasswordField` | srcdev-design-system |
+| InputTextCore | `InputText` | yes |
+| InputTextWithLabel | `InputTextField` | yes |
+| InputPasswordWithLabel | `InputPasswordField` | yes |
 | InputTextAsNumberWithLabel | `InputTextAsNumberField` | - |
 | InputRangeCore | `InputRange` | - |
 | InputRangeDefault | `InputRangeField` | - |
 | InputTextareaCore | `InputTextarea` | - |
-| InputTextareaWithLabel | `InputTextareaField` | guidemyhair, luxury-locs-by-natasha-nuxt3, srcdev-design-system |
-| InputSelectCore | `InputSelect` | guidemyhair |
-| InputSelectWithLabel | `InputSelectField` | guidemyhair, srcdev-design-system |
-| ToggleSwitchCore | `ToggleSwitch` | guidemyhair |
-| ToggleSwitchWithLabel | `ToggleSwitchField` | cnv-hairdressing, guidemyhair |
+| InputTextareaWithLabel | `InputTextareaField` | yes |
+| InputSelectCore | `InputSelect` | yes |
+| InputSelectWithLabel | `InputSelectField` | yes |
+| ToggleSwitchCore | `ToggleSwitch` | yes |
+| ToggleSwitchWithLabel | `ToggleSwitchField` | yes |
 | ToggleSwitchWithLabelInline | `layout` prop on `ToggleSwitchField`, or `ToggleSwitchFieldInline` | - |
-| TripleToggleSwitchCore | `TripleToggleSwitch` | srcdev-design-system |
-| InputButtonCore | `InputButton` | cnv-hairdressing, guidemyhair, luxury-locs-by-natasha-nuxt3, nuxt3-pinia-i18n-storybook |
+| TripleToggleSwitchCore | `TripleToggleSwitch` | yes |
+| InputButtonCore | `InputButton` | yes |
 | InputCheckboxRadioCore | `InputCheckboxRadio` (review family first) | - |
 | InputCheckboxRadioButton | review: button-style variant, not a Field | - |
 | InputCheckboxRadioWithLabel | `InputCheckboxRadioField` (review family first) | - |
 | ActionMenuItemCore | `ActionMenuItem` (child of `ActionMenu`, not a wrapper pair) | - |
 | AlertMaskCore | `AlertMask` | - |
-| CardCore | **decide**: `Card` is single-word and collision-prone; prefer a prefixed name (`Display*`, `Content*`) | instepreflexology |
-| AccordianCore | **decide**: also fixes the "Accordian" misspelling; bare `Accordion` is single-word and collision-prone, and it is built on `<details>`/`<summary>` | srcdev-design-system |
+| CardCore | **decide**: `Card` is single-word and collision-prone; prefer a prefixed name (`Display*`, `Content*`) | yes |
+| AccordianCore | **decide**: also fixes the "Accordian" misspelling; bare `Accordion` is single-word and collision-prone, and it is built on `<details>`/`<summary>` | yes |
 | TabsCore | **decide**: `Tabs` is single-word and collision-prone | - |
 
 The `input-checkbox` family also has `MultipleCheckboxes`/`SingleCheckbox` on top of the Core; look

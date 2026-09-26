@@ -292,7 +292,7 @@ export const RealisticPageContext: Story = {
     docs: {
       description: {
         story:
-          "Matches the real services listing page (app/pages/services/index.vue in the luxury-locs-by-natasha-nuxt3 project): a page hero (EyebrowText + HeroText inside PageRow/TextBlock) followed by a ServiceSummary. Use ServiceSummaryGrid for the full alternating listing — this story sanity-checks a single instance's layout in context.",
+          "Matches a typical services listing page: a page hero (EyebrowText + HeroText inside PageRow/TextBlock) followed by a ServiceSummary. Use ServiceSummaryGrid for the full alternating listing — this story sanity-checks a single instance's layout in context.",
       },
     },
   },
