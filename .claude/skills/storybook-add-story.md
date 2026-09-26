@@ -236,6 +236,10 @@ Key points:
 
 ## Notes
 
+- **Colour scheme:** `.storybook/preview.ts` pins every story to the light scheme
+  (`html[data-color-scheme="light"]`, off-white `--slate-00` stage) by default, whatever the OS
+  setting. Use the toolbar "Colour scheme" menu (Light / Dark / Follow OS) to check dark mode.
+  Don't hardcode a stage background in a story to get a light canvas; it's already the default.
 - Use `table: { category: "..." }` in `argTypes` when a component has many props — it groups
   them in the Storybook controls panel (e.g. `"Model"`, `"Basic"`, `"Validation"`, `"Styling"`, `"Slots"`).
 - Export multiple named stories (`Default`, `WithError`, `Outlined`, etc.) when you want

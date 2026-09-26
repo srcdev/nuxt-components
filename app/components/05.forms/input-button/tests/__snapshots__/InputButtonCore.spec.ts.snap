@@ -9,9 +9,9 @@ exports[`InputButtonCore > Snapshots > icon-only slot 1`] = `
 `;
 
 exports[`InputButtonCore > Snapshots > pending state 1`] = `
-"<button type="button" aria-disabled="false" data-testid="input-button-core" data-theme="default" class="input-button-core primary pending-effect is-pending"><svg class="pending-container" data-theme="default">
-    <rect pathLength="100" stroke-linecap="round" class="pending-blur"></rect>
-    <rect pathLength="100" stroke-linecap="round" class="pending-line"></rect>
+"<button type="button" aria-disabled="false" data-testid="input-button-core" data-theme="default" class="input-button-core primary pending-effect is-pending"><svg class="pending-effect-container" data-theme="default" aria-hidden="true" focusable="false">
+    <rect pathLength="100" stroke-linecap="round" class="pending-effect-blur"></rect>
+    <rect pathLength="100" stroke-linecap="round" class="pending-effect-line"></rect>
   </svg>
   <!--v-if--><span class="button-text">Click me</span>
   <!--v-if-->

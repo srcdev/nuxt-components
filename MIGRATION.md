@@ -172,7 +172,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 
 | Component | File | CS | SN |
 |---|---|---|---|
-| PendingEffect | `pending-effect/PendingEffect.vue` | — | — |
+| PendingEffect | `pending-effect/PendingEffect.vue` | ✅ | ✅ |
 
 ---
 

@@ -120,6 +120,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       display: inline-grid;
     }
 
+    &.pending-effect {
+      overflow: visible;
+    }
+
     /*
     * Theming
     * Every colour is a public --input-button-{variant}-{property} token, inline-fallback to

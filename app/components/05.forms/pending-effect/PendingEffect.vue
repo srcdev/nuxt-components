@@ -1,7 +1,13 @@
 <template>
-  <svg class="pending-container" :class="[elementClasses]" :data-theme="theme">
-    <rect pathLength="100" stroke-linecap="round" class="pending-blur" />
-    <rect pathLength="100" stroke-linecap="round" class="pending-line" />
+  <svg
+    class="pending-effect-container"
+    :class="elementClasses"
+    :data-theme="theme"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <rect pathLength="100" stroke-linecap="round" class="pending-effect-blur"/>
+    <rect pathLength="100" stroke-linecap="round" class="pending-effect-line"/>
   </svg>
 </template>
 
@@ -16,80 +22,81 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 </script>
 
 <style lang="css">
 @layer components {
   .pending-effect {
-    --pending-line-color: var(--theme-surface);
-    --pending-line-thickness: 0.1rem;
-    --pending-line-length: 2rem;
-    --pending-blur-color: var(--theme-surface);
-    --pending-blur-size: 0rem; /* 0.3rem */
-    --pending-offset: 1rem;
-    --animation-speed: 3000ms;
-    /* do not change, used for calculations */
-    --container-offset: 10rem;
     position: relative;
 
-    .pending-container {
+    .pending-effect-container {
+      --_container-offset: 10rem;
+      --_offset: var(--pending-effect-offset, 1rem);
+
       pointer-events: none;
       position: absolute;
-      inset: calc(var(--container-offset) / -2);
-      width: calc(100% + var(--container-offset));
-      height: calc(100% + var(--container-offset));
+      inset: calc(var(--_container-offset) / -2);
+      width: calc(100% + var(--_container-offset));
+      height: calc(100% + var(--_container-offset));
       opacity: 0;
 
-      .pending-blur,
-      .pending-line {
-        width: calc(100% - var(--container-offset) + var(--pending-offset));
-        height: calc(100% - var(--container-offset) + var(--pending-offset));
-        x: calc((var(--container-offset) / 2) + calc(var(--pending-offset) / -2));
-        y: calc((var(--container-offset) / 2) + calc(var(--pending-offset) / -2));
-        rx: 0.8rem;
+      .pending-effect-blur,
+      .pending-effect-line {
+        width: calc(100% - var(--_container-offset) + var(--_offset));
+        height: calc(100% - var(--_container-offset) + var(--_offset));
+        x: calc((var(--_container-offset) / 2) - (var(--_offset) / 2));
+        y: calc((var(--_container-offset) / 2) - (var(--_offset) / 2));
+        rx: var(--pending-effect-border-radius, 0.8rem);
         fill: transparent;
-        stroke: black;
-        stroke-width: 0.5rem;
-        stroke-dasharray: var(--pending-line-length) calc(5rem - var(--pending-line-length));
+        stroke-dasharray: var(--pending-effect-line-length, 2rem)
+          calc(5rem - var(--pending-effect-line-length, 2rem));
       }
 
-      .pending-line {
-        stroke: var(--pending-line-color);
-        stroke-width: var(--pending-line-thickness);
+      .pending-effect-line {
+        stroke: var(--pending-effect-line-color, var(--theme-surface));
+        stroke-width: var(--pending-effect-line-thickness, 0.1rem);
       }
 
-      .pending-blur {
-        filter: blur(var(--pending-blur-size));
-        stroke: var(--pending-blur-color);
-        stroke-width: var(--pending-blur-size);
-      }
-    }
-
-    &:is(.icon-only) {
-      .pending-container {
-        .pending-blur,
-        .pending-line {
-          rx: 100vw;
-        }
+      .pending-effect-blur {
+        filter: blur(var(--pending-effect-blur-size, 0rem));
+        stroke: var(--pending-effect-blur-color, var(--theme-surface));
+        stroke-width: var(--pending-effect-blur-size, 0rem);
       }
     }
 
-    &:is(.is-pending) {
+    &.icon-only .pending-effect-container {
+      .pending-effect-blur,
+      .pending-effect-line {
+        rx: var(--pending-effect-border-radius-icon-only, 100vw);
+      }
+    }
+
+    &.is-pending {
       pointer-events: none;
       cursor: wait;
 
       @media (prefers-reduced-motion: no-preference) {
-        animation: stroke-dashoffset var(--animation-speed) infinite linear;
-
-        .pending-container {
+        .pending-effect-container {
           opacity: 1;
+
+          .pending-effect-blur,
+          .pending-effect-line {
+            animation: pending-effect-dash var(--pending-effect-animation-duration, 3000ms) infinite linear;
+          }
         }
       }
     }
   }
 
-  @keyframes stroke-dashoffset {
+  @keyframes pending-effect-dash {
     0% {
       stroke-dashoffset: 0;
     }

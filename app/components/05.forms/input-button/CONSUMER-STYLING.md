@@ -67,7 +67,8 @@ Same shape again:
 | `--input-button-tertiary-ring-focus` | `var(--theme-ring)` |
 
 `.is-pending` always dims the *primary* surface regardless of variant — a pre-existing quirk, not
-something this token set changes.
+something this token set changes. The animated border added by `has-pending-effect` has its own
+`--pending-effect-*` tokens, see `../pending-effect/CONSUMER-STYLING.md`.
 
 `InputCopy` and `PricingCard` fall back through `--input-button-primary-*` for their own copy/CTA
 buttons (see their own `CONSUMER-STYLING.md`) rather than duplicating this chain.

@@ -1,0 +1,26 @@
+{
+  "SRCDEV PendingEffect Button": {
+    "description": "InputButtonCore with the PendingEffect animated border while busy",
+    "scope": "vue,html",
+    "body": [
+      "<InputButtonCore",
+      "  button-text=\"$1Submit\"",
+      "  type=\"${2|submit,button|}\"",
+      "  has-pending-effect",
+      "  :is-pending=\"$3isSubmitting\"",
+      "/>"
+    ]
+  },
+  "SRCDEV PendingEffect CSS Override": {
+    "description": "CSS override scaffold for PendingEffect tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --pending-effect-line-color: $2;",
+      "  --pending-effect-line-thickness: $3;",
+      "  --pending-effect-blur-size: $4;",
+      "  --pending-effect-animation-duration: $5;",
+      "}"
+    ]
+  }
+}
