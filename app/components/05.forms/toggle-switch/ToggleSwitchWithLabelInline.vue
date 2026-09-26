@@ -1,10 +1,8 @@
 <template>
   <div class="toggle-switch-with-label-inline" :class="[elementClasses]" :data-theme="theme">
     <InputLabel
-      :id
-      :for="toggleSwitchId"
-      :theme
-      :name
+      :id="toggleSwitchId"
+      indicator="none"
       input-variant="normal"
       :style-class-passthrough="['input-switch-label', 'input-text-label', labelWeightClass]"
     >

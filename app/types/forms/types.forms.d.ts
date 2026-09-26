@@ -10,6 +10,9 @@ export type InputButtonVariant = "primary" | "secondary" | "tertiary" | "inline"
 // Input variant types for form components
 export type InputUiVariant = "normal" | "outlined" | "underlined";
 
+// Which fields InputLabel marks: required ones, optional ones, or neither
+export type InputLabelIndicator = "none" | "required" | "optional";
+
 // Other form-specific types
 export type CheckboxAppearance = null | "with-decorator";
 export type CheckboxStyle = "check" | "cross";

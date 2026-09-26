@@ -29,7 +29,9 @@ interface MigratedFieldsFormStoryArgs {
 // checkbox fields, FormWrapper (5/5 as of 2026-09-26) wraps the form itself, and InputError
 // (5/5 as of 2026-09-26) is the error strip every field below renders, so none of the four
 // gets a field of its own. InputDescription (5/5 as of 2026-09-26) is the help text under the
-// "Full name" field, rendered through InputTextWithLabel's descriptionText slot. Every other 05.forms component
+// "Full name" field, rendered through InputTextWithLabel's descriptionText slot. InputLabel (5/5 as
+// of 2026-09-26) is the <label> every labelled field below renders, so it has no field of its own
+// either. Every other 05.forms component
 // (radio, ...) is still mid-migration.
 // Add a field here each time /migrate-component brings another 05.forms component up to 5/5, so
 // this story doubles as a visible migration-progress tracker rather than living only in the

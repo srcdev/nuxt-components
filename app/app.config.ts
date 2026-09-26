@@ -5,6 +5,7 @@ import type {
   DisplayToastPosition,
   DisplayToastAlignment,
 } from "./types/components";
+import type { InputLabelIndicator } from "./types/forms/types.forms";
 
 export default defineAppConfig({
   srcdev: {
@@ -45,6 +46,13 @@ export default defineAppConfig({
       allowContentScroll: false,
       theme: undefined as SemanticTheme | undefined,
       closeIcon: "bitcoin-icons:cross-filled",
+    },
+    inputLabel: {
+      indicator: "none" as InputLabelIndicator,
+      requiredText: "*",
+      optionalText: "(optional)",
+      requiredIcon: undefined as string | undefined,
+      optionalIcon: undefined as string | undefined,
     },
     cookieConsentBanner: {
       theme: "info" as SemanticTheme,

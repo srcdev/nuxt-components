@@ -1,10 +1,8 @@
 <template>
   <div class="toggle-switch-with-label" :class="[elementClasses]" :data-theme="formUiTheme">
     <InputLabel
-      :id
-      :for="toggleSwitchId"
-      :theme
-      :name
+      :id="toggleSwitchId"
+      indicator="none"
       input-variant="normal"
       :field-has-error
       :style-class-passthrough="['input-switch-label', 'input-text-label', 'body-normal-bold']"

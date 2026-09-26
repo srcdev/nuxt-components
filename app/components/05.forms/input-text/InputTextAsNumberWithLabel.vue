@@ -7,9 +7,7 @@
   >
     <InputLabel
       :id
-      :for="id"
-      :theme
-      :name
+      :required
       :input-variant
       :field-has-error
       :style-class-passthrough="['input-text-label', 'body-normal-bold']"

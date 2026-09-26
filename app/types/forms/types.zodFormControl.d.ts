@@ -2,9 +2,6 @@ import type {
   IFieldsInitialState,
   IFormFieldsState,
   IFormFieldsC12,
-  IFormFieldC12,
-  IApiErrorMessages,
-  ICustomErrorMessage,
   IErrorMessagesArr,
 } from "../../app/types/forms/types.forms"
 

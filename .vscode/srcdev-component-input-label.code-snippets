@@ -1,0 +1,39 @@
+{
+  "SRCDEV InputLabel Basic": {
+    "description": "InputLabel for a custom field wrapper (id is the control's id, rendered as for)",
+    "scope": "vue,html",
+    "body": [
+      "<InputLabel :id=\"${1:inputId}\" :field-has-error=\"${2:fieldHasError}\" input-variant=\"${3|normal,outlined,underlined|}\">",
+      "  <template #textLabel>${4:Label}</template>",
+      "</InputLabel>$0"
+    ]
+  },
+  "SRCDEV InputLabel Indicator app.config": {
+    "description": "Site-wide required/optional marker for every InputLabel (app.config.ts)",
+    "scope": "typescript",
+    "body": [
+      "inputLabel: {",
+      "  indicator: \"${1|required,optional,none|}\",",
+      "  requiredText: \"${2:*}\",",
+      "  optionalText: \"${3:(optional)}\",",
+      "},$0"
+    ]
+  },
+  "SRCDEV InputLabel CSS Override": {
+    "description": "CSS override scaffold for InputLabel tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --input-label-color: $2;",
+      "  --input-label-font-size: $3;",
+      "  --input-label-font-weight: $4;",
+      "  --input-label-line-height: $5;",
+      "  --input-label-margin-block: $6;",
+      "  --input-label-margin-inline: $7;",
+      "  --input-label-indicator-color-required: $8;",
+      "  --input-label-indicator-color-optional: $9;",
+      "  --input-label-indicator-gap: $10;",
+      "}"
+    ]
+  }
+}
