@@ -3,6 +3,7 @@
     :id
     :name
     :legend
+    group-role="radiogroup"
     :field-has-error
     :required
     :data-testid

@@ -113,8 +113,8 @@ Tracks progress toward a fully migrated component library. A component is consid
 | Component | File | CS | SN |
 |---|---|---|---|
 | FormWrapper | `form-wrapper/FormWrapper.vue` | ☐ | ☐ |
-| FormFieldset | `form-fieldset/FormFieldset.vue` | ☐ | ☐ |
-| FormField | `form-field/FormField.vue` | ☐ | ☐ |
+| FormFieldset | `form-fieldset/FormFieldset.vue` | ✅ | ✅ |
+| FormField | `form-field/FormField.vue` | ✅ | ✅ |
 | InputError | `form-errors/InputError.vue` | — | — |
 | InputLabel | `input-label/InputLabel.vue` | — | — |
 | InputDescription | `input-description/InputDescription.vue` | — | — |

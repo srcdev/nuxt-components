@@ -24,7 +24,8 @@ interface MigratedFieldsFormStoryArgs {
 // (via InputNumberField), InputTextareaCore (via InputTextareaWithLabel), InputSelectCore
 // (via InputSelectWithLabel), ToggleSwitchCore (via ToggleSwitchWithLabel), and input-checkbox
 // (MultipleCheckboxes + SingleCheckbox). FormField (5/5 as of 2026-09-26) is the layout wrapper
-// around every field below rather than a field of its own. Every other 05.forms component
+// around every field below, and FormFieldset (5/5 as of 2026-09-26) is rendered inside the
+// checkbox fields, so neither gets a field of its own. Every other 05.forms component
 // (radio, ...) is still mid-migration.
 // Add a field here each time /migrate-component brings another 05.forms component up to 5/5, so
 // this story doubles as a visible migration-progress tracker rather than living only in the

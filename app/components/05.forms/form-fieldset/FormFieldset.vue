@@ -1,15 +1,15 @@
 <template>
   <fieldset
     :id="id"
-    :aria-required="required"
+    :role="groupRole === 'radiogroup' ? 'radiogroup' : undefined"
+    :aria-required="groupRole === 'radiogroup' && required ? 'true' : undefined"
     :aria-invalid="fieldHasError"
-    role="radiogroup"
     :name="name"
     class="form-fieldset"
-    :class="[elementClasses, { error: fieldHasError }]"
+    :class="elementClasses"
     :data-testid="dataTestid"
   >
-    <legend v-if="legend" class="form-fieldset-legend" :class="[{ 'has-description': slots.description }]">
+    <legend v-if="legend || slots.legend" class="form-fieldset-legend">
       <slot name="legend">{{ legend }}</slot>
     </legend>
 
@@ -24,6 +24,7 @@ interface Props {
   id: string;
   name: string;
   legend?: string;
+  groupRole?: "group" | "radiogroup";
   required?: boolean;
   fieldHasError?: boolean;
   dataTestid?: string;
@@ -32,6 +33,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   legend: "",
+  groupRole: "group",
   required: false,
   fieldHasError: false,
   dataTestid: "",
@@ -39,37 +41,41 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 </script>
 
 <style lang="css">
 @layer components {
-.form-fieldset {
-  margin: 0;
-  padding: 0;
-  border: 0;
+  .form-fieldset {
+    margin-block: var(--form-fieldset-margin-block, 0);
+    margin-inline: var(--form-fieldset-margin-inline, 0);
+    padding-block: var(--form-fieldset-padding-block, 0);
+    padding-inline: var(--form-fieldset-padding-inline, 0);
+    border: var(--form-fieldset-border, 0);
+    border-radius: var(--form-fieldset-border-radius, 0);
+    outline: var(--form-fieldset-outline, 0);
+    outline-offset: var(--form-fieldset-outline-offset, 0);
 
-  .form-fieldset-legend {
-    color: var(--form-fieldset-legend-color);
-    margin-block: 0.8rem;
-    font-size: var(--step-5);
-    font-weight: normal;
-    line-height: 1.5;
+    .form-fieldset-legend {
+      color: var(--form-fieldset-legend-color, inherit);
+      margin-block: var(--form-fieldset-legend-margin-block, 0.8rem);
+      margin-inline: var(--form-fieldset-legend-margin-inline, 0);
+      font-size: var(--form-fieldset-legend-font-size, var(--step-5));
+      font-weight: var(--form-fieldset-legend-font-weight, normal);
+      line-height: var(--form-fieldset-legend-line-height, 1.5);
+    }
 
-    &.has-description {
-      margin-bottom: 0;
+    .form-fieldset-content {
+      margin-block: var(--form-fieldset-content-margin-block, 0);
+      margin-inline: var(--form-fieldset-content-margin-inline, 0);
     }
   }
-
-  .form-fieldset-description {
-    font-size: 1.6rem;
-    margin-top: 1.2rem;
-  }
-
-  .form-fieldset-content {
-    margin-block-start: 0;
-    margin-block-end: 0;
-  }
-}
 }
 </style>

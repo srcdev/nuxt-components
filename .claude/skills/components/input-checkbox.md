@@ -28,7 +28,7 @@ instead.
 | `legend` | `string` | (required) | Fieldset `<legend>` text. |
 | `:error-message` | `string \| object` | (required) | Shown by `InputError` when `fieldHasError` is true. Pass `""` when there's no error. An array renders as a list. |
 | `:field-has-error` | `boolean` | `false` | Shows the error, sets `aria-invalid` on the fieldset and points each checkbox's `aria-describedby` at the error. |
-| `:required` | `boolean` | `false` | Sets `aria-required` on the fieldset. Native `required` is deliberately **not** put on the individual checkboxes, since that would force every box to be ticked. Validate "at least N selected" in the consuming app. |
+| `:required` | `boolean` | `false` | No ARIA output: `aria-required` isn't valid on a checkbox group (`role="group"`), so it was dropped from the fieldset 2026-09-26. Signal "required" in the legend text instead (e.g. "Interests (required)"). Native `required` is deliberately **not** put on the individual checkboxes, since that would force every box to be ticked. Validate "at least N selected" in the consuming app. |
 | `:is-button` | `boolean` | `false` | Pill/button presentation (`InputCheckboxRadioButton`) instead of labelled checkboxes. |
 | `:is-pill` | `boolean` | `false` | With `is-button`, fully rounded pills. |
 | `:options-layout` | `OptionsLayout` | `"equal-widths"` | `"equal-widths"` (auto-fit grid, columns sized to the longest label), `"inline"` (wrapping row) or `"block"` (column). |
@@ -79,7 +79,7 @@ instead.
 | `label` | `string` | `""` | Text next to the checkbox. Replaced by the `labelContent` slot when given. |
 | `:error-message` | `string \| object` | (required) | Pass `""` when there's no error. |
 | `:field-has-error` | `boolean` | `false` | Shows the error, sets `aria-invalid` on the fieldset and the checkbox's `aria-describedby`. |
-| `:required` | `boolean` | `false` | Native `required` on the checkbox, plus `aria-required` on the fieldset. |
+| `:required` | `boolean` | `false` | Native `required` on the checkbox. (The fieldset no longer gets `aria-required`, see above.) |
 | `:true-value` / `:false-value` | `string \| number \| boolean` | `true` / `false` | Model values for checked/unchecked. |
 | `:options-layout` | `OptionsLayout` | `"equal-widths"` | Class on the items container. |
 | `:theme` | `FormUiTheme` | `"default"` | |
@@ -143,5 +143,6 @@ Brought to full compliance. Behaviour changes a consumer could notice:
 - Both `v-model`s (and `v-model:field-data`) are now `defineModel({ required: true })`.
 - Items-container spacing is now overridable via the public tokens above (defaults unchanged).
 
-Known follow-up, not fixed here: the shared `FormFieldset` hardcodes `role="radiogroup"`, so
-screen readers announce a checkbox group as a radio group.
+Fixed 2026-09-26 (FormFieldset migration): the shared `FormFieldset` used to hardcode
+`role="radiogroup"`, so screen readers announced checkbox groups as radio groups. It now defaults
+to the native fieldset `group` role; only `MultipleRadiobuttons` opts into `radiogroup`.

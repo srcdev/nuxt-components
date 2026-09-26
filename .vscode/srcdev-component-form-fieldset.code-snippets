@@ -1,0 +1,36 @@
+{
+  "SRCDEV FormFieldset Basic": {
+    "description": "FormFieldset: fieldset + legend wrapper for a group of controls",
+    "scope": "vue,html",
+    "body": [
+      "<FormFieldset",
+      "  id=\"$1fieldId\"",
+      "  name=\"$2fieldName\"",
+      "  legend=\"$3Legend\"",
+      "  group-role=\"${4|group,radiogroup|}\"",
+      "  :field-has-error=\"!!$5errors.fieldName\"",
+      ">",
+      "  <template #content>",
+      "    $0",
+      "  </template>",
+      "</FormFieldset>"
+    ]
+  },
+  "SRCDEV FormFieldset CSS Override": {
+    "description": "CSS override scaffold for FormFieldset tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .form-fieldset {",
+      "    --form-fieldset-padding-block: $6;",
+      "    --form-fieldset-padding-inline: $7;",
+      "    --form-fieldset-border: $8;",
+      "    --form-fieldset-legend-color: $2;",
+      "    --form-fieldset-legend-font-size: $3;",
+      "    --form-fieldset-legend-font-weight: $4;",
+      "    --form-fieldset-legend-margin-block: $5;",
+      "  }",
+      "}"
+    ]
+  }
+}
