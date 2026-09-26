@@ -1,0 +1,30 @@
+{
+  "SRCDEV InputError Basic": {
+    "description": "InputError message strip for a custom field wrapper (place in grid row 2 under the control)",
+    "scope": "vue,html",
+    "body": [
+      "<InputError",
+      "  :id=\"${1:errorId}\"",
+      "  :error-message=\"${2:errorMessage}\"",
+      "  :show-error=\"${3:fieldHasError}\"",
+      "  :is-detached=\"${4|false,true|}\"",
+      "  input-variant=\"${5|normal,outlined,underlined|}\"",
+      "></InputError>$0"
+    ]
+  },
+  "SRCDEV InputError CSS Override": {
+    "description": "CSS override scaffold for InputError tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --input-error-text-color: $2;",
+      "  --input-error-background-color: $3;",
+      "  --input-error-border-color: $4;",
+      "  --input-error-outline-color: $5;",
+      "  --input-error-border-radius: $6;",
+      "  --input-error-font-size: $7;",
+      "  --input-error-detached-offset: $8;",
+      "}"
+    ]
+  }
+}

@@ -120,7 +120,7 @@ describe("MultipleCheckboxes Component", () => {
   it("shows the error message and marks the fieldset invalid when fieldHasError is true", async () => {
     wrapper = await wrapperFactory({ fieldHasError: true });
     const error = wrapper.find(".input-error-message");
-    expect(error.classes()).toContain("show");
+    expect(error.attributes("data-visible")).toBeDefined();
     expect(error.text()).toContain(initialPropsData.errorMessage);
     expect(wrapper.find(".form-fieldset").attributes("aria-invalid")).toBe("true");
   });
@@ -134,6 +134,6 @@ describe("MultipleCheckboxes Component", () => {
 
   it("hides the error message when fieldHasError is false", async () => {
     wrapper = await wrapperFactory({ fieldHasError: false });
-    expect(wrapper.find(".input-error-message").classes()).not.toContain("show");
+    expect(wrapper.find(".input-error-message").attributes("data-visible")).toBeUndefined();
   });
 });
