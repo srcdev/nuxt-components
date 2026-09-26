@@ -10,6 +10,7 @@ import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
 import SingleCheckbox from "../../input-checkbox/SingleCheckbox.vue";
 import InputButtonCore from "../../input-button/InputButtonCore.vue";
 import FormField from "../../form-field/FormField.vue";
+import FormWrapper from "../../form-wrapper/FormWrapper.vue";
 import HeroText from "../../../01.atoms/text-blocks/hero-text/HeroText.vue";
 import type { InputUiVariant, IFormMultipleOptions } from "~/types/forms/types.forms.d";
 
@@ -25,7 +26,8 @@ interface MigratedFieldsFormStoryArgs {
 // (via InputSelectWithLabel), ToggleSwitchCore (via ToggleSwitchWithLabel), and input-checkbox
 // (MultipleCheckboxes + SingleCheckbox). FormField (5/5 as of 2026-09-26) is the layout wrapper
 // around every field below, and FormFieldset (5/5 as of 2026-09-26) is rendered inside the
-// checkbox fields, so neither gets a field of its own. Every other 05.forms component
+// checkbox fields, and FormWrapper (5/5 as of 2026-09-26) wraps the form itself, so none
+// of the three gets a field of its own. Every other 05.forms component
 // (radio, ...) is still mid-migration.
 // Add a field here each time /migrate-component brings another 05.forms component up to 5/5, so
 // this story doubles as a visible migration-progress tracker rather than living only in the
@@ -58,6 +60,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     SingleCheckbox,
     InputButtonCore,
     FormField,
+    FormWrapper,
     HeroText,
   },
   setup() {
@@ -145,116 +148,118 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         or no colour chosen to see the error states.
       </p>
 
-      <form novalidate @submit.prevent="validate">
-        <FormField width="wide" :has-gutter="false">
-          <InputTextWithLabel
-            v-model="state.fullName"
-            type="text"
-            name="fullName"
-            label="Full name"
-            placeholder="eg. Jane Smith"
-            :error-message="errors.fullName"
-            :field-has-error="!!errors.fullName"
-            :required="true"
-            :input-variant="args.inputVariant"
-          />
-        </FormField>
+      <FormWrapper width="medium">
+        <form novalidate @submit.prevent="validate">
+          <FormField width="wide" :has-gutter="false">
+            <InputTextWithLabel
+              v-model="state.fullName"
+              type="text"
+              name="fullName"
+              label="Full name"
+              placeholder="eg. Jane Smith"
+              :error-message="errors.fullName"
+              :field-has-error="!!errors.fullName"
+              :required="true"
+              :input-variant="args.inputVariant"
+            />
+          </FormField>
 
-        <FormField width="wide" :has-gutter="false">
-          <InputRangeDefault
-            v-model="state.budget"
-            name="budget"
-            label="Budget (£)"
-            :min="0"
-            :max="500"
-            :step="10"
-            :error-message="errors.budget"
-            :field-has-error="!!errors.budget"
-          >
-            <template #left><span aria-hidden="true">−</span></template>
-            <template #right><span aria-hidden="true">+</span></template>
-          </InputRangeDefault>
-        </FormField>
+          <FormField width="wide" :has-gutter="false">
+            <InputRangeDefault
+              v-model="state.budget"
+              name="budget"
+              label="Budget (£)"
+              :min="0"
+              :max="500"
+              :step="10"
+              :error-message="errors.budget"
+              :field-has-error="!!errors.budget"
+            >
+              <template #left><span aria-hidden="true">−</span></template>
+              <template #right><span aria-hidden="true">+</span></template>
+            </InputRangeDefault>
+          </FormField>
 
-        <FormField width="wide" :has-gutter="false">
-          <InputNumberField
-            v-model="state.quantity"
-            name="quantity"
-            label="Quantity"
-            :min="1"
-            :max="10"
-            :error-message="errors.quantity"
-            :field-has-error="!!errors.quantity"
-            :input-variant="args.inputVariant"
-          >
-            <template #left><span aria-hidden="true">−</span></template>
-            <template #right><span aria-hidden="true">+</span></template>
-          </InputNumberField>
-        </FormField>
+          <FormField width="wide" :has-gutter="false">
+            <InputNumberField
+              v-model="state.quantity"
+              name="quantity"
+              label="Quantity"
+              :min="1"
+              :max="10"
+              :error-message="errors.quantity"
+              :field-has-error="!!errors.quantity"
+              :input-variant="args.inputVariant"
+            >
+              <template #left><span aria-hidden="true">−</span></template>
+              <template #right><span aria-hidden="true">+</span></template>
+            </InputNumberField>
+          </FormField>
 
-        <FormField width="wide" :has-gutter="false">
-          <InputTextareaWithLabel
-            v-model="state.notes"
-            name="notes"
-            label="Notes"
-            placeholder="Anything else we should know?"
-            :error-message="errors.notes"
-            :field-has-error="!!errors.notes"
-            :input-variant="args.inputVariant"
-          />
-        </FormField>
+          <FormField width="wide" :has-gutter="false">
+            <InputTextareaWithLabel
+              v-model="state.notes"
+              name="notes"
+              label="Notes"
+              placeholder="Anything else we should know?"
+              :error-message="errors.notes"
+              :field-has-error="!!errors.notes"
+              :input-variant="args.inputVariant"
+            />
+          </FormField>
 
-        <FormField width="wide" :has-gutter="false">
-          <InputSelectWithLabel
-            v-model="state.colour"
-            v-model:field-data="colourOptions"
-            name="colour"
-            label="Favourite colour"
-            placeholder="Choose a colour"
-            :error-message="errors.colour"
-            :field-has-error="!!errors.colour"
-            :input-variant="args.inputVariant"
-          />
-        </FormField>
+          <FormField width="wide" :has-gutter="false">
+            <InputSelectWithLabel
+              v-model="state.colour"
+              v-model:field-data="colourOptions"
+              name="colour"
+              label="Favourite colour"
+              placeholder="Choose a colour"
+              :error-message="errors.colour"
+              :field-has-error="!!errors.colour"
+              :input-variant="args.inputVariant"
+            />
+          </FormField>
 
-        <FormField width="wide" :has-gutter="false">
-          <ToggleSwitchWithLabel v-model="state.subscribe" name="subscribe" label="Subscribe to updates" />
-        </FormField>
+          <FormField width="wide" :has-gutter="false">
+            <ToggleSwitchWithLabel v-model="state.subscribe" name="subscribe" label="Subscribe to updates" />
+          </FormField>
 
-        <FormField width="wide" :has-gutter="false">
-          <MultipleCheckboxes
-            v-model="state.services"
-            v-model:field-data="serviceOptions"
-            name="services"
-            legend="Services of interest"
-            options-layout="inline"
-            :is-button="true"
-            :error-message="errors.services"
-            :field-has-error="!!errors.services"
-            :input-variant="args.inputVariant"
-          />
-        </FormField>
+          <FormField width="wide" :has-gutter="false">
+            <MultipleCheckboxes
+              v-model="state.services"
+              v-model:field-data="serviceOptions"
+              name="services"
+              legend="Services of interest"
+              options-layout="inline"
+              :is-button="true"
+              :error-message="errors.services"
+              :field-has-error="!!errors.services"
+              :input-variant="args.inputVariant"
+            />
+          </FormField>
 
-        <FormField width="wide" :has-gutter="false">
-          <SingleCheckbox
-            v-model="state.terms"
-            name="terms"
-            legend="Terms and conditions"
-            label="I agree to the terms"
-            :required="true"
-            :error-message="errors.terms"
-            :field-has-error="!!errors.terms"
-            :input-variant="args.inputVariant"
-          />
-        </FormField>
+          <FormField width="wide" :has-gutter="false">
+            <SingleCheckbox
+              v-model="state.terms"
+              name="terms"
+              legend="Terms and conditions"
+              label="I agree to the terms"
+              :required="true"
+              :error-message="errors.terms"
+              :field-has-error="!!errors.terms"
+              :input-variant="args.inputVariant"
+            />
+          </FormField>
 
-        <FormField width="wide" :has-gutter="false">
-          <div style="display: flex; gap: 1.2rem;">
-            <InputButtonCore type="submit" variant="primary" button-text="Continue" />
-            <InputButtonCore type="button" variant="tertiary" button-text="Clear errors" @click="clearErrors" />
-          </div>
-        </FormField>
-      </form>
+          <FormField width="wide" :has-gutter="false">
+            <div style="display: flex; gap: 1.2rem;">
+              <InputButtonCore type="submit" variant="primary" button-text="Continue" />
+              <InputButtonCore type="button" variant="tertiary" button-text="Clear errors" @click="clearErrors" />
+            </div>
+          </FormField>
+        </form>
+      </FormWrapper>
 
       <div
         style="margin-top: 2rem; padding: 1.6rem; border-radius: 0.8rem; background: #f8fafc; font-family: monospace; font-size: 1.3rem;"

@@ -1,0 +1,30 @@
+{
+  "SRCDEV FormWrapper Basic": {
+    "description": "FormWrapper: width-capped container around a form, with FormField children",
+    "scope": "vue,html",
+    "body": [
+      "<FormWrapper width=\"${1|medium,narrow,wide|}\">",
+      "  <form @submit.prevent=\"$2submitForm\">",
+      "    <FormField width=\"wide\" :has-gutter=\"false\">",
+      "      $0",
+      "    </FormField>",
+      "  </form>",
+      "</FormWrapper>"
+    ]
+  },
+  "SRCDEV FormWrapper CSS Override": {
+    "description": "CSS override scaffold for FormWrapper tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .form-wrapper {",
+      "    --form-wrapper-max-width-medium: $2;",
+      "    --form-wrapper-margin-block: $5;",
+      "    --form-wrapper-margin-inline: $3;",
+      "    --form-wrapper-border: $6;",
+      "    --form-wrapper-padding-block: $4;",
+      "  }",
+      "}"
+    ]
+  }
+}
