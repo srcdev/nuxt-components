@@ -1,0 +1,25 @@
+{
+  "SRCDEV FormField Basic": {
+    "description": "FormField layout wrapper around a single form control",
+    "scope": "vue,html",
+    "body": [
+      "<FormField width=\"${1|wide,medium,narrow|}\" :has-gutter=\"${2|false,true|}\" :field-has-error=\"!!$3errors.fieldName\">",
+      "  $0",
+      "</FormField>"
+    ]
+  },
+  "SRCDEV FormField CSS Override": {
+    "description": "CSS override scaffold for FormField tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .form-field {",
+      "    --form-field-max-width-narrow: $2;",
+      "    --form-field-gutter-width: $3;",
+      "    --form-field-margin-block: $4;",
+      "    --form-field-background-color: $5;",
+      "  }",
+      "}"
+    ]
+  }
+}

@@ -1,8 +1,10 @@
 <template>
   <div
     class="form-field"
-    :class="[width, styleClassPassthrough, { 'has-gutter': hasGutter }]"
-    :data-invalid="fieldHasError ? true : undefined"
+    :class="elementClasses"
+    :data-width="width"
+    :data-has-gutter="hasGutter ? '' : null"
+    :data-invalid="fieldHasError ? '' : null"
   >
     <div class="form-field-inner">
       <slot name="default"></slot>
@@ -15,59 +17,48 @@ interface Props {
   width?: "narrow" | "medium" | "wide";
   fieldHasError?: boolean;
   hasGutter?: boolean;
-  styleClassPassthrough?: string;
+  styleClassPassthrough?: string | string[];
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   width: "narrow",
   fieldHasError: false,
   hasGutter: true,
-  styleClassPassthrough: "",
+  styleClassPassthrough: () => [],
 });
+
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 </script>
 
 <style lang="css">
 @layer components {
   .form-field {
+    --_max-width: var(--form-field-max-width-narrow, 400px);
     --_gutter-width: 0rem;
-    --_max-width: 400px;
-    --_background-color: transparent;
-    --_border-radius: 0.4rem;
 
-    background-color: var(--_background-color);
-    border-radius: var(--_border-radius);
+    background-color: var(--form-field-background-color, transparent);
+    border-radius: var(--form-field-border-radius, 0.4rem);
     margin-inline: auto;
-    margin-block: var(--field-margin-block);
-
+    margin-block: var(--form-field-margin-block, var(--field-margin-block));
     width: min(100% - calc(2 * var(--_gutter-width)), var(--_max-width));
-    outline: 0rem solid var(--slate-05);
 
-    &:has(.underline) {
-      --_background-color: var(--theme-form-input-bg-underlined);
+    &[data-width="medium"] {
+      --_max-width: var(--form-field-max-width-medium, 800px);
     }
 
-    .form-field-inner {
-      background-color: var(--_background-color);
-      border-radius: var(--_border-radius);
-      margin-inline-start: 0rem;
-      padding-inline-start: 0rem;
-      outline: 0 solid var(--slate-05);
+    &[data-width="wide"] {
+      --_max-width: var(--form-field-max-width-wide, 1200px);
     }
 
-    &.has-gutter {
-      --_gutter-width: 1.6rem;
-    }
-
-    &.narrow {
-      max-width: 400px;
-    }
-
-    &.medium {
-      --_max-width: 800px;
-    }
-
-    &.wide {
-      --_max-width: 1200px;
+    &[data-has-gutter] {
+      --_gutter-width: var(--form-field-gutter-width, 1.6rem);
     }
   }
 }
