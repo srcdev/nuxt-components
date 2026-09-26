@@ -8,6 +8,7 @@ import InputSelectWithLabel from "../../input-select/InputSelectWithLabel.vue";
 import ToggleSwitchWithLabel from "../../toggle-switch/ToggleSwitchWithLabel.vue";
 import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
 import SingleCheckbox from "../../input-checkbox/SingleCheckbox.vue";
+import MultipleRadiobuttons from "../../input-radio/MultipleRadiobuttons.vue";
 import InputButtonCore from "../../input-button/InputButtonCore.vue";
 import FormField from "../../form-field/FormField.vue";
 import FormWrapper from "../../form-wrapper/FormWrapper.vue";
@@ -24,14 +25,16 @@ interface MigratedFieldsFormStoryArgs {
 // InputTextCore (via InputTextWithLabel), InputRangeCore (via InputRangeDefault), InputNumber
 // (via InputNumberField), InputTextareaCore (via InputTextareaWithLabel), InputSelectCore
 // (via InputSelectWithLabel), ToggleSwitchCore (via ToggleSwitchWithLabel), and input-checkbox
-// (MultipleCheckboxes + SingleCheckbox). FormField (5/5 as of 2026-09-26) is the layout wrapper
+// (MultipleCheckboxes + SingleCheckbox), plus input-radio (MultipleRadiobuttons, 5/5 as of
+// 2026-09-27). FormField (5/5 as of 2026-09-26) is the layout wrapper
 // around every field below, and FormFieldset (5/5 as of 2026-09-26) is rendered inside the
 // checkbox fields, FormWrapper (5/5 as of 2026-09-26) wraps the form itself, and InputError
 // (5/5 as of 2026-09-26) is the error strip every field below renders, so none of the four
 // gets a field of its own. InputDescription (5/5 as of 2026-09-26) is the help text under the
 // "Full name" field, rendered through InputTextWithLabel's descriptionText slot. InputLabel (5/5 as
 // of 2026-09-26) is the <label> every labelled field below renders, so it has no field of its own
-// either. Every other 05.forms component
+// either. The input-checkbox-radio family (InputCheckboxRadio/Field/Button, 5/5 as of 2026-09-27)
+// renders every checkbox and radio below, so it has no field of its own. Every other 05.forms component
 // (radio, ...) is still mid-migration.
 // Add a field here each time /migrate-component brings another 05.forms component up to 5/5, so
 // this story doubles as a visible migration-progress tracker rather than living only in the
@@ -62,6 +65,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     ToggleSwitchWithLabel,
     MultipleCheckboxes,
     SingleCheckbox,
+    MultipleRadiobuttons,
     InputButtonCore,
     FormField,
     FormWrapper,
@@ -76,6 +80,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       colour: "",
       subscribe: false,
       services: [] as string[],
+      contactMethod: "",
       terms: false,
     });
 
@@ -84,6 +89,17 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         { id: "1", name: "services", value: "cut", label: "Cut" },
         { id: "2", name: "services", value: "colour", label: "Colour" },
         { id: "3", name: "services", value: "styling", label: "Styling" },
+      ],
+      total: 3,
+      skip: 0,
+      limit: 10,
+    });
+
+    const contactMethodOptions = reactive<IFormMultipleOptions>({
+      data: [
+        { id: "1", name: "contactMethod", value: "email", label: "Email" },
+        { id: "2", name: "contactMethod", value: "phone", label: "Phone" },
+        { id: "3", name: "contactMethod", value: "text", label: "Text message" },
       ],
       total: 3,
       skip: 0,
@@ -105,7 +121,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     // useZodValidation instead (see this file's top comment). Kept deliberately simple so the
     // Continue button has an obvious, reliable way to trigger each field's error state for
     // exercising InputTextWithLabel/InputRangeDefault/InputNumberField/InputTextareaWithLabel/
-    // InputSelectWithLabel/MultipleCheckboxes/SingleCheckbox's error UI in Storybook.
+    // InputSelectWithLabel/MultipleCheckboxes/MultipleRadiobuttons/SingleCheckbox's error UI in Storybook.
     const errors = reactive({
       fullName: "",
       budget: "",
@@ -113,6 +129,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       notes: "",
       colour: "",
       services: "",
+      contactMethod: "",
       terms: "",
     });
 
@@ -123,6 +140,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       errors.notes = state.notes.trim() ? "" : "Notes are required";
       errors.colour = state.colour ? "" : "Please choose a colour";
       errors.services = state.services.length ? "" : "Choose at least one service";
+      errors.contactMethod = state.contactMethod ? "" : "Choose how we should contact you";
       errors.terms = state.terms ? "" : "You must agree to the terms";
     };
 
@@ -133,10 +151,11 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       errors.notes = "";
       errors.colour = "";
       errors.services = "";
+      errors.contactMethod = "";
       errors.terms = "";
     };
 
-    return { args, state, errors, validate, clearErrors, colourOptions, serviceOptions };
+    return { args, state, errors, validate, clearErrors, colourOptions, serviceOptions, contactMethodOptions };
   },
   template: `
     <div style="margin: 36px; max-width: 480px;">
@@ -149,7 +168,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       <p style="margin: 0 0 2rem 0; color: #475569; font-size: 1.4rem;">
         One field per 05.forms component that's fully migrated (5/5 on the Component Ledger).
         Click Continue with an empty name, a budget under £100, a quantity under 1, empty notes,
-        or no colour chosen to see the error states.
+        no colour or no contact method chosen to see the error states.
       </p>
 
       <FormWrapper width="medium">
@@ -246,6 +265,20 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
+            <MultipleRadiobuttons
+              v-model="state.contactMethod"
+              v-model:field-data="contactMethodOptions"
+              name="contactMethod"
+              legend="Preferred contact method"
+              options-layout="inline"
+              :required="true"
+              :error-message="errors.contactMethod"
+              :field-has-error="!!errors.contactMethod"
+              :input-variant="args.inputVariant"
+            />
+          </FormField>
+
+          <FormField width="wide" :has-gutter="false">
             <SingleCheckbox
               v-model="state.terms"
               name="terms"
@@ -277,6 +310,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         <div>colour: {{ state.colour || '""' }}</div>
         <div>subscribe: {{ state.subscribe }}</div>
         <div>services: {{ JSON.stringify(state.services) }}</div>
+        <div>contactMethod: {{ state.contactMethod || '""' }}</div>
         <div>terms: {{ state.terms }}</div>
       </div>
     </div>

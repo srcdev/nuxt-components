@@ -92,9 +92,9 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | ToggleSwitchWithLabelInline | `layout` prop on `ToggleSwitchField`, or `ToggleSwitchFieldInline` | - |
 | TripleToggleSwitchCore | `TripleToggleSwitch` | yes |
 | InputButtonCore | `InputButton` | yes |
-| InputCheckboxRadioCore | `InputCheckboxRadio` (review family first) | - |
-| InputCheckboxRadioButton | review: button-style variant, not a Field | - |
-| InputCheckboxRadioWithLabel | `InputCheckboxRadioField` (review family first) | - |
+| ~~InputCheckboxRadioCore~~ | ✅ `InputCheckboxRadio` (2026-09-27) | - |
+| InputCheckboxRadioButton | ✅ kept: button-style option, not a Field (2026-09-27) | - |
+| ~~InputCheckboxRadioWithLabel~~ | ✅ `InputCheckboxRadioField` (2026-09-27) | - |
 | ActionMenuItemCore | `ActionMenuItem` (child of `ActionMenu`, not a wrapper pair) | - |
 | AlertMaskCore | `AlertMask` | - |
 | CardCore | **decide**: `Card` is single-word and collision-prone; prefer a prefixed name (`Display*`, `Content*`) | yes |

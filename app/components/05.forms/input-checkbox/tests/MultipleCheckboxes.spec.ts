@@ -62,18 +62,18 @@ describe("MultipleCheckboxes Component", () => {
 
   it("uses the button presentation when isButton is true", async () => {
     wrapper = await wrapperFactory({ isButton: true });
-    expect(wrapper.findAll(".input-checkbox-radio-options-button").length).toBe(tagsData.data.length);
+    expect(wrapper.findAll(".input-checkbox-radio-button").length).toBe(tagsData.data.length);
   });
 
   it("uses the labelled presentation when isButton is false", async () => {
     wrapper = await wrapperFactory({ isButton: false });
-    expect(wrapper.find(".input-checkbox-radio-options-button").exists()).toBe(false);
-    expect(wrapper.findAll(".input-checkbox-radio-with-label").length).toBe(tagsData.data.length);
+    expect(wrapper.find(".input-checkbox-radio-button").exists()).toBe(false);
+    expect(wrapper.findAll(".input-checkbox-radio-field").length).toBe(tagsData.data.length);
   });
 
-  it("applies optionsLayout as a class on the items container", async () => {
+  it("renders optionsLayout as data-options-layout on the items container", async () => {
     wrapper = await wrapperFactory({ optionsLayout: "block" as OptionsLayout });
-    expect(wrapper.find(".multiple-checkboxes-items").classes()).toContain("block");
+    expect(wrapper.find(".multiple-checkboxes-items").attributes("data-options-layout")).toBe("block");
   });
 
   it("does not put native required on each checkbox in the group", async () => {
@@ -98,11 +98,11 @@ describe("MultipleCheckboxes Component", () => {
 
     await checkboxes[0]!.setValue(true);
     expect(wrapper.props("modelValue")).toEqual([tagsData.data[0]!.value]);
-    expect(checkboxes[0]!.attributes("aria-checked")).toBe("true");
+    expect((checkboxes[0]!.element as HTMLInputElement).checked).toBe(true);
 
     await checkboxes[1]!.setValue(true);
     expect(wrapper.props("modelValue")).toEqual([tagsData.data[0]!.value, tagsData.data[1]!.value]);
-    expect(checkboxes[1]!.attributes("aria-checked")).toBe("true");
+    expect((checkboxes[1]!.element as HTMLInputElement).checked).toBe(true);
   });
 
   it("removes a value from the model when unchecked", async () => {
@@ -111,7 +111,7 @@ describe("MultipleCheckboxes Component", () => {
       "onUpdate:modelValue": (value: string[]) => wrapper.setProps({ modelValue: value }),
     });
     const first = wrapper.find('input[type="checkbox"]');
-    expect(first.attributes("aria-checked")).toBe("true");
+    expect((first.element as HTMLInputElement).checked).toBe(true);
 
     await first.setValue(false);
     expect(wrapper.props("modelValue")).toEqual([]);

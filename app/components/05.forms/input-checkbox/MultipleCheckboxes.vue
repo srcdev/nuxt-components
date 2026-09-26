@@ -22,7 +22,7 @@
           <slot name="descriptionText"></slot>
         </template>
       </InputDescription>
-      <div ref="itemsContainer" class="multiple-checkboxes-items" :class="[optionsLayout]">
+      <div ref="itemsContainer" class="multiple-checkboxes-items" :data-options-layout="optionsLayout">
         <template v-for="item in fieldData.data" :key="item.id">
           <InputCheckboxRadioButton
             v-if="isButton"
@@ -52,9 +52,8 @@
               </slot>
             </template>
           </InputCheckboxRadioButton>
-          <InputCheckboxRadioWithLabel
+          <InputCheckboxRadioField
             v-else
-            :id="`${name}-${item.value}`"
             v-model="modelValue"
             type="checkbox"
             :name
@@ -63,7 +62,6 @@
             :label="item.label"
             :field-has-error
             :true-value="item.value"
-            :options-layout
             :theme
             :input-variant
             :aria-describedby
@@ -72,7 +70,7 @@
             <template #checkedIcon>
               <slot name="checkedIcon"></slot>
             </template>
-          </InputCheckboxRadioWithLabel>
+          </InputCheckboxRadioField>
         </template>
       </div>
       <InputError :id="errorId" :error-message="errorMessage" :show-error="fieldHasError" :is-detached="true" :input-variant />
@@ -129,8 +127,8 @@ const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   slots
 );
 
-const { maxChildWidth, itemsContainer, updateMaxChildWidth } = useMaxChildWidth(
-  ".input-checkbox-radio-label, .input-checkbox-radio-with-label",
+const { maxChildWidth, updateMaxChildWidth } = useMaxChildWidth(
+  ".input-checkbox-radio-field-label, .input-checkbox-radio-field",
   "100px"
 );
 
@@ -153,16 +151,16 @@ watch(
   gap: var(--multiple-checkboxes-gap, 1.2rem);
   margin-block-start: var(--multiple-checkboxes-margin-block-start, 1.2rem);
 
-  &.inline {
+  &[data-options-layout="inline"] {
     flex-direction: row;
     flex-wrap: wrap;
   }
 
-  &.block {
+  &[data-options-layout="block"] {
     flex-direction: column;
   }
 
-  &.equal-widths {
+  &[data-options-layout="equal-widths"] {
     display: grid;
     grid-template-columns: repeat(
       auto-fit,

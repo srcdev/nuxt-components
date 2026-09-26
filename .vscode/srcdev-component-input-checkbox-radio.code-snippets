@@ -1,0 +1,60 @@
+{
+  "SRCDEV InputCheckboxRadio": {
+    "description": "Bare checkbox/radio control (pair with your own label[for])",
+    "scope": "vue,html",
+    "body": [
+      "<InputCheckboxRadio",
+      "  id=\"${1:id}\"",
+      "  v-model=\"${2:state.value}\"",
+      "  type=\"${3|checkbox,radio|}\"",
+      "  name=\"${4:name}\"",
+      "  :true-value=\"${5:true}\"",
+      "/>$0"
+    ]
+  },
+  "SRCDEV InputCheckboxRadioField": {
+    "description": "Checkbox/radio with a text label",
+    "scope": "vue,html",
+    "body": [
+      "<InputCheckboxRadioField",
+      "  v-model=\"${1:state.value}\"",
+      "  type=\"${2|checkbox,radio|}\"",
+      "  name=\"${3:name}\"",
+      "  label=\"${4:Label}\"",
+      "/>$0"
+    ]
+  },
+  "SRCDEV InputCheckboxRadioButton Group": {
+    "description": "Button/pill checkbox or radio options from an array",
+    "scope": "vue,html",
+    "body": [
+      "<InputCheckboxRadioButton",
+      "  v-for=\"option in ${1:options}\"",
+      "  :id=\"`${2:name}-\\${option.value}`\"",
+      "  :key=\"option.value\"",
+      "  v-model=\"${3:state.value}\"",
+      "  type=\"${4|checkbox,radio|}\"",
+      "  name=\"${2:name}\"",
+      "  :label=\"option.label\"",
+      "  :true-value=\"option.value\"",
+      "  :multiple-options=\"${5|true,false|}\"",
+      "  :is-pill=\"${6|false,true|}\"",
+      "/>$0"
+    ]
+  },
+  "SRCDEV InputCheckboxRadio CSS Override": {
+    "description": "CSS override scaffold for checkbox/radio tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --input-checkbox-surface: $2;",
+      "  --input-checkbox-border: $3;",
+      "  --input-checkbox-icon-color: $4;",
+      "  --input-checkbox-label-color: $5;",
+      "  --input-checkbox-button-surface: $6;",
+      "  --input-checkbox-button-surface-hover: $7;",
+      "  --input-checkbox-button-border-radius: $8;",
+      "}"
+    ]
+  }
+}

@@ -1,12 +1,15 @@
 <template>
   <label
     :for="id"
-    class="input-checkbox-radio-options-button"
+    class="input-checkbox-radio-button"
+    :class="elementClasses"
     :data-theme="theme"
-    :data-invalid="fieldHasError ? '' : null"
-    :class="[elementClasses, optionsLayout, { error: fieldHasError }, { 'is-pill': isPill }]"
+    :data-invalid="fieldHasError ? '' : undefined"
+    :data-options-layout="optionsLayout"
+    :data-direction="direction"
+    :data-pill="isPill ? '' : undefined"
   >
-    <InputCheckboxRadioCore
+    <InputCheckboxRadio
       :id
       v-model="modelValue"
       :is-button="true"
@@ -14,36 +17,39 @@
       :name
       :required
       :multiple-options
-      :true-value="trueValue"
-      :false-value="falseValue"
-      :field-has-error="fieldHasError"
+      :true-value
+      :false-value
+      :field-has-error
       :theme
-      :aria-describedby="ariaDescribedby"
-      :display-as-disc="displayAsDisc"
+      :input-variant
+      :aria-describedby
+      :display-as-disc
     >
       <template #checkedIcon>
         <slot name="checkedIcon"></slot>
       </template>
-    </InputCheckboxRadioCore>
-    <div v-if="slots.labelContent" class="input-checkbox-radio-options-button-label">
-      <slot name="labelContent"></slot>
+    </InputCheckboxRadio>
+    <div class="input-checkbox-radio-button-label">
+      <slot name="labelContent">{{ label }}</slot>
     </div>
-    <div v-else class="input-checkbox-radio-options-button-label">{{ label }}</div>
-    <div class="decorator-icon">
+    <div class="input-checkbox-radio-button-icon">
       <slot name="itemIcon">
-        <Icon name="material-symbols:add-2" class="icon" aria-hidden="true" focusable="false" />
+        <Icon :name="itemIcon" class="icon" aria-hidden="true" focusable="false" />
       </slot>
     </div>
   </label>
 </template>
 
 <script setup lang="ts">
+import type { FormUiTheme, InputUiVariant, OptionsLayout } from "~/types/forms/types.forms";
+
 interface Props {
   id: string;
   type: "checkbox" | "radio";
   name: string;
+  label?: string;
   required?: boolean;
-  theme?: "default" | "success" | "error" | "warning";
+  theme?: FormUiTheme;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
   trueValue?: string | number | boolean;
@@ -51,13 +57,15 @@ interface Props {
   ariaDescribedby?: string;
   displayAsDisc?: boolean;
   multipleOptions?: boolean;
-  label: string;
-  optionsLayout?: string;
+  optionsLayout?: OptionsLayout;
   direction?: "row" | "row-reverse";
   isPill?: boolean;
+  inputVariant?: InputUiVariant;
+  itemIcon?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  label: "",
   required: false,
   theme: "default",
   fieldHasError: false,
@@ -70,117 +78,109 @@ const props = withDefaults(defineProps<Props>(), {
   optionsLayout: "equal-widths",
   direction: "row",
   isPill: false,
+  inputVariant: "normal",
+  itemIcon: "material-symbols:add-2",
 });
-
-const slots = useSlots();
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough || []);
 
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({ required: true });
 
-const flexDirection = ref(props.direction);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 </script>
 
 <style lang="css">
 @layer components {
-.input-checkbox-radio-options-button {
-  --_white-space: wrap;
+  .input-checkbox-radio-button {
+    --_white-space: wrap;
 
-  display: flex;
-  flex-direction: v-bind(flexDirection);
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  border-radius: 0.4rem;
-  user-select: none;
-  transition: all 0.2s ease-in-out;
-
-  &.is-pill {
-    border-radius: 100vw;
-  }
-
-  &.inline {
-    --_white-space: nowrap;
-  }
-
-  /* Public --input-checkbox-button-* tokens, inline-fallback to the shared theme tokens (see
-     theming-component-token-pattern.md) — overriding one here doesn't touch every other themed
-     input/control that also reads --theme-input-surface/--theme-border, etc. Defaults are
-     unchanged from before this migration — this is a token-rename pass, not a redesign. */
-  background-color: var(--input-checkbox-button-surface, var(--theme-input-surface));
-  border: var(--form-element-border-width) solid var(--input-checkbox-button-border, var(--theme-border));
-  outline: var(--form-element-outline-width) solid transparent;
-
-  box-shadow: 0.1rem 0.1rem 0.8rem 0.1rem transparent;
-
-  &:hover {
-    background-color: var(--input-checkbox-button-surface-hover, var(--theme-input-surface-hover));
-    border-color: var(--input-checkbox-button-border, var(--theme-border));
-    outline-color: var(--input-checkbox-button-ring-hover, var(--theme-ring));
-    outline-offset: var(--form-element-outline-offset-focus);
-    cursor: pointer;
-  }
-
-  &:has(.input-checkbox-radio-core:focus-visible) {
-    background-color: var(--input-checkbox-button-surface-focus, var(--theme-surface-subtle));
-    outline-color: var(--input-checkbox-button-ring-focus, var(--theme-border-focus));
-    outline-offset: var(--form-element-outline-offset-focus);
-  }
-
-  padding-block: 0.4rem;
-  padding-inline: 1.2rem;
-  gap: 1rem;
-
-  .input-checkbox-radio-options-button-label {
     display: flex;
-    flex-grow: 1;
-    color: var(--input-checkbox-button-label-color, var(--colour-text-default));
-    font-size: var(--input-font-size);
-    width: 100%;
-    min-height: var(--input-element-line-height);
     align-items: center;
-    justify-content: center;
-    /* justify-content only centers the label as a single block — once text actually wraps
-       (e.g. "Half Head Highlights"), that block fills the full available width and each
-       individual line falls back to its default left-alignment inside it. text-align is what
-       centers wrapped lines relative to each other. */
-    text-align: center;
-    padding-block: 0.8rem;
-    padding-inline: 0.8rem;
-    white-space: var(--_white-space);
+    justify-content: space-between;
+    gap: var(--input-checkbox-button-gap, 1rem);
+    padding-block: var(--input-checkbox-button-padding-block, 0.4rem);
+    padding-inline: var(--input-checkbox-button-padding-inline, 1.2rem);
+    user-select: none;
+
+    background-color: var(--input-checkbox-button-surface, var(--theme-input-surface));
+    border: var(--form-element-border-width) solid var(--input-checkbox-button-border, var(--theme-border));
+    border-radius: var(--input-checkbox-button-border-radius, 0.4rem);
+    outline: var(--form-element-outline-width) solid transparent;
+
+    transition: all var(--input-checkbox-transition-duration, var(--theme-form-transition-duration)) ease-in-out;
+
+    &[data-direction="row-reverse"] {
+      flex-direction: row-reverse;
+    }
+
+    &[data-pill] {
+      border-radius: var(--input-checkbox-button-border-radius-pill, 100vw);
+    }
+
+    &[data-options-layout="inline"] {
+      --_white-space: nowrap;
+    }
 
     &:hover {
+      background-color: var(--input-checkbox-button-surface-hover, var(--theme-input-surface-hover));
+      outline-color: var(--input-checkbox-button-ring-hover, var(--theme-ring));
+      outline-offset: var(--form-element-outline-offset-focus);
       cursor: pointer;
     }
-  }
 
-  .decorator-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--input-checkbox-button-icon-color, var(--theme-text));
-
-    .icon {
-      height: var(--input-checkbox-decorator-icon-size);
-      width: var(--input-checkbox-decorator-icon-size);
+    &:has(.input-checkbox-radio-input:focus-visible) {
+      background-color: var(--input-checkbox-button-surface-focus, var(--theme-surface-subtle));
+      outline-color: var(--input-checkbox-button-ring-focus, var(--theme-border-focus));
+      outline-offset: var(--form-element-outline-offset-focus);
     }
-  }
 
-  .input-checkbox-radio-wrapper {
-    width: calc(var(--input-checked-icon-size) - 0.6rem);
-    height: calc(var(--input-checked-icon-size) - 0.6rem);
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
 
-    .input-checked-icon-slot {
-      .input-checked-icon-checked {
-        width: calc(var(--input-checked-icon-size) - 0.8rem);
-        height: calc(var(--input-checked-icon-size) - 0.8rem);
+    .input-checkbox-radio-button-label {
+      display: flex;
+      flex-grow: 1;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      color: var(--input-checkbox-button-label-color, var(--theme-text));
+      font-size: var(--input-font-size);
+      /* justify-content centres the block; text-align centres each wrapped line within it */
+      text-align: center;
+      padding-block: var(--input-checkbox-button-label-padding-block, 0.8rem);
+      padding-inline: var(--input-checkbox-button-label-padding-inline, 0.8rem);
+      white-space: var(--_white-space);
+      cursor: pointer;
+    }
+
+    .input-checkbox-radio-button-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--input-checkbox-button-icon-color, var(--theme-text));
+
+      .icon {
+        font-size: var(--input-checkbox-decorator-icon-size);
       }
     }
 
-    .input-checkbox-radio-core {
+    .input-checkbox-radio {
+      --_icon-size: calc(var(--input-checked-icon-size) - 0.8rem);
+
       width: calc(var(--input-checked-icon-size) - 0.6rem);
       height: calc(var(--input-checked-icon-size) - 0.6rem);
+
+      .input-checkbox-radio-input {
+        width: calc(var(--input-checked-icon-size) - 0.6rem);
+        height: calc(var(--input-checked-icon-size) - 0.6rem);
+      }
     }
   }
-}
 }
 </style>

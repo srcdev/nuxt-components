@@ -1,9 +1,9 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
-import StorybookComponent from "../InputCheckboxRadioCore.vue";
-import type { FormUiTheme } from "~/types/forms/types.forms.d";
+import StorybookComponent from "../InputCheckboxRadio.vue";
+import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
-interface InputCheckboxRadioCoreStoryArgs {
+interface InputCheckboxRadioStoryArgs {
   type: "checkbox" | "radio";
   id: string;
   name: string;
@@ -11,10 +11,12 @@ interface InputCheckboxRadioCoreStoryArgs {
   theme: FormUiTheme;
   fieldHasError: boolean;
   displayAsDisc: boolean;
+  isButton: boolean;
+  inputVariant: InputUiVariant;
 }
 
 export default {
-  title: "Components/Forms/Input Checkbox Radio/InputCheckboxRadioCore",
+  title: "Components/Forms/Input Checkbox Radio/InputCheckboxRadio",
   component: StorybookComponent,
   argTypes: {
     type: {
@@ -34,7 +36,18 @@ export default {
     fieldHasError: { control: "boolean", table: { category: "States" } },
     displayAsDisc: {
       control: "boolean",
-      description: "Checkbox only — render as a filled disc instead of a check icon",
+      description: "Checkbox in button mode only: round the box into a disc",
+      table: { category: "Styling" },
+    },
+    isButton: {
+      control: "boolean",
+      description: "Set by InputCheckboxRadioButton: drops the focus outline (the button draws its own) and enables displayAsDisc",
+      table: { category: "Styling" },
+    },
+    inputVariant: {
+      control: { type: "select" },
+      options: ["normal", "outlined", "underlined"],
+      description: "underlined squares off a checkbox",
       table: { category: "Styling" },
     },
   },
@@ -46,10 +59,12 @@ export default {
     theme: "default",
     fieldHasError: false,
     displayAsDisc: false,
+    isButton: false,
+    inputVariant: "normal",
   },
-} as Meta<InputCheckboxRadioCoreStoryArgs>;
+} as Meta<InputCheckboxRadioStoryArgs>;
 
-const Template: StoryFn<InputCheckboxRadioCoreStoryArgs> = (args) => ({
+const Template: StoryFn<InputCheckboxRadioStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
     const modelValue = ref(false);
@@ -69,7 +84,7 @@ export const Radio = Template.bind({});
 Radio.args = { type: "radio" };
 
 export const CheckboxAsDisc = Template.bind({});
-CheckboxAsDisc.args = { type: "checkbox", displayAsDisc: true };
+CheckboxAsDisc.args = { type: "checkbox", isButton: true, displayAsDisc: true };
 
 export const ErrorState = Template.bind({});
 ErrorState.args = { type: "checkbox", fieldHasError: true, theme: "error" };

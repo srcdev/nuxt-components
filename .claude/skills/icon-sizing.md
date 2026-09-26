@@ -45,7 +45,7 @@ reason.
 `font-size` works because the icon rule never sets it, so there's nothing competing, and its own
 `width: 1em; height: 1em` then resolves against your `font-size`.
 
-Found 2026-09-25 in `InputCheckboxRadioCore`, whose `--input-checked-icon-size` token did nothing
+Found 2026-09-25 in `InputCheckboxRadio`, whose `--input-checked-icon-size` token did nothing
 until it was moved from `width`/`height` to `font-size`.
 
 ## Related notes

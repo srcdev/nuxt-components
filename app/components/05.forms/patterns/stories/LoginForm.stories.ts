@@ -2,7 +2,7 @@ import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { reactive } from "vue";
 import InputTextWithLabel from "../../input-text/InputTextWithLabel.vue";
 import InputPasswordWithLabel from "../../input-text/InputPasswordWithLabel.vue";
-import InputCheckboxRadioWithLabel from "../../input-checkbox-radio/InputCheckboxRadioWithLabel.vue";
+import InputCheckboxRadioField from "../../input-checkbox-radio/InputCheckboxRadioField.vue";
 import InputButtonCore from "../../input-button/InputButtonCore.vue";
 import FormField from "../../form-field/FormField.vue";
 import GlassPanel from "../../../01.atoms/glass-panel/GlassPanel.vue";
@@ -37,7 +37,7 @@ const Template: StoryFn<LoginFormStoryArgs> = (args) => ({
   components: {
     InputTextWithLabel,
     InputPasswordWithLabel,
-    InputCheckboxRadioWithLabel,
+    InputCheckboxRadioField,
     InputButtonCore,
     FormField,
     GlassPanel,
@@ -91,7 +91,7 @@ const Template: StoryFn<LoginFormStoryArgs> = (args) => ({
 
             <FormField width="wide" :has-gutter="false">
               <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
-                <InputCheckboxRadioWithLabel
+                <InputCheckboxRadioField
                   v-model="state.rememberMe"
                   type="checkbox"
                   name="rememberMe"

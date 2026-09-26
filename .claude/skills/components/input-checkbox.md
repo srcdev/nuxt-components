@@ -9,7 +9,7 @@ with `aria-describedby` wired up via `useAriaDescribedById`.
 - **MultipleCheckboxes**: a group of checkboxes built from a data list (`v-model:field-data`).
   The model is an array of the checked items' values. Each option renders as either a pill/button
   (`InputCheckboxRadioButton`, `:is-button="true"`) or a plain labelled checkbox
-  (`InputCheckboxRadioWithLabel`, the default).
+  (`InputCheckboxRadioField`, the default).
 - **SingleCheckbox**: one labelled checkbox (e.g. "I agree to the terms"). The model toggles
   between `trueValue` and `falseValue`.
 
@@ -31,7 +31,7 @@ instead.
 | `:required` | `boolean` | `false` | No ARIA output: `aria-required` isn't valid on a checkbox group (`role="group"`), so it was dropped from the fieldset 2026-09-26. Signal "required" in the legend text instead (e.g. "Interests (required)"). Native `required` is deliberately **not** put on the individual checkboxes, since that would force every box to be ticked. Validate "at least N selected" in the consuming app. |
 | `:is-button` | `boolean` | `false` | Pill/button presentation (`InputCheckboxRadioButton`) instead of labelled checkboxes. |
 | `:is-pill` | `boolean` | `false` | With `is-button`, fully rounded pills. |
-| `:options-layout` | `OptionsLayout` | `"equal-widths"` | `"equal-widths"` (auto-fit grid, columns sized to the longest label), `"inline"` (wrapping row) or `"block"` (column). |
+| `:options-layout` | `OptionsLayout` | `"equal-widths"` | `"equal-widths"` (auto-fit grid, columns sized to the longest label), `"inline"` (wrapping row) or `"block"` (column). Rendered as `data-options-layout` on the items container (was a bare class until 2026-09-27). |
 | `:direction` | `"row" \| "row-reverse"` | `"row"` | Button presentation only: icon/label order. |
 | `:display-as-disc` | `boolean` | `false` | Round checkbox symbol. |
 | `:theme` | `FormUiTheme` | `"default"` | Forwarded to each control. |
@@ -81,7 +81,7 @@ instead.
 | `:field-has-error` | `boolean` | `false` | Shows the error, sets `aria-invalid` on the fieldset and the checkbox's `aria-describedby`. |
 | `:required` | `boolean` | `false` | Native `required` on the checkbox. (The fieldset no longer gets `aria-required`, see above.) |
 | `:true-value` / `:false-value` | `string \| number \| boolean` | `true` / `false` | Model values for checked/unchecked. |
-| `:options-layout` | `OptionsLayout` | `"equal-widths"` | Class on the items container. |
+| `:options-layout` | `OptionsLayout` | `"equal-widths"` | Rendered as `data-options-layout` on the items container. |
 | `:theme` | `FormUiTheme` | `"default"` | |
 | `:input-variant` | `InputUiVariant` | `"normal"` | |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Classes on the root `<fieldset>`. Read once at mount. |
@@ -128,8 +128,8 @@ Brought to full compliance. Behaviour changes a consumer could notice:
 
 - **MultipleCheckboxes no longer puts native `required` on every checkbox.** Previously each box
   got `required`, so a form without `novalidate` would refuse to submit until every option was
-  ticked. `InputCheckboxRadioWithLabel`/`InputCheckboxRadioButton` now forward `multipleOptions`
-  to `InputCheckboxRadioCore` (they declared it but dropped it), and `MultipleCheckboxes` passes
+  ticked. `InputCheckboxRadioField`/`InputCheckboxRadioButton` now forward `multipleOptions`
+  to `InputCheckboxRadio` (they declared it but dropped it), and `MultipleCheckboxes` passes
   `true`.
 - **SingleCheckbox `styleClassPassthrough` now lands on the root `<fieldset>`**, matching
   `MultipleCheckboxes`. It was being applied to the error message.

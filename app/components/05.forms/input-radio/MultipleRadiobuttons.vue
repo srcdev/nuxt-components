@@ -24,14 +24,14 @@
         </template>
       </InputDescription>
 
-      <div ref="itemsContainer" class="multiple-radiobuttons-items" :class="[optionsLayout]">
+      <div ref="itemsContainer" class="multiple-radiobuttons-items" :data-options-layout="optionsLayout">
         <template v-for="item in fieldData.data" :key="item.id">
           <InputCheckboxRadioButton
             v-if="isButton"
             :id="`${name}-${item.value}`"
             v-model="modelValue"
             type="radio"
-            :name="`${name}-${item.name}`"
+            :name
             :required
             :label="item.label"
             :field-has-error
@@ -52,17 +52,15 @@
               </slot>
             </template>
           </InputCheckboxRadioButton>
-          <InputCheckboxRadioWithLabel
+          <InputCheckboxRadioField
             v-else
-            :id="`${name}-${item.value}`"
             v-model="modelValue"
             type="radio"
-            :name="`${name}-${item.name}`"
+            :name
             :required
             :label="item.label"
             :field-has-error
             :true-value="item.value"
-            :options-layout
             :theme
             :input-variant
             :aria-describedby
@@ -70,7 +68,7 @@
             <template #checkedIcon>
               <slot name="checkedIcon"></slot>
             </template>
-          </InputCheckboxRadioWithLabel>
+          </InputCheckboxRadioField>
         </template>
       </div>
       <InputError :id="errorId" :error-message="errorMessage" :show-error="fieldHasError" :is-detached="true" :input-variant />
@@ -85,38 +83,29 @@ interface Props {
   dataTestid?: string;
   name: string;
   legend: string;
-  label: string;
-  placeholder?: string;
   isButton?: boolean;
   isPill?: boolean;
-  errorMessage: object | string;
+  errorMessage: string | object;
   required?: boolean;
   fieldHasError?: boolean;
-  multipleOptions?: boolean;
   optionsLayout?: OptionsLayout;
-  equalCols?: boolean;
   styleClassPassthrough?: string | string[];
   theme?: FormUiTheme;
   inputVariant?: InputUiVariant;
   direction?: "row" | "row-reverse";
-  displayAsLozenge?: boolean;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   dataTestid: "multiple-radio-buttons",
-  placeholder: "",
   isButton: false,
   isPill: false,
   required: false,
   fieldHasError: false,
-  multipleOptions: false,
   optionsLayout: "equal-widths",
-  equalCols: true,
   styleClassPassthrough: () => [],
   theme: "default",
   inputVariant: "normal",
   direction: "row",
-  displayAsLozenge: false,
 });
 
 const slots = useSlots();
@@ -130,10 +119,10 @@ const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
 );
 
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({ required: true });
-const fieldData = defineModel("fieldData") as Ref<IFormMultipleOptions>;
+const fieldData = defineModel<IFormMultipleOptions>("fieldData", { required: true });
 
-const { maxChildWidth, itemsContainer, updateMaxChildWidth } = useMaxChildWidth(
-  ".input-checkbox-radio-label, .input-checkbox-radio-with-label-label",
+const { maxChildWidth, updateMaxChildWidth } = useMaxChildWidth(
+  ".input-checkbox-radio-field-label",
   "100px"
 );
 
@@ -153,19 +142,19 @@ watch(
 @layer components {
 .multiple-radiobuttons-items {
   display: flex;
-  gap: 1.2rem;
-  margin-top: 1.2rem;
+  gap: var(--multiple-radiobuttons-gap, 1.2rem);
+  margin-block-start: var(--multiple-radiobuttons-margin-block-start, 1.2rem);
 
-  &.inline {
+  &[data-options-layout="inline"] {
     flex-direction: row;
     flex-wrap: wrap;
   }
 
-  &.block {
+  &[data-options-layout="block"] {
     flex-direction: column;
   }
 
-  &.equal-widths {
+  &[data-options-layout="equal-widths"] {
     display: grid;
     grid-template-columns: repeat(
       auto-fit,

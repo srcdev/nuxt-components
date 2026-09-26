@@ -67,11 +67,11 @@ describe("SingleCheckbox Component", () => {
 
     await checkbox.setValue(true);
     expect(wrapper.props("modelValue")).toBe(true);
-    expect(checkbox.attributes("aria-checked")).toBe("true");
+    expect((checkbox.element as HTMLInputElement).checked).toBe(true);
 
     await checkbox.setValue(false);
     expect(wrapper.props("modelValue")).toBe(false);
-    expect(checkbox.attributes("aria-checked")).toBe("false");
+    expect((checkbox.element as HTMLInputElement).checked).toBe(false);
   });
 
   it("emits custom trueValue and falseValue", async () => {

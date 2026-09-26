@@ -4,7 +4,7 @@
 
 These two components are layout wrappers: a `FormFieldset` holding one or more checkbox controls
 plus an error message. They only own the spacing of the items container. The checkbox controls'
-colours, borders and pill/button styling come from `InputCheckboxRadioCore`/
+colours, borders and pill/button styling come from `InputCheckboxRadio`/
 `InputCheckboxRadioButton`. See `../input-checkbox-radio/CONSUMER-STYLING.md` for those
 (`--input-checkbox-*` tokens).
 
@@ -28,6 +28,19 @@ columns need more room.
 | `--single-checkbox-gap` | `1.2rem` | Gap inside the items container |
 | `--single-checkbox-margin-block-start` | `1.2rem` | Space between the legend/description and the checkbox |
 | `--single-checkbox-column-min-width` | `100px` | Grid column minimum width with `options-layout="equal-widths"` |
+
+---
+
+## State hooks
+
+| Attribute | On | When |
+|---|---|---|
+| `data-options-layout="equal-widths" \| "inline" \| "block"` | `.multiple-checkboxes-items`, `.single-checkbox-items` | Always, mirrors `options-layout` |
+
+> **Changed 2026-09-27**: the layout used to be a bare class (`.inline`, `.block`,
+> `.equal-widths`) on the items container. Generic names like `.block`/`.inline` collide with
+> common consumer utility classes (an unlayered `.block { display: block }` would break the flex
+> column), so select on `[data-options-layout]` instead.
 
 ---
 

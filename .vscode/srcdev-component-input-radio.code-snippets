@@ -1,0 +1,58 @@
+{
+  "SRCDEV MultipleRadiobuttons Basic": {
+    "description": "MultipleRadiobuttons single-choice group (v-model + v-model:field-data)",
+    "scope": "vue,html",
+    "body": [
+      "<MultipleRadiobuttons",
+      "  v-model=\"${1:state.choice}\"",
+      "  v-model:field-data=\"${2:choiceOptions}\"",
+      "  name=\"${3:choice}\"",
+      "  legend=\"${4:Legend}\"",
+      "  :required=\"${5:true}\"",
+      "  :error-message=\"${6:errors.choice ?? ''}\"",
+      "  :field-has-error=\"${7:Boolean(errors.choice)}\"",
+      "  options-layout=\"${8|equal-widths,inline,block|}\"",
+      ">",
+      "  <template #descriptionText>${9:Help text}</template>",
+      "</MultipleRadiobuttons>$0"
+    ]
+  },
+  "SRCDEV MultipleRadiobuttons Buttons": {
+    "description": "MultipleRadiobuttons rendered as button/pill options",
+    "scope": "vue,html",
+    "body": [
+      "<MultipleRadiobuttons",
+      "  v-model=\"${1:state.choice}\"",
+      "  v-model:field-data=\"${2:choiceOptions}\"",
+      "  name=\"${3:choice}\"",
+      "  legend=\"${4:Legend}\"",
+      "  :error-message=\"${5:''}\"",
+      "  :is-button=\"true\"",
+      "  :is-pill=\"${6|true,false|}\"",
+      "  options-layout=\"inline\"",
+      "/>$0"
+    ]
+  },
+  "SRCDEV MultipleRadiobuttons Options Data": {
+    "description": "IFormMultipleOptions ref for MultipleRadiobuttons field-data",
+    "scope": "typescript,vue",
+    "body": [
+      "const ${1:choiceOptions} = ref<IFormMultipleOptions>({",
+      "  data: [",
+      "    { id: \"${2:a}\", name: \"${3:choice}\", value: \"${2:a}\", label: \"${4:Option A}\" },",
+      "    { id: \"${5:b}\", name: \"${3:choice}\", value: \"${5:b}\", label: \"${6:Option B}\" },",
+      "  ],",
+      "});$0"
+    ]
+  },
+  "SRCDEV MultipleRadiobuttons CSS Override": {
+    "description": "CSS override scaffold for MultipleRadiobuttons tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --multiple-radiobuttons-gap: $2;",
+      "  --multiple-radiobuttons-margin-block-start: $3;",
+      "}"
+    ]
+  }
+}

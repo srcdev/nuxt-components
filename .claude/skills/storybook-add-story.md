@@ -71,6 +71,7 @@ Use when the component has `v-model`, reactive state, or named slots that need t
 
 ```ts
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
+import { computed } from "vue";
 import StorybookComponent from "../ComponentName.vue";
 
 interface ComponentStoryArgs {
@@ -117,13 +118,16 @@ export default {
 const Template: StoryFn<ComponentStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
-    const { modelValue, ...otherArgs } = args;
-    const inputValue = ref(modelValue);
-    return { inputValue, args: otherArgs, useSlot: args.useSlot, slotContent: args.slotContent };
+    // Strip non-prop extra args inside a computed, never at setup time (see below)
+    const componentArgs = computed(() => {
+      const { modelValue: _modelValue, useSlot: _useSlot, slotContent: _slotContent, ...rest } = args;
+      return rest;
+    });
+    return { args, componentArgs };
   },
   template: `
-    <StorybookComponent v-model="inputValue" v-bind="args">
-      <template v-if="useSlot" #slotName>{{ slotContent }}</template>
+    <StorybookComponent v-model="args.modelValue" v-bind="componentArgs">
+      <template v-if="args.useSlot" #slotName>{{ args.slotContent }}</template>
     </StorybookComponent>
   `,
 });
@@ -134,6 +138,39 @@ Default.args = {};
 export const WithSlot = Template.bind({});
 WithSlot.args = { useSlot: true, slotContent: "Custom content" };
 ```
+
+### Reacting to a Controls change
+
+Storybook mounts the story once and mutates `args` in place on every Controls change; `setup()`
+never re-runs. So:
+
+- **Don't destructure or copy `args` at setup time** (`const { x, ...rest } = args`, `ref(args.x)`):
+  it's a one-time snapshot and the control silently stops working. Read `args.x` in the template,
+  or destructure inside a `computed()`. The Component Ledger's `story_args_bug` column flags this.
+- **Don't `watch(() => args.x)` either.** The template does pick up the new value, but the
+  watcher never fires (found 2026-09-27 in `InputCheckboxRadioButton`'s Option group story, where
+  a `watch` meant to reset local state on a `type` switch did nothing). When a control change
+  must reset local state, move that state into a small inline child component and key it on the
+  arg, so the change remounts it:
+
+```ts
+const Group = defineComponent({
+  props: { type: { type: String, required: true } },
+  setup(props) {
+    const selected = ref(props.type === "checkbox" ? [] : "");
+    return { selected };
+  },
+  template: `...`,
+});
+
+const Template: StoryFn<StoryArgs> = (args) => ({
+  components: { Group },
+  setup: () => ({ args }),
+  template: `<Group :key="args.type" :type="args.type" />`,
+});
+```
+
+Don't name the inline component the same as an exported story (`TS2451: Cannot redeclare`).
 
 ## Title format
 

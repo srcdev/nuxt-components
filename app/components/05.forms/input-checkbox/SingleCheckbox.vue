@@ -23,8 +23,8 @@
         </template>
       </InputDescription>
 
-      <div class="single-checkbox-items" :class="[optionsLayout]">
-        <InputCheckboxRadioWithLabel
+      <div class="single-checkbox-items" :data-options-layout="optionsLayout">
+        <InputCheckboxRadioField
           v-model="modelValue"
           type="checkbox"
           :name
@@ -43,7 +43,7 @@
           <template v-if="slots.labelContent" #labelContent>
             <slot name="labelContent"></slot>
           </template>
-        </InputCheckboxRadioWithLabel>
+        </InputCheckboxRadioField>
       </div>
       <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" :input-variant />
     </template>
@@ -100,16 +100,16 @@ const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   gap: var(--single-checkbox-gap, 1.2rem);
   margin-block-start: var(--single-checkbox-margin-block-start, 1.2rem);
 
-  &.inline {
+  &[data-options-layout="inline"] {
     flex-direction: row;
     flex-wrap: wrap;
   }
 
-  &.block {
+  &[data-options-layout="block"] {
     flex-direction: column;
   }
 
-  &.equal-widths {
+  &[data-options-layout="equal-widths"] {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--single-checkbox-column-min-width, 100px), 1fr));
   }

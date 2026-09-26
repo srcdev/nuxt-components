@@ -1,15 +1,14 @@
-import type { Ref } from "vue";
-
 /**
  * useMaxChildWidth composable
  * Measures the widest child element matching a selector inside a container and returns a reactive pixel width.
  * @param selector - CSS selector for child elements to measure
  * @param fallback - fallback width if no children found (default: "100px")
- * @returns { maxChildWidth, itemsContainer, updateMaxChildWidth }
+ * @param refKey - template ref name of the container element (default: "itemsContainer", i.e. `ref="itemsContainer"`)
+ * @returns { maxChildWidth, updateMaxChildWidth }
  */
-export function useMaxChildWidth(selector: string, fallback = "100px") {
+export function useMaxChildWidth(selector: string, fallback = "100px", refKey = "itemsContainer") {
   const maxChildWidth = ref<string>(fallback);
-  const itemsContainer = ref<HTMLElement | null>(null);
+  const itemsContainer = useTemplateRef<HTMLElement>(refKey);
 
   function updateMaxChildWidth() {
     if (!itemsContainer.value) return;
@@ -24,7 +23,6 @@ export function useMaxChildWidth(selector: string, fallback = "100px") {
 
   return {
     maxChildWidth,
-    itemsContainer,
     updateMaxChildWidth,
   };
 }

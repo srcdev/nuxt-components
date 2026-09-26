@@ -80,9 +80,9 @@ consuming app having declared anything.
   2026-08-25, see their `CONSUMER-STYLING.md` for the full token list. This pass also included a
   deliberate visual redesign (flat borders, `color-mix()`-darkened hover, transparent resting
   outline, separated `:focus-visible`), not just the token API change.
-- ✅ `InputCheckboxRadioCore`/`Button` — migrated 2026-08-25, see their `CONSUMER-STYLING.md`.
+- ✅ `InputCheckboxRadio`/`Button` — migrated 2026-08-25, see their `CONSUMER-STYLING.md`.
   Pure token-rename pass, no visual/default changes (unlike `InputButtonCore`'s redesign above).
-  Added Storybook stories for both (`InputCheckboxRadioCore`, `InputCheckboxRadioButton`) —
+  Added Storybook stories for both (`InputCheckboxRadio`, `InputCheckboxRadioButton`) —
   neither had one before.
 - ✅ `InputTextCore`, `InputSelectCore`, `InputNumber` — migrated 2026-08-25, see their
   `CONSUMER-STYLING.md`. `InputTextCore`/`InputSelectCore` also had this exact problem's original

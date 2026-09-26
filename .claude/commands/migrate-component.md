@@ -206,6 +206,11 @@ briefly) — don't skip silently.
 
 - Run the relevant test file(s), `npx eslint <touched files>`, and `npx vue-tsc` (or the project's
   usual type-check command) to confirm nothing broke.
+- If you renamed, added or removed any component `.vue` file (checklist item 13, a flattened
+  `variants/` folder, a new wrapper), run `npm run prepare` to regenerate `.nuxt/components.d.ts`
+  and tell the user to restart Storybook. A running Storybook keeps its startup component scan, so
+  a renamed component silently renders as an empty unknown element there, while Vitest (fresh Nuxt
+  each run) still passes.
 - Summarize what changed and what you deliberately skipped (with reasons).
 - Don't stage, commit, or push — that's the user's call. Mention that running
   `/create-commit-message` next will trigger the Component Ledger refresh automatically via the
