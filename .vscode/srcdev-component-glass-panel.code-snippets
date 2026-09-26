@@ -1,0 +1,38 @@
+{
+  "SRCDEV GlassPanel Basic": {
+    "description": "GlassPanel: frosted-glass container",
+    "scope": "vue,html",
+    "body": [
+      "<GlassPanel>",
+      "  $0",
+      "</GlassPanel>"
+    ]
+  },
+  "SRCDEV GlassPanel Section": {
+    "description": "GlassPanel as a labelled <section>, heading bound via the headingId slot prop",
+    "scope": "vue,html",
+    "body": [
+      "<GlassPanel tag=\"${1|section,article|}\">",
+      "  <template #default=\"{ headingId }\">",
+      "    <h2 :id=\"headingId\">$2Heading</h2>",
+      "    $0",
+      "  </template>",
+      "</GlassPanel>"
+    ]
+  },
+  "SRCDEV GlassPanel CSS Override": {
+    "description": "CSS override scaffold for GlassPanel tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .glass-panel {",
+      "    --glass-panel-bg: $2;",
+      "    --glass-panel-border-color: $3;",
+      "    --glass-panel-shadow: $4;",
+      "    --glass-panel-highlight: $5;",
+      "    --glass-panel-border-radius: $6;",
+      "  }",
+      "}"
+    ]
+  }
+}

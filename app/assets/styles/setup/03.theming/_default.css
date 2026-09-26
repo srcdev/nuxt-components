@@ -12,17 +12,6 @@
   --colour-text-eyebrow: light-dark(var(--blue-09), var(--blue-05));
 
   /* ===========================================
-     GLASS PANEL VARIABLES
-     =========================================== */
-  --glass-panel-bg: light-dark(rgba(255, 255, 255, 0.55), rgba(12, 12, 20, 0.45));
-  --glass-panel-border-color: light-dark(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.07));
-  /* Multi-shadow: opacity driven by light-dark() sub-vars */
-  --_gp-shadow-a: light-dark(0.08, 0.5);
-  --_gp-shadow-b: light-dark(0.04, 0.3);
-  --glass-panel-shadow: 0 8px 32px rgba(0, 0, 0, var(--_gp-shadow-a)), 0 2px 8px rgba(0, 0, 0, var(--_gp-shadow-b));
-  --glass-panel-highlight: light-dark(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.04));
-
-  /* ===========================================
      HERO / EYEBROW TEXT VARIABLES
      =========================================== */
   --hero-text-bg-img: linear-gradient(135deg, #c2a770, #b4747e, #d1bd94);
