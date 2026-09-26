@@ -12,11 +12,6 @@ CanvasSwitcher itself exposes the following public tokens:
 | `--canvas-switcher-icon-colour` | `var(--slate-10)` | Icon colour, resting state |
 | `--canvas-switcher-icon-colour-current` | `var(--green-10)` | Icon colour when that button's canvas is selected (`aria-pressed="true"`) |
 
-## Class passthrough
-
-`styleClassPassthrough` (string or string[]) is applied to the root `.canvas-switcher` element via
-`useStyleClassPassthrough()`.
-
 ## Canvas-size utility classes
 
 `.mobileCanvas`, `.tabletCanvas`, `.laptopCanvas`, `.desktopCanvas`, `.fullWidthCanvas` are also
@@ -25,3 +20,21 @@ the same `MediaCanvas` value returned by `v-model:canvas-name` directly as a cla
 wrapper to constrain its width — see `DashboardQuadGrid`/`DashboardStatsGrid` stories for the pattern. These are
 plain global utility classes, not overridable via a CSS custom property; import `CanvasSwitcher`
 (or otherwise ensure its styles are bundled) wherever you rely on them.
+
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
+
+## Class passthrough
+
+`styleClassPassthrough` (string or string[]) is applied to the root `.canvas-switcher` element via
+`useStyleClassPassthrough()`.
+

@@ -35,6 +35,8 @@ Or scope to a single instance via `styleClassPassthrough`:
 <DeepExpandingMenu style-class-passthrough="main-nav">...</DeepExpandingMenu>
 ```
 
+---
+
 ## Not tokenised
 
 - The `@position-try` fallback offsets (`--anchor-left`/`--anchor-right`) are fixed at `1rem` —
@@ -42,3 +44,14 @@ Or scope to a single instance via `styleClassPassthrough`:
   overridden per-instance without a new `@position-try` block.
 - Anchor names and popover target ids are generated per-instance via `useId()` and are not
   consumer-configurable — they only need to be unique, not meaningful.
+
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+

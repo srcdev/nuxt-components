@@ -9,6 +9,8 @@
 etc.) applies unchanged, since `DisplayThemeSwitch` renders that component directly with no
 intermediate styling layer.
 
+---
+
 ## `small` class — compact sizing
 
 Pass `"small"` via `styleClassPassthrough` for a more compact gap/padding/icon-size, useful in a
@@ -28,7 +30,26 @@ size instead of using `small`:
 <DisplayThemeSwitch style="--triple-toggle-switch-icon-size: 2.4rem;" />
 ```
 
+---
+
+## Local overrides
+
+There are no public tokens, so override the classes above with direct properties, scoped to an
+element you own (a page or section class, or a class added with `:style-class-passthrough`). Keep
+the block **unlayered** (no `@layer` wrapper) so it beats the library's `@layer components`. If your
+own file uses `<style scoped>`, selectors that reach inside the component need `:deep()`. Patterns
+and examples: `.claude/skills/component-local-style-override.md`.
+
+**Caveat:** the colour tokens (`--triple-toggle-switch-surface`, `-border`, ...) work from any
+ancestor, but the four sizing tokens (`--triple-toggle-switch-gap`, `-padding`, `-option-padding`,
+`-icon-size`) are declared on this component's own root (that's how its default and `small` sizes
+work), so an ancestor value never reaches the toggle. Set those on the root itself: a class from
+`style-class-passthrough`, or inline `style` as shown above.
+
+---
+
 ## Class passthrough
 
 `styleClassPassthrough` also accepts any other class for layout purposes, alongside or instead of
 `small`.
+

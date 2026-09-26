@@ -32,6 +32,18 @@ Or scope to a single instance via `styleClassPassthrough`:
 <InputRangeCore style-class-passthrough="price-range" ... />
 ```
 
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
+
 ## Notes
 
 - `accent-color` was previously read from `--theme-form-range-accent-color`, a custom property
@@ -43,3 +55,4 @@ Or scope to a single instance via `styleClassPassthrough`:
   CSS in this component (or elsewhere in the library) currently styles that class — it's a no-op
   today. Left as-is rather than redesigned, since the original intent wasn't clear; flagged here
   so you don't spend time debugging "why doesn't `weight` do anything."
+

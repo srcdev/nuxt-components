@@ -33,6 +33,50 @@ applying this guide to that component.
 
 ---
 
+## Site-wide component defaults (the baseline local overrides build on)
+
+Before any page or instance override, a consuming app usually sets its own **site-wide** values for
+a component's public tokens: one file per component under `app/assets/styles/setup/03.theming/`,
+each imported from that folder's `index.css` alongside `_default.css` (see
+`consumer-styles-structure.md` for the whole `setup/` tree):
+
+```css
+/* app/assets/styles/setup/03.theming/_card-core.css */
+/* CardCore — site-wide card look. */
+:where(html) {
+  --card-core-background-color: var(--rose-01);
+  --card-core-border: 0.1rem solid var(--rose-03);
+  --card-core-border-radius: 1.2rem;
+}
+```
+
+```css
+/* app/assets/styles/setup/03.theming/index.css */
+@import "./_default.css";
+@import "./_card-core.css";
+```
+
+Why `:where(html)` rather than `:root` or `html`:
+
+- `:where()` has **zero specificity**, so this is the weakest possible declaration on `<html>`. Any
+  other rule setting the same token on `<html>` wins without a fight: a colour-scheme selector
+  (`html[data-color-scheme="dark"] { ... }`), or a page-level `html.checkout-page { ... }`.
+  `:root` (0,1,0) would outrank or tie those and force specificity games.
+- Page and instance overrides (the patterns below) set the token on a descendant element, so they
+  win through inheritance regardless of specificity: the nearest declaration is what the component
+  reads.
+- Keep these files unlayered, same as everything else here (see the warning above).
+
+Only set tokens the component's current `CONSUMER-STYLING.md` lists. Components that haven't been
+through `/migrate-component` yet may still rename tokens when they are, so check a site-defaults
+file against the doc after upgrading the layer.
+
+Use this for "every instance on the site should look like this"; use the patterns below for
+"this page/section/instance differs from the site default". A component's `CONSUMER-STYLING.md`
+**Global theming** section, when it has one, is a starting point for this file.
+
+---
+
 ## Pattern 1 — Page-level scoping (preferred for single-use or section-scoped instances)
 
 The consuming page has a unique wrapper or body class. The `<style>` block is **unscoped** — no
@@ -70,7 +114,7 @@ scope. No `:deep()` is needed.
 use that as the root scope for all page-specific overrides:
 
 ```ts
-useHead({ bodyAttrs: { class: "contact-page" } })
+useHead({ bodyAttrs: { class: "contact-page" } });
 ```
 
 ```css
@@ -81,18 +125,18 @@ useHead({ bodyAttrs: { class: "contact-page" } })
 }
 ```
 
-> **⚠️ Do not use `bodyAttrs.class` as the scope for a page's *own* local `<style>` overrides if the
+> \**⚠️ Do not use `bodyAttrs.class` as the scope for a page's *own* local `<style>` overrides if the
 > app uses `pageTransition`/`layoutTransition` (see `page-transitions.md`) — it races and breaks
 > mid-transition. `unhead` swaps `<body>`'s class the instant the *incoming* route's component sets
 > up, which happens as soon as navigation starts — not when the *outgoing* page's leave-transition
 > finishes animating. For a real transition duration (not an instant swap), the outgoing page is
-> still visible and mid-fade while `<body>` already carries the *new* page's class. Any selector
+> still visible and mid-fade while `<body>` already carries the *new\* page's class. Any selector
 > that depends on the old body class as an ancestor (`.contact-page .hero-bg-image { position:
-> absolute; ... }`) stops matching mid-fade, and the affected element snaps to unstyled/intrinsic
+absolute; ... }`) stops matching mid-fade, and the affected element snaps to unstyled/intrinsic
 > sizing for the rest of the transition — confirmed via direct DOM/computed-style polling against a
 > real `npm run build` + preview, not dev-server guesswork.
 >
-> Keep `bodyAttrs.class` for its legitimate use — a hook for *persistent* components (header, nav)
+> Keep `bodyAttrs.class` for its legitimate use — a hook for _persistent_ components (header, nav)
 > that live outside the transitioning page to react to "which page is active." For a page's own
 > local overrides, put a matching class directly on the page's own template root instead, so the
 > scope lives on the exact element that's fading and can never desync from what's rendered:
@@ -163,11 +207,11 @@ Vue adds the consuming file's scope attribute (`[data-v-xxxx]`) to the last comp
 every rule in a scoped block. Your own template elements carry that attribute; the library
 component's elements don't. So:
 
-| Override | In a consumer's scoped block |
-|---|---|
-| Public token set on **your own** element (`.contact-page { --card-core-border-radius: 1.6rem; }`) | Works unchanged: your element matches, and the token inherits into the component |
-| Class/attribute on the component's **root** passed from your template (`:style-class-passthrough`, or `class` fallthrough) | Works: Vue also puts your scope attribute on a child component's root element |
-| Anything **inside** the component (`.card-core-header`, `.input-description[data-invalid]` when the description is nested in a wrapper) | Doesn't match. Wrap it in `:deep()`, or move it to an unscoped `<style>` block |
+| Override                                                                                                                                | In a consumer's scoped block                                                     |
+| --------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| Public token set on **your own** element (`.contact-page { --card-core-border-radius: 1.6rem; }`)                                       | Works unchanged: your element matches, and the token inherits into the component |
+| Class/attribute on the component's **root** passed from your template (`:style-class-passthrough`, or `class` fallthrough)              | Works: Vue also puts your scope attribute on a child component's root element    |
+| Anything **inside** the component (`.card-core-header`, `.input-description[data-invalid]` when the description is nested in a wrapper) | Doesn't match. Wrap it in `:deep()`, or move it to an unscoped `<style>` block   |
 
 ```vue
 <style scoped>
@@ -198,11 +242,11 @@ component's own class name and the public `--component-name-*` tokens listed in 
 
 ## What to override
 
-| Category | Examples | Approach |
-|---|---|---|
-| Theming | icon colour, background, border colour | The component's public tokens; otherwise a direct property |
-| Geometry | border-radius, padding, gap, size | The component's public tokens; otherwise a direct property |
-| Border / outline | width, style, colour | The component's public tokens; otherwise a direct property |
+| Category         | Examples                               | Approach                                                   |
+| ---------------- | -------------------------------------- | ---------------------------------------------------------- |
+| Theming          | icon colour, background, border colour | The component's public tokens; otherwise a direct property |
+| Geometry         | border-radius, padding, gap, size      | The component's public tokens; otherwise a direct property |
+| Border / outline | width, style, colour                   | The component's public tokens; otherwise a direct property |
 
 **Do not override behaviour** — `display`, `visibility`, `pointer-events`, `z-index`, animations.
 Those belong in the component or a structural parent.
@@ -233,12 +277,12 @@ they're shared by every component reading them, so scope the override tightly.
 
 ## When to use this vs other approaches
 
-| Situation | Approach |
-|---|---|
-| One-off visual tweak for a specific page/context | Local style override (this skill) |
+| Situation                                            | Approach                                      |
+| ---------------------------------------------------- | --------------------------------------------- |
+| One-off visual tweak for a specific page/context     | Local style override (this skill)             |
 | Consistent appearance across all instances site-wide | Default theme (`theming-override-default.md`) |
-| Variant that belongs in the component itself | Add a `variant` prop value to the component |
-| Structural layout change | Wrapper element or parent component |
+| Variant that belongs in the component itself         | Add a `variant` prop value to the component   |
+| Structural layout change                             | Wrapper element or parent component           |
 
 ### Component type guide
 
@@ -257,4 +301,4 @@ they're shared by every component reading them, so scope the override tightly.
 These all expose the same public tokens, so a local override is still available when a context
 genuinely calls for it (e.g. a form on a dark hero section). The point is the default, not a ban.
 
-The test: *should all instances of this component look the same?* If yes → theme. If instances are expected to look different → local override.
+The test: _should all instances of this component look the same?_ If yes → theme. If instances are expected to look different → local override.

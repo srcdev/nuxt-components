@@ -64,7 +64,7 @@ styles would apply to both elements, doubling the bottom padding.
 
 ---
 
-## Global theming — app-level CSS file
+## Global theming
 
 ```css
 :where(html) {
@@ -75,7 +75,15 @@ styles would apply to both elements, doubling the bottom padding.
 
 ---
 
-## Scoped overrides
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### Page or section
 
 ```css
 .contact-page {
@@ -85,6 +93,9 @@ styles would apply to both elements, doubling the bottom padding.
 }
 ```
 
+---
+
 ## Class passthrough
 
 `:style-class-passthrough` (string or string array) adds classes to the root `.form-wrapper` element.
+

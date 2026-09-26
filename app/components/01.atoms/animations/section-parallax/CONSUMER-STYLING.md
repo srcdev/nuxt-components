@@ -19,11 +19,32 @@
 </SectionParallax>
 ```
 
+---
+
 ## Motion
 
 The parallax effect (`background-attachment: fixed`) only activates on `(hover: hover) and
 (pointer: fine)` inputs that support it, and is disabled under `prefers-reduced-motion: reduce`
 (falls back to `background-attachment: scroll` and the base `--section-parallax-min-height`).
+
+---
+
+## No overlay/gradient built in
+
+The component has no built-in overlay or gradient scrim — add one via the default slot or a
+`::before` pseudo-element in your consuming-page styles.
+
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
 
 ## Class passthrough
 
@@ -38,7 +59,3 @@ from a consuming page's own stylesheet instead of inline tokens:
 }
 ```
 
-## No overlay/gradient built in
-
-The component has no built-in overlay or gradient scrim — add one via the default slot or a
-`::before` pseudo-element in your consuming-page styles.

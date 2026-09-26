@@ -54,7 +54,7 @@ global token so it matches the rest of the design system out of the box.
 
 ---
 
-## Global theming — recommended approach
+## Global theming
 
 Create `assets/styles/setup/07.components/select-menu.css` in the consuming app and set tokens
 on `:root`. This applies to every `SelectMenu` across the site.
@@ -77,7 +77,15 @@ on `:root`. This applies to every `SelectMenu` across the site.
 
 ---
 
-## Per-instance overrides via styleClassPassthrough
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### One instance
 
 ```vue
 <SelectMenu
@@ -166,3 +174,4 @@ story.
   the bottom of the viewport (`position-try-fallbacks: flip-block`).
 - **Chevron rotation** is pure CSS via `:has(.select-menu-popover:popover-open)` — no JS state
   needed for the visual, though `isOpen` is still tracked internally to drive `aria-expanded`.
+

@@ -27,7 +27,7 @@ or instance) without touching the component itself.
 
 ---
 
-## Global theming — app-level CSS file
+## Global theming
 
 Create `assets/styles/setup/07.components/card-core.css` in the consuming app and set tokens on
 `:root`. These values apply to every `CardCore` instance across the site.
@@ -44,7 +44,15 @@ Create `assets/styles/setup/07.components/card-core.css` in the consuming app an
 
 ---
 
-## Per-variant overrides
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### Per variant
 
 Variants override internal tokens directly, so target the variant class to change their colours:
 
@@ -69,6 +77,43 @@ Variants override internal tokens directly, so target the variant class to chang
 
   &.outline {
     --_card-border: 0.15rem solid var(--brand-primary);
+  }
+}
+```
+
+### Page or section
+
+When a card appears in a specific page context, scope overrides under the page wrapper. No
+`:deep()` is required (component styles are unscoped).
+
+```css
+/* In the consuming page's unscoped <style> block */
+.services-page {
+  .card-core {
+    --card-core-border-radius: 1.2rem;
+    --card-core-row-gap: 0;
+
+    &.solid {
+      --_card-background-color: var(--brand-surface-alt);
+    }
+  }
+}
+```
+
+### One instance
+
+```vue
+<CardCore :style-class-passthrough="['featured']">
+  ...
+</CardCore>
+```
+
+```css
+.card-core {
+  &.featured {
+    --card-core-border: 0.2rem solid var(--brand-primary);
+    --card-core-box-shadow: 0 0.4rem 2rem rgb(0 0 0 / 15%);
+    --card-core-border-radius: 1.6rem;
   }
 }
 ```
@@ -109,47 +154,6 @@ Or inline for a single instance:
 
 ---
 
-## Page-scoped overrides
-
-When a card appears in a specific page context, scope overrides under the page wrapper. No
-`:deep()` is required (component styles are unscoped).
-
-```css
-/* In the consuming page's unscoped <style> block */
-.services-page {
-  .card-core {
-    --card-core-border-radius: 1.2rem;
-    --card-core-row-gap: 0;
-
-    &.solid {
-      --_card-background-color: var(--brand-surface-alt);
-    }
-  }
-}
-```
-
----
-
-## Per-instance overrides via styleClassPassthrough
-
-```vue
-<CardCore :style-class-passthrough="['featured']">
-  ...
-</CardCore>
-```
-
-```css
-.card-core {
-  &.featured {
-    --card-core-border: 0.2rem solid var(--brand-primary);
-    --card-core-box-shadow: 0 0.4rem 2rem rgb(0 0 0 / 15%);
-    --card-core-border-radius: 1.6rem;
-  }
-}
-```
-
----
-
 ## Card row targeting
 
 Slot content is wrapped in `.card-row.card-row-{name}`. Target rows for padding, borders, or
@@ -173,3 +177,4 @@ backgrounds without modifying the component:
   }
 }
 ```
+

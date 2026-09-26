@@ -31,6 +31,8 @@
 }
 ```
 
+---
+
 ## High-contrast mode colours are not tokenised
 
 Under `prefers-contrast: high`, the control button switches to the system colour keywords
@@ -39,6 +41,8 @@ exposed as overridable tokens on purpose — they're meant to track the user's O
 theme, which a component-level override would defeat. Only the border *width* in that mode is a
 token (`--marquee-scroller-control-border-width`), since it's a plain dimension with no such
 constraint.
+
+---
 
 ## Item size and spacing are prop-driven, not tokens
 
@@ -52,6 +56,8 @@ layout math (`aspect-ratio`, track width). Override those through props:
   animation-runtime="60s"
 />
 ```
+
+---
 
 ## Item content via slots
 
@@ -68,6 +74,8 @@ markup for each item via that dynamically-named slot:
   </template>
 </MarqueeScroller>
 ```
+
+---
 
 ## Control button icon and copy
 
@@ -92,3 +100,15 @@ The pause/play button's icon and its `aria-label` copy are all overridable — s
   </template>
 </MarqueeScroller>
 ```
+
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a plain `class` on the
+component (it falls through to the root element)): they inherit down into the component. Keep the
+block **unlayered** (no `@layer` wrapper) so it beats the library's `@layer components`. If your own
+file uses `<style scoped>`, tokens set on your element still work, but selectors that reach inside
+the component need `:deep()`. Patterns and examples:
+`.claude/skills/component-local-style-override.md`.
+

@@ -35,6 +35,8 @@
 }
 ```
 
+---
+
 ## Colour tokens are flat values, not light-dark() pairs
 
 Every colour token above defaults to a single flat `--slate-*` value rather than a
@@ -47,6 +49,8 @@ own override in `light-dark()`:
   --tabs-active-indicator-colour: light-dark(#1a1a1a, #f5f5f5);
 }
 ```
+
+---
 
 ## Tab-label text colour tracks the indicator behind it
 
@@ -64,6 +68,8 @@ either indicator background, override its matching text-colour token to keep con
   --tabs-active-indicator-text-colour: white;
 }
 ```
+
+---
 
 ## Tabs spanned by a jump keep their normal styling
 
@@ -85,11 +91,15 @@ literally the same colour as the indicator sliding beneath it (invisible). If yo
 `--tabs-active-indicator-colour`, check it still differs enough from `--tabs-list-item-colour` (or
 override that too) to avoid the same collision recurring.
 
+---
+
 ## Indicator visibility is prop-driven, not tokens
 
 Whether the hover highlight, active highlight, and underline indicator render at all is controlled
 by the `trackHover`/`trackActive`/`trackIndicator` boolean props (all default `true`), since they
 also gate whether the underlying DOM nodes are created — not just their styling.
+
+---
 
 ## Movement/position values are private
 
@@ -97,3 +107,14 @@ also gate whether the underlying DOM nodes are created — not just their stylin
 `--_y-height`, `--_y-width`, and `--_transition-duration` are computed at runtime from the tab
 elements' measured layout (`offsetLeft`/`offsetWidth`/etc. in `useTabs`) and aren't meaningful to
 override directly — use `transitionDuration` (a prop, in ms) to control indicator movement speed.
+
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+

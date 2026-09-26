@@ -44,6 +44,18 @@ Or scope to a single instance via `styleClassPassthrough`:
 <DisplayTooltip style-class-passthrough="promo-tooltip">...</DisplayTooltip>
 ```
 
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
+
 ## Notes
 
 - Built on the native Popover API (`popover`/`popovertarget`) and CSS anchor-positioning
@@ -60,3 +72,4 @@ Or scope to a single instance via `styleClassPassthrough`:
   flush against the panel edges) plus the popover gained a default elevation `box-shadow`
   (previously none) — the out-of-the-box look was flat and under-styled before this. All of these
   remain overridable via the tokens above.
+

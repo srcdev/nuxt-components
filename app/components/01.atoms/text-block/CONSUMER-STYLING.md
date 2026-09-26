@@ -20,7 +20,17 @@ global fluid spacing token `--fluid-space-48-96` (`clamp(3rem, …, 6rem)`, i.e.
 
 You don't need to redeclare the default padding in your own CSS to get it; the component ships it.
 
-## Overriding one instance
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### One instance
 
 Add your own class through `styleClassPassthrough` and set the tokens on it:
 
@@ -36,3 +46,4 @@ Add your own class through `styleClassPassthrough` and set the tokens on it:
 
 `.text-block` is declared inside `@layer components`, so any unlayered consumer rule on the class
 itself also wins, but prefer the tokens so the fallback chain stays intact.
+

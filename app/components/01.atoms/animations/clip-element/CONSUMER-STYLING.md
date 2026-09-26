@@ -7,6 +7,8 @@
 from the `maxClip` prop and the element's scroll position — there is no fixed appearance value a
 consumer would plausibly want to override via CSS.
 
+---
+
 ## Override surface
 
 Use `styleClassPassthrough` to apply your own classes to the root `.clip-element-wrapper`:
@@ -25,3 +27,14 @@ Use `styleClassPassthrough` to apply your own classes to the root `.clip-element
 
 Style the slotted content directly for anything beyond the clip effect itself (sizing, object-fit,
 borders, etc.) — `ClipElement` does not constrain it.
+
+---
+
+## Local overrides
+
+There are no public tokens, so override the classes above with direct properties, scoped to an
+element you own (a page or section class, or a class added with `:style-class-passthrough`). Keep
+the block **unlayered** (no `@layer` wrapper) so it beats the library's `@layer components`. If your
+own file uses `<style scoped>`, selectors that reach inside the component need `:deep()`. Patterns
+and examples: `.claude/skills/component-local-style-override.md`.
+

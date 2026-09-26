@@ -27,7 +27,7 @@ component itself.
 
 ---
 
-## Global theming — recommended approach
+## Global theming
 
 Create `assets/styles/setup/07.components/site-header.css` in the consuming app and set tokens
 on a scope class matching the one passed via `styleClassPassthrough`:
@@ -52,9 +52,20 @@ on a scope class matching the one passed via `styleClassPassthrough`:
 
 ---
 
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
+
 ## Notes
 
 - The branding markup (logo image, wordmark, etc.) is entirely consumer-authored via the
   `#branding` slot — `SiteHeader` has no opinion on brand styling.
 - `SkipLinks`' hardcoded anchors (`#main-content`, `#footer-content`) expect the consuming
   layout's main/footer regions to carry those `id`s — unchanged from using `SkipLinks` directly.
+

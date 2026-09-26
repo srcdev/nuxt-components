@@ -99,30 +99,34 @@ briefly) — don't skip silently.
      with no public fallback. That's the thing to promote, not every `--_` var you find.
 4. **CONSUMER-STYLING.md** — create or update so every public token the component exposes is
    documented, with its default. Skip only if the component genuinely has no override surface at
-   all (no CSS custom properties, no class passthrough). Use this fixed layout, in this order
-   (`app/components/05.forms/input-description/CONSUMER-STYLING.md` is the reference):
+   all (no CSS custom properties, no class passthrough). Use this fixed layout, in this order:
    - `## Public token API` — token tables (split into `###` groups by element when there are
      several), each token with its default; list any private `--_` tokens as "not public API", or
      say there are none.
    - `## State hooks` — `data-*` attributes / state selectors and the inner element class names.
      Omit only if the component has neither.
-   - `## Global theming` — a `:where(html) { ... }` block for an app-level stylesheet.
+   - Component-specific reference sections (motion, sizing model, etc.) may follow here.
+   - `## Global theming` — optional. Include a `:where(html) { ... }` block only when there's
+     something worth showing (e.g. a common site-wide tweak); don't pad it out.
    - `## Local overrides` — required heading (the ledger's `styling_doc_outdated` check looks for
-     it). A two-line intro (set tokens on an element you own that wraps the component; keep the
-     block unlayered; link `.claude/skills/component-local-style-override.md`), then:
-     - `### Page or section` — an unscoped `<style>` example nested under a consumer wrapper class.
-     - `### One instance` (or "One field" for form components) — how to target a single usage:
-       `style-class-passthrough` when the consumer renders the component directly, or a plain
-       `class` on a wrapper component that falls through to its root when the passthrough isn't
-       forwarded. Check `inheritAttrs` and single-root before claiming the fallthrough works.
-     - `### If your page or component uses <style scoped>` — make clear this library's styles are
-       unscoped, so this is about the **consumer's** scoped file: tokens set on the consumer's own
-       element still work; selectors reaching into the component need `:deep()` or an unscoped
-       block. Show one of each.
+     it). The mechanics are the same for every component and live in
+     `.claude/skills/component-local-style-override.md`, so don't write bespoke examples by
+     default. Write one standard paragraph (copy it from any migrated doc, e.g.
+     `05.forms/form-field/CONSUMER-STYLING.md`): set tokens on an element you own (page/section
+     class, or a `:style-class-passthrough` class, or a plain `class` that falls through when there's
+     no passthrough prop); keep the block unlayered; from a **consumer's** `<style scoped>` file,
+     tokens on their own element still work but selectors reaching inside need `:deep()` (this
+     library's own styles are never scoped); link the guide. Then add a **Caveat** only where this
+     component breaks that model, most often a token it re-declares on its own elements (so an
+     ancestor value never lands, e.g. `DisplayThemeSwitch`'s sizing tokens, `ServiceSummary`'s
+     `--theme-pill-*`, `InputError`'s `data-theme`), or a wrapper that doesn't forward
+     passthrough. Check with a grep for `^\s*--<name>-[\w-]+\s*:` in the component's `<style>`.
+     Existing examples can stay as `###` subsections (`Page or section`, `One instance`).
    - `## Recipe: <name>` — optional, for component-specific patterns that need several tokens
      working together (e.g. InputDescription's panel/callout).
    - `## Class passthrough` — what `style-class-passthrough` targets and whether it's actually
      reachable in normal use.
+   - `## Notes` — optional, last.
 
    Dated "Changed YYYY-MM-DD" migration notes go as blockquotes inside the relevant section.
 5. **Tests** — create or bring up to date in `tests/`, following the Testing Requirements section

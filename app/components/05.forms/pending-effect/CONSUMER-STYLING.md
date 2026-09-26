@@ -55,7 +55,7 @@ clicked twice.
 
 ---
 
-## Global theming — app-level CSS file
+## Global theming
 
 ```css
 :where(html) {
@@ -64,7 +64,17 @@ clicked twice.
 }
 ```
 
-## Scoped overrides
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### Page or section
 
 ```css
 .checkout-page {
@@ -73,7 +83,10 @@ clicked twice.
 }
 ```
 
+---
+
 ## Class passthrough
 
 `:style-class-passthrough` adds classes to the SVG. `InputButtonCore` doesn't forward it, so this
 only matters if you render `PendingEffect` yourself.
+

@@ -17,6 +17,8 @@
 </GlowingBorder>
 ```
 
+---
+
 ## Variant colour stops
 
 Each `variant` drives a 5-stop conic gradient. Every stop is an individually overridable token,
@@ -39,10 +41,32 @@ named `--glowing-border-{variant}-color-{1-5}`:
 </GlowingBorder>
 ```
 
+---
+
 ## Motion
 
 The glow rotates continuously via CSS animation and stops automatically when the visitor has
 `prefers-reduced-motion: reduce` set.
+
+---
+
+## Internal (non-overridable) custom properties
+
+`--_glow-deg`, `--_clr-1` through `--_clr-5`, and `--_gradient-glow` are internal composition
+plumbing (the resolved per-variant colour stops and the animated rotation angle) — use the public
+tokens above instead.
+
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
 
 ## Class passthrough
 
@@ -54,8 +78,3 @@ above.
 <GlowingBorder style-class-passthrough="my-glowing-border">...</GlowingBorder>
 ```
 
-## Internal (non-overridable) custom properties
-
-`--_glow-deg`, `--_clr-1` through `--_clr-5`, and `--_gradient-glow` are internal composition
-plumbing (the resolved per-variant colour stops and the animated rotation angle) — use the public
-tokens above instead.

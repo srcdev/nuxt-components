@@ -44,7 +44,15 @@ check any `.accordian-item.expanding-panel*` overrides still target the right cl
 
 ---
 
-## Page-scoped overrides
+## Local overrides
+
+There are no public tokens, so override the classes above with direct properties, scoped to an
+element you own (a page or section class, or a class added with `:style-class-passthrough`). Keep
+the block **unlayered** (no `@layer` wrapper) so it beats the library's `@layer components`. If your
+own file uses `<style scoped>`, selectors that reach inside the component need `:deep()`. Patterns
+and examples: `.claude/skills/component-local-style-override.md`.
+
+### Page or section
 
 No `:deep()` is required (component styles are unscoped).
 
@@ -60,9 +68,7 @@ No `:deep()` is required (component styles are unscoped).
 }
 ```
 
----
-
-## Per-instance overrides via styleClassPassthrough
+### One instance
 
 Use sparingly — prefer global or page-scoped CSS. `styleClassPassthrough` on `AccordianCore`
 targets the root `.display-accordian` element, not the individual panels (those already get
@@ -91,3 +97,4 @@ targets the root `.display-accordian` element, not the individual panels (those 
   (see `ExpandingPanel`'s own docs for why: it's for a single panel overlaying trailing page
   content, not stacked/grouped panels). Use `ExpandingPanel`/`ExpandingPanelClassic` directly if
   you need an overlay panel.
+

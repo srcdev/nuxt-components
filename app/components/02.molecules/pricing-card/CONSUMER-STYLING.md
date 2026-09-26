@@ -41,7 +41,7 @@ override it — there is no locale-aware formatting, just a literal prefix chara
 
 ---
 
-## Global theming — app-level CSS file
+## Global theming
 
 Create `assets/styles/setup/07.components/pricing-card.css` in the consuming app and set tokens on
 `:root`. These values apply to every `PricingCard` instance across the site.
@@ -62,7 +62,15 @@ Create `assets/styles/setup/07.components/pricing-card.css` in the consuming app
 
 ---
 
-## Per-instance overrides via inline styles
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### One instance
 
 Override tokens directly on a single card instance:
 
@@ -78,9 +86,7 @@ Override tokens directly on a single card instance:
 />
 ```
 
----
-
-## Page-scoped overrides
+### Page or section
 
 When pricing cards appear in a specific page context, scope overrides under the page wrapper:
 
@@ -191,3 +197,4 @@ Or inline:
 ```
 
 (Note: `--_feature-checkmark-color` is an internal token; consider requesting it as a public token if override is needed frequently.)
+

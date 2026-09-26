@@ -25,3 +25,17 @@ with a strict priority order between them.
   --display-toast-provider-z-index: 1000000;
 }
 ```
+
+---
+
+## Local overrides
+
+The `--display-toast-z-index` and `--display-toast-provider-z-index` tokens above are only read,
+never declared on the toast, so they work from any ancestor, though a global `:root` value is usually
+what you want for a `position: fixed` overlay. Anything else is a direct property, scoped to an
+element you own (a page or section class, or a class added with `:style-class-passthrough`). Keep
+the block **unlayered** (no `@layer` wrapper) so it beats the library's `@layer components`. If your
+own file uses `<style scoped>`, tokens set on your element still work, but selectors that reach
+inside the component need `:deep()`. Patterns and examples:
+`.claude/skills/component-local-style-override.md`.
+

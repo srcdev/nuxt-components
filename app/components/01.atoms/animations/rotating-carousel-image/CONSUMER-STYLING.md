@@ -30,12 +30,16 @@
 }
 ```
 
+---
+
 ## High-contrast mode colours are not tokenised
 
 Under `prefers-contrast: high`, the control button switches to the system colour keywords
 `ButtonFace`/`ButtonText` rather than the component's own background/text tokens, so it tracks the
 user's OS-level high-contrast theme. Only the border *width* in that mode is a token
 (`--rotating-carousel-control-border-width`).
+
+---
 
 ## Rotation geometry is prop-driven, not tokens
 
@@ -47,8 +51,21 @@ parallax math:
 <RotatingCarouselImage :data="images" :perspective="1200" :translate-z="1200" />
 ```
 
+---
+
 ## Control button icon and copy
 
 The pause/play button's icon and its `aria-label` copy are overridable via `playIcon`/`pauseIcon`/
 `playLabel`/`pauseLabel` props, or the `toggle-icon` slot for a fully custom icon (scoped with
 `isPaused`) — same pattern as `MarqueeScroller`.
+
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+

@@ -29,6 +29,8 @@ consuming page's own stylesheet:
 </ContainerGlow>
 ```
 
+---
+
 ## The `config` prop (layout and interaction behaviour)
 
 Proximity distance, glow spread/blur, wrapper gap, wrapper direction, and the inactive-state
@@ -54,6 +56,8 @@ All fields are optional — pass only the ones you want to change:
 </ContainerGlow>
 ```
 
+---
+
 ## Named dynamic slots
 
 Each named slot renders as one glow card — the consumer controls the slot names, there's no
@@ -66,10 +70,32 @@ Each named slot renders as one glow card — the consumer controls the slot name
 </ContainerGlow>
 ```
 
+---
+
 ## Motion
 
 The glow's opacity fade (`--container-glow-transition-duration`) is disabled under
 `prefers-reduced-motion: reduce`, so proximity changes are instant rather than animated.
+
+---
+
+## Internal (non-overridable) custom properties
+
+`--_start`, `--_opacity-active`, `--_gap`, `--_blur`, `--_spread`, `--_direction`, and `--_gradient`
+are internal plumbing driven by pointer events and the `config` prop — use `config` (for
+gap/blur/spread/direction/opacity) or the public tokens above (for colour/geometry) instead.
+
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
 
 ## Class passthrough
 
@@ -79,8 +105,3 @@ Use `styleClassPassthrough` to add classes to the root `.container-glow-wrapper`
 <ContainerGlow style-class-passthrough="my-container-glow">...</ContainerGlow>
 ```
 
-## Internal (non-overridable) custom properties
-
-`--_start`, `--_opacity-active`, `--_gap`, `--_blur`, `--_spread`, `--_direction`, and `--_gradient`
-are internal plumbing driven by pointer events and the `config` prop — use `config` (for
-gap/blur/spread/direction/opacity) or the public tokens above (for colour/geometry) instead.

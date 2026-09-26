@@ -29,6 +29,26 @@ All fields are optional and fall back to `backgroundColour: "rgba(0,0,0,0.25)"`,
 `borderColour: "var(--orange-08)"`, `radiusLeft`/`radiusRight: 12`, `borderLeft`/`borderTop`/
 `borderRight`/`borderBottom: 8`.
 
+---
+
+## Internal (non-overridable) custom properties
+
+`--_height`, `--_inset-inline-start`, `--_inset-inline-end`, `--_inset-block-start`, and
+`--_inset-block-end` are set inline from measured content size and `config` border widths. They're
+private implementation plumbing, not a consumer override surface — use `config` instead.
+
+---
+
+## Local overrides
+
+There are no public tokens, so override the classes above with direct properties, scoped to an
+element you own (a page or section class, or a class added with `:style-class-passthrough`). Keep
+the block **unlayered** (no `@layer` wrapper) so it beats the library's `@layer components`. If your
+own file uses `<style scoped>`, selectors that reach inside the component need `:deep()`. Patterns
+and examples: `.claude/skills/component-local-style-override.md`.
+
+---
+
 ## Class passthrough
 
 Use `styleClassPassthrough` to add classes to the root `.alert-mask-core` element for layout
@@ -39,8 +59,3 @@ governed by `config`.
 <AlertMaskCore style-class-passthrough="my-alert-mask">...</AlertMaskCore>
 ```
 
-## Internal (non-overridable) custom properties
-
-`--_height`, `--_inset-inline-start`, `--_inset-inline-end`, `--_inset-block-start`, and
-`--_inset-block-end` are set inline from measured content size and `config` border widths. They're
-private implementation plumbing, not a consumer override surface — use `config` instead.

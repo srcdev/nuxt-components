@@ -19,9 +19,23 @@
 }
 ```
 
+---
+
 ## Text content — props, not CSS
 
 `items` and `separator` are props. There is no hardcoded copy to override in CSS.
+
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
 
 ## Notes
 
@@ -30,3 +44,4 @@
 - The separator (`aria-hidden="true"`) is only rendered between items, never after the last one.
 - `--breadcrumb-colour` is what `ServiceDetail` overrides internally (to `white` by default) so
   the breadcrumb reads over its hero image — see `ServiceDetail`'s `CONSUMER-STYLING.md`.
+

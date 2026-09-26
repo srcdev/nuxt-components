@@ -9,6 +9,8 @@
 | `--wipe-away-vertical-animation-duration` | `1s`     | `wipe-out` scroll-linked animation, browsers supporting `animation-timeline: view()` |
 | `--wipe-away-vertical-trailing-buffer`    | `20vh`   | `.trailing-buffer` height — release room after the last panel                        |
 
+---
+
 ## Only itemCount - 1 scrollingItem slots
 
 The last panel has nothing left to reveal, so it has no wipe animation and no `.scrolling-section`
@@ -20,6 +22,8 @@ as deep on screen as the others, since it got the same reveal lead-in as every o
 a whole dedicated section with no wipe to cut it short. `.trailing-buffer` (see token above)
 replaces that with a much smaller, purpose-built release cushion instead.
 
+---
+
 ## Pure CSS, no JS measurement
 
 The whole pin/reveal effect is CSS-only (grid overlay + `animation-timeline: view()`); there's
@@ -29,6 +33,8 @@ see below), and `.sticky-items-container` spans `grid-row: 1 / -1` to overlay al
 adding its own row — so the root's height is simply the sum of the scrolling sections' own content
 height plus the leading buffer, nothing extra to size manually.
 
+---
+
 ## Leading buffer
 
 `.leading-buffer` is a fixed `100vh` spacer rendered before the first scrolling section. Without
@@ -37,12 +43,16 @@ timeline range at initial page load (before any scrolling happens), so the first
 appear partially wiped on load. The buffer guarantees a full viewport of scroll run-up regardless
 of how much real content precedes the component.
 
+---
+
 ## No `animation-timeline: view()` support
 
 Browsers without support (checked via `@supports not (animation-timeline: view())`) get the
 sticky/grid-overlay/animation rules dropped entirely — `.sticky-item`s just render as normal
 stacked panels in document flow, and `.scrolling-section`s are hidden. No JS fallback, no
 opacity crossfade.
+
+---
 
 ## Sticky vertical centering — no transform
 
@@ -59,12 +69,27 @@ the last panel and whatever content follows the component.
 }
 ```
 
+---
+
 ## Reduced motion
 
 The wipe animation is disabled under `prefers-reduced-motion: reduce` (`animation: none;
 clip-path: none;`) — panels render fully visible with no clip.
 
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
+
 ## Class passthrough
 
 `styleClassPassthrough` (string or string array) is applied to the root element via
 `useStyleClassPassthrough`.
+

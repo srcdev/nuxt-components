@@ -140,6 +140,13 @@ palette by name.
 @import "./03.theming/_default.css";
 ```
 
+**Per-component site defaults:** once you start setting a component's own public tokens site-wide
+(e.g. CardCore's background and radius), give each component its own `03.theming/_<component>.css`
+using the same `:where(html) { ... }` shape, and switch to a `03.theming/index.css` that imports
+`_default.css` plus each component file, then `@import "./03.theming/";` here instead. See
+"Site-wide component defaults" in `component-local-style-override.md` for why `:where(html)`,
+and `consumer-styles-structure.md` for the full consumer `setup/` tree.
+
 ### 7. Wire up the CSS entry point
 
 `app/assets/styles/main.css`:

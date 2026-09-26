@@ -29,6 +29,18 @@ Or scope to a single instance via `styleClassPassthrough`:
 <DashboardQuadGrid style-class-passthrough="promo-quad-grid">...</DashboardQuadGrid>
 ```
 
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
+
 ## Notes
 
 - The four-panel layout (mobile stack → tablet 2×3 → desktop 3×2 with slot1 spanning vertically)
@@ -40,3 +52,4 @@ Or scope to a single instance via `styleClassPassthrough`:
   CSS Gap Decorations spec) via `--dashboard-quad-grid-rule-*` tokens. Browser support is limited
   as of 2026, so it's transparent by default and safe to ignore — set
   `--dashboard-quad-grid-rule-colour` to opt in where supported.
+

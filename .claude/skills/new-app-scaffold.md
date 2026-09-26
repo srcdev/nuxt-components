@@ -212,7 +212,17 @@ node 20
 ```
 app/
 ├── assets/styles/
-│   └── main.css          ← brand tokens + font vars (loads after layer CSS)
+│   ├── main.css          ← @import "./setup/"; (loads after layer CSS)
+│   └── setup/            ← numbered folders mirroring the library's, see consumer-styles-structure.md
+│       ├── index.css
+│       ├── 03.theming/
+│       │   ├── index.css
+│       │   └── _default.css
+│       └── 05.typography/
+│           ├── index.css
+│           └── 01.tokens/
+│               ├── index.css
+│               └── _font-family.css
 ├── layouts/
 │   └── default.vue       ← minimal shell with <slot>
 ├── pages/
@@ -220,14 +230,42 @@ app/
 └── error.vue             ← 404 / 500 handler with clearError redirect
 ```
 
-**`app/assets/styles/main.css`** — declare brand CSS custom properties and set font-family:
+Styles follow `consumer-styles-structure.md`: only create the numbered folders the app has
+something for. `03.theming` and `05.typography` are the usual starting pair; add `02.colours`
+when you generate palettes (`theming-override-default.md`) and `01.config` for page shell rules
+or page transitions. All files unlayered, token values on `:where(html)`.
+
+**`app/assets/styles/main.css`**:
 
 ```css
-:root {
-  /* Add brand colour tokens */
-  --font-display: "{Display Font}", serif;
-  --font-body: "{Body Font}", sans-serif;
-  font-family: var(--font-body);
+@import "./setup/";
+```
+
+**`app/assets/styles/setup/index.css`**:
+
+```css
+@import "./03.theming/";
+@import "./05.typography/";
+```
+
+**`setup/03.theming/index.css`** / **`_default.css`**: brand theme values:
+
+```css
+/* index.css */
+@import "./_default.css";
+
+/* _default.css */
+:where(html) {
+  /* --theme-hue / --theme-chroma once palettes are generated (theming-override-default.md) */
+}
+```
+
+**`setup/05.typography/index.css`** → `@import "./01.tokens/";`, **`01.tokens/index.css`** →
+`@import "./_font-family.css";`, and **`_font-family.css`**:
+
+```css
+:where(html) {
+  --font-family: "{Body Font}", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 ```
 

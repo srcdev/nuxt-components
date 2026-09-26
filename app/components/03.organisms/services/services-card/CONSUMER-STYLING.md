@@ -82,7 +82,15 @@ the tokens above. See the component skill doc for slot/prop usage examples.
 
 ---
 
-## Per-instance overrides via styleClassPassthrough
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### One instance
 
 Use sparingly — prefer global or page-scoped CSS. When a single instance needs a distinct look:
 
@@ -127,3 +135,4 @@ on the widened column, not the cause.
 - `.meta`'s internal gap (between the duration and price text) is a fixed `1rem`, not a token.
 - Root element tag, `href`/`external` (whole-card-clickable), `eyebrowConfig`, and `heroConfig`
   are props, not CSS — see the component skill doc.
+

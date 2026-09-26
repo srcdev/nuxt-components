@@ -41,7 +41,7 @@ setup.
 
 ---
 
-## Global theming — app-level CSS file
+## Global theming
 
 ```css
 :where(html) {
@@ -51,7 +51,17 @@ setup.
 }
 ```
 
-## Scoped overrides
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### Page or section
 
 ```css
 .pricing-page {
@@ -62,9 +72,13 @@ setup.
 }
 ```
 
+---
+
 ## Class passthrough
 
 `:style-class-passthrough` (string or string array) adds classes to the root `.glass-panel`.
+
+---
 
 ## Layout notes
 
@@ -74,3 +88,4 @@ setup.
   `isolation: isolate` root), so it tints the background but never washes out text, and
   `pointer-events: none` means it never blocks clicks. The root is its own stacking context, so a
   `z-index` on something inside the panel can't lift it above elements outside the panel.
+

@@ -42,7 +42,7 @@ The root `.form-field` element carries these attributes, which are safe to targe
 
 ---
 
-## Global theming — app-level CSS file
+## Global theming
 
 ```css
 :where(html) {
@@ -53,7 +53,15 @@ The root `.form-field` element carries these attributes, which are safe to targe
 
 ---
 
-## Per-instance overrides
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### One instance
 
 ```vue
 <FormField width="wide" style="--form-field-background-color: var(--slate-01);">
@@ -75,6 +83,9 @@ Or scoped by a page/section wrapper class:
 }
 ```
 
+---
+
 ## Class passthrough
 
 `:style-class-passthrough` (string or string array) adds classes to the root `.form-field` element.
+

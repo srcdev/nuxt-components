@@ -27,7 +27,21 @@ own CSS rather than expecting a level to come with baked-in margin:
 }
 ```
 
-## Overriding one instance
+---
+
+## Local overrides
+
+There are no public tokens, so override the classes above with direct properties, scoped to an
+element you own (a page or section class, or a class added with `:style-class-passthrough`). Keep
+the block **unlayered** (no `@layer` wrapper) so it beats the library's `@layer components`. If your
+own file uses `<style scoped>`, selectors that reach inside the component need `:deep()`. Patterns
+and examples: `.claude/skills/component-local-style-override.md`.
+
+**Caveat:** size comes from the global `--step-*` type-scale tokens behind `.page-heading-*`.
+Overriding a `--step-*` token on your own element changes every `page-heading-*` inside it, not just
+this component's.
+
+### One instance
 
 Use `styleClassPassthrough` to add your own class and override `font-size`/`font-weight`/etc. for
 a single `HeaderBlock` instance without touching the shared `.page-heading-*` utility classes:
@@ -41,3 +55,4 @@ a single `HeaderBlock` instance without touching the shared `.page-heading-*` ut
   font-size: 6rem;
 }
 ```
+

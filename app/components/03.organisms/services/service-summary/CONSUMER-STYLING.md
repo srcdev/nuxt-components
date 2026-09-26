@@ -52,7 +52,7 @@ under `.service-summary__pills` — see [display-pill.md](../../../../../.claude
 
 ---
 
-## Global theming — recommended approach
+## Global theming
 
 Create `assets/styles/setup/07.components/service-summary.css` in the consuming app and
 set tokens on `:root`. This applies to every `ServiceSummary` across the site.
@@ -68,7 +68,20 @@ set tokens on `:root`. This applies to every `ServiceSummary` across the site.
 
 ---
 
-## Page-scoped overrides
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+**Caveat:** don't set `--theme-pill-bg`, `--theme-pill-color` or `--theme-pill-border-color` on an
+ancestor to restyle the pills: `ServiceSummary` re-declares them on `.service-summary__pills`, so an
+ancestor value never lands. Use the `--service-summary-pill-*` tokens, or set other
+`--theme-pill-*` tokens on `.service-summary__pills` itself (see **Pill colours** above).
+
+### Page or section
 
 Override tokens for a specific section by scoping them under the page or layout wrapper.
 No `:deep()` is required (component styles are unscoped).
@@ -82,9 +95,7 @@ No `:deep()` is required (component styles are unscoped).
 }
 ```
 
----
-
-## Per-instance overrides via styleClassPassthrough
+### One instance
 
 Use sparingly — prefer global or page-scoped CSS. When a single instance needs a distinct
 visual style, pass a modifier class:
@@ -114,3 +125,4 @@ visual style, pass a modifier class:
 - `ServiceSummary` is summary-only — it has no "full mode". For a complete single-service page
   (process, ideal-for list, FAQs, booking CTA), use
   [ServiceDetail](../../../../../.claude/skills/components/service-detail.md) instead.
+

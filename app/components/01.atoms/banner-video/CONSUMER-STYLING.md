@@ -55,7 +55,7 @@ component doesn't cover), replace it with the `toggle-icon` scoped slot, which r
 
 ---
 
-## Global theming — recommended approach
+## Global theming
 
 Create `assets/styles/setup/07.components/banner-video.css` in the consuming app and set
 tokens on `:root`. This applies to every `BannerVideo` across the site.
@@ -72,7 +72,15 @@ tokens on `:root`. This applies to every `BannerVideo` across the site.
 
 ---
 
-## Page-scoped overrides
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### Page or section
 
 Override tokens for a specific banner by scoping them under the page or layout wrapper.
 No `:deep()` is required (component styles are unscoped).
@@ -88,9 +96,7 @@ No `:deep()` is required (component styles are unscoped).
 }
 ```
 
----
-
-## Per-instance overrides via styleClassPassthrough
+### One instance
 
 Use sparingly — prefer global or page-scoped CSS. When a single instance needs a distinct
 visual style, pass a modifier class:
@@ -118,3 +124,4 @@ visual style, pass a modifier class:
   consuming apps are expected to reskin per-brand.
 - `aspectRatio`, `objectFit`, `verticalPosition`, and `horizontalPosition` are props, not
   tokens — set them directly on the component.
+

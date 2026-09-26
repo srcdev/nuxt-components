@@ -26,6 +26,18 @@ Or scope to a single instance via `styleClassPassthrough`:
 <DashboardStatsGrid style-class-passthrough="quarterly-stats">...</DashboardStatsGrid>
 ```
 
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
+
 ## Notes
 
 - Layout shape (top-row split into a multi-panel cluster + 2 static panels, bottom-row panel
@@ -39,3 +51,4 @@ Or scope to a single instance via `styleClassPassthrough`:
   between the top row and bottom row. Browser support is limited as of 2026, so it's transparent
   by default and safe to ignore — set `--dashboard-stats-grid-rule-colour` to opt in where
   supported.
+

@@ -30,6 +30,8 @@ inside an outer, wider `PageRow` — see
 notes in [page-row.md](../../../../../.claude/skills/components/page-row.md) for how nested page-rows
 compose.
 
+---
+
 ## Public token API
 
 ### Hero banner
@@ -182,7 +184,7 @@ Section headings, sidebar labels, and CTA copy are **props**, not hardcoded stri
 
 ---
 
-## Global theming — recommended approach
+## Global theming
 
 ```css
 /* assets/styles/setup/07.components/service-detail.css */
@@ -193,7 +195,21 @@ Section headings, sidebar labels, and CTA copy are **props**, not hardcoded stri
 }
 ```
 
-## Page-scoped overrides
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+**Caveat:** `ServiceDetail` re-declares `--theme-pill-bg`, `--theme-pill-color`,
+`--theme-pill-border-color` and `--breadcrumb-colour` inside its hero, so ancestor values of those
+never reach the hero pills or breadcrumb. Use the `--service-detail-hero-*` tokens instead.
+
+### Page or section
 
 ```css
 .our-services-page {
@@ -231,3 +247,4 @@ Section headings, sidebar labels, and CTA copy are **props**, not hardcoded stri
   `@container` queries against the component's own width, not the viewport — they are not tokens
   since resizing them would need corresponding `minmax()`/`grid-template-columns` changes too, not
   just spacing (same rationale as `ServiceSummary`'s `--service-summary-grid-gap-desktop`).
+

@@ -26,7 +26,7 @@ or instance) without touching the component itself.
 
 ---
 
-## Global theming — app-level CSS file
+## Global theming
 
 Create `assets/styles/setup/07.components/input-copy.css` in the consuming app and set tokens on
 `:root`. These values apply to every `InputCopy` instance across the site.
@@ -44,7 +44,15 @@ Create `assets/styles/setup/07.components/input-copy.css` in the consuming app a
 
 ---
 
-## Per-instance overrides via inline styles
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### One instance
 
 Override tokens directly on a single InputCopy instance:
 
@@ -59,9 +67,7 @@ Override tokens directly on a single InputCopy instance:
 />
 ```
 
----
-
-## Page-scoped overrides
+### Page or section
 
 When input-copy appears in a specific page context (e.g., checkout success page), scope overrides
 under the page wrapper:
@@ -141,3 +147,4 @@ Or show only the icon on mobile and text on desktop (default behavior):
 /* Default: button shows only icon on mobile, icon + text on desktop (480px+) */
 /* No override needed; this is the built-in behavior */
 ```
+

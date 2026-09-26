@@ -24,6 +24,8 @@ Or scope to a single instance via `styleClassPassthrough`:
 }
 ```
 
+---
+
 ## Layout
 
 `DisplayBanner` stacks its `canvas` and `content` slots on top of each other in a single grid
@@ -33,3 +35,14 @@ overlaid text/CTAs in `content`, since `content` follows `canvas` in the templat
 
 Both slots are conditionally rendered (`v-if="$slots.canvas"` / `v-if="$slots.content"`), so an
 unused slot contributes no empty wrapper `<div>` to the DOM.
+
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+

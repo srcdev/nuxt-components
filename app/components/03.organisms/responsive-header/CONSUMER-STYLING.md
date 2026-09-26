@@ -28,7 +28,7 @@ are documented alongside it since that's where they're consumed.
 
 ---
 
-## Global theming — recommended approach
+## Global theming
 
 Create `assets/styles/setup/07.components/responsive-header.css` in the consuming app and set
 tokens on a scope class matching the one passed via `styleClassPassthrough`:
@@ -54,6 +54,16 @@ tokens on a scope class matching the one passed via `styleClassPassthrough`:
 
 ---
 
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
+
 ## Notes
 
 - Anything with async-loaded content (an `iconName` icon on a nav item, a new decorator inside
@@ -64,3 +74,4 @@ tokens on a scope class matching the one passed via `styleClassPassthrough`:
 - `NavigationItems`' own tokens (`--overflow-nav-*`) are documented in its own skill doc since
   they style the overflow-panel's *content*, distinct from `ResponsiveHeader`'s own tokens
   above which style the top bar and the overflow *button*/*container*.
+

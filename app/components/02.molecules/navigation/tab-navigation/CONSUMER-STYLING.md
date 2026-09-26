@@ -60,7 +60,7 @@ instance) without touching the component itself.
 
 ---
 
-## Global theming — app-level CSS file
+## Global theming
 
 Create `assets/styles/setup/07.components/tab-navigation.css` in the consuming app and set tokens
 on `:root`. These values apply to every `TabNavigation` instance across the site.
@@ -79,7 +79,15 @@ on `:root`. These values apply to every `TabNavigation` instance across the site
 
 ---
 
-## Page-scoped overrides
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### Page or section
 
 Override tokens for a single page by scoping them under a page wrapper. No `:deep()` is required
 (component styles are unscoped).
@@ -95,9 +103,7 @@ Override tokens for a single page by scoping them under a page wrapper. No `:dee
 }
 ```
 
----
-
-## Per-instance overrides via inline style
+### One instance: inline style
 
 ```vue
 <TabNavigation
@@ -110,9 +116,7 @@ Override tokens for a single page by scoping them under a page wrapper. No `:dee
 />
 ```
 
----
-
-## Per-instance overrides via styleClassPassthrough
+### One instance: style-class-passthrough
 
 ```vue
 <TabNavigation :nav-item-data="navData" :style-class-passthrough="['brand-nav']" />
@@ -143,3 +147,4 @@ Override tokens for a single page by scoping them under a page wrapper. No `:dee
   the collapsed state.
 - The backdrop (`--tab-nav-backdrop-*`) appears behind the open panel and above page content at
   `z-index: 10`. It teleports to `<body>` so it is unaffected by parent stacking contexts.
+

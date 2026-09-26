@@ -32,8 +32,21 @@ Or scope to a single instance via `styleClassPassthrough`:
 }
 ```
 
+---
+
 ## Strength props apply at most one class each
 
 `borderStrength`, `shadowStrength` and `innerShadowStrength` are independent — a value of `0`
 (the default) applies no class for that decoration. All three can be combined on the same
 instance (e.g. a border and a shadow together).
+
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+

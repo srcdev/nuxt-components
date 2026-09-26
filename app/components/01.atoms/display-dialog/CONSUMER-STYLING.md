@@ -12,6 +12,8 @@ unlayered CSS always beats `@layer components` regardless of specificity. All si
 `.display-dialog-*` prefixed variants (`.display-dialog-inner`, `.display-dialog-header`, etc.) —
 update any consumer overrides written against the old names.
 
+---
+
 ## Public token API
 
 All `--display-dialog-*` tokens are the stable override surface. Because dialogs are site-wide UI
@@ -61,7 +63,7 @@ file** rather than per-instance via `styleClassPassthrough`.
 
 ---
 
-## Global theming — recommended approach
+## Global theming
 
 Create `assets/styles/setup/07.components/display-dialog.css` in the consuming app and set tokens
 on `:root`. This applies to every `DisplayDialog` across the site.
@@ -83,7 +85,15 @@ on `:root`. This applies to every `DisplayDialog` across the site.
 
 ---
 
-## Per-variant overrides
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+### Per variant
 
 The `fullscreen` variant bypasses `--_inner-border-radius`, `--_inner-border`, and
 `--_inner-outline` directly (setting them to `0`/`none`). To restyle the fullscreen panel,
@@ -105,6 +115,44 @@ target the private tokens on `.display-dialog-inner.fullscreen`:
       /* private tokens are the only lever here */
       --_inner-background: var(--brand-surface-alt);
     }
+  }
+}
+```
+
+### Page or section
+
+Because `<DisplayDialog>` renders inside the page's DOM tree (even though it is `position: fixed`),
+you can scope overrides to a specific page without affecting the rest of the site:
+
+```css
+/* In the consuming page's unscoped <style> block */
+.checkout-page {
+  .display-dialog {
+    --display-dialog-inner-border-radius: 0;
+    --display-dialog-backdrop-background: rgba(0, 0, 0, 0.8);
+
+    .display-dialog-footer {
+      justify-content: stretch;
+    }
+  }
+}
+```
+
+### One instance
+
+Use sparingly — prefer global or page-scoped CSS for dialogs. When a single instance genuinely
+needs a different look, pass a modifier class and target it alongside `.display-dialog`:
+
+```vue
+<DisplayDialog :style-class-passthrough="['danger-dialog']" ...>
+```
+
+```css
+.display-dialog.danger-dialog {
+  --display-dialog-backdrop-background: rgba(180, 0, 0, 0.4);
+
+  .display-dialog-inner {
+    --display-dialog-inner-border: 0.2rem solid var(--color-danger);
   }
 }
 ```
@@ -132,44 +180,3 @@ Target `.display-dialog-header`, `.display-dialog-content`, and `.display-dialog
 }
 ```
 
----
-
-## Page-scoped overrides
-
-Because `<DisplayDialog>` renders inside the page's DOM tree (even though it is `position: fixed`),
-you can scope overrides to a specific page without affecting the rest of the site:
-
-```css
-/* In the consuming page's unscoped <style> block */
-.checkout-page {
-  .display-dialog {
-    --display-dialog-inner-border-radius: 0;
-    --display-dialog-backdrop-background: rgba(0, 0, 0, 0.8);
-
-    .display-dialog-footer {
-      justify-content: stretch;
-    }
-  }
-}
-```
-
----
-
-## Per-instance overrides via styleClassPassthrough
-
-Use sparingly — prefer global or page-scoped CSS for dialogs. When a single instance genuinely
-needs a different look, pass a modifier class and target it alongside `.display-dialog`:
-
-```vue
-<DisplayDialog :style-class-passthrough="['danger-dialog']" ...>
-```
-
-```css
-.display-dialog.danger-dialog {
-  --display-dialog-backdrop-background: rgba(180, 0, 0, 0.4);
-
-  .display-dialog-inner {
-    --display-dialog-inner-border: 0.2rem solid var(--color-danger);
-  }
-}
-```

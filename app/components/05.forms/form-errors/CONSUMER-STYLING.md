@@ -65,7 +65,7 @@ Inner elements: `.input-error-message-inner`, `.input-error-message-content`,
 
 ---
 
-## Global theming — app-level CSS file
+## Global theming
 
 ```css
 :where(html) {
@@ -76,7 +76,19 @@ Inner elements: `.input-error-message-inner`, `.input-error-message-content`,
 
 ---
 
-## Per-section overrides
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+**Caveat:** set the `--input-error-*` tokens, not `--input-error-color` or the `--theme-error-*`
+ones: the root's `data-theme="error"` re-declares those on the element itself (see **Why component
+tokens instead of the `--theme-error-*` ones** above).
+
+### Page or section
 
 ```css
 .contact-page {
@@ -90,8 +102,11 @@ Inner elements: `.input-error-message-inner`, `.input-error-message-content`,
 }
 ```
 
+---
+
 ## Class passthrough
 
 `:style-class-passthrough` (string or string array) adds classes to the root
 `.input-error-message` element. Field wrappers don't forward it, so in practice use the tokens
 above.
+

@@ -28,6 +28,8 @@ Or scope to a single instance via `styleClassPassthrough`:
 }
 ```
 
+---
+
 ## Shapes are fixed-size, not tokenised
 
 Each `variant`'s notched/cutout shape is drawn with `clip-path: path("...")` using literal pixel
@@ -37,3 +39,14 @@ radii, notch size, overall dimensions — is **not** overridable via tokens or `
 overrides. Changing `width` on the element stretches the box without moving the clip-path
 coordinates, which will misalign the shape. If a different size or geometry is needed, that
 requires a new variant with its own `path()` string, not a CSS override.
+
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+

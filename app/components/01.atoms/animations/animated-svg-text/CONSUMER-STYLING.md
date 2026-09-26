@@ -23,6 +23,18 @@ through public CSS custom properties, consumed directly on `.animated-svg-text s
 </AnimatedSvgText>
 ```
 
+---
+
+## Local overrides
+
+Set the tokens above on an element you own (a page or section class, or a class added with
+`:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
+`@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
+`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+---
+
 ## Notes
 
 - The animation runs once on mount (`forwards`, `1` iteration) — it does not loop or replay on re-entry.
@@ -32,3 +44,4 @@ through public CSS custom properties, consumed directly on `.animated-svg-text s
   traced at a small/normalised coordinate scale — a larger `viewBox` (e.g. plain SVG `<text>` at a
   large `font-size`) needs a proportionally larger `--animated-svg-text-stroke-width` and
   `--animated-svg-text-stroke-dasharray`, or the stroke renders too thin/short to see.
+
