@@ -1,14 +1,14 @@
 /* GENERATED — edit ramps.config.mjs, not this file */
 :where(html) {
-  --orange-00: oklch(98% 0.0067 60);
-  --orange-01: oklch(94% 0.027 60);
-  --orange-02: oklch(88% 0.048 60);
-  --orange-03: oklch(80% 0.075 60);
-  --orange-04: oklch(72% 0.102 60);
-  --orange-05: oklch(64% 0.129 60);
-  --orange-06: oklch(56% 0.15 60);
-  --orange-07: oklch(48% 0.1425 60);
-  --orange-08: oklch(40% 0.129 60);
-  --orange-09: oklch(32% 0.1155 60);
-  --orange-10: oklch(25% 0.096 60);
+  --orange-00: oklch(98% 0.0086 55);
+  --orange-01: oklch(94% 0.0342 55);
+  --orange-02: oklch(88% 0.0608 55);
+  --orange-03: oklch(80% 0.095 55);
+  --orange-04: oklch(72% 0.1292 55);
+  --orange-05: oklch(64% 0.1634 55);
+  --orange-06: oklch(56% 0.19 55);
+  --orange-07: oklch(48% 0.1805 55);
+  --orange-08: oklch(40% 0.1634 55);
+  --orange-09: oklch(32% 0.1463 55);
+  --orange-10: oklch(25% 0.1216 55);
 }

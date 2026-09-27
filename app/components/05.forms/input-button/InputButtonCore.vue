@@ -224,6 +224,34 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       }
     }
 
+    /* Trial (2026-09-27): where supported, text picks black or white from its own surface, per
+       state. An explicit --input-button-{variant}-text still wins. Remove this block to revert. */
+    @supports (color: contrast-color(red)) {
+      &.primary {
+        color: var(--input-button-primary-text, contrast-color(var(--_surface)));
+
+        &:hover {
+          color: var(--input-button-primary-text, contrast-color(var(--_surface-hover)));
+        }
+      }
+
+      &.secondary {
+        color: var(--input-button-secondary-text, contrast-color(var(--_surface)));
+
+        &:hover {
+          color: var(--input-button-secondary-text, contrast-color(var(--_surface-hover)));
+        }
+      }
+
+      &.tertiary {
+        color: var(--input-button-tertiary-text, contrast-color(var(--_surface)));
+
+        &:hover {
+          color: var(--input-button-tertiary-text, contrast-color(var(--_surface-hover)));
+        }
+      }
+    }
+
     &.primary,
     &.secondary,
     &.tertiary {

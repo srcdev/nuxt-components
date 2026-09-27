@@ -60,8 +60,8 @@ Defined in `ramps.config.mjs`, generated to `_theme-params.css` as `--palette-{n
 | red    | 30  | 0.24       | Error/danger theme            |
 | green  | 157 | 0.19       | Success theme                 |
 | amber  | 75  | 0.19       |                               |
-| orange | 60  | 0.15       |                               |
-| sunset | 50  | 0.22       | Warning theme — drift: -25    |
+| orange | 55  | 0.19       | Warning theme                 |
+| sunset | 50  | 0.22       | drift: -25 (amber to red-orange) |
 | slate  | 260 | 0.02       | Near-neutral grey             |
 
 Also generates one named-step file per palette, e.g. `_blue.css` with `--blue-00` … `--blue-10`.
@@ -105,7 +105,7 @@ Additional context tokens (declared in `_default.css`):
 |--------------------|---------|----------------------------------------------|
 | `"default"`        | blue    | Page-level default                           |
 | `"success"`        | green   |                                              |
-| `"warning"`        | sunset  | Overrides surface to step 5 for warm feel    |
+| `"warning"`        | orange  | Surface step 6, hover step 7 (both modes), for AA text contrast |
 | `"error"`          | red     | Also applied on `[data-invalid]` elements    |
 
 ## Generator
@@ -158,6 +158,21 @@ Produces `_gold.css` with `--gold-00` … `--gold-10`, and adds `--palette-gold-
   --theme-chroma: var(--palette-gold-chroma);
 }
 ```
+
+1. Add a story export for it in `stories/foundations/colour-ramps/ColourRamps.stories.ts`
+   (`export const Gold: Story = rampStory("gold");`). The "All Ramps" story picks new ramps up
+   automatically, but Storybook needs a static export per ramp page.
+
+## Storybook reference (Foundations)
+
+`Foundations/Colour Ramps` in Storybook is the visual reference for this system: a Setup Guide
+(consumer instructions, `SetupGuide.mdx`), an All Ramps overview, and one page per ramp showing
+each step's oklch and hex value (flagged P3 when the hex is a clipped sRGB fallback), contrast
+against white and black text, the theme roles it plays (parsed from `03.theming/*.css`), and
+which components reference it by name (scanned from `app/` source via `import.meta.glob`).
+Everything is derived from `ramps.config.mjs` and the source, so it never needs manual
+updating beyond the per-ramp story export. It lives in the root `stories/` folder, which is not
+in the package `files` list, so it doesn't ship to consumers.
 
 ## Consumer app: generating a custom palette
 
@@ -326,3 +341,10 @@ The `useColourScheme()` composable toggles the `.light` / `.dark` class on `<htm
 | 310–360| Magenta / rose   |
 
 Use [oklch.com](https://oklch.com) to preview values before committing.
+
+> Changed 2026-09-27: `orange` moved from hue 60 / chroma 0.15 to hue 55 / chroma 0.19 (the old
+> values read as brown, not orange), and the warning theme switched from `sunset` to `orange` so
+> warning inputs, alerts, prompts and buttons read as orange rather than red-orange. `sunset`
+> remains available as a named ramp. Warning's filled surface then moved from step
+> 05 (light) / 04 (dark) to step 06 in both modes, hover step 07: step 06 is the lightest orange
+> where the near-white `--theme-on-surface` text meets AA (4.65:1; step 05 was 3.3:1).

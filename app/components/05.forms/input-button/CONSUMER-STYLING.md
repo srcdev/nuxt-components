@@ -73,6 +73,13 @@ something this token set changes. The animated border added by `has-pending-effe
 `InputCopy` and `PricingCard` fall back through `--input-button-primary-*` for their own copy/CTA
 buttons (see their own `CONSUMER-STYLING.md`) rather than duplicating this chain.
 
+> **Trial, 2026-09-27: automatic text contrast.** In browsers that support CSS `contrast-color()`
+> (Safari/iOS 26, Firefox 146, Chrome/Edge 147), an unset `--input-button-{variant}-text` resolves
+> to `contrast-color()` of that state's own surface: pure black or pure white, whichever has more
+> contrast, re-evaluated on hover. Older browsers keep the defaults in the tables above. Setting
+> the `-text` token explicitly always wins, so you can opt a variant out. The whole behaviour is
+> one `@supports` block in `InputButtonCore.vue` and may be removed if the trial doesn't hold up.
+
 ---
 
 ## Global theming

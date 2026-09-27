@@ -22,7 +22,7 @@ export const ramps = {
   red:    { hue: 30,  chroma: 0.24 },
   green:  { hue: 157, chroma: 0.19 },
   amber:  { hue: 75,  chroma: 0.19 },
-  orange: { hue: 60,  chroma: 0.15 },
+  orange: { hue: 55,  chroma: 0.19 },
   sunset: { hue: 50,  chroma: 0.22, drift: -25 },
   slate:  { hue: 260, chroma: 0.02 },
 };

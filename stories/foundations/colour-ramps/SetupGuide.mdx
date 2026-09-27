@@ -1,0 +1,125 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+import * as ColourRampsStories from "./ColourRamps.stories";
+
+<Meta of={ColourRampsStories} name="Setup Guide" />
+
+# Colour ramps: setup guide
+
+Every colour in the library comes from an 11-step oklch ramp. All ramps share one lightness and
+chroma curve (step `00` is the lightest, `10` the darkest, chroma peaks at `06`), so a ramp is
+defined by just a **hue** and a **maximum chroma**, plus an optional **hue drift**.
+
+The ramp pages alongside this guide show each ramp's values, its contrast against white and
+black text, the theme roles each step plays, and which components reference it by name.
+
+## How components use a ramp
+
+Themed components (buttons, inputs, alerts, toasts, prompts) never reference a named ramp
+directly. They read semantic tokens such as `--theme-surface`, `--theme-border` and
+`--theme-text`, which point at steps of the **active** ramp. The active ramp is chosen by two
+variables:
+
+```css
+--theme-hue: var(--palette-blue-hue);
+--theme-chroma: var(--palette-blue-chroma);
+```
+
+Setting those on any element re-themes everything inside it. The built-in themes are:
+
+| Theme | Ramp |
+|---|---|
+| Page default (`html`) | blue |
+| `data-theme="success"` | green |
+| `data-theme="warning"` | orange (lighter filled surface) |
+| `data-theme="error"`, `[data-invalid]` | red |
+
+Named steps (`--blue-06`, `--slate-01`, and so on) are for page-level tokens and one-off values
+where a component needs a specific colour rather than a theme role.
+
+## Adding or changing ramps in your app
+
+### 1. Create `ramps.config.mjs` in your project root
+
+```js
+export const ramps = {
+  // A new ramp: adds --gold-00 to --gold-10 and --palette-gold-* variables
+  gold: { hue: 85, chroma: 0.2 },
+
+  // Reusing a built-in name overrides the library's values (your CSS loads later)
+  // red: { hue: 15, chroma: 0.26 },
+
+  // Optional drift rotates the hue across the ramp, e.g. amber into red-orange
+  // copper: { hue: 45, chroma: 0.21, drift: -15 },
+};
+```
+
+### 2. Add the generator to `package.json`
+
+The generator ships with the library, so there is nothing to copy. Run it before `dev`, `build`
+and `generate` so the CSS never drifts from the config:
+
+```json
+"scripts": {
+  "generate:ramps": "node node_modules/srcdev-nuxt-components/scripts/generate-consumer-ramps.mjs",
+  "dev": "npm run generate:ramps && nuxt dev",
+  "build": "npm run generate:ramps && nuxt build",
+  "generate": "npm run generate:ramps && nuxt generate"
+}
+```
+
+### 3. Import the generated files
+
+The generator writes to `app/assets/styles/setup/02.colours/`: one `_<name>.css` file per ramp
+and a `_palette-params.css`. Import them from that folder's `index.css`:
+
+```css
+@import "./_palette-params";
+@import "./_gold";
+```
+
+Never edit the generated files by hand. They carry a `GENERATED` header and are overwritten on
+every run; all changes belong in `ramps.config.mjs`.
+
+### 4. Make it the default theme, or a named one
+
+```css
+/* app/assets/styles/setup/03.theming/_default.css */
+:where(html) {
+  --theme-hue: var(--palette-gold-hue);
+  --theme-chroma: var(--palette-gold-chroma);
+}
+
+/* Optional: available as data-theme="gold" as well */
+[data-theme="gold"] {
+  --theme-hue: var(--palette-gold-hue);
+  --theme-chroma: var(--palette-gold-chroma);
+}
+```
+
+For a drifting ramp, also set `--theme-hue-drift: var(--palette-<name>-drift);`.
+
+## Quick override without the generator
+
+To shift the whole library to another hue without named steps, set the two variables directly:
+
+```css
+:where(html) {
+  --theme-hue: 85;
+  --theme-chroma: 0.2;
+}
+```
+
+Components update automatically, but you won't get `--gold-09` style names for your own CSS.
+Use the generator whenever you need those.
+
+## Choosing values
+
+- **Hue** is the oklch angle: roughly 0 to 30 red, 30 to 70 orange, 70 to 100 gold, 100 to 160
+  green, 160 to 220 teal, 220 to 270 blue, 270 to 310 violet, 310 to 360 magenta. Preview values
+  at [oklch.com](https://oklch.com).
+- **Chroma** between 0.15 and 0.24 suits a brand colour; near 0.02 gives a tinted neutral like
+  `slate`.
+- High-chroma mid steps can fall outside sRGB. The ramp pages mark these **P3**: wide-gamut
+  screens show the full colour, and the hex shown is the clipped sRGB fallback.
+- Check the contrast column before pairing a step with text. The semantic tokens are chosen so
+  text stays readable in light and dark mode; one-off pairings of named steps are your call.

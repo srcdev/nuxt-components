@@ -6,6 +6,11 @@ import "./fonts.css";
 // works by setting html[data-color-scheme], the same hook consumer apps use (see _head.css).
 const preview: Preview = {
   parameters: {
+    options: {
+      storySort: {
+        order: ["Foundations", ["Colour Ramps", ["Setup Guide", "All Ramps", "*"]], "*"],
+      },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

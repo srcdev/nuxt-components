@@ -143,8 +143,8 @@ re-evaluates locally so each themed element gets its own full palette without af
 | red    | 30  | Error / `data-theme="error"`                      |
 | green  | 157 | Success / `data-theme="success"`                  |
 | amber  | 75  | Available for consumer use                        |
-| orange | 60  | Available for consumer use                        |
-| sunset | 50  | Warning / `data-theme="warning"` (with hue drift) |
+| orange | 55  | Warning / `data-theme="warning"`                  |
+| sunset | 50  | Available for consumer use (with hue drift)       |
 | slate  | 260 | Near-neutral grey                                 |
 
 ### Consumer app: generating a custom palette
