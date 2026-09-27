@@ -25,6 +25,9 @@ prop (`AlertMaskConfig`):
 </AlertMaskCore>
 ```
 
+Colours are applied as `fill` styles, so `borderColour`/`backgroundColour` can be `var()`
+references to your own tokens (a `var(--theme-*)` value needs a `data-theme` ancestor to resolve).
+
 All fields are optional and fall back to `backgroundColour: "rgba(0,0,0,0.25)"`,
 `borderColour: "var(--orange-08)"`, `radiusLeft`/`radiusRight: 12`, `borderLeft`/`borderTop`/
 `borderRight`/`borderBottom: 8`.

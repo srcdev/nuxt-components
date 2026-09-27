@@ -1,0 +1,35 @@
+{
+  "SRCDEV AlertMaskedContent Basic": {
+    "description": "AlertMaskedContent — alert with SVG accent-border mask and translucent fill",
+    "scope": "vue,html",
+    "body": [
+      "<AlertMaskedContent theme=\"${1|info,success,warning,error|}\">",
+      "  <template #title>$2</template>",
+      "  <template #content>$0</template>",
+      "</AlertMaskedContent>"
+    ]
+  },
+  "SRCDEV AlertMaskedContent Dismissible": {
+    "description": "AlertMaskedContent with dismiss button",
+    "scope": "vue,html",
+    "body": [
+      "<AlertMaskedContent theme=\"${1|info,success,warning,error|}\" dismissible @dismiss=\"$2\">",
+      "  <template #title>$3</template>",
+      "  <template #content>$0</template>",
+      "</AlertMaskedContent>"
+    ]
+  },
+  "SRCDEV AlertMaskedContent Custom Mask": {
+    "description": "AlertMaskedContent with custom mask geometry",
+    "scope": "vue,html",
+    "body": [
+      "<AlertMaskedContent",
+      "  theme=\"${1|info,success,warning,error|}\"",
+      "  :mask-config=\"{ radiusLeft: ${2:8}, radiusRight: ${3:4}, borderLeft: ${4:6}, borderTop: ${5:1}, borderRight: ${6:1}, borderBottom: ${7:1} }\"",
+      ">",
+      "  <template #title>$8</template>",
+      "  <template #content>$0</template>",
+      "</AlertMaskedContent>"
+    ]
+  }
+}

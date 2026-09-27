@@ -171,11 +171,45 @@ describe("AlertMaskCore", () => {
 
     // Check for defs and mask
     expect(wrapper.find("defs").exists()).toBe(true);
-    expect(wrapper.find("mask#borderMask").exists()).toBe(true);
+    const mask = wrapper.find("mask");
+    expect(mask.exists()).toBe(true);
+    expect(wrapper.find("path[mask]").attributes("mask")).toBe(`url(#${mask.attributes("id")})`);
 
     // Check for paths
     const paths = wrapper.findAll("path");
     expect(paths.length).toBe(4); // 2 in mask, 2 visible paths
+  });
+
+  it("gives each instance its own mask id so multiple masks on a page don't share one shape", async () => {
+    const wrapper = await mountSuspended({
+      components: { AlertMaskCore },
+      template: "<div><AlertMaskCore></AlertMaskCore><AlertMaskCore></AlertMaskCore></div>",
+    });
+    const ids = wrapper.findAll("mask").map((mask) => mask.attributes("id"));
+    expect(ids).toHaveLength(2);
+    expect(ids[0]).toBeTruthy();
+    expect(ids[0]).not.toBe(ids[1]);
+  });
+
+  it("hides the decorative SVG from assistive technology", async () => {
+    const wrapper = await mountSuspended(AlertMaskCore);
+    expect(wrapper.find(".alert-mask-decorator").attributes("aria-hidden")).toBe("true");
+  });
+
+  it("applies config colours as fill styles so CSS var() values resolve", async () => {
+    const wrapper = await mountSuspended(AlertMaskCore, {
+      props: { config: { borderColour: "var(--my-border)", backgroundColour: "var(--my-bg)" } },
+    });
+    const paths = wrapper.findAll(".alert-mask-decorator > path");
+    expect((paths[0]!.element as unknown as SVGElement).style.fill).toBe("var(--my-border)");
+    expect((paths[1]!.element as unknown as SVGElement).style.fill).toBe("var(--my-bg)");
+  });
+
+  it("disconnects its ResizeObserver on unmount", async () => {
+    const wrapper = await mountSuspended(AlertMaskCore);
+    const observer = mockResizeObserver.mock.results.at(-1)?.value as { disconnect: ReturnType<typeof vi.fn> };
+    wrapper.unmount();
+    expect(observer.disconnect).toHaveBeenCalled();
   });
 
   it("applies CSS custom properties for content positioning", async () => {

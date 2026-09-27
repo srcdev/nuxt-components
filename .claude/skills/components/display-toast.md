@@ -224,11 +224,11 @@ appearing behind a consumer's own sticky header.
 
 ### Masked variant
 
-Setting `appearance.masked: true` swaps `AlertContent` for `AlertMaskedContent`, which uses an SVG-based border and a semi-transparent background (`rgba(0,0,0,0.3)`) so page content is faintly visible beneath the toast.
+Setting `appearance.masked: true` swaps `AlertContent` for `AlertMaskedContent`, which uses an SVG-based border and a semi-transparent background (the theme's `--theme-surface-subtle` at 80%) so page content is faintly visible beneath the toast.
 
 The SVG border shape matches the standard toast exactly (8px left radius, 4px right, 6px accent-colour left bar via `--theme-accent`). Override any dimension or colour via a `maskConfig` prop if using `AlertMaskedContent` standalone.
 
-The inner content layout is handled by the shared `AlertContentInner` molecule — both variants reuse it. `AlertMaskedContent` overrides `--_alert-content-inner-bg: transparent` so the glass effect shows through.
+The inner content layout is handled by the shared `AlertContentInner` molecule — both variants reuse it. `AlertMaskedContent` sets `--alert-content-inner-background: transparent` so the glass effect shows through.
 
 ### Provider notes
 

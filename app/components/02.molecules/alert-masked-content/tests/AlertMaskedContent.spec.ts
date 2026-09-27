@@ -142,6 +142,26 @@ describe("AlertMaskedContent", () => {
     expect(style.getPropertyValue("--_inset-block-end")).toBe("1px");
   });
 
+  it("routes the default mask colours through public tokens", async () => {
+    const wrapper = await mountSuspended(AlertMaskedContent, { props: { theme: "info" } });
+    const paths = wrapper.findAll(".alert-mask-decorator > path");
+    expect((paths[0]!.element as unknown as SVGElement).style.fill).toBe(
+      "var(--alert-masked-content-border-colour, var(--theme-accent))"
+    );
+    expect((paths[1]!.element as unknown as SVGElement).style.fill).toBe(
+      "var(--alert-masked-content-background, color-mix(in oklab, var(--theme-surface-subtle) 80%, transparent))"
+    );
+  });
+
+  it("lets maskConfig colours replace the token defaults", async () => {
+    const wrapper = await mountSuspended(AlertMaskedContent, {
+      props: { theme: "info", maskConfig: { borderColour: "red", backgroundColour: "blue" } },
+    });
+    const paths = wrapper.findAll(".alert-mask-decorator > path");
+    expect((paths[0]!.element as unknown as SVGElement).style.fill).toBe("red");
+    expect((paths[1]!.element as unknown as SVGElement).style.fill).toBe("blue");
+  });
+
   it("merges custom maskConfig over defaults", async () => {
     const wrapper = await mountSuspended(AlertMaskedContent, {
       props: { theme: "info", maskConfig: { borderLeft: 12 } },

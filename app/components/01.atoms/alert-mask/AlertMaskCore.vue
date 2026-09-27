@@ -1,15 +1,26 @@
 <template>
   <div class="alert-mask-core" :class="[elementClasses]">
-    <svg class="alert-mask-decorator" :style="{ '--_height': svgHeight + 'px' }" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      class="alert-mask-decorator"
+      :style="{ '--_height': svgHeight + 'px' }"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+    >
       <defs>
-        <mask id="borderMask" maskUnits="userSpaceOnUse">
+        <mask :id="maskId" maskUnits="userSpaceOnUse">
           <path :d="outerPath" fill="white" />
           <path :d="innerPath" fill="black" />
         </mask>
       </defs>
 
-      <path :d="outerPath" :fill="cfg.borderColour" mask="url(#borderMask)" vector-effect="non-scaling-stroke" />
-      <path :d="innerPath" :fill="cfg.backgroundColour" />
+      <path
+        :d="outerPath"
+        :style="{ fill: cfg.borderColour }"
+        :mask="`url(#${maskId})`"
+        vector-effect="non-scaling-stroke"
+      />
+      <path :d="innerPath" :style="{ fill: cfg.backgroundColour }" />
     </svg>
 
     <div
@@ -43,9 +54,11 @@ const props = withDefaults(defineProps<Props>(), {
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
+const maskId = `alert-mask-${useId()}`;
 const alertContentRef = useTemplateRef<HTMLElement | null>("alertContentRef");
 const svgWidth = ref(0);
 const svgHeight = ref(0);
+let resizeObserver: ResizeObserver | null = null;
 
 // Update dimensions based on content
 onMounted(() => {
@@ -67,9 +80,14 @@ onMounted(() => {
   // Observe content changes
   const contentEl = alertContentRef.value;
   if (contentEl) {
-    const resizeObserver = new ResizeObserver(updateDimensions);
+    resizeObserver = new ResizeObserver(updateDimensions);
     resizeObserver.observe(contentEl);
   }
+});
+
+onBeforeUnmount(() => {
+  resizeObserver?.disconnect();
+  resizeObserver = null;
 });
 
 const cfg = computed(() => ({

@@ -67,6 +67,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 └── components/
     ├── alert-content-inner.md    — AlertContentInner: shared icon/body/dismiss molecule under AlertContent + AlertMaskedContent; app.config icon map (alertContent.icons + dismissIcon) covers all consumers
     ├── alert-mask-core.md      — AlertMaskCore: SVG border/background mask sized to slotted content via ResizeObserver, config-prop-driven geometry/colour (no CSS token API)
+    ├── alert-masked-content.md — AlertMaskedContent: AlertContentInner inside AlertMaskCore's SVG mask (accent cut-out border + translucent fill); masked variant for DisplayToast/DisplayPrompt; --alert-masked-content-* colour tokens
     ├── animated-svg-text.md    — AnimatedSvgText: inline SVG stroke-draw-then-fill animation, text slot, CSS token API
     ├── accordian-core.md       — AccordianCore indexed dynamic slots (accordian-{n}-summary/icon/content), exclusive-open grouping
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling

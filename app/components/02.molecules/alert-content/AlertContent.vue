@@ -53,6 +53,7 @@ const slots = useSlots();
 <style lang="css">
 @layer components {
   .alert-content {
+    display: grid;
     background-color: var(--theme-accent);
     border: 0.1rem solid var(--theme-border);
     border-start-start-radius: 8px;
@@ -61,7 +62,6 @@ const slots = useSlots();
     border-end-end-radius: 4px;
     padding-inline-start: 6px;
     overflow: hidden;
-
   }
 }
 </style>

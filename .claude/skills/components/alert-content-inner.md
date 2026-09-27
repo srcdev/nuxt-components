@@ -58,3 +58,11 @@ The `dismissIcon` slot (`#dismissIcon` on `AlertContent`) always wins over app.c
 
 - Do not use `AlertContentInner` directly in pages — use `AlertContent` or `AlertMaskedContent` instead.
 - `AlertMaskedContent` wraps `AlertContentInner` with a different background treatment (SVG glass border).
+- Background is the public token `--alert-content-inner-background` (default `var(--theme-surface-subtle)`).
+  `AlertMaskedContent` sets it to `transparent` on its own root so the mask shows through. Changed
+  2026-09-27: this was previously a private `--_alert-content-inner-bg` hook that
+  `AlertMaskedContent` reached into.
+- `AlertContent`'s root is `display: grid` so the inner stretches to whatever height the root is
+  given. Changed 2026-09-27: in a stretched grid/flex row (e.g. next to a taller alert) the inner
+  used to keep its content height and the root's `--theme-accent` background showed below it as a
+  thick bottom border.

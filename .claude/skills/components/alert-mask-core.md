@@ -63,6 +63,12 @@ accent-bordered alert shape.
 - An SVG outer path (rounded rect using `radiusLeft`/`radiusRight`) and inner path (the same rect
   inset by the border thicknesses) are computed from that measurement, and the region between them
   is masked to `borderColour`; the inner region is filled with `backgroundColour`.
+- Each instance gets its own mask id (`alert-mask-<useId>`), so several masks on one page don't
+  share a shape. The SVG is `aria-hidden`.
+- `borderColour`/`backgroundColour` are applied as `fill` **styles**, not attributes, so a `var()`
+  value (e.g. `var(--theme-accent)`, or a consumer token) resolves against the element's ancestors.
+  A `var(--theme-*)` colour needs a `data-theme` ancestor to resolve.
+- The `ResizeObserver` is disconnected on unmount.
 - The slot content itself sits in a separate `.alert-mask-content` div, inset by the same border
   thicknesses via internal `--_inset-*` custom properties, so it visually sits inside the drawn
   border without overlapping it.
@@ -71,7 +77,9 @@ accent-bordered alert shape.
 
 Unlike most components in this library, `AlertMaskCore` has no public `--alert-mask-core-*` CSS
 custom properties — the SVG path geometry can't be driven by `var()`, so `config` is the entire
-override surface (colour included). See CONSUMER-STYLING.md.
+override surface (colour included). Colour strings may be `var()` references, so a wrapper
+component can expose its own tokens through them (as `AlertMaskedContent` does with
+`--alert-masked-content-border-colour`/`-background`). See CONSUMER-STYLING.md.
 
 ## Notes
 
@@ -82,3 +90,9 @@ override surface (colour included). See CONSUMER-STYLING.md.
   `--_height`/`--_inset-inline-start`/`--_inset-inline-end`/`--_inset-block-start`/
   `--_inset-block-end` (they're JS-computed plumbing, not a consumer override surface — `config`
   already covers that). No behaviour change.
+- Changed 2026-09-27: the mask id was a hardcoded `borderMask`, so with more than one instance on a
+  page (e.g. stacked masked toasts) every instance used the first one's mask shape; now unique per
+  instance via `useId()`. Also: SVG marked `aria-hidden`, colours applied as `fill` styles so `var()`
+  resolves reliably, and the `ResizeObserver` is disconnected on unmount (it previously leaked).
+  Stories now render over a photo/gradient backdrop with a `data-theme` wrapper; on the plain canvas
+  they looked flat grey.

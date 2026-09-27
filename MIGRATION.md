@@ -62,7 +62,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | ActionMenuItemCore | `action-menu/ActionMenuItemCore.vue` | — | — |
 | AlertContent | `alert-content/AlertContent.vue` | — | — |
 | AlertContentInner | `alert-content/AlertContentInner.vue` | — | — |
-| AlertMaskedContent | `alert-masked-content/AlertMaskedContent.vue` | — | — |
+| AlertMaskedContent | `alert-masked-content/AlertMaskedContent.vue` | ✅ | ✅ `alert-masked-content` |
 | ContactSection | `contact-section/ContactSection.vue` | ☐ | ☐ |
 | DisplayChip | `display-chip/DisplayChip.vue` | ☐ | ☐ |
 | AccordianCore | `expandable/accordian/AccordianCore.vue` | ☐ | ☐ |

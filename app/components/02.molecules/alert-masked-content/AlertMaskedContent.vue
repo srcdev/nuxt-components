@@ -55,8 +55,8 @@ const slots = useSlots();
 
 // Shape matches AlertContent: 8px left radius, 4px right, 6px accent bar on left, 1px border elsewhere
 const resolvedMaskConfig = computed<AlertMaskConfig>(() => ({
-  borderColour: "var(--theme-accent)",
-  backgroundColour: "rgba(0, 0, 0, 0.3)",
+  borderColour: "var(--alert-masked-content-border-colour, var(--theme-accent))",
+  backgroundColour: "var(--alert-masked-content-background, color-mix(in oklab, var(--theme-surface-subtle) 80%, transparent))",
   radiusLeft: 8,
   radiusRight: 4,
   borderLeft: 6,
@@ -70,9 +70,7 @@ const resolvedMaskConfig = computed<AlertMaskConfig>(() => ({
 <style lang="css">
 @layer components {
   .alert-masked-content {
-    .alert-content-inner {
-      --_alert-content-inner-bg: transparent;
-    }
+    --alert-content-inner-background: transparent;
   }
 }
 </style>

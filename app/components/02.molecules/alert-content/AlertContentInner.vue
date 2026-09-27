@@ -77,7 +77,7 @@ const dismissIcon = computed(() => appConfig.srcdev?.alertContent?.dismissIcon ?
     grid-template-columns: auto 1fr auto;
     gap: 1.2rem;
     align-items: center;
-    background-color: var(--_alert-content-inner-bg, var(--theme-surface-subtle));
+    background-color: var(--alert-content-inner-background, var(--theme-surface-subtle));
     border-start-start-radius: 8px;
     border-end-start-radius: 8px;
     padding: 1.2rem 1.5rem;
