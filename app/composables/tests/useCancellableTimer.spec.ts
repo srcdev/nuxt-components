@@ -132,4 +132,52 @@ describe("useCancellableTimer", () => {
       expect(secondResolved).toBe(true);
     });
   });
+  describe("pause / resume", () => {
+    it("holds a pending wait while paused and resolves after resume", async () => {
+      const { wait, start, pause, resume } = useCancellableTimer();
+      start();
+
+      let resolved = false;
+      wait(100).then(() => {
+        resolved = true;
+      });
+      pause();
+      await vi.advanceTimersByTimeAsync(500);
+      expect(resolved).toBe(false);
+
+      resume();
+      await vi.advanceTimersByTimeAsync(100);
+      expect(resolved).toBe(true);
+    });
+
+    it("holds a scheduled callback while paused", async () => {
+      const { schedule, start, pause, resume } = useCancellableTimer();
+      start();
+
+      const fn = vi.fn();
+      schedule(fn, 100);
+      pause();
+      await vi.advanceTimersByTimeAsync(500);
+      expect(fn).not.toHaveBeenCalled();
+
+      resume();
+      await vi.advanceTimersByTimeAsync(100);
+      expect(fn).toHaveBeenCalledOnce();
+    });
+
+    it("stop still rejects a wait held by pause", async () => {
+      const { wait, start, stop, pause } = useCancellableTimer();
+      start();
+
+      let rejected = false;
+      wait(100).catch(() => {
+        rejected = true;
+      });
+      pause();
+      await vi.advanceTimersByTimeAsync(300);
+      stop();
+      await Promise.resolve();
+      expect(rejected).toBe(true);
+    });
+  });
 });

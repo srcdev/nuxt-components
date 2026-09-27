@@ -366,3 +366,69 @@ describe("SamaritanPrompt — word-pulse", () => {
     expect(wrapper.find(".samaritan-prompt__cursor").attributes("style")).toContain("opacity: 1");
   });
 });
+
+// ─── Accessibility, pause and slots ─────────────────────────────────────────
+
+describe("SamaritanPrompt — accessibility and pause", () => {
+  it("hides the animated content from assistive tech and exposes a polite live region", async () => {
+    const wrapper = await mountSuspended(SamaritanPrompt, { props: { messages } });
+    expect(wrapper.find(".samaritan-prompt__content").attributes("aria-hidden")).toBe("true");
+    const live = wrapper.find(".samaritan-prompt__sr-text");
+    expect(live.attributes("aria-live")).toBe("polite");
+    expect(live.attributes("aria-atomic")).toBe("true");
+    expect(live.text()).toBe("");
+  });
+
+  it("announces the full message once typed, and clears it when deleting starts", async () => {
+    const wrapper = await mountSuspended(SamaritanPrompt, {
+      props: { messages, typeSpeed: 10, holdDuration: 500, deleteSpeed: 10 },
+    });
+
+    vi.advanceTimersByTime(10 * (firstMessage.length + 1));
+    await nextTick();
+    expect(wrapper.find(".samaritan-prompt__sr-text").text()).toBe(firstMessage);
+
+    vi.advanceTimersByTime(500);
+    await nextTick();
+    expect(wrapper.find(".samaritan-prompt__sr-text").text()).toBe("");
+  });
+
+  it("stops typing while hovered and resumes on leave", async () => {
+    const wrapper = await mountSuspended(SamaritanPrompt, { props: { messages, typeSpeed: 100 } });
+    const root = wrapper.find(".samaritan-prompt");
+
+    vi.advanceTimersByTime(200);
+    await nextTick();
+    expect(wrapper.find(".samaritan-prompt__text").text()).toBe("He");
+
+    await root.trigger("pointerenter");
+    expect(root.attributes("data-paused")).toBeDefined();
+    vi.advanceTimersByTime(1000);
+    await nextTick();
+    expect(wrapper.find(".samaritan-prompt__text").text()).toBe("He");
+
+    await root.trigger("pointerleave");
+    expect(root.attributes("data-paused")).toBeUndefined();
+    vi.advanceTimersByTime(100);
+    await nextTick();
+    expect(wrapper.find(".samaritan-prompt__text").text()).toBe("Hel");
+  });
+
+  it("renders a custom cursor from the cursor slot", async () => {
+    const wrapper = await mountSuspended(SamaritanPrompt, {
+      props: { messages },
+      slots: { cursor: () => "_" },
+    });
+    expect(wrapper.find(".samaritan-prompt__cursor").text()).toBe("_");
+  });
+
+  it("updates passthrough classes when the prop changes", async () => {
+    const wrapper = await mountSuspended(SamaritanPrompt, {
+      props: { messages, styleClassPassthrough: "first-class" },
+    });
+    await wrapper.setProps({ styleClassPassthrough: "second-class" });
+    const classes = wrapper.find(".samaritan-prompt").classes();
+    expect(classes).toContain("second-class");
+    expect(classes).not.toContain("first-class");
+  });
+});

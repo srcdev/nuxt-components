@@ -2,7 +2,7 @@ import { describe, it, expect, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
 import SamaritanPromptMixed from "../SamaritanPromptMixed.vue";
-import type { MessageConfig } from "../SamaritanPromptMixed.vue";
+import type { SamaritanPromptMessageConfig as MessageConfig } from "~/types/components/samaritan-prompt";
 
 // ─── Typewriter ───────────────────────────────────────────────────────────────
 //
@@ -38,14 +38,14 @@ describe("SamaritanPromptMixed — typewriter", () => {
     expect(wrapper.find(".samaritan-prompt__stage").exists()).toBe(true);
   });
 
-  it.skip("types the first character immediately on mount", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+  it("types the first character immediately on mount", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick();
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("H");
   });
 
-  it.skip("types one character per typeSpeed tick", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+  it("types one character per typeSpeed tick", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick();
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("H");
 
@@ -55,8 +55,8 @@ describe("SamaritanPromptMixed — typewriter", () => {
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("HE");
   });
 
-  it.skip("hides cursor when typing starts", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+  it("hides cursor when typing starts", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick();
     expect(wrapper.find(".samaritan-prompt__cursor").attributes("style")).toContain("opacity: 0");
   });
@@ -166,16 +166,16 @@ describe("SamaritanPromptMixed — word-pulse", () => {
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("");
   });
 
-  it.skip("fades content out when cycle starts", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+  it("fades content out when cycle starts", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick(); // component's await nextTick() resolves → sets opacity=0
     await nextTick(); // DOM update
 
     expect(wrapper.find(".samaritan-prompt__content").attributes("style")).toContain("opacity: 0");
   });
 
-  it.skip("hides cursor when cycle starts", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+  it("hides cursor when cycle starts", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick();
     await nextTick();
 
@@ -192,8 +192,8 @@ describe("SamaritanPromptMixed — word-pulse", () => {
     expect(wrapper.find(".samaritan-prompt__cursor").attributes("style")).toContain("opacity: 1");
   });
 
-  it.skip("shows text and restores opacity after fade duration and settle delay", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+  it("shows text and restores opacity after fade duration and settle delay", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick(); // component's nextTick resolves → opacity=0, await wait(fadeDuration)
     await nextTick(); // DOM update
 
@@ -211,8 +211,8 @@ describe("SamaritanPromptMixed — word-pulse", () => {
     expect(wrapper.find(".samaritan-prompt__content").attributes("style")).toContain("opacity: 1");
   });
 
-  it.skip("fades text back out after word duration", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+  it("fades text back out after word duration", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick();
     await nextTick();
 
@@ -241,10 +241,11 @@ describe("SamaritanPromptMixed — config resolution", () => {
     // wrappers are unmounted inline in each test
   });
 
-  it.skip("falls back to global effect prop when not specified per message", async () => {
+  it("falls back to global effect prop when not specified per message", async () => {
     const wrapper = await mountSuspended(SamaritanPromptMixed, {
       props: {
         messageConfigs: [{ text: "TEST" }], // no effect
+        introDelay: 0,
         effect: "typewriter",
         typeSpeed: 100,
       },
@@ -255,10 +256,11 @@ describe("SamaritanPromptMixed — config resolution", () => {
     wrapper.unmount();
   });
 
-  it.skip("falls back to global typeSpeed when not specified per message", async () => {
+  it("falls back to global typeSpeed when not specified per message", async () => {
     const wrapper = await mountSuspended(SamaritanPromptMixed, {
       props: {
         messageConfigs: [{ text: "HI", effect: "typewriter" }],
+        introDelay: 0,
         typeSpeed: 150,
       },
     });
@@ -302,5 +304,81 @@ describe("SamaritanPromptMixed — config resolution", () => {
 
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("");
     wrapper.unmount();
+  });
+});
+
+// ─── Accessibility, pause and slots ───────────────────────────────────────────
+
+describe("SamaritanPromptMixed — accessibility and pause", () => {
+  const config: MessageConfig = {
+    text: "HI",
+    effect: "typewriter",
+    typeSpeed: 100,
+    deleteSpeed: 50,
+    holdDuration: 300,
+    pauseDuration: 100,
+  };
+
+  let wrapper: Awaited<ReturnType<typeof mountSuspended>>;
+
+  afterEach(() => {
+    wrapper?.unmount();
+  });
+
+  it("hides the animated content from assistive tech and exposes a polite live region", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
+    expect(wrapper.find(".samaritan-prompt__content").attributes("aria-hidden")).toBe("true");
+    const live = wrapper.find(".samaritan-prompt__sr-text");
+    expect(live.attributes("aria-live")).toBe("polite");
+    expect(live.attributes("aria-atomic")).toBe("true");
+  });
+
+  it("announces the full message once it is typed", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
+    await vi.advanceTimersByTimeAsync(200);
+    await nextTick();
+    expect(wrapper.find(".samaritan-prompt__sr-text").text()).toBe("HI");
+  });
+
+  it("sets data-paused on hover and removes it on leave", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+    const root = wrapper.find(".samaritan-prompt");
+    await root.trigger("pointerenter");
+    expect(root.attributes("data-paused")).toBeDefined();
+    await root.trigger("pointerleave");
+    expect(root.attributes("data-paused")).toBeUndefined();
+  });
+
+  it("stops typing while hovered and resumes on leave", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, {
+      props: { messageConfigs: [{ ...config, text: "HELLO" }], introDelay: 0 },
+    });
+    await vi.advanceTimersByTimeAsync(100);
+    await nextTick();
+    const typedBeforePause = wrapper.find(".samaritan-prompt__text").text();
+
+    await wrapper.find(".samaritan-prompt").trigger("pointerenter");
+    await vi.advanceTimersByTimeAsync(1000);
+    await nextTick();
+    expect(wrapper.find(".samaritan-prompt__text").text()).toBe(typedBeforePause);
+
+    await wrapper.find(".samaritan-prompt").trigger("pointerleave");
+    await vi.advanceTimersByTimeAsync(300);
+    await nextTick();
+    expect(wrapper.find(".samaritan-prompt__text").text().length).toBeGreaterThan(typedBeforePause.length);
+  });
+
+  it("renders a custom cursor from the cursor slot", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, {
+      props: { messageConfigs: [config] },
+      slots: { cursor: () => "_" },
+    });
+    expect(wrapper.find(".samaritan-prompt__cursor").text()).toBe("_");
+  });
+
+  it("exposes the fade duration as an inline private token", async () => {
+    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], fadeDuration: 900 } });
+    const style = (wrapper.find(".samaritan-prompt").element as HTMLElement).style;
+    expect(style.getPropertyValue("--_fade-duration")).toBe("900ms");
   });
 });

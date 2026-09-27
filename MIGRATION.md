@@ -75,8 +75,8 @@ Tracks progress toward a fully migrated component library. A component is consid
 | ProfileSection | `profile-section/ProfileSection.vue` | ☐ | ☐ |
 | CaptureQrCode | `qr-code/CaptureQrCode.vue` | ☐ | ☐ |
 | DecodeQrCode | `qr-code/DecodeQrCode.vue` | ☐ | ☐ |
-| SamaritanPrompt | `samaritan-prompt/SamaritanPrompt.vue` | ☐ | ☐ |
-| SamaritanPromptMixed | `samaritan-prompt/SamaritanPromptMixed.vue` | ☐ | ☐ |
+| SamaritanPrompt | `samaritan-prompt/SamaritanPrompt.vue` | ✅ | ✅ `samaritan-prompt` |
+| SamaritanPromptMixed | `samaritan-prompt/SamaritanPromptMixed.vue` | ✅ | ✅ `samaritan-prompt` |
 | SocialIconsList | `social-icons-list/SocialIconsList.vue` | ☐ | ☐ |
 | StepperList | `stepper-list/StepperList.vue` | ✅ | ☐ |
 

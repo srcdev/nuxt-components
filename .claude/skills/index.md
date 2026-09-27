@@ -119,7 +119,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── display-chip.md         — DisplayChip: status indicator chip overlay, CSS trig positioning, circle/square shapes, status colours, icon/label content
     ├── display-pill.md         — DisplayPill: pill/badge label with icon slot, 6 variants, 3 sizes, reversible order, full CSS token API for border/outline/colour
     ├── carousel-flip.md        — CarouselFlip: FLIP-animated carousel, carouselDataIds slot API, buttonLayout variants (sides/controls-flanking/controls-grouped-right/overlay), CSS tokens
-    ├── samaritan-prompt-mixed.md — SamaritanPromptMixed: animated text prompt, typewriter/word-pulse effects, MessageConfig API, aria-live accessibility, CSS tokens
+    ├── samaritan-prompt.md — SamaritanPrompt + SamaritanPromptMixed: animated text prompts, typewriter/word-pulse effects, MessageConfig API, pause on hover, aria-live, CSS tokens
     ├── display-toast.md          — DisplayToast (standalone v-model) + DisplayToastProvider + useToastQueue (app-wide queue): stacking, FLIP dismiss, maxVisible, SemanticTheme × 4, masked SVG glass variant
     ├── display-prompt.md         — DisplayPrompt: inline notification banner, SemanticTheme × 4, local vs parent-controlled dismiss, outlined modifier, CSS token override
     ├── expanding-panel-classic.md — ExpandingPanelClassic: grid-template-rows animation (no Baseline-2025 dependency), same API as ExpandingPanel, cross-browser animation parity trade-off

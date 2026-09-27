@@ -1,7 +1,22 @@
+const PAUSE_POLL_MS = 100;
+
 export function useCancellableTimer() {
   let _isActive = false;
+  let _isPaused = false;
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
   let rejectCurrent: (() => void) | null = null;
+
+  // While paused, a due timer re-arms itself instead of firing, so the sequence resumes where it stopped.
+  const arm = (fn: () => void, ms: number) => {
+    timeoutId = setTimeout(() => {
+      if (!_isActive) return;
+      if (_isPaused) {
+        arm(fn, PAUSE_POLL_MS);
+        return;
+      }
+      fn();
+    }, ms);
+  };
 
   const wait = (ms: number): Promise<void> =>
     new Promise((resolve, reject) => {
@@ -10,18 +25,15 @@ export function useCancellableTimer() {
         return;
       }
       rejectCurrent = reject;
-      timeoutId = setTimeout(() => {
+      arm(() => {
         rejectCurrent = null;
-        if (_isActive) resolve();
-        else reject();
+        resolve();
       }, ms);
     });
 
   const schedule = (fn: () => void, ms: number) => {
     if (!_isActive) return;
-    timeoutId = setTimeout(() => {
-      if (_isActive) fn();
-    }, ms);
+    arm(fn, ms);
   };
 
   const stop = () => {
@@ -38,5 +50,13 @@ export function useCancellableTimer() {
     _isActive = true;
   };
 
-  return { wait, schedule, stop, start };
+  const pause = () => {
+    _isPaused = true;
+  };
+
+  const resume = () => {
+    _isPaused = false;
+  };
+
+  return { wait, schedule, stop, start, pause, resume };
 }

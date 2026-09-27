@@ -1,32 +1,30 @@
 <template>
-  <div :class="['samaritan-prompt', elementClasses]">
+  <div
+    :class="['samaritan-prompt', elementClasses]"
+    :style="{ '--_fade-duration': fadeDurationCss }"
+    :data-paused="isPaused || undefined"
+    @pointerenter="pause"
+    @pointerleave="resume"
+  >
     <div class="samaritan-prompt__content" :style="{ opacity: textOpacity }" aria-hidden="true">
       <div class="samaritan-prompt__stage">
         <span class="samaritan-prompt__text">{{ displayText }}</span>
       </div>
       <div class="samaritan-prompt__underline"></div>
     </div>
-    <span class="samaritan-prompt__cursor" :style="{ opacity: cursorOpacity }" aria-hidden="true">▲</span>
+    <span class="samaritan-prompt__cursor" :style="{ opacity: cursorOpacity }" aria-hidden="true">
+      <slot name="cursor">▲</slot>
+    </span>
     <span class="samaritan-prompt__sr-text" aria-live="polite" aria-atomic="true">{{ announcedText }}</span>
   </div>
 </template>
 
 <script setup lang="ts">
-export interface MessageConfig {
-  text: string;
-  effect?: "typewriter" | "word-pulse";
-  typeSpeed?: number;
-  deleteSpeed?: number;
-  holdDuration?: number;
-  pauseDuration?: number;
-  wordDuration?: number;
-  fadeDuration?: number;
-  hideCursorInCycle?: boolean;
-}
+import type { SamaritanPromptEffect, SamaritanPromptMessageConfig } from "~/types/components/samaritan-prompt";
 
 interface Props {
-  messageConfigs: MessageConfig[];
-  effect?: "typewriter" | "word-pulse";
+  messageConfigs: SamaritanPromptMessageConfig[];
+  effect?: SamaritanPromptEffect;
   typeSpeed?: number;
   deleteSpeed?: number;
   holdDuration?: number;
@@ -51,21 +49,38 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 
 const displayText = ref("");
 const announcedText = ref("");
 const textOpacity = ref(1);
 const cursorVisible = ref(true);
+const isPaused = ref(false);
 const activeFadeDuration = ref(props.fadeDuration);
 const fadeDurationCss = computed(() => `${activeFadeDuration.value}ms`);
 const cursorOpacity = computed(() => (cursorVisible.value ? 1 : 0));
 
-const { wait, stop, start } = useCancellableTimer();
+const timer = useCancellableTimer();
+const { wait, stop, start } = timer;
 
-type ResolvedConfig = Required<MessageConfig>;
+const pause = () => {
+  isPaused.value = true;
+  timer.pause();
+};
 
-const resolveConfig = (msg: MessageConfig): ResolvedConfig => ({
+const resume = () => {
+  isPaused.value = false;
+  timer.resume();
+};
+
+type ResolvedConfig = Required<SamaritanPromptMessageConfig>;
+
+const resolveConfig = (msg: SamaritanPromptMessageConfig): ResolvedConfig => ({
   text: msg.text,
   effect: msg.effect ?? props.effect,
   typeSpeed: msg.typeSpeed ?? props.typeSpeed,
@@ -136,8 +151,6 @@ const runLoop = async () => {
     while (true) {
       if (props.introDelay > 0) await wait(props.introDelay);
 
-      // if (props.hideCursorInCycle) cursorVisible.value = false;
-
       for (const msg of props.messageConfigs) {
         const config = resolveConfig(msg);
         if (config.effect === "typewriter") {
@@ -146,8 +159,6 @@ const runLoop = async () => {
           await runWordPulse(config);
         }
       }
-
-      // if (props.hideCursorInCycle) cursorVisible.value = true;
     }
   } catch {
     // component unmounted — exit cleanly
@@ -175,37 +186,23 @@ onUnmounted(stop);
   font-display: optional;
 }
 
-.samaritan-stage {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-block-size: 100dvh;
-  width: 100%;
-
+@layer components {
   .samaritan-prompt {
-    --_font-size: var(--samaritan-font-size, 2rem);
-    --_color-text: var(--samaritan-color-text, #ffffff);
-    --_color-underline: var(--samaritan-color-underline, #ffffff);
-    --_color-cursor: var(--samaritan-color-cursor, #cc0000);
-    --_color-cursor-off: var(--samaritan-color-cursor-off, transparent);
-    --_font-family: var(--samaritan-font-family, "Mono MMM 5", "Nova Mono", "Courier New", monospace);
-    --_letter-spacing: var(--samaritan-letter-spacing, 0.08em);
-
     display: flex;
     flex-direction: column;
     align-items: center;
-    row-gap: 0.6rem;
-    font-family: var(--_font-family);
-    font-size: var(--_font-size);
-    letter-spacing: var(--_letter-spacing);
+    row-gap: var(--samaritan-prompt-cursor-gap, 0.6rem);
+    font-family: var(--samaritan-prompt-font-family, "Mono MMM 5", "Nova Mono", "Courier New", monospace);
+    font-size: var(--samaritan-prompt-font-size, 2rem);
+    letter-spacing: var(--samaritan-prompt-letter-spacing, 0.08em);
 
     .samaritan-prompt__content {
       display: flex;
       flex-direction: column;
       align-items: center;
-      row-gap: 0.6rem;
+      row-gap: var(--samaritan-prompt-underline-gap, 0.6rem);
       width: 100%;
-      transition: opacity v-bind(fadeDurationCss) ease;
+      transition: opacity var(--_fade-duration, 400ms) ease;
 
       .samaritan-prompt__stage {
         display: flex;
@@ -213,26 +210,30 @@ onUnmounted(stop);
         min-height: 1.2em;
 
         .samaritan-prompt__text {
-          color: var(--_color-text);
+          color: var(--samaritan-prompt-text-colour, #ffffff);
           white-space: nowrap;
-          text-transform: uppercase;
+          text-transform: var(--samaritan-prompt-text-transform, uppercase);
         }
       }
 
       .samaritan-prompt__underline {
         width: 100%;
         min-width: 4ch;
-        height: 0.15rem;
-        background: var(--_color-underline);
+        height: var(--samaritan-prompt-underline-height, 0.15rem);
+        background: var(--samaritan-prompt-underline-colour, #ffffff);
       }
     }
 
     .samaritan-prompt__cursor {
-      color: var(--_color-cursor);
-      font-size: 2.4rem;
+      color: var(--samaritan-prompt-cursor-colour, #cc0000);
+      font-size: var(--samaritan-prompt-cursor-size, 2.4rem);
       line-height: 1;
-      animation: samaritan-pulse 2.5s ease-in-out infinite;
+      animation: samaritan-prompt-pulse var(--samaritan-prompt-cursor-pulse-duration, 2.5s) ease-in-out infinite;
       transition: opacity 400ms ease;
+    }
+
+    &[data-paused] .samaritan-prompt__cursor {
+      animation-play-state: paused;
     }
 
     .samaritan-prompt__sr-text {
@@ -247,27 +248,27 @@ onUnmounted(stop);
       border: 0;
     }
   }
-}
 
-@media (prefers-reduced-motion: reduce) {
-  .samaritan-prompt {
-    .samaritan-prompt__content {
-      transition: none;
-    }
+  @media (prefers-reduced-motion: reduce) {
+    .samaritan-prompt {
+      .samaritan-prompt__content {
+        transition: none;
+      }
 
-    .samaritan-prompt__cursor {
-      animation: none;
+      .samaritan-prompt__cursor {
+        animation: none;
+      }
     }
   }
 }
 
-@keyframes samaritan-pulse {
+@keyframes samaritan-prompt-pulse {
   0%,
   100% {
-    color: var(--_color-cursor);
+    color: var(--samaritan-prompt-cursor-colour, #cc0000);
   }
   50% {
-    color: var(--_color-cursor-off);
+    color: var(--samaritan-prompt-cursor-colour-off, transparent);
   }
 }
 </style>

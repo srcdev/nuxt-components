@@ -1,0 +1,60 @@
+{
+  "SRCDEV SamaritanPrompt Basic": {
+    "description": "SamaritanPrompt — loops plain-string messages with one effect",
+    "scope": "vue,html",
+    "body": [
+      "<SamaritanPrompt :messages=\"[${1:'Can you hear me?', 'Surveillance active'}]\" />"
+    ]
+  },
+  "SRCDEV SamaritanPrompt Full": {
+    "description": "SamaritanPrompt with effect, timings, cursor slot and class passthrough",
+    "scope": "vue,html",
+    "body": [
+      "<SamaritanPrompt",
+      "  :messages=\"${1:messages}\"",
+      "  effect=\"${2|typewriter,word-pulse|}\"",
+      "  :type-speed=\"${3:80}\"",
+      "  :delete-speed=\"${4:40}\"",
+      "  :hold-duration=\"${5:2000}\"",
+      "  :pause-duration=\"${6:500}\"",
+      "  :word-duration=\"${7:1200}\"",
+      "  :fade-duration=\"${8:400}\"",
+      "  :hide-cursor-in-cycle=\"${9|true,false|}\"",
+      "  :style-class-passthrough=\"['${10:my-prompt}']\"",
+      ">",
+      "  <template #cursor>${11:▲}</template>",
+      "</SamaritanPrompt>"
+    ]
+  },
+  "SRCDEV SamaritanPromptMixed": {
+    "description": "SamaritanPromptMixed — per-message effect and timing",
+    "scope": "vue,html",
+    "body": [
+      "<SamaritanPromptMixed",
+      "  :message-configs=\"${1:messageConfigs}\"",
+      "  :intro-delay=\"${2:2000}\"",
+      "  :hide-cursor-in-cycle=\"${3|true,false|}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV SamaritanPromptMixed Data": {
+    "description": "SamaritanPromptMixed messages (import type { SamaritanPromptMessageConfig } from \"srcdev-nuxt-components\")",
+    "scope": "typescript,vue",
+    "body": [
+      "const ${1:messageConfigs}: SamaritanPromptMessageConfig[] = [",
+      "  { text: \"${2:Good evening}\", effect: \"typewriter\", holdDuration: ${3:3500} },",
+      "  { text: \"${4:Stand by}\", effect: \"word-pulse\", wordDuration: ${5:2500} },",
+      "];"
+    ]
+  },
+  "SRCDEV SamaritanPrompt Tokens": {
+    "description": "SamaritanPrompt / SamaritanPromptMixed CSS token overrides",
+    "scope": "css,vue",
+    "body": [
+      "--samaritan-prompt-font-size: ${1:2rem};",
+      "--samaritan-prompt-text-colour: ${2:var(--theme-text)};",
+      "--samaritan-prompt-underline-colour: ${3:var(--theme-text)};",
+      "--samaritan-prompt-cursor-colour: ${4:#cc0000};"
+    ]
+  }
+}
