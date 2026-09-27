@@ -1,0 +1,40 @@
+{
+  "SRCDEV OpeningHours Basic": {
+    "description": "OpeningHours — weekly opening hours table",
+    "scope": "vue,html",
+    "body": [
+      "<OpeningHours :days=\"${1:openingDays}\" time-zone=\"${2:Europe/London}\" />"
+    ]
+  },
+  "SRCDEV OpeningHours Full": {
+    "description": "OpeningHours with exceptions, 12-hour display and JSON-LD",
+    "scope": "vue,html",
+    "body": [
+      "<OpeningHours",
+      "  :days=\"${1:openingDays}\"",
+      "  :exceptions=\"${2:specialDates}\"",
+      "  :hour12=\"${3|false,true|}\"",
+      "  time-zone=\"${4:Europe/London}\"",
+      "  :structured-data=\"{ type: '${5:LocalBusiness}', name: '${6:Business name}', id: '${7:https://example.com/#business}' }\"",
+      "/>"
+    ]
+  },
+  "SRCDEV OpeningHours Data": {
+    "description": "OpeningHours days + exceptions (import type { OpeningDay, OpeningException } from \"srcdev-nuxt-components\")",
+    "scope": "typescript,vue",
+    "body": [
+      "const ${1:openingDays}: OpeningDay[] = [",
+      "  { day: 0, sessions: [{ opens: \"${2:09:00}\", closes: \"${3:17:30}\" }] }, // Monday",
+      "  { day: 1, sessions: [{ opens: \"$2\", closes: \"$3\" }] },",
+      "  { day: 2, sessions: [{ opens: \"$2\", closes: \"$3\" }] },",
+      "  { day: 3, sessions: [{ opens: \"$2\", closes: \"$3\" }] },",
+      "  { day: 4, sessions: [{ opens: \"$2\", closes: \"$3\" }] },",
+      "  { day: 5, sessions: [{ opens: \"$2\", closes: \"$3\" }] }, // Saturday; Sunday omitted = closed",
+      "];",
+      "",
+      "const ${4:specialDates}: OpeningException[] = [",
+      "  { from: \"${5:2026-12-25}\", to: \"${6:2026-12-26}\", label: \"${7:Christmas}\" },",
+      "];"
+    ]
+  }
+}
