@@ -1,8 +1,8 @@
 <template>
   <component :is="tag" class="profile-section" :class="[elementClasses]" :aria-labelledby="ariaLabelledby">
     <header class="profile-section-header">
-      <slot v-if="hasEyebrowTextSlot" name="eyebrowText"></slot>
-      <slot v-if="hasHeroTextSlot" name="heroText" :heading-id="headingId"></slot>
+      <slot v-if="hasEyebrowTextSlot()" name="eyebrowText"></slot>
+      <slot v-if="hasHeroTextSlot()" name="heroText" :heading-id="headingId"></slot>
     </header>
 
     <div class="profile-section-inner">
@@ -18,7 +18,7 @@
           </div>
         </div>
 
-        <div v-if="hasProfileLinksSlot" class="profile-links">
+        <div v-if="hasProfileLinksSlot()" class="profile-links">
           <slot name="profileLinks">
             <p>Profile links content</p>
           </slot>
@@ -49,9 +49,9 @@ const props = withDefaults(defineProps<Props>(), {
 const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
 
 const slots = useSlots();
-const hasEyebrowTextSlot = computed(() => Boolean(slots.eyebrowText));
-const hasHeroTextSlot = computed(() => Boolean(slots.heroText));
-const hasProfileLinksSlot = computed(() => Boolean(slots.profileLinks));
+const hasEyebrowTextSlot = () => Boolean(slots.eyebrowText);
+const hasHeroTextSlot = () => Boolean(slots.heroText);
+const hasProfileLinksSlot = () => Boolean(slots.profileLinks);
 
 const profileInfoSlots = computed(() => {
   const provided = Object.keys(slots)

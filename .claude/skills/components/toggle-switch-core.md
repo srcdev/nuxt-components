@@ -28,7 +28,7 @@ than `ToggleSwitchCore` directly.
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the root element. |
 | `:theme` | `FormUiTheme` | `"default"` | Sets `data-theme` on the root (superseded by `"error"` when `field-has-error` is true — see above). |
 | `:round` | `boolean` | `true` | `true` renders a pill-shaped track/thumb (`border-radius: 100vw`); `false` renders a rounded-square shape (`border-radius: 0.4rem`). See the `--toggle-switch-border-radius` token in CONSUMER-STYLING.md to override the exact value either state produces. |
-| `:aria-describedby` | `string` | `""` | Forwarded to the native checkbox. |
+| `:aria-describedby` | `string` | `""` | Forwarded to the native checkbox (omitted when empty). Changed 2026-09-27: it was ignored before, and the checkbox always pointed at `<id>-description` whether or not that element existed, so `ToggleSwitchWithLabel`'s error-message id never reached it. |
 
 ### v-model
 

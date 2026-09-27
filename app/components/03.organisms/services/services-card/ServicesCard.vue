@@ -1,9 +1,9 @@
 <template>
   <component
-    :is="resolvedTag"
-    :href="isClickable ? props.href : undefined"
+    :is="resolvedTag()"
+    :href="isClickable() ? props.href : undefined"
     class="services-card"
-    :class="[elementClasses, { 'is-clickable': isClickable }]"
+    :class="[elementClasses, { 'is-clickable': isClickable() }]"
   >
     <div class="image-wrapper">
       <NuxtImg :src="serviceData.image" :alt="serviceData.title" loading="lazy" class="image" />
@@ -27,8 +27,8 @@
       <div class="description">
         {{ serviceData.shortDescription }}
       </div>
-      <div v-if="hasFooter" class="footer">
-        <div v-if="hasMeta" class="meta">
+      <div v-if="hasFooter()" class="footer">
+        <div v-if="hasMeta()" class="meta">
           <div class="meta-duration">
             <slot name="duration" :service-data="serviceData">{{ durationText }}</slot>
           </div>
@@ -89,21 +89,21 @@ const NuxtLink = resolveComponent("NuxtLink");
 
 const durationText = computed(() => props.durationText ?? props.serviceData.duration);
 const priceText = computed(() => props.priceText ?? props.serviceData.price);
-const hasMeta = computed(() => Boolean(slots.duration || slots.price || durationText.value || priceText.value));
+const hasMeta = () => Boolean(slots.duration || slots.price || durationText.value || priceText.value);
 // Groups the meta row and actions slot so they can be pushed to the bottom of the card as
 // one unit — keeps them aligned across a row of cards in ServicesCardGrid regardless of how
 // long each card's description is, without needing per-row CSS subgrid across components.
-const hasFooter = computed(() => Boolean(hasMeta.value || slots.actions));
+const hasFooter = () => Boolean(hasMeta() || slots.actions);
 
 // Whole card is clickable only when there's no actions slot to hold its own interactive
 // content (which would otherwise end up nested inside the card's own anchor) and an href is set
-const isClickable = computed(() => Boolean(!slots.actions && props.href));
-const isInternalLink = computed(() => isClickable.value && props.href!.startsWith("/") && !props.external);
-const resolvedTag = computed(() => {
-  if (!isClickable.value) return props.tag;
-  if (isInternalLink.value) return NuxtLink;
+const isClickable = () => Boolean(!slots.actions && props.href);
+const isInternalLink = () => isClickable() && props.href!.startsWith("/") && !props.external;
+const resolvedTag = () => {
+  if (!isClickable()) return props.tag;
+  if (isInternalLink()) return NuxtLink;
   return "a";
-});
+};
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 

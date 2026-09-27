@@ -1,3 +1,7 @@
+
+> **Changed 2026-09-27**: `--service-detail-hero-pill-bg` (and the hero text colour on the pills)
+> never applied before, because `DisplayPill`'s `neutral` variant ignored the base tokens. It now
+> falls back to them, so the hero pills are transparent with the hero text colour as documented.
 # ServiceDetail — Consumer Styling Guide
 
 ## Layout building blocks
@@ -48,7 +52,7 @@ compose.
 | `--service-detail-hero-text-colour` | `white` | Colour of the breadcrumb, eyebrow, and title over the hero image |
 | `--service-detail-breadcrumb-margin-block-end` | `0.8rem` | Space below the breadcrumb |
 | `--service-detail-hero-pills-gap` | `0.8rem` | Gap between the duration and price pills |
-| `--service-detail-hero-pill-bg` | `transparent` | Background of the price/duration pills (via `DisplayPill`'s `--theme-pill-bg`) |
+| `--service-detail-hero-pill-bg` | `transparent` | Background of the price/duration pills (via `DisplayPill`'s `--display-pill-background`) |
 | `--service-detail-hero-pill-border-colour` | `currentColor` | Border colour of the price/duration pills |
 
 The hero image is always `object-fit: cover` (not tokened) — only its anchor point changes
@@ -205,8 +209,8 @@ Set the tokens above on an element you own (a page or section class, or a class 
 `<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
 `:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
 
-**Caveat:** `ServiceDetail` re-declares `--theme-pill-bg`, `--theme-pill-color`,
-`--theme-pill-border-color` and `--breadcrumb-colour` inside its hero, so ancestor values of those
+**Caveat:** `ServiceDetail` re-declares `--display-pill-background`, `--display-pill-text-colour`,
+`--display-pill-border-colour` and `--breadcrumb-colour` inside its hero, so ancestor values of those
 never reach the hero pills or breadcrumb. Use the `--service-detail-hero-*` tokens instead.
 
 ### Page or section

@@ -8,8 +8,8 @@ A classic pill/badge component for displaying status labels, tags, or metadata. 
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `tag` | `"span" \| "div" \| "button" \| "a"` | `"span"` | Root element. Use `"button"` or `"a"` for interactive pills — cursor auto-switches to pointer |
-| `label` | `string` | `undefined` | Pill text. When set, renders inside `.pill-label` and suppresses the default slot |
+| `tag` | `"span" \| "div" \| "button" \| "a"` | `"span"` | Root element. Use `"button"` or `"a"` for interactive pills: cursor switches to pointer and a `:focus-visible` outline is shown. A `button` gets `type="button"`; pass `href` (falls through) for an `a`. |
+| `label` | `string` | `undefined` | Pill text. When set, renders inside `.display-pill-label` and suppresses the default slot |
 | `size` | `"sm" \| "md" \| "lg"` | `"md"` | Size variant |
 | `variant` | `"default" \| "primary" \| "success" \| "warning" \| "danger" \| "neutral"` | `"default"` | Colour variant |
 | `reversed` | `boolean` | `false` | Reverses icon/label order (`flex-direction: row-reverse`) |
@@ -19,7 +19,7 @@ A classic pill/badge component for displaying status labels, tags, or metadata. 
 
 | Slot | Description |
 |------|-------------|
-| `icon` | Icon content — rendered before the label by default, after when `reversed=true` |
+| `icon` | Icon content, wrapped in `.display-pill-icon` (sized by `--display-pill-icon-size`) — rendered before the label by default, after when `reversed=true` |
 | `default` | Custom label content — only used when the `label` prop is not set |
 
 ## Basic usage
@@ -67,57 +67,9 @@ When `label` is not set, the default slot is rendered instead:
 
 ## CSS token API
 
-All tokens follow the `--theme-pill-*` convention and fall back to project colour tokens.
+Full token list in `CONSUMER-STYLING.md` next to the component. All tokens are `--display-pill-*` (renamed from `--theme-pill-*` on 2026-09-27; `bg`/`color` became `background`/`text-colour`).
 
-### Colour
-
-| Token | Default |
-|-------|---------|
-| `--theme-pill-bg` | `var(--slate-01)` |
-| `--theme-pill-color` | `var(--slate-09)` |
-| `--theme-pill-primary-bg` | `var(--blue-01)` |
-| `--theme-pill-primary-color` | `var(--blue-09)` |
-| `--theme-pill-success-bg` | `var(--green-01)` |
-| `--theme-pill-success-color` | `var(--green-10)` |
-| `--theme-pill-warning-bg` | `var(--yellow-08, #fef9c3)` |
-| `--theme-pill-warning-color` | `var(--yellow-03, #a16207)` |
-| `--theme-pill-danger-bg` | `var(--red-01)` |
-| `--theme-pill-danger-color` | `var(--red-10)` |
-| `--theme-pill-neutral-bg` | `var(--slate-08)` |
-| `--theme-pill-neutral-color` | `var(--slate-03)` |
-
-### Border
-
-| Token | Default |
-|-------|---------|
-| `--theme-pill-border-color` | `transparent` |
-| `--theme-pill-border-width` | `1px` |
-| `--theme-pill-border-style` | `solid` |
-| `--theme-pill-border-radius` | `100vw` |
-
-### Outline
-
-| Token | Default |
-|-------|---------|
-| `--theme-pill-outline` | `none` |
-| `--theme-pill-outline-offset` | `0px` |
-
-### Typography & spacing
-
-| Token | Default |
-|-------|---------|
-| `--theme-pill-font-size` | `1.2rem` |
-| `--theme-pill-font-size-sm` | `1rem` |
-| `--theme-pill-font-size-lg` | `1.4rem` |
-| `--theme-pill-font-weight` | `500` |
-| `--theme-pill-padding-x` | `1rem` |
-| `--theme-pill-padding-y` | `0.4rem` |
-| `--theme-pill-gap` | `0.5rem` |
-| `--theme-pill-icon-size` | `1.4rem` |
-
-## Theming via styleClassPassthrough
-
-Override tokens by targeting `.your-class.display-pill` — no `:deep()` needed:
+Colour resolves as **variant token → base token → variant default**: `--display-pill-background`/`-text-colour` restyle every variant; `--display-pill-success-background` etc. win for that variant only. Sizes have `-sm`/`-lg` suffixed tokens for font size, padding and icon size. The icon side of a pill gets `--display-pill-padding-inline-icon` (tighter than `--display-pill-padding-inline`), placed by `data-icon-position` (`start`, `end` when `reversed`, `only` for icon-only, absent with no icon), so label-only pills stay evenly padded.
 
 ```vue
 <DisplayPill label="New" variant="primary" style-class-passthrough="pill-new" />
@@ -125,33 +77,22 @@ Override tokens by targeting `.your-class.display-pill` — no `:deep()` needed:
 
 ```css
 .pill-new.display-pill {
-  --theme-pill-primary-bg: var(--green-01);
-  --theme-pill-primary-color: var(--green-10);
-  --theme-pill-border-color: currentColor;
-  --theme-pill-border-width: 1.5px;
-}
-```
-
-## Border and outline examples
-
-```css
-/* Solid border */
-.bordered.display-pill {
-  --theme-pill-border-color: currentColor;
-  --theme-pill-border-width: 1.5px;
+  --display-pill-primary-background: var(--green-01);
+  --display-pill-primary-text-colour: var(--green-10);
+  --display-pill-border-colour: currentColor;
+  --display-pill-border-width: 0.15rem;
 }
 
 /* Dashed border */
 .dashed.display-pill {
-  --theme-pill-border-color: currentColor;
-  --theme-pill-border-width: 1.5px;
-  --theme-pill-border-style: dashed;
+  --display-pill-border-colour: currentColor;
+  --display-pill-border-style: dashed;
 }
 
-/* Focus-ring style outline */
-.outlined.display-pill {
-  --theme-pill-outline: 2px solid currentColor;
-  --theme-pill-outline-offset: 3px;
+/* Decorative outline ring */
+.ringed.display-pill {
+  --display-pill-outline: 0.2rem solid currentColor;
+  --display-pill-outline-offset: 0.3rem;
 }
 ```
 
@@ -160,3 +101,4 @@ Override tokens by targeting `.your-class.display-pill` — no `:deep()` needed:
 - `border-radius` defaults to `100vw` — this always collapses to the tightest possible radius on the shorter axis, making it geometry-independent (no magic number needed).
 - `cursor: default` and `user-select: none` are applied unconditionally. `cursor: pointer` is applied automatically via `:is(button, a)` when `tag` is interactive.
 - All variant colour pairs use a light-tint background (`--color-01`) with a dark text colour (`--color-09`/`--color-10`) to ensure WCAG AA contrast. The project colour scale runs `00` (lightest) → `10` (darkest) — the opposite of Tailwind.
+- 2026-09-27 migration: tokens renamed `--theme-pill-*` → `--display-pill-*`; variants now fall back to the base colour tokens (so `ServiceSummary`/`ServiceDetail`'s pill overrides finally apply); `warning` moved from a non-existent `--yellow-*` ramp (hex fallbacks) to `--orange-01`/`--orange-10`; icon slot wrapped and sized (the icon-size tokens were unused); `.pill-label` → `.display-pill-label`; `button` pills get `type="button"` and a visible focus outline (the base `outline: none` suppressed it); single-use private pass-throughs inlined.

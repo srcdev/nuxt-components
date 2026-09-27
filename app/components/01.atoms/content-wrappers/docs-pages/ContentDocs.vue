@@ -1,7 +1,7 @@
 <template>
   <component :is="tag" ref="rootEl" class="content-docs" :class="[elementClasses]">
     <div class="content-docs-inner">
-      <div v-if="hasDocsContent" class="docs-content">
+      <div v-if="hasDocsContent()" class="docs-content">
         <slot name="docsContent"></slot>
       </div>
       <div v-if="hasDocsNav" class="docs-nav">
@@ -123,7 +123,7 @@ const NuxtLink = resolveComponent("NuxtLink");
 
 const slots = useSlots();
 const hasDocsNav = computed(() => props.docsNavItems.length > 0);
-const hasDocsContent = computed(() => !!slots.docsContent);
+const hasDocsContent = () => !!slots.docsContent;
 const hasDocsPageNav = computed(() => props.docsPageNavItems.length > 0);
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);

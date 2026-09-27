@@ -119,7 +119,7 @@ briefly) — don't skip silently.
      library's own styles are never scoped); link the guide. Then add a **Caveat** only where this
      component breaks that model, most often a token it re-declares on its own elements (so an
      ancestor value never lands, e.g. `DisplayThemeSwitch`'s sizing tokens, `ServiceSummary`'s
-     `--theme-pill-*`, `InputError`'s `data-theme`), or a wrapper that doesn't forward
+     `--display-pill-*`, `InputError`'s `data-theme`), or a wrapper that doesn't forward
      passthrough. Check with a grep for `^\s*--<name>-[\w-]+\s*:` in the component's `<style>`.
      Existing examples can stay as `###` subsections (`Page or section`, `One instance`).
    - `## Recipe: <name>` — optional, for component-specific patterns that need several tokens

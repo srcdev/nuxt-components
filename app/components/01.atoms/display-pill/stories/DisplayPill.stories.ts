@@ -76,9 +76,7 @@ const Template: StoryFn<StoryArgs> = (args) => ({
         :reversed="args.reversed"
       >
         <template v-if="args.showIcon" #icon>
-          <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <circle cx="12" cy="12" r="5" />
-          </svg>
+          <Icon name="material-symbols:check-circle-outline" />
         </template>
       </StorybookComponent>
     </div>
@@ -86,3 +84,58 @@ const Template: StoryFn<StoryArgs> = (args) => ({
 });
 
 export const Default = Template.bind({});
+
+const variants = ["default", "primary", "success", "warning", "danger", "neutral"] as const;
+
+export const AllVariants: StoryFn<StoryArgs> = (args) => ({
+  components: { StorybookComponent },
+  setup() {
+    return { args, variants };
+  },
+  template: `
+    <div style="display: flex; align-items: center; justify-content: center; min-height: 100vh; gap: 1.6rem; flex-wrap: wrap;">
+      <StorybookComponent
+        v-for="variant in variants"
+        :key="variant"
+        :tag="args.tag"
+        :label="variant"
+        :size="args.size"
+        :variant="variant"
+        :reversed="args.reversed"
+      >
+        <template v-if="args.showIcon" #icon>
+          <Icon name="material-symbols:check-circle-outline" />
+        </template>
+      </StorybookComponent>
+    </div>
+  `,
+});
+AllVariants.argTypes = { variant: { table: { disable: true } }, label: { table: { disable: true } } };
+
+export const OutlinedViaBaseTokens: StoryFn<StoryArgs> = (args) => ({
+  components: { StorybookComponent },
+  setup() {
+    return { args, variants };
+  },
+  template: `
+    <div
+      style="
+        display: flex; align-items: center; justify-content: center; min-height: 100vh; gap: 1.6rem; flex-wrap: wrap;
+        --display-pill-background: transparent;
+        --display-pill-text-colour: #1e293b;
+        --display-pill-border-colour: currentColor;
+      "
+    >
+      <StorybookComponent v-for="variant in variants" :key="variant" :label="variant" :size="args.size" :variant="variant" />
+    </div>
+  `,
+});
+OutlinedViaBaseTokens.storyName = "Outlined (base tokens override every variant)";
+OutlinedViaBaseTokens.parameters = {
+  docs: {
+    description: {
+      story:
+        "Setting only the base --display-pill-background/-text-colour/-border-colour on an ancestor restyles every variant. A variant-specific token (e.g. --display-pill-success-background) would still win for that variant.",
+    },
+  },
+};

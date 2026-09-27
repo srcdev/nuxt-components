@@ -2,13 +2,14 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import InputButtonCore from "../InputButtonCore.vue";
+import { defineComponent, nextTick, ref } from "vue";
 
 // --- Types ---
 interface InputButtonCoreInstance {
-  hasLeftSlot: boolean;
-  hasRightSlot: boolean;
-  hasIconOnlySlot: boolean;
-  buttonClasses: string[];
+  hasLeftSlot: () => boolean;
+  hasRightSlot: () => boolean;
+  hasIconOnlySlot: () => boolean;
+  buttonClasses: () => unknown[];
 }
 
 // --- Helpers ---
@@ -276,22 +277,45 @@ describe("InputButtonCore", () => {
   describe("Computed properties", () => {
     it("hasLeftSlot is true when left slot provided without iconOnly", async () => {
       wrapper = await createWrapper({}, { left: "<span>L</span>" });
-      expect((wrapper.vm as unknown as InputButtonCoreInstance).hasLeftSlot).toBe(true);
+      expect((wrapper.vm as unknown as InputButtonCoreInstance).hasLeftSlot()).toBe(true);
     });
 
     it("hasLeftSlot is false when iconOnly is also provided", async () => {
       wrapper = await createWrapper({}, { left: "<span>L</span>", iconOnly: "<span>I</span>" });
-      expect((wrapper.vm as unknown as InputButtonCoreInstance).hasLeftSlot).toBe(false);
+      expect((wrapper.vm as unknown as InputButtonCoreInstance).hasLeftSlot()).toBe(false);
     });
 
     it("hasRightSlot is true when right slot provided without iconOnly", async () => {
       wrapper = await createWrapper({}, { right: "<span>R</span>" });
-      expect((wrapper.vm as unknown as InputButtonCoreInstance).hasRightSlot).toBe(true);
+      expect((wrapper.vm as unknown as InputButtonCoreInstance).hasRightSlot()).toBe(true);
     });
 
     it("hasIconOnlySlot is true when iconOnly slot provided", async () => {
       wrapper = await createWrapper({}, { iconOnly: "<span>I</span>" });
-      expect((wrapper.vm as unknown as InputButtonCoreInstance).hasIconOnlySlot).toBe(true);
+      expect((wrapper.vm as unknown as InputButtonCoreInstance).hasIconOnlySlot()).toBe(true);
     });
+  });
+});
+
+describe("InputButtonCore slot toggling", () => {
+  it("adds and removes the icon-only class when the iconOnly slot changes after mount", async () => {
+    const Host = defineComponent({
+      components: { InputButtonCore },
+      setup() {
+        return { iconOnly: ref(false) };
+      },
+      template: `
+        <InputButtonCore button-text="Close">
+          <template v-if="iconOnly" #iconOnly><span>×</span></template>
+        </InputButtonCore>
+      `,
+    });
+    const wrapper = await mountSuspended(Host);
+    const button = () => wrapper.find(".input-button-core");
+    expect(button().classes()).not.toContain("icon-only");
+    (wrapper.vm as unknown as { iconOnly: boolean }).iconOnly = true;
+    await nextTick();
+    expect(button().classes()).toContain("icon-only");
+    expect(wrapper.find(".button-text").classes()).toContain("sr-only");
   });
 });

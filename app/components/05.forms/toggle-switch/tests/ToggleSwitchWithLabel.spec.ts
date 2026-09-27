@@ -2,6 +2,7 @@
 import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import ComponentUnderTest from "../ToggleSwitchWithLabel.vue";
+import { defineComponent, nextTick, ref } from "vue";
 
 const initialPropsData = {
   name: "notifications",
@@ -73,5 +74,30 @@ describe("ToggleSwitchWithLabel", () => {
     const core = wrapper.findComponent({ name: "ToggleSwitchCore" });
     expect(core.props("round")).toBe(false);
     expect(wrapper.find(".toggle-switch-core").attributes("round")).toBeUndefined();
+  });
+
+  it("points aria-describedby at the description once it appears after mount", async () => {
+    const Host = defineComponent({
+      components: { ComponentUnderTest },
+      setup() {
+        return { modelValue: ref(false), showDescription: ref(false) };
+      },
+      template: `
+        <ComponentUnderTest v-model="modelValue" name="notifications" label="Enable notifications" error-message="">
+          <template v-if="showDescription" #description>Sends at most one email a week.</template>
+        </ComponentUnderTest>
+      `,
+    });
+    const host = await mountSuspended(Host);
+    const input = () => host.find("input[type='checkbox']");
+    expect(input().attributes("aria-describedby")).toBeFalsy();
+    (host.vm as unknown as { showDescription: boolean }).showDescription = true;
+    await nextTick();
+    expect(input().attributes("aria-describedby")).toMatch(/-description$/);
+  });
+
+  it("points aria-describedby at the error message when the field has an error", async () => {
+    wrapper = await wrapperFactory({ fieldHasError: true, errorMessage: "Required" });
+    expect(wrapper.find("input[type='checkbox']").attributes("aria-describedby")).toMatch(/-error-message$/);
   });
 });

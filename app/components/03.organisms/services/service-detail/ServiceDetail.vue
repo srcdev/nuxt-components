@@ -326,9 +326,9 @@ watch(
             flex-wrap: wrap;
             gap: var(--service-detail-hero-pills-gap, 0.8rem);
 
-            --theme-pill-bg: var(--service-detail-hero-pill-bg, transparent);
-            --theme-pill-color: var(--service-detail-hero-text-colour, white);
-            --theme-pill-border-color: var(--service-detail-hero-pill-border-colour, currentColor);
+            --display-pill-background: var(--service-detail-hero-pill-bg, transparent);
+            --display-pill-text-colour: var(--service-detail-hero-text-colour, white);
+            --display-pill-border-colour: var(--service-detail-hero-pill-border-colour, currentColor);
           }
         }
       }

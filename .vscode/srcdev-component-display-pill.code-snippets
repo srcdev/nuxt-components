@@ -1,0 +1,38 @@
+{
+  "SRCDEV DisplayPill Label": {
+    "description": "DisplayPill: pill/badge with a text label",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayPill label=\"${1:Status}\" variant=\"${2|default,primary,success,warning,danger,neutral|}\" size=\"${3|md,sm,lg|}\" />"
+    ]
+  },
+  "SRCDEV DisplayPill Icon": {
+    "description": "DisplayPill with an icon",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayPill label=\"${1:Active}\" variant=\"${2|success,default,primary,warning,danger,neutral|}\">",
+      "  <template #icon>",
+      "    <Icon name=\"${3:material-symbols:circle}\" />",
+      "  </template>",
+      "</DisplayPill>"
+    ]
+  },
+  "SRCDEV DisplayPill Link": {
+    "description": "DisplayPill as a link (focusable, pointer cursor)",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayPill tag=\"a\" href=\"${1:/tags/example}\" label=\"${2:Example}\" variant=\"${3|primary,default,success,warning,danger,neutral|}\" />"
+    ]
+  },
+  "SRCDEV DisplayPill Tokens": {
+    "description": "DisplayPill outlined style for every variant via base tokens",
+    "scope": "css",
+    "body": [
+      ".${1:tag-list} {",
+      "  --display-pill-background: ${2:transparent};",
+      "  --display-pill-text-colour: ${3:currentColor};",
+      "  --display-pill-border-colour: ${4:currentColor};",
+      "}"
+    ]
+  }
+}

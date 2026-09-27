@@ -4,7 +4,7 @@
     :class="[elementClasses]"
     :role="isAlert ? 'alertdialog' : undefined"
     :aria-modal="true"
-    :aria-labelledby="hasTitle ? dialogTitleId : undefined"
+    :aria-labelledby="hasTitle() ? dialogTitleId : undefined"
     :align-dialog="resolved.alignDialog"
     :justify-dialog="resolved.justifyDialog"
     :open
@@ -18,7 +18,7 @@
     >
       <div class="display-dialog-inner" :class="[resolved.variant]">
         <div class="display-dialog-header" :data-theme="resolved.theme">
-          <div v-if="hasTitle" :id="dialogTitleId" class="display-dialog-col-left">
+          <div v-if="hasTitle()" :id="dialogTitleId" class="display-dialog-col-left">
             <slot name="dialogTitle"></slot>
           </div>
 
@@ -34,14 +34,14 @@
           </div>
         </div>
         <div
-          v-if="hasContent"
+          v-if="hasContent()"
           class="display-dialog-content"
           :class="[{ 'allow-content-scroll': resolved.allowContentScroll }]"
           :tabindex="resolved.allowContentScroll ? 0 : undefined"
         >
           <slot name="dialogContent"></slot>
         </div>
-        <div v-if="hasFooter" class="display-dialog-footer">
+        <div v-if="hasFooter()" class="display-dialog-footer">
           <slot name="actionButtonLeft"></slot>
           <slot name="actionButtonRight"></slot>
         </div>
@@ -104,9 +104,9 @@ const closeDialog = () => {
 };
 
 const slots = useSlots();
-const hasTitle = computed(() => !!slots.dialogTitle);
-const hasContent = computed(() => !!slots.dialogContent);
-const hasFooter = computed(() => !!(slots.actionButtonLeft || slots.actionButtonRight));
+const hasTitle = () => !!slots.dialogTitle;
+const hasContent = () => !!slots.dialogContent;
+const hasFooter = () => !!(slots.actionButtonLeft || slots.actionButtonRight);
 
 const { lock, unlock } = useBodyLock();
 let hasLocked = false;

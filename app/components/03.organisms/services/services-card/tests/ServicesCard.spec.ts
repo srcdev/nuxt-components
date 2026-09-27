@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import ServicesCard from "../ServicesCard.vue";
+import { defineComponent, nextTick, ref } from "vue";
 import type { Service } from "~/types/types.services";
 
 // ─── Fixtures ─────────────────────────────────────────────────────────────────
@@ -281,5 +282,25 @@ describe("ServicesCard", () => {
     await wrapper.setProps({ styleClassPassthrough: ["updated"] });
     expect(wrapper.classes()).not.toContain("original");
     expect(wrapper.classes()).toContain("updated");
+  });
+
+  it("stops being a link when an actions slot appears after mount", async () => {
+    const Host = defineComponent({
+      components: { ServicesCard },
+      setup() {
+        return { mockService, showActions: ref(false) };
+      },
+      template: `
+        <ServicesCard :service-data="mockService" href="https://example.com/service">
+          <template v-if="showActions" #actions><button type="button">Book</button></template>
+        </ServicesCard>
+      `,
+    });
+    const wrapper = await mountSuspended(Host);
+    expect(wrapper.find("a.is-clickable").exists()).toBe(true);
+    (wrapper.vm as unknown as { showActions: boolean }).showActions = true;
+    await nextTick();
+    expect(wrapper.find("a.is-clickable").exists()).toBe(false);
+    expect(wrapper.find("button").exists()).toBe(true);
   });
 });

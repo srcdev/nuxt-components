@@ -1,10 +1,10 @@
 <template>
   <NuxtLink class="link-text" :class="elementClasses" :to="to" :external="external" :target="target">
-    <span v-if="hasLeftSlot" class="link-text__icon link-text__icon--left">
+    <span v-if="hasLeftSlot()" class="link-text__icon link-text__icon--left">
       <slot name="left"></slot>
     </span>
     <span class="link-text__label">{{ linkText }}</span>
-    <span v-if="hasRightSlot" class="link-text__icon link-text__icon--right">
+    <span v-if="hasRightSlot()" class="link-text__icon link-text__icon--right">
       <slot name="right"></slot>
     </span>
   </NuxtLink>
@@ -26,8 +26,8 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
-const hasLeftSlot = computed(() => Boolean(slots.left));
-const hasRightSlot = computed(() => Boolean(slots.right));
+const hasLeftSlot = () => Boolean(slots.left);
+const hasRightSlot = () => Boolean(slots.right);
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>

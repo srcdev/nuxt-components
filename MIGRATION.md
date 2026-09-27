@@ -34,7 +34,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | DashboardStatsGrid | `content-wrappers/layout-grid/dashboard-stats-grid/` | ✅ | ✅ `dashboard-stats-grid` |
 | LayoutGridByCols | `content-wrappers/layout-grid/layout-grid-by-cols/` | ✅ | ✅ `layout-grid-by-cols` |
 | DisplayDialog | `display-dialog/DisplayDialog.vue` | ✅ | ✅ `dialog` |
-| DisplayPill | `display-pill/DisplayPill.vue` | ☐ | ☐ |
+| DisplayPill | `display-pill/DisplayPill.vue` | ✅ | ✅ `display-pill` |
 | GlassPanel | `glass-panel/GlassPanel.vue` | ✅ | ✅ |
 | AutoGrid | `grids/auto-grid/AutoGrid.vue` | ☐ | ☐ |
 | GridStack | `grids/grid-stack/GridStack.vue` | ☐ | ☐ |

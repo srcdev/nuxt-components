@@ -3,7 +3,7 @@
     <div class="phh-start">
       <slot name="start"></slot>
     </div>
-    <div v-if="hasEndSlot" class="phh-end">
+    <div v-if="hasEndSlot()" class="phh-end">
       <slot name="end"></slot>
     </div>
   </div>
@@ -19,7 +19,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
-const hasEndSlot = computed(() => Boolean(slots.end));
+const hasEndSlot = () => Boolean(slots.end);
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 

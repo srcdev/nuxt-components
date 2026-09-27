@@ -8,18 +8,18 @@
     data-testid="input-button-core"
     :data-theme="theme"
     class="input-button-core"
-    :class="buttonClasses"
+    :class="buttonClasses()"
   >
     <PendingEffect v-if="hasPendingEffect" :theme="theme" />
 
-    <span v-if="hasLeftSlot" class="btn-icon left">
+    <span v-if="hasLeftSlot()" class="btn-icon left">
       <slot name="left"></slot>
     </span>
-    <span class="button-text" :class="[{ 'sr-only': hasIconOnlySlot }]">{{ buttonText }}</span>
-    <span v-if="hasRightSlot" class="btn-icon right">
+    <span class="button-text" :class="[{ 'sr-only': hasIconOnlySlot() }]">{{ buttonText }}</span>
+    <span v-if="hasRightSlot()" class="btn-icon right">
       <slot name="right"></slot>
     </span>
-    <span v-if="hasIconOnlySlot" class="btn-icon icon-only">
+    <span v-if="hasIconOnlySlot()" class="btn-icon icon-only">
       <slot name="iconOnly"></slot>
     </span>
   </component>
@@ -77,20 +77,20 @@ const tag = computed(() => {
 });
 
 // Cache slot computations for better performance
-const hasLeftSlot = computed(() => Boolean(slots.left && !slots.iconOnly));
-const hasRightSlot = computed(() => Boolean(slots.right && !slots.iconOnly));
-const hasIconOnlySlot = computed(() => Boolean(slots.iconOnly));
+const hasLeftSlot = () => Boolean(slots.left && !slots.iconOnly);
+const hasRightSlot = () => Boolean(slots.right && !slots.iconOnly);
+const hasIconOnlySlot = () => Boolean(slots.iconOnly);
 
 // Combine all button classes into a single computed
-const buttonClasses = computed(() => [
+const buttonClasses = () => [
   props.variant,
   elementClasses.value,
-  { "icon-only": hasIconOnlySlot.value },
+  { "icon-only": hasIconOnlySlot() },
   { "pending-effect": props.hasPendingEffect },
   { "is-pending": props.isPending },
   { pill: props.isPill },
   { "is-link": isLink.value },
-]);
+];
 
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 </script>

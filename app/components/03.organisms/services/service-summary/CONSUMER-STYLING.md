@@ -1,3 +1,8 @@
+
+> **Changed 2026-09-27**: the background and text-colour tokens never applied before. The pills use
+> `variant="neutral"`, and `DisplayPill`'s neutral rule only read its own neutral tokens, so they rendered
+> as dark slate pills with light text (only the border token worked). `DisplayPill` variants now fall
+> back to the base `--display-pill-*` tokens, so these defaults (transparent, `currentColor`) take effect.
 # ServiceSummary — Consumer Styling Guide
 
 ## Public token API
@@ -39,7 +44,7 @@ where the layout is genuinely two columns side by side.
 ### Pill colours
 
 The duration/price pills are `DisplayPill` instances — `ServiceSummary` maps its own tokens onto
-`DisplayPill`'s `--theme-pill-*` custom properties scoped to `.service-summary__pills`:
+`DisplayPill`'s `--display-pill-*` custom properties scoped to `.service-summary__pills`:
 
 | Token | Default | Controls |
 |---|---|---|
@@ -47,7 +52,7 @@ The duration/price pills are `DisplayPill` instances — `ServiceSummary` maps i
 | `--service-summary-pill-colour` | `currentColor` | Text colour of the pills |
 | `--service-summary-pill-border-colour` | `currentColor` | Border colour of the pills |
 
-For anything not covered by these (e.g. pill size, font weight), target `--theme-pill-*` directly
+For anything not covered by these (e.g. pill size, font weight), target `--display-pill-*` directly
 under `.service-summary__pills` — see [display-pill.md](../../../../../.claude/skills/components/display-pill.md).
 
 ---
@@ -76,10 +81,10 @@ Set the tokens above on an element you own (a page or section class, or a class 
 `<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
 `:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
 
-**Caveat:** don't set `--theme-pill-bg`, `--theme-pill-color` or `--theme-pill-border-color` on an
+**Caveat:** don't set `--display-pill-background`, `--display-pill-text-colour` or `--display-pill-border-colour` on an
 ancestor to restyle the pills: `ServiceSummary` re-declares them on `.service-summary__pills`, so an
 ancestor value never lands. Use the `--service-summary-pill-*` tokens, or set other
-`--theme-pill-*` tokens on `.service-summary__pills` itself (see **Pill colours** above).
+`--display-pill-*` tokens on `.service-summary__pills` itself (see **Pill colours** above).
 
 ### Page or section
 

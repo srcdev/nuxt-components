@@ -23,7 +23,7 @@
       :false-value
       :theme
       :round
-      :aria-describedby
+      :aria-describedby="ariaDescribedby()"
     >
       <template v-if="slots.iconOn" #iconOn>
         <slot name="iconOn"></slot>
@@ -77,10 +77,10 @@ const toggleSwitchId = computed(() => `toggle-switch-${id}`);
 const descriptionId = computed(() => `${id}-description`);
 const errorId = computed(() => `${id}-error-message`);
 
-const ariaDescribedby = computed(() => {
+const ariaDescribedby = () => {
   const ariaDescribedbyId = slots.description ? descriptionId.value : undefined;
   return props.fieldHasError ? errorId.value : ariaDescribedbyId;
-});
+};
 
 const modelValue = defineModel<string | number | boolean>({ required: true });
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);

@@ -1,6 +1,6 @@
 <template>
   <div class="toggle-switch-core" :class="elementClasses" :data-theme="formUiTheme">
-    <div class="toggle-switch-wrapper" :class="wrapperClasses" @click="toggleSwitchValue">
+    <div class="toggle-switch-wrapper" :class="wrapperClasses()" @click="toggleSwitchValue">
       <input
         :id="inputId"
         v-model="modelValue"
@@ -8,7 +8,7 @@
         :true-value
         :false-value
         :aria-invalid="fieldHasError"
-        :aria-describedby="ariaDescribedbyId"
+        :aria-describedby="ariaDescribedby || undefined"
         :name
         :required
         :checked="isChecked"
@@ -60,7 +60,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
-const useDefaultIcons = computed(() => !slots.iconOn && !slots.iconOff);
+const useDefaultIcons = () => !slots.iconOn && !slots.iconOff;
 
 const formUiTheme = computed(() => {
   return props.fieldHasError ? "error" : props.theme;
@@ -72,16 +72,15 @@ const modelValue = defineModel<string | number | boolean>({ required: true });
 const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const inputId = computed(() => `toggle-switch-${props.id}`);
-const ariaDescribedbyId = computed(() => `${props.id}-description`);
 
 const isChecked = computed(() => {
   return modelValue.value === props.trueValue;
 });
 
 // Optimized class computeds to reduce template reactivity
-const wrapperClasses = computed(() => ({
-  "use-default-icons": useDefaultIcons.value,
-}));
+const wrapperClasses = () => ({
+  "use-default-icons": useDefaultIcons(),
+});
 
 const symbolClasses = computed(() => ({
   checked: isChecked.value,

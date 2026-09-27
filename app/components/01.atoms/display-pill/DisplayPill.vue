@@ -3,9 +3,13 @@
     :is="tag"
     class="display-pill"
     :class="[size, variant, { 'is-reversed': reversed }, elementClasses]"
+    :type="tag === 'button' ? 'button' : undefined"
+    :data-icon-position="iconPosition()"
   >
-    <slot name="icon"></slot>
-    <span v-if="label" class="pill-label">{{ label }}</span>
+    <span v-if="slots.icon" class="display-pill-icon">
+      <slot name="icon"></slot>
+    </span>
+    <span v-if="label" class="display-pill-label">{{ label }}</span>
     <slot v-else name="default"></slot>
   </component>
 </template>
@@ -29,47 +33,64 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
+const slots = useSlots();
+
+// A function, not a computed: slots aren't reactive, so a cached value goes stale when a slot is toggled.
+const iconPosition = () => {
+  if (!slots.icon) return undefined;
+  if (!props.label && !slots.default) return "only";
+  return props.reversed ? "end" : "start";
+};
+
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
   () => props.styleClassPassthrough,
-  () => {
-    resetElementClasses(props.styleClassPassthrough);
-  }
+  () => resetElementClasses(props.styleClassPassthrough)
 );
 </script>
 
 <style lang="css">
 @layer components {
   .display-pill {
-    --_bg: var(--theme-pill-bg, var(--slate-01));
-    --_color: var(--theme-pill-color, var(--slate-09));
-    --_border-color: var(--theme-pill-border-color, transparent);
-    --_border-width: var(--theme-pill-border-width, 1px);
-    --_border-style: var(--theme-pill-border-style, solid);
-    /* 100vw always resolves to the correct pill radius regardless of element size */
-    --_border-radius: var(--theme-pill-border-radius, 100vw);
-    --_outline: var(--theme-pill-outline, none);
-    --_outline-offset: var(--theme-pill-outline-offset, 0px);
-    --_gap: var(--theme-pill-gap, 0.5rem);
-    --_font-size: var(--theme-pill-font-size, 1.2rem);
-    --_font-weight: var(--theme-pill-font-weight, 500);
-    --_padding-x: var(--theme-pill-padding-x, 1rem);
-    --_padding-y: var(--theme-pill-padding-y, 0.4rem);
-    --_icon-size: var(--theme-pill-icon-size, 1.4rem);
+    --_background: var(--display-pill-background, var(--slate-01));
+    --_text-colour: var(--display-pill-text-colour, var(--slate-09));
+    --_font-size: var(--display-pill-font-size, 1.2rem);
+    --_padding-inline: var(--display-pill-padding-inline, 1rem);
+    --_padding-inline-icon: var(--display-pill-padding-inline-icon, 0.6rem);
+    --_padding-block: var(--display-pill-padding-block, 0.4rem);
+    --_icon-size: var(--display-pill-icon-size, 1.4rem);
 
     display: inline-flex;
     align-items: center;
-    gap: var(--_gap);
-    padding: var(--_padding-y) var(--_padding-x);
-    border-radius: var(--_border-radius);
-    border: var(--_border-width) var(--_border-style) var(--_border-color);
-    outline: var(--_outline);
-    outline-offset: var(--_outline-offset);
-    background-color: var(--_bg);
-    color: var(--_color);
+    gap: var(--display-pill-gap, 0.5rem);
+    padding-block: var(--_padding-block);
+    padding-inline: var(--_padding-inline);
+
+    /* Icons carry their own whitespace, so the icon side gets less padding. */
+    &[data-icon-position="start"] {
+      padding-inline: var(--_padding-inline-icon) var(--_padding-inline);
+    }
+
+    &[data-icon-position="end"] {
+      padding-inline: var(--_padding-inline) var(--_padding-inline-icon);
+    }
+
+    &[data-icon-position="only"] {
+      padding-inline: var(--_padding-inline-icon);
+    }
+
+    border: var(--display-pill-border-width, 0.1rem) var(--display-pill-border-style, solid)
+      var(--display-pill-border-colour, transparent);
+    /* 100vw always resolves to a full pill radius regardless of element size */
+    border-radius: var(--display-pill-border-radius, 100vw);
+    outline: var(--display-pill-outline, none);
+    outline-offset: var(--display-pill-outline-offset, 0);
+    background-color: var(--_background);
+    color: var(--_text-colour);
+    font-family: inherit;
     font-size: var(--_font-size);
-    font-weight: var(--_font-weight);
+    font-weight: var(--display-pill-font-weight, 500);
     line-height: 1;
     white-space: nowrap;
     width: fit-content;
@@ -78,56 +99,68 @@ watch(
 
     &:is(button, a) {
       cursor: pointer;
+
+      &:focus-visible {
+        outline: 0.2rem solid var(--display-pill-focus-ring, var(--theme-border-focus));
+        outline-offset: 0.2rem;
+      }
     }
 
     &.is-reversed {
       flex-direction: row-reverse;
     }
 
-    .pill-label {
+    .display-pill-icon {
+      display: inline-flex;
+      align-items: center;
+      font-size: var(--_icon-size);
+    }
+
+    .display-pill-label {
       display: inline-flex;
       align-items: center;
     }
 
-    /* Sizes */
     &.sm {
-      --_font-size: var(--theme-pill-font-size-sm, 1rem);
-      --_padding-x: var(--theme-pill-padding-x-sm, 0.8rem);
-      --_padding-y: var(--theme-pill-padding-y-sm, 0.3rem);
-      --_icon-size: var(--theme-pill-icon-size-sm, 1.2rem);
+      --_font-size: var(--display-pill-font-size-sm, 1rem);
+      --_padding-inline: var(--display-pill-padding-inline-sm, 0.8rem);
+      --_padding-inline-icon: var(--display-pill-padding-inline-icon-sm, 0.4rem);
+      --_padding-block: var(--display-pill-padding-block-sm, 0.3rem);
+      --_icon-size: var(--display-pill-icon-size-sm, 1.2rem);
     }
 
     &.lg {
-      --_font-size: var(--theme-pill-font-size-lg, 1.4rem);
-      --_padding-x: var(--theme-pill-padding-x-lg, 1.2rem);
-      --_padding-y: var(--theme-pill-padding-y-lg, 0.6rem);
-      --_icon-size: var(--theme-pill-icon-size-lg, 1.6rem);
+      --_font-size: var(--display-pill-font-size-lg, 1.4rem);
+      --_padding-inline: var(--display-pill-padding-inline-lg, 1.2rem);
+      --_padding-inline-icon: var(--display-pill-padding-inline-icon-lg, 0.8rem);
+      --_padding-block: var(--display-pill-padding-block-lg, 0.6rem);
+      --_icon-size: var(--display-pill-icon-size-lg, 1.6rem);
     }
 
-    /* Variants */
+    /* Variant token, then the base token, then the variant's own default. */
     &.primary {
-      --_bg: var(--theme-pill-primary-bg, var(--blue-01));
-      --_color: var(--theme-pill-primary-color, var(--blue-09));
+      --_background: var(--display-pill-primary-background, var(--display-pill-background, var(--blue-01)));
+      --_text-colour: var(--display-pill-primary-text-colour, var(--display-pill-text-colour, var(--blue-09)));
     }
 
     &.success {
-      --_bg: var(--theme-pill-success-bg, var(--green-01));
-      --_color: var(--theme-pill-success-color, var(--green-10));
+      --_background: var(--display-pill-success-background, var(--display-pill-background, var(--green-01)));
+      --_text-colour: var(--display-pill-success-text-colour, var(--display-pill-text-colour, var(--green-10)));
     }
 
     &.warning {
-      --_bg: var(--theme-pill-warning-bg, var(--yellow-08, #fef9c3));
-      --_color: var(--theme-pill-warning-color, var(--yellow-03, #a16207));
+      --_background: var(--display-pill-warning-background, var(--display-pill-background, var(--orange-01)));
+      --_text-colour: var(--display-pill-warning-text-colour, var(--display-pill-text-colour, var(--orange-10)));
     }
 
     &.danger {
-      --_bg: var(--theme-pill-danger-bg, var(--red-01));
-      --_color: var(--theme-pill-danger-color, var(--red-10));
+      --_background: var(--display-pill-danger-background, var(--display-pill-background, var(--red-01)));
+      --_text-colour: var(--display-pill-danger-text-colour, var(--display-pill-text-colour, var(--red-10)));
     }
 
     &.neutral {
-      --_bg: var(--theme-pill-neutral-bg, var(--slate-08));
-      --_color: var(--theme-pill-neutral-color, var(--slate-03));
+      --_background: var(--display-pill-neutral-background, var(--display-pill-background, var(--slate-08)));
+      --_text-colour: var(--display-pill-neutral-text-colour, var(--display-pill-text-colour, var(--slate-03)));
     }
   }
 }

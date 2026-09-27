@@ -117,7 +117,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── select-menu.md          — SelectMenu: v-model single-select listbox popover (ActionMenu's popover mechanics, InputSelectCore's selected-option semantics), icon/text/chevron trigger toggles, checkmark on selected option, options-array driven, full CSS token API
     ├── display-dialog.md       — DisplayDialog: native <dialog> overlay, 5 variants (dialog/modal/confirm/alert/fullscreen), useDialogControls integration, CSS token API
     ├── display-chip.md         — DisplayChip: status indicator chip overlay, CSS trig positioning, circle/square shapes, status colours, icon/label content
-    ├── display-pill.md         — DisplayPill: pill/badge label with icon slot, 6 variants, 3 sizes, reversible order, full CSS token API for border/outline/colour
+    ├── display-pill.md         — DisplayPill: pill/badge label with icon slot, 6 variants, 3 sizes, reversible order, --display-pill-* tokens (renamed from --theme-pill-*; variants fall back to base colour tokens)
     ├── carousel-flip.md        — CarouselFlip: FLIP-animated carousel, carouselDataIds slot API, buttonLayout variants (sides/controls-flanking/controls-grouped-right/overlay), CSS tokens
     ├── samaritan-prompt.md — SamaritanPrompt + SamaritanPromptMixed: animated text prompts, typewriter/word-pulse effects, MessageConfig API, pause on hover, aria-live, CSS tokens
     ├── display-toast.md          — DisplayToast (standalone v-model) + DisplayToastProvider + useToastQueue (app-wide queue): stacking, FLIP dismiss, maxVisible, SemanticTheme × 4, masked SVG glass variant

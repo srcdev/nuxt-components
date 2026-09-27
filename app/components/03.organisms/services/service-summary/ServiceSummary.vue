@@ -173,9 +173,9 @@ watch(
         gap: var(--service-summary-pills-gap, 0.8rem);
         margin-block-end: var(--service-summary-pills-margin-block-end, 2rem);
 
-        --theme-pill-bg: var(--service-summary-pill-bg, transparent);
-        --theme-pill-color: var(--service-summary-pill-colour, currentColor);
-        --theme-pill-border-color: var(--service-summary-pill-border-colour, currentColor);
+        --display-pill-background: var(--service-summary-pill-bg, transparent);
+        --display-pill-text-colour: var(--service-summary-pill-colour, currentColor);
+        --display-pill-border-colour: var(--service-summary-pill-border-colour, currentColor);
       }
     }
   }

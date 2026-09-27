@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="showDescription"
+    v-if="showDescription()"
     :id="descriptionId || undefined"
     class="input-description"
     :class="elementClasses"
@@ -34,7 +34,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
-const showDescription = computed(() => Boolean(slots.descriptionHtml || slots.descriptionText));
+const showDescription = () => Boolean(slots.descriptionHtml || slots.descriptionText);
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 

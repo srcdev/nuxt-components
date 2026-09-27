@@ -9,7 +9,7 @@ exports[`ServiceSummary > renders correct HTML structure 1`] = `
       <h2 id="v-0-0" class="hero-text mb-20 title axis-horizontal">
         <!--v-if--><span class="text-block-0 normal">Test Service</span>
       </h2>
-      <div class="service-summary__pills"><span class="display-pill md neutral"><span class="pill-label">60 mins</span></span><span class="display-pill md neutral"><span class="pill-label">From £50</span></span></div>
+      <div class="service-summary__pills"><span class="display-pill md neutral"><!--v-if--><span class="display-pill-label">60 mins</span></span><span class="display-pill md neutral"><!--v-if--><span class="display-pill-label">From £50</span></span></div>
       <p class="page-body-normal">What this service is</p>
     </div>
   </div>
