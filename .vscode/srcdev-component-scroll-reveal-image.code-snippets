@@ -1,0 +1,46 @@
+{
+  "SRCDEV ScrollRevealImage Basic": {
+    "description": "ScrollRevealImage: single NuxtImg with scroll-driven parallax reveal",
+    "scope": "vue,html",
+    "body": [
+      "<ScrollRevealImage",
+      "  src=\"${1:/images/hero.jpg}\"",
+      "  alt=\"${2:Description of the image}\"",
+      "  :img-width=\"${3:1280}\"",
+      "  :img-height=\"${4:1920}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV ScrollRevealImage Sized": {
+    "description": "ScrollRevealImage with frame size, travel, radius and horizontal focal point",
+    "scope": "vue,html",
+    "body": [
+      "<ScrollRevealImage",
+      "  src=\"${1:/images/hero.jpg}\"",
+      "  alt=\"${2:Description of the image}\"",
+      "  :img-width=\"${3:1280}\"",
+      "  :img-height=\"${4:1920}\"",
+      "  frame-height=\"${5:540px}\"",
+      "  parallax-offset=\"${6:36rem}\"",
+      "  radius=\"${7:1.6rem}\"",
+      "  focal-x=\"${8:50%}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV ScrollRevealImage Tokens": {
+    "description": "ScrollRevealImage responsive crop/frame token overrides (leave the matching props off)",
+    "scope": "css",
+    "body": [
+      ".${1:my-section} {",
+      "  --scroll-reveal-frame-height: ${2:320px};",
+      "  --scroll-reveal-image-focal-x: ${3:50%};",
+      "  --scroll-reveal-image-focal-y: ${4:40%};",
+      "",
+      "  @media (width >= 768px) {",
+      "    --scroll-reveal-frame-height: ${5:540px};",
+      "    --scroll-reveal-image-focal-y: ${6:0%};",
+      "  }",
+      "}"
+    ]
+  }
+}

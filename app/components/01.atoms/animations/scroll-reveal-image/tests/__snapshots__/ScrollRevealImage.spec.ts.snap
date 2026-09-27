@@ -1,13 +1,13 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`ScrollRevealImage > renders correct HTML structure (all props set) 1`] = `
-"<figure class="scroll-reveal-frame custom-class" style="--scroll-reveal-frame-height: 400px; --scroll-reveal-frame-parallax-offset: 20rem; --scroll-reveal-frame-radius: 1.6rem; --_focal-x: 30%;">
+"<figure class="scroll-reveal-frame custom-class" style="--scroll-reveal-frame-height: 400px; --scroll-reveal-frame-parallax-offset: 20rem; --scroll-reveal-frame-radius: 1.6rem; --scroll-reveal-image-focal-x: 30%;">
   <div class="scroll-reveal-frame-content"><img width="800" height="600" data-nuxt-img="" srcset="/_ipx/s_800x600/images/test.jpg 1x, /_ipx/s_1600x1200/images/test.jpg 2x" class="scroll-reveal-image" alt="All props" loading="eager" decoding="async" src="/_ipx/s_800x600/images/test.jpg"></div>
 </figure>"
 `;
 
 exports[`ScrollRevealImage > renders correct HTML structure (default props) 1`] = `
-"<figure class="scroll-reveal-frame" style="--_focal-x: 50%;">
+"<figure class="scroll-reveal-frame">
   <div class="scroll-reveal-frame-content"><img width="1920" height="1080" data-nuxt-img="" srcset="/_ipx/s_1920x1080/images/test.jpg 1x, /_ipx/s_3840x2160/images/test.jpg 2x" class="scroll-reveal-image" alt="Test image" loading="lazy" decoding="async" src="/_ipx/s_1920x1080/images/test.jpg"></div>
 </figure>"
 `;

@@ -1,6 +1,6 @@
 ---
 name: ScrollRevealImage
-description: ScrollRevealImage single-image parallax reveal — props, focalX usage, CSS tokens, browser support, when to use vs ScrollRevealFrame
+description: ScrollRevealImage single-image parallax reveal — props, focalX and focal-y crop tokens, CSS tokens (prop or CSS), browser support, when to use vs ScrollRevealFrame
 type: reference
 ---
 
@@ -22,7 +22,7 @@ For arbitrary slot content — a grid of images, video, markup — use `ScrollRe
 | `imgHeight` | `number` | `1080` | Intrinsic height of the source image — required for NuxtImg optimisation. |
 | `frameHeight` | `string` | unset (CSS default `540px`) | Height of the visible clipping frame. Any CSS length unit. Leave unset to control it from CSS via `--scroll-reveal-frame-height`. |
 | `parallaxOffset` | `string` | unset (CSS default `36rem`) | Distance the image travels vertically across the full scroll range. Leave unset to control it via `--scroll-reveal-frame-parallax-offset`. |
-| `focalX` | `string` | `"50%"` | Horizontal focal point — CSS `object-position` x-axis value. Controls which horizontal slice stays in view. |
+| `focalX` | `string` | unset (CSS default `50%`) | Horizontal focal point, CSS `object-position` x value. Controls which horizontal slice stays in view. Leave unset to control it via `--scroll-reveal-image-focal-x`. |
 | `radius` | `string` | unset (CSS default `0px`) | `border-radius` of the clipping frame. Leave unset to control it via `--scroll-reveal-frame-radius`. |
 | `loading` | `"lazy" \| "eager"` | `"lazy"` | Image loading strategy. Use `"eager"` if this is the LCP image (e.g. partially in view on load). |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root `<figure>`. |
@@ -102,7 +102,7 @@ The vertical position of the image is driven by the scroll animation (`translate
 | `"75%"` | Right of centre — useful for a subject offset to the right |
 | `"100%"` or `"right"` | Right edge |
 
-Internally, `focalX` sets `object-position: <focalX> 0%` on the `<img>`. The `Y` is always `0%` because the animation handles vertical travel.
+Internally, `focalX` sets `--scroll-reveal-image-focal-x`, used as `object-position: <focal-x> <focal-y>` on the `<img>`. The Y comes from `--scroll-reveal-image-focal-y` (default `0%`, so the animation starts at the image top); raise it if the top of the image is empty or the subject sits low. With no animation (reduced motion or no support), Y is `--scroll-reveal-image-focal-y-static` (default `50%`).
 
 ## imgWidth / imgHeight
 
@@ -153,7 +153,9 @@ token inline only when passed.
 | `--scroll-reveal-frame-height` | `540px` | `frameHeight` |
 | `--scroll-reveal-frame-parallax-offset` | `36rem` | `parallaxOffset` |
 | `--scroll-reveal-frame-radius` | `0px` | `radius` |
-| `--_focal-x` | `50%` | `focalX` (always written inline) |
+| `--scroll-reveal-image-focal-x` | `50%` | `focalX` |
+| `--scroll-reveal-image-focal-y` | `0%` | none (CSS only) |
+| `--scroll-reveal-image-focal-y-static` | `50%` | none (CSS only) |
 
 Classes: root `.scroll-reveal-frame`, wrapper `.scroll-reveal-frame-content`, image
 `.scroll-reveal-image` (renamed 2026-09-27 from `.reveal-frame`/`.reveal-content`/`.reveal-image`).
@@ -167,5 +169,6 @@ See `scroll-reveal-frame.md` for the full guide. For portrait images the default
 - The root `<figure>` has `margin: 0` set in the component — browser default `<figure>` margins are neutralised at source.
 - `decoding="async"` is always set on the `<img>`. Use `:loading="'eager'"` if this component is the LCP image (e.g. a hero partially in view on load) — the default `"lazy"` is correct for below-fold usage.
 - Do not place inside a container with `overflow: hidden` or `overflow: clip` — breaks the `view-timeline` scroll detection inherited from `ScrollRevealFrame`.
-- Reduced-motion: animation is disabled and the image falls back to a static crop centred at `object-position: <focalX> 50%`.
+- Reduced-motion: animation is disabled and the image falls back to a static crop at `object-position: <focal-x> <focal-y-static>` (default `50% 50%`).
+- 2026-09-27 migration: `focalX` lost its `"50%"` default and now writes the public `--scroll-reveal-image-focal-x` only when passed (it was a private `--_focal-x`, always inline, so CSS could never change it). New `--scroll-reveal-image-focal-y`/`-focal-y-static` tokens replace the hardcoded vertical crop. Added CONSUMER-STYLING.md, snippet and a `CssTokens` story.
 - Storybook: the `"none"` image provider is active (`nuxt.config.ts`), so `src` paths pass through unchanged. Always provide explicit `img-width` and `img-height` props to avoid the `w=1536` fallback in deployed Storybook.

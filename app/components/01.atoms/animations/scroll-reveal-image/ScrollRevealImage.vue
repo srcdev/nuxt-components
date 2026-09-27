@@ -4,7 +4,7 @@
     :parallax-offset="parallaxOffset"
     :radius="radius"
     :style-class-passthrough="styleClassPassthrough"
-    :style="{ '--_focal-x': focalX }"
+    :style="{ '--scroll-reveal-image-focal-x': focalX }"
   >
     <NuxtImg
       class="scroll-reveal-image"
@@ -19,37 +19,14 @@
 </template>
 
 <script setup lang="ts">
-/**
- * ScrollRevealImage
- *
- * A single-image convenience wrapper around ScrollRevealFrame.
- * Adds NuxtImg optimisation (src, alt, intrinsic dimensions) and horizontal
- * focal-point control (focalX → CSS object-position x-axis).
- *
- * For a grid of images or arbitrary slot content use ScrollRevealFrame directly.
- */
-
 interface Props {
   src: string;
   alt?: string;
-  /** Intrinsic width of the source image — required for NuxtImg optimisation. */
   imgWidth?: number;
-  /** Intrinsic height of the source image — required for NuxtImg optimisation. */
   imgHeight?: number;
-  /** Height of the visible clipping frame. */
   frameHeight?: string;
-  /**
-   * How far the image travels vertically as the frame scrolls through the
-   * viewport. Larger = more image revealed = stronger parallax feel.
-   */
   parallaxOffset?: string;
-  /**
-   * Horizontal focal point — CSS `object-position` x-axis value.
-   * Controls which horizontal slice of the image is kept in view.
-   * Examples: "50%", "left", "30%".
-   */
   focalX?: string;
-  /** Optional rounded corners on the frame. */
   radius?: string;
   loading?: "lazy" | "eager";
   styleClassPassthrough?: string | string[];
@@ -61,7 +38,7 @@ withDefaults(defineProps<Props>(), {
   imgHeight: 1080,
   frameHeight: undefined,
   parallaxOffset: undefined,
-  focalX: "50%",
+  focalX: undefined,
   radius: undefined,
   loading: "lazy",
   styleClassPassthrough: () => [],
@@ -71,27 +48,20 @@ withDefaults(defineProps<Props>(), {
 <style lang="css">
 @layer components {
   .scroll-reveal-image {
+    --_focal-x: var(--scroll-reveal-image-focal-x, 50%);
+
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /*
-     * Y is always 0% — ScrollRevealFrame's translateY handles vertical travel.
-     * focalX (--_focal-x) lets the consumer pin the horizontal crop point.
-     */
-    object-position: var(--_focal-x, 50%) 0%;
-  }
+    object-position: var(--_focal-x) var(--scroll-reveal-image-focal-y, 0%);
 
-  /* ── Fallback: centre the crop vertically when there is no animation ── */
-  @supports not (animation-timeline: scroll()) {
-    .scroll-reveal-image {
-      object-position: var(--_focal-x, 50%) 50%;
+    @supports not (animation-timeline: scroll()) {
+      object-position: var(--_focal-x) var(--scroll-reveal-image-focal-y-static, 50%);
     }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
-    .scroll-reveal-image {
-      object-position: var(--_focal-x, 50%) 50%;
+    @media (prefers-reduced-motion: reduce) {
+      object-position: var(--_focal-x) var(--scroll-reveal-image-focal-y-static, 50%);
     }
   }
 }

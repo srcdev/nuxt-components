@@ -81,12 +81,12 @@ describe("ScrollRevealImage", () => {
     expect(style.getPropertyValue("--scroll-reveal-frame-radius")).toBe("");
   });
 
-  it("sets --_focal-x to 50% by default", async () => {
+  it("leaves --scroll-reveal-image-focal-x unset by default (CSS default applies)", async () => {
     const wrapper = await mountSuspended(ScrollRevealImage, {
       props: { src: "/images/test.jpg" },
     });
     const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_focal-x")).toBe("50%");
+    expect(style.getPropertyValue("--scroll-reveal-image-focal-x")).toBe("");
   });
 
   it("reflects frameHeight prop in --scroll-reveal-frame-height", async () => {
@@ -113,12 +113,19 @@ describe("ScrollRevealImage", () => {
     expect(style.getPropertyValue("--scroll-reveal-frame-radius")).toBe("2.4rem");
   });
 
-  it("reflects focalX prop in --_focal-x", async () => {
+  it("writes no inline style at all when no sizing or focal props are passed", async () => {
+    const wrapper = await mountSuspended(ScrollRevealImage, {
+      props: { src: "/images/test.jpg" },
+    });
+    expect(wrapper.attributes("style")).toBeUndefined();
+  });
+
+  it("reflects focalX prop in --scroll-reveal-image-focal-x", async () => {
     const wrapper = await mountSuspended(ScrollRevealImage, {
       props: { src: "/images/test.jpg", focalX: "75%" },
     });
     const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_focal-x")).toBe("75%");
+    expect(style.getPropertyValue("--scroll-reveal-image-focal-x")).toBe("75%");
   });
 
   // ─── Image element ───────────────────────────────────────────────────────

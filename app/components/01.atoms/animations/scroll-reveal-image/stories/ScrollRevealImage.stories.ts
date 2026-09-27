@@ -90,7 +90,7 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: "All props at their default values. A portrait image panning from top to bottom as the frame crosses the viewport.",
+        story: "A portrait image panning from top to bottom as the frame crosses the viewport. The sizing values shown match the CSS defaults.",
       },
     },
   },
@@ -175,6 +175,55 @@ export const TallFrame: Story = {
     docs: {
       description: {
         story: "A tall frame combined with a large parallaxOffset creates the most dramatic reveal — nearly the full image height is traversed as you scroll.",
+      },
+    },
+  },
+};
+
+export const CssTokens: Story = {
+  args: {
+    src: "/images/page/hero/hero-red.jpg",
+    alt: "Red hair portrait",
+    imgWidth: 1280,
+    imgHeight: 1920,
+  },
+  render: (args) => ({
+    components: { ScrollRevealImage },
+    setup() {
+      return { args };
+    },
+    template: `
+      <div style="padding-block: 60vh; max-width: 860px; margin-inline: auto;">
+        <component is="style">
+          .sri-story-tokens {
+            --scroll-reveal-frame-height: 320px;
+            --scroll-reveal-frame-parallax-offset: 20rem;
+            --scroll-reveal-image-focal-x: 70%;
+            --scroll-reveal-image-focal-y: 40%;
+          }
+          @media (width >= 768px) {
+            .sri-story-tokens {
+              --scroll-reveal-frame-height: 540px;
+              --scroll-reveal-frame-parallax-offset: 36rem;
+              --scroll-reveal-image-focal-x: 50%;
+              --scroll-reveal-image-focal-y: 0%;
+            }
+          }
+        </component>
+        <p style="text-align: center; font-size: 1.4rem; opacity: 0.5; margin-block-end: 4rem;">
+          Resize below/above 768px and scroll: frame size and crop point come from CSS tokens, no props passed
+        </p>
+        <div class="sri-story-tokens">
+          <ScrollRevealImage v-bind="args" />
+        </div>
+      </div>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Only the image props are passed, so frame size and crop point come from --scroll-reveal-frame-* and --scroll-reveal-image-focal-x/-y on an ancestor, changing at 768px. A prop, when passed, is written inline and wins.",
       },
     },
   },

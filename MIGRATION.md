@@ -22,7 +22,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | AnimatedSvgText | `animations/animated-svg-text/AnimatedSvgText.vue` | ✅ | ✅ `animated-svg-text` |
 | EntryAnimation | `animations/entry/EntryAnimation.vue` | ☐ | ☐ |
 | ScrollRevealFrame | `animations/scroll-reveal-frame/ScrollRevealFrame.vue` | ✅ | ✅ `scroll-reveal-frame` |
-| ScrollRevealImage | `animations/scroll-reveal-image/ScrollRevealImage.vue` | ☐ | ☐ |
+| ScrollRevealImage | `animations/scroll-reveal-image/ScrollRevealImage.vue` | ✅ | ✅ `scroll-reveal-image` |
 | RotatingCarouselImage | `animations/rotating-carousel-image/RotatingCarouselImage.vue` | ✅ | ✅ `rotating-carousel-image` |
 | ClipElement | `animations/clip-element/ClipElement.vue` | ✅ | ✅ `clip-element` |
 | WipeAwayVertical | `animations/view-timeline/WipeAwayVertical.vue` | ✅ | ✅ `wipe-away-vertical` |
