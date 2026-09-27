@@ -69,7 +69,7 @@ When `label` is not set, the default slot is rendered instead:
 
 Full token list in `CONSUMER-STYLING.md` next to the component. All tokens are `--display-pill-*` (renamed from `--theme-pill-*` on 2026-09-27; `bg`/`color` became `background`/`text-colour`).
 
-Colour resolves as **variant token → base token → variant default**: `--display-pill-background`/`-text-colour` restyle every variant; `--display-pill-success-background` etc. win for that variant only. Sizes have `-sm`/`-lg` suffixed tokens for font size, padding and icon size. The icon side of a pill gets `--display-pill-padding-inline-icon` (tighter than `--display-pill-padding-inline`), placed by `data-icon-position` (`start`, `end` when `reversed`, `only` for icon-only, absent with no icon), so label-only pills stay evenly padded.
+Colour resolves as **variant token → base token → variant default**: `--display-pill-background`/`-text-colour` restyle every variant; `--display-pill-success-background` etc. win for that variant only. Sizes have `-sm`/`-lg` suffixed tokens for font size and icon size only; padding and gap are the icon size times a ratio (`--display-pill-padding-inline-ratio` 0.7, `-padding-inline-icon-ratio` 0.4, `-padding-block-ratio` 0.3, `-gap-ratio` 0.35), so spacing scales with the pill. Absolute `--display-pill-padding-inline`/`-padding-block`/`-gap` tokens still override. The icon side of a pill gets `--display-pill-padding-inline-icon` (tighter than `--display-pill-padding-inline`), placed by `data-icon-position` (`start`, `end` when `reversed`, `only` for icon-only, absent with no icon), so label-only pills stay evenly padded.
 
 ```vue
 <DisplayPill label="New" variant="primary" style-class-passthrough="pill-new" />

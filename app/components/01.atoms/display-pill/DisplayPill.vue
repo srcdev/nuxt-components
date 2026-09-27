@@ -56,14 +56,25 @@ watch(
     --_background: var(--display-pill-background, var(--slate-01));
     --_text-colour: var(--display-pill-text-colour, var(--slate-09));
     --_font-size: var(--display-pill-font-size, 1.2rem);
-    --_padding-inline: var(--display-pill-padding-inline, 1rem);
-    --_padding-inline-icon: var(--display-pill-padding-inline-icon, 0.6rem);
-    --_padding-block: var(--display-pill-padding-block, 0.4rem);
     --_icon-size: var(--display-pill-icon-size, 1.4rem);
+
+    /* Spacing scales with the icon size, so each size only sets font and icon size. */
+    --_padding-inline: var(
+      --display-pill-padding-inline,
+      calc(var(--_icon-size) * var(--display-pill-padding-inline-ratio, 0.7))
+    );
+    --_padding-inline-icon: var(
+      --display-pill-padding-inline-icon,
+      calc(var(--_icon-size) * var(--display-pill-padding-inline-icon-ratio, 0.4))
+    );
+    --_padding-block: var(
+      --display-pill-padding-block,
+      calc(var(--_icon-size) * var(--display-pill-padding-block-ratio, 0.3))
+    );
 
     display: inline-flex;
     align-items: center;
-    gap: var(--display-pill-gap, 0.5rem);
+    gap: var(--display-pill-gap, calc(var(--_icon-size) * var(--display-pill-gap-ratio, 0.35)));
     padding-block: var(--_padding-block);
     padding-inline: var(--_padding-inline);
 
@@ -123,17 +134,11 @@ watch(
 
     &.sm {
       --_font-size: var(--display-pill-font-size-sm, 1rem);
-      --_padding-inline: var(--display-pill-padding-inline-sm, 0.8rem);
-      --_padding-inline-icon: var(--display-pill-padding-inline-icon-sm, 0.4rem);
-      --_padding-block: var(--display-pill-padding-block-sm, 0.3rem);
       --_icon-size: var(--display-pill-icon-size-sm, 1.2rem);
     }
 
     &.lg {
       --_font-size: var(--display-pill-font-size-lg, 1.4rem);
-      --_padding-inline: var(--display-pill-padding-inline-lg, 1.2rem);
-      --_padding-inline-icon: var(--display-pill-padding-inline-icon-lg, 0.8rem);
-      --_padding-block: var(--display-pill-padding-block-lg, 0.6rem);
       --_icon-size: var(--display-pill-icon-size-lg, 1.6rem);
     }
 

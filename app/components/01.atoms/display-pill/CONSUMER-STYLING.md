@@ -40,25 +40,38 @@ the base token restyles every variant, and a variant token still wins for that o
 | `--display-pill-outline` | `none` | Decorative outline (shorthand) on every pill |
 | `--display-pill-outline-offset` | `0` | Offset for that outline |
 
-### Typography and spacing
+### Size
 
 | Token | Default (`sm` / `md` / `lg`) | Controls |
 |---|---|---|
 | `--display-pill-font-size` / `-sm` / `-lg` | `1rem` / `1.2rem` / `1.4rem` | Text size |
-| `--display-pill-padding-inline` / `-sm` / `-lg` | `0.8rem` / `1rem` / `1.2rem` | `padding-inline` (both sides of a label-only pill; the non-icon side otherwise) |
-| `--display-pill-padding-inline-icon` / `-sm` / `-lg` | `0.4rem` / `0.6rem` / `0.8rem` | `padding-inline` on the icon side (both sides of an icon-only pill), tighter because icons carry their own whitespace |
-| `--display-pill-padding-block` / `-sm` / `-lg` | `0.3rem` / `0.4rem` / `0.6rem` | `padding-block` |
-| `--display-pill-icon-size` / `-sm` / `-lg` | `1.2rem` / `1.4rem` / `1.6rem` | Icon size (`font-size` on `.display-pill-icon`) |
+| `--display-pill-icon-size` / `-sm` / `-lg` | `1.2rem` / `1.4rem` / `1.6rem` | Icon size (`font-size` on `.display-pill-icon`); also the unit all spacing below scales from |
 | `--display-pill-font-weight` | `500` | Text weight |
-| `--display-pill-gap` | `0.5rem` | Gap between icon and label |
 
 The unsuffixed token is the `md` value; `-sm`/`-lg` apply to those sizes.
 
 > **Changed 2026-09-27**: the icon-size tokens were declared but never used, so icons weren't
 > sized. The icon slot is now wrapped in `.display-pill-icon`, which sets its `font-size`.
 
+### Spacing
+
+Padding and gap are the pill's icon size times a ratio, so every size (and any custom icon size)
+keeps the same proportions. Tune a **ratio** to change spacing across all sizes, or set the
+**absolute** token to pin one length (it then applies to every size).
+
+| Ratio token | Default | Result (`sm` / `md` / `lg`) | Absolute override | Controls |
+|---|---|---|---|---|
+| `--display-pill-padding-inline-ratio` | `0.7` | ≈ `0.84` / `0.98` / `1.12rem` | `--display-pill-padding-inline` | `padding-inline` (both sides of a label-only pill; the non-icon side otherwise) |
+| `--display-pill-padding-inline-icon-ratio` | `0.4` | ≈ `0.48` / `0.56` / `0.64rem` | `--display-pill-padding-inline-icon` | `padding-inline` on the icon side (both sides of an icon-only pill), tighter because icons carry their own whitespace |
+| `--display-pill-padding-block-ratio` | `0.3` | ≈ `0.36` / `0.42` / `0.48rem` | `--display-pill-padding-block` | `padding-block` |
+| `--display-pill-gap-ratio` | `0.35` | ≈ `0.42` / `0.49` / `0.56rem` | `--display-pill-gap` | Gap between icon and label |
+
+> **Changed 2026-09-27**: spacing used to be hand-set per size (`--display-pill-padding-inline-sm`,
+> `-lg`, etc., now removed). It's now derived from the icon size; results are within about 0.1rem
+> of the old values, except `lg` block padding (`0.6rem` → `0.48rem`), which was out of proportion.
+
 Private tokens (not public API): `--_background`, `--_text-colour`, `--_font-size`, `--_padding-inline`,
-`--_padding-block`, `--_padding-inline-icon`, `--_icon-size`, swapped by the size and variant classes.
+`--_padding-block`, `--_padding-inline-icon` (derived from `--_icon-size`), `--_icon-size`, swapped by the size and variant classes.
 
 ## State hooks
 
