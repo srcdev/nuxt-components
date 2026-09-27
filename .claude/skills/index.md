@@ -93,6 +93,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── glass-panel.md          — GlassPanel: frosted-glass container, light-only token defaults in-component (light-dark() block removed from _default.css, no built-in dark glass), highlight behind content, section/article labelled via headingId slot prop, CSS token API
     ├── navigation-horizontal.md — NavigationHorizontal props, NavItemData type, CSS token API, import path gotcha
     ├── pricing-card.md         — PricingCard: SaaS-style plan card with highlight, feature list, #cta slot for button customization, CSS token API
+    ├── price-list.md           — PriceList: service/menu price columns (dl rows), PriceListData type, headingTag/fromLabel props, CSS token API
     ├── input-copy.md           — InputCopy: readonly copy-to-clipboard input, visual feedback, Clipboard API, accessibility, CSS token API
     ├── banner-video.md         — BannerVideo: full-width hero video banner, depth tier system, objectFit/objectPosition, playIcon/pauseIcon/toggle-icon slot, reduced-motion fallback, CSS tokens
     ├── grid-stack.md           — GridStack: CSS Grid z-axis stacking, slot API, z-order rules, sizing, video+overlay and image+text patterns

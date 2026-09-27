@@ -1,7 +1,7 @@
 import { describe, it, expect, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import PriceList from "../PriceList.vue";
-import type { PriceListData } from "../PriceList.vue";
+import type { PriceListData } from "~/types/components/price-list";
 
 const defaultPriceListData = [
   {
@@ -22,7 +22,11 @@ const defaultPriceListData = [
 
 const createWrapper = async (
   priceListData: PriceListData[] = defaultPriceListData,
-  extraProps: { styleClassPassthrough?: string | string[] } = {}
+  extraProps: {
+    headingTag?: "h2" | "h3" | "h4" | "h5" | "h6";
+    fromLabel?: string;
+    styleClassPassthrough?: string | string[];
+  } = {}
 ) => {
   return mountSuspended(PriceList, {
     props: { priceListData, ...extraProps },
@@ -160,6 +164,33 @@ describe("PriceList", () => {
       expect(wrapper.find(".price-list__from").text()).toBe("from");
     });
 
+    it("renders a custom fromLabel", async () => {
+      wrapper = await createWrapper(
+        [{ headingtext: "Cuts", items: [{ description: "Cut", price: "£45", from: true }] }],
+        { fromLabel: "ab" }
+      );
+      expect(wrapper.find(".price-list__from").text()).toBe("ab");
+    });
+
+    it("renders column headings as h2 by default", async () => {
+      wrapper = await createWrapper();
+      expect(wrapper.findAll("h2.price-list__heading").length).toBe(2);
+    });
+
+    it("renders column headings with a custom headingTag", async () => {
+      wrapper = await createWrapper(defaultPriceListData, { headingTag: "h3" });
+      expect(wrapper.findAll("h3.price-list__heading").length).toBe(2);
+      expect(wrapper.findAll("h2").length).toBe(0);
+    });
+
+    it("updates classes when styleClassPassthrough changes", async () => {
+      wrapper = await createWrapper(defaultPriceListData, { styleClassPassthrough: ["first-class"] });
+      await wrapper.setProps({ styleClassPassthrough: ["second-class"] });
+      const classes = wrapper.find(".price-list").classes();
+      expect(classes).toContain("second-class");
+      expect(classes).not.toContain("first-class");
+    });
+
     it("does not render a 'from' label when item.from is omitted", async () => {
       wrapper = await createWrapper();
       expect(wrapper.find(".price-list__from").exists()).toBe(false);
@@ -180,6 +211,12 @@ describe("PriceList", () => {
       const dts = wrapper.findAll("dt");
       expect(dts.length).toBe(4);
       expect(dts[0]!.text()).toBe("Cut & Blow Dry");
+    });
+
+    it("renders headings only for column titles, not prices", async () => {
+      wrapper = await createWrapper();
+      expect(wrapper.findAll("h1, h2, h3, h4, h5, h6").length).toBe(2);
+      expect(wrapper.find("dd h2").exists()).toBe(false);
     });
 
     it("uses dd for prices", async () => {

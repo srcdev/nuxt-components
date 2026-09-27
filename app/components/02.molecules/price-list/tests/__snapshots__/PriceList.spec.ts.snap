@@ -27,19 +27,13 @@ exports[`PriceList > Snapshots > default 1`] = `
       <div class="price-list__row">
         <dt class="price-list__description">Cut &amp; Blow Dry</dt>
         <dd class="price-list__price">
-          <!--v-if-->
-          <h2 class="hero-text label axis-horizontal">
-            <!--v-if--><span class="text-block-0">£45</span>
-          </h2>
+          <!--v-if--><span class="price-list__amount">£45</span>
         </dd>
       </div>
       <div class="price-list__row">
         <dt class="price-list__description">Restyle</dt>
         <dd class="price-list__price">
-          <!--v-if-->
-          <h2 class="hero-text label axis-horizontal">
-            <!--v-if--><span class="text-block-0">£65</span>
-          </h2>
+          <!--v-if--><span class="price-list__amount">£65</span>
         </dd>
       </div>
     </dl>
@@ -52,19 +46,13 @@ exports[`PriceList > Snapshots > default 1`] = `
       <div class="price-list__row">
         <dt class="price-list__description">Full Head Colour</dt>
         <dd class="price-list__price">
-          <!--v-if-->
-          <h2 class="hero-text label axis-horizontal">
-            <!--v-if--><span class="text-block-0">£75</span>
-          </h2>
+          <!--v-if--><span class="price-list__amount">£75</span>
         </dd>
       </div>
       <div class="price-list__row">
         <dt class="price-list__description">Balayage</dt>
         <dd class="price-list__price">
-          <!--v-if-->
-          <h2 class="hero-text label axis-horizontal">
-            <!--v-if--><span class="text-block-0">£95</span>
-          </h2>
+          <!--v-if--><span class="price-list__amount">£95</span>
         </dd>
       </div>
     </dl>

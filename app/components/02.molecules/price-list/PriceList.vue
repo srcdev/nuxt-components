@@ -2,7 +2,7 @@
   <div class="price-list" :class="elementClasses">
     <div v-for="(column, colIndex) in priceListData" :key="colIndex" class="price-list__column">
       <HeroText
-        :tag="'h2'"
+        :tag="headingTag"
         font-size="subheading"
         :text-content="[{ text: column.headingtext }]"
         :icon="column.headingIcon ? column.headingIcon : undefined"
@@ -13,8 +13,8 @@
         <div v-for="(item, index) in column.items" :key="index" class="price-list__row">
           <dt class="price-list__description">{{ item.description }}</dt>
           <dd class="price-list__price">
-            <span v-if="item.from" class="price-list__from">from</span>
-            <HeroText :tag="'h2'" font-size="label" :text-content="[{ text: item.price }]" />
+            <span v-if="item.from" class="price-list__from">{{ fromLabel }}</span>
+            <span class="price-list__amount">{{ item.price }}</span>
           </dd>
         </div>
       </dl>
@@ -23,58 +23,48 @@
 </template>
 
 <script setup lang="ts">
-export interface PriceItem {
-  description: string;
-  price: string;
-  from?: boolean;
-}
-
-export interface PriceListData {
-  headingtext: string;
-  headingIcon?: string;
-  items: PriceItem[];
-}
+import type { PriceListData } from "~/types/components/price-list";
 
 interface Props {
   priceListData: PriceListData[];
+  headingTag?: "h2" | "h3" | "h4" | "h5" | "h6";
+  fromLabel?: string;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  headingTag: "h2",
+  fromLabel: "from",
   styleClassPassthrough: () => [],
 });
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 </script>
 
 <style lang="css">
 @layer components {
   .price-list {
-    --_price-list-gap: 2rem;
-    --_price-list-heading-margin-block-end: 1.8rem;
-    --_price-list-row-gap: 0.75rem;
-    --_price-list-divider-color: var(--price-list-divider-color, currentColor);
-    --_price-list-divider-opacity: var(--price-list-divider-opacity, 0.15);
-    --_price-list-heading-font-size: var(--price-list-heading-font-size, 1.8rem);
-    --_price-list-description-font-size: var(--price-list-description-font-size, 1.4rem);
-    --_price-list-price-font-size: var(--price-list-price-font-size, 1.4rem);
-
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2.4rem;
+    gap: var(--price-list-column-gap, 2.4rem);
 
     @media (min-width: 48em) {
       grid-template-columns: 1fr 1fr;
     }
 
-    .price-list__heading {
-      font-weight: 600;
-      margin: 0 0 var(--_price-list-heading-margin-block-end);
+    .price-list__heading.hero-text {
+      font-size: var(--price-list-heading-font-size, var(--hero-text-subheading));
+      font-weight: var(--price-list-heading-font-weight, 600);
+      color: var(--price-list-heading-colour, inherit);
+      margin: 0 0 var(--price-list-heading-margin-block-end, 1.8rem);
 
-      &.hero-text {
-        .hero-text__icon {
-          margin-inline-end: 1rem;
-        }
+      .hero-text__icon {
+        margin-inline-end: var(--price-list-heading-icon-gap, 1rem);
       }
     }
 
@@ -83,18 +73,17 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       padding: 0;
       display: flex;
       flex-direction: column;
-      gap: 0rem;
 
       .price-list__row {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 1.2rem;
-        padding-block: 1.4rem;
-        border-block-end: 1px solid
+        gap: var(--price-list-row-gap, 1.2rem);
+        padding-block: var(--price-list-row-padding-block, 1.4rem);
+        border-block-end: var(--price-list-divider-width, 1px) solid
           color-mix(
             in srgb,
-            var(--_price-list-divider-color) calc(var(--_price-list-divider-opacity) * 100%),
+            var(--price-list-divider-colour, currentColor) calc(var(--price-list-divider-opacity, 0.15) * 100%),
             transparent
           );
 
@@ -102,15 +91,34 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
           border-block-end: none;
           padding-block-end: 0;
         }
+
         .price-list__description {
-          font-size: var(--_price-list-description-font-size);
+          font-size: var(--price-list-description-font-size, 1.4rem);
+          color: var(--price-list-description-colour, inherit);
         }
 
         .price-list__price {
-          font-size: var(--_price-list-price-font-size);
+          display: flex;
+          align-items: baseline;
+          gap: var(--price-list-from-gap, 0.5ch);
+          margin: 0;
           font-variant-numeric: tabular-nums;
           white-space: nowrap;
-          margin: 0;
+        }
+
+        .price-list__from {
+          font-size: var(--price-list-from-font-size, 1.4rem);
+          color: var(--price-list-from-colour, inherit);
+        }
+
+        .price-list__amount {
+          font-family: var(--price-list-price-font-family, var(--hero-text-font-family, "Playfair Display"));
+          font-size: var(--price-list-price-font-size, var(--hero-text-label));
+          font-variation-settings:
+            "wght" 400,
+            "ital" 1;
+          line-height: 1;
+          color: var(--price-list-price-colour, inherit);
         }
       }
     }

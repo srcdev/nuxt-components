@@ -70,7 +70,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | NavigationHorizontal | `navigation/navigation-horizontal/NavigationHorizontal.vue` | ☐ | ☐ |
 | SiteNavigation | `navigation/site-navigation/SiteNavigation.vue` | ☐ | ☐ |
 | TabNavigation | `navigation/tab-navigation/TabNavigation.vue` | ✅ | ☐ |
-| PriceList | `price-list/PriceList.vue` | ☐ | ☐ |
+| PriceList | `price-list/PriceList.vue` | ✅ | ✅ `price-list` |
 | ProfileSection | `profile-section/ProfileSection.vue` | ☐ | ☐ |
 | CaptureQrCode | `qr-code/CaptureQrCode.vue` | ☐ | ☐ |
 | DecodeQrCode | `qr-code/DecodeQrCode.vue` | ☐ | ☐ |

@@ -1,0 +1,37 @@
+{
+  "SRCDEV PriceList Basic": {
+    "description": "PriceList — columns of description/price rows",
+    "scope": "vue,html",
+    "body": [
+      "<PriceList :price-list-data=\"${1:priceListData}\" />"
+    ]
+  },
+  "SRCDEV PriceList Full": {
+    "description": "PriceList with heading level, from label and class passthrough",
+    "scope": "vue,html",
+    "body": [
+      "<PriceList",
+      "  :price-list-data=\"${1:priceListData}\"",
+      "  heading-tag=\"${2|h2,h3,h4,h5,h6|}\"",
+      "  from-label=\"${3:from}\"",
+      "  :style-class-passthrough=\"['${4:my-price-list}']\"",
+      "/>"
+    ]
+  },
+  "SRCDEV PriceList Data": {
+    "description": "PriceList data array (import type { PriceListData } from \"srcdev-nuxt-components\")",
+    "scope": "typescript,vue",
+    "body": [
+      "const ${1:priceListData}: PriceListData[] = [",
+      "  {",
+      "    headingtext: \"${2:Cutting & Styling}\",",
+      "    headingIcon: \"${3:lucide:sparkles}\",",
+      "    items: [",
+      "      { description: \"${4:Cut & Blow Dry}\", price: \"${5:£45}\" },",
+      "      { description: \"${6:Balayage}\", price: \"${7:£95}\", from: true },",
+      "    ],",
+      "  },",
+      "];"
+    ]
+  }
+}

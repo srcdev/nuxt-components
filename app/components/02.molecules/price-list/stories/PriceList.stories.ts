@@ -10,7 +10,7 @@ const priceListData = [
       { description: "Restyle", price: "£65" },
       { description: "Wash & Blow Dry", price: "£35" },
       { description: "Trim & Tidy", price: "£25" },
-      { description: "Keratin Treatment", price: "£120" },
+      { description: "Keratin Treatment", price: "£120", from: true },
     ],
   },
   {
@@ -20,7 +20,7 @@ const priceListData = [
       { description: "Full Head Colour", price: "£75" },
       { description: "Half Head Highlights", price: "£65" },
       { description: "Full Head Highlights", price: "£85" },
-      { description: "Balayage", price: "£95" },
+      { description: "Balayage", price: "£95", from: true },
       { description: "Toner", price: "£35" },
     ],
   },
@@ -34,6 +34,17 @@ const meta: Meta<typeof PriceList> = {
       control: "object",
       description: "Array of columns, each with a heading and list of items",
       table: { category: "Content" },
+    },
+    headingTag: {
+      control: "select",
+      options: ["h2", "h3", "h4", "h5", "h6"],
+      description: "Heading level for each column title; pick to fit the surrounding page outline",
+      table: { category: "Content", defaultValue: { summary: "h2" } },
+    },
+    fromLabel: {
+      control: "text",
+      description: "Text shown before a price whose item has `from: true`",
+      table: { category: "Content", defaultValue: { summary: "from" } },
     },
     styleClassPassthrough: {
       control: "object",
@@ -49,6 +60,8 @@ type Story = StoryObj<typeof PriceList>;
 export const Default: Story = {
   args: {
     priceListData,
+    headingTag: "h2",
+    fromLabel: "from",
     styleClassPassthrough: [],
   },
   render: (args) => ({
