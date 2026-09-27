@@ -1,0 +1,36 @@
+{
+  "SRCDEV ScrollRevealFrame Basic": {
+    "description": "ScrollRevealFrame: scroll-driven parallax clipping frame for any slot content",
+    "scope": "vue,html",
+    "body": [
+      "<ScrollRevealFrame frame-height=\"${1:540px}\" parallax-offset=\"${2:36rem}\">",
+      "  $0",
+      "</ScrollRevealFrame>"
+    ]
+  },
+  "SRCDEV ScrollRevealFrame CSS Sized": {
+    "description": "ScrollRevealFrame sized from CSS tokens (no sizing props, so --scroll-reveal-frame-* apply)",
+    "scope": "vue,html",
+    "body": [
+      "<ScrollRevealFrame style-class-passthrough=\"${1:my-reveal-frame}\">",
+      "  $0",
+      "</ScrollRevealFrame>"
+    ]
+  },
+  "SRCDEV ScrollRevealFrame Tokens": {
+    "description": "ScrollRevealFrame responsive token overrides",
+    "scope": "css",
+    "body": [
+      ".${1:my-reveal-frame} {",
+      "  --scroll-reveal-frame-height: ${2:320px};",
+      "  --scroll-reveal-frame-parallax-offset: ${3:20rem};",
+      "  --scroll-reveal-frame-radius: ${4:0px};",
+      "",
+      "  @media (width >= 768px) {",
+      "    --scroll-reveal-frame-height: ${5:540px};",
+      "    --scroll-reveal-frame-parallax-offset: ${6:36rem};",
+      "  }",
+      "}"
+    ]
+  }
+}

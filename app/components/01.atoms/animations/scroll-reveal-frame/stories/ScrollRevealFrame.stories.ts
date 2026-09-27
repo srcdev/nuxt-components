@@ -164,3 +164,51 @@ export const ShortFrame: Story = {
     },
   },
 };
+
+export const ResponsiveTokens: Story = {
+  args: {},
+  render: (args) => ({
+    components: { ScrollRevealFrame },
+    setup() {
+      return { args };
+    },
+    template: `
+      <div style="padding-block: 60vh; max-width: 860px; margin-inline: auto;">
+        <component is="style">
+          .srf-story-responsive {
+            --scroll-reveal-frame-height: 280px;
+            --scroll-reveal-frame-parallax-offset: 18rem;
+            --scroll-reveal-frame-radius: 0.8rem;
+          }
+          @media (width >= 768px) {
+            .srf-story-responsive {
+              --scroll-reveal-frame-height: 540px;
+              --scroll-reveal-frame-parallax-offset: 36rem;
+              --scroll-reveal-frame-radius: 2.4rem;
+            }
+          }
+        </component>
+        <p style="text-align: center; font-size: 1.4rem; opacity: 0.5; margin-block-end: 4rem;">
+          Resize below/above 768px and scroll: height, travel and radius come from CSS tokens, no props passed
+        </p>
+        <div class="srf-story-responsive">
+          <ScrollRevealFrame v-bind="args">
+            <img
+              src="/images/page/hero/hero-blonde.jpg"
+              alt="Blonde hair portrait"
+              style="display: block; width: 100%; height: 100%; object-fit: cover;"
+            />
+          </ScrollRevealFrame>
+        </div>
+      </div>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "No sizing props are passed, so the frame reads --scroll-reveal-frame-height/-parallax-offset/-radius from an ancestor class with a media query. A prop, when passed, is written inline and wins over these.",
+      },
+    },
+  },
+};

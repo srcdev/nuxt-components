@@ -2,6 +2,8 @@ import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import ScrollRevealFrame from "../ScrollRevealFrame.vue";
 
+const styleOf = (el: Element) => (el as HTMLElement).style;
+
 describe("ScrollRevealFrame", () => {
   // ─── Mount ───────────────────────────────────────────────────────────────
 
@@ -36,80 +38,85 @@ describe("ScrollRevealFrame", () => {
     expect(wrapper.element.tagName).toBe("FIGURE");
   });
 
-  it("always has the reveal-frame class", async () => {
+  it("always has the scroll-reveal-frame class", async () => {
     const wrapper = await mountSuspended(ScrollRevealFrame);
-    expect(wrapper.classes()).toContain("reveal-frame");
+    expect(wrapper.classes()).toContain("scroll-reveal-frame");
   });
 
   // ─── Inner content wrapper ───────────────────────────────────────────────
 
-  it("renders a .reveal-content child element", async () => {
+  it("renders a .scroll-reveal-frame-content child element", async () => {
     const wrapper = await mountSuspended(ScrollRevealFrame);
-    expect(wrapper.find(".reveal-content").exists()).toBe(true);
+    expect(wrapper.find(".scroll-reveal-frame-content").exists()).toBe(true);
   });
 
   // ─── Slot ────────────────────────────────────────────────────────────────
 
-  it("renders slot content inside .reveal-content", async () => {
+  it("renders slot content inside .scroll-reveal-frame-content", async () => {
     const wrapper = await mountSuspended(ScrollRevealFrame, {
       slots: { default: "<p class='slot-child'>Hello</p>" },
     });
-    const content = wrapper.find(".reveal-content");
+    const content = wrapper.find(".scroll-reveal-frame-content");
     expect(content.find(".slot-child").exists()).toBe(true);
     expect(content.find(".slot-child").text()).toBe("Hello");
   });
 
-  it("renders multiple slot children inside .reveal-content", async () => {
+  it("renders multiple slot children inside .scroll-reveal-frame-content", async () => {
     const wrapper = await mountSuspended(ScrollRevealFrame, {
       slots: { default: "<div class='child-a'></div><div class='child-b'></div>" },
     });
-    const content = wrapper.find(".reveal-content");
+    const content = wrapper.find(".scroll-reveal-frame-content");
     expect(content.find(".child-a").exists()).toBe(true);
     expect(content.find(".child-b").exists()).toBe(true);
   });
 
   // ─── CSS custom properties ───────────────────────────────────────────────
 
-  it("sets --_frame-height to 540px by default", async () => {
+  it("sets no inline tokens by default, so CSS overrides and defaults apply", async () => {
     const wrapper = await mountSuspended(ScrollRevealFrame);
-    const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_frame-height")).toBe("540px");
+    const style = styleOf(wrapper.element);
+    expect(style.getPropertyValue("--scroll-reveal-frame-height")).toBe("");
+    expect(style.getPropertyValue("--scroll-reveal-frame-parallax-offset")).toBe("");
+    expect(style.getPropertyValue("--scroll-reveal-frame-radius")).toBe("");
+    expect(wrapper.attributes("style")).toBeUndefined();
   });
 
-  it("sets --_parallax-offset to 36rem by default", async () => {
-    const wrapper = await mountSuspended(ScrollRevealFrame);
-    const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_parallax-offset")).toBe("36rem");
-  });
-
-  it("sets --_radius to 0px by default", async () => {
-    const wrapper = await mountSuspended(ScrollRevealFrame);
-    const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_radius")).toBe("0px");
-  });
-
-  it("reflects frameHeight prop in --_frame-height", async () => {
+  it("reflects frameHeight prop in --scroll-reveal-frame-height", async () => {
     const wrapper = await mountSuspended(ScrollRevealFrame, {
       props: { frameHeight: "80vh" },
     });
-    const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_frame-height")).toBe("80vh");
+    expect(styleOf(wrapper.element).getPropertyValue("--scroll-reveal-frame-height")).toBe("80vh");
   });
 
-  it("reflects parallaxOffset prop in --_parallax-offset", async () => {
+  it("reflects parallaxOffset prop in --scroll-reveal-frame-parallax-offset", async () => {
     const wrapper = await mountSuspended(ScrollRevealFrame, {
       props: { parallaxOffset: "48rem" },
     });
-    const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_parallax-offset")).toBe("48rem");
+    expect(styleOf(wrapper.element).getPropertyValue("--scroll-reveal-frame-parallax-offset")).toBe("48rem");
   });
 
-  it("reflects radius prop in --_radius", async () => {
+  it("reflects radius prop in --scroll-reveal-frame-radius", async () => {
     const wrapper = await mountSuspended(ScrollRevealFrame, {
       props: { radius: "2.4rem" },
     });
-    const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_radius")).toBe("2.4rem");
+    expect(styleOf(wrapper.element).getPropertyValue("--scroll-reveal-frame-radius")).toBe("2.4rem");
+  });
+
+  it("only sets the tokens whose props were passed", async () => {
+    const wrapper = await mountSuspended(ScrollRevealFrame, {
+      props: { radius: "1rem" },
+    });
+    const style = styleOf(wrapper.element);
+    expect(style.getPropertyValue("--scroll-reveal-frame-radius")).toBe("1rem");
+    expect(style.getPropertyValue("--scroll-reveal-frame-height")).toBe("");
+  });
+
+  it("removes the inline token when the prop is cleared", async () => {
+    const wrapper = await mountSuspended(ScrollRevealFrame, {
+      props: { frameHeight: "400px" },
+    });
+    await wrapper.setProps({ frameHeight: undefined });
+    expect(styleOf(wrapper.element).getPropertyValue("--scroll-reveal-frame-height")).toBe("");
   });
 
   // ─── styleClassPassthrough ───────────────────────────────────────────────
@@ -129,11 +136,11 @@ describe("ScrollRevealFrame", () => {
     expect(wrapper.classes()).toContain("mbe-32");
   });
 
-  it("does not apply styleClassPassthrough to .reveal-content", async () => {
+  it("does not apply styleClassPassthrough to .scroll-reveal-frame-content", async () => {
     const wrapper = await mountSuspended(ScrollRevealFrame, {
       props: { styleClassPassthrough: "hero-frame" },
     });
-    expect(wrapper.find(".reveal-content").classes()).not.toContain("hero-frame");
+    expect(wrapper.find(".scroll-reveal-frame-content").classes()).not.toContain("hero-frame");
   });
 
   it("updates classes when styleClassPassthrough prop changes", async () => {

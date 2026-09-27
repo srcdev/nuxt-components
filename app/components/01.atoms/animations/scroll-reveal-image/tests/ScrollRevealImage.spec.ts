@@ -48,37 +48,37 @@ describe("ScrollRevealImage", () => {
     expect(wrapper.element.tagName).toBe("FIGURE");
   });
 
-  it("always has the reveal-frame class", async () => {
+  it("always has the scroll-reveal-frame class", async () => {
     const wrapper = await mountSuspended(ScrollRevealImage, {
       props: { src: "/images/test.jpg" },
     });
-    expect(wrapper.classes()).toContain("reveal-frame");
+    expect(wrapper.classes()).toContain("scroll-reveal-frame");
   });
 
   // ─── CSS custom properties ───────────────────────────────────────────────
 
-  it("sets --_frame-height to 540px by default", async () => {
+  it("leaves --scroll-reveal-frame-height unset by default (CSS default applies)", async () => {
     const wrapper = await mountSuspended(ScrollRevealImage, {
       props: { src: "/images/test.jpg" },
     });
     const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_frame-height")).toBe("540px");
+    expect(style.getPropertyValue("--scroll-reveal-frame-height")).toBe("");
   });
 
-  it("sets --_parallax-offset to 36rem by default", async () => {
+  it("leaves --scroll-reveal-frame-parallax-offset unset by default (CSS default applies)", async () => {
     const wrapper = await mountSuspended(ScrollRevealImage, {
       props: { src: "/images/test.jpg" },
     });
     const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_parallax-offset")).toBe("36rem");
+    expect(style.getPropertyValue("--scroll-reveal-frame-parallax-offset")).toBe("");
   });
 
-  it("sets --_radius to 0px by default", async () => {
+  it("leaves --scroll-reveal-frame-radius unset by default (CSS default applies)", async () => {
     const wrapper = await mountSuspended(ScrollRevealImage, {
       props: { src: "/images/test.jpg" },
     });
     const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_radius")).toBe("0px");
+    expect(style.getPropertyValue("--scroll-reveal-frame-radius")).toBe("");
   });
 
   it("sets --_focal-x to 50% by default", async () => {
@@ -89,28 +89,28 @@ describe("ScrollRevealImage", () => {
     expect(style.getPropertyValue("--_focal-x")).toBe("50%");
   });
 
-  it("reflects frameHeight prop in --_frame-height", async () => {
+  it("reflects frameHeight prop in --scroll-reveal-frame-height", async () => {
     const wrapper = await mountSuspended(ScrollRevealImage, {
       props: { src: "/images/test.jpg", frameHeight: "80vh" },
     });
     const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_frame-height")).toBe("80vh");
+    expect(style.getPropertyValue("--scroll-reveal-frame-height")).toBe("80vh");
   });
 
-  it("reflects parallaxOffset prop in --_parallax-offset", async () => {
+  it("reflects parallaxOffset prop in --scroll-reveal-frame-parallax-offset", async () => {
     const wrapper = await mountSuspended(ScrollRevealImage, {
       props: { src: "/images/test.jpg", parallaxOffset: "48rem" },
     });
     const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_parallax-offset")).toBe("48rem");
+    expect(style.getPropertyValue("--scroll-reveal-frame-parallax-offset")).toBe("48rem");
   });
 
-  it("reflects radius prop in --_radius", async () => {
+  it("reflects radius prop in --scroll-reveal-frame-radius", async () => {
     const wrapper = await mountSuspended(ScrollRevealImage, {
       props: { src: "/images/test.jpg", radius: "2.4rem" },
     });
     const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_radius")).toBe("2.4rem");
+    expect(style.getPropertyValue("--scroll-reveal-frame-radius")).toBe("2.4rem");
   });
 
   it("reflects focalX prop in --_focal-x", async () => {
@@ -123,7 +123,7 @@ describe("ScrollRevealImage", () => {
 
   // ─── Image element ───────────────────────────────────────────────────────
 
-  it("renders an img child element with the reveal-image class", async () => {
+  it("renders an img child element with the scroll-reveal-image class", async () => {
     const wrapper = await mountSuspended(ScrollRevealImage, {
       props: { src: "/images/test.jpg" },
     });
@@ -131,7 +131,7 @@ describe("ScrollRevealImage", () => {
     // identified by the data-nuxt-img attribute it injects.
     const img = wrapper.find("img[data-nuxt-img]");
     expect(img.exists()).toBe(true);
-    expect(img.classes()).toContain("reveal-image");
+    expect(img.classes()).toContain("scroll-reveal-image");
   });
 
   it("passes src through to the image element", async () => {

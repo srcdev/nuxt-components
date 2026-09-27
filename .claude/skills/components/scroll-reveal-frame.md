@@ -1,6 +1,6 @@
 ---
 name: ScrollRevealFrame
-description: ScrollRevealFrame generic parallax clipping frame — props, slot API, CSS tokens, browser support, when to use vs ScrollRevealImage
+description: ScrollRevealFrame generic parallax clipping frame — props, slot API, public CSS tokens (prop or CSS), browser support, when to use vs ScrollRevealImage
 type: reference
 ---
 
@@ -14,26 +14,28 @@ Use `ScrollRevealFrame` when the content inside the frame is **anything other th
 
 ## How it works
 
-- The `<figure>` root is a fixed-height clipping window (`overflow: hidden`) that registers a named `view-timeline`.
-- The inner `.reveal-content` wrapper is taller than the frame by `parallaxOffset` and animates `translateY` as the frame scrolls through the viewport.
+- The `<figure class="scroll-reveal-frame">` root is a fixed-height clipping window (`overflow: hidden`) that registers a named `view-timeline`.
+- The inner `.scroll-reveal-frame-content` wrapper is taller than the frame by the parallax offset and animates `translateY` as the frame scrolls through the viewport.
 - Slot content fills that wrapper — anything inside pans as a unit.
 
 Browser support (as of 2026): Chrome 115+, Edge 115+, Firefox 114+, Safari 17.2+. Older browsers fall back to a static cropped view.
 
 ## Props
 
+The three sizing props have **no default**. When passed, each writes its public token inline on the root (so it wins over any CSS). When omitted, the token comes from CSS, falling back to the default shown.
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `frameHeight` | `string` | `"540px"` | Height of the visible clipping frame. Any CSS length unit (`px`, `vh`, `rem`). |
-| `parallaxOffset` | `string` | `"36rem"` | Distance the content travels vertically across the full scroll range. Larger = more dramatic reveal. |
-| `radius` | `string` | `"0px"` | `border-radius` applied to the clipping frame. Slot content stays contained within the rounded shape. |
+| `frameHeight` | `string` | unset (CSS `540px`) | Height of the visible clipping frame. Any CSS length unit. Writes `--scroll-reveal-frame-height`. |
+| `parallaxOffset` | `string` | unset (CSS `36rem`) | Distance the content travels vertically across the full scroll range. Writes `--scroll-reveal-frame-parallax-offset`. |
+| `radius` | `string` | unset (CSS `0px`) | `border-radius` of the clipping frame. Writes `--scroll-reveal-frame-radius`. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root `<figure>`. |
 
 ## Slots
 
 | Slot | Description |
 |------|-------------|
-| `default` | Content to pan. It fills a `div.reveal-content` that is taller than the frame by `parallaxOffset`. |
+| `default` | Content to pan. It fills a `div.scroll-reveal-frame-content` that is taller than the frame by the parallax offset. |
 
 ## Basic usage — single image
 
@@ -91,29 +93,27 @@ Wrap each `<img>` / `<NuxtImg>` in a `<div>` cell — `object-fit` on an `<img>`
 
 ## Responsive frame height
 
-The `frameHeight` prop sets `--_frame-height` as an inline style. To vary it responsively, override the CSS custom property in a scoped style block:
+Don't pass the prop; set the public token from CSS on an element you own:
 
 ```css
 .my-page {
-  .reveal-frame {
-    --_frame-height: 320px;
+  --scroll-reveal-frame-height: 320px;
 
-    @media (width >= 768px) {
-      --_frame-height: 540px;
-    }
+  @media (width >= 768px) {
+    --scroll-reveal-frame-height: 540px;
   }
 }
 ```
 
 ## CSS custom properties
 
-These are set from props via inline `:style` but can be overridden in CSS for responsive or contextual control.
+Full detail in `CONSUMER-STYLING.md` next to the component.
 
-| Property | Default | Set by prop |
+| Property | Default | Set by prop (when passed) |
 |----------|---------|-------------|
-| `--_frame-height` | `540px` | `frameHeight` |
-| `--_parallax-offset` | `36rem` | `parallaxOffset` |
-| `--_radius` | `0px` | `radius` |
+| `--scroll-reveal-frame-height` | `540px` | `frameHeight` |
+| `--scroll-reveal-frame-parallax-offset` | `36rem` | `parallaxOffset` |
+| `--scroll-reveal-frame-radius` | `0px` | `radius` |
 
 ## Choosing parallaxOffset
 
@@ -131,6 +131,7 @@ Values below `20rem` tend to look static at normal scroll speeds.
 ## Notes
 
 - `overflow: hidden` is on the root `<figure>` — content that needs to escape (dropdowns, tooltips) must be portalled outside.
-- The named `view-timeline` (`--reveal-frame-timeline`) is scoped to the component. Multiple `ScrollRevealFrame` instances on the same page are independent.
-- Reduced-motion: the animation is disabled and the content falls back to a static centred crop via `@media (prefers-reduced-motion: reduce)`.
+- The named `view-timeline` (`--scroll-reveal-frame-timeline`) is scoped to the component. Multiple `ScrollRevealFrame` instances on the same page are independent.
+- Reduced-motion: the animation is disabled and the content is sized to the frame (a static crop) via `@media (prefers-reduced-motion: reduce)`. Same for browsers without `animation-timeline`.
 - Do not put `ScrollRevealFrame` inside a container with `overflow: hidden` or `overflow: clip` — this breaks the `view-timeline` scroll detection.
+- 2026-09-27 migration: the private `--_frame-height`/`--_parallax-offset`/`--_radius` tokens became public `--scroll-reveal-frame-*` tokens, and the props lost their defaults. Before, the props always wrote the private tokens inline, so the CSS override this doc used to recommend could never apply. Classes renamed `.reveal-frame` → `.scroll-reveal-frame`, `.reveal-content` → `.scroll-reveal-frame-content`; keyframes `reveal-pan` → `scroll-reveal-frame-pan` (generic global names, collision-prone). `ScrollRevealImage`'s image class became `.scroll-reveal-image`.

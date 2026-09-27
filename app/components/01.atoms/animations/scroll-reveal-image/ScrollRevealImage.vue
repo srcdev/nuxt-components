@@ -7,7 +7,7 @@
     :style="{ '--_focal-x': focalX }"
   >
     <NuxtImg
-      class="reveal-image"
+      class="scroll-reveal-image"
       :src="src"
       :alt="alt"
       :width="imgWidth"
@@ -59,10 +59,10 @@ withDefaults(defineProps<Props>(), {
   alt: "",
   imgWidth: 1920,
   imgHeight: 1080,
-  frameHeight: "540px",
-  parallaxOffset: "36rem",
+  frameHeight: undefined,
+  parallaxOffset: undefined,
   focalX: "50%",
-  radius: "0px",
+  radius: undefined,
   loading: "lazy",
   styleClassPassthrough: () => [],
 });
@@ -70,7 +70,7 @@ withDefaults(defineProps<Props>(), {
 
 <style lang="css">
 @layer components {
-  .reveal-image {
+  .scroll-reveal-image {
     display: block;
     width: 100%;
     height: 100%;
@@ -84,13 +84,13 @@ withDefaults(defineProps<Props>(), {
 
   /* ── Fallback: centre the crop vertically when there is no animation ── */
   @supports not (animation-timeline: scroll()) {
-    .reveal-image {
+    .scroll-reveal-image {
       object-position: var(--_focal-x, 50%) 50%;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .reveal-image {
+    .scroll-reveal-image {
       object-position: var(--_focal-x, 50%) 50%;
     }
   }

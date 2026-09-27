@@ -1,59 +1,31 @@
 <template>
   <figure
-    class="reveal-frame"
+    class="scroll-reveal-frame"
     :class="[elementClasses]"
     :style="{
-      '--_frame-height': frameHeight,
-      '--_parallax-offset': parallaxOffset,
-      '--_radius': radius,
+      '--scroll-reveal-frame-height': frameHeight,
+      '--scroll-reveal-frame-parallax-offset': parallaxOffset,
+      '--scroll-reveal-frame-radius': radius,
     }"
   >
-    <div class="reveal-content">
+    <div class="scroll-reveal-frame-content">
       <slot></slot>
     </div>
   </figure>
 </template>
 
 <script setup lang="ts">
-/**
- * ScrollRevealFrame
- *
- * Generic clipping frame that pans its slot content vertically as it scrolls
- * through the viewport — driven entirely by CSS Scroll-driven Animations.
- * No scroll listeners, no JS animation.
- *
- * How it works:
- *   - The <figure> is a fixed-height clipping window (overflow: hidden).
- *   - It registers a named view-timeline scoped to itself.
- *   - The inner .reveal-content wrapper is taller than the frame by
- *     `parallaxOffset`, and animates translateY as the frame scrolls.
- *   - Any slot content (single image, grid, video, etc.) fills that wrapper.
- *
- * Browser support (as of 2026):
- *   Chrome 115+, Edge 115+, Firefox 114+, Safari 17.2+
- *   Falls back gracefully to a static cropped view in older browsers.
- *
- * For single-image use with NuxtImg optimisation and focal-point control,
- * use ScrollRevealImage instead — it wraps this component.
- */
-
 interface Props {
-  /** Height of the visible clipping frame. */
   frameHeight?: string;
-  /**
-   * How far the content travels vertically as the frame scrolls through the
-   * viewport. Larger = more content revealed = stronger parallax feel.
-   */
   parallaxOffset?: string;
-  /** Optional rounded corners on the frame. */
   radius?: string;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  frameHeight: "540px",
-  parallaxOffset: "36rem",
-  radius: "0px",
+  frameHeight: undefined,
+  parallaxOffset: undefined,
+  radius: undefined,
   styleClassPassthrough: () => [],
 });
 
@@ -67,59 +39,46 @@ watch(
 
 <style lang="css">
 @layer components {
-  .reveal-frame {
-    /* Public tokens (overridable by consumer) */
-    --_frame-height: 540px;
-    --_parallax-offset: 36rem;
-    --_radius: 0px;
-
-    margin: 0; /* reset browser <figure> default margin */
+  .scroll-reveal-frame {
+    margin: 0;
     position: relative;
-    height: var(--_frame-height);
+    height: var(--scroll-reveal-frame-height, 540px);
     width: 100%;
     overflow: hidden;
-    border-radius: var(--_radius);
+    border-radius: var(--scroll-reveal-frame-radius, 0px);
 
-    /*
-     * Named view-timeline lets the child content reference this element's
-     * scroll progress rather than its own (which would be distorted by the
-     * artificially inflated height).
-     */
-    view-timeline: --reveal-frame-timeline block;
-  }
+    /* Named so the taller child animates on this element's progress, not its own. */
+    view-timeline: --scroll-reveal-frame-timeline block;
 
-  .reveal-content {
-    display: block;
-    width: 100%;
-    /*
-     * Content is taller than the frame by parallaxOffset so there is always
-     * content to travel into as the animation progresses.
-     */
-    height: calc(100% + var(--_parallax-offset));
+    .scroll-reveal-frame-content {
+      --_parallax-offset: var(--scroll-reveal-frame-parallax-offset, 36rem);
 
-    animation: reveal-pan linear both;
-    animation-timeline: --reveal-frame-timeline;
-    animation-range: entry 0% exit 100%;
-  }
+      display: block;
+      width: 100%;
+      height: calc(100% + var(--_parallax-offset));
 
-  @keyframes reveal-pan {
-    from { transform: translateY(0); }
-    to   { transform: translateY(calc(-1 * var(--_parallax-offset))); }
-  }
+      animation: scroll-reveal-frame-pan linear both;
+      animation-timeline: --scroll-reveal-frame-timeline;
+      animation-range: entry 0% exit 100%;
 
-  /* ── Fallback: browsers without Scroll-driven Animations ── */
-  @supports not (animation-timeline: scroll()) {
-    .reveal-content {
-      animation: none;
-      height: 100%;
+      @supports not (animation-timeline: scroll()) {
+        animation: none;
+        height: 100%;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        animation: none;
+        height: 100%;
+      }
     }
   }
 
-  /* ── Reduced-motion: static view, no travel ── */
-  @media (prefers-reduced-motion: reduce) {
-    .reveal-content {
-      animation: none;
-      height: 100%;
+  @keyframes scroll-reveal-frame-pan {
+    from {
+      transform: translateY(0);
+    }
+    to {
+      transform: translateY(calc(-1 * var(--_parallax-offset)));
     }
   }
 }

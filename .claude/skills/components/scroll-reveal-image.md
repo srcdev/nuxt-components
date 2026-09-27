@@ -20,10 +20,10 @@ For arbitrary slot content — a grid of images, video, markup — use `ScrollRe
 | `alt` | `string` | `""` | Alt text for the image. |
 | `imgWidth` | `number` | `1920` | Intrinsic width of the source image — required for NuxtImg optimisation. |
 | `imgHeight` | `number` | `1080` | Intrinsic height of the source image — required for NuxtImg optimisation. |
-| `frameHeight` | `string` | `"540px"` | Height of the visible clipping frame. Any CSS length unit (`px`, `vh`, `rem`). |
-| `parallaxOffset` | `string` | `"36rem"` | Distance the image travels vertically across the full scroll range. Larger = more dramatic reveal. |
+| `frameHeight` | `string` | unset (CSS default `540px`) | Height of the visible clipping frame. Any CSS length unit. Leave unset to control it from CSS via `--scroll-reveal-frame-height`. |
+| `parallaxOffset` | `string` | unset (CSS default `36rem`) | Distance the image travels vertically across the full scroll range. Leave unset to control it via `--scroll-reveal-frame-parallax-offset`. |
 | `focalX` | `string` | `"50%"` | Horizontal focal point — CSS `object-position` x-axis value. Controls which horizontal slice stays in view. |
-| `radius` | `string` | `"0px"` | `border-radius` applied to the clipping frame. |
+| `radius` | `string` | unset (CSS default `0px`) | `border-radius` of the clipping frame. Leave unset to control it via `--scroll-reveal-frame-radius`. |
 | `loading` | `"lazy" \| "eager"` | `"lazy"` | Image loading strategy. Use `"eager"` if this is the LCP image (e.g. partially in view on load). |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root `<figure>`. |
 
@@ -122,34 +122,41 @@ Common pairs:
 
 ## Responsive frame height
 
-Override `--_frame-height` in a scoped style block for responsive control:
+Don't pass `frame-height`, and set the frame's public token from CSS on an ancestor you own (a prop,
+when passed, is written inline and always wins):
 
 ```css
 .my-page {
-  .reveal-frame {
-    --_frame-height: 320px;
+  --scroll-reveal-frame-height: 320px;
 
-    @media (width >= 768px) {
-      --_frame-height: 480px;
-    }
+  @media (width >= 768px) {
+    --scroll-reveal-frame-height: 480px;
+  }
 
-    @media (width >= 1024px) {
-      --_frame-height: 540px;
-    }
+  @media (width >= 1024px) {
+    --scroll-reveal-frame-height: 540px;
   }
 }
 ```
 
+> **Changed 2026-09-27**: this section used to recommend overriding `--_frame-height` on
+> `.reveal-frame`. That never worked, because this component always passed a default `frameHeight`
+> down and the frame always wrote it inline. The frame-sizing props now default to unset.
+
 ## CSS custom properties
 
-Set from props via inline `:style` — override in CSS for responsive or contextual control.
+Frame tokens come from `ScrollRevealFrame` (see its `CONSUMER-STYLING.md`); each prop writes its
+token inline only when passed.
 
 | Property | Default | Set by prop |
 | -------- | ------- | ----------- |
-| `--_frame-height` | `540px` | `frameHeight` |
-| `--_parallax-offset` | `36rem` | `parallaxOffset` |
-| `--_radius` | `0px` | `radius` |
-| `--_focal-x` | `50%` | `focalX` |
+| `--scroll-reveal-frame-height` | `540px` | `frameHeight` |
+| `--scroll-reveal-frame-parallax-offset` | `36rem` | `parallaxOffset` |
+| `--scroll-reveal-frame-radius` | `0px` | `radius` |
+| `--_focal-x` | `50%` | `focalX` (always written inline) |
+
+Classes: root `.scroll-reveal-frame`, wrapper `.scroll-reveal-frame-content`, image
+`.scroll-reveal-image` (renamed 2026-09-27 from `.reveal-frame`/`.reveal-content`/`.reveal-image`).
 
 ## Choosing parallaxOffset
 
