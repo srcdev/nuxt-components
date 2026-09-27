@@ -63,4 +63,39 @@ describe("GridStack", () => {
     expect(wrapper.classes()).toContain("class-a");
     expect(wrapper.classes()).toContain("class-b");
   });
+
+  it("updates classes when styleClassPassthrough prop changes", async () => {
+    const wrapper = await mountSuspended(GridStack, {
+      props: { styleClassPassthrough: ["original"] },
+    });
+    await wrapper.setProps({ styleClassPassthrough: ["updated"] });
+    expect(wrapper.classes()).not.toContain("original");
+    expect(wrapper.classes()).toContain("updated");
+  });
+
+  it("always has the grid-stack class", async () => {
+    const wrapper = await mountSuspended(GridStack);
+    expect(wrapper.classes()).toContain("grid-stack");
+  });
+
+  it("passes a consumer aria-label through to the root", async () => {
+    const wrapper = await mountSuspended(GridStack, {
+      props: { tag: "section" },
+      attrs: { "aria-label": "Hero" },
+    });
+    expect(wrapper.attributes("aria-label")).toBe("Hero");
+    expect(wrapper.attributes("aria-labelledby")).toBeUndefined();
+  });
+
+  it("renders the base layer first so later slots paint on top", async () => {
+    const wrapper = await mountSuspended(GridStack, {
+      slots: {
+        "layer-1": "<div class='base'>Base</div>",
+        "layer-2": "<div class='overlay'>Overlay</div>",
+      },
+    });
+    const layers = wrapper.findAll(".grid-stack__layer");
+    expect(layers[0]!.find(".base").exists()).toBe(true);
+    expect(layers[1]!.find(".overlay").exists()).toBe(true);
+  });
 });

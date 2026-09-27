@@ -1,0 +1,49 @@
+{
+  "SRCDEV GridStack Basic": {
+    "description": "GridStack with a base layer and an overlay layer (last slot paints on top)",
+    "scope": "vue,html",
+    "body": [
+      "<GridStack${1: tag=\"section\"}>",
+      "  <template #layer-1>",
+      "    $2",
+      "  </template>",
+      "  <template #layer-2>",
+      "    $3",
+      "  </template>",
+      "</GridStack>"
+    ]
+  },
+  "SRCDEV GridStack Video Overlay": {
+    "description": "GridStack with a BannerVideo base layer and a centred content overlay",
+    "scope": "vue,html",
+    "body": [
+      "<GridStack tag=\"section\">",
+      "  <template #layer-1>",
+      "    <BannerVideo src=\"$1\" poster=\"$2\" alt=\"$3\"></BannerVideo>",
+      "  </template>",
+      "  <template #layer-2>",
+      "    <div class=\"$4hero-overlay\">",
+      "      $5",
+      "    </div>",
+      "  </template>",
+      "</GridStack>"
+    ]
+  },
+  "SRCDEV GridStack CSS Override": {
+    "description": "CSS override scaffold for GridStack (no tokens; root and layer classes)",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .grid-stack {",
+      "    block-size: $2;",
+      "  }",
+      "",
+      "  .grid-stack__layer:last-child {",
+      "    display: grid;",
+      "    place-items: center;",
+      "    pointer-events: none;",
+      "  }",
+      "}"
+    ]
+  }
+}

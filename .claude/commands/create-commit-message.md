@@ -11,3 +11,7 @@ Steps:
 4. Present the message in a fenced code block. Do not commit it.
 
 If the user's request also explicitly says "commit this" or "run it", that's authorization to act — use the `/run-commit` flow instead of stopping at the draft.
+
+## Never name consumer apps
+
+This repo and its npm package are public. Never name a consuming app, client site or repo (or its file paths, page names, or domain) in the output. Refer to them generically: "a consumer app", "consumers overriding this token", "one consumer still uses the old name". This holds even when the change was prompted by a specific consumer or the diff context mentions one; the private consumer map lives in personal memory only.

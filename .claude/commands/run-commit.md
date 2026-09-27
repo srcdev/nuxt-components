@@ -11,3 +11,7 @@ Steps:
 4. Push to the current branch's tracked remote. If the branch has no upstream yet, ask before setting one with `-u`. Never force-push without explicit user instruction.
 
 Never use `--no-verify`, `--no-gpg-sign`, or otherwise skip hooks/signing. If a pre-commit hook fails, fix the underlying issue and create a **new** commit — never amend to work around a failed hook.
+
+## Never name consumer apps
+
+This repo and its npm package are public. Never name a consuming app, client site or repo (or its file paths, page names, or domain) in the output. Refer to them generically: "a consumer app", "consumers overriding this token", "one consumer still uses the old name". This holds even when the change was prompted by a specific consumer or the diff context mentions one; the private consumer map lives in personal memory only.

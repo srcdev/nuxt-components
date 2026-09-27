@@ -32,3 +32,7 @@ Steps:
 
 - **`skill-name` skill** — new/updated: what it covers
 ```
+
+## Never name consumer apps
+
+This repo and its npm package are public. Never name a consuming app, client site or repo (or its file paths, page names, or domain) in the output. Refer to them generically: "a consumer app", "consumers overriding this token", "one consumer still uses the old name". This holds even when the change was prompted by a specific consumer or the diff context mentions one; the private consumer map lives in personal memory only.

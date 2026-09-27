@@ -15,7 +15,10 @@ type: reference
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `tag` | `"div" \| "section" \| "article" \| "main"` | `"div"` | HTML element rendered as the root. |
-| `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root element. |
+| `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root element. Reactive: changing it after mount swaps the classes. |
+
+GridStack never sets `aria-labelledby`. If `tag="section"` needs an accessible name, pass
+`aria-label` (it falls through to the root).
 
 ## Slot API
 
@@ -106,7 +109,10 @@ To pin the stack to a fixed height, set it on the root from the consuming page:
 
 ## Consumer styling
 
-No `:deep()` needed — `@layer components` means page styles win automatically.
+GridStack has no CSS custom properties; style `.grid-stack` / `.grid-stack__layer` directly from an
+unlayered page block (`@layer components` means it wins without extra specificity). From a
+consumer's `<style scoped>` file, `.grid-stack__layer` rules need `:deep()`. Full reference:
+`app/components/01.atoms/grids/grid-stack/CONSUMER-STYLING.md`.
 
 ```vue
 <style>

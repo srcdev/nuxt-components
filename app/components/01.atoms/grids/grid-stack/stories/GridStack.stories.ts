@@ -8,7 +8,7 @@ interface GridStackArgs {
 }
 
 export default {
-  title: "Atoms/Layout/GridStack",
+  title: "Atoms/Grids/GridStack",
   component: GridStackComponent,
   argTypes: {
     tag: {

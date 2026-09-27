@@ -46,3 +46,4 @@ Any caveats, follow-up tickets, or decisions worth flagging for reviewers (optio
 - Lead with the user-facing or functional change; CSS/test/doc tidy-ups can be secondary bullets
 - Keep the tone factual — describe what changed, not the effort involved
 - Do not include "Co-Authored-By" or other git trailer lines — those belong in the commit message, not the PR body
+- Never name a consuming app, client site or repo (or its file paths, page names or domain): this repo and its npm package are public. Say "a consumer app" instead, even when the change was prompted by a specific one.
