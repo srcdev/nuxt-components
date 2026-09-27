@@ -77,7 +77,6 @@ Slots are rendered in document order.
 
 - `app/components/01.atoms/card/CardCore.vue`
 - `app/components/01.atoms/content-wrappers/layout-grid/layout-grid-by-cols/LayoutGridByCols.vue`
-- `app/components/01.atoms/content-wrappers/layout-grid/layout-grid-by-width/LayoutGridByWidth.vue`
 - `app/components/container-glow/ContainerGlowCore.vue`
 
 ---

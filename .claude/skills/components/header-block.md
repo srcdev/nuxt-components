@@ -58,7 +58,7 @@ heading to have an accessible name. Bind the same id to both:
 </section>
 ```
 
-Several components in this library (`PageRow`, `LayoutGridByCols`/`LayoutGridByWidth`,
+Several components in this library (`PageRow`, `LayoutGridByCols`,
 `ProfileSection`, `ServiceSummary`, `ServiceDetail`, `PageHeroHighlights`) already generate this id
 automatically via the `useAriaLabelledById` composable and expose it as a `heading-id` slot prop —
 when composing inside one of those, bind `HeaderBlock`'s `id` to that slot prop instead of writing

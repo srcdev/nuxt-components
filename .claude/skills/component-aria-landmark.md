@@ -88,7 +88,7 @@ Self-bound (the component renders its own heading and binds `headingId` internal
 action needed):
 
 - `ServiceSummary` (03.organisms) — binds it to its own title `HeroText`
-- `LayoutGridByCols` / `LayoutGridByWidth` (01.atoms) — render their own visually-hidden `<p>` from the `label` prop
+- `LayoutGridByCols` (01.atoms) — renders its own visually-hidden `<p>` from the `label` prop
 
 Not using this pattern:
 

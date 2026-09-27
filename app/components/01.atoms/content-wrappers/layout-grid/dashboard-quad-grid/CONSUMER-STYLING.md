@@ -46,7 +46,7 @@ Set the tokens above on an element you own (a page or section class, or a class 
 - The four-panel layout (mobile stack → tablet 2×3 → desktop 3×2 with slot1 spanning vertically)
   is structural, driven by fixed container-query breakpoints (`768px`, `1060px`) rather than
   tokens/props — this is a fixed dashboard shape, not a general-purpose grid. Use
-  `LayoutGridByCols`/`LayoutGridByWidth` instead if you need an arbitrary column count.
+  `LayoutGridByCols` or `AutoGrid` instead if you need an arbitrary column count.
 - Responds to its own container width (`container-type: inline-size`), not the viewport.
 - Also declares a `rule`/`rule-break`/`rule-inset` gap-decoration line between grid cells (the
   CSS Gap Decorations spec) via `--dashboard-quad-grid-rule-*` tokens. Browser support is limited

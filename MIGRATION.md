@@ -33,7 +33,6 @@ Tracks progress toward a fully migrated component library. A component is consid
 | DashboardQuadGrid | `content-wrappers/layout-grid/dashboard-quad-grid/` | ✅ | ✅ `dashboard-quad-grid` |
 | DashboardStatsGrid | `content-wrappers/layout-grid/dashboard-stats-grid/` | ✅ | ✅ `dashboard-stats-grid` |
 | LayoutGridByCols | `content-wrappers/layout-grid/layout-grid-by-cols/` | ☐ | ☐ |
-| LayoutGridByWidth | `content-wrappers/layout-grid/layout-grid-by-width/` | ☐ | ☐ |
 | DisplayAvatar | `display-avatar/DisplayAvatar.vue` | ☐ | ☐ |
 | DisplayDialog | `display-dialog/DisplayDialog.vue` | ✅ | ✅ `dialog` |
 | DisplayPill | `display-pill/DisplayPill.vue` | ☐ | ☐ |

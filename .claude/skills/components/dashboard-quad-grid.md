@@ -2,8 +2,8 @@
 
 ## Overview
 
-`DashboardQuadGrid` (renamed from `LayoutGridA`) is a fixed 4-panel dashboard layout. Unlike
-`LayoutGridByCols`/`LayoutGridByWidth`, it does not take a column-count prop — it has four
+`DashboardQuadGrid` (renamed from `LayoutGridA`) is a fixed 4-panel dashboard layout. Unlike the generic
+grids (`LayoutGridByCols`, `AutoGrid`), its column arrangement isn't configurable — it has four
 **named** slots (`slot1`–`slot4`) with a fixed responsive arrangement that changes shape (not
 just column count) across breakpoints, designed for dashboard-style layouts (one primary panel
 plus three supporting panels).
@@ -46,7 +46,7 @@ own container width, not the viewport.
   horizontally across the top-right; `slot3`/`slot4` sit in the bottom-right.
 
 This shape is structural — there is no prop to reconfigure it. If you need an arbitrary
-column count instead, use `LayoutGridByCols`/`LayoutGridByWidth`.
+column count instead, use `LayoutGridByCols` (fixed count) or `AutoGrid` (auto-fit by minimum width).
 
 ---
 
@@ -94,5 +94,5 @@ See [CONSUMER-STYLING.md](../../app/components/01.atoms/content-wrappers/layout-
 - Renamed from `LayoutGridA` during the 2026-09-21 compliance migration; previously lived
   unplaced at `app/components/layout-grids/LayoutGridA.vue` with options-style props and no
   public CSS tokens (its geometry values were hardcoded px literals).
-- For a generic, arbitrary-column-count grid, use `LayoutGridByCols`/`LayoutGridByWidth` instead
+- For a generic, arbitrary-column-count grid, use `LayoutGridByCols` or `AutoGrid` instead
   — this component's 4-slot shape is fixed and specifically dashboard-oriented.
