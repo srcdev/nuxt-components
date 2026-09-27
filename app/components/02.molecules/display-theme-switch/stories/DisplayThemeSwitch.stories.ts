@@ -10,6 +10,11 @@ const meta: Meta<typeof DisplayThemeSwitch> = {
       description: "Extra classes — pass \"small\" for a compact size",
       table: { category: "Styling" },
     },
+    ariaLabel: {
+      control: "text",
+      description: "Accessible name for the radiogroup",
+      table: { category: "Labels" },
+    },
     systemLabel: {
       control: "text",
       description: "Accessible label for the system option",
@@ -45,7 +50,7 @@ const meta: Meta<typeof DisplayThemeSwitch> = {
     docs: {
       description: {
         component:
-          "A system/light/dark theme switch wrapping TripleToggleSwitchCore, wired to useSettingsStore. Colour and sizing are entirely delegated to TripleToggleSwitchCore's public --triple-toggle-switch-* tokens — see CONSUMER-STYLING.md.",
+          "A system/light/dark theme switch wrapping TripleToggleSwitch, wired to useSettingsStore. Colour and sizing are entirely delegated to TripleToggleSwitch's public --triple-toggle-switch-* tokens — see CONSUMER-STYLING.md.",
       },
     },
   },

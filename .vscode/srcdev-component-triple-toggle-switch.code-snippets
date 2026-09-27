@@ -1,0 +1,30 @@
+{
+  "SRCDEV TripleToggleSwitch": {
+    "description": "TripleToggleSwitch: three-option radio pill with a sliding marker",
+    "scope": "vue,html",
+    "body": [
+      "<TripleToggleSwitch",
+      "  v-model=\"${1:selected}\"",
+      "  v-model:field-data=\"${2:options}\"",
+      "  name=\"${3:triple-toggle}\"",
+      "  aria-label=\"${4:Choose an option}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV TripleToggleSwitch Options": {
+    "description": "IFormMultipleOptions data for TripleToggleSwitch (system/light/dark values get marker gradients)",
+    "scope": "typescript,vue",
+    "body": [
+      "const ${1:options} = ref<IFormMultipleOptions>({",
+      "  data: [",
+      "    { id: \"${2:system}\", name: \"${3:scheme}\", value: \"${2:system}\", label: \"${4:System}\", icon: \"${5:material-symbols:night-sight-auto-sharp}\" },",
+      "    { id: \"${6:light}\", name: \"${3:scheme}\", value: \"${6:light}\", label: \"${7:Light}\", icon: \"${8:radix-icons:sun}\" },",
+      "    { id: \"${9:dark}\", name: \"${3:scheme}\", value: \"${9:dark}\", label: \"${10:Dark}\", icon: \"${11:radix-icons:moon}\" },",
+      "  ],",
+      "  total: 3,",
+      "  skip: 0,",
+      "  limit: 3,",
+      "});"
+    ]
+  }
+}

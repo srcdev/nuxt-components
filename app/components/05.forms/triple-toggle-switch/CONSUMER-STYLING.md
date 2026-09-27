@@ -1,70 +1,75 @@
-# TripleToggleSwitchCore — Consumer Styling Guide
+# TripleToggleSwitch — Consumer Styling Guide
+
+> **Renamed 2026-09-27**: `TripleToggleSwitchCore` → `TripleToggleSwitch`. The root class was
+> already `.triple-toggle-switch`, and no token names changed.
 
 ## Public token API
 
-Every colour token below is `var(--triple-toggle-switch-*, {default})` — set the
-`--triple-toggle-switch-*` name to override just this component; leave it unset and it inherits
-the shared `--theme-*` token every other themed component also falls back to. See
-`theming-component-token-pattern.md` for why this two-tier shape exists.
+Colour tokens fall back to the shared `--theme-*` tokens every other themed component uses, so
+leave them unset to follow the site theme. See `theming-component-token-pattern.md`.
 
-| Token | Falls back to | Controls |
-|---|---|---|
-| `--triple-toggle-switch-surface` | `var(--theme-input-surface)` | Wrapper background |
-| `--triple-toggle-switch-border` | `var(--theme-border)` | Wrapper border colour |
-| `--triple-toggle-switch-ring-focus` | `var(--theme-ring)` | Wrapper outline colour on `:focus-visible` |
-| `--triple-toggle-switch-marker-surface` | `var(--theme-input-surface)` | Selected-option marker background, when none of the `system`/`light`/`dark` `:has()` overrides below match |
-| `--triple-toggle-switch-marker-border` | `var(--slate-10)` | Selected-option marker border colour |
-| `--triple-toggle-switch-option-border` | `#00000025` | Each option's resting border colour |
-| `--triple-toggle-switch-option-border-hover` | `var(--slate-10)` | Each option's outline colour on hover |
-| `--triple-toggle-switch-option-ring-focus` | `var(--theme-ring)` | Each option's outline colour on `:focus-visible` |
-| `--triple-toggle-switch-option-icon-color` | `var(--slate-10)` | Option icon colour, resting (shared by the `.system`/`.light`/`.dark` selectors — see note) |
-| `--triple-toggle-switch-option-icon-color-active` | `var(--slate-00)` | Option icon colour, selected |
-
-> **Two bugs fixed in this migration**:
->
-> 1. `--triple-toggle-switch-marker-surface` replaces a reference to `--theme-form-checkbox-bg`, a
->    token declared nowhere in this layer at all — an undefined `var()` with no fallback silently
->    resolves to the property's initial value, so the marker had no visible background whenever
->    none of the value-specific `:has()` overrides matched. Two more dead tokens
->    (`--theme-form-radio-border`, `--theme-form-radio-outline`, both also undeclared anywhere)
->    fed two further-unused private locals and were removed outright.
-> 2. The `.system`/`.light`/`.dark` `:has(input[value="..."])` selectors and matching
->    `.option-icon.system/.light/.dark` classes used to say `"auto"` instead of `"system"` — but
->    the only known consumer, `DisplayThemeSwitch`, has only ever emitted `id`/`value: "system"`
->    (matching `useSettingsStore`'s `colourScheme` type, which the presentational side has to
->    track). `"auto"` never matched anything real, so the system option's green gradient marker
->    had never actually fired. Renamed the selectors to `"system"` rather than the data, since the
->    data value is a real external contract (`useSettingsStore.setColourScheme` applies it as a
->    literal CSS class on `<html>` elsewhere in the app) and the selectors are this component's own
->    presentational-only concern.
->
-> **`.system`/`.light`/`.dark` selectors**: the component hardcodes these three option *values* as
-> CSS class selectors rather than being value-agnostic — a legacy of its one real consumer,
-> `DisplayThemeSwitch`'s light/dark/system theme picker. All three already shared identical colour
-> values before this migration; only the repeated literal values became tokens here, the selectors
-> themselves are otherwise unchanged (so anything already targeting them by their corrected names
-> keeps working). Making the component genuinely value-agnostic would be a larger, separate change.
-
----
-
-## Sizing tokens
+### Wrapper
 
 | Token | Default | Controls |
 |---|---|---|
-| `--triple-toggle-switch-gap` | `1rem` | Gap between the three option circles |
+| `--triple-toggle-switch-surface` | `var(--theme-input-surface)` | Wrapper background |
+| `--triple-toggle-switch-border` | `var(--theme-border)` | Wrapper border colour |
+| `--triple-toggle-switch-ring-focus` | `var(--theme-ring)` | Wrapper outline colour while a radio has `:focus-visible` |
 | `--triple-toggle-switch-padding` | `0.6rem` | Wrapper padding |
+| `--triple-toggle-switch-gap` | `1rem` | Gap between the three options (also drives the marker's position) |
+
+### Selected-option marker
+
+| Token | Default | Controls |
+|---|---|---|
+| `--triple-toggle-switch-marker-surface` | `var(--theme-input-surface)` | Marker background when the selected value isn't `system`/`light`/`dark` |
+| `--triple-toggle-switch-marker-border` | `var(--slate-10)` | Marker border colour |
+| `--triple-toggle-switch-marker-gradient-system` | green `radial-gradient(...)` | Marker `background-image` when `system` is selected |
+| `--triple-toggle-switch-marker-gradient-light` | red/orange `radial-gradient(...)` | Marker `background-image` when `light` is selected |
+| `--triple-toggle-switch-marker-gradient-dark` | black/grey `radial-gradient(...)` | Marker `background-image` when `dark` is selected |
+
+> **Changed 2026-09-27**: the three marker gradients were hardcoded literals with no override hook.
+> They're now public tokens; the defaults are unchanged. Any `<image>` value works
+> (`linear-gradient(...)`, `url(...)`, `none`).
+
+### Options
+
+| Token | Default | Controls |
+|---|---|---|
 | `--triple-toggle-switch-option-padding` | `0.5rem` | Padding inside each option circle |
-| `--triple-toggle-switch-icon-size` | `2rem` | Icon font-size inside each option |
+| `--triple-toggle-switch-icon-size` | `2rem` | Icon `font-size` (and the hidden radio's hit area) |
+| `--triple-toggle-switch-option-border` | `#00000025` | Each option's resting border colour |
+| `--triple-toggle-switch-option-border-hover` | `var(--slate-10)` | Option outline colour on icon hover |
+| `--triple-toggle-switch-option-ring-focus` | `var(--theme-ring)` | Option outline colour on `:focus-visible` |
+| `--triple-toggle-switch-option-icon-color` | `var(--slate-10)` | Icon colour, resting |
+| `--triple-toggle-switch-option-icon-color-active` | `var(--slate-00)` | Icon colour, selected |
 
-Added 2026-09-20 when `DisplayThemeSwitch`'s `small` variant was found reaching directly into this
-component's private `--_form-items-gap`/`--_form-padding`/`--_select-scheme-group-padding`/
-`--_scheme-icon-font-size` locals via selector specificity — a consumer-relevant value (compact
-sizing) hidden behind a private var with no public override hook, the same bug class as CLAUDE.md
-pitfall #20. These four now wrap those locals as real public tokens; the shared geometry from
-`--form-element-*` (border width, outline width) is still shared/component-internal and untouched
-by this — see `theming-form-geometry-tokens.md` for that half.
+Also read (shared, not component-specific): `--form-element-border-width`,
+`--form-element-outline-width`, `--theme-form-transition-duration`. See
+`theming-form-geometry-tokens.md`.
 
----
+Private tokens (not public API): `--_form-items-gap`, `--_scheme-icon-font-size` (each used twice,
+fed by the public gap/icon-size tokens) and `--_select-scheme-group-background-color`/
+`--_select-scheme-group-background-image` (swapped per selected value).
+
+## State hooks
+
+- **Selected value**: the marker gradients key off `:has(input[value="system" | "light" | "dark"]:checked)`
+  on the root. These three values are hardcoded, a legacy of the one real consumer
+  (`DisplayThemeSwitch`). Any other value shows `--triple-toggle-switch-marker-surface` instead.
+- **Option icon classes**: each `.option-icon` carries the option's `id` as a class (e.g.
+  `.option-icon.light`) plus `.active` when selected.
+- **Marker**: `.selected-option-marker` gains `.show` roughly 250ms after mount (it's positioned
+  from a measured option width, so it stays hidden until measured).
+- **Theme**: `data-theme` on the root, from the `theme` prop.
+- **Inner classes**: `.triple-toggle-switch-wrapper`, `.selected-option-marker-wrapper`,
+  `.selected-option-marker`, `.option-group-wrapper` (the `role="radiogroup"`), `.option-group`
+  (each `<label>`), `.option-icon`, `.option-input`.
+
+## Motion
+
+The marker slides between options over the `stepAnimationDuration` prop (default `250ms`). Under
+`prefers-reduced-motion: reduce` the slide transition is removed and the marker jumps.
 
 ## Global theming
 
@@ -75,23 +80,20 @@ by this — see `theming-form-geometry-tokens.md` for that half.
 }
 ```
 
----
-
 ## Local overrides
 
 Set the tokens above on an element you own (a page or section class, or a class added with
 `:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
 `@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
-`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
-`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the
+component need `:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
 
-### One instance
+**Caveat:** when used through `DisplayThemeSwitch`, that wrapper re-declares the four sizing tokens
+(`--triple-toggle-switch-gap`, `-padding`, `-option-padding`, `-icon-size`) on the root element, so
+setting them on an ancestor has no effect there. Set them on the component itself (via
+`style` or a passthrough class) instead. Used directly, `TripleToggleSwitch` re-declares nothing.
 
-```vue
-<TripleToggleSwitchCore
-  v-model="scheme"
-  v-model:field-data="options"
-  style="--triple-toggle-switch-marker-surface: var(--gold-06);"
-/>
-```
+## Class passthrough
 
+`style-class-passthrough` adds classes to the root `.triple-toggle-switch` element, alongside
+`data-theme`. `DisplayThemeSwitch` uses it for its `colour-scheme-select` and `small` classes.

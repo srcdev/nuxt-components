@@ -100,20 +100,20 @@ consuming app having declared anything.
   mouse and assistive-tech interaction can now be themed independently. `InputNumber` has no
   hover state on its border at all (only a `:focus-visible` box-shadow toggle), so there was
   nothing to split there.
-- ✅ `ToggleSwitchCore`, `TripleToggleSwitchCore`, `DisplayThemeSwitch` — migrated 2026-08-25, see
+- ✅ `ToggleSwitchCore`, `TripleToggleSwitch`, `DisplayThemeSwitch` — migrated 2026-08-25, see
   the first two's `CONSUMER-STYLING.md`. Correction to the two lines this replaces: they claimed
   `ToggleSwitchCore` read a bare `--theme-toggle-symbol-color-*` — that token doesn't exist
   anywhere in this codebase and never did; false memory from conflating it with the checkbox
   fix. `ToggleSwitchCore` itself turned out to be a plain Tier 2 case (real, live tokens, just no
   component-scoped override point) plus five confirmed-dead private locals (declared, never read
-  anywhere in the file) removed outright. The real dead-token bug was in `TripleToggleSwitchCore`
+  anywhere in the file) removed outright. The real dead-token bug was in `TripleToggleSwitch`
   (and duplicated in `DisplayThemeSwitch`'s own override): `--theme-form-radio-border`,
   `--theme-form-radio-outline`, `--theme-form-checkbox-bg` — all three declared nowhere in the
   layer. The first two fed two further-unused private locals (removed); the third fed the
   selected-option marker's background (real bug, narrow impact — only visible when none of the
   component's `system`/`light`/`dark` `:has()` overrides match).
 
-  Second bug, found while adding the Storybook story `TripleToggleSwitchCore` never had: those
+  Second bug, found while adding the Storybook story `TripleToggleSwitch` never had: those
   `:has()` selectors (and the matching `.option-icon.system/.light/.dark` classes, template-bound
   to each option's `id`) said `"auto"`, not `"system"` — but the only known consumer,
   `DisplayThemeSwitch`, has only ever emitted `id`/`value: "system"` (it has to; that literal
@@ -121,6 +121,6 @@ consuming app having declared anything.
   `"auto"` never matched anything real, so the system option's green gradient marker had never
   actually fired — confirmed live before and after the fix. Renamed the selectors to `"system"`
   rather than the data, since the data value is a real external contract this component's
-  presentational selectors have no business dictating. `TripleToggleSwitchCore` still hardcodes
+  presentational selectors have no business dictating. `TripleToggleSwitch` still hardcodes
   three option values as CSS selectors rather than being genuinely value-agnostic — noted in its
   `CONSUMER-STYLING.md`, left as a larger separate change.

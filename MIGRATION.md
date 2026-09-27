@@ -162,7 +162,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | ToggleSwitchCore | `toggle-switch/ToggleSwitchCore.vue` | ☐ | ☐ |
 | ToggleSwitchWithLabel | `toggle-switch/ToggleSwitchWithLabel.vue` | ☐ | ☐ |
 | ToggleSwitchWithLabelInline | `toggle-switch/ToggleSwitchWithLabelInline.vue` | ☐ | ☐ |
-| TripleToggleSwitchCore | `triple-toggle-switch/TripleToggleSwitchCore.vue` | ☐ | ☐ |
+| TripleToggleSwitch | `triple-toggle-switch/TripleToggleSwitch.vue` | ✅ | ✅ `triple-toggle-switch` |
 | InputRangeCore | `input-range/InputRangeCore.vue` | ✅ | ✅ `input-range` |
 | InputRangeDefault | `input-range/InputRangeDefault.vue` | ✅ | ✅ `input-range` |
 

@@ -25,7 +25,7 @@ describe("DisplayThemeSwitch", () => {
     expect(wrapper.vm).toBeTruthy();
   });
 
-  it("renders TripleToggleSwitchCore with the colour-scheme-select class", async () => {
+  it("renders TripleToggleSwitch with the colour-scheme-select class", async () => {
     const wrapper = await mountSuspended(DisplayThemeSwitch);
     await nextTick();
     expect(wrapper.find(".colour-scheme-select").exists()).toBe(true);
@@ -63,6 +63,15 @@ describe("DisplayThemeSwitch", () => {
     await nextTick();
     const icons = wrapper.findAll(".option-icon").map((el) => el.attributes("class"));
     expect(icons.some((c) => c?.includes("system"))).toBe(true);
+  });
+
+  it("names the radiogroup with ariaLabel", async () => {
+    const wrapper = await mountSuspended(DisplayThemeSwitch);
+    await nextTick();
+    expect(wrapper.find('[role="radiogroup"]').attributes("aria-label")).toBe("Colour scheme");
+
+    await wrapper.setProps({ ariaLabel: "Thème" });
+    expect(wrapper.find('[role="radiogroup"]').attributes("aria-label")).toBe("Thème");
   });
 
   it("applies the small class via styleClassPassthrough", async () => {

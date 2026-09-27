@@ -1,8 +1,9 @@
 <template>
   <ClientOnly>
-    <TripleToggleSwitchCore
+    <TripleToggleSwitch
       v-model="colorModeVal"
       v-model:field-data="sampleFieldData"
+      :aria-label="ariaLabel"
       :style-class-passthrough="[`colour-scheme-select`, elementClasses]"
     />
   </ClientOnly>
@@ -12,6 +13,7 @@
 import type { IFormMultipleOptions } from "~/types/forms/types.forms";
 interface Props {
   styleClassPassthrough?: string | string[];
+  ariaLabel?: string;
   systemLabel?: string;
   lightLabel?: string;
   darkLabel?: string;
@@ -22,6 +24,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
+  ariaLabel: "Colour scheme",
   systemLabel: "System",
   lightLabel: "Light",
   darkLabel: "Dark",
@@ -74,16 +77,16 @@ watch(colorModeVal, (val) => {
 .colour-scheme-select {
   /* Everything DisplayThemeSwitch used to redeclare here beyond sizing (wrapper background/border/
      focus ring, marker border, option border/outline/focus/hover, option-icon colours, and the
-     system/light/dark marker gradients) was a byte-for-byte duplicate of TripleToggleSwitchCore's
+     system/light/dark marker gradients) was a byte-for-byte duplicate of TripleToggleSwitch's
      own defaults for the exact same selectors — a no-op at best, and for the ones that bypassed
-     TripleToggleSwitchCore's public --triple-toggle-switch-* tokens with a hardcoded literal
+     TripleToggleSwitch's public --triple-toggle-switch-* tokens with a hardcoded literal
      (background-color, border, focus outline, marker border, option border/hover/focus, icon
      colour) an active bug: a consumer setting e.g. --triple-toggle-switch-surface globally would
      have been silently overridden back to the hardcoded default by this block's higher
-     specificity. Removed 2026-09-20 — TripleToggleSwitchCore already owns all of that. Only the
-     genuine "small" sizing variant remains, now driving TripleToggleSwitchCore's own public
+     specificity. Removed 2026-09-20 — TripleToggleSwitch already owns all of that. Only the
+     genuine "small" sizing variant remains, now driving TripleToggleSwitch's own public
      sizing tokens instead of reaching into its private --_form-* and --_scheme-icon-font-size
-     locals directly (see TripleToggleSwitchCore's CONSUMER-STYLING.md). */
+     locals directly (see TripleToggleSwitch's CONSUMER-STYLING.md). */
   &.triple-toggle-switch {
     --triple-toggle-switch-gap: 0.4rem;
     --triple-toggle-switch-padding: 0.4rem;

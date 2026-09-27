@@ -9,6 +9,7 @@ import ToggleSwitchWithLabel from "../../toggle-switch/ToggleSwitchWithLabel.vue
 import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
 import SingleCheckbox from "../../input-checkbox/SingleCheckbox.vue";
 import MultipleRadiobuttons from "../../input-radio/MultipleRadiobuttons.vue";
+import TripleToggleSwitch from "../../triple-toggle-switch/TripleToggleSwitch.vue";
 import InputButtonCore from "../../input-button/InputButtonCore.vue";
 import FormField from "../../form-field/FormField.vue";
 import FormWrapper from "../../form-wrapper/FormWrapper.vue";
@@ -21,7 +22,7 @@ interface MigratedFieldsFormStoryArgs {
 
 // Living reference, not a component of its own — one field per 05.forms component group that
 // currently scores 5/5 in the Component Ledger (.claude/component-ledger/audit.json: tier folder,
-// tests, story, skill doc, CONSUMER-STYLING.md, VS Code snippet). As of 2026-09-25 that's
+// tests, story, skill doc, CONSUMER-STYLING.md, VS Code snippet). As of 2026-09-27 that's
 // InputTextCore (via InputTextWithLabel), InputRangeCore (via InputRangeDefault), InputNumber
 // (via InputNumberField), InputTextareaCore (via InputTextareaWithLabel), InputSelectCore
 // (via InputSelectWithLabel), ToggleSwitchCore (via ToggleSwitchWithLabel), and input-checkbox
@@ -34,7 +35,9 @@ interface MigratedFieldsFormStoryArgs {
 // "Full name" field, rendered through InputTextWithLabel's descriptionText slot. InputLabel (5/5 as
 // of 2026-09-26) is the <label> every labelled field below renders, so it has no field of its own
 // either. The input-checkbox-radio family (InputCheckboxRadio/Field/Button, 5/5 as of 2026-09-27)
-// renders every checkbox and radio below, so it has no field of its own. Every other 05.forms component
+// renders every checkbox and radio below, so it has no field of its own. TripleToggleSwitch (5/5 as of
+// 2026-09-27) is the "Theme preference" field; it has no Field wrapper or error state of its own,
+// so it sits under a plain caption and always has a value. Every other 05.forms component
 // (radio, ...) is still mid-migration.
 // Add a field here each time /migrate-component brings another 05.forms component up to 5/5, so
 // this story doubles as a visible migration-progress tracker rather than living only in the
@@ -66,6 +69,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     MultipleCheckboxes,
     SingleCheckbox,
     MultipleRadiobuttons,
+    TripleToggleSwitch,
     InputButtonCore,
     FormField,
     FormWrapper,
@@ -81,6 +85,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       subscribe: false,
       services: [] as string[],
       contactMethod: "",
+      themePreference: "system",
       terms: false,
     });
 
@@ -104,6 +109,23 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       total: 3,
       skip: 0,
       limit: 10,
+    });
+
+    const themeOptions = reactive<IFormMultipleOptions>({
+      data: [
+        {
+          id: "themePreference-system",
+          name: "themePreference",
+          value: "system",
+          label: "System",
+          icon: "material-symbols:night-sight-auto-sharp",
+        },
+        { id: "themePreference-light", name: "themePreference", value: "light", label: "Light", icon: "radix-icons:sun" },
+        { id: "themePreference-dark", name: "themePreference", value: "dark", label: "Dark", icon: "radix-icons:moon" },
+      ],
+      total: 3,
+      skip: 0,
+      limit: 3,
     });
 
     const colourOptions = reactive<IFormMultipleOptions>({
@@ -155,7 +177,17 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       errors.terms = "";
     };
 
-    return { args, state, errors, validate, clearErrors, colourOptions, serviceOptions, contactMethodOptions };
+    return {
+      args,
+      state,
+      errors,
+      validate,
+      clearErrors,
+      colourOptions,
+      serviceOptions,
+      contactMethodOptions,
+      themeOptions,
+    };
   },
   template: `
     <div style="margin: 36px; max-width: 480px;">
@@ -279,6 +311,18 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
+            <div style="display: grid; gap: 0.8rem; justify-items: start;">
+              <span>Theme preference</span>
+              <TripleToggleSwitch
+                v-model="state.themePreference"
+                v-model:field-data="themeOptions"
+                name="themePreference"
+                aria-label="Theme preference"
+              />
+            </div>
+          </FormField>
+
+          <FormField width="wide" :has-gutter="false">
             <SingleCheckbox
               v-model="state.terms"
               name="terms"
@@ -311,6 +355,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         <div>subscribe: {{ state.subscribe }}</div>
         <div>services: {{ JSON.stringify(state.services) }}</div>
         <div>contactMethod: {{ state.contactMethod || '""' }}</div>
+        <div>themePreference: {{ state.themePreference }}</div>
         <div>terms: {{ state.terms }}</div>
       </div>
     </div>

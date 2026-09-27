@@ -90,7 +90,7 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | ToggleSwitchCore | `ToggleSwitch` | yes |
 | ToggleSwitchWithLabel | `ToggleSwitchField` | yes |
 | ToggleSwitchWithLabelInline | `layout` prop on `ToggleSwitchField`, or `ToggleSwitchFieldInline` | - |
-| TripleToggleSwitchCore | `TripleToggleSwitch` | yes |
+| ~~TripleToggleSwitchCore~~ | ✅ `TripleToggleSwitch` (2026-09-27) | - |
 | InputButtonCore | `InputButton` | yes |
 | ~~InputCheckboxRadioCore~~ | ✅ `InputCheckboxRadio` (2026-09-27) | - |
 | InputCheckboxRadioButton | ✅ kept: button-style option, not a Field (2026-09-27) | - |

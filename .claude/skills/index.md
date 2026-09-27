@@ -111,7 +111,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── decode-qr-code.md       — DecodeQrCode: file picker + drag-and-drop image decoder, shared results list, CSS override points
     ├── auto-grid.md            — AutoGrid: auto-fit responsive grid, $slots iteration, --auto-grid-min-col-size/gap tokens, semantic tag + aria
     ├── display-avatar.md       — DisplayAvatar: circular avatar with image/initials fallback, size variants, chip badge, icon slot, styleClassPassthrough
-    ├── display-theme-switch.md — DisplayThemeSwitch: system/light/dark picker wrapping TripleToggleSwitchCore, wired to useSettingsStore, labels/icons props, small sizing variant
+    ├── display-theme-switch.md — DisplayThemeSwitch: system/light/dark picker wrapping TripleToggleSwitch, wired to useSettingsStore, labels/icons props, small sizing variant
     ├── card-core.md            — CardCore: generic card container, dynamic named slots as rows, 4 variants, blurred backdrop layer, full CSS token API
     ├── action-menu.md          — ActionMenu + ActionMenuItemCore: ellipsis trigger + anchored popover menu, indexed item-{n} slots, link/button items, full CSS token API
     ├── select-menu.md          — SelectMenu: v-model single-select listbox popover (ActionMenu's popover mechanics, InputSelectCore's selected-option semantics), icon/text/chevron trigger toggles, checkmark on selected option, options-array driven, full CSS token API
@@ -149,6 +149,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── input-checkbox.md         — MultipleCheckboxes/SingleCheckbox: fieldset-wrapped checkbox group (data-driven, button or labelled) and single checkbox, per-box native-required/styleClassPassthrough/data-testid bugs fixed, spacing token API
     ├── input-radio.md            — MultipleRadiobuttons: fieldset radiogroup (data-driven, button or labelled), shared-name grouping bug fixed, dead label/placeholder/equalCols props removed, data-options-layout hook, spacing token API
     ├── toggle-switch-core.md      — ToggleSwitchCore: pill/square checkbox-backed toggle primitive, dead round-prop/data-theme-error functionality and story theme-options bugs fixed, CSS token API; Variants section covers ToggleSwitchWithLabel/ToggleSwitchWithLabelInline
+    ├── triple-toggle-switch.md    — TripleToggleSwitch (renamed from TripleToggleSwitchCore): three-option icon radio pill with sliding marker, radiogroup + ariaLabel, system/light/dark marker-gradient tokens, reduced-motion, CSS token API
     ├── entry-animation.md         — EntryAnimation: scroll-driven entry animation wrapper (slide-in/zoom-reveal/exit-blur utility classes), skipAnimation for above-the-fold loop items, reduced-motion handled at the CSS layer
     ├── column-flow-grid.md        — ColumnFlowGrid (renamed from MasonryGrid): CSS multi-column text-flow layout, named dynamic slots (no count/data prop), itemMinWidth/gap/unit sizing, CSS token API; not a true masonry, see "which one do I want?"
     ├── masonry-grid.md            — MasonryGrid: real measured-height masonry (greedy shortest-column packing, animated resize) absorbed from the now-retired MasonryGridOrdered; named dynamic slots, fixedWidth/justify, CSS token API
