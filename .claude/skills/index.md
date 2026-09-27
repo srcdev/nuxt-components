@@ -65,7 +65,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── composable-cookie-consent.md      — useCookieConsent: unset/granted/denied state, cookie persistence, wraps @nuxt/scripts' useScriptTriggerConsent
 ├── composable-analytics.md           — useAnalytics: provider-agnostic trackEvent/page-view tracking (google-analytics only implemented), consent-gated, single call site for setup + firing events
 └── components/
-    ├── alert-content-inner.md    — AlertContentInner: shared icon/body/dismiss molecule under AlertContent + AlertMaskedContent; app.config icon map (alertContent.icons + dismissIcon) covers all consumers
+    ├── alert-content.md          — AlertContent + AlertContentInner: themed alert panel (icon/title/content/actions/dismiss) under DisplayToast, DisplayPrompt and AlertMaskedContent; showIcon, #actions row, --alert-content-* tokens, app.config icon map
     ├── alert-mask-core.md      — AlertMaskCore: SVG border/background mask sized to slotted content via ResizeObserver, config-prop-driven geometry/colour (no CSS token API)
     ├── alert-masked-content.md — AlertMaskedContent: AlertContentInner inside AlertMaskCore's SVG mask (accent cut-out border + translucent fill); masked variant for DisplayToast/DisplayPrompt; --alert-masked-content-* colour tokens
     ├── animated-svg-text.md    — AnimatedSvgText: inline SVG stroke-draw-then-fill animation, text slot, CSS token API
@@ -126,7 +126,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── site-header.md            — SiteHeader: PageRow + SkipLinks + ResponsiveHeader composition, #branding/#secondaryNavigation slots, dual styleClassPassthrough hooks
     ├── responsive-header.md      — ResponsiveHeader: overflow-collapsing adaptive nav, measurement-pipeline gotchas (unsized icons, vw font-size drift), full CSS token API
     ├── navigation-items.md       — NavigationItems: internal overflow-panel renderer for ResponsiveHeader, complement-visibility logic, not used standalone
-    ├── cookie-consent-banner.md  — CookieConsentBanner: fixed non-modal Accept/Reject banner driven by useCookieConsent, message/acceptLabel/rejectLabel slots, ariaLabel prop, --cookie-consent-banner-* token API (renamed from privacy-notice-banner), teleported so tokens go on html/passthrough
+    ├── cookie-consent-banner.md  — CookieConsentBanner: fixed non-modal Accept/Reject banner built on AlertContent, driven by useCookieConsent; title/message/acceptLabel/rejectLabel slots, icon/showIcon/ariaLabel props, position/button tokens (panel via --alert-content-*), teleported so tokens go on html/passthrough
     ├── display-banner.md         — DisplayBanner: canvas/content stacked overlay banner, conditional slot wrappers, CSS token API
     ├── deep-expanding-menu.md         — DeepExpandingMenu: anchor-positioned popover nav panels, browser support caveat, CSS token API
     ├── deep-expanding-menu-classic.md — DeepExpandingMenuClassic: <details>-based fallback nav, click-outside close, CSS token API

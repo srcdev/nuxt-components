@@ -1,6 +1,6 @@
 {
   "SRCDEV CookieConsentBanner Basic": {
-    "description": "CookieConsentBanner: fixed Accept/Reject banner driven by useCookieConsent (once, in the default layout)",
+    "description": "CookieConsentBanner: fixed Accept/Reject banner (built on AlertContent) driven by useCookieConsent, once in the default layout",
     "scope": "vue,html",
     "body": [
       "<CookieConsentBanner />"
@@ -11,21 +11,22 @@
     "scope": "vue,html",
     "body": [
       "<CookieConsentBanner :aria-label=\"${1:t('global.cookieConsent.ariaLabel')}\">",
-      "  <template #message>{{ ${2:t('global.cookieConsent.message')} }}</template>",
-      "  <template #acceptLabel>{{ ${3:t('global.cookieConsent.accept')} }}</template>",
-      "  <template #rejectLabel>{{ ${4:t('global.cookieConsent.reject')} }}</template>",
+      "  <template #title>{{ ${2:t('global.cookieConsent.title')} }}</template>",
+      "  <template #message>{{ ${3:t('global.cookieConsent.message')} }}</template>",
+      "  <template #acceptLabel>{{ ${4:t('global.cookieConsent.accept')} }}</template>",
+      "  <template #rejectLabel>{{ ${5:t('global.cookieConsent.reject')} }}</template>",
       "</CookieConsentBanner>"
     ]
   },
   "SRCDEV CookieConsentBanner Tokens": {
-    "description": "CookieConsentBanner global token overrides (it's teleported to body, so set them on html)",
+    "description": "CookieConsentBanner token overrides, scoped to the (teleported) banner root",
     "scope": "css",
     "body": [
-      ":where(html) {",
+      ".cookie-consent-banner {",
       "  --cookie-consent-banner-max-width: ${1:64rem};",
-      "  --cookie-consent-banner-background: ${2:var(--slate-00)};",
-      "  --cookie-consent-banner-text-colour: ${3:var(--slate-10)};",
-      "  --cookie-consent-banner-accent: ${4:var(--theme-accent)};",
+      "  --cookie-consent-banner-accent: ${2:var(--theme-accent)};",
+      "  --alert-content-inner-background: ${3:var(--theme-surface-subtle)};",
+      "  --alert-content-text-colour: ${4:var(--theme-text)};",
       "}"
     ]
   }

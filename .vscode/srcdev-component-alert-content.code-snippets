@@ -1,0 +1,36 @@
+{
+  "SRCDEV AlertContent Basic": {
+    "description": "AlertContent: themed alert panel with title and message",
+    "scope": "vue,html",
+    "body": [
+      "<AlertContent theme=\"${1|info,success,warning,error|}\">",
+      "  <template #title>${2:Title}</template>",
+      "  <template #content>${3:Message}</template>",
+      "</AlertContent>"
+    ]
+  },
+  "SRCDEV AlertContent Dismissible": {
+    "description": "AlertContent with a dismiss button",
+    "scope": "vue,html",
+    "body": [
+      "<AlertContent theme=\"${1|info,success,warning,error|}\" dismissible @dismiss=\"${2:onDismiss}\">",
+      "  <template #content>${3:Message}</template>",
+      "  <template #dismissLabel>${4:Close}</template>",
+      "</AlertContent>"
+    ]
+  },
+  "SRCDEV AlertContent Actions": {
+    "description": "AlertContent with a title, custom icon and a right-aligned actions row",
+    "scope": "vue,html",
+    "body": [
+      "<AlertContent theme=\"${1|info,success,warning,error|}\" custom-icon=\"${2:material-symbols:cookie-outline}\">",
+      "  <template #title>${3:Title}</template>",
+      "  <template #content>${4:Message}</template>",
+      "  <template #actions>",
+      "    <InputButtonCore type=\"button\" variant=\"tertiary\" button-text=\"${5:Cancel}\" @click=\"${6:onCancel}\" />",
+      "    <InputButtonCore type=\"button\" variant=\"primary\" button-text=\"${7:Confirm}\" @click=\"${8:onConfirm}\" />",
+      "  </template>",
+      "</AlertContent>"
+    ]
+  }
+}

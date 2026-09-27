@@ -38,8 +38,15 @@ None of its own. `AlertMaskCore`'s `--_height` / `--_inset-*` are measured plumb
 - `data-theme="info" | "success" | "warning" | "error"` on the root `.alert-masked-content`,
   from the `theme` prop. Drives `--theme-accent` and the content colours.
 - Inner classes: `.alert-mask-core` > `.alert-mask-decorator` (the SVG) + `.alert-mask-content` >
-  `.alert-content-inner` > `.alert-content-icon`, `.alert-content-body` (`.title`, `.content`),
-  `.alert-content-dismiss`.
+  `.alert-content-inner` > `.alert-content-icon`, `.alert-content-main` > (`.alert-content-body` >
+  `.alert-content-title`, `.alert-content-text`) + `.alert-content-actions`, then `.alert-content-dismiss`.
+  The inner content tokens (`--alert-content-gap`, `-padding`, `-text-colour`, `-icon-size`, `-title-font-size`,
+  `-actions-gap`, the dismiss-button tokens, ...) apply here too; see `AlertContent`'s CONSUMER-STYLING.md.
+  Its outer-shape tokens (`--alert-content-accent`, `-border`, `-border-radius-*`, `-accent-width`) don't:
+  the masked shape comes from `maskConfig`.
+
+> **Changed 2026-09-27**: `.title`/`.content` renamed to `.alert-content-title`/`.alert-content-text`,
+> and body + actions now sit in `.alert-content-main`.
 
 ## Local overrides
 

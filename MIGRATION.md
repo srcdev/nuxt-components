@@ -60,7 +60,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 |---|---|---|---|
 | ActionMenu | `action-menu/ActionMenu.vue` | ✅ | ☐ |
 | ActionMenuItemCore | `action-menu/ActionMenuItemCore.vue` | — | — |
-| AlertContent | `alert-content/AlertContent.vue` | — | — |
+| AlertContent | `alert-content/AlertContent.vue` | ✅ | ✅ `alert-content` |
 | AlertContentInner | `alert-content/AlertContentInner.vue` | — | — |
 | AlertMaskedContent | `alert-masked-content/AlertMaskedContent.vue` | ✅ | ✅ `alert-masked-content` |
 | ContactSection | `contact-section/ContactSection.vue` | ☐ | ☐ |

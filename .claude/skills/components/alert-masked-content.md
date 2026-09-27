@@ -23,7 +23,8 @@ Used internally by `DisplayToast` (`appearance.masked: true`) and `DisplayPrompt
 | Prop | Type | Default | Notes |
 |---|---|---|---|
 | `theme` | `SemanticTheme` | — | **Required.** Sets `data-theme` on the root; drives the accent colour and default icon. |
-| `customIcon` | `string` | `undefined` | Icon name override (see `alert-content-inner.md` for the resolution chain). |
+| `customIcon` | `string` | `undefined` | Icon name override (see `alert-content.md` for the resolution chain). |
+| `showIcon` | `boolean` | `true` | Render the icon column. |
 | `dismissible` | `boolean` | `false` | Shows the dismiss button. |
 | `contentId` | `string` | `undefined` | `id` on `.alert-content-body`, for `aria-describedby` wiring. |
 | `ariaLive` | `"polite" \| "assertive" \| "off"` | `undefined` | `aria-live` on `.alert-content-body`. |
@@ -42,7 +43,7 @@ Default mask config:
 
 ## Slots
 
-Forwarded to `AlertContentInner`: `#icon`, `#title`, `#content`, `#dismissIcon`, `#dismissLabel`
+Forwarded to `AlertContentInner`: `#icon`, `#title`, `#content`, `#actions` (a button row under the message, outside the live body), `#dismissIcon`, `#dismissLabel`
 (sr-only dismiss label, default `"Close"`; pass translated text here).
 
 ## Events

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import AlertContent from "../AlertContent.vue";
+import InputButtonCore from "../../../05.forms/input-button/InputButtonCore.vue";
 
 const meta: Meta<typeof AlertContent> = {
   title: "Molecules/AlertContent",
@@ -16,6 +17,11 @@ const meta: Meta<typeof AlertContent> = {
       description: "Iconify icon name to override the default theme icon",
       table: { category: "Appearance" },
     },
+    showIcon: {
+      control: "boolean",
+      description: "Render the theme icon column",
+      table: { category: "Appearance" },
+    },
     dismissible: {
       control: "boolean",
       description: "Show a close button (emits 'dismiss' on click)",
@@ -26,6 +32,7 @@ const meta: Meta<typeof AlertContent> = {
   },
   args: {
     theme: "info",
+    showIcon: true,
     dismissible: false,
   },
 };
@@ -128,4 +135,36 @@ export const AllThemes: Story = {
       </div>
     `,
   }),
+};
+
+/** Actions — a row of buttons under the message, e.g. for a consent or confirm prompt. */
+export const WithActions: Story = {
+  name: "With Actions",
+  args: { theme: "info", customIcon: "material-symbols:cookie-outline" },
+  render: (args) => ({
+    components: { AlertContent, InputButtonCore },
+    setup() {
+      return { args };
+    },
+    template: `
+      <div :data-theme="args.theme" style="max-width: 600px; padding: 2rem;">
+        <AlertContent v-bind="args">
+          <template #title>Cookies</template>
+          <template #content>This site uses cookies to understand how it's used. You can accept or reject them.</template>
+          <template #actions>
+            <InputButtonCore type="button" variant="tertiary" button-text="Reject" />
+            <InputButtonCore type="button" variant="primary" button-text="Accept" />
+          </template>
+        </AlertContent>
+      </div>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The #actions slot renders a wrapping row under the message, outside the aria-live/contentId body so the buttons aren't announced or pulled into aria-describedby. Actions are right-aligned by default (--alert-content-actions-justify). The cookie icon comes from customIcon; set showIcon to false to drop the icon column.",
+      },
+    },
+  },
 };

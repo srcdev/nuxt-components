@@ -1,18 +1,24 @@
 <template>
   <div class="alert-content-inner">
-    <div class="alert-content-icon" data-test-id="alert-icon" aria-hidden="true">
+    <div v-if="showIcon" class="alert-content-icon" data-test-id="alert-icon" aria-hidden="true">
       <slot name="icon">
         <Icon :name="customIcon || themeIcon" class="icon" />
       </slot>
     </div>
 
-    <div :id="contentId" class="alert-content-body" :aria-live="ariaLive">
-      <p v-if="slots.title" class="title" data-test-id="alert-title">
-        <slot name="title"></slot>
-      </p>
-      <p v-if="slots.content" class="content" data-test-id="alert-content">
-        <slot name="content"></slot>
-      </p>
+    <div class="alert-content-main">
+      <div :id="contentId" class="alert-content-body" :aria-live="ariaLive">
+        <p v-if="slots.title" class="alert-content-title" data-test-id="alert-title">
+          <slot name="title"></slot>
+        </p>
+        <p v-if="slots.content" class="alert-content-text" data-test-id="alert-content">
+          <slot name="content"></slot>
+        </p>
+      </div>
+
+      <div v-if="slots.actions" class="alert-content-actions" data-test-id="alert-actions">
+        <slot name="actions"></slot>
+      </div>
     </div>
 
     <button
@@ -38,6 +44,7 @@ import type { SemanticTheme } from "~/types/components";
 interface Props {
   theme: SemanticTheme;
   customIcon?: string;
+  showIcon?: boolean;
   dismissible?: boolean;
   contentId?: string;
   ariaLive?: "polite" | "assertive" | "off";
@@ -45,6 +52,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   customIcon: undefined,
+  showIcon: true,
   dismissible: false,
   contentId: undefined,
   ariaLive: undefined,
@@ -73,46 +81,53 @@ const dismissIcon = computed(() => appConfig.srcdev?.alertContent?.dismissIcon ?
 <style lang="css">
 @layer components {
   .alert-content-inner {
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    gap: 1.2rem;
+    display: flex;
     align-items: center;
+    gap: var(--alert-content-gap, 1.2rem);
     background-color: var(--alert-content-inner-background, var(--theme-surface-subtle));
-    border-start-start-radius: 8px;
-    border-end-start-radius: 8px;
-    padding: 1.2rem 1.5rem;
+    color: var(--alert-content-text-colour, var(--theme-text));
+    border-start-start-radius: var(--alert-content-border-radius-start, 0.8rem);
+    border-end-start-radius: var(--alert-content-border-radius-start, 0.8rem);
+    padding: var(--alert-content-padding, 1.2rem 1.5rem);
     overflow: hidden;
 
     .alert-content-icon {
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
 
       .icon {
-        color: var(--theme-text);
+        color: var(--alert-content-icon-colour, currentColor);
         display: inline-block;
-        font-size: 2.5rem;
+        font-size: var(--alert-content-icon-size, 2.5rem);
         font-style: normal;
         font-weight: normal;
         overflow: hidden;
       }
     }
 
+    .alert-content-main {
+      flex: 1;
+      min-width: 0;
+      display: grid;
+      gap: var(--alert-content-actions-spacing, 1.2rem);
+    }
+
     .alert-content-body {
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
-      color: var(--theme-text);
+      gap: var(--alert-content-body-gap, 0.4rem);
 
-      .title {
-        font-size: var(--step-4);
+      .alert-content-title {
+        font-size: var(--alert-content-title-font-size, var(--step-4));
         font-weight: 600;
         line-height: 1.2;
         margin: 0;
       }
 
-      .content {
-        font-size: var(--step-3);
+      .alert-content-text {
+        font-size: var(--alert-content-text-font-size, var(--step-3));
         font-weight: normal;
         line-height: 1.4;
         margin: 0;
@@ -120,32 +135,44 @@ const dismissIcon = computed(() => appConfig.srcdev?.alertContent?.dismissIcon ?
       }
     }
 
+    .alert-content-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: var(--alert-content-actions-justify, flex-end);
+      gap: var(--alert-content-actions-gap, 0.8rem);
+    }
+
     .alert-content-dismiss {
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
       background: transparent;
-      border: 0.1rem solid var(--theme-border);
+      border: 0.1rem solid var(--alert-content-dismiss-border-colour, var(--theme-border));
       outline: 0.1rem solid transparent;
       border-radius: 50%;
-      color: var(--theme-text);
+      color: inherit;
       cursor: pointer;
-      flex-shrink: 0;
       padding: 0.5rem;
       transition: all 200ms ease;
 
       .icon {
         color: inherit;
         display: block;
-        font-size: 1.5rem;
+        font-size: var(--alert-content-dismiss-icon-size, 1.5rem);
       }
 
       &:hover,
       &:focus-visible {
-        background-color: var(--theme-surface-hover);
-        color: var(--theme-on-surface);
-        outline: 0.1rem solid var(--theme-ring);
+        background-color: var(--alert-content-dismiss-background-hover, var(--theme-surface-hover));
+        color: var(--alert-content-dismiss-colour-hover, var(--theme-on-surface));
+        outline: 0.1rem solid var(--alert-content-dismiss-ring, var(--theme-ring));
         outline-offset: 0.2rem;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        transition: none;
       }
     }
   }

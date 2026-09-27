@@ -3,6 +3,7 @@
     <AlertContentInner
       :theme="theme"
       :custom-icon="customIcon"
+      :show-icon="showIcon"
       :dismissible="dismissible"
       :content-id="contentId"
       :aria-live="ariaLive"
@@ -16,6 +17,9 @@
       </template>
       <template v-if="slots.content" #content>
         <slot name="content"></slot>
+      </template>
+      <template v-if="slots.actions" #actions>
+        <slot name="actions"></slot>
       </template>
       <template v-if="slots.dismissIcon" #dismissIcon>
         <slot name="dismissIcon"></slot>
@@ -33,6 +37,7 @@ import type { SemanticTheme } from "~/types/components";
 interface Props {
   theme: SemanticTheme;
   customIcon?: string;
+  showIcon?: boolean;
   dismissible?: boolean;
   contentId?: string;
   ariaLive?: "polite" | "assertive" | "off";
@@ -40,6 +45,7 @@ interface Props {
 
 withDefaults(defineProps<Props>(), {
   customIcon: undefined,
+  showIcon: true,
   dismissible: false,
   contentId: undefined,
   ariaLive: undefined,
@@ -53,14 +59,17 @@ const slots = useSlots();
 <style lang="css">
 @layer components {
   .alert-content {
+    --_radius-start: var(--alert-content-border-radius-start, 0.8rem);
+    --_radius-end: var(--alert-content-border-radius-end, 0.4rem);
+
     display: grid;
-    background-color: var(--theme-accent);
-    border: 0.1rem solid var(--theme-border);
-    border-start-start-radius: 8px;
-    border-end-start-radius: 8px;
-    border-start-end-radius: 4px;
-    border-end-end-radius: 4px;
-    padding-inline-start: 6px;
+    background-color: var(--alert-content-accent, var(--theme-accent));
+    border: var(--alert-content-border, 0.1rem solid var(--theme-border));
+    border-start-start-radius: var(--_radius-start);
+    border-end-start-radius: var(--_radius-start);
+    border-start-end-radius: var(--_radius-end);
+    border-end-end-radius: var(--_radius-end);
+    padding-inline-start: var(--alert-content-accent-width, 0.6rem);
     overflow: hidden;
   }
 }

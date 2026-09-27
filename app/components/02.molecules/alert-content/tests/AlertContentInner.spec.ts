@@ -132,4 +132,36 @@ describe("AlertContentInner", () => {
     });
     expect(wrapper.find(".sr-only").text()).toBe("Close");
   });
+
+  // ─── showIcon / actions (added 2026-09-27) ──────────────────────────────────
+
+  it("omits the icon region when showIcon is false", async () => {
+    const wrapper = await mountSuspended(AlertContentInner, { props: { theme: "info", showIcon: false } });
+    expect(wrapper.find("[data-test-id='alert-icon']").exists()).toBe(false);
+  });
+
+  it("renders the #actions slot in its own row, outside the live/described body", async () => {
+    const wrapper = await mountSuspended(AlertContentInner, {
+      props: { theme: "info", contentId: "msg-1", ariaLive: "polite" },
+      slots: { content: "Body", actions: '<button type="button" class="act">Do it</button>' },
+    });
+    const actions = wrapper.find("[data-test-id='alert-actions']");
+    expect(actions.exists()).toBe(true);
+    expect(actions.find(".act").exists()).toBe(true);
+    expect(wrapper.find(".alert-content-body").find(".act").exists()).toBe(false);
+  });
+
+  it("does not render the actions row without the #actions slot", async () => {
+    const wrapper = await mountSuspended(AlertContentInner, { props: { theme: "info" }, slots: { content: "Body" } });
+    expect(wrapper.find("[data-test-id='alert-actions']").exists()).toBe(false);
+  });
+
+  it("uses component-prefixed classes for the title and text", async () => {
+    const wrapper = await mountSuspended(AlertContentInner, {
+      props: { theme: "info" },
+      slots: { title: "T", content: "C" },
+    });
+    expect(wrapper.find(".alert-content-title").exists()).toBe(true);
+    expect(wrapper.find(".alert-content-text").exists()).toBe(true);
+  });
 });

@@ -3,7 +3,7 @@ import { ref } from "vue";
 import StorybookComponent from "../DisplayPrompt.vue";
 
 export default {
-  title: "Atoms/DisplayPrompt",
+  title: "Molecules/DisplayPrompt",
   component: StorybookComponent,
   argTypes: {
     theme: {

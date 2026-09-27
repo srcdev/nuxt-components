@@ -23,7 +23,7 @@ const messages: Record<DisplayToastTheme, { title: string; description: string }
 };
 
 export default {
-  title: "Atoms/DisplayToastProvider",
+  title: "Molecules/DisplayToastProvider",
   component: DisplayToastProvider,
   argTypes: {
     position: {

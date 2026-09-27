@@ -5,5 +5,7 @@ export type CookieConsentStatus = "unset" | "granted" | "denied"
 export interface CookieConsentBannerProps {
   theme?: SemanticTheme
   ariaLabel?: string
+  icon?: string
+  showIcon?: boolean
   styleClassPassthrough?: string | string[]
 }

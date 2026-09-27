@@ -16,7 +16,7 @@ interface ToastStoryArgs {
 }
 
 export default {
-  title: "Atoms/DisplayToast",
+  title: "Molecules/DisplayToast",
   component: StorybookComponent,
   argTypes: {
     theme: {

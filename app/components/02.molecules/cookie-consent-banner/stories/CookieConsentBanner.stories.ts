@@ -2,13 +2,23 @@ import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../CookieConsentBanner.vue";
 
 export default {
-  title: "Atoms/CookieConsentBanner",
+  title: "Molecules/CookieConsentBanner",
   component: StorybookComponent,
   argTypes: {
     theme: {
       control: { type: "inline-radio" },
       options: ["info", "success", "warning", "error"],
       description: "Semantic theme for the banner's accent border/accept button",
+      table: { category: "Appearance" },
+    },
+    icon: {
+      control: "text",
+      description: "Iconify name for the alert icon",
+      table: { category: "Appearance" },
+    },
+    showIcon: {
+      control: "boolean",
+      description: "Render the icon column",
       table: { category: "Appearance" },
     },
     ariaLabel: {
@@ -25,6 +35,8 @@ export default {
   args: {
     theme: "info",
     ariaLabel: "Cookie consent",
+    icon: "material-symbols:cookie-outline",
+    showIcon: true,
     styleClassPassthrough: [],
   },
   parameters: {
@@ -70,7 +82,7 @@ const Template: StoryFn<typeof StorybookComponent> = (args) => ({
     <div style="padding: 2rem; min-height: 240px; position: relative;">
       <button type="button" @click="showAgain">Show banner again</button>
       <button type="button" @click="deleteCookie" style="margin-inline-start: 0.8rem;">Delete cookie</button>
-      <StorybookComponent :theme="args.theme" :aria-label="args.ariaLabel" :style-class-passthrough="args.styleClassPassthrough">
+      <StorybookComponent :theme="args.theme" :icon="args.icon" :show-icon="args.showIcon" :aria-label="args.ariaLabel" :style-class-passthrough="args.styleClassPassthrough">
         <template #message>This site uses cookies for analytics. You can accept or reject them.</template>
       </StorybookComponent>
     </div>
@@ -89,7 +101,8 @@ export const CustomCopy: StoryFn<typeof StorybookComponent> = (args) => ({
     <div style="padding: 2rem; min-height: 240px; position: relative;">
       <button type="button" @click="showAgain">Show banner again</button>
       <button type="button" @click="deleteCookie" style="margin-inline-start: 0.8rem;">Delete cookie</button>
-      <StorybookComponent :theme="args.theme" :aria-label="args.ariaLabel">
+      <StorybookComponent :theme="args.theme" :icon="args.icon" :show-icon="args.showIcon" :aria-label="args.ariaLabel">
+        <template #title>Your privacy</template>
         <template #message>We use cookies to understand traffic to this site. No personal data is sold.</template>
         <template #acceptLabel>Allow cookies</template>
         <template #rejectLabel>No thanks</template>

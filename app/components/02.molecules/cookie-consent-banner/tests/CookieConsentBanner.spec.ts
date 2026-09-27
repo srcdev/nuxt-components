@@ -152,4 +152,44 @@ describe("CookieConsentBanner", () => {
     expect(banner()!.classList).toContain("two");
     expect(banner()!.classList).not.toContain("one");
   });
+
+  // ─── Built on AlertContent (2026-09-27) ───────────────────────────────────
+
+  it("renders inside AlertContent with the resolved theme", async () => {
+    await mountSuspended(CookieConsentBanner, { props: { theme: "success" } });
+    const alert = document.querySelector(".cookie-consent-banner-inner .alert-content");
+    expect(alert).not.toBeNull();
+    expect(alert!.getAttribute("data-theme")).toBe("success");
+  });
+
+  it("renders the default 'Cookies' title and the message in the alert body", async () => {
+    await mountSuspended(CookieConsentBanner);
+    expect(document.querySelector("[data-test-id='alert-title']")!.textContent).toContain("Cookies");
+    expect(document.querySelector("[data-test-id='alert-content']")!.textContent).toContain("cookies");
+  });
+
+  it("replaces the title via the #title slot", async () => {
+    await mountSuspended(CookieConsentBanner, { slots: { title: "Your privacy" } });
+    expect(document.querySelector("[data-test-id='alert-title']")!.textContent).toContain("Your privacy");
+  });
+
+  it("puts both buttons in the alert's actions row", async () => {
+    await mountSuspended(CookieConsentBanner);
+    const actions = document.querySelector("[data-test-id='alert-actions']")!;
+    expect(actions.contains(acceptButton())).toBe(true);
+    expect(actions.contains(rejectButton())).toBe(true);
+  });
+
+  it("shows the icon by default and hides it with showIcon=false", async () => {
+    await mountSuspended(CookieConsentBanner);
+    expect(document.querySelector("[data-test-id='alert-icon']")).not.toBeNull();
+    document.body.innerHTML = "";
+    await mountSuspended(CookieConsentBanner, { props: { showIcon: false } });
+    expect(document.querySelector("[data-test-id='alert-icon']")).toBeNull();
+  });
+
+  it("does not make the message an aria-live region", async () => {
+    await mountSuspended(CookieConsentBanner);
+    expect(document.querySelector(".alert-content-body")!.hasAttribute("aria-live")).toBe(false);
+  });
 });

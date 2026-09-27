@@ -6,7 +6,7 @@
 an optional dismiss button. It collapses in-place via CSS grid animation rather than removing from
 the DOM. Dismiss can be controlled locally (closes itself) or by a parent via `v-model`.
 
-**Location**: `app/components/01.atoms/prompt/DisplayPrompt.vue`
+**Location**: `app/components/02.molecules/prompt/DisplayPrompt.vue`
 **Types**: `~/types/components` — `DisplayPromptTheme`, `SemanticTheme`
 
 ## Props

@@ -4,6 +4,7 @@
       <AlertContentInner
         :theme="theme"
         :custom-icon="customIcon"
+        :show-icon="showIcon"
         :dismissible="dismissible"
         :content-id="contentId"
         :aria-live="ariaLive"
@@ -17,6 +18,9 @@
         </template>
         <template v-if="slots.content" #content>
           <slot name="content"></slot>
+        </template>
+        <template v-if="slots.actions" #actions>
+          <slot name="actions"></slot>
         </template>
         <template v-if="slots.dismissIcon" #dismissIcon>
           <slot name="dismissIcon"></slot>
@@ -35,6 +39,7 @@ import type { SemanticTheme, AlertMaskConfig } from "~/types/components";
 interface Props {
   theme: SemanticTheme;
   customIcon?: string;
+  showIcon?: boolean;
   dismissible?: boolean;
   contentId?: string;
   ariaLive?: "polite" | "assertive" | "off";
@@ -43,6 +48,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   customIcon: undefined,
+  showIcon: true,
   dismissible: false,
   contentId: undefined,
   ariaLive: undefined,

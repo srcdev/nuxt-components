@@ -11,10 +11,9 @@ Two patterns are available depending on the use case:
 
 **Locations**:
 
-- `app/components/01.atoms/toast/DisplayToast.vue`
-- `app/components/01.atoms/toast/DisplayToastProvider.vue`
+- `app/components/02.molecules/toast/DisplayToast.vue`
+- `app/components/02.molecules/toast/DisplayToastProvider.vue`
 - `app/composables/useToastQueue.ts`
-- `app/components/01.atoms/toast/molecules/DefaultToastContent.vue`
 
 **Types**: `~/types/components` — `DisplayToastConfig`, `DisplayToastTheme`, `ToastQueueEntry`, `ToastQueueStatus`
 
@@ -81,7 +80,7 @@ Resolution chain: **`config` prop → app.config → hardcoded fallback**.
 
 | Slot | Description |
 |---|---|
-| `default` | Replaces `DefaultToastContent` entirely. `has-theme`, `tabindex`, and `aria-describedby` are omitted — accessibility is the caller's responsibility. |
+| `default` | Replaces the built-in `AlertContent`/`AlertMaskedContent` entirely. `has-theme`, `tabindex`, and `aria-describedby` are omitted — accessibility is the caller's responsibility. |
 | `#customToastIcon` | Replaces the default theme icon. |
 | `#title` | Replaces `config.content.title`. Do not provide both slot and config value. |
 | `#description` | Replaces `config.content.description`. Do not provide both slot and config value. |

@@ -7,27 +7,32 @@
       data-test-id="cookie-consent-banner"
     >
       <div class="cookie-consent-banner-inner" role="region" :aria-label="ariaLabel">
-        <div class="cookie-consent-banner-message">
-          <slot name="message">This site uses cookies to understand how it's used. You can accept or reject them.</slot>
-        </div>
-        <div class="cookie-consent-banner-actions">
-          <button
-            type="button"
-            class="cookie-consent-banner-reject"
-            data-test-id="cookie-consent-banner-reject"
-            @click="rejectAll()"
-          >
-            <slot name="rejectLabel">Reject</slot>
-          </button>
-          <button
-            type="button"
-            class="cookie-consent-banner-accept"
-            data-test-id="cookie-consent-banner-accept"
-            @click="acceptAll()"
-          >
-            <slot name="acceptLabel">Accept</slot>
-          </button>
-        </div>
+        <AlertContent :theme="resolved.theme" :custom-icon="icon" :show-icon="showIcon">
+          <template #title>
+            <slot name="title">Cookies</slot>
+          </template>
+          <template #content>
+            <slot name="message">This site uses cookies to understand how it's used. You can accept or reject them.</slot>
+          </template>
+          <template #actions>
+            <button
+              type="button"
+              class="cookie-consent-banner-reject"
+              data-test-id="cookie-consent-banner-reject"
+              @click="rejectAll()"
+            >
+              <slot name="rejectLabel">Reject</slot>
+            </button>
+            <button
+              type="button"
+              class="cookie-consent-banner-accept"
+              data-test-id="cookie-consent-banner-accept"
+              @click="acceptAll()"
+            >
+              <slot name="acceptLabel">Accept</slot>
+            </button>
+          </template>
+        </AlertContent>
       </div>
     </div>
   </Teleport>
@@ -39,6 +44,8 @@ import type { CookieConsentBannerProps } from "../../../types/components";
 const props = withDefaults(defineProps<CookieConsentBannerProps>(), {
   theme: undefined,
   ariaLabel: "Cookie consent",
+  icon: "material-symbols:cookie-outline",
+  showIcon: true,
   styleClassPassthrough: () => [],
 });
 
@@ -96,27 +103,8 @@ const isClosed = computed(() => status.value !== "unset");
     }
 
     .cookie-consent-banner-inner {
+      min-height: 0;
       overflow: hidden;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: var(--cookie-consent-banner-gap, 1.2rem);
-      padding: var(--cookie-consent-banner-padding, 1.6rem);
-      border-radius: var(--cookie-consent-banner-border-radius, 0.8rem);
-      border: var(--cookie-consent-banner-border, 0.1rem solid var(--slate-10));
-      border-block-start: var(--cookie-consent-banner-accent-border-width, 0.2rem) solid var(--_accent);
-      background-color: var(--cookie-consent-banner-background, var(--slate-00));
-      color: var(--cookie-consent-banner-text-colour, var(--slate-10));
-    }
-
-    .cookie-consent-banner-message {
-      flex: 1 1 24rem;
-    }
-
-    .cookie-consent-banner-actions {
-      display: flex;
-      gap: var(--cookie-consent-banner-actions-gap, 0.8rem);
-      margin-inline-start: auto;
     }
 
     .cookie-consent-banner-reject,
@@ -139,7 +127,7 @@ const isClosed = computed(() => status.value !== "unset");
     .cookie-consent-banner-reject {
       background-color: transparent;
       color: inherit;
-      border-color: var(--cookie-consent-banner-reject-border-colour, var(--slate-08));
+      border-color: var(--cookie-consent-banner-reject-border-colour, var(--theme-border));
 
       &:hover,
       &:focus-visible {
@@ -149,7 +137,7 @@ const isClosed = computed(() => status.value !== "unset");
 
     .cookie-consent-banner-accept {
       background-color: var(--cookie-consent-banner-accept-background, var(--_accent));
-      color: var(--cookie-consent-banner-accept-text-colour, var(--slate-00));
+      color: var(--cookie-consent-banner-accept-text-colour, var(--theme-on-surface));
 
       &:hover,
       &:focus-visible {
