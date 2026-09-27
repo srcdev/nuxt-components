@@ -1,28 +1,28 @@
 <template>
   <Teleport to="body">
     <div
-      class="privacy-notice-banner"
-      :class="[{ closed: status !== 'unset' }, elementClasses]"
+      class="cookie-consent-banner"
+      :class="[{ closed: isClosed }, elementClasses]"
       :data-theme="resolved.theme"
-      data-test-id="privacy-notice-banner"
+      data-test-id="cookie-consent-banner"
     >
-      <div class="privacy-notice-banner-inner" role="region" :aria-label="ariaLabel">
-        <div class="privacy-notice-banner-message">
+      <div class="cookie-consent-banner-inner" role="region" :aria-label="ariaLabel">
+        <div class="cookie-consent-banner-message">
           <slot name="message">This site uses cookies to understand how it's used. You can accept or reject them.</slot>
         </div>
-        <div class="privacy-notice-banner-actions">
+        <div class="cookie-consent-banner-actions">
           <button
             type="button"
-            class="privacy-notice-banner-reject"
-            data-test-id="privacy-notice-banner-reject"
+            class="cookie-consent-banner-reject"
+            data-test-id="cookie-consent-banner-reject"
             @click="rejectAll()"
           >
             <slot name="rejectLabel">Reject</slot>
           </button>
           <button
             type="button"
-            class="privacy-notice-banner-accept"
-            data-test-id="privacy-notice-banner-accept"
+            class="cookie-consent-banner-accept"
+            data-test-id="cookie-consent-banner-accept"
             @click="acceptAll()"
           >
             <slot name="acceptLabel">Accept</slot>
@@ -38,6 +38,7 @@ import type { CookieConsentBannerProps } from "../../../types/components";
 
 const props = withDefaults(defineProps<CookieConsentBannerProps>(), {
   theme: undefined,
+  ariaLabel: "Cookie consent",
   styleClassPassthrough: () => [],
 });
 
@@ -50,93 +51,105 @@ const resolved = computed(() => {
   } as const;
 });
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
+
 const { status, acceptAll, rejectAll } = useCookieConsent();
-const ariaLabel = "Cookie consent";
+const isClosed = computed(() => status.value !== "unset");
 </script>
 
 <style lang="css">
 @layer components {
-  .privacy-notice-banner {
-    /* Matches DisplayToastProvider/DisplayDialog's z-index convention so
-       this clears ordinary page chrome (and a consumer's sticky header) but
-       still sits below an active modal dialog if one somehow overlaps. */
-    --_z-index: var(--privacy-notice-banner-z-index, 999999);
-    --_gutter: var(--privacy-notice-banner-gutter, 1.6rem);
-    --_max-width: var(--privacy-notice-banner-max-width, 64rem);
-    --_border-radius: var(--privacy-notice-banner-border-radius, 0.8rem);
-    --_border: var(--privacy-notice-banner-border, 0.1rem solid light-dark(var(--slate-10), var(--slate-02)));
-    --_background: var(--privacy-notice-banner-background, light-dark(var(--slate-00), var(--slate-10)));
-    --_transition-duration: var(--privacy-notice-banner-transition-duration, 200ms);
+  .cookie-consent-banner {
+    --_gutter: var(--cookie-consent-banner-gutter, 1.6rem);
+    --_transition-duration: var(--cookie-consent-banner-transition-duration, 200ms);
+    --_accent: var(--cookie-consent-banner-accent, var(--theme-accent));
 
     position: fixed;
     inset-inline: var(--_gutter);
     inset-block-end: var(--_gutter);
-    z-index: var(--_z-index);
+    z-index: var(--cookie-consent-banner-z-index, 999999);
     margin-inline: auto;
-    max-width: var(--_max-width);
+    max-width: var(--cookie-consent-banner-max-width, 64rem);
 
     display: grid;
     grid-template-rows: 1fr;
     opacity: 1;
-    transition: all var(--_transition-duration) ease-in-out;
+    transition:
+      grid-template-rows var(--_transition-duration) ease-in-out,
+      opacity var(--_transition-duration) ease-in-out,
+      visibility var(--_transition-duration);
 
     &.closed {
       grid-template-rows: 0fr;
       opacity: 0;
+      visibility: hidden;
       pointer-events: none;
     }
 
-    .privacy-notice-banner-inner {
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
+
+    .cookie-consent-banner-inner {
       overflow: hidden;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 1.2rem;
-      padding: 1.6rem;
-      border-radius: var(--_border-radius);
-      border: var(--_border);
-      background-color: var(--_background);
-
-      &[aria-label] {
-        border-block-start: 0.2rem solid var(--theme-accent);
-      }
+      gap: var(--cookie-consent-banner-gap, 1.2rem);
+      padding: var(--cookie-consent-banner-padding, 1.6rem);
+      border-radius: var(--cookie-consent-banner-border-radius, 0.8rem);
+      border: var(--cookie-consent-banner-border, 0.1rem solid var(--slate-10));
+      border-block-start: var(--cookie-consent-banner-accent-border-width, 0.2rem) solid var(--_accent);
+      background-color: var(--cookie-consent-banner-background, var(--slate-00));
+      color: var(--cookie-consent-banner-text-colour, var(--slate-10));
     }
 
-    .privacy-notice-banner-message {
+    .cookie-consent-banner-message {
       flex: 1 1 24rem;
     }
 
-    .privacy-notice-banner-actions {
+    .cookie-consent-banner-actions {
       display: flex;
-      gap: 0.8rem;
+      gap: var(--cookie-consent-banner-actions-gap, 0.8rem);
       margin-inline-start: auto;
     }
 
-    .privacy-notice-banner-reject,
-    .privacy-notice-banner-accept {
-      padding: 0.8rem 1.6rem;
-      border-radius: 0.4rem;
+    .cookie-consent-banner-reject,
+    .cookie-consent-banner-accept {
+      padding: var(--cookie-consent-banner-button-padding, 0.8rem 1.6rem);
+      border-radius: var(--cookie-consent-banner-button-border-radius, 0.4rem);
       border: 0.1rem solid transparent;
+      font: inherit;
       cursor: pointer;
       transition:
         border-color var(--_transition-duration),
         background-color var(--_transition-duration);
-    }
 
-    .privacy-notice-banner-reject {
-      background-color: transparent;
-      border: 0.1rem solid light-dark(var(--slate-08), var(--slate-04));
-
-      &:hover,
       &:focus-visible {
-        border-color: var(--theme-accent);
+        outline: 0.2rem solid var(--cookie-consent-banner-focus-ring, var(--theme-border-focus));
+        outline-offset: 0.2rem;
       }
     }
 
-    .privacy-notice-banner-accept {
-      background-color: var(--theme-accent);
-      color: light-dark(var(--slate-00), var(--slate-12));
+    .cookie-consent-banner-reject {
+      background-color: transparent;
+      color: inherit;
+      border-color: var(--cookie-consent-banner-reject-border-colour, var(--slate-08));
+
+      &:hover,
+      &:focus-visible {
+        border-color: var(--cookie-consent-banner-reject-border-colour-hover, var(--_accent));
+      }
+    }
+
+    .cookie-consent-banner-accept {
+      background-color: var(--cookie-consent-banner-accept-background, var(--_accent));
+      color: var(--cookie-consent-banner-accept-text-colour, var(--slate-00));
 
       &:hover,
       &:focus-visible {

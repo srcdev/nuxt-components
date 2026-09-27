@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { mountSuspended, mockNuxtImport } from "@nuxt/test-utils/runtime";
 import CookieConsentBanner from "../CookieConsentBanner.vue";
 
@@ -23,15 +23,15 @@ mockNuxtImport("useCookieConsent", () => () => ({
 }));
 
 function banner() {
-  return document.querySelector(".privacy-notice-banner");
+  return document.querySelector(".cookie-consent-banner");
 }
 
 function acceptButton() {
-  return document.querySelector("[data-test-id='privacy-notice-banner-accept']") as HTMLElement;
+  return document.querySelector("[data-test-id='cookie-consent-banner-accept']") as HTMLElement;
 }
 
 function rejectButton() {
-  return document.querySelector("[data-test-id='privacy-notice-banner-reject']") as HTMLElement;
+  return document.querySelector("[data-test-id='cookie-consent-banner-reject']") as HTMLElement;
 }
 
 describe("CookieConsentBanner", () => {
@@ -39,6 +39,7 @@ describe("CookieConsentBanner", () => {
     statusRef.value = "unset";
     acceptAllSpy.mockClear();
     rejectAllSpy.mockClear();
+    useAppConfigMock.mockReturnValue({ srcdev: undefined, icon: {} });
   });
 
   afterEach(() => {
@@ -114,5 +115,41 @@ describe("CookieConsentBanner", () => {
   it("applies a styleClassPassthrough class to the root", async () => {
     await mountSuspended(CookieConsentBanner, { props: { styleClassPassthrough: "outlined" } });
     expect(banner()!.classList).toContain("outlined");
+  });
+
+  it("names the region with the default aria-label", async () => {
+    await mountSuspended(CookieConsentBanner);
+    const region = document.querySelector(".cookie-consent-banner-inner")!;
+    expect(region.getAttribute("role")).toBe("region");
+    expect(region.getAttribute("aria-label")).toBe("Cookie consent");
+  });
+
+  it("applies a custom ariaLabel", async () => {
+    await mountSuspended(CookieConsentBanner, { props: { ariaLabel: "Consentement aux cookies" } });
+    expect(document.querySelector(".cookie-consent-banner-inner")!.getAttribute("aria-label")).toBe(
+      "Consentement aux cookies"
+    );
+  });
+
+  it("closes after a choice is made", async () => {
+    await mountSuspended(CookieConsentBanner);
+    rejectButton().click();
+    await nextTick();
+    expect(banner()!.classList).toContain("closed");
+  });
+
+  it("reopens if consent is reset to 'unset'", async () => {
+    statusRef.value = "denied";
+    await mountSuspended(CookieConsentBanner);
+    statusRef.value = "unset";
+    await nextTick();
+    expect(banner()!.classList).not.toContain("closed");
+  });
+
+  it("updates classes when styleClassPassthrough changes", async () => {
+    const w = await mountSuspended(CookieConsentBanner, { props: { styleClassPassthrough: ["one"] } });
+    await w.setProps({ styleClassPassthrough: ["two"] });
+    expect(banner()!.classList).toContain("two");
+    expect(banner()!.classList).not.toContain("one");
   });
 });

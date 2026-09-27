@@ -11,6 +11,11 @@ export default {
       description: "Semantic theme for the banner's accent border/accept button",
       table: { category: "Appearance" },
     },
+    ariaLabel: {
+      control: "text",
+      description: "Accessible name for the banner region",
+      table: { category: "Accessibility" },
+    },
     styleClassPassthrough: {
       control: { type: "object" },
       description: "Extra classes applied to the banner root",
@@ -19,6 +24,7 @@ export default {
   },
   args: {
     theme: "info",
+    ariaLabel: "Cookie consent",
     styleClassPassthrough: [],
   },
   parameters: {
@@ -64,7 +70,7 @@ const Template: StoryFn<typeof StorybookComponent> = (args) => ({
     <div style="padding: 2rem; min-height: 240px; position: relative;">
       <button type="button" @click="showAgain">Show banner again</button>
       <button type="button" @click="deleteCookie" style="margin-inline-start: 0.8rem;">Delete cookie</button>
-      <StorybookComponent :theme="args.theme" :style-class-passthrough="args.styleClassPassthrough">
+      <StorybookComponent :theme="args.theme" :aria-label="args.ariaLabel" :style-class-passthrough="args.styleClassPassthrough">
         <template #message>This site uses cookies for analytics. You can accept or reject them.</template>
       </StorybookComponent>
     </div>
@@ -83,7 +89,7 @@ export const CustomCopy: StoryFn<typeof StorybookComponent> = (args) => ({
     <div style="padding: 2rem; min-height: 240px; position: relative;">
       <button type="button" @click="showAgain">Show banner again</button>
       <button type="button" @click="deleteCookie" style="margin-inline-start: 0.8rem;">Delete cookie</button>
-      <StorybookComponent :theme="args.theme">
+      <StorybookComponent :theme="args.theme" :aria-label="args.ariaLabel">
         <template #message>We use cookies to understand traffic to this site. No personal data is sold.</template>
         <template #acceptLabel>Allow cookies</template>
         <template #rejectLabel>No thanks</template>

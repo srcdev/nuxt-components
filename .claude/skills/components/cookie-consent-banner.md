@@ -15,6 +15,7 @@ Fixed, non-modal banner shown while cookie consent is undecided (`useCookieConse
 | Prop | Type | Default | Notes |
 |---|---|---|---|
 | `theme` | `SemanticTheme` | `"info"` | Colours the banner's accent border and accept button via `--theme-accent`. |
+| `ariaLabel` | `string` | `"Cookie consent"` | Accessible name for the banner's `role="region"`. Pass translated copy in non-English apps. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the root element. |
 
 ### app.config defaults
@@ -68,21 +69,14 @@ useAnalytics();
 
 ## CSS / styling
 
-Public tokens (all on `.privacy-notice-banner`, `var(--privacy-notice-banner-*, fallback)` pattern):
+Full token list in `CONSUMER-STYLING.md` next to the component (`--cookie-consent-banner-*`: z-index, gutter, max-width, padding, gap, border, accent, background, text colour, button padding/radius, reject/accept colours, focus ring, transition duration). Defaults are light-only (no `light-dark()`); see its "dark panel" recipe.
 
-| Token | Default |
-|---|---|
-| `--privacy-notice-banner-z-index` | `999999` |
-| `--privacy-notice-banner-gutter` | `1.6rem` |
-| `--privacy-notice-banner-max-width` | `64rem` |
-| `--privacy-notice-banner-border-radius` | `0.8rem` |
-| `--privacy-notice-banner-border` | `0.1rem solid light-dark(var(--slate-10), var(--slate-02))` |
-| `--privacy-notice-banner-background` | `light-dark(var(--slate-00), var(--slate-10))` |
-| `--privacy-notice-banner-transition-duration` | `200ms` |
+The banner is **teleported to `<body>`**, so set tokens on `:root`/`html`/`body` or through `style-class-passthrough`, not on a page wrapper.
 
 ## Notes
 
-- **Teleported to `<body>`** — like `DisplayToastProvider`, query it in tests via `document.querySelector(".privacy-notice-banner")`, not `wrapper.find(...)`.
-- **No focus trap / backdrop** — this is a dismiss-by-decision banner, not a modal. It collapses via a `grid-template-rows` transition (same mechanic as `DisplayPrompt`) once `status` leaves `"unset"`, rather than unmounting.
+- **Teleported to `<body>`** — like `DisplayToastProvider`, query it in tests via `document.querySelector(".cookie-consent-banner")`, not `wrapper.find(...)`.
+- **No focus trap / backdrop** — this is a dismiss-by-decision banner, not a modal. It collapses via a `grid-template-rows` transition (same mechanic as `DisplayPrompt`) once `status` leaves `"unset"`, rather than unmounting. When closed it is `visibility: hidden`, so its buttons leave the tab order and accessibility tree (before 2026-09-27 they stayed focusable while invisible).
 - **Only ever one instance** — `useCookieConsent()`'s underlying state is a module-scope singleton, so mounting the banner twice in one app just duplicates the UI, it doesn't create separate consent state.
-- To let a visitor change their mind later (e.g. from a cookie-policy page), call `useCookieConsent().rejectAll()` or clear the `cookie-consent` cookie — the banner reappears since `status` returns to `"unset"` only once the cookie is gone; `rejectAll()` itself sets it to `"denied"`, which keeps the banner hidden but stops GA. Expose a dedicated "reset my choice" affordance if you want the banner itself to resurface.
+- To let a visitor change their mind later (e.g. from a cookie-policy page), call `useCookieConsent().rejectAll()` or clear the `privacy-notice-consent` cookie — the banner reappears since `status` returns to `"unset"` only once the cookie is gone; `rejectAll()` itself sets it to `"denied"`, which keeps the banner hidden but stops GA. Expose a dedicated "reset my choice" affordance if you want the banner itself to resurface.
+- 2026-09-27 migration: classes/tokens/test ids renamed `privacy-notice-banner` → `cookie-consent-banner`; `light-dark()` defaults replaced with light values plus an explicit text colour; single-use private pass-throughs inlined and the hardcoded spacing, button and colour values promoted to public tokens; `ariaLabel` prop (was a hardcoded "Cookie consent"); closed banner hidden from keyboard and screen readers; visible `:focus-visible` outline on the buttons; reduced-motion support; `styleClassPassthrough` now reactive. Added CONSUMER-STYLING.md and a snippet.

@@ -1,0 +1,32 @@
+{
+  "SRCDEV CookieConsentBanner Basic": {
+    "description": "CookieConsentBanner: fixed Accept/Reject banner driven by useCookieConsent (once, in the default layout)",
+    "scope": "vue,html",
+    "body": [
+      "<CookieConsentBanner />"
+    ]
+  },
+  "SRCDEV CookieConsentBanner Translated": {
+    "description": "CookieConsentBanner with translated copy and accessible name",
+    "scope": "vue,html",
+    "body": [
+      "<CookieConsentBanner :aria-label=\"${1:t('global.cookieConsent.ariaLabel')}\">",
+      "  <template #message>{{ ${2:t('global.cookieConsent.message')} }}</template>",
+      "  <template #acceptLabel>{{ ${3:t('global.cookieConsent.accept')} }}</template>",
+      "  <template #rejectLabel>{{ ${4:t('global.cookieConsent.reject')} }}</template>",
+      "</CookieConsentBanner>"
+    ]
+  },
+  "SRCDEV CookieConsentBanner Tokens": {
+    "description": "CookieConsentBanner global token overrides (it's teleported to body, so set them on html)",
+    "scope": "css",
+    "body": [
+      ":where(html) {",
+      "  --cookie-consent-banner-max-width: ${1:64rem};",
+      "  --cookie-consent-banner-background: ${2:var(--slate-00)};",
+      "  --cookie-consent-banner-text-colour: ${3:var(--slate-10)};",
+      "  --cookie-consent-banner-accent: ${4:var(--theme-accent)};",
+      "}"
+    ]
+  }
+}

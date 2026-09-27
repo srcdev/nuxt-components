@@ -126,7 +126,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── site-header.md            — SiteHeader: PageRow + SkipLinks + ResponsiveHeader composition, #branding/#secondaryNavigation slots, dual styleClassPassthrough hooks
     ├── responsive-header.md      — ResponsiveHeader: overflow-collapsing adaptive nav, measurement-pipeline gotchas (unsized icons, vw font-size drift), full CSS token API
     ├── navigation-items.md       — NavigationItems: internal overflow-panel renderer for ResponsiveHeader, complement-visibility logic, not used standalone
-    ├── cookie-consent-banner.md  — CookieConsentBanner: fixed non-modal Accept/Reject banner driven by useCookieConsent, message/acceptLabel/rejectLabel slots, CSS token API
+    ├── cookie-consent-banner.md  — CookieConsentBanner: fixed non-modal Accept/Reject banner driven by useCookieConsent, message/acceptLabel/rejectLabel slots, ariaLabel prop, --cookie-consent-banner-* token API (renamed from privacy-notice-banner), teleported so tokens go on html/passthrough
     ├── display-banner.md         — DisplayBanner: canvas/content stacked overlay banner, conditional slot wrappers, CSS token API
     ├── deep-expanding-menu.md         — DeepExpandingMenu: anchor-positioned popover nav panels, browser support caveat, CSS token API
     ├── deep-expanding-menu-classic.md — DeepExpandingMenuClassic: <details>-based fallback nav, click-outside close, CSS token API
