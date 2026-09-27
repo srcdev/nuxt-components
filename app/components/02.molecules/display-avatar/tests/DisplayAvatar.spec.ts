@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import DisplayAvatar from "../DisplayAvatar.vue";
-import DisplayChip from "../../../02.molecules/display-chip/DisplayChip.vue";
+import DisplayChip from "../../display-chip/DisplayChip.vue";
 
 describe("DisplayAvatar", () => {
   // ─── Mount ───────────────────────────────────────────────────────────────
@@ -80,33 +80,33 @@ describe("DisplayAvatar", () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { alt: "John Doe" },
     });
-    expect(wrapper.find("span").text()).toBe("JD");
+    expect(wrapper.find(".display-avatar > span:first-child").text()).toBe("JD");
   });
 
   it("caps initials at two characters", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { alt: "Alice Bob Charlie" },
     });
-    expect(wrapper.find("span").text()).toBe("AB");
+    expect(wrapper.find(".display-avatar > span:first-child").text()).toBe("AB");
   });
 
   it("shows single initial for a single-word alt", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { alt: "Alice" },
     });
-    expect(wrapper.find("span").text()).toBe("A");
+    expect(wrapper.find(".display-avatar > span:first-child").text()).toBe("A");
   });
 
   it("shows text prop instead of alt-derived initials when text is set", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { alt: "John Doe", text: "?" },
     });
-    expect(wrapper.find("span").text()).toBe("?");
+    expect(wrapper.find(".display-avatar > span:first-child").text()).toBe("?");
   });
 
   it("shows empty fallback when neither src, text, nor alt are set", async () => {
     const wrapper = await mountSuspended(DisplayAvatar);
-    expect(wrapper.find("span").text()).toBe("");
+    expect(wrapper.find(".display-avatar > span:first-child").text()).toBe("");
   });
 
   // ─── Image ────────────────────────────────────────────────────────────────
@@ -115,26 +115,26 @@ describe("DisplayAvatar", () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { src: "/avatar.jpg" },
     });
-    expect(wrapper.find(".avatar-image").exists()).toBe(true);
+    expect(wrapper.find(".display-avatar-image").exists()).toBe(true);
   });
 
   it("does not render an image element when src is not provided", async () => {
     const wrapper = await mountSuspended(DisplayAvatar);
-    expect(wrapper.find(".avatar-image").exists()).toBe(false);
+    expect(wrapper.find(".display-avatar-image").exists()).toBe(false);
   });
 
-  it("falls back to 'Avatar' as alt text when src is set but alt is not", async () => {
+  it("uses an empty (decorative) alt when src is set but alt is not", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { src: "/avatar.jpg" },
     });
-    expect(wrapper.find(".avatar-image").attributes("alt")).toBe("Avatar");
+    expect(wrapper.find(".display-avatar-image").attributes("alt")).toBe("");
   });
 
   it("uses the alt prop as alt text on the image", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { src: "/avatar.jpg", alt: "Profile picture" },
     });
-    expect(wrapper.find(".avatar-image").attributes("alt")).toBe("Profile picture");
+    expect(wrapper.find(".display-avatar-image").attributes("alt")).toBe("Profile picture");
   });
 
   // ─── Slots ────────────────────────────────────────────────────────────────
@@ -204,5 +204,37 @@ describe("DisplayAvatar", () => {
     await wrapper.setProps({ styleClassPassthrough: ["offline"] });
     expect(wrapper.classes()).not.toContain("online");
     expect(wrapper.classes()).toContain("offline");
+  });
+
+  // ─── Migration 2026-09-27 ──────────────────────────────────────────────────
+
+  it("hides the initials from screen readers and announces the alt instead", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { alt: "John Doe" } });
+    expect(wrapper.find(".display-avatar > span:first-child").attributes("aria-hidden")).toBe("true");
+    expect(wrapper.find(".sr-only").text()).toBe("John Doe");
+  });
+
+  it("leaves text-only fallback readable when there is no alt", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { text: "?" } });
+    expect(wrapper.find(".display-avatar > span:first-child").attributes("aria-hidden")).toBeUndefined();
+    expect(wrapper.find(".sr-only").exists()).toBe(false);
+  });
+
+  it("does not render a stray style-class-passthrough attribute on a native root", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { styleClassPassthrough: ["online"] } });
+    expect(wrapper.attributes("style-class-passthrough")).toBeUndefined();
+  });
+
+  it("puts display-avatar, size and passthrough classes on the DisplayChip root", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, {
+      props: { chip: true, size: "lg", styleClassPassthrough: ["online"] },
+    });
+    expect(wrapper.classes()).toEqual(expect.arrayContaining(["display-chip-core", "display-avatar", "lg", "online"]));
+  });
+
+  it("updates the chip config when the chip prop changes", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { chip: true } });
+    await wrapper.setProps({ chip: { size: "20px", maskWidth: "2px", offset: "0px", angle: "0deg" } });
+    expect(wrapper.findComponent(DisplayChip).props("config")).toMatchObject({ size: "20px" });
   });
 });

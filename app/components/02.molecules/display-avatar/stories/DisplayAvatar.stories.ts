@@ -1,8 +1,9 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
+import { computed } from "vue";
 import StorybookComponent from "../DisplayAvatar.vue";
 
 export default {
-  title: "Atoms/DisplayAvatar",
+  title: "Molecules/DisplayAvatar",
   component: StorybookComponent,
   argTypes: {
     size: {
@@ -80,27 +81,68 @@ export default {
   },
 } as Meta<typeof StorybookComponent>;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const useChip = (args: any) =>
+  computed(() => ({
+    size: `${args.chipSize ?? 12}px`,
+    maskWidth: `${args.chipMaskWidth ?? 4}px`,
+    offset: `${args.chipOffset ?? 2}px`,
+    angle: `${args.chipAngle ?? 45}deg`,
+  }));
+
 const Template: StoryFn<typeof StorybookComponent> = (args) => ({
   components: { StorybookComponent },
   setup() {
-    return { args };
+    return { args, chip: useChip(args) };
   },
   template: `
     <div style="display: flex; align-items: center; justify-content: center; height: 100vh;">
-    <StorybookComponent
-      :size="args.size"
-      :src="args.src"
-      :alt="args.alt"
-      :chip="{
-        size: (args.chipSize || 12) + 'px',
-        maskWidth: (args.chipMaskWidth || 4) + 'px',
-        offset: (args.chipOffset || 2) + 'px',
-        angle: (args.chipAngle || 45) + 'deg'
-      }"
-      :style-class-passthrough="args.styleClassPassthrough"
-    />
+      <StorybookComponent
+        :size="args.size"
+        :src="args.src"
+        :alt="args.alt"
+        :chip="chip"
+        :style-class-passthrough="args.styleClassPassthrough"
+      />
     </div>
   `,
 });
 
 export const Default = Template.bind({});
+
+export const Initials: StoryFn<typeof StorybookComponent> = (args) => ({
+  components: { StorybookComponent },
+  setup() {
+    return { args, chip: useChip(args) };
+  },
+  template: `
+    <div style="display: flex; align-items: center; justify-content: center; gap: 1.6rem; height: 100vh;">
+      <StorybookComponent :size="args.size" :alt="args.alt" :chip="chip" :style-class-passthrough="args.styleClassPassthrough" />
+      <StorybookComponent :size="args.size" text="?" :chip="chip" :style-class-passthrough="args.styleClassPassthrough" />
+    </div>
+  `,
+});
+Initials.args = { src: undefined, alt: "Jane Smith" };
+Initials.argTypes = { src: { table: { disable: true } } };
+
+export const Sizes: StoryFn<typeof StorybookComponent> = (args) => ({
+  components: { StorybookComponent },
+  setup() {
+    return { args, chip: useChip(args), sizes: ["xs", "s", "md", "lg", "xl"] };
+  },
+  template: `
+    <div style="display: flex; align-items: center; justify-content: center; gap: 1.6rem; height: 100vh;">
+      <StorybookComponent
+        v-for="size in sizes"
+        :key="size"
+        :size="size"
+        :src="args.src"
+        :alt="args.alt"
+        :chip="chip"
+        :style-class-passthrough="args.styleClassPassthrough"
+      />
+    </div>
+  `,
+});
+Sizes.args = { src: undefined, alt: "Jane Smith" };
+Sizes.argTypes = { size: { table: { disable: true } } };

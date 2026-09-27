@@ -1,0 +1,11 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DisplayAvatar > renders correct HTML structure (default) 1`] = `"<span class="display-avatar md"><span aria-hidden="true">JD</span><span class="sr-only">John Doe</span></span>"`;
+
+exports[`DisplayAvatar > renders correct HTML structure (with chip) 1`] = `
+"<span class="display-chip-core circle display-avatar md" style="--chip-size: 12px; --chip-mask-width: 4px; --chip-offset: 0px; --chip-angle: 90deg;"><span aria-hidden="true">JD</span><span class="sr-only">John Doe</span>
+<!--v-if-->
+<!--v-if--></span>"
+`;
+
+exports[`DisplayAvatar > renders correct HTML structure (with src) 1`] = `"<span class="display-avatar lg"><img data-nuxt-img="" srcset="/_ipx/_/avatar.jpg 1x, /_ipx/_/avatar.jpg 2x" alt="John Doe" class="display-avatar-image" src="/_ipx/_/avatar.jpg"></span>"`;

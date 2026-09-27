@@ -33,7 +33,6 @@ Tracks progress toward a fully migrated component library. A component is consid
 | DashboardQuadGrid | `content-wrappers/layout-grid/dashboard-quad-grid/` | ✅ | ✅ `dashboard-quad-grid` |
 | DashboardStatsGrid | `content-wrappers/layout-grid/dashboard-stats-grid/` | ✅ | ✅ `dashboard-stats-grid` |
 | LayoutGridByCols | `content-wrappers/layout-grid/layout-grid-by-cols/` | ✅ | ✅ `layout-grid-by-cols` |
-| DisplayAvatar | `display-avatar/DisplayAvatar.vue` | ☐ | ☐ |
 | DisplayDialog | `display-dialog/DisplayDialog.vue` | ✅ | ✅ `dialog` |
 | DisplayPill | `display-pill/DisplayPill.vue` | ☐ | ☐ |
 | GlassPanel | `glass-panel/GlassPanel.vue` | ✅ | ✅ |
@@ -42,14 +41,11 @@ Tracks progress toward a fully migrated component library. A component is consid
 | ColumnFlowGrid | `grids/column-flow-grid/ColumnFlowGrid.vue` (renamed from MasonryGrid) | ✅ | ✅ `column-flow-grid` |
 | MasonryGrid | `grids/masonry-grid/MasonryGrid.vue` (renamed from MasonryGridReadingOrder, itself renamed from MasonryGridSorted) | ✅ | ✅ `masonry-grid` |
 | PageRow | `page-row/PageRow.vue` | ✅ | ☐ |
-| DisplayPrompt | `prompt/DisplayPrompt.vue` | ☐ | ✅ `display-prompt` |
 | DisplayQrCode | `qr-code/DisplayQrCode.vue` | ☐ | ☐ |
 | TextBlock | `text-block/TextBlock.vue` | ☐ | ☐ |
 | EyebrowText | `text-blocks/eyebrow-text/EyebrowText.vue` | ☐ | ☐ |
 | HeroText | `text-blocks/hero-text/HeroText.vue` | ☐ | ☐ |
 | LinkText | `text-blocks/link-text/LinkText.vue` | ☐ | ☐ |
-| DisplayToast | `toast/DisplayToast.vue` | ☐ | ✅ `display-toast` |
-| DisplayToastProvider | `toast/DisplayToastProvider.vue` | ☐ | ✅ `display-toast` |
 | UiBlockDecorated | `ui-block-decorated/UiBlockDecorated.vue` | ✅ | ✅ `ui-block-decorated` |
 
 ---
@@ -64,7 +60,11 @@ Tracks progress toward a fully migrated component library. A component is consid
 | AlertContentInner | `alert-content/AlertContentInner.vue` | — | — |
 | AlertMaskedContent | `alert-masked-content/AlertMaskedContent.vue` | ✅ | ✅ `alert-masked-content` |
 | ContactSection | `contact-section/ContactSection.vue` | ☐ | ☐ |
+| DisplayAvatar | `display-avatar/DisplayAvatar.vue` | ✅ | ✅ `display-avatar` |
 | DisplayChip | `display-chip/DisplayChip.vue` | ☐ | ☐ |
+| DisplayPrompt | `prompt/DisplayPrompt.vue` | ☐ | ✅ `display-prompt` |
+| DisplayToast | `toast/DisplayToast.vue` | ✅ | ✅ `display-toast` |
+| DisplayToastProvider | `toast/DisplayToastProvider.vue` | ✅ | ✅ `display-toast` |
 | AccordianCore | `expandable/accordian/AccordianCore.vue` | ☐ | ☐ |
 | ExpandingPanel | `expandable/expanding-panel/ExpandingPanel.vue` | ☐ | ☐ |
 | NavigationHorizontal | `navigation/navigation-horizontal/NavigationHorizontal.vue` | ☐ | ☐ |

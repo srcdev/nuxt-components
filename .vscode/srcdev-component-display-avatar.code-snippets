@@ -1,0 +1,28 @@
+{
+  "SRCDEV DisplayAvatar Image": {
+    "description": "DisplayAvatar: circular image avatar",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayAvatar src=\"${1:/images/profile.jpg}\" alt=\"${2:Jane Smith}\" size=\"${3|md,xs,s,lg,xl|}\" />"
+    ]
+  },
+  "SRCDEV DisplayAvatar Initials": {
+    "description": "DisplayAvatar: initials derived from alt (alt is announced, initials hidden from screen readers)",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayAvatar alt=\"${1:Jane Smith}\" size=\"${2|md,xs,s,lg,xl|}\" />"
+    ]
+  },
+  "SRCDEV DisplayAvatar Chip": {
+    "description": "DisplayAvatar with a status chip",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayAvatar",
+      "  src=\"${1:/images/profile.jpg}\"",
+      "  alt=\"${2:Jane Smith}\"",
+      "  :chip=\"{ size: '${3:12px}', maskWidth: '${4:4px}', offset: '${5:0px}', angle: '${6:45deg}' }\"",
+      "  :style-class-passthrough=\"['${7|online,offline|}']\"",
+      "/>"
+    ]
+  }
+}

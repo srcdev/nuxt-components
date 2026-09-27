@@ -24,11 +24,13 @@
 
 | Size | Diameter | Font size |
 | ---- | -------- | --------- |
-| `xs` | 24px     | 0.75rem   |
-| `s`  | 32px     | 0.875rem  |
-| `md` | 40px     | 1rem      |
-| `lg` | 48px     | 1.125rem  |
-| `xl` | 56px     | 1.25rem   |
+| `xs` | 2.4rem (24px) | 1.2rem (12px) |
+| `s`  | 3.2rem (32px) | 1.4rem (14px) |
+| `md` | 4rem (40px)   | 1.6rem (16px) |
+| `lg` | 4.8rem (48px) | 1.8rem (18px) |
+| `xl` | 5.6rem (56px) | 2rem (20px)   |
+
+Each step is a token (`--display-avatar-size-md`, `--display-avatar-font-size-md`, ...), and `--display-avatar-size`/`--display-avatar-font-size` override the scale for one avatar or an area. A custom `size` string renders at `md` unless you set `--display-avatar-size`. Full list in `CONSUMER-STYLING.md`.
 
 ---
 
@@ -48,6 +50,10 @@ When `src` is not set, a `<span>` renders the fallback value:
 1. `text` prop — used as-is if provided.
 2. `alt` initials — first character of each word, capped at two characters.
 3. Empty string — if neither is set.
+
+When `alt` is set, the initials are `aria-hidden` and the full `alt` is rendered as `sr-only` text, so a screen reader announces "Jane Smith" rather than "J S". With only `text`, the text is read as-is.
+
+With `src`, the image uses `alt`, or an empty (decorative) `alt` when none is given. Pass `alt` unless the name is already visible next to the avatar.
 
 ```
 alt="John Doe"     → "JD"
@@ -134,7 +140,7 @@ interface DisplayChipConfig {
 ```vue
 <DisplayAvatar size="xl">
   <template #default>
-    <img src="/images/profile.jpg" alt="Jane Smith" class="avatar-image" />
+    <img src="/images/profile.jpg" alt="Jane Smith" class="display-avatar-image" />
   </template>
 </DisplayAvatar>
 ```
@@ -144,38 +150,16 @@ interface DisplayChipConfig {
 ```vue
 <DisplayAvatar alt="Jane Smith">
   <template #icon>
-    <Icon name="bi:check-circle-fill" class="avatar-icon" />
+    <Icon name="bi:check-circle-fill" class="display-avatar-icon" />
   </template>
 </DisplayAvatar>
 ```
 
 ---
 
-## Local style override scaffold
+## Styling
 
-```vue
-<DisplayAvatar
-  alt="Jane Smith"
-  :style-class-passthrough="['profile-avatar']"
-/>
-
-<style>
-/* ─── DisplayAvatar local overrides ────────────────────────────────
-   Scope by your wrapper class, then nest .display-avatar directly.
-   No :deep() needed (component styles are unscoped).
-   Delete this block if no overrides are needed.
-   ─────────────────────────────────────────────────────────────────── */
-.my-page-section {
-  .display-avatar {
-    &.profile-avatar {
-      /* custom overrides */
-    }
-  }
-}
-</style>
-```
-
-See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
+Tokens for size, background, text colour, radius and icon size are in `CONSUMER-STYLING.md` next to the component; overrides follow [component-local-style-override.md](../component-local-style-override.md). Give an icon in the `#icon` slot the `display-avatar-icon` class to size it with `--display-avatar-icon-size`.
 
 ---
 
@@ -185,3 +169,4 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 - When `chip` is set, the root element becomes `DisplayChip` and the `as` prop is ignored.
 - `class` and `style` are **not** declared as explicit props — they fall through to the root element automatically via Vue's attribute inheritance (`inheritAttrs: true`). Do not re-add them as props; doing so pulls them out of `$attrs` and breaks automatic inheritance.
 - `NuxtImg` is used for the image, so `@nuxt/image` must be installed in the consuming app.
+- 2026-09-27 migration: moved from `01.atoms` to `02.molecules` (it composes `DisplayChip`). Font sizes fixed (they were 16px-root rem values, rendering at 7.5–12.5px here); sizes and colours are now public tokens, with a `--theme-*` background and text colour instead of no background and faint `--slate-03` text. The hardcoded English `"Avatar"` alt fallback became an empty (decorative) alt, and initials now announce the full `alt`. Classes `.avatar-image`/`.avatar-icon` became `.display-avatar-image`/`.display-avatar-icon`. A stray `style-class-passthrough` attribute is no longer rendered on a native root, and the chip config now reacts to prop changes.

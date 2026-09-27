@@ -110,7 +110,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── capture-qr-code.md      — CaptureQrCode: live camera scanner, error state, visibility/route/KeepAlive lifecycle, media stream cleanup
     ├── decode-qr-code.md       — DecodeQrCode: file picker + drag-and-drop image decoder, shared results list, CSS override points
     ├── auto-grid.md            — AutoGrid: auto-fit responsive grid, $slots iteration, --auto-grid-min-col-size/gap tokens, semantic tag + aria
-    ├── display-avatar.md       — DisplayAvatar: circular avatar with image/initials fallback, size variants, chip badge, icon slot, styleClassPassthrough
+    ├── display-avatar.md       — DisplayAvatar (02.molecules): circular avatar with image/initials fallback (alt announced), size scale tokens, --display-avatar-* colours, chip badge, icon slot
     ├── display-theme-switch.md — DisplayThemeSwitch: system/light/dark picker wrapping TripleToggleSwitch, wired to useSettingsStore, labels/icons props, small sizing variant
     ├── card-core.md            — CardCore: generic card container, dynamic named slots as rows, 4 variants, blurred backdrop layer, full CSS token API
     ├── action-menu.md          — ActionMenu + ActionMenuItemCore: ellipsis trigger + anchored popover menu, indexed item-{n} slots, link/button items, full CSS token API
