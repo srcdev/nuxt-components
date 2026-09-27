@@ -76,6 +76,14 @@ describe("AutoGrid", () => {
     }
   );
 
+  it("passes a consumer aria-label through to the root", async () => {
+    const wrapper = await mountSuspended(AutoGrid, {
+      props: { tag: "section" },
+      attrs: { "aria-label": "Practice stats" },
+    });
+    expect(wrapper.attributes("aria-label")).toBe("Practice stats");
+  });
+
   // ─── isResponsive ────────────────────────────────────────────────────────
 
   it("does not have is-responsive class by default", async () => {

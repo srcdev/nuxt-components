@@ -28,27 +28,22 @@ watch(
 <style lang="css">
 @layer components {
   .auto-grid {
-    --auto-grid-min-col-size-small: 250px;
-    --auto-grid-min-col-size-default: 300px;
-    --auto-grid-min-col-size-large: 350px;
-    --auto-grid-gap: 1rem;
-
     display: grid;
-    gap: var(--auto-grid-gap);
+    gap: var(--auto-grid-gap, 1rem);
 
     &:not(.is-responsive) {
-      grid-template-columns: repeat(auto-fit, minmax(min(var(--auto-grid-min-col-size-default), 100%), 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(var(--auto-grid-min-col-size-default, 300px), 100%), 1fr));
     }
 
     &.is-responsive {
-      grid-template-columns: repeat(auto-fit, minmax(min(var(--auto-grid-min-col-size-small), 100%), 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(var(--auto-grid-min-col-size-small, 250px), 100%), 1fr));
 
       @container (width >= 768px) {
-        grid-template-columns: repeat(auto-fit, minmax(min(var(--auto-grid-min-col-size-default), 100%), 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(min(var(--auto-grid-min-col-size-default, 300px), 100%), 1fr));
       }
 
       @container (width >= 1024px) {
-        grid-template-columns: repeat(auto-fit, minmax(min(var(--auto-grid-min-col-size-large), 100%), 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(min(var(--auto-grid-min-col-size-large, 350px), 100%), 1fr));
       }
     }
   }

@@ -1,0 +1,39 @@
+{
+  "SRCDEV AutoGrid Basic": {
+    "description": "Basic AutoGrid with a few named item slots",
+    "scope": "vue,html",
+    "body": [
+      "<AutoGrid>",
+      "  <template #item-1>",
+      "    $1",
+      "  </template>",
+      "  <template #item-2>",
+      "    $2",
+      "  </template>",
+      "</AutoGrid>"
+    ]
+  },
+  "SRCDEV AutoGrid Looped": {
+    "description": "AutoGrid rendering a v-for list via dynamic slot names",
+    "scope": "vue,html",
+    "body": [
+      "<AutoGrid${1: is-responsive}>",
+      "  <template v-for=\"$2item in $3items\" :key=\"$2item.id\" #[$2item.id]>",
+      "    $4",
+      "  </template>",
+      "</AutoGrid>"
+    ]
+  },
+  "SRCDEV AutoGrid CSS Override": {
+    "description": "CSS override scaffold for AutoGrid tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --auto-grid-gap: $2;",
+      "  --auto-grid-min-col-size-default: $3;",
+      "  --auto-grid-min-col-size-small: $4;",
+      "  --auto-grid-min-col-size-large: $5;",
+      "}"
+    ]
+  }
+}

@@ -92,8 +92,8 @@ const Template: StoryFn<AutoGridArgs> = (args) => ({
     return { args, cssTokenStyle };
   },
   template: `
-    <div style="padding: 3.2rem; background: #f9fafb; container-type: inline-size;">
-      <AutoGridComponent :tag="args.tag" :is-responsive="args.isResponsive" :style="cssTokenStyle" :style-class-passthrough="args.styleClassPassthrough">
+    <div style="padding: 3.2rem; background: #f9fafb; container-type: inline-size;" :style="cssTokenStyle">
+      <AutoGridComponent :tag="args.tag" :is-responsive="args.isResponsive" :style-class-passthrough="args.styleClassPassthrough">
         <template #item-1>
           <div style="${cardStyle}">
             <span style="${labelStyle}">Revenue</span>
@@ -258,7 +258,7 @@ export const SemanticSection: StoryFn<AutoGridArgs> = (args) => ({
   },
   template: `
     <div style="padding: 3.2rem; background: #f9fafb; container-type: inline-size;">
-      <AutoGridComponent tag="section">
+      <AutoGridComponent tag="section" aria-label="Practice stats">
         <template #item-1>
           <div style="${cardStyle}">
             <span style="${labelStyle}">Revenue</span>
@@ -284,7 +284,8 @@ export const SemanticSection: StoryFn<AutoGridArgs> = (args) => ({
 SemanticSection.parameters = {
   docs: {
     description: {
-      story: "Rendered as a `<section>` — `aria-labelledby` is automatically applied via `useAriaLabelledById`.",
+      story:
+        "Rendered as a `<section>`. AutoGrid has no heading of its own and never sets `aria-labelledby`, so pass `aria-label` when a landmark tag needs an accessible name.",
     },
   },
 };
