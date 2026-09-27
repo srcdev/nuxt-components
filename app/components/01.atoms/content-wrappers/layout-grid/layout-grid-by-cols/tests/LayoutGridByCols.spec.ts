@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import LayoutGridByCols from "../LayoutGridByCols.vue";
 
@@ -52,16 +52,16 @@ describe("LayoutGridByCols", () => {
 
   // ─── Base class ──────────────────────────────────────────────────────────
 
-  it("always has the layout-grid class", async () => {
+  it("always has the layout-grid-by-cols class", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols);
     expect(wrapper.classes()).toContain("layout-grid-by-cols");
   });
 
   // ─── Inner div ───────────────────────────────────────────────────────────
 
-  it("renders a .layout-grid-inner div", async () => {
+  it("renders a .layout-grid-by-cols-inner div", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols);
-    expect(wrapper.find(".layout-grid-inner").exists()).toBe(true);
+    expect(wrapper.find(".layout-grid-by-cols-inner").exists()).toBe(true);
   });
 
   // ─── Accessibility ───────────────────────────────────────────────────────
@@ -94,7 +94,7 @@ describe("LayoutGridByCols", () => {
         "item-2": "<span>Gamma</span>",
       },
     });
-    const inner = wrapper.find(".layout-grid-inner");
+    const inner = wrapper.find(".layout-grid-by-cols-inner");
     expect(inner.text()).toContain("Alpha");
     expect(inner.text()).toContain("Beta");
     expect(inner.text()).toContain("Gamma");
@@ -102,7 +102,7 @@ describe("LayoutGridByCols", () => {
 
   it("renders no slot content when no slots are provided", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols);
-    expect(wrapper.find(".layout-grid-inner").text().trim()).toBe("");
+    expect(wrapper.find(".layout-grid-by-cols-inner").text().trim()).toBe("");
   });
 
   // ─── styleClassPassthrough ───────────────────────────────────────────────
@@ -122,29 +122,64 @@ describe("LayoutGridByCols", () => {
     expect(wrapper.classes()).toContain("class-b");
   });
 
-  // ─── columnCount prop ─────────────────────────────────────────────────────
+  // ─── Token props ──────────────────────────────────────────────────────────
 
-  it("accepts columnCount without error", async () => {
+  const inlineToken = (wrapper: { element: Element }, name: string) =>
+    (wrapper.element as HTMLElement).style.getPropertyValue(name);
+
+  it("writes no inline style when no layout props are passed", async () => {
+    const wrapper = await mountSuspended(LayoutGridByCols);
+    expect(wrapper.attributes("style")).toBeUndefined();
+  });
+
+  it("writes columnCount to --layout-grid-by-cols-column-count", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
       props: { columnCount: 3 },
     });
-    expect(wrapper.vm).toBeTruthy();
+    expect(inlineToken(wrapper, "--layout-grid-by-cols-column-count")).toBe("3");
   });
 
-  // ─── Other prop acceptance ────────────────────────────────────────────────
+  it("clamps columnCount to a minimum of 2", async () => {
+    const wrapper = await mountSuspended(LayoutGridByCols, {
+      props: { columnCount: 1 as unknown as 2 },
+    });
+    expect(inlineToken(wrapper, "--layout-grid-by-cols-column-count")).toBe("2");
+  });
 
-  it("accepts gap prop without error", async () => {
+  it("writes gap to --layout-grid-by-cols-gap", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
       props: { gap: "2rem" },
     });
-    expect(wrapper.vm).toBeTruthy();
+    expect(inlineToken(wrapper, "--layout-grid-by-cols-gap")).toBe("2rem");
   });
 
-  it("accepts singleColBelow prop without error", async () => {
+  it("writes singleColBelow to --layout-grid-by-cols-single-col-below", async () => {
     const wrapper = await mountSuspended(LayoutGridByCols, {
       props: { singleColBelow: "600px" },
     });
-    expect(wrapper.vm).toBeTruthy();
+    expect(inlineToken(wrapper, "--layout-grid-by-cols-single-col-below")).toBe("600px");
+  });
+
+  it("updates the inline token when a prop changes", async () => {
+    const wrapper = await mountSuspended(LayoutGridByCols, {
+      props: { columnCount: 3 },
+    });
+    await wrapper.setProps({ columnCount: 4 });
+    expect(inlineToken(wrapper, "--layout-grid-by-cols-column-count")).toBe("4");
+    await wrapper.setProps({ columnCount: undefined });
+    expect(inlineToken(wrapper, "--layout-grid-by-cols-column-count")).toBe("");
+  });
+
+  it("does not render placeholder text or aria-labelledby for a section without a label", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const wrapper = await mountSuspended(LayoutGridByCols, {
+      props: { tag: "section" },
+    });
+    expect(wrapper.find(".sr-only").exists()).toBe(false);
+    expect(wrapper.attributes("aria-labelledby")).toBeUndefined();
+    expect(wrapper.text()).not.toContain("label is required");
+    expect(warn).toHaveBeenCalled();
+    warn.mockRestore();
   });
 
   // ─── Combined ────────────────────────────────────────────────────────────
@@ -167,7 +202,7 @@ describe("LayoutGridByCols", () => {
     });
     expect(wrapper.element.tagName).toBe("SECTION");
     expect(wrapper.classes()).toContain("services-grid");
-    expect(wrapper.find(".layout-grid-inner").exists()).toBe(true);
+    expect(wrapper.find(".layout-grid-by-cols-inner").exists()).toBe(true);
     expect(wrapper.text()).toContain("One");
     expect(wrapper.html()).toMatchSnapshot();
   });

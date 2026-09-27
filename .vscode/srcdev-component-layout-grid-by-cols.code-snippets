@@ -1,0 +1,46 @@
+{
+  "SRCDEV LayoutGridByCols Basic": {
+    "description": "LayoutGridByCols: N equal columns from named slots, collapsing to one column below a width",
+    "scope": "vue,html",
+    "body": [
+      "<LayoutGridByCols :column-count=\"${1:3}\" gap=\"${2:1.6rem}\">",
+      "  <template #${3:item-0}>$0</template>",
+      "</LayoutGridByCols>"
+    ]
+  },
+  "SRCDEV LayoutGridByCols Data": {
+    "description": "LayoutGridByCols filled from an array with dynamic slot names",
+    "scope": "vue,html",
+    "body": [
+      "<LayoutGridByCols :column-count=\"${1:3}\">",
+      "  <template v-for=\"(${2:item}, i) in ${3:items}\" #[`item-${i}`] :key=\"i\">",
+      "    $0",
+      "  </template>",
+      "</LayoutGridByCols>"
+    ]
+  },
+  "SRCDEV LayoutGridByCols Section": {
+    "description": "LayoutGridByCols as a labelled section landmark",
+    "scope": "vue,html",
+    "body": [
+      "<LayoutGridByCols tag=\"section\" label=\"${1:Section name}\" :column-count=\"${2:3}\">",
+      "  <template #${3:item-0}>$0</template>",
+      "</LayoutGridByCols>"
+    ]
+  },
+  "SRCDEV LayoutGridByCols Tokens": {
+    "description": "LayoutGridByCols token overrides (leave the matching props off)",
+    "scope": "css",
+    "body": [
+      ".${1:my-grid} {",
+      "  --layout-grid-by-cols-column-count: ${2:2};",
+      "  --layout-grid-by-cols-gap: ${3:1.6rem};",
+      "  --layout-grid-by-cols-single-col-below: ${4:480px};",
+      "",
+      "  @media (width >= ${5:1024px}) {",
+      "    --layout-grid-by-cols-column-count: ${6:4};",
+      "  }",
+      "}"
+    ]
+  }
+}

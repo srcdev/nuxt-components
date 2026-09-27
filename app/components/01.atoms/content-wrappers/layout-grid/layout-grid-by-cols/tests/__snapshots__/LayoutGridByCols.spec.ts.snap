@@ -3,7 +3,7 @@
 exports[`LayoutGridByCols > renders correct HTML structure (div, 2 items) 1`] = `
 "<div class="layout-grid-by-cols">
   <!--v-if-->
-  <div class="layout-grid-inner">
+  <div class="layout-grid-by-cols-inner">
     <p>First</p>
     <p>Second</p>
   </div>
@@ -13,21 +13,21 @@ exports[`LayoutGridByCols > renders correct HTML structure (div, 2 items) 1`] = 
 exports[`LayoutGridByCols > renders correct HTML structure (section with label) 1`] = `
 "<section class="layout-grid-by-cols" aria-labelledby="v-0-0">
   <p id="v-0-0" class="sr-only">Feature grid</p>
-  <div class="layout-grid-inner"></div>
+  <div class="layout-grid-by-cols-inner"></div>
 </section>"
 `;
 
 exports[`LayoutGridByCols > renders correct HTML structure with styleClassPassthrough 1`] = `
 "<div class="layout-grid-by-cols custom-class another-class">
   <!--v-if-->
-  <div class="layout-grid-inner"></div>
+  <div class="layout-grid-by-cols-inner"></div>
 </div>"
 `;
 
 exports[`LayoutGridByCols > renders correctly with all props and slots combined 1`] = `
-"<section class="layout-grid-by-cols services-grid" aria-labelledby="v-0-0">
+"<section class="layout-grid-by-cols services-grid" aria-labelledby="v-0-0" style="--layout-grid-by-cols-column-count: 3; --layout-grid-by-cols-gap: 2rem; --layout-grid-by-cols-single-col-below: 768px;">
   <p id="v-0-0" class="sr-only">Services</p>
-  <div class="layout-grid-inner">
+  <div class="layout-grid-by-cols-inner">
     <p>One</p>
     <p>Two</p>
     <p>Three</p>

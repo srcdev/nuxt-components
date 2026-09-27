@@ -32,7 +32,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | ClippedPanel | `clipped-panel/ClippedPanel.vue` | ✅ | ✅ `clipped-panel` |
 | DashboardQuadGrid | `content-wrappers/layout-grid/dashboard-quad-grid/` | ✅ | ✅ `dashboard-quad-grid` |
 | DashboardStatsGrid | `content-wrappers/layout-grid/dashboard-stats-grid/` | ✅ | ✅ `dashboard-stats-grid` |
-| LayoutGridByCols | `content-wrappers/layout-grid/layout-grid-by-cols/` | ☐ | ☐ |
+| LayoutGridByCols | `content-wrappers/layout-grid/layout-grid-by-cols/` | ✅ | ✅ `layout-grid-by-cols` |
 | DisplayAvatar | `display-avatar/DisplayAvatar.vue` | ☐ | ☐ |
 | DisplayDialog | `display-dialog/DisplayDialog.vue` | ✅ | ✅ `dialog` |
 | DisplayPill | `display-pill/DisplayPill.vue` | ☐ | ☐ |

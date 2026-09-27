@@ -88,7 +88,7 @@ Self-bound (the component renders its own heading and binds `headingId` internal
 action needed):
 
 - `ServiceSummary` (03.organisms) — binds it to its own title `HeroText`
-- `LayoutGridByCols` (01.atoms) — renders its own visually-hidden `<p>` from the `label` prop
+- `LayoutGridByCols` (01.atoms) — renders its own visually-hidden `<p>` from the `label` prop (only when `label` is set; a `section` without one gets no `aria-labelledby`, and the composable warns)
 
 Not using this pattern:
 

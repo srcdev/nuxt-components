@@ -2,7 +2,9 @@
 
 ## Overview
 
-`LayoutGridByCols` is a CSS grid layout wrapper that arranges content into a fixed number of equal-width columns. It uses **named dynamic slots** — the component renders whatever slots the consumer passes, in the order they appear. It collapses to a single column below a configurable breakpoint.
+`LayoutGridByCols` is a CSS grid layout wrapper that arranges content into a fixed number of equal-width columns. It uses **named dynamic slots** — the component renders whatever slots the consumer passes, in the order they appear. It collapses to a single column when the grid is narrower than a configurable threshold.
+
+For columns that auto-fit by a minimum width instead of a fixed count, use `AutoGrid`.
 
 ---
 
@@ -34,13 +36,15 @@ When filling from a data array, use a dynamic slot name in a `v-for`:
 
 > **Hyphenation rule**: Vue's ESLint config enforces `vue/attribute-hyphenation`. Always write camelCase prop names hyphenated in templates: `:column-count`, `:single-col-below`, `:style-class-passthrough`.
 
+The three layout props have **no default**. When passed, each writes its public token inline on the root (so it beats CSS). When omitted, the token comes from CSS, falling back to the default shown.
+
 | Prop (template form) | Type | Default | Notes |
 |------|------|---------|-------|
-| `:column-count` | `2 \| 3 \| 4 \| 5 \| 6` | `2` | Number of equal-width columns above `single-col-below`. Minimum is 2. |
-| `:gap` | `string` | `"1rem"` | Any valid CSS length or shorthand. |
-| `:single-col-below` | `string` | `"768px"` | Container width below which the grid collapses to a single column. |
+| `:column-count` | `2 \| 3 \| 4 \| 5 \| 6` | unset (CSS `2`) | Equal columns above the threshold. Clamped to a minimum of 2. Writes `--layout-grid-by-cols-column-count`. |
+| `gap` | `string` | unset (CSS `1rem`) | Row and column gap, a **single** CSS length. Writes `--layout-grid-by-cols-gap`. |
+| `single-col-below` | `string` | unset (CSS `768px`) | Grid width below which it becomes one column. `"0px"` never collapses. Writes `--layout-grid-by-cols-single-col-below`. |
 | `tag` | `"div" \| "section"` | `"div"` | Use `"section"` for semantic page regions. |
-| `label` | `string` | `""` | Required when `tag="section"` — rendered as a visually-hidden `<p>` linked via `aria-labelledby`. |
+| `label` | `string` | `""` | Accessible name when `tag="section"`, rendered as a visually hidden `<p>` linked via `aria-labelledby`. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra CSS classes on the root element. |
 
 ---
@@ -81,67 +85,51 @@ When filling from a data array, use a dynamic slot name in a `v-for`:
 </LayoutGridByCols>
 ```
 
-### Data-driven with v-for
+### Column count from CSS (responsive)
+
+Leave `column-count` off and set the token:
 
 ```vue
-<LayoutGridByCols :column-count="3">
-  <template v-for="(item, i) in items" #[`item-${i}`] :key="i">
-    <Card :data="item" />
-  </template>
-</LayoutGridByCols>
+<LayoutGridByCols style-class-passthrough="team-grid">...</LayoutGridByCols>
+```
+
+```css
+.team-grid {
+  --layout-grid-by-cols-column-count: 2;
+
+  @media (width >= 1024px) {
+    --layout-grid-by-cols-column-count: 4;
+  }
+}
 ```
 
 ---
 
 ## Accessibility
 
-- When `tag="section"`, the root element automatically receives `aria-labelledby` pointing to a visually-hidden `<p>` with the `label` value.
-- Always provide a meaningful `label` when using `tag="section"`.
+- When `tag="section"` and `label` is set, the root gets `aria-labelledby` pointing to a visually hidden `<p>` with the label.
+- A `section` without a `label` gets no `aria-labelledby` and no hidden text; `useAriaLabelledById` logs a dev console warning. Always pass a meaningful `label` with `tag="section"`.
 - When `tag="div"`, no label or ARIA attributes are added.
 
 ---
 
 ## Responsive behaviour
 
-Uses **CSS container queries** (`container-type: inline-size`) — responds to its own container width, not the viewport.
+The collapse compares the **grid's own width** (not the viewport) with the threshold, like a container query, but without one: it's a `repeat(auto-fill, minmax(...))` calculation, which is what lets the threshold be a CSS token. See `CONSUMER-STYLING.md` for the sizing model and full token list.
 
-- **Below `singleColBelow`**: single-column stacked layout.
-- **At or above `singleColBelow`**: `columnCount`-column grid.
+- **Narrower than `singleColBelow`**: single column.
+- **At or wider**: `columnCount` equal columns.
 
 ---
 
-## Local style override scaffold
+## Styling
 
-When consuming this component, scaffold a style block using `styleClassPassthrough`. Delete the block if unused.
-
-See [component-local-style-override.md](../component-local-style-override.md) for the full pattern.
-
-```vue
-<LayoutGridByCols :style-class-passthrough="['my-grid']" :column-count="3">
-  ...
-</LayoutGridByCols>
-
-<style>
-/* ─── LayoutGridByCols local overrides ─────────────────────────────
-   Colours, borders, geometry only — do not override behaviour.
-   Delete this block if no overrides are needed.
-   ─────────────────────────────────────────────────────────────────── */
-.layout-grid-by-cols {
-  &.my-grid {
-    /* Colours */
-    /* background: var(--brand-surface); */
-  }
-}
-</style>
-```
-
-> **Note:** `gap` and `column-count` are prop-driven — use the props rather than CSS overrides for layout changes.
+Tokens: `--layout-grid-by-cols-column-count`, `-single-col-below`, `-gap`, `-row-gap`, `-column-gap`. Classes: `.layout-grid-by-cols`, `.layout-grid-by-cols-inner`. Full detail in `CONSUMER-STYLING.md` next to the component; overrides follow [component-local-style-override.md](../component-local-style-override.md).
 
 ---
 
 ## Notes
 
 - Auto-imported in Nuxt — no manual import needed.
-- `column-count` is clamped to a minimum of 2 internally.
-- `gap` accepts any CSS value including compound values like `"1rem 2rem"`.
 - Slot names can be anything — semantic or indexed. Document order determines render order.
+- 2026-09-27 migration: `singleColBelow` never worked before (the breakpoint was a hardcoded `768px` container query); it does now. `gap`/`columnCount` moved from `v-bind()` to public tokens, and the layout props lost their defaults (defaults now live in CSS). A `section` without a `label` used to read the placeholder "If tag='section' then a label is required" to screen readers; it now renders nothing and relies on the composable's dev warning. `gap` must be a single length (compound values were claimed before but break the column calculation). Inner class `.layout-grid-inner` → `.layout-grid-by-cols-inner`; root no longer a `layoutGrid` size container. No consumer app used the component at the time.

@@ -2,13 +2,16 @@
   <component
     :is="tag"
     class="layout-grid-by-cols"
-    :aria-labelledby="ariaLabelledby"
+    :aria-labelledby="label ? ariaLabelledby : undefined"
     :class="[elementClasses]"
+    :style="{
+      '--layout-grid-by-cols-column-count': columnCountValue,
+      '--layout-grid-by-cols-gap': gap,
+      '--layout-grid-by-cols-single-col-below': singleColBelow,
+    }"
   >
-    <p v-if="ariaLabelledby" :id="headingId" class="sr-only">
-      {{ props.label || "If tag='section' then a label is required" }}
-    </p>
-    <div class="layout-grid-inner">
+    <p v-if="ariaLabelledby && label" :id="headingId" class="sr-only">{{ label }}</p>
+    <div class="layout-grid-by-cols-inner">
       <template v-for="(_, name) in $slots" :key="name">
         <slot :name="name"></slot>
       </template>
@@ -29,42 +32,40 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   label: "",
-  columnCount: 2,
-  gap: "1rem",
-  singleColBelow: "768px",
+  columnCount: undefined,
+  gap: undefined,
+  singleColBelow: undefined,
   styleClassPassthrough: () => [],
 });
 
 const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
-const columnCount = computed(() => (props.columnCount < 2 ? 2 : props.columnCount));
 
-const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const columnCountValue = computed(() =>
+  props.columnCount === undefined ? undefined : Math.max(2, Math.round(props.columnCount))
+);
+
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
   () => props.styleClassPassthrough,
-  () => {
-    updateElementClasses(props.styleClassPassthrough);
-  }
+  () => resetElementClasses(props.styleClassPassthrough)
 );
 </script>
 
 <style lang="css">
 @layer components {
   .layout-grid-by-cols {
-    container-type: inline-size;
-    container-name: layoutGrid;
+    .layout-grid-by-cols-inner {
+      --_cols: var(--layout-grid-by-cols-column-count, 2);
+      --_column-gap: var(--layout-grid-by-cols-column-gap, var(--layout-grid-by-cols-gap, 1rem));
+      /* One column once the grid is narrower than the threshold, else N equal columns (no container query, so the threshold can be a token). */
+      --_collapse: calc((var(--layout-grid-by-cols-single-col-below, 768px) - 100%) * 999);
+      --_column-min: calc((100% - (var(--_cols) - 1) * var(--_column-gap)) / var(--_cols) - 0.1px);
 
-    --_gap: v-bind(gap);
-
-    .layout-grid-inner {
       display: grid;
-      grid-auto-flow: row;
-      gap: var(--_gap);
-
-      @container layoutGrid (width >= 768px) {
-        grid-template-columns: repeat(v-bind(columnCount), 1fr);
-        gap: var(--_gap);
-      }
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, max(var(--_collapse), var(--_column-min))), 1fr));
+      row-gap: var(--layout-grid-by-cols-row-gap, var(--layout-grid-by-cols-gap, 1rem));
+      column-gap: var(--_column-gap);
     }
   }
 }
