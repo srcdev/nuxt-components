@@ -30,7 +30,6 @@ Tracks progress toward a fully migrated component library. A component is consid
 | CanvasSwitcher | `canvas-switcher/CanvasSwitcher.vue` | ✅ | ✅ `canvas-switcher` |
 | CardCore | `card/CardCore.vue` | ✅ | ☐ |
 | ClippedPanel | `clipped-panel/ClippedPanel.vue` | ✅ | ✅ `clipped-panel` |
-| ContentColumns2 | `content-wrappers/content-columns-2/ContentColumns2.vue` | ☐ | ☐ |
 | ContentWidth | `content-wrappers/content-width/ContentWidth.vue` | ☐ | ☐ |
 | DashboardQuadGrid | `content-wrappers/layout-grid/dashboard-quad-grid/` | ✅ | ✅ `dashboard-quad-grid` |
 | DashboardStatsGrid | `content-wrappers/layout-grid/dashboard-stats-grid/` | ✅ | ✅ `dashboard-stats-grid` |
