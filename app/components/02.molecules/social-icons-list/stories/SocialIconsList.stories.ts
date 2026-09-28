@@ -48,6 +48,10 @@ const meta: Meta<typeof SocialIconsList> = {
       control: "text",
       description: "aria-label for the list element",
     },
+    linkLabelTemplate: {
+      control: "text",
+      description: "aria-label for each link; {network} is replaced with the item's networkName",
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes applied to the root element",
@@ -56,6 +60,7 @@ const meta: Meta<typeof SocialIconsList> = {
   args: {
     items: sampleItems,
     label: "Social media profiles",
+    linkLabelTemplate: "{network} profile (opens in a new tab)",
     styleClassPassthrough: ["m-40"],
   },
 };
@@ -84,7 +89,7 @@ export const LargeIcons: Story = {
     setup() {
       return { args };
     },
-    template: `<SocialIconsList v-bind="args" style="--theme-social-icon-size: 4rem;" />`,
+    template: `<SocialIconsList v-bind="args" style="--social-icons-list-icon-size: 4rem;" />`,
   }),
 };
 

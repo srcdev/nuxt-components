@@ -10,13 +10,14 @@
 | ----------------------- | --------------------------------- | -------------------------------- | -------- |
 | `servicesData`          | `Service[]`                       | —                                | **yes**  |
 | `tag`                   | `"div" \| "section" \| "main"`    | `"div"`                          | no       |
-| `eyebrowConfig`         | `EyebrowConfig`                   | `{}`                             | no       |
-| `heroConfig`            | `HeroConfig`                      | `{}`                             | no       |
+| `eyebrowConfig`         | `ServicesCardEyebrowConfig`                   | `{}`                             | no       |
+| `heroConfig`            | `ServicesCardHeroConfig`                      | `{}`                             | no       |
 | `hrefBase`              | `string`                          | `"/services/"`                    | no     |
 | `buttonTextPrefix`      | `string`                          | `"Enquire about"`                | no       |
+| `buttonIcon` | `string` | `"mdi:arrow-right"` | no |
 | `styleClassPassthrough` | `string \| string[]`              | `[]`                             | no       |
 
-Both config props are passed through to every `ServicesCard` in the grid unchanged. See [services-card.md](./services-card.md) for the full `EyebrowConfig` / `HeroConfig` key reference.
+Both config props are passed through to every `ServicesCard` in the grid unchanged. See [services-card.md](./services-card.md) for the full key reference. The types are exported as `ServicesCardEyebrowConfig` / `ServicesCardHeroConfig` from `srcdev-nuxt-components` (were inline and not importable before 2026-09-28).
 
 ### Button link and text
 
@@ -104,6 +105,6 @@ if (servicesData.value.length === 0) {
 
 - Component is auto-imported in Nuxt — no import needed.
 - The `Service` type is imported from `~/types/types.services`.
-- Uses `repeat(auto-fit, minmax(var(--services-card-grid-column-min-width, 250px), 1fr))` — columns grow to fill available space and wrap when below the minimum width.
+- Uses `repeat(auto-fit, minmax(min(var(--services-card-grid-column-min-width, 250px), 100%), 1fr))` (the `min(…, 100%)` stops a single column overflowing containers narrower than the minimum, fixed 2026-09-28) — columns grow to fill available space and wrap when below the minimum width.
 - The `#actions` slot template is passed down into each `ServicesCard`; `serviceData` is the scoped prop for the current iteration item.
 - Data fetching is the page's responsibility — pass an empty array as fallback while loading (`servicesData ?? []`).

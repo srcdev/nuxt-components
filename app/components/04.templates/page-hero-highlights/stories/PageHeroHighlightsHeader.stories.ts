@@ -31,7 +31,7 @@ export const Default: Story = {
       return { args };
     },
     template: `
-      <PageHeroHighlights tag="section" style="--header-row-background-colour: #2d4a35;">
+      <PageHeroHighlights tag="section" style="--page-hero-highlights-header-background: #2d4a35;">
         <template #header>
           <PageHeroHighlightsHeader v-bind="args">
             <template #start>
@@ -56,7 +56,7 @@ export const WithActions: Story = {
       return { args };
     },
     template: `
-      <PageHeroHighlights tag="section" style="--header-row-background-colour: #2d4a35;">
+      <PageHeroHighlights tag="section" style="--page-hero-highlights-header-background: #2d4a35;">
         <template #header>
           <PageHeroHighlightsHeader v-bind="args">
             <template #start>

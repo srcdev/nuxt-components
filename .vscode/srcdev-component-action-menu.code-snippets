@@ -6,11 +6,11 @@
       "<ActionMenu label=\"${1:Open actions menu}\">",
       "  <template #item-0>",
       "    <ActionMenuItem label=\"${2:Edit}\" @click=\"$3\">",
-      "      <template #icon><Icon name=\"${4:lucide:pencil}\"></Icon></template>",
+      "      <template #icon><Icon name=\"${4:lucide:pencil}\" /></template>",
       "    </ActionMenuItem>",
       "  </template>",
       "  <template #item-1>",
-      "    <ActionMenuItem label=\"${5:View}\" href=\"${6:/path}\"></ActionMenuItem>",
+      "    <ActionMenuItem label=\"${5:View}\" href=\"${6:/path}\" />",
       "  </template>",
       "</ActionMenu>"
     ]
@@ -21,7 +21,7 @@
     "body": [
       "<ActionMenu>",
       "  <template v-for=\"($1action, $2i) in $3actions\" :key=\"$1action.label\" #[`item-${$2i}`]>",
-      "    <ActionMenuItem :label=\"$1action.label\" :href=\"$1action.href\" @click=\"$1action.onClick\"></ActionMenuItem>",
+      "    <ActionMenuItem :label=\"$1action.label\" :href=\"$1action.href\" @click=\"$1action.onClick\" />",
       "  </template>",
       "</ActionMenu>"
     ]

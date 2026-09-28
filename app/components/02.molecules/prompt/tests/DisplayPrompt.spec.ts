@@ -11,7 +11,7 @@ const { useAppConfigMock } = vi.hoisted(() => ({
 mockNuxtImport("useAppConfig", () => useAppConfigMock);
 
 function root(wrapper: Awaited<ReturnType<typeof mountSuspended<typeof DisplayPrompt>>>) {
-  return wrapper.find(".display-prompt-core");
+  return wrapper.find(".display-prompt");
 }
 
 function wrapper(w: Awaited<ReturnType<typeof mountSuspended<typeof DisplayPrompt>>>) {
@@ -28,7 +28,7 @@ describe("DisplayPrompt", () => {
 
   // ─── Root element ─────────────────────────────────────────────────────────
 
-  it("renders the root element with class display-prompt-core", async () => {
+  it("renders the root element with class display-prompt", async () => {
     const w = await mountSuspended(DisplayPrompt);
     expect(root(w).exists()).toBe(true);
   });
@@ -38,9 +38,14 @@ describe("DisplayPrompt", () => {
     expect(root(w).classes()).not.toContain("closed");
   });
 
-  it("has tabindex='0' on the root element", async () => {
+  it("is not in the tab order by default", async () => {
     const w = await mountSuspended(DisplayPrompt);
-    expect(root(w).attributes("tabindex")).toBe("0");
+    expect(root(w).attributes("tabindex")).toBeUndefined();
+  });
+
+  it("is programmatically focusable (tabindex=-1) when useAutoFocus is on", async () => {
+    const w = await mountSuspended(DisplayPrompt, { props: { useAutoFocus: true } });
+    expect(root(w).attributes("tabindex")).toBe("-1");
   });
 
   // ─── data-theme ───────────────────────────────────────────────────────────
@@ -64,7 +69,7 @@ describe("DisplayPrompt", () => {
     "sets data-test-id reflecting the theme on the root element",
     async (theme) => {
       const w = await mountSuspended(DisplayPrompt, { props: { theme } });
-      expect(root(w).attributes("data-test-id")).toBe(`display-prompt-core-${theme}`);
+      expect(root(w).attributes("data-test-id")).toBe(`display-prompt-${theme}`);
     }
   );
 
@@ -125,6 +130,31 @@ describe("DisplayPrompt", () => {
     expect(root(w).classes()).toContain("closed");
   });
 
+  it("makes the closed prompt inert so its controls leave the tab order", async () => {
+    const w = await mountSuspended(DisplayPrompt, { props: { dismissible: true } });
+    expect(root(w).attributes("inert")).toBeUndefined();
+    await w.find("[data-test-id='alert-dismiss']").trigger("click");
+    await nextTick();
+    expect(root(w).attributes("inert")).toBeDefined();
+  });
+
+  it("uses \"Close this prompt\" as the default dismiss label", async () => {
+    const w = await mountSuspended(DisplayPrompt, { props: { dismissible: true } });
+    expect(w.find("[data-test-id='alert-dismiss']").text()).toContain("Close this prompt");
+  });
+
+  it("uses the closeLabel prop as the dismiss label", async () => {
+    const w = await mountSuspended(DisplayPrompt, { props: { dismissible: true, closeLabel: "Fermer" } });
+    expect(w.find("[data-test-id='alert-dismiss']").text()).toContain("Fermer");
+  });
+
+  it("updates classes when styleClassPassthrough changes after mount", async () => {
+    const w = await mountSuspended(DisplayPrompt, { props: { styleClassPassthrough: ["original"] } });
+    await w.setProps({ styleClassPassthrough: ["updated"] });
+    expect(wrapper(w).classes()).not.toContain("original");
+    expect(wrapper(w).classes()).toContain("updated");
+  });
+
   // ─── Dismiss behaviour (with parent model) ────────────────────────────────
 
   it("emits update:modelValue=false when clicked with modelValue=true", async () => {
@@ -175,7 +205,7 @@ describe("DisplayPrompt", () => {
     it("uses hardcoded fallbacks when app.config has no displayPrompt key", async () => {
       const w = await mountSuspended(DisplayPrompt);
       expect(wrapper(w).attributes("data-theme")).toBe("info");
-      expect(root(w).attributes("data-test-id")).toBe("display-prompt-core-info");
+      expect(root(w).attributes("data-test-id")).toBe("display-prompt-info");
       expect(w.find("[data-test-id='alert-dismiss']").exists()).toBe(false);
     });
 
@@ -186,7 +216,7 @@ describe("DisplayPrompt", () => {
       });
       const w = await mountSuspended(DisplayPrompt);
       expect(wrapper(w).attributes("data-theme")).toBe("success");
-      expect(root(w).attributes("data-test-id")).toBe("display-prompt-core-success");
+      expect(root(w).attributes("data-test-id")).toBe("display-prompt-success");
       expect(w.find("[data-test-id='alert-dismiss']").exists()).toBe(true);
     });
 

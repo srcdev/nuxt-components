@@ -12,7 +12,7 @@ describe("PageHeroHighlightsHeader", () => {
     const wrapper = await mountSuspended(PageHeroHighlightsHeader, {
       slots: { start: "<h1 class='page-title'>Surplus needs</h1>" },
     });
-    expect(wrapper.find(".phh-start .page-title").exists()).toBe(true);
+    expect(wrapper.find(".page-hero-highlights-header-start .page-title").exists()).toBe(true);
     expect(wrapper.html()).toContain("Surplus needs");
   });
 
@@ -23,22 +23,22 @@ describe("PageHeroHighlightsHeader", () => {
         end: "<button class='cta'>Create new need</button>",
       },
     });
-    expect(wrapper.find(".phh-end .cta").exists()).toBe(true);
+    expect(wrapper.find(".page-hero-highlights-header-end .cta").exists()).toBe(true);
   });
 
-  it("does not render .phh-end when no end slot is provided", async () => {
+  it("does not render .page-hero-highlights-header-end when no end slot is provided", async () => {
     const wrapper = await mountSuspended(PageHeroHighlightsHeader, {
       slots: { start: "<h1>Title</h1>" },
     });
-    expect(wrapper.find(".phh-end").exists()).toBe(false);
+    expect(wrapper.find(".page-hero-highlights-header-end").exists()).toBe(false);
   });
 
-  it("renders .phh-start as full width when no end slot is provided", async () => {
+  it("renders .page-hero-highlights-header-start as full width when no end slot is provided", async () => {
     const wrapper = await mountSuspended(PageHeroHighlightsHeader, {
       slots: { start: "<h1>Title</h1>" },
     });
-    expect(wrapper.find(".phh-start").exists()).toBe(true);
-    expect(wrapper.find(".phh-end").exists()).toBe(false);
+    expect(wrapper.find(".page-hero-highlights-header-start").exists()).toBe(true);
+    expect(wrapper.find(".page-hero-highlights-header-end").exists()).toBe(false);
   });
 
   it("applies styleClassPassthrough classes", async () => {

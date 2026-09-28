@@ -44,16 +44,7 @@
 
 <script setup lang="ts">
 import type { Service } from "~/types/types.services";
-
-interface EyebrowConfig {
-  tag?: "p" | "div" | "span";
-  fontSize?: "large" | "medium" | "small";
-}
-
-interface HeroConfig {
-  tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-  fontSize?: "display" | "title" | "heading" | "subheading" | "label";
-}
+import type { ServicesCardEyebrowConfig, ServicesCardHeroConfig } from "~/types/components";
 
 interface Props {
   tag?: "div" | "section" | "article";
@@ -64,8 +55,8 @@ interface Props {
    * href starting with "/". See InputButtonCore's `external` prop for the full rationale.
    */
   external?: boolean;
-  eyebrowConfig?: EyebrowConfig;
-  heroConfig?: HeroConfig;
+  eyebrowConfig?: ServicesCardEyebrowConfig;
+  heroConfig?: ServicesCardHeroConfig;
   /** Overrides serviceData.duration. Ignored if the `duration` slot is used. */
   durationText?: string;
   /** Overrides serviceData.price. Ignored if the `price` slot is used. */

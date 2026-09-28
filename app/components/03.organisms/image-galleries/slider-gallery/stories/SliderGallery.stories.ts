@@ -18,6 +18,18 @@ const meta: Meta<typeof SliderGallery> = {
       control: { type: "number", min: 100, step: 100 },
       description: "Slide transition duration in milliseconds",
     },
+    ariaLabel: {
+      control: { type: "text" },
+      description: "aria-label on the carousel region",
+    },
+    seeMoreText: {
+      control: { type: "text" },
+      description: "Link text for slides that have an href",
+    },
+    prevAriaLabel: { control: { type: "text" }, description: "Previous button aria-label" },
+    nextAriaLabel: { control: { type: "text" }, description: "Next button aria-label" },
+    prevIcon: { control: { type: "text" }, description: "Previous button icon" },
+    nextIcon: { control: { type: "text" }, description: "Next button icon" },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes applied to the root element",
@@ -27,6 +39,12 @@ const meta: Meta<typeof SliderGallery> = {
     autoRun: true,
     autoRunInterval: 7000,
     animationDuration: 3000,
+    ariaLabel: "Image gallery",
+    seeMoreText: "SEE MORE",
+    prevAriaLabel: "Previous image",
+    nextAriaLabel: "Next image",
+    prevIcon: "ic:outline-keyboard-arrow-left",
+    nextIcon: "ic:outline-keyboard-arrow-right",
     styleClassPassthrough: [],
   },
   parameters: {
@@ -34,7 +52,7 @@ const meta: Meta<typeof SliderGallery> = {
     docs: {
       description: {
         component:
-          "A full-screen image slider gallery with animated slide transitions, thumbnail navigation, arrow controls, and keyboard support. Gallery data is passed via v-model:galleryData.",
+          "A full-screen image slider gallery with animated slide transitions, thumbnail navigation, arrow controls, and keyboard support. Gallery data is passed via v-model:galleryData. Auto-advance pauses on hover/focus and is off under reduced motion; slides with an href get a see-more link.",
       },
     },
   },
@@ -55,6 +73,7 @@ const sampleSlides: IGalleryData[] = [
     description: "Vast mountain ranges stretching to the horizon at the golden hour of sunrise.",
     thumbnail: { title: "Into the Wild", description: "Landscape" },
     textBrightness: "light",
+    href: "#into-the-wild",
   },
   {
     src: "https://picsum.photos/seed/gallery2/1920/1080",
@@ -65,6 +84,7 @@ const sampleSlides: IGalleryData[] = [
     description: "Modern skyscrapers reflecting the warm hues of the setting sun.",
     thumbnail: { title: "City Lights", description: "Architecture" },
     textBrightness: "light",
+    href: "#city-lights",
   },
   {
     src: "https://picsum.photos/seed/gallery3/1920/1080",

@@ -3,4 +3,6 @@ export interface ISocialIcon {
   iconName: string;
   baseHref: string;
   profileId: string;
+  /** Accessible name for the link; overrides the list's linkLabelTemplate. */
+  label?: string;
 }

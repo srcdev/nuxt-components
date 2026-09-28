@@ -1,66 +1,22 @@
 {
-  "SRCDEV DisplayPrompt Template": {
-    "description": "DisplayPrompt inline notification banner with all slots",
+  "SRCDEV DisplayPrompt": {
+    "description": "DisplayPrompt inline notice with title and content",
     "scope": "vue,html",
     "body": [
-      "<DisplayPrompt",
-      "  theme=\"$1info\"",
-      "  :dismissible=\"true\"",
-      "  :style-class-passthrough=\"['$2']\"",
-      ">",
-      "  <template #title>$3Prompt title</template>",
-      "  <template #content>$4Prompt body text.</template>",
+      "<DisplayPrompt theme=\"${1|info,success,warning,error|}\"${2: dismissible}>",
+      "  <template #title>$3</template>",
+      "  <template #content>$4</template>",
       "</DisplayPrompt>"
     ]
   },
-  "SRCDEV DisplayPrompt Masked Template": {
-    "description": "DisplayPrompt with SVG glass border — place over a coloured background",
+  "SRCDEV DisplayPrompt Parent Controlled": {
+    "description": "DisplayPrompt shown and dismissed via v-model",
     "scope": "vue,html",
     "body": [
-      "<DisplayPrompt",
-      "  theme=\"$1info\"",
-      "  :masked=\"true\"",
-      "  :dismissible=\"true\"",
-      ">",
-      "  <template #title>$2Prompt title</template>",
-      "  <template #content>$3Prompt body text.</template>",
+      "<DisplayPrompt v-if=\"$1showPrompt\" v-model=\"$1showPrompt\" theme=\"${2|info,success,warning,error|}\" dismissible close-label=\"${3:Close this prompt}\">",
+      "  <template #title>$4</template>",
+      "  <template #content>$5</template>",
       "</DisplayPrompt>"
-    ]
-  },
-  "SRCDEV DisplayPrompt v-model Template": {
-    "description": "DisplayPrompt with parent-controlled dismiss via v-model",
-    "scope": "vue,html",
-    "body": [
-      "<DisplayPrompt",
-      "  v-model=\"$1showPrompt\"",
-      "  theme=\"$2info\"",
-      "  :dismissible=\"true\"",
-      ">",
-      "  <template #title>$3Prompt title</template>",
-      "  <template #content>$4Prompt body text.</template>",
-      "</DisplayPrompt>"
-    ]
-  },
-  "SRCDEV DisplayPrompt Script Setup": {
-    "description": "Script refs for DisplayPrompt v-model and theme",
-    "scope": "javascript,typescript",
-    "body": [
-      "const showPrompt = ref(true);",
-      "const promptTheme = ref<'info' | 'success' | 'warning' | 'error'>('$1info');"
-    ]
-  },
-  "SRCDEV DisplayPrompt CSS Override": {
-    "description": "CSS override scaffold for DisplayPrompt — scope to a page or section class",
-    "scope": "css",
-    "body": [
-      ".$1my-page {",
-      "  .display-prompt-wrapper {",
-      "    --theme-accent: ;",
-      "    --theme-border: ;",
-      "    --theme-surface: ;",
-      "    --theme-text: ;",
-      "  }",
-      "}"
     ]
   }
 }

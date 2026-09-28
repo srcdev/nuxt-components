@@ -23,6 +23,7 @@ export default defineAppConfig({
       dismissible: false,
       useAutoFocus: false,
       masked: false,
+      closeLabel: "Close this prompt",
     },
     displayToast: {
       appearance: {

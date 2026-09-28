@@ -22,6 +22,16 @@ export default {
       description: "Focuses the prompt element on mount",
       table: { category: "Behaviour" },
     },
+    masked: {
+      control: { type: "boolean" },
+      description: "Render with AlertMaskedContent instead of AlertContent",
+      table: { category: "Appearance" },
+    },
+    closeLabel: {
+      control: { type: "text" },
+      description: "Dismiss button label (screen-reader) — override for localisation",
+      table: { category: "Accessibility" },
+    },
     styleClassPassthrough: {
       control: { type: "object" },
       description: "Extra classes applied to the prompt wrapper",
@@ -33,6 +43,8 @@ export default {
     theme: "info",
     dismissible: false,
     useAutoFocus: false,
+    masked: false,
+    closeLabel: "Close this prompt",
     styleClassPassthrough: [],
   },
 } as Meta<typeof StorybookComponent>;
@@ -50,6 +62,8 @@ const Template: StoryFn<typeof StorybookComponent> = (args) => ({
         :theme="args.theme"
         :dismissible="args.dismissible"
         :use-auto-focus="args.useAutoFocus"
+        :masked="args.masked"
+        :close-label="args.closeLabel"
         :style-class-passthrough="args.styleClassPassthrough"
       >
         <template #title>Prompt title</template>

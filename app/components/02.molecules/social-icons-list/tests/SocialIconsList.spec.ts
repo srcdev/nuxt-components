@@ -62,7 +62,7 @@ describe("SocialIconsList", () => {
     });
     const links = wrapper.findAll(".social-icon-link");
     defaultItems.forEach((item, i) => {
-      expect(links[i]!.attributes("aria-label")).toBe(`${item.networkName} profile`);
+      expect(links[i]!.attributes("aria-label")).toBe(`${item.networkName} profile (opens in a new tab)`);
     });
   });
 
@@ -120,5 +120,26 @@ describe("SocialIconsList", () => {
       props: { items: defaultItems },
     });
     expect(wrapper.html()).toMatchSnapshot();
+  });
+});
+
+describe("SocialIconsList link labels", () => {
+  it("uses linkLabelTemplate for each link", async () => {
+    const wrapper = await mountSuspended(SocialIconsList, {
+      props: { items: defaultItems, linkLabelTemplate: "Profil {network}" },
+    });
+    expect(wrapper.findAll(".social-icon-link")[0]!.attributes("aria-label")).toBe("Profil Facebook");
+  });
+
+  it("lets an item's own label override the template", async () => {
+    const wrapper = await mountSuspended(SocialIconsList, {
+      props: { items: [{ ...defaultItems[0]!, label: "Our Facebook page" }] },
+    });
+    expect(wrapper.find(".social-icon-link").attributes("aria-label")).toBe("Our Facebook page");
+  });
+
+  it("hides the icon from assistive tech (the link carries the name)", async () => {
+    const wrapper = await mountSuspended(SocialIconsList, { props: { items: defaultItems } });
+    expect(wrapper.find(".social-icon").attributes("aria-hidden")).toBe("true");
   });
 });

@@ -19,7 +19,7 @@
     "body": [
       "<GridStack tag=\"section\">",
       "  <template #layer-1>",
-      "    <BannerVideo src=\"$1\" poster=\"$2\" alt=\"$3\"></BannerVideo>",
+      "    <BannerVideo src=\"$1\" poster=\"$2\" alt=\"$3\" />",
       "  </template>",
       "  <template #layer-2>",
       "    <div class=\"$4hero-overlay\">",

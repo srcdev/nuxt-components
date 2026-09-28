@@ -7,7 +7,7 @@
       "  :nav-item-data=\"$1navItems\"",
       "  nav-align=\"${2|left,center,right|}\"",
       "  aria-label=\"${3:Site navigation}\"",
-      "></SiteNavigation>"
+      "/>"
     ]
   },
   "SRCDEV SiteNavigation Items": {

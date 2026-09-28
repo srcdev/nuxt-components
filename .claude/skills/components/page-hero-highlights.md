@@ -1,5 +1,7 @@
 # PageHeroHighlights Component
 
+> **Changed 2026-09-28:** styles are now in `@layer components` (they were unlayered). Every token is `--page-hero-highlights-*` with its default as a `var()` fallback, so it can be set on the component or any ancestor (previously declared on the root with generic names like `--max-width`, `--highlight-border`, so ancestor values never landed). Inner classes are prefixed (`.page-hero-highlights-header-row`, `-header-slot`, `-strip`, `-content-row`, `-content-slot`); the content-align root classes are `.content-align-start`/`.content-align-center` (were bare `.start`/`.center`); the highlight contract classes are `.page-hero-highlights-item`, `-item-title`, `-item-body` (were `.highlight`, `.title`, `.body`); PageHeroHighlightsHeader uses `.page-hero-highlights-header-start`/`-end` and `--page-hero-highlights-header-*` tokens (were `.phh-*` / `--phh-*`). Full token reference: `CONSUMER-STYLING.md` in the component folder.
+
 ## Overview
 
 `PageHeroHighlights` is a page-level layout template that creates a "hero + highlights strip" grid. It has:
@@ -20,7 +22,7 @@ The layout uses a 4-row CSS Grid with `subgrid` — no `translate`, negative mar
 | `widthConstrained`              | `boolean`                                                           | `false`     | When `true`, caps the central column at `--width-constrained` (default `1064px`). Gutters grow responsively to enforce the constraint. |
 | `contentAlign`          | `"start" \| "center"`                                               | `"center"`  | When `widthConstrained` is `true`: `"center"` grows gutters equally; `"start"` pins content to the left with a fixed left gutter.      |
 | `contentPanel`          | `boolean`                                                           | `true`      | When `true`, renders a decorative panel behind the content slot and offsets the highlights strip. Set to `false` for a flat layout with no backdrop. |
-| `highlightTitleBaseline`| `boolean`                                                           | `false`     | When `true`, fixes the highlight title row to a set height so titles align at a common baseline. Override `--highlight-title-height` to tune. |
+| `highlightTitleBaseline`| `boolean`                                                           | `false`     | When `true`, fixes the highlight title row to a set height so titles align at a common baseline. Override `--page-hero-highlights-title-height` to tune. |
 | `styleClassPassthrough` | `string \| string[]`                                                | `[]`        | Extra classes on the root element                                                                                               |
 
 ## Slots
@@ -102,17 +104,17 @@ Located at: `app/components/04.templates/page-hero-highlights/PageHeroHighlights
 | Slot    | Purpose                                                   |
 | ------- | --------------------------------------------------------- |
 | `start` | Title and description — always rendered, fills full width when `#end` is absent |
-| `end`   | Action buttons — `.phh-end` is only mounted when this slot is provided |
+| `end`   | Action buttons — `.page-hero-highlights-header-end` is only mounted when this slot is provided |
 
 ### CSS tokens
 
 | Token                      | Default          | Description                                          |
 | -------------------------- | ---------------- | ---------------------------------------------------- |
-| `--phh-padding-block-mobile`  | `1.6rem 3.2rem`  | Block padding (start end) at mobile widths           |
-| `--phh-padding-block-tablet`  | `2.4rem 4.8rem`  | Block padding (start end) at ≥768px                  |
-| `--phh-padding-block-desktop` | `3.2rem 6.4rem`  | Block padding (start end) at ≥1024px                 |
-| `--phh-gap`                   | `1.6rem`         | Gap between `#start` and `#end` areas                |
-| `--phh-end-gap`               | `0.8rem`         | Gap between items within `#end`                      |
+| `--page-hero-highlights-header-padding-block-mobile`  | `1.6rem 3.2rem`  | Block padding (start end) at mobile widths           |
+| `--page-hero-highlights-header-padding-block-tablet`  | `2.4rem 4.8rem`  | Block padding (start end) at ≥768px                  |
+| `--page-hero-highlights-header-padding-block-desktop` | `3.2rem 6.4rem`  | Block padding (start end) at ≥1024px                 |
+| `--page-hero-highlights-header-gap`                   | `1.6rem`         | Gap between `#start` and `#end` areas                |
+| `--page-hero-highlights-header-end-gap`               | `0.8rem`         | Gap between items within `#end`                      |
 
 ### Usage
 
@@ -219,40 +221,38 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
     /* --page-hero-highlights-gutter-desktop: 32px; */
 
     /* Header zone */
-    /* --header-row-background-colour: darkblue; */
+    /* --page-hero-highlights-header-background: darkblue; */
 
     /* Highlights strip */
-    /* --highlights-row-item-gap: 1rem; */
-    /* --highlights-row-initial-item-offset: 1.2rem; */
+    /* --page-hero-highlights-strip-gap: 1rem; */
+    /* --page-hero-highlights-strip-inset: 1.2rem; */
 
     /* Highlight cards */
-    /* --highlight-rows-gap: 1.2rem; */
-    /* --highlight-title-height: 1fr; */ /* see: highlight-title-baseline prop */
-    /* --highlight-padding-block-start: 1.2rem; */
-    /* --highlight-padding: 1.2rem; */
-    /* --highlight-background-color: white; */
-    /* --highlight-border: 1px solid black; */
-    /* --highlight-border-radius: 8px; */
-    /* --highlight-color: black; */
+    /* --page-hero-highlights-item-rows-gap: 1.2rem; */
+    /* --page-hero-highlights-title-height: 1fr; */ /* see: highlight-title-baseline prop */
+    /* --page-hero-highlights-item-padding-block-start: 1.2rem; */
+    /* --page-hero-highlights-item-padding: 1.2rem; */
+    /* --page-hero-highlights-item-background: white; */
+    /* --page-hero-highlights-item-border: 1px solid black; */
+    /* --page-hero-highlights-item-border-radius: 8px; */
+    /* --page-hero-highlights-item-colour: black; */
 
     /* Content zone */
-    /* --content-row-background-color: var(--slate-01); */ /* transparent */
-    /* --content-row-start-gap: 1.2rem; */
-    /* --content-row-end-gap: 1.2rem; */
+    /* --page-hero-highlights-content-background: var(--slate-01); */ /* transparent */
+    /* --page-hero-highlights-content-start-gap: 1.2rem; */
+    /* --page-hero-highlights-content-end-gap: 1.2rem; */
 
     /* Content slot decorative border */
-    /* --content-slot-margin-block-start: 2.4rem; */
-    /* --content-slot-margin: var(--highlights-row-initial-item-offset); */
-    /* --content-slot-background-color: var(--slate-00); */
-    /* --content-slot-border: 1px solid var(--slate-06); */
-    /* --content-slot-border-radius: 0.8rem; */
-    /* --content-slot-outline: 1px solid var(--slate-02); */
+    /* --page-hero-highlights-content-margin-block-start: 2.4rem; */
+    /* --page-hero-highlights-content-margin: var(--page-hero-highlights-strip-inset); */
+    /* --page-hero-highlights-panel-background: var(--slate-00); */
+    /* --page-hero-highlights-panel-border: 1px solid var(--slate-06); */
+    /* --page-hero-highlights-panel-border-radius: 0.8rem; */
+    /* --page-hero-highlights-panel-outline: 1px solid var(--slate-02); */
 
     /* When using :highlight-title-baseline="true" */
-    /* &.highlight-title-baseline { */
-    /*   --highlight-title-height: 4rem; */ /* proportional value preferred */
-    /*   --highlight-padding-block-start: 0; */
-    /* } */
+    /* --page-hero-highlights-title-height-baseline: 4rem; */ /* proportional value preferred */
+    /* --page-hero-highlights-item-padding-block-start-baseline: 0; */
   }
 }
 </style>
@@ -268,14 +268,14 @@ row3: highlights bottom half
 row4: page content (never underflows highlights)
 ```
 
-`.header-row` spans cols 1–3, rows 1–2 (edge-to-edge bg). `.header-slot` is placed in row 1 only.
-`.content-row` spans cols 1–3, rows 3–4 (bg fills behind highlights; `.content-slot` is placed in row 4 only). The decorative border behind `.content-slot` is rendered via `.content-row:before` — there is no separate DOM element for it.
+`.page-hero-highlights-header-row` spans cols 1–3, rows 1–2 (edge-to-edge bg). `.page-hero-highlights-header-slot` is placed in row 1 only.
+`.page-hero-highlights-content-row` spans cols 1–3, rows 3–4 (bg fills behind highlights; `.page-hero-highlights-content-slot` is placed in row 4 only). The decorative border behind `.page-hero-highlights-content-slot` is rendered via `.page-hero-highlights-content-row::before` — there is no separate DOM element for it.
 
 Grid columns are determined entirely by CSS — no `v-bind`. The `widthConstrained` and `contentAlign` props add CSS classes (`width-constrained`, `start`, `center`) which select the appropriate `grid-template-columns` rule.
 
-## Layout pitfall: do not use `grid-template-rows: subgrid` inside `.highlights-row`
+## Layout pitfall: do not use `grid-template-rows: subgrid` inside `.page-hero-highlights-strip`
 
-The `.highlights-row` element spans rows 2–3 of the parent grid (the "straddle"). If you add an inner grid to `.highlights-row` (e.g. to extend `equal-widths` behaviour) and include `grid-template-rows: subgrid`, auto-placed items will only occupy row 1 of the subgrid (= parent row 2). Parent row 3 collapses to 0-height, destroying the straddle effect — `.content-row` appears immediately below the highlights instead of overlapping it.
+The `.page-hero-highlights-strip` element spans rows 2–3 of the parent grid (the "straddle"). If you add an inner grid to `.page-hero-highlights-strip` (e.g. to extend `equal-widths` behaviour) and include `grid-template-rows: subgrid`, auto-placed items will only occupy row 1 of the subgrid (= parent row 2). Parent row 3 collapses to 0-height, destroying the straddle effect — `.page-hero-highlights-content-row` appears immediately below the highlights instead of overlapping it.
 
 ```css
 /* ❌ — breaks the straddle when items are auto-placed by column flow */

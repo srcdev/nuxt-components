@@ -12,6 +12,7 @@ type StoryArgs = {
   };
   hrefBase?: string;
   buttonTextPrefix?: string;
+  buttonIcon?: string;
   styleClassPassthrough?: string | string[];
   /** Story-only — not a real ServicesCardGrid prop, see useStorySetup below. */
   lineClamp?: number;
@@ -42,6 +43,10 @@ const meta: Meta<StoryArgs> = {
       control: { type: "text" },
       description: "Prefix for each card's CTA button text — appended with the service title",
     },
+    buttonIcon: {
+      control: { type: "text" },
+      description: "Icon on each card's CTA button",
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes applied to the root element",
@@ -58,6 +63,7 @@ const meta: Meta<StoryArgs> = {
     heroConfig: {},
     hrefBase: "/services/",
     buttonTextPrefix: "Enquire about",
+    buttonIcon: "mdi:arrow-right",
     styleClassPassthrough: [],
     lineClamp: 3,
   },

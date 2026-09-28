@@ -1,54 +1,73 @@
 <template>
-  <div ref="sliderGalleryWrapper" class="slider-gallery" :class="[elementClasses]">
-    <div class="loading-state" :class="[{ galleryLoaded: !galleryLoaded }]">
-      <div class="loading-spinner"></div>
+  <div
+    ref="sliderGalleryWrapper"
+    class="slider-gallery"
+    :class="[elementClasses]"
+    role="region"
+    aria-roledescription="carousel"
+    :aria-label="ariaLabel"
+    @mouseenter="isPaused = true"
+    @mouseleave="isPaused = false"
+    @focusin="isPaused = true"
+    @focusout="isPaused = false"
+  >
+    <div class="slider-gallery-loading" :class="[{ 'is-loaded': !isLoading }]" role="status">
+      <div class="slider-gallery-spinner" aria-hidden="true"></div>
       <p>{{ loadingText }}</p>
     </div>
 
-    <div v-if="showGallery" class="gallery-content" :class="[{ galleryLoaded: !galleryLoaded }]">
-      <div ref="sliderGalleryImagesList" class="list">
-        <div v-for="(item, index) in galleryData" :key="index" class="item">
+    <div v-if="showGallery" class="slider-gallery-content" :class="[{ 'is-loaded': !isLoading }]">
+      <div ref="sliderGalleryImagesList" class="slider-gallery-list">
+        <div v-for="(item, index) in galleryData" :key="index" class="slider-gallery-item">
           <NuxtImg :src="item.src" :alt="item.alt" @load="handleImageLoad(index)" @error="handleImageError(index)" />
-          <div class="content" :class="item.textBrightness">
-            <div v-show="item.stylist !== ''" class="author" :class="item.textBrightness">{{ item.stylist }}</div>
-            <div v-show="item.title !== ''" class="title" :class="item.textBrightness">{{ item.title }}</div>
-            <div v-show="item.category !== ''" class="topic" :class="item.textBrightness">{{ item.category }}</div>
-            <div v-show="item.description !== ''" class="description" :class="item.textBrightness">
-              {{ item.description }}
-            </div>
-            <div class="buttons" :class="item.textBrightness">
-              <button>{{ seeMoreText }}</button>
+          <div class="slider-gallery-item-content" :class="item.textBrightness">
+            <div v-if="item.stylist" class="slider-gallery-author">{{ item.stylist }}</div>
+            <div v-if="item.title" class="slider-gallery-title">{{ item.title }}</div>
+            <div v-if="item.category" class="slider-gallery-topic">{{ item.category }}</div>
+            <div v-if="item.description" class="slider-gallery-description">{{ item.description }}</div>
+            <div v-if="item.href" class="slider-gallery-actions">
+              <a :href="item.href" class="slider-gallery-cta">{{ seeMoreText }}</a>
             </div>
           </div>
         </div>
       </div>
 
-      <div ref="sliderGalleryThumbnailsList" class="thumbnail">
-        <div v-for="(item, index) in galleryData" :key="index" class="item">
-          <div class="inner">
-            <NuxtImg :src="item.src" :alt="item.alt" loading="lazy" />
-            <div class="content" :class="item.textBrightness">
-              <div v-show="item.thumbnail?.title !== ''" class="title" :class="item.textBrightness">
-                {{ item.thumbnail?.title }}
-              </div>
-              <div v-show="item.thumbnail?.description !== ''" class="description" :class="item.textBrightness">
-                {{ item.thumbnail?.description }}
+      <div ref="sliderGalleryThumbnailsList" class="slider-gallery-thumbnails" aria-hidden="true">
+        <div v-for="(item, index) in galleryData" :key="index" class="slider-gallery-item">
+          <div class="slider-gallery-thumbnail-overlay">
+            <NuxtImg :src="item.src" alt="" loading="lazy" />
+            <div class="slider-gallery-item-content" :class="item.textBrightness">
+              <div v-if="item.thumbnail?.title" class="slider-gallery-title">{{ item.thumbnail.title }}</div>
+              <div v-if="item.thumbnail?.description" class="slider-gallery-description">
+                {{ item.thumbnail.description }}
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="arrows">
-        <button id="prev" ref="prevDom" :aria-label="prevAriaLabel" @click.prevent="doPrevious()">
-          <Icon name="ic:outline-keyboard-arrow-left" class="arrows-icon" />
+      <div class="slider-gallery-arrows">
+        <button
+          ref="prevDom"
+          type="button"
+          class="slider-gallery-prev"
+          :aria-label="prevAriaLabel"
+          @click.prevent="doPrevious()"
+        >
+          <Icon :name="prevIcon" class="slider-gallery-arrow-icon" aria-hidden="true" />
         </button>
-        <button id="next" ref="nextDom" :aria-label="nextAriaLabel" @click.prevent="doNext()">
-          <Icon name="ic:outline-keyboard-arrow-right" class="arrows-icon" />
+        <button
+          ref="nextDom"
+          type="button"
+          class="slider-gallery-next"
+          :aria-label="nextAriaLabel"
+          @click.prevent="doNext()"
+        >
+          <Icon :name="nextIcon" class="slider-gallery-arrow-icon" aria-hidden="true" />
         </button>
       </div>
 
-      <div class="time"></div>
+      <div class="slider-gallery-progress" aria-hidden="true"></div>
     </div>
   </div>
 </template>
@@ -62,12 +81,16 @@ interface Props {
   animationDuration?: number;
   /** Loading-state copy — override for localisation. */
   loadingText?: string;
-  /** Per-slide call-to-action button copy — override for localisation. */
+  /** Per-slide link copy (shown for slides with an href) — override for localisation. */
   seeMoreText?: string;
   /** aria-label on the previous-image button — override for localisation. */
   prevAriaLabel?: string;
   /** aria-label on the next-image button — override for localisation. */
   nextAriaLabel?: string;
+  /** aria-label on the carousel region — override for localisation. */
+  ariaLabel?: string;
+  prevIcon?: string;
+  nextIcon?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -79,6 +102,9 @@ const props = withDefaults(defineProps<Props>(), {
   seeMoreText: "SEE MORE",
   prevAriaLabel: "Previous image",
   nextAriaLabel: "Next image",
+  ariaLabel: "Image gallery",
+  prevIcon: "ic:outline-keyboard-arrow-left",
+  nextIcon: "ic:outline-keyboard-arrow-right",
   styleClassPassthrough: () => [],
 });
 
@@ -90,24 +116,26 @@ const sliderGalleryImagesList = useTemplateRef("sliderGalleryImagesList");
 const sliderGalleryThumbnailsList = useTemplateRef("sliderGalleryThumbnailsList");
 
 const transitionRunning = ref(false);
-const galleryLoaded = ref(true);
+const isLoading = ref(true);
 const showGallery = ref(false);
+const isPaused = ref(false);
 const loadedImages = new Set<number>();
 const preloadedImages: HTMLImageElement[] = [];
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+const shouldAutoRun = () => props.autoRun && !prefersReducedMotion();
 
 onMounted(async () => {
   await nextTick();
 
-  // If no images or galleryData is empty, stop loading
   if (!galleryData.value || galleryData.value.length === 0) {
-    galleryLoaded.value = false;
+    isLoading.value = false;
     return;
   }
 
-  // Create an array to hold image loading promises
   const imageLoadPromises: Promise<void>[] = [];
 
-  // Preload the first image at minimum
   const firstImageIndex = 0;
   if (galleryData.value[firstImageIndex]) {
     const img = new Image();
@@ -119,7 +147,7 @@ onMounted(async () => {
         resolve();
       };
       img.onerror = () => {
-        loadedImages.add(firstImageIndex); // Count as loaded anyway
+        loadedImages.add(firstImageIndex);
         resolve();
       };
     });
@@ -128,11 +156,10 @@ onMounted(async () => {
     preloadedImages.push(img);
   }
 
-  // Wait for at least the first image to load
   await Promise.race(imageLoadPromises);
 
   setTimeout(() => {
-    galleryLoaded.value = false;
+    isLoading.value = false;
   }, 500);
 
   showGallery.value = true;
@@ -160,78 +187,63 @@ const doPrevious = () => {
 let runTimeOut: ReturnType<typeof setTimeout> | undefined;
 let runNextAuto: ReturnType<typeof setTimeout> | null = null;
 
-function showSlider(type: string) {
+function scheduleAutoRun() {
+  if (runNextAuto) clearTimeout(runNextAuto);
+  runNextAuto = setTimeout(() => {
+    if (!shouldAutoRun() || isLoading.value) return;
+    if (isPaused.value) {
+      scheduleAutoRun();
+      return;
+    }
+    doNext();
+  }, props.autoRunInterval);
+}
+
+function showSlider(type: "next" | "prev") {
   transitionRunning.value = true;
 
   const currentSliderItems = Array.from(sliderGalleryImagesList.value?.children || []);
   const currentThumbnailItems = Array.from(sliderGalleryThumbnailsList.value?.children || []);
 
   if (type === "next") {
-    if (currentSliderItems.length) {
-      const firstItem = currentSliderItems[0];
-      if (firstItem) {
-        sliderGalleryImagesList.value?.appendChild(firstItem);
-      }
-    }
+    const firstItem = currentSliderItems[0];
+    if (firstItem) sliderGalleryImagesList.value?.appendChild(firstItem);
 
-    if (currentThumbnailItems.length) {
-      const firstThumb = currentThumbnailItems[0];
-      if (firstThumb) {
-        sliderGalleryThumbnailsList.value?.appendChild(firstThumb);
-      }
-    }
+    const firstThumb = currentThumbnailItems[0];
+    if (firstThumb) sliderGalleryThumbnailsList.value?.appendChild(firstThumb);
 
-    sliderGalleryWrapper.value?.classList.add("next");
+    sliderGalleryWrapper.value?.classList.add("is-next");
   } else {
-    if (currentSliderItems.length) {
-      const lastItem = currentSliderItems[currentSliderItems.length - 1];
-      if (lastItem) {
-        lastItem.classList.add("prepend-item");
-        sliderGalleryImagesList.value?.prepend(lastItem);
-      }
+    const lastItem = currentSliderItems[currentSliderItems.length - 1];
+    if (lastItem) {
+      lastItem.classList.add("is-prepended");
+      sliderGalleryImagesList.value?.prepend(lastItem);
     }
 
-    if (currentThumbnailItems.length) {
-      const lastThumb = currentThumbnailItems[currentThumbnailItems.length - 1];
-      if (lastThumb) {
-        lastThumb.classList.add("prepend-item");
-        sliderGalleryThumbnailsList.value?.prepend(lastThumb);
-      }
+    const lastThumb = currentThumbnailItems[currentThumbnailItems.length - 1];
+    if (lastThumb) {
+      lastThumb.classList.add("is-prepended");
+      sliderGalleryThumbnailsList.value?.prepend(lastThumb);
     }
 
-    void sliderGalleryWrapper.value?.offsetWidth; // Force reflow
-    sliderGalleryWrapper.value?.classList.add("prev");
+    void sliderGalleryWrapper.value?.offsetWidth; // force reflow so the prev animation restarts
+    sliderGalleryWrapper.value?.classList.add("is-prev");
   }
 
   clearTimeout(runTimeOut);
   runTimeOut = setTimeout(() => {
     if (sliderGalleryWrapper.value) {
-      sliderGalleryWrapper.value.classList.remove("next");
-      sliderGalleryWrapper.value.classList.remove("prev");
-
-      const items = sliderGalleryImagesList.value?.querySelectorAll(".prepend-item");
-      items?.forEach((item) => item.classList.remove("prepend-item"));
-
-      const thumbs = sliderGalleryThumbnailsList.value?.querySelectorAll(".prepend-item");
-      thumbs?.forEach((thumb) => thumb.classList.remove("prepend-item"));
+      sliderGalleryWrapper.value.classList.remove("is-next", "is-prev");
+      sliderGalleryWrapper.value.querySelectorAll(".is-prepended").forEach((el) => el.classList.remove("is-prepended"));
     }
     transitionRunning.value = false;
   }, props.animationDuration);
 
-  // Reset auto-run timer
-  if (runNextAuto) clearTimeout(runNextAuto);
-  runNextAuto = setTimeout(() => {
-    if (!props.autoRun || galleryLoaded.value) return;
-    doNext();
-  }, props.autoRunInterval);
+  scheduleAutoRun();
 }
 
-// Add keyboard navigation event handlers
 const handleKeyDown = (event: KeyboardEvent) => {
-  // Don't process key events if transition is running or gallery isn't loaded
-  if (transitionRunning.value || galleryLoaded.value) {
-    return;
-  }
+  if (transitionRunning.value || isLoading.value) return;
 
   if (event.key === "ArrowLeft") {
     doPrevious();
@@ -240,14 +252,8 @@ const handleKeyDown = (event: KeyboardEvent) => {
   }
 };
 
-// Initialize auto-run only after loading completes
-watch(galleryLoaded, (newValue) => {
-  if (!newValue && props.autoRun) {
-    if (runNextAuto) clearTimeout(runNextAuto);
-    runNextAuto = setTimeout(() => {
-      doNext();
-    }, props.autoRunInterval);
-  }
+watch(isLoading, (loading) => {
+  if (!loading && shouldAutoRun()) scheduleAutoRun();
 });
 
 watch(
@@ -268,50 +274,47 @@ onBeforeUnmount(() => {
 <style lang="css">
 @layer components {
   .slider-gallery {
-    --_animationDuration: v-bind(animationDuration + "ms");
+    --_animation-duration: v-bind(animationDuration + "ms");
+    --_accent: var(--slider-gallery-accent, #f1683a);
+    --_thumbnail-width: var(--slider-gallery-thumbnail-width, 100px);
+    --_thumbnail-height: var(--slider-gallery-thumbnail-height, 165px);
 
-    --_thumbnailAspectRatio: 150 /220;
-
-    --_thumbnailWidth: var(--_thumbnailMobileWidth, 100px);
-    --_thumbnailHeight: var(--_thumbnailMobileHeight, 165px);
-
-    height: 100svh;
+    height: var(--slider-gallery-height, 100svh);
     width: 100vw;
     overflow: hidden;
     position: absolute;
-    inset: 0 0 0 0;
-
-    z-index: 9999;
+    inset: 0;
+    z-index: var(--slider-gallery-z-index, 9999);
     container-type: inline-size;
 
-    .loading-state {
+    .slider-gallery-loading {
       position: absolute;
-      inset: 0 0 0 0;
+      inset: 0;
       z-index: 1000;
       display: flex;
       flex-direction: column;
-      background-color: var(--page-bg);
+      background-color: var(--slider-gallery-loading-background, var(--page-bg));
       align-items: center;
       justify-content: center;
-      color: var(--colour-text-default);
+      color: var(--slider-gallery-loading-colour, var(--colour-text-default));
       opacity: 1;
       transition:
         display 0.5s,
         opacity 0.5s;
       transition-behavior: allow-discrete;
 
-      &.galleryLoaded {
+      &.is-loaded {
         display: none;
         opacity: 0;
       }
 
-      .loading-spinner {
+      .slider-gallery-spinner {
         width: 50px;
         height: 50px;
         border: 5px solid rgba(0, 0, 0, 0.1);
         border-radius: 50%;
-        border-top-color: #f1683a;
-        animation: spinner 1s ease-in-out infinite;
+        border-top-color: var(--_accent);
+        animation: slider-gallery-spinner 1s ease-in-out infinite;
         margin-bottom: 20px;
       }
 
@@ -321,49 +324,63 @@ onBeforeUnmount(() => {
       }
     }
 
-    .gallery-content {
+    .slider-gallery-content {
       width: 100%;
       height: 100%;
       position: relative;
-      /* opacity: 0; */
-      /* transition: opacity 0.5s ease-in-out; */
 
-      /* Removed empty ruleset for .galleryLoaded */
+      @container (width >= 1024px) {
+        --_thumbnail-width: var(--slider-gallery-thumbnail-width-wide, 150px);
+        --_thumbnail-height: var(--slider-gallery-thumbnail-height-wide, 220px);
+      }
     }
 
-    .list {
-      .item {
+    .slider-gallery-item-content {
+      &.light {
+        color: var(--slider-gallery-text-light, #fff);
+      }
+
+      &.dark {
+        color: var(--slider-gallery-text-dark, #000);
+      }
+    }
+
+    .slider-gallery-list {
+      .slider-gallery-item {
         width: 100%;
         height: 100%;
         position: absolute;
-        inset: 0 0 0 0;
+        inset: 0;
 
         &:nth-child(1) {
           z-index: 1;
 
-          .content {
-            .author,
-            .title,
-            .topic,
-            .description,
-            .buttons {
+          .slider-gallery-item-content {
+            .slider-gallery-author,
+            .slider-gallery-title,
+            .slider-gallery-topic,
+            .slider-gallery-description,
+            .slider-gallery-actions {
               transform: translateY(50px);
               filter: blur(20px);
               opacity: 0;
-              animation: showContent 0.5s 1s linear 1 forwards;
+              animation: slider-gallery-show-content 0.5s 1s linear 1 forwards;
             }
 
-            .title {
-              animation-delay: 1.2s !important;
+            .slider-gallery-title {
+              animation-delay: 1.2s;
             }
-            .topic {
-              animation-delay: 1.4s !important;
+
+            .slider-gallery-topic {
+              animation-delay: 1.4s;
             }
-            .description {
-              animation-delay: 1.6s !important;
+
+            .slider-gallery-description {
+              animation-delay: 1.6s;
             }
-            .buttons {
-              animation-delay: 1.8s !important;
+
+            .slider-gallery-actions {
+              animation-delay: 1.8s;
             }
           }
         }
@@ -374,7 +391,7 @@ onBeforeUnmount(() => {
           object-fit: cover;
         }
 
-        .content {
+        .slider-gallery-item-content {
           position: absolute;
           top: 20%;
           width: 1140px;
@@ -385,69 +402,47 @@ onBeforeUnmount(() => {
           box-sizing: border-box;
           text-shadow: 0 5px 10px #0004;
 
-          &.light {
-            color: #fff;
-          }
-          &.dark {
-            color: #000;
+          @container (width < 678px) {
+            padding-right: 0;
           }
 
-          .author {
+          .slider-gallery-author {
             font-weight: bold;
             letter-spacing: 10px;
-
-            &.light {
-              color: #fff;
-            }
-            &.dark {
-              color: #000;
-            }
           }
 
-          .title {
-            font-size: 5em;
+          .slider-gallery-title,
+          .slider-gallery-topic {
+            font-size: var(--slider-gallery-title-font-size, 5em);
             font-weight: bold;
             line-height: 1.3em;
-
-            &.light {
-              color: #fff;
-            }
-            &.dark {
-              color: #000;
-            }
           }
-          .topic {
-            font-size: 5em;
-            font-weight: bold;
-            line-height: 1.3em;
 
-            &.light {
-              color: #fff;
-            }
-            &.dark {
-              color: #000;
+          .slider-gallery-title {
+            @container (width < 678px) {
+              font-size: var(--slider-gallery-title-font-size-narrow, 30px);
             }
           }
 
-          .buttons {
-            display: grid;
-            grid-template-columns: repeat(2, 130px);
-            grid-template-rows: 40px;
-            gap: 5px;
+          .slider-gallery-actions {
             margin-top: 20px;
 
-            button {
-              background-color: #99999975;
-              border: 1px solid #fff;
-              color: #fff;
+            .slider-gallery-cta {
+              display: inline-grid;
+              place-items: center;
+              min-width: 130px;
+              min-height: 40px;
+              padding-inline: 1.2rem;
+              background-color: var(--slider-gallery-cta-background, #99999975);
+              border: 1px solid var(--slider-gallery-cta-border-colour, #fff);
+              color: var(--slider-gallery-cta-colour, #fff);
               letter-spacing: 3px;
               font-weight: 500;
+              text-decoration: none;
 
-              &.light {
-                color: #fff;
-              }
-              &.dark {
-                color: #000;
+              &:focus-visible {
+                outline: 2px solid var(--theme-ring, currentColor);
+                outline-offset: 2px;
               }
             }
           }
@@ -455,35 +450,29 @@ onBeforeUnmount(() => {
       }
     }
 
-    .thumbnail {
+    .slider-gallery-thumbnails {
       position: absolute;
       bottom: 50px;
       left: 50%;
       width: max-content;
       z-index: 100;
       display: flex;
-      gap: 20px;
+      gap: var(--slider-gallery-thumbnail-gap, 20px);
 
-      @container (width >= 1024px) {
-        --_thumbnailWidth: var(--_thumbnailDesktopWidth, 150px);
-        --_thumbnailHeight: var(--_thumbnailDesktopHeight, 220px);
-      }
-
-      .item {
-        width: var(--_thumbnailWidth);
-        height: var(--_thumbnailHeight);
+      .slider-gallery-item {
+        width: var(--_thumbnail-width);
+        height: var(--_thumbnail-height);
         flex-shrink: 0;
         position: relative;
-
-        border: var(--_thumbnailBorder, 1px solid transparent);
-        outline: var(--_thumbnailOutline, 1px solid transparent);
-        border-radius: var(--_thumbnailBorderRadius, 20px);
+        border: var(--slider-gallery-thumbnail-border, 1px solid transparent);
+        outline: var(--slider-gallery-thumbnail-outline, 1px solid transparent);
+        border-radius: var(--slider-gallery-thumbnail-border-radius, 20px);
         overflow: hidden;
 
-        .inner {
+        .slider-gallery-thumbnail-overlay {
           position: absolute;
-          inset: 0 0 0 0;
-          background-color: #0004;
+          inset: 0;
+          background-color: var(--slider-gallery-thumbnail-overlay, #0004);
           z-index: 2;
         }
 
@@ -493,39 +482,24 @@ onBeforeUnmount(() => {
           object-fit: cover;
         }
 
-        .content {
+        .slider-gallery-item-content {
           position: absolute;
           bottom: 10px;
           left: 10px;
           right: 10px;
 
-          .title {
+          .slider-gallery-title {
             font-weight: 500;
-
-            &.light {
-              color: #fff;
-            }
-            &.dark {
-              color: #000;
-            }
           }
 
-          .description {
+          .slider-gallery-description {
             font-weight: 300;
-
-            &.light {
-              color: #fff;
-            }
-            &.dark {
-              color: #000;
-            }
           }
         }
       }
     }
 
-    /* arrows */
-    .arrows {
+    .slider-gallery-arrows {
       position: absolute;
       top: 80%;
       right: 52%;
@@ -538,164 +512,148 @@ onBeforeUnmount(() => {
 
       button {
         display: grid;
-        justify-content: center;
-        align-items: center;
-        width: 40px;
-        height: 40px;
+        place-items: center;
+        width: var(--slider-gallery-arrow-size, 40px);
+        height: var(--slider-gallery-arrow-size, 40px);
         border-radius: 50%;
-        background-color: #eee4;
-        color: #fff;
-        font-family: monospace;
-        font-weight: bold;
+        background-color: var(--slider-gallery-arrow-background, #eee4);
+        color: var(--slider-gallery-arrow-colour, #fff);
+        border: 2px solid var(--slider-gallery-arrow-border-colour, white);
         transition: 0.5s;
 
-        border-width: 2px;
-        border-style: solid;
-        border-color: white;
-
-        &#prev {
-          --_translateX: -2px;
+        &.slider-gallery-prev {
+          --_translate-x: -2px;
         }
 
-        &#next {
-          --_translateX: 2px;
+        &.slider-gallery-next {
+          --_translate-x: 2px;
         }
 
         &:hover {
-          background-color: #fff;
-          color: #000;
+          background-color: var(--slider-gallery-arrow-background-hover, #fff);
+          color: var(--slider-gallery-arrow-colour-hover, #000);
         }
 
-        .arrows-icon {
-          color: currentColor;
-          font-weight: 900;
-          height: 40px;
-          width: 40px;
-          translate: var(--_translateX) -3px;
+        &:focus-visible {
+          outline: 2px solid var(--theme-ring, currentColor);
+          outline-offset: 2px;
+        }
+
+        .slider-gallery-arrow-icon {
+          font-size: var(--slider-gallery-arrow-size, 40px);
+          translate: var(--_translate-x) 0;
         }
       }
     }
 
-    .time {
+    .slider-gallery-progress {
       position: absolute;
       z-index: 1000;
       width: 0%;
       height: 3px;
-      background-color: #f1683a;
+      background-color: var(--_accent);
       left: 0;
       top: 0;
     }
 
-    /* Slider carousel animations */
-    &.next {
-      .list {
-        .item {
-          &:nth-child(1) {
-            img {
-              width: var(--_thumbnailWidth);
-              height: var(--_thumbnailHeight);
-              position: absolute;
-              bottom: 50px;
-              left: 50%;
-              border-radius: 30px;
-              animation: showImage 0.5s linear 1 forwards;
-            }
-          }
+    &.is-next {
+      .slider-gallery-list .slider-gallery-item:nth-child(1) img {
+        width: var(--_thumbnail-width);
+        height: var(--_thumbnail-height);
+        position: absolute;
+        bottom: 50px;
+        left: 50%;
+        border-radius: 30px;
+        animation: slider-gallery-show-image 0.5s linear 1 forwards;
+      }
+
+      .slider-gallery-arrows button {
+        pointer-events: none;
+      }
+
+      .slider-gallery-thumbnails {
+        animation: slider-gallery-effect-next 0.5s linear 1 forwards;
+
+        .slider-gallery-item:nth-last-child(1) {
+          overflow: hidden;
+          animation: slider-gallery-show-thumbnail 0.5s linear 1 forwards;
         }
       }
 
-      .arrows {
-        button {
-          pointer-events: none;
-        }
-      }
-
-      .thumbnail {
-        animation: effectNext 0.5s linear 1 forwards;
-
-        .item {
-          &:nth-last-child(1) {
-            overflow: hidden;
-            animation: showThumbnail 0.5s linear 1 forwards;
-          }
-        }
-      }
-
-      .time {
-        animation: runningTime var(--_animationDuration) linear 1 forwards;
+      .slider-gallery-progress {
+        animation: slider-gallery-running-time var(--_animation-duration) linear 1 forwards;
       }
     }
 
-    &.prev {
-      .list {
-        .item {
+    &.is-prev {
+      .slider-gallery-list {
+        .slider-gallery-item {
           &:nth-child(2) {
             z-index: 2;
 
             img {
-              animation: outFrame 0.5s linear 1 forwards;
+              animation: slider-gallery-out-frame 0.5s linear 1 forwards;
               position: absolute;
               bottom: 0;
               left: 0;
             }
 
-            .content {
-              .author,
-              .title,
-              .topic,
-              .description,
-              .buttons {
-                animation: contentOut 1.5s linear 1 forwards !important;
+            .slider-gallery-item-content {
+              .slider-gallery-author,
+              .slider-gallery-title,
+              .slider-gallery-topic,
+              .slider-gallery-description,
+              .slider-gallery-actions {
+                animation: slider-gallery-content-out 1.5s linear 1 forwards;
               }
             }
           }
+
           img {
             z-index: 100;
           }
         }
 
-        .item.prepend-item {
-          z-index: 1; /* Ensure it's visible */
-          /* Any initial styles needed */
+        .slider-gallery-item.is-prepended {
+          z-index: 1;
         }
       }
 
-      .arrows {
-        button {
-          pointer-events: none;
-        }
+      .slider-gallery-arrows button {
+        pointer-events: none;
       }
 
-      .thumbnail {
-        /* Add a transform to the entire thumbnail container */
-        animation: effectPrev 0.5s linear 1 forwards;
+      .slider-gallery-thumbnails {
+        animation: slider-gallery-effect-prev 0.5s linear 1 forwards;
 
-        .item {
-          &:first-child {
-            /* Add the animated border effect */
-            &::before {
-              animation: countdownBorder 7s linear 1 forwards;
-            }
-          }
-          &:nth-child(1) {
-            overflow: hidden;
-            animation: showThumbnailPrev 0.5s linear 1 forwards;
-          }
+        .slider-gallery-item:nth-child(1) {
+          overflow: hidden;
+          animation: slider-gallery-show-thumbnail-prev 0.5s linear 1 forwards;
         }
 
-        .item.prepend-item {
+        .slider-gallery-item.is-prepended {
           opacity: 0;
           transform: translateX(-20px);
-          /* Initial state for thumbnail animation */
         }
       }
-      .time {
-        animation: runningTime var(--_animationDuration) linear 1 forwards;
+
+      .slider-gallery-progress {
+        animation: slider-gallery-running-time var(--_animation-duration) linear 1 forwards;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 1ms !important;
+        animation-delay: 0s !important;
+        transition-duration: 1ms !important;
       }
     }
   }
 
-  @keyframes showContent {
+  @keyframes slider-gallery-show-content {
     to {
       transform: translateY(0px);
       filter: blur(0px);
@@ -703,7 +661,7 @@ onBeforeUnmount(() => {
     }
   }
 
-  @keyframes showImage {
+  @keyframes slider-gallery-show-image {
     to {
       bottom: 0;
       left: 0;
@@ -713,20 +671,20 @@ onBeforeUnmount(() => {
     }
   }
 
-  @keyframes showThumbnail {
+  @keyframes slider-gallery-show-thumbnail {
     from {
       width: 0;
       opacity: 0;
     }
   }
 
-  @keyframes effectNext {
+  @keyframes slider-gallery-effect-next {
     from {
-      transform: translateX(calc(1 * var(--_thumbnailWidth)));
+      transform: translateX(calc(1 * var(--_thumbnail-width)));
     }
   }
 
-  @keyframes runningTime {
+  @keyframes slider-gallery-running-time {
     from {
       width: 100%;
     }
@@ -735,34 +693,34 @@ onBeforeUnmount(() => {
     }
   }
 
-  @keyframes outFrame {
+  @keyframes slider-gallery-out-frame {
     to {
-      width: var(--_thumbnailWidth);
-      height: var(--_thumbnailHeight);
+      width: var(--_thumbnail-width);
+      height: var(--_thumbnail-height);
       bottom: 50px;
       left: 50%;
       border-radius: 20px;
     }
   }
 
-  @keyframes contentOut {
+  @keyframes slider-gallery-content-out {
     to {
-      transform: translateY(calc(-1 * var(--_thumbnailWidth)));
+      transform: translateY(calc(-1 * var(--_thumbnail-width)));
       filter: blur(20px);
       opacity: 0;
     }
   }
 
-  @keyframes effectPrev {
+  @keyframes slider-gallery-effect-prev {
     from {
-      transform: translateX(calc(-1 * var(--_thumbnailWidth)));
+      transform: translateX(calc(-1 * var(--_thumbnail-width)));
     }
     to {
       transform: translateX(0);
     }
   }
 
-  @keyframes showThumbnailPrev {
+  @keyframes slider-gallery-show-thumbnail-prev {
     from {
       opacity: 0;
       transform: translateX(-20px);
@@ -773,21 +731,12 @@ onBeforeUnmount(() => {
     }
   }
 
-  @keyframes spinner {
+  @keyframes slider-gallery-spinner {
     0% {
       transform: rotate(0deg);
     }
     100% {
       transform: rotate(360deg);
-    }
-  }
-
-  @media screen and (max-width: 678px) {
-    .slider-gallery .list .item .content {
-      padding-right: 0;
-    }
-    .slider-gallery .list .item .content .title {
-      font-size: 30px;
     }
   }
 }

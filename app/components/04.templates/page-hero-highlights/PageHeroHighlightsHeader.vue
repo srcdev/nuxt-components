@@ -1,9 +1,9 @@
 <template>
   <div class="page-hero-highlights-header" :class="elementClasses">
-    <div class="phh-start">
+    <div class="page-hero-highlights-header-start">
       <slot name="start"></slot>
     </div>
-    <div v-if="hasEndSlot()" class="phh-end">
+    <div v-if="hasEndSlot()" class="page-hero-highlights-header-end">
       <slot name="end"></slot>
     </div>
   </div>
@@ -32,45 +32,35 @@ watch(
 </script>
 
 <style lang="css">
-.page-hero-highlights-header {
-  /* User themable tokens */
-  --phh-padding-block-mobile: 1.6rem 3.2rem;
-  --phh-padding-block-tablet: 2.4rem 4.8rem;
-  --phh-padding-block-desktop: 3.2rem 6.4rem;
-  --phh-gap: 1.6rem;
-  --phh-end-gap: 0.8rem;
-
-  display: flex;
-  flex-direction: column;
-  gap: var(--phh-gap);
-
-  padding-block: var(--phh-padding-block-mobile);
-
-  @container (width >= 768px) {
-    padding-block: var(--phh-padding-block-tablet);
-  }
-  @container (width >= 1024px) {
-    padding-block: var(--phh-padding-block-desktop);
-  }
-
-  &:has(.phh-end) {
-    @container (width >= 768px) {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      align-items: flex-end;
-      justify-content: space-between;
-    }
-  }
-
-  .phh-start {
-    /* flex: 1; */
-  }
-
-  .phh-end {
+@layer components {
+  .page-hero-highlights-header {
     display: flex;
-    align-items: center;
-    gap: var(--phh-end-gap);
-    /* flex-shrink: 0; */
+    flex-direction: column;
+    gap: var(--page-hero-highlights-header-gap, 1.6rem);
+    padding-block: var(--page-hero-highlights-header-padding-block-mobile, 1.6rem 3.2rem);
+
+    @container (width >= 768px) {
+      padding-block: var(--page-hero-highlights-header-padding-block-tablet, 2.4rem 4.8rem);
+    }
+
+    @container (width >= 1024px) {
+      padding-block: var(--page-hero-highlights-header-padding-block-desktop, 3.2rem 6.4rem);
+    }
+
+    &:has(.page-hero-highlights-header-end) {
+      @container (width >= 768px) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        align-items: flex-end;
+        justify-content: space-between;
+      }
+    }
+
+    .page-hero-highlights-header-end {
+      display: flex;
+      align-items: center;
+      gap: var(--page-hero-highlights-header-end-gap, 0.8rem);
+    }
   }
 }
 </style>

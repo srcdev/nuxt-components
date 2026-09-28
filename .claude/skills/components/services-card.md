@@ -12,8 +12,8 @@
 | `tag`                   | `"div" \| "section" \| "article"` | `"div"`     | no       |
 | `href`                  | `string`                           | `undefined` | no       |
 | `external`              | `boolean`                          | `false`     | no       |
-| `eyebrowConfig`         | `EyebrowConfig`                    | `{}`        | no       |
-| `heroConfig`            | `HeroConfig`                       | `{}`        | no       |
+| `eyebrowConfig`         | `ServicesCardEyebrowConfig`                    | `{}`        | no       |
+| `heroConfig`            | `ServicesCardHeroConfig`                       | `{}`        | no       |
 | `durationText`          | `string`                           | `undefined` | no       |
 | `priceText`             | `string`                           | `undefined` | no       |
 | `styleClassPassthrough` | `string \| string[]`               | `[]`        | no       |
@@ -31,6 +31,8 @@ If an `actions` slot is provided, the card stays as a static `tag` element (no h
 `is-clickable` is added to the root class list when whole-card-clickable mode is active, giving `cursor: pointer` and removing default link colour/underline. It's also what gates the border/outline hover/focus interaction-state tokens — see "Interaction states (whole-card-clickable only)" in `CONSUMER-STYLING.md`; they're a no-op when the card isn't clickable, since only `.is-clickable` has a `:hover`/`:focus-visible` rule.
 
 ### EyebrowConfig
+
+Exported as `ServicesCardEyebrowConfig` (and `ServicesCardHeroConfig` below) from `srcdev-nuxt-components` since 2026-09-28.
 
 | Key        | Type                              | Default   |
 | ---------- | ---------------------------------- | --------- |

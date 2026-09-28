@@ -13,6 +13,7 @@ declare module "@nuxt/schema" {
         dismissible?: boolean
         useAutoFocus?: boolean
         masked?: boolean
+        closeLabel?: string
       }
       displayToast?: {
         appearance?: {

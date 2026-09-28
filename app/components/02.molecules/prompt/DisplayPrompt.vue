@@ -1,10 +1,11 @@
 <template>
   <div
     ref="promptElementRef"
-    class="display-prompt-core"
+    class="display-prompt"
     :class="[{ closed: !componentOpen }]"
-    :data-test-id="`display-prompt-core-${resolved.theme}`"
-    tabindex="0"
+    :data-test-id="`display-prompt-${resolved.theme}`"
+    :tabindex="resolved.useAutoFocus ? -1 : undefined"
+    :inert="!componentOpen || undefined"
   >
     <div class="display-prompt-wrapper" :data-theme="resolved.theme" :class="[elementClasses]" data-test-id="display-prompt">
       <component
@@ -27,7 +28,7 @@
           <slot name="customCloseIcon"></slot>
         </template>
         <template #dismissLabel>
-          <slot name="customTitle">Close this prompt</slot>
+          <slot name="customTitle">{{ resolved.closeLabel }}</slot>
         </template>
       </component>
     </div>
@@ -44,6 +45,7 @@ interface Props {
   dismissible?: boolean;
   useAutoFocus?: boolean;
   masked?: boolean;
+  closeLabel?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -53,6 +55,7 @@ const props = withDefaults(defineProps<Props>(), {
   dismissible: undefined,
   useAutoFocus: undefined,
   masked: undefined,
+  closeLabel: undefined,
 });
 
 const appConfig = useAppConfig();
@@ -64,6 +67,7 @@ const resolved = computed(() => {
     dismissible: props.dismissible ?? config?.dismissible ?? false,
     useAutoFocus: props.useAutoFocus ?? config?.useAutoFocus ?? false,
     masked: props.masked ?? config?.masked ?? false,
+    closeLabel: props.closeLabel ?? config?.closeLabel ?? "Close this prompt",
   } as const;
 });
 
@@ -73,7 +77,12 @@ const slots = useSlots();
 const promptElementRef = useTemplateRef<HTMLElement>("promptElementRef");
 const parentComponentState = defineModel<boolean>({ default: false });
 const componentOpen = ref(true);
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 
 const updateComponentState = () => {
   if (parentComponentState.value) {
@@ -84,7 +93,7 @@ const updateComponentState = () => {
   componentOpen.value = false;
 };
 
-onMounted(async () => {
+onMounted(() => {
   if (resolved.value.useAutoFocus && promptElementRef.value) {
     promptElementRef.value.focus();
   }
@@ -93,11 +102,17 @@ onMounted(async () => {
 
 <style lang="css">
 @layer components {
-  .display-prompt-core {
+  .display-prompt {
     display: grid;
     grid-template-rows: 1fr;
     opacity: 1;
-    transition: all 200ms ease-in-out;
+    transition:
+      grid-template-rows var(--display-prompt-transition-duration, 200ms) ease-in-out,
+      opacity var(--display-prompt-transition-duration, 200ms) ease-in-out;
+
+    @media (prefers-reduced-motion: reduce) {
+      transition: none;
+    }
 
     &.closed {
       grid-template-rows: 0fr;

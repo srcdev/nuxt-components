@@ -1,0 +1,36 @@
+{
+  "SRCDEV ServicesCardGrid": {
+    "description": "ServicesCardGrid: auto-fit grid of ServicesCard with generated CTA buttons",
+    "scope": "vue,html",
+    "body": [
+      "<ServicesCardGrid",
+      "  :services-data=\"$1services\"",
+      "  href-base=\"${2:/services/}\"",
+      "  button-text-prefix=\"${3:Enquire about}\"",
+      "  :hero-config=\"{ tag: '${4|h3,h2,h4|}', fontSize: '${5|heading,title,subheading|}' }\"",
+      "/>"
+    ]
+  },
+  "SRCDEV ServiceSummaryGrid": {
+    "description": "ServiceSummaryGrid: stacked ServiceSummary rows with an optional custom link slot",
+    "scope": "vue,html",
+    "body": [
+      "<ServiceSummaryGrid :services-data=\"$1services\" use-alternate-reverse alignment=\"${2|center,start,end|}\">",
+      "  <template #summary-link=\"{ serviceData }\">",
+      "    <LinkText :to=\"`/services/${serviceData.slug}`\" :link-text=\"serviceData.title\" />",
+      "  </template>",
+      "</ServiceSummaryGrid>"
+    ]
+  },
+  "SRCDEV Services Grids CSS Override": {
+    "description": "CSS override scaffold for the services grid tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --services-card-grid-column-min-width: $2;",
+      "  --services-card-grid-gap: $3;",
+      "  --service-summary-grid-row-gap: $4;",
+      "}"
+    ]
+  }
+}

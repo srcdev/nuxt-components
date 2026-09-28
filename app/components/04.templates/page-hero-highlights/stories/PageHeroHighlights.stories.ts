@@ -37,7 +37,7 @@ const meta: Meta<StoryArgs> = {
     widthConstrained: {
       control: "boolean",
       description:
-        "When true, caps the central column at --max-width (default 1064px). Gutters grow responsively to enforce the constraint. Override --max-width via styleClassPassthrough to change the cap value.",
+        "When true, caps the central column at --page-hero-highlights-max-width (default 1064px). Gutters grow responsively to enforce the constraint. Override --page-hero-highlights-max-width via styleClassPassthrough to change the cap value.",
     },
     contentAlign: {
       control: { type: "inline-radio" },
@@ -53,15 +53,15 @@ const meta: Meta<StoryArgs> = {
     highlightTitleBaseline: {
       control: "boolean",
       description:
-        "When true, fixes the highlight title row to a set height so titles align to the header baseline. Override --highlight-title-height in the consuming page to tune the value.",
+        "When true, fixes the highlight title row to a set height so titles align to the header baseline. Override --page-hero-highlights-title-height in the consuming page to tune the value.",
     },
     headerBackground: {
       control: "color",
-      description: "Background colour of the header zone (sets --header-row-background-colour)",
+      description: "Background colour of the header zone (sets --page-hero-highlights-header-background)",
     },
     contentBackground: {
       control: "color",
-      description: "Background colour of the content zone (sets --content-row-background-color)",
+      description: "Background colour of the content zone (sets --page-hero-highlights-content-background)",
     },
     highlightCount: {
       control: { type: "select" },
@@ -95,8 +95,8 @@ type Story = StoryObj<typeof PageHeroHighlights>;
 
 function useStorySetup(args: StoryArgs) {
   const bgStyles = computed(() => ({
-    ...(args.headerBackground ? { "--header-row-background-colour": args.headerBackground } : {}),
-    ...(args.contentBackground ? { "--content-row-background-color": args.contentBackground } : {}),
+    ...(args.headerBackground ? { "--page-hero-highlights-header-background": args.headerBackground } : {}),
+    ...(args.contentBackground ? { "--page-hero-highlights-content-background": args.contentBackground } : {}),
   }));
   const highlightCount = computed(() => args.highlightCount ?? 3);
   const componentArgs = computed(() => {
@@ -119,46 +119,44 @@ All layout and visual properties are customisable via CSS custom properties. Set
 \`\`\`css
 .page-hero-highlights {
   /* Grid layout */
-  --max-width: 1064px;
+  --page-hero-highlights-max-width: 1064px;
   --page-hero-highlights-gutter-mobile: 16px;
   --page-hero-highlights-gutter-tablet: 40px;
   --page-hero-highlights-gutter-desktop: 32px;
 
   /* Header zone */
-  --header-row-background-colour: darkblue;
+  --page-hero-highlights-header-background: darkblue;
 
   /* Highlights strip */
-  --highlights-row-item-gap: 1rem;
-  --highlights-row-initial-item-offset: 1.2rem;
+  --page-hero-highlights-strip-gap: 1rem;
+  --page-hero-highlights-strip-inset: 1.2rem;
 
   /* Highlight cards */
-  --highlight-rows-gap: 1.2rem;
-  --highlight-title-height: 1fr; /* see: highlight-title-baseline prop */
-  --highlight-padding-block-start: 1.2rem;
-  --highlight-padding: 1.2rem;
-  --highlight-background-color: white;
-  --highlight-border: 1px solid black;
-  --highlight-border-radius: 8px;
-  --highlight-color: black;
+  --page-hero-highlights-item-rows-gap: 1.2rem;
+  --page-hero-highlights-title-height: 1fr; /* see: highlight-title-baseline prop */
+  --page-hero-highlights-item-padding-block-start: 1.2rem;
+  --page-hero-highlights-item-padding: 1.2rem;
+  --page-hero-highlights-item-background: white;
+  --page-hero-highlights-item-border: 1px solid black;
+  --page-hero-highlights-item-border-radius: 8px;
+  --page-hero-highlights-item-colour: black;
 
   /* Content zone */
-  --content-row-background-color: var(--slate-01); /* transparent */
-  --content-row-start-gap: 1.2rem;
-  --content-row-end-gap: 1.2rem;
+  --page-hero-highlights-content-background: var(--slate-01); /* transparent */
+  --page-hero-highlights-content-start-gap: 1.2rem;
+  --page-hero-highlights-content-end-gap: 1.2rem;
 
   /* Content slot decorative border */
-  --content-slot-margin-block-start: 2.4rem;
-  --content-slot-margin: var(--highlights-row-initial-item-offset);
-  --content-slot-background-color: var(--slate-00);
-  --content-slot-border: 1px solid var(--slate-06);
-  --content-slot-border-radius: 0.8rem;
-  --content-slot-outline: 1px solid var(--slate-02);
+  --page-hero-highlights-content-margin-block-start: 2.4rem;
+  --page-hero-highlights-content-margin: var(--page-hero-highlights-strip-inset);
+  --page-hero-highlights-panel-background: var(--slate-00);
+  --page-hero-highlights-panel-border: 1px solid var(--slate-06);
+  --page-hero-highlights-panel-border-radius: 0.8rem;
+  --page-hero-highlights-panel-outline: 1px solid var(--slate-02);
 
   /* When using :highlight-title-baseline="true" */
-  &.highlight-title-baseline {
-    --highlight-title-height: 4rem; /* proportional value preferred */
-    --highlight-padding-block-start: 0;
-  }
+  --page-hero-highlights-title-height-baseline: 4rem; /* proportional value preferred */
+    --page-hero-highlights-item-padding-block-start-baseline: 0;
 }
 \`\`\`
         `,
@@ -202,46 +200,44 @@ All layout and visual properties are customisable via CSS custom properties. Set
 .page-hero-highlights {
 
   /* Grid layout */
-  --max-width: 1064px;
+  --page-hero-highlights-max-width: 1064px;
   --page-hero-highlights-gutter-mobile: 16px;
   --page-hero-highlights-gutter-tablet: 40px;
   --page-hero-highlights-gutter-desktop: 32px;
 
   /* Header zone */
-  --header-row-background-colour: darkblue;
+  --page-hero-highlights-header-background: darkblue;
 
   /* Highlights strip */
-  --highlights-row-item-gap: 1rem;
-  --highlights-row-initial-item-offset: 1.2rem;
+  --page-hero-highlights-strip-gap: 1rem;
+  --page-hero-highlights-strip-inset: 1.2rem;
 
   /* Highlight cards */
-  --highlight-rows-gap: 1.2rem;
-  --highlight-title-height: 1fr; /* see: highlight-title-baseline prop */
-  --highlight-padding-block-start: 1.2rem;
-  --highlight-padding: 1.2rem;
-  --highlight-background-color: white;
-  --highlight-border: 1px solid black;
-  --highlight-border-radius: 8px;
-  --highlight-color: black;
+  --page-hero-highlights-item-rows-gap: 1.2rem;
+  --page-hero-highlights-title-height: 1fr; /* see: highlight-title-baseline prop */
+  --page-hero-highlights-item-padding-block-start: 1.2rem;
+  --page-hero-highlights-item-padding: 1.2rem;
+  --page-hero-highlights-item-background: white;
+  --page-hero-highlights-item-border: 1px solid black;
+  --page-hero-highlights-item-border-radius: 8px;
+  --page-hero-highlights-item-colour: black;
 
   /* Content zone */
-  --content-row-background-color: var(--slate-01); /* transparent */
-  --content-row-start-gap: 1.2rem;
-  --content-row-end-gap: 1.2rem;
+  --page-hero-highlights-content-background: var(--slate-01); /* transparent */
+  --page-hero-highlights-content-start-gap: 1.2rem;
+  --page-hero-highlights-content-end-gap: 1.2rem;
 
   /* Content slot decorative border */
-  --content-slot-margin-block-start: 2.4rem;
-  --content-slot-margin: var(--highlights-row-initial-item-offset);
-  --content-slot-background-color: var(--slate-00);
-  --content-slot-border: 1px solid var(--slate-06);
-  --content-slot-border-radius: 0.8rem;
-  --content-slot-outline: 1px solid var(--slate-02);
+  --page-hero-highlights-content-margin-block-start: 2.4rem;
+  --page-hero-highlights-content-margin: var(--page-hero-highlights-strip-inset);
+  --page-hero-highlights-panel-background: var(--slate-00);
+  --page-hero-highlights-panel-border: 1px solid var(--slate-06);
+  --page-hero-highlights-panel-border-radius: 0.8rem;
+  --page-hero-highlights-panel-outline: 1px solid var(--slate-02);
 
   /* When using :highlight-title-baseline="true" */
-  &.highlight-title-baseline {
-    --highlight-title-height: 4rem; /* proportional value preferred */
-    --highlight-padding-block-start: 0;
-  }
+  --page-hero-highlights-title-height-baseline: 4rem; /* proportional value preferred */
+    --page-hero-highlights-item-padding-block-start-baseline: 0;
 }</pre>
         </template>
       </PageHeroHighlights>
@@ -341,7 +337,7 @@ export const NoSlotContent: Story = {
   }),
 };
 
-/** Max width centered — content column capped at --max-width (1064px) with equal growing gutters either side. */
+/** Max width centered — content column capped at --page-hero-highlights-max-width (1064px) with equal growing gutters either side. */
 export const MaxWidthCentered: Story = {
   name: "Max Width — Centered",
   args: { widthConstrained: true, contentAlign: "center" },
@@ -354,7 +350,7 @@ export const MaxWidthCentered: Story = {
       <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
         <template #header>
           <p class="page-heading-1">Dashboard</p>
-          <p class="page-body-normal">Content column is capped at --max-width (1064px by default) — gutters grow equally on both sides.</p>
+          <p class="page-body-normal">Content column is capped at --page-hero-highlights-max-width (1064px by default) — gutters grow equally on both sides.</p>
         </template>
 
         <template #highlights>
@@ -381,7 +377,7 @@ export const MaxWidthCentered: Story = {
   }),
 };
 
-/** Max width start — content column capped at --max-width (1064px), pinned to the left. */
+/** Max width start — content column capped at --page-hero-highlights-max-width (1064px), pinned to the left. */
 export const MaxWidthStart: Story = {
   name: "Max Width — Start",
   args: { widthConstrained: true, contentAlign: "start" },
@@ -394,7 +390,7 @@ export const MaxWidthStart: Story = {
       <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
         <template #header>
           <p class="page-heading-1">Dashboard</p>
-          <p class="page-body-normal">Content column is capped at --max-width (1064px by default), aligned to the start — right side takes the remaining space.</p>
+          <p class="page-body-normal">Content column is capped at --page-hero-highlights-max-width (1064px by default), aligned to the start — right side takes the remaining space.</p>
         </template>
 
         <template #highlights>

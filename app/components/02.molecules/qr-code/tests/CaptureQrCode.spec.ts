@@ -37,9 +37,9 @@ describe("CaptureQrCode", () => {
     expect(wrapper.element.tagName).toBe("DIV");
   });
 
-  it("always has the capture-qr-stream class", async () => {
+  it("always has the capture-qr-code class", async () => {
     const wrapper = await mountSuspended(CaptureQrCode);
-    expect(wrapper.classes()).toContain("capture-qr-stream");
+    expect(wrapper.classes()).toContain("capture-qr-code");
   });
 
   // ─── Initial state ────────────────────────────────────────────────────────
@@ -52,17 +52,17 @@ describe("CaptureQrCode", () => {
 
   it("does not show camera-stopped on mount", async () => {
     const wrapper = await mountSuspended(CaptureQrCode);
-    expect(wrapper.find(".camera-stopped").exists()).toBe(false);
+    expect(wrapper.find(".capture-qr-code-stopped").exists()).toBe(false);
   });
 
   it("does not show scanned results initially", async () => {
     const wrapper = await mountSuspended(CaptureQrCode);
-    expect(wrapper.find(".scanned-results").exists()).toBe(false);
+    expect(wrapper.find(".capture-qr-code-results ul").exists()).toBe(false);
   });
 
   it("does not show the error state initially", async () => {
     const wrapper = await mountSuspended(CaptureQrCode);
-    expect(wrapper.find(".camera-error").exists()).toBe(false);
+    expect(wrapper.find(".capture-qr-code-error").exists()).toBe(false);
   });
 
   // ─── Camera off ───────────────────────────────────────────────────────────
@@ -73,7 +73,7 @@ describe("CaptureQrCode", () => {
     vm.state.cameraOn = false;
     await nextTick();
     expect(vm.state.cameraOn).toBe(false);
-    expect(wrapper.find(".camera-stopped").exists()).toBe(true);
+    expect(wrapper.find(".capture-qr-code-stopped").exists()).toBe(true);
   });
 
   // ─── Error state ──────────────────────────────────────────────────────────
@@ -83,7 +83,7 @@ describe("CaptureQrCode", () => {
     const vm = wrapper.vm as unknown as CaptureVM;
     vm.onError(new Error("Permission denied"));
     await nextTick();
-    expect(wrapper.find(".camera-error").exists()).toBe(true);
+    expect(wrapper.find(".capture-qr-code-error").exists()).toBe(true);
   });
 
   it("shows the error message in the error state", async () => {
@@ -91,7 +91,7 @@ describe("CaptureQrCode", () => {
     const vm = wrapper.vm as unknown as CaptureVM;
     vm.onError(new Error("Permission denied"));
     await nextTick();
-    expect(wrapper.find(".camera-error p").text()).toContain("Permission denied");
+    expect(wrapper.find(".capture-qr-code-error p").text()).toContain("Permission denied");
   });
 
   it("sets state.error when onError is called, hiding the stream", async () => {
@@ -100,7 +100,7 @@ describe("CaptureQrCode", () => {
     vm.onError(new Error("test"));
     await nextTick();
     expect(vm.state.error).toBe(true);
-    expect(wrapper.find(".camera-error").exists()).toBe(true);
+    expect(wrapper.find(".capture-qr-code-error").exists()).toBe(true);
   });
 
   it("shows a reset button in the error state", async () => {
@@ -108,7 +108,7 @@ describe("CaptureQrCode", () => {
     const vm = wrapper.vm as unknown as CaptureVM;
     vm.onError(new Error("test"));
     await nextTick();
-    expect(wrapper.find(".camera-error button").exists()).toBe(true);
+    expect(wrapper.find(".capture-qr-code-error button").exists()).toBe(true);
   });
 
   // ─── Reset camera ─────────────────────────────────────────────────────────
@@ -120,7 +120,7 @@ describe("CaptureQrCode", () => {
     await nextTick();
     vm.resetCamera();
     await nextTick();
-    expect(wrapper.find(".camera-error").exists()).toBe(false);
+    expect(wrapper.find(".capture-qr-code-error").exists()).toBe(false);
     expect(vm.state.cameraOn).toBe(true);
   });
 
@@ -129,8 +129,8 @@ describe("CaptureQrCode", () => {
     const vm = wrapper.vm as unknown as CaptureVM;
     vm.onError(new Error("test"));
     await nextTick();
-    await wrapper.find(".camera-error button").trigger("click");
-    expect(wrapper.find(".camera-error").exists()).toBe(false);
+    await wrapper.find(".capture-qr-code-error button").trigger("click");
+    expect(wrapper.find(".capture-qr-code-error").exists()).toBe(false);
   });
 
   // ─── Detect ───────────────────────────────────────────────────────────────
@@ -140,7 +140,7 @@ describe("CaptureQrCode", () => {
     const vm = wrapper.vm as unknown as CaptureVM;
     vm.onDetect([{ rawValue: "https://example.com" }]);
     await nextTick();
-    expect(wrapper.find(".scanned-results").exists()).toBe(true);
+    expect(wrapper.find(".capture-qr-code-results ul").exists()).toBe(true);
   });
 
   it("shows the detected value in the results list", async () => {
@@ -148,7 +148,7 @@ describe("CaptureQrCode", () => {
     const vm = wrapper.vm as unknown as CaptureVM;
     vm.onDetect([{ rawValue: "https://example.com" }]);
     await nextTick();
-    expect(wrapper.find(".scanned-results").text()).toContain("https://example.com");
+    expect(wrapper.find(".capture-qr-code-results").text()).toContain("https://example.com");
   });
 
   it("shows all detected values when multiple codes are scanned", async () => {
@@ -156,7 +156,7 @@ describe("CaptureQrCode", () => {
     const vm = wrapper.vm as unknown as CaptureVM;
     vm.onDetect([{ rawValue: "https://one.com" }, { rawValue: "https://two.com" }]);
     await nextTick();
-    const items = wrapper.findAll(".scanned-results li");
+    const items = wrapper.findAll(".capture-qr-code-results li");
     expect(items).toHaveLength(2);
     expect(items[0]!.text()).toBe("https://one.com");
     expect(items[1]!.text()).toBe("https://two.com");
@@ -169,7 +169,7 @@ describe("CaptureQrCode", () => {
     await nextTick();
     vm.onDetect([{ rawValue: "second" }]);
     await nextTick();
-    const items = wrapper.findAll(".scanned-results li");
+    const items = wrapper.findAll(".capture-qr-code-results li");
     expect(items).toHaveLength(1);
     expect(items[0]!.text()).toBe("second");
   });
@@ -202,11 +202,59 @@ describe("CaptureQrCode", () => {
     expect(wrapper.classes()).toContain("class-b");
   });
 
-  it("retains capture-qr-stream class alongside styleClassPassthrough", async () => {
+  it("retains capture-qr-code class alongside styleClassPassthrough", async () => {
     const wrapper = await mountSuspended(CaptureQrCode, {
       props: { styleClassPassthrough: "extra" },
     });
-    expect(wrapper.classes()).toContain("capture-qr-stream");
+    expect(wrapper.classes()).toContain("capture-qr-code");
     expect(wrapper.classes()).toContain("extra");
+  });
+});
+
+describe("CaptureQrCode labels and a11y", () => {
+  beforeEach(() => {
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({} as unknown as RenderingContext);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("uses cameraStoppedLabel for the stopped message", async () => {
+    const wrapper = await mountSuspended(CaptureQrCode, { props: { cameraStoppedLabel: "Caméra arrêtée" } });
+    (wrapper.vm as unknown as CaptureVM).state.cameraOn = false;
+    await nextTick();
+    expect(wrapper.find(".capture-qr-code-stopped").text()).toBe("Caméra arrêtée");
+  });
+
+  it("uses resetCameraLabel for the reset button and marks the error as an alert", async () => {
+    const wrapper = await mountSuspended(CaptureQrCode, { props: { resetCameraLabel: "Réinitialiser" } });
+    (wrapper.vm as unknown as CaptureVM).onError(new Error("test"));
+    await nextTick();
+    expect(wrapper.find(".capture-qr-code-error").attributes("role")).toBe("alert");
+    expect(wrapper.find(".capture-qr-code-error button").text()).toContain("Réinitialiser");
+  });
+
+  it("lets the error slot replace the default error content", async () => {
+    const wrapper = await mountSuspended(CaptureQrCode, {
+      slots: { error: ({ error }: { error: string }) => `Custom: ${error}` },
+    });
+    const err = new Error("denied");
+    err.name = "NotAllowedError";
+    (wrapper.vm as unknown as CaptureVM).onError(err);
+    await nextTick();
+    expect(wrapper.find(".capture-qr-code-error").text()).toBe("Custom: NotAllowedError");
+  });
+
+  it("keeps a polite live region for results", async () => {
+    const wrapper = await mountSuspended(CaptureQrCode);
+    expect(wrapper.find(".capture-qr-code-results").attributes("aria-live")).toBe("polite");
+  });
+
+  it("updates classes when styleClassPassthrough changes after mount", async () => {
+    const wrapper = await mountSuspended(CaptureQrCode, { props: { styleClassPassthrough: ["original"] } });
+    await wrapper.setProps({ styleClassPassthrough: ["updated"] });
+    expect(wrapper.classes()).not.toContain("original");
+    expect(wrapper.classes()).toContain("updated");
   });
 });

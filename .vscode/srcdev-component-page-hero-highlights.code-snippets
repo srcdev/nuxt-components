@@ -1,0 +1,37 @@
+{
+  "SRCDEV PageHeroHighlights": {
+    "description": "PageHeroHighlights: header zone, straddling highlights strip, content panel",
+    "scope": "vue,html",
+    "body": [
+      "<PageHeroHighlights tag=\"section\" content-align=\"${1|center,start|}\">",
+      "  <template #header=\"{ headingId }\">",
+      "    <PageHeroHighlightsHeader>",
+      "      <template #start><h1 :id=\"headingId\">$2</h1></template>",
+      "      <template #end>$3</template>",
+      "    </PageHeroHighlightsHeader>",
+      "  </template>",
+      "  <template #highlights>",
+      "    <div class=\"page-hero-highlights-item\">",
+      "      <p class=\"page-hero-highlights-item-title\">$4</p>",
+      "      <p class=\"page-hero-highlights-item-body\">$5</p>",
+      "    </div>",
+      "  </template>",
+      "  <template #content>",
+      "    $6",
+      "  </template>",
+      "</PageHeroHighlights>"
+    ]
+  },
+  "SRCDEV PageHeroHighlights CSS Override": {
+    "description": "CSS override scaffold for PageHeroHighlights tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --page-hero-highlights-header-background: $2;",
+      "  --page-hero-highlights-content-background: $3;",
+      "  --page-hero-highlights-item-background: $4;",
+      "  --page-hero-highlights-max-width: $5;",
+      "}"
+    ]
+  }
+}

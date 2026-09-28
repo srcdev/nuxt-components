@@ -12,6 +12,7 @@
 |------|------|---------|-------|
 | `items` | `ISocialIcon[]` | — | **Required.** Array of social network items. |
 | `label` | `string` | `"Social media profiles"` | `aria-label` applied to the `<ul>` element. |
+| `linkLabelTemplate` | `string` | `"{network} profile (opens in a new tab)"` | `aria-label` for each link; `{network}` is replaced with the item's `networkName`. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the root `<ul>`. |
 
 ---
@@ -20,7 +21,8 @@
 
 ```ts
 interface ISocialIcon {
-  networkName: string; // Used as aria-label: "{networkName} profile"
+  networkName: string; // Fills {network} in the list's linkLabelTemplate
+  label?: string;      // Optional per-item aria-label, overrides the template
   iconName: string;    // Iconify icon name, e.g. "logos:instagram-icon"
   baseHref: string;    // Base URL including trailing slash, e.g. "https://www.instagram.com/"
   profileId: string;   // Profile identifier appended to baseHref
@@ -84,8 +86,12 @@ import type { ISocialIcon } from "srcdev-nuxt-components";
 
 | Property | Default | Notes |
 |----------|---------|-------|
-| `--theme-social-icon-size` | `2.4rem` | Width and height of each icon |
-| `--theme-social-icon-gap` | `1.2rem` | Gap between icons in the flex row |
+| `--social-icons-list-icon-size` | `2.4rem` | Icon size (applied as `font-size`) |
+| `--social-icons-list-gap` | `1.2rem` | Gap between icons in the flex row |
+| `--social-icons-list-hover-scale` | `1.15` | Hover/focus scale (none under reduced motion) |
+| `--social-icons-list-hover-opacity` | `0.85` | Hover/focus opacity |
+
+> Renamed 2026-09-28 from `--theme-social-icon-size` / `--theme-social-icon-gap`. Full reference: `CONSUMER-STYLING.md` in the component folder.
 
 > **Note:** Iconify's `logos:*` styles are injected outside any CSS `@layer`, which means they override layered component styles. Icon sizing is applied via an inline `style` attribute on the `<Icon>` element so it takes precedence.
 
@@ -108,8 +114,8 @@ Offer this scaffold when placing the component in a consuming page or section. T
    ─────────────────────────────────────────────────────────────────── */
 .my-page-or-section {
   .social-icons-list {
-    /* --theme-social-icon-size: 3.2rem; */
-    /* --theme-social-icon-gap: 1.6rem; */
+    /* --social-icons-list-icon-size: 3.2rem; */
+    /* --social-icons-list-gap: 1.6rem; */
     /* margin-block-start: 1.6rem; */
 
     .social-icon-link {
@@ -130,6 +136,6 @@ need to target a specific instance. See `component-local-style-override.md` for 
 ## Notes
 
 - All links open in a new tab with `rel="noopener noreferrer"`.
-- Each link carries `aria-label="{networkName} profile"` for screen reader accessibility.
+- Each link's `aria-label` comes from `linkLabelTemplate` (default `"{network} profile (opens in a new tab)"`, `{network}` = `networkName`), or the item's own `label`. Pass a translated template for other languages. The icon is `aria-hidden`.
 - The `logos:*` Iconify collection requires `@iconify-json/logos` to be installed in the consumer app. Without it, icons will fall back to a CDN fetch (causing FOUC). See [icon-sets.md](../icon-sets.md).
 - Auto-imported in Nuxt — no manual import needed.

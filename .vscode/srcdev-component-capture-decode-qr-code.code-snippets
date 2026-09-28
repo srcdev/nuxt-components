@@ -1,0 +1,28 @@
+{
+  "SRCDEV CaptureQrCode": {
+    "description": "CaptureQrCode live camera scanner with localisable copy",
+    "scope": "vue,html",
+    "body": [
+      "<CaptureQrCode camera-stopped-label=\"${1:Camera stopped}\" reset-camera-label=\"${2:Reset camera}\" />"
+    ]
+  },
+  "SRCDEV CaptureQrCode Custom Error": {
+    "description": "CaptureQrCode with a custom, translated error block",
+    "scope": "vue,html",
+    "body": [
+      "<CaptureQrCode>",
+      "  <template #error=\"{ error, reset }\">",
+      "    <p>{{ error === 'NotAllowedError' ? '$1' : '$2' }}</p>",
+      "    <InputButtonCore variant=\"secondary\" button-text=\"$3\" @click=\"reset\" />",
+      "  </template>",
+      "</CaptureQrCode>"
+    ]
+  },
+  "SRCDEV DecodeQrCode": {
+    "description": "DecodeQrCode image upload / drop decoder",
+    "scope": "vue,html",
+    "body": [
+      "<DecodeQrCode upload-label=\"${1:Upload a QR code image}\" drop-label=\"${2:Or drop a QR code image here}\" />"
+    ]
+  }
+}

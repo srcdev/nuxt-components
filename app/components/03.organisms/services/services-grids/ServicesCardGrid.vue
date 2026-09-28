@@ -15,7 +15,7 @@
           :style-class-passthrough="['mbs-24']"
         >
           <template #right>
-            <Icon name="mdi:arrow-right" class="icon" />
+            <Icon :name="buttonIcon" class="icon" aria-hidden="true" />
           </template>
         </InputButtonCore>
       </template>
@@ -25,24 +25,16 @@
 
 <script setup lang="ts">
 import type { Service } from "~/types/types.services";
-
-interface EyebrowConfig {
-  tag?: "p" | "div" | "span";
-  fontSize?: "large" | "medium" | "small";
-}
-
-interface HeroConfig {
-  tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-  fontSize?: "display" | "title" | "heading" | "subheading" | "label";
-}
+import type { ServicesCardEyebrowConfig, ServicesCardHeroConfig } from "~/types/components";
 
 interface Props {
   tag?: "div" | "section" | "main";
   servicesData: Service[];
-  eyebrowConfig?: EyebrowConfig;
-  heroConfig?: HeroConfig;
+  eyebrowConfig?: ServicesCardEyebrowConfig;
+  heroConfig?: ServicesCardHeroConfig;
   hrefBase?: string;
   buttonTextPrefix?: string;
+  buttonIcon?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -52,6 +44,7 @@ const props = withDefaults(defineProps<Props>(), {
   heroConfig: () => ({}),
   hrefBase: "/services/",
   buttonTextPrefix: "Enquire about",
+  buttonIcon: "mdi:arrow-right",
   styleClassPassthrough: () => [],
 });
 
@@ -69,7 +62,7 @@ watch(
 @layer components {
   .services-card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--services-card-grid-column-min-width, 250px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--services-card-grid-column-min-width, 250px), 100%), 1fr));
     gap: var(--services-card-grid-gap, 4rem);
   }
 }

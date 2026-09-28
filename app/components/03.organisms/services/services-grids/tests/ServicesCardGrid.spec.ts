@@ -179,3 +179,21 @@ describe("ServicesCardGrid", () => {
     expect(wrapper.classes()).toContain("updated");
   });
 });
+
+describe("ServicesCardGrid button icon", () => {
+  const iconName = (wrapper: Awaited<ReturnType<typeof mountSuspended>>) =>
+    wrapper.find(".services-card-grid .iconify").classes().find((c: string) => c.includes(":")) ?? "";
+
+  it("uses the arrow icon by default, hidden from assistive tech", async () => {
+    const wrapper = await mountSuspended(ServicesCardGrid, { props: { servicesData: mockServices } });
+    expect(iconName(wrapper)).toContain("mdi:arrow-right");
+    expect(wrapper.find(".services-card-grid .iconify").attributes("aria-hidden")).toBe("true");
+  });
+
+  it("uses the buttonIcon prop when given", async () => {
+    const wrapper = await mountSuspended(ServicesCardGrid, {
+      props: { servicesData: mockServices, buttonIcon: "lucide:arrow-right" },
+    });
+    expect(iconName(wrapper)).toContain("lucide:arrow-right");
+  });
+});

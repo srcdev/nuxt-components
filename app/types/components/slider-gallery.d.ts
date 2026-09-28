@@ -10,4 +10,6 @@ export interface IGalleryData {
     description: string
   }
   textBrightness: "light" | "dark"
+  /** Link for the slide's call-to-action; no link is rendered without it. */
+  href?: string
 }

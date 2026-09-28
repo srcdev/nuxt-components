@@ -1,17 +1,17 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`PageHeroHighlights > renders correct HTML structure 1`] = `
-"<div class="page-hero-highlights center has-content-panel">
-  <div class="header-row">
-    <div class="header-slot">
+"<div class="page-hero-highlights content-align-center has-content-panel">
+  <div class="page-hero-highlights-header-row">
+    <div class="page-hero-highlights-header-slot">
       <h1>Page Title</h1>
     </div>
   </div>
-  <div class="highlights-row flexible-widths justify-start">
+  <div class="page-hero-highlights-strip flexible-widths justify-start">
     <div class="highlight">Highlight 1</div>
   </div>
-  <div class="content-row">
-    <div class="content-slot">
+  <div class="page-hero-highlights-content-row">
+    <div class="page-hero-highlights-content-slot">
       <p>Content</p>
     </div>
   </div>

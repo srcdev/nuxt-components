@@ -16,7 +16,7 @@
     "body": [
       "<StepperList tag=\"ol\" :item-count=\"$1steps.length\">",
       "  <template v-for=\"($2step, $3i) in $1steps\" :key=\"`indicator-${$3i}`\" #[`indicator-${$3i}`]>",
-      "    <Icon :name=\"$2step.icon\"></Icon>",
+      "    <Icon :name=\"$2step.icon\" />",
       "  </template>",
       "  <template v-for=\"($2step, $3i) in $1steps\" :key=\"`item-${$3i}`\" #[`item-${$3i}`]>",
       "    $4",

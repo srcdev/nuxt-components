@@ -3,7 +3,7 @@
     "description": "LinkText inline link",
     "scope": "vue,html",
     "body": [
-      "<LinkText to=\"$1\" link-text=\"$2\"></LinkText>"
+      "<LinkText to=\"$1\" link-text=\"$2\" />"
     ]
   },
   "SRCDEV LinkText With Icon": {
@@ -11,7 +11,7 @@
     "scope": "vue,html",
     "body": [
       "<LinkText to=\"$1\" link-text=\"$2\"${3: external target=\"_blank\"}>",
-      "  <template #right><Icon name=\"${4:lucide:arrow-right}\"></Icon></template>",
+      "  <template #right><Icon name=\"${4:lucide:arrow-right}\" /></template>",
       "</LinkText>"
     ]
   },

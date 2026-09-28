@@ -4,15 +4,11 @@
       <a
         :href="`${item.baseHref}${item.profileId}`"
         class="social-icon-link"
-        :aria-label="`${item.networkName} profile`"
+        :aria-label="linkLabel(item)"
         rel="noopener noreferrer"
         target="_blank"
       >
-        <Icon
-          :name="item.iconName"
-          class="social-icon"
-          :style="{ width: 'var(--_icon-size)', height: 'var(--_icon-size)' }"
-        />
+        <Icon :name="item.iconName" class="social-icon" aria-hidden="true" />
       </a>
     </li>
   </ul>
@@ -24,13 +20,17 @@ import type { ISocialIcon } from "~/types/components/social-icons-list.d";
 interface Props {
   items: ISocialIcon[];
   label?: string;
+  linkLabelTemplate?: string;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   label: "Social media profiles",
+  linkLabelTemplate: "{network} profile (opens in a new tab)",
   styleClassPassthrough: () => [],
 });
+
+const linkLabel = (item: ISocialIcon) => item.label ?? props.linkLabelTemplate.replace("{network}", item.networkName);
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -45,12 +45,9 @@ watch(
 <style lang="css">
 @layer components {
   .social-icons-list {
-    --_icon-size: var(--theme-social-icon-size, 2.4rem);
-    --_gap: var(--theme-social-icon-gap, 1.2rem);
-
     display: flex;
     flex-wrap: wrap;
-    gap: var(--_gap);
+    gap: var(--social-icons-list-gap, 1.2rem);
     list-style: none;
     padding: 0;
     margin: 0;
@@ -69,19 +66,22 @@ watch(
 
         &:hover,
         &:focus-visible {
-          transform: scale(1.15);
-          opacity: 0.85;
+          transform: scale(var(--social-icons-list-hover-scale, 1.15));
+          opacity: var(--social-icons-list-hover-opacity, 0.85);
+
+          @media (prefers-reduced-motion: reduce) {
+            transform: none;
+          }
         }
 
         &:focus-visible {
-          outline: 2px solid currentColor;
+          outline: 2px solid var(--theme-ring, currentColor);
           outline-offset: 3px;
           border-radius: 2px;
         }
 
         .social-icon {
-          /* width: var(--_icon-size); */
-          /* height: var(--_icon-size); */
+          font-size: var(--social-icons-list-icon-size, 2.4rem);
         }
       }
     }

@@ -100,19 +100,19 @@ describe("SliderGallery", () => {
     const wrapper = await mountSuspended(SliderGallery, {
       props: { galleryData: mockGalleryData },
     });
-    expect(wrapper.find(".loading-state").exists()).toBe(true);
+    expect(wrapper.find(".slider-gallery-loading").exists()).toBe(true);
   });
 
   it("hides gallery content before images load", async () => {
     const wrapper = await mountSuspended(SliderGallery, {
       props: { galleryData: mockGalleryData },
     });
-    expect(wrapper.find(".gallery-content").exists()).toBe(false);
+    expect(wrapper.find(".slider-gallery-content").exists()).toBe(false);
   });
 
   it("shows gallery content after image loads", async () => {
     const wrapper = await mountAndLoad(mockGalleryData, mockImage);
-    expect(wrapper.find(".gallery-content").exists()).toBe(true);
+    expect(wrapper.find(".slider-gallery-content").exists()).toBe(true);
   });
 
   it("dismisses loading state when galleryData is empty", async () => {
@@ -120,8 +120,8 @@ describe("SliderGallery", () => {
       props: { galleryData: [] },
     });
     await nextTick();
-    // galleryLoaded becomes false → loading-state gains the galleryLoaded class
-    expect(wrapper.find(".loading-state.galleryLoaded").exists()).toBe(true);
+    // loading finishes → the loading block gains is-loaded
+    expect(wrapper.find(".slider-gallery-loading.is-loaded").exists()).toBe(true);
   });
 
   it("resolves loading when first image errors", async () => {
@@ -133,31 +133,31 @@ describe("SliderGallery", () => {
     await nextTick(); // extra tick — onerror → resolve → Promise.race → onMounted resume
     vi.advanceTimersByTime(500);
     await nextTick();
-    expect(wrapper.find(".gallery-content").exists()).toBe(true);
+    expect(wrapper.find(".slider-gallery-content").exists()).toBe(true);
   });
 
   // ─── Gallery items ────────────────────────────────────────────────────────
 
   it("renders correct number of slide items", async () => {
     const wrapper = await mountAndLoad(mockGalleryData, mockImage);
-    expect(wrapper.findAll(".list .item")).toHaveLength(mockGalleryData.length);
+    expect(wrapper.findAll(".slider-gallery-list .slider-gallery-item")).toHaveLength(mockGalleryData.length);
   });
 
   it("renders correct number of thumbnail items", async () => {
     const wrapper = await mountAndLoad(mockGalleryData, mockImage);
-    expect(wrapper.findAll(".thumbnail .item")).toHaveLength(mockGalleryData.length);
+    expect(wrapper.findAll(".slider-gallery-thumbnails .slider-gallery-item")).toHaveLength(mockGalleryData.length);
   });
 
   it("renders slide image alt text correctly", async () => {
     const wrapper = await mountAndLoad(mockGalleryData, mockImage);
-    const images = wrapper.findAll(".list .item img");
+    const images = wrapper.findAll(".slider-gallery-list .slider-gallery-item img");
     expect(images[0]?.attributes("alt")).toBe(mockGalleryData[0]?.alt);
     expect(images[1]?.attributes("alt")).toBe(mockGalleryData[1]?.alt);
   });
 
   it("renders thumbnail images with lazy loading", async () => {
     const wrapper = await mountAndLoad(mockGalleryData, mockImage);
-    const thumbImages = wrapper.findAll(".thumbnail .item img");
+    const thumbImages = wrapper.findAll(".slider-gallery-thumbnails .slider-gallery-item img");
     thumbImages.forEach((img) => {
       expect(img.attributes("loading")).toBe("lazy");
     });
@@ -165,34 +165,34 @@ describe("SliderGallery", () => {
 
   it("renders slide content fields when provided", async () => {
     const wrapper = await mountAndLoad([mockGalleryData[0]!], mockImage);
-    expect(wrapper.find(".list .item .author").text()).toBe(mockGalleryData[0]!.stylist);
-    expect(wrapper.find(".list .item .title").text()).toBe(mockGalleryData[0]!.title);
-    expect(wrapper.find(".list .item .topic").text()).toBe(mockGalleryData[0]!.category);
-    expect(wrapper.find(".list .item .description").text()).toBe(mockGalleryData[0]!.description);
+    expect(wrapper.find(".slider-gallery-list .slider-gallery-item .slider-gallery-author").text()).toBe(mockGalleryData[0]!.stylist);
+    expect(wrapper.find(".slider-gallery-list .slider-gallery-item .slider-gallery-title").text()).toBe(mockGalleryData[0]!.title);
+    expect(wrapper.find(".slider-gallery-list .slider-gallery-item .slider-gallery-topic").text()).toBe(mockGalleryData[0]!.category);
+    expect(wrapper.find(".slider-gallery-list .slider-gallery-item .slider-gallery-description").text()).toBe(mockGalleryData[0]!.description);
   });
 
   it("renders thumbnail content when provided", async () => {
     const wrapper = await mountAndLoad([mockGalleryData[0]!], mockImage);
-    expect(wrapper.find(".thumbnail .item .title").text()).toBe(mockGalleryData[0]!.thumbnail?.title);
-    expect(wrapper.find(".thumbnail .item .description").text()).toBe(mockGalleryData[0]!.thumbnail?.description);
+    expect(wrapper.find(".slider-gallery-thumbnails .slider-gallery-item .slider-gallery-title").text()).toBe(mockGalleryData[0]!.thumbnail?.title);
+    expect(wrapper.find(".slider-gallery-thumbnails .slider-gallery-item .slider-gallery-description").text()).toBe(mockGalleryData[0]!.thumbnail?.description);
   });
 
   // ─── Navigation buttons ───────────────────────────────────────────────────
 
   it("renders prev and next arrow buttons", async () => {
     const wrapper = await mountAndLoad(mockGalleryData, mockImage);
-    expect(wrapper.find("#prev").exists()).toBe(true);
-    expect(wrapper.find("#next").exists()).toBe(true);
+    expect(wrapper.find(".slider-gallery-prev").exists()).toBe(true);
+    expect(wrapper.find(".slider-gallery-next").exists()).toBe(true);
   });
 
   it("prev button has accessible aria-label", async () => {
     const wrapper = await mountAndLoad(mockGalleryData, mockImage);
-    expect(wrapper.find("#prev").attributes("aria-label")).toBe("Previous image");
+    expect(wrapper.find(".slider-gallery-prev").attributes("aria-label")).toBe("Previous image");
   });
 
   it("next button has accessible aria-label", async () => {
     const wrapper = await mountAndLoad(mockGalleryData, mockImage);
-    expect(wrapper.find("#next").attributes("aria-label")).toBe("Next image");
+    expect(wrapper.find(".slider-gallery-next").attributes("aria-label")).toBe("Next image");
   });
 
   // ─── styleClassPassthrough ────────────────────────────────────────────────
@@ -230,5 +230,54 @@ describe("SliderGallery", () => {
     const spy = vi.spyOn(el, "removeEventListener");
     wrapper.unmount();
     expect(spy).toHaveBeenCalledWith("keydown", expect.any(Function));
+  });
+
+  // ─── Carousel semantics and a11y ──────────────────────────────────────────
+
+  it("is a labelled carousel region", async () => {
+    const wrapper = await mountSuspended(SliderGallery, { props: { galleryData: [], ariaLabel: "Our work" } });
+    expect(wrapper.attributes("role")).toBe("region");
+    expect(wrapper.attributes("aria-roledescription")).toBe("carousel");
+    expect(wrapper.attributes("aria-label")).toBe("Our work");
+  });
+
+  it("does not use fixed ids on the arrow buttons", async () => {
+    const wrapper = await mountAndLoad(mockGalleryData, mockImage);
+    expect(wrapper.find(".slider-gallery-prev").attributes("id")).toBeUndefined();
+    expect(wrapper.find(".slider-gallery-next").attributes("id")).toBeUndefined();
+  });
+
+  it("hides the decorative thumbnail strip from assistive tech", async () => {
+    const wrapper = await mountAndLoad(mockGalleryData, mockImage);
+    expect(wrapper.find(".slider-gallery-thumbnails").attributes("aria-hidden")).toBe("true");
+  });
+
+  it("renders the see-more link only for slides with an href", async () => {
+    const data: IGalleryData[] = [{ ...mockGalleryData[0]!, href: "/work/1" }, mockGalleryData[1]!];
+    const wrapper = await mountAndLoad(data, mockImage);
+    const ctas = wrapper.findAll(".slider-gallery-cta");
+    expect(ctas).toHaveLength(1);
+    expect(ctas[0]!.attributes("href")).toBe("/work/1");
+    expect(ctas[0]!.text()).toBe("SEE MORE");
+  });
+
+  it("pauses auto-advance while hovered and resumes on leave", async () => {
+    const wrapper = await mountAndLoad(mockGalleryData, mockImage);
+    await wrapper.trigger("mouseenter");
+    vi.advanceTimersByTime(7000);
+    await nextTick();
+    expect(wrapper.classes()).not.toContain("is-next");
+    await wrapper.trigger("mouseleave");
+    vi.advanceTimersByTime(7000);
+    await nextTick();
+    expect(wrapper.classes()).toContain("is-next");
+  });
+
+  it("does not auto-advance under prefers-reduced-motion", async () => {
+    vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
+    const wrapper = await mountAndLoad(mockGalleryData, mockImage);
+    vi.advanceTimersByTime(7000);
+    await nextTick();
+    expect(wrapper.classes()).not.toContain("is-next");
   });
 });

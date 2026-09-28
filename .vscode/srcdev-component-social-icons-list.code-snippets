@@ -1,0 +1,24 @@
+{
+  "SRCDEV SocialIconsList": {
+    "description": "SocialIconsList row of social profile links",
+    "scope": "vue,html",
+    "body": [
+      "<SocialIconsList",
+      "  :items=\"[",
+      "    { networkName: '${1:Instagram}', iconName: '${2:logos:instagram-icon}', baseHref: '${3:https://www.instagram.com/}', profileId: '$4' },",
+      "  ]\"",
+      "  label=\"${5:Social media profiles}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV SocialIconsList CSS Override": {
+    "description": "CSS override scaffold for SocialIconsList tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --social-icons-list-icon-size: $2;",
+      "  --social-icons-list-gap: $3;",
+      "}"
+    ]
+  }
+}

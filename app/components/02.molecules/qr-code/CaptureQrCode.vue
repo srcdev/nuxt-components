@@ -1,21 +1,23 @@
 <template>
-  <div class="capture-qr-stream" :class="[elementClasses]">
-    <div v-if="!state.error">
+  <div class="capture-qr-code" :class="[elementClasses]">
+    <div v-if="!state.error" class="capture-qr-code-camera">
       <QrcodeStream v-if="state.cameraOn" ref="qrcodeStreamRef" @error="onError" @detect="onDetect" />
-      <div v-else class="camera-stopped">
-        <p>Camera stopped</p>
+      <div v-else class="capture-qr-code-stopped">
+        <p>{{ cameraStoppedLabel }}</p>
       </div>
-      <div v-if="result?.length" class="scanned-results">
-        <ul>
+      <div class="capture-qr-code-results" aria-live="polite">
+        <ul v-if="result?.length">
           <li v-for="(r, i) in result" :key="i">
             <span>{{ r }}</span>
           </li>
         </ul>
       </div>
     </div>
-    <div v-else class="camera-error">
-      <p>{{ state.errorMsg }}</p>
-      <button @click="resetCamera">Reset camera</button>
+    <div v-else class="capture-qr-code-error" role="alert">
+      <slot name="error" :error="state.errorName" :message="state.errorMsg" :reset="resetCamera">
+        <p>{{ state.errorMsg }}</p>
+        <InputButtonCore variant="secondary" :button-text="resetCameraLabel" @click="resetCamera" />
+      </slot>
     </div>
   </div>
 </template>
@@ -24,10 +26,14 @@
 import type { DetectedBarcode } from "nuxt-qrcode";
 
 interface Props {
+  cameraStoppedLabel?: string;
+  resetCameraLabel?: string;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  cameraStoppedLabel: "Camera stopped",
+  resetCameraLabel: "Reset camera",
   styleClassPassthrough: () => [],
 });
 
@@ -35,6 +41,7 @@ const qrcodeStreamRef = ref();
 const result = ref<string[]>();
 const state = reactive({
   errorMsg: "",
+  errorName: "",
   error: false,
   cameraOn: true,
 });
@@ -65,6 +72,7 @@ function onDetect(detectedCodes: DetectedBarcode[]) {
 
 function onError(err: Error) {
   state.error = true;
+  state.errorName = err.name;
   state.errorMsg = `[${err.name}]: ${err.message}`;
 }
 
@@ -130,13 +138,24 @@ onBeforeRouteLeave(() => {
   stopAllMediaStreams();
 });
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 </script>
 
 <style lang="css">
 @layer components {
-  .capture-qr-stream {
-    aspect-ratio: 1 / 1;
+  .capture-qr-code {
+    aspect-ratio: var(--capture-qr-code-aspect-ratio, 1 / 1);
+
+    .capture-qr-code-error {
+      display: grid;
+      gap: var(--capture-qr-code-error-gap, 1.2rem);
+      justify-items: start;
+    }
   }
 }
 </style>

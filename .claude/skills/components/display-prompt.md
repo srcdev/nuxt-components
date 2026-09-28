@@ -1,5 +1,7 @@
 # DisplayPrompt
 
+> **Changed 2026-09-28:** root class `.display-prompt-core` → `.display-prompt` (and `data-test-id` `display-prompt-core-{theme}` → `display-prompt-{theme}`). The documented `outlined` passthrough modifier never had any CSS behind it and was removed from this doc.
+
 ## Overview
 
 `DisplayPrompt` is an inline notification banner with a themed icon, title, optional content, and
@@ -17,7 +19,8 @@ the DOM. Dismiss can be controlled locally (closes itself) or by a parent via `v
 | `dismissible` | `boolean` | `false` | Shows a close button. |
 | `useAutoFocus` | `boolean` | `false` | Focuses the prompt root element on mount. |
 | `masked` | `boolean` | `false` | SVG glass border — swaps `AlertContent` for `AlertMaskedContent`. |
-| `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the inner wrapper. Supported modifier: `"outlined"`. |
+| `closeLabel` | `string` | `"Close this prompt"` | Screen-reader label for the dismiss button. Also settable via `app.config`; the `#customTitle` slot still overrides it. |
+| `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the inner `.display-prompt-wrapper` (not the root). Reactive after mount. |
 | `v-model` | `boolean` | `false` | Optional parent control — see dismiss behaviour below. |
 
 ## Slots
@@ -28,7 +31,7 @@ the DOM. Dismiss can be controlled locally (closes itself) or by a parent via `v
 | `#content` | Body text below the title. The `<p>` element is omitted when this slot is empty. |
 | `#customDecoratorIcon` | Replaces the default theme icon. |
 | `#customCloseIcon` | Replaces the default × close icon inside the dismiss button. |
-| `#customTitle` | Screen-reader label for the dismiss button (default: `"Close this prompt"`). |
+| `#customTitle` | Screen-reader label for the dismiss button (defaults to the `closeLabel` prop). |
 
 ## Themes
 
@@ -53,7 +56,9 @@ Two modes depending on whether `v-model` is bound:
 | `v-model="true"` | Emits `update:modelValue = false`; internal state unchanged — parent controls visibility |
 
 The `.closed` class triggers a CSS grid row animation (`grid-template-rows: 1fr → 0fr`) with
-`opacity: 0` and `pointer-events: none`.
+`opacity: 0` and `pointer-events: none`, and the root becomes `inert` so the dismiss button leaves the
+tab order and the accessibility tree. The transition is off under `prefers-reduced-motion: reduce`;
+its duration is `--display-prompt-transition-duration` (`200ms`).
 
 ## app.config defaults
 
@@ -69,6 +74,7 @@ export default defineAppConfig({
       dismissible: true,
       masked: false,
       useAutoFocus: false,
+      closeLabel: "Fermer",
     },
   },
 })
@@ -114,20 +120,6 @@ const showPrompt = ref(true)
 </template>
 ```
 
-## `styleClassPassthrough` modifiers
-
-| Class | Effect |
-|---|---|
-| `"outlined"` | Adds `1px solid var(--theme-border)` border to the wrapper |
-
-Apply via prop:
-
-```vue
-<DisplayPrompt :style-class-passthrough="['outlined']" theme="error">
-  <template #title>Something went wrong.</template>
-</DisplayPrompt>
-```
-
 ## CSS token override
 
 Scope overrides using your page or section wrapper class — no `:deep()` needed:
@@ -156,7 +148,7 @@ glass effect to be visible.
 ## Notes
 
 - `DisplayPromptTheme` is an alias for `SemanticTheme` (`"info" | "success" | "warning" | "error"`).
-- The root element always has `tabindex="0"` — it is focusable whether or not `dismissible` is set.
+- The root gets `tabindex="-1"` only when `useAutoFocus` is on, so it can take programmatic focus without joining the tab order (it used to be `tabindex="0"` always).
 - `useAutoFocus` focuses the root element on mount (useful when injecting a prompt in response to a
   user action that has already moved focus elsewhere).
 - The `#title` slot renders unconditionally — an empty title `<p>` will still appear. Always
