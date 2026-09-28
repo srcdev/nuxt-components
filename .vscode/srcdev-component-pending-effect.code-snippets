@@ -1,9 +1,9 @@
 {
   "SRCDEV PendingEffect Button": {
-    "description": "InputButtonCore with the PendingEffect animated border while busy",
+    "description": "InputButton with the PendingEffect animated border while busy",
     "scope": "vue,html",
     "body": [
-      "<InputButtonCore",
+      "<InputButton",
       "  button-text=\"$1Submit\"",
       "  type=\"${2|submit,button|}\"",
       "  has-pending-effect",

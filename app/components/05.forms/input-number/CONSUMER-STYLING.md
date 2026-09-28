@@ -10,7 +10,7 @@ to override just this component; leave it unset and it inherits the shared `--th
 This shape mirrors `InputTextCore`'s token set (see its own CONSUMER-STYLING.md) — `InputNumber`
 is a native `<input type="number">` sibling to the text-based `InputTextAsNumberWithLabel` variant,
 and both are meant to look and behave the same way. Border colour also doubles as the divider
-colour between the input and an embedded left/right `InputButtonCore` — there's no separate divider
+colour between the input and an embedded left/right `InputButton` — there's no separate divider
 token, same as `InputTextCore`.
 
 | Token | Falls back to | Controls |

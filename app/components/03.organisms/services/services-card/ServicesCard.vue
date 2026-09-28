@@ -52,7 +52,7 @@ interface Props {
   href?: string;
   /**
    * Force a real browser navigation instead of client-side routing, even for a same-origin
-   * href starting with "/". See InputButtonCore's `external` prop for the full rationale.
+   * href starting with "/". See InputButton's `external` prop for the full rationale.
    */
   external?: boolean;
   eyebrowConfig?: ServicesCardEyebrowConfig;

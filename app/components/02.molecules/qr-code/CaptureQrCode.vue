@@ -16,7 +16,7 @@
     <div v-else class="capture-qr-code-error" role="alert">
       <slot name="error" :error="state.errorName" :message="state.errorMsg" :reset="resetCamera">
         <p>{{ state.errorMsg }}</p>
-        <InputButtonCore variant="secondary" :button-text="resetCameraLabel" @click="resetCamera" />
+        <InputButton variant="secondary" :button-text="resetCameraLabel" @click="resetCamera" />
       </slot>
     </div>
   </div>

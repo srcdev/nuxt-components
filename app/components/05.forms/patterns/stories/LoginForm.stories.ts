@@ -3,7 +3,7 @@ import { reactive } from "vue";
 import InputTextWithLabel from "../../input-text/InputTextWithLabel.vue";
 import InputPasswordWithLabel from "../../input-text/InputPasswordWithLabel.vue";
 import InputCheckboxRadioField from "../../input-checkbox-radio/InputCheckboxRadioField.vue";
-import InputButtonCore from "../../input-button/InputButtonCore.vue";
+import InputButton from "../../input-button/InputButton.vue";
 import FormField from "../../form-field/FormField.vue";
 import GlassPanel from "../../../01.atoms/glass-panel/GlassPanel.vue";
 import HeroText from "../../../01.atoms/text-blocks/hero-text/HeroText.vue";
@@ -38,7 +38,7 @@ const Template: StoryFn<LoginFormStoryArgs> = (args) => ({
     InputTextWithLabel,
     InputPasswordWithLabel,
     InputCheckboxRadioField,
-    InputButtonCore,
+    InputButton,
     FormField,
     GlassPanel,
     HeroText,
@@ -98,17 +98,17 @@ const Template: StoryFn<LoginFormStoryArgs> = (args) => ({
                   label="Remember me"
                   :input-variant="args.inputVariant"
                 />
-                <InputButtonCore type="button" variant="tertiary" button-text="Forgot password?" />
+                <InputButton type="button" variant="tertiary" button-text="Forgot password?" />
               </div>
             </FormField>
 
             <FormField width="wide" :has-gutter="false">
-              <!-- InputButtonCore keeps box-sizing: content-box, so width: 100% alone sizes only
+              <!-- InputButton keeps box-sizing: content-box, so width: 100% alone sizes only
                    the content box and padding/border overflow past it — box-sizing: border-box
                    here makes width: 100% mean the actual rendered width, not a demo-only quirk
                    worth fixing in the component itself since content-box is relied on elsewhere
                    (e.g. icon-only's aspect-ratio: 1). -->
-              <InputButtonCore
+              <InputButton
                 type="submit"
                 variant="primary"
                 button-text="Sign in"

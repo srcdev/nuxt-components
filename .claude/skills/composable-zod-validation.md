@@ -77,7 +77,7 @@ Pass `formRef` to the `<form>` and bind `formErrors` to each field's `error-mess
     :field-has-error="Boolean(zodFormControl.submitAttempted && formErrors?.fullName)"
     :required="true"
   />
-  <InputButtonCore
+  <InputButton
     type="submit"
     :is-pending="zodFormControl.displayLoader"
     :readonly="zodFormControl.submitDisabled"

@@ -46,7 +46,7 @@
         <slot name="datalist"></slot>
       </template>
       <template v-if="slots.left" #left>
-        <InputButtonCore
+        <InputButton
           type="button"
           :readonly="Number(modelValue) === min"
           :is-pending="false"
@@ -58,10 +58,10 @@
           <template #iconOnly>
             <slot name="left"></slot>
           </template>
-        </InputButtonCore>
+        </InputButton>
       </template>
       <template v-if="slots.right" #right>
-        <InputButtonCore
+        <InputButton
           type="button"
           :readonly="Number(modelValue) === max"
           :is-pending="false"
@@ -73,7 +73,7 @@
           <template #iconOnly>
             <slot name="right"></slot>
           </template>
-        </InputButtonCore>
+        </InputButton>
       </template>
     </InputRangeCore>
     <InputError

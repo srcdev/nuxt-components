@@ -4,7 +4,7 @@
 
 `CanvasSwitcher` renders a row of icon buttons (mobile / tablet / laptop / desktop / full width)
 for switching a bound `MediaCanvas` value — typically used to drive a preview/demo wrapper's width
-while working on a responsive component in Storybook. Each button is an `InputButtonCore`
+while working on a responsive component in Storybook. Each button is an `InputButton`
 (`variant="tertiary"`, icon-only), giving it the library's standard button focus ring and hover
 state for free instead of a raw `<button>`.
 
@@ -55,7 +55,7 @@ actually imported somewhere, since Nuxt only bundles a component's SFC styles wh
 
 - Component is auto-imported in Nuxt — no import needed.
 - No accessible-name prop is needed on the buttons — each one's `button-text` ("Mobile", "Tablet",
-  etc.) is rendered screen-reader-only by `InputButtonCore`'s icon-only handling, and the selected
+  etc.) is rendered screen-reader-only by `InputButton`'s icon-only handling, and the selected
   button is marked via `aria-pressed="true"` rather than a private CSS-only "current" class.
 - See `CONSUMER-STYLING.md` in the component's own folder for the full `--canvas-switcher-*` token
-  API. Button-level tokens (surface/hover/focus) belong to `InputButtonCore`, not this component.
+  API. Button-level tokens (surface/hover/focus) belong to `InputButton`, not this component.

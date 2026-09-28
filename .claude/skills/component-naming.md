@@ -62,10 +62,12 @@ stripping `Core`.
    component names, `import` paths, story titles/`*StoryArgs` interfaces, `describe()` names, and the
    root/base DOM class (update `CONSUMER-STYLING.md` and test selectors that use it).
 3. Add a "Renamed YYYY-MM-DD" note at the top of the skill doc listing old → new names and classes.
-4. Grep consumer repos (`/check-component-usage`) and update any that use the old names. All
-   consumers are the user's own apps, so no deprecated aliases are needed: update the consumers
-   directly, and bump the layer's major version in the release notes if a live consumer used an old
-   name.
+4. Grep consumer repos (`/check-component-usage`) and **list** the files/lines that use the old
+   names (in the private consumer notes, never in this repo). Don't edit the consumers yet: they pin
+   an exact layer version, so a rename applied now breaks them until they bump. Apply the list when
+   each consumer upgrades to the release that ships the rename. No deprecated aliases are needed
+   (all consumers are the user's own apps); note the rename as breaking in the release notes.
+   (Decided 2026-09-28 during the InputButton rename.)
 5. Tick the row off below.
 
 ## Backlog
@@ -91,7 +93,7 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | ToggleSwitchWithLabel | `ToggleSwitchField` | yes |
 | ToggleSwitchWithLabelInline | `layout` prop on `ToggleSwitchField`, or `ToggleSwitchFieldInline` | - |
 | ~~TripleToggleSwitchCore~~ | ✅ `TripleToggleSwitch` (2026-09-27) | - |
-| InputButtonCore | `InputButton` | yes |
+| ~~InputButtonCore~~ | ✅ `InputButton` (2026-09-28) | yes |
 | ~~InputCheckboxRadioCore~~ | ✅ `InputCheckboxRadio` (2026-09-27) | - |
 | InputCheckboxRadioButton | ✅ kept: button-style option, not a Field (2026-09-27) | - |
 | ~~InputCheckboxRadioWithLabel~~ | ✅ `InputCheckboxRadioField` (2026-09-27) | - |

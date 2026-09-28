@@ -1,6 +1,6 @@
 # CanvasSwitcher — Consumer Styling
 
-CanvasSwitcher renders its buttons via `InputButtonCore` (`variant="tertiary"`, icon-only) — see
+CanvasSwitcher renders its buttons via `InputButton` (`variant="tertiary"`, icon-only) — see
 that component's own `CONSUMER-STYLING.md` for the button surface/hover/focus tokens it inherits.
 CanvasSwitcher itself exposes the following public tokens:
 

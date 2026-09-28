@@ -49,7 +49,7 @@ Override the default feature list rendering. Receives no slot scope.
 
 ### #cta slot
 
-Customize the CTA button. Default renders `InputButtonCore` with theme support.
+Customize the CTA button. Default renders `InputButton` with theme support.
 
 **Slot scope:**
 - `ctaText: string` — button label from `:cta-text` prop
@@ -60,7 +60,7 @@ Customize the CTA button. Default renders `InputButtonCore` with theme support.
 ```vue
 <PricingCard plan-name="Pro" :price="99" @select="handleSelect">
   <template #cta="{ ctaText, isDisabled, onSelect }">
-    <InputButtonCore
+    <InputButton
       :button-text="ctaText"
       variant="secondary"
       theme="custom"
@@ -127,7 +127,7 @@ All `--pricing-card-*` tokens can be overridden at global, page, or instance sco
   @select="handleSelect"
 >
   <template #cta="{ ctaText, isDisabled, onSelect }">
-    <InputButtonCore
+    <InputButton
       :button-text="ctaText"
       variant="primary"
       :readonly="isDisabled"

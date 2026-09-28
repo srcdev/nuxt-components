@@ -13,7 +13,7 @@
   --theme-on-surface: var(--colour-theme-0);
   --theme-text: light-dark(var(--colour-theme-9), var(--colour-theme-2));
   /* Light-mode branch was --colour-theme-9 — identical to --theme-surface-inverted's own
-     light-mode branch (line 6), its only pairing (InputButtonCore's .secondary, background +
+     light-mode branch (line 6), its only pairing (InputButton's .secondary, background +
      color), so secondary-button text was invisible (dark-on-dark) in light mode. Should be a
      light step to contrast against that dark inverted surface, matching how --theme-on-surface
      (line 13) contrasts against --theme-surface the same way in both modes. */

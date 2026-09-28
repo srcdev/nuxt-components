@@ -96,7 +96,7 @@ was itself commented out.
 ### InputRangeDefault
 
 `InputRangeDefault` (`InputRangeDefault.vue`) composes `InputRangeCore` with `InputLabel`,
-`InputDescription`, and `InputError`, plus optional step-down/step-up buttons (`InputButtonCore`)
+`InputDescription`, and `InputError`, plus optional step-down/step-up buttons (`InputButton`)
 wired into the `left`/`right` slots.
 
 **Additional props over InputRangeCore:**
@@ -105,8 +105,8 @@ wired into the `left`/`right` slots.
 |------|------|---------|-------|
 | `:label` | `string` | (required) | Rendered via `InputLabel`. |
 | `:error-message` | `object \| string` | (required) | Rendered via `InputError` when `field-has-error` is true. |
-| `:step-down-label` | `string` | `"Step down"` | `button-text` on the step-down `InputButtonCore` — override for localisation. |
-| `:step-up-label` | `string` | `"Step up"` | `button-text` on the step-up `InputButtonCore` — override for localisation. |
+| `:step-down-label` | `string` | `"Step down"` | `button-text` on the step-down `InputButton` — override for localisation. |
+| `:step-up-label` | `string` | `"Step up"` | `button-text` on the step-up `InputButton` — override for localisation. |
 
 **Slots**: `descriptionHtml`, `descriptionText` (both forwarded to `InputDescription`), plus
 `left`/`right`/`markers`/`datalist` (forwarded straight through to the underlying

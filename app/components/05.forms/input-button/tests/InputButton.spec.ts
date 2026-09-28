@@ -1,11 +1,11 @@
-// InputButtonCore.test.ts
-import { describe, it, expect, afterEach } from "vitest";
+// InputButton.test.ts
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import InputButtonCore from "../InputButtonCore.vue";
+import InputButton from "../InputButton.vue";
 import { defineComponent, nextTick, ref } from "vue";
 
 // --- Types ---
-interface InputButtonCoreInstance {
+interface InputButtonInstance {
   hasLeftSlot: () => boolean;
   hasRightSlot: () => boolean;
   hasIconOnlySlot: () => boolean;
@@ -14,13 +14,13 @@ interface InputButtonCoreInstance {
 
 // --- Helpers ---
 const createWrapper = async (props: Record<string, unknown> = {}, slots: Record<string, string> = {}) => {
-  return mountSuspended(InputButtonCore, {
+  return mountSuspended(InputButton, {
     props: { buttonText: "Click me", ...props },
     slots,
   });
 };
 
-describe("InputButtonCore", () => {
+describe("InputButton", () => {
   let wrapper: Awaited<ReturnType<typeof createWrapper>>;
 
   afterEach(() => {
@@ -86,8 +86,8 @@ describe("InputButtonCore", () => {
       wrapper = await createWrapper();
       const button = wrapper.find("button");
       expect(button.exists()).toBe(true);
-      expect(button.classes()).toContain("input-button-core");
-      expect(button.attributes("data-testid")).toBe("input-button-core");
+      expect(button.classes()).toContain("input-button");
+      expect(button.attributes("data-testid")).toBe("input-button");
     });
 
     it("renders button text", async () => {
@@ -109,7 +109,7 @@ describe("InputButtonCore", () => {
   describe("Props", () => {
     it("applies variant class", async () => {
       for (const variant of ["primary", "secondary", "tertiary"] as const) {
-        const w = await mountSuspended(InputButtonCore, {
+        const w = await mountSuspended(InputButton, {
           props: { buttonText: "Test", variant },
         });
         expect(w.find("button").classes()).toContain(variant);
@@ -136,7 +136,7 @@ describe("InputButtonCore", () => {
 
     it("applies correct type attribute", async () => {
       for (const type of ["button", "submit", "reset"] as const) {
-        const w = await mountSuspended(InputButtonCore, {
+        const w = await mountSuspended(InputButton, {
           props: { buttonText: "Test", type },
         });
         expect(w.find("button").attributes("type")).toBe(type);
@@ -255,7 +255,7 @@ describe("InputButtonCore", () => {
     });
 
     it("renders a real anchor with the exact href for a '/'-prefixed href when external is true", async () => {
-      // Regression test: InputButtonCore used to always route a leading-"/" href through
+      // Regression test: InputButton used to always route a leading-"/" href through
       // NuxtLink (client-side router.push), which silently fails for non-page paths like a
       // Nitro server route ("/api/auth/github") since no Vue Router route matches it. The
       // `external` prop forces a real anchor so the browser makes an actual request instead.
@@ -277,45 +277,77 @@ describe("InputButtonCore", () => {
   describe("Computed properties", () => {
     it("hasLeftSlot is true when left slot provided without iconOnly", async () => {
       wrapper = await createWrapper({}, { left: "<span>L</span>" });
-      expect((wrapper.vm as unknown as InputButtonCoreInstance).hasLeftSlot()).toBe(true);
+      expect((wrapper.vm as unknown as InputButtonInstance).hasLeftSlot()).toBe(true);
     });
 
     it("hasLeftSlot is false when iconOnly is also provided", async () => {
       wrapper = await createWrapper({}, { left: "<span>L</span>", iconOnly: "<span>I</span>" });
-      expect((wrapper.vm as unknown as InputButtonCoreInstance).hasLeftSlot()).toBe(false);
+      expect((wrapper.vm as unknown as InputButtonInstance).hasLeftSlot()).toBe(false);
     });
 
     it("hasRightSlot is true when right slot provided without iconOnly", async () => {
       wrapper = await createWrapper({}, { right: "<span>R</span>" });
-      expect((wrapper.vm as unknown as InputButtonCoreInstance).hasRightSlot()).toBe(true);
+      expect((wrapper.vm as unknown as InputButtonInstance).hasRightSlot()).toBe(true);
     });
 
     it("hasIconOnlySlot is true when iconOnly slot provided", async () => {
       wrapper = await createWrapper({}, { iconOnly: "<span>I</span>" });
-      expect((wrapper.vm as unknown as InputButtonCoreInstance).hasIconOnlySlot()).toBe(true);
+      expect((wrapper.vm as unknown as InputButtonInstance).hasIconOnlySlot()).toBe(true);
     });
   });
 });
 
-describe("InputButtonCore slot toggling", () => {
+describe("InputButton slot toggling", () => {
   it("adds and removes the icon-only class when the iconOnly slot changes after mount", async () => {
     const Host = defineComponent({
-      components: { InputButtonCore },
+      components: { InputButton },
       setup() {
         return { iconOnly: ref(false) };
       },
       template: `
-        <InputButtonCore button-text="Close">
+        <InputButton button-text="Close">
           <template v-if="iconOnly" #iconOnly><span>×</span></template>
-        </InputButtonCore>
+        </InputButton>
       `,
     });
     const wrapper = await mountSuspended(Host);
-    const button = () => wrapper.find(".input-button-core");
+    const button = () => wrapper.find(".input-button");
     expect(button().classes()).not.toContain("icon-only");
     (wrapper.vm as unknown as { iconOnly: boolean }).iconOnly = true;
     await nextTick();
     expect(button().classes()).toContain("icon-only");
     expect(wrapper.find(".button-text").classes()).toContain("sr-only");
+  });
+});
+
+describe("InputButton readonly and reactivity", () => {
+  it("does not fire a consumer click handler while readonly (keyboard activation included)", async () => {
+    const onClick = vi.fn();
+    const wrapper = await mountSuspended(InputButton, {
+      props: { buttonText: "Save", readonly: true },
+      attrs: { onClick },
+    });
+    await wrapper.trigger("click");
+    expect(onClick).not.toHaveBeenCalled();
+    expect(wrapper.attributes("aria-disabled")).toBe("true");
+  });
+
+  it("fires the click handler when not readonly", async () => {
+    const onClick = vi.fn();
+    const wrapper = await mountSuspended(InputButton, {
+      props: { buttonText: "Save" },
+      attrs: { onClick },
+    });
+    await wrapper.trigger("click");
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("updates classes when styleClassPassthrough changes after mount", async () => {
+    const wrapper = await mountSuspended(InputButton, {
+      props: { buttonText: "Save", styleClassPassthrough: ["original"] },
+    });
+    await wrapper.setProps({ styleClassPassthrough: ["updated"] });
+    expect(wrapper.classes()).not.toContain("original");
+    expect(wrapper.classes()).toContain("updated");
   });
 });

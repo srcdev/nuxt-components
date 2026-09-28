@@ -10,7 +10,7 @@ import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
 import SingleCheckbox from "../../input-checkbox/SingleCheckbox.vue";
 import MultipleRadiobuttons from "../../input-radio/MultipleRadiobuttons.vue";
 import TripleToggleSwitch from "../../triple-toggle-switch/TripleToggleSwitch.vue";
-import InputButtonCore from "../../input-button/InputButtonCore.vue";
+import InputButton from "../../input-button/InputButton.vue";
 import FormField from "../../form-field/FormField.vue";
 import FormWrapper from "../../form-wrapper/FormWrapper.vue";
 import HeroText from "../../../01.atoms/text-blocks/hero-text/HeroText.vue";
@@ -70,7 +70,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     SingleCheckbox,
     MultipleRadiobuttons,
     TripleToggleSwitch,
-    InputButtonCore,
+    InputButton,
     FormField,
     FormWrapper,
     HeroText,
@@ -337,8 +337,8 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
 
           <FormField width="wide" :has-gutter="false">
             <div style="display: flex; gap: 1.2rem;">
-              <InputButtonCore type="submit" variant="primary" button-text="Continue" />
-              <InputButtonCore type="button" variant="tertiary" button-text="Clear errors" @click="clearErrors" />
+              <InputButton type="submit" variant="primary" button-text="Continue" />
+              <InputButton type="button" variant="tertiary" button-text="Clear errors" @click="clearErrors" />
             </div>
           </FormField>
         </form>

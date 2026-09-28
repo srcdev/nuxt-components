@@ -40,7 +40,7 @@ affects buttons, inputs, prompts, and toasts simultaneously:
 | --------------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `--theme-surface`           | `--colour-theme-7` / `9` | Filled button/chip surface                                                                                              |
 | `--theme-surface-hover`     | `--colour-theme-9` / `7` | Hover state of filled surface                                                                                            |
-| `--theme-surface-inverted`  | `--colour-theme-9` / `2` | Inverted surface (`InputButtonCore`'s `.secondary` background)                                                          |
+| `--theme-surface-inverted`  | `--colour-theme-9` / `2` | Inverted surface (`InputButton`'s `.secondary` background)                                                          |
 | `--theme-accent`            | `--colour-theme-5` / `4` | Decorative accent strip (prompt/toast left edge)                                                                        |
 | `--theme-surface-subtle`    | `--colour-theme-1` / `9` | Subtle body bg for prompt/toast, outline element hover                                                                  |
 | `--theme-border`            | `--colour-theme-6` / `5` | Input/card border                                                                                                        |

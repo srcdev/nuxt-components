@@ -38,7 +38,7 @@ const THEMES = ["default", "success", "error", "warning"] as const;
 // -------------------------
 // Per-story baseline snapshots
 // -------------------------
-test.describe("InputButtonCore — story baselines", () => {
+test.describe("InputButton — story baselines", () => {
   for (const story of STORIES) {
     test(`${story} matches snapshot`, async ({ page }) => {
       const button = await getButton(page, story);
@@ -50,7 +50,7 @@ test.describe("InputButtonCore — story baselines", () => {
 // -------------------------
 // Variant snapshots (default story × each variant)
 // -------------------------
-test.describe("InputButtonCore — variants", () => {
+test.describe("InputButton — variants", () => {
   for (const variant of VARIANTS) {
     test(`default story — variant: ${variant}`, async ({ page }) => {
       const button = await getButton(page, "default", { variant });
@@ -62,7 +62,7 @@ test.describe("InputButtonCore — variants", () => {
 // -------------------------
 // Theme snapshots (default story × each theme)
 // -------------------------
-test.describe("InputButtonCore — themes", () => {
+test.describe("InputButton — themes", () => {
   for (const theme of THEMES) {
     test(`default story — theme: ${theme}`, async ({ page }) => {
       const button = await getButton(page, "default", { theme });
@@ -74,7 +74,7 @@ test.describe("InputButtonCore — themes", () => {
 // -------------------------
 // State snapshots
 // -------------------------
-test.describe("InputButtonCore — states", () => {
+test.describe("InputButton — states", () => {
   test("readonly", async ({ page }) => {
     const button = await getButton(page, "default", { readonly: "true" });
     await expect(button).toHaveScreenshot("state-readonly.png");
@@ -94,7 +94,7 @@ test.describe("InputButtonCore — states", () => {
 // -------------------------
 // Key combinations (variant × state — not exhaustive, just meaningful)
 // -------------------------
-test.describe("InputButtonCore — variant × state combinations", () => {
+test.describe("InputButton — variant × state combinations", () => {
   const combinations: Array<{ story: string; args: Record<string, string>; name: string }> = [
     { story: "default", args: { variant: "secondary", isPill: "true" }, name: "secondary-pill" },
     { story: "default", args: { variant: "tertiary", readonly: "true" }, name: "tertiary-readonly" },

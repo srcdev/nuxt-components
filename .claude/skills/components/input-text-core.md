@@ -46,7 +46,7 @@ Most consumers should reach for one of the **Variants** rather than `InputTextCo
 
 | Slot    | Notes                                                                 |
 | ------- | ---------------------------------------------------------------------- |
-| `left`  | Rendered before the input, inside the bordered wrapper (e.g. an icon or `InputButtonCore variant="inline"`). |
+| `left`  | Rendered before the input, inside the bordered wrapper (e.g. an icon or `InputButton variant="inline"`). |
 | `right` | Rendered after the input, inside the bordered wrapper.                 |
 
 ---
@@ -119,7 +119,7 @@ Slots: `left`, `right`, `descriptionHtml`, `descriptionText`.
 
 ### InputPasswordWithLabel
 
-Adds a show/hide toggle button (`InputButtonCore variant="inline"` in the `right` slot) that swaps
+Adds a show/hide toggle button (`InputButton variant="inline"` in the `right` slot) that swaps
 `type` between `"password"` and `"text"`.
 
 ```vue
@@ -140,7 +140,7 @@ here for a non-English consumer app; there is no built-in i18n framework depende
 
 ### InputTextAsNumberWithLabel
 
-A numeric stepper: left/right `InputButtonCore variant="inline"` buttons decrement/increment the
+A numeric stepper: left/right `InputButton variant="inline"` buttons decrement/increment the
 value by `step`, disabled once `min`/`max` is reached.
 
 ```vue
@@ -192,7 +192,7 @@ the prop of that exact name, never a same-named local composable output.
 - Focus is tracked via native `focusin`/`focusout`, not a custom keyboard handler — `:focus-visible`
   styling is preserved.
 - The password/number variants give their icon-only toggle/step buttons a real accessible name via
-  `InputButtonCore`'s `buttonText` (visually hidden via `.sr-only` when an icon-only slot is used).
+  `InputButton`'s `buttonText` (visually hidden via `.sr-only` when an icon-only slot is used).
 
 ---
 

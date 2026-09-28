@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { nextTick } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import PendingEffect from "../PendingEffect.vue";
-import InputButtonCore from "../../input-button/InputButtonCore.vue";
+import InputButton from "../../input-button/InputButton.vue";
 
 describe("PendingEffect", () => {
   it("mounts without error", async () => {
@@ -45,12 +45,12 @@ describe("PendingEffect", () => {
     expect(classes).not.toContain("one");
   });
 
-  describe("inside InputButtonCore", () => {
+  describe("inside InputButton", () => {
     it("is rendered only when hasPendingEffect is true", async () => {
-      const without = await mountSuspended(InputButtonCore, { props: { buttonText: "Save" } });
+      const without = await mountSuspended(InputButton, { props: { buttonText: "Save" } });
       expect(without.find(".pending-effect-container").exists()).toBe(false);
 
-      const withEffect = await mountSuspended(InputButtonCore, {
+      const withEffect = await mountSuspended(InputButton, {
         props: { buttonText: "Save", hasPendingEffect: true },
       });
       expect(withEffect.find(".pending-effect-container").exists()).toBe(true);
@@ -58,7 +58,7 @@ describe("PendingEffect", () => {
     });
 
     it("passes the button theme through", async () => {
-      const wrapper = await mountSuspended(InputButtonCore, {
+      const wrapper = await mountSuspended(InputButton, {
         props: { buttonText: "Save", hasPendingEffect: true, theme: "success" },
       });
       expect(wrapper.find(".pending-effect-container").attributes("data-theme")).toBe("success");

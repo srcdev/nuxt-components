@@ -1,4 +1,4 @@
-# InputButtonCore — Consumer Styling Guide
+# InputButton — Consumer Styling Guide
 
 ## Public token API
 
@@ -78,14 +78,36 @@ buttons (see their own `CONSUMER-STYLING.md`) rather than duplicating this chain
 > to `contrast-color()` of that state's own surface: pure black or pure white, whichever has more
 > contrast, re-evaluated on hover. Older browsers keep the defaults in the tables above. Setting
 > the `-text` token explicitly always wins, so you can opt a variant out. The whole behaviour is
-> one `@supports` block in `InputButtonCore.vue` and may be removed if the trial doesn't hold up.
+> one `@supports` block in `InputButton.vue` and may be removed if the trial doesn't hold up.
 
 ---
+
+> Renamed 2026-09-28: component `InputButtonCore` → `InputButton`, root class `.input-button-core` →
+> `.input-button`, `data-testid="input-button-core"` → `"input-button"`. Icon size inside `.btn-icon`
+> is now applied as `font-size: var(--input-icon-size)` (the old `width`/`height` on the `<Icon>` was
+> overridden by `@nuxt/icon`).
+
+---
+
+## State hooks
+
+| Hook | When |
+|---|---|
+| `.primary`, `.secondary`, `.tertiary`, `.inline` | The `variant` prop |
+| `[data-theme]` | The `theme` prop (re-declares the `--theme-*` palette on the button) |
+| `.icon-only` | The `#iconOnly` slot is used (square, text becomes `sr-only`) |
+| `.pill` | `is-pill` |
+| `.is-pending`, `.pending-effect` | `is-pending` / `has-pending-effect` |
+| `.is-link` | `href` is set (renders `NuxtLink` or `<a>`) |
+| `[readonly]` + `aria-disabled="true"` | `readonly` (dimmed, not operable by mouse or keyboard) |
+
+Inner classes: `.button-text`, `.btn-icon` with `.left` / `.right` / `.icon-only`.
+
 
 ## Global theming
 
 Set tokens on `:where(html)` in the consuming app's own theming file (e.g.
-`assets/styles/setup/03.theming/_button.css`). These apply to every `InputButtonCore` instance:
+`assets/styles/setup/03.theming/_button.css`). These apply to every `InputButton` instance:
 
 ```css
 :where(html) {
@@ -113,17 +135,23 @@ Set the tokens above on an element you own (a page or section class, or a class 
 ### One instance
 
 ```vue
-<InputButtonCore variant="primary" button-text="Book now" style="--input-button-primary-surface: var(--gold-06);" />
+<InputButton variant="primary" button-text="Book now" style="--input-button-primary-surface: var(--gold-06);" />
 ```
 
 To make hover lighten instead of darken for one instance, override the hover token directly rather
 than fighting the `color-mix()` default:
 
 ```vue
-<InputButtonCore
+<InputButton
   variant="primary"
   button-text="Book now"
   style="--input-button-primary-surface-hover: var(--gold-04);"
 />
 ```
 
+
+---
+
+## Class passthrough
+
+`style-class-passthrough` adds classes to the root `.input-button` element. Reactive after mount.

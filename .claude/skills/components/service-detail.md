@@ -111,7 +111,7 @@ are delegated to the consumer, matching `ServiceSummary`'s slot-based routing pa
   :related-services="relatedServices"
 >
   <template #book-cta>
-    <InputButtonCore tag="a" href="/contact" button-text="Book now" variant="primary" />
+    <InputButton tag="a" href="/contact" button-text="Book now" variant="primary" />
   </template>
   <template #sidebar-note>
     A patch test is required at least 48 hours before any colour treatment.
@@ -120,7 +120,7 @@ are delegated to the consumer, matching `ServiceSummary`'s slot-based routing pa
     <NuxtLink :to="`/services/${related.slug}`">{{ related.title }} — {{ related.price }}</NuxtLink>
   </template>
   <template #final-cta>
-    <InputButtonCore tag="a" href="/contact" button-text="Book now" variant="secondary" />
+    <InputButton tag="a" href="/contact" button-text="Book now" variant="secondary" />
   </template>
 </ServiceDetail>
 ```

@@ -27,8 +27,8 @@
       "  <template #title>${3:Title}</template>",
       "  <template #content>${4:Message}</template>",
       "  <template #actions>",
-      "    <InputButtonCore type=\"button\" variant=\"tertiary\" button-text=\"${5:Cancel}\" @click=\"${6:onCancel}\" />",
-      "    <InputButtonCore type=\"button\" variant=\"primary\" button-text=\"${7:Confirm}\" @click=\"${8:onConfirm}\" />",
+      "    <InputButton type=\"button\" variant=\"tertiary\" button-text=\"${5:Cancel}\" @click=\"${6:onCancel}\" />",
+      "    <InputButton type=\"button\" variant=\"primary\" button-text=\"${7:Confirm}\" @click=\"${8:onConfirm}\" />",
       "  </template>",
       "</AlertContent>"
     ]

@@ -49,7 +49,7 @@ an inline fallback, even if that fallback happens to be a Tier 1 or Tier 2 token
 - `--input-button-primary-surface` / `-surface-hover` — variant + property + state
 - `--services-card-border-colour` / `-border-colour-hover` — property + state
 - Only add a `-hover`/`-focus`/`-active` suffix if that state's value actually differs from the
-  base token. If hover reuses the exact same value as base (see `InputButtonCore`'s primary text
+  base token. If hover reuses the exact same value as base (see `InputButton`'s primary text
   colour, fixed on purpose across states), reuse the base token — don't manufacture a second name
   for a value that never diverges.
 
@@ -59,7 +59,7 @@ A component that wants to *look like* another component's default (rather than d
 raw value) chains through it:
 
 ```css
-/* InputCopy's copy button defaults to InputButtonCore's primary look */
+/* InputCopy's copy button defaults to InputButton's primary look */
 --_button-bg: var(--input-copy-button-bg, var(--input-button-primary-surface, var(--theme-surface)));
 ```
 
@@ -76,12 +76,12 @@ consuming app having declared anything.
 
 ## Rollout status
 
-- ✅ `InputButtonCore` (primary/secondary/tertiary), `InputCopy`, `PricingCard` — migrated
+- ✅ `InputButton` (primary/secondary/tertiary), `InputCopy`, `PricingCard` — migrated
   2026-08-25, see their `CONSUMER-STYLING.md` for the full token list. This pass also included a
   deliberate visual redesign (flat borders, `color-mix()`-darkened hover, transparent resting
   outline, separated `:focus-visible`), not just the token API change.
 - ✅ `InputCheckboxRadio`/`Button` — migrated 2026-08-25, see their `CONSUMER-STYLING.md`.
-  Pure token-rename pass, no visual/default changes (unlike `InputButtonCore`'s redesign above).
+  Pure token-rename pass, no visual/default changes (unlike `InputButton`'s redesign above).
   Added Storybook stories for both (`InputCheckboxRadio`, `InputCheckboxRadioButton`) —
   neither had one before.
 - ✅ `InputTextCore`, `InputSelectCore`, `InputNumber` — migrated 2026-08-25, see their

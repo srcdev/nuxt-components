@@ -4,7 +4,7 @@ Live camera QR code scanner. Streams the device camera, detects QR codes in real
 
 **File**: `app/components/02.molecules/qr-code/CaptureQrCode.vue`
 
-> **Changed 2026-09-28:** root class `.capture-qr-stream` → `.capture-qr-code`; `.camera-stopped`, `.camera-error`, `.scanned-results` → `.capture-qr-code-stopped`, `-error`, `-results`. Copy is now props, the error block is `role="alert"` with an `#error` slot, and the reset button is `InputButtonCore`.
+> **Changed 2026-09-28:** root class `.capture-qr-stream` → `.capture-qr-code`; `.camera-stopped`, `.camera-error`, `.scanned-results` → `.capture-qr-code-stopped`, `-error`, `-results`. Copy is now props, the error block is `role="alert"` with an `#error` slot, and the reset button is `InputButton`.
 
 ## Prerequisites
 

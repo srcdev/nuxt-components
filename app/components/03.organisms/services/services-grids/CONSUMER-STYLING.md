@@ -18,7 +18,7 @@
 Each item is a full `ServiceSummary` or `ServicesCard`, styled by its own tokens (see
 `03.organisms/services/service-summary/CONSUMER-STYLING.md` and
 `03.organisms/services/services-card/CONSUMER-STYLING.md`). ServicesCardGrid's CTA is
-`InputButtonCore` (`variant="secondary"`).
+`InputButton` (`variant="secondary"`).
 
 > Changed 2026-09-28: ServicesCardGrid columns use `minmax(min(<min-width>, 100%), 1fr)`, so a
 > single column no longer overflows a container narrower than the minimum width.

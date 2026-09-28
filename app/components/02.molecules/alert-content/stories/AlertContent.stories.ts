@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import AlertContent from "../AlertContent.vue";
-import InputButtonCore from "../../../05.forms/input-button/InputButtonCore.vue";
+import InputButton from "../../../05.forms/input-button/InputButton.vue";
 
 const meta: Meta<typeof AlertContent> = {
   title: "Molecules/AlertContent",
@@ -142,7 +142,7 @@ export const WithActions: Story = {
   name: "With Actions",
   args: { theme: "info", customIcon: "material-symbols:cookie-outline" },
   render: (args) => ({
-    components: { AlertContent, InputButtonCore },
+    components: { AlertContent, InputButton },
     setup() {
       return { args };
     },
@@ -152,8 +152,8 @@ export const WithActions: Story = {
           <template #title>Cookies</template>
           <template #content>This site uses cookies to understand how it's used. You can accept or reject them.</template>
           <template #actions>
-            <InputButtonCore type="button" variant="tertiary" button-text="Reject" />
-            <InputButtonCore type="button" variant="primary" button-text="Accept" />
+            <InputButton type="button" variant="tertiary" button-text="Reject" />
+            <InputButton type="button" variant="primary" button-text="Accept" />
           </template>
         </AlertContent>
       </div>

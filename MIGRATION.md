@@ -120,7 +120,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 
 | Component | File | CS | SN |
 |---|---|---|---|
-| InputButtonCore | `input-button/InputButtonCore.vue` | ☐ | ☐ |
+| InputButton | `input-button/InputButton.vue` | ☐ | ☐ |
 
 ### Text Inputs
 

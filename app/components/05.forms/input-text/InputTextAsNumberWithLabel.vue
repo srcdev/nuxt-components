@@ -49,7 +49,7 @@
       :input-variant
     >
       <template v-if="slots.left" #left>
-        <InputButtonCore
+        <InputButton
           type="button"
           :readonly="(modelValue ?? 0) <= min"
           :is-pending="false"
@@ -61,10 +61,10 @@
           <template #iconOnly>
             <slot name="left"></slot>
           </template>
-        </InputButtonCore>
+        </InputButton>
       </template>
       <template v-if="slots.right" #right>
-        <InputButtonCore
+        <InputButton
           type="button"
           :readonly="(modelValue ?? 0) >= max"
           :is-pending="false"
@@ -76,7 +76,7 @@
           <template #iconOnly>
             <slot name="right"></slot>
           </template>
-        </InputButtonCore>
+        </InputButton>
       </template>
     </InputTextCore>
     <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" />
@@ -167,7 +167,7 @@ updateElementClasses(["input-text-as-number", "has-left-button", "has-right-butt
         .slot {
           margin-inline: 0;
 
-          .input-button-core {
+          .input-button {
             background-color: var(--theme-input-surface);
 
             &:hover {
@@ -182,13 +182,13 @@ updateElementClasses(["input-text-as-number", "has-left-button", "has-right-butt
           }
 
           &.left-slot {
-            .input-button-core {
+            .input-button {
               border-right: var(--form-element-border-width) solid var(--theme-border);
             }
           }
 
           &.right-slot {
-            .input-button-core {
+            .input-button {
               border-left: var(--form-element-border-width) solid var(--theme-border);
             }
           }

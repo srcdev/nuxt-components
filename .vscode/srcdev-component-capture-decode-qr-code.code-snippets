@@ -13,7 +13,7 @@
       "<CaptureQrCode>",
       "  <template #error=\"{ error, reset }\">",
       "    <p>{{ error === 'NotAllowedError' ? '$1' : '$2' }}</p>",
-      "    <InputButtonCore variant=\"secondary\" button-text=\"$3\" @click=\"reset\" />",
+      "    <InputButton variant=\"secondary\" button-text=\"$3\" @click=\"reset\" />",
       "  </template>",
       "</CaptureQrCode>"
     ]

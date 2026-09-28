@@ -44,7 +44,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── css-animation-utilities.md                — scroll-driven animation utility classes: scroller-x (carousel), entry-zoom-reveal, entry-slide-in, entry-exit-blur, auto-rotate
 ├── component-aria-landmark.md        — useAriaLabelledById composable: aria-labelledby for section/article/aside tags (not main), consumer-bound vs self-bound pattern, built-in broken-reference console warning
 ├── component-export-types.md         — move inline component types to app/types/components/ barrel for consumer imports
-├── component-inline-action-button.md — InputButtonCore variant="inline" pattern for buttons embedded in custom input wrappers
+├── component-inline-action-button.md — InputButton variant="inline" pattern for buttons embedded in custom input wrappers
 ├── vue-video-autoplay.md             — autoplay on client-side navigation: use <source> child (not :src on <video>), :key, and explicit v.load()
 ├── icon-sets.md                      — icon set packages required by layer components, FOUC prevention, component→package map
 ├── icon-sizing.md                    — size <Icon> with font-size, never width/height: @nuxt/icon's unlayered CSS beats @layer components; possible global cssLayer fix
@@ -134,6 +134,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── display-tooltip-defined.md — DisplayTooltipDefined: structured title/body/action tooltip content with close button, composes DisplayTooltip
     ├── pop-over.md                — PopOver: generic anchor-positioned disclosure panel, consumer-supplied trigger/content slots, placement prop, CSS token API
     ├── input-text-core.md        — InputTextCore: native text/date/number input primitive, min/max pass-through (date-picker range), CSS token API; Variants section covers InputTextWithLabel/InputPasswordWithLabel/InputTextAsNumberWithLabel
+    ├── input-button.md           — InputButton (renamed from InputButtonCore 2026-09-28): button/NuxtLink/a, variants, icon slots, readonly (aria-disabled, activation blocked), tokens
     ├── input-range-core.md       — InputRangeCore: native range-slider primitive, markers/datalist slots, dead --theme-form-range-accent-color token fixed, CSS token API; Variants section covers InputRangeDefault
     ├── input-number.md           — InputNumber: native number-input primitive, left/right step-button slots, missing base class/placeholder/mismatched slot-selector bugs fixed, CSS token API; Variants section covers InputNumberField
     ├── form-field.md             — FormField: layout wrapper for one form control (width cap, gutter, field spacing), data-width/data-has-gutter/data-invalid hooks, dead .underline rule removed, CSS token API
@@ -142,7 +143,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── input-description.md      — InputDescription: field help text (descriptionText/descriptionHtml slots), renders nothing without a slot, wrappers' unconditional slot forwarding/outlined double-render/missing aria id fixed, dead id/theme props removed, data-input-variant/data-invalid hooks, CSS token API
     ├── input-label.md            — InputLabel: the <label> every labelled *Field wrapper renders (textLabel/htmlLabel slots), id is the control's id rendered as for, required/optional indicator (app.config srcdev.inputLabel, text or icon), dead name/theme props and fallthrough :for removed, data-input-variant/data-invalid hooks, CSS token API
     ├── form-wrapper.md           — FormWrapper: width-capped outer container for a whole form, data-width hook, named inline-size container, not centred by default (--form-wrapper-margin-inline), CSS token API
-    ├── pending-effect.md         — PendingEffect: animated dashed border InputButtonCore draws while is-pending (has-pending-effect), tokens renamed to --pending-effect-* and read at point of use, animation moved off the host button, aria-hidden
+    ├── pending-effect.md         — PendingEffect: animated dashed border InputButton draws while is-pending (has-pending-effect), tokens renamed to --pending-effect-* and read at point of use, animation moved off the host button, aria-hidden
     ├── input-textarea-core.md    — InputTextareaCore: native textarea primitive, left/right decorative slots, undefined-token/dead-code/label-leak bugs fixed, CSS token API; Variants section covers InputTextareaWithLabel
     ├── input-select-core.md      — InputSelectCore: native select primitive, data-driven options with icon decorator, dead required/styleClassPassthrough/isDirty-isActive functionality fixed, appearance:base-select browser-support note, CSS token API; Variants section covers InputSelectWithLabel
     ├── input-checkbox-radio.md   — InputCheckboxRadio (bare control), InputCheckboxRadioField (labelled), InputCheckboxRadioButton (button/pill option): renamed from Core/WithLabel, state classes → data-* hooks, type-switch v-model fix, no aria-checked, icon font-size sizing, button spacing tokens

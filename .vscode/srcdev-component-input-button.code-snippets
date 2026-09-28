@@ -1,0 +1,27 @@
+{
+  "SRCDEV InputButton": {
+    "description": "InputButton",
+    "scope": "vue,html",
+    "body": [
+      "<InputButton variant=\"${1|primary,secondary,tertiary,inline|}\" button-text=\"$2\" type=\"${3|button,submit,reset|}\" @click=\"$4\" />"
+    ]
+  },
+  "SRCDEV InputButton Link With Icon": {
+    "description": "InputButton rendered as a link, with a trailing icon",
+    "scope": "vue,html",
+    "body": [
+      "<InputButton variant=\"${1|secondary,primary,tertiary|}\" button-text=\"$2\" href=\"$3\">",
+      "  <template #right><Icon name=\"${4:mdi:arrow-right}\" class=\"icon\" /></template>",
+      "</InputButton>"
+    ]
+  },
+  "SRCDEV InputButton Icon Only": {
+    "description": "Icon-only InputButton (buttonText becomes the accessible name)",
+    "scope": "vue,html",
+    "body": [
+      "<InputButton variant=\"${1|tertiary,secondary,primary|}\" button-text=\"${2:Accessible label}\" @click=\"$3\">",
+      "  <template #iconOnly><Icon name=\"${4:mdi:close}\" class=\"icon\" /></template>",
+      "</InputButton>"
+    ]
+  }
+}

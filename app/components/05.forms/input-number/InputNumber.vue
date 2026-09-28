@@ -127,7 +127,7 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
         font-weight: 900;
       }
 
-      .input-button-core {
+      .input-button {
         background-color: var(--_surface);
         color: var(--input-number-text-color, var(--theme-input-text-color-normal));
         border: none;
@@ -167,11 +167,11 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
       }
     }
 
-    &.has-left-slot .left-slot .input-button-core {
+    &.has-left-slot .left-slot .input-button {
       border-right: var(--form-element-border-width) solid var(--_border);
     }
 
-    &.has-right-slot .right-slot .input-button-core {
+    &.has-right-slot .right-slot .input-button {
       border-left: var(--form-element-border-width) solid var(--_border);
     }
 

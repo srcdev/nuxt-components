@@ -85,8 +85,8 @@ slot always wins over app.config.
   <template #title>Cookies</template>
   <template #content>We use cookies to understand how the site is used.</template>
   <template #actions>
-    <InputButtonCore type="button" variant="tertiary" button-text="Reject" @click="reject" />
-    <InputButtonCore type="button" variant="primary" button-text="Accept" @click="accept" />
+    <InputButton type="button" variant="tertiary" button-text="Reject" @click="reject" />
+    <InputButton type="button" variant="primary" button-text="Accept" @click="accept" />
   </template>
 </AlertContent>
 ```

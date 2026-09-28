@@ -2,7 +2,7 @@
 
 ## Overview
 
-When a component needs an action button visually attached to an input-like wrapper (e.g. copy-to-clipboard, search-submit), use `InputButtonCore variant="inline"` rather than a raw `<button>`. The `inline` variant applies no built-in styles intentionally — the parent component's CSS provides all context. This keeps the button consistent with the rest of the input system (focus rings, hover tokens, transition timing) without duplicating the button style system.
+When a component needs an action button visually attached to an input-like wrapper (e.g. copy-to-clipboard, search-submit), use `InputButton variant="inline"` rather than a raw `<button>`. The `inline` variant applies no built-in styles intentionally — the parent component's CSS provides all context. This keeps the button consistent with the rest of the input system (focus rings, hover tokens, transition timing) without duplicating the button style system.
 
 ## Pattern
 
@@ -10,7 +10,7 @@ When a component needs an action button visually attached to an input-like wrapp
 <template>
   <div class="my-wrapper" :class="{ 'some-state': isActive }">
     <input class="my-field" ... />
-    <InputButtonCore
+    <InputButton
       type="button"
       variant="inline"
       class="my-action-button"
@@ -21,16 +21,16 @@ When a component needs an action button visually attached to an input-like wrapp
       <template v-if="slots.icon" #left>
         <slot name="icon"></slot>
       </template>
-    </InputButtonCore>
+    </InputButton>
   </div>
 </template>
 ```
 
-`aria-label` is not a declared prop on InputButtonCore — it falls through to the root element via Vue's default `inheritAttrs: true`.
+`aria-label` is not a declared prop on InputButton — it falls through to the root element via Vue's default `inheritAttrs: true`.
 
 ## CSS
 
-Target `.my-action-button.input-button-core` inside the wrapper to override InputButtonCore's defaults. Use theme tokens — not private `--_` tokens — for colours that already have theme equivalents:
+Target `.my-action-button.input-button` inside the wrapper to override InputButton's defaults. Use theme tokens — not private `--_` tokens — for colours that already have theme equivalents:
 
 ```css
 @layer components {
@@ -41,7 +41,7 @@ Target `.my-action-button.input-button-core` inside the wrapper to override Inpu
     border-radius: var(--form-input-border-radius);
     background-color: var(--theme-input-surface);
 
-    .my-action-button.input-button-core {
+    .my-action-button.input-button {
       border-radius: 0;
       border-inline-start: var(--form-element-border-width) solid var(--theme-input-border);
       padding-inline: var(--input-padding-inline);
@@ -65,7 +65,7 @@ Target `.my-action-button.input-button-core` inside the wrapper to override Inpu
       --_state-surface: light-dark(var(--green-01), var(--green-09));
       --_state-text: light-dark(var(--green-08), var(--green-01));
 
-      .my-action-button.input-button-core {
+      .my-action-button.input-button {
         background-color: var(--_state-surface);
         color: var(--_state-text);
       }

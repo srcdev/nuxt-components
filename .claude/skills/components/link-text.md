@@ -2,7 +2,7 @@
 
 ## Overview
 
-`LinkText` renders a `NuxtLink` styled as a standalone text link, with optional left and/or right icon slots. Icons are vertically centred with the label text. Intended as a CTA-style link — distinct from `InputButtonCore` (which is a button/link hybrid with button styling).
+`LinkText` renders a `NuxtLink` styled as a standalone text link, with optional left and/or right icon slots. Icons are vertically centred with the label text. Intended as a CTA-style link — distinct from `InputButton` (which is a button/link hybrid with button styling).
 
 ## Props
 

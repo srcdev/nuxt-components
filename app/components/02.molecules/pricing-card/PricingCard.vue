@@ -25,7 +25,7 @@
 
     <div class="pricing-card__cta">
       <slot name="cta" :cta-text="ctaText" :is-disabled="ctaDisabled" :plan-name="planName" :on-select="handleSelect">
-        <InputButtonCore :button-text="ctaText" :readonly="ctaDisabled" @click="handleSelect" />
+        <InputButton :button-text="ctaText" :readonly="ctaDisabled" @click="handleSelect" />
       </slot>
     </div>
   </component>
@@ -250,7 +250,7 @@ watch(
     .pricing-card__cta {
       align-self: var(--_cta-align);
 
-      :deep(.input-button-core) {
+      :deep(.input-button) {
         padding: var(--_cta-padding);
         background-color: var(--_cta-bg);
         color: var(--_cta-text);

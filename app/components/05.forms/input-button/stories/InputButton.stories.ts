@@ -1,9 +1,9 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
-import StorybookComponent from "../InputButtonCore.vue";
+import StorybookComponent from "../InputButton.vue";
 import InputTextCore from "../../input-text/InputTextCore.vue";
 
-interface InputButtonCoreStoryArgs {
+interface InputButtonStoryArgs {
   type: "submit" | "button" | "reset";
   theme: "default" | "success" | "error" | "warning";
   variant: "primary" | "secondary" | "tertiary" | "inline";
@@ -27,7 +27,7 @@ interface InputButtonCoreStoryArgs {
 }
 
 export default {
-  title: "Components/Forms/Input Button/InputButtonCore",
+  title: "Components/Forms/Input Button/InputButton",
   component: StorybookComponent,
   argTypes: {
     // Basic Configuration
@@ -215,14 +215,9 @@ export default {
     rightIconName: "mdi:arrow-right",
     iconOnlyName: "mdi:flash",
   },
-  // NOTE: In your InputButtonCore.vue component, ensure you do NOT destructure props in <script setup>.
-  // Always use props.variant and props.isPill directly for reactivity.
-  // Example:
-  // const props = defineProps<{ variant: string; isPill: boolean; ... }>()
-  // // Use props.variant, props.isPill in template and script.
 } as Meta<typeof StorybookComponent>;
 
-const Template: StoryFn<InputButtonCoreStoryArgs> = (args) => ({
+const Template: StoryFn<InputButtonStoryArgs> = (args) => ({
   components: { StorybookComponent },
   setup() {
     const clickCount = ref(0);
@@ -314,7 +309,7 @@ NuxtIconOnlyComponent.args = {
   iconOnlyName: "mdi:chevron-right-circle-outline",
 };
 
-// Composition check, not a props demo: confirms InputButtonCore's --button-min-height (defaults
+// Composition check, not a props demo: confirms InputButton's --button-min-height (defaults
 // to var(--input-min-height)) actually keeps it height-aligned with an inline text input, the
 // most common "usual suspect" pairing (e.g. newsletter signup, search bar). Textareas are the
 // deliberate exception to this alignment and aren't part of this story.

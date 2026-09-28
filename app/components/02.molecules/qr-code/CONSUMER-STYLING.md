@@ -9,7 +9,7 @@
 | `--capture-qr-code-aspect-ratio` | `1 / 1` | Root aspect ratio (the camera frame) |
 | `--capture-qr-code-error-gap` | `1.2rem` | Gap between the error message and the reset button |
 
-The reset button is `InputButtonCore` (`variant="secondary"`), styled by its own tokens.
+The reset button is `InputButton` (`variant="secondary"`), styled by its own tokens.
 
 ### DecodeQrCode
 

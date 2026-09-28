@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { computed } from "vue";
-import InputButtonCore from "../../input-button/InputButtonCore.vue";
+import InputButton from "../../input-button/InputButton.vue";
 
 interface PendingEffectStoryArgs {
   isPending: boolean;
@@ -19,7 +19,7 @@ interface PendingEffectStoryArgs {
 export default {
   title: "Components/Forms/Pending Effect/PendingEffect",
   argTypes: {
-    isPending: { control: "boolean", description: "InputButtonCore is-pending", table: { category: "State" } },
+    isPending: { control: "boolean", description: "InputButton is-pending", table: { category: "State" } },
     theme: {
       control: { type: "select" },
       options: ["default", "success", "error", "warning"],
@@ -88,7 +88,7 @@ export default {
 } as Meta<PendingEffectStoryArgs>;
 
 const Template: StoryFn<PendingEffectStoryArgs> = (args) => ({
-  components: { InputButtonCore },
+  components: { InputButton },
   setup() {
     const tokenStyle = computed(() => ({
       ...(args.lineColor ? { "--pending-effect-line-color": args.lineColor } : {}),
@@ -104,11 +104,11 @@ const Template: StoryFn<PendingEffectStoryArgs> = (args) => ({
   template: `
     <div style="margin: 3.6rem;">
       <p style="font-size: 1.4rem; margin-block-end: 2.4rem;">
-        PendingEffect is rendered by InputButtonCore when <code>has-pending-effect</code> is set, and animates while
+        PendingEffect is rendered by InputButton when <code>has-pending-effect</code> is set, and animates while
         <code>is-pending</code> is true. It is hidden under <code>prefers-reduced-motion: reduce</code>.
       </p>
       <div :style="tokenStyle">
-        <InputButtonCore
+        <InputButton
           :button-text="args.buttonText"
           :variant="args.variant"
           :theme="args.theme"

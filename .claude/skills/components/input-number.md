@@ -50,10 +50,10 @@ as `InputRangeCore`'s `v-model` (see that skill doc) — this also satisfies `vu
 | `left` | Rendered before the input (e.g. a step-down button). Adds `has-left-slot` to the wrapper. |
 | `right` | Rendered after the input (e.g. a step-up button). Adds `has-right-slot` to the wrapper. |
 
-Any `.input-button-core` inside `.slot` gets its own border/outline stripped and is sized to
+Any `.input-button` inside `.slot` gets its own border/outline stripped and is sized to
 match the input (`aspect-ratio: 1`, `width: var(--input-min-height)`) regardless of which slot
 it's in. The divider border is then added directly to that button element specifically when its
-slot is present — `&.has-left-slot .left-slot .input-button-core { border-right: ... }` and the
+slot is present — `&.has-left-slot .left-slot .input-button { border-right: ... }` and the
 right-hand mirror — so it sits flush against the button's own edge rather than around the
 containing `.slot` div. This makes step buttons read as embedded segments of the same control
 rather than separate floating buttons. The divider reuses the wrapper's own border colour token
@@ -100,7 +100,7 @@ score-1/5 state. Several latent bugs were fixed alongside the standard checklist
   `InputNumber`'s `.input-number-wrapper`, so the `:has()` selector that was meant to key off
   those classes could never match (the class lived on an ancestor, not a descendant). Replaced
   entirely: `InputNumber` now detects an embedded button directly via
-  `:has(.left-slot .input-button-core)` / `:has(.right-slot .input-button-core)`, so no
+  `:has(.left-slot .input-button)` / `:has(.right-slot .input-button)`, so no
   JS-driven class relay is needed at all.
 - `theme` was typed as an inline `"default" | "success" | "error" | "warning"` union in both
   `InputNumber` and `InputNumberField` instead of importing the shared `FormUiTheme` type —
@@ -163,12 +163,12 @@ unrelated pre-existing bug — see `input-text-core.md`'s Variants section for t
 
 **Correction, same day**: the first version of this rewrite still didn't visually match — the
 divider border and button sizing (`aspect-ratio: 1`, `width: var(--input-min-height)`) had been
-put on the `.left-slot`/`.right-slot` *wrapper divs*, not on `.input-button-core` itself, unlike
+put on the `.left-slot`/`.right-slot` *wrapper divs*, not on `.input-button` itself, unlike
 `InputTextCore`'s equivalent block. That left an unstyled gap between the button and the border
 line instead of a flush edge, and the buttons weren't sized to match the input's height. Fixed by
-moving the divider border and all button sizing/colour rules onto `.input-button-core` directly
-(`&.has-left-slot .left-slot .input-button-core { border-right: ... }`, matching
-`InputTextAsNumberWithLabel`'s `.left-slot .input-button-core { border-right: ... }` exactly)
+moving the divider border and all button sizing/colour rules onto `.input-button` directly
+(`&.has-left-slot .left-slot .input-button { border-right: ... }`, matching
+`InputTextAsNumberWithLabel`'s `.left-slot .input-button { border-right: ... }` exactly)
 rather than the containing `.slot` div. When mirroring another component's CSS structure, check
 *which element* a rule targets, not just that an equivalent rule exists somewhere in the block —
 a border/sizing rule one level off in the DOM tree produces a visually-close-but-not-matching
@@ -182,7 +182,7 @@ result that's easy to miss without a side-by-side screenshot comparison.
 
 `InputNumberField` (`InputNumberField.vue`) composes `InputNumber` with
 `InputLabel`, `InputDescription`, and `InputError`, plus optional step-down/step-up buttons
-(`InputButtonCore`) wired into the `left`/`right` slots.
+(`InputButton`) wired into the `left`/`right` slots.
 
 **Additional props over InputNumber:**
 
@@ -190,8 +190,8 @@ result that's easy to miss without a side-by-side screenshot comparison.
 |------|------|---------|-------|
 | `:label` | `string` | (required) | Rendered via `InputLabel`. |
 | `:error-message` | `object \| string` | (required) | Rendered via `InputError` when `field-has-error` is true. |
-| `:step-down-label` | `string` | `"Step down"` | `button-text` on the step-down `InputButtonCore` — override for localisation. |
-| `:step-up-label` | `string` | `"Step up"` | `button-text` on the step-up `InputButtonCore` — override for localisation. |
+| `:step-down-label` | `string` | `"Step down"` | `button-text` on the step-down `InputButton` — override for localisation. |
+| `:step-up-label` | `string` | `"Step up"` | `button-text` on the step-up `InputButton` — override for localisation. |
 
 **Slots**: `descriptionHtml`, `descriptionText` (both forwarded to `InputDescription`), plus
 `left`/`right` (forwarded straight through to the underlying `InputNumber` — the
@@ -215,5 +215,5 @@ button icon content itself is consumer-supplied).
 
 `v-model` is `number | readonly number[]`, **required** — same as `InputNumber` above.
 
-Step-down is disabled (`readonly` on its `InputButtonCore`) once the value reaches `min`, and
+Step-down is disabled (`readonly` on its `InputButton`) once the value reaches `min`, and
 step-up once it reaches `max`; clicking either button while at that boundary is a no-op.

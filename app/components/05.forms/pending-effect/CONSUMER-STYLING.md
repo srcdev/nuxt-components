@@ -1,17 +1,17 @@
 # PendingEffect — Consumer Styling Guide
 
 `PendingEffect` draws an animated dashed line around a button while it is busy. You don't use it
-directly: `InputButtonCore` renders it when `has-pending-effect` is set, and it animates while
+directly: `InputButton` renders it when `has-pending-effect` is set, and it animates while
 `is-pending` is true.
 
 ```vue
-<InputButtonCore button-text="Save" has-pending-effect :is-pending="saving" />
+<InputButton button-text="Save" has-pending-effect :is-pending="saving" />
 ```
 
 The CSS keys off the host button's classes: `.pending-effect` (added by `has-pending-effect`),
 `.is-pending`, and `.icon-only`. The SVG itself is `.pending-effect-container`.
 
-The line sits outside the button's edge, so nothing around it may clip overflow. `InputButtonCore`
+The line sits outside the button's edge, so nothing around it may clip overflow. `InputButton`
 sets `overflow: visible` on itself when `has-pending-effect` is on, but an ancestor with
 `overflow: hidden` and no spare room (e.g. a tight card or table cell) will still cut it off.
 
@@ -87,6 +87,6 @@ Set the tokens above on an element you own (a page or section class, or a class 
 
 ## Class passthrough
 
-`:style-class-passthrough` adds classes to the SVG. `InputButtonCore` doesn't forward it, so this
+`:style-class-passthrough` adds classes to the SVG. `InputButton` doesn't forward it, so this
 only matters if you render `PendingEffect` yourself.
 

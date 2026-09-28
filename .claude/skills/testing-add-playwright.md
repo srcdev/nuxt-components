@@ -105,7 +105,7 @@ and replace `/` with `-`:
 | Story `title`                                     | `STORY_BASE`                                    |
 | ------------------------------------------------- | ----------------------------------------------- |
 | `"Atoms/Text Blocks/HeroText"`                    | `atoms-text-blocks-herotext`                    |
-| `"Components/Forms/Input Button/InputButtonCore"` | `components-forms-input-button-inputbuttoncore` |
+| `"Components/Forms/Input Button/InputButton"` | `components-forms-input-button-inputbuttoncore` |
 
 The full story URL pattern is:
 

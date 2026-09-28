@@ -15,7 +15,7 @@ documented path to reach for.)
 | Token | Falls back to | Controls |
 |---|---|---|
 | `--input-text-surface` | `var(--theme-input-surface)` | Wrapper background |
-| `--input-text-surface-hover` | `var(--theme-input-surface-hover)` | Background of an embedded `InputButtonCore` slot on hover |
+| `--input-text-surface-hover` | `var(--theme-input-surface-hover)` | Background of an embedded `InputButton` slot on hover |
 | `--input-text-border` | `var(--theme-border)` | Border colour (`.normal`/`.underlined`, resting) |
 | `--input-text-border-hover` | `var(--theme-border-focus)` | Outline colour on hover (mouse) |
 | `--input-text-border-focus` | `var(--theme-border-focus)` | Outline colour on `:focus-visible` (keyboard/assistive) |

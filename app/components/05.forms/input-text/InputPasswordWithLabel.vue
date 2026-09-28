@@ -21,7 +21,7 @@
     </template>
 
     <template #right>
-      <InputButtonCore
+      <InputButton
         type="button"
         :is-pending="false"
         :button-text
@@ -33,7 +33,7 @@
           <Icon v-if="displayPassword" name="radix-icons:eye-none" class="icon" />
           <Icon v-else name="radix-icons:eye-open" class="icon" />
         </template>
-      </InputButtonCore>
+      </InputButton>
     </template>
   </InputTextWithLabel>
 </template>

@@ -8,7 +8,7 @@
       :hero-config="heroConfig"
     >
       <template #actions="{ serviceData }">
-        <InputButtonCore
+        <InputButton
           variant="secondary"
           :button-text="`${buttonTextPrefix} ${serviceData.title}`"
           :href="`${hrefBase}${serviceData.slug}`"
@@ -17,7 +17,7 @@
           <template #right>
             <Icon :name="buttonIcon" class="icon" aria-hidden="true" />
           </template>
-        </InputButtonCore>
+        </InputButton>
       </template>
     </ServicesCard>
   </component>

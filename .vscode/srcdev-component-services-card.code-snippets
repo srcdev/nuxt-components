@@ -5,7 +5,7 @@
     "body": [
       "<ServicesCard :service-data=\"$1service\">",
       "  <template #actions=\"{ serviceData }\">",
-      "    <InputButtonCore",
+      "    <InputButton",
       "      variant=\"secondary\"",
       "      :button-text=\"`More about ${serviceData.title}`\"",
       "      :href=\"`/services/${serviceData.slug}`\"",
@@ -13,7 +13,7 @@
       "      <template #right>",
       "        <Icon name=\"mdi:arrow-right\" class=\"icon\" />",
       "      </template>",
-      "    </InputButtonCore>",
+      "    </InputButton>",
       "  </template>",
       "</ServicesCard>"
     ]
@@ -35,7 +35,7 @@
       "  :hero-config=\"{ tag: '$3h3', fontSize: '$4title' }\"",
       ">",
       "  <template #actions=\"{ serviceData }\">",
-      "    <InputButtonCore variant=\"secondary\" button-text=\"$5Enquire\" :href=\"`/services/${serviceData.slug}`\" />",
+      "    <InputButton variant=\"secondary\" button-text=\"$5Enquire\" :href=\"`/services/${serviceData.slug}`\" />",
       "  </template>",
       "</ServicesCard>"
     ]
@@ -54,7 +54,7 @@
       "    <span>From {{ serviceData.price }}</span>",
       "  </template>",
       "  <template #actions=\"{ serviceData }\">",
-      "    <InputButtonCore variant=\"secondary\" button-text=\"$2Enquire\" :href=\"`/services/${serviceData.slug}`\" />",
+      "    <InputButton variant=\"secondary\" button-text=\"$2Enquire\" :href=\"`/services/${serviceData.slug}`\" />",
       "  </template>",
       "</ServicesCard>"
     ]

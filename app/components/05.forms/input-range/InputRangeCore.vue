@@ -77,7 +77,7 @@ const modelValue = defineModel<number>({
     .slot {
       align-self: flex-start;
 
-      .input-button-core {
+      .input-button {
         border-radius: var(--form-input-border-radius);
         width: var(--input-range-button-size);
         height: var(--input-range-button-size);

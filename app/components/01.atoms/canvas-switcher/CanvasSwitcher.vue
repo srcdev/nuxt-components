@@ -2,7 +2,7 @@
   <div class="canvas-switcher" :class="[elementClasses]">
     <ul class="canvas-switcher-list">
       <li v-for="option in canvasOptions" :key="option.value">
-        <InputButtonCore
+        <InputButton
           type="button"
           variant="tertiary"
           class="canvas-switcher-button"
@@ -13,7 +13,7 @@
           <template #iconOnly>
             <Icon :name="option.icon" class="icon"/>
           </template>
-        </InputButtonCore>
+        </InputButton>
       </li>
     </ul>
   </div>
@@ -77,7 +77,7 @@ watch(
     padding: 0;
   }
 
-  .canvas-switcher-button.input-button-core {
+  .canvas-switcher-button.input-button {
     color: var(--canvas-switcher-icon-colour, var(--slate-10));
 
     &[aria-pressed="true"] {

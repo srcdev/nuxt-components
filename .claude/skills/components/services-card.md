@@ -24,7 +24,7 @@ A row below the description shows duration (left) and price (right), separated b
 
 ### Whole-card clickable (`href`)
 
-When `href` is set **and no `actions` slot content is provided**, the root element switches from `tag` to a link (`NuxtLink` for an internal href starting with `/`, a plain `a` otherwise) and the whole card becomes clickable — matching `InputButtonCore`'s link-resolution pattern. `external` forces a plain `a` tag even for an internal-looking href (e.g. a Nitro server route like `/api/auth/github`).
+When `href` is set **and no `actions` slot content is provided**, the root element switches from `tag` to a link (`NuxtLink` for an internal href starting with `/`, a plain `a` otherwise) and the whole card becomes clickable — matching `InputButton`'s link-resolution pattern. `external` forces a plain `a` tag even for an internal-looking href (e.g. a Nitro server route like `/api/auth/github`).
 
 If an `actions` slot is provided, the card stays as a static `tag` element (no href rendered) even when `href` is set — this avoids nesting another interactive element (e.g. a button/link in `actions`) inside the card's own anchor, which would be invalid HTML. Use the `href` mode for a plain "whole card links out" card with no separate CTA, and the `actions`-slot mode (see Basic usage below) when the card needs its own button/link.
 
@@ -73,7 +73,7 @@ scaffold a style block using `styleClassPassthrough` instead — see
 ```vue
 <ServicesCard :service-data="service">
   <template #actions="{ serviceData }">
-    <InputButtonCore
+    <InputButton
       variant="secondary"
       :button-text="`More about ${serviceData.title}`"
       :href="`/services/${serviceData.slug}`"
@@ -81,7 +81,7 @@ scaffold a style block using `styleClassPassthrough` instead — see
       <template #right>
         <Icon name="mdi:arrow-right" class="icon" />
       </template>
-    </InputButtonCore>
+    </InputButton>
   </template>
 </ServicesCard>
 ```
@@ -95,7 +95,7 @@ scaffold a style block using `styleClassPassthrough` instead — see
   :hero-config="{ tag: 'h3', fontSize: 'title' }"
 >
   <template #actions="{ serviceData }">
-    <InputButtonCore variant="secondary" :button-text="`Enquire`" :href="`/services/${serviceData.slug}`" />
+    <InputButton variant="secondary" :button-text="`Enquire`" :href="`/services/${serviceData.slug}`" />
   </template>
 </ServicesCard>
 ```
@@ -113,7 +113,7 @@ scaffold a style block using `styleClassPassthrough` instead — see
     <span>From {{ serviceData.price }}</span>
   </template>
   <template #actions="{ serviceData }">
-    <InputButtonCore variant="secondary" :button-text="`Enquire`" :href="`/services/${serviceData.slug}`" />
+    <InputButton variant="secondary" :button-text="`Enquire`" :href="`/services/${serviceData.slug}`" />
   </template>
 </ServicesCard>
 ```
@@ -128,7 +128,7 @@ scaffold a style block using `styleClassPassthrough` instead — see
     :hero-config="{ tag: 'h2', fontSize: 'heading' }"
   >
     <template #actions="{ serviceData }">
-      <InputButtonCore
+      <InputButton
         variant="secondary"
         :button-text="`Enquire about ${serviceData.title}`"
         :href="`/services/${serviceData.slug}`"
@@ -137,7 +137,7 @@ scaffold a style block using `styleClassPassthrough` instead — see
         <template #right>
           <Icon name="mdi:arrow-right" class="icon" />
         </template>
-      </InputButtonCore>
+      </InputButton>
     </template>
   </ServicesCard>
 </template>
@@ -174,5 +174,5 @@ No `actions` slot — the entire card renders as an anchor (`NuxtLink` for the i
 - Root markup is two rows (`grid-template-rows: auto 1fr`): `.image-wrapper`, then a `.details-wrapper` (`display: flex; flex-direction: column`) holding the eyebrow, title, description, and a `.footer` wrapper. Description length is controlled by `--description-line-clamp` (default effectively unclamped) rather than a fixed-height grid row.
 - `.footer` groups the meta row and the `actions` slot and gets `margin-block-start: auto`, pinning them to the bottom of the card. Combined with the root's `1fr` details row, this means when `ServicesCardGrid`'s default `align-items: stretch` makes a card taller than its own content (to match a taller sibling in the same row), the extra height goes to `.footer`'s top margin rather than leaving whitespace below the actions slot — so the meta row and actions/button line up across a row of cards regardless of each card's description length. This does the visual job of CSS subgrid without needing a subgrid chain across `ServicesCard`/`ServicesCardGrid` (which would also break whenever cards in a row don't all render the same optional rows — `.meta` and `actions` are both conditional).
 - Image has a `3/4` aspect ratio with a subtle scale-on-hover effect.
-- `.services-card`, `.image-wrapper`, `.details-wrapper`, and `.footer` all set `min-inline-size: 0`. Without it, an unbreakable child — most commonly a long `actions` slot button label, since `InputButtonCore`'s `.button-text` is `white-space: nowrap` with no ellipsis — forces its content's min-content width up through the flex/grid chain and widens that one card's grid column in `ServicesCardGrid` wider than its siblings (the image just rides along on the widened column; it isn't the actual cause). If you see one card/column wider than the rest with cut-off content, check for a long unbreakable string in a slot before assuming it's an image sizing issue.
+- `.services-card`, `.image-wrapper`, `.details-wrapper`, and `.footer` all set `min-inline-size: 0`. Without it, an unbreakable child — most commonly a long `actions` slot button label, since `InputButton`'s `.button-text` is `white-space: nowrap` with no ellipsis — forces its content's min-content width up through the flex/grid chain and widens that one card's grid column in `ServicesCardGrid` wider than its siblings (the image just rides along on the widened column; it isn't the actual cause). If you see one card/column wider than the rest with cut-off content, check for a long unbreakable string in a slot before assuming it's an image sizing issue.
 - Usually consumed via `ServicesCardGrid` rather than directly.

@@ -47,7 +47,7 @@ describe("InputRangeDefault", () => {
 
   it("does not render step buttons when the left/right slots are not used", async () => {
     wrapper = await wrapperFactory();
-    expect(wrapper.findAllComponents({ name: "InputButtonCore" })).toHaveLength(0);
+    expect(wrapper.findAllComponents({ name: "InputButton" })).toHaveLength(0);
   });
 
   it("renders step buttons with default labels when the left/right slots are used", async () => {

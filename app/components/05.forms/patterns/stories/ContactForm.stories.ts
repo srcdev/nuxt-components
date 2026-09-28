@@ -4,7 +4,7 @@ import InputTextWithLabel from "../../input-text/InputTextWithLabel.vue";
 import InputSelectWithLabel from "../../input-select/InputSelectWithLabel.vue";
 import InputTextareaWithLabel from "../../input-textarea/InputTextareaWithLabel.vue";
 import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
-import InputButtonCore from "../../input-button/InputButtonCore.vue";
+import InputButton from "../../input-button/InputButton.vue";
 import FormField from "../../form-field/FormField.vue";
 import HeroText from "../../../01.atoms/text-blocks/hero-text/HeroText.vue";
 import type { IFormMultipleOptions, InputUiVariant } from "~/types/forms/types.forms.d";
@@ -40,7 +40,7 @@ const Template: StoryFn<ContactFormStoryArgs> = (args) => ({
     InputSelectWithLabel,
     InputTextareaWithLabel,
     MultipleCheckboxes,
-    InputButtonCore,
+    InputButton,
     FormField,
     HeroText,
   },
@@ -173,7 +173,7 @@ const Template: StoryFn<ContactFormStoryArgs> = (args) => ({
         </FormField>
 
         <FormField width="wide" :has-gutter="false">
-          <InputButtonCore type="submit" variant="primary" button-text="Send message" />
+          <InputButton type="submit" variant="primary" button-text="Send message" />
         </FormField>
       </form>
     </div>

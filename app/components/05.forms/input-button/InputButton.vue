@@ -5,10 +5,11 @@
     :href="isLink ? props.href : undefined"
     :readonly="!isLink ? props.readonly : undefined"
     :aria-disabled="!isLink ? props.readonly : undefined"
-    data-testid="input-button-core"
+    data-testid="input-button"
     :data-theme="theme"
-    class="input-button-core"
+    class="input-button"
     :class="buttonClasses()"
+    @click.capture="guardReadonly"
   >
     <PendingEffect v-if="hasPendingEffect" :theme="theme" />
 
@@ -92,12 +93,23 @@ const buttonClasses = () => [
   { "is-link": isLink.value },
 ];
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const guardReadonly = (event: MouseEvent) => {
+  if (!props.readonly) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+};
+
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 </script>
 
 <style lang="css">
 @layer components {
-  .input-button-core {
+  .input-button {
     /* all: unset; */
 
     display: grid;
@@ -291,10 +303,8 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
       display: flex;
 
       .icon {
-        aspect-ratio: 1;
         display: inline-block;
-        height: var(--input-icon-size);
-        width: var(--input-icon-size);
+        font-size: var(--input-icon-size);
       }
     }
 

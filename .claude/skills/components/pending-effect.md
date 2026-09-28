@@ -3,12 +3,12 @@
 ## Overview
 
 `PendingEffect` is a decorative SVG that draws an animated dashed line around a busy button. It
-is an internal part of `InputButtonCore`: set `has-pending-effect` on the button and toggle
+is an internal part of `InputButton`: set `has-pending-effect` on the button and toggle
 `is-pending`. Don't render it on its own. Its CSS depends on the host having `.pending-effect`
 (and `position: relative`, which that rule provides), plus `.is-pending` to show and animate it.
 
 ```vue
-<InputButtonCore button-text="Submit" type="submit" has-pending-effect :is-pending="submitting" />
+<InputButton button-text="Submit" type="submit" has-pending-effect :is-pending="submitting" />
 ```
 
 ---
@@ -17,8 +17,8 @@ is an internal part of `InputButtonCore`: set `has-pending-effect` on the button
 
 | Prop (template form) | Type | Default | Notes |
 |------|------|---------|-------|
-| `theme` | `"default" \| "success" \| "error" \| "warning"` | `"default"` | Set as `data-theme` on the SVG, so the `--theme-surface` colour defaults follow the theme. `InputButtonCore` passes its own `theme`. |
-| `:style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the SVG. Not forwarded by `InputButtonCore`. |
+| `theme` | `"default" \| "success" \| "error" \| "warning"` | `"default"` | Set as `data-theme` on the SVG, so the `--theme-surface` colour defaults follow the theme. `InputButton` passes its own `theme`. |
+| `:style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the SVG. Not forwarded by `InputButton`. |
 
 No slots, no events.
 
@@ -27,7 +27,7 @@ No slots, no events.
 ## Behaviour
 
 - Hidden (`opacity: 0`) until the host has `.is-pending`.
-- The host must not clip overflow: the line is drawn outside the host's edge. `InputButtonCore`
+- The host must not clip overflow: the line is drawn outside the host's edge. `InputButton`
   sets `overflow: hidden` on buttons generally, and switches it to `visible` when
   `.pending-effect` is present. Before 2026-09-26 it didn't, so the effect never rendered at all.
 - Under `prefers-reduced-motion: reduce` it never shows, since the animation is the whole effect.

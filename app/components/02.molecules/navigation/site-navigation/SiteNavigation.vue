@@ -32,7 +32,7 @@
       <li aria-hidden="true" role="none" class="nav-indicator-li"><div class="nav__active-indicator"></div></li>
     </ul>
 
-    <InputButtonCore
+    <InputButton
       v-if="isCollapsed && isLoaded"
       class="site-nav-burger"
       :class="{ 'is-open': isMenuOpen }"
@@ -47,7 +47,7 @@
         <span class="burger-bar" aria-hidden="true"></span>
         <span class="burger-bar" aria-hidden="true"></span>
       </template>
-    </InputButtonCore>
+    </InputButton>
 
     <Teleport to="body">
       <div
@@ -589,13 +589,13 @@ watch(
       justify-content: end;
     }
 
-    /* ─── Burger button (InputButtonCore) ──────────────────────────── */
+    /* ─── Burger button (InputButton) ──────────────────────────── */
 
-    .site-nav-burger.input-button-core.icon-only {
+    .site-nav-burger.input-button.icon-only {
       margin-inline-start: auto;
       color: var(--_burger-color);
 
-      /* Strip all InputButtonCore visual styling */
+      /* Strip all InputButton visual styling */
       background: none;
       border: none;
       outline: none;

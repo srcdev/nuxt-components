@@ -1,5 +1,5 @@
 import ServiceDetail from "../ServiceDetail.vue";
-import InputButtonCore from "../../../../05.forms/input-button/InputButtonCore.vue";
+import InputButton from "../../../../05.forms/input-button/InputButton.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import type { Service } from "~/types/types.services";
 
@@ -171,7 +171,7 @@ const storyTheme = {
 
 export const Default: Story = {
   render: (args) => ({
-    components: { ServiceDetail, InputButtonCore },
+    components: { ServiceDetail, InputButton },
     setup() {
       return { args, balayage, relatedServices, storyTheme };
     },
@@ -184,13 +184,13 @@ export const Default: Story = {
         :style="storyTheme"
       >
         <template #book-cta>
-          <InputButtonCore tag="a" href="/contact" button-text="Book now" variant="primary" :style-class-passthrough="['mbs-16']" />
+          <InputButton tag="a" href="/contact" button-text="Book now" variant="primary" :style-class-passthrough="['mbs-16']" />
         </template>
         <template #sidebar-note>
           A patch test is required at least 48 hours before any colour treatment.
         </template>
         <template #final-cta>
-          <InputButtonCore tag="a" href="/contact" button-text="Book now" variant="secondary" />
+          <InputButton tag="a" href="/contact" button-text="Book now" variant="secondary" />
         </template>
       </ServiceDetail>
     `,
@@ -208,17 +208,17 @@ export const Default: Story = {
 export const NoLocationOrRelated: Story = {
   name: "No Location / No Related Services",
   render: (args) => ({
-    components: { ServiceDetail, InputButtonCore },
+    components: { ServiceDetail, InputButton },
     setup() {
       return { args, balayage, storyTheme };
     },
     template: `
       <ServiceDetail v-bind="args" :service-data="balayage" :style="storyTheme">
         <template #book-cta>
-          <InputButtonCore tag="a" href="/contact" button-text="Book now" variant="primary" :style-class-passthrough="['mbs-16']" />
+          <InputButton tag="a" href="/contact" button-text="Book now" variant="primary" :style-class-passthrough="['mbs-16']" />
         </template>
         <template #final-cta>
-          <InputButtonCore tag="a" href="/contact" button-text="Book now" variant="secondary" />
+          <InputButton tag="a" href="/contact" button-text="Book now" variant="secondary" />
         </template>
       </ServiceDetail>
     `,
@@ -236,7 +236,7 @@ export const NoLocationOrRelated: Story = {
 export const CustomBreadcrumbAndHeadings: Story = {
   name: "Custom Breadcrumb & Headings",
   render: (args) => ({
-    components: { ServiceDetail, InputButtonCore },
+    components: { ServiceDetail, InputButton },
     setup() {
       return { args, balayage, relatedServices, storyTheme };
     },
@@ -254,10 +254,10 @@ export const CustomBreadcrumbAndHeadings: Story = {
         :style="storyTheme"
       >
         <template #book-cta>
-          <InputButtonCore tag="a" href="/contact" button-text="Book now" variant="primary" :style-class-passthrough="['mbs-16']" />
+          <InputButton tag="a" href="/contact" button-text="Book now" variant="primary" :style-class-passthrough="['mbs-16']" />
         </template>
         <template #final-cta>
-          <InputButtonCore tag="a" href="/contact" button-text="Book now" variant="secondary" />
+          <InputButton tag="a" href="/contact" button-text="Book now" variant="secondary" />
         </template>
       </ServiceDetail>
     `,
@@ -274,14 +274,14 @@ export const CustomBreadcrumbAndHeadings: Story = {
 export const CustomRelatedServiceLink: Story = {
   name: "Custom Related Service Link (slot override)",
   render: (args) => ({
-    components: { ServiceDetail, InputButtonCore },
+    components: { ServiceDetail, InputButton },
     setup() {
       return { args, balayage, relatedServices, storyTheme };
     },
     template: `
       <ServiceDetail v-bind="args" :service-data="balayage" :related-services="relatedServices" :style="storyTheme">
         <template #book-cta>
-          <InputButtonCore tag="a" href="/contact" button-text="Book now" variant="primary" :style-class-passthrough="['mbs-16']" />
+          <InputButton tag="a" href="/contact" button-text="Book now" variant="primary" :style-class-passthrough="['mbs-16']" />
         </template>
         <template #related-service="{ service }">
           <a :href="'/services/' + service.slug" style="display:flex;gap:1.2rem;align-items:center;color:inherit;text-decoration:none;">
@@ -290,7 +290,7 @@ export const CustomRelatedServiceLink: Story = {
           </a>
         </template>
         <template #final-cta>
-          <InputButtonCore tag="a" href="/contact" button-text="Book now" variant="secondary" />
+          <InputButton tag="a" href="/contact" button-text="Book now" variant="secondary" />
         </template>
       </ServiceDetail>
     `,

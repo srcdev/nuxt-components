@@ -50,7 +50,7 @@ directly.
 | `left` | Rendered before the textarea (decorative — e.g. an icon). Adds `has-left-slot` to the wrapper. |
 | `right` | Rendered after the textarea (decorative). Adds `has-right-slot` to the wrapper. |
 
-Unlike `InputNumber`/`InputRangeCore`, these slots have no built-in `InputButtonCore`
+Unlike `InputNumber`/`InputRangeCore`, these slots have no built-in `InputButton`
 divider/embedded-button styling — they're plain decorative content (see the Storybook stories,
 which use emoji), not a stepper control.
 
