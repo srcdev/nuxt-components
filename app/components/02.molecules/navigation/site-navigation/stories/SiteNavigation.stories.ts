@@ -1,7 +1,7 @@
 import { ref, reactive, computed } from "vue";
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import SiteNavigationComponent from "../SiteNavigation.vue";
-import type { NavItemData } from "~/types/components/navigation-horizontal.d";
+import type { NavItemData } from "~/types/components/nav-item.d";
 
 const meta: Meta<typeof SiteNavigationComponent> = {
   title: "Molecules/SiteNavigation",
@@ -12,11 +12,29 @@ const meta: Meta<typeof SiteNavigationComponent> = {
       options: ["left", "center", "right"],
       description: "Horizontal alignment of the nav list",
     },
+    ariaLabel: {
+      control: { type: "text" },
+      description: "aria-label on the nav landmark",
+      table: { category: "Accessibility" },
+    },
+    openMenuLabel: {
+      control: { type: "text" },
+      description: "Burger button label while the menu is closed",
+      table: { category: "Accessibility" },
+    },
+    closeMenuLabel: {
+      control: { type: "text" },
+      description: "Burger button label while the menu is open",
+      table: { category: "Accessibility" },
+    },
     navItemData: { table: { disable: true } },
     styleClassPassthrough: { table: { disable: true } },
   },
   args: {
     navAlign: "left",
+    ariaLabel: "Site navigation",
+    openMenuLabel: "Open navigation menu",
+    closeMenuLabel: "Close navigation menu",
   },
 };
 
@@ -137,6 +155,9 @@ const DefaultTemplate: StoryFn<typeof SiteNavigationComponent> = (args) => ({
         <SiteNavigationComponent
           :nav-item-data="navItemData"
           :nav-align="args.navAlign"
+          :aria-label="args.ariaLabel"
+          :open-menu-label="args.openMenuLabel"
+          :close-menu-label="args.closeMenuLabel"
         />
       </div>
 

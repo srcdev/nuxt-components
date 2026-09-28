@@ -148,8 +148,8 @@ export const IconAtEnd: StoryFn<ContentDocsStoryArgs> = (args) => ({
     <div>
       <style>
         .content-docs.icon-at-end-demo {
-          --docs-nav-link-icon-order: rtl;
-          --docs-page-nav-link-icon-order: rtl;
+          --content-docs-nav-link-icon-order: rtl;
+          --content-docs-page-nav-link-icon-order: rtl;
         }
       </style>
       <ContentDocs
@@ -160,7 +160,7 @@ export const IconAtEnd: StoryFn<ContentDocsStoryArgs> = (args) => ({
         <template #docsContent>
           <h3 style="margin-top:0">Docs Content</h3>
           <p>
-            <code>--docs-nav-link-icon-order: rtl</code> moves the icon to the end of each
+            <code>--content-docs-nav-link-icon-order: rtl</code> moves the icon to the end of each
             link instead of the start (default <code>ltr</code>).
           </p>
         </template>

@@ -12,6 +12,27 @@ or instance) without touching the component itself.
 | `--page-row-content-max-width` | `1064px` | Maximum width of the `content` column track |
 | `--page-row-inset-content-max-width` | `840px` | Maximum width of the `inset-content` column track |
 
+Private (not public API): `--_minimum-content-padding`, `--_popout-max-width`,
+`--_content-max-width`, `--_inset-content-max-width` (resolved copies of the tokens above) and the
+computed tracks `--_full-track-min`, `--_full-track`, `--_popout-track`, `--_content-track`,
+`--_inset-content-track`.
+
+> Changed 2026-09-27: the computed tracks used to be unprefixed `--full`, `--popout`, `--content`
+> and `--inset-content`. Declared on every `.page-row`, they overwrote any consumer variable with
+> the same (very generic) name inside a page row. They are internal and now carry the `--_` prefix.
+
+---
+
+## State hooks
+
+| Hook | When |
+|---|---|
+| `.page-row.full`, `.popout`, `.content`, `.inset-content` | The `variant` prop (default `content`). Sets the row's own track when nested, and the default track for its direct non-PageRow children |
+| `[data-align="start"]`, `[data-align="end"]` | The `align` prop on a nested row: bleeds to the left or right edge instead of centring |
+
+Direct children of a `.page-row` are grid items placed on a named track (`full`, `popout`,
+`content`, `inset-content`). Place your own child elsewhere with e.g. `grid-column: popout`.
+
 ---
 
 ## Global theming
@@ -38,6 +59,11 @@ Set the tokens above on an element you own (a page or section class, or a class 
 `@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
 `<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
 `:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+
+**Caveat:** a nested `.page-row` re-declares `--_minimum-content-padding` as
+`var(--page-row-minimum-content-padding, 0px)`, so nested rows get no gutter by default. If you set
+`--page-row-minimum-content-padding` on an ancestor, nested rows inherit that value and pick up the
+gutter too. Reset it to `0px` on nested rows if that's not what you want.
 
 ### Page or section
 
@@ -81,6 +107,13 @@ is required (component styles are unscoped).
   }
 }
 ```
+
+---
+
+## Class passthrough
+
+`style-class-passthrough` adds classes to the root `.page-row` element, alongside the variant
+class. Tokens set on a passthrough class land for that row and any rows nested in it.
 
 ---
 

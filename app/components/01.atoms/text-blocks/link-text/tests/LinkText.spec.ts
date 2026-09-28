@@ -166,3 +166,14 @@ describe("LinkText", () => {
     expect(children[2].classList.contains("link-text__icon--right")).toBe(true);
   });
 });
+
+describe("LinkText styleClassPassthrough reactivity", () => {
+  it("updates classes when styleClassPassthrough changes after mount", async () => {
+    const wrapper = await mountSuspended(LinkText, {
+      props: { to: "/about", linkText: "About", styleClassPassthrough: ["original"] },
+    });
+    await wrapper.setProps({ styleClassPassthrough: ["updated"] });
+    expect(wrapper.classes()).not.toContain("original");
+    expect(wrapper.classes()).toContain("updated");
+  });
+});

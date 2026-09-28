@@ -123,9 +123,9 @@ Building this component's forced-open/forced-closed cycling surfaced a real bug 
 
 ## Icons
 
-`DocsNavItem.icon` is optional (any icon name resolvable by `<Icon>`, e.g. Lucide set: `"lucide:rocket"`). Items without an icon still align correctly with icon-bearing items — the link is `display: grid` with a fixed-width icon column (`--docs-nav-link-icon-size`), not `flex`, so an absent icon doesn't collapse the label leftward.
+`DocsNavItem.icon` is optional (any icon name resolvable by `<Icon>`, e.g. Lucide set: `"lucide:rocket"`). Items without an icon still align correctly with icon-bearing items — the link is `display: grid` with a fixed-width icon column (`--content-docs-link-icon-size`), not `flex`, so an absent icon doesn't collapse the label leftward.
 
-To move the icon to the end of the link instead of the start, set `--docs-nav-link-icon-order` (or `--docs-page-nav-link-icon-order`) to `rtl` (default `ltr`). This uses a `direction` flip to mirror which physical side the fixed-width column renders on, rather than swapping `grid-column` values directly — swapping columns would put the label into the icon-sized track and squeeze it. The icon and label content reset `direction: ltr` internally so text/glyphs don't visually mirror.
+To move the icon to the end of the link instead of the start, set `--content-docs-nav-link-icon-order` (or `--content-docs-page-nav-link-icon-order`) to `rtl` (default `ltr`). This uses a `direction` flip to mirror which physical side the fixed-width column renders on, rather than swapping `grid-column` values directly — swapping columns would put the label into the icon-sized track and squeeze it. The icon and label content reset `direction: ltr` internally so text/glyphs don't visually mirror.
 
 ---
 
@@ -137,7 +137,7 @@ All `--content-docs-*` tokens can be overridden at global, page, or instance sco
 - `-font-size`, `-font-weight`, `-color`, `-bg`, `-margin`, `-padding-block`, `-padding-inline`
 
 **Panel tokens** (shared: `--content-docs-panel-*`, per-side: `--content-docs-{nav,page-nav}-panel-bg`):
-- `-bg` (default: `light-dark(var(--slate-00), var(--slate-10))`, the project's standard card-surface token), `-padding-block`, `-padding-inline`, `-border-radius`
+- `-bg` (default: `var(--page-bg)`), `-padding-block`, `-padding-inline`, `-border-radius`
 
 **Link tokens** (shared: `--content-docs-link-*`, per-side: `--content-docs-{nav,page-nav}-link-*`):
 - `-font-size`, `-padding-block`, `-padding-inline`, `-margin-block`, `-border-radius`, `-color`, `-bg`, `-hover-bg`, `-hover-color`, `-active-bg`, `-active-color`
@@ -147,8 +147,12 @@ All `--content-docs-*` tokens can be overridden at global, page, or instance sco
 - `--content-docs-page-nav-column-width` (default `22rem`, desktop `docsPageNav` track)
 - `--content-docs-page-nav-column-width-tablet` (default `20rem`, tablet's single fixed track — `docsNav` is full-width at tablet)
 
-**Icon tokens** (not `content-docs-` prefixed — shared with the link, not per-side by default):
-- `--docs-nav-link-icon-gap`, `--docs-nav-link-icon-size`, `--docs-nav-link-icon-order` (`ltr`/`rtl`), `--docs-page-nav-link-icon-order`
+**Icon tokens** (shared by both link lists; renamed from `--docs-*` to `--content-docs-*` 2026-09-27, no consumer used the old names):
+- `--content-docs-link-icon-gap`, `--content-docs-link-icon-size` (applied as `font-size` on the icon, pitfall #24), `--content-docs-nav-link-icon-order` (`ltr`/`rtl`), `--content-docs-page-nav-link-icon-order`
+
+---
+
+Full token reference with defaults: `app/components/01.atoms/content-wrappers/docs-pages/CONSUMER-STYLING.md`.
 
 ---
 

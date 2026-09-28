@@ -31,7 +31,12 @@ const componentClasses = computed(() => {
   return [props.fontSize, `axis-${props.axis}`];
 });
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 
 const normalisedContent = computed(() =>
   props.textContent.map((item, index) => ({
@@ -65,38 +70,38 @@ const normalisedContent = computed(() =>
 
     .hero-text__icon {
       aspect-ratio: 1;
-      color: var(--colour-text-accent);
+      color: var(--hero-text-icon-colour, var(--colour-text-accent));
     }
 
     &.display {
-      font-size: var(--hero-text-display);
+      font-size: var(--hero-text-display, clamp(4.8rem, 4vw + 2rem, 9.6rem));
     }
 
     &.title {
-      font-size: var(--hero-text-title);
+      font-size: var(--hero-text-title, clamp(3.6rem, 4vw + 2rem, 4.8rem));
     }
 
     &.heading {
-      font-size: var(--hero-text-heading);
+      font-size: var(--hero-text-heading, clamp(2.8rem, 4vw + 2rem, 3rem));
     }
 
     &.subheading {
-      font-size: var(--hero-text-subheading);
+      font-size: var(--hero-text-subheading, 2.4rem);
 
       .hero-text__icon {
-        width: calc(var(--hero-text-subheading) * 0.75) !important;
+        font-size: 0.75em;
       }
     }
 
     &.label {
-      font-size: var(--hero-text-label);
+      font-size: var(--hero-text-label, 1.75rem);
     }
 
     .accent {
       --_hero-text-accent-offset: var(--hero-text-accent-offset, 0.2em);
 
       background-clip: text;
-      background-image: var(--hero-text-bg-img);
+      background-image: var(--hero-text-bg-img, linear-gradient(135deg, #c2a770, #b4747e, #d1bd94));
       font-style: italic;
       color: transparent;
       padding-bottom: var(--_hero-text-accent-offset);

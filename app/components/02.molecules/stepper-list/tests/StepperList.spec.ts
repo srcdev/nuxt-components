@@ -118,6 +118,15 @@ describe("StepperList", () => {
     expect(wrapper.classes()).toContain("class-b");
   });
 
+  it("updates classes when styleClassPassthrough changes after mount", async () => {
+    const wrapper = await mountSuspended(StepperList, {
+      props: { itemCount: 1, styleClassPassthrough: ["original"] },
+    });
+    await wrapper.setProps({ styleClassPassthrough: ["updated"] });
+    expect(wrapper.classes()).not.toContain("original");
+    expect(wrapper.classes()).toContain("updated");
+  });
+
   it("renders cleanly with no styleClassPassthrough prop", async () => {
     const wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1 },

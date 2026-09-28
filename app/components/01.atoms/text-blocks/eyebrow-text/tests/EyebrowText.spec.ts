@@ -194,3 +194,14 @@ describe("EyebrowText", () => {
     expect(wrapper.text()).toBe("Limited Edition");
   });
 });
+
+describe("EyebrowText styleClassPassthrough reactivity", () => {
+  it("updates classes when styleClassPassthrough changes after mount", async () => {
+    const wrapper = await mountSuspended(EyebrowText, {
+      props: { textContent: "Eyebrow", styleClassPassthrough: ["original"] },
+    });
+    await wrapper.setProps({ styleClassPassthrough: ["updated"] });
+    expect(wrapper.classes()).not.toContain("original");
+    expect(wrapper.classes()).toContain("updated");
+  });
+});

@@ -1,7 +1,7 @@
 import { ref, reactive, computed } from "vue";
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import TabNavigationComponent from "../TabNavigation.vue";
-import type { NavItemData } from "~/types/components/navigation-horizontal.d";
+import type { NavItemData } from "~/types/components/nav-item.d";
 
 const meta: Meta<typeof TabNavigationComponent> = {
   title: "Molecules/TabNavigation",

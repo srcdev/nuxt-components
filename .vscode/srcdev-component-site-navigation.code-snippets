@@ -1,30 +1,38 @@
 {
-  "SRCDEV SiteNavigation Basic": {
-    "description": "SiteNavigation horizontal nav with sliding active/hover indicator",
+  "SRCDEV SiteNavigation": {
+    "description": "SiteNavigation: horizontal links that collapse to a burger panel when they don't fit",
     "scope": "vue,html",
     "body": [
-      "<SiteNavigation :nav-item-data=\"$1navData\" nav-align=\"${2:left}\" />"
+      "<SiteNavigation",
+      "  :nav-item-data=\"$1navItems\"",
+      "  nav-align=\"${2|left,center,right|}\"",
+      "  aria-label=\"${3:Site navigation}\"",
+      "></SiteNavigation>"
     ]
   },
-  "SRCDEV SiteNavigation Localised": {
-    "description": "SiteNavigation with a localised aria-label",
-    "scope": "vue,html",
+  "SRCDEV SiteNavigation Items": {
+    "description": "NavItemData object for SiteNavigation",
+    "scope": "javascript,typescript",
     "body": [
-      "<SiteNavigation :nav-item-data=\"$1navData\" aria-label=\"${2:Site navigation}\" />"
-    ]
-  },
-  "SRCDEV SiteNavigation Nav Data Script": {
-    "description": "navItemData for SiteNavigation",
-    "scope": "typescript,vue",
-    "body": [
-      "import type { NavItemData } from \"srcdev-nuxt-components\";",
-      "",
-      "const $1navData: NavItemData = {",
+      "const $1navItems: NavItemData = {",
       "  main: [",
-      "    { text: \"$2Home\", href: \"$3/\" },",
-      "    { text: \"$4About\", href: \"$5/about\" },",
+      "    { text: \"$2Home\", href: \"/\" },",
+      "    { text: \"$3About\", href: \"/about\" },",
       "  ],",
       "};"
+    ]
+  },
+  "SRCDEV SiteNavigation CSS Override": {
+    "description": "CSS override scaffold for SiteNavigation tokens (backdrop tokens go on :root)",
+    "scope": "css",
+    "body": [
+      ".$1site-header {",
+      "  --site-nav-link-color: $2;",
+      "  --site-nav-link-hover-color: $3;",
+      "  --site-nav-decorator-indicator-color: $4;",
+      "  --site-nav-panel-bg: $5;",
+      "  --site-nav-burger-color: $6;",
+      "}"
     ]
   }
 }

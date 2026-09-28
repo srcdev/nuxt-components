@@ -31,6 +31,11 @@ const meta: Meta<typeof DisplayQrCodeComponent> = {
       description: "Color of the QR code background",
       table: { category: "Appearance" },
     },
+    ariaLabel: {
+      control: { type: "text" },
+      description: "Accessible name for the QR image (override for a more specific or translated label)",
+      table: { category: "Accessibility" },
+    },
     variant: { table: { disable: true } },
     styleClassPassthrough: { table: { disable: true } },
   },
@@ -40,6 +45,7 @@ const meta: Meta<typeof DisplayQrCodeComponent> = {
     radius: 0,
     blackColor: "#000000",
     whiteColor: "transparent",
+    ariaLabel: "QR code",
     styleClassPassthrough: [],
   },
 };
@@ -52,6 +58,7 @@ interface QrStoryArgs {
   radius: number;
   blackColor: string;
   whiteColor: string;
+  ariaLabel: string;
   styleClassPassthrough: string[];
 }
 
@@ -68,12 +75,13 @@ const DisplayTemplate: StoryFn<QrStoryArgs> = (args, { parameters }) => ({
   template: `
     <div style="padding: 40px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border-radius: 8px;">
       <DisplayQrCodeComponent
-        :qrValue="args.qrValue"
+        :qr-value="args.qrValue"
         :variant="variant"
         :radius="args.radius"
-        :blackColor="args.blackColor"
-        :whiteColor="args.whiteColor"
+        :black-color="args.blackColor"
+        :white-color="args.whiteColor"
         :size="args.size"
+        :aria-label="args.ariaLabel"
         :style-class-passthrough="args.styleClassPassthrough"
       />
     </div>

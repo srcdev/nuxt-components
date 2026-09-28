@@ -84,7 +84,7 @@ Key CSS custom properties — define these in your consuming app to control appe
 | Property | Default | Purpose |
 |----------|---------|---------|
 | `--link-text-colour` | `currentColor` | Link text/icon colour |
-| `--link-text-colour-hover` | `currentColor` | Colour on hover/focus |
+| `--link-text-colour-hover` | `--link-text-colour` | Colour on hover/focus (falls back to the resting colour; before 2026-09-27 it fell back to the parent text colour) |
 | `--link-text-gap` | `0.4em` | Gap between icon and label |
 | `--link-text-font-size` | `inherit` | Font size |
 | `--link-text-decoration` | `underline` | Text decoration |

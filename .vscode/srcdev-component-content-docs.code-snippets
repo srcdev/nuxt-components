@@ -89,10 +89,10 @@
     "body": [
       ".$1my-content-docs {",
       "  .content-docs {",
-      "    --docs-nav-link-icon-gap: $2;",
-      "    --docs-nav-link-icon-size: $3;",
-      "    --docs-nav-link-icon-order: $4rtl; /* icon at the end */",
-      "    --docs-page-nav-link-icon-order: $5ltr; /* icon at the start (default) */",
+      "    --content-docs-link-icon-gap: $2;",
+      "    --content-docs-link-icon-size: $3;",
+      "    --content-docs-nav-link-icon-order: $4rtl; /* icon at the end */",
+      "    --content-docs-page-nav-link-icon-order: $5ltr; /* icon at the start (default) */",
       "  }",
       "}"
     ]

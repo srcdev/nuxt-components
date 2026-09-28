@@ -55,7 +55,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | Component | File | CS | SN |
 |---|---|---|---|
 | ActionMenu | `action-menu/ActionMenu.vue` | ✅ | ☐ |
-| ActionMenuItemCore | `action-menu/ActionMenuItemCore.vue` | — | — |
+| ActionMenuItem | `action-menu/ActionMenuItem.vue` | — | — |
 | AlertContent | `alert-content/AlertContent.vue` | ✅ | ✅ `alert-content` |
 | AlertContentInner | `alert-content/AlertContentInner.vue` | — | — |
 | AlertMaskedContent | `alert-masked-content/AlertMaskedContent.vue` | ✅ | ✅ `alert-masked-content` |
@@ -67,7 +67,6 @@ Tracks progress toward a fully migrated component library. A component is consid
 | DisplayToastProvider | `toast/DisplayToastProvider.vue` | ✅ | ✅ `display-toast` |
 | AccordianCore | `expandable/accordian/AccordianCore.vue` | ☐ | ☐ |
 | ExpandingPanel | `expandable/expanding-panel/ExpandingPanel.vue` | ☐ | ☐ |
-| NavigationHorizontal | `navigation/navigation-horizontal/NavigationHorizontal.vue` | ☐ | ☐ |
 | SiteNavigation | `navigation/site-navigation/SiteNavigation.vue` | ☐ | ☐ |
 | TabNavigation | `navigation/tab-navigation/TabNavigation.vue` | ✅ | ☐ |
 | OpeningHours | `opening-hours/OpeningHours.vue` | ✅ | ✅ `opening-hours` |

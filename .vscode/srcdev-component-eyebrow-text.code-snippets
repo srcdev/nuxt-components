@@ -1,0 +1,19 @@
+{
+  "SRCDEV EyebrowText": {
+    "description": "EyebrowText label above a heading",
+    "scope": "vue,html",
+    "body": [
+      "<EyebrowText text-content=\"$1\" font-size=\"${2|medium,large,small|}\" tag=\"${3|div,p,span|}\"></EyebrowText>"
+    ]
+  },
+  "SRCDEV EyebrowText CSS Override": {
+    "description": "CSS override scaffold for EyebrowText tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --eyebrow-text-bg-img: linear-gradient(135deg, $2, $3);",
+      "  --eyebrow-text-medium: $4;",
+      "}"
+    ]
+  }
+}

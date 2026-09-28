@@ -9,7 +9,7 @@
       :aria-label="label"
       aria-haspopup="menu"
     >
-      <Icon name="lucide:ellipsis" class="action-menu-trigger-icon" aria-hidden="true" />
+      <Icon :name="triggerIcon" class="action-menu-trigger-icon" aria-hidden="true" />
     </button>
 
     <div
@@ -21,7 +21,7 @@
       @keydown="handleKeydown"
     >
       <ul class="action-menu-list" role="menu" :aria-label="label">
-        <li v-for="n in itemCount" :key="n - 1" class="action-menu-list-item" role="none" @click="closeMenu">
+        <li v-for="n in itemCount()" :key="n - 1" class="action-menu-list-item" role="none" @click="closeMenu">
           <slot :name="`item-${n - 1}`"></slot>
         </li>
       </ul>
@@ -32,16 +32,18 @@
 <script setup lang="ts">
 interface Props {
   label?: string;
+  triggerIcon?: string;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   label: "Open actions menu",
+  triggerIcon: "lucide:ellipsis",
   styleClassPassthrough: () => [],
 });
 
 const slots = useSlots();
-const itemCount = computed(() => Object.keys(slots).filter((name) => /^item-\d+$/.test(name)).length);
+const itemCount = () => Object.keys(slots).filter((name) => /^item-\d+$/.test(name)).length;
 
 const id = useId();
 const menuId = `action-menu-${id}`;
@@ -111,7 +113,12 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 };
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 </script>
 
 <style lang="css">
@@ -161,8 +168,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
       .action-menu-trigger-icon {
         display: block;
-        width: var(--_trigger-icon-size);
-        height: var(--_trigger-icon-size);
+        font-size: var(--_trigger-icon-size);
       }
     }
 

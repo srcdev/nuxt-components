@@ -1,19 +1,5 @@
 # DisplayDialog — Consumer Styling Guide
 
-## Structural class names (2026-08-22)
-
-`DisplayDialog` renders `<dialog>` inline in the component tree, not via `<Teleport>` — so it's a
-genuine descendant of wherever it's used in the page, and any ancestor's CSS selectors reach it.
-Before 2026-08-22 its internal sections used bare generic class names (`.inner`, `.header`,
-`.footer`, `.col-left`, `.col-right`, `.dialog-content`) — a consumer app with its own `.header`/
-`.footer` layout classes (extremely common names) had its unlayered site CSS silently override the
-dialog's own footer layout (button alignment, padding) purely by class-name collision, since
-unlayered CSS always beats `@layer components` regardless of specificity. All six renamed to
-`.display-dialog-*` prefixed variants (`.display-dialog-inner`, `.display-dialog-header`, etc.) —
-update any consumer overrides written against the old names.
-
----
-
 ## Public token API
 
 All `--display-dialog-*` tokens are the stable override surface. Because dialogs are site-wide UI
@@ -34,9 +20,16 @@ file** rather than per-instance via `styleClassPassthrough`.
 | Token | Default | Controls |
 |---|---|---|
 | `--display-dialog-inner-border-radius` | `0.8rem` | Panel corner rounding |
-| `--display-dialog-inner-border` | `0.1rem solid light-dark(var(--slate-10), var(--slate-02))` | Panel border shorthand |
-| `--display-dialog-inner-outline` | `0.1rem solid light-dark(var(--slate-10), var(--slate-00))` | Panel outer outline (sits outside the border) |
-| `--display-dialog-inner-background` | `light-dark(var(--slate-00), var(--slate-10))` | Panel background colour |
+| `--display-dialog-inner-border` | `0.1rem solid var(--colour-text-default)` | Panel border shorthand |
+| `--display-dialog-inner-outline` | `0.1rem solid var(--colour-text-default)` | Panel outer outline (sits outside the border) |
+| `--display-dialog-inner-background` | `var(--page-bg)` | Panel background colour |
+
+> Changed 2026-09-27: the four panel tokens are now resolved on `.display-dialog-inner` (they were
+> resolved on the outer `.display-dialog`), so setting them on the panel itself, e.g. per variant
+> with `.display-dialog-inner.alert`, now works. Colour defaults no longer call `light-dark()`
+> (unsupported on older iPad Safari); they use the global scheme-aware `--colour-text-default` and
+> `--page-bg` instead, so they still follow light/dark mode (dark panel is now `--slate-08`, was
+> `--slate-10`).
 
 ### Header
 
@@ -48,9 +41,9 @@ file** rather than per-instance via `styleClassPassthrough`.
 | `--display-dialog-header-button-border` | `0.1rem solid transparent` | Close button border (resting) |
 | `--display-dialog-header-button-border-radius` | `0.4rem` | Close button corner rounding |
 | `--display-dialog-header-button-outline` | `0.1rem solid transparent` | Close button outline (resting) |
-| `--display-dialog-header-button-border-hover` | `0.1rem solid light-dark(var(--slate-08), var(--slate-04))` | Close button border on hover/focus |
-| `--display-dialog-header-button-outline-hover` | `0.1rem solid light-dark(var(--slate-08), var(--slate-04))` | Close button outline on hover/focus |
-| `--display-dialog-header-button-icon-color` | `light-dark(var(--slate-09), var(--slate-02))` | Close button icon colour |
+| `--display-dialog-header-button-border-hover` | `0.1rem solid var(--colour-text-default)` | Close button border on hover/focus |
+| `--display-dialog-header-button-outline-hover` | `0.1rem solid var(--colour-text-default)` | Close button outline on hover/focus |
+| `--display-dialog-header-button-icon-color` | `var(--colour-text-default)` | Close button icon colour |
 | `--display-dialog-header-button-icon-size` | `2.4rem` | Close button icon size |
 
 ### Content & footer
@@ -60,6 +53,28 @@ file** rather than per-instance via `styleClassPassthrough`.
 | `--display-dialog-content-padding` | `1.2rem` | Content area padding |
 | `--display-dialog-footer-gap` | `1.2rem` | Gap between footer action buttons |
 | `--display-dialog-footer-padding` | `1.2rem` | Footer area padding |
+
+---
+
+## State hooks
+
+| Hook | Element | When |
+|---|---|---|
+| `[open]` | `.display-dialog` | Dialog is open |
+| `[justify-dialog="start|center|end"]` | `.display-dialog` | Horizontal placement of the panel |
+| `[align-dialog="start|center|end"]` | `.display-dialog` | Vertical placement of the panel |
+| `.dialog`, `.modal`, `.confirm`, `.alert`, `.fullscreen` | `.display-dialog-inner` | The resolved `variant` |
+| `[data-theme]` | `.display-dialog-header` | A `theme` is set: adds a `--theme-accent` bottom border and title colour |
+| `.allow-content-scroll` | `.display-dialog-content` | `allow-content-scroll` is on |
+
+Inner classes: `.display-dialog-inner` (panel), `.display-dialog-header`,
+`.display-dialog-col-left` (title), `.display-dialog-col-right`, `.display-dialog-close`,
+`.display-dialog-content`, `.display-dialog-footer`.
+
+> Changed 2026-08-22: these used to be bare generic names (`.inner`, `.header`, `.footer`,
+> `.col-left`, `.col-right`, `.dialog-content`). The dialog renders inline, not teleported, so a
+> consumer's own unlayered `.header`/`.footer` CSS silently restyled it. Update any overrides
+> written against the old names.
 
 ---
 
@@ -95,15 +110,12 @@ Set the tokens above on an element you own (a page or section class, or a class 
 
 ### Per variant
 
-The `fullscreen` variant bypasses `--_inner-border-radius`, `--_inner-border`, and
-`--_inner-outline` directly (setting them to `0`/`none`). To restyle the fullscreen panel,
-target the private tokens on `.display-dialog-inner.fullscreen`:
+The panel tokens resolve on `.display-dialog-inner`, so set them on the variant class:
 
 ```css
 .display-dialog {
   .display-dialog-inner {
     &.confirm {
-      /* e.g. constrain confirm panel width further */
       max-width: 40rem;
     }
 
@@ -112,12 +124,15 @@ target the private tokens on `.display-dialog-inner.fullscreen`:
     }
 
     &.fullscreen {
-      /* private tokens are the only lever here */
-      --_inner-background: var(--brand-surface-alt);
+      --display-dialog-inner-background: var(--brand-surface-alt);
     }
   }
 }
 ```
+
+**Caveat:** `fullscreen` forces its radius, border and outline to `0`/`none` on the panel itself,
+so `--display-dialog-inner-border-radius`, `-border` and `-outline` have no effect on that variant
+(its background still follows `--display-dialog-inner-background`).
 
 ### Page or section
 
@@ -159,7 +174,7 @@ needs a different look, pass a modifier class and target it alongside `.display-
 
 ---
 
-## Section targeting
+## Recipe: section targeting
 
 Target `.display-dialog-header`, `.display-dialog-content`, and `.display-dialog-footer` directly to adjust layout within the panel:
 
@@ -180,3 +195,9 @@ Target `.display-dialog-header`, `.display-dialog-content`, and `.display-dialog
 }
 ```
 
+---
+
+## Class passthrough
+
+`style-class-passthrough` adds classes to the root `<dialog class="display-dialog">`, so tokens
+set on a passthrough class land for the whole dialog (see **One instance** above).

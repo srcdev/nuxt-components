@@ -14,6 +14,7 @@ Renders a styled QR code SVG from a string value. Supports colour, size, corner 
 | `black-color` | `string` | `"currentColor"` | Colour for the dark modules |
 | `white-color` | `string` | `"transparent"` | Colour for the light modules |
 | `size` | `string` | `"256px"` | Width of the QR code (height matches via `aspect-ratio: 1 / 1`) |
+| `aria-label` | `string` | `"QR code"` | Accessible name for the QR image (root has `role="img"`). Pass something specific and translated, e.g. "Scan to book an appointment". |
 | `style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the root element |
 
 ### QrCodeVariant type
@@ -28,6 +29,10 @@ const variant: QrCodeVariant = {
   pixel: "dots",
 };
 ```
+
+## CSS token
+
+`--display-qr-code-size` overrides the `size` prop when set (e.g. on a page wrapper). Full reference: `app/components/01.atoms/qr-code/CONSUMER-STYLING.md`.
 
 ## CSS classes
 

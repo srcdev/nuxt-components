@@ -1,5 +1,7 @@
 # DisplayChip Component
 
+> **Renamed 2026-09-27:** root class `.display-chip-core` → `.display-chip`. Status colours are now public tokens (`--display-chip-colour-*`, were unprefixed `--color-*`); the geometry vars fed from `config` are private (`--_chip-*`).
+
 ## Overview
 
 `DisplayChip` renders a small status indicator dot (or icon/label badge) that is absolutely positioned on a parent element using CSS trigonometric functions. It works by applying a radial-gradient mask to the parent's content, creating a clean cutout behind the chip. Supports circle and square parent shapes.
@@ -53,12 +55,15 @@ Default config: `{ size: "12px", maskWidth: "4px", offset: "0px", angle: "90deg"
 
 Apply status via `styleClassPassthrough` — the component has built-in colour variants:
 
-| Class      | Colour                  |
-| ---------- | ----------------------- |
-| (none)     | `slategrey` (offline)   |
-| `online`   | `rgb(0, 255, 135)`      |
-| `idle`     | `rgb(255, 185, 51)`     |
-| `dnd`      | `rgb(255, 40, 80)`      |
+| Class | Token | Default |
+| --- | --- | --- |
+| (none) | `--display-chip-colour-offline` | `slategrey` |
+| `online` | `--display-chip-colour-online` | `rgb(0, 255, 135)` |
+| `idle` | `--display-chip-colour-idle` | `rgb(255, 185, 51)` |
+| `dnd` | `--display-chip-colour-dnd` | `rgb(255, 40, 80)` |
+
+Icon and label colour: `--display-chip-text-colour` (default `black`). Full reference:
+`app/components/02.molecules/display-chip/CONSUMER-STYLING.md`.
 
 ```vue
 <DisplayChip :style-class-passthrough="['online']">...</DisplayChip>
@@ -186,15 +191,15 @@ See [display-avatar.md](./display-avatar.md) for the full API.
 
 <style>
 /* ─── DisplayChip local overrides ──────────────────────────────────
-   Scope by your wrapper class, then nest .display-chip-core directly.
+   Scope by your wrapper class, then nest .display-chip directly.
    No :deep() needed (component styles are unscoped).
    Delete this block if no overrides are needed.
    ─────────────────────────────────────────────────────────────────── */
 .my-page-section {
-  .display-chip-core {
+  .display-chip {
     &.my-chip {
       /* override colour vars, e.g. */
-      --color-online: hotpink;
+      --display-chip-colour-online: hotpink;
     }
   }
 }
@@ -209,5 +214,5 @@ See [display-avatar.md](./display-avatar.md) for the full API.
 - `shape` must match the actual shape of the slot content — the position maths differs between `circle` (radius-based) and `square` (clamped corner-aware).
 - `config` values are geometric inputs to CSS `calc(cos())` / `calc(sin())` expressions. Pass them as strings with units (`"12px"`, `"45deg"`), not plain numbers.
 - The chip dot is rendered via `::after` pseudo-element; icon and label sit above it at `z-index: 2`.
-- The mask cutout is applied to all direct children of `.display-chip-core` except `.chip-icon` and `.chip-label` — ensure the host element is a direct child.
+- The mask cutout is applied to all direct children of `.display-chip` except `.chip-icon` and `.chip-label` — ensure the host element is a direct child.
 - `DisplayChipConfig` and `DisplayChipProps` are both exported from the layer types. Use `DisplayChipConfig` when passing geometry values (the `config` prop). Use `DisplayChipProps` only if you need to pass the full component prop set (e.g. when building a wrapper component).

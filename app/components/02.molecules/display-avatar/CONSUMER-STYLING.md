@@ -38,7 +38,7 @@ scale token.
 - Size class on the root: `.xs`, `.s`, `.md`, `.lg`, `.xl` (or your custom `size` string).
 - Classes: `.display-avatar` (root), `.display-avatar-image` (the image), `.display-avatar-icon`
   (opt-in, for your `#icon` slot content).
-- With `chip`, the root is `DisplayChip`, so it also carries `.display-chip-core` and its shape
+- With `chip`, the root is `DisplayChip`, so it also carries `.display-chip` and its shape
   class; status classes such as `.online` (through `style-class-passthrough`) are `DisplayChip`'s.
   See `display-chip` for its tokens.
 

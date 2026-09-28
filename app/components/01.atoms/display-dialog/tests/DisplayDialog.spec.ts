@@ -230,6 +230,16 @@ describe("DisplayDialog", () => {
     expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([false]);
   });
 
+  it("uses \"Close\" as the close button's screen-reader label by default", async () => {
+    const wrapper = await mountSuspended(DisplayDialog, { props: { dataDialogId: "test" } });
+    expect(wrapper.find(".display-dialog-close .sr-only").text()).toBe("Close");
+  });
+
+  it("uses the closeLabel prop for the close button's screen-reader label", async () => {
+    const wrapper = await mountSuspended(DisplayDialog, { props: { dataDialogId: "test", closeLabel: "Fermer" } });
+    expect(wrapper.find(".display-dialog-close .sr-only").text()).toBe("Fermer");
+  });
+
   // ─── styleClassPassthrough ────────────────────────────────────────────────
 
   it("applies a styleClassPassthrough string", async () => {
@@ -237,6 +247,15 @@ describe("DisplayDialog", () => {
       props: { dataDialogId: "test", styleClassPassthrough: "my-class" },
     });
     expect(wrapper.classes()).toContain("my-class");
+  });
+
+  it("updates classes when styleClassPassthrough changes", async () => {
+    const wrapper = await mountSuspended(DisplayDialog, {
+      props: { dataDialogId: "test", styleClassPassthrough: ["original"] },
+    });
+    await wrapper.setProps({ styleClassPassthrough: ["updated"] });
+    expect(wrapper.classes()).not.toContain("original");
+    expect(wrapper.classes()).toContain("updated");
   });
 
   it("applies multiple styleClassPassthrough classes from an array", async () => {
@@ -332,6 +351,7 @@ describe("DisplayDialog", () => {
             lockViewport: false,
             allowContentScroll: true,
             theme: "info" as SemanticTheme,
+            closeLabel: "Schliessen",
             closeIcon: "heroicons:x-mark",
           },
         },
@@ -340,6 +360,7 @@ describe("DisplayDialog", () => {
         props: { dataDialogId: "test" },
         slots: { dialogContent: "<p>Content</p>" },
       });
+      expect(wrapper.find(".display-dialog-close .sr-only").text()).toBe("Schliessen");
       expect(wrapper.find(".display-dialog-inner").classes()).toContain("modal");
       expect(wrapper.attributes("align-dialog")).toBe("end");
       expect(wrapper.attributes("justify-dialog")).toBe("start");

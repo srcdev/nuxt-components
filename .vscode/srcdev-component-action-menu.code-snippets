@@ -1,0 +1,42 @@
+{
+  "SRCDEV ActionMenu": {
+    "description": "ActionMenu with indexed item-{n} slots, each holding one ActionMenuItem",
+    "scope": "vue,html",
+    "body": [
+      "<ActionMenu label=\"${1:Open actions menu}\">",
+      "  <template #item-0>",
+      "    <ActionMenuItem label=\"${2:Edit}\" @click=\"$3\">",
+      "      <template #icon><Icon name=\"${4:lucide:pencil}\"></Icon></template>",
+      "    </ActionMenuItem>",
+      "  </template>",
+      "  <template #item-1>",
+      "    <ActionMenuItem label=\"${5:View}\" href=\"${6:/path}\"></ActionMenuItem>",
+      "  </template>",
+      "</ActionMenu>"
+    ]
+  },
+  "SRCDEV ActionMenu Looped": {
+    "description": "ActionMenu driven by an array via dynamic item-{n} slot names",
+    "scope": "vue,html",
+    "body": [
+      "<ActionMenu>",
+      "  <template v-for=\"($1action, $2i) in $3actions\" :key=\"$1action.label\" #[`item-${$2i}`]>",
+      "    <ActionMenuItem :label=\"$1action.label\" :href=\"$1action.href\" @click=\"$1action.onClick\"></ActionMenuItem>",
+      "  </template>",
+      "</ActionMenu>"
+    ]
+  },
+  "SRCDEV ActionMenu CSS Override": {
+    "description": "CSS override scaffold for ActionMenu tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --action-menu-trigger-icon-color: $2;",
+      "  --action-menu-popover-background: $3;",
+      "  --action-menu-popover-border: $4;",
+      "  --action-menu-item-text-color: $5;",
+      "  --action-menu-item-surface-hover: $6;",
+      "}"
+    ]
+  }
+}

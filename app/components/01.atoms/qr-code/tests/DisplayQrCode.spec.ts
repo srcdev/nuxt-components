@@ -137,3 +137,18 @@ describe("DisplayQrCode", () => {
     expect(wrapper.classes()).toContain("updated");
   });
 });
+
+describe("DisplayQrCode accessibility", () => {
+  it("exposes the QR code as an image with a default accessible name", async () => {
+    const wrapper = await mountSuspended(DisplayQrCode, { props: { qrValue: "https://example.com" } });
+    expect(wrapper.attributes("role")).toBe("img");
+    expect(wrapper.attributes("aria-label")).toBe("QR code");
+  });
+
+  it("uses the ariaLabel prop as the accessible name", async () => {
+    const wrapper = await mountSuspended(DisplayQrCode, {
+      props: { qrValue: "https://example.com", ariaLabel: "Scan to open our booking page" },
+    });
+    expect(wrapper.attributes("aria-label")).toBe("Scan to open our booking page");
+  });
+});

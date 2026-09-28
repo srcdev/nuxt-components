@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { nextTick } from "vue";
+import { defineComponent, nextTick, ref } from "vue";
 import ActionMenu from "../ActionMenu.vue";
 
 // --- Types ---
@@ -453,6 +453,51 @@ describe("ActionMenu", () => {
     it("root element always has the 'action-menu' class", async () => {
       wrapper = await createWrapper({ styleClassPassthrough: "extra-class" });
       expect(wrapper.classes()).toContain("action-menu");
+    });
+
+    it("updates classes when styleClassPassthrough changes after mount", async () => {
+      wrapper = await createWrapper({ styleClassPassthrough: ["original"] });
+      await wrapper.setProps({ styleClassPassthrough: ["updated"] });
+      expect(wrapper.classes()).not.toContain("original");
+      expect(wrapper.classes()).toContain("updated");
+    });
+  });
+
+  describe("triggerIcon", () => {
+    const triggerIconName = () =>
+      wrapper.find(".action-menu-trigger .iconify").classes().find((c: string) => c.includes(":")) ?? "";
+
+    it("uses the ellipsis icon by default", async () => {
+      wrapper = await createWrapper();
+      expect(triggerIconName()).toContain("lucide:ellipsis");
+    });
+
+    it("uses the triggerIcon prop when given", async () => {
+      wrapper = await createWrapper({ triggerIcon: "lucide:more-vertical" });
+      expect(triggerIconName()).toContain("lucide:more-vertical");
+    });
+  });
+
+  describe("Item slots added after mount", () => {
+    it("renders a list item for an item slot that appears after mount", async () => {
+      const Host = defineComponent({
+        components: { ActionMenu },
+        setup() {
+          const showSecond = ref(false);
+          return { showSecond };
+        },
+        template: `
+          <ActionMenu>
+            <template #item-0><button role="menuitem">One</button></template>
+            <template v-if="showSecond" #item-1><button role="menuitem">Two</button></template>
+          </ActionMenu>
+        `,
+      });
+      const host = await mountSuspended(Host);
+      expect(host.findAll(".action-menu-list-item")).toHaveLength(1);
+      (host.vm as unknown as { showSecond: boolean }).showSecond = true;
+      await nextTick();
+      expect(host.findAll(".action-menu-list-item")).toHaveLength(2);
     });
   });
 });

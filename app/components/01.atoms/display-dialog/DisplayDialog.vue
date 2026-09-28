@@ -29,7 +29,7 @@
               @click.prevent="closeDialog()"
             >
               <Icon :name="resolved.closeIcon" class="icon" />
-              <span class="sr-only">Close</span>
+              <span class="sr-only">{{ resolved.closeLabel }}</span>
             </button>
           </div>
         </div>
@@ -64,6 +64,7 @@ interface Props {
   dataDialogId: string;
   theme?: SemanticTheme;
   closeIcon?: string;
+  closeLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -75,6 +76,7 @@ const props = withDefaults(defineProps<Props>(), {
   allowContentScroll: undefined,
   theme: undefined,
   closeIcon: undefined,
+  closeLabel: undefined,
 });
 
 const appConfig = useAppConfig();
@@ -89,10 +91,16 @@ const resolved = computed(() => {
     allowContentScroll: props.allowContentScroll ?? config?.allowContentScroll ?? false,
     theme: props.theme ?? config?.theme,
     closeIcon: props.closeIcon ?? config?.closeIcon ?? "bitcoin-icons:cross-filled",
+    closeLabel: props.closeLabel ?? config?.closeLabel ?? "Close",
   } as const;
 });
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 
 const isAlert = computed(() => resolved.value.variant === "alert");
 const dialogTitleId = useId();
@@ -134,11 +142,6 @@ onUnmounted(() => {
     --_z-index: var(--display-dialog-z-index, 999999);
     --_transition-duration: var(--display-dialog-transition-duration, 200ms);
 
-    --_inner-border-radius: var(--display-dialog-inner-border-radius, 0.8rem);
-    --_inner-border: var(--display-dialog-inner-border, 0.1rem solid light-dark(var(--slate-10), var(--slate-02)));
-    --_inner-outline: var(--display-dialog-inner-outline, 0.1rem solid light-dark(var(--slate-10), var(--slate-00)));
-    --_inner-background: var(--display-dialog-inner-background, light-dark(var(--slate-00), var(--slate-10)));
-
     --_header-padding: var(--display-dialog-header-padding, 1.2rem);
     --_header-button-margin: var(--display-dialog-header-button-margin, 0);
     --_header-button-padding: var(--display-dialog-header-button-padding, 0.4rem);
@@ -147,15 +150,15 @@ onUnmounted(() => {
     --_header-button-outline: var(--display-dialog-header-button-outline, 0.1rem solid transparent);
     --_header-button-border-hover: var(
       --display-dialog-header-button-border-hover,
-      0.1rem solid light-dark(var(--slate-08), var(--slate-04))
+      0.1rem solid var(--colour-text-default)
     );
     --_header-button-outline-hover: var(
       --display-dialog-header-button-outline-hover,
-      0.1rem solid light-dark(var(--slate-08), var(--slate-04))
+      0.1rem solid var(--colour-text-default)
     );
     --_header-button-icon-color: var(
       --display-dialog-header-button-icon-color,
-      light-dark(var(--slate-09), var(--slate-02))
+      var(--colour-text-default)
     );
     --_header-button-icon-size: var(--display-dialog-header-button-icon-size, 2.4rem);
 
@@ -217,6 +220,11 @@ onUnmounted(() => {
     }
 
     .display-dialog-inner {
+      --_inner-border-radius: var(--display-dialog-inner-border-radius, 0.8rem);
+      --_inner-border: var(--display-dialog-inner-border, 0.1rem solid var(--colour-text-default));
+      --_inner-outline: var(--display-dialog-inner-outline, 0.1rem solid var(--colour-text-default));
+      --_inner-background: var(--display-dialog-inner-background, var(--page-bg));
+
       display: grid;
       grid-template-rows: auto 1fr auto;
       border-radius: var(--_inner-border-radius);

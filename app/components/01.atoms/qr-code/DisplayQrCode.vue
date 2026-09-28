@@ -6,6 +6,8 @@
     :radius
     :black-color
     :white-color
+    role="img"
+    :aria-label="ariaLabel"
     :class="[elementClasses]"
   />
 </template>
@@ -20,6 +22,7 @@ interface Props {
   blackColor?: string;
   whiteColor?: string;
   size?: string;
+  ariaLabel?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -29,6 +32,7 @@ const props = withDefaults(defineProps<Props>(), {
   blackColor: "currentColor",
   whiteColor: "transparent",
   size: "256px",
+  ariaLabel: "QR code",
   styleClassPassthrough: () => [],
 });
 
@@ -44,7 +48,7 @@ watch(
 @layer components {
   .display-qr-code {
     aspect-ratio: 1 / 1;
-    width: v-bind(size);
+    width: var(--display-qr-code-size, v-bind(size));
   }
 }
 </style>

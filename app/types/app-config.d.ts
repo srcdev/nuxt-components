@@ -36,6 +36,7 @@ declare module "@nuxt/schema" {
         allowContentScroll?: boolean
         theme?: SemanticTheme
         closeIcon?: string
+        closeLabel?: string
       }
       inputLabel?: {
         indicator?: InputLabelIndicator

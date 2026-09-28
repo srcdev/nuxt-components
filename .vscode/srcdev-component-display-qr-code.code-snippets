@@ -1,0 +1,22 @@
+{
+  "SRCDEV DisplayQrCode": {
+    "description": "DisplayQrCode rendering a value as an accessible QR image",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayQrCode qr-value=\"$1\" aria-label=\"${2:QR code}\" size=\"${3:256px}\"></DisplayQrCode>"
+    ]
+  },
+  "SRCDEV DisplayQrCode Styled": {
+    "description": "DisplayQrCode with colours, radius and shape variants",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayQrCode",
+      "  qr-value=\"$1\"",
+      "  aria-label=\"$2\"",
+      "  black-color=\"${3:currentColor}\"",
+      "  :radius=\"${4:0.5}\"",
+      "  :variant=\"{ inner: '${5|default,circle,rounded,dots,classy,classy-rounded|}', marker: '${6|default,circle,rounded,dots,classy,classy-rounded|}', pixel: '${7|default,circle,rounded,dots,classy,classy-rounded|}' }\"",
+      "></DisplayQrCode>"
+    ]
+  }
+}

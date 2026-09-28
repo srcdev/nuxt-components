@@ -37,9 +37,9 @@
       class="site-nav-burger"
       :class="{ 'is-open': isMenuOpen }"
       variant="tertiary"
-      :button-text="isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
+      :button-text="isMenuOpen ? closeMenuLabel : openMenuLabel"
       :aria-expanded="String(isMenuOpen)"
-      aria-controls="site-nav-panel"
+      :aria-controls="panelId"
       @click="toggleMenu"
     >
       <template #iconOnly>
@@ -61,7 +61,7 @@
 
     <div
       v-if="isCollapsed && isLoaded"
-      id="site-nav-panel"
+      :id="panelId"
       class="site-nav-panel"
       :class="{ 'is-open': isMenuOpen }"
       :inert="!isMenuOpen ? true : undefined"
@@ -108,13 +108,21 @@ interface Props {
   styleClassPassthrough?: string | string[];
   /** aria-label on the nav landmark — override for localisation. */
   ariaLabel?: string;
+  /** Burger button label while the menu is closed — override for localisation. */
+  openMenuLabel?: string;
+  /** Burger button label while the menu is open — override for localisation. */
+  closeMenuLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
   navAlign: "left",
   styleClassPassthrough: () => [],
   ariaLabel: "Site navigation",
+  openMenuLabel: "Open navigation menu",
+  closeMenuLabel: "Close navigation menu",
 });
+
+const panelId = `site-nav-panel-${useId()}`;
 
 // ─── Animation gate — prevents indicator from transitioning on first paint ───
 
@@ -396,7 +404,7 @@ watch(
 
     position: fixed;
     inset: 0;
-    z-index: 10;
+    z-index: var(--site-nav-backdrop-z-index, 10);
     background: var(--_backdrop-bg);
     backdrop-filter: blur(var(--_backdrop-blur));
     opacity: 0;
@@ -413,8 +421,8 @@ watch(
     /* ─── Public token API ────────────────────────────────────────────── */
 
     /* Decorators — horizontal nav */
-    --_decorator-hovered-bg: transparent;
-    --_decorator-active-bg: transparent;
+    --_decorator-hovered-bg: var(--site-nav-decorator-hovered-bg, transparent);
+    --_decorator-active-bg: var(--site-nav-decorator-active-bg, transparent);
     --_decorator-indicator-color: var(--site-nav-decorator-indicator-color, var(--slate-01, currentColor));
 
     /* Decorators — panel */

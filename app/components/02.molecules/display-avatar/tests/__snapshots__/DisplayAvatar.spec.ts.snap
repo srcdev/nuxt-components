@@ -3,7 +3,7 @@
 exports[`DisplayAvatar > renders correct HTML structure (default) 1`] = `"<span class="display-avatar md"><span aria-hidden="true">JD</span><span class="sr-only">John Doe</span></span>"`;
 
 exports[`DisplayAvatar > renders correct HTML structure (with chip) 1`] = `
-"<span class="display-chip-core circle display-avatar md" style="--chip-size: 12px; --chip-mask-width: 4px; --chip-offset: 0px; --chip-angle: 90deg;"><span aria-hidden="true">JD</span><span class="sr-only">John Doe</span>
+"<span class="display-chip circle display-avatar md" style="--_chip-size: 12px; --_chip-mask-width: 4px; --_chip-offset: 0px; --_chip-angle: 90deg;"><span aria-hidden="true">JD</span><span class="sr-only">John Doe</span>
 <!--v-if-->
 <!--v-if--></span>"
 `;

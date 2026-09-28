@@ -229,7 +229,7 @@ describe("DisplayAvatar", () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { chip: true, size: "lg", styleClassPassthrough: ["online"] },
     });
-    expect(wrapper.classes()).toEqual(expect.arrayContaining(["display-chip-core", "display-avatar", "lg", "online"]));
+    expect(wrapper.classes()).toEqual(expect.arrayContaining(["display-chip", "display-avatar", "lg", "online"]));
   });
 
   it("updates the chip config when the chip prop changes", async () => {

@@ -7,18 +7,12 @@ exports[`ProfileSection > renders correct HTML structure 1`] = `
     <!--v-if-->
   </header>
   <div class="profile-section-inner">
-    <div class="picture"><img data-nuxt-img="" srcset="/_ipx/_/images/test.jpg 1x, /_ipx/_/images/test.jpg 2x" alt="Test profile picture" class="profile-picture" src="/_ipx/_/images/test.jpg"></div>
-    <div class="profile-info">
-      <div class="profile-info-content">
-        <div class="profile-info-block">
-          <p>Profile info content profile-info-1</p>
-        </div>
-        <div class="profile-info-block">
-          <p>Profile info content profile-info-2</p>
-        </div>
-        <div class="profile-info-block">
-          <p>Profile info content profile-info-3</p>
-        </div>
+    <div class="profile-section-picture"><img width="828" height="1104" data-nuxt-img="" srcset="/_ipx/s_828x1104/images/test.jpg 1x, /_ipx/s_1656x2208/images/test.jpg 2x" alt="Test profile picture" class="profile-section-image" src="/_ipx/s_828x1104/images/test.jpg"></div>
+    <div class="profile-section-info">
+      <div class="profile-section-info-content">
+        <div class="profile-section-info-block"></div>
+        <div class="profile-section-info-block"></div>
+        <div class="profile-section-info-block"></div>
       </div>
       <!--v-if-->
     </div>

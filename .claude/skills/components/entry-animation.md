@@ -67,7 +67,7 @@ every item, it just omits the animation class for the ones that don't need it:
 
 None — this component has no `--entry-animation-*` tokens or CSS of its own. The animation
 keyframes, timing, and `prefers-reduced-motion` guard live in the shared utility class
-(`entry-slide-in`/`entry-zoom-reveal`/`entry-exit-blur`), not in this component.
+(`entry-slide-in`/`entry-zoom-reveal`/`entry-exit-blur`), not in this component. Full reference: `app/components/01.atoms/animations/entry/CONSUMER-STYLING.md`.
 
 ---
 
@@ -82,7 +82,4 @@ keyframes, timing, and `prefers-reduced-motion` guard live in the shared utility
 
 ## Notes
 
-- **No animation reactivity**: `animationType`/`skipAnimation` are read once at mount to toggle the
-  utility class — changing either prop after mount does not currently re-toggle the class. This
-  matches the component's existing usage pattern (animation type is always set once per instance,
-  never swapped at runtime); flag it if a future consumer needs runtime toggling.
+- **Reactive**: `animationType`, `skipAnimation` and `styleClassPassthrough` can all change after mount; the animation class is bound in the template (it used to be set once at setup, fixed 2026-09-27). Note that switching the class on an element already in view restarts its scroll-driven timeline from wherever the scroll position currently is.

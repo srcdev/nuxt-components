@@ -160,13 +160,13 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
   .content-docs {
     --_heading-font-size: var(--content-docs-heading-font-size, 1.4rem);
     --_heading-font-weight: var(--content-docs-heading-font-weight, 700);
-    --_heading-color: var(--content-docs-heading-color, light-dark(var(--slate-10), var(--slate-01)));
+    --_heading-color: var(--content-docs-heading-color, var(--colour-text-default));
     --_heading-bg: var(--content-docs-heading-bg, transparent);
     --_heading-margin: var(--content-docs-heading-margin, 0);
     --_heading-padding-block: var(--content-docs-heading-padding-block, 0.4rem 0.8rem);
     --_heading-padding-inline: var(--content-docs-heading-padding-inline, 0);
 
-    --_panel-bg: var(--content-docs-panel-bg, light-dark(var(--slate-00), var(--slate-10)));
+    --_panel-bg: var(--content-docs-panel-bg, var(--page-bg));
     --_panel-padding-block: var(--content-docs-panel-padding-block, 0.8rem);
     --_panel-padding-inline: var(--content-docs-panel-padding-inline, 0.8rem);
     --_panel-border-radius: var(--content-docs-panel-border-radius, 0.5rem);
@@ -180,12 +180,12 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
     --_link-padding-inline: var(--content-docs-link-padding-inline, 0.8rem);
     --_link-margin-block: var(--content-docs-link-margin-block, 0);
     --_link-border-radius: var(--content-docs-link-border-radius, 0.4rem);
-    --_link-color: var(--content-docs-link-color, light-dark(var(--slate-09), var(--slate-01)));
+    --_link-color: var(--content-docs-link-color, var(--colour-text-default));
     --_link-bg: var(--content-docs-link-bg, transparent);
-    --_link-hover-bg: var(--content-docs-link-hover-bg, light-dark(var(--slate-01), var(--slate-09)));
+    --_link-hover-bg: var(--content-docs-link-hover-bg, var(--theme-surface-subtle));
     --_link-hover-color: var(--content-docs-link-hover-color, var(--_link-color));
-    --_link-active-bg: var(--content-docs-link-active-bg, light-dark(var(--green-01), var(--green-09)));
-    --_link-active-color: var(--content-docs-link-active-color, light-dark(var(--green-10), var(--green-04)));
+    --_link-active-bg: var(--content-docs-link-active-bg, var(--green-01));
+    --_link-active-color: var(--content-docs-link-active-color, var(--green-10));
 
     --_nav-heading-font-size: var(--content-docs-nav-heading-font-size, var(--_heading-font-size));
     --_nav-heading-font-weight: var(--content-docs-nav-heading-font-weight, var(--_heading-font-weight));
@@ -331,9 +331,9 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
 
     .docs-nav-link {
       display: grid;
-      grid-template-columns: var(--docs-nav-link-icon-size, 1.6rem) 1fr;
+      grid-template-columns: var(--content-docs-link-icon-size, 1.6rem) 1fr;
       align-items: center;
-      gap: var(--docs-nav-link-icon-gap, 0.6rem);
+      gap: var(--content-docs-link-icon-gap, 0.6rem);
       border-radius: var(--_link-border-radius);
       font-size: var(--_link-font-size);
       padding-block: var(--_link-padding-block);
@@ -341,7 +341,7 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       margin-block: var(--_link-margin-block);
       background-color: var(--_link-bg);
       text-decoration: none;
-      direction: var(--docs-nav-link-icon-order, ltr);
+      direction: var(--content-docs-nav-link-icon-order, ltr);
       color: var(--_nav-link-color);
       transition:
         background-color var(--control-transition-duration, 200ms) var(--control-transition-ease, ease),
@@ -365,9 +365,9 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
     }
     .docs-page-nav-link {
       display: grid;
-      grid-template-columns: var(--docs-nav-link-icon-size, 1.6rem) 1fr;
+      grid-template-columns: var(--content-docs-link-icon-size, 1.6rem) 1fr;
       align-items: center;
-      gap: var(--docs-nav-link-icon-gap, 0.6rem);
+      gap: var(--content-docs-link-icon-gap, 0.6rem);
       border-radius: var(--_link-border-radius);
       font-size: var(--_link-font-size);
       padding-block: var(--_link-padding-block);
@@ -375,7 +375,7 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       margin-block: var(--_link-margin-block);
       background-color: var(--_link-bg);
       text-decoration: none;
-      direction: var(--docs-page-nav-link-icon-order, ltr);
+      direction: var(--content-docs-page-nav-link-icon-order, ltr);
       color: var(--_page-nav-link-color);
       transition:
         background-color var(--control-transition-duration, 200ms) var(--control-transition-ease, ease),
@@ -403,8 +403,7 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       grid-column: 1;
       direction: ltr;
       flex-shrink: 0;
-      width: var(--docs-nav-link-icon-size, 1.6rem);
-      height: var(--docs-nav-link-icon-size, 1.6rem);
+      font-size: var(--content-docs-link-icon-size, 1.6rem);
     }
 
     .docs-nav-link-label,

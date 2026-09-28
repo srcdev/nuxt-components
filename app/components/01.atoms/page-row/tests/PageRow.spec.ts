@@ -3,15 +3,6 @@ import { h } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import PageRow from "../PageRow.vue";
 
-const mockElementClasses = { value: "" };
-const mockUseStyleClassPassthrough = vi.fn(() => ({
-  elementClasses: mockElementClasses,
-}));
-
-vi.mock("#imports", () => ({
-  useStyleClassPassthrough: mockUseStyleClassPassthrough,
-}));
-
 describe("PageRow", () => {
   let wrapper: Awaited<ReturnType<typeof mountSuspended>>;
 
@@ -28,7 +19,6 @@ describe("PageRow", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockElementClasses.value = "";
   });
 
   afterEach(() => {
@@ -95,7 +85,6 @@ describe("PageRow", () => {
 
   describe("Props — styleClassPassthrough", () => {
     it("forwards string class via elementClasses", async () => {
-      mockElementClasses.value = "custom-class";
       await createWrapper({ styleClassPassthrough: "custom-class" });
       expect(wrapper.classes()).toContain("custom-class");
     });
@@ -104,6 +93,13 @@ describe("PageRow", () => {
       await createWrapper({ styleClassPassthrough: ["class-a", "class-b"] });
       expect(wrapper.classes()).toContain("class-a");
       expect(wrapper.classes()).toContain("class-b");
+    });
+
+    it("updates classes when styleClassPassthrough changes after mount", async () => {
+      await createWrapper({ styleClassPassthrough: ["original"] });
+      await wrapper.setProps({ styleClassPassthrough: ["updated"] });
+      expect(wrapper.classes()).not.toContain("original");
+      expect(wrapper.classes()).toContain("updated");
     });
   });
 

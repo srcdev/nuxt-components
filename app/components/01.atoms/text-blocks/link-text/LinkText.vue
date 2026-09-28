@@ -29,7 +29,12 @@ const slots = useSlots();
 const hasLeftSlot = () => Boolean(slots.left);
 const hasRightSlot = () => Boolean(slots.right);
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 </script>
 
 <style lang="css">
@@ -38,8 +43,10 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
     display: inline-grid;
     grid-auto-flow: column;
     align-items: center;
+    --_colour: var(--link-text-colour, currentColor);
+
     gap: var(--link-text-gap, 0.4em);
-    color: var(--link-text-colour, currentColor);
+    color: var(--_colour);
     font-size: var(--link-text-font-size, inherit);
     text-decoration: var(--link-text-decoration, underline);
     text-underline-offset: var(--link-text-underline-offset, 0.2em);
@@ -47,12 +54,12 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
     &:hover,
     &:focus-visible {
-      color: var(--link-text-colour-hover, currentColor);
+      color: var(--link-text-colour-hover, var(--_colour));
       text-decoration: var(--link-text-decoration-hover, none);
     }
 
     &:focus-visible {
-      outline: 2px solid var(--link-text-colour, currentColor);
+      outline: 2px solid var(--_colour);
       outline-offset: 3px;
       border-radius: 2px;
     }

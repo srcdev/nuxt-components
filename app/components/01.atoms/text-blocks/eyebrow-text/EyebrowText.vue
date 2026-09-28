@@ -17,7 +17,12 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 </script>
 
 <style lang="css">
@@ -25,20 +30,20 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
   .eyebrow-text {
     text-transform: uppercase;
     background-clip: text;
-    background-image: var(--eyebrow-text-bg-img);
+    background-image: var(--eyebrow-text-bg-img, linear-gradient(135deg, #c2a770, #b4747e, #d1bd94));
     font-style: italic;
     color: transparent;
 
     &.large {
-      font-size: var(--eyebrow-text-large);
+      font-size: var(--eyebrow-text-large, 1.4rem);
     }
 
     &.medium {
-      font-size: var(--eyebrow-text-medium);
+      font-size: var(--eyebrow-text-medium, 1.2rem);
     }
 
     &.small {
-      font-size: var(--eyebrow-text-small);
+      font-size: var(--eyebrow-text-small, 1rem);
     }
   }
 }

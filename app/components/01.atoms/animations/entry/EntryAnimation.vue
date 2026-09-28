@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" :class="[elementClasses]">
+  <component :is="tag" :class="[elementClasses, skipAnimation ? null : animationType]">
     <slot name="default"></slot>
   </component>
 </template>
@@ -20,9 +20,10 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-if (!props.skipAnimation) {
-  updateElementClasses(props.animationType);
-}
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 </script>

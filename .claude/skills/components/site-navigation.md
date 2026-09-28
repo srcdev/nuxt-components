@@ -17,6 +17,8 @@ Both the horizontal list and the panel include animated active/hover indicator d
 | `navItemData` | `NavItemData` | — (required) | Navigation items — see type below |
 | `navAlign` | `"left" \| "center" \| "right"` | `"left"` | Alignment of the horizontal nav list |
 | `ariaLabel` | `string` | `"Site navigation"` | aria-label on the root `<nav>` landmark — override for localisation |
+| `openMenuLabel` | `string` | `"Open navigation menu"` | Burger button text (screen-reader) while closed — override for localisation |
+| `closeMenuLabel` | `string` | `"Close navigation menu"` | Burger button text (screen-reader) while open — override for localisation |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root `<nav>` |
 
 ## NavItemData type
@@ -24,7 +26,7 @@ Both the horizontal list and the panel include animated active/hover indicator d
 **Within the layer:**
 
 ```ts
-import type { NavItemData } from "~/types/components/navigation-horizontal.d";
+import type { NavItemData } from "~/types/components/nav-item.d";
 ```
 
 **In a consuming app:**
@@ -70,6 +72,8 @@ Set these tokens on a parent element (e.g. your `<header>`) to theme the navigat
 .your-header {
   /* ── Decorators ────────────────────────────────────── */
   --site-nav-decorator-indicator-color: var(--rose-05);  /* underline bar */
+  --site-nav-decorator-hovered-bg:      transparent;     /* hover pill behind a link */
+  --site-nav-decorator-active-bg:       transparent;     /* active pill behind a link */
 
   /* ── Horizontal nav links ──────────────────────────── */
   --site-nav-link-color:        var(--warm-01);
@@ -102,30 +106,40 @@ Set these tokens on a parent element (e.g. your `<header>`) to theme the navigat
   --site-nav-burger-gap:        5px;
   --site-nav-burger-transition: 300ms ease;
 
-  /* ── Backdrop (teleported to <body>) ───────────────── */
+}
+```
+
+The backdrop is teleported to `<body>`, so its tokens only land when set on `:root`/`html`/`body`,
+not on your header:
+
+```css
+:where(html) {
   --site-nav-backdrop-bg:       oklch(0% 0 0 / 55%);
   --site-nav-backdrop-blur:     3px;
   --site-nav-backdrop-duration: 350ms;
+  --site-nav-backdrop-z-index:  10;  /* keep your header above this */
 }
 ```
+
+Full reference: `app/components/02.molecules/navigation/site-navigation/CONSUMER-STYLING.md`.
 
 ## Behaviour notes
 
 - **Collapse detection**: `ResizeObserver` fires on every container resize. The list's `scrollWidth` is cached whenever the list is in the DOM; that cached value is compared against the container's `clientWidth` to set `isCollapsed`.
 - **isLoaded state**: The component uses `useState("site-nav-loaded")` — a Nuxt shared state — to gate visibility until the first measurement is complete, preventing a flash of the wrong nav state on load. The nav renders `opacity: 0` until `is-loaded` is applied.
 - **Teleport**: The backdrop overlay is teleported to `<body>` via `<Teleport>` and is only mounted when `isCollapsed && isLoaded`.
-- **Panel inert**: The `#site-nav-panel` div receives `:inert="!isMenuOpen ? true : undefined"` — it is inert (keyboard/pointer-inaccessible) when closed.
+- **Panel inert**: The panel div (id `site-nav-panel-{useId}`, unique per instance) receives `:inert="!isMenuOpen ? true : undefined"` — it is inert (keyboard/pointer-inaccessible) when closed.
 - **Decorator init**: `initNavDecorators()` and `initPanelDecorators()` inject `<li>` elements with CSS-driven indicator `<div>`s. They query `[data-nav-item]` / `[data-panel-nav-item]` to find links, and look for `router-link-active` to set the initial active position.
 
 ## Accessibility
 
-- Root `<nav>` has `aria-label="Site navigation"`.
-- Burger button uses `aria-expanded` (string `"true"/"false"`) and `aria-controls="site-nav-panel"`.
+- Root `<nav>` has `aria-label` from the `ariaLabel` prop (default `"Site navigation"`).
+- Burger button text comes from `openMenuLabel`/`closeMenuLabel`, with `aria-expanded` (string `"true"/"false"`) and `aria-controls` pointing at the panel's per-instance id (was a fixed `site-nav-panel`, which collided when two navs were on one page; fixed 2026-09-27).
 - Backdrop and indicator `<li>` elements are `aria-hidden="true"`.
 - Panel div is `inert` when closed.
 
 ## Related files
 
-- Type: `app/types/components/navigation-horizontal.d.ts`
+- Type: `app/types/components/nav-item.d.ts`
 - Tests: `app/components/02.molecules/navigation/site-navigation/tests/SiteNavigation.spec.ts`
 - Story: `app/components/02.molecules/navigation/site-navigation/stories/SiteNavigation.stories.ts`

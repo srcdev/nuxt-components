@@ -56,7 +56,7 @@ describe("ProfileSection", () => {
     const wrapper = await mountSuspended(ProfileSection, {
       props: defaultProps,
     });
-    const blocks = wrapper.findAll(".profile-info-block");
+    const blocks = wrapper.findAll(".profile-section-info-block");
     expect(blocks.length).toBe(3);
   });
 
@@ -64,7 +64,7 @@ describe("ProfileSection", () => {
     const wrapper = await mountSuspended(ProfileSection, {
       props: { ...defaultProps, profileInfoCount: 5 },
     });
-    const blocks = wrapper.findAll(".profile-info-block");
+    const blocks = wrapper.findAll(".profile-section-info-block");
     expect(blocks.length).toBe(5);
   });
 
@@ -163,7 +163,7 @@ describe("ProfileSection", () => {
     const wrapper = await mountSuspended(ProfileSection, {
       props: defaultProps,
     });
-    expect(wrapper.find(".profile-links").exists()).toBe(false);
+    expect(wrapper.find(".profile-section-links").exists()).toBe(false);
   });
 
   it("renders profile-links section when profileLinks slot is provided", async () => {
@@ -173,7 +173,7 @@ describe("ProfileSection", () => {
         profileLinks: "<a href='/'>Link</a>",
       },
     });
-    expect(wrapper.find(".profile-links").exists()).toBe(true);
+    expect(wrapper.find(".profile-section-links").exists()).toBe(true);
     expect(wrapper.html()).toContain("Link");
   });
 

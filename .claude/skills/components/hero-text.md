@@ -9,7 +9,7 @@
 Always ask the user for the following before placing the component:
 
 1. **`tag`** — what heading level? (`h1` | `h2` | `h3` | `h4` | `h5` | `h6`)
-2. **Text segments** — for each segment, what is the text and should it be `normal` (default) or `accent` (italic, `--colour-text-accent` colour)?
+2. **Text segments** — for each segment, what is the text and should it be `normal` (default) or `accent` (italic, filled with the `--hero-text-bg-img` gradient)?
 3. **`axis`** — should segments sit inline (`horizontal`, default) or stack in a column (`vertical`)?
 4. **`fontSize`** — which size? (`display` | `title` | `heading` | `subheading` | `label`) — default is `title`
 5. **`styleClassPassthrough`** — any extra classes to add? (layout, spacing, custom styling hooks)
@@ -38,7 +38,7 @@ interface TextConfig {
 ```
 
 - `"normal"` — default unstyled text
-- `"accent"` — italic, coloured with `--colour-text-accent`
+- `"accent"` — italic, text filled with the `--hero-text-bg-img` gradient (`background-clip: text`)
 
 ## Basic Usage
 
@@ -102,8 +102,9 @@ Key CSS custom properties:
 
 | Property | Default | Controls |
 | -------- | ------- | -------- |
-| `--colour-text-accent` | — | Colour of `.accent` spans and the icon |
-| `--hero-text-{scale}` | — | Font size per `fontSize` prop value |
+| `--hero-text-bg-img` | gold/rose `linear-gradient(135deg, ...)` | Fill of `.accent` spans |
+| `--hero-text-icon-colour` | `var(--colour-text-accent)` | Icon colour |
+| `--hero-text-{scale}` | see CONSUMER-STYLING.md | Font size per `fontSize` prop value (the library theme sets them on `:root`; the component has matching fallbacks) |
 | `--hero-text-font-family` | `"Playfair Display"` | Font family of the whole component |
 | `--hero-text-margin` | `0` | Margin on the root element |
 | `--hero-text-horizontal-gap` | `0.5ch` | Gap between segments in `axis="horizontal"` mode |
@@ -137,7 +138,8 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 .hero-text {
   &.my-hero {
     /* Colours */
-    /* --colour-text-accent: var(--brand-primary); */
+    /* --hero-text-icon-colour: var(--brand-primary); */
+    /* --hero-text-bg-img: linear-gradient(135deg, var(--brand-primary), var(--brand-accent)); */
   }
 }
 </style>
@@ -148,5 +150,5 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 ## Notes
 
 - Text segments are trimmed and a trailing space is automatically appended between segments in horizontal axis — do not manually pad `text` values.
-- The icon is sized to match the font size. At `subheading` scale it is explicitly capped at `0.75 * --hero-text-subheading`.
+- The icon is sized to match the font size. At `subheading` scale it is `0.75em` (applied as `font-size`, since `width`/`height` on an `<Icon>` are overridden by `@nuxt/icon`).
 - Component is auto-imported in Nuxt — no import needed.

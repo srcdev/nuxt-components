@@ -11,7 +11,7 @@ Types defined inline in a `.vue` component file are not easily importable by con
 Create `app/types/components/<component-name>.d.ts` with the exported interfaces:
 
 ```ts
-// app/types/components/navigation-horizontal.d.ts
+// app/types/components/nav-item.d.ts
 export interface NavItem {
   text: string;
   href?: string;
@@ -30,7 +30,7 @@ export interface NavItemData {
 In `app/types/components/index.ts`, add an export line:
 
 ```ts
-export * from "./navigation-horizontal.d"
+export * from "./nav-item.d"
 ```
 
 ### 3. Update the component
@@ -43,7 +43,7 @@ export interface NavItem { ... }
 export interface NavItemData { ... }
 
 // After
-import type { NavItem, NavItemData } from "~/types/components/navigation-horizontal.d";
+import type { NavItem, NavItemData } from "~/types/components/nav-item.d";
 ```
 
 ## Consuming app usage

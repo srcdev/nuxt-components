@@ -6,6 +6,8 @@ type: reference
 
 # ProfileSection
 
+> **Classes renamed 2026-09-27:** `.picture` → `.profile-section-picture`, `.profile-picture` → `.profile-section-image`, `.profile-info` → `.profile-section-info`, `.profile-info-content` → `.profile-section-info-content`, `.profile-info-block` → `.profile-section-info-block`, `.profile-links` → `.profile-section-links`.
+
 ## Overview
 
 `ProfileSection` is a molecule that renders a practitioner/author profile: a header area (eyebrow + heading), a profile picture, and a flexible set of bio/info blocks alongside optional profile links. It is landmark-aware — when `tag` is `section`, `article`, or `aside`, the root element automatically gets `aria-labelledby` wired to the heading inside the `#heroText` slot (**you must bind `headingId` yourself, and a console warning fires if you forget** — see [component-aria-landmark.md](../component-aria-landmark.md)). `tag="main"` is never auto-labelled.
@@ -14,7 +16,7 @@ type: reference
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `profilePicture` | `{ src: string; alt: string }` | — | **Required.** Path and alt text for the profile image. Rendered via `NuxtImg`. |
+| `profilePicture` | `ProfilePicture` (`{ src; alt; width?; height? }`, exported from the layer types) | — | **Required.** Rendered via `NuxtImg` with `width`/`height` defaulting to `828`/`1104` (3:4, a Vercel-allowed width). |
 | `tag` | `"div" \| "section" \| "article" \| "main"` | `"div"` | HTML element rendered as the root. |
 | `profileInfoCount` | `number` | `3` | Number of `profile-info-N` slots to generate when none are explicitly provided. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root element. |
@@ -70,7 +72,7 @@ type: reference
 The `profile-info-N` slots are discovered at runtime by filtering `useSlots()` for keys matching `/^profile-info-\d+$/`. The slots are rendered in ascending numeric order.
 
 - If you provide `#profile-info-1`, `#profile-info-2`, `#profile-info-3` — all three render in order.
-- If you provide no `profile-info-*` slots, the component generates `profileInfoCount` empty placeholder blocks.
+- If you provide no `profile-info-*` slots, the component renders `profileInfoCount` empty blocks (they used to contain visible placeholder text, removed 2026-09-27). Slot discovery runs every render, so slots added after mount appear.
 - Gaps are supported — you can provide `#profile-info-1` and `#profile-info-3` without `#profile-info-2`; they sort correctly.
 
 ## heroText slot prop
@@ -88,8 +90,8 @@ If you use a different heading component, bind `headingId` to whatever prop rend
 ## Layout
 
 - **Mobile**: single column — picture stacked above info.
-- **768px+**: two columns — `384px` picture column, `1fr` info column, `4rem` gap.
-- Picture frame: `aspect-ratio: 3/4`, `border-radius: 8px`, `overflow: hidden`. The `NuxtImg` fills the frame with `object-fit: cover`.
+- **768px+**: two columns — `--profile-section-picture-width` (`384px`) picture column, `1fr` info column, `--profile-section-gap-wide` (`4rem`) gap (`--profile-section-gap`, `2rem`, below 768px).
+- Picture frame (`.profile-section-picture`): `--profile-section-picture-aspect-ratio` (`3 / 4`), `--profile-section-picture-border-radius` (`8px`), `overflow: hidden`. Full token list: `CONSUMER-STYLING.md` in the component folder. The `NuxtImg` fills the frame with `object-fit: cover`.
 - Profile links: `align-items: end; justify-content: flex-end` — right-aligned to the bottom of the info column.
 
 ## CSS notes

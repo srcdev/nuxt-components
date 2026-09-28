@@ -55,3 +55,28 @@ describe("EntryAnimation", () => {
     expect(wrapper.text()).toContain("Content");
   });
 });
+
+describe("EntryAnimation reactivity", () => {
+  it("swaps the animation class when animationType changes after mount", async () => {
+    wrapper = await wrapperFactory({ animationType: "entry-slide-in" });
+    await wrapper.setProps({ animationType: "entry-exit-blur" });
+    expect(wrapper.classes()).toContain("entry-exit-blur");
+    expect(wrapper.classes()).not.toContain("entry-slide-in");
+  });
+
+  it("removes and restores the animation class when skipAnimation toggles", async () => {
+    wrapper = await wrapperFactory();
+    await wrapper.setProps({ skipAnimation: true });
+    expect(wrapper.classes()).not.toContain("entry-slide-in");
+    await wrapper.setProps({ skipAnimation: false });
+    expect(wrapper.classes()).toContain("entry-slide-in");
+  });
+
+  it("updates classes when styleClassPassthrough changes", async () => {
+    wrapper = await wrapperFactory({ styleClassPassthrough: ["original"] });
+    await wrapper.setProps({ styleClassPassthrough: ["updated"] });
+    expect(wrapper.classes()).not.toContain("original");
+    expect(wrapper.classes()).toContain("updated");
+    expect(wrapper.classes()).toContain("entry-slide-in");
+  });
+});

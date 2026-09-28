@@ -61,11 +61,13 @@ EyebrowText is commonly placed directly above a `HeroText` heading:
 
 | Value | CSS variable |
 |-------|-------------|
-| `large` | `--eyebrow-text-large` |
-| `medium` | `--eyebrow-text-medium` |
-| `small` | `--eyebrow-text-small` |
+| `large` | `--eyebrow-text-large` (default `1.4rem`) |
+| `medium` | `--eyebrow-text-medium` (default `1.2rem`) |
+| `small` | `--eyebrow-text-small` (default `1rem`) |
 
-Define these CSS custom properties in your consuming app to control sizes.
+The library theme sets these on `:root`; the component has matching fallbacks. The text is filled
+with `--eyebrow-text-bg-img` (gold/rose gradient by default) via `background-clip: text`. Full
+reference: `app/components/01.atoms/text-blocks/eyebrow-text/CONSUMER-STYLING.md`.
 
 ## Styling
 

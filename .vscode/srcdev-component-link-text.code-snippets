@@ -1,0 +1,30 @@
+{
+  "SRCDEV LinkText": {
+    "description": "LinkText inline link",
+    "scope": "vue,html",
+    "body": [
+      "<LinkText to=\"$1\" link-text=\"$2\"></LinkText>"
+    ]
+  },
+  "SRCDEV LinkText With Icon": {
+    "description": "LinkText with a trailing icon",
+    "scope": "vue,html",
+    "body": [
+      "<LinkText to=\"$1\" link-text=\"$2\"${3: external target=\"_blank\"}>",
+      "  <template #right><Icon name=\"${4:lucide:arrow-right}\"></Icon></template>",
+      "</LinkText>"
+    ]
+  },
+  "SRCDEV LinkText CSS Override": {
+    "description": "CSS override scaffold for LinkText tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --link-text-colour: $2;",
+      "  --link-text-colour-hover: $3;",
+      "  --link-text-decoration: $4underline;",
+      "  --link-text-decoration-hover: $5none;",
+      "}"
+    ]
+  }
+}

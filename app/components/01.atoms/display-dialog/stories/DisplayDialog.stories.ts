@@ -7,6 +7,9 @@ type StoryArgs = {
   allowContentScroll: boolean;
   justifyDialog: "start" | "center" | "end";
   alignDialog: "start" | "center" | "end";
+  theme: "" | "info" | "success" | "warning" | "error";
+  closeIcon: string;
+  closeLabel: string;
 };
 
 export default {
@@ -36,6 +39,22 @@ export default {
       description: "Vertical position of the dialog panel within the overlay",
       table: { category: "Layout" },
     },
+    theme: {
+      control: { type: "select" },
+      options: ["", "info", "success", "warning", "error"],
+      description: "Semantic theme: accent border and title colour on the header",
+      table: { category: "Appearance" },
+    },
+    closeIcon: {
+      control: { type: "text" },
+      description: "Icon name for the close button",
+      table: { category: "Appearance" },
+    },
+    closeLabel: {
+      control: { type: "text" },
+      description: "Screen-reader label for the close button (override for localisation)",
+      table: { category: "Accessibility" },
+    },
     styleClassPassthrough: { table: { disable: true } },
     lockViewport: { table: { disable: true } },
     dataDialogId: { table: { disable: true } },
@@ -45,6 +64,9 @@ export default {
     allowContentScroll: false,
     justifyDialog: "center",
     alignDialog: "center",
+    theme: "",
+    closeIcon: "bitcoin-icons:cross-filled",
+    closeLabel: "Close",
   },
   parameters: {
     docs: {
@@ -77,6 +99,9 @@ const Template: StoryFn<StoryArgs> = (args) => ({
         :allow-content-scroll="args.allowContentScroll"
         :justify-dialog="args.justifyDialog"
         :align-dialog="args.alignDialog"
+        :theme="args.theme || undefined"
+        :close-icon="args.closeIcon"
+        :close-label="args.closeLabel"
         :lock-viewport="false"
         data-dialog-id="storybook-dialog"
       >

@@ -46,6 +46,7 @@ export default defineAppConfig({
       allowContentScroll: false,
       theme: undefined as SemanticTheme | undefined,
       closeIcon: "bitcoin-icons:cross-filled",
+      closeLabel: "Close",
     },
     inputLabel: {
       indicator: "none" as InputLabelIndicator,

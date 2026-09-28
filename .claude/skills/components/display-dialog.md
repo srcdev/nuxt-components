@@ -21,6 +21,7 @@ open/close state management.
 | `justifyDialog` | `'start' \| 'center' \| 'end'` | `'center'` | Horizontal position of panel within overlay. |
 | `alignDialog` | `'start' \| 'center' \| 'end'` | `'center'` | Vertical position of panel within overlay. |
 | `closeIcon` | `string` | app.config | Icon name for the header close button. Override per-instance or set globally via `app.config`. |
+| `closeLabel` | `string` | app.config (`"Close"`) | Screen-reader text on the icon-only close button. Pass a translated string, or set it site-wide via `app.config`. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root `<dialog>` element. |
 
 ## Slots
@@ -120,6 +121,7 @@ export default defineAppConfig({
       alignDialog: "end",
       lockViewport: true,
       closeIcon: "heroicons:x-mark",
+      closeLabel: "Fermer",
       theme: "info",
     },
   },
@@ -130,7 +132,7 @@ Per-instance props always win — app.config only fills in when a prop is absent
 
 ## CSS token API
 
-See `CONSUMER-STYLING.md` in the component folder for the full token reference. Prefer global
+See `CONSUMER-STYLING.md` in the component folder for the full token reference. The four `--display-dialog-inner-*` panel tokens resolve on `.display-dialog-inner` (since 2026-09-27), so they can be set per variant (`.display-dialog-inner.alert { ... }`); `fullscreen` ignores radius/border/outline. Colour defaults use `--colour-text-default` / `--page-bg`, not `light-dark()`. Prefer global
 CSS over per-instance overrides — dialogs are site-wide UI:
 
 ```css

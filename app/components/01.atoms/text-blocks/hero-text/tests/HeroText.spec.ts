@@ -146,3 +146,14 @@ describe("HeroText", () => {
     expect(wrapper.find(".hero-text__icon").exists()).toBe(false);
   });
 });
+
+describe("HeroText styleClassPassthrough reactivity", () => {
+  it("updates classes when styleClassPassthrough changes after mount", async () => {
+    const wrapper = await mountSuspended(HeroText, {
+      props: { tag: "h2", textContent: [{ text: "Hero" }], styleClassPassthrough: ["original"] },
+    });
+    await wrapper.setProps({ styleClassPassthrough: ["updated"] });
+    expect(wrapper.classes()).not.toContain("original");
+    expect(wrapper.classes()).toContain("updated");
+  });
+});

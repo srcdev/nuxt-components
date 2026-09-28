@@ -3,7 +3,7 @@
     :is="tag"
     :type="!isLink ? 'button' : undefined"
     :href="isLink ? href : undefined"
-    class="action-menu-item-core"
+    class="action-menu-item"
     :class="[elementClasses]"
     role="menuitem"
     @click="emit('click', $event)"
@@ -13,7 +13,7 @@
     </span>
     <span class="action-menu-item-label">{{ label }}</span>
     <span class="action-menu-item-arrow" aria-hidden="true">
-      <Icon name="lucide:arrow-right" class="action-menu-item-arrow-icon" />
+      <Icon :name="arrowIcon" class="action-menu-item-arrow-icon" />
     </span>
   </component>
 </template>
@@ -22,11 +22,13 @@
 interface Props {
   label: string;
   href?: string;
+  arrowIcon?: string;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   href: undefined,
+  arrowIcon: "lucide:arrow-right",
   styleClassPassthrough: () => [],
 });
 
@@ -56,10 +58,10 @@ watch(
 
 <style lang="css">
 @layer components {
-  .action-menu-item-core {
+  .action-menu-item {
     --_gap: var(--action-menu-item-gap, 1.2rem);
-    --_surface-hover: var(--action-menu-item-surface-hover, light-dark(var(--slate-01), var(--slate-09)));
-    --_text-color: var(--action-menu-item-text-color, light-dark(var(--slate-09), var(--slate-01)));
+    --_surface-hover: var(--action-menu-item-surface-hover, var(--slate-01));
+    --_text-color: var(--action-menu-item-text-color, var(--slate-09));
     --_icon-size: var(--action-menu-item-icon-size, 2rem);
     --_padding-inline: var(--action-menu-item-padding-inline, 1.6rem);
     --_padding-block: var(--action-menu-item-padding-block, 1.2rem);
@@ -101,6 +103,7 @@ watch(
       justify-content: center;
       width: var(--_icon-size);
       height: var(--_icon-size);
+      font-size: var(--_icon-size);
       flex-shrink: 0;
     }
 
@@ -122,8 +125,7 @@ watch(
 
       .action-menu-item-arrow-icon {
         display: block;
-        width: 1.6rem;
-        height: 1.6rem;
+        font-size: var(--action-menu-item-arrow-size, 1.6rem);
       }
     }
   }

@@ -1,10 +1,12 @@
 # ActionMenu
 
+> **Renamed 2026-09-27:** `ActionMenuItemCore` → `ActionMenuItem`; root class `.action-menu-item-core` → `.action-menu-item`.
+
 ## Overview
 
 `ActionMenu` is a trigger-and-popover component that shows a compact ellipsis button (`lucide:ellipsis`).
 Clicking it opens an anchored menu list populated via indexed dynamic slots (`item-{n}`). Each slot
-should contain a single `ActionMenuItemCore` — either a `<button>` (for actions) or a link (for
+should contain a single `ActionMenuItem` — either a `<button>` (for actions) or a link (for
 navigation). The popover API and CSS anchor positioning handle positioning and dismiss behaviour
 natively; no JavaScript click-outside logic is needed.
 
@@ -18,24 +20,25 @@ natively; no JavaScript click-outside logic is needed.
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|
-| `itemCount` | `number` | `0` | Number of `item-{n}` slots to render. |
 | `label` | `string` | `"Open actions menu"` | Used as `aria-label` on the trigger and `aria-label` on the menu list. |
+| `triggerIcon` | `string` | `"lucide:ellipsis"` | Icon on the trigger button. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the root `<div>`. |
 
 **Slots**
 
 | Slot | When used |
 |---|---|
-| `item-{n}` | One per item, where `n` is 0-indexed up to `itemCount - 1`. Should contain one `ActionMenuItemCore`. |
+| `item-{n}` | One per item, `n` 0-indexed. The row count is derived from which `item-{n}` slots are present (re-evaluated every render, so items added after mount appear). Should contain one `ActionMenuItem`. |
 
 ---
 
-### ActionMenuItemCore
+### ActionMenuItem
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|
 | `label` | `string` | — | **Required.** Visible text for the row. |
 | `href` | `string` | `undefined` | If set, renders as `<a>` (external) or `NuxtLink` (internal `/…` path). Omit for a `<button>`. |
+| `arrowIcon` | `string` | `"lucide:arrow-right"` | Decorative trailing arrow icon. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the root element. |
 
 **Slots**
@@ -62,19 +65,19 @@ natively; no JavaScript click-outside logic is needed.
 ```vue
 <ActionMenu :item-count="3" label="Row actions">
   <template #item-0>
-    <ActionMenuItemCore label="Edit" @click="handleEdit">
+    <ActionMenuItem label="Edit" @click="handleEdit">
       <template #icon><Icon name="lucide:pencil" /></template>
-    </ActionMenuItemCore>
+    </ActionMenuItem>
   </template>
   <template #item-1>
-    <ActionMenuItemCore label="View detail" href="/records/123">
+    <ActionMenuItem label="View detail" href="/records/123">
       <template #icon><Icon name="lucide:eye" /></template>
-    </ActionMenuItemCore>
+    </ActionMenuItem>
   </template>
   <template #item-2>
-    <ActionMenuItemCore label="Delete" @click="handleDelete">
+    <ActionMenuItem label="Delete" @click="handleDelete">
       <template #icon><Icon name="lucide:trash-2" /></template>
-    </ActionMenuItemCore>
+    </ActionMenuItem>
   </template>
 </ActionMenu>
 ```
@@ -119,9 +122,10 @@ Quick reference:
 
 ## Notes
 
-- **Popover API + CSS anchor positioning** — the menu uses `popover` attribute and `position-anchor`.
-  Both are broadly supported (Chrome 114+, Firefox 125+, Safari 17+). No polyfill is included.
-- **Auto-close** — clicking any `<li>` row fires `hidePopover()` on the menu. The `ActionMenuItemCore`
+- **Popover API + CSS anchor positioning** — the menu uses the `popover` attribute (broadly supported)
+  and `position-anchor` (newer: Chromium 125+, Safari 26+). Without anchor positioning the popover
+  still opens, just not anchored to the trigger. No polyfill is included.
+- **Auto-close** — clicking any `<li>` row fires `hidePopover()` on the menu. The `ActionMenuItem`
   emitting `click` triggers normally before the menu closes.
 - **Focus management** — on open the `toggle` event fires `handleToggle`, which moves focus to the
   first `[role="menuitem"]` inside the popover.
@@ -136,6 +140,6 @@ Quick reference:
 - **`anchorName` format** — internally generated as `--action-menu-anchor-{id}` (a valid CSS
   `<dashed-ident>`). Set via a CSS custom property on the root element so both the trigger's
   `anchor-name` and the popover's `position-anchor` can reference the same value.
-- **Dynamic slots stability** — `item-{n}` slots enforce that only `ActionMenuItemCore` content
+- **Dynamic slots stability** — `item-{n}` slots enforce that only `ActionMenuItem` content
   enters the list; arbitrary HTML inside the popover is not supported and will break the ARIA
   `menu` / `menuitem` pattern.

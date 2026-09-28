@@ -2,7 +2,7 @@ import EntryAnimation from "../EntryAnimation.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
 const meta: Meta<typeof EntryAnimation> = {
-  title: "Components/Effects/EntryAnimation",
+  title: "Atoms/Effects/EntryAnimation",
   component: EntryAnimation,
   argTypes: {
     tag: {

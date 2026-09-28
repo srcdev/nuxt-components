@@ -56,9 +56,9 @@ describe("DisplayChip", () => {
 
   // ─── Base class ───────────────────────────────────────────────────────────
 
-  it("always has the display-chip-core class", async () => {
+  it("always has the display-chip class", async () => {
     const wrapper = await mountSuspended(DisplayChip);
-    expect(wrapper.classes()).toContain("display-chip-core");
+    expect(wrapper.classes()).toContain("display-chip");
   });
 
   // ─── Shape ────────────────────────────────────────────────────────────────
@@ -83,19 +83,19 @@ describe("DisplayChip", () => {
       },
     });
     const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--chip-size")).toBe("16px");
-    expect(style.getPropertyValue("--chip-mask-width")).toBe("3px");
-    expect(style.getPropertyValue("--chip-offset")).toBe("4px");
-    expect(style.getPropertyValue("--chip-angle")).toBe("45deg");
+    expect(style.getPropertyValue("--_chip-size")).toBe("16px");
+    expect(style.getPropertyValue("--_chip-mask-width")).toBe("3px");
+    expect(style.getPropertyValue("--_chip-offset")).toBe("4px");
+    expect(style.getPropertyValue("--_chip-angle")).toBe("45deg");
   });
 
   it("sets default CSS custom properties when no config is provided", async () => {
     const wrapper = await mountSuspended(DisplayChip);
     const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--chip-size")).toBe("12px");
-    expect(style.getPropertyValue("--chip-mask-width")).toBe("4px");
-    expect(style.getPropertyValue("--chip-offset")).toBe("0px");
-    expect(style.getPropertyValue("--chip-angle")).toBe("90deg");
+    expect(style.getPropertyValue("--_chip-size")).toBe("12px");
+    expect(style.getPropertyValue("--_chip-mask-width")).toBe("4px");
+    expect(style.getPropertyValue("--_chip-offset")).toBe("0px");
+    expect(style.getPropertyValue("--_chip-angle")).toBe("90deg");
   });
 
   // ─── Label ────────────────────────────────────────────────────────────────

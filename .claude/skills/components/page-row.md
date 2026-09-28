@@ -20,7 +20,7 @@ no extra wrapper divs needed.
 | `variant` | `"full" \| "popout" \| "content" \| "inset-content"` | `"content"` | Grid column track this element occupies when nested in another PageRow |
 | `align` | `"start" \| "end"` | — | Bleeds one side to the viewport edge while respecting the variant boundary on the other |
 | `id` | `string` | — | `id` attribute on the root element |
-| `:style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the root element |
+| `:style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the root element (reactive after mount) |
 
 ---
 

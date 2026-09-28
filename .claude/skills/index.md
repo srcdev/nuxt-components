@@ -91,7 +91,6 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── expanding-panel.md      — ExpandingPanel v-model, forceOpened, contentIsOnTop overlay mode, slots (summary/icon/content), ARIA wiring, CSS token API
     ├── content-docs.md         — ContentDocs docs-page shell: prop-driven docsNav/docsPageNav (not slots), DocsNavItem icons, container-width breakpoint behaviour, shared/per-side CSS token API
     ├── glass-panel.md          — GlassPanel: frosted-glass container, light-only token defaults in-component (light-dark() block removed from _default.css, no built-in dark glass), highlight behind content, section/article labelled via headingId slot prop, CSS token API
-    ├── navigation-horizontal.md — NavigationHorizontal props, NavItemData type, CSS token API, import path gotcha
     ├── pricing-card.md         — PricingCard: SaaS-style plan card with highlight, feature list, #cta slot for button customization, CSS token API
     ├── price-list.md           — PriceList: service/menu price columns (dl rows), PriceListData type, headingTag/fromLabel props, CSS token API
     ├── opening-hours.md        — OpeningHours: per-day data auto-grouped into ranges, split sessions, 24h/appointment, exceptions, Intl formatting, today highlight, JSON-LD, CSS token API
@@ -113,7 +112,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── display-avatar.md       — DisplayAvatar (02.molecules): circular avatar with image/initials fallback (alt announced), size scale tokens, --display-avatar-* colours, chip badge, icon slot
     ├── display-theme-switch.md — DisplayThemeSwitch: system/light/dark picker wrapping TripleToggleSwitch, wired to useSettingsStore, labels/icons props, small sizing variant
     ├── card-core.md            — CardCore: generic card container, dynamic named slots as rows, 4 variants, blurred backdrop layer, full CSS token API
-    ├── action-menu.md          — ActionMenu + ActionMenuItemCore: ellipsis trigger + anchored popover menu, indexed item-{n} slots, link/button items, full CSS token API
+    ├── action-menu.md          — ActionMenu + ActionMenuItem: ellipsis trigger + anchored popover menu, indexed item-{n} slots, link/button items, full CSS token API
     ├── select-menu.md          — SelectMenu: v-model single-select listbox popover (ActionMenu's popover mechanics, InputSelectCore's selected-option semantics), icon/text/chevron trigger toggles, checkmark on selected option, options-array driven, full CSS token API
     ├── display-dialog.md       — DisplayDialog: native <dialog> overlay, 5 variants (dialog/modal/confirm/alert/fullscreen), useDialogControls integration, CSS token API
     ├── display-chip.md         — DisplayChip: status indicator chip overlay, CSS trig positioning, circle/square shapes, status colours, icon/label content

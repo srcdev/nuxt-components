@@ -24,7 +24,7 @@ The layer's `modules/icon-sets.ts` runs at dev/build time and logs an info messa
 | `ic` | `@iconify-json/ic` | CarouselFlip, SliderGallery, CanvasSwitcher |
 | `lucide` | `@iconify-json/lucide` | ActionMenu, InputCopy, PopOver, SelectMenu |
 | `material-symbols` | `@iconify-json/material-symbols` | form components |
-| `mdi` | `@iconify-json/mdi` | NavigationHorizontal, form components, ServicesCard |
+| `mdi` | `@iconify-json/mdi` | Form components, ServicesCard |
 | `radix-icons` | `@iconify-json/radix-icons` | InputPasswordWithLabel, InputError, DisplayThemeSwitch |
 
 ## Fix: install missing packages

@@ -1,0 +1,47 @@
+{
+  "SRCDEV PageRow": {
+    "description": "PageRow layout row (children sit on the content track by default)",
+    "scope": "vue,html",
+    "body": [
+      "<PageRow tag=\"${1|div,section,article,header,footer,main,nav|}\" variant=\"${2|content,full,popout,inset-content|}\">",
+      "  $3",
+      "</PageRow>"
+    ]
+  },
+  "SRCDEV PageRow Section With Heading": {
+    "description": "PageRow as a <section> with its heading wired to aria-labelledby via the heading-id slot prop",
+    "scope": "vue,html",
+    "body": [
+      "<PageRow tag=\"section\" variant=\"${1|content,full,popout,inset-content|}\">",
+      "  <template #default=\"{ headingId }\">",
+      "    <h2 :id=\"headingId\">$2</h2>",
+      "    $3",
+      "  </template>",
+      "</PageRow>"
+    ]
+  },
+  "SRCDEV PageRow Nested Breakout": {
+    "description": "Outer PageRow with a nested row that breaks out to a wider track, optionally bleeding to one edge",
+    "scope": "vue,html",
+    "body": [
+      "<PageRow tag=\"section\">",
+      "  $1",
+      "  <PageRow variant=\"${2|popout,full,content,inset-content|}\"${3: align=\"start\"}>",
+      "    $4",
+      "  </PageRow>",
+      "</PageRow>"
+    ]
+  },
+  "SRCDEV PageRow CSS Override": {
+    "description": "CSS override scaffold for PageRow track tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --page-row-minimum-content-padding: $2;",
+      "  --page-row-popout-max-width: $3;",
+      "  --page-row-content-max-width: $4;",
+      "  --page-row-inset-content-max-width: $5;",
+      "}"
+    ]
+  }
+}

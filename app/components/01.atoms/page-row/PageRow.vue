@@ -28,8 +28,13 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 const { headingId, ariaLabelledby } = useAriaLabelledById(props.tag);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 </script>
 
 <style lang="css">
@@ -54,31 +59,31 @@ const { headingId, ariaLabelledby } = useAriaLabelledById(props.tag);
       max(0px, calc((var(--_content-max-width) + var(--_minimum-content-padding) * 2 - 100%) / 2))
     );
 
-    --full: minmax(var(--_full-track-min), 1fr);
-    --popout: minmax(0, calc((var(--_popout-max-width) - var(--_content-max-width)) * 0.5));
-    --content: clamp(
+    --_full-track: minmax(var(--_full-track-min), 1fr);
+    --_popout-track: minmax(0, calc((var(--_popout-max-width) - var(--_content-max-width)) * 0.5));
+    --_content-track: clamp(
       0px,
       calc((100% - var(--_minimum-content-padding) * 2 - var(--_inset-content-max-width)) * 0.5),
       calc((var(--_content-max-width) - var(--_inset-content-max-width)) * 0.5)
     );
-    --inset-content: min(var(--_inset-content-max-width), 100% - var(--_minimum-content-padding) * 2);
+    --_inset-content-track: min(var(--_inset-content-max-width), 100% - var(--_minimum-content-padding) * 2);
 
     display: grid;
     grid-template-columns:
       [full-start]
-      var(--full)
+      var(--_full-track)
       [popout-start]
-      var(--popout)
+      var(--_popout-track)
       [content-start]
-      var(--content)
+      var(--_content-track)
       [inset-content-start]
-      var(--inset-content)
+      var(--_inset-content-track)
       [inset-content-end]
-      var(--content)
+      var(--_content-track)
       [content-end]
-      var(--popout)
+      var(--_popout-track)
       [popout-end]
-      var(--full)
+      var(--_full-track)
       [full-end];
 
     container-type: inline-size;

@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
 import TabNavigation from "../TabNavigation.vue";
-import type { NavItemData } from "~/types/components/navigation-horizontal.d";
+import type { NavItemData } from "~/types/components/nav-item.d";
 
 // useResizeObserver (from @vueuse/core) requires ResizeObserver
 // Vitest 4: a mock's implementation must be a regular function (not an

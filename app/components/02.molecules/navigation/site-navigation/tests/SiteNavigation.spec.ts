@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { nextTick } from "vue";
+import { defineComponent, nextTick } from "vue";
 import SiteNavigation from "../SiteNavigation.vue";
-import type { NavItemData } from "~/types/components/navigation-horizontal.d";
+import type { NavItemData } from "~/types/components/nav-item.d";
 
 // useResizeObserver (from @vueuse/core) requires ResizeObserver
 // Vitest 4: a mock's implementation must be a regular function (not an
@@ -233,9 +233,9 @@ describe("SiteNavigation", () => {
       isMenuOpen: boolean;
     }
 
-    async function mountCollapsed() {
+    async function mountCollapsed(extraProps: Record<string, unknown> = {}) {
       const wrapper = await mountSuspended(SiteNavigation, {
-        props: { navItemData: defaultNavItemData },
+        props: { navItemData: defaultNavItemData, ...extraProps },
       });
       const setup = (wrapper.vm as unknown as { $: { setupState: SiteNavSetup } }).$.setupState;
       setup.isCollapsed = true;
@@ -324,9 +324,44 @@ describe("SiteNavigation", () => {
       expect(wrapper.find(".site-nav-panel").attributes("inert")).toBeUndefined();
     });
 
-    it("panel has aria-controls pointing to site-nav-panel", async () => {
+    it("burger aria-controls points at the panel's own id", async () => {
       const { wrapper } = await mountCollapsed();
-      expect(wrapper.find(".site-nav-burger").attributes("aria-controls")).toBe("site-nav-panel");
+      const panelId = wrapper.find(".site-nav-panel").attributes("id");
+      expect(panelId).toMatch(/^site-nav-panel-/);
+      expect(wrapper.find(".site-nav-burger").attributes("aria-controls")).toBe(panelId);
+    });
+
+    it("gives two instances on the same page distinct panel ids", async () => {
+      const Host = defineComponent({
+        components: { SiteNavigation },
+        setup: () => ({ navItemData: defaultNavItemData }),
+        template: `<div><SiteNavigation :nav-item-data="navItemData" /><SiteNavigation :nav-item-data="navItemData" /></div>`,
+      });
+      const host = await mountSuspended(Host);
+      const navs = host.findAllComponents(SiteNavigation);
+      for (const nav of navs) {
+        (nav.vm as unknown as { $: { setupState: SiteNavSetup } }).$.setupState.isCollapsed = true;
+      }
+      await nextTick();
+      const ids = host.findAll(".site-nav-panel").map((p) => p.attributes("id"));
+      expect(ids).toHaveLength(2);
+      expect(ids[0]).not.toBe(ids[1]);
+    });
+
+    it("uses the default burger labels", async () => {
+      const { wrapper } = await mountCollapsed();
+      expect(wrapper.find(".site-nav-burger").text()).toContain("Open navigation menu");
+      await wrapper.find(".site-nav-burger").trigger("click");
+      await nextTick();
+      expect(wrapper.find(".site-nav-burger").text()).toContain("Close navigation menu");
+    });
+
+    it("uses openMenuLabel and closeMenuLabel when given", async () => {
+      const { wrapper } = await mountCollapsed({ openMenuLabel: "Ouvrir le menu", closeMenuLabel: "Fermer le menu" });
+      expect(wrapper.find(".site-nav-burger").text()).toContain("Ouvrir le menu");
+      await wrapper.find(".site-nav-burger").trigger("click");
+      await nextTick();
+      expect(wrapper.find(".site-nav-burger").text()).toContain("Fermer le menu");
     });
   });
 });

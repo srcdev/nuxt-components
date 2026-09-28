@@ -1,0 +1,36 @@
+{
+  "SRCDEV ProfileSection": {
+    "description": "ProfileSection with a heading wired to aria-labelledby and numbered info blocks",
+    "scope": "vue,html",
+    "body": [
+      "<ProfileSection",
+      "  tag=\"section\"",
+      "  :profile-picture=\"{ src: '$1', alt: '$2' }\"",
+      ">",
+      "  <template #eyebrowText>",
+      "    <EyebrowText text-content=\"$3\"></EyebrowText>",
+      "  </template>",
+      "  <template #heroText=\"{ headingId }\">",
+      "    <HeroText :id=\"headingId\" tag=\"h2\" :text-content=\"[{ text: '$4' }]\"></HeroText>",
+      "  </template>",
+      "  <template #profile-info-1>",
+      "    <p>$5</p>",
+      "  </template>",
+      "  <template #profile-info-2>",
+      "    <p>$6</p>",
+      "  </template>",
+      "</ProfileSection>"
+    ]
+  },
+  "SRCDEV ProfileSection CSS Override": {
+    "description": "CSS override scaffold for ProfileSection tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --profile-section-picture-width: $2;",
+      "  --profile-section-gap-wide: $3;",
+      "  --profile-section-picture-border-radius: $4;",
+      "}"
+    ]
+  }
+}

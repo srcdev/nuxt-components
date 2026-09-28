@@ -1,17 +1,17 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
-import ActionMenuItemCore from "../ActionMenuItemCore.vue";
+import ActionMenuItem from "../ActionMenuItem.vue";
 
 // --- Helpers ---
 const createWrapper = async (props: Record<string, unknown> = {}, slots: Record<string, string> = {}) => {
-  return mountSuspended(ActionMenuItemCore, {
+  return mountSuspended(ActionMenuItem, {
     props: { label: "Edit item", ...props },
     slots,
   });
 };
 
-describe("ActionMenuItemCore", () => {
+describe("ActionMenuItem", () => {
   let wrapper: Awaited<ReturnType<typeof createWrapper>>;
 
   beforeEach(() => {
@@ -95,9 +95,9 @@ describe("ActionMenuItemCore", () => {
       expect(wrapper.attributes("role")).toBe("menuitem");
     });
 
-    it("has class 'action-menu-item-core'", async () => {
+    it("has class 'action-menu-item'", async () => {
       wrapper = await createWrapper();
-      expect(wrapper.classes()).toContain("action-menu-item-core");
+      expect(wrapper.classes()).toContain("action-menu-item");
     });
   });
 
@@ -145,6 +145,12 @@ describe("ActionMenuItemCore", () => {
     it("arrow element has aria-hidden='true'", async () => {
       wrapper = await createWrapper();
       expect(wrapper.find(".action-menu-item-arrow").attributes("aria-hidden")).toBe("true");
+    });
+
+    it("uses the arrowIcon prop for the arrow icon", async () => {
+      wrapper = await mountSuspended(ActionMenuItem, { props: { label: "Edit", arrowIcon: "lucide:chevron-right" } });
+      const name = wrapper.find(".action-menu-item-arrow .iconify").classes().find((c: string) => c.includes(":")) ?? "";
+      expect(name).toContain("lucide:chevron-right");
     });
   });
 

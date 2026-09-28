@@ -2,66 +2,90 @@
 
 ## Public token API
 
-All `--action-menu-*` tokens are the stable override surface. Because action menus appear
-repeatedly across the UI (tables, cards, list rows) the recommended approach is to set tokens
-once in a **global CSS file** rather than per-instance via `styleClassPassthrough`.
+All `--action-menu-*` tokens are the stable override surface. Action menus repeat across the UI
+(tables, cards, list rows), so setting them once globally is usually the right scope.
 
-### Trigger button
+> Changed 2026-09-27: this table previously listed `light-dark()` defaults that the component
+> never actually used. The values below are the real ones. The menu is a fixed light panel in
+> both colour schemes; give it a dark variant by overriding the tokens (see **Recipe** below).
+
+### Trigger button (resolved on `.action-menu`)
 
 | Token | Default | Controls |
 |---|---|---|
 | `--action-menu-trigger-size` | `3.2rem` | Trigger button width and height |
 | `--action-menu-trigger-border-radius` | `var(--button-border-radius-icon-only, 50%)` | Trigger corner rounding |
-| `--action-menu-trigger-surface` | `transparent` | Trigger background (rest state) |
-| `--action-menu-trigger-surface-hover` | `light-dark(var(--slate-01), var(--slate-09))` | Trigger background on hover/focus |
-| `--action-menu-trigger-icon-size` | `2rem` | Ellipsis icon size |
-| `--action-menu-trigger-icon-color` | `light-dark(var(--slate-07), var(--slate-03))` | Ellipsis icon colour |
+| `--action-menu-trigger-surface` | `transparent` | Trigger background (rest) |
+| `--action-menu-trigger-surface-hover` | `var(--slate-01)` | Trigger background on hover/focus |
+| `--action-menu-trigger-icon-size` | `2rem` | Trigger icon size (applied as `font-size`) |
+| `--action-menu-trigger-icon-color` | `var(--slate-07)` | Trigger icon colour |
 
-### Menu popover
+### Menu popover (resolved on `.action-menu`)
 
 | Token | Default | Controls |
 |---|---|---|
-| `--action-menu-block-distance` | `0.4rem` | Gap between trigger bottom and menu top |
-| `--action-menu-popover-background` | `light-dark(var(--slate-00), var(--slate-10))` | Menu panel background |
-| `--action-menu-popover-border` | `0.1rem solid light-dark(var(--slate-03), var(--slate-07))` | Menu panel border shorthand |
+| `--action-menu-block-distance` | `0.4rem` | Gap between trigger and menu |
+| `--action-menu-popover-background` | `var(--slate-00)` | Menu panel background |
+| `--action-menu-popover-border` | `0.1rem solid var(--slate-03)` | Menu panel border shorthand |
 | `--action-menu-popover-border-radius` | `0.8rem` | Menu panel corner rounding |
 | `--action-menu-popover-min-width` | `20rem` | Minimum menu width |
-| `--action-menu-popover-shadow` | `0 0.4rem 1.6rem light-dark(rgba(0,0,0,0.1), rgba(0,0,0,0.4))` | Menu panel drop shadow |
+| `--action-menu-popover-shadow` | `0 0.4rem 1.6rem rgba(0, 0, 0, 0.1)` | Menu panel drop shadow |
 | `--action-menu-popover-transition-duration` | `200ms` | Open/close fade duration |
+| `--action-menu-item-divider` | `0.1rem solid var(--slate-02)` | Divider between list rows |
 
-### Menu items (`ActionMenuItemCore`)
+### Menu items (`ActionMenuItem`, resolved on `.action-menu-item`)
 
 | Token | Default | Controls |
 |---|---|---|
-| `--action-menu-item-divider` | `0.1rem solid light-dark(var(--slate-02), var(--slate-08))` | Divider line between items |
-| `--action-menu-item-surface-hover` | `light-dark(var(--slate-01), var(--slate-09))` | Item row background on hover/focus |
-| `--action-menu-item-text-color` | `light-dark(var(--slate-09), var(--slate-01))` | Item label and icon colour |
-| `--action-menu-item-icon-size` | `2rem` | Left icon container size |
-| `--action-menu-item-padding-inline` | `1.6rem` | Item horizontal padding |
-| `--action-menu-item-padding-block` | `1.2rem` | Item vertical padding |
+| `--action-menu-item-surface-hover` | `var(--slate-01)` | Row background on hover/focus |
+| `--action-menu-item-text-color` | `var(--slate-09)` | Label and icon colour |
+| `--action-menu-item-icon-size` | `2rem` | Leading icon box size; also its `font-size`, so a slotted `<Icon>` fills it |
+| `--action-menu-item-arrow-size` | `1.6rem` | Trailing arrow icon size |
+| `--action-menu-item-gap` | `1.2rem` | Space between icon, label and arrow |
+| `--action-menu-item-padding-inline` | `1.6rem` | Row horizontal padding |
+| `--action-menu-item-padding-block` | `1.2rem` | Row vertical padding |
+
+> Changed 2026-09-27: item `light-dark()` defaults replaced by their light values (older iPad
+> Safari lacks `light-dark()`), matching the already-light panel. Icon sizes are applied as
+> `font-size`; the old `width`/`height` on the trigger and arrow icons was silently overridden by
+> `@nuxt/icon`. `--action-menu-item-arrow-size` is new.
+
+Private (not public API): the `--_*` copies of the tokens above, and `--_anchor-name` (the
+per-instance CSS anchor set inline on the root).
+
+---
+
+## State hooks
+
+| Hook | When |
+|---|---|
+| `.action-menu-popover:popover-open` | Menu is open |
+
+Inner classes: `.action-menu-trigger`, `.action-menu-trigger-icon`, `.action-menu-popover`,
+`.action-menu-list`, `.action-menu-list-item`; on each item `.action-menu-item`,
+`.action-menu-item-icon`, `.action-menu-item-label`, `.action-menu-item-arrow`,
+`.action-menu-item-arrow-icon`.
+
+> Changed 2026-09-27: the item root class is `.action-menu-item` (was `.action-menu-item-core`,
+> renamed with the component).
+
+---
+
+## Positioning
+
+The menu uses the Popover API plus CSS anchor positioning: it opens below the trigger,
+right-aligned, and flips above near the bottom of the viewport (`position-try-fallbacks:
+flip-block`). Browsers without anchor positioning still open the popover, but not anchored to the
+trigger.
 
 ---
 
 ## Global theming
 
-Create `assets/styles/setup/07.components/action-menu.css` in the consuming app and set tokens
-on `:root`. This applies to every `ActionMenu` across the site.
-
 ```css
-/* assets/styles/setup/07.components/action-menu.css */
-:root {
+:where(html) {
   --action-menu-trigger-border-radius: 0.4rem;
-  --action-menu-trigger-surface-hover: var(--brand-surface-subtle);
-  --action-menu-trigger-icon-color: var(--brand-text-muted);
-
-  --action-menu-popover-background: var(--brand-surface);
-  --action-menu-popover-border: 0.1rem solid var(--brand-border);
   --action-menu-popover-border-radius: 0.6rem;
-  --action-menu-popover-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.15);
-
-  --action-menu-item-surface-hover: var(--brand-surface-subtle);
-  --action-menu-item-text-color: var(--brand-text);
-  --action-menu-item-divider: 0.1rem solid var(--brand-border);
   --action-menu-block-distance: 0.6rem;
 }
 ```
@@ -76,57 +100,39 @@ Set the tokens above on an element you own (a page or section class, or a class 
 `<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
 `:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
 
-### Page or section
+**Caveat:** the popover is a top-layer element, but it's still a DOM descendant of `.action-menu`,
+so tokens set on an ancestor still reach it.
 
-Override tokens for a specific section by scoping them under the page or layout wrapper.
-No `:deep()` is required (component styles are unscoped).
+---
+
+## Recipe: dark-scheme menu
 
 ```css
-/* In the consuming page's unscoped <style> block */
-.admin-table {
-  .action-menu {
-    --action-menu-trigger-size: 2.8rem;
-    --action-menu-trigger-icon-size: 1.6rem;
-    --action-menu-popover-min-width: 16rem;
-    --action-menu-item-padding-block: 0.8rem;
-  }
+.my-page {
+  --action-menu-trigger-surface-hover: light-dark(var(--slate-01), var(--slate-09));
+  --action-menu-trigger-icon-color: light-dark(var(--slate-07), var(--slate-03));
+  --action-menu-popover-background: light-dark(var(--slate-00), var(--slate-10));
+  --action-menu-popover-border: 0.1rem solid light-dark(var(--slate-03), var(--slate-07));
+  --action-menu-item-divider: 0.1rem solid light-dark(var(--slate-02), var(--slate-08));
+  --action-menu-item-surface-hover: light-dark(var(--slate-01), var(--slate-09));
+  --action-menu-item-text-color: light-dark(var(--slate-09), var(--slate-01));
 }
 ```
 
-### One instance
+`light-dark()` is fine in your own CSS if your supported browsers have it; the library just
+doesn't rely on it for its defaults.
 
-Use sparingly — prefer global or page-scoped CSS. When a single instance needs a distinct
-visual style, pass a modifier class:
+---
 
-```vue
-<ActionMenu
-  :style-class-passthrough="['danger-actions']"
->
-  ...
-</ActionMenu>
-```
+## Class passthrough
 
-```css
-.action-menu.danger-actions {
-  --action-menu-trigger-icon-color: var(--color-danger);
-  --action-menu-trigger-surface-hover: light-dark(var(--red-01), var(--red-09));
-  --action-menu-item-surface-hover: light-dark(var(--red-01), var(--red-09));
-  --action-menu-item-text-color: light-dark(var(--red-09), var(--red-01));
-  --action-menu-item-divider: 0.1rem solid light-dark(var(--red-02), var(--red-08));
-}
-```
+`style-class-passthrough` on `ActionMenu` adds classes to the root `.action-menu`; on
+`ActionMenuItem` it adds them to the item root. Both are reactive after mount.
 
 ---
 
 ## Notes
 
-- `--action-menu-block-distance` accepts any valid `<length>`. Negative values will cause the
-  menu to overlap the trigger.
-- The menu opens **below** the trigger and right-aligns with it by default. It flips above
-  when near the bottom of the viewport (`position-try-fallbacks: flip-block`).
-- `--action-menu-popover-min-width` sets the floor — long labels will naturally expand the
-  menu wider. Set `width: max-content` on `.action-menu-popover` in a consumer override if
-  you want to suppress that.
-- The `--action-menu-item-*` tokens resolve on `.action-menu-item-core` elements, so they
-  take effect even when items are used in other contexts.
-
+- Negative `--action-menu-block-distance` values make the menu overlap the trigger.
+- `--action-menu-popover-min-width` is a floor; long labels widen the menu. Set
+  `width: max-content` on `.action-menu-popover` to change that.

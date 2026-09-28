@@ -1,0 +1,27 @@
+{
+  "SRCDEV DisplayChip": {
+    "description": "DisplayChip status dot cut into the corner of its slotted content",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayChip",
+      "  shape=\"${1|circle,square|}\"",
+      "  :config=\"{ size: '${2:12px}', maskWidth: '${3:4px}', offset: '${4:0px}', angle: '${5:135deg}' }\"",
+      "  :style-class-passthrough=\"['${6|online,idle,dnd|}']\"",
+      ">",
+      "  $7",
+      "</DisplayChip>"
+    ]
+  },
+  "SRCDEV DisplayChip CSS Override": {
+    "description": "CSS override scaffold for DisplayChip status colours",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --display-chip-colour-online: $2;",
+      "  --display-chip-colour-idle: $3;",
+      "  --display-chip-colour-dnd: $4;",
+      "  --display-chip-colour-offline: $5;",
+      "}"
+    ]
+  }
+}

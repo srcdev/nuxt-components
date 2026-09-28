@@ -1,0 +1,39 @@
+{
+  "SRCDEV StepperList": {
+    "description": "StepperList with auto-numbered indicators and indexed item-{n} slots",
+    "scope": "vue,html",
+    "body": [
+      "<StepperList tag=\"${1|ol,ul|}\" :item-count=\"${2:3}\" indicator-variant=\"${3|disc,square,circle|}\">",
+      "  <template #item-0>$4</template>",
+      "  <template #item-1>$5</template>",
+      "  <template #item-2>$6</template>",
+      "</StepperList>"
+    ]
+  },
+  "SRCDEV StepperList Looped": {
+    "description": "StepperList driven by an array, with a custom icon indicator per step",
+    "scope": "vue,html",
+    "body": [
+      "<StepperList tag=\"ol\" :item-count=\"$1steps.length\">",
+      "  <template v-for=\"($2step, $3i) in $1steps\" :key=\"`indicator-${$3i}`\" #[`indicator-${$3i}`]>",
+      "    <Icon :name=\"$2step.icon\"></Icon>",
+      "  </template>",
+      "  <template v-for=\"($2step, $3i) in $1steps\" :key=\"`item-${$3i}`\" #[`item-${$3i}`]>",
+      "    $4",
+      "  </template>",
+      "</StepperList>"
+    ]
+  },
+  "SRCDEV StepperList CSS Override": {
+    "description": "CSS override scaffold for StepperList tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --stepper-list-gap: $2;",
+      "  --stepper-list-connector-color: $3;",
+      "  --stepper-list-counter-disc-background: $4;",
+      "  --stepper-list-counter-disc-text: $5;",
+      "}"
+    ]
+  }
+}

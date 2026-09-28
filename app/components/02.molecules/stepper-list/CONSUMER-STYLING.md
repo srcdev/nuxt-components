@@ -50,6 +50,31 @@ file, scoped to a page wrapper, or per-instance via `styleClassPassthrough`.
 | `--stepper-list-counter-square-border` | `transparent` | Bubble border colour |
 | `--stepper-list-counter-square-border-radius` | `0.25rem` | Bubble corner rounding |
 
+The defaults above are the component's own fallbacks. The library's default theme
+(`app/assets/styles/setup/03.theming/_default.css`) sets blue values for the colour tokens on
+`:root`, so that's what you see unless your app replaces that theme file or overrides them.
+
+> Changed 2026-09-27: the default theme set `--stepper-list-icon`, a name the component never
+> reads, so custom indicator icons fell back to `currentColor`. It now sets
+> `--stepper-list-icon-color`.
+
+Private (not public API): the `--_*` copies of the tokens above, plus `--_connector-top` and
+`--_connector-height`, which script measures and sets inline on each `<li>`.
+
+---
+
+## State hooks
+
+| Hook | Element | When |
+|---|---|---|
+| `.has-connectors` | root | `connected` is on (default) |
+| `.has-indicator` | `<li>` | That item has an `indicator-{n}` slot |
+| `.indicator-top`, `.indicator-center` | `<li>` | `indicator-alignment` |
+| `.indicator-disc`, `.indicator-square`, `.indicator-circle` | `<li>` | `indicator-variant` |
+
+Inner classes: `.stepper-list__indicator-counter` (auto-numbered bubble) or
+`.stepper-list__indicator-custom` (wraps a custom `indicator-{n}` slot).
+
 ---
 
 ## Global theming
@@ -128,6 +153,13 @@ visual style, pass a modifier class:
   --stepper-list-icon-color: var(--color-success);
 }
 ```
+
+---
+
+## Class passthrough
+
+`style-class-passthrough` adds classes to the root `<ul>`/`<ol>`. Tokens set on a passthrough class
+land for the whole list. Reactive after mount.
 
 ---
 

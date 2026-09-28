@@ -1,13 +1,14 @@
 import { computed, ref } from "vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import ActionMenu from "../ActionMenu.vue";
-import ActionMenuItemCore from "../ActionMenuItemCore.vue";
+import ActionMenuItem from "../ActionMenuItem.vue";
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 
 interface StoryArgs {
   itemCount?: number;
   label?: string;
+  triggerIcon?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -25,6 +26,11 @@ const meta: Meta<StoryArgs> = {
       description: "Accessible label for both the trigger button and the menu list (`aria-label`)",
       table: { category: "Accessibility" },
     },
+    triggerIcon: {
+      control: { type: "text" },
+      description: "Icon name for the trigger button",
+      table: { category: "Appearance" },
+    },
     styleClassPassthrough: {
       table: { disable: true },
     },
@@ -32,13 +38,14 @@ const meta: Meta<StoryArgs> = {
   args: {
     itemCount: 5,
     label: "Open actions menu",
+    triggerIcon: "lucide:ellipsis",
   },
   parameters: {
     docs: {
       description: {
         component:
           "An ellipsis trigger button that opens an anchored popover menu. " +
-          "Populate the menu via indexed `item-{n}` slots, each containing a single `ActionMenuItemCore`. " +
+          "Populate the menu via indexed `item-{n}` slots, each containing a single `ActionMenuItem`. " +
           "Items can be buttons (omit `href`) or links (internal `/path` → NuxtLink, external URL → `<a>`). " +
           "The menu closes automatically when any item is clicked. " +
           "Set shared CSS tokens globally — see `CONSUMER-STYLING.md` in the component folder.",
@@ -72,7 +79,7 @@ export const Default: Story = {
     itemCount: 5,
   },
   render: (args) => ({
-    components: { ActionMenu, ActionMenuItemCore },
+    components: { ActionMenu, ActionMenuItem },
     setup() {
       // `args` is Storybook's own reactive object — read from it directly (`args.x`) inside
       // these computeds rather than destructuring it into local variables at setup-time, which
@@ -94,11 +101,11 @@ export const Default: Story = {
       <div style="padding: 4rem 8rem; display: flex; flex-direction: column; align-items: flex-end; gap: 2rem;">
         <ActionMenu v-bind="componentArgs">
           <template v-for="item in items" :key="item.slotName" #[item.slotName]>
-            <ActionMenuItemCore :label="item.label" @click="lastAction = item.label">
+            <ActionMenuItem :label="item.label" @click="lastAction = item.label">
               <template #icon>
                 <Icon :name="item.icon" />
               </template>
-            </ActionMenuItemCore>
+            </ActionMenuItem>
           </template>
         </ActionMenu>
         <p v-if="lastAction" style="margin: 0; font-size: 1.3rem; opacity: 0.6;">
@@ -110,7 +117,7 @@ export const Default: Story = {
 };
 
 /**
- * Mixed items — demonstrates the three `ActionMenuItemCore` rendering modes:
+ * Mixed items — demonstrates the three `ActionMenuItem` rendering modes:
  * button (no href), internal link (/path), and external link (https://…).
  */
 export const MixedItems: Story = {
@@ -119,7 +126,7 @@ export const MixedItems: Story = {
     label: "Record actions",
   },
   render: (args) => ({
-    components: { ActionMenu, ActionMenuItemCore },
+    components: { ActionMenu, ActionMenuItem },
     setup() {
       return { args };
     },
@@ -127,24 +134,24 @@ export const MixedItems: Story = {
       <div style="padding: 4rem 8rem; display: flex; justify-content: flex-end;">
         <ActionMenu v-bind="args">
           <template #item-0>
-            <ActionMenuItemCore label="Edit record" @click="() => {}">
+            <ActionMenuItem label="Edit record" @click="() => {}">
               <template #icon><Icon name="lucide:pencil" /></template>
-            </ActionMenuItemCore>
+            </ActionMenuItem>
           </template>
           <template #item-1>
-            <ActionMenuItemCore label="View full profile" href="/profile/123">
+            <ActionMenuItem label="View full profile" href="/profile/123">
               <template #icon><Icon name="lucide:user" /></template>
-            </ActionMenuItemCore>
+            </ActionMenuItem>
           </template>
           <template #item-2>
-            <ActionMenuItemCore label="Open in new tab" href="https://example.com">
+            <ActionMenuItem label="Open in new tab" href="https://example.com">
               <template #icon><Icon name="lucide:external-link" /></template>
-            </ActionMenuItemCore>
+            </ActionMenuItem>
           </template>
           <template #item-3>
-            <ActionMenuItemCore label="Delete record" @click="() => {}">
+            <ActionMenuItem label="Delete record" @click="() => {}">
               <template #icon><Icon name="lucide:trash-2" /></template>
-            </ActionMenuItemCore>
+            </ActionMenuItem>
           </template>
         </ActionMenu>
       </div>
@@ -159,7 +166,7 @@ export const NoIcons: Story = {
   name: "No Icons",
   args: {},
   render: (args) => ({
-    components: { ActionMenu, ActionMenuItemCore },
+    components: { ActionMenu, ActionMenuItem },
     setup() {
       return { args };
     },
@@ -167,13 +174,13 @@ export const NoIcons: Story = {
       <div style="padding: 4rem 8rem; display: flex; justify-content: flex-end;">
         <ActionMenu v-bind="args">
           <template #item-0>
-            <ActionMenuItemCore label="Approve" @click="() => {}" />
+            <ActionMenuItem label="Approve" @click="() => {}" />
           </template>
           <template #item-1>
-            <ActionMenuItemCore label="Request changes" @click="() => {}" />
+            <ActionMenuItem label="Request changes" @click="() => {}" />
           </template>
           <template #item-2>
-            <ActionMenuItemCore label="Reject" @click="() => {}" />
+            <ActionMenuItem label="Reject" @click="() => {}" />
           </template>
         </ActionMenu>
       </div>
@@ -192,7 +199,7 @@ export const InContext: Story = {
     label: "User actions",
   },
   render: (args) => ({
-    components: { ActionMenu, ActionMenuItemCore },
+    components: { ActionMenu, ActionMenuItem },
     setup() {
       const users = [
         { name: "Alex Morgan",    email: "alex@example.com",    role: "Admin" },
@@ -240,24 +247,24 @@ export const InContext: Story = {
           <span style="font-size: 1.2rem; opacity: 0.5; white-space: nowrap;">{{ user.role }}</span>
           <ActionMenu v-bind="args">
             <template #item-0>
-              <ActionMenuItemCore label="Edit user" @click="() => {}">
+              <ActionMenuItem label="Edit user" @click="() => {}">
                 <template #icon><Icon name="lucide:pencil" /></template>
-              </ActionMenuItemCore>
+              </ActionMenuItem>
             </template>
             <template #item-1>
-              <ActionMenuItemCore label="View profile" :href="'/users/' + user.email">
+              <ActionMenuItem label="View profile" :href="'/users/' + user.email">
                 <template #icon><Icon name="lucide:user" /></template>
-              </ActionMenuItemCore>
+              </ActionMenuItem>
             </template>
             <template #item-2>
-              <ActionMenuItemCore label="Reset password" @click="() => {}">
+              <ActionMenuItem label="Reset password" @click="() => {}">
                 <template #icon><Icon name="lucide:key" /></template>
-              </ActionMenuItemCore>
+              </ActionMenuItem>
             </template>
             <template #item-3>
-              <ActionMenuItemCore label="Remove user" @click="() => {}">
+              <ActionMenuItem label="Remove user" @click="() => {}">
                 <template #icon><Icon name="lucide:user-minus" /></template>
-              </ActionMenuItemCore>
+              </ActionMenuItem>
             </template>
           </ActionMenu>
         </div>
@@ -267,15 +274,15 @@ export const InContext: Story = {
 };
 
 /**
- * ActionMenuItemCore — standalone view of the child component in its three
+ * ActionMenuItem — standalone view of the child component in its three
  * rendering modes (button, internal link, external link). Not an interactive
  * menu — use this story to style and test individual item rows.
  */
 export const ItemCoreStandalone: Story = {
-  name: "ActionMenuItemCore — Standalone",
+  name: "ActionMenuItem — Standalone",
   args: {},
   render: () => ({
-    components: { ActionMenuItemCore },
+    components: { ActionMenuItem },
     setup() {
       const lastClick = ref<string | null>(null);
       return { lastClick };
@@ -284,43 +291,43 @@ export const ItemCoreStandalone: Story = {
       <div style="padding: 4rem; max-width: 32rem; margin: 0 auto;">
         <p style="margin: 0 0 1.2rem; font-size: 1.2rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.08em;">Button items</p>
         <div style="border: 0.1rem solid light-dark(#e5e7eb, #374151); border-radius: 0.8rem; overflow: hidden;">
-          <ActionMenuItemCore
+          <ActionMenuItem
             label="Edit"
             style="border-bottom: 0.1rem solid light-dark(#e5e7eb, #374151);"
             @click="lastClick = 'Edit'"
           >
             <template #icon><Icon name="lucide:pencil" /></template>
-          </ActionMenuItemCore>
-          <ActionMenuItemCore
+          </ActionMenuItem>
+          <ActionMenuItem
             label="Duplicate"
             style="border-bottom: 0.1rem solid light-dark(#e5e7eb, #374151);"
             @click="lastClick = 'Duplicate'"
           >
             <template #icon><Icon name="lucide:copy" /></template>
-          </ActionMenuItemCore>
-          <ActionMenuItemCore
+          </ActionMenuItem>
+          <ActionMenuItem
             label="Delete"
             @click="lastClick = 'Delete'"
           >
             <template #icon><Icon name="lucide:trash-2" /></template>
-          </ActionMenuItemCore>
+          </ActionMenuItem>
         </div>
 
         <p style="margin: 2.4rem 0 1.2rem; font-size: 1.2rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.08em;">Link items</p>
         <div style="border: 0.1rem solid light-dark(#e5e7eb, #374151); border-radius: 0.8rem; overflow: hidden;">
-          <ActionMenuItemCore
+          <ActionMenuItem
             label="Internal link (/about)"
             href="/about"
             style="border-bottom: 0.1rem solid light-dark(#e5e7eb, #374151);"
           >
             <template #icon><Icon name="lucide:arrow-up-right" /></template>
-          </ActionMenuItemCore>
-          <ActionMenuItemCore
+          </ActionMenuItem>
+          <ActionMenuItem
             label="External link"
             href="https://example.com"
           >
             <template #icon><Icon name="lucide:external-link" /></template>
-          </ActionMenuItemCore>
+          </ActionMenuItem>
         </div>
 
         <p v-if="lastClick" style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
