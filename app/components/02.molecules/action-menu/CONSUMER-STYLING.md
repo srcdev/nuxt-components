@@ -50,8 +50,9 @@ All `--action-menu-*` tokens are the stable override surface. Action menus repea
 > `font-size`; the old `width`/`height` on the trigger and arrow icons was silently overridden by
 > `@nuxt/icon`. `--action-menu-item-arrow-size` is new.
 
-Private (not public API): the `--_*` copies of the tokens above, and `--_anchor-name` (the
-per-instance CSS anchor set inline on the root).
+Private (not public API): `--_trigger-size`, `--_popover-transition-duration`, `--_gap` and
+`--_icon-size` (each reused across several declarations; set the public token instead), and
+`--_anchor-name` (the per-instance CSS anchor set inline on the root).
 
 ---
 

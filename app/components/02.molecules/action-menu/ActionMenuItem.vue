@@ -60,23 +60,19 @@ watch(
 @layer components {
   .action-menu-item {
     --_gap: var(--action-menu-item-gap, 1.2rem);
-    --_surface-hover: var(--action-menu-item-surface-hover, var(--slate-01));
-    --_text-color: var(--action-menu-item-text-color, var(--slate-09));
     --_icon-size: var(--action-menu-item-icon-size, 2rem);
-    --_padding-inline: var(--action-menu-item-padding-inline, 1.6rem);
-    --_padding-block: var(--action-menu-item-padding-block, 1.2rem);
 
     all: unset;
     box-sizing: border-box;
     cursor: pointer;
     display: grid;
-    grid-template-columns: subgrid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
 
     width: 100%;
-    padding-inline: var(--_padding-inline);
-    padding-block: var(--_padding-block);
-    color: var(--_text-color);
+    padding-inline: var(--action-menu-item-padding-inline, 1.6rem);
+    padding-block: var(--action-menu-item-padding-block, 1.2rem);
+    color: var(--action-menu-item-text-color, var(--slate-09));
     font-family: var(--font-family);
     font-size: var(--button-font-size, 1.4rem);
     font-weight: var(--button-font-weight, 500);
@@ -86,7 +82,7 @@ watch(
 
     &:hover,
     &:focus-visible {
-      background-color: var(--_surface-hover);
+      background-color: var(--action-menu-item-surface-hover, var(--slate-01));
     }
 
     &:focus-visible {

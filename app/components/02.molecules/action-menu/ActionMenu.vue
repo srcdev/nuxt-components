@@ -124,21 +124,8 @@ watch(
 <style lang="css">
 @layer components {
   .action-menu {
-    --_block-distance: var(--action-menu-block-distance, 0.4rem);
     --_trigger-size: var(--action-menu-trigger-size, 3.2rem);
-    --_trigger-border-radius: var(--action-menu-trigger-border-radius, var(--button-border-radius-icon-only, 50%));
-    --_trigger-surface: var(--action-menu-trigger-surface, transparent);
-    --_trigger-surface-hover: var(--action-menu-trigger-surface-hover, var(--slate-01));
-    --_trigger-icon-size: var(--action-menu-trigger-icon-size, 2rem);
-    --_trigger-icon-color: var(--action-menu-trigger-icon-color, var(--slate-07));
-
-    --_popover-background: var(--action-menu-popover-background, var(--slate-00));
-    --_popover-border: var(--action-menu-popover-border, 0.1rem solid var(--slate-03));
-    --_popover-border-radius: var(--action-menu-popover-border-radius, 0.8rem);
-    --_popover-min-width: var(--action-menu-popover-min-width, 20rem);
-    --_popover-shadow: var(--action-menu-popover-shadow, 0 0.4rem 1.6rem rgba(0, 0, 0, 0.1));
     --_popover-transition-duration: var(--action-menu-popover-transition-duration, 200ms);
-    --_item-divider: var(--action-menu-item-divider, 0.1rem solid var(--slate-02));
 
     position: relative;
     display: inline-block;
@@ -150,15 +137,15 @@ watch(
       place-items: center;
       width: var(--_trigger-size);
       height: var(--_trigger-size);
-      border-radius: var(--_trigger-border-radius);
-      background-color: var(--_trigger-surface);
-      color: var(--_trigger-icon-color);
+      border-radius: var(--action-menu-trigger-border-radius, var(--button-border-radius-icon-only, 50%));
+      background-color: var(--action-menu-trigger-surface, transparent);
+      color: var(--action-menu-trigger-icon-color, var(--slate-07));
       anchor-name: var(--_anchor-name);
       transition: background-color var(--control-transition-duration, 200ms) var(--control-transition-ease, ease);
 
       &:hover,
       &:focus-visible {
-        background-color: var(--_trigger-surface-hover);
+        background-color: var(--action-menu-trigger-surface-hover, var(--slate-01));
       }
 
       &:focus-visible {
@@ -168,23 +155,23 @@ watch(
 
       .action-menu-trigger-icon {
         display: block;
-        font-size: var(--_trigger-icon-size);
+        font-size: var(--action-menu-trigger-icon-size, 2rem);
       }
     }
 
     .action-menu-popover {
-      border: var(--_popover-border);
+      border: var(--action-menu-popover-border, 0.1rem solid var(--slate-03));
       margin: 0;
       padding: 0;
       inset: auto;
-      background-color: var(--_popover-background);
-      border-radius: var(--_popover-border-radius);
-      min-width: var(--_popover-min-width);
-      box-shadow: var(--_popover-shadow);
+      background-color: var(--action-menu-popover-background, var(--slate-00));
+      border-radius: var(--action-menu-popover-border-radius, 0.8rem);
+      min-width: var(--action-menu-popover-min-width, 20rem);
+      box-shadow: var(--action-menu-popover-shadow, 0 0.4rem 1.6rem rgba(0, 0, 0, 0.1));
       overflow: hidden;
 
       position-anchor: var(--_anchor-name);
-      top: calc(anchor(bottom) + var(--_block-distance));
+      top: calc(anchor(bottom) + var(--action-menu-block-distance, 0.4rem));
       right: anchor(right);
       left: auto;
       position-try-fallbacks: flip-block;
@@ -221,7 +208,12 @@ watch(
           grid-template-columns: subgrid;
 
           &:not(:last-child) {
-            border-bottom: var(--_item-divider);
+            border-bottom: var(--action-menu-item-divider, 0.1rem solid var(--slate-02));
+          }
+
+          > .action-menu-item {
+            grid-column: 1 / -1;
+            grid-template-columns: subgrid;
           }
         }
       }
