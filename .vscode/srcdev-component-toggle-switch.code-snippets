@@ -20,7 +20,9 @@
       "  label=\"$3Field label\"",
       "  :error-message=\"$4errors.fieldName\"",
       "  :field-has-error=\"!!$4errors.fieldName\"",
-      "/>"
+      ">",
+      "  <template #descriptionText>$5Help text</template>",
+      "</ToggleSwitchWithLabel>"
     ]
   },
   "SRCDEV ToggleSwitchWithLabelInline": {

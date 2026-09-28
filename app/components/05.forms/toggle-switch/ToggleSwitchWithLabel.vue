@@ -10,9 +10,18 @@
       <template #textLabel>{{ label }}</template>
     </InputLabel>
 
-    <div v-if="slots.description" :id="descriptionId">
-      <slot name="description"></slot>
-    </div>
+    <InputDescription
+      :description-id
+      :field-has-error
+      :style-class-passthrough="['toggle-switch-description']"
+    >
+      <template v-if="slots.descriptionHtml" #descriptionHtml>
+        <slot name="descriptionHtml"></slot>
+      </template>
+      <template v-if="slots.descriptionText" #descriptionText>
+        <slot name="descriptionText"></slot>
+      </template>
+    </InputDescription>
     <ToggleSwitchCore
       :id
       v-model="modelValue"
@@ -77,9 +86,15 @@ const toggleSwitchId = computed(() => `toggle-switch-${id}`);
 const descriptionId = computed(() => `${id}-description`);
 const errorId = computed(() => `${id}-error-message`);
 
+// A plain function rather than useAriaDescribedById's computed: slots aren't reactive, so a
+// computed would keep its first answer if a description slot is added or removed after mount
+// (Claude.md pitfall #25). Lists both ids when there's a description and an error, so the
+// description is still announced while the field is invalid.
 const ariaDescribedby = () => {
-  const ariaDescribedbyId = slots.description ? descriptionId.value : undefined;
-  return props.fieldHasError ? errorId.value : ariaDescribedbyId;
+  const ids: string[] = [];
+  if (slots.descriptionText || slots.descriptionHtml) ids.push(descriptionId.value);
+  if (props.fieldHasError) ids.push(errorId.value);
+  return ids.join(" ");
 };
 
 const modelValue = defineModel<string | number | boolean>({ required: true });

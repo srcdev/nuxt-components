@@ -49,9 +49,26 @@ describe("ToggleSwitchWithLabel", () => {
     expect(wrapper.text()).toContain("You must accept");
   });
 
-  it("renders the description slot", async () => {
-    wrapper = await wrapperFactory({}, { description: () => "Turn this on to receive notifications" });
-    expect(wrapper.text()).toContain("Turn this on to receive notifications");
+  it("renders descriptionText through InputDescription", async () => {
+    wrapper = await wrapperFactory({}, { descriptionText: () => "Turn this on to receive notifications" });
+    const description = wrapper.find(".input-description.toggle-switch-description");
+    expect(description.exists()).toBe(true);
+    expect(description.find(".input-description-text").text()).toBe("Turn this on to receive notifications");
+  });
+
+  it("renders descriptionHtml through InputDescription", async () => {
+    wrapper = await wrapperFactory({}, { descriptionHtml: () => "Rich description" });
+    expect(wrapper.find(".toggle-switch-description .input-description-html").text()).toBe("Rich description");
+  });
+
+  it("renders no description element without a description slot", async () => {
+    wrapper = await wrapperFactory();
+    expect(wrapper.find(".input-description").exists()).toBe(false);
+  });
+
+  it("no longer renders the removed description slot", async () => {
+    wrapper = await wrapperFactory({}, { description: () => "Old slot content" });
+    expect(wrapper.text()).not.toContain("Old slot content");
   });
 
   it("forwards required to the underlying input", async () => {
@@ -84,7 +101,7 @@ describe("ToggleSwitchWithLabel", () => {
       },
       template: `
         <ComponentUnderTest v-model="modelValue" name="notifications" label="Enable notifications" error-message="">
-          <template v-if="showDescription" #description>Sends at most one email a week.</template>
+          <template v-if="showDescription" #descriptionText>Sends at most one email a week.</template>
         </ComponentUnderTest>
       `,
     });
@@ -99,5 +116,18 @@ describe("ToggleSwitchWithLabel", () => {
   it("points aria-describedby at the error message when the field has an error", async () => {
     wrapper = await wrapperFactory({ fieldHasError: true, errorMessage: "Required" });
     expect(wrapper.find("input[type='checkbox']").attributes("aria-describedby")).toMatch(/-error-message$/);
+  });
+
+  it("points aria-describedby at both the description and the error when both are present", async () => {
+    wrapper = await wrapperFactory(
+      { fieldHasError: true, errorMessage: "Required" },
+      { descriptionText: () => "Sends at most one email a week." }
+    );
+    const describedBy = wrapper.find("input[type='checkbox']").attributes("aria-describedby") ?? "";
+    const ids = describedBy.split(" ");
+    expect(ids).toHaveLength(2);
+    expect(ids[0]).toMatch(/-description$/);
+    expect(ids[1]).toMatch(/-error-message$/);
+    expect(wrapper.find(`[id="${ids[0]}"]`).exists()).toBe(true);
   });
 });

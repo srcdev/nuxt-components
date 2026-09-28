@@ -55,6 +55,21 @@ fixed width independent of symbol size).
 
 ---
 
+## Description (ToggleSwitchWithLabel)
+
+`ToggleSwitchWithLabel`'s `descriptionText` / `descriptionHtml` slots render through
+`InputDescription`, so they're styled by its `--input-description-*` tokens (see
+`input-description/CONSUMER-STYLING.md`), the same as every other labelled form field. The
+spacing between the description and the switch is
+`--input-description-slot-margin-block-end` (default `0.8rem`). Scope an override to toggles only
+with the `.toggle-switch-description` class it adds:
+
+```css
+.toggle-switch-description {
+  --input-description-slot-margin-block-end: 1.2rem;
+}
+```
+
 ## Global theming
 
 ```css

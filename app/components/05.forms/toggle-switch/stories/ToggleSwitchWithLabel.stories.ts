@@ -166,9 +166,7 @@ const Template: StoryFn<ToggleSwitchWithLabelStoryArgs> = (_args, { argTypes }) 
       :theme="args.theme"
       :round="args.round"
     >
-      <template v-if="args.useDescription" #description>
-        <div style="color: #666; font-size: 0.875rem;">{{ args.descriptionContent }}</div>
-      </template>
+      <template v-if="args.useDescription" #descriptionText>{{ args.descriptionContent }}</template>
       <template v-if="args.useCustomIcons" #iconOn>
         <span v-html="args.iconOnContent"></span>
       </template>

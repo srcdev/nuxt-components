@@ -100,7 +100,7 @@ full table with defaults.
 ### ToggleSwitchWithLabel
 
 `ToggleSwitchWithLabel` (`ToggleSwitchWithLabel.vue`) composes `ToggleSwitchCore` with
-`InputLabel`, an optional `description` slot, and `InputError`.
+`InputLabel`, an optional description (rendered by `InputDescription`, the same as every other labelled form field), and `InputError`.
 
 **Additional props over ToggleSwitchCore:**
 
@@ -113,7 +113,9 @@ Note this wrapper passes `id`/`name`/`required`/`field-has-error`/`true-value`/`
 `theme`/`round`/`aria-describedby` straight through to `ToggleSwitchCore`; `id` is a self-generated
 `useId()` value, not a prop — consumers don't set it directly.
 
-**Slots**: `description`, `iconOn`, `iconOff` (the latter two forwarded to `ToggleSwitchCore`).
+**Slots**: `descriptionText` / `descriptionHtml` (help text between the label and the switch, via `InputDescription`), `iconOn`, `iconOff` (the latter two forwarded to `ToggleSwitchCore`).
+
+The switch's `aria-describedby` lists the description id when a description slot is present and the error id when `field-has-error` is true, both together when both apply.
 
 ```vue
 <ToggleSwitchWithLabel
@@ -123,8 +125,25 @@ Note this wrapper passes `id`/`name`/`required`/`field-has-error`/`true-value`/`
   :error-message="errors.notifications"
   :field-has-error="!!errors.notifications"
 >
-  <template #description>Turn this on to receive notifications</template>
+  <template #descriptionText>Turn this on to receive notifications</template>
 </ToggleSwitchWithLabel>
+```
+
+#### Breaking change 2026-09-29: description slot
+
+The `description` slot is removed. Use `descriptionText` (plain text, wrapped in a `<p>`) or
+`descriptionHtml` (rich markup) instead. The old slot rendered into a bare `<div>` with no class,
+spacing or tokens, so its content sat flush against the switch; it now goes through
+`InputDescription` like every other labelled form field, styled by the `--input-description-*`
+tokens (see `input-description` CONSUMER-STYLING.md) and targetable as
+`.toggle-switch-description`. `aria-describedby` also used to drop the description id whenever
+the field had an error; it now lists both.
+
+```vue
+<!-- before -->
+<template #description>Sends at most one email a week.</template>
+<!-- after -->
+<template #descriptionText>Sends at most one email a week.</template>
 ```
 
 ### ToggleSwitchWithLabelInline
