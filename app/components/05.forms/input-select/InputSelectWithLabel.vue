@@ -44,7 +44,7 @@
         :required
         :style-class-passthrough
         :theme="FormUiTheme"
-        :aria-describedby
+        :aria-describedby="ariaDescribedby()"
         :input-variant
       />
 

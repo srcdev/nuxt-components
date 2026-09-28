@@ -39,7 +39,7 @@
       :required
       :weight
       :field-has-error
-      :aria-describedby="ariaDescribedby"
+      :aria-describedby="ariaDescribedby()"
       :style-class-passthrough="styleClassPassthrough"
     >
       <template v-if="slots.datalist" #datalist>

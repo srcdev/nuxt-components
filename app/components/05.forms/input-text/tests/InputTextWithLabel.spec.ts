@@ -2,6 +2,7 @@
 import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import ComponentUnderTest from "../InputTextWithLabel.vue";
+import { defineComponent, nextTick, ref } from "vue";
 
 const initialPropsData = {
   type: "text" as const,
@@ -43,5 +44,28 @@ describe("InputTextWithLabel", () => {
     expect(input.attributes("type")).toBe("date");
     expect(input.attributes("min")).toBe("2026-01-01");
     expect(input.attributes("max")).toBe("2026-12-31");
+  });
+
+  it("points aria-describedby at the description once it appears after mount", async () => {
+    const Host = defineComponent({
+      components: { ComponentUnderTest },
+      setup() {
+        return { modelValue: ref(""), showDescription: ref(false) };
+      },
+      template: `
+        <ComponentUnderTest v-model="modelValue" type="text" name="email" label="Email" error-message="">
+          <template v-if="showDescription" #descriptionText>We never share it.</template>
+        </ComponentUnderTest>
+      `,
+    });
+    const host = await mountSuspended(Host);
+    const input = () => host.find("input");
+    expect(input().attributes("aria-describedby")).toBeFalsy();
+    (host.vm as unknown as { showDescription: boolean }).showDescription = true;
+    await nextTick();
+    expect(input().attributes("aria-describedby")).toMatch(/-description$/);
+    (host.vm as unknown as { showDescription: boolean }).showDescription = false;
+    await nextTick();
+    expect(input().attributes("aria-describedby")).toBeFalsy();
   });
 });

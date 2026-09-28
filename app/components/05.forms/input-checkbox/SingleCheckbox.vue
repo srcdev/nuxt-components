@@ -35,7 +35,7 @@
           :false-value
           :theme
           :input-variant
-          :aria-describedby
+          :aria-describedby="ariaDescribedby()"
         >
           <template #checkedIcon>
             <slot name="checkedIcon"></slot>

@@ -40,7 +40,7 @@
             :theme
             :input-variant
             :direction
-            :aria-describedby
+            :aria-describedby="ariaDescribedby()"
             :is-pill="isPill"
           >
             <template #checkedIcon>
@@ -63,7 +63,7 @@
             :true-value="item.value"
             :theme
             :input-variant
-            :aria-describedby
+            :aria-describedby="ariaDescribedby()"
           >
             <template #checkedIcon>
               <slot name="checkedIcon"></slot>

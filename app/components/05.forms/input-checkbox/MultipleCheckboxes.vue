@@ -39,7 +39,7 @@
             :theme
             :input-variant
             :direction
-            :aria-describedby
+            :aria-describedby="ariaDescribedby()"
             :display-as-disc
             :is-pill="isPill"
           >
@@ -64,7 +64,7 @@
             :true-value="item.value"
             :theme
             :input-variant
-            :aria-describedby
+            :aria-describedby="ariaDescribedby()"
             :display-as-disc
           >
             <template #checkedIcon>

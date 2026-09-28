@@ -41,7 +41,7 @@ No slots.
 ```vue
 <template>
   <div class="my-field">
-    <input :id :aria-describedby :aria-invalid="fieldHasError" />
+    <input :id :aria-describedby="ariaDescribedby()" :aria-invalid="fieldHasError" />
     <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="false" :input-variant />
   </div>
 </template>

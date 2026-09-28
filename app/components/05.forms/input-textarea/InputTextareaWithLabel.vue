@@ -44,7 +44,7 @@
         :style-class-passthrough
         :theme
         :input-variant
-        :aria-describedby
+        :aria-describedby="ariaDescribedby()"
       >
         <template v-if="slots.left" #left>
           <slot name="left"></slot>

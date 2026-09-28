@@ -45,7 +45,7 @@
       :style-class-passthrough="elementClasses"
       :theme
       inputmode="numeric"
-      :aria-describedby
+      :aria-describedby="ariaDescribedby()"
       :input-variant
     >
       <template v-if="slots.left" #left>

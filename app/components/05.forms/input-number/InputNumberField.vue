@@ -43,7 +43,7 @@
       :input-variant
       :field-has-error
       :style-class-passthrough
-      :aria-describedby
+      :aria-describedby="ariaDescribedby()"
     >
       <template v-if="slots.left" #left>
         <InputButton

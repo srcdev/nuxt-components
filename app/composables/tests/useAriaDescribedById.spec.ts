@@ -38,7 +38,7 @@ describe("useAriaDescribedById", () => {
   describe("ariaDescribedby", () => {
     it("is null when no slots and no error", () => {
       const { ariaDescribedby } = useAriaDescribedById("email", ref(false), noSlots);
-      expect(ariaDescribedby.value).toBeNull();
+      expect(ariaDescribedby()).toBeNull();
     });
 
     it("includes descriptionId when descriptionText slot is present", () => {
@@ -47,7 +47,7 @@ describe("useAriaDescribedById", () => {
         ref(false),
         withSlot("descriptionText")
       );
-      expect(ariaDescribedby.value).toContain(descriptionId);
+      expect(ariaDescribedby()).toContain(descriptionId);
     });
 
     it("includes descriptionId when descriptionHtml slot is present", () => {
@@ -56,7 +56,7 @@ describe("useAriaDescribedById", () => {
         ref(false),
         withSlot("descriptionHtml")
       );
-      expect(ariaDescribedby.value).toContain(descriptionId);
+      expect(ariaDescribedby()).toContain(descriptionId);
     });
 
     it("includes descriptionId when description slot is present", () => {
@@ -65,17 +65,17 @@ describe("useAriaDescribedById", () => {
         ref(false),
         withSlot("description")
       );
-      expect(ariaDescribedby.value).toContain(descriptionId);
+      expect(ariaDescribedby()).toContain(descriptionId);
     });
 
     it("includes errorId when fieldHasError is true", () => {
       const { errorId, ariaDescribedby } = useAriaDescribedById("email", ref(true), noSlots);
-      expect(ariaDescribedby.value).toContain(errorId);
+      expect(ariaDescribedby()).toContain(errorId);
     });
 
     it("does not include errorId when fieldHasError is false (value is null)", () => {
       const { ariaDescribedby } = useAriaDescribedById("email", ref(false), noSlots);
-      expect(ariaDescribedby.value).toBeNull();
+      expect(ariaDescribedby()).toBeNull();
     });
 
     it("does not include errorId when slot is present but fieldHasError is false", () => {
@@ -84,7 +84,7 @@ describe("useAriaDescribedById", () => {
         ref(false),
         withSlot("descriptionText")
       );
-      expect(ariaDescribedby.value).not.toContain(errorId);
+      expect(ariaDescribedby()).not.toContain(errorId);
     });
 
     it("includes both descriptionId and errorId when slot present and error active", () => {
@@ -94,8 +94,8 @@ describe("useAriaDescribedById", () => {
         fieldHasError,
         withSlot("descriptionText")
       );
-      expect(ariaDescribedby.value).toContain(descriptionId);
-      expect(ariaDescribedby.value).toContain(errorId);
+      expect(ariaDescribedby()).toContain(descriptionId);
+      expect(ariaDescribedby()).toContain(errorId);
     });
 
     it("descriptionId appears before errorId in the combined string", () => {
@@ -105,7 +105,7 @@ describe("useAriaDescribedById", () => {
         fieldHasError,
         withSlot("descriptionText")
       );
-      const value = ariaDescribedby.value!;
+      const value = ariaDescribedby()!;
       expect(value.indexOf(descriptionId)).toBeLessThan(value.indexOf(errorId));
     });
   });
@@ -116,19 +116,35 @@ describe("useAriaDescribedById", () => {
     it("ariaDescribedby updates when fieldHasError changes to true", async () => {
       const fieldHasError = ref(false);
       const { errorId, ariaDescribedby } = useAriaDescribedById("email", fieldHasError, noSlots);
-      expect(ariaDescribedby.value).toBeNull();
+      expect(ariaDescribedby()).toBeNull();
       fieldHasError.value = true;
       await nextTick();
-      expect(ariaDescribedby.value).toContain(errorId);
+      expect(ariaDescribedby()).toContain(errorId);
     });
 
     it("ariaDescribedby updates when fieldHasError changes back to false", async () => {
       const fieldHasError = ref(true);
       const { ariaDescribedby } = useAriaDescribedById("email", fieldHasError, noSlots);
-      expect(ariaDescribedby.value).toBeTruthy();
+      expect(ariaDescribedby()).toBeTruthy();
       fieldHasError.value = false;
       await nextTick();
-      expect(ariaDescribedby.value).toBeNull();
+      expect(ariaDescribedby()).toBeNull();
+    });
+
+    it("picks up a description slot added after setup", () => {
+      const slots: Slots = {};
+      const { descriptionId, ariaDescribedby } = useAriaDescribedById("email", ref(false), slots);
+      expect(ariaDescribedby()).toBeNull();
+      slots.descriptionText = () => [];
+      expect(ariaDescribedby()).toBe(descriptionId);
+    });
+
+    it("drops a description slot removed after setup", () => {
+      const slots: Slots = withSlot("descriptionText");
+      const { ariaDescribedby } = useAriaDescribedById("email", ref(false), slots);
+      expect(ariaDescribedby()).toBeTruthy();
+      delete slots.descriptionText;
+      expect(ariaDescribedby()).toBeNull();
     });
   });
 });
