@@ -108,15 +108,9 @@ onUnmounted(() => {
 <style lang="css">
 @layer components {
   .input-copy {
-    --_input-bg: var(--input-copy-input-bg, var(--slate-00));
-    --_input-border: var(--input-copy-input-border, 1px solid var(--slate-03));
     --_input-border-radius: var(--input-copy-input-border-radius, 0.4rem);
-    --_input-padding: var(--input-copy-input-padding, 0.8rem 1rem);
-    --_input-text-color: var(--input-copy-input-text-color, #333);
-    --_input-placeholder-color: var(--input-copy-input-placeholder-color, #999);
     --_input-font-size: var(--input-copy-input-font-size, 0.95rem);
 
-    --_button-bg: var(--input-copy-button-bg, var(--input-button-primary-surface, var(--theme-surface)));
     --_button-bg-hover: var(
       --input-copy-button-bg-hover,
       var(--input-button-primary-surface-hover, var(--theme-surface-hover))
@@ -125,13 +119,6 @@ onUnmounted(() => {
       --input-copy-button-text-color,
       var(--input-button-primary-text, var(--theme-on-surface))
     );
-    --_button-padding: var(--input-copy-button-padding, 0.8rem 1.2rem);
-    --_button-border-radius: var(--input-copy-button-border-radius, 0.4rem);
-    --_button-gap: var(--input-copy-button-gap, 0.6rem);
-
-    --_description-color: var(--input-copy-description-color, #666);
-    --_description-font-size: var(--input-copy-description-font-size, 0.85rem);
-    --_description-margin: var(--input-copy-description-margin, 0.6rem 0 0 0);
 
     display: flex;
     flex-direction: column;
@@ -148,16 +135,16 @@ onUnmounted(() => {
     flex: 1;
     min-width: 0;
 
-    padding: var(--_input-padding);
-    background-color: var(--_input-bg);
-    border: var(--_input-border);
+    padding: var(--input-copy-input-padding, 0.8rem 1rem);
+    background-color: var(--input-copy-input-bg, var(--slate-00));
+    border: var(--input-copy-input-border, 1px solid var(--slate-03));
     border-radius: var(--_input-border-radius);
     font-size: var(--_input-font-size);
-    color: var(--_input-text-color);
+    color: var(--input-copy-input-text-color, #333);
     font-family: inherit;
 
     &::placeholder {
-      color: var(--_input-placeholder-color);
+      color: var(--input-copy-input-placeholder-color, #999);
     }
 
     &:focus {
@@ -169,13 +156,13 @@ onUnmounted(() => {
   .input-copy__button {
     display: flex;
     align-items: center;
-    gap: var(--_button-gap);
-    padding: var(--_button-padding);
+    gap: var(--input-copy-button-gap, 0.6rem);
+    padding: var(--input-copy-button-padding, 0.8rem 1.2rem);
 
-    background-color: var(--_button-bg);
+    background-color: var(--input-copy-button-bg, var(--input-button-primary-surface, var(--theme-surface)));
     color: var(--_button-text-color);
     border: none;
-    border-radius: var(--_button-border-radius);
+    border-radius: var(--input-copy-button-border-radius, 0.4rem);
     font-size: var(--_input-font-size);
     font-weight: 500;
     cursor: pointer;
@@ -207,9 +194,9 @@ onUnmounted(() => {
   }
 
   .input-copy__description {
-    margin: var(--_description-margin);
-    font-size: var(--_description-font-size);
-    color: var(--_description-color);
+    margin: var(--input-copy-description-margin, 0.6rem 0 0 0);
+    font-size: var(--input-copy-description-font-size, 0.85rem);
+    color: var(--input-copy-description-color, #666);
   }
 }
 </style>

@@ -41,23 +41,14 @@ watch(
 <style lang="css">
 @layer components {
   .card-core {
-    --_card-row-gap: var(--card-core-row-gap, 1rem);
-    --_card-padding: var(--card-core-inner-padding, 1rem);
-    --_card-lower-background-image: var(--card-core-lower-background-image, none);
-    --_card-lower-background-position: var(--card-core-lower-background-position, center);
-    --_card-lower-background-color: var(--card-core-lower-background-color, transparent);
-    --_card-lower-background-blur: var(--card-core-lower-background-blur, 16px);
-    --_card-lower-scale: var(--card-core-lower-scale, 1.1);
-    --_card-background-image: var(--card-core-background-image, none);
     --_card-background-color: var(--card-core-background-color, transparent);
     --_card-border: var(--card-core-border, 0.2rem solid var(--slate-08));
-    --_card-border-radius: var(--card-core-border-radius, 0.5rem);
     --_card-box-shadow: var(--card-core-box-shadow, 0.1rem 0.1rem 0.4rem oklch(from var(--slate-08) l c h / 0.45));
 
     display: grid;
     grid-auto-flow: row;
-    gap: var(--_card-row-gap);
-    border-radius: var(--_card-border-radius);
+    gap: var(--card-core-row-gap, 1rem);
+    border-radius: var(--card-core-border-radius, 0.5rem);
     overflow: hidden;
     position: relative;
 
@@ -69,13 +60,13 @@ watch(
       content: "";
       position: absolute;
       inset: 0;
-      background-color: var(--_card-lower-background-color);
-      background-image: var(--_card-lower-background-image);
-      background-position: var(--_card-lower-background-position, center);
+      background-color: var(--card-core-lower-background-color, transparent);
+      background-image: var(--card-core-lower-background-image, none);
+      background-position: var(--card-core-lower-background-position, center);
       background-size: cover;
       background-repeat: no-repeat;
-      filter: blur(var(--_card-lower-background-blur));
-      scale: var(--_card-lower-scale);
+      filter: blur(var(--card-core-lower-background-blur, 16px));
+      scale: var(--card-core-lower-scale, 1.1);
       z-index: 0;
     }
 
@@ -101,7 +92,6 @@ watch(
 
     &.soft {
       --_card-background-color: color-mix(in oklab, var(--slate-01) 20%, transparent);
-      --_card-box-shadow-color: color-mix(in oklab, var(--slate-02) 80%, transparent);
     }
 
     &.outline {

@@ -19,8 +19,8 @@ to migrate — run `node .claude/component-ledger/build.mjs` and look up that co
 
 - **Already fully compliant** (`score: 5`, placed in a real tier, `variants: false`,
   `legacy_props: false`, `story_args_bug: false`, `eslint_issues: false`,
-  `styling_doc_outdated: false`): skip straight to
-  reporting — state its ledger row (tier, score, and confirmation the five non-scored checks are
+  `redundant_priv_tokens: false`, `styling_doc_outdated: false`): skip straight to
+  reporting — state its ledger row (tier, score, and confirmation the six non-scored checks are
   also clean) and stop. Don't run step 2's `AskUserQuestion` or the step 3 checklist for a
   component that already passes every check; that flow is for when there's actual work to decide
   about.
@@ -52,6 +52,10 @@ Otherwise, auto-pick the next worst offender:
      the fix is `defineModel<T>({ required: true })` where the native element genuinely can't be
      meaningfully empty (see `InputRangeCore`/`InputRangeDefault`), not a blanket rule disable and
      not an artificial default value that would change real behaviour.
+   - Else any group with `"redundant_priv_tokens": true` (a `--_` token that's declared but never
+     read, or is a single-use 1:1 copy of a public token — see checklist item 3) — same tie-break.
+     Also doesn't move the 5-point `score`. Run
+     `node .claude/component-ledger/fix-private-tokens.mjs <file.vue>` for the list.
    - Else any group with `"styling_doc_outdated": true` (its `CONSUMER-STYLING.md` exists but has
      no `## Local overrides` section, so it predates the fixed layout in checklist item 4) — same
      tie-break. Also doesn't move the 5-point `score`. Usually a doc-only pass: restructure the
@@ -97,6 +101,17 @@ briefly) — don't skip silently.
      once — don't strip the prefix just because reuse is low.
    - Fix the actual bug class this catches: a consumer-relevant value that's currently private
      with no public fallback. That's the thing to promote, not every `--_` var you find.
+   - Remove redundant private tokens (the other half of pitfall #20): a `--_` token declared but
+     never read, or one whose whole value is a single `var(--public-token, fallback)` and which is
+     read exactly once, is pure duplication. Delete the unread ones; inline the public token at
+     the single point of use for the rest. Keep a private token that's read in more than one
+     place, is composed (`calc()`, `v-bind()`, several `var()`s), or is re-declared by a
+     state/variant selector. `node .claude/component-ledger/fix-private-tokens.mjs <file.vue>`
+     lists them (dry run); `--write` applies the ones marked `fix`. A `REVIEW` item is declared
+     somewhere other than the root rule or read outside its subtree: check the element that
+     reads it sits inside the one that declares it before adding `--include-review`, or fix it by
+     hand. Afterwards, update any CONSUMER-STYLING.md or skill doc line that names the removed
+     tokens, and delete comments left describing them.
 4. **CONSUMER-STYLING.md** — create or update so every public token the component exposes is
    documented, with its default. Skip only if the component genuinely has no override surface at
    all (no CSS custom properties, no class passthrough). Use this fixed layout, in this order:

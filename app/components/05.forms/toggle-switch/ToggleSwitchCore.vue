@@ -99,23 +99,6 @@ const toggleSwitchValue = () => {
     }
 
     .toggle-switch-wrapper {
-      /* --_icon-font-size, --_switch-padding, --_toggle-symbol-border-width are the only locals
-       actually read anywhere below — --_icon-on-opacity, --_icon-off-opacity,
-       --_symbol-background-color, --_symbol-margin-inline-start, --_symbol-checked-offset were
-       declared here but never referenced by any property in this file; removed as dead code
-       rather than migrated, since migrating an unread token would just create a new unread
-       public one. */
-      --_icon-font-size: 2.4rem;
-      --_switch-padding: 0.2rem;
-      --_toggle-symbol-border-width: 0.1rem;
-
-      /* Public --toggle-switch-* tokens, inline-fallback to the shared --theme-* tokens (see
-       theming-component-token-pattern.md) — overriding one here doesn't touch every other
-       themed input/control that also reads --theme-checkbox-symbol-surface/--theme-border. */
-      --_surface: var(--toggle-switch-surface, var(--theme-checkbox-symbol-surface));
-      --_surface-hover: var(--toggle-switch-surface-hover, var(--theme-surface-subtle));
-      --_border: var(--toggle-switch-border, var(--theme-border));
-      --_border-focus: var(--toggle-switch-border-focus, var(--theme-border-focus));
       --_border-radius: var(--toggle-switch-border-radius, v-bind(roundedRadiusDefault));
 
       display: flex;
@@ -128,7 +111,7 @@ const toggleSwitchValue = () => {
 
         &:focus-visible {
           + .symbol-wrapper {
-            outline: var(--form-element-outline-width-focus) solid var(--_border-focus);
+            outline: var(--form-element-outline-width-focus) solid var(--toggle-switch-border-focus, var(--theme-border-focus));
             outline-offset: var(--form-element-outline-offset-focus);
           }
         }
@@ -165,15 +148,15 @@ const toggleSwitchValue = () => {
           outline var(--theme-form-transition-duration) linear;
 
         /* UI */
-        background-color: var(--_surface);
-        border: var(--form-element-border-width) solid var(--_border);
+        background-color: var(--toggle-switch-surface, var(--theme-checkbox-symbol-surface));
+        border: var(--form-element-border-width) solid var(--toggle-switch-border, var(--theme-border));
         outline: var(--form-element-outline-width) solid transparent;
         border-radius: var(--_border-radius);
         width: var(--_track-width);
         padding: calc(var(--input-toggle-wrapper-padding) + var(--input-toggle-symbol-outline-width));
 
         &:hover {
-          background-color: var(--_surface-hover);
+          background-color: var(--toggle-switch-surface-hover, var(--theme-surface-subtle));
           cursor: pointer;
         }
 
@@ -189,7 +172,6 @@ const toggleSwitchValue = () => {
           aspect-ratio: 1/1;
 
           /* UI */
-          /* padding: calc(calc(var(--input-toggle-symbol-size) - var(--_icon-font-size)) / 2); */
           border: var(--input-toggle-symbol-border-width) solid var(--toggle-switch-symbol-border, var(--theme-text));
           outline: var(--input-toggle-symbol-outline-width) solid transparent;
           border-radius: var(--_border-radius);

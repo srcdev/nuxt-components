@@ -12,7 +12,7 @@ or instance) without touching the component itself.
 | `--page-row-content-max-width` | `1064px` | Maximum width of the `content` column track |
 | `--page-row-inset-content-max-width` | `840px` | Maximum width of the `inset-content` column track |
 
-Private (not public API): `--_minimum-content-padding`, `--_popout-max-width`,
+Private (not public API): `--_minimum-content-padding`,
 `--_content-max-width`, `--_inset-content-max-width` (resolved copies of the tokens above) and the
 computed tracks `--_full-track-min`, `--_full-track`, `--_popout-track`, `--_content-track`,
 `--_inset-content-track`.

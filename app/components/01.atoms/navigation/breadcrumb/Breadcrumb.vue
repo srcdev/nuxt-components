@@ -42,17 +42,12 @@ watch(
 <style lang="css">
 @layer components {
   .breadcrumb {
-    --_font-size: var(--breadcrumb-font-size, 1.3rem);
     --_gap: var(--breadcrumb-gap, 0.8rem);
-    --_text-transform: var(--breadcrumb-text-transform, uppercase);
-    --_letter-spacing: var(--breadcrumb-letter-spacing, 0.05em);
     --_colour: var(--breadcrumb-colour, currentColor);
-    --_colour-current: var(--breadcrumb-colour-current, var(--breadcrumb-colour, currentColor));
-    --_link-decoration-hover: var(--breadcrumb-link-decoration-hover, underline);
 
-    font-size: var(--_font-size);
-    text-transform: var(--_text-transform);
-    letter-spacing: var(--_letter-spacing);
+    font-size: var(--breadcrumb-font-size, 1.3rem);
+    text-transform: var(--breadcrumb-text-transform, uppercase);
+    letter-spacing: var(--breadcrumb-letter-spacing, 0.05em);
 
     .breadcrumb__list {
       display: flex;
@@ -76,7 +71,7 @@ watch(
     }
 
     .breadcrumb__label[aria-current="page"] {
-      color: var(--_colour-current);
+      color: var(--breadcrumb-colour-current, var(--breadcrumb-colour, currentColor));
     }
 
     .breadcrumb__link {
@@ -84,7 +79,7 @@ watch(
 
       &:hover,
       &:focus-visible {
-        text-decoration: var(--_link-decoration-hover);
+        text-decoration: var(--breadcrumb-link-decoration-hover, underline);
       }
     }
 

@@ -398,18 +398,14 @@ watch(
 <style lang="css">
 @layer components {
   .site-nav-backdrop {
-    --_backdrop-bg: var(--site-nav-backdrop-bg, oklch(0% 0 0 / 55%));
-    --_backdrop-blur: var(--site-nav-backdrop-blur, 3px);
-    --_backdrop-duration: var(--site-nav-backdrop-duration, 350ms);
-
     position: fixed;
     inset: 0;
     z-index: var(--site-nav-backdrop-z-index, 10);
-    background: var(--_backdrop-bg);
-    backdrop-filter: blur(var(--_backdrop-blur));
+    background: var(--site-nav-backdrop-bg, oklch(0% 0 0 / 55%));
+    backdrop-filter: blur(var(--site-nav-backdrop-blur, 3px));
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--_backdrop-duration) ease;
+    transition: opacity var(--site-nav-backdrop-duration, 350ms) ease;
 
     &.is-open {
       opacity: 1;
@@ -420,31 +416,14 @@ watch(
   .site-navigation {
     /* ─── Public token API ────────────────────────────────────────────── */
 
-    /* Decorators — horizontal nav */
-    --_decorator-hovered-bg: var(--site-nav-decorator-hovered-bg, transparent);
-    --_decorator-active-bg: var(--site-nav-decorator-active-bg, transparent);
-    --_decorator-indicator-color: var(--site-nav-decorator-indicator-color, var(--slate-01, currentColor));
-
-    /* Decorators — panel */
-    --_panel-decorator-hovered-bg: var(--site-nav-panel-decorator-hovered-bg, transparent);
-    --_panel-decorator-active-bg: var(--site-nav-panel-decorator-active-bg, transparent);
-    --_panel-decorator-indicator-color: var(--site-nav-panel-decorator-indicator-color, var(--slate-01, currentColor));
-    --_panel-indicator-left: var(--site-nav-panel-indicator-left, 0);
-    --_panel-indicator-right: var(--site-nav-panel-indicator-right, auto);
-
     /* Horizontal nav */
     --_link-color: var(--site-nav-link-color, var(--slate-01, currentColor));
-    --_link-hover-color: var(--site-nav-link-hover-color, var(--slate-04, var(--_link-color)));
-    --_link-active-color: var(--site-nav-link-active-color, var(--slate-01, var(--_link-color)));
     --_link-size: var(--site-nav-link-size, 1.6rem);
     --_link-tracking: var(--site-nav-link-tracking, 0.06em);
     --_link-weight: var(--site-nav-link-weight, 400);
-    --_link-accent: var(--site-nav-link-accent, var(--slate-01, currentColor));
-    --_nav-gap: var(--site-nav-gap, 2.2rem);
     --_nav-transition: var(--site-nav-transition, 250ms ease);
 
     /* Panel */
-    --_panel-bg: var(--site-nav-panel-bg, var(--page-bg, #1a1614));
     --_panel-border-color: var(
       --site-nav-panel-border-color,
       color-mix(in oklch, var(--slate-01, #c0847a) 35%, transparent)
@@ -454,15 +433,10 @@ watch(
       color-mix(in oklch, var(--slate-01, white) 8%, transparent)
     );
     --_panel-link-color: var(--site-nav-panel-link-color, var(--slate-01, currentColor));
-    --_panel-link-hover-color: var(--site-nav-panel-link-hover-color, var(--slate-04, var(--_panel-link-color)));
-    --_panel-link-active-color: var(--site-nav-panel-link-active-color, var(--slate-01, var(--_panel-link-color)));
-    --_panel-padding-block: var(--site-nav-panel-padding-block, 1.4rem);
-    --_panel-padding-inline: var(--site-nav-panel-padding-inline, 1.5rem);
     --_panel-slide-duration: var(--site-nav-panel-slide-duration, 350ms);
     --_panel-slide-easing: var(--site-nav-panel-slide-easing, cubic-bezier(0.4, 0, 0.2, 1));
 
     /* Burger */
-    --_burger-bar-width: var(--site-nav-burger-width, 22px);
     --_burger-bar-height: var(--site-nav-burger-height, 1.5px);
     --_burger-bar-gap: var(--site-nav-burger-gap, 5px);
     --_burger-color: var(--site-nav-burger-color, var(--slate-01, currentColor));
@@ -486,7 +460,7 @@ watch(
       margin: 0;
       padding: 0;
       display: flex;
-      gap: var(--_nav-gap);
+      gap: var(--site-nav-gap, 2.2rem);
       align-items: center;
       position: relative;
 
@@ -530,13 +504,13 @@ watch(
       }
 
       .nav__hovered {
-        background: var(--_decorator-hovered-bg);
+        background: var(--site-nav-decorator-hovered-bg, transparent);
         border-radius: 4px;
         z-index: 1;
       }
 
       .nav__active {
-        background: var(--_decorator-active-bg);
+        background: var(--site-nav-decorator-active-bg, transparent);
         border-radius: 4px;
         z-index: 2;
       }
@@ -544,7 +518,7 @@ watch(
       .nav__active-indicator {
         top: auto;
         height: 2px;
-        background-color: var(--_decorator-indicator-color);
+        background-color: var(--site-nav-decorator-indicator-color, var(--slate-01, currentColor));
         z-index: 3;
       }
 
@@ -566,12 +540,12 @@ watch(
 
         &:hover,
         &:focus-visible {
-          color: var(--_link-hover-color);
+          color: var(--site-nav-link-hover-color, var(--slate-04, var(--_link-color)));
           outline: none;
         }
       }
       li.is-active .site-nav-link {
-        color: var(--_link-active-color);
+        color: var(--site-nav-link-active-color, var(--slate-01, var(--_link-color)));
       }
     }
 
@@ -625,7 +599,7 @@ watch(
 
     .burger-bar {
       display: block;
-      width: var(--_burger-bar-width);
+      width: var(--site-nav-burger-width, 22px);
       height: var(--_burger-bar-height);
       background: currentColor;
       border-radius: 1px;
@@ -674,7 +648,7 @@ watch(
 
       .site-nav-panel-inner {
         overflow: hidden;
-        background-color: var(--_panel-bg);
+        background-color: var(--site-nav-panel-bg, var(--page-bg, #1a1614));
       }
 
       .site-nav-panel-list {
@@ -718,23 +692,23 @@ watch(
         }
 
         .nav__active-indicator {
-          left: var(--_panel-indicator-left, 0);
-          right: var(--_panel-indicator-right, auto);
+          left: var(--site-nav-panel-indicator-left, 0);
+          right: var(--site-nav-panel-indicator-right, auto);
           width: 2px;
         }
 
         .nav__hovered {
-          background: var(--_panel-decorator-hovered-bg);
+          background: var(--site-nav-panel-decorator-hovered-bg, transparent);
           z-index: 1;
         }
 
         .nav__active {
-          background: var(--_panel-decorator-active-bg);
+          background: var(--site-nav-panel-decorator-active-bg, transparent);
           z-index: 2;
         }
 
         .nav__active-indicator {
-          background: var(--_panel-decorator-indicator-color);
+          background: var(--site-nav-panel-decorator-indicator-color, var(--slate-01, currentColor));
           z-index: 3;
         }
 
@@ -755,20 +729,20 @@ watch(
           font-weight: var(--_link-weight);
           letter-spacing: var(--_link-tracking);
           text-decoration: none;
-          padding-block: var(--_panel-padding-block);
-          padding-inline: var(--_panel-padding-inline);
+          padding-block: var(--site-nav-panel-padding-block, 1.4rem);
+          padding-inline: var(--site-nav-panel-padding-inline, 1.5rem);
           position: relative;
           z-index: 4;
           transition: color var(--_nav-transition);
 
           &:hover,
           &:focus-visible {
-            color: var(--_panel-link-hover-color);
+            color: var(--site-nav-panel-link-hover-color, var(--slate-04, var(--_panel-link-color)));
             outline: none;
           }
         }
         li.is-active .site-nav-panel-link {
-          color: var(--_panel-link-active-color);
+          color: var(--site-nav-panel-link-active-color, var(--slate-01, var(--_panel-link-color)));
         }
       }
     }

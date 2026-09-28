@@ -137,17 +137,8 @@ onUnmounted(() => {
 <style lang="css">
 @layer components {
   .display-dialog {
-    --_backdrop-blur: var(--display-dialog-backdrop-blur, blur(0.5rem));
-    --_backdrop-background: var(--display-dialog-backdrop-background, rgba(0, 0, 0, 0.5));
-    --_z-index: var(--display-dialog-z-index, 999999);
     --_transition-duration: var(--display-dialog-transition-duration, 200ms);
 
-    --_header-padding: var(--display-dialog-header-padding, 1.2rem);
-    --_header-button-margin: var(--display-dialog-header-button-margin, 0);
-    --_header-button-padding: var(--display-dialog-header-button-padding, 0.4rem);
-    --_header-button-border: var(--display-dialog-header-button-border, 0.1rem solid transparent);
-    --_header-button-border-radius: var(--display-dialog-header-button-border-radius, 0.4rem);
-    --_header-button-outline: var(--display-dialog-header-button-outline, 0.1rem solid transparent);
     --_header-button-border-hover: var(
       --display-dialog-header-button-border-hover,
       0.1rem solid var(--colour-text-default)
@@ -160,20 +151,15 @@ onUnmounted(() => {
       --display-dialog-header-button-icon-color,
       var(--colour-text-default)
     );
-    --_header-button-icon-size: var(--display-dialog-header-button-icon-size, 2.4rem);
-
-    --_content-padding: var(--display-dialog-content-padding, 1.2rem);
-    --_footer-gap: var(--display-dialog-footer-gap, 1.2rem);
-    --_footer-padding: var(--display-dialog-footer-padding, 1.2rem);
 
     position: fixed;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
-    backdrop-filter: var(--_backdrop-blur);
-    background-color: var(--_backdrop-background);
-    z-index: var(--_z-index);
+    backdrop-filter: var(--display-dialog-backdrop-blur, blur(0.5rem));
+    background-color: var(--display-dialog-backdrop-background, rgba(0, 0, 0, 0.5));
+    z-index: var(--display-dialog-z-index, 999999);
     opacity: 0;
     border: none;
     padding: 0;
@@ -223,14 +209,13 @@ onUnmounted(() => {
       --_inner-border-radius: var(--display-dialog-inner-border-radius, 0.8rem);
       --_inner-border: var(--display-dialog-inner-border, 0.1rem solid var(--colour-text-default));
       --_inner-outline: var(--display-dialog-inner-outline, 0.1rem solid var(--colour-text-default));
-      --_inner-background: var(--display-dialog-inner-background, var(--page-bg));
 
       display: grid;
       grid-template-rows: auto 1fr auto;
       border-radius: var(--_inner-border-radius);
       border: var(--_inner-border);
       outline: var(--_inner-outline);
-      background-color: var(--_inner-background);
+      background-color: var(--display-dialog-inner-background, var(--page-bg));
       height: initial;
       width: 100vw;
       overflow: hidden;
@@ -267,7 +252,7 @@ onUnmounted(() => {
       .display-dialog-header {
         display: flex;
         align-items: center;
-        padding: var(--_header-padding);
+        padding: var(--display-dialog-header-padding, 1.2rem);
 
         &[data-theme] {
           border-block-end: 0.2rem solid var(--theme-accent);
@@ -289,11 +274,11 @@ onUnmounted(() => {
             display: block flex;
             align-items: center;
             justify-content: center;
-            margin: var(--_header-button-margin);
-            padding: var(--_header-button-padding);
-            border: var(--_header-button-border);
-            border-radius: var(--_header-button-border-radius);
-            outline: var(--_header-button-outline);
+            margin: var(--display-dialog-header-button-margin, 0);
+            padding: var(--display-dialog-header-button-padding, 0.4rem);
+            border: var(--display-dialog-header-button-border, 0.1rem solid transparent);
+            border-radius: var(--display-dialog-header-button-border-radius, 0.4rem);
+            outline: var(--display-dialog-header-button-outline, 0.1rem solid transparent);
 
             transition:
               border-color var(--_transition-duration),
@@ -309,7 +294,7 @@ onUnmounted(() => {
             .icon {
               color: var(--_header-button-icon-color);
               display: block;
-              font-size: var(--_header-button-icon-size);
+              font-size: var(--display-dialog-header-button-icon-size, 2.4rem);
             }
           }
         }
@@ -317,7 +302,7 @@ onUnmounted(() => {
 
       .display-dialog-content {
         overflow: hidden;
-        padding: var(--_content-padding);
+        padding: var(--display-dialog-content-padding, 1.2rem);
 
         &.allow-content-scroll {
           overflow-y: auto;
@@ -329,9 +314,9 @@ onUnmounted(() => {
 
       .display-dialog-footer {
         display: flex;
-        gap: var(--_footer-gap);
+        gap: var(--display-dialog-footer-gap, 1.2rem);
         justify-content: flex-end;
-        padding: var(--_footer-padding);
+        padding: var(--display-dialog-footer-padding, 1.2rem);
       }
     }
   }

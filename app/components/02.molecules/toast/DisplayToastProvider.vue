@@ -225,13 +225,12 @@ onUnmounted(() => {
        chrome, but 100 loses to any consumer's sticky header. Matches DisplayDialog's default so
        toasts also clear a modal's own overlay; the two ties on DOM/paint order if both happen to
        be visible at once, which is an acceptable edge case for a transient notification. */
-    --_z-index: var(--display-toast-provider-z-index, 999999);
 
     position: fixed;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    z-index: var(--_z-index);
+    z-index: var(--display-toast-provider-z-index, 999999);
 
     inset-inline: var(--_gutter);
     margin-inline: auto;

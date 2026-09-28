@@ -47,7 +47,6 @@ watch(
    */
   .page-row {
     --_minimum-content-padding: var(--page-row-minimum-content-padding, 1rem);
-    --_popout-max-width: var(--page-row-popout-max-width, 1400px);
     --_content-max-width: var(--page-row-content-max-width, 1064px);
     --_inset-content-max-width: var(--page-row-inset-content-max-width, 840px);
 
@@ -60,7 +59,7 @@ watch(
     );
 
     --_full-track: minmax(var(--_full-track-min), 1fr);
-    --_popout-track: minmax(0, calc((var(--_popout-max-width) - var(--_content-max-width)) * 0.5));
+    --_popout-track: minmax(0, calc((var(--page-row-popout-max-width, 1400px) - var(--_content-max-width)) * 0.5));
     --_content-track: clamp(
       0px,
       calc((100% - var(--_minimum-content-padding) * 2 - var(--_inset-content-max-width)) * 0.5),

@@ -66,8 +66,8 @@ back to the inherited text colour otherwise.
 
 > Changed 2026-09-27: `--site-nav-backdrop-z-index` is new (was a hardcoded `10`).
 
-The `--_*` variables declared on `.site-navigation` and `.site-nav-backdrop` are the resolved copies
-of the tokens above: not public API.
+The `--_*` variables declared on `.site-navigation` are the resolved copies of the tokens above
+that are read in more than one place: not public API.
 
 ---
 

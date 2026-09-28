@@ -58,7 +58,7 @@ The defaults above are the component's own fallbacks. The library's default them
 > reads, so custom indicator icons fell back to `currentColor`. It now sets
 > `--stepper-list-icon-color`.
 
-Private (not public API): the `--_*` copies of the tokens above, plus `--_connector-top` and
+Private (not public API): `--_gap`, `--_counter-size` and `--_padding-block`, plus `--_connector-top` and
 `--_connector-height`, which script measures and sets inline on each `<li>`.
 
 ---

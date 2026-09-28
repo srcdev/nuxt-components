@@ -190,18 +190,14 @@ watch(
 <style lang="css">
 @layer components {
   .tab-nav-backdrop {
-    --_backdrop-bg: var(--tab-nav-backdrop-bg, oklch(0% 0 0 / 55%));
-    --_backdrop-blur: var(--tab-nav-backdrop-blur, 3px);
-    --_backdrop-duration: var(--tab-nav-backdrop-duration, 350ms);
-
     position: fixed;
     inset: 0;
     z-index: 10;
-    background: var(--_backdrop-bg);
-    backdrop-filter: blur(var(--_backdrop-blur));
+    background: var(--tab-nav-backdrop-bg, oklch(0% 0 0 / 55%));
+    backdrop-filter: blur(var(--tab-nav-backdrop-blur, 3px));
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--_backdrop-duration) ease;
+    transition: opacity var(--tab-nav-backdrop-duration, 350ms) ease;
 
     &.is-open {
       opacity: 1;
@@ -212,37 +208,23 @@ watch(
   .tab-navigation {
     /* ─── Public token API ────────────────────────────────────────────── */
 
-    /* Decorators — horizontal nav */
-    --_decorator-hovered-bg: var(--tab-nav-decorator-hovered-bg, transparent);
-    --_decorator-indicator-color: var(--tab-nav-decorator-indicator-color, var(--slate-01, currentColor));
-
     /* Horizontal nav */
     --_link-color: var(--tab-nav-link-color, var(--slate-01, currentColor));
-    --_link-hover-color: var(--tab-nav-link-hover-color, var(--slate-04, var(--_link-color)));
-    --_link-active-color: var(--tab-nav-link-active-color, var(--slate-01, var(--_link-color)));
     --_link-size: var(--tab-nav-link-size, 1.6rem);
     --_link-tracking: var(--tab-nav-link-tracking, 0.06em);
     --_link-weight: var(--tab-nav-link-weight, 400);
-    --_nav-gap: var(--tab-nav-gap, 2.2rem);
     --_nav-transition: var(--tab-nav-transition, 250ms ease);
 
     /* Panel */
-    --_panel-bg: var(--tab-nav-panel-bg, var(--page-bg, #1a1614));
     --_panel-border-color: var(
       --tab-nav-panel-border-color,
       color-mix(in oklch, var(--slate-01, #c0847a) 35%, transparent)
     );
-    --_panel-item-border: var(--tab-nav-panel-item-border, color-mix(in oklch, var(--slate-01, white) 8%, transparent));
     --_panel-link-color: var(--tab-nav-panel-link-color, var(--slate-01, currentColor));
-    --_panel-link-hover-color: var(--tab-nav-panel-link-hover-color, var(--slate-04, var(--_panel-link-color)));
-    --_panel-link-active-color: var(--tab-nav-panel-link-active-color, var(--slate-01, var(--_panel-link-color)));
-    --_panel-padding-block: var(--tab-nav-panel-padding-block, 1.4rem);
-    --_panel-padding-inline: var(--tab-nav-panel-padding-inline, 1.5rem);
     --_panel-slide-duration: var(--tab-nav-panel-slide-duration, 350ms);
     --_panel-slide-easing: var(--tab-nav-panel-slide-easing, cubic-bezier(0.4, 0, 0.2, 1));
 
     /* Burger */
-    --_burger-bar-width: var(--tab-nav-burger-width, 22px);
     --_burger-bar-height: var(--tab-nav-burger-height, 1.5px);
     --_burger-bar-gap: var(--tab-nav-burger-gap, 5px);
     --_burger-color: var(--tab-nav-burger-color, var(--slate-01, currentColor));
@@ -266,7 +248,7 @@ watch(
       margin: 0;
       padding: 0;
       display: flex;
-      gap: var(--_nav-gap);
+      gap: var(--tab-nav-gap, 2.2rem);
       align-items: center;
       position: relative;
 
@@ -305,12 +287,12 @@ watch(
 
         &:hover,
         &:focus-visible {
-          color: var(--_link-hover-color);
+          color: var(--tab-nav-link-hover-color, var(--slate-04, var(--_link-color)));
           outline: none;
         }
 
         &.router-link-exact-active {
-          color: var(--_link-active-color);
+          color: var(--tab-nav-link-active-color, var(--slate-01, var(--_link-color)));
         }
       }
     }
@@ -364,7 +346,7 @@ watch(
 
     .burger-bar {
       display: block;
-      width: var(--_burger-bar-width);
+      width: var(--tab-nav-burger-width, 22px);
       height: var(--_burger-bar-height);
       background: currentColor;
       border-radius: 1px;
@@ -413,7 +395,7 @@ watch(
 
       .tab-nav-panel-inner {
         overflow: hidden;
-        background-color: var(--_panel-bg);
+        background-color: var(--tab-nav-panel-bg, var(--page-bg, #1a1614));
       }
 
       .tab-nav-panel-list {
@@ -422,7 +404,7 @@ watch(
         padding: 0;
 
         li {
-          border-block-end: 1px solid var(--_panel-item-border);
+          border-block-end: 1px solid var(--tab-nav-panel-item-border, color-mix(in oklch, var(--slate-01, white) 8%, transparent));
 
           &:last-child {
             border-block-end: none;
@@ -442,20 +424,20 @@ watch(
           font-weight: var(--_link-weight);
           letter-spacing: var(--_link-tracking);
           text-decoration: none;
-          padding-block: var(--_panel-padding-block);
-          padding-inline: var(--_panel-padding-inline);
+          padding-block: var(--tab-nav-panel-padding-block, 1.4rem);
+          padding-inline: var(--tab-nav-panel-padding-inline, 1.5rem);
           position: relative;
           z-index: 1;
           transition: color var(--_nav-transition);
 
           &:hover,
           &:focus-visible {
-            color: var(--_panel-link-hover-color);
+            color: var(--tab-nav-panel-link-hover-color, var(--slate-04, var(--_panel-link-color)));
             outline: none;
           }
 
           &.router-link-exact-active {
-            color: var(--_panel-link-active-color);
+            color: var(--tab-nav-panel-link-active-color, var(--slate-01, var(--_panel-link-color)));
           }
         }
       }

@@ -171,10 +171,6 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
     --_panel-padding-inline: var(--content-docs-panel-padding-inline, 0.8rem);
     --_panel-border-radius: var(--content-docs-panel-border-radius, 0.5rem);
 
-    --_nav-column-width: var(--content-docs-nav-column-width, 23rem);
-    --_page-nav-column-width: var(--content-docs-page-nav-column-width, 22rem);
-    --_page-nav-column-width-tablet: var(--content-docs-page-nav-column-width-tablet, 20rem);
-
     --_link-font-size: var(--content-docs-link-font-size, 1.4rem);
     --_link-padding-block: var(--content-docs-link-padding-block, 0.6rem);
     --_link-padding-inline: var(--content-docs-link-padding-inline, 0.8rem);
@@ -187,19 +183,6 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
     --_link-active-bg: var(--content-docs-link-active-bg, var(--green-01));
     --_link-active-color: var(--content-docs-link-active-color, var(--green-10));
 
-    --_nav-heading-font-size: var(--content-docs-nav-heading-font-size, var(--_heading-font-size));
-    --_nav-heading-font-weight: var(--content-docs-nav-heading-font-weight, var(--_heading-font-weight));
-    --_nav-heading-color: var(--content-docs-nav-heading-color, var(--_heading-color));
-    --_nav-heading-bg: var(--content-docs-nav-heading-bg, var(--_heading-bg));
-    --_nav-heading-margin: var(--content-docs-nav-heading-margin, var(--_heading-margin));
-    --_nav-heading-padding-block: var(--content-docs-nav-heading-padding-block, var(--_heading-padding-block));
-    --_nav-heading-padding-inline: var(--content-docs-nav-heading-padding-inline, var(--_heading-padding-inline));
-
-    --_page-nav-heading-font-size: var(--content-docs-page-nav-heading-font-size, var(--_heading-font-size));
-    --_page-nav-heading-font-weight: var(--content-docs-page-nav-heading-font-weight, var(--_heading-font-weight));
-    --_page-nav-heading-color: var(--content-docs-page-nav-heading-color, var(--_heading-color));
-    --_page-nav-heading-bg: var(--content-docs-page-nav-heading-bg, var(--_heading-bg));
-    --_page-nav-heading-margin: var(--content-docs-page-nav-heading-margin, var(--_heading-margin));
     --_page-nav-heading-padding-block: var(
       --content-docs-page-nav-heading-padding-block,
       var(--_heading-padding-block)
@@ -208,21 +191,6 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       --content-docs-page-nav-heading-padding-inline,
       var(--_heading-padding-inline)
     );
-
-    --_nav-panel-bg: var(--content-docs-nav-panel-bg, var(--_panel-bg));
-    --_page-nav-panel-bg: var(--content-docs-page-nav-panel-bg, var(--_panel-bg));
-
-    --_nav-link-color: var(--content-docs-nav-link-color, var(--_link-color));
-    --_nav-link-hover-bg: var(--content-docs-nav-link-hover-bg, var(--_link-hover-bg));
-    --_nav-link-hover-color: var(--content-docs-nav-link-hover-color, var(--_link-hover-color));
-    --_nav-link-active-bg: var(--content-docs-nav-link-active-bg, var(--_link-active-bg));
-    --_nav-link-active-color: var(--content-docs-nav-link-active-color, var(--_link-active-color));
-
-    --_page-nav-link-color: var(--content-docs-page-nav-link-color, var(--_link-color));
-    --_page-nav-link-hover-bg: var(--content-docs-page-nav-link-hover-bg, var(--_link-hover-bg));
-    --_page-nav-link-hover-color: var(--content-docs-page-nav-link-hover-color, var(--_link-hover-color));
-    --_page-nav-link-active-bg: var(--content-docs-page-nav-link-active-bg, var(--_link-active-bg));
-    --_page-nav-link-active-color: var(--content-docs-page-nav-link-active-color, var(--_link-active-color));
 
     container-type: inline-size;
     container-name: contentDocs;
@@ -241,14 +209,14 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
           "docsNav docsPageNav"
           "docsContent docsPageNav";
         gap: 1.6rem;
-        grid-template-columns: 1fr var(--_page-nav-column-width-tablet);
+        grid-template-columns: 1fr var(--content-docs-page-nav-column-width-tablet, 20rem);
         grid-template-rows: auto 1fr;
       }
 
       @container contentDocs (width >= 1024px) {
         grid-template-areas: "docsNav docsContent  docsPageNav";
         gap: 1.6rem;
-        grid-template-columns: var(--_nav-column-width) 1fr var(--_page-nav-column-width);
+        grid-template-columns: var(--content-docs-nav-column-width, 23rem) 1fr var(--content-docs-page-nav-column-width, 22rem);
       }
 
       .docs-nav {
@@ -280,20 +248,20 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
     }
 
     .docs-nav-heading {
-      font-size: var(--_nav-heading-font-size);
-      font-weight: var(--_nav-heading-font-weight);
-      color: var(--_nav-heading-color);
-      background-color: var(--_nav-heading-bg);
-      margin: var(--_nav-heading-margin);
-      padding-block: var(--_nav-heading-padding-block);
-      padding-inline: var(--_nav-heading-padding-inline);
+      font-size: var(--content-docs-nav-heading-font-size, var(--_heading-font-size));
+      font-weight: var(--content-docs-nav-heading-font-weight, var(--_heading-font-weight));
+      color: var(--content-docs-nav-heading-color, var(--_heading-color));
+      background-color: var(--content-docs-nav-heading-bg, var(--_heading-bg));
+      margin: var(--content-docs-nav-heading-margin, var(--_heading-margin));
+      padding-block: var(--content-docs-nav-heading-padding-block, var(--_heading-padding-block));
+      padding-inline: var(--content-docs-nav-heading-padding-inline, var(--_heading-padding-inline));
     }
     .docs-page-nav-heading {
-      font-size: var(--_page-nav-heading-font-size);
-      font-weight: var(--_page-nav-heading-font-weight);
-      color: var(--_page-nav-heading-color);
-      background-color: var(--_page-nav-heading-bg);
-      margin: var(--_page-nav-heading-margin);
+      font-size: var(--content-docs-page-nav-heading-font-size, var(--_heading-font-size));
+      font-weight: var(--content-docs-page-nav-heading-font-weight, var(--_heading-font-weight));
+      color: var(--content-docs-page-nav-heading-color, var(--_heading-color));
+      background-color: var(--content-docs-page-nav-heading-bg, var(--_heading-bg));
+      margin: var(--content-docs-page-nav-heading-margin, var(--_heading-margin));
       padding-block: var(--_page-nav-heading-padding-block);
       padding-inline: var(--_page-nav-heading-padding-inline);
     }
@@ -302,7 +270,7 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       border-radius: var(--_panel-border-radius);
       padding-block: var(--_panel-padding-block);
       padding-inline: var(--_panel-padding-inline);
-      background-color: var(--_nav-panel-bg);
+      background-color: var(--content-docs-nav-panel-bg, var(--_panel-bg));
 
       ul {
         list-style: none;
@@ -317,7 +285,7 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       border-radius: var(--_panel-border-radius);
       padding-block: var(--_panel-padding-block);
       padding-inline: var(--_panel-padding-inline);
-      background-color: var(--_page-nav-panel-bg);
+      background-color: var(--content-docs-page-nav-panel-bg, var(--_panel-bg));
 
       ul {
         list-style: none;
@@ -342,7 +310,7 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       background-color: var(--_link-bg);
       text-decoration: none;
       direction: var(--content-docs-nav-link-icon-order, ltr);
-      color: var(--_nav-link-color);
+      color: var(--content-docs-nav-link-color, var(--_link-color));
       transition:
         background-color var(--control-transition-duration, 200ms) var(--control-transition-ease, ease),
         color var(--control-transition-duration, 200ms) var(--control-transition-ease, ease);
@@ -353,13 +321,13 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       }
 
       &:hover {
-        background-color: var(--_nav-link-hover-bg);
-        color: var(--_nav-link-hover-color);
+        background-color: var(--content-docs-nav-link-hover-bg, var(--_link-hover-bg));
+        color: var(--content-docs-nav-link-hover-color, var(--_link-hover-color));
       }
 
       &.is-active {
-        background-color: var(--_nav-link-active-bg);
-        color: var(--_nav-link-active-color);
+        background-color: var(--content-docs-nav-link-active-bg, var(--_link-active-bg));
+        color: var(--content-docs-nav-link-active-color, var(--_link-active-color));
         font-weight: 600;
       }
     }
@@ -376,7 +344,7 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       background-color: var(--_link-bg);
       text-decoration: none;
       direction: var(--content-docs-page-nav-link-icon-order, ltr);
-      color: var(--_page-nav-link-color);
+      color: var(--content-docs-page-nav-link-color, var(--_link-color));
       transition:
         background-color var(--control-transition-duration, 200ms) var(--control-transition-ease, ease),
         color var(--control-transition-duration, 200ms) var(--control-transition-ease, ease);
@@ -387,13 +355,13 @@ const docsPageNavPanelName = computed(() => (isMobile.value ? panelGroupId : `${
       }
 
       &:hover {
-        background-color: var(--_page-nav-link-hover-bg);
-        color: var(--_page-nav-link-hover-color);
+        background-color: var(--content-docs-page-nav-link-hover-bg, var(--_link-hover-bg));
+        color: var(--content-docs-page-nav-link-hover-color, var(--_link-hover-color));
       }
 
       &.is-active {
-        background-color: var(--_page-nav-link-active-bg);
-        color: var(--_page-nav-link-active-color);
+        background-color: var(--content-docs-page-nav-link-active-bg, var(--_link-active-bg));
+        color: var(--content-docs-page-nav-link-active-color, var(--_link-active-color));
         font-weight: 600;
       }
     }

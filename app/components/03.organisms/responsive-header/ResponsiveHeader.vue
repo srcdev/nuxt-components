@@ -717,7 +717,6 @@ watch(
        Set this token to a fixed value (or a small set of breakpoint-based values)
        to avoid it. */
 
-    --_link-visibility-transition: none;
     position: relative;
     color: var(--responsive-header-color, inherit);
 
@@ -731,7 +730,6 @@ watch(
     inline-size: var(--responsive-header-inline-size, 100%);
 
     &.loaded {
-      --_link-visibility-transition: all 0.2s ease-in-out;
     }
 
     /* flex-grow: 1; */
@@ -746,7 +744,6 @@ watch(
       --_link-margin-inline: 0.1rem;
       --_link-focus-visible-outline-width: 0.2rem;
       --_link-border-default: 2px solid transparent;
-      --_link-border-bottom-hover: var(--green-08);
 
       grid-area: navStack;
       display: flex;
@@ -816,7 +813,6 @@ watch(
             --_icon-transform: scaleY(1);
 
             margin-inline-start: 0;
-            /* transition: var(--_link-visibility-transition); */
 
             &[open] {
               --_icon-transform: scaleY(-1);

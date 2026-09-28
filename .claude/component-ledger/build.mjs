@@ -9,6 +9,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { execFileSync } from "child_process";
+import { findRedundantPrivateTokens, orphanPrivateReads } from "./private-tokens.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(here, "../.."); // repo root
@@ -48,6 +49,21 @@ function walk(dir, out = []) {
 const vueFiles = walk(componentsRoot).filter(
   (f) => !f.split(path.sep).includes("tests") && !f.split(path.sep).includes("stories")
 );
+
+// Private tokens read in a file that never declares them (set by a parent for a child to read),
+// gathered across app/ so the redundant-token check never flags the declaring side.
+const privateOrphans = (() => {
+  const sources = [];
+  (function collect(dir) {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      const full = path.join(dir, entry.name);
+      if (entry.isDirectory()) {
+        if (entry.name !== "tests" && entry.name !== "stories") collect(full);
+      } else if (/\.(vue|css|ts)$/.test(entry.name)) sources.push(fs.readFileSync(full, "utf-8"));
+    }
+  })(path.join(root, "app"));
+  return orphanPrivateReads(sources);
+})();
 
 function toKebab(name) {
   return name.replace(/(?<!^)(?=[A-Z])/g, "-").toLowerCase();
@@ -129,6 +145,12 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
     return false;
   });
   const hasEslintIssues = files.some((f) => eslintIssuesByFile.has(f));
+  // Pitfall #20's second half (added 2026-09-28): a --_ token that's never read, or a single-use
+  // 1:1 copy of a public token. The migrate checklist only ever covered the promote-to-public half,
+  // so ~160 of these survived migrations.
+  const hasRedundantPrivTokens = files.some(
+    (f) => findRedundantPrivateTokens(fs.readFileSync(f, "utf-8"), privateOrphans).length > 0
+  );
   // CONSUMER-STYLING.md predating the fixed layout (added 2026-09-26): flagged only when the doc
   // exists but has no "## Local overrides" section. A missing doc is already counted in the score.
   const hasStylingDocOutdated =
@@ -143,6 +165,7 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
     legacy_props: hasLegacyProps,
     story_args_bug: hasStoryArgsBug,
     eslint_issues: hasEslintIssues,
+    redundant_priv_tokens: hasRedundantPrivTokens,
     styling_doc_outdated: hasStylingDocOutdated,
     consumer_styling: hasConsumerStyling,
     tests: hasTests,

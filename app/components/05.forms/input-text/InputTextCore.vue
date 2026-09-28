@@ -142,12 +142,7 @@ onMounted(() => {
        repeating the fallback chain at every property — they are not themselves an override point,
        see CONSUMER-STYLING.md. */
     --_surface: var(--input-text-surface, var(--theme-input-surface));
-    --_surface-hover: var(--input-text-surface-hover, var(--theme-input-surface-hover));
     --_border: var(--input-text-border, var(--theme-border));
-    /* Split so hover (mouse) and :focus-visible (keyboard/assistive) can diverge — both default
-       to the same --theme-border-focus today, identical appearance to before this token existed,
-       but each now has its own override point. */
-    --_border-hover: var(--input-text-border-hover, var(--theme-border-focus));
     --_border-focus: var(--input-text-border-focus, var(--theme-border-focus));
 
     display: flex;
@@ -168,7 +163,7 @@ onMounted(() => {
       padding-inline: var(--input-padding-inline);
 
       &:has(input:is(:hover), button:is(:hover)) {
-        outline: var(--form-element-outline-width-focus) solid var(--_border-hover);
+        outline: var(--form-element-outline-width-focus) solid var(--input-text-border-hover, var(--theme-border-focus));
         outline-offset: var(--form-element-outline-offset-focus);
       }
 
@@ -211,7 +206,7 @@ onMounted(() => {
         width: var(--input-min-height);
 
         &:hover {
-          background-color: var(--_surface-hover);
+          background-color: var(--input-text-surface-hover, var(--theme-input-surface-hover));
         }
 
         &:is(:focus-visible) {

@@ -229,7 +229,6 @@ onBeforeRouteLeave(() => {
     }
 
     /* See the matching comment in DisplayToastProvider.vue — same fix, same rationale. */
-    --_z-index: var(--display-toast-z-index, 999999);
 
     display: block;
     overflow: hidden;
@@ -237,7 +236,7 @@ onBeforeRouteLeave(() => {
     margin: 0;
     opacity: 0;
 
-    z-index: var(--_z-index);
+    z-index: var(--display-toast-z-index, 999999);
 
     /* Focus styles for accessibility */
     &:focus {

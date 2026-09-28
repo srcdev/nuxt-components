@@ -83,62 +83,30 @@ watch(
 <style lang="css">
 @layer components {
   .pricing-card {
-    --_card-border: var(--pricing-card-border, 1px solid var(--slate-03));
-    --_card-border-radius: var(--pricing-card-border-radius, 0.8rem);
-    --_card-padding: var(--pricing-card-padding, 2rem);
-    --_card-background: var(--pricing-card-background, var(--slate-00));
-    --_card-shadow: var(--pricing-card-shadow, 0 2px 8px oklch(from var(--slate-08) l c h / 0.12));
-    --_card-gap: var(--pricing-card-gap, 1.2rem);
-
-    --_highlight-border: var(--pricing-card-highlight-border, 2px solid var(--teal-06));
-    --_highlight-shadow: var(--pricing-card-highlight-shadow, 0 8px 24px oklch(from var(--teal-06) l c h / 0.2));
-    --_highlight-scale: var(--pricing-card-highlight-scale, 1.05);
-
-    --_badge-bg: var(--pricing-card-badge-bg, var(--teal-06));
-    --_badge-text: var(--pricing-card-badge-text, var(--teal-00));
-
-    --_ribbon-bg: var(--pricing-card-ribbon-bg, var(--red-06));
-    --_ribbon-text: var(--pricing-card-ribbon-text, var(--red-00, white));
     --_ribbon-size: var(--pricing-card-ribbon-size, 20rem);
 
-    --_name-font-size: var(--pricing-card-name-font-size, 1.8rem);
-    --_name-color: var(--pricing-card-name-color, #1a1a1a);
-
-    --_amount-font-size: var(--pricing-card-amount-font-size, 3.2rem);
-    --_amount-color: var(--pricing-card-amount-color, #1a1a1a);
-    --_period-font-size: var(--pricing-card-period-font-size, 0.9rem);
-    --_period-color: var(--pricing-card-period-color, #666);
-
-    --_description-color: var(--pricing-card-description-color, #555);
-    --_feature-color: var(--pricing-card-feature-color, #333);
-
-    --_cta-align: var(--pricing-card-cta-align, flex-start);
-    --_cta-bg: var(--pricing-card-cta-bg, var(--input-button-primary-surface, var(--theme-surface)));
     --_cta-bg-hover: var(
       --pricing-card-cta-bg-hover,
       var(--input-button-primary-surface-hover, var(--theme-surface-hover))
     );
-    --_cta-text: var(--pricing-card-cta-text, var(--input-button-primary-text, var(--theme-on-surface)));
-    --_cta-padding: var(--pricing-card-cta-padding, 1rem 1.6rem);
-    --_cta-border-radius: var(--pricing-card-cta-border-radius, 0.4rem);
 
     display: flex;
     flex-direction: column;
-    gap: var(--_card-gap);
+    gap: var(--pricing-card-gap, 1.2rem);
     position: relative;
 
-    padding: var(--_card-padding);
-    background-color: var(--_card-background);
-    border: var(--_card-border);
-    border-radius: var(--_card-border-radius);
-    box-shadow: var(--_card-shadow);
+    padding: var(--pricing-card-padding, 2rem);
+    background-color: var(--pricing-card-background, var(--slate-00));
+    border: var(--pricing-card-border, 1px solid var(--slate-03));
+    border-radius: var(--pricing-card-border-radius, 0.8rem);
+    box-shadow: var(--pricing-card-shadow, 0 2px 8px oklch(from var(--slate-08) l c h / 0.12));
 
     transition: all 0.3s ease;
 
     &.is-highlighted {
-      border: var(--_highlight-border);
-      box-shadow: var(--_highlight-shadow);
-      transform: scale(var(--_highlight-scale));
+      border: var(--pricing-card-highlight-border, 2px solid var(--teal-06));
+      box-shadow: var(--pricing-card-highlight-shadow, 0 8px 24px oklch(from var(--teal-06) l c h / 0.2));
+      transform: scale(var(--pricing-card-highlight-scale, 1.05));
     }
 
     .pricing-card__badge {
@@ -152,8 +120,8 @@ watch(
 
       display: inline-block;
       padding: 0.4rem 1rem;
-      background-color: var(--_badge-bg);
-      color: var(--_badge-text);
+      background-color: var(--pricing-card-badge-bg, var(--teal-06));
+      color: var(--pricing-card-badge-text, var(--teal-00));
       border-radius: 2rem;
       font-size: 0.75rem;
       font-weight: 600;
@@ -182,8 +150,8 @@ watch(
 
         display: block;
         padding: 0.6rem 1.4rem 0.6rem 0;
-        background-color: var(--_ribbon-bg);
-        color: var(--_ribbon-text);
+        background-color: var(--pricing-card-ribbon-bg, var(--red-06));
+        color: var(--pricing-card-ribbon-text, var(--red-00, white));
         text-align: right;
         font-size: 1.2rem;
         font-weight: 700;
@@ -194,9 +162,9 @@ watch(
 
     .pricing-card__name {
       margin: 0;
-      font-size: var(--_name-font-size);
+      font-size: var(--pricing-card-name-font-size, 1.8rem);
       font-weight: 600;
-      color: var(--_name-color);
+      color: var(--pricing-card-name-color, #1a1a1a);
     }
 
     .pricing-card__price {
@@ -206,19 +174,19 @@ watch(
     }
 
     .pricing-card__amount {
-      font-size: var(--_amount-font-size);
+      font-size: var(--pricing-card-amount-font-size, 3.2rem);
       font-weight: 700;
-      color: var(--_amount-color);
+      color: var(--pricing-card-amount-color, #1a1a1a);
     }
 
     .pricing-card__period {
-      font-size: var(--_period-font-size);
-      color: var(--_period-color);
+      font-size: var(--pricing-card-period-font-size, 0.9rem);
+      color: var(--pricing-card-period-color, #666);
     }
 
     .pricing-card__description {
       margin: 0;
-      color: var(--_description-color);
+      color: var(--pricing-card-description-color, #555);
       line-height: 1.5;
     }
 
@@ -234,7 +202,7 @@ watch(
     }
 
     .pricing-card__feature {
-      color: var(--_feature-color);
+      color: var(--pricing-card-feature-color, #333);
       padding-left: 1.6rem;
       position: relative;
 
@@ -248,13 +216,13 @@ watch(
     }
 
     .pricing-card__cta {
-      align-self: var(--_cta-align);
+      align-self: var(--pricing-card-cta-align, flex-start);
 
       :deep(.input-button) {
-        padding: var(--_cta-padding);
-        background-color: var(--_cta-bg);
-        color: var(--_cta-text);
-        border-radius: var(--_cta-border-radius);
+        padding: var(--pricing-card-cta-padding, 1rem 1.6rem);
+        background-color: var(--pricing-card-cta-bg, var(--input-button-primary-surface, var(--theme-surface)));
+        color: var(--pricing-card-cta-text, var(--input-button-primary-text, var(--theme-on-surface)));
+        border-radius: var(--pricing-card-cta-border-radius, 0.4rem);
         font-weight: 600;
 
         &:hover:not([aria-disabled="true"]) {

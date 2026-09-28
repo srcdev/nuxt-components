@@ -72,7 +72,7 @@ styles both the docs nav and the page nav, plus **per-side** forms (`--content-d
 Link transitions also read the library-wide `--control-transition-duration` (`200ms`) and
 `--control-transition-ease` (`ease`); focus rings use `--theme-ring`.
 
-The `--_*` variables declared on `.content-docs` (e.g. `--_link-color`, `--_nav-link-hover-bg`)
+The `--_*` variables declared on `.content-docs` (e.g. `--_link-color`, `--_panel-bg`)
 are the resolved shared/per-side fallback chain: not public API. Set the `--content-docs-*`
 tokens instead.
 
