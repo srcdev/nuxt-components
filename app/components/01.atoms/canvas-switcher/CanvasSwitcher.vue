@@ -11,7 +11,7 @@
           @click="updateCanvas(option.value)"
         >
           <template #iconOnly>
-            <Icon :name="option.icon" class="icon"/>
+            <Icon :name="option.icon" class="icon" />
           </template>
         </InputButton>
       </li>
@@ -85,8 +85,13 @@ watch(
     }
 
     .icon {
-      width: var(--canvas-switcher-icon-size, 2.4rem);
-      height: var(--canvas-switcher-icon-size, 2.4rem);
+      --_icon-size-default: 1.6rem;
+      width: var(--canvas-switcher-icon-size, var(--_icon-size-default));
+      height: var(--canvas-switcher-icon-size, var(--_icon-size-default));
+
+      @media (min-width: 768px) {
+        --_icon-size-default: 2.2rem;
+      }
     }
   }
 

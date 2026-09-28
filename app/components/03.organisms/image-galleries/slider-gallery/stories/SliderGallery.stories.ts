@@ -30,6 +30,10 @@ const meta: Meta<typeof SliderGallery> = {
     nextAriaLabel: { control: { type: "text" }, description: "Next button aria-label" },
     prevIcon: { control: { type: "text" }, description: "Previous button icon" },
     nextIcon: { control: { type: "text" }, description: "Next button icon" },
+    textScrim: {
+      control: { type: "boolean" },
+      description: "Gradient behind the slide text, matched to each slide's textBrightness",
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes applied to the root element",
@@ -39,6 +43,7 @@ const meta: Meta<typeof SliderGallery> = {
     autoRun: true,
     autoRunInterval: 7000,
     animationDuration: 3000,
+    textScrim: true,
     ariaLabel: "Image gallery",
     seeMoreText: "SEE MORE",
     prevAriaLabel: "Previous image",

@@ -1,14 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`SliderGallery > renders correct HTML structure after load 1`] = `
-"<div class="slider-gallery" role="region" aria-roledescription="carousel" aria-label="Image gallery">
+"<div class="slider-gallery has-text-scrim" role="region" aria-roledescription="carousel" aria-label="Image gallery">
   <div class="slider-gallery-loading" role="status">
     <div class="slider-gallery-spinner" aria-hidden="true"></div>
     <p>Loading gallery...</p>
   </div>
   <div class="slider-gallery-content">
     <div class="slider-gallery-list">
-      <div class="slider-gallery-item"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-1.jpg 1x, /_ipx/_/images/slide-1.jpg 2x" alt="Slide 1" src="/_ipx/_/images/slide-1.jpg">
+      <div class="slider-gallery-item" data-text-brightness="light" data-has-text=""><img data-nuxt-img="" srcset="/_ipx/_/images/slide-1.jpg 1x, /_ipx/_/images/slide-1.jpg 2x" alt="Slide 1" src="/_ipx/_/images/slide-1.jpg">
         <div class="slider-gallery-item-content light">
           <div class="slider-gallery-author">Stylist One</div>
           <div class="slider-gallery-title">First Slide</div>
@@ -17,7 +17,7 @@ exports[`SliderGallery > renders correct HTML structure after load 1`] = `
           <!--v-if-->
         </div>
       </div>
-      <div class="slider-gallery-item"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-2.jpg 1x, /_ipx/_/images/slide-2.jpg 2x" alt="Slide 2" src="/_ipx/_/images/slide-2.jpg">
+      <div class="slider-gallery-item" data-text-brightness="dark" data-has-text=""><img data-nuxt-img="" srcset="/_ipx/_/images/slide-2.jpg 1x, /_ipx/_/images/slide-2.jpg 2x" alt="Slide 2" src="/_ipx/_/images/slide-2.jpg">
         <div class="slider-gallery-item-content dark">
           <!--v-if-->
           <div class="slider-gallery-title">Second Slide</div>
@@ -26,7 +26,7 @@ exports[`SliderGallery > renders correct HTML structure after load 1`] = `
           <!--v-if-->
         </div>
       </div>
-      <div class="slider-gallery-item"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-3.jpg 1x, /_ipx/_/images/slide-3.jpg 2x" alt="Slide 3" src="/_ipx/_/images/slide-3.jpg">
+      <div class="slider-gallery-item" data-text-brightness="light"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-3.jpg 1x, /_ipx/_/images/slide-3.jpg 2x" alt="Slide 3" src="/_ipx/_/images/slide-3.jpg">
         <div class="slider-gallery-item-content light">
           <!--v-if-->
           <!--v-if-->

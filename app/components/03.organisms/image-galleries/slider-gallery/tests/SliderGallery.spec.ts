@@ -94,6 +94,36 @@ describe("SliderGallery", () => {
     expect(wrapper.classes()).toContain("slider-gallery");
   });
 
+  // ─── Text scrim ───────────────────────────────────────────────────────────
+
+  it("adds has-text-scrim to the root by default", async () => {
+    const wrapper = await mountSuspended(SliderGallery);
+    expect(wrapper.classes()).toContain("has-text-scrim");
+  });
+
+  it("omits has-text-scrim when textScrim is false", async () => {
+    const wrapper = await mountSuspended(SliderGallery, { props: { galleryData: mockGalleryData, textScrim: false } });
+    expect(wrapper.classes()).not.toContain("has-text-scrim");
+  });
+
+  it("toggles has-text-scrim when textScrim changes after mount", async () => {
+    const wrapper = await mountSuspended(SliderGallery);
+    await wrapper.setProps({ textScrim: false });
+    expect(wrapper.classes()).not.toContain("has-text-scrim");
+  });
+
+  it("marks each main slide with its textBrightness", async () => {
+    const wrapper = await mountAndLoad(mockGalleryData, mockImage);
+    const slides = wrapper.findAll(".slider-gallery-list .slider-gallery-item");
+    expect(slides.map((slide) => slide.attributes("data-text-brightness"))).toEqual(["light", "dark", "light"]);
+  });
+
+  it("marks only slides with overlay text as data-has-text", async () => {
+    const wrapper = await mountAndLoad(mockGalleryData, mockImage);
+    const slides = wrapper.findAll(".slider-gallery-list .slider-gallery-item");
+    expect(slides.map((slide) => slide.attributes("data-has-text") !== undefined)).toEqual([true, true, false]);
+  });
+
   // ─── Loading state ────────────────────────────────────────────────────────
 
   it("shows loading state before images load", async () => {

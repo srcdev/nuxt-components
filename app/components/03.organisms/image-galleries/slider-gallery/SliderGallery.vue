@@ -2,7 +2,7 @@
   <div
     ref="sliderGalleryWrapper"
     class="slider-gallery"
-    :class="[elementClasses]"
+    :class="[elementClasses, { 'has-text-scrim': textScrim }]"
     role="region"
     aria-roledescription="carousel"
     :aria-label="ariaLabel"
@@ -18,7 +18,13 @@
 
     <div v-if="showGallery" class="slider-gallery-content" :class="[{ 'is-loaded': !isLoading }]">
       <div ref="sliderGalleryImagesList" class="slider-gallery-list">
-        <div v-for="(item, index) in galleryData" :key="index" class="slider-gallery-item">
+        <div
+          v-for="(item, index) in galleryData"
+          :key="index"
+          class="slider-gallery-item"
+          :data-text-brightness="item.textBrightness"
+          :data-has-text="hasSlideText(item) ? '' : undefined"
+        >
           <NuxtImg :src="item.src" :alt="item.alt" @load="handleImageLoad(index)" @error="handleImageError(index)" />
           <div class="slider-gallery-item-content" :class="item.textBrightness">
             <div v-if="item.stylist" class="slider-gallery-author">{{ item.stylist }}</div>
@@ -91,6 +97,8 @@ interface Props {
   ariaLabel?: string;
   prevIcon?: string;
   nextIcon?: string;
+  /** Gradient behind the slide text, keyed to each slide's textBrightness. */
+  textScrim?: boolean;
   styleClassPassthrough?: string | string[];
 }
 
@@ -105,11 +113,15 @@ const props = withDefaults(defineProps<Props>(), {
   ariaLabel: "Image gallery",
   prevIcon: "ic:outline-keyboard-arrow-left",
   nextIcon: "ic:outline-keyboard-arrow-right",
+  textScrim: true,
   styleClassPassthrough: () => [],
 });
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 const galleryData = defineModel<IGalleryData[]>("galleryData", { required: true });
+
+const hasSlideText = (item: IGalleryData) =>
+  Boolean(item.stylist || item.title || item.category || item.description || item.href);
 
 const sliderGalleryWrapper = useTemplateRef("sliderGalleryWrapper");
 const sliderGalleryImagesList = useTemplateRef("sliderGalleryImagesList");
@@ -347,6 +359,7 @@ onBeforeUnmount(() => {
 
     .slider-gallery-list {
       .slider-gallery-item {
+        isolation: isolate;
         width: 100%;
         height: 100%;
         position: absolute;
@@ -391,8 +404,29 @@ onBeforeUnmount(() => {
           object-fit: cover;
         }
 
+        &::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          pointer-events: none;
+          opacity: 0;
+          background: var(
+            --slider-gallery-text-light-scrim,
+            linear-gradient(to right, rgb(0 0 0 / 0.6), transparent 70%)
+          );
+        }
+
+        &[data-text-brightness="dark"]::before {
+          background: var(
+            --slider-gallery-text-dark-scrim,
+            linear-gradient(to right, rgb(255 255 255 / 0.6), transparent 70%)
+          );
+        }
+
         .slider-gallery-item-content {
           position: absolute;
+          z-index: 2;
           top: 20%;
           width: 1140px;
           max-width: 80%;
@@ -466,8 +500,15 @@ onBeforeUnmount(() => {
         position: relative;
         border: var(--slider-gallery-thumbnail-border, 1px solid transparent);
         outline: var(--slider-gallery-thumbnail-outline, 1px solid transparent);
+        outline-offset: var(--slider-gallery-thumbnail-outline-offset, 0rem);
         border-radius: var(--slider-gallery-thumbnail-border-radius, 20px);
         overflow: hidden;
+
+        &:hover {
+          border: var(--slider-gallery-thumbnail-border-hover, var(--slider-gallery-thumbnail-border, 1px solid transparent));
+          outline: var(--slider-gallery-thumbnail-outline-hover, var(--slider-gallery-thumbnail-outline, 1px solid transparent));
+          outline-offset: var(--slider-gallery-thumbnail-outline-offset-hover, var(--slider-gallery-thumbnail-outline-offset, 0rem));
+        }
 
         .slider-gallery-thumbnail-overlay {
           position: absolute;
@@ -500,48 +541,83 @@ onBeforeUnmount(() => {
     }
 
     .slider-gallery-arrows {
+      --_arrows-top: var(--slider-gallery-arrows-top, 80%);
+      --_arrows-right: var(--slider-gallery-arrows-right, 52%);
+      --_arrows-width: var(--slider-gallery-arrows-width, 300px);
+      --_arrows-max-width: var(--slider-gallery-arrows-max-width, 30%);
+
       position: absolute;
-      top: 80%;
-      right: 52%;
+      top: var(--_arrows-top);
+      right: var(--_arrows-right);
       z-index: 100;
-      width: 300px;
-      max-width: 30%;
+      width: var(--_arrows-width);
+      max-width: var(--_arrows-max-width);
       display: flex;
-      gap: 20px;
+      gap: var(--slider-gallery-arrow-gap, 20px);
       align-items: center;
 
+      @container (width >= 768px) {
+        --_arrows-top: var(--slider-gallery-arrows-top-tablet, var(--slider-gallery-arrows-top, 80%));
+        --_arrows-right: var(--slider-gallery-arrows-right-tablet, var(--slider-gallery-arrows-right, 52%));
+        --_arrows-width: var(--slider-gallery-arrows-width-tablet, var(--slider-gallery-arrows-width, 300px));
+        --_arrows-max-width: var(--slider-gallery-arrows-max-width-tablet, var(--slider-gallery-arrows-max-width, 30%));
+      }
+
+      @container (width >= 1024px) {
+        --_arrows-top: var(
+          --slider-gallery-arrows-top-desktop,
+          var(--slider-gallery-arrows-top-tablet, var(--slider-gallery-arrows-top, 80%))
+        );
+        --_arrows-right: var(
+          --slider-gallery-arrows-right-desktop,
+          var(--slider-gallery-arrows-right-tablet, var(--slider-gallery-arrows-right, 52%))
+        );
+        --_arrows-width: var(
+          --slider-gallery-arrows-width-desktop,
+          var(--slider-gallery-arrows-width-tablet, var(--slider-gallery-arrows-width, 300px))
+        );
+        --_arrows-max-width: var(
+          --slider-gallery-arrows-max-width-desktop,
+          var(--slider-gallery-arrows-max-width-tablet, var(--slider-gallery-arrows-max-width, 30%))
+        );
+      }
+
       button {
+        --_arrow-border-width: var(--slider-gallery-arrow-border-width, 0.2rem);
+        --_arrow-border-colour: var(--slider-gallery-arrow-border-colour, white);
+        --_arrow-outline-width: var(--slider-gallery-arrow-outline-width, 0.1rem);
+        --_arrow-outline-colour: var(--slider-gallery-arrow-outline-colour, transparent);
+
         display: grid;
         place-items: center;
         width: var(--slider-gallery-arrow-size, 40px);
         height: var(--slider-gallery-arrow-size, 40px);
-        border-radius: 50%;
+        border-radius: var(--slider-gallery-arrow-border-radius, 50%);
         background-color: var(--slider-gallery-arrow-background, #eee4);
         color: var(--slider-gallery-arrow-colour, #fff);
-        border: 2px solid var(--slider-gallery-arrow-border-colour, white);
-        transition: 0.5s;
-
-        &.slider-gallery-prev {
-          --_translate-x: -2px;
-        }
-
-        &.slider-gallery-next {
-          --_translate-x: 2px;
-        }
+        border: var(--_arrow-border-width) solid var(--_arrow-border-colour);
+        outline: var(--_arrow-outline-width) solid var(--_arrow-outline-colour);
+        transition: var(--slider-gallery-arrow-transition-duration, 0.5s);
 
         &:hover {
+          cursor: pointer;
           background-color: var(--slider-gallery-arrow-background-hover, #fff);
           color: var(--slider-gallery-arrow-colour-hover, #000);
+          border-width: var(--slider-gallery-arrow-border-width-hover, var(--_arrow-border-width));
+          border-color: var(--slider-gallery-arrow-border-colour-hover, var(--_arrow-border-colour));
+          outline-width: var(--slider-gallery-arrow-outline-width-hover, var(--_arrow-outline-width));
+          outline-color: var(--slider-gallery-arrow-outline-colour-hover, var(--_arrow-outline-colour));
         }
 
         &:focus-visible {
-          outline: 2px solid var(--theme-ring, currentColor);
-          outline-offset: 2px;
+          outline: var(--slider-gallery-arrow-outline-width-focus, 2px) solid
+            var(--slider-gallery-arrow-outline-colour-focus, var(--theme-ring, currentColor));
+          outline-offset: var(--slider-gallery-arrow-outline-offset-focus, 2px);
         }
 
         .slider-gallery-arrow-icon {
-          font-size: var(--slider-gallery-arrow-size, 40px);
-          translate: var(--_translate-x) 0;
+          width: var(--slider-gallery-arrow-icon-size, 24px);
+          height: var(--slider-gallery-arrow-icon-size, 24px);
         }
       }
     }
@@ -554,6 +630,10 @@ onBeforeUnmount(() => {
       background-color: var(--_accent);
       left: 0;
       top: 0;
+    }
+
+    &.has-text-scrim .slider-gallery-list .slider-gallery-item[data-has-text]:nth-child(1)::before {
+      animation: slider-gallery-scrim-in 0.5s 0.5s linear forwards;
     }
 
     &.is-next {
@@ -728,6 +808,12 @@ onBeforeUnmount(() => {
     to {
       opacity: 1;
       transform: translateX(0);
+    }
+  }
+
+  @keyframes slider-gallery-scrim-in {
+    to {
+      opacity: 1;
     }
   }
 

@@ -27,6 +27,7 @@ so place it inside a positioned container sized for it (usually a full-viewport 
 | `seeMoreText` | `string` | `"SEE MORE"` | Link text for slides with an `href` |
 | `prevAriaLabel` / `nextAriaLabel` | `string` | `"Previous image"` / `"Next image"` | Arrow button labels |
 | `prevIcon` / `nextIcon` | `string` | `ic:outline-keyboard-arrow-left/right` | Arrow icons |
+| `textScrim` | `boolean` | `true` | Fades in a gradient behind the active slide's text (slides with no stylist, title, category, description or href get none): dark behind `textBrightness: "light"` slides, light behind `"dark"` ones. Adds `.has-text-scrim` to the root. Styled by `--slider-gallery-text-light-scrim` / `--slider-gallery-text-dark-scrim` |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Classes on the root. Reactive |
 
 All copy props are there for localisation: pass translated strings.
@@ -77,7 +78,7 @@ const slides = ref<IGalleryData[]>([
 ## Styling
 
 Public tokens (`--slider-gallery-*`) cover height, z-index, accent (spinner and progress), text
-colours, thumbnail size/border/radius/overlay, arrow colours and CTA colours. Full reference:
+colours, thumbnail size/border/radius/overlay, arrow row position (base, tablet, desktop), arrow size, colours, border, outline (resting, hover and focus) and CTA colours. Full reference:
 `app/components/03.organisms/image-galleries/slider-gallery/CONSUMER-STYLING.md`.
 
 ## Notes

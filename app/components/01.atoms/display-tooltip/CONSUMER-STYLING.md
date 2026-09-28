@@ -6,9 +6,12 @@
 |---|---|---|
 | `--display-tooltip-padding-block` | `0.8rem` | Vertical padding around the trigger row |
 | `--display-tooltip-trigger-gap` | `0.8rem` | Space between `triggerContent` slot and the trigger button |
-| `--display-tooltip-trigger-icon-box-size` | `2rem` | Trigger icon's box width/height |
-| `--display-tooltip-trigger-icon-font-size` | `1.8rem` | Trigger icon glyph size |
+| `--display-tooltip-trigger-icon-box-size` | `1.6rem` | Trigger icon width/height |
 | `--display-tooltip-trigger-icon-colour` | `var(--theme-text)` | Trigger icon colour |
+| `--display-tooltip-trigger-padding` | `0rem` | Space between the icon and the trigger button edge (single length, see note) |
+| `--display-tooltip-trigger-border-width` | `0.1rem` | Trigger button border width |
+| `--display-tooltip-trigger-border-colour` | `transparent` | Trigger button border colour |
+| `--display-tooltip-trigger-border-radius` | `100vw` | Trigger button corner radius (circular by default) |
 | `--display-tooltip-trigger-outline-width` | `0.1rem` | Trigger button focus/hover outline width |
 | `--display-tooltip-trigger-outline-colour-hover` | `var(--theme-ring)` | Trigger button outline colour on hover/focus-visible |
 | `--display-tooltip-popover-width` | `30rem` | Popover panel width |
@@ -58,6 +61,10 @@ Set the tokens above on an element you own (a page or section class, or a class 
 
 ## Notes
 
+- The trigger button is vertically centred on the first line of `triggerContent` text, using
+  `--display-tooltip-trigger-icon-box-size`, `-padding` and `-border-width` to work out its height.
+  Give `--display-tooltip-trigger-padding` a single length (e.g. `0.4rem`): a two-value shorthand
+  breaks that calculation, and the button is square anyway.
 - Built on the native Popover API (`popover`/`popovertarget`) and CSS anchor-positioning
   (`anchor-name`/`position-anchor`/`anchor()`) — check current browser support before relying on
   it where broad support is a hard requirement.

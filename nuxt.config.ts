@@ -57,6 +57,10 @@ export default defineNuxtConfig({
   imports: {
     dirs: ["./stores"],
   },
+  icon: {
+    // Must stay listed before `components` in the @layer order in app/assets/styles/setup/index.css
+    cssLayer: "icons",
+  },
   app: {
     head: {
       htmlAttrs: {

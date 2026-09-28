@@ -64,37 +64,38 @@ watch(
 
         &.hide {
           width: 0;
+          padding: 0;
+          border-width: 0;
           overflow: hidden;
           opacity: 0;
         }
 
         .display-tooltip-trigger-icon {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          width: var(--display-tooltip-trigger-icon-box-size, 2rem);
-          height: var(--display-tooltip-trigger-icon-box-size, 2rem);
+          width: var(--_trigger-icon-size);
+          height: var(--_trigger-icon-size);
           color: var(--display-tooltip-trigger-icon-colour, var(--theme-text));
-          font-size: var(--display-tooltip-trigger-icon-font-size, 1.8rem);
-          line-height: var(--display-tooltip-trigger-icon-box-size, 2rem);
         }
       }
     }
 
     .display-tooltip-trigger-button {
+      --_trigger-icon-size: var(--display-tooltip-trigger-icon-box-size, 1.6rem);
+      --_trigger-padding: var(--display-tooltip-trigger-padding, 0rem);
+      --_trigger-border-width: var(--display-tooltip-trigger-border-width, 0.1rem);
+
       all: unset;
       aspect-ratio: 1 / 1;
-      width: 2.4rem;
+      padding: var(--_trigger-padding);
       display: grid;
       place-items: center;
 
+      border: var(--_trigger-border-width) solid
+        var(--display-tooltip-trigger-border-colour, transparent);
+      border-radius: var(--display-tooltip-trigger-border-radius, 100vw);
       outline: var(--display-tooltip-trigger-outline-width, 0.1rem) solid transparent;
       anchor-name: var(--_anchor-name);
-
-      @supports (corner-shape: squircle) {
-        corner-shape: squircle;
-        border-radius: 50%;
-      }
+      /* Centres the button on the first line of trigger text */
+      translate: 0 calc((1lh - var(--_trigger-icon-size) - 2 * (var(--_trigger-padding) + var(--_trigger-border-width))) / 2);
 
       &:hover {
         cursor: pointer;
@@ -104,7 +105,7 @@ watch(
       &:hover,
       &:focus-visible {
         outline-color: var(--display-tooltip-trigger-outline-colour-hover, var(--theme-ring));
-        outline-offset: 0.2rem;
+        outline-offset: 0.1rem;
       }
     }
 
@@ -119,10 +120,7 @@ watch(
       color: var(--display-tooltip-popover-text-colour, var(--slate-09));
       background-color: var(--display-tooltip-popover-background-colour, var(--slate-00));
       border-radius: var(--display-tooltip-popover-border-radius, 0.8rem);
-      box-shadow: var(
-        --display-tooltip-popover-shadow,
-        0 0.4rem 1.6rem rgba(0, 0, 0, 0.12)
-      );
+      box-shadow: var(--display-tooltip-popover-shadow, 0 0.4rem 1.6rem rgba(0, 0, 0, 0.12));
 
       position-anchor: var(--_anchor-name);
       margin: 0;
@@ -158,14 +156,8 @@ watch(
           &:hover,
           &:focus {
             text-decoration: underline;
-            border-color: var(
-              --display-tooltip-close-button-border-colour-hover,
-              var(--slate-06)
-            );
-            outline-color: var(
-              --display-tooltip-close-button-outline-colour-hover,
-              var(--slate-06)
-            );
+            border-color: var(--display-tooltip-close-button-border-colour-hover, var(--slate-06));
+            outline-color: var(--display-tooltip-close-button-outline-colour-hover, var(--slate-06));
             outline-offset: 0.2rem;
           }
         }

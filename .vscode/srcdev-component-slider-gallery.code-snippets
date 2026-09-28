@@ -6,6 +6,13 @@
       "<SliderGallery v-model:gallery-data=\"$1galleryData\" />"
     ]
   },
+  "SRCDEV SliderGallery No Scrim": {
+    "description": "SliderGallery without the gradient behind slide text",
+    "scope": "vue,html",
+    "body": [
+      "<SliderGallery v-model:gallery-data=\"$1galleryData\" :text-scrim=\"false\" />"
+    ]
+  },
   "SRCDEV SliderGallery Localised": {
     "description": "SliderGallery with localised loading/CTA/arrow copy",
     "scope": "vue,html",
