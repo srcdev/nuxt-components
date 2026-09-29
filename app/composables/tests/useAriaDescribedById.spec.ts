@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { ref } from "vue";
-import type { Slots } from "vue";
+import type { Slot, Slots } from "vue";
 import { mockNuxtImport } from "@nuxt/test-utils/runtime";
 import { useAriaDescribedById } from "../useAriaDescribedById";
 
@@ -132,16 +132,16 @@ describe("useAriaDescribedById", () => {
     });
 
     it("picks up a description slot added after setup", () => {
-      const slots: Slots = {};
-      const { descriptionId, ariaDescribedby } = useAriaDescribedById("email", ref(false), slots);
+      const slots: Record<string, Slot> = {};
+      const { descriptionId, ariaDescribedby } = useAriaDescribedById("email", ref(false), slots as Slots);
       expect(ariaDescribedby()).toBeNull();
       slots.descriptionText = () => [];
       expect(ariaDescribedby()).toBe(descriptionId);
     });
 
     it("drops a description slot removed after setup", () => {
-      const slots: Slots = withSlot("descriptionText");
-      const { ariaDescribedby } = useAriaDescribedById("email", ref(false), slots);
+      const slots: Record<string, Slot> = { descriptionText: () => [] };
+      const { ariaDescribedby } = useAriaDescribedById("email", ref(false), slots as Slots);
       expect(ariaDescribedby()).toBeTruthy();
       delete slots.descriptionText;
       expect(ariaDescribedby()).toBeNull();
