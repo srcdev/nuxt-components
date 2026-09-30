@@ -277,6 +277,11 @@ Key points:
   (`html[data-color-scheme="light"]`, off-white `--slate-00` stage) by default, whatever the OS
   setting. Use the toolbar "Colour scheme" menu (Light / Dark / Follow OS) to check dark mode.
   Don't hardcode a stage background in a story to get a light canvas; it's already the default.
+- **Edge-aware components need `layout: "fullscreen"`** in the meta's `parameters`. Storybook's
+  default `"padded"` layout insets the canvas by 1rem, which masks viewport gutters, full-bleed
+  tracks and edge alignment (`PageRow`, `SliderGallery`). To swap canvas widths inside a story,
+  add the `CanvasSwitcher` decorator from `PageRow.stories.ts` (container-sized components only;
+  see `components/canvas-switcher.md`).
 - Use `table: { category: "..." }` in `argTypes` when a component has many props — it groups
   them in the Storybook controls panel (e.g. `"Model"`, `"Basic"`, `"Validation"`, `"Styling"`, `"Slots"`).
 - Export multiple named stories (`Default`, `WithError`, `Outlined`, etc.) when you want

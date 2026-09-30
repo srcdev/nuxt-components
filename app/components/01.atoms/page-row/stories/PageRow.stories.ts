@@ -1,5 +1,8 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
+import { ref } from "vue";
 import PageRowComponent from "../PageRow.vue";
+import CanvasSwitcher from "../../canvas-switcher/CanvasSwitcher.vue";
+import type { MediaCanvas } from "~/types/components";
 
 interface PageRowArgs {
   tag: string;
@@ -47,7 +50,27 @@ export default {
     id: "",
     styleClassPassthrough: [],
   },
+  decorators: [
+    // PageRow sizes its tracks from 100% of its container, so a constrained wrapper stands in for a narrower viewport.
+    (story) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>("fullWidthCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
   parameters: {
+    // Storybook's default padded layout hides the viewport gutter and align edge-bleed.
+    layout: "fullscreen",
     docs: {
       description: {
         component:
@@ -118,26 +141,37 @@ InsetContent.parameters = {
 const NestingTemplate: StoryFn = () => ({
   components: { PageRowComponent },
   setup() {
-    return { sampleText };
+    const nested = [
+      { variant: "full", background: "#fca5a5", desc: "edge to edge" },
+      { variant: "popout", background: "#fdba74", desc: "max 1400px" },
+      { variant: "content", background: "#fde047", desc: "max 1064px" },
+      { variant: "inset-content", background: "#86efac", desc: "max 840px" },
+    ];
+    const chip =
+      "display: inline-block; margin-block-end: 8px; padding: 2px 8px; border-radius: 4px; background: rgba(0,0,0,0.75); color: white; font-family: monospace; font-size: 1.2rem;";
+    return { sampleText, nested, chip };
   },
   template: `
     <div style="min-height: 100vh;">
 
-      <PageRowComponent tag="section" variant="full" style="background: #1e3a5f; color: white; padding-block: 60px;">
+      <PageRowComponent tag="section" style="background: #1e3a5f; color: white; padding-block: 60px;">
+        <span :style="chip">outer PageRow (variant="content")</span>
         <h1 style="margin: 0 0 16px; font-size: 2.4rem;">Full-width background, constrained content</h1>
         <p style="margin: 0; opacity: 0.85; line-height: 1.7;">{{ sampleText }}</p>
       </PageRowComponent>
 
-      <PageRowComponent tag="section" style="background: #f0fdf4; padding-block: 48px;">
-        <PageRowComponent variant="content">
-          <h2 style="margin: 0 0 12px; font-size: 1.8rem; color: #166534;">Nested: content inside a content row</h2>
-          <p style="margin: 0; color: #15803d; line-height: 1.7;">{{ sampleText }}</p>
-        </PageRowComponent>
-        <PageRowComponent variant="popout" style="margin-block: 24px; background: #dcfce7; border-radius: 6px; padding: 24px;">
-          <p style="margin: 0; color: #166534;">Popout child breaking out to 1400px</p>
-        </PageRowComponent>
-        <PageRowComponent variant="inset-content">
-          <p style="margin: 0; color: #15803d; font-style: italic; line-height: 1.7;">Inset content (840px) for a focused quote or aside.</p>
+      <PageRowComponent tag="section" style="background: #0f172a; padding-block: 48px; display: grid; row-gap: 16px;">
+        <span :style="chip" style="background: white; color: #0f172a;">outer PageRow (dark background)</span>
+        <PageRowComponent
+          v-for="row in nested"
+          :key="row.variant"
+          :variant="row.variant"
+          :style="{ background: row.background, color: '#111827', paddingBlock: '24px' }"
+        >
+          <div>
+            <span :style="chip">nested variant="{{ row.variant }}"</span>
+            <p style="margin: 0; line-height: 1.6;">{{ row.desc }}: the background shows the track this nested PageRow occupies.</p>
+          </div>
         </PageRowComponent>
       </PageRowComponent>
 
@@ -152,7 +186,7 @@ NestingPattern.parameters = {
   docs: {
     description: {
       story:
-        "The key composition pattern: nest a full-width outer PageRow (for backgrounds/borders) with inner PageRows at narrower variants. No extra wrapper divs needed.",
+        "The key composition pattern: an outer PageRow carries the full-width background, and nested PageRows pick a track via variant. Each nested row's background marks the track it occupies against the dark outer row. No extra wrapper divs needed.",
     },
   },
 };

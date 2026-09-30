@@ -47,7 +47,11 @@ const canvasName = ref<MediaCanvas>("desktopCanvas");
 The selected value doubles as a utility class name: `CanvasSwitcher`'s stylesheet also declares
 `.mobileCanvas`/`.tabletCanvas`/`.laptopCanvas`/`.desktopCanvas`/`.fullWidthCanvas` (max-width
 utilities, not scoped to `.canvas-switcher`), so binding `:class="canvasName"` directly onto a
-preview wrapper constrains it to match — see `DashboardQuadGrid`/`DashboardStatsGrid` stories for the pattern.
+preview wrapper constrains it to match. `DashboardQuadGrid`/`DashboardStatsGrid` stories use the
+classes alone (driven by a Controls select); `PageRow.stories.ts` renders the switcher itself in a
+meta-level decorator, so every story gets an in-canvas width toggle. Copy that decorator for any
+component that sizes itself from its container (`%`, container queries) rather than from
+`@media`: a constrained wrapper cannot trigger a viewport media query.
 These classes only ship in the bundle once `CanvasSwitcher` (or another importer of them) is
 actually imported somewhere, since Nuxt only bundles a component's SFC styles when it's used.
 
