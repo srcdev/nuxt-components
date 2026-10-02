@@ -6,7 +6,7 @@
 
 ## NOTE
 
-Althought this repo is public and feel free to do what you wish with it, this has been developed for use with websites we develop.
+Although this repo is public and feel free to do what you wish with it, this has been developed for use with websites we develop.
 
 ## Install Nuxt Components layer
 
@@ -58,7 +58,7 @@ To ensure skills are always up to date, VSCode snippets are installed, and `nuxt
 2. `nuxt prepare` — generates Nuxt type declarations
 3. `setup:claude` — copies skills into `.claude/skills/srcdev-nuxt-components/`
 
-> **Note**: The snippet copy must run from your consumer app's postinstall, not the layer's. npm doesn't invoke postinstall hooks for dependencies, so each consumer app is responsible for copying snippets into its own `.vscode/` folder. If your app uses a standalone env flag for `nuxt prepare` (e.g. `NUXT_STANDALONE=true`), add it before `nuxt prepare`. This is project-specific — check your own `nuxt.config.ts` to confirm whether it is needed.
+> **Note**: The snippet copy must run from your consumer app's postinstall, not the layer's. npm doesn't invoke postinstall hooks for dependencies, so each consumer app is responsible for copying snippets into its own `.vscode/` folder. Don't set `SRCDEV_STANDALONE` in a consumer app: that flag is only for running this layer on its own (it enables dev-only modules and the ramp watcher).
 
 ---
 
@@ -74,6 +74,31 @@ and a `CLAUDE.md` — all pre-wired to extend this layer correctly.
 
 The skill is available at `.claude/skills/new-app-scaffold.md` once copied into your project
 via `npm run setup:claude`.
+
+---
+
+## Components
+
+Components live in `app/components/`, grouped into tiers:
+
+| Folder         | Storybook title prefix |
+| -------------- | ---------------------- |
+| `01.atoms`     | `Atoms/`               |
+| `02.molecules` | `Molecules/`           |
+| `03.organisms` | `Organisms/`           |
+| `04.templates` | `Templates/`           |
+| `05.forms`     | `Forms/`               |
+
+Components are auto-imported with `pathPrefix: false`, so the tier folder never appears in the tag name.
+
+**Naming**: a bare form control is `<Name>` (e.g. `InputNumber`) and its labelled wrapper is `<Name>Field` (e.g. `InputNumberField`). Older `Core` / `Default` / `WithLabel` suffixes are being renamed to this convention; see `.claude/skills/component-naming.md` for the backlog.
+
+Each component ships with:
+
+- **`CONSUMER-STYLING.md`** next to the `.vue` file, listing its public CSS custom properties and how to override them
+- **a Storybook story**, the only place components are demonstrated (this repo has no demo pages)
+- **a skill doc** in `.claude/skills/components/`, copied into your app by `npm run setup:claude`
+- **a VS Code snippet** in `.vscode/srcdev-component-{name}.code-snippets`, copied into your app by `postinstall`
 
 ---
 
@@ -107,6 +132,40 @@ NUXT_PUBLIC_COLOUR_SCHEME_ENABLED=false
 When disabled, no `data-color-scheme` attribute is set on `<html>` and `useColourScheme()` is a no-op. The default is `true`.
 
 > See [.claude/skills/colour-scheme-disable.md](.claude/skills/colour-scheme-disable.md) for the full guide.
+
+### Analytics
+
+Call `useAnalytics()` from a layout, page or component and use `trackEvent(name, params)` to fire events. Only Google Analytics (GA4) is implemented today; call sites never name the provider, so adding another later won't change them.
+
+```ts
+// nuxt.config.ts
+runtimeConfig: {
+  public: {
+    analytics: {
+      provider: "google-analytics",
+      googleAnalytics: { id: "G-XXXXXXXXXX" },
+    },
+  },
+},
+```
+
+Or via environment variable:
+
+```bash
+NUXT_PUBLIC_ANALYTICS_GOOGLE_ANALYTICS_ID=G-XXXXXXXXXX
+```
+
+With no ID set, `trackEvent` does nothing.
+
+### WhatsApp
+
+`useWhatsApp().openWhatsApp(fields)` opens a WhatsApp chat pre-filled with the given label/value pairs. Set the number in international format, without `+` or spaces:
+
+```bash
+NUXT_PUBLIC_WHATSAPP_NUMBER=447700900000
+```
+
+Without a number it logs a warning and does nothing.
 
 ---
 
@@ -276,39 +335,6 @@ Skills are available in your project after running `npm run setup:claude`.
 
 ---
 
-## Known Build / Production Issues
-
-### `ERR_MODULE_NOT_FOUND: vue/index.mjs` — 500 on every request (Node 22)
-
-**Symptom**: After `npm run build`, running `node .output/server/index.mjs` returns HTTP 500 on every page. The terminal shows:
-
-```text
-Error [ERR_MODULE_NOT_FOUND]: Cannot find module
-  '.output/server/node_modules/vue/index.mjs'
-Did you mean to import
-  '.output/server/node_modules/.nitro/vue@3.5.34/dist/vue.cjs.prod.js'?
-```
-
-**Root cause**: Nitro's dependency tracer externalises `vue` and copies it to `.output/server/node_modules/vue/`, but only traces the CJS build (`dist/vue.cjs.prod.js`). Vue's `package.json` exports map resolves the `"import"` + `"node"` condition (used by Node 22 when importing from an ES module) to `./index.mjs` — a file that was never copied. This is a Nitro tracing bug exposed by Node 22's stricter ESM condition matching, made more likely by `vue.runtimeCompiler: true` (which changes how Nuxt aliases Vue at build time, causing Nitro to fall back to externalising it as a node_modules package).
-
-**Fix** (already applied in this repo's `nuxt.config.ts`):
-
-```ts
-nitro: {
-  externals: {
-    inline: ["vue", "@vue/runtime-core", "@vue/runtime-dom", "@vue/reactivity", "@vue/shared", "@vue/server-renderer"],
-  },
-},
-```
-
-This tells Nitro to bundle these packages inline rather than externalise them, which sidesteps the runtime resolution entirely.
-
-**Consumer apps**: This config is not gated behind `isStandalone`, so it is inherited automatically by any app that extends this layer. No consumer-side action is required.
-
-**When it's safe to remove**: If a future Nitro release fixes the dependency tracer so that all export-condition files are copied correctly, the `inline` list can be removed. Verify by checking that `.output/server/node_modules/vue/index.mjs` exists after a clean build without the config.
-
----
-
 ## Development Environment (`.vscode`)
 
 The `.vscode` directory contains Visual Studio Code configuration files to ensure a consistent development experience across the project:
@@ -428,7 +454,7 @@ npm run test:update
 
 ### Visual Regression Tests (Playwright)
 
-Runs pixel-level screenshot comparisons against Storybook. Requires Storybook to be running first.
+Runs pixel-level screenshot comparisons against Storybook. Requires Storybook to be running first. Coverage is currently limited to a few components (`InputButton`, `HeroText`, `EyebrowText`, `ContentDocs`); specs live in each component's `playwright/` folder as `*.playwright.ts`.
 
 ```bash
 # 1. Start Storybook
@@ -462,12 +488,13 @@ npx playwright show-report
 
 ## Storybook
 
-Storybook is used for isolated component development and as the target for visual regression tests. It runs as a separate Vite-based dev server.
+Storybook (v10, via `@nuxtjs/storybook`) is the only demo surface for this library, and the target for visual regression tests. The deployed build is at [storybook.srcdev.co.uk](https://storybook.srcdev.co.uk).
 
 ### Scripts
 
 ```bash
-# Start Storybook dev server (http://localhost:6006)
+# Start Storybook dev server (http://localhost:6006). `npm run dev` does the same after
+# regenerating the colour ramps; there is no `nuxt dev` entry point.
 npm run storybook
 
 # Build a static Storybook (outputs to storybook-static/)
@@ -483,6 +510,16 @@ npm run storybook:cache:clean
 > After clearing the cache, restart with `npm run storybook`. The cache clear is particularly
 > useful when changes inside `@layer` CSS blocks are not reflected in the running dev server.
 
+### MCP server for AI agents
+
+`@storybook/addon-mcp` exposes the stories over MCP while the dev server is running, so a coding agent can look up components, their props and story examples instead of guessing. The endpoint is `http://localhost:6006/mcp`. To connect Claude Code:
+
+```bash
+claude mcp add --transport http storybook http://localhost:6006/mcp
+```
+
+See the [Storybook MCP docs](https://storybook.js.org/docs/next/ai/mcp/overview) for other clients.
+
 ### Fonts
 
 `@nuxt/fonts` is disabled in Storybook (detected via `process.env.STORYBOOK` in `nuxt.config.ts`).
@@ -492,5 +529,6 @@ Fonts are served instead from local files in `.storybook/public/_fonts/`, declar
 | ---------------- | ------ | -------------------------------------------- |
 | Poppins          | TTF    | `.storybook/public/_fonts/poppins/`          |
 | Playfair Display | woff2  | `.storybook/public/_fonts/playfair-display/` |
+| Mono MMM 5       | TTF    | `public/fonts/`                              |
 
 To add a new font, see [.claude/skills/storybook-add-font.md](.claude/skills/storybook-add-font.md).
