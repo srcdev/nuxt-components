@@ -15,7 +15,9 @@ type StoryArgs = {
   buttonIcon?: string;
   styleClassPassthrough?: string | string[];
   /** Story-only — not a real ServicesCardGrid prop, see useStorySetup below. */
-  lineClamp?: number;
+  lineClamp?: 1 | 2 | 3 | 4 | 5;
+  /** Story-only — sets --services-card-grid-column-min-width on the wrapper, see useStorySetup below. */
+  cardMinWidth?: "200px" | "250px" | "300px" | "350px" | "400px";
 };
 
 const meta: Meta<StoryArgs> = {
@@ -52,9 +54,16 @@ const meta: Meta<StoryArgs> = {
       description: "Additional CSS classes applied to the root element",
     },
     lineClamp: {
-      control: { type: "number", min: 1, max: 10, step: 1 },
+      control: { type: "inline-radio" },
+      options: [1, 2, 3, 4, 5],
       description:
         "Story-only control — sets ServicesCard's --description-line-clamp custom property on the grid wrapper (not a real component prop) to demo description clamping across cards",
+    },
+    cardMinWidth: {
+      control: { type: "inline-radio" },
+      options: ["200px", "250px", "300px", "350px", "400px"],
+      description:
+        "Story-only control — sets --services-card-grid-column-min-width on the grid wrapper (not a real component prop). Cards never go narrower than this; auto-fit then stretches each column to share the leftover space",
     },
   },
   args: {
@@ -66,6 +75,7 @@ const meta: Meta<StoryArgs> = {
     buttonIcon: "mdi:arrow-right",
     styleClassPassthrough: [],
     lineClamp: 3,
+    cardMinWidth: "250px",
   },
   parameters: {
     backgrounds: {
@@ -169,31 +179,56 @@ const lineClampServices: Service[] = [
   ),
 ];
 
+// Twelve cards (divides evenly into 2, 3, 4 and 6 columns) to demo how cardMinWidth
+// changes the column count as the canvas resizes.
+const cardWidthServices: Service[] = [
+  ...sampleServices,
+  ...lineClampServices,
+  makeService("silk-press", "Silk Press", "Sleek, glossy straightening", "https://picsum.photos/seed/width-1/600/800"),
+  makeService("box-braids", "Box Braids", "Classic protective style", "https://picsum.photos/seed/width-2/600/800"),
+  makeService("scalp-treatment", "Scalp Treatment", "Healthy hair starts here", "https://picsum.photos/seed/width-3/600/800"),
+];
+
 // ─── Stories ──────────────────────────────────────────────────────────────────
 
+// Hides the story-only lineClamp/cardMinWidth controls on stories whose fixtures can't
+// show them (3 or fewer cards never wrap under auto-fit, and two-line descriptions
+// never clamp) — use the Description Line Clamp and Card Width stories for those.
+const hideDemoControls = {
+  lineClamp: { table: { disable: true } },
+  cardMinWidth: { table: { disable: true } },
+};
+
 /**
- * lineClamp is a story-only control (not a real ServicesCardGrid prop) that sets
- * --description-line-clamp on the grid wrapper — the global custom property each
- * ServicesCard's .description reads for its -webkit-line-clamp value.
+ * lineClamp and cardMinWidth are story-only controls (not real ServicesCardGrid props).
+ * They set --description-line-clamp (read by each ServicesCard's .description) and
+ * --services-card-grid-column-min-width (the grid's minmax() floor) on a wrapper div,
+ * and are stripped from the args bound to the component so they don't leak as attributes.
  */
 function useStorySetup(args: StoryArgs) {
-  const clampStyle = computed(() => ({
+  const wrapperStyle = computed(() => ({
     "--description-line-clamp": String(args.lineClamp ?? 3),
+    "--services-card-grid-column-min-width": args.cardMinWidth ?? "250px",
   }));
   const componentArgs = computed(() => {
-    const { lineClamp: _lineClamp, ...rest } = args;
+    const { lineClamp: _lineClamp, cardMinWidth: _cardMinWidth, ...rest } = args;
     return rest;
   });
-  return { clampStyle, componentArgs };
+  return { wrapperStyle, componentArgs };
 }
 
 export const Default: Story = {
+  argTypes: hideDemoControls,
   render: (args) => ({
     components: { ServicesCardGrid },
     setup() {
-      return { args, sampleServices };
+      return { ...useStorySetup(args), sampleServices };
     },
-    template: `<ServicesCardGrid v-bind="args" :services-data="sampleServices" />`,
+    template: `
+      <div :style="wrapperStyle">
+        <ServicesCardGrid v-bind="componentArgs" :services-data="sampleServices" />
+      </div>
+    `,
   }),
   parameters: {
     docs: {
@@ -205,6 +240,7 @@ export const Default: Story = {
 };
 
 export const CustomButtonText: Story = {
+  argTypes: hideDemoControls,
   name: "Custom Button Text",
   args: {
     hrefBase: "/services/",
@@ -213,9 +249,13 @@ export const CustomButtonText: Story = {
   render: (args) => ({
     components: { ServicesCardGrid },
     setup() {
-      return { args, sampleServices };
+      return { ...useStorySetup(args), sampleServices };
     },
-    template: `<ServicesCardGrid v-bind="args" :services-data="sampleServices" />`,
+    template: `
+      <div :style="wrapperStyle">
+        <ServicesCardGrid v-bind="componentArgs" :services-data="sampleServices" />
+      </div>
+    `,
   }),
   parameters: {
     docs: {
@@ -227,6 +267,7 @@ export const CustomButtonText: Story = {
 };
 
 export const ConfigOverrides: Story = {
+  argTypes: hideDemoControls,
   name: "Config Overrides",
   args: {
     eyebrowConfig: { tag: "p", fontSize: "small" },
@@ -235,9 +276,13 @@ export const ConfigOverrides: Story = {
   render: (args) => ({
     components: { ServicesCardGrid },
     setup() {
-      return { args, sampleServices };
+      return { ...useStorySetup(args), sampleServices };
     },
-    template: `<ServicesCardGrid v-bind="args" :services-data="sampleServices" />`,
+    template: `
+      <div :style="wrapperStyle">
+        <ServicesCardGrid v-bind="componentArgs" :services-data="sampleServices" />
+      </div>
+    `,
   }),
   parameters: {
     docs: {
@@ -250,13 +295,18 @@ export const ConfigOverrides: Story = {
 };
 
 export const SingleCard: Story = {
+  argTypes: hideDemoControls,
   name: "Single Card",
   render: (args) => ({
     components: { ServicesCardGrid },
     setup() {
-      return { args, sampleServices };
+      return { ...useStorySetup(args), sampleServices };
     },
-    template: `<ServicesCardGrid v-bind="args" :services-data="[sampleServices[0]]" />`,
+    template: `
+      <div :style="wrapperStyle">
+        <ServicesCardGrid v-bind="componentArgs" :services-data="[sampleServices[0]]" />
+      </div>
+    `,
   }),
   parameters: {
     docs: {
@@ -268,13 +318,18 @@ export const SingleCard: Story = {
 };
 
 export const EmptyData: Story = {
+  argTypes: hideDemoControls,
   name: "Empty Data",
   render: (args) => ({
     components: { ServicesCardGrid },
     setup() {
-      return { args };
+      return { ...useStorySetup(args) };
     },
-    template: `<ServicesCardGrid v-bind="args" :services-data="[]" />`,
+    template: `
+      <div :style="wrapperStyle">
+        <ServicesCardGrid v-bind="componentArgs" :services-data="[]" />
+      </div>
+    `,
   }),
   parameters: {
     docs: {
@@ -296,7 +351,7 @@ export const DescriptionLineClamp: Story = {
       return { ...useStorySetup(args), lineClampServices };
     },
     template: `
-      <div :style="clampStyle">
+      <div :style="wrapperStyle">
         <ServicesCardGrid v-bind="componentArgs" :services-data="lineClampServices" />
       </div>
     `,
@@ -306,6 +361,32 @@ export const DescriptionLineClamp: Story = {
       description: {
         story:
           "Six cards with progressively longer shortDescription text, all sharing one --description-line-clamp value set via the lineClamp control. Use the control to see how the same clamp value affects a one-line description (no visible clamping) versus a long paragraph (clamped with an ellipsis) — card heights stay equal since the meta row and actions slot sit below the clamped description rather than growing with it.",
+      },
+    },
+  },
+};
+
+export const CardWidth: Story = {
+  name: "Card Width",
+  args: {
+    cardMinWidth: "300px",
+  },
+  render: (args) => ({
+    components: { ServicesCardGrid },
+    setup() {
+      return { ...useStorySetup(args), cardWidthServices };
+    },
+    template: `
+      <div :style="wrapperStyle">
+        <ServicesCardGrid v-bind="componentArgs" :services-data="cardWidthServices" />
+      </div>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Twelve cards with the cardMinWidth control driving --services-card-grid-column-min-width. The value is a floor, not a fixed width: auto-fit fits as many columns as that minimum allows, then stretches them to fill the row. Change the control or resize the canvas to see the column count change.",
       },
     },
   },
