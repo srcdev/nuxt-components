@@ -9,9 +9,14 @@ const config: StorybookConfig = {
   },
   stories: ["../**/*.mdx", "../**/*.stories.ts"],
   staticDirs: ["../public", "./public"],
-  addons: ["@chromatic-com/storybook", "@storybook/addon-docs", "@storybook/addon-a11y"],
+  addons: [
+    "@chromatic-com/storybook",
+    "@storybook/addon-docs",
+    "@storybook/addon-a11y",
+    "@storybook/addon-mcp"
+  ],
   framework: {
-    name: "@storybook-vue/nuxt", // correct for SB 9.x + @nuxtjs/storybook@9.0.1
+    name: "@storybook-vue/nuxt", // correct for SB 10.x + @nuxtjs/storybook@10.0.0
     options: {},
   },
   async viteFinal(config) {
