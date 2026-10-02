@@ -2,7 +2,8 @@
 description: Bring one component up to the current compliance standard (tier, styling doc, tokens, tests, story, skill doc, snippet)
 ---
 
-Migrate a single component to full compliance with the standard in CLAUDE.md (Development
+Migrate a single existing component to full compliance with the standard in
+`.claude/skills/component-compliance-checklist.md` and CLAUDE.md (Development
 Workflow, Styling Methodology, Vue Template Conventions) — see also `project_component_compliance_standard`
 and `feedback_private_token_convention_clarified` in memory for the token rule specifically.
 
@@ -37,7 +38,7 @@ Otherwise, auto-pick the next worst offender:
      `defineProps<Props>()`) — same tie-break. This one doesn't move the 5-point `score`, so it
      would otherwise hide forever behind an already-complete-looking component.
    - Else any group with `"story_args_bug": true` (a story destructures/refs Storybook's `args` at
-     setup-time — see checklist item 6a) — same tie-break. Also doesn't move the 5-point `score`,
+     setup-time — see compliance checklist item 6a) — same tie-break. Also doesn't move the 5-point `score`,
      for the same reason as `legacy_props`.
    - Else any group with `"eslint_issues": true` (`npx eslint` reports at least one error or
      warning on a `.vue` file in the group) — same tie-break. Also doesn't move the 5-point
@@ -53,11 +54,11 @@ Otherwise, auto-pick the next worst offender:
      meaningfully empty (see `InputRangeCore`/`InputRangeDefault`), not a blanket rule disable and
      not an artificial default value that would change real behaviour.
    - Else any group with `"redundant_priv_tokens": true` (a `--_` token that's declared but never
-     read, or is a single-use 1:1 copy of a public token — see checklist item 3) — same tie-break.
+     read, or is a single-use 1:1 copy of a public token — see compliance checklist item 3) — same tie-break.
      Also doesn't move the 5-point `score`. Run
      `node .claude/component-ledger/fix-private-tokens.mjs <file.vue>` for the list.
    - Else any group with `"styling_doc_outdated": true` (its `CONSUMER-STYLING.md` exists but has
-     no `## Local overrides` section, so it predates the fixed layout in checklist item 4) — same
+     no `## Local overrides` section, so it predates the fixed layout in compliance checklist item 4) — same
      tie-break. Also doesn't move the 5-point `score`. Usually a doc-only pass: restructure the
      existing doc to the layout, checking the rest of the checklist as normal while you're there.
    - Else the lowest `score` overall — same tie-break.
@@ -84,144 +85,16 @@ migrated — a low score isn't proof it's still needed. Use AskUserQuestion with
 
 ## 3. Work the checklist
 
-Go through each point below. Skip a point only when it genuinely doesn't apply (state why,
-briefly) — don't skip silently.
-
-1. **Tier folder** — if the component lives outside `01.atoms`–`05.forms`, move it with `git mv`
-   into the tier that fits (see `project_component_tiers` in memory for what each tier means).
-   If none fits cleanly, ask the user rather than guessing.
-2. **Props pattern** — confirm `interface Props` + `withDefaults(defineProps<Props>(), {...})`,
-   not options-style `defineProps({...})`. Migrate if needed.
-3. **CSS tokens** — audit every custom property in the component's `<style>` block against the
-   corrected rule (consumer relevance, not reuse count):
-   - A value a consumer could plausibly want to override — including a per-state variant like a
-     hover-only width or a dark-theme colour — must be a **public** token (`--component-name-x`),
-     consumed directly at its point of use, even if used only once.
-   - A value with no plausible consumer relevance stays **private** (`--_x`), even if used only
-     once — don't strip the prefix just because reuse is low.
-   - Fix the actual bug class this catches: a consumer-relevant value that's currently private
-     with no public fallback. That's the thing to promote, not every `--_` var you find.
-   - Remove redundant private tokens (the other half of pitfall #20): a `--_` token declared but
-     never read, or one whose whole value is a single `var(--public-token, fallback)` and which is
-     read exactly once, is pure duplication. Delete the unread ones; inline the public token at
-     the single point of use for the rest. Keep a private token that's read in more than one
-     place, is composed (`calc()`, `v-bind()`, several `var()`s), or is re-declared by a
-     state/variant selector. `node .claude/component-ledger/fix-private-tokens.mjs <file.vue>`
-     lists them (dry run); `--write` applies the ones marked `fix`. A `REVIEW` item is declared
-     somewhere other than the root rule or read outside its subtree: check the element that
-     reads it sits inside the one that declares it before adding `--include-review`, or fix it by
-     hand. Afterwards, update any CONSUMER-STYLING.md or skill doc line that names the removed
-     tokens, and delete comments left describing them.
-4. **CONSUMER-STYLING.md** — create or update so every public token the component exposes is
-   documented, with its default. Skip only if the component genuinely has no override surface at
-   all (no CSS custom properties, no class passthrough). Use this fixed layout, in this order:
-   - `## Public token API` — token tables (split into `###` groups by element when there are
-     several), each token with its default; list any private `--_` tokens as "not public API", or
-     say there are none.
-   - `## State hooks` — `data-*` attributes / state selectors and the inner element class names.
-     Omit only if the component has neither.
-   - Component-specific reference sections (motion, sizing model, etc.) may follow here.
-   - `## Global theming` — optional. Include a `:where(html) { ... }` block only when there's
-     something worth showing (e.g. a common site-wide tweak); don't pad it out.
-   - `## Local overrides` — required heading (the ledger's `styling_doc_outdated` check looks for
-     it). The mechanics are the same for every component and live in
-     `.claude/skills/component-local-style-override.md`, so don't write bespoke examples by
-     default. Write one standard paragraph (copy it from any migrated doc, e.g.
-     `05.forms/form-field/CONSUMER-STYLING.md`): set tokens on an element you own (page/section
-     class, or a `:style-class-passthrough` class, or a plain `class` that falls through when there's
-     no passthrough prop); keep the block unlayered; from a **consumer's** `<style scoped>` file,
-     tokens on their own element still work but selectors reaching inside need `:deep()` (this
-     library's own styles are never scoped); link the guide. Then add a **Caveat** only where this
-     component breaks that model, most often a token it re-declares on its own elements (so an
-     ancestor value never lands, e.g. `DisplayThemeSwitch`'s sizing tokens, `ServiceSummary`'s
-     `--display-pill-*`, `InputError`'s `data-theme`), or a wrapper that doesn't forward
-     passthrough. Check with a grep for `^\s*--<name>-[\w-]+\s*:` in the component's `<style>`.
-     Existing examples can stay as `###` subsections (`Page or section`, `One instance`).
-   - `## Recipe: <name>` — optional, for component-specific patterns that need several tokens
-     working together (e.g. InputDescription's panel/callout).
-   - `## Class passthrough` — what `style-class-passthrough` targets and whether it's actually
-     reachable in normal use.
-   - `## Notes` — optional, last.
-
-   Dated "Changed YYYY-MM-DD" migration notes go as blockquotes inside the relevant section.
-5. **Tests** — create or bring up to date in `tests/`, following the Testing Requirements section
-   (mountSuspended, fake-timer rules, etc.). Skip only for a trivial presentational component with
-   no logic worth testing — say so explicitly if you skip.
-6. **Storybook story** — create or update `stories/*.stories.ts` with controls for props/slots
-   that warrant them (see `.claude/skills/storybook-add-story.md`).
-6a. **Storybook Controls-panel reactivity** — check every story `Template`/`render` function in
-    the component's `stories/*.stories.ts` files for this bug: `@storybook/vue3` mounts the story
-    component **once** and, on every Controls-panel change, mutates the same reactive `args`
-    object in place — it never re-runs `setup()`. A story that destructures or spreads `args` into
-    local variables/a ref at setup-time (the tell-tale shape: `const { modelValue, ...otherArgs }
-    = args;`, whether or not it's then fed into a `ref()`) takes a one-time snapshot, so most
-    Controls silently stop updating the rendered story after first render — often alongside a
-    prop-name typo in `argTypes` that compounds it (e.g. a control literally named differently
-    from the real component prop it's meant to drive — check that too). Fix by binding the
-    template directly to the live object (`v-model="args.modelValue"`, `v-bind="componentArgs"`
-    where `componentArgs` is a `computed()` that strips only genuinely non-prop extra args) rather
-    than copying values out in `setup()` — a destructure/spread from `args` is only safe when it's
-    inside a `computed()`. The ledger's `story_args_bug` column flags this automatically (any
-    `{...} = args;` spread not wrapped in a `computed()`); still eyeball each story file yourself,
-    since a differently-shaped variant of the same mistake may not match that exact heuristic.
-7. **Skill doc** — create or update `.claude/skills/components/<component-name>.md`. If the
-   component has wrapper variants (non-Core `.vue` files next to its `*Core.vue`), fold each one's
-   behaviour into this doc as a "Variants" section per `feedback_variants_deprecated_as_own_skill_docs`.
-   If you find a `variants/` subfolder, flatten it into the parent folder (`git mv` the `.vue`
-   files plus their stories/tests up one level, fix relative imports); `pathPrefix: false` keeps
-   the auto-import names unchanged. All existing `variants/` folders were flattened 2026-09-25.
-8. **VS Code snippet** — create or update `.vscode/srcdev-component-{name}.code-snippets`.
-9. **Accessibility** — check for gaps beyond what already-passing tests would catch:
-   - Interactive controls (buttons, toggles, custom form-like widgets) have an accessible name —
-     visible text, `aria-label`, or `aria-labelledby`.
-   - Keyboard behaviour matches what's actually implemented — no keydown case that only calls
-     `event.preventDefault()` with a comment like "could add this later", and no screen-reader
-     copy (visible or `sr-only`) that describes an interaction the component doesn't actually
-     perform. Cross-check every claim in the copy against the handler that's supposed to back it.
-   - Focus is visible (`:focus-visible`, not a suppressed outline) on anything focusable.
-   - Live-updating or auto-advancing content (carousels, marquees, auto-dismissing toasts) has a
-     way to pause it, per WCAG 2.2.2 — a visible control, or pause-on-hover/focus at minimum.
-   - `prefers-reduced-motion` is respected for any animation that isn't purely decorative.
-10. **Localisation (no hardcoded consumer-facing text)** — grep the template and script for
-    user-visible string literals (button copy, `aria-label`/`aria-description` text, placeholder
-    text, empty-state messages, etc.) that aren't already props. This library has no i18n
-    framework dependency (see `MarqueeScroller`'s `playLabel`/`pauseLabel`/`ariaLabel`/
-    `ariaDescription` for the pattern) — promote any hardcoded copy to a string prop with the
-    existing English text as its default, so a consumer can pass translated strings from their own
-    i18n solution. Icon-only controls should also get an icon-override prop or slot (see
-    `playIcon`/`pauseIcon`/`toggle-icon`) alongside the label prop, not just the label.
-11. **No `light-dark()` CSS function in the component's own values** — grep the `<style>` block
-    (and any `v-bind()`-fed script constants) for `light-dark(`. Older iPads/Safari versions don't
-    support it, so this library's own default values must never rely on it — use the existing
-    `--theme-*` token convention (pitfall #14) where one already fits. Where none fits and you're
-    replacing a literal `light-dark(light-value, dark-value)` call directly, keep the **light**
-    value only — don't invent a dark-mode fallback scheme, and don't ask which of the two to keep.
-    The mechanism stays available for consumers: a consumer app is free to define its own public
-    token overrides using `light-dark()` inside its own CSS, since that's their own browser-support
-    decision to make, not this library's default.
-12. **Add the component to the Migrated Fields Form story** — once the component reaches 5/5,
-    add one field for it to
-    `app/components/05.forms/patterns/stories/MigratedFieldsForm.stories.ts` (import the
-    component, add a field to the demo form, wire minimal state/error handling matching the
-    existing fields). This story is a living migration-progress tracker, not just a demo — its own
-    top-of-file comment lists which components are currently included and must be updated too
-    (add the new component to the list, bump the "As of `<date>`" note). Skip only if the
-    component's shape genuinely doesn't fit a form field (e.g. a non-form-input `05.forms` helper
-    component) — state why if you skip.
-13. **Naming** — if the component (or its wrapper variants) still uses a `Core`, `Default` or
-    `WithLabel` suffix, rename it per `.claude/skills/component-naming.md`: bare control `<Name>`,
-    labelled wrapper `<Name>Field`, root DOM class following the new name. Its backlog table gives
-    the proposed name and which consumer repos use the old one. Rows marked **decide**
-    (collision-prone generic names like `Card`/`Tabs`) need an `AskUserQuestion` before renaming.
-    Follow the doc's rename procedure (including updating consumer repos) and tick the row off.
-    Do this as the last checklist step, so the earlier steps' edits don't have to track a
-    mid-flight rename.
+Work through every item in `.claude/skills/component-compliance-checklist.md`, including the
+notes marked **Existing component** (tier move, `variants/` flattening, suffix rename). Read the
+file each run rather than working from memory; it is shared with `/new-component` and gets new
+items. Skip an item only when it genuinely doesn't apply, and say why briefly.
 
 ## 4. Wrap up
 
 - Run the relevant test file(s), `npx eslint <touched files>`, and `npx vue-tsc` (or the project's
   usual type-check command) to confirm nothing broke.
-- If you renamed, added or removed any component `.vue` file (checklist item 13, a flattened
+- If you renamed, added or removed any component `.vue` file (compliance checklist item 13, a flattened
   `variants/` folder, a new wrapper), run `npm run prepare` to regenerate `.nuxt/components.d.ts`
   and tell the user to restart Storybook. A running Storybook keeps its startup component scan, so
   a renamed component silently renders as an empty unknown element there, while Vitest (fresh Nuxt

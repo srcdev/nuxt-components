@@ -386,6 +386,8 @@ See `.claude/skills/storybook-add-font.md` for the step-by-step process to add a
 
 ## Development Workflow
 
+The full definition of done is `.claude/skills/component-compliance-checklist.md`. Use `/new-component` to build a new component against it, and `/migrate-component` to bring an existing one up to it. The steps below are the short version.
+
 1. **Plan**: Check existing patterns in `.claude/skills/`
 2. **Create**: Follow established component patterns
 3. **Style**: Functional base styles with CSS custom properties

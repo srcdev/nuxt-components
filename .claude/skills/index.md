@@ -36,6 +36,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── colour-scheme-disable.md         — disable light/dark scheme support in a consumer app
 ├── component-dynamic-slots.md        — named dynamic slots ($slots iteration) vs indexed dynamic slots (itemCount pattern)
 ├── component-naming.md               — Control/Field naming convention (InputNumber + InputNumberField, no Core/Default/WithLabel suffixes), rename procedure, backlog with consumer usage
+├── component-compliance-checklist.md — definition of done for every component (tier, props, tokens, CONSUMER-STYLING.md layout, tests, story, skill doc, snippet, a11y, i18n, naming, pitfalls); shared by /new-component and /migrate-component
 ├── component-local-style-override.md — overriding a component from a consumer app: public tokens on an ancestor, unscoped page blocks, per-instance class/passthrough, consumer `<style scoped>` + :deep() rules, never @layer overrides
 ├── component-prop-driven-container-layout.md — vary CSS grid layout inside @container queries using data-* attribute selectors
 ├── page-transitions.md               — pageTransition/layoutTransition setup; the self-wrapped <NuxtLayout> + layout:false anti-pattern that pulls the header/nav into the transition boundary; fade CSS
