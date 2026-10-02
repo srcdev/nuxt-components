@@ -31,7 +31,10 @@ watch(
     text-transform: uppercase;
     background-clip: text;
     background-image: var(--eyebrow-text-bg-img, linear-gradient(135deg, #c2a770, #b4747e, #d1bd94));
-    font-style: italic;
+    font-family: var(--eyebrow-text-font-family, inherit);
+    font-style: var(--eyebrow-text-font-style, italic);
+    font-weight: var(--eyebrow-text-font-weight, inherit);
+    letter-spacing: var(--eyebrow-text-letter-spacing, inherit);
     color: transparent;
 
     &.large {

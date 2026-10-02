@@ -13,6 +13,10 @@
       ".$1my-page {",
       "  --eyebrow-text-bg-img: linear-gradient(135deg, $2, $3);",
       "  --eyebrow-text-medium: $4;",
+      "  --eyebrow-text-font-family: ;",
+      "  --eyebrow-text-font-style: ;",
+      "  --eyebrow-text-font-weight: ;",
+      "  --eyebrow-text-letter-spacing: ;",
       "}"
     ]
   }

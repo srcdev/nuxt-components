@@ -8,8 +8,12 @@
 | `--eyebrow-text-large` | `1.4rem` | Font size for `font-size="large"` |
 | `--eyebrow-text-medium` | `1.2rem` | Font size for `font-size="medium"` (default) |
 | `--eyebrow-text-small` | `1rem` | Font size for `font-size="small"` |
+| `--eyebrow-text-font-family` | `inherit` | Font family |
+| `--eyebrow-text-font-style` | `italic` | Font style, e.g. `normal` for upright text |
+| `--eyebrow-text-font-weight` | `inherit` | Font weight |
+| `--eyebrow-text-letter-spacing` | `inherit` | Letter-spacing, e.g. `0.25em` for wide tracking |
 
-The library theme also sets all four on `:root` (`03.theming/_default.css` and
+The library theme also sets the colour and size tokens on `:root` (`03.theming/_default.css` and
 `05.typography/01.tokens/_reponsive-font-sizes.css`) with the same values.
 
 > Changed 2026-09-27: the component now carries those values as fallbacks too. Before, an app that

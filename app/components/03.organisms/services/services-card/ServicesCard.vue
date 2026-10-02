@@ -153,7 +153,8 @@ watch(
       background-color 0.3s ease-in-out,
       border-color 0.3s ease-in-out,
       outline-color 0.3s ease-in-out,
-      outline-offset 0.3s ease-in-out;
+      outline-offset 0.3s ease-in-out,
+      transform 0.3s ease-in-out;
 
     &.is-clickable {
       color: inherit;
@@ -171,6 +172,14 @@ watch(
         border-color: var(--services-card-border-colour-hover, var(--services-card-border-colour, transparent));
         outline-color: var(--services-card-outline-colour-hover, transparent);
         outline-offset: var(--services-card-outline-offset-hover, 0px);
+        transform: var(--services-card-transform-hover, none);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        &:hover,
+        &:focus-visible {
+          transform: none;
+        }
       }
     }
 
@@ -252,6 +261,7 @@ watch(
 
       .description {
         color: var(--description-text-colour, var(--colour-text-secondary));
+        font-weight: var(--description-font-weight, inherit);
         line-height: var(--description-line-height, 1.4);
         padding-block: var(--description-padding-block, 0 0);
 
@@ -280,13 +290,16 @@ watch(
           border-block-start: 1px solid var(--meta-border-colour, var(--theme-border));
           color: var(--meta-text-colour, inherit);
           font-size: var(--meta-font-size, 1.4rem);
+          letter-spacing: var(--meta-letter-spacing, inherit);
           text-transform: var(--meta-text-transform, uppercase);
 
           .meta-duration {
+            color: var(--meta-duration-text-colour, inherit);
             font-weight: var(--meta-duration-font-weight, 500);
           }
 
           .meta-price {
+            color: var(--meta-price-text-colour, inherit);
             font-weight: var(--meta-price-font-weight, 700);
           }
         }

@@ -71,9 +71,10 @@ reference: `app/components/01.atoms/text-blocks/eyebrow-text/CONSUMER-STYLING.md
 
 ## Styling
 
-Key CSS custom properties:
+Key CSS custom properties (full list in `CONSUMER-STYLING.md`):
 
-- `--colour-text-eyebrow` — text colour (defaults to an accent/muted tone)
+- `--eyebrow-text-bg-img` — text fill (gradient via `background-clip: text`; use a single-colour gradient for a solid colour)
+- `--eyebrow-text-font-family`, `--eyebrow-text-font-style` (default `italic`), `--eyebrow-text-font-weight`, `--eyebrow-text-letter-spacing` — typography
 
 Text is always `text-transform: uppercase` — do not pass pre-uppercased strings, as this makes content harder to edit and search.
 
@@ -95,8 +96,9 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
    ─────────────────────────────────────────────────────────────────── */
 .eyebrow-text {
   &.my-eyebrow {
-    /* Colours */
-    /* --colour-text-eyebrow: var(--brand-accent); */
+    /* --eyebrow-text-bg-img: linear-gradient(var(--brand-accent), var(--brand-accent)); */
+    /* --eyebrow-text-font-style: normal; */
+    /* --eyebrow-text-letter-spacing: 0.2em; */
   }
 }
 </style>

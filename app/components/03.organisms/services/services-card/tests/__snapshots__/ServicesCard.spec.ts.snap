@@ -2,7 +2,10 @@
 
 exports[`ServicesCard > renders correct HTML structure 1`] = `
 "<div class="services-card">
-  <div class="image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/test.jpg 1x, /_ipx/_/images/test.jpg 2x" alt="Test Service" loading="lazy" class="image" src="/_ipx/_/images/test.jpg"></div>
+  <div class="grid-stack image-wrapper">
+    <div class="grid-stack__layer"><img data-nuxt-img="" srcset="/_ipx/_/images/test.jpg 1x, /_ipx/_/images/test.jpg 2x" alt="Test Service" loading="lazy" class="image" src="/_ipx/_/images/test.jpg"></div>
+    <div class="grid-stack__layer"></div>
+  </div>
   <div class="details-wrapper">
     <div class="eyebrow-text large">A subtitle</div>
     <h2 class="hero-text heading axis-horizontal">
