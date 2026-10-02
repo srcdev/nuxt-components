@@ -12,6 +12,7 @@
 | `tag`                   | `"div" \| "section" \| "article"` | `"div"`     | no       |
 | `href`                  | `string`                           | `undefined` | no       |
 | `external`              | `boolean`                          | `false`     | no       |
+| `titlesWithinImageWrapper` | `boolean`                       | `false`     | no       |
 | `eyebrowConfig`         | `ServicesCardEyebrowConfig`                    | `{}`        | no       |
 | `heroConfig`            | `ServicesCardHeroConfig`                       | `{}`        | no       |
 | `durationText`          | `string`                           | `undefined` | no       |
@@ -30,6 +31,17 @@ If an `actions` slot is provided, the card stays as a static `tag` element (no h
 
 `is-clickable` is added to the root class list when whole-card-clickable mode is active, giving `cursor: pointer` and removing default link colour/underline. It's also what gates the border/outline hover/focus interaction-state tokens — see "Interaction states (whole-card-clickable only)" in `CONSUMER-STYLING.md`; they're a no-op when the card isn't clickable, since only `.is-clickable` has a `:hover`/`:focus-visible` rule.
 
+### Titles over the image (`titlesWithinImageWrapper`)
+
+When `true`, the eyebrow and title move out of `.details-wrapper` and sit over the bottom of the image instead. The image wrapper is a `GridStack`: the image is layer 1, and `.image-wrapper-details` (eyebrow + title) is layer 2. The description, meta row and actions stay below the image.
+
+- A gradient scrim behind the text keeps it readable. Its colour comes from `--image-wrapper-details-scrim-colour` (default black), and `--image-wrapper-details-scrim` replaces the whole background (`none` removes it).
+- Text colour uses `contrast-color()` against the scrim colour where supported (black or white, whichever reads better), falling back to white. It reads the scrim colour only, not the photo, so if you remove the scrim, set `--image-wrapper-details-text-colour` yourself.
+- The eyebrow's gradient fill is turned off over the image; it takes the text colour (or `--image-wrapper-details-eyebrow-text-colour`).
+- The eyebrow's default `fontSize` is `"medium"` in this mode (vs `"large"` below the image). `eyebrowConfig`/`heroConfig` still apply.
+
+See "Titles over the image" in `CONSUMER-STYLING.md` for the token list.
+
 ### EyebrowConfig
 
 Exported as `ServicesCardEyebrowConfig` (and `ServicesCardHeroConfig` below) from `srcdev-nuxt-components` since 2026-09-28.
@@ -37,7 +49,7 @@ Exported as `ServicesCardEyebrowConfig` (and `ServicesCardHeroConfig` below) fro
 | Key        | Type                              | Default   |
 | ---------- | ---------------------------------- | --------- |
 | `tag`      | `"p" \| "div" \| "span"`          | `"div"`   |
-| `fontSize` | `"large" \| "medium" \| "small"`  | `"large"` |
+| `fontSize` | `"large" \| "medium" \| "small"`  | `"large"` (`"medium"` with `titlesWithinImageWrapper`) |
 
 ### HeroConfig
 
@@ -159,6 +171,16 @@ See `CONSUMER-STYLING.md` for the full token list — every token is a plain pub
 consumed directly at its point of use (no `--_`-prefixed private indirection layer), so all of
 them work both globally (`:root`) and scoped like the example above.
 
+## Titles over the image usage
+
+```vue
+<ServicesCard :service-data="service" titles-within-image-wrapper>
+  <template #actions="{ serviceData }">
+    <InputButton variant="secondary" button-text="Enquire" :href="`/services/${serviceData.slug}`" />
+  </template>
+</ServicesCard>
+```
+
 ## Whole-card clickable usage
 
 ```vue
@@ -173,6 +195,6 @@ No `actions` slot — the entire card renders as an anchor (`NuxtLink` for the i
 - The `Service` type is imported from `~/types/types.services`.
 - Root markup is two rows (`grid-template-rows: auto 1fr`): `.image-wrapper`, then a `.details-wrapper` (`display: flex; flex-direction: column`) holding the eyebrow, title, description, and a `.footer` wrapper. Description length is controlled by `--description-line-clamp` (default effectively unclamped) rather than a fixed-height grid row.
 - `.footer` groups the meta row and the `actions` slot and gets `margin-block-start: auto`, pinning them to the bottom of the card. Combined with the root's `1fr` details row, this means when `ServicesCardGrid`'s default `align-items: stretch` makes a card taller than its own content (to match a taller sibling in the same row), the extra height goes to `.footer`'s top margin rather than leaving whitespace below the actions slot — so the meta row and actions/button line up across a row of cards regardless of each card's description length. This does the visual job of CSS subgrid without needing a subgrid chain across `ServicesCard`/`ServicesCardGrid` (which would also break whenever cards in a row don't all render the same optional rows — `.meta` and `actions` are both conditional).
-- Image has a `3/4` aspect ratio with a subtle scale-on-hover effect.
+- Image has a `3/4` aspect ratio with a subtle scale-on-hover effect. The hover is on `.image-wrapper`, not the image, so it still fires when the overlaid titles cover the image. `.image-wrapper-details` is `position: relative; z-index: 1` because the image's hover `transform` would otherwise paint over it, and `.image-wrapper` sets `isolation: isolate` so that z-index stays inside the card.
 - `.services-card`, `.image-wrapper`, `.details-wrapper`, and `.footer` all set `min-inline-size: 0`. Without it, an unbreakable child — most commonly a long `actions` slot button label, since `InputButton`'s `.button-text` is `white-space: nowrap` with no ellipsis — forces its content's min-content width up through the flex/grid chain and widens that one card's grid column in `ServicesCardGrid` wider than its siblings (the image just rides along on the widened column; it isn't the actual cause). If you see one card/column wider than the rest with cut-off content, check for a long unbreakable string in a slot before assuming it's an image sizing issue.
 - Usually consumed via `ServicesCardGrid` rather than directly.

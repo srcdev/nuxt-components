@@ -62,6 +62,20 @@ i.e. `is-clickable` is on the root — since these all default to `transparent`/
 | `--footer-padding-block` | `0` | Padding on the `.footer` wrapper (meta row + actions slot) |
 | `--footer-wrapper-grid-gap` | `1rem` | Gap between the meta row and the actions slot inside `.footer` |
 
+### Titles over the image (`titlesWithinImageWrapper`)
+
+| Token | Default | Controls |
+|---|---|---|
+| `--image-wrapper-details-scrim-colour` | `#000` | Colour of the gradient scrim behind the title/eyebrow. Use an opaque colour: the default scrim fades it with `color-mix()`, and the text colour is derived from it |
+| `--image-wrapper-details-scrim` | `linear-gradient(to top, <scrim colour at 75%>, transparent 70%)` | The whole scrim `background` value — replace it for a different shape or direction, or set `none` to remove it |
+| `--image-wrapper-details-text-colour` | `contrast-color(<scrim colour>)`, `#fff` without support | Title/eyebrow text colour. Where `contrast-color()` is supported it picks black or white against the scrim colour, so a light scrim gets dark text automatically |
+| `--image-wrapper-details-eyebrow-text-colour` | `inherit` | Eyebrow colour. The eyebrow's gradient fill is turned off over the image so it can't clash with the photo |
+| `--image-wrapper-details-gap` | `0.5rem` | Gap between eyebrow and title |
+| `--image-wrapper-details-eyebrow-text-padding-block` / `-inline` | `0` / `2.2rem` | Eyebrow padding |
+| `--image-wrapper-details-hero-text-padding-block` / `-inline` | `1.2rem 2.2rem` / `2.2rem` | Title padding |
+
+`contrast-color()` only reads the scrim colour, not the photo. If you remove the scrim, set `--image-wrapper-details-text-colour` yourself to suit the images.
+
 ```css
 /* assets/styles/setup/07.components/services-card.css */
 :root {

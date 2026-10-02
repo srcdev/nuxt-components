@@ -5,16 +5,40 @@
     class="services-card"
     :class="[elementClasses, { 'is-clickable': isClickable() }]"
   >
-    <div class="image-wrapper">
-      <NuxtImg :src="serviceData.image" :alt="serviceData.title" loading="lazy" class="image" />
-    </div>
+    <GridStack tag="div" :style-class-passthrough="['image-wrapper']">
+      <template #layer-1>
+        <NuxtImg :src="serviceData.image" :alt="serviceData.title" loading="lazy" class="image" />
+      </template>
+      <template #layer-2>
+        <div v-if="props.titlesWithinImageWrapper" class="image-wrapper-details">
+          <EyebrowText
+            :font-size="eyebrowConfig.fontSize ?? 'medium'"
+            :tag="eyebrowConfig.tag ?? 'div'"
+            :text-content="serviceData.subtitle"
+          />
+          <HeroText
+            :tag="heroConfig.tag ?? 'h2'"
+            :font-size="heroConfig.fontSize ?? 'heading'"
+            :text-content="[
+              {
+                text: serviceData.title,
+                styleClass: 'normal',
+              },
+            ]"
+          />
+        </div>
+      </template>
+    </GridStack>
+
     <div class="details-wrapper">
       <EyebrowText
+        v-if="!props.titlesWithinImageWrapper"
         :font-size="eyebrowConfig.fontSize ?? 'large'"
         :tag="eyebrowConfig.tag ?? 'div'"
         :text-content="serviceData.subtitle"
       />
       <HeroText
+        v-if="!props.titlesWithinImageWrapper"
         :tag="heroConfig.tag ?? 'h2'"
         :font-size="heroConfig.fontSize ?? 'heading'"
         :text-content="[
@@ -50,6 +74,7 @@ interface Props {
   tag?: "div" | "section" | "article";
   serviceData: Service;
   href?: string;
+  titlesWithinImageWrapper?: boolean;
   /**
    * Force a real browser navigation instead of client-side routing, even for a same-origin
    * href starting with "/". See InputButton's `external` prop for the full rationale.
@@ -67,6 +92,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
   href: undefined,
+  titlesWithinImageWrapper: false,
   external: false,
   eyebrowConfig: () => ({}),
   heroConfig: () => ({}),
@@ -114,6 +140,9 @@ watch(
     gap: var(--services-card-gap, 1rem);
     min-inline-size: 0;
 
+    background-color: var(--services-card-background-color, transparent);
+    padding-block: var(--services-card-padding-block,);
+    padding-inline: var(--services-card-padding-inline, 0);
     border-radius: var(--services-card-border-radius, 0);
     border: var(--services-card-border-width, 1px) solid var(--services-card-border-colour, transparent);
     outline: var(--services-card-outline-width, 2px) solid var(--services-card-outline-colour, transparent);
@@ -121,6 +150,7 @@ watch(
     overflow: hidden;
 
     transition:
+      background-color 0.3s ease-in-out,
       border-color 0.3s ease-in-out,
       outline-color 0.3s ease-in-out,
       outline-offset 0.3s ease-in-out;
@@ -134,6 +164,10 @@ watch(
       &:focus-visible {
         /* Falls back to the resting border colour (not transparent) so setting only
            --services-card-border-colour doesn't make the border vanish on hover/focus. */
+        background-color: var(
+          --services-card-background-color-hover,
+          var(--services-card-background-color, transparent)
+        );
         border-color: var(--services-card-border-colour-hover, var(--services-card-border-colour, transparent));
         outline-color: var(--services-card-outline-colour-hover, transparent);
         outline-offset: var(--services-card-outline-offset-hover, 0px);
@@ -144,6 +178,7 @@ watch(
       aspect-ratio: var(--image-wrapper-aspect-ratio, 3/4);
       border-radius: var(--image-wrapper-border-radius, 8px);
       overflow: hidden;
+      isolation: isolate;
       min-inline-size: 0;
       padding-block: var(--image-wrapper-padding-block, 0 0);
       padding-inline: var(--image-wrapper-padding-inline, 0 0);
@@ -154,9 +189,46 @@ watch(
         width: 100%;
         height: 100%;
         transition: transform 0.3s ease-in-out;
+      }
 
-        &:hover {
-          transform: var(--image-wrapper-border-image-zoom-transform, scale(1.05));
+      &:hover .image {
+        transform: var(--image-wrapper-border-image-zoom-transform, scale(1.05));
+      }
+
+      .image-wrapper-details {
+        --_scrim-colour: var(--image-wrapper-details-scrim-colour, #000);
+
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-auto-flow: row;
+        align-content: end;
+        gap: var(--image-wrapper-details-gap, 0.5rem);
+        height: 100%;
+        color: var(--image-wrapper-details-text-colour, #fff);
+        background: var(--image-wrapper-details-scrim, linear-gradient(to top, rgb(0 0 0 / 0.75), transparent 70%));
+
+        @supports (color: color-mix(in oklab, red, transparent)) {
+          background: var(
+            --image-wrapper-details-scrim,
+            linear-gradient(to top, color-mix(in oklab, var(--_scrim-colour) 75%, transparent), transparent 70%)
+          );
+        }
+
+        @supports (color: contrast-color(red)) {
+          color: var(--image-wrapper-details-text-colour, contrast-color(var(--_scrim-colour)));
+        }
+
+        .eyebrow-text {
+          --eyebrow-text-bg-img: none;
+          color: var(--image-wrapper-details-eyebrow-text-colour, inherit);
+          padding-block: var(--image-wrapper-details-eyebrow-text-padding-block, 0);
+          padding-inline: var(--image-wrapper-details-eyebrow-text-padding-inline, 2.2rem);
+        }
+
+        .hero-text {
+          padding-block: var(--image-wrapper-details-hero-text-padding-block, 1.2rem 2.2rem);
+          padding-inline: var(--image-wrapper-details-hero-text-padding-inline, 2.2rem);
         }
       }
     }
@@ -175,7 +247,7 @@ watch(
       }
 
       .hero-text {
-        padding-block: var(--hero-text-padding-block, 2rem 1rem);
+        padding-block: var(--hero-text-padding-block, 1.2rem 1rem);
       }
 
       .description {
@@ -198,18 +270,26 @@ watch(
         margin-block-start: auto;
         min-inline-size: 0;
         padding-block: var(--footer-padding-block, 0);
-      }
 
-      .meta {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-        padding-block: var(--meta-padding-block, 1.6rem 0);
-        border-block-start: 1px solid var(--meta-border-colour, var(--theme-border));
-        color: var(--meta-text-colour, inherit);
-        font-size: var(--meta-font-size, 1.4rem);
-        text-transform: var(--meta-text-transform, uppercase);
+        .meta {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          padding-block: var(--meta-padding-block, 1.6rem 0);
+          border-block-start: 1px solid var(--meta-border-colour, var(--theme-border));
+          color: var(--meta-text-colour, inherit);
+          font-size: var(--meta-font-size, 1.4rem);
+          text-transform: var(--meta-text-transform, uppercase);
+
+          .meta-duration {
+            font-weight: var(--meta-duration-font-weight, 500);
+          }
+
+          .meta-price {
+            font-weight: var(--meta-price-font-weight, 700);
+          }
+        }
       }
     }
   }

@@ -25,6 +25,17 @@
       "<ServicesCard :service-data=\"$1service\" :href=\"`/services/${$1service.slug}`\" />"
     ]
   },
+  "SRCDEV ServicesCard Titles Over Image": {
+    "description": "ServicesCard with eyebrow and title overlaid on the image, over a scrim",
+    "scope": "vue,html",
+    "body": [
+      "<ServicesCard :service-data=\"$1service\" titles-within-image-wrapper>",
+      "  <template #actions=\"{ serviceData }\">",
+      "    <InputButton variant=\"secondary\" button-text=\"$2Enquire\" :href=\"`/services/${serviceData.slug}`\" />",
+      "  </template>",
+      "</ServicesCard>"
+    ]
+  },
   "SRCDEV ServicesCard With Config Overrides": {
     "description": "ServicesCard with eyebrowConfig/heroConfig overrides",
     "scope": "vue,html",
@@ -86,21 +97,30 @@
       "    --details-wrapper-grid-gap: ;",
       "    --details-wrapper-padding-block: ;",
       "    --details-wrapper-padding-inline: ;",
+      "    --eyebrow-text-padding-block: ;",
+      "    --hero-text-padding-block: ;",
+      "    --description-text-colour: ;",
       "    --description-padding-block: ;",
       "    --description-line-height: ;",
       "    --description-line-clamp: ;",
       "    --meta-padding-block: ;",
+      "    --meta-border-colour: ;",
+      "    --meta-text-colour: ;",
+      "    --meta-font-size: ;",
       "    --meta-text-transform: ;",
       "    --footer-padding-block: ;",
       "    --footer-wrapper-grid-gap: ;",
       "",
-      "    /* Local-only tokens — page-scoped override only, no :root fallback */",
-      "    --_eyebrow-text-padding-block: ;",
-      "    --_hero-text-padding-block: ;",
-      "    --_description-text-colour: ;",
-      "    --_meta-border-colour: ;",
-      "    --_meta-text-colour: ;",
-      "    --_meta-font-size: ;",
+      "    /* Titles over the image (titlesWithinImageWrapper) */",
+      "    --image-wrapper-details-scrim-colour: ;",
+      "    --image-wrapper-details-scrim: ;",
+      "    --image-wrapper-details-text-colour: ;",
+      "    --image-wrapper-details-eyebrow-text-colour: ;",
+      "    --image-wrapper-details-gap: ;",
+      "    --image-wrapper-details-eyebrow-text-padding-block: ;",
+      "    --image-wrapper-details-eyebrow-text-padding-inline: ;",
+      "    --image-wrapper-details-hero-text-padding-block: ;",
+      "    --image-wrapper-details-hero-text-padding-inline: ;",
       "  }",
       "}"
     ]
