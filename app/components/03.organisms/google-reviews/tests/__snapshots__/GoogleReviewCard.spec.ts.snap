@@ -1,0 +1,9 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`GoogleReviewCard > renders correct HTML structure 1`] = `
+"<article class="google-review-card">
+  <div class="google-review-card-author"><span class="display-avatar md" aria-hidden="true"><img data-nuxt-img="" srcset="/_ipx/_/https://lh3.googleusercontent.com/a 1x, /_ipx/_/https://lh3.googleusercontent.com/a 2x" alt="" class="display-avatar-image" src="/_ipx/_/https://lh3.googleusercontent.com/a"></span><a id="v-0-0" href="https://maps.google.com/contrib/1" class="google-review-card-author-name">Alex Doe</a><time datetime="2026-09-18T10:00:00Z" class="google-review-card-time">2 weeks ago</time></div>
+  <div class="google-review-card-rating"><span class="google-review-card-stars" style="--_rating: 4;" aria-hidden="true">★★★★★</span><span class="sr-only">Rated 4 out of 5</span></div>
+  <p class="google-review-card-text">Lovely visit, would come again.</p><a href="https://maps.google.com/review/1" aria-describedby="v-0-0" class="google-review-card-link">Read on Google</a>
+</article>"
+`;

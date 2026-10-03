@@ -81,6 +81,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── page-hero-highlights.md — PageHeroHighlights template: hero + highlights strip grid, CSS custom property theming
     ├── slider-gallery.md       — SliderGallery: full-screen image carousel, IGalleryData, pause-on-hover/reduced-motion auto-advance, prefixed classes, CSS tokens
     ├── services-card.md        — ServicesCard props (incl. eyebrowConfig/heroConfig), actions slot, CSS tokens, page boilerplate
+    ├── google-reviews.md        — GoogleReviews + GoogleReviewCard: Google Places reviews in a scrolling row; env vars, server route, useGoogleReviews, props, slots, tokens, Google terms
     ├── services-card-grid.md        — ServicesCardGrid props, config pass-through, CSS tokens, full page boilerplate
     ├── service-summary-grid.md      — ServiceSummaryGrid props, useAlternateReverse zigzag layout, page boilerplate
     ├── service-summary.md           — ServiceSummary props, summary-link slot, DisplayPill duration/price (renamed/stripped from ServicesSection — full mode is now ServiceDetail)

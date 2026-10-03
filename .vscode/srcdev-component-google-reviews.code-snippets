@@ -1,0 +1,78 @@
+{
+  "SRCDEV GoogleReviews Basic": {
+    "description": "GoogleReviews fed by useGoogleReviews() (needs NUXT_GOOGLE_REVIEWS_API_KEY and NUXT_GOOGLE_REVIEWS_PLACE_ID)",
+    "scope": "vue,html",
+    "body": [
+      "<GoogleReviews :data=\"${1:googleReviews}\" />"
+    ]
+  },
+  "SRCDEV GoogleReviews Script": {
+    "description": "Fetch Google reviews from the layer's server route",
+    "scope": "typescript,javascript,vue",
+    "body": [
+      "const { data: ${1:googleReviews} } = await useGoogleReviews();"
+    ]
+  },
+  "SRCDEV GoogleReviews With Heading": {
+    "description": "GoogleReviews labelled by its own heading, optionally filtered",
+    "scope": "vue,html",
+    "body": [
+      "<GoogleReviews :data=\"${1:googleReviews}\" :min-rating=\"${2:0}\">",
+      "  <template #heading=\"{ headingId }\">",
+      "    <h2 :id=\"headingId\">${3:What clients say}</h2>",
+      "  </template>",
+      "</GoogleReviews>"
+    ]
+  },
+  "SRCDEV GoogleReviews Custom Card": {
+    "description": "GoogleReviews with each card rendered through the card slot",
+    "scope": "vue,html",
+    "body": [
+      "<GoogleReviews :data=\"${1:googleReviews}\">",
+      "  <template #card=\"{ review }\">",
+      "    <GoogleReviewCard :review=\"review\" :style-class-passthrough=\"['${2:my-review}']\" />",
+      "  </template>",
+      "</GoogleReviews>"
+    ]
+  },
+  "SRCDEV GoogleReviews CSS Override": {
+    "description": "CSS override scaffold for GoogleReviews — scope to a page or section class. See CONSUMER-STYLING.md for the full token list.",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  .google-reviews {",
+      "    --google-reviews-gap: ;",
+      "    --google-reviews-card-width: ;",
+      "    --google-reviews-scroll-padding: ;",
+      "    --google-reviews-scrollbar-width: ;",
+      "    --google-reviews-scrollbar-thumb-colour: ;",
+      "    --google-reviews-scrollbar-track-colour: ;",
+      "    --google-reviews-summary-rating-font-size: ;",
+      "    --google-reviews-focus-outline-width: ;",
+      "    --google-reviews-focus-outline-colour: ;",
+      "",
+      "    --google-reviews-card-gap: ;",
+      "    --google-reviews-card-padding: ;",
+      "    --google-reviews-card-border-width: ;",
+      "    --google-reviews-card-border-colour: ;",
+      "    --google-reviews-card-border-radius: ;",
+      "    --google-reviews-card-surface: ;",
+      "    --google-reviews-card-text-colour: ;",
+      "    --google-reviews-avatar-surface: ;",
+      "    --google-reviews-avatar-text-colour: ;",
+      "    --google-reviews-author-font-weight: ;",
+      "    --google-reviews-author-line-clamp: ;",
+      "    --google-reviews-text-line-height: ;",
+      "    --google-reviews-text-line-clamp: ;",
+      "    --google-reviews-link-colour: ;",
+      "",
+      "    --google-reviews-star-size: ;",
+      "    --google-reviews-star-colour: ;",
+      "    --google-reviews-star-empty-colour: ;",
+      "    --google-reviews-meta-font-size: ;",
+      "    --google-reviews-meta-text-colour: ;",
+      "  }",
+      "}"
+    ]
+  }
+}

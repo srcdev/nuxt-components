@@ -19,6 +19,13 @@ export default defineNuxtConfig({
     resendApiKey: "", // NUXT_RESEND_API_KEY
     contactEmailTo: "", // NUXT_CONTACT_EMAIL_TO   — inbox that receives enquiries
     contactEmailFrom: "", // NUXT_CONTACT_EMAIL_FROM — must be a verified Resend domain
+    // Used by server/api/google-reviews.get.ts (GoogleReviews component)
+    googleReviews: {
+      apiKey: "", // NUXT_GOOGLE_REVIEWS_API_KEY — Places API (New) key
+      placeId: "", // NUXT_GOOGLE_REVIEWS_PLACE_ID
+      languageCode: "", // NUXT_GOOGLE_REVIEWS_LANGUAGE_CODE — optional, e.g. en-GB
+      cacheMaxAge: 3600, // NUXT_GOOGLE_REVIEWS_CACHE_MAX_AGE — seconds
+    },
     public: {
       whatsappNumber: "", // NUXT_PUBLIC_WHATSAPP_NUMBER — in international format, no + or spaces, e.g. 447700900000
       // Consumer apps that don't support dark/light mode can opt out entirely:
@@ -127,6 +134,8 @@ export default defineNuxtConfig({
     // In Storybook, use 'none' provider so images render as plain /images/... paths
     // (avoids /_vercel/image which has no source images in storybook-static/)
     provider: process.env.STORYBOOK ? "none" : undefined,
+    // GoogleReviews reviewer photos
+    domains: ["lh3.googleusercontent.com"],
   },
   vite: {
     optimizeDeps: {
