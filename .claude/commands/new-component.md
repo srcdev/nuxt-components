@@ -79,9 +79,16 @@ Reply with a short spec, then wait for approval or changes before writing any fi
 4. **References**: each component or example read, and what's being taken from it.
 5. **Acceptance criteria**: numbered (AC1, AC2, ...), each with the test(s) and story that will
    prove it. Add criteria the checklist implies but the brief didn't state (keyboard, focus,
-   reduced motion, pause for auto-advancing content) and mark them as added.
-6. **Proposals**: anything the user left as "you decide", stated as a choice, not a question.
-7. **Out of scope**: carried over from the brief.
+   reduced motion, pause for auto-advancing content) and mark them as added. Always include
+   "survives worst-case data without breaking layout", proved by the `StressTest` story
+   (checklist item 6b), with the specific hostile cases for this component listed.
+6. **Non-component parts**: anything outside the component folder the brief needs, e.g. a server
+   route under `server/api/` (with testable logic in `server/lib/`), a composable, `runtimeConfig`
+   entries and their env vars (plus `.env.example`), `nuxt.config.ts` changes such as
+   `image.domains`, or a third-party API and its terms, limits and billing. Secrets stay in
+   server-only `runtimeConfig`, never `public`.
+7. **Proposals**: anything the user left as "you decide", stated as a choice, not a question.
+8. **Out of scope**: carried over from the brief.
 
 Revise and replay the spec until the user approves it. The approved spec is the build contract:
 if something in it turns out to be wrong during the build, stop and say so rather than quietly
@@ -108,6 +115,9 @@ plus, outside the component folder:
 - `.vscode/srcdev-component-<family>.code-snippets`
 - `app/types/components/<family>.d.ts` + export from `app/types/components/index.ts`, only if
   consumers need to import a type
+- every non-component part listed in the spec, with tests for any server logic (keep it in a
+  plain function in `server/lib/` so it can be tested without a running server). The skill doc
+  covers their setup too (env vars, route, composable).
 
 Model each file on a recently migrated component in the same tier rather than writing from a
 blank page; `05.forms/input-number/` is the reference for a control + Field pair. Name test cases

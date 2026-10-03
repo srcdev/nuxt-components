@@ -53,6 +53,36 @@ an inline fallback, even if that fallback happens to be a Tier 1 or Tier 2 token
   colour, fixed on purpose across states), reuse the base token — don't manufacture a second name
   for a value that never diverges.
 
+## Line-clamp tokens
+
+Text that could overflow (names, titles, descriptions, body text) gets one public token per
+element, `--{component}-{element}-line-clamp`. It covers both ellipsis cases: `1` is single-line
+ellipsis, any other number caps the lines with an ellipsis on the last, `none` shows everything.
+Prefer this over a prop: line count is presentation, and CSS handles it without a re-render.
+
+```css
+.google-review-card-author-name {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere; /* unbroken strings still wrap before the clamp applies */
+  -webkit-line-clamp: var(--google-reviews-author-line-clamp, 2);
+  line-clamp: var(--google-reviews-author-line-clamp, 2);
+}
+```
+
+- Default to `none` unless the layout clearly needs a cap (a row of equal-height cards, say). Use
+  `none` for "no clamp", never a large number like `100` (`ServicesCard`'s
+  `--description-line-clamp: 100` predates this; switch it to `none` when it's next migrated).
+- Don't clamp text that must stay readable: legal or attribution text, error messages, link text
+  that names its destination.
+- Clamped text stays in the DOM, so screen readers read all of it; sighted users lose the rest,
+  which is why `none` is the default. If a clamped item has nowhere else to read it in full,
+  consider a "read more" link or a `title`.
+- `display: -webkit-box` makes an inline element (`<a>`, `<span>`) block-level; check the
+  layout around it.
+- Document it in `CONSUMER-STYLING.md` with its default and the `1`/`none` options.
+
 ## Multi-level fallback chains are fine
 
 A component that wants to *look like* another component's default (rather than duplicating a

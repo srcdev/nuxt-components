@@ -49,7 +49,10 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
      tokens, and delete comments left describing them.
    - Colours default from `--theme-*` tokens through the component's own public tokens, never by
      reading a global `--theme-*` token bare at the point of use (pitfall #14). Pair a dark/bold
-     surface with `--theme-on-surface`, not `--theme-text` (pitfall #13).
+     surface with `--theme-on-surface`, not `--theme-text` (pitfall #13). For a card or panel
+     background default to `--theme-surface-subtle` (the surface `--theme-text` sits on);
+     `--theme-surface` and `--theme-border` are bold steps meant for buttons and focus, and make a
+     card a solid block of theme colour.
    - Style rules sit in `@layer components`, with child selectors nested inside the root block
      using native nesting (`& .block__child`), never Sass `&__child` concatenation
      (`css-nesting-conventions.md`).
@@ -91,7 +94,9 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
    from slots, test it by toggling a `v-if`'d slot in a host component after mount (pitfall #25).
 6. **Storybook story** — create or update `stories/*.stories.ts` with controls for props/slots
    that warrant them (see `.claude/skills/storybook-add-story.md`). The story title uses the tier
-   name directly.
+   name directly. A component whose layout responds to its container gets the `CanvasSwitcher`
+   decorator (see `PageRow.stories.ts` or `GoogleReviews.stories.ts`, which also shows a per-story
+   starting canvas via `parameters.initialCanvas`) rather than a hand-sized wrapper or a width arg.
 6a. **Storybook Controls-panel reactivity** — check every story `Template`/`render` function in
     the component's `stories/*.stories.ts` files for this bug: `@storybook/vue3` mounts the story
     component **once** and, on every Controls-panel change, mutates the same reactive `args`
@@ -107,6 +112,27 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
     inside a `computed()`. The ledger's `story_args_bug` column flags this automatically (any
     `{...} = args;` spread not wrapped in a `computed()`); still eyeball each story file yourself,
     since a differently-shaped variant of the same mistake may not match that exact heuristic.
+6b. **Stress-test story** — add a `StressTest` story ("Stress Test (Worst-Case Data)") that
+    feeds the component the most hostile data a QA tester could think of, and fix whatever it
+    breaks. Go through every prop, slot and data field and ask what would break it, for example:
+    - very long text, and long **unbroken** strings (no spaces, a long URL) in every text field,
+      including labels and copy props (long translated copy, e.g. German)
+    - empty strings, missing optional fields, a single character, a single item, the maximum
+      number of items
+    - emoji (including at the start of anything that takes initials or first letters), HTML-like
+      text (must render as text), right-to-left text
+    - out-of-range or odd numbers (0, negative, above the maximum, fractional, very large)
+    - broken image or link URLs
+    Describe what to check in the story's docs description, and look at it at every
+    `CanvasSwitcher` width. Fixes usually mean `overflow-wrap: anywhere`, `min-inline-size: 0` on
+    flex/grid children, `Array.from(str)` instead of `str[0]`, and `clamp()` on values
+    derived from data. Give each text element a consumer might want to shorten (names, titles,
+    descriptions, body text) a line-clamp token, `--<component>-<element>-line-clamp`, which
+    covers ellipsis too (`1` is single-line ellipsis). Default it to `none` unless the layout
+    clearly needs a cap, and never clamp text that must stay readable (legal or attribution text,
+    link text that names its destination). Shape and rules: `theming-component-token-pattern.md`,
+    "Line-clamp tokens". Add a unit test for any logic fix. A component that takes no data or copy
+    (e.g. a pure layout wrapper) still gets one with oversized slot content.
 7. **Skill doc** — create or update `.claude/skills/components/<component-name>.md`, following the
    pattern of an existing one. A labelled `<Name>Field` wrapper (or any other wrapper) is documented
    in its control's doc under a "Variants" section, not in a doc of its own
@@ -128,7 +154,11 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
      way to pause it, per WCAG 2.2.2 — a visible control, or pause-on-hover/focus at minimum.
    - `prefers-reduced-motion` is respected for any animation that isn't purely decorative.
    - A component with a `tag` prop that can render a landmark uses `useAriaLabelledById`
-     (`component-aria-landmark.md`).
+     (`component-aria-landmark.md`), unless it falls back to `aria-label` when no heading is
+     given: the composable can't do that and warns whenever a landmark has no heading. Then label
+     it directly with `useId()` (`aria-labelledby` when the heading slot is filled, `aria-label`
+     otherwise, both decided by a function called from the template, per pitfall #25), as
+     `GoogleReviews` does.
 10. **Localisation (no hardcoded consumer-facing text)** — grep the template and script for
     user-visible string literals (button copy, `aria-label`/`aria-description` text, placeholder
     text, empty-state messages, etc.) that aren't already props. This library has no i18n
