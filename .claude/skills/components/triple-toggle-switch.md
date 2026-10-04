@@ -28,7 +28,7 @@ for that for a theme switch; use `TripleToggleSwitch` directly for any other thr
 | `name` | `string` | `"triple-toggle-switch"` | Shared radio `name`. Give each instance on a page its own. |
 | `aria-label` | `string` | `""` | Accessible name for the `role="radiogroup"`. Omitted from the DOM when empty. Always pass one. |
 | `theme` | `FormUiTheme` | `"default"` | Rendered as `data-theme`. |
-| `step-animation-duration` | `string` | `"250ms"` | Marker slide duration. Ignored under `prefers-reduced-motion`. |
+| `step-animation-duration` | `string` | `"250ms"` | Marker slide duration; also times the icon colour swap (see Behaviour). Ignored under `prefers-reduced-motion`. |
 | `style-class-passthrough` | `string \| string[]` | `[]` | Classes on the root. |
 
 Option `id`s are used as element ids (and as a class on each icon), so they must be unique on the
@@ -66,6 +66,12 @@ const options = ref<IFormMultipleOptions>({
 - The marker is measured from the first option's width on mount and fades in after ~250ms. It
   isn't re-measured on resize, so changing the icon-size/padding tokens after mount (e.g. toggling
   a class) leaves the marker at its old size.
+- Icon colour swaps are timed to the marker: the newly active icon waits half of
+  `stepAnimationDuration`, then fades to the active colour over the other half, so it lands as the
+  marker arrives rather than turning white on the bare track. The previous icon fades back straight
+  away. The marker takes the same time whatever the distance, so no per-index delay is needed.
+- Option circles are sized by their content (1em icon + equal padding) with `place-items: center`,
+  not `aspect-ratio`; older iPad Safari mis-centred the icons under the `aspect-ratio` version.
 - Marker gradients only exist for the values `system`, `light` and `dark`; other values get the
   plain `--triple-toggle-switch-marker-surface` background.
 

@@ -186,10 +186,9 @@ onMounted(() => {
         position: relative;
 
         .option-group {
-          aspect-ratio: 1;
           display: grid;
           grid-template-areas: "icon-stack";
-          place-content: center;
+          place-items: center;
           background: transparent;
           border: var(--form-element-border-width) solid var(--triple-toggle-switch-option-border, #00000025);
           outline: var(--form-element-outline-width) solid transparent;
@@ -214,10 +213,18 @@ onMounted(() => {
             grid-area: icon-stack;
             display: block;
             font-size: var(--_scheme-icon-font-size);
+            width: 1em;
+            height: 1em;
             color: var(--triple-toggle-switch-option-icon-color, var(--slate-10));
+            transition: color calc(v-bind(stepAnimationDuration) / 2) ease-in-out;
 
             &.active {
               color: var(--triple-toggle-switch-option-icon-color-active, var(--slate-00));
+              transition-delay: calc(v-bind(stepAnimationDuration) / 2);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+              transition: none;
             }
 
             &:hover {
@@ -227,9 +234,10 @@ onMounted(() => {
 
           .option-input {
             grid-area: icon-stack;
+            appearance: none;
             opacity: 0;
-            aspect-ratio: 1;
             width: var(--_scheme-icon-font-size);
+            height: var(--_scheme-icon-font-size);
 
             &:hover {
               cursor: pointer;
