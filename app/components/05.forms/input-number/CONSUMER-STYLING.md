@@ -18,7 +18,7 @@ token, same as `InputTextCore`.
 | `--input-number-surface` | `var(--theme-input-surface)` | Wrapper, input, and embedded-button background |
 | `--input-number-surface-hover` | `var(--theme-input-surface-hover)` | Embedded left/right button background on hover |
 | `--input-number-border` | `var(--theme-border)` | Border/divider colour (`normal`/`underlined` variant border, and the divider between the input and an embedded button) |
-| `--input-number-border-hover` | `var(--theme-border-focus)` | Wrapper outline colour on mouse hover (`normal` variant only) |
+| `--input-number-border-hover` | `var(--theme-border-focus)` | Wrapper outline colour on mouse hover over the input or either step button (`normal` variant only) |
 | `--input-number-border-focus` | `var(--theme-border-focus)` | Wrapper outline colour on `:focus-visible` (`normal` variant), and the embedded button's own `:focus-visible` outline |
 | `--input-number-text-color` | `var(--theme-input-text-color-normal)` | Input text colour |
 | `--input-number-placeholder-color` | `var(--theme-input-placeholder)` | Placeholder text colour |

@@ -62,8 +62,8 @@ Target `.my-action-button.input-button` inside the wrapper to override InputButt
 
     /* Use private tokens only for new semantic states with no theme equivalent */
     &.some-state {
-      --_state-surface: light-dark(var(--green-01), var(--green-09));
-      --_state-text: light-dark(var(--green-08), var(--green-01));
+      --_state-surface: var(--green-01);
+      --_state-text: var(--green-08);
 
       .my-action-button.input-button {
         background-color: var(--_state-surface);

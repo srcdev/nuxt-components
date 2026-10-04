@@ -46,8 +46,8 @@ see CONSUMER-STYLING.md for why these can't be resized via CSS.
 
 | Property | Default | Controls |
 |----------|---------|----------|
-| `--clipped-panel-background-colour` | `light-dark(hsl(0, 0%, 96%), hsl(0, 0%, 12%))` | Panel background |
-| `--clipped-panel-outline-colour` | `light-dark(hsl(0, 29%, 3%), hsl(0, 0%, 92%))` | Outline colour and text/icon colour |
+| `--clipped-panel-background-colour` | `hsl(0, 0%, 96%)` | Panel background |
+| `--clipped-panel-outline-colour` | `hsl(0, 29%, 3%)` | Outline colour and text/icon colour |
 | `--clipped-panel-outline-width` | `1px` | Outline width |
 
 ## Notes

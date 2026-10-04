@@ -1,0 +1,75 @@
+/* Storybook-only dark scheme. The layer ships light token values only, so Storybook acts as a
+   consumer here and supplies its own dark overrides, keyed on html[data-color-scheme="dark"]
+   (preview.ts resolves "Follow OS" to that attribute too). No light-dark(), so the dark preview
+   also works on older Safari. Consumer apps can copy these values, but also need a
+   prefers-color-scheme block for data-color-scheme="auto" (see .claude/skills/theming-dark-mode.md). */
+
+html[data-color-scheme="dark"] {
+  color-scheme: dark;
+
+  --page-bg: var(--slate-08);
+  --colour-text-default: var(--slate-01);
+  --colour-text-accent: var(--blue-05);
+  --colour-text-eyebrow: var(--blue-05);
+
+  --stepper-list-counter-circle-text: var(--blue-02);
+  --stepper-list-counter-circle-border: var(--blue-02);
+  --stepper-list-counter-disc-background: var(--blue-02);
+  --stepper-list-counter-disc-border: var(--blue-02);
+  --stepper-list-counter-square-text: var(--blue-02);
+  --stepper-list-counter-square-border: var(--blue-02);
+  --stepper-list-connector-color: var(--blue-02);
+  --stepper-list-icon-color: var(--blue-02);
+
+  --treatment-consultant-primary-colour: var(--amber-02);
+  --treatment-consultant-primary-foreground: var(--amber-02);
+  --treatment-consultant-muted-colour: var(--amber-05);
+  --treatment-consultant-muted-foreground: var(--amber-05);
+  --treatment-consultant-background: var(--amber-10);
+  --treatment-consultant-foreground: var(--amber-02);
+  --treatment-consultant-border-colour: var(--amber-03);
+  --treatment-consultant-checked-surface-colour: var(--green-10);
+  --treatment-consultant-checked-stroke-colour: var(--green-03);
+  --treatment-consultant-conflict-surface-colour: var(--sunset-09);
+  --treatment-consultant-conflict-stroke-colour: var(--sunset-03);
+
+  --colour-link-default: var(--blue-02);
+  --colour-link-hover: var(--blue-03);
+
+  --theme-input-surface: var(--slate-10);
+  --theme-input-surface-hover: var(--slate-09);
+  --theme-input-text-color-normal: var(--slate-01);
+  --theme-input-placeholder: var(--slate-04);
+
+  --focus-box-shadow-colour-on: var(--slate-00);
+  --box-shadow-on: 0 0 0 0.3rem var(--slate-00);
+}
+
+/* Re-declared per [data-theme] element so the ramp re-evaluates there, as in _theme-slots.css. */
+html[data-color-scheme="dark"],
+html[data-color-scheme="dark"] [data-theme],
+html[data-color-scheme="dark"] [data-invalid] {
+  --theme-surface: var(--colour-theme-9);
+  --theme-surface-inverted: var(--colour-theme-2);
+  --theme-surface-hover: var(--colour-theme-7);
+  --theme-accent: var(--colour-theme-4);
+  --theme-surface-subtle: var(--colour-theme-9);
+  --theme-border: var(--colour-theme-5);
+  --theme-border-focus: var(--colour-theme-3);
+  --theme-ring: var(--colour-theme-9);
+  --theme-text: var(--colour-theme-2);
+  --theme-text-inverted: var(--colour-theme-7);
+}
+
+/* Warning keeps its AA-safe step 6 surface in both schemes (see _warning.css). */
+html[data-color-scheme="dark"] [data-theme="warning"] {
+  --theme-surface: var(--colour-theme-6);
+  --theme-surface-hover: var(--colour-theme-7);
+}
+
+html[data-color-scheme="dark"] [data-invalid],
+html[data-color-scheme="dark"] [data-theme="error"] {
+  --theme-error-surface: var(--red-07);
+  --theme-error-border: var(--red-07);
+  --theme-error-outline: var(--red-05);
+}

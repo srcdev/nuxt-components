@@ -57,7 +57,7 @@ The component sets:
 - `background-position: var(--section-parallax-background-position, center)`
 - `background-size: var(--section-parallax-background-size, cover)`
 - `min-height: var(--section-parallax-min-height, 100svh)`
-- `background-color: var(--section-parallax-background-colour, light-dark(var(--slate-01), var(--slate-08)))` (visible if image fails to load)
+- `background-color: var(--section-parallax-background-colour, var(--slate-01))` (visible if image fails to load)
 
 Inside `@media (hover: hover) and (pointer: fine) { @supports (background-attachment: fixed) { ... } }`:
 

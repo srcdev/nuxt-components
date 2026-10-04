@@ -1,11 +1,14 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import InputTextWithLabel from "../../input-text/InputTextWithLabel.vue";
+import InputPasswordWithLabel from "../../input-text/InputPasswordWithLabel.vue";
+import InputTextAsNumberWithLabel from "../../input-text/InputTextAsNumberWithLabel.vue";
 import InputRangeDefault from "../../input-range/InputRangeDefault.vue";
 import InputNumberField from "../../input-number/InputNumberField.vue";
 import InputTextareaWithLabel from "../../input-textarea/InputTextareaWithLabel.vue";
 import InputSelectWithLabel from "../../input-select/InputSelectWithLabel.vue";
 import ToggleSwitchWithLabel from "../../toggle-switch/ToggleSwitchWithLabel.vue";
+import ToggleSwitchWithLabelInline from "../../toggle-switch/ToggleSwitchWithLabelInline.vue";
 import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
 import SingleCheckbox from "../../input-checkbox/SingleCheckbox.vue";
 import MultipleRadiobuttons from "../../input-radio/MultipleRadiobuttons.vue";
@@ -14,35 +17,31 @@ import InputButton from "../../input-button/InputButton.vue";
 import FormField from "../../form-field/FormField.vue";
 import FormWrapper from "../../form-wrapper/FormWrapper.vue";
 import HeroText from "../../../01.atoms/text-blocks/hero-text/HeroText.vue";
-import type { InputUiVariant, IFormMultipleOptions } from "~/types/forms/types.forms.d";
+import type { InputUiVariant, IFormMultipleOptions, InputTypesText, InputMode } from "~/types/forms/types.forms.d";
 
 interface MigratedFieldsFormStoryArgs {
   inputVariant: InputUiVariant;
 }
 
-// Living reference, not a component of its own — one field per 05.forms component group that
-// currently scores 5/5 in the Component Ledger (.claude/component-ledger/audit.json: tier folder,
-// tests, story, skill doc, CONSUMER-STYLING.md, VS Code snippet). As of 2026-09-27 that's
-// InputTextCore (via InputTextWithLabel), InputRangeCore (via InputRangeDefault), InputNumber
-// (via InputNumberField), InputTextareaCore (via InputTextareaWithLabel), InputSelectCore
-// (via InputSelectWithLabel), ToggleSwitchCore (via ToggleSwitchWithLabel), and input-checkbox
-// (MultipleCheckboxes + SingleCheckbox), plus input-radio (MultipleRadiobuttons, 5/5 as of
-// 2026-09-27). FormField (5/5 as of 2026-09-26) is the layout wrapper
-// around every field below, and FormFieldset (5/5 as of 2026-09-26) is rendered inside the
-// checkbox fields, FormWrapper (5/5 as of 2026-09-26) wraps the form itself, and InputError
-// (5/5 as of 2026-09-26) is the error strip every field below renders, so none of the four
-// gets a field of its own. InputDescription (5/5 as of 2026-09-26) is the help text under the
-// "Full name" field, rendered through InputTextWithLabel's descriptionText slot. InputLabel (5/5 as
-// of 2026-09-26) is the <label> every labelled field below renders, so it has no field of its own
-// either. The input-checkbox-radio family (InputCheckboxRadio/Field/Button, 5/5 as of 2026-09-27)
-// renders every checkbox and radio below, so it has no field of its own. TripleToggleSwitch (5/5 as of
-// 2026-09-27) is the "Theme preference" field; it has no Field wrapper or error state of its own,
-// so it sits under a plain caption and always has a value. Every other 05.forms component
-// (radio, ...) is still mid-migration.
-// Add a field here each time /migrate-component brings another 05.forms component up to 5/5, so
-// this story doubles as a visible migration-progress tracker rather than living only in the
-// ledger's HTML output. No validation wiring (useZodValidation/zod) here — that's the consuming
-// app's concern, this is a visual/composition reference only.
+// Living reference, not a component of its own: every 05.forms component that scores 5/5 in the
+// Component Ledger (.claude/component-ledger/audit.json) appears here, either as its own field or
+// rendered inside one. As of 2026-10-04 every 05.forms component is 5/5, so all of them are in:
+// - Own field: InputTextWithLabel (InputTextCore; plus one per type/inputmode pair for checking
+//   on-device keyboards), InputPasswordWithLabel,
+//   InputTextAsNumberWithLabel, InputRangeDefault (InputRangeCore), InputNumberField
+//   (InputNumber), InputTextareaWithLabel (InputTextareaCore), InputSelectWithLabel
+//   (InputSelectCore), ToggleSwitchWithLabel and ToggleSwitchWithLabelInline (ToggleSwitchCore),
+//   MultipleCheckboxes, SingleCheckbox, MultipleRadiobuttons, TripleToggleSwitch ("Theme
+//   preference": no Field wrapper or error state, so it sits under a plain caption).
+// - Rendered inside other fields: FormWrapper (wraps the form), FormField (wraps every field),
+//   FormFieldset (checkbox/radio groups), InputLabel, InputDescription (the "Full name" and
+//   "Password" help text), InputError (every error strip), the input-checkbox-radio family
+//   (every checkbox and radio), InputButton (Continue/Clear errors, and the inline buttons inside
+//   the password and number fields), PendingEffect (Continue's simulated 1.5s submit).
+// Add a field here each time a new 05.forms component reaches 5/5, so this story stays a visible
+// completeness check rather than living only in the ledger's HTML output. No validation wiring
+// (useZodValidation/zod) here — that's the consuming app's concern, this is a visual/composition
+// reference only.
 export default {
   title: "Patterns/Migrated Fields Form",
   argTypes: {
@@ -61,11 +60,14 @@ export default {
 const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
   components: {
     InputTextWithLabel,
+    InputPasswordWithLabel,
+    InputTextAsNumberWithLabel,
     InputRangeDefault,
     InputNumberField,
     InputTextareaWithLabel,
     InputSelectWithLabel,
     ToggleSwitchWithLabel,
+    ToggleSwitchWithLabelInline,
     MultipleCheckboxes,
     SingleCheckbox,
     MultipleRadiobuttons,
@@ -78,16 +80,34 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
   setup() {
     const state = reactive({
       fullName: "",
+      password: "",
+      guests: 2 as number | undefined,
       budget: 50,
       quantity: 1,
       notes: "",
       colour: "",
       subscribe: false,
+      reminders: true,
       services: [] as string[],
       contactMethod: "",
       themePreference: "system",
       terms: false,
     });
+
+    // One InputTextWithLabel per type/inputmode pair, for checking each on-screen keyboard on a real device.
+    const textVariants: { name: string; label: string; type: InputTypesText; inputmode: InputMode; placeholder: string }[] = [
+      { name: "variantEmail", label: "Email", type: "email", inputmode: "email", placeholder: "eg. jane@example.com" },
+      { name: "variantTel", label: "Phone", type: "tel", inputmode: "tel", placeholder: "eg. 07700 900123" },
+      { name: "variantUrl", label: "Website", type: "url", inputmode: "url", placeholder: "eg. https://example.com" },
+      { name: "variantSearch", label: "Search", type: "text", inputmode: "search", placeholder: "Search treatments" },
+      { name: "variantNumber", label: "Age", type: "number", inputmode: "numeric", placeholder: "eg. 34" },
+      { name: "variantNumeric", label: "One-time code", type: "text", inputmode: "numeric", placeholder: "eg. 123456" },
+      { name: "variantDecimal", label: "Hair length (cm)", type: "text", inputmode: "decimal", placeholder: "eg. 12.5" },
+      { name: "variantDate", label: "Appointment date", type: "date", inputmode: "text", placeholder: "" },
+    ];
+    const textVariantValues = reactive<Record<string, string>>(
+      Object.fromEntries(textVariants.map((variant) => [variant.name, ""]))
+    );
 
     const serviceOptions = reactive<IFormMultipleOptions>({
       data: [
@@ -142,10 +162,11 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     // Demo-only "validation" — a real consuming app would wire this through something like
     // useZodValidation instead (see this file's top comment). Kept deliberately simple so the
     // Continue button has an obvious, reliable way to trigger each field's error state for
-    // exercising InputTextWithLabel/InputRangeDefault/InputNumberField/InputTextareaWithLabel/
-    // InputSelectWithLabel/MultipleCheckboxes/MultipleRadiobuttons/SingleCheckbox's error UI in Storybook.
+    // exercising every field's error UI in Storybook.
     const errors = reactive({
       fullName: "",
+      password: "",
+      guests: "",
       budget: "",
       quantity: "",
       notes: "",
@@ -157,6 +178,8 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
 
     const validate = () => {
       errors.fullName = state.fullName.trim() ? "" : "Full name is required";
+      errors.password = state.password.length >= 8 ? "" : "Password must be at least 8 characters";
+      errors.guests = (state.guests ?? 0) >= 1 ? "" : "At least 1 guest is required";
       errors.budget = state.budget >= 100 ? "" : "Budget must be at least £100";
       errors.quantity = state.quantity >= 1 ? "" : "Quantity must be at least 1";
       errors.notes = state.notes.trim() ? "" : "Notes are required";
@@ -166,8 +189,20 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       errors.terms = state.terms ? "" : "You must agree to the terms";
     };
 
+    // Simulated round trip so the Continue button shows PendingEffect before the errors land.
+    const isSubmitting = ref(false);
+    const submit = () => {
+      isSubmitting.value = true;
+      setTimeout(() => {
+        isSubmitting.value = false;
+        validate();
+      }, 1500);
+    };
+
     const clearErrors = () => {
       errors.fullName = "";
+      errors.password = "";
+      errors.guests = "";
       errors.budget = "";
       errors.quantity = "";
       errors.notes = "";
@@ -181,11 +216,14 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       args,
       state,
       errors,
-      validate,
+      submit,
+      isSubmitting,
       clearErrors,
       colourOptions,
       serviceOptions,
       contactMethodOptions,
+      textVariants,
+      textVariantValues,
       themeOptions,
     };
   },
@@ -198,13 +236,14 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         :style-class-passthrough="['mbe-20']"
       />
       <p style="margin: 0 0 2rem 0; color: #475569; font-size: 1.4rem;">
-        One field per 05.forms component that's fully migrated (5/5 on the Component Ledger).
-        Click Continue with an empty name, a budget under £100, a quantity under 1, empty notes,
-        no colour or no contact method chosen to see the error states.
+        Every 05.forms component that is fully migrated (5/5 on the Component Ledger).
+        Click Continue to see the pending state, then the error states for any empty or
+        out-of-range field: name, password under 8 characters, no guests, budget under £100,
+        quantity under 1, notes, colour, services, contact method or terms.
       </p>
 
       <FormWrapper width="medium">
-        <form novalidate @submit.prevent="validate">
+        <form novalidate @submit.prevent="submit">
           <FormField width="wide" :has-gutter="false">
             <InputTextWithLabel
               v-model="state.fullName"
@@ -218,6 +257,35 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
               :input-variant="args.inputVariant"
             >
               <template #descriptionText>As it appears on your ID</template>
+            </InputTextWithLabel>
+          </FormField>
+
+          <FormField width="wide" :has-gutter="false">
+            <InputPasswordWithLabel
+              v-model="state.password"
+              name="password"
+              label="Password"
+              :error-message="errors.password"
+              :field-has-error="!!errors.password"
+              :required="true"
+              :input-variant="args.inputVariant"
+            >
+              <template #descriptionText>At least 8 characters</template>
+            </InputPasswordWithLabel>
+          </FormField>
+
+          <FormField v-for="variant in textVariants" :key="variant.name" width="wide" :has-gutter="false">
+            <InputTextWithLabel
+              v-model="textVariantValues[variant.name]"
+              :type="variant.type"
+              :inputmode="variant.inputmode"
+              :name="variant.name"
+              :label="variant.label"
+              :placeholder="variant.placeholder"
+              error-message=""
+              :input-variant="args.inputVariant"
+            >
+              <template #descriptionText>type="{{ variant.type }}", inputmode="{{ variant.inputmode }}"</template>
             </InputTextWithLabel>
           </FormField>
 
@@ -254,6 +322,22 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
+            <InputTextAsNumberWithLabel
+              v-model="state.guests"
+              name="guests"
+              label="Guests"
+              :min="1"
+              :max="8"
+              :error-message="errors.guests"
+              :field-has-error="!!errors.guests"
+              :input-variant="args.inputVariant"
+            >
+              <template #left><span aria-hidden="true">−</span></template>
+              <template #right><span aria-hidden="true">+</span></template>
+            </InputTextAsNumberWithLabel>
+          </FormField>
+
+          <FormField width="wide" :has-gutter="false">
             <InputTextareaWithLabel
               v-model="state.notes"
               name="notes"
@@ -280,6 +364,10 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
 
           <FormField width="wide" :has-gutter="false">
             <ToggleSwitchWithLabel v-model="state.subscribe" name="subscribe" label="Subscribe to updates" />
+          </FormField>
+
+          <FormField width="wide" :has-gutter="false">
+            <ToggleSwitchWithLabelInline v-model="state.reminders" name="reminders" label="Email me appointment reminders" />
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
@@ -337,7 +425,14 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
 
           <FormField width="wide" :has-gutter="false">
             <div style="display: flex; gap: 1.2rem;">
-              <InputButton type="submit" variant="primary" button-text="Continue" />
+              <InputButton
+                type="submit"
+                variant="primary"
+                button-text="Continue"
+                :has-pending-effect="isSubmitting"
+                :is-pending="isSubmitting"
+                :readonly="isSubmitting"
+              />
               <InputButton type="button" variant="tertiary" button-text="Clear errors" @click="clearErrors" />
             </div>
           </FormField>
@@ -348,11 +443,15 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         style="margin-top: 2rem; padding: 1.6rem; border-radius: 0.8rem; background: #f8fafc; font-family: monospace; font-size: 1.3rem;"
       >
         <div>fullName: {{ state.fullName || '""' }}</div>
+        <div>password: {{ state.password ? "•".repeat(state.password.length) : '""' }}</div>
+        <div v-for="variant in textVariants" :key="variant.name">{{ variant.name }}: {{ textVariantValues[variant.name] || '""' }}</div>
+        <div>guests: {{ state.guests ?? "undefined" }}</div>
         <div>budget: £{{ state.budget }}</div>
         <div>quantity: {{ state.quantity }}</div>
         <div>notes: {{ state.notes || '""' }}</div>
         <div>colour: {{ state.colour || '""' }}</div>
         <div>subscribe: {{ state.subscribe }}</div>
+        <div>reminders: {{ state.reminders }}</div>
         <div>services: {{ JSON.stringify(state.services) }}</div>
         <div>contactMethod: {{ state.contactMethod || '""' }}</div>
         <div>themePreference: {{ state.themePreference }}</div>

@@ -218,7 +218,7 @@ export const InContext: Story = {
             align-items: center;
             gap: 1.2rem;
             padding: 1.2rem 1.6rem;
-            border-bottom: 0.1rem solid light-dark(#e5e7eb, #374151);
+            border-bottom: 0.1rem solid rgb(128 128 128 / 0.35);
           "
         >
           <div
@@ -226,7 +226,7 @@ export const InContext: Story = {
               width: 3.6rem;
               height: 3.6rem;
               border-radius: 50%;
-              background: light-dark(#e5e7eb, #374151);
+              background: rgb(128 128 128 / 0.35);
               display: grid;
               place-items: center;
               font-size: 1.4rem;
@@ -290,17 +290,17 @@ export const ItemCoreStandalone: Story = {
     template: `
       <div style="padding: 4rem; max-width: 32rem; margin: 0 auto;">
         <p style="margin: 0 0 1.2rem; font-size: 1.2rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.08em;">Button items</p>
-        <div style="border: 0.1rem solid light-dark(#e5e7eb, #374151); border-radius: 0.8rem; overflow: hidden;">
+        <div style="border: 0.1rem solid rgb(128 128 128 / 0.35); border-radius: 0.8rem; overflow: hidden;">
           <ActionMenuItem
             label="Edit"
-            style="border-bottom: 0.1rem solid light-dark(#e5e7eb, #374151);"
+            style="border-bottom: 0.1rem solid rgb(128 128 128 / 0.35);"
             @click="lastClick = 'Edit'"
           >
             <template #icon><Icon name="lucide:pencil" /></template>
           </ActionMenuItem>
           <ActionMenuItem
             label="Duplicate"
-            style="border-bottom: 0.1rem solid light-dark(#e5e7eb, #374151);"
+            style="border-bottom: 0.1rem solid rgb(128 128 128 / 0.35);"
             @click="lastClick = 'Duplicate'"
           >
             <template #icon><Icon name="lucide:copy" /></template>
@@ -314,11 +314,11 @@ export const ItemCoreStandalone: Story = {
         </div>
 
         <p style="margin: 2.4rem 0 1.2rem; font-size: 1.2rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 0.08em;">Link items</p>
-        <div style="border: 0.1rem solid light-dark(#e5e7eb, #374151); border-radius: 0.8rem; overflow: hidden;">
+        <div style="border: 0.1rem solid rgb(128 128 128 / 0.35); border-radius: 0.8rem; overflow: hidden;">
           <ActionMenuItem
             label="Internal link (/about)"
             href="/about"
-            style="border-bottom: 0.1rem solid light-dark(#e5e7eb, #374151);"
+            style="border-bottom: 0.1rem solid rgb(128 128 128 / 0.35);"
           >
             <template #icon><Icon name="lucide:arrow-up-right" /></template>
           </ActionMenuItem>

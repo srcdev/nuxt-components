@@ -8,7 +8,7 @@
      These are always error-red regardless of nesting context.
      =========================================== */
   --input-error-color: white;
-  --theme-error-surface: light-dark(var(--red-06), var(--red-07));
-  --theme-error-border: light-dark(var(--red-06), var(--red-07));
-  --theme-error-outline: light-dark(var(--red-01), var(--red-05));
+  --theme-error-surface: var(--red-06);
+  --theme-error-border: var(--red-06);
+  --theme-error-outline: var(--red-01);
 }

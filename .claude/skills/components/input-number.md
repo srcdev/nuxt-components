@@ -156,6 +156,10 @@ to mirror `InputTextCore` directly:
   `var(--input-number-surface-hover, var(--theme-input-surface-hover))`) rather than kept as
   private wrappers. `--_border-focus` stayed private since it's now genuinely reused (the
   wrapper's own focus outline *and* the embedded button's focus outline both read it).
+- Fixed 2026-10-04: the wrapper's hover and focus outlines only matched `input:hover` /
+  `input:focus-visible`, so hovering or tabbing to a step button showed no outer ring, unlike
+  `InputTextCore` (and so `InputTextAsNumberWithLabel`), which matches `button` too. Both
+  selectors are now `:has(input:…, button:…)`, mirroring `InputTextCore`.
 
 **Separately found in the same investigation** (not an `InputNumber` bug, but what the visual
 comparison was originally checking against): `InputTextAsNumberWithLabel.vue` had its own,

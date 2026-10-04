@@ -120,10 +120,10 @@ Create `app/assets/styles/setup/03.theming/_default.css`:
   --theme-chroma: var(--palette-gold-chroma);
 
   /* Page-level tokens — readable named steps, not raw oklch */
-  --page-bg: light-dark(var(--slate-00), var(--slate-08));
-  --colour-text-default:  light-dark(var(--slate-09), var(--slate-01));
-  --colour-text-accent:   light-dark(var(--gold-09), var(--gold-04));
-  --colour-text-eyebrow:  light-dark(var(--gold-09), var(--gold-04));
+  --page-bg: var(--slate-00);
+  --colour-text-default:  var(--slate-09);
+  --colour-text-accent:   var(--gold-09);
+  --colour-text-eyebrow:  var(--gold-09);
 }
 ```
 
@@ -172,8 +172,8 @@ export default defineNuxtConfig({
 The layer's `theme-ramp.css` declares the formula on `:where(html, [data-theme], [data-invalid])`.
 When your override sets `--theme-hue`/`--theme-chroma` on `:where(html)`, every `--colour-theme-*`
 step recalculates to your palette. Semantic slots (`--theme-surface`, `--theme-text`, etc.) are
-declared on that same selector using `light-dark()` — light/dark mode continues to work without
-any extra declarations.
+declared on that same selector with light values only. The layer ships no dark scheme; to add
+one, see `theming-dark-mode.md`.
 
 The generated `_gold.css` gives you a named alias for each step (`--gold-09` etc.) so your
 page-level token values stay readable. The values match what the formula would produce for
@@ -183,7 +183,6 @@ that hue/chroma pair.
 
 - Define `--colour-theme-0` through `--colour-theme-10` — the formula handles it
 - Redeclare `--theme-surface`, `--theme-border`, `--theme-ring` etc. — they auto-update
-- Write separate light/dark files — use `light-dark()` in a single file
 - Override any button or input component tokens — they all consume semantic slots
 
 ## rem sizing

@@ -339,5 +339,5 @@ npm install
 - If security modules are not wanted, omit `nuxt-security` from `dependencies` and remove it
   from `modules` and the `security` config block in `nuxt.config.ts`. Same for `@nuxtjs/robots`.
 - The `colourScheme.enabled: false` default is correct for most consumer apps — enable only if
-  the app needs light/dark switching.
+  the app needs light/dark switching (then follow `theming-dark-mode.md`: the layer ships light values only).
 - Check the latest `srcdev-nuxt-components` version on npm before writing `package.json`.

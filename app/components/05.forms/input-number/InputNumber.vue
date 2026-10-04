@@ -104,13 +104,13 @@ const minLength = computed(() => `${props.max.toString().length + 1}em`);
       border-radius: var(--form-input-border-radius);
       outline: var(--form-element-outline-width) solid transparent;
 
-      &:has(input:hover) {
+      &:has(input:hover, button:hover) {
         outline: var(--form-element-outline-width-focus) solid
           var(--input-number-border-hover, var(--theme-border-focus));
         outline-offset: var(--form-element-outline-offset-focus);
       }
 
-      &:has(input:focus-visible) {
+      &:has(input:focus-visible, button:focus-visible) {
         outline: var(--form-element-outline-width-focus) solid var(--_border-focus);
         outline-offset: var(--form-element-outline-offset-focus);
       }

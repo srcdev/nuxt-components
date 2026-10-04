@@ -88,8 +88,8 @@ Page-level tokens:
 ```css
 /* Make primary buttons darker/more saturated (step-7/9 defaults, step-9/7 hover) */
 :where(html) {
-  --theme-surface:       light-dark(oklch(48% 0.18 85), oklch(32% 0.20 85));
-  --theme-surface-hover: light-dark(oklch(32% 0.18 85), oklch(48% 0.20 85));
+  --theme-surface:       oklch(48% 0.18 85);
+  --theme-surface-hover: oklch(32% 0.18 85);
 }
 ```
 
@@ -97,9 +97,9 @@ Page-level tokens:
 
 ```css
 :where(html) {
-  --theme-input-surface:           light-dark(oklch(0.99 0 0), oklch(0.12 0.01 255));
-  --theme-input-text-color-normal: light-dark(oklch(0.20 0.01 255), oklch(0.95 0.01 255));
-  --theme-input-placeholder:       light-dark(oklch(0.60 0.01 255), oklch(0.40 0.01 255));
+  --theme-input-surface:           oklch(0.99 0 0);
+  --theme-input-text-color-normal: oklch(0.20 0.01 255);
+  --theme-input-placeholder:       oklch(0.60 0.01 255);
 }
 ```
 
@@ -107,9 +107,9 @@ Page-level tokens:
 
 ```css
 :where(html) {
-  --page-bg:             light-dark(oklch(0.98 0 0), oklch(0.10 0 0));
-  --colour-text-default: light-dark(oklch(0.20 0 0), oklch(0.93 0 0));
-  --colour-text-accent:  light-dark(oklch(0.30 0.16 85), oklch(0.65 0.18 85));
+  --page-bg:             oklch(0.98 0 0);
+  --colour-text-default: oklch(0.20 0 0);
+  --colour-text-accent:  oklch(0.30 0.16 85);
 }
 ```
 
@@ -140,8 +140,8 @@ To restrict an override to a specific section, scope to a wrapper class instead 
 
 .hero-cta {
   /* Just these buttons use a different surface colour */
-  --theme-surface:       light-dark(oklch(48% 0.16 85), oklch(32% 0.18 85));
-  --theme-surface-hover: light-dark(oklch(32% 0.14 85), oklch(48% 0.16 85));
+  --theme-surface:       oklch(48% 0.16 85);
+  --theme-surface-hover: oklch(32% 0.14 85);
 }
 ```
 
@@ -160,6 +160,6 @@ To change how `data-theme="success"` looks without affecting other themes:
 ## Notes
 
 - Only override the tokens you actually need — everything else falls back to layer defaults
-- Use `light-dark()` in a single rule rather than separate `:where(html.light)` / `:where(html.dark)` blocks — the layer's `color-scheme` infrastructure handles mode switching
+- The layer ships light values only (no `light-dark()`, for older iPad Safari). For dark mode, redeclare tokens under `html[data-color-scheme="dark"]` plus a `prefers-color-scheme` block for `auto`, or use `light-dark()` yourself if you accept the browser-support cost. Full setup in `theming-dark-mode.md`.
 - `--slate-*` neutral tokens come from the layer and do not need to be redefined unless you genuinely want different neutrals
 - For a full palette replacement (changing the layer default), use `theming-override-default.md` instead

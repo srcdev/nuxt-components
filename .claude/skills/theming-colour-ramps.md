@@ -254,8 +254,8 @@ In `app/assets/styles/setup/02.colours/index.css` (create if it doesn't exist):
   --theme-chroma: var(--palette-gold-chroma);
 
   /* Page-level tokens — readable named steps, not raw oklch */
-  --colour-text-accent:  light-dark(var(--gold-09), var(--gold-04));
-  --colour-text-eyebrow: light-dark(var(--gold-09), var(--gold-04));
+  --colour-text-accent:  var(--gold-09);
+  --colour-text-eyebrow: var(--gold-09);
 }
 
 /* Optional: make it available as a data-theme variant too */
@@ -295,37 +295,10 @@ approach whenever you need `--gold-09` style references in your CSS.
 
 ## Light / dark mode
 
-Semantic slots use `light-dark()`, which responds to `color-scheme` on `html` (set by the layer's
-`_head.css`):
-
-```css
-html {
-  color-scheme: light dark;   /* OS preference */
-  &.light { color-scheme: light; }
-  &.dark  { color-scheme: dark; }
-}
-```
-
-Use `light-dark()` in your own override values too:
-
-```css
-:where(html) {
-  --theme-hue: 85;
-  --theme-chroma: 0.20;
-  --page-bg: light-dark(var(--slate-00), var(--slate-08));
-}
-```
-
-**Multi-value caveat**: `light-dark()` cannot contain comma-separated values (e.g. box-shadow
-lists). Use intermediate scalar vars:
-
-```css
---_shadow-a: light-dark(0.08, 0.5);
---my-shadow: 0 8px 32px rgba(0, 0, 0, var(--_shadow-a));
-```
-
-The `useColourScheme()` composable toggles the `.light` / `.dark` class on `<html>`. See
-`composable-colour-scheme.md` for the full API.
+The layer ships light values only (since 2026-10-04): no token uses `light-dark()`, because older
+iPad Safari doesn't support it. Dark mode is the consumer app's decision. `theming-dark-mode.md`
+has the full setup: enabling the scheme plumbing, the complete dark token set to copy (works on
+older Safari), and the shorter `light-dark()` alternative for apps that don't need it.
 
 ## Hue angle reference
 

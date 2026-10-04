@@ -190,7 +190,8 @@ computes the scale from the two params:
 Scale direction: **00 = lightest, 10 = darkest**. Chroma tapers at both ends and peaks at step 06.
 
 Nine semantic slots (`--theme-surface`, `--theme-accent`, `--theme-text`, `--theme-ring`, etc.) are derived from the
-scale using `light-dark()` and are shared by all components. Theme variants (`data-theme="success"`,
+scale and are shared by all components. They ship light values only (no `light-dark()`, which older iPad
+Safari lacks); dark mode is left to the consuming app, see `.claude/skills/theming-dark-mode.md`. Theme variants (`data-theme="success"`,
 `"warning"`, `"error"`) swap `--theme-hue` and `--theme-chroma` on their element; the formula
 re-evaluates locally so each themed element gets its own full palette without affecting the page.
 
@@ -281,8 +282,8 @@ In your `app/assets/styles/setup/02.colours/index.css` (create if it doesn't exi
   --theme-chroma: var(--palette-gold-chroma);
 
   /* Page-level tokens — readable named steps, not raw oklch */
-  --colour-text-accent: light-dark(var(--gold-09), var(--gold-04));
-  --colour-text-eyebrow: light-dark(var(--gold-09), var(--gold-04));
+  --colour-text-accent: var(--gold-09);
+  --colour-text-eyebrow: var(--gold-09);
 }
 ```
 
@@ -329,6 +330,7 @@ npm run check:ramps      # CI: fail if generated CSS is out of date
 | Full ramp architecture, formula details, hue drift      | `.claude/skills/theming-colour-ramps.md`     |
 | Full palette swap for a consumer app                    | `.claude/skills/theming-override-default.md` |
 | Partial token override (palette shift, buttons, inputs) | `.claude/skills/theming-partial-override.md` |
+| Add a dark scheme (layer ships light values only)       | `.claude/skills/theming-dark-mode.md`        |
 | Disable light/dark mode support                         | `.claude/skills/colour-scheme-disable.md`    |
 
 Skills are available in your project after running `npm run setup:claude`.

@@ -59,6 +59,8 @@ The three valid values are:
 | `"light"` | Forces light theme regardless of OS setting |
 | `"dark"` | Forces dark theme regardless of OS setting |
 
+The attribute only switches schemes; the layer ships light colour values only. The app supplies the dark values, see `theming-dark-mode.md`.
+
 ## Notes
 
 - `onMounted` is used to read `localStorage` — `currentColourScheme` is always `"auto"` during SSR and hydrates client-side. Do not read it server-side.

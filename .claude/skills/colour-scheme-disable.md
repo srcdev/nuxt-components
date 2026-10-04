@@ -2,7 +2,7 @@
 
 ## Overview
 
-This layer includes light/dark/auto colour scheme support (not via CSS `color-scheme` — iPadOS 16 compatibility). By default it:
+This layer includes light/dark/auto colour scheme switching (an attribute, not `light-dark()`, for older iPad Safari). The layer ships light colour values only; dark values are the app's to add (`theming-dark-mode.md`). By default it:
 
 1. Injects a synchronous `<head>` script to apply the saved scheme before first paint (FOUC prevention)
 2. Provides `useColourScheme()` composable to read/write the active scheme via localStorage and `document.documentElement.dataset.colorScheme`

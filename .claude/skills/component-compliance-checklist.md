@@ -176,7 +176,7 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
     value only — don't invent a dark-mode fallback scheme, and don't ask which of the two to keep.
     The mechanism stays available for consumers: a consumer app is free to define its own public
     token overrides using `light-dark()` inside its own CSS, since that's their own browser-support
-    decision to make, not this library's default.
+    decision to make, not this library's default. The global token layer (`03.theming`, `a11y/_variables.css`) is light-only too since 2026-10-04, so `--theme-*` tokens are safe to consume.
 12. **Add the component to the Migrated Fields Form story** — once the component reaches 5/5,
     add one field for it to
     `app/components/05.forms/patterns/stories/MigratedFieldsForm.stories.ts` (import the
