@@ -49,6 +49,15 @@ global token so it matches the rest of the design system out of the box.
 | `--select-menu-item-text-color` | `var(--theme-text)` | Option label colour |
 | `--select-menu-item-font-size` | `1.5rem` | Option label font size |
 | `--select-menu-item-surface-hover` | `var(--theme-input-surface-hover)` | Option row background on hover/focus |
+| `--select-menu-item-surface-selected` | `var(--theme-surface-subtle)` | Background of selected/checked option rows (hover/focus still wins) |
+| `--select-menu-item-text-color-selected` | `--select-menu-item-text-color` | Selected row label colour (the checkmark follows via `currentcolor`) |
+| `--select-menu-item-font-weight` | inherited | Option row font weight |
+| `--select-menu-item-font-weight-selected` | `--select-menu-item-font-weight` | Selected row font weight; the popover reserves the bolder width, so selecting doesn't resize it |
+| `--select-menu-item-border-width` | `0` | Block (top/bottom) border width on **every** row, so a selected border never shifts layout |
+| `--select-menu-item-border` | `transparent` | Resting row border colour |
+| `--select-menu-item-border-selected` | `--select-menu-item-border` | Selected row border colour. Two adjacent selected rows show both borders where they meet |
+| `--select-menu-item-text-color-hover` | the row's current colour | Label colour on hover/focus. Unset, a selected row keeps its selected colour |
+| `--select-menu-item-border-hover` | the row's current border | Border colour on hover/focus. Unset, a selected row keeps its selected border |
 | `--select-menu-item-check-size` | `1.6rem` | Checkmark icon box size |
 | `--select-menu-item-check-color` | `currentcolor` | Checkmark icon colour |
 | `--select-menu-item-icon-size` | `1.8rem` | Per-option icon size |
@@ -184,4 +193,3 @@ story.
   the bottom of the viewport (`position-try-fallbacks: flip-block`).
 - **Chevron rotation** is pure CSS via `:has(.select-menu-popover:popover-open)` — no JS state
   needed for the visual, though `isOpen` is still tracked internally to drive `aria-expanded`.
-

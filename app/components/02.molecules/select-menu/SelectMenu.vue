@@ -41,6 +41,7 @@
           role="option"
           tabindex="-1"
           :aria-selected="isSelected(option)"
+          :data-label="option.label"
           @click="selectOption(option)"
         >
           <span class="select-menu-item-check" aria-hidden="true">
@@ -343,15 +344,50 @@ watch(
           gap: var(--select-menu-item-gap, 0.8rem);
           padding-block: var(--select-menu-item-padding-block, 1rem);
           padding-inline: var(--select-menu-item-padding-inline, 1.2rem);
+          --_text-color: var(--select-menu-item-text-color, var(--theme-text));
+          --_border: var(--select-menu-item-border, transparent);
+
           cursor: pointer;
-          color: var(--select-menu-item-text-color, var(--theme-text));
+          color: var(--_text-color);
           font-family: var(--font-family);
           font-size: var(--select-menu-item-font-size, 1.5rem);
-          transition: background-color var(--select-menu-transition-duration, 200ms) ease;
+          /* No fallback: unset means invalid at computed time, so the weight inherits. */
+          font-weight: var(--select-menu-item-font-weight);
+          border-block: var(--select-menu-item-border-width, 0) solid var(--_border);
+          transition:
+            background-color var(--select-menu-transition-duration, 200ms) ease,
+            border-color var(--select-menu-transition-duration, 200ms) ease,
+            color var(--select-menu-transition-duration, 200ms) ease;
 
+          /* Reserves the selected label width so a bolder selected weight doesn't resize the popover. */
+          &::after {
+            content: attr(data-label);
+            grid-column: 3;
+            grid-row: 1;
+            block-size: 0;
+            overflow: hidden;
+            visibility: hidden;
+            white-space: nowrap;
+            font-weight: var(--select-menu-item-font-weight-selected, var(--select-menu-item-font-weight));
+          }
+
+          &[aria-selected="true"] {
+            --_text-color: var(
+              --select-menu-item-text-color-selected,
+              var(--select-menu-item-text-color, var(--theme-text))
+            );
+            --_border: var(--select-menu-item-border-selected, var(--select-menu-item-border, transparent));
+
+            background-color: var(--select-menu-item-surface-selected, var(--theme-surface-subtle));
+            font-weight: var(--select-menu-item-font-weight-selected, var(--select-menu-item-font-weight));
+          }
+
+          /* Hover falls back to the row's current state, so an unset hover token keeps a selected row's colours. */
           &:hover,
           &:focus-visible {
             background-color: var(--select-menu-item-surface-hover, var(--theme-input-surface-hover));
+            color: var(--select-menu-item-text-color-hover, var(--_text-color));
+            border-color: var(--select-menu-item-border-hover, var(--_border));
           }
 
           &:focus-visible {
@@ -386,6 +422,7 @@ watch(
 
           .select-menu-item-label {
             grid-column: 3;
+            grid-row: 1;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;

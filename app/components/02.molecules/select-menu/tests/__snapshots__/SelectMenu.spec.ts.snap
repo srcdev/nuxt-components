@@ -6,9 +6,9 @@ exports[`SelectMenu > Snapshots > default 1`] = `
   </button>
   <div id="select-menu-v-0-0" popover="" class="select-menu-popover">
     <ul class="select-menu-list" role="listbox" aria-label="Language">
-      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:gb-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">English</span></li>
-      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:fr-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">Français</span></li>
-      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:de-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">Deutsch</span></li>
+      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false" data-label="English"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:gb-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">English</span></li>
+      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false" data-label="Français"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:fr-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">Français</span></li>
+      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false" data-label="Deutsch"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:de-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">Deutsch</span></li>
     </ul>
   </div>
 </div>"
@@ -21,9 +21,9 @@ exports[`SelectMenu > Snapshots > icon-only trigger 1`] = `
   </button>
   <div id="select-menu-v-0-0" popover="" class="select-menu-popover">
     <ul class="select-menu-list" role="listbox" aria-label="Language">
-      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="true"><span class="select-menu-item-check" aria-hidden="true"><span class="iconify i-lucide:check select-menu-item-check-icon" aria-hidden="true"></span></span><span class="iconify i-flag:gb-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">English</span></li>
-      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:fr-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">Français</span></li>
-      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:de-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">Deutsch</span></li>
+      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="true" data-label="English"><span class="select-menu-item-check" aria-hidden="true"><span class="iconify i-lucide:check select-menu-item-check-icon" aria-hidden="true"></span></span><span class="iconify i-flag:gb-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">English</span></li>
+      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false" data-label="Français"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:fr-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">Français</span></li>
+      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false" data-label="Deutsch"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:de-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">Deutsch</span></li>
     </ul>
   </div>
 </div>"
@@ -33,9 +33,9 @@ exports[`SelectMenu > Snapshots > with a selected value 1`] = `
 "<div class="select-menu normal" style="--_anchor-name: --select-menu-anchor-v-0-0;"><button popovertarget="select-menu-v-0-0" popovertargetaction="toggle" type="button" class="select-menu-trigger" aria-label="Language" aria-haspopup="listbox" aria-expanded="false"><span class="iconify i-flag:fr-4x3 select-menu-trigger-icon" aria-hidden="true"></span><span class="select-menu-trigger-label">Français</span><span class="iconify i-lucide:chevron-down select-menu-trigger-chevron" aria-hidden="true"></span></button>
   <div id="select-menu-v-0-0" popover="" class="select-menu-popover">
     <ul class="select-menu-list" role="listbox" aria-label="Language">
-      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:gb-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">English</span></li>
-      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="true"><span class="select-menu-item-check" aria-hidden="true"><span class="iconify i-lucide:check select-menu-item-check-icon" aria-hidden="true"></span></span><span class="iconify i-flag:fr-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">Français</span></li>
-      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:de-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">Deutsch</span></li>
+      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false" data-label="English"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:gb-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">English</span></li>
+      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="true" data-label="Français"><span class="select-menu-item-check" aria-hidden="true"><span class="iconify i-lucide:check select-menu-item-check-icon" aria-hidden="true"></span></span><span class="iconify i-flag:fr-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">Français</span></li>
+      <li class="select-menu-list-item" role="option" tabindex="-1" aria-selected="false" data-label="Deutsch"><span class="select-menu-item-check" aria-hidden="true"><!--v-if--></span><span class="iconify i-flag:de-4x3 select-menu-item-icon" aria-hidden="true"></span><span class="select-menu-item-label">Deutsch</span></li>
     </ul>
   </div>
 </div>"

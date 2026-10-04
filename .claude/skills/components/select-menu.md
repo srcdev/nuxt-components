@@ -188,6 +188,16 @@ Quick reference:
   `[role="option"]` if one exists (in `multiple` mode, the first checked item), otherwise the first
   option (unlike `ActionMenu`, which always focuses the first item since it has no selection state).
 - **`aria-multiselectable="true"`** is set on the listbox only when `multiple` is `true`.
+- **Selected rows are tinted** via `[aria-selected="true"]` (`--select-menu-item-surface-selected`,
+  default `--theme-surface-subtle`), in both single and multiple mode. Hover/focus is declared after
+  it at equal specificity, so the hover surface still shows on a selected row. Selected text colour,
+  font weight and border colour have their own `-selected` tokens falling back to the resting ones.
+  The row border width (`--select-menu-item-border-width`, default `0`) applies to every row with a
+  transparent resting colour, so a selected border never shifts layout. A hidden `::after` carrying
+  `data-label` in the selected weight reserves the label column's width, so a bolder selected
+  weight doesn't resize the popover. Hover/focus has `-text-color-hover` and `-border-hover`, which
+  fall back to the row's *current* state (selected or resting), not always to resting. There's no
+  hover font-weight token on purpose: the width reserve only covers one alternate weight.
 - **Chevron rotation is pure CSS** via `:has(.select-menu-popover:popover-open)` on the root — no
   JS state drives the visual. `isOpen` is still tracked internally, but only to set `aria-expanded`
   on the trigger.
