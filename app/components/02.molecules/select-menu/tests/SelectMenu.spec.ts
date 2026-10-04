@@ -89,6 +89,15 @@ describe("SelectMenu", () => {
       expect(wrapper.find(".select-menu-trigger").attributes("aria-haspopup")).toBe("listbox");
     });
 
+    it("applies the normal variant class by default and underlined when set", async () => {
+      wrapper = await createWrapper();
+      expect(wrapper.find(".select-menu").classes()).toContain("normal");
+
+      await wrapper.setProps({ inputVariant: "underlined" });
+      expect(wrapper.find(".select-menu").classes()).toContain("underlined");
+      expect(wrapper.find(".select-menu").classes()).not.toContain("normal");
+    });
+
     it("uses label prop as aria-label", async () => {
       wrapper = await createWrapper({ label: "Filter by service" });
       expect(wrapper.find(".select-menu-trigger").attributes("aria-label")).toBe("Filter by service");

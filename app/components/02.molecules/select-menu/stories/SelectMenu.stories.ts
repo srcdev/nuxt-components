@@ -14,6 +14,7 @@ interface StoryArgs {
   showChevron?: boolean;
   multiple?: boolean;
   showSelectionInTrigger?: boolean;
+  inputVariant?: "normal" | "underlined";
   modelValue?: string | number | (string | number)[];
   styleClassPassthrough?: string | string[];
 }
@@ -57,6 +58,12 @@ const meta: Meta<StoryArgs> = {
       description: "In multiple mode, update the trigger text to a comma-separated list of the currently checked options instead of leaving it fixed on placeholder/label. No effect outside multiple mode.",
       table: { category: "Content" },
     },
+    inputVariant: {
+      control: { type: "select" },
+      options: ["normal", "underlined"],
+      description: "Trigger border style, matching InputSelect: bordered box or bottom border only.",
+      table: { category: "Styling" },
+    },
     styleClassPassthrough: {
       table: { disable: true },
     },
@@ -66,6 +73,7 @@ const meta: Meta<StoryArgs> = {
     showIcon: true,
     showLabel: true,
     showChevron: true,
+    inputVariant: "normal",
   },
   parameters: {
     docs: {
@@ -350,6 +358,33 @@ export const CustomTokens: Story = {
           }
         </style>
         <SelectMenu v-bind="args" v-model="value" :options="languageOptions" :style-class-passthrough="['dark-pill']" />
+        <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
+          modelValue: <strong>{{ value === undefined ? 'undefined' : value }}</strong>
+        </p>
+      </div>
+    `,
+  }),
+};
+
+/**
+ * Underlined — bottom border only, matching InputSelect's `underlined` variant
+ * so a SelectMenu can sit next to underlined form fields.
+ */
+export const Underlined: Story = {
+  args: {
+    label: "Choose a service",
+    showIcon: false,
+    inputVariant: "underlined",
+  },
+  render: (args) => ({
+    components: { SelectMenu },
+    setup() {
+      const value = ref<string | undefined>(undefined);
+      return { args, value, serviceOptions };
+    },
+    template: `
+      <div style="padding: 4rem 8rem;">
+        <SelectMenu v-bind="args" v-model="value" :options="serviceOptions" />
         <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
           modelValue: <strong>{{ value === undefined ? 'undefined' : value }}</strong>
         </p>

@@ -1,5 +1,5 @@
 <template>
-  <div class="select-menu" :class="[elementClasses]" :style="`--_anchor-name: ${anchorName}`">
+  <div class="select-menu" :class="[inputVariant, elementClasses]" :style="`--_anchor-name: ${anchorName}`">
     <button
       ref="triggerRef"
       :popovertarget="menuId"
@@ -61,6 +61,7 @@
 
 <script setup lang="ts">
 import type { SelectMenuOption } from "~/types/components/select-menu";
+import type { InputUiVariant } from "~/types/forms/types.forms";
 
 interface Props {
   /** The full list of selectable options. */
@@ -79,6 +80,8 @@ interface Props {
   multiple?: boolean;
   /** In multiple mode, update the trigger text to a comma-separated list of the currently checked options instead of leaving it fixed on placeholder/label. No effect outside multiple mode. */
   showSelectionInTrigger?: boolean;
+  /** Trigger border style, matching InputSelect: `normal` (bordered box) or `underlined` (bottom border only). */
+  inputVariant?: InputUiVariant;
   styleClassPassthrough?: string | string[];
 }
 
@@ -89,6 +92,7 @@ const props = withDefaults(defineProps<Props>(), {
   showChevron: true,
   multiple: false,
   showSelectionInTrigger: false,
+  inputVariant: "normal",
   styleClassPassthrough: () => [],
 });
 
@@ -271,6 +275,16 @@ watch(
         opacity: 0.6;
         transition: transform var(--select-menu-transition-duration, 200ms) ease;
       }
+    }
+
+    &.underlined .select-menu-trigger {
+      border-block-start-width: 0;
+      border-inline-width: 0;
+      border-block-end-width: var(
+        --select-menu-trigger-border-width-underlined,
+        var(--form-element-border-bottom-width-underlined, 0.3rem)
+      );
+      border-radius: 0;
     }
 
     &:has(.select-menu-popover:popover-open) .select-menu-trigger-chevron {

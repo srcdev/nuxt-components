@@ -35,6 +35,19 @@
       "/>"
     ]
   },
+  "SRCDEV SelectMenu Underlined": {
+    "description": "SelectMenu — text + chevron with an underlined trigger, matching InputSelect's underlined variant",
+    "scope": "vue,html",
+    "body": [
+      "<SelectMenu",
+      "  v-model=\"${1:filterValue}\"",
+      "  :options=\"${2:filterOptions}\"",
+      "  label=\"${3:Choose a service}\"",
+      "  :show-icon=\"false\"",
+      "  input-variant=\"underlined\"",
+      "/>"
+    ]
+  },
   "SRCDEV SelectMenu Multi-Select": {
     "description": "SelectMenu — checkbox-per-option multi-select, v-model is an array",
     "scope": "vue,html",

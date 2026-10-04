@@ -14,6 +14,7 @@ global token so it matches the rest of the design system out of the box.
 | `--select-menu-trigger-padding-block` | `0.8rem` | Trigger vertical padding |
 | `--select-menu-trigger-padding-inline` | `1.2rem` | Trigger horizontal padding |
 | `--select-menu-trigger-border-width` | `0.1rem` | Trigger border thickness |
+| `--select-menu-trigger-border-width-underlined` | `var(--form-element-border-bottom-width-underlined, 0.3rem)` | Bottom border thickness in the `underlined` variant |
 | `--select-menu-trigger-border` | `var(--theme-border)` | Trigger border colour (rest state) |
 | `--select-menu-trigger-border-focus` | `var(--theme-border-focus)` | Trigger border colour on hover/focus |
 | `--select-menu-trigger-border-radius` | `0.5rem` | Trigger corner rounding |
@@ -51,6 +52,15 @@ global token so it matches the rest of the design system out of the box.
 | `--select-menu-item-check-size` | `1.6rem` | Checkmark icon box size |
 | `--select-menu-item-check-color` | `currentcolor` | Checkmark icon colour |
 | `--select-menu-item-icon-size` | `1.8rem` | Per-option icon size |
+
+---
+
+## State hooks
+
+| Hook | Where | Meaning |
+|---|---|---|
+| `.normal` / `.underlined` | `.select-menu` root | The `inputVariant` prop. `underlined` removes the trigger's top and side borders and its corner radius, matching `InputSelect`'s underlined variant. |
+| `:has(.select-menu-popover:popover-open)` | `.select-menu` root | Menu open (rotates the chevron). |
 
 ---
 

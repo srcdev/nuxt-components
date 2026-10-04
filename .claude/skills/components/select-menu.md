@@ -17,7 +17,7 @@ open between picks.
 
 ## Components
 
-### SelectMenu
+### SelectMenu props
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|
@@ -29,9 +29,10 @@ open between picks.
 | `showChevron` | `boolean` | `true` | Show the trailing chevron in the trigger. |
 | `multiple` | `boolean` | `false` | Allow selecting more than one option. Each option gets a checkbox indicator, `v-model` becomes an array, and picking an option leaves the popover open so more can be toggled. Trigger icon is not shown when `true` (no single option to represent). |
 | `showSelectionInTrigger` | `boolean` | `false` | Multiple mode only. When `true`, the trigger text updates to a comma-separated list of the currently checked options instead of staying fixed on `placeholder`/`label`. No effect outside `multiple`. |
+| `inputVariant` | `InputUiVariant` | `"normal"` | Trigger border style, same prop as `InputSelect`: `"normal"` (bordered box) or `"underlined"` (bottom border only, square corners), added as a class on the root. `"outlined"` has no CSS, same as the `05.forms` inputs. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the root `<div>`. |
 
-**v-model**
+#### v-model
 
 `defineModel<string | number | (string | number)[] | undefined>({ default: undefined })` — the
 selected value(s). In single-select mode (default) it's the one selected option's `value`, or
@@ -44,7 +45,7 @@ is optional by design (see that rule's `defineModel` gap noted in the repo's led
 docs). For several independent single-select categories, place multiple `SelectMenu` instances
 side by side rather than using `multiple` on one instance — see the "Filter bar" section below.
 
-**Type import**
+#### Type import
 
 ```ts
 import type { SelectMenuOption } from "~/types/components/select-menu";
@@ -170,8 +171,11 @@ Quick reference:
 
 ## Notes
 
-- **Popover API + CSS anchor positioning** — same mechanism as `ActionMenu`. Broadly supported
-  (Chrome 114+, Firefox 125+, Safari 17+). No polyfill is included.
+- **Popover API + CSS anchor positioning** — same mechanism as `ActionMenu`. The Popover API is
+  broadly supported (Chrome 114+, Firefox 125+, Safari 17+), but CSS anchor positioning is much
+  newer (Chromium 125+, Safari 26+), and without it the popover isn't placed under the trigger. No
+  polyfill or fallback is included, so check support before using this where older devices
+  matter; a native `<select>` (`InputSelect`) is the safer choice there.
 - **Left-aligned popover** (`left: anchor(left)`) — unlike `ActionMenu` which right-aligns. Matches
   native `<select>` dropdown behaviour. Flips above the trigger near the bottom of the viewport.
 - **Keyboard navigation** follows the WAI-ARIA listbox pattern: `ArrowDown`/`ArrowUp` move between
