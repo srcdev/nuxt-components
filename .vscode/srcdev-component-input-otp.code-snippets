@@ -1,0 +1,47 @@
+{
+  "SRCDEV InputOtp Basic": {
+    "description": "Bare InputOtp one-time-code boxes (no legend/description/error wrapper)",
+    "scope": "vue,html",
+    "body": [
+      "<InputOtp",
+      "  id=\"$1otp\"",
+      "  v-model=\"$2code\"",
+      "  name=\"$3code\"",
+      "  :length=\"${4:6}\"",
+      "  group-label=\"$5Verification code\"",
+      "/>"
+    ]
+  },
+  "SRCDEV InputOtpField Basic": {
+    "description": "InputOtpField: labelled one-time-code field with description and error support",
+    "scope": "vue,html",
+    "body": [
+      "<InputOtpField",
+      "  v-model=\"$1code\"",
+      "  name=\"$2code\"",
+      "  label=\"$3Verification code\"",
+      "  :length=\"${4:6}\"",
+      "  autofocus",
+      "  :error-message=\"$5errors.code\"",
+      "  :field-has-error=\"!!$5errors.code\"",
+      "  @complete=\"$6onComplete\"",
+      ">",
+      "  <template #descriptionText>$7Enter the code we sent to your email.</template>",
+      "</InputOtpField>"
+    ]
+  },
+  "SRCDEV InputOtp CSS Override": {
+    "description": "CSS override scaffold for InputOtp tokens",
+    "scope": "css",
+    "body": [
+      ".$1my-page {",
+      "  --input-otp-gap: $2;",
+      "  --input-otp-box-inline-size: $3;",
+      "  --input-otp-box-block-size: $4;",
+      "  --input-otp-font-size: $5;",
+      "  --input-otp-border: $6;",
+      "  --input-otp-border-focus: $7;",
+      "}"
+    ]
+  }
+}

@@ -5,6 +5,7 @@ import InputPasswordWithLabel from "../../input-text/InputPasswordWithLabel.vue"
 import InputTextAsNumberWithLabel from "../../input-text/InputTextAsNumberWithLabel.vue";
 import InputRangeDefault from "../../input-range/InputRangeDefault.vue";
 import InputNumberField from "../../input-number/InputNumberField.vue";
+import InputOtpField from "../../input-otp/InputOtpField.vue";
 import InputTextareaWithLabel from "../../input-textarea/InputTextareaWithLabel.vue";
 import InputSelectWithLabel from "../../input-select/InputSelectWithLabel.vue";
 import ToggleSwitchWithLabel from "../../toggle-switch/ToggleSwitchWithLabel.vue";
@@ -29,7 +30,7 @@ interface MigratedFieldsFormStoryArgs {
 // - Own field: InputTextWithLabel (InputTextCore; plus one per type/inputmode pair for checking
 //   on-device keyboards), InputPasswordWithLabel,
 //   InputTextAsNumberWithLabel, InputRangeDefault (InputRangeCore), InputNumberField
-//   (InputNumber), InputTextareaWithLabel (InputTextareaCore), InputSelectWithLabel
+//   (InputNumber), InputOtpField (InputOtp), InputTextareaWithLabel (InputTextareaCore), InputSelectWithLabel
 //   (InputSelectCore), ToggleSwitchWithLabel and ToggleSwitchWithLabelInline (ToggleSwitchCore),
 //   MultipleCheckboxes, SingleCheckbox, MultipleRadiobuttons, TripleToggleSwitch ("Theme
 //   preference": no Field wrapper or error state, so it sits under a plain caption).
@@ -64,6 +65,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     InputTextAsNumberWithLabel,
     InputRangeDefault,
     InputNumberField,
+    InputOtpField,
     InputTextareaWithLabel,
     InputSelectWithLabel,
     ToggleSwitchWithLabel,
@@ -84,6 +86,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       guests: 2 as number | undefined,
       budget: 50,
       quantity: 1,
+      code: "",
       notes: "",
       colour: "",
       subscribe: false,
@@ -169,6 +172,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       guests: "",
       budget: "",
       quantity: "",
+      code: "",
       notes: "",
       colour: "",
       services: "",
@@ -182,6 +186,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       errors.guests = (state.guests ?? 0) >= 1 ? "" : "At least 1 guest is required";
       errors.budget = state.budget >= 100 ? "" : "Budget must be at least £100";
       errors.quantity = state.quantity >= 1 ? "" : "Quantity must be at least 1";
+      errors.code = /^\d{6}$/.test(state.code) ? "" : "Enter the 6-digit code";
       errors.notes = state.notes.trim() ? "" : "Notes are required";
       errors.colour = state.colour ? "" : "Please choose a colour";
       errors.services = state.services.length ? "" : "Choose at least one service";
@@ -205,6 +210,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       errors.guests = "";
       errors.budget = "";
       errors.quantity = "";
+      errors.code = "";
       errors.notes = "";
       errors.colour = "";
       errors.services = "";
@@ -239,7 +245,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
         Every 05.forms component that is fully migrated (5/5 on the Component Ledger).
         Click Continue to see the pending state, then the error states for any empty or
         out-of-range field: name, password under 8 characters, no guests, budget under £100,
-        quantity under 1, notes, colour, services, contact method or terms.
+        quantity under 1, verification code, notes, colour, services, contact method or terms.
       </p>
 
       <FormWrapper width="medium">
@@ -319,6 +325,19 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
               <template #left><span aria-hidden="true">−</span></template>
               <template #right><span aria-hidden="true">+</span></template>
             </InputNumberField>
+          </FormField>
+
+          <FormField width="wide" :has-gutter="false">
+            <InputOtpField
+              v-model="state.code"
+              name="code"
+              label="Verification code"
+              :error-message="errors.code"
+              :field-has-error="!!errors.code"
+              :input-variant="args.inputVariant"
+            >
+              <template #descriptionText>Enter the 6-digit code we sent to your email</template>
+            </InputOtpField>
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
