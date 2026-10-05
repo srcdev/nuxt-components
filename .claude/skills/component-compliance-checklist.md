@@ -132,7 +132,10 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
     covers ellipsis too (`1` is single-line ellipsis). Default it to `none` unless the layout
     clearly needs a cap, and never clamp text that must stay readable (legal or attribution text,
     link text that names its destination). Shape and rules: `theming-component-token-pattern.md`,
-    "Line-clamp tokens". Add a unit test for any logic fix. A component that takes no data or copy
+    "Line-clamp tokens". Give each line-clamp token a Controls-panel select in the stories (set on
+    a wrapper `:style`, stripped from the component's args), labelled as a story-only CSS token so
+    nobody mistakes it for a prop: `storybook-add-story.md`, "Label token controls as story-only".
+    Add a unit test for any logic fix. A component that takes no data or copy
     (e.g. a pure layout wrapper) still gets one with oversized slot content.
 7. **Skill doc** — create or update `.claude/skills/components/<component-name>.md`, following the
    pattern of an existing one. A labelled `<Name>Field` wrapper (or any other wrapper) is documented

@@ -54,14 +54,19 @@ const meta: Meta<StoryArgs> = {
     authorLineClamp: {
       control: "select",
       options: lineClampOptions,
-      description: "Story control for --google-reviews-author-line-clamp (1 = single-line ellipsis)",
-      table: { category: "CSS tokens" },
+      description:
+        "**Story control, not a prop.** Sets the `--google-reviews-author-line-clamp` CSS token on a wrapper. " +
+        "To use it in an app, set the token in your own CSS, e.g. `.reviews { --google-reviews-author-line-clamp: 1; }`. " +
+        "`1` is single-line ellipsis.",
+      table: { category: "CSS tokens (story only, set in your CSS)" },
     },
     textLineClamp: {
       control: "select",
       options: lineClampOptions,
-      description: "Story control for --google-reviews-text-line-clamp",
-      table: { category: "CSS tokens" },
+      description:
+        "**Story control, not a prop.** Sets the `--google-reviews-text-line-clamp` CSS token on a wrapper. " +
+        "To use it in an app, set the token in your own CSS, e.g. `.reviews { --google-reviews-text-line-clamp: 3; }`.",
+      table: { category: "CSS tokens (story only, set in your CSS)" },
     },
     data: { control: "object", description: "GoogleReviewsData, usually from useGoogleReviews()" },
     minRating: { control: { type: "range", min: 0, max: 5, step: 1 }, description: "Hide reviews below this rating; shows the filter notice" },

@@ -271,6 +271,20 @@ Key points:
 - Extra args must be stripped before `v-bind` — spreading unknown keys onto a component makes them unknown HTML attributes.
 - CSS custom properties set via `:style` on the component root are picked up by `var()` in the component's scoped CSS.
 
+### Label token controls as story-only
+
+A control that drives a CSS token (a line clamp, a colour) looks exactly like a prop in the
+Controls panel and the generated docs table, so a developer reading the story can assume it's a
+prop and try to pass it. Make it unmistakable:
+
+- Put it in the category `"CSS tokens (story only, set in your CSS)"`.
+- Start the description with `**Story control, not a prop.**`, name the token, and show the CSS a
+  consumer would write instead, e.g.
+  `` `.salon-menu { --price-list-description-line-clamp: 2; }` ``.
+- If a story's docs text tells people to try the control, say there too that it's a CSS token.
+
+`PriceList.stories.ts` and `GoogleReviews.stories.ts` (line-clamp controls) follow this.
+
 ## Notes
 
 - **Colour scheme:** `.storybook/preview.ts` pins every story to the light scheme

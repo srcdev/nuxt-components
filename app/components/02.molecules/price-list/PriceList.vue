@@ -2,6 +2,7 @@
   <div class="price-list" :class="elementClasses">
     <div v-for="(column, colIndex) in priceListData" :key="colIndex" class="price-list__column">
       <HeroText
+        v-if="column.headingtext"
         :tag="headingTag"
         font-size="subheading"
         :text-content="[{ text: column.headingtext }]"
@@ -49,15 +50,28 @@ watch(
 <style lang="css">
 @layer components {
   .price-list {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--price-list-column-gap, 2.4rem);
+    --_column-gap: var(--price-list-column-gap, 2.4rem);
+    --_max-columns: var(--price-list-max-columns, 2);
 
-    @media (min-width: 48em) {
-      grid-template-columns: 1fr 1fr;
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(
+        max(
+          min(100%, var(--price-list-column-min-inline-size, 32rem)),
+          calc((100% - (var(--_max-columns) - 1) * var(--_column-gap)) / var(--_max-columns))
+        ),
+        1fr
+      )
+    );
+    gap: var(--_column-gap);
+
+    .price-list__column {
+      min-inline-size: 0;
     }
 
     .price-list__heading.hero-text {
+      overflow-wrap: anywhere;
       font-size: var(--price-list-heading-font-size, var(--hero-text-subheading));
       font-weight: var(--price-list-heading-font-weight, 600);
       color: var(--price-list-heading-colour, inherit);
@@ -75,10 +89,10 @@ watch(
       flex-direction: column;
 
       .price-list__row {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) fit-content(var(--price-list-price-max-inline-size, 50%));
         align-items: center;
-        gap: var(--price-list-row-gap, 1.2rem);
+        column-gap: var(--price-list-row-gap, 1.2rem);
         padding-block: var(--price-list-row-padding-block, 1.4rem);
         border-block-end: var(--price-list-divider-width, 1px) solid
           color-mix(
@@ -93,17 +107,26 @@ watch(
         }
 
         .price-list__description {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          overflow-wrap: anywhere;
+          -webkit-line-clamp: var(--price-list-description-line-clamp, none);
+          line-clamp: var(--price-list-description-line-clamp, none);
           font-size: var(--price-list-description-font-size, 1.4rem);
           color: var(--price-list-description-colour, inherit);
         }
 
         .price-list__price {
           display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-end;
           align-items: baseline;
           gap: var(--price-list-from-gap, 0.5ch);
           margin: 0;
+          text-align: end;
+          overflow-wrap: anywhere;
           font-variant-numeric: tabular-nums;
-          white-space: nowrap;
         }
 
         .price-list__from {

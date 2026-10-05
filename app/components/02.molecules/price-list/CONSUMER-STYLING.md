@@ -2,7 +2,8 @@
 
 `PriceList` renders one or more columns of priced items (a salon/service menu). Each column is a
 `HeroText` heading followed by a `<dl>` of description/price rows separated by dividers. Columns
-stack on narrow viewports and sit two-up from `48em`.
+stack in a narrow container and sit side by side (two at most by default) once the container is
+wide enough for each to reach `--price-list-column-min-inline-size`.
 
 ## Public token API
 
@@ -10,7 +11,17 @@ stack on narrow viewports and sit two-up from `48em`.
 
 | Token | Default | Controls |
 |---|---|---|
-| `--price-list-column-gap` | `2.4rem` | Gap between columns (and between stacked columns on mobile) |
+| `--price-list-column-gap` | `2.4rem` | Gap between columns (and between stacked columns) |
+| `--price-list-column-min-inline-size` | `32rem` | Narrowest a column gets before the columns stack. Measured against the component's own width, not the viewport |
+| `--price-list-max-columns` | `2` | Most columns side by side. A single column still takes only its share of the width (half, by default) |
+
+Private `--_column-gap` and `--_max-columns` hold the two tokens above so the column formula can
+read each twice; they are not public API.
+
+> **Changed 2026-10-05**: the two-column switch used to be a `48em` viewport media query, so a
+> list in a narrow container (a sidebar, a card) stayed two-up and cramped on a wide screen. It now
+> follows the component's own width, set by `--price-list-column-min-inline-size` and
+> `--price-list-max-columns`.
 
 ### Column heading
 
@@ -35,6 +46,7 @@ The heading is a `HeroText`, so `--hero-text-font-family` also applies to it.
 | `--price-list-divider-opacity` | `0.15` | Divider opacity (0 to 1), mixed into the colour |
 | `--price-list-description-font-size` | `1.4rem` | Item description size |
 | `--price-list-description-colour` | `inherit` | Item description colour |
+| `--price-list-description-line-clamp` | `none` | Cap the description at this many lines, with an ellipsis on the last. `1` is single-line ellipsis, `none` shows everything |
 
 ### Price
 
@@ -46,8 +58,9 @@ The heading is a `HeroText`, so `--hero-text-font-family` also applies to it.
 | `--price-list-from-font-size` | `1.4rem` | "from" label size |
 | `--price-list-from-colour` | `inherit` | "from" label colour |
 | `--price-list-from-gap` | `0.5ch` | Space between "from" and the amount |
+| `--price-list-price-max-inline-size` | `50%` | Most of the row the price can take. A price longer than this wraps inside it, right-aligned; normal short prices stay on one line |
 
-There are no private `--_` tokens.
+Long unbroken descriptions, headings and prices wrap anywhere rather than overflow the column.
 
 > **Changed 2026-09-27**: `--price-list-divider-color` is now `--price-list-divider-colour`
 > (repo spelling convention). `--price-list-price-font-size` used to be dead for the amount itself
@@ -74,8 +87,7 @@ No `data-*` attributes. Inner element classes, safe to target:
 | `.price-list__from` | "from" label (only when `item.from` is true) |
 | `.price-list__amount` | Price amount |
 
-The two-column breakpoint (`48em`) is a media query and can't be tokenised; override
-`grid-template-columns` on `.price-list` if you need a different split.
+`.price-list__heading` is not rendered for a column whose `headingtext` is empty.
 
 ---
 

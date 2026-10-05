@@ -4,7 +4,8 @@
 
 `PriceList` (`app/components/02.molecules/price-list/`) renders a service/menu-style price list:
 one or more columns, each with a heading (optional icon) and a `<dl>` of description/price rows.
-Columns stack below `48em` and sit two-up above it. Not a SaaS plan comparison, use `PricingCard`
+Columns stack in a narrow container and sit two-up once the component itself is wide enough
+(a container-width grid since 2026-10-05, not a viewport media query). Not a SaaS plan comparison, use `PricingCard`
 for that.
 
 ---
@@ -48,6 +49,8 @@ No slots, no events.
 - Column titles are `HeroText` headings at `heading-tag`. Prices are plain `<span>`s inside `<dd>`,
   not headings (before 2026-09-27 each price was an `<h2>`, which flooded the heading outline).
 - Rows are `<div>`-wrapped `<dt>`/`<dd>` pairs, valid inside `<dl>`.
+- A column with an empty `headingtext` renders no heading at all (no empty `<h2>`); its rows still
+  render.
 
 ---
 
@@ -56,6 +59,12 @@ No slots, no events.
 All tokens are `--price-list-*`; full table in `CONSUMER-STYLING.md` next to the component.
 Common ones: `--price-list-divider-colour`, `--price-list-divider-opacity`,
 `--price-list-price-font-size`, `--price-list-heading-margin-block-end`.
+
+Layout and long data: `--price-list-column-min-inline-size` (`32rem`) and `--price-list-max-columns`
+(`2`) control when columns sit side by side; `--price-list-price-max-inline-size` (`50%`) caps the
+price so a long price wraps instead of crushing the description; `--price-list-description-line-clamp`
+(`none`) caps description lines. Unbroken strings wrap anywhere. The `StressTest` story covers the
+worst-case data.
 
 ---
 

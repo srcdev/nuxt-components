@@ -191,6 +191,26 @@ describe("PriceList", () => {
       expect(classes).not.toContain("first-class");
     });
 
+    it("does not render an empty heading when headingtext is empty", async () => {
+      wrapper = await createWrapper([
+        { headingtext: "", items: [{ description: "Cut", price: "£45" }] },
+        { headingtext: "Colour", items: [] },
+      ]);
+      const columns = wrapper.findAll(".price-list__column");
+      expect(columns[0]!.find(".price-list__heading").exists()).toBe(false);
+      expect(columns[0]!.findAll(".price-list__row").length).toBe(1);
+      expect(columns[1]!.find(".price-list__heading").text()).toBe("Colour");
+    });
+
+    it("renders HTML-like text as text", async () => {
+      wrapper = await createWrapper([
+        { headingtext: "Cuts", items: [{ description: "<script>alert(1)</script>", price: "<b>£5</b>" }] },
+      ]);
+      expect(wrapper.find("script").exists()).toBe(false);
+      expect(wrapper.find("dd b").exists()).toBe(false);
+      expect(wrapper.find(".price-list__description").text()).toBe("<script>alert(1)</script>");
+    });
+
     it("does not render a 'from' label when item.from is omitted", async () => {
       wrapper = await createWrapper();
       expect(wrapper.find(".price-list__from").exists()).toBe(false);
