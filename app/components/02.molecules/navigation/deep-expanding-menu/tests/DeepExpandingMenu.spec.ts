@@ -1,5 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
+import { nextTick } from "vue";
 import DeepExpandingMenu from "../DeepExpandingMenu.vue";
 import type { ResponsiveHeaderNavItem } from "~/types/components";
 
@@ -88,5 +89,81 @@ describe("DeepExpandingMenu", () => {
     await wrapper.setProps({ styleClassPassthrough: ["updated-class"] });
     expect(wrapper.classes()).not.toContain("initial-class");
     expect(wrapper.classes()).toContain("updated-class");
+  });
+
+  describe("open state", () => {
+    const twoGroups: ResponsiveHeaderNavItem[] = [
+      { name: "Services", childLinksTitle: "Our services", childLinks: [{ name: "Haircuts", path: "/haircuts" }] },
+      { name: "About", childLinksTitle: "About us", childLinks: [{ name: "Team", path: "/team" }] },
+    ];
+
+    const toggleEvent = (newState: "open" | "closed") => Object.assign(new Event("toggle"), { newState });
+
+    afterEach(() => {
+      delete (HTMLElement.prototype as unknown as Record<string, unknown>)["showPopover"];
+      delete (HTMLElement.prototype as unknown as Record<string, unknown>)["hidePopover"];
+    });
+
+    describe("with the Popover API", () => {
+      beforeEach(() => {
+        Object.defineProperty(HTMLElement.prototype, "showPopover", { value: vi.fn(), writable: true, configurable: true });
+        Object.defineProperty(HTMLElement.prototype, "hidePopover", { value: vi.fn(), writable: true, configurable: true });
+      });
+
+      it("tracks the open group from toggle events, whichever order they arrive in", async () => {
+        const wrapper = await mountSuspended(DeepExpandingMenu, { props: { navLinks: twoGroups } });
+        const [first, second] = wrapper.findAll(".navigation-group-panel");
+        const toggles = wrapper.findAll(".navigation-group-toggle");
+
+        first!.element.dispatchEvent(toggleEvent("open"));
+        await nextTick();
+        expect(toggles[0]!.attributes("aria-expanded")).toBe("true");
+
+        second!.element.dispatchEvent(toggleEvent("open"));
+        first!.element.dispatchEvent(toggleEvent("closed"));
+        await nextTick();
+        expect(toggles[0]!.attributes("aria-expanded")).toBe("false");
+        expect(toggles[1]!.attributes("aria-expanded")).toBe("true");
+
+        second!.element.dispatchEvent(toggleEvent("closed"));
+        await nextTick();
+        expect(toggles[1]!.attributes("aria-expanded")).toBe("false");
+      });
+    });
+
+    describe("without the Popover API", () => {
+      beforeEach(() => {
+        Object.defineProperty(HTMLElement.prototype, "showPopover", { value: undefined, writable: true, configurable: true });
+      });
+
+      it("opens, switches and closes groups from their toggles", async () => {
+        const wrapper = await mountSuspended(DeepExpandingMenu, { props: { navLinks: twoGroups } });
+        const toggles = wrapper.findAll(".navigation-group-toggle");
+        const panels = wrapper.findAll(".navigation-group-panel");
+
+        await toggles[0]!.trigger("click");
+        expect(panels[0]!.classes()).toContain("deep-expanding-menu-panel-open");
+        expect(toggles[0]!.attributes("aria-expanded")).toBe("true");
+
+        await toggles[1]!.trigger("click");
+        expect(panels[0]!.classes()).not.toContain("deep-expanding-menu-panel-open");
+        expect(panels[1]!.classes()).toContain("deep-expanding-menu-panel-open");
+
+        await toggles[1]!.trigger("click");
+        expect(panels[1]!.classes()).not.toContain("deep-expanding-menu-panel-open");
+        expect(toggles[1]!.attributes("aria-expanded")).toBe("false");
+      });
+
+      it("closes the open group on Escape", async () => {
+        const wrapper = await mountSuspended(DeepExpandingMenu, { props: { navLinks: twoGroups }, attachTo: document.body });
+        await wrapper.findAll(".navigation-group-toggle")[0]!.trigger("click");
+        await nextTick();
+
+        document.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+        await nextTick();
+        expect(wrapper.find(".deep-expanding-menu-panel-open").exists()).toBe(false);
+        wrapper.unmount();
+      });
+    });
   });
 });

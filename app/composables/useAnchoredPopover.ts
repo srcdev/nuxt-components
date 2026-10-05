@@ -1,9 +1,9 @@
 import type { Ref } from "vue";
 
 interface AnchoredPopoverOptions {
-  rootRef: Ref<HTMLElement | null>;
-  triggerRef: Ref<HTMLElement | null>;
-  popoverRef: Ref<HTMLElement | null>;
+  rootRef: Readonly<Ref<HTMLElement | null>>;
+  triggerRef: Readonly<Ref<HTMLElement | null>>;
+  popoverRef: Readonly<Ref<HTMLElement | null>>;
   align?: "start" | "end";
   onOpen?: () => void;
 }

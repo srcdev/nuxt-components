@@ -1,16 +1,33 @@
 <template>
-  <component :is="tag" class="deep-expanding-menu" :class="[elementClasses]">
+  <component :is="tag" ref="rootRef" class="deep-expanding-menu" :class="[elementClasses]">
     <div class="inner">
       <template v-for="(link, key) in navLinks" :key="key">
         <NuxtLink v-if="link.path" :to="link.path" class="navigation-link">{{ link.name }}</NuxtLink>
 
         <div v-else class="navigation-group" :style="`--_anchor-name: --anchor-${uid}-${key};`">
-          <button :popovertarget="`popovertarget-${uid}-${key}`" class="navigation-group-toggle">
+          <button
+            :ref="(el) => setElement(triggerEls, key, el)"
+            :popovertarget="`popovertarget-${uid}-${key}`"
+            class="navigation-group-toggle"
+            :aria-expanded="isOpen && activeKey === key"
+            @click="handleGroupClick(key)"
+          >
             <span>{{ link.name }}</span>
             <Icon name="bi:caret-down-fill" class="icon" />
           </button>
 
-          <div :id="`popovertarget-${uid}-${key}`" class="navigation-group-panel" popover role="menu">
+          <div
+            :id="`popovertarget-${uid}-${key}`"
+            :ref="(el) => setElement(panelEls, key, el)"
+            class="navigation-group-panel"
+            :class="{ 'deep-expanding-menu-panel-open': usesFallbackPopover && isOpen && activeKey === key }"
+            :style="activeKey === key ? positionStyle : undefined"
+            :data-placement="activeKey === key ? popoverPlacement : undefined"
+            popover
+            role="menu"
+            @beforetoggle="handlePanelBeforeToggle(key, $event)"
+            @toggle="handlePanelToggle(key, $event)"
+          >
             <h4 class="page-heading-4 mb-6">{{ link.childLinksTitle }}</h4>
             <ul class="navigation-group-list">
               <li v-for="childLink in link.childLinks" :key="childLink.name" class="navigation-group-item">
@@ -25,6 +42,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ComponentPublicInstance } from "vue";
 import type { ResponsiveHeaderNavItem } from "~/types/components";
 
 interface Props {
@@ -44,6 +62,54 @@ const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.s
 // Scopes anchor-name/popovertarget ids so multiple instances on one page don't collide.
 const uid = useId();
 
+// One panel is open at a time, so a single popover controller follows the active group.
+const rootRef = ref<HTMLElement | null>(null);
+const activeKey = ref<number | null>(null);
+const triggerEls = new Map<number, HTMLElement>();
+const panelEls = new Map<number, HTMLElement>();
+
+const setElement = (map: Map<number, HTMLElement>, key: number, el: Element | ComponentPublicInstance | null) => {
+  if (el instanceof HTMLElement) map.set(key, el);
+  else map.delete(key);
+};
+
+const triggerRef = computed(() => (activeKey.value === null ? null : (triggerEls.get(activeKey.value) ?? null)));
+const popoverRef = computed(() => (activeKey.value === null ? null : (panelEls.get(activeKey.value) ?? null)));
+
+const {
+  isOpen,
+  usesFallbackPopover,
+  positionStyle,
+  popoverPlacement,
+  show,
+  hide,
+  handleBeforeToggle,
+  handleToggle,
+} = useAnchoredPopover({ rootRef, triggerRef, popoverRef, align: "start" });
+
+const handleGroupClick = (key: number) => {
+  if (!usesFallbackPopover.value) return;
+  const wasActive = isOpen.value && activeKey.value === key;
+  hide();
+  if (wasActive) return;
+  activeKey.value = key;
+  show();
+};
+
+const handlePanelBeforeToggle = (key: number, event: Event) => {
+  if ((event as ToggleEvent).newState !== "open") return;
+  activeKey.value = key;
+  handleBeforeToggle(event);
+};
+
+// Opening one auto popover closes the other, and those toggle events can arrive in either order.
+const handlePanelToggle = (key: number, event: Event) => {
+  const opening = (event as ToggleEvent).newState === "open";
+  if (opening) activeKey.value = key;
+  else if (activeKey.value !== key) return;
+  handleToggle(event);
+};
+
 watch(
   () => props.styleClassPassthrough,
   () => {
@@ -55,18 +121,6 @@ watch(
 <style lang="css">
 @layer components {
   @layer deep-expanding-menu-setup {
-    @position-try --anchor-left {
-      inset: auto;
-      top: calc(anchor(bottom) + 1rem);
-      left: calc(anchor(left) + 1rem);
-    }
-
-    @position-try-fallbacks --anchor-right {
-      inset: auto;
-      top: calc(anchor(bottom) + 1rem);
-      right: calc(anchor(right) + 1rem);
-    }
-
     .deep-expanding-menu {
       container-type: inline-size;
       display: grid;
@@ -152,6 +206,24 @@ watch(
               }
             }
 
+            /* Kept apart from :popover-open, which would invalidate a shared selector list where unsupported. */
+            &.deep-expanding-menu-panel-open {
+              display: block;
+              opacity: 1;
+            }
+
+            @supports not (anchor-name: --a) {
+              position: fixed;
+              top: calc(var(--_popover-top, 0px) + 1rem);
+              left: var(--_popover-left, 0px);
+              z-index: var(--deep-expanding-menu-panel-z-index, 999999);
+
+              &[data-placement="above"] {
+                top: auto;
+                bottom: calc(var(--_popover-bottom, 0px) + 1rem);
+              }
+            }
+
             h4 {
               color: var(--deep-expanding-menu-panel-heading-colour, var(--slate-10));
             }
@@ -186,7 +258,7 @@ watch(
             }
           }
 
-          &:has(.navigation-group-panel:popover-open) {
+          &:has(> .navigation-group-toggle[aria-expanded="true"]) {
             --_icon-transform: scaleY(-1);
           }
         }

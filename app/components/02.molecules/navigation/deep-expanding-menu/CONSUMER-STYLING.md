@@ -20,6 +20,7 @@
 | `--deep-expanding-menu-panel-list-gap` | `1.2rem` | Gap between child link grid items |
 | `--deep-expanding-menu-group-link-colour` | `var(--slate-10)` | Child link text colour |
 | `--deep-expanding-menu-group-link-border-colour-hover` | `var(--slate-10)` | Child link bottom border colour on hover/focus |
+| `--deep-expanding-menu-panel-z-index` | `999999` | Panel stacking order in browsers without CSS anchor positioning. Ignored where the panel renders in the top layer |
 
 ```css
 .my-page {
@@ -39,11 +40,25 @@ Or scope to a single instance via `styleClassPassthrough`:
 
 ## Not tokenised
 
-- The `@position-try` fallback offsets (`--anchor-left`/`--anchor-right`) are fixed at `1rem` —
-  these are CSS anchor-positioning fallback rules, not runtime custom properties, so they can't be
-  overridden per-instance without a new `@position-try` block.
+- The `1rem` gap between a toggle and its panel.
 - Anchor names and popover target ids are generated per-instance via `useId()` and are not
   consumer-configurable — they only need to be unique, not meaningful.
+
+---
+
+## Open state and older browsers
+
+| Hook | Meaning |
+|---|---|
+| `.navigation-group-toggle[aria-expanded="true"]` | Group open, every browser (flips the caret) |
+| `.navigation-group-panel:popover-open` | Panel open, Popover API browsers |
+| `.deep-expanding-menu-panel-open` | Panel open, browsers without the Popover API (Safari 16 and older). Style it in a **separate rule** from `:popover-open`: a selector list containing `:popover-open` is dropped whole where it's unsupported |
+| `.navigation-group-panel[data-placement="above"]` | Flipped above the toggle, browsers without CSS anchor positioning only |
+
+Without CSS anchor positioning (e.g. Safari 17–18) the panel is placed with `position: fixed` from
+the toggle's measured position. Without the Popover API (Safari 16) the panel also opens and closes
+in JS and isn't in the top layer, so `--deep-expanding-menu-panel-z-index` applies, and an ancestor
+with `transform`, `filter` or `contain` becomes its containing block and can misplace it.
 
 ---
 
@@ -54,4 +69,3 @@ Set the tokens above on an element you own (a page or section class, or a class 
 `@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
 `<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
 `:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
-

@@ -2,8 +2,14 @@
 
 `app/composables/useAnchoredPopover.ts`. Open/close state and positioning for a trigger + `popover`
 element anchored with CSS anchor positioning, with fallbacks for browsers that lack either
-feature. Used by `ActionMenu` (`align: "end"`) and `SelectMenu` (`align: "start"`). Use it for any
-new anchored popover instead of calling `showPopover()`/`hidePopover()` directly.
+feature. Used by `ActionMenu` (`align: "end"`), `SelectMenu` and `DeepExpandingMenu` (`align:
+"start"`). Use it for any new anchored popover instead of calling `showPopover()`/`hidePopover()`
+directly.
+
+Several popovers where only one is open at a time (e.g. `DeepExpandingMenu`'s groups) can share
+one instance: keep an `activeKey`, pass computeds over per-item element maps as `triggerRef`/
+`popoverRef` (the options accept readonly refs), and ignore a `toggle` close event that isn't for
+the active item, since auto popovers' open and close events can arrive in either order.
 
 ## Why
 

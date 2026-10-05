@@ -13,12 +13,12 @@ type: reference
 anchor-positioning (`anchor-name`/`position-anchor`/`anchor()`) and the native Popover API
 (`popover`/`popovertarget`).
 
-**Browser support caveat:** CSS anchor-positioning and the Popover API are both comparatively
-recent — check current browser support before shipping this on a page that must work everywhere,
-same caution as `ExpandingPanel`'s `::details-content` gap (CLAUDE.md pitfall #19). If broad
-support is a hard requirement, use [`DeepExpandingMenuClassic`](deep-expanding-menu-classic.md)
-instead — same API and visual result, built on `<details>`/`<summary>` +
-`onClickOutside` instead.
+**Browser support:** since 2026-10-05 open/close and positioning go through the shared
+`useAnchoredPopover` composable (see `composable-anchored-popover.md`), so the menu also works
+without anchor positioning (Safari 17–18: JS-measured `position: fixed`) and without the Popover
+API (Safari 16: JS open/close, outside click and Escape). Before that, panels never opened on
+Safari 16. [`DeepExpandingMenuClassic`](deep-expanding-menu-classic.md) is still the alternative
+built on `<details>`/`<summary>`: same API and visual result, with no popover layer involved.
 
 ## Props
 
@@ -82,6 +82,14 @@ See `CONSUMER-STYLING.md` for the full token API and what's not tokenised.
 - Auto-imported in Nuxt — no manual import needed.
 - Anchor names and popover target ids are generated per-instance via `useId()`, so multiple
   instances on one page don't collide.
+- One `useAnchoredPopover` instance serves every group: `activeKey` tracks the open group, and the
+  composable's `triggerRef`/`popoverRef` are computeds over per-group element maps (filled by
+  function refs). Native `toggle` events for two auto popovers can arrive in either order (B opens,
+  then A closes), so a close event is ignored unless it's for the active group.
+- Each group toggle has `aria-expanded`; the caret flip keys off it rather than
+  `:has(:popover-open)`, so it works in the fallback too.
+- 2026-10-05: removed two never-referenced `@position-try` blocks (`--anchor-left`, and an invalid
+  `@position-try-fallbacks --anchor-right` at-rule).
 - 2026-09-07 migration: moved from an unplaced top-level folder into
   `02.molecules/navigation/deep-expanding-menu/`; converted options-style `defineProps` to
   `interface Props` + `withDefaults`; the previous hardcoded `nav-1` anchor/popover id prefix
