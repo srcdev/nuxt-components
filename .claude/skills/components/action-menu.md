@@ -124,8 +124,8 @@ Quick reference:
 ## Notes
 
 - **Popover API + CSS anchor positioning, with fallbacks** — open/close and positioning go through
-  the shared `useAnchoredPopover` composable (`align: "end"`), same as `SelectMenu`. Without anchor
-  positioning (Safari 17–18) JS measures the trigger and writes `--_popover-top`/`-bottom`/`-right`
+  the shared `useAnchoredPopover` composable, same as `SelectMenu`. Without anchor
+  positioning (Safari 17–18) JS measures the trigger and writes `--_anchor-*` px values
   for the `@supports not (anchor-name: --a)` block. Without the Popover API (Safari 16) the trigger
   toggles `isOpen`, `.action-menu-popover-open` shows the menu, outside pointerdown and Escape
   close it, and `--action-menu-popover-z-index` (default `999999`) applies. See the `select-menu`

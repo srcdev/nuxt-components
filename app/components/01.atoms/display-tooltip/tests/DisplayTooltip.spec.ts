@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import DisplayTooltip from "../DisplayTooltip.vue";
 
@@ -71,5 +71,40 @@ describe("DisplayTooltip", () => {
     await wrapper.setProps({ styleClassPassthrough: ["updated-class"] });
     expect(wrapper.classes()).not.toContain("initial-class");
     expect(wrapper.classes()).toContain("updated-class");
+  });
+
+  describe("without the Popover API", () => {
+    beforeEach(() => {
+      Object.defineProperty(HTMLElement.prototype, "showPopover", { value: undefined, writable: true, configurable: true });
+    });
+
+    afterEach(() => {
+      delete (HTMLElement.prototype as unknown as Record<string, unknown>)["showPopover"];
+    });
+
+    it("opens and closes from the trigger", async () => {
+      const wrapper = await mountSuspended(DisplayTooltip);
+      const trigger = wrapper.find(".display-tooltip-trigger-button");
+      const popover = wrapper.find(".display-tooltip-popover");
+
+      await trigger.trigger("click");
+      expect(popover.classes()).toContain("display-tooltip-popover-open");
+      expect(trigger.attributes("aria-expanded")).toBe("true");
+
+      await trigger.trigger("click");
+      expect(popover.classes()).not.toContain("display-tooltip-popover-open");
+      expect(trigger.attributes("aria-expanded")).toBe("false");
+    });
+
+    it("passes a close function to the tooltipContent slot", async () => {
+      const wrapper = await mountSuspended(DisplayTooltip, {
+        slots: {
+          tooltipContent: `<template #tooltipContent="{ close }"><button class="custom-close" @click="close">Done</button></template>`,
+        },
+      });
+      await wrapper.find(".display-tooltip-trigger-button").trigger("click");
+      await wrapper.find(".custom-close").trigger("click");
+      expect(wrapper.find(".display-tooltip-popover").classes()).not.toContain("display-tooltip-popover-open");
+    });
   });
 });

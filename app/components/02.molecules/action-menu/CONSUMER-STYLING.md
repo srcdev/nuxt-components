@@ -64,7 +64,7 @@ Private (not public API): `--_trigger-size`, `--_popover-transition-duration`, `
 | `.action-menu-popover:popover-open` | Menu is open, Popover API browsers |
 | `.action-menu-popover-open` | Menu is open, browsers without the Popover API (Safari 16 and older). Style it in a **separate rule** from `:popover-open`: a selector list containing `:popover-open` is dropped whole where it's unsupported |
 | `.action-menu-trigger[aria-expanded="true"]` | Menu is open, every browser |
-| `.action-menu-popover[data-placement="above"]` | Flipped above the trigger, browsers without CSS anchor positioning only |
+| `.action-menu-popover[data-placement="top"]` | Flipped above the trigger, browsers without CSS anchor positioning only |
 
 Inner classes: `.action-menu-trigger`, `.action-menu-trigger-icon`, `.action-menu-popover`,
 `.action-menu-list`, `.action-menu-list-item`; on each item `.action-menu-item`,

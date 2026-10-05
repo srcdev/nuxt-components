@@ -53,7 +53,7 @@ Or scope to a single instance via `styleClassPassthrough`:
 | `.navigation-group-toggle[aria-expanded="true"]` | Group open, every browser (flips the caret) |
 | `.navigation-group-panel:popover-open` | Panel open, Popover API browsers |
 | `.deep-expanding-menu-panel-open` | Panel open, browsers without the Popover API (Safari 16 and older). Style it in a **separate rule** from `:popover-open`: a selector list containing `:popover-open` is dropped whole where it's unsupported |
-| `.navigation-group-panel[data-placement="above"]` | Flipped above the toggle, browsers without CSS anchor positioning only |
+| `.navigation-group-panel[data-placement="top"]` | Flipped above the toggle, browsers without CSS anchor positioning only |
 
 Without CSS anchor positioning (e.g. Safari 17–18) the panel is placed with `position: fixed` from
 the toggle's measured position. Without the Popover API (Safari 16) the panel also opens and closes

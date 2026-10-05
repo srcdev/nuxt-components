@@ -8,7 +8,7 @@
 
 ## Prerequisites
 
-- Uses the native HTML Popover API — supported in all modern browsers (Chrome 114+, Firefox 125+, Safari 17+)
+- Built around the native Popover API (Chrome 114+, Firefox 125+, Safari 17+). With `DisplayTooltip`/`DisplayTooltipDefined` it also works on Safari 16, because those components fall back to JS open/close (`useAnchoredPopover`) and the guide drives them through their trigger buttons. Hand-written raw `[popover]` markup like the example below still needs the Popover API.
 - Popovers must have `id` attributes and corresponding trigger buttons with `popovertarget` and `popovertargetaction="toggle"` attributes
 - Close buttons inside each popover must have `popovertargetaction="hide"`
 
@@ -74,6 +74,8 @@ await startGuide()
 2. If `autoStart` is `true`, calls `startGuide()` which iterates the popovers in DOM order.
 3. For each popover: finds the `[popovertarget][popovertargetaction="toggle"]` trigger button and clicks it to open the popover, then waits for the `[popovertargetaction="hide"]` button to be clicked before advancing.
 4. After the last popover is dismissed, `autoRunGuide` is set to `false` and `isGuideRunning` becomes `false`.
+5. With no close button, a step ends when the trigger's `aria-expanded` turns `"false"` (a `MutationObserver`), or on the popover's `toggle` event with `newState: "closed"` when there's no trigger either.
+6. `stopGuide()`/`restartGuide()` close an open step by clicking its trigger when `aria-expanded="true"`, or with `hidePopover()` where `:popover-open` is supported. They never call `togglePopover()` or match `:popover-open` unguarded, both of which throw on Safari 16.
 
 ## API reference
 

@@ -4,26 +4,45 @@ interface AnchoredPopoverOptions {
   rootRef: Readonly<Ref<HTMLElement | null>>;
   triggerRef: Readonly<Ref<HTMLElement | null>>;
   popoverRef: Readonly<Ref<HTMLElement | null>>;
-  align?: "start" | "end";
+  side?: AnchoredPopoverSide;
   onOpen?: () => void;
 }
 
+export type AnchoredPopoverSide = "top" | "right" | "bottom" | "left";
+
 type PopoverToggleEvent = Event & { newState?: string };
+
+const OPPOSITE_SIDE: Record<AnchoredPopoverSide, AnchoredPopoverSide> = {
+  top: "bottom",
+  bottom: "top",
+  left: "right",
+  right: "left",
+};
 
 // Native popover + anchor positioning where supported; JS positioning without anchor positioning
 // (Safari 17-18); JS open/close, outside click and Escape without the Popover API (Safari 16).
-export function useAnchoredPopover({ rootRef, triggerRef, popoverRef, align = "start", onOpen }: AnchoredPopoverOptions) {
+export function useAnchoredPopover({ rootRef, triggerRef, popoverRef, side = "bottom", onOpen }: AnchoredPopoverOptions) {
   const isOpen = ref(false);
   const usesFallbackPopover = ref(false);
   const needsPositioning = ref(false);
-  const placement = ref<"below" | "above">("below");
-  const anchor = ref({ top: 0, bottom: 0, left: 0, right: 0 });
+  const placement = ref<AnchoredPopoverSide>(side);
+  const anchor = ref({ top: 0, bottom: 0, left: 0, right: 0, viewportWidth: 0, viewportHeight: 0 });
 
+  // `--_anchor-{edge}` mirrors anchor({edge}) for top/left; `-inverse` is the same edge measured
+  // from the viewport's bottom/right, for bottom/right.
   const positionStyle = computed(() => {
     if (!needsPositioning.value) return undefined;
-    return align === "end"
-      ? { "--_popover-top": `${anchor.value.top}px`, "--_popover-bottom": `${anchor.value.bottom}px`, "--_popover-right": `${anchor.value.right}px` }
-      : { "--_popover-top": `${anchor.value.top}px`, "--_popover-bottom": `${anchor.value.bottom}px`, "--_popover-left": `${anchor.value.left}px` };
+    const { top, bottom, left, right, viewportWidth, viewportHeight } = anchor.value;
+    return {
+      "--_anchor-top": `${top}px`,
+      "--_anchor-bottom": `${bottom}px`,
+      "--_anchor-left": `${left}px`,
+      "--_anchor-right": `${right}px`,
+      "--_anchor-top-inverse": `${viewportHeight - top}px`,
+      "--_anchor-bottom-inverse": `${viewportHeight - bottom}px`,
+      "--_anchor-left-inverse": `${viewportWidth - left}px`,
+      "--_anchor-right-inverse": `${viewportWidth - right}px`,
+    };
   });
 
   const popoverPlacement = computed(() => (needsPositioning.value ? placement.value : undefined));
@@ -34,15 +53,18 @@ export function useAnchoredPopover({ rootRef, triggerRef, popoverRef, align = "s
     const rect = trigger.getBoundingClientRect();
     const viewportWidth = document.documentElement.clientWidth;
     const viewportHeight = document.documentElement.clientHeight;
-    const popoverHeight = popoverRef.value?.offsetHeight ?? 0;
+    const width = popoverRef.value?.offsetWidth ?? 0;
+    const height = popoverRef.value?.offsetHeight ?? 0;
 
-    anchor.value = {
-      top: rect.bottom,
-      bottom: viewportHeight - rect.top,
-      left: rect.left,
-      right: viewportWidth - rect.right,
+    const fits: Record<AnchoredPopoverSide, boolean> = {
+      bottom: rect.bottom + height <= viewportHeight,
+      top: rect.top - height >= 0,
+      right: rect.right + width <= viewportWidth,
+      left: rect.left - width >= 0,
     };
-    placement.value = rect.bottom + popoverHeight > viewportHeight && rect.top > popoverHeight ? "above" : "below";
+
+    anchor.value = { top: rect.top, bottom: rect.bottom, left: rect.left, right: rect.right, viewportWidth, viewportHeight };
+    placement.value = fits[side] || !fits[OPPOSITE_SIDE[side]] ? side : OPPOSITE_SIDE[side];
   };
 
   let frame = 0;
@@ -109,6 +131,8 @@ export function useAnchoredPopover({ rootRef, triggerRef, popoverRef, align = "s
       return;
     }
     if (!isOpen.value) return;
+    // Matches native popovers, which return focus to the invoker when focus was inside.
+    if (popoverRef.value?.contains(document.activeElement)) triggerRef.value?.focus();
     isOpen.value = false;
     removeListeners();
   };

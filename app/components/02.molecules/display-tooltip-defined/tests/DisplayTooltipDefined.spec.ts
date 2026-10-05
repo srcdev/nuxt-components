@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import DisplayTooltipDefined from "../DisplayTooltipDefined.vue";
 import type { TooltipContentText } from "~/types/components";
@@ -62,5 +62,24 @@ describe("DisplayTooltipDefined", () => {
       props: { styleClassPassthrough: ["custom-class"] },
     });
     expect(wrapper.classes()).toContain("custom-class");
+  });
+
+  describe("without the Popover API", () => {
+    beforeEach(() => {
+      Object.defineProperty(HTMLElement.prototype, "showPopover", { value: undefined, writable: true, configurable: true });
+    });
+
+    afterEach(() => {
+      delete (HTMLElement.prototype as unknown as Record<string, unknown>)["showPopover"];
+    });
+
+    it("closes from the close button", async () => {
+      const wrapper = await mountSuspended(DisplayTooltipDefined, { props: { contentText } });
+      await wrapper.find(".display-tooltip-trigger-button").trigger("click");
+      expect(wrapper.find(".display-tooltip-popover").classes()).toContain("display-tooltip-popover-open");
+
+      await wrapper.find(".display-tooltip-close-button").trigger("click");
+      expect(wrapper.find(".display-tooltip-popover").classes()).not.toContain("display-tooltip-popover-open");
+    });
   });
 });

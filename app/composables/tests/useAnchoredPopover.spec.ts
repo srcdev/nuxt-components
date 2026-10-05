@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { defineComponent, h, nextTick, ref } from "vue";
-import { useAnchoredPopover } from "../useAnchoredPopover";
+import { useAnchoredPopover, type AnchoredPopoverSide } from "../useAnchoredPopover";
 
 type Support = { popover: boolean; anchor: boolean };
 
@@ -27,7 +27,7 @@ const setViewport = (width: number, height: number) => {
   Object.defineProperty(document.documentElement, "clientHeight", { value: height, configurable: true });
 };
 
-const mountHost = (align: "start" | "end" = "start") => {
+const mountHost = (side: AnchoredPopoverSide = "bottom") => {
   const onOpen = vi.fn();
   const mounted = mountSuspended(
     defineComponent({
@@ -35,7 +35,7 @@ const mountHost = (align: "start" | "end" = "start") => {
         const rootRef = ref<HTMLElement | null>(null);
         const triggerRef = ref<HTMLElement | null>(null);
         const popoverRef = ref<HTMLElement | null>(null);
-        return { rootRef, triggerRef, popoverRef, ...useAnchoredPopover({ rootRef, triggerRef, popoverRef, align, onOpen }) };
+        return { rootRef, triggerRef, popoverRef, ...useAnchoredPopover({ rootRef, triggerRef, popoverRef, side, onOpen }) };
       },
       render() {
         return h("div", [
@@ -57,8 +57,10 @@ const mockTriggerRect = (wrapper: Awaited<ReturnType<typeof mountHost>["mounted"
   vi.spyOn(trigger, "getBoundingClientRect").mockReturnValue({ top: 0, bottom: 0, left: 0, right: 0, ...rect } as DOMRect);
 };
 
-const mockPopoverHeight = (wrapper: Awaited<ReturnType<typeof mountHost>["mounted"]>, height: number) => {
-  Object.defineProperty(wrapper.find(".popover").element, "offsetHeight", { value: height, configurable: true });
+const mockPopoverSize = (wrapper: Awaited<ReturnType<typeof mountHost>["mounted"]>, width: number, height: number) => {
+  const popover = wrapper.find(".popover").element;
+  Object.defineProperty(popover, "offsetWidth", { value: width, configurable: true });
+  Object.defineProperty(popover, "offsetHeight", { value: height, configurable: true });
 };
 
 describe("useAnchoredPopover", () => {
@@ -173,46 +175,30 @@ describe("useAnchoredPopover", () => {
   describe("without anchor positioning", () => {
     beforeEach(() => setSupport({ popover: true, anchor: false }));
 
-    it("writes the trigger position below it, left-aligned", async () => {
-      const wrapper = await mountHost("start").mounted;
+    const openWith = async (side: AnchoredPopoverSide, rect: Partial<DOMRect>, size = { width: 100, height: 200 }) => {
+      const wrapper = await mountHost(side).mounted;
+      mockTriggerRect(wrapper, rect);
+      mockPopoverSize(wrapper, size.width, size.height);
+      wrapper.vm.handleToggle(Object.assign(new Event("toggle"), { newState: "open" }));
+      return wrapper;
+    };
+
+    it("writes every trigger edge, plain and measured from the viewport's far edge", async () => {
+      const wrapper = await mountHost().mounted;
       mockTriggerRect(wrapper, { top: 100, bottom: 140, left: 50, right: 250 });
-      mockPopoverHeight(wrapper, 200);
 
       wrapper.vm.handleBeforeToggle(Object.assign(new Event("beforetoggle"), { newState: "open" }));
       expect(wrapper.vm.needsPositioning).toBe(true);
       expect(wrapper.vm.positionStyle).toEqual({
-        "--_popover-top": "140px",
-        "--_popover-bottom": "700px",
-        "--_popover-left": "50px",
+        "--_anchor-top": "100px",
+        "--_anchor-bottom": "140px",
+        "--_anchor-left": "50px",
+        "--_anchor-right": "250px",
+        "--_anchor-top-inverse": "700px",
+        "--_anchor-bottom-inverse": "660px",
+        "--_anchor-left-inverse": "950px",
+        "--_anchor-right-inverse": "750px",
       });
-      expect(wrapper.vm.popoverPlacement).toBe("below");
-    });
-
-    it("measures the right edge when end-aligned", async () => {
-      const wrapper = await mountHost("end").mounted;
-      mockTriggerRect(wrapper, { top: 100, bottom: 140, left: 50, right: 250 });
-
-      wrapper.vm.handleBeforeToggle(Object.assign(new Event("beforetoggle"), { newState: "open" }));
-      expect(wrapper.vm.positionStyle).toMatchObject({ "--_popover-right": "750px" });
-      expect(wrapper.vm.positionStyle).not.toHaveProperty("--_popover-left");
-    });
-
-    it("flips above when there is no room below but room above", async () => {
-      const wrapper = await mountHost().mounted;
-      mockTriggerRect(wrapper, { top: 700, bottom: 740, left: 50, right: 250 });
-      mockPopoverHeight(wrapper, 200);
-
-      wrapper.vm.handleToggle(Object.assign(new Event("toggle"), { newState: "open" }));
-      expect(wrapper.vm.popoverPlacement).toBe("above");
-    });
-
-    it("stays below when there is no room either side", async () => {
-      const wrapper = await mountHost().mounted;
-      mockTriggerRect(wrapper, { top: 100, bottom: 140, left: 50, right: 250 });
-      mockPopoverHeight(wrapper, 900);
-
-      wrapper.vm.handleToggle(Object.assign(new Event("toggle"), { newState: "open" }));
-      expect(wrapper.vm.popoverPlacement).toBe("below");
     });
 
     it("ignores beforetoggle when closing", async () => {
@@ -220,7 +206,26 @@ describe("useAnchoredPopover", () => {
       mockTriggerRect(wrapper, { top: 100, bottom: 140, left: 50, right: 250 });
 
       wrapper.vm.handleBeforeToggle(Object.assign(new Event("beforetoggle"), { newState: "closed" }));
-      expect(wrapper.vm.positionStyle).toMatchObject({ "--_popover-top": "0px" });
+      expect(wrapper.vm.positionStyle).toMatchObject({ "--_anchor-top": "0px" });
+    });
+
+    it.each([
+      ["bottom", { top: 100, bottom: 140, left: 400, right: 450 }, "bottom"],
+      ["bottom", { top: 700, bottom: 740, left: 400, right: 450 }, "top"],
+      ["top", { top: 300, bottom: 340, left: 400, right: 450 }, "top"],
+      ["top", { top: 100, bottom: 140, left: 400, right: 450 }, "bottom"],
+      ["right", { top: 300, bottom: 340, left: 400, right: 450 }, "right"],
+      ["right", { top: 300, bottom: 340, left: 850, right: 950 }, "left"],
+      ["left", { top: 300, bottom: 340, left: 400, right: 450 }, "left"],
+      ["left", { top: 300, bottom: 340, left: 50, right: 100 }, "right"],
+    ] as const)("prefers %s and resolves to %s for %o", async (side, rect, expected) => {
+      const wrapper = await openWith(side, rect);
+      expect(wrapper.vm.popoverPlacement).toBe(expected);
+    });
+
+    it("keeps the preferred side when neither side has room", async () => {
+      const wrapper = await openWith("bottom", { top: 100, bottom: 140, left: 50, right: 250 }, { width: 100, height: 900 });
+      expect(wrapper.vm.popoverPlacement).toBe("bottom");
     });
   });
 });

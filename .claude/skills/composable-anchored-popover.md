@@ -2,8 +2,8 @@
 
 `app/composables/useAnchoredPopover.ts`. Open/close state and positioning for a trigger + `popover`
 element anchored with CSS anchor positioning, with fallbacks for browsers that lack either
-feature. Used by `ActionMenu` (`align: "end"`), `SelectMenu` and `DeepExpandingMenu` (`align:
-"start"`). Use it for any new anchored popover instead of calling `showPopover()`/`hidePopover()`
+feature. Used by `ActionMenu`, `SelectMenu`, `DeepExpandingMenu` (all `side: "bottom"`, the default)
+and `DisplayTooltip` (`side: "right"`). Use it for any new anchored popover instead of calling `showPopover()`/`hidePopover()`
 directly.
 
 Several popovers where only one is open at a time (e.g. `DeepExpandingMenu`'s groups) can share
@@ -23,8 +23,8 @@ the active item, since auto popovers' open and close events can arrive in either
 | Support | Behaviour |
 |---|---|
 | Popover API + anchor positioning | Fully native. The composable only tracks `isOpen` from `toggle`. |
-| Popover API, no anchor positioning | JS measures the trigger on `beforetoggle`/`toggle` and on scroll/resize, and writes `--_popover-top`/`-bottom`/`-left` (or `-right`) px values; flips to `data-placement="above"` when there's no room below. |
-| No Popover API | Also opens/closes in JS: trigger `@click` toggles `isOpen`, document `pointerdown` outside the root and `Escape` (returning focus to the trigger) close it. The component shows the popover from a fallback class. |
+| Popover API, no anchor positioning | JS measures the trigger on `beforetoggle`/`toggle` and on scroll/resize, and writes the trigger's edges as `--_anchor-*` px values (see below); flips to the opposite side (`data-placement`) when the preferred side has no room and the opposite side does. |
+| No Popover API | Also opens/closes in JS: trigger `@click` toggles `isOpen`, document `pointerdown` outside the root and `Escape` close it, and `hide()` returns focus to the trigger when focus was inside the popover, as native popovers do. The component shows the popover from a fallback class. |
 
 ## API
 
@@ -34,16 +34,27 @@ const {
   usesFallbackPopover, // Ref<boolean>, true without the Popover API
   needsPositioning,    // Ref<boolean>, true without anchor positioning
   positionStyle,       // bind to the popover's :style (undefined when not needed)
-  popoverPlacement,    // bind to the popover's :data-placement ("below" | "above" | undefined)
+  popoverPlacement,    // bind to :data-placement: the resolved side, or undefined when native
   show, hide,          // always use these, never showPopover()/hidePopover() directly
   handleTriggerClick,  // trigger @click (no-op where popovertarget works)
   handleBeforeToggle,  // popover @beforetoggle
   handleToggle,        // popover @toggle
-} = useAnchoredPopover({ rootRef, triggerRef, popoverRef, align: "start", onOpen: focusFirstItem });
+} = useAnchoredPopover({ rootRef, triggerRef, popoverRef, side: "bottom", onOpen: focusFirstItem });
 ```
 
 `rootRef` must contain both the trigger and the popover (outside-click detection). `onOpen` runs
 after the popover is visible, so it can move focus into it.
+
+`side` (`"bottom"` default, `"top"`, `"right"`, `"left"`) is the preferred side for the fallback
+flip; it doesn't affect native anchor positioning, which the component's own CSS controls.
+
+### Fallback position variables
+
+They mirror `anchor()`: `--_anchor-{top|bottom|left|right}` is the trigger edge in viewport px, for
+the `top`/`left` properties (`top: anchor(bottom)` becomes `top: var(--_anchor-bottom)`).
+`--_anchor-{edge}-inverse` is the same edge measured from the viewport's bottom/right, for the
+`bottom`/`right` properties (`right: anchor(left)` becomes `right: var(--_anchor-left-inverse)`).
+All eight are always written, so CSS picks what each side needs.
 
 ## Component wiring
 
@@ -72,13 +83,13 @@ after the popover is visible, so it can move focus into it.
 
   @supports not (anchor-name: --a) {
     position: fixed;
-    top: calc(var(--_popover-top, 0px) + var(--x-menu-block-distance, 0.4rem));
-    left: var(--_popover-left, 0px);
+    top: calc(var(--_anchor-bottom, 0px) + var(--x-menu-block-distance, 0.4rem));
+    left: var(--_anchor-left, 0px);
     z-index: var(--x-menu-popover-z-index, 999999);
 
-    &[data-placement="above"] {
+    &[data-placement="top"] {
       top: auto;
-      bottom: calc(var(--_popover-bottom, 0px) + var(--x-menu-block-distance, 0.4rem));
+      bottom: calc(var(--_anchor-top-inverse, 0px) + var(--x-menu-block-distance, 0.4rem));
     }
   }
 }

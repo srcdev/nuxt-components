@@ -84,7 +84,7 @@ const {
   hide,
   handleBeforeToggle,
   handleToggle,
-} = useAnchoredPopover({ rootRef, triggerRef, popoverRef, align: "start" });
+} = useAnchoredPopover({ rootRef, triggerRef, popoverRef });
 
 const handleGroupClick = (key: number) => {
   if (!usesFallbackPopover.value) return;
@@ -213,13 +213,13 @@ watch(
 
             @supports not (anchor-name: --a) {
               position: fixed;
-              top: calc(var(--_popover-top, 0px) + 1rem);
-              left: var(--_popover-left, 0px);
+              top: calc(var(--_anchor-bottom, 0px) + 1rem);
+              left: var(--_anchor-left, 0px);
               z-index: var(--deep-expanding-menu-panel-z-index, 999999);
 
-              &[data-placement="above"] {
+              &[data-placement="top"] {
                 top: auto;
-                bottom: calc(var(--_popover-bottom, 0px) + 1rem);
+                bottom: calc(var(--_anchor-top-inverse, 0px) + 1rem);
               }
             }
 

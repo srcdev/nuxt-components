@@ -174,9 +174,9 @@ Quick reference:
 - **Popover API + CSS anchor positioning, with fallbacks** — same mechanism as `ActionMenu`, both
   via the shared `useAnchoredPopover` composable (`app/composables/useAnchoredPopover.ts`). The
   Popover API arrived in Safari 17 and CSS anchor positioning in Safari 26, so:
-  - No anchor positioning (Safari 17–18): JS measures the trigger and writes `--_popover-top`/
-    `-bottom`/`-left` px values for the `@supports not (anchor-name: --a)` block, re-measuring on
-    scroll/resize and flipping above (`data-placement="above"`) when there's no room below.
+  - No anchor positioning (Safari 17–18): JS measures the trigger and writes `--_anchor-*` px values for the
+    `@supports not (anchor-name: --a)` block, re-measuring on scroll/resize and flipping above
+    (`data-placement="top"`) when there's no room below.
   - No Popover API (Safari 16, e.g. first-generation iPad Pros that can't update): the trigger's
     `@click` toggles `isOpen`, `.select-menu-popover-open` shows the list, and document listeners
     close it on outside pointerdown and Escape. Not top-layer here, hence

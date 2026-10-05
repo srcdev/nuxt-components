@@ -14,9 +14,11 @@ the native Popover API (`popover`/`popovertarget`) and CSS anchor-positioning
 with a built-in close button, see [`DisplayTooltipDefined`](display-tooltip-defined.md), which
 composes this component.
 
-**Browser support caveat:** CSS anchor-positioning and the Popover API are both comparatively
-recent — check current browser support before relying on this where broad support is a hard
-requirement, same caution as `DeepExpandingMenu`'s equivalent gap.
+**Browser support:** since 2026-10-05 open/close and positioning go through the shared
+`useAnchoredPopover` composable (`side: "right"`, see `composable-anchored-popover.md`). Without
+anchor positioning (Safari 17–18) the panel is placed from the trigger's measured position, flipping
+to the left when there's no room on the right. Without the Popover API (Safari 16) it opens and
+closes in JS, with outside-click and Escape dismissal. The trigger has `aria-expanded`.
 
 ## Props
 
@@ -32,7 +34,7 @@ requirement, same caution as `DeepExpandingMenu`'s equivalent gap.
 | Slot | Description |
 |------|-------------|
 | `triggerContent` | Optional content rendered before the trigger button (e.g. a label the tooltip icon sits next to). |
-| `tooltipContent` | Content rendered inside the popover panel. |
+| `tooltipContent` | Content rendered inside the popover panel. Scoped prop `close()` hides the panel in every browser: wire your own close button to it (`#tooltipContent="{ close }"`), since `popovertargetaction="hide"` alone does nothing without the Popover API. |
 
 ## Basic usage
 
@@ -53,6 +55,10 @@ See `CONSUMER-STYLING.md` for the full `--display-tooltip-*` token API (padding,
 popover width/colours/radius, and the close-button tokens `DisplayTooltipDefined` uses).
 
 ## Notes
+
+- Slotted content: direct children of `tooltipContent` get `margin-block: 0` (in `:where()`, so
+  consumer margins win) and the panel sets `--display-tooltip-popover-font-size` (`1.4rem`) and
+  `-line-height` (`1.4`), so a bare `<p>` reads as tooltip text without extra styling.
 
 - Auto-imported in Nuxt — no manual import needed.
 - `tooltipId` is only reactive at mount — changing it after mount does not regenerate the linked

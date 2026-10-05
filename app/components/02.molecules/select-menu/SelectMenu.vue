@@ -162,7 +162,7 @@ const {
   handleTriggerClick,
   handleBeforeToggle,
   handleToggle,
-} = useAnchoredPopover({ rootRef, triggerRef, popoverRef, align: "start", onOpen: focusInitialItem });
+} = useAnchoredPopover({ rootRef, triggerRef, popoverRef, onOpen: focusInitialItem });
 
 const selectOption = (option: SelectMenuOption) => {
   if (props.multiple) {
@@ -354,13 +354,13 @@ watch(
 
       @supports not (anchor-name: --a) {
         position: fixed;
-        top: calc(var(--_popover-top, 0px) + var(--select-menu-block-distance, 0.4rem));
-        left: var(--_popover-left, 0px);
+        top: calc(var(--_anchor-bottom, 0px) + var(--select-menu-block-distance, 0.4rem));
+        left: var(--_anchor-left, 0px);
         z-index: var(--select-menu-popover-z-index, 999999);
 
-        &[data-placement="above"] {
+        &[data-placement="top"] {
           top: auto;
-          bottom: calc(var(--_popover-bottom, 0px) + var(--select-menu-block-distance, 0.4rem));
+          bottom: calc(var(--_anchor-top-inverse, 0px) + var(--select-menu-block-distance, 0.4rem));
         }
       }
 

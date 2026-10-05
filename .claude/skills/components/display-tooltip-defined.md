@@ -10,7 +10,8 @@ type: reference
 
 `DisplayTooltipDefined` composes [`DisplayTooltip`](display-tooltip.md), supplying a structured
 title/body/action content shape (each rendered with a consumer-chosen tag) plus a built-in close
-button wired to the popover's `popovertarget`. Use this when you want the standard tooltip content
+button wired to the popover's `popovertarget` and to `DisplayTooltip`'s scoped `close()`, so it also
+closes the tooltip on Safari 16 (no Popover API). Use this when you want the standard tooltip content
 layout without hand-building the `tooltipContent` slot markup each time; use plain `DisplayTooltip`
 directly when you need full control over the popover's content.
 

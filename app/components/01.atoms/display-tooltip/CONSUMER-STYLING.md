@@ -17,6 +17,8 @@
 | `--display-tooltip-popover-width` | `30rem` | Popover panel width |
 | `--display-tooltip-popover-padding` | `1.2rem` | Popover panel content padding |
 | `--display-tooltip-popover-content-gap` | `1.2rem` | Gap between stacked children in the `tooltipContent` slot |
+| `--display-tooltip-popover-font-size` | `1.4rem` | Popover text size (`DisplayTooltipDefined` sets its own per-element sizes) |
+| `--display-tooltip-popover-line-height` | `1.4` | Popover text line height |
 | `--display-tooltip-popover-outline-width` | `0.1rem` | Popover panel outline (border) width |
 | `--display-tooltip-popover-outline-colour` | `var(--slate-02)` | Popover panel outline (border) colour |
 | `--display-tooltip-popover-text-colour` | `var(--slate-09)` | Popover panel text colour |
@@ -24,6 +26,7 @@
 | `--display-tooltip-popover-border-radius` | `0.8rem` | Popover panel corner radius |
 | `--display-tooltip-popover-shadow` | `0 0.4rem 1.6rem rgba(0,0,0,.12)` | Popover panel elevation shadow |
 | `--display-tooltip-popover-offset` | `0.1rem` | Gap between the trigger and the popover panel |
+| `--display-tooltip-popover-z-index` | `999999` | Panel stacking order in browsers without CSS anchor positioning. Ignored where the panel renders in the top layer |
 | `--display-tooltip-close-button-colour` | `var(--slate-09)` | Close button text colour (used by `DisplayTooltipDefined`) |
 | `--display-tooltip-close-button-border-width` | `0.1rem` | Close button border width |
 | `--display-tooltip-close-button-border-colour` | `var(--slate-03)` | Close button border colour |
@@ -61,13 +64,22 @@ Set the tokens above on an element you own (a page or section class, or a class 
 
 ## Notes
 
+- Direct children of the `tooltipContent` slot have their block margins reset to `0` (inside
+  `:where()`, so any margin you set on them still wins): the gap token is the only spacing between
+  them. Before 2026-10-05 a slotted `<p>` kept its browser `1em` margins on top of the padding.
+
 - The trigger button is vertically centred on the first line of `triggerContent` text, using
   `--display-tooltip-trigger-icon-box-size`, `-padding` and `-border-width` to work out its height.
   Give `--display-tooltip-trigger-padding` a single length (e.g. `0.4rem`): a two-value shorthand
   breaks that calculation, and the button is square anyway.
-- Built on the native Popover API (`popover`/`popovertarget`) and CSS anchor-positioning
-  (`anchor-name`/`position-anchor`/`anchor()`) — check current browser support before relying on
-  it where broad support is a hard requirement.
+- Built on the native Popover API and CSS anchor positioning, with fallbacks: without anchor
+  positioning (e.g. Safari 17–18) the panel is placed with `position: fixed` from the trigger's
+  measured position and flips left (`.display-tooltip-popover[data-placement="left"]`) when there's
+  no room on the right. Without the Popover API (Safari 16) it opens and closes in JS, shows via
+  `.display-tooltip-popover-open` (style it in a separate rule from `:popover-open`: a selector list
+  containing `:popover-open` is dropped whole where unsupported), isn't in the top layer (so the
+  z-index token applies), and an ancestor with `transform`, `filter` or `contain` can misplace it.
+  The trigger's `aria-expanded` tracks the open state in every browser.
 - The `.display-tooltip-close-button` styled here is rendered by `DisplayTooltipDefined`, not this
   component directly — `DisplayTooltip` only provides the `tooltipContent` slot, so a plain
   `DisplayTooltip` usage supplies its own close affordance if it wants one (give it

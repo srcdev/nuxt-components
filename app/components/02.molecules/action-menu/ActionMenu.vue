@@ -72,7 +72,7 @@ const {
   handleTriggerClick,
   handleBeforeToggle,
   handleToggle,
-} = useAnchoredPopover({ rootRef, triggerRef, popoverRef, align: "end", onOpen: () => getMenuItems()[0]?.focus() });
+} = useAnchoredPopover({ rootRef, triggerRef, popoverRef, onOpen: () => getMenuItems()[0]?.focus() });
 
 /** Close the menu and return focus to the trigger. Called on item click. */
 const closeMenu = () => {
@@ -209,13 +209,13 @@ watch(
 
       @supports not (anchor-name: --a) {
         position: fixed;
-        top: calc(var(--_popover-top, 0px) + var(--action-menu-block-distance, 0.4rem));
-        right: var(--_popover-right, 0px);
+        top: calc(var(--_anchor-bottom, 0px) + var(--action-menu-block-distance, 0.4rem));
+        right: var(--_anchor-right-inverse, 0px);
         z-index: var(--action-menu-popover-z-index, 999999);
 
-        &[data-placement="above"] {
+        &[data-placement="top"] {
           top: auto;
-          bottom: calc(var(--_popover-bottom, 0px) + var(--action-menu-block-distance, 0.4rem));
+          bottom: calc(var(--_anchor-top-inverse, 0px) + var(--action-menu-block-distance, 0.4rem));
         }
       }
 

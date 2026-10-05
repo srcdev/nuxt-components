@@ -32,23 +32,40 @@ export const useTooltipsGuide = (
     })
   }
 
+  const findTrigger = (popover: HTMLElement) =>
+    document.querySelector<HTMLElement>(`[popovertarget="${popover.id}"][popovertargetaction="toggle"]`)
+
+  // Without the Popover API (Safari 16) there's no togglePopover() and :popover-open throws, so
+  // tooltips are driven through their trigger, whose aria-expanded tracks the open state everywhere.
+  const closePopover = (popover: HTMLElement) => {
+    const trigger = findTrigger(popover)
+    if (trigger?.getAttribute("aria-expanded") === "true") {
+      trigger.click()
+      return
+    }
+    if (typeof popover.hidePopover !== "function") return
+    try {
+      if (popover.matches(":popover-open")) popover.hidePopover()
+    } catch {
+      // :popover-open unsupported
+    }
+  }
+
   /**
    * Show a tooltip and wait for user dismissal
    */
   const showTooltipAndWaitForDismiss = (popover: HTMLElement): Promise<void> => {
     return new Promise((resolve) => {
-      // Find the trigger button that corresponds to this popover
-      const popoverId = popover.id
-      const triggerButton = document.querySelector<HTMLElement>(
-        `[popovertarget="${popoverId}"][popovertargetaction="toggle"]`
-      )
+      const triggerButton = findTrigger(popover)
 
       // Use the trigger button to show the popover to maintain proper anchor relationship
       if (triggerButton) {
         triggerButton.click()
-      } else {
-        // Fallback if no trigger button found
+      } else if (typeof popover.togglePopover === "function") {
         popover.togglePopover(true)
+      } else {
+        resolve()
+        return
       }
 
       // Find the close button within this popover
@@ -62,10 +79,18 @@ export const useTooltipsGuide = (
         }
 
         closeButton.addEventListener("click", handleClose)
+      } else if (triggerButton) {
+        // No close button: resolve once the trigger reports the tooltip closed
+        const observer = new MutationObserver(() => {
+          if (triggerButton.getAttribute("aria-expanded") === "false") {
+            observer.disconnect()
+            resolve()
+          }
+        })
+        observer.observe(triggerButton, { attributes: true, attributeFilter: ["aria-expanded"] })
       } else {
-        // Fallback: listen for the popover to be hidden
-        const handleToggle = () => {
-          if (!popover.matches(":popover-open")) {
+        const handleToggle = (event: Event) => {
+          if ((event as Event & { newState?: string }).newState === "closed") {
             popover.removeEventListener("toggle", handleToggle)
             resolve()
           }
@@ -105,11 +130,7 @@ export const useTooltipsGuide = (
     if (isGuideRunning.value) return
 
     // Close any currently open popovers
-    popovers.forEach((popover) => {
-      if (popover.matches(":popover-open")) {
-        popover.togglePopover(false)
-      }
-    })
+    popovers.forEach(closePopover)
 
     // Reset state and start the guide
     autoRunGuide.value = true
@@ -123,11 +144,7 @@ export const useTooltipsGuide = (
     if (!isGuideRunning.value) return
 
     // Close any currently open popovers
-    popovers.forEach((popover) => {
-      if (popover.matches(":popover-open")) {
-        popover.togglePopover(false)
-      }
-    })
+    popovers.forEach(closePopover)
 
     isGuideRunning.value = false
     autoRunGuide.value = false

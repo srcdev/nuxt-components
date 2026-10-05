@@ -73,7 +73,7 @@ global token so it matches the rest of the design system out of the box.
 | `.select-menu-trigger[aria-expanded="true"]` | trigger | Menu open (rotates the chevron). Works with and without the Popover API. |
 | `.select-menu-popover:popover-open` | popover | Menu open, Popover API browsers. |
 | `.select-menu-popover-open` | popover | Menu open, browsers without the Popover API (Safari 16 and older). Style both open hooks in **separate rules**: a selector list containing `:popover-open` is dropped whole where it's unsupported. |
-| `[data-placement="above"]` | popover | Flipped above the trigger, browsers without CSS anchor positioning only. |
+| `[data-placement="top"]` | popover | Flipped above the trigger, browsers without CSS anchor positioning only. |
 
 > Changed 2026-10-05: the chevron hook moved from `:has(.select-menu-popover:popover-open)` on the
 > root to the trigger's `aria-expanded`, so it also works without the Popover API.

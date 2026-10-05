@@ -7,7 +7,7 @@
     <template v-if="$slots.triggerContent" #triggerContent>
       <slot name="triggerContent"></slot>
     </template>
-    <template #tooltipContent>
+    <template #tooltipContent="{ close }">
       <div class="popover-content-defined">
         <component
           :is="contentText.tooltipTitle?.tag"
@@ -31,6 +31,7 @@
           popovertargetaction="hide"
           class="display-tooltip-close-button"
           :aria-label="closeButtonAriaLabel"
+          @click="close"
         >
           {{ closeButtonText }}
         </button>

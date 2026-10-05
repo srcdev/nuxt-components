@@ -1,20 +1,38 @@
 <template>
-  <div class="display-tooltip-core" :class="[elementClasses]" :style="{ '--_anchor-name': tooltipAnchorName }">
+  <div
+    ref="rootRef"
+    class="display-tooltip-core"
+    :class="[elementClasses]"
+    :style="{ '--_anchor-name': tooltipAnchorName }"
+  >
     <div class="display-tooltip-trigger-wrapper body-md">
       <slot v-if="$slots.triggerContent" name="triggerContent"></slot>
       <button
+        ref="triggerRef"
         :popovertarget="tooltipId"
         popovertargetaction="toggle"
         class="display-tooltip-trigger-button"
         :class="{ hide: hideTrigger }"
         :aria-label="triggerAriaLabel"
+        :aria-expanded="isOpen"
+        @click="handleTriggerClick"
       >
         <Icon name="fa7-solid:circle-question" class="display-tooltip-trigger-icon" aria-hidden="true" />
       </button>
     </div>
-    <div :id="tooltipId" popover class="display-tooltip-popover">
+    <div
+      :id="tooltipId"
+      ref="popoverRef"
+      popover
+      class="display-tooltip-popover"
+      :class="{ 'display-tooltip-popover-open': usesFallbackPopover && isOpen }"
+      :style="positionStyle"
+      :data-placement="popoverPlacement"
+      @beforetoggle="handleBeforeToggle"
+      @toggle="handleToggle"
+    >
       <div class="display-tooltip-popover-content">
-        <slot name="tooltipContent"></slot>
+        <slot name="tooltipContent" :close="hide"></slot>
       </div>
     </div>
   </div>
@@ -38,6 +56,21 @@ const props = withDefaults(defineProps<Props>(), {
 
 const tooltipId = computed(() => (props.tooltipId.length ? props.tooltipId : `nuxt-tooltip-${useId()}`));
 const tooltipAnchorName = `--tooltip-anchor-${useId()}`;
+
+const rootRef = ref<HTMLElement | null>(null);
+const triggerRef = ref<HTMLElement | null>(null);
+const popoverRef = ref<HTMLElement | null>(null);
+
+const {
+  isOpen,
+  usesFallbackPopover,
+  positionStyle,
+  popoverPlacement,
+  hide,
+  handleTriggerClick,
+  handleBeforeToggle,
+  handleToggle,
+} = useAnchoredPopover({ rootRef, triggerRef, popoverRef, side: "right" });
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -141,6 +174,13 @@ watch(
         display: flex;
         flex-direction: column;
         gap: var(--display-tooltip-popover-content-gap, 1.2rem);
+        font-size: var(--display-tooltip-popover-font-size, 1.4rem);
+        line-height: var(--display-tooltip-popover-line-height, 1.4);
+
+        /* Gap is the only spacing between slotted elements; :where keeps consumer margins winning. */
+        > :where(*) {
+          margin-block: 0;
+        }
 
         .display-tooltip-close-button {
           all: unset;
@@ -172,6 +212,25 @@ watch(
         @starting-style {
           display: flex;
           opacity: 0;
+        }
+      }
+
+      /* Kept apart from :popover-open, which would invalidate a shared selector list where unsupported. */
+      &.display-tooltip-popover-open {
+        display: flex;
+        opacity: 1;
+        flex-direction: column;
+      }
+
+      @supports not (anchor-name: --a) {
+        position: fixed;
+        top: var(--_anchor-top, 0px);
+        left: calc(var(--_anchor-right, 0px) + var(--display-tooltip-popover-offset, 0.1rem));
+        z-index: var(--display-tooltip-popover-z-index, 999999);
+
+        &[data-placement="left"] {
+          left: auto;
+          right: calc(var(--_anchor-left-inverse, 0px) + var(--display-tooltip-popover-offset, 0.1rem));
         }
       }
     }
