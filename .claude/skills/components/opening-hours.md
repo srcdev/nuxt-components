@@ -78,6 +78,18 @@ earlier than `opens` means the session runs past midnight and is displayed as gi
 - Grouping compares status, sessions and note; only **consecutive** days (in `week-starts-on`
   order) group. No wrap-around from Sunday to Monday.
 - Exceptions don't alter the weekly table; they are listed separately.
+- **Bad data never throws** (since 2026-10-05): a time that isn't a valid `HH:MM` from `00:00` to
+  `23:59` (e.g. `"abc"`, `"25:99"`, `"24:00"`) and an exception date that isn't a real
+  `YYYY-MM-DD` are shown exactly as written. An invalid `locale` falls back to `en-GB`, and an
+  invalid `timeZone` to the browser's own. An exception whose `to` is before its `from` is shown
+  the right way round, and duplicate exception dates both render. The checks are the
+  auto-imported `parseOpeningTime` and `parseOpeningDate` utils (`app/utils/opening-hours.ts`).
+- A session that closes after midnight (`22:00`–`02:00`) displays as written; schema.org reads
+  `closes` before `opens` as the next day.
+- `status: "open"` with no sessions is treated as closed (since 2026-10-05): the row shows
+  `closedLabel`, gets `data-status="closed"`, and structured data treats it as closed too.
+- Long text wraps rather than overflowing; notes and exception labels have line-clamp tokens
+  (`CONSUMER-STYLING.md`). The `StressTest` story covers the worst-case data.
 - Today's highlight and past-exception hiding run in `onMounted`, never on the server, so cached
   HTML can't carry a stale day. Past exceptions are briefly visible before hydration.
 - **Structured data**: emits `{ "@type": structuredData.type ?? "LocalBusiness", "@id", name,

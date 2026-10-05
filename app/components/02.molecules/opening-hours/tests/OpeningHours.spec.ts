@@ -200,6 +200,59 @@ describe("OpeningHours", () => {
       wrapper = await createWrapper();
       expect(wrapper.find(".opening-hours__exceptions").exists()).toBe(false);
     });
+
+    it("swaps a range whose to is before from", async () => {
+      vi.setSystemTime(new Date("2026-12-25T12:00:00Z"));
+      wrapper = await createWrapper({ exceptions: [{ from: "2026-12-26", to: "2026-12-24", label: "Reversed" }] });
+      await nextTick();
+      expect(rowTexts(wrapper, ".opening-hours__exceptions")).toEqual(["Reversed 24 December – to 26 December Closed"]);
+      expect(wrapper.find(".opening-hours__exceptions .opening-hours__row").attributes("data-today")).toBe("true");
+    });
+
+    it("renders duplicate exceptions without key clashes", async () => {
+      const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+      vi.setSystemTime(new Date("2026-09-27T12:00:00Z"));
+      wrapper = await createWrapper({ exceptions: [{ from: "2026-12-25" }, { from: "2026-12-25" }] });
+      await nextTick();
+      expect(wrapper.find(".opening-hours__exceptions").findAll(".opening-hours__row").length).toBe(2);
+      expect(warn.mock.calls.some(([msg]) => String(msg).includes("Duplicate keys"))).toBe(false);
+      warn.mockRestore();
+    });
+  });
+
+  describe("Bad data", () => {
+    it("shows an unparseable or out-of-range time as written instead of throwing", async () => {
+      wrapper = await createWrapper({ days: [{ day: 0, sessions: [{ opens: "abc", closes: "25:99" }] }], groupDays: false });
+      expect(rowTexts(wrapper)[0]).toBe("Monday abc – to 25:99");
+    });
+
+    it("shows an invalid exception date as written instead of throwing", async () => {
+      wrapper = await createWrapper({
+        exceptions: [{ from: "not-a-date", label: "Bad" }],
+        hidePastExceptions: false,
+      });
+      await nextTick();
+      expect(rowTexts(wrapper, ".opening-hours__exceptions")).toEqual(["Bad not-a-date Closed"]);
+    });
+
+    it("shows the closed label for status open with no sessions", async () => {
+      wrapper = await createWrapper({ days: [{ day: 0, status: "open", sessions: [] }], groupDays: false });
+      const row = wrapper.find(".opening-hours__row");
+      expect(row.attributes("data-status")).toBe("closed");
+      expect(row.find(".opening-hours__status").text()).toBe("Closed");
+    });
+
+    it("falls back to en-GB for an invalid locale", async () => {
+      wrapper = await createWrapper({ locale: "not a locale!!" });
+      expect(rowTexts(wrapper)[0]).toBe("Monday – to Saturday 09:00 – to 17:30");
+    });
+
+    it("still mounts with an invalid timeZone", async () => {
+      vi.setSystemTime(new Date("2026-09-28T12:00:00Z"));
+      wrapper = await createWrapper({ timeZone: "Mars/Base" });
+      await nextTick();
+      expect(wrapper.find("[data-today]").exists()).toBe(true);
+    });
   });
 
   describe("Accessibility", () => {

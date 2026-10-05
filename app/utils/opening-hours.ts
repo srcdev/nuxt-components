@@ -8,8 +8,29 @@ import type {
 
 const SCHEMA_DAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-export const resolveOpeningStatus = (entry: { status?: OpeningStatus; sessions?: OpeningSession[] }): OpeningStatus =>
-  entry.status ?? (entry.sessions?.length ? "open" : "closed");
+// "HH:MM" from 00:00 to 23:59, else null so the caller can show the raw value instead of throwing
+export const parseOpeningTime = (time: string): { hours: number; minutes: number } | null => {
+  const match = /^(\d{1,2}):(\d{2})$/.exec(time.trim());
+  if (!match) return null;
+  const hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  return hours < 24 && minutes < 60 ? { hours, minutes } : null;
+};
+
+// A real calendar date in "YYYY-MM-DD" form, as a UTC midnight Date, else null
+export const parseOpeningDate = (iso: string): Date | null => {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso.trim());
+  if (!match) return null;
+  const [y, m, d] = [Number(match[1]), Number(match[2]), Number(match[3])];
+  const date = new Date(Date.UTC(y, m - 1, d));
+  return date.getUTCFullYear() === y && date.getUTCMonth() === m - 1 && date.getUTCDate() === d ? date : null;
+};
+
+// "open" with no sessions has nothing to show, so it's treated as closed
+export const resolveOpeningStatus = (entry: { status?: OpeningStatus; sessions?: OpeningSession[] }): OpeningStatus => {
+  const status = entry.status ?? "open";
+  return status === "open" && !entry.sessions?.length ? "closed" : status;
+};
 
 const specsFor = (
   entry: { status?: OpeningStatus; sessions?: OpeningSession[] },

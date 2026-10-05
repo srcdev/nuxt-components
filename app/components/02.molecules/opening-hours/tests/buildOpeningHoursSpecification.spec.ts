@@ -1,11 +1,47 @@
 import { describe, it, expect } from "vitest";
-import { buildOpeningHoursSpecification, resolveOpeningStatus } from "~/utils/opening-hours";
+import {
+  buildOpeningHoursSpecification,
+  parseOpeningDate,
+  parseOpeningTime,
+  resolveOpeningStatus,
+} from "~/utils/opening-hours";
+
+describe("parseOpeningTime", () => {
+  it("parses HH:MM and H:MM", () => {
+    expect(parseOpeningTime("09:30")).toEqual({ hours: 9, minutes: 30 });
+    expect(parseOpeningTime("9:05")).toEqual({ hours: 9, minutes: 5 });
+    expect(parseOpeningTime("23:59")).toEqual({ hours: 23, minutes: 59 });
+  });
+
+  it("rejects malformed and out-of-range times", () => {
+    for (const bad of ["", "abc", "9", "24:00", "25:99", "12:60", "12:3", "-1:00"]) {
+      expect(parseOpeningTime(bad)).toBeNull();
+    }
+  });
+});
+
+describe("parseOpeningDate", () => {
+  it("parses a real YYYY-MM-DD date as UTC midnight", () => {
+    expect(parseOpeningDate("2026-02-28")?.toISOString()).toBe("2026-02-28T00:00:00.000Z");
+  });
+
+  it("rejects malformed and impossible dates", () => {
+    for (const bad of ["", "not-a-date", "2026-13-01", "2026-02-30", "26-01-01", "2026-1-1"]) {
+      expect(parseOpeningDate(bad)).toBeNull();
+    }
+  });
+});
 
 describe("resolveOpeningStatus", () => {
   it("defaults to open with sessions and closed without", () => {
     expect(resolveOpeningStatus({ sessions: [{ opens: "09:00", closes: "17:00" }] })).toBe("open");
     expect(resolveOpeningStatus({})).toBe("closed");
     expect(resolveOpeningStatus({ status: "by-appointment" })).toBe("by-appointment");
+  });
+
+  it("treats open with no sessions as closed", () => {
+    expect(resolveOpeningStatus({ status: "open" })).toBe("closed");
+    expect(resolveOpeningStatus({ status: "open", sessions: [] })).toBe("closed");
   });
 });
 

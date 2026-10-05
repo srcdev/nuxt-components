@@ -25,6 +25,7 @@ deliberately matches `PriceList`.
 | `--opening-hours-day-font-size` | `1.4rem` | Day name / exception label size |
 | `--opening-hours-day-colour` | `inherit` | Day name / exception label colour |
 | `--opening-hours-hours-font-size` | `1.4rem` | Times and status text size |
+| `--opening-hours-hours-max-inline-size` | `60%` | Most of the row the hours column can take. Longer content (long session labels, notes, status labels) wraps inside it |
 | `--opening-hours-closed-colour` | `inherit` | Hours colour on closed rows |
 
 ### Sessions and notes
@@ -36,6 +37,9 @@ deliberately matches `PriceList`.
 | `--opening-hours-session-label-colour` | `inherit` | Session label colour |
 | `--opening-hours-note-font-size` | `1.2rem` | Note size |
 | `--opening-hours-note-colour` | `inherit` | Note colour |
+| `--opening-hours-note-line-clamp` | `none` | Cap notes at this many lines, with an ellipsis on the last. `1` is single-line ellipsis, `none` shows everything |
+
+Each session's times stay on one line; a long session label wraps before them.
 
 ### Today
 
@@ -54,8 +58,13 @@ deliberately matches `PriceList`.
 | `--opening-hours-exceptions-heading-margin-block-end` | `1.2rem` | Space below the exceptions heading |
 | `--opening-hours-date-font-size` | `1.2rem` | Exception date size |
 | `--opening-hours-date-colour` | `inherit` | Exception date colour |
+| `--opening-hours-exception-label-line-clamp` | `none` | Cap exception labels at this many lines. `1` is single-line ellipsis, `none` shows everything |
 
-There are no private `--_` tokens.
+There are no private `--_` tokens. Long unbroken text anywhere in the component wraps rather than overflowing.
+
+> **Changed 2026-10-05**: rows are a grid instead of a flex row, so the day column can shrink and
+> the hours column is capped by `--opening-hours-hours-max-inline-size`. `.opening-hours__session`
+> is no longer `nowrap`; the new `.opening-hours__session-times` wrapper is.
 
 ---
 
@@ -77,6 +86,7 @@ Inner element classes, safe to target:
 | `.opening-hours__hours` | `<dd>` |
 | `.opening-hours__session` | One opening session |
 | `.opening-hours__session-label` | Session label ("Lunch") |
+| `.opening-hours__session-times` | The opens–closes pair, kept on one line |
 | `.opening-hours__status` | "Closed" / "Open 24 hours" / "By appointment only" |
 | `.opening-hours__note` | Per-day or per-exception note |
 | `.opening-hours__exceptions` | Exceptions wrapper |

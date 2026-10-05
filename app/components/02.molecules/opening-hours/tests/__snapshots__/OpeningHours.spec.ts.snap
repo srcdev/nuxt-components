@@ -5,7 +5,7 @@ exports[`OpeningHours > Snapshots > default 1`] = `
   <dl class="opening-hours__list">
     <div class="opening-hours__row" data-status="open" data-today="true" aria-current="date">
       <dt class="opening-hours__days"><span>Monday</span><span aria-hidden="true"> – </span><span class="sr-only">to</span><span>Saturday</span></dt>
-      <dd class="opening-hours__hours"><span class="opening-hours__session"><!--v-if--><time datetime="09:00">09:00</time><span aria-hidden="true"> – </span><span class="sr-only">to</span><time datetime="17:30">17:30</time></span>
+      <dd class="opening-hours__hours"><span class="opening-hours__session"><!--v-if--><span class="opening-hours__session-times"><time datetime="09:00">09:00</time><span aria-hidden="true"> – </span><span class="sr-only">to</span><time datetime="17:30">17:30</time></span></span>
         <!--v-if-->
       </dd>
     </div>

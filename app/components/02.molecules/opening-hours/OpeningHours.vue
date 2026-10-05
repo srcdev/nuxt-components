@@ -21,10 +21,12 @@
           <template v-if="row.status === 'open'">
             <span v-for="(session, index) in row.sessions" :key="index" class="opening-hours__session">
               <span v-if="session.label" class="opening-hours__session-label">{{ session.label }}</span>
-              <time :datetime="session.opens">{{ formatTime(session.opens) }}</time>
-              <span aria-hidden="true"> – </span>
-              <span class="sr-only"> {{ toLabel }} </span>
-              <time :datetime="session.closes">{{ formatTime(session.closes) }}</time>
+              <span class="opening-hours__session-times">
+                <time :datetime="session.opens">{{ formatTime(session.opens) }}</time>
+                <span aria-hidden="true"> – </span>
+                <span class="sr-only"> {{ toLabel }} </span>
+                <time :datetime="session.closes">{{ formatTime(session.closes) }}</time>
+              </span>
             </span>
           </template>
           <span v-else class="opening-hours__status">{{ statusLabel(row.status) }}</span>
@@ -61,10 +63,12 @@
             <template v-if="row.status === 'open'">
               <span v-for="(session, index) in row.sessions" :key="index" class="opening-hours__session">
                 <span v-if="session.label" class="opening-hours__session-label">{{ session.label }}</span>
-                <time :datetime="session.opens">{{ formatTime(session.opens) }}</time>
-                <span aria-hidden="true"> – </span>
-                <span class="sr-only"> {{ toLabel }} </span>
-                <time :datetime="session.closes">{{ formatTime(session.closes) }}</time>
+                <span class="opening-hours__session-times">
+                  <time :datetime="session.opens">{{ formatTime(session.opens) }}</time>
+                  <span aria-hidden="true"> – </span>
+                  <span class="sr-only"> {{ toLabel }} </span>
+                  <time :datetime="session.closes">{{ formatTime(session.closes) }}</time>
+                </span>
               </span>
             </template>
             <span v-else class="opening-hours__status">{{ statusLabel(row.status) }}</span>
@@ -138,29 +142,35 @@ watch(
 const todayIso = ref<string | null>(null);
 
 onMounted(() => {
-  todayIso.value = new Intl.DateTimeFormat("en-CA", {
-    timeZone: props.timeZone,
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(new Date());
+  const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "2-digit", day: "2-digit" };
+  let formatter: Intl.DateTimeFormat;
+  try {
+    formatter = new Intl.DateTimeFormat("en-CA", { ...options, timeZone: props.timeZone });
+  } catch {
+    formatter = new Intl.DateTimeFormat("en-CA", options);
+  }
+  todayIso.value = formatter.format(new Date());
 });
 
-const parseIsoDate = (iso: string) => {
-  const [y = 0, m = 1, d = 1] = iso.split("-").map(Number);
-  return new Date(Date.UTC(y, m - 1, d));
-};
+const todayWeekday = computed<OpeningWeekday | null>(() => {
+  const today = todayIso.value ? parseOpeningDate(todayIso.value) : null;
+  return today ? (((today.getUTCDay() + 6) % 7) as OpeningWeekday) : null;
+});
 
-const todayWeekday = computed<OpeningWeekday | null>(() =>
-  todayIso.value ? (((parseIsoDate(todayIso.value).getUTCDay() + 6) % 7) as OpeningWeekday) : null
-);
+const safeLocale = computed(() => {
+  try {
+    return Intl.getCanonicalLocales(props.locale)[0] ?? "en-GB";
+  } catch {
+    return "en-GB";
+  }
+});
 
 const dayFormatter = computed(
-  () => new Intl.DateTimeFormat(props.locale, { weekday: props.dayFormat, timeZone: "UTC" })
+  () => new Intl.DateTimeFormat(safeLocale.value, { weekday: props.dayFormat, timeZone: "UTC" })
 );
 const timeFormatter = computed(
   () =>
-    new Intl.DateTimeFormat(props.locale, {
+    new Intl.DateTimeFormat(safeLocale.value, {
       hour: props.hour12 ? "numeric" : "2-digit",
       minute: "2-digit",
       hour12: props.hour12,
@@ -168,15 +178,20 @@ const timeFormatter = computed(
     })
 );
 const dateFormatter = computed(
-  () => new Intl.DateTimeFormat(props.locale, { day: "numeric", month: "long", timeZone: "UTC" })
+  () => new Intl.DateTimeFormat(safeLocale.value, { day: "numeric", month: "long", timeZone: "UTC" })
 );
 
 // 1 Jan 2024 was a Monday
 const dayName = (day: OpeningWeekday) => dayFormatter.value.format(new Date(Date.UTC(2024, 0, 1 + day)));
 
 const formatTime = (time: string) => {
-  const [h = 0, m = 0] = time.split(":").map(Number);
-  return timeFormatter.value.format(new Date(Date.UTC(2024, 0, 1, h, m)));
+  const parsed = parseOpeningTime(time);
+  return parsed ? timeFormatter.value.format(new Date(Date.UTC(2024, 0, 1, parsed.hours, parsed.minutes))) : time;
+};
+
+const formatDate = (iso: string) => {
+  const date = parseOpeningDate(iso);
+  return date ? dateFormatter.value.format(date) : iso;
 };
 
 const statusLabel = (status: OpeningStatus) => {
@@ -225,21 +240,22 @@ const weeklyRows = computed(() => {
 
 const exceptionRows = computed(() =>
   props.exceptions
-    .filter((exception) => !(props.hidePastExceptions && todayIso.value && (exception.to ?? exception.from) < todayIso.value))
-    .map((exception) => {
-      const to = exception.to && exception.to !== exception.from ? exception.to : null;
+    .filter((exception) => {
+      const last = exception.to && exception.to > exception.from ? exception.to : exception.from;
+      return !(props.hidePastExceptions && todayIso.value && last < todayIso.value);
+    })
+    .map((exception, index) => {
+      const [from, rawTo] =
+        exception.to && exception.to < exception.from ? [exception.to, exception.from] : [exception.from, exception.to];
+      const to = rawTo && rawTo !== from ? rawTo : null;
       return {
-        key: `${exception.from}-${to ?? ""}`,
+        key: `${index}-${from}-${to ?? ""}`,
         label: exception.label,
-        from: exception.from,
+        from,
         to,
-        start: dateFormatter.value.format(parseIsoDate(exception.from)),
-        end: to ? dateFormatter.value.format(parseIsoDate(to)) : null,
-        isToday:
-          props.highlightToday &&
-          todayIso.value !== null &&
-          exception.from <= todayIso.value &&
-          todayIso.value <= (to ?? exception.from),
+        start: formatDate(from),
+        end: to ? formatDate(to) : null,
+        isToday: props.highlightToday && todayIso.value !== null && from <= todayIso.value && todayIso.value <= (to ?? from),
         ...resolve(exception),
       };
     })
@@ -269,6 +285,7 @@ if (props.structuredData) {
     gap: var(--opening-hours-section-gap, 3.2rem);
 
     .opening-hours__exceptions-heading {
+      overflow-wrap: anywhere;
       font-size: var(--opening-hours-exceptions-heading-font-size, 1.6rem);
       font-weight: var(--opening-hours-exceptions-heading-font-weight, 600);
       margin: 0 0 var(--opening-hours-exceptions-heading-margin-block-end, 1.2rem);
@@ -279,10 +296,10 @@ if (props.structuredData) {
       padding: 0;
 
       .opening-hours__row {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) fit-content(var(--opening-hours-hours-max-inline-size, 60%));
         align-items: baseline;
-        gap: var(--opening-hours-row-gap, 1.2rem);
+        column-gap: var(--opening-hours-row-gap, 1.2rem);
         padding-block: var(--opening-hours-row-padding-block, 1.2rem);
         padding-inline: var(--opening-hours-row-padding-inline, 0);
         border-block-end: var(--opening-hours-divider-width, 1px) solid
@@ -308,12 +325,17 @@ if (props.structuredData) {
       }
 
       .opening-hours__days {
+        overflow-wrap: anywhere;
         font-size: var(--opening-hours-day-font-size, 1.4rem);
         color: var(--opening-hours-day-colour, inherit);
       }
 
       .opening-hours__exception-label {
-        display: block;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        -webkit-line-clamp: var(--opening-hours-exception-label-line-clamp, none);
+        line-clamp: var(--opening-hours-exception-label-line-clamp, none);
       }
 
       .opening-hours__date {
@@ -329,11 +351,12 @@ if (props.structuredData) {
         gap: var(--opening-hours-session-gap, 0.4rem);
         margin: 0;
         text-align: end;
+        overflow-wrap: anywhere;
         font-size: var(--opening-hours-hours-font-size, 1.4rem);
         font-variant-numeric: tabular-nums;
       }
 
-      .opening-hours__session {
+      .opening-hours__session-times {
         white-space: nowrap;
       }
 
@@ -343,6 +366,11 @@ if (props.structuredData) {
       }
 
       .opening-hours__note {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        -webkit-line-clamp: var(--opening-hours-note-line-clamp, none);
+        line-clamp: var(--opening-hours-note-line-clamp, none);
         font-size: var(--opening-hours-note-font-size, 1.2rem);
         color: var(--opening-hours-note-colour, inherit);
       }

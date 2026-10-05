@@ -122,8 +122,11 @@ items. Skip an item only when it genuinely doesn't apply, and say why briefly.
 - Run the relevant test file(s), `npx eslint <touched files>`, and `npx vue-tsc` (or the project's
   usual type-check command) to confirm nothing broke.
 - If you renamed, added or removed any component `.vue` file (compliance checklist item 13, a flattened
-  `variants/` folder, a new wrapper), run `npm run prepare` to regenerate `.nuxt/components.d.ts`
-  and tell the user to restart Storybook. A running Storybook keeps its startup component scan, so
+  `variants/` folder, a new wrapper), or added or renamed an export in `app/utils/` or
+  `app/composables/` (auto-imported, so `.nuxt/imports.d.ts` has to know about it), run
+  `npm run prepare` to regenerate `.nuxt/components.d.ts` and `.nuxt/imports.d.ts`, and tell the
+  user to restart Storybook. Storybook's vue-tsc checker otherwise reports "Cannot find name" for a
+  new util even though `nuxt typecheck` (which regenerates its own types) passes. A running Storybook keeps its startup component scan, so
   a renamed component silently renders as an empty unknown element there, while Vitest (fresh Nuxt
   each run) still passes.
 - Summarize what changed and what you deliberately skipped (with reasons).
