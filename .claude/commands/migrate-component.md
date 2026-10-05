@@ -20,8 +20,8 @@ to migrate — run `node .claude/component-ledger/build.mjs` and look up that co
 
 - **Already fully compliant** (`score: 5`, placed in a real tier, `variants: false`,
   `legacy_props: false`, `story_args_bug: false`, `eslint_issues: false`,
-  `redundant_priv_tokens: false`, `styling_doc_outdated: false`): skip straight to
-  reporting — state its ledger row (tier, score, and confirmation the six non-scored checks are
+  `redundant_priv_tokens: false`, `styling_doc_outdated: false`, `missing_stress_story: false`): skip straight to
+  reporting — state its ledger row (tier, score, and confirmation the seven non-scored checks are
   also clean) and stop. Don't run step 2's `AskUserQuestion` or the step 3 checklist for a
   component that already passes every check; that flow is for when there's actual work to decide
   about.
@@ -61,6 +61,33 @@ Otherwise, auto-pick the next worst offender:
      no `## Local overrides` section, so it predates the fixed layout in compliance checklist item 4) — same
      tie-break. Also doesn't move the 5-point `score`. Usually a doc-only pass: restructure the
      existing doc to the layout, checking the rest of the checklist as normal while you're there.
+   - Else any group with `"missing_stress_story": true` (no story file in the group exports a
+     `StressTest` story — compliance checklist item 6b). Also doesn't move the 5-point `score`.
+     Pick by this risk order rather than alphabetically, first `compdir` still flagged wins
+     (data-driven components fed straight from a CMS/API first, then single-row/inline layouts):
+     1. `02.molecules/price-list`
+     2. `02.molecules/opening-hours`
+     3. `03.organisms/responsive-header`
+     4. `03.organisms/image-galleries/slider-gallery`
+     5. `03.organisms/services/services-card`
+     6. `03.organisms/services/services-grids`
+     7. `03.organisms/services/service-summary`
+     8. `03.organisms/services/service-detail`
+     9. `01.atoms/navigation/breadcrumb`
+     10. `02.molecules/navigation/tab-navigation`
+     11. `01.atoms/navigation/tabs`
+     12. `02.molecules/select-menu`
+     13. `02.molecules/toast`
+     14. `02.molecules/alert-content`
+     15. `02.molecules/prompt`
+     16. `02.molecules/display-chip`
+     17. `01.atoms/display-pill`
+     18. `02.molecules/display-avatar`
+
+     After that list, copy-heavy molecules (`profile-section`, `pricing-card`,
+     `cookie-consent-banner`, `stepper-list`, `social-icons-list`, `04.templates/page-hero-highlights`),
+     then the `05.forms` labelled fields, then everything else alphabetically. Layout and animation
+     wrappers come last: an oversized-slot story is enough for them.
    - Else the lowest `score` overall — same tie-break.
 3. State which component was picked and why in one line (e.g. "Picked `input-select` — unplaced isn't the issue here, it forks a `variants/` subfolder and scores 2/5.") before doing anything else, so the user can redirect you if they'd rather do a different one next.
 

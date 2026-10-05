@@ -13,7 +13,8 @@ skip silently. Notes marked **Existing component** only apply when migrating.
 
 A component passes when its Component Ledger row (`node .claude/component-ledger/build.mjs`, then
 `.claude/component-ledger/audit.json`) shows `score: 5`, a real tier, and `variants`, `legacy_props`,
-`story_args_bug`, `eslint_issues`, `redundant_priv_tokens` and `styling_doc_outdated` all `false`.
+`story_args_bug`, `eslint_issues`, `redundant_priv_tokens`, `styling_doc_outdated` and `missing_stress_story`
+all `false`.
 The ledger can't see items 9, 10, 11 and 14, so check those by hand.
 
 ## The checklist

@@ -145,6 +145,11 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
     return false;
   });
   const hasEslintIssues = files.some((f) => eslintIssuesByFile.has(f));
+  // Checklist item 6b (added 2026-10-05): at least one story file in the group exports a
+  // `StressTest` story. A group with no stories at all is flagged too, on top of the score.
+  const missingStressStory = !storyFiles.some((f) =>
+    /export\s+const\s+StressTest\b/.test(fs.readFileSync(f, "utf-8"))
+  );
   // Pitfall #20's second half (added 2026-09-28): a --_ token that's never read, or a single-use
   // 1:1 copy of a public token. The migrate checklist only ever covered the promote-to-public half,
   // so ~160 of these survived migrations.
@@ -167,6 +172,7 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
     eslint_issues: hasEslintIssues,
     redundant_priv_tokens: hasRedundantPrivTokens,
     styling_doc_outdated: hasStylingDocOutdated,
+    missing_stress_story: missingStressStory,
     consumer_styling: hasConsumerStyling,
     tests: hasTests,
     stories: hasStoriesDir || hasStoriesFile,
