@@ -15,9 +15,12 @@ with fully consumer-supplied content, built on the native Popover API
 text) or `ActionMenu` (menu semantics with arrow-key navigation), `PopOver` makes no assumption
 about what the trigger or content look like, and always renders its own visible close button.
 
-**Browser support caveat:** CSS anchor-positioning and the Popover API are both comparatively
-recent — check current browser support before relying on this where broad support is a hard
-requirement, same caution as `DisplayTooltip`/`DeepExpandingMenu`'s equivalent gap.
+**Browser support:** since 2026-10-05 open/close and positioning go through the shared
+`useAnchoredPopover` composable, with `side` following the `placement` prop (see
+`composable-anchored-popover.md`). Without anchor positioning (Safari 17–18) the panel is placed
+from the trigger's measured position on the `placement` side, flipping to the opposite side when
+there's no room. Without the Popover API (Safari 16) it opens and closes in JS, with outside-click
+and Escape dismissal.
 
 ## Props
 
@@ -72,11 +75,11 @@ the only source of space above/below the slotted content — a plain `<p>` doesn
 
 ## Behaviour
 
-- Opening/closing is handled natively by the Popover API: clicking the trigger toggles the panel,
-  clicking the close button or pressing Escape hides it, and focus returns to the trigger
-  automatically on close.
-- On open, focus moves to the close button (`handleToggle`, driven by the popover's native
-  `toggle` event) so keyboard users land inside the panel immediately.
+- Clicking the trigger toggles the panel; the close button, Escape or an outside click hides it,
+  and focus returns to the trigger. Natively this is the Popover API; on Safari 16 the composable
+  does the same in JS. The trigger has `aria-expanded` in every browser.
+- On open, focus moves to the close button (the composable's `onOpen`) so keyboard users land
+  inside the panel immediately.
 
 ## CSS custom properties
 

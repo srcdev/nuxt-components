@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import PopOver from "../PopOver.vue";
+import { nextTick } from "vue";
 
 interface PopOverInstance {
   popoverId: string;
@@ -190,6 +191,58 @@ describe("PopOver", () => {
       await wrapper.setProps({ styleClassPassthrough: "updated-class" });
       expect(wrapper.find(".pop-over").classes()).not.toContain("initial-class");
       expect(wrapper.find(".pop-over").classes()).toContain("updated-class");
+    });
+  });
+
+  describe("Without the Popover API", () => {
+    beforeEach(() => {
+      Object.defineProperty(HTMLElement.prototype, "showPopover", { value: undefined, writable: true, configurable: true });
+    });
+
+    it("opens from the trigger and closes from the close button, returning focus to the trigger", async () => {
+      wrapper = await mountSuspended(PopOver, {
+        slots: { trigger: "<span>Open</span>", content: "<p>Body</p>" },
+        attachTo: document.body,
+      });
+      const trigger = wrapper.find(".pop-over-trigger");
+      const popover = wrapper.find(".pop-over-popover");
+
+      await trigger.trigger("click");
+      await nextTick();
+      expect(popover.classes()).toContain("pop-over-popover-open");
+      expect(trigger.attributes("aria-expanded")).toBe("true");
+      expect(document.activeElement).toBe(wrapper.find(".pop-over-close-button").element);
+
+      await wrapper.find(".pop-over-close-button").trigger("click");
+      expect(popover.classes()).not.toContain("pop-over-popover-open");
+      expect(document.activeElement).toBe(trigger.element);
+    });
+  });
+
+  describe("Without anchor positioning", () => {
+    const originalCSS = globalThis.CSS;
+
+    beforeEach(() => {
+      Object.defineProperty(globalThis, "CSS", { value: { supports: () => false }, writable: true, configurable: true });
+    });
+
+    afterEach(() => {
+      Object.defineProperty(globalThis, "CSS", { value: originalCSS, writable: true, configurable: true });
+    });
+
+    it("places the popover on the current placement prop's side", async () => {
+      wrapper = await createWrapper({ placement: "left" });
+      const vm = wrapper.vm as unknown as PopOverInstance;
+      const popover = wrapper.find(".pop-over-popover");
+
+      vm.handleToggle(Object.assign(new Event("toggle"), { newState: "open" }));
+      await nextTick();
+      expect(popover.attributes("data-placement")).toBe("left");
+
+      await wrapper.setProps({ placement: "top" });
+      vm.handleToggle(Object.assign(new Event("toggle"), { newState: "open" }));
+      await nextTick();
+      expect(popover.attributes("data-placement")).toBe("top");
     });
   });
 });

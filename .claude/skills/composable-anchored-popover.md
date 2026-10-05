@@ -3,7 +3,7 @@
 `app/composables/useAnchoredPopover.ts`. Open/close state and positioning for a trigger + `popover`
 element anchored with CSS anchor positioning, with fallbacks for browsers that lack either
 feature. Used by `ActionMenu`, `SelectMenu`, `DeepExpandingMenu` (all `side: "bottom"`, the default)
-and `DisplayTooltip` (`side: "right"`). Use it for any new anchored popover instead of calling `showPopover()`/`hidePopover()`
+`DisplayTooltip` (`side: "right"`) and `PopOver` (`side: () => props.placement`). Use it for any new anchored popover instead of calling `showPopover()`/`hidePopover()`
 directly.
 
 Several popovers where only one is open at a time (e.g. `DeepExpandingMenu`'s groups) can share
@@ -45,7 +45,7 @@ const {
 `rootRef` must contain both the trigger and the popover (outside-click detection). `onOpen` runs
 after the popover is visible, so it can move focus into it.
 
-`side` (`"bottom"` default, `"top"`, `"right"`, `"left"`) is the preferred side for the fallback
+`side` (`"bottom"` default, `"top"`, `"right"`, `"left"`, or a ref/getter of one, e.g. `() => props.placement`) is the preferred side for the fallback
 flip; it doesn't affect native anchor positioning, which the component's own CSS controls.
 
 ### Fallback position variables

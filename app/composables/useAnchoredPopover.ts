@@ -1,10 +1,10 @@
-import type { Ref } from "vue";
+import type { MaybeRefOrGetter, Ref } from "vue";
 
 interface AnchoredPopoverOptions {
   rootRef: Readonly<Ref<HTMLElement | null>>;
   triggerRef: Readonly<Ref<HTMLElement | null>>;
   popoverRef: Readonly<Ref<HTMLElement | null>>;
-  side?: AnchoredPopoverSide;
+  side?: MaybeRefOrGetter<AnchoredPopoverSide>;
   onOpen?: () => void;
 }
 
@@ -25,7 +25,7 @@ export function useAnchoredPopover({ rootRef, triggerRef, popoverRef, side = "bo
   const isOpen = ref(false);
   const usesFallbackPopover = ref(false);
   const needsPositioning = ref(false);
-  const placement = ref<AnchoredPopoverSide>(side);
+  const placement = ref<AnchoredPopoverSide>(toValue(side));
   const anchor = ref({ top: 0, bottom: 0, left: 0, right: 0, viewportWidth: 0, viewportHeight: 0 });
 
   // `--_anchor-{edge}` mirrors anchor({edge}) for top/left; `-inverse` is the same edge measured
@@ -64,7 +64,8 @@ export function useAnchoredPopover({ rootRef, triggerRef, popoverRef, side = "bo
     };
 
     anchor.value = { top: rect.top, bottom: rect.bottom, left: rect.left, right: rect.right, viewportWidth, viewportHeight };
-    placement.value = fits[side] || !fits[OPPOSITE_SIDE[side]] ? side : OPPOSITE_SIDE[side];
+    const preferred = toValue(side);
+    placement.value = fits[preferred] || !fits[OPPOSITE_SIDE[preferred]] ? preferred : OPPOSITE_SIDE[preferred];
   };
 
   let frame = 0;

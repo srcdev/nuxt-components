@@ -1,6 +1,12 @@
 <template>
   <ClientOnly>
-    <div class="pop-over" :class="[elementClasses]" :style="{ '--_anchor-name': anchorName }" :data-placement="placement">
+    <div
+      ref="rootRef"
+      class="pop-over"
+      :class="[elementClasses]"
+      :style="{ '--_anchor-name': anchorName }"
+      :data-placement="placement"
+    >
       <button
         ref="triggerRef"
         :popovertarget="popoverId"
@@ -8,11 +14,24 @@
         type="button"
         class="pop-over-trigger"
         :aria-label="triggerAriaLabel || undefined"
+        :aria-expanded="isOpen"
+        @click="handleTriggerClick"
       >
         <slot name="trigger"></slot>
       </button>
 
-      <div :id="popoverId" ref="popoverRef" popover class="pop-over-popover" :aria-label="popoverAriaLabel || undefined" @toggle="handleToggle">
+      <div
+        :id="popoverId"
+        ref="popoverRef"
+        popover
+        class="pop-over-popover"
+        :class="{ 'pop-over-popover-open': usesFallbackPopover && isOpen }"
+        :style="positionStyle"
+        :data-placement="popoverPlacement"
+        :aria-label="popoverAriaLabel || undefined"
+        @beforetoggle="handleBeforeToggle"
+        @toggle="handleToggle"
+      >
         <button
           ref="closeButtonRef"
           :popovertarget="popoverId"
@@ -20,6 +39,7 @@
           type="button"
           class="pop-over-close-button"
           :aria-label="closeButtonAriaLabel"
+          @click="hide"
         >
           <Icon name="lucide:x" class="pop-over-close-button-icon" aria-hidden="true" />
         </button>
@@ -55,17 +75,28 @@ const id = useId();
 const popoverId = `pop-over-${id}`;
 const anchorName = `--pop-over-anchor-${id}`;
 
+const rootRef = ref<HTMLDivElement | null>(null);
 const triggerRef = ref<HTMLButtonElement | null>(null);
 const popoverRef = ref<HTMLDivElement | null>(null);
 const closeButtonRef = ref<HTMLButtonElement | null>(null);
 
-/** Move focus into the popover on open; the Popover API restores focus to the trigger on close. */
-const handleToggle = (event: Event) => {
-  const toggleEvent = event as ToggleEvent;
-  if (toggleEvent.newState === "open") {
-    closeButtonRef.value?.focus();
-  }
-};
+// Focus moves to the close button on open; closing returns it to the trigger in every mode.
+const {
+  isOpen,
+  usesFallbackPopover,
+  positionStyle,
+  popoverPlacement,
+  hide,
+  handleTriggerClick,
+  handleBeforeToggle,
+  handleToggle,
+} = useAnchoredPopover({
+  rootRef,
+  triggerRef,
+  popoverRef,
+  side: () => props.placement,
+  onOpen: () => closeButtonRef.value?.focus(),
+});
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -126,6 +157,12 @@ watch(
         @starting-style {
           opacity: 0;
         }
+      }
+
+      /* Kept apart from :popover-open, which would invalidate a shared selector list where unsupported. */
+      &.pop-over-popover-open {
+        display: block;
+        opacity: 1;
       }
 
       .pop-over-close-button {
@@ -195,6 +232,30 @@ watch(
       top: auto;
       left: anchor(left);
       position-try-fallbacks: flip-block;
+    }
+
+    /* After the placement rules above, so the resolved (possibly flipped) side wins over their insets. */
+    @supports not (anchor-name: --a) {
+      .pop-over-popover {
+        position: fixed;
+        z-index: var(--pop-over-z-index, 999999);
+
+        &[data-placement="right"] {
+          inset: var(--_anchor-top, 0px) auto auto calc(var(--_anchor-right, 0px) + var(--pop-over-gap, 1rem));
+        }
+
+        &[data-placement="left"] {
+          inset: var(--_anchor-top, 0px) calc(var(--_anchor-left-inverse, 0px) + var(--pop-over-gap, 1rem)) auto auto;
+        }
+
+        &[data-placement="bottom"] {
+          inset: calc(var(--_anchor-bottom, 0px) + var(--pop-over-gap, 1rem)) auto auto var(--_anchor-left, 0px);
+        }
+
+        &[data-placement="top"] {
+          inset: auto auto calc(var(--_anchor-top-inverse, 0px) + var(--pop-over-gap, 1rem)) var(--_anchor-left, 0px);
+        }
+      }
     }
   }
 }

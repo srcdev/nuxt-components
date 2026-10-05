@@ -15,6 +15,7 @@
 | `--pop-over-text-colour` | `var(--slate-09)` | Popover panel text colour |
 | `--pop-over-shadow` | `0 0.4rem 1.6rem rgba(0,0,0,.12)` | Popover panel elevation shadow |
 | `--pop-over-transition-duration` | `200ms` | Open/close fade duration |
+| `--pop-over-z-index` | `999999` | Panel stacking order in browsers without CSS anchor positioning. Ignored where the panel renders in the top layer |
 | `--pop-over-content-padding` | `1.6rem` | Padding around the `content` slot |
 | `--pop-over-content-padding-block-start` | `3.2rem` | Extra top padding so content clears the close button |
 | `--pop-over-close-button-offset` | `0.8rem` | Distance of the close button from the panel's top/right edges |
@@ -54,9 +55,14 @@ Set the tokens above on an element you own (a page or section class, or a class 
 
 ## Notes
 
-- Built on the native Popover API (`popover`/`popovertarget`) and CSS anchor-positioning
-  (`anchor-name`/`position-anchor`/`anchor()`) — check current browser support before relying on
-  it where broad support is a hard requirement.
+- Built on the native Popover API and CSS anchor positioning, with fallbacks: without anchor
+  positioning (e.g. Safari 17–18) the panel is placed with `position: fixed` from the trigger's
+  measured position, and `.pop-over-popover[data-placement]` holds the resolved side (the
+  `placement` prop's side, or its opposite when that has no room). Without the Popover API
+  (Safari 16) it opens and closes in JS and shows via `.pop-over-popover-open` (style it in a
+  separate rule from `:popover-open`: a selector list containing `:popover-open` is dropped whole
+  where unsupported). It isn't in the top layer there, so the z-index token applies, and an
+  ancestor with `transform`, `filter` or `contain` can misplace it.
 - `placement` (`"top" | "right" | "bottom" | "left"`, default `"right"`) picks which side of the
   trigger the panel opens on; each side gets a `position-try-fallbacks` so the browser flips it
   automatically if it would overflow the viewport.
