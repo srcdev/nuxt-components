@@ -88,6 +88,10 @@ See `CONSUMER-STYLING.md` for the full token API and what's not tokenised.
   then A closes), so a close event is ignored unless it's for the active group.
 - Each group toggle has `aria-expanded`; the caret flip keys off it rather than
   `:has(:popover-open)`, so it works in the fallback too.
+- Panels have no ARIA role: this is the disclosure-navigation pattern (a toggle with
+  `aria-expanded` revealing ordinary links), not an ARIA menu. `role="menu"` was removed 2026-10-05
+  because it requires `menuitem` children and arrow-key handling the panels don't have, so screen
+  readers announced a menu that didn't behave like one. Don't add it back.
 - 2026-10-05: removed two never-referenced `@position-try` blocks (`--anchor-left`, and an invalid
   `@position-try-fallbacks --anchor-right` at-rule).
 - 2026-09-07 migration: moved from an unplaced top-level folder into

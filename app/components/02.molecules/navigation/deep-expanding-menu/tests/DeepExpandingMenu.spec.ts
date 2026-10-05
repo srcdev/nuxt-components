@@ -91,6 +91,11 @@ describe("DeepExpandingMenu", () => {
     expect(wrapper.classes()).toContain("updated-class");
   });
 
+  it("doesn't give the link panels a menu role", async () => {
+    const wrapper = await mountSuspended(DeepExpandingMenu, { props: { navLinks: defaultNavLinks } });
+    expect(wrapper.find(".navigation-group-panel").attributes("role")).toBeUndefined();
+  });
+
   describe("open state", () => {
     const twoGroups: ResponsiveHeaderNavItem[] = [
       { name: "Services", childLinksTitle: "Our services", childLinks: [{ name: "Haircuts", path: "/haircuts" }] },

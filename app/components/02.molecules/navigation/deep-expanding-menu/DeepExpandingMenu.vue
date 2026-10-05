@@ -24,7 +24,6 @@
             :style="activeKey === key ? positionStyle : undefined"
             :data-placement="activeKey === key ? popoverPlacement : undefined"
             popover
-            role="menu"
             @beforetoggle="handlePanelBeforeToggle(key, $event)"
             @toggle="handlePanelToggle(key, $event)"
           >
