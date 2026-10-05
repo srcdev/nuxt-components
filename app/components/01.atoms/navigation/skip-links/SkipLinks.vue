@@ -81,7 +81,7 @@ watch(
       color: var(--skip-links-text-colour, white);
       text-decoration: none;
       padding: var(--skip-links-link-padding-block, 0.8rem) var(--skip-links-link-padding-inline, 1.2rem);
-      text-wrap: nowrap;
+      white-space: nowrap;
 
       &:focus-visible {
         outline: var(--skip-links-focus-outline-width, 2px) solid var(--skip-links-focus-outline-colour, white);

@@ -782,7 +782,7 @@ watch(
           .main-navigation-link {
             display: flex;
             gap: 6px;
-            text-wrap-mode: nowrap;
+            white-space: nowrap;
             font-size: var(--responsive-header-link-font-size, inherit);
             color: var(--responsive-header-link-color, inherit);
             text-decoration: none;
@@ -821,7 +821,7 @@ watch(
             .has-toggle-icon {
               display: flex;
               gap: 6px;
-              text-wrap-mode: nowrap;
+              white-space: nowrap;
 
               /* Reserved for the same reason as .decorator-icon above — an
                  unsized chevron would widen the summary once its SVG loads. */
@@ -883,7 +883,7 @@ watch(
 
                   .main-navigation-sub-nav-link {
                     display: block;
-                    text-wrap-mode: nowrap;
+                    white-space: nowrap;
                     text-decoration: none;
                     color: var(--responsive-header-link-color, inherit);
                   }
@@ -994,7 +994,7 @@ watch(
           align-items: center;
           justify-content: center;
           padding-inline: 5px;
-          text-wrap: nowrap;
+          white-space: nowrap;
 
           aspect-ratio: 1;
           border-radius: 4px;

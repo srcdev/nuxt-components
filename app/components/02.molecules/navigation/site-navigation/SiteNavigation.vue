@@ -531,7 +531,7 @@ watch(
         font-weight: var(--_link-weight);
         letter-spacing: var(--_link-tracking);
         text-decoration: none;
-        text-wrap: nowrap;
+        white-space: nowrap;
         padding-block: 0.8rem;
         padding-inline: 0.4rem;
         position: relative;

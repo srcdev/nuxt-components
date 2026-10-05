@@ -263,7 +263,7 @@ watch(
 
                 .label-wrapper {
                   .overflow-navigation-text {
-                    text-wrap: nowrap;
+                    white-space: nowrap;
                   }
                 }
                 .icon-wrapper {
@@ -326,7 +326,7 @@ watch(
 
                 .label-wrapper {
                   .overflow-navigation-text {
-                    text-wrap: nowrap;
+                    white-space: nowrap;
                   }
                 }
                 .icon-wrapper {
