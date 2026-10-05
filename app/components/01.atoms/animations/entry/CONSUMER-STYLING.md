@@ -31,8 +31,12 @@ any passthrough classes.
 ## Motion
 
 - All three classes only animate inside `@media (prefers-reduced-motion: no-preference)`.
-- They use `animation-timeline: view(...)` (scroll-driven). In a browser without scroll-driven
-  animation support the animation completes immediately, so the content just appears in place.
+- They use `animation-timeline: view(...)` (scroll-driven), inside an
+  `@supports (animation-timeline: view())` guard, so a browser without scroll-driven animations
+  (Safari before 26, Firefox) shows the content in place with no animation.
+
+> Changed 2026-10-05: the guard is new. Before it, an unsupported browser ran the animation with a
+> zero duration and kept its end keyframe, which for `entry-exit-blur` left the content blurred.
 
 ---
 

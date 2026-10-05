@@ -14,8 +14,10 @@
 /* Used to scroll scale elements when scrolling x-axis like a carousel. */
 
 @media (prefers-reduced-motion: no-preference) {
-  .animation-scroller-x {
-    animation: scroller linear both;
-    animation-timeline: view(x);
+  @supports (animation-timeline: view()) {
+    .animation-scroller-x {
+      animation: scroller linear both;
+      animation-timeline: view(x);
+    }
   }
 }

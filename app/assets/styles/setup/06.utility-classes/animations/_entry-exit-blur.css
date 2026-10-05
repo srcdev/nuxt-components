@@ -1,7 +1,9 @@
 @media (prefers-reduced-motion: no-preference) {
-  .entry-exit-blur {
-    animation: entryExitBlurAnimation linear both;
-    animation-timeline: view();
+  @supports (animation-timeline: view()) {
+    .entry-exit-blur {
+      animation: entryExitBlurAnimation linear both;
+      animation-timeline: view();
+    }
   }
 }
 @keyframes entryExitBlurAnimation {

@@ -8,8 +8,10 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .auto-rotate {
-    animation: autoRotateAnimation;
-    animation-timeline: view();
+  @supports (animation-timeline: view()) {
+    .auto-rotate {
+      animation: autoRotateAnimation;
+      animation-timeline: view();
+    }
   }
 }

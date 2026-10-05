@@ -8,8 +8,10 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .entry-slide-in {
-    animation: entrySlideInAnimation forwards;
-    animation-timeline: view(70% 5%);
+  @supports (animation-timeline: view()) {
+    .entry-slide-in {
+      animation: entrySlideInAnimation forwards;
+      animation-timeline: view(70% 5%);
+    }
   }
 }
