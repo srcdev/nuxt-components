@@ -37,6 +37,7 @@ global token so it matches the rest of the design system out of the box.
 | `--select-menu-popover-min-width` | `18rem` | Minimum popover width |
 | `--select-menu-popover-max-height` | `32rem` | Maximum popover height before scrolling |
 | `--select-menu-popover-shadow` | `0 0.4rem 1.6rem rgb(0 0 0 / 12%)` | Popover drop shadow |
+| `--select-menu-popover-z-index` | `999999` | Stacking order in browsers without CSS anchor positioning (see Notes). Ignored where the popover renders in the top layer |
 | `--select-menu-transition-duration` | `200ms` | Open/close fade and chevron-rotate duration |
 
 ### Options
@@ -69,7 +70,13 @@ global token so it matches the rest of the design system out of the box.
 | Hook | Where | Meaning |
 |---|---|---|
 | `.normal` / `.underlined` | `.select-menu` root | The `inputVariant` prop. `underlined` removes the trigger's top and side borders and its corner radius, matching `InputSelect`'s underlined variant. |
-| `:has(.select-menu-popover:popover-open)` | `.select-menu` root | Menu open (rotates the chevron). |
+| `.select-menu-trigger[aria-expanded="true"]` | trigger | Menu open (rotates the chevron). Works with and without the Popover API. |
+| `.select-menu-popover:popover-open` | popover | Menu open, Popover API browsers. |
+| `.select-menu-popover-open` | popover | Menu open, browsers without the Popover API (Safari 16 and older). Style both open hooks in **separate rules**: a selector list containing `:popover-open` is dropped whole where it's unsupported. |
+| `[data-placement="above"]` | popover | Flipped above the trigger, browsers without CSS anchor positioning only. |
+
+> Changed 2026-10-05: the chevron hook moved from `:has(.select-menu-popover:popover-open)` on the
+> root to the trigger's `aria-expanded`, so it also works without the Popover API.
 
 ---
 
@@ -186,10 +193,15 @@ story.
 
 ## Notes
 
-- **Popover API + CSS anchor positioning** — same mechanism as `ActionMenu`. Broadly supported
-  (Chrome 114+, Firefox 125+, Safari 17+). No polyfill is included.
+- **Popover API + CSS anchor positioning, with fallbacks** — same mechanism as `ActionMenu`, via the
+  shared `useAnchoredPopover` composable. Without anchor positioning (e.g. Safari 17–18), the
+  popover is placed with `position: fixed` from the trigger's measured position, re-measured on
+  scroll and resize. Without the Popover API (Safari 16 and older), the menu also opens and
+  closes in JS, with outside-click and Escape dismissal. In that mode it isn't in the top layer, so
+  `--select-menu-popover-z-index` matters, and an ancestor with `transform`, `filter` or
+  `contain` becomes its containing block and can misplace it.
 - **Popover left-aligns with the trigger** by default (`left: anchor(left)`), unlike `ActionMenu`
   which right-aligns — matches native `<select>` dropdown behaviour. Flips above the trigger near
   the bottom of the viewport (`position-try-fallbacks: flip-block`).
-- **Chevron rotation** is pure CSS via `:has(.select-menu-popover:popover-open)` — no JS state
-  needed for the visual, though `isOpen` is still tracked internally to drive `aria-expanded`.
+- **Chevron rotation** is driven by the trigger's `aria-expanded`, which tracks the open state in
+  every browser.

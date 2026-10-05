@@ -171,11 +171,22 @@ Quick reference:
 
 ## Notes
 
-- **Popover API + CSS anchor positioning** — same mechanism as `ActionMenu`. The Popover API is
-  broadly supported (Chrome 114+, Firefox 125+, Safari 17+), but CSS anchor positioning is much
-  newer (Chromium 125+, Safari 26+), and without it the popover isn't placed under the trigger. No
-  polyfill or fallback is included, so check support before using this where older devices
-  matter; a native `<select>` (`InputSelect`) is the safer choice there.
+- **Popover API + CSS anchor positioning, with fallbacks** — same mechanism as `ActionMenu`, both
+  via the shared `useAnchoredPopover` composable (`app/composables/useAnchoredPopover.ts`). The
+  Popover API arrived in Safari 17 and CSS anchor positioning in Safari 26, so:
+  - No anchor positioning (Safari 17–18): JS measures the trigger and writes `--_popover-top`/
+    `-bottom`/`-left` px values for the `@supports not (anchor-name: --a)` block, re-measuring on
+    scroll/resize and flipping above (`data-placement="above"`) when there's no room below.
+  - No Popover API (Safari 16, e.g. first-generation iPad Pros that can't update): the trigger's
+    `@click` toggles `isOpen`, `.select-menu-popover-open` shows the list, and document listeners
+    close it on outside pointerdown and Escape. Not top-layer here, hence
+    `--select-menu-popover-z-index` (default `999999`).
+  - Detection runs in `onMounted` (`typeof HTMLElement.prototype.showPopover`, `CSS.supports`), so
+    SSR markup is identical everywhere. Every close goes through the composable's `hide()`, never
+    `hidePopover()` directly, so it works in both modes.
+  - Never put `:popover-open` in a selector list with the fallback class: browsers without it
+    drop the whole rule.
+  Confirmed broken on a Safari 16 iPad before this (trigger rendered, menu never opened).
 - **Left-aligned popover** (`left: anchor(left)`) — unlike `ActionMenu` which right-aligns. Matches
   native `<select>` dropdown behaviour. Flips above the trigger near the bottom of the viewport.
 - **Keyboard navigation** follows the WAI-ARIA listbox pattern: `ArrowDown`/`ArrowUp` move between
@@ -198,9 +209,8 @@ Quick reference:
   weight doesn't resize the popover. Hover/focus has `-text-color-hover` and `-border-hover`, which
   fall back to the row's *current* state (selected or resting), not always to resting. There's no
   hover font-weight token on purpose: the width reserve only covers one alternate weight.
-- **Chevron rotation is pure CSS** via `:has(.select-menu-popover:popover-open)` on the root — no
-  JS state drives the visual. `isOpen` is still tracked internally, but only to set `aria-expanded`
-  on the trigger.
+- **Chevron rotation** keys off the trigger's `aria-expanded` (from the composable's `isOpen`), not
+  `:has(...:popover-open)`, so it also works without the Popover API (changed 2026-10-05).
 - **No native `<select>`/`appearance: base-select` involved** — this is a from-scratch popover
   listbox, not a styled native select, so it doesn't inherit `InputSelectCore`'s WebKit
   `appearance: base-select` constraints.

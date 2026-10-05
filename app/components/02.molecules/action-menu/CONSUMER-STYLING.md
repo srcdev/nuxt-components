@@ -31,6 +31,7 @@ All `--action-menu-*` tokens are the stable override surface. Action menus repea
 | `--action-menu-popover-min-width` | `20rem` | Minimum menu width |
 | `--action-menu-popover-shadow` | `0 0.4rem 1.6rem rgba(0, 0, 0, 0.1)` | Menu panel drop shadow |
 | `--action-menu-popover-transition-duration` | `200ms` | Open/close fade duration |
+| `--action-menu-popover-z-index` | `999999` | Stacking order in browsers without CSS anchor positioning (see Positioning). Ignored where the popover renders in the top layer |
 | `--action-menu-item-divider` | `0.1rem solid var(--slate-02)` | Divider between list rows |
 
 ### Menu items (`ActionMenuItem`, resolved on `.action-menu-item`)
@@ -60,7 +61,10 @@ Private (not public API): `--_trigger-size`, `--_popover-transition-duration`, `
 
 | Hook | When |
 |---|---|
-| `.action-menu-popover:popover-open` | Menu is open |
+| `.action-menu-popover:popover-open` | Menu is open, Popover API browsers |
+| `.action-menu-popover-open` | Menu is open, browsers without the Popover API (Safari 16 and older). Style it in a **separate rule** from `:popover-open`: a selector list containing `:popover-open` is dropped whole where it's unsupported |
+| `.action-menu-trigger[aria-expanded="true"]` | Menu is open, every browser |
+| `.action-menu-popover[data-placement="above"]` | Flipped above the trigger, browsers without CSS anchor positioning only |
 
 Inner classes: `.action-menu-trigger`, `.action-menu-trigger-icon`, `.action-menu-popover`,
 `.action-menu-list`, `.action-menu-list-item`; on each item `.action-menu-item`,
@@ -76,8 +80,17 @@ Inner classes: `.action-menu-trigger`, `.action-menu-trigger-icon`, `.action-men
 
 The menu uses the Popover API plus CSS anchor positioning: it opens below the trigger,
 right-aligned, and flips above near the bottom of the viewport (`position-try-fallbacks:
-flip-block`). Browsers without anchor positioning still open the popover, but not anchored to the
-trigger.
+flip-block`).
+
+Fallbacks, via the shared `useAnchoredPopover` composable:
+
+- **No anchor positioning** (e.g. Safari 17–18): the popover is placed with `position: fixed` from
+  the trigger's measured position, re-measured on scroll and resize, and flipped above when there's
+  no room below.
+- **No Popover API** (Safari 16 and older): the menu also opens and closes in JS, with
+  outside-click and Escape dismissal. It isn't in the top layer in this mode, so
+  `--action-menu-popover-z-index` matters, and an ancestor with `transform`, `filter` or `contain`
+  becomes its containing block and can misplace it.
 
 ---
 

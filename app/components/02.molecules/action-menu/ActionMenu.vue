@@ -1,5 +1,5 @@
 <template>
-  <div class="action-menu" :class="[elementClasses]" :style="`--_anchor-name: ${anchorName}`">
+  <div ref="rootRef" class="action-menu" :class="[elementClasses]" :style="`--_anchor-name: ${anchorName}`">
     <button
       ref="triggerRef"
       :popovertarget="menuId"
@@ -8,6 +8,8 @@
       class="action-menu-trigger"
       :aria-label="label"
       aria-haspopup="menu"
+      :aria-expanded="isOpen"
+      @click="handleTriggerClick"
     >
       <Icon :name="triggerIcon" class="action-menu-trigger-icon" aria-hidden="true" />
     </button>
@@ -17,6 +19,10 @@
       ref="popoverRef"
       popover
       class="action-menu-popover"
+      :class="{ 'action-menu-popover-open': usesFallbackPopover && isOpen }"
+      :style="positionStyle"
+      :data-placement="popoverPlacement"
+      @beforetoggle="handleBeforeToggle"
       @toggle="handleToggle"
       @keydown="handleKeydown"
     >
@@ -49,6 +55,7 @@ const id = useId();
 const menuId = `action-menu-${id}`;
 const anchorName = `--action-menu-anchor-${id}`;
 
+const rootRef = ref<HTMLDivElement | null>(null);
 const triggerRef = ref<HTMLButtonElement | null>(null);
 const popoverRef = ref<HTMLDivElement | null>(null);
 
@@ -56,21 +63,21 @@ const popoverRef = ref<HTMLDivElement | null>(null);
 const getMenuItems = (): HTMLElement[] =>
   Array.from(popoverRef.value?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? []);
 
-/**
- * Close the menu and return focus to the trigger.
- * Called on item click — Escape is handled natively by the Popover API
- * (which also restores focus to the trigger automatically).
- */
-const closeMenu = () => {
-  popoverRef.value?.hidePopover();
-  triggerRef.value?.focus();
-};
+const {
+  isOpen,
+  usesFallbackPopover,
+  positionStyle,
+  popoverPlacement,
+  hide,
+  handleTriggerClick,
+  handleBeforeToggle,
+  handleToggle,
+} = useAnchoredPopover({ rootRef, triggerRef, popoverRef, align: "end", onOpen: () => getMenuItems()[0]?.focus() });
 
-const handleToggle = (event: Event) => {
-  const toggleEvent = event as ToggleEvent;
-  if (toggleEvent.newState === "open") {
-    getMenuItems()[0]?.focus();
-  }
+/** Close the menu and return focus to the trigger. Called on item click. */
+const closeMenu = () => {
+  hide();
+  triggerRef.value?.focus();
 };
 
 /**
@@ -81,7 +88,7 @@ const handleToggle = (event: Event) => {
  * Tab                  — close the menu; let the browser Tab naturally
  *                        (do NOT focus the trigger — Tab should advance
  *                        to the next element in the page).
- * Escape               — handled natively by the Popover API.
+ * Escape               — native light dismiss, or the fallback listener without the Popover API.
  */
 const handleKeydown = (event: KeyboardEvent) => {
   const items = getMenuItems();
@@ -108,7 +115,7 @@ const handleKeydown = (event: KeyboardEvent) => {
       break;
     case "Tab":
       // Close without stealing focus — Tab exits to the next DOM element naturally.
-      popoverRef.value?.hidePopover();
+      hide();
       break;
   }
 };
@@ -191,6 +198,24 @@ watch(
         @starting-style {
           display: block;
           opacity: 0;
+        }
+      }
+
+      /* Kept apart from :popover-open, which would invalidate a shared selector list where unsupported. */
+      &.action-menu-popover-open {
+        display: block;
+        opacity: 1;
+      }
+
+      @supports not (anchor-name: --a) {
+        position: fixed;
+        top: calc(var(--_popover-top, 0px) + var(--action-menu-block-distance, 0.4rem));
+        right: var(--_popover-right, 0px);
+        z-index: var(--action-menu-popover-z-index, 999999);
+
+        &[data-placement="above"] {
+          top: auto;
+          bottom: calc(var(--_popover-bottom, 0px) + var(--action-menu-block-distance, 0.4rem));
         }
       }
 

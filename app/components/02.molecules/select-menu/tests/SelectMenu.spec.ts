@@ -482,4 +482,40 @@ describe("SelectMenu", () => {
       expect(wrapper.classes()).toContain("select-menu");
     });
   });
+
+  // -------------------------
+  // Without the Popover API (Safari 16 and older)
+  // -------------------------
+  describe("Without the Popover API", () => {
+    beforeEach(() => {
+      Object.defineProperty(HTMLElement.prototype, "showPopover", { value: undefined, writable: true, configurable: true });
+    });
+
+    it("opens from the trigger with the fallback open class and aria-expanded", async () => {
+      wrapper = await createWrapper();
+      const popover = wrapper.find(".select-menu-popover");
+      expect(popover.classes()).not.toContain("select-menu-popover-open");
+
+      await wrapper.find(".select-menu-trigger").trigger("click");
+      expect(popover.classes()).toContain("select-menu-popover-open");
+      expect(wrapper.find(".select-menu-trigger").attributes("aria-expanded")).toBe("true");
+    });
+
+    it("closes when a single-select option is chosen", async () => {
+      wrapper = await createWrapper();
+      await wrapper.find(".select-menu-trigger").trigger("click");
+      await wrapper.findAll('[role="option"]')[1]!.trigger("click");
+
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual(["fr"]);
+      expect(wrapper.find(".select-menu-popover").classes()).not.toContain("select-menu-popover-open");
+    });
+
+    it("stays open while toggling options in multiple mode", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: [] });
+      await wrapper.find(".select-menu-trigger").trigger("click");
+      await wrapper.findAll('[role="option"]')[1]!.trigger("click");
+
+      expect(wrapper.find(".select-menu-popover").classes()).toContain("select-menu-popover-open");
+    });
+  });
 });

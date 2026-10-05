@@ -500,4 +500,32 @@ describe("ActionMenu", () => {
       expect(host.findAll(".action-menu-list-item")).toHaveLength(2);
     });
   });
+
+  // -------------------------
+  // Without the Popover API (Safari 16 and older)
+  // -------------------------
+  describe("Without the Popover API", () => {
+    beforeEach(() => {
+      Object.defineProperty(HTMLElement.prototype, "showPopover", { value: undefined, writable: true, configurable: true });
+    });
+
+    it("opens from the trigger with the fallback open class and aria-expanded", async () => {
+      wrapper = await createWrapper({}, { "item-0": '<button role="menuitem">Edit</button>' });
+      const popover = wrapper.find(".action-menu-popover");
+      expect(popover.classes()).not.toContain("action-menu-popover-open");
+
+      await wrapper.find(".action-menu-trigger").trigger("click");
+      expect(popover.classes()).toContain("action-menu-popover-open");
+      expect(wrapper.find(".action-menu-trigger").attributes("aria-expanded")).toBe("true");
+    });
+
+    it("closes when an item is clicked", async () => {
+      wrapper = await createWrapper({}, { "item-0": '<button role="menuitem">Edit</button>' });
+      await wrapper.find(".action-menu-trigger").trigger("click");
+      await wrapper.find(".action-menu-list-item").trigger("click");
+
+      expect(wrapper.find(".action-menu-popover").classes()).not.toContain("action-menu-popover-open");
+      expect(wrapper.find(".action-menu-trigger").attributes("aria-expanded")).toBe("false");
+    });
+  });
 });

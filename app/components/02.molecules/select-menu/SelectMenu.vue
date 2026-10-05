@@ -1,5 +1,10 @@
 <template>
-  <div class="select-menu" :class="[inputVariant, elementClasses]" :style="`--_anchor-name: ${anchorName}`">
+  <div
+    ref="rootRef"
+    class="select-menu"
+    :class="[inputVariant, elementClasses]"
+    :style="`--_anchor-name: ${anchorName}`"
+  >
     <button
       ref="triggerRef"
       :popovertarget="menuId"
@@ -9,6 +14,7 @@
       :aria-label="label"
       aria-haspopup="listbox"
       :aria-expanded="isOpen"
+      @click="handleTriggerClick"
     >
       <Icon
         v-if="showIcon && !multiple && selectedOption?.icon"
@@ -30,6 +36,10 @@
       ref="popoverRef"
       popover
       class="select-menu-popover"
+      :class="{ 'select-menu-popover-open': usesFallbackPopover && isOpen }"
+      :style="positionStyle"
+      :data-placement="popoverPlacement"
+      @beforetoggle="handleBeforeToggle"
       @toggle="handleToggle"
       @keydown="handleKeydown"
     >
@@ -103,9 +113,9 @@ const id = useId();
 const menuId = `select-menu-${id}`;
 const anchorName = `--select-menu-anchor-${id}`;
 
+const rootRef = ref<HTMLDivElement | null>(null);
 const triggerRef = ref<HTMLButtonElement | null>(null);
 const popoverRef = ref<HTMLDivElement | null>(null);
-const isOpen = ref(false);
 
 const selectedValues = computed(() => (props.multiple && Array.isArray(modelValue.value) ? modelValue.value : []));
 const selectedOption = computed(() =>
@@ -137,6 +147,23 @@ const isSelected = (option: SelectMenuOption): boolean =>
 const getMenuItems = (): HTMLElement[] =>
   Array.from(popoverRef.value?.querySelectorAll<HTMLElement>('[role="option"]') ?? []);
 
+const focusInitialItem = () => {
+  const items = getMenuItems();
+  const selectedIndex = items.findIndex((el) => el.getAttribute("aria-selected") === "true");
+  items[selectedIndex === -1 ? 0 : selectedIndex]?.focus();
+};
+
+const {
+  isOpen,
+  usesFallbackPopover,
+  positionStyle,
+  popoverPlacement,
+  hide,
+  handleTriggerClick,
+  handleBeforeToggle,
+  handleToggle,
+} = useAnchoredPopover({ rootRef, triggerRef, popoverRef, align: "start", onOpen: focusInitialItem });
+
 const selectOption = (option: SelectMenuOption) => {
   if (props.multiple) {
     const next = selectedValues.value.includes(option.value)
@@ -146,18 +173,8 @@ const selectOption = (option: SelectMenuOption) => {
     return;
   }
   modelValue.value = option.value;
-  popoverRef.value?.hidePopover();
+  hide();
   triggerRef.value?.focus();
-};
-
-const handleToggle = (event: Event) => {
-  const toggleEvent = event as ToggleEvent;
-  isOpen.value = toggleEvent.newState === "open";
-  if (isOpen.value) {
-    const items = getMenuItems();
-    const selectedIndex = items.findIndex((el) => el.getAttribute("aria-selected") === "true");
-    items[selectedIndex === -1 ? 0 : selectedIndex]?.focus();
-  }
 };
 
 /**
@@ -168,7 +185,7 @@ const handleToggle = (event: Event) => {
  * Enter / Space        — select the focused option. Closes the menu in single-select mode;
  *                        toggles the checkbox and keeps the menu open in multi-select mode.
  * Tab                  — close the menu; let the browser Tab naturally.
- * Escape               — handled natively by the Popover API.
+ * Escape               — native light dismiss, or the fallback listener without the Popover API.
  */
 const handleKeydown = (event: KeyboardEvent) => {
   const items = getMenuItems();
@@ -201,7 +218,7 @@ const handleKeydown = (event: KeyboardEvent) => {
       break;
     }
     case "Tab":
-      popoverRef.value?.hidePopover();
+      hide();
       break;
   }
 };
@@ -288,7 +305,7 @@ watch(
       border-radius: 0;
     }
 
-    &:has(.select-menu-popover:popover-open) .select-menu-trigger-chevron {
+    .select-menu-trigger[aria-expanded="true"] .select-menu-trigger-chevron {
       transform: rotate(180deg);
     }
 
@@ -326,6 +343,24 @@ watch(
         @starting-style {
           display: block;
           opacity: 0;
+        }
+      }
+
+      /* Kept apart from :popover-open, which would invalidate a shared selector list where unsupported. */
+      &.select-menu-popover-open {
+        display: block;
+        opacity: 1;
+      }
+
+      @supports not (anchor-name: --a) {
+        position: fixed;
+        top: calc(var(--_popover-top, 0px) + var(--select-menu-block-distance, 0.4rem));
+        left: var(--_popover-left, 0px);
+        z-index: var(--select-menu-popover-z-index, 999999);
+
+        &[data-placement="above"] {
+          top: auto;
+          bottom: calc(var(--_popover-bottom, 0px) + var(--select-menu-block-distance, 0.4rem));
         }
       }
 

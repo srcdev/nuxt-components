@@ -8,7 +8,7 @@
 Clicking it opens an anchored menu list populated via indexed dynamic slots (`item-{n}`). Each slot
 should contain a single `ActionMenuItem` — either a `<button>` (for actions) or a link (for
 navigation). The popover API and CSS anchor positioning handle positioning and dismiss behaviour
-natively; no JavaScript click-outside logic is needed.
+natively, with a JS fallback for older Safari (see Notes).
 
 **Location**: `app/components/02.molecules/action-menu/`
 
@@ -16,7 +16,7 @@ natively; no JavaScript click-outside logic is needed.
 
 ## Components
 
-### ActionMenu
+### `ActionMenu`
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|
@@ -24,7 +24,7 @@ natively; no JavaScript click-outside logic is needed.
 | `triggerIcon` | `string` | `"lucide:ellipsis"` | Icon on the trigger button. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the root `<div>`. |
 
-**Slots**
+#### Slots
 
 | Slot | When used |
 |---|---|
@@ -32,7 +32,7 @@ natively; no JavaScript click-outside logic is needed.
 
 ---
 
-### ActionMenuItem
+### `ActionMenuItem`
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|
@@ -41,19 +41,20 @@ natively; no JavaScript click-outside logic is needed.
 | `arrowIcon` | `string` | `"lucide:arrow-right"` | Decorative trailing arrow icon. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the root element. |
 
-**Slots**
+#### Slots
 
 | Slot | Content |
 |---|---|
 | `#icon` | Optional left icon (e.g. `<Icon name="lucide:pencil" />`). Wrapped in `aria-hidden` span. |
 
-**Emits**
+#### Emits
 
 | Event | Payload | Notes |
 |---|---|---|
 | `click` | `MouseEvent` | Fired on every click regardless of whether the item is a button or link. |
 
-**Notes on routing**
+#### Notes on routing
+
 - Internal paths (`/…`) resolve to `<NuxtLink>` via `resolveComponent`.
 - External URLs or relative paths without a leading `/` render as plain `<a>`.
 - `type="button"` is set automatically on `<button>` elements to prevent accidental form submission.
@@ -63,7 +64,7 @@ natively; no JavaScript click-outside logic is needed.
 ## Basic usage
 
 ```vue
-<ActionMenu :item-count="3" label="Row actions">
+<ActionMenu label="Row actions">
   <template #item-0>
     <ActionMenuItem label="Edit" @click="handleEdit">
       <template #icon><Icon name="lucide:pencil" /></template>
@@ -122,13 +123,18 @@ Quick reference:
 
 ## Notes
 
-- **Popover API + CSS anchor positioning** — the menu uses the `popover` attribute (broadly supported)
-  and `position-anchor` (newer: Chromium 125+, Safari 26+). Without anchor positioning the popover
-  still opens, just not anchored to the trigger. No polyfill is included.
-- **Auto-close** — clicking any `<li>` row fires `hidePopover()` on the menu. The `ActionMenuItem`
-  emitting `click` triggers normally before the menu closes.
-- **Focus management** — on open the `toggle` event fires `handleToggle`, which moves focus to the
-  first `[role="menuitem"]` inside the popover.
+- **Popover API + CSS anchor positioning, with fallbacks** — open/close and positioning go through
+  the shared `useAnchoredPopover` composable (`align: "end"`), same as `SelectMenu`. Without anchor
+  positioning (Safari 17–18) JS measures the trigger and writes `--_popover-top`/`-bottom`/`-right`
+  for the `@supports not (anchor-name: --a)` block. Without the Popover API (Safari 16) the trigger
+  toggles `isOpen`, `.action-menu-popover-open` shows the menu, outside pointerdown and Escape
+  close it, and `--action-menu-popover-z-index` (default `999999`) applies. See the `select-menu`
+  skill doc for the details and the `:popover-open` selector-list caveat.
+- **`aria-expanded`** on the trigger tracks the open state in every browser (added 2026-10-05).
+- **Auto-close** — clicking any `<li>` row calls the composable's `hide()` (native `hidePopover()`
+  or the fallback). The `ActionMenuItem` emitting `click` triggers normally before the menu closes.
+- **Focus management** — on open (the `toggle` event, or after render in the fallback), focus moves
+  to the first `[role="menuitem"]` inside the popover.
 - **Keyboard navigation `currentIndex === -1` guard** — `handleKeydown` computes the current
   position via `items.indexOf(document.activeElement)`. When focus is outside the menu this returns
   `-1`. Always guard explicitly before applying wrap-around math: `ArrowDown` should focus

@@ -66,6 +66,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── composable-tooltips-guide.md      — useTooltipsGuide: sequential popover guide with auto-start, dismiss-to-advance, manual controls
 ├── composable-cookie-consent.md      — useCookieConsent: unset/granted/denied state, cookie persistence, wraps @nuxt/scripts' useScriptTriggerConsent
 ├── composable-analytics.md           — useAnalytics: provider-agnostic trackEvent/page-view tracking (google-analytics only implemented), consent-gated, single call site for setup + firing events
+├── composable-anchored-popover.md    — useAnchoredPopover: popover + anchor positioning with JS fallbacks for Safari 16 (no Popover API) and 17–18 (no anchor positioning); used by ActionMenu/SelectMenu
 └── components/
     ├── alert-content.md          — AlertContent + AlertContentInner: themed alert panel (icon/title/content/actions/dismiss) under DisplayToast, DisplayPrompt and AlertMaskedContent; showIcon, #actions row, --alert-content-* tokens, app.config icon map
     ├── alert-mask-core.md      — AlertMaskCore: SVG border/background mask sized to slotted content via ResizeObserver, config-prop-driven geometry/colour (no CSS token API)
