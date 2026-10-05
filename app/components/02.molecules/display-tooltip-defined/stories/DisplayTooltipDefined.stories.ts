@@ -67,7 +67,7 @@ export const GuidedTour: Story = {
     docs: {
       description: {
         story:
-          "Recreates the deleted `app/pages/ui/tooltips.vue` demo: `useTooltipsGuide` walks a container's `[popover]` elements in DOM order, opening each and waiting for its close button before advancing — the autoplay-through-steps pattern seen on some guide intros. Mixes a `DisplayTooltipDefined` step with a plain `DisplayTooltip` step (the guide works with either, since it only needs native `[popover]`/`popovertarget` markup). Guide auto-starts 800ms after mount in this story; use \"Run guide again\" to replay it.",
+          "Recreates the deleted `app/pages/ui/tooltips.vue` demo: `useTooltipsGuide` walks a container's `[popover]` elements in DOM order, opening each and waiting for its close button before advancing — the autoplay-through-steps pattern seen on some guide intros. Mixes a `DisplayTooltipDefined` step (its close button relabelled \"Next\" via `closeButtonText`) with a plain `DisplayTooltip` step. A hand-written close button must call the `tooltipContent` slot's `close()` as well as carrying `popovertargetaction=\"hide\"`: the attribute alone does nothing on Safari 16, which has no Popover API. Guide auto-starts 800ms after mount in this story; use \"Run guide again\" to replay it.",
       },
     },
   },
@@ -89,12 +89,14 @@ export const GuidedTour: Story = {
             {{ isGuideRunning ? 'Guide running…' : 'Run guide again' }}
           </button>
           <span v-if="isGuideRunning" style="font-size: 1.3rem; color: #666;">
-            Step {{ currentTooltipIndex + 1 }} of {{ totalPopovers }} — click each popover's Close button to advance
+            Step {{ currentTooltipIndex + 1 }} of {{ totalPopovers }} — click Next (Close on the last step) to advance
           </span>
         </div>
 
         <div ref="guideContainer" style="display: grid; gap: 2rem;">
           <DisplayTooltipDefined
+            close-button-text="Next"
+            close-button-aria-label="Next step"
             :content-text="{
               tooltipTitle: { tag: 'h3', text: 'Step 1' },
               tooltipContent: { tag: 'p', text: 'This step uses DisplayTooltipDefined — structured title/body/action content plus a built-in close button.' },
@@ -106,14 +108,15 @@ export const GuidedTour: Story = {
 
           <DisplayTooltip tooltip-id="guided-tour-step-2">
             <template #triggerContent>Trigger from plain DisplayTooltip</template>
-            <template #tooltipContent>
-              <p style="margin: 0;">This step uses plain DisplayTooltip — you supply the close button yourself via the tooltipContent slot.</p>
+            <template #tooltipContent="{ close }">
+              <p>This step uses plain DisplayTooltip — you supply the close button yourself via the tooltipContent slot.</p>
               <button
                 popovertarget="guided-tour-step-2"
                 popovertargetaction="hide"
                 class="display-tooltip-close-button"
                 style="align-self: flex-end;"
                 aria-label="Close tool tip"
+                @click="close"
               >
                 Close
               </button>
