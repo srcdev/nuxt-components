@@ -43,48 +43,52 @@ watch(
 <style lang="css">
 @layer components {
   .ui-block-decorated {
+    --_border-colour: var(--ui-block-decorated-border-colour, var(--theme-border));
+    --_shadow-colour: var(--ui-block-decorated-shadow-colour, #000);
+    --_inner-shadow-colour: var(--ui-block-decorated-inner-shadow-colour, var(--_shadow-colour));
+
     /*
     * Border strength classes
     */
     &.ui-block-decorated-border-1 {
-      border: var(--ui-block-decorated-border-1, 1px solid var(--theme-border));
+      border: var(--ui-block-decorated-border-1, 1px solid var(--_border-colour));
     }
     &.ui-block-decorated-border-2 {
-      border: var(--ui-block-decorated-border-2, 2px solid var(--theme-border));
+      border: var(--ui-block-decorated-border-2, 2px solid var(--_border-colour));
     }
     &.ui-block-decorated-border-3 {
-      border: var(--ui-block-decorated-border-3, 3px solid var(--theme-border));
+      border: var(--ui-block-decorated-border-3, 3px solid var(--_border-colour));
     }
     &.ui-block-decorated-border-4 {
-      border: var(--ui-block-decorated-border-4, 4px solid var(--theme-border));
+      border: var(--ui-block-decorated-border-4, 4px solid var(--_border-colour));
     }
     &.ui-block-decorated-border-5 {
-      border: var(--ui-block-decorated-border-5, 5px solid var(--theme-border));
+      border: var(--ui-block-decorated-border-5, 5px solid var(--_border-colour));
     }
     &.ui-block-decorated-border-6 {
-      border: var(--ui-block-decorated-border-6, 6px solid var(--theme-border));
+      border: var(--ui-block-decorated-border-6, 6px solid var(--_border-colour));
     }
 
     /*
     * Shadow strength classes
     */
     &.ui-block-decorated-shadow-1 {
-      box-shadow: var(--ui-block-decorated-shadow-1, 0 1px 2px rgba(0, 0, 0, 0.08));
+      box-shadow: var(--ui-block-decorated-shadow-1, 0 1px 2px color-mix(in srgb, var(--_shadow-colour) 8%, transparent));
     }
     &.ui-block-decorated-shadow-2 {
-      box-shadow: var(--ui-block-decorated-shadow-2, 0 2px 4px rgba(0, 0, 0, 0.1));
+      box-shadow: var(--ui-block-decorated-shadow-2, 0 2px 4px color-mix(in srgb, var(--_shadow-colour) 10%, transparent));
     }
     &.ui-block-decorated-shadow-3 {
-      box-shadow: var(--ui-block-decorated-shadow-3, 0 4px 8px rgba(0, 0, 0, 0.12));
+      box-shadow: var(--ui-block-decorated-shadow-3, 0 4px 8px color-mix(in srgb, var(--_shadow-colour) 12%, transparent));
     }
     &.ui-block-decorated-shadow-4 {
-      box-shadow: var(--ui-block-decorated-shadow-4, 0 8px 16px rgba(0, 0, 0, 0.14));
+      box-shadow: var(--ui-block-decorated-shadow-4, 0 8px 16px color-mix(in srgb, var(--_shadow-colour) 14%, transparent));
     }
     &.ui-block-decorated-shadow-5 {
-      box-shadow: var(--ui-block-decorated-shadow-5, 0 16px 24px rgba(0, 0, 0, 0.16));
+      box-shadow: var(--ui-block-decorated-shadow-5, 0 16px 24px color-mix(in srgb, var(--_shadow-colour) 16%, transparent));
     }
     &.ui-block-decorated-shadow-6 {
-      box-shadow: var(--ui-block-decorated-shadow-6, 0 24px 32px rgba(0, 0, 0, 0.18));
+      box-shadow: var(--ui-block-decorated-shadow-6, 0 24px 32px color-mix(in srgb, var(--_shadow-colour) 18%, transparent));
     }
 
     /*
@@ -115,25 +119,25 @@ watch(
 
     &.ui-block-decorated-inner-shadow-1::before {
       box-shadow:
-        var(--ui-block-decorated-inner-shadow-1, inset 0 1px 2px rgba(0, 0, 0, 0.08)),
+        var(--ui-block-decorated-inner-shadow-1, inset 0 1px 2px color-mix(in srgb, var(--_inner-shadow-colour) 8%, transparent)),
         var(--ui-block-decorated-inner-shadow-highlight, inset 0 1px 0 rgba(255, 255, 255, 0.15));
     }
 
     &.ui-block-decorated-inner-shadow-2::before {
       box-shadow:
-        var(--ui-block-decorated-inner-shadow-2, inset 0 2px 4px rgba(0, 0, 0, 0.1)),
+        var(--ui-block-decorated-inner-shadow-2, inset 0 2px 4px color-mix(in srgb, var(--_inner-shadow-colour) 10%, transparent)),
         var(--ui-block-decorated-inner-shadow-highlight, inset 0 1px 0 rgba(255, 255, 255, 0.15));
     }
 
     &.ui-block-decorated-inner-shadow-3::before {
       box-shadow:
-        var(--ui-block-decorated-inner-shadow-3, inset 0 4px 6px rgba(0, 0, 0, 0.12)),
+        var(--ui-block-decorated-inner-shadow-3, inset 0 4px 6px color-mix(in srgb, var(--_inner-shadow-colour) 12%, transparent)),
         var(--ui-block-decorated-inner-shadow-highlight, inset 0 1px 0 rgba(255, 255, 255, 0.15));
     }
 
     &.ui-block-decorated-inner-shadow-4::before {
       box-shadow:
-        var(--ui-block-decorated-inner-shadow-4, inset 0 6px 8px rgba(0, 0, 0, 0.14)),
+        var(--ui-block-decorated-inner-shadow-4, inset 0 6px 8px color-mix(in srgb, var(--_inner-shadow-colour) 14%, transparent)),
         var(--ui-block-decorated-inner-shadow-highlight, inset 0 1px 0 rgba(255, 255, 255, 0.15));
     }
   }

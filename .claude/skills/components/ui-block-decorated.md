@@ -42,6 +42,13 @@ short: `--ui-block-decorated-border-1` .. `-6`, `--ui-block-decorated-shadow-1` 
 `--ui-block-decorated-inner-shadow-1` .. `-4`, and `--ui-block-decorated-inner-shadow-highlight`
 (layered on top of every inner shadow level).
 
+To recolour every level at once (added 2026-10-05): `--ui-block-decorated-border-colour` (default
+`var(--theme-border)`), `--ui-block-decorated-shadow-colour` (default `#000`) and
+`--ui-block-decorated-inner-shadow-colour` (default: the shadow colour). Each shadow level mixes the
+colour with its own opacity via `color-mix()` (8% .. 18%), so defaults render exactly as before.
+The per-level tokens still override the whole value. The story has colour pickers for all three,
+plus story-only background and text colour controls for checking contrast.
+
 ## Notes
 
 - 2026-09-16 migration: previously used options-style `defineProps` and referenced six families of
