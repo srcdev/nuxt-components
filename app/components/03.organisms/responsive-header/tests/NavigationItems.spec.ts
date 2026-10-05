@@ -146,6 +146,22 @@ describe("NavigationItems", () => {
     expect(details.attributes("open")).toBe("");
   });
 
+  it("builds the submenu aria-label from submenuAriaLabel, falling back to name", async () => {
+    const wrapper = await mountSuspended(NavigationItems, {
+      props: {
+        submenuAriaLabel: "Untermenü {title}",
+        mainNavigationState: {
+          clonedNavLinks: { firstNav: [{ name: "Services", childLinks: [{ name: "A", path: "/a" }] }] },
+          navListVisibility: { firstNav: false },
+          hasSecondNav: false,
+        },
+      },
+    });
+    const text = wrapper.find(".overflow-navigation-details .overflow-navigation-text");
+    expect(text.text()).toBe("Services");
+    expect(text.attributes("aria-label")).toBe("Untermenü Services");
+  });
+
   it("renders correct HTML structure with default props", async () => {
     const wrapper = await mountSuspended(NavigationItems, {
       props: { mainNavigationState },

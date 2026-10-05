@@ -20,6 +20,8 @@
           :main-nav-aria-label="mainNavAriaLabel"
           :secondary-nav-aria-label="secondaryNavAriaLabel"
           :overflow-menu-aria-label="overflowMenuAriaLabel"
+          :overflow-button-label="overflowButtonLabel"
+          :submenu-aria-label="submenuAriaLabel"
         >
           <template v-if="slots.secondaryNavigation" #secondaryNavigation>
             <slot name="secondaryNavigation"></slot>
@@ -54,6 +56,10 @@ interface Props {
   secondaryNavAriaLabel?: string;
   /** Forwarded to ResponsiveHeader's overflowMenuAriaLabel — override for localisation. */
   overflowMenuAriaLabel?: string;
+  /** Forwarded to ResponsiveHeader's overflowButtonLabel, the burger button's accessible name. */
+  overflowButtonLabel?: string;
+  /** Forwarded to ResponsiveHeader's submenuAriaLabel; {title} is replaced with the item's title. */
+  submenuAriaLabel?: string;
 }
 
 withDefaults(defineProps<Props>(), {
@@ -73,6 +79,8 @@ withDefaults(defineProps<Props>(), {
   mainNavAriaLabel: "Main navigation",
   secondaryNavAriaLabel: "Secondary navigation",
   overflowMenuAriaLabel: "Overflow navigation menu",
+  overflowButtonLabel: "More navigation",
+  submenuAriaLabel: "{title} submenu",
 });
 
 const slots = useSlots();

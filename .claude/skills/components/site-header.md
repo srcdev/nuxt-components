@@ -27,6 +27,8 @@ Branding (logo/wordmark) is entirely consumer-authored via the `#branding` slot 
 | `mainNavAriaLabel` | `string` | `"Main navigation"` | Forwarded to `ResponsiveHeader`'s `mainNavAriaLabel` — override for localisation. |
 | `secondaryNavAriaLabel` | `string` | `"Secondary navigation"` | Forwarded to `ResponsiveHeader`'s `secondaryNavAriaLabel` — override for localisation. |
 | `overflowMenuAriaLabel` | `string` | `"Overflow navigation menu"` | Forwarded to `ResponsiveHeader`'s `overflowMenuAriaLabel` — override for localisation. |
+| `overflowButtonLabel` | `string` | `"More navigation"` | Forwarded to `ResponsiveHeader`'s `overflowButtonLabel`, the burger button's accessible name. |
+| `submenuAriaLabel` | `string` | `"{title} submenu"` | Forwarded to `ResponsiveHeader`'s `submenuAriaLabel`; `{title}` is replaced with the item's title. |
 
 ---
 

@@ -40,9 +40,11 @@
       "  main-nav-aria-label=\"${3:Main navigation}\"",
       "  secondary-nav-aria-label=\"${4:Secondary navigation}\"",
       "  overflow-menu-aria-label=\"${5:Overflow navigation menu}\"",
+      "  overflow-button-label=\"${6:More navigation}\"",
+      "  submenu-aria-label=\"${7:{title\\} submenu}\"",
       ">",
       "  <template #branding>",
-      "    <NuxtLink to=\"/\" class=\"home-link\">$6Brand</NuxtLink>",
+      "    <NuxtLink to=\"/\" class=\"home-link\">$8Brand</NuxtLink>",
       "  </template>",
       "</SiteHeader>"
     ]

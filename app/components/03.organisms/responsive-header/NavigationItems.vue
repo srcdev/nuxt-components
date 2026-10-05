@@ -27,8 +27,7 @@
             'is-active': isActiveNavItem(link),
           }"
           :style="{
-            '--_main-navigation-item-width':
-              mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
+            '--_main-navigation-item-width': itemWidth(mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]),
           }"
           :data-group-key="groupKey"
           :data-local-index="localIndex"
@@ -48,8 +47,7 @@
             'is-active': isActiveNavItem(link),
           }"
           :style="{
-            '--_main-navigation-item-width':
-              mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
+            '--_main-navigation-item-width': itemWidth(mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]),
           }"
           :data-group-key="groupKey"
           :data-local-index="localIndex"
@@ -66,11 +64,11 @@
             <template #summary>
               <span
                 class="overflow-navigation-text"
-                :aria-label="`${link.childLinksTitle} submenu`"
+                :aria-label="submenuLabel(link)"
                 role="menuitem"
                 :aria-haspopup="true"
               >
-                {{ link.childLinksTitle }}
+                {{ link.childLinksTitle ?? link.name }}
               </span>
             </template>
             <template #icon>
@@ -81,7 +79,7 @@
                 <ul class="overflow-navigation-sub-nav-list" @mouseleave="hoveredChildKey = null">
                   <li
                     v-for="(childLink, childIndex) in link.childLinks"
-                    :key="childLink.name"
+                    :key="childIndex"
                     class="overflow-navigation-sub-nav-item"
                     :class="{
                       'is-hovered': hoveredChildKey === `${String(groupKey)}-${localIndex}-${childIndex}`,
@@ -117,6 +115,8 @@ interface Props {
   styleClassPassthrough?: string | string[];
   /** aria-label on the overflow menu — override for localisation. */
   ariaLabel?: string;
+  /** aria-label on each submenu summary; {title} is replaced with the item's title. */
+  submenuAriaLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -127,7 +127,11 @@ const props = withDefaults(defineProps<Props>(), {
   panelVariant: "classic",
   styleClassPassthrough: () => [],
   ariaLabel: "Overflow navigation menu",
+  submenuAriaLabel: "{title} submenu",
 });
+
+const submenuLabel = (link: ResponsiveHeaderNavItem) =>
+  props.submenuAriaLabel.replace("{title}", link.childLinksTitle ?? link.name);
 
 const panelComponent = computed(() => (props.panelVariant === "modern" ? ExpandingPanel : ExpandingPanelClassic));
 
@@ -178,6 +182,9 @@ const widestNavLinkWidthInMainNavigationState = computed(() => {
   }, 0);
 });
 
+const itemWidth = (link?: ResponsiveHeaderNavItem) =>
+  link?.config?.width === undefined ? undefined : `${link.config.width}px`;
+
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 // Performance: Use immediate flag and more efficient watching
@@ -199,6 +206,7 @@ watch(
        on this element to avoid cascade conflicts with ancestor overrides.
 
        --overflow-nav-padding-inline         (default: 0.8rem)
+       --overflow-nav-max-inline-size        (default: calc(100vw - 3.2rem))
        --overflow-nav-items-gap              (default: 0px)
        --overflow-nav-items-padding-block    (default: 0.8rem)
 
@@ -212,10 +220,15 @@ watch(
        --overflow-nav-decorator-hovered-bg              (default: oklch(100% 0 0 / 6%))
     ──────────────────────────────────────────────────────────────────────── */
 
+    --_max-inline-size: var(--overflow-nav-max-inline-size, calc(100vw - 3.2rem));
+
     display: flex;
     flex-direction: column;
     gap: var(--overflow-nav-items-gap, 0px);
     position: relative;
+    inline-size: max-content;
+    max-inline-size: var(--_max-inline-size);
+    overflow-wrap: anywhere;
 
     .overflow-navigation-list {
       display: none;
@@ -224,7 +237,7 @@ watch(
         display: flex;
         flex-direction: column;
         gap: var(--overflow-nav-items-gap, 0px);
-        min-width: var(--_overflow-navigation-list-min-width, auto);
+        min-width: min(var(--_overflow-navigation-list-min-width, 0px), var(--_max-inline-size));
       }
 
       .overflow-navigation-item {
@@ -262,9 +275,7 @@ watch(
                 border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
 
                 .label-wrapper {
-                  .overflow-navigation-text {
-                    white-space: nowrap;
-                  }
+                  min-inline-size: 0;
                 }
                 .icon-wrapper {
                   padding: 0;
@@ -325,9 +336,7 @@ watch(
                 border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
 
                 .label-wrapper {
-                  .overflow-navigation-text {
-                    white-space: nowrap;
-                  }
+                  min-inline-size: 0;
                 }
                 .icon-wrapper {
                   padding: 0;

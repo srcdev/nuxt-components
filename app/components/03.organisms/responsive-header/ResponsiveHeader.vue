@@ -32,8 +32,7 @@
             'is-active': isActiveNavItem(link),
           }"
           :style="{
-            '--_main-navigation-item-width':
-              mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]?.config?.width + 'px',
+            '--_main-navigation-item-width': itemWidth(mainNavigationState.clonedNavLinks?.[groupKey]?.[localIndex]),
           }"
           :data-group-key="groupKey"
           :data-local-index="localIndex"
@@ -52,7 +51,7 @@
           <details v-else ref="navigationDetails" class="main-navigation-details" name="navigation-group">
             <summary
               class="main-navigation-details-summary has-toggle-icon"
-              :aria-label="`${link.childLinksTitle} submenu`"
+              :aria-label="submenuLabel(link)"
               @mouseenter="handleSummaryHover($event)"
               @focusin="handleSummaryHover($event)"
               @click.prevent="handleSummaryAction($event)"
@@ -61,11 +60,15 @@
               <Icon name="mdi:chevron-down" class="icon" :aria-hidden="true" />
               <Icon v-if="link.iconName" :name="link.iconName" class="decorator-icon" aria-hidden="true" />
 
-              {{ link.childLinksTitle }}
+              {{ link.childLinksTitle ?? link.name }}
             </summary>
             <div class="main-navigation-sub-nav" role="menu" @mouseenter="handleSubNavHover">
               <ul class="main-navigation-sub-nav-list">
-                <li v-for="childLink in link.childLinks" :key="childLink.name" class="main-navigation-sub-nav-item">
+                <li
+                  v-for="(childLink, childIndex) in link.childLinks"
+                  :key="childIndex"
+                  class="main-navigation-sub-nav-item"
+                >
                   <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link" role="menuitem">
                     {{ childLink.name }}
                   </NuxtLink>
@@ -85,7 +88,7 @@
         :class="overflowDetailsClass ? [overflowDetailsClass] : []"
         name="overflow-group"
       >
-        <summary class="overflow-details-summary has-toggle-icon">
+        <summary class="overflow-details-summary has-toggle-icon" :aria-label="overflowButtonLabel">
           <Icon
             :name="overflowDetailsSummaryIcons.more ?? 'gravity-ui:ellipsis'"
             class="icon"
@@ -104,6 +107,7 @@
             :main-navigation-state="mainNavigationState"
             :panel-variant="panelVariant"
             :aria-label="overflowMenuAriaLabel"
+            :submenu-aria-label="submenuAriaLabel"
           />
         </div>
       </details>
@@ -136,6 +140,10 @@ interface Props {
   secondaryNavAriaLabel?: string;
   /** aria-label on the overflow menu itself (forwarded to NavigationItems) — override for localisation. */
   overflowMenuAriaLabel?: string;
+  /** Accessible name of the overflow/burger button, which shows only icons. */
+  overflowButtonLabel?: string;
+  /** aria-label on each dropdown summary; {title} is replaced with the item's title. Forwarded to NavigationItems. */
+  submenuAriaLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -155,7 +163,12 @@ const props = withDefaults(defineProps<Props>(), {
   mainNavAriaLabel: "Main navigation",
   secondaryNavAriaLabel: "Secondary navigation",
   overflowMenuAriaLabel: "Overflow navigation menu",
+  overflowButtonLabel: "More navigation",
+  submenuAriaLabel: "{title} submenu",
 });
+
+const submenuLabel = (link: ResponsiveHeaderNavItem) =>
+  props.submenuAriaLabel.replace("{title}", link.childLinksTitle ?? link.name);
 
 const collapseNavigationBelowWidth = computed(
   () => props.collapseBreakpoint !== null || props.collapseAtMainNavIntersection
@@ -173,6 +186,7 @@ const {
 const slots = useSlots();
 
 const navigationWrapperRef = useTemplateRef<HTMLDivElement>("navigationWrapper");
+const mainNavRef = useTemplateRef<HTMLElement>("mainNav");
 
 const closeAllNavigationDetails = () => {
   navigationDetailsRefs.value?.forEach((element) => {
@@ -361,7 +375,10 @@ const mainNavigationState = ref<ResponsiveHeaderState>({
     firstNav: false,
     secondNav: false,
   },
-  clonedNavLinks: props.responsiveNavLinks,
+  // Copied so the geometry pass's config writes never land in the consumer's own nav data
+  clonedNavLinks: Object.fromEntries(
+    Object.entries(props.responsiveNavLinks).map(([groupKey, group]) => [groupKey, group.map((link) => ({ ...link }))])
+  ),
   hasSecondNav: Object.keys(props.responsiveNavLinks).length > 1,
 });
 
@@ -398,12 +415,13 @@ const navigationDetailsRefs = useTemplateRef<HTMLElement[]>("navigationDetails")
 
 const overflowDetailsRef = useTemplateRef<HTMLDetailsElement>("overflowDetails");
 
-const showOverflowDetails = computed(() => {
-  const hasHiddenNav =
-    !mainNavigationState.value.navListVisibility["firstNav"] ||
-    (!mainNavigationState.value.navListVisibility["secondNav"] && mainNavigationState.value.hasSecondNav);
-  return hasHiddenNav;
-});
+// Item-based rather than reading navListVisibility.firstNav/secondNav, so any group key works and
+// empty nav data never shows a burger with nothing in it
+const showOverflowDetails = computed(() =>
+  Object.values(mainNavigationState.value.clonedNavLinks ?? {}).some((group) =>
+    group.some((link) => link.config?.visible === false)
+  )
+);
 
 const mainNavigationMarginBlockEnd = computed(() => {
   return secondaryNavRects.value ? secondaryNavRects.value.width + props.gapBetweenFirstAndSecondNav : 0;
@@ -462,20 +480,18 @@ const determineNavigationItemVisibility = (rect: DOMRect) => {
     return false;
   }
 
-  // Use default responsive visibility logic if wrapper exists
-  if (navigationWrapperRects.value) {
-    return (
-      Math.floor(rect.right + mainNavigationMarginBlockEnd.value + props.gapBetweenFirstAndSecondNav) <
-      navigationWrapperRects.value.right
-    );
-  }
-
-  // Default to visible
-  return true;
+  // An item fits if it ends within the main nav, whose margin-inline-end already reserves the
+  // secondary nav plus the gap. Measured live with the item so both read the same layout.
+  const mainNavRect = mainNavRef.value?.getBoundingClientRect();
+  if (!mainNavRect) return true;
+  return Math.floor(rect.right) <= Math.floor(mainNavRect.right);
 };
 
 const initMainNavigationState = () => {
-  if (!mainNavigationItemsRefs.value) return;
+  if (!mainNavigationItemsRefs.value?.length) {
+    isGeometryReady.value = true;
+    return;
+  }
 
   mainNavigationItemsRefs.value.forEach(async (item) => {
     // await nextTick()
@@ -642,6 +658,9 @@ onMounted(async () => {
 
 useResizeObserver(navigationWrapperRef, runGeometryPass);
 
+const itemWidth = (link?: ResponsiveHeaderNavItem) =>
+  link?.config?.width === undefined ? undefined : `${link.config.width}px`;
+
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
@@ -690,6 +709,8 @@ watch(
        --responsive-header-sub-nav-border       (default: 1px solid #efefef75)
        --responsive-header-sub-nav-border-radius (default: 8px)
        --responsive-header-sub-nav-padding      (default: 12px)
+       --responsive-header-sub-nav-max-inline-size (default: min(48rem, calc(100vw - 3.2rem)))
+       --responsive-header-sub-nav-max-block-size  (default: 70vh)
 
        --responsive-header-overflow-btn-bg              (default: Canvas)
        --responsive-header-overflow-btn-size            (default: 20px)
@@ -702,12 +723,14 @@ watch(
        --responsive-header-overflow-nav-border          (default: 1px solid #ffffff90)
        --responsive-header-overflow-nav-border-radius   (default: 8px)
        --responsive-header-overflow-nav-padding-block   (default: 12px)
+       --responsive-header-overflow-nav-max-block-size  (default: 70vh)
 
        --responsive-nav-decorator-indicator-color         (default: currentColor)
        --responsive-nav-decorator-hovered-indicator-color (default: inherits --responsive-nav-decorator-indicator-color)
        --responsive-nav-decorator-hovered-bg              (default: oklch(100% 0 0 / 8%))
 
        --responsive-header-link-font-size       (default: inherit)
+       --responsive-header-main-nav-justify-content (default: space-between)
     ──────────────────────────────────────────────────────────────────────── */
 
     /* `inherit` means a viewport-relative (vw/clamp) ancestor font-size silently
@@ -749,7 +772,7 @@ watch(
       display: flex;
       flex-wrap: nowrap;
       flex-grow: 1;
-      justify-content: space-between;
+      justify-content: var(--responsive-header-main-nav-justify-content, space-between);
       gap: 60px;
       overflow-x: hidden;
       margin-inline-end: v-bind(mainNavigationMarginBlockEndStr);
@@ -868,6 +891,9 @@ watch(
               translate: 0 12px;
 
               min-width: var(--_main-navigation-item-width);
+              max-inline-size: var(--responsive-header-sub-nav-max-inline-size, min(48rem, calc(100vw - 3.2rem)));
+              max-block-size: var(--responsive-header-sub-nav-max-block-size, 70vh);
+              overflow-y: auto;
 
               .main-navigation-sub-nav-list {
                 display: grid;
@@ -883,7 +909,7 @@ watch(
 
                   .main-navigation-sub-nav-link {
                     display: block;
-                    white-space: nowrap;
+                    overflow-wrap: anywhere;
                     text-decoration: none;
                     color: var(--responsive-header-link-color, inherit);
                   }
@@ -1048,7 +1074,9 @@ watch(
           padding-block: var(--responsive-header-overflow-nav-padding-block, 12px);
           margin: 0;
           z-index: 999;
-          min-width: var(--_overflow-drop-down-width, fit-content);
+          min-width: fit-content;
+          max-block-size: var(--responsive-header-overflow-nav-max-block-size, 70vh);
+          overflow-y: auto;
 
           display: grid;
           grid-auto-flow: row;

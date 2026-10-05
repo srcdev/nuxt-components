@@ -34,6 +34,19 @@ const triggerGeometryPass = async () => {
   }
 };
 
+// Fake layout: the main nav ends at mainNavRight and each item is 100px wide, laid out in
+// document order, so item n (0-based) ends at (n + 1) * 100.
+const mockGeometry = (mainNavRight: number) =>
+  vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(function (this: Element) {
+    let right = 0;
+    if (this.classList.contains("main-navigation")) right = mainNavRight;
+    if (this.classList.contains("main-navigation-item")) {
+      const items = Array.from(this.closest(".main-navigation")?.querySelectorAll(".main-navigation-item") ?? []);
+      right = (items.indexOf(this) + 1) * 100;
+    }
+    return { left: 0, top: 0, bottom: 0, x: 0, y: 0, height: 0, right, width: right, toJSON: () => ({}) } as DOMRect;
+  });
+
 const navLinks: ResponsiveHeaderProp = {
   firstNav: [
     { name: "Home", path: "/" },
@@ -296,18 +309,90 @@ describe("ResponsiveHeader", () => {
     expect(overflowNav.text()).toContain("UI Components");
   });
 
-  it("completes the geometry pass and marks all items visually-hidden under jsdom's zero-size layout", async () => {
+  it("hides only the items that end past the main nav's right edge", async () => {
+    const geometry = mockGeometry(250);
     const wrapper = await mountSuspended(ResponsiveHeader, {
       props: { responsiveNavLinks: navLinks },
     });
     await triggerGeometryPass();
 
-    // jsdom reports every rect as 0×0, so `rect.right + margin + gap < wrapperRect.right`
-    // (0 + 0 + 12 < 0) is always false — every item correctly collapses into overflow.
     expect(wrapper.find(".navigation").classes()).toContain("geometry-ready");
-    const items = wrapper.findAll(".main-navigation-item");
-    expect(items.length).toBeGreaterThan(0);
-    items.forEach((item) => expect(item.classes()).toContain("visually-hidden"));
+    const hidden = wrapper.findAll(".main-navigation-item").map((item) => item.classes().includes("visually-hidden"));
+    expect(hidden).toEqual([false, false, true, true]);
+    expect(wrapper.find(".overflow-details").classes()).not.toContain("visually-hidden");
+    geometry.mockRestore();
+  });
+
+  it("keeps an item that ends exactly at the main nav's right edge, so a flush-right last item isn't always hidden", async () => {
+    const geometry = mockGeometry(400);
+    const wrapper = await mountSuspended(ResponsiveHeader, {
+      props: { responsiveNavLinks: navLinks },
+    });
+    await triggerGeometryPass();
+
+    wrapper.findAll(".main-navigation-item").forEach((item) => expect(item.classes()).not.toContain("visually-hidden"));
+    expect(wrapper.find(".overflow-details").classes()).toContain("visually-hidden");
+    geometry.mockRestore();
+  });
+
+  it("gives the icon-only overflow button an accessible name", async () => {
+    const wrapper = await mountSuspended(ResponsiveHeader, {
+      props: { responsiveNavLinks: navLinks },
+    });
+    expect(wrapper.find(".overflow-details-summary").attributes("aria-label")).toBe("More navigation");
+    await wrapper.setProps({ overflowButtonLabel: "Menü" });
+    expect(wrapper.find(".overflow-details-summary").attributes("aria-label")).toBe("Menü");
+  });
+
+  it("builds the submenu aria-label from submenuAriaLabel", async () => {
+    const wrapper = await mountSuspended(ResponsiveHeader, {
+      props: { responsiveNavLinks: navLinks, submenuAriaLabel: "Untermenü {title}" },
+    });
+    expect(wrapper.find(".main-navigation-details-summary").attributes("aria-label")).toBe("Untermenü UI Components");
+  });
+
+  it("falls back to name for a dropdown with no childLinksTitle", async () => {
+    const wrapper = await mountSuspended(ResponsiveHeader, {
+      props: { responsiveNavLinks: { firstNav: [{ name: "Services", childLinks: [{ name: "A", path: "/a" }] }] } },
+    });
+    const summary = wrapper.find(".main-navigation-details-summary");
+    expect(summary.text()).toBe("Services");
+    expect(summary.attributes("aria-label")).toBe("Services submenu");
+  });
+
+  it("renders child links with duplicate names without key clashes", async () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const wrapper = await mountSuspended(ResponsiveHeader, {
+      props: {
+        responsiveNavLinks: {
+          firstNav: [
+            { name: "Dup", childLinksTitle: "Dup", childLinks: [{ name: "Same", path: "/a" }, { name: "Same", path: "/b" }] },
+          ],
+        },
+      },
+    });
+    expect(wrapper.findAll(".main-navigation-sub-nav-link")).toHaveLength(2);
+    expect(warn.mock.calls.some(([msg]) => String(msg).includes("Duplicate keys"))).toBe(false);
+    warn.mockRestore();
+  });
+
+  it("shows the overflow button for any group key once an item is hidden", async () => {
+    const geometry = mockGeometry(150);
+    const wrapper = await mountSuspended(ResponsiveHeader, {
+      props: { responsiveNavLinks: { main: [{ name: "Home", path: "/" }, { name: "About", path: "/about" }] } },
+    });
+    await triggerGeometryPass();
+    expect(wrapper.find(".overflow-details").classes()).not.toContain("visually-hidden");
+    geometry.mockRestore();
+  });
+
+  it("keeps the overflow button hidden when there are no nav items", async () => {
+    const wrapper = await mountSuspended(ResponsiveHeader, {
+      props: { responsiveNavLinks: {} },
+    });
+    await triggerGeometryPass();
+    expect(wrapper.find(".navigation").classes()).toContain("geometry-ready");
+    expect(wrapper.find(".overflow-details").classes()).toContain("visually-hidden");
   });
 
   it("renders correct HTML structure with default props", async () => {

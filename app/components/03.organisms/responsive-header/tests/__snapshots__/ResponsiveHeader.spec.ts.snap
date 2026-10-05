@@ -4,11 +4,11 @@ exports[`ResponsiveHeader > renders correct HTML structure with default props 1`
 "<div class="navigation loaded" role="banner">
   <nav class="main-navigation is-animated" aria-label="Main navigation">
     <ul class="main-navigation-list">
-      <li class="main-navigation-item visually-hidden is-active" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="0"><a href="/" class="main-navigation-link">
+      <li class="main-navigation-item visually-hidden is-active" data-group-key="firstNav" data-local-index="0"><a href="/" class="main-navigation-link">
           <!--v-if--> Home
         </a></li>
-      <li class="main-navigation-item visually-hidden" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="1"><a href="/about" class="main-navigation-link has-icon"><span class="iconify i-mdi:home decorator-icon" aria-hidden="true"></span> About</a></li>
-      <li class="main-navigation-item visually-hidden" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="2">
+      <li class="main-navigation-item visually-hidden" data-group-key="firstNav" data-local-index="1"><a href="/about" class="main-navigation-link has-icon"><span class="iconify i-mdi:home decorator-icon" aria-hidden="true"></span> About</a></li>
+      <li class="main-navigation-item visually-hidden" data-group-key="firstNav" data-local-index="2">
         <details class="main-navigation-details" name="navigation-group">
           <summary class="main-navigation-details-summary has-toggle-icon" aria-label="UI Components submenu"><span class="iconify i-mdi:chevron-down icon" aria-hidden="true"></span>
             <!--v-if--> UI Components
@@ -23,7 +23,7 @@ exports[`ResponsiveHeader > renders correct HTML structure with default props 1`
       </li>
     </ul>
     <ul class="main-navigation-list">
-      <li class="main-navigation-item visually-hidden" style="--_main-navigation-item-width: 0px;" data-group-key="secondNav" data-local-index="0"><a href="/contact" class="main-navigation-link">
+      <li class="main-navigation-item visually-hidden" data-group-key="secondNav" data-local-index="0"><a href="/contact" class="main-navigation-link">
           <!--v-if--> Contact
         </a></li>
     </ul>
@@ -32,13 +32,13 @@ exports[`ResponsiveHeader > renders correct HTML structure with default props 1`
   </nav>
   <nav class="secondary-navigation" aria-label="Secondary navigation">
     <details class="overflow-details visually-hidden" name="overflow-group">
-      <summary class="overflow-details-summary has-toggle-icon"><span class="iconify i-gravity-ui:ellipsis icon show" aria-hidden="true"></span><span class="iconify i-gravity-ui:bars icon" aria-hidden="true"></span></summary>
+      <summary class="overflow-details-summary has-toggle-icon" aria-label="More navigation"><span class="iconify i-gravity-ui:ellipsis icon show" aria-hidden="true"></span><span class="iconify i-gravity-ui:bars icon" aria-hidden="true"></span></summary>
       <div class="overflow-details-nav" role="menu">
         <div class="overflow-navigation-wrapper" role="menu" aria-label="Overflow navigation menu">
           <ul class="overflow-navigation-list visible" style="--_overflow-navigation-list-min-width: 0px;" role="none">
-            <li class="overflow-navigation-item visible is-active" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="0" role="none"><a href="/" class="overflow-navigation-link" role="menuitem"><span class="overflow-navigation-text">Home</span></a></li>
-            <li class="overflow-navigation-item visible" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="1" role="none"><a href="/about" class="overflow-navigation-link" role="menuitem"><span class="overflow-navigation-text">About</span></a></li>
-            <li class="overflow-navigation-item visible" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="2" role="none">
+            <li class="overflow-navigation-item visible is-active" data-group-key="firstNav" data-local-index="0" role="none"><a href="/" class="overflow-navigation-link" role="menuitem"><span class="overflow-navigation-text">Home</span></a></li>
+            <li class="overflow-navigation-item visible" data-group-key="firstNav" data-local-index="1" role="none"><a href="/about" class="overflow-navigation-link" role="menuitem"><span class="overflow-navigation-text">About</span></a></li>
+            <li class="overflow-navigation-item visible" data-group-key="firstNav" data-local-index="2" role="none">
               <div class="expanding-panel-classic overflow-navigation-details">
                 <details class="expanding-panel-classic-details" name="overflow-navigation-group">
                   <summary id="id-overflow-navigation-group-trigger" class="expanding-panel-classic-summary" aria-controls="id-overflow-navigation-group-content" aria-expanded="false">
@@ -61,7 +61,7 @@ exports[`ResponsiveHeader > renders correct HTML structure with default props 1`
             </li>
           </ul>
           <ul class="overflow-navigation-list visible" style="--_overflow-navigation-list-min-width: 0px;" role="none">
-            <li class="overflow-navigation-item visible" style="--_main-navigation-item-width: 0px;" data-group-key="secondNav" data-local-index="0" role="none"><a href="/contact" class="overflow-navigation-link" role="menuitem"><span class="overflow-navigation-text">Contact</span></a></li>
+            <li class="overflow-navigation-item visible" data-group-key="secondNav" data-local-index="0" role="none"><a href="/contact" class="overflow-navigation-link" role="menuitem"><span class="overflow-navigation-text">Contact</span></a></li>
           </ul>
           <div aria-hidden="true" class="overflow-nav-indicator-hovered"></div>
           <div aria-hidden="true" class="overflow-nav-indicator-active"></div>

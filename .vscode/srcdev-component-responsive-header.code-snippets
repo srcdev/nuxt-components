@@ -24,7 +24,9 @@
       "  main-nav-aria-label=\"${2:Main navigation}\"",
       "  secondary-nav-aria-label=\"${3:Secondary navigation}\"",
       "  overflow-menu-aria-label=\"${4:Overflow navigation menu}\"",
-      "/>"
+      "  overflow-button-label=\"${5:More navigation}\"",
+      "  submenu-aria-label=\"${6:{title\\} submenu}\"",
+      "></ResponsiveHeader>"
     ]
   },
   "SRCDEV ResponsiveHeader Nav Data (with dropdown)": {

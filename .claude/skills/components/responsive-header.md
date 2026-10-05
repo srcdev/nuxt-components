@@ -110,7 +110,32 @@ buggy toggle-based version too.
 | `mainNavAriaLabel` | `string` | `"Main navigation"` | aria-label on the primary nav landmark — override for localisation. |
 | `secondaryNavAriaLabel` | `string` | `"Secondary navigation"` | aria-label on the secondary (overflow) nav landmark — override for localisation. |
 | `overflowMenuAriaLabel` | `string` | `"Overflow navigation menu"` | Forwarded to `NavigationItems`' `ariaLabel` — override for localisation. |
+| `overflowButtonLabel` | `string` | `"More navigation"` | Accessible name of the overflow/burger button, which shows only icons. |
+| `submenuAriaLabel` | `string` | `"{title} submenu"` | aria-label on each dropdown summary, top bar and overflow panel; `{title}` is replaced with `childLinksTitle` (or `name`). Forwarded to `NavigationItems`. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the root `.navigation` element. |
+
+## Data edge cases (since 2026-10-05)
+
+- A dropdown with no `childLinksTitle` shows its `name` instead (it used to render an empty
+  summary labelled "undefined submenu").
+- Child links are keyed by index, so duplicate names are fine.
+- The overflow button appears whenever any item is hidden, whatever the group keys are called.
+  It used to read `navListVisibility.firstNav`/`secondNav` only, so a group named anything else
+  (e.g. `main`) kept the burger showing even when everything fitted. Empty nav data never shows
+  it, and still completes the geometry pass.
+- The top-bar dropdown and the overflow panel are capped in width and height (tokens in
+  `CONSUMER-STYLING.md`); long names wrap and long lists scroll inside them.
+- **Fit check (fixed 2026-10-05):** an item is visible when its right edge is at or before the main
+  nav's own measured right edge (which already has the secondary nav and gap reserved as
+  `margin-inline-end`). It used to compare against the wrapper while adding the gap a second time
+  with a strict `<`, so the last item of a flush-right second group (e.g. "Contact") was always
+  sent to the overflow menu, however wide the screen.
+- The component copies `responsiveNavLinks` before measuring. It used to write each item's
+  `config` straight into the consumer's own nav data object.
+- The `StressTest` story covers all of the above.
+- **Alignment (added 2026-10-05):** `--responsive-header-main-nav-justify-content`
+  (default `space-between`) sets how the main nav's groups sit along the bar; use `safe end` /
+  `safe center`, never plain `end`/`center`. The `MainNavAlignment` story shows the options.
 
 ## Slots
 
