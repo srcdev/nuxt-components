@@ -73,6 +73,9 @@ keeps the same proportions. Tune a **ratio** to change spacing across all sizes,
 Private tokens (not public API): `--_background`, `--_text-colour`, `--_font-size`, `--_padding-inline`,
 `--_padding-block`, `--_padding-inline-icon` (derived from `--_icon-size`), `--_icon-size`, swapped by the size and variant classes.
 
+> **Changed 2026-10-06**: a pill is capped at its container's width (`max-inline-size: 100%`), and a
+> label too long for it ends in an ellipsis instead of overflowing. Short labels are unaffected.
+
 ## State hooks
 
 - Size class: `.sm`, `.md`, `.lg`. Variant class: `.default`, `.primary`, `.success`, `.warning`,

@@ -18,7 +18,7 @@
     "description": "ServiceSummary with image/content columns swapped",
     "scope": "vue,html",
     "body": [
-      "<ServiceSummary :service-data=\"$1service\" :reverse=\"$2true\">",
+      "<ServiceSummary :service-data=\"$1service\" :reverse=\"$2true\" price-prefix=\"${3:From}\">",
       "  <template #summary-link=\"{ serviceData }\">",
       "    <NuxtLink :to=\"`/services/${serviceData.slug}`\">$3More about {{ serviceData.title }} →</NuxtLink>",
       "  </template>",
@@ -55,6 +55,8 @@
       "    --service-summary-image-padding-block-mobile: ;",
       "    --service-summary-image-padding-inline-mobile: ;",
       "    --service-summary-pills-gap: ;",
+      "    --service-summary-column-min-width: ;",
+      "    --service-summary-body-line-clamp: ;",
       "    --service-summary-pill-border-colour: ;",
       "",
       "    .service-summary__image-wrapper {}",

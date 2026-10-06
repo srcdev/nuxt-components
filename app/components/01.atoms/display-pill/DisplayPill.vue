@@ -105,6 +105,7 @@ watch(
     line-height: 1;
     white-space: nowrap;
     width: fit-content;
+    max-inline-size: 100%;
     cursor: default;
     user-select: none;
 
@@ -128,8 +129,10 @@ watch(
     }
 
     .display-pill-label {
-      display: inline-flex;
-      align-items: center;
+      display: block;
+      min-inline-size: 0;
+      overflow-x: clip;
+      text-overflow: ellipsis;
     }
 
     &.sm {

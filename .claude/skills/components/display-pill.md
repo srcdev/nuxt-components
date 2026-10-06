@@ -98,6 +98,8 @@ Colour resolves as **variant token → base token → variant default**: `--disp
 
 ## Notes
 
+- Since 2026-10-06 a pill never grows past its container: a label too long for the space ends in an ellipsis (it still never wraps).
+
 - `border-radius` defaults to `100vw` — this always collapses to the tightest possible radius on the shorter axis, making it geometry-independent (no magic number needed).
 - `cursor: default` and `user-select: none` are applied unconditionally. `cursor: pointer` is applied automatically via `:is(button, a)` when `tag` is interactive.
 - All variant colour pairs use a light-tint background (`--color-01`) with a dark text colour (`--color-09`/`--color-10`) to ensure WCAG AA contrast. The project colour scale runs `00` (lightest) → `10` (darkest) — the opposite of Tailwind.

@@ -207,4 +207,30 @@ describe("ServiceSummary", () => {
     expect(wrapper.classes()).not.toContain("original");
     expect(wrapper.classes()).toContain("updated");
   });
+
+  // ─── Worst-case data ───────────────────────────────────────────────────
+
+  it("renders no empty eyebrow, heading, pills or body for empty strings", async () => {
+    const wrapper = await mountSuspended(ServiceSummary, {
+      props: {
+        serviceData: { ...mockService, subtitle: "", title: "", duration: "", price: "", whatIsIt: "" },
+        tag: "section",
+      },
+    });
+    expect(wrapper.find(".eyebrow-text").exists()).toBe(false);
+    expect(wrapper.find(".hero-text").exists()).toBe(false);
+    expect(wrapper.find(".service-summary__pills").exists()).toBe(false);
+    expect(wrapper.find("p.page-body-normal").exists()).toBe(false);
+    expect(wrapper.attributes("aria-labelledby")).toBeUndefined();
+  });
+
+  it("uses pricePrefix for the price pill, and shows the price alone when it is empty", async () => {
+    const wrapper = await mountSuspended(ServiceSummary, {
+      props: { serviceData: mockService, pricePrefix: "Ab" },
+    });
+    expect(wrapper.text()).toContain(`Ab ${mockService.price}`);
+    await wrapper.setProps({ pricePrefix: "" });
+    const labels = wrapper.findAll(".display-pill-label").map((label) => label.element.textContent);
+    expect(labels).toContain(mockService.price);
+  });
 });

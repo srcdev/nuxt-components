@@ -25,6 +25,7 @@ Usually consumed via [ServiceSummaryGrid](service-summary-grid.md) rather than d
 | `index` | `number` | `0` | no |
 | `alignment` | `"start" \| "center" \| "end"` | `"center"` | no |
 | `reverse` | `boolean` | `false` | no |
+| `pricePrefix` | `string` | `"From"` | no |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | no |
 
 ### `index` and image loading
@@ -56,6 +57,13 @@ Duration and price render as `DisplayPill` instances (`variant="neutral"`, `size
 same pattern `ServiceDetail`'s hero uses — rather than the icon+text row the old `ServicesSection`
 had. There are no icon-customisation props (`durationIcon`/`priceIcon` are gone along with the
 icon row).
+
+The price pill reads `` `${pricePrefix} ${price}` `` (trimmed): pass a translated `pricePrefix`, or `""`
+for the price alone. A pill is only rendered when its value is non-empty, and the pill row is left out
+when both are empty. Empty `subtitle`, `title` and `whatIsIt` render nothing either; with no title, a
+landmark `tag` drops its `aria-labelledby` (there is no heading to point at). Added 2026-10-06, along
+with `--service-summary-column-min-width` and `--service-summary-body-line-clamp`. Before, the `From`
+prefix was hardcoded and empty fields rendered empty elements, including an empty heading.
 
 ## Row height and image aspect ratio
 

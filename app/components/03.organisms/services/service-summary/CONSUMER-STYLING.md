@@ -29,6 +29,14 @@ theme file, scoped to a page wrapper, or per-instance via `styleClassPassthrough
 | `--service-summary-image-border-radius` | `0.8rem` | Corner rounding on the service image |
 | `--service-summary-pills-gap` | `0.8rem` | Gap between the duration and price pills |
 | `--service-summary-pills-margin-block-end` | `2rem` | Space below the pill row |
+| `--service-summary-column-min-width` | `246px` | Minimum width of each column in the two-column layout (from the 768px container breakpoint), capped at the container width |
+| `--service-summary-body-line-clamp` | `none` | Max lines of the `whatIsIt` summary text, with an ellipsis on the last. `1` is single-line ellipsis, `none` shows everything |
+
+Long unbroken text wraps in every field. A pill longer than its column is capped at the column width
+and ends in an ellipsis (that is `DisplayPill` behaviour).
+
+> Changed 2026-10-06: added `--service-summary-column-min-width` (was a fixed `246px`) and
+> `--service-summary-body-line-clamp`; columns can no longer be widened by unbroken text.
 
 All breakpoints above (row height, image padding, and the two-column grid switch) are
 **container queries** against `.service-summary`'s own inline size (`container-name:
@@ -54,6 +62,22 @@ The duration/price pills are `DisplayPill` instances — `ServiceSummary` maps i
 
 For anything not covered by these (e.g. pill size, font weight), target `--display-pill-*` directly
 under `.service-summary__pills` — see [display-pill.md](../../../../../.claude/skills/components/display-pill.md).
+
+---
+
+## State hooks
+
+| Hook | When |
+|---|---|
+| `.service-summary__grid--reverse` | `reverse` is set: the image column moves after the text column from the 768px container breakpoint |
+| `.service-summary__info-wrapper--align-start` / `-center` / `-end` | The `alignment` prop |
+
+Inner classes: `.service-summary__grid`, `.service-summary__image-wrapper`, `.service-summary__image`,
+`.service-summary__info-wrapper`, `.service-summary__pills`. The eyebrow, title and pills are
+`EyebrowText`, `HeroText` and `DisplayPill`; the summary text is a `p.page-body-normal`.
+
+Empty `subtitle`, `title`, `whatIsIt`, `duration` or `price` render no element (and no pill row when
+both pill values are empty). With no title, a landmark `tag` gets no `aria-labelledby`.
 
 ---
 
@@ -114,6 +138,12 @@ visual style, pass a modifier class:
   --service-summary-image-border-radius: 2rem;
 }
 ```
+
+---
+
+## Class passthrough
+
+`style-class-passthrough` adds classes to the root `.service-summary`. Reactive after mount.
 
 ---
 

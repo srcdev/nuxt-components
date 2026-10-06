@@ -5,14 +5,17 @@
         <NuxtImg
           :src="serviceData.image"
           :alt="serviceData.title"
+          width="1080"
+          height="1080"
           :loading="imageLoading"
           :fetchpriority="imageFetchPriority"
           class="service-summary__image"
         />
       </div>
       <div class="service-summary__info-wrapper" :class="infoWrapperClasses">
-        <EyebrowText font-size="large" :text-content="serviceData.subtitle" />
+        <EyebrowText v-if="serviceData.subtitle" font-size="large" :text-content="serviceData.subtitle" />
         <HeroText
+          v-if="serviceData.title"
           :id="headingId"
           :tag="headerTag"
           font-size="title"
@@ -20,12 +23,12 @@
           :style-class-passthrough="['mb-20']"
         />
 
-        <div class="service-summary__pills">
-          <DisplayPill :label="serviceData.duration" size="md" variant="neutral" />
-          <DisplayPill :label="`From ${serviceData.price}`" size="md" variant="neutral" />
+        <div v-if="serviceData.duration || serviceData.price" class="service-summary__pills">
+          <DisplayPill v-if="serviceData.duration" :label="serviceData.duration" size="md" variant="neutral" />
+          <DisplayPill v-if="serviceData.price" :label="priceLabel" size="md" variant="neutral" />
         </div>
 
-        <p class="page-body-normal">{{ serviceData.whatIsIt }}</p>
+        <p v-if="serviceData.whatIsIt" class="page-body-normal">{{ serviceData.whatIsIt }}</p>
 
         <slot name="summary-link" :service-data="serviceData"></slot>
       </div>
@@ -43,6 +46,8 @@ interface Props {
   serviceData: Service;
   alignment?: "start" | "center" | "end";
   reverse?: boolean;
+  /** Text before the price in its pill, e.g. "From £95". Override for localisation; "" shows the price alone. */
+  pricePrefix?: string;
   styleClassPassthrough?: string | string[];
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -51,10 +56,14 @@ const props = withDefaults(defineProps<Props>(), {
   index: 0,
   alignment: "center",
   reverse: false,
+  pricePrefix: "From",
   styleClassPassthrough: () => [],
 });
 
-const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
+// No title means no heading to point at, so don't label the landmark from one.
+const { headingId, ariaLabelledby } = useAriaLabelledById(() => (props.serviceData.title ? props.tag : "div"));
+
+const priceLabel = computed(() => `${props.pricePrefix} ${props.serviceData.price}`.trim());
 
 const infoWrapperClasses = computed(() => ({
   [`service-summary__info-wrapper--align-${props.alignment}`]: true,
@@ -98,14 +107,17 @@ watch(
       --_grid-gap: var(--service-summary-grid-gap, 2rem);
 
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       gap: var(--_grid-gap);
       height: 100%;
 
       @container service-summary (width >= 768px) {
         --_grid-gap: var(--service-summary-grid-gap-desktop, 3rem);
 
-        grid-template-columns: repeat(auto-fit, minmax(246px, 1fr));
+        grid-template-columns: repeat(
+          auto-fit,
+          minmax(min(var(--service-summary-column-min-width, 246px), 100%), 1fr)
+        );
 
         &.service-summary__grid--reverse {
           .service-summary__image-wrapper {
@@ -117,6 +129,17 @@ watch(
 
       .service-summary__info-wrapper {
         display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        min-inline-size: 0;
+        overflow-wrap: anywhere;
+
+        .page-body-normal {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          -webkit-line-clamp: var(--service-summary-body-line-clamp, none);
+          line-clamp: var(--service-summary-body-line-clamp, none);
+        }
 
         &.service-summary__info-wrapper--align-start {
           align-content: start;
@@ -171,6 +194,7 @@ watch(
         display: flex;
         flex-wrap: wrap;
         gap: var(--service-summary-pills-gap, 0.8rem);
+        min-inline-size: 0;
         margin-block-end: var(--service-summary-pills-margin-block-end, 2rem);
 
         --display-pill-background: var(--service-summary-pill-bg, transparent);

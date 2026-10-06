@@ -3,7 +3,7 @@
 exports[`ServiceSummary > renders correct HTML structure 1`] = `
 "<div class="service-summary">
   <div class="service-summary__grid">
-    <div class="service-summary__image-wrapper"><img data-nuxt-img="" srcset="/_ipx/_/images/test.jpg 1x, /_ipx/_/images/test.jpg 2x" alt="Test Service" loading="eager" fetchpriority="high" class="service-summary__image" src="/_ipx/_/images/test.jpg"></div>
+    <div class="service-summary__image-wrapper"><img width="1080" height="1080" data-nuxt-img="" srcset="/_ipx/s_1080x1080/images/test.jpg 1x, /_ipx/s_2160x2160/images/test.jpg 2x" alt="Test Service" loading="eager" fetchpriority="high" class="service-summary__image" src="/_ipx/s_1080x1080/images/test.jpg"></div>
     <div class="service-summary__info-wrapper service-summary__info-wrapper--align-center">
       <div class="eyebrow-text large">A subtitle</div>
       <h2 id="v-0-0" class="hero-text mb-20 title axis-horizontal">

@@ -1,10 +1,13 @@
+import { computed, ref } from "vue";
 import ServiceSummary from "../ServiceSummary.vue";
+import CanvasSwitcher from "../../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
 import PageRow from "../../../../01.atoms/page-row/PageRow.vue";
 import TextBlock from "../../../../01.atoms/text-block/TextBlock.vue";
 import EyebrowText from "../../../../01.atoms/text-blocks/eyebrow-text/EyebrowText.vue";
 import HeroText from "../../../../01.atoms/text-blocks/hero-text/HeroText.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import type { Service } from "~/types/types.services";
+import type { MediaCanvas } from "~/types/components";
 
 const meta: Meta<typeof ServiceSummary> = {
   title: "Organisms/Services/Service Summary",
@@ -29,6 +32,10 @@ const meta: Meta<typeof ServiceSummary> = {
       control: { type: "boolean" },
       description: "Swap image and content columns",
     },
+    pricePrefix: {
+      control: { type: "text" },
+      description: "Text before the price in its pill; override for localisation, empty shows the price alone",
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Additional CSS classes applied to the root element",
@@ -39,6 +46,7 @@ const meta: Meta<typeof ServiceSummary> = {
     headerTag: "h2",
     alignment: "center",
     reverse: false,
+    pricePrefix: "From",
     styleClassPassthrough: [],
   },
   parameters: {
@@ -293,6 +301,145 @@ export const RealisticPageContext: Story = {
       description: {
         story:
           "Matches a typical services listing page: a page hero (EyebrowText + HeroText inside PageRow/TextBlock) followed by a ServiceSummary. Use ServiceSummaryGrid for the full alternating listing — this story sanity-checks a single instance's layout in context.",
+      },
+    },
+  },
+};
+
+// ─── Stress test ──────────────────────────────────────────────────────────────
+
+type LineClamp = "none" | "1" | "2" | "3" | "4";
+
+// Story-only arg: drives a CSS token, not a ServiceSummary prop. See the argTypes entry.
+type StressArgs = InstanceType<typeof ServiceSummary>["$props"] & { bodyLineClamp: LineClamp };
+
+const longGerman = "Haarverlängerungsbehandlungsberatungsterminvereinbarung";
+
+const stressSummaries: Service[] = [
+  {
+    ...sampleService,
+    slug: "long-german",
+    subtitle: `Freihändige ${longGerman}`,
+    title: `${longGerman} und ${longGerman}`,
+    duration: "Ungefähr zweieinhalb bis dreieinhalb Stunden einschließlich ausführlicher Beratung",
+    price: "95,00 € zuzüglich Pflegeprodukte nach individueller Absprache mit Ihrer Stylistin",
+    whatIsIt: "Eine ausgesprochen lange Beschreibung, wie sie ein CMS liefert, wenn niemand die Zeichenanzahl prüft. ".repeat(8),
+  },
+  {
+    ...sampleService,
+    slug: "emoji-html",
+    subtitle: "✨💇‍♀️ Colour",
+    title: "<script>alert('xss')</script>",
+    duration: "⏱",
+    price: "£∞",
+    whatIsIt: "🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈 <b>not bold</b> https://example.com/a/very/long/url/that/never/breaks/at/all",
+  },
+  {
+    ...sampleService,
+    slug: "rtl",
+    subtitle: "تلوين الشعر",
+    title: "تسريحات شعر جديدة لموسم الخريف",
+    duration: "ساعتان",
+    price: "١٢٠ جنيه",
+    whatIsIt: "وصف طويل باللغة العربية يمتد عبر عدة أسطر للتحقق من أن النص من اليمين إلى اليسار يعرض بشكل صحيح.",
+  },
+  {
+    ...sampleService,
+    slug: "empty",
+    image: "https://example.invalid/missing.jpg",
+    subtitle: "",
+    title: "",
+    duration: "",
+    price: "",
+    whatIsIt: "",
+  },
+  {
+    ...sampleService,
+    slug: "single-chars",
+    subtitle: "A",
+    title: "B",
+    duration: "1",
+    price: "0",
+    whatIsIt: "C",
+  },
+];
+
+export const StressTest: StoryObj<StressArgs> = {
+  name: "Stress Test (Worst-Case Data)",
+  argTypes: {
+    bodyLineClamp: {
+      control: "select",
+      options: ["none", "1", "2", "3", "4"] satisfies LineClamp[],
+      description:
+        "**Story control, not a prop.** Sets the `--service-summary-body-line-clamp` CSS token on a wrapper so you can try it here. " +
+        "To use it in an app, set the token in your own CSS, e.g. `.services-page { --service-summary-body-line-clamp: 4; }`. " +
+        "`1` is single-line ellipsis, `none` (the default) shows everything.",
+      table: { category: "CSS tokens (story only, set in your CSS)", defaultValue: { summary: "none" } },
+    },
+  },
+  args: {
+    pricePrefix: "Ab einem Mindestpreis von",
+    bodyLineClamp: "none",
+  },
+  render: (args) => ({
+    components: { ServiceSummary },
+    setup() {
+      const componentArgs = computed(() => {
+        const { bodyLineClamp: _bodyLineClamp, ...rest } = args;
+        return rest;
+      });
+      const tokenStyles = computed(() => ({ "--service-summary-body-line-clamp": args.bodyLineClamp }));
+      return { componentArgs, tokenStyles, stressSummaries };
+    },
+    template: `
+      <div :style="tokenStyles" style="display:grid; gap:4rem;">
+        <ServiceSummary
+          v-for="(service, index) in stressSummaries"
+          :key="service.slug"
+          v-bind="componentArgs"
+          :index="index"
+          :reverse="index % 2 === 1"
+          :service-data="service"
+        >
+          <template #summary-link="{ serviceData }">
+            <a :href="'/services/' + serviceData.slug" style="color:inherit;">
+              Mehr über {{ serviceData.title || "diese Behandlung" }} erfahren →
+            </a>
+          </template>
+        </ServiceSummary>
+      </div>
+    `,
+  }),
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "fullWidthCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; padding: 2rem; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    layout: "fullscreen",
+    initialCanvas: "mobileCanvas",
+    docs: {
+      description: {
+        story:
+          "Deliberately hostile data to find breakage: long German copy and unbroken compound words in every field, a long " +
+          "German price prefix, a very long duration and price (their pills cap at the column width and end in an ellipsis), " +
+          "emoji, HTML-like text (must render as text), an unbroken URL, right-to-left Arabic, a broken image, single characters, " +
+          "and a summary with every text field empty (no empty eyebrow, heading, pills or body is rendered, and a section root " +
+          "drops its aria-labelledby). Check at every canvas width, in both column orders: no text runs out of its column, " +
+          "the two columns stay balanced and stack on narrow canvases. Try the Body line clamp control too: it's a CSS token " +
+          "set by the story, not a prop.",
       },
     },
   },
