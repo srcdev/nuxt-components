@@ -75,6 +75,14 @@ describe("useAnchorScroll", () => {
         expect(history.pushState).not.toHaveBeenCalled();
       });
 
+      it("still records the clicked hash as active", () => {
+        stubMatchMedia(true);
+        appendEl("overview");
+        const { handleNavClick, activeHash } = useAnchorScroll();
+        handleNavClick(makeEvent(), "#overview");
+        expect(activeHash.value).toBe("#overview");
+      });
+
       it("does not scroll", () => {
         stubMatchMedia(true);
         const el = appendEl("overview");

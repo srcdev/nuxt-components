@@ -168,4 +168,24 @@ describe("NavigationItems", () => {
     });
     expect(wrapper.html()).toMatchSnapshot();
   });
+
+  // ─── Same-page anchor links ─────────────────────────────────────────────
+
+  it("renders #anchor items as plain links, emits anchorClick and follows activeHash", async () => {
+    const wrapper = await mountSuspended(NavigationItems, {
+      props: {
+        activeHash: "#about",
+        mainNavigationState: {
+          clonedNavLinks: { firstNav: [{ name: "Home", path: "#home" }, { name: "About", path: "#about" }] },
+          navListVisibility: { firstNav: false },
+          hasSecondNav: false,
+        },
+      },
+    });
+    const links = wrapper.findAll(".overflow-navigation-link");
+    expect(links[0]!.attributes("href")).toBe("#home");
+    expect(wrapper.findAll(".overflow-navigation-item")[1]!.classes()).toContain("is-active");
+    await links[0]!.trigger("click");
+    expect(wrapper.emitted("anchorClick")?.[0]?.[1]).toBe("#home");
+  });
 });

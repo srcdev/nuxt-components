@@ -112,7 +112,56 @@ buggy toggle-based version too.
 | `overflowMenuAriaLabel` | `string` | `"Overflow navigation menu"` | Forwarded to `NavigationItems`' `ariaLabel` — override for localisation. |
 | `overflowButtonLabel` | `string` | `"More navigation"` | Accessible name of the overflow/burger button, which shows only icons. |
 | `submenuAriaLabel` | `string` | `"{title} submenu"` | aria-label on each dropdown summary, top bar and overflow panel; `{title}` is replaced with `childLinksTitle` (or `name`). Forwarded to `NavigationItems`. |
+| `anchorScrollOffset` | `number \| (() => number)` | `undefined` (0) | Pixels left above a section when a `#anchor` link scrolls to it, e.g. a sticky header's height. Pass a getter to read it at click time. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the root `.navigation` element. |
+
+## Same-page anchor links (since 2026-10-06)
+
+Any item or child link whose `path` starts with `#` is a same-page section link:
+
+- It renders as a plain `<a href="#section">`, not a `NuxtLink`, so Vue Router stays out of the scroll.
+- Clicking it smooth-scrolls to the element with that id (`useAnchorScroll`), leaving
+  `anchorScrollOffset` pixels above it, and pushes the hash to the URL. Under
+  `prefers-reduced-motion: reduce` the browser's instant jump is used instead.
+- It is active (`li.is-active`, the indicator) by hash, not by route. On load, the URL's hash wins;
+  with none, the first anchor item in the data is active. Both the top bar and the overflow menu
+  share that state.
+- Clicking one closes any open dropdown and the overflow menu (route links close them by navigating).
+
+Route links and anchor links can be mixed in the same data. See the "Same-Page Anchor Links" story.
+
+## Migrating from TabNavigation
+
+`ResponsiveHeader` covers everything `TabNavigation` does, and collapses progressively (only the items
+that don't fit move into the overflow menu) instead of all-or-nothing. To switch:
+
+| TabNavigation | ResponsiveHeader |
+|---|---|
+| `:nav-item-data="{ main: [...] }"` | `:responsive-nav-links="{ main: [...] }"` |
+| item `text` | item `name` |
+| item `href` (route or `#anchor`) | item `path` (route or `#anchor`, same behaviour) |
+| item `iconName` | item `iconName` |
+| item `isExternal` | drop it: `NuxtLink` treats a full URL as external |
+| item `cssName` | no equivalent; drop it (no consumer styles these classes) |
+| `nav-align="right"` | `--responsive-header-main-nav-justify-content: safe end` (CSS token) |
+| `aria-label` | `main-nav-aria-label` |
+| `open-menu-label` / `close-menu-label` | `overflow-button-label` (one label; the button is a `<summary>`) |
+| `anchor-scroll-offset` | `anchor-scroll-offset` |
+| collapse everything to a burger when items don't fit | default is per-item overflow; add `collapse-at-main-nav-intersection` for the old all-or-nothing burger |
+| `--tab-nav-link-color` | `--responsive-header-link-color` |
+| `--tab-nav-decorator-indicator-color` | `--responsive-nav-decorator-indicator-color` |
+| `--tab-nav-*` panel and burger tokens | the overflow tokens in `CONSUMER-STYLING.md` and NavigationItems' `--overflow-nav-*` |
+
+```vue
+<!-- Before -->
+<TabNavigation nav-align="right" :nav-item-data="{ main: [{ text: 'About', href: '#about' }] }" />
+
+<!-- After -->
+<ResponsiveHeader
+  :responsive-nav-links="{ main: [{ name: 'About', path: '#about' }] }"
+  style="--responsive-header-main-nav-justify-content: safe end"
+/>
+```
 
 ## Data edge cases (since 2026-10-05)
 

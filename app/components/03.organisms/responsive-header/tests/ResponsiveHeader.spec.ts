@@ -401,4 +401,44 @@ describe("ResponsiveHeader", () => {
     });
     expect(wrapper.html()).toMatchSnapshot();
   });
+
+  // ─── Same-page anchor links ─────────────────────────────────────────────
+
+  describe("anchor links", () => {
+    const anchorLinks: ResponsiveHeaderProp = {
+      firstNav: [
+        { name: "Home", path: "#home" },
+        { name: "About", path: "#about" },
+        { name: "Blog", path: "/blog" },
+      ],
+    };
+
+    it("renders #anchor paths as plain links and route paths as NuxtLinks", async () => {
+      const wrapper = await mountSuspended(ResponsiveHeader, { props: { responsiveNavLinks: anchorLinks } });
+      const links = wrapper.findAll(".main-navigation-link");
+      expect(links[0]!.attributes("href")).toBe("#home");
+      expect(links[2]!.attributes("href")).toBe("/blog");
+    });
+
+    it("marks the first anchor item active on load", async () => {
+      const wrapper = await mountSuspended(ResponsiveHeader, { props: { responsiveNavLinks: anchorLinks } });
+      await nextTick();
+      const items = wrapper.findAll(".main-navigation-item");
+      expect(items[0]!.classes()).toContain("is-active");
+      expect(items[1]!.classes()).not.toContain("is-active");
+    });
+
+    it("moves the active item to a clicked anchor and scrolls instead of jumping", async () => {
+      vi.stubGlobal("matchMedia", vi.fn().mockReturnValue({ matches: false }));
+      const section = document.createElement("section");
+      section.id = "about";
+      section.scrollIntoView = vi.fn();
+      document.body.appendChild(section);
+      const wrapper = await mountSuspended(ResponsiveHeader, { props: { responsiveNavLinks: anchorLinks } });
+      await wrapper.findAll(".main-navigation-link")[1]!.trigger("click");
+      expect(section.scrollIntoView).toHaveBeenCalled();
+      expect(wrapper.findAll(".main-navigation-item")[1]!.classes()).toContain("is-active");
+      section.remove();
+    });
+  });
 });

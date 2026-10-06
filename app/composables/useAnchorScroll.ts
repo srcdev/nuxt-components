@@ -47,10 +47,10 @@ export const useAnchorScroll = (options: UseAnchorScrollOptions = {}) => {
   // and smooth-scroll ourselves.
   const handleNavClick = (event: MouseEvent, href: string): void => {
     if (!href.startsWith("#")) return;
+    activeHash.value = href;
     if (prefersReducedMotion()) return;
 
     event.preventDefault();
-    activeHash.value = href;
     history.pushState(null, "", href);
     scrollToAnchor(href);
   };

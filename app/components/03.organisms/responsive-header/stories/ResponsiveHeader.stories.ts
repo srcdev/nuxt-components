@@ -82,6 +82,11 @@ const meta: Meta<StoryArgs> = {
       description: "aria-label on each dropdown summary; {title} is replaced with the item's title",
       table: { category: "Labels", defaultValue: { summary: "{title} submenu" } },
     },
+    anchorScrollOffset: {
+      control: { type: "number", min: 0, step: 10 },
+      description: "Pixels left above a section when a #anchor link scrolls to it (e.g. a sticky header's height)",
+      table: { category: "Behaviour", defaultValue: { summary: "0" } },
+    },
     styleClassPassthrough: {
       control: "object",
       description: "Extra CSS classes applied to the root element",
@@ -195,6 +200,53 @@ export const MainNavAlignment: Story = {
           "The main nav's two groups are spread with `space-between` by default. Use the Main nav justify content control " +
           "(a CSS token set by the story, not a prop) to try `flex-start`, `safe center` and `safe end`. " +
           "Narrow the canvas to check items still collapse into the overflow menu from the end, whatever the alignment.",
+      },
+    },
+  },
+};
+
+export const SamePageAnchorLinks: Story = {
+  name: "Same-Page Anchor Links",
+  args: {
+    responsiveNavLinks: {
+      main: [
+        { name: "Home", path: "#rh-home" },
+        { name: "About", path: "#rh-about" },
+        { name: "Testimonials", path: "#rh-testimonials" },
+        {
+          name: "More",
+          childLinks: [
+            { name: "Prices", path: "#rh-prices" },
+            { name: "Blog (a route)", path: "/blog" },
+          ],
+        },
+        { name: "Contact", path: "#rh-contact" },
+      ],
+    },
+    anchorScrollOffset: 80,
+  },
+  render: renderWith(`
+    <div style="position: sticky; top: 0; z-index: 2; background: var(--page-bg, white); border-block-end: 1px solid currentColor;">
+      <ResponsiveHeader v-bind="componentArgs" />
+    </div>
+    <section
+      v-for="id in ['rh-home', 'rh-about', 'rh-testimonials', 'rh-prices', 'rh-contact']"
+      :id="id"
+      :key="id"
+      style="min-block-size: 70vh; padding: 2.4rem; border-block-end: 1px dashed currentColor;"
+    >
+      <h2 style="margin: 0;">#{{ id }}</h2>
+    </section>
+  `),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Items whose `path` starts with `#` are same-page section links: they render as plain `<a>` (not NuxtLink), " +
+          "smooth-scroll to the section (an instant jump under reduced motion), and are active by hash rather than by " +
+          "route; the first anchor is active on load. `anchorScrollOffset` (80 here) leaves room for the sticky header. " +
+          "Route links like Blog mix in as normal. Narrow the canvas so items move into the overflow menu: anchor links " +
+          "there scroll the same way and close the menu. This replaces TabNavigation's anchor mode.",
       },
     },
   },

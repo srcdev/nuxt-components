@@ -39,8 +39,18 @@
           @mouseenter="handleNavigationItemHover(`${String(groupKey)}-${localIndex}`)"
           @focusin="handleNavigationItemHover(`${String(groupKey)}-${localIndex}`)"
         >
+          <a
+            v-if="link.path && isAnchorPath(link.path)"
+            class="main-navigation-link"
+            :class="{ 'has-icon': link.iconName }"
+            :href="link.path"
+            @click="handleAnchorClick($event, link.path)"
+          >
+            <Icon v-if="link.iconName" :name="link.iconName" class="decorator-icon" aria-hidden="true" />
+            {{ link.name }}
+          </a>
           <NuxtLink
-            v-if="link.path"
+            v-else-if="link.path"
             class="main-navigation-link"
             :class="{ 'has-icon': link.iconName }"
             :to="link.path"
@@ -69,7 +79,16 @@
                   :key="childIndex"
                   class="main-navigation-sub-nav-item"
                 >
-                  <NuxtLink :to="childLink.path" class="main-navigation-sub-nav-link" role="menuitem">
+                  <a
+                    v-if="childLink.path && isAnchorPath(childLink.path)"
+                    :href="childLink.path"
+                    class="main-navigation-sub-nav-link"
+                    role="menuitem"
+                    @click="handleAnchorClick($event, childLink.path)"
+                  >
+                    {{ childLink.name }}
+                  </a>
+                  <NuxtLink v-else :to="childLink.path" class="main-navigation-sub-nav-link" role="menuitem">
                     {{ childLink.name }}
                   </NuxtLink>
                 </li>
@@ -108,6 +127,8 @@
             :panel-variant="panelVariant"
             :aria-label="overflowMenuAriaLabel"
             :submenu-aria-label="submenuAriaLabel"
+            :active-hash="activeHash"
+            @anchor-click="handleAnchorClick"
           />
         </div>
       </details>
@@ -144,6 +165,11 @@ interface Props {
   overflowButtonLabel?: string;
   /** aria-label on each dropdown summary; {title} is replaced with the item's title. Forwarded to NavigationItems. */
   submenuAriaLabel?: string;
+  /**
+   * Pixels to leave above a section when a same-page "#anchor" link scrolls to it (e.g. a sticky
+   * header's height). Pass a getter to read it at click time.
+   */
+  anchorScrollOffset?: number | (() => number);
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -165,6 +191,7 @@ const props = withDefaults(defineProps<Props>(), {
   overflowMenuAriaLabel: "Overflow navigation menu",
   overflowButtonLabel: "More navigation",
   submenuAriaLabel: "{title} submenu",
+  anchorScrollOffset: undefined,
 });
 
 const submenuLabel = (link: ResponsiveHeaderNavItem) =>
@@ -315,11 +342,31 @@ const hoveredItemKey = ref<string | null>(null);
 
 const route = useRoute();
 
+// "#anchor" paths are same-page section links: plain <a>, smooth-scrolled, active by hash.
+const { handleNavClick, activeHash } = useAnchorScroll({ offset: props.anchorScrollOffset });
+const isAnchorPath = (path?: string) => Boolean(path?.startsWith("#"));
+const isCurrentPath = (path?: string) =>
+  Boolean(path) && (isAnchorPath(path) ? path === activeHash.value : path === route.path);
+
 const isActiveNavItem = (link: ResponsiveHeaderNavItem): boolean => {
-  if (link.path) return route.path === link.path;
-  if (link.childLinks) return link.childLinks.some((child) => child.path && route.path === child.path);
+  if (link.path) return isCurrentPath(link.path);
+  if (link.childLinks) return link.childLinks.some((child) => isCurrentPath(child.path));
   return false;
 };
+
+const handleAnchorClick = (event: MouseEvent, href: string) => {
+  handleNavClick(event, href);
+  closeAllNavigationDetails();
+};
+
+onMounted(() => {
+  if (activeHash.value) return;
+  const firstAnchor = Object.values(props.responsiveNavLinks)
+    .flat()
+    .flatMap((link) => [link, ...(link.childLinks ?? [])])
+    .find((link) => isAnchorPath(link.path));
+  if (firstAnchor?.path) activeHash.value = firstAnchor.path;
+});
 
 const isAnimated = ref(true);
 

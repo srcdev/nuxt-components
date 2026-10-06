@@ -34,7 +34,16 @@
           role="none"
           @mouseenter="hoveredItemKey = `${String(groupKey)}-${localIndex}`"
         >
-          <NuxtLink class="overflow-navigation-link" :to="link.path" role="menuitem">
+          <a
+            v-if="isAnchorPath(link.path)"
+            class="overflow-navigation-link"
+            :href="link.path"
+            role="menuitem"
+            @click="emit('anchorClick', $event, link.path)"
+          >
+            <span class="overflow-navigation-text">{{ link.name }}</span>
+          </a>
+          <NuxtLink v-else class="overflow-navigation-link" :to="link.path" role="menuitem">
             <span class="overflow-navigation-text">{{ link.name }}</span>
           </NuxtLink>
         </li>
@@ -87,7 +96,16 @@
                     }"
                     @mouseenter="hoveredChildKey = `${String(groupKey)}-${localIndex}-${childIndex}`"
                   >
-                    <NuxtLink :to="childLink.path" class="overflow-navigation-sub-nav-link" role="menuitem">
+                    <a
+                      v-if="childLink.path && isAnchorPath(childLink.path)"
+                      :href="childLink.path"
+                      class="overflow-navigation-sub-nav-link"
+                      role="menuitem"
+                      @click="emit('anchorClick', $event, childLink.path)"
+                    >
+                      <span class="overflow-navigation-sub-nav-text">{{ childLink.name }}</span>
+                    </a>
+                    <NuxtLink v-else :to="childLink.path" class="overflow-navigation-sub-nav-link" role="menuitem">
                       <span class="overflow-navigation-sub-nav-text">{{ childLink.name }}</span>
                     </NuxtLink>
                   </li>
@@ -117,6 +135,8 @@ interface Props {
   ariaLabel?: string;
   /** aria-label on each submenu summary; {title} is replaced with the item's title. */
   submenuAriaLabel?: string;
+  /** The active "#anchor" path, owned by ResponsiveHeader so both menus agree. */
+  activeHash?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -128,7 +148,12 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
   ariaLabel: "Overflow navigation menu",
   submenuAriaLabel: "{title} submenu",
+  activeHash: "",
 });
+
+const emit = defineEmits<{
+  anchorClick: [event: MouseEvent, href: string];
+}>();
 
 const submenuLabel = (link: ResponsiveHeaderNavItem) =>
   props.submenuAriaLabel.replace("{title}", link.childLinksTitle ?? link.name);
@@ -162,9 +187,13 @@ onUnmounted(() => {
 
 const route = useRoute();
 
+const isAnchorPath = (path?: string) => Boolean(path?.startsWith("#"));
+const isCurrentPath = (path?: string) =>
+  Boolean(path) && (isAnchorPath(path) ? path === props.activeHash : path === route.path);
+
 const isActiveNavItem = (link: ResponsiveHeaderNavItem): boolean => {
-  if (link.path) return route.path === link.path;
-  if (link.childLinks) return link.childLinks.some((child) => child.path && route.path === child.path);
+  if (link.path) return isCurrentPath(link.path);
+  if (link.childLinks) return link.childLinks.some((child) => isCurrentPath(child.path));
   return false;
 };
 // const DETAILS_ANIMATION_DURATION_STRING = `${DETAILS_ANIMATION_DURATION}ms` as const;

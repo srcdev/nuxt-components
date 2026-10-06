@@ -80,6 +80,10 @@ Set the tokens above on an element you own (a page or section class, or a class 
 
 ## Notes
 
+- Same-page `#anchor` items (since 2026-10-06) render as plain `<a>` with the same classes as route
+  links (`.main-navigation-link`, `.overflow-navigation-link`, the sub-nav link classes), so every token
+  and selector here applies to them. Their `li.is-active` follows the current hash rather than the route.
+
 - Anything with async-loaded content (an `iconName` icon on a nav item, a new decorator inside
   a nav link) must reserve its own `width`/`height` in CSS — an unsized element measures at
   `0` during the initial geometry pass and then pops in afterward with nothing to detect it.

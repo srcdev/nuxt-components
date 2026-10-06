@@ -56,5 +56,15 @@
       "  --responsive-header-link-font-size: ${4:1.4rem};",
       "}"
     ]
+  },
+  "SRCDEV ResponsiveHeader Anchor Links": {
+    "description": "ResponsiveHeader for a one-page site: #anchor items smooth-scroll to sections, offset for a sticky header",
+    "scope": "vue,html",
+    "body": [
+      "<ResponsiveHeader",
+      "  :responsive-nav-links=\"{ main: [{ name: '$1Home', path: '#$2home' }, { name: '$3About', path: '#$4about' }] }\"",
+      "  :anchor-scroll-offset=\"${5:80}\"",
+      "/>"
+    ]
   }
 }
