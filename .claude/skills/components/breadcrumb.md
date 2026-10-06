@@ -47,4 +47,6 @@ a `to` is a real link; the library never guesses which item is "current" from it
 - `ServiceDetail` uses this component internally for its hero banner breadcrumb, overriding
   `--breadcrumb-colour` to `white` so it reads over the hero image. See
   [service-detail.md](service-detail.md).
+- Long labels wrap (unbroken ones too). Set `--breadcrumb-item-line-clamp` (default `none`) to cap each
+  label's lines with an ellipsis, e.g. `1` for single-line crumbs. Added 2026-10-06.
 - See `CONSUMER-STYLING.md` in the component's own folder for the full `--breadcrumb-*` token API.

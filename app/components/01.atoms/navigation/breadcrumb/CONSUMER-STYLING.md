@@ -11,6 +11,9 @@
 | `--breadcrumb-colour` | `currentColor` | Colour of links, separators, and non-current labels |
 | `--breadcrumb-colour-current` | `currentColor` | Colour of the current-page item (the one without a `to`) |
 | `--breadcrumb-link-decoration-hover` | `underline` | `text-decoration` on link hover/focus |
+| `--breadcrumb-item-line-clamp` | `none` | Max lines of each item's label, with an ellipsis on the last. `1` is single-line ellipsis, `none` shows everything |
+
+> Added 2026-10-06: `--breadcrumb-item-line-clamp`; long unbroken labels now wrap inside the trail.
 
 ```css
 .breadcrumb {

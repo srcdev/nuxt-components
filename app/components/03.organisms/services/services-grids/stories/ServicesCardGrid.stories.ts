@@ -80,12 +80,6 @@ const meta: Meta<StoryArgs> = {
     cardMinWidth: "250px",
   },
   parameters: {
-    backgrounds: {
-      default: "storybook-canvas",
-      options: {
-        "storybook-canvas": { name: "Canvas", value: "oklch(0.163 0.005 17)" },
-      },
-    },
     docs: {
       description: {
         component:

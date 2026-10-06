@@ -36,6 +36,9 @@ always rendered.
 | `headerTag` | `"h1" \| "h2" \| "h3"` | `"h1"` | no |
 | `subheadingTag` | `"h2" \| "h3"` | `"h2"` | no |
 | `breadcrumbItems` | `BreadcrumbItem[]` | auto-built from `serviceData` | no |
+| `breadcrumbAriaLabel` | `string` | Breadcrumb's default | no |
+| `pricePrefix` | `string` | `"From"` | no |
+| `idealForIcon` | `string` | `"mdi:diamond-stone"` | no |
 | `heroImageVariant` | `"full" \| "popout" \| "content" \| "inset-content"` | `"full"` | no |
 | `heroContentVariant` | `"full" \| "popout" \| "content" \| "inset-content"` | `"content"` | no |
 | `bodyVariant` | `"full" \| "popout" \| "content" \| "inset-content"` | `"content"` | no |
@@ -89,6 +92,35 @@ Defaults to a plain, non-linked two-item trail built from `serviceData.category`
   ]"
 />
 ```
+
+> **Changed 2026-10-06:** the hero price prefix (`pricePrefix`), breadcrumb label and ideal-for icon are
+> props (the `From` and the icon were hardcoded). Sections with empty data, and headings set to `""`, are
+> left out instead of rendering an orphan heading; empty fields render nothing; with no title, a landmark
+> `tag` drops `aria-labelledby`. FAQ questions are one level below `subheadingTag` (were always `h3`).
+> The hero tokens are now a real minimum height, so a long title grows the hero instead of being clipped.
+> Ideal-for and related cards default to `--theme-surface-subtle` (were dark slate with no text colour).
+> The `final-cta` slot sits in `.service-detail__final-cta-action`, which never shrinks, so long copy can't
+> push its button out of the banner. Sidebar row labels size to their words (up to half the row); values wrap.
+
+## Line-clamp tokens
+
+All default to `none` (show everything). `1` is single-line ellipsis; any other number caps the lines
+with an ellipsis on the last. Set them in the consumer's own CSS, e.g.
+`.service-page { --service-detail-hero-title-line-clamp: 3; }`.
+
+| Token | Clamps |
+|---|---|
+| `--breadcrumb-item-line-clamp` | Each hero breadcrumb label (Breadcrumb's own token) |
+| `--service-detail-hero-eyebrow-line-clamp` | Hero eyebrow (`subtitle`) |
+| `--service-detail-hero-title-line-clamp` | Hero title |
+| `--service-detail-sidebar-label-line-clamp` | "Book This Service" / "You May Also Like" labels |
+| `--service-detail-sidebar-value-line-clamp` | Sidebar row values (price, duration, location) |
+| `--service-detail-related-title-line-clamp` | Related service titles (default item only, not the `related-service` slot) |
+| `--service-detail-final-cta-heading-line-clamp` | Final CTA heading |
+| `--service-detail-final-cta-body-line-clamp` | Final CTA body |
+
+The long-form body sections (description, process, FAQs) have no clamp on purpose: this is the page
+people come to read in full.
 
 ## Slots
 

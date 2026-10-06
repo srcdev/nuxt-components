@@ -1,40 +1,8 @@
+# ServiceDetail — Consumer Styling Guide
 
 > **Changed 2026-09-27**: `--service-detail-hero-pill-bg` (and the hero text colour on the pills)
 > never applied before, because `DisplayPill`'s `neutral` variant ignored the base tokens. It now
 > falls back to them, so the hero pills are transparent with the hero text colour as documented.
-# ServiceDetail — Consumer Styling Guide
-
-## Layout building blocks
-
-The hero banner is a [GridStack](../../../../../.claude/skills/components/grid-stack.md) with two
-stacked layers — an `image` layer (the service photo) behind a `content` layer (the scrim +
-breadcrumb/title/pills). Each layer's root element is itself a
-[PageRow](../../../../../.claude/skills/components/page-row.md): `.service-detail__hero-image-row`
-(prop `heroImageVariant`, default `"full"`) wraps the photo, and `.service-detail__hero-overlay`
-(prop `heroContentVariant`, default `"content"`) *is* the scrim/alignment element, not a wrapper
-around one — a `PageRow`'s own box always spans the full width of its parent regardless of variant,
-only its children default into the variant's grid column, so the one element can carry the
-full-bleed scrim while its child (`.service-detail__hero-content`) still gets pulled to the
-configured column. This means the photo bleeds to whatever width `.service-detail` itself is allowed
-(edge-to-edge if `ServiceDetail` is placed without a content-constraining wrapper around it), while
-the breadcrumb/title/pills always stay pulled into the page's normal content-width column,
-regardless of how wide the photo bleeds. `--service-detail-hero-padding` now only controls
-**block** (vertical) padding on the scrim — horizontal alignment of the text is handled entirely by
-`.service-detail__hero-overlay`'s own `PageRow` grid, not by padding, so it can't fight the page's
-content-grid gutters.
-
-The two-column body (main content + sticky sidebar) is wrapped in its own `PageRow`, whose variant
-is a prop: `bodyVariant` (`"full" | "popout" | "content" | "inset-content"`, default `"content"`).
-The closing full-width CTA banner is wrapped the same way via `finalCtaVariant` (same type, same
-`"content"` default). This means a consumer no longer needs to wrap `ServiceDetail` itself in an
-outer `PageRow` purely to constrain either section's width — pass `body-variant`/`final-cta-variant`
-directly. It's still fine (and necessary for a genuine full-bleed hero) to place `ServiceDetail`
-inside an outer, wider `PageRow` — see
-[service-summary.md](../../../../../.claude/skills/components/service-summary.md)-style nesting
-notes in [page-row.md](../../../../../.claude/skills/components/page-row.md) for how nested page-rows
-compose.
-
----
 
 ## Public token API
 
@@ -44,12 +12,25 @@ compose.
 |---|---|---|
 | `--service-detail-hero-border-radius` | `0.8rem` | Corner rounding on the hero (clips the image/content layers — set to `0` for a true edge-to-edge bleed hero) |
 | `--service-detail-hero-content-align` | `end` | `align-content` on `.service-detail__hero-content` (the breadcrumb/title/pills wrapper) — where that content sits within the hero's block axis (`end` = bottom-anchored) |
-| `--service-detail-hero-min-height-mobile` | `32rem` | Hero banner height below the `768px` container breakpoint. The hero image always fills this height (`object-fit`/`object-position` control cropping) |
-| `--service-detail-hero-min-height-tablet` | `36rem` | Hero banner height from the `768px` container breakpoint |
-| `--service-detail-hero-min-height-desktop` | `42rem` | Hero banner height from the `1024px` container breakpoint |
+| `--service-detail-hero-min-height-mobile` | `32rem` | Minimum hero banner height below the `768px` container breakpoint. The hero grows past it when its content (a long title, say) needs more room; the image always fills the hero (`object-fit`/`object-position` control cropping) |
+| `--service-detail-hero-min-height-tablet` | `36rem` | Minimum hero banner height from the `768px` container breakpoint |
+| `--service-detail-hero-min-height-desktop` | `42rem` | Minimum hero banner height from the `1024px` container breakpoint |
+
+> Changed 2026-10-06: these were applied as a fixed `height`, so a long title was clipped by the
+> hero. They are now a true minimum (`min-block-size`), matching their names.
+>
+> Also 2026-10-06: line-clamp tokens for the hero eyebrow and title, sidebar labels and values,
+> and the final CTA heading and body. The hero title's and final CTA heading's spacing moved from
+> utility classes (`mb-20`, `mbs-0`/`mbe-8`) into the component CSS, same values, so the clamp can
+> keep descenders and italic overhang visible.
 | `--service-detail-hero-padding` | `3.2rem` | **Block-axis (vertical)** padding around the breadcrumb/title/pills content — horizontal alignment comes from the nested content `PageRow`, not this token |
 | `--service-detail-hero-scrim` | `linear-gradient(0deg, rgb(0 0 0 / 70%) 0%, rgb(0 0 0 / 10%) 60%, transparent 100%)` | Overlay gradient behind the hero text, for legibility over the image |
 | `--service-detail-hero-text-colour` | `white` | Colour of the breadcrumb, eyebrow, and title over the hero image |
+| `--service-detail-hero-eyebrow-line-clamp` | `none` | Max lines of the hero eyebrow (subtitle), ellipsis on the last. `1` is single-line ellipsis |
+| `--service-detail-hero-title-line-clamp` | `none` | Max lines of the hero title |
+
+For the breadcrumb, set Breadcrumb's own `--breadcrumb-item-line-clamp` (it reaches the hero
+breadcrumb from any ancestor).
 | `--service-detail-breadcrumb-margin-block-end` | `0.8rem` | Space below the breadcrumb |
 | `--service-detail-hero-pills-gap` | `0.8rem` | Gap between the duration and price pills |
 | `--service-detail-hero-pill-bg` | `transparent` | Background of the price/duration pills (via `DisplayPill`'s `--display-pill-background`) |
@@ -100,8 +81,8 @@ target `--stepper-list-*` directly under `.service-detail__process` — see
 | `--service-detail-ideal-for-gap` | `1.2rem` | Gap between ideal-for cards |
 | `--service-detail-ideal-for-item-gap` | `1rem` | Gap between icon and text within a card |
 | `--service-detail-ideal-for-item-padding` | `1.6rem` | Padding inside a card |
-| `--service-detail-ideal-for-item-background` | `var(--slate-09)` | Card background colour |
-| `--service-detail-ideal-for-item-border-colour` | `var(--slate-06)` | Card border colour |
+| `--service-detail-ideal-for-item-background` | `var(--theme-surface-subtle)` | Card background colour |
+| `--service-detail-ideal-for-item-border-colour` | `transparent` | Card border colour |
 | `--service-detail-ideal-for-item-border-radius` | `0.4rem` | Card corner rounding |
 | `--service-detail-ideal-for-icon-size` | `1.6rem` | Icon size |
 | `--service-detail-ideal-for-icon-colour` | `var(--colour-text-accent)` | Icon colour |
@@ -129,17 +110,28 @@ The ideal-for grid becomes 2 columns at a **500px container width**.
 | `--service-detail-sidebar-row-book-cta-padding-block` | `2rem` | Vertical padding on the `book-cta` slot's own row (only renders when the slot has content) |
 | `--service-detail-sidebar-row-book-cta-justify-content` | `end` | Horizontal alignment of the `book-cta` slot content within its row |
 | `--service-detail-sidebar-row-label-font-size` | `1.2rem` | Font size of a row's label (e.g. "Price") |
+| `--service-detail-sidebar-label-line-clamp` | `none` | Max lines of the "Book This Service" / "You May Also Like" labels |
+| `--service-detail-sidebar-value-line-clamp` | `none` | Max lines of a row's value (price, duration, location) |
+
+A row's label takes the width of its own words (up to half the row) and wraps between words only;
+the value takes the rest and wraps anywhere.
 | `--service-detail-sidebar-note-font-size` | `1.2rem` | Font size of the `sidebar-note` slot content |
 | `--service-detail-sidebar-note-margin-block-start` | `1.2rem` | Space above the `sidebar-note` slot content |
 | `--service-detail-related-items-gap` | `1rem` | Gap between related-service item cards |
-| `--service-detail-related-item-background` | `var(--slate-09)` | Background colour of a related-service item's card |
+| `--service-detail-related-item-background` | `var(--theme-surface-subtle)` | Background colour of a related-service item's card |
 | `--service-detail-related-item-padding` | `1rem` | Padding inside a related-service item's card |
-| `--service-detail-related-item-border-colour` | `var(--slate-06)` | Border colour of a related-service item's card |
+| `--service-detail-related-item-border-colour` | `transparent` | Border colour of a related-service item's card |
 | `--service-detail-related-item-border-radius` | `0.4rem` | Corner rounding of a related-service item's card |
 | `--service-detail-related-item-gap` | `1.2rem` | Gap between a related item's thumbnail and its text |
 | `--service-detail-related-image-size` | `5.6rem` | Width/height of a related-service thumbnail |
 | `--service-detail-related-image-border-radius` | `0.4rem` | Corner rounding of a related-service thumbnail |
 | `--service-detail-related-price-font-size` | `1.2rem` | Font size of a related item's price |
+| `--service-detail-related-title-line-clamp` | `none` | Max lines of a related item's title (default item only, not the `related-service` slot). `1` is single-line ellipsis |
+
+> Changed 2026-10-06: the ideal-for and related-service cards defaulted to dark `--slate-09` with a
+> `--slate-06` border but set no text colour, so on a light page their inherited dark text was
+> unreadable. They now default to `var(--theme-surface-subtle)` with a transparent border. To keep
+> dark cards, set the four `-background`/`-border-colour` tokens.
 | `--service-detail-related-price-margin-block-start` | `0.6rem` | Space between a related item's title and its price |
 | `--service-detail-muted-opacity` | `0.7` | Opacity shared by every secondary/muted text element (sidebar label, sidebar note, related price, final CTA body) |
 
@@ -153,10 +145,56 @@ The booking card is a `GlassPanel` — its own `--glass-panel-*` tokens also app
 | `--service-detail-final-cta-margin-block-start` | `3.2rem` | Space above the banner |
 | `--service-detail-final-cta-padding-block` | `3.2rem 3.2rem` | Padding (block-start block-end) around the banner content, below its divider |
 | `--service-detail-final-cta-divider-colour` | `currentColor` | Divider line above the banner |
+| `--service-detail-final-cta-heading-line-clamp` | `none` | Max lines of the banner heading |
+| `--service-detail-final-cta-body-line-clamp` | `none` | Max lines of the banner body text |
+
+The `final-cta` slot sits in `.service-detail__final-cta-action`, which never shrinks: long copy
+wraps beside it instead of pushing the button out of the banner.
 
 The banner becomes a single row (copy left, CTA right) at a **700px container width**. Its own
 breakout width is controlled by the `finalCtaVariant` prop (default `"content"`), not a token —
 see Layout building blocks above.
+
+---
+
+## State hooks
+
+No state classes. Inner classes are all `service-detail__*` (hero, hero image/overlay/content, breadcrumb,
+hero pills, body, main, process, ideal-for and its items/icon, faqs and each faq/question, sidebar,
+booking card, sidebar label/rows/note, related items, final CTA). FAQ questions render one heading level
+below `subheadingTag` (`h3` for the default `h2`, `h4` for `h3`).
+
+---
+
+## Layout building blocks
+
+The hero banner is a [GridStack](../../../../../.claude/skills/components/grid-stack.md) with two
+stacked layers — an `image` layer (the service photo) behind a `content` layer (the scrim +
+breadcrumb/title/pills). Each layer's root element is itself a
+[PageRow](../../../../../.claude/skills/components/page-row.md): `.service-detail__hero-image-row`
+(prop `heroImageVariant`, default `"full"`) wraps the photo, and `.service-detail__hero-overlay`
+(prop `heroContentVariant`, default `"content"`) *is* the scrim/alignment element, not a wrapper
+around one — a `PageRow`'s own box always spans the full width of its parent regardless of variant,
+only its children default into the variant's grid column, so the one element can carry the
+full-bleed scrim while its child (`.service-detail__hero-content`) still gets pulled to the
+configured column. This means the photo bleeds to whatever width `.service-detail` itself is allowed
+(edge-to-edge if `ServiceDetail` is placed without a content-constraining wrapper around it), while
+the breadcrumb/title/pills always stay pulled into the page's normal content-width column,
+regardless of how wide the photo bleeds. `--service-detail-hero-padding` now only controls
+**block** (vertical) padding on the scrim — horizontal alignment of the text is handled entirely by
+`.service-detail__hero-overlay`'s own `PageRow` grid, not by padding, so it can't fight the page's
+content-grid gutters.
+
+The two-column body (main content + sticky sidebar) is wrapped in its own `PageRow`, whose variant
+is a prop: `bodyVariant` (`"full" | "popout" | "content" | "inset-content"`, default `"content"`).
+The closing full-width CTA banner is wrapped the same way via `finalCtaVariant` (same type, same
+`"content"` default). This means a consumer no longer needs to wrap `ServiceDetail` itself in an
+outer `PageRow` purely to constrain either section's width — pass `body-variant`/`final-cta-variant`
+directly. It's still fine (and necessary for a genuine full-bleed hero) to place `ServiceDetail`
+inside an outer, wider `PageRow` — see
+[service-summary.md](../../../../../.claude/skills/components/service-summary.md)-style nesting
+notes in [page-row.md](../../../../../.claude/skills/components/page-row.md) for how nested page-rows
+compose.
 
 ---
 
@@ -177,6 +215,14 @@ Section headings, sidebar labels, and CTA copy are **props**, not hardcoded stri
 | `relatedServicesHeading` | `"You May Also Like"` |
 | `finalCtaHeading` | `"Ready to book your appointment?"` |
 | `finalCtaBody` | `"Get in touch to book your appointment."` |
+| `pricePrefix` | `"From"` (hero price pill; `""` shows the price alone) |
+| `breadcrumbAriaLabel` | Breadcrumb's own default |
+| `idealForIcon` | `"mdi:diamond-stone"` (decorative, hidden from assistive tech) |
+
+A section is left out, heading and all, when its data is empty (`process`, `idealFor`, `faqs`,
+`maintenance`, a `heroHeading` with no text), and so is any heading or label prop set to `""`. Empty
+`subtitle`, `title`, `price`, `duration`, `longDescription`, `whatIsIt` and FAQ questions/answers render
+nothing, and empty breadcrumb labels are dropped.
 
 ```vue
 <ServiceDetail
@@ -226,6 +272,12 @@ never reach the hero pills or breadcrumb. Use the `--service-detail-hero-*` toke
 
 ---
 
+## Class passthrough
+
+`style-class-passthrough` adds classes to the root `.service-detail`. Reactive after mount.
+
+---
+
 ## Notes
 
 - Routing is entirely delegated to the consumer via slots: `book-cta` (scoped `serviceData`),
@@ -251,4 +303,3 @@ never reach the hero pills or breadcrumb. Use the `--service-detail-hero-*` toke
   `@container` queries against the component's own width, not the viewport — they are not tokens
   since resizing them would need corresponding `minmax()`/`grid-template-columns` changes too, not
   just spacing (same rationale as `ServiceSummary`'s `--service-summary-grid-gap-desktop`).
-

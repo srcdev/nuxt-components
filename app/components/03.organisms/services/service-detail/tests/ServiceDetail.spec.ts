@@ -311,4 +311,62 @@ describe("ServiceDetail", () => {
     expect(wrapper.classes()).not.toContain("original");
     expect(wrapper.classes()).toContain("updated");
   });
+
+  // ─── Worst-case data ───────────────────────────────────────────────────
+
+  it("leaves out every section whose data is empty, along with its heading", async () => {
+    const wrapper = await mountSuspended(ServiceDetail, {
+      props: {
+        serviceData: {
+          ...mockService,
+          category: "",
+          subtitle: "",
+          title: "",
+          price: "",
+          duration: "",
+          longDescription: "",
+          heroHeading: [{ text: "", styleClass: "normal" }],
+          whatIsIt: "",
+          process: [],
+          idealFor: [],
+          maintenance: "",
+          faqs: [],
+        },
+        tag: "section",
+      },
+    });
+    expect(wrapper.find(".breadcrumb").exists()).toBe(false);
+    expect(wrapper.find(".service-detail__hero-pills").exists()).toBe(false);
+    expect(wrapper.find(".service-detail__process").exists()).toBe(false);
+    expect(wrapper.find(".service-detail__ideal-for").exists()).toBe(false);
+    expect(wrapper.find(".service-detail__faqs").exists()).toBe(false);
+    expect(wrapper.find(".service-detail__sidebar-row").exists()).toBe(false);
+    expect(wrapper.text()).not.toContain("The Process");
+    expect(wrapper.text()).not.toContain("Ideal For");
+    expect(wrapper.text()).not.toContain("Aftercare & Maintenance");
+    expect(wrapper.text()).not.toContain("Frequently Asked Questions");
+    expect(wrapper.attributes("aria-labelledby")).toBeUndefined();
+  });
+
+  it("uses pricePrefix for the hero price pill", async () => {
+    const wrapper = await mountSuspended(ServiceDetail, {
+      props: { serviceData: mockService, pricePrefix: "Ab" },
+    });
+    expect(wrapper.find(".service-detail__hero-pills").text()).toContain(`Ab ${mockService.price}`);
+  });
+
+  it("puts FAQ questions one level below subheadingTag", async () => {
+    const wrapper = await mountSuspended(ServiceDetail, {
+      props: { serviceData: mockService, subheadingTag: "h3" },
+    });
+    expect(wrapper.find(".service-detail__faq-question").element.tagName).toBe("H4");
+  });
+
+  it("hides the decorative ideal-for icon and accepts a custom one", async () => {
+    const wrapper = await mountSuspended(ServiceDetail, {
+      props: { serviceData: mockService, idealForIcon: "mdi:check" },
+    });
+    const icon = wrapper.find(".service-detail__ideal-for-icon");
+    expect(icon.attributes("aria-hidden")).toBe("true");
+  });
 });

@@ -1,7 +1,10 @@
+import { computed, ref } from "vue";
 import ServiceDetail from "../ServiceDetail.vue";
+import CanvasSwitcher from "../../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
 import InputButton from "../../../../05.forms/input-button/InputButton.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import type { Service } from "~/types/types.services";
+import type { MediaCanvas } from "~/types/components";
 
 const meta: Meta<typeof ServiceDetail> = {
   title: "Organisms/Services/Service Detail",
@@ -60,6 +63,9 @@ const meta: Meta<typeof ServiceDetail> = {
     relatedServices: { control: "object", description: "Services rendered in the 'You may also like' sidebar list" },
     finalCtaHeading: { control: "text", description: "Heading in the closing full-width CTA banner" },
     finalCtaBody: { control: "text", description: "Body text in the closing full-width CTA banner" },
+    pricePrefix: { control: "text", description: "Text before the price in the hero pill; empty shows the price alone" },
+    idealForIcon: { control: "text", description: "Icon shown on each ideal-for item" },
+    breadcrumbAriaLabel: { control: "text", description: "aria-label on the breadcrumb nav (Breadcrumb's default when unset)" },
     styleClassPassthrough: { control: "object", description: "Additional CSS classes applied to the root element" },
   },
   args: {
@@ -70,15 +76,11 @@ const meta: Meta<typeof ServiceDetail> = {
     heroContentVariant: "content",
     bodyVariant: "content",
     finalCtaVariant: "content",
+    pricePrefix: "From",
+    idealForIcon: "mdi:diamond-stone",
     styleClassPassthrough: [],
   },
   parameters: {
-    backgrounds: {
-      default: "storybook-canvas",
-      options: {
-        "storybook-canvas": { name: "Canvas", value: "oklch(0.163 0.005 17)" },
-      },
-    },
     docs: {
       description: {
         component:
@@ -154,13 +156,10 @@ const relatedServices: Service[] = [
 // ServiceDetail's own --service-detail-*/--glass-panel-*/--breadcrumb-* tokens (see
 // CONSUMER-STYLING.md) rather than new component defaults.
 const storyTheme = {
-  "--glass-panel-bg": "oklch(0.216 0.006 40)",
-  "--glass-panel-border-color": "oklch(0.283 0.008 44)",
   "--service-detail-process-divider-colour": "oklch(0.283 0.008 44)",
   "--service-detail-faq-divider-colour": "oklch(0.283 0.008 44)",
   "--service-detail-sidebar-row-divider-colour": "oklch(0.283 0.008 44)",
   "--service-detail-final-cta-divider-colour": "oklch(0.283 0.008 44)",
-  "--service-detail-ideal-for-item-border-colour": "oklch(0.283 0.008 44)",
   "--service-detail-process-index-colour": "oklch(0.727 0.089 87)",
   "--service-detail-ideal-for-icon-colour": "oklch(0.727 0.089 87)",
   "--service-detail-hero-pill-border-colour": "oklch(0.727 0.089 87)",
@@ -300,6 +299,155 @@ export const CustomRelatedServiceLink: Story = {
       description: {
         story:
           "The related-service scoped slot replaces each related item's default (non-clickable) markup — use it to wrap the item in a real link, matching the pattern of ServiceSummary's summary-link slot.",
+      },
+    },
+  },
+};
+
+// ─── Stress test ──────────────────────────────────────────────────────────────
+
+type LineClamp = "none" | "1" | "2" | "3" | "4";
+
+// Story-only args: each drives a CSS token, not a ServiceDetail prop. See the argTypes entries.
+const lineClampTokens = {
+  breadcrumbItemLineClamp: { token: "--breadcrumb-item-line-clamp", label: "Breadcrumb item" },
+  heroEyebrowLineClamp: { token: "--service-detail-hero-eyebrow-line-clamp", label: "Hero eyebrow" },
+  heroTitleLineClamp: { token: "--service-detail-hero-title-line-clamp", label: "Hero title" },
+  sidebarLabelLineClamp: { token: "--service-detail-sidebar-label-line-clamp", label: "Sidebar label" },
+  sidebarValueLineClamp: { token: "--service-detail-sidebar-value-line-clamp", label: "Sidebar value" },
+  relatedTitleLineClamp: { token: "--service-detail-related-title-line-clamp", label: "Related title" },
+  finalCtaHeadingLineClamp: { token: "--service-detail-final-cta-heading-line-clamp", label: "Final CTA heading" },
+  finalCtaBodyLineClamp: { token: "--service-detail-final-cta-body-line-clamp", label: "Final CTA body" },
+} as const;
+
+type LineClampArg = keyof typeof lineClampTokens;
+
+type StressArgs = InstanceType<typeof ServiceDetail>["$props"] & Record<LineClampArg, LineClamp>;
+
+const longGerman = "Haarverlängerungsbehandlungsberatungsterminvereinbarung";
+const longUrl = "https://example.com/a/very/long/path/that/never/breaks/because/it/has/no/spaces/at/all?utm_source=newsletter";
+const germanParagraph = "Eine ausgesprochen lange Beschreibung, wie sie ein CMS liefert, wenn niemand die Zeichenanzahl prüft. ";
+
+const stressService: Service = {
+  ...balayage,
+  slug: "stress",
+  category: `Kategorie ${longGerman}`,
+  subtitle: `Freihändige ${longGerman}`,
+  title: `${longGerman} und ${longGerman}`,
+  price: "95,00 € zuzüglich Pflegeprodukte nach individueller Absprache mit Ihrer Stylistin",
+  duration: "Ungefähr zweieinhalb bis dreieinhalb Stunden einschließlich ausführlicher Beratung",
+  longDescription: germanParagraph.repeat(10),
+  heroHeading: [
+    { text: "Warum", styleClass: "normal" },
+    { text: longGerman, styleClass: "accent" },
+  ],
+  whatIsIt: `🌈✨ <b>not bold</b> <script>alert(1)</script> ${longUrl}`,
+  process: [
+    longGerman,
+    "A",
+    "وصف طويل باللغة العربية يمتد عبر عدة أسطر للتحقق من أن النص من اليمين إلى اليسار يعرض بشكل صحيح.",
+    ...Array.from({ length: 9 }, (_, index) => `Schritt ${index + 4}: ${germanParagraph}`),
+  ],
+  idealFor: [longGerman, "😀 Emoji first", longUrl, "B", ...Array.from({ length: 8 }, (_, index) => `Filler ${index + 1}`)],
+  maintenance: germanParagraph.repeat(3),
+  faqs: [
+    { question: `${longGerman}?`, answer: germanParagraph.repeat(4) },
+    { question: "<i>Is this italic?</i>", answer: "" },
+    { question: "", answer: "An answer with no question." },
+  ],
+};
+
+const stressRelated: Service[] = [
+  { ...balayage, slug: "related-long", title: `${longGerman} ${longGerman}`, price: "Ab 1.250,00 € pro Sitzung" },
+  { ...balayage, slug: "related-long", title: "Duplicate slug", price: "£0" },
+  { ...balayage, slug: "related-broken", title: "Broken image", image: "https://example.invalid/missing.jpg", price: "" },
+];
+
+export const StressTest: StoryObj<StressArgs> = {
+  name: "Stress Test (Worst-Case Data)",
+  argTypes: Object.fromEntries(
+    Object.entries(lineClampTokens).map(([arg, { token, label }]) => [
+      arg,
+      {
+        name: `${label} line clamp`,
+        control: "select",
+        options: ["none", "1", "2", "3", "4"] satisfies LineClamp[],
+        description:
+          `**Story control, not a prop.** Sets the \`${token}\` CSS token on the component so you can try it here. ` +
+          `To use it in an app, set the token in your own CSS, e.g. \`.service-page { ${token}: 2; }\`. ` +
+          "`1` is single-line ellipsis, `none` (the default) shows everything.",
+        table: { category: "CSS tokens (story only, set in your CSS)", defaultValue: { summary: "none" } },
+      },
+    ])
+  ),
+  args: {
+    tag: "section",
+    pricePrefix: "Ab einem Mindestpreis von",
+    idealForIcon: "this-icon:does-not-exist",
+    location: `Mobil im gesamten Großraum ${longGerman}, nach Vereinbarung auch an Wochenenden`,
+    bookingHeading: `Diese ${longGerman} jetzt buchen`,
+    finalCtaHeading: `Bereit für Ihre ${longGerman}?`,
+    finalCtaBody: germanParagraph.repeat(2),
+    ...(Object.fromEntries(Object.keys(lineClampTokens).map((arg) => [arg, "none"])) as Record<LineClampArg, LineClamp>),
+  },
+  render: (args) => ({
+    components: { ServiceDetail, InputButton },
+    setup() {
+      const componentArgs = computed(() =>
+        Object.fromEntries(Object.entries(args).filter(([arg]) => !(arg in lineClampTokens)))
+      );
+      const tokenStyles = computed(() => ({
+        ...storyTheme,
+        ...Object.fromEntries(
+          Object.entries(lineClampTokens).map(([arg, { token }]) => [token, args[arg as LineClampArg]])
+        ),
+      }));
+      return { componentArgs, tokenStyles, stressService, stressRelated };
+    },
+    template: `
+      <ServiceDetail v-bind="componentArgs" :service-data="stressService" :related-services="stressRelated" :style="tokenStyles">
+        <template #book-cta>
+          <InputButton tag="a" href="/contact" button-text="Jetzt unverbindlich einen Beratungstermin vereinbaren" variant="primary" />
+        </template>
+        <template #sidebar-note>
+          Ein Allergietest ist mindestens 48 Stunden vor jeder Farbbehandlung erforderlich: ${longUrl}
+        </template>
+        <template #final-cta>
+          <InputButton tag="a" href="/contact" button-text="Jetzt buchen" variant="secondary" />
+        </template>
+      </ServiceDetail>
+    `,
+  }),
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "fullWidthCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    layout: "fullscreen",
+    initialCanvas: "mobileCanvas",
+    docs: {
+      description: {
+        story:
+          "Deliberately hostile data to find breakage: a hero title of two 55-character German compound words (the hero " +
+          "grows instead of clipping it), long German breadcrumb, eyebrow, pills, booking copy and location, a German price " +
+          "prefix, emoji, HTML-like text (must render as text), an unbroken URL, right-to-left Arabic, 12 process steps and " +
+          "12 ideal-for items, FAQs with an empty answer and an empty question, related services with a long title, a " +
+          "duplicate slug, a broken image and an empty price, and a broken ideal-for icon name. Check at every canvas width: " +
+          "no text runs out of its column, the sidebar values wrap and stay right-aligned, and the body switches to two " +
+          "columns from 900px. Try the line clamp controls too (breadcrumb items, hero eyebrow and title, sidebar labels and values, related titles, final CTA heading and body): they set CSS tokens, they are not props. The final CTA button never shrinks or gets pushed out by long copy.",
       },
     },
   },

@@ -7,6 +7,7 @@
       "  :service-data=\"$1service\"",
       "  location=\"$2Mobile — across Bath\"",
       "  :related-services=\"$3relatedServices\"",
+      "  price-prefix=\"${7:From}\"",
       ">",
       "  <template #book-cta>",
       "    <button type=\"button\">$4Book Now</button>",

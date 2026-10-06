@@ -4,7 +4,7 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
 "<div class="service-detail">
   <div class="grid-stack service-detail__hero">
     <div class="grid-stack__layer">
-      <div class="page-row full service-detail__hero-image-row"><img data-nuxt-img="" srcset="/_ipx/_/images/balayage.jpg 1x, /_ipx/_/images/balayage.jpg 2x" alt="Balayage" loading="eager" fetchpriority="high" class="service-detail__hero-image" src="/_ipx/_/images/balayage.jpg"></div>
+      <div class="page-row full service-detail__hero-image-row"><img width="1920" height="1080" data-nuxt-img="" srcset="/_ipx/s_1920x1080/images/balayage.jpg 1x, /_ipx/s_3840x2160/images/balayage.jpg 2x" alt="Balayage" loading="eager" fetchpriority="high" class="service-detail__hero-image" src="/_ipx/s_1920x1080/images/balayage.jpg"></div>
     </div>
     <div class="grid-stack__layer">
       <div class="page-row content service-detail__hero-overlay">
@@ -18,7 +18,7 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
             </ol>
           </nav>
           <div class="eyebrow-text large">Freehand colour artistry</div>
-          <h1 id="v-0-0" class="hero-text mb-20 display axis-horizontal">
+          <h1 id="v-0-0" class="hero-text display axis-horizontal">
             <!--v-if--><span class="text-block-0 normal">Balayage</span>
           </h1>
           <div class="service-detail__hero-pills"><span class="display-pill md neutral"><!--v-if--><span class="display-pill-label">2.5 - 3.5 hours</span></span><span class="display-pill md neutral"><!--v-if--><span class="display-pill-label">From £95</span></span></div>
@@ -98,11 +98,12 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
   <div class="page-row content service-detail__final-cta-row">
     <div class="service-detail__final-cta">
       <div class="service-detail__final-cta-copy">
-        <h2 class="hero-text mbs-0 mbe-8 subheading axis-horizontal">
+        <h2 class="hero-text subheading axis-horizontal">
           <!--v-if--><span class="text-block-0 normal">Ready to book your appointment?</span>
         </h2>
         <p class="page-body-normal">Get in touch to book your appointment.</p>
       </div>
+      <!--v-if-->
     </div>
   </div>
 </div>"

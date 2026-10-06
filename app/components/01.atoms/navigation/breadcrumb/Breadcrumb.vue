@@ -63,11 +63,19 @@ watch(
       display: flex;
       align-items: center;
       gap: var(--_gap);
+      min-inline-size: 0;
     }
 
     .breadcrumb__link,
     .breadcrumb__label {
       color: var(--_colour);
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      -webkit-line-clamp: var(--breadcrumb-item-line-clamp, none);
+      line-clamp: var(--breadcrumb-item-line-clamp, none);
     }
 
     .breadcrumb__label[aria-current="page"] {
