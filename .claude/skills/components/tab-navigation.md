@@ -41,9 +41,19 @@ interface NavItemData {
 | `nav-align` | `"left" \| "center" \| "right"` | `"left"` | Positions the tab list within the nav container |
 | `anchor-scroll-offset` | `number \| (() => number)` | — | Pixel offset subtracted from scroll target; pass a getter so it is re-evaluated at click time |
 | `aria-label` | `string` | `"Site navigation"` | aria-label on the root `<nav>` landmark — override for localisation |
+| `open-menu-label` | `string` | `"Open navigation menu"` | Burger button label while closed — override for localisation |
+| `close-menu-label` | `string` | `"Close navigation menu"` | Burger button label while open — override for localisation |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the root `<nav>` element |
 
 ---
+
+> **Changed 2026-10-06:** the burger labels are props (were hardcoded English). Items with blank `text`
+> are skipped (a link with no text has no accessible name), and nothing renders when none are left.
+> Items are keyed by position, so duplicate or missing `href`s no longer break rendering. The mobile
+> panel's id comes from `useId()` (was a fixed `tab-nav-panel`, which duplicated with two navs on a
+> page). Links show a focus ring (`--tab-nav-focus-ring-*`), and long panel labels wrap. Colour
+> defaults are light-theme now (`--theme-text` links, `--theme-accent` hover and indicator, `--page-bg`
+> panel); they used to assume a dark header. Dark headers or dark mode set the colour tokens.
 
 ## Basic usage — route links
 
@@ -146,9 +156,9 @@ the component source folder for the full token reference.
 
 | Token | Default | Controls |
 |---|---|---|
-| `--tab-nav-link-color` | `var(--slate-01, currentColor)` | Link text colour |
-| `--tab-nav-link-hover-color` | `var(--slate-04, currentColor)` | Link hover colour |
-| `--tab-nav-link-active-color` | `var(--slate-01, currentColor)` | Active link colour |
+| `--tab-nav-link-color` | `var(--theme-text)` | Link text colour |
+| `--tab-nav-link-hover-color` | `var(--theme-accent)` | Link hover colour |
+| `--tab-nav-link-active-color` | the link colour | Active link colour |
 | `--tab-nav-link-size` | `1.6rem` | Font size |
 | `--tab-nav-link-weight` | `400` | Font weight |
 | `--tab-nav-link-tracking` | `0.06em` | Letter spacing |
@@ -159,17 +169,17 @@ the component source folder for the full token reference.
 
 | Token | Default | Controls |
 |---|---|---|
-| `--tab-nav-decorator-indicator-color` | `var(--slate-01, currentColor)` | Active underline bar colour |
+| `--tab-nav-decorator-indicator-color` | `var(--theme-accent)` | Active underline bar colour |
 | `--tab-nav-decorator-hovered-bg` | `transparent` | Hover pill background (set non-transparent to enable) |
 
 ### Mobile panel
 
 | Token | Default | Controls |
 |---|---|---|
-| `--tab-nav-panel-bg` | `var(--page-bg, #1a1614)` | Panel background |
-| `--tab-nav-panel-border-color` | `color-mix(in oklch, var(--slate-01) 35%, transparent)` | Panel top border |
-| `--tab-nav-panel-item-border` | `color-mix(in oklch, var(--slate-01) 8%, transparent)` | Item dividers |
-| `--tab-nav-panel-link-color` | `var(--slate-01, currentColor)` | Panel link colour |
+| `--tab-nav-panel-bg` | `var(--page-bg, var(--theme-surface-subtle))` | Panel background |
+| `--tab-nav-panel-border-color` | the link colour at 20% | Panel top border |
+| `--tab-nav-panel-item-border` | the panel link colour at 12% | Item dividers |
+| `--tab-nav-panel-link-color` | the link colour | Panel link colour |
 | `--tab-nav-panel-padding-block` | `1.4rem` | Link vertical padding |
 | `--tab-nav-panel-padding-inline` | `1.5rem` | Link horizontal padding |
 | `--tab-nav-panel-slide-duration` | `350ms` | Panel open/close duration |
@@ -179,7 +189,7 @@ the component source folder for the full token reference.
 
 | Token | Default | Controls |
 |---|---|---|
-| `--tab-nav-burger-color` | `var(--slate-01, currentColor)` | Bar colour |
+| `--tab-nav-burger-color` | the link colour | Bar colour |
 | `--tab-nav-burger-width` | `22px` | Bar width |
 | `--tab-nav-burger-height` | `1.5px` | Bar height |
 | `--tab-nav-burger-gap` | `5px` | Gap between bars |

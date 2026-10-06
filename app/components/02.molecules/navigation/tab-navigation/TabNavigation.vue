@@ -1,5 +1,6 @@
 <template>
   <nav
+    v-if="visibleItems.length"
     ref="navRef"
     class="tab-navigation"
     :class="[
@@ -11,8 +12,8 @@
   >
     <ul v-if="!isCollapsed || !isLoaded" ref="navListRef" class="tab-nav-list" @mouseleave="hoveredItemHref = null">
       <li
-        v-for="item in navItemData.main"
-        :key="item.href"
+        v-for="(item, index) in visibleItems"
+        :key="`${index}-${item.href}`"
         :data-href="item.href"
         :class="[
           item.cssName,
@@ -55,9 +56,9 @@
       class="tab-nav-burger"
       :class="{ 'is-open': isMenuOpen }"
       variant="tertiary"
-      :button-text="isMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
+      :button-text="isMenuOpen ? closeMenuLabel : openMenuLabel"
       :aria-expanded="String(isMenuOpen)"
-      aria-controls="tab-nav-panel"
+      :aria-controls="panelId"
       @click="toggleMenu"
     >
       <template #iconOnly>
@@ -79,14 +80,14 @@
 
     <div
       v-if="showCollapsed"
-      id="tab-nav-panel"
+      :id="panelId"
       class="tab-nav-panel"
       :class="{ 'is-open': isMenuOpen }"
       :inert="!isMenuOpen ? true : undefined"
     >
       <div class="tab-nav-panel-inner">
         <ul class="tab-nav-panel-list">
-          <li v-for="item in navItemData.main" :key="item.href" :class="item.cssName">
+          <li v-for="(item, index) in visibleItems" :key="`${index}-${item.href}`" :class="item.cssName">
             <a
               v-if="item.href?.startsWith('#')"
               :href="item.href"
@@ -133,6 +134,10 @@ interface Props {
   anchorScrollOffset?: number | (() => number);
   /** aria-label on the nav landmark — override for localisation. */
   ariaLabel?: string;
+  /** Burger button label while the menu is closed — override for localisation. */
+  openMenuLabel?: string;
+  /** Burger button label while the menu is open — override for localisation. */
+  closeMenuLabel?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -140,7 +145,13 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
   anchorScrollOffset: undefined,
   ariaLabel: "Site navigation",
+  openMenuLabel: "Open navigation menu",
+  closeMenuLabel: "Close navigation menu",
 });
+
+// Items with no text would render links with no accessible name.
+const visibleItems = computed(() => (props.navItemData.main ?? []).filter((item) => item.text?.trim()));
+const panelId = useId();
 
 const { navRef, navListRef, isCollapsed, isLoaded, isMenuOpen, isActiveItem, toggleMenu, closeMenu } =
   useNavCollapse("tab-nav-loaded");
@@ -149,7 +160,7 @@ const { handleNavClick, activeHash } = useAnchorScroll({ offset: props.anchorScr
 
 onMounted(() => {
   if (!activeHash.value) {
-    const firstHashItem = props.navItemData.main?.find((item) => item.href?.startsWith("#"));
+    const firstHashItem = visibleItems.value.find((item) => item.href?.startsWith("#"));
     if (firstHashItem?.href) activeHash.value = firstHashItem.href;
   }
 });
@@ -209,25 +220,22 @@ watch(
     /* ─── Public token API ────────────────────────────────────────────── */
 
     /* Horizontal nav */
-    --_link-color: var(--tab-nav-link-color, var(--slate-01, currentColor));
+    --_link-color: var(--tab-nav-link-color, var(--theme-text));
+    --_link-hover-color: var(--tab-nav-link-hover-color, var(--theme-accent));
     --_link-size: var(--tab-nav-link-size, 1.6rem);
     --_link-tracking: var(--tab-nav-link-tracking, 0.06em);
     --_link-weight: var(--tab-nav-link-weight, 400);
     --_nav-transition: var(--tab-nav-transition, 250ms ease);
 
     /* Panel */
-    --_panel-border-color: var(
-      --tab-nav-panel-border-color,
-      color-mix(in oklch, var(--slate-01, #c0847a) 35%, transparent)
-    );
-    --_panel-link-color: var(--tab-nav-panel-link-color, var(--slate-01, currentColor));
+    --_panel-link-color: var(--tab-nav-panel-link-color, var(--_link-color));
     --_panel-slide-duration: var(--tab-nav-panel-slide-duration, 350ms);
     --_panel-slide-easing: var(--tab-nav-panel-slide-easing, cubic-bezier(0.4, 0, 0.2, 1));
 
     /* Burger */
     --_burger-bar-height: var(--tab-nav-burger-height, 1.5px);
     --_burger-bar-gap: var(--tab-nav-burger-gap, 5px);
-    --_burger-color: var(--tab-nav-burger-color, var(--slate-01, currentColor));
+    --_burger-color: var(--tab-nav-burger-color, var(--_link-color));
     --_burger-transition: var(--tab-nav-burger-transition, 300ms ease);
 
     /* ─────────────────────────────────────────────────────────────────── */
@@ -287,12 +295,17 @@ watch(
 
         &:hover,
         &:focus-visible {
-          color: var(--tab-nav-link-hover-color, var(--slate-04, var(--_link-color)));
+          color: var(--_link-hover-color);
           outline: none;
         }
 
+        &:focus-visible {
+          outline: var(--tab-nav-focus-ring-width, 2px) solid var(--tab-nav-focus-ring-colour, currentColor);
+          outline-offset: var(--tab-nav-focus-ring-offset, 2px);
+        }
+
         &.router-link-exact-active {
-          color: var(--tab-nav-link-active-color, var(--slate-01, var(--_link-color)));
+          color: var(--tab-nav-link-active-color, var(--_link-color));
         }
       }
     }
@@ -390,12 +403,12 @@ watch(
 
       &.is-open {
         grid-template-rows: 1fr;
-        border-block-start-color: var(--_panel-border-color);
+        border-block-start-color: var(--tab-nav-panel-border-color, color-mix(in oklch, var(--_link-color) 20%, transparent));
       }
 
       .tab-nav-panel-inner {
         overflow: hidden;
-        background-color: var(--tab-nav-panel-bg, var(--page-bg, #1a1614));
+        background-color: var(--tab-nav-panel-bg, var(--page-bg, var(--theme-surface-subtle)));
       }
 
       .tab-nav-panel-list {
@@ -404,14 +417,18 @@ watch(
         padding: 0;
 
         li {
-          border-block-end: 1px solid var(--tab-nav-panel-item-border, color-mix(in oklch, var(--slate-01, white) 8%, transparent));
+          border-block-end: 1px solid
+            var(--tab-nav-panel-item-border, color-mix(in oklch, var(--_panel-link-color) 12%, transparent));
 
           &:last-child {
             border-block-end: none;
           }
 
           &:hover {
-            background-color: color-mix(in oklch, var(--slate-01, white) 5%, transparent);
+            background-color: var(
+              --tab-nav-panel-item-hover-bg,
+              color-mix(in oklch, var(--_panel-link-color) 5%, transparent)
+            );
           }
         }
 
@@ -426,18 +443,25 @@ watch(
           text-decoration: none;
           padding-block: var(--tab-nav-panel-padding-block, 1.4rem);
           padding-inline: var(--tab-nav-panel-padding-inline, 1.5rem);
+          overflow-wrap: anywhere;
+          min-inline-size: 0;
           position: relative;
           z-index: 1;
           transition: color var(--_nav-transition);
 
           &:hover,
           &:focus-visible {
-            color: var(--tab-nav-panel-link-hover-color, var(--slate-04, var(--_panel-link-color)));
+            color: var(--tab-nav-panel-link-hover-color, var(--_link-hover-color));
             outline: none;
           }
 
+          &:focus-visible {
+            outline: var(--tab-nav-focus-ring-width, 2px) solid var(--tab-nav-focus-ring-colour, currentColor);
+            outline-offset: calc(-1 * var(--tab-nav-focus-ring-width, 2px));
+          }
+
           &.router-link-exact-active {
-            color: var(--tab-nav-panel-link-active-color, var(--slate-01, var(--_panel-link-color)));
+            color: var(--tab-nav-panel-link-active-color, var(--_panel-link-color));
           }
         }
       }
@@ -504,7 +528,7 @@ watch(
     bottom: 0;
     height: 2px;
     pointer-events: none;
-    background-color: var(--tab-nav-decorator-indicator-color, var(--slate-01, currentColor));
+    background-color: var(--tab-nav-decorator-indicator-color, var(--theme-accent));
     z-index: 3;
   }
 

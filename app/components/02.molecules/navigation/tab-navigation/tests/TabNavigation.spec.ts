@@ -331,9 +331,49 @@ describe("TabNavigation", () => {
       expect(wrapper.find(".tab-nav-panel").attributes("inert")).toBeUndefined();
     });
 
-    it("panel has aria-controls pointing to tab-nav-panel", async () => {
+    it("burger aria-controls points at the panel's own unique id", async () => {
       const { wrapper } = await mountCollapsed();
-      expect(wrapper.find(".tab-nav-burger").attributes("aria-controls")).toBe("tab-nav-panel");
+      const panelId = wrapper.find(".tab-nav-panel").attributes("id");
+      expect(panelId).toBeTruthy();
+      expect(panelId).not.toBe("tab-nav-panel");
+      expect(wrapper.find(".tab-nav-burger").attributes("aria-controls")).toBe(panelId);
     });
+
+    it("uses openMenuLabel / closeMenuLabel for the burger", async () => {
+      const wrapper = await mountSuspended(TabNavigation, {
+        props: { navItemData: defaultNavItemData, openMenuLabel: "Menü öffnen", closeMenuLabel: "Menü schließen" },
+      });
+      const setup = (wrapper.vm as unknown as { $: { setupState: TabNavSetup } }).$.setupState;
+      setup.isCollapsed = true;
+      await nextTick();
+      expect(wrapper.find(".tab-nav-burger").text()).toContain("Menü öffnen");
+      await wrapper.find(".tab-nav-burger").trigger("click");
+      expect(wrapper.find(".tab-nav-burger").text()).toContain("Menü schließen");
+    });
+  });
+
+  // ─── Worst-case data ─────────────────────────────────────────────────────
+
+  it("skips items with blank text", async () => {
+    const wrapper = await mountSuspended(TabNavigation, {
+      props: {
+        navItemData: { main: [{ text: "Home", href: "/" }, { text: "  ", href: "/blank" }, { text: "", href: "/empty" }] },
+      },
+    });
+    expect(wrapper.findAll(".tab-nav-link")).toHaveLength(1);
+  });
+
+  it("renders duplicate and missing hrefs without collapsing items", async () => {
+    const wrapper = await mountSuspended(TabNavigation, {
+      props: {
+        navItemData: { main: [{ text: "One", href: "/same" }, { text: "Two", href: "/same" }, { text: "Three" }, { text: "Four" }] },
+      },
+    });
+    expect(wrapper.findAll(".tab-nav-link")).toHaveLength(4);
+  });
+
+  it("renders no nav landmark when there are no items", async () => {
+    const wrapper = await mountSuspended(TabNavigation, { props: { navItemData: { main: [] } } });
+    expect(wrapper.find("nav").exists()).toBe(false);
   });
 });

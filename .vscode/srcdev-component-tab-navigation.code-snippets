@@ -10,7 +10,7 @@
     "description": "TabNavigation with a localised aria-label",
     "scope": "vue,html",
     "body": [
-      "<TabNavigation :nav-item-data=\"$1navData\" aria-label=\"${2:Site navigation}\" />"
+      "<TabNavigation :nav-item-data=\"$1navData\" aria-label=\"${2:Site navigation}\" open-menu-label=\"${3:Open navigation menu}\" close-menu-label=\"${4:Close navigation menu}\" />"
     ]
   },
   "SRCDEV TabNavigation Nav Data Script": {
