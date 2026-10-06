@@ -1,7 +1,9 @@
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import ServicesCardGrid from "../ServicesCardGrid.vue";
+import CanvasSwitcher from "../../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import type { Service } from "~/types/types.services";
+import type { MediaCanvas } from "~/types/components";
 
 type StoryArgs = {
   tag?: "div" | "section" | "main";
@@ -387,6 +389,88 @@ export const CardWidth: Story = {
       description: {
         story:
           "Twelve cards with the cardMinWidth control driving --services-card-grid-column-min-width. The value is a floor, not a fixed width: auto-fit fits as many columns as that minimum allows, then stretches them to fill the row. Change the control or resize the canvas to see the column count change.",
+      },
+    },
+  },
+};
+
+// ─── Stress test ──────────────────────────────────────────────────────────────
+
+const longGerman = "Haarverlängerungsbehandlungsberatungsterminvereinbarung";
+
+const stressServices: Service[] = [
+  {
+    ...makeService("long-german", longGerman, `Freihändige ${longGerman}`, "https://picsum.photos/seed/stress-grid-1/600/800"),
+    shortDescription: "Eine ausgesprochen lange Beschreibung, wie sie ein CMS liefert. ".repeat(6),
+    duration: "Ungefähr zweieinhalb bis dreieinhalb Stunden",
+    price: "Ab 95,00 € zuzüglich Pflegeprodukte",
+  },
+  { ...makeService("emoji", "✨💇‍♀️ <b>not bold</b>", "<script>alert(1)</script>", "https://picsum.photos/seed/stress-grid-2/600/800") },
+  {
+    ...makeService("rtl", "تسريحات شعر جديدة لموسم الخريف", "تلوين الشعر", "https://picsum.photos/seed/stress-grid-3/600/800"),
+    shortDescription: "وصف طويل باللغة العربية يمتد عبر عدة أسطر للتحقق من النص من اليمين إلى اليسار.",
+  },
+  {
+    ...makeService("", "", "", "https://example.invalid/missing.jpg"),
+    shortDescription: "",
+    duration: "",
+    price: "",
+  },
+  { ...makeService("a b/c?d=é#frag", "A", "B", "https://picsum.photos/seed/stress-grid-5/600/800"), shortDescription: "C" },
+  { ...makeService("long-german", "Duplicate slug", "Same slug as the first card", "https://picsum.photos/seed/stress-grid-6/600/800") },
+  ...Array.from({ length: 6 }, (_, index) =>
+    makeService(`filler-${index}`, `Filler ${index + 1}`, "Filler", `https://picsum.photos/seed/stress-grid-f${index}/600/800`)
+  ),
+];
+
+export const StressTest: Story = {
+  name: "Stress Test (Worst-Case Data)",
+  args: {
+    buttonTextPrefix: "Unverbindliche Anfrage stellen zu",
+    hrefBase: "",
+    buttonIcon: "this-icon:does-not-exist",
+  },
+  render: (args) => ({
+    components: { ServicesCardGrid },
+    setup() {
+      return { ...useStorySetup(args), stressServices };
+    },
+    template: `
+      <div :style="wrapperStyle">
+        <ServicesCardGrid v-bind="componentArgs" :services-data="stressServices" />
+      </div>
+    `,
+  }),
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "fullWidthCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; padding: 2rem; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    layout: "fullscreen",
+    initialCanvas: "mobileCanvas",
+    docs: {
+      description: {
+        story:
+          "Deliberately hostile data to find breakage: a long German title, so the CTA label (long German prefix + title) " +
+          "is far wider than the card; emoji and HTML-like text (must render as text); right-to-left Arabic; a card with " +
+          "every text field and the slug empty (label is just the prefix, no trailing space); a broken image; a slug with " +
+          "spaces and URL characters; two cards sharing a slug; 12 cards; an empty hrefBase and a broken icon name. " +
+          "Check at every canvas width: every CTA label wraps inside its card instead of being clipped at the edge, all " +
+          "columns stay equal, and the meta rows and buttons line up along each row. The line clamp and card width " +
+          "controls are CSS tokens set by the story, not props.",
       },
     },
   },

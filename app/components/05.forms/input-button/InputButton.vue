@@ -292,7 +292,9 @@ watch(
 
     .button-text {
       display: inline-block;
-      white-space: nowrap;
+      min-inline-size: 0;
+      white-space: var(--input-button-text-white-space, nowrap);
+      overflow-wrap: anywhere;
       font-size: var(--button-font-size);
       line-height: var(--button-line-height);
       font-weight: var(--button-font-weight);

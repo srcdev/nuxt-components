@@ -29,7 +29,8 @@
       ".$1my-page {",
       "  --services-card-grid-column-min-width: $2;",
       "  --services-card-grid-gap: $3;",
-      "  --service-summary-grid-row-gap: $4;",
+      "  --services-card-grid-button-text-white-space: $4;",
+      "  --service-summary-grid-row-gap: $5;",
       "}"
     ]
   }

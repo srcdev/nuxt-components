@@ -40,6 +40,7 @@ Set on `.services-card-grid` (or scoped to a page class):
 | Token                  | Default   | Controls                              |
 | ---------------------- | --------- | ------------------------------------- |
 | `--services-card-grid-gap`               | `4rem`    | Gap between grid cells                |
+| `--services-card-grid-button-text-white-space` | `normal` | CTA label wrapping; `nowrap` keeps labels on one line |
 | `--services-card-grid-column-min-width`  | `250px`   | Minimum column width before wrapping  |
 
 ## Consumer page boilerplate
@@ -107,4 +108,5 @@ if (servicesData.value.length === 0) {
 - The `Service` type is imported from `~/types/types.services`.
 - Uses `repeat(auto-fit, minmax(min(var(--services-card-grid-column-min-width, 250px), 100%), 1fr))` (the `min(…, 100%)` stops a single column overflowing containers narrower than the minimum, fixed 2026-09-28) — columns grow to fill available space and wrap when below the minimum width.
 - The `#actions` slot template is passed down into each `ServicesCard`; `serviceData` is the scoped prop for the current iteration item.
+- CTA labels (`buttonTextPrefix` + title, trimmed) wrap inside the card since 2026-10-06; before, InputButton's `nowrap` let a long or translated title run past the card edge and get clipped.
 - Data fetching is the page's responsibility — pass an empty array as fallback while loading (`servicesData ?? []`).

@@ -201,3 +201,49 @@ export const EmptyData: Story = {
     },
   },
 };
+
+// ─── Stress test ──────────────────────────────────────────────────────────────
+
+const stressServices: Service[] = [
+  ...Array.from({ length: 7 }, (_, index) =>
+    makeService(`stress-${index}`, `Service ${index + 1}`, "Grid stress", `https://picsum.photos/seed/summary-stress-${index}/800/600`)
+  ),
+  makeService("stress-0", "Duplicate slug", "Same slug as the first row", "https://picsum.photos/seed/summary-stress-dup/800/600"),
+];
+
+const longLinkLabel =
+  "Mehr über diese außergewöhnlich ausführliche Haarverlängerungsbehandlungsberatung erfahren und einen Termin vereinbaren";
+
+export const StressTest: Story = {
+  name: "Stress Test (Worst-Case Data)",
+  args: {
+    useAlternateReverse: true,
+  },
+  render: (args) => ({
+    components: { ServiceSummaryGrid },
+    setup() {
+      return { args, stressServices, longLinkLabel };
+    },
+    template: `
+      <ServiceSummaryGrid v-bind="args" :services-data="stressServices">
+        <template #summary-link="{ serviceData }">
+          <a :href="'/services/' + serviceData.slug" style="display:inline-block;margin-top:1.6rem;color:inherit;overflow-wrap:anywhere;">
+            {{ longLinkLabel }}
+          </a>
+        </template>
+      </ServiceSummaryGrid>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Grid-level worst case: eight rows (an odd count of distinct services, so alternate-reverse ends on a " +
+          "non-reversed row), two rows sharing a slug, and a long German summary-link label in every row. Check that " +
+          "rows alternate correctly all the way down, the duplicate slug renders both rows, and the slot content stays " +
+          "inside its column. Field-level worst-case data (long titles, empty fields, emoji) belongs to ServiceSummary's " +
+          "own stress story, since every field is rendered there.",
+      },
+    },
+  },
+};

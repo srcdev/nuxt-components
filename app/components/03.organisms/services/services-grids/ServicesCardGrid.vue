@@ -10,7 +10,7 @@
       <template #actions="{ serviceData }">
         <InputButton
           variant="secondary"
-          :button-text="`${buttonTextPrefix} ${serviceData.title}`"
+          :button-text="`${buttonTextPrefix} ${serviceData.title}`.trim()"
           :href="`${hrefBase}${serviceData.slug}`"
           :style-class-passthrough="['mbs-24']"
         >
@@ -64,6 +64,7 @@ watch(
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(min(var(--services-card-grid-column-min-width, 250px), 100%), 1fr));
     gap: var(--services-card-grid-gap, 4rem);
+    --input-button-text-white-space: var(--services-card-grid-button-text-white-space, normal);
   }
 }
 </style>

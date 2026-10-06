@@ -66,6 +66,9 @@ Colour tokens are `--input-button-{variant}-{property}` with `--theme-*` fallbac
 typography are the global `--button-*` tokens. Full reference:
 `app/components/05.forms/input-button/CONSUMER-STYLING.md`.
 
+Labels stay on one line by default. Set `--input-button-text-white-space: normal` to let a long
+label wrap inside a narrow container (added 2026-10-06; `ServicesCardGrid` does this for its CTAs).
+
 ## Notes
 
 - Before 2026-09-28, `readonly` only set `pointer-events: none`, so keyboard users could still

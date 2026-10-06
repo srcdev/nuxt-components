@@ -196,4 +196,12 @@ describe("ServicesCardGrid button icon", () => {
     });
     expect(iconName(wrapper)).toContain("lucide:arrow-right");
   });
+
+  it("drops the trailing space from the CTA label when a title is empty", async () => {
+    const wrapper = await mountSuspended(ServicesCardGrid, {
+      props: { servicesData: [makeService("untitled", "")] },
+    });
+    expect(wrapper.find(".button-text").text()).toBe("Enquire about");
+    expect(wrapper.find(".button-text").element.textContent).toBe("Enquire about");
+  });
 });

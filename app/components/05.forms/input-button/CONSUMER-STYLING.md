@@ -70,6 +70,14 @@ Same shape again:
 something this token set changes. The animated border added by `has-pending-effect` has its own
 `--pending-effect-*` tokens, see `../pending-effect/CONSUMER-STYLING.md`.
 
+### Text wrapping
+
+| Token | Default | Controls |
+|---|---|---|
+| `--input-button-text-white-space` | `nowrap` | Set `normal` to let a long label wrap onto several lines instead of overflowing the button. Unbroken strings break anywhere once wrapping is on |
+
+> Added 2026-10-06. `ServicesCardGrid` sets it to `normal` on its CTA buttons so a long service title stays inside the card.
+
 `InputCopy` and `PricingCard` fall back through `--input-button-primary-*` for their own copy/CTA
 buttons (see their own `CONSUMER-STYLING.md`) rather than duplicating this chain.
 
