@@ -8,7 +8,7 @@ exports[`SliderGallery > renders correct HTML structure after load 1`] = `
   </div>
   <div class="slider-gallery-content">
     <div class="slider-gallery-list">
-      <div class="slider-gallery-item" data-text-brightness="light" data-has-text=""><img data-nuxt-img="" srcset="/_ipx/_/images/slide-1.jpg 1x, /_ipx/_/images/slide-1.jpg 2x" alt="Slide 1" src="/_ipx/_/images/slide-1.jpg">
+      <div class="slider-gallery-item" data-text-brightness="light" data-has-text=""><img width="1920" height="1080" data-nuxt-img="" srcset="/_ipx/s_1920x1080/images/slide-1.jpg 1x, /_ipx/s_3840x2160/images/slide-1.jpg 2x" alt="Slide 1" src="/_ipx/s_1920x1080/images/slide-1.jpg">
         <div class="slider-gallery-item-content light">
           <div class="slider-gallery-author">Stylist One</div>
           <div class="slider-gallery-title">First Slide</div>
@@ -17,7 +17,7 @@ exports[`SliderGallery > renders correct HTML structure after load 1`] = `
           <!--v-if-->
         </div>
       </div>
-      <div class="slider-gallery-item" data-text-brightness="dark" data-has-text=""><img data-nuxt-img="" srcset="/_ipx/_/images/slide-2.jpg 1x, /_ipx/_/images/slide-2.jpg 2x" alt="Slide 2" src="/_ipx/_/images/slide-2.jpg">
+      <div class="slider-gallery-item" data-text-brightness="dark" data-has-text=""><img width="1920" height="1080" data-nuxt-img="" srcset="/_ipx/s_1920x1080/images/slide-2.jpg 1x, /_ipx/s_3840x2160/images/slide-2.jpg 2x" alt="Slide 2" src="/_ipx/s_1920x1080/images/slide-2.jpg">
         <div class="slider-gallery-item-content dark">
           <!--v-if-->
           <div class="slider-gallery-title">Second Slide</div>
@@ -26,7 +26,7 @@ exports[`SliderGallery > renders correct HTML structure after load 1`] = `
           <!--v-if-->
         </div>
       </div>
-      <div class="slider-gallery-item" data-text-brightness="light"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-3.jpg 1x, /_ipx/_/images/slide-3.jpg 2x" alt="Slide 3" src="/_ipx/_/images/slide-3.jpg">
+      <div class="slider-gallery-item" data-text-brightness="light"><img width="1920" height="1080" data-nuxt-img="" srcset="/_ipx/s_1920x1080/images/slide-3.jpg 1x, /_ipx/s_3840x2160/images/slide-3.jpg 2x" alt="Slide 3" src="/_ipx/s_1920x1080/images/slide-3.jpg">
         <div class="slider-gallery-item-content light">
           <!--v-if-->
           <!--v-if-->
@@ -38,7 +38,7 @@ exports[`SliderGallery > renders correct HTML structure after load 1`] = `
     </div>
     <div class="slider-gallery-thumbnails" aria-hidden="true">
       <div class="slider-gallery-item">
-        <div class="slider-gallery-thumbnail-overlay"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-1.jpg 1x, /_ipx/_/images/slide-1.jpg 2x" alt="" loading="lazy" src="/_ipx/_/images/slide-1.jpg">
+        <div class="slider-gallery-thumbnail-overlay"><img width="640" height="940" data-nuxt-img="" srcset="/_ipx/s_640x940/images/slide-1.jpg 1x, /_ipx/s_1280x1880/images/slide-1.jpg 2x" alt="" loading="lazy" src="/_ipx/s_640x940/images/slide-1.jpg">
           <div class="slider-gallery-item-content light">
             <div class="slider-gallery-title">Thumb 1</div>
             <div class="slider-gallery-description">Thumb desc 1</div>
@@ -46,7 +46,7 @@ exports[`SliderGallery > renders correct HTML structure after load 1`] = `
         </div>
       </div>
       <div class="slider-gallery-item">
-        <div class="slider-gallery-thumbnail-overlay"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-2.jpg 1x, /_ipx/_/images/slide-2.jpg 2x" alt="" loading="lazy" src="/_ipx/_/images/slide-2.jpg">
+        <div class="slider-gallery-thumbnail-overlay"><img width="640" height="940" data-nuxt-img="" srcset="/_ipx/s_640x940/images/slide-2.jpg 1x, /_ipx/s_1280x1880/images/slide-2.jpg 2x" alt="" loading="lazy" src="/_ipx/s_640x940/images/slide-2.jpg">
           <div class="slider-gallery-item-content dark">
             <div class="slider-gallery-title">Thumb 2</div>
             <div class="slider-gallery-description">Thumb desc 2</div>
@@ -54,7 +54,7 @@ exports[`SliderGallery > renders correct HTML structure after load 1`] = `
         </div>
       </div>
       <div class="slider-gallery-item">
-        <div class="slider-gallery-thumbnail-overlay"><img data-nuxt-img="" srcset="/_ipx/_/images/slide-3.jpg 1x, /_ipx/_/images/slide-3.jpg 2x" alt="" loading="lazy" src="/_ipx/_/images/slide-3.jpg">
+        <div class="slider-gallery-thumbnail-overlay"><img width="640" height="940" data-nuxt-img="" srcset="/_ipx/s_640x940/images/slide-3.jpg 1x, /_ipx/s_1280x1880/images/slide-3.jpg 2x" alt="" loading="lazy" src="/_ipx/s_640x940/images/slide-3.jpg">
           <div class="slider-gallery-item-content light">
             <!--v-if-->
             <!--v-if-->

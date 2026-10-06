@@ -5,7 +5,13 @@
 `SliderGallery` (`03.organisms/image-galleries/slider-gallery`) is a full-screen image carousel:
 a large slide with staggered text, a thumbnail strip that animates into place, prev/next arrows, a
 progress bar, and optional auto-advance. It's `position: absolute; inset: 0` at `100svh × 100vw`,
-so place it inside a positioned container sized for it (usually a full-viewport hero).
+so place it inside a positioned container sized for it (usually a full-viewport hero). To fill a
+smaller positioned container instead, set `--slider-gallery-width: 100%` and `--slider-gallery-height: 100%`.
+
+> **Changed 2026-10-06:** worst-case timings are clamped: `animationDuration` below 0 (or not a
+> finite number) becomes 0, and auto-advance waits at least `max(1000, animationDuration, autoRunInterval)`
+> ms. Before, an `autoRunInterval` at or below `animationDuration` stopped auto-advance after the first
+> slide. Long unbroken text now wraps everywhere, and thumbnail text is clamped to 2 lines by default.
 
 > **Changed 2026-09-28:** every inner class is now `slider-gallery-*` (was bare `.list`, `.item`,
 > `.content`, `.title`, `.thumbnail`, `.arrows`, `.time` and so on, which collided with consumer CSS
@@ -20,8 +26,8 @@ so place it inside a positioned container sized for it (usually a full-viewport 
 |---|---|---|---|
 | `v-model:gallery-data` | `IGalleryData[]` | required | Slides (see type below) |
 | `autoRun` | `boolean` | `true` | Auto-advance. Paused while hovered or focused; never runs under `prefers-reduced-motion: reduce` |
-| `autoRunInterval` | `number` | `7000` | ms between auto-advances |
-| `animationDuration` | `number` | `3000` | ms a transition locks the controls (also drives the progress bar) |
+| `autoRunInterval` | `number` | `7000` | ms between auto-advances. Never shorter than `animationDuration` or 1000ms |
+| `animationDuration` | `number` | `3000` | ms a transition locks the controls (also drives the progress bar). Negative values become 0 |
 | `ariaLabel` | `string` | `"Image gallery"` | Carousel region label |
 | `loadingText` | `string` | `"Loading gallery..."` | Loading-state copy |
 | `seeMoreText` | `string` | `"SEE MORE"` | Link text for slides with an `href` |
@@ -78,7 +84,7 @@ const slides = ref<IGalleryData[]>([
 ## Styling
 
 Public tokens (`--slider-gallery-*`) cover height, z-index, accent (spinner and progress), text
-colours, thumbnail size/border/radius/overlay, arrow row position (base, tablet, desktop), arrow size, colours, border, outline (resting, hover and focus) and CTA colours. Full reference:
+width, colours, line clamps for each text element (`--slider-gallery-*-line-clamp`; thumbnails default to 2 lines), thumbnail size/border/radius/overlay, arrow row position (base, tablet, desktop), arrow size, colours, border, outline (resting, hover and focus) and CTA colours. Full reference:
 `app/components/03.organisms/image-galleries/slider-gallery/CONSUMER-STYLING.md`.
 
 ## Notes

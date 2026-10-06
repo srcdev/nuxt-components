@@ -43,9 +43,13 @@ type MockImageInstance = {
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 /** Mount the gallery and simulate the first image loading successfully. */
-async function mountAndLoad(galleryData: IGalleryData[], mockImage: MockImageInstance) {
+async function mountAndLoad(
+  galleryData: IGalleryData[],
+  mockImage: MockImageInstance,
+  props: Record<string, unknown> = {}
+) {
   const wrapper = await mountSuspended(SliderGallery, {
-    props: { galleryData },
+    props: { galleryData, ...props },
   });
   mockImage.onload?.();
   await nextTick(); // let onMounted resume after Promise.race resolves
@@ -309,5 +313,40 @@ describe("SliderGallery", () => {
     vi.advanceTimersByTime(7000);
     await nextTick();
     expect(wrapper.classes()).not.toContain("is-next");
+  });
+
+  // ─── Worst-case numbers ─────────────────────────────────────────────────
+
+  const activeAlt = (wrapper: Awaited<ReturnType<typeof mountAndLoad>>) =>
+    wrapper.find(".slider-gallery-list .slider-gallery-item img").attributes("alt");
+
+  // Mount with motion allowed, then let the load chain settle so the first auto-run timer is queued.
+  async function mountForAutoRun(props: Record<string, unknown>) {
+    vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: false })));
+    const wrapper = await mountAndLoad(mockGalleryData, mockImage, props);
+    vi.advanceTimersByTime(1000);
+    await nextTick();
+    return wrapper;
+  }
+
+  it("keeps auto-advancing when autoRunInterval is shorter than the transition", async () => {
+    const wrapper = await mountForAutoRun({ autoRunInterval: 0, animationDuration: 3000 });
+    expect(activeAlt(wrapper)).toBe("Slide 1");
+    vi.advanceTimersByTime(3000);
+    await nextTick();
+    expect(activeAlt(wrapper)).toBe("Slide 2");
+    vi.advanceTimersByTime(3000);
+    await nextTick();
+    expect(activeAlt(wrapper)).toBe("Slide 3");
+  });
+
+  it("floors auto-advance at 1s when both timings are zero or negative", async () => {
+    const wrapper = await mountForAutoRun({ autoRunInterval: 0, animationDuration: -500 });
+    vi.advanceTimersByTime(999);
+    await nextTick();
+    expect(activeAlt(wrapper)).toBe("Slide 1");
+    vi.advanceTimersByTime(1);
+    await nextTick();
+    expect(activeAlt(wrapper)).toBe("Slide 2");
   });
 });

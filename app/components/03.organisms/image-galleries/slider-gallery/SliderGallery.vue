@@ -25,7 +25,14 @@
           :data-text-brightness="item.textBrightness"
           :data-has-text="hasSlideText(item) ? '' : undefined"
         >
-          <NuxtImg :src="item.src" :alt="item.alt" @load="handleImageLoad(index)" @error="handleImageError(index)" />
+          <NuxtImg
+            :src="item.src"
+            :alt="item.alt"
+            width="1920"
+            height="1080"
+            @load="handleImageLoad(index)"
+            @error="handleImageError(index)"
+          />
           <div class="slider-gallery-item-content" :class="item.textBrightness">
             <div v-if="item.stylist" class="slider-gallery-author">{{ item.stylist }}</div>
             <div v-if="item.title" class="slider-gallery-title">{{ item.title }}</div>
@@ -41,7 +48,7 @@
       <div ref="sliderGalleryThumbnailsList" class="slider-gallery-thumbnails" aria-hidden="true">
         <div v-for="(item, index) in galleryData" :key="index" class="slider-gallery-item">
           <div class="slider-gallery-thumbnail-overlay">
-            <NuxtImg :src="item.src" alt="" loading="lazy" />
+            <NuxtImg :src="item.src" alt="" width="640" height="940" loading="lazy" />
             <div class="slider-gallery-item-content" :class="item.textBrightness">
               <div v-if="item.thumbnail?.title" class="slider-gallery-title">{{ item.thumbnail.title }}</div>
               <div v-if="item.thumbnail?.description" class="slider-gallery-description">
@@ -138,6 +145,12 @@ const prefersReducedMotion = () =>
   typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 const shouldAutoRun = () => props.autoRun && !prefersReducedMotion();
 
+const finiteOr = (value: number, fallback: number) => (Number.isFinite(value) ? value : fallback);
+const safeAnimationDuration = computed(() => Math.max(0, finiteOr(props.animationDuration, 3000)));
+const safeAutoRunInterval = computed(() =>
+  Math.max(1000, safeAnimationDuration.value, finiteOr(props.autoRunInterval, 7000))
+);
+
 onMounted(async () => {
   await nextTick();
 
@@ -203,12 +216,12 @@ function scheduleAutoRun() {
   if (runNextAuto) clearTimeout(runNextAuto);
   runNextAuto = setTimeout(() => {
     if (!shouldAutoRun() || isLoading.value) return;
-    if (isPaused.value) {
+    if (isPaused.value || transitionRunning.value) {
       scheduleAutoRun();
       return;
     }
     doNext();
-  }, props.autoRunInterval);
+  }, safeAutoRunInterval.value);
 }
 
 function showSlider(type: "next" | "prev") {
@@ -249,7 +262,7 @@ function showSlider(type: "next" | "prev") {
       sliderGalleryWrapper.value.querySelectorAll(".is-prepended").forEach((el) => el.classList.remove("is-prepended"));
     }
     transitionRunning.value = false;
-  }, props.animationDuration);
+  }, safeAnimationDuration.value);
 
   scheduleAutoRun();
 }
@@ -286,13 +299,13 @@ onBeforeUnmount(() => {
 <style lang="css">
 @layer components {
   .slider-gallery {
-    --_animation-duration: v-bind(animationDuration + "ms");
+    --_animation-duration: v-bind(safeAnimationDuration + "ms");
     --_accent: var(--slider-gallery-accent, #f1683a);
     --_thumbnail-width: var(--slider-gallery-thumbnail-width, 100px);
     --_thumbnail-height: var(--slider-gallery-thumbnail-height, 165px);
 
     height: var(--slider-gallery-height, 100svh);
-    width: 100vw;
+    width: var(--slider-gallery-width, 100vw);
     overflow: hidden;
     position: absolute;
     inset: 0;
@@ -333,6 +346,10 @@ onBeforeUnmount(() => {
       p {
         font-size: 1.2em;
         font-weight: 500;
+        max-inline-size: 100%;
+        padding-inline: 1.6rem;
+        text-align: center;
+        overflow-wrap: anywhere;
       }
     }
 
@@ -435,14 +452,41 @@ onBeforeUnmount(() => {
           padding-right: 30%;
           box-sizing: border-box;
           text-shadow: 0 5px 10px #0004;
+          overflow-wrap: anywhere;
 
           @container (width < 678px) {
             padding-right: 0;
           }
 
+          .slider-gallery-author,
+          .slider-gallery-title,
+          .slider-gallery-topic,
+          .slider-gallery-description {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
+
           .slider-gallery-author {
             font-weight: bold;
             letter-spacing: 10px;
+            -webkit-line-clamp: var(--slider-gallery-author-line-clamp, none);
+            line-clamp: var(--slider-gallery-author-line-clamp, none);
+          }
+
+          .slider-gallery-title {
+            -webkit-line-clamp: var(--slider-gallery-title-line-clamp, none);
+            line-clamp: var(--slider-gallery-title-line-clamp, none);
+          }
+
+          .slider-gallery-topic {
+            -webkit-line-clamp: var(--slider-gallery-topic-line-clamp, none);
+            line-clamp: var(--slider-gallery-topic-line-clamp, none);
+          }
+
+          .slider-gallery-description {
+            -webkit-line-clamp: var(--slider-gallery-description-line-clamp, none);
+            line-clamp: var(--slider-gallery-description-line-clamp, none);
           }
 
           .slider-gallery-title,
@@ -466,7 +510,9 @@ onBeforeUnmount(() => {
               place-items: center;
               min-width: 130px;
               min-height: 40px;
+              max-inline-size: 100%;
               padding-inline: 1.2rem;
+              box-sizing: border-box;
               background-color: var(--slider-gallery-cta-background, #99999975);
               border: 1px solid var(--slider-gallery-cta-border-colour, #fff);
               color: var(--slider-gallery-cta-colour, #fff);
@@ -528,13 +574,25 @@ onBeforeUnmount(() => {
           bottom: 10px;
           left: 10px;
           right: 10px;
+          overflow-wrap: anywhere;
+
+          .slider-gallery-title,
+          .slider-gallery-description {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
 
           .slider-gallery-title {
             font-weight: 500;
+            -webkit-line-clamp: var(--slider-gallery-thumbnail-title-line-clamp, 2);
+            line-clamp: var(--slider-gallery-thumbnail-title-line-clamp, 2);
           }
 
           .slider-gallery-description {
             font-weight: 300;
+            -webkit-line-clamp: var(--slider-gallery-thumbnail-description-line-clamp, 2);
+            line-clamp: var(--slider-gallery-thumbnail-description-line-clamp, 2);
           }
         }
       }

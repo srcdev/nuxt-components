@@ -6,7 +6,8 @@
 
 | Token | Default | Controls |
 |---|---|---|
-| `--slider-gallery-height` | `100svh` | Gallery height (width is always `100vw`) |
+| `--slider-gallery-height` | `100svh` | Gallery height |
+| `--slider-gallery-width` | `100vw` | Gallery width. Set `100%` to fill a positioned container instead of the viewport |
 | `--slider-gallery-z-index` | `9999` | Stacking order (full-screen takeover) |
 | `--slider-gallery-accent` | `#f1683a` | Loading spinner and progress bar colour |
 | `--slider-gallery-loading-background` | `var(--page-bg)` | Loading overlay background |
@@ -25,6 +26,15 @@
 | `--slider-gallery-cta-background` | `#99999975` | See-more link background |
 | `--slider-gallery-cta-border-colour` | `#fff` | See-more link border |
 | `--slider-gallery-cta-colour` | `#fff` | See-more link text |
+| `--slider-gallery-author-line-clamp` | `none` | Max lines of the stylist line |
+| `--slider-gallery-title-line-clamp` | `none` | Max lines of the title |
+| `--slider-gallery-topic-line-clamp` | `none` | Max lines of the category line |
+| `--slider-gallery-description-line-clamp` | `none` | Max lines of the description |
+
+Line-clamp tokens: `1` is single-line ellipsis, any other number caps the lines with an ellipsis
+on the last, `none` shows everything. All slide text wraps long unbroken strings (`overflow-wrap: anywhere`).
+The slide text is absolutely positioned, so very long copy can run into the thumbnails and arrows:
+clamp the description if your CMS copy is unbounded.
 
 ### Thumbnails
 
@@ -43,6 +53,11 @@
 | `--slider-gallery-thumbnail-outline-offset-hover` | the resting offset | Outline gap on hover |
 | `--slider-gallery-thumbnail-border-radius` | `20px` | Thumbnail rounding |
 | `--slider-gallery-thumbnail-overlay` | `#0004` | Tint over thumbnail images |
+| `--slider-gallery-thumbnail-title-line-clamp` | `2` | Max lines of a thumbnail title |
+| `--slider-gallery-thumbnail-description-line-clamp` | `2` | Max lines of a thumbnail description |
+
+The thumbnail clamps default to `2` because the card is a fixed size with its text anchored to the
+bottom: uncapped, long text grows upwards and its first lines are cut off.
 
 ### Arrows
 
@@ -82,6 +97,9 @@ Private (not public API): `--_animation-duration` (from the `animationDuration` 
 `--_thumbnail-width`, `--_thumbnail-height` (the resolved, breakpoint-switched sizes) and
 `--_arrow-border-*`/`--_arrow-outline-*` (resting values the hover tokens fall back to) and
 `--_arrows-top`/`-right`/`-width`/`-max-width` (the resolved, breakpoint-switched row position).
+
+> Changed 2026-10-06: added `--slider-gallery-width` (was a fixed `100vw`) and the line-clamp tokens;
+> slide, thumbnail, see-more and loading text now wrap unbroken strings.
 
 > Changed 2026-09-28: the thumbnail sizing/border/radius overrides used to be private names
 > (`--_thumbnailMobileWidth`, `--_thumbnailBorderRadius`, etc.) with no public token; colours were
