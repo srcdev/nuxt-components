@@ -9,7 +9,7 @@
 | `--breadcrumb-text-transform` | `uppercase` | Text transform of the whole trail |
 | `--breadcrumb-letter-spacing` | `0.05em` | Letter spacing of the whole trail |
 | `--breadcrumb-colour` | `currentColor` | Colour of links, separators, and non-current labels |
-| `--breadcrumb-colour-current` | `currentColor` | Colour of the current-page item (the one without a `to`) |
+| `--breadcrumb-colour-current` | `currentColor` | Colour of the current-page item (the last item, when it has no `to`) |
 | `--breadcrumb-link-decoration-hover` | `underline` | `text-decoration` on link hover/focus |
 | `--breadcrumb-item-line-clamp` | `none` | Max lines of each item's label, with an ellipsis on the last. `1` is single-line ellipsis, `none` shows everything |
 
@@ -24,9 +24,21 @@
 
 ---
 
+## State hooks
+
+| Hook | When |
+|---|---|
+| `.breadcrumb__label[aria-current="page"]` | The last item, when it has no `to` (styled by `--breadcrumb-colour-current`) |
+
+Inner classes: `.breadcrumb__list`, `.breadcrumb__item`, `.breadcrumb__link`, `.breadcrumb__label`,
+`.breadcrumb__separator`.
+
+---
+
 ## Text content — props, not CSS
 
-`items` and `separator` are props. There is no hardcoded copy to override in CSS.
+`items`, `separator` and `ariaLabel` (the nav landmark's label) are props. There is no hardcoded copy to
+override in CSS.
 
 ---
 
@@ -40,11 +52,19 @@ Set the tokens above on an element you own (a page or section class, or a class 
 
 ---
 
+## Class passthrough
+
+`style-class-passthrough` adds classes to the root `nav.breadcrumb`. Reactive after mount.
+
+---
+
 ## Notes
 
-- An item renders as a `NuxtLink` when it has a `to`, otherwise as `<span aria-current="page">` —
-  omit `to` on whichever item represents the current page (usually the last one).
-- The separator (`aria-hidden="true"`) is only rendered between items, never after the last one.
+- An item renders as a `NuxtLink` when it has a `to`, otherwise as a plain `<span>`. The last item gets
+  `aria-current="page"` when it has no `to`, so omit `to` on the current page's item.
+- The separator (`aria-hidden="true"`) is only rendered between items, never after the last one, and
+  not at all when `separator` is `""`.
+- Items with a blank `label` are skipped, and no `<nav>` is rendered when none are left (added 2026-10-06).
 - `--breadcrumb-colour` is what `ServiceDetail` overrides internally (to `white` by default) so
   the breadcrumb reads over its hero image — see `ServiceDetail`'s `CONSUMER-STYLING.md`.
 

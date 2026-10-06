@@ -84,4 +84,31 @@ describe("Breadcrumb", () => {
     expect(wrapper.classes()).not.toContain("original");
     expect(wrapper.classes()).toContain("updated");
   });
+
+  // ─── Worst-case data ───────────────────────────────────────────────────
+
+  it("skips blank labels without leaving a dangling separator", async () => {
+    const wrapper = await mountSuspended(Breadcrumb, {
+      props: { items: [{ label: "Services", to: "/services" }, { label: "  " }, { label: "Balayage" }, { label: "" }] },
+    });
+    expect(wrapper.findAll(".breadcrumb__item")).toHaveLength(2);
+    expect(wrapper.findAll(".breadcrumb__separator")).toHaveLength(1);
+    expect(wrapper.find(".breadcrumb__label").attributes("aria-current")).toBe("page");
+  });
+
+  it("renders no nav landmark when there is nothing to show", async () => {
+    const wrapper = await mountSuspended(Breadcrumb, { props: { items: [{ label: "" }] } });
+    expect(wrapper.find("nav").exists()).toBe(false);
+  });
+
+  it("renders no separator element when separator is empty", async () => {
+    const wrapper = await mountSuspended(Breadcrumb, { props: { items, separator: "" } });
+    expect(wrapper.find(".breadcrumb__separator").exists()).toBe(false);
+  });
+
+  it("renders HTML-like labels as text", async () => {
+    const wrapper = await mountSuspended(Breadcrumb, { props: { items: [{ label: "<b>bold</b>" }] } });
+    expect(wrapper.find(".breadcrumb__label").text()).toBe("<b>bold</b>");
+    expect(wrapper.find(".breadcrumb__label b").exists()).toBe(false);
+  });
 });

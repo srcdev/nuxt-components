@@ -1,12 +1,12 @@
 <template>
-  <nav class="breadcrumb" :class="[elementClasses]" :aria-label="ariaLabel">
+  <nav v-if="visibleItems.length" class="breadcrumb" :class="[elementClasses]" :aria-label="ariaLabel">
     <ol class="breadcrumb__list">
-      <li v-for="(item, index) in items" :key="`${item.label}-${index}`" class="breadcrumb__item">
+      <li v-for="(item, index) in visibleItems" :key="`${item.label}-${index}`" class="breadcrumb__item">
         <NuxtLink v-if="item.to" :to="item.to" class="breadcrumb__link">{{ item.label }}</NuxtLink>
-        <span v-else class="breadcrumb__label" :aria-current="index === items.length - 1 ? 'page' : undefined">{{
+        <span v-else class="breadcrumb__label" :aria-current="index === visibleItems.length - 1 ? 'page' : undefined">{{
           item.label
         }}</span>
-        <span v-if="index < items.length - 1" class="breadcrumb__separator" aria-hidden="true">{{ separator }}</span>
+        <span v-if="separator && index < visibleItems.length - 1" class="breadcrumb__separator" aria-hidden="true">{{ separator }}</span>
       </li>
     </ol>
   </nav>
@@ -28,6 +28,9 @@ const props = withDefaults(defineProps<Props>(), {
   ariaLabel: "Breadcrumb",
   styleClassPassthrough: () => [],
 });
+
+// Blank labels would render an empty crumb with a dangling separator.
+const visibleItems = computed(() => props.items.filter((item) => item.label?.trim()));
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -92,6 +95,7 @@ watch(
     }
 
     .breadcrumb__separator {
+      flex-shrink: 0;
       color: var(--_colour);
       opacity: 0.6;
     }
