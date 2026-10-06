@@ -1,6 +1,9 @@
+import { computed, ref } from "vue";
 import ServicesCard from "../ServicesCard.vue";
+import CanvasSwitcher from "../../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import type { Service } from "~/types/types.services";
+import type { MediaCanvas } from "~/types/components";
 
 const meta: Meta<typeof ServicesCard> = {
   title: "Organisms/Services/Services Card",
@@ -329,32 +332,32 @@ export const DarkOverlayCards: Story = {
           --services-card-border-colour-hover: #6b5a4e;
           --services-card-transform-hover: translateY(-0.4rem);
 
-          --image-wrapper-border-radius: 0;
-          --image-wrapper-border-image-zoom-transform: none;
-          --image-wrapper-details-scrim-colour: #141110;
-          --image-wrapper-details-text-colour: #f3ece4;
-          --image-wrapper-details-eyebrow-text-colour: #c9a24a;
-          --image-wrapper-details-gap: 0.4rem;
+          --services-card-image-border-radius: 0;
+          --services-card-image-zoom-transform: none;
+          --services-card-image-details-scrim-colour: #141110;
+          --services-card-image-details-text-colour: #f3ece4;
+          --services-card-image-details-eyebrow-colour: #c9a24a;
+          --services-card-image-details-gap: 0.4rem;
           --eyebrow-text-font-family: "Poppins", sans-serif;
           --eyebrow-text-font-style: normal;
           --eyebrow-text-font-weight: 600;
           --eyebrow-text-letter-spacing: 0.25em;
-          --image-wrapper-details-eyebrow-text-padding-inline: 3.6rem;
-          --image-wrapper-details-hero-text-padding-block: 0 2.8rem;
-          --image-wrapper-details-hero-text-padding-inline: 3.6rem;
+          --services-card-image-details-eyebrow-padding-inline: 3.6rem;
+          --services-card-image-details-title-padding-block: 0 2.8rem;
+          --services-card-image-details-title-padding-inline: 3.6rem;
 
-          --details-wrapper-padding-block: 3.6rem;
-          --details-wrapper-padding-inline: 3.6rem;
-          --description-text-colour: #a39a94;
-          --description-line-height: 1.75;
-          --description-font-weight: 300;
-          --meta-border-colour: #2e2826;
-          --meta-padding-block: 2.4rem 0;
-          --meta-text-colour: #8a817b;
-          --meta-duration-font-weight: 400;
-          --meta-price-font-weight: 400;
-          --meta-letter-spacing: 0.15em;
-          --meta-price-text-colour: #e8dfd6;
+          --services-card-details-padding-block: 3.6rem;
+          --services-card-details-padding-inline: 3.6rem;
+          --services-card-description-text-colour: #a39a94;
+          --services-card-description-line-height: 1.75;
+          --services-card-description-font-weight: 300;
+          --services-card-meta-border-colour: #2e2826;
+          --services-card-meta-padding-block: 2.4rem 0;
+          --services-card-meta-text-colour: #8a817b;
+          --services-card-meta-duration-font-weight: 400;
+          --services-card-meta-price-font-weight: 400;
+          --services-card-meta-letter-spacing: 0.15em;
+          --services-card-meta-price-text-colour: #e8dfd6;
         }
       </component>
       <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(26rem, 100%), 1fr)); gap:4rem; padding:2.4rem; background:#121010;">
@@ -375,6 +378,176 @@ export const DarkOverlayCards: Story = {
       description: {
         story:
           "A darker variant built from tokens: titles over the image with a dark scrim, a flush square-cornered image, a padded details panel, and a whole-card link whose hover lightens the border. Every value is a token, set on a class added with styleClassPassthrough; the eyebrow tokens are EyebrowText's own and inherit down into the card.",
+      },
+    },
+  },
+};
+
+// ─── Stress test ──────────────────────────────────────────────────────────────
+
+type LineClamp = "none" | "1" | "2" | "3" | "4";
+
+// Story-only arg: drives a CSS token, not a ServicesCard prop. See the argTypes entry.
+type StressArgs = InstanceType<typeof ServicesCard>["$props"] & { descriptionLineClamp: LineClamp };
+
+const longGerman = "Haarverlängerungsbehandlungsberatungsterminvereinbarungsbestätigungsschreiben";
+const longUrl =
+  "https://example.com/services/a-very-long-path-with-no-spaces-at-all?utm_source=newsletter&utm_campaign=autumn-2026";
+
+const stressService = (overrides: Partial<Service>): Service => ({ ...balayageService, ...overrides });
+
+const stressServices: { service: Service; titlesWithinImageWrapper?: boolean; href?: string; action?: string }[] = [
+  {
+    service: stressService({
+      slug: "long-german",
+      subtitle: `Freihändige ${longGerman}`,
+      title: longGerman,
+      shortDescription:
+        "Eine ausgesprochen lange Beschreibung, wie sie ein CMS liefert, wenn niemand die Zeichenanzahl prüft. ".repeat(6),
+      duration: "Ungefähr zweieinhalb bis dreieinhalb Stunden einschließlich Beratung",
+      price: "Ab 95,00 € zuzüglich Pflegeprodukte nach individueller Absprache",
+    }),
+  },
+  {
+    service: stressService({
+      slug: "emoji-html",
+      subtitle: "✨💇‍♀️ Colour",
+      title: "<script>alert('xss')</script>",
+      shortDescription: "🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈🌈 <b>not bold</b>",
+      duration: "⏱",
+      price: "£∞",
+    }),
+    href: longUrl,
+  },
+  {
+    service: stressService({
+      slug: "rtl",
+      subtitle: "تلوين الشعر",
+      title: "تسريحات شعر جديدة لموسم الخريف",
+      shortDescription: "وصف طويل باللغة العربية يمتد عبر عدة أسطر للتحقق من أن النص من اليمين إلى اليسار يعرض بشكل صحيح.",
+      duration: "ساعتان",
+      price: "١٢٠ جنيه",
+    }),
+  },
+  {
+    service: stressService({
+      slug: "empty",
+      subtitle: "",
+      title: "",
+      shortDescription: "",
+      duration: "",
+      price: "",
+    }),
+  },
+  {
+    service: stressService({
+      slug: "broken-image",
+      image: "https://example.invalid/missing.jpg",
+      subtitle: "A",
+      title: "B",
+      shortDescription: "C",
+      duration: "1",
+      price: "£0",
+    }),
+  },
+  {
+    service: stressService({
+      slug: "overlay-long",
+      image: "https://picsum.photos/seed/stress-overlay/600/800",
+      subtitle: longUrl,
+      title: `${longGerman} ${longGerman}`,
+      shortDescription: longUrl,
+    }),
+    titlesWithinImageWrapper: true,
+    href: "#overlay-long",
+  },
+  {
+    service: stressService({ slug: "long-action", title: "Long button label" }),
+    action: `Jetzt ${longGerman} buchen`,
+  },
+];
+
+export const StressTest: StoryObj<StressArgs> = {
+  name: "Stress Test (Worst-Case Data)",
+  argTypes: {
+    descriptionLineClamp: {
+      control: "select",
+      options: ["none", "1", "2", "3", "4"] satisfies LineClamp[],
+      description:
+        "**Story control, not a prop.** Sets the `--services-card-description-line-clamp` CSS token on a wrapper so you can try it here. " +
+        "To use it in an app, set the token in your own CSS, e.g. `.services-list { --services-card-description-line-clamp: 3; }`. " +
+        "`1` is single-line ellipsis, `none` (the default) shows everything.",
+      table: { category: "CSS tokens (story only, set in your CSS)", defaultValue: { summary: "none" } },
+    },
+  },
+  args: {
+    descriptionLineClamp: "none",
+  },
+  render: (args) => ({
+    components: { ServicesCard },
+    setup() {
+      const componentArgs = computed(() => {
+        const { descriptionLineClamp: _descriptionLineClamp, ...rest } = args;
+        return rest;
+      });
+      const tokenStyles = computed(() => ({
+        "--services-card-description-line-clamp": args.descriptionLineClamp,
+      }));
+      return { componentArgs, tokenStyles, stressServices };
+    },
+    template: `
+      <div
+        :style="tokenStyles"
+        style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(25rem, 100%), 1fr)); gap:3.2rem;"
+      >
+        <ServicesCard
+          v-for="item in stressServices"
+          :key="item.service.slug"
+          v-bind="componentArgs"
+          :service-data="item.service"
+          :href="item.href"
+          :titles-within-image-wrapper="item.titlesWithinImageWrapper"
+        >
+          <template v-if="item.action" #actions>
+            <a href="#long-action" style="display:inline-block; padding:1.2rem 2.4rem; background:#333; color:#fff; border-radius:0.4rem; text-decoration:none;">
+              {{ item.action }}
+            </a>
+          </template>
+        </ServicesCard>
+      </div>
+    `,
+  }),
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "fullWidthCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; padding: 2rem; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    layout: "fullscreen",
+    initialCanvas: "mobileCanvas",
+    docs: {
+      description: {
+        story:
+          "Deliberately hostile data to find breakage, in a grid like ServicesCardGrid's: a long German compound word as title, " +
+          "eyebrow and actions label, a long paragraph description, long duration and price strings, emoji, HTML-like text " +
+          "(must render as text), right-to-left Arabic, a card with every text field empty (no empty eyebrow, heading, " +
+          "description or meta row is rendered), a broken image URL (its alt text shows), single characters, a whole-card " +
+          "link to a long URL, and long unbroken titles over the image. Check at every canvas width: no text runs out of its " +
+          "card, every column stays the same width, a long duration/price wraps onto two lines rather than overflowing, and " +
+          "the meta row and actions stay pinned to the bottom. Try the Description line clamp control too: it's a CSS token " +
+          "set by the story, not a prop.",
       },
     },
   },

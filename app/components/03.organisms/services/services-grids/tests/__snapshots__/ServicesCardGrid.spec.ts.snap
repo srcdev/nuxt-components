@@ -3,20 +3,20 @@
 exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
 "<div class="services-card-grid">
   <div class="services-card">
-    <div class="grid-stack image-wrapper">
-      <div class="grid-stack__layer"><img data-nuxt-img="" srcset="/_ipx/_/images/locs-installation.jpg 1x, /_ipx/_/images/locs-installation.jpg 2x" alt="Locs Installation" loading="lazy" class="image" src="/_ipx/_/images/locs-installation.jpg"></div>
+    <div class="grid-stack services-card-image-wrapper">
+      <div class="grid-stack__layer"><img width="640" height="853" data-nuxt-img="" srcset="/_ipx/s_640x853/images/locs-installation.jpg 1x, /_ipx/s_1280x1706/images/locs-installation.jpg 2x" alt="Locs Installation" loading="lazy" class="services-card-image" src="/_ipx/s_640x853/images/locs-installation.jpg"></div>
       <div class="grid-stack__layer"></div>
     </div>
-    <div class="details-wrapper">
+    <div class="services-card-details">
       <div class="eyebrow-text large">Subtitle for Locs Installation</div>
       <h2 class="hero-text heading axis-horizontal">
         <!--v-if--><span class="text-block-0 normal">Locs Installation</span>
       </h2>
-      <div class="description">Short description for Locs Installation.</div>
-      <div class="footer">
-        <div class="meta">
-          <div class="meta-duration">60 mins</div>
-          <div class="meta-price">£50</div>
+      <div class="services-card-description">Short description for Locs Installation.</div>
+      <div class="services-card-footer">
+        <div class="services-card-meta">
+          <div class="services-card-meta-duration">60 mins</div>
+          <div class="services-card-meta-price">£50</div>
         </div><a href="/services/locs-installation" data-testid="input-button" data-theme="default" class="input-button secondary mbs-24 is-link">
           <!--v-if-->
           <!--v-if--><span class="button-text">Enquire about Locs Installation</span><span class="btn-icon right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
@@ -26,20 +26,20 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
     </div>
   </div>
   <div class="services-card">
-    <div class="grid-stack image-wrapper">
-      <div class="grid-stack__layer"><img data-nuxt-img="" srcset="/_ipx/_/images/locs-retwist.jpg 1x, /_ipx/_/images/locs-retwist.jpg 2x" alt="Locs Retwist" loading="lazy" class="image" src="/_ipx/_/images/locs-retwist.jpg"></div>
+    <div class="grid-stack services-card-image-wrapper">
+      <div class="grid-stack__layer"><img width="640" height="853" data-nuxt-img="" srcset="/_ipx/s_640x853/images/locs-retwist.jpg 1x, /_ipx/s_1280x1706/images/locs-retwist.jpg 2x" alt="Locs Retwist" loading="lazy" class="services-card-image" src="/_ipx/s_640x853/images/locs-retwist.jpg"></div>
       <div class="grid-stack__layer"></div>
     </div>
-    <div class="details-wrapper">
+    <div class="services-card-details">
       <div class="eyebrow-text large">Subtitle for Locs Retwist</div>
       <h2 class="hero-text heading axis-horizontal">
         <!--v-if--><span class="text-block-0 normal">Locs Retwist</span>
       </h2>
-      <div class="description">Short description for Locs Retwist.</div>
-      <div class="footer">
-        <div class="meta">
-          <div class="meta-duration">60 mins</div>
-          <div class="meta-price">£50</div>
+      <div class="services-card-description">Short description for Locs Retwist.</div>
+      <div class="services-card-footer">
+        <div class="services-card-meta">
+          <div class="services-card-meta-duration">60 mins</div>
+          <div class="services-card-meta-price">£50</div>
         </div><a href="/services/locs-retwist" data-testid="input-button" data-theme="default" class="input-button secondary mbs-24 is-link">
           <!--v-if-->
           <!--v-if--><span class="button-text">Enquire about Locs Retwist</span><span class="btn-icon right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
@@ -49,20 +49,20 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
     </div>
   </div>
   <div class="services-card">
-    <div class="grid-stack image-wrapper">
-      <div class="grid-stack__layer"><img data-nuxt-img="" srcset="/_ipx/_/images/colour-treatment.jpg 1x, /_ipx/_/images/colour-treatment.jpg 2x" alt="Colour Treatment" loading="lazy" class="image" src="/_ipx/_/images/colour-treatment.jpg"></div>
+    <div class="grid-stack services-card-image-wrapper">
+      <div class="grid-stack__layer"><img width="640" height="853" data-nuxt-img="" srcset="/_ipx/s_640x853/images/colour-treatment.jpg 1x, /_ipx/s_1280x1706/images/colour-treatment.jpg 2x" alt="Colour Treatment" loading="lazy" class="services-card-image" src="/_ipx/s_640x853/images/colour-treatment.jpg"></div>
       <div class="grid-stack__layer"></div>
     </div>
-    <div class="details-wrapper">
+    <div class="services-card-details">
       <div class="eyebrow-text large">Subtitle for Colour Treatment</div>
       <h2 class="hero-text heading axis-horizontal">
         <!--v-if--><span class="text-block-0 normal">Colour Treatment</span>
       </h2>
-      <div class="description">Short description for Colour Treatment.</div>
-      <div class="footer">
-        <div class="meta">
-          <div class="meta-duration">60 mins</div>
-          <div class="meta-price">£50</div>
+      <div class="services-card-description">Short description for Colour Treatment.</div>
+      <div class="services-card-footer">
+        <div class="services-card-meta">
+          <div class="services-card-meta-duration">60 mins</div>
+          <div class="services-card-meta-price">£50</div>
         </div><a href="/services/colour-treatment" data-testid="input-button" data-theme="default" class="input-button secondary mbs-24 is-link">
           <!--v-if-->
           <!--v-if--><span class="button-text">Enquire about Colour Treatment</span><span class="btn-icon right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>

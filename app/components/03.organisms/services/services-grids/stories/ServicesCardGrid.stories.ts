@@ -57,7 +57,7 @@ const meta: Meta<StoryArgs> = {
       control: { type: "inline-radio" },
       options: [1, 2, 3, 4, 5],
       description:
-        "Story-only control — sets ServicesCard's --description-line-clamp custom property on the grid wrapper (not a real component prop) to demo description clamping across cards",
+        "Story-only control — sets ServicesCard's --services-card-description-line-clamp custom property on the grid wrapper (not a real component prop) to demo description clamping across cards",
     },
     cardMinWidth: {
       control: { type: "inline-radio" },
@@ -201,13 +201,13 @@ const hideDemoControls = {
 
 /**
  * lineClamp and cardMinWidth are story-only controls (not real ServicesCardGrid props).
- * They set --description-line-clamp (read by each ServicesCard's .description) and
+ * They set --services-card-description-line-clamp (read by each ServicesCard's .description) and
  * --services-card-grid-column-min-width (the grid's minmax() floor) on a wrapper div,
  * and are stripped from the args bound to the component so they don't leak as attributes.
  */
 function useStorySetup(args: StoryArgs) {
   const wrapperStyle = computed(() => ({
-    "--description-line-clamp": String(args.lineClamp ?? 3),
+    "--services-card-description-line-clamp": String(args.lineClamp ?? 3),
     "--services-card-grid-column-min-width": args.cardMinWidth ?? "250px",
   }));
   const componentArgs = computed(() => {
@@ -360,7 +360,7 @@ export const DescriptionLineClamp: Story = {
     docs: {
       description: {
         story:
-          "Six cards with progressively longer shortDescription text, all sharing one --description-line-clamp value set via the lineClamp control. Use the control to see how the same clamp value affects a one-line description (no visible clamping) versus a long paragraph (clamped with an ellipsis) — card heights stay equal since the meta row and actions slot sit below the clamped description rather than growing with it.",
+          "Six cards with progressively longer shortDescription text, all sharing one --services-card-description-line-clamp value set via the lineClamp control. Use the control to see how the same clamp value affects a one-line description (no visible clamping) versus a long paragraph (clamped with an ellipsis) — card heights stay equal since the meta row and actions slot sit below the clamped description rather than growing with it.",
       },
     },
   },

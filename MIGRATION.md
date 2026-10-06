@@ -87,8 +87,8 @@ Tracks progress toward a fully migrated component library. A component is consid
 |---|---|---|---|
 | CarouselFlip | `image-galleries/carousel-flip/CarouselFlip.vue` | ✅ | ✅ `carousel-flip` |
 | SliderGallery | `image-galleries/slider-gallery/SliderGallery.vue` | ☐ | ☐ |
-| ServicesCard | `services/services-card/ServicesCard.vue` | ☐ | ☐ |
-| ServicesCardGrid | `services/services-grids/ServicesCardGrid.vue` | ☐ | ☐ |
+| ServicesCard | `services/services-card/ServicesCard.vue` | ✅ | ✅ `services-card` |
+| ServicesCardGrid | `services/services-grids/ServicesCardGrid.vue` | ✅ | ✅ `services-grids` |
 | ServiceSummaryGrid | `services/services-grids/ServiceSummaryGrid.vue` | ☐ | ☐ |
 | ServiceSummary | `services/service-summary/ServiceSummary.vue` | ☐ | ☐ |
 

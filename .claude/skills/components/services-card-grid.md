@@ -92,9 +92,9 @@ if (servicesData.value.length === 0) {
     --services-card-grid-column-min-width: 250px;
 
     .services-card {
-      --eyebrow-text-padding-block: 0.8rem 0;
-      --hero-text-padding-block: 2rem 1rem;
-      --description-text-colour: var(--colour-text-secondary);
+      --services-card-eyebrow-padding-block: 0.8rem 0;
+      --services-card-title-padding-block: 2rem 1rem;
+      --services-card-description-text-colour: inherit;
     }
   }
 }

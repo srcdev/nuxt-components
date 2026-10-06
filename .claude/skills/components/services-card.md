@@ -4,6 +4,16 @@
 
 `ServicesCard` renders a single service as a portrait card: image, subtitle (eyebrow), title, short description, an optional duration/price meta row, and an `actions` slot for any CTA content. The component owns the layout and data display; all routing and button decisions are delegated to the consumer via the slot.
 
+> **Changed 2026-10-06:** every inner class and card-specific token is now prefixed `services-card-`
+> (`.footer` → `.services-card-footer`, `--meta-font-size` → `--services-card-meta-font-size`,
+> `--image-wrapper-*` → `--services-card-image-*`, and so on; the full old-to-new list is in
+> `CONSUMER-STYLING.md` under State hooks). Bare names like `.footer`, `.description` and
+> `--meta-*` collided with consumer CSS, since the card renders inline. Also: empty `subtitle`,
+> `title` or `shortDescription` no longer render an empty element (no empty heading); long unbroken
+> text wraps; a long duration/price wraps onto its own line; `--services-card-description-line-clamp`
+> defaults to `none`; new `--services-card-meta-gap`; outline hover tokens fall back to the resting ones; a whole-card link now shows a focus ring by default
+> (`--services-card-outline-colour-focus`, falling back to the hover colour then `--theme-ring`).
+
 ## Props
 
 | Prop                    | Type                              | Default     | Required |
@@ -33,11 +43,11 @@ If an `actions` slot is provided, the card stays as a static `tag` element (no h
 
 ### Titles over the image (`titlesWithinImageWrapper`)
 
-When `true`, the eyebrow and title move out of `.details-wrapper` and sit over the bottom of the image instead. The image wrapper is a `GridStack`: the image is layer 1, and `.image-wrapper-details` (eyebrow + title) is layer 2. The description, meta row and actions stay below the image.
+When `true`, the eyebrow and title move out of `.services-card-details` and sit over the bottom of the image instead. The image wrapper is a `GridStack`: the image is layer 1, and `.services-card-image-details` (eyebrow + title) is layer 2. The description, meta row and actions stay below the image.
 
-- A gradient scrim behind the text keeps it readable. Its colour comes from `--image-wrapper-details-scrim-colour` (default black), and `--image-wrapper-details-scrim` replaces the whole background (`none` removes it).
-- Text colour uses `contrast-color()` against the scrim colour where supported (black or white, whichever reads better), falling back to white. It reads the scrim colour only, not the photo, so if you remove the scrim, set `--image-wrapper-details-text-colour` yourself.
-- The eyebrow's gradient fill is turned off over the image; it takes the text colour (or `--image-wrapper-details-eyebrow-text-colour`).
+- A gradient scrim behind the text keeps it readable. Its colour comes from `--services-card-image-details-scrim-colour` (default black), and `--services-card-image-details-scrim` replaces the whole background (`none` removes it).
+- Text colour uses `contrast-color()` against the scrim colour where supported (black or white, whichever reads better), falling back to white. It reads the scrim colour only, not the photo, so if you remove the scrim, set `--services-card-image-details-text-colour` yourself.
+- The eyebrow's gradient fill is turned off over the image; it takes the text colour (or `--services-card-image-details-eyebrow-colour`).
 - The eyebrow's default `fontSize` is `"medium"` in this mode (vs `"large"` below the image). `eyebrowConfig`/`heroConfig` still apply.
 
 See "Titles over the image" in `CONSUMER-STYLING.md` for the token list.
@@ -158,10 +168,10 @@ scaffold a style block using `styleClassPassthrough` instead — see
 .page-my-page {
   .services-card {
     --services-card-gap: 1.4rem;
-    --description-line-clamp: 3;
-    --eyebrow-text-padding-block: 0.8rem 0;
-    --hero-text-padding-block: 2rem 1rem;
-    --meta-border-colour: var(--brand-border);
+    --services-card-description-line-clamp: 3;
+    --services-card-eyebrow-padding-block: 0.8rem 0;
+    --services-card-title-padding-block: 2rem 1rem;
+    --services-card-meta-border-colour: var(--brand-border);
   }
 }
 </style>
@@ -193,9 +203,9 @@ No `actions` slot — the entire card renders as an anchor (`NuxtLink` for the i
 
 - Component is auto-imported in Nuxt — no import needed.
 - The `Service` type is imported from `~/types/types.services`.
-- Root markup is two rows (`grid-template-rows: auto 1fr`): `.image-wrapper`, then a `.details-wrapper` (`display: flex; flex-direction: column`) holding the eyebrow, title, description, and a `.footer` wrapper. Description length is controlled by `--description-line-clamp` (default effectively unclamped) rather than a fixed-height grid row.
-- `.footer` groups the meta row and the `actions` slot and gets `margin-block-start: auto`, pinning them to the bottom of the card. Combined with the root's `1fr` details row, this means when `ServicesCardGrid`'s default `align-items: stretch` makes a card taller than its own content (to match a taller sibling in the same row), the extra height goes to `.footer`'s top margin rather than leaving whitespace below the actions slot — so the meta row and actions/button line up across a row of cards regardless of each card's description length. This does the visual job of CSS subgrid without needing a subgrid chain across `ServicesCard`/`ServicesCardGrid` (which would also break whenever cards in a row don't all render the same optional rows — `.meta` and `actions` are both conditional).
-- Image has a `3/4` aspect ratio with a subtle scale-on-hover effect, triggered by hovering the image only (not the whole card). When the card is a whole-card link styled with its own hover effect (e.g. `--services-card-transform-hover`), set `--image-wrapper-border-image-zoom-transform: none` so the two effects don't stack; the "Dark Overlay Cards" story does this. Keep the zoom for the `actions`-slot layout, where the card itself has no hover state. The hover is on `.image-wrapper`, not the image, so it still fires when the overlaid titles cover the image. `.image-wrapper-details` is `position: relative; z-index: 1` because the image's hover `transform` would otherwise paint over it, and `.image-wrapper` sets `isolation: isolate` so that z-index stays inside the card.
-- `.services-card`, `.image-wrapper`, `.details-wrapper`, and `.footer` all set `min-inline-size: 0`. Without it, an unbreakable child — most commonly a long `actions` slot button label, since `InputButton`'s `.button-text` is `white-space: nowrap` with no ellipsis — forces its content's min-content width up through the flex/grid chain and widens that one card's grid column in `ServicesCardGrid` wider than its siblings (the image just rides along on the widened column; it isn't the actual cause). If you see one card/column wider than the rest with cut-off content, check for a long unbreakable string in a slot before assuming it's an image sizing issue.
+- Root markup is two rows (`grid-template-rows: auto 1fr`): `.services-card-image-wrapper`, then a `.services-card-details` (`display: flex; flex-direction: column`) holding the eyebrow, title, description, and a `.services-card-footer` wrapper. Description length is controlled by `--services-card-description-line-clamp` (default `none`) rather than a fixed-height grid row.
+- `.services-card-footer` groups the meta row and the `actions` slot and gets `margin-block-start: auto`, pinning them to the bottom of the card. Combined with the root's `1fr` details row, this means when `ServicesCardGrid`'s default `align-items: stretch` makes a card taller than its own content (to match a taller sibling in the same row), the extra height goes to `.services-card-footer`'s top margin rather than leaving whitespace below the actions slot — so the meta row and actions/button line up across a row of cards regardless of each card's description length. This does the visual job of CSS subgrid without needing a subgrid chain across `ServicesCard`/`ServicesCardGrid` (which would also break whenever cards in a row don't all render the same optional rows — `.services-card-meta` and `actions` are both conditional).
+- Image has a `3/4` aspect ratio with a subtle scale-on-hover effect, triggered by hovering the image only (not the whole card). When the card is a whole-card link styled with its own hover effect (e.g. `--services-card-transform-hover`), set `--services-card-image-zoom-transform: none` so the two effects don't stack; the "Dark Overlay Cards" story does this. Keep the zoom for the `actions`-slot layout, where the card itself has no hover state. The hover is on `.services-card-image-wrapper`, not the image, so it still fires when the overlaid titles cover the image. `.services-card-image-details` is `position: relative; z-index: 1` because the image's hover `transform` would otherwise paint over it, and `.services-card-image-wrapper` sets `isolation: isolate` so that z-index stays inside the card.
+- `.services-card`, `.services-card-image-wrapper`, `.services-card-details`, and `.services-card-footer` all set `min-inline-size: 0`. Without it, an unbreakable child — most commonly a long `actions` slot button label, since `InputButton`'s `.button-text` is `white-space: nowrap` with no ellipsis — forces its content's min-content width up through the flex/grid chain and widens that one card's grid column in `ServicesCardGrid` wider than its siblings (the image just rides along on the widened column; it isn't the actual cause). If you see one card/column wider than the rest with cut-off content, check for a long unbreakable string in a slot before assuming it's an image sizing issue.
 - Usually consumed via `ServicesCardGrid` rather than directly.
 - The "Dark Overlay Cards" story shows a full restyle using tokens only: dark panel, flush image, titles over the image, hover lift (`--services-card-transform-hover`), and EyebrowText typography tokens (`--eyebrow-text-font-style`, `-letter-spacing`, etc.) set on the card so they inherit into its eyebrow.

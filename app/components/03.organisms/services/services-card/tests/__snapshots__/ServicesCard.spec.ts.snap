@@ -2,20 +2,20 @@
 
 exports[`ServicesCard > renders correct HTML structure 1`] = `
 "<div class="services-card">
-  <div class="grid-stack image-wrapper">
-    <div class="grid-stack__layer"><img data-nuxt-img="" srcset="/_ipx/_/images/test.jpg 1x, /_ipx/_/images/test.jpg 2x" alt="Test Service" loading="lazy" class="image" src="/_ipx/_/images/test.jpg"></div>
+  <div class="grid-stack services-card-image-wrapper">
+    <div class="grid-stack__layer"><img width="640" height="853" data-nuxt-img="" srcset="/_ipx/s_640x853/images/test.jpg 1x, /_ipx/s_1280x1706/images/test.jpg 2x" alt="Test Service" loading="lazy" class="services-card-image" src="/_ipx/s_640x853/images/test.jpg"></div>
     <div class="grid-stack__layer"></div>
   </div>
-  <div class="details-wrapper">
+  <div class="services-card-details">
     <div class="eyebrow-text large">A subtitle</div>
     <h2 class="hero-text heading axis-horizontal">
       <!--v-if--><span class="text-block-0 normal">Test Service</span>
     </h2>
-    <div class="description">A short description of the service.</div>
-    <div class="footer">
-      <div class="meta">
-        <div class="meta-duration">60 mins</div>
-        <div class="meta-price">£50</div>
+    <div class="services-card-description">A short description of the service.</div>
+    <div class="services-card-footer">
+      <div class="services-card-meta">
+        <div class="services-card-meta-duration">60 mins</div>
+        <div class="services-card-meta-price">£50</div>
       </div>
     </div>
   </div>

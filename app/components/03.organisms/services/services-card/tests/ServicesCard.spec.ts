@@ -90,14 +90,14 @@ describe("ServicesCard", () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: mockService },
     });
-    expect(wrapper.find(".description").text()).toBe(mockService.shortDescription);
+    expect(wrapper.find(".services-card-description").text()).toBe(mockService.shortDescription);
   });
 
   it("passes image src and alt to the image element", async () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: mockService },
     });
-    const img = wrapper.find(".image-wrapper img");
+    const img = wrapper.find(".services-card-image-wrapper img");
     expect(img.attributes("src")).toContain(mockService.image);
     expect(img.attributes("alt")).toBe(mockService.title);
   });
@@ -106,7 +106,7 @@ describe("ServicesCard", () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: mockService },
     });
-    expect(wrapper.find(".image-wrapper img").attributes("loading")).toBe("lazy");
+    expect(wrapper.find(".services-card-image-wrapper img").attributes("loading")).toBe("lazy");
   });
 
   // ─── Meta row (duration / price) ───────────────────────────────────────
@@ -115,16 +115,16 @@ describe("ServicesCard", () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: mockService },
     });
-    expect(wrapper.find(".meta-duration").text()).toBe(mockService.duration);
-    expect(wrapper.find(".meta-price").text()).toBe(mockService.price);
+    expect(wrapper.find(".services-card-meta-duration").text()).toBe(mockService.duration);
+    expect(wrapper.find(".services-card-meta-price").text()).toBe(mockService.price);
   });
 
   it("overrides duration/price text with durationText/priceText props", async () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: mockService, durationText: "1 hour", priceText: "£75" },
     });
-    expect(wrapper.find(".meta-duration").text()).toBe("1 hour");
-    expect(wrapper.find(".meta-price").text()).toBe("£75");
+    expect(wrapper.find(".services-card-meta-duration").text()).toBe("1 hour");
+    expect(wrapper.find(".services-card-meta-price").text()).toBe("£75");
   });
 
   it("overrides duration/price content with duration/price slots", async () => {
@@ -144,7 +144,7 @@ describe("ServicesCard", () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: serviceWithoutMeta },
     });
-    expect(wrapper.find(".meta").exists()).toBe(false);
+    expect(wrapper.find(".services-card-meta").exists()).toBe(false);
   });
 
   // ─── Actions slot ───────────────────────────────────────────────────────
@@ -302,5 +302,31 @@ describe("ServicesCard", () => {
     await nextTick();
     expect(wrapper.find("a.is-clickable").exists()).toBe(false);
     expect(wrapper.find("button").exists()).toBe(true);
+  });
+
+  // ─── Worst-case data ───────────────────────────────────────────────────
+
+  it("renders no empty eyebrow, heading or description for empty strings", async () => {
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: { ...mockService, subtitle: "", title: "", shortDescription: "" } },
+    });
+    expect(wrapper.find(".eyebrow-text").exists()).toBe(false);
+    expect(wrapper.find(".hero-text").exists()).toBe(false);
+    expect(wrapper.find(".services-card-description").exists()).toBe(false);
+  });
+
+  it("drops the image overlay entirely when both titles are empty", async () => {
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: { ...mockService, subtitle: "", title: "" }, titlesWithinImageWrapper: true },
+    });
+    expect(wrapper.find(".services-card-image-details").exists()).toBe(false);
+  });
+
+  it("renders HTML-like data as text", async () => {
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: { ...mockService, title: "<b>bold</b>" } },
+    });
+    expect(wrapper.find(".hero-text").text()).toBe("<b>bold</b>");
+    expect(wrapper.find(".hero-text b").exists()).toBe(false);
   });
 });
