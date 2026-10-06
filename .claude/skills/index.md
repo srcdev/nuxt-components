@@ -107,8 +107,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── wipe-away-vertical.md   — WipeAwayVertical: scroll-driven vertical wipe-away effect, pure-CSS grid overlay (no JS), indexed dynamic slots, sticky-centering-via-calc gotcha, CSS tokens
     ├── marquee-scroller.md     — MarqueeScroller: infinite logo/badge scroller, per-item dynamic slots (marqueeData id), hover/focus/keyboard pause, reduced-motion, CSS tokens
     ├── rotating-carousel-image.md — RotatingCarouselImage: 3D rotating image carousel, scroll-parallax tilt, focus/keyboard/hover pause, reduced-motion, CSS tokens
-    ├── site-navigation.md      — SiteNavigation: responsive nav with auto-collapse, burger menu, decorator indicators, CSS token API
-    ├── tab-navigation.md       — TabNavigation: horizontal tab nav with CSS anchor-positioning indicators, anchor scroll, burger collapse, full CSS token API
+    ├── tab-navigation.md       — TabNavigation (DEPRECATED, use ResponsiveHeader): horizontal tab nav with CSS anchor-positioning indicators, anchor scroll, burger collapse, full CSS token API
     ├── social-icons-list.md    — SocialIconsList: data-driven social icon links, ISocialIcon type, logos: icon names, CSS tokens
     ├── display-qr-code.md      — DisplayQrCode: QR code SVG from a string value, colour/size/variant/radius props, currentColor default
     ├── capture-qr-code.md      — CaptureQrCode: live camera scanner, error state, visibility/route/KeepAlive lifecycle, media stream cleanup

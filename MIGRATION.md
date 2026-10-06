@@ -67,7 +67,6 @@ Tracks progress toward a fully migrated component library. A component is consid
 | DisplayToastProvider | `toast/DisplayToastProvider.vue` | ✅ | ✅ `display-toast` |
 | AccordianCore | `expandable/accordian/AccordianCore.vue` | ☐ | ☐ |
 | ExpandingPanel | `expandable/expanding-panel/ExpandingPanel.vue` | ☐ | ☐ |
-| SiteNavigation | `navigation/site-navigation/SiteNavigation.vue` | ☐ | ☐ |
 | TabNavigation | `navigation/tab-navigation/TabNavigation.vue` | ✅ | ☐ |
 | OpeningHours | `opening-hours/OpeningHours.vue` | ✅ | ✅ `opening-hours` |
 | PriceList | `price-list/PriceList.vue` | ✅ | ✅ `price-list` |

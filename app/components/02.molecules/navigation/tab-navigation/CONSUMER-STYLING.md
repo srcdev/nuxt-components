@@ -1,5 +1,8 @@
 # TabNavigation — Consumer Styling Guide
 
+> **Deprecated (2026-10-06):** use `ResponsiveHeader`. The token mapping is in "Migrating from
+> TabNavigation" in `.claude/skills/components/responsive-header.md`.
+
 ## Public token API
 
 All `--tab-nav-*` tokens are the stable override surface. Set them at any scope (global, page, or

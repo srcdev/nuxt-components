@@ -149,6 +149,14 @@ const props = withDefaults(defineProps<Props>(), {
   closeMenuLabel: "Close navigation menu",
 });
 
+if (import.meta.dev) {
+  console.warn(
+    "TabNavigation is deprecated: use ResponsiveHeader, which also handles #anchor links " +
+      "(anchorScrollOffset) and collapses item by item. See \"Migrating from TabNavigation\" in " +
+      ".claude/skills/components/responsive-header.md."
+  );
+}
+
 // Items with no text would render links with no accessible name.
 const visibleItems = computed(() => (props.navItemData.main ?? []).filter((item) => item.text?.trim()));
 const panelId = useId();

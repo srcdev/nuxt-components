@@ -1,5 +1,11 @@
 # TabNavigation
 
+> **Deprecated (2026-10-06): use [ResponsiveHeader](responsive-header.md) for new work.** It does
+> everything TabNavigation does, including same-page `#anchor` links with `anchorScrollOffset`, and
+> collapses item by item instead of all-or-nothing. Follow "Migrating from TabNavigation" in that doc.
+> TabNavigation stays until existing consumers have moved, then it will be removed. It logs a
+> dev-mode console warning on mount.
+
 ## Overview
 
 A responsive horizontal navigation bar with CSS anchor-positioning indicators, smooth anchor

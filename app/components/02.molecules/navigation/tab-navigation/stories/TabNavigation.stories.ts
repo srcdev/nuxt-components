@@ -8,6 +8,16 @@ import type { MediaCanvas } from "~/types/components";
 const meta: Meta<typeof TabNavigationComponent> = {
   title: "Molecules/TabNavigation",
   component: TabNavigationComponent,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "**Deprecated: use ResponsiveHeader.** It handles the same route and `#anchor` links (with " +
+          "`anchorScrollOffset`) and collapses item by item rather than all-or-nothing. See \"Migrating from " +
+          "TabNavigation\" in the ResponsiveHeader skill doc. TabNavigation stays until existing consumers have moved.",
+      },
+    },
+  },
   argTypes: {
     navAlign: {
       control: { type: "select" },
