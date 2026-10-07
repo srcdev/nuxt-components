@@ -479,6 +479,32 @@ describe("TabbedContent", () => {
     vi.restoreAllMocks();
   });
 
+  it("keeps checking coverage after a refresh lands mid-move (regression: stale label colours)", async () => {
+    let highlight = { left: 90, right: 210 };
+    vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(function (this: Element) {
+      const el = this as HTMLElement;
+      if (el.hasAttribute("data-active-indicator")) return { ...highlight, top: 0, bottom: 40 } as DOMRect;
+      if (el.hasAttribute("data-nav-item")) {
+        const left = Number(el.dataset.tabIndex) * 100;
+        return { left, right: left + 100, top: 0, bottom: 40 } as DOMRect;
+      }
+      return { left: 0, right: 0, top: 0, bottom: 0 } as DOMRect;
+    });
+    const wrapper = await mountSuspended(TabbedContent, { props: { itemCount: 3 }, slots });
+    const triggers = wrapper.findAll(TRIGGER);
+    const underActive = () => triggers.map((trigger) => trigger.attributes("data-under-active") !== undefined);
+
+    await triggers[2]!.trigger("click");
+    // A refresh mid-move (here from a prop change; in a browser, the More button resizing).
+    await wrapper.setProps({ trackHover: false });
+    await nextTick();
+
+    highlight = { left: 200, right: 300 };
+    vi.advanceTimersByTime(16);
+    expect(underActive()).toEqual([false, false, true]);
+    vi.restoreAllMocks();
+  });
+
   it("leaves text colour to aria-selected when there is no active highlight", async () => {
     const wrapper = await mountSuspended(TabbedContent, { props: { itemCount: 3, trackActive: false }, slots });
     expect(wrapper.classes()).not.toContain("tracks-active");
@@ -702,6 +728,46 @@ describe("TabbedContent", () => {
       await triggers[1]!.trigger("keydown", { key: "ArrowRight" });
 
       expect(triggers[0]!.attributes("aria-selected")).toBe("true");
+    });
+
+    it("moves the indicators onto the More button's new box when it resizes", async () => {
+      const observerCallbacks: (() => void)[] = [];
+      vi.stubGlobal(
+        "ResizeObserver",
+        class {
+          constructor(callback: () => void) {
+            observerCallbacks.push(callback);
+          }
+          observe = vi.fn();
+          unobserve = vi.fn();
+          disconnect = vi.fn();
+        }
+      );
+      let moreLeft = 250;
+      vi.spyOn(HTMLElement.prototype, "clientWidth", "get").mockImplementation(function (this: HTMLElement) {
+        return this.classList.contains("tabbed-content-bar") ? 300 : 0;
+      });
+      vi.spyOn(HTMLElement.prototype, "offsetLeft", "get").mockImplementation(function (this: HTMLElement) {
+        if (this.hasAttribute("data-nav-item")) return Number(this.dataset.tabIndex) * 100;
+        return this.hasAttribute("data-more-trigger") ? moreLeft : 0;
+      });
+      vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockImplementation(function (this: HTMLElement) {
+        if (this.hasAttribute("data-nav-item")) return 100;
+        return this.hasAttribute("data-more-trigger") ? 300 - moreLeft : 0;
+      });
+      const wrapper = await mountSuspended(TabbedContent, { props: { itemCount: 5 }, slots: fiveSlots });
+      await nextTick();
+      const bar = wrapper.find(".tabbed-content-bar").element as HTMLElement;
+
+      await wrapper.findAll(".tabbed-content-more-item")[0]!.trigger("click");
+      expect(bar.style.getPropertyValue("--_active-start")).toBe("250px");
+
+      // The button grows leftwards to show the active label, without changing which tabs fit.
+      moreLeft = 220;
+      observerCallbacks.forEach((callback) => callback());
+
+      expect(bar.style.getPropertyValue("--_active-start")).toBe("220px");
+      expect(bar.style.getPropertyValue("--_active-end")).toBe("0px");
     });
 
     it("never collapses tabs with overflowMode scroll or on axis y", async () => {

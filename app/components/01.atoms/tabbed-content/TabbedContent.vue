@@ -191,7 +191,16 @@ const morePopoverRef = ref<HTMLElement | null>(null);
 
 const overflowedIndexes = ref<number[]>([]);
 
-const { refreshTabs, activeIndex, activateTabByIndex, navItemClicked, navItemHovered, navItemKeydown, resetHoverToActivePosition } =
+const {
+  refreshTabs,
+  syncIndicators,
+  activeIndex,
+  activateTabByIndex,
+  navItemClicked,
+  navItemHovered,
+  navItemKeydown,
+  resetHoverToActivePosition,
+} =
   useTabs(() => props.axis, tabsNavRef, tabsContentRefs, () => props.transitionDuration, () => props.trackHover);
 
 const activeIsOverflowed = computed(() => activeIndex.value !== null && overflowedIndexes.value.includes(activeIndex.value));
@@ -292,12 +301,17 @@ const recalculate = () => {
 
 useResizeObserver(tabsNavRef, measureOverflow);
 useResizeObserver(tablistRef, measureOverflow);
-// The More button widens to show a collapsed active tab's label, which can push another tab into the menu.
-useResizeObserver(moreTriggerRef, measureOverflow);
+// The More button widens to show a collapsed active tab's label, which can push another tab into the menu,
+// and the indicators sitting on it must follow its new box either way.
+useResizeObserver(moreTriggerRef, () => {
+  measureOverflow();
+  syncIndicators(true);
+});
 
 onMounted(recalculate);
 
-watch(overflowedIndexes, () => nextTick(refreshTabs));
+// Usually fires straight after a click (the More button changes size), so retarget rather than snap.
+watch(overflowedIndexes, () => nextTick(() => refreshTabs(true)));
 
 watch(
   [

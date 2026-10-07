@@ -19,6 +19,7 @@ const useTabs = (
   // Leading edge (start along the axis) each indicator was last sent to, to tell the direction of a move.
   const lastStart: Record<IndicatorKind, number | null> = { active: null, hovered: null };
   let coverageFrameId: number | null = null;
+  let coverageUntil = 0;
 
   const transitionMs = () => Math.max(0, Number(toValue(duration)) || 0);
 
@@ -31,8 +32,12 @@ const useTabs = (
   const indicatorTarget = (element?: HTMLElement | null) =>
     element?.hidden ? (tabsNavRef.value?.querySelector<HTMLElement>("[data-more-trigger]") ?? element) : element;
 
-  /** Re-reads the tabs from the DOM (after mount, or when the tab count/axis/indicators change), keeping the active tab when it still exists. */
-  const refreshTabs = () => {
+  /**
+   * Re-reads the tabs from the DOM (after mount, or when the tab count/axis/indicators/overflow change),
+   * keeping the active tab when it still exists. `animate` retargets indicators that are mid-move
+   * instead of snapping them.
+   */
+  const refreshTabs = (animate = false) => {
     allItems.value = tabsNavRef.value
       ? Array.from(tabsNavRef.value.querySelectorAll<HTMLElement>("[data-nav-item]"))
       : [];
@@ -50,8 +55,7 @@ const useTabs = (
     });
 
     setRovingTabindex();
-    placeIndicator("active", false);
-    placeIndicator("hovered", false);
+    syncIndicators(animate);
     setActiveTabContent();
   };
 
@@ -199,15 +203,17 @@ const useTabs = (
     });
   };
 
-  // Re-checks coverage every frame while the indicator's transition runs.
+  // Re-checks coverage every frame while the indicator's transition runs. A new request only ever
+  // extends the window: a snap (e.g. a refresh) mid-move mustn't stop the checks before it lands.
   const trackCoverage = (animationMs: number) => {
-    if (coverageFrameId !== null) cancelAnimationFrame(coverageFrameId);
-    const until = performance.now() + animationMs + 50;
+    coverageUntil = Math.max(coverageUntil, performance.now() + animationMs + 50);
+    updateCoverage();
+    if (coverageFrameId !== null) return;
     const step = () => {
       updateCoverage();
-      coverageFrameId = performance.now() < until ? requestAnimationFrame(step) : null;
+      coverageFrameId = performance.now() < coverageUntil ? requestAnimationFrame(step) : null;
     };
-    step();
+    coverageFrameId = requestAnimationFrame(step);
   };
 
   // Matched by data-tab-index, since a v-for ref array isn't guaranteed to stay in source order.
@@ -218,10 +224,13 @@ const useTabs = (
     });
   };
 
-  useResizeObserver(tabsNavRef, () => {
-    placeIndicator("active", false);
-    placeIndicator("hovered", false);
-  });
+  /** Re-places both indicators onto their current targets, e.g. after the overflow trigger changes size. */
+  const syncIndicators = (animate = false) => {
+    placeIndicator("active", animate);
+    placeIndicator("hovered", animate);
+  };
+
+  useResizeObserver(tabsNavRef, () => syncIndicators(false));
 
   onUnmounted(() => {
     if (coverageFrameId !== null) cancelAnimationFrame(coverageFrameId);
@@ -229,6 +238,7 @@ const useTabs = (
 
   return {
     refreshTabs,
+    syncIndicators,
     activeIndex,
     activateTabByIndex,
     navItemClicked,

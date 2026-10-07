@@ -159,7 +159,13 @@ transitions (`trackCoverage`, for `transitionDuration` + 50ms) which visible tab
 button the indicator (`[data-active-indicator]`) covers by at least half, and toggles
 `data-under-active` on them (an attribute, not a class, so Vue's own class binding on the More
 button can't wipe it). CSS under `.tracks-active` colours by that attribute rather than
-`aria-selected`. This replaces the per-component timing trick `TripleToggleSwitch` uses (swap
+`aria-selected`. The coverage window only ever extends (`coverageUntil`): a refresh landing
+mid-move (e.g. the More button resizing straight after a click) used to restart it with zero
+length, cancelling the per-frame checks while the highlight was still sliding and leaving stale
+colours (dark selected label, invisible neighbour). A More-button resize also re-places both
+indicators (`syncIndicators(true)`), since its box moves even when no tab changes sides, and an
+overflow change refreshes with `refreshTabs(true)` so an in-flight move retargets instead of
+snapping. This replaces the per-component timing trick `TripleToggleSwitch` uses (swap
 colour at half the slide), which only works for single-step moves; a tab jump passes under
 several labels.
 
