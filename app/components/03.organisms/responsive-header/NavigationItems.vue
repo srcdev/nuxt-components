@@ -240,13 +240,15 @@ watch(
        --overflow-nav-items-padding-block    (default: 0.8rem)
 
        --overflow-nav-link-color             (default: inherit)
-       --overflow-nav-link-border-color      (default: #efefef75)
+       --overflow-nav-link-color-hover       (default: --overflow-nav-link-color)
+       --overflow-nav-link-color-active      (default: --overflow-nav-link-color)
+       --overflow-nav-link-border-color      (default: color-mix(in oklch, var(--theme-text) 12%, transparent))
        --overflow-nav-sub-item-color         (default: inherit)
        --overflow-nav-sub-item-font-size     (default: inherit)
 
        --overflow-nav-decorator-indicator-color         (default: currentColor)
        --overflow-nav-decorator-hovered-indicator-color (default: inherits --overflow-nav-decorator-indicator-color)
-       --overflow-nav-decorator-hovered-bg              (default: oklch(100% 0 0 / 6%))
+       --overflow-nav-decorator-hovered-bg              (default: color-mix(in oklch, var(--theme-text) 6%, transparent))
     ──────────────────────────────────────────────────────────────────────── */
 
     --_max-inline-size: var(--overflow-nav-max-inline-size, calc(100vw - 3.2rem));
@@ -276,13 +278,26 @@ watch(
           display: block;
         }
 
+        /* Per-state link colour; hover falls back to the item's current state. Unset means the resting colour. */
+        &.is-active {
+          --_overflow-link-color: var(--overflow-nav-link-color-active);
+        }
+
+        &.is-hovered {
+          --_overflow-link-color: var(--overflow-nav-link-color-hover, var(--overflow-nav-link-color-active));
+        }
+
+        &.is-hovered:not(.is-active) {
+          --_overflow-link-color: var(--overflow-nav-link-color-hover);
+        }
+
         .overflow-navigation-link {
           text-decoration: none;
-          color: var(--overflow-nav-link-color, inherit);
+          color: var(--_overflow-link-color, var(--overflow-nav-link-color, inherit));
           padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
           padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
           display: flex;
-          border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
+          border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, color-mix(in oklch, var(--theme-text) 12%, transparent));
         }
 
         .overflow-navigation-details {
@@ -300,8 +315,8 @@ watch(
                 padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
                 padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
                 gap: 1rem;
-                color: var(--overflow-nav-link-color, inherit);
-                border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
+                color: var(--_overflow-link-color, var(--overflow-nav-link-color, inherit));
+                border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, color-mix(in oklch, var(--theme-text) 12%, transparent));
 
                 .label-wrapper {
                   min-inline-size: 0;
@@ -316,7 +331,7 @@ watch(
                   border-bottom: 0.1rem solid transparent;
                 }
                 + .expanding-panel-content {
-                  border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
+                  border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, color-mix(in oklch, var(--theme-text) 12%, transparent));
                   .overflow-navigation-sub-nav-inner {
                     margin-top: var(--overflow-nav-items-gap, 0px);
                   }
@@ -361,8 +376,8 @@ watch(
                 padding-block: var(--overflow-nav-items-padding-block, 0.8rem);
                 padding-inline: var(--overflow-nav-padding-inline, 0.8rem);
                 gap: 1rem;
-                color: var(--overflow-nav-link-color, inherit);
-                border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
+                color: var(--_overflow-link-color, var(--overflow-nav-link-color, inherit));
+                border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, color-mix(in oklch, var(--theme-text) 12%, transparent));
 
                 .label-wrapper {
                   min-inline-size: 0;
@@ -377,7 +392,7 @@ watch(
                   border-bottom: 0.1rem solid transparent;
                 }
                 + .expanding-panel-classic-content {
-                  border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, #efefef75);
+                  border-bottom: 0.1rem solid var(--overflow-nav-link-border-color, color-mix(in oklch, var(--theme-text) 12%, transparent));
                   .overflow-navigation-sub-nav-inner {
                     margin-top: var(--overflow-nav-items-gap, 0px);
                   }
@@ -486,7 +501,7 @@ watch(
     right: 0;
     top: anchor(top);
     bottom: anchor(bottom);
-    background: var(--overflow-nav-decorator-hovered-bg, oklch(100% 0 0 / 6%));
+    background: var(--overflow-nav-decorator-hovered-bg, color-mix(in oklch, var(--theme-text) 6%, transparent));
     z-index: 1;
     opacity: 0;
     transition:
@@ -552,7 +567,7 @@ watch(
     right: 0;
     top: anchor(top);
     bottom: anchor(bottom);
-    background: var(--overflow-nav-decorator-hovered-bg, oklch(100% 0 0 / 6%));
+    background: var(--overflow-nav-decorator-hovered-bg, color-mix(in oklch, var(--theme-text) 6%, transparent));
     border-inline-start: 2px solid var(
       --overflow-nav-decorator-hovered-indicator-color,
       var(--overflow-nav-decorator-indicator-color, currentColor)

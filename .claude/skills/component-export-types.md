@@ -11,17 +11,12 @@ Types defined inline in a `.vue` component file are not easily importable by con
 Create `app/types/components/<component-name>.d.ts` with the exported interfaces:
 
 ```ts
-// app/types/components/nav-item.d.ts
-export interface NavItem {
-  text: string;
-  href?: string;
-  isExternal?: boolean;
-  iconName?: string;
-  cssName?: string;
-}
-
-export interface NavItemData {
-  [key: string]: NavItem[];
+// app/types/components/select-menu.d.ts
+export interface SelectMenuOption {
+  value: string | number;
+  label: string;
+  icon?: string;
+  dotColor?: string;
 }
 ```
 
@@ -30,7 +25,7 @@ export interface NavItemData {
 In `app/types/components/index.ts`, add an export line:
 
 ```ts
-export * from "./nav-item.d"
+export * from "./select-menu.d"
 ```
 
 ### 3. Update the component
@@ -39,11 +34,10 @@ Replace the inline `export interface` blocks in the `.vue` file with an import f
 
 ```ts
 // Before
-export interface NavItem { ... }
-export interface NavItemData { ... }
+export interface SelectMenuOption { ... }
 
 // After
-import type { NavItem, NavItemData } from "~/types/components/nav-item.d";
+import type { SelectMenuOption } from "~/types/components/select-menu";
 ```
 
 ## Consuming app usage
@@ -60,7 +54,7 @@ app/types/components/<component>.d.ts
 `types.d.ts` is the `"types"` entry point in `package.json`, so once a type is added to the barrel it is importable directly from the package name:
 
 ```ts
-import type { NavItem, NavItemData } from "srcdev-nuxt-components";
+import type { SelectMenuOption } from "srcdev-nuxt-components";
 ```
 
 ## Notes

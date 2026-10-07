@@ -751,30 +751,32 @@ watch(
 
        --responsive-header-color                (default: inherit)
        --responsive-header-link-color           (default: inherit)
+       --responsive-header-link-color-hover     (default: --responsive-header-link-color)
+       --responsive-header-link-color-active    (default: --responsive-header-link-color)
 
-       --responsive-header-sub-nav-bg           (default: Canvas)
-       --responsive-header-sub-nav-border       (default: 1px solid #efefef75)
+       --responsive-header-sub-nav-bg           (default: var(--page-bg, var(--theme-surface-subtle)))
+       --responsive-header-sub-nav-border       (default: 1px solid color-mix(in oklch, var(--theme-text) 20%, transparent))
        --responsive-header-sub-nav-border-radius (default: 8px)
        --responsive-header-sub-nav-padding      (default: 12px)
        --responsive-header-sub-nav-max-inline-size (default: min(48rem, calc(100vw - 3.2rem)))
        --responsive-header-sub-nav-max-block-size  (default: 70vh)
 
-       --responsive-header-overflow-btn-bg              (default: Canvas)
+       --responsive-header-overflow-btn-bg              (default: transparent)
        --responsive-header-overflow-btn-size            (default: 20px)
-       --responsive-header-overflow-btn-border          (default: 1px solid #ffffff90)
-       --responsive-header-overflow-btn-outline         (default: 1px solid #ffffff10)
+       --responsive-header-overflow-btn-border          (default: 1px solid color-mix(in oklch, var(--theme-text) 20%, transparent))
+       --responsive-header-overflow-btn-outline         (default: 1px solid transparent)
        --responsive-header-overflow-btn-icon-color      (default: inherit)
-       --responsive-header-overflow-btn-hover-outline   (default: 1px solid #ffffff)
+       --responsive-header-overflow-btn-hover-outline   (default: 1px solid var(--theme-border-focus))
 
-       --responsive-header-overflow-nav-bg              (default: Canvas)
-       --responsive-header-overflow-nav-border          (default: 1px solid #ffffff90)
+       --responsive-header-overflow-nav-bg              (default: var(--page-bg, var(--theme-surface-subtle)))
+       --responsive-header-overflow-nav-border          (default: 1px solid color-mix(in oklch, var(--theme-text) 20%, transparent))
        --responsive-header-overflow-nav-border-radius   (default: 8px)
        --responsive-header-overflow-nav-padding-block   (default: 12px)
        --responsive-header-overflow-nav-max-block-size  (default: 70vh)
 
        --responsive-nav-decorator-indicator-color         (default: currentColor)
        --responsive-nav-decorator-hovered-indicator-color (default: inherits --responsive-nav-decorator-indicator-color)
-       --responsive-nav-decorator-hovered-bg              (default: oklch(100% 0 0 / 8%))
+       --responsive-nav-decorator-hovered-bg              (default: color-mix(in oklch, var(--theme-text) 8%, transparent))
 
        --responsive-header-link-font-size       (default: inherit)
        --responsive-header-main-nav-justify-content (default: space-between)
@@ -854,7 +856,7 @@ watch(
             gap: 6px;
             white-space: nowrap;
             font-size: var(--responsive-header-link-font-size, inherit);
-            color: var(--responsive-header-link-color, inherit);
+            color: var(--_link-color, var(--responsive-header-link-color, inherit));
             text-decoration: none;
             cursor: pointer;
             margin-inline-start: 0;
@@ -916,7 +918,7 @@ watch(
               position: relative;
               z-index: 4;
               font-size: var(--responsive-header-link-font-size, inherit);
-              color: var(--responsive-header-link-color, inherit);
+              color: var(--_link-color, var(--responsive-header-link-color, inherit));
 
               &::-webkit-details-marker,
               &::marker {
@@ -932,9 +934,9 @@ watch(
               position: absolute;
 
               padding: var(--responsive-header-sub-nav-padding, 12px);
-              border: var(--responsive-header-sub-nav-border, 1px solid #efefef75);
+              border: var(--responsive-header-sub-nav-border, 1px solid color-mix(in oklch, var(--theme-text) 20%, transparent));
               border-radius: var(--responsive-header-sub-nav-border-radius, 8px);
-              background-color: var(--responsive-header-sub-nav-bg, Canvas);
+              background-color: var(--responsive-header-sub-nav-bg, var(--page-bg, var(--theme-surface-subtle)));
               translate: 0 12px;
 
               min-width: var(--_main-navigation-item-width);
@@ -979,6 +981,19 @@ watch(
             .main-navigation-link {
               margin-inline-start: var(--_main-navigation-item-width);
             }
+          }
+
+          /* Per-state link colour; hover falls back to the item's current state. Unset means the resting colour. */
+          &.is-active {
+            --_link-color: var(--responsive-header-link-color-active);
+          }
+
+          &.is-hovered {
+            --_link-color: var(--responsive-header-link-color-hover, var(--responsive-header-link-color-active));
+          }
+
+          &.is-hovered:not(.is-active) {
+            --_link-color: var(--responsive-header-link-color-hover);
           }
         }
 
@@ -1071,9 +1086,9 @@ watch(
 
           aspect-ratio: 1;
           border-radius: 4px;
-          border: var(--responsive-header-overflow-btn-border, 1px solid #ffffff90);
-          outline: var(--responsive-header-overflow-btn-outline, 1px solid #ffffff10);
-          background-color: var(--responsive-header-overflow-btn-bg, Canvas);
+          border: var(--responsive-header-overflow-btn-border, 1px solid color-mix(in oklch, var(--theme-text) 20%, transparent));
+          outline: var(--responsive-header-overflow-btn-outline, 1px solid transparent);
+          background-color: var(--responsive-header-overflow-btn-bg, transparent);
 
           width: var(--_icon-size);
           overflow: hidden;
@@ -1089,7 +1104,7 @@ watch(
           &:hover,
           &:focus-visible {
             --_icon-zoom: 1.2;
-            outline: var(--responsive-header-overflow-btn-hover-outline, 1px solid #ffffff);
+            outline: var(--responsive-header-overflow-btn-hover-outline, 1px solid var(--theme-border-focus));
           }
 
           .icon {
@@ -1115,8 +1130,8 @@ watch(
           position: absolute;
           top: 135%;
           right: 0;
-          background-color: var(--responsive-header-overflow-nav-bg, Canvas);
-          border: var(--responsive-header-overflow-nav-border, 1px solid #ffffff90);
+          background-color: var(--responsive-header-overflow-nav-bg, var(--page-bg, var(--theme-surface-subtle)));
+          border: var(--responsive-header-overflow-nav-border, 1px solid color-mix(in oklch, var(--theme-text) 20%, transparent));
           border-radius: var(--responsive-header-overflow-nav-border-radius, 8px);
           padding-block: var(--responsive-header-overflow-nav-padding-block, 12px);
           margin: 0;
@@ -1172,7 +1187,7 @@ watch(
       right: anchor(right);
       top: anchor(top);
       bottom: anchor(bottom);
-      background: var(--responsive-nav-decorator-hovered-bg, oklch(100% 0 0 / 8%));
+      background: var(--responsive-nav-decorator-hovered-bg, color-mix(in oklch, var(--theme-text) 8%, transparent));
       border-radius: 4px;
       z-index: 1;
       opacity: 0;

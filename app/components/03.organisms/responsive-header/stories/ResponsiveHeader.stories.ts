@@ -246,7 +246,7 @@ export const SamePageAnchorLinks: Story = {
           "smooth-scroll to the section (an instant jump under reduced motion), and are active by hash rather than by " +
           "route; the first anchor is active on load. `anchorScrollOffset` (80 here) leaves room for the sticky header. " +
           "Route links like Blog mix in as normal. Narrow the canvas so items move into the overflow menu: anchor links " +
-          "there scroll the same way and close the menu. This replaces TabNavigation's anchor mode.",
+          "there scroll the same way and close the menu.",
       },
     },
   },

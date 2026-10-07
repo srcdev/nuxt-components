@@ -51,6 +51,12 @@
     "body": [
       ".$1site-header-nav {",
       "  --responsive-header-link-color: $2inherit;",
+      "  --responsive-header-link-color-hover: ;",
+      "  --responsive-header-link-color-active: ;",
+      "  --responsive-nav-decorator-indicator-color: ;",
+      "  --overflow-nav-link-color: ;",
+      "  --overflow-nav-link-color-hover: ;",
+      "  --overflow-nav-link-color-active: ;",
       "  --responsive-header-bg: $3transparent;",
       "  /* Fixed, NOT var(--step-*) — see responsive-header.md's measurement-pipeline note. */",
       "  --responsive-header-link-font-size: ${4:1.4rem};",

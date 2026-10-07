@@ -63,7 +63,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── composable-zod-validation.md      — useZodValidation: schema-driven form validation, error binding, submit flow, API error push
 ├── composable-colour-scheme.md       — useColourScheme: reactive light/dark/auto switching, localStorage persistence, runtime config
 ├── composable-dialog-controls.md     — useDialogControls: single-call setup with config object, openDialog/closeDialog API, confirm/cancel callbacks
-├── composable-anchor-scroll.md       — useAnchorScroll: smooth anchor scrolling with reduced-motion support, dynamic offset, and TabNavigation integration
+├── composable-anchor-scroll.md       — useAnchorScroll: smooth anchor scrolling with reduced-motion support, dynamic offset, and ResponsiveHeader integration
 ├── composable-tooltips-guide.md      — useTooltipsGuide: sequential popover guide with auto-start, dismiss-to-advance, manual controls
 ├── composable-cookie-consent.md      — useCookieConsent: unset/granted/denied state, cookie persistence, wraps @nuxt/scripts' useScriptTriggerConsent
 ├── composable-analytics.md           — useAnalytics: provider-agnostic trackEvent/page-view tracking (google-analytics only implemented), consent-gated, single call site for setup + firing events
@@ -91,7 +91,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── service-detail.md            — ServiceDetail: full service detail page (hero banner, sticky sidebar booking card + related services, closing CTA), headerTag vs subheadingTag split, book-cta/sidebar-note/related-service/final-cta slots
     ├── breadcrumb.md                — Breadcrumb: items (BreadcrumbItem[]) trail, link vs current-page text, CSS token API
     ├── skip-links.md                — SkipLinks: focus-revealed accessibility skip-nav, links (SkipLink[]) data-driven, homeLink slot, CSS token API
-    ├── tabs-core.md                 — TabsCore: tablist from indexed slots (itemCount), arrow-key nav, moving hover/active/underline indicators, CSS token API
+    ├── tabbed-content.md            — TabbedContent (was TabsCore): tablist + panels from indexed slots (itemCount), arrow-key nav, moving hover/active/underline indicators, CSS token API
     ├── contact-section.md      — ContactSection props (stepperIndicatorSize pass-through), 3-item info+form layout, slot API
     ├── stepper-list.md         — StepperList dynamic slots (item-{n}/indicator-{n}), props, connector behaviour
     ├── expanding-panel.md      — ExpandingPanel v-model, forceOpened, contentIsOnTop overlay mode, slots (summary/icon/content), ARIA wiring, CSS token API
@@ -108,7 +108,6 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── wipe-away-vertical.md   — WipeAwayVertical: scroll-driven vertical wipe-away effect, pure-CSS grid overlay (no JS), indexed dynamic slots, sticky-centering-via-calc gotcha, CSS tokens
     ├── marquee-scroller.md     — MarqueeScroller: infinite logo/badge scroller, per-item dynamic slots (marqueeData id), hover/focus/keyboard pause, reduced-motion, CSS tokens
     ├── rotating-carousel-image.md — RotatingCarouselImage: 3D rotating image carousel, scroll-parallax tilt, focus/keyboard/hover pause, reduced-motion, CSS tokens
-    ├── tab-navigation.md       — TabNavigation (DEPRECATED, use ResponsiveHeader): horizontal tab nav with CSS anchor-positioning indicators, anchor scroll, burger collapse, full CSS token API
     ├── social-icons-list.md    — SocialIconsList: data-driven social icon links, ISocialIcon type, logos: icon names, CSS tokens
     ├── display-qr-code.md      — DisplayQrCode: QR code SVG from a string value, colour/size/variant/radius props, currentColor default
     ├── capture-qr-code.md      — CaptureQrCode: live camera scanner, error state, visibility/route/KeepAlive lifecycle, media stream cleanup

@@ -92,7 +92,7 @@ predictable pattern (`item-0`, `item-1`, …).
 
 |---|---|
 | Multiple slot types per item must be grouped into one rendered element | `AccordianCore` — `summary`/`icon`/`content` per `<ExpandingPanel>` |
-| Two parallel loops must stay in sync for aria linking | `TabsCore` — nav `<li>` loop + content `<div>` loop linked by id |
+| Two parallel loops must stay in sync for aria linking | `TabbedContent` — trigger `<button>` loop + panel `<div>` loop linked by id |
 | `itemCount` drives non-slot logic (z-index, CSS scope, counters) | `WipeAwayVertical` — `z-index: itemCount - key`, `timelineScope` computed |
 | `$slots` inspection per iteration is needed to conditionally render | `StepperList` — checks `$slots[indicator-N]` to toggle class per `<li>` |
 
@@ -119,7 +119,7 @@ const props = defineProps<Props>();
 
 ### Multi-type indexed slots
 
-Some components pair multiple slot types per index (e.g. TabsCore):
+Some components pair multiple slot types per index (e.g. TabbedContent):
 
 ```vue
 <template v-for="index in itemCount" :key="index">
@@ -130,7 +130,7 @@ Some components pair multiple slot types per index (e.g. TabsCore):
 
 ### Reference components (indexed dynamic slots)
 
-- `app/components/01.atoms/navigation/tabs/TabsCore.vue`
+- `app/components/01.atoms/tabbed-content/TabbedContent.vue`
 - `app/components/accordian/AccordianCore.vue`
 - `app/components/02.molecules/stepper-list/StepperList.vue`
 - `app/components/01.atoms/animations/view-timeline/WipeAwayVertical.vue`

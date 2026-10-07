@@ -101,7 +101,7 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | AlertMaskCore | `AlertMask` | - |
 | CardCore | **decide**: `Card` is single-word and collision-prone; prefer a prefixed name (`Display*`, `Content*`) | yes |
 | AccordianCore | **decide**: also fixes the "Accordian" misspelling; bare `Accordion` is single-word and collision-prone, and it is built on `<details>`/`<summary>` | yes |
-| TabsCore | **decide**: `Tabs` is single-word and collision-prone | - |
+| ~~TabsCore~~ | ✅ `TabbedContent` (2026-10-07) | - |
 
 The `input-checkbox` family also has `MultipleCheckboxes`/`SingleCheckbox` on top of the Core; look
 at how the four relate before choosing names there.

@@ -99,6 +99,6 @@ const responsiveNavLinks = {
 
 ## Migration notes
 
-- Consuming layouts previously assembling `PageRow` + `SkipLinks` + `ResponsiveHeader` (or `TabNavigation`) by hand can switch to `SiteHeader` directly; the two `styleClassPassthrough` props map 1:1 onto the two independent passthrough hooks that pattern used.
-- `TabNavigation`'s `NavItemData` shape (`{ main: [{ text, href, iconName, cssName }] }`) is **not** the same shape as `ResponsiveHeaderProp` (`{ groupKey: [{ name, path, childLinksTitle, childLinks }] }`) — migrating a `TabNavigation` consumer means reshaping the nav data, not just swapping the component. `TabNavigation`'s `navAlign` prop has no `SiteHeader` equivalent since `ResponsiveHeader`'s layout is fixed (branding column + nav column).
+- Consuming layouts previously assembling `PageRow` + `SkipLinks` + `ResponsiveHeader` (or the removed `TabNavigation`) by hand can switch to `SiteHeader` directly; the two `styleClassPassthrough` props map 1:1 onto the two independent passthrough hooks that pattern used.
+- `TabNavigation` (removed 2026-10-07) took `NavItemData` (`{ main: [{ text, href, iconName, cssName }] }`, also removed), which is **not** the same shape as `ResponsiveHeaderProp` (`{ groupKey: [{ name, path, childLinksTitle, childLinks }] }`): migrating means reshaping the nav data, not just swapping the component. See "Migrating from TabNavigation" in `responsive-header.md`. Its `navAlign` prop has no `SiteHeader` equivalent since `ResponsiveHeader`'s layout is fixed (branding column + nav column).
 - Requires the consuming layout's main/footer regions to carry `id="main-content"` / `id="footer-content"` — same requirement as using `SkipLinks` directly.

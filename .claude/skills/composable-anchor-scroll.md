@@ -64,26 +64,27 @@ onMounted(() => {
 >{{ section.label }}</a>
 ```
 
-### Active state in TabNavigation
+### Active state in ResponsiveHeader
 
-`TabNavigation` handles `activeHash` internally for hash nav items. No extra work needed —
-just pass anchor hrefs in `navItemData` and the active indicator moves automatically on click
-and on initial load (defaulting to the first hash item when the URL has no hash).
+`ResponsiveHeader` handles `activeHash` internally for `#` nav items. No extra work needed —
+just pass anchor paths in `responsiveNavLinks` and the active indicator moves automatically on
+click and on initial load (defaulting to the first anchor item when the URL has no hash).
+(`TabNavigation` did the same until it was removed on 2026-10-07.)
 
 ---
 
 ## Usage patterns
 
-### 1. TabNavigation with a sticky site header
+### 1. ResponsiveHeader with a sticky site header
 
-`TabNavigation` accepts an `anchorScrollOffset` prop that is passed directly to `useAnchorScroll`.
+`ResponsiveHeader` accepts an `anchorScrollOffset` prop that is passed directly to `useAnchorScroll`.
 Pass a getter so the live header height is read at scroll time — this stays correct if the
 header resizes on different viewports.
 
 ```vue
 <header ref="headerRef">
-  <TabNavigation
-    :nav-item-data="navItemData"
+  <ResponsiveHeader
+    :responsive-nav-links="responsiveNavLinks"
     :anchor-scroll-offset="() => headerRef?.offsetHeight ?? 0"
   />
 </header>
@@ -92,18 +93,18 @@ header resizes on different viewports.
 ```ts
 const headerRef = ref<HTMLElement | null>(null);
 
-const navItemData = {
+const responsiveNavLinks = {
   main: [
-    { text: "About",    href: "#about" },
-    { text: "Services", href: "#services" },
-    { text: "Contact",  href: "#contact" },
-    { text: "Blog",     href: "/blog" },  // route — NuxtLink handles as normal
+    { name: "About",    path: "#about" },
+    { name: "Services", path: "#services" },
+    { name: "Contact",  path: "#contact" },
+    { name: "Blog",     path: "/blog" },  // route — NuxtLink handles as normal
   ],
 };
 ```
 
 **CSS alternative** — if you want all anchor links site-wide to respect the sticky header
-(not just the ones inside `TabNavigation`), add `scroll-padding-top` to `html` instead and
+(not just the ones inside `ResponsiveHeader`), add `scroll-padding-top` to `html` instead and
 skip the prop:
 
 ```css
@@ -290,4 +291,4 @@ takes effect immediately on the next click.
 - **SSR** — both `handleNavClick` and `scrollToAnchor` guard with `import.meta.server` and return
   early. No special SSR setup is needed.
 - **Multiple instances** — each call to `useAnchorScroll` is independent. You can run a sticky
-  section nav alongside a `TabNavigation` on the same page with different offsets.
+  section nav alongside a `ResponsiveHeader` on the same page with different offsets.

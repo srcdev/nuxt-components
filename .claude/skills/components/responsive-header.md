@@ -132,6 +132,9 @@ Route links and anchor links can be mixed in the same data. See the "Same-Page A
 
 ## Migrating from TabNavigation
 
+> `TabNavigation` was deprecated 2026-10-06 and **removed 2026-10-07**, along with its `NavItem` /
+> `NavItemData` types and the `useNavCollapse` composable. Type the new data as `ResponsiveHeaderProp`.
+
 `ResponsiveHeader` covers everything `TabNavigation` does, and collapses progressively (only the items
 that don't fit move into the overflow menu) instead of all-or-nothing. To switch:
 
@@ -149,8 +152,12 @@ that don't fit move into the overflow menu) instead of all-or-nothing. To switch
 | `anchor-scroll-offset` | `anchor-scroll-offset` |
 | collapse everything to a burger when items don't fit | default is per-item overflow; add `collapse-at-main-nav-intersection` for the old all-or-nothing burger |
 | `--tab-nav-link-color` | `--responsive-header-link-color` |
+| `--tab-nav-link-hover-color` / `--tab-nav-link-active-color` | `--responsive-header-link-color-hover` / `-active` (added 2026-10-07) |
+| `--tab-nav-decorator-hovered-bg` | `--responsive-nav-decorator-hovered-bg` |
 | `--tab-nav-decorator-indicator-color` | `--responsive-nav-decorator-indicator-color` |
-| `--tab-nav-*` panel and burger tokens | the overflow tokens in `CONSUMER-STYLING.md` and NavigationItems' `--overflow-nav-*` |
+| `--tab-nav-panel-link-color` / `-hover-color` / `-active-color` | `--overflow-nav-link-color` / `-color-hover` / `-color-active` |
+| `--tab-nav-panel-bg` / `--tab-nav-panel-border-color` / `--tab-nav-panel-item-border` | `--responsive-header-overflow-nav-bg` / `--responsive-header-overflow-nav-border` (full shorthand) / `--overflow-nav-link-border-color` |
+| `--tab-nav-burger-color` | `--responsive-header-overflow-btn-icon-color` |
 
 ```vue
 <!-- Before -->
@@ -203,9 +210,12 @@ All tokens are read via `var(--token, default)` — see the full list in the com
 |---|---|---|
 | `--responsive-header-link-font-size` | `inherit` | Nav-link font-size. **Set this to a fixed value** — see the measurement-pipeline note above for why leaving it `inherit` from a fluid ancestor is a footgun. |
 | `--responsive-header-link-color` | `inherit` | Link/summary text colour. |
+| `--responsive-header-link-color-hover` / `-active` | the resting colour | Per-state link colour in the top bar (added 2026-10-07). Hover falls back to the item's current state. `--overflow-nav-link-color-hover` / `-active` do the same in the overflow panel. |
 | `--responsive-header-bg` / `--responsive-header-padding-*` / `--responsive-header-border*` | transparent / `0` / `none` | Root element theming. |
 | `--responsive-header-overflow-btn-*` | various | Overflow burger button sizing/colour. |
 | `--responsive-header-sub-nav-*` / `--responsive-header-overflow-nav-*` | various | Top-bar dropdown panel and overflow-panel container theming. |
+
+Defaults are for a **light** header (changed 2026-10-07): panels use `--page-bg`, borders and hover tints are `color-mix()`es of `--theme-text`, the overflow button is transparent with a `--theme-border-focus` hover outline. They used to assume a dark bar (`Canvas`, translucent white borders and tints). A dark header sets the tokens.
 | `--responsive-nav-decorator-indicator-color` / `--responsive-nav-decorator-hovered-*` | `currentColor` / inherits | The sliding active/hover indicator bar under the main nav. |
 
 ---

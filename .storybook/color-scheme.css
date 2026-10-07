@@ -9,6 +9,13 @@ html[data-color-scheme="dark"] {
 
   --page-bg: var(--slate-08);
 
+  --responsive-header-sub-nav-border: 1px solid color-mix(in oklch, var(--slate-01) 20%, transparent);
+  --responsive-header-overflow-btn-border: 1px solid color-mix(in oklch, var(--slate-01) 30%, transparent);
+  --responsive-header-overflow-nav-border: 1px solid color-mix(in oklch, var(--slate-01) 20%, transparent);
+  --responsive-nav-decorator-hovered-bg: color-mix(in oklch, var(--slate-01) 8%, transparent);
+  --overflow-nav-link-border-color: color-mix(in oklch, var(--slate-01) 12%, transparent);
+  --overflow-nav-decorator-hovered-bg: color-mix(in oklch, var(--slate-01) 6%, transparent);
+
   --status-success-surface: var(--green-09);
   --status-success-text: var(--green-02);
   --status-warning-surface: var(--orange-09);

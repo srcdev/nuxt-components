@@ -1,9 +1,9 @@
 {
-  "SRCDEV TabsCore Basic": {
-    "description": "TabsCore — horizontal tablist with indexed trigger/content slots",
+  "SRCDEV TabbedContent Basic": {
+    "description": "TabbedContent — horizontal tablist with indexed trigger/content slots",
     "scope": "vue,html",
     "body": [
-      "<TabsCore :item-count=\"${1:3}\">",
+      "<TabbedContent :item-count=\"${1:3}\" aria-label=\"${8:Product details}\">",
       "  <template #tab-0-trigger>${2:Overview}</template>",
       "  <template #tab-0-content>",
       "    $3",
@@ -16,39 +16,39 @@
       "  <template #tab-2-content>",
       "    $7",
       "  </template>",
-      "</TabsCore>"
+      "</TabbedContent>"
     ]
   },
-  "SRCDEV TabsCore Vertical": {
-    "description": "TabsCore with axis=\"y\" for a vertical tab column",
+  "SRCDEV TabbedContent Vertical": {
+    "description": "TabbedContent with axis=\"y\" for a vertical tab column",
     "scope": "vue,html",
     "body": [
-      "<TabsCore axis=\"y\" :item-count=\"${1:3}\" aria-label=\"${2:Settings}\">",
+      "<TabbedContent axis=\"y\" :item-count=\"${1:3}\" aria-label=\"${2:Settings}\">",
       "  <template #tab-0-trigger>$3</template>",
       "  <template #tab-0-content>$4</template>",
-      "</TabsCore>"
+      "</TabbedContent>"
     ]
   },
-  "SRCDEV TabsCore Indicators Off": {
-    "description": "TabsCore with the moving hover/active/underline decorators all disabled",
+  "SRCDEV TabbedContent Indicators Off": {
+    "description": "TabbedContent with the moving hover/active/underline decorators all disabled",
     "scope": "vue,html",
     "body": [
-      "<TabsCore",
+      "<TabbedContent",
       "  :item-count=\"${1:3}\"",
       "  :track-hover=\"false\"",
       "  :track-active=\"false\"",
       "  :track-indicator=\"false\"",
       ">",
       "  $2",
-      "</TabsCore>"
+      "</TabbedContent>"
     ]
   },
-  "SRCDEV TabsCore CSS Override": {
-    "description": "CSS override scaffold for TabsCore — scope to a page or section class",
+  "SRCDEV TabbedContent CSS Override": {
+    "description": "CSS override scaffold for TabbedContent — scope to a page or section class",
     "scope": "css",
     "body": [
       ".$1my-page {",
-      "  .tabs-core {",
+      "  .tabbed-content {",
       "    --tabs-nav-border: ;",
       "    --tabs-hover-indicator-colour: ;",
       "    --tabs-hover-indicator-text-colour: ;",
@@ -56,6 +56,8 @@
       "    --tabs-active-indicator-text-colour: ;",
       "    --tabs-underline-indicator-colour: ;",
       "    --tabs-underline-indicator-height: ;",
+      "    --tabs-hover-underline-indicator-colour: ;",
+      "    --tabs-hover-underline-indicator-height: ;",
       "    --tabs-list-item-opacity: ;",
       "    --tabs-list-item-colour: ;",
       "    --tabs-list-item-colour-selected: ;",
@@ -63,16 +65,33 @@
       "    --tabs-list-item-font-weight: ;",
       "    --tabs-list-item-padding-block: ;",
       "    --tabs-list-item-padding-inline: ;",
+      "    --tabs-list-item-max-inline-size: ;",
       "    --tabs-list-item-colour-transition-duration: ;",
-      "    --tabs-list-item-focus-outline-width: ;",
+      "    --tabs-focus-ring-width: ;",
+      "    --tabs-focus-ring-colour: ;",
       "    --tabs-list-item-focus-outline-offset: ;",
+      "    --tabs-more-popover-surface: ;",
+      "    --tabs-more-popover-border: ;",
+      "    --tabs-more-item-surface-hover: ;",
+      "    --tabs-more-item-colour-selected: ;",
       "    --tabs-content-background-colour: ;",
+      "    --tabs-content-text-colour: ;",
       "    --tabs-content-border-width: ;",
       "    --tabs-content-border-colour: ;",
       "    --tabs-content-border-radius: ;",
       "    --tabs-axis-y-gap: ;",
+      "    --tabs-axis-y-list-max-inline-size: ;",
       "  }",
       "}"
+    ]
+  },
+  "SRCDEV TabbedContent Scrolling Row": {
+    "description": "TabbedContent whose tab row scrolls sideways instead of collapsing into a More menu",
+    "scope": "vue,html",
+    "body": [
+      "<TabbedContent :item-count=\"${1:3}\" overflow-mode=\"scroll\" aria-label=\"${2:Product details}\">",
+      "  $3",
+      "</TabbedContent>"
     ]
   }
 }

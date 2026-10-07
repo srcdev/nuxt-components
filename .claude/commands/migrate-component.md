@@ -74,15 +74,14 @@ Otherwise, auto-pick the next worst offender:
      7. `03.organisms/services/service-summary`
      8. `03.organisms/services/service-detail`
      9. `01.atoms/navigation/breadcrumb`
-     10. `02.molecules/navigation/tab-navigation`
-     11. `01.atoms/navigation/tabs`
-     12. `02.molecules/select-menu`
-     13. `02.molecules/toast`
-     14. `02.molecules/alert-content`
-     15. `02.molecules/prompt`
-     16. `02.molecules/display-chip`
-     17. `01.atoms/display-pill`
-     18. `02.molecules/display-avatar`
+     10. `01.atoms/tabbed-content`
+     11. `02.molecules/select-menu`
+     12. `02.molecules/toast`
+     13. `02.molecules/alert-content`
+     14. `02.molecules/prompt`
+     15. `02.molecules/display-chip`
+     16. `01.atoms/display-pill`
+     17. `02.molecules/display-avatar`
 
      After that list, copy-heavy molecules (`profile-section`, `pricing-card`,
      `cookie-consent-banner`, `stepper-list`, `social-icons-list`, `04.templates/page-hero-highlights`),

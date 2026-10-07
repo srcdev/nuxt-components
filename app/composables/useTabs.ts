@@ -1,304 +1,236 @@
 import { useResizeObserver } from "@vueuse/core";
-
-interface UseTabsOptions {
-  trackHover: boolean;
-  trackActive: boolean;
-  trackIndicator: boolean;
-}
+import type { MaybeRefOrGetter } from "vue";
 
 const useTabs = (
-  axis: string,
+  axis: MaybeRefOrGetter<"x" | "y">,
   tabsNavRef: Ref<HTMLElement | null>,
   tabsContentRefs: Ref<HTMLElement[] | null>,
-  duration: number,
-  options: UseTabsOptions = { trackHover: true, trackActive: true, trackIndicator: true }
+  duration: MaybeRefOrGetter<number>,
+  trackHover: MaybeRefOrGetter<boolean> = true
 ) => {
-  const navItems = ref<HTMLElement[] | null>(null);
-  // Plain ref, not useState: this is ephemeral per-instance UI state, not something that
-  // needs to survive SSR hydration or be shared by key — useState's fixed key here previously
-  // meant every TabsCore instance on the page silently shared the same "previous active tab".
-  const previousActiveTab = ref<HTMLElement | null>(null);
+  // All triggers, and the ones not collapsed into an overflow menu (keyboard and roving tabindex use these).
+  const allItems = ref<HTMLElement[]>([]);
+  const navItems = ref<HTMLElement[]>([]);
+  // Plain refs, not useState: per-instance UI state that must not be shared between instances.
   const currentActiveTab = ref<HTMLElement>();
-
-  const previousHoveredTab = ref<HTMLElement>();
   const currentHoveredTab = ref<HTMLElement>();
-  const tagName = ref<string>();
 
-  let activeSettleTimeoutId: ReturnType<typeof setTimeout> | null = null;
-  let hoveredSettleTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  type IndicatorKind = "active" | "hovered";
+  // Leading edge (start along the axis) each indicator was last sent to, to tell the direction of a move.
+  const lastStart: Record<IndicatorKind, number | null> = { active: null, hovered: null };
+  let coverageFrameId: number | null = null;
 
-  const initNavDecorators = () => {
-    navItems.value = tabsNavRef.value
-      ? (Array.from(tabsNavRef.value.querySelectorAll("[data-nav-item]")) as HTMLElement[])
+  const transitionMs = () => Math.max(0, Number(toValue(duration)) || 0);
+
+  const activeIndex = computed(() => {
+    const index = currentActiveTab.value?.dataset.tabIndex;
+    return index === undefined ? null : Number(index);
+  });
+
+  // A collapsed tab has no box of its own, so the indicators sit on the overflow menu's trigger instead.
+  const indicatorTarget = (element?: HTMLElement | null) =>
+    element?.hidden ? (tabsNavRef.value?.querySelector<HTMLElement>("[data-more-trigger]") ?? element) : element;
+
+  /** Re-reads the tabs from the DOM (after mount, or when the tab count/axis/indicators change), keeping the active tab when it still exists. */
+  const refreshTabs = () => {
+    allItems.value = tabsNavRef.value
+      ? Array.from(tabsNavRef.value.querySelectorAll<HTMLElement>("[data-nav-item]"))
       : [];
+    navItems.value = allItems.value.filter((tab) => !tab.hidden);
 
-    if (!navItems.value || navItems.value.length === 0) {
-      return;
-    }
+    const items = allItems.value;
+    const activeTab =
+      currentActiveTab.value && items.includes(currentActiveTab.value) ? currentActiveTab.value : items[0];
 
-    const firstNavItem = navItems.value[0];
-    if (!firstNavItem) return;
+    currentActiveTab.value = activeTab;
+    currentHoveredTab.value = activeTab;
 
-    tagName.value = firstNavItem.tagName.toLowerCase();
-
-    const activeIndex = ref(0);
-
-    // Temporarily set the first nav item as active
-    firstNavItem.setAttribute("aria-selected", "true");
-
-    // Test if navItems are hyperlinks
-    if (firstNavItem.tagName.toLowerCase() === "a") {
-      // Find index of element with class "router-link-active"
-      activeIndex.value = navItems.value.findIndex((el) => el.classList.contains("router-link-active"));
-    }
-
-    const activeElement = navItems.value[activeIndex.value];
-    if (!activeElement) return;
-
-    currentActiveTab.value = activeElement;
-    currentHoveredTab.value = activeElement;
-
-    previousActiveTab.value = activeElement;
-    previousHoveredTab.value = activeElement;
+    items.forEach((tab) => {
+      tab.setAttribute("aria-selected", tab === activeTab ? "true" : "false");
+    });
 
     setRovingTabindex();
-    addNavDecorators();
+    placeIndicator("active", false);
+    placeIndicator("hovered", false);
     setActiveTabContent();
   };
 
-  const addNavDecorators = () => {
-    if (!tabsNavRef.value) return;
-
-    if (options.trackIndicator) {
-      tabsNavRef.value.appendChild(
-        Object.assign(document.createElement("div"), { className: "nav__active-indicator" })
-      );
-    }
-    if (options.trackActive) {
-      tabsNavRef.value.appendChild(Object.assign(document.createElement("div"), { className: "nav__active" }));
-    }
-    if (options.trackHover) {
-      tabsNavRef.value.appendChild(Object.assign(document.createElement("div"), { className: "nav__hovered" }));
-    }
-  };
-
+  // When the active tab is collapsed, the first visible tab keeps the tablist reachable with Tab.
   const setRovingTabindex = () => {
-    navItems.value?.forEach((tab) => {
-      tab.setAttribute("tabindex", tab === currentActiveTab.value ? "0" : "-1");
+    const focusTarget = navItems.value.includes(currentActiveTab.value as HTMLElement)
+      ? currentActiveTab.value
+      : navItems.value[0];
+    allItems.value.forEach((tab) => {
+      tab.setAttribute("tabindex", tab === focusTarget ? "0" : "-1");
     });
   };
 
   const navItemHovered = (event: Event) => {
-    if (!options.trackHover) return;
+    if (!toValue(trackHover)) return;
 
-    const target = event.target as HTMLElement;
+    const target = event.currentTarget as HTMLElement;
     const newTabPosition = currentHoveredTab.value ? currentHoveredTab.value.compareDocumentPosition(target) : 0;
 
     if (newTabPosition !== 0) {
-      previousHoveredTab.value = currentHoveredTab.value;
       currentHoveredTab.value = target;
-      moveHoveredIndicator();
+      placeIndicator("hovered", true);
     }
   };
 
   const resetHoverToActivePosition = () => {
-    if (!options.trackHover) return;
+    if (!toValue(trackHover)) return;
 
-    previousHoveredTab.value = currentHoveredTab.value;
     currentHoveredTab.value = currentActiveTab.value;
-    moveHoveredIndicator();
+    placeIndicator("hovered", true);
   };
 
   const activateTab = (target: HTMLElement) => {
     if (target === currentActiveTab.value) return;
 
-    previousActiveTab.value = currentActiveTab.value || null;
     currentActiveTab.value = target;
 
-    navItems.value?.forEach((tab) => {
+    allItems.value.forEach((tab) => {
       tab.setAttribute("aria-selected", currentActiveTab.value === tab ? "true" : "false");
     });
 
     setRovingTabindex();
-    moveActiveIndicator();
+    placeIndicator("active", true);
     setActiveTabContent();
   };
 
+  const activateTabByIndex = (index: number) => {
+    const target = allItems.value.find((tab) => Number(tab.dataset.tabIndex) === index);
+    if (target) activateTab(target);
+  };
+
   const navItemClicked = (event: Event) => {
-    activateTab(event.target as HTMLElement);
+    activateTab(event.currentTarget as HTMLElement);
   };
 
   // WAI-ARIA Tabs pattern: arrow keys move focus and activate (automatic activation);
   // Home/End jump to the first/last tab.
   const navItemKeydown = (event: KeyboardEvent) => {
-    if (!navItems.value || navItems.value.length === 0) return;
+    const items = navItems.value;
+    if (items.length === 0) return;
 
-    const previousKey = axis === "y" ? "ArrowUp" : "ArrowLeft";
-    const nextKey = axis === "y" ? "ArrowDown" : "ArrowRight";
+    const isVertical = toValue(axis) === "y";
+    const previousKey = isVertical ? "ArrowUp" : "ArrowLeft";
+    const nextKey = isVertical ? "ArrowDown" : "ArrowRight";
 
     let targetIndex: number | null = null;
-    const currentIndex = currentActiveTab.value ? navItems.value.indexOf(currentActiveTab.value) : 0;
+    const currentIndex = currentActiveTab.value ? items.indexOf(currentActiveTab.value) : 0;
 
     if (event.key === nextKey) {
-      targetIndex = (currentIndex + 1) % navItems.value.length;
+      targetIndex = (currentIndex + 1) % items.length;
     } else if (event.key === previousKey) {
-      targetIndex = (currentIndex - 1 + navItems.value.length) % navItems.value.length;
+      targetIndex = (currentIndex - 1 + items.length) % items.length;
     } else if (event.key === "Home") {
       targetIndex = 0;
     } else if (event.key === "End") {
-      targetIndex = navItems.value.length - 1;
+      targetIndex = items.length - 1;
     }
 
     if (targetIndex === null) return;
 
     event.preventDefault();
-    const targetTab = navItems.value[targetIndex];
+    const targetTab = items[targetIndex];
     if (!targetTab) return;
 
     targetTab.focus();
     activateTab(targetTab);
   };
 
-  const setFinalHoveredPositions = (resized: boolean = false) => {
-    if (!tabsNavRef.value || !currentHoveredTab.value) return;
-
-    // Batch every layout read before any style write below, so the browser doesn't need to
-    // perform a forced synchronous reflow between each read/write pair.
-    const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = currentHoveredTab.value;
-    const { offsetWidth: navWidth } = tabsNavRef.value;
-    const setDuration = resized ? 0 : duration;
-    const newTabWidth = navWidth ? offsetWidth / navWidth : 0;
-
+  /**
+   * Sends an indicator's two edges to its target tab, as insets from the bar's start and end edges
+   * along the axis. On a move, the edge in the direction of travel goes first and the trailing edge
+   * follows one duration later, so the indicator stretches across and then catches up. CSS retargets
+   * each edge from wherever it is, so a quick second move never pulls an edge backwards.
+   * `animate: false` (mount, resize, tab-count change) snaps both edges.
+   */
+  const placeIndicator = (kind: IndicatorKind, animate: boolean) => {
     const nav = tabsNavRef.value;
-    nav.style.setProperty("--_transition-duration", setDuration + "ms");
-    nav.style.setProperty("--_x-hovered", offsetLeft + "px");
-    nav.style.setProperty("--_width-hovered", newTabWidth.toString());
-    nav.style.setProperty("--_y-hovered", offsetTop + "px");
-    nav.style.setProperty("--_y-height", offsetHeight + "px");
-    nav.style.setProperty("--_y-width", offsetWidth + "px");
+    const target = indicatorTarget(kind === "active" ? currentActiveTab.value : currentHoveredTab.value);
+    if (!nav || !target) return;
+
+    const vertical = toValue(axis) === "y";
+    const start = vertical ? target.offsetTop : target.offsetLeft;
+    const size = vertical ? target.offsetHeight : target.offsetWidth;
+    const end = (vertical ? nav.clientHeight : nav.clientWidth) - start - size;
+
+    const previous = lastStart[kind];
+    const ms = animate && previous !== null ? transitionMs() : 0;
+    const forward = previous !== null && start > previous;
+    const backward = previous !== null && start < previous;
+    lastStart[kind] = start;
+
+    nav.style.setProperty(`--_${kind}-duration`, ms + "ms");
+    nav.style.setProperty(`--_${kind}-start-delay`, forward ? ms + "ms" : "0ms");
+    nav.style.setProperty(`--_${kind}-end-delay`, backward ? ms + "ms" : "0ms");
+    nav.style.setProperty(`--_${kind}-start`, start + "px");
+    nav.style.setProperty(`--_${kind}-end`, end + "px");
+
+    if (kind === "active") trackCoverage(ms * 2);
   };
 
-  const setFinalActivePositions = (resized: boolean = false) => {
-    if (!tabsNavRef.value || !currentActiveTab.value) return;
-
-    const { offsetLeft, offsetTop, offsetWidth, offsetHeight } = currentActiveTab.value;
-    const { offsetWidth: navWidth } = tabsNavRef.value;
-    const setDuration = resized ? 0 : duration;
-    const newTabWidth = navWidth ? offsetWidth / navWidth : 0;
-
+  // Marks each visible tab (and the overflow trigger) that the active indicator covers by at least half,
+  // so its text can take the active text colour while the indicator slides under it.
+  const updateCoverage = () => {
     const nav = tabsNavRef.value;
-    nav.style.setProperty("--_transition-duration", setDuration + "ms");
-    nav.style.setProperty("--_x-active", offsetLeft + "px");
-    nav.style.setProperty("--_width-active", newTabWidth.toString());
-    nav.style.setProperty("--_y-active", offsetTop + "px");
-    nav.style.setProperty("--_y-height", offsetHeight + "px");
-    nav.style.setProperty("--_y-width", offsetWidth + "px");
+    if (!nav) return;
+    const targets = [...navItems.value];
+    const more = nav.querySelector<HTMLElement>("[data-more-trigger]");
+    if (more) targets.push(more);
+
+    const indicator = nav.querySelector<HTMLElement>("[data-active-indicator]");
+    if (!indicator) {
+      targets.forEach((target) => target.removeAttribute("data-under-active"));
+      return;
+    }
+
+    const vertical = toValue(axis) === "y";
+    const box = indicator.getBoundingClientRect();
+    const [boxStart, boxEnd] = vertical ? [box.top, box.bottom] : [box.left, box.right];
+
+    targets.forEach((target) => {
+      const rect = target.getBoundingClientRect();
+      const [start, end] = vertical ? [rect.top, rect.bottom] : [rect.left, rect.right];
+      const overlap = Math.min(boxEnd, end) - Math.max(boxStart, start);
+      target.toggleAttribute("data-under-active", end > start && overlap >= (end - start) / 2);
+    });
   };
 
-  const moveActiveIndicator = () => {
-    if (!tabsNavRef.value || !currentActiveTab.value) return;
-    if (!options.trackActive && !options.trackIndicator) return;
-
-    const nav = tabsNavRef.value;
-    const current = currentActiveTab.value;
-    const previous = previousActiveTab.value;
-
-    // Batch reads first.
-    const newTabPosition = previous ? previous.compareDocumentPosition(current) : 0;
-    const currentLeft = current.offsetLeft;
-    const currentWidth = current.offsetWidth;
-    const previousLeft = previous?.offsetLeft ?? 0;
-    const previousWidth = previous?.offsetWidth ?? 0;
-    const navWidth = nav.offsetWidth;
-
-    let transitionWidth: number;
-    let xActive: string | null = null;
-
-    if (newTabPosition === 4) {
-      transitionWidth = previous ? currentLeft + currentWidth - previousLeft : 0;
-    } else {
-      transitionWidth = previous ? previousLeft + previousWidth - currentLeft : 0;
-      xActive = currentLeft + "px";
-    }
-
-    // Then batch writes.
-    nav.style.setProperty("--_transition-duration", duration + "ms");
-    if (xActive !== null) {
-      nav.style.setProperty("--_x-active", xActive);
-    }
-    nav.style.setProperty("--_width-active", String(transitionWidth / navWidth));
-
-    if (activeSettleTimeoutId) clearTimeout(activeSettleTimeoutId);
-    activeSettleTimeoutId = setTimeout(
-      () => {
-        setFinalActivePositions();
-      },
-      Math.floor(duration + 20)
-    );
+  // Re-checks coverage every frame while the indicator's transition runs.
+  const trackCoverage = (animationMs: number) => {
+    if (coverageFrameId !== null) cancelAnimationFrame(coverageFrameId);
+    const until = performance.now() + animationMs + 50;
+    const step = () => {
+      updateCoverage();
+      coverageFrameId = performance.now() < until ? requestAnimationFrame(step) : null;
+    };
+    step();
   };
 
-  const moveHoveredIndicator = () => {
-    if (!tabsNavRef.value || !currentHoveredTab.value) return;
-
-    const nav = tabsNavRef.value;
-    const current = currentHoveredTab.value;
-    const previous = previousHoveredTab.value;
-
-    // Batch reads first.
-    const newTabPosition = previous ? previous.compareDocumentPosition(current) : 0;
-    const currentLeft = current.offsetLeft;
-    const currentWidth = current.offsetWidth;
-    const previousLeft = previous?.offsetLeft ?? 0;
-    const previousWidth = previous?.offsetWidth ?? 0;
-    const navWidth = nav.offsetWidth;
-
-    let transitionWidth: number;
-    let xHovered: string | null = null;
-
-    if (newTabPosition === 4) {
-      transitionWidth = previous ? currentLeft + currentWidth - previousLeft : 0;
-    } else {
-      transitionWidth = previous ? previousLeft + previousWidth - currentLeft : 0;
-      xHovered = currentLeft + "px";
-    }
-
-    // Then batch writes.
-    nav.style.setProperty("--_transition-duration", duration + "ms");
-    if (xHovered !== null) {
-      nav.style.setProperty("--_x-hovered", xHovered);
-    }
-    nav.style.setProperty("--_width-hovered", String(transitionWidth / navWidth));
-
-    if (hoveredSettleTimeoutId) clearTimeout(hoveredSettleTimeoutId);
-    hoveredSettleTimeoutId = setTimeout(
-      () => {
-        setFinalHoveredPositions();
-      },
-      Math.floor(duration + 20)
-    );
-  };
-
+  // Matched by data-tab-index, since a v-for ref array isn't guaranteed to stay in source order.
   const setActiveTabContent = () => {
-    const activeIndex = navItems.value?.findIndex((el) => el === currentActiveTab.value);
-    tabsContentRefs.value?.forEach((tabContent: HTMLElement, index: number) => {
-      const isActive = activeIndex === index;
-      tabContent.style.display = isActive ? "block" : "none";
-      tabContent.setAttribute("aria-hidden", isActive ? "false" : "true");
+    const activeIndex = currentActiveTab.value?.dataset.tabIndex;
+    tabsContentRefs.value?.forEach((tabContent: HTMLElement) => {
+      tabContent.hidden = tabContent.dataset.tabIndex !== activeIndex;
     });
   };
 
   useResizeObserver(tabsNavRef, () => {
-    setFinalActivePositions(true);
-    setFinalHoveredPositions(true);
+    placeIndicator("active", false);
+    placeIndicator("hovered", false);
   });
 
   onUnmounted(() => {
-    if (activeSettleTimeoutId) clearTimeout(activeSettleTimeoutId);
-    if (hoveredSettleTimeoutId) clearTimeout(hoveredSettleTimeoutId);
+    if (coverageFrameId !== null) cancelAnimationFrame(coverageFrameId);
   });
 
   return {
-    initNavDecorators,
+    refreshTabs,
+    activeIndex,
+    activateTabByIndex,
     navItemClicked,
     navItemHovered,
     navItemKeydown,
