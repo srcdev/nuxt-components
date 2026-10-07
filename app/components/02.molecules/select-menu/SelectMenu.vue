@@ -11,24 +11,45 @@
       popovertargetaction="toggle"
       type="button"
       class="select-menu-trigger"
-      :aria-label="label"
+      :aria-label="triggerAriaLabel"
       aria-haspopup="listbox"
       :aria-expanded="isOpen"
       @click="handleTriggerClick"
     >
-      <Icon
-        v-if="showIcon && !multiple && selectedOption?.icon"
-        :name="selectedOption.icon"
-        class="select-menu-trigger-icon"
+      <Icon v-if="leadingIcon" :name="leadingIcon" class="select-menu-trigger-icon" aria-hidden="true" />
+      <span
+        v-if="showLabel"
+        class="select-menu-trigger-label"
+        :class="{ 'select-menu-trigger-label-reserved': reservedLabels.length }"
+      >
+        <template v-if="reservedLabels.length">
+          <span class="select-menu-trigger-label-text">{{ triggerLabelText }}</span>
+          <span
+            v-for="(text, index) in reservedLabels"
+            :key="index"
+            class="select-menu-trigger-label-sizer"
+            aria-hidden="true"
+            >{{ text }}</span
+          >
+        </template>
+        <template v-else>{{ triggerLabelText }}</template>
+      </span>
+      <span
+        v-if="indicator === 'count'"
+        class="select-menu-trigger-count"
+        :class="{ 'select-menu-trigger-indicator-empty': !selectedCount }"
         aria-hidden="true"
-      />
-      <span v-if="showLabel" class="select-menu-trigger-label">{{ triggerLabelText }}</span>
-      <Icon
-        v-if="showChevron"
-        name="lucide:chevron-down"
-        class="select-menu-trigger-chevron"
+      >
+        {{ selectedCount || "" }}
+      </span>
+      <span
+        v-else-if="indicator === 'dot'"
+        class="select-menu-trigger-dot"
+        :class="{ 'select-menu-trigger-indicator-empty': !selectedCount }"
+        :style="selectedOption?.dotColor ? { '--_dot-color': selectedOption.dotColor } : undefined"
         aria-hidden="true"
-      />
+      ></span>
+      <Icon v-if="showChevron" name="lucide:chevron-down" class="select-menu-trigger-chevron" aria-hidden="true" />
     </button>
 
     <div
@@ -63,6 +84,12 @@
             <Icon v-else-if="isSelected(option)" name="lucide:check" class="select-menu-item-check-icon" />
           </span>
           <Icon v-if="option.icon" :name="option.icon" class="select-menu-item-icon" aria-hidden="true" />
+          <span
+            v-else-if="option.dotColor"
+            class="select-menu-item-dot"
+            :style="{ '--_dot-color': option.dotColor }"
+            aria-hidden="true"
+          ></span>
           <span class="select-menu-item-label">{{ option.label }}</span>
         </li>
       </ul>
@@ -81,8 +108,14 @@ interface Props {
   label: string;
   /** Text shown in the trigger when no option is selected. Falls back to `label`. */
   placeholder?: string;
-  /** Show the selected option's icon in the trigger. */
+  /** Show the leading icon in the trigger: the selected option's icon (single-select), otherwise `triggerIcon`. */
   showIcon?: boolean;
+  /** Fixed leading icon for the trigger, e.g. a filter category icon. Shown in both modes; in single-select a selected option's own icon replaces it. */
+  triggerIcon?: string;
+  /** Selection indicator after the trigger text, shown only while something is selected: `count` (badge with the number selected) or `dot` (status dot). */
+  indicator?: "none" | "count" | "dot";
+  /** Appended to the trigger's accessible name while the indicator is showing. `{count}` is replaced with the number selected. */
+  selectedCountLabel?: string;
   /** Show the selected option's label (or placeholder) text in the trigger. Set to false for an icon-only compact trigger. */
   showLabel?: boolean;
   /** Show the trailing chevron in the trigger. */
@@ -91,6 +124,8 @@ interface Props {
   multiple?: boolean;
   /** In multiple mode, update the trigger text to a comma-separated list of the currently checked options instead of leaving it fixed on placeholder/label. No effect outside multiple mode. */
   showSelectionInTrigger?: boolean;
+  /** Single-select only. Size the trigger text to the longest option label (or placeholder), so the trigger doesn't change width as the selection changes. */
+  reserveLabelWidth?: boolean;
   /** Trigger border style, matching InputSelect: `normal` (bordered box) or `underlined` (bottom border only). */
   inputVariant?: InputUiVariant;
   styleClassPassthrough?: string | string[];
@@ -99,10 +134,14 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   placeholder: undefined,
   showIcon: true,
+  triggerIcon: undefined,
+  indicator: "none",
+  selectedCountLabel: "{count} selected",
   showLabel: true,
   showChevron: true,
   multiple: false,
   showSelectionInTrigger: false,
+  reserveLabelWidth: false,
   inputVariant: "normal",
   styleClassPassthrough: () => [],
 });
@@ -130,6 +169,11 @@ const selectedOptions = computed(() => props.options.filter((option) => selected
  * options would grow unpredictably long and push on adjacent triggers. Set
  * `showSelectionInTrigger` to opt into the comma-joined list instead.
  */
+const reservedLabels = computed(() => {
+  if (!props.reserveLabelWidth || props.multiple) return [];
+  return [props.placeholder ?? props.label, ...props.options.map((option) => option.label)];
+});
+
 const triggerLabelText = computed(() => {
   if (props.multiple) {
     if (props.showSelectionInTrigger && selectedOptions.value.length) {
@@ -138,6 +182,21 @@ const triggerLabelText = computed(() => {
     return props.placeholder ?? props.label;
   }
   return selectedOption.value?.label ?? props.placeholder ?? props.label;
+});
+
+const selectedCount = computed(() => {
+  if (props.multiple) return selectedOptions.value.length;
+  return selectedOption.value ? 1 : 0;
+});
+
+const leadingIcon = computed(() => {
+  if (!props.showIcon) return undefined;
+  return (!props.multiple && selectedOption.value?.icon) || props.triggerIcon;
+});
+
+const triggerAriaLabel = computed(() => {
+  if (props.indicator === "none" || !selectedCount.value) return props.label;
+  return `${props.label}, ${props.selectedCountLabel.replace("{count}", String(selectedCount.value))}`;
 });
 
 const isSelected = (option: SelectMenuOption): boolean =>
@@ -249,7 +308,8 @@ watch(
       min-height: var(--select-menu-trigger-min-height, 4.4rem);
       padding-block: var(--select-menu-trigger-padding-block, 0.8rem);
       padding-inline: var(--select-menu-trigger-padding-inline, 1.2rem);
-      border: var(--select-menu-trigger-border-width, 0.1rem) solid var(--select-menu-trigger-border, var(--theme-border));
+      border: var(--select-menu-trigger-border-width, 0.1rem) solid
+        var(--select-menu-trigger-border, var(--theme-border));
       border-radius: var(--select-menu-trigger-border-radius, 0.5rem);
       background-color: var(--select-menu-trigger-surface, var(--theme-input-surface));
       color: var(--select-menu-trigger-text-color, var(--theme-text));
@@ -274,6 +334,7 @@ watch(
         flex-shrink: 0;
         width: var(--select-menu-trigger-icon-size, 2rem);
         height: var(--select-menu-trigger-icon-size, 2rem);
+        color: var(--select-menu-trigger-icon-color, currentcolor);
       }
 
       .select-menu-trigger-label {
@@ -283,6 +344,53 @@ watch(
         overflow: hidden;
         text-overflow: ellipsis;
         text-align: start;
+      }
+
+      /* Hidden copies of every possible label share one grid cell, so the widest sets the width. */
+      .select-menu-trigger-label-reserved {
+        display: grid;
+
+        .select-menu-trigger-label-text,
+        .select-menu-trigger-label-sizer {
+          grid-area: 1 / 1;
+          min-width: 0;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .select-menu-trigger-label-sizer {
+          visibility: hidden;
+          block-size: 0;
+        }
+      }
+
+      .select-menu-trigger-count {
+        flex-shrink: 0;
+        min-width: var(--select-menu-trigger-count-min-width, 2.4rem);
+        padding-block: var(--select-menu-trigger-count-padding-block, 0.2rem);
+        padding-inline: var(--select-menu-trigger-count-padding-inline, 0.6rem);
+        margin-inline: var(--select-menu-trigger-count-margin-inline, 1.2rem 0);
+        border-radius: var(--select-menu-trigger-count-border-radius, 0.4rem);
+        background-color: var(--select-menu-trigger-count-surface, var(--theme-surface-subtle));
+        color: var(--select-menu-trigger-count-text-color, var(--theme-text));
+        font-size: var(--select-menu-trigger-count-font-size, 1.4rem);
+        font-weight: var(--select-menu-trigger-count-font-weight, 600);
+        font-variant-numeric: tabular-nums;
+        text-align: center;
+      }
+
+      .select-menu-trigger-dot {
+        flex-shrink: 0;
+        width: var(--select-menu-trigger-dot-size, 0.8rem);
+        height: var(--select-menu-trigger-dot-size, 0.8rem);
+        margin-inline: var(--select-menu-trigger-dot-margin-inline, 1.2rem 0);
+        border-radius: 50%;
+        background-color: var(--_dot-color, var(--select-menu-trigger-dot-color, var(--theme-accent)));
+      }
+
+      /* Kept in the layout while nothing is selected, so the trigger width doesn't jump. */
+      .select-menu-trigger-indicator-empty {
+        visibility: hidden;
       }
 
       .select-menu-trigger-chevron {
@@ -306,7 +414,7 @@ watch(
     }
 
     .select-menu-trigger[aria-expanded="true"] .select-menu-trigger-chevron {
-      transform: rotate(180deg);
+      transform: scaleY(-1);
     }
 
     .select-menu-popover {
@@ -453,6 +561,15 @@ watch(
             flex-shrink: 0;
             width: var(--select-menu-item-icon-size, 1.8rem);
             height: var(--select-menu-item-icon-size, 1.8rem);
+          }
+
+          .select-menu-item-dot {
+            grid-column: 2;
+            justify-self: center;
+            width: var(--select-menu-item-dot-size, 0.8rem);
+            height: var(--select-menu-item-dot-size, 0.8rem);
+            border-radius: 50%;
+            background-color: var(--_dot-color);
           }
 
           .select-menu-item-label {

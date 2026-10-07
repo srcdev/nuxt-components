@@ -61,6 +61,34 @@
       "/>"
     ]
   },
+  "SRCDEV SelectMenu Filter Count": {
+    "description": "SelectMenu — multi-select filter with a category icon and a selected-count badge",
+    "scope": "vue,html",
+    "body": [
+      "<SelectMenu",
+      "  v-model=\"${1:selectedValues}\"",
+      "  :options=\"${2:options}\"",
+      "  label=\"${3:Category}\"",
+      "  multiple",
+      "  trigger-icon=\"${4:lucide:list}\"",
+      "  indicator=\"count\"",
+      "/>"
+    ]
+  },
+  "SRCDEV SelectMenu Filter Status Dot": {
+    "description": "SelectMenu — single-select filter with a category icon and an active-filter status dot, fixed width across selections",
+    "scope": "vue,html",
+    "body": [
+      "<SelectMenu",
+      "  v-model=\"${1:status}\"",
+      "  :options=\"${2:statusOptions}\"",
+      "  label=\"${3:Status}\"",
+      "  trigger-icon=\"${4:lucide:circle-dot}\"",
+      "  indicator=\"dot\"",
+      "  reserve-label-width",
+      "/>"
+    ]
+  },
   "SRCDEV SelectMenu Multi-Select Showing Selection": {
     "description": "SelectMenu — multi-select where the trigger updates to list checked options",
     "scope": "vue,html",

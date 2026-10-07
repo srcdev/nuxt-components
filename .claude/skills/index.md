@@ -33,6 +33,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── theming-partial-override.md      — override a specific colour token category (palette, buttons, inputs) without a full theme replacement
 ├── theming-form-geometry-tokens.md  — non-colour form/button/input tokens (padding, border-radius, gaps): full inventory, why partial override doesn't need duplicating the source files
 ├── theming-component-token-pattern.md — standard shape for overridable component colours: public token + inline fallback, no bare var()/no private-only indirection; the three tiers (theme slots / cross-component families / component-scoped); line-clamp tokens for overflowing text; rollout status
+├── theming-status-tokens.md        — global --status-* colours (success/warning/danger/info/neutral: solid + surface + text), which components read them, how to override once for the whole library
 ├── theming-dark-mode.md            — add a dark scheme in a consumer app (layer is light-only): enable plumbing, full dark token set without light-dark(), light-dark() alternative, light-only pinning
 ├── colour-scheme-disable.md         — disable light/dark scheme support in a consumer app
 ├── component-dynamic-slots.md        — named dynamic slots ($slots iteration) vs indexed dynamic slots (itemCount pattern)

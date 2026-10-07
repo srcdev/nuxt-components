@@ -463,6 +463,157 @@ describe("SelectMenu", () => {
   });
 
   // -------------------------
+  // Trigger icon + indicator
+  // -------------------------
+  describe("Trigger icon and indicator", () => {
+    const plainOptions: SelectMenuOption[] = [
+      { value: "a", label: "Alpha" },
+      { value: "b", label: "Beta" },
+      { value: "c", label: "Gamma" },
+    ];
+
+    it("renders triggerIcon in multiple mode", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: [], triggerIcon: "lucide:list" });
+      expect(wrapper.find(".select-menu-trigger-icon").exists()).toBe(true);
+    });
+
+    it("renders triggerIcon in single mode when the selected option has no icon", async () => {
+      wrapper = await createWrapper({ options: plainOptions, modelValue: "a", triggerIcon: "lucide:list" });
+      expect(wrapper.find(".select-menu-trigger-icon").exists()).toBe(true);
+    });
+
+    it("hides triggerIcon when showIcon is false", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: [], triggerIcon: "lucide:list", showIcon: false });
+      expect(wrapper.find(".select-menu-trigger-icon").exists()).toBe(false);
+    });
+
+    it("renders no indicator by default", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: ["en", "fr"] });
+      expect(wrapper.find(".select-menu-trigger-count").exists()).toBe(false);
+      expect(wrapper.find(".select-menu-trigger-dot").exists()).toBe(false);
+    });
+
+    it("shows the number selected in the count badge", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: ["en", "fr"], indicator: "count" });
+      expect(wrapper.find(".select-menu-trigger-count").text()).toBe("2");
+    });
+
+    it("keeps an empty, hidden count badge in the layout when nothing is selected", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: [], indicator: "count" });
+      const badge = wrapper.find(".select-menu-trigger-count");
+      expect(badge.exists()).toBe(true);
+      expect(badge.text()).toBe("");
+      expect(badge.classes()).toContain("select-menu-trigger-indicator-empty");
+    });
+
+    it("updates the count badge as options are toggled", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: [], indicator: "count" });
+      await wrapper.setProps({ modelValue: ["en", "fr", "de"] });
+      const badge = wrapper.find(".select-menu-trigger-count");
+      expect(badge.text()).toBe("3");
+      expect(badge.classes()).not.toContain("select-menu-trigger-indicator-empty");
+    });
+
+    it("hides the dot, keeping its space, when nothing is selected", async () => {
+      wrapper = await createWrapper({ modelValue: "en", indicator: "dot" });
+      const dot = () => wrapper.find(".select-menu-trigger-dot");
+      expect(dot().classes()).not.toContain("select-menu-trigger-indicator-empty");
+      await wrapper.setProps({ modelValue: undefined });
+      expect(dot().exists()).toBe(true);
+      expect(dot().classes()).toContain("select-menu-trigger-indicator-empty");
+    });
+
+    it("colours the trigger dot with the selected option's dotColor", async () => {
+      const statusOptions: SelectMenuOption[] = [
+        { value: "active", label: "Active", dotColor: "green" },
+        { value: "pending", label: "Pending", dotColor: "orange" },
+      ];
+      wrapper = await createWrapper({ options: statusOptions, modelValue: "active", indicator: "dot" });
+      const dot = () => wrapper.find(".select-menu-trigger-dot").element as HTMLElement;
+      expect(dot().style.getPropertyValue("--_dot-color")).toBe("green");
+      await wrapper.setProps({ modelValue: "pending" });
+      expect(dot().style.getPropertyValue("--_dot-color")).toBe("orange");
+    });
+
+    it("leaves the trigger dot on the token colour when the option has no dotColor", async () => {
+      wrapper = await createWrapper({ options: plainOptions, modelValue: "a", indicator: "dot" });
+      const dot = wrapper.find(".select-menu-trigger-dot").element as HTMLElement;
+      expect(dot.style.getPropertyValue("--_dot-color")).toBe("");
+    });
+
+    it("renders a list dot for options with dotColor and no icon", async () => {
+      wrapper = await createWrapper({
+        options: [
+          { value: "a", label: "Alpha", dotColor: "green" },
+          { value: "b", label: "Beta" },
+          { value: "c", label: "Gamma", icon: "lucide:star", dotColor: "red" },
+        ],
+      });
+      const rows = wrapper.findAll(".select-menu-list-item");
+      const rowDot = rows[0]!.find(".select-menu-item-dot");
+      expect((rowDot.element as HTMLElement).style.getPropertyValue("--_dot-color")).toBe("green");
+      expect(rows[1]!.find(".select-menu-item-dot").exists()).toBe(false);
+      expect(rows[2]!.find(".select-menu-item-dot").exists()).toBe(false);
+    });
+
+    it("hides the indicator from assistive tech", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: ["en"], indicator: "count" });
+      expect(wrapper.find(".select-menu-trigger-count").attributes("aria-hidden")).toBe("true");
+    });
+
+    it("appends the selected count to the trigger's accessible name while the indicator shows", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: ["en", "fr"], indicator: "count" });
+      expect(wrapper.find(".select-menu-trigger").attributes("aria-label")).toBe("Language, 2 selected");
+    });
+
+    it("uses a custom selectedCountLabel", async () => {
+      wrapper = await createWrapper({
+        multiple: true,
+        modelValue: ["en"],
+        indicator: "count",
+        selectedCountLabel: "{count} sélectionné",
+      });
+      expect(wrapper.find(".select-menu-trigger").attributes("aria-label")).toBe("Language, 1 sélectionné");
+    });
+
+    it("keeps the plain label as the accessible name when nothing is selected", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: [], indicator: "count" });
+      expect(wrapper.find(".select-menu-trigger").attributes("aria-label")).toBe("Language");
+    });
+  });
+
+  // -------------------------
+  // reserveLabelWidth
+  // -------------------------
+  describe("reserveLabelWidth", () => {
+    it("renders plain label text by default", async () => {
+      wrapper = await createWrapper({ modelValue: "en" });
+      expect(wrapper.find(".select-menu-trigger-label-sizer").exists()).toBe(false);
+      expect(wrapper.find(".select-menu-trigger-label").text()).toBe("English");
+    });
+
+    it("renders a hidden sizer for the placeholder and every option label", async () => {
+      wrapper = await createWrapper({ modelValue: "en", placeholder: "Pick one", reserveLabelWidth: true });
+      const sizers = wrapper.findAll(".select-menu-trigger-label-sizer");
+      expect(sizers.map((sizer) => sizer.text())).toEqual(["Pick one", "English", "Français", "Deutsch"]);
+      expect(sizers.every((sizer) => sizer.attributes("aria-hidden") === "true")).toBe(true);
+    });
+
+    it("shows the selected label in the visible text span", async () => {
+      wrapper = await createWrapper({ modelValue: "fr", reserveLabelWidth: true });
+      expect(wrapper.find(".select-menu-trigger-label-text").text()).toBe("Français");
+      await wrapper.setProps({ modelValue: "de" });
+      expect(wrapper.find(".select-menu-trigger-label-text").text()).toBe("Deutsch");
+    });
+
+    it("has no effect in multiple mode", async () => {
+      wrapper = await createWrapper({ multiple: true, modelValue: [], reserveLabelWidth: true });
+      expect(wrapper.find(".select-menu-trigger-label").classes()).not.toContain("select-menu-trigger-label-reserved");
+      expect(wrapper.find(".select-menu-trigger-label-sizer").exists()).toBe(false);
+    });
+  });
+
+  // -------------------------
   // styleClassPassthrough
   // -------------------------
   describe("styleClassPassthrough", () => {

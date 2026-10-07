@@ -152,18 +152,18 @@ watch(
     }
 
     &.success {
-      --_background: var(--display-pill-success-background, var(--display-pill-background, var(--green-01)));
-      --_text-colour: var(--display-pill-success-text-colour, var(--display-pill-text-colour, var(--green-10)));
+      --_background: var(--display-pill-success-background, var(--display-pill-background, var(--status-success-surface)));
+      --_text-colour: var(--display-pill-success-text-colour, var(--display-pill-text-colour, var(--status-success-text)));
     }
 
     &.warning {
-      --_background: var(--display-pill-warning-background, var(--display-pill-background, var(--orange-01)));
-      --_text-colour: var(--display-pill-warning-text-colour, var(--display-pill-text-colour, var(--orange-10)));
+      --_background: var(--display-pill-warning-background, var(--display-pill-background, var(--status-warning-surface)));
+      --_text-colour: var(--display-pill-warning-text-colour, var(--display-pill-text-colour, var(--status-warning-text)));
     }
 
     &.danger {
-      --_background: var(--display-pill-danger-background, var(--display-pill-background, var(--red-01)));
-      --_text-colour: var(--display-pill-danger-text-colour, var(--display-pill-text-colour, var(--red-10)));
+      --_background: var(--display-pill-danger-background, var(--display-pill-background, var(--status-danger-surface)));
+      --_text-colour: var(--display-pill-danger-text-colour, var(--display-pill-text-colour, var(--status-danger-text)));
     }
 
     &.neutral {

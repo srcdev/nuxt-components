@@ -10,10 +10,14 @@ interface StoryArgs {
   label?: string;
   placeholder?: string;
   showIcon?: boolean;
+  triggerIcon?: string;
+  indicator?: "none" | "count" | "dot";
+  selectedCountLabel?: string;
   showLabel?: boolean;
   showChevron?: boolean;
   multiple?: boolean;
   showSelectionInTrigger?: boolean;
+  reserveLabelWidth?: boolean;
   inputVariant?: "normal" | "underlined";
   modelValue?: string | number | (string | number)[];
   styleClassPassthrough?: string | string[];
@@ -35,8 +39,24 @@ const meta: Meta<StoryArgs> = {
     },
     showIcon: {
       control: { type: "boolean" },
-      description: "Show the selected option's icon in the trigger.",
+      description: "Show the leading icon in the trigger: the selected option's icon (single-select), otherwise `triggerIcon`.",
       table: { category: "Trigger content" },
+    },
+    triggerIcon: {
+      control: { type: "text" },
+      description: "Fixed leading icon, e.g. a filter category icon. In single-select a selected option's own icon replaces it.",
+      table: { category: "Trigger content" },
+    },
+    indicator: {
+      control: { type: "select" },
+      options: ["none", "count", "dot"],
+      description: "Selection indicator after the trigger text, shown only while something is selected: a count badge or a status dot.",
+      table: { category: "Trigger content" },
+    },
+    selectedCountLabel: {
+      control: { type: "text" },
+      description: "Appended to the trigger's accessible name while the indicator shows. `{count}` is replaced with the number selected.",
+      table: { category: "Content" },
     },
     showLabel: {
       control: { type: "boolean" },
@@ -58,6 +78,11 @@ const meta: Meta<StoryArgs> = {
       description: "In multiple mode, update the trigger text to a comma-separated list of the currently checked options instead of leaving it fixed on placeholder/label. No effect outside multiple mode.",
       table: { category: "Content" },
     },
+    reserveLabelWidth: {
+      control: { type: "boolean" },
+      description: "Single-select only. Size the trigger text to the longest option label (or placeholder), so the trigger doesn't change width as the selection changes.",
+      table: { category: "Trigger content" },
+    },
     inputVariant: {
       control: { type: "select" },
       options: ["normal", "underlined"],
@@ -71,6 +96,7 @@ const meta: Meta<StoryArgs> = {
   args: {
     label: "Language",
     showIcon: true,
+    indicator: "none",
     showLabel: true,
     showChevron: true,
     inputVariant: "normal",
@@ -322,6 +348,75 @@ export const MultiSelectShowingSelection: Story = {
         <SelectMenu v-bind="args" v-model="value" :options="treatmentOptions" />
         <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
           modelValue: <strong>{{ value.length ? value.join(', ') : '[]' }}</strong>
+        </p>
+      </div>
+    `,
+  }),
+};
+
+/**
+ * Filter with a count — a fixed category icon (`triggerIcon`) plus a count
+ * badge (`indicator="count"`) showing how many options are checked. The
+ * badge only appears once something is selected.
+ */
+export const FilterWithCount: Story = {
+  name: "Filter — Icon + Count",
+  args: {
+    label: "Category",
+    multiple: true,
+    triggerIcon: "lucide:list",
+    indicator: "count",
+  },
+  render: (args) => ({
+    components: { SelectMenu },
+    setup() {
+      const value = ref<string[]>(["trim", "layers", "restyle"]);
+      return { args, value, treatmentOptions };
+    },
+    template: `
+      <div style="padding: 4rem 8rem;">
+        <SelectMenu v-bind="args" v-model="value" :options="treatmentOptions" />
+        <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
+          modelValue: <strong>{{ value.length ? value.join(', ') : '[]' }}</strong>
+        </p>
+      </div>
+    `,
+  }),
+};
+
+/**
+ * Filter with a status dot — single-select with `indicator="dot"`, e.g. a
+ * status filter. The dot signals the filter is active and disappears when the
+ * value is cleared. Each option's `dotColor` colours the trigger dot while
+ * it's selected and shows beside it in the list. `reserveLabelWidth` keeps
+ * the trigger at the width of the longest status, so it doesn't resize between
+ * "Active" and "Archived" (toggle it off in Controls to compare).
+ */
+export const FilterWithDot: Story = {
+  name: "Filter — Icon + Status Dot",
+  args: {
+    label: "Status",
+    triggerIcon: "lucide:circle-dot",
+    indicator: "dot",
+    reserveLabelWidth: true,
+  },
+  render: (args) => ({
+    components: { SelectMenu },
+    setup() {
+      const value = ref<string | undefined>("active");
+      const statusOptions: SelectMenuOption[] = [
+        { value: "active", label: "Active", dotColor: "var(--status-success)" },
+        { value: "pending", label: "Pending", dotColor: "var(--status-warning)" },
+        { value: "archived", label: "Archived", dotColor: "var(--status-neutral)" },
+      ];
+      return { args, value, statusOptions };
+    },
+    template: `
+      <div style="padding: 4rem 8rem;">
+        <SelectMenu v-bind="args" v-model="value" :options="statusOptions" />
+        <p style="margin: 1.6rem 0 0; font-size: 1.3rem; opacity: 0.6;">
+          modelValue: <strong>{{ value === undefined ? 'undefined' : value }}</strong>
+          <button type="button" style="margin-inline-start: 1.2rem;" @click="value = undefined">Clear</button>
         </p>
       </div>
     `,

@@ -8,6 +8,17 @@ html[data-color-scheme="dark"] {
   color-scheme: dark;
 
   --page-bg: var(--slate-08);
+
+  --status-success-surface: var(--green-09);
+  --status-success-text: var(--green-02);
+  --status-warning-surface: var(--orange-09);
+  --status-warning-text: var(--orange-02);
+  --status-danger-surface: var(--red-09);
+  --status-danger-text: var(--red-02);
+  --status-info-surface: var(--blue-09);
+  --status-info-text: var(--blue-02);
+  --status-neutral-surface: var(--slate-09);
+  --status-neutral-text: var(--slate-02);
   --colour-text-default: var(--slate-01);
   --colour-text-accent: var(--blue-05);
   --colour-text-eyebrow: var(--blue-05);

@@ -4,10 +4,10 @@
 
 | Token | Default | Controls |
 |---|---|---|
-| `--display-chip-colour-offline` | `slategrey` | Dot colour with no status class |
-| `--display-chip-colour-online` | `rgb(0, 255, 135)` | Dot colour with `.online` |
-| `--display-chip-colour-idle` | `rgb(255, 185, 51)` | Dot colour with `.idle` |
-| `--display-chip-colour-dnd` | `rgb(255, 40, 80)` | Dot colour with `.dnd` |
+| `--display-chip-colour-offline` | `var(--status-neutral)` | Dot colour with no status class |
+| `--display-chip-colour-online` | `var(--status-success)` | Dot colour with `.online` |
+| `--display-chip-colour-idle` | `var(--status-warning)` | Dot colour with `.idle` |
+| `--display-chip-colour-dnd` | `var(--status-danger)` | Dot colour with `.dnd` |
 | `--display-chip-text-colour` | `black` | Icon and label colour on the dot |
 
 Geometry (size, mask width, offset, angle) is set through the `config` prop, not tokens. Those
@@ -22,6 +22,13 @@ of these are public API.
 > consumer variable of the same name. The icon is now sized with `font-size` (its old
 > `width`/`height` were overridden by `@nuxt/icon`), and the icon/label colour is a token instead
 > of a hardcoded `black`.
+
+> Changed 2026-10-07: the status colours default to the global `--status-*` tokens
+> (`03.theming/_status.css`) instead of hardcoded neon `rgb()` values and `slategrey`, so they
+> match `DisplayPill`, `SelectMenu` and anything else reading the shared set. To keep the old
+> look, set the four `--display-chip-colour-*` tokens to the previous values. To restyle every
+> status across the library, override `--status-*` instead. See
+> `.claude/skills/theming-status-tokens.md`.
 
 ---
 

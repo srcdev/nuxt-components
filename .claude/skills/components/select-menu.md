@@ -21,14 +21,18 @@ open between picks.
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|
-| `options` | `SelectMenuOption[]` | — | **Required.** `{ value: string \| number; label: string; icon?: string }[]`. |
+| `options` | `SelectMenuOption[]` | — | **Required.** `{ value: string \| number; label: string; icon?: string; dotColor?: string }[]`. `dotColor` (any CSS colour) colours the trigger's status dot while that option is selected (`indicator="dot"`, single-select) and shows a matching dot beside the option in the list when it has no `icon`. |
 | `label` | `string` | — | **Required.** Accessible name for the trigger + listbox (`aria-label`). Also the trigger's fallback text when nothing is selected and no `placeholder` is set — this doubles as a visible category tag, e.g. `"Choose a service"`. |
 | `placeholder` | `string` | `undefined` | Trigger text shown when nothing is selected. Falls back to `label` when omitted. |
-| `showIcon` | `boolean` | `true` | Show the selected option's icon in the trigger. |
+| `showIcon` | `boolean` | `true` | Show the leading icon in the trigger: the selected option's icon (single-select), otherwise `triggerIcon`. |
+| `triggerIcon` | `string` | `undefined` | Fixed leading icon, e.g. a filter category icon. Shown in both modes; in single-select a selected option's own icon replaces it. |
+| `indicator` | `"none" \| "count" \| "dot"` | `"none"` | Marker after the trigger text, visible only while something is selected; otherwise kept in the layout with `visibility: hidden` (`.select-menu-trigger-indicator-empty`) so the trigger width doesn't jump. `count` = badge with the number selected (for `multiple`); `dot` = status dot (for single-select filters, flags the filter as active). `aria-hidden`. |
+| `selectedCountLabel` | `string` | `"{count} selected"` | Appended to the trigger's `aria-label` while the indicator shows (`"Category, 3 selected"`). `{count}` is replaced. Override for translation. |
 | `showLabel` | `boolean` | `true` | Show the selected option's label (or placeholder/label fallback) text in the trigger. Set `false` for an icon-only compact trigger. |
 | `showChevron` | `boolean` | `true` | Show the trailing chevron in the trigger. |
-| `multiple` | `boolean` | `false` | Allow selecting more than one option. Each option gets a checkbox indicator, `v-model` becomes an array, and picking an option leaves the popover open so more can be toggled. Trigger icon is not shown when `true` (no single option to represent). |
+| `multiple` | `boolean` | `false` | Allow selecting more than one option. Each option gets a checkbox indicator, `v-model` becomes an array, and picking an option leaves the popover open so more can be toggled. No option icon in the trigger when `true` (no single option to represent); `triggerIcon` still shows. |
 | `showSelectionInTrigger` | `boolean` | `false` | Multiple mode only. When `true`, the trigger text updates to a comma-separated list of the currently checked options instead of staying fixed on `placeholder`/`label`. No effect outside `multiple`. |
+| `reserveLabelWidth` | `boolean` | `false` | Single-select only. Renders hidden copies of the placeholder and every option label in the same grid cell as the visible text, so the trigger is always as wide as the longest one and doesn't resize when the selection changes. Off by default, since sometimes a trigger that hugs its text is wanted. No effect with `multiple`. |
 | `inputVariant` | `InputUiVariant` | `"normal"` | Trigger border style, same prop as `InputSelect`: `"normal"` (bordered box) or `"underlined"` (bottom border only, square corners), added as a class on the root. `"outlined"` has no CSS, same as the `05.forms` inputs. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the root `<div>`. |
 
@@ -132,6 +136,39 @@ Set `showSelectionInTrigger` to opt out of that and have the trigger update inst
 
 ---
 
+## Filter trigger: icon + count or status dot
+
+```vue
+<!-- Multi-select category filter: list icon, "Category", badge "3", chevron -->
+<SelectMenu
+  v-model="categories"
+  :options="categoryOptions"
+  label="Category"
+  multiple
+  trigger-icon="lucide:list"
+  indicator="count"
+/>
+
+<!-- Single-select status filter: dot appears once a status is picked, in that option's dotColor
+     statusOptions = [{ value: "active", label: "Active", dotColor: "var(--status-success)" }, ...] -->
+<SelectMenu
+  v-model="status"
+  :options="statusOptions"
+  label="Status"
+  trigger-icon="lucide:circle-dot"
+  indicator="dot"
+/>
+```
+
+The indicator is only visible while something is selected, so an unfiltered trigger looks plain,
+but its space is always reserved so the trigger doesn't resize as the filter is set and cleared.
+Per-option `dotColor` beats `--select-menu-trigger-dot-color`, which is the fallback (and the only
+colour in `multiple` mode).
+Badge/dot tokens (`--select-menu-trigger-count-*`, `--select-menu-trigger-dot-*`) are in
+`CONSUMER-STYLING.md`.
+
+---
+
 ## Filter bar (multiple categories)
 
 `SelectMenu` is single-select per instance — a faceted filter bar is built by placing one instance
@@ -209,7 +246,7 @@ Quick reference:
   weight doesn't resize the popover. Hover/focus has `-text-color-hover` and `-border-hover`, which
   fall back to the row's *current* state (selected or resting), not always to resting. There's no
   hover font-weight token on purpose: the width reserve only covers one alternate weight.
-- **Chevron rotation** keys off the trigger's `aria-expanded` (from the composable's `isOpen`), not
+- **Chevron flip** (`scaleY(-1)`, was `rotate(180deg)` until 2026-10-07) keys off the trigger's `aria-expanded` (from the composable's `isOpen`), not
   `:has(...:popover-open)`, so it also works without the Popover API (changed 2026-10-05).
 - **No native `<select>`/`appearance: base-select` involved** — this is a from-scratch popover
   listbox, not a styled native select, so it doesn't inherit `InputSelectCore`'s WebKit

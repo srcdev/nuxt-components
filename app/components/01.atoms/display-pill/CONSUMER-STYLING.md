@@ -17,9 +17,9 @@ the base token restyles every variant, and a variant token still wins for that o
 | `--display-pill-background` | `var(--slate-01)` | Background (the `default` variant, and the fallback for every other variant) |
 | `--display-pill-text-colour` | `var(--slate-09)` | Text/icon colour (same fallback role) |
 | `--display-pill-primary-background` / `-text-colour` | `var(--blue-01)` / `var(--blue-09)` | `primary` variant |
-| `--display-pill-success-background` / `-text-colour` | `var(--green-01)` / `var(--green-10)` | `success` variant |
-| `--display-pill-warning-background` / `-text-colour` | `var(--orange-01)` / `var(--orange-10)` | `warning` variant |
-| `--display-pill-danger-background` / `-text-colour` | `var(--red-01)` / `var(--red-10)` | `danger` variant |
+| `--display-pill-success-background` / `-text-colour` | `var(--status-success-surface)` / `var(--status-success-text)` | `success` variant |
+| `--display-pill-warning-background` / `-text-colour` | `var(--status-warning-surface)` / `var(--status-warning-text)` | `warning` variant |
+| `--display-pill-danger-background` / `-text-colour` | `var(--status-danger-surface)` / `var(--status-danger-text)` | `danger` variant |
 | `--display-pill-neutral-background` / `-text-colour` | `var(--slate-08)` / `var(--slate-03)` | `neutral` variant (dark) |
 | `--display-pill-focus-ring` | `var(--theme-border-focus)` | `:focus-visible` outline on `button`/`a` pills |
 
@@ -28,6 +28,12 @@ the base token restyles every variant, and a variant token still wins for that o
 > pill tokens (their pills are `neutral`) had never applied. The `warning` variant read a
 > `--yellow-*` ramp that doesn't exist, so it always showed its hardcoded hex fallbacks; it now uses
 > the `orange` ramp the warning theme moved to.
+
+`success`, `warning` and `danger` default to the global `--status-*` tokens
+(`03.theming/_status.css`), so overriding those restyles pills along with every other status
+indicator; same colours as before (changed 2026-10-07). `primary` (brand) and `neutral` (a dark,
+inverted pill) keep their own defaults and don't read the status set. See
+`.claude/skills/theming-status-tokens.md`.
 
 ### Border, outline and shape
 

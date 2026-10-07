@@ -64,7 +64,7 @@ const chipStyles = computed(() => ({
 @layer components {
   .display-chip {
     --_mask-diameter: calc(var(--_chip-size) + (var(--_chip-mask-width) * 2));
-    --_dot-colour: var(--display-chip-colour-offline, slategrey);
+    --_dot-colour: var(--display-chip-colour-offline, var(--status-neutral));
 
     position: relative;
     display: inline-block;
@@ -83,15 +83,15 @@ const chipStyles = computed(() => ({
     }
 
     &.online {
-      --_dot-colour: var(--display-chip-colour-online, rgb(0, 255, 135));
+      --_dot-colour: var(--display-chip-colour-online, var(--status-success));
     }
 
     &.idle {
-      --_dot-colour: var(--display-chip-colour-idle, rgb(255, 185, 51));
+      --_dot-colour: var(--display-chip-colour-idle, var(--status-warning));
     }
 
     &.dnd {
-      --_dot-colour: var(--display-chip-colour-dnd, rgb(255, 40, 80));
+      --_dot-colour: var(--display-chip-colour-dnd, var(--status-danger));
     }
 
     &::after {

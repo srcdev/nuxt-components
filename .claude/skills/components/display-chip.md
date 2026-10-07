@@ -57,10 +57,13 @@ Apply status via `styleClassPassthrough` — the component has built-in colour v
 
 | Class | Token | Default |
 | --- | --- | --- |
-| (none) | `--display-chip-colour-offline` | `slategrey` |
-| `online` | `--display-chip-colour-online` | `rgb(0, 255, 135)` |
-| `idle` | `--display-chip-colour-idle` | `rgb(255, 185, 51)` |
-| `dnd` | `--display-chip-colour-dnd` | `rgb(255, 40, 80)` |
+| (none) | `--display-chip-colour-offline` | `var(--status-neutral)` |
+| `online` | `--display-chip-colour-online` | `var(--status-success)` |
+| `idle` | `--display-chip-colour-idle` | `var(--status-warning)` |
+| `dnd` | `--display-chip-colour-dnd` | `var(--status-danger)` |
+
+Defaults come from the global status tokens (changed 2026-10-07, were neon `rgb()` values); see
+`.claude/skills/theming-status-tokens.md`.
 
 Icon and label colour: `--display-chip-text-colour` (default `black`). Full reference:
 `app/components/02.molecules/display-chip/CONSUMER-STYLING.md`.

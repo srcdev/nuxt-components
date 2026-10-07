@@ -1,0 +1,24 @@
+/* Shared status colours. Each status has a solid colour (dots, markers) plus a tinted
+   surface/text pair (badges, pills). Component tokens fall back to these, so overriding
+   one here restyles that status across every component. */
+:root {
+  --status-success: var(--green-06);
+  --status-success-surface: var(--green-01);
+  --status-success-text: var(--green-10);
+
+  --status-warning: var(--orange-05);
+  --status-warning-surface: var(--orange-01);
+  --status-warning-text: var(--orange-10);
+
+  --status-danger: var(--red-06);
+  --status-danger-surface: var(--red-01);
+  --status-danger-text: var(--red-10);
+
+  --status-info: var(--blue-06);
+  --status-info-surface: var(--blue-01);
+  --status-info-text: var(--blue-09);
+
+  --status-neutral: var(--slate-05);
+  --status-neutral-surface: var(--slate-01);
+  --status-neutral-text: var(--slate-09);
+}

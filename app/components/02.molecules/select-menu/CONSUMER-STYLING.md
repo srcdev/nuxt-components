@@ -22,7 +22,20 @@ global token so it matches the rest of the design system out of the box.
 | `--select-menu-trigger-text-color` | `var(--theme-text)` | Trigger label text colour |
 | `--select-menu-trigger-font-size` | `1.6rem` | Trigger label font size |
 | `--select-menu-trigger-outline-width` | `0.2rem` | Focus-visible outline width (trigger and items) |
-| `--select-menu-trigger-icon-size` | `2rem` | Selected option's icon size in the trigger |
+| `--select-menu-trigger-icon-size` | `2rem` | Leading icon size in the trigger (selected option's icon or `triggerIcon`) |
+| `--select-menu-trigger-icon-color` | `currentcolor` | Leading icon colour (monochrome icon sets only) |
+| `--select-menu-trigger-count-surface` | `var(--theme-surface-subtle)` | Count badge background (`indicator="count"`) |
+| `--select-menu-trigger-count-text-color` | `var(--theme-text)` | Count badge text colour |
+| `--select-menu-trigger-count-font-size` | `1.4rem` | Count badge font size |
+| `--select-menu-trigger-count-font-weight` | `600` | Count badge font weight |
+| `--select-menu-trigger-count-min-width` | `2.4rem` | Count badge minimum width, so 1 and 12 read as the same shape |
+| `--select-menu-trigger-count-padding-block` | `0.2rem` | Count badge vertical padding |
+| `--select-menu-trigger-count-padding-inline` | `0.6rem` | Count badge horizontal padding |
+| `--select-menu-trigger-count-border-radius` | `0.4rem` | Count badge corner rounding (`999rem` for a pill) |
+| `--select-menu-trigger-count-margin-inline` | `1.2rem 0` | Extra space around the count badge, on top of `--select-menu-trigger-gap` (start, end) |
+| `--select-menu-trigger-dot-size` | `0.8rem` | Status dot diameter (`indicator="dot"`) |
+| `--select-menu-trigger-dot-margin-inline` | `1.2rem 0` | Extra space around the status dot, on top of `--select-menu-trigger-gap` (start, end) |
+| `--select-menu-trigger-dot-color` | `var(--theme-accent)` | Status dot colour when the selected option has no `dotColor` |
 | `--select-menu-trigger-chevron-size` | `1.6rem` | Chevron icon size |
 
 ### Menu popover
@@ -38,7 +51,7 @@ global token so it matches the rest of the design system out of the box.
 | `--select-menu-popover-max-height` | `32rem` | Maximum popover height before scrolling |
 | `--select-menu-popover-shadow` | `0 0.4rem 1.6rem rgb(0 0 0 / 12%)` | Popover drop shadow |
 | `--select-menu-popover-z-index` | `999999` | Stacking order in browsers without CSS anchor positioning (see Notes). Ignored where the popover renders in the top layer |
-| `--select-menu-transition-duration` | `200ms` | Open/close fade and chevron-rotate duration |
+| `--select-menu-transition-duration` | `200ms` | Open/close fade and chevron-flip duration |
 
 ### Options
 
@@ -62,6 +75,7 @@ global token so it matches the rest of the design system out of the box.
 | `--select-menu-item-check-size` | `1.6rem` | Checkmark icon box size |
 | `--select-menu-item-check-color` | `currentcolor` | Checkmark icon colour |
 | `--select-menu-item-icon-size` | `1.8rem` | Per-option icon size |
+| `--select-menu-item-dot-size` | `0.8rem` | Per-option status dot size (options with `dotColor` and no `icon`) |
 
 ---
 
@@ -70,7 +84,7 @@ global token so it matches the rest of the design system out of the box.
 | Hook | Where | Meaning |
 |---|---|---|
 | `.normal` / `.underlined` | `.select-menu` root | The `inputVariant` prop. `underlined` removes the trigger's top and side borders and its corner radius, matching `InputSelect`'s underlined variant. |
-| `.select-menu-trigger[aria-expanded="true"]` | trigger | Menu open (rotates the chevron). Works with and without the Popover API. |
+| `.select-menu-trigger[aria-expanded="true"]` | trigger | Menu open (flips the chevron vertically). Works with and without the Popover API. |
 | `.select-menu-popover:popover-open` | popover | Menu open, Popover API browsers. |
 | `.select-menu-popover-open` | popover | Menu open, browsers without the Popover API (Safari 16 and older). Style both open hooks in **separate rules**: a selector list containing `:popover-open` is dropped whole where it's unsupported. |
 | `[data-placement="top"]` | popover | Flipped above the trigger, browsers without CSS anchor positioning only. |
@@ -142,6 +156,40 @@ the three common shapes:
 | Icon-only (e.g. flag switcher in a tight header) | `:show-label="false" :show-chevron="false"` |
 | Text + chevron (e.g. a category filter with no per-option icons) | `:show-icon="false"` (default `showLabel`/`showChevron`) |
 | Icon + text + chevron (full select) | Defaults — no overrides needed |
+| Filter: category icon + text + count/dot + chevron | `trigger-icon="lucide:list" indicator="count"` (or `"dot"`) |
+
+### Stable trigger width
+
+In single-select the trigger text changes with the selection, so by default the trigger resizes
+("Active" to "Archived"). Set `reserve-label-width` to size it to the longest option label (or
+placeholder) instead: hidden copies of each label (`.select-menu-trigger-label-sizer`) share a grid
+cell with the visible text (`.select-menu-trigger-label-text`), and the root label span gets
+`.select-menu-trigger-label-reserved`. No effect with `multiple`. If only some options have an
+`icon`, the trigger can still change width when the icon appears; give them all an icon, or use
+`triggerIcon`.
+
+### Filter icon and indicator
+
+`triggerIcon` sets a fixed leading icon (a category icon for a filter). It shows in both modes;
+in single-select a selected option's own icon replaces it. `showIcon` hides either.
+
+`indicator` adds a marker after the label, visible only while something is selected. With nothing
+selected it stays in the layout but hidden (`.select-menu-trigger-indicator-empty`, `visibility:
+hidden`), so the trigger doesn't change width as the filter is set and cleared. The count badge's
+`--select-menu-trigger-count-min-width` fits two digits, so it only grows at 100+:
+
+- `count`: a badge with the number selected. Meant for `multiple`.
+- `dot`: a status dot. Meant for single-select, to flag that the filter is active.
+
+Give options a `dotColor` (any CSS colour) to colour the dot per status: the trigger dot takes the
+selected option's colour, and options with a `dotColor` and no `icon` show the same dot in the
+list. The per-option colour beats `--select-menu-trigger-dot-color`, which stays the fallback
+(and the only colour in `multiple` mode, where there's no single selected option). Pass a global
+status token, e.g. `dotColor: "var(--status-success)"`, so the colours stay in step with every other
+status indicator (see `.claude/skills/theming-status-tokens.md`).
+
+The indicator is `aria-hidden`; instead the trigger's accessible name becomes
+`"<label>, <selectedCountLabel>"` (default `"{count} selected"`, override it for translation).
 
 ---
 
@@ -156,9 +204,9 @@ toggles it in the array without closing the popover — so several can be picked
 cycle. By default the trigger text stays fixed on `placeholder`/`label` as a static category tag
 (e.g. `"Services required"`) regardless of how many options are checked, since a comma-joined list
 of checked options would grow unpredictably long. Set `showSelectionInTrigger` to opt into that
-comma-joined list instead (falling back to `placeholder`/`label` when nothing is checked). The
-trigger icon is not shown in multi-select mode (`showIcon` has no effect), since there's no single
-selected option to represent.
+comma-joined list instead (falling back to `placeholder`/`label` when nothing is checked). No
+option icon is shown in the trigger in multi-select mode, since there's no single selected option
+to represent; a fixed `triggerIcon` still shows.
 
 ```vue
 <script setup lang="ts">
@@ -203,5 +251,5 @@ story.
 - **Popover left-aligns with the trigger** by default (`left: anchor(left)`), unlike `ActionMenu`
   which right-aligns — matches native `<select>` dropdown behaviour. Flips above the trigger near
   the bottom of the viewport (`position-try-fallbacks: flip-block`).
-- **Chevron rotation** is driven by the trigger's `aria-expanded`, which tracks the open state in
+- **Chevron flip** (`scaleY(-1)`, was `rotate(180deg)` until 2026-10-07) is driven by the trigger's `aria-expanded`, which tracks the open state in
   every browser.
