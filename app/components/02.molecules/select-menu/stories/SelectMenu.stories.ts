@@ -1,7 +1,9 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import SelectMenu from "../SelectMenu.vue";
+import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
 import type { SelectMenuOption } from "~/types/components/select-menu";
+import type { MediaCanvas } from "~/types/components";
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 
@@ -21,6 +23,7 @@ interface StoryArgs {
   inputVariant?: "normal" | "underlined";
   modelValue?: string | number | (string | number)[];
   styleClassPassthrough?: string | string[];
+  itemLabelLineClamp?: string;
 }
 
 const meta: Meta<StoryArgs> = {
@@ -91,6 +94,13 @@ const meta: Meta<StoryArgs> = {
     },
     styleClassPassthrough: {
       table: { disable: true },
+    },
+    itemLabelLineClamp: {
+      control: { type: "select" },
+      options: ["none", "1", "2", "3"],
+      description:
+        "**Story control, not a prop.** Sets `--select-menu-item-label-line-clamp` on a wrapper (StressTest only). In your CSS: `.booking-filters { --select-menu-item-label-line-clamp: 2; }`",
+      table: { category: "CSS tokens (story only, set in your CSS)" },
     },
   },
   args: {
@@ -486,4 +496,129 @@ export const Underlined: Story = {
       </div>
     `,
   }),
+};
+
+// ─── Stress test ──────────────────────────────────────────────────────────────
+
+const longUnbroken = "Donaudampfschifffahrtselektrizitätenhauptbetriebswerkbauunterbeamtengesellschaft";
+
+const stressOptions: SelectMenuOption[] = [
+  {
+    value: "long",
+    label:
+      "Full head balayage with toner, Olaplex bond treatment, deep conditioning mask and a blow-dry finish (allow 4 hours)",
+    icon: "lucide:sparkles",
+  },
+  { value: "unbroken", label: longUnbroken },
+  { value: "url", label: "https://example.com/" + "a-very-long-path-segment-without-spaces".repeat(3) },
+  { value: "emoji", label: "🎉 Emoji first option", dotColor: "var(--status-success)" },
+  { value: "html", label: "<b>Not bold</b> <script>alert('x')</script>" },
+  { value: "rtl", label: "قص الشعر وتصفيفه" },
+  { value: "single", label: "A" },
+  { value: "empty", label: "" },
+  { value: "broken-icon", label: "Broken icon name", icon: "lucide:does-not-exist" },
+  { value: "bad-dot", label: "Invalid dot colour", dotColor: "not-a-colour" },
+  ...Array.from({ length: 40 }, (_, index) => ({ value: `extra-${index + 1}`, label: `Option ${index + 1}` })),
+];
+
+/**
+ * Stress test — hostile option data at every canvas width.
+ */
+export const StressTest: Story = {
+  name: "Stress Test (Worst-Case Data)",
+  args: {
+    label: "Behandlung auswählen für Ihren nächsten Termin im Salon (sehr lange Beschriftung)",
+    placeholder: "Bitte wählen Sie eine oder mehrere Behandlungen aus der Liste",
+    indicator: "count",
+    selectedCountLabel: "{count} ausgewählt",
+    itemLabelLineClamp: "none",
+  },
+  render: (args) => ({
+    components: { SelectMenu },
+    setup() {
+      const componentArgs = computed(() => {
+        const { itemLabelLineClamp: _itemLabelLineClamp, ...rest } = args;
+        return rest;
+      });
+      const wrapperStyle = computed(() => ({
+        "--select-menu-item-label-line-clamp": args.itemLabelLineClamp,
+      }));
+      const single = ref<string | undefined>("long");
+      const reserved = ref<string | undefined>("unbroken");
+      const many = ref<string[]>(stressOptions.map((option) => option.value as string));
+      const none = ref<string | undefined>(undefined);
+      return { componentArgs, wrapperStyle, single, reserved, many, none, stressOptions };
+    },
+    template: `
+      <div :style="wrapperStyle" style="display: grid; gap: 2.4rem; padding: 2.4rem 1.6rem;">
+        <section>
+          <h3 style="margin: 0 0 0.8rem;">Single-select, longest option selected</h3>
+          <SelectMenu v-bind="componentArgs" v-model="single" :options="stressOptions" :multiple="false" />
+        </section>
+        <section>
+          <h3 style="margin: 0 0 0.8rem;">Reserved label width, unbroken word selected, status dot</h3>
+          <SelectMenu
+            v-bind="componentArgs"
+            v-model="reserved"
+            :options="stressOptions"
+            :multiple="false"
+            :reserve-label-width="true"
+            indicator="dot"
+          />
+        </section>
+        <section>
+          <h3 style="margin: 0 0 0.8rem;">Multi-select, all 50 checked, selection shown in trigger</h3>
+          <SelectMenu
+            v-bind="componentArgs"
+            v-model="many"
+            :options="stressOptions"
+            :multiple="true"
+            :show-selection-in-trigger="true"
+            trigger-icon="lucide:list-filter"
+          />
+        </section>
+        <section style="display: flex; justify-content: flex-end;">
+          <div>
+            <h3 style="margin: 0 0 0.8rem;">Right-aligned trigger (menu should stay on screen)</h3>
+            <SelectMenu v-bind="componentArgs" v-model="none" :options="stressOptions" :multiple="false" :show-label="false" trigger-icon="lucide:list-filter" />
+          </div>
+        </section>
+        <section>
+          <h3 style="margin: 0 0 0.8rem;">No options</h3>
+          <SelectMenu v-bind="componentArgs" v-model="none" :options="[]" :multiple="false" />
+        </section>
+      </div>
+    `,
+  }),
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "mobileCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    initialCanvas: "mobileCanvas",
+    docs: {
+      description: {
+        story:
+          "Hostile option data: a very long label, an unbroken word, a long URL, emoji first, HTML-like text (must render as text), " +
+          "RTL, a single character, an empty label, a broken icon name, an invalid dot colour, and 50 options in total. " +
+          "Check at every canvas width that each trigger stays inside the canvas with its text truncated by an ellipsis, the count badge " +
+          "and chevron stay visible, the menu never runs off either side of the screen (the right-aligned trigger flips its menu), " +
+          "long options wrap inside the menu, and the list scrolls. `itemLabelLineClamp` is a story-only control for the " +
+          "`--select-menu-item-label-line-clamp` CSS token: try `1` for single-line ellipsis. The empty menu shows just its border.",
+      },
+    },
+  },
 };

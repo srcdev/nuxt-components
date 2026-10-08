@@ -48,6 +48,7 @@ global token so it matches the rest of the design system out of the box.
 | `--select-menu-popover-surface` | `var(--theme-input-surface)` | Popover background |
 | `--select-menu-popover-border-radius` | `0.5rem` | Popover corner rounding |
 | `--select-menu-popover-min-width` | `18rem` | Minimum popover width |
+| `--select-menu-popover-max-width` | `calc(100vw - 3.2rem)` | Maximum popover width; longer option labels wrap (see `--select-menu-item-label-line-clamp`) |
 | `--select-menu-popover-max-height` | `32rem` | Maximum popover height before scrolling |
 | `--select-menu-popover-shadow` | `0 0.4rem 1.6rem rgb(0 0 0 / 12%)` | Popover drop shadow |
 | `--select-menu-popover-z-index` | `999999` | Stacking order in browsers without CSS anchor positioning (see Notes). Ignored where the popover renders in the top layer |
@@ -76,6 +77,13 @@ global token so it matches the rest of the design system out of the box.
 | `--select-menu-item-check-color` | `currentcolor` | Checkmark icon colour |
 | `--select-menu-item-icon-size` | `1.8rem` | Per-option icon size |
 | `--select-menu-item-dot-size` | `0.8rem` | Per-option status dot size (options with `dotColor` and no `icon`) |
+| `--select-menu-item-label-line-clamp` | `none` | Lines an option label may take before it's cut with an ellipsis. `none` wraps the full label, `1` is single-line ellipsis |
+
+> Changed 2026-10-08: long values used to push things off screen. The root now caps at its
+> container's width (`max-inline-size: 100%`), so a long trigger label truncates with its ellipsis
+> instead of overflowing. The popover caps at `--select-menu-popover-max-width`, and option labels
+> wrap (they were `nowrap`, so a long one made the menu wider than the viewport). Set
+> `--select-menu-item-label-line-clamp: 1` for the old single-line look.
 
 ---
 
@@ -250,6 +258,8 @@ story.
   `contain` becomes its containing block and can misplace it.
 - **Popover left-aligns with the trigger** by default (`left: anchor(left)`), unlike `ActionMenu`
   which right-aligns — matches native `<select>` dropdown behaviour. Flips above the trigger near
-  the bottom of the viewport (`position-try-fallbacks: flip-block`).
+  the bottom of the viewport, and right-aligns when there's no room to the right
+  (`position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline`). The inline flip needs
+  CSS anchor positioning; the JS fallback only flips above/below.
 - **Chevron flip** (`scaleY(-1)`, was `rotate(180deg)` until 2026-10-07) is driven by the trigger's `aria-expanded`, which tracks the open state in
   every browser.

@@ -204,6 +204,13 @@ Quick reference:
 }
 ```
 
+### Long content
+
+The root caps at its container width, so a long trigger label truncates with an ellipsis. The
+popover caps at `--select-menu-popover-max-width` (default `calc(100vw - 3.2rem)`) and option labels
+wrap; `--select-menu-item-label-line-clamp` (default `none`) caps them, `1` for single-line
+ellipsis. The `StressTest` story covers this at every canvas width.
+
 ---
 
 ## Notes
@@ -225,7 +232,8 @@ Quick reference:
     drop the whole rule.
   Confirmed broken on a Safari 16 iPad before this (trigger rendered, menu never opened).
 - **Left-aligned popover** (`left: anchor(left)`) — unlike `ActionMenu` which right-aligns. Matches
-  native `<select>` dropdown behaviour. Flips above the trigger near the bottom of the viewport.
+  native `<select>` dropdown behaviour. Flips above the trigger near the bottom of the viewport,
+  and to right-aligned when it would overflow the right edge (anchor-positioning browsers only).
 - **Keyboard navigation** follows the WAI-ARIA listbox pattern: `ArrowDown`/`ArrowUp` move between
   options (wraps around), `Home`/`End` jump to first/last, `Enter`/`Space` select the focused
   option, `Tab` closes without stealing focus back to the trigger (matches `ActionMenu`'s
@@ -254,3 +262,7 @@ Quick reference:
 - **Not a form field** — `SelectMenu` has no `fieldHasError`/`theme`/`inputVariant` props like the
   `05.forms` inputs. Use `InputSelectCore` instead for an actual form field that needs validation
   state and native `<select>` semantics.
+- **2026-10-08 stress-test pass**: root `max-inline-size: 100%` (a long trigger label overflowed
+  narrow containers instead of truncating), popover `--select-menu-popover-max-width` and
+  `flip-inline` fallbacks (a long option made the menu wider than the viewport), option labels wrap
+  with a `--select-menu-item-label-line-clamp` token instead of `nowrap`.

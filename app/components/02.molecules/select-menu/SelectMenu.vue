@@ -297,6 +297,8 @@ watch(
   .select-menu {
     position: relative;
     display: inline-block;
+    max-inline-size: 100%;
+    min-inline-size: 0;
 
     .select-menu-trigger {
       all: unset;
@@ -426,6 +428,7 @@ watch(
       background-color: var(--select-menu-popover-surface, var(--theme-input-surface));
       border-radius: var(--select-menu-popover-border-radius, 0.5rem);
       min-width: var(--select-menu-popover-min-width, 18rem);
+      max-inline-size: var(--select-menu-popover-max-width, calc(100vw - 3.2rem));
       max-height: var(--select-menu-popover-max-height, 32rem);
       overflow: auto;
       box-shadow: var(--select-menu-popover-shadow, 0 0.4rem 1.6rem rgb(0 0 0 / 12%));
@@ -434,7 +437,7 @@ watch(
       top: calc(anchor(bottom) + var(--select-menu-block-distance, 0.4rem));
       left: anchor(left);
       right: auto;
-      position-try-fallbacks: flip-block;
+      position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline;
 
       opacity: 0;
       display: none;
@@ -575,9 +578,12 @@ watch(
           .select-menu-item-label {
             grid-column: 3;
             grid-row: 1;
-            white-space: nowrap;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
             overflow: hidden;
-            text-overflow: ellipsis;
+            overflow-wrap: anywhere;
+            -webkit-line-clamp: var(--select-menu-item-label-line-clamp, none);
+            line-clamp: var(--select-menu-item-label-line-clamp, none);
           }
         }
       }
