@@ -53,6 +53,7 @@ interface DisplayToastConfig {
     title?: string               // bold title line
     description?: string         // smaller description line
     customIcon?: string          // icon name override (e.g. "akar-icons:check-box")
+    dismissLabel?: string        // screen-reader text for the close button — default: "Close"
   }
 }
 ```
@@ -111,6 +112,17 @@ const toastVisible = ref(false)
 - `onBeforeRouteLeave` dismisses the toast on navigation. This emits a Vue Router warning in Vitest (no active route record) — harmless.
 - `returnFocusTo` accepts an `HTMLElement` or a component instance with `$el`.
 - The toast uses `<Teleport to="body">`. In tests, query `document.querySelector(".display-toast")` not `wrapper.find()`.
+- Position, alignment and state are `data-position`, `data-alignment` (`full-width` when `fullWidth`) and `data-state="show|hide"`, not classes (changed 2026-10-08: the old bare `.top`/`.hide`/... classes could collide with a consumer's utility classes, since the toast is teleported into `<body>`).
+- In tests, unmount every toast in `afterEach` before clearing `document.body`: a leftover instance's pending dismiss timer otherwise re-renders into the removed container (`insertBefore` of null) during a later test's timer advance.
+
+### Auto-dismiss pause
+
+Auto-dismiss pauses while hovered, or while keyboard focus is on or inside the toast, and resumes with
+the remaining time (`createPausableTimeout` in `app/utils/pausableTimeout.ts`, plus
+`focusPausesAutoDismiss`). The toast's own programmatic focus only pauses it when the root matches
+`:focus-visible` (keyboard modality), so mouse users still get auto-dismiss. `data-paused` freezes the
+progress bar via `animation-play-state`. In jsdom `:focus-visible` matches any focus, so tests that
+depend on modality spy on `Element.prototype.matches` (see `DisplayToast.spec.ts`).
 
 ---
 
@@ -208,12 +220,15 @@ Stacked dismissals use a FLIP animation — remaining toasts slide smoothly to f
 
 ### CSS / styling
 
-Override tokens via an unscoped style block scoped to a page or layout class:
+Both components teleport to `<body>`, so tokens set on a page or layout class don't reach them: set
+them globally. Own tokens: `--display-toast(-provider)-max-width` (default `min(48rem, 100% - 2 * gutter)`),
+`-progress-colour`, `-focus-ring-colour`, `-z-index`. Card styling comes from `--alert-content-*`.
+Full list in `CONSUMER-STYLING.md`.
 
 ```css
-.my-page .display-toast-provider-item {
-  --theme-surface: oklch(15% 0 0);
-  --theme-text: oklch(95% 0 0);
+:where(html) {
+  --display-toast-provider-max-width: min(36rem, 100% - 48px);
+  --display-toast-provider-progress-colour: var(--brand-accent);
 }
 ```
 
@@ -234,5 +249,7 @@ The inner content layout is handled by the shared `AlertContentInner` molecule �
 - `useToastQueue` state persists across route changes — no `onBeforeRouteLeave` cleanup needed.
 - `crypto.randomUUID()` generates toast IDs (`toast-<uuid>`). IDs are returned by `show()` for targeted `dismiss(id)` calls.
 - In tests, query via `document.querySelector(".display-toast-provider-item")` — the Teleport renders outside the component wrapper.
+- Every mounted provider reacts to the shared `useToastQueue` state, so tests must unmount providers in `afterEach`; otherwise an earlier test's provider runs its own timer for a new toast and dismisses it.
+- Each item pauses independently (hover / keyboard focus, same rule as the standalone toast), tracked per toast id.
 - The progress bar (`.display-toast-provider-progress`) is only rendered when `autoDismiss: true`.
 - Dismissal can be triggered by: close button click, Escape key (when the toast item has focus), `dismiss(id)`, auto-dismiss timer, or `clear()`.

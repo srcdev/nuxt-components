@@ -4,13 +4,21 @@
       v-if="privateDisplayToast"
       ref="toastElementRef"
       class="display-toast"
-      :class="[elementClasses, cssStateClass, positionClasses]"
+      :class="elementClasses"
+      :data-state="toastState"
+      :data-position="position"
+      :data-alignment="fullWidth ? 'full-width' : alignment"
+      :data-paused="isPaused ? '' : undefined"
       :data-theme="theme"
       :role="toastRole"
       :aria-live="ariaLive"
       :tabindex="slots.default ? undefined : '0'"
       :aria-describedby="slots.default ? undefined : 'toast-message-' + toastId"
       @keydown.escape="setDismissToast"
+      @pointerenter="isHovered = true"
+      @pointerleave="isHovered = false"
+      @focusin="handleFocusIn"
+      @focusout="handleFocusOut"
     >
       <slot v-if="slots.default"></slot>
 
@@ -32,6 +40,7 @@
         <template v-if="slots.description || toastDescription" #content>
           <slot name="description">{{ toastDescription }}</slot>
         </template>
+        <template v-if="dismissLabel" #dismissLabel>{{ dismissLabel }}</template>
       </component>
       <div v-if="autoDismiss" class="display-toast-progress"></div>
     </div>
@@ -75,18 +84,7 @@ const toastDisplayText = computed(() => props.config?.content?.text ?? "");
 const toastTitle = computed(() => props.config?.content?.title ?? "");
 const toastDescription = computed(() => props.config?.content?.description ?? "");
 const customIcon = computed(() => props.config?.content?.customIcon);
-
-// Computed classes for positioning
-const positionClasses = computed(() => {
-  const classes = [];
-  classes.push(position.value);
-  if (fullWidth.value) {
-    classes.push("full-width");
-  } else {
-    classes.push(alignment.value);
-  }
-  return classes;
-});
+const dismissLabel = computed(() => props.config?.content?.dismissLabel);
 
 /*
  * Accessibility setup
@@ -109,9 +107,30 @@ const ariaLive = computed(() => {
 const externalTriggerModel = defineModel<boolean>({ default: false });
 const privateDisplayToast = ref(false);
 const transitionalState = ref(false);
-const cssStateClass = computed(() => {
-  return transitionalState.value ? "show" : "hide";
-});
+const toastState = computed(() => (transitionalState.value ? "show" : "hide"));
+
+/*
+ * Auto-dismiss pauses while hovered or keyboard-focused (WCAG 2.2.2)
+ */
+const isHovered = ref(false);
+const isFocusPaused = ref(false);
+const isPaused = computed(() => autoDismiss.value && (isHovered.value || isFocusPaused.value));
+let dismissTimer: ReturnType<typeof createPausableTimeout> | null = null;
+
+const handleFocusIn = (event: FocusEvent) => {
+  if (toastElementRef.value) isFocusPaused.value = focusPausesAutoDismiss(toastElementRef.value, event.target);
+};
+
+const handleFocusOut = (event: FocusEvent) => {
+  if (!toastElementRef.value?.contains(event.relatedTarget as Node | null)) isFocusPaused.value = false;
+};
+
+watch(isPaused, (paused) => (paused ? dismissTimer?.pause() : dismissTimer?.resume()));
+
+const clearDismissTimer = () => {
+  dismissTimer?.clear();
+  dismissTimer = null;
+};
 
 /*
  * Computed properties for durations (in ms for CSS)
@@ -123,6 +142,7 @@ const displayDurationMs = computed(() => duration.value + "ms");
  * Lifecycle hooks
  */
 const setDismissToast = async () => {
+  clearDismissTimer();
   transitionalState.value = false;
   await useSleep(revealDuration.value);
 
@@ -144,6 +164,8 @@ const setDismissToast = async () => {
 
   externalTriggerModel.value = false;
   privateDisplayToast.value = false;
+  isHovered.value = false;
+  isFocusPaused.value = false;
 };
 
 watch(
@@ -170,8 +192,9 @@ watch(
       }
 
       if (autoDismiss.value) {
-        await useSleep(duration.value);
-        setDismissToast();
+        clearDismissTimer();
+        dismissTimer = createPausableTimeout(setDismissToast, duration.value);
+        if (isPaused.value) dismissTimer.pause();
       }
     } else if (!newValue && previousValue) {
       // If external model is set to false, dismiss the toast
@@ -183,18 +206,20 @@ watch(
 onBeforeRouteLeave(() => {
   setDismissToast();
 });
+
+onBeforeUnmount(clearDismissTimer);
 </script>
 
 <style lang="css">
 @layer components {
-  @keyframes show {
+  @keyframes display-toast-show {
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
 
-  @keyframes hideTop {
+  @keyframes display-toast-hide-top {
     0% {
       opacity: 1;
       transform: translateY(0);
@@ -205,7 +230,7 @@ onBeforeRouteLeave(() => {
     }
   }
 
-  @keyframes hideBottom {
+  @keyframes display-toast-hide-bottom {
     0% {
       opacity: 1;
       transform: translateY(0);
@@ -216,7 +241,22 @@ onBeforeRouteLeave(() => {
     }
   }
 
-  @keyframes progress {
+  @keyframes display-toast-fade-in {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes display-toast-fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes display-toast-progress {
     to {
       transform: scaleX(1);
     }
@@ -228,19 +268,18 @@ onBeforeRouteLeave(() => {
       --_toast-gutter: 24px;
     }
 
-    /* See the matching comment in DisplayToastProvider.vue — same fix, same rationale. */
-
     display: block;
     overflow: hidden;
+    overflow-wrap: anywhere;
     position: fixed;
     margin: 0;
     opacity: 0;
+    max-inline-size: var(--display-toast-max-width, min(48rem, 100% - 2 * var(--_toast-gutter)));
 
     z-index: var(--display-toast-z-index, 999999);
 
-    /* Focus styles for accessibility */
     &:focus {
-      outline: 2px solid var(--theme-ring);
+      outline: 2px solid var(--display-toast-focus-ring-colour, var(--theme-ring));
       outline-offset: 2px;
     }
 
@@ -248,69 +287,89 @@ onBeforeRouteLeave(() => {
       outline: none;
     }
 
-    &.show {
+    &[data-state="show"] {
       @supports (animation-timing-function: linear(0, 1)) {
-        animation: show v-bind(revealDurationMs) var(--spring-easing) forwards;
+        animation: display-toast-show v-bind(revealDurationMs) var(--spring-easing) forwards;
       }
 
       @supports not (animation-timing-function: linear(0, 1)) {
-        animation: show calc(v-bind(revealDurationMs) / 2) linear forwards;
+        animation: display-toast-show calc(v-bind(revealDurationMs) / 2) linear forwards;
       }
     }
 
-    &.hide {
+    &[data-state="hide"] {
       @supports (animation-timing-function: linear(0, 1)) {
-        animation: hideTop v-bind(revealDurationMs) var(--spring-easing) forwards;
+        animation: display-toast-hide-top v-bind(revealDurationMs) var(--spring-easing) forwards;
       }
 
       @supports not (animation-timing-function: linear(0, 1)) {
-        animation: hideTop calc(v-bind(revealDurationMs) / 2) linear forwards;
+        animation: display-toast-hide-top calc(v-bind(revealDurationMs) / 2) linear forwards;
       }
 
-      &.bottom {
+      &[data-position="bottom"] {
         @supports (animation-timing-function: linear(0, 1)) {
-          animation: hideBottom v-bind(revealDurationMs) var(--spring-easing) forwards;
+          animation: display-toast-hide-bottom v-bind(revealDurationMs) var(--spring-easing) forwards;
         }
 
         @supports not (animation-timing-function: linear(0, 1)) {
-          animation: hideBottom calc(v-bind(revealDurationMs) / 2) linear forwards;
+          animation: display-toast-hide-bottom calc(v-bind(revealDurationMs) / 2) linear forwards;
         }
       }
     }
 
-    /*
-  * Default is centre for smaller screens
-  */
+    /* Centred on small screens */
     inset-inline: var(--_toast-gutter);
     margin-inline: auto;
 
     @media (width >= 600px) {
-      &.left {
+      &[data-alignment="left"] {
         inset-inline-start: var(--_toast-gutter);
         inset-inline-end: unset;
       }
 
-      &.right {
+      &[data-alignment="right"] {
         inset-inline-end: var(--_toast-gutter);
         inset-inline-start: unset;
       }
 
-      &.center {
-        &:not(.full-width) {
-          inset-inline: 0;
-          margin-inline: auto;
-          width: max-content;
-        }
+      &[data-alignment="center"] {
+        inset-inline: 0;
+        margin-inline: auto;
+        width: fit-content;
       }
     }
 
-    &.top {
+    &[data-alignment="full-width"] {
+      max-inline-size: none;
+    }
+
+    &[data-position="top"] {
       inset-block-start: var(--_toast-gutter);
       transform: translateY(-30px);
     }
-    &.bottom {
+
+    &[data-position="bottom"] {
       inset-block-end: var(--_toast-gutter);
       transform: translateY(30px);
+    }
+
+    /* After the position and state rules so it wins at equal specificity. */
+    @media (prefers-reduced-motion: reduce) {
+      &[data-position] {
+        transform: none;
+      }
+
+      &[data-state="show"][data-position] {
+        animation: display-toast-fade-in v-bind(revealDurationMs) linear forwards;
+      }
+
+      &[data-state="hide"][data-position] {
+        animation: display-toast-fade-out v-bind(revealDurationMs) linear forwards;
+      }
+    }
+
+    &[data-paused] .display-toast-progress {
+      animation-play-state: paused;
     }
 
     .display-toast-progress {
@@ -320,9 +379,9 @@ onBeforeRouteLeave(() => {
       height: 3px;
       transform: scaleX(0);
       transform-origin: right;
-      background: var(--theme-accent);
+      background: var(--display-toast-progress-colour, var(--theme-accent));
       border-radius: inherit;
-      animation: progress v-bind(displayDurationMs) linear forwards;
+      animation: display-toast-progress v-bind(displayDurationMs) linear forwards;
     }
   }
 }

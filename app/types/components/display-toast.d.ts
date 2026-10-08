@@ -26,6 +26,8 @@ export interface DisplayToastContentConfig {
   title?: string
   description?: string
   customIcon?: string
+  /** Screen-reader text for the dismiss button (non-auto-dismiss toasts). Defaults to "Close". */
+  dismissLabel?: string
 }
 
 export interface DisplayToastConfig {

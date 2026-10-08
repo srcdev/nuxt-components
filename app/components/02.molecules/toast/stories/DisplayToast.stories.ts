@@ -193,3 +193,26 @@ FullWidth.args = {
   position: "top",
   autoDismiss: false,
 };
+
+export const StressTest = Template.bind({});
+StressTest.storyName = "Stress Test (Worst-Case Data)";
+StressTest.args = {
+  theme: "error",
+  alignment: "center",
+  autoDismiss: true,
+  duration: 10000,
+  title: "Donaudampfschifffahrtselektrizitätenhauptbetriebswerkbauunterbeamtengesellschaft",
+  description:
+    "Ihre Zahlung konnte leider nicht verarbeitet werden. Bitte überprüfen Sie Ihre Kartendaten und versuchen Sie es erneut, oder wenden Sie sich an Ihre Bank. https://example.com/a-very-long-path-segment-without-any-spaces-at-all-in-it",
+};
+StressTest.parameters = {
+  docs: {
+    description: {
+      story:
+        "Long unbroken title, long German description and a long URL, centred (the alignment most likely to overflow). " +
+        "Toasts are fixed to the viewport, so use Storybook's viewport toolbar to check narrow screens. Try every alignment " +
+        "and fullWidth: the toast should stay inside the viewport, cap at 48rem on wide screens, and wrap the unbroken text. " +
+        "Hover it or tab to it to check the progress bar and the 10s timer pause.",
+    },
+  },
+};

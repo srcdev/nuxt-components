@@ -3,7 +3,8 @@
     <TransitionGroup
       tag="div"
       class="display-toast-provider"
-      :class="[position, fullWidth ? 'full-width' : alignment]"
+      :data-position="position"
+      :data-alignment="fullWidth ? 'full-width' : alignment"
       @before-leave="onBeforeLeave"
       @after-leave="onAfterLeave"
       @after-enter="onAfterEnter"
@@ -21,7 +22,12 @@
         :aria-live="ariaLiveFor(entry)"
         tabindex="0"
         :aria-describedby="'toast-message-' + entry.id"
+        :data-paused="isPaused(entry) ? '' : undefined"
         @keydown.escape="handleDismiss(entry.id)"
+        @pointerenter="setPauseReason(entry.id, 'hover', true)"
+        @pointerleave="setPauseReason(entry.id, 'hover', false)"
+        @focusin="handleFocusIn(entry.id, $event)"
+        @focusout="handleFocusOut(entry.id, $event)"
       >
         <component
           :is="maskedFor(entry) ? AlertMaskedContent : AlertContent"
@@ -36,6 +42,9 @@
           </template>
           <template v-if="entry.config.content?.description" #content>
             {{ entry.config.content?.description }}
+          </template>
+          <template v-if="entry.config.content?.dismissLabel" #dismissLabel>
+            {{ entry.config.content?.dismissLabel }}
           </template>
         </component>
         <div v-if="autoDismissFor(entry)" class="display-toast-provider-progress"></div>
@@ -83,21 +92,50 @@ const roleFor = (entry: ToastQueueEntry) => (["error", "warning"].includes(theme
 const ariaLiveFor = (entry: ToastQueueEntry) =>
   ["error", "warning"].includes(themeFor(entry)) ? "assertive" : "polite";
 
-const timers = new Map<string, ReturnType<typeof setTimeout>>();
+const timers = new Map<string, ReturnType<typeof createPausableTimeout>>();
+
+// Auto-dismiss pauses while hovered or keyboard-focused (WCAG 2.2.2).
+const pauseReasons = ref<Record<string, { hover: boolean; focus: boolean }>>({});
+
+const isPaused = (entry: ToastQueueEntry) => {
+  const reasons = pauseReasons.value[entry.id];
+  return autoDismissFor(entry) && !!reasons && (reasons.hover || reasons.focus);
+};
+
+const setPauseReason = (id: string, reason: "hover" | "focus", active: boolean) => {
+  const reasons = { hover: false, focus: false, ...pauseReasons.value[id], [reason]: active };
+  pauseReasons.value = { ...pauseReasons.value, [id]: reasons };
+  const timer = timers.get(id);
+  if (reasons.hover || reasons.focus) timer?.pause();
+  else timer?.resume();
+};
+
+const handleFocusIn = (id: string, event: FocusEvent) => {
+  setPauseReason(id, "focus", focusPausesAutoDismiss(event.currentTarget as HTMLElement, event.target));
+};
+
+const handleFocusOut = (id: string, event: FocusEvent) => {
+  if (!(event.currentTarget as HTMLElement).contains(event.relatedTarget as Node | null)) {
+    setPauseReason(id, "focus", false);
+  }
+};
+
+const forgetEntry = (id: string) => {
+  timers.get(id)?.clear();
+  timers.delete(id);
+  const { [id]: _removed, ...rest } = pauseReasons.value;
+  pauseReasons.value = rest;
+};
 
 const handleDismiss = (id: string) => {
-  const timer = timers.get(id);
-  if (timer !== undefined) {
-    clearTimeout(timer);
-    timers.delete(id);
-  }
+  forgetEntry(id);
   dismiss(id);
 };
 
 const startTimer = (entry: ToastQueueEntry) => {
   if (!autoDismissFor(entry)) return;
-  const timer = setTimeout(() => {
-    timers.delete(entry.id);
+  const timer = createPausableTimeout(() => {
+    forgetEntry(entry.id);
     dismiss(entry.id);
   }, displayDurationFor(entry));
   timers.set(entry.id, timer);
@@ -110,11 +148,8 @@ watch(
 
     // Clear timers for entries that no longer exist (e.g. clear()).
     const entryIds = new Set(entries.map((e) => e.id));
-    for (const [id, timer] of timers) {
-      if (!entryIds.has(id)) {
-        clearTimeout(timer);
-        timers.delete(id);
-      }
+    for (const id of timers.keys()) {
+      if (!entryIds.has(id)) forgetEntry(id);
     }
 
     const visibleCount = entries.filter((e) => e.status === "visible").length;
@@ -157,14 +192,14 @@ const onAfterEnter = (el: Element) => {
 };
 
 onUnmounted(() => {
-  timers.forEach(clearTimeout);
+  timers.forEach((timer) => timer.clear());
   timers.clear();
 });
 </script>
 
 <style lang="css">
 @layer components {
-  @keyframes hideTop {
+  @keyframes display-toast-provider-hide-top {
     0% {
       opacity: 1;
       transform: translateY(0);
@@ -175,7 +210,7 @@ onUnmounted(() => {
     }
   }
 
-  @keyframes hideBottom {
+  @keyframes display-toast-provider-hide-bottom {
     0% {
       opacity: 1;
       transform: translateY(0);
@@ -186,13 +221,13 @@ onUnmounted(() => {
     }
   }
 
-  @keyframes progress {
+  @keyframes display-toast-provider-progress {
     to {
       transform: scaleX(1);
     }
   }
 
-  @keyframes showTop {
+  @keyframes display-toast-provider-show-top {
     from {
       opacity: 0;
       transform: translateY(-30px);
@@ -203,7 +238,16 @@ onUnmounted(() => {
     }
   }
 
-  @keyframes showBottom {
+  @keyframes display-toast-provider-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes display-toast-provider-show-bottom {
     from {
       opacity: 0;
       transform: translateY(30px);
@@ -220,12 +264,6 @@ onUnmounted(() => {
       --_gutter: 24px;
     }
 
-    /* No public token before 2026-08-22 and hardcoded far below DisplayDialog's own
-       --display-dialog-z-index default (999999) — a toast is meant to float above ordinary page
-       chrome, but 100 loses to any consumer's sticky header. Matches DisplayDialog's default so
-       toasts also clear a modal's own overlay; the two ties on DOM/paint order if both happen to
-       be visible at once, which is an acceptable edge case for a transient notification. */
-
     position: fixed;
     display: flex;
     flex-direction: column;
@@ -235,36 +273,36 @@ onUnmounted(() => {
     inset-inline: var(--_gutter);
     margin-inline: auto;
     width: max-content;
-    max-width: calc(100% - 2 * var(--_gutter));
+    max-width: var(--display-toast-provider-max-width, min(48rem, 100% - 2 * var(--_gutter)));
 
-    &.top {
+    &[data-position="top"] {
       inset-block-start: var(--_gutter);
     }
 
-    &.bottom {
+    &[data-position="bottom"] {
       inset-block-end: var(--_gutter);
       flex-direction: column-reverse;
     }
 
     @media (width >= 600px) {
-      &.left {
+      &[data-alignment="left"] {
         inset-inline-start: var(--_gutter);
         inset-inline-end: unset;
         margin-inline: 0;
       }
 
-      &.right {
+      &[data-alignment="right"] {
         inset-inline-end: var(--_gutter);
         inset-inline-start: unset;
         margin-inline: 0;
       }
 
-      &.center:not(.full-width) {
+      &[data-alignment="center"] {
         inset-inline: 0;
         margin-inline: auto;
       }
 
-      &.full-width {
+      &[data-alignment="full-width"] {
         inset-inline: var(--_gutter);
         width: unset;
         max-width: unset;
@@ -279,9 +317,10 @@ onUnmounted(() => {
     display: block;
     position: relative;
     overflow: hidden;
+    overflow-wrap: anywhere;
 
     &:focus {
-      outline: 2px solid var(--theme-ring);
+      outline: 2px solid var(--display-toast-provider-focus-ring-colour, var(--theme-ring));
       outline-offset: 2px;
     }
 
@@ -290,7 +329,7 @@ onUnmounted(() => {
     }
 
     /* TransitionGroup enter/leave */
-    .display-toast-provider.top & {
+    .display-toast-provider[data-position="top"] & {
       &.v-enter-from {
         opacity: 0;
         transform: translateY(-30px);
@@ -298,11 +337,11 @@ onUnmounted(() => {
 
       &.v-enter-active {
         @supports (animation-timing-function: linear(0, 1)) {
-          animation: showTop var(--_reveal) var(--spring-easing) forwards;
+          animation: display-toast-provider-show-top var(--_reveal) var(--spring-easing) forwards;
         }
 
         @supports not (animation-timing-function: linear(0, 1)) {
-          animation: showTop calc(var(--_reveal) / 2) linear forwards;
+          animation: display-toast-provider-show-top calc(var(--_reveal) / 2) linear forwards;
         }
       }
 
@@ -310,16 +349,16 @@ onUnmounted(() => {
         position: absolute;
 
         @supports (animation-timing-function: linear(0, 1)) {
-          animation: hideTop var(--_reveal) var(--spring-easing) forwards;
+          animation: display-toast-provider-hide-top var(--_reveal) var(--spring-easing) forwards;
         }
 
         @supports not (animation-timing-function: linear(0, 1)) {
-          animation: hideTop calc(var(--_reveal) / 2) linear forwards;
+          animation: display-toast-provider-hide-top calc(var(--_reveal) / 2) linear forwards;
         }
       }
     }
 
-    .display-toast-provider.bottom & {
+    .display-toast-provider[data-position="bottom"] & {
       &.v-enter-from {
         opacity: 0;
         transform: translateY(30px);
@@ -327,11 +366,11 @@ onUnmounted(() => {
 
       &.v-enter-active {
         @supports (animation-timing-function: linear(0, 1)) {
-          animation: showBottom var(--_reveal) var(--spring-easing) forwards;
+          animation: display-toast-provider-show-bottom var(--_reveal) var(--spring-easing) forwards;
         }
 
         @supports not (animation-timing-function: linear(0, 1)) {
-          animation: showBottom calc(var(--_reveal) / 2) linear forwards;
+          animation: display-toast-provider-show-bottom calc(var(--_reveal) / 2) linear forwards;
         }
       }
 
@@ -339,17 +378,42 @@ onUnmounted(() => {
         position: absolute;
 
         @supports (animation-timing-function: linear(0, 1)) {
-          animation: hideBottom var(--_reveal) var(--spring-easing) forwards;
+          animation: display-toast-provider-hide-bottom var(--_reveal) var(--spring-easing) forwards;
         }
 
         @supports not (animation-timing-function: linear(0, 1)) {
-          animation: hideBottom calc(var(--_reveal) / 2) linear forwards;
+          animation: display-toast-provider-hide-bottom calc(var(--_reveal) / 2) linear forwards;
         }
       }
     }
 
     &.v-move {
       transition: transform 0.3s ease;
+    }
+
+    /* Same selector shape as the position rules above, later in source, so it wins. */
+    @media (prefers-reduced-motion: reduce) {
+      .display-toast-provider[data-position] & {
+        &.v-enter-from {
+          transform: none;
+        }
+
+        &.v-enter-active {
+          animation: display-toast-provider-fade var(--_reveal) linear forwards;
+        }
+
+        &.v-leave-active {
+          animation: display-toast-provider-fade var(--_reveal) linear reverse forwards;
+        }
+
+        &.v-move {
+          transition: none;
+        }
+      }
+    }
+
+    &[data-paused] .display-toast-provider-progress {
+      animation-play-state: paused;
     }
 
     .display-toast-provider-progress {
@@ -359,9 +423,9 @@ onUnmounted(() => {
       height: 3px;
       transform: scaleX(0);
       transform-origin: right;
-      background: var(--theme-accent);
+      background: var(--display-toast-provider-progress-colour, var(--theme-accent));
       border-radius: inherit;
-      animation: progress var(--_duration) linear forwards;
+      animation: display-toast-provider-progress var(--_duration) linear forwards;
     }
   }
 }
