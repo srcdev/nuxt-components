@@ -3,11 +3,11 @@
 exports[`ContainerGlow > renders correct HTML structure (default) 1`] = `
 "<div class="container-glow-wrapper" style="--_gap: 32; --_blur: 20; --_spread: 80; --_direction: row;">
   <div class="container-glow">
-    <div class="glows"></div>
+    <div class="container-glow-glows" aria-hidden="true"></div>
     <p>One</p>
   </div>
   <div class="container-glow">
-    <div class="glows"></div>
+    <div class="container-glow-glows" aria-hidden="true"></div>
     <p>Two</p>
   </div>
 </div>"

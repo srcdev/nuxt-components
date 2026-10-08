@@ -64,6 +64,29 @@ describe("ContainerGlow", () => {
     expect(wrapper.find(".container-glow").element.tagName).toBe(tag.toUpperCase());
   });
 
+  it("renders the wrapper as <ul> when tag='li' so the items form a valid list", async () => {
+    const wrapper = await mountSuspended(ContainerGlow, {
+      props: { tag: "li" },
+      slots: { one: "<p>One</p>" },
+    });
+    expect(wrapper.element.tagName).toBe("UL");
+  });
+
+  it.each(["div", "article", "section"] as const)("renders the wrapper as <div> when tag='%s'", async (tag) => {
+    const wrapper = await mountSuspended(ContainerGlow, {
+      props: { tag },
+      slots: { one: "<p>One</p>" },
+    });
+    expect(wrapper.element.tagName).toBe("DIV");
+  });
+
+  it("hides the decorative glow layer from assistive technology", async () => {
+    const wrapper = await mountSuspended(ContainerGlow, {
+      slots: { one: "<p>One</p>" },
+    });
+    expect(wrapper.find(".container-glow-glows").attributes("aria-hidden")).toBe("true");
+  });
+
   // ─── Config ─────────────────────────────────────────────────────────────
 
   it("applies default config values to the wrapper as CSS custom properties", async () => {
@@ -97,6 +120,28 @@ describe("ContainerGlow", () => {
     const style = wrapper.element.style;
     expect(style.getPropertyValue("--_blur")).toBe("5");
     expect(style.getPropertyValue("--_gap")).toBe("32");
+  });
+
+  it("clamps negative and out-of-range config values", async () => {
+    const wrapper = await mountSuspended(ContainerGlow, {
+      props: { config: { gap: -10, blur: -5, spread: 999 } },
+      slots: { one: "<p>One</p>" },
+    });
+    const style = wrapper.element.style;
+    expect(style.getPropertyValue("--_gap")).toBe("0");
+    expect(style.getPropertyValue("--_blur")).toBe("0");
+    expect(style.getPropertyValue("--_spread")).toBe("360");
+  });
+
+  it("falls back to defaults for non-finite config values", async () => {
+    const wrapper = await mountSuspended(ContainerGlow, {
+      props: { config: { gap: Number.NaN, blur: Number.POSITIVE_INFINITY, spread: Number.NaN } },
+      slots: { one: "<p>One</p>" },
+    });
+    const style = wrapper.element.style;
+    expect(style.getPropertyValue("--_gap")).toBe("32");
+    expect(style.getPropertyValue("--_blur")).toBe("20");
+    expect(style.getPropertyValue("--_spread")).toBe("80");
   });
 
   // ─── styleClassPassthrough ────────────────────────────────────────────────

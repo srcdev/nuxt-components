@@ -17,7 +17,7 @@ It uses the named dynamic slots pattern (`v-for="(_, name) in $slots"`), so ther
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `tag` | `"div" \| "li" \| "article" \| "section"` | `"div"` | HTML tag rendered for each card. |
+| `tag` | `"div" \| "li" \| "article" \| "section"` | `"div"` | HTML tag rendered for each card. With `"li"` the wrapper renders as a `<ul>` (list styling reset); otherwise a `<div>`. |
 | `config` | `ContainerGlowConfig` | `{}` | Proximity/spread/blur/gap/direction/inactive-opacity — see below. All fields optional. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root wrapper element. |
 
@@ -25,12 +25,14 @@ It uses the named dynamic slots pattern (`v-for="(_, name) in $slots"`), so ther
 
 | Field | Type | Default | Description |
 |---|---|---|---|
-| `proximity` | `number` | `40` | Pointer distance (px) at which a card starts glowing. |
-| `spread` | `number` | `80` | Angular spread of the glow (degrees). |
-| `blur` | `number` | `20` | Blur applied to the glow layer (px). |
-| `gap` | `number` | `32` | Gap between cards in the wrapper (px). |
+| `proximity` | `number` | `40` | Pointer distance (px) at which a card starts glowing. Minimum `0`. |
+| `spread` | `number` | `80` | Angular spread of the glow (degrees). Clamped to `0`–`360`. |
+| `blur` | `number` | `20` | Blur applied to the glow layer (px). Minimum `0`. |
+| `gap` | `number` | `32` | Gap between cards in the wrapper (px). Minimum `0`. |
 | `vertical` | `boolean` | `false` | Stack cards vertically instead of horizontally. |
-| `inactiveOpacity` | `number` | `0` | Glow opacity when the pointer isn't nearby. |
+| `inactiveOpacity` | `number` | `0` | Glow opacity when the pointer isn't nearby. Clamped to `0`–`1`. |
+
+Non-finite values (`NaN`, `Infinity`) fall back to the default.
 
 ## Slots
 
@@ -62,16 +64,19 @@ name list or count prop.
   that on a private `--_start` custom property (registered via `@property` so it participates in
   the conic-gradient mask math); the card's `--_opacity-active` is set to `1` (or
   `config.inactiveOpacity` otherwise).
-- Two pseudo-elements (`::before`/`::after`) and a `.glows` layer combine a thin proximity ring, a
+- Two pseudo-elements (`::before`/`::after`) and an `aria-hidden` `.container-glow-glows` layer combine a thin proximity ring, a
   coloured gradient glow, and a blurred backdrop glow, all masked by conic gradients driven from
   `--_start` and `--_spread`.
 - `config.gap`/`config.blur`/`config.spread`/`config.vertical` are applied once (and on every
   `config` change, via a deep `watch`) as private custom properties on the wrapper, which cards
   inherit.
+- The wrapper is a wrapping flex row (or column), so many cards flow onto new rows rather than
+  overflowing. Each card is `280px` wide by default, capped at the wrapper's width, and wraps long
+  unbroken text (`overflow-wrap: anywhere`).
 
 ## Styling
 
-Card background/padding/sizing/border-radius/highlight-colour/brightness/transition-duration and
+Card background (defaults to `--theme-surface-subtle`)/text colour (`--theme-text`)/padding/sizing/border-radius/highlight-colour/brightness/transition-duration and
 the glow gradient itself are public CSS custom properties — see `CONSUMER-STYLING.md` for the full
 token table. Layout and interaction behaviour (proximity, spread, blur, gap, direction, inactive
 opacity) go through the `config` prop instead, since they're computed in JavaScript per pointer
@@ -121,3 +126,11 @@ apply instantly instead of fading).
   `--_direction`/`--_gradient` to match the private-token convention (they're config-driven, not a
   direct CSS override surface).
 - Added a `prefers-reduced-motion: reduce` guard disabling the opacity transition.
+- 2026-10-08 stress-test pass (`StressTest` story): the glow layer class `.glows` was renamed to
+  `.container-glow-glows` (pitfall #16) and marked `aria-hidden`; `tag="li"` now renders the
+  wrapper as a `<ul>` instead of an invalid `<li>`-in-`<div>`; the wrapper wraps (`flex-wrap`)
+  instead of overflowing sideways with many cards; cards cap `min-width` at the wrapper's width and
+  use `overflow-wrap: anywhere`; `config` numbers are clamped (negative gap/blur/proximity, spread
+  outside 0–360, opacity outside 0–1, non-finite values) so a bad value can't produce an invalid
+  `calc()`. Card background default moved from `white` to `--theme-surface-subtle`, and a new
+  `--container-glow-text-colour` token defaults to `--theme-text`.

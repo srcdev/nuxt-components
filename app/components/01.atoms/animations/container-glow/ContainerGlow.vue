@@ -1,5 +1,5 @@
 <template>
-  <div ref="containerGlowWrapper" class="container-glow-wrapper" :class="elementClasses">
+  <component :is="wrapperTag" ref="containerGlowWrapper" class="container-glow-wrapper" :class="elementClasses">
     <component
       :is="tag"
       v-for="(_, name) in $slots"
@@ -7,10 +7,10 @@
       ref="containerGlowItem"
       class="container-glow"
     >
-      <div class="glows"></div>
+      <div class="container-glow-glows" aria-hidden="true"></div>
       <slot :name="name"></slot>
     </component>
-  </div>
+  </component>
 </template>
 
 <script setup lang="ts">
@@ -37,18 +37,22 @@ watch(
   }
 );
 
+const wrapperTag = computed(() => (props.tag === "li" ? "ul" : "div"));
+
 const controller = new AbortController();
 
 const containerGlowWrapper = ref<HTMLElement>();
 const containerGlowItem = ref<HTMLElement[]>([]);
 
-// Cache frequently used values to avoid repeated access
+const clampConfig = (value: number | undefined, fallback: number, min: number, max: number) =>
+  typeof value === "number" && Number.isFinite(value) ? Math.min(Math.max(value, min), max) : fallback;
+
 const configCache = computed(() => ({
-  proximity: props.config.proximity ?? 40,
-  inactiveOpacityStr: String(props.config.inactiveOpacity ?? 0),
-  gapStr: String(props.config.gap ?? 32),
-  blurStr: String(props.config.blur ?? 20),
-  spreadStr: String(props.config.spread ?? 80),
+  proximity: clampConfig(props.config.proximity, 40, 0, Infinity),
+  inactiveOpacityStr: String(clampConfig(props.config.inactiveOpacity, 0, 0, 1)),
+  gapStr: String(clampConfig(props.config.gap, 32, 0, Infinity)),
+  blurStr: String(clampConfig(props.config.blur, 20, 0, Infinity)),
+  spreadStr: String(clampConfig(props.config.spread, 80, 0, 360)),
   direction: props.config.vertical ? "column" : "row",
 }));
 
@@ -164,7 +168,11 @@ onBeforeUnmount(() => {
   .container-glow-wrapper {
     display: flex;
     flex-direction: var(--_direction, row);
+    flex-wrap: wrap;
     gap: calc(var(--_gap, 32) * 1px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
 
     .container-glow {
       & *,
@@ -185,18 +193,20 @@ onBeforeUnmount(() => {
           hsla(0, 0%, 98%, 1) 1turn
         )
       );
-      --_opacity-active: v-bind("props.config.inactiveOpacity ?? 0");
+      --_opacity-active: v-bind("configCache.inactiveOpacityStr");
       --_start: 0;
 
       position: relative;
 
       height: 100%;
-      background: var(--container-glow-background, white);
+      background: var(--container-glow-background, var(--theme-surface-subtle));
+      color: var(--container-glow-text-colour, var(--theme-text));
       padding: var(--container-glow-padding, 2rem);
       aspect-ratio: var(--container-glow-aspect-ratio, 330 / 400);
       border-radius: var(--container-glow-border-radius, 12px);
-      min-width: var(--container-glow-min-width, 280px);
+      min-width: min(var(--container-glow-min-width, 280px), 100%);
       max-width: var(--container-glow-max-width, 280px);
+      overflow-wrap: anywhere;
       display: flex;
       flex-direction: column;
       gap: var(--container-glow-content-gap, 0.25rem);
@@ -255,7 +265,7 @@ onBeforeUnmount(() => {
         mask-composite: intersect;
       }
 
-      .glows {
+      .container-glow-glows {
         pointer-events: none;
         position: absolute;
         inset: 0;
@@ -288,8 +298,8 @@ onBeforeUnmount(() => {
       @media (prefers-reduced-motion: reduce) {
         &::before,
         &::after,
-        .glows::before,
-        .glows::after {
+        .container-glow-glows::before,
+        .container-glow-glows::after {
           transition: none;
         }
       }
