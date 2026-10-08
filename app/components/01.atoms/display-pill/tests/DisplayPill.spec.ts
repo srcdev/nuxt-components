@@ -64,12 +64,30 @@ describe("DisplayPill", () => {
     expect(wrapper.find(".display-pill-label").text()).toBe("Active");
   });
 
-  it("renders default slot when no label prop is set", async () => {
+  it("renders default slot inside .display-pill-label when no label prop is set", async () => {
     const wrapper = await mountSuspended(DisplayPill, {
       slots: { default: "<strong class='custom'>Custom</strong>" },
     });
-    expect(wrapper.find(".custom").exists()).toBe(true);
+    expect(wrapper.find(".display-pill-label .custom").exists()).toBe(true);
+  });
+
+  it("treats a whitespace-only label as no label and falls back to the default slot", async () => {
+    const wrapper = await mountSuspended(DisplayPill, {
+      props: { label: "   " },
+      slots: { default: "<strong class='custom'>Custom</strong>" },
+    });
+    expect(wrapper.find(".display-pill-label .custom").exists()).toBe(true);
+  });
+
+  it.each(["", "   "])("renders no label element for label=%j with no default slot", async (label) => {
+    const wrapper = await mountSuspended(DisplayPill, { props: { label } });
     expect(wrapper.find(".display-pill-label").exists()).toBe(false);
+  });
+
+  it("renders a label with HTML-like text as text, not markup", async () => {
+    const wrapper = await mountSuspended(DisplayPill, { props: { label: "<b>bold</b>" } });
+    expect(wrapper.find(".display-pill-label").text()).toBe("<b>bold</b>");
+    expect(wrapper.find("b").exists()).toBe(false);
   });
 
   it("does not render default slot when label prop is set", async () => {
@@ -92,43 +110,46 @@ describe("DisplayPill", () => {
 
   // ─── Size ─────────────────────────────────────────────────────────────────
 
-  it("applies md size class by default", async () => {
+  it("sets data-size='md' by default", async () => {
     const wrapper = await mountSuspended(DisplayPill);
-    expect(wrapper.classes()).toContain("md");
+    expect(wrapper.attributes("data-size")).toBe("md");
   });
 
-  it.each(["sm", "md", "lg"] as const)("applies %s size class when size='%s'", async (size) => {
+  it.each(["sm", "md", "lg"] as const)("sets data-size='%s' when size='%s'", async (size) => {
     const wrapper = await mountSuspended(DisplayPill, { props: { size } });
-    expect(wrapper.classes()).toContain(size);
+    expect(wrapper.attributes("data-size")).toBe(size);
+    expect(wrapper.classes()).not.toContain(size);
   });
 
   // ─── Variant ──────────────────────────────────────────────────────────────
 
-  it("applies default variant class by default", async () => {
+  it("sets data-variant='default' by default", async () => {
     const wrapper = await mountSuspended(DisplayPill);
-    expect(wrapper.classes()).toContain("default");
+    expect(wrapper.attributes("data-variant")).toBe("default");
   });
 
   it.each(["default", "primary", "success", "warning", "danger", "neutral"] as const)(
-    "applies %s variant class when variant='%s'",
+    "sets data-variant='%s' when variant='%s'",
     async (variant) => {
       const wrapper = await mountSuspended(DisplayPill, { props: { variant } });
-      expect(wrapper.classes()).toContain(variant);
+      expect(wrapper.attributes("data-variant")).toBe(variant);
+      expect(wrapper.classes()).not.toContain(variant);
     }
   );
 
   // ─── Reversed ─────────────────────────────────────────────────────────────
 
-  it("does not apply is-reversed class by default", async () => {
+  it("does not set data-reversed by default", async () => {
     const wrapper = await mountSuspended(DisplayPill);
-    expect(wrapper.classes()).not.toContain("is-reversed");
+    expect(wrapper.attributes("data-reversed")).toBeUndefined();
   });
 
-  it("applies is-reversed class when reversed=true", async () => {
+  it("sets data-reversed when reversed=true", async () => {
     const wrapper = await mountSuspended(DisplayPill, {
       props: { reversed: true },
     });
-    expect(wrapper.classes()).toContain("is-reversed");
+    expect(wrapper.attributes("data-reversed")).toBeDefined();
+    expect(wrapper.classes()).not.toContain("is-reversed");
   });
 
   // ─── styleClassPassthrough ────────────────────────────────────────────────
@@ -216,6 +237,14 @@ describe("DisplayPill", () => {
 
   it("sets data-icon-position='only' for an icon with no label or text", async () => {
     const wrapper = await mountSuspended(DisplayPill, { slots: { icon: "<span>●</span>" } });
+    expect(wrapper.attributes("data-icon-position")).toBe("only");
+  });
+
+  it("sets data-icon-position='only' when the label is whitespace", async () => {
+    const wrapper = await mountSuspended(DisplayPill, {
+      props: { label: "  " },
+      slots: { icon: "<span>●</span>" },
+    });
     expect(wrapper.attributes("data-icon-position")).toBe("only");
   });
 

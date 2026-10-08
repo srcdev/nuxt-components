@@ -21,7 +21,7 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
           <h1 id="v-0-0" class="hero-text display axis-horizontal">
             <!--v-if--><span class="text-block-0 normal">Balayage</span>
           </h1>
-          <div class="service-detail__hero-pills"><span class="display-pill md neutral"><!--v-if--><span class="display-pill-label">2.5 - 3.5 hours</span></span><span class="display-pill md neutral"><!--v-if--><span class="display-pill-label">From £95</span></span></div>
+          <div class="service-detail__hero-pills"><span class="display-pill" data-size="md" data-variant="neutral"><!--v-if--><span class="display-pill-label">2.5 - 3.5 hours</span></span><span class="display-pill" data-size="md" data-variant="neutral"><!--v-if--><span class="display-pill-label">From £95</span></span></div>
         </div>
       </div>
     </div>

@@ -34,5 +34,15 @@
       "  --display-pill-border-colour: ${4:currentColor};",
       "}"
     ]
+  },
+  "SRCDEV DisplayPill Two-Tone Ring": {
+    "description": "DisplayPill dark border plus light ring in each variant's own colours",
+    "scope": "css",
+    "body": [
+      ".${1:tag-list} {",
+      "  --display-pill-border-colour: currentColor;",
+      "  --display-pill-ring-width: ${2:0.2rem};",
+      "}"
+    ]
   }
 }

@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DisplayPill > renders correct HTML structure (default) 1`] = `"<span class="display-pill md default"><!--v-if--><span class="display-pill-label">Status</span></span>"`;
+exports[`DisplayPill > renders correct HTML structure (default) 1`] = `"<span class="display-pill" data-size="md" data-variant="default"><!--v-if--><span class="display-pill-label">Status</span></span>"`;
 
-exports[`DisplayPill > renders correct HTML structure (reversed) 1`] = `"<span class="display-pill md default is-reversed" data-icon-position="end"><span class="display-pill-icon"><span class="icon">✓</span></span><span class="display-pill-label">Status</span></span>"`;
+exports[`DisplayPill > renders correct HTML structure (reversed) 1`] = `"<span class="display-pill" data-size="md" data-variant="default" data-reversed="true" data-icon-position="end"><span class="display-pill-icon"><span class="icon">✓</span></span><span class="display-pill-label">Status</span></span>"`;
 
-exports[`DisplayPill > renders correct HTML structure (with icon slot) 1`] = `"<span class="display-pill lg success" data-icon-position="start"><span class="display-pill-icon"><span class="icon">✓</span></span><span class="display-pill-label">Status</span></span>"`;
+exports[`DisplayPill > renders correct HTML structure (with icon slot) 1`] = `"<span class="display-pill" data-size="lg" data-variant="success" data-icon-position="start"><span class="display-pill-icon"><span class="icon">✓</span></span><span class="display-pill-label">Status</span></span>"`;
