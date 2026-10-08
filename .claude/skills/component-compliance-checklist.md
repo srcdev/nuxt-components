@@ -138,8 +138,11 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
     "Line-clamp tokens". Give each line-clamp token a Controls-panel select in the stories (set on
     a wrapper `:style`, stripped from the component's args), labelled as a story-only CSS token so
     nobody mistakes it for a prop: `storybook-add-story.md`, "Label token controls as story-only".
-    Add a unit test for any logic fix. A component that takes no data or copy
-    (e.g. a pure layout wrapper) still gets one with oversized slot content.
+    Add a unit test for any logic fix. A grid or layout component still gets one with oversized
+    slot content (an unbroken string in one cell finds `min-inline-size` overflow bugs). Components
+    with nothing to stress (animation wrappers, decorative containers that only take a slot and
+    tag/variant props, Storybook tooling) are exempt: they are listed in `stressStoryExempt` in
+    `.claude/component-ledger/build.mjs`; add a new one there rather than writing a padding story.
 7. **Skill doc** — create or update `.claude/skills/components/<component-name>.md`, following the
    pattern of an existing one. A labelled `<Name>Field` wrapper (or any other wrapper) is documented
    in its control's doc under a "Variants" section, not in a doc of its own

@@ -37,6 +37,30 @@ function collectEslintIssues() {
 }
 const eslintIssuesByFile = collectEslintIssues();
 
+// Checklist item 6b exemptions (2026-10-08): groups that take no copy or data of their own, so a
+// worst-case-data story has nothing to stress. Animation wrappers, decorative/plain containers
+// (slot plus tag/variant/strength props only) and Storybook-only tooling. Grids and PageRow are
+// deliberately NOT here: an unbroken string in one cell is the classic min-inline-size overflow bug.
+const stressStoryExempt = new Set([
+  "01.atoms/animations/animated-svg-text",
+  "01.atoms/animations/clip-element",
+  "01.atoms/animations/entry",
+  "01.atoms/animations/rotating-carousel-image",
+  "01.atoms/animations/scroll-reveal-frame",
+  "01.atoms/animations/scroll-reveal-image",
+  "01.atoms/animations/section-parallax",
+  "01.atoms/animations/view-timeline",
+  "01.atoms/canvas-switcher",
+  "01.atoms/card",
+  "01.atoms/clipped-panel",
+  "01.atoms/display-banner",
+  "01.atoms/glass-panel",
+  "01.atoms/text-block",
+  "01.atoms/ui-block-decorated",
+  "05.forms/form-wrapper",
+  "05.forms/pending-effect",
+]);
+
 function walk(dir, out = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
@@ -147,9 +171,9 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
   const hasEslintIssues = files.some((f) => eslintIssuesByFile.has(f));
   // Checklist item 6b (added 2026-10-05): at least one story file in the group exports a
   // `StressTest` story. A group with no stories at all is flagged too, on top of the score.
-  const missingStressStory = !storyFiles.some((f) =>
-    /export\s+const\s+StressTest\b/.test(fs.readFileSync(f, "utf-8"))
-  );
+  const stressExempt = stressStoryExempt.has(relDir);
+  const missingStressStory =
+    !stressExempt && !storyFiles.some((f) => /export\s+const\s+StressTest\b/.test(fs.readFileSync(f, "utf-8")));
   // Pitfall #20's second half (added 2026-09-28): a --_ token that's never read, or a single-use
   // 1:1 copy of a public token. The migrate checklist only ever covered the promote-to-public half,
   // so ~160 of these survived migrations.
@@ -173,6 +197,7 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
     redundant_priv_tokens: hasRedundantPrivTokens,
     styling_doc_outdated: hasStylingDocOutdated,
     missing_stress_story: missingStressStory,
+    stress_story_exempt: stressExempt,
     consumer_styling: hasConsumerStyling,
     tests: hasTests,
     stories: hasStoriesDir || hasStoriesFile,

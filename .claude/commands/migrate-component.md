@@ -85,8 +85,10 @@ Otherwise, auto-pick the next worst offender:
 
      After that list, copy-heavy molecules (`profile-section`, `pricing-card`,
      `cookie-consent-banner`, `stepper-list`, `social-icons-list`, `04.templates/page-hero-highlights`),
-     then the `05.forms` labelled fields, then everything else alphabetically. Layout and animation
-     wrappers come last: an oversized-slot story is enough for them.
+     then the `05.forms` labelled fields, then everything else alphabetically. Grids and layout
+     components come last: an oversized-slot story is enough for them. Animation wrappers,
+     decorative containers and Storybook tooling are exempt (`stressStoryExempt` in `build.mjs`) and
+     never flagged.
    - Else the lowest `score` overall — same tie-break.
 3. State which component was picked and why in one line (e.g. "Picked `input-select` — unplaced isn't the issue here, it forks a `variants/` subfolder and scores 2/5.") before doing anything else, so the user can redirect you if they'd rather do a different one next.
 
