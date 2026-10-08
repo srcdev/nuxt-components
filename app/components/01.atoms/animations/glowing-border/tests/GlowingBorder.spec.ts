@@ -52,18 +52,29 @@ describe("GlowingBorder", () => {
 
   // ─── Variant ──────────────────────────────────────────────────────────────
 
-  it("applies subtle variant class by default", async () => {
+  it("sets data-variant='subtle' by default", async () => {
     const wrapper = await mountSuspended(GlowingBorder);
-    expect(wrapper.classes()).toContain("subtle");
+    expect(wrapper.attributes("data-variant")).toBe("subtle");
   });
 
   it.each(["subtle", "vivid", "silver", "steel", "green"] as const)(
-    "applies %s variant class when variant='%s'",
+    "sets data-variant='%s' when variant='%s'",
     async (variant) => {
       const wrapper = await mountSuspended(GlowingBorder, { props: { variant } });
-      expect(wrapper.classes()).toContain(variant);
+      expect(wrapper.attributes("data-variant")).toBe(variant);
     }
   );
+
+  it("does not add the variant name as a class, so consumer classes like .green can't collide", async () => {
+    const wrapper = await mountSuspended(GlowingBorder, { props: { variant: "green" } });
+    expect(wrapper.classes()).not.toContain("green");
+  });
+
+  it("updates data-variant when the variant prop changes", async () => {
+    const wrapper = await mountSuspended(GlowingBorder, { props: { variant: "vivid" } });
+    await wrapper.setProps({ variant: "steel" });
+    expect(wrapper.attributes("data-variant")).toBe("steel");
+  });
 
   // ─── styleClassPassthrough ────────────────────────────────────────────────
 

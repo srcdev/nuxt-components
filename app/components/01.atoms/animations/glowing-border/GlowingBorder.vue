@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="glowing-border" :class="[variant, elementClasses]">
+  <component :is="tag" class="glowing-border" :class="elementClasses" :data-variant="variant">
     <slot></slot>
   </component>
 </template>
@@ -66,7 +66,7 @@ watch(
   }
 
   .glowing-border {
-    &.vivid {
+    &[data-variant="vivid"] {
       --_clr-1: var(--glowing-border-vivid-color-1, #ff0000);
       --_clr-2: var(--glowing-border-vivid-color-2, #ffa500);
       --_clr-3: var(--glowing-border-vivid-color-3, #ffff00);
@@ -74,7 +74,7 @@ watch(
       --_clr-5: var(--glowing-border-vivid-color-5, #0000ff);
     }
 
-    &.subtle {
+    &[data-variant="subtle"] {
       --_clr-1: var(--glowing-border-subtle-color-1, #ff9a9e);
       --_clr-2: var(--glowing-border-subtle-color-2, #fad0c4);
       --_clr-3: var(--glowing-border-subtle-color-3, #fad0c4);
@@ -82,7 +82,7 @@ watch(
       --_clr-5: var(--glowing-border-subtle-color-5, #a18cd1);
     }
 
-    &.silver {
+    &[data-variant="silver"] {
       --_clr-1: var(--glowing-border-silver-color-1, #d4d4d4);
       --_clr-2: var(--glowing-border-silver-color-2, #e4e4e4);
       --_clr-3: var(--glowing-border-silver-color-3, #f5f5f5);
@@ -90,7 +90,7 @@ watch(
       --_clr-5: var(--glowing-border-silver-color-5, #d4d4d4);
     }
 
-    &.steel {
+    &[data-variant="steel"] {
       --_clr-1: var(--glowing-border-steel-color-1, #434343);
       --_clr-2: var(--glowing-border-steel-color-2, #5a5a5a);
       --_clr-3: var(--glowing-border-steel-color-3, #6e6e6e);
@@ -98,7 +98,7 @@ watch(
       --_clr-5: var(--glowing-border-steel-color-5, #434343);
     }
 
-    &.green {
+    &[data-variant="green"] {
       --_clr-1: var(--glowing-border-green-color-1, #00ff87);
       --_clr-2: var(--glowing-border-green-color-2, #39ff14);
       --_clr-3: var(--glowing-border-green-color-3, #00c853);
@@ -110,20 +110,22 @@ watch(
 
     border: var(--glowing-border-width, 3px) solid transparent;
     border-radius: var(--glowing-border-radius, 30px);
+    color: var(--glowing-border-text-colour, var(--theme-text));
+    overflow-wrap: anywhere;
     background:
-      linear-gradient(var(--glowing-border-surface, canvas) 0 0) padding-box,
+      linear-gradient(var(--glowing-border-surface, var(--theme-surface-subtle)) 0 0) padding-box,
       conic-gradient(from var(--_glow-deg), var(--_gradient-glow)) border-box;
 
-    animation: glow var(--glowing-border-animation-duration, 10s) infinite linear;
+    animation: glowing-border-rotate var(--glowing-border-animation-duration, 10s) infinite linear;
 
-    overflow: hidden;
+    overflow: var(--glowing-border-overflow, hidden);
 
     @media (prefers-reduced-motion: reduce) {
       animation: none;
     }
   }
 
-  @keyframes glow {
+  @keyframes glowing-border-rotate {
     100% {
       --_glow-deg: 270deg;
     }

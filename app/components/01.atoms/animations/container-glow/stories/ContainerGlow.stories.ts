@@ -25,6 +25,8 @@ const darkColourLabels = {
   "#1e293b": "Slate",
   "#262626": "Charcoal",
 };
+const surfaceLabels = { ...darkColourLabels, "#ffffff": "White" };
+const isDark = (colour: string) => darkColours.includes(colour);
 
 export default {
   title: "Atoms/Effects/ContainerGlow",
@@ -73,8 +75,8 @@ export default {
       table: { category: "Story canvas (story only)" },
     },
     cardBackground: {
-      control: { type: "select", labels: darkColourLabels },
-      options: ["", ...darkColours],
+      control: { type: "select", labels: surfaceLabels },
+      options: ["", "#ffffff", ...darkColours],
       description:
         "**Story control, not a prop.** Sets `--container-glow-background` (and a light `--container-glow-text-colour` for dark values). In your CSS: `.pricing { --container-glow-background: #0f0f23; --container-glow-text-colour: #f3f4f6; }`",
       table: { category: "CSS tokens (story only, set in your CSS)" },
@@ -97,8 +99,8 @@ export default {
     gap: 32,
     vertical: false,
     inactiveOpacity: 0,
-    canvasBackground: "#020024",
-    cardBackground: "#1e293b",
+    canvasBackground: "",
+    cardBackground: "",
   },
   parameters: {
     docs: {
@@ -122,7 +124,8 @@ function useStorySetup(args: StoryArgs) {
   const stageStyle = computed(() => ({
     background: args.canvasBackground || undefined,
     "--container-glow-background": args.cardBackground || undefined,
-    "--container-glow-text-colour": args.cardBackground ? "#f3f4f6" : undefined,
+    "--container-glow-text-colour":
+      isDark(args.cardBackground) ? "#f3f4f6" : undefined,
   }));
   return { args, config, stageStyle };
 }
