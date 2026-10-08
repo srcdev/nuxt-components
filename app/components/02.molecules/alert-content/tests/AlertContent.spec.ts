@@ -156,6 +156,39 @@ describe("AlertContent", () => {
     expect(wrapper.find("[data-test-id='alert-actions']").exists()).toBe(false);
   });
 
+  // ─── styleClassPassthrough / hostile text (added 2026-10-08) ────────────────
+
+  it("applies styleClassPassthrough classes to the root", async () => {
+    const wrapper = await mountSuspended(AlertContent, {
+      props: { theme: "info", styleClassPassthrough: ["site-notice", "is-wide"] },
+    });
+    expect(wrapper.find(".alert-content").classes()).toEqual(expect.arrayContaining(["site-notice", "is-wide"]));
+  });
+
+  it("updates root classes when styleClassPassthrough changes", async () => {
+    const wrapper = await mountSuspended(AlertContent, {
+      props: { theme: "info", styleClassPassthrough: "first-class" },
+    });
+    await wrapper.setProps({ styleClassPassthrough: "second-class" });
+    const classes = wrapper.find(".alert-content").classes();
+    expect(classes).toContain("second-class");
+    expect(classes).not.toContain("first-class");
+  });
+
+  it("renders HTML-like slot text as text, not markup", async () => {
+    const wrapper = await mountSuspended(
+      {
+        components: { AlertContent },
+        setup: () => ({ text: "<img src=x onerror=alert(1)>" }),
+        template: `<AlertContent theme="info"><template #content>{{ text }}</template></AlertContent>`,
+      },
+      {}
+    );
+    const content = wrapper.find("[data-test-id='alert-content']");
+    expect(content.find("img").exists()).toBe(false);
+    expect(content.text()).toBe("<img src=x onerror=alert(1)>");
+  });
+
   it("uses component-prefixed classes for the title and text", async () => {
     const wrapper = await mountSuspended(AlertContent, {
       props: { theme: "info" },

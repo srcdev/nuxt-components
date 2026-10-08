@@ -1,5 +1,5 @@
 <template>
-  <div class="alert-content" :data-theme="theme">
+  <div class="alert-content" :class="[elementClasses]" :data-theme="theme">
     <AlertContentInner
       :theme="theme"
       :custom-icon="customIcon"
@@ -41,19 +41,28 @@ interface Props {
   dismissible?: boolean;
   contentId?: string;
   ariaLive?: "polite" | "assertive" | "off";
+  styleClassPassthrough?: string | string[];
 }
 
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   customIcon: undefined,
   showIcon: true,
   dismissible: false,
   contentId: undefined,
   ariaLive: undefined,
+  styleClassPassthrough: () => [],
 });
 
 const emit = defineEmits<{ dismiss: [] }>();
 
 const slots = useSlots();
+
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 </script>
 
 <style lang="css">

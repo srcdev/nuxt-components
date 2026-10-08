@@ -285,6 +285,59 @@ prop and try to pass it. Make it unmistakable:
 
 `PriceList.stories.ts` and `GoogleReviews.stories.ts` (line-clamp controls) follow this.
 
+## Link to the stories of components that use this one
+
+When the component you're working on is a building block of other components (it's rendered
+inside them, or they're a specialised version of it), its stories only show it in isolation. Add a
+short note to each story that names the components using it, says what they add, and links to their
+stories, so a reader can see it in real use. Examples: `AlertContent` is the panel inside
+`DisplayToast`, `DisplayPrompt` and `CookieConsentBanner`; `AlertContentInner` is shared by
+`AlertContent` and `AlertMaskedContent`.
+
+- **Say how they're related, not just "see also".** Name the parent and what it adds, e.g. "The
+  #actions slot wired to real accept and reject handlers: see the CookieConsentBanner story."
+- **Link to the story that shows the relevant feature**, not just any story. A story about a slot
+  or behaviour links to the parent story that exercises it. Other stories can share one general
+  note.
+- **Check the parent story actually shows what the note says.** Read its component before writing
+  the note. `DisplayToast` doesn't fill `AlertContent`'s `#actions` slot, so a toast note that
+  promised action buttons would send people to the wrong place.
+- **Put the note in the canvas**, as a `<p>` above the component, so it's visible on the Canvas tab
+  as well as Docs. If the story has a `parameters.docs.description`, add the link there too.
+- Find the parent's story id from its `title` and export name: `"Molecules/CookieConsentBanner"` +
+  `Default` gives `molecules-cookieconsentbanner--default` (lowercase, `/` and spaces become `-`,
+  then `--` and the kebab-cased export name).
+
+```ts
+// Links in the canvas open in the Storybook manager (target="_top"), not inside the preview iframe.
+const storyNoteStyle = "margin: 0 0 1.6rem; font-size: 1.4rem;";
+const cookieNote = `
+  <p style="${storyNoteStyle}">
+    For the #actions slot wired up to real accept and reject handlers, open the
+    <a href="/?path=/story/molecules-cookieconsentbanner--default" target="_top">CookieConsentBanner</a> story.
+  </p>
+`;
+
+// In the story template:
+template: `
+  <div style="max-width: 600px; padding: 2rem;">
+    ${cookieNote}
+    <AlertContent v-bind="componentArgs">...</AlertContent>
+  </div>
+`,
+
+// In parameters.docs.description (markdown): use "?path=..." with no leading slash.
+story: "See the [CookieConsentBanner](?path=/story/molecules-cookieconsentbanner--default) story. ...",
+```
+
+- Canvas links need `target="_top"` and a leading `/` (`/?path=...`). Without `target="_top"` the
+  whole Storybook UI loads inside the preview frame. The leading `/` assumes Storybook is served
+  from the root of its domain, which holds locally and on the deployed Storybook.
+- Define each note once as a constant at the top of the file and interpolate it, rather than
+  repeating the markup in every story.
+
+`AlertContent.stories.ts` follows this.
+
 ## Notes
 
 - **Colour scheme:** `.storybook/preview.ts` pins every story to the light scheme

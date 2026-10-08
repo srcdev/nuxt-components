@@ -89,6 +89,7 @@ const dismissIcon = computed(() => appConfig.srcdev?.alertContent?.dismissIcon ?
     border-start-start-radius: var(--alert-content-border-radius-start, 0.8rem);
     border-end-start-radius: var(--alert-content-border-radius-start, 0.8rem);
     padding: var(--alert-content-padding, 1.2rem 1.5rem);
+    min-inline-size: 0;
     overflow: hidden;
 
     .alert-content-icon {
@@ -124,6 +125,12 @@ const dismissIcon = computed(() => appConfig.srcdev?.alertContent?.dismissIcon ?
         font-weight: 600;
         line-height: 1.2;
         margin: 0;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+        -webkit-line-clamp: var(--alert-content-title-line-clamp, none);
+        line-clamp: var(--alert-content-title-line-clamp, none);
       }
 
       .alert-content-text {
@@ -132,6 +139,12 @@ const dismissIcon = computed(() => appConfig.srcdev?.alertContent?.dismissIcon ?
         line-height: 1.4;
         margin: 0;
         opacity: 0.9;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        overflow-wrap: anywhere;
+        -webkit-line-clamp: var(--alert-content-text-line-clamp, none);
+        line-clamp: var(--alert-content-text-line-clamp, none);
       }
     }
 
@@ -141,6 +154,12 @@ const dismissIcon = computed(() => appConfig.srcdev?.alertContent?.dismissIcon ?
       align-items: center;
       justify-content: var(--alert-content-actions-justify, flex-end);
       gap: var(--alert-content-actions-gap, 0.8rem);
+      --input-button-text-white-space: normal;
+
+      & > * {
+        min-inline-size: 0;
+        max-inline-size: 100%;
+      }
     }
 
     .alert-content-dismiss {

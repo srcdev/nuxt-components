@@ -14,6 +14,10 @@ wrappers. Don't use `AlertContentInner` directly in pages.
 
 **Location**: `app/components/02.molecules/alert-content/AlertContent.vue`, `AlertContentInner.vue`
 
+> **Changed 2026-10-08**: added `styleClassPassthrough` to `AlertContent`, line-clamp tokens for the
+> title and message, and wrapping for long unbroken text and long `InputButton` labels in `#actions`.
+> `StressTest` story added.
+
 > **Changed 2026-09-27**: skill doc renamed from `alert-content-inner.md`. Added the `showIcon` prop
 > and `#actions` slot, public `--alert-content-*` tokens for the previously hardcoded values, and
 > renamed `.title`/`.content` to `.alert-content-title`/`.alert-content-text`.
@@ -30,6 +34,7 @@ Same on `AlertContent`, `AlertContentInner` and `AlertMaskedContent`:
 | `dismissible` | `boolean` | `false` | Shows the dismiss button, which emits `dismiss`. |
 | `contentId` | `string` | `undefined` | `id` on `.alert-content-body`, for `aria-describedby` wiring. |
 | `ariaLive` | `"polite" \| "assertive" \| "off"` | `undefined` | `aria-live` on `.alert-content-body`. Leave unset for static content (e.g. a banner present on page load). |
+| `styleClassPassthrough` | `string \| string[]` | `[]` | `AlertContent` only. Extra classes on the root `.alert-content`. |
 
 ## Slots
 
@@ -96,7 +101,8 @@ slot always wins over app.config.
 Full token list in `CONSUMER-STYLING.md` next to the component. Outer shape (`AlertContent` only):
 `--alert-content-accent`, `-accent-width`, `-border`, `-border-radius-start`/`-end`. Inside (applies to
 `AlertMaskedContent` too): `--alert-content-inner-background`, `-gap`, `-padding`, `-text-colour`,
-`-icon-colour`, `-icon-size`, `-title-font-size`, `-text-font-size`, `-body-gap`,
+`-icon-colour`, `-icon-size`, `-title-font-size`, `-text-font-size`, `-title-line-clamp`,
+`-text-line-clamp` (both default `none`), `-body-gap`,
 `-actions-spacing`, `-actions-gap`, `-actions-justify` (default `flex-end`, right-aligned), and the `-dismiss-*` tokens.
 
 ## Notes
@@ -105,6 +111,8 @@ Full token list in `CONSUMER-STYLING.md` next to the component. Outer shape (`Al
   SVG mask shows through; change its fill with `--alert-masked-content-background` instead.
 - `AlertContent`'s root is `display: grid` so the inner stretches to the root's height (e.g. in a
   stretched row next to a taller alert) instead of showing the accent colour below it.
+- Long unbroken text in the title or message wraps (`overflow-wrap: anywhere`). The actions row sets
+  `--input-button-text-white-space: normal`, so long `InputButton` labels wrap rather than being clipped.
 - The inner is a flex row (icon | main | dismiss), so a missing icon or dismiss button leaves no
   empty column or stray gap. Before 2026-09-27 it was a fixed three-column grid, and a
   non-dismissible alert carried an empty trailing column plus its gap.

@@ -98,6 +98,9 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
    name directly. A component whose layout responds to its container gets the `CanvasSwitcher`
    decorator (see `PageRow.stories.ts` or `GoogleReviews.stories.ts`, which also shows a per-story
    starting canvas via `parameters.initialCanvas`) rather than a hand-sized wrapper or a width arg.
+   If other components render this one inside them (it's a child or building block of theirs),
+   each story gets a short note that explains the relationship and links to the parent's story
+   (`storybook-add-story.md`, "Link to the stories of components that use this one").
 6a. **Storybook Controls-panel reactivity** — check every story `Template`/`render` function in
     the component's `stories/*.stories.ts` files for this bug: `@storybook/vue3` mounts the story
     component **once** and, on every Controls-panel change, mutates the same reactive `args`

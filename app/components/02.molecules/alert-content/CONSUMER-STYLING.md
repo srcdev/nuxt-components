@@ -28,6 +28,8 @@ Covers `AlertContent` and its inner `AlertContentInner`. The inner tokens also a
 | `--alert-content-body-gap` | `0.4rem` | Gap between title and message |
 | `--alert-content-title-font-size` | `var(--step-4)` | Title size |
 | `--alert-content-text-font-size` | `var(--step-3)` | Message size |
+| `--alert-content-title-line-clamp` | `none` | Max title lines before an ellipsis (`1` = single-line ellipsis, `none` = show everything) |
+| `--alert-content-text-line-clamp` | `none` | Max message lines before an ellipsis. Leave it at `none` for messages people must read in full (errors, consent text): clamped text is still read by screen readers but hidden from sighted users |
 | `--alert-content-actions-spacing` | `1.2rem` | Space between the message and the actions row |
 | `--alert-content-actions-gap` | `0.8rem` | Gap between action controls |
 | `--alert-content-actions-justify` | `flex-end` | Horizontal alignment of the actions row (`justify-content`) |
@@ -41,6 +43,9 @@ Covers `AlertContent` and its inner `AlertContentInner`. The inner tokens also a
 | `--alert-content-dismiss-background-hover` | `var(--theme-surface-hover)` | Background on hover/focus |
 | `--alert-content-dismiss-colour-hover` | `var(--theme-on-surface)` | Icon colour on hover/focus |
 | `--alert-content-dismiss-ring` | `var(--theme-ring)` | Focus/hover outline colour |
+
+> **Changed 2026-10-08**: added the two line-clamp tokens. The title and message now wrap long
+> unbroken strings (`overflow-wrap: anywhere`) instead of being clipped at the alert's edge.
 
 > **Changed 2026-09-27**: every value above except `--alert-content-inner-background` was hardcoded
 > (or read a `--theme-*` token directly, CLAUDE.md pitfall #14). Defaults are unchanged apart from
@@ -66,8 +71,8 @@ radius tokens once for the four corners.
 
 ## Local overrides
 
-Set the tokens above on an element you own (a page or section class, or a plain `class` on the
-component, which falls through to the root `.alert-content`): they inherit down into the component.
+Set the tokens above on an element you own (a page or section class, or a `:style-class-passthrough`
+class on the component, which lands on the root `.alert-content`): they inherit down into the component.
 Keep the block **unlayered** (no `@layer` wrapper) so it beats the library's `@layer components`. If
 your own file uses `<style scoped>`, tokens set on your element still work, but selectors that reach
 inside the component need `:deep()`. Patterns and examples:
@@ -78,7 +83,15 @@ don't reach it: the alert always uses its own `theme` prop's palette. Override t
 tokens instead. When it's rendered by `DisplayToast`/`DisplayToastProvider` it's teleported to
 `<body>`, so set tokens globally or through the toast's own hooks rather than on a page wrapper.
 
+**Caveat:** `.alert-content-actions` sets `--input-button-text-white-space: normal`, so an
+`InputButton` in the `#actions` slot wraps a long label instead of spilling out of the alert. A value
+for that token set on an ancestor doesn't reach buttons inside the actions row; set it on the button
+itself (its own `style-class-passthrough` class) if you need `nowrap` there.
+
 ## Class passthrough
 
-No `style-class-passthrough` prop. A plain `class` attribute falls through to the root `.alert-content`
-(`AlertContent` has a single root), which is enough for setting tokens on one instance.
+`style-class-passthrough` adds classes to the root `.alert-content`, so it's the hook for setting tokens
+on one instance. A plain `class` attribute lands there too (single root). Components that render
+`AlertContent` for you (`DisplayToast`, `DisplayPrompt`, `CookieConsentBanner`) don't forward it.
+
+> **Changed 2026-10-08**: added the prop. Before this, a plain `class` was the only option.
