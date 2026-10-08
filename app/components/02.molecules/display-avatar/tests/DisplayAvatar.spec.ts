@@ -232,6 +232,25 @@ describe("DisplayAvatar", () => {
     expect(wrapper.classes()).toEqual(expect.arrayContaining(["display-chip", "display-avatar", "lg", "online"]));
   });
 
+  it("forwards status and statusLabel to the chip", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, {
+      props: { chip: true, alt: "Jane Smith", status: "dnd", statusLabel: "Do not disturb" },
+    });
+    expect(wrapper.attributes("data-status")).toBe("dnd");
+    expect(wrapper.findAll(".sr-only").map((el) => el.text())).toContain("Do not disturb");
+  });
+
+  it("leaves the chip offline when no status is given", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { chip: true } });
+    expect(wrapper.attributes("data-status")).toBe("offline");
+  });
+
+  it("does not put status attributes on a plain avatar", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { status: "online" } });
+    expect(wrapper.attributes("data-status")).toBeUndefined();
+    expect(wrapper.attributes("status")).toBeUndefined();
+  });
+
   it("updates the chip config when the chip prop changes", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, { props: { chip: true } });
     await wrapper.setProps({ chip: { size: "20px", maskWidth: "2px", offset: "0px", angle: "0deg" } });

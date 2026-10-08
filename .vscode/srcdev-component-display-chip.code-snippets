@@ -6,9 +6,10 @@
       "<DisplayChip",
       "  shape=\"${1|circle,square|}\"",
       "  :config=\"{ size: '${2:12px}', maskWidth: '${3:4px}', offset: '${4:0px}', angle: '${5:135deg}' }\"",
-      "  :style-class-passthrough=\"['${6|online,idle,dnd|}']\"",
+      "  status=\"${6|online,idle,dnd,offline|}\"",
+      "  status-label=\"${7:Online}\"",
       ">",
-      "  $7",
+      "  $8",
       "</DisplayChip>"
     ]
   },

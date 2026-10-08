@@ -38,9 +38,12 @@ scale token.
 - Size class on the root: `.xs`, `.s`, `.md`, `.lg`, `.xl` (or your custom `size` string).
 - Classes: `.display-avatar` (root), `.display-avatar-image` (the image), `.display-avatar-icon`
   (opt-in, for your `#icon` slot content).
-- With `chip`, the root is `DisplayChip`, so it also carries `.display-chip` and its shape
-  class; status classes such as `.online` (through `style-class-passthrough`) are `DisplayChip`'s.
-  See `display-chip` for its tokens.
+- With `chip`, the root is `DisplayChip`, so it also carries `.display-chip` and its
+  `data-shape`/`data-status` attributes (status comes from the `status` prop). See `display-chip`
+  for its tokens.
+
+> **Changed 2026-10-08**: chip status is the `status` prop (forwarded to `DisplayChip` as
+> `data-status`), not an `online`/`idle`/`dnd` class through `style-class-passthrough`.
 
 > **Changed 2026-09-27**: `.avatar-image` → `.display-avatar-image` and `.avatar-icon` →
 > `.display-avatar-icon`.
@@ -59,5 +62,4 @@ scale (`--display-avatar-size-md` etc.) from an ancestor works, but a one-off di
 
 ## Class passthrough
 
-`style-class-passthrough` adds classes to the root, including when the root is `DisplayChip`. That's
-how chip status classes like `online` are applied.
+`style-class-passthrough` adds classes to the root, including when the root is `DisplayChip`.

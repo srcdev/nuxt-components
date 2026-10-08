@@ -21,7 +21,8 @@
       "  src=\"${1:/images/profile.jpg}\"",
       "  alt=\"${2:Jane Smith}\"",
       "  :chip=\"{ size: '${3:12px}', maskWidth: '${4:4px}', offset: '${5:0px}', angle: '${6:45deg}' }\"",
-      "  :style-class-passthrough=\"['${7|online,offline|}']\"",
+      "  status=\"${7|online,idle,dnd,offline|}\"",
+      "  status-label=\"${8:Online}\"",
       "/>"
     ]
   }

@@ -1,5 +1,7 @@
 # DisplayAvatar Component
 
+> **Changed 2026-10-08:** new `status`/`status-label` props, forwarded to the chip. Chip status used to be an `online`/`idle`/`dnd` class through `style-class-passthrough`, which no longer colours the dot.
+
 ## Overview
 
 `DisplayAvatar` renders a circular avatar — either an image (via `NuxtImg`) or a text fallback showing initials derived from the `alt` prop. Optionally wraps in a `DisplayChip` to show a status indicator badge.
@@ -18,6 +20,8 @@
 | `text`                      | `string`                                  | —        | Override the auto-derived initials with an explicit string.       |
 | `size`                      | `"xs" \| "s" \| "md" \| "lg" \| "xl"`   | `"md"`   | Controls width, height, and font-size.                            |
 | `chip`                      | `boolean \| DisplayChipConfig`           | —        | Add a status chip. `true` uses defaults; pass a config object to customise. |
+| `status`                    | `DisplayChipStatus`                       | —        | Chip status colour (`offline`/`online`/`idle`/`dnd`), forwarded to `DisplayChip`. Ignored without `chip`; the chip defaults to `offline`. |
+| `status-label`              | `string`                                  | —        | Screen-reader text for the chip status (e.g. "Online"), forwarded to `DisplayChip`. Ignored without `chip`. |
 | `:style-class-passthrough`  | `string \| string[]`                      | `[]`     | Extra CSS classes on the root element.                            |
 
 ### Size dimensions
@@ -102,10 +106,12 @@ text="?"           → "?"
   src="/images/profile.jpg"
   alt="Jane Smith"
   :chip="true"
+  status="online"
+  status-label="Online"
 />
 ```
 
-Default chip config: `{ size: "12px", maskWidth: "4px", offset: "0px", angle: "90deg" }`.
+Default chip config: `{ size: "12px", maskWidth: "4px", offset: "0px", angle: "90deg" }`. Without `status` the dot is `offline`.
 
 ### With a custom chip
 
@@ -126,12 +132,12 @@ Full `DisplayChipConfig` shape (pass directly as the `chip` value):
 
 ```ts
 interface DisplayChipConfig {
-  size: string       // chip diameter, e.g. "12px"
-  maskWidth: string  // cutout ring width, e.g. "4px"
-  offset: string     // distance from avatar edge, e.g. "0px"
-  angle: string      // position around avatar (0–360deg), e.g. "45deg"
-  icon?: string      // Iconify icon name
-  label?: string     // short text (max 3 characters)
+  size?: string       // chip diameter, e.g. "12px"
+  maskWidth?: string  // cutout ring width, e.g. "4px"
+  offset?: string     // distance from avatar edge, e.g. "0px"
+  angle?: string      // position around avatar (0–360deg), e.g. "45deg"
+  icon?: string       // Iconify icon name
+  label?: string      // short text (max 3 characters)
 }
 ```
 

@@ -1,12 +1,16 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DisplayChip > renders correct HTML structure (default) 1`] = `"<span class="display-chip circle" style="--_chip-size: 12px; --_chip-mask-width: 4px; --_chip-offset: 0px; --_chip-angle: 90deg;"><!--v-if--><!--v-if--></span>"`;
+exports[`DisplayChip > renders correct HTML structure (default) 1`] = `"<span class="display-chip" data-shape="circle" data-status="offline" style="--_chip-size: var(--display-chip-size, 1.2rem); --_chip-mask-width: var(--display-chip-mask-width, 0.4rem); --_chip-offset: var(--display-chip-offset, 0rem); --_chip-angle: var(--display-chip-angle, 90deg);"><!--v-if--><!--v-if--><!--v-if--></span>"`;
 
-exports[`DisplayChip > renders correct HTML structure (square + styleClassPassthrough) 1`] = `"<span class="display-chip square online" style="--_chip-size: 12px; --_chip-mask-width: 4px; --_chip-offset: 0px; --_chip-angle: 90deg;"><!--v-if--><!--v-if--></span>"`;
+exports[`DisplayChip > renders correct HTML structure (square + styleClassPassthrough) 1`] = `"<span class="display-chip featured" data-shape="square" data-status="online" style="--_chip-size: var(--display-chip-size, 1.2rem); --_chip-mask-width: var(--display-chip-mask-width, 0.4rem); --_chip-offset: var(--display-chip-offset, 0rem); --_chip-angle: var(--display-chip-angle, 90deg);"><!--v-if--><!--v-if--><!--v-if--></span>"`;
 
 exports[`DisplayChip > renders correct HTML structure (with icon) 1`] = `
-"<span class="display-chip circle" style="--_chip-size: 12px; --_chip-mask-width: 4px; --_chip-offset: 0px; --_chip-angle: 90deg;"><span class="iconify i-mdi:check chip-icon" aria-hidden="true"></span>
+"<span class="display-chip" data-shape="circle" data-status="offline" style="--_chip-size: 12px; --_chip-mask-width: 4px; --_chip-offset: 0px; --_chip-angle: 90deg;"><span class="iconify i-mdi:check display-chip-icon" aria-hidden="true"></span>
+<!--v-if-->
 <!--v-if--></span>"
 `;
 
-exports[`DisplayChip > renders correct HTML structure (with label) 1`] = `"<span class="display-chip circle" style="--_chip-size: 12px; --_chip-mask-width: 4px; --_chip-offset: 0px; --_chip-angle: 90deg;"><!--v-if--><span class="chip-label length-1">5</span></span>"`;
+exports[`DisplayChip > renders correct HTML structure (with label) 1`] = `
+"<span class="display-chip" data-shape="circle" data-status="offline" style="--_chip-size: 12px; --_chip-mask-width: 4px; --_chip-offset: 0px; --_chip-angle: 90deg;"><!--v-if--><span class="display-chip-label" data-length="1">5</span>
+<!--v-if--></span>"
+`;

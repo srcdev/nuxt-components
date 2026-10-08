@@ -1,5 +1,7 @@
 # DisplayChip Component
 
+> **Changed 2026-10-08 (breaking):** status is the new `status` prop (`data-status`), not an `online`/`idle`/`dnd` class through `styleClassPassthrough`. Shape is `data-shape`, not a `.circle`/`.square` class. Inner classes are `.display-chip-icon`/`.display-chip-label` (were `.chip-icon`/`.chip-label`), with `data-length` instead of `.length-N`. Every `config` field is optional and falls back to a public `--display-chip-*` geometry token. Labels are counted and truncated by grapheme, so emoji are never split. New `statusLabel` prop for screen-reader text.
+
 > **Renamed 2026-09-27:** root class `.display-chip-core` → `.display-chip`. Status colours are now public tokens (`--display-chip-colour-*`, were unprefixed `--color-*`); the geometry vars fed from `config` are private (`--_chip-*`).
 
 ## Overview
@@ -18,23 +20,28 @@ Used directly for standalone chip overlays, and internally by `DisplayAvatar` wh
 | -------------------------- | -------------------------- | ---------- | -------------------------------------------------- |
 | `tag`                      | `"div" \| "span"`          | `"span"`   | Root element tag.                                  |
 | `shape`                    | `"circle" \| "square"`     | `"circle"` | Affects position maths — must match the parent shape. |
-| `:config`                  | `DisplayChipConfig`        | see below  | Controls chip geometry and optional content.       |
-| `:style-class-passthrough` | `string \| string[]`       | `[]`       | Extra CSS classes — use for status colour variants. |
+| `status`                   | `DisplayChipStatus`        | `"offline"` | `"offline" \| "online" \| "idle" \| "dnd"`. Sets the dot colour via `data-status`. |
+| `status-label`             | `string`                   | `""`       | Screen-reader text for the status (e.g. "Online"), so it isn't conveyed by colour alone. Pass translated copy. |
+| `:config`                  | `DisplayChipConfig`        | `{}`       | Geometry and optional content. Every field is optional. |
+| `:style-class-passthrough` | `string \| string[]`       | `[]`       | Extra CSS classes on the root.                     |
 
 ### DisplayChipConfig
 
 ```ts
 interface DisplayChipConfig {
-  size: string       // chip dot diameter, e.g. "12px"
-  maskWidth: string  // cutout ring width around the chip, e.g. "4px"
-  offset: string     // extra distance from the parent edge, e.g. "0px"
-  angle: string      // position around the parent (0–360deg), e.g. "45deg"
-  icon?: string      // Iconify icon name rendered inside the chip
-  label?: string     // short text rendered inside the chip (max 3 characters)
+  size?: string       // chip dot diameter, e.g. "12px"
+  maskWidth?: string  // cutout ring width around the chip, e.g. "4px"
+  offset?: string     // extra distance from the parent edge, e.g. "0px"
+  angle?: string      // position around the parent (0–360deg), e.g. "45deg"
+  icon?: string       // Iconify icon name rendered inside the chip (decorative, aria-hidden)
+  label?: string      // short text rendered inside the chip (max 3 characters)
 }
 ```
 
-Default config: `{ size: "12px", maskWidth: "4px", offset: "0px", angle: "90deg" }`.
+A missing geometry field falls back to its token: `--display-chip-size` (`1.2rem`),
+`--display-chip-mask-width` (`0.4rem`), `--display-chip-offset` (`0rem`), `--display-chip-angle`
+(`90deg`). A field set in `config` beats the token. Negative `size`/`maskWidth` clamp to `0`; values
+without units (`"45"`) are invalid CSS and hide the dot.
 
 ### Angle reference
 
@@ -53,11 +60,11 @@ Default config: `{ size: "12px", maskWidth: "4px", offset: "0px", angle: "90deg"
 
 ## Status colours
 
-Apply status via `styleClassPassthrough` — the component has built-in colour variants:
+Set with the `status` prop:
 
-| Class | Token | Default |
+| `status` | Token | Default |
 | --- | --- | --- |
-| (none) | `--display-chip-colour-offline` | `var(--status-neutral)` |
+| `offline` (default) | `--display-chip-colour-offline` | `var(--status-neutral)` |
 | `online` | `--display-chip-colour-online` | `var(--status-success)` |
 | `idle` | `--display-chip-colour-idle` | `var(--status-warning)` |
 | `dnd` | `--display-chip-colour-dnd` | `var(--status-danger)` |
@@ -69,14 +76,14 @@ Icon and label colour: `--display-chip-text-colour` (default `black`). Full refe
 `app/components/02.molecules/display-chip/CONSUMER-STYLING.md`.
 
 ```vue
-<DisplayChip :style-class-passthrough="['online']">...</DisplayChip>
+<DisplayChip status="online" status-label="Online">...</DisplayChip>
 ```
 
 ---
 
 ## Label constraints
 
-- Max 3 characters. Longer values are silently truncated with a `console.warn`.
+- Max 3 characters, counted as graphemes: an emoji (including ZWJ sequences like 👨‍👩‍👧‍👦 and flags) counts as one and is never split. Longer values are truncated with a `console.warn`. Whitespace is trimmed; a whitespace-only label renders nothing.
 - Font-size scales automatically with chip size via `--_font-size-adjust`:
   - 1 char → `0.7 × size`
   - 2 chars → `0.6 × size`
@@ -100,7 +107,7 @@ Icon and label colour: `--display-chip-text-colour` (default `black`). Full refe
 <DisplayChip
   shape="circle"
   :config="{ size: '12px', maskWidth: '4px', offset: '0px', angle: '45deg' }"
-  :style-class-passthrough="['online']"
+  status="online"
 >
   <div class="avatar">SRC</div>
 </DisplayChip>
@@ -112,7 +119,7 @@ Icon and label colour: `--display-chip-text-colour` (default `black`). Full refe
 <DisplayChip
   shape="square"
   :config="{ size: '10px', maskWidth: '3px', offset: '2px', angle: '135deg' }"
-  :style-class-passthrough="['idle']"
+  status="idle"
 >
   <img src="/thumbnail.jpg" alt="Card thumbnail" />
 </DisplayChip>
@@ -123,7 +130,7 @@ Icon and label colour: `--display-chip-text-colour` (default `black`). Full refe
 ```vue
 <DisplayChip
   :config="{ size: '16px', maskWidth: '4px', offset: '0px', angle: '45deg', icon: 'bi:check-circle-fill' }"
-  :style-class-passthrough="['online']"
+  status="online"
 >
   <div class="avatar">SRC</div>
 </DisplayChip>
@@ -135,7 +142,7 @@ Icon and label colour: `--display-chip-text-colour` (default `black`). Full refe
 <!-- 1–3 characters only; longer values are truncated with a warning -->
 <DisplayChip
   :config="{ size: '16px', maskWidth: '4px', offset: '0px', angle: '45deg', label: '+2' }"
-  :style-class-passthrough="['dnd']"
+  status="dnd"
 >
   <div class="avatar">SRC</div>
 </DisplayChip>
@@ -159,7 +166,7 @@ const chipConfig = computed((): DisplayChipConfig => ({
 </script>
 
 <template>
-  <DisplayChip shape="circle" :config="chipConfig" :style-class-passthrough="['online']">
+  <DisplayChip shape="circle" :config="chipConfig" status="online">
     <div class="avatar">SRC</div>
   </DisplayChip>
 </template>
@@ -174,7 +181,8 @@ Prefer `DisplayAvatar` with its `chip` prop over wiring `DisplayChip` directly:
   src="/images/profile.jpg"
   alt="Jane Smith"
   :chip="{ size: '12px', maskWidth: '4px', offset: '0px', angle: '45deg' }"
-  :style-class-passthrough="['online']"
+  status="online"
+  status-label="Online"
 />
 ```
 
@@ -187,6 +195,7 @@ See [display-avatar.md](./display-avatar.md) for the full API.
 ```vue
 <DisplayChip
   :config="chipConfig"
+  status="online"
   :style-class-passthrough="['my-chip']"
 >
   <div class="avatar">SRC</div>
@@ -217,5 +226,6 @@ See [display-avatar.md](./display-avatar.md) for the full API.
 - `shape` must match the actual shape of the slot content — the position maths differs between `circle` (radius-based) and `square` (clamped corner-aware).
 - `config` values are geometric inputs to CSS `calc(cos())` / `calc(sin())` expressions. Pass them as strings with units (`"12px"`, `"45deg"`), not plain numbers.
 - The chip dot is rendered via `::after` pseudo-element; icon and label sit above it at `z-index: 2`.
-- The mask cutout is applied to all direct children of `.display-chip` except `.chip-icon` and `.chip-label` — ensure the host element is a direct child.
+- The mask cutout is applied to all direct children of `.display-chip` except `.display-chip-icon`, `.display-chip-label` and the `.sr-only` status text — ensure the host element is a direct child.
+- The `StressTest` story shows the worst-case labels and config values.
 - `DisplayChipConfig` and `DisplayChipProps` are both exported from the layer types. Use `DisplayChipConfig` when passing geometry values (the `config` prop). Use `DisplayChipProps` only if you need to pass the full component prop set (e.g. when building a wrapper component).

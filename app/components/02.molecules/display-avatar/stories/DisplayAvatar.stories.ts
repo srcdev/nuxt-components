@@ -56,6 +56,21 @@ export default {
         category: "Chip Configuration",
       },
     },
+    status: {
+      control: { type: "inline-radio" },
+      options: ["offline", "online", "idle", "dnd"],
+      description: "Chip status colour (forwarded to DisplayChip)",
+      table: {
+        category: "Chip Configuration",
+      },
+    },
+    statusLabel: {
+      control: { type: "text" },
+      description: "Screen-reader text for the chip status, e.g. 'Online' (forwarded to DisplayChip)",
+      table: {
+        category: "Chip Configuration",
+      },
+    },
     // Hide the chip prop from controls since we're using individual controls
     chip: {
       table: {
@@ -77,7 +92,9 @@ export default {
     chipMaskWidth: 4,
     chipOffset: 2,
     chipAngle: 45,
-    styleClassPassthrough: ["test-storybook--display-avatar", "online"],
+    status: "online",
+    statusLabel: "Online",
+    styleClassPassthrough: ["test-storybook--display-avatar"],
   },
 } as Meta<typeof StorybookComponent>;
 
@@ -102,6 +119,8 @@ const Template: StoryFn<typeof StorybookComponent> = (args) => ({
         :src="args.src"
         :alt="args.alt"
         :chip="chip"
+        :status="args.status"
+        :status-label="args.statusLabel"
         :style-class-passthrough="args.styleClassPassthrough"
       />
     </div>
@@ -117,8 +136,8 @@ export const Initials: StoryFn<typeof StorybookComponent> = (args) => ({
   },
   template: `
     <div style="display: flex; align-items: center; justify-content: center; gap: 1.6rem; height: 100vh;">
-      <StorybookComponent :size="args.size" :alt="args.alt" :chip="chip" :style-class-passthrough="args.styleClassPassthrough" />
-      <StorybookComponent :size="args.size" text="?" :chip="chip" :style-class-passthrough="args.styleClassPassthrough" />
+      <StorybookComponent :size="args.size" :alt="args.alt" :chip="chip" :status="args.status" :status-label="args.statusLabel" :style-class-passthrough="args.styleClassPassthrough" />
+      <StorybookComponent :size="args.size" text="?" :chip="chip" :status="args.status" :status-label="args.statusLabel" :style-class-passthrough="args.styleClassPassthrough" />
     </div>
   `,
 });
@@ -139,6 +158,8 @@ export const Sizes: StoryFn<typeof StorybookComponent> = (args) => ({
         :src="args.src"
         :alt="args.alt"
         :chip="chip"
+        :status="args.status"
+        :status-label="args.statusLabel"
         :style-class-passthrough="args.styleClassPassthrough"
       />
     </div>

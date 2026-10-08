@@ -1,7 +1,7 @@
 <template>
   <component
     :is="chip ? DisplayChip : as"
-    v-bind="chip ? { tag: chipTag, config: chipConfig } : {}"
+    v-bind="chip ? { tag: chipTag, config: chipConfig, status, statusLabel } : {}"
     class="display-avatar"
     :class="[size, elementClasses]"
   >
@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import DisplayChip from "../display-chip/DisplayChip.vue";
-import type { DisplayChipConfig } from "~/types/components";
+import type { DisplayChipConfig, DisplayChipStatus } from "~/types/components";
 
 interface Props {
   as?: string | object;
@@ -27,6 +27,8 @@ interface Props {
   text?: string;
   size?: "xs" | "s" | "md" | "lg" | "xl" | string;
   chip?: boolean | DisplayChipConfig;
+  status?: DisplayChipStatus;
+  statusLabel?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -37,6 +39,8 @@ const props = withDefaults(defineProps<Props>(), {
   text: undefined,
   size: "md",
   chip: undefined,
+  status: undefined,
+  statusLabel: undefined,
   styleClassPassthrough: () => [],
 });
 
