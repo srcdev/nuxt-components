@@ -11,6 +11,10 @@ by `AlertContent`, or `AlertMaskedContent` with `masked`, and styled by their to
 `02.molecules/alert-content/CONSUMER-STYLING.md` and `02.molecules/alert-masked-content/CONSUMER-STYLING.md`.
 The palette comes from the `data-theme` attribute on `.display-prompt-wrapper` (`--theme-*` tokens).
 
+To shorten long titles or messages, use AlertContent's line-clamp tokens, which inherit through the
+prompt: `--alert-content-title-line-clamp` and `--alert-content-text-line-clamp` (default `none`,
+`1` is single-line ellipsis).
+
 > Changed 2026-09-28: `--display-prompt-transition-duration` is new (the transition was a hardcoded
 > `all 200ms`), and the transition now respects reduced motion.
 
@@ -22,8 +26,12 @@ No private `--_` tokens.
 
 | Hook | Element | When |
 |---|---|---|
-| `.closed` | `.display-prompt` (root) | Dismissed without a parent `v-model`; the root is also `inert` |
+| `[data-state="open\|closed"]` | `.display-prompt` (root) | `closed` once dismissed without a parent `v-model`; the root is then also `inert` |
 | `[data-theme="info\|success\|warning\|error"]` | `.display-prompt-wrapper` | The resolved `theme` |
+
+> Changed 2026-10-08: the bare `.closed` class is now `data-state="closed"` (and `data-state="open"` before
+> dismissal), so a consumer's own `.closed` utility class can no longer match the prompt. Replace
+> `.display-prompt.closed` selectors with `.display-prompt[data-state="closed"]`.
 
 > Changed 2026-09-28: root class renamed from `.display-prompt-core`. A closed prompt is now `inert`
 > (its dismiss button used to stay in the tab order while invisible), and the root is only focusable

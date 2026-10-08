@@ -2,7 +2,7 @@
   <div
     ref="promptElementRef"
     class="display-prompt"
-    :class="[{ closed: !componentOpen }]"
+    :data-state="componentOpen ? 'open' : 'closed'"
     :data-test-id="`display-prompt-${resolved.theme}`"
     :tabindex="resolved.useAutoFocus ? -1 : undefined"
     :inert="!componentOpen || undefined"
@@ -114,7 +114,7 @@ onMounted(() => {
       transition: none;
     }
 
-    &.closed {
+    &[data-state="closed"] {
       grid-template-rows: 0fr;
       opacity: 0;
       pointer-events: none;

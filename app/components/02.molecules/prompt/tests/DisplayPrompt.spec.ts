@@ -33,9 +33,9 @@ describe("DisplayPrompt", () => {
     expect(root(w).exists()).toBe(true);
   });
 
-  it("is visible by default (no closed class)", async () => {
+  it("is open by default (data-state=open)", async () => {
     const w = await mountSuspended(DisplayPrompt);
-    expect(root(w).classes()).not.toContain("closed");
+    expect(root(w).attributes("data-state")).toBe("open");
   });
 
   it("is not in the tab order by default", async () => {
@@ -104,6 +104,19 @@ describe("DisplayPrompt", () => {
     expect(w.find("[data-test-id='alert-content']").text()).toContain("Detailed explanation here");
   });
 
+  it("does not render the title element when the title slot is not provided", async () => {
+    const w = await mountSuspended(DisplayPrompt, { slots: { content: "x" } });
+    expect(w.find("[data-test-id='alert-title']").exists()).toBe(false);
+  });
+
+  it("renders HTML-like slot text as plain text", async () => {
+    const w = await mountSuspended(DisplayPrompt, {
+      slots: { title: () => "<script>alert('xss')</script>" },
+    });
+    expect(w.find("[data-test-id='alert-title'] script").exists()).toBe(false);
+    expect(w.find("[data-test-id='alert-title']").text()).toContain("<script>");
+  });
+
   it("does not render content element when content slot is empty", async () => {
     const w = await mountSuspended(DisplayPrompt);
     expect(w.find("[data-test-id='alert-content']").exists()).toBe(false);
@@ -123,11 +136,11 @@ describe("DisplayPrompt", () => {
 
   // ─── Dismiss behaviour (no parent model) ─────────────────────────────────
 
-  it("adds the closed class after the dismiss button is clicked", async () => {
+  it("sets data-state=closed after the dismiss button is clicked", async () => {
     const w = await mountSuspended(DisplayPrompt, { props: { dismissible: true } });
     await w.find("[data-test-id='alert-dismiss']").trigger("click");
     await nextTick();
-    expect(root(w).classes()).toContain("closed");
+    expect(root(w).attributes("data-state")).toBe("closed");
   });
 
   it("makes the closed prompt inert so its controls leave the tab order", async () => {
@@ -168,14 +181,14 @@ describe("DisplayPrompt", () => {
     expect(emitted![0]).toEqual([false]);
   });
 
-  it("does not add the closed class when dismissed via parent model", async () => {
+  it("stays data-state=open when dismissed via parent model", async () => {
     const w = await mountSuspended(DisplayPrompt, {
       props: { dismissible: true, modelValue: true },
     });
     await w.find("[data-test-id='alert-dismiss']").trigger("click");
     await nextTick();
     // componentOpen is unchanged — parent controls visibility via modelValue
-    expect(root(w).classes()).not.toContain("closed");
+    expect(root(w).attributes("data-state")).toBe("open");
   });
 
   // ─── styleClassPassthrough ────────────────────────────────────────────────

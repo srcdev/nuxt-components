@@ -1,5 +1,7 @@
 # DisplayPrompt
 
+> **Changed 2026-10-08:** the root's `.closed` class is now `data-state="open" | "closed"`, so a consumer's own `.closed` class can't collide with it.
+
 > **Changed 2026-09-28:** root class `.display-prompt-core` → `.display-prompt` (and `data-test-id` `display-prompt-core-{theme}` → `display-prompt-{theme}`). The documented `outlined` passthrough modifier never had any CSS behind it and was removed from this doc.
 
 ## Overview
@@ -27,7 +29,7 @@ the DOM. Dismiss can be controlled locally (closes itself) or by a parent via `v
 
 | Slot | Description |
 |---|---|
-| `#title` | **Required in practice.** Bold heading text. Always rendered (even when empty). |
+| `#title` | Bold heading text. The title `<p>` is omitted when this slot isn't provided. |
 | `#content` | Body text below the title. The `<p>` element is omitted when this slot is empty. |
 | `#customDecoratorIcon` | Replaces the default theme icon. |
 | `#customCloseIcon` | Replaces the default × close icon inside the dismiss button. |
@@ -52,10 +54,10 @@ Two modes depending on whether `v-model` is bound:
 
 | Scenario | What happens on close |
 |---|---|
-| No `v-model` (or `v-model="false"`) | Sets internal `componentOpen = false` → `.closed` class → collapses via CSS |
+| No `v-model` (or `v-model="false"`) | Sets internal `componentOpen = false` → `data-state="closed"` on the root → collapses via CSS |
 | `v-model="true"` | Emits `update:modelValue = false`; internal state unchanged — parent controls visibility |
 
-The `.closed` class triggers a CSS grid row animation (`grid-template-rows: 1fr → 0fr`) with
+`data-state="closed"` triggers a CSS grid row animation (`grid-template-rows: 1fr → 0fr`) with
 `opacity: 0` and `pointer-events: none`, and the root becomes `inert` so the dismiss button leaves the
 tab order and the accessibility tree. The transition is off under `prefers-reduced-motion: reduce`;
 its duration is `--display-prompt-transition-duration` (`200ms`).
@@ -151,5 +153,6 @@ glass effect to be visible.
 - The root gets `tabindex="-1"` only when `useAutoFocus` is on, so it can take programmatic focus without joining the tab order (it used to be `tabindex="0"` always).
 - `useAutoFocus` focuses the root element on mount (useful when injecting a prompt in response to a
   user action that has already moved focus elsewhere).
-- The `#title` slot renders unconditionally — an empty title `<p>` will still appear. Always
-  provide meaningful content in `#title`.
+- Long titles/messages wrap (unbroken strings included). To cap them, set AlertContent's
+  `--alert-content-title-line-clamp` / `--alert-content-text-line-clamp` on an ancestor. The
+  `StressTest` story shows the worst-case content.
