@@ -42,6 +42,52 @@ overrides (2026-08-25):
 Tier 1 is the one deliberate exception. Everything else gets a real component-prefixed name with
 an inline fallback, even if that fallback happens to be a Tier 1 or Tier 2 token underneath.
 
+## Public vs private tokens
+
+Rule: `.claude/rules/css-public-private-tokens.md`.
+
+The public/private decision is about **consumer relevance, not reuse
+count**. A value a consumer could plausibly want to customise — colours, spacing, sizes, radii,
+durations, and any per-state variant of these (a hover outline width, a focus border colour) — is
+a **public token**, consumed directly at its point of use: `border-radius: var(--component-name-border-radius, 0.5rem)`.
+This holds even when it's only used once — single-use is not a reason to demote a genuinely
+consumer-facing value to private. Per-state variants get their own public token that falls back
+to the resting one, rather than being derived privately: `--component-name-outline-width-hover`
+falling back to `--component-name-outline-width`, not a private var with no override hook.
+
+A value with **no plausible consumer relevance** — genuine internal implementation detail, e.g.
+something composed from a `v-bind()` JS value, or an intermediate that exists purely to avoid
+repeating a computation — is a **private token**, always prefixed `--_x`. Prefix it even when
+it's used only once: the underscore is a grep-able, at-a-glance "this is not public API" signal,
+and that signal shouldn't depend on how many places the value happens to appear.
+
+```css
+/* ✅ Single-use, consumer-facing — still a public token, consumed directly */
+.component-name {
+  border-radius: var(--component-name-border-radius, 0.5rem);
+  transition: all var(--component-name-transition-duration, 300ms) ease;
+}
+
+/* ✅ Resting/hover pair — both public, hover falls back to resting; --_ only wraps the
+   genuinely-shared intermediate so the fallback chain isn't repeated */
+.component-name {
+  --_border-colour: var(--component-name-border-colour, transparent);
+  border-color: var(--_border-colour);
+
+  &:hover {
+    border-color: var(--component-name-border-colour-hover, var(--_border-colour));
+  }
+}
+
+/* ✅ Private — internal only, no consumer would ever want to override this directly */
+.component-name {
+  --_computed-offset: calc(v-bind(dynamicWidth) * 0.5px);
+}
+```
+
+CLAUDE.md pitfall #20 is the concrete case (`ServicesCard`'s private layer wrapped public tokens with
+no composition or state-swap behind them: pure pass-through duplication, not genuine privacy).
+
 ## Naming convention
 
 `--{component-kebab-name}-{variant-if-any}-{property}[-state]`

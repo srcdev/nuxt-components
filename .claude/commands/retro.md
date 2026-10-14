@@ -97,8 +97,9 @@ Sort each one by where it belongs:
 
 | Destination | What goes there |
 |---|---|
+| `.claude/rules/*.md` | A one-sentence constraint that must hold every time matching files are touched (`paths:`-scoped, links its skill); see CLAUDE.md "Where knowledge goes"; under `consumer/` if it also holds in apps extending the layer (that folder ships) |
 | `.claude/skills/*.md` | How-to and patterns for working in this layer; ships with the repo |
-| `CLAUDE.md` pitfalls | A recurring trap with a concrete cause and fix |
+| `CLAUDE.md` pitfalls | Incident history for a trap, as a numbered pointer to its rule (the constraint itself goes in a rule) |
 | `.claude/skills/component-compliance-checklist.md` | A check every component should pass |
 | `/migrate-component` or `/new-component` | A step those commands should take |
 | Private memory | Anything naming a consumer app, user preferences, pending consumer edits |

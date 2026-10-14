@@ -12,6 +12,12 @@ cp -r node_modules/srcdev-nuxt-components/.claude/skills .claude/skills/srcdev-n
 
 Skills land in `.claude/skills/srcdev-nuxt-components/` — safe to re-run without overwriting your own skills.
 
+The layer also ships a curated set of Claude Code rules in `.claude/rules/consumer/`. `npm run setup:claude` (see `setup-postinstall.md`) copies skills and rules together; to copy the rules by hand:
+
+```bash
+mkdir -p .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components
+```
+
 ## Structure
 
 Each skill is a single markdown file named `<area>-<task>.md`.

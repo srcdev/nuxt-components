@@ -58,7 +58,7 @@ stripping `Core`.
 
 1. `git mv` the `.vue` files, their stories and tests (and the skill doc if it's named after the old
    control name).
-2. `sed` the old names across `app/`, `.claude/`, `.vscode/`, `MIGRATION.md` and `Claude.md`:
+2. `sed` the old names across `app/`, `.claude/`, `.vscode/`, `MIGRATION.md` and `CLAUDE.md`:
    component names, `import` paths, story titles/`*StoryArgs` interfaces, `describe()` names, and the
    root/base DOM class (update `CONSUMER-STYLING.md` and test selectors that use it).
 3. Add a "Renamed YYYY-MM-DD" note at the top of the skill doc listing old → new names and classes.

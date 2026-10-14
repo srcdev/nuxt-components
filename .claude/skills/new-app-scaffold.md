@@ -44,7 +44,7 @@ to inform the CLAUDE.md and CSS tokens.
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "setup:claude": "mkdir -p .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components",
+    "setup:claude": "mkdir -p .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components",
     "postinstall": "NUXT_STANDALONE=true nuxt prepare && npm run setup:claude",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"

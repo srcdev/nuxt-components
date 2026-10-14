@@ -25,12 +25,12 @@ defineNuxtConfig({
 
 ## Claude Code Skills
 
-This package ships Claude Code skills — reference docs for components and development tasks — in the `.claude/` directory.
+This package ships Claude Code skills (reference docs for components and development tasks) and a curated set of Claude Code rules (short constraints for working with the layer: CSS nesting, overrides, props, NuxtImg, Storybook args) in the `.claude/` directory.
 
 To make them available in your project, add this script to your `package.json`:
 
 ```json
-"setup:claude": "cp -r node_modules/srcdev-nuxt-components/.claude/skills .claude/skills/srcdev-nuxt-components"
+"setup:claude": "mkdir -p .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components"
 ```
 
 Then run it after install:
@@ -39,7 +39,7 @@ Then run it after install:
 npm run setup:claude
 ```
 
-Skills are copied into `.claude/skills/srcdev-nuxt-components/` so they never conflict with or overwrite skills your own project defines. Re-running the script after a package update is safe.
+Skills are copied into `.claude/skills/srcdev-nuxt-components/` and rules into `.claude/rules/srcdev-nuxt-components/`, so they never conflict with or overwrite your own project's. Re-running the script after a package update is safe.
 
 ### Automate with postinstall (recommended)
 
@@ -47,7 +47,7 @@ To ensure skills are always up to date, VSCode snippets are installed, and `nuxt
 
 ```json
 "scripts": {
-  "setup:claude": "mkdir -p .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components",
+  "setup:claude": "mkdir -p .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components",
   "postinstall": "node node_modules/srcdev-nuxt-components/scripts/copy-snippets.mjs && nuxt prepare && npm run setup:claude"
 }
 ```
@@ -56,7 +56,7 @@ To ensure skills are always up to date, VSCode snippets are installed, and `nuxt
 
 1. `copy-snippets.mjs` — copies VSCode snippets (`.code-snippets` files) from the layer to your `.vscode/` folder
 2. `nuxt prepare` — generates Nuxt type declarations
-3. `setup:claude` — copies skills into `.claude/skills/srcdev-nuxt-components/`
+3. `setup:claude` — copies skills into `.claude/skills/srcdev-nuxt-components/` and rules into `.claude/rules/srcdev-nuxt-components/`
 
 > **Note**: The snippet copy must run from your consumer app's postinstall, not the layer's. npm doesn't invoke postinstall hooks for dependencies, so each consumer app is responsible for copying snippets into its own `.vscode/` folder. Don't set `SRCDEV_STANDALONE` in a consumer app: that flag is only for running this layer on its own (it enables dev-only modules and the ramp watcher).
 

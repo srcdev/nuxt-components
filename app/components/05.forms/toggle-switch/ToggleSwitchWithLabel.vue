@@ -87,7 +87,7 @@ const descriptionId = computed(() => `${id}-description`);
 const errorId = computed(() => `${id}-error-message`);
 
 // A plain function, like useAriaDescribedById's: slots aren't reactive, so a computed would keep
-// its first answer if a description slot is added or removed after mount (Claude.md pitfall #25).
+// its first answer if a description slot is added or removed after mount (CLAUDE.md pitfall #25).
 // Lists both ids when there's a description and an error, so the description is still announced
 // while the field is invalid.
 const ariaDescribedby = () => {

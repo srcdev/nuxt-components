@@ -47,7 +47,7 @@ affects buttons, inputs, prompts, and toasts simultaneously:
 | `--theme-border-focus`      | `--colour-theme-4` / `3` | Focused border                                                                                                           |
 | `--theme-ring`               | `--colour-theme-1` / `9` | Focus ring (outline)                                                                                                     |
 | `--theme-on-surface`        | `--colour-theme-0`       | Text/icon on filled/inverted surface (fixed light value in both modes — pair this with any dark-in-light-mode surface, not `--theme-text`) |
-| `--theme-text`               | `--colour-theme-9` / `2` | Text on page, outline element text (assumes a *light* surface — don't pair with `--theme-surface-hover`/`-inverted`, see pitfall #13 in `Claude.md`) |
+| `--theme-text`               | `--colour-theme-9` / `2` | Text on page, outline element text (assumes a *light* surface — don't pair with `--theme-surface-hover`/`-inverted`, see pitfall #13 in `CLAUDE.md`) |
 | `--theme-text-inverted`     | `--colour-theme-0` / `7` | Text on `--theme-surface-inverted` (fixed to a light value in light mode as of 2026-08-03 — was `--colour-theme-9`, identical to the surface it sits on) |
 
 Input-specific tokens:

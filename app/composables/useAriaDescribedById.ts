@@ -7,7 +7,7 @@ export function useAriaDescribedById(name: string | Ref<string>, fieldHasError: 
 
   // A plain function, not a computed: the slots object isn't reactive, so a computed would cache
   // its first answer and keep pointing at (or away from) the description after a description slot
-  // is added or removed post-mount (Claude.md pitfall #25). Call it from the template,
+  // is added or removed post-mount (CLAUDE.md pitfall #25). Call it from the template,
   // `:aria-describedby="ariaDescribedby()"`, so it's re-evaluated on every render.
   const ariaDescribedby = () => {
     const hasDescription = slots.descriptionText || slots.descriptionHtml || slots.description;

@@ -2,7 +2,7 @@
 # PostToolUse hook (Write|Edit) for app/components/*.vue files. Advisory nudges only
 # (missing != wrong): skill doc, story, test, CONSUMER-STYLING.md, .vscode snippet,
 # legacy tier-folder location, options-style defineProps, single-use private CSS tokens,
-# leftover app/pages/ demo pages (this library is Storybook-only, see Claude.md).
+# leftover app/pages/ demo pages (this library is Storybook-only, see .claude/rules/no-demo-pages.md).
 
 root="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 
@@ -41,7 +41,7 @@ fi
 if [[ "$is_variant" == true ]]; then
   msg="Component file $f was edited/written. This is a wrapper variant of $parent_name — per project convention, document it inside .claude/skills/components/$parent_name.md (e.g. a \"Variants\" section) rather than creating a separate .claude/skills/components/$skill.md for it."
 else
-  msg="Component file $f was edited/written. Per Claude.md Development Workflow step 6, check whether .claude/skills/components/$skill.md needs updating to reflect this change (props/slots/models/defaults/behaviour)."
+  msg="Component file $f was edited/written. Per CLAUDE.md Development Workflow step 6, check whether .claude/skills/components/$skill.md needs updating to reflect this change (props/slots/models/defaults/behaviour)."
 fi
 
 shopt -s nullglob
@@ -71,12 +71,12 @@ case "$f" in
 esac
 
 if grep -qE 'defineProps\(\s*\{' "$f" && ! grep -q 'defineProps<' "$f"; then
-  msg="$msg This component uses the options-style defineProps({...}) pattern, an outdated-pattern signal; migrate to interface Props + withDefaults(defineProps<Props>(), {...}) per the Props Pattern in Claude.md."
+  msg="$msg This component uses the options-style defineProps({...}) pattern, an outdated-pattern signal; migrate to interface Props + withDefaults(defineProps<Props>(), {...}) per .claude/rules/consumer/vue-props-pattern.md."
 fi
 
 # Private --_x CSS tokens that appear only twice in the file (once declared, once consumed) are
 # likely pure indirection with no reuse/computation/state to justify them — see the "Public
-# token pattern" rule in Claude.md's Styling Methodology and pitfall #20 (ServicesCard).
+# token pattern" rule (.claude/rules/css-public-private-tokens.md) and CLAUDE.md pitfall #20 (ServicesCard).
 private_vars=$(grep -oE -- '--_[a-zA-Z0-9-]+' "$f" | sort -u)
 if [[ -n "$private_vars" ]]; then
   single_use=""
@@ -88,11 +88,11 @@ if [[ -n "$private_vars" ]]; then
     fi
   done <<< "$private_vars"
   if [[ -n "$single_use" ]]; then
-    msg="$msg This component declares private CSS token(s) ($(echo "$single_use" | xargs)) that appear to be used only once — check whether each is genuinely reused across multiple declarations/selectors, composed from a v-bind() value, or swapped by a state (:hover, data-theme). If not, inline the public var(--token, default) directly at its point of use instead, per the Public token pattern rule in Claude.md's Styling Methodology (see pitfall #20 for the ServicesCard precedent), and update CONSUMER-STYLING.md/the skill doc if the token's public name or default changes."
+    msg="$msg This component declares private CSS token(s) ($(echo "$single_use" | xargs)) that appear to be used only once — check whether each is genuinely reused across multiple declarations/selectors, composed from a v-bind() value, or swapped by a state (:hover, data-theme). If not, inline the public var(--token, default) directly at its point of use instead, per .claude/rules/css-public-private-tokens.md (CLAUDE.md pitfall #20 is the ServicesCard precedent), and update CONSUMER-STYLING.md/the skill doc if the token's public name or default changes."
   fi
 fi
 
-# This library ships no demo pages — Storybook stories are the only demo surface (see Claude.md's
+# This library ships no demo pages — Storybook stories are the only demo surface (see .claude/rules/no-demo-pages.md and CLAUDE.md's
 # "Storybook is the only demo surface"). Flag any app/pages/ file that mentions this component,
 # whether a pre-existing leftover or a newly (re)added one.
 if [[ -d "$root/app/pages" ]]; then
