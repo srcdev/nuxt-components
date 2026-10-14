@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { h } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import ProfileSection from "../ProfileSection.vue";
 
@@ -52,25 +52,28 @@ describe("ProfileSection", () => {
     expect(img.attributes("alt")).toBe("Jane Doe");
   });
 
-  it("renders 3 profile-info blocks by default", async () => {
+  it("renders no profile-info blocks when no profile-info slots are given", async () => {
     const wrapper = await mountSuspended(ProfileSection, {
       props: defaultProps,
     });
-    const blocks = wrapper.findAll(".profile-section-info-block");
-    expect(blocks.length).toBe(3);
+    expect(wrapper.findAll(".profile-section-info-block").length).toBe(0);
   });
 
-  it("renders the correct number of profile-info blocks from profileInfoCount", async () => {
+  it("renders one block per provided profile-info slot, in numeric order, with gaps", async () => {
     const wrapper = await mountSuspended(ProfileSection, {
-      props: { ...defaultProps, profileInfoCount: 5 },
+      props: defaultProps,
+      slots: {
+        "profile-info-10": "<p>Ten</p>",
+        "profile-info-3": "<p>Three</p>",
+        "profile-info-1": "<p>One</p>",
+      },
     });
-    const blocks = wrapper.findAll(".profile-section-info-block");
-    expect(blocks.length).toBe(5);
+    expect(wrapper.findAll(".profile-section-info-block").map((b) => b.text())).toEqual(["One", "Three", "Ten"]);
   });
 
   it("renders named profile-info slot content", async () => {
     const wrapper = await mountSuspended(ProfileSection, {
-      props: { ...defaultProps, profileInfoCount: 2 },
+      props: defaultProps,
       slots: {
         "profile-info-1": "<p>First info block</p>",
         "profile-info-2": "<p>Second info block</p>",
@@ -91,11 +94,11 @@ describe("ProfileSection", () => {
     const wrapper = await mountSuspended(ProfileSection, {
       props: defaultProps,
       slots: {
-        eyebrowText: "<p class='eyebrow'>About Natasha</p>",
+        eyebrowText: "<p class='eyebrow'>About the author</p>",
       },
     });
     expect(wrapper.find(".eyebrow").exists()).toBe(true);
-    expect(wrapper.html()).toContain("About Natasha");
+    expect(wrapper.html()).toContain("About the author");
   });
 
   it("does not render heroText slot area when slot is not provided", async () => {
@@ -187,5 +190,135 @@ describe("ProfileSection", () => {
     const el = wrapper.find(".profile-section");
     expect(el.classes()).toContain("extra-class");
     expect(el.classes()).toContain("another-class");
+  });
+
+  // ─── Stress test 2026-10-14 ────────────────────────────────────────────────
+
+  it("does not render an empty header when neither header slot is given", async () => {
+    const wrapper = await mountSuspended(ProfileSection, { props: defaultProps });
+    expect(wrapper.find(".profile-section-header").exists()).toBe(false);
+  });
+
+  it("adds and removes the header and info blocks when slots are toggled after mount", async () => {
+    const show = ref(false);
+    const Host = defineComponent({
+      components: { ProfileSection },
+      setup: () => ({ show, defaultProps }),
+      template: `
+        <ProfileSection v-bind="defaultProps">
+          <template v-if="show" #heroText><h2>Heading</h2></template>
+          <template v-if="show" #profile-info-1><p>Info</p></template>
+        </ProfileSection>
+      `,
+    });
+    const wrapper = await mountSuspended(Host);
+    expect(wrapper.find(".profile-section-header").exists()).toBe(false);
+    expect(wrapper.findAll(".profile-section-info-block").length).toBe(0);
+
+    show.value = true;
+    await nextTick();
+    expect(wrapper.find(".profile-section-header").exists()).toBe(true);
+    expect(wrapper.findAll(".profile-section-info-block").length).toBe(1);
+
+    show.value = false;
+    await nextTick();
+    expect(wrapper.find(".profile-section-header").exists()).toBe(false);
+    expect(wrapper.findAll(".profile-section-info-block").length).toBe(0);
+  });
+
+  it("uses the given picture width and height", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: { profilePicture: { src: "/a.jpg", alt: "A", width: 640, height: 480 } },
+    });
+    expect(wrapper.find("img").attributes("width")).toBe("640");
+    expect(wrapper.find("img").attributes("height")).toBe("480");
+  });
+
+  it.each([0, -100, Number.NaN, Number.POSITIVE_INFINITY])(
+    "falls back to 828x1104 for an invalid picture size (%s)",
+    async (size) => {
+      const wrapper = await mountSuspended(ProfileSection, {
+        props: { profilePicture: { src: "/a.jpg", alt: "A", width: size, height: size } },
+      });
+      expect(wrapper.find("img").attributes("width")).toBe("828");
+      expect(wrapper.find("img").attributes("height")).toBe("1104");
+    }
+  );
+
+  it("renders HTML-like alt text as text", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: { profilePicture: { src: "/a.jpg", alt: "<script>alert(1)</script>" } },
+    });
+    expect(wrapper.find("script").exists()).toBe(false);
+    expect(wrapper.find("img").attributes("alt")).toBe("<script>alert(1)</script>");
+  });
+
+  // ─── headerPlacement ─────────────────────────────────────────────────────────────────────────────────────────────────────────
+
+  const headerSlots = {
+    eyebrowText: "<p class='eyebrow'>About</p>",
+    heroText: (props: Record<string, unknown>) => h("h2", { id: props.headingId, class: "hero-heading" }, "Heading"),
+  };
+
+  it("renders the header above the grid by default", async () => {
+    const wrapper = await mountSuspended(ProfileSection, { props: defaultProps, slots: headerSlots });
+    expect(wrapper.find(".profile-section > .profile-section-header").exists()).toBe(true);
+    expect(wrapper.find(".profile-section-picture .profile-section-header").exists()).toBe(false);
+    expect(wrapper.attributes("data-header-placement")).toBe("above");
+  });
+
+  it("renders the header inside the picture frame, before the image, for picture-bottom", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: { ...defaultProps, headerPlacement: "picture-bottom" },
+      slots: headerSlots,
+    });
+    expect(wrapper.attributes("data-header-placement")).toBe("picture-bottom");
+    expect(wrapper.findAll(".profile-section-header").length).toBe(1);
+    const picture = wrapper.find(".profile-section-picture");
+    expect(picture.element.firstElementChild?.classList.contains("profile-section-header")).toBe(true);
+    expect(picture.find(".eyebrow").exists()).toBe(true);
+    expect(picture.find(".hero-heading").exists()).toBe(true);
+  });
+
+  it("keeps aria-labelledby pointing at the heading when it is inside the picture", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: { ...defaultProps, tag: "section", headerPlacement: "picture-bottom" },
+      slots: headerSlots,
+    });
+    expect(wrapper.attributes("aria-labelledby")).toBe(wrapper.find(".hero-heading").attributes("id"));
+  });
+
+  it("renders no header in the picture when no header slot is given", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: { ...defaultProps, headerPlacement: "picture-bottom" },
+    });
+    expect(wrapper.find(".profile-section-header").exists()).toBe(false);
+  });
+
+  it("moves the header when headerPlacement changes after mount", async () => {
+    const wrapper = await mountSuspended(ProfileSection, { props: defaultProps, slots: headerSlots });
+    await wrapper.setProps({ headerPlacement: "picture-bottom" });
+    expect(wrapper.find(".profile-section-picture .profile-section-header").exists()).toBe(true);
+    expect(wrapper.find(".profile-section > .profile-section-header").exists()).toBe(false);
+  });
+
+  it("renders the header inside the picture for picture-top too", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: { ...defaultProps, headerPlacement: "picture-top" },
+      slots: headerSlots,
+    });
+    expect(wrapper.attributes("data-header-placement")).toBe("picture-top");
+    expect(wrapper.find(".profile-section-picture > .profile-section-header").exists()).toBe(true);
+    expect(wrapper.find(".profile-section > .profile-section-header").exists()).toBe(false);
+  });
+
+  it("moves the header back above the grid when headerPlacement returns to above", async () => {
+    const wrapper = await mountSuspended(ProfileSection, {
+      props: { ...defaultProps, headerPlacement: "picture-top" },
+      slots: headerSlots,
+    });
+    await wrapper.setProps({ headerPlacement: "above" });
+    expect(wrapper.find(".profile-section > .profile-section-header").exists()).toBe(true);
+    expect(wrapper.find(".profile-section-picture .profile-section-header").exists()).toBe(false);
   });
 });

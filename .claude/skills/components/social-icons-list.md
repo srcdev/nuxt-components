@@ -57,6 +57,8 @@ import type { ISocialIcon } from "srcdev-nuxt-components";
 | YouTube | `logos:youtube-icon` | `https://www.youtube.com/@` |
 | TikTok | `logos:tiktok-icon` | `https://www.tiktok.com/@` |
 
+`logos:instagram-icon`, `logos:x` and other dark brand icons vanish on a dark background, and their colours can't be changed. On a dark background use a mono icon such as `mdi:instagram` (any set that draws in `currentColor`) and colour it with `--social-icons-list-icon-colour` (default `currentColor`). Installed mono Instagram icons: `mdi:instagram`, `bi:instagram`, `lucide:instagram`, `akar-icons:instagram-fill`, `radix-icons:instagram-logo`.
+
 ---
 
 ## Usage example

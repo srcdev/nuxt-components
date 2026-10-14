@@ -320,7 +320,7 @@ describe("DisplayAvatar", () => {
       props: { alt: "Jane Smith", chip: true },
       slots: { icon: "<span class='status-icon'>●</span>" },
     });
-    const masked = Array.from(wrapper.element.children).filter(
+    const masked = Array.from((wrapper.element as HTMLElement).children).filter(
       (el) => !el.matches(".display-chip-icon, .display-chip-label, .sr-only")
     );
     expect(masked).toHaveLength(1);

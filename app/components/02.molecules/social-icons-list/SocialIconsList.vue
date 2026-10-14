@@ -82,6 +82,7 @@ watch(
 
         .social-icon {
           font-size: var(--social-icons-list-icon-size, 2.4rem);
+          color: var(--social-icons-list-icon-colour, currentColor);
         }
       }
     }

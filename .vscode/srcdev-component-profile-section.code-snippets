@@ -5,18 +5,39 @@
     "body": [
       "<ProfileSection",
       "  tag=\"section\"",
-      "  :profile-picture=\"{ src: '$1', alt: '$2' }\"",
+      "  :profile-picture=\"{ src: '$2', alt: '$3' }\"",
       ">",
       "  <template #eyebrowText>",
-      "    <EyebrowText text-content=\"$3\" />",
+      "    <EyebrowText text-content=\"$4\" />",
       "  </template>",
       "  <template #heroText=\"{ headingId }\">",
-      "    <HeroText :id=\"headingId\" tag=\"h2\" :text-content=\"[{ text: '$4' }]\" />",
+      "    <HeroText :id=\"headingId\" tag=\"h2\" :text-content=\"[{ text: '$5' }]\" />",
       "  </template>",
       "  <template #profile-info-1>",
-      "    <p>$5</p>",
+      "    <p>$6</p>",
       "  </template>",
       "  <template #profile-info-2>",
+      "    <p>$6</p>",
+      "  </template>",
+      "</ProfileSection>"
+    ]
+  },
+  "SRCDEV ProfileSection Header In Picture": {
+    "description": "ProfileSection with the eyebrow and heading over the bottom or top of the picture, on a scrim",
+    "scope": "vue,html",
+    "body": [
+      "<ProfileSection",
+      "  tag=\"section\"",
+      "  header-placement=\"${1|picture-bottom,picture-top|}\"",
+      "  :profile-picture=\"{ src: '$2', alt: '$3' }\"",
+      ">",
+      "  <template #eyebrowText>",
+      "    <EyebrowText text-content=\"$4\" />",
+      "  </template>",
+      "  <template #heroText=\"{ headingId }\">",
+      "    <HeroText :id=\"headingId\" tag=\"h2\" :text-content=\"[{ text: '$5' }]\" />",
+      "  </template>",
+      "  <template #profile-info-1>",
       "    <p>$6</p>",
       "  </template>",
       "</ProfileSection>"
@@ -30,6 +51,8 @@
       "  --profile-section-picture-width: $2;",
       "  --profile-section-gap-wide: $3;",
       "  --profile-section-picture-border-radius: $4;",
+      "  --profile-section-highlight-colour: $5;",
+      "  --profile-section-link-colour: $6;",
       "}"
     ]
   }

@@ -83,6 +83,54 @@ Prefer this over a prop: line count is presentation, and CSS handles it without 
   layout around it.
 - Document it in `CONSUMER-STYLING.md` with its default and the `1`/`none` options.
 
+## Text over an image: scrim tokens
+
+Any component that puts text over a photo (a header in a picture, a card title on its image) gets
+the same scrim token set, so a consumer can match the scrim to their photos. `ProfileSection`'s
+`header-placement="picture-top|picture-bottom"` is the reference; `ServicesCard`'s
+`titles-within-image-wrapper` has the older subset (colour and whole-background override only) and
+should gain the rest when it's next touched.
+
+| Token | Default | Purpose |
+|---|---|---|
+| `--{c}-scrim-colour` | `#000` | Colour the scrim starts from at the image's edge |
+| `--{c}-scrim-opacity` | `75%` | Its opacity at the start |
+| `--{c}-scrim-solid-stop` | `0%` | How far it stays full strength before fading, so the text sits on a clean background |
+| `--{c}-scrim-target-colour` | `transparent` | What it fades into: set to roughly the photo's colour where the fade ends, so there's no grey band |
+| `--{c}-scrim` | the gradient | Whole `background` override; `none` removes it |
+| `--{c}-text-colour` | `contrast-color(<scrim colour>)`, `#fff` without support | Text on the scrim |
+
+```css
+.component-header {
+  --_scrim-colour: var(--component-scrim-colour, #000);
+  --_scrim-start-colour: color-mix(in oklab, var(--_scrim-colour) var(--component-scrim-opacity, 75%), transparent);
+  --_scrim-solid-stop: var(--component-scrim-solid-stop, 0%);
+  --_scrim-target-colour: var(--component-scrim-target-colour, transparent);
+
+  color: var(--component-text-colour, #fff);
+  background: var(--component-scrim, linear-gradient(to top, rgb(0 0 0 / 0.75), rgb(0 0 0 / 0.75) var(--_scrim-solid-stop), var(--_scrim-target-colour)));
+
+  @supports (color: color-mix(in oklab, red, transparent)) {
+    background: var(--component-scrim, linear-gradient(to top, var(--_scrim-start-colour), var(--_scrim-start-colour) var(--_scrim-solid-stop), var(--_scrim-target-colour)));
+  }
+
+  @supports (color: contrast-color(red)) {
+    color: var(--component-text-colour, contrast-color(var(--_scrim-colour)));
+  }
+}
+```
+
+- The `@supports` fallback is for Safari before 16.2 (no `color-mix()`): it starts from 75% black
+  whatever the scrim colour, but keeps the solid stop and target colour.
+- `contrast-color()` reads the scrim colour, not the photo. Document that a consumer who removes the
+  scrim must set the text colour.
+- Round only the corners on the image's edge (`border-end-*-radius: inherit` for a bottom scrim),
+  or an opaque target colour shows rounded inner corners.
+- If the text can be long, don't clip it: let the frame grow (absolutely position the image and
+  keep `overflow` visible so `aspect-ratio` acts as a minimum).
+- Give the story a light and a dark theme built only from these tokens, each with a photo whose
+  edge suits the scrim.
+
 ## Multi-level fallback chains are fine
 
 A component that wants to *look like* another component's default (rather than duplicating a

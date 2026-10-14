@@ -32,7 +32,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── theming-override-default.md      — replace the entire default theme with a custom palette (set --theme-hue/--theme-chroma)
 ├── theming-partial-override.md      — override a specific colour token category (palette, buttons, inputs) without a full theme replacement
 ├── theming-form-geometry-tokens.md  — non-colour form/button/input tokens (padding, border-radius, gaps): full inventory, why partial override doesn't need duplicating the source files
-├── theming-component-token-pattern.md — standard shape for overridable component colours: public token + inline fallback, no bare var()/no private-only indirection; the three tiers (theme slots / cross-component families / component-scoped); line-clamp tokens for overflowing text; rollout status
+├── theming-component-token-pattern.md — standard shape for overridable component colours: public token + inline fallback, no bare var()/no private-only indirection; the three tiers (theme slots / cross-component families / component-scoped); line-clamp tokens for overflowing text; image-overlay scrim tokens; rollout status
 ├── theming-status-tokens.md        — global --status-* colours (success/warning/danger/info/neutral: solid + surface + text), which components read them, how to override once for the whole library
 ├── theming-dark-mode.md            — add a dark scheme in a consumer app (layer is light-only): enable plumbing, full dark token set without light-dark(), light-dark() alternative, light-only pinning
 ├── colour-scheme-disable.md         — disable light/dark scheme support in a consumer app
@@ -108,12 +108,13 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── wipe-away-vertical.md   — WipeAwayVertical: scroll-driven vertical wipe-away effect, pure-CSS grid overlay (no JS), indexed dynamic slots, sticky-centering-via-calc gotcha, CSS tokens
     ├── marquee-scroller.md     — MarqueeScroller: infinite logo/badge scroller, per-item dynamic slots (marqueeData id), hover/focus/keyboard pause, reduced-motion, CSS tokens
     ├── rotating-carousel-image.md — RotatingCarouselImage: 3D rotating image carousel, scroll-parallax tilt, focus/keyboard/hover pause, reduced-motion, CSS tokens
-    ├── social-icons-list.md    — SocialIconsList: data-driven social icon links, ISocialIcon type, logos: icon names, CSS tokens
+    ├── social-icons-list.md    — SocialIconsList: data-driven social icon links, ISocialIcon type, logos: icon names (dark ones vanish on dark backgrounds; mono alternatives), CSS tokens incl. --social-icons-list-icon-colour
     ├── display-qr-code.md      — DisplayQrCode: QR code SVG from a string value, colour/size/variant/radius props, currentColor default
     ├── capture-qr-code.md      — CaptureQrCode: live camera scanner, error state, visibility/route/KeepAlive lifecycle, media stream cleanup
     ├── decode-qr-code.md       — DecodeQrCode: file picker + drag-and-drop image decoder, shared results list, CSS override points
     ├── auto-grid.md            — AutoGrid: auto-fit responsive grid, $slots iteration, --auto-grid-gap/min-col-size-{small,default,large} tokens, is-responsive, semantic tag + aria
-    ├── display-avatar.md       — DisplayAvatar (02.molecules): circular avatar with image/initials fallback (alt announced), size scale tokens, --display-avatar-* colours, chip badge, icon slot
+    ├── display-avatar.md       — DisplayAvatar (02.molecules): circular avatar with image/initials fallback (alt announced), broken-image fallback, data-size scale tokens, image-size, --display-avatar-* colours, chip badge, icon slot
+    ├── profile-section.md      — ProfileSection (02.molecules): picture + numbered profile-info-N slots, eyebrow/hero header (above, or over the picture top/bottom on a scrim via header-placement), profileLinks, container-query two-column layout, .location/.services highlight tokens
     ├── display-theme-switch.md — DisplayThemeSwitch: system/light/dark picker wrapping TripleToggleSwitch, wired to useSettingsStore, labels/icons props, small sizing variant
     ├── card-core.md            — CardCore: generic card container, dynamic named slots as rows, 4 variants, blurred backdrop layer, full CSS token API
     ├── action-menu.md          — ActionMenu + ActionMenuItem: ellipsis trigger + anchored popover menu, indexed item-{n} slots, link/button items, full CSS token API

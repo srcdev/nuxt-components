@@ -1,19 +1,14 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`ProfileSection > renders correct HTML structure 1`] = `
-"<div class="profile-section custom-class">
-  <header class="profile-section-header">
-    <!--v-if-->
-    <!--v-if-->
-  </header>
+"<div class="profile-section custom-class" data-header-placement="above">
+  <!--v-if-->
   <div class="profile-section-inner">
-    <div class="profile-section-picture"><img width="828" height="1104" data-nuxt-img="" srcset="/_ipx/s_828x1104/images/test.jpg 1x, /_ipx/s_1656x2208/images/test.jpg 2x" alt="Test profile picture" class="profile-section-image" src="/_ipx/s_828x1104/images/test.jpg"></div>
+    <div class="profile-section-picture">
+      <!--v-if--><img width="828" height="1104" data-nuxt-img="" srcset="/_ipx/s_828x1104/images/test.jpg 1x, /_ipx/s_1656x2208/images/test.jpg 2x" alt="Test profile picture" class="profile-section-image" src="/_ipx/s_828x1104/images/test.jpg">
+    </div>
     <div class="profile-section-info">
-      <div class="profile-section-info-content">
-        <div class="profile-section-info-block"></div>
-        <div class="profile-section-info-block"></div>
-        <div class="profile-section-info-block"></div>
-      </div>
+      <div class="profile-section-info-content"></div>
       <!--v-if-->
     </div>
   </div>

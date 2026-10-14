@@ -101,6 +101,10 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
    If other components render this one inside them (it's a child or building block of theirs),
    each story gets a short note that explains the relationship and links to the parent's story
    (`storybook-add-story.md`, "Link to the stories of components that use this one").
+   Sample copy in stories, and examples in the skill doc, use placeholders (a name like "Alex
+   Morgan", a town like "Northtown"), never a real client's name, town, business or site: the
+   stories and docs ship in the public package. **Existing component:** check for, and replace, any
+   copy lifted from a consumer app (`ProfileSection` had both).
 6a. **Storybook Controls-panel reactivity** — check every story `Template`/`render` function in
     the component's `stories/*.stories.ts` files for this bug: `@storybook/vue3` mounts the story
     component **once** and, on every Controls-panel change, mutates the same reactive `args`
@@ -134,7 +138,9 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
     descriptions, body text) a line-clamp token, `--<component>-<element>-line-clamp`, which
     covers ellipsis too (`1` is single-line ellipsis). Default it to `none` unless the layout
     clearly needs a cap, and never clamp text that must stay readable (legal or attribution text,
-    link text that names its destination). Shape and rules: `theming-component-token-pattern.md`,
+    link text that names its destination). Only text the component renders itself (props and data) needs a token: text that arrives
+    through a slot is the consumer's own markup, so they clamp it directly and the component adds
+    no token for it (`ProfileSection` is all slots and has none). Shape and rules: `theming-component-token-pattern.md`,
     "Line-clamp tokens". Give each line-clamp token a Controls-panel select in the stories (set on
     a wrapper `:style`, stripped from the component's args), labelled as a story-only CSS token so
     nobody mistakes it for a prop: `storybook-add-story.md`, "Label token controls as story-only".
@@ -222,3 +228,10 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
     - `NuxtImg` gets explicit `width` and `height`; a `<video>` uses a `<source :src>` child with
       `:key` and `.load()` (pitfall #12).
     - No `#components` import (breaks Storybook); use `resolveComponent()`.
+    - Layout breakpoints respond to the component's own width (`container: <name> / inline-size` on the
+      root, `@container <name> (min-width: …)`), not the viewport, so it still works in a narrow
+      column. **Existing component:** when converting a viewport `@media` breakpoint, grep consumer
+      repos for `@media` overrides of the same element (they now switch at a different point) and list
+      the edits in private memory. Note that an inline-size container can't size itself from its
+      content: say so in `CONSUMER-STYLING.md` (`ProfileSection`).
+    - Grid tracks that hold text are `minmax(0, …)` so an unbroken string can't widen the grid.

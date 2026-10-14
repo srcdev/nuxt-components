@@ -6,12 +6,16 @@
 |---|---|---|
 | `--social-icons-list-icon-size` | `2.4rem` | Icon size (applied as `font-size`) |
 | `--social-icons-list-gap` | `1.2rem` | Gap between icons |
+| `--social-icons-list-icon-colour` | `currentColor` | Colour of mono icons (sets that draw in `currentColor`, e.g. `mdi:instagram`). No effect on `logos:` icons, whose colours are fixed in the SVG |
 | `--social-icons-list-hover-scale` | `1.15` | Scale on hover/focus (no scaling under `prefers-reduced-motion: reduce`) |
 | `--social-icons-list-hover-opacity` | `0.85` | Opacity on hover/focus |
 
-The focus outline uses `--theme-ring`, falling back to `currentColor`. Icon colour is whatever the
-Iconify icon renders (`logos:` icons carry their own brand colours; mono sets follow `color`).
+The focus outline uses `--theme-ring`, falling back to `currentColor`. `logos:` icons carry their own brand colours. Some are dark (`logos:instagram-icon`, `logos:x`,
+`logos:github-icon`) and vanish on a dark background: use a mono icon there (`mdi:instagram`,
+`bi:instagram`, ...) and colour it with `--social-icons-list-icon-colour`.
 
+> Changed 2026-10-14: new `--social-icons-list-icon-colour` token for mono icons.
+>
 > Changed 2026-09-28: `--theme-social-icon-size` and `--theme-social-icon-gap` were renamed to
 > `--social-icons-list-icon-size` and `--social-icons-list-gap`; the old names no longer work. The
 > icon is now sized with `font-size` (it used an inline `width`/`height` style). The hover tokens
