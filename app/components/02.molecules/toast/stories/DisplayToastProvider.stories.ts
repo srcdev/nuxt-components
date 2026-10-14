@@ -74,6 +74,10 @@ export default {
     autoDismiss: true,
     duration: 4000,
   },
+  parameters: {
+    // Own iframe on the Docs page: toasts are fixed to the viewport.
+    docs: { story: { inline: false, height: "400px" } },
+  },
 } as Meta<StoryArgs>;
 
 const Template: StoryFn<StoryArgs> = (args) => ({

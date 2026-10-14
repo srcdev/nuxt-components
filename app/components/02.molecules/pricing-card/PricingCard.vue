@@ -1,15 +1,20 @@
 <template>
-  <component :is="tag" class="pricing-card" :class="[elementClasses, { 'is-highlighted': isHighlighted }]">
+  <component
+    :is="tag"
+    class="pricing-card"
+    :class="[elementClasses, { 'is-highlighted': isHighlighted, 'has-ribbon': Boolean(ribbonText) }]"
+    :aria-labelledby="headingId"
+  >
     <div v-if="isHighlighted" class="pricing-card__badge">{{ badgeText }}</div>
 
     <div v-if="ribbonText" class="pricing-card__ribbon-clip">
       <span class="pricing-card__ribbon">{{ ribbonText }}</span>
     </div>
 
-    <h3 class="pricing-card__name">{{ planName }}</h3>
+    <component :is="headingTag" :id="headingId" class="pricing-card__name">{{ planName }}</component>
 
     <div class="pricing-card__price">
-      <span class="pricing-card__amount">{{ currencySymbol }}{{ price }}</span>
+      <span class="pricing-card__amount">{{ currencySymbol }}{{ displayPrice }}</span>
       <span v-if="billingPeriod" class="pricing-card__period">{{ billingPeriod }}</span>
     </div>
 
@@ -34,6 +39,7 @@
 <script setup lang="ts">
 interface Props {
   tag?: "div" | "section" | "article";
+  headingTag?: "h2" | "h3" | "h4" | "h5" | "h6";
   planName: string;
   price: number;
   currencySymbol?: string;
@@ -50,6 +56,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   tag: "article",
+  headingTag: "h3",
   currencySymbol: "$",
   billingPeriod: "one-time",
   description: undefined,
@@ -65,6 +72,13 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   select: [planName: string];
 }>();
+
+const headingId = useId();
+
+const displayPrice = computed(() => {
+  if (!Number.isFinite(props.price)) return "";
+  return Number.isInteger(props.price) ? String(props.price) : props.price.toFixed(2);
+});
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -85,48 +99,52 @@ watch(
   .pricing-card {
     --_ribbon-size: var(--pricing-card-ribbon-size, 20rem);
 
-    --_cta-bg-hover: var(
-      --pricing-card-cta-bg-hover,
-      var(--input-button-primary-surface-hover, var(--theme-surface-hover))
-    );
-
     display: flex;
     flex-direction: column;
     gap: var(--pricing-card-gap, 1.2rem);
     position: relative;
+    min-inline-size: 0;
 
     padding: var(--pricing-card-padding, 2rem);
-    background-color: var(--pricing-card-background, var(--slate-00));
+    background-color: var(--pricing-card-background, var(--theme-surface-subtle));
     border: var(--pricing-card-border, 1px solid var(--slate-03));
     border-radius: var(--pricing-card-border-radius, 0.8rem);
     box-shadow: var(--pricing-card-shadow, 0 2px 8px oklch(from var(--slate-08) l c h / 0.12));
 
-    transition: all 0.3s ease;
+    @media (prefers-reduced-motion: no-preference) {
+      transition-property: transform, box-shadow, border-color;
+      transition-duration: var(--pricing-card-transition-duration, 300ms);
+      transition-timing-function: ease;
+    }
 
     &.is-highlighted {
-      border: var(--pricing-card-highlight-border, 2px solid var(--teal-06));
-      box-shadow: var(--pricing-card-highlight-shadow, 0 8px 24px oklch(from var(--teal-06) l c h / 0.2));
+      border: var(--pricing-card-highlight-border, 2px solid var(--theme-border));
+      box-shadow: var(--pricing-card-highlight-shadow, 0 8px 24px oklch(from var(--slate-08) l c h / 0.2));
       transform: scale(var(--pricing-card-highlight-scale, 1.05));
     }
 
     .pricing-card__badge {
       position: absolute;
-      top: -0.6rem;
-      left: 50%;
-      transform: translateX(-50%);
-      /* Above .pricing-card__ribbon-clip (z-index: 1) — without this the badge has no stacking
-         context of its own and the ribbon, which does, paints over it regardless of DOM order. */
+      inset-block-start: 0;
+      inset-inline: 0;
+      translate: 0 -50%;
+      inline-size: fit-content;
+      max-inline-size: calc(100% - 2rem);
+      margin-inline: auto;
+      /* Above .pricing-card__ribbon-clip (z-index: 1), which otherwise paints over it. */
       z-index: 2;
 
-      display: inline-block;
       padding: 0.4rem 1rem;
-      background-color: var(--pricing-card-badge-bg, var(--teal-06));
-      color: var(--pricing-card-badge-text, var(--teal-00));
+      background-color: var(--pricing-card-badge-bg, var(--theme-surface));
+      color: var(--pricing-card-badge-text, var(--theme-on-surface));
       border-radius: 2rem;
-      font-size: 0.75rem;
+      font-size: var(--pricing-card-badge-font-size, 1.2rem);
       font-weight: 600;
+      text-align: center;
       text-transform: uppercase;
       letter-spacing: 0.05em;
+      overflow-wrap: anywhere;
+      text-wrap: balance;
     }
 
     .pricing-card__ribbon-clip {
@@ -137,7 +155,6 @@ watch(
       height: var(--_ribbon-size);
       overflow: hidden;
       pointer-events: none;
-      /* Sits above card content but stays clear of the top-centred "Most Popular" badge. */
       z-index: 1;
 
       .pricing-card__ribbon {
@@ -148,7 +165,12 @@ watch(
         transform: rotate(23deg);
         transform-origin: center;
 
-        display: block;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        -webkit-line-clamp: var(--pricing-card-ribbon-line-clamp, 2);
+        line-clamp: var(--pricing-card-ribbon-line-clamp, 2);
+        overflow-wrap: anywhere;
         padding: 0.6rem 1.4rem 0.6rem 0;
         background-color: var(--pricing-card-ribbon-bg, var(--red-06));
         color: var(--pricing-card-ribbon-text, var(--red-00, white));
@@ -160,33 +182,55 @@ watch(
       }
     }
 
+    &.has-ribbon .pricing-card__name {
+      padding-right: var(--pricing-card-ribbon-clearance, 6rem);
+    }
+
     .pricing-card__name {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      -webkit-line-clamp: var(--pricing-card-name-line-clamp, none);
+      line-clamp: var(--pricing-card-name-line-clamp, none);
+      overflow-wrap: anywhere;
       margin: 0;
       font-size: var(--pricing-card-name-font-size, 1.8rem);
       font-weight: 600;
-      color: var(--pricing-card-name-color, #1a1a1a);
+      color: var(--pricing-card-name-color, var(--theme-text));
     }
 
     .pricing-card__price {
       display: flex;
+      flex-wrap: wrap;
       align-items: baseline;
       gap: 0.4rem;
+      min-inline-size: 0;
     }
 
     .pricing-card__amount {
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
       font-size: var(--pricing-card-amount-font-size, 3.2rem);
       font-weight: 700;
-      color: var(--pricing-card-amount-color, #1a1a1a);
+      color: var(--pricing-card-amount-color, var(--theme-text));
     }
 
     .pricing-card__period {
-      font-size: var(--pricing-card-period-font-size, 0.9rem);
-      color: var(--pricing-card-period-color, #666);
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
+      font-size: var(--pricing-card-period-font-size, 1.4rem);
+      color: var(--pricing-card-period-color, var(--theme-text));
     }
 
     .pricing-card__description {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      -webkit-line-clamp: var(--pricing-card-description-line-clamp, none);
+      line-clamp: var(--pricing-card-description-line-clamp, none);
+      overflow-wrap: anywhere;
       margin: 0;
-      color: var(--pricing-card-description-color, #555);
+      color: var(--pricing-card-description-color, var(--theme-text));
       line-height: 1.5;
     }
 
@@ -202,33 +246,29 @@ watch(
     }
 
     .pricing-card__feature {
-      color: var(--pricing-card-feature-color, #333);
-      padding-left: 1.6rem;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      -webkit-line-clamp: var(--pricing-card-feature-line-clamp, none);
+      line-clamp: var(--pricing-card-feature-line-clamp, none);
+      overflow-wrap: anywhere;
+      color: var(--pricing-card-feature-color, var(--theme-text));
+      padding-inline-start: 1.6rem;
       position: relative;
 
       &::before {
         content: "✓";
+        content: "✓" / "";
         position: absolute;
-        left: 0;
-        color: var(--teal-06);
+        inset-inline-start: 0;
+        color: var(--pricing-card-feature-icon-color, var(--theme-accent));
         font-weight: bold;
       }
     }
 
     .pricing-card__cta {
       align-self: var(--pricing-card-cta-align, flex-start);
-
-      :deep(.input-button) {
-        padding: var(--pricing-card-cta-padding, 1rem 1.6rem);
-        background-color: var(--pricing-card-cta-bg, var(--input-button-primary-surface, var(--theme-surface)));
-        color: var(--pricing-card-cta-text, var(--input-button-primary-text, var(--theme-on-surface)));
-        border-radius: var(--pricing-card-cta-border-radius, 0.4rem);
-        font-weight: 600;
-
-        &:hover:not([aria-disabled="true"]) {
-          background-color: var(--_cta-bg-hover);
-        }
-      }
+      max-inline-size: 100%;
     }
   }
 }

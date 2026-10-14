@@ -25,7 +25,9 @@ const meta: Meta<typeof ScrollRevealFrame> = {
     },
   },
   parameters: {
+    // Own iframe on the Docs page: the effect depends on page scroll.
     docs: {
+      story: { inline: false, height: "600px" },
       description: {
         component:
           "Generic clipping frame that pans any slot content vertically as it scrolls through the viewport — driven entirely by CSS Scroll-driven Animations. No scroll listeners, no JS. Use this when you need the parallax reveal with arbitrary content (grids, video, etc.). For a single NuxtImg with optimisation and focal-point control, use ScrollRevealImage instead.",

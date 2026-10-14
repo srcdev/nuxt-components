@@ -97,7 +97,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── expanding-panel.md      — ExpandingPanel v-model, forceOpened, contentIsOnTop overlay mode, slots (summary/icon/content), ARIA wiring, CSS token API
     ├── content-docs.md         — ContentDocs docs-page shell: prop-driven docsNav/docsPageNav (not slots), DocsNavItem icons, container-width breakpoint behaviour, shared/per-side CSS token API
     ├── glass-panel.md          — GlassPanel: frosted-glass container, light-only token defaults in-component (light-dark() block removed from _default.css, no built-in dark glass), highlight behind content, section/article labelled via headingId slot prop, CSS token API
-    ├── pricing-card.md         — PricingCard: SaaS-style plan card with highlight, feature list, #cta slot for button customization, CSS token API
+    ├── pricing-card.md         — PricingCard: plan card with highlight badge, corner ribbon, feature list, #cta slot, heading-tag, line-clamp tokens
     ├── price-list.md           — PriceList: service/menu price columns (dl rows), PriceListData type, headingTag/fromLabel props, CSS token API
     ├── opening-hours.md        — OpeningHours: per-day data auto-grouped into ranges, split sessions, 24h/appointment, exceptions, Intl formatting, today highlight, JSON-LD, CSS token API
     ├── input-copy.md           — InputCopy: readonly copy-to-clipboard input, visual feedback, Clipboard API, accessibility, CSS token API

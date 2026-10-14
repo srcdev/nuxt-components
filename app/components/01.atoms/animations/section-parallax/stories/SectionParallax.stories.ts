@@ -45,6 +45,10 @@ export default {
     showOverlay: true,
     overlayText: "A quiet moment.",
   },
+  parameters: {
+    // Own iframe on the Docs page: the effect depends on page scroll and vh heights.
+    docs: { story: { inline: false, height: "600px" } },
+  },
 } as Meta<StoryArgs>;
 
 const Template: StoryFn<StoryArgs> = (args) => ({

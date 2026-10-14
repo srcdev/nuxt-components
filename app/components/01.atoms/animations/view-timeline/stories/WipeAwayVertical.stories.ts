@@ -20,7 +20,9 @@ const meta: Meta<typeof WipeAwayVertical> = {
     styleClassPassthrough: { table: { disable: true } },
   },
   parameters: {
+    // Own iframe on the Docs page: the effect depends on page scroll and vh heights.
     docs: {
+      story: { inline: false, height: "600px" },
       description: {
         component:
           "Scroll-driven vertical wipe effect: each sticky panel wipes away to reveal the next as its paired scrolling section crosses the viewport. Pure CSS — a single-column grid overlays `.sticky-items-container` across all `.scrolling-section` rows via `animation-timeline: view()`, so there's no scroll listener or JS measurement involved. Consumers supply `stickyItem-{n}` slots for each of `itemCount` panels, and `scrollingItem-{n}` slots for only the first `itemCount - 1` — the last panel has nothing left to reveal, so it has no wipe animation or scrolling section of its own, just a small built-in trailing buffer to release cleanly. The sticky panel's own visible height is `--wipe-away-vertical-height` (default `100vh`) — leave the root's own `height` unset (`auto`) so it sizes itself from its children. Browsers without `animation-timeline: view()` support (via `@supports not (...)`) just get the sticky items stacked in normal document flow instead.",

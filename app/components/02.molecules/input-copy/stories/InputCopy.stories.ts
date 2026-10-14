@@ -4,7 +4,6 @@ import InputCopy from "../InputCopy.vue";
 const meta: Meta<typeof InputCopy> = {
   title: "Molecules/Input Copy",
   component: InputCopy,
-  tags: ["autodocs"],
   argTypes: {
     value: { control: "text" },
     id: {

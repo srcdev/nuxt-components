@@ -5,6 +5,8 @@ import { buildRamp, rampNames, themesForPalette } from "./ramp-data";
 const meta: Meta<typeof RampReference> = {
   title: "Foundations/Colour Ramps",
   component: RampReference,
+  // SetupGuide.mdx is this file's docs page; a generated one would duplicate it.
+  tags: ["!autodocs"],
   parameters: {
     layout: "padded",
     controls: { disable: true },

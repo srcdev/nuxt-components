@@ -15,7 +15,7 @@ A component passes when its Component Ledger row (`node .claude/component-ledger
 `.claude/component-ledger/audit.json`) shows `score: 5`, a real tier, and `variants`, `legacy_props`,
 `story_args_bug`, `eslint_issues`, `redundant_priv_tokens`, `styling_doc_outdated` and `missing_stress_story`
 all `false`.
-The ledger can't see items 9, 10, 11 and 14, so check those by hand.
+The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
 
 ## The checklist
 
@@ -149,6 +149,21 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
     with nothing to stress (animation wrappers, decorative containers that only take a slot and
     tag/variant props, Storybook tooling) are exempt: they are listed in `stressStoryExempt` in
     `.claude/component-ledger/build.mjs`; add a new one there rather than writing a padding story.
+6c. **Storybook docs page** — every story file gets a generated Docs page: `tags: ["autodocs"]` is
+    set globally in `.storybook/preview.ts` (since 2026-10-14), so don't repeat it in the meta.
+    Open the component's Docs page and check that it reads well:
+    - A `parameters.docs.description.component` in the meta says what the component is for and
+      names its main props/slots/events. Per-story `docs.description.story` text explains what
+      that story shows (the Docs page is the only place either is visible).
+    - The props table is accurate. Every story-only arg has a `description` and a category, and
+      CSS-token args are labelled story-only (6b).
+    - Every story renders inline. A story that misbehaves on the shared page (fixed/sticky
+      overlays, `layout: "fullscreen"` canvases, dialogs, toasts, scroll effects, heavy stress
+      data) gets `parameters.docs.story: { inline: false, height: "<px>" }` so it renders in its
+      own iframe. Don't drop it from the page.
+    - A story file that isn't a component reference (Storybook tooling, a file that already has an
+      attached `.mdx` page) opts out with `tags: ["!autodocs"]`. `ColourRamps.stories.ts` does this.
+    See `storybook-add-story.md`, "Docs page".
 7. **Skill doc** — create or update `.claude/skills/components/<component-name>.md`, following the
    pattern of an existing one. A labelled `<Name>Field` wrapper (or any other wrapper) is documented
    in its control's doc under a "Variants" section, not in a doc of its own
@@ -235,3 +250,10 @@ The ledger can't see items 9, 10, 11 and 14, so check those by hand.
       the edits in private memory. Note that an inline-size container can't size itself from its
       content: say so in `CONSUMER-STYLING.md` (`ProfileSection`).
     - Grid tracks that hold text are `minmax(0, …)` so an unbroken string can't widen the grid.
+    - No `:deep()` in the component's `<style>`: these blocks are never scoped, so Vue leaves it
+      as-is and the browser drops the whole rule (pitfall #27). Use a descendant selector, or set
+      the child component's public tokens on an ancestor.
+    - No `font-size` (or font-size token default) under `1rem`. `html` is `62.5%`, so `1rem` is
+      10px, and values like `0.75rem`/`0.9rem` are almost always copied from a 16px-base design
+      and render at 7.5-9px. `PricingCard` had both (fixed 2026-10-15); grep
+      `font-size:\s*(var\([^,]+,\s*)?0?\.[0-9]+rem` to find them.

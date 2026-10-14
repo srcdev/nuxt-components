@@ -287,6 +287,29 @@ prop and try to pass it. Make it unmistakable:
 
 `PriceList.stories.ts` and `GoogleReviews.stories.ts` (line-clamp controls) follow this.
 
+## Docs page
+
+`.storybook/preview.ts` sets `tags: ["autodocs"]` globally (2026-10-14), so every story file gets a
+generated Docs page and the meta doesn't need the tag. Before that, only two files opted in, and
+the earlier nightly `@nuxtjs/storybook` didn't render Docs pages at all, so a lot of existing
+`docs.description` text had never been visible. Check the page whenever you add or change a story
+(compliance checklist item 6c):
+
+- `parameters.docs.description.component` in the meta: what the component is for and its main
+  props, slots and events. `docs.description.story` on a story: what that story shows.
+- The Docs page renders every story inline in one document. Overlays (`position: fixed`), dialogs,
+  toasts, fullscreen canvases and scroll-driven effects break or overlap there. Render them in
+  their own iframe instead:
+
+  ```ts
+  parameters: {
+    docs: { story: { inline: false, height: "480px" } },
+  },
+  ```
+
+- Opt a file out with `tags: ["!autodocs"]` only when it isn't a component reference (tooling, or
+  a file with its own attached `.mdx` page, like `ColourRamps.stories.ts` with `SetupGuide.mdx`).
+
 ## Link to the stories of components that use this one
 
 When the component you're working on is a building block of other components (it's rendered
@@ -362,6 +385,19 @@ story: "See the [CookieConsentBanner](?path=/story/molecules-cookieconsentbanner
   controls that make sense (hide irrelevant ones with `Story.argTypes = { x: { table: { disable: true } } }`),
   or, for a fixed showcase (comparisons, all-themes grids, composition examples), add
   `controls: { disable: true }` to that story's `parameters`.
+- **Sidebar order** comes from the `storySort` function in `.storybook/preview.ts`: top-level
+  groups in tier order, everything below them alphabetical, entries within one component in file
+  order with Docs first. Storybook doesn't run that function from the compiled file. It extracts
+  the function's source and `eval`s it as plain JavaScript, so any TypeScript inside it
+  (annotations, `as` casts) or a reference to something outside its body fails the whole preview
+  build with `SyntaxError: Unexpected token ':'` (found 2026-10-15). It stays annotation-free
+  under a `// @ts-expect-error`. Check an edit without starting Storybook:
+
+  ```bash
+  node --input-type=module -e 'import { getStorySortParameter } from "storybook/internal/csf-tools"; import fs from "node:fs"; console.log(typeof getStorySortParameter(fs.readFileSync(".storybook/preview.ts", "utf8")));'
+  ```
+
+  `function` means it parses; a syntax error is the same one Storybook would hit.
 
 ## Scroll/animation-driven effects need surrounding chrome, not just the bare component
 

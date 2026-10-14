@@ -87,6 +87,10 @@ export default {
     description: "This is a toast notification message.",
     customIcon: "",
   },
+  parameters: {
+    // Own iframe on the Docs page: each story opens a viewport-fixed toast on mount.
+    docs: { story: { inline: false, height: "320px" } },
+  },
 } as Meta<ToastStoryArgs>;
 
 const Template: StoryFn<ToastStoryArgs> = (args) => ({

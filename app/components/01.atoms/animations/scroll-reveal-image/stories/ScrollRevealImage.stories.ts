@@ -50,7 +50,9 @@ const meta: Meta<typeof ScrollRevealImage> = {
     },
   },
   parameters: {
+    // Own iframe on the Docs page: the effect depends on page scroll.
     docs: {
+      story: { inline: false, height: "600px" },
       description: {
         component:
           "Single-image parallax reveal built on ScrollRevealFrame. Adds NuxtImg optimisation (src, alt, intrinsic dimensions) and a horizontal focal-point prop (focalX). For arbitrary slot content — grids, video, etc. — use ScrollRevealFrame directly.",

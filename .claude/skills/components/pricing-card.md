@@ -2,7 +2,11 @@
 
 ## Overview
 
-`PricingCard` renders a SaaS-style pricing plan card with plan name, price, description, feature list, and call-to-action button. Supports "Most Popular" highlight state with optional badge. Features are highly customizable via CSS token overrides, and the CTA button can be customized via the `#cta` slot for custom variants and themes.
+`PricingCard` (`app/components/02.molecules/pricing-card/`) renders a pricing plan card: plan name,
+price, billing period, description, feature list and a call-to-action button. `is-highlighted`
+adds a "Most Popular" badge plus a scaled, emphasised border; `ribbon-text` adds a diagonal corner
+ribbon. The CTA can be replaced through the `#cta` slot. Styling tokens:
+`app/components/02.molecules/pricing-card/CONSUMER-STYLING.md`.
 
 ---
 
@@ -10,34 +14,42 @@
 
 > **Hyphenation rule**: Vue's ESLint config enforces `vue/attribute-hyphenation`. Always write camelCase prop names hyphenated in templates: `:style-class-passthrough`.
 
-| Prop (template form)       | Type                          | Default      | Notes                                                              |
-| -------------------------- | ----------------------------- | ------------ | ------------------------------------------------------------------ |
-| `tag`                      | `"div" \| "section" \| "article"` | `"article"` | Root element tag for semantic HTML.                               |
-| `:plan-name`               | `string`                      | (required)   | Plan/tier name (e.g., "Basic", "Professional", "Enterprise").     |
-| `:price`                   | `number`                      | (required)   | Price amount (e.g., `99`, `4.99`). Currency symbol added in template. |
-| `:billing-period`          | `string`                      | `"one-time"` | Billing frequency text (e.g., "monthly", "yearly").              |
-| `:description`             | `string`                      | (optional)   | Short plan description.                                            |
-| `:features`                | `string[]`                    | `[]`         | Array of feature strings. Rendered with checkmark icons.          |
-| `:is-highlighted`          | `boolean`                     | `false`      | Highlight state; applies "Most Popular" badge, border, shadow, and scale. |
-| `:cta-text`                | `string`                      | `"Get started"` | Button label text.                                              |
-| `:cta-disabled`            | `boolean`                     | `false`      | Disables the CTA button.                                          |
-| `:style-class-passthrough` | `string \| string[]`          | `[]`         | Extra CSS classes applied to the card root.                       |
+| Prop (template form)       | Type                                   | Default          | Notes |
+| -------------------------- | -------------------------------------- | ---------------- | ----- |
+| `tag`                      | `"div" \| "section" \| "article"`      | `"article"`      | Root element. Always labelled by the plan name heading (`aria-labelledby`). |
+| `heading-tag`              | `"h2" \| "h3" \| "h4" \| "h5" \| "h6"` | `"h3"`           | Heading level for the plan name; pick to fit the page outline. |
+| `plan-name`                | `string`                               | (required)       | Plan name. |
+| `:price`                   | `number`                               | (required)       | Whole numbers show as-is, fractional ones to two decimals (`9.5` → `9.50`). A non-finite value shows nothing. |
+| `currency-symbol`          | `string`                               | `"$"`            | Literal prefix; no locale formatting. Pass `""` for none. |
+| `billing-period`           | `string`                               | `"one-time"`     | Shown after the price; `""` hides it. |
+| `description`              | `string`                               | `undefined`      | Short plan description. |
+| `:features`                | `string[]`                             | `[]`             | Rendered as a checkmark list (checkmark hidden from screen readers). |
+| `:is-highlighted`          | `boolean`                              | `false`          | Badge, highlight border/shadow, and `scale(1.05)`. |
+| `badge-text`               | `string`                               | `"Most Popular"` | Badge copy; pass a translated string for i18n. |
+| `cta-text`                 | `string`                               | `"Get started"`  | Default button label. |
+| `:cta-disabled`            | `boolean`                              | `false`          | Sets the default button to `readonly`/`aria-disabled`. |
+| `ribbon-text`              | `string`                               | `undefined`      | Corner ribbon copy; unset for no ribbon. Caps at two lines (`--pricing-card-ribbon-line-clamp`). |
+| `:style-class-passthrough` | `string \| string[]`                   | `[]`             | Extra classes on the root. |
+
+All visitor-facing copy (`badge-text`, `cta-text`, `billing-period`) is a prop, so pass strings from
+your own i18n solution.
 
 ---
 
 ## Events
 
-| Event  | Payload    | Notes                                    |
-| ------ | ---------- | ---------------------------------------- |
-| `select` | `planName: string` | Emitted when the CTA button is clicked. |
+| Event    | Payload            | Notes |
+| -------- | ------------------ | ----- |
+| `select` | `planName: string` | Emitted when the default CTA is clicked, or when a `#cta` slot calls `onSelect`. |
 
 ---
 
 ## Slots
 
-### Default slot (features)
+### `#features`
 
-Override the default feature list rendering. Receives no slot scope.
+Replaces the default `<li>` list. Your content goes inside the component's `<ul>`, so render `<li>`
+elements. `--pricing-card-feature-line-clamp` and the checkmark only apply to the built-in list.
 
 ```vue
 <PricingCard plan-name="Pro" :price="99">
@@ -47,97 +59,57 @@ Override the default feature list rendering. Receives no slot scope.
 </PricingCard>
 ```
 
-### #cta slot
+### `#cta`
 
-Customize the CTA button. Default renders `InputButton` with theme support.
+Replaces the default `InputButton`. Slot scope:
 
-**Slot scope:**
-- `ctaText: string` — button label from `:cta-text` prop
-- `isDisabled: boolean` — button disabled state from `:cta-disabled` prop
-- `planName: string` — plan name for context
-- `onSelect: () => void` — callback to trigger `select` event
+- `ctaText: string` — from `cta-text`
+- `isDisabled: boolean` — from `cta-disabled`
+- `planName: string`
+- `onSelect: () => void` — emits `select`
 
 ```vue
 <PricingCard plan-name="Pro" :price="99" @select="handleSelect">
   <template #cta="{ ctaText, isDisabled, onSelect }">
-    <InputButton
-      :button-text="ctaText"
-      variant="secondary"
-      theme="custom"
-      :readonly="isDisabled"
-      @click="onSelect"
-    />
+    <InputButton :button-text="ctaText" variant="secondary" :readonly="isDisabled" @click="onSelect" />
   </template>
 </PricingCard>
 ```
 
 ---
 
-## CSS Token Customization
+## Styling
 
-All `--pricing-card-*` tokens can be overridden at global, page, or instance scope. See `CONSUMER-STYLING.md` in the component directory for full token documentation and examples.
+All `--pricing-card-*` tokens are listed in `CONSUMER-STYLING.md`. The common ones:
 
-**Common tokens:**
-- `--pricing-card-padding` — card internal spacing
-- `--pricing-card-border-radius` — card corners
-- `--pricing-card-cta-bg` — button background
-- `--pricing-card-highlight-border` — highlighted card border
-- `--pricing-card-name-color` — plan name text color
+- `--pricing-card-padding`, `--pricing-card-border-radius`, `--pricing-card-background`
+- `--pricing-card-highlight-border`, `--pricing-card-highlight-scale`
+- `--pricing-card-name-line-clamp`, `--pricing-card-description-line-clamp`, `--pricing-card-feature-line-clamp` (default `none`)
+- `--pricing-card-feature-icon-color` (checkmark colour)
+
+The default CTA is styled with `InputButton`'s own tokens (`--input-button-primary-surface`, etc.),
+set on the card or an ancestor. There are no `--pricing-card-cta-*` colour tokens: the old ones never
+applied and were removed 2026-10-14. `--pricing-card-cta-align` still controls CTA alignment.
 
 ---
 
-## Usage Examples
+## Usage examples
 
-### Single card with default button
+### Single card
 
 ```vue
 <PricingCard
   plan-name="Basic"
   :price="29.99"
-  billing-period="monthly"
+  currency-symbol="£"
+  billing-period="per month"
   description="Perfect for getting started"
   :features="['Feature 1', 'Feature 2', 'Feature 3']"
-  cta-text="Get started"
   @select="handleSelect"
 />
 ```
 
-### Highlighted "Most Popular" card
-
-```vue
-<PricingCard
-  plan-name="Professional"
-  :price="79.99"
-  billing-period="monthly"
-  :is-highlighted="true"
-  :features="['All Basic features', 'Priority support', 'Advanced analytics']"
-  @select="handleSelect"
-/>
-```
-
-### Card with custom button variant
-
-```vue
-<PricingCard
-  plan-name="Enterprise"
-  :price="199.99"
-  billing-period="monthly"
-  description="Everything you need"
-  :features="['Unlimited access', 'Dedicated support', 'Custom integrations']"
-  @select="handleSelect"
->
-  <template #cta="{ ctaText, isDisabled, onSelect }">
-    <InputButton
-      :button-text="ctaText"
-      variant="primary"
-      :readonly="isDisabled"
-      @click="onSelect"
-    />
-  </template>
-</PricingCard>
-```
-
-### Three-column grid with token customization
+### Comparison grid
 
 ```vue
 <div class="pricing-grid">
@@ -148,16 +120,28 @@ All `--pricing-card-*` tokens can be overridden at global, page, or instance sco
     :price="plan.price"
     :is-highlighted="plan.id === 'pro'"
     :features="plan.features"
+    heading-tag="h2"
     @select="handleSelect"
-    style="--pricing-card-padding: 2.5rem; --pricing-card-cta-bg: var(--brand-primary)"
   />
 </div>
+```
+
+```css
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
+  gap: 2.4rem;
+}
 ```
 
 ---
 
 ## Notes
 
-- Feature checkmarks are always rendered with a teal checkmark (`✓`). Customize the color via `--teal-06` or component tokens.
-- The `#cta` slot is preferred over CSS-only button customization when you need variant or theme changes.
-- Highlighted cards apply a 1.05x scale transform — consider z-index when nesting in flex/grid layouts.
+- The highlight scale is a `transform`, so it doesn't change layout size. In a stacked single
+  column set `--pricing-card-highlight-scale: 1`, or the highlighted card overhangs.
+- The badge sits centred on the top border (`translate: 0 -50%`), so leave some space above the
+  card (grid gap or padding).
+- The plan name gets `--pricing-card-ribbon-clearance` (`6rem`) of right padding while a ribbon is
+  shown, so long names don't run underneath it.
+- Stories: `Molecules/Pricing Card`, including `Stress Test (Worst-Case Data)`.

@@ -40,7 +40,9 @@ export default {
     styleClassPassthrough: [],
   },
   parameters: {
+    // Own iframe on the Docs page: the banner is fixed to the viewport.
     docs: {
+      story: { inline: false, height: "400px" },
       description: {
         // Drives itself from the real useCookieConsent()/useCookie() state, so
         // once accepted/rejected in this browser it stays hidden across story
