@@ -3,16 +3,27 @@
     :is="chip ? DisplayChip : as"
     v-bind="chip ? { tag: chipTag, config: chipConfig, status, statusLabel } : {}"
     class="display-avatar"
-    :class="[size, elementClasses]"
+    :class="elementClasses"
+    :data-size="size"
   >
-    <slot name="default">
-      <NuxtImg v-if="src" :src :alt="alt ?? ''" width="100%" height="100%" class="display-avatar-image" />
-      <template v-else>
-        <span :aria-hidden="alt ? 'true' : undefined">{{ fallback }}</span>
-        <span v-if="alt" class="sr-only">{{ alt }}</span>
-      </template>
-    </slot>
-    <slot name="icon"></slot>
+    <span class="display-avatar-surface">
+      <slot name="default">
+        <NuxtImg
+          v-if="src && !imageFailed"
+          :src
+          :alt="alt ?? ''"
+          :width="imageSize"
+          :height="imageSize"
+          class="display-avatar-image"
+          @error="imageFailed = true"
+        />
+        <template v-else>
+          <span class="display-avatar-fallback" :aria-hidden="alt ? 'true' : undefined">{{ fallback }}</span>
+          <span v-if="alt" class="sr-only">{{ alt }}</span>
+        </template>
+      </slot>
+      <slot name="icon"></slot>
+    </span>
   </component>
 </template>
 
@@ -29,6 +40,7 @@ interface Props {
   chip?: boolean | DisplayChipConfig;
   status?: DisplayChipStatus;
   statusLabel?: string;
+  imageSize?: number;
   styleClassPassthrough?: string | string[];
 }
 
@@ -41,6 +53,7 @@ const props = withDefaults(defineProps<Props>(), {
   chip: undefined,
   status: undefined,
   statusLabel: undefined,
+  imageSize: 112,
   styleClassPassthrough: () => [],
 });
 
@@ -51,14 +64,26 @@ watch(
   () => resetElementClasses(props.styleClassPassthrough)
 );
 
+const imageFailed = ref(false);
+
+watch(
+  () => props.src,
+  () => (imageFailed.value = false)
+);
+
+const graphemes = new Intl.Segmenter(undefined, { granularity: "grapheme" });
+const firstGrapheme = (word: string) => graphemes.segment(word)[Symbol.iterator]().next().value?.segment ?? "";
+
 const fallback = computed(
   () =>
-    props.text ||
+    props.text?.trim() ||
     (props.alt || "")
-      .split(" ")
-      .map((word) => word.charAt(0))
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(firstGrapheme)
       .join("")
-      .substring(0, 2)
 );
 
 const chipDefaultConfig: DisplayChipConfig = {
@@ -76,36 +101,52 @@ const chipTag = computed((): "div" | "span" => (props.as === "div" || props.as =
 <style lang="css">
 @layer components {
   .display-avatar {
-    --_size: var(--display-avatar-size-md, 4rem);
-    --_font-size: var(--display-avatar-font-size-md, 1.6rem);
+    --_avatar-size: var(--display-avatar-size-md, 4rem);
+    --_avatar-font-size: var(--display-avatar-font-size-md, 1.6rem);
 
     display: flex;
-    align-items: center;
-    justify-content: center;
-    width: var(--display-avatar-size, var(--_size));
-    height: var(--display-avatar-size, var(--_size));
-    font-size: var(--display-avatar-font-size, var(--_font-size));
+    flex-shrink: 0;
+    width: var(--display-avatar-size, var(--_avatar-size));
+    height: var(--display-avatar-size, var(--_avatar-size));
+    font-size: var(--display-avatar-font-size, var(--_avatar-font-size));
     border-radius: var(--display-avatar-border-radius, 50%);
-    background-color: var(--display-avatar-background, var(--theme-surface-subtle));
-    color: var(--display-avatar-text-colour, var(--theme-text));
 
     isolation: isolate;
 
-    &.xs {
-      --_size: var(--display-avatar-size-xs, 2.4rem);
-      --_font-size: var(--display-avatar-font-size-xs, 1.2rem);
+    /* Fills the root so DisplayChip's per-child cutout mask is sized to the whole avatar. */
+    .display-avatar-surface {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background-color: var(--display-avatar-background, var(--theme-surface-subtle));
+      color: var(--display-avatar-text-colour, var(--theme-text));
     }
-    &.s {
-      --_size: var(--display-avatar-size-s, 3.2rem);
-      --_font-size: var(--display-avatar-font-size-s, 1.4rem);
+
+    &[data-size="xs"] {
+      --_avatar-size: var(--display-avatar-size-xs, 2.4rem);
+      --_avatar-font-size: var(--display-avatar-font-size-xs, 1.2rem);
     }
-    &.lg {
-      --_size: var(--display-avatar-size-lg, 4.8rem);
-      --_font-size: var(--display-avatar-font-size-lg, 1.8rem);
+    &[data-size="s"] {
+      --_avatar-size: var(--display-avatar-size-s, 3.2rem);
+      --_avatar-font-size: var(--display-avatar-font-size-s, 1.4rem);
     }
-    &.xl {
-      --_size: var(--display-avatar-size-xl, 5.6rem);
-      --_font-size: var(--display-avatar-font-size-xl, 2rem);
+    &[data-size="lg"] {
+      --_avatar-size: var(--display-avatar-size-lg, 4.8rem);
+      --_avatar-font-size: var(--display-avatar-font-size-lg, 1.8rem);
+    }
+    &[data-size="xl"] {
+      --_avatar-size: var(--display-avatar-size-xl, 5.6rem);
+      --_avatar-font-size: var(--display-avatar-font-size-xl, 2rem);
+    }
+
+    .display-avatar-fallback {
+      min-inline-size: 0;
+      max-inline-size: 100%;
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     .display-avatar-image {

@@ -64,14 +64,15 @@ describe("DisplayAvatar", () => {
 
   // ─── Size ─────────────────────────────────────────────────────────────────
 
-  it("applies md size class by default", async () => {
+  it("sets data-size=\"md\" by default", async () => {
     const wrapper = await mountSuspended(DisplayAvatar);
-    expect(wrapper.classes()).toContain("md");
+    expect(wrapper.attributes("data-size")).toBe("md");
   });
 
-  it.each(["xs", "s", "md", "lg", "xl"] as const)("applies %s size class when size='%s'", async (size) => {
+  it.each(["xs", "s", "md", "lg", "xl"] as const)("sets data-size=\"%s\" when size='%s'", async (size) => {
     const wrapper = await mountSuspended(DisplayAvatar, { props: { size } });
-    expect(wrapper.classes()).toContain(size);
+    expect(wrapper.attributes("data-size")).toBe(size);
+    expect(wrapper.classes()).not.toContain(size);
   });
 
   // ─── Fallback text ────────────────────────────────────────────────────────
@@ -80,33 +81,33 @@ describe("DisplayAvatar", () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { alt: "John Doe" },
     });
-    expect(wrapper.find(".display-avatar > span:first-child").text()).toBe("JD");
+    expect(wrapper.find(".display-avatar-fallback").text()).toBe("JD");
   });
 
   it("caps initials at two characters", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { alt: "Alice Bob Charlie" },
     });
-    expect(wrapper.find(".display-avatar > span:first-child").text()).toBe("AB");
+    expect(wrapper.find(".display-avatar-fallback").text()).toBe("AB");
   });
 
   it("shows single initial for a single-word alt", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { alt: "Alice" },
     });
-    expect(wrapper.find(".display-avatar > span:first-child").text()).toBe("A");
+    expect(wrapper.find(".display-avatar-fallback").text()).toBe("A");
   });
 
   it("shows text prop instead of alt-derived initials when text is set", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { alt: "John Doe", text: "?" },
     });
-    expect(wrapper.find(".display-avatar > span:first-child").text()).toBe("?");
+    expect(wrapper.find(".display-avatar-fallback").text()).toBe("?");
   });
 
   it("shows empty fallback when neither src, text, nor alt are set", async () => {
     const wrapper = await mountSuspended(DisplayAvatar);
-    expect(wrapper.find(".display-avatar > span:first-child").text()).toBe("");
+    expect(wrapper.find(".display-avatar-fallback").text()).toBe("");
   });
 
   // ─── Image ────────────────────────────────────────────────────────────────
@@ -210,13 +211,13 @@ describe("DisplayAvatar", () => {
 
   it("hides the initials from screen readers and announces the alt instead", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, { props: { alt: "John Doe" } });
-    expect(wrapper.find(".display-avatar > span:first-child").attributes("aria-hidden")).toBe("true");
+    expect(wrapper.find(".display-avatar-fallback").attributes("aria-hidden")).toBe("true");
     expect(wrapper.find(".sr-only").text()).toBe("John Doe");
   });
 
   it("leaves text-only fallback readable when there is no alt", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, { props: { text: "?" } });
-    expect(wrapper.find(".display-avatar > span:first-child").attributes("aria-hidden")).toBeUndefined();
+    expect(wrapper.find(".display-avatar-fallback").attributes("aria-hidden")).toBeUndefined();
     expect(wrapper.find(".sr-only").exists()).toBe(false);
   });
 
@@ -225,11 +226,12 @@ describe("DisplayAvatar", () => {
     expect(wrapper.attributes("style-class-passthrough")).toBeUndefined();
   });
 
-  it("puts display-avatar, size and passthrough classes on the DisplayChip root", async () => {
+  it("puts display-avatar, data-size and passthrough classes on the DisplayChip root", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { chip: true, size: "lg", styleClassPassthrough: ["online"] },
     });
-    expect(wrapper.classes()).toEqual(expect.arrayContaining(["display-chip", "display-avatar", "lg", "online"]));
+    expect(wrapper.classes()).toEqual(expect.arrayContaining(["display-chip", "display-avatar", "online"]));
+    expect(wrapper.attributes("data-size")).toBe("lg");
   });
 
   it("forwards status and statusLabel to the chip", async () => {
@@ -255,5 +257,75 @@ describe("DisplayAvatar", () => {
     const wrapper = await mountSuspended(DisplayAvatar, { props: { chip: true } });
     await wrapper.setProps({ chip: { size: "20px", maskWidth: "2px", offset: "0px", angle: "0deg" } });
     expect(wrapper.findComponent(DisplayChip).props("config")).toMatchObject({ size: "20px" });
+  });
+
+  // ─── Stress test 2026-10-14 ────────────────────────────────────────────────
+
+  const initialsFor = async (alt: string) => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { alt } });
+    return wrapper.find(".display-avatar-fallback").text();
+  };
+
+  it("takes whole emoji as initials, not half a surrogate pair", async () => {
+    expect(await initialsFor("🦄 Unicorn")).toBe("🦄U");
+    expect(await initialsFor("👩‍👩‍👧 Family")).toBe("👩‍👩‍👧F");
+    expect(await initialsFor("🇬🇧 Team")).toBe("🇬🇧T");
+  });
+
+  it("ignores leading, trailing and repeated whitespace in alt", async () => {
+    expect(await initialsFor("  Jane    Smith  ")).toBe("JS");
+    expect(await initialsFor("Jane\tSmith")).toBe("JS");
+  });
+
+  it("falls back to alt initials when text is whitespace only", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { alt: "Jane Smith", text: "   " } });
+    expect(wrapper.find(".display-avatar-fallback").text()).toBe("JS");
+  });
+
+  it("renders HTML-like alt as text", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { alt: "<b>Bold</b> <script>" } });
+    expect(wrapper.find("b").exists()).toBe(false);
+    expect(wrapper.find(".sr-only").text()).toBe("<b>Bold</b> <script>");
+  });
+
+  it("passes a numeric width and height to the image", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { src: "/avatar.jpg" } });
+    const img = wrapper.find(".display-avatar-image");
+    expect(img.attributes("width")).toBe("112");
+    expect(img.attributes("height")).toBe("112");
+  });
+
+  it("uses imageSize for the image's width and height", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { src: "/avatar.jpg", imageSize: 240 } });
+    expect(wrapper.find(".display-avatar-image").attributes("width")).toBe("240");
+  });
+
+  it("shows the initials fallback when the image fails to load", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { src: "/broken.jpg", alt: "Jane Smith" } });
+    await wrapper.find(".display-avatar-image").trigger("error");
+    expect(wrapper.find(".display-avatar-image").exists()).toBe(false);
+    expect(wrapper.find(".display-avatar-fallback").text()).toBe("JS");
+    expect(wrapper.find(".sr-only").text()).toBe("Jane Smith");
+  });
+
+  it("tries the image again when src changes after a failure", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, { props: { src: "/broken.jpg", alt: "Jane Smith" } });
+    await wrapper.find(".display-avatar-image").trigger("error");
+    await wrapper.setProps({ src: "/working.jpg" });
+    expect(wrapper.find(".display-avatar-image").exists()).toBe(true);
+  });
+
+  it("wraps all content in one surface so the chip's per-child mask covers the whole avatar", async () => {
+    const wrapper = await mountSuspended(DisplayAvatar, {
+      props: { alt: "Jane Smith", chip: true },
+      slots: { icon: "<span class='status-icon'>●</span>" },
+    });
+    const masked = Array.from(wrapper.element.children).filter(
+      (el) => !el.matches(".display-chip-icon, .display-chip-label, .sr-only")
+    );
+    expect(masked).toHaveLength(1);
+    expect(masked[0]!.classList.contains("display-avatar-surface")).toBe(true);
+    expect(masked[0]!.querySelector(".display-avatar-fallback")?.textContent).toBe("JS");
+    expect(masked[0]!.querySelector(".status-icon")).not.toBeNull();
   });
 });

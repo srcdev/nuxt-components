@@ -6,13 +6,17 @@
 
 | Token | Default | Controls |
 |---|---|---|
-| `--display-avatar-size` | the size class's value | Diameter, overriding the `size` prop's scale (one instance or a whole area) |
-| `--display-avatar-font-size` | the size class's value | Initials/text size, overriding the scale |
+| `--display-avatar-size` | the `size` step's value | Diameter, overriding the `size` prop's scale (one instance or a whole area) |
+| `--display-avatar-font-size` | the `size` step's value | Initials/text size, overriding the scale |
 | `--display-avatar-size-xs` / `-s` / `-md` / `-lg` / `-xl` | `2.4rem` / `3.2rem` / `4rem` / `4.8rem` / `5.6rem` | The diameter each `size` value maps to |
 | `--display-avatar-font-size-xs` / `-s` / `-md` / `-lg` / `-xl` | `1.2rem` / `1.4rem` / `1.6rem` / `1.8rem` / `2rem` | The text size each `size` value maps to |
 
-A custom `size` string (anything other than `xs`–`xl`) is added as a class but maps to no scale
-step, so it renders at `md` unless you set `--display-avatar-size` for it.
+A custom `size` string (anything other than `xs`–`xl`) is set as `data-size` but maps to no
+scale step, so it renders at `md` unless you set `--display-avatar-size` for it (target it with
+`.display-avatar[data-size="<your-size>"]`).
+
+If you size an image avatar beyond the scale, raise the `image-size` prop (default `112`, the
+pixel width and height requested from `@nuxt/image`) to match, or the image is upscaled and blurry.
 
 ### Appearance
 
@@ -30,21 +34,33 @@ step, so it renders at `md` unless you set `--display-avatar-size` for it.
 > faint in light mode; it now uses the `--theme-*` surface and text tokens, so it follows light
 > and dark mode.
 
-Private tokens (not public API): `--_size` and `--_font-size`, which each size class sets from its
+Private tokens (not public API): `--_avatar-size` and `--_avatar-font-size`, which each size step sets from its
 scale token.
 
 ## State hooks
 
-- Size class on the root: `.xs`, `.s`, `.md`, `.lg`, `.xl` (or your custom `size` string).
-- Classes: `.display-avatar` (root), `.display-avatar-image` (the image), `.display-avatar-icon`
-  (opt-in, for your `#icon` slot content).
+- `data-size` on the root: `xs`, `s`, `md`, `lg`, `xl` (or your custom `size` string).
+- Classes: `.display-avatar` (root: size, font size, radius), `.display-avatar-surface` (fills the root,
+  carries the background and text colour, and holds all content), `.display-avatar-image` (the image), `.display-avatar-fallback`
+  (the initials or `text`; one line, clipped to the circle), `.display-avatar-icon` (opt-in, for
+  your `#icon` slot content).
 - With `chip`, the root is `DisplayChip`, so it also carries `.display-chip` and its
   `data-shape`/`data-status` attributes (status comes from the `status` prop). See `display-chip`
   for its tokens.
 
+> **Changed 2026-10-14**: the size was a bare class on the root (`.display-avatar.lg`), which a
+> consumer's own `.lg`/`.xl` utility classes could match. Replace `.display-avatar.<size>` with
+> `.display-avatar[data-size="<size>"]`. Overlong fallback text is now clipped inside the circle, the
+> avatar no longer shrinks in a flex row, and a broken image falls back to the initials.
+> With `chip`, the status dot is its configured size again (it had picked up the avatar's diameter
+> through a shared private `--_size` name). Content now sits in a full-size
+> `.display-avatar-surface`, which carries the background: the chip's cutout used to land on the
+> small initials span (cutting into the letters) and never reached the background. If you set
+> `background` directly on `.display-avatar`, use `--display-avatar-background` instead.
+>
 > **Changed 2026-10-08**: chip status is the `status` prop (forwarded to `DisplayChip` as
 > `data-status`), not an `online`/`idle`/`dnd` class through `style-class-passthrough`.
-
+>
 > **Changed 2026-09-27**: `.avatar-image` → `.display-avatar-image` and `.avatar-icon` →
 > `.display-avatar-icon`.
 
@@ -56,7 +72,7 @@ Set the tokens above on an element you own (a page or section class, or a class 
 `<style scoped>`, tokens set on your element still work, but selectors that reach inside the
 component need `:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
 
-**Caveat:** the size classes set `--_size`/`--_font-size` on the avatar itself, so changing the
+**Caveat:** the size steps set `--_avatar-size`/`--_avatar-font-size` on the avatar itself, so changing the
 scale (`--display-avatar-size-md` etc.) from an ancestor works, but a one-off diameter should use
 `--display-avatar-size`, which beats the scale wherever it's set.
 

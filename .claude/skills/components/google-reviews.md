@@ -132,8 +132,8 @@ replaced.
 - Survives hostile data (see the `StressTest` story): long and unbroken text wraps inside its card,
   reviewer names are cut to 2 lines (`--google-reviews-author-line-clamp`),
   initials take whole characters (emoji-safe), star fill is clamped to 0–5, review text renders as
-  plain text. A broken photo URL still shows the browser's broken-image icon, since
-  `DisplayAvatar` has no image-error fallback.
+  plain text. A broken photo URL falls back to the reviewer's initials (`DisplayAvatar`'s image-error
+  fallback).
 
 ## Variants
 

@@ -58,7 +58,10 @@ maths (`--_mask-diameter`, `--_position-x`, `--_position-y`, `--_offset`, `--_ci
 
 Inner elements: the dot is `.display-chip::after`; `.display-chip-icon` and `.display-chip-label`
 sit on top of it. The `statusLabel` text is a `.sr-only` span. Every other direct child gets the
-cutout `mask-image`.
+cutout `mask-image`. The mask is positioned in percentages of each child's own box, so the slot
+should be one element that fills the chip and carries any background: a small child (a bare text
+span) gets the notch cut into its own content, and a background on the root is never masked.
+`DisplayAvatar` uses a full-size `.display-avatar-surface` for this.
 
 > Changed 2026-10-08: shape and status are `data-shape`/`data-status` attributes instead of the
 > `.circle`/`.square` and `.online`/`.idle`/`.dnd` classes, so they can't collide with a
@@ -87,4 +90,6 @@ let the token apply.
 ## Class passthrough
 
 `style-class-passthrough` adds classes to the root `.display-chip`. Reactive after mount.
-`DisplayAvatar` with `chip` renders this component as its root, so the same applies there.
+`DisplayAvatar` with `chip` renders this component as its root, so the same applies there. Because the
+root element is shared, a wrapping component must not reuse this component's private token names
+(`--_size` especially) for its own values.

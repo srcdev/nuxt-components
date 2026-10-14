@@ -1,12 +1,12 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`DisplayAvatar > renders correct HTML structure (default) 1`] = `"<span class="display-avatar md"><span aria-hidden="true">JD</span><span class="sr-only">John Doe</span></span>"`;
+exports[`DisplayAvatar > renders correct HTML structure (default) 1`] = `"<span class="display-avatar" data-size="md"><span class="display-avatar-surface"><span class="display-avatar-fallback" aria-hidden="true">JD</span><span class="sr-only">John Doe</span></span></span>"`;
 
 exports[`DisplayAvatar > renders correct HTML structure (with chip) 1`] = `
-"<span class="display-chip display-avatar md" data-shape="circle" data-status="offline" style="--_chip-size: 12px; --_chip-mask-width: 4px; --_chip-offset: 0px; --_chip-angle: 90deg;"><span aria-hidden="true">JD</span><span class="sr-only">John Doe</span>
+"<span class="display-chip display-avatar" data-shape="circle" data-status="offline" style="--_chip-size: 12px; --_chip-mask-width: 4px; --_chip-offset: 0px; --_chip-angle: 90deg;" data-size="md"><span class="display-avatar-surface"><span class="display-avatar-fallback" aria-hidden="true">JD</span><span class="sr-only">John Doe</span></span>
 <!--v-if-->
 <!--v-if-->
 <!--v-if--></span>"
 `;
 
-exports[`DisplayAvatar > renders correct HTML structure (with src) 1`] = `"<span class="display-avatar lg"><img data-nuxt-img="" srcset="/_ipx/_/avatar.jpg 1x, /_ipx/_/avatar.jpg 2x" alt="John Doe" class="display-avatar-image" src="/_ipx/_/avatar.jpg"></span>"`;
+exports[`DisplayAvatar > renders correct HTML structure (with src) 1`] = `"<span class="display-avatar" data-size="lg"><span class="display-avatar-surface"><img width="112" height="112" data-nuxt-img="" srcset="/_ipx/s_112x112/avatar.jpg 1x, /_ipx/s_224x224/avatar.jpg 2x" alt="John Doe" class="display-avatar-image" src="/_ipx/s_112x112/avatar.jpg"></span></span>"`;

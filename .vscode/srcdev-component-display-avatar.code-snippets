@@ -6,6 +6,13 @@
       "<DisplayAvatar src=\"${1:/images/profile.jpg}\" alt=\"${2:Jane Smith}\" size=\"${3|md,xs,s,lg,xl|}\" />"
     ]
   },
+  "SRCDEV DisplayAvatar Large Image": {
+    "description": "DisplayAvatar: image avatar resized beyond the scale, with a matching image-size so it stays sharp",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayAvatar src=\"${1:/images/profile.jpg}\" alt=\"${2:Jane Smith}\" :image-size=\"${3:240}\" style=\"--display-avatar-size: ${4:12rem}\" />"
+    ]
+  },
   "SRCDEV DisplayAvatar Initials": {
     "description": "DisplayAvatar: initials derived from alt (alt is announced, initials hidden from screen readers)",
     "scope": "vue,html",

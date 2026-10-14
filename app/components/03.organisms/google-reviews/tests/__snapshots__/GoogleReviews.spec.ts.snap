@@ -9,8 +9,8 @@ exports[`GoogleReviews > renders correct HTML structure 1`] = `
   <ul class="google-reviews-list" tabindex="0">
     <li class="google-reviews-item">
       <article class="google-review-card">
-        <div class="google-review-card-author"><span class="display-avatar md" aria-hidden="true"><span>R1</span>
-          <!--v-if--></span><a id="v-0-0-0" href="https://maps.google.com/contrib/1" class="google-review-card-author-name">Reviewer 1</a><time datetime="2026-09-18T10:00:00Z" class="google-review-card-time">1 weeks ago</time>
+        <div class="google-review-card-author"><span class="display-avatar" data-size="md" aria-hidden="true"><span class="display-avatar-surface"><span class="display-avatar-fallback">R1</span>
+          <!--v-if--></span></span><a id="v-0-0-0" href="https://maps.google.com/contrib/1" class="google-review-card-author-name">Reviewer 1</a><time datetime="2026-09-18T10:00:00Z" class="google-review-card-time">1 weeks ago</time>
         </div>
         <div class="google-review-card-rating"><span class="google-review-card-stars" style="--_rating: 5;" aria-hidden="true">★★★★★</span><span class="sr-only">Rated 5 out of 5</span></div>
         <p class="google-review-card-text">Review text 1</p><a href="https://maps.google.com/review/1" aria-describedby="v-0-0-0" class="google-review-card-link">Read on Google</a>
@@ -18,8 +18,8 @@ exports[`GoogleReviews > renders correct HTML structure 1`] = `
     </li>
     <li class="google-reviews-item">
       <article class="google-review-card">
-        <div class="google-review-card-author"><span class="display-avatar md" aria-hidden="true"><span>R2</span>
-          <!--v-if--></span><a id="v-0-0-1" href="https://maps.google.com/contrib/2" class="google-review-card-author-name">Reviewer 2</a><time datetime="2026-09-18T10:00:00Z" class="google-review-card-time">2 weeks ago</time>
+        <div class="google-review-card-author"><span class="display-avatar" data-size="md" aria-hidden="true"><span class="display-avatar-surface"><span class="display-avatar-fallback">R2</span>
+          <!--v-if--></span></span><a id="v-0-0-1" href="https://maps.google.com/contrib/2" class="google-review-card-author-name">Reviewer 2</a><time datetime="2026-09-18T10:00:00Z" class="google-review-card-time">2 weeks ago</time>
         </div>
         <div class="google-review-card-rating"><span class="google-review-card-stars" style="--_rating: 4;" aria-hidden="true">★★★★★</span><span class="sr-only">Rated 4 out of 5</span></div>
         <p class="google-review-card-text">Review text 2</p><a href="https://maps.google.com/review/2" aria-describedby="v-0-0-1" class="google-review-card-link">Read on Google</a>
@@ -27,8 +27,8 @@ exports[`GoogleReviews > renders correct HTML structure 1`] = `
     </li>
     <li class="google-reviews-item">
       <article class="google-review-card">
-        <div class="google-review-card-author"><span class="display-avatar md" aria-hidden="true"><span>R3</span>
-          <!--v-if--></span><a id="v-0-0-2" href="https://maps.google.com/contrib/3" class="google-review-card-author-name">Reviewer 3</a><time datetime="2026-09-18T10:00:00Z" class="google-review-card-time">3 weeks ago</time>
+        <div class="google-review-card-author"><span class="display-avatar" data-size="md" aria-hidden="true"><span class="display-avatar-surface"><span class="display-avatar-fallback">R3</span>
+          <!--v-if--></span></span><a id="v-0-0-2" href="https://maps.google.com/contrib/3" class="google-review-card-author-name">Reviewer 3</a><time datetime="2026-09-18T10:00:00Z" class="google-review-card-time">3 weeks ago</time>
         </div>
         <div class="google-review-card-rating"><span class="google-review-card-stars" style="--_rating: 3;" aria-hidden="true">★★★★★</span><span class="sr-only">Rated 3 out of 5</span></div>
         <p class="google-review-card-text">Review text 3</p><a href="https://maps.google.com/review/3" aria-describedby="v-0-0-2" class="google-review-card-link">Read on Google</a>

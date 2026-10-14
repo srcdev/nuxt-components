@@ -1,5 +1,7 @@
 # DisplayAvatar Component
 
+> **Changed 2026-10-14:** size is a `data-size` attribute, not a bare class (`.display-avatar.lg` → `.display-avatar[data-size="lg"]`). New `image-size` prop (default `112`): `NuxtImg` used to get `width="100%"`, which @nuxt/image ignores, so the Vercel provider requested its largest screen width for every avatar. A broken image now falls back to the initials, initials are emoji-safe, and long fallback text is clipped inside the circle. With `chip`, the status dot was drawn at the avatar's diameter instead of its configured size: avatar and chip both declared a private `--_size` on the same root element and the avatar's size rules won. The avatar's private tokens are now `--_avatar-size`/`--_avatar-font-size`. Content (both slots too) now sits in a full-size `.display-avatar-surface` that carries the background, so the chip's cutout covers the whole avatar instead of landing on the initials span and cutting into the letters.
+
 > **Changed 2026-10-08:** new `status`/`status-label` props, forwarded to the chip. Chip status used to be an `online`/`idle`/`dnd` class through `style-class-passthrough`, which no longer colours the dot.
 
 ## Overview
@@ -18,10 +20,11 @@
 | `src`                       | `string`                                  | —        | Image URL. Renders `NuxtImg` when set; fallback text otherwise.   |
 | `alt`                       | `string`                                  | —        | Alt text for the image; also used to derive initials.             |
 | `text`                      | `string`                                  | —        | Override the auto-derived initials with an explicit string.       |
-| `size`                      | `"xs" \| "s" \| "md" \| "lg" \| "xl"`   | `"md"`   | Controls width, height, and font-size.                            |
+| `size`                      | `"xs" \| "s" \| "md" \| "lg" \| "xl"`   | `"md"`   | Sets `data-size`, which picks width, height and font-size.        |
 | `chip`                      | `boolean \| DisplayChipConfig`           | —        | Add a status chip. `true` uses defaults; pass a config object to customise. |
 | `status`                    | `DisplayChipStatus`                       | —        | Chip status colour (`offline`/`online`/`idle`/`dnd`), forwarded to `DisplayChip`. Ignored without `chip`; the chip defaults to `offline`. |
 | `status-label`              | `string`                                  | —        | Screen-reader text for the chip status (e.g. "Online"), forwarded to `DisplayChip`. Ignored without `chip`. |
+| `:image-size`              | `number`                                  | `112`    | Pixel width and height requested from `@nuxt/image` (1x; 2x is double). Raise it if you resize the avatar past `xl` with `--display-avatar-size`. |
 | `:style-class-passthrough`  | `string \| string[]`                      | `[]`     | Extra CSS classes on the root element.                            |
 
 ### Size dimensions
@@ -45,17 +48,23 @@ Each step is a token (`--display-avatar-size-md`, `--display-avatar-font-size-md
 | `default` | Replaces the auto image/fallback content entirely.                  |
 | `icon`    | Appended inside the avatar (e.g. an icon overlay over the image). |
 
+Both slots render inside `.display-avatar-surface`, a full-size element that carries the background. With `chip`, that surface is what gets the cutout mask.
+
 ---
 
 ## Fallback text logic
 
 When `src` is not set, a `<span>` renders the fallback value:
 
-1. `text` prop — used as-is if provided.
-2. `alt` initials — first character of each word, capped at two characters.
+1. `text` prop — used as-is if it has any non-whitespace content.
+2. `alt` initials — the first character (a whole grapheme, so emoji and flags stay intact) of the first two words. Extra whitespace is ignored.
 3. Empty string — if neither is set.
 
 When `alt` is set, the initials are `aria-hidden` and the full `alt` is rendered as `sr-only` text, so a screen reader announces "Jane Smith" rather than "J S". With only `text`, the text is read as-is.
+
+If the image fails to load, the initials fallback shows instead (an empty circle when there is no `alt`). A new `src` tries the image again.
+
+The fallback is one line, clipped to the circle: keep `text` short (1–3 characters).
 
 With `src`, the image uses `alt`, or an empty (decorative) `alt` when none is given. Pass `alt` unless the name is already visible next to the avatar.
 
@@ -63,6 +72,8 @@ With `src`, the image uses `alt`, or an empty (decorative) `alt` when none is gi
 alt="John Doe"     → "JD"
 alt="Alice"        → "A"
 alt="Alice Bob C"  → "AB"
+alt="🦄 Unicorn"    → "🦄U"
+alt="  Jane  Smith " → "JS"
 text="?"           → "?"
 ```
 
