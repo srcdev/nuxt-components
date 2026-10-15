@@ -2,7 +2,9 @@
 
 ## Overview
 
-`InputCopy` renders a readonly text input with a copy-to-clipboard button. Displays a copyable value (e.g., license key, API token) with optional description text below. Shows visual feedback ("Copied!") in the button after a successful copy. Emits `copy` and `copied` events for consumer-side toast/feedback handling.
+`InputCopy` renders a readonly text input with a copy-to-clipboard button (an inline `InputButton`), with optional description text below. After a successful copy the button shows `copiedText` and `copiedIcon` for `copiedDuration` ms, a visually hidden status region announces `copiedText`, and the button stays focusable but `aria-disabled` so repeat clicks are ignored without losing focus. Emits `copy` and `copied` for consumer-side toast/feedback handling.
+
+**Location**: `app/components/02.molecules/input-copy/InputCopy.vue`
 
 ---
 
@@ -10,53 +12,49 @@
 
 > **Hyphenation rule**: Vue's ESLint config enforces `vue/attribute-hyphenation`. Always write camelCase prop names hyphenated in templates: `:style-class-passthrough`.
 
-| Prop (template form)       | Type                   | Default          | Notes                                                        |
-| -------------------------- | ---------------------- | ---------------- | ------------------------------------------------------------ |
-| `:value`                   | `string`               | (required)       | The text to copy to clipboard (e.g., license key, API token).|
-| `:id`                      | `string`               | auto-generated   | Id applied to the input. Only pass one if something needs to target this input directly. |
-| `:name`                    | `string`               | falls back to `id` | Name applied to the input. Falls back to the resolved `id` (auto-generated or explicit) when not provided. |
-| `:label`                   | `string`               | (optional)       | Short label for the field; used in aria-label if ariaLabel not set. |
-| `:aria-label`              | `string`               | (optional)       | Custom aria-label for the input; overrides label.           |
-| `:description`             | `string`               | (optional)       | Helper text displayed below the input.                       |
-| `:button-text`             | `string`               | `"Copy"`         | Label on the copy button.                                    |
-| `:copied-text`             | `string`               | `"Copied!"`      | Text shown in button after copy succeeds.                    |
-| `:copied-duration`         | `number`               | `2000`           | Milliseconds the "Copied!" state persists before resetting.  |
-| `:is-disabled`             | `boolean`              | `false`          | Disables the copy button.                                    |
-| `:style-class-passthrough` | `string \| string[]`   | `[]`             | Extra CSS classes applied to the root element.              |
+| Prop (template form)       | Type                 | Default            | Notes |
+| -------------------------- | -------------------- | ------------------ | ----- |
+| `:value`                   | `string`             | (required)         | The text copied to the clipboard. |
+| `:id`                      | `string`             | auto-generated     | Id on the input. Only pass one if something needs to target it. |
+| `:name`                    | `string`             | falls back to `id` | Name on the input. |
+| `:label`                   | `string`             | `undefined`        | Accessible name for the input (not rendered visibly) and part of the default button aria-label. |
+| `:aria-label`              | `string`             | `undefined`        | Accessible name for the input; overrides `label`. |
+| `:description`             | `string`             | `undefined`        | Helper text below the input, linked with `aria-describedby`. |
+| `:button-text`             | `string`             | `"Copy"`           | Button label. |
+| `:copied-text`             | `string`             | `"Copied!"`        | Button label and status announcement after a copy. |
+| `:button-aria-label`       | `string`             | `"Copy <label> to clipboard"` | Accessible name for the button. Pass translated copy in non-English apps. |
+| `:icon`                    | `string`             | `"lucide:copy"`    | Iconify name for the resting icon. |
+| `:copied-icon`             | `string`             | `"lucide:check"`   | Iconify name shown after a copy. |
+| `:copied-duration`         | `number`             | `2000`             | Milliseconds the copied state lasts. |
+| `:is-disabled`             | `boolean`            | `false`            | Disables the copy button. |
+| `:style-class-passthrough` | `string \| string[]` | `[]`               | Extra classes on the root element. |
 
 ---
 
 ## Events
 
-| Event    | Payload              | Notes                                                      |
-| -------- | -------------------- | ---------------------------------------------------------- |
-| `copy`   | `value: string`      | Emitted when the copy button is clicked (before clipboard write). |
-| `copied` | `value: string`      | Emitted after successful clipboard write; fires after `copy`. |
+| Event    | Payload         | Notes |
+| -------- | --------------- | ----- |
+| `copy`   | `value: string` | Emitted after the clipboard write succeeds. |
+| `copied` | `value: string` | Emitted straight after `copy`, same payload. Neither fires if the write fails (it logs `console.error`). |
 
 ---
 
 ## Slots
 
-None. Use events to customize feedback behavior.
+None.
 
 ---
 
-## CSS Token Customization
+## Styling
 
-All `--input-copy-*` tokens can be overridden at global, page, or instance scope. See `CONSUMER-STYLING.md` in the component directory for full token documentation and examples.
-
-**Common tokens:**
-- `--input-copy-input-bg` — input field background
-- `--input-copy-input-border` — input field border
-- `--input-copy-button-bg` — copy button background
-- `--input-copy-button-bg-hover` — button background on hover
-- `--input-copy-description-color` — description text color
+Tokens are `--input-copy-*` (layout gap, input, button, description including `--input-copy-description-line-clamp`), defaulting from `--theme-*`. Full list and defaults in `CONSUMER-STYLING.md` next to the component. The root is an inline-size container: below `48rem` of its own width the button shows only its icon.
 
 ---
 
-## Usage Examples
+## Usage examples
 
-### License key display (most common)
+### License key display
 
 ```vue
 <InputCopy
@@ -67,21 +65,20 @@ All `--input-copy-*` tokens can be overridden at global, page, or instance scope
 />
 ```
 
-### API token with custom button text
+### Translated copy
 
 ```vue
 <InputCopy
   :value="apiToken"
-  label="API token"
-  description="Do not share this token with anyone."
-  button-text="Copy token"
-  copied-text="Token copied!"
-  @copy="logCopy"
-  @copied="logCopied"
+  :label="t('account.apiToken.label')"
+  :description="t('account.apiToken.description')"
+  :button-text="t('common.copy')"
+  :copied-text="t('common.copied')"
+  :button-aria-label="t('account.apiToken.copyAriaLabel')"
 />
 ```
 
-### Disabled state (e.g., loading or error)
+### Disabled state
 
 ```vue
 <InputCopy
@@ -93,79 +90,29 @@ All `--input-copy-*` tokens can be overridden at global, page, or instance scope
 />
 ```
 
-### With custom styling via CSS tokens
-
-```vue
-<InputCopy
-  :value="shareLink"
-  label="Share link"
-  description="Share this link with others"
-  style="
-    --input-copy-input-bg: #f0f0f0;
-    --input-copy-button-bg: var(--brand-primary);
-    --input-copy-button-text-color: white;
-  "
-/>
-```
-
-### With page-scoped styling
-
-In your page's `<style>` block:
+### Page-scoped styling
 
 ```css
-.success-page .input-copy {
-  --input-copy-input-border: 2px solid var(--success-color);
-  --input-copy-button-bg: var(--success-color);
-  --input-copy-description-color: var(--slate-06);
+.account-page .input-copy {
+  --input-copy-input-border: 0.2rem solid var(--theme-border);
+  --input-copy-button-bg: var(--theme-surface-inverted);
 }
-```
-
-Then in the template:
-
-```vue
-<div class="success-page">
-  <InputCopy
-    :value="licenseKey"
-    label="Your license key"
-    description="Copy this key to activate the component in your application."
-  />
-</div>
-```
-
-### With toast feedback (consumer-side)
-
-```vue
-<template>
-  <InputCopy
-    :value="apiKey"
-    label="API key"
-    @copied="handleCopied"
-  />
-</template>
-
-<script setup>
-const handleCopied = (value: string) => {
-  // Use your app's toast library
-  useToast().success(`Copied: ${value.slice(0, 8)}...`);
-};
-</script>
 ```
 
 ---
 
 ## Accessibility
 
-- Input always has `aria-label` set from `label` or `aria-label` prop
-- Button has descriptive aria-label: "Copy [label] to clipboard"
-- Button is disabled during the "Copied!" feedback window to prevent repeated clicks
-- Icon-only display on mobile (<480px); text shown on desktop for clarity
-- Readonly input has `readonly` attribute; not editable
+- The input's accessible name comes from `aria-label` or `label`; `description` is linked with `aria-describedby`.
+- The button's accessible name is `buttonAriaLabel`, defaulting to "Copy [label] to clipboard". It's set as `aria-label`, so it overrides the visible label.
+- A visually hidden `role="status"` region announces `copiedText` after a copy (the button's aria-label doesn't change, so screen readers wouldn't otherwise hear it).
+- During the copied state the button is `aria-disabled`, not `disabled`, so keyboard focus stays on it.
+- Visible `:focus-visible` rings on the input and the button.
 
 ---
 
 ## Notes
 
-- **Clipboard API**: Uses native `navigator.clipboard.writeText()`. Fails silently if unavailable (e.g., insecure context).
-- **Button text hide on mobile**: By default, only the copy icon displays on screens <480px. Text appears on desktop (≥480px).
-- **No toast built-in**: This component does not show toasts. Listen to `@copied` event and use your app's toast library for feedback.
-- **Manual reset**: The "Copied!" state automatically resets after `copied-duration` milliseconds. No manual reset needed.
+- **Clipboard API**: uses `navigator.clipboard.writeText()`, which needs a secure context. A failure logs to the console and leaves the resting state.
+- **No toast built-in**: listen to `@copied` and use the app's own toast (e.g. `DisplayToastProvider`).
+- 2026-10-15 migration: raw `<button>` replaced with `InputButton variant="inline"`; new `buttonAriaLabel`, `icon`, `copiedIcon` props; status announcement, `aria-describedby`, copied state via `aria-disabled` instead of `disabled`; theme colour defaults and readable font sizes; container query replaces the 480px viewport media query; `.input-copy__button-text` became InputButton's `.button-text`; StressTest story and `--input-copy-description-line-clamp`.

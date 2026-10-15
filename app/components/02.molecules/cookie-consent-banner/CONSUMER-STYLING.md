@@ -6,6 +6,11 @@ colour, border, radius, padding, accent stripe, icon, title and message sizes, a
 `app/components/02.molecules/alert-content/CONSUMER-STYLING.md`. This guide covers what the banner
 adds: position, motion and the two buttons.
 
+> **Changed 2026-10-15**: the closed state class `.closed` is now `.cookie-consent-banner-closed`,
+> and the buttons are `InputButton`s (`variant="inline"`, so the banner's tokens still style them):
+> each button is `.cookie-consent-banner-accept.input-button` / `.cookie-consent-banner-reject.input-button`
+> with the label in an inner `.button-text`. The button tokens below are unchanged.
+>
 > **Changed 2026-09-27**: rebuilt on `AlertContent`. The banner's own panel tokens
 > (`--cookie-consent-banner-padding`, `-gap`, `-border-radius`, `-border`, `-accent-border-width`,
 > `-background`, `-text-colour`, `-actions-gap`) are gone; use the matching `--alert-content-*`
@@ -41,7 +46,10 @@ adds: position, motion and the two buttons.
 | `--cookie-consent-banner-accept-text-colour` | `var(--theme-on-surface)` | Accept button text |
 
 The gap between the buttons and their alignment (right by default) are `AlertContent`'s
-`--alert-content-actions-gap` and `--alert-content-actions-justify`.
+`--alert-content-actions-gap` and `--alert-content-actions-justify`. Long labels wrap inside the
+buttons (`InputButton`'s `.button-text`), and the buttons wrap onto their own lines when the row is full.
+The label keeps the banner's font size and case: `InputButton`'s `--button-font-size` and
+`--button-text-transform` don't apply here.
 
 Private tokens (not public API): `--_gutter`, `--_transition-duration`, `--_accent` on the root,
 each resolving a public token once for reuse.
@@ -50,11 +58,12 @@ each resolving a public token once for reuse.
 
 - `data-theme` on the root and on the inner `.alert-content`, from the `theme` prop or `app.config`
   (default `info`). It drives every `--theme-*` default, for the panel and the buttons.
-- `.closed` on the root once consent is granted or denied. The banner fades out and becomes
+- `.cookie-consent-banner-closed` on the root once consent is granted or denied. The banner fades out and becomes
   `visibility: hidden`, so its buttons leave the tab order and the accessibility tree.
 - Classes: `.cookie-consent-banner` > `.cookie-consent-banner-inner` (the `role="region"`) >
   `.alert-content` (see its guide for the inner structure); the buttons are
-  `.cookie-consent-banner-reject` and `.cookie-consent-banner-accept` inside `.alert-content-actions`.
+  `InputButton`s with `.cookie-consent-banner-reject` and `.cookie-consent-banner-accept` (plus
+  `.input-button.inline`) inside `.alert-content-actions`.
 - `data-test-id`: `cookie-consent-banner`, `cookie-consent-banner-reject`, `cookie-consent-banner-accept`,
   plus `AlertContent`'s `alert-icon`, `alert-title`, `alert-content`, `alert-actions`.
 
@@ -91,5 +100,5 @@ The pre-2026-09-27 look (white panel, dark text, no tint), scoped to the banner:
 ## Class passthrough
 
 `style-class-passthrough` adds classes to the teleported root `.cookie-consent-banner`, next to
-`data-theme` and `.closed`. It's reachable in normal use and is the most reliable place to set
+`data-theme` and `.cookie-consent-banner-closed`. It's reachable in normal use and is the most reliable place to set
 tokens for this component, since ancestor wrappers don't contain it.

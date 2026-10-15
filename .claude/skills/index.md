@@ -106,7 +106,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── pricing-card.md         — PricingCard: plan card with highlight badge, corner ribbon, feature list, #cta slot, heading-tag, line-clamp tokens
     ├── price-list.md           — PriceList: service/menu price columns (dl rows), PriceListData type, headingTag/fromLabel props, CSS token API
     ├── opening-hours.md        — OpeningHours: per-day data auto-grouped into ranges, split sessions, 24h/appointment, exceptions, Intl formatting, today highlight, JSON-LD, CSS token API
-    ├── input-copy.md           — InputCopy: readonly copy-to-clipboard input, visual feedback, Clipboard API, accessibility, CSS token API
+    ├── input-copy.md           — InputCopy: readonly copy-to-clipboard input with an inline InputButton, copied state + status announcement, translatable labels/icons, container-query icon-only button, --input-copy-* tokens
     ├── banner-video.md         — BannerVideo: full-width hero video banner, depth tier system, objectFit/objectPosition, playIcon/pauseIcon/toggle-icon slot, reduced-motion fallback, CSS tokens
     ├── grid-stack.md           — GridStack: CSS Grid z-axis stacking, slot API, z-order rules, sizing, video+overlay and image+text patterns
     ├── scroll-reveal-frame.md  — ScrollRevealFrame: generic parallax clipping frame, slot API, image grid pattern, public --scroll-reveal-frame-* tokens (props only write them when passed), browser support
@@ -136,7 +136,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── site-header.md            — SiteHeader: PageRow + SkipLinks + ResponsiveHeader composition, #branding/#secondaryNavigation slots, dual styleClassPassthrough hooks
     ├── responsive-header.md      — ResponsiveHeader: overflow-collapsing adaptive nav, measurement-pipeline gotchas (unsized icons, vw font-size drift), full CSS token API
     ├── navigation-items.md       — NavigationItems: internal overflow-panel renderer for ResponsiveHeader, complement-visibility logic, not used standalone
-    ├── cookie-consent-banner.md  — CookieConsentBanner: fixed non-modal Accept/Reject banner built on AlertContent, driven by useCookieConsent; title/message/acceptLabel/rejectLabel slots, icon/showIcon/ariaLabel props, position/button tokens (panel via --alert-content-*), teleported so tokens go on html/passthrough
+    ├── cookie-consent-banner.md  — CookieConsentBanner: fixed non-modal Accept/Reject banner built on AlertContent, driven by useCookieConsent; title/message slots, acceptLabel/rejectLabel/icon/showIcon/ariaLabel props, InputButton (inline) actions, position/button tokens (panel via --alert-content-*), teleported so tokens go on html/passthrough
     ├── display-banner.md         — DisplayBanner: canvas/content stacked overlay banner, conditional slot wrappers, CSS token API
     ├── deep-expanding-menu.md         — DeepExpandingMenu: anchor-positioned popover nav panels, browser support caveat, CSS token API
     ├── deep-expanding-menu-classic.md — DeepExpandingMenuClassic: <details>-based fallback nav, click-outside close, CSS token API

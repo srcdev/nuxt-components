@@ -1,5 +1,5 @@
 <template>
-  <div class="input-copy" :class="elementClasses">
+  <div class="input-copy" :class="[{ 'input-copy-copied': copied }, elementClasses]">
     <div class="input-copy__wrapper">
       <input
         :id="resolvedId"
@@ -8,20 +8,26 @@
         :name="name || resolvedId"
         :value="value"
         :aria-label="ariaLabel || label"
+        :aria-describedby="description ? descriptionId : undefined"
         readonly
       />
-      <button
+      <InputButton
         type="button"
+        variant="inline"
         class="input-copy__button"
-        :aria-label="`Copy ${ariaLabel || label || 'value'} to clipboard`"
-        :disabled="copied || isDisabled"
+        :button-text="copied ? copiedText : buttonText"
+        :aria-label="resolvedButtonAriaLabel"
+        :disabled="isDisabled"
+        :readonly="copied"
         @click="handleCopy"
       >
-        <Icon name="lucide:copy" class="input-copy__icon" />
-        <span class="input-copy__button-text">{{ copied ? copiedText : buttonText }}</span>
-      </button>
+        <template #left>
+          <Icon :name="copied ? copiedIcon : icon" class="input-copy__icon" />
+        </template>
+      </InputButton>
     </div>
-    <p v-if="description" class="input-copy__description">{{ description }}</p>
+    <p v-if="description" :id="descriptionId" class="input-copy__description">{{ description }}</p>
+    <span class="sr-only" role="status">{{ copied ? copiedText : "" }}</span>
   </div>
 </template>
 
@@ -36,6 +42,9 @@ interface Props {
   description?: string;
   buttonText?: string;
   copiedText?: string;
+  buttonAriaLabel?: string;
+  icon?: string;
+  copiedIcon?: string;
   copiedDuration?: number;
   isDisabled?: boolean;
   styleClassPassthrough?: string | string[];
@@ -49,17 +58,23 @@ const props = withDefaults(defineProps<Props>(), {
   description: undefined,
   buttonText: "Copy",
   copiedText: "Copied!",
+  buttonAriaLabel: undefined,
+  icon: "lucide:copy",
+  copiedIcon: "lucide:check",
   copiedDuration: 2000,
   isDisabled: false,
   styleClassPassthrough: () => [],
 });
 
 // Readonly text inputs still need an id/name to satisfy "a form field element should have an
-// id or name attribute" — auto-generated so every existing call site (none of which pass one)
-// gets a valid, unique id for free. Named resolvedId, not id, so it can't be confused with (or
-// silently shadow) the `id` prop it falls back to.
+// id or name attribute", so one is auto-generated when none is passed.
 const autoId = useId();
 const resolvedId = computed(() => props.id ?? autoId);
+const descriptionId = computed(() => `${resolvedId.value}-description`);
+
+const resolvedButtonAriaLabel = computed(
+  () => props.buttonAriaLabel ?? `Copy ${props.ariaLabel || props.label || "value"} to clipboard`
+);
 
 const emit = defineEmits<{
   copy: [value: string];
@@ -95,7 +110,7 @@ watch(
   () => props.styleClassPassthrough,
   () => {
     resetElementClasses(props.styleClassPassthrough);
-  },
+  }
 );
 
 onUnmounted(() => {
@@ -108,95 +123,105 @@ onUnmounted(() => {
 <style lang="css">
 @layer components {
   .input-copy {
-    --_input-border-radius: var(--input-copy-input-border-radius, 0.4rem);
-    --_input-font-size: var(--input-copy-input-font-size, 0.95rem);
+    --_input-font-size: var(--input-copy-input-font-size, var(--step-4));
 
-    --_button-bg-hover: var(
-      --input-copy-button-bg-hover,
-      var(--input-button-primary-surface-hover, var(--theme-surface-hover))
-    );
-    --_button-text-color: var(
-      --input-copy-button-text-color,
-      var(--input-button-primary-text, var(--theme-on-surface))
-    );
-
+    container: input-copy / inline-size;
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
-  }
+    gap: var(--input-copy-gap, 0.8rem);
 
-  .input-copy__wrapper {
-    display: flex;
-    gap: 0.8rem;
-    align-items: stretch;
-  }
-
-  .input-copy__input {
-    flex: 1;
-    min-width: 0;
-
-    padding: var(--input-copy-input-padding, 0.8rem 1rem);
-    background-color: var(--input-copy-input-bg, var(--slate-00));
-    border: var(--input-copy-input-border, 1px solid var(--slate-03));
-    border-radius: var(--_input-border-radius);
-    font-size: var(--_input-font-size);
-    color: var(--input-copy-input-text-color, #333);
-    font-family: inherit;
-
-    &::placeholder {
-      color: var(--input-copy-input-placeholder-color, #999);
+    .input-copy__wrapper {
+      display: flex;
+      gap: var(--input-copy-gap, 0.8rem);
+      align-items: stretch;
     }
 
-    &:focus {
-      outline: 2px solid var(--_input-border-radius);
-      outline-offset: 2px;
-    }
-  }
+    .input-copy__input {
+      flex: 1;
+      min-width: 0;
+      padding: var(--input-copy-input-padding, 0.8rem 1rem);
+      background-color: var(--input-copy-input-bg, var(--theme-input-surface));
+      border: var(--input-copy-input-border, 0.1rem solid var(--theme-border));
+      border-radius: var(--input-copy-input-border-radius, 0.4rem);
+      font-size: var(--_input-font-size);
+      color: var(--input-copy-input-text-color, var(--theme-text));
+      font-family: inherit;
 
-  .input-copy__button {
-    display: flex;
-    align-items: center;
-    gap: var(--input-copy-button-gap, 0.6rem);
-    padding: var(--input-copy-button-padding, 0.8rem 1.2rem);
-
-    background-color: var(--input-copy-button-bg, var(--input-button-primary-surface, var(--theme-surface)));
-    color: var(--_button-text-color);
-    border: none;
-    border-radius: var(--input-copy-button-border-radius, 0.4rem);
-    font-size: var(--_input-font-size);
-    font-weight: 500;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background-color 0.2s ease;
-
-    &:hover:not(:disabled) {
-      background-color: var(--_button-bg-hover);
-    }
-
-    &:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .input-copy__icon {
-      width: 1.2em;
-      height: 1.2em;
-      flex-shrink: 0;
-    }
-
-    .input-copy__button-text {
-      display: none;
-
-      @media (min-width: 480px) {
-        display: inline;
+      &:focus-visible {
+        outline: var(--form-element-outline-width-focus, 0.2rem) solid
+          var(--input-copy-focus-ring, var(--theme-border-focus));
+        outline-offset: var(--form-element-outline-offset-focus, 0.2rem);
       }
     }
-  }
 
-  .input-copy__description {
-    margin: var(--input-copy-description-margin, 0.6rem 0 0 0);
-    font-size: var(--input-copy-description-font-size, 0.85rem);
-    color: var(--input-copy-description-color, #666);
+    .input-copy__button.input-button {
+      flex-shrink: 0;
+      max-inline-size: 50%;
+      box-sizing: border-box;
+      min-height: auto;
+      gap: var(--input-copy-button-gap, 0.6rem);
+      padding: var(--input-copy-button-padding, 0.8rem 1.2rem);
+      background-color: var(--input-copy-button-bg, var(--input-button-primary-surface, var(--theme-surface)));
+      color: var(--input-copy-button-text-color, var(--input-button-primary-text, var(--theme-on-surface)));
+      border: none;
+      border-radius: var(--input-copy-button-border-radius, 0.4rem);
+      font-size: var(--_input-font-size);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      --input-button-text-white-space: normal;
+
+      &:hover:not(:disabled, [aria-disabled="true"]) {
+        background-color: var(
+          --input-copy-button-bg-hover,
+          var(--input-button-primary-surface-hover, var(--theme-surface-hover))
+        );
+      }
+
+      &:focus-visible {
+        outline: var(--form-element-outline-width-focus, 0.2rem) solid
+          var(--input-copy-focus-ring, var(--theme-border-focus));
+        outline-offset: var(--form-element-outline-offset-focus, 0.2rem);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      &[aria-disabled="true"] {
+        cursor: default;
+      }
+
+      .input-copy__icon {
+        width: 1.2em;
+        height: 1.2em;
+        flex-shrink: 0;
+      }
+
+      .button-text {
+        font-size: inherit;
+        text-transform: none;
+      }
+    }
+
+    @container input-copy (width < 48rem) {
+      .input-copy__button.input-button .button-text {
+        display: none;
+      }
+    }
+
+    .input-copy__description {
+      margin: var(--input-copy-description-margin, 0);
+      font-size: var(--input-copy-description-font-size, var(--step-4));
+      color: var(--input-copy-description-color, var(--theme-text));
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      overflow-wrap: anywhere;
+      -webkit-line-clamp: var(--input-copy-description-line-clamp, none);
+      line-clamp: var(--input-copy-description-line-clamp, none);
+    }
   }
 }
 </style>

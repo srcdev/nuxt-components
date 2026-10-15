@@ -18,7 +18,7 @@
 
 ### 2. Render the banner
 
-Pair it with [[cookie-consent-banner]] (`CookieConsentBanner.vue`), registered once in the app's default layout — see that component's skill doc for placement and copy slots.
+Pair it with [[cookie-consent-banner]] (`CookieConsentBanner.vue`), registered once in the app's default layout — see that component's skill doc for placement, copy slots and label props.
 
 ## Composable reference
 

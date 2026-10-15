@@ -2,7 +2,7 @@
   <Teleport to="body">
     <div
       class="cookie-consent-banner"
-      :class="[{ closed: isClosed }, elementClasses]"
+      :class="[{ 'cookie-consent-banner-closed': isClosed }, elementClasses]"
       :data-theme="resolved.theme"
       data-test-id="cookie-consent-banner"
     >
@@ -15,22 +15,22 @@
             <slot name="message">This site uses cookies to understand how it's used. You can accept or reject them.</slot>
           </template>
           <template #actions>
-            <button
+            <InputButton
               type="button"
+              variant="inline"
               class="cookie-consent-banner-reject"
               data-test-id="cookie-consent-banner-reject"
+              :button-text="rejectLabel"
               @click="rejectAll()"
-            >
-              <slot name="rejectLabel">Reject</slot>
-            </button>
-            <button
+            />
+            <InputButton
               type="button"
+              variant="inline"
               class="cookie-consent-banner-accept"
               data-test-id="cookie-consent-banner-accept"
+              :button-text="acceptLabel"
               @click="acceptAll()"
-            >
-              <slot name="acceptLabel">Accept</slot>
-            </button>
+            />
           </template>
         </AlertContent>
       </div>
@@ -44,6 +44,8 @@ import type { CookieConsentBannerProps } from "../../../types/components";
 const props = withDefaults(defineProps<CookieConsentBannerProps>(), {
   theme: undefined,
   ariaLabel: "Cookie consent",
+  acceptLabel: "Accept",
+  rejectLabel: "Reject",
   icon: "material-symbols:cookie-outline",
   showIcon: true,
   styleClassPassthrough: () => [],
@@ -91,7 +93,7 @@ const isClosed = computed(() => status.value !== "unset");
       opacity var(--_transition-duration) ease-in-out,
       visibility var(--_transition-duration);
 
-    &.closed {
+    &.cookie-consent-banner-closed {
       grid-template-rows: 0fr;
       opacity: 0;
       visibility: hidden;
@@ -107,8 +109,10 @@ const isClosed = computed(() => status.value !== "unset");
       overflow: hidden;
     }
 
-    .cookie-consent-banner-reject,
-    .cookie-consent-banner-accept {
+    .cookie-consent-banner-reject.input-button,
+    .cookie-consent-banner-accept.input-button {
+      box-sizing: border-box;
+      min-height: auto;
       padding: var(--cookie-consent-banner-button-padding, 0.8rem 1.6rem);
       border-radius: var(--cookie-consent-banner-button-border-radius, 0.4rem);
       border: 0.1rem solid transparent;
@@ -122,9 +126,14 @@ const isClosed = computed(() => status.value !== "unset");
         outline: 0.2rem solid var(--cookie-consent-banner-focus-ring, var(--theme-border-focus));
         outline-offset: 0.2rem;
       }
+
+      .button-text {
+        font-size: inherit;
+        text-transform: none;
+      }
     }
 
-    .cookie-consent-banner-reject {
+    .cookie-consent-banner-reject.input-button {
       background-color: transparent;
       color: inherit;
       border-color: var(--cookie-consent-banner-reject-border-colour, var(--theme-border));
@@ -135,7 +144,7 @@ const isClosed = computed(() => status.value !== "unset");
       }
     }
 
-    .cookie-consent-banner-accept {
+    .cookie-consent-banner-accept.input-button {
       background-color: var(--cookie-consent-banner-accept-background, var(--_accent));
       color: var(--cookie-consent-banner-accept-text-colour, var(--theme-on-surface));
 

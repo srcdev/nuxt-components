@@ -184,7 +184,7 @@ raw value) chains through it:
 
 ```css
 /* InputCopy's copy button defaults to InputButton's primary look */
---_button-bg: var(--input-copy-button-bg, var(--input-button-primary-surface, var(--theme-surface)));
+background-color: var(--input-copy-button-bg, var(--input-button-primary-surface, var(--theme-surface)));
 ```
 
 Three tiers deep here: instance/global override → "look like the primary button" → the theme

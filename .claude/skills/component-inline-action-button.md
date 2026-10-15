@@ -74,6 +74,37 @@ Target `.my-action-button.input-button` inside the wrapper to override InputButt
 }
 ```
 
-## Real example
+## What `variant="inline"` still brings
 
-`InputCopyCore` — `app/components/forms/input-copy/InputCopyCore.vue`
+`inline` adds no colours, but the base `.input-button` rule and its inner `.button-text` still
+apply. Override what the wrapper doesn't want, on the `.my-action-button.input-button` selector:
+
+- `box-sizing: content-box`: set `border-box` if the button has a `max-inline-size: 100%` or sits
+  in a wrapping flex row, or padding pushes it past its container.
+- `min-height: var(--button-min-height)`: set `auto` to size from your own padding.
+- `grid-auto-flow: column` layout, `overflow: hidden` and a `transition: all` (replace it with
+  your own `transition` list).
+- `.button-text` takes `font-size: var(--button-font-size)` and
+  `text-transform: var(--button-text-transform)`: set `font-size: inherit; text-transform: none`
+  on `& .button-text` to keep the wrapper's type. It already wraps unbroken text
+  (`overflow-wrap: anywhere`, with `white-space` from `--input-button-text-white-space`).
+- The label is the `buttonText` string prop; there's no label slot. A wrapper that had label
+  slots on a raw `<button>` turns them into string props when it switches (a breaking change).
+
+`InputButton` always renders `data-theme` (default `"default"`). That value has no hue rule of
+its own, so the button keeps the parent's `data-theme` palette and `--theme-*` reads inside it
+still follow the wrapper's theme. Don't pass a theme just to keep it in step.
+
+## Temporary "done" states (copied, saved)
+
+When the button briefly blocks repeat clicks after it succeeds, use `InputButton`'s `readonly` prop
+(`aria-disabled` plus a click guard), not `disabled`: disabling the focused button drops keyboard
+focus. Keep `disabled` for a genuinely unavailable control. If the button has an `aria-label`, a
+changed visible label ("Copied!") isn't announced, because the aria-label wins; add a visually hidden
+`role="status"` span carrying the message. `InputCopy` does both (2026-10-15).
+
+## Real examples
+
+- `InputPasswordWithLabel`: `app/components/05.forms/input-text/InputPasswordWithLabel.vue` (show/hide toggle attached to the input)
+- `CookieConsentBanner`: `app/components/02.molecules/cookie-consent-banner/CookieConsentBanner.vue`
+  (standalone Accept/Reject actions, not attached to an input)

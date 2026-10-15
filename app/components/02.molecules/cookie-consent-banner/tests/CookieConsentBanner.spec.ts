@@ -34,6 +34,12 @@ function rejectButton() {
   return document.querySelector("[data-test-id='cookie-consent-banner-reject']") as HTMLElement;
 }
 
+// Vue ignores events stamped at or before its listener's attach time; fake timers freeze both.
+function click(button: HTMLElement) {
+  vi.advanceTimersByTime(1);
+  button.click();
+}
+
 describe("CookieConsentBanner", () => {
   beforeEach(() => {
     statusRef.value = "unset";
@@ -56,15 +62,15 @@ describe("CookieConsentBanner", () => {
     expect(banner()).not.toBeNull();
   });
 
-  it("is visible (no closed class) while status is 'unset'", async () => {
+  it("is visible (no closed state class) while status is 'unset'", async () => {
     await mountSuspended(CookieConsentBanner);
-    expect(banner()!.classList).not.toContain("closed");
+    expect(banner()!.classList).not.toContain("cookie-consent-banner-closed");
   });
 
-  it("adds the closed class once status is no longer 'unset'", async () => {
+  it("adds the cookie-consent-banner-closed class once status is no longer 'unset'", async () => {
     statusRef.value = "granted";
     await mountSuspended(CookieConsentBanner);
-    expect(banner()!.classList).toContain("closed");
+    expect(banner()!.classList).toContain("cookie-consent-banner-closed");
   });
 
   it("defaults to data-theme='info'", async () => {
@@ -94,21 +100,37 @@ describe("CookieConsentBanner", () => {
     expect(banner()!.textContent).toContain("Custom cookie copy");
   });
 
-  it("renders acceptLabel/rejectLabel slot content", async () => {
-    await mountSuspended(CookieConsentBanner, { slots: { acceptLabel: "Yes please", rejectLabel: "No thanks" } });
+  it("renders default button labels", async () => {
+    await mountSuspended(CookieConsentBanner);
+    expect(acceptButton().textContent).toContain("Accept");
+    expect(rejectButton().textContent).toContain("Reject");
+  });
+
+  it("renders acceptLabel/rejectLabel props", async () => {
+    await mountSuspended(CookieConsentBanner, { props: { acceptLabel: "Yes please", rejectLabel: "No thanks" } });
     expect(acceptButton().textContent).toContain("Yes please");
     expect(rejectButton().textContent).toContain("No thanks");
   });
 
+  it("renders both buttons as inline InputButtons", async () => {
+    await mountSuspended(CookieConsentBanner);
+    for (const button of [acceptButton(), rejectButton()]) {
+      expect(button.tagName).toBe("BUTTON");
+      expect(button.getAttribute("type")).toBe("button");
+      expect(button.classList).toContain("input-button");
+      expect(button.classList).toContain("inline");
+    }
+  });
+
   it("calls acceptAll() when the accept button is clicked", async () => {
     await mountSuspended(CookieConsentBanner);
-    acceptButton().click();
+    click(acceptButton());
     expect(acceptAllSpy).toHaveBeenCalledOnce();
   });
 
   it("calls rejectAll() when the reject button is clicked", async () => {
     await mountSuspended(CookieConsentBanner);
-    rejectButton().click();
+    click(rejectButton());
     expect(rejectAllSpy).toHaveBeenCalledOnce();
   });
 
@@ -133,9 +155,9 @@ describe("CookieConsentBanner", () => {
 
   it("closes after a choice is made", async () => {
     await mountSuspended(CookieConsentBanner);
-    rejectButton().click();
+    click(rejectButton());
     await nextTick();
-    expect(banner()!.classList).toContain("closed");
+    expect(banner()!.classList).toContain("cookie-consent-banner-closed");
   });
 
   it("reopens if consent is reset to 'unset'", async () => {
@@ -143,7 +165,7 @@ describe("CookieConsentBanner", () => {
     await mountSuspended(CookieConsentBanner);
     statusRef.value = "unset";
     await nextTick();
-    expect(banner()!.classList).not.toContain("closed");
+    expect(banner()!.classList).not.toContain("cookie-consent-banner-closed");
   });
 
   it("updates classes when styleClassPassthrough changes", async () => {

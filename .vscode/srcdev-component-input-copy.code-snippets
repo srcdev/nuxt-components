@@ -1,28 +1,27 @@
 {
   "SRCDEV InputCopy Basic": {
-    "description": "Basic InputCopy component with value and label",
+    "description": "InputCopy: readonly input with a copy-to-clipboard button",
     "scope": "vue,html",
     "body": [
       "<InputCopy",
-      "  value=\"$1sk_live_abc123xyz\"",
-      "  label=\"$2API key\"",
-      "  description=\"$3Copy this key to authenticate with our API.\"",
-      "  @copy=\"$4handleCopy\"",
+      "  :value=\"${1:licenseKey}\"",
+      "  label=\"${2:License key}\"",
+      "  description=\"${3:Copy this key to activate the component in your application.}\"",
+      "  @copied=\"${4:handleCopied}\"",
       "/>"
     ]
   },
-  "SRCDEV InputCopy License Key": {
-    "description": "InputCopy for displaying a license key on success page",
+  "SRCDEV InputCopy Translated": {
+    "description": "InputCopy with translated copy and accessible names",
     "scope": "vue,html",
     "body": [
       "<InputCopy",
-      "  :value=\"licenseKey\"",
-      "  label=\"License key\"",
-      "  description=\"Your license key is ready to use. Copy it to embed in your application.\"",
-      "  buttonText=\"Copy\"",
-      "  copiedText=\"Copied to clipboard!\"",
-      "  @copy=\"$1handleCopy\"",
-      "  @copied=\"$2showCopiedFeedback\"",
+      "  :value=\"${1:value}\"",
+      "  :label=\"${2:t('account.key.label')}\"",
+      "  :description=\"${3:t('account.key.description')}\"",
+      "  :button-text=\"${4:t('common.copy')}\"",
+      "  :copied-text=\"${5:t('common.copied')}\"",
+      "  :button-aria-label=\"${6:t('account.key.copyAriaLabel')}\"",
       "/>"
     ]
   },
@@ -31,25 +30,10 @@
     "scope": "vue,html",
     "body": [
       "<InputCopy",
-      "  :value=\"$1value\"",
-      "  label=\"$2Label\"",
-      "  :is-disabled=\"true\"",
-      "  :button-text=\"$3Unavailable\"",
-      "/>"
-    ]
-  },
-  "SRCDEV InputCopy in Page": {
-    "description": "InputCopy with custom aria labels",
-    "scope": "vue,html",
-    "body": [
-      "<InputCopy",
-      "  :value=\"$1value\"",
-      "  label=\"$2License key\"",
-      "  aria-label=\"$3Your unique GuideMyHair license identifier\"",
-      "  description=\"$4Keep this key safe. You'll need it to embed the widget.\"",
-      "  button-text=\"$5Copy key\"",
-      "  copied-text=\"$6Key copied!\"",
-      "  @copy=\"$7logCopy\"",
+      "  :value=\"${1:value}\"",
+      "  label=\"${2:Label}\"",
+      "  :is-disabled=\"${3:true}\"",
+      "  button-text=\"${4:Unavailable}\"",
       "/>"
     ]
   },
@@ -57,15 +41,13 @@
     "description": "CSS override scaffold for InputCopy tokens",
     "scope": "css",
     "body": [
-      ".$1success-page {",
-      "  .input-copy {",
-      "    --input-copy-input-bg: $2;",
-      "    --input-copy-input-border: $3;",
-      "    --input-copy-input-border-radius: $4;",
-      "    --input-copy-button-bg: $5;",
-      "    --input-copy-button-bg-hover: $6;",
-      "    --input-copy-button-text-color: $7;",
-      "  }",
+      ".${1:account-page} .input-copy {",
+      "  --input-copy-input-bg: ${2:var(--theme-input-surface)};",
+      "  --input-copy-input-border: ${3:0.1rem solid var(--theme-border)};",
+      "  --input-copy-button-bg: ${4:var(--theme-surface)};",
+      "  --input-copy-button-bg-hover: ${5:var(--theme-surface-hover)};",
+      "  --input-copy-button-text-color: ${6:var(--theme-on-surface)};",
+      "  --input-copy-description-line-clamp: ${7:none};",
       "}"
     ]
   }

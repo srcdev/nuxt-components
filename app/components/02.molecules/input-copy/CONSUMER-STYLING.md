@@ -1,150 +1,108 @@
 # InputCopy — Consumer Styling Guide
 
+A readonly input and a copy button (an `InputButton` with `variant="inline"`, so the tokens below
+style it rather than `InputButton`'s variant colours), with optional description text below.
+
+> **Changed 2026-10-15**: compliance migration.
+>
+> - Colour defaults now come from the theme: input background `--theme-input-surface` (was
+>   `--slate-00`), border `0.1rem solid var(--theme-border)` (was `1px solid var(--slate-03)`), input
+>   and description text `--theme-text` (were `#333` / `#666`). Set the tokens if you relied on the
+>   old greys.
+> - Font sizes were `0.95rem` / `0.85rem` (9.5px / 8.5px on the 10px rem base); both now default to
+>   `var(--step-4)`.
+> - `--input-copy-description-margin` defaults to `0` (was `0.6rem 0 0 0`, doubling up with the
+>   gap); spacing is the new `--input-copy-gap`.
+> - `--input-copy-input-placeholder-color` is gone (the input always has a value). New:
+>   `--input-copy-gap`, `--input-copy-focus-ring`, `--input-copy-description-line-clamp`.
+> - The input's focus outline used the border-radius token as its colour; it's now a real
+>   `:focus-visible` ring from `--input-copy-focus-ring`.
+> - The button label is `InputButton`'s `.button-text` (was `.input-copy__button-text`), and it
+>   hides below 48rem of the **component's** width (a container query), not a 480px viewport.
+
 ## Public token API
 
-All `--input-copy-*` tokens are the stable override surface. Set them at any scope (global, page,
-or instance) without touching the component itself.
+### Layout
 
 | Token | Default | Controls |
 |---|---|---|
-| `--input-copy-input-bg` | `var(--slate-00)` | Input field background colour |
-| `--input-copy-input-border` | `1px solid var(--slate-03)` | Input field border |
-| `--input-copy-input-border-radius` | `0.4rem` | Input field corner rounding |
-| `--input-copy-input-padding` | `0.8rem 1rem` | Input field padding |
-| `--input-copy-input-text-color` | `#333` | Input text colour |
-| `--input-copy-input-placeholder-color` | `#999` | Placeholder text colour |
-| `--input-copy-input-font-size` | `0.95rem` | Input field font size |
-| `--input-copy-button-bg` | `var(--input-button-primary-surface)` | Copy button background |
-| `--input-copy-button-bg-hover` | `var(--input-button-primary-surface-hover)` | Copy button background on hover |
-| `--input-copy-button-text-color` | `var(--input-button-primary-text)` | Copy button text colour |
-| `--input-copy-button-padding` | `0.8rem 1.2rem` | Copy button padding |
-| `--input-copy-button-border-radius` | `0.4rem` | Copy button corner rounding |
-| `--input-copy-button-gap` | `0.6rem` | Gap between icon and text in button |
-| `--input-copy-description-color` | `#666` | Description text colour |
-| `--input-copy-description-font-size` | `0.85rem` | Description font size |
-| `--input-copy-description-margin` | `0.6rem 0 0 0` | Description margin |
+| `--input-copy-gap` | `0.8rem` | Gap between input and button, and above the description |
 
----
+### Input
+
+| Token | Default | Controls |
+|---|---|---|
+| `--input-copy-input-bg` | `var(--theme-input-surface)` | Input background |
+| `--input-copy-input-border` | `0.1rem solid var(--theme-border)` | Input border (shorthand) |
+| `--input-copy-input-border-radius` | `0.4rem` | Input corner radius |
+| `--input-copy-input-padding` | `0.8rem 1rem` | Input padding |
+| `--input-copy-input-text-color` | `var(--theme-text)` | Input text colour |
+| `--input-copy-input-font-size` | `var(--step-4)` | Input and button font size |
+| `--input-copy-focus-ring` | `var(--theme-border-focus)` | `:focus-visible` outline colour on the input and the button |
+
+### Button
+
+| Token | Default | Controls |
+|---|---|---|
+| `--input-copy-button-bg` | `var(--input-button-primary-surface, var(--theme-surface))` | Button background |
+| `--input-copy-button-bg-hover` | `var(--input-button-primary-surface-hover, var(--theme-surface-hover))` | Button background on hover |
+| `--input-copy-button-text-color` | `var(--input-button-primary-text, var(--theme-on-surface))` | Button text and icon colour |
+| `--input-copy-button-padding` | `0.8rem 1.2rem` | Button padding |
+| `--input-copy-button-border-radius` | `0.4rem` | Button corner radius |
+| `--input-copy-button-gap` | `0.6rem` | Gap between icon and label |
+
+### Description
+
+| Token | Default | Controls |
+|---|---|---|
+| `--input-copy-description-color` | `var(--theme-text)` | Description text colour |
+| `--input-copy-description-font-size` | `var(--step-4)` | Description font size |
+| `--input-copy-description-margin` | `0` | Description margin |
+| `--input-copy-description-line-clamp` | `none` | Lines before the description is cut off with an ellipsis (`1` = single line) |
+
+Private tokens (not public API): `--_input-font-size` on the root, the resolved input font size
+shared by the input and the button.
+
+## State hooks
+
+- `.input-copy-copied` on the root for `copiedDuration` ms after a successful copy. The button then
+  has `aria-disabled="true"` (it stays focusable and ignores clicks) and shows `copiedText` and
+  `copiedIcon`.
+- `disabled` on the button when `isDisabled` is set.
+- Classes: `.input-copy` > `.input-copy__wrapper` > `.input-copy__input` and
+  `.input-copy__button` (also `.input-button.inline`, containing `.input-copy__icon` and
+  `.button-text`); then `.input-copy__description` and a visually hidden `role="status"` span.
+- Container: the root is `container: input-copy / inline-size`. Below `48rem` of its own width the
+  button's `.button-text` is hidden and only the icon shows (the button keeps its aria-label).
 
 ## Global theming
 
-Create `assets/styles/setup/07.components/input-copy.css` in the consuming app and set tokens on
-`:root`. These values apply to every `InputCopy` instance across the site.
-
 ```css
-/* assets/styles/setup/07.components/input-copy.css */
-:root {
+:where(html) {
   --input-copy-input-border-radius: 0.6rem;
-  --input-copy-input-padding: 1rem 1.2rem;
   --input-copy-button-border-radius: 0.6rem;
-  --input-copy-button-gap: 0.8rem;
-  --input-copy-description-color: var(--slate-06);
 }
 ```
-
----
 
 ## Local overrides
 
 Set the tokens above on an element you own (a page or section class, or a class added with
 `:style-class-passthrough`): they inherit down into the component. Keep the block **unlayered** (no
 `@layer` wrapper) so it beats the library's `@layer components`. If your own file uses
-`<style scoped>`, tokens set on your element still work, but selectors that reach inside the component need
-`:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
+`<style scoped>`, tokens set on your element still work, but selectors that reach inside the
+component need `:deep()`. Patterns and examples: `.claude/skills/component-local-style-override.md`.
 
-### One instance
+**Caveat:** the button sets `--input-button-text-white-space: normal` on itself so long labels wrap,
+so a value set on an ancestor won't reach it.
 
-Override tokens directly on a single InputCopy instance:
+## Class passthrough
 
-```vue
-<InputCopy
-  value="sk_live_abc123"
-  label="API key"
-  style="
-    --input-copy-input-border-radius: 0.8rem;
-    --input-copy-button-bg: var(--brand-success);
-  "
-/>
-```
+`style-class-passthrough` adds classes to the root `.input-copy`, next to `.input-copy-copied`. It's
+reachable in normal use and is a good place to set tokens for one instance.
 
-### Page or section
+## Notes
 
-When input-copy appears in a specific page context (e.g., checkout success page), scope overrides
-under the page wrapper:
-
-```css
-/* In the consuming page's unscoped <style> block */
-.success-page {
-  .input-copy {
-    --input-copy-input-bg: var(--brand-surface-light);
-    --input-copy-input-border: 2px solid var(--brand-primary);
-    --input-copy-button-bg: var(--brand-primary);
-    --input-copy-button-bg-hover: var(--brand-primary-hover);
-  }
-}
-```
-
----
-
-## License key display pattern
-
-Typical usage on a success page or dashboard to display a license key:
-
-```vue
-<InputCopy
-  :value="licenseKey"
-  label="License key"
-  description="Your license key is ready to use. Copy it and add to your component."
-  buttonText="Copy"
-  copiedText="Copied!"
-  @copied="showFeedback"
-/>
-```
-
-```css
-.success-page {
-  .input-copy {
-    max-width: 500px;
-
-    --input-copy-input-bg: #f9f9f9;
-    --input-copy-input-border: 1px solid var(--slate-02);
-    --input-copy-input-text-color: var(--slate-09);
-  }
-}
-```
-
----
-
-## Readonly input styling
-
-The input field is always readonly to prevent accidental edits. Style it distinctly if needed:
-
-```css
-.input-copy {
-  .input-copy__input {
-    background-color: var(--slate-00);
-    color: var(--slate-09);
-    cursor: default;
-  }
-}
-```
-
----
-
-## Button text visibility on small screens
-
-By default, the button text is hidden on screens < 480px. Override for always-visible text:
-
-```css
-.input-copy__button-text {
-  display: inline !important;
-}
-```
-
-Or show only the icon on mobile and text on desktop (default behavior):
-
-```css
-/* Default: button shows only icon on mobile, icon + text on desktop (480px+) */
-/* No override needed; this is the built-in behavior */
-```
-
+- The root is an inline-size container, so it can't size itself from its content: give it a width
+  from its parent (it fills a block or grid cell; inside a flex row, give it `flex: 1` or a width).
+- The button is capped at half the row (`max-inline-size: 50%`) and its label wraps, so a long
+  translated label can't squeeze the input to nothing.

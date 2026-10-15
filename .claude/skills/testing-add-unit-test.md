@@ -201,6 +201,25 @@ await nextTick();
 vi.runAllTimers();
 ```
 
+### Native clicks are silently dropped under frozen time
+
+Vue's event invoker ignores an event whose timestamp is at or before the moment its listener was
+attached (a guard against an event that triggered the patch also firing the new listener). With
+the clock frozen, a native `button.click()` or `dispatchEvent()` straight after mount carries the
+same timestamp, so the handler never runs and the test fails with "called 0 times". Whether it
+bites depends on render timing: `CookieConsentBanner`'s click tests passed with raw `<button>`s
+and failed once they became `InputButton`s (2026-10-15). Either use test-utils'
+`wrapper.trigger("click")` (which works, including on teleported content via `findComponent`), or
+advance the clock first:
+
+```ts
+// Vue ignores events stamped at or before its listener's attach time; fake timers freeze both.
+function click(button: HTMLElement) {
+  vi.advanceTimersByTime(1);
+  button.click();
+}
+```
+
 ## `mountSuspended` flushes component async setup — initial state may be past the first `await`
 
 `mountSuspended` calls `flushPromises()` internally, draining all pending microtasks including `await nextTick()` calls inside the component's async functions. If a component's async lifecycle starts with `await nextTick()` (e.g. to let a CSS `v-bind` update before beginning a transition), **the component will have already executed past it by the time `mountSuspended` returns**.

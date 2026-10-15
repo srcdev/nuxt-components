@@ -104,7 +104,8 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
    Sample copy in stories, and examples in the skill doc, use placeholders (a name like "Alex
    Morgan", a town like "Northtown"), never a real client's name, town, business or site: the
    stories and docs ship in the public package. **Existing component:** check for, and replace, any
-   copy lifted from a consumer app (`ProfileSection` had both).
+   copy lifted from a consumer app (`ProfileSection` had both), in the stories, the snippet and the
+   skill doc (`InputCopy` had one in a story and one in a snippet).
 6a. **Storybook Controls-panel reactivity** — check every story `Template`/`render` function in
     the component's `stories/*.stories.ts` files for this bug: `@storybook/vue3` mounts the story
     component **once** and, on every Controls-panel change, mutates the same reactive `args`
@@ -167,7 +168,9 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
 7. **Skill doc** — create or update `.claude/skills/components/<component-name>.md`, following the
    pattern of an existing one. A labelled `<Name>Field` wrapper (or any other wrapper) is documented
    in its control's doc under a "Variants" section, not in a doc of its own
-   (`feedback_variants_deprecated_as_own_skill_docs`). **Existing component:** if you find a
+   (`feedback_variants_deprecated_as_own_skill_docs`). **Existing component:** check every
+   behavioural claim (event order and timing, what's disabled when, breakpoints) against the code,
+   not just the props table: `InputCopy`'s doc said `copy` fired before the clipboard write. **Existing component:** if you find a
    `variants/` subfolder, flatten it into the parent folder (`git mv` the `.vue` files plus their
    stories/tests up one level, fix relative imports); `pathPrefix: false` keeps the auto-import
    names unchanged. All existing `variants/` folders were flattened 2026-09-25.
@@ -250,6 +253,9 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
       the edits in private memory. Note that an inline-size container can't size itself from its
       content: say so in `CONSUMER-STYLING.md` (`ProfileSection`).
     - Grid tracks that hold text are `minmax(0, …)` so an unbroken string can't widen the grid.
+    - Action buttons are `InputButton` (`variant="inline"` when the wrapper styles them), not a raw
+      `<button>` (`component-inline-button.md`, `component-inline-action-button.md`). The ledger
+      doesn't check this, which is how `InputCopy` scored 5/5 with one (fixed 2026-10-15).
     - No `:deep()` in the component's `<style>`: these blocks are never scoped, so Vue leaves it
       as-is and the browser drops the whole rule (pitfall #27). Use a descendant selector, or set
       the child component's public tokens on an ancestor.

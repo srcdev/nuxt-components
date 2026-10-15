@@ -1,5 +1,5 @@
 ---
-description: End-of-session retro — bring every consumer-facing doc in line with the code changed since the last release, then propose learnings for skills, rules and memory
+description: End-of-session retro — bring every consumer-facing doc in line with the code changed since the last release, then record learnings in skills, rules and memory
 ---
 
 Run at the end of a long session (or any time) to answer "are the docs up to date?" without being
@@ -86,7 +86,7 @@ node .claude/component-ledger/build.mjs
 and confirm each in-scope component's row is still fully compliant (`score: 5` and every flag
 `false`).
 
-## 2. Learnings (propose, then apply what's approved)
+## 2. Learnings (decide and record)
 
 Look back over the session for things a future session would want to know. Good candidates: a bug
 whose cause wasn't obvious, a correction the user made, a pattern that worked and should be
@@ -104,17 +104,18 @@ Sort each one by where it belongs:
 | `/migrate-component` or `/new-component` | A step those commands should take |
 | Private memory | Anything naming a consumer app, user preferences, pending consumer edits |
 
-Check each destination for an existing entry first and propose an update over a duplicate. Present
-the list with `AskUserQuestion` (`multiSelect: true`), one option per learning, labelled with its
-destination. Write only what's picked. Consumer names and pending consumer-repo edits only ever go
-to private memory.
+Check each destination for an existing entry first and update it rather than adding a duplicate.
+Then write them: decide yourself what's worth keeping and record it, without asking for approval
+first (the user would approve them anyway). Leave out anything trivial or already covered. List what
+you recorded, and where, in the report so the user can strike anything they disagree with. Consumer
+names and pending consumer-repo edits only ever go to private memory.
 
 ## 3. Report
 
 Finish with a short report:
 - components checked, and per component which docs changed (or "up to date");
 - stale references fixed elsewhere;
-- learnings recorded, and where;
+- learnings recorded, and where (one line each, so any can be reverted);
 - anything left undone and why (e.g. consumer-repo edits, which are listed in private memory and
   never applied from here).
 

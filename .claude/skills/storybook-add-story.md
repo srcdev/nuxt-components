@@ -307,6 +307,14 @@ the earlier nightly `@nuxtjs/storybook` didn't render Docs pages at all, so a lo
   },
   ```
 
+- A fixed or teleported overlay (banner, toast, dialog) can't be narrowed by `CanvasSwitcher`: it
+  positions against the viewport and may not even live inside the decorator. Its `StressTest`
+  (compliance checklist item 6b) renders **one** instance, switches between hostile data sets with
+  a story-only select (`stressCase`, category `"Story only"`, description starting
+  `**Story control, not a prop.**`), tells the reader to use Storybook's viewport toolbar for narrow
+  screens, and sets `docs.story: { inline: false }`. `CookieConsentBanner` and `DisplayToast`
+  follow this. A teleported component doesn't inherit a wrapper's `dir`, so wrap RTL slot copy
+  in `<span dir="rtl">`.
 - Opt a file out with `tags: ["!autodocs"]` only when it isn't a component reference (tooling, or
   a file with its own attached `.mdx` page, like `ColourRamps.stories.ts` with `SetupGuide.mdx`).
 

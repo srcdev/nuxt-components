@@ -10,11 +10,13 @@
     "description": "CookieConsentBanner with translated copy and accessible name",
     "scope": "vue,html",
     "body": [
-      "<CookieConsentBanner :aria-label=\"${1:t('global.cookieConsent.ariaLabel')}\">",
-      "  <template #title>{{ ${2:t('global.cookieConsent.title')} }}</template>",
-      "  <template #message>{{ ${3:t('global.cookieConsent.message')} }}</template>",
-      "  <template #acceptLabel>{{ ${4:t('global.cookieConsent.accept')} }}</template>",
-      "  <template #rejectLabel>{{ ${5:t('global.cookieConsent.reject')} }}</template>",
+      "<CookieConsentBanner",
+      "  :aria-label=\"${1:t('global.cookieConsent.ariaLabel')}\"",
+      "  :accept-label=\"${2:t('global.cookieConsent.accept')}\"",
+      "  :reject-label=\"${3:t('global.cookieConsent.reject')}\"",
+      ">",
+      "  <template #title>{{ ${4:t('global.cookieConsent.title')} }}</template>",
+      "  <template #message>{{ ${5:t('global.cookieConsent.message')} }}</template>",
       "</CookieConsentBanner>"
     ]
   },
