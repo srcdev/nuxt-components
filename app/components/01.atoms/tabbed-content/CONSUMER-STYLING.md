@@ -58,6 +58,7 @@ box.
 | `--tabs-underline-indicator-height` | `0.4rem` | Thickness of the underline (`axis="x"`), also its width on `axis="y"` |
 | `--tabs-hover-underline-indicator-colour` | `--tabs-underline-indicator-colour` | Colour of the thin underline/sideline that follows the hovered tab (`trackHover` and `trackIndicator`) |
 | `--tabs-hover-underline-indicator-height` | `0.1rem` | Its thickness; `0` hides it. Sits under the active underline where they overlap |
+| `--tabs-hover-indicator-stretch` | `1` | Stretch of the hover highlight and hover underline as they move: `1` stretches (leading edge first, trailing edge catches up), `0` slides both edges together. Values in between shorten the stretch |
 
 ### More menu (`overflowMode="menu"`, `axis="x"`)
 

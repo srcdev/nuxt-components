@@ -354,8 +354,8 @@ watch(
         --_start: var(--_hovered-start, 0px);
         --_end: var(--_hovered-end, 100%);
         --_duration: var(--_hovered-duration, 0ms);
-        --_start-delay: var(--_hovered-start-delay, 0ms);
-        --_end-delay: var(--_hovered-end-delay, 0ms);
+        --_start-delay: calc(var(--_hovered-start-delay, 0ms) * var(--tabs-hover-indicator-stretch, 1));
+        --_end-delay: calc(var(--_hovered-end-delay, 0ms) * var(--tabs-hover-indicator-stretch, 1));
       }
 
       .tabbed-content-indicator-active,

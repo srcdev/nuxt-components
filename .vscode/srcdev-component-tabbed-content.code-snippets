@@ -58,6 +58,7 @@
       "    --tabs-underline-indicator-height: ;",
       "    --tabs-hover-underline-indicator-colour: ;",
       "    --tabs-hover-underline-indicator-height: ;",
+      "    --tabs-hover-indicator-stretch: ;",
       "    --tabs-list-item-opacity: ;",
       "    --tabs-list-item-colour: ;",
       "    --tabs-list-item-colour-selected: ;",

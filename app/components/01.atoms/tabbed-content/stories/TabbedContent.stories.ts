@@ -219,6 +219,32 @@ export const IndicatorColours: Story = {
   }),
 };
 
+export const HoverWithoutStretch: Story = {
+  name: "Hover Without Stretch",
+  args: { itemCount: 5 },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "--tabs-hover-indicator-stretch: 0 makes the hover highlight slide between tabs instead of stretching across and catching up. Clicking a tab still stretches the active indicator.",
+      },
+    },
+  },
+  render: (args) => ({
+    components: { TabbedContent },
+    setup() {
+      return { args };
+    },
+    template: `
+      <div style="--tabs-hover-indicator-stretch: 0">
+        <TabbedContent v-bind="args">
+          ${tabSlots}
+        </TabbedContent>
+      </div>
+    `,
+  }),
+};
+
 // ─── Stress test ──────────────────────────────────────────────────────────────
 
 const stressTabs = [
