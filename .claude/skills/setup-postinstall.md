@@ -17,7 +17,7 @@ A consumer app's `postinstall` script runs both automatically after every `npm i
 
 ```json
 "scripts": {
-  "setup:claude": "mkdir -p .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components",
+  "setup:claude": "rm -rf .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && mkdir -p .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components",
   "postinstall": "node node_modules/srcdev-nuxt-components/scripts/copy-snippets.mjs && nuxt prepare && npm run setup:claude"
 }
 ```
@@ -49,7 +49,7 @@ From this point on, `npm install` and `npm ci` trigger both steps automatically.
 ## Notes
 
 - **Snippet copy must run in consumer app**: npm doesn't invoke postinstall hooks for dependencies. Each consumer app must explicitly call `scripts/copy-snippets.mjs` in its own postinstall to copy VSCode snippets to `.vscode/`. The layer's postinstall is used when the layer runs standalone, but consumers are responsible for their own `.vscode/` folder.
-- Skills land in `.claude/skills/srcdev-nuxt-components/` and rules in `.claude/rules/srcdev-nuxt-components/` — safe to re-run without overwriting your own project's skills or rules.
+- Skills land in `.claude/skills/srcdev-nuxt-components/` and rules in `.claude/rules/srcdev-nuxt-components/` — safe to re-run. The script deletes and recreates only those two folders, so anything dropped or renamed upstream is removed (a stale rule would otherwise stay loaded forever); your own project's skills and rules are never touched.
 - Only the layer's `.claude/rules/consumer/` set ships. The rest of its rules govern the library's own source (naming, ledger, demo pages) and would be wrong in an app.
 - `postinstall` also fires on `npm ci`, so CI environments get the skills and snippets too if they have a `.claude/` directory in the project.
 - If you do not want `postinstall` running in CI, guard it: `"postinstall": "[ \"$CI\" = \"true\" ] || (node node_modules/srcdev-nuxt-components/scripts/copy-snippets.mjs && nuxt prepare && npm run setup:claude)"`.

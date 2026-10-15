@@ -7,15 +7,15 @@ Step-by-step guides for repeatable development tasks in this project.
 Copy skills into your project with:
 
 ```bash
-cp -r node_modules/srcdev-nuxt-components/.claude/skills .claude/skills/srcdev-nuxt-components
+rm -rf .claude/skills/srcdev-nuxt-components && mkdir -p .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components
 ```
 
-Skills land in `.claude/skills/srcdev-nuxt-components/` — safe to re-run without overwriting your own skills.
+Skills land in `.claude/skills/srcdev-nuxt-components/` — safe to re-run: it replaces only that folder, so skills dropped or renamed upstream are removed and your own skills are never touched.
 
 The layer also ships a curated set of Claude Code rules in `.claude/rules/consumer/`. `npm run setup:claude` (see `setup-postinstall.md`) copies skills and rules together; to copy the rules by hand:
 
 ```bash
-mkdir -p .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components
+rm -rf .claude/rules/srcdev-nuxt-components && mkdir -p .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components
 ```
 
 ## Structure

@@ -246,7 +246,8 @@ See `.claude/skills/storybook-add-font.md` for the step-by-step process to add a
   Rules that also hold in an app extending the layer go in `.claude/rules/consumer/`, the only
   rules folder that ships (`package.json` `files`; `setup:claude` copies it to consumer apps). Keep
   those location-independent: name skills as "skill `x.md` (srcdev-nuxt-components)", not by
-  path, and no CLAUDE.md pitfall numbers or ledger references.
+  path, and no CLAUDE.md pitfall numbers or ledger references. `consumer/srcdev-skills-location.md`
+  (always on, no `paths:`) tells a consumer app where those named skills live.
 - **`.claude/skills/`**: how-to, procedures, decision guides, per-component usage docs.
 - **CLAUDE.md**: project overview and index, not rules.
 

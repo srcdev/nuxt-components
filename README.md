@@ -30,7 +30,7 @@ This package ships Claude Code skills (reference docs for components and develop
 To make them available in your project, add this script to your `package.json`:
 
 ```json
-"setup:claude": "mkdir -p .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components"
+"setup:claude": "rm -rf .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && mkdir -p .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components"
 ```
 
 Then run it after install:
@@ -39,7 +39,7 @@ Then run it after install:
 npm run setup:claude
 ```
 
-Skills are copied into `.claude/skills/srcdev-nuxt-components/` and rules into `.claude/rules/srcdev-nuxt-components/`, so they never conflict with or overwrite your own project's. Re-running the script after a package update is safe.
+Skills are copied into `.claude/skills/srcdev-nuxt-components/` and rules into `.claude/rules/srcdev-nuxt-components/`, so they never conflict with or overwrite your own project's. Re-running the script after a package update is safe: it replaces only those two `srcdev-nuxt-components` folders, so skills and rules dropped or renamed upstream are removed too, and your own skills and rules are never touched.
 
 ### Automate with postinstall (recommended)
 
@@ -47,7 +47,7 @@ To ensure skills are always up to date, VSCode snippets are installed, and `nuxt
 
 ```json
 "scripts": {
-  "setup:claude": "mkdir -p .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components",
+  "setup:claude": "rm -rf .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && mkdir -p .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components",
   "postinstall": "node node_modules/srcdev-nuxt-components/scripts/copy-snippets.mjs && nuxt prepare && npm run setup:claude"
 }
 ```

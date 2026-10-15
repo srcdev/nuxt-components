@@ -44,7 +44,7 @@ to inform the CLAUDE.md and CSS tokens.
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "setup:claude": "mkdir -p .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components",
+    "setup:claude": "rm -rf .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && mkdir -p .claude/skills/srcdev-nuxt-components .claude/rules/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/skills/. .claude/skills/srcdev-nuxt-components && cp -r node_modules/srcdev-nuxt-components/.claude/rules/consumer/. .claude/rules/srcdev-nuxt-components",
     "postinstall": "NUXT_STANDALONE=true nuxt prepare && npm run setup:claude",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
@@ -71,7 +71,9 @@ to inform the CLAUDE.md and CSS tokens.
 
 > **`setup:claude` script**: `mkdir -p` is required — the destination folder won't exist on a
 > fresh clone. The trailing `/.` on the source path copies contents into the destination rather
-> than nesting a `skills` subfolder inside it.
+> than nesting a `skills` subfolder inside it. The leading `rm -rf` clears only the two
+> `srcdev-nuxt-components` folders, so skills and rules dropped or renamed upstream don't linger
+> (a stale rule stays loaded); the app's own `.claude/skills/` and `.claude/rules/` are untouched.
 
 ### 3. Create `nuxt.config.ts`
 
