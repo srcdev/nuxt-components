@@ -1,12 +1,20 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
+import type { VueWrapper } from "@vue/test-utils";
 import StepperList from "../StepperList.vue";
 
+let wrapper: VueWrapper | undefined;
+
 describe("StepperList", () => {
+  afterEach(() => {
+    wrapper?.unmount();
+    wrapper = undefined;
+    vi.restoreAllMocks();
+  });
   // ─── Mount ───────────────────────────────────────────────────────────────
 
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 3 },
     });
     expect(wrapper.vm).toBeTruthy();
@@ -15,21 +23,21 @@ describe("StepperList", () => {
   // ─── Snapshots ───────────────────────────────────────────────────────────
 
   it("renders correct HTML structure (ul, 3 items)", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { tag: "ul", itemCount: 3 },
     });
     expect(wrapper.html()).toMatchSnapshot();
   });
 
   it("renders correct HTML structure (ol, 5 items)", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { tag: "ol", itemCount: 5 },
     });
     expect(wrapper.html()).toMatchSnapshot();
   });
 
   it("renders correct HTML structure with styleClassPassthrough", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: {
         itemCount: 2,
         styleClassPassthrough: ["custom-class", "another-class"],
@@ -39,7 +47,7 @@ describe("StepperList", () => {
   });
 
   it("renders correct HTML structure with indicator slots", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 2 },
       slots: {
         "indicator-0": '<span class="indicator-icon">✓</span>',
@@ -53,21 +61,21 @@ describe("StepperList", () => {
   // ─── Tag rendering ───────────────────────────────────────────────────────
 
   it("renders as <ul> by default", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1 },
     });
     expect(wrapper.element.tagName).toBe("UL");
   });
 
   it("renders as <ul> when tag='ul'", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { tag: "ul", itemCount: 1 },
     });
     expect(wrapper.element.tagName).toBe("UL");
   });
 
   it("renders as <ol> when tag='ol'", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { tag: "ol", itemCount: 1 },
     });
     expect(wrapper.element.tagName).toBe("OL");
@@ -76,23 +84,70 @@ describe("StepperList", () => {
   // ─── Item count ──────────────────────────────────────────────────────────
 
   it("renders the correct number of <li> elements", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 4 },
     });
     expect(wrapper.findAll("li").length).toBe(4);
   });
 
   it("renders zero <li> elements when itemCount is 0", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 0 },
     });
     expect(wrapper.findAll("li").length).toBe(0);
   });
 
+  it("floors a fractional itemCount instead of rendering nothing", async () => {
+    wrapper = await mountSuspended(StepperList, {
+      props: { itemCount: 2.7 },
+    });
+    expect(wrapper.findAll("li").length).toBe(2);
+  });
+
+  it("renders zero <li> elements for a negative itemCount", async () => {
+    wrapper = await mountSuspended(StepperList, {
+      props: { itemCount: -3 },
+    });
+    expect(wrapper.findAll("li").length).toBe(0);
+  });
+
+  it("renders zero <li> elements for a NaN itemCount", async () => {
+    wrapper = await mountSuspended(StepperList, {
+      props: { itemCount: Number.NaN },
+    });
+    expect(wrapper.findAll("li").length).toBe(0);
+  });
+
+  it("updates the number of <li> elements when itemCount changes", async () => {
+    wrapper = await mountSuspended(StepperList, {
+      props: { itemCount: 2 },
+    });
+    await wrapper.setProps({ itemCount: 5 });
+    expect(wrapper.findAll("li").length).toBe(5);
+  });
+
+  // ─── Semantics ───────────────────────────────────────────────────────────
+
+  it("keeps list semantics with role='list' despite list-style: none", async () => {
+    wrapper = await mountSuspended(StepperList, {
+      props: { tag: "ol", itemCount: 1 },
+    });
+    expect(wrapper.attributes("role")).toBe("list");
+  });
+
+  it("wraps each item slot in .stepper-list-content", async () => {
+    wrapper = await mountSuspended(StepperList, {
+      props: { itemCount: 2 },
+      slots: { "item-1": "<span class='second'>Second</span>" },
+    });
+    expect(wrapper.findAll(".stepper-list-item").length).toBe(2);
+    expect(wrapper.findAll(".stepper-list-content")[1]!.find(".second").exists()).toBe(true);
+  });
+
   // ─── Base classes ────────────────────────────────────────────────────────
 
   it("always has the indicator-list class", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1 },
     });
     expect(wrapper.classes()).toContain("stepper-list");
@@ -101,14 +156,14 @@ describe("StepperList", () => {
   // ─── styleClassPassthrough ───────────────────────────────────────────────
 
   it("applies a single styleClassPassthrough string", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1, styleClassPassthrough: "my-class" },
     });
     expect(wrapper.classes()).toContain("my-class");
   });
 
   it("applies multiple styleClassPassthrough classes from an array", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: {
         itemCount: 1,
         styleClassPassthrough: ["class-a", "class-b"],
@@ -119,7 +174,7 @@ describe("StepperList", () => {
   });
 
   it("updates classes when styleClassPassthrough changes after mount", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1, styleClassPassthrough: ["original"] },
     });
     await wrapper.setProps({ styleClassPassthrough: ["updated"] });
@@ -128,7 +183,7 @@ describe("StepperList", () => {
   });
 
   it("renders cleanly with no styleClassPassthrough prop", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1 },
     });
     // Only the base class should be present (and any passthrough-derived ones)
@@ -138,7 +193,7 @@ describe("StepperList", () => {
   // ─── Slot: item-N ────────────────────────────────────────────────────────
 
   it("renders item slot content inside each <li>", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 2 },
       slots: {
         "item-0": "<span>First</span>",
@@ -153,7 +208,7 @@ describe("StepperList", () => {
   // ─── Slot: indicator-N ───────────────────────────────────────────────────
 
   it("adds has-indicator class to <li> when indicator slot is provided", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 3 },
       slots: {
         "indicator-1": '<span class="indicator-icon">★</span>',
@@ -166,7 +221,7 @@ describe("StepperList", () => {
   });
 
   it("renders the custom indicator wrapper when indicator slot is provided", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 2 },
       slots: {
         "indicator-0": '<span class="indicator-icon">✓</span>',
@@ -177,7 +232,7 @@ describe("StepperList", () => {
   });
 
   it("renders the counter wrapper when no indicator slot is provided", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 2 },
     });
     const items = wrapper.findAll("li");
@@ -186,7 +241,7 @@ describe("StepperList", () => {
   });
 
   it("renders indicator slot content inside the custom indicator wrapper", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1 },
       slots: {
         "indicator-0": '<span class="indicator-icon">✓</span>',
@@ -197,7 +252,7 @@ describe("StepperList", () => {
   });
 
   it("only items with indicator slots receive has-indicator; others do not", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 4 },
       slots: {
         "indicator-0": "<span>A</span>",
@@ -214,37 +269,57 @@ describe("StepperList", () => {
   // ─── connected ──────────────────────────────────────────────────────
 
   it("has has-connectors class by default", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1 },
     });
     expect(wrapper.classes()).toContain("has-connectors");
   });
 
   it("has has-connectors class when connected is true", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1, connected: true },
     });
     expect(wrapper.classes()).toContain("has-connectors");
   });
 
   it("does not have has-connectors class when connected is false", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1, connected: false },
     });
     expect(wrapper.classes()).not.toContain("has-connectors");
   });
 
+  it("centres each connector on its measured indicator, not on --_counter-size", async () => {
+    const rect = (left: number, width: number, top: number, height: number) =>
+      ({ left, width, top, height, right: left + width, bottom: top + height, x: left, y: top }) as DOMRect;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (
+      this: HTMLElement
+    ) {
+      if (this.tagName === "LI") return rect(100, 400, this.previousElementSibling ? 80 : 0, 80);
+      return rect(110, 60, this.closest("li")?.previousElementSibling ? 90 : 10, 30);
+    });
+
+    wrapper = await mountSuspended(StepperList, {
+      props: { itemCount: 2 },
+      slots: { "indicator-0": "<span>Wide custom indicator</span>" },
+    });
+    const first = wrapper.findAll("li")[0]!.element as HTMLElement;
+    expect(first.style.getPropertyValue("--_connector-left")).toBe("40px");
+    expect(first.style.getPropertyValue("--_connector-top")).toBe("40px");
+    expect(first.style.getPropertyValue("--_connector-height")).toBe("50px");
+  });
+
   // ─── indicatorAlignment ───────────────────────────────────────────────────
 
   it("applies indicator-top class by default", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1 },
     });
     expect(wrapper.find("li")?.classes()).toContain("indicator-top");
   });
 
   it("applies indicator-center class when indicatorAlignment is center", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1, indicatorAlignment: "center" },
     });
     expect(wrapper.find("li")?.classes()).toContain("indicator-center");
@@ -253,21 +328,21 @@ describe("StepperList", () => {
   // ─── indicatorVariant ─────────────────────────────────────────────────────
 
   it("applies indicator-disc class by default", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1 },
     });
     expect(wrapper.find("li")?.classes()).toContain("indicator-disc");
   });
 
   it("applies indicator-circle class when indicatorVariant is circle", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1, indicatorVariant: "circle" },
     });
     expect(wrapper.find("li")?.classes()).toContain("indicator-circle");
   });
 
   it("applies indicator-square class when indicatorVariant is square", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1, indicatorVariant: "square" },
     });
     expect(wrapper.find("li")?.classes()).toContain("indicator-square");
@@ -276,7 +351,7 @@ describe("StepperList", () => {
   // ─── indicatorSize ────────────────────────────────────────────────────────
 
   it("defaults indicatorSize to 3rem", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1 },
     });
     const style = (wrapper.element as HTMLElement).style;
@@ -284,14 +359,14 @@ describe("StepperList", () => {
   });
 
   it("accepts a custom indicatorSize prop without error", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 1, indicatorSize: "5rem" },
     });
     expect(wrapper.vm).toBeTruthy();
   });
 
   it("renders correct HTML structure with custom indicatorSize", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: { itemCount: 2, indicatorSize: "4rem" },
     });
     expect(wrapper.html()).toMatchSnapshot();
@@ -300,7 +375,7 @@ describe("StepperList", () => {
   // ─── Combined props ───────────────────────────────────────────────────────
 
   it("renders correctly with all props and slots combined", async () => {
-    const wrapper = await mountSuspended(StepperList, {
+    wrapper = await mountSuspended(StepperList, {
       props: {
         tag: "ol",
         itemCount: 3,

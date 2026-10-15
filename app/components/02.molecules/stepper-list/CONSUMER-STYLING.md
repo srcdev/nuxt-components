@@ -15,12 +15,14 @@ file, scoped to a page wrapper, or per-instance via `styleClassPassthrough`.
 | `--stepper-list-counter-font-size` | `1.4rem` | Counter number font size |
 | `--stepper-list-counter-font-weight` | `600` | Counter number font weight |
 | `--stepper-list-connector-width` | `0.2rem` | Connector line thickness |
+| `--stepper-list-connector-gap` | `0` | Space between each end of the connector line and the indicators it joins. A gap larger than half the space between two indicators hides that line |
 
 ### Colours
 
 | Token | Default | Controls |
 |---|---|---|
 | `--stepper-list-connector-color` | `currentColor` | Connector line colour |
+| `--stepper-list-connector-image` | `none` | Image painted over the connector colour, e.g. a `repeating-linear-gradient()` for a dashed or dotted line (set the colour to `transparent` underneath) |
 | `--stepper-list-icon-color` | `currentColor` | Icon colour for custom `indicator-icon` elements |
 
 ### Circle indicator
@@ -58,8 +60,8 @@ The defaults above are the component's own fallbacks. The library's default them
 > reads, so custom indicator icons fell back to `currentColor`. It now sets
 > `--stepper-list-icon-color`.
 
-Private (not public API): `--_gap`, `--_counter-size` and `--_padding-block`, plus `--_connector-top` and
-`--_connector-height`, which script measures and sets inline on each `<li>`.
+Private (not public API): `--_counter-size` and `--_padding-block`, plus `--_connector-left`,
+`--_connector-top` and `--_connector-height`, which script measures and sets inline on each `<li>`.
 
 ---
 
@@ -72,8 +74,14 @@ Private (not public API): `--_gap`, `--_counter-size` and `--_padding-block`, pl
 | `.indicator-top`, `.indicator-center` | `<li>` | `indicator-alignment` |
 | `.indicator-disc`, `.indicator-square`, `.indicator-circle` | `<li>` | `indicator-variant` |
 
-Inner classes: `.stepper-list__indicator-counter` (auto-numbered bubble) or
-`.stepper-list__indicator-custom` (wraps a custom `indicator-{n}` slot).
+Inner classes: `.stepper-list-item` (each `<li>`), `.stepper-list__indicator-counter`
+(auto-numbered bubble) or `.stepper-list__indicator-custom` (wraps a custom `indicator-{n}` slot),
+and `.stepper-list-content` (wraps the `item-{n}` slot).
+
+> Changed 2026-10-15: `<li>` gained `.stepper-list-item` and the content wrapper gained
+> `.stepper-list-content` (it had no class). The content column is now `minmax(0, 1fr)` with
+> `overflow-wrap: anywhere`, so an unbroken string or long URL wraps instead of widening the list.
+> The root carries `role="list"`, since `list-style: none` drops list semantics in Safari.
 
 ---
 
@@ -156,6 +164,29 @@ visual style, pass a modifier class:
 
 ---
 
+## Recipe: per-step states and dashed connectors
+
+The component has no "done / current / upcoming" prop. Put a state class on the content you pass
+to each `#indicator-{n}` slot, then set tokens on the matching `.stepper-list-item` with `:has()`.
+Each connector belongs to the item above it, so it takes that item's state.
+
+```css
+.onboarding-steps {
+  --stepper-list-connector-color: transparent;
+  --stepper-list-connector-image: repeating-linear-gradient(to bottom, #3a3d45 0 0.2rem, transparent 0.2rem 0.6rem);
+
+  .stepper-list-item:has(.step-marker.is-done) {
+    --stepper-list-connector-image: repeating-linear-gradient(to bottom, #00c8d7 0 0.4rem, transparent 0.4rem 0.7rem);
+  }
+}
+```
+
+Shapes such as diamonds go in the indicator slot (a rotated square). The connector is centred on
+whatever the slot renders, so it needs no adjustment. The "Timeline (styled demo)" story shows the
+full pattern.
+
+---
+
 ## Class passthrough
 
 `style-class-passthrough` adds classes to the root `<ul>`/`<ol>`. Tokens set on a passthrough class
@@ -168,10 +199,11 @@ land for the whole list. Reactive after mount.
 - `--stepper-list-counter-size` takes precedence over the `indicatorSize` prop. Use the prop
   for programmatic/template control; use the CSS token for pure-CSS theme overrides.
 - The connector line is positioned by JS (`ResizeObserver`) on each `<li>` as
-  `--_connector-top` and `--_connector-height`. These are internal — do not set them.
+  `--_connector-left`, `--_connector-top` and `--_connector-height`, centred on the measured
+  indicator, so it lines up under a custom indicator wider than `--stepper-list-counter-size`.
+  These are internal — do not set them.
 - `--stepper-list-connector-color` defaults to `currentColor`, inheriting from the nearest
   ancestor's text colour. Set it explicitly when that behaviour is undesirable.
 - All border tokens (`--stepper-list-counter-*-border`) control the **colour** only — the
   border is always `2px solid`. Override the border shorthand directly on `.stepper-list li
   .stepper-list__indicator-counter::before` if you need a different width.
-

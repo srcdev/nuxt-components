@@ -44,6 +44,7 @@ comm -13 /tmp/retro-code /tmp/retro-doc   # documented, gone from code
 Read the result with judgement. Tokens owned by another component (`--eyebrow-text-*`), global
 theme tokens (`--theme-*`, `--colour-*`) and tokens documented as a scale shorthand
 (`-xs` / `-s` / `-md`) show up as false positives. Then check by eye:
+
 - each default in the doc matches the fallback in the code;
 - the private `--_` token list matches the code;
 - state hooks (`data-*` attributes, inner class names) match the template;
@@ -113,10 +114,13 @@ names and pending consumer-repo edits only ever go to private memory.
 ## 3. Report
 
 Finish with a short report:
+
 - components checked, and per component which docs changed (or "up to date");
 - stale references fixed elsewhere;
 - learnings recorded, and where (one line each, so any can be reverted);
 - anything left undone and why (e.g. consumer-repo edits, which are listed in private memory and
-  never applied from here).
+  never applied from here). A gap in an in-scope component's own files (its spec, stories,
+  snippet, docs) doesn't belong here: fix it before reporting. Only decisions for the user and
+  consumer-repo edits stay open.
 
 Mention that `/create-commit-message` will pick the doc changes up with the code.

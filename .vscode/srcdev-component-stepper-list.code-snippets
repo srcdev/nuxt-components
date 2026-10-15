@@ -31,8 +31,9 @@
       ".$1my-page {",
       "  --stepper-list-gap: $2;",
       "  --stepper-list-connector-color: $3;",
-      "  --stepper-list-counter-disc-background: $4;",
-      "  --stepper-list-counter-disc-text: $5;",
+      "  --stepper-list-connector-gap: $4;",
+      "  --stepper-list-counter-disc-background: $5;",
+      "  --stepper-list-counter-disc-text: $6;",
       "}"
     ]
   }

@@ -99,7 +99,10 @@ measured layout, per indicator (`active` / `hovered`): `--_{kind}-start` / `--_{
 insets from the bar's start and end along the axis), `--_{kind}-duration`,
 `--_{kind}-start-delay` / `--_{kind}-end-delay`; each indicator reads them through its own
 `--_start` / `--_end` / `--_duration` / `--_start-delay` / `--_end-delay`. Not public API; use the
-`transitionDuration` prop for indicator speed (one edge moves for that long, then the other).
+`transitionDuration` prop for indicator speed (one edge moves for that long, then the other), and
+`--tabs-hover-indicator-stretch` to turn the hover stretch off. The More menu also uses
+`--_anchor-name` (a per-instance anchor name) and the `--_anchor-*` position values
+`useAnchoredPopover` writes for browsers without CSS anchor positioning.
 
 > **Changed 2026-10-08**: indicators were a bar-wide box moved with `translate` and sized with
 > `scale` (`--_x-*`, `--_width-*`, `--_y-*`, a shared `--_transition-duration`), with a timer

@@ -20,6 +20,7 @@
 | … | … |
 
 **Rules:**
+
 - Slots are always **zero-indexed**: first item = `item-0`, last item = `item-{itemCount - 1}`.
 - `item-{n}` slots are required if you want content in each row.
 - `indicator-{n}` slots are **optional**. When omitted, a CSS counter bubble is rendered automatically. When provided, the custom content replaces the counter entirely — the CSS counter is hidden for that item only.
@@ -32,7 +33,7 @@
 
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `itemCount` | `number` | — | **Required.** Controls how many `<li>` elements are rendered and which slots exist. |
+| `itemCount` | `number` | — | **Required.** Controls how many `<li>` elements are rendered and which slots exist. Floored to a whole number; negative or `NaN` renders no rows. |
 | `tag` | `"ul" \| "ol"` | `"ul"` | Use `"ol"` for sequentially meaningful content (recipes, instructions). |
 | `indicatorAlignment` | `"top" \| "center"` | `"top"` | Vertical alignment of the indicator relative to each item's content. `"center"` suits single-line items; `"top"` suits multi-line content. |
 | `indicatorVariant` | `"disc" \| "circle" \| "square"` | `"disc"` | Visual style of the auto-generated counter bubble. |
@@ -160,12 +161,14 @@ for full examples (global theming, page-scoped, and per-instance overrides).
 | `--stepper-list-counter-font-size` | `1.4rem` | Counter number font size |
 | `--stepper-list-counter-font-weight` | `600` | Counter number font weight |
 | `--stepper-list-connector-width` | `0.2rem` | Connector line thickness |
+| `--stepper-list-connector-gap` | `0` | Space between each end of the connector line and its indicators |
 
 ### Colours
 
 | Token | Default | Controls |
 |---|---|---|
 | `--stepper-list-connector-color` | `currentColor` | Connector line colour |
+| `--stepper-list-connector-image` | `none` | Image over the connector colour, e.g. a `repeating-linear-gradient()` for a dashed line |
 | `--stepper-list-icon-color` | `currentColor` | Icon colour for custom `indicator-icon` elements |
 
 ### Per-variant tokens
@@ -190,7 +193,7 @@ for full examples (global theming, page-scoped, and per-instance overrides).
 ## Connector behaviour
 
 - Connectors are drawn as `::after` pseudo-elements on each `<li>` except the last.
-- JS (`ResizeObserver`) measures the bottom of each indicator and the top of the next to set `--_connector-top` and `--_connector-height` precisely, keeping the line flush between bubbles regardless of content height.
+- JS (`ResizeObserver`) measures the bottom of each indicator and the top of the next to set `--_connector-top` and `--_connector-height` precisely, keeping the line flush between bubbles regardless of content height. It also sets `--_connector-left` to the indicator's measured centre, so the line stays centred under a custom indicator wider than the counter bubble (before JS runs it falls back to half of `--_counter-size`).
 - Before JS runs (SSR / initial paint), CSS fallback values approximate the correct position for `indicatorAlignment="top"`.
 - If `connected="false"`, no connectors are rendered and JS measurement is skipped.
 - Connectors recalculate automatically when `itemCount`, `connected`, or `indicatorAlignment` props change.
@@ -222,6 +225,7 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
     /* --stepper-list-counter-font-size: 1.4rem; */
     /* --stepper-list-counter-font-weight: 600; */
     /* --stepper-list-connector-width: 0.2rem; */
+    /* --stepper-list-connector-gap: 0.6rem; */
 
     /* Counter bubble — disc variant */
     /* --stepper-list-counter-disc-background: var(--brand-primary); */
@@ -246,6 +250,7 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 
     /* Connector line */
     /* --stepper-list-connector-color: var(--brand-primary); */
+    /* --stepper-list-connector-image: repeating-linear-gradient(to bottom, currentColor 0 0.4rem, transparent 0.4rem 0.8rem); */
   }
 }
 </style>
@@ -258,4 +263,6 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 - Always keep `itemCount` in sync with the number of `#item-*` slots you provide — mismatches will render empty `<li>` rows.
 - Slot names are **zero-indexed** — `#item-0` not `#item-1`.
 - The `indicator-icon` class is defined inside the component CSS and sizes the SVG to `var(--_counter-size)` (driven by `indicatorSize` or `--stepper-list-counter-size`). Always add it to custom SVGs.
+- Markup: root `<ul>`/`<ol>` with `role="list"` (Safari drops list semantics under `list-style: none`), each row `li.stepper-list-item`, content in `.stepper-list-content`. The content column is `minmax(0, 1fr)` with `overflow-wrap: anywhere`, so long unbroken strings wrap.
+- Used by `ServiceDetail` for its process steps (circle variant, `tag="ol"`, item count from CMS data).
 - Auto-imported in Nuxt — no manual import needed.

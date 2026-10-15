@@ -2,13 +2,15 @@
   <component
     :is="tag"
     ref="listEl"
+    role="list"
     class="stepper-list"
     :class="[elementClasses, { 'has-connectors': props.connected }]"
   >
     <li
-      v-for="index in itemCount"
+      v-for="index in itemTotal"
       :key="index"
       :class="[
+        'stepper-list-item',
         { 'has-indicator': $slots[`indicator-${index - 1}`] },
         `indicator-${props.indicatorAlignment}`,
         `indicator-${props.indicatorVariant}`,
@@ -19,7 +21,7 @@
       >
         <slot :name="`indicator-${index - 1}`"></slot>
       </div>
-      <div>
+      <div class="stepper-list-content">
         <slot :name="`item-${index - 1}`"></slot>
       </div>
     </li>
@@ -53,6 +55,8 @@ watch(
   () => resetElementClasses(props.styleClassPassthrough)
 );
 
+const itemTotal = computed(() => Math.max(0, Math.floor(Number(props.itemCount)) || 0));
+
 const listEl = ref<HTMLElement | null>(null);
 let resizeObserver: ResizeObserver | null = null;
 
@@ -76,7 +80,8 @@ function updateConnectors() {
     const indicatorRect = indicator.getBoundingClientRect();
     const nextIndicatorRect = nextIndicator.getBoundingClientRect();
 
-    li.style.setProperty("--_connector-top", `${indicatorRect.bottom - liRect.top}px`);
+    li.style.setProperty("--_connector-left", `${indicatorRect.left - liRect.left + indicatorRect.width / 2}px`);
+    li.style.setProperty("--_connector-top",`${indicatorRect.bottom - liRect.top}px`);
     li.style.setProperty("--_connector-height", `${Math.max(0, nextIndicatorRect.top - indicatorRect.bottom)}px`);
   });
 }
@@ -94,7 +99,7 @@ onBeforeUnmount(() => {
 });
 
 watch(
-  () => [props.itemCount, props.connected, props.indicatorAlignment],
+  () => [itemTotal.value, props.connected, props.indicatorAlignment],
   async () => {
     await nextTick();
     updateConnectors();
@@ -107,7 +112,6 @@ watch(
   .stepper-list {
     /* Layout */
     --_padding-block: var(--stepper-list-padding-block, 1.2rem);
-    --_gap: var(--stepper-list-gap, 2.2rem);
     --_counter-size: var(--stepper-list-counter-size, v-bind(indicatorSize));
 
     list-style: none;
@@ -116,8 +120,8 @@ watch(
 
     li {
       display: grid;
-      grid-template-columns: auto 1fr;
-      gap: var(--_gap);
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: var(--stepper-list-gap, 2.2rem);
       counter-increment: stepper-list;
       padding-inline-start: 0rem;
       padding-block: var(--_padding-block);
@@ -163,13 +167,8 @@ watch(
         border-radius: var(--stepper-list-counter-square-border-radius, 0.25rem);
       }
 
-      &.has-indicator::before {
-        display: none;
-      }
-
-      .stepper-list__indicator-custom,
-      .stepper-list__indicator-counter {
-        anchor-name: --indicator-bubble;
+      .stepper-list-content {
+        overflow-wrap: anywhere;
       }
 
       .stepper-list__indicator-custom {
@@ -189,15 +188,17 @@ watch(
   .stepper-list.has-connectors li:not(:last-child)::after {
     content: "";
     position: absolute;
-    left: calc(var(--_counter-size) / 2);
+    left: var(--_connector-left, calc(var(--_counter-size) / 2));
     transform: translateX(-50%);
-    /* JS sets --_connector-top and --_connector-height from measured indicator positions.
-     The fallback values handle the indicator-top case before JS runs. */
+    /* JS sets --_connector-left, --_connector-top and --_connector-height from measured indicator
+     positions. The fallback values handle the indicator-top case before JS runs. */
     top: var(--_connector-top, calc(var(--_padding-block) + var(--_counter-size)));
     height: var(--_connector-height, auto);
     bottom: calc(-1 * var(--_padding-block));
     width: var(--stepper-list-connector-width, 0.2rem);
+    clip-path: inset(var(--stepper-list-connector-gap, 0) 0);
     background-color: var(--stepper-list-connector-color, currentColor);
+    background-image: var(--stepper-list-connector-image, none);
   }
 }
 </style>

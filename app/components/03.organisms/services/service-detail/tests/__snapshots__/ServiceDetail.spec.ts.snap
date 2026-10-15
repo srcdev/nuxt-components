@@ -37,22 +37,22 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
         <h2 class="hero-text mb-20 subheading axis-horizontal">
           <!--v-if--><span class="text-block-0 normal">The Process</span>
         </h2>
-        <ol class="stepper-list has-connectors service-detail__process">
-          <li class="indicator-top indicator-circle" style="--_connector-top: 0px; --_connector-height: 0px;">
+        <ol role="list" class="stepper-list has-connectors service-detail__process">
+          <li class="stepper-list-item indicator-top indicator-circle" style="--_connector-left: 0px; --_connector-top: 0px; --_connector-height: 0px;">
             <div class="stepper-list__indicator-counter"></div>
-            <div>
+            <div class="stepper-list-content">
               <p class="page-body-normal">Consultation</p>
             </div>
           </li>
-          <li class="indicator-top indicator-circle" style="--_connector-top: 0px; --_connector-height: 0px;">
+          <li class="stepper-list-item indicator-top indicator-circle" style="--_connector-left: 0px; --_connector-top: 0px; --_connector-height: 0px;">
             <div class="stepper-list__indicator-counter"></div>
-            <div>
+            <div class="stepper-list-content">
               <p class="page-body-normal">Sectioning</p>
             </div>
           </li>
-          <li class="indicator-top indicator-circle">
+          <li class="stepper-list-item indicator-top indicator-circle">
             <div class="stepper-list__indicator-counter"></div>
-            <div>
+            <div class="stepper-list-content">
               <p class="page-body-normal">Painting</p>
             </div>
           </li>

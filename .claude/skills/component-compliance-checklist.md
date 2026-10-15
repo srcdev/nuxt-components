@@ -130,7 +130,10 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
       number of items
     - emoji (including at the start of anything that takes initials or first letters), HTML-like
       text (must render as text), right-to-left text
-    - out-of-range or odd numbers (0, negative, above the maximum, fractional, very large)
+    - out-of-range or odd numbers (0, negative, above the maximum, fractional, very large). A
+      count prop used as a `v-for` range (`itemCount`) needs flooring and clamping in a
+      `computed()`: Vue renders nothing for a fractional or negative range and only warns in dev
+      (`StepperList`, 2026-10-15)
     - broken image or link URLs
     Describe what to check in the story's docs description, and look at it at every
     `CanvasSwitcher` width. Fixes usually mean `overflow-wrap: anywhere`, `min-inline-size: 0` on
@@ -179,6 +182,8 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
 9. **Accessibility** — check for gaps beyond what already-passing tests would catch:
    - Interactive controls (buttons, toggles, custom form-like widgets) have an accessible name —
      visible text, `aria-label`, or `aria-labelledby`.
+   - A `<ul>`/`<ol>` styled with `list-style: none` gets `role="list"`, or Safari/VoiceOver stops
+     announcing it as a list (`StepperList`, 2026-10-15).
    - Keyboard behaviour matches what's actually implemented — no keydown case that only calls
      `event.preventDefault()` with a comment like "could add this later", and no screen-reader
      copy (visible or `sr-only`) that describes an interaction the component doesn't actually

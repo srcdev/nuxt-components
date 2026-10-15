@@ -130,6 +130,12 @@ items. Skip an item only when it genuinely doesn't apply, and say why briefly.
   new util even though `nuxt typecheck` (which regenerates its own types) passes. A running Storybook keeps its startup component scan, so
   a renamed component silently renders as an empty unknown element there, while Vitest (fresh Nuxt
   each run) still passes.
+- Before summarizing, fix anything you noticed in the component's own files that you were about
+  to call a follow-up: a spec that breaks a test rule (`test-mounting.md`), a stale story, a doc
+  gap, a lint warning. "Pre-existing" or "needs the whole file restructured" isn't a reason to
+  leave it. Only defer what needs the user's decision (deleting or retiring something) or a
+  consumer-repo edit. StepperList's spec cleanup was listed as a follow-up on 2026-10-15 and had to
+  be done afterwards anyway.
 - Summarize what changed and what you deliberately skipped (with reasons).
 - Don't stage, commit, or push — that's the user's call. Mention that running
   `/create-commit-message` next will trigger the Component Ledger refresh automatically via the

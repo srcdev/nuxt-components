@@ -4,22 +4,22 @@ exports[`ContactSection > renders correct HTML structure with default props 1`] 
 "<div class="contact-section">
   <div class="contact-section-inner">
     <div class="contact-section-info">
-      <ul class="stepper-list">
-        <li class="has-indicator indicator-top indicator-disc">
+      <ul role="list" class="stepper-list">
+        <li class="stepper-list-item has-indicator indicator-top indicator-disc">
           <div class="stepper-list__indicator-custom"></div>
-          <div>
+          <div class="stepper-list-content">
             <p class="page-body-normal">Default slot content for item 1</p>
           </div>
         </li>
-        <li class="has-indicator indicator-top indicator-disc">
+        <li class="stepper-list-item has-indicator indicator-top indicator-disc">
           <div class="stepper-list__indicator-custom"></div>
-          <div>
+          <div class="stepper-list-content">
             <p class="page-body-normal">Default slot content for item 2</p>
           </div>
         </li>
-        <li class="has-indicator indicator-top indicator-disc">
+        <li class="stepper-list-item has-indicator indicator-top indicator-disc">
           <div class="stepper-list__indicator-custom"></div>
-          <div>
+          <div class="stepper-list-content">
             <p class="page-body-normal">Default slot content for item 3</p>
           </div>
         </li>
@@ -34,22 +34,22 @@ exports[`ContactSection > renders correct HTML structure with form slot 1`] = `
 "<div class="contact-section">
   <div class="contact-section-inner">
     <div class="contact-section-info">
-      <ul class="stepper-list">
-        <li class="has-indicator indicator-top indicator-disc">
+      <ul role="list" class="stepper-list">
+        <li class="stepper-list-item has-indicator indicator-top indicator-disc">
           <div class="stepper-list__indicator-custom"></div>
-          <div>
+          <div class="stepper-list-content">
             <p class="page-body-normal">Default slot content for item 1</p>
           </div>
         </li>
-        <li class="has-indicator indicator-top indicator-disc">
+        <li class="stepper-list-item has-indicator indicator-top indicator-disc">
           <div class="stepper-list__indicator-custom"></div>
-          <div>
+          <div class="stepper-list-content">
             <p class="page-body-normal">Default slot content for item 2</p>
           </div>
         </li>
-        <li class="has-indicator indicator-top indicator-disc">
+        <li class="stepper-list-item has-indicator indicator-top indicator-disc">
           <div class="stepper-list__indicator-custom"></div>
-          <div>
+          <div class="stepper-list-content">
             <p class="page-body-normal">Default slot content for item 3</p>
           </div>
         </li>
@@ -66,22 +66,22 @@ exports[`ContactSection > renders correct HTML structure with styleClassPassthro
 "<div class="contact-section custom-class another-class">
   <div class="contact-section-inner">
     <div class="contact-section-info">
-      <ul class="stepper-list">
-        <li class="has-indicator indicator-top indicator-disc">
+      <ul role="list" class="stepper-list">
+        <li class="stepper-list-item has-indicator indicator-top indicator-disc">
           <div class="stepper-list__indicator-custom"></div>
-          <div>
+          <div class="stepper-list-content">
             <p class="page-body-normal">Default slot content for item 1</p>
           </div>
         </li>
-        <li class="has-indicator indicator-top indicator-disc">
+        <li class="stepper-list-item has-indicator indicator-top indicator-disc">
           <div class="stepper-list__indicator-custom"></div>
-          <div>
+          <div class="stepper-list-content">
             <p class="page-body-normal">Default slot content for item 2</p>
           </div>
         </li>
-        <li class="has-indicator indicator-top indicator-disc">
+        <li class="stepper-list-item has-indicator indicator-top indicator-disc">
           <div class="stepper-list__indicator-custom"></div>
-          <div>
+          <div class="stepper-list-content">
             <p class="page-body-normal">Default slot content for item 3</p>
           </div>
         </li>
@@ -96,18 +96,18 @@ exports[`ContactSection > renders correctly with all props and slots combined 1`
 "<section class="contact-section combined-class">
   <div class="contact-section-inner">
     <div class="contact-section-info">
-      <ul class="stepper-list">
-        <li class="has-indicator indicator-top indicator-disc">
+      <ul role="list" class="stepper-list">
+        <li class="stepper-list-item has-indicator indicator-top indicator-disc">
           <div class="stepper-list__indicator-custom"><span class="icon">✓</span></div>
-          <div><span>Step one</span></div>
+          <div class="stepper-list-content"><span>Step one</span></div>
         </li>
-        <li class="has-indicator indicator-top indicator-disc">
+        <li class="stepper-list-item has-indicator indicator-top indicator-disc">
           <div class="stepper-list__indicator-custom"></div>
-          <div><span>Step two</span></div>
+          <div class="stepper-list-content"><span>Step two</span></div>
         </li>
-        <li class="has-indicator indicator-top indicator-disc">
+        <li class="stepper-list-item has-indicator indicator-top indicator-disc">
           <div class="stepper-list__indicator-custom"></div>
-          <div><span>Step three</span></div>
+          <div class="stepper-list-content"><span>Step three</span></div>
         </li>
       </ul>
     </div>
