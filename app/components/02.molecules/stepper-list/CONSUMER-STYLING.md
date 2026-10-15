@@ -198,10 +198,13 @@ land for the whole list. Reactive after mount.
 
 - `--stepper-list-counter-size` takes precedence over the `indicatorSize` prop. Use the prop
   for programmatic/template control; use the CSS token for pure-CSS theme overrides.
-- The connector line is positioned by JS (`ResizeObserver`) on each `<li>` as
-  `--_connector-left`, `--_connector-top` and `--_connector-height`, centred on the measured
-  indicator, so it lines up under a custom indicator wider than `--stepper-list-counter-size`.
-  These are internal — do not set them.
+- The connector line is positioned by JS on each `<li>` as `--_connector-left`,
+  `--_connector-top` and `--_connector-height`, centred on the measured indicator, so it lines up
+  under a custom indicator wider than `--stepper-list-counter-size`. These are internal — do not
+  set them. They are re-measured when the list or any item resizes, and when a `class` or the
+  content changes inside the list, so per-step state styling (the recipe above) keeps the lines
+  in place. A change made only through an inline `style` attribute isn't seen; toggle a class
+  instead.
 - `--stepper-list-connector-color` defaults to `currentColor`, inheriting from the nearest
   ancestor's text colour. Set it explicitly when that behaviour is undesirable.
 - All border tokens (`--stepper-list-counter-*-border`) control the **colour** only — the

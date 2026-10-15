@@ -4,10 +4,9 @@ import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
 // Links in the canvas open in the Storybook manager (target="_top"), not inside the preview iframe.
 const storyNoteStyle = "margin: 0 0 1.6rem; font-size: 1.4rem;";
-const serviceDetailNote = `
+const parentStoriesNote = `
   <p style="${storyNoteStyle}">
-    ServiceDetail renders its process steps as a circle-variant StepperList fed from CMS data: open the
-    <a href="/?path=/story/organisms-services-service-detail--default" target="_top">ServiceDetail</a> story.
+    StepperList in real use: ServiceDetail renders its process steps from CMS data (<a href="/?path=/story/organisms-services-service-detail--default" target="_top">ServiceDetail</a> story), and ProgressTracker adds done, current and upcoming states, a progress header and a focus card (<a href="/?path=/story/molecules-progresstracker--default" target="_top">ProgressTracker</a> story).
   </p>
 `;
 
@@ -18,7 +17,7 @@ const meta: Meta<typeof StepperList> = {
     docs: {
       description: {
         component:
-          "A list of steps, each with an indicator and a content area. `itemCount` sets how many rows render; fill them with the zero-indexed `#item-{n}` slots. Each row shows an auto-numbered counter bubble (`indicatorVariant`: disc, circle or square; `indicatorSize`) unless an `#indicator-{n}` slot replaces it. `connected` draws a line between indicators. Used by [ServiceDetail](?path=/story/organisms-services-service-detail--default) for its process steps.",
+          "A list of steps, each with an indicator and a content area. `itemCount` sets how many rows render; fill them with the zero-indexed `#item-{n}` slots. Each row shows an auto-numbered counter bubble (`indicatorVariant`: disc, circle or square; `indicatorSize`) unless an `#indicator-{n}` slot replaces it. `connected` draws a line between indicators. Used by [ServiceDetail](?path=/story/organisms-services-service-detail--default) for its process steps and by [ProgressTracker](?path=/story/molecules-progresstracker--default), which adds step states, a progress header and a focus card.",
       },
     },
   },
@@ -84,7 +83,7 @@ export const Default: Story = {
       return { args };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Plan your project goals and define what success looks like</p></template>
         <template #item-1><p class="page-body-normal">Set up your development environment</p></template>
@@ -109,7 +108,7 @@ export const OrderedList: Story = {
       return { args };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Preheat the oven to 180°C</p></template>
         <template #item-1><p class="page-body-normal">Sift together the flour, baking powder, and a pinch of salt into a large bowl</p></template>
@@ -135,7 +134,7 @@ export const WithCustomIndicators: Story = {
       return { args };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <StepperList v-bind="args">
         <template #indicator-0>
           <svg class="indicator-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -190,7 +189,7 @@ export const MixedIndicators: Story = {
       return { args };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <StepperList v-bind="args">
         <template #indicator-0>
           <svg class="indicator-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -230,7 +229,7 @@ export const AlignmentCenter: Story = {
       return { args };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Connect your data source</p></template>
         <template #item-1><p class="page-body-normal">Configure sync settings</p></template>
@@ -284,7 +283,7 @@ export const ConnectorGap: StoryObj<ConnectorGapArgs> = {
       return { componentArgs, tokenStyles };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <div :style="tokenStyles">
         <StepperList v-bind="componentArgs">
           <template #item-0><p class="page-body-normal">Connect your data source</p></template>
@@ -312,7 +311,7 @@ export const VariantDisc: Story = {
       return { args };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Research and define requirements with stakeholders</p></template>
         <template #item-1><p class="page-body-normal">Wireframe key user journeys</p></template>
@@ -338,7 +337,7 @@ export const VariantCircle: Story = {
       return { args };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Research and define requirements with stakeholders</p></template>
         <template #item-1><p class="page-body-normal">Wireframe key user journeys</p></template>
@@ -364,7 +363,7 @@ export const VariantSquare: Story = {
       return { args };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Research and define requirements with stakeholders</p></template>
         <template #item-1><p class="page-body-normal">Wireframe key user journeys</p></template>
@@ -392,7 +391,7 @@ export const CustomIndicatorSize: Story = {
       return { args };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">Create your account</p></template>
         <template #item-1><p class="page-body-normal">Verify your email and complete your profile with a photo, bio, and preferred contact details</p></template>
@@ -416,7 +415,7 @@ export const RichContent: Story = {
       return { args };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <StepperList v-bind="args">
         <template #item-0>
           <div>
@@ -465,7 +464,7 @@ export const SingleItem: Story = {
       return { args };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">The only item</p></template>
       </StepperList>
@@ -483,7 +482,7 @@ export const Empty: Story = {
     setup() {
       return { args };
     },
-    template: `${serviceDetailNote}<StepperList v-bind="args" />`,
+    template: `${parentStoriesNote}<StepperList v-bind="args" />`,
   }),
 };
 
@@ -499,7 +498,7 @@ export const WithStyleClassPassthrough: Story = {
       return { args };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <StepperList v-bind="args">
         <template #item-0><p class="page-body-normal">First item</p></template>
         <template #item-1><p class="page-body-normal">Second item</p></template>
@@ -637,7 +636,7 @@ export const TimelineDemo: Story = {
       return { args, timelineSteps, timelineStateLabels, timelineCss };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <div class="stepper-timeline-demo">
         <component :is="'style'">{{ timelineCss }}</component>
         <StepperList v-bind="args">
@@ -685,7 +684,7 @@ export const StressTest: Story = {
       return { args, unbroken, longGerman, longUrl };
     },
     template: `
-      ${serviceDetailNote}
+      ${parentStoriesNote}
       <div style="max-inline-size: 48rem;">
         <StepperList v-bind="args">
           <template #item-0><p class="page-body-normal">{{ unbroken }}</p></template>

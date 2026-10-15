@@ -258,6 +258,9 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
       the edits in private memory. Note that an inline-size container can't size itself from its
       content: say so in `CONSUMER-STYLING.md` (`ProfileSection`).
     - Grid tracks that hold text are `minmax(0, …)` so an unbroken string can't widen the grid.
+    - Layout measured in script (connector lines, indicators) re-measures when any measured item
+      resizes or changes class, not only when the container resizes (`measured-layout-observers.md`,
+      pitfall #28).
     - Action buttons are `InputButton` (`variant="inline"` when the wrapper styles them), not a raw
       `<button>` (`component-inline-button.md`, `component-inline-action-button.md`). The ledger
       doesn't check this, which is how `InputCopy` scored 5/5 with one (fixed 2026-10-15).

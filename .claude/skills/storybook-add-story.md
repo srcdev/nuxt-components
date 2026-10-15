@@ -242,6 +242,12 @@ export default meta;
 type Story = StoryObj<typeof ComponentName>; // ← still strict for individual stories
 ```
 
+When the story assigns a model arg itself (a button doing `args.modelValue = index + 1`, a wizard's
+Back/Continue), a type built from `InstanceType<typeof C>["$props"]` fails `vue-tsc` with "Cannot
+assign to 'modelValue' because it is a read-only property". Re-declare it writable:
+`Omit<InstanceType<typeof C>["$props"], "modelValue"> & { modelValue: number; ... }`
+(`ProgressTracker.stories.ts`).
+
 Strip extra args before `v-bind` using a `useStorySetup` helper in `setup()`:
 
 ```ts

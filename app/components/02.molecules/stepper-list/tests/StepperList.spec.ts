@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
+import { nextTick } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import type { VueWrapper } from "@vue/test-utils";
 import StepperList from "../StepperList.vue";
@@ -307,6 +308,57 @@ describe("StepperList", () => {
     expect(first.style.getPropertyValue("--_connector-left")).toBe("40px");
     expect(first.style.getPropertyValue("--_connector-top")).toBe("40px");
     expect(first.style.getPropertyValue("--_connector-height")).toBe("50px");
+  });
+
+  it("re-measures connectors when a class changes inside the list, even if nothing resizes", async () => {
+    let secondIndicatorTop = 90;
+    const rect = (top: number, height: number) =>
+      ({ left: 100, width: 30, top, height, right: 130, bottom: top + height, x: 100, y: top }) as DOMRect;
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (this: HTMLElement) {
+      if (this.tagName === "LI") return rect(this.previousElementSibling ? 80 : 0, 80);
+      return this.closest("li")?.previousElementSibling ? rect(secondIndicatorTop, 30) : rect(10, 30);
+    });
+
+    wrapper = await mountSuspended(StepperList, {
+      props: { itemCount: 2 },
+      slots: { "indicator-1": "<span class='marker'>2</span>" },
+    });
+    const first = wrapper.findAll("li")[0]!.element as HTMLElement;
+    expect(first.style.getPropertyValue("--_connector-height")).toBe("50px");
+
+    secondIndicatorTop = 120;
+    wrapper.find(".marker").element.classList.add("is-current");
+    await Promise.resolve();
+    expect(first.style.getPropertyValue("--_connector-height")).toBe("80px");
+  });
+
+  it("observes every item for size changes, not only the list", async () => {
+    const observed: Element[] = [];
+    const originalResizeObserver = globalThis.ResizeObserver;
+    vi.stubGlobal(
+      "ResizeObserver",
+      class {
+        observe(el: Element) {
+          observed.push(el);
+        }
+        disconnect() {
+          observed.length = 0;
+        }
+        unobserve() {}
+      }
+    );
+
+    try {
+      wrapper = await mountSuspended(StepperList, { props: { itemCount: 3 } });
+      expect(observed.filter((el) => el.tagName === "LI")).toHaveLength(3);
+      expect(observed).toContain(wrapper.element);
+
+      await wrapper.setProps({ itemCount: 4 });
+      await nextTick();
+      expect(observed.filter((el) => el.tagName === "LI")).toHaveLength(4);
+    } finally {
+      vi.stubGlobal("ResizeObserver", originalResizeObserver);
+    }
   });
 
   // ─── indicatorAlignment ───────────────────────────────────────────────────

@@ -86,22 +86,44 @@ function updateConnectors() {
   });
 }
 
+let mutationObserver: MutationObserver | null = null;
+
+// Items can resize or restyle without the list changing size (e.g. a card moving from one step to the next).
+function observeItems() {
+  if (!resizeObserver || !listEl.value) return;
+  resizeObserver.disconnect();
+  resizeObserver.observe(listEl.value);
+  listEl.value.querySelectorAll(":scope > li").forEach((li) => resizeObserver?.observe(li));
+}
+
 onMounted(() => {
   updateConnectors();
-  if (typeof ResizeObserver !== "undefined" && listEl.value) {
+  if (!listEl.value) return;
+  if (typeof ResizeObserver !== "undefined") {
     resizeObserver = new ResizeObserver(updateConnectors);
-    resizeObserver.observe(listEl.value);
+    observeItems();
+  }
+  if (typeof MutationObserver !== "undefined") {
+    mutationObserver = new MutationObserver(updateConnectors);
+    mutationObserver.observe(listEl.value, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+      attributeFilter: ["class"],
+    });
   }
 });
 
 onBeforeUnmount(() => {
   resizeObserver?.disconnect();
+  mutationObserver?.disconnect();
 });
 
 watch(
   () => [itemTotal.value, props.connected, props.indicatorAlignment],
   async () => {
     await nextTick();
+    observeItems();
     updateConnectors();
   }
 );

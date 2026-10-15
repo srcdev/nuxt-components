@@ -124,6 +124,12 @@ blank page; `05.forms/input-number/` is the reference for a control + Field pair
 so each acceptance criterion's test is recognisable (e.g. `it("closes on Escape")` for "Escape
 closes it"), without putting AC numbers in the repo.
 
+If the new component composes an existing one, update that component's docs in the same change: its
+stories' "used by" note and meta description (`storybook-add-story.md`, "Link to the stories of
+components that use this one") and its skill doc's "Used by" line. Also re-check its behaviour under
+the new parent's usage: ProgressTracker restyling StepperList's items exposed stale connector
+measurement (pitfall #28).
+
 ## 5. Work the checklist
 
 Work through every item in `.claude/skills/component-compliance-checklist.md` as a build spec.

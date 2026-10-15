@@ -196,7 +196,7 @@ for full examples (global theming, page-scoped, and per-instance overrides).
 - JS (`ResizeObserver`) measures the bottom of each indicator and the top of the next to set `--_connector-top` and `--_connector-height` precisely, keeping the line flush between bubbles regardless of content height. It also sets `--_connector-left` to the indicator's measured centre, so the line stays centred under a custom indicator wider than the counter bubble (before JS runs it falls back to half of `--_counter-size`).
 - Before JS runs (SSR / initial paint), CSS fallback values approximate the correct position for `indicatorAlignment="top"`.
 - If `connected="false"`, no connectors are rendered and JS measurement is skipped.
-- Connectors recalculate automatically when `itemCount`, `connected`, or `indicatorAlignment` props change.
+- Connectors recalculate when `itemCount`, `connected` or `indicatorAlignment` change, when the list or any `<li>` resizes (a `ResizeObserver` on the list and every item), and when a `class` attribute or child nodes change anywhere inside the list (a `MutationObserver`). The last two cover a consumer restyling a step without the list changing size, e.g. ProgressTracker moving its focus card from one step to the next. Inline `style` changes are not watched, since the connector values themselves are written there.
 
 ---
 
@@ -264,5 +264,5 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 - Slot names are **zero-indexed** — `#item-0` not `#item-1`.
 - The `indicator-icon` class is defined inside the component CSS and sizes the SVG to `var(--_counter-size)` (driven by `indicatorSize` or `--stepper-list-counter-size`). Always add it to custom SVGs.
 - Markup: root `<ul>`/`<ol>` with `role="list"` (Safari drops list semantics under `list-style: none`), each row `li.stepper-list-item`, content in `.stepper-list-content`. The content column is `minmax(0, 1fr)` with `overflow-wrap: anywhere`, so long unbroken strings wrap.
-- Used by `ServiceDetail` for its process steps (circle variant, `tag="ol"`, item count from CMS data).
+- Used by `ServiceDetail` for its process steps (circle variant, `tag="ol"`, item count from CMS data) and by `ProgressTracker`, which fills the indicator and item slots with done/current/upcoming states (skill `progress-tracker.md`).
 - Auto-imported in Nuxt — no manual import needed.
