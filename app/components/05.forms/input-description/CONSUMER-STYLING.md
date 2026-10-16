@@ -2,7 +2,7 @@
 
 `InputDescription` is the help text rendered between the label and the control by every `*Field`
 wrapper (`InputTextField`, `InputNumberField`, `InputSelectField`,
-`InputTextareaWithLabel`, `InputRangeField`, `InputTextAsNumberField`, `SingleCheckbox`,
+`InputTextareaField`, `InputRangeField`, `InputTextAsNumberField`, `SingleCheckbox`,
 `MultipleCheckboxes`, `MultipleRadiobuttons`) when you pass it a `descriptionText` or
 `descriptionHtml` slot. With neither slot it renders nothing.
 

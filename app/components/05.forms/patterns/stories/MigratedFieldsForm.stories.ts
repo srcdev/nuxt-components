@@ -6,7 +6,7 @@ import InputTextAsNumberField from "../../input-text/InputTextAsNumberField.vue"
 import InputRangeField from "../../input-range/InputRangeField.vue";
 import InputNumberField from "../../input-number/InputNumberField.vue";
 import InputOtpField from "../../input-otp/InputOtpField.vue";
-import InputTextareaWithLabel from "../../input-textarea/InputTextareaWithLabel.vue";
+import InputTextareaField from "../../input-textarea/InputTextareaField.vue";
 import InputSelectField from "../../input-select/InputSelectField.vue";
 import ToggleSwitchWithLabel from "../../toggle-switch/ToggleSwitchWithLabel.vue";
 import ToggleSwitchWithLabelInline from "../../toggle-switch/ToggleSwitchWithLabelInline.vue";
@@ -30,7 +30,7 @@ interface MigratedFieldsFormStoryArgs {
 // - Own field: InputTextField (InputText; plus one per type/inputmode pair for checking
 //   on-device keyboards), InputPasswordField,
 //   InputTextAsNumberField, InputRangeField (InputRange), InputNumberField
-//   (InputNumber), InputOtpField (InputOtp), InputTextareaWithLabel (InputTextareaCore), InputSelectField
+//   (InputNumber), InputOtpField (InputOtp), InputTextareaField (InputTextarea), InputSelectField
 //   (InputSelect), ToggleSwitchWithLabel and ToggleSwitchWithLabelInline (ToggleSwitchCore),
 //   MultipleCheckboxes, SingleCheckbox, MultipleRadiobuttons, TripleToggleSwitch ("Theme
 //   preference": no Field wrapper or error state, so it sits under a plain caption).
@@ -66,7 +66,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     InputRangeField,
     InputNumberField,
     InputOtpField,
-    InputTextareaWithLabel,
+    InputTextareaField,
     InputSelectField,
     ToggleSwitchWithLabel,
     ToggleSwitchWithLabelInline,
@@ -357,7 +357,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
-            <InputTextareaWithLabel
+            <InputTextareaField
               v-model="state.notes"
               name="notes"
               label="Notes"

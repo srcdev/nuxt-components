@@ -128,8 +128,8 @@ Tracks progress toward a fully migrated component library. A component is consid
 | InputTextField | `input-text/InputTextField.vue` | ☐ | ☐ |
 | InputTextAsNumberField | `input-text/InputTextAsNumberField.vue` | ☐ | ☐ |
 | InputPasswordField | `input-text/InputPasswordField.vue` | ☐ | ☐ |
-| InputTextareaCore | `input-textarea/InputTextareaCore.vue` | ☐ | ☐ |
-| InputTextareaWithLabel | `input-textarea/InputTextareaWithLabel.vue` | ☐ | ☐ |
+| InputTextarea | `input-textarea/InputTextarea.vue` | ☐ | ☐ |
+| InputTextareaField | `input-textarea/InputTextareaField.vue` | ☐ | ☐ |
 | InputCopyCore | `input-copy/InputCopyCore.vue` | ☐ | ☐ |
 
 ### Select & Number

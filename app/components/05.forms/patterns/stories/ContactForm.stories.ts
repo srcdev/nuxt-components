@@ -2,7 +2,7 @@ import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { reactive, ref } from "vue";
 import InputTextField from "../../input-text/InputTextField.vue";
 import InputSelectField from "../../input-select/InputSelectField.vue";
-import InputTextareaWithLabel from "../../input-textarea/InputTextareaWithLabel.vue";
+import InputTextareaField from "../../input-textarea/InputTextareaField.vue";
 import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
 import InputButton from "../../input-button/InputButton.vue";
 import FormField from "../../form-field/FormField.vue";
@@ -38,7 +38,7 @@ const Template: StoryFn<ContactFormStoryArgs> = (args) => ({
   components: {
     InputTextField,
     InputSelectField,
-    InputTextareaWithLabel,
+    InputTextareaField,
     MultipleCheckboxes,
     InputButton,
     FormField,
@@ -160,7 +160,7 @@ const Template: StoryFn<ContactFormStoryArgs> = (args) => ({
         </FormField>
 
         <FormField width="wide" :has-gutter="false">
-          <InputTextareaWithLabel
+          <InputTextareaField
             v-model="state.comments"
             name="comments"
             label="Comments"
@@ -169,7 +169,7 @@ const Template: StoryFn<ContactFormStoryArgs> = (args) => ({
             :input-variant="args.inputVariant"
           >
             <template #descriptionText>Optional — any extra information that might help us.</template>
-          </InputTextareaWithLabel>
+          </InputTextareaField>
         </FormField>
 
         <FormField width="wide" :has-gutter="false">

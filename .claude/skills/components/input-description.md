@@ -3,7 +3,7 @@
 ## Overview
 
 `InputDescription` renders a form field's help text. Every `*Field` wrapper in `05.forms`
-(`InputTextField`, `InputNumberField`, `InputSelectField`, `InputTextareaWithLabel`,
+(`InputTextField`, `InputNumberField`, `InputSelectField`, `InputTextareaField`,
 `InputRangeField`, `InputTextAsNumberField`, `SingleCheckbox`, `MultipleCheckboxes`,
 `MultipleRadiobuttons`) already renders one and forwards its own `descriptionText` /
 `descriptionHtml` slots into it, so consumers normally just pass those slots to the wrapper:
@@ -54,7 +54,7 @@ otherwise `InputDescription` sees an (empty) slot and renders an empty element:
 
 - It's a plain description, not a live region: link it with `aria-describedby` on the control
   (`useAriaDescribedById` does this in every wrapper).
-- `InputTextField`, `InputSelectField` and `InputTextareaWithLabel` render it **after**
+- `InputTextField`, `InputSelectField` and `InputTextareaField` render it **after**
   the control for the `outlined` variant and before it otherwise; both positions carry the same id.
 
 ---
@@ -83,7 +83,7 @@ look, zero the slot margins and space it with the root margins (example in CONSU
   a slot only when its own consumer supplied it.
 - `InputTextField` and `InputSelectField` rendered the description **twice** for the
   `outlined` variant (before and after the control); the first copy now has
-  `v-if="inputVariant !== 'outlined'"`, matching `InputTextareaWithLabel`.
+  `v-if="inputVariant !== 'outlined'"`, matching `InputTextareaField`.
 - The outlined-variant copies had no `description-id`, so the control's `aria-describedby`
   pointed at an id that didn't exist. They now pass it.
 - Removed props that were never read: `id` (a leftover from a commented-out id computation) and

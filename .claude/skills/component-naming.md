@@ -85,8 +85,8 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | ~~InputTextAsNumberWithLabel~~ | ✅ `InputTextAsNumberField` (2026-10-16) | - |
 | ~~InputRangeCore~~ | ✅ `InputRange` (2026-10-16) | - |
 | ~~InputRangeDefault~~ | ✅ `InputRangeField` (2026-10-16) | - |
-| InputTextareaCore | `InputTextarea` | - |
-| InputTextareaWithLabel | `InputTextareaField` | yes |
+| ~~InputTextareaCore~~ | ✅ `InputTextarea` (2026-10-16) | - |
+| ~~InputTextareaWithLabel~~ | ✅ `InputTextareaField` (2026-10-16) | yes |
 | ~~InputSelectCore~~ | ✅ `InputSelect` (2026-10-16) | yes |
 | ~~InputSelectWithLabel~~ | ✅ `InputSelectField` (2026-10-16) | yes |
 | ToggleSwitchCore | `ToggleSwitch` | yes |

@@ -4,7 +4,7 @@
 
 `InputLabel` renders a form field's `<label>`. Every labelled wrapper in `05.forms`
 (`InputTextField`, `InputTextAsNumberField`, `InputNumberField`, `InputSelectField`,
-`InputTextareaWithLabel`, `InputRangeField`, `ToggleSwitchWithLabel`,
+`InputTextareaField`, `InputRangeField`, `ToggleSwitchWithLabel`,
 `ToggleSwitchWithLabelInline`) already renders one from its `label` prop, so consumers normally
 never use it directly.
 
@@ -62,7 +62,7 @@ export default defineAppConfig({
 - `"required"` mode: a marker on fields with `required`; `"optional"` mode: a marker on fields
   without it; `"none"`: nothing (default, so existing sites are unchanged).
 - `InputTextField`, `InputTextAsNumberField`, `InputNumberField`, `InputSelectField`,
-  `InputTextareaWithLabel` and `InputRangeField` forward `:required`.
+  `InputTextareaField` and `InputRangeField` forward `:required`.
   `ToggleSwitchWithLabel`/`ToggleSwitchWithLabelInline` pass `indicator="none"`: a switch always
   has a value, so neither marker means anything there.
 - The wrappers don't expose the indicator props per field; use `app.config`.

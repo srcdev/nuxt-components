@@ -2,7 +2,7 @@
 
 `InputLabel` is the `<label>` rendered by every labelled field wrapper (`InputTextField`,
 `InputTextAsNumberField`, `InputNumberField`, `InputSelectField`,
-`InputTextareaWithLabel`, `InputRangeField`, `ToggleSwitchWithLabel`,
+`InputTextareaField`, `InputRangeField`, `ToggleSwitchWithLabel`,
 `ToggleSwitchWithLabelInline`).
 
 ## Public token API
