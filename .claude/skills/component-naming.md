@@ -79,10 +79,10 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 |---------|----------|-----------|
 | ~~InputNumberCore~~ | ✅ `InputNumber` (2026-09-25) | - |
 | ~~InputNumberDefault~~ | ✅ `InputNumberField` (2026-09-25) | - |
-| InputTextCore | `InputText` | yes |
-| InputTextWithLabel | `InputTextField` | yes |
-| InputPasswordWithLabel | `InputPasswordField` | yes |
-| InputTextAsNumberWithLabel | `InputTextAsNumberField` | - |
+| ~~InputTextCore~~ | ✅ `InputText` (2026-10-16) | yes |
+| ~~InputTextWithLabel~~ | ✅ `InputTextField` (2026-10-16) | yes |
+| ~~InputPasswordWithLabel~~ | ✅ `InputPasswordField` (2026-10-16) | yes |
+| ~~InputTextAsNumberWithLabel~~ | ✅ `InputTextAsNumberField` (2026-10-16) | - |
 | ~~InputRangeCore~~ | ✅ `InputRange` (2026-10-16) | - |
 | ~~InputRangeDefault~~ | ✅ `InputRangeField` (2026-10-16) | - |
 | InputTextareaCore | `InputTextarea` | - |

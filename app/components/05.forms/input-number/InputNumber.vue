@@ -100,8 +100,8 @@ const inputmode = computed(() => {
 
     /* Public --input-number-* tokens, inline-fallback to the shared --theme-* tokens (see
      theming-component-token-pattern.md) — overriding one here doesn't touch every other themed
-     input/control that also reads --theme-input-surface/--theme-border. Mirrors InputTextCore's
-     token shape so a native number input and the text-based InputTextAsNumberWithLabel variant
+     input/control that also reads --theme-input-surface/--theme-border. Mirrors InputText's
+     token shape so a native number input and the text-based InputTextAsNumberField variant
      look and behave the same way (see input-number.md's "Fixed 2026-09-22" note). */
     --_surface: var(--input-number-surface, var(--theme-input-surface));
     --_border: var(--input-number-border, var(--theme-border));

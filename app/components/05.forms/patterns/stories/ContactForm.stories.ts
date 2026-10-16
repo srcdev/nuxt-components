@@ -1,6 +1,6 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { reactive, ref } from "vue";
-import InputTextWithLabel from "../../input-text/InputTextWithLabel.vue";
+import InputTextField from "../../input-text/InputTextField.vue";
 import InputSelectField from "../../input-select/InputSelectField.vue";
 import InputTextareaWithLabel from "../../input-textarea/InputTextareaWithLabel.vue";
 import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
@@ -36,7 +36,7 @@ export default {
 
 const Template: StoryFn<ContactFormStoryArgs> = (args) => ({
   components: {
-    InputTextWithLabel,
+    InputTextField,
     InputSelectField,
     InputTextareaWithLabel,
     MultipleCheckboxes,
@@ -91,7 +91,7 @@ const Template: StoryFn<ContactFormStoryArgs> = (args) => ({
 
       <form @submit.prevent>
         <FormField width="wide" :has-gutter="false">
-          <InputTextWithLabel
+          <InputTextField
             v-model="state.fullName"
             type="text"
             name="fullName"
@@ -104,7 +104,7 @@ const Template: StoryFn<ContactFormStoryArgs> = (args) => ({
         </FormField>
 
         <FormField width="wide" :has-gutter="false">
-          <InputTextWithLabel
+          <InputTextField
             v-model="state.telNumber"
             type="tel"
             inputmode="tel"
@@ -118,7 +118,7 @@ const Template: StoryFn<ContactFormStoryArgs> = (args) => ({
         </FormField>
 
         <FormField width="wide" :has-gutter="false">
-          <InputTextWithLabel
+          <InputTextField
             v-model="state.emailAddress"
             type="email"
             inputmode="email"

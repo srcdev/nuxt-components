@@ -50,7 +50,7 @@ stops are public CSS custom properties — see `CONSUMER-STYLING.md` for the ful
 
 ## Highlighting a single control
 
-Wrap just an `InputButton` or `InputTextCore` so the glow becomes the control's border (a design
+Wrap just an `InputButton` or `InputText` so the glow becomes the control's border (a design
 call-out for something "special"). Set `--glowing-border-radius` to the control's radius plus the
 glow width, `--glowing-border-surface: transparent`, `--glowing-border-overflow: visible` (or the
 control's focus ring is clipped), shrink-to-fit display, and `--input-text-border: transparent` for

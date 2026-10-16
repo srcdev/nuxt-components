@@ -86,7 +86,7 @@ For a single "special" button or input, wrap just the control so the glow become
 No changes to the control are needed:
 
 - `InputButton`'s border already defaults to its own surface colour, so it shows no edge of its own.
-- `InputTextCore` needs `--input-text-border: transparent`.
+- `InputText` needs `--input-text-border: transparent`.
 - On the `GlowingBorder`: radius is the control's radius plus the glow width, surface
   `transparent`, overflow `visible` (so the control's hover and focus outlines aren't clipped),
   and an inline or shrink-to-fit display so it hugs the control.
@@ -97,7 +97,7 @@ No changes to the control are needed:
 </GlowingBorder>
 
 <GlowingBorder variant="vivid" style-class-passthrough="special-input">
-  <InputTextCore id="email" v-model="email" type="email" name="email"></InputTextCore>
+  <InputText id="email" v-model="email" type="email" name="email"></InputText>
 </GlowingBorder>
 ```
 

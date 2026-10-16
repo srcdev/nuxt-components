@@ -272,7 +272,7 @@ Numbers are stable (code and docs cite them). Rule files are in `.claude/rules/`
 11. **Sass-style BEM nesting** → `css-native-nesting.md`
 12. **`:src` on `<video>`** → `vue-video-source.md`
 13. **`--theme-text` on dark surfaces** → `css-surface-text-pairing.md`
-14. **Form components reading `--theme-*` directly** → `forms-local-tokens.md`. `InputTextCore`/`InputSelect` fixed 2026-08-22, `AlertContent` 2026-09-27; give the rest local tokens the next time each is touched, not in one pass.
+14. **Form components reading `--theme-*` directly** → `forms-local-tokens.md`. `InputText`/`InputSelect` fixed 2026-08-22, `AlertContent` 2026-09-27; give the rest local tokens the next time each is touched, not in one pass.
 15. **`InputSelect` taller than its siblings** (active unitless `line-height`, fixed 2026-08-22) → `forms-local-tokens.md`
 16. **Generic structural class names** (`DisplayDialog`, 2026-08-22) → `component-class-prefix.md`
 17. **Hardcoded overlay z-index** (`DisplayToast`, 2026-08-22) → `css-overlay-z-index.md`

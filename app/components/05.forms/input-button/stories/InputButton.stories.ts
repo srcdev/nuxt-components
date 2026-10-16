@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
 import StorybookComponent from "../InputButton.vue";
-import InputTextCore from "../../input-text/InputTextCore.vue";
+import InputText from "../../input-text/InputText.vue";
 
 interface InputButtonStoryArgs {
   type: "submit" | "button" | "reset";
@@ -314,11 +314,11 @@ NuxtIconOnlyComponent.args = {
 // most common "usual suspect" pairing (e.g. newsletter signup, search bar). Textareas are the
 // deliberate exception to this alignment and aren't part of this story.
 const InlineTemplate: StoryFn = () => ({
-  components: { StorybookComponent, InputTextCore },
+  components: { StorybookComponent, InputText },
   template: `
     <div style="margin: 36px; max-width: 480px;">
       <div style="display: flex; align-items: flex-start; gap: 0.8rem;">
-        <InputTextCore
+        <InputText
           id="inline-email"
           name="email"
           type="email"

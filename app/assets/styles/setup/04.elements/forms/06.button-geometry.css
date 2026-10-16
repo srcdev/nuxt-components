@@ -17,7 +17,7 @@
      box alone — .input-button keeps box-sizing: content-box (changing that risks shifting
      icon-only's aspect-ratio: 1 sizing), so its own padding-block and border have to be
      subtracted back out here, unlike --input-min-height itself which happens to need no such
-     adjustment (InputTextCore has zero padding-block and no full border in its resting state).
+     adjustment (InputText has zero padding-block and no full border in its resting state).
      This is a floor, not a fixed height — icon-only/pill buttons or longer button-text can
      still grow past it. Textareas are the deliberate exception to this alignment entirely. */
   --button-min-height: calc(

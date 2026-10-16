@@ -118,7 +118,7 @@ Migrated from a `variants:true`, `eslint_issues:true`, score-2/5 state.
 
 `InputSelectField` (`InputSelectField.vue`) composes `InputSelect` with `InputLabel`,
 `InputDescription` (before the control, or after the control and error when
-`inputVariant === "outlined"`, matching `InputTextWithLabel`'s placement rule), and `InputError`.
+`inputVariant === "outlined"`, matching `InputTextField`'s placement rule), and `InputError`.
 Ids for the label, description and error come from `useAriaDescribedById`.
 
 **Additional props over InputSelect** (it takes no `id`; the id is generated):

@@ -3,15 +3,15 @@
 ## Overview
 
 `InputDescription` renders a form field's help text. Every `*Field` wrapper in `05.forms`
-(`InputTextWithLabel`, `InputNumberField`, `InputSelectField`, `InputTextareaWithLabel`,
-`InputRangeField`, `InputTextAsNumberWithLabel`, `SingleCheckbox`, `MultipleCheckboxes`,
+(`InputTextField`, `InputNumberField`, `InputSelectField`, `InputTextareaWithLabel`,
+`InputRangeField`, `InputTextAsNumberField`, `SingleCheckbox`, `MultipleCheckboxes`,
 `MultipleRadiobuttons`) already renders one and forwards its own `descriptionText` /
 `descriptionHtml` slots into it, so consumers normally just pass those slots to the wrapper:
 
 ```vue
-<InputTextWithLabel v-model="email" name="email" label="Email" :field-has-error :error-message>
+<InputTextField v-model="email" name="email" label="Email" :field-has-error :error-message>
   <template #descriptionText>We'll only use this for your booking confirmation</template>
-</InputTextWithLabel>
+</InputTextField>
 ```
 
 Use `InputDescription` directly only when building a custom field wrapper.
@@ -54,7 +54,7 @@ otherwise `InputDescription` sees an (empty) slot and renders an empty element:
 
 - It's a plain description, not a live region: link it with `aria-describedby` on the control
   (`useAriaDescribedById` does this in every wrapper).
-- `InputTextWithLabel`, `InputSelectField` and `InputTextareaWithLabel` render it **after**
+- `InputTextField`, `InputSelectField` and `InputTextareaWithLabel` render it **after**
   the control for the `outlined` variant and before it otherwise; both positions carry the same id.
 
 ---
@@ -81,7 +81,7 @@ look, zero the slot margins and space it with the root margins (example in CONSU
 - Wrappers forwarded both description slots unconditionally, so every field rendered an empty
   description element (with its id) even when no description was given. Each wrapper now forwards
   a slot only when its own consumer supplied it.
-- `InputTextWithLabel` and `InputSelectField` rendered the description **twice** for the
+- `InputTextField` and `InputSelectField` rendered the description **twice** for the
   `outlined` variant (before and after the control); the first copy now has
   `v-if="inputVariant !== 'outlined'"`, matching `InputTextareaWithLabel`.
 - The outlined-variant copies had no `description-id`, so the control's `aria-describedby`

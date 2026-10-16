@@ -181,7 +181,7 @@ Playwright `STORY_BASE` slug. The slug is derived by lowercasing and replacing s
 | Title                                         | STORY_BASE slug                             |
 | --------------------------------------------- | ------------------------------------------- |
 | `"Atoms/Text Blocks/HeroText"`                | `atoms-text-blocks-herotext`                |
-| `"Components/Forms/Input Text/InputTextCore"` | `components-forms-input-text-inputtextcore` |
+| `"Components/Forms/Input Text/InputText"`     | `components-forms-input-text-inputtext`     |
 
 ## argTypes control types
 

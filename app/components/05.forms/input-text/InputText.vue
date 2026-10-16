@@ -3,42 +3,42 @@
     class="input-text-wrapper"
     data-testid="input-text-wrapper"
     :data-theme="theme"
+    :data-input-variant="inputVariant"
     :data-invalid="fieldHasError ? '' : null"
+    :data-dirty="isDirty ? '' : null"
+    :data-active="isActive ? '' : null"
+    :data-readonly="readonly ? '' : null"
     :data-inputmode="inputmode"
-    :class="[
-      inputVariant,
-      { dirty: isDirty },
-      { active: isActive },
-      { error: fieldHasError },
-      { 'has-left-slot': slots.left },
-      { 'has-right-slot': slots.right },
-    ]"
+    :data-has-left-slot="slots.left ? '' : null"
+    :data-has-right-slot="slots.right ? '' : null"
   >
-    <div v-if="slots.left" class="slot left-slot">
+    <div v-if="slots.left" class="input-text-slot input-text-slot-left">
       <slot name="left"></slot>
     </div>
 
     <input
       :id
-      ref="inputField"
       v-model="modelValue"
       :type
       :placeholder
       :name
       :required
+      :readonly
+      :autocomplete
       :maxlength
       :min
       :max
-      :class="['input-text-core', elementClasses, { dirty: isDirty }, { active: isActive }]"
+      :class="['input-text', elementClasses]"
       :aria-invalid="fieldHasError ? 'true' : undefined"
-      :aria-describedby
+      :aria-describedby="ariaDescribedby || undefined"
       :pattern="inputPattern"
       :inputmode
-      @focusin="updateFocus(true)"
-      @focusout="updateFocus(false)"
+      @beforeinput="filterInput"
+      @focusin="isActive = true"
+      @focusout="isActive = false"
     />
 
-    <div v-if="slots.right" class="slot right-slot">
+    <div v-if="slots.right" class="input-text-slot input-text-slot-right">
       <slot name="right"></slot>
     </div>
   </div>
@@ -51,13 +51,13 @@ interface Props {
   type?: InputTypesText;
   inputmode?: InputMode;
   maxlength?: number;
-  /** Passed straight through to the native input — meaningful for type="date"/"number" etc. */
   min?: string | number;
-  /** Passed straight through to the native input — meaningful for type="date"/"number" etc. */
   max?: string | number;
   id: string;
   name: string;
   required?: boolean;
+  readonly?: boolean;
+  autocomplete?: string;
   placeholder?: string;
   fieldHasError?: boolean;
   styleClassPassthrough?: string | string[];
@@ -73,6 +73,8 @@ const props = withDefaults(defineProps<Props>(), {
   min: undefined,
   max: undefined,
   required: false,
+  readonly: false,
+  autocomplete: undefined,
   placeholder: "",
   fieldHasError: false,
   styleClassPassthrough: () => [],
@@ -83,64 +85,32 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const FormUiTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
-});
-
 const modelValue = defineModel<string>({ required: true });
 const isDirty = defineModel<boolean>("isDirty");
 const isActive = defineModel<boolean>("isActive");
 
-const inputPattern = computed(() => {
-  return props.inputmode === "numeric" ? "[0-9]+" : undefined;
-});
+const inputPattern = computed(() => (props.inputmode === "numeric" ? "[0-9]+" : undefined));
 
-const updateFocus = (isFocused: boolean) => {
-  isActive.value = isFocused;
-};
-
-const inputField = ref<HTMLInputElement | null>(null);
-
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-
-// TODO: Move this to a utility function to allow removeEventListener on unmounted
-// Leaving like this could lead to memory leaks
-const validateInput = () => {
-  if (inputField.value !== null) {
-    inputField.value.addEventListener("beforeinput", (event: InputEvent) => {
-      const beforeValue = modelValue.value;
-      if (event.data === null) {
-        // Handle deletion case
-        return;
-      } else if (event.target) {
-        event.target.addEventListener(
-          "input",
-          () => {
-            if (inputField.value !== null && inputField.value.validity.patternMismatch) {
-              inputField.value.value = beforeValue as string;
-            }
-          },
-          { once: true }
-        );
-      }
-    });
+const filterInput = (event: Event) => {
+  const data = (event as InputEvent).data;
+  if (props.inputmode === "numeric" && data !== null && !/^[0-9]*$/.test(data)) {
+    event.preventDefault();
   }
 };
 
-onMounted(() => {
-  if (props.inputmode === "numeric") validateInput();
-});
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 </script>
 
 <style lang="css">
 @layer components {
   .input-text-wrapper {
-    /* Public --input-text-* tokens, inline-fallback to the shared --theme-* tokens (see
-       theming-component-token-pattern.md) — overriding one here doesn't touch every other themed
-       input/control that also reads --theme-input-surface/--theme-border. --_surface etc. are
-       private locals purely so the rest of this rule can reuse the resolved value without
-       repeating the fallback chain at every property — they are not themselves an override point,
-       see CONSUMER-STYLING.md. */
     --_surface: var(--input-text-surface, var(--theme-input-surface));
     --_border: var(--input-text-border, var(--theme-border));
     --_border-focus: var(--input-text-border-focus, var(--theme-border-focus));
@@ -148,6 +118,8 @@ onMounted(() => {
     display: flex;
     align-items: center;
     gap: var(--input-icon-slot-gap);
+    min-inline-size: 0;
+    max-inline-size: 100%;
     background-color: var(--_surface);
     overflow: hidden;
     transition: all var(--theme-form-transition-duration) ease-in-out;
@@ -155,7 +127,7 @@ onMounted(() => {
     z-index: 2;
     position: relative;
 
-    &.normal {
+    &[data-input-variant="normal"] {
       border: var(--form-element-border-width) solid var(--_border);
       border-radius: var(--form-input-border-radius);
       outline: var(--form-element-outline-width) solid transparent;
@@ -173,30 +145,24 @@ onMounted(() => {
       }
     }
 
-    &.underlined {
+    &[data-input-variant="underlined"] {
       border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--_border);
       padding-inline: var(--input-padding-inline);
     }
 
-    &.has-right-slot:has(.input-button) {
+    &[data-has-right-slot]:has(.input-text-slot-right .input-button) {
       padding-inline-end: 0;
     }
 
-    .slot {
+    .input-text-slot {
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
       box-sizing: content-box;
 
+      /* variant="inline" InputButton ships unstyled; the slot supplies its border, colour and outline. */
       .input-button {
-        /* variant="inline" ships with zero border/colour styling by design (see
-           component-inline-action-button.md) — the parent supplies all of it. This rule was
-           always missing the border/colour half of that contract, only ever setting
-           background-color; harmless before InputButton's flat-button redesign, which
-           removed the unscoped base rule that used to accidentally give every variant a real
-           border regardless. Without its own border/color/outline reset, this button now falls
-           through to the browser's UA default <button> chrome (a stark outset border and
-           black/white text) instead of sitting flush with the input. */
         background-color: var(--_surface);
         color: var(--input-text-color, var(--theme-input-text-color-normal));
         border: none;
@@ -222,20 +188,18 @@ onMounted(() => {
       }
     }
 
-    .input-text-core {
+    .input-text {
       all: unset;
       touch-action: manipulation;
       flex-grow: 1;
+      min-inline-size: 0;
 
       color: var(--input-text-color, var(--theme-input-text-color-normal));
       font-family: var(--font-family);
       font-size: var(--input-font-size);
 
-      /* line-height: var(--input-element-line-height); */
-
       padding-block: var(--input-padding-block);
       padding-inline: var(--input-padding-inline);
-      /* height: stretch; */
       min-height: var(--input-min-height);
 
       &::placeholder {

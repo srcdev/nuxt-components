@@ -2,7 +2,7 @@ import { computed, reactive, ref } from "vue";
 import ProgressTracker from "../ProgressTracker.vue";
 import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
 import InputButton from "../../../05.forms/input-button/InputButton.vue";
-import InputTextWithLabel from "../../../05.forms/input-text/InputTextWithLabel.vue";
+import InputTextField from "../../../05.forms/input-text/InputTextField.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import type { MediaCanvas, ProgressTrackerStep } from "~/types/components";
 
@@ -217,7 +217,7 @@ export const Wizard: Story = {
   name: "Wizard (parent-owned forms)",
   args: { modelValue: 0, steps: wizardSteps },
   render: (args) => ({
-    components: { ProgressTracker, InputButton, InputTextWithLabel },
+    components: { ProgressTracker, InputButton, InputTextField },
     setup() {
       const story = useStorySetup(args);
       const form = reactive({ name: "", email: "" });
@@ -254,7 +254,7 @@ export const Wizard: Story = {
         <ProgressTracker v-bind="componentArgs" v-model="args.modelValue" :steps="steps">
           <template #step-0="{ headingId }">
             <form :aria-labelledby="headingId" style="display: grid; gap: 1.6rem;" @submit.prevent="next('name')">
-              <InputTextWithLabel
+              <InputTextField
                 v-model="form.name"
                 type="text"
                 name="wizard-name"
@@ -270,7 +270,7 @@ export const Wizard: Story = {
           </template>
           <template #step-1="{ headingId }">
             <form :aria-labelledby="headingId" style="display: grid; gap: 1.6rem;" @submit.prevent="next('email')">
-              <InputTextWithLabel
+              <InputTextField
                 v-model="form.email"
                 type="email"
                 name="wizard-email"

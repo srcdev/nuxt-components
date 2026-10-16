@@ -85,7 +85,7 @@ const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 @layer components {
 .input-textarea-wrapper {
   /* Public --input-textarea-* tokens, inline-fallback to the shared --theme-* tokens (see
-     theming-component-token-pattern.md) — mirrors InputTextCore's token shape. --_border is
+     theming-component-token-pattern.md) — mirrors InputText's token shape. --_border is
      genuinely reused (both the .normal border and the .underlined border-bottom read it); the
      hover/focus border colours are each used only once, so they're inlined directly rather than
      wrapped in a private var (see the Public token pattern rule in CLAUDE.md's Styling

@@ -68,7 +68,7 @@ Pass `formRef` to the `<form>` and bind `formErrors` to each field's `error-mess
 
 ```vue
 <form ref="formRef" @submit.stop.prevent="submitForm()">
-  <InputTextWithLabel
+  <InputTextField
     id="fullName"
     v-model="state.fullName"
     name="fullName"

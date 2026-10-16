@@ -1,9 +1,12 @@
 <template>
   <div
-    class="input-text-with-label"
+    class="input-text-as-number-field"
+    :class="elementClasses"
     :data-theme="theme"
+    :data-input-variant="inputVariant"
     :data-invalid="fieldHasError ? '' : null"
-    :class="[inputVariant, elementClasses, { dirty: isDirty }, { active: isActive }]"
+    :data-dirty="isDirty ? '' : null"
+    :data-active="isActive ? '' : null"
   >
     <InputLabel
       :id
@@ -29,7 +32,7 @@
       </template>
     </InputDescription>
 
-    <InputTextCore
+    <InputText
       :id
       v-model="internalStringValue"
       v-model:is-dirty="isDirty"
@@ -38,14 +41,11 @@
       :maxlength
       :name
       :placeholder
-      :label
-      :error-message
       :field-has-error
       :required
-      :style-class-passthrough="elementClasses"
       :theme
-      inputmode="numeric"
-      :aria-describedby="ariaDescribedby()"
+      :inputmode
+      :aria-describedby="ariaDescribedby() ?? undefined"
       :input-variant
     >
       <template v-if="slots.left" #left>
@@ -54,9 +54,9 @@
           :readonly="(modelValue ?? 0) <= min"
           :is-pending="false"
           :button-text="stepDownText"
-          theme="default"
+          :theme
           variant="inline"
-          @click.stop.prevent="updateValue(-step, (modelValue ?? 0) > min)"
+          @click.stop.prevent="stepBy(-1)"
         >
           <template #iconOnly>
             <slot name="left"></slot>
@@ -69,17 +69,17 @@
           :readonly="(modelValue ?? 0) >= max"
           :is-pending="false"
           :button-text="stepUpText"
-          theme="default"
+          :theme
           variant="inline"
-          @click.stop.prevent="updateValue(step, (modelValue ?? 0) < max)"
+          @click.stop.prevent="stepBy(1)"
         >
           <template #iconOnly>
             <slot name="right"></slot>
           </template>
         </InputButton>
       </template>
-    </InputTextCore>
-    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" />
+    </InputText>
+    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" :input-variant />
   </div>
 </template>
 
@@ -100,9 +100,7 @@ interface Props {
   max: number;
   step?: number;
   inputVariant?: InputUiVariant;
-  /** Accessible name for the decrement button. */
   stepDownText?: string;
-  /** Accessible name for the increment button. */
   stepUpText?: string;
 }
 
@@ -131,71 +129,77 @@ const modelValue = defineModel<number | undefined>({ default: undefined });
 const isActive = ref<boolean>(false);
 const isDirty = ref<boolean>(false);
 
-// Convert between string (for input) and number (for modelValue)
 const internalStringValue = computed({
   get: () => modelValue.value?.toString() ?? "",
   set: (value: string) => {
-    const numericValue = value === "" ? undefined : Number(value);
-    // Only update if it's a valid number or empty string
-    if (value === "" || !isNaN(numericValue as number)) {
-      modelValue.value = numericValue;
+    if (value === "") {
+      modelValue.value = undefined;
+      return;
     }
+    const numericValue = Number(value);
+    if (Number.isFinite(numericValue)) modelValue.value = numericValue;
   },
 });
 
-const { elementClasses, updateElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
-const minLength = computed(() => `${props.max.toString().length + 1}em`);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const updateValue = (step: number, withinRangeLimit: boolean) => {
-  if (withinRangeLimit) {
-    const currentValue = modelValue.value ?? 0;
-    modelValue.value = currentValue + step;
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
   }
-};
+);
 
-updateElementClasses(["input-text-as-number", "has-left-button", "has-right-button"]);
+const decimalPlaces = (value: number) => (String(value).split(".")[1] ?? "").length;
+const clamp = (value: number) => Math.min(Math.max(value, props.min), props.max);
+
+const inputmode = computed(() => {
+  if (props.min < 0) return "text";
+  return Number.isInteger(props.step) ? "numeric" : "decimal";
+});
+
+const minLength = computed(() => {
+  const longest = Math.max(String(props.min).length, String(props.max).length) + decimalPlaces(props.step);
+  return `${Math.min(longest + 1, 12)}em`;
+});
+
+const stepBy = (direction: 1 | -1) => {
+  const current = modelValue.value;
+  if (typeof current !== "number" || !Number.isFinite(current)) {
+    modelValue.value = clamp(0);
+    return;
+  }
+  const stepSize = Math.abs(props.step) || 1;
+  const precision = Math.max(decimalPlaces(stepSize), decimalPlaces(current), decimalPlaces(props.min));
+  const next = clamp(Number((current + direction * stepSize).toFixed(precision)));
+  if (next !== current) modelValue.value = next;
+};
 </script>
 
 <style lang="css">
 @layer components {
-  .input-text-as-number {
-    .input-text-wrapper {
+  .input-text-as-number-field {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+
+    .input-text-wrapper[data-input-variant] {
       width: fit-content;
+      max-inline-size: 100%;
       padding-inline: 0;
 
-      &:has(.input-text-as-number) {
-        .slot {
-          margin-inline: 0;
-
-          .input-button {
-            background-color: var(--theme-input-surface);
-
-            &:hover {
-              background-color: var(--theme-input-surface-hover);
-            }
-
-            &.icon-only {
-              .btn-icon {
-                margin: 0;
-              }
-            }
-          }
-
-          &.left-slot {
-            .input-button {
-              border-right: var(--form-element-border-width) solid var(--theme-border);
-            }
-          }
-
-          &.right-slot {
-            .input-button {
-              border-left: var(--form-element-border-width) solid var(--theme-border);
-            }
-          }
-        }
+      .input-text-slot {
+        margin-inline: 0;
       }
 
-      .input-text-core.input-text-as-number {
+      .input-text-slot-left .input-button {
+        border-inline-end: var(--form-element-border-width) solid var(--input-text-border, var(--theme-border));
+      }
+
+      .input-text-slot-right .input-button {
+        border-inline-start: var(--form-element-border-width) solid var(--input-text-border, var(--theme-border));
+      }
+
+      .input-text {
         flex-grow: initial;
         text-align: center;
         width: v-bind(minLength);

@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { reactive } from "vue";
-import InputTextWithLabel from "../../input-text/InputTextWithLabel.vue";
-import InputPasswordWithLabel from "../../input-text/InputPasswordWithLabel.vue";
+import InputTextField from "../../input-text/InputTextField.vue";
+import InputPasswordField from "../../input-text/InputPasswordField.vue";
 import InputCheckboxRadioField from "../../input-checkbox-radio/InputCheckboxRadioField.vue";
 import InputButton from "../../input-button/InputButton.vue";
 import FormField from "../../form-field/FormField.vue";
@@ -35,8 +35,8 @@ export default {
 
 const Template: StoryFn<LoginFormStoryArgs> = (args) => ({
   components: {
-    InputTextWithLabel,
-    InputPasswordWithLabel,
+    InputTextField,
+    InputPasswordField,
     InputCheckboxRadioField,
     InputButton,
     FormField,
@@ -64,7 +64,7 @@ const Template: StoryFn<LoginFormStoryArgs> = (args) => ({
 
           <form @submit.prevent>
             <FormField width="wide" :has-gutter="false">
-              <InputTextWithLabel
+              <InputTextField
                 v-model="state.email"
                 type="email"
                 inputmode="email"
@@ -78,7 +78,7 @@ const Template: StoryFn<LoginFormStoryArgs> = (args) => ({
             </FormField>
 
             <FormField width="wide" :has-gutter="false">
-              <InputPasswordWithLabel
+              <InputPasswordField
                 v-model="state.password"
                 name="password"
                 label="Password"

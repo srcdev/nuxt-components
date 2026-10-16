@@ -30,7 +30,7 @@ Most consumers should reach for **InputNumberField** rather than `InputNumber` d
 | `:required` | `boolean` | `false` | Native `required`. |
 | `:theme` | `FormUiTheme` | `"default"` | Sets `data-theme` on the wrapper. |
 | `:weight` | `FormWeight` | `"normal"` | Adds an `input-number--{weight}` class to the input, for prop-shape consistency with sibling `05.forms` components. **No CSS in the library currently styles this class — it's a no-op today**, same convention as `InputRange`'s `weight` prop. |
-| `:input-variant` | `InputUiVariant` | `"normal"` | Rendered as `data-input-variant` on the wrapper (a bare class until 2026-10-16) — `"normal"` (bordered box) and `"underlined"` (bottom-border only) have CSS; `"outlined"` doesn't (see CONSUMER-STYLING.md). Same prop/behaviour as `InputTextCore`. |
+| `:input-variant` | `InputUiVariant` | `"normal"` | Rendered as `data-input-variant` on the wrapper (a bare class until 2026-10-16) — `"normal"` (bordered box) and `"underlined"` (bottom-border only) have CSS; `"outlined"` doesn't (see CONSUMER-STYLING.md). Same prop/behaviour as `InputText`. |
 | `:field-has-error` | `boolean` | `false` | Drives `data-invalid` on the wrapper. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the input element. Reacts to changes. |
 | `:aria-describedby` | `string` | `""` | Forwarded to the native input. |
@@ -57,7 +57,7 @@ slot is present (`.input-number-slot-left .input-button { border-right: ... }` a
 right-hand mirror), so it sits flush against the button's own edge rather than around the
 containing `.input-number-slot` div. This makes step buttons read as embedded segments of the same control
 rather than separate floating buttons. The divider reuses the wrapper's own border colour token
-(no separate divider token), same as `InputTextCore`/`InputTextAsNumberWithLabel`.
+(no separate divider token), same as `InputText`/`InputTextAsNumberField`.
 
 ---
 
@@ -117,7 +117,7 @@ score-1/5 state. Several latent bugs were fixed alongside the standard checklist
 
 ---
 
-## Fixed 2026-09-22 (follow-up): rewritten to visually mirror InputTextCore
+## Fixed 2026-09-22 (follow-up): rewritten to visually mirror InputText
 
 The first migration pass above only made `InputNumber`'s *own* (pre-existing, previously dead)
 CSS active — it didn't reconsider whether that CSS was actually the right design. Once live, it
@@ -125,21 +125,21 @@ was visually inconsistent with the rest of `05.forms`: no border-radius, no hove
 state, wrong padding-token family (`--form-textarea-padding-*` instead of the shared input
 padding tokens), and a box-shadow-toggle focus mechanism instead of the `:has()`-based outline
 approach every other input in this library uses. `InputNumber` is meant to be a native
-`<input type="number">` sibling to the text-based `InputTextAsNumberWithLabel` variant (see
-`input-text-core.md`'s Variants section) — both should look and behave the same. The CSS was rewritten
-to mirror `InputTextCore` directly:
+`<input type="number">` sibling to the text-based `InputTextAsNumberField` variant (see
+`input-text.md`'s Variants section) — both should look and behave the same. The CSS was rewritten
+to mirror `InputText` directly:
 
-- Added `:input-variant` (`"normal"` / `"outlined"` / `"underlined"`), matching `InputTextCore`'s
+- Added `:input-variant` (`"normal"` / `"outlined"` / `"underlined"`), matching `InputText`'s
   prop and wrapper-class shape (`InputNumberField` forwards it the same way
-  `InputTextWithLabel` forwards it to `InputTextCore`, including to `InputLabel`).
-- Replaced the flat, unconditional border/radius/box-shadow with `InputTextCore`'s `.normal`
+  `InputTextField` forwards it to `InputText`, including to `InputLabel`).
+- Replaced the flat, unconditional border/radius/box-shadow with `InputText`'s `.normal`
   variant shape: border + `border-radius: var(--form-input-border-radius)` (previously this read
   `var(--form-element-border-width)` — a pre-existing bug that used the *border-width* token as
   the *radius*, coincidentally invisible while the block was dead), plus `:has(input:hover)` /
   `:has(input:focus-visible)` outline states instead of the old `--_focus-box-shadow` custom
   property toggle.
   - `--input-number-border-hover` and `--input-number-border-focus` are new public tokens for
-    these two states (both fall back to `--theme-border-focus`, same as `InputTextCore`).
+    these two states (both fall back to `--theme-border-focus`, same as `InputText`).
 - Padding moved from `--form-textarea-padding-*` (the wrong token family — textarea, not input)
   to the shared `--input-padding-block`/`--input-padding-inline`/`--input-min-height` tokens every
   other `05.forms` text-like input uses.
@@ -148,7 +148,7 @@ to mirror `InputTextCore` directly:
   previously it had neither, an accessibility gap beyond the visual mismatch (checklist item 9).
 - The divider between the input and an embedded button now reuses the border colour
   (`--_border`) directly instead of a separate `--input-number-divider-color` token — removed,
-  since `InputTextCore` doesn't have an equivalent separate token either (the border colour
+  since `InputText` doesn't have an equivalent separate token either (the border colour
   *is* the divider colour there too).
 - `--_border-hover` and `--_surface-hover` were each used only once with no composition or
   state-swap, so per the public-token rule they were inlined directly
@@ -158,21 +158,21 @@ to mirror `InputTextCore` directly:
   wrapper's own focus outline *and* the embedded button's focus outline both read it).
 - Fixed 2026-10-04: the wrapper's hover and focus outlines only matched `input:hover` /
   `input:focus-visible`, so hovering or tabbing to a step button showed no outer ring, unlike
-  `InputTextCore` (and so `InputTextAsNumberWithLabel`), which matches `button` too. Both
-  selectors are now `:has(input:…, button:…)`, mirroring `InputTextCore`.
+  `InputText` (and so `InputTextAsNumberField`), which matches `button` too. Both
+  selectors are now `:has(input:…, button:…)`, mirroring `InputText`.
 
 **Separately found in the same investigation** (not an `InputNumber` bug, but what the visual
-comparison was originally checking against): `InputTextAsNumberWithLabel.vue` had its own,
-unrelated pre-existing bug — see `input-text-core.md`'s Variants section for the fix.
+comparison was originally checking against): `InputTextAsNumberField.vue` had its own,
+unrelated pre-existing bug — see `input-text.md`'s Variants section for the fix.
 
 **Correction, same day**: the first version of this rewrite still didn't visually match — the
 divider border and button sizing (`aspect-ratio: 1`, `width: var(--input-min-height)`) had been
 put on the `.left-slot`/`.right-slot` *wrapper divs*, not on `.input-button` itself, unlike
-`InputTextCore`'s equivalent block. That left an unstyled gap between the button and the border
+`InputText`'s equivalent block. That left an unstyled gap between the button and the border
 line instead of a flush edge, and the buttons weren't sized to match the input's height. Fixed by
 moving the divider border and all button sizing/colour rules onto `.input-button` directly
 (`&.has-left-slot .left-slot .input-button { border-right: ... }`, matching
-`InputTextAsNumberWithLabel`'s `.left-slot .input-button { border-right: ... }` exactly)
+`InputTextAsNumberField`'s `.left-slot .input-button { border-right: ... }` exactly)
 rather than the containing `.slot` div. When mirroring another component's CSS structure, check
 *which element* a rule targets, not just that an equivalent rule exists somewhere in the block —
 a border/sizing rule one level off in the DOM tree produces a visually-close-but-not-matching

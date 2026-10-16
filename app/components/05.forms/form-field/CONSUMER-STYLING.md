@@ -1,7 +1,7 @@
 # FormField — Consumer Styling Guide
 
 `FormField` is a layout wrapper for one form control (typically an `*Field` component such as
-`InputTextWithLabel` or `InputNumberField`). It caps the field's width, centres it, optionally
+`InputTextField` or `InputNumberField`). It caps the field's width, centres it, optionally
 insets it from its container's edges with a gutter, and applies vertical spacing between fields.
 
 ## Public token API
@@ -65,7 +65,7 @@ Set the tokens above on an element you own (a page or section class, or a class 
 
 ```vue
 <FormField width="wide" style="--form-field-background-color: var(--slate-01);">
-  <InputTextWithLabel ... />
+  <InputTextField ... />
 </FormField>
 ```
 

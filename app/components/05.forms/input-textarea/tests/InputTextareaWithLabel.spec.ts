@@ -38,7 +38,7 @@ describe("InputTextareaWithLabel", () => {
   });
 
   it("does not leak a label attribute onto InputTextareaCore's wrapper", async () => {
-    // Regression test: InputTextareaCore has no `label` prop (matches InputTextCore), so passing
+    // Regression test: InputTextareaCore has no `label` prop (matches InputText), so passing
     // it down would fall through as a meaningless raw `label` HTML attribute on the wrapper div.
     wrapper = await wrapperFactory({ label: "Feedback" });
     expect(wrapper.find(".input-textarea-wrapper").attributes("label")).toBeUndefined();

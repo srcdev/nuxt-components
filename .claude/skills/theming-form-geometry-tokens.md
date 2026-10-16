@@ -51,7 +51,7 @@ From `00.element-defaults.css` through `09.animation-motion.css`:
 
 `00.element-defaults.css` is the one exception — it's not tokens, it's a real selector-based rule
 (browser autofill background/text-colour reset via `input:autofill` etc.). It reads
-`var(--theme-surface)` and the component-private `--_input-text-core-color`, so changing
+`var(--theme-surface)` and the component-private `--_input-text-color`, so changing
 `--theme-surface` (per `theming-partial-override.md`) changes autofill colours too — no separate
 override needed there. If you need to change that rule's *behaviour* itself (not just its colour
 inputs), you'd need a competing unlayered selector of your own targeting the same pseudo-classes,

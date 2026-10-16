@@ -165,7 +165,7 @@ Use when the same component appears multiple times on a page and you need to tar
 instance.
 
 If the component you're rendering is a **wrapper** that doesn't forward `styleClassPassthrough` to
-the inner component you want to style (e.g. `InputDescription` inside `InputTextWithLabel`), put a
+the inner component you want to style (e.g. `InputDescription` inside `InputTextField`), put a
 plain `class` on the wrapper instead. Vue falls it through to the wrapper's root element, which is
 an ancestor of the inner component, so tokens set there inherit down. This needs the wrapper to
 have a single root element and not set `inheritAttrs: false`.

@@ -124,10 +124,10 @@ Tracks progress toward a fully migrated component library. A component is consid
 
 | Component | File | CS | SN |
 |---|---|---|---|
-| InputTextCore | `input-text/InputTextCore.vue` | ☐ | ☐ |
-| InputTextWithLabel | `input-text/InputTextWithLabel.vue` | ☐ | ☐ |
-| InputTextAsNumberWithLabel | `input-text/InputTextAsNumberWithLabel.vue` | ☐ | ☐ |
-| InputPasswordWithLabel | `input-text/InputPasswordWithLabel.vue` | ☐ | ☐ |
+| InputText | `input-text/InputText.vue` | ☐ | ☐ |
+| InputTextField | `input-text/InputTextField.vue` | ☐ | ☐ |
+| InputTextAsNumberField | `input-text/InputTextAsNumberField.vue` | ☐ | ☐ |
+| InputPasswordField | `input-text/InputPasswordField.vue` | ☐ | ☐ |
 | InputTextareaCore | `input-textarea/InputTextareaCore.vue` | ☐ | ☐ |
 | InputTextareaWithLabel | `input-textarea/InputTextareaWithLabel.vue` | ☐ | ☐ |
 | InputCopyCore | `input-copy/InputCopyCore.vue` | ☐ | ☐ |

@@ -1,53 +1,54 @@
 {
-  "SRCDEV InputTextCore Basic": {
-    "description": "Basic InputTextCore native input (no label/error wrapper)",
+  "SRCDEV InputText Basic": {
+    "description": "Basic InputText native input (no label/error wrapper)",
     "scope": "vue,html",
     "body": [
-      "<InputTextCore",
+      "<InputText",
       "  id=\"$1fieldId\"",
-      "  name=\"$2fieldName\"",
-      "  v-model=\"$3fieldValue\"",
+      "  v-model=\"$2fieldValue\"",
+      "  name=\"$3fieldName\"",
       "  type=\"$4text\"",
-      "  placeholder=\"$5Enter value...\"",
+      "  placeholder=\"$5Enter value\"",
       "/>"
     ]
   },
-  "SRCDEV InputTextCore Date with min/max": {
-    "description": "InputTextCore date input constrained to a min/max range (e.g. no dates in the past)",
+  "SRCDEV InputText Date with min/max": {
+    "description": "InputText date input constrained to a min/max range (e.g. no dates in the past)",
     "scope": "vue,html",
     "body": [
-      "<InputTextCore",
+      "<InputText",
       "  id=\"$1appointment-date\"",
-      "  name=\"$2appointmentDate\"",
-      "  v-model=\"$3appointmentDate\"",
+      "  v-model=\"$2appointmentDate\"",
+      "  name=\"$3appointmentDate\"",
       "  type=\"date\"",
       "  :min=\"new Date().toISOString().split('T')[0]\"",
       "  max=\"$42027-12-31\"",
       "/>"
     ]
   },
-  "SRCDEV InputTextWithLabel Basic": {
-    "description": "InputTextWithLabel: labelled text field with error/description support",
+  "SRCDEV InputTextField Basic": {
+    "description": "InputTextField: labelled text field with description and error support",
     "scope": "vue,html",
     "body": [
-      "<InputTextWithLabel",
+      "<InputTextField",
       "  v-model=\"$1fieldValue\"",
-      "  id=\"$2fieldId\"",
-      "  name=\"$3fieldName\"",
-      "  type=\"$4text\"",
-      "  label=\"$5Field label\"",
+      "  name=\"$2fieldName\"",
+      "  type=\"${3|text,email,tel,url,date,number|}\"",
+      "  label=\"$4Field label\"",
+      "  autocomplete=\"$5\"",
       "  :error-message=\"$6errors.fieldName\"",
       "  :field-has-error=\"!!$6errors.fieldName\"",
-      "/>"
+      ">",
+      "  <template #descriptionText>$7</template>",
+      "</InputTextField>"
     ]
   },
-  "SRCDEV InputTextWithLabel Date with min/max": {
-    "description": "InputTextWithLabel date field constrained to a min/max range",
+  "SRCDEV InputTextField Date with min/max": {
+    "description": "InputTextField date field constrained to a min/max range",
     "scope": "vue,html",
     "body": [
-      "<InputTextWithLabel",
+      "<InputTextField",
       "  v-model=\"$1appointmentDate\"",
-      "  id=\"$2appointment-date\"",
       "  name=\"$2appointmentDate\"",
       "  type=\"date\"",
       "  label=\"$3Appointment date\"",
@@ -58,24 +59,27 @@
       "/>"
     ]
   },
-  "SRCDEV InputPasswordWithLabel": {
-    "description": "InputPasswordWithLabel with show/hide toggle",
+  "SRCDEV InputPasswordField": {
+    "description": "InputPasswordField with show/hide toggle",
     "scope": "vue,html",
     "body": [
-      "<InputPasswordWithLabel",
+      "<InputPasswordField",
       "  v-model=\"$1password\"",
       "  name=\"$2password\"",
       "  label=\"$3Password\"",
-      "  :error-message=\"$4errors.password\"",
-      "  :field-has-error=\"!!$4errors.password\"",
+      "  autocomplete=\"${4|current-password,new-password|}\"",
+      "  :error-message=\"$5errors.password\"",
+      "  :field-has-error=\"!!$5errors.password\"",
+      "  show-password-text=\"$6Show password\"",
+      "  hide-password-text=\"$7Hide password\"",
       "/>"
     ]
   },
-  "SRCDEV InputTextAsNumberWithLabel": {
-    "description": "InputTextAsNumberWithLabel numeric stepper with min/max/step",
+  "SRCDEV InputTextAsNumberField": {
+    "description": "InputTextAsNumberField numeric stepper with min/max/step",
     "scope": "vue,html",
     "body": [
-      "<InputTextAsNumberWithLabel",
+      "<InputTextAsNumberField",
       "  v-model=\"$1quantity\"",
       "  name=\"$2quantity\"",
       "  label=\"$3Quantity\"",
@@ -85,21 +89,23 @@
       "  :error-message=\"$7errors.quantity\"",
       "  :field-has-error=\"!!$7errors.quantity\"",
       ">",
-      "  <template #left>−</template>",
-      "  <template #right>+</template>",
-      "</InputTextAsNumberWithLabel>"
+      "  <template #left><Icon name=\"mdi:minus\" /></template>",
+      "  <template #right><Icon name=\"mdi:plus\" /></template>",
+      "</InputTextAsNumberField>"
     ]
   },
   "SRCDEV InputText CSS Override": {
-    "description": "CSS override scaffold for InputTextCore tokens",
+    "description": "CSS override scaffold for InputText tokens",
     "scope": "css",
     "body": [
       ".$1my-page {",
-      "  .input-text-wrapper {",
-      "    --input-text-surface: $2;",
-      "    --input-text-border: $3;",
-      "    --input-text-border-focus: $4;",
-      "    --input-text-color: $5;",
+      "  --input-text-surface: $2;",
+      "  --input-text-border: $3;",
+      "  --input-text-border-focus: $4;",
+      "  --input-text-color: $5;",
+      "",
+      "  .input-text-field[data-invalid] {",
+      "    $0",
       "  }",
       "}"
     ]

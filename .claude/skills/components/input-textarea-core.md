@@ -24,7 +24,7 @@ directly.
 | `:placeholder` | `string` | `""` | Native `placeholder`. |
 | `:required` | `boolean` | `false` | Native `required`. |
 | `:theme` | `FormUiTheme` | `"default"` | Sets `data-theme` on the wrapper. |
-| `:input-variant` | `InputUiVariant` | `"normal"` | Adds the variant name as a class on the wrapper — `"normal"` (bordered box) and `"underlined"` (bottom-border only) have CSS; `"outlined"` doesn't (see CONSUMER-STYLING.md). Same prop/behaviour as `InputTextCore`. |
+| `:input-variant` | `InputUiVariant` | `"normal"` | Adds the variant name as a class on the wrapper — `"normal"` (bordered box) and `"underlined"` (bottom-border only) have CSS; `"outlined"` doesn't (see CONSUMER-STYLING.md). Same prop/behaviour as `InputText`. |
 | `:field-has-error` | `boolean` | `false` | Drives `data-invalid` on the wrapper and `aria-invalid` on the textarea. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the textarea element. |
 | `:aria-describedby` | `string` | `""` | Forwarded to the native textarea. |
@@ -81,13 +81,13 @@ score-1/5 state (no public tokens, no CONSUMER-STYLING.md, no tests, no skill do
   `-font-weight` — **none of these five custom properties were declared anywhere in the
   codebase**. Per the CSS spec, an undefined `var()` with no fallback makes the whole declaration
   invalid, so all five silently fell back to the browser/inherited default instead of the intended
-  design. Fixed by switching to the tokens `InputTextCore` actually uses for the same purpose:
+  design. Fixed by switching to the tokens `InputText` actually uses for the same purpose:
   `--input-padding-inline` for the wrapper padding, and `--theme-input-placeholder-font-size` +
-  hardcoded `italic`/`1`/`normal` for the placeholder (matching `InputTextCore`'s placeholder rule
+  hardcoded `italic`/`1`/`normal` for the placeholder (matching `InputText`'s placeholder rule
   exactly — those three placeholder sub-properties aren't tokenized there either).
 - **Zero public `--input-textarea-*` tokens existed at all** — every colour value read a
   `--theme-*` global directly, with no component-level override point (the exact gap pitfall #14
-  describes for early `05.forms` components). Added the full set matching `InputTextCore`'s shape:
+  describes for early `05.forms` components). Added the full set matching `InputText`'s shape:
   `--input-textarea-surface`, `-border`, `-border-hover`, `-border-focus`, `-text-color`,
   `-placeholder-color`.
 - **Dead code**: both `InputTextareaCore` and `InputTextareaWithLabel` declared
@@ -97,10 +97,10 @@ score-1/5 state (no public tokens, no CONSUMER-STYLING.md, no tests, no skill do
   `defineProps`). Removed both. `InputTextareaWithLabel` also had ~5 lines of commented-out dead
   code (an old, hand-rolled `id`/`errorId`/`ariaDescribedby` implementation, superseded by
   `useAriaDescribedById` right below it) — removed. (The identical dead `FormUiTheme` computed
-  still exists in `InputTextCore`/`InputTextWithLabel` themselves — out of scope for this pass
+  still exists in `InputText`/`InputTextField` themselves — out of scope for this pass
   since those weren't being touched, but worth cleaning up next time either is migrated.)
 - **`InputTextareaWithLabel` passed `:label` down to `InputTextareaCore`**, which has no `label`
-  prop (matching `InputTextCore`, which doesn't have one either) — it fell through as a
+  prop (matching `InputText`, which doesn't have one either) — it fell through as a
   meaningless raw `label="..."` HTML attribute on the wrapper `<div>`. Removed the pass-through;
   `InputLabel` (which does have a real `label` concept) already renders it correctly. Covered by
   a regression test.
@@ -121,7 +121,7 @@ score-1/5 state (no public tokens, no CONSUMER-STYLING.md, no tests, no skill do
 
 `InputTextareaWithLabel` (`InputTextareaWithLabel.vue`) composes `InputTextareaCore` with
 `InputLabel`, `InputDescription` (positioned before or after the field depending on
-`inputVariant === "outlined"`, matching `InputTextWithLabel`'s exact placement rule), and
+`inputVariant === "outlined"`, matching `InputTextField`'s exact placement rule), and
 `InputError`.
 
 **Additional props over InputTextareaCore:**

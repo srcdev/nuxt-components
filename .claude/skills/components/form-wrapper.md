@@ -36,7 +36,7 @@ centre it.
 <FormWrapper width="medium">
   <form @submit.prevent="submitForm">
     <FormField width="wide" :has-gutter="false">
-      <InputTextWithLabel ... />
+      <InputTextField ... />
     </FormField>
   </form>
 </FormWrapper>

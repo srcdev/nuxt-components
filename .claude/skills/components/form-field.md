@@ -6,7 +6,7 @@
 field's width (`narrow`/`medium`/`wide`), centres it with `margin-inline: auto`, optionally insets
 it from its container edges with a gutter, and applies the shared vertical field spacing
 (`--field-margin-block`). It renders no label, input or error text itself: put an `*Field`
-component (`InputTextWithLabel`, `InputNumberField`, `InputSelectField`, ...) in its default
+component (`InputTextField`, `InputNumberField`, `InputSelectField`, ...) in its default
 slot.
 
 Typical use inside `FormWrapper` / a pattern form: `<FormField width="wide" :has-gutter="false">`
@@ -37,7 +37,7 @@ around each control, so the form's own container controls the width.
 
 ```vue
 <FormField width="wide" :has-gutter="false" :field-has-error="!!errors.email">
-  <InputTextWithLabel
+  <InputTextField
     v-model="state.email"
     name="email"
     label="Email"

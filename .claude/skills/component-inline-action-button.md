@@ -105,6 +105,6 @@ changed visible label ("Copied!") isn't announced, because the aria-label wins; 
 
 ## Real examples
 
-- `InputPasswordWithLabel`: `app/components/05.forms/input-text/InputPasswordWithLabel.vue` (show/hide toggle attached to the input)
+- `InputPasswordField`: `app/components/05.forms/input-text/InputPasswordField.vue` (show/hide toggle attached to the input)
 - `CookieConsentBanner`: `app/components/02.molecules/cookie-consent-banner/CookieConsentBanner.vue`
   (standalone Accept/Reject actions, not attached to an input)

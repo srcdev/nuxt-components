@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { computed, ref } from "vue";
 import StorybookComponent from "../GlowingBorder.vue";
-import InputTextCore from "../../../../05.forms/input-text/InputTextCore.vue";
+import InputText from "../../../../05.forms/input-text/InputText.vue";
 import InputButton from "../../../../05.forms/input-button/InputButton.vue";
 import CanvasSwitcher from "../../../canvas-switcher/CanvasSwitcher.vue";
 import type { MediaCanvas } from "~/types/components";
@@ -194,7 +194,7 @@ CustomTokens.args = {
 };
 
 export const HighlightedControls: StoryFn<StoryArgs> = (args) => ({
-  components: { StorybookComponent, InputTextCore, InputButton },
+  components: { StorybookComponent, InputText, InputButton },
   setup() {
     const { args: storyArgs, stageStyle } = useStorySetup(args);
     const glowStyle = (controlRadius: string) =>
@@ -224,13 +224,13 @@ export const HighlightedControls: StoryFn<StoryArgs> = (args) => ({
       <div style="display: grid; gap: 8px; inline-size: min(100%, 40rem);">
         <label for="highlighted-email">Early-access email</label>
         <StorybookComponent :variant="args.variant" :style="inputGlowStyle">
-          <InputTextCore
+          <InputText
             id="highlighted-email"
             v-model="email"
             type="email"
             name="highlighted-email"
             placeholder="eg. jane@example.com"
-          ></InputTextCore>
+          ></InputText>
         </StorybookComponent>
       </div>
     </div>

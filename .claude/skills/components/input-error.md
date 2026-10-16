@@ -3,9 +3,9 @@
 ## Overview
 
 `InputError` renders the red error message strip under a form control. Every `*Field` wrapper in
-`05.forms` (`InputTextWithLabel`, `InputNumberField`, `InputSelectField`, `InputTextareaWithLabel`,
+`05.forms` (`InputTextField`, `InputNumberField`, `InputSelectField`, `InputTextareaWithLabel`,
 `InputRangeField`, `ToggleSwitchWithLabel`, `SingleCheckbox`, `MultipleCheckboxes`,
-`MultipleRadiobuttons`, `InputTextAsNumberWithLabel`) already renders one, so consumers rarely use
+`MultipleRadiobuttons`, `InputTextAsNumberField`) already renders one, so consumers rarely use
 it directly. Use it yourself only when building a custom field wrapper.
 
 It is designed to sit in **grid row 2** of the wrapper, directly under the control in row 1: it is

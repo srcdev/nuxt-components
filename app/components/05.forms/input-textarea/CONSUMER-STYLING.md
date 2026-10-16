@@ -7,7 +7,7 @@ name to override just this component; leave it unset and it inherits the shared 
 `--theme-*` token every other themed component also falls back to. See
 `theming-component-token-pattern.md` for why this two-tier shape exists.
 
-This shape mirrors `InputTextCore`'s token set (see its own CONSUMER-STYLING.md).
+This shape mirrors `InputText`'s token set (see its own CONSUMER-STYLING.md).
 
 | Token | Falls back to | Controls |
 |---|---|---|
@@ -27,8 +27,8 @@ component and untouched by this — see `theming-form-geometry-tokens.md`.
 ## Input variant
 
 `:input-variant="'normal' | 'outlined' | 'underlined'"` (default `"normal"`) — same prop as
-`InputTextCore`. Only `normal` (bordered box, with hover/focus outline) and `underlined`
-(bottom-border only) have CSS today; `outlined` has no styling in `InputTextCore` either (no
+`InputText`. Only `normal` (bordered box, with hover/focus outline) and `underlined`
+(bottom-border only) have CSS today; `outlined` has no styling in `InputText` either (no
 `&.outlined` rule exists there), so passing it renders with no border/outline at all — a
 pre-existing gap in the type, not specific to `InputTextareaCore`.
 

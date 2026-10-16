@@ -7,11 +7,11 @@ to override just this component; leave it unset and it inherits the shared `--th
 `--theme-*` token every other themed component also falls back to. See
 `theming-component-token-pattern.md` for why this two-tier shape exists.
 
-This shape mirrors `InputTextCore`'s token set (see its own CONSUMER-STYLING.md) — `InputNumber`
-is a native `<input type="number">` sibling to the text-based `InputTextAsNumberWithLabel` variant,
+This shape mirrors `InputText`'s token set (see its own CONSUMER-STYLING.md) — `InputNumber`
+is a native `<input type="number">` sibling to the text-based `InputTextAsNumberField` variant,
 and both are meant to look and behave the same way. Border colour also doubles as the divider
 colour between the input and an embedded left/right `InputButton` — there's no separate divider
-token, same as `InputTextCore`.
+token, same as `InputText`.
 
 | Token | Falls back to | Controls |
 |---|---|---|
@@ -66,8 +66,8 @@ Inner elements: `.input-number-slot` (both slot holders), `.input-number-slot-le
 ## Input variant
 
 `:input-variant="'normal' | 'outlined' | 'underlined'"` (default `"normal"`) — same prop as
-`InputTextCore`. Only `normal` (bordered box, with hover/focus outline) and `underlined`
-(bottom-border only) have CSS today; `outlined` has no styling in `InputTextCore` either, so passing it renders with no border/outline at all — a
+`InputText`. Only `normal` (bordered box, with hover/focus outline) and `underlined`
+(bottom-border only) have CSS today; `outlined` has no styling in `InputText` either, so passing it renders with no border/outline at all — a
 pre-existing gap in the type, not something specific to `InputNumber`. Declared for prop-shape
 consistency with the rest of `05.forms`.
 

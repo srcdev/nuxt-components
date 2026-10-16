@@ -1,8 +1,8 @@
 # InputDescription — Consumer Styling Guide
 
 `InputDescription` is the help text rendered between the label and the control by every `*Field`
-wrapper (`InputTextWithLabel`, `InputNumberField`, `InputSelectField`,
-`InputTextareaWithLabel`, `InputRangeField`, `InputTextAsNumberWithLabel`, `SingleCheckbox`,
+wrapper (`InputTextField`, `InputNumberField`, `InputSelectField`,
+`InputTextareaWithLabel`, `InputRangeField`, `InputTextAsNumberField`, `SingleCheckbox`,
 `MultipleCheckboxes`, `MultipleRadiobuttons`) when you pass it a `descriptionText` or
 `descriptionHtml` slot. With neither slot it renders nothing.
 
@@ -84,9 +84,9 @@ description. Keep these blocks **unlayered** (no `@layer ...` wrapper) so they b
 ```vue
 <template>
   <div class="contact-page-content">
-    <InputTextWithLabel v-model="email" name="email" label="Email">
+    <InputTextField v-model="email" name="email" label="Email">
       <template #descriptionText>We'll only use this for your booking confirmation</template>
-    </InputTextWithLabel>
+    </InputTextField>
   </div>
 </template>
 
@@ -108,9 +108,9 @@ The wrappers don't forward `style-class-passthrough` to the description, but a p
 the wrapper itself lands on its root element, which is an ancestor of the description:
 
 ```vue
-<InputTextWithLabel class="email-field" v-model="email" name="email" label="Email">
+<InputTextField class="email-field" v-model="email" name="email" label="Email">
   <template #descriptionText>We'll only use this for your booking confirmation</template>
-</InputTextWithLabel>
+</InputTextField>
 
 <style>
 .email-field {

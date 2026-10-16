@@ -1,8 +1,8 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { reactive, ref } from "vue";
-import InputTextWithLabel from "../../input-text/InputTextWithLabel.vue";
-import InputPasswordWithLabel from "../../input-text/InputPasswordWithLabel.vue";
-import InputTextAsNumberWithLabel from "../../input-text/InputTextAsNumberWithLabel.vue";
+import InputTextField from "../../input-text/InputTextField.vue";
+import InputPasswordField from "../../input-text/InputPasswordField.vue";
+import InputTextAsNumberField from "../../input-text/InputTextAsNumberField.vue";
 import InputRangeField from "../../input-range/InputRangeField.vue";
 import InputNumberField from "../../input-number/InputNumberField.vue";
 import InputOtpField from "../../input-otp/InputOtpField.vue";
@@ -27,9 +27,9 @@ interface MigratedFieldsFormStoryArgs {
 // Living reference, not a component of its own: every 05.forms component that scores 5/5 in the
 // Component Ledger (.claude/component-ledger/audit.json) appears here, either as its own field or
 // rendered inside one. As of 2026-10-04 every 05.forms component is 5/5, so all of them are in:
-// - Own field: InputTextWithLabel (InputTextCore; plus one per type/inputmode pair for checking
-//   on-device keyboards), InputPasswordWithLabel,
-//   InputTextAsNumberWithLabel, InputRangeField (InputRange), InputNumberField
+// - Own field: InputTextField (InputText; plus one per type/inputmode pair for checking
+//   on-device keyboards), InputPasswordField,
+//   InputTextAsNumberField, InputRangeField (InputRange), InputNumberField
 //   (InputNumber), InputOtpField (InputOtp), InputTextareaWithLabel (InputTextareaCore), InputSelectField
 //   (InputSelect), ToggleSwitchWithLabel and ToggleSwitchWithLabelInline (ToggleSwitchCore),
 //   MultipleCheckboxes, SingleCheckbox, MultipleRadiobuttons, TripleToggleSwitch ("Theme
@@ -60,9 +60,9 @@ export default {
 
 const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
   components: {
-    InputTextWithLabel,
-    InputPasswordWithLabel,
-    InputTextAsNumberWithLabel,
+    InputTextField,
+    InputPasswordField,
+    InputTextAsNumberField,
     InputRangeField,
     InputNumberField,
     InputOtpField,
@@ -97,7 +97,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       terms: false,
     });
 
-    // One InputTextWithLabel per type/inputmode pair, for checking each on-screen keyboard on a real device.
+    // One InputTextField per type/inputmode pair, for checking each on-screen keyboard on a real device.
     const textVariants: { name: string; label: string; type: InputTypesText; inputmode: InputMode; placeholder: string }[] = [
       { name: "variantEmail", label: "Email", type: "email", inputmode: "email", placeholder: "eg. jane@example.com" },
       { name: "variantTel", label: "Phone", type: "tel", inputmode: "tel", placeholder: "eg. 07700 900123" },
@@ -251,7 +251,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
       <FormWrapper width="medium">
         <form novalidate @submit.prevent="submit">
           <FormField width="wide" :has-gutter="false">
-            <InputTextWithLabel
+            <InputTextField
               v-model="state.fullName"
               type="text"
               name="fullName"
@@ -263,11 +263,11 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
               :input-variant="args.inputVariant"
             >
               <template #descriptionText>As it appears on your ID</template>
-            </InputTextWithLabel>
+            </InputTextField>
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
-            <InputPasswordWithLabel
+            <InputPasswordField
               v-model="state.password"
               name="password"
               label="Password"
@@ -277,11 +277,11 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
               :input-variant="args.inputVariant"
             >
               <template #descriptionText>At least 8 characters</template>
-            </InputPasswordWithLabel>
+            </InputPasswordField>
           </FormField>
 
           <FormField v-for="variant in textVariants" :key="variant.name" width="wide" :has-gutter="false">
-            <InputTextWithLabel
+            <InputTextField
               v-model="textVariantValues[variant.name]"
               :type="variant.type"
               :inputmode="variant.inputmode"
@@ -292,7 +292,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
               :input-variant="args.inputVariant"
             >
               <template #descriptionText>type="{{ variant.type }}", inputmode="{{ variant.inputmode }}"</template>
-            </InputTextWithLabel>
+            </InputTextField>
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
@@ -341,7 +341,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
-            <InputTextAsNumberWithLabel
+            <InputTextAsNumberField
               v-model="state.guests"
               name="guests"
               label="Guests"
@@ -353,7 +353,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
             >
               <template #left><span aria-hidden="true">−</span></template>
               <template #right><span aria-hidden="true">+</span></template>
-            </InputTextAsNumberWithLabel>
+            </InputTextAsNumberField>
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
