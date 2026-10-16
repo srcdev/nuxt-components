@@ -136,8 +136,8 @@ Tracks progress toward a fully migrated component library. A component is consid
 
 | Component | File | CS | SN |
 |---|---|---|---|
-| InputSelectCore | `input-select/InputSelectCore.vue` | ☐ | ☐ |
-| InputSelectWithLabel | `input-select/InputSelectWithLabel.vue` | ☐ | ☐ |
+| InputSelect | `input-select/InputSelect.vue` | ☐ | ☐ |
+| InputSelectField | `input-select/InputSelectField.vue` | ☐ | ☐ |
 | InputNumber | `input-number/InputNumber.vue` | ☐ | ☐ |
 | InputNumberField | `input-number/InputNumberField.vue` | ☐ | ☐ |
 

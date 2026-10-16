@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { reactive, ref } from "vue";
 import InputTextWithLabel from "../../input-text/InputTextWithLabel.vue";
-import InputSelectWithLabel from "../../input-select/InputSelectWithLabel.vue";
+import InputSelectField from "../../input-select/InputSelectField.vue";
 import InputTextareaWithLabel from "../../input-textarea/InputTextareaWithLabel.vue";
 import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
 import InputButton from "../../input-button/InputButton.vue";
@@ -14,7 +14,7 @@ interface ContactFormStoryArgs {
 }
 
 // Demo composition, not a component of its own — a richer variant of a typical contact page
-// pattern: name/phone/email + multi-select services + comments shape, plus an InputSelectWithLabel
+// pattern: name/phone/email + multi-select services + comments shape, plus an InputSelectField
 // "How did you hear about us?" field, to also exercise the select
 // component alongside the others in one composed form. No validation wiring
 // (useZodValidation/zod) here — that's the consuming app's concern, this is a visual/composition
@@ -37,7 +37,7 @@ export default {
 const Template: StoryFn<ContactFormStoryArgs> = (args) => ({
   components: {
     InputTextWithLabel,
-    InputSelectWithLabel,
+    InputSelectField,
     InputTextareaWithLabel,
     MultipleCheckboxes,
     InputButton,
@@ -132,7 +132,7 @@ const Template: StoryFn<ContactFormStoryArgs> = (args) => ({
         </FormField>
 
         <FormField width="wide" :has-gutter="false">
-          <InputSelectWithLabel
+          <InputSelectField
             v-model="state.hearAboutUs"
             v-model:field-data="hearAboutUsOptions"
             name="hearAboutUs"

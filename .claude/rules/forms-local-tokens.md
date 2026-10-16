@@ -10,5 +10,5 @@ give it a local `--_<name>-*` token defaulting from the global one. Check any fo
 against `--input-min-height` next to its siblings (text input, select, button).
 
 Why: early form components had no component-level override point (CLAUDE.md pitfall #14), and an
-active unitless `line-height` made `InputSelectCore` taller than its siblings (pitfall #15).
+active unitless `line-height` made `InputSelect` taller than its siblings (pitfall #15).
 Detail: `.claude/skills/theming-component-token-pattern.md`.

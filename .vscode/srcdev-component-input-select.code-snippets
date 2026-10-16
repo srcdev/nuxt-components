@@ -1,22 +1,22 @@
 {
-  "SRCDEV InputSelectCore Basic": {
-    "description": "Basic InputSelectCore native select (no label/error wrapper)",
+  "SRCDEV InputSelect Basic": {
+    "description": "Basic InputSelect native select (no label/error wrapper)",
     "scope": "vue,html",
     "body": [
-      "<InputSelectCore",
+      "<InputSelect",
       "  id=\"$1fieldId\"",
-      "  name=\"$2fieldName\"",
-      "  v-model=\"$3fieldValue\"",
-      "  v-model:field-data=\"$4fieldOptions\"",
+      "  v-model=\"$2fieldValue\"",
+      "  v-model:field-data=\"$3fieldOptions\"",
+      "  name=\"$4fieldName\"",
       "  placeholder=\"$5Choose an option\"",
       "/>"
     ]
   },
-  "SRCDEV InputSelectWithLabel Basic": {
-    "description": "InputSelectWithLabel: labelled select with error/description support",
+  "SRCDEV InputSelectField Basic": {
+    "description": "InputSelectField: labelled select with description and error support",
     "scope": "vue,html",
     "body": [
-      "<InputSelectWithLabel",
+      "<InputSelectField",
       "  v-model=\"$1fieldValue\"",
       "  v-model:field-data=\"$2fieldOptions\"",
       "  name=\"$3fieldName\"",
@@ -24,17 +24,23 @@
       "  placeholder=\"$5Choose an option\"",
       "  :error-message=\"$6errors.fieldName\"",
       "  :field-has-error=\"!!$6errors.fieldName\"",
-      "/>"
+      ">",
+      "  <template #descriptionText>$7</template>",
+      "</InputSelectField>"
     ]
   },
   "SRCDEV InputSelect CSS Override": {
-    "description": "CSS override scaffold for InputSelectCore tokens",
+    "description": "CSS override scaffold for InputSelect tokens",
     "scope": "css",
     "body": [
       ".$1my-page {",
-      "  .input-select-wrapper {",
-      "    --input-select-surface: $2;",
-      "    --input-select-border: $3;",
+      "  --input-select-surface: $2;",
+      "  --input-select-text-color: $3;",
+      "  --input-select-border: $4;",
+      "  --input-select-border-focus: $5;",
+      "",
+      "  .input-select-field[data-invalid] {",
+      "    $0",
       "  }",
       "}"
     ]

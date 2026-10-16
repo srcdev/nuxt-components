@@ -1,7 +1,7 @@
 # InputLabel — Consumer Styling Guide
 
 `InputLabel` is the `<label>` rendered by every labelled field wrapper (`InputTextWithLabel`,
-`InputTextAsNumberWithLabel`, `InputNumberField`, `InputSelectWithLabel`,
+`InputTextAsNumberWithLabel`, `InputNumberField`, `InputSelectField`,
 `InputTextareaWithLabel`, `InputRangeField`, `ToggleSwitchWithLabel`,
 `ToggleSwitchWithLabelInline`).
 

@@ -1,7 +1,7 @@
 # InputError — Consumer Styling Guide
 
 `InputError` is the red error message strip rendered under a form control by every `*Field`
-wrapper (`InputTextWithLabel`, `InputNumberField`, `InputSelectWithLabel`, `SingleCheckbox`, ...).
+wrapper (`InputTextWithLabel`, `InputNumberField`, `InputSelectField`, `SingleCheckbox`, ...).
 It animates open (`grid-template-rows: 0fr → 1fr` plus opacity) when the field is in error.
 
 ## Public token API

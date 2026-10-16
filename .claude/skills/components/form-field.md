@@ -6,7 +6,7 @@
 field's width (`narrow`/`medium`/`wide`), centres it with `margin-inline: auto`, optionally insets
 it from its container edges with a gutter, and applies the shared vertical field spacing
 (`--field-margin-block`). It renders no label, input or error text itself: put an `*Field`
-component (`InputTextWithLabel`, `InputNumberField`, `InputSelectWithLabel`, ...) in its default
+component (`InputTextWithLabel`, `InputNumberField`, `InputSelectField`, ...) in its default
 slot.
 
 Typical use inside `FormWrapper` / a pattern form: `<FormField width="wide" :has-gutter="false">`

@@ -87,8 +87,8 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | ~~InputRangeDefault~~ | ✅ `InputRangeField` (2026-10-16) | - |
 | InputTextareaCore | `InputTextarea` | - |
 | InputTextareaWithLabel | `InputTextareaField` | yes |
-| InputSelectCore | `InputSelect` | yes |
-| InputSelectWithLabel | `InputSelectField` | yes |
+| ~~InputSelectCore~~ | ✅ `InputSelect` (2026-10-16) | yes |
+| ~~InputSelectWithLabel~~ | ✅ `InputSelectField` (2026-10-16) | yes |
 | ToggleSwitchCore | `ToggleSwitch` | yes |
 | ToggleSwitchWithLabel | `ToggleSwitchField` | yes |
 | ToggleSwitchWithLabelInline | `layout` prop on `ToggleSwitchField`, or `ToggleSwitchFieldInline` | - |

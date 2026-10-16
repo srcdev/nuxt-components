@@ -3,7 +3,7 @@
 ## Overview
 
 `SelectMenu` is a trigger-and-popover component for selecting from a list of options — a custom,
-fully token-styled alternative to a native `<select>` or `InputSelectCore`, built for non-form
+fully token-styled alternative to a native `<select>` or `InputSelect`, built for non-form
 contexts (language switchers, category filters, faceted filter bars, multi-pick treatment lists).
 It reuses the same Popover API + CSS anchor-positioning mechanism as `ActionMenu` (see that skill
 doc), but its items carry a `value`/`label`/optional `icon`, and the whole thing is driven by
@@ -43,7 +43,7 @@ selected value(s). In single-select mode (default) it's the one selected option'
 `undefined` if nothing is selected — a valid, expected state that renders the placeholder. With
 `multiple`, it's an array of selected values (`[]` when nothing is selected). `{ default: undefined }`
 is this repo's fix for the `vue/require-default-prop` false positive on `defineModel`-declared
-props that are legitimately optional — unlike `InputSelectCore`'s `modelValue`, which uses
+props that are legitimately optional — unlike `InputSelect`'s `modelValue`, which uses
 `{ required: true }` because a native form field genuinely can't be meaningfully empty, this model
 is optional by design (see that rule's `defineModel` gap noted in the repo's ledger `eslint_issues`
 docs). For several independent single-select categories, place multiple `SelectMenu` instances
@@ -257,10 +257,10 @@ ellipsis. The `StressTest` story covers this at every canvas width.
 - **Chevron flip** (`scaleY(-1)`, was `rotate(180deg)` until 2026-10-07) keys off the trigger's `aria-expanded` (from the composable's `isOpen`), not
   `:has(...:popover-open)`, so it also works without the Popover API (changed 2026-10-05).
 - **No native `<select>`/`appearance: base-select` involved** — this is a from-scratch popover
-  listbox, not a styled native select, so it doesn't inherit `InputSelectCore`'s WebKit
+  listbox, not a styled native select, so it doesn't inherit `InputSelect`'s WebKit
   `appearance: base-select` constraints.
 - **Not a form field** — `SelectMenu` has no `fieldHasError`/`theme`/`inputVariant` props like the
-  `05.forms` inputs. Use `InputSelectCore` instead for an actual form field that needs validation
+  `05.forms` inputs. Use `InputSelect` instead for an actual form field that needs validation
   state and native `<select>` semantics.
 - **2026-10-08 stress-test pass**: root `max-inline-size: 100%` (a long trigger label overflowed
   narrow containers instead of truncating), popover `--select-menu-popover-max-width` and

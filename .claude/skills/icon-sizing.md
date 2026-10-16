@@ -48,7 +48,7 @@ beat every layered one regardless of specificity, so any `width`/`height` in `@l
 on an icon showed struck through in DevTools and did nothing, and the rule was "use `font-size`".
 When the layer was added, the `width`/`height` declarations written against icons at the time
 (CanvasSwitcher, DisplayTooltip, PopOver, InputCopy, SelectMenu, CarouselFlip, ResponsiveHeader,
-ServiceDetail, InputSelectCore) started applying for the first time. If an icon in one of those
+ServiceDetail, InputSelect) started applying for the first time. If an icon in one of those
 looks a different size than it used to, that's the cause.
 
 ## Related notes

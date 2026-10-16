@@ -7,7 +7,7 @@ import InputRangeField from "../../input-range/InputRangeField.vue";
 import InputNumberField from "../../input-number/InputNumberField.vue";
 import InputOtpField from "../../input-otp/InputOtpField.vue";
 import InputTextareaWithLabel from "../../input-textarea/InputTextareaWithLabel.vue";
-import InputSelectWithLabel from "../../input-select/InputSelectWithLabel.vue";
+import InputSelectField from "../../input-select/InputSelectField.vue";
 import ToggleSwitchWithLabel from "../../toggle-switch/ToggleSwitchWithLabel.vue";
 import ToggleSwitchWithLabelInline from "../../toggle-switch/ToggleSwitchWithLabelInline.vue";
 import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
@@ -30,8 +30,8 @@ interface MigratedFieldsFormStoryArgs {
 // - Own field: InputTextWithLabel (InputTextCore; plus one per type/inputmode pair for checking
 //   on-device keyboards), InputPasswordWithLabel,
 //   InputTextAsNumberWithLabel, InputRangeField (InputRange), InputNumberField
-//   (InputNumber), InputOtpField (InputOtp), InputTextareaWithLabel (InputTextareaCore), InputSelectWithLabel
-//   (InputSelectCore), ToggleSwitchWithLabel and ToggleSwitchWithLabelInline (ToggleSwitchCore),
+//   (InputNumber), InputOtpField (InputOtp), InputTextareaWithLabel (InputTextareaCore), InputSelectField
+//   (InputSelect), ToggleSwitchWithLabel and ToggleSwitchWithLabelInline (ToggleSwitchCore),
 //   MultipleCheckboxes, SingleCheckbox, MultipleRadiobuttons, TripleToggleSwitch ("Theme
 //   preference": no Field wrapper or error state, so it sits under a plain caption).
 // - Rendered inside other fields: FormWrapper (wraps the form), FormField (wraps every field),
@@ -67,7 +67,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     InputNumberField,
     InputOtpField,
     InputTextareaWithLabel,
-    InputSelectWithLabel,
+    InputSelectField,
     ToggleSwitchWithLabel,
     ToggleSwitchWithLabelInline,
     MultipleCheckboxes,
@@ -369,7 +369,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
-            <InputSelectWithLabel
+            <InputSelectField
               v-model="state.colour"
               v-model:field-data="colourOptions"
               name="colour"
