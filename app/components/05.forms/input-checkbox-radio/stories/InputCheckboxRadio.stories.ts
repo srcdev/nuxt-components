@@ -1,9 +1,9 @@
-import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import { ref } from "vue";
-import StorybookComponent from "../InputCheckboxRadio.vue";
+import type { Meta, StoryObj } from "@nuxtjs/storybook";
+import InputCheckboxRadio from "../InputCheckboxRadio.vue";
 import type { FormUiTheme, InputUiVariant } from "~/types/forms/types.forms.d";
 
-interface InputCheckboxRadioStoryArgs {
+interface StoryArgs {
   type: "checkbox" | "radio";
   id: string;
   name: string;
@@ -15,9 +15,20 @@ interface InputCheckboxRadioStoryArgs {
   inputVariant: InputUiVariant;
 }
 
-export default {
+// Links in the canvas open in the Storybook manager (target="_top"), not inside the preview iframe.
+const storyNoteStyle = "margin: 0 0 1.6rem; font-size: 1.4rem;";
+const parentNote = `
+  <p style="${storyNoteStyle}">
+    This is the bare control with no label. With a text label it's the
+    <a href="/?path=/story/components-forms-input-checkbox-radio-inputcheckboxradiofield--checkbox" target="_top">InputCheckboxRadioField</a>;
+    drawn as a button or pill it's the
+    <a href="/?path=/story/components-forms-input-checkbox-radio-inputcheckboxradiobutton--option-group" target="_top">InputCheckboxRadioButton</a>.
+  </p>
+`;
+
+const meta: Meta<StoryArgs> = {
   title: "Components/Forms/Input Checkbox Radio/InputCheckboxRadio",
-  component: StorybookComponent,
+  component: InputCheckboxRadio,
   argTypes: {
     type: {
       control: { type: "select" },
@@ -62,29 +73,45 @@ export default {
     isButton: false,
     inputVariant: "normal",
   },
-} as Meta<InputCheckboxRadioStoryArgs>;
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "The checkbox or radio control every form checkbox and radio is built from: a styled square or circle stacked over a hidden native input. It has no label, so pair its `id` with your own `label[for]`, or use `InputCheckboxRadioField` / `InputCheckboxRadioButton`. Slot: `checkedIcon`. No stress story here: the control renders no text, and long-label behaviour is covered by the Field and Button stress stories.",
+      },
+    },
+  },
+};
 
-const Template: StoryFn<InputCheckboxRadioStoryArgs> = (args) => ({
-  components: { StorybookComponent },
+export default meta;
+type Story = StoryObj<StoryArgs>;
+
+const render = (args: StoryArgs) => ({
+  components: { InputCheckboxRadio },
   setup() {
     const modelValue = ref(false);
     return { args, modelValue };
   },
   template: `
     <div style="margin: 36px;">
-      <StorybookComponent v-bind="args" v-model="modelValue" />
+      ${parentNote}
+      <InputCheckboxRadio v-bind="args" v-model="modelValue" />
     </div>
   `,
 });
 
-export const Checkbox = Template.bind({});
-Checkbox.args = { type: "checkbox" };
+export const Checkbox: Story = { args: { type: "checkbox" }, render };
 
-export const Radio = Template.bind({});
-Radio.args = { type: "radio" };
+export const Radio: Story = { args: { type: "radio" }, render };
 
-export const CheckboxAsDisc = Template.bind({});
-CheckboxAsDisc.args = { type: "checkbox", isButton: true, displayAsDisc: true };
+export const CheckboxAsDisc: Story = {
+  args: { type: "checkbox", isButton: true, displayAsDisc: true },
+  render,
+  parameters: { docs: { description: { story: "`displayAsDisc` rounds a checkbox, but only in button mode (`isButton`)." } } },
+};
 
-export const ErrorState = Template.bind({});
-ErrorState.args = { type: "checkbox", fieldHasError: true, theme: "error" };
+export const ErrorState: Story = {
+  args: { type: "checkbox", fieldHasError: true, theme: "error" },
+  render,
+  parameters: { docs: { description: { story: "`fieldHasError` sets `aria-invalid` on the input and `data-invalid` on the root." } } },
+};

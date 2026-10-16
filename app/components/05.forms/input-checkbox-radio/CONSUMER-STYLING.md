@@ -67,8 +67,7 @@ Also reads `--input-checkbox-decorator-icon-size` (decorator icon `font-size`, `
 `--input-font-size` (label).
 
 Private (not public API): `--_transition-duration` (the control's resolved duration, shared by two
-transitions), `--_icon-size` (the button shrinks the inner control's checked icon through it) and
-`--_white-space` (the button label's wrapping, swapped by `data-options-layout="inline"`).
+transitions) and `--_icon-size` (the button shrinks the inner control's checked icon through it).
 
 > **Changed 2026-09-27**:
 >
@@ -80,6 +79,14 @@ transitions), `--_icon-size` (the button shrinks the inner control's checked ico
 >   so both tokens take effect for the first time: the `+` renders at `2rem` and the checked icon
 >   inside a button at `--input-checked-icon-size` minus `0.8rem`.
 > - `--input-checkbox-label-color` is new (was unstyled, so `inherit`).
+>
+> **Changed 2026-10-16**: long labels wrap instead of overflowing. Both labels
+> (`.input-checkbox-radio-field-label`, `.input-checkbox-radio-button-label`) and their roots set
+> `min-inline-size: 0`, the labels set `overflow-wrap: anywhere`, and the control and decorator
+> icon no longer shrink (`flex-shrink: 0`). The button label used to be `nowrap` under
+> `data-options-layout="inline"` (private `--_white-space`, now removed), so an unbroken label
+> overflowed the row. In a wrapping row a short label still sits on one line; if you relied on
+> `nowrap`, set `white-space: nowrap` on `.input-checkbox-radio-button-label` yourself.
 
 ---
 
@@ -95,7 +102,7 @@ transitions), `--_icon-size` (the button shrinks the inner control's checked ico
 | `data-invalid` | all three roots | The field has an error |
 | `data-pill` | `.input-checkbox-radio-button` | `is-pill` |
 | `data-direction="row" \| "row-reverse"` | `.input-checkbox-radio-button` | Always, mirrors `direction` |
-| `data-options-layout` | `.input-checkbox-radio-button` | Always, mirrors `options-layout` (`inline` stops the label wrapping) |
+| `data-options-layout` | `.input-checkbox-radio-button` | Always, mirrors `options-layout` (a hook only: it no longer changes wrapping) |
 
 Inner elements: `.input-checkbox-radio-icon-slot` (holds the `checkedIcon` slot or the default
 `.input-checkbox-radio-icon`), `.input-checkbox-radio-input` (the hidden native input),

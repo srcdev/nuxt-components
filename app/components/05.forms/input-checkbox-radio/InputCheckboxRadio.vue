@@ -99,6 +99,7 @@ watch(
 
     height: var(--input-checked-element-size);
     width: var(--input-checked-element-size);
+    flex-shrink: 0;
 
     transition: all var(--_transition-duration) ease-in-out;
 

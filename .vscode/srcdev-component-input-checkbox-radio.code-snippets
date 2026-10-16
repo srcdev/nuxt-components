@@ -30,7 +30,6 @@
     "body": [
       "<InputCheckboxRadioButton",
       "  v-for=\"option in ${1:options}\"",
-      "  :id=\"`${2:name}-\\${option.value}`\"",
       "  :key=\"option.value\"",
       "  v-model=\"${3:state.value}\"",
       "  type=\"${4|checkbox,radio|}\"",

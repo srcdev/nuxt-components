@@ -206,7 +206,7 @@ export const StressTest: Story = {
       story: { inline: false, height: "900px" },
       description: {
         story:
-          "30 options including an empty label, a single character, long unbroken German and URL labels, emoji, right-to-left text, HTML-like text and a value with spaces. Check at every canvas width: the legend, description, labels and error wrap inside the dashed outline, markup renders as text, the equal-width columns never get wider than the container, and clicking any label (including the odd ones) toggles its own checkbox. Switch `optionsLayout` to `inline` and `block`, and turn on `isButton`. Known gap: inline button tiles are deliberately `nowrap` (`InputCheckboxRadioButton`), so an unbroken label still overflows in `isButton` + `inline`.",
+          "30 options including an empty label, a single character, long unbroken German and URL labels, emoji, right-to-left text, HTML-like text and a value with spaces. Check at every canvas width: the legend, description, labels and error wrap inside the dashed outline, markup renders as text, the equal-width columns never get wider than the container, and clicking any label (including the odd ones) toggles its own checkbox. Switch `optionsLayout` to `inline` and `block`, and turn on `isButton`..",
       },
     },
   },

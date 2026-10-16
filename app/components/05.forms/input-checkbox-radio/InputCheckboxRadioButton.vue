@@ -1,6 +1,6 @@
 <template>
   <label
-    :for="id"
+    :for="inputId"
     class="input-checkbox-radio-button"
     :class="elementClasses"
     :data-theme="theme"
@@ -10,7 +10,7 @@
     :data-pill="isPill ? '' : undefined"
   >
     <InputCheckboxRadio
-      :id
+      :id="inputId"
       v-model="modelValue"
       :is-button="true"
       :type
@@ -44,7 +44,7 @@
 import type { FormUiTheme, InputUiVariant, OptionsLayout } from "~/types/forms/types.forms";
 
 interface Props {
-  id: string;
+  id?: string;
   type: "checkbox" | "radio";
   name: string;
   label?: string;
@@ -65,6 +65,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  id: undefined,
   label: "",
   required: false,
   theme: "default",
@@ -84,6 +85,9 @@ const props = withDefaults(defineProps<Props>(), {
 
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({ required: true });
 
+const generatedId = useId();
+const inputId = computed(() => props.id || generatedId);
+
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
@@ -97,9 +101,8 @@ watch(
 <style lang="css">
 @layer components {
   .input-checkbox-radio-button {
-    --_white-space: wrap;
-
     display: flex;
+    min-inline-size: 0;
     align-items: center;
     justify-content: space-between;
     gap: var(--input-checkbox-button-gap, 1rem);
@@ -120,10 +123,6 @@ watch(
 
     &[data-pill] {
       border-radius: var(--input-checkbox-button-border-radius-pill, 100vw);
-    }
-
-    &[data-options-layout="inline"] {
-      --_white-space: nowrap;
     }
 
     &:hover {
@@ -155,12 +154,14 @@ watch(
       text-align: center;
       padding-block: var(--input-checkbox-button-label-padding-block, 0.8rem);
       padding-inline: var(--input-checkbox-button-label-padding-inline, 0.8rem);
-      white-space: var(--_white-space);
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
       cursor: pointer;
     }
 
     .input-checkbox-radio-button-icon {
       display: flex;
+      flex-shrink: 0;
       align-items: center;
       justify-content: center;
       color: var(--input-checkbox-button-icon-color, var(--theme-text));

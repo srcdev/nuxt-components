@@ -28,7 +28,6 @@ Use these three directly only for a custom group or layout:
 
 <InputCheckboxRadioButton
   v-for="option in options"
-  :id="`service-${option.value}`"
   :key="option.value"
   v-model="state.services"
   type="checkbox"
@@ -85,9 +84,9 @@ Same props as the control minus `isButton` (always on), plus:
 
 | Prop | Type | Default | Notes |
 |---|---|---|---|
-| `id` | `string` | required | Used for both the input and `label[for]`. |
+| `id` | `string` | generated | Used for both the input and `label[for]`. Optional since 2026-10-16: omitted, it comes from `useId()`. Never build it from data values (rule `ids-from-useid.md`). |
 | `label` | `string` | `""` | Replaced by the `labelContent` slot when given. |
-| `:options-layout` | `OptionsLayout` | `"equal-widths"` | `data-options-layout`; `inline` stops the label wrapping. |
+| `:options-layout` | `OptionsLayout` | `"equal-widths"` | `data-options-layout`, a styling hook only (until 2026-10-16 `inline` made the label `nowrap`). |
 | `direction` | `"row" \| "row-reverse"` | `"row"` | `data-direction`; `row-reverse` puts the control on the right. Reacts to changes. |
 | `:is-pill` | `boolean` | `false` | `data-pill`, fully rounded. |
 | `:item-icon` | `string` | `"material-symbols:add-2"` | Decorator icon name. The `itemIcon` slot replaces it entirely. |
@@ -124,6 +123,15 @@ Full detail in `app/components/05.forms/input-checkbox-radio/CONSUMER-STYLING.md
 
 ---
 
+## Long and hostile content
+
+Both labels wrap long unbroken words and URLs (`overflow-wrap: anywhere`, `min-inline-size: 0` on
+label and root), and the control and decorator icon keep their size (`flex-shrink: 0`). No
+line-clamp tokens: an option label names the choice and must stay readable. The Field and Button
+`StressTest` stories cover it; the bare control renders no text, so it has none.
+
+---
+
 ## History
 
 **Migrated 2026-09-27** (3/5 → full compliance):
@@ -147,3 +155,11 @@ Full detail in `app/components/05.forms/input-checkbox-radio/CONSUMER-STYLING.md
 - Button radius, gap, paddings and the Field label colour became tokens; label colour default moved
   from `--colour-text-default` to `--theme-text`. Removed an undeclared `--_box-shadow` and an
   invalid unitless `min-height`.
+
+**Stress pass 2026-10-16**:
+
+- Removed the inline-layout `nowrap` on the button label (private `--_white-space`), which made an
+  unbroken label overflow the row; labels now wrap and the control/icon no longer shrink.
+- `InputCheckboxRadioButton`'s `id` became optional with a `useId()` fallback.
+- Specs now unmount every wrapper in `afterEach`; stories moved to `StoryObj` with Docs
+  descriptions, parent-story links, `CanvasSwitcher` (Field, Button) and `StressTest` stories.

@@ -1,4 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { afterEach, describe, it, expect, vi } from "vitest";
+import { defineComponent } from "vue";
+import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import InputCheckboxRadioButton from "../InputCheckboxRadioButton.vue";
 
@@ -12,12 +14,22 @@ const defaultProps = {
   multipleOptions: true,
 };
 
-const createWrapper = (props = {}, slots = {}) =>
-  mountSuspended(InputCheckboxRadioButton, {
+const mounted: VueWrapper[] = [];
+
+const createWrapper = async (props = {}, slots = {}) => {
+  const wrapper = await mountSuspended(InputCheckboxRadioButton, {
     attachTo: document.body,
     props: { ...defaultProps, ...props },
     slots,
   });
+  mounted.push(wrapper);
+  return wrapper;
+};
+
+afterEach(() => {
+  mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+  vi.restoreAllMocks();
+});
 
 describe("InputCheckboxRadioButton", () => {
   it("renders a label linked to the inner control by id", async () => {
@@ -25,6 +37,29 @@ describe("InputCheckboxRadioButton", () => {
 
     expect(wrapper.find("label.input-checkbox-radio-button").attributes("for")).toBe("service-balayage");
     expect(wrapper.find("input").attributes("id")).toBe("service-balayage");
+  });
+
+  it("generates a space-free id linking label and control when no id is passed", async () => {
+    const wrapper = await createWrapper({ id: undefined });
+    const id = wrapper.find("input").attributes("id");
+
+    expect(id).toBeTruthy();
+    expect(id).not.toMatch(/\s/);
+    expect(wrapper.find("label.input-checkbox-radio-button").attributes("for")).toBe(id);
+  });
+
+  it("generates a different id for each instance", async () => {
+    const Host = defineComponent({
+      components: { InputCheckboxRadioButton },
+      setup: () => ({ props: { ...defaultProps, id: undefined } }),
+      template: `<div><InputCheckboxRadioButton v-bind="props" /><InputCheckboxRadioButton v-bind="props" /></div>`,
+    });
+    const host = await mountSuspended(Host);
+    mounted.push(host);
+    const ids = host.findAll("input").map((input) => input.attributes("id"));
+
+    expect(ids).toHaveLength(2);
+    expect(ids[0]).not.toBe(ids[1]);
   });
 
   it("renders the label prop, or the labelContent slot in its place", async () => {

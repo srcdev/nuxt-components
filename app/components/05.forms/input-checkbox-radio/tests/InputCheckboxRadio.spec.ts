@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { afterEach, describe, it, expect, vi } from "vitest";
+import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import InputCheckboxRadio from "../InputCheckboxRadio.vue";
 
@@ -11,12 +12,22 @@ const defaultProps = {
   modelValue: "unchecked",
 };
 
-const createWrapper = (props = {}, slots = {}) =>
-  mountSuspended(InputCheckboxRadio, {
+const mounted: VueWrapper[] = [];
+
+const createWrapper = async (props = {}, slots = {}) => {
+  const wrapper = await mountSuspended(InputCheckboxRadio, {
     attachTo: document.body,
     props: { ...defaultProps, ...props },
     slots,
   });
+  mounted.push(wrapper);
+  return wrapper;
+};
+
+afterEach(() => {
+  mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+  vi.restoreAllMocks();
+});
 
 const inputOf = (wrapper: Awaited<ReturnType<typeof createWrapper>>) => wrapper.find("input").element as HTMLInputElement;
 

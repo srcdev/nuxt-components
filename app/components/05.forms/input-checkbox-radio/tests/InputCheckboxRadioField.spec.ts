@@ -1,4 +1,5 @@
-import { describe, it, expect } from "vitest";
+import { afterEach, describe, it, expect, vi } from "vitest";
+import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import InputCheckboxRadioField from "../InputCheckboxRadioField.vue";
 
@@ -9,12 +10,22 @@ const defaultProps = {
   modelValue: false,
 };
 
-const createWrapper = (props = {}, slots = {}) =>
-  mountSuspended(InputCheckboxRadioField, {
+const mounted: VueWrapper[] = [];
+
+const createWrapper = async (props = {}, slots = {}) => {
+  const wrapper = await mountSuspended(InputCheckboxRadioField, {
     attachTo: document.body,
     props: { ...defaultProps, ...props },
     slots,
   });
+  mounted.push(wrapper);
+  return wrapper;
+};
+
+afterEach(() => {
+  mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+  vi.restoreAllMocks();
+});
 
 describe("InputCheckboxRadioField", () => {
   it("renders a label linked to the inner control", async () => {

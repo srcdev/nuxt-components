@@ -127,9 +127,8 @@ controls' own colours are the `--input-checkbox-*` tokens in `input-checkbox-rad
 Both root fieldsets set `min-inline-size: 0` (a native `<fieldset>` otherwise grows to its
 min-content width and overflows a narrow column) and `overflow-wrap: anywhere`, which inherits
 into the legend, description, labels and error, so long unbroken words and URLs wrap. Equal-width
-columns are capped at `100%` of the container. Known gap: `InputCheckboxRadioButton` keeps inline
-button labels `nowrap`, so `is-button` with `options-layout="inline"` still overflows on an
-unbroken label. No line-clamp tokens: the legend, option labels and error name the choice or the
+columns are capped at `100%` of the container. Button-mode labels wrap too (`InputCheckboxRadioButton` dropped its inline `nowrap`
+2026-10-16). No line-clamp tokens: the legend, option labels and error name the choice or the
 problem and must stay readable. The `StressTest` story in each story file covers this.
 
 ---

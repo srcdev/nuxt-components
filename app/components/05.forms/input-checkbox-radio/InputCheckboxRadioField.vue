@@ -85,11 +85,14 @@ watch(
     gap: var(--input-checked-icon-gap);
     min-height: var(--input-min-height);
     user-select: none;
+    min-inline-size: 0;
 
     .input-checkbox-radio-field-label {
       display: flex;
       flex: 1;
       align-items: center;
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
       color: var(--input-checkbox-label-color, inherit);
       padding-block: var(--input-checkbox-label-padding-block);
       padding-inline: var(--input-checkbox-label-padding-inline);
