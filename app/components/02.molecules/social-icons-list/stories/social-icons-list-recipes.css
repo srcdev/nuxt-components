@@ -1,0 +1,108 @@
+/*
+ * SocialIconsList recipes, as a consumer would write them: unlayered, on a class passed through
+ * style-class-passthrough. Tokens that read --social-icons-list-brand-colour are set on
+ * .social-icons-list-item, the element that defines it (a var() in a custom property resolves where
+ * that property is declared, so setting them on the root would find no brand colour).
+ */
+
+/* 2a: mono tiles, brand colour on hover */
+.demo-social-mono-tiles {
+  --social-icons-list-gap: 1rem;
+  --social-icons-list-icon-size: 2rem;
+  --social-icons-list-icon-colour: #16171b;
+  --social-icons-list-link-padding: 1.2rem;
+  --social-icons-list-link-radius: 1.2rem;
+  --social-icons-list-link-background: #f1f2f5;
+  --social-icons-list-link-background-hover: #e6e8ee;
+  --social-icons-list-hover-scale: 1.04;
+  --social-icons-list-hover-opacity: 1;
+
+  .social-icons-list-item {
+    --social-icons-list-icon-colour-hover: var(--social-icons-list-brand-colour);
+  }
+}
+
+/* 2b: dark dock with glow */
+.demo-social-dark-dock {
+  inline-size: fit-content;
+  padding: 0.8rem;
+  border: 1px solid #34353b;
+  border-radius: 2.2rem;
+  background: #232428;
+  --social-icons-list-gap: 0.8rem;
+  --social-icons-list-icon-size: 2rem;
+  --social-icons-list-icon-colour: #ffffff;
+  --social-icons-list-link-padding: 1.2rem;
+  --social-icons-list-link-radius: 1.4rem;
+  --social-icons-list-link-background: #1a1b1f;
+  --social-icons-list-hover-scale: 1;
+  --social-icons-list-hover-opacity: 1;
+
+  .social-icons-list-item {
+    --social-icons-list-link-shadow-hover:
+      0 0 0 1px color-mix(in oklab, var(--social-icons-list-brand-colour) 60%, transparent),
+      0 0 1.6rem color-mix(in oklab, var(--social-icons-list-brand-colour) 55%, transparent);
+    --social-icons-list-icon-colour-hover: var(--social-icons-list-brand-colour);
+  }
+}
+
+/* 2c: labelled pills (show-label) */
+.demo-social-pills {
+  justify-content: center;
+  --social-icons-list-gap: 1rem;
+  --social-icons-list-icon-size: 1.6rem;
+  --social-icons-list-icon-colour: #ffffff;
+  --social-icons-list-link-padding: 0.4rem 1.4rem 0.4rem 0.4rem;
+  --social-icons-list-link-gap: 0.8rem;
+  --social-icons-list-link-border: 1.5px solid #16171b;
+  --social-icons-list-link-radius: 99rem;
+  --social-icons-list-link-background: #ffffff;
+  --social-icons-list-label-colour: #16171b;
+  --social-icons-list-icon-wrapper-padding: 0.6rem;
+  --social-icons-list-icon-wrapper-radius: 50%;
+  --social-icons-list-hover-scale: 1.03;
+  --social-icons-list-hover-opacity: 1;
+
+  .social-icons-list-item {
+    --social-icons-list-icon-wrapper-background: var(--social-icons-list-brand-colour);
+  }
+}
+
+/* 2d: overlapping stack, fans out on hover or keyboard focus */
+.demo-social-stack {
+  --social-icons-list-gap: 0;
+  --social-icons-list-icon-size: 1.8rem;
+  --social-icons-list-icon-colour: #ffffff;
+  --social-icons-list-icon-wrapper-padding: 1rem;
+  --social-icons-list-icon-wrapper-radius: 50%;
+  --social-icons-list-icon-wrapper-border: 2px solid #ffffff;
+  --social-icons-list-link-radius: 50%;
+  --social-icons-list-hover-scale: 1.08;
+  --social-icons-list-hover-opacity: 1;
+
+  .social-icons-list-item {
+    --social-icons-list-icon-wrapper-background: var(--social-icons-list-brand-colour);
+
+    & + .social-icons-list-item {
+      margin-inline-start: -1.2rem;
+    }
+
+    &:hover,
+    &:focus-within {
+      z-index: 1;
+    }
+  }
+
+  &:hover,
+  &:focus-within {
+    .social-icons-list-item + .social-icons-list-item {
+      margin-inline-start: 0.4rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .social-icons-list-item {
+      transition: margin-inline-start 250ms ease-out;
+    }
+  }
+}

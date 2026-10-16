@@ -1,9 +1,15 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`SocialIconsList > renders the correct HTML structure 1`] = `
-"<ul class="social-icons-list" aria-label="Social media profiles">
-  <li class="social-icon-item"><a href="https://www.facebook.com/testprofile" class="social-icon-link" aria-label="Facebook profile (opens in a new tab)" rel="noopener noreferrer" target="_blank"><span class="iconify i-logos:facebook social-icon" aria-hidden="true"></span></a></li>
-  <li class="social-icon-item"><a href="https://www.instagram.com/testhandle" class="social-icon-link" aria-label="Instagram profile (opens in a new tab)" rel="noopener noreferrer" target="_blank"><span class="iconify i-logos:instagram-icon social-icon" aria-hidden="true"></span></a></li>
-  <li class="social-icon-item"><a href="https://www.youtube.com/@testchannel" class="social-icon-link" aria-label="YouTube profile (opens in a new tab)" rel="noopener noreferrer" target="_blank"><span class="iconify i-logos:youtube-icon social-icon" aria-hidden="true"></span></a></li>
+"<ul class="social-icons-list" role="list" aria-label="Social media profiles">
+  <li class="social-icons-list-item"><a href="https://www.facebook.com/testprofile" class="social-icons-list-link" aria-label="Facebook profile (opens in a new tab)" rel="noopener noreferrer" target="_blank"><span class="social-icons-list-icon-wrapper" aria-hidden="true"><span class="iconify i-logos:facebook social-icons-list-icon" aria-hidden="true"></span></span>
+      <!--v-if-->
+    </a></li>
+  <li class="social-icons-list-item"><a href="https://www.instagram.com/testhandle" class="social-icons-list-link" aria-label="Instagram profile (opens in a new tab)" rel="noopener noreferrer" target="_blank"><span class="social-icons-list-icon-wrapper" aria-hidden="true"><span class="iconify i-logos:instagram-icon social-icons-list-icon" aria-hidden="true"></span></span>
+      <!--v-if-->
+    </a></li>
+  <li class="social-icons-list-item"><a href="https://www.youtube.com/@testchannel" class="social-icons-list-link" aria-label="YouTube profile (opens in a new tab)" rel="noopener noreferrer" target="_blank"><span class="social-icons-list-icon-wrapper" aria-hidden="true"><span class="iconify i-logos:youtube-icon social-icons-list-icon" aria-hidden="true"></span></span>
+      <!--v-if-->
+    </a></li>
 </ul>"
 `;

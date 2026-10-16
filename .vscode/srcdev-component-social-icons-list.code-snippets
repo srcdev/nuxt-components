@@ -11,6 +11,19 @@
       "/>"
     ]
   },
+  "SRCDEV SocialIconsList Labelled": {
+    "description": "SocialIconsList with visible labels and brand colours (mono icons, for the pill or tile recipes)",
+    "scope": "vue,html",
+    "body": [
+      "<SocialIconsList",
+      "  :items=\"[",
+      "    { networkName: '${1:Instagram}', iconName: '${2:bi:instagram}', baseHref: '${3:https://www.instagram.com/}', profileId: '$4', brandColour: '${5:#e1306c}' },",
+      "  ]\"",
+      "  show-label",
+      "  :style-class-passthrough=\"['${6:my-social-pills}']\"",
+      "/>"
+    ]
+  },
   "SRCDEV SocialIconsList CSS Override": {
     "description": "CSS override scaffold for SocialIconsList tokens",
     "scope": "css",
@@ -18,6 +31,7 @@
       ".$1my-page {",
       "  --social-icons-list-icon-size: $2;",
       "  --social-icons-list-gap: $3;",
+      "  --social-icons-list-icon-colour: $4;",
       "}"
     ]
   }
