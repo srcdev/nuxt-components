@@ -41,7 +41,7 @@ option in `fieldData.data`, and an `InputError`. It's the single-choice sibling 
 | `:options-layout` | `OptionsLayout` | `"equal-widths"` | `"equal-widths"` (auto-fit grid sized to the longest label), `"inline"` (wrapping row) or `"block"` (column). Rendered as `data-options-layout` on the items container. |
 | `:theme` | `FormUiTheme` | `"default"` | Passed to each radio. |
 | `:input-variant` | `InputUiVariant` | `"normal"` | Passed to each radio, the description and the error. |
-| `:style-class-passthrough` | `string \| string[]` | `[]` | Classes on the root `<fieldset>`. Read once at mount. |
+| `:style-class-passthrough` | `string \| string[]` | `[]` | Classes on the root `<fieldset>`; updates when the prop changes. |
 | `data-testid` | `string` | `"multiple-radio-buttons"` | On the root `<fieldset>`. |
 
 ### v-model
@@ -93,3 +93,17 @@ tokens from `input-checkbox-radio`.
   to `data-options-layout`; `MultipleCheckboxes` and `SingleCheckbox` got the same change.
 - Gap and top margin are public tokens. The label-width measurement no longer includes a
   selector for a class that doesn't exist. `fieldData` is a typed required model.
+
+**Stress pass 2026-10-16**:
+
+- Button-mode radio ids were `${name}-${item.value}`, so two groups sharing a `name` got duplicate
+  ids and a value with spaces made an invalid one (CLAUDE.md pitfall 30). `MultipleRadiobuttons`
+  no longer passes an `id`; `InputCheckboxRadioButton` generates one with `useId()`.
+- The root fieldset sets `min-inline-size: 0` and `overflow-wrap: anywhere`, and equal-width
+  columns are capped at `min(100%, ...)`, so long legends, labels and errors wrap inside a narrow
+  column (same fix as `MultipleCheckboxes`). No line-clamp tokens: the legend, option labels and
+  error must stay readable.
+- `styleClassPassthrough` is watched instead of read once at mount.
+- The spec unmounts every wrapper in `afterEach`; the story moved to `StoryObj` with Docs
+  descriptions, `CanvasSwitcher` and a `StressTest` story, and its gap control is labelled as a
+  story-only CSS token.

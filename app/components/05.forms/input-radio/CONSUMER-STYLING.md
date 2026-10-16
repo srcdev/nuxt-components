@@ -26,6 +26,17 @@ No private tokens.
 
 > **Changed 2026-09-27**: the gap and top margin were hardcoded; they're now tokens with the same
 > defaults, matching `MultipleCheckboxes`.
+>
+> **Changed 2026-10-16**: the equal-width column minimum is capped at `min(100%, ...)` so one long
+> label can no longer push the grid wider than its container.
+
+### Root fieldset
+
+`.multiple-radiobuttons-fieldset` sets `min-inline-size: 0` and `overflow-wrap: anywhere` (added
+2026-10-16). A native `<fieldset>` otherwise grows to its min-content width and overflows a narrow
+column; the wrap setting inherits into the legend, description, option labels and error, so long
+unbroken words and URLs wrap. Neither is a token; override `overflow-wrap` on your passthrough
+class if you need the old behaviour.
 
 ---
 

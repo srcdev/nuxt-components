@@ -28,7 +28,6 @@
         <template v-for="item in fieldData.data" :key="item.id">
           <InputCheckboxRadioButton
             v-if="isButton"
-            :id="`${name}-${item.value}`"
             v-model="modelValue"
             type="radio"
             :name
@@ -110,7 +109,14 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 
 const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   props.name,
@@ -140,6 +146,11 @@ watch(
 
 <style lang="css">
 @layer components {
+.multiple-radiobuttons-fieldset {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
 .multiple-radiobuttons-items {
   display: flex;
   gap: var(--multiple-radiobuttons-gap, 1.2rem);
@@ -159,7 +170,7 @@ watch(
     grid-template-columns: repeat(
       auto-fit,
       minmax(
-        calc(var(--input-checked-icon-gap) + (2 * var(--input-checkbox-label-padding-inline)) + v-bind(maxChildWidth)),
+        min(100%, calc(var(--input-checked-icon-gap) + (2 * var(--input-checkbox-label-padding-inline)) + v-bind(maxChildWidth))),
         1fr
       )
     );

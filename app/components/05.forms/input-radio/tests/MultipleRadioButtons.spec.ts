@@ -1,4 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { defineComponent } from "vue";
+import { afterEach, describe, it, expect, vi } from "vitest";
+import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import type { OptionsLayout, IFormMultipleOptions } from "~/types/forms/types.forms";
 import MultipleRadiobuttons from "../MultipleRadiobuttons.vue";
@@ -12,15 +14,60 @@ const defaultProps = {
   fieldData: tagsData as IFormMultipleOptions,
 };
 
-const createWrapper = (props = {}, slots = {}) =>
-  mountSuspended(MultipleRadiobuttons, {
+const mounted: VueWrapper[] = [];
+
+const createWrapper = async (props = {}, slots = {}) => {
+  const wrapper = await mountSuspended(MultipleRadiobuttons, {
     attachTo: document.body,
     props: { ...defaultProps, ...props },
     slots,
   });
+  mounted.push(wrapper);
+  return wrapper;
+};
+
+afterEach(() => {
+  mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+  vi.restoreAllMocks();
+});
 
 describe("MultipleRadiobuttons", () => {
   describe("rendering", () => {
+    it("gives button radios unique, space-free ids that don't come from option values", async () => {
+      const wrapper = await createWrapper({
+        isButton: true,
+        fieldData: { ...tagsData, data: [{ id: "x", name: "tags", value: "has spaces", label: "Spaces" }, ...tagsData.data] },
+      });
+      const ids = wrapper.findAll('input[type="radio"]').map((radio) => radio.attributes("id")!);
+
+      expect(new Set(ids).size).toBe(ids.length);
+      ids.forEach((id) => expect(id).not.toMatch(/\s/));
+      expect(ids).not.toContain("tags-has spaces");
+    });
+
+    it("keeps button radio ids unique across two groups sharing a name", async () => {
+      const Host = defineComponent({
+        components: { MultipleRadiobuttons },
+        setup: () => ({ props: { ...defaultProps, isButton: true } }),
+        template: `<div><MultipleRadiobuttons v-bind="props" /><MultipleRadiobuttons v-bind="props" /></div>`,
+      });
+      const host = await mountSuspended(Host);
+      mounted.push(host);
+      const ids = host.findAll('input[type="radio"]').map((radio) => radio.attributes("id"));
+
+      expect(ids).toHaveLength(tagsData.data.length * 2);
+      expect(new Set(ids).size).toBe(ids.length);
+    });
+
+    it("updates passthrough classes when the prop changes", async () => {
+      const wrapper = await createWrapper({ styleClassPassthrough: ["first"] });
+      await wrapper.setProps({ styleClassPassthrough: ["second"] });
+      const classes = wrapper.find(".form-fieldset").classes();
+
+      expect(classes).toContain("second");
+      expect(classes).not.toContain("first");
+    });
+
     it("renders a radiogroup fieldset with the legend", async () => {
       const wrapper = await createWrapper();
       const fieldset = wrapper.find("fieldset");
