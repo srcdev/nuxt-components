@@ -2,17 +2,19 @@
 
 exports[`PageHeroHighlights > renders correct HTML structure 1`] = `
 "<div class="page-hero-highlights content-align-center has-content-panel">
-  <div class="page-hero-highlights-header-row">
-    <div class="page-hero-highlights-header-slot">
-      <h1>Page Title</h1>
+  <div class="page-hero-highlights-grid">
+    <div class="page-hero-highlights-header-row">
+      <div class="page-hero-highlights-header-slot">
+        <h1>Page Title</h1>
+      </div>
     </div>
-  </div>
-  <div class="page-hero-highlights-strip flexible-widths justify-start">
-    <div class="highlight">Highlight 1</div>
-  </div>
-  <div class="page-hero-highlights-content-row">
-    <div class="page-hero-highlights-content-slot">
-      <p>Content</p>
+    <div class="page-hero-highlights-strip flexible-widths justify-start">
+      <div class="highlight">Highlight 1</div>
+    </div>
+    <div class="page-hero-highlights-content-row">
+      <div class="page-hero-highlights-content-slot">
+        <p>Content</p>
+      </div>
     </div>
   </div>
 </div>"

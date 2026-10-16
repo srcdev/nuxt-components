@@ -1,5 +1,7 @@
 # PageHeroHighlights Component
 
+> **Changed 2026-10-16:** `widthConstrained` was inverted in the CSS since it was first added (`true` gave full width, `false` capped the column); it now does what this doc always said. The tablet/desktop gutters never applied (their `@container` queries had no container): the root is now a named `page-hero-highlights` inline-size container and the rows sit in a `.page-hero-highlights-grid` wrapper. Colour defaults are light theme tokens (were `darkblue`/`white`/`black`/`--slate-*`). Equal-width highlights wrap below `--page-hero-highlights-item-min-width` (12rem). Grid tracks are `minmax(0, …)` and items get `overflow-wrap: anywhere`.
+
 > **Changed 2026-09-28:** styles are now in `@layer components` (they were unlayered). Every token is `--page-hero-highlights-*` with its default as a `var()` fallback, so it can be set on the component or any ancestor (previously declared on the root with generic names like `--max-width`, `--highlight-border`, so ancestor values never landed). Inner classes are prefixed (`.page-hero-highlights-header-row`, `-header-slot`, `-strip`, `-content-row`, `-content-slot`); the content-align root classes are `.content-align-start`/`.content-align-center` (were bare `.start`/`.center`); the highlight contract classes are `.page-hero-highlights-item`, `-item-title`, `-item-body` (were `.highlight`, `.title`, `.body`); PageHeroHighlightsHeader uses `.page-hero-highlights-header-start`/`-end` and `--page-hero-highlights-header-*` tokens (were `.phh-*` / `--phh-*`). Full token reference: `CONSUMER-STYLING.md` in the component folder.
 
 ## Overview
@@ -19,7 +21,7 @@ The layout uses a 4-row CSS Grid with `subgrid` — no `translate`, negative mar
 | `tag`                   | `"div" \| "section" \| "main"`                                      | `"div"`     | Root element tag                                                                                                                |
 | `highlightsEqualWidths` | `boolean`                                                           | `false`     | Equal-width grid columns for highlight items                                                                                    |
 | `highlightsJustify`     | `"start" \| "center" \| "end" \| "space-between" \| "space-around"` | `"start"`   | Alignment of highlight items along the main axis                                                                                |
-| `widthConstrained`              | `boolean`                                                           | `false`     | When `true`, caps the central column at `--width-constrained` (default `1064px`). Gutters grow responsively to enforce the constraint. |
+| `widthConstrained`              | `boolean`                                                           | `false`     | When `true`, caps the central column at `--page-hero-highlights-max-width` (default `1064px`). Gutters grow responsively to enforce the constraint. |
 | `contentAlign`          | `"start" \| "center"`                                               | `"center"`  | When `widthConstrained` is `true`: `"center"` grows gutters equally; `"start"` pins content to the left with a fixed left gutter.      |
 | `contentPanel`          | `boolean`                                                           | `true`      | When `true`, renders a decorative panel behind the content slot and offsets the highlights strip. Set to `false` for a flat layout with no backdrop. |
 | `highlightTitleBaseline`| `boolean`                                                           | `false`     | When `true`, fixes the highlight title row to a set height so titles align at a common baseline. Override `--page-hero-highlights-title-height` to tune. |
@@ -166,7 +168,7 @@ See [component-aria-landmark.md](../component-aria-landmark.md) for the full pat
 
 ## Equal-width highlights
 
-By default, highlight items size to their content (`flex-wrap`). Pass `:highlights-equal-widths="true"` to switch to a grid where all items share equal column widths:
+By default, highlight items size to their content (`flex-wrap`). Pass `:highlights-equal-widths="true"` to switch to a grid where all items share equal column widths (`repeat(auto-fit, minmax(min(100%, --page-hero-highlights-item-min-width), 1fr))`), wrapping onto new rows when they'd get narrower than the min width (default `12rem`):
 
 ```vue
 <PageHeroHighlights :highlights-equal-widths="true">
@@ -176,10 +178,10 @@ By default, highlight items size to their content (`flex-wrap`). Pass `:highligh
 
 ## Constraining the central column width
 
-Pass `:width-constrained="true"` to cap the content column at `--width-constrained` (default `1064px`). The gutters grow responsively to enforce it — full-bleed backgrounds are unaffected and `subgrid` continues to work. Use `content-align` to pin to the left or centre:
+Pass `:width-constrained="true"` to cap the content column at `--page-hero-highlights-max-width` (default `1064px`). The gutters grow responsively to enforce it — full-bleed backgrounds are unaffected and `subgrid` continues to work. Use `content-align` to pin to the left or centre:
 
 ```vue
-<!-- Centred, capped at --width-constrained (1064px) -->
+<!-- Centred, capped at --page-hero-highlights-max-width (1064px) -->
 <PageHeroHighlights :width-constrained="true" content-align="center">...</PageHeroHighlights>
 
 <!-- Left-pinned (right side takes remaining space) -->
@@ -190,12 +192,12 @@ The maximum width value and gutter sizes are all CSS tokens — override them vi
 
 ```css
 .my-page-hero {
-  --width-constrained: 1200px;
+  --page-hero-highlights-max-width: 1200px;
   --page-hero-highlights-gutter-desktop: 48px;
 }
 ```
 
-See [css-grid-width-constrained-gutters.md](../css-grid-width-constrained-gutters.md) for the underlying pattern explanation.
+See [css-grid-max-width-gutters.md](../css-grid-max-width-gutters.md) for the underlying pattern explanation.
 
 ## Local style override scaffold
 
@@ -215,40 +217,41 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 .page-hero-highlights {
   &.my-page-hero {
     /* Grid layout */
-    /* --width-constrained: 1064px; */
+    /* --page-hero-highlights-max-width: 1064px; */
     /* --page-hero-highlights-gutter-mobile: 16px; */
     /* --page-hero-highlights-gutter-tablet: 40px; */
     /* --page-hero-highlights-gutter-desktop: 32px; */
 
     /* Header zone */
-    /* --page-hero-highlights-header-background: darkblue; */
+    /* --page-hero-highlights-header-background: var(--theme-surface-subtle); */
 
     /* Highlights strip */
     /* --page-hero-highlights-strip-gap: 1rem; */
     /* --page-hero-highlights-strip-inset: 1.2rem; */
+    /* --page-hero-highlights-item-min-width: 12rem; */ /* equal-widths wrap point */
 
     /* Highlight cards */
     /* --page-hero-highlights-item-rows-gap: 1.2rem; */
     /* --page-hero-highlights-title-height: 1fr; */ /* see: highlight-title-baseline prop */
     /* --page-hero-highlights-item-padding-block-start: 1.2rem; */
     /* --page-hero-highlights-item-padding: 1.2rem; */
-    /* --page-hero-highlights-item-background: white; */
-    /* --page-hero-highlights-item-border: 1px solid black; */
+    /* --page-hero-highlights-item-background: var(--page-bg, Canvas); */
+    /* --page-hero-highlights-item-border: 1px solid var(--theme-border); */
     /* --page-hero-highlights-item-border-radius: 8px; */
-    /* --page-hero-highlights-item-colour: black; */
+    /* --page-hero-highlights-item-colour: var(--theme-text); */
 
     /* Content zone */
-    /* --page-hero-highlights-content-background: var(--slate-01); */ /* transparent */
+    /* --page-hero-highlights-content-background: transparent; */
     /* --page-hero-highlights-content-start-gap: 1.2rem; */
     /* --page-hero-highlights-content-end-gap: 1.2rem; */
 
     /* Content slot decorative border */
     /* --page-hero-highlights-content-margin-block-start: 2.4rem; */
     /* --page-hero-highlights-content-margin: var(--page-hero-highlights-strip-inset); */
-    /* --page-hero-highlights-panel-background: var(--slate-00); */
-    /* --page-hero-highlights-panel-border: 1px solid var(--slate-06); */
+    /* --page-hero-highlights-panel-background: var(--theme-surface-subtle); */
+    /* --page-hero-highlights-panel-border: 1px solid var(--theme-border); */
     /* --page-hero-highlights-panel-border-radius: 0.8rem; */
-    /* --page-hero-highlights-panel-outline: 1px solid var(--slate-02); */
+    /* --page-hero-highlights-panel-outline: none; */
 
     /* When using :highlight-title-baseline="true" */
     /* --page-hero-highlights-title-height-baseline: 4rem; */ /* proportional value preferred */
@@ -268,10 +271,10 @@ row3: highlights bottom half
 row4: page content (never underflows highlights)
 ```
 
-`.page-hero-highlights-header-row` spans cols 1–3, rows 1–2 (edge-to-edge bg). `.page-hero-highlights-header-slot` is placed in row 1 only.
+All of these sit in `.page-hero-highlights-grid`, the grid inside the root (the root is the size container). `.page-hero-highlights-header-row` spans cols 1–3, rows 1–2 (edge-to-edge bg). `.page-hero-highlights-header-slot` is placed in row 1 only.
 `.page-hero-highlights-content-row` spans cols 1–3, rows 3–4 (bg fills behind highlights; `.page-hero-highlights-content-slot` is placed in row 4 only). The decorative border behind `.page-hero-highlights-content-slot` is rendered via `.page-hero-highlights-content-row::before` — there is no separate DOM element for it.
 
-Grid columns are determined entirely by CSS — no `v-bind`. The `widthConstrained` and `contentAlign` props add CSS classes (`width-constrained`, `start`, `center`) which select the appropriate `grid-template-columns` rule.
+Grid columns are determined entirely by CSS — no `v-bind`. The `widthConstrained` and `contentAlign` props add CSS classes (`width-constrained`, `content-align-start`, `content-align-center`) on the root, which select the `grid-template-columns` rule on `.page-hero-highlights-grid`.
 
 ## Layout pitfall: do not use `grid-template-rows: subgrid` inside `.page-hero-highlights-strip`
 
@@ -300,4 +303,5 @@ The `.page-hero-highlights-strip` element spans rows 2–3 of the parent grid (t
 - Lives in `app/components/04.templates/page-hero-highlights/`.
 - Storybook title: `"Templates/PageHeroHighlights"`.
 - **`contentAlign` has no effect when `widthConstrained` is `false`** — both gutters hold their responsive default.
-- **Gutter sizes are CSS tokens** — `--page-hero-highlights-gutter-mobile/tablet/desktop` are all overridable. The responsive switching between them (via `@container`) is handled internally and cannot be overridden.
+- **Gutter sizes are CSS tokens** — `--page-hero-highlights-gutter-mobile/tablet/desktop` are all overridable. They switch at 768px and 1024px of the component's own width (`@container page-hero-highlights`); the breakpoints themselves aren't tokens.
+- **The root is an inline-size container**, so it can't size from its content: as a flex or grid item give it `inline-size: 100%` or a track. A grid on the root itself was moved to `.page-hero-highlights-grid` for this (an element can't query its own size).

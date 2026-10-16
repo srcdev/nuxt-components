@@ -88,7 +88,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── link-text.md            — LinkText props, slots, usage patterns, styling
     ├── header-block.md         — HeaderBlock: tagLevel/classLevel semantic-vs-visual heading decoupling, page-heading-N utility classes
     ├── text-block.md           — TextBlock: vertical-rhythm text wrapper, --text-block-padding-block-start/-end tokens, heading-id slot prop for section/article aria-labelledby
-    ├── page-hero-highlights.md — PageHeroHighlights template: hero + highlights strip grid, CSS custom property theming
+    ├── page-hero-highlights.md — PageHeroHighlights template: hero + straddling highlights strip grid (root is the `page-hero-highlights` container, grid in `.page-hero-highlights-grid`), widthConstrained caps the column, equal-width highlights wrap at --page-hero-highlights-item-min-width, light theme-token defaults, PageHeroHighlightsHeader companion
     ├── slider-gallery.md       — SliderGallery: full-screen image carousel, IGalleryData, pause-on-hover/reduced-motion auto-advance, prefixed classes, CSS tokens
     ├── services-card.md        — ServicesCard props (incl. eyebrowConfig/heroConfig), actions slot, CSS tokens, page boilerplate
     ├── google-reviews.md        — GoogleReviews + GoogleReviewCard: Google Places reviews in a scrolling row; env vars, server route, useGoogleReviews, props, slots, tokens, Google terms

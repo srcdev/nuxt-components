@@ -18,6 +18,16 @@ const meta: Meta<StoryArgs> = {
   args: {
     styleClassPassthrough: [],
   },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Lays out the `header` slot of [PageHeroHighlights](?path=/docs/templates-pageherohighlights--docs): a `start` slot (title and description) and an optional `end` slot (actions). " +
+          "They stack in a narrow header and sit side by side from 768px of the header slot's own width. `.page-hero-highlights-header-end` only renders when `end` is filled. Tokens: `--page-hero-highlights-header-*`. " +
+          "These stories set a dark header background to show light text; the library default is light.",
+      },
+    },
+  },
 };
 
 export default meta;

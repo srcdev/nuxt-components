@@ -1,6 +1,8 @@
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import PageHeroHighlights from "../PageHeroHighlights.vue";
+import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
+import type { MediaCanvas } from "~/types/components";
 
 type StoryArgs = {
   tag?: "div" | "section" | "main";
@@ -12,7 +14,7 @@ type StoryArgs = {
   highlightTitleBaseline?: boolean;
   headerBackground?: string;
   contentBackground?: string;
-  highlightCount?: 1 | 2 | 3;
+  highlightCount?: number;
   styleClassPassthrough?: string | string[];
 };
 
@@ -23,11 +25,12 @@ const meta: Meta<StoryArgs> = {
     tag: {
       control: { type: "select" },
       options: ["div", "section", "main"],
-      description: "HTML element to render as the root",
+      description: "HTML element to render as the root. `section` wires `aria-labelledby` to the heading bound to the `header` slot's `headingId`.",
     },
     highlightsEqualWidths: {
       control: "boolean",
-      description: "When true, highlight items share equal widths (grid). When false, items size to content (flex).",
+      description:
+        "When true, highlight items share equal widths and wrap onto new rows below `--page-hero-highlights-item-min-width` (default 12rem). When false, items size to content (flex).",
     },
     highlightsJustify: {
       control: { type: "select" },
@@ -37,36 +40,38 @@ const meta: Meta<StoryArgs> = {
     widthConstrained: {
       control: "boolean",
       description:
-        "When true, caps the central column at --page-hero-highlights-max-width (default 1064px). Gutters grow responsively to enforce the constraint. Override --page-hero-highlights-max-width via styleClassPassthrough to change the cap value.",
+        "When true, caps the central column at `--page-hero-highlights-max-width` (default 1064px); the gutters grow to enforce it. When false, the column fills the width between the gutters.",
     },
     contentAlign: {
       control: { type: "inline-radio" },
       options: ["start", "center"],
       description:
-        "Align the content column to the start (left gutter stays 16px, right takes remaining space) or center (equal gutters). Only meaningful when maxWidth is set.",
+        "With `widthConstrained`: `center` grows both gutters equally, `start` keeps the start gutter and gives the remaining space to the end gutter. No effect otherwise.",
     },
     contentPanel: {
       control: "boolean",
       description:
-        "When true (default), renders a decorative panel behind the content slot and offsets the highlights strip. Set to false for a flat layout with no backdrop.",
+        "When true (default), renders a decorative panel behind the content slot and insets the highlights strip. Set to false for a flat layout with no backdrop.",
     },
     highlightTitleBaseline: {
       control: "boolean",
       description:
-        "When true, fixes the highlight title row to a set height so titles align to the header baseline. Override --page-hero-highlights-title-height in the consuming page to tune the value.",
+        "When true, fixes the highlight title row to `--page-hero-highlights-title-height-baseline` so titles line up on the header's baseline.",
     },
     headerBackground: {
       control: "color",
-      description: "Background colour of the header zone (sets --page-hero-highlights-header-background)",
+      description: "**Story control, not a prop.** Sets `--page-hero-highlights-header-background`.",
+      table: { category: "Story only" },
     },
     contentBackground: {
       control: "color",
-      description: "Background colour of the content zone (sets --page-hero-highlights-content-background)",
+      description: "**Story control, not a prop.** Sets `--page-hero-highlights-content-background`.",
+      table: { category: "Story only" },
     },
     highlightCount: {
-      control: { type: "select" },
-      options: [1, 2, 3],
-      description: "Number of highlight items to display in the highlights slot",
+      control: { type: "range", min: 1, max: 6, step: 1 },
+      description: "**Story control, not a prop.** Number of highlight items rendered in the `highlights` slot.",
+      table: { category: "Story only" },
     },
     styleClassPassthrough: {
       control: "object",
@@ -83,252 +88,137 @@ const meta: Meta<StoryArgs> = {
     highlightTitleBaseline: false,
     headerBackground: "",
     contentBackground: "",
-    highlightCount: 1,
+    highlightCount: 3,
     styleClassPassthrough: [],
+  },
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "fullWidthCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component:
+          "A page-level template: a full-bleed header zone (`header` slot, scoped `headingId`), a highlights strip that straddles the header/content boundary (`highlights` slot), " +
+          "and a content zone with an optional decorative panel (`content` slot). Give each highlight the `page-hero-highlights-item` class with `-item-title` and `-item-body` children for the card styling. " +
+          "Gutters step at 768px and 1024px of the component's own width. Every colour and spacing value is a `--page-hero-highlights-*` token (see CONSUMER-STYLING.md). " +
+          "Pair it with `PageHeroHighlightsHeader` for a title plus actions header.",
+      },
+      story: { inline: false, height: "640px" },
+    },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof PageHeroHighlights>;
+type Story = StoryObj<StoryArgs>;
 
 // ─── Shared setup helper ──────────────────────────────────────────────────────
+
+const sampleHighlights = [
+  { title: "Total revenue", body: "£24,500" },
+  { title: "Active users", body: "1,284" },
+  { title: "Open tasks", body: "37" },
+  { title: "Bookings this week", body: "112" },
+  { title: "Average rating", body: "4.8" },
+  { title: "Repeat clients", body: "62%" },
+];
 
 function useStorySetup(args: StoryArgs) {
   const bgStyles = computed(() => ({
     ...(args.headerBackground ? { "--page-hero-highlights-header-background": args.headerBackground } : {}),
     ...(args.contentBackground ? { "--page-hero-highlights-content-background": args.contentBackground } : {}),
   }));
-  const highlightCount = computed(() => args.highlightCount ?? 3);
+  const highlights = computed(() => sampleHighlights.slice(0, args.highlightCount ?? 3));
   const componentArgs = computed(() => {
     const { headerBackground: _h, contentBackground: _c, highlightCount: _n, ...rest } = args;
     return rest;
   });
-  return { bgStyles, componentArgs, highlightCount };
+  return { bgStyles, componentArgs, highlights };
 }
 
-// ─── Stories ─────────────────────────────────────────────────────────────────
+const highlightsTemplate = `
+  <template #highlights>
+    <div v-for="item in highlights" :key="item.title" class="page-hero-highlights-item">
+      <p class="page-hero-highlights-item-title page-heading-4">{{ item.title }}</p>
+      <p class="page-hero-highlights-item-body page-body-normal">{{ item.body }}</p>
+    </div>
+  </template>
+`;
 
-/** Default — header, highlights strip, and page content with all three slots filled. */
-export const Default: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: `
-All layout and visual properties are customisable via CSS custom properties. Set them on \`.page-hero-highlights\` (or a scoped class via \`styleClassPassthrough\`):
+const contentTemplate = `
+  <template #content>
+    <p class="page-heading-2">Recent activity</p>
+    <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
+  </template>
+`;
 
-\`\`\`css
-.page-hero-highlights {
-  /* Grid layout */
-  --page-hero-highlights-max-width: 1064px;
-  --page-hero-highlights-gutter-mobile: 16px;
-  --page-hero-highlights-gutter-tablet: 40px;
-  --page-hero-highlights-gutter-desktop: 32px;
-
-  /* Header zone */
-  --page-hero-highlights-header-background: darkblue;
-
-  /* Highlights strip */
-  --page-hero-highlights-strip-gap: 1rem;
-  --page-hero-highlights-strip-inset: 1.2rem;
-
-  /* Highlight cards */
-  --page-hero-highlights-item-rows-gap: 1.2rem;
-  --page-hero-highlights-title-height: 1fr; /* see: highlight-title-baseline prop */
-  --page-hero-highlights-item-padding-block-start: 1.2rem;
-  --page-hero-highlights-item-padding: 1.2rem;
-  --page-hero-highlights-item-background: white;
-  --page-hero-highlights-item-border: 1px solid black;
-  --page-hero-highlights-item-border-radius: 8px;
-  --page-hero-highlights-item-colour: black;
-
-  /* Content zone */
-  --page-hero-highlights-content-background: var(--slate-01); /* transparent */
-  --page-hero-highlights-content-start-gap: 1.2rem;
-  --page-hero-highlights-content-end-gap: 1.2rem;
-
-  /* Content slot decorative border */
-  --page-hero-highlights-content-margin-block-start: 2.4rem;
-  --page-hero-highlights-content-margin: var(--page-hero-highlights-strip-inset);
-  --page-hero-highlights-panel-background: var(--slate-00);
-  --page-hero-highlights-panel-border: 1px solid var(--slate-06);
-  --page-hero-highlights-panel-border-radius: 0.8rem;
-  --page-hero-highlights-panel-outline: 1px solid var(--slate-02);
-
-  /* When using :highlight-title-baseline="true" */
-  --page-hero-highlights-title-height-baseline: 4rem; /* proportional value preferred */
-    --page-hero-highlights-item-padding-block-start-baseline: 0;
-}
-\`\`\`
-        `,
-      },
-    },
-  },
-  render: (args: StoryArgs) => ({
+const render =
+  (header: string): Story["render"] =>
+  (args) => ({
     components: { PageHeroHighlights },
     setup() {
       return useStorySetup(args);
     },
     template: `
       <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
-        <template #header>
-          <div style="color: white; padding-block: 1.6rem;">
-            <h1 class="page-heading-1" style="color: white;">Dashboard</h1>
-            <p class="page-body-normal" style="color: white;">Overview of your account activity and key metrics.</p>
-          </div>
-        </template>
-
-        <template #highlights>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Total Revenue</p>
-            <p class="page-body-normal">£24,500</p>
-          </div>
-          <div v-if="highlightCount >= 2" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Active Users</p>
-            <p class="page-body-normal">1,284</p>
-          </div>
-          <div v-if="highlightCount >= 3" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Open Tasks</p>
-            <p class="page-body-normal">37</p>
-          </div>
-        </template>
-
-        <template #content>
-          <pre style="padding: 1.6rem; font-size: 1.2rem; line-height: 1.6; overflow-x: auto;">/* ─── PageHeroHighlights CSS tokens ─────────────────────────────────
-   Set on .page-hero-highlights (or a scoped styleClassPassthrough class).
-   Update values as needed. Delete tokens you are not overriding.
-   ─────────────────────────────────────────────────────────────────── */
-.page-hero-highlights {
-
-  /* Grid layout */
-  --page-hero-highlights-max-width: 1064px;
-  --page-hero-highlights-gutter-mobile: 16px;
-  --page-hero-highlights-gutter-tablet: 40px;
-  --page-hero-highlights-gutter-desktop: 32px;
-
-  /* Header zone */
-  --page-hero-highlights-header-background: darkblue;
-
-  /* Highlights strip */
-  --page-hero-highlights-strip-gap: 1rem;
-  --page-hero-highlights-strip-inset: 1.2rem;
-
-  /* Highlight cards */
-  --page-hero-highlights-item-rows-gap: 1.2rem;
-  --page-hero-highlights-title-height: 1fr; /* see: highlight-title-baseline prop */
-  --page-hero-highlights-item-padding-block-start: 1.2rem;
-  --page-hero-highlights-item-padding: 1.2rem;
-  --page-hero-highlights-item-background: white;
-  --page-hero-highlights-item-border: 1px solid black;
-  --page-hero-highlights-item-border-radius: 8px;
-  --page-hero-highlights-item-colour: black;
-
-  /* Content zone */
-  --page-hero-highlights-content-background: var(--slate-01); /* transparent */
-  --page-hero-highlights-content-start-gap: 1.2rem;
-  --page-hero-highlights-content-end-gap: 1.2rem;
-
-  /* Content slot decorative border */
-  --page-hero-highlights-content-margin-block-start: 2.4rem;
-  --page-hero-highlights-content-margin: var(--page-hero-highlights-strip-inset);
-  --page-hero-highlights-panel-background: var(--slate-00);
-  --page-hero-highlights-panel-border: 1px solid var(--slate-06);
-  --page-hero-highlights-panel-border-radius: 0.8rem;
-  --page-hero-highlights-panel-outline: 1px solid var(--slate-02);
-
-  /* When using :highlight-title-baseline="true" */
-  --page-hero-highlights-title-height-baseline: 4rem; /* proportional value preferred */
-    --page-hero-highlights-item-padding-block-start-baseline: 0;
-}</pre>
-        </template>
+        ${header}
+        ${highlightsTemplate}
+        ${contentTemplate}
       </PageHeroHighlights>
     `,
-  }),
+  });
+
+const plainHeader = (copy: string) => `
+  <template #header>
+    <p class="page-heading-1">Dashboard</p>
+    <p class="page-body-normal">${copy}</p>
+  </template>
+`;
+
+// ─── Stories ─────────────────────────────────────────────────────────────────
+
+/** Default — header, highlights strip and page content, with the library's light defaults. */
+export const Default: Story = {
+  render: render(plainHeader("Overview of your account activity and key metrics.")),
 };
 
 /** As section tag — root renders as a semantic section with aria-labelledby wired to the heading. */
 export const AsSectionTag: Story = {
   name: "As section Tag",
   args: { tag: "section" },
-  render: (args: StoryArgs) => ({
-    components: { PageHeroHighlights },
-    setup() {
-      return useStorySetup(args);
-    },
-    template: `
-      <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
-        <template #header="{ headingId }">
-          <h1 :id="headingId" class="page-heading-1">Dashboard</h1>
-          <p class="page-body-normal">Overview of your account activity and key metrics.</p>
-        </template>
-
-        <template #highlights>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Total Revenue</p>
-            <p class="page-body-normal">£24,500</p>
-          </div>
-          <div v-if="highlightCount >= 2" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Active Users</p>
-            <p class="page-body-normal">1,284</p>
-          </div>
-          <div v-if="highlightCount >= 3" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Open Tasks</p>
-            <p class="page-body-normal">37</p>
-          </div>
-        </template>
-
-        <template #content>
-          <p class="page-heading-2">Recent Activity</p>
-          <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
-        </template>
-      </PageHeroHighlights>
-    `,
-  }),
+  render: render(`
+    <template #header="{ headingId }">
+      <h1 :id="headingId" class="page-heading-1">Dashboard</h1>
+      <p class="page-body-normal">The section is labelled by this heading through the header slot's headingId.</p>
+    </template>
+  `),
 };
 
-/** Equal widths — highlights items share equal column widths via grid. */
+/** Equal widths — highlight items share equal widths and wrap below their minimum width. */
 export const EqualWidthHighlights: Story = {
   name: "Equal Width Highlights",
-  args: { highlightsEqualWidths: true },
-  render: (args: StoryArgs) => ({
-    components: { PageHeroHighlights },
-    setup() {
-      return useStorySetup(args);
-    },
-    template: `
-      <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
-        <template #header>
-          <p class="page-heading-1">Dashboard</p>
-          <p class="page-body-normal">Overview of your account activity and key metrics.</p>
-        </template>
-
-        <template #highlights>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Total Revenue</p>
-            <p class="page-body-normal">£24,500</p>
-          </div>
-          <div v-if="highlightCount >= 2" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Active Users</p>
-            <p class="page-body-normal">1,284</p>
-          </div>
-          <div v-if="highlightCount >= 3" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Open Tasks</p>
-            <p class="page-body-normal">37</p>
-          </div>
-        </template>
-
-        <template #content>
-          <p class="page-heading-2">Recent Activity</p>
-          <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
-        </template>
-      </PageHeroHighlights>
-    `,
-  }),
+  args: { highlightsEqualWidths: true, highlightCount: 4 },
+  render: render(plainHeader("Four equal-width highlights. Switch to the mobile canvas to see them wrap two by two, then one per row.")),
 };
 
 /** Minimal — renders with no slot content to show the bare grid structure. */
 export const NoSlotContent: Story = {
   name: "No Slot Content",
-  render: (args: StoryArgs) => ({
+  render: (args) => ({
     components: { PageHeroHighlights },
     setup() {
       return useStorySetup(args);
@@ -337,122 +227,83 @@ export const NoSlotContent: Story = {
   }),
 };
 
-/** Max width centered — content column capped at --page-hero-highlights-max-width (1064px) with equal growing gutters either side. */
+/** Width constrained, centred — content column capped at --page-hero-highlights-max-width with equal growing gutters. */
 export const MaxWidthCentered: Story = {
   name: "Max Width — Centered",
   args: { widthConstrained: true, contentAlign: "center" },
-  render: (args: StoryArgs) => ({
-    components: { PageHeroHighlights },
-    setup() {
-      return useStorySetup(args);
-    },
-    template: `
-      <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
-        <template #header>
-          <p class="page-heading-1">Dashboard</p>
-          <p class="page-body-normal">Content column is capped at --page-hero-highlights-max-width (1064px by default) — gutters grow equally on both sides.</p>
-        </template>
-
-        <template #highlights>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Total Revenue</p>
-            <p class="page-body-normal">£24,500</p>
-          </div>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Active Users</p>
-            <p class="page-body-normal">1,284</p>
-          </div>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Open Tasks</p>
-            <p class="page-body-normal">37</p>
-          </div>
-        </template>
-
-        <template #content>
-          <p class="page-heading-2">Recent Activity</p>
-          <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
-        </template>
-      </PageHeroHighlights>
-    `,
-  }),
+  render: render(
+    plainHeader("The central column is capped at --page-hero-highlights-max-width (1064px by default); both gutters grow equally. Use the full-width canvas on a wide screen.")
+  ),
 };
 
-/** Max width start — content column capped at --page-hero-highlights-max-width (1064px), pinned to the left. */
+/** Width constrained, start — content column capped at --page-hero-highlights-max-width and pinned to the start. */
 export const MaxWidthStart: Story = {
   name: "Max Width — Start",
   args: { widthConstrained: true, contentAlign: "start" },
-  render: (args: StoryArgs) => ({
-    components: { PageHeroHighlights },
-    setup() {
-      return useStorySetup(args);
-    },
-    template: `
-      <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
-        <template #header>
-          <p class="page-heading-1">Dashboard</p>
-          <p class="page-body-normal">Content column is capped at --page-hero-highlights-max-width (1064px by default), aligned to the start — right side takes the remaining space.</p>
-        </template>
-
-        <template #highlights>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Total Revenue</p>
-            <p class="page-body-normal">£24,500</p>
-          </div>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Active Users</p>
-            <p class="page-body-normal">1,284</p>
-          </div>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Open Tasks</p>
-            <p class="page-body-normal">37</p>
-          </div>
-        </template>
-
-        <template #content>
-          <p class="page-heading-2">Recent Activity</p>
-          <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
-        </template>
-      </PageHeroHighlights>
-    `,
-  }),
+  render: render(
+    plainHeader("The central column is capped at --page-hero-highlights-max-width (1064px by default) and pinned to the start; the end gutter takes the remaining space.")
+  ),
 };
 
-/** No content panel — flat layout with no backdrop or highlight offset behind the content slot. */
+/** No content panel — flat layout with no backdrop or highlight inset behind the content slot. */
 export const NoContentPanel: Story = {
   name: "No Content Panel",
   args: { contentPanel: false },
-  render: (args: StoryArgs) => ({
+  render: render(plainHeader("Flat layout: no decorative panel behind the content slot.")),
+};
+
+const stressHighlights = [
+  { title: "Donaudampfschifffahrtselektrizitätenhauptbetriebswerkbauunterbeamtengesellschaft", body: "Unbroken German compound in the title." },
+  { title: "Monatlicher Gesamtumsatz aller Filialen im Vergleich zum Vorjahreszeitraum", body: "€1.234.567,89" },
+  { title: "😀 Emoji first", body: "🎉🎉🎉" },
+  { title: "<script>alert('xss')</script>", body: "HTML-like text must render as text." },
+  { title: "إجمالي الإيرادات", body: "٢٤٬٥٠٠ ج.م", dir: "rtl" },
+  { title: "", body: "Empty title." },
+  { title: "A", body: "" },
+  { title: "Link", body: "https://example.com/a-very-long-path-segment-without-any-spaces-at-all-in-it" },
+];
+
+/**
+ * Stress test — unbroken and long translated text in the header, eight hostile highlights, a
+ * long URL in the content, inside the CanvasSwitcher (starts on mobile).
+ */
+export const StressTest: Story = {
+  name: "Stress Test (Worst-Case Data)",
+  args: { tag: "section", highlightsEqualWidths: true, widthConstrained: true },
+  render: (args) => ({
     components: { PageHeroHighlights },
     setup() {
-      return useStorySetup(args);
+      return { ...useStorySetup(args), stressHighlights };
     },
     template: `
       <PageHeroHighlights v-bind="componentArgs" :style="bgStyles">
-        <template #header>
-          <p class="page-heading-1">Dashboard</p>
-          <p class="page-body-normal">Flat layout — no decorative panel behind the content slot.</p>
+        <template #header="{ headingId }">
+          <h1 :id="headingId" class="page-heading-1" style="overflow-wrap: anywhere;">Kundendienstmitarbeiterkontaktaufnahmeformularübersicht</h1>
+          <p class="page-body-normal">Übersicht über die Aktivitäten Ihres Kontos, die wichtigsten Kennzahlen und alle offenen Vorgänge der letzten dreißig Tage.</p>
         </template>
-
         <template #highlights>
-          <div style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Total Revenue</p>
-            <p class="page-body-normal">£24,500</p>
-          </div>
-          <div v-if="highlightCount >= 2" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Active Users</p>
-            <p class="page-body-normal">1,284</p>
-          </div>
-          <div v-if="highlightCount >= 3" style="border-radius: 12px; background: #1a1a2e; color: white; padding: 1.6rem;">
-            <p class="page-heading-2">Open Tasks</p>
-            <p class="page-body-normal">37</p>
+          <div v-for="(item, i) in stressHighlights" :key="i" class="page-hero-highlights-item" :dir="item.dir">
+            <p class="page-hero-highlights-item-title page-heading-4">{{ item.title }}</p>
+            <p class="page-hero-highlights-item-body page-body-normal">{{ item.body }}</p>
           </div>
         </template>
-
         <template #content>
-          <p class="page-heading-2">Recent Activity</p>
-          <p class="page-body-normal">Your most recent transactions and events will appear here.</p>
+          <p class="page-heading-2">Ergebnisse</p>
+          <p class="page-body-normal" style="overflow-wrap: anywhere;">https://example.com/another-very-long-path-segment-without-any-spaces-that-must-wrap-inside-the-panel</p>
         </template>
       </PageHeroHighlights>
     `,
   }),
+  parameters: {
+    initialCanvas: "mobileCanvas",
+    docs: {
+      description: {
+        story:
+          "Check every canvas width, with `highlightsEqualWidths` on and off: no horizontal scroll, the strip still straddles the header and content zones, " +
+          "cards wrap onto new rows rather than squeezing (equal widths) or overflowing (flexible), and the unbroken title and URL wrap inside their card. " +
+          "Gutters should step from 16px to 40px at 768px and to 32px at 1024px of the component's width. Slot text is the consumer's own markup, so the header and " +
+          "content paragraphs set their own `overflow-wrap`; highlight items get `overflow-wrap: anywhere` from the item class.",
+      },
+    },
+  },
 };

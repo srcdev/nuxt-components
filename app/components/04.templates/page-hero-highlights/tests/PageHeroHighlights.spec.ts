@@ -1,16 +1,29 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi, afterEach } from "vitest";
 import { h } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import PageHeroHighlights from "../PageHeroHighlights.vue";
 
+const mounted: { unmount: () => void }[] = [];
+
+const mountTracked = (async (...args: Parameters<typeof mountSuspended>) => {
+  const wrapper = await mountSuspended(...args);
+  mounted.push(wrapper);
+  return wrapper;
+}) as typeof mountSuspended;
+
+afterEach(() => {
+  mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+  vi.restoreAllMocks();
+});
+
 describe("PageHeroHighlights", () => {
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights);
+    const wrapper = await mountTracked(PageHeroHighlights);
     expect(wrapper.vm).toBeTruthy();
   });
 
   it("renders correct HTML structure", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       slots: {
         header: "<h1>Page Title</h1>",
         highlights: "<div class='highlight'>Highlight 1</div>",
@@ -20,14 +33,23 @@ describe("PageHeroHighlights", () => {
     expect(wrapper.html()).toMatchSnapshot();
   });
 
+  it("wraps the rows in .page-hero-highlights-grid, so the root can be the gutter query container", async () => {
+    const wrapper = await mountTracked(PageHeroHighlights);
+    const grid = wrapper.find(".page-hero-highlights > .page-hero-highlights-grid");
+    expect(grid.exists()).toBe(true);
+    expect(grid.find(".page-hero-highlights-header-row").exists()).toBe(true);
+    expect(grid.find(".page-hero-highlights-strip").exists()).toBe(true);
+    expect(grid.find(".page-hero-highlights-content-row").exists()).toBe(true);
+  });
+
   it("renders as a div by default", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights);
+    const wrapper = await mountTracked(PageHeroHighlights);
     expect(wrapper.element.tagName.toLowerCase()).toBe("div");
   });
 
   it("renders with the correct tag when tag prop is provided", async () => {
     for (const tag of ["section", "main"] as const) {
-      const wrapper = await mountSuspended(PageHeroHighlights, {
+      const wrapper = await mountTracked(PageHeroHighlights, {
         props: { tag },
       });
       expect(wrapper.element.tagName.toLowerCase()).toBe(tag);
@@ -35,7 +57,7 @@ describe("PageHeroHighlights", () => {
   });
 
   it("renders header slot content", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       slots: { header: "<h1 class='page-title'>Dashboard</h1>" },
     });
     expect(wrapper.find(".page-title").exists()).toBe(true);
@@ -43,7 +65,7 @@ describe("PageHeroHighlights", () => {
   });
 
   it("renders highlights slot content", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       slots: {
         highlights: ["<div class='highlight-card'>Card 1</div>", "<div class='highlight-card'>Card 2</div>"].join(""),
       },
@@ -52,7 +74,7 @@ describe("PageHeroHighlights", () => {
   });
 
   it("renders content slot content", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       slots: { content: "<p class='body-text'>Page body</p>" },
     });
     expect(wrapper.find(".body-text").exists()).toBe(true);
@@ -60,42 +82,42 @@ describe("PageHeroHighlights", () => {
   });
 
   it("content slot is rendered inside .content-slot", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       slots: { content: "<p class='body-text'>Page body</p>" },
     });
     expect(wrapper.find(".page-hero-highlights-content-slot .body-text").exists()).toBe(true);
   });
 
   it("header slot is rendered inside .header-slot", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       slots: { header: "<h1 class='page-title'>Dashboard</h1>" },
     });
     expect(wrapper.find(".page-hero-highlights-header-slot .page-title").exists()).toBe(true);
   });
 
   it("adds aria-labelledby when tag is section", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       props: { tag: "section" },
     });
     expect(wrapper.find(".page-hero-highlights").attributes("aria-labelledby")).toBeTruthy();
   });
 
   it("does not add aria-labelledby when tag is main (main never needs an accessible name)", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       props: { tag: "main" },
     });
     expect(wrapper.find(".page-hero-highlights").attributes("aria-labelledby")).toBeUndefined();
   });
 
   it("does not add aria-labelledby when tag is div", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       props: { tag: "div" },
     });
     expect(wrapper.find(".page-hero-highlights").attributes("aria-labelledby")).toBeUndefined();
   });
 
   it("exposes headingId via header scoped slot and aria-labelledby matches", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       props: { tag: "section" },
       slots: {
         header: (props: Record<string, unknown>) => h("h1", { id: props.headingId, class: "page-title" }, "Dashboard"),
@@ -107,13 +129,13 @@ describe("PageHeroHighlights", () => {
   });
 
   it("applies flexible-widths class by default", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights);
+    const wrapper = await mountTracked(PageHeroHighlights);
     expect(wrapper.find(".page-hero-highlights-strip").classes()).toContain("flexible-widths");
     expect(wrapper.find(".page-hero-highlights-strip").classes()).not.toContain("equal-widths");
   });
 
   it("applies equal-widths class when highlightsEqualWidths is true", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       props: { highlightsEqualWidths: true },
     });
     expect(wrapper.find(".page-hero-highlights-strip").classes()).toContain("equal-widths");
@@ -121,14 +143,14 @@ describe("PageHeroHighlights", () => {
   });
 
   it("applies justify-start class by default", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights);
+    const wrapper = await mountTracked(PageHeroHighlights);
     expect(wrapper.find(".page-hero-highlights-strip").classes()).toContain("justify-start");
   });
 
   it("applies the correct justify class for each highlightsJustify value", async () => {
     const values = ["start", "center", "end", "space-between", "space-around"] as const;
     for (const value of values) {
-      const wrapper = await mountSuspended(PageHeroHighlights, {
+      const wrapper = await mountTracked(PageHeroHighlights, {
         props: { highlightsJustify: value },
       });
       expect(wrapper.find(".page-hero-highlights-strip").classes()).toContain(`justify-${value}`);
@@ -136,31 +158,31 @@ describe("PageHeroHighlights", () => {
   });
 
   it("applies has-content-panel class by default", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights);
+    const wrapper = await mountTracked(PageHeroHighlights);
     expect(wrapper.find(".page-hero-highlights").classes()).toContain("has-content-panel");
   });
 
   it("does not apply has-content-panel class when contentPanel is false", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       props: { contentPanel: false },
     });
     expect(wrapper.find(".page-hero-highlights").classes()).not.toContain("has-content-panel");
   });
 
   it("does not apply highlight-title-baseline class by default", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights);
+    const wrapper = await mountTracked(PageHeroHighlights);
     expect(wrapper.find(".page-hero-highlights").classes()).not.toContain("highlight-title-baseline");
   });
 
   it("applies highlight-title-baseline class when highlightTitleBaseline is true", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       props: { highlightTitleBaseline: true },
     });
     expect(wrapper.find(".page-hero-highlights").classes()).toContain("highlight-title-baseline");
   });
 
   it("applies styleClassPassthrough classes", async () => {
-    const wrapper = await mountSuspended(PageHeroHighlights, {
+    const wrapper = await mountTracked(PageHeroHighlights, {
       props: { styleClassPassthrough: ["extra-class", "another-class"] },
     });
     const el = wrapper.find(".page-hero-highlights");
@@ -170,24 +192,24 @@ describe("PageHeroHighlights", () => {
 
   describe("grid layout classes", () => {
     it("applies center class by default", async () => {
-      const wrapper = await mountSuspended(PageHeroHighlights);
+      const wrapper = await mountTracked(PageHeroHighlights);
       expect(wrapper.find(".page-hero-highlights").classes()).toContain("content-align-center");
     });
 
     it("does not apply width-constrained class by default", async () => {
-      const wrapper = await mountSuspended(PageHeroHighlights);
+      const wrapper = await mountTracked(PageHeroHighlights);
       expect(wrapper.find(".page-hero-highlights").classes()).not.toContain("width-constrained");
     });
 
     it("applies width-constrained class when widthConstrained is true", async () => {
-      const wrapper = await mountSuspended(PageHeroHighlights, {
+      const wrapper = await mountTracked(PageHeroHighlights, {
         props: { widthConstrained: true },
       });
       expect(wrapper.find(".page-hero-highlights").classes()).toContain("width-constrained");
     });
 
     it("applies start class when contentAlign is start", async () => {
-      const wrapper = await mountSuspended(PageHeroHighlights, {
+      const wrapper = await mountTracked(PageHeroHighlights, {
         props: { contentAlign: "start" },
       });
       expect(wrapper.find(".page-hero-highlights").classes()).toContain("content-align-start");
