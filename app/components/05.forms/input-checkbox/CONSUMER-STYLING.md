@@ -29,6 +29,16 @@ columns need more room.
 | `--single-checkbox-margin-block-start` | `1.2rem` | Space between the legend/description and the checkbox |
 | `--single-checkbox-column-min-width` | `100px` | Grid column minimum width with `options-layout="equal-widths"` |
 
+> **Changed 2026-10-16**: the equal-width column minimum is capped at `min(100%, ...)` so one long
+> label can no longer push the grid wider than its container.
+
+### Root fieldset
+
+`.multiple-checkboxes-fieldset` and `.single-checkbox-fieldset` set `min-inline-size: 0` and
+`overflow-wrap: anywhere` (added 2026-10-16). The second inherits into the legend, description,
+option labels and error, so long unbroken words and URLs wrap instead of overflowing. Neither is a
+token; override `overflow-wrap` on your passthrough class if you need the old behaviour.
+
 ---
 
 ## State hooks

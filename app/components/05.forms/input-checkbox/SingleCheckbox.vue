@@ -84,7 +84,14 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({ required: true });
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 
 const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   props.name,
@@ -95,6 +102,11 @@ const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
 
 <style lang="css">
 @layer components {
+.single-checkbox-fieldset {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
 .single-checkbox-items {
   display: flex;
   gap: var(--single-checkbox-gap, 1.2rem);
@@ -111,7 +123,7 @@ const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
 
   &[data-options-layout="equal-widths"] {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--single-checkbox-column-min-width, 100px), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--single-checkbox-column-min-width, 100px)), 1fr));
   }
 }
 }

@@ -1,4 +1,5 @@
 // https://nuxt.com/docs/getting-started/testing#unit-testing
+import { defineComponent } from "vue";
 import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import type { FormUiTheme, OptionsLayout } from "~/types/forms/types.forms";
@@ -25,6 +26,11 @@ const initialSlots = {
 };
 
 let wrapper: VueWrapper<InstanceType<typeof ComponentUnderTest>>;
+
+afterEach(() => {
+  wrapper?.unmount();
+  vi.restoreAllMocks();
+});
 const wrapperFactory = (propsData = {}, slotsData = {}) => {
   const mockPropsData = { ...initialPropsData, ...propsData };
   const mockSlotsData = { ...initialSlots, ...slotsData };
@@ -84,10 +90,38 @@ describe("MultipleCheckboxes Component", () => {
     });
   });
 
-  it("gives each checkbox an id derived from name and value", async () => {
-    wrapper = await wrapperFactory();
-    const first = wrapper.find('input[type="checkbox"]');
-    expect(first.attributes("id")).toBe(`tags-${tagsData.data[0]!.value}`);
+  it("gives each button checkbox a unique, space-free id linked to its label", async () => {
+    wrapper = await wrapperFactory({ isButton: true });
+    const ids = wrapper.findAll('input[type="checkbox"]').map((checkbox) => checkbox.attributes("id")!);
+    expect(new Set(ids).size).toBe(tagsData.data.length);
+    ids.forEach((id) => expect(id).not.toMatch(/\s/));
+    ids.forEach((id) => expect(wrapper.find(`label[for="${id}"]`).exists()).toBe(true));
+  });
+
+  it("keeps option ids unique across two groups sharing a name and values", async () => {
+    const Host = defineComponent({
+      components: { ComponentUnderTest },
+      setup: () => ({ props: initialPropsData }),
+      template: `
+        <div>
+          <ComponentUnderTest v-bind="props" :model-value="[]" />
+          <ComponentUnderTest v-bind="props" :model-value="[]" />
+        </div>
+      `,
+    });
+    const host = await mountSuspended(Host);
+    const ids = host.findAll('input[type="checkbox"]').map((checkbox) => checkbox.attributes("id"));
+    expect(ids.length).toBe(tagsData.data.length * 2);
+    expect(new Set(ids).size).toBe(ids.length);
+    host.unmount();
+  });
+
+  it("builds ids that don't depend on option values containing spaces", async () => {
+    wrapper = await wrapperFactory({
+      isButton: true,
+      fieldData: { ...tagsData, data: [{ id: "x", name: "tags", value: "has spaces <b>", label: "Spaces" }] },
+    });
+    expect(wrapper.find('input[type="checkbox"]').attributes("id")).not.toMatch(/\s/);
   });
 
   it("adds each clicked value to the model", async () => {

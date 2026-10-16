@@ -24,7 +24,7 @@ instead.
 
 | Prop (template form) | Type | Default | Notes |
 |---|---|---|---|
-| `name` | `string` | (required) | Shared `name` on every checkbox; also used to build each checkbox `id` (`${name}-${item.value}`) and the error/description ids. |
+| `name` | `string` | (required) | Shared `name` on every checkbox; also used for the error/description ids. Button-presentation checkbox ids come from `useId()` plus the option index (until 2026-10-16 they were `${name}-${item.value}`, which duplicated across two groups sharing a name and broke on values with spaces). |
 | `legend` | `string` | (required) | Fieldset `<legend>` text. |
 | `:error-message` | `string \| object` | (required) | Shown by `InputError` when `fieldHasError` is true. Pass `""` when there's no error. An array renders as a list. |
 | `:field-has-error` | `boolean` | `false` | Shows the error, sets `aria-invalid` on the fieldset and points each checkbox's `aria-describedby` at the error. |
@@ -36,7 +36,7 @@ instead.
 | `:display-as-disc` | `boolean` | `false` | Round checkbox symbol. |
 | `:theme` | `FormUiTheme` | `"default"` | Forwarded to each control. |
 | `:input-variant` | `InputUiVariant` | `"normal"` | Forwarded to each control and the error message. |
-| `:style-class-passthrough` | `string \| string[]` | `[]` | Classes on the root `<fieldset>`. Read once at mount. |
+| `:style-class-passthrough` | `string \| string[]` | `[]` | Classes on the root `<fieldset>`; updates when the prop changes. |
 | `data-testid` | `string` | `"multiple-checkboxes"` | On the root `<fieldset>`. |
 | `label` | `string` | `""` | **Ignored.** Kept only so existing call sites that pass it don't break; it has never rendered. Use `legend` or the description slots. |
 
@@ -84,7 +84,7 @@ instead.
 | `:options-layout` | `OptionsLayout` | `"equal-widths"` | Rendered as `data-options-layout` on the items container. |
 | `:theme` | `FormUiTheme` | `"default"` | |
 | `:input-variant` | `InputUiVariant` | `"normal"` | |
-| `:style-class-passthrough` | `string \| string[]` | `[]` | Classes on the root `<fieldset>`. Read once at mount. |
+| `:style-class-passthrough` | `string \| string[]` | `[]` | Classes on the root `<fieldset>`; updates when the prop changes. |
 | `data-testid` | `string` | `"single-checkbox"` | On the root `<fieldset>`. |
 
 ### v-model
@@ -119,6 +119,18 @@ These components own only the items-container spacing (`--multiple-checkboxes-ga
 `--multiple-checkboxes-margin-block-start`, `--single-checkbox-gap`,
 `--single-checkbox-margin-block-start`, `--single-checkbox-column-min-width`). The checkbox
 controls' own colours are the `--input-checkbox-*` tokens in `input-checkbox-radio`.
+
+---
+
+## Long and hostile content
+
+Both root fieldsets set `min-inline-size: 0` (a native `<fieldset>` otherwise grows to its
+min-content width and overflows a narrow column) and `overflow-wrap: anywhere`, which inherits
+into the legend, description, labels and error, so long unbroken words and URLs wrap. Equal-width
+columns are capped at `100%` of the container. Known gap: `InputCheckboxRadioButton` keeps inline
+button labels `nowrap`, so `is-button` with `options-layout="inline"` still overflows on an
+unbroken label. No line-clamp tokens: the legend, option labels and error name the choice or the
+problem and must stay readable. The `StressTest` story in each story file covers this.
 
 ---
 

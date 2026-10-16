@@ -12,6 +12,11 @@ const initialPropsData = {
 };
 
 let wrapper: VueWrapper<InstanceType<typeof ComponentUnderTest>>;
+
+afterEach(() => {
+  wrapper?.unmount();
+  vi.restoreAllMocks();
+});
 const wrapperFactory = (propsData = {}, slotsData = {}) =>
   mountSuspended(ComponentUnderTest, {
     attachTo: document.body,

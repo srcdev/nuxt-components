@@ -262,6 +262,12 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
       the edits in private memory. Note that an inline-size container can't size itself from its
       content: say so in `CONSUMER-STYLING.md` (`ProfileSection`).
     - Grid tracks that hold text are `minmax(0, …)` so an unbroken string can't widen the grid.
+    - An `auto-fit` column minimum taken from a token or a measured width is wrapped in
+      `min(100%, …)`, or one long item makes the column wider than its container.
+    - A component whose root is a `<fieldset>` sets `min-inline-size: 0` on it: a native fieldset
+      defaults to its min-content width and overflows a narrow column (`MultipleCheckboxes`,
+      2026-10-16).
+    - Element ids come from `useId()`, never from data values (rule `consumer/ids-from-useid.md`).
     - Layout measured in script (connector lines, indicators) re-measures when any measured item
       resizes or changes class, not only when the container resizes (`measured-layout-observers.md`,
       pitfall #28).

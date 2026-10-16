@@ -321,6 +321,23 @@ it("passes myProp to ChildComponent", async () => {
 
 Import the child component directly in the test file — it is not auto-imported there.
 
+## Testing `useId()` uniqueness across instances
+
+Each `mountSuspended` call is its own Nuxt app, so `useId()` restarts its counter and two separately
+mounted instances get the **same** ids. That's a test artefact, not a bug. To prove two instances
+don't collide, render both inside one host component (`MultipleCheckboxes.spec.ts`):
+
+```ts
+const Host = defineComponent({
+  components: { ComponentUnderTest },
+  setup: () => ({ props: initialPropsData }),
+  template: `<div><ComponentUnderTest v-bind="props" /><ComponentUnderTest v-bind="props" /></div>`,
+});
+const host = await mountSuspended(Host);
+const ids = host.findAll("input").map((input) => input.attributes("id"));
+expect(new Set(ids).size).toBe(ids.length);
+```
+
 ## Mocking browser APIs
 
 ### Global constructors (ResizeObserver, IntersectionObserver, etc.)

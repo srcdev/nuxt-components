@@ -23,10 +23,10 @@
         </template>
       </InputDescription>
       <div ref="itemsContainer" class="multiple-checkboxes-items" :data-options-layout="optionsLayout">
-        <template v-for="item in fieldData.data" :key="item.id">
+        <template v-for="(item, index) in fieldData.data" :key="item.id">
           <InputCheckboxRadioButton
             v-if="isButton"
-            :id="`${name}-${item.value}`"
+            :id="`${optionIdPrefix}-${index}`"
             v-model="modelValue"
             type="checkbox"
             :name
@@ -119,13 +119,22 @@ const slots = useSlots();
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({ required: true });
 const fieldData = defineModel<IFormMultipleOptions>("fieldData", { required: true });
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 
 const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   props.name,
   toRef(props, "fieldHasError"),
   slots
 );
+
+const optionIdPrefix = useId();
 
 const { maxChildWidth, updateMaxChildWidth } = useMaxChildWidth(
   ".input-checkbox-radio-field-label, .input-checkbox-radio-field",
@@ -146,6 +155,11 @@ watch(
 
 <style lang="css">
 @layer components {
+.multiple-checkboxes-fieldset {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
 .multiple-checkboxes-items {
   display: flex;
   gap: var(--multiple-checkboxes-gap, 1.2rem);
@@ -165,7 +179,7 @@ watch(
     grid-template-columns: repeat(
       auto-fit,
       minmax(
-        calc(var(--input-checked-icon-gap) + (2 * var(--input-checkbox-label-padding-inline)) + v-bind(maxChildWidth)),
+        min(100%, calc(var(--input-checked-icon-gap) + (2 * var(--input-checkbox-label-padding-inline)) + v-bind(maxChildWidth))),
         1fr
       )
     );
