@@ -28,7 +28,8 @@ This project uses **native CSS nesting** (W3C CSS Nesting spec), not Sass/SCSS. 
 **Why it silently fails**: esbuild converts `&__heading` to `:is(__heading)`, which tries to match an HTML element named `__heading`. No such element exists, so the styles are never applied. There's no error — just missing styles.
 
 The build will show this warning:
-```
+
+```text
 ▲ [WARNING] Cannot use type selector "__heading" directly after nesting selector "&" [css-syntax-error]
   CSS nesting syntax does not allow the "&" selector to come before a type selector.
 ```
@@ -119,3 +120,23 @@ If you see `&__` or `&-` in a `.vue` `<style lang="css">` block, it's Sass synta
 
 - `CLAUDE.md` → Styling Methodology section
 - `css-grid-max-width-gutters.md` — example of correct native nesting in a grid utility
+
+## State rules and specificity
+
+Nesting multiplies specificity: `.toggle-switch { .toggle-switch-wrapper { .toggle-switch-track
+{ .toggle-switch-thumb {} } } }` compiles to a four-class selector. A state rule written once at
+the root level, `.toggle-switch[data-checked] .toggle-switch-thumb`, has only three, so the base
+rule wins and the state never shows. Nest the state rule inside the element's own block instead:
+
+```css
+.toggle-switch-thumb {
+  translate: 0 0;
+
+  .toggle-switch[data-checked] & {
+    translate: 100% 0;
+  }
+}
+```
+
+`.toggle-switch[data-checked] &` adds the root's class and attribute on top of the full nested
+selector, so it always outranks the base rule.

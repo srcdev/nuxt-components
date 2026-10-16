@@ -196,6 +196,11 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
    - A toast, banner or status message doesn't `.focus()` itself when it appears (rule
      `consumer/a11y-no-focus-steal.md`).
    - Focus is visible (`:focus-visible`, not a suppressed outline) on anything focusable.
+   - `aria-invalid` is bound as `fieldHasError ? 'true' : undefined`, never the boolean itself:
+     `:aria-invalid="fieldHasError"` renders `aria-invalid="false"` on every valid field
+     (`InputTextarea`, `ToggleSwitch`, fixed 2026-10-16). Same for an empty `aria-describedby`.
+   - A checkbox drawn as an on/off switch has `role="switch"`, and its decorative track is
+     `aria-hidden` (`ToggleSwitch`, 2026-10-16).
    - Live-updating or auto-advancing content (carousels, marquees, auto-dismissing toasts) has a
      way to pause it, per WCAG 2.2.2 — a visible control, or pause-on-hover/focus at minimum.
    - `prefers-reduced-motion` is respected for any animation that isn't purely decorative.
@@ -275,6 +280,17 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
       defaults to its min-content width and overflows a narrow column (`MultipleCheckboxes`,
       2026-10-16).
     - Element ids come from `useId()`, never from data values (rule `consumer/ids-from-useid.md`).
+    - A wrapper passes its child only props the child declares. Anything else falls through as an
+      HTML attribute on the child's root: `InputTextField` put `label="…"` and
+      `error-message="…"` on `.input-text-wrapper` (fixed 2026-10-16). Check the child root's
+      attributes in a test.
+    - A control styled with `all: unset` restores the UA defaults it depends on. On a `<textarea>`
+      that reset `white-space: pre-wrap` (inherited, so it took the page's `normal`); set
+      `white-space: pre-wrap` and `overflow-wrap: anywhere` explicitly (`InputTextarea`,
+      2026-10-16).
+    - A state rule (`[data-checked]`) written at the root level loses to deeper nested base rules
+      for the same element. Nest it in the element's own block as `.root[data-x] & { … }`
+      (`ToggleSwitch`, 2026-10-16; `css-nesting-conventions.md`).
     - Step buttons and any other script that changes a number round to the step's precision
       (`toFixed`), clamp to `min`/`max`, and compare limits with `<=`/`>=`, never `===` (0.1 steps
       drift to 0.30000000000000004, and an overshoot past an `===` check never disables the button).

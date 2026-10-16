@@ -60,7 +60,12 @@ stripping `Core`.
    control name).
 2. `sed` the old names across `app/`, `.claude/`, `.vscode/`, `MIGRATION.md` and `CLAUDE.md`:
    component names, `import` paths, story titles/`*StoryArgs` interfaces, `describe()` names, and the
-   root/base DOM class (update `CONSUMER-STYLING.md` and test selectors that use it).
+   root/base DOM class (update `CONSUMER-STYLING.md` and test selectors that use it). Match on word
+   boundaries (`\bToggleSwitchCore\b`): a bare `ToggleSwitchCore` also matched inside
+   `TripleToggleSwitchCore` and rewrote its history notes (2026-10-16). Leave out the gitignored
+   `.claude/settings.json` (its old allowlist entries match too) and any dated "Renamed"/"Changed"
+   notes, and rename a removed wrapper by hand before the bulk pass, or `XWithLabel` → `XField`
+   turns `XWithLabelInline` into a name that never existed.
 3. Add a "Renamed YYYY-MM-DD" note at the top of the skill doc listing old → new names and classes.
 4. Grep consumer repos (`/check-component-usage`) and **list** the files/lines that use the old
    names (in the private consumer notes, never in this repo). Don't edit the consumers yet: they pin

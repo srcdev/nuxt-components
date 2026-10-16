@@ -130,5 +130,5 @@ ancestor of the label).
 
 `:style-class-passthrough` (string or string array) adds classes to the `<label>`. It's only
 reachable when you render `InputLabel` directly in a custom field wrapper: the library's wrappers
-pass their own hook classes (`input-text-label`, `input-number-label`, `input-select-label`,
-`input-textarea-label`, `input-switch-label`) and don't forward yours.
+pass their own hook classes (`input-text-label`, `input-number-label`, `input-range-label`, `input-select-label`,
+`input-textarea-label`, `toggle-switch-label`) and don't forward yours.
