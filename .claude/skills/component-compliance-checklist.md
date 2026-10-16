@@ -178,7 +178,9 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
    stories/tests up one level, fix relative imports); `pathPrefix: false` keeps the auto-import
    names unchanged. All existing `variants/` folders were flattened 2026-09-25.
 8. **VS Code snippet** — create or update `.vscode/srcdev-component-{family}.code-snippets`,
-   covering the control and its Field wrapper in one file.
+   covering the control and its Field wrapper in one file. For a teleported component, a CSS
+   override scaffold must not nest its selector under a page class: it never matches (the
+   `DisplayToast` snippet did, fixed 2026-10-16).
 9. **Accessibility** — check for gaps beyond what already-passing tests would catch:
    - Interactive controls (buttons, toggles, custom form-like widgets) have an accessible name —
      visible text, `aria-label`, or `aria-labelledby`.
@@ -188,6 +190,8 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
      `event.preventDefault()` with a comment like "could add this later", and no screen-reader
      copy (visible or `sr-only`) that describes an interaction the component doesn't actually
      perform. Cross-check every claim in the copy against the handler that's supposed to back it.
+   - A toast, banner or status message doesn't `.focus()` itself when it appears (rule
+     `consumer/a11y-no-focus-steal.md`).
    - Focus is visible (`:focus-visible`, not a suppressed outline) on anything focusable.
    - Live-updating or auto-advancing content (carousels, marquees, auto-dismissing toasts) has a
      way to pause it, per WCAG 2.2.2 — a visible control, or pause-on-hover/focus at minimum.

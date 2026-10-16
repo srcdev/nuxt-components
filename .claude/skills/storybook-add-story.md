@@ -321,6 +321,12 @@ the earlier nightly `@nuxtjs/storybook` didn't render Docs pages at all, so a lo
   screens, and sets `docs.story: { inline: false }`. `CookieConsentBanner` and `DisplayToast`
   follow this. A teleported component doesn't inherit a wrapper's `dir`, so wrap RTL slot copy
   in `<span dir="rtl">`.
+- The same goes for tokens: a teleported component doesn't inherit custom properties from a story
+  wrapper. To demo a token override, inject a `<style>` rule targeting the component's own root
+  class in setup (remove it in `onUnmounted`); that also keeps `var(--theme-*)` inside the value
+  resolving against the component's own `data-theme`. A backdrop meant to sit behind it (to demo
+  translucency) must be `position: fixed; inset: 0`. `DisplayToast`'s `canvas` / `maskedFill`
+  story controls follow this.
 - Opt a file out with `tags: ["!autodocs"]` only when it isn't a component reference (tooling, or
   a file with its own attached `.mdx` page, like `ColourRamps.stories.ts` with `SetupGuide.mdx`).
 

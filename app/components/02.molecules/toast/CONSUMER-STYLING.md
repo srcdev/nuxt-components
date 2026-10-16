@@ -71,9 +71,15 @@ Toasts slide in and out over `behavior.revealDuration` (default `550ms`). Under
 because it shows how long is left.
 
 Auto-dismiss pauses while the pointer is over a toast, or while keyboard focus is on it or inside
-it, and resumes with the time that was left (WCAG 2.2.2). The toast moves focus to itself when
-shown; that only pauses it when the user was using a keyboard (`:focus-visible`), so mouse users
-still get auto-dismiss.
+it, and resumes with the time that was left (WCAG 2.2.2). Toasts don't take focus when they
+appear, so the focus ring only shows when a keyboard user tabs to one, and focus on the toast
+itself only pauses it for keyboard users (`:focus-visible`).
+
+> Changed 2026-10-16: toasts used to move focus to themselves when shown, which interrupted
+> typing and showed the focus ring when a toast opened before any pointer input. Escape now
+> dismisses a toast from anywhere on the page (the provider dismisses the newest one), unless
+> another handler called `preventDefault()`. No consumer change needed, unless your own code relied
+> on the toast holding focus.
 
 ## Global theming
 

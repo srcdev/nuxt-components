@@ -287,6 +287,7 @@ Numbers are stable (code and docs cite them). Rule files are in `.claude/rules/`
 26. **Private tokens collide on a shared root** (`DisplayAvatar`/`DisplayChip`, 2026-10-14) → `css-private-token-collision.md`. Related: `DisplayChip` masks each direct child in that child's own box, so the host must be one full-size element (`.display-avatar-surface`).
 27. **`:deep()` in unscoped styles** (`PricingCard`, 2026-10-15) → `css-no-deep.md`
 28. **Container-only ResizeObserver for measured layout** (`StepperList` connectors, 2026-10-15) → `measured-layout-observers.md`. ProgressTracker moving its focus card from one step to the next left the list height unchanged, so the connectors kept stale geometry.
+29. **Toasts focusing themselves** (`DisplayToast`/`DisplayToastProvider`, 2026-10-16) → `a11y-no-focus-steal.md`. The ring showed on stories that auto-open on load, and the masked variant made the rectangular outline obvious.
 
 ## Development Workflow
 

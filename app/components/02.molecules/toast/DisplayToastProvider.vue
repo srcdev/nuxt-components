@@ -7,7 +7,6 @@
       :data-alignment="fullWidth ? 'full-width' : alignment"
       @before-leave="onBeforeLeave"
       @after-leave="onAfterLeave"
-      @after-enter="onAfterEnter"
     >
       <div
         v-for="entry in visibleEntries"
@@ -54,6 +53,7 @@
 </template>
 
 <script setup lang="ts">
+import { useEventListener } from "@vueuse/core";
 import AlertContent from "~/components/02.molecules/alert-content/AlertContent.vue";
 import AlertMaskedContent from "~/components/02.molecules/alert-masked-content/AlertMaskedContent.vue";
 import type {
@@ -187,9 +187,17 @@ const onAfterLeave = () => {
   }
 };
 
-const onAfterEnter = (el: Element) => {
-  (el as HTMLElement).focus();
-};
+// Toasts never take focus (WCAG 4.1.3); Escape outside one dismisses the newest.
+useEventListener(
+  () => (import.meta.client ? document : null),
+  "keydown",
+  (event: KeyboardEvent) => {
+    if (event.key !== "Escape" || event.defaultPrevented) return;
+    if ((event.target as Element | null)?.closest?.(".display-toast-provider-item")) return;
+    const newest = visibleEntries.value.at(-1);
+    if (newest) handleDismiss(newest.id);
+  }
+);
 
 onUnmounted(() => {
   timers.forEach((timer) => timer.clear());

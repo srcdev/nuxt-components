@@ -111,6 +111,7 @@ const toastVisible = ref(false)
 
 - `onBeforeRouteLeave` dismisses the toast on navigation. This emits a Vue Router warning in Vitest (no active route record) — harmless.
 - `returnFocusTo` accepts an `HTMLElement` or a component instance with `$el`.
+- Neither `DisplayToast` nor `DisplayToastProvider` moves focus when a toast appears (changed 2026-10-16; both used to `.focus()` the toast). Toasts are status messages announced through `role` + `aria-live` (WCAG 4.1.3), and stealing focus interrupted typing and drew a focus ring in Chrome when the toast opened before any pointer input. Keyboard users can still Tab to it (`tabindex="0"`), and Escape is heard on the document while a toast is shown (ignored if another handler called `preventDefault()`).
 - The toast uses `<Teleport to="body">`. In tests, query `document.querySelector(".display-toast")` not `wrapper.find()`.
 - Position, alignment and state are `data-position`, `data-alignment` (`full-width` when `fullWidth`) and `data-state="show|hide"`, not classes (changed 2026-10-08: the old bare `.top`/`.hide`/... classes could collide with a consumer's utility classes, since the toast is teleported into `<body>`).
 - In tests, unmount every toast in `afterEach` before clearing `document.body`: a leftover instance's pending dismiss timer otherwise re-renders into the removed container (`insertBefore` of null) during a later test's timer advance.
@@ -119,8 +120,8 @@ const toastVisible = ref(false)
 
 Auto-dismiss pauses while hovered, or while keyboard focus is on or inside the toast, and resumes with
 the remaining time (`createPausableTimeout` in `app/utils/pausableTimeout.ts`, plus
-`focusPausesAutoDismiss`). The toast's own programmatic focus only pauses it when the root matches
-`:focus-visible` (keyboard modality), so mouse users still get auto-dismiss. `data-paused` freezes the
+`focusPausesAutoDismiss`). Focus on the toast root only pauses it when the root matches
+`:focus-visible` (keyboard modality), so a mouse click on it doesn't stop auto-dismiss. `data-paused` freezes the
 progress bar via `animation-play-state`. In jsdom `:focus-visible` matches any focus, so tests that
 depend on modality spy on `Element.prototype.matches` (see `DisplayToast.spec.ts`).
 
@@ -244,6 +245,8 @@ The SVG border shape matches the standard toast exactly (8px left radius, 4px ri
 
 The inner content layout is handled by the shared `AlertContentInner` molecule — both variants reuse it. `AlertMaskedContent` sets `--alert-content-inner-background: transparent` so the glass effect shows through.
 
+**Contrast caveat:** a toast is fixed to the viewport, so whatever scrolls behind it (body copy, busy photos) shows through the fill. 80% holds up over most backdrops; lowering `--alert-masked-content-background` can make the message hard to read, and the 1px accent border can disappear over a backdrop of similar hue. Set that token on `.display-toast` (or a `styleClassPassthrough` class) or `.display-toast-provider-item`: both teleport to `<body>`, so a page-level ancestor never reaches them. Prefer the opaque variant for error/warning toasts. Storybook's "Masked: Low Contrast Risk" story demos the failure.
+
 ### Provider notes
 
 - `useToastQueue` state persists across route changes — no `onBeforeRouteLeave` cleanup needed.
@@ -252,4 +255,4 @@ The inner content layout is handled by the shared `AlertContentInner` molecule �
 - Every mounted provider reacts to the shared `useToastQueue` state, so tests must unmount providers in `afterEach`; otherwise an earlier test's provider runs its own timer for a new toast and dismisses it.
 - Each item pauses independently (hover / keyboard focus, same rule as the standalone toast), tracked per toast id.
 - The progress bar (`.display-toast-provider-progress`) is only rendered when `autoDismiss: true`.
-- Dismissal can be triggered by: close button click, Escape key (when the toast item has focus), `dismiss(id)`, auto-dismiss timer, or `clear()`.
+- Dismissal can be triggered by: close button click, Escape key (dismisses that item when focus is inside it, otherwise the newest visible item), `dismiss(id)`, auto-dismiss timer, or `clear()`.

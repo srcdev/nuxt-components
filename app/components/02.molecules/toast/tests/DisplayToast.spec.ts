@@ -198,21 +198,35 @@ describe("DisplayToast", () => {
 
   // ─── Dismiss via Escape key ────────────────────────────────────────────────
 
-  it("transitions to hide class when Escape is pressed", async () => {
+  it("transitions to hide class when Escape is pressed on the toast", async () => {
     await mountAndShow({ config: { behavior: { autoDismiss: false } } });
-    vi.advanceTimersByTime(100); // fire the focus setTimeout
-    await nextTick();
+    vi.advanceTimersByTime(1);
     toast()!.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
     await nextTick();
     expect(toast()!.getAttribute("data-state")).toBe("hide");
+  });
+
+  it("dismisses on Escape pressed anywhere in the document, since it never takes focus", async () => {
+    await mountAndShow({ config: { behavior: { autoDismiss: false } } });
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await nextTick();
+    expect(toast()!.getAttribute("data-state")).toBe("hide");
+  });
+
+  it("ignores an Escape another handler has already claimed", async () => {
+    await mountAndShow({ config: { behavior: { autoDismiss: false } } });
+    const event = new KeyboardEvent("keydown", { key: "Escape", bubbles: true, cancelable: true });
+    event.preventDefault();
+    document.body.dispatchEvent(event);
+    await nextTick();
+    expect(toast()!.getAttribute("data-state")).toBe("show");
   });
 
   // ─── Dismiss via close button ─────────────────────────────────────────────
 
   it("transitions to hide class when the close button is clicked", async () => {
     await mountAndShow({ config: { behavior: { autoDismiss: false } } });
-    vi.advanceTimersByTime(100);
-    await nextTick();
+    vi.advanceTimersByTime(1);
     (document.querySelector("[data-test-id='alert-dismiss']") as HTMLElement).click();
     await nextTick();
     expect(toast()!.getAttribute("data-state")).toBe("hide");
@@ -282,22 +296,29 @@ describe("DisplayToast", () => {
     expect(toast()!.getAttribute("data-state")).toBe("hide");
   });
 
-  it("does not pause when the toast takes focus after mouse input", async () => {
+  it("does not move focus to itself when shown", async () => {
+    await mountAndShow({ config: autoConfig });
+    vi.advanceTimersByTime(500);
+    await nextTick();
+    expect(document.activeElement).not.toBe(toast());
+    expect(toast()!.hasAttribute("data-paused")).toBe(false);
+  });
+
+  it("does not pause when focused after mouse input", async () => {
     setFocusVisible(false);
     await mountAndShow({ config: autoConfig });
-    vi.advanceTimersByTime(100); // the toast focuses itself
+    (toast() as HTMLElement).focus();
     await nextTick();
-    expect(document.activeElement).toBe(toast());
     expect(toast()!.hasAttribute("data-paused")).toBe(false);
-    vi.advanceTimersByTime(900);
+    vi.advanceTimersByTime(1000);
     await nextTick();
     expect(toast()!.getAttribute("data-state")).toBe("hide");
   });
 
-  it("pauses when the toast takes focus after keyboard input, until focus leaves", async () => {
+  it("pauses when a keyboard user focuses the toast, until focus leaves", async () => {
     setFocusVisible(true);
     await mountAndShow({ config: autoConfig });
-    vi.advanceTimersByTime(100);
+    (toast() as HTMLElement).focus();
     await nextTick();
     expect(toast()!.hasAttribute("data-paused")).toBe(true);
     vi.advanceTimersByTime(5000);
@@ -305,7 +326,7 @@ describe("DisplayToast", () => {
     expect(toast()!.getAttribute("data-state")).toBe("show");
     (toast() as HTMLElement).blur();
     await nextTick();
-    vi.advanceTimersByTime(900);
+    vi.advanceTimersByTime(1000);
     await nextTick();
     expect(toast()!.getAttribute("data-state")).toBe("hide");
   });

@@ -62,16 +62,14 @@
     ]
   },
   "SRCDEV DisplayToast CSS Override": {
-    "description": "CSS override scaffold for DisplayToastProvider items",
+    "description": "CSS override scaffold for DisplayToastProvider items (teleported to body, so not nested in a page class)",
     "scope": "css",
     "body": [
-      ".$1my-page {",
-      "  .display-toast-provider-item {",
-      "    --theme-surface: ;",
-      "    --theme-text: ;",
-      "    --theme-accent: ;",
-      "    --theme-border: ;",
-      "  }",
+      ".display-toast-provider-item {",
+      "  --theme-surface: $1;",
+      "  --theme-text: $2;",
+      "  --theme-accent: $3;",
+      "  --theme-border: $4;",
       "}"
     ]
   }

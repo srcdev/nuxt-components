@@ -14,7 +14,6 @@
       :aria-live="ariaLive"
       :tabindex="slots.default ? undefined : '0'"
       :aria-describedby="slots.default ? undefined : 'toast-message-' + toastId"
-      @keydown.escape="setDismissToast"
       @pointerenter="isHovered = true"
       @pointerleave="isHovered = false"
       @focusin="handleFocusIn"
@@ -48,6 +47,7 @@
 </template>
 
 <script setup lang="ts">
+import { useEventListener } from "@vueuse/core";
 import AlertContent from "~/components/02.molecules/alert-content/AlertContent.vue";
 import AlertMaskedContent from "~/components/02.molecules/alert-masked-content/AlertMaskedContent.vue";
 import type { DisplayToastConfig, ToastSlots } from "~/types/components";
@@ -182,15 +182,6 @@ watch(
       privateDisplayToast.value = true;
       transitionalState.value = true;
 
-      // Focus management for accessibility when not using custom slots
-      if (!slots.default) {
-        await nextTick();
-        // Wait for animation to start before focusing
-        setTimeout(() => {
-          toastElementRef.value?.focus();
-        }, 100);
-      }
-
       if (autoDismiss.value) {
         clearDismissTimer();
         dismissTimer = createPausableTimeout(setDismissToast, duration.value);
@@ -200,6 +191,15 @@ watch(
       // If external model is set to false, dismiss the toast
       setDismissToast();
     }
+  }
+);
+
+// The toast never takes focus (WCAG 4.1.3), so Escape is heard document-wide while it's shown.
+useEventListener(
+  () => (import.meta.client ? document : null),
+  "keydown",
+  (event: KeyboardEvent) => {
+    if (event.key === "Escape" && !event.defaultPrevented && transitionalState.value) setDismissToast();
   }
 );
 

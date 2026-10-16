@@ -208,6 +208,26 @@ describe("DisplayToastProvider", () => {
     expect(items().length).toBe(0);
   });
 
+  it("does not move focus to a toast when it appears", async () => {
+    await mountProvider(DisplayToastProvider);
+    show({ behavior: { autoDismiss: false } });
+    await nextTick();
+    await nextTick();
+    expect(document.activeElement).not.toBe(item());
+  });
+
+  it("dismisses only the newest toast when Escape is pressed outside the toasts", async () => {
+    await mountProvider(DisplayToastProvider, { props: { maxVisible: 2 } });
+    show({ content: { text: "First" }, behavior: { autoDismiss: false } });
+    show({ content: { text: "Second" }, behavior: { autoDismiss: false } });
+    await nextTick();
+    expect(items().length).toBe(2);
+    document.body.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+    await nextTick();
+    expect(items().length).toBe(1);
+    expect(item()!.textContent).toContain("First");
+  });
+
   // ─── Auto-dismiss timer ───────────────────────────────────────────────────
 
   it("auto-dismisses after duration", async () => {
