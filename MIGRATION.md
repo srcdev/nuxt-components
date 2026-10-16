@@ -156,9 +156,8 @@ Tracks progress toward a fully migrated component library. A component is consid
 
 | Component | File | CS | SN |
 |---|---|---|---|
-| ToggleSwitchCore | `toggle-switch/ToggleSwitchCore.vue` | ☐ | ☐ |
-| ToggleSwitchWithLabel | `toggle-switch/ToggleSwitchWithLabel.vue` | ☐ | ☐ |
-| ToggleSwitchWithLabelInline | `toggle-switch/ToggleSwitchWithLabelInline.vue` | ☐ | ☐ |
+| ToggleSwitch | `toggle-switch/ToggleSwitch.vue` | ☐ | ☐ |
+| ToggleSwitchField | `toggle-switch/ToggleSwitchField.vue` | ☐ | ☐ |
 | TripleToggleSwitch | `triple-toggle-switch/TripleToggleSwitch.vue` | ✅ | ✅ `triple-toggle-switch` |
 | InputRange | `input-range/InputRange.vue` | ✅ | ✅ `input-range` |
 | InputRangeField | `input-range/InputRangeField.vue` | ✅ | ✅ `input-range` |

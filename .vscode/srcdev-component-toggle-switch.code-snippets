@@ -1,50 +1,40 @@
 {
-  "SRCDEV ToggleSwitchCore": {
-    "description": "ToggleSwitchCore — bare toggle switch (no label, use ToggleSwitchWithLabel for that)",
+  "SRCDEV ToggleSwitch": {
+    "description": "ToggleSwitch: bare switch (pair with a label for=\"toggle-switch-{id}\", or use ToggleSwitchField)",
     "scope": "vue,html",
     "body": [
-      "<ToggleSwitchCore",
-      "  v-model=\"$1modelValue\"",
-      "  id=\"$2toggle-id\"",
-      "  name=\"$3toggleName\"",
+      "<label for=\"toggle-switch-$1toggle-id\">$2Label</label>",
+      "<ToggleSwitch",
+      "  id=\"$1toggle-id\"",
+      "  v-model=\"$3modelValue\"",
+      "  name=\"$4toggleName\"",
       "/>"
     ]
   },
-  "SRCDEV ToggleSwitchWithLabel": {
-    "description": "ToggleSwitchWithLabel: labelled toggle switch with description/error support",
+  "SRCDEV ToggleSwitchField": {
+    "description": "ToggleSwitchField: labelled switch with description and error support",
     "scope": "vue,html",
     "body": [
-      "<ToggleSwitchWithLabel",
+      "<ToggleSwitchField",
       "  v-model=\"$1fieldValue\"",
       "  name=\"$2fieldName\"",
       "  label=\"$3Field label\"",
-      "  :error-message=\"$4errors.fieldName\"",
-      "  :field-has-error=\"!!$4errors.fieldName\"",
+      "  layout=\"${4|stacked,inline|}\"",
+      "  :error-message=\"$5errors.fieldName\"",
+      "  :field-has-error=\"!!$5errors.fieldName\"",
       ">",
-      "  <template #descriptionText>$5Help text</template>",
-      "</ToggleSwitchWithLabel>"
-    ]
-  },
-  "SRCDEV ToggleSwitchWithLabelInline": {
-    "description": "ToggleSwitchWithLabelInline: compact label + toggle switch side by side, no error support",
-    "scope": "vue,html",
-    "body": [
-      "<ToggleSwitchWithLabelInline",
-      "  v-model=\"$1fieldValue\"",
-      "  name=\"$2fieldName\"",
-      "  label=\"$3Field label\"",
-      "/>"
+      "  <template #descriptionText>$6Help text</template>",
+      "</ToggleSwitchField>"
     ]
   },
   "SRCDEV ToggleSwitch CSS Override": {
-    "description": "CSS override scaffold for ToggleSwitchCore tokens",
+    "description": "CSS override scaffold for ToggleSwitch tokens",
     "scope": "css",
     "body": [
       ".$1my-page {",
-      "  .toggle-switch-wrapper {",
-      "    --toggle-switch-surface: $2;",
-      "    --toggle-switch-symbol-surface-on: $3;",
-      "  }",
+      "  --toggle-switch-surface: $2;",
+      "  --toggle-switch-symbol-surface-on: $3;",
+      "  --input-toggle-symbol-size: ${4:2.4rem};",
       "}"
     ]
   }

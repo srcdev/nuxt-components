@@ -8,8 +8,7 @@ import InputNumberField from "../../input-number/InputNumberField.vue";
 import InputOtpField from "../../input-otp/InputOtpField.vue";
 import InputTextareaField from "../../input-textarea/InputTextareaField.vue";
 import InputSelectField from "../../input-select/InputSelectField.vue";
-import ToggleSwitchWithLabel from "../../toggle-switch/ToggleSwitchWithLabel.vue";
-import ToggleSwitchWithLabelInline from "../../toggle-switch/ToggleSwitchWithLabelInline.vue";
+import ToggleSwitchField from "../../toggle-switch/ToggleSwitchField.vue";
 import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
 import SingleCheckbox from "../../input-checkbox/SingleCheckbox.vue";
 import MultipleRadiobuttons from "../../input-radio/MultipleRadiobuttons.vue";
@@ -31,7 +30,7 @@ interface MigratedFieldsFormStoryArgs {
 //   on-device keyboards), InputPasswordField,
 //   InputTextAsNumberField, InputRangeField (InputRange), InputNumberField
 //   (InputNumber), InputOtpField (InputOtp), InputTextareaField (InputTextarea), InputSelectField
-//   (InputSelect), ToggleSwitchWithLabel and ToggleSwitchWithLabelInline (ToggleSwitchCore),
+//   (InputSelect), ToggleSwitchField, stacked and inline (ToggleSwitch),
 //   MultipleCheckboxes, SingleCheckbox, MultipleRadiobuttons, TripleToggleSwitch ("Theme
 //   preference": no Field wrapper or error state, so it sits under a plain caption).
 // - Rendered inside other fields: FormWrapper (wraps the form), FormField (wraps every field),
@@ -68,8 +67,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     InputOtpField,
     InputTextareaField,
     InputSelectField,
-    ToggleSwitchWithLabel,
-    ToggleSwitchWithLabelInline,
+    ToggleSwitchField,
     MultipleCheckboxes,
     SingleCheckbox,
     MultipleRadiobuttons,
@@ -382,11 +380,11 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
-            <ToggleSwitchWithLabel v-model="state.subscribe" name="subscribe" label="Subscribe to updates" />
+            <ToggleSwitchField v-model="state.subscribe" name="subscribe" label="Subscribe to updates" />
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
-            <ToggleSwitchWithLabelInline v-model="state.reminders" name="reminders" label="Email me appointment reminders" />
+            <ToggleSwitchField v-model="state.reminders" name="reminders" label="Email me appointment reminders" layout="inline" />
           </FormField>
 
           <FormField width="wide" :has-gutter="false">

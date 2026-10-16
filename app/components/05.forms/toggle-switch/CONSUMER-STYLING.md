@@ -1,74 +1,106 @@
-# ToggleSwitchCore — Consumer Styling Guide
+# ToggleSwitch — Consumer Styling Guide
+
+> **Renamed 2026-10-16**: `ToggleSwitchCore` → `ToggleSwitch`, `ToggleSwitchWithLabel` →
+> `ToggleSwitchField`, `ToggleSwitchWithLabelInline` → `ToggleSwitchField layout="inline"`. Class
+> changes are listed under "State hooks" below.
 
 ## Public token API
 
 Every colour token below is `var(--toggle-switch-*, {default})` — set the `--toggle-switch-*`
 name to override just this component; leave it unset and it inherits the shared `--theme-*` token
 every other themed component also falls back to. See `theming-component-token-pattern.md` for why
-this two-tier shape exists. Defaults are unchanged from before this migration — this is a
-token-rename pass, not a redesign.
+this two-tier shape exists.
 
-| Token | Falls back to | Controls |
+### Track and thumb
+
+| Token | Default | Controls |
 |---|---|---|
 | `--toggle-switch-surface` | `var(--theme-checkbox-symbol-surface)` | Track background (resting) |
 | `--toggle-switch-surface-hover` | `var(--theme-surface-subtle)` | Track background on hover |
 | `--toggle-switch-border` | `var(--theme-border)` | Track border colour |
 | `--toggle-switch-border-focus` | `var(--theme-border-focus)` | Track outline colour on `:focus-visible` |
 | `--toggle-switch-symbol-border` | `var(--theme-text)` | Thumb border colour |
-| `--toggle-switch-symbol-surface-off` | `var(--theme-on-surface)` | Thumb background, unchecked |
-| `--toggle-switch-symbol-surface-on` | `var(--theme-surface)` | Thumb background, checked |
+| `--toggle-switch-symbol-surface-off` | `var(--theme-on-surface)` | Thumb background, off |
+| `--toggle-switch-symbol-surface-on` | `var(--theme-surface)` | Thumb background, on |
 | `--toggle-switch-icon-on-color` | `var(--theme-on-surface)` | "On" icon colour |
 | `--toggle-switch-icon-off-color` | `var(--theme-surface)` | "Off" icon colour |
+| `--toggle-switch-border-radius` | `100vw` (`round`), `0.4rem` (`round: false`) | Track and thumb shape |
+| `--toggle-switch-track-width` | derived from the thumb size | Track width (see below) |
+
+### Field
+
+| Token | Default | Controls |
+|---|---|---|
+| `--toggle-switch-field-inline-gap` | `1.2rem` | Space between label and switch with `layout="inline"` |
 
 Geometry (`--input-toggle-*`, `--form-element-*`) is shared across every `05.forms` component and
 untouched by this — see `theming-form-geometry-tokens.md`.
 
-### Shape (`round` prop)
-
-`--toggle-switch-border-radius` controls the track and thumb's shared `border-radius`. Left unset,
-it defaults to `100vw` (pill shape) when the `round` prop is `true` (the default), or `0.4rem`
-(a rounded-square shape) when `round` is `false` — see the `SquareShape` story. Set the token
-directly to override with an exact value the two-state default doesn't produce.
+Private (not public API): `--_border-radius` (from `round` and the token above, read by track and
+thumb) and `--_track-width` (the derived width).
 
 ### Track width
 
-`--toggle-switch-track-width` overrides the track's width directly. Left unset, the track derives
-its width from the shared `--input-toggle-*`/`--form-element-*` geometry tokens so it always scales
-with `--input-toggle-symbol-size` — resize the thumb and the track resizes to match, no separate
-width to keep in sync:
+Left unset, the track width is worked out from the shared `--input-toggle-*`/`--form-element-*`
+geometry tokens, so it scales with `--input-toggle-symbol-size`:
 
 ```css
 .my-compact-toggle {
   --input-toggle-symbol-size: 2.2rem;
-  /* Track width now follows automatically — no --toggle-switch-track-width override needed. */
 }
 ```
 
-Only set `--toggle-switch-track-width` if you need a width the formula doesn't produce (e.g. a
-fixed width independent of symbol size).
-
-> Five private locals (`--_icon-on-opacity`, `--_icon-off-opacity`, `--_symbol-background-color`,
-> `--_symbol-margin-inline-start`, `--_symbol-checked-offset`) were removed during this migration —
-> declared but never actually read by any property in the component, confirmed by grep. Not part
-> of any public API, so nothing to update if you were relying on them (you weren't — they had zero
-> effect).
+Only set `--toggle-switch-track-width` for a width the formula doesn't produce.
 
 ---
 
-## Description (ToggleSwitchWithLabel)
+## State hooks
 
-`ToggleSwitchWithLabel`'s `descriptionText` / `descriptionHtml` slots render through
+| Attribute | On | When |
+|---|---|---|
+| `data-checked` | `.toggle-switch` | The value equals `true-value` |
+| `data-invalid` | `.toggle-switch`, `.toggle-switch-field` | `field-has-error` |
+| `data-theme` | `.toggle-switch`, `.toggle-switch-field` | Always; `error` while `field-has-error` is set |
+| `data-layout="stacked" \| "inline"` | `.toggle-switch-field` | Always, mirrors `layout` |
+
+Inner elements: `.toggle-switch-wrapper`, `.toggle-switch-input` (the hidden checkbox),
+`.toggle-switch-track`, `.toggle-switch-thumb`, `.toggle-switch-icon`, `.toggle-switch-icon-on`,
+`.toggle-switch-icon-off`, `.toggle-switch-label` (the Field's `InputLabel`),
+`.toggle-switch-description` (the Field's `InputDescription`).
+
+The thumb slide is turned off under `prefers-reduced-motion: reduce`.
+
+> **Changed 2026-10-16**: inner classes were generic names that a consumer's own CSS could hit,
+> and state was a class. Use the new names:
+>
+> - `.toggle-switch-core` → `.toggle-switch`; `.toggle-switch-with-label` → `.toggle-switch-field`;
+>   `.toggle-switch-with-label-inline` → `.toggle-switch-field[data-layout="inline"]`
+> - `.symbol-wrapper` → `.toggle-switch-track`; `.symbol` → `.toggle-switch-thumb`;
+>   `.symbol-icon` → `.toggle-switch-icon`; `.icon-on` / `.icon-off` → `.toggle-switch-icon-on` /
+>   `.toggle-switch-icon-off`; the bare `input` → `.toggle-switch-input`
+> - `.symbol.checked` and `.symbol-icon.active` → `.toggle-switch[data-checked]`
+> - the unused `.use-default-icons` class and the default icon's `.icon` class are gone
+> - the Field's label class `input-switch-label` → `toggle-switch-label`
+>
+> Also: the inline layout's label wraps instead of `nowrap`, and the inline row now supports a
+> description, an error and `required`.
+
+---
+
+## Description
+
+`ToggleSwitchField`'s `descriptionText` / `descriptionHtml` slots render through
 `InputDescription`, so they're styled by its `--input-description-*` tokens (see
-`input-description/CONSUMER-STYLING.md`), the same as every other labelled form field. The
-spacing between the description and the switch is
-`--input-description-slot-margin-block-end` (default `0.8rem`). Scope an override to toggles only
-with the `.toggle-switch-description` class it adds:
+`input-description/CONSUMER-STYLING.md`). Scope an override to toggles with
+`.toggle-switch-description`:
 
 ```css
 .toggle-switch-description {
   --input-description-slot-margin-block-end: 1.2rem;
 }
 ```
+
+---
 
 ## Global theming
 
@@ -92,28 +124,17 @@ Set the tokens above on an element you own (a page or section class, or a class 
 ### One instance
 
 ```vue
-<ToggleSwitchCore id="notifications" name="notifications" style="--toggle-switch-symbol-surface-on: var(--gold-06);" />
+<ToggleSwitchField
+  v-model="notifications"
+  name="notifications"
+  label="Notifications"
+  style="--toggle-switch-symbol-surface-on: var(--gold-06);"
+/>
 ```
 
 ---
 
-## Migration notes (2026-09-23)
+## Class passthrough
 
-- **`round` prop was previously dead** — `ToggleSwitchWithLabel`/`ToggleSwitchWithLabelInline`
-  both accepted and forwarded it, but `ToggleSwitchCore` never declared the prop or read it, so
-  the Storybook `SquareShape` story rendered identically to `Default`. Fixed by adding `round` to
-  `ToggleSwitchCore` and wiring it to the new `--toggle-switch-border-radius` token (see Shape
-  above).
-- **`fieldHasError` didn't visually theme the component** — `ToggleSwitchCore` and
-  `ToggleSwitchWithLabel` both computed an error-aware theme value but bound `data-theme` to the
-  raw `theme` prop instead, so setting `fieldHasError` never applied this library's
-  `[data-theme="error"]` theme-token overrides (`_error.css`). Fixed by binding `data-theme` to the
-  computed value.
-- Custom `iconOn`/`iconOff` slot content could render as a non-square box (e.g. a 16×16 SVG
-  rendering as ~16×20), throwing off centering inside the thumb — fixed by adding
-  `line-height: 0` to `.symbol-icon`, which collapses inline leading for any slotted content.
-- Two dead, unread `--_transition-duration` private locals were removed from
-  `ToggleSwitchWithLabel`/`ToggleSwitchWithLabelInline` — nothing in either file's CSS or
-  `ToggleSwitchCore`'s ever read them (the actual transition durations are hardcoded `0.4s`
-  literals in `ToggleSwitchCore`).
-
+`ToggleSwitch`'s `:style-class-passthrough` lands on its root `.toggle-switch`, and
+`ToggleSwitchField`'s on its root `.toggle-switch-field`.

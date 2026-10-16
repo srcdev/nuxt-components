@@ -4,8 +4,7 @@
 
 `InputLabel` renders a form field's `<label>`. Every labelled wrapper in `05.forms`
 (`InputTextField`, `InputTextAsNumberField`, `InputNumberField`, `InputSelectField`,
-`InputTextareaField`, `InputRangeField`, `ToggleSwitchWithLabel`,
-`ToggleSwitchWithLabelInline`) already renders one from its `label` prop, so consumers normally
+`InputTextareaField`, `InputRangeField`, `ToggleSwitchField`) already renders one from its `label` prop, so consumers normally
 never use it directly.
 
 Use `InputLabel` directly only when building a custom field wrapper:
@@ -24,7 +23,7 @@ Use `InputLabel` directly only when building a custom field wrapper:
 
 | Prop (template form) | Type | Default | Notes |
 |------|------|---------|-------|
-| `:id` | `string` | required | The **control's** id, rendered as the label's `for`. The label itself gets no id. Must match the id actually on the `<input>`/`<select>`/`<textarea>` (e.g. `ToggleSwitchCore` prefixes its input id with `toggle-switch-`, so its wrappers pass `toggleSwitchId`). |
+| `:id` | `string` | required | The **control's** id, rendered as the label's `for`. The label itself gets no id. Must match the id actually on the `<input>`/`<select>`/`<textarea>` (e.g. `ToggleSwitch` prefixes its input id with `toggle-switch-`, so its wrappers pass `toggleSwitchId`). |
 | `:required` | `boolean` | `false` | Whether the field is required. Only decides which fields the indicator marks; it doesn't set `required` on the control. Wrappers forward their own `required`. |
 | `:indicator` | `"none" \| "required" \| "optional"` | `undefined` → app.config → `"none"` | Which fields get a marker. |
 | `:required-text` | `string` | `undefined` → app.config → `"*"` | Required marker text. |
@@ -63,7 +62,7 @@ export default defineAppConfig({
   without it; `"none"`: nothing (default, so existing sites are unchanged).
 - `InputTextField`, `InputTextAsNumberField`, `InputNumberField`, `InputSelectField`,
   `InputTextareaField` and `InputRangeField` forward `:required`.
-  `ToggleSwitchWithLabel`/`ToggleSwitchWithLabelInline` pass `indicator="none"`: a switch always
+  `ToggleSwitchField` pass `indicator="none"`: a switch always
   has a value, so neither marker means anything there.
 - The wrappers don't expose the indicator props per field; use `app.config`.
 - Text props are the i18n hook: pass translated `optionalText`/`requiredText` (or set them in
@@ -101,7 +100,7 @@ Hooks: `data-input-variant`, `data-invalid`, `.input-label-indicator[data-indica
 - Removed props that were never read: `name` and `theme`. Wrappers stopped passing them.
 - Wrappers also passed a non-prop `:for`, which fell through and overrode the `for` built from
   `id`. For the text/number/select/textarea/range wrappers it was the same value (dropped). For
-  `ToggleSwitchWithLabel`/`ToggleSwitchWithLabelInline` it was the only thing pointing the label
+  `ToggleSwitchField` it was the only thing pointing the label
   at the real input (`toggle-switch-<id>`); they now pass `:id="toggleSwitchId"` explicitly.
 - `inputVariant` moved from a bare class (`.normal`/`.underlined`, whose rules were duplicates of
   the base rule) to `data-input-variant`. `fieldHasError` (accepted but unused) now renders

@@ -89,9 +89,9 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | ~~InputTextareaWithLabel~~ | ✅ `InputTextareaField` (2026-10-16) | yes |
 | ~~InputSelectCore~~ | ✅ `InputSelect` (2026-10-16) | yes |
 | ~~InputSelectWithLabel~~ | ✅ `InputSelectField` (2026-10-16) | yes |
-| ToggleSwitchCore | `ToggleSwitch` | yes |
-| ToggleSwitchWithLabel | `ToggleSwitchField` | yes |
-| ToggleSwitchWithLabelInline | `layout` prop on `ToggleSwitchField`, or `ToggleSwitchFieldInline` | - |
+| ~~ToggleSwitchCore~~ | ✅ `ToggleSwitch` (2026-10-16) | yes |
+| ~~ToggleSwitchWithLabel~~ | ✅ `ToggleSwitchField` (2026-10-16) | yes |
+| ~~ToggleSwitchWithLabelInline~~ | ✅ `layout="inline"` on `ToggleSwitchField` (2026-10-16) | - |
 | ~~TripleToggleSwitchCore~~ | ✅ `TripleToggleSwitch` (2026-09-27) | - |
 | ~~InputButtonCore~~ | ✅ `InputButton` (2026-09-28) | yes |
 | ~~InputCheckboxRadioCore~~ | ✅ `InputCheckboxRadio` (2026-09-27) | - |

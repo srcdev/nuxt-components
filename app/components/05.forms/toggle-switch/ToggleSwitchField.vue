@@ -1,11 +1,17 @@
 <template>
-  <div class="toggle-switch-with-label" :class="[elementClasses]" :data-theme="formUiTheme">
+  <div
+    class="toggle-switch-field"
+    :class="elementClasses"
+    :data-theme="formUiTheme"
+    :data-layout="layout"
+    :data-invalid="fieldHasError ? '' : null"
+  >
     <InputLabel
       :id="toggleSwitchId"
       indicator="none"
       input-variant="normal"
       :field-has-error
-      :style-class-passthrough="['input-switch-label', 'input-text-label', 'body-normal-bold']"
+      :style-class-passthrough="['toggle-switch-label', 'input-text-label', labelWeightClass]"
     >
       <template #textLabel>{{ label }}</template>
     </InputLabel>
@@ -22,7 +28,8 @@
         <slot name="descriptionText"></slot>
       </template>
     </InputDescription>
-    <ToggleSwitchCore
+
+    <ToggleSwitch
       :id
       v-model="modelValue"
       :name
@@ -41,17 +48,20 @@
       <template v-if="slots.iconOff" #iconOff>
         <slot name="iconOff"></slot>
       </template>
-    </ToggleSwitchCore>
+    </ToggleSwitch>
+
     <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" />
   </div>
 </template>
 
 <script setup lang="ts">
-import type { FormUiTheme } from "~/types/forms/types.forms";
+import type { FormUiTheme, LabelWeight } from "~/types/forms/types.forms";
 
 interface Props {
   name: string;
   label: string;
+  layout?: "stacked" | "inline";
+  labelWeight?: LabelWeight;
   required?: boolean;
   errorMessage?: object | string;
   fieldHasError?: boolean;
@@ -63,6 +73,8 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
+  layout: "stacked",
+  labelWeight: undefined,
   required: false,
   errorMessage: "",
   fieldHasError: false,
@@ -75,21 +87,24 @@ const props = withDefaults(defineProps<Props>(), {
 
 const slots = useSlots();
 
-const formUiTheme = computed(() => {
-  return props.fieldHasError ? "error" : props.theme;
-});
+const formUiTheme = computed(() => (props.fieldHasError ? "error" : props.theme));
+
+const labelWeightClassMap: Record<LabelWeight, string> = {
+  bold: "body-normal-bold",
+  "semi-bold": "body-normal-semibold",
+  normal: "body-normal",
+};
+
+const labelWeightClass = computed(
+  () => labelWeightClassMap[props.labelWeight ?? (props.layout === "inline" ? "normal" : "bold")]
+);
 
 const id = useId();
-
-// Performance-optimized computed properties to avoid template string interpolation
 const toggleSwitchId = computed(() => `toggle-switch-${id}`);
 const descriptionId = computed(() => `${id}-description`);
 const errorId = computed(() => `${id}-error-message`);
 
-// A plain function, like useAriaDescribedById's: slots aren't reactive, so a computed would keep
-// its first answer if a description slot is added or removed after mount (CLAUDE.md pitfall #25).
-// Lists both ids when there's a description and an error, so the description is still announced
-// while the field is invalid.
+// A plain function, not a computed: slots aren't reactive (CLAUDE.md pitfall #25).
 const ariaDescribedby = () => {
   const ids: string[] = [];
   if (slots.descriptionText || slots.descriptionHtml) ids.push(descriptionId.value);
@@ -98,15 +113,46 @@ const ariaDescribedby = () => {
 };
 
 const modelValue = defineModel<string | number | boolean>({ required: true });
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 </script>
 
 <style lang="css">
 @layer components {
-.toggle-switch-with-label {
-  .toggle-switch-label {
-    display: block;
+  .toggle-switch-field {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+
+    .toggle-switch-label {
+      display: block;
+    }
+
+    &[data-layout="inline"] {
+      display: grid;
+      grid-template-columns: minmax(0, max-content) auto;
+      align-items: center;
+      justify-content: start;
+      column-gap: var(--toggle-switch-field-inline-gap, 1.2rem);
+
+      > * {
+        grid-column: 1 / -1;
+      }
+
+      > .toggle-switch-label {
+        grid-area: 1 / 1;
+      }
+
+      > .toggle-switch {
+        grid-area: 1 / 2;
+      }
+    }
   }
-}
 }
 </style>

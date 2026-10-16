@@ -224,11 +224,11 @@ consuming app having declared anything.
   mouse and assistive-tech interaction can now be themed independently. `InputNumber` has no
   hover state on its border at all (only a `:focus-visible` box-shadow toggle), so there was
   nothing to split there.
-- ✅ `ToggleSwitchCore`, `TripleToggleSwitch`, `DisplayThemeSwitch` — migrated 2026-08-25, see
+- ✅ `ToggleSwitch`, `TripleToggleSwitch`, `DisplayThemeSwitch` — migrated 2026-08-25, see
   the first two's `CONSUMER-STYLING.md`. Correction to the two lines this replaces: they claimed
-  `ToggleSwitchCore` read a bare `--theme-toggle-symbol-color-*` — that token doesn't exist
+  `ToggleSwitch` read a bare `--theme-toggle-symbol-color-*` — that token doesn't exist
   anywhere in this codebase and never did; false memory from conflating it with the checkbox
-  fix. `ToggleSwitchCore` itself turned out to be a plain Tier 2 case (real, live tokens, just no
+  fix. `ToggleSwitch` itself turned out to be a plain Tier 2 case (real, live tokens, just no
   component-scoped override point) plus five confirmed-dead private locals (declared, never read
   anywhere in the file) removed outright. The real dead-token bug was in `TripleToggleSwitch`
   (and duplicated in `DisplayThemeSwitch`'s own override): `--theme-form-radio-border`,
