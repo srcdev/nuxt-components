@@ -1,0 +1,27 @@
+/* ===========================================
+   DYNAMIC BORDER RADIUS
+   Rounded corners while the element is narrower than its
+   container; square once it spans the full container width.
+   Needs an ancestor with container-type: inline-size.
+   =========================================== */
+
+.dynamic-border-radius {
+  border-radius: clamp(0px, (100cqi - 100%) * 1e5, var(--dynamic-border-radius, 5rem));
+}
+
+/*
+ * Transition variant: compares against a max-width token instead of 100%, so the computed value is a plain length.
+ * A % stays unresolved until layout, which makes a transition start from a stale value and flicker on every resize frame.
+ */
+.dynamic-border-radius-transition {
+  max-inline-size: var(--dynamic-border-radius-max-width, 100%);
+  border-radius: clamp(
+    0px,
+    (100cqi - var(--dynamic-border-radius-max-width, 100%)) * 1e5,
+    var(--dynamic-border-radius, 5rem)
+  );
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: border-radius var(--dynamic-border-radius-duration, 300ms) var(--dynamic-border-radius-easing, ease-out);
+  }
+}

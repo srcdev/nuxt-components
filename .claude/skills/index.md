@@ -51,6 +51,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── css-nesting-conventions.md                — native CSS nesting rules: why &__child Sass BEM concatenation silently breaks, correct patterns
 ├── css-grid-max-width-gutters.md             — cap a centre grid column width by growing gutters, with start/center alignment variants
 ├── css-animation-utilities.md                — scroll-driven animation utility classes: scroller-x (carousel), entry-zoom-reveal, entry-slide-in, entry-exit-blur, auto-rotate
+├── css-dynamic-border-radius.md              — .dynamic-border-radius utility: rounded until the element fills its container-type ancestor, then square; --dynamic-border-radius token, opt-in -transition class, container/full-width caveats
 ├── component-aria-landmark.md        — useAriaLabelledById composable: aria-labelledby for section/article/aside tags (not main), consumer-bound vs self-bound pattern, built-in broken-reference console warning
 ├── component-export-types.md         — move inline component types to app/types/components/ barrel for consumer imports
 ├── component-inline-action-button.md — InputButton variant="inline" pattern for buttons embedded in custom input wrappers

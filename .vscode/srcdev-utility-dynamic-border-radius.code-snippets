@@ -1,0 +1,31 @@
+{
+  "SRCDEV Dynamic Border Radius Markup": {
+    "prefix": "srcdev-dynamic-border-radius",
+    "description": ".dynamic-border-radius: rounded until the image fills its container, then square (wrapper needs container-type: inline-size)",
+    "scope": "vue,html",
+    "body": [
+      "<div class=\"$1media-wrapper\">",
+      "  <img class=\"dynamic-border-radius${6:-transition}\" src=\"$2\" alt=\"$3\" width=\"$4\" height=\"$5\">",
+      "</div>"
+    ]
+  },
+  "SRCDEV Dynamic Border Radius CSS": {
+    "prefix": "srcdev-dynamic-border-radius-css",
+    "description": "Container wrapper and image rules for .dynamic-border-radius (max width via the token, so the -transition class can read it)",
+    "scope": "css",
+    "body": [
+      ".$1media-wrapper {",
+      "  container-type: inline-size;",
+      "",
+      "  img {",
+      "    display: block;",
+      "    inline-size: 100%;",
+      "    --dynamic-border-radius-max-width: ${2:50rem};",
+      "    max-inline-size: var(--dynamic-border-radius-max-width);",
+      "    margin-inline: auto;",
+      "    --dynamic-border-radius: ${3:5rem};",
+      "  }",
+      "}"
+    ]
+  }
+}
