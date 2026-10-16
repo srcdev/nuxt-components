@@ -3,14 +3,15 @@
     class="input-number-field"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
-    :class="[elementClasses, inputVariant, `theme-${theme}`, { error: fieldHasError }]"
+    :data-input-variant="inputVariant"
+    :class="elementClasses"
   >
     <InputLabel
       :id
       :required
       :input-variant
       :field-has-error
-      :style-class-passthrough="['input-number-label', 'body-normal-bold']"
+      :style-class-passthrough="['input-number-label']"
     >
       <template #textLabel>{{ label }}</template>
     </InputLabel>
@@ -42,7 +43,6 @@
       :weight
       :input-variant
       :field-has-error
-      :style-class-passthrough
       :aria-describedby="ariaDescribedby()"
     >
       <template v-if="slots.left" #left>
@@ -53,7 +53,7 @@
           :button-text="stepDownLabel"
           :theme="theme"
           variant="inline"
-          @click.stop.prevent="updateValue(-step, Number(modelValue) > min)"
+          @click.stop.prevent="stepBy(-1)"
         >
           <template #iconOnly>
             <slot name="left"></slot>
@@ -68,7 +68,7 @@
           :button-text="stepUpLabel"
           :theme="theme"
           variant="inline"
-          @click.stop.prevent="updateValue(step, Number(modelValue) < max)"
+          @click.stop.prevent="stepBy(1)"
         >
           <template #iconOnly>
             <slot name="right"></slot>
@@ -76,7 +76,7 @@
         </InputButton>
       </template>
     </InputNumber>
-    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" />
+    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" :input-variant />
   </div>
 </template>
 
@@ -115,7 +115,14 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 
 const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   props.name,
@@ -126,16 +133,28 @@ const modelValue = defineModel<number | readonly number[]>({
   required: true,
 });
 
-const updateValue = (step: number, withinRangeLimit: boolean) => {
-  if (withinRangeLimit) {
-    modelValue.value = (Number(modelValue.value) + step) as number;
+const decimalPlaces = (value: number) => (String(value).split(".")[1] ?? "").length;
+const clamp = (value: number) => Math.min(Math.max(value, props.min), props.max);
+
+const stepBy = (direction: 1 | -1) => {
+  const current = modelValue.value;
+  if (typeof current !== "number" || !Number.isFinite(current)) {
+    modelValue.value = clamp(0);
+    return;
   }
+  const stepSize = Math.abs(props.step) || 1;
+  const precision = Math.max(decimalPlaces(stepSize), decimalPlaces(current), decimalPlaces(props.min));
+  const next = clamp(Number((current + direction * stepSize).toFixed(precision)));
+  if (next !== current) modelValue.value = next;
 };
 </script>
 
 <style lang="css">
 @layer components {
   .input-number-field {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+
     .input-number-label {
       display: block;
       margin-block: 0.8rem;
@@ -143,12 +162,6 @@ const updateValue = (step: number, withinRangeLimit: boolean) => {
       &:hover {
         cursor: pointer;
       }
-    }
-
-    .label-description {
-      font-family: var(--font-family);
-      font-size: 1.6rem;
-      margin-top: 1.2rem;
     }
   }
 }

@@ -30,9 +30,9 @@ Most consumers should reach for **InputNumberField** rather than `InputNumber` d
 | `:required` | `boolean` | `false` | Native `required`. |
 | `:theme` | `FormUiTheme` | `"default"` | Sets `data-theme` on the wrapper. |
 | `:weight` | `FormWeight` | `"normal"` | Adds an `input-number--{weight}` class to the input, for prop-shape consistency with sibling `05.forms` components. **No CSS in the library currently styles this class — it's a no-op today**, same convention as `InputRangeCore`'s `weight` prop. |
-| `:input-variant` | `InputUiVariant` | `"normal"` | Adds the variant name as a class on the wrapper — `"normal"` (bordered box) and `"underlined"` (bottom-border only) have CSS; `"outlined"` doesn't (see CONSUMER-STYLING.md). Same prop/behaviour as `InputTextCore`. |
+| `:input-variant` | `InputUiVariant` | `"normal"` | Rendered as `data-input-variant` on the wrapper (a bare class until 2026-10-16) — `"normal"` (bordered box) and `"underlined"` (bottom-border only) have CSS; `"outlined"` doesn't (see CONSUMER-STYLING.md). Same prop/behaviour as `InputTextCore`. |
 | `:field-has-error` | `boolean` | `false` | Drives `data-invalid` on the wrapper. |
-| `:style-class-passthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the input element. |
+| `:style-class-passthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the input element. Reacts to changes. |
 | `:aria-describedby` | `string` | `""` | Forwarded to the native input. |
 
 ### v-model
@@ -47,15 +47,15 @@ as `InputRangeCore`'s `v-model` (see that skill doc) — this also satisfies `vu
 
 | Slot | Notes |
 |------|-------|
-| `left` | Rendered before the input (e.g. a step-down button). Adds `has-left-slot` to the wrapper. |
-| `right` | Rendered after the input (e.g. a step-up button). Adds `has-right-slot` to the wrapper. |
+| `left` | Rendered before the input (e.g. a step-down button) in `.input-number-slot-left`. Sets `data-has-left-slot` on the wrapper. |
+| `right` | Rendered after the input (e.g. a step-up button) in `.input-number-slot-right`. Sets `data-has-right-slot` on the wrapper. |
 
-Any `.input-button` inside `.slot` gets its own border/outline stripped and is sized to
+Any `.input-button` inside `.input-number-slot` gets its own border/outline stripped and is sized to
 match the input (`aspect-ratio: 1`, `width: var(--input-min-height)`) regardless of which slot
 it's in. The divider border is then added directly to that button element specifically when its
-slot is present — `&.has-left-slot .left-slot .input-button { border-right: ... }` and the
-right-hand mirror — so it sits flush against the button's own edge rather than around the
-containing `.slot` div. This makes step buttons read as embedded segments of the same control
+slot is present (`.input-number-slot-left .input-button { border-right: ... }` and the
+right-hand mirror), so it sits flush against the button's own edge rather than around the
+containing `.input-number-slot` div. This makes step buttons read as embedded segments of the same control
 rather than separate floating buttons. The divider reuses the wrapper's own border colour token
 (no separate divider token), same as `InputTextCore`/`InputTextAsNumberWithLabel`.
 
@@ -221,3 +221,34 @@ button icon content itself is consumer-supplied).
 
 Step-down is disabled (`readonly` on its `InputButton`) once the value reaches `min`, and
 step-up once it reaches `max`; clicking either button while at that boundary is a no-op.
+Each press adds or subtracts `step` (its absolute value, or 1 when it's 0), rounds away
+floating-point drift (0.2 + 0.1 gives 0.3) and clamps to `min`/`max`, so a step that would overshoot
+lands on the limit and a typed out-of-range value is pulled back in. From an empty field the first
+press sets 0, clamped into range. `:style-class-passthrough` lands on the root `.input-number-field`
+only (it also reached the inner input until 2026-10-16) and reacts to changes. The root carries
+`data-input-variant`, `data-theme` and `data-invalid`; its old `error`, `theme-*` and variant
+classes are gone.
+
+---
+
+## Stress pass 2026-10-16
+
+- **Stepping** (`InputNumberField`): 0.1 steps drifted (0.30000000000000004); a step that didn't
+  divide the range overshot `max`/`min` (8 + 5 with max 10 gave 13); an empty field turned into
+  `NaN`. Now rounded to the step's precision, clamped to `min`/`max`, and an empty field starts at
+  0, clamped. A zero or negative `step` steps by its size, or 1.
+- **Mobile keyboard**: `inputmode="numeric"` and `pattern="[0-9]+"` were hardcoded, so a negative
+  or decimal value couldn't be typed on phones (and number inputs ignore `pattern`). `inputmode` is
+  now `numeric` for whole steps, `decimal` for fractional ones, and omitted when `min` is negative;
+  `pattern` is gone.
+- **Width**: the input's minimum width was `max`'s digit count in `em`, uncapped and blind to a
+  longer negative `min` or the step's decimals. It now counts the longest of `min`/`max` plus the
+  step's decimals, capped at `12em`; the wrapper has `max-inline-size: 100%` and the step buttons
+  don't shrink. The Field wraps long label, description and error copy.
+- **State hooks**: bare state classes became data attributes and the slot holders got prefixed
+  class names (CONSUMER-STYLING.md has the mapping). Removed the non-existent `body-normal-bold`
+  utility class from the label and a dead `.label-description` rule. `InputError` now gets
+  `input-variant` like the label does.
+- Specs unmount in `afterEach`; stories moved to `StoryObj` with Docs descriptions, a
+  `DecimalSteps` story, `CanvasSwitcher` and a `StressTest` story on the Field. The bare
+  control's step-button demo uses `InputButton`, not raw buttons.

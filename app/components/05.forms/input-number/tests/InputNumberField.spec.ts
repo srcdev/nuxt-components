@@ -13,6 +13,11 @@ const initialPropsData = {
 };
 
 let wrapper: VueWrapper<InstanceType<typeof ComponentUnderTest>>;
+
+afterEach(() => {
+  wrapper?.unmount();
+  vi.restoreAllMocks();
+});
 const wrapperFactory = (propsData = {}, slots = {}) => {
   const mockPropsData = { ...initialPropsData, ...propsData };
 
@@ -44,10 +49,10 @@ describe("InputNumberField", () => {
     expect(wrapper.find("input").attributes("placeholder")).toBe("Enter a quantity");
   });
 
-  it("sets data-invalid and the error class when fieldHasError is true", async () => {
+  it("sets data-invalid, not a bare error class, when fieldHasError is true", async () => {
     wrapper = await wrapperFactory({ fieldHasError: true });
     expect(wrapper.find(".input-number-field").attributes("data-invalid")).toBe("");
-    expect(wrapper.find(".input-number-field").classes()).toContain("error");
+    expect(wrapper.find(".input-number-field").classes()).not.toContain("error");
   });
 
   it("does not render step buttons when the left/right slots are not used", async () => {
@@ -130,14 +135,63 @@ describe("InputNumberField", () => {
     expect(wrapper.text()).toContain("This field is required");
   });
 
-  it("applies styleClassPassthrough", async () => {
+  it("applies styleClassPassthrough to the root only, not the inner input", async () => {
     wrapper = await wrapperFactory({ styleClassPassthrough: "custom-number" });
     expect(wrapper.find(".input-number-field").classes()).toContain("custom-number");
+    expect(wrapper.find("input").classes()).not.toContain("custom-number");
   });
 
   it("forwards inputVariant to the wrapper, InputLabel, and InputNumber", async () => {
     wrapper = await wrapperFactory({ inputVariant: "underlined" });
-    expect(wrapper.find(".input-number-field").classes()).toContain("underlined");
-    expect(wrapper.find(".input-number-wrapper").classes()).toContain("underlined");
+    expect(wrapper.find(".input-number-field").attributes("data-input-variant")).toBe("underlined");
+    expect(wrapper.find(".input-number-wrapper").attributes("data-input-variant")).toBe("underlined");
+    expect(wrapper.find(".input-error-message").attributes("data-input-variant")).toBe("underlined");
+  });
+
+  describe("step buttons", () => {
+    const stepSlots = { left: "<span>-</span>", right: "<span>+</span>" };
+    const stepDown = () => wrapper.findAll("button").find((button) => button.text().includes("-"))!;
+    const stepUp = () => wrapper.findAll("button").find((button) => button.text().includes("+"))!;
+
+    it("rounds away floating-point drift on fractional steps", async () => {
+      wrapper = await wrapperFactory({ modelValue: 0.2, min: 0, max: 1, step: 0.1 }, stepSlots);
+      await stepUp().trigger("click");
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([0.3]);
+    });
+
+    it("clamps to max when a step would overshoot it", async () => {
+      wrapper = await wrapperFactory({ modelValue: 8, min: 0, max: 10, step: 5 }, stepSlots);
+      await stepUp().trigger("click");
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([10]);
+    });
+
+    it("clamps to min when a step would undershoot it", async () => {
+      wrapper = await wrapperFactory({ modelValue: 2, min: 0, max: 10, step: 5 }, stepSlots);
+      await stepDown().trigger("click");
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([0]);
+    });
+
+    it("brings a typed out-of-range value back into range", async () => {
+      wrapper = await wrapperFactory({ modelValue: 500, min: 0, max: 100 }, stepSlots);
+      await stepDown().trigger("click");
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([100]);
+    });
+
+    it("starts from 0, clamped into range, when the field is empty", async () => {
+      wrapper = await wrapperFactory({ modelValue: "", min: 5, max: 10 }, stepSlots);
+      await stepUp().trigger("click");
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([5]);
+    });
+
+    it("treats a negative or zero step as its size, or 1", async () => {
+      wrapper = await wrapperFactory({ modelValue: 5, min: 0, max: 10, step: -2 }, stepSlots);
+      await stepUp().trigger("click");
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([7]);
+
+      wrapper.unmount();
+      wrapper = await wrapperFactory({ modelValue: 5, min: 0, max: 10, step: 0 }, stepSlots);
+      await stepUp().trigger("click");
+      expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([6]);
+    });
   });
 });

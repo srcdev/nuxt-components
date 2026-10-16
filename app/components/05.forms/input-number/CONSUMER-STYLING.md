@@ -29,12 +29,41 @@ component and untouched by this — see `theming-form-geometry-tokens.md`.
 
 ---
 
+## State hooks
+
+| Attribute | On | When |
+|---|---|---|
+| `data-input-variant="normal" \| "outlined" \| "underlined"` | `.input-number-wrapper`, `.input-number-field` | Always, mirrors `input-variant` |
+| `data-theme` | `.input-number-wrapper`, `.input-number-field` | Always, mirrors `theme` |
+| `data-invalid` | `.input-number-wrapper`, `.input-number-field` | `field-has-error` |
+| `data-has-left-slot` / `data-has-right-slot` | `.input-number-wrapper` | The `left` / `right` slot is filled |
+
+Inner elements: `.input-number-slot` (both slot holders), `.input-number-slot-left`,
+`.input-number-slot-right`, `.input-number-container`, `.input-number` (the native input),
+`.input-number-label` (the Field's `InputLabel`).
+
+> **Changed 2026-10-16**: state used to be bare classes, which collide with common consumer CSS
+> (an unlayered `.error` or `.normal` rule would restyle the field). Select on the attributes
+> above instead:
+>
+> - `.input-number-wrapper.normal` / `.underlined` → `[data-input-variant="…"]`
+> - `.input-number-wrapper.has-left-slot` / `.has-right-slot` → `[data-has-left-slot]` /
+>   `[data-has-right-slot]`
+> - `.slot.left-slot` / `.slot.right-slot` → `.input-number-slot-left` / `.input-number-slot-right`
+> - `.input-number-field.error` → `[data-invalid]`; its `.normal`/`.underlined` and `theme-*`
+>   classes → `[data-input-variant]` / `[data-theme]`
+>
+> Also: long label, description and error copy now wraps (`overflow-wrap: anywhere` on
+> `.input-number-field`), and the control's minimum width is capped at `12em` so a long `min`/`max`
+> can't push it past a phone screen.
+
+---
+
 ## Input variant
 
 `:input-variant="'normal' | 'outlined' | 'underlined'"` (default `"normal"`) — same prop as
 `InputTextCore`. Only `normal` (bordered box, with hover/focus outline) and `underlined`
-(bottom-border only) have CSS today; `outlined` has no styling in `InputTextCore` either (no
-`&.outlined` rule exists there), so passing it renders with no border/outline at all — a
+(bottom-border only) have CSS today; `outlined` has no styling in `InputTextCore` either, so passing it renders with no border/outline at all — a
 pre-existing gap in the type, not something specific to `InputNumber`. Declared for prop-shape
 consistency with the rest of `05.forms`.
 
@@ -68,3 +97,14 @@ Set the tokens above on an element you own (a page or section class, or a class 
 <InputNumber id="quantity" name="quantity" :min="1" :max="10" style="--input-number-border: var(--gold-04);" />
 ```
 
+
+---
+
+## Class passthrough
+
+`InputNumber`'s `:style-class-passthrough` lands on the native `<input class="input-number">`.
+`InputNumberField`'s lands on its root `.input-number-field` only.
+
+> **Changed 2026-10-16**: `InputNumberField` also forwarded its passthrough classes to the inner
+> input, so a class meant for the field matched two elements. If you styled the input through the
+> Field's passthrough, select `.your-class .input-number` instead.

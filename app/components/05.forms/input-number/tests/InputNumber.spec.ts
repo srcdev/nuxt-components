@@ -12,6 +12,11 @@ const initialPropsData = {
 };
 
 let wrapper: VueWrapper<InstanceType<typeof ComponentUnderTest>>;
+
+afterEach(() => {
+  wrapper?.unmount();
+  vi.restoreAllMocks();
+});
 const wrapperFactory = (propsData = {}, slots = {}) => {
   const mockPropsData = { ...initialPropsData, ...propsData };
 
@@ -70,10 +75,10 @@ describe("InputNumber", () => {
 
   it("does not render the left/right slot wrappers when the slots are not used", async () => {
     wrapper = await wrapperFactory();
-    expect(wrapper.find(".slot.left-slot").exists()).toBe(false);
-    expect(wrapper.find(".slot.right-slot").exists()).toBe(false);
-    expect(wrapper.find(".input-number-wrapper").classes()).not.toContain("has-left-slot");
-    expect(wrapper.find(".input-number-wrapper").classes()).not.toContain("has-right-slot");
+    expect(wrapper.find(".input-number-slot-left").exists()).toBe(false);
+    expect(wrapper.find(".input-number-slot-right").exists()).toBe(false);
+    expect(wrapper.find(".input-number-wrapper").attributes("data-has-left-slot")).toBeUndefined();
+    expect(wrapper.find(".input-number-wrapper").attributes("data-has-right-slot")).toBeUndefined();
   });
 
   it("renders the left/right slots when provided", async () => {
@@ -85,10 +90,10 @@ describe("InputNumber", () => {
       }
     );
 
-    expect(wrapper.find(".slot.left-slot [data-testid='left-slot']").exists()).toBe(true);
-    expect(wrapper.find(".slot.right-slot [data-testid='right-slot']").exists()).toBe(true);
-    expect(wrapper.find(".input-number-wrapper").classes()).toContain("has-left-slot");
-    expect(wrapper.find(".input-number-wrapper").classes()).toContain("has-right-slot");
+    expect(wrapper.find(".input-number-slot-left [data-testid='left-slot']").exists()).toBe(true);
+    expect(wrapper.find(".input-number-slot-right [data-testid='right-slot']").exists()).toBe(true);
+    expect(wrapper.find(".input-number-wrapper").attributes("data-has-left-slot")).toBe("");
+    expect(wrapper.find(".input-number-wrapper").attributes("data-has-right-slot")).toBe("");
   });
 
   it("applies the weight class from the weight prop", async () => {
@@ -106,14 +111,45 @@ describe("InputNumber", () => {
     expect(wrapper.find("input").attributes("required")).toBeDefined();
   });
 
-  it("defaults inputVariant to normal", async () => {
+  it("defaults data-input-variant to normal", async () => {
     wrapper = await wrapperFactory();
-    expect(wrapper.find(".input-number-wrapper").classes()).toContain("normal");
+    expect(wrapper.find(".input-number-wrapper").attributes("data-input-variant")).toBe("normal");
   });
 
-  it("applies inputVariant as a class on the wrapper", async () => {
+  it("renders inputVariant as data-input-variant, not a bare class", async () => {
     wrapper = await wrapperFactory({ inputVariant: "underlined" });
-    expect(wrapper.find(".input-number-wrapper").classes()).toContain("underlined");
-    expect(wrapper.find(".input-number-wrapper").classes()).not.toContain("normal");
+    const root = wrapper.find(".input-number-wrapper");
+    expect(root.attributes("data-input-variant")).toBe("underlined");
+    expect(root.classes()).not.toContain("underlined");
+  });
+
+  it("doesn't set a pattern, which number inputs ignore", async () => {
+    wrapper = await wrapperFactory();
+    expect(wrapper.find("input").attributes("pattern")).toBeUndefined();
+  });
+
+  it("picks inputmode from min and step", async () => {
+    wrapper = await wrapperFactory();
+    expect(wrapper.find("input").attributes("inputmode")).toBe("numeric");
+
+    await wrapper.setProps({ step: 0.5 });
+    expect(wrapper.find("input").attributes("inputmode")).toBe("decimal");
+
+    await wrapper.setProps({ min: -10 });
+    expect(wrapper.find("input").attributes("inputmode")).toBeUndefined();
+  });
+
+  it("caps the minimum width for very long min and max values", async () => {
+    wrapper = await wrapperFactory({ min: -999999999999, max: 999999999999999, step: 0.0001 });
+    const vm = wrapper.vm as unknown as { minLength: string };
+    expect(vm.minLength).toBe("12em");
+  });
+
+  it("updates passthrough classes when the prop changes", async () => {
+    wrapper = await wrapperFactory({ styleClassPassthrough: ["first"] });
+    await wrapper.setProps({ styleClassPassthrough: ["second"] });
+    const classes = wrapper.find("input").classes();
+    expect(classes).toContain("second");
+    expect(classes).not.toContain("first");
   });
 });
