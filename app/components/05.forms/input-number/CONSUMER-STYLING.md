@@ -27,6 +27,10 @@ Geometry (`--input-padding-block`, `--input-padding-inline`, `--input-min-height
 `--form-input-border-radius`, `--input-font-size`, etc.) is shared across every `05.forms`
 component and untouched by this — see `theming-form-geometry-tokens.md`.
 
+Private (not public API): `--_surface`, `--_border` and `--_border-focus` (each resolved once and
+read in several places) and `--_min-width` (the input's minimum width, worked out from `min`, `max`
+and `step` and capped at `12em`).
+
 ---
 
 ## State hooks

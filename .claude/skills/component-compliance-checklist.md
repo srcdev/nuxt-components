@@ -25,7 +25,10 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
    **Existing component:** if it lives outside a tier, move it with `git mv`.
 2. **Props pattern** — `interface Props` + `withDefaults(defineProps<Props>(), {...})`, never
    options-style `defineProps({...})`. Include `styleClassPassthrough` and wire it through
-   `useStyleClassPassthrough()`. Consumer-facing data-shape types go in
+   `useStyleClassPassthrough()`, with a `watch` that calls `resetElementClasses` so it reacts to prop
+   changes. A Field wrapper applies its passthrough to its own root only: forwarding the same prop
+   to the inner control as well puts one consumer class on two elements (`InputNumberField`,
+   `InputRangeField`, fixed 2026-10-16). Consumer-facing data-shape types go in
    `app/types/components/<component-name>.d.ts` and are exported from `app/types/components/index.ts`
    (see `component-export-types.md`), not left inline in the `.vue` file.
 3. **CSS tokens** — audit every custom property in the component's `<style>` block against the
@@ -196,6 +199,10 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
    - Live-updating or auto-advancing content (carousels, marquees, auto-dismissing toasts) has a
      way to pause it, per WCAG 2.2.2 — a visible control, or pause-on-hover/focus at minimum.
    - `prefers-reduced-motion` is respected for any animation that isn't purely decorative.
+   - A mode that hides a native control's own indicator (a range thumb, a checkbox box, a caret)
+     draws its own visible state for the current value, and its interactive area isn't shrunk to a
+     sliver. `InputRange`'s markers mode hid the thumb with nothing in its place and left only a
+     2px line clickable, from its first commit until 2026-10-16; its 5/5 score didn't show it.
    - A component with a `tag` prop that can render a landmark uses `useAriaLabelledById`
      (`component-aria-landmark.md`), unless it falls back to `aria-label` when no heading is
      given: the composable can't do that and warns whenever a landmark has no heading. Then label
@@ -268,6 +275,10 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
       defaults to its min-content width and overflows a narrow column (`MultipleCheckboxes`,
       2026-10-16).
     - Element ids come from `useId()`, never from data values (rule `consumer/ids-from-useid.md`).
+    - Step buttons and any other script that changes a number round to the step's precision
+      (`toFixed`), clamp to `min`/`max`, and compare limits with `<=`/`>=`, never `===` (0.1 steps
+      drift to 0.30000000000000004, and an overshoot past an `===` check never disables the button).
+      Reference: `stepBy()` in `InputNumberField`.
     - Layout measured in script (connector lines, indicators) re-measures when any measured item
       resizes or changes class, not only when the container resizes (`measured-layout-observers.md`,
       pitfall #28).
