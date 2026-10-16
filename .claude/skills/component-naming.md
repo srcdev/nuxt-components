@@ -83,8 +83,8 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | InputTextWithLabel | `InputTextField` | yes |
 | InputPasswordWithLabel | `InputPasswordField` | yes |
 | InputTextAsNumberWithLabel | `InputTextAsNumberField` | - |
-| InputRangeCore | `InputRange` | - |
-| InputRangeDefault | `InputRangeField` | - |
+| ~~InputRangeCore~~ | ✅ `InputRange` (2026-10-16) | - |
+| ~~InputRangeDefault~~ | ✅ `InputRangeField` (2026-10-16) | - |
 | InputTextareaCore | `InputTextarea` | - |
 | InputTextareaWithLabel | `InputTextareaField` | yes |
 | InputSelectCore | `InputSelect` | yes |

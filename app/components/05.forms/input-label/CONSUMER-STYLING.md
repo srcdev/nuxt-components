@@ -2,7 +2,7 @@
 
 `InputLabel` is the `<label>` rendered by every labelled field wrapper (`InputTextWithLabel`,
 `InputTextAsNumberWithLabel`, `InputNumberField`, `InputSelectWithLabel`,
-`InputTextareaWithLabel`, `InputRangeDefault`, `ToggleSwitchWithLabel`,
+`InputTextareaWithLabel`, `InputRangeField`, `ToggleSwitchWithLabel`,
 `ToggleSwitchWithLabelInline`).
 
 ## Public token API
@@ -50,7 +50,7 @@ shared fallback so the per-state tokens don't repeat it.
 
 | Attribute on `.input-label` | When |
 |---|---|
-| `data-input-variant="normal" \| "outlined" \| "underlined"` | Always, mirrors the field's `input-variant` (`InputRangeDefault` and the toggle switches always pass `normal`) |
+| `data-input-variant="normal" \| "outlined" \| "underlined"` | Always, mirrors the field's `input-variant` (`InputRangeField` and the toggle switches always pass `normal`) |
 | `data-invalid` | The field has an error (not passed by `ToggleSwitchWithLabelInline`) |
 
 | Attribute on `.input-label-indicator` | When |

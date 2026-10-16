@@ -3,7 +3,7 @@ import { reactive, ref } from "vue";
 import InputTextWithLabel from "../../input-text/InputTextWithLabel.vue";
 import InputPasswordWithLabel from "../../input-text/InputPasswordWithLabel.vue";
 import InputTextAsNumberWithLabel from "../../input-text/InputTextAsNumberWithLabel.vue";
-import InputRangeDefault from "../../input-range/InputRangeDefault.vue";
+import InputRangeField from "../../input-range/InputRangeField.vue";
 import InputNumberField from "../../input-number/InputNumberField.vue";
 import InputOtpField from "../../input-otp/InputOtpField.vue";
 import InputTextareaWithLabel from "../../input-textarea/InputTextareaWithLabel.vue";
@@ -29,7 +29,7 @@ interface MigratedFieldsFormStoryArgs {
 // rendered inside one. As of 2026-10-04 every 05.forms component is 5/5, so all of them are in:
 // - Own field: InputTextWithLabel (InputTextCore; plus one per type/inputmode pair for checking
 //   on-device keyboards), InputPasswordWithLabel,
-//   InputTextAsNumberWithLabel, InputRangeDefault (InputRangeCore), InputNumberField
+//   InputTextAsNumberWithLabel, InputRangeField (InputRange), InputNumberField
 //   (InputNumber), InputOtpField (InputOtp), InputTextareaWithLabel (InputTextareaCore), InputSelectWithLabel
 //   (InputSelectCore), ToggleSwitchWithLabel and ToggleSwitchWithLabelInline (ToggleSwitchCore),
 //   MultipleCheckboxes, SingleCheckbox, MultipleRadiobuttons, TripleToggleSwitch ("Theme
@@ -63,7 +63,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     InputTextWithLabel,
     InputPasswordWithLabel,
     InputTextAsNumberWithLabel,
-    InputRangeDefault,
+    InputRangeField,
     InputNumberField,
     InputOtpField,
     InputTextareaWithLabel,
@@ -296,7 +296,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
           </FormField>
 
           <FormField width="wide" :has-gutter="false">
-            <InputRangeDefault
+            <InputRangeField
               v-model="state.budget"
               name="budget"
               label="Budget (£)"
@@ -308,7 +308,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
             >
               <template #left><span aria-hidden="true">−</span></template>
               <template #right><span aria-hidden="true">+</span></template>
-            </InputRangeDefault>
+            </InputRangeField>
           </FormField>
 
           <FormField width="wide" :has-gutter="false">

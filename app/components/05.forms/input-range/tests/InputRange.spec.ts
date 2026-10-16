@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/getting-started/testing#unit-testing
 import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import ComponentUnderTest from "../InputRangeCore.vue";
+import ComponentUnderTest from "../InputRange.vue";
 
 const initialPropsData = {
   id: "test-range",
@@ -12,6 +12,11 @@ const initialPropsData = {
 };
 
 let wrapper: VueWrapper<InstanceType<typeof ComponentUnderTest>>;
+
+afterEach(() => {
+  wrapper?.unmount();
+  vi.restoreAllMocks();
+});
 const wrapperFactory = (propsData = {}, slots = {}) => {
   const mockPropsData = { ...initialPropsData, ...propsData };
 
@@ -22,7 +27,7 @@ const wrapperFactory = (propsData = {}, slots = {}) => {
   });
 };
 
-describe("InputRangeCore", () => {
+describe("InputRange", () => {
   it("mounts without error", async () => {
     wrapper = await wrapperFactory();
     expect(wrapper.vm).toBeTruthy();
@@ -60,8 +65,8 @@ describe("InputRangeCore", () => {
 
   it("does not render the left/right slot wrappers when the slots are not used", async () => {
     wrapper = await wrapperFactory();
-    expect(wrapper.find(".slot.left").exists()).toBe(false);
-    expect(wrapper.find(".slot.right").exists()).toBe(false);
+    expect(wrapper.find(".input-range-slot-left").exists()).toBe(false);
+    expect(wrapper.find(".input-range-slot-right").exists()).toBe(false);
   });
 
   it("renders the left/right slots when provided", async () => {
@@ -73,11 +78,11 @@ describe("InputRangeCore", () => {
       }
     );
 
-    expect(wrapper.find(".slot.left [data-testid='left-slot']").exists()).toBe(true);
-    expect(wrapper.find(".slot.right [data-testid='right-slot']").exists()).toBe(true);
+    expect(wrapper.find(".input-range-slot-left [data-testid='left-slot']").exists()).toBe(true);
+    expect(wrapper.find(".input-range-slot-right [data-testid='right-slot']").exists()).toBe(true);
   });
 
-  it("renders the markers slot and adds has-markers class to the input", async () => {
+  it("renders the markers slot and sets data-has-markers on the wrapper", async () => {
     wrapper = await wrapperFactory(
       {},
       {
@@ -86,25 +91,44 @@ describe("InputRangeCore", () => {
     );
 
     expect(wrapper.find('[data-testid="markers"]').exists()).toBe(true);
-    expect(wrapper.find("input").classes()).toContain("has-markers");
+    expect(wrapper.find(".input-range-wrapper").attributes("data-has-markers")).toBe("");
   });
 
-  it("does not add has-markers class when the markers slot is not used", async () => {
+  it("does not set data-has-markers when the markers slot is not used", async () => {
     wrapper = await wrapperFactory();
-    expect(wrapper.find("input").classes()).not.toContain("has-markers");
+    expect(wrapper.find(".input-range-wrapper").attributes("data-has-markers")).toBeUndefined();
   });
 
-  it("sets the list attribute to `{name}-datalist` only when the datalist slot is used", async () => {
+  it("links a generated datalist id through the datalistId slot prop", async () => {
     wrapper = await wrapperFactory(
       { name: "price" },
-      { datalist: '<datalist id="price-datalist"></datalist>' }
+      { datalist: `<template #datalist="{ datalistId }"><datalist :id="datalistId"></datalist></template>` }
     );
-    expect(wrapper.find("input").attributes("list")).toBe("price-datalist");
+    const list = wrapper.find("input").attributes("list");
+
+    expect(list).toBeTruthy();
+    expect(list).not.toBe("price-datalist");
+    expect(wrapper.find("datalist").attributes("id")).toBe(list);
   });
 
-  it("leaves the list attribute empty when the datalist slot is not used", async () => {
+  it("omits the list attribute when the datalist slot is not used", async () => {
     wrapper = await wrapperFactory();
-    expect(wrapper.find("input").attributes("list")).toBe("");
+    expect(wrapper.find("input").attributes("list")).toBeUndefined();
+  });
+
+  it("marks the wrapper and input invalid when fieldHasError is true", async () => {
+    wrapper = await wrapperFactory({ fieldHasError: true });
+    expect(wrapper.find(".input-range-wrapper").attributes("data-invalid")).toBe("");
+    expect(wrapper.find("input").attributes("aria-invalid")).toBe("true");
+  });
+
+  it("updates passthrough classes when the prop changes", async () => {
+    wrapper = await wrapperFactory({ styleClassPassthrough: ["first"] });
+    await wrapper.setProps({ styleClassPassthrough: ["second"] });
+    const classes = wrapper.find("input").classes();
+
+    expect(classes).toContain("second");
+    expect(classes).not.toContain("first");
   });
 
   it("applies the weight class from the weight prop", async () => {

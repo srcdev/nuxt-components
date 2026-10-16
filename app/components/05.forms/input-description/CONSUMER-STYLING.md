@@ -2,7 +2,7 @@
 
 `InputDescription` is the help text rendered between the label and the control by every `*Field`
 wrapper (`InputTextWithLabel`, `InputNumberField`, `InputSelectWithLabel`,
-`InputTextareaWithLabel`, `InputRangeDefault`, `InputTextAsNumberWithLabel`, `SingleCheckbox`,
+`InputTextareaWithLabel`, `InputRangeField`, `InputTextAsNumberWithLabel`, `SingleCheckbox`,
 `MultipleCheckboxes`, `MultipleRadiobuttons`) when you pass it a `descriptionText` or
 `descriptionHtml` slot. With neither slot it renders nothing.
 
@@ -53,7 +53,7 @@ No private tokens.
 
 | Attribute on `.input-description` | When |
 |---|---|
-| `data-input-variant="normal" \| "outlined" \| "underlined"` | Always, mirrors the field's `input-variant` (not passed by `InputRangeDefault`, which has no variants, so it stays `normal` there) |
+| `data-input-variant="normal" \| "outlined" \| "underlined"` | Always, mirrors the field's `input-variant` (not passed by `InputRangeField`, which has no variants, so it stays `normal` there) |
 | `data-invalid` | The field has an error |
 
 Inner elements: `.input-description-html` (div), `.input-description-text` (p).

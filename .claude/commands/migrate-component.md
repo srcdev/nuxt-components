@@ -51,7 +51,7 @@ Otherwise, auto-pick the next worst offender:
      ruleset: `vue/require-default-prop` firing on a `defineModel()`-declared prop — this is a
      known false positive (the rule predates `defineModel` and has no way to exempt model props);
      the fix is `defineModel<T>({ required: true })` where the native element genuinely can't be
-     meaningfully empty (see `InputRangeCore`/`InputRangeDefault`), not a blanket rule disable and
+     meaningfully empty (see `InputRange`/`InputRangeField`), not a blanket rule disable and
      not an artificial default value that would change real behaviour.
    - Else any group with `"redundant_priv_tokens": true` (a `--_` token that's declared but never
      read, or is a single-use 1:1 copy of a public token — see compliance checklist item 3) — same tie-break.

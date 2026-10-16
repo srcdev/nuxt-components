@@ -29,7 +29,7 @@ Most consumers should reach for **InputNumberField** rather than `InputNumber` d
 | `:placeholder` | `string` | `""` | Native `placeholder`. |
 | `:required` | `boolean` | `false` | Native `required`. |
 | `:theme` | `FormUiTheme` | `"default"` | Sets `data-theme` on the wrapper. |
-| `:weight` | `FormWeight` | `"normal"` | Adds an `input-number--{weight}` class to the input, for prop-shape consistency with sibling `05.forms` components. **No CSS in the library currently styles this class — it's a no-op today**, same convention as `InputRangeCore`'s `weight` prop. |
+| `:weight` | `FormWeight` | `"normal"` | Adds an `input-number--{weight}` class to the input, for prop-shape consistency with sibling `05.forms` components. **No CSS in the library currently styles this class — it's a no-op today**, same convention as `InputRange`'s `weight` prop. |
 | `:input-variant` | `InputUiVariant` | `"normal"` | Rendered as `data-input-variant` on the wrapper (a bare class until 2026-10-16) — `"normal"` (bordered box) and `"underlined"` (bottom-border only) have CSS; `"outlined"` doesn't (see CONSUMER-STYLING.md). Same prop/behaviour as `InputTextCore`. |
 | `:field-has-error` | `boolean` | `false` | Drives `data-invalid` on the wrapper. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the input element. Reacts to changes. |
@@ -39,7 +39,7 @@ Most consumers should reach for **InputNumberField** rather than `InputNumber` d
 
 `v-model` — `number | readonly number[]`, **required** (`defineModel({ required: true })`). Bound
 directly to the native number input. Required rather than defaulted deliberately — same reasoning
-as `InputRangeCore`'s `v-model` (see that skill doc) — this also satisfies `vue/require-default-prop`.
+as `InputRange`'s `v-model` (see that skill doc) — this also satisfies `vue/require-default-prop`.
 
 ---
 
@@ -83,7 +83,7 @@ score-1/5 state. Several latent bugs were fixed alongside the standard checklist
 - The native `<input>` had no static `input-number` class — only the dynamic
   `elementClasses` passthrough — so the entire `.input-number { ... }` style block (font,
   padding, colour, focus box-shadow) never matched anything. Fixed by adding the class directly.
-- `placeholder` was declared as a prop but never bound on the `<input>` — unlike `InputRangeCore`
+- `placeholder` was declared as a prop but never bound on the `<input>` — unlike `InputRange`
   (where a range input genuinely has no placeholder concept and the no-op is intentional and
   documented), a number input *does* support `placeholder` meaningfully, so this was a real gap,
   not a deliberate no-op. Fixed by binding `:placeholder`.
@@ -107,9 +107,9 @@ score-1/5 state. Several latent bugs were fixed alongside the standard checklist
   aligned with the rest of `05.forms`.
 - `weight` was passed from `InputNumberField` to `InputNumber` but `InputNumber` had no
   matching prop, so it fell through as a raw, meaningless `weight="normal"` HTML attribute on the
-  wrapper `<div>`. Fixed by declaring the prop on `InputNumber` too, matching `InputRangeCore`.
+  wrapper `<div>`. Fixed by declaring the prop on `InputNumber` too, matching `InputRange`.
 - `defineModel()` had no default, tripping `vue/require-default-prop` — fixed the same way as
-  `InputRangeCore`: `defineModel({ required: true })`, not a rule disable or an artificial default.
+  `InputRange`: `defineModel({ required: true })`, not a rule disable or an artificial default.
 - A single-use private token, `--_border`, was inlined to the public
   `var(--input-number-border, var(--theme-border))` directly at its point of use — it had no
   composition or state-swap behind it, just a bare pass-through (see pitfall #20). `--_surface`

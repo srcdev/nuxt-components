@@ -1,9 +1,9 @@
 {
-  "SRCDEV InputRangeCore Basic": {
-    "description": "Basic InputRangeCore native range input (no label/error wrapper)",
+  "SRCDEV InputRange Basic": {
+    "description": "Basic InputRange native range input (no label/error wrapper)",
     "scope": "vue,html",
     "body": [
-      "<InputRangeCore",
+      "<InputRange",
       "  id=\"$1fieldId\"",
       "  name=\"$2fieldName\"",
       "  v-model=\"$3fieldValue\"",
@@ -13,11 +13,11 @@
       "/>"
     ]
   },
-  "SRCDEV InputRangeCore With Markers": {
-    "description": "InputRangeCore with custom tick-mark markers overlaid on the track",
+  "SRCDEV InputRange With Markers": {
+    "description": "InputRange with custom tick-mark markers overlaid on the track",
     "scope": "vue,html",
     "body": [
-      "<InputRangeCore",
+      "<InputRange",
       "  id=\"$1fieldId\"",
       "  name=\"$2fieldName\"",
       "  v-model=\"$3fieldValue\"",
@@ -27,19 +27,39 @@
       ">",
       "  <template #markers>",
       "    <div class=\"input-range-markers\">",
-      "      <div class=\"marker\"><span class=\"marker-icon\">$7\\ud83d\\ude00</span></div>",
-      "      <div class=\"marker\"><span class=\"marker-icon\">$8\\ud83d\\ude10</span></div>",
-      "      <div class=\"marker\"><span class=\"marker-icon\">$9\\ud83d\\ude1e</span></div>",
+      "      <div class=\"input-range-marker\"><span class=\"input-range-marker-icon\">$7\\ud83d\\ude00</span></div>",
+      "      <div class=\"input-range-marker\"><span class=\"input-range-marker-icon\">$8\\ud83d\\ude10</span></div>",
+      "      <div class=\"input-range-marker\"><span class=\"input-range-marker-icon\">$9\\ud83d\\ude1e</span></div>",
       "    </div>",
       "  </template>",
-      "</InputRangeCore>"
+      "</InputRange>"
     ]
   },
-  "SRCDEV InputRangeDefault Basic": {
-    "description": "InputRangeDefault: labelled range slider with error/description support",
+  "SRCDEV InputRange With Datalist": {
+    "description": "InputRange with a datalist; the slot passes the generated datalistId",
     "scope": "vue,html",
     "body": [
-      "<InputRangeDefault",
+      "<InputRange",
+      "  id=\"$1fieldId\"",
+      "  name=\"$2fieldName\"",
+      "  v-model=\"$3fieldValue\"",
+      "  :min=\"${4:0}\"",
+      "  :max=\"${5:100}\"",
+      ">",
+      "  <template #datalist=\"{ datalistId }\">",
+      "    <datalist :id=\"datalistId\" class=\"input-range-datalist\">",
+      "      <option value=\"${4:0}\" label=\"${6:Low}\"></option>",
+      "      <option value=\"${5:100}\" label=\"${7:High}\"></option>",
+      "    </datalist>",
+      "  </template>",
+      "</InputRange>"
+    ]
+  },
+  "SRCDEV InputRangeField Basic": {
+    "description": "InputRangeField: labelled range slider with error/description support",
+    "scope": "vue,html",
+    "body": [
+      "<InputRangeField",
       "  v-model=\"$1fieldValue\"",
       "  name=\"$2fieldName\"",
       "  label=\"$3Field label\"",
@@ -51,11 +71,11 @@
       "/>"
     ]
   },
-  "SRCDEV InputRangeDefault With Step Buttons": {
-    "description": "InputRangeDefault with step-down/step-up buttons wired into the left/right slots",
+  "SRCDEV InputRangeField With Step Buttons": {
+    "description": "InputRangeField with step-down/step-up buttons wired into the left/right slots",
     "scope": "vue,html",
     "body": [
-      "<InputRangeDefault",
+      "<InputRangeField",
       "  v-model=\"$1fieldValue\"",
       "  name=\"$2fieldName\"",
       "  label=\"$3Field label\"",
@@ -67,11 +87,11 @@
       ">",
       "  <template #left>\\u2212</template>",
       "  <template #right>+</template>",
-      "</InputRangeDefault>"
+      "</InputRangeField>"
     ]
   },
   "SRCDEV InputRange CSS Override": {
-    "description": "CSS override scaffold for InputRangeCore tokens",
+    "description": "CSS override scaffold for InputRange tokens",
     "scope": "css",
     "body": [
       ".$1my-page {",

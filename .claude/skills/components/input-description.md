@@ -4,7 +4,7 @@
 
 `InputDescription` renders a form field's help text. Every `*Field` wrapper in `05.forms`
 (`InputTextWithLabel`, `InputNumberField`, `InputSelectWithLabel`, `InputTextareaWithLabel`,
-`InputRangeDefault`, `InputTextAsNumberWithLabel`, `SingleCheckbox`, `MultipleCheckboxes`,
+`InputRangeField`, `InputTextAsNumberWithLabel`, `SingleCheckbox`, `MultipleCheckboxes`,
 `MultipleRadiobuttons`) already renders one and forwards its own `descriptionText` /
 `descriptionHtml` slots into it, so consumers normally just pass those slots to the wrapper:
 

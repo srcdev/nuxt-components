@@ -1,16 +1,16 @@
 <template>
   <div
-    class="input-range-with-label"
+    class="input-range-field"
+    :class="elementClasses"
     :data-theme="theme"
-    :data-invalid="fieldHasError ? '' : null"
-    :class="[elementClasses, { error: fieldHasError }]"
+    :data-invalid="fieldHasError ? '' : undefined"
   >
     <InputLabel
       :id
       :required
       input-variant="normal"
       :field-has-error
-      :style-class-passthrough="['input-number-label', 'body-normal-bold']"
+      :style-class-passthrough="['input-range-label']"
     >
       <template #textLabel>{{ label }}</template>
     </InputLabel>
@@ -28,7 +28,7 @@
       </template>
     </InputDescription>
 
-    <InputRangeCore
+    <InputRange
       :id
       v-model="modelValue"
       :name
@@ -40,20 +40,22 @@
       :weight
       :field-has-error
       :aria-describedby="ariaDescribedby()"
-      :style-class-passthrough="styleClassPassthrough"
     >
-      <template v-if="slots.datalist" #datalist>
-        <slot name="datalist"></slot>
+      <template v-if="slots.markers" #markers>
+        <slot name="markers"></slot>
+      </template>
+      <template v-if="slots.datalist" #datalist="{ datalistId }">
+        <slot name="datalist" :datalist-id="datalistId"></slot>
       </template>
       <template v-if="slots.left" #left>
         <InputButton
           type="button"
-          :readonly="Number(modelValue) === min"
+          :readonly="modelValue <= min"
           :is-pending="false"
           :button-text="stepDownLabel"
           :theme
           variant="secondary"
-          @click.stop.prevent="updateRange(-step, Number(modelValue) > min)"
+          @click.stop.prevent="stepBy(-1)"
         >
           <template #iconOnly>
             <slot name="left"></slot>
@@ -63,19 +65,19 @@
       <template v-if="slots.right" #right>
         <InputButton
           type="button"
-          :readonly="Number(modelValue) === max"
+          :readonly="modelValue >= max"
           :is-pending="false"
           :button-text="stepUpLabel"
           :theme
           variant="secondary"
-          @click.stop.prevent="updateRange(step, Number(modelValue) < max)"
+          @click.stop.prevent="stepBy(1)"
         >
           <template #iconOnly>
             <slot name="right"></slot>
           </template>
         </InputButton>
       </template>
-    </InputRangeCore>
+    </InputRange>
     <InputError
       :id="errorId"
       :error-message
@@ -119,7 +121,14 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const slots = useSlots();
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 
 const { id, errorId, descriptionId, ariaDescribedby } = useAriaDescribedById(
   props.name,
@@ -131,9 +140,23 @@ const modelValue = defineModel<number>({
   required: true,
 });
 
-const updateRange = (step: number, withinRangeLimit: boolean) => {
-  if (withinRangeLimit) {
-    modelValue.value = (Number(modelValue.value) + step) as number;
-  }
+const decimalPlaces = (value: number) => (String(value).split(".")[1] ?? "").length;
+const clamp = (value: number) => Math.min(Math.max(value, props.min), props.max);
+
+const stepBy = (direction: 1 | -1) => {
+  const current = Number(modelValue.value);
+  const stepSize = Math.abs(props.step) || 1;
+  const precision = Math.max(decimalPlaces(stepSize), decimalPlaces(props.min));
+  const next = clamp(Number(((Number.isFinite(current) ? current : props.min) + direction * stepSize).toFixed(precision)));
+  if (next !== current) modelValue.value = next;
 };
 </script>
+
+<style lang="css">
+@layer components {
+  .input-range-field {
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+}
+</style>
