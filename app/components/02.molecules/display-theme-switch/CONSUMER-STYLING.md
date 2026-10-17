@@ -1,11 +1,11 @@
 # DisplayThemeSwitch — Consumer Styling Guide
 
-## No tokens of its own — delegates entirely to TripleToggleSwitch
+## No tokens of its own — delegates entirely to SegmentedControl
 
-`DisplayThemeSwitch` is a thin wrapper around `TripleToggleSwitch` (see
-`app/components/05.forms/triple-toggle-switch/CONSUMER-STYLING.md`) and declares no
+`DisplayThemeSwitch` is a thin wrapper around `SegmentedControl` (see
+`app/components/05.forms/segmented-control/CONSUMER-STYLING.md`) and declares no
 `--display-theme-switch-*` tokens of its own. Every colour token documented there
-(`--triple-toggle-switch-surface`, `--triple-toggle-switch-border`, `--triple-toggle-switch-marker-surface`,
+(`--segmented-control-surface`, `--segmented-control-border`, `--segmented-control-marker-surface`,
 etc.) applies unchanged, since `DisplayThemeSwitch` renders that component directly with no
 intermediate styling layer.
 
@@ -20,14 +20,14 @@ tight header/nav slot:
 <DisplayThemeSwitch style-class-passthrough="small" />
 ```
 
-This sets `TripleToggleSwitch`'s public `--triple-toggle-switch-gap`/`-padding`/
+This sets `SegmentedControl`'s public `--segmented-control-gap`/`-padding`/
 `-option-padding`/`-icon-size` tokens to smaller values (`0.2rem`/`0.2rem`/`0.2rem`/`1.6rem` vs the
-default `0.4rem`/`0.4rem`/`0.4rem`/`2rem` — both already more compact than `TripleToggleSwitch`'s
+default `0.4rem`/`0.4rem`/`0.4rem`/`2rem` — both already more compact than `SegmentedControl`'s
 own defaults of `1rem`/`0.6rem`/`0.5rem`/`2rem`). Override any of the four directly for a custom
 size instead of using `small`:
 
 ```vue
-<DisplayThemeSwitch style="--triple-toggle-switch-icon-size: 2.4rem;" />
+<DisplayThemeSwitch style="--segmented-control-icon-size: 2.4rem;" />
 ```
 
 ---
@@ -40,8 +40,8 @@ the block **unlayered** (no `@layer` wrapper) so it beats the library's `@layer 
 own file uses `<style scoped>`, selectors that reach inside the component need `:deep()`. Patterns
 and examples: `.claude/skills/component-local-style-override.md`.
 
-**Caveat:** the colour tokens (`--triple-toggle-switch-surface`, `-border`, ...) work from any
-ancestor, but the four sizing tokens (`--triple-toggle-switch-gap`, `-padding`, `-option-padding`,
+**Caveat:** the colour tokens (`--segmented-control-surface`, `-border`, ...) work from any
+ancestor, but the four sizing tokens (`--segmented-control-gap`, `-padding`, `-option-padding`,
 `-icon-size`) are declared on this component's own root (that's how its default and `small` sizes
 work), so an ancestor value never reaches the toggle. Set those on the root itself: a class from
 `style-class-passthrough`, or inline `style` as shown above.

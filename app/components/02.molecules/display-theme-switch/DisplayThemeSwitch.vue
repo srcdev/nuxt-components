@@ -1,6 +1,6 @@
 <template>
   <ClientOnly>
-    <TripleToggleSwitch
+    <SegmentedControl
       v-model="colorModeVal"
       v-model:field-data="sampleFieldData"
       :aria-label="ariaLabel"
@@ -77,27 +77,27 @@ watch(colorModeVal, (val) => {
 .colour-scheme-select {
   /* Everything DisplayThemeSwitch used to redeclare here beyond sizing (wrapper background/border/
      focus ring, marker border, option border/outline/focus/hover, option-icon colours, and the
-     system/light/dark marker gradients) was a byte-for-byte duplicate of TripleToggleSwitch's
+     system/light/dark marker gradients) was a byte-for-byte duplicate of SegmentedControl's
      own defaults for the exact same selectors — a no-op at best, and for the ones that bypassed
-     TripleToggleSwitch's public --triple-toggle-switch-* tokens with a hardcoded literal
+     SegmentedControl's public --segmented-control-* tokens with a hardcoded literal
      (background-color, border, focus outline, marker border, option border/hover/focus, icon
-     colour) an active bug: a consumer setting e.g. --triple-toggle-switch-surface globally would
+     colour) an active bug: a consumer setting e.g. --segmented-control-surface globally would
      have been silently overridden back to the hardcoded default by this block's higher
-     specificity. Removed 2026-09-20 — TripleToggleSwitch already owns all of that. Only the
-     genuine "small" sizing variant remains, now driving TripleToggleSwitch's own public
+     specificity. Removed 2026-09-20 — SegmentedControl already owns all of that. Only the
+     genuine "small" sizing variant remains, now driving SegmentedControl's own public
      sizing tokens instead of reaching into its private --_form-* and --_scheme-icon-font-size
-     locals directly (see TripleToggleSwitch's CONSUMER-STYLING.md). */
-  &.triple-toggle-switch {
-    --triple-toggle-switch-gap: 0.4rem;
-    --triple-toggle-switch-padding: 0.4rem;
-    --triple-toggle-switch-option-padding: 0.4rem;
-    --triple-toggle-switch-icon-size: 2rem;
+     locals directly (see SegmentedControl's CONSUMER-STYLING.md). */
+  &.segmented-control {
+    --segmented-control-gap: 0.4rem;
+    --segmented-control-padding: 0.4rem;
+    --segmented-control-option-padding: 0.4rem;
+    --segmented-control-icon-size: 2rem;
 
     &.small {
-      --triple-toggle-switch-gap: 0.2rem;
-      --triple-toggle-switch-padding: 0.2rem;
-      --triple-toggle-switch-option-padding: 0.2rem;
-      --triple-toggle-switch-icon-size: 1.6rem;
+      --segmented-control-gap: 0.2rem;
+      --segmented-control-padding: 0.2rem;
+      --segmented-control-option-padding: 0.2rem;
+      --segmented-control-icon-size: 1.6rem;
     }
   }
 }

@@ -1,18 +1,17 @@
 {
-  "SRCDEV TripleToggleSwitch": {
-    "description": "TripleToggleSwitch: three-option radio pill with a sliding marker",
+  "SRCDEV SegmentedControl": {
+    "description": "SegmentedControl: three-option radio pill with a sliding marker",
     "scope": "vue,html",
     "body": [
-      "<TripleToggleSwitch",
+      "<SegmentedControl",
       "  v-model=\"${1:selected}\"",
       "  v-model:field-data=\"${2:options}\"",
-      "  name=\"${3:triple-toggle}\"",
-      "  aria-label=\"${4:Choose an option}\"",
+      "  aria-label=\"${3:Choose an option}\"",
       "/>"
     ]
   },
-  "SRCDEV TripleToggleSwitch Options": {
-    "description": "IFormMultipleOptions data for TripleToggleSwitch (system/light/dark values get marker gradients)",
+  "SRCDEV SegmentedControl Options": {
+    "description": "IFormMultipleOptions data for SegmentedControl (system/light/dark values get marker gradients)",
     "scope": "typescript,vue",
     "body": [
       "const ${1:options} = ref<IFormMultipleOptions>({",

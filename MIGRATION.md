@@ -158,7 +158,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 |---|---|---|---|
 | ToggleSwitch | `toggle-switch/ToggleSwitch.vue` | ☐ | ☐ |
 | ToggleSwitchField | `toggle-switch/ToggleSwitchField.vue` | ☐ | ☐ |
-| TripleToggleSwitch | `triple-toggle-switch/TripleToggleSwitch.vue` | ✅ | ✅ `triple-toggle-switch` |
+| SegmentedControl | `segmented-control/SegmentedControl.vue` | ✅ | ✅ `segmented-control` |
 | InputRange | `input-range/InputRange.vue` | ✅ | ✅ `input-range` |
 | InputRangeField | `input-range/InputRangeField.vue` | ✅ | ✅ `input-range` |
 

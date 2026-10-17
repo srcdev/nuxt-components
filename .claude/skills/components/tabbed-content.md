@@ -169,7 +169,7 @@ length, cancelling the per-frame checks while the highlight was still sliding an
 colours (dark selected label, invisible neighbour). A More-button resize also re-places both
 indicators (`syncIndicators(true)`), since its box moves even when no tab changes sides, and an
 overflow change refreshes with `refreshTabs(true)` so an in-flight move retargets instead of
-snapping. This replaces the per-component timing trick `TripleToggleSwitch` uses (swap
+snapping. This replaces the per-component timing trick `SegmentedControl` uses (swap
 colour at half the slide), which only works for single-step moves; a tab jump passes under
 several labels.
 

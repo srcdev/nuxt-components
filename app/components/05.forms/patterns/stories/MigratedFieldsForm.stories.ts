@@ -12,7 +12,7 @@ import ToggleSwitchField from "../../toggle-switch/ToggleSwitchField.vue";
 import MultipleCheckboxes from "../../input-checkbox/MultipleCheckboxes.vue";
 import SingleCheckbox from "../../input-checkbox/SingleCheckbox.vue";
 import MultipleRadiobuttons from "../../input-radio/MultipleRadiobuttons.vue";
-import TripleToggleSwitch from "../../triple-toggle-switch/TripleToggleSwitch.vue";
+import SegmentedControl from "../../segmented-control/SegmentedControl.vue";
 import InputButton from "../../input-button/InputButton.vue";
 import FormField from "../../form-field/FormField.vue";
 import FormWrapper from "../../form-wrapper/FormWrapper.vue";
@@ -31,7 +31,7 @@ interface MigratedFieldsFormStoryArgs {
 //   InputTextAsNumberField, InputRangeField (InputRange), InputNumberField
 //   (InputNumber), InputOtpField (InputOtp), InputTextareaField (InputTextarea), InputSelectField
 //   (InputSelect), ToggleSwitchField, stacked and inline (ToggleSwitch),
-//   MultipleCheckboxes, SingleCheckbox, MultipleRadiobuttons, TripleToggleSwitch ("Theme
+//   MultipleCheckboxes, SingleCheckbox, MultipleRadiobuttons, SegmentedControl ("Theme
 //   preference": no Field wrapper or error state, so it sits under a plain caption).
 // - Rendered inside other fields: FormWrapper (wraps the form), FormField (wraps every field),
 //   FormFieldset (checkbox/radio groups), InputLabel, InputDescription (the "Full name" and
@@ -71,7 +71,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
     MultipleCheckboxes,
     SingleCheckbox,
     MultipleRadiobuttons,
-    TripleToggleSwitch,
+    SegmentedControl,
     InputButton,
     FormField,
     FormWrapper,
@@ -418,7 +418,7 @@ const Template: StoryFn<MigratedFieldsFormStoryArgs> = (args) => ({
           <FormField width="wide" :has-gutter="false">
             <div style="display: grid; gap: 0.8rem; justify-items: start;">
               <span>Theme preference</span>
-              <TripleToggleSwitch
+              <SegmentedControl
                 v-model="state.themePreference"
                 v-model:field-data="themeOptions"
                 name="themePreference"

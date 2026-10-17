@@ -50,7 +50,7 @@ const meta: Meta<typeof DisplayThemeSwitch> = {
     docs: {
       description: {
         component:
-          "A system/light/dark theme switch wrapping TripleToggleSwitch, wired to useSettingsStore. Colour and sizing are entirely delegated to TripleToggleSwitch's public --triple-toggle-switch-* tokens — see CONSUMER-STYLING.md.",
+          "A system/light/dark theme switch wrapping SegmentedControl, wired to useSettingsStore. Colour and sizing are entirely delegated to SegmentedControl's public --segmented-control-* tokens — see CONSUMER-STYLING.md.",
       },
     },
   },

@@ -25,17 +25,17 @@ describe("DisplayThemeSwitch", () => {
     expect(wrapper.vm).toBeTruthy();
   });
 
-  it("renders TripleToggleSwitch with the colour-scheme-select class", async () => {
+  it("renders SegmentedControl with the colour-scheme-select class", async () => {
     const wrapper = await mountSuspended(DisplayThemeSwitch);
     await nextTick();
     expect(wrapper.find(".colour-scheme-select").exists()).toBe(true);
-    expect(wrapper.find(".triple-toggle-switch").exists()).toBe(true);
+    expect(wrapper.find(".segmented-control").exists()).toBe(true);
   });
 
   it("renders default option labels", async () => {
     const wrapper = await mountSuspended(DisplayThemeSwitch);
     await nextTick();
-    const labels = wrapper.findAll(".option-group .sr-only").map((el) => el.text());
+    const labels = wrapper.findAll(".segmented-control-option .sr-only").map((el) => el.text());
     expect(labels).toEqual(["System", "Light", "Dark"]);
   });
 
@@ -48,7 +48,7 @@ describe("DisplayThemeSwitch", () => {
       },
     });
     await nextTick();
-    const labels = wrapper.findAll(".option-group .sr-only").map((el) => el.text());
+    const labels = wrapper.findAll(".segmented-control-option .sr-only").map((el) => el.text());
     expect(labels).toEqual(["Auto", "Day", "Night"]);
   });
 
@@ -61,8 +61,8 @@ describe("DisplayThemeSwitch", () => {
       },
     });
     await nextTick();
-    const icons = wrapper.findAll(".option-icon").map((el) => el.attributes("class"));
-    expect(icons.some((c) => c?.includes("system"))).toBe(true);
+    const icons = wrapper.findAll(".segmented-control-option-icon").map((el) => el.html());
+    expect(icons.some((html) => html.includes("custom:system") || html.includes("custom-system"))).toBe(true);
   });
 
   it("names the radiogroup with ariaLabel", async () => {
@@ -79,14 +79,14 @@ describe("DisplayThemeSwitch", () => {
       props: { styleClassPassthrough: "small" },
     });
     await nextTick();
-    expect(wrapper.find(".triple-toggle-switch").classes()).toContain("small");
+    expect(wrapper.find(".segmented-control").classes()).toContain("small");
   });
 
   it("calls setColourScheme when the selected option changes", async () => {
     const wrapper = await mountSuspended(DisplayThemeSwitch);
     await nextTick();
 
-    const lightInput = wrapper.findAll("input.option-input")[1];
+    const lightInput = wrapper.findAll("input.segmented-control-option-input")[1];
     await lightInput?.setValue(true);
     await nextTick();
 

@@ -98,6 +98,7 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | ~~ToggleSwitchWithLabel~~ | ✅ `ToggleSwitchField` (2026-10-16) | yes |
 | ~~ToggleSwitchWithLabelInline~~ | ✅ `layout="inline"` on `ToggleSwitchField` (2026-10-16) | - |
 | ~~TripleToggleSwitchCore~~ | ✅ `TripleToggleSwitch` (2026-09-27) | - |
+| ~~TripleToggleSwitch~~ | ✅ `SegmentedControl` (2026-10-17): handles any option count | - |
 | ~~InputButtonCore~~ | ✅ `InputButton` (2026-09-28) | yes |
 | ~~InputCheckboxRadioCore~~ | ✅ `InputCheckboxRadio` (2026-09-27) | - |
 | InputCheckboxRadioButton | ✅ kept: button-style option, not a Field (2026-09-27) | - |
