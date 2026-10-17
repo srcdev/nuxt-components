@@ -57,9 +57,24 @@ Full token table in `app/components/05.forms/form-field/CONSUMER-STYLING.md`. Pu
 Target state via `.form-field[data-width="wide"]`, `.form-field[data-has-gutter]`,
 `.form-field[data-invalid]`.
 
+FormField doesn't change `overflow-wrap` or `min-inline-size` on its slot content: wrapping long
+copy is the slotted control's job (every `*Field` component handles its own). Plain text slotted
+directly needs its own wrapping rule.
+
+---
+
+## Storybook
+
+`Components/Forms/Form Field/FormField`: `Default`, `AllWidths`, `NoGutter`, and `StressTest`
+(each width, with and without gutter and error state, around an `InputTextField` with hostile
+copy). Stories use the `CanvasSwitcher` decorator.
+
 ---
 
 ## History
+
+**2026-10-17**: added the `StressTest` story, `CanvasSwitcher` decorator and Docs-page
+descriptions; nothing in the component broke under it.
 
 **Migrated 2026-09-26** (0/5 → full compliance):
 

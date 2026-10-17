@@ -89,3 +89,10 @@ Or scoped by a page/section wrapper class:
 
 `:style-class-passthrough` (string or string array) adds classes to the root `.form-field` element.
 
+---
+
+## Notes
+
+- FormField sets no `overflow-wrap` or `min-inline-size` on its slot content. The `*Field`
+  components wrap their own long copy; plain text you slot in directly needs its own wrapping rule.
+
