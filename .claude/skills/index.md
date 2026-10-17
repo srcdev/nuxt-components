@@ -77,8 +77,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── composable-anchored-popover.md    — useAnchoredPopover: popover + anchor positioning with JS fallbacks for Safari 16 (no Popover API) and 17–18 (no anchor positioning); used by ActionMenu/SelectMenu/DeepExpandingMenu/DisplayTooltip/PopOver
 └── components/
     ├── alert-content.md          — AlertContent + AlertContentInner: themed alert panel (icon/title/content/actions/dismiss) under DisplayToast, DisplayPrompt and AlertMaskedContent; showIcon, #actions row, --alert-content-* tokens, app.config icon map
-    ├── alert-mask-core.md      — AlertMaskCore: SVG border/background mask sized to slotted content via ResizeObserver, config-prop-driven geometry/colour (no CSS token API)
-    ├── alert-masked-content.md — AlertMaskedContent: AlertContentInner inside AlertMaskCore's SVG mask (accent cut-out border + translucent fill); masked variant for DisplayToast/DisplayPrompt; --alert-masked-content-* colour tokens
+    ├── alert-mask.md      — AlertMask (renamed from AlertMaskCore): SVG border/fill sized to slotted content via ResizeObserver; config-prop geometry, --alert-mask-* colour tokens
+    ├── alert-masked-content.md — AlertMaskedContent: AlertContentInner inside AlertMask's SVG mask (accent cut-out border + translucent fill); masked variant for DisplayToast/DisplayPrompt; --alert-masked-content-* colour tokens
     ├── animated-svg-text.md    — AnimatedSvgText: inline SVG stroke-draw-then-fill animation, text slot, CSS token API
     ├── accordian-core.md       — AccordianCore indexed dynamic slots (accordian-{n}-summary/icon/content), exclusive-open grouping
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling

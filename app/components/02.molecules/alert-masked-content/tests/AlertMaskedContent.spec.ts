@@ -38,16 +38,16 @@ describe("AlertMaskedContent", () => {
     expect(wrapper.find(".alert-masked-content").attributes("data-theme")).toBe("success");
   });
 
-  // ─── AlertMaskCore ────────────────────────────────────────────────────────
+  // ─── AlertMask ────────────────────────────────────────────────────────
 
-  it("renders AlertMaskCore", async () => {
+  it("renders AlertMask", async () => {
     const wrapper = await mountSuspended(AlertMaskedContent, { props: { theme: "info" } });
-    expect(wrapper.find(".alert-mask-core").exists()).toBe(true);
+    expect(wrapper.find(".alert-mask").exists()).toBe(true);
   });
 
-  it("renders AlertContentInner inside AlertMaskCore", async () => {
+  it("renders AlertContentInner inside AlertMask", async () => {
     const wrapper = await mountSuspended(AlertMaskedContent, { props: { theme: "info" } });
-    expect(wrapper.find(".alert-mask-core .alert-content-inner").exists()).toBe(true);
+    expect(wrapper.find(".alert-mask .alert-content-inner").exists()).toBe(true);
   });
 
   // ─── Icon ─────────────────────────────────────────────────────────────────
@@ -131,15 +131,15 @@ describe("AlertMaskedContent", () => {
 
   // ─── Default maskConfig ───────────────────────────────────────────────────
 
-  it("passes the resolved maskConfig to AlertMaskCore", async () => {
+  it("passes the resolved maskConfig to AlertMask", async () => {
     const wrapper = await mountSuspended(AlertMaskedContent, { props: { theme: "info" } });
     const contentEl = wrapper.find(".alert-mask-content");
     const style = (contentEl.element as HTMLElement).style;
-    // Default borderLeft: 6 → --_inset-inline-start: 6px
-    expect(style.getPropertyValue("--_inset-inline-start")).toBe("6px");
-    expect(style.getPropertyValue("--_inset-block-start")).toBe("1px");
-    expect(style.getPropertyValue("--_inset-inline-end")).toBe("1px");
-    expect(style.getPropertyValue("--_inset-block-end")).toBe("1px");
+    // Default borderLeft: 6 → --_inset-left: 6px
+    expect(style.getPropertyValue("--_inset-left")).toBe("6px");
+    expect(style.getPropertyValue("--_inset-top")).toBe("1px");
+    expect(style.getPropertyValue("--_inset-right")).toBe("1px");
+    expect(style.getPropertyValue("--_inset-bottom")).toBe("1px");
   });
 
   it("routes the default mask colours through public tokens", async () => {
@@ -168,7 +168,7 @@ describe("AlertMaskedContent", () => {
     });
     const contentEl = wrapper.find(".alert-mask-content");
     const style = (contentEl.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_inset-inline-start")).toBe("12px");
+    expect(style.getPropertyValue("--_inset-left")).toBe("12px");
   });
 
   // ─── showIcon / actions (added 2026-09-27) ──────────────────────────────────

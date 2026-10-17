@@ -176,7 +176,7 @@ These components still live in the root `app/components/` folder and need to be 
 
 | Component | File | Notes |
 |---|---|---|
-| AlertMaskCore | `alert-mask/AlertMaskCore.vue` | SVG mask utility — may stay internal |
+| AlertMask | `alert-mask/AlertMask.vue` | SVG mask utility — may stay internal |
 | CarouselFlip | `carousels/CarouselFlip.vue` | |
 | DeepExpandingMenu | `deep-expanding-menu/DeepExpandingMenu.vue` | |
 | DeepExpandingMenuOld | `deep-expanding-menu/DeepExpandingMenuOld.vue` | Likely deprecated — review before migrating |

@@ -1,0 +1,41 @@
+{
+  "SRCDEV AlertMask Basic": {
+    "description": "AlertMask: SVG border and fill sized to slotted content",
+    "scope": "vue,html",
+    "body": [
+      "<AlertMask>",
+      "  $0",
+      "</AlertMask>"
+    ]
+  },
+  "SRCDEV AlertMask Custom Config": {
+    "description": "AlertMask with custom colour/geometry config",
+    "scope": "vue,html",
+    "body": [
+      "<AlertMask",
+      "  :config=\"{",
+      "    borderColour: '${1:var(--theme-accent)}',",
+      "    backgroundColour: '${2:rgba(0, 0, 0, 0.3)}',",
+      "    radiusLeft: ${3:8},",
+      "    radiusRight: ${4:4},",
+      "    borderLeft: ${5:6},",
+      "    borderTop: ${6:1},",
+      "    borderRight: ${7:1},",
+      "    borderBottom: ${8:1},",
+      "  }\"",
+      ">",
+      "  $0",
+      "</AlertMask>"
+    ]
+  },
+  "SRCDEV AlertMask CSS Override": {
+    "description": "CSS override scaffold for AlertMask colour tokens",
+    "scope": "css",
+    "body": [
+      ".${1:my-section} {",
+      "  --alert-mask-border-colour: $2;",
+      "  --alert-mask-background-colour: $3;",
+      "}"
+    ]
+  }
+}

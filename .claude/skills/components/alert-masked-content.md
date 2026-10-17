@@ -1,6 +1,6 @@
 ---
 name: AlertMaskedContent
-description: AlertMaskedContent — AlertContentInner inside AlertMaskCore's SVG mask (accent border cut-out + translucent fill); the masked variant DisplayToast/DisplayPrompt swap in
+description: AlertMaskedContent — AlertContentInner inside AlertMask's SVG mask (accent border cut-out + translucent fill); the masked variant DisplayToast/DisplayPrompt swap in
 type: reference
 ---
 
@@ -9,7 +9,7 @@ type: reference
 ## Overview
 
 The "glass" sibling of `AlertContent`. Same icon/title/body/dismiss layout (the shared
-`AlertContentInner`), but instead of an opaque surface it sits inside `AlertMaskCore`, which draws
+`AlertContentInner`), but instead of an opaque surface it sits inside `AlertMask`, which draws
 an accent-coloured border as an SVG cut-out and a translucent fill, so the page behind shows
 through.
 
@@ -91,5 +91,5 @@ See `CONSUMER-STYLING.md` next to the component. Public tokens:
 - Changed 2026-09-27: colours are now overridable via the two public tokens (previously fixed
   literals, reachable only through `maskConfig`), and the transparent inner background uses
   `AlertContentInner`'s public `--alert-content-inner-background` instead of reaching into its
-  private `--_alert-content-inner-bg`. `AlertMaskCore` now gives each instance a unique mask id,
+  private `--_alert-content-inner-bg`. `AlertMask` now gives each instance a unique mask id,
   so several masked alerts on one page (e.g. stacked toasts) no longer all use the first one's shape.

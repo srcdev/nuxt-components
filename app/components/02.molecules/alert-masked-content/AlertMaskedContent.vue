@@ -1,6 +1,6 @@
 <template>
   <div class="alert-masked-content" :data-theme="theme">
-    <AlertMaskCore :config="resolvedMaskConfig">
+    <AlertMask :config="resolvedMaskConfig">
       <AlertContentInner
         :theme="theme"
         :custom-icon="customIcon"
@@ -29,7 +29,7 @@
           <slot name="dismissLabel"></slot>
         </template>
       </AlertContentInner>
-    </AlertMaskCore>
+    </AlertMask>
   </div>
 </template>
 

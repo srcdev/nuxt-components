@@ -1,7 +1,7 @@
 # AlertMaskedContent — Consumer Styling Guide
 
 `AlertMaskedContent` is `AlertContentInner` (icon, title, body, dismiss button) wrapped in
-`AlertMaskCore`'s SVG mask: an accent-coloured border drawn as a cut-out, and a translucent fill,
+`AlertMask`'s SVG mask: an accent-coloured border drawn as a cut-out, and a translucent fill,
 so whatever sits behind the alert stays visible. It's the variant `DisplayToast`
 (`appearance.masked`) and `DisplayPrompt` (`masked`) swap in.
 
@@ -20,7 +20,7 @@ for that instance.
 
 ### Mask geometry
 
-Radius and border thickness aren't tokens: `AlertMaskCore` computes the SVG path from them in JS.
+Radius and border thickness aren't tokens: `AlertMask` computes the SVG path from them in JS.
 Set them with the `maskConfig` prop (`AlertMaskConfig`). Defaults: `radiusLeft: 8`,
 `radiusRight: 4`, `borderLeft: 6`, `borderTop`/`borderRight`/`borderBottom: 1`.
 
@@ -31,13 +31,13 @@ set on the root (`--theme-text`, `--theme-border`, etc.).
 
 ### Private tokens
 
-None of its own. `AlertMaskCore`'s `--_height` / `--_inset-*` are measured plumbing, not public API.
+None of its own. `AlertMask`'s `--_height` / `--_inset-*` are measured plumbing, not public API.
 
 ## State hooks
 
 - `data-theme="info" | "success" | "warning" | "error"` on the root `.alert-masked-content`,
   from the `theme` prop. Drives `--theme-accent` and the content colours.
-- Inner classes: `.alert-mask-core` > `.alert-mask-decorator` (the SVG) + `.alert-mask-content` >
+- Inner classes: `.alert-mask` > `.alert-mask-decorator` (the SVG) + `.alert-mask-content` >
   `.alert-content-inner` > `.alert-content-icon`, `.alert-content-main` > (`.alert-content-body` >
   `.alert-content-title`, `.alert-content-text`) + `.alert-content-actions`, then `.alert-content-dismiss`.
   The inner content tokens (`--alert-content-gap`, `-padding`, `-text-colour`, `-icon-size`, `-title-font-size`,

@@ -104,7 +104,7 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | InputCheckboxRadioButton | ✅ kept: button-style option, not a Field (2026-09-27) | - |
 | ~~InputCheckboxRadioWithLabel~~ | ✅ `InputCheckboxRadioField` (2026-09-27) | - |
 | ~~ActionMenuItemCore~~ | ✅ `ActionMenuItem` (2026-09-27) | - |
-| AlertMaskCore | `AlertMask` | - |
+| ~~AlertMaskCore~~ | ✅ `AlertMask` (2026-10-17) | - |
 | CardCore | **decide**: `Card` is single-word and collision-prone; prefer a prefixed name (`Display*`, `Content*`) | yes |
 | AccordianCore | **decide**: also fixes the "Accordian" misspelling; bare `Accordion` is single-word and collision-prone, and it is built on `<details>`/`<summary>` | yes |
 | ~~TabsCore~~ | ✅ `TabbedContent` (2026-10-07) | - |
