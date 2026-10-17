@@ -110,3 +110,11 @@ tokens instead of the `--theme-error-*` ones** above).
 `.input-error-message` element. Field wrappers don't forward it, so in practice use the tokens
 above.
 
+---
+
+## Notes
+
+- Message text wraps anywhere, so a long URL or unbroken word stays inside the strip. There is no
+  line-clamp token: error text should stay readable in full.
+- Blank entries in an array `error-message` are dropped rather than rendered as empty list items.
+

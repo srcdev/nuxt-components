@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import type { VueWrapper } from "@vue/test-utils";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
@@ -22,6 +22,11 @@ const wrapperFactory = (propsData = {}) => {
 };
 
 describe("InputError", () => {
+  afterEach(() => {
+    wrapper?.unmount();
+    vi.restoreAllMocks();
+  });
+
   it("renders the root with id, testid, error theme and passthrough classes", async () => {
     wrapper = await wrapperFactory();
     const root = wrapper.find(".input-error-message");
@@ -90,6 +95,29 @@ describe("InputError", () => {
     expect(items).toHaveLength(2);
     expect(items[0]!.text()).toBe("Hello World");
     expect(items[1]!.text()).toBe("Hello World 2");
+  });
+
+  it("keeps list semantics on the unstyled list", async () => {
+    wrapper = await wrapperFactory({ errorMessage: ["Hello World", "Hello World 2"] });
+
+    expect(wrapper.find(".input-error-message-list").attributes("role")).toBe("list");
+  });
+
+  it("drops blank entries from an array of messages", async () => {
+    wrapper = await wrapperFactory({ errorMessage: ["First", "", "   ", "Second"] });
+    const items = wrapper.findAll(".input-error-message-list-item");
+
+    expect(items).toHaveLength(2);
+    expect(items[0]!.text()).toBe("First");
+    expect(items[1]!.text()).toBe("Second");
+  });
+
+  it("renders HTML-like message text as text", async () => {
+    wrapper = await wrapperFactory({ errorMessage: "<b>not bold</b>" });
+    const message = wrapper.find(".input-error-message-single");
+
+    expect(message.find("b").exists()).toBe(false);
+    expect(message.text()).toBe("<b>not bold</b>");
   });
 
   it("renders a decorative icon that can be overridden", async () => {

@@ -24,7 +24,7 @@ the surrounding theme.
 | Prop (template form) | Type | Default | Notes |
 |------|------|---------|-------|
 | `:id` | `string` | (required) | Must match an id in the control's `aria-describedby` while in error. Wrappers get it from `useAriaDescribedById(...).errorId`, which only adds it to `aria-describedby` when `fieldHasError` is true. |
-| `:error-message` | `string \| string[] \| object` | (required) | A string renders as one message; an array renders as a `<ul>` list. |
+| `:error-message` | `string \| string[] \| object` | (required) | A string renders as one message; an array renders as a `<ul role="list">`, with blank entries dropped. Long and unbroken text wraps inside the strip (`overflow-wrap: anywhere`); it is never line-clamped. |
 | `:show-error` | `boolean` | (required) | Opens the strip. Rendered as `data-visible`; when `false` the root gets `aria-hidden="true"`. |
 | `:is-detached` | `boolean` | (required) | `true`: sits below the control with a `2rem` gap, fully rounded. `false`: tucked under the control's bottom edge. Rendered as `data-detached`. |
 | `:input-variant` | `"normal" \| "outlined" \| "underlined"` | `"normal"` | Match the control's variant. Rendered as `data-input-variant`. `underlined` drops the rounded corners and (when attached) the outline. |
@@ -41,7 +41,7 @@ No slots.
 ```vue
 <template>
   <div class="my-field">
-    <input :id :aria-describedby="ariaDescribedby()" :aria-invalid="fieldHasError" />
+    <input :id :aria-describedby="ariaDescribedby()" :aria-invalid="fieldHasError ? 'true' : undefined" />
     <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="false" :input-variant />
   </div>
 </template>
@@ -66,6 +66,8 @@ const { id, errorId, ariaDescribedby } = useAriaDescribedById(props.name, toRef(
   read when the control is focused. Moving focus to the first invalid field on submit is the
   form's job (see `FormWrapper` / pattern forms).
 - Hidden errors are `aria-hidden="true"`; the icon is always `aria-hidden`.
+- The message list keeps `role="list"`, since `list-style: none` makes Safari/VoiceOver drop list
+  semantics.
 - The open/close transition is disabled under `prefers-reduced-motion: reduce`.
 
 ---
@@ -103,3 +105,8 @@ re-declares those on the element itself, so ancestor overrides of them never lan
   Hardcoded font size/weight, padding, list gap and detached gap promoted to public tokens.
 - `aria-hidden` now omitted when visible (was `"false"`); icon marked `aria-hidden`;
   `prefers-reduced-motion` respected; `styleClassPassthrough` now reacts to prop changes.
+
+**2026-10-17** (stress-test pass): added the `StressTest` story and a CanvasSwitcher decorator;
+message text wraps long unbroken strings (`min-inline-size: 0`, `overflow-wrap: anywhere`) and the
+icon no longer shrinks; blank array entries are dropped; the list gets `role="list"`; child rules
+nested inside the root block. No line-clamp token on purpose: a truncated error can't be acted on.

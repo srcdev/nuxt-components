@@ -16,8 +16,8 @@
           <Icon :name="icon" class="input-error-message-icon" aria-hidden="true" />
         </div>
         <div class="input-error-message-text">
-          <ul v-if="isArray" class="input-error-message-list">
-            <li v-for="(message, index) in errorMessage" :key="index" class="input-error-message-list-item">
+          <ul v-if="isArray" class="input-error-message-list" role="list">
+            <li v-for="(message, index) in messages" :key="index" class="input-error-message-list-item">
               {{ message }}
             </li>
           </ul>
@@ -52,6 +52,9 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const isArray = computed(() => Array.isArray(props.errorMessage));
+const messages = computed(() =>
+  Array.isArray(props.errorMessage) ? props.errorMessage.filter((message) => String(message).trim() !== "") : []
+);
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -141,48 +144,51 @@ watch(
         outline-color: transparent;
       }
     }
-  }
 
-  .input-error-message-inner {
-    align-items: center;
-    overflow: hidden;
-  }
+    & .input-error-message-inner {
+      align-items: center;
+      overflow: hidden;
+    }
 
-  .input-error-message-content {
-    display: flex;
-    align-items: center;
-  }
+    & .input-error-message-content {
+      display: flex;
+      align-items: center;
+    }
 
-  .input-error-message-icon-wrapper {
-    display: inline-block;
-    padding-inline-start: var(--_padding-inline);
-  }
+    & .input-error-message-icon-wrapper {
+      display: inline-block;
+      flex-shrink: 0;
+      padding-inline-start: var(--_padding-inline);
+    }
 
-  .input-error-message-icon {
-    color: var(--input-error-icon-color, var(--_text-color));
-    font-size: var(--input-error-icon-size, 1em);
-    transform: translateY(3px);
-  }
+    & .input-error-message-icon {
+      color: var(--input-error-icon-color, var(--_text-color));
+      font-size: var(--input-error-icon-size, 1em);
+      transform: translateY(3px);
+    }
 
-  .input-error-message-text {
-    display: inline-block;
-    flex-grow: 1;
-    font-family: var(--input-error-font-family, var(--font-family));
-    font-size: var(--input-error-font-size, 1.6rem);
-    font-weight: var(--input-error-font-weight, 500);
-    padding-block: var(--input-error-padding-block-start, var(--_padding-block-start))
-      var(--input-error-padding-block-end, 1rem);
-    padding-inline: var(--_padding-inline);
-  }
+    & .input-error-message-text {
+      display: inline-block;
+      flex-grow: 1;
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
+      font-family: var(--input-error-font-family, var(--font-family));
+      font-size: var(--input-error-font-size, 1.6rem);
+      font-weight: var(--input-error-font-weight, 500);
+      padding-block: var(--input-error-padding-block-start, var(--_padding-block-start))
+        var(--input-error-padding-block-end, 1rem);
+      padding-inline: var(--_padding-inline);
+    }
 
-  .input-error-message-list {
-    list-style-type: none;
-    padding-inline-start: 0;
-    margin-block: 0;
-  }
+    & .input-error-message-list {
+      list-style-type: none;
+      padding-inline-start: 0;
+      margin-block: 0;
+    }
 
-  .input-error-message-list-item + .input-error-message-list-item {
-    margin-block-start: var(--input-error-list-gap, 0.6rem);
+    & .input-error-message-list-item + .input-error-message-list-item {
+      margin-block-start: var(--input-error-list-gap, 0.6rem);
+    }
   }
 }
 </style>
