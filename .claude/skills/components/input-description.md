@@ -100,3 +100,8 @@ look, zero the slot margins and space it with the root margins (example in CONSU
   bottom margin collapsed through and won anyway).
 - An empty `descriptionId` no longer renders `id=""`. `styleClassPassthrough` now reacts to prop
   changes.
+
+**2026-10-17** (stress-test pass): `--input-description-line-height` defaults to `1.5` (was
+`var(--step-4)`, equal to the font size, so wrapped lines touched); the root wraps unbroken copy
+(`overflow-wrap: anywhere`). Added the `StressTest` story, a CanvasSwitcher decorator, Docs page
+descriptions and a link to the InputTextField story; the spec restores mocks after each test.

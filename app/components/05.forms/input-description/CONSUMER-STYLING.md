@@ -36,7 +36,7 @@ These match `FormFieldset`'s `--form-fieldset-*` panel tokens.
 | `--input-description-slot-margin-block-end` | `0.8rem` | Space below each slot's wrapper |
 | `--input-description-slot-margin-inline` | `0` | Inline margin of each slot's wrapper |
 | `--input-description-font-size` | `var(--step-4)` | Font size of the `descriptionText` paragraph |
-| `--input-description-line-height` | `var(--step-4)` | Line height of the `descriptionText` paragraph. The default equals the font size, which is tight for wrapping text, so `1.5` is a good override for long descriptions |
+| `--input-description-line-height` | `1.5` | Line height of the `descriptionText` paragraph |
 
 With default (unpadded) panel tokens, the slot margins collapse through the root, so they are what
 spaces the description from the label and control. Beyond these the `descriptionHtml` wrapper
@@ -67,7 +67,7 @@ Every field's description at once, from an app-level stylesheet (e.g. `app/asset
 ```css
 :where(html) {
   --input-description-color: var(--theme-input-placeholder);
-  --input-description-line-height: 1.5;
+  --input-description-font-size: 1.4rem;
 }
 ```
 
@@ -175,3 +175,15 @@ show as uneven space inside the panel. Zero them and space the panel with the ro
 `.input-description` element. It's only reachable when you render `InputDescription` directly in
 a custom field wrapper: the library's own wrappers pass `input-text-description` (no styles
 attached) and don't forward yours. Use a `class` on the wrapper instead (see **One field** above).
+
+---
+
+## Notes
+
+- The root sets `overflow-wrap: anywhere`, so a long URL or unbroken word wraps inside a narrow
+  column. Copy arrives through slots, so there is no line-clamp token: clamp your own slot markup
+  if you need to.
+
+> **Changed 2026-10-17**: `--input-description-line-height` defaults to `1.5` (was `var(--step-4)`,
+> the same as the font size, so wrapped lines touched). If you relied on the tighter spacing, set
+> it back with `--input-description-line-height: var(--step-4)`.

@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
 import InputDescription from "../InputDescription.vue";
@@ -19,6 +19,7 @@ describe("InputDescription", () => {
   afterEach(() => {
     wrapper?.unmount();
     wrapper = undefined;
+    vi.restoreAllMocks();
   });
 
   describe("rendering", () => {

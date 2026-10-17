@@ -1,7 +1,9 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import StorybookComponent from "../InputDescription.vue";
+import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
 import type { InputUiVariant } from "~/types/forms/types.forms";
+import type { MediaCanvas } from "~/types/components";
 
 interface InputDescriptionStoryArgs {
   descriptionId: string;
@@ -52,7 +54,42 @@ export default {
     descriptionText: "We'll only use this to send your booking confirmation.",
     descriptionHtml: "",
   },
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "fullWidthCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; padding: 2rem; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component:
+          "Help text for a form field. Copy goes in the `descriptionText` slot (a paragraph) and the `descriptionHtml` slot (rich markup, rendered first); with neither filled nothing renders. `description-id` becomes the root id, for the control's `aria-describedby`. `field-has-error` and `input-variant` are styling hooks only. Every labelled field renders it from its own description slots: see [InputTextField](?path=/story/components-forms-input-text-inputtextfield--with-description).",
+      },
+    },
+  },
 } as Meta<InputDescriptionStoryArgs>;
+
+// Links in the canvas open in the Storybook manager (target="_top"), not inside the preview iframe.
+const storyNoteStyle = "margin: 0 0 1.6rem; font-size: 1.4rem;";
+const fieldNote = `
+  <p style="${storyNoteStyle}">
+    Every labelled field renders this from its own description slots. See it in a real field in the
+    <a href="/?path=/story/components-forms-input-text-inputtextfield--with-description" target="_top">InputTextField</a> story.
+  </p>
+`;
 
 const Template: StoryFn<InputDescriptionStoryArgs> = (args) => ({
   components: { StorybookComponent },
@@ -64,7 +101,8 @@ const Template: StoryFn<InputDescriptionStoryArgs> = (args) => ({
     return { args, componentArgs };
   },
   template: `
-    <div style="max-width: 48rem; margin: 3.6rem; font-size: 1.6rem;">
+    <div style="max-width: 48rem; font-size: 1.6rem;">
+      ${fieldNote}
       <label for="story-field" style="display: block; font-weight: 700;">Email address</label>
       <StorybookComponent v-bind="componentArgs">
         <template v-if="args.descriptionHtml" #descriptionHtml><span v-html="args.descriptionHtml"></span></template>
@@ -81,16 +119,25 @@ const Template: StoryFn<InputDescriptionStoryArgs> = (args) => ({
 });
 
 export const TextOnly = Template.bind({});
+TextOnly.parameters = {
+  docs: { description: { story: "Plain help text in the `descriptionText` slot." } },
+};
 
 export const HtmlOnly = Template.bind({});
 HtmlOnly.args = {
   descriptionText: "",
   descriptionHtml: "Password must contain:<ul><li>At least 12 characters</li><li>One number</li></ul>",
 };
+HtmlOnly.parameters = {
+  docs: { description: { story: "Rich markup, here a list, in the `descriptionHtml` slot." } },
+};
 
 export const TextAndHtml = Template.bind({});
 TextAndHtml.args = {
   descriptionHtml: "<strong>Tip:</strong> use your work address if you have one.",
+};
+TextAndHtml.parameters = {
+  docs: { description: { story: "Both slots: `descriptionHtml` renders above `descriptionText`." } },
 };
 
 export const Empty = Template.bind({});
@@ -101,6 +148,9 @@ Empty.parameters = {
 
 export const CustomTokens = Template.bind({});
 CustomTokens.args = { styleClassPassthrough: "input-description-story-tokens" };
+CustomTokens.parameters = {
+  docs: { description: { story: "Colour, size and slot spacing set as tokens through a passthrough class." } },
+};
 CustomTokens.decorators = [
   () => ({
     template: `
@@ -109,7 +159,6 @@ CustomTokens.decorators = [
           .input-description-story-tokens {
             --input-description-color: var(--theme-input-placeholder);
             --input-description-font-size: 1.4rem;
-            --input-description-line-height: 1.5;
             --input-description-slot-margin-block-start: 0.2rem;
             --input-description-slot-margin-block-end: 1.2rem;
           }
@@ -147,7 +196,6 @@ Panel.decorators = [
             --input-description-padding-inline: 1.2rem;
             --input-description-slot-margin-block-start: 0;
             --input-description-slot-margin-block-end: 0;
-            --input-description-line-height: 1.5;
           }
           .input-description-story-panel .input-description-html + .input-description-text {
             margin-block-start: 0.4rem;
@@ -158,3 +206,21 @@ Panel.decorators = [
     `,
   }),
 ];
+
+export const StressTest = Template.bind({});
+StressTest.storyName = "Stress Test (Worst-Case Data)";
+StressTest.args = {
+  descriptionText:
+    "📧 Wir verwenden Ihre Adresse ausschließlich für Rückfragen zu Ihrer Bestellung. Datenschutzgrundverordnungskonformitätsbestätigung https://example.com/a/very/long/unbroken/url/for/the/privacy/policy <b>not bold</b> يرجى إدخال بريدك الإلكتروني",
+  descriptionHtml:
+    "<strong>Hinweis:</strong> Elektronischepostadressefürdiebenachrichtigungüberbestellungen <a href=\"https://example.com/a/very/long/unbroken/url/for/the/terms\">https://example.com/a/very/long/unbroken/url/for/the/terms</a>",
+};
+StressTest.parameters = {
+  initialCanvas: "mobileCanvas",
+  docs: {
+    description: {
+      story:
+        "Long German copy, unbroken compound words, long URLs (one as a link), emoji, HTML-like and right-to-left text in both slots. Check at every canvas width: every line wraps inside the dashed outline and the wrapped lines don't touch. Copy arrives through slots, so there is no line-clamp token: clamp your own slot markup if you need to.",
+    },
+  },
+};

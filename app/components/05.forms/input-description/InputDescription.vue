@@ -59,6 +59,7 @@ watch(
     border-radius: var(--input-description-border-radius, 0);
     outline: var(--input-description-outline, 0);
     outline-offset: var(--input-description-outline-offset, 0);
+    overflow-wrap: anywhere;
 
     .input-description-html,
     .input-description-text {
@@ -69,7 +70,7 @@ watch(
 
     .input-description-text {
       font-size: var(--input-description-font-size, var(--step-4));
-      line-height: var(--input-description-line-height, var(--step-4));
+      line-height: var(--input-description-line-height, 1.5);
     }
   }
 }
