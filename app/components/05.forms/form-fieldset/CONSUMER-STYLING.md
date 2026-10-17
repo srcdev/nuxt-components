@@ -35,11 +35,14 @@ behaviour; setting the token now works as expected.
 
 | Selector | When |
 |---|---|
-| `.form-fieldset[aria-invalid="true"]` | `field-has-error` is `true` |
+| `.form-fieldset[aria-invalid="true"]` | `field-has-error` is `true` (the attribute is absent otherwise) |
 | `.form-fieldset[role="radiogroup"]` | Rendered by `MultipleRadiobuttons` (`group-role="radiogroup"`) |
 
 > **Changed 2026-09-26**: the fieldset no longer adds a bare `.error` class in the error state.
 > Target `[aria-invalid="true"]` instead.
+>
+> **Changed 2026-10-17**: a valid fieldset no longer renders `aria-invalid="false"`. Replace any
+> `[aria-invalid="false"]` selector with `:not([aria-invalid])`.
 
 The wrapping components add their own class too (`.single-checkbox-fieldset`,
 `.multiple-checkboxes-fieldset`, `.multiple-radiobuttons-fieldset`), so you can scope overrides
@@ -86,3 +89,10 @@ Set the tokens above on an element you own (a page or section class, or a class 
 
 `:style-class-passthrough` (string or string array) adds classes to the `<fieldset>`.
 
+---
+
+## Notes
+
+- The fieldset sets `min-inline-size: 0`, so a native fieldset's min-content width can't push it
+  past a narrow column, and the legend wraps long unbroken copy (`overflow-wrap: anywhere`).
+  Wrapping the slotted controls is the slot content's job.

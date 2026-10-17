@@ -1,5 +1,8 @@
+import { ref } from "vue";
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import StorybookComponent from "../FormFieldset.vue";
+import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
+import type { MediaCanvas } from "~/types/components";
 
 interface FormFieldsetStoryArgs {
   id: string;
@@ -41,7 +44,44 @@ export default {
     fieldHasError: false,
     styleClassPassthrough: "",
   },
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "fullWidthCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; padding: 2rem; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component:
+          "Shared `<fieldset>` + `<legend>` wrapper for a group of controls. `legend` (or the `legend` slot) names the group, the `content` slot holds the controls, `group-role` switches between the native `group` and `radiogroup`, and `required`/`field-has-error` set `aria-required` (radiogroup only) and `aria-invalid`. Mostly a building block: `SingleCheckbox`, `MultipleCheckboxes` and `MultipleRadiobuttons` render it.",
+      },
+    },
+  },
 } as Meta<FormFieldsetStoryArgs>;
+
+// Links in the canvas open in the Storybook manager (target="_top"), not inside the preview iframe.
+const parentNote = `
+  <p style="font-size: 1.3rem; margin: 0 0 1.6rem;">
+    Rendered by
+    <a href="/?path=/story/components-forms-input-checkbox-singlecheckbox--default" target="_top">SingleCheckbox</a>,
+    <a href="/?path=/story/components-forms-input-checkbox-multiplecheckboxes--default" target="_top">MultipleCheckboxes</a> and
+    <a href="/?path=/story/components-forms-input-radio-multipleradiobuttons--default" target="_top">MultipleRadiobuttons</a>,
+    which add styled options, a description and an error message. Inspect the fieldset to see role and aria-* output.
+  </p>
+`;
 
 const Template: StoryFn<FormFieldsetStoryArgs> = (args) => ({
   components: { StorybookComponent },
@@ -49,7 +89,8 @@ const Template: StoryFn<FormFieldsetStoryArgs> = (args) => ({
     return { args };
   },
   template: `
-    <div style="margin: 3.6rem; max-width: 48rem;">
+    <div>
+      ${parentNote}
       <StorybookComponent
         :id="args.id"
         :name="args.name"
@@ -68,17 +109,40 @@ const Template: StoryFn<FormFieldsetStoryArgs> = (args) => ({
           </label>
         </template>
       </StorybookComponent>
-      <p style="font-size: 1.3rem; margin-top: 1.6rem;">
-        Rendered by SingleCheckbox, MultipleCheckboxes and MultipleRadiobuttons. Inspect the fieldset to see role and aria-* output.
-      </p>
     </div>
   `,
 });
 
 export const Default = Template.bind({});
+Default.parameters = {
+  docs: { description: { story: "A required radio group: `role=\"radiogroup\"` and `aria-required=\"true\"` on the fieldset." } },
+};
 
 export const CheckboxGroup = Template.bind({});
 CheckboxGroup.args = { groupRole: "group", legend: "Interests", required: false };
+CheckboxGroup.parameters = {
+  docs: { description: { story: "`group-role=\"group\"`: no `role` attribute (a fieldset is already a group) and never `aria-required`." } },
+};
 
 export const WithError = Template.bind({});
 WithError.args = { fieldHasError: true };
+WithError.parameters = {
+  docs: { description: { story: "`field-has-error` sets `aria-invalid=\"true\"`. With it off, the attribute is left out entirely." } },
+};
+
+export const StressTest = Template.bind({});
+StressTest.storyName = "Stress Test (Worst-Case Data)";
+StressTest.args = {
+  legend:
+    "📞 Bevorzugtekontaktmethodefürrückfragenzuihrerbestellung https://example.com/a/very/long/unbroken/url <b>not bold</b> طريقة الاتصال",
+  fieldHasError: true,
+};
+StressTest.parameters = {
+  initialCanvas: "mobileCanvas",
+  docs: {
+    description: {
+      story:
+        "Long unbroken German, a URL, emoji, HTML-like and right-to-left copy in the legend, with the error state on. Check at every canvas width: the legend wraps inside the dashed outline, the fieldset never grows past its column (it sets `min-inline-size: 0`, so a native fieldset's min-content width can't push it out), and markup renders as text. Wrapping the slotted controls is the slot content's job.",
+    },
+  },
+};

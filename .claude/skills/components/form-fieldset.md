@@ -21,8 +21,8 @@ ARIA semantics.
 | `:legend` | `string` | `""` | Legend text. The legend renders when this or the `legend` slot is given. |
 | `group-role` | `"group" \| "radiogroup"` | `"group"` | `"group"` renders no `role` attribute (a fieldset's native role is already `group`). `"radiogroup"` sets `role="radiogroup"`: use it for radio buttons only. |
 | `:required` | `boolean` | `false` | Sets `aria-required="true"` **only** when `group-role="radiogroup"`. `aria-required` isn't allowed on `role="group"`, so checkbox groups get nothing; put "(required)" in the legend text instead. |
-| `:field-has-error` | `boolean` | `false` | Sets `aria-invalid` on the fieldset. |
-| `:data-testid` | `string` | `""` | Passed to the fieldset. |
+| `:field-has-error` | `boolean` | `false` | Sets `aria-invalid="true"` on the fieldset; the attribute is absent when `false`. |
+| `:data-testid` | `string` | `""` | Passed to the fieldset; omitted when empty. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the fieldset, via `useStyleClassPassthrough` (reacts to prop changes). |
 
 ## Slots
@@ -54,9 +54,25 @@ content `--form-fieldset-content-margin-block|margin-inline`, legend
 `--form-fieldset-legend-color|font-size|font-weight|line-height|margin-block|margin-inline`. Error state hook:
 `.form-fieldset[aria-invalid="true"]`.
 
+The fieldset sets `min-inline-size: 0` and the legend `overflow-wrap: anywhere`, so neither
+overflows a narrow column. Slotted controls handle their own wrapping.
+
+---
+
+## Storybook
+
+`Components/Forms/Form Fieldset/FormFieldset`: `Default`, `CheckboxGroup`, `WithError`, and
+`StressTest` (hostile legend copy with the error state on). Stories use the `CanvasSwitcher`
+decorator and link to the three components that render FormFieldset.
+
 ---
 
 ## History
+
+**2026-10-17**: StressTest story, CanvasSwitcher and Docs-page descriptions added. Fixed: a
+valid fieldset rendered `aria-invalid="false"`; an empty `dataTestid` rendered `data-testid=""`;
+the fieldset had no `min-inline-size: 0` (each wrapping component set it on its own class), and
+the legend didn't wrap unbroken copy.
 
 **Migrated 2026-09-26** (0/5 → full compliance):
 

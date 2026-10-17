@@ -3,11 +3,11 @@
     :id="id"
     :role="groupRole === 'radiogroup' ? 'radiogroup' : undefined"
     :aria-required="groupRole === 'radiogroup' && required ? 'true' : undefined"
-    :aria-invalid="fieldHasError"
+    :aria-invalid="fieldHasError ? 'true' : undefined"
     :name="name"
     class="form-fieldset"
     :class="elementClasses"
-    :data-testid="dataTestid"
+    :data-testid="dataTestid || undefined"
   >
     <legend v-if="legend || slots.legend" class="form-fieldset-legend">
       <slot name="legend">{{ legend }}</slot>
@@ -54,6 +54,7 @@ watch(
 <style lang="css">
 @layer components {
   .form-fieldset {
+    min-inline-size: 0;
     margin-block: var(--form-fieldset-margin-block, 0);
     margin-inline: var(--form-fieldset-margin-inline, 0);
     padding-block: var(--form-fieldset-padding-block, 0);
@@ -65,6 +66,7 @@ watch(
 
     .form-fieldset-legend {
       color: var(--form-fieldset-legend-color, inherit);
+      overflow-wrap: anywhere;
       margin-block: var(--form-fieldset-legend-margin-block, 0.8rem);
       margin-inline: var(--form-fieldset-legend-margin-inline, 0);
       font-size: var(--form-fieldset-legend-font-size, var(--step-5));

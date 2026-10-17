@@ -22,6 +22,11 @@ describe("FormFieldset", () => {
     expect(fieldset.attributes("data-testid")).toBe("fieldset-test");
   });
 
+  it("omits data-testid when none is given", async () => {
+    const wrapper = await mountSuspended(FormFieldset, { props: baseProps });
+    expect(wrapper.find("fieldset").attributes("data-testid")).toBeUndefined();
+  });
+
   it("renders the content slot", async () => {
     const wrapper = await mountSuspended(FormFieldset, {
       props: baseProps,
@@ -77,6 +82,11 @@ describe("FormFieldset", () => {
     it("sets aria-invalid from fieldHasError", async () => {
       const wrapper = await mountSuspended(FormFieldset, { props: { ...baseProps, fieldHasError: true } });
       expect(wrapper.find("fieldset").attributes("aria-invalid")).toBe("true");
+    });
+
+    it("omits aria-invalid when fieldHasError is false", async () => {
+      const wrapper = await mountSuspended(FormFieldset, { props: baseProps });
+      expect(wrapper.find("fieldset").attributes("aria-invalid")).toBeUndefined();
     });
 
     it("does not add a bare error class", async () => {
