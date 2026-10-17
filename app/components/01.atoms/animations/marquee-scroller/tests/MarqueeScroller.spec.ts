@@ -1,16 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
+import type { VueWrapper } from "@vue/test-utils";
 import MarqueeScroller from "../MarqueeScroller.vue";
 
 const stubMatchMedia = (prefersReducedMotion: boolean) => {
-  vi.stubGlobal(
-    "matchMedia",
-    vi.fn().mockReturnValue({
-      matches: prefersReducedMotion,
-      addEventListener: vi.fn(),
-    })
-  );
+  const query = { matches: prefersReducedMotion, addEventListener: vi.fn(), removeEventListener: vi.fn() };
+  vi.stubGlobal("matchMedia", vi.fn().mockReturnValue(query));
+  return query;
 };
 
 // jsdom reports 0 for offsetWidth/scrollWidth — stub them per-element by class so
@@ -28,7 +25,7 @@ const stubDimensions = ({ containerWidth, groupScrollWidth }: { containerWidth: 
   Object.defineProperty(HTMLElement.prototype, "scrollWidth", {
     configurable: true,
     get() {
-      return this.classList.contains("marquee-group") ? groupScrollWidth : 0;
+      return this.classList.contains("marquee-scroller-group") ? groupScrollWidth : 0;
     },
   });
 };
@@ -43,36 +40,44 @@ const marqueeData = [
   { id: 2, content: "logo-b" },
 ];
 
+const isPaused = (wrapper: VueWrapper) => wrapper.attributes("data-paused") !== undefined;
+const control = (wrapper: VueWrapper) => wrapper.find(".marquee-scroller-control");
+
 describe("MarqueeScroller", () => {
+  let wrapper: VueWrapper | undefined;
+
   beforeEach(() => {
     stubMatchMedia(false);
   });
 
   afterEach(() => {
+    wrapper?.unmount();
+    wrapper = undefined;
     restoreDimensions();
+    vi.restoreAllMocks();
   });
 
   // ─── Mount ───────────────────────────────────────────────────────────────
 
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
+    wrapper = await mountSuspended(MarqueeScroller);
     expect(wrapper.vm).toBeTruthy();
   });
 
   it("renders after mount (displayComponent flips true in onMounted)", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
+    wrapper = await mountSuspended(MarqueeScroller);
     expect(wrapper.find(".marquee-scroller").exists()).toBe(true);
   });
 
   // ─── Snapshots ───────────────────────────────────────────────────────────
 
   it("renders correct HTML structure (default props)", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
+    wrapper = await mountSuspended(MarqueeScroller);
     expect(wrapper.html()).toMatchSnapshot();
   });
 
   it("renders correct HTML structure (all props set)", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
+    wrapper = await mountSuspended(MarqueeScroller, {
       props: {
         animationRuntime: "20s",
         reverse: true,
@@ -89,7 +94,7 @@ describe("MarqueeScroller", () => {
   // ─── marqueeData / slots ─────────────────────────────────────────────────
 
   it("renders each marqueeData item twice (main track + duplicate for looping)", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
+    wrapper = await mountSuspended(MarqueeScroller, {
       props: { marqueeData },
       slots: {
         "1": "<span class='logo-a'>A</span>",
@@ -101,116 +106,135 @@ describe("MarqueeScroller", () => {
   });
 
   it("renders no items when marqueeData is empty", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
-    expect(wrapper.findAll(".item")).toHaveLength(0);
+    wrapper = await mountSuspended(MarqueeScroller);
+    expect(wrapper.findAll(".marquee-scroller-item")).toHaveLength(0);
+  });
+
+  it("makes the duplicate group inert and aria-hidden so its copies can't be focused", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, { props: { marqueeData } });
+    const groups = wrapper.findAll(".marquee-scroller-group");
+    expect(groups[0]!.attributes("inert")).toBeUndefined();
+    expect(groups[1]!.attributes("inert")).toBeDefined();
+    expect(groups[1]!.attributes("aria-hidden")).toBe("true");
+  });
+
+  it("uses only component-prefixed structural class names", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, { props: { marqueeData, showControls: true } });
+    for (const generic of [".item", ".control-btn", ".marquee-track", ".marquee-group"]) {
+      expect(wrapper.find(generic).exists()).toBe(false);
+    }
   });
 
   // ─── reverse ─────────────────────────────────────────────────────────────
 
-  it("does not apply the reverse class by default", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
-    expect(wrapper.classes()).not.toContain("reverse");
+  it("does not set data-reverse by default", async () => {
+    wrapper = await mountSuspended(MarqueeScroller);
+    expect(wrapper.attributes("data-reverse")).toBeUndefined();
   });
 
-  it("applies the reverse class when reverse is true", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
-      props: { reverse: true },
-    });
-    expect(wrapper.classes()).toContain("reverse");
+  it("sets data-reverse when reverse is true, with no bare state classes", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, { props: { reverse: true } });
+    expect(wrapper.attributes("data-reverse")).toBe("");
+    expect(wrapper.classes()).not.toContain("reverse");
   });
 
   // ─── Accessibility attributes ────────────────────────────────────────────
 
   it("defaults aria-label to 'Scrolling content'", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
+    wrapper = await mountSuspended(MarqueeScroller);
     expect(wrapper.attributes("aria-label")).toBe("Scrolling content");
   });
 
   it("uses a custom ariaLabel when provided", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
-      props: { ariaLabel: "Client logos" },
-    });
+    wrapper = await mountSuspended(MarqueeScroller, { props: { ariaLabel: "Client logos" } });
     expect(wrapper.attributes("aria-label")).toBe("Client logos");
   });
 
   it("uses default screen-reader instructions when ariaDescription is not set", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
-    expect(wrapper.find(".sr-only").text()).toContain("Use spacebar to pause or play");
+    wrapper = await mountSuspended(MarqueeScroller);
+    expect(wrapper.find(".marquee-scroller-description").text()).toContain("Use spacebar to pause or play");
   });
 
   it("uses a custom ariaDescription when provided", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
-      props: { ariaDescription: "Custom instructions" },
-    });
-    expect(wrapper.find(".sr-only").text()).toBe("Custom instructions");
+    wrapper = await mountSuspended(MarqueeScroller, { props: { ariaDescription: "Custom instructions" } });
+    expect(wrapper.find(".marquee-scroller-description").text()).toBe("Custom instructions");
   });
 
-  it("sets aria-live to off while playing", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
+  it("sets aria-live to off and hides the moving track while playing", async () => {
+    wrapper = await mountSuspended(MarqueeScroller);
     expect(wrapper.attributes("aria-live")).toBe("off");
+    expect(wrapper.find(".marquee-scroller-track").attributes("aria-hidden")).toBe("true");
+  });
+
+  it("exposes the track (no aria-hidden attribute) once paused", async () => {
+    wrapper = await mountSuspended(MarqueeScroller);
+    await wrapper.trigger("keydown", { key: " " });
+    expect(wrapper.find(".marquee-scroller-track").attributes("aria-hidden")).toBeUndefined();
   });
 
   // ─── Controls ────────────────────────────────────────────────────────────
 
   it("does not render the control button by default", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
-    expect(wrapper.find(".control-btn").exists()).toBe(false);
+    wrapper = await mountSuspended(MarqueeScroller);
+    expect(control(wrapper).exists()).toBe(false);
   });
 
-  it("renders the control button when showControls is true", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
-      props: { showControls: true },
-    });
-    expect(wrapper.find(".control-btn").exists()).toBe(true);
+  it("renders the control as an InputButton when showControls is true", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, { props: { showControls: true } });
+    expect(control(wrapper).exists()).toBe(true);
+    expect(control(wrapper).classes()).toContain("input-button");
+    expect(control(wrapper).attributes("type")).toBe("button");
   });
 
   it("toggles paused state and aria-live when the control button is clicked", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
-      props: { showControls: true },
-    });
-    await wrapper.find(".control-btn").trigger("click");
-    expect(wrapper.classes()).toContain("paused");
+    wrapper = await mountSuspended(MarqueeScroller, { props: { showControls: true } });
+    await control(wrapper).trigger("click");
+    expect(isPaused(wrapper)).toBe(true);
     expect(wrapper.attributes("aria-live")).toBe("polite");
-    expect(wrapper.find(".control-btn").attributes("aria-label")).toBe("Play animation");
+    expect(control(wrapper).find(".input-button-text").text()).toBe("Play animation");
+  });
+
+  it("does not auto-pause when focus lands on the control button, so one click pauses", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, { props: { showControls: true } });
+    await control(wrapper).trigger("focusin");
+    expect(isPaused(wrapper)).toBe(false);
+    await control(wrapper).trigger("click");
+    expect(isPaused(wrapper)).toBe(true);
   });
 
   // ─── Control button icon / label customisation ──────────────────────────
 
-  it("renders the default play icon while playing", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
-      props: { showControls: true },
-    });
-    expect(wrapper.find(".control-btn").html()).toContain("mdi:pause");
+  it("renders the default pause icon while playing", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, { props: { showControls: true } });
+    expect(control(wrapper).html()).toContain("mdi:pause");
   });
 
   it("renders the default play icon once paused", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
-      props: { showControls: true },
-    });
-    await wrapper.find(".control-btn").trigger("click");
-    expect(wrapper.find(".control-btn").html()).toContain("mdi:play");
+    wrapper = await mountSuspended(MarqueeScroller, { props: { showControls: true } });
+    await control(wrapper).trigger("click");
+    expect(control(wrapper).html()).toContain("mdi:play");
   });
 
   it("renders a custom playIcon/pauseIcon", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
+    wrapper = await mountSuspended(MarqueeScroller, {
       props: { showControls: true, playIcon: "mdi:play-circle", pauseIcon: "mdi:pause-circle" },
     });
-    expect(wrapper.find(".control-btn").html()).toContain("mdi:pause-circle");
-    await wrapper.find(".control-btn").trigger("click");
-    expect(wrapper.find(".control-btn").html()).toContain("mdi:play-circle");
+    expect(control(wrapper).html()).toContain("mdi:pause-circle");
+    await control(wrapper).trigger("click");
+    expect(control(wrapper).html()).toContain("mdi:play-circle");
   });
 
-  it("uses custom playLabel/pauseLabel for the control button's aria-label", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
+  it("uses custom playLabel/pauseLabel as the control button's accessible text", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, {
       props: { showControls: true, playLabel: "Reproduire", pauseLabel: "Suspendre" },
     });
-    expect(wrapper.find(".control-btn").attributes("aria-label")).toBe("Suspendre");
-    await wrapper.find(".control-btn").trigger("click");
-    expect(wrapper.find(".control-btn").attributes("aria-label")).toBe("Reproduire");
+    expect(control(wrapper).find(".input-button-text").text()).toBe("Suspendre");
+    await control(wrapper).trigger("click");
+    expect(control(wrapper).find(".input-button-text").text()).toBe("Reproduire");
   });
 
   it("replaces the toggle icon via the toggle-icon slot", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
+    wrapper = await mountSuspended(MarqueeScroller, {
       props: { showControls: true },
       slots: { "toggle-icon": "<span class='custom-icon'>custom</span>" },
     });
@@ -218,79 +242,132 @@ describe("MarqueeScroller", () => {
   });
 
   it("passes isPaused to the toggle-icon slot", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
+    wrapper = await mountSuspended(MarqueeScroller, {
       props: { showControls: true },
       slots: { "toggle-icon": "<template #toggle-icon=\"{ isPaused }\"><span class='state'>{{ isPaused }}</span></template>" },
     });
     expect(wrapper.find(".state").text()).toBe("false");
-    await wrapper.find(".control-btn").trigger("click");
+    await control(wrapper).trigger("click");
     expect(wrapper.find(".state").text()).toBe("true");
   });
 
   // ─── Keyboard interaction ────────────────────────────────────────────────
 
-  it("toggles pause on spacebar keydown", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
+  it("toggles pause on spacebar keydown on the region", async () => {
+    wrapper = await mountSuspended(MarqueeScroller);
     await wrapper.trigger("keydown", { key: " " });
-    expect(wrapper.classes()).toContain("paused");
+    expect(isPaused(wrapper)).toBe(true);
     await wrapper.trigger("keydown", { key: " " });
-    expect(wrapper.classes()).not.toContain("paused");
+    expect(isPaused(wrapper)).toBe(false);
+  });
+
+  it("ignores spacebar bubbling from inside the region (the control button handles its own)", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, { props: { showControls: true } });
+    await control(wrapper).trigger("keydown", { key: " " });
+    expect(isPaused(wrapper)).toBe(false);
   });
 
   it("does not react to arrow keys (no manual-stepping behaviour is implemented)", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
+    wrapper = await mountSuspended(MarqueeScroller);
     await wrapper.trigger("keydown", { key: "ArrowLeft" });
     await wrapper.trigger("keydown", { key: "ArrowRight" });
-    expect(wrapper.classes()).not.toContain("paused");
+    expect(isPaused(wrapper)).toBe(false);
   });
 
-  // ─── Focus / blur ────────────────────────────────────────────────────────
+  // ─── Focus ───────────────────────────────────────────────────────────────
 
-  it("pauses on focus when respectReducedMotion is true (default)", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
-    await wrapper.trigger("focus");
-    expect(wrapper.classes()).toContain("paused");
+  it("pauses when focus enters the region", async () => {
+    wrapper = await mountSuspended(MarqueeScroller);
+    await wrapper.trigger("focusin");
+    expect(isPaused(wrapper)).toBe(true);
   });
 
-  it("resumes on blur when the user does not prefer reduced motion", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller);
-    await wrapper.trigger("focus");
-    await wrapper.trigger("blur");
-    expect(wrapper.classes()).not.toContain("paused");
+  it("pauses on focus even when respectReducedMotion is false", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, { props: { respectReducedMotion: false } });
+    await wrapper.trigger("focusin");
+    expect(isPaused(wrapper)).toBe(true);
   });
 
-  it("does not pause on focus when respectReducedMotion is false", async () => {
-    const wrapper = await mountSuspended(MarqueeScroller, {
-      props: { respectReducedMotion: false },
+  it("pauses and exposes the track when focus lands on content inside an item", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, {
+      props: { marqueeData },
+      slots: { "1": "<a class='logo-link' href='#a'>A</a>", "2": "<span>B</span>" },
     });
-    await wrapper.trigger("focus");
-    expect(wrapper.classes()).not.toContain("paused");
+    await wrapper.find(".logo-link").trigger("focusin");
+    expect(isPaused(wrapper)).toBe(true);
+    expect(wrapper.find(".marquee-scroller-track").attributes("aria-hidden")).toBeUndefined();
+  });
+
+  it("resumes when focus leaves the region if focus caused the pause", async () => {
+    wrapper = await mountSuspended(MarqueeScroller);
+    await wrapper.trigger("focusin");
+    await wrapper.trigger("focusout", { relatedTarget: null });
+    expect(isPaused(wrapper)).toBe(false);
+  });
+
+  it("stays paused while focus moves between elements inside the region", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, { props: { showControls: true } });
+    await wrapper.trigger("focusin");
+    await wrapper.trigger("focusout", { relatedTarget: control(wrapper).element });
+    expect(isPaused(wrapper)).toBe(true);
+  });
+
+  it("keeps a pause the user chose after focus leaves", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, { props: { showControls: true } });
+    await control(wrapper).trigger("click");
+    await control(wrapper).trigger("focusout", { relatedTarget: null });
+    expect(isPaused(wrapper)).toBe(true);
   });
 
   // ─── Reduced motion ──────────────────────────────────────────────────────
 
-  it("auto-pauses and applies reduced-motion class when the user prefers reduced motion", async () => {
+  it("auto-pauses and sets data-reduced-motion when the user prefers reduced motion", async () => {
     stubMatchMedia(true);
-    const wrapper = await mountSuspended(MarqueeScroller);
-    expect(wrapper.classes()).toContain("paused");
-    expect(wrapper.classes()).toContain("reduced-motion");
+    wrapper = await mountSuspended(MarqueeScroller);
+    expect(isPaused(wrapper)).toBe(true);
+    expect(wrapper.attributes("data-reduced-motion")).toBe("");
+  });
+
+  it("stays paused after focus leaves when the user prefers reduced motion", async () => {
+    stubMatchMedia(true);
+    wrapper = await mountSuspended(MarqueeScroller);
+    await wrapper.trigger("focusin");
+    await wrapper.trigger("focusout", { relatedTarget: null });
+    expect(isPaused(wrapper)).toBe(true);
   });
 
   it("does not check matchMedia when respectReducedMotion is false", async () => {
-    stubMatchMedia(false);
-    const matchMediaSpy = vi.fn(() => ({ matches: false, addEventListener: vi.fn() }));
+    const matchMediaSpy = vi.fn(() => ({ matches: false, addEventListener: vi.fn(), removeEventListener: vi.fn() }));
     vi.stubGlobal("matchMedia", matchMediaSpy);
-    await mountSuspended(MarqueeScroller, {
-      props: { respectReducedMotion: false },
-    });
+    wrapper = await mountSuspended(MarqueeScroller, { props: { respectReducedMotion: false } });
     expect(matchMediaSpy).not.toHaveBeenCalled();
+  });
+
+  it("removes its reduced-motion listener on unmount", async () => {
+    const query = stubMatchMedia(false);
+    wrapper = await mountSuspended(MarqueeScroller);
+    const handler = query.addEventListener.mock.calls[0]![1];
+    wrapper.unmount();
+    wrapper = undefined;
+    expect(query.removeEventListener).toHaveBeenCalledWith("change", handler);
+  });
+
+  // ─── styleClassPassthrough ───────────────────────────────────────────────
+
+  it("applies styleClassPassthrough to the root and updates on change", async () => {
+    wrapper = await mountSuspended(MarqueeScroller, { props: { styleClassPassthrough: ["one"] } });
+    expect(wrapper.classes()).toContain("one");
+    await wrapper.setProps({ styleClassPassthrough: "two three" });
+    await nextTick();
+    expect(wrapper.classes()).toEqual(expect.arrayContaining(["marquee-scroller", "two", "three"]));
+    expect(wrapper.classes()).not.toContain("one");
   });
 
   // ─── Repeating marqueeData to fill a wide container ─────────────────────
 
   it("repeats marqueeData enough times so one group's width covers a wide container", async () => {
     stubDimensions({ containerWidth: 500, groupScrollWidth: 100 });
-    const wrapper = await mountSuspended(MarqueeScroller, {
+    wrapper = await mountSuspended(MarqueeScroller, {
       props: { marqueeData },
       slots: { "1": "<span class='logo-a'></span>", "2": "<span class='logo-b'></span>" },
     });
@@ -303,7 +380,7 @@ describe("MarqueeScroller", () => {
 
   it("does not add extra copies when a single copy already covers the container", async () => {
     stubDimensions({ containerWidth: 50, groupScrollWidth: 200 });
-    const wrapper = await mountSuspended(MarqueeScroller, {
+    wrapper = await mountSuspended(MarqueeScroller, {
       props: { marqueeData },
       slots: { "1": "<span class='logo-a'></span>", "2": "<span class='logo-b'></span>" },
     });
@@ -311,5 +388,16 @@ describe("MarqueeScroller", () => {
     await nextTick();
     expect(wrapper.findAll(".logo-a")).toHaveLength(2);
     expect(wrapper.findAll(".logo-b")).toHaveLength(2);
+  });
+
+  it("caps the repeat count at 50 copies for tiny items in a huge container", async () => {
+    stubDimensions({ containerWidth: 100000, groupScrollWidth: 2 });
+    wrapper = await mountSuspended(MarqueeScroller, {
+      props: { marqueeData },
+      slots: { "1": "<span class='logo-a'></span>", "2": "<span class='logo-b'></span>" },
+    });
+    await nextTick();
+    await nextTick();
+    expect(wrapper.findAll(".logo-a")).toHaveLength(100);
   });
 });

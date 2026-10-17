@@ -1,16 +1,20 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`MarqueeScroller > renders correct HTML structure (all props set) 1`] = `
-"<div class="marquee-scroller reverse" role="region" aria-label="Client logos" aria-live="off" tabindex="0">
-  <div class="sr-only">Custom instructions</div><button class="control-btn" aria-label="Pause animation" type="button"><span class="iconify i-mdi:pause" aria-hidden="true"></span></button>
-  <div class="marquee-track" aria-hidden="true">
-    <div class="marquee-group">
-      <div class="item"></div>
-      <div class="item"></div>
+"<div class="marquee-scroller" data-reverse="" role="region" aria-label="Client logos" aria-live="off" tabindex="0">
+  <div class="marquee-scroller-description">Custom instructions</div><button type="button" data-testid="input-button" data-theme="default" data-variant="inline" data-icon-only="" class="input-button marquee-scroller-control">
+    <!--v-if-->
+    <!--v-if--><span class="input-button-text sr-only">Pause animation</span>
+    <!--v-if--><span class="input-button-icon" data-slot="icon-only"><span class="iconify i-mdi:pause" aria-hidden="true"></span></span>
+  </button>
+  <div class="marquee-scroller-track" aria-hidden="true">
+    <div class="marquee-scroller-group">
+      <div class="marquee-scroller-item"></div>
+      <div class="marquee-scroller-item"></div>
     </div>
-    <div class="marquee-group" aria-hidden="true">
-      <div class="item"></div>
-      <div class="item"></div>
+    <div class="marquee-scroller-group" aria-hidden="true" inert="">
+      <div class="marquee-scroller-item"></div>
+      <div class="marquee-scroller-item"></div>
     </div>
   </div>
 </div>"
@@ -18,11 +22,11 @@ exports[`MarqueeScroller > renders correct HTML structure (all props set) 1`] = 
 
 exports[`MarqueeScroller > renders correct HTML structure (default props) 1`] = `
 "<div class="marquee-scroller" role="region" aria-label="Scrolling content" aria-live="off" tabindex="0">
-  <div class="sr-only">Use spacebar to pause or play the animation.</div>
+  <div class="marquee-scroller-description">Use spacebar to pause or play the animation.</div>
   <!--v-if-->
-  <div class="marquee-track" aria-hidden="true">
-    <div class="marquee-group"></div>
-    <div class="marquee-group" aria-hidden="true"></div>
+  <div class="marquee-scroller-track" aria-hidden="true">
+    <div class="marquee-scroller-group"></div>
+    <div class="marquee-scroller-group" aria-hidden="true" inert=""></div>
   </div>
 </div>"
 `;

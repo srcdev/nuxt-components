@@ -204,6 +204,11 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
      `aria-hidden` (`ToggleSwitch`, 2026-10-16).
    - Live-updating or auto-advancing content (carousels, marquees, auto-dismissing toasts) has a
      way to pause it, per WCAG 2.2.2 — a visible control, or pause-on-hover/focus at minimum.
+   - Pause-on-focus listens for `focusin`/`focusout` on the root (with a `relatedTarget`
+     containment check), not `focus`/`blur`, which don't bubble: focusable content inside an
+     `aria-hidden` moving track otherwise gets focus while still hidden and moving. A looping
+     duplicate copy gets `inert`, and a focus-caused pause must not undo a pause the user chose
+     (`MarqueeScroller`, 2026-10-18).
    - `prefers-reduced-motion` is respected for any animation that isn't purely decorative.
    - A mode that hides a native control's own indicator (a range thumb, a checkbox box, a caret)
      draws its own visible state for the current value, and its interactive area isn't shrunk to a
