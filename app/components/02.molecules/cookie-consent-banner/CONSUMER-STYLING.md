@@ -9,7 +9,7 @@ adds: position, motion and the two buttons.
 > **Changed 2026-10-15**: the closed state class `.closed` is now `.cookie-consent-banner-closed`,
 > and the buttons are `InputButton`s (`variant="inline"`, so the banner's tokens still style them):
 > each button is `.cookie-consent-banner-accept.input-button` / `.cookie-consent-banner-reject.input-button`
-> with the label in an inner `.button-text`. The button tokens below are unchanged.
+> with the label in an inner `.input-button-text` (`.button-text` until 2026-10-17). The button tokens below are unchanged.
 >
 > **Changed 2026-09-27**: rebuilt on `AlertContent`. The banner's own panel tokens
 > (`--cookie-consent-banner-padding`, `-gap`, `-border-radius`, `-border`, `-accent-border-width`,
@@ -47,7 +47,7 @@ adds: position, motion and the two buttons.
 
 The gap between the buttons and their alignment (right by default) are `AlertContent`'s
 `--alert-content-actions-gap` and `--alert-content-actions-justify`. Long labels wrap inside the
-buttons (`InputButton`'s `.button-text`), and the buttons wrap onto their own lines when the row is full.
+buttons (`InputButton`'s `.input-button-text`), and the buttons wrap onto their own lines when the row is full.
 The label keeps the banner's font size and case: `InputButton`'s `--button-font-size` and
 `--button-text-transform` don't apply here.
 

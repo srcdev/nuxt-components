@@ -199,14 +199,14 @@ onUnmounted(() => {
         flex-shrink: 0;
       }
 
-      .button-text {
+      & .input-button-text {
         font-size: inherit;
         text-transform: none;
       }
     }
 
     @container input-copy (width < 48rem) {
-      .input-copy__button.input-button .button-text {
+      .input-copy__button.input-button .input-button-text {
         display: none;
       }
     }

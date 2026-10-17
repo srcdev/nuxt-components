@@ -201,7 +201,7 @@ describe("ServicesCardGrid button icon", () => {
     const wrapper = await mountSuspended(ServicesCardGrid, {
       props: { servicesData: [makeService("untitled", "")] },
     });
-    expect(wrapper.find(".button-text").text()).toBe("Enquire about");
-    expect(wrapper.find(".button-text").element.textContent).toBe("Enquire about");
+    expect(wrapper.find(".input-button-text").text()).toBe("Enquire about");
+    expect(wrapper.find(".input-button-text").element.textContent).toBe("Enquire about");
   });
 });

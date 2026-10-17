@@ -1,13 +1,16 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import StorybookComponent from "../InputButton.vue";
 import InputText from "../../input-text/InputText.vue";
+import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
+import type { MediaCanvas } from "~/types/components";
 
 interface InputButtonStoryArgs {
   type: "submit" | "button" | "reset";
   theme: "default" | "success" | "error" | "warning";
   variant: "primary" | "secondary" | "tertiary" | "inline";
   buttonText: string;
+  isPill: boolean;
   styleClassPassthrough: string[];
   isPending: boolean;
   hasPendingEffect: boolean;
@@ -75,7 +78,7 @@ export default {
     variant: {
       control: { type: "select" },
       options: ["primary", "secondary", "tertiary", "inline"],
-      description: "Button variant/style",
+      description: "primary: filled. secondary: outlined. tertiary: text-only. inline: no colours, for wrapper components that style the button themselves",
       table: {
         category: "Styling",
       },
@@ -201,7 +204,7 @@ export default {
     isPending: false,
     hasPendingEffect: false,
     readonly: false,
-    isPill: false, // Ensure isPill is present and defaulted
+    isPill: false,
     useLeftSlot: false,
     useRightSlot: false,
     useIconOnlySlot: false,
@@ -215,7 +218,45 @@ export default {
     rightIconName: "mdi:arrow-right",
     iconOnlyName: "mdi:flash",
   },
-} as Meta<typeof StorybookComponent>;
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "The library's button. Renders a `<button>`, or a link when `href` is set (`NuxtLink` for a `/` path unless `external`). `variant` (primary, secondary, tertiary, inline) and `theme` pick the colours, `is-pill` rounds it, `readonly` dims it and blocks clicks, and `is-pending` with `has-pending-effect` animates a border while work runs. Label copy is `button-text`; the `left`/`right` slots add icons beside it, and `iconOnly` replaces it (the text stays as screen-reader text). The Slots and Icons controls are story-only. It's also the action button inside [InputCopy](?path=/story/molecules-input-copy--default), [CookieConsentBanner](?path=/story/molecules-cookieconsentbanner--default) and the step buttons of [InputNumberField](?path=/story/components-forms-input-number-inputnumberfield--default).",
+      },
+    },
+  },
+} as Meta<InputButtonStoryArgs>;
+
+// Links in the canvas open in the Storybook manager (target="_top"), not inside the preview iframe.
+const storyNoteStyle = "margin: 0; font-size: 1.4rem;";
+const usedByNote = `
+  <p style="${storyNoteStyle}">
+    Also the action button inside
+    <a href="/?path=/story/molecules-input-copy--default" target="_top">InputCopy</a>,
+    <a href="/?path=/story/molecules-cookieconsentbanner--default" target="_top">CookieConsentBanner</a>
+    (variant inline, styled by the banner's tokens) and the step buttons of
+    <a href="/?path=/story/components-forms-input-number-inputnumberfield--default" target="_top">InputNumberField</a>.
+  </p>
+`;
+
+const storyOnlyArgs = [
+  "useLeftSlot",
+  "useRightSlot",
+  "useIconOnlySlot",
+  "leftSlotContent",
+  "rightSlotContent",
+  "iconOnlyContent",
+  "leftIconName",
+  "rightIconName",
+  "iconOnlyName",
+  "useLeftIcon",
+  "useRightIcon",
+  "useIconOnly",
+] as const;
+
+const stripStoryArgs = (args: InputButtonStoryArgs) =>
+  Object.fromEntries(Object.entries(args).filter(([key]) => !(storyOnlyArgs as readonly string[]).includes(key)));
 
 const Template: StoryFn<InputButtonStoryArgs> = (args) => ({
   components: { StorybookComponent },
@@ -228,14 +269,18 @@ const Template: StoryFn<InputButtonStoryArgs> = (args) => ({
       }
     };
 
+    const componentArgs = computed(() => stripStoryArgs(args));
+
     return {
       args,
+      componentArgs,
       clickCount,
       handleClick,
     };
   },
   template: `
-    <div style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start;margin: 36px;">
+    <div style="display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; margin: 3.6rem;">
+      ${usedByNote}
       <!-- :key forces a remount when any slot-visibility arg changes. Verified the args
            themselves ARE reactive here (a plain {{ args.useLeftSlot }} interpolation updates
            live on toggle) — the bug is narrower: Vue's compiled-at-runtime string template
@@ -244,10 +289,11 @@ const Template: StoryFn<InputButtonStoryArgs> = (args) => ({
            Toggling a control changed the fallthrough attribute (confirmed via useleftslot="true"
            in the rendered DOM) but never actually added/removed the slot content until a hard
            refresh. Remounting sidesteps whatever the underlying slot-stability quirk is, rather
-           than chasing it further. -->
+           than chasing it further. The story-only args are stripped before v-bind, so they no
+           longer land on the button as attributes. -->
       <StorybookComponent
         :key="[args.useLeftSlot, args.useLeftIcon, args.useRightSlot, args.useRightIcon, args.useIconOnlySlot, args.useIconOnly].join(',')"
-        v-bind="args"
+        v-bind="componentArgs"
         @click="handleClick"
       >
         <template v-if="args.useLeftSlot || args.useLeftIcon" #left>
@@ -276,6 +322,9 @@ Default.args = {
   useLeftSlot: false,
   useRightSlot: false,
 };
+Default.parameters = {
+  docs: { description: { story: "Text only. Every prop is live in Controls, including the pending, pill and readonly states." } },
+};
 
 export const WithBothEmojiIcons = Template.bind({});
 WithBothEmojiIcons.args = {
@@ -284,6 +333,9 @@ WithBothEmojiIcons.args = {
   useRightSlot: true,
   leftSlotContent: "💸",
   rightSlotContent: "✅",
+};
+WithBothEmojiIcons.parameters = {
+  docs: { description: { story: "Plain content in the `left` and `right` slots." } },
 };
 
 export const WithBothNuxtIconComponents = Template.bind({});
@@ -294,6 +346,9 @@ WithBothNuxtIconComponents.args = {
   leftIconName: "mdi:arrow-left",
   rightIconName: "mdi:arrow-right",
 };
+WithBothNuxtIconComponents.parameters = {
+  docs: { description: { story: "`<Icon class=\"icon\">` in both slots, sized by `--input-icon-size`." } },
+};
 
 export const EmojiIconOnly = Template.bind({});
 EmojiIconOnly.args = {
@@ -301,12 +356,18 @@ EmojiIconOnly.args = {
   useIconOnlySlot: true,
   iconOnlyContent: "⚡",
 };
+EmojiIconOnly.parameters = {
+  docs: { description: { story: "The `iconOnly` slot makes the button square (`data-icon-only`) and keeps `button-text` as screen-reader text." } },
+};
 
 export const NuxtIconOnlyComponent = Template.bind({});
 NuxtIconOnlyComponent.args = {
   buttonText: "Nuxt Icon Only Button",
   useIconOnly: true,
   iconOnlyName: "mdi:chevron-right-circle-outline",
+};
+NuxtIconOnlyComponent.parameters = {
+  docs: { description: { story: "Icon-only with an `<Icon>`; the accessible name still comes from `button-text`." } },
 };
 
 // Composition check, not a props demo: confirms InputButton's --button-min-height (defaults
@@ -334,4 +395,80 @@ const InlineTemplate: StoryFn = () => ({
 export const InlineWithTextInput = InlineTemplate.bind({});
 
 // Fixed showcase: hardcoded values, so Controls would do nothing here.
-InlineWithTextInput.parameters = { controls: { disable: true } };
+InlineWithTextInput.parameters = {
+  controls: { disable: true },
+  docs: {
+    description: {
+      story: "Composition check: `--button-min-height` defaults to `--input-min-height`, so the button lines up with an inline text input. Controls do nothing here.",
+    },
+  },
+};
+
+const stressLabels = [
+  "Jetzt unverbindlich einen kostenlosen Beratungstermin vereinbaren",
+  "Datenschutzgrundverordnungskonformitätsbestätigung",
+  "https://example.com/a/very/long/unbroken/url/for/the/button/label",
+  "<b>not bold</b>",
+  "🎉 Book now",
+  "احجز الآن",
+  "x",
+  "",
+];
+
+const StressTemplate: StoryFn<InputButtonStoryArgs> = (args) => ({
+  components: { StorybookComponent },
+  setup() {
+    const componentArgs = computed(() => {
+      const { buttonText: _buttonText, ...rest } = stripStoryArgs(args);
+      return rest;
+    });
+    return { args, componentArgs, stressLabels };
+  },
+  template: `
+    <div style="display: grid; gap: 2.4rem;">
+      <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 1.2rem;">
+        <StorybookComponent v-for="(label, index) in stressLabels" :key="index" v-bind="componentArgs" :button-text="label" />
+        <StorybookComponent v-bind="componentArgs" :button-text="stressLabels[0]">
+          <template #left><Icon name="mdi:calendar" class="icon" /></template>
+          <template #right><Icon name="mdi:arrow-right" class="icon" /></template>
+        </StorybookComponent>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 1.2rem;">
+        <StorybookComponent v-bind="componentArgs" variant="secondary" button-text="Zurück zur vorherigen Seite" />
+        <StorybookComponent v-bind="componentArgs" :button-text="stressLabels[0]" />
+      </div>
+    </div>
+  `,
+});
+
+export const StressTest = StressTemplate.bind({});
+StressTest.storyName = "Stress Test (Worst-Case Data)";
+StressTest.args = { isPill: true };
+StressTest.decorators = [
+  (story, context) => ({
+    components: { story, CanvasSwitcher },
+    setup() {
+      const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "fullWidthCanvas");
+      return { canvasName };
+    },
+    template: `
+      <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+        <CanvasSwitcher v-model:canvas-name="canvasName" />
+      </div>
+      <div :class="canvasName" style="margin-inline: auto; padding: 2rem; outline: 1px dashed currentColor;">
+        <story />
+      </div>
+    `,
+  }),
+];
+StressTest.parameters = {
+  layout: "fullscreen",
+  initialCanvas: "mobileCanvas",
+  docs: {
+    story: { inline: false, height: "900px" },
+    description: {
+      story:
+        "Long German copy, an unbroken compound word, a long URL, HTML-like text, emoji, right-to-left text, a single character and an empty label, then a long label with icons on both sides and a wrapping row of two buttons. Check at every canvas width: no button pushes past the dashed outline, long labels wrap inside the button (`--input-button-text-white-space` defaults to `normal`), icons keep their size, markup renders as text, and the pill shape still reads with several lines. Toggle variant, pill and pending in Controls. Button text is never line-clamped: a cut-off action label can't be trusted.",
+    },
+  },
+};

@@ -180,8 +180,8 @@ watch(
           outline-offset: -4px;
         }
 
-        &.icon-only {
-          .btn-icon {
+        &[data-icon-only] {
+          & .input-button-icon {
             margin: 0;
           }
         }

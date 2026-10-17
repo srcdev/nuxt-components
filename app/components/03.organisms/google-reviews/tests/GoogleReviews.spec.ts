@@ -163,11 +163,11 @@ describe("GoogleReviews", () => {
     setScrollMetrics(list.element, { scrollWidth: 1000, clientWidth: 400, scrollLeft: 0 });
     await list.trigger("scroll");
     expect(wrapper.find(".google-reviews-prev").attributes("aria-disabled")).toBe("true");
-    expect(wrapper.find(".google-reviews-next").attributes("aria-disabled")).toBe("false");
+    expect(wrapper.find(".google-reviews-next").attributes("aria-disabled")).toBeUndefined();
 
     setScrollMetrics(list.element, { scrollWidth: 1000, clientWidth: 400, scrollLeft: 600 });
     await list.trigger("scroll");
-    expect(wrapper.find(".google-reviews-prev").attributes("aria-disabled")).toBe("false");
+    expect(wrapper.find(".google-reviews-prev").attributes("aria-disabled")).toBeUndefined();
     expect(wrapper.find(".google-reviews-next").attributes("aria-disabled")).toBe("true");
   });
 
@@ -192,8 +192,8 @@ describe("GoogleReviews", () => {
     const list = wrapper.find(".google-reviews-list");
     setScrollMetrics(list.element, { scrollWidth: 1000, clientWidth: 400, scrollLeft: 0 });
     await list.trigger("scroll");
-    expect(wrapper.find(".google-reviews-prev .button-text").text()).toBe("Previous reviews");
-    expect(wrapper.find(".google-reviews-next .button-text").text()).toBe("Next reviews");
+    expect(wrapper.find(".google-reviews-prev .input-button-text").text()).toBe("Previous reviews");
+    expect(wrapper.find(".google-reviews-next .input-button-text").text()).toBe("Next reviews");
   });
 
   // ─── Copy and slots ────────────────────────────────────────────────────

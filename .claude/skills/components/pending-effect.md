@@ -4,8 +4,9 @@
 
 `PendingEffect` is a decorative SVG that draws an animated dashed line around a busy button. It
 is an internal part of `InputButton`: set `has-pending-effect` on the button and toggle
-`is-pending`. Don't render it on its own. Its CSS depends on the host having `.pending-effect`
-(and `position: relative`, which that rule provides), plus `.is-pending` to show and animate it.
+`is-pending`. Don't render it on its own. Its CSS depends on the host being `.input-button[data-pending-effect]`
+(and `position: relative`, which that rule provides), plus `[data-pending]` to show and animate it.
+Those were the classes `.pending-effect` and `.is-pending` until 2026-10-17.
 
 ```vue
 <InputButton button-text="Submit" type="submit" has-pending-effect :is-pending="submitting" />
@@ -26,10 +27,10 @@ No slots, no events.
 
 ## Behaviour
 
-- Hidden (`opacity: 0`) until the host has `.is-pending`.
+- Hidden (`opacity: 0`) until the host has `[data-pending]`.
 - The host must not clip overflow: the line is drawn outside the host's edge. `InputButton`
   sets `overflow: hidden` on buttons generally, and switches it to `visible` when
-  `.pending-effect` is present. Before 2026-09-26 it didn't, so the effect never rendered at all.
+  `[data-pending-effect]` is present. Before 2026-09-26 it didn't, so the effect never rendered at all.
 - Under `prefers-reduced-motion: reduce` it never shows, since the animation is the whole effect.
 - `aria-hidden="true"` and `focusable="false"`: it is decorative. Busy state for assistive tech
   is the host button's responsibility.

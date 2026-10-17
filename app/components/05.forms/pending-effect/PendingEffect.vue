@@ -34,7 +34,7 @@ watch(
 
 <style lang="css">
 @layer components {
-  .pending-effect {
+  .input-button[data-pending-effect] {
     position: relative;
 
     .pending-effect-container {
@@ -72,14 +72,14 @@ watch(
       }
     }
 
-    &.icon-only .pending-effect-container {
+    &[data-icon-only] .pending-effect-container {
       .pending-effect-blur,
       .pending-effect-line {
         rx: var(--pending-effect-border-radius-icon-only, 100vw);
       }
     }
 
-    &.is-pending {
+    &[data-pending] {
       pointer-events: none;
       cursor: wait;
 

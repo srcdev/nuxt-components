@@ -54,7 +54,7 @@ describe("PendingEffect", () => {
         props: { buttonText: "Save", hasPendingEffect: true },
       });
       expect(withEffect.find(".pending-effect-container").exists()).toBe(true);
-      expect(withEffect.find("button").classes()).toContain("pending-effect");
+      expect(withEffect.find("button").attributes("data-pending-effect")).toBe("");
     });
 
     it("passes the button theme through", async () => {

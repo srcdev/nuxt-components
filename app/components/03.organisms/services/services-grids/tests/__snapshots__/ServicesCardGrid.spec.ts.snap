@@ -17,9 +17,9 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
         <div class="services-card-meta">
           <div class="services-card-meta-duration">60 mins</div>
           <div class="services-card-meta-price">£50</div>
-        </div><a href="/services/locs-installation" data-testid="input-button" data-theme="default" class="input-button secondary mbs-24 is-link">
+        </div><a href="/services/locs-installation" data-testid="input-button" data-theme="default" data-variant="secondary" data-link="" class="input-button mbs-24">
           <!--v-if-->
-          <!--v-if--><span class="button-text">Enquire about Locs Installation</span><span class="btn-icon right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
+          <!--v-if--><span class="input-button-text">Enquire about Locs Installation</span><span class="input-button-icon" data-slot="right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
           <!--v-if-->
         </a>
       </div>
@@ -40,9 +40,9 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
         <div class="services-card-meta">
           <div class="services-card-meta-duration">60 mins</div>
           <div class="services-card-meta-price">£50</div>
-        </div><a href="/services/locs-retwist" data-testid="input-button" data-theme="default" class="input-button secondary mbs-24 is-link">
+        </div><a href="/services/locs-retwist" data-testid="input-button" data-theme="default" data-variant="secondary" data-link="" class="input-button mbs-24">
           <!--v-if-->
-          <!--v-if--><span class="button-text">Enquire about Locs Retwist</span><span class="btn-icon right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
+          <!--v-if--><span class="input-button-text">Enquire about Locs Retwist</span><span class="input-button-icon" data-slot="right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
           <!--v-if-->
         </a>
       </div>
@@ -63,9 +63,9 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
         <div class="services-card-meta">
           <div class="services-card-meta-duration">60 mins</div>
           <div class="services-card-meta-price">£50</div>
-        </div><a href="/services/colour-treatment" data-testid="input-button" data-theme="default" class="input-button secondary mbs-24 is-link">
+        </div><a href="/services/colour-treatment" data-testid="input-button" data-theme="default" data-variant="secondary" data-link="" class="input-button mbs-24">
           <!--v-if-->
-          <!--v-if--><span class="button-text">Enquire about Colour Treatment</span><span class="btn-icon right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
+          <!--v-if--><span class="input-button-text">Enquire about Colour Treatment</span><span class="input-button-icon" data-slot="right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
           <!--v-if-->
         </a>
       </div>

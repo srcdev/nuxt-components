@@ -4,23 +4,29 @@
     :type="!isLink ? props.type : undefined"
     :href="isLink ? props.href : undefined"
     :readonly="!isLink ? props.readonly : undefined"
-    :aria-disabled="!isLink ? props.readonly : undefined"
+    :aria-disabled="!isLink && props.readonly ? 'true' : undefined"
     data-testid="input-button"
     :data-theme="theme"
+    :data-variant="variant"
+    :data-pill="isPill ? '' : undefined"
+    :data-pending="isPending ? '' : undefined"
+    :data-pending-effect="hasPendingEffect ? '' : undefined"
+    :data-link="isLink ? '' : undefined"
+    :data-icon-only="hasIconOnlySlot() ? '' : undefined"
     class="input-button"
-    :class="buttonClasses()"
+    :class="elementClasses"
     @click.capture="guardReadonly"
   >
     <PendingEffect v-if="hasPendingEffect" :theme="theme" />
 
-    <span v-if="hasLeftSlot()" class="btn-icon left">
+    <span v-if="hasLeftSlot()" class="input-button-icon" data-slot="left">
       <slot name="left"></slot>
     </span>
-    <span class="button-text" :class="[{ 'sr-only': hasIconOnlySlot() }]">{{ buttonText }}</span>
-    <span v-if="hasRightSlot()" class="btn-icon right">
+    <span class="input-button-text" :class="{ 'sr-only': hasIconOnlySlot() }">{{ buttonText }}</span>
+    <span v-if="hasRightSlot()" class="input-button-icon" data-slot="right">
       <slot name="right"></slot>
     </span>
-    <span v-if="hasIconOnlySlot()" class="btn-icon icon-only">
+    <span v-if="hasIconOnlySlot()" class="input-button-icon" data-slot="icon-only">
       <slot name="iconOnly"></slot>
     </span>
   </component>
@@ -77,21 +83,9 @@ const tag = computed(() => {
   return "button";
 });
 
-// Cache slot computations for better performance
 const hasLeftSlot = () => Boolean(slots.left && !slots.iconOnly);
 const hasRightSlot = () => Boolean(slots.right && !slots.iconOnly);
 const hasIconOnlySlot = () => Boolean(slots.iconOnly);
-
-// Combine all button classes into a single computed
-const buttonClasses = () => [
-  props.variant,
-  elementClasses.value,
-  { "icon-only": hasIconOnlySlot() },
-  { "pending-effect": props.hasPendingEffect },
-  { "is-pending": props.isPending },
-  { pill: props.isPill },
-  { "is-link": isLink.value },
-];
 
 const guardReadonly = (event: MouseEvent) => {
   if (!props.readonly) return;
@@ -128,47 +122,31 @@ watch(
     overflow: hidden;
     transition: all var(--control-transition-duration) var(--control-transition-ease);
 
-    &.is-link {
+    &[data-link] {
       display: inline-grid;
     }
 
-    &.pending-effect {
+    &[data-pending-effect] {
       overflow: visible;
     }
 
-    /*
-    * Theming
-    * Every colour is a public --input-button-{variant}-{property} token, inline-fallback to
-    * the shared theme slot (see theming-component-token-pattern.md for why: overriding one
-    * variant here never touches the --theme-* slots other components read).
-    *
-    * Flat by default: border defaults to the variant's own surface colour (so the resting state
-    * shows no visible edge) and outline defaults to fully transparent — outline is reserved for
-    * the focus-visible ring, not used to reinforce the flat look. Hover darkens the surface via
-    * color-mix (always darker, regardless of which direction the underlying theme ramp runs in
-    * light vs dark mode — no more "hover looks lighter" surprises) and carries the border along
-    * with it, still flat; outline stays transparent through hover too.
-    * focus-visible is deliberately its own block, not grouped with :hover — it's the one state
-    * that gets a real, separately-themeable a11y indicator, and its outline-width/-offset (set
-    * below, in Shared States) give it a visible ring regardless of the border/outline being
-    * invisible everywhere else.
-    * --_surface is a private local (not a public token) — it exists purely so -hover/-border/-ring
-    * can color-mix() off the SAME resolved value a consumer's --input-button-{variant}-surface
-    * override produces, without every derived token repeating that fallback chain itself.
-    **/
-    &.primary {
+    /* Primary is filled, secondary outlined, tertiary text-only; inline has no colours (wrappers style it).
+       Primary and secondary carry a light shadow ring; hover draws the outline over its inner edge. */
+    &[data-variant="primary"] {
       --_surface: var(--input-button-primary-surface, var(--theme-surface));
       --_surface-hover: var(--input-button-primary-surface-hover, color-mix(in oklab, var(--_surface) 85%, black));
+      --_primary-border-hover: var(--input-button-primary-border-hover, var(--_surface-hover));
 
       background-color: var(--_surface);
       color: var(--input-button-primary-text, var(--theme-on-surface));
       border: var(--button-border-width) solid var(--input-button-primary-border, var(--_surface));
       outline: var(--button-outline-width) solid var(--input-button-primary-ring, transparent);
+      box-shadow: 0 0 0 var(--input-button-shadow-width, 0.2rem) var(--input-button-primary-shadow, var(--colour-theme-2));
 
       &:hover {
         background-color: var(--_surface-hover);
-        border-color: var(--input-button-primary-border-hover, var(--_surface-hover));
-        outline-color: var(--input-button-primary-ring-hover, transparent);
+        border-color: var(--_primary-border-hover);
+        outline-color: var(--input-button-primary-ring-hover, var(--_primary-border-hover));
       }
 
       &:focus-visible {
@@ -177,9 +155,7 @@ watch(
       }
     }
 
-    &.is-pending {
-      /* Always the primary surface regardless of variant — pre-existing behaviour, not
-         something this migration changes. */
+    &[data-pending] {
       background-color: color-mix(
         in oklab,
         var(--input-button-primary-surface, var(--theme-surface)) 50%,
@@ -187,22 +163,20 @@ watch(
       );
     }
 
-    &.secondary {
-      --_surface: var(--input-button-secondary-surface, var(--theme-surface-inverted));
-      --_surface-hover: var(
-        --input-button-secondary-surface-hover,
-        color-mix(in oklab, var(--_surface) 85%, black)
-      );
+    &[data-variant="secondary"] {
+      --_secondary-border: var(--input-button-secondary-border, var(--theme-surface));
+      --_secondary-border-hover: var(--input-button-secondary-border-hover, var(--_secondary-border));
 
-      background-color: var(--_surface);
-      color: var(--input-button-secondary-text, var(--theme-text-inverted));
-      border: var(--button-border-width) solid var(--input-button-secondary-border, var(--_surface));
+      background-color: var(--input-button-secondary-surface, transparent);
+      color: var(--input-button-secondary-text, var(--theme-surface));
+      border: var(--button-border-width) solid var(--_secondary-border);
       outline: var(--button-outline-width) solid var(--input-button-secondary-ring, transparent);
+      box-shadow: 0 0 0 var(--input-button-shadow-width, 0.2rem) var(--input-button-secondary-shadow, var(--colour-theme-2));
 
       &:hover {
-        background-color: var(--_surface-hover);
-        border-color: var(--input-button-secondary-border-hover, var(--_surface-hover));
-        outline-color: var(--input-button-secondary-ring-hover, transparent);
+        background-color: var(--input-button-secondary-surface-hover, var(--theme-surface-subtle));
+        border-color: var(--_secondary-border-hover);
+        outline-color: var(--input-button-secondary-ring-hover, var(--_secondary-border-hover));
       }
 
       &:focus-visible {
@@ -211,22 +185,15 @@ watch(
       }
     }
 
-    &.tertiary {
-      --_surface: var(--input-button-tertiary-surface, var(--slate-01));
-      --_surface-hover: var(
-        --input-button-tertiary-surface-hover,
-        color-mix(in oklab, var(--_surface) 85%, black)
-      );
-
-      background-color: var(--_surface);
-      color: var(--input-button-tertiary-text, var(--theme-text));
-      border: var(--button-border-width) solid var(--input-button-tertiary-border, var(--_surface));
+    &[data-variant="tertiary"] {
+      background-color: var(--input-button-tertiary-surface, transparent);
+      color: var(--input-button-tertiary-text, var(--theme-surface));
+      border: var(--button-border-width) solid var(--input-button-tertiary-border, transparent);
       outline: var(--button-outline-width) solid var(--input-button-tertiary-ring, transparent);
-      text-decoration: underline;
 
       &:hover {
-        background-color: var(--_surface-hover);
-        border-color: var(--input-button-tertiary-border-hover, var(--_surface-hover));
+        background-color: var(--input-button-tertiary-surface-hover, var(--theme-surface-subtle));
+        border-color: var(--input-button-tertiary-border-hover, transparent);
         outline-color: var(--input-button-tertiary-ring-hover, transparent);
       }
 
@@ -236,38 +203,21 @@ watch(
       }
     }
 
-    /* Trial (2026-09-27): where supported, text picks black or white from its own surface, per
-       state. An explicit --input-button-{variant}-text still wins. Remove this block to revert. */
+    /* Trial (2026-09-27): primary text picks black or white from its own surface. Remove to revert. */
     @supports (color: contrast-color(red)) {
-      &.primary {
+      &[data-variant="primary"] {
         color: var(--input-button-primary-text, contrast-color(var(--_surface)));
 
         &:hover {
           color: var(--input-button-primary-text, contrast-color(var(--_surface-hover)));
         }
       }
-
-      &.secondary {
-        color: var(--input-button-secondary-text, contrast-color(var(--_surface)));
-
-        &:hover {
-          color: var(--input-button-secondary-text, contrast-color(var(--_surface-hover)));
-        }
-      }
-
-      &.tertiary {
-        color: var(--input-button-tertiary-text, contrast-color(var(--_surface)));
-
-        &:hover {
-          color: var(--input-button-tertiary-text, contrast-color(var(--_surface-hover)));
-        }
-      }
     }
 
-    &.primary,
-    &.secondary,
-    &.tertiary {
-      &.pill {
+    &[data-variant="primary"],
+    &[data-variant="secondary"],
+    &[data-variant="tertiary"] {
+      &[data-pill] {
         border-radius: 100vw;
       }
     }
@@ -290,10 +240,10 @@ watch(
       pointer-events: none;
     }
 
-    .button-text {
+    & .input-button-text {
       display: inline-block;
       min-inline-size: 0;
-      white-space: var(--input-button-text-white-space, nowrap);
+      white-space: var(--input-button-text-white-space, normal);
       overflow-wrap: anywhere;
       font-size: var(--button-font-size);
       line-height: var(--button-line-height);
@@ -301,22 +251,22 @@ watch(
       text-transform: var(--button-text-transform);
     }
 
-    .btn-icon {
+    & .input-button-icon {
       display: flex;
 
-      .icon {
+      & .icon {
         display: inline-block;
         font-size: var(--input-icon-size);
       }
     }
 
-    &.icon-only {
+    &[data-icon-only] {
       aspect-ratio: 1;
       border-radius: var(--button-border-radius-icon-only);
       margin: 0;
       padding: 0;
 
-      .btn-icon {
+      & .input-button-icon {
         margin: 1.2rem;
       }
     }

@@ -118,7 +118,7 @@ describe("CookieConsentBanner", () => {
       expect(button.tagName).toBe("BUTTON");
       expect(button.getAttribute("type")).toBe("button");
       expect(button.classList).toContain("input-button");
-      expect(button.classList).toContain("inline");
+      expect(button.dataset.variant).toBe("inline");
     }
   });
 

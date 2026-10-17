@@ -7,14 +7,21 @@ Every colour token below is `var(--input-button-{variant}-{property}, {default})
 the shared `--theme-*` slot every other themed component (inputs, alerts, ...) also falls back to.
 See `theming-component-token-pattern.md` for why this two-tier shape exists.
 
-**Resting state is flat by design**: `border` defaults to the variant's own surface colour, so
-there's no visible edge until you hover, focus, or override it. **`outline` defaults to fully
-transparent** in both resting and hover state — outline is reserved for the focus-visible ring,
-not used to reinforce the flat look. **Hover always darkens the resting surface** via `color-mix()`
-rather than jumping to a different `--theme-*` step — it's reliably darker in both light and dark
-mode. **`:focus-visible` is a separate token set**, not grouped with hover, since it's the one
-state that gets a real, independently-themeable indicator (its `outline-width`/`-offset` come from
-`--button-focus-ring-width`/`-offset`, not from here — see `theming-form-geometry-tokens.md`).
+The variants follow the usual hierarchy: **primary** is filled, **secondary** is outlined
+(transparent background, border and text in the theme colour), **tertiary** is text-only
+(no background or border until hover), and **inline** has no colours at all, for wrapper
+components that style the button themselves. Primary and secondary also carry a light **shadow ring** (`box-shadow`, 2px of theme step 2)
+outside the border, and on **hover** their 1px outline (no offset) takes the hover border colour,
+so it draws over the inner edge of that ring. Tertiary has neither. The `outline` is transparent
+at rest. **`:focus-visible` is a separate token set**
+(its `outline-width`/`-offset` come from `--button-focus-ring-width`/`-offset`, see
+`theming-form-geometry-tokens.md`).
+
+> **Changed 2026-10-17**: secondary was filled with `--theme-surface-inverted`, which read as a
+> darker primary; tertiary was a grey `--slate-01` fill with an underlined label. To bring back
+> the old look for one site, set the secondary or tertiary tokens below (e.g.
+> `--input-button-secondary-surface: var(--theme-surface-inverted)` and
+> `--input-button-secondary-text: var(--theme-text-inverted)`).
 
 Geometry and typography (`--button-*`) are separate, already-global tokens with real defaults —
 see `theming-form-geometry-tokens.md`. Not duplicated here. One geometry token worth calling out:
@@ -32,60 +39,78 @@ the `InlineWithTextInput` story). `box-sizing: content-box` means it's a floor, 
 | `--input-button-primary-ring` | `transparent` | Outline colour (resting) |
 | `--input-button-primary-surface-hover` | `color-mix(in oklab, surface 85%, black)` | Background on hover |
 | `--input-button-primary-border-hover` | the resolved hover surface above | Border colour on hover |
-| `--input-button-primary-ring-hover` | `transparent` | Outline colour on hover |
+| `--input-button-primary-ring-hover` | the resolved hover border above | Outline colour on hover (1px, no offset) |
+| `--input-button-primary-shadow` | `var(--colour-theme-2)` | Shadow ring colour (all states) |
 | `--input-button-primary-border-focus` | `var(--theme-border-focus)` | Border colour on `:focus-visible` |
 | `--input-button-primary-ring-focus` | `var(--theme-ring)` | Outline colour on `:focus-visible` |
 
-### Secondary
+### Secondary (outlined)
 
-Same shape, falls back to the inverted-surface slots instead:
+| Token | Falls back to | Controls |
+|---|---|---|
+| `--input-button-secondary-surface` | `transparent` | Background (resting) |
+| `--input-button-secondary-text` | `var(--theme-surface)` | Text colour (all states) |
+| `--input-button-secondary-border` | `var(--theme-surface)` | Border colour (resting) |
+| `--input-button-secondary-ring` | `transparent` | Outline colour (resting) |
+| `--input-button-secondary-ring-hover` | the resolved hover border | Outline colour on hover (1px, no offset) |
+| `--input-button-secondary-shadow` | `var(--colour-theme-2)` | Shadow ring colour (all states) |
+| `--input-button-secondary-surface-hover` | `var(--theme-surface-subtle)` | Background on hover |
+| `--input-button-secondary-border-hover` | the resolved border above | Border colour on hover |
+| `--input-button-secondary-border-focus` | `var(--theme-border-focus)` | Border colour on `:focus-visible` |
+| `--input-button-secondary-ring-focus` | `var(--theme-ring)` | Outline colour on `:focus-visible` |
 
-| Token | Falls back to |
-|---|---|
-| `--input-button-secondary-surface` | `var(--theme-surface-inverted)` |
-| `--input-button-secondary-text` | `var(--theme-text-inverted)` |
-| `--input-button-secondary-border` | the resolved surface above (flat) |
-| `--input-button-secondary-ring` / `-ring-hover` | `transparent` |
-| `--input-button-secondary-surface-hover` | `color-mix(in oklab, surface 85%, black)` |
-| `--input-button-secondary-border-hover` | the resolved hover surface above |
-| `--input-button-secondary-border-focus` | `var(--theme-border-focus)` |
-| `--input-button-secondary-ring-focus` | `var(--theme-ring)` |
+### Tertiary (text-only)
 
-### Tertiary
+| Token | Falls back to | Controls |
+|---|---|---|
+| `--input-button-tertiary-surface` | `transparent` | Background (resting) |
+| `--input-button-tertiary-text` | `var(--theme-surface)` | Text colour (all states) |
+| `--input-button-tertiary-border` | `transparent` | Border colour (resting) |
+| `--input-button-tertiary-ring` / `-ring-hover` | `transparent` | Outline colour |
+| `--input-button-tertiary-surface-hover` | `var(--theme-surface-subtle)` | Background on hover |
+| `--input-button-tertiary-border-hover` | `transparent` | Border colour on hover |
+| `--input-button-tertiary-border-focus` | `var(--theme-border-focus)` | Border colour on `:focus-visible` |
+| `--input-button-tertiary-ring-focus` | `var(--theme-ring)` | Outline colour on `:focus-visible` |
 
-Same shape again:
+| Token | Default | Controls |
+|---|---|---|
+| `--input-button-shadow-width` | `0.2rem` | Width of the primary and secondary shadow ring. Set `0` to remove it |
 
-| Token | Falls back to |
-|---|---|
-| `--input-button-tertiary-surface` | `var(--slate-01)` |
-| `--input-button-tertiary-text` | `var(--theme-text)` |
-| `--input-button-tertiary-border` | the resolved surface above (flat) |
-| `--input-button-tertiary-ring` / `-ring-hover` | `transparent` |
-| `--input-button-tertiary-surface-hover` | `color-mix(in oklab, surface 85%, black)` |
-| `--input-button-tertiary-border-hover` | the resolved hover surface above |
-| `--input-button-tertiary-border-focus` | `var(--theme-border-focus)` |
-| `--input-button-tertiary-ring-focus` | `var(--theme-ring)` |
+The focus ring's offset (`--button-focus-ring-offset`, `0.2rem`) puts it just outside the shadow
+ring; if you widen the ring, raise the offset to match or the focus ring will draw over it. An
+ancestor with `overflow: hidden` and no spare room clips the ring.
 
-`.is-pending` always dims the *primary* surface regardless of variant — a pre-existing quirk, not
-something this token set changes. The animated border added by `has-pending-effect` has its own
-`--pending-effect-*` tokens, see `../pending-effect/CONSUMER-STYLING.md`.
+Secondary and tertiary text sits on the page background, so on a dark section set their `-text`
+and `-border` tokens to a light colour.
+
+`[data-pending]` dims a primary button's surface to 50%; secondary and tertiary keep their own
+background. The animated border added by `has-pending-effect` has its own `--pending-effect-*`
+tokens, see `../pending-effect/CONSUMER-STYLING.md`.
 
 ### Text wrapping
 
 | Token | Default | Controls |
 |---|---|---|
-| `--input-button-text-white-space` | `nowrap` | Set `normal` to let a long label wrap onto several lines instead of overflowing the button. Unbroken strings break anywhere once wrapping is on |
+| `--input-button-text-white-space` | `normal` | Long labels wrap onto several lines inside the button, and unbroken strings break anywhere. Set `nowrap` to keep a label on one line; the button then grows to fit it and can overflow a narrow container |
 
-> Added 2026-10-06. `ServicesCardGrid` sets it to `normal` on its CTA buttons so a long service title stays inside the card.
+> Added 2026-10-06. **Changed 2026-10-17**: the default was `nowrap`, which pushed a long label
+> past a narrow column. If you relied on one-line labels in a tight row, set
+> `--input-button-text-white-space: nowrap` on that row.
+
+Button text has no line-clamp token on purpose: a cut-off action label can't be trusted.
+
+Private tokens (not public API): `--_surface` and `--_surface-hover` (primary's resolved
+surfaces, which its border, hover and contrast colours derive from) and `--_primary-border-hover`, `--_secondary-border` and `--_secondary-border-hover`.
 
 `InputCopy` and `PricingCard` fall back through `--input-button-primary-*` for their own copy/CTA
 buttons (see their own `CONSUMER-STYLING.md`) rather than duplicating this chain.
 
 > **Trial, 2026-09-27: automatic text contrast.** In browsers that support CSS `contrast-color()`
-> (Safari/iOS 26, Firefox 146, Chrome/Edge 147), an unset `--input-button-{variant}-text` resolves
+> (Safari/iOS 26, Firefox 146, Chrome/Edge 147), an unset `--input-button-primary-text` resolves
 > to `contrast-color()` of that state's own surface: pure black or pure white, whichever has more
 > contrast, re-evaluated on hover. Older browsers keep the defaults in the tables above. Setting
-> the `-text` token explicitly always wins, so you can opt a variant out. The whole behaviour is
+> the `-text` token explicitly always wins, so you can opt out. Secondary and tertiary aren't part of the trial since
+> 2026-10-17: their surface is transparent. The whole behaviour is
 > one `@supports` block in `InputButton.vue` and may be removed if the trial doesn't hold up.
 
 ---
@@ -101,15 +126,23 @@ buttons (see their own `CONSUMER-STYLING.md`) rather than duplicating this chain
 
 | Hook | When |
 |---|---|
-| `.primary`, `.secondary`, `.tertiary`, `.inline` | The `variant` prop |
+| `[data-variant="primary" \| "secondary" \| "tertiary" \| "inline"]` | The `variant` prop |
 | `[data-theme]` | The `theme` prop (re-declares the `--theme-*` palette on the button) |
-| `.icon-only` | The `#iconOnly` slot is used (square, text becomes `sr-only`) |
-| `.pill` | `is-pill` |
-| `.is-pending`, `.pending-effect` | `is-pending` / `has-pending-effect` |
-| `.is-link` | `href` is set (renders `NuxtLink` or `<a>`) |
+| `[data-icon-only]` | The `#iconOnly` slot is used (square, text becomes `sr-only`) |
+| `[data-pill]` | `is-pill` |
+| `[data-pending]`, `[data-pending-effect]` | `is-pending` / `has-pending-effect` |
+| `[data-link]` | `href` is set (renders `NuxtLink` or `<a>`) |
 | `[readonly]` + `aria-disabled="true"` | `readonly` (dimmed, not operable by mouse or keyboard) |
 
-Inner classes: `.button-text`, `.btn-icon` with `.left` / `.right` / `.icon-only`.
+Inner elements: `.input-button-text`, and `.input-button-icon` with `data-slot="left"`,
+`"right"` or `"icon-only"`.
+
+> **Changed 2026-10-17**: these were bare classes, which collided with consumer CSS. Update
+> selectors: `.input-button.primary` → `.input-button[data-variant="primary"]`, `.pill` →
+> `[data-pill]`, `.is-pending` → `[data-pending]`, `.pending-effect` → `[data-pending-effect]`,
+> `.is-link` → `[data-link]`, `.icon-only` → `[data-icon-only]`, `.button-text` →
+> `.input-button-text`, `.btn-icon.left` → `.input-button-icon[data-slot="left"]`. Same
+> specificity, so overrides keep winning where they did.
 
 
 ## Global theming

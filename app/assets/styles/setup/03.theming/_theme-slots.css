@@ -13,6 +13,6 @@
   --theme-ring: var(--colour-theme-1);
   --theme-on-surface: var(--colour-theme-0);
   --theme-text: var(--colour-theme-9);
-  /* Light step: pairs with the dark --theme-surface-inverted (InputButton .secondary). */
+  /* Light step: pairs with the dark --theme-surface-inverted. */
   --theme-text-inverted: var(--colour-theme-0);
 }

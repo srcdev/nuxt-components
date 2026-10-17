@@ -2,7 +2,7 @@ import { test, expect, type Page } from "@playwright/test";
 
 // --- Config ---
 const STORYBOOK_URL = "http://127.0.0.1:6006";
-const STORY_BASE = "components-forms-input-button-inputbuttoncore";
+const STORY_BASE = "components-forms-input-button-inputbutton";
 const BUTTON_TIMEOUT = 15000;
 
 // --- Helpers ---

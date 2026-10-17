@@ -103,7 +103,7 @@ watch(
         width: var(--input-range-button-size);
         height: var(--input-range-button-size);
 
-        .btn-icon {
+        & .input-button-icon {
           margin: initial;
         }
       }

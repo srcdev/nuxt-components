@@ -17,7 +17,7 @@ style it rather than `InputButton`'s variant colours), with optional description
 >   `--input-copy-gap`, `--input-copy-focus-ring`, `--input-copy-description-line-clamp`.
 > - The input's focus outline used the border-radius token as its colour; it's now a real
 >   `:focus-visible` ring from `--input-copy-focus-ring`.
-> - The button label is `InputButton`'s `.button-text` (was `.input-copy__button-text`), and it
+> - The button label is `InputButton`'s `.input-button-text` (was `.input-copy__button-text`, then `.button-text` until 2026-10-17), and it
 >   hides below 48rem of the **component's** width (a container query), not a 480px viewport.
 
 ## Public token API
@@ -70,10 +70,10 @@ shared by the input and the button.
   `copiedIcon`.
 - `disabled` on the button when `isDisabled` is set.
 - Classes: `.input-copy` > `.input-copy__wrapper` > `.input-copy__input` and
-  `.input-copy__button` (also `.input-button.inline`, containing `.input-copy__icon` and
-  `.button-text`); then `.input-copy__description` and a visually hidden `role="status"` span.
+  `.input-copy__button` (also `.input-button[data-variant="inline"]`, containing `.input-copy__icon` and
+  `.input-button-text`); then `.input-copy__description` and a visually hidden `role="status"` span.
 - Container: the root is `container: input-copy / inline-size`. Below `48rem` of its own width the
-  button's `.button-text` is hidden and only the icon shows (the button keeps its aria-label).
+  button's `.input-button-text` is hidden and only the icon shows (the button keeps its aria-label).
 
 ## Global theming
 

@@ -8,8 +8,12 @@ directly: `InputButton` renders it when `has-pending-effect` is set, and it anim
 <InputButton button-text="Save" has-pending-effect :is-pending="saving" />
 ```
 
-The CSS keys off the host button's classes: `.pending-effect` (added by `has-pending-effect`),
-`.is-pending`, and `.icon-only`. The SVG itself is `.pending-effect-container`.
+The CSS keys off the host button's state attributes: `.input-button[data-pending-effect]` (added by
+`has-pending-effect`), `[data-pending]`, and `[data-icon-only]`. The SVG itself is
+`.pending-effect-container`.
+
+> **Changed 2026-10-17**: these were the classes `.pending-effect`, `.is-pending` and `.icon-only`
+> until `InputButton` moved its state to `data-*` attributes.
 
 The line sits outside the button's edge, so nothing around it may clip overflow. `InputButton`
 sets `overflow: visible` on itself when `has-pending-effect` is on, but an ancestor with
@@ -50,7 +54,7 @@ positioning maths) and `--_offset` (the resolved `--pending-effect-offset`).
 ## Reduced motion
 
 Under `prefers-reduced-motion: reduce` the effect stays hidden. The host button still gets
-`pointer-events: none` while `.is-pending` is set, from this component's CSS, so it can't be
+`pointer-events: none` while `[data-pending]` is set, from this component's CSS, so it can't be
 clicked twice.
 
 ---

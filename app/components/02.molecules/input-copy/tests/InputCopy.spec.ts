@@ -56,7 +56,7 @@ describe("InputCopy", () => {
       const w = await mountCopy();
       const button = w.find("button");
       expect(button.classes()).toContain("input-button");
-      expect(button.classes()).toContain("inline");
+      expect(button.attributes("data-variant")).toBe("inline");
       expect(button.classes()).toContain("input-copy__button");
       expect(button.attributes("type")).toBe("button");
     });
@@ -182,7 +182,7 @@ describe("InputCopy", () => {
       await nextTick();
       expect(w.classes()).not.toContain("input-copy-copied");
       expect(w.find("button").text()).toContain("Copy");
-      expect(w.find("button").attributes("aria-disabled")).toBe("false");
+      expect(w.find("button").attributes("aria-disabled")).toBeUndefined();
     });
 
     it("logs and stays in the resting state when the clipboard write fails", async () => {

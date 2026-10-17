@@ -155,8 +155,8 @@ cards regardless of each card's description length, without needing CSS subgrid.
 
 `.services-card`, `.services-card-image-wrapper`, `.services-card-details`, and `.services-card-footer` all set
 `min-inline-size: 0`. Without it, an unbreakable child — most commonly a long `actions` slot
-button label, since `InputButton`'s `.button-text` is `white-space: nowrap` with no
-ellipsis — forces its content's min-content width up through the flex/grid chain and widens
+button label kept on one line with `--input-button-text-white-space: nowrap` (the default was
+`nowrap` until 2026-10-17) — forces its content's min-content width up through the flex/grid chain and widens
 that one card's grid column in `ServicesCardGrid` wider than its siblings. If a card/column
 ever looks wider than the rest with content cut off at the edge, check for a long unbreakable
 string in a slot before assuming it's an image sizing issue — the image is just riding along

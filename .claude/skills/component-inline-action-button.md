@@ -76,7 +76,7 @@ Target `.my-action-button.input-button` inside the wrapper to override InputButt
 
 ## What `variant="inline"` still brings
 
-`inline` adds no colours, but the base `.input-button` rule and its inner `.button-text` still
+`inline` adds no colours, but the base `.input-button` rule and its inner `.input-button-text` still
 apply. Override what the wrapper doesn't want, on the `.my-action-button.input-button` selector:
 
 - `box-sizing: content-box`: set `border-box` if the button has a `max-inline-size: 100%` or sits
@@ -84,10 +84,11 @@ apply. Override what the wrapper doesn't want, on the `.my-action-button.input-b
 - `min-height: var(--button-min-height)`: set `auto` to size from your own padding.
 - `grid-auto-flow: column` layout, `overflow: hidden` and a `transition: all` (replace it with
   your own `transition` list).
-- `.button-text` takes `font-size: var(--button-font-size)` and
+- `.input-button-text` takes `font-size: var(--button-font-size)` and
   `text-transform: var(--button-text-transform)`: set `font-size: inherit; text-transform: none`
-  on `& .button-text` to keep the wrapper's type. It already wraps unbroken text
-  (`overflow-wrap: anywhere`, with `white-space` from `--input-button-text-white-space`).
+  on `& .input-button-text` to keep the wrapper's type. It already wraps unbroken text
+  (`overflow-wrap: anywhere`, with `white-space` from `--input-button-text-white-space`, default
+  `normal`).
 - The label is the `buttonText` string prop; there's no label slot. A wrapper that had label
   slots on a raw `<button>` turns them into string props when it switches (a breaking change).
 

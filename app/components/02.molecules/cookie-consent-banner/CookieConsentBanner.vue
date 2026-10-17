@@ -127,7 +127,7 @@ const isClosed = computed(() => status.value !== "unset");
         outline-offset: 0.2rem;
       }
 
-      .button-text {
+      & .input-button-text {
         font-size: inherit;
         text-transform: none;
       }
