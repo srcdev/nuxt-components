@@ -141,7 +141,8 @@ watch(
       color: var(--input-button-primary-text, var(--theme-on-surface));
       border: var(--button-border-width) solid var(--input-button-primary-border, var(--_surface));
       outline: var(--button-outline-width) solid var(--input-button-primary-ring, transparent);
-      box-shadow: 0 0 0 var(--input-button-shadow-width, 0.2rem) var(--input-button-primary-shadow, var(--colour-theme-2));
+      box-shadow: 0 0 0 var(--input-button-shadow-width, var(--form-element-shadow-width))
+        var(--input-button-primary-shadow, var(--form-element-shadow-colour, var(--colour-theme-2)));
 
       &:hover {
         background-color: var(--_surface-hover);
@@ -171,7 +172,8 @@ watch(
       color: var(--input-button-secondary-text, var(--theme-surface));
       border: var(--button-border-width) solid var(--_secondary-border);
       outline: var(--button-outline-width) solid var(--input-button-secondary-ring, transparent);
-      box-shadow: 0 0 0 var(--input-button-shadow-width, 0.2rem) var(--input-button-secondary-shadow, var(--colour-theme-2));
+      box-shadow: 0 0 0 var(--input-button-shadow-width, var(--form-element-shadow-width))
+        var(--input-button-secondary-shadow, var(--form-element-shadow-colour, var(--colour-theme-2)));
 
       &:hover {
         background-color: var(--input-button-secondary-surface-hover, var(--theme-surface-subtle));

@@ -89,3 +89,5 @@ Full token list in `CONSUMER-STYLING.md` next to the component. Key tokens:
   dead `--_form-border-radius` token and commented-out CSS removed; three identical per-id icon
   colour rules collapsed to one `.option-icon` rule (the per-id classes are still rendered);
   `fieldData` is now a typed required `defineModel`. Tests added.
+
+**2026-10-17**: resting shadow ring (`--triple-toggle-switch-shadow`), on the wrapper. Theme step 2 by default, so it turns red under `data-invalid`; width is the global `--form-element-shadow-width`. Hover now draws a 1px outline in the border colour with no offset, over the ring's inner edge (was a 2px outline at a 2px offset in the focus colour); focus is unchanged and sits just outside the ring.

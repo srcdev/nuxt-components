@@ -18,6 +18,8 @@ this two-tier shape exists.
 | `--toggle-switch-surface` | `var(--theme-checkbox-symbol-surface)` | Track background (resting) |
 | `--toggle-switch-surface-hover` | `var(--theme-surface-subtle)` | Track background on hover |
 | `--toggle-switch-border` | `var(--theme-border)` | Track border colour |
+| `--toggle-switch-border-hover` | the resolved border | 1px track outline colour on hover |
+| `--toggle-switch-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (on the track). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
 | `--toggle-switch-border-focus` | `var(--theme-border-focus)` | Track outline colour on `:focus-visible` |
 | `--toggle-switch-symbol-border` | `var(--theme-text)` | Thumb border colour |
 | `--toggle-switch-symbol-surface-off` | `var(--theme-on-surface)` | Thumb background, off |
@@ -53,6 +55,11 @@ geometry tokens, so it scales with `--input-toggle-symbol-size`:
 Only set `--toggle-switch-track-width` for a width the formula doesn't produce.
 
 ---
+
+> **Changed 2026-10-17**: bordered controls carry a light shadow ring (`box-shadow`, theme step 2,
+> so red when invalid), and hover draws a 1px outline in the border colour with no offset, over the
+> ring's inner edge. Hover used to draw a 2px outline at a 2px offset in the focus colour. Focus is
+> unchanged and sits just outside the ring.
 
 ## State hooks
 

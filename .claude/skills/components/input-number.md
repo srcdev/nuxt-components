@@ -252,3 +252,5 @@ classes are gone.
 - Specs unmount in `afterEach`; stories moved to `StoryObj` with Docs descriptions, a
   `DecimalSteps` story, `CanvasSwitcher` and a `StressTest` story on the Field. The bare
   control's step-button demo uses `InputButton`, not raw buttons.
+
+**2026-10-17**: resting shadow ring (`--input-number-shadow`), `normal` variant; underlined unchanged. Theme step 2 by default, so it turns red under `data-invalid`; width is the global `--form-element-shadow-width`. Hover now draws a 1px outline in the border colour with no offset, over the ring's inner edge (was a 2px outline at a 2px offset in the focus colour); focus is unchanged and sits just outside the ring.

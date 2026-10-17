@@ -18,7 +18,8 @@ for the two-tier shape.
 | `--input-otp-surface` | `var(--theme-input-surface)` | Box background |
 | `--input-otp-text-color` | `var(--theme-input-text-color-normal)` | Digit colour |
 | `--input-otp-border` | `var(--theme-border)` | Box border (`normal`) or bottom border (`underlined`) |
-| `--input-otp-border-hover` | `var(--input-otp-border-focus)` | Outline colour on hover (`normal` variant) |
+| `--input-otp-border-hover` | the resolved border | 1px outline colour on hover (`normal` variant) |
+| `--input-otp-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (each box, `normal` only). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
 | `--input-otp-border-focus` | `var(--theme-border-focus)` | Outline colour on `:focus-visible`, and the bottom border colour on focus (`underlined`) |
 
 ### Field (`InputOtpField`)
@@ -34,6 +35,11 @@ Border/outline widths and transition duration are the shared form geometry token
 
 Private tokens (not public API): `--_border` and `--_border-focus` on `.input-otp`, which only
 resolve the two public border tokens once for reuse across the variant rules.
+
+> **Changed 2026-10-17**: bordered controls carry a light shadow ring (`box-shadow`, theme step 2,
+> so red when invalid), and hover draws a 1px outline in the border colour with no offset, over the
+> ring's inner edge. Hover used to draw a 2px outline at a 2px offset in the focus colour. Focus is
+> unchanged and sits just outside the ring.
 
 ## State hooks
 

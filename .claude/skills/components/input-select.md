@@ -151,3 +151,5 @@ the `theme` prop says; the Field root's own `data-theme` keeps the prop value.
 ```
 
 `v-model` and `v-model:field-data` are both **required**, same as `InputSelect` above.
+
+**2026-10-17**: resting shadow ring (`--input-select-shadow`), `normal` variant; underlined keeps its old 2px hover outline. Theme step 2 by default, so it turns red under `data-invalid`; width is the global `--form-element-shadow-width`. Hover now draws a 1px outline in the border colour with no offset, over the ring's inner edge (was a 2px outline at a 2px offset in the focus colour); focus is unchanged and sits just outside the ring.

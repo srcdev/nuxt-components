@@ -114,6 +114,7 @@ watch(
     border: var(--form-element-border-width) solid var(--input-checkbox-button-border, var(--theme-border));
     border-radius: var(--input-checkbox-button-border-radius, 0.4rem);
     outline: var(--form-element-outline-width) solid transparent;
+    box-shadow: 0 0 0 var(--form-element-shadow-width) var(--input-checkbox-button-shadow, var(--form-element-shadow-colour, var(--colour-theme-2)));
 
     transition: all var(--input-checkbox-transition-duration, var(--theme-form-transition-duration)) ease-in-out;
 
@@ -127,8 +128,7 @@ watch(
 
     &:hover {
       background-color: var(--input-checkbox-button-surface-hover, var(--theme-input-surface-hover));
-      outline-color: var(--input-checkbox-button-ring-hover, var(--theme-ring));
-      outline-offset: var(--form-element-outline-offset-focus);
+      outline-color: var(--input-checkbox-button-ring-hover, var(--input-checkbox-button-border, var(--theme-border)));
       cursor: pointer;
     }
 

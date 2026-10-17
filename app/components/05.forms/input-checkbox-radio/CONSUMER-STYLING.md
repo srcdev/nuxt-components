@@ -25,6 +25,8 @@ declared in `04.elements/forms/03.generic-input-geometry.css`; see `theming-form
 |---|---|---|
 | `--input-checkbox-surface` | `var(--theme-checkbox-symbol-surface)` | Background |
 | `--input-checkbox-border` | `var(--theme-border)` | Border colour |
+| `--input-checkbox-border-hover` | the resolved border | 1px outline colour on hover |
+| `--input-checkbox-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (not inside the button style). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
 | `--input-checkbox-border-focus` | `var(--theme-border-focus)` | Outline colour on `:focus-visible` (not in button mode, the button draws its own) |
 | `--input-checkbox-icon-color` | `var(--theme-text)` | Checked icon colour |
 | `--input-checkbox-transition-duration` | `var(--theme-form-transition-duration)` (`0.2s`) | Border/background and icon fade transitions, all three components |
@@ -50,7 +52,8 @@ Also reads `--input-checked-icon-gap` (control to label gap) and `--input-min-he
 | `--input-checkbox-button-surface` | `var(--theme-input-surface)` | Background (resting) |
 | `--input-checkbox-button-border` | `var(--theme-border)` | Border colour |
 | `--input-checkbox-button-surface-hover` | `var(--theme-input-surface-hover)` | Background on hover |
-| `--input-checkbox-button-ring-hover` | `var(--theme-ring)` | Outline colour on hover |
+| `--input-checkbox-button-ring-hover` | `var(--input-checkbox-button-border)` | 1px outline colour on hover, no offset |
+| `--input-checkbox-button-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border. Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
 | `--input-checkbox-button-surface-focus` | `var(--theme-surface-subtle)` | Background when the inner control has `:focus-visible` |
 | `--input-checkbox-button-ring-focus` | `var(--theme-border-focus)` | Outline colour when the inner control has `:focus-visible` |
 | `--input-checkbox-button-label-color` | `var(--theme-text)` | Option label colour |
@@ -89,6 +92,11 @@ transitions) and `--_icon-size` (the button shrinks the inner control's checked 
 > `nowrap`, set `white-space: nowrap` on `.input-checkbox-radio-button-label` yourself.
 
 ---
+
+> **Changed 2026-10-17**: bordered controls carry a light shadow ring (`box-shadow`, theme step 2,
+> so red when invalid), and hover draws a 1px outline in the border colour with no offset, over the
+> ring's inner edge. Hover used to draw a 2px outline at a 2px offset in the focus colour. Focus is
+> unchanged and sits just outside the ring.
 
 ## State hooks
 

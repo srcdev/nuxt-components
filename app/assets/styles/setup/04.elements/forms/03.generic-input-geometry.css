@@ -20,6 +20,10 @@
   --form-element-outline-width-focus: 0.2rem;
   --form-element-outline-offset-focus: 0.2rem;
 
+  /* Resting shadow ring outside bordered controls. Its colour, --form-element-shadow-colour, is unset
+     so each control falls back to its own theme step 2 (red when invalid). */
+  --form-element-shadow-width: 0.2rem;
+
   /* Focus */
   --input-focus-ring-width: 0.2rem; /* 2px */
   --input-focus-ring-offset: 0.2rem;

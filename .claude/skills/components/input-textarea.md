@@ -145,3 +145,5 @@ with `data-theme`, `data-input-variant`, `data-invalid`, `data-dirty` and `data-
   <template #descriptionText>Please describe your enquiry in detail</template>
 </InputTextareaField>
 ```
+
+**2026-10-17**: resting shadow ring (`--input-textarea-shadow`), `normal` variant; underlined unchanged. Theme step 2 by default, so it turns red under `data-invalid`; width is the global `--form-element-shadow-width`. Hover now draws a 1px outline in the border colour with no offset, over the ring's inner edge (was a 2px outline at a 2px offset in the focus colour); focus is unchanged and sits just outside the ring.

@@ -118,3 +118,5 @@ focused the first box on mount; pass `autofocus` to keep that. Its boxes were na
 read the code from `v-model` or the hidden input (`name`) instead. Rename the app's file away (or
 delete it) once on the layer release that ships this, or the app's own `InputOtp` shadows the
 layer's.
+
+**2026-10-17**: resting shadow ring (`--input-otp-shadow`), each box, `normal` variant. Theme step 2 by default, so it turns red under `data-invalid`; width is the global `--form-element-shadow-width`. Hover now draws a 1px outline in the border colour with no offset, over the ring's inner edge (was a 2px outline at a 2px offset in the focus colour); focus is unchanged and sits just outside the ring.

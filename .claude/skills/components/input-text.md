@@ -218,3 +218,5 @@ A compact numeric stepper on a text input (no native spinner). Root
 - The password and stepper buttons get accessible names through `InputButton`'s `buttonText`
   (visually hidden in icon-only mode).
 - Use `autocomplete` on personal-data fields (WCAG 1.3.5).
+
+**2026-10-17**: resting shadow ring (`--input-text-shadow`), `normal` variant; underlined unchanged. Theme step 2 by default, so it turns red under `data-invalid`; width is the global `--form-element-shadow-width`. Hover now draws a 1px outline in the border colour with no offset, over the ring's inner edge (was a 2px outline at a 2px offset in the focus colour); focus is unchanged and sits just outside the ring.

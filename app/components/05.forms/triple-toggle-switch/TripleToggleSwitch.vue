@@ -132,10 +132,15 @@ onMounted(() => {
       background-color: var(--triple-toggle-switch-surface, var(--theme-input-surface));
       border: var(--form-element-border-width) solid var(--triple-toggle-switch-border, var(--theme-border));
       outline: var(--form-element-outline-width) solid transparent;
+      box-shadow: 0 0 0 var(--form-element-shadow-width) var(--triple-toggle-switch-shadow, var(--form-element-shadow-colour, var(--colour-theme-2)));
       border-radius: 100vw;
       padding: var(--triple-toggle-switch-padding, 0.6rem);
 
       transition: all var(--theme-form-transition-duration) ease-in-out;
+
+      &:hover {
+        outline-color: var(--triple-toggle-switch-border-hover, var(--triple-toggle-switch-border, var(--theme-border)));
+      }
 
       &:has(input:focus-visible) {
         outline: var(--form-element-outline-width) solid var(--triple-toggle-switch-ring-focus, var(--theme-ring));

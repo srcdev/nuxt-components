@@ -17,7 +17,8 @@ to override just this component; leave it unset and it inherits the shared `--th
 | `--input-select-surface` | `var(--theme-input-surface)` | Wrapper/select background |
 | `--input-select-text-color` | `var(--theme-input-text-color-normal)` | Select text colour (added 2026-10-16; it inherited the page colour before) |
 | `--input-select-border` | `var(--theme-border)` | Border colour (`normal`/`underlined` variants and the open picker, resting) |
-| `--input-select-border-hover` | `var(--theme-border-focus)` | Outline colour on hover (mouse) |
+| `--input-select-border-hover` | the resolved border (`normal`), `var(--theme-border-focus)` (`underlined`) | Outline colour on hover (mouse): 1px with no offset on `normal`, 2px at a 2px offset on `underlined` |
+| `--input-select-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal` only). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
 | `--input-select-border-focus` | `var(--theme-border-focus)` | Outline colour on `:focus-visible` (keyboard/assistive), and the open picker's outline |
 
 ### Options
@@ -40,6 +41,11 @@ only styled where the browser supports `appearance: base-select`. Elsewhere the 
 shows and ignores them.
 
 ---
+
+> **Changed 2026-10-17**: bordered controls carry a light shadow ring (`box-shadow`, theme step 2,
+> so red when invalid), and hover draws a 1px outline in the border colour with no offset, over the
+> ring's inner edge. Hover used to draw a 2px outline at a 2px offset in the focus colour. Focus is
+> unchanged and sits just outside the ring.
 
 ## State hooks
 

@@ -133,12 +133,14 @@ watch(
         background-color: var(--toggle-switch-surface, var(--theme-checkbox-symbol-surface));
         border: var(--form-element-border-width) solid var(--toggle-switch-border, var(--theme-border));
         outline: var(--form-element-outline-width) solid transparent;
+        box-shadow: 0 0 0 var(--form-element-shadow-width) var(--toggle-switch-shadow, var(--form-element-shadow-colour, var(--colour-theme-2)));
         border-radius: var(--_border-radius);
         width: var(--_track-width);
         padding: calc(var(--input-toggle-wrapper-padding) + var(--input-toggle-symbol-outline-width));
 
         &:hover {
           background-color: var(--toggle-switch-surface-hover, var(--theme-surface-subtle));
+          outline-color: var(--toggle-switch-border-hover, var(--toggle-switch-border, var(--theme-border)));
           cursor: pointer;
         }
 

@@ -14,6 +14,8 @@ leave them unset to follow the site theme. See `theming-component-token-pattern.
 |---|---|---|
 | `--triple-toggle-switch-surface` | `var(--theme-input-surface)` | Wrapper background |
 | `--triple-toggle-switch-border` | `var(--theme-border)` | Wrapper border colour |
+| `--triple-toggle-switch-border-hover` | the resolved border | 1px wrapper outline colour on hover |
+| `--triple-toggle-switch-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (on the wrapper). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
 | `--triple-toggle-switch-ring-focus` | `var(--theme-ring)` | Wrapper outline colour while a radio has `:focus-visible` |
 | `--triple-toggle-switch-padding` | `0.6rem` | Wrapper padding |
 | `--triple-toggle-switch-gap` | `1rem` | Gap between the three options (also drives the marker's position) |
@@ -51,6 +53,11 @@ Also read (shared, not component-specific): `--form-element-border-width`,
 Private tokens (not public API): `--_form-items-gap`, `--_scheme-icon-font-size` (each used twice,
 fed by the public gap/icon-size tokens) and `--_select-scheme-group-background-color`/
 `--_select-scheme-group-background-image` (swapped per selected value).
+
+> **Changed 2026-10-17**: bordered controls carry a light shadow ring (`box-shadow`, theme step 2,
+> so red when invalid), and hover draws a 1px outline in the border colour with no offset, over the
+> ring's inner edge. Hover used to draw a 2px outline at a 2px offset in the focus colour. Focus is
+> unchanged and sits just outside the ring.
 
 ## State hooks
 

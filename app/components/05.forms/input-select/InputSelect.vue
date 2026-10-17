@@ -112,16 +112,25 @@ watch(
       border: var(--form-element-border-width) solid var(--_border);
       border-radius: var(--form-input-border-radius);
       outline: var(--form-element-outline-width) solid transparent;
+      box-shadow: 0 0 0 var(--form-element-shadow-width) var(--input-select-shadow, var(--form-element-shadow-colour, var(--colour-theme-2)));
+
+      &:has(:hover) {
+        outline-color: var(--input-select-border-hover, var(--_border));
+      }
+
+      &:has(select:focus-visible) {
+        outline-color: var(--_border-focus);
+      }
     }
 
     &[data-input-variant="underlined"] {
       border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--_border);
-    }
 
-    &:has(:hover) {
-      outline: var(--form-element-outline-width-focus) solid
-        var(--input-select-border-hover, var(--theme-border-focus));
-      outline-offset: var(--form-element-outline-offset-focus);
+      &:has(:hover) {
+        outline: var(--form-element-outline-width-focus) solid
+          var(--input-select-border-hover, var(--theme-border-focus));
+        outline-offset: var(--form-element-outline-offset-focus);
+      }
     }
 
     &:has(select:focus-visible) {

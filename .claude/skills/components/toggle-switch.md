@@ -141,3 +141,5 @@ error id when `field-has-error` is true.
 ```
 
 The `description` slot was removed on 2026-09-29; use `descriptionText` or `descriptionHtml`.
+
+**2026-10-17**: resting shadow ring (`--toggle-switch-shadow`), on the track. Theme step 2 by default, so it turns red under `data-invalid`; width is the global `--form-element-shadow-width`. Hover now draws a 1px outline in the border colour with no offset, over the ring's inner edge (was a 2px outline at a 2px offset in the focus colour); focus is unchanged and sits just outside the ring.

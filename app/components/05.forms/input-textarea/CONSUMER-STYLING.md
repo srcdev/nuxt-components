@@ -18,7 +18,8 @@ This shape mirrors `InputText`'s token set (see its own CONSUMER-STYLING.md).
 |---|---|---|
 | `--input-textarea-surface` | `var(--theme-input-surface)` | Wrapper background |
 | `--input-textarea-border` | `var(--theme-border)` | Border colour (`normal`/`underlined` variant border) |
-| `--input-textarea-border-hover` | `var(--theme-border-focus)` | Wrapper outline colour on mouse hover (`normal` only) |
+| `--input-textarea-border-hover` | the resolved border | 1px wrapper outline colour on mouse hover (`normal` only) |
+| `--input-textarea-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal` only). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
 | `--input-textarea-border-focus` | `var(--theme-border-focus)` | Wrapper outline colour on `:focus-visible` (`normal` only) |
 | `--input-textarea-text-color` | `var(--theme-input-text-color-normal)` | Textarea text colour |
 | `--input-textarea-placeholder-color` | `var(--theme-input-placeholder)` | Placeholder text colour |
@@ -40,6 +41,11 @@ component and untouched by this — see `theming-form-geometry-tokens.md`.
 Private (not public API): `--_border`, resolved once and read by both border variants.
 
 ---
+
+> **Changed 2026-10-17**: bordered controls carry a light shadow ring (`box-shadow`, theme step 2,
+> so red when invalid), and hover draws a 1px outline in the border colour with no offset, over the
+> ring's inner edge. Hover used to draw a 2px outline at a 2px offset in the focus colour. Focus is
+> unchanged and sits just outside the ring.
 
 ## State hooks
 

@@ -112,6 +112,14 @@ watch(
       border-radius: 100vw;
     }
 
+    &:not([data-button]) {
+      box-shadow: 0 0 0 var(--form-element-shadow-width) var(--input-checkbox-shadow, var(--form-element-shadow-colour, var(--colour-theme-2)));
+
+      &:has(input:hover) {
+        outline-color: var(--input-checkbox-border-hover, var(--input-checkbox-border, var(--theme-border)));
+      }
+    }
+
     &:not([data-button]):has(input:focus-visible) {
       outline: var(--form-element-outline-width-focus) solid var(--input-checkbox-border-focus, var(--theme-border-focus));
       outline-offset: var(--form-element-outline-offset-focus);

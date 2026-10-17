@@ -163,3 +163,5 @@ line-clamp tokens: an option label names the choice and must stay readable. The 
 - `InputCheckboxRadioButton`'s `id` became optional with a `useId()` fallback.
 - Specs now unmount every wrapper in `afterEach`; stories moved to `StoryObj` with Docs
   descriptions, parent-story links, `CanvasSwitcher` (Field, Button) and `StressTest` stories.
+
+**2026-10-17**: resting shadow ring, the box (`--input-checkbox-shadow`, not inside the button style) and the button style (`--input-checkbox-button-shadow`). Theme step 2 by default, so it turns red under `data-invalid`; width is the global `--form-element-shadow-width`. Hover now draws a 1px outline in the border colour with no offset, over the ring's inner edge (was a 2px outline at a 2px offset in the focus colour); focus is unchanged and sits just outside the ring.

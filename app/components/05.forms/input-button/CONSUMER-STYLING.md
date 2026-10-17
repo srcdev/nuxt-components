@@ -40,7 +40,7 @@ the `InlineWithTextInput` story). `box-sizing: content-box` means it's a floor, 
 | `--input-button-primary-surface-hover` | `color-mix(in oklab, surface 85%, black)` | Background on hover |
 | `--input-button-primary-border-hover` | the resolved hover surface above | Border colour on hover |
 | `--input-button-primary-ring-hover` | the resolved hover border above | Outline colour on hover (1px, no offset) |
-| `--input-button-primary-shadow` | `var(--colour-theme-2)` | Shadow ring colour (all states) |
+| `--input-button-primary-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Shadow ring colour (all states) |
 | `--input-button-primary-border-focus` | `var(--theme-border-focus)` | Border colour on `:focus-visible` |
 | `--input-button-primary-ring-focus` | `var(--theme-ring)` | Outline colour on `:focus-visible` |
 
@@ -53,7 +53,7 @@ the `InlineWithTextInput` story). `box-sizing: content-box` means it's a floor, 
 | `--input-button-secondary-border` | `var(--theme-surface)` | Border colour (resting) |
 | `--input-button-secondary-ring` | `transparent` | Outline colour (resting) |
 | `--input-button-secondary-ring-hover` | the resolved hover border | Outline colour on hover (1px, no offset) |
-| `--input-button-secondary-shadow` | `var(--colour-theme-2)` | Shadow ring colour (all states) |
+| `--input-button-secondary-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Shadow ring colour (all states) |
 | `--input-button-secondary-surface-hover` | `var(--theme-surface-subtle)` | Background on hover |
 | `--input-button-secondary-border-hover` | the resolved border above | Border colour on hover |
 | `--input-button-secondary-border-focus` | `var(--theme-border-focus)` | Border colour on `:focus-visible` |
@@ -74,7 +74,7 @@ the `InlineWithTextInput` story). `box-sizing: content-box` means it's a floor, 
 
 | Token | Default | Controls |
 |---|---|---|
-| `--input-button-shadow-width` | `0.2rem` | Width of the primary and secondary shadow ring. Set `0` to remove it |
+| `--input-button-shadow-width` | `var(--form-element-shadow-width)` (`0.2rem`) | Width of the primary and secondary shadow ring. Set `0` to remove it from buttons only; set the global token to `0` to remove it from every form control |
 
 The focus ring's offset (`--button-focus-ring-offset`, `0.2rem`) puts it just outside the shadow
 ring; if you widen the ring, raise the offset to match or the focus ring will draw over it. An

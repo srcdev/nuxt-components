@@ -17,7 +17,8 @@ override just this component; leave it unset and it inherits the shared `--theme
 | `--input-text-surface` | `var(--theme-input-surface)` | Wrapper background, and slot `InputButton` background |
 | `--input-text-surface-hover` | `var(--theme-input-surface-hover)` | Slot `InputButton` background on hover |
 | `--input-text-border` | `var(--theme-border)` | Border colour (`normal`/`underlined`, resting), and the stepper's button dividers |
-| `--input-text-border-hover` | `var(--theme-border-focus)` | Outline colour on hover (`normal` only) |
+| `--input-text-border-hover` | the resolved border | 1px outline colour on hover (`normal` only) |
+| `--input-text-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal` only). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
 | `--input-text-border-focus` | `var(--theme-border-focus)` | Outline colour on `:focus-visible` (`normal` only), and a slot button's own focus outline |
 | `--input-text-color` | `var(--theme-input-text-color-normal)` | Input text and slot button colour, and autofilled text (global rule) |
 | `--input-text-placeholder-color` | `var(--theme-input-placeholder)` | Placeholder text colour |
@@ -30,6 +31,11 @@ Private (not public API): `--_surface`, `--_border` and `--_border-focus`, each 
 read in several places.
 
 ---
+
+> **Changed 2026-10-17**: bordered controls carry a light shadow ring (`box-shadow`, theme step 2,
+> so red when invalid), and hover draws a 1px outline in the border colour with no offset, over the
+> ring's inner edge. Hover used to draw a 2px outline at a 2px offset in the focus colour. Focus is
+> unchanged and sits just outside the ring.
 
 ## State hooks
 

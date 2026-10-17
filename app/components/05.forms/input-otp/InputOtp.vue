@@ -230,10 +230,10 @@ function onFocus(event: FocusEvent) {
       border: var(--form-element-border-width) solid var(--_border);
       border-radius: var(--input-otp-border-radius, var(--form-input-border-radius));
       outline: var(--form-element-outline-width) solid transparent;
+      box-shadow: 0 0 0 var(--form-element-shadow-width) var(--input-otp-shadow, var(--form-element-shadow-colour, var(--colour-theme-2)));
 
       &:hover {
-        outline: var(--form-element-outline-width-focus) solid var(--input-otp-border-hover, var(--_border-focus));
-        outline-offset: var(--form-element-outline-offset-focus);
+        outline-color: var(--input-otp-border-hover, var(--_border));
       }
 
       &:focus-visible {
