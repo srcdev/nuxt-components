@@ -289,6 +289,7 @@ Numbers are stable (code and docs cite them). Rule files are in `.claude/rules/`
 28. **Container-only ResizeObserver for measured layout** (`StepperList` connectors, 2026-10-15) → `measured-layout-observers.md`. ProgressTracker moving its focus card from one step to the next left the list height unchanged, so the connectors kept stale geometry.
 29. **Toasts focusing themselves** (`DisplayToast`/`DisplayToastProvider`, 2026-10-16) → `a11y-no-focus-steal.md`. The ring showed on stories that auto-open on load, and the masked variant made the rectangular outline obvious.
 30. **Element ids built from data** (`MultipleCheckboxes` button options, 2026-10-16) → `ids-from-useid.md`. `MultipleRadiobuttons` had the same pattern until later that day.
+31. **Theme-relative global colour declared on `:root`** (`--form-element-shadow-colour`, 2026-10-17) → `css-theme-relative-globals.md`. Caught before shipping: declaring it would have frozen every field's ring at the root hue, so invalid fields lost their red ring.
 
 ## Development Workflow
 

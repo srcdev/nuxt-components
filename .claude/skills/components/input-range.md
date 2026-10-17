@@ -175,3 +175,5 @@ automatically in `<script setup>`, no destructuring or `props.` reference needed
 - Specs unmount in `afterEach`; stories moved to `StoryObj` with Docs descriptions, a
   `DecimalSteps` story, `CanvasSwitcher` and a `StressTest` story on the Field. The bare
   control's step-button demo uses `InputButton`, not raw buttons.
+
+**2026-10-17**: deliberately left out of the form-control shadow ring and border-colour hover. The default mode is the native slider (no border to ring), and markers mode draws each marker's edge as an outline. Decided to keep it as it is.

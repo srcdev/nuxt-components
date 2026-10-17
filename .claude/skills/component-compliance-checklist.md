@@ -183,7 +183,8 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
 8. **VS Code snippet** — create or update `.vscode/srcdev-component-{family}.code-snippets`,
    covering the control and its Field wrapper in one file. For a teleported component, a CSS
    override scaffold must not nest its selector under a page class: it never matches (the
-   `DisplayToast` snippet did, fixed 2026-10-16).
+   `DisplayToast` snippet did, fixed 2026-10-16). A tab stop with a default value is `${3:8}`:
+   `$38` is read as tab stop 38 and the default never appears (`AlertMask`, fixed 2026-10-17).
 9. **Accessibility** — check for gaps beyond what already-passing tests would catch:
    - Interactive controls (buttons, toggles, custom form-like widgets) have an accessible name —
      visible text, `aria-label`, or `aria-labelledby`.
@@ -290,14 +291,19 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
       2026-10-16).
     - A state rule (`[data-checked]`) written at the root level loses to deeper nested base rules
       for the same element. Nest it in the element's own block as `.root[data-x] & { … }`
-      (`ToggleSwitch`, 2026-10-16; `css-nesting-conventions.md`).
+      (`ToggleSwitch`, 2026-10-16; `css-nesting-conventions.md`). Same for hover and focus: keep
+      both at the same nesting depth with focus after hover, or a deeper hover rule recolours the
+      focus ring while both apply (`InputSelect`, 2026-10-17).
     - Step buttons and any other script that changes a number round to the step's precision
       (`toFixed`), clamp to `min`/`max`, and compare limits with `<=`/`>=`, never `===` (0.1 steps
       drift to 0.30000000000000004, and an overshoot past an `===` check never disables the button).
       Reference: `stepBy()` in `InputNumberField`.
     - Layout measured in script (connector lines, indicators) re-measures when any measured item
       resizes or changes class, not only when the container resizes (`measured-layout-observers.md`,
-      pitfall #28).
+      pitfall #28). Prefer a CSS-only position when one exists (rule above, `SegmentedControl`).
+    - Geometry drawn in script (SVG paths, canvas) is physical. Position content around it with
+      physical properties (`margin-left`, not `margin-inline-start`), or right-to-left content
+      overlaps a one-sided bar (`AlertMask`, 2026-10-17).
     - Action buttons are `InputButton` (`variant="inline"` when the wrapper styles them), not a raw
       `<button>` (`component-inline-button.md`, `component-inline-action-button.md`). The ledger
       doesn't check this, which is how `InputCopy` scored 5/5 with one (fixed 2026-10-15).

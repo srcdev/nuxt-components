@@ -393,7 +393,9 @@ story: "See the [CookieConsentBanner](?path=/story/molecules-cookieconsentbanner
   default `"padded"` layout insets the canvas by 1rem, which masks viewport gutters, full-bleed
   tracks and edge alignment (`PageRow`, `SliderGallery`). To swap canvas widths inside a story,
   add the `CanvasSwitcher` decorator from `PageRow.stories.ts` (container-sized components only;
-  see `components/canvas-switcher.md`).
+  see `components/canvas-switcher.md`). The switcher renders its own buttons, so for a component
+  with Playwright tests that grab the story's only `role=button` (`InputButton`), put it on the
+  `StressTest` story alone, not in the meta.
 - Use `table: { category: "..." }` in `argTypes` when a component has many props — it groups
   them in the Storybook controls panel (e.g. `"Model"`, `"Basic"`, `"Validation"`, `"Styling"`, `"Slots"`).
 - Export multiple named stories (`Default`, `WithError`, `Outlined`, etc.) when you want

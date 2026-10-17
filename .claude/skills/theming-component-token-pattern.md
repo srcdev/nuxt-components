@@ -191,6 +191,30 @@ Three tiers deep here: instance/global override → "look like the primary butto
 slot underneath that. Each link in the chain is a real, resolvable token — nothing depends on a
 consuming app having declared anything.
 
+## Global colour knobs that follow the theme
+
+A site-wide colour knob that should follow each element's `data-theme` (or `data-invalid`) can't be
+declared on `:root` as `var(--colour-theme-2)`: a custom property holding `var()` is computed where
+it's declared and inherited as that value, so every element gets the root theme's colour. Leave the
+knob undeclared and fall back at the point of use instead:
+
+```css
+/* global: only the geometry is declared */
+:where(html) {
+  --form-element-shadow-width: 0.2rem;
+}
+
+/* component: the colour fallback is evaluated on the themed element */
+.input-text-wrapper {
+  box-shadow: 0 0 0 var(--form-element-shadow-width)
+    var(--input-text-shadow, var(--form-element-shadow-colour, var(--colour-theme-2)));
+}
+```
+
+`--colour-theme-N` and the `--theme-*` slots are themselves re-declared on every `[data-theme]` and
+`[data-invalid]` element (`theme-ramp.css`, `_theme-slots.css`), which is why they work at the point of
+use. Rule: `css-theme-relative-globals.md`.
+
 ## What this does NOT change
 
 - Tier 1 theme slots (`_theme-slots.css`) stay bare `var()`, no fallback, by design.

@@ -1,3 +1,6 @@
+import { ref } from "vue";
+import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
+import type { MediaCanvas } from "~/types/components";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import AlertMaskedContent from "../AlertMaskedContent.vue";
 import AlertContent from "../../alert-content/AlertContent.vue";
@@ -210,4 +213,61 @@ export const TokenOverrides: Story = {
       </div>
     `,
   }),
+};
+
+export const StressTest: Story = {
+  name: "Stress Test (Worst-Case Data)",
+  args: { theme: "warning", dismissible: true },
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "mobileCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; padding: 2rem; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  render: (args) => ({
+    components: { AlertMaskedContent },
+    setup() {
+      return { args, wrapperStyle };
+    },
+    template: `
+      <div :data-theme="args.theme" :style="wrapperStyle" style="display: grid; gap: 1.6rem; max-width: none;">
+        <AlertMaskedContent v-bind="args">
+          <template #title>⚠️ Datenschutzgrundverordnungskonformitätsbestätigungsaufforderung &lt;b&gt;not bold&lt;/b&gt;</template>
+          <template #content>
+            Wir verwenden Ihre Adresse ausschließlich für Rückfragen zu Ihrer Bestellung bei Alex Morgan in Northtown.
+            https://example.com/a/very/long/unbroken/url/that/should/wrap/inside/the/mask يرجى المحاولة مرة أخرى
+          </template>
+        </AlertMaskedContent>
+        <div dir="rtl">
+          <AlertMaskedContent v-bind="args">
+            <template #title>تنبيه</template>
+            <template #content>نص من اليمين إلى اليسار؛ يبقى شريط التمييز على اليسار والنص بعيدًا عنه.</template>
+          </AlertMaskedContent>
+        </div>
+        <AlertMaskedContent v-bind="args" :mask-config="{ radiusLeft: 500, radiusRight: 500, borderLeft: -4 }">
+          <template #title>x</template>
+        </AlertMaskedContent>
+      </div>
+    `,
+  }),
+  parameters: {
+    docs: {
+      story: { inline: false, height: "900px" },
+      description: {
+        story:
+          "Long German title and body with an unbroken compound word and URL, HTML-like and right-to-left text, a right-to-left alert, and a hostile `mask-config` (oversized radii, negative border) round a one-character title. Check at every canvas width: text wraps inside the mask, the accent bar stays on the left with the text clear of it, and the hostile mask still draws a clean shape.",
+      },
+    },
+  },
 };

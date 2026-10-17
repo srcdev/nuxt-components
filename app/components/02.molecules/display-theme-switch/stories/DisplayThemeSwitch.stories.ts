@@ -1,3 +1,6 @@
+import { ref } from "vue";
+import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
+import type { MediaCanvas } from "~/types/components";
 import DisplayThemeSwitch from "../DisplayThemeSwitch.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
@@ -114,6 +117,55 @@ export const InNavigation: Story = {
     docs: {
       description: {
         story: "Example of the theme switch integrated into a navigation bar context.",
+      },
+    },
+  },
+};
+
+export const StressTest: Story = {
+  name: "Stress Test (Worst-Case Data)",
+  args: {
+    ariaLabel: "Farbschema für die gesamte Website auswählen <b>not bold</b>",
+    systemLabel: "Systemeinstellung des Betriebssystems übernehmen",
+    lightLabel: "🌞",
+    darkLabel: "داكن",
+    lightIcon: "",
+  },
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "mobileCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; padding: 2rem; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  render: (args) => ({
+    components: { DisplayThemeSwitch },
+    setup() {
+      return { args };
+    },
+    template: `
+      <div style="display: grid; gap: 1.6rem; justify-items: start;">
+        <DisplayThemeSwitch v-bind="args" />
+        <DisplayThemeSwitch v-bind="args" style-class-passthrough="small" />
+        <div dir="rtl"><DisplayThemeSwitch v-bind="args" /></div>
+      </div>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Long, HTML-like, emoji and right-to-left labels (screen-reader text only), an empty light icon, the small size and a right-to-left container, all bound to the one site colour scheme. Check at every canvas width: the switch stays inside the dashed outline, the empty-icon option still renders as a clickable circle, the marker follows the scheme in every copy, and it slides the right way in right-to-left.",
       },
     },
   },

@@ -63,7 +63,7 @@ each resolving a public token once for reuse.
 - Classes: `.cookie-consent-banner` > `.cookie-consent-banner-inner` (the `role="region"`) >
   `.alert-content` (see its guide for the inner structure); the buttons are
   `InputButton`s with `.cookie-consent-banner-reject` and `.cookie-consent-banner-accept` (plus
-  `.input-button.inline`) inside `.alert-content-actions`.
+  `.input-button[data-variant="inline"]`) inside `.alert-content-actions`.
 - `data-test-id`: `cookie-consent-banner`, `cookie-consent-banner-reject`, `cookie-consent-banner-accept`,
   plus `AlertContent`'s `alert-icon`, `alert-title`, `alert-content`, `alert-actions`.
 
