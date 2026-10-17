@@ -1,7 +1,9 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import StorybookComponent from "../InputLabel.vue";
+import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
 import type { InputUiVariant, InputLabelIndicator } from "~/types/forms/types.forms";
+import type { MediaCanvas } from "~/types/components";
 
 interface InputLabelStoryArgs {
   id: string;
@@ -109,7 +111,42 @@ export default {
     textLabel: "Email address",
     htmlLabel: "",
   },
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "fullWidthCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; padding: 2rem; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        component:
+          "The `<label>` every labelled field wrapper renders. Label copy goes in the `textLabel` and `htmlLabel` slots (html first), `id` becomes its `for`, and `indicator` with `required` adds a required or optional marker (falling back to `app.config` `srcdev.inputLabel`). `field-has-error` and `input-variant` are styling hooks only. The control in these stories is a plain input; see [InputTextField](?path=/story/components-forms-input-text-inputtextfield--required) for it inside a real field.",
+      },
+    },
+  },
 } as Meta<InputLabelStoryArgs>;
+
+// Links in the canvas open in the Storybook manager (target="_top"), not inside the preview iframe.
+const storyNoteStyle = "margin: 0 0 1.6rem; font-size: 1.4rem;";
+const fieldNote = `
+  <p style="${storyNoteStyle}">
+    Every labelled field wrapper renders this label and forwards its own <code>required</code> prop. See it in a real field in the
+    <a href="/?path=/story/components-forms-input-text-inputtextfield--required" target="_top">InputTextField</a> story.
+  </p>
+`;
 
 const Template: StoryFn<InputLabelStoryArgs> = (args) => ({
   components: { StorybookComponent },
@@ -133,7 +170,8 @@ const Template: StoryFn<InputLabelStoryArgs> = (args) => ({
     return { args, componentArgs, tokenStyles };
   },
   template: `
-    <div style="max-width: 48rem; margin: 3.6rem; font-size: 1.6rem;" :style="tokenStyles">
+    <div style="max-width: 48rem; font-size: 1.6rem;" :style="tokenStyles">
+      ${fieldNote}
       <StorybookComponent v-bind="componentArgs">
         <template v-if="args.htmlLabel" #htmlLabel><span v-html="args.htmlLabel"></span></template>
         <template v-if="args.textLabel" #textLabel>{{ args.textLabel }}</template>
@@ -150,16 +188,25 @@ const Template: StoryFn<InputLabelStoryArgs> = (args) => ({
 });
 
 export const TextLabel = Template.bind({});
+TextLabel.parameters = {
+  docs: { description: { story: "Plain label text through the `textLabel` slot." } },
+};
 
 export const HtmlLabel = Template.bind({});
 HtmlLabel.args = {
   textLabel: "",
   htmlLabel: 'Email address <small style="font-weight: normal;">(work or personal)</small>',
 };
+HtmlLabel.parameters = {
+  docs: { description: { story: "Rich markup through the `htmlLabel` slot." } },
+};
 
 export const TextAndHtml = Template.bind({});
 TextAndHtml.args = {
   htmlLabel: "<strong>Work</strong> ",
+};
+TextAndHtml.parameters = {
+  docs: { description: { story: "Both slots filled: `htmlLabel` renders first, then `textLabel`." } },
 };
 
 export const MarkRequired = Template.bind({});
@@ -234,3 +281,22 @@ CustomTokens.decorators = [
     `,
   }),
 ];
+
+export const StressTest = Template.bind({});
+StressTest.storyName = "Stress Test (Worst-Case Data)";
+StressTest.args = {
+  textLabel:
+    "📧 Elektronischepostadressefürdiebenachrichtigungüberbestellungen https://example.com/a/very/long/unbroken/url/for/the/label <b>not bold</b> البريد الإلكتروني",
+  indicator: "optional",
+  required: false,
+  optionalText: "(freiwilligeAngabekeinePflichtfeldbitteleerlassenwennnichtzutreffend)",
+};
+StressTest.parameters = {
+  initialCanvas: "mobileCanvas",
+  docs: {
+    description: {
+      story:
+        "Long unbroken German, a long URL, emoji, HTML-like and right-to-left text in the label, plus an unbroken optional marker. Check at every canvas width: the label and the marker wrap inside the dashed outline, markup renders as text, and the marker stays after the text in RTL. Switch `indicator` to required and turn `required` on to check the required marker. Label copy arrives through slots, so there is no line-clamp token: clamp your own slot markup if you need to.",
+    },
+  },
+};

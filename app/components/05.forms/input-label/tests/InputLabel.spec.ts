@@ -1,14 +1,24 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import InputLabel from "../InputLabel.vue";
 
-const createWrapper = (props = {}, slots = {}) =>
-  mountSuspended(InputLabel, {
+const mounted: { unmount: () => void }[] = [];
+
+const createWrapper = async (props = {}, slots = {}) => {
+  const wrapper = await mountSuspended(InputLabel, {
     props: { id: "test-input", ...props },
     slots,
   });
+  mounted.push(wrapper);
+  return wrapper;
+};
 
 describe("InputLabel", () => {
+  afterEach(() => {
+    mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+    vi.restoreAllMocks();
+  });
+
   describe("rendering", () => {
     it("renders a label linked to the control id", async () => {
       const wrapper = await createWrapper({ id: "email-input" });

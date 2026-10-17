@@ -95,6 +95,7 @@ watch(
     line-height: var(--input-label-line-height, 1.5);
     margin-block: var(--input-label-margin-block, 0.8rem);
     margin-inline: var(--input-label-margin-inline, 0);
+    overflow-wrap: anywhere;
 
     .input-label-indicator {
       --_indicator-color: var(--input-label-indicator-color, inherit);

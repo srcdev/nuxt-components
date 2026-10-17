@@ -132,3 +132,11 @@ ancestor of the label).
 reachable when you render `InputLabel` directly in a custom field wrapper: the library's wrappers
 pass their own hook classes (`input-text-label`, `input-number-label`, `input-range-label`, `input-select-label`,
 `input-textarea-label`, `toggle-switch-label`) and don't forward yours.
+
+---
+
+## Notes
+
+- The label sets `overflow-wrap: anywhere`, so a long URL or unbroken word (and an unbroken
+  marker text) wraps inside a narrow column. Label copy arrives through slots, so there is no
+  line-clamp token: clamp your own slot markup if you need to.

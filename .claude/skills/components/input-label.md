@@ -41,7 +41,9 @@ Use `InputLabel` directly only when building a custom field wrapper:
 | `htmlLabel` | Rich markup (e.g. a required marker). Rendered first. Phrasing content only: it's inside a `<label>`, so no interactive elements. |
 | `textLabel` | Plain label text. |
 
-Both render directly inside the `<label>`, no wrapper elements. Don't hardcode a required
+Both render directly inside the `<label>`, no wrapper elements. Long or unbroken copy wraps
+(`overflow-wrap: anywhere` on the label); there is no line-clamp token, since slot copy is the
+consumer's own markup to clamp. Don't hardcode a required
 asterisk in a slot: use the indicator below.
 
 ---
@@ -62,7 +64,7 @@ export default defineAppConfig({
   without it; `"none"`: nothing (default, so existing sites are unchanged).
 - `InputTextField`, `InputTextAsNumberField`, `InputNumberField`, `InputSelectField`,
   `InputTextareaField` and `InputRangeField` forward `:required`.
-  `ToggleSwitchField` pass `indicator="none"`: a switch always
+  `ToggleSwitchField` passes `indicator="none"`: a switch always
   has a value, so neither marker means anything there.
 - The wrappers don't expose the indicator props per field; use `app.config`.
 - Text props are the i18n hook: pass translated `optionalText`/`requiredText` (or set them in
@@ -116,3 +118,7 @@ Hooks: `data-input-variant`, `data-invalid`, `.input-label-indicator[data-indica
 **2026-09-27**: added the required/optional indicator (`required`, `indicator`, `requiredText`,
 `optionalText`, `requiredIcon`, `optionalIcon`, all app.config-backed under `srcdev.inputLabel`),
 with wrappers forwarding `:required`.
+
+**2026-10-17** (stress-test pass): `overflow-wrap: anywhere` on the label so unbroken copy and
+markers wrap in a narrow column; added the `StressTest` story, a CanvasSwitcher decorator, Docs
+page descriptions and a link to the InputTextField story; spec now unmounts every wrapper.
