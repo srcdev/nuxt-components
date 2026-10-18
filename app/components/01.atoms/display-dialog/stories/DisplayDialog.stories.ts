@@ -10,6 +10,9 @@ type StoryArgs = {
   theme: "" | "info" | "success" | "warning" | "error";
   closeIcon: string;
   closeLabel: string;
+  stressShowTitle?: boolean;
+  stressShowContent?: boolean;
+  stressFooterButtons?: number;
 };
 
 export default {
@@ -72,8 +75,9 @@ export default {
     docs: {
       description: {
         component:
-          "A dialog overlay with header, scrollable content, and footer action slots. Supports `dialog`, `confirm`, `alert`, `modal`, and `fullscreen` variants. The `alert` variant sets `role=alertdialog` and disables dismiss-on-outside-click and Escape.",
+          "A dialog overlay with header, scrollable content, and footer action slots. Supports `dialog`, `confirm`, `alert`, `modal`, and `fullscreen` variants. The `alert` variant sets `role=alertdialog` and disables dismiss-on-outside-click and Escape. Slots: `dialogTitle` (also names the dialog), `dialogContent`, `actionButtonLeft` and `actionButtonRight`. Open state is `v-model`; `closeLabel` and `closeIcon` set the header close button. With no `dialogTitle`, pass an `aria-label` (it falls through to the `<dialog>`). Every story renders in its own frame because the overlay is `position: fixed`.",
       },
+      story: { inline: false, height: "600px" },
     },
   },
 } as Meta<StoryArgs>;
@@ -198,5 +202,92 @@ export const ScrollableContent = ScrollableTemplate.bind({});
 ScrollableContent.parameters = {
   docs: {
     description: { story: "Content area scrolls independently when it overflows the fixed-height dialog panel." },
+  },
+};
+
+const stressLabels = [
+  "Abbrechenundzurückzurübersicht",
+  "😀 Bestätigen",
+  "<b>not bold</b>",
+  "إلغاء العملية",
+  "OK",
+  "Änderungenspeichernundfortfahrenohnezuwarten",
+];
+
+export const StressTest: StoryFn<StoryArgs> = (args) => ({
+  components: { StorybookComponent },
+  setup() {
+    const open = ref(true);
+    return { args, open, stressLabels };
+  },
+  template: `
+    <div style="padding: 4rem; display: flex; justify-content: center;">
+      <button :style="'${triggerButtonStyles}'" @click="open = true">Open dialog</button>
+      <StorybookComponent
+        v-model="open"
+        :variant="args.variant"
+        :allow-content-scroll="args.allowContentScroll"
+        :justify-dialog="args.justifyDialog"
+        :align-dialog="args.alignDialog"
+        :theme="args.theme || undefined"
+        :close-icon="args.closeIcon"
+        :close-label="args.closeLabel"
+        :lock-viewport="false"
+        aria-label="Stress test dialog"
+        data-dialog-id="storybook-stress"
+      >
+        <template v-if="args.stressShowTitle" #dialogTitle>
+          <p style="margin: 0; font-weight: 700; font-size: 1.6rem;">😀 Bevorzugtekontaktmethodefürrückfragenundterminvereinbarungenbestätigen &lt;b&gt;not bold&lt;/b&gt; طريقة الاتصال المفضلة</p>
+        </template>
+        <template v-if="args.stressShowContent" #dialogContent>
+          <p style="margin: 0 0 1.2rem; line-height: 1.6;">https://example.invalid/a/very/long/unbroken/url/that/never/offers/a/break/opportunity/anywhere/in/its/path?query=withevenmoreunbrokentextandparameters</p>
+          <p style="margin: 0 0 1.2rem; line-height: 1.6;">Sind Sie sicher, dass Sie alle nicht gespeicherten Änderungen an Ihrem Profil, Ihren Benachrichtigungseinstellungen und Ihren gespeicherten Zahlungsmethoden unwiderruflich verwerfen möchten? Dieser Vorgang kann nicht rückgängig gemacht werden.</p>
+          <p dir="rtl" style="margin: 0 0 1.2rem; line-height: 1.6;">هل أنت متأكد أنك تريد تجاهل جميع التغييرات غير المحفوظة؟ لا يمكن التراجع عن هذا الإجراء.</p>
+          <p v-for="n in 12" :key="n" style="margin: 0 0 1.2rem; line-height: 1.6;">Paragraph {{ n }}: <b>&lt;script&gt;alert("x")&lt;/script&gt;</b> renders as text. Lorem ipsum odor amet, consectetuer adipiscing elit.</p>
+        </template>
+        <template v-if="args.stressFooterButtons" #actionButtonRight>
+          <button
+            v-for="label in stressLabels.slice(0, args.stressFooterButtons)"
+            :key="label"
+            :style="'${actionButtonStyles}'"
+            @click="open = false"
+          >{{ label }}</button>
+        </template>
+      </StorybookComponent>
+    </div>
+  `,
+});
+StressTest.storyName = "Stress Test (Worst-Case Data)";
+StressTest.args = {
+  variant: "modal",
+  closeLabel: "Dialogfensterschließenundzurückkehren 😀",
+  stressShowTitle: true,
+  stressShowContent: true,
+  stressFooterButtons: 6,
+};
+StressTest.argTypes = {
+  stressShowTitle: {
+    control: { type: "boolean" },
+    description: "Story-only: render the `dialogTitle` slot (off shows the close button alone in the header)",
+    table: { category: "Stress test (story-only)" },
+  },
+  stressShowContent: {
+    control: { type: "boolean" },
+    description: "Story-only: render the `dialogContent` slot",
+    table: { category: "Stress test (story-only)" },
+  },
+  stressFooterButtons: {
+    control: { type: "range", min: 0, max: 6, step: 1 },
+    description: "Story-only: number of footer buttons in `actionButtonRight` (0 omits the footer)",
+    table: { category: "Stress test (story-only)" },
+  },
+};
+StressTest.parameters = {
+  docs: {
+    story: { inline: false, height: "700px" },
+    description: {
+      story:
+        "Worst-case content, opened on load. A long unbroken title with emoji, HTML-like and right-to-left text, an unbroken URL, long German and Arabic copy, escaped markup that must render as text, and six footer buttons with unbroken labels. Switch `variant` through all five: the panel never exceeds the viewport, the close button stays in the header's top-right corner, the title and content wrap instead of widening the panel, the footer buttons wrap onto further rows and stay visible (content is clipped, or scrolls with `allowContentScroll`, rather than pushing the footer off-screen). Toggle the slots off one at a time: with no content the footer keeps its own row (at the bottom of the fixed-height `dialog` panel) instead of stretching into the middle one, and with nothing but the header the panel is just the close button.",
+    },
   },
 };

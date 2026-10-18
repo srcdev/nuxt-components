@@ -10,6 +10,19 @@ const { useAppConfigMock } = vi.hoisted(() => ({
 
 mockNuxtImport("useAppConfig", () => useAppConfigMock);
 
+const mounted: { unmount: () => void }[] = [];
+
+const mountDialog = async (options: Parameters<typeof mountSuspended<typeof DisplayDialog>>[1] = {}) => {
+  const wrapper = await mountSuspended(DisplayDialog, options);
+  mounted.push(wrapper);
+  return wrapper;
+};
+
+const unmountDialog = (wrapper: { unmount: () => void }) => {
+  mounted.splice(mounted.indexOf(wrapper), 1);
+  wrapper.unmount();
+};
+
 vi.mock("focus-trap-vue", () => ({
   FocusTrap: {
     name: "FocusTrap",
@@ -21,6 +34,8 @@ vi.mock("focus-trap-vue", () => ({
 
 describe("DisplayDialog", () => {
   afterEach(() => {
+    mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+    vi.restoreAllMocks();
     document.body.classList.remove("lock");
     delete document.body.dataset.lockCount;
   });
@@ -28,7 +43,7 @@ describe("DisplayDialog", () => {
   // ─── Mount ────────────────────────────────────────────────────────────────
 
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
     });
     expect(wrapper.vm).toBeTruthy();
@@ -37,7 +52,7 @@ describe("DisplayDialog", () => {
   // ─── Snapshot ─────────────────────────────────────────────────────────────
 
   it("renders correct HTML structure with all slots", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test", modelValue: true },
       slots: {
         dialogTitle: "<p>Title</p>",
@@ -52,14 +67,14 @@ describe("DisplayDialog", () => {
   // ─── Root element ─────────────────────────────────────────────────────────
 
   it("renders as <dialog>", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
     });
     expect(wrapper.element.tagName).toBe("DIALOG");
   });
 
   it("always has the display-dialog class", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
     });
     expect(wrapper.classes()).toContain("display-dialog");
@@ -68,7 +83,7 @@ describe("DisplayDialog", () => {
   // ─── data-dialog-id ───────────────────────────────────────────────────────
 
   it("sets data-dialog-id attribute from prop", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "my-dialog" },
     });
     expect(wrapper.attributes("data-dialog-id")).toBe("my-dialog");
@@ -77,14 +92,14 @@ describe("DisplayDialog", () => {
   // ─── open attribute ───────────────────────────────────────────────────────
 
   it("sets [open] attribute when modelValue is true", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test", modelValue: true },
     });
     expect(wrapper.attributes("open")).toBeDefined();
   });
 
   it("omits [open] attribute when modelValue is false", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test", modelValue: false },
     });
     expect(wrapper.attributes("open")).toBeUndefined();
@@ -93,7 +108,7 @@ describe("DisplayDialog", () => {
   // ─── role ─────────────────────────────────────────────────────────────────
 
   it("has no explicit role by default — implicit from <dialog> element", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
     });
     expect(wrapper.attributes("role")).toBeUndefined();
@@ -102,7 +117,7 @@ describe("DisplayDialog", () => {
   it.each(["dialog", "modal", "confirm", "fullscreen"] as const)(
     "has no explicit role for variant='%s' — implicit from <dialog> element",
     async (variant) => {
-      const wrapper = await mountSuspended(DisplayDialog, {
+      const wrapper = await mountDialog({
         props: { dataDialogId: "test", variant },
       });
       expect(wrapper.attributes("role")).toBeUndefined();
@@ -110,7 +125,7 @@ describe("DisplayDialog", () => {
   );
 
   it("has role='alertdialog' for variant='alert'", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test", variant: "alert" },
     });
     expect(wrapper.attributes("role")).toBe("alertdialog");
@@ -119,7 +134,7 @@ describe("DisplayDialog", () => {
   // ─── Variant class on .display-dialog-inner ──────────────────────────────────────────────
 
   it("applies 'dialog' class to .display-dialog-inner by default", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
     });
     expect(wrapper.find(".display-dialog-inner").classes()).toContain("dialog");
@@ -128,7 +143,7 @@ describe("DisplayDialog", () => {
   it.each(["dialog", "modal", "confirm", "alert", "fullscreen"] as const)(
     "applies '%s' class to .display-dialog-inner",
     async (variant) => {
-      const wrapper = await mountSuspended(DisplayDialog, {
+      const wrapper = await mountDialog({
         props: { dataDialogId: "test", variant },
       });
       expect(wrapper.find(".display-dialog-inner").classes()).toContain(variant);
@@ -138,7 +153,7 @@ describe("DisplayDialog", () => {
   // ─── Slots ────────────────────────────────────────────────────────────────
 
   it("renders dialogTitle slot in .display-dialog-col-left", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
       slots: { dialogTitle: "<p>My Title</p>" },
     });
@@ -146,14 +161,14 @@ describe("DisplayDialog", () => {
   });
 
   it("omits .display-dialog-col-left when dialogTitle slot is not provided", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
     });
     expect(wrapper.find(".display-dialog-col-left").exists()).toBe(false);
   });
 
   it("renders dialogContent slot in .display-dialog-content", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
       slots: { dialogContent: "<p>Content</p>" },
     });
@@ -161,14 +176,14 @@ describe("DisplayDialog", () => {
   });
 
   it("omits .display-dialog-content when dialogContent slot is not provided", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
     });
     expect(wrapper.find(".display-dialog-content").exists()).toBe(false);
   });
 
   it("renders .display-dialog-footer when actionButtonLeft slot is provided", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
       slots: { actionButtonLeft: "<button>Cancel</button>" },
     });
@@ -176,7 +191,7 @@ describe("DisplayDialog", () => {
   });
 
   it("renders .display-dialog-footer when actionButtonRight slot is provided", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
       slots: { actionButtonRight: "<button>Confirm</button>" },
     });
@@ -184,14 +199,14 @@ describe("DisplayDialog", () => {
   });
 
   it("omits .display-dialog-footer when neither action button slot is provided", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
     });
     expect(wrapper.find(".display-dialog-footer").exists()).toBe(false);
   });
 
   it("renders both action button slots inside .display-dialog-footer", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
       slots: {
         actionButtonLeft: "<button>Cancel</button>",
@@ -205,7 +220,7 @@ describe("DisplayDialog", () => {
   // ─── allowContentScroll ───────────────────────────────────────────────────
 
   it("does not apply allow-content-scroll class by default", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test" },
       slots: { dialogContent: "<p>Content</p>" },
     });
@@ -213,7 +228,7 @@ describe("DisplayDialog", () => {
   });
 
   it("applies allow-content-scroll class when allowContentScroll=true", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test", allowContentScroll: true },
       slots: { dialogContent: "<p>Content</p>" },
     });
@@ -223,7 +238,7 @@ describe("DisplayDialog", () => {
   // ─── Close button ─────────────────────────────────────────────────────────
 
   it("close button emits update:modelValue=false", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test", modelValue: true },
     });
     await wrapper.find('[data-test-id="display-dialog-header-close"]').trigger("click");
@@ -231,26 +246,57 @@ describe("DisplayDialog", () => {
   });
 
   it("uses \"Close\" as the close button's screen-reader label by default", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, { props: { dataDialogId: "test" } });
+    const wrapper = await mountDialog({ props: { dataDialogId: "test" } });
     expect(wrapper.find(".display-dialog-close .sr-only").text()).toBe("Close");
   });
 
   it("uses the closeLabel prop for the close button's screen-reader label", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, { props: { dataDialogId: "test", closeLabel: "Fermer" } });
+    const wrapper = await mountDialog({ props: { dataDialogId: "test", closeLabel: "Fermer" } });
     expect(wrapper.find(".display-dialog-close .sr-only").text()).toBe("Fermer");
+  });
+
+  it("renders the close button as an icon-only InputButton of type button", async () => {
+    const wrapper = await mountDialog({ props: { dataDialogId: "test" } });
+    const close = wrapper.find('[data-test-id="display-dialog-header-close"]');
+    expect(close.element.tagName).toBe("BUTTON");
+    expect(close.classes()).toEqual(expect.arrayContaining(["input-button", "display-dialog-close"]));
+    expect(close.attributes("type")).toBe("button");
+    expect(close.attributes("data-icon-only")).toBeDefined();
+    expect(close.find(".icon").attributes("aria-hidden")).toBe("true");
+  });
+
+  // ─── Accessible name ──────────────────────────────────────────────────────
+
+  it("labels the dialog by its title when dialogTitle is provided", async () => {
+    const wrapper = await mountDialog({
+      props: { dataDialogId: "test" },
+      slots: { dialogTitle: "<p>My Title</p>" },
+    });
+    const titleId = wrapper.find(".display-dialog-col-left").attributes("id");
+    expect(titleId).toBeTruthy();
+    expect(wrapper.attributes("aria-labelledby")).toBe(titleId);
+  });
+
+  it("passes a consumer aria-label through to the <dialog> when there is no title", async () => {
+    const wrapper = await mountDialog({
+      props: { dataDialogId: "test" },
+      attrs: { "aria-label": "Settings" },
+    });
+    expect(wrapper.attributes("aria-labelledby")).toBeUndefined();
+    expect(wrapper.attributes("aria-label")).toBe("Settings");
   });
 
   // ─── styleClassPassthrough ────────────────────────────────────────────────
 
   it("applies a styleClassPassthrough string", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test", styleClassPassthrough: "my-class" },
     });
     expect(wrapper.classes()).toContain("my-class");
   });
 
   it("updates classes when styleClassPassthrough changes", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test", styleClassPassthrough: ["original"] },
     });
     await wrapper.setProps({ styleClassPassthrough: ["updated"] });
@@ -259,7 +305,7 @@ describe("DisplayDialog", () => {
   });
 
   it("applies multiple styleClassPassthrough classes from an array", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test", styleClassPassthrough: ["class-a", "class-b"] },
     });
     expect(wrapper.classes()).toContain("class-a");
@@ -269,40 +315,40 @@ describe("DisplayDialog", () => {
   // ─── Body viewport lock ───────────────────────────────────────────────────
 
   it("adds lock class to body on mount when lockViewport=true", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test", lockViewport: true },
     });
     expect(document.body.classList.contains("lock")).toBe(true);
-    wrapper.unmount();
+    unmountDialog(wrapper);
   });
 
   it("does not add lock class to body when lockViewport=false", async () => {
-    await mountSuspended(DisplayDialog, {
+    await mountDialog({
       props: { dataDialogId: "test", lockViewport: false },
     });
     expect(document.body.classList.contains("lock")).toBe(false);
   });
 
   it("removes lock class from body on unmount when lockViewport=true", async () => {
-    const wrapper = await mountSuspended(DisplayDialog, {
+    const wrapper = await mountDialog({
       props: { dataDialogId: "test", lockViewport: true },
     });
     expect(document.body.classList.contains("lock")).toBe(true);
-    wrapper.unmount();
+    unmountDialog(wrapper);
     expect(document.body.classList.contains("lock")).toBe(false);
   });
 
   it("does not remove lock when a second locking dialog is still open", async () => {
-    const wrapper1 = await mountSuspended(DisplayDialog, {
+    const wrapper1 = await mountDialog({
       props: { dataDialogId: "a", lockViewport: true },
     });
-    const wrapper2 = await mountSuspended(DisplayDialog, {
+    const wrapper2 = await mountDialog({
       props: { dataDialogId: "b", lockViewport: true },
     });
     expect(document.body.classList.contains("lock")).toBe(true);
-    wrapper2.unmount();
+    unmountDialog(wrapper2);
     expect(document.body.classList.contains("lock")).toBe(true);
-    wrapper1.unmount();
+    unmountDialog(wrapper1);
     expect(document.body.classList.contains("lock")).toBe(false);
   });
 
@@ -327,7 +373,7 @@ describe("DisplayDialog", () => {
         .find((c: string) => c !== "iconify" && c !== "icon") ?? "";
 
     it("uses hardcoded fallbacks when app.config has no displayDialog key", async () => {
-      const wrapper = await mountSuspended(DisplayDialog, {
+      const wrapper = await mountDialog({
         props: { dataDialogId: "test" },
         slots: { dialogContent: "<p>Content</p>" },
       });
@@ -356,7 +402,7 @@ describe("DisplayDialog", () => {
           },
         },
       });
-      const wrapper = await mountSuspended(DisplayDialog, {
+      const wrapper = await mountDialog({
         props: { dataDialogId: "test" },
         slots: { dialogContent: "<p>Content</p>" },
       });
@@ -385,7 +431,7 @@ describe("DisplayDialog", () => {
           },
         },
       });
-      const wrapper = await mountSuspended(DisplayDialog, {
+      const wrapper = await mountDialog({
         props: {
           dataDialogId: "test",
           variant: "fullscreen",
@@ -412,7 +458,7 @@ describe("DisplayDialog", () => {
         icon: {},
         srcdev: { displayDialog: { lockViewport: false } },
       });
-      await mountSuspended(DisplayDialog, { props: { dataDialogId: "test" } });
+      await mountDialog({ props: { dataDialogId: "test" } });
       expect(document.body.classList.contains("lock")).toBe(false);
     });
   });

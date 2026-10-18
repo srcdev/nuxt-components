@@ -14,14 +14,14 @@ open/close state management.
 |---|---|---|---|
 | `dataDialogId` | `string` | — | **Required.** Unique identifier rendered as `data-dialog-id` attribute. |
 | `variant` | `'dialog' \| 'modal' \| 'confirm' \| 'alert' \| 'fullscreen'` | `'dialog'` | Controls panel sizing and ARIA role. |
-| `theme` | `SemanticTheme` | `undefined` | Optional header accent — `data-theme` on `.display-dialog-header` only; adds a coloured bottom border and tints the close icon. |
+| `theme` | `SemanticTheme` | `undefined` | Optional header accent: `data-theme` on `.display-dialog-header` only; adds a coloured bottom border and tints the close icon (`--display-dialog-header-accent-color`). |
 | `v-model` | `boolean` | — | Controls open/closed state. |
 | `allowContentScroll` | `boolean` | `false` | Enables independent scroll on `.display-dialog-content`. |
-| `lockViewport` | `boolean` | `true` | Adds/removes `lock` class on `<body>` on mount/close. |
+| `lockViewport` | `boolean` | `true` | Locks body scroll (`useBodyLock`) on mount and releases it on unmount, not on close: render the dialog with `v-if`. |
 | `justifyDialog` | `'start' \| 'center' \| 'end'` | `'center'` | Horizontal position of panel within overlay. |
 | `alignDialog` | `'start' \| 'center' \| 'end'` | `'center'` | Vertical position of panel within overlay. |
 | `closeIcon` | `string` | app.config | Icon name for the header close button. Override per-instance or set globally via `app.config`. |
-| `closeLabel` | `string` | app.config (`"Close"`) | Screen-reader text on the icon-only close button. Pass a translated string, or set it site-wide via `app.config`. |
+| `closeLabel` | `string` | app.config (`"Close"`) | Visually hidden text on the icon-only close button (an `InputButton`). Pass a translated string, or set it site-wide via `app.config`. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root `<dialog>` element. |
 
 ## Slots
@@ -35,15 +35,25 @@ open/close state management.
 
 `.display-dialog-footer` is omitted entirely when neither action button slot is provided.
 
+## Accessible name
+
+The `#dialogTitle` slot names the dialog (`aria-labelledby` points at it). A dialog without a
+title has no name, so pass `aria-label="..."`: it isn't a prop, it falls through to the root
+`<dialog>`.
+
 ## Variants
 
 | Variant | Panel size | ARIA role | Dismiss on Escape/outside-click |
 |---|---|---|---|
 | `dialog` | `70dvh × min(75%, 72rem)` | `dialog` | Yes |
-| `modal` | Content-sized | `dialog` | Yes |
-| `confirm` | Content-sized | `dialog` | Yes |
+| `modal` | Content-sized, capped at the viewport | `dialog` | Yes |
+| `confirm` | `min(90%, 48rem)` wide, content height | `dialog` | Yes |
 | `alert` | `min(90%, 48rem)` | `alertdialog` | **No** — requires explicit action |
 | `fullscreen` | `100% × 100%` | `dialog` | Yes |
+
+Every variant is capped at the overlay's size. Long titles and content wrap, footer buttons wrap onto
+further rows, and content taller than the panel is clipped (or scrolls with `allowContentScroll`)
+while the header and footer stay visible.
 
 ## Basic usage
 
@@ -137,7 +147,7 @@ CSS over per-instance overrides — dialogs are site-wide UI:
 
 ```css
 /* assets/styles/setup/07.components/display-dialog.css */
-:root {
+:where(html) {
   --display-dialog-inner-border-radius: 1.2rem;
   --display-dialog-inner-background: var(--brand-surface);
   --display-dialog-inner-border: 0.1rem solid var(--brand-border);

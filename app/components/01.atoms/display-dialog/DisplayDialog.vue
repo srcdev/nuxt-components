@@ -23,14 +23,18 @@
           </div>
 
           <div class="display-dialog-col-right">
-            <button
+            <InputButton
+              type="button"
+              variant="inline"
               data-test-id="display-dialog-header-close"
-              class="display-dialog-close"
-              @click.prevent="closeDialog()"
+              :button-text="resolved.closeLabel"
+              style-class-passthrough="display-dialog-close"
+              @click="closeDialog()"
             >
-              <Icon :name="resolved.closeIcon" class="icon" />
-              <span class="sr-only">{{ resolved.closeLabel }}</span>
-            </button>
+              <template #iconOnly>
+                <Icon :name="resolved.closeIcon" class="icon" aria-hidden="true" />
+              </template>
+            </InputButton>
           </div>
         </div>
         <div
@@ -139,19 +143,6 @@ onUnmounted(() => {
   .display-dialog {
     --_transition-duration: var(--display-dialog-transition-duration, 200ms);
 
-    --_header-button-border-hover: var(
-      --display-dialog-header-button-border-hover,
-      0.1rem solid var(--colour-text-default)
-    );
-    --_header-button-outline-hover: var(
-      --display-dialog-header-button-outline-hover,
-      0.1rem solid var(--colour-text-default)
-    );
-    --_header-button-icon-color: var(
-      --display-dialog-header-button-icon-color,
-      var(--colour-text-default)
-    );
-
     position: fixed;
     left: 0;
     top: 0;
@@ -211,13 +202,14 @@ onUnmounted(() => {
       --_inner-outline: var(--display-dialog-inner-outline, 0.1rem solid var(--colour-text-default));
 
       display: grid;
-      grid-template-rows: auto 1fr auto;
+      grid-template-rows: auto minmax(0, 1fr) auto;
       border-radius: var(--_inner-border-radius);
       border: var(--_inner-border);
       outline: var(--_inner-outline);
       background-color: var(--display-dialog-inner-background, var(--page-bg));
       height: initial;
-      width: 100vw;
+      max-inline-size: 100%;
+      max-block-size: 100%;
       overflow: hidden;
 
       &.alert {
@@ -250,30 +242,33 @@ onUnmounted(() => {
       }
 
       .display-dialog-header {
+        grid-row: 1;
         display: flex;
         align-items: center;
+        gap: var(--display-dialog-header-gap, 1.2rem);
         padding: var(--display-dialog-header-padding, 1.2rem);
 
         &[data-theme] {
-          border-block-end: 0.2rem solid var(--theme-accent);
-
-          .display-dialog-close .icon {
-            color: var(--theme-accent);
-          }
+          border-block-end: 0.2rem solid var(--display-dialog-header-accent-color, var(--theme-accent));
         }
 
         .display-dialog-col-left {
           flex: 1;
+          min-inline-size: 0;
+          overflow-wrap: anywhere;
         }
 
         .display-dialog-col-right {
+          flex: none;
           margin-inline-start: auto;
 
-          .display-dialog-close {
-            background-color: transparent;
+          .display-dialog-close.input-button {
+            box-sizing: border-box;
             display: block flex;
             align-items: center;
             justify-content: center;
+            min-height: auto;
+            background-color: transparent;
             margin: var(--display-dialog-header-button-margin, 0);
             padding: var(--display-dialog-header-button-padding, 0.4rem);
             border: var(--display-dialog-header-button-border, 0.1rem solid transparent);
@@ -287,21 +282,31 @@ onUnmounted(() => {
             &:hover,
             &:focus-visible {
               cursor: pointer;
-              border: var(--_header-button-border-hover);
-              outline: var(--_header-button-outline-hover);
+              border: var(--display-dialog-header-button-border-hover, 0.1rem solid var(--colour-text-default));
+              outline: var(--display-dialog-header-button-outline-hover, 0.1rem solid var(--colour-text-default));
+            }
+
+            .input-button-icon {
+              margin: 0;
             }
 
             .icon {
-              color: var(--_header-button-icon-color);
+              color: var(--display-dialog-header-button-icon-color, var(--colour-text-default));
               display: block;
               font-size: var(--display-dialog-header-button-icon-size, 2.4rem);
+
+              .display-dialog-header[data-theme] & {
+                color: var(--display-dialog-header-accent-color, var(--theme-accent));
+              }
             }
           }
         }
       }
 
       .display-dialog-content {
+        grid-row: 2;
         overflow: hidden;
+        overflow-wrap: anywhere;
         padding: var(--display-dialog-content-padding, 1.2rem);
 
         &.allow-content-scroll {
@@ -313,7 +318,10 @@ onUnmounted(() => {
       }
 
       .display-dialog-footer {
+        grid-row: 3;
         display: flex;
+        flex-wrap: wrap;
+        overflow-wrap: anywhere;
         gap: var(--display-dialog-footer-gap, 1.2rem);
         justify-content: flex-end;
         padding: var(--display-dialog-footer-padding, 1.2rem);

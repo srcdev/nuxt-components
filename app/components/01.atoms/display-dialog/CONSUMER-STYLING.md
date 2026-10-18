@@ -6,6 +6,9 @@ All `--display-dialog-*` tokens are the stable override surface. Because dialogs
 elements — not inline components — the recommended approach is to set tokens once in a **global CSS
 file** rather than per-instance via `styleClassPassthrough`.
 
+Private tokens (`--_transition-duration`, `--_inner-border-radius`, `--_inner-border`,
+`--_inner-outline`) are not public API: set the public token each one reads instead.
+
 ### Overlay
 
 | Token | Default | Controls |
@@ -36,6 +39,8 @@ file** rather than per-instance via `styleClassPassthrough`.
 | Token | Default | Controls |
 |---|---|---|
 | `--display-dialog-header-padding` | `1.2rem` | Header area padding |
+| `--display-dialog-header-gap` | `1.2rem` | Space between the title and the close button |
+| `--display-dialog-header-accent-color` | `var(--theme-accent)` | Bottom border and close-icon colour when `theme` is set |
 | `--display-dialog-header-button-margin` | `0` | Close button margin |
 | `--display-dialog-header-button-padding` | `0.4rem` | Close button padding |
 | `--display-dialog-header-button-border` | `0.1rem solid transparent` | Close button border (resting) |
@@ -45,6 +50,14 @@ file** rather than per-instance via `styleClassPassthrough`.
 | `--display-dialog-header-button-outline-hover` | `0.1rem solid var(--colour-text-default)` | Close button outline on hover/focus |
 | `--display-dialog-header-button-icon-color` | `var(--colour-text-default)` | Close button icon colour |
 | `--display-dialog-header-button-icon-size` | `2.4rem` | Close button icon size |
+
+The close button is an icon-only `InputButton` (`variant="inline"`), so it renders as
+`.display-dialog-close.input-button`; the `--display-dialog-header-button-*` tokens style it.
+
+> Changed 2026-10-18: the close button was a raw `<button>` and is now an `InputButton`. Its class
+> (`.display-dialog-close`) and tokens are unchanged, so existing overrides still match. A set `theme` now tints the
+> close icon as documented: the tint rule used to lose to the resting icon colour and never applied.
+> `--display-dialog-header-gap` and `--display-dialog-header-accent-color` are new.
 
 ### Content & footer
 
@@ -64,12 +77,24 @@ file** rather than per-instance via `styleClassPassthrough`.
 | `[justify-dialog="start|center|end"]` | `.display-dialog` | Horizontal placement of the panel |
 | `[align-dialog="start|center|end"]` | `.display-dialog` | Vertical placement of the panel |
 | `.dialog`, `.modal`, `.confirm`, `.alert`, `.fullscreen` | `.display-dialog-inner` | The resolved `variant` |
-| `[data-theme]` | `.display-dialog-header` | A `theme` is set: adds a `--theme-accent` bottom border and title colour |
+| `[data-theme]` | `.display-dialog-header` | A `theme` is set: adds a bottom border and close-icon tint in `--display-dialog-header-accent-color` |
 | `.allow-content-scroll` | `.display-dialog-content` | `allow-content-scroll` is on |
 
 Inner classes: `.display-dialog-inner` (panel), `.display-dialog-header`,
 `.display-dialog-col-left` (title), `.display-dialog-col-right`, `.display-dialog-close`,
 `.display-dialog-content`, `.display-dialog-footer`.
+
+## Sizing
+
+The panel never grows past the overlay: `max-inline-size` and `max-block-size` are `100%`, the
+rows are `auto minmax(0, 1fr) auto`, and the header, content and footer each keep their own row
+(so with no content the footer doesn't stretch into the middle). The title column and content area
+wrap long unbroken text (`overflow-wrap: anywhere`), and the footer wraps its buttons onto further
+rows. Content taller than the panel is clipped, or scrolls with `allow-content-scroll`; the header
+and footer stay visible either way.
+
+> Changed 2026-10-18: `modal` used to grow with its content past the viewport, a long title pushed
+> the close button out of the panel, and footer buttons never wrapped.
 
 > Changed 2026-08-22: these used to be bare generic names (`.inner`, `.header`, `.footer`,
 > `.col-left`, `.col-right`, `.dialog-content`). The dialog renders inline, not teleported, so a
@@ -81,11 +106,11 @@ Inner classes: `.display-dialog-inner` (panel), `.display-dialog-header`,
 ## Global theming
 
 Create `assets/styles/setup/07.components/display-dialog.css` in the consuming app and set tokens
-on `:root`. This applies to every `DisplayDialog` across the site.
+on `:where(html)`. This applies to every `DisplayDialog` across the site.
 
 ```css
 /* assets/styles/setup/07.components/display-dialog.css */
-:root {
+:where(html) {
   --display-dialog-backdrop-background: rgba(0, 0, 0, 0.6);
   --display-dialog-inner-border-radius: 1.2rem;
   --display-dialog-inner-background: var(--brand-surface);

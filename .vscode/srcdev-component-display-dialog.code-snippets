@@ -19,7 +19,7 @@
     ]
   },
   "SRCDEV DisplayDialog Confirm Template": {
-    "description": "DisplayDialog confirm variant — content-sized, requires explicit action",
+    "description": "DisplayDialog confirm variant — compact (max 48rem), dismissable with Escape or outside-click",
     "scope": "vue,html",
     "body": [
       "<DisplayDialog",
@@ -114,10 +114,12 @@
       "    --display-dialog-backdrop-blur: ;",
       "    --display-dialog-transition-duration: ;",
       "",
-      "    .inner {",
-      "      .header {}",
-      "      .dialog-content {}",
-      "      .footer {}",
+      "    --display-dialog-header-accent-color: ;",
+      "",
+      "    .display-dialog-inner {",
+      "      .display-dialog-header {}",
+      "      .display-dialog-content {}",
+      "      .display-dialog-footer {}",
       "    }",
       "  }",
       "}"
