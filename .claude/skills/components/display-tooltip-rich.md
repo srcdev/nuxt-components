@@ -18,7 +18,8 @@ directly when you need full control over the popover's content.
 The name follows Material 3's **rich tooltip** (subhead, supporting text, optional action, as
 opposed to a plain one-line tooltip). Renamed from `DisplayTooltipDefined` on 2026-10-18: every
 `display-tooltip-defined` class and `--display-tooltip-defined-*` token became `display-tooltip-rich`,
-with the same suffixes and defaults. Older notes below use the new name throughout.
+with the same suffixes and defaults. Older notes below use the new component name but keep the
+class names of their date (`.popover-content-defined` is today's `.display-tooltip-rich-content`).
 
 ## Props
 

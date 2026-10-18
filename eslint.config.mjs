@@ -29,6 +29,9 @@ export default withNuxt(
     files: ["app/components/**/*.vue"],
     rules: {
       "vue/multi-word-component-names": ["error", { ignores: ["Breadcrumb"] }],
+      // A <button> with no type submits any form a consumer renders it inside
+      // (DisplayTooltip trigger, DisplayTooltipRich close button, 2026-10-18).
+      "vue/html-button-has-type": "error",
     },
   }
 );

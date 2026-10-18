@@ -7,7 +7,8 @@ paths:
 
 Build `id`/`for` pairs from `useId()` (plus a loop index for repeated items), never from props or
 data values like `` `${name}-${item.value}` ``. A radio group's default `name` comes from
-`useId()` too, never a fixed string.
+`useId()` too, never a fixed string. Call `useId()` once at setup and store the result; never call
+it inside a `computed`, which can re-run it.
 
 Why: two instances sharing a `name` and values produce duplicate ids, and a value with spaces makes
 an invalid one, so labels toggle the wrong control (`MultipleCheckboxes`, 2026-10-16). A fixed default radio `name` makes every instance on a page

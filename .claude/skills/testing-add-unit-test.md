@@ -338,6 +338,14 @@ const ids = host.findAll("input").map((input) => input.attributes("id"));
 expect(new Set(ids).size).toBe(ids.length);
 ```
 
+## Testing duplicate `v-for` keys
+
+Duplicate keys don't show on first render, and Vue only warns (and only corrupts the DOM) inside
+the keyed diff's unsorted middle section. A reorder that keeps the first or last item in place can
+be resolved from the ends and never reaches it. Mount with two items sharing the repeatable field,
+then `setProps` with the first and last items swapped, and assert the rendered labels in order
+(`SkipLinks.spec.ts`). With an `href`-only key that test rendered five links instead of four.
+
 ## Mocking browser APIs
 
 ### Global constructors (ResizeObserver, IntersectionObserver, etc.)

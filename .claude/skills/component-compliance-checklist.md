@@ -197,6 +197,9 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
    - A toast, banner or status message doesn't `.focus()` itself when it appears (rule
      `consumer/a11y-no-focus-steal.md`).
    - Focus is visible (`:focus-visible`, not a suppressed outline) on anything focusable.
+   - An element hidden visually but kept in the DOM (zero width, `opacity: 0`, kept as an anchor)
+     also leaves the tab order and the accessibility tree (`tabindex="-1"`, `aria-hidden`), or it's
+     an invisible tab stop (`DisplayTooltip`'s `hideTrigger`, fixed 2026-10-18).
    - `aria-invalid` is bound as `fieldHasError ? 'true' : undefined`, never the boolean itself:
      `:aria-invalid="fieldHasError"` renders `aria-invalid="false"` on every valid field
      (`InputTextarea`, `ToggleSwitch`, fixed 2026-10-16). Same for an empty `aria-describedby`.
@@ -264,7 +267,20 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
     - A `position: fixed`/`sticky` overlay exposes a public z-index token defaulting to `999999`
       (pitfall #17).
     - No utility class from `06.utility-classes` in the component's own markup unless it's used
-      for what that class actually means (pitfall #18, `mi-12`).
+      for what that class actually means (pitfall #18, `mi-12`). And no class the layer doesn't
+      define at all: `DisplayTooltipRich` carried `subtitle-sm`, `body-sm` and `input-value`, which
+      did nothing here but would pick up a consumer's own CSS (removed 2026-10-18). Grep
+      `app/assets/styles` for each non-prefixed class.
+    - A class this component styles that another component also styles (a class passed to a child,
+      or a child's class the parent restyles): compare the two selectors' specificity. An `all: unset`
+      in the higher one silently resets every layout property the other sets: `DisplayTooltip`'s
+      close-button reset stretched `DisplayTooltipRich`'s right-aligned button full width for six
+      weeks (fixed 2026-10-18).
+    - A `v-for` over consumer or CMS data is keyed on something guaranteed unique; a data field
+      that can repeat (`href`, `to`, a label) is combined with the index (rule
+      `consumer/vfor-keys-from-data.md`).
+    - Every raw `<button>` has an explicit `type` (ESLint `vue/html-button-has-type`, on since
+      2026-10-18), or it submits any form a consumer renders it inside.
     - Nothing load-bearing relies on a CSS feature WebKit lacks (pitfall #19).
     - No `computed()` over `useSlots()`; use a function called from the template (pitfall #25).
     - Values derived from props are `computed()`, not plain consts frozen at mount.
@@ -286,6 +302,8 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
       defaults to its min-content width and overflows a narrow column (`MultipleCheckboxes`,
       2026-10-16).
     - Element ids come from `useId()`, never from data values (rule `consumer/ids-from-useid.md`).
+      Call `useId()` once at setup, never inside a `computed` (`DisplayTooltip`, `DisplayTooltipRich`,
+      2026-10-18).
     - A wrapper passes its child only props the child declares. Anything else falls through as an
       HTML attribute on the child's root: `InputTextField` put `label="…"` and
       `error-message="…"` on `.input-text-wrapper` (fixed 2026-10-16). Check the child root's

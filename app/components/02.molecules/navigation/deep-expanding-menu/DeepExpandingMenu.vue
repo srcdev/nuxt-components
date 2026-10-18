@@ -7,6 +7,7 @@
         <div v-else class="navigation-group" :style="`--_anchor-name: --anchor-${uid}-${key};`">
           <button
             :ref="(el) => setElement(triggerEls, key, el)"
+            type="button"
             :popovertarget="`popovertarget-${uid}-${key}`"
             class="navigation-group-toggle"
             :aria-expanded="isOpen && activeKey === key"

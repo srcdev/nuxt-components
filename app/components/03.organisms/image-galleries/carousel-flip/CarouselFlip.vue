@@ -37,6 +37,7 @@
         <ul class="markers-list">
           <li v-for="index in itemCount" :key="index" class="markers-item">
             <button
+              type="button"
               class="btn-marker"
               :class="[{ active: displayActiveIndex === index - 1 }]"
               :aria-label="`${jumpToItemLabel} ${index}`"

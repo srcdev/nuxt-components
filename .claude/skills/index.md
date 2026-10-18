@@ -97,7 +97,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── service-summary.md           — ServiceSummary props, summary-link slot, DisplayPill duration/price (renamed/stripped from ServicesSection — full mode is now ServiceDetail)
     ├── service-detail.md            — ServiceDetail: full service detail page (hero banner, sticky sidebar booking card + related services, closing CTA), headerTag vs subheadingTag split, book-cta/sidebar-note/related-service/final-cta slots
     ├── breadcrumb.md                — Breadcrumb: items (BreadcrumbItem[]) trail, link vs current-page text, CSS token API
-    ├── skip-links.md                — SkipLinks: focus-revealed accessibility skip-nav, links (SkipLink[]) data-driven, homeLink slot, CSS token API
+    ├── skip-links.md                — SkipLinks: focus-revealed accessibility skip-nav, links (SkipLink[]) data-driven, homeLink slot, empty entries dropped, index-safe keys, theme-token colours, viewport-capped wrapping panel, CSS token API
     ├── tabbed-content.md            — TabbedContent (was TabsCore): tablist + panels from indexed slots (itemCount), arrow-key nav, moving hover/active/underline indicators, CSS token API
     ├── contact-section.md      — ContactSection props (stepperIndicatorSize pass-through), 3-item info+form layout, slot API
     ├── stepper-list.md         — StepperList dynamic slots (item-{n}/indicator-{n}), props, measured connectors (gap, dashed image tokens), per-step state recipe
@@ -127,7 +127,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── card-core.md            — CardCore: generic card container, dynamic named slots as rows, 4 variants, blurred backdrop layer, full CSS token API
     ├── action-menu.md          — ActionMenu + ActionMenuItem: ellipsis trigger + anchored popover menu, indexed item-{n} slots, link/button items, full CSS token API
     ├── select-menu.md          — SelectMenu: v-model single-select listbox popover (ActionMenu's popover mechanics, InputSelect's selected-option semantics), icon/text/chevron trigger toggles, checkmark on selected option, options-array driven, full CSS token API
-    ├── display-dialog.md       — DisplayDialog: native <dialog> overlay, 5 variants (dialog/modal/confirm/alert/fullscreen), useDialogControls integration, CSS token API
+    ├── display-dialog.md       — DisplayDialog: native <dialog> overlay, 5 variants (dialog/modal/confirm/alert/fullscreen), useDialogControls integration, InputButton close button, viewport-capped panel with wrapping title/content/footer, aria-label fallthrough when untitled, CSS token API
     ├── display-chip.md         — DisplayChip: status indicator chip overlay, CSS trig positioning, circle/square shapes, status colours, icon/label content
     ├── display-pill.md         — DisplayPill: pill/badge label with icon slot, 6 variants, 3 sizes, reversible order, --display-pill-* tokens (variants fall back to base colour/border/ring tokens); data-size/data-variant/data-reversed hooks (2026-10-08, were bare classes), label line-clamp token, -02 ring and outlined-monochrome recipes, StressTest story
     ├── carousel-flip.md        — CarouselFlip: FLIP-animated carousel, carouselDataIds slot API, buttonLayout variants (sides/controls-flanking/controls-grouped-right/overlay), CSS tokens
@@ -142,7 +142,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── display-banner.md         — DisplayBanner: canvas/content stacked overlay banner, conditional slot wrappers, CSS token API
     ├── deep-expanding-menu.md         — DeepExpandingMenu: anchor-positioned popover nav panels, browser support caveat, CSS token API
     ├── deep-expanding-menu-classic.md — DeepExpandingMenuClassic: <details>-based fallback nav, click-outside close, CSS token API
-    ├── display-tooltip.md         — DisplayTooltip: anchor-positioned popover trigger, browser support caveat, CSS token API
+    ├── display-tooltip.md         — DisplayTooltip: anchor-positioned popover trigger, browser support caveat, triggerIcon prop, type="button" trigger, hideTrigger removes it from tab order (data-hidden), CSS token API
     ├── display-tooltip-rich.md    — DisplayTooltipRich (Material 3 rich tooltip, renamed from DisplayTooltipDefined 2026-10-18): structured title/body/action content with InputButton close button, per-field line-clamp tokens, composes DisplayTooltip
     ├── pop-over.md                — PopOver: generic anchor-positioned disclosure panel, consumer-supplied trigger/content slots, placement prop, CSS token API
     ├── input-text.md            — InputText (bare control), InputTextField, InputPasswordField, InputTextAsNumberField: renamed from Core/WithLabel, data-* state hooks, readonly/autocomplete props, leak-free digit filtering, wrapper attr-leak/empty-description/passthrough fixes, rounded+clamped stepping, min/max pass-through, CSS token API, stress stories

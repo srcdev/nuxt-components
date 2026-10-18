@@ -84,6 +84,11 @@ Inner classes: `.display-dialog-inner` (panel), `.display-dialog-header`,
 `.display-dialog-col-left` (title), `.display-dialog-col-right`, `.display-dialog-close`,
 `.display-dialog-content`, `.display-dialog-footer`.
 
+> Changed 2026-08-22: these used to be bare generic names (`.inner`, `.header`, `.footer`,
+> `.col-left`, `.col-right`, `.dialog-content`). The dialog renders inline, not teleported, so a
+> consumer's own unlayered `.header`/`.footer` CSS silently restyled it. Update any overrides
+> written against the old names.
+
 ## Sizing
 
 The panel never grows past the overlay: `max-inline-size` and `max-block-size` are `100%`, the
@@ -95,11 +100,6 @@ and footer stay visible either way.
 
 > Changed 2026-10-18: `modal` used to grow with its content past the viewport, a long title pushed
 > the close button out of the panel, and footer buttons never wrapped.
-
-> Changed 2026-08-22: these used to be bare generic names (`.inner`, `.header`, `.footer`,
-> `.col-left`, `.col-right`, `.dialog-content`). The dialog renders inline, not teleported, so a
-> consumer's own unlayered `.header`/`.footer` CSS silently restyled it. Update any overrides
-> written against the old names.
 
 ---
 
