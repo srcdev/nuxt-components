@@ -59,6 +59,17 @@ in `.skip-links__home`. Only rendered when the slot is actually used.
 Each `href` must match the `id` of a real element on the page (e.g. `<main id="main-content">`) —
 the component does not create those anchors itself.
 
+Data handling (safe to feed straight from a CMS):
+
+- An entry with an empty or whitespace-only `href` or `label` is dropped: an empty link has no
+  target or no accessible name.
+- When no entry survives, the `<nav>` isn't rendered at all, so there's no empty landmark.
+- Two entries may share an `href`; each renders (keys include the index). Before 2026-10-18 they
+  were keyed by `href` alone, and reordering such a list left a stale extra link in the DOM.
+- Labels render as text and wrap; the panel never exceeds the viewport width.
+
+`SiteHeader` renders `SkipLinks` as its branding row, passing its `branding` slot into `homeLink`.
+
 ## Accessibility behaviour
 
 - Links are hidden via `opacity`/`transform`, not `display`/`visibility` — they stay in the tab
@@ -80,3 +91,8 @@ See `CONSUMER-STYLING.md` in this component's folder for the full `--skip-links-
 - Migrated 2026-09-15 from the unplaced `skip-links/` folder: the link set was previously
   hardcoded (two fixed `<a>` tags with hardcoded English copy) — now data-driven via `links` so
   consumers can add/remove targets and localise the copy without forking the component.
+- 2026-10-18 migration: colours moved from hardcoded black/white to `--theme-surface-inverted` and
+  `--theme-on-surface` defaults (same high contrast, follows `data-theme`); z-index default
+  `1000` → `999999` (library overlay default); links wrap instead of `nowrap`, and the panel is
+  capped at the viewport width and anchored with `inset-inline-start`; invalid entries dropped, no
+  empty landmark, index-safe keys; StressTest story and a link to the SiteHeader story.

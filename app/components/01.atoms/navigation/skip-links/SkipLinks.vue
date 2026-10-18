@@ -3,8 +3,13 @@
     <div v-if="$slots.homeLink" class="skip-links__home">
       <slot name="homeLink"></slot>
     </div>
-    <nav class="skip-links__nav" :aria-label="ariaLabel">
-      <a v-for="link in links" :key="link.href" :href="link.href" class="skip-links__link">{{ link.label }}</a>
+    <nav v-if="validLinks.length" class="skip-links__nav" :aria-label="ariaLabel">
+      <a
+        v-for="(link, index) in validLinks"
+        :key="`${index}-${link.href}`"
+        :href="link.href"
+        class="skip-links__link"
+      >{{ link.label }}</a>
     </nav>
   </div>
 </template>
@@ -28,6 +33,8 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 })
 
+const validLinks = computed(() => props.links.filter((link) => link.href?.trim() && link.label?.trim()))
+
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough)
 
 watch(
@@ -46,22 +53,21 @@ watch(
     .skip-links__nav {
       position: absolute;
       top: 100%;
-      left: 0;
-      z-index: var(--skip-links-z-index, 1000);
+      inset-inline-start: 0;
+      z-index: var(--skip-links-z-index, 999999);
 
       display: flex;
       flex-direction: column;
       gap: var(--skip-links-gap, 0.2rem);
-      background-color: var(--skip-links-background-colour, black);
-      border: var(--skip-links-border-width, 1px) solid var(--skip-links-border-colour, white);
+      inline-size: max-content;
+      max-inline-size: calc(100vw - 3.2rem);
+      background-color: var(--skip-links-background-colour, var(--theme-surface-inverted));
+      border: var(--skip-links-border-width, 1px) solid var(--skip-links-border-colour, var(--theme-on-surface));
       padding: var(--skip-links-padding, 0.2rem);
       margin: 0;
 
-      /* Hidden off-screen via transform — does NOT break keyboard focusability. pointer-events is
-         off in this state too: translateY(-100%) puts this at the same position as .skip-links__home
-         (the homeLink slot), and opacity:0 alone doesn't stop it from catching hover/clicks meant
-         for whatever sits underneath it. Keyboard tab focus doesn't need pointer-events, so this
-         doesn't affect focusability. */
+      /* Hidden by transform, not display, so the links stay focusable; pointer-events stops the
+         invisible panel catching clicks meant for the homeLink slot it overlaps. */
       opacity: 0;
       pointer-events: none;
       transform: translateY(-100%);
@@ -78,13 +84,13 @@ watch(
 
     .skip-links__link {
       display: block;
-      color: var(--skip-links-text-colour, white);
+      color: var(--skip-links-text-colour, var(--theme-on-surface));
       text-decoration: none;
       padding: var(--skip-links-link-padding-block, 0.8rem) var(--skip-links-link-padding-inline, 1.2rem);
-      white-space: nowrap;
+      overflow-wrap: anywhere;
 
       &:focus-visible {
-        outline: var(--skip-links-focus-outline-width, 2px) solid var(--skip-links-focus-outline-colour, white);
+        outline: var(--skip-links-focus-outline-width, 2px) solid var(--skip-links-focus-outline-colour, var(--theme-on-surface));
       }
     }
   }

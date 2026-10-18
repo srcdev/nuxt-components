@@ -34,7 +34,7 @@
     "description": "CSS override scaffold for SkipLinks — scope to a page or section class",
     "scope": "css",
     "body": [
-      ".$1my-page {",
+      ".${1:my-page} {",
       "  .skip-links {",
       "    --skip-links-z-index: ;",
       "    --skip-links-gap: ;",
