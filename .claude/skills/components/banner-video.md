@@ -1,6 +1,6 @@
 ---
 name: BannerVideo
-description: BannerVideo full-width hero video banner — props, depth tier system, verticalPosition/horizontalPosition, playIcon/pauseIcon/toggle-icon slot, reduced-motion fallback, CSS tokens, consumer styling
+description: BannerVideo full-width hero video banner — props, depth tier system, verticalPosition/horizontalPosition, playIcon/pauseIcon/toggle-icon slot, playLabel/pauseLabel, reduced-motion fallback, CSS tokens, consumer styling
 type: reference
 ---
 
@@ -25,21 +25,23 @@ The video uses `autoplay muted loop playsinline preload="auto"` attributes on th
 | `alt` | `string` | `""` | Alt text for the fallback `NuxtImg`. |
 | `imgWidth` | `number` | `1920` | Intrinsic width of the poster image — required for NuxtImg/IPX optimisation. |
 | `imgHeight` | `number` | `1080` | Intrinsic height of the poster image — required for NuxtImg/IPX optimisation. |
-| `tag` | `"section" \| "div" \| "header" \| "main" \| "article"` | `"section"` | HTML element rendered as the root. |
+| `tag` | `"section" \| "div" \| "header" \| "main" \| "article"` | `"div"` | HTML element rendered as the root. Pass `aria-label` as a plain attribute (it falls through to the root) when the tag is a landmark that needs a name. |
 | `depth` | `"xs" \| "sm" \| "md" \| "lg" \| "xl"` | `"md"` | Responsive max-height tier. Each maps to a `clamp()` scale; override via `--banner-video-max-height-{depth}`. |
-| `aspectRatio` | `string` | `"21/9"` | CSS `aspect-ratio` of the container (e.g. `"16/9"`, `"21/9"`, `"4/3"`). |
+| `aspectRatio` | `string` | `"21/9"` | CSS `aspect-ratio` of the container (e.g. `"16/9"`, `"21/9"`, `"4/3"`, `"1.5"`). Anything that isn't a positive number or `w/h` ratio falls back to `"21/9"`. |
 | `objectFit` | `"cover" \| "contain" \| "fill" \| "none" \| "scale-down"` | `"cover"` | How the video and fallback image fill the banner frame. |
 | `verticalPosition` | `"start" \| "center" \| "end"` | `"center"` | Vertical crop position. Maps to `align-self` on the video element and `object-position` Y on the fallback image. |
 | `horizontalPosition` | `"start" \| "center" \| "end"` | `"center"` | Horizontal crop position. Maps to `object-position` X on the fallback image. |
 | `playIcon` | `string` | `"mdi:play"` | Iconify icon name shown on the toggle button before playback starts. |
 | `pauseIcon` | `string` | `"mdi:pause"` | Iconify icon name shown on the toggle button once playback starts. |
+| `playLabel` | `string` | `"Play background video"` | Toggle button label while paused (visually hidden; the button's accessible name). Override for localisation. |
+| `pauseLabel` | `string` | `"Pause background video"` | Toggle button label while playing. Override for localisation. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root element. |
 
 ## Slots
 
 | Slot | Slot props | Purpose |
 |---|---|---|
-| `toggle-icon` | `{ isPlaying: boolean }` | Replaces the toggle button's icon entirely. Default renders `<Icon :name="isPlaying ? pauseIcon : playIcon" />` — use this slot instead of `playIcon`/`pauseIcon` when an Iconify name isn't enough (custom SVG, different icon set). |
+| `toggle-icon` | `{ isPlaying: boolean }` | Replaces the toggle button's icon entirely. Default renders `<Icon :name="isPlaying ? pauseIcon : playIcon" />` — use this slot instead of `playIcon`/`pauseIcon` when an Iconify name isn't enough (custom SVG, different icon set). Content is clipped to the round button, so size it to `--banner-video-toggle-size`. The accessible name still comes from `playLabel`/`pauseLabel`. |
 
 ## Basic usage
 
@@ -180,18 +182,22 @@ Inline style tokens (set from props):
 | `--banner-video-toggle-background` | `oklch(0% 0 0 / 0.4)` | Button background |
 | `--banner-video-toggle-background-hover` | `oklch(0% 0 0 / 0.6)` | Button background on hover/focus |
 | `--banner-video-toggle-icon-color` | `white` | Icon colour |
+| `--banner-video-toggle-focus-outline-width` | `2px` | Focus ring width |
+| `--banner-video-toggle-focus-outline-color` | `currentColor` | Focus ring colour (the icon colour by default) |
+| `--banner-video-toggle-focus-outline-offset` | `2px` | Focus ring offset |
 
 Full details, plus global/page-scoped/per-instance override patterns, live in the
 component's own `CONSUMER-STYLING.md`.
 
 ## Pause/play toggle
 
-A `<button class="banner-video__toggle">` is always rendered in the bottom-right corner of the
-banner, overlaying the video. It calls `videoEl.pause()` / `.play()` directly and its
-`aria-label` reflects actual playback state ("Pause background video" / "Play background video"),
-tracked via the video's native `play`/`pause` events rather than assumed — autoplay can be
-blocked by the browser, so the label starts as "Play background video" until a `play` event
-actually fires.
+An icon-only `InputButton variant="inline"` (class `.banner-video-toggle`) is always rendered in the
+bottom-right corner of the banner, overlaying the video. It calls `videoEl.pause()` / `.play()`
+directly. Its accessible name is visually hidden text (`.input-button-text.sr-only`, not an
+`aria-label`) that reflects actual playback state: `pauseLabel` while playing, `playLabel`
+otherwise (defaults "Pause background video" / "Play background video"). State is tracked via the
+video's native `play`/`pause` events rather than assumed: autoplay can be blocked by the browser,
+so the label starts as `playLabel` until a `play` event actually fires.
 
 This exists to satisfy **WCAG 2.2.2 (Pause, Stop, Hide)**: content that autoplays and lasts more
 than 5 seconds needs an on-page mechanism to pause it. The `prefers-reduced-motion` fallback only
@@ -211,9 +217,11 @@ component, since `BannerVideo` has no slot for it.
 | Class | Applied when |
 |---|---|
 | `.banner-video` | Always — the root element |
-| `.video` | The `<video>` element |
-| `.fallback` | The `<NuxtImg>` fallback — hidden by default, shown via `prefers-reduced-motion` CSS |
-| `.banner-video__toggle` | The pause/play button — always rendered except under `prefers-reduced-motion: reduce` |
+| `.banner-video-media` | The `<video>` element |
+| `.banner-video-fallback` | The `<NuxtImg>` fallback — hidden by default, shown via `prefers-reduced-motion` CSS |
+| `.banner-video-toggle` | The pause/play `InputButton` (also `.input-button`) — always rendered, hidden under `prefers-reduced-motion: reduce` |
+
+Renamed 2026-10-18 from `.video`, `.fallback` and `.banner-video__toggle` (generic names collided with consumer CSS).
 
 ## Consumer styling
 
@@ -239,37 +247,23 @@ per-instance override patterns.
 
 `max-height` from the depth tier silently wins over `aspect-ratio` once the viewport is wide enough. For example, at `depth="md"` the max-height clamp caps at `56rem` — so changing `aspectRatio` from `"21/9"` to `"1/1"` produces no visible change on a wide desktop because `max-height` is the binding constraint.
 
-**If you need `aspect-ratio` to dominate**, override all depth tokens to a large fixed value on the parent:
+**If you need `aspect-ratio` to dominate**, raise the active tier's token on the parent. Only that one is read: `depth` is always set, so the root always matches one `[data-depth]` rule.
 
 ```css
 .my-page {
-  --banner-video-max-height-xs: 80rem;
-  --banner-video-max-height-sm: 80rem;
-  --banner-video-max-height-md: 80rem;
   --banner-video-max-height-lg: 80rem;
-  --banner-video-max-height-xl: 80rem;
 }
 ```
 
-Or via inline `:style` on the parent element (useful for dev QA exploration):
-
 ```vue
-<div :style="{
-  '--banner-video-max-height-xs': '80rem',
-  '--banner-video-max-height-sm': '80rem',
-  '--banner-video-max-height-md': '80rem',
-  '--banner-video-max-height-lg': '80rem',
-  '--banner-video-max-height-xl': '80rem',
-}">
+<div class="my-page">
   <BannerVideo aspect-ratio="1/1" depth="lg" ... />
 </div>
 ```
-
-You must override **all five tier tokens** — overriding only the active depth token is not sufficient because the component resolves the token by name.
 
 ## Notes
 
 - `loading="eager"` and `decoding="async"` are hardcoded on the fallback `NuxtImg` — it is above the fold by definition.
 - The video has `autoplay muted loop playsinline preload="auto"` — intentional and not configurable. This component is for ambient background video only, not a media player — the pause/play toggle exists purely for WCAG 2.2.2 compliance, not as a general playback UI (no seek bar, volume, etc.).
-- `prefers-reduced-motion` is handled in CSS (`.video { display: none }` + `.fallback { display: block }`), not via JS.
+- `prefers-reduced-motion` is handled in CSS (`.banner-video-media` and the toggle hidden, `.banner-video-fallback` shown), not via JS. The script still loads and plays the hidden video.
 - Storybook: the `"none"` image provider is active, so `poster` paths pass through unchanged. Always provide explicit `img-width` and `img-height` to avoid the `w=1536` fallback in deployed Storybook.

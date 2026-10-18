@@ -109,7 +109,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── price-list.md           — PriceList: service/menu price columns (dl rows), PriceListData type, headingTag/fromLabel props, CSS token API
     ├── opening-hours.md        — OpeningHours: per-day data auto-grouped into ranges, split sessions, 24h/appointment, exceptions, Intl formatting, today highlight, JSON-LD, CSS token API
     ├── input-copy.md           — InputCopy: readonly copy-to-clipboard input with an inline InputButton, copied state + status announcement, translatable labels/icons, container-query icon-only button, --input-copy-* tokens
-    ├── banner-video.md         — BannerVideo: full-width hero video banner, depth tier system, objectFit/objectPosition, playIcon/pauseIcon/toggle-icon slot, reduced-motion fallback, CSS tokens
+    ├── banner-video.md         — BannerVideo: full-width hero video banner, depth tier system, objectFit/objectPosition, playIcon/pauseIcon/toggle-icon slot, playLabel/pauseLabel, reduced-motion fallback, CSS tokens
     ├── grid-stack.md           — GridStack: CSS Grid z-axis stacking, slot API, z-order rules, sizing, video+overlay and image+text patterns
     ├── scroll-reveal-frame.md  — ScrollRevealFrame: generic parallax clipping frame, slot API, image grid pattern, public --scroll-reveal-frame-* tokens (props only write them when passed), browser support
     ├── scroll-reveal-image.md  — ScrollRevealImage: single-image parallax reveal, imgWidth/imgHeight, public focal-x/focal-y crop tokens, frame tokens settable from CSS

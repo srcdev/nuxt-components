@@ -5,7 +5,7 @@
     :class="elementClasses"
     :data-depth="depth"
     :style="{
-      '--_aspect-ratio': aspectRatio,
+      '--_aspect-ratio': safeAspectRatio,
       '--_align-self': verticalPosition,
       '--_justify-self': horizontalPosition,
     }"
@@ -13,7 +13,7 @@
     <video
       :key="src"
       ref="videoEl"
-      class="video"
+      class="banner-video-media"
       autoplay
       muted
       loop
@@ -30,7 +30,7 @@
       <source :src="src" type="video/mp4" />
     </video>
     <NuxtImg
-      class="fallback"
+      class="banner-video-fallback"
       :src="poster"
       :alt="alt"
       :width="imgWidth"
@@ -40,16 +40,19 @@
       decoding="async"
       :style="{ objectFit: props.objectFit, objectPosition: imgObjectPosition }"
     />
-    <button
+    <InputButton
       type="button"
-      class="banner-video__toggle"
-      :aria-label="isPlaying ? 'Pause background video' : 'Play background video'"
+      variant="inline"
+      :button-text="isPlaying ? pauseLabel : playLabel"
+      style-class-passthrough="banner-video-toggle"
       @click="togglePlayback"
     >
-      <slot name="toggle-icon" :is-playing="isPlaying">
-        <Icon :name="isPlaying ? pauseIcon : playIcon" aria-hidden="true" />
-      </slot>
-    </button>
+      <template #iconOnly>
+        <slot name="toggle-icon" :is-playing="isPlaying">
+          <Icon :name="isPlaying ? pauseIcon : playIcon" aria-hidden="true" />
+        </slot>
+      </template>
+    </InputButton>
   </component>
 </template>
 
@@ -68,6 +71,10 @@ interface Props {
   horizontalPosition?: "start" | "center" | "end";
   playIcon?: string;
   pauseIcon?: string;
+  /** Toggle button label while paused — override for localisation. */
+  playLabel?: string;
+  /** Toggle button label while playing — override for localisation. */
+  pauseLabel?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -83,7 +90,20 @@ const props = withDefaults(defineProps<Props>(), {
   horizontalPosition: "center",
   playIcon: "mdi:play",
   pauseIcon: "mdi:pause",
+  playLabel: "Play background video",
+  pauseLabel: "Pause background video",
   styleClassPassthrough: () => [],
+});
+
+const DEFAULT_ASPECT_RATIO = "21/9";
+const ratioPattern = /^\s*(\d*\.?\d+)\s*(?:\/\s*(\d*\.?\d+)\s*)?$/;
+
+const safeAspectRatio = computed(() => {
+  const match = ratioPattern.exec(props.aspectRatio ?? "");
+  if (!match) return DEFAULT_ASPECT_RATIO;
+  const width = Number(match[1]);
+  const height = match[2] === undefined ? 1 : Number(match[2]);
+  return width > 0 && height > 0 ? props.aspectRatio.trim() : DEFAULT_ASPECT_RATIO;
 });
 
 const positionKeywordMap = {
@@ -123,7 +143,7 @@ const tryPlay = async () => {
     v.muted = true;
     await v.play();
   } catch {
-    // Autoplay blocked or interrupted — fallback image will remain visible
+    // Autoplay blocked or interrupted: the video's poster stays visible
   }
 };
 
@@ -162,7 +182,7 @@ onActivated(() => {
 
     display: grid;
     grid-template-areas: "media";
-    aspect-ratio: var(--_aspect-ratio, 16/9);
+    aspect-ratio: var(--_aspect-ratio, 21/9);
     max-height: var(--_max-height);
     width: 100%;
     overflow: hidden;
@@ -183,7 +203,7 @@ onActivated(() => {
       --_max-height: var(--banner-video-max-height-xl, clamp(52rem, 65vw, 90rem));
     }
 
-    .video {
+    .banner-video-media {
       grid-area: media;
       display: block;
       width: 100%;
@@ -193,24 +213,26 @@ onActivated(() => {
       justify-self: var(--_justify-self, center);
     }
 
-    .fallback {
+    .banner-video-fallback {
       grid-area: media;
       display: none;
       width: 100%;
       height: 100%;
     }
 
-    .banner-video__toggle {
+    .banner-video-toggle.input-button {
       grid-area: media;
       align-self: end;
       justify-self: end;
       margin: var(--banner-video-toggle-offset, 1.2rem);
       z-index: 1;
 
+      box-sizing: border-box;
       display: grid;
       place-items: center;
       width: var(--banner-video-toggle-size, 3.2rem);
       height: var(--banner-video-toggle-size, 3.2rem);
+      min-height: auto;
       padding: 0;
 
       background-color: var(--banner-video-toggle-background, oklch(0% 0 0 / 0.4));
@@ -220,20 +242,30 @@ onActivated(() => {
       cursor: pointer;
       transition: background-color 0.2s ease;
 
-      &:hover,
+      & .input-button-icon {
+        margin: 0;
+      }
+
+      &:hover {
+        background-color: var(--banner-video-toggle-background-hover, oklch(0% 0 0 / 0.6));
+      }
+
       &:focus-visible {
         background-color: var(--banner-video-toggle-background-hover, oklch(0% 0 0 / 0.6));
+        outline: var(--banner-video-toggle-focus-outline-width, 2px) solid
+          var(--banner-video-toggle-focus-outline-color, currentColor);
+        outline-offset: var(--banner-video-toggle-focus-outline-offset, 2px);
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .video {
+      .banner-video-media {
         display: none;
       }
-      .fallback {
+      .banner-video-fallback {
         display: block;
       }
-      .banner-video__toggle {
+      .banner-video-toggle.input-button {
         display: none;
       }
     }

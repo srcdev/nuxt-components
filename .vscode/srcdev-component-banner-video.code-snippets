@@ -4,12 +4,24 @@
     "scope": "vue,html",
     "body": [
       "<BannerVideo",
-      "  src=\"$1/videos/hero.mp4\"",
-      "  poster=\"$2/images/hero-poster.jpg\"",
-      "  alt=\"$3Studio interior\"",
-      "  :img-width=\"1920\"",
-      "  :img-height=\"1080\"",
-      "  depth=\"$4md\"",
+      "  src=\"${1:/videos/hero.mp4}\"",
+      "  poster=\"${2:/images/hero-poster.jpg}\"",
+      "  alt=\"${3:Studio interior}\"",
+      "  :img-width=\"${4:1920}\"",
+      "  :img-height=\"${5:1080}\"",
+      "  depth=\"${6|md,xs,sm,lg,xl|}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV BannerVideo Localised Labels": {
+    "description": "BannerVideo with translated pause/play toggle labels (the button's visually hidden accessible name)",
+    "scope": "vue,html",
+    "body": [
+      "<BannerVideo",
+      "  src=\"${1:/videos/hero.mp4}\"",
+      "  poster=\"${2:/images/hero-poster.jpg}\"",
+      "  :play-label=\"${3:t('banner.playVideo')}\"",
+      "  :pause-label=\"${4:t('banner.pauseVideo')}\"",
       "/>"
     ]
   },
@@ -18,10 +30,10 @@
     "scope": "vue,html",
     "body": [
       "<BannerVideo",
-      "  src=\"$1/videos/hero.mp4\"",
-      "  poster=\"$2/images/hero-poster.jpg\"",
-      "  play-icon=\"$3mdi:play-circle\"",
-      "  pause-icon=\"$4mdi:pause-circle\"",
+      "  src=\"${1:/videos/hero.mp4}\"",
+      "  poster=\"${2:/images/hero-poster.jpg}\"",
+      "  play-icon=\"${3:mdi:play-circle}\"",
+      "  pause-icon=\"${4:mdi:pause-circle}\"",
       "/>"
     ]
   },
@@ -29,7 +41,7 @@
     "description": "BannerVideo with the toggle-icon slot fully replacing the toggle button's icon",
     "scope": "vue,html",
     "body": [
-      "<BannerVideo src=\"$1/videos/hero.mp4\" poster=\"$2/images/hero-poster.jpg\">",
+      "<BannerVideo src=\"${1:/videos/hero.mp4}\" poster=\"${2:/images/hero-poster.jpg}\">",
       "  <template #toggle-icon=\"{ isPlaying }\">",
       "    $3",
       "  </template>",
@@ -37,22 +49,23 @@
     ]
   },
   "SRCDEV BannerVideo CSS Override": {
-    "description": "CSS override scaffold for BannerVideo — scope to a page or section class",
+    "description": "CSS override scaffold for BannerVideo — set tokens on a page or section class you own",
     "scope": "css",
     "body": [
-      ".$1my-page {",
-      "  .banner-video {",
-      "    --banner-video-max-height-xs: ;",
-      "    --banner-video-max-height-sm: ;",
-      "    --banner-video-max-height-md: ;",
-      "    --banner-video-max-height-lg: ;",
-      "    --banner-video-max-height-xl: ;",
-      "    --banner-video-toggle-size: ;",
-      "    --banner-video-toggle-offset: ;",
-      "    --banner-video-toggle-background: ;",
-      "    --banner-video-toggle-background-hover: ;",
-      "    --banner-video-toggle-icon-color: ;",
-      "  }",
+      ".${1:my-page} {",
+      "  --banner-video-max-height-xs: ;",
+      "  --banner-video-max-height-sm: ;",
+      "  --banner-video-max-height-md: ;",
+      "  --banner-video-max-height-lg: ;",
+      "  --banner-video-max-height-xl: ;",
+      "  --banner-video-toggle-size: ;",
+      "  --banner-video-toggle-offset: ;",
+      "  --banner-video-toggle-background: ;",
+      "  --banner-video-toggle-background-hover: ;",
+      "  --banner-video-toggle-icon-color: ;",
+      "  --banner-video-toggle-focus-outline-width: ;",
+      "  --banner-video-toggle-focus-outline-color: ;",
+      "  --banner-video-toggle-focus-outline-offset: ;",
       "}"
     ]
   }

@@ -1,5 +1,8 @@
+import { ref } from "vue";
 import BannerVideo from "../BannerVideo.vue";
+import CanvasSwitcher from "../../canvas-switcher/CanvasSwitcher.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
+import type { MediaCanvas } from "~/types/components";
 
 const meta: Meta<typeof BannerVideo> = {
   title: "Atoms/Media/BannerVideo",
@@ -75,15 +78,43 @@ const meta: Meta<typeof BannerVideo> = {
       description: "Icon name for the toggle button once playback starts (any Iconify icon)",
       table: { category: "Appearance" },
     },
+    playLabel: {
+      control: "text",
+      description: "Toggle button label while paused (visually hidden, its accessible name). Override for localisation",
+      table: { category: "Content" },
+    },
+    pauseLabel: {
+      control: "text",
+      description: "Toggle button label while playing (visually hidden, its accessible name). Override for localisation",
+      table: { category: "Content" },
+    },
     styleClassPassthrough: {
       table: { disable: true },
     },
   },
+  decorators: [
+    // The banner is 100% of its container wide and takes its height from aspect-ratio, so a constrained wrapper stands in for a narrower viewport.
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "fullWidthCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
   parameters: {
     docs: {
       description: {
         component:
-          "A full-width banner that plays a muted, looping mp4 video. The poster image is shown before the video loads, when the video fails to play, and whenever the user has `prefers-reduced-motion: reduce` set. The banner is sized via `aspect-ratio` with a responsive `max-height` driven by the `depth` tier (`xs` → `xl`). Each tier uses a `clamp()` scale and exposes a `--banner-video-max-height-{depth}` token for consuming pages to override. `objectFit` controls how media fills the frame. `verticalPosition` and `horizontalPosition` control the crop focal point. The pause/play toggle's icon is configurable via `playIcon`/`pauseIcon` props, or fully replaceable via the `toggle-icon` scoped slot.",
+          "A full-width banner that plays a muted, looping mp4 video. The poster image is shown before the video loads, when the video fails to play, and whenever the user has `prefers-reduced-motion: reduce` set. The banner is sized via `aspect-ratio` with a responsive `max-height` driven by the `depth` tier (`xs` → `xl`). Each tier uses a `clamp()` scale and exposes a `--banner-video-max-height-{depth}` token for consuming pages to override. `objectFit` controls how media fills the frame. `verticalPosition` and `horizontalPosition` control the crop focal point. The pause/play toggle (WCAG 2.2.2) is an icon-only `InputButton`: its icon is configurable via `playIcon`/`pauseIcon`, or fully replaceable via the `toggle-icon` scoped slot, and its visually hidden label comes from `playLabel`/`pauseLabel`. An invalid `aspectRatio` (empty, zero, negative, not a number or `w/h` ratio) falls back to `21/9`.",
       },
     },
   },
@@ -225,6 +256,62 @@ export const CustomToggleIconSlot: Story = {
     docs: {
       description: {
         story: "The toggle-icon scoped slot replaces the toggle button's icon entirely, receiving isPlaying — use when an Iconify icon name isn't enough (a custom SVG, or a different icon set).",
+      },
+    },
+  },
+};
+
+export const StressTest: Story = {
+  name: "Stress Test (Worst-Case Data)",
+  args: {
+    ...Default.args,
+    src: "https://example.invalid/missing-video.mp4",
+    alt: "Bevorzugtekontaktmethodefürrückfragenundterminvereinbarungen 😀 <b>not bold</b> طريقة الاتصال المفضلة",
+    playLabel: "Hintergrundvideoabspielenundweiterlaufenlassen 😀 <b>not bold</b>",
+    pauseLabel: "Hintergrundvideoanhaltenundstehenlassen",
+  },
+  render: (args) => ({
+    components: { BannerVideo },
+    setup() {
+      const lake = Default.args!;
+      return { args, lake };
+    },
+    template: `
+      <div style="display: grid; gap: 2.4rem; font-size: 1.4rem;">
+        <p style="margin: 0;">Broken video URL, long unbroken localised labels with emoji and HTML-like text, and an alt with right-to-left text. The video never loads, so its poster shows instead.</p>
+        <BannerVideo v-bind="args"></BannerVideo>
+
+        <p style="margin: 0;">Broken video and broken poster URLs: an empty frame at the banner's size, the toggle still in its corner.</p>
+        <BannerVideo
+          src="https://example.invalid/missing-video.mp4"
+          poster="https://example.invalid/missing-poster.jpg"
+          :alt="args.alt"
+          depth="sm"
+        ></BannerVideo>
+
+        <p style="margin: 0;">Invalid <code>aspectRatio</code> values (<code>"abc"</code>, <code>"0"</code>, <code>"-16/9"</code>, <code>""</code>): each falls back to <code>21/9</code> instead of collapsing to the video's intrinsic size.</p>
+        <BannerVideo v-for="ratio in ['abc', '0', '-16/9', '']" :key="ratio" v-bind="lake" :aspect-ratio="ratio" depth="xs"></BannerVideo>
+
+        <p style="margin: 0;">Extreme ratios: a <code>10/1</code> sliver and a <code>1/3</code> portrait (capped by the depth tier's max-height).</p>
+        <BannerVideo v-bind="lake" aspect-ratio="10/1"></BannerVideo>
+        <BannerVideo v-bind="lake" aspect-ratio="1/3" depth="xs"></BannerVideo>
+
+        <p style="margin: 0;">Oversized <code>toggle-icon</code> slot content: clipped to the round button, never spilling over the video.</p>
+        <BannerVideo v-bind="lake" depth="xs">
+          <template #toggle-icon="{ isPlaying }">
+            <span style="font-size: 1.4rem;">{{ isPlaying ? 'Anhaltenundstehenlassen' : 'Abspielenundweiterlaufen' }}</span>
+          </template>
+        </BannerVideo>
+      </div>
+    `,
+  }),
+  parameters: {
+    initialCanvas: "mobileCanvas",
+    docs: {
+      story: { inline: false, height: "1600px" },
+      description: {
+        story:
+          "Worst-case data across nine banners. Check at every canvas width: a broken video falls back to its poster, a broken poster leaves an empty frame of the right size (not a 300x150 default box), invalid aspect ratios fall back to 21/9, the toggle stays in the bottom-right corner at every size, oversized slot content is clipped to the button, and the long labels never show on screen (they're the button's visually hidden accessible name: inspect `.input-button-text`). Under `prefers-reduced-motion: reduce` every banner shows its poster image instead, and a broken poster then shows its alt text.",
       },
     },
   },
