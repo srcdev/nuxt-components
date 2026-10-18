@@ -34,5 +34,36 @@
       "  </template>",
       "</DisplayTooltip>"
     ]
+  },
+  "SRCDEV DisplayTooltip Custom Icon": {
+    "description": "DisplayTooltip with a custom trigger icon and localised label",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayTooltip trigger-icon=\"${1:lucide:info}\" trigger-aria-label=\"${2:More information}\">",
+      "  <template #triggerContent>",
+      "    <span>$3</span>",
+      "  </template>",
+      "  <template #tooltipContent>",
+      "    <p>$0</p>",
+      "  </template>",
+      "</DisplayTooltip>"
+    ]
+  },
+  "SRCDEV DisplayTooltip CSS Override": {
+    "description": "CSS override scaffold for DisplayTooltip, scoped to a page or section class",
+    "scope": "css",
+    "body": [
+      ".${1:my-page} {",
+      "  .display-tooltip {",
+      "    --display-tooltip-trigger-icon-box-size: ;",
+      "    --display-tooltip-trigger-icon-colour: ;",
+      "    --display-tooltip-popover-width: ;",
+      "    --display-tooltip-popover-background-colour: ;",
+      "    --display-tooltip-popover-text-colour: ;",
+      "    --display-tooltip-popover-outline-colour: ;",
+      "    --display-tooltip-popover-border-radius: ;",
+      "  }",
+      "}"
+    ]
   }
 }

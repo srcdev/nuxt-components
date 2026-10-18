@@ -1,7 +1,7 @@
 <template>
   <div
     ref="rootRef"
-    class="display-tooltip-core"
+    class="display-tooltip"
     :class="[elementClasses]"
     :style="{ '--_anchor-name': tooltipAnchorName }"
   >
@@ -11,13 +11,16 @@
         ref="triggerRef"
         :popovertarget="tooltipId"
         popovertargetaction="toggle"
+        type="button"
         class="display-tooltip-trigger-button"
-        :class="{ hide: hideTrigger }"
+        :data-hidden="hideTrigger ? '' : undefined"
+        :tabindex="hideTrigger ? -1 : undefined"
+        :aria-hidden="hideTrigger ? 'true' : undefined"
         :aria-label="triggerAriaLabel"
         :aria-expanded="isOpen"
         @click="handleTriggerClick"
       >
-        <Icon name="fa7-solid:circle-question" class="display-tooltip-trigger-icon" aria-hidden="true" />
+        <Icon :name="triggerIcon" class="display-tooltip-trigger-icon" aria-hidden="true" />
       </button>
     </div>
     <div
@@ -44,6 +47,8 @@ interface Props {
   hideTrigger?: boolean;
   /** aria-label on the trigger button — override for localisation. */
   triggerAriaLabel?: string;
+  /** Iconify name for the trigger button icon. */
+  triggerIcon?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -51,10 +56,12 @@ const props = withDefaults(defineProps<Props>(), {
   tooltipId: "",
   hideTrigger: false,
   triggerAriaLabel: "Toggle the popover",
+  triggerIcon: "fa7-solid:circle-question",
   styleClassPassthrough: () => [],
 });
 
-const tooltipId = computed(() => (props.tooltipId.length ? props.tooltipId : `nuxt-tooltip-${useId()}`));
+const generatedTooltipId = `nuxt-tooltip-${useId()}`;
+const tooltipId = computed(() => props.tooltipId || generatedTooltipId);
 const tooltipAnchorName = `--tooltip-anchor-${useId()}`;
 
 const rootRef = ref<HTMLElement | null>(null);
@@ -84,18 +91,22 @@ watch(
 
 <style lang="css">
 @layer components {
-  .display-tooltip-core {
+  .display-tooltip {
     padding-block: var(--display-tooltip-padding-block, 0.8rem);
     position: relative;
 
     .display-tooltip-trigger-wrapper {
       display: inline-flex;
       align-items: flex-start;
+      max-inline-size: 100%;
+      overflow-wrap: anywhere;
 
       .display-tooltip-trigger-button {
-        margin-left: var(--display-tooltip-trigger-gap, 0.8rem);
+        flex: none;
+        margin-inline-start: var(--display-tooltip-trigger-gap, 0.8rem);
 
-        &.hide {
+        &[data-hidden] {
+          margin-inline-start: 0;
           width: 0;
           padding: 0;
           border-width: 0;
@@ -132,7 +143,6 @@ watch(
 
       &:hover {
         cursor: pointer;
-        text-decoration: underline;
       }
 
       &:hover,
@@ -146,7 +156,8 @@ watch(
       display: none;
       position: absolute;
       border: none;
-      width: var(--display-tooltip-popover-width, 30rem);
+      width: min(var(--display-tooltip-popover-width, 30rem), calc(100vw - 3.2rem));
+      overflow-wrap: anywhere;
 
       outline: var(--display-tooltip-popover-outline-width, 0.1rem) solid
         var(--display-tooltip-popover-outline-colour, var(--slate-02));
@@ -188,13 +199,14 @@ watch(
           color: var(--display-tooltip-close-button-colour, var(--slate-09));
           border: var(--display-tooltip-close-button-border-width, 0.1rem) solid
             var(--display-tooltip-close-button-border-colour, var(--slate-03));
-          outline: var(--display-tooltip-close-button-outline-width, 0.1rem) solid transparent;
+          outline: var(--display-tooltip-close-button-outline-width, 0.1rem) solid
+            var(--display-tooltip-close-button-outline-colour, transparent);
 
           font-weight: 600;
           padding: var(--display-tooltip-close-button-padding, 0.4rem 1rem);
 
           &:hover,
-          &:focus {
+          &:focus-visible {
             text-decoration: underline;
             border-color: var(--display-tooltip-close-button-border-colour-hover, var(--slate-06));
             outline-color: var(--display-tooltip-close-button-outline-colour-hover, var(--slate-06));

@@ -71,7 +71,7 @@ const tooltipId = computed(() =>
 
 <style lang="css">
 @layer components {
-  .display-tooltip-core {
+  .display-tooltip {
     .popover-content-defined {
       display: flex;
       flex-direction: column;

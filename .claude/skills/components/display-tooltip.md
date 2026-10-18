@@ -25,8 +25,9 @@ closes in JS, with outside-click and Escape dismissal. The trigger has `aria-exp
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `tooltipId` | `string` | `""` | Id linking the trigger button (`popovertarget`) to the popover panel (`id`). Auto-generated via `useId()` when omitted. |
-| `hideTrigger` | `boolean` | `false` | Visually hides the trigger button (kept in the DOM, not removed) — e.g. when an equivalent trigger is supplied via the `triggerContent` slot. |
+| `hideTrigger` | `boolean` | `false` | Collapses the trigger button to zero width and removes it from the tab order and accessibility tree (`tabindex="-1"`, `aria-hidden`). It stays in the DOM as the panel's anchor: open the panel from your own button with `popovertarget="<tooltipId>"` (Popover API browsers only; Safari 16 has no way to open it then). |
 | `triggerAriaLabel` | `string` | `"Toggle the popover"` | aria-label on the trigger button — override for localisation. |
+| `triggerIcon` | `string` | `"fa7-solid:circle-question"` | Iconify name for the trigger button icon. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root element. |
 
 ## Slots
@@ -61,9 +62,19 @@ popover width/colours/radius, and the close-button tokens `DisplayTooltipDefined
   `-line-height` (`1.4`), so a bare `<p>` reads as tooltip text without extra styling.
 
 - Auto-imported in Nuxt — no manual import needed.
-- `tooltipId` is only reactive at mount — changing it after mount does not regenerate the linked
-  `popovertarget`/`id` pair reactively beyond Vue's normal re-render, since both derive from the
-  same computed.
+- `tooltipId` is reactive: changing it updates both `popovertarget` and the panel `id`. Clearing it
+  falls back to the id generated once at setup (`nuxt-tooltip-<useId>`), which stays stable.
+- The trigger is `type="button"`, so it never submits a surrounding form. It stays a raw `<button>`
+  rather than `InputButton`, like `PopOver`'s: `useAnchoredPopover` needs the native element (it
+  carries `popovertarget` and `anchor-name`) in its ref.
+- Long unbroken text wraps in the trigger row and the panel; the panel width is capped at the
+  viewport (`100vw - 3.2rem`).
+- 2026-10-18 migration: root class `.display-tooltip-core` renamed to `.display-tooltip`; the
+  hidden trigger's generic `.hide` class replaced by `[data-hidden]`, plus `tabindex="-1"` and
+  `aria-hidden` so it's no longer an invisible tab stop; `type="button"` added (it submitted
+  surrounding forms); new `triggerIcon` prop; the generated id is created once at setup instead
+  of inside a `computed`; the close button's documented resting-outline token now works and its
+  hover styles apply on `:focus-visible`; wrapping and width cap for worst-case content.
 - 2026-09-07 migration: moved from an unplaced top-level folder into `01.atoms/display-tooltip/`;
   converted options-style `defineProps` to `interface Props` + `withDefaults`; fixed a real
   accessibility bug where the trigger button's hover/focus-visible state set `outline-offset` but
