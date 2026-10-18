@@ -4,7 +4,7 @@
 
 `ContentDocs` is a docs-page layout shell: a primary nav column, a main content column, and an "on this page" nav column, arranged via CSS `@container` queries (not viewport breakpoints) so the layout adapts to the space actually available — correct even when a consumer page has its own decoration (e.g. a site-wide left nav) eating into the viewport.
 
-`docsNav` and `docsPageNav` are **not** slots — they're rendered internally as `ExpandingPanel` accordions driven by `docsNavItems`/`docsPageNavItems` props. Only `docsContent` remains a slot, since it's arbitrary page content. The two side panels auto force-open/collapse based on the component's own measured width via `useContainerBreakpoints`, and share a native `<details name>` accordion group only on mobile (see "Breakpoint behaviour" below).
+`docsNav` and `docsPageNav` are **not** slots — they're rendered internally as collapsible panels (`ExpandingPanelClassic` by default, `ExpandingPanel` with `panel-variant="modern"`) driven by `docsNavItems`/`docsPageNavItems` props. Only `docsContent` remains a slot, since it's arbitrary page content. The two side panels auto force-open/collapse based on the component's own measured width via `useContainerBreakpoints`, and share a native `<details name>` accordion group only on mobile (see "Breakpoint behaviour" below).
 
 ---
 
@@ -13,7 +13,7 @@
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
 | `tag` | `"div" \| "section" \| "article" \| "main"` | `"div"` | Root element tag. |
-| `docsNavItems` | `DocsNavItem[]` | `[]` | Items rendered in the `docsNav` panel. Panel (and its `.docs-nav` wrapper) is omitted entirely when empty. |
+| `docsNavItems` | `DocsNavItem[]` | `[]` | Items rendered in the `docsNav` panel. Panel (and its `.content-docs-nav` wrapper) is omitted entirely when empty. Items may share a `to` (keys include the index); every item matching the active `to` is marked active. |
 | `docsPageNavItems` | `DocsNavItem[]` | `[]` | Items rendered in the `docsPageNav` panel. Panel omitted entirely when empty. |
 | `docsNavLabel` | `string` | `"Navigation"` | Heading text for the `docsNav` panel's `#summary`. |
 | `docsPageNavLabel` | `string` | `"On this page"` | Heading text for the `docsPageNav` panel's `#summary`. |
@@ -113,7 +113,7 @@ In the template, `docsContent` is placed **before** `docsNav`/`docsPageNav` — 
 
 ### Why the two panels share a `name` only on mobile
 
-Both panels are `ExpandingPanel`s using the native `<details name="...">` grouping feature, which makes same-named panels mutually exclusive (browser force-closes one when the other opens). That's the wanted behaviour on mobile (accordion — only one open at a time), but at tablet/desktop both panels must be open **simultaneously** — a shared name there would make the browser silently force-close one of them the moment both try to be open. So the component computes distinct names (`"docsNav"` / `"docsPageNav"`) once past mobile, and a shared name (`"docsPanelGroup"`) only while mobile.
+Both panels are `ExpandingPanel`s using the native `<details name="...">` grouping feature, which makes same-named panels mutually exclusive (browser force-closes one when the other opens). That's the wanted behaviour on mobile (accordion — only one open at a time), but at tablet/desktop both panels must be open **simultaneously** — a shared name there would make the browser silently force-close one of them the moment both try to be open. So the component computes distinct names (`useId()` plus `-docsNav` / `-docsPageNav`) once past mobile, and the shared bare `useId()` value only while mobile. Ids come from `useId()`, so two `ContentDocs` on one page never share a group.
 
 ### Related fix in ExpandingPanel.vue
 
@@ -125,7 +125,19 @@ Building this component's forced-open/forced-closed cycling surfaced a real bug 
 
 `DocsNavItem.icon` is optional (any icon name resolvable by `<Icon>`, e.g. Lucide set: `"lucide:rocket"`). Items without an icon still align correctly with icon-bearing items — the link is `display: grid` with a fixed-width icon column (`--content-docs-link-icon-size`), not `flex`, so an absent icon doesn't collapse the label leftward.
 
-To move the icon to the end of the link instead of the start, set `--content-docs-nav-link-icon-order` (or `--content-docs-page-nav-link-icon-order`) to `rtl` (default `ltr`). This uses a `direction` flip to mirror which physical side the fixed-width column renders on, rather than swapping `grid-column` values directly — swapping columns would put the label into the icon-sized track and squeeze it. The icon and label content reset `direction: ltr` internally so text/glyphs don't visually mirror.
+To move the icon to the end of the link instead of the start, set `--content-docs-nav-link-icon-order` (or `--content-docs-page-nav-link-icon-order`) to `rtl` (default `ltr`). This uses a `direction` flip to mirror which physical side the fixed-width column renders on, rather than swapping `grid-column` values directly — swapping columns would put the label into the icon-sized track and squeeze it. The icon resets `direction: ltr` so its glyph doesn't mirror. The label uses `unicode-bidi: plaintext` with `text-align: start` instead, so it takes its direction from its own text: a right-to-left label still reads and aligns right-to-left. (Until 2026-10-18 the label forced `direction: ltr`, which broke right-to-left labels.)
+
+---
+
+## Classes and state hooks
+
+Root `.content-docs`; grid `.content-docs-inner`; grid areas `.content-docs-nav`, `.content-docs-content`, `.content-docs-page-nav` (each `min-inline-size: 0`, tracks `minmax(0, 1fr)`, content area `overflow-wrap: break-word`); headings `.content-docs-nav-heading` / `.content-docs-page-nav-heading`; `<nav>`s `.content-docs-nav-list` / `.content-docs-page-nav-list` (their `<ul role="list">`); links `.content-docs-nav-link` / `.content-docs-page-nav-link` with `-icon` and `-label` children. The active link is selected by `[aria-current="page"]`; there is no `.is-active` class.
+
+Renamed 2026-10-18 from the unprefixed `.docs-*` names (`.docs-nav`, `.docs-content`, `.docs-page-nav`, `.docs-nav-link`, ...), which collided with consumer CSS. Full map in `CONSUMER-STYLING.md`.
+
+## Worst-case data
+
+Labels and headings wrap anywhere, so an unbroken label stays in its column. An empty `label` renders a thin link with no accessible name: filter those out of the data. Link labels have no line-clamp token: they name their destinations. See the `StressTest` story.
 
 ---
 
@@ -140,7 +152,8 @@ All `--content-docs-*` tokens can be overridden at global, page, or instance sco
 - `-bg` (default: `var(--page-bg)`), `-padding-block`, `-padding-inline`, `-border-radius`
 
 **Link tokens** (shared: `--content-docs-link-*`, per-side: `--content-docs-{nav,page-nav}-link-*`):
-- `-font-size`, `-padding-block`, `-padding-inline`, `-margin-block`, `-border-radius`, `-color`, `-bg`, `-hover-bg`, `-hover-color`, `-active-bg`, `-active-color`
+- `-font-size`, `-padding-block`, `-padding-inline`, `-margin-block`, `-border-radius`, `-color`, `-bg`, `-hover-bg`, `-hover-color`, `-active-bg`, `-active-color` (active defaults to `var(--theme-surface)` / `var(--theme-on-surface)`; it was a fixed green pair before 2026-10-18)
+- Shared only: `--content-docs-link-focus-outline-width` (`0.2rem`), `--content-docs-link-focus-outline-color` (`var(--theme-border-focus)`)
 
 **Column-width tokens** (fixed-width grid tracks at tablet/desktop):
 - `--content-docs-nav-column-width` (default `23rem`, desktop `docsNav` track)

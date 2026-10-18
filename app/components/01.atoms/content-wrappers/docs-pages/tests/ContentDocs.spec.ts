@@ -1,5 +1,5 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
-import { nextTick } from "vue";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { defineComponent, h, nextTick, ref } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import ContentDocs from "../ContentDocs.vue";
 
@@ -37,67 +37,75 @@ const navItems = [
 const pageNavItems = [{ label: "Overview", to: "/one#overview" }];
 
 describe("ContentDocs", () => {
+  let wrapper: Awaited<ReturnType<typeof mountSuspended>> | undefined;
+
+  afterEach(() => {
+    wrapper?.unmount();
+    wrapper = undefined;
+    vi.restoreAllMocks();
+  });
+
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(ContentDocs);
+    wrapper = await mountSuspended(ContentDocs);
     expect(wrapper.vm).toBeTruthy();
   });
 
   // ─── docsNav / docsPageNav visibility ──────────────────────────────────────
 
-  it("does not render .docs-nav when docsNavItems is empty", async () => {
-    const wrapper = await mountSuspended(ContentDocs);
-    expect(wrapper.find(".docs-nav").exists()).toBe(false);
+  it("does not render .content-docs-nav when docsNavItems is empty", async () => {
+    wrapper = await mountSuspended(ContentDocs);
+    expect(wrapper.find(".content-docs-nav").exists()).toBe(false);
   });
 
-  it("renders .docs-nav with a link per item when docsNavItems is provided", async () => {
-    const wrapper = await mountSuspended(ContentDocs, { props: { docsNavItems: navItems } });
-    const links = wrapper.find(".docs-nav").findAll("a");
+  it("renders .content-docs-nav with a link per item when docsNavItems is provided", async () => {
+    wrapper = await mountSuspended(ContentDocs, { props: { docsNavItems: navItems } });
+    const links = wrapper.find(".content-docs-nav").findAll("a");
     expect(links).toHaveLength(2);
     expect(links[0]?.text()).toBe("One");
     expect(links[0]?.attributes("href")).toBe("/one");
   });
 
-  it("does not render .docs-page-nav when docsPageNavItems is empty", async () => {
-    const wrapper = await mountSuspended(ContentDocs);
-    expect(wrapper.find(".docs-page-nav").exists()).toBe(false);
+  it("does not render .content-docs-page-nav when docsPageNavItems is empty", async () => {
+    wrapper = await mountSuspended(ContentDocs);
+    expect(wrapper.find(".content-docs-page-nav").exists()).toBe(false);
   });
 
-  it("renders .docs-page-nav with a link per item when docsPageNavItems is provided", async () => {
-    const wrapper = await mountSuspended(ContentDocs, { props: { docsPageNavItems: pageNavItems } });
-    const links = wrapper.find(".docs-page-nav").findAll("a");
+  it("renders .content-docs-page-nav with a link per item when docsPageNavItems is provided", async () => {
+    wrapper = await mountSuspended(ContentDocs, { props: { docsPageNavItems: pageNavItems } });
+    const links = wrapper.find(".content-docs-page-nav").findAll("a");
     expect(links).toHaveLength(1);
     expect(links[0]?.text()).toBe("Overview");
   });
 
   it("renders the docsContent slot", async () => {
-    const wrapper = await mountSuspended(ContentDocs, {
+    wrapper = await mountSuspended(ContentDocs, {
       slots: { docsContent: '<p data-testid="body">Body</p>' },
     });
     expect(wrapper.find('[data-testid="body"]').text()).toBe("Body");
   });
 
   it("places docsContent before docsNav and docsPageNav in DOM order, so a consumer's h1 is reachable before either nav panel's h3 heading (visual position is unaffected — grid-template-areas places all three, not source order)", async () => {
-    const wrapper = await mountSuspended(ContentDocs, {
+    wrapper = await mountSuspended(ContentDocs, {
       props: { docsNavItems: navItems, docsPageNavItems: pageNavItems },
       slots: { docsContent: "<h1>Title</h1>" },
     });
     const inner = wrapper.find(".content-docs-inner").element;
     const children = [...inner.children].map((el) => el.className);
-    expect(children).toEqual(["docs-content", "docs-nav", "docs-page-nav"]);
+    expect(children).toEqual(["content-docs-content", "content-docs-nav", "content-docs-page-nav"]);
   });
 
   // ─── labels ─────────────────────────────────────────────────────────────
 
   it("defaults docsNavLabel to 'Navigation' and docsPageNavLabel to 'On this page'", async () => {
-    const wrapper = await mountSuspended(ContentDocs, {
+    wrapper = await mountSuspended(ContentDocs, {
       props: { docsNavItems: navItems, docsPageNavItems: pageNavItems },
     });
-    expect(wrapper.find(".docs-nav-heading").text()).toBe("Navigation");
-    expect(wrapper.find(".docs-page-nav-heading").text()).toBe("On this page");
+    expect(wrapper.find(".content-docs-nav-heading").text()).toBe("Navigation");
+    expect(wrapper.find(".content-docs-page-nav-heading").text()).toBe("On this page");
   });
 
   it("uses custom docsNavLabel / docsPageNavLabel when provided", async () => {
-    const wrapper = await mountSuspended(ContentDocs, {
+    wrapper = await mountSuspended(ContentDocs, {
       props: {
         docsNavItems: navItems,
         docsPageNavItems: pageNavItems,
@@ -105,111 +113,111 @@ describe("ContentDocs", () => {
         docsPageNavLabel: "Contents",
       },
     });
-    expect(wrapper.find(".docs-nav-heading").text()).toBe("Sections");
-    expect(wrapper.find(".docs-page-nav-heading").text()).toBe("Contents");
+    expect(wrapper.find(".content-docs-nav-heading").text()).toBe("Sections");
+    expect(wrapper.find(".content-docs-page-nav-heading").text()).toBe("Contents");
   });
 
   // ─── icons ──────────────────────────────────────────────────────────────
 
   it("renders an icon on a docsNav item when item.icon is set", async () => {
-    const wrapper = await mountSuspended(ContentDocs, {
+    wrapper = await mountSuspended(ContentDocs, {
       props: { docsNavItems: [{ label: "One", to: "/one", icon: "lucide:home" }] },
     });
-    expect(wrapper.find(".docs-nav-link-icon").exists()).toBe(true);
+    expect(wrapper.find(".content-docs-nav-link-icon").exists()).toBe(true);
   });
 
   it("does not render an icon on a docsNav item when item.icon is omitted", async () => {
-    const wrapper = await mountSuspended(ContentDocs, { props: { docsNavItems: navItems } });
-    expect(wrapper.find(".docs-nav-link-icon").exists()).toBe(false);
+    wrapper = await mountSuspended(ContentDocs, { props: { docsNavItems: navItems } });
+    expect(wrapper.find(".content-docs-nav-link-icon").exists()).toBe(false);
   });
 
   it("renders an icon on a docsPageNav item when item.icon is set", async () => {
-    const wrapper = await mountSuspended(ContentDocs, {
+    wrapper = await mountSuspended(ContentDocs, {
       props: { docsPageNavItems: [{ label: "Overview", to: "/one#overview", icon: "lucide:list" }] },
     });
-    expect(wrapper.find(".docs-page-nav-link-icon").exists()).toBe(true);
+    expect(wrapper.find(".content-docs-page-nav-link-icon").exists()).toBe(true);
   });
 
   // ─── active item ────────────────────────────────────────────────────────
 
-  it("applies is-active and aria-current to the link matching activeNavItem", async () => {
-    const wrapper = await mountSuspended(ContentDocs, {
+  it("sets aria-current='page' only on the link matching activeNavItem", async () => {
+    wrapper = await mountSuspended(ContentDocs, {
       props: { docsNavItems: navItems, activeNavItem: "/two" },
     });
-    const links = wrapper.find(".docs-nav").findAll("a");
-    expect(links[0]?.classes()).not.toContain("is-active");
-    expect(links[1]?.classes()).toContain("is-active");
+    const links = wrapper.find(".content-docs-nav").findAll("a");
+    expect(links[0]?.attributes("aria-current")).toBeUndefined();
     expect(links[1]?.attributes("aria-current")).toBe("page");
+    expect(links[1]?.classes()).not.toContain("is-active");
   });
 
   it("emits update:activeNavItem when a docsNav link is clicked", async () => {
-    const wrapper = await mountSuspended(ContentDocs, { props: { docsNavItems: navItems } });
-    await wrapper.find(".docs-nav").findAll("a")[1]?.trigger("click");
+    wrapper = await mountSuspended(ContentDocs, { props: { docsNavItems: navItems } });
+    await wrapper.find(".content-docs-nav").findAll("a")[1]?.trigger("click");
     expect(wrapper.emitted("update:activeNavItem")?.[0]).toEqual(["/two"]);
   });
 
   it("emits update:activePageNavItem when a docsPageNav link is clicked", async () => {
-    const wrapper = await mountSuspended(ContentDocs, { props: { docsPageNavItems: pageNavItems } });
-    await wrapper.find(".docs-page-nav").find("a").trigger("click");
+    wrapper = await mountSuspended(ContentDocs, { props: { docsPageNavItems: pageNavItems } });
+    await wrapper.find(".content-docs-page-nav").find("a").trigger("click");
     expect(wrapper.emitted("update:activePageNavItem")?.[0]).toEqual(["/one#overview"]);
   });
 
   // ─── closing on link click (mobile overlay behaviour) ─────────────────────
 
   it("closes the docsNav panel when a link inside it is clicked", async () => {
-    const wrapper = await mountSuspended(ContentDocs, { props: { docsNavItems: navItems } });
+    wrapper = await mountSuspended(ContentDocs, { props: { docsNavItems: navItems } });
 
-    await wrapper.find(".docs-nav summary").trigger("click");
-    expect(wrapper.find(".docs-nav details").attributes("open")).toBeDefined();
+    await wrapper.find(".content-docs-nav summary").trigger("click");
+    expect(wrapper.find(".content-docs-nav details").attributes("open")).toBeDefined();
 
-    await wrapper.find(".docs-nav").findAll("a")[0]?.trigger("click");
-    expect(wrapper.find(".docs-nav details").attributes("open")).toBeUndefined();
+    await wrapper.find(".content-docs-nav").findAll("a")[0]?.trigger("click");
+    expect(wrapper.find(".content-docs-nav details").attributes("open")).toBeUndefined();
   });
 
   it("closes the docsPageNav panel when a link inside it is clicked", async () => {
-    const wrapper = await mountSuspended(ContentDocs, { props: { docsPageNavItems: pageNavItems } });
+    wrapper = await mountSuspended(ContentDocs, { props: { docsPageNavItems: pageNavItems } });
 
-    await wrapper.find(".docs-page-nav summary").trigger("click");
-    expect(wrapper.find(".docs-page-nav details").attributes("open")).toBeDefined();
+    await wrapper.find(".content-docs-page-nav summary").trigger("click");
+    expect(wrapper.find(".content-docs-page-nav details").attributes("open")).toBeDefined();
 
-    await wrapper.find(".docs-page-nav").find("a").trigger("click");
-    expect(wrapper.find(".docs-page-nav details").attributes("open")).toBeUndefined();
+    await wrapper.find(".content-docs-page-nav").find("a").trigger("click");
+    expect(wrapper.find(".content-docs-page-nav details").attributes("open")).toBeUndefined();
   });
 
   // ─── container-width-driven forceOpened ────────────────────────────────────
 
   describe("breakpoint-driven forceOpened", () => {
     it("neither panel is forceOpened below 768px (mobile)", async () => {
-      const wrapper = await mountSuspended(ContentDocs, {
+      wrapper = await mountSuspended(ContentDocs, {
         props: { docsNavItems: navItems, docsPageNavItems: pageNavItems },
       });
       triggerResize(wrapper.find(".content-docs").element as HTMLElement, 500);
       await nextTick();
 
-      expect(wrapper.find(".docs-nav .icon-wrapper").exists()).toBe(true);
-      expect(wrapper.find(".docs-page-nav .icon-wrapper").exists()).toBe(true);
+      expect(wrapper.find(".content-docs-nav .icon-wrapper").exists()).toBe(true);
+      expect(wrapper.find(".content-docs-page-nav .icon-wrapper").exists()).toBe(true);
     });
 
     it("only docsPageNav is forceOpened between 768px and 1023px (tablet)", async () => {
-      const wrapper = await mountSuspended(ContentDocs, {
+      wrapper = await mountSuspended(ContentDocs, {
         props: { docsNavItems: navItems, docsPageNavItems: pageNavItems },
       });
       triggerResize(wrapper.find(".content-docs").element as HTMLElement, 900);
       await nextTick();
 
-      expect(wrapper.find(".docs-nav .icon-wrapper").classes()).not.toContain("icon-wrapper--hidden");
-      expect(wrapper.find(".docs-page-nav .icon-wrapper").classes()).toContain("icon-wrapper--hidden");
+      expect(wrapper.find(".content-docs-nav .icon-wrapper").classes()).not.toContain("icon-wrapper--hidden");
+      expect(wrapper.find(".content-docs-page-nav .icon-wrapper").classes()).toContain("icon-wrapper--hidden");
     });
 
     it("both panels are forceOpened at 1024px and above (desktop)", async () => {
-      const wrapper = await mountSuspended(ContentDocs, {
+      wrapper = await mountSuspended(ContentDocs, {
         props: { docsNavItems: navItems, docsPageNavItems: pageNavItems },
       });
       triggerResize(wrapper.find(".content-docs").element as HTMLElement, 1200);
       await nextTick();
 
-      expect(wrapper.find(".docs-nav .icon-wrapper").classes()).toContain("icon-wrapper--hidden");
-      expect(wrapper.find(".docs-page-nav .icon-wrapper").classes()).toContain("icon-wrapper--hidden");
+      expect(wrapper.find(".content-docs-nav .icon-wrapper").classes()).toContain("icon-wrapper--hidden");
+      expect(wrapper.find(".content-docs-page-nav .icon-wrapper").classes()).toContain("icon-wrapper--hidden");
     });
   });
 
@@ -217,34 +225,92 @@ describe("ContentDocs", () => {
 
   describe("panel name grouping", () => {
     it("shares one details name between docsNav and docsPageNav on mobile", async () => {
-      const wrapper = await mountSuspended(ContentDocs, {
+      wrapper = await mountSuspended(ContentDocs, {
         props: { docsNavItems: navItems, docsPageNavItems: pageNavItems },
       });
       triggerResize(wrapper.find(".content-docs").element as HTMLElement, 500);
       await nextTick();
 
-      const navName = wrapper.find(".docs-nav details").attributes("name");
-      const pageNavName = wrapper.find(".docs-page-nav details").attributes("name");
+      const navName = wrapper.find(".content-docs-nav details").attributes("name");
+      const pageNavName = wrapper.find(".content-docs-page-nav details").attributes("name");
       expect(navName).toBe(pageNavName);
     });
 
     it("uses distinct details names on desktop, where both must stay open simultaneously", async () => {
-      const wrapper = await mountSuspended(ContentDocs, {
+      wrapper = await mountSuspended(ContentDocs, {
         props: { docsNavItems: navItems, docsPageNavItems: pageNavItems },
       });
       triggerResize(wrapper.find(".content-docs").element as HTMLElement, 1200);
       await nextTick();
 
-      const navName = wrapper.find(".docs-nav details").attributes("name");
-      const pageNavName = wrapper.find(".docs-page-nav details").attributes("name");
+      const navName = wrapper.find(".content-docs-nav details").attributes("name");
+      const pageNavName = wrapper.find(".content-docs-page-nav details").attributes("name");
       expect(navName).not.toBe(pageNavName);
     });
+  });
+
+  // ─── worst-case data and markup ─────────────────────────────────────────
+
+  it("gives both styled lists role=\"list\" so Safari/VoiceOver still announces them", async () => {
+    wrapper = await mountSuspended(ContentDocs, {
+      props: { docsNavItems: navItems, docsPageNavItems: pageNavItems },
+    });
+    const lists = wrapper.findAll("ul");
+    expect(lists).toHaveLength(2);
+    for (const list of lists) expect(list.attributes("role")).toBe("list");
+  });
+
+  it("renders and reorders items that share the same `to`", async () => {
+    wrapper = await mountSuspended(ContentDocs, {
+      props: {
+        docsNavItems: [
+          { label: "First", to: "/same" },
+          { label: "Second", to: "/same" },
+        ],
+      },
+    });
+    const mounted = wrapper;
+    const labels = () => mounted.findAll(".content-docs-nav-link-label").map((el: { text: () => string }) => el.text());
+    expect(labels()).toEqual(["First", "Second"]);
+    await mounted.setProps({
+      docsNavItems: [
+        { label: "Second", to: "/same" },
+        { label: "First", to: "/same" },
+        { label: "Third", to: "/same" },
+      ],
+    });
+    expect(labels()).toEqual(["Second", "First", "Third"]);
+  });
+
+  it("renders HTML-like labels as text", async () => {
+    wrapper = await mountSuspended(ContentDocs, {
+      props: { docsNavItems: [{ label: "<b>not bold</b>", to: "/x" }], docsNavLabel: "<i>x</i>" },
+    });
+    expect(wrapper.find(".content-docs-nav-link-label b").exists()).toBe(false);
+    expect(wrapper.find(".content-docs-nav-link-label").text()).toBe("<b>not bold</b>");
+    expect(wrapper.find(".content-docs-nav-heading i").exists()).toBe(false);
+  });
+
+  it("adds and removes the content area when the docsContent slot is toggled after mount", async () => {
+    const show = ref(false);
+    const Host = defineComponent({
+      setup: () => () =>
+        h(ContentDocs, null, show.value ? { docsContent: () => h("p", { class: "body" }, "Body") } : {}),
+    });
+    wrapper = await mountSuspended(Host);
+    expect(wrapper.find(".content-docs-content").exists()).toBe(false);
+    show.value = true;
+    await nextTick();
+    expect(wrapper.find(".content-docs-content .body").exists()).toBe(true);
+    show.value = false;
+    await nextTick();
+    expect(wrapper.find(".content-docs-content").exists()).toBe(false);
   });
 
   // ─── styleClassPassthrough ────────────────────────────────────────────────
 
   it("applies styleClassPassthrough classes to the root element", async () => {
-    const wrapper = await mountSuspended(ContentDocs, {
+    wrapper = await mountSuspended(ContentDocs, {
       props: { styleClassPassthrough: ["custom-class"] },
     });
     expect(wrapper.find(".content-docs").classes()).toContain("custom-class");
