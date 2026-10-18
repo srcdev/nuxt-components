@@ -5,7 +5,7 @@
     :class="[elementClasses]"
     :style="{ '--_anchor-name': tooltipAnchorName }"
   >
-    <div class="display-tooltip-trigger-wrapper body-md">
+    <div class="display-tooltip-trigger-wrapper">
       <slot v-if="$slots.triggerContent" name="triggerContent"></slot>
       <button
         ref="triggerRef"

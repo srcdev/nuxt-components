@@ -105,6 +105,7 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | ~~InputCheckboxRadioWithLabel~~ | ✅ `InputCheckboxRadioField` (2026-09-27) | - |
 | ~~ActionMenuItemCore~~ | ✅ `ActionMenuItem` (2026-09-27) | - |
 | ~~AlertMaskCore~~ | ✅ `AlertMask` (2026-10-17) | - |
+| ~~DisplayTooltipDefined~~ | ✅ `DisplayTooltipRich` (2026-10-18): Material 3 "rich tooltip", the implementation word "Defined" said nothing about what it is | - |
 | CardCore | **decide**: `Card` is single-word and collision-prone; prefer a prefixed name (`Display*`, `Content*`) | yes |
 | AccordianCore | **decide**: also fixes the "Accordian" misspelling; bare `Accordion` is single-word and collision-prone, and it is built on `<details>`/`<summary>` | yes |
 | ~~TabsCore~~ | ✅ `TabbedContent` (2026-10-07) | - |

@@ -143,7 +143,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── deep-expanding-menu.md         — DeepExpandingMenu: anchor-positioned popover nav panels, browser support caveat, CSS token API
     ├── deep-expanding-menu-classic.md — DeepExpandingMenuClassic: <details>-based fallback nav, click-outside close, CSS token API
     ├── display-tooltip.md         — DisplayTooltip: anchor-positioned popover trigger, browser support caveat, CSS token API
-    ├── display-tooltip-defined.md — DisplayTooltipDefined: structured title/body/action tooltip content with close button, composes DisplayTooltip
+    ├── display-tooltip-rich.md    — DisplayTooltipRich (Material 3 rich tooltip, renamed from DisplayTooltipDefined 2026-10-18): structured title/body/action content with InputButton close button, per-field line-clamp tokens, composes DisplayTooltip
     ├── pop-over.md                — PopOver: generic anchor-positioned disclosure panel, consumer-supplied trigger/content slots, placement prop, CSS token API
     ├── input-text.md            — InputText (bare control), InputTextField, InputPasswordField, InputTextAsNumberField: renamed from Core/WithLabel, data-* state hooks, readonly/autocomplete props, leak-free digit filtering, wrapper attr-leak/empty-description/passthrough fixes, rounded+clamped stepping, min/max pass-through, CSS token API, stress stories
     ├── input-button.md           — InputButton (renamed from InputButtonCore 2026-09-28): button/NuxtLink/a; primary filled, secondary outlined, tertiary text-only, inline unstyled; data-* state hooks; shadow ring + border-colour hover; wrapping labels; icon slots; readonly (aria-disabled, activation blocked); tokens

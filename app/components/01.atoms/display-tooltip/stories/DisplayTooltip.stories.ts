@@ -36,7 +36,7 @@ const meta: Meta<typeof DisplayTooltip> = {
     docs: {
       description: {
         component:
-          "A trigger button that opens an anchor-positioned popover panel, built on the native Popover API and CSS anchor positioning (with fallbacks for Safari 16-18). Slots: `triggerContent` (a label before the button) and `tooltipContent` (the panel, with a scoped `close()`). Props set the trigger's icon (`triggerIcon`) and accessible name (`triggerAriaLabel`). DisplayTooltipDefined builds on this with a structured title, body and close button: see its stories.",
+          "A trigger button that opens an anchor-positioned popover panel, built on the native Popover API and CSS anchor positioning (with fallbacks for Safari 16-18). Slots: `triggerContent` (a label before the button) and `tooltipContent` (the panel, with a scoped `close()`). Props set the trigger's icon (`triggerIcon`) and accessible name (`triggerAriaLabel`). DisplayTooltipRich builds on this with a structured title, body and close button: see its stories.",
       },
     },
   },

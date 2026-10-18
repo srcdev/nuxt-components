@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DisplayTooltipRich > renders correct HTML structure 1`] = `
+"<div class="display-tooltip display-tooltip-rich" style="--_anchor-name: --tooltip-anchor-v-0-0-1;">
+  <div class="display-tooltip-trigger-wrapper">
+    <!--v-if--><button popovertarget="nuxt-tooltip-fixed" popovertargetaction="toggle" type="button" class="display-tooltip-trigger-button" aria-label="Toggle the popover" aria-expanded="false"><span class="iconify i-fa7-solid:circle-question display-tooltip-trigger-icon" aria-hidden="true"></span></button>
+  </div>
+  <div id="nuxt-tooltip-fixed" popover="" class="display-tooltip-popover">
+    <div class="display-tooltip-popover-content">
+      <div class="display-tooltip-rich-content">
+        <h4 class="display-tooltip-rich-title">Title</h4>
+        <p class="display-tooltip-rich-body">Body copy</p><span class="display-tooltip-rich-action">Learn more</span><button type="button" data-testid="input-button" data-theme="default" data-variant="inline" class="input-button display-tooltip-close-button" popovertarget="nuxt-tooltip-fixed" popovertargetaction="hide" aria-label="Close tool tip">
+          <!--v-if-->
+          <!--v-if--><span class="input-button-text">Close</span>
+          <!--v-if-->
+          <!--v-if-->
+        </button>
+      </div>
+    </div>
+  </div>
+</div>"
+`;

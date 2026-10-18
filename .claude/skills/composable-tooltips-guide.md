@@ -8,7 +8,7 @@
 
 ## Prerequisites
 
-- Built around the native Popover API (Chrome 114+, Firefox 125+, Safari 17+). With `DisplayTooltip`/`DisplayTooltipDefined` it also works on Safari 16, because those components fall back to JS open/close (`useAnchoredPopover`) and the guide drives them through their trigger buttons. Hand-written raw `[popover]` markup like the example below still needs the Popover API.
+- Built around the native Popover API (Chrome 114+, Firefox 125+, Safari 17+). With `DisplayTooltip`/`DisplayTooltipRich` it also works on Safari 16, because those components fall back to JS open/close (`useAnchoredPopover`) and the guide drives them through their trigger buttons. Hand-written raw `[popover]` markup like the example below still needs the Popover API.
 - Popovers must have `id` attributes and corresponding trigger buttons with `popovertarget` and `popovertargetaction="toggle"` attributes
 - Close buttons inside each popover must have `popovertargetaction="hide"`
 
@@ -91,13 +91,13 @@ await startGuide()
 | `stopGuide()` | `() => void` | Close any open popovers and stop the guide |
 | `initializePopovers()` | `() => void` | Re-scan the container for `[popover]` elements; call if popovers are added dynamically |
 
-## Example with DisplayTooltip / DisplayTooltipDefined
+## Example with DisplayTooltip / DisplayTooltipRich
 
 [`DisplayTooltip`](components/display-tooltip.md) and
-[`DisplayTooltipDefined`](components/display-tooltip-defined.md) already emit the
+[`DisplayTooltipRich`](components/display-tooltip-rich.md) already emit the
 `[popover]`/`popovertarget`/`popovertargetaction` markup this composable expects, so no extra
 wiring is needed beyond passing their shared container's ref in. See the `GuidedTour` story in
-`DisplayTooltipDefined.stories.ts` for a full working example — it recreates the old
+`DisplayTooltipRich.stories.ts` for a full working example — it recreates the old
 `app/pages/ui/tooltips.vue` demo page (removed 2026-08-23 when Storybook became the only demo
 surface), mixing one of each component as guide steps.
 

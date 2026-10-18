@@ -1,0 +1,50 @@
+{
+  "SRCDEV DisplayTooltipRich Basic": {
+    "description": "DisplayTooltipRich — structured title/body/action tooltip",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayTooltipRich",
+      "  :content-text=\"{",
+      "    tooltipTitle: { tag: 'h4', text: '$1' },",
+      "    tooltipContent: { tag: 'p', text: '$0' },",
+      "  }\"",
+      "/>"
+    ]
+  },
+  "SRCDEV DisplayTooltipRich Localised Copy": {
+    "description": "DisplayTooltipRich with localised trigger/close-button copy and a custom trigger icon",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayTooltipRich",
+      "  :content-text=\"{",
+      "    tooltipTitle: { tag: 'h4', text: '$1' },",
+      "    tooltipContent: { tag: 'p', text: '$2' },",
+      "  }\"",
+      "  trigger-aria-label=\"${3:Toggle the popover}\"",
+      "  close-button-text=\"${4:Close}\"",
+      "  close-button-aria-label=\"${5:Close tool tip}\"",
+      "  trigger-icon=\"${6:fa7-solid:circle-question}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV DisplayTooltipRich CSS Override": {
+    "description": "CSS override scaffold for DisplayTooltipRich, scoped to a page or section class",
+    "scope": "css",
+    "body": [
+      ".${1:my-page} {",
+      "  .display-tooltip-rich {",
+      "    --display-tooltip-rich-content-gap: ;",
+      "    --display-tooltip-rich-title-colour: ;",
+      "    --display-tooltip-rich-title-font-size: ;",
+      "    --display-tooltip-rich-title-line-clamp: ${2:none};",
+      "    --display-tooltip-rich-body-font-size: ;",
+      "    --display-tooltip-rich-body-line-clamp: ${3:none};",
+      "    --display-tooltip-rich-action-colour: ;",
+      "    --display-tooltip-rich-action-line-clamp: ${4:none};",
+      "    --display-tooltip-popover-background-colour: ;",
+      "    --display-tooltip-popover-text-colour: ;",
+      "  }",
+      "}"
+    ]
+  }
+}

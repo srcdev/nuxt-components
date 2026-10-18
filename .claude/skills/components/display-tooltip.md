@@ -11,7 +11,7 @@ type: reference
 `DisplayTooltip` renders a trigger button that opens an anchor-positioned popover panel, built on
 the native Popover API (`popover`/`popovertarget`) and CSS anchor-positioning
 (`anchor-name`/`position-anchor`/`anchor()`). For a structured title/body/action content shape
-with a built-in close button, see [`DisplayTooltipDefined`](display-tooltip-defined.md), which
+with a built-in close button, see [`DisplayTooltipRich`](display-tooltip-rich.md), which
 composes this component.
 
 **Browser support:** since 2026-10-05 open/close and positioning go through the shared
@@ -53,7 +53,7 @@ closes in JS, with outside-click and Escape dismissal. The trigger has `aria-exp
 ## CSS custom properties
 
 See `CONSUMER-STYLING.md` for the full `--display-tooltip-*` token API (padding, gaps, icon size,
-popover width/colours/radius, and the close-button tokens `DisplayTooltipDefined` uses).
+popover width/colours/radius, and the close-button tokens `DisplayTooltipRich` uses).
 
 ## Notes
 

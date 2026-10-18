@@ -34,6 +34,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | DashboardStatsGrid | `content-wrappers/layout-grid/dashboard-stats-grid/` | ✅ | ✅ `dashboard-stats-grid` |
 | LayoutGridByCols | `content-wrappers/layout-grid/layout-grid-by-cols/` | ✅ | ✅ `layout-grid-by-cols` |
 | DisplayDialog | `display-dialog/DisplayDialog.vue` | ✅ | ✅ `dialog` |
+| DisplayTooltip | `display-tooltip/DisplayTooltip.vue` | ✅ | ✅ `display-tooltip` |
 | DisplayPill | `display-pill/DisplayPill.vue` | ✅ | ✅ `display-pill` |
 | GlassPanel | `glass-panel/GlassPanel.vue` | ✅ | ✅ |
 | AutoGrid | `grids/auto-grid/AutoGrid.vue` | ☐ | ☐ |
@@ -61,6 +62,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | AlertMaskedContent | `alert-masked-content/AlertMaskedContent.vue` | ✅ | ✅ `alert-masked-content` |
 | ContactSection | `contact-section/ContactSection.vue` | ☐ | ☐ |
 | DisplayAvatar | `display-avatar/DisplayAvatar.vue` | ✅ | ✅ `display-avatar` |
+| DisplayTooltipRich | `display-tooltip-rich/DisplayTooltipRich.vue` | ✅ | ✅ `display-tooltip-rich` |
 | DisplayChip | `display-chip/DisplayChip.vue` | ☐ | ☐ |
 | DisplayPrompt | `prompt/DisplayPrompt.vue` | ☐ | ✅ `display-prompt` |
 | DisplayToast | `toast/DisplayToast.vue` | ✅ | ✅ `display-toast` |
@@ -182,8 +184,6 @@ These components still live in the root `app/components/` folder and need to be 
 | DeepExpandingMenuOld | `deep-expanding-menu/DeepExpandingMenuOld.vue` | Likely deprecated — review before migrating |
 | DisplayBanner | `display-banner/DisplayBanner.vue` | |
 | DisplayThemeSwitch | `display-theme-switch/DisplayThemeSwitch.vue` | |
-| DisplayTooltip | `display-tooltip/DisplayTooltip.vue` | |
-| DisplayTooltipDefined | `display-tooltip/DisplayTooltipDefined.vue` | |
 | MagneticNavigation | `magnetic-navigation/MagneticNavigation.vue` | |
 | MarqueeScroller | `marquee-scroller/MarqueeScroller.vue` | |
 | PopOver | `pop-over/PopOver.vue` | |

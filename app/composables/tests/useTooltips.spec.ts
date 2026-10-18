@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { defineComponent, h, nextTick, ref } from "vue";
 import { useTooltipsGuide } from "../useTooltips";
-import DisplayTooltipDefined from "~/components/02.molecules/display-tooltip-defined/DisplayTooltipDefined.vue";
+import DisplayTooltipRich from "~/components/02.molecules/display-tooltip-rich/DisplayTooltipRich.vue";
 
 const flush = async () => {
   for (let i = 0; i < 5; i++) await nextTick();
@@ -18,8 +18,8 @@ const mountGuide = () =>
       },
       render() {
         return h("div", { ref: "containerRef" }, [
-          h(DisplayTooltipDefined, { tooltipId: "one", contentText: { tooltipTitle: { tag: "h4", text: "One" } } }),
-          h(DisplayTooltipDefined, { tooltipId: "two", contentText: { tooltipTitle: { tag: "h4", text: "Two" } } }),
+          h(DisplayTooltipRich, { tooltipId: "one", contentText: { tooltipTitle: { tag: "h4", text: "One" } } }),
+          h(DisplayTooltipRich, { tooltipId: "two", contentText: { tooltipTitle: { tag: "h4", text: "Two" } } }),
         ]);
       },
     }),

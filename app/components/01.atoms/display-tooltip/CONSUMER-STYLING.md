@@ -28,7 +28,7 @@ Private tokens (`--_anchor-name`, `--_trigger-icon-size`, `--_trigger-padding`,
 | `--display-tooltip-popover-width` | `30rem` | Popover panel width (capped at `100vw - 3.2rem`) |
 | `--display-tooltip-popover-padding` | `1.2rem` | Popover panel content padding |
 | `--display-tooltip-popover-content-gap` | `1.2rem` | Gap between stacked children in the `tooltipContent` slot |
-| `--display-tooltip-popover-font-size` | `1.4rem` | Popover text size (`DisplayTooltipDefined` sets its own per-element sizes) |
+| `--display-tooltip-popover-font-size` | `1.4rem` | Popover text size (`DisplayTooltipRich` sets its own per-element sizes) |
 | `--display-tooltip-popover-line-height` | `1.4` | Popover text line height |
 | `--display-tooltip-popover-outline-width` | `0.1rem` | Popover panel outline (border) width |
 | `--display-tooltip-popover-outline-colour` | `var(--slate-02)` | Popover panel outline (border) colour |
@@ -55,7 +55,7 @@ reads as a neutral overlay whatever the surrounding theme.
 | `--display-tooltip-close-button-outline-colour-hover` | `var(--slate-06)` | Close button outline colour on hover/focus-visible |
 | `--display-tooltip-close-button-padding` | `0.4rem 1rem` | Close button padding |
 
-`DisplayTooltipDefined` renders this button. A plain `DisplayTooltip` gets the same styling by
+`DisplayTooltipRich` renders this button. A plain `DisplayTooltip` gets the same styling by
 giving its own close button the `display-tooltip-close-button` class inside `tooltipContent`.
 
 > Changed 2026-10-18: `--display-tooltip-close-button-outline-colour` was documented but never read

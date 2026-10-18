@@ -2,7 +2,7 @@
 
 exports[`DisplayTooltip > renders correct HTML structure 1`] = `
 "<div class="display-tooltip" style="--_anchor-name: --tooltip-anchor-v-0-1;">
-  <div class="display-tooltip-trigger-wrapper body-md">
+  <div class="display-tooltip-trigger-wrapper">
     <!--v-if--><button popovertarget="fixed-id" popovertargetaction="toggle" type="button" class="display-tooltip-trigger-button" aria-label="Toggle the popover" aria-expanded="false"><span class="iconify i-fa7-solid:circle-question display-tooltip-trigger-icon" aria-hidden="true"></span></button>
   </div>
   <div id="fixed-id" popover="" class="display-tooltip-popover">
