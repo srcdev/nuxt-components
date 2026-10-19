@@ -10,6 +10,8 @@ are documented alongside it since that's where they're consumed.
 | Token | Default | Controls |
 |---|---|---|
 | `--responsive-header-link-font-size` | `inherit` | Nav-link font-size. **Always set this to a fixed value.** Leaving it `inherit` means a fluid ancestor font-size (`clamp()`/`vw`) can drift nav-item text width without ever re-triggering the overflow-collapse measurement — see the component skill doc's "measurement pipeline" section for the full mechanism. |
+| `--responsive-header-link-padding-block` / `--responsive-header-link-padding-inline` | `0.8rem` / `0.2rem` | Padding around each top-bar link and summary. The active underline and hover highlight span this box, so larger inline padding makes them reach past the label. Set fixed values, as with the font size: the overflow-collapse measurement only re-runs when the header resizes. |
+| `--responsive-header-nav-item-gap` | `30px` | Gap between items within each top-bar list. Reduce it when you raise the inline padding to keep the label-to-label spacing. |
 | `--responsive-header-link-color` | `inherit` | Link/summary text colour. |
 | `--responsive-header-main-nav-justify-content` | `space-between` | How the main nav's groups are spread along the bar. Use `flex-start`, `safe center` or `safe end`; plain `center`/`end` let items that don't fit spill off the start edge, where they're clipped. (Safari 16 ignores `safe` values and falls back to start alignment.) |
 | `--responsive-header-color` | `inherit` | Root element text colour. |

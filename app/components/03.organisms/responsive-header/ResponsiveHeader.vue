@@ -779,6 +779,9 @@ watch(
        --responsive-nav-decorator-hovered-bg              (default: color-mix(in oklch, var(--theme-text) 8%, transparent))
 
        --responsive-header-link-font-size       (default: inherit)
+       --responsive-header-link-padding-block   (default: 0.8rem)
+       --responsive-header-link-padding-inline  (default: 0.2rem)
+       --responsive-header-nav-item-gap         (default: 30px)
        --responsive-header-main-nav-justify-content (default: space-between)
     ──────────────────────────────────────────────────────────────────────── */
 
@@ -810,8 +813,8 @@ watch(
 
     .main-navigation {
       /* Set up some global vars */
-      --_link-padding-block: 0.8rem;
-      --_link-padding-inline: 0.2rem;
+      --_link-padding-block: var(--responsive-header-link-padding-block, 0.8rem);
+      --_link-padding-inline: var(--responsive-header-link-padding-inline, 0.2rem);
       --_link-margin-block: 0.1rem;
       --_link-margin-inline: 0.1rem;
       --_link-focus-visible-outline-width: 0.2rem;
@@ -835,11 +838,11 @@ watch(
         flex-wrap: nowrap;
 
         &:nth-of-type(1) {
-          gap: 30px;
+          gap: var(--responsive-header-nav-item-gap, 30px);
         }
 
         &:nth-of-type(2) {
-          gap: 30px;
+          gap: var(--responsive-header-nav-item-gap, 30px);
         }
 
         .main-navigation-item {

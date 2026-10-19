@@ -209,6 +209,8 @@ All tokens are read via `var(--token, default)` — see the full list in the com
 | Token | Default | Controls |
 |---|---|---|
 | `--responsive-header-link-font-size` | `inherit` | Nav-link font-size. **Set this to a fixed value** — see the measurement-pipeline note above for why leaving it `inherit` from a fluid ancestor is a footgun. |
+| `--responsive-header-link-padding-block` / `--responsive-header-link-padding-inline` | `0.8rem` / `0.2rem` | Padding around each top-bar link and summary. The active underline and hover highlight span this box, so larger inline padding makes them reach past the label. Set fixed values, as with the font size: the overflow-collapse measurement only re-runs when the header resizes. |
+| `--responsive-header-nav-item-gap` | `30px` | Gap between items within each top-bar list. Reduce it when you raise the inline padding to keep the label-to-label spacing. |
 | `--responsive-header-link-color` | `inherit` | Link/summary text colour. |
 | `--responsive-header-link-color-hover` / `-active` | the resting colour | Per-state link colour in the top bar (added 2026-10-07). Hover falls back to the item's current state. `--overflow-nav-link-color-hover` / `-active` do the same in the overflow panel. |
 | `--responsive-header-bg` / `--responsive-header-padding-*` / `--responsive-header-border*` | transparent / `0` / `none` | Root element theming. |
