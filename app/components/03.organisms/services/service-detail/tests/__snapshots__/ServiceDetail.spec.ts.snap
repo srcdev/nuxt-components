@@ -18,8 +18,8 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
             </ol>
           </nav>
           <div class="eyebrow-text" data-font-size="large">Freehand colour artistry</div>
-          <h1 id="v-0-0" class="hero-text display axis-horizontal">
-            <!--v-if--><span class="text-block-0 normal">Balayage</span>
+          <h1 id="v-0-0" class="hero-text" data-font-size="display" data-axis="horizontal">
+            <!--v-if--><span class="hero-text-segment normal">Balayage</span>
           </h1>
           <div class="service-detail__hero-pills"><span class="display-pill" data-size="md" data-variant="neutral"><!--v-if--><span class="display-pill-label">2.5 - 3.5 hours</span></span><span class="display-pill" data-size="md" data-variant="neutral"><!--v-if--><span class="display-pill-label">From £95</span></span></div>
         </div>
@@ -30,12 +30,12 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
     <div class="service-detail__body">
       <div class="service-detail__main">
         <p class="page-body-normal">Balayage is a freehand hair colouring technique that creates a soft gradient.</p>
-        <h2 class="hero-text mb-20 subheading axis-horizontal">
-          <!--v-if--><span class="text-block-0 normal">What is Balayage?</span>
+        <h2 class="hero-text mb-20" data-font-size="subheading" data-axis="horizontal">
+          <!--v-if--><span class="hero-text-segment normal">What is Balayage?</span>
         </h2>
         <p class="page-body-normal">The word balayage comes from the French for 'to sweep'.</p>
-        <h2 class="hero-text mb-20 subheading axis-horizontal">
-          <!--v-if--><span class="text-block-0 normal">The Process</span>
+        <h2 class="hero-text mb-20" data-font-size="subheading" data-axis="horizontal">
+          <!--v-if--><span class="hero-text-segment normal">The Process</span>
         </h2>
         <ol role="list" class="stepper-list has-connectors service-detail__process">
           <li class="stepper-list-item indicator-top indicator-circle" style="--_connector-left: 0px; --_connector-top: 0px; --_connector-height: 0px;">
@@ -57,8 +57,8 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
             </div>
           </li>
         </ol>
-        <h2 class="hero-text mb-20 subheading axis-horizontal">
-          <!--v-if--><span class="text-block-0 normal">Ideal For</span>
+        <h2 class="hero-text mb-20" data-font-size="subheading" data-axis="horizontal">
+          <!--v-if--><span class="hero-text-segment normal">Ideal For</span>
         </h2>
         <ul class="service-detail__ideal-for">
           <li class="service-detail__ideal-for-item"><span class="iconify i-mdi:diamond-stone service-detail__ideal-for-icon" aria-hidden="true"></span>
@@ -68,12 +68,12 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
             <p class="page-body-normal">Low-maintenance colour</p>
           </li>
         </ul>
-        <h2 class="hero-text mb-20 subheading axis-horizontal">
-          <!--v-if--><span class="text-block-0 normal">Aftercare &amp; Maintenance</span>
+        <h2 class="hero-text mb-20" data-font-size="subheading" data-axis="horizontal">
+          <!--v-if--><span class="hero-text-segment normal">Aftercare &amp; Maintenance</span>
         </h2>
         <p class="page-body-normal">Balayage is low maintenance since regrowth is soft and natural.</p>
-        <h2 class="hero-text mb-20 subheading axis-horizontal">
-          <!--v-if--><span class="text-block-0 normal">Frequently Asked Questions</span>
+        <h2 class="hero-text mb-20" data-font-size="subheading" data-axis="horizontal">
+          <!--v-if--><span class="hero-text-segment normal">Frequently Asked Questions</span>
         </h2>
         <div class="service-detail__faqs">
           <div class="service-detail__faq">
@@ -98,8 +98,8 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
   <div class="page-row content service-detail__final-cta-row">
     <div class="service-detail__final-cta">
       <div class="service-detail__final-cta-copy">
-        <h2 class="hero-text subheading axis-horizontal">
-          <!--v-if--><span class="text-block-0 normal">Ready to book your appointment?</span>
+        <h2 class="hero-text" data-font-size="subheading" data-axis="horizontal">
+          <!--v-if--><span class="hero-text-segment normal">Ready to book your appointment?</span>
         </h2>
         <p class="page-body-normal">Get in touch to book your appointment.</p>
       </div>

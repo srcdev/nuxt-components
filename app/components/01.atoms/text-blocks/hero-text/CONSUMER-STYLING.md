@@ -18,7 +18,6 @@
 |---|---|---|
 | `--hero-text-font-family` | `"Playfair Display"` | Font family of the whole heading |
 | `--hero-text-margin` | `0` | Margin on the root |
-| `--hero-text-horizontal-gap` | `0.5ch` | Gap between segments, `axis="horizontal"` |
 | `--hero-text-vertical-gap` | `0.4em` | Gap between segments, `axis="vertical"` |
 | `--hero-text-bg-img` | `linear-gradient(135deg, #c2a770, #b4747e, #d1bd94)` | Fill of `accent` segments (`background-clip: text`) |
 | `--hero-text-accent-offset` | `0.2em` | Extra bottom padding (and matching negative margin) on `accent` segments so descenders aren't clipped |
@@ -39,12 +38,20 @@ Private (not public API): `--_hero-text-accent-offset`.
 
 | Hook | When |
 |---|---|
-| `.hero-text.display`, `.title`, `.heading`, `.subheading`, `.label` | The `font-size` prop |
-| `.axis-horizontal`, `.axis-vertical` | The `axis` prop (vertical is a flex column) |
-| `.accent` | A segment with `styleClass: "accent"` |
+| `[data-font-size="display" \| "title" \| "heading" \| "subheading" \| "label"]` | The `font-size` prop |
+| `[data-axis="horizontal" \| "vertical"]` | The `axis` prop (vertical is a flex column) |
+| `.hero-text-segment.accent` | A segment with `styleClass: "accent"` |
 
-Inner elements: `.hero-text__icon`, and one `<span class="text-block-{n}">` per segment (plus its
-own `styleClass`).
+Inner elements: `.hero-text__icon` (decorative, `aria-hidden`), and one
+`<span class="hero-text-segment">` per segment, plus its own `styleClass`. Segments with blank or
+missing `text` are dropped. Target one segment with `.hero-text-segment:nth-of-type(n)`.
+
+> Changed 2026-10-19: size and axis were bare classes on the root (`.title`, `.label`,
+> `.axis-vertical`, ...) and segments were `.text-block-{n}`, names a consumer's own CSS could
+> collide with. Replace `.hero-text.title` with `.hero-text[data-font-size="title"]`,
+> `.hero-text.axis-vertical` with `.hero-text[data-axis="vertical"]`, and `.text-block-1` with
+> `.hero-text-segment:nth-of-type(2)`. `--hero-text-horizontal-gap` is gone: it never applied (the
+> horizontal axis isn't a flex container; segments are joined by a space).
 
 ---
 
@@ -72,3 +79,12 @@ Set the tokens above on an element you own (a page or section class, or a class 
 ## Class passthrough
 
 `style-class-passthrough` adds classes to the root heading element. Reactive after mount.
+
+---
+
+## Notes
+
+- Every segment wraps (`overflow-wrap: anywhere`), so an unbroken word or URL stays inside its
+  column. There is no line-clamp token: clamping needs `overflow: hidden`, which clips the accent
+  descender offset and italic overhang. `ServiceDetail` clamps its title itself, with an allowance
+  for both.

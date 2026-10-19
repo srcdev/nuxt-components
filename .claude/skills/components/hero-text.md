@@ -45,7 +45,7 @@ interface TextConfig {
 ```vue
 <HeroText
   tag="h1"
-  :textContent="[
+  :text-content="[
     { text: 'Designing', styleClass: 'normal' },
     { text: 'Artistry', styleClass: 'accent' },
     { text: 'at Home', styleClass: 'normal' },
@@ -61,8 +61,8 @@ interface TextConfig {
 <HeroText
   tag="h2"
   icon="lucide:sparkles"
-  fontSize="heading"
-  :textContent="[{ text: 'Featured', styleClass: 'accent' }]"
+  font-size="heading"
+  :text-content="[{ text: 'Featured', styleClass: 'accent' }]"
 />
 ```
 
@@ -74,8 +74,8 @@ Use `axis="vertical"` to stack text segments in a column instead of a row.
 <HeroText
   tag="h1"
   axis="vertical"
-  fontSize="display"
-  :textContent="[
+  font-size="display"
+  :text-content="[
     { text: 'Modern', styleClass: 'normal' },
     { text: 'Living', styleClass: 'accent' },
   ]"
@@ -96,7 +96,9 @@ Define these CSS custom properties in your consuming app to control sizes.
 
 ## Styling
 
-Override via `styleClassPassthrough` or a parent HOC `<style>` block targeting `.hero-text`.
+Override via `styleClassPassthrough` or a parent HOC `<style>` block targeting `.hero-text`. Size
+and axis are `data-font-size` and `data-axis` attributes on the root (not classes); each segment is a
+`<span class="hero-text-segment">` plus its `styleClass`.
 
 Key CSS custom properties:
 
@@ -107,7 +109,6 @@ Key CSS custom properties:
 | `--hero-text-{scale}` | see CONSUMER-STYLING.md | Font size per `fontSize` prop value (the library theme sets them on `:root`; the component has matching fallbacks) |
 | `--hero-text-font-family` | `"Playfair Display"` | Font family of the whole component |
 | `--hero-text-margin` | `0` | Margin on the root element |
-| `--hero-text-horizontal-gap` | `0.5ch` | Gap between segments in `axis="horizontal"` mode |
 | `--hero-text-vertical-gap` | `0.4em` | Gap between segments in `axis="vertical"` mode |
 | `--hero-text-accent-offset` | `0.2em` | Underline-clearance offset on `.accent` spans (`padding-bottom` and the matching negative `margin-bottom`) |
 
@@ -115,7 +116,7 @@ Key CSS custom properties:
 
 ```css
 .my-page {
-  .hero-text.axis-vertical {
+  .hero-text[data-axis="vertical"] {
     --hero-text-vertical-gap: 0.6em;
   }
 }
@@ -149,6 +150,9 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 
 ## Notes
 
-- Text segments are trimmed and a trailing space is automatically appended between segments in horizontal axis — do not manually pad `text` values.
+- Text segments are trimmed and a trailing space is automatically appended between segments — do not manually pad `text` values. Segments with blank or missing `text` (common in CMS data) are dropped.
+- The icon is decorative (`aria-hidden`).
+- Long text and unbroken strings wrap. No line-clamp token: clamping needs `overflow: hidden`, which clips the accent descender offset; `ServiceDetail` clamps its title itself.
+- 2026-10-19 migration: size and axis moved from bare root classes to `data-font-size`/`data-axis`, segments from `.text-block-{n}` to `.hero-text-segment`; dropped the dead `--hero-text-horizontal-gap`; added a `StressTest` story.
 - The icon is sized to match the font size. At `subheading` scale it is `0.75em` (applied as `font-size`, since `width`/`height` on an `<Icon>` are overridden by `@nuxt/icon`).
 - Component is auto-imported in Nuxt — no import needed.

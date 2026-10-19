@@ -3,14 +3,14 @@
 exports[`PriceList > Snapshots > custom headings 1`] = `
 "<div class="price-list">
   <div class="price-list__column">
-    <h2 class="hero-text price-list__heading subheading axis-horizontal">
-      <!--v-if--><span class="text-block-0">Cuts</span>
+    <h2 class="hero-text price-list__heading" data-font-size="subheading" data-axis="horizontal">
+      <!--v-if--><span class="hero-text-segment">Cuts</span>
     </h2>
     <dl class="price-list__list"></dl>
   </div>
   <div class="price-list__column">
-    <h2 class="hero-text price-list__heading subheading axis-horizontal">
-      <!--v-if--><span class="text-block-0">Colour</span>
+    <h2 class="hero-text price-list__heading" data-font-size="subheading" data-axis="horizontal">
+      <!--v-if--><span class="hero-text-segment">Colour</span>
     </h2>
     <dl class="price-list__list"></dl>
   </div>
@@ -20,8 +20,8 @@ exports[`PriceList > Snapshots > custom headings 1`] = `
 exports[`PriceList > Snapshots > default 1`] = `
 "<div class="price-list">
   <div class="price-list__column">
-    <h2 class="hero-text price-list__heading subheading axis-horizontal">
-      <!--v-if--><span class="text-block-0">Cutting &amp; Treatment</span>
+    <h2 class="hero-text price-list__heading" data-font-size="subheading" data-axis="horizontal">
+      <!--v-if--><span class="hero-text-segment">Cutting &amp; Treatment</span>
     </h2>
     <dl class="price-list__list">
       <div class="price-list__row">
@@ -39,8 +39,8 @@ exports[`PriceList > Snapshots > default 1`] = `
     </dl>
   </div>
   <div class="price-list__column">
-    <h2 class="hero-text price-list__heading subheading axis-horizontal">
-      <!--v-if--><span class="text-block-0">Hair Colouring</span>
+    <h2 class="hero-text price-list__heading" data-font-size="subheading" data-axis="horizontal">
+      <!--v-if--><span class="hero-text-segment">Hair Colouring</span>
     </h2>
     <dl class="price-list__list">
       <div class="price-list__row">

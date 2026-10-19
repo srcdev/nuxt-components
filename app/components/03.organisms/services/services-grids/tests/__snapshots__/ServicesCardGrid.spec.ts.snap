@@ -9,8 +9,8 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
     </div>
     <div class="services-card-details">
       <div class="eyebrow-text" data-font-size="large">Subtitle for Locs Installation</div>
-      <h2 class="hero-text heading axis-horizontal">
-        <!--v-if--><span class="text-block-0 normal">Locs Installation</span>
+      <h2 class="hero-text" data-font-size="heading" data-axis="horizontal">
+        <!--v-if--><span class="hero-text-segment normal">Locs Installation</span>
       </h2>
       <div class="services-card-description">Short description for Locs Installation.</div>
       <div class="services-card-footer">
@@ -32,8 +32,8 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
     </div>
     <div class="services-card-details">
       <div class="eyebrow-text" data-font-size="large">Subtitle for Locs Retwist</div>
-      <h2 class="hero-text heading axis-horizontal">
-        <!--v-if--><span class="text-block-0 normal">Locs Retwist</span>
+      <h2 class="hero-text" data-font-size="heading" data-axis="horizontal">
+        <!--v-if--><span class="hero-text-segment normal">Locs Retwist</span>
       </h2>
       <div class="services-card-description">Short description for Locs Retwist.</div>
       <div class="services-card-footer">
@@ -55,8 +55,8 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
     </div>
     <div class="services-card-details">
       <div class="eyebrow-text" data-font-size="large">Subtitle for Colour Treatment</div>
-      <h2 class="hero-text heading axis-horizontal">
-        <!--v-if--><span class="text-block-0 normal">Colour Treatment</span>
+      <h2 class="hero-text" data-font-size="heading" data-axis="horizontal">
+        <!--v-if--><span class="hero-text-segment normal">Colour Treatment</span>
       </h2>
       <div class="services-card-description">Short description for Colour Treatment.</div>
       <div class="services-card-footer">

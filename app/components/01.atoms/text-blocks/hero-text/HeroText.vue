@@ -1,7 +1,19 @@
 <template>
-  <component :is="tag" :id="id" class="hero-text" :class="[elementClasses, ...componentClasses]">
-    <Icon v-if="props.icon" :name="props.icon" class="hero-text__icon" />
-    <span v-for="(item, index) in normalisedContent" :key="index" :class="['text-block-' + index, item.styleClass]">
+  <component
+    :is="tag"
+    :id="id"
+    class="hero-text"
+    :class="[elementClasses]"
+    :data-font-size="fontSize"
+    :data-axis="axis"
+  >
+    <Icon v-if="icon" :name="icon" class="hero-text__icon" aria-hidden="true" />
+    <span
+      v-for="(item, index) in normalisedContent"
+      :key="index"
+      class="hero-text-segment"
+      :class="item.styleClass"
+    >
       {{ item.text }}
     </span>
   </component>
@@ -27,10 +39,6 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
-const componentClasses = computed(() => {
-  return [props.fontSize, `axis-${props.axis}`];
-});
-
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
@@ -38,12 +46,16 @@ watch(
   () => resetElementClasses(props.styleClassPassthrough)
 );
 
-const normalisedContent = computed(() =>
-  props.textContent.map((item, index) => ({
+// CMS data can hold segments with missing or blank text; drop them so no stray spaces render.
+const normalisedContent = computed(() => {
+  const segments = (props.textContent ?? [])
+    .map((item) => ({ ...item, text: String(item?.text ?? "").trim() }))
+    .filter((item) => item.text !== "");
+  return segments.map((item, index) => ({
     ...item,
-    text: item.text.trim() + (index < props.textContent.length - 1 ? " " : ""),
-  }))
-);
+    text: item.text + (index < segments.length - 1 ? " " : ""),
+  }));
+});
 </script>
 
 <style lang="css">
@@ -55,14 +67,11 @@ const normalisedContent = computed(() =>
       "wght" 400,
       "ital" 1;
     line-height: 1;
+    overflow-wrap: anywhere;
 
     margin: var(--hero-text-margin, 0);
 
-    &.axis-horizontal {
-      flex-direction: row;
-      gap: var(--hero-text-horizontal-gap, 0.5ch);
-    }
-    &.axis-vertical {
+    &[data-axis="vertical"] {
       display: flex;
       gap: var(--hero-text-vertical-gap, 0.4em);
       flex-direction: column;
@@ -73,19 +82,19 @@ const normalisedContent = computed(() =>
       color: var(--hero-text-icon-colour, var(--colour-text-accent));
     }
 
-    &.display {
+    &[data-font-size="display"] {
       font-size: var(--hero-text-display, clamp(4.8rem, 4vw + 2rem, 9.6rem));
     }
 
-    &.title {
+    &[data-font-size="title"] {
       font-size: var(--hero-text-title, clamp(3.6rem, 4vw + 2rem, 4.8rem));
     }
 
-    &.heading {
+    &[data-font-size="heading"] {
       font-size: var(--hero-text-heading, clamp(2.8rem, 4vw + 2rem, 3rem));
     }
 
-    &.subheading {
+    &[data-font-size="subheading"] {
       font-size: var(--hero-text-subheading, 2.4rem);
 
       .hero-text__icon {
@@ -93,11 +102,11 @@ const normalisedContent = computed(() =>
       }
     }
 
-    &.label {
+    &[data-font-size="label"] {
       font-size: var(--hero-text-label, 1.75rem);
     }
 
-    .accent {
+    .hero-text-segment.accent {
       --_hero-text-accent-offset: var(--hero-text-accent-offset, 0.2em);
 
       background-clip: text;

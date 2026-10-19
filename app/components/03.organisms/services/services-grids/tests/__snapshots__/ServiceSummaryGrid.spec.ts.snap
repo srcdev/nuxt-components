@@ -7,8 +7,8 @@ exports[`ServiceSummaryGrid > renders correct HTML structure 1`] = `
       <div class="service-summary__image-wrapper"><img width="1080" height="1080" data-nuxt-img="" srcset="/_ipx/s_1080x1080/images/locs-installation.jpg 1x, /_ipx/s_2160x2160/images/locs-installation.jpg 2x" alt="Locs Installation" loading="eager" fetchpriority="high" class="service-summary__image" src="/_ipx/s_1080x1080/images/locs-installation.jpg"></div>
       <div class="service-summary__info-wrapper service-summary__info-wrapper--align-center">
         <div class="eyebrow-text" data-font-size="large">Subtitle for Locs Installation</div>
-        <h2 id="v-0-0-0" class="hero-text mb-20 title axis-horizontal">
-          <!--v-if--><span class="text-block-0 normal">Locs Installation</span>
+        <h2 id="v-0-0-0" class="hero-text mb-20" data-font-size="title" data-axis="horizontal">
+          <!--v-if--><span class="hero-text-segment normal">Locs Installation</span>
         </h2>
         <div class="service-summary__pills"><span class="display-pill" data-size="md" data-variant="neutral"><!--v-if--><span class="display-pill-label">60 mins</span></span><span class="display-pill" data-size="md" data-variant="neutral"><!--v-if--><span class="display-pill-label">From £50</span></span></div>
         <p class="page-body-normal">What this service is.</p>
@@ -20,8 +20,8 @@ exports[`ServiceSummaryGrid > renders correct HTML structure 1`] = `
       <div class="service-summary__image-wrapper"><img width="1080" height="1080" data-nuxt-img="" srcset="/_ipx/s_1080x1080/images/locs-retwist.jpg 1x, /_ipx/s_2160x2160/images/locs-retwist.jpg 2x" alt="Locs Retwist" loading="eager" fetchpriority="auto" class="service-summary__image" src="/_ipx/s_1080x1080/images/locs-retwist.jpg"></div>
       <div class="service-summary__info-wrapper service-summary__info-wrapper--align-center">
         <div class="eyebrow-text" data-font-size="large">Subtitle for Locs Retwist</div>
-        <h2 id="v-0-0-1" class="hero-text mb-20 title axis-horizontal">
-          <!--v-if--><span class="text-block-0 normal">Locs Retwist</span>
+        <h2 id="v-0-0-1" class="hero-text mb-20" data-font-size="title" data-axis="horizontal">
+          <!--v-if--><span class="hero-text-segment normal">Locs Retwist</span>
         </h2>
         <div class="service-summary__pills"><span class="display-pill" data-size="md" data-variant="neutral"><!--v-if--><span class="display-pill-label">60 mins</span></span><span class="display-pill" data-size="md" data-variant="neutral"><!--v-if--><span class="display-pill-label">From £50</span></span></div>
         <p class="page-body-normal">What this service is.</p>
@@ -33,8 +33,8 @@ exports[`ServiceSummaryGrid > renders correct HTML structure 1`] = `
       <div class="service-summary__image-wrapper"><img width="1080" height="1080" data-nuxt-img="" srcset="/_ipx/s_1080x1080/images/colour-treatment.jpg 1x, /_ipx/s_2160x2160/images/colour-treatment.jpg 2x" alt="Colour Treatment" loading="lazy" fetchpriority="auto" class="service-summary__image" src="/_ipx/s_1080x1080/images/colour-treatment.jpg"></div>
       <div class="service-summary__info-wrapper service-summary__info-wrapper--align-center">
         <div class="eyebrow-text" data-font-size="large">Subtitle for Colour Treatment</div>
-        <h2 id="v-0-0-2" class="hero-text mb-20 title axis-horizontal">
-          <!--v-if--><span class="text-block-0 normal">Colour Treatment</span>
+        <h2 id="v-0-0-2" class="hero-text mb-20" data-font-size="title" data-axis="horizontal">
+          <!--v-if--><span class="hero-text-segment normal">Colour Treatment</span>
         </h2>
         <div class="service-summary__pills"><span class="display-pill" data-size="md" data-variant="neutral"><!--v-if--><span class="display-pill-label">60 mins</span></span><span class="display-pill" data-size="md" data-variant="neutral"><!--v-if--><span class="display-pill-label">From £50</span></span></div>
         <p class="page-body-normal">What this service is.</p>

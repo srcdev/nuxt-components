@@ -254,7 +254,7 @@ describe("ServicesCard", () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: mockService, heroConfig: { fontSize: "title" } },
     });
-    expect(wrapper.find(".hero-text").classes()).toContain("title");
+    expect(wrapper.find(".hero-text").attributes("data-font-size")).toBe("title");
   });
 
   // ─── styleClassPassthrough ──────────────────────────────────────────────

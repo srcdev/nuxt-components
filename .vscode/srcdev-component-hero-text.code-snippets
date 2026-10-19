@@ -4,11 +4,27 @@
     "scope": "vue,html",
     "body": [
       "<HeroText",
-      "  tag=\"$1h1\"",
-      "  fontSize=\"$2title\"",
-      "  :textContent=\"[",
-      "    { text: '$3Designing', styleClass: 'normal' },",
-      "    { text: '$4Artistry', styleClass: 'accent' },",
+      "  tag=\"${1|h1,h2,h3,h4,h5,h6|}\"",
+      "  font-size=\"${2|title,display,heading,subheading,label|}\"",
+      "  :text-content=\"[",
+      "    { text: '${3:Designing}', styleClass: 'normal' },",
+      "    { text: '${4:Artistry}', styleClass: 'accent' },",
+      "  ]\"",
+      "/>"
+    ]
+  },
+  "SRCDEV HeroText Vertical With Icon": {
+    "description": "HeroText stacked vertically with a decorative icon",
+    "scope": "vue,html",
+    "body": [
+      "<HeroText",
+      "  tag=\"${1|h2,h1,h3,h4,h5,h6|}\"",
+      "  axis=\"vertical\"",
+      "  icon=\"${2:lucide:sparkles}\"",
+      "  font-size=\"${3|display,title,heading,subheading,label|}\"",
+      "  :text-content=\"[",
+      "    { text: '${4:Modern}', styleClass: 'normal' },",
+      "    { text: '${5:Living}', styleClass: 'accent' },",
       "  ]\"",
       "/>"
     ]
