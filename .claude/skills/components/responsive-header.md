@@ -211,6 +211,8 @@ All tokens are read via `var(--token, default)` — see the full list in the com
 | `--responsive-header-link-font-size` | `inherit` | Nav-link font-size. **Set this to a fixed value** — see the measurement-pipeline note above for why leaving it `inherit` from a fluid ancestor is a footgun. |
 | `--responsive-header-link-padding-block` / `--responsive-header-link-padding-inline` | `0.8rem` / `0.2rem` | Padding around each top-bar link and summary. The active underline and hover highlight span this box, so larger inline padding makes them reach past the label. Set fixed values, as with the font size: the overflow-collapse measurement only re-runs when the header resizes. |
 | `--responsive-header-nav-item-gap` | `30px` | Gap between items within each top-bar list. Reduce it when you raise the inline padding to keep the label-to-label spacing. |
+| `--responsive-header-link-icon-size` / `--responsive-header-link-icon-gap` | `1.35em` / `6px` | Link icon and summary chevron size, and its gap to the label. Keep the size fixed so a late icon can't widen an item after measurement. |
+| `--responsive-header-nav-group-gap` | `60px` | Gap between the main and secondary nav groups. |
 | `--responsive-header-link-color` | `inherit` | Link/summary text colour. |
 | `--responsive-header-link-color-hover` / `-active` | the resting colour | Per-state link colour in the top bar (added 2026-10-07). Hover falls back to the item's current state. `--overflow-nav-link-color-hover` / `-active` do the same in the overflow panel. |
 | `--responsive-header-bg` / `--responsive-header-padding-*` / `--responsive-header-border*` | transparent / `0` / `none` | Root element theming. |
@@ -219,6 +221,8 @@ All tokens are read via `var(--token, default)` — see the full list in the com
 
 Defaults are for a **light** header (changed 2026-10-07): panels use `--page-bg`, borders and hover tints are `color-mix()`es of `--theme-text`, the overflow button is transparent with a `--theme-border-focus` hover outline. They used to assume a dark bar (`Canvas`, translucent white borders and tints). A dark header sets the tokens.
 | `--responsive-nav-decorator-indicator-color` / `--responsive-nav-decorator-hovered-*` | `currentColor` / inherits | The sliding active/hover indicator bar under the main nav. |
+| `--responsive-nav-decorator-indicator-offset` | `2px` | Distance of the active indicator below the active item's bottom edge; negative raises it. |
+| `--responsive-nav-decorator-indicator-height` / `--responsive-nav-decorator-hovered-border-radius` / `--responsive-nav-decorator-transition-duration` | `2px` / `4px` / `200ms` | Active indicator thickness, hover highlight radius, and how long both take to slide. |
 
 ---
 

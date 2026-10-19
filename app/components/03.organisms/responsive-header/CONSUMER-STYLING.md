@@ -12,6 +12,9 @@ are documented alongside it since that's where they're consumed.
 | `--responsive-header-link-font-size` | `inherit` | Nav-link font-size. **Always set this to a fixed value.** Leaving it `inherit` means a fluid ancestor font-size (`clamp()`/`vw`) can drift nav-item text width without ever re-triggering the overflow-collapse measurement — see the component skill doc's "measurement pipeline" section for the full mechanism. |
 | `--responsive-header-link-padding-block` / `--responsive-header-link-padding-inline` | `0.8rem` / `0.2rem` | Padding around each top-bar link and summary. The active underline and hover highlight span this box, so larger inline padding makes them reach past the label. Set fixed values, as with the font size: the overflow-collapse measurement only re-runs when the header resizes. |
 | `--responsive-header-nav-item-gap` | `30px` | Gap between items within each top-bar list. Reduce it when you raise the inline padding to keep the label-to-label spacing. |
+| `--responsive-header-link-icon-size` | `1.35em` | Size of a top-bar link's icon and a sub-nav summary's chevron. Keep it a fixed size (not `auto`): the slot is reserved so a late-loading icon can't widen an item after the overflow measurement. |
+| `--responsive-header-link-icon-gap` | `6px` | Gap between a top-bar link's icon and label, and a summary's label and chevron. |
+| `--responsive-header-nav-group-gap` | `60px` | Gap between the main and secondary nav groups. |
 | `--responsive-header-link-color` | `inherit` | Link/summary text colour. |
 | `--responsive-header-main-nav-justify-content` | `space-between` | How the main nav's groups are spread along the bar. Use `flex-start`, `safe center` or `safe end`; plain `center`/`end` let items that don't fit spill off the start edge, where they're clipped. (Safari 16 ignores `safe` values and falls back to start alignment.) |
 | `--responsive-header-color` | `inherit` | Root element text colour. |
@@ -31,8 +34,12 @@ are documented alongside it since that's where they're consumed.
 | `--responsive-header-overflow-nav-bg` / `-border` / `-border-radius` / `-padding-block` | `var(--page-bg, var(--theme-surface-subtle))` / `1px solid color-mix(in oklch, var(--theme-text) 20%, transparent)` / `8px` / `12px` | Overflow panel container. |
 | `--responsive-header-overflow-nav-max-block-size` | `70vh` | Tallest the overflow panel gets before it scrolls. |
 | `--responsive-nav-decorator-indicator-color` | `currentColor` | Active-item indicator bar/underline. |
+| `--responsive-nav-decorator-indicator-offset` | `2px` | How far the active indicator sits below the active item's bottom edge. Negative values raise it inside the item (`-4px` sits it 4px up). |
 | `--responsive-nav-decorator-hovered-indicator-color` | inherits the above | Indicator colour while hovering. |
 | `--responsive-nav-decorator-hovered-bg` | `color-mix(in oklch, var(--theme-text) 8%, transparent)` | Hover highlight background behind the hovered item. |
+| `--responsive-nav-decorator-indicator-height` | `2px` | Thickness of the active indicator. |
+| `--responsive-nav-decorator-hovered-border-radius` | `4px` | Corner radius of the hover highlight. |
+| `--responsive-nav-decorator-transition-duration` | `200ms` | How long the active indicator and hover highlight take to slide between items. |
 
 ### Overflow panel content (`NavigationItems`)
 

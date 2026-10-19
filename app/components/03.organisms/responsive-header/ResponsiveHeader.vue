@@ -775,13 +775,20 @@ watch(
        --responsive-header-overflow-nav-max-block-size  (default: 70vh)
 
        --responsive-nav-decorator-indicator-color         (default: currentColor)
+       --responsive-nav-decorator-indicator-offset        (default: 2px, below the item; negative raises it)
        --responsive-nav-decorator-hovered-indicator-color (default: inherits --responsive-nav-decorator-indicator-color)
        --responsive-nav-decorator-hovered-bg              (default: color-mix(in oklch, var(--theme-text) 8%, transparent))
+       --responsive-nav-decorator-indicator-height        (default: 2px)
+       --responsive-nav-decorator-hovered-border-radius   (default: 4px)
+       --responsive-nav-decorator-transition-duration     (default: 200ms)
 
        --responsive-header-link-font-size       (default: inherit)
        --responsive-header-link-padding-block   (default: 0.8rem)
        --responsive-header-link-padding-inline  (default: 0.2rem)
        --responsive-header-nav-item-gap         (default: 30px)
+       --responsive-header-link-icon-size       (default: 1.35em)
+       --responsive-header-link-icon-gap        (default: 6px)
+       --responsive-header-nav-group-gap        (default: 60px)
        --responsive-header-main-nav-justify-content (default: space-between)
     ──────────────────────────────────────────────────────────────────────── */
 
@@ -825,7 +832,7 @@ watch(
       flex-wrap: nowrap;
       flex-grow: 1;
       justify-content: var(--responsive-header-main-nav-justify-content, space-between);
-      gap: 60px;
+      gap: var(--responsive-header-nav-group-gap, 60px);
       overflow-x: hidden;
       margin-inline-end: v-bind(mainNavigationMarginBlockEndStr);
 
@@ -856,7 +863,7 @@ watch(
 
           .main-navigation-link {
             display: flex;
-            gap: 6px;
+            gap: var(--responsive-header-link-icon-gap, 6px);
             white-space: nowrap;
             font-size: var(--responsive-header-link-font-size, inherit);
             color: var(--_link-color, var(--responsive-header-link-color, inherit));
@@ -880,8 +887,8 @@ watch(
              (the wrapper's own box doesn't necessarily change size when it happens). */
           .decorator-icon {
             flex-shrink: 0;
-            width: 1.35em;
-            height: 1.35em;
+            width: var(--responsive-header-link-icon-size, 1.35em);
+            height: var(--responsive-header-link-icon-size, 1.35em);
           }
 
           .main-navigation-details {
@@ -895,7 +902,7 @@ watch(
 
             .has-toggle-icon {
               display: flex;
-              gap: 6px;
+              gap: var(--responsive-header-link-icon-gap, 6px);
               white-space: nowrap;
 
               /* Reserved for the same reason as .decorator-icon above — an
@@ -903,8 +910,8 @@ watch(
               .icon {
                 display: block;
                 flex-shrink: 0;
-                width: 1.35em;
-                height: 1.35em;
+                width: var(--responsive-header-link-icon-size, 1.35em);
+                height: var(--responsive-header-link-icon-size, 1.35em);
                 transform: var(--_icon-transform);
                 transition: transform 0.2s ease-in-out;
               }
@@ -1191,12 +1198,12 @@ watch(
       top: anchor(top);
       bottom: anchor(bottom);
       background: var(--responsive-nav-decorator-hovered-bg, color-mix(in oklch, var(--theme-text) 8%, transparent));
-      border-radius: 4px;
+      border-radius: var(--responsive-nav-decorator-hovered-border-radius, 4px);
       z-index: 1;
       opacity: 0;
       transition:
-        left 200ms ease,
-        right 200ms ease,
+        left var(--responsive-nav-decorator-transition-duration, 200ms) ease,
+        right var(--responsive-nav-decorator-transition-duration, 200ms) ease,
         opacity 150ms ease;
     }
 
@@ -1214,13 +1221,13 @@ watch(
       position-anchor: --responsive-main-nav-indicator;
       left: anchor(left);
       right: anchor(right);
-      bottom: calc(anchor(bottom) - 2px);
-      height: 2px;
+      bottom: calc(anchor(bottom) - var(--responsive-nav-decorator-indicator-offset, 2px));
+      height: var(--responsive-nav-decorator-indicator-height, 2px);
       background: var(--responsive-nav-decorator-indicator-color, currentColor);
       z-index: 3;
       transition:
-        left 200ms ease,
-        right 200ms ease;
+        left var(--responsive-nav-decorator-transition-duration, 200ms) ease,
+        right var(--responsive-nav-decorator-transition-duration, 200ms) ease;
     }
 
     &:not(.is-animated) .nav-indicator-active {
