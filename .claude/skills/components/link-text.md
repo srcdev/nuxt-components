@@ -26,13 +26,13 @@ Both slots are optional. If neither is provided, no icon wrapper elements are re
 ## Basic Usage
 
 ```vue
-<LinkText to="/about" linkText="About Us" />
+<LinkText to="/about" link-text="About Us" />
 ```
 
 ## With Left Icon (back/previous pattern)
 
 ```vue
-<LinkText to="/blog" linkText="Back to Blog">
+<LinkText to="/blog" link-text="Back to Blog">
   <template #left>
     <Icon name="lucide:arrow-left" />
   </template>
@@ -42,7 +42,7 @@ Both slots are optional. If neither is provided, no icon wrapper elements are re
 ## With Right Icon (forward/more pattern)
 
 ```vue
-<LinkText to="/services" linkText="Learn More">
+<LinkText to="/services" link-text="Learn More">
   <template #right>
     <Icon name="lucide:arrow-right" />
   </template>
@@ -52,7 +52,7 @@ Both slots are optional. If neither is provided, no icon wrapper elements are re
 ## Both Icons
 
 ```vue
-<LinkText to="/collection" linkText="Explore">
+<LinkText to="/collection" link-text="Explore">
   <template #left>
     <Icon name="lucide:sparkles" />
   </template>
@@ -67,7 +67,7 @@ Both slots are optional. If neither is provided, no icon wrapper elements are re
 ```vue
 <LinkText
   to="https://example.com"
-  linkText="Visit Site"
+  link-text="Visit Site"
   :external="true"
   target="_blank"
 >
@@ -132,3 +132,6 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 - NuxtLink handles both internal (`/path`) and external (`https://...`) URLs automatically. Only set `external: true` if you need to force external handling on an internal-looking path.
 - The label is always rendered inside `.link-text__label` — target this class if you need to style the text independently of the icons.
 - DOM order is always: left icon → label → right icon.
+- Long and unbroken labels wrap inside the column (the root is capped at `max-inline-size: 100%`). There is no line-clamp token: link text names its destination.
+- For an icon-only link, pass an empty `link-text` and an `aria-label`; it falls through to the `<a>`.
+- 2026-10-19 migration: label wrapping, rem focus ring, `StressTest` story, docs text; the spec now unmounts every wrapper.

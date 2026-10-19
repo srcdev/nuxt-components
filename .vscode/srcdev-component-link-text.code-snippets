@@ -19,11 +19,11 @@
     "description": "CSS override scaffold for LinkText tokens",
     "scope": "css",
     "body": [
-      ".$1my-page {",
+      ".${1:my-page} {",
       "  --link-text-colour: $2;",
       "  --link-text-colour-hover: $3;",
-      "  --link-text-decoration: $4underline;",
-      "  --link-text-decoration-hover: $5none;",
+      "  --link-text-decoration: ${4:underline};",
+      "  --link-text-decoration-hover: ${5:none};",
       "}"
     ]
   }

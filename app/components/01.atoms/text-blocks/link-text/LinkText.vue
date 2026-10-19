@@ -43,6 +43,7 @@ watch(
     display: inline-grid;
     grid-auto-flow: column;
     align-items: center;
+    max-inline-size: 100%;
     --_colour: var(--link-text-colour, currentColor);
 
     gap: var(--link-text-gap, 0.4em);
@@ -59,9 +60,14 @@ watch(
     }
 
     &:focus-visible {
-      outline: 2px solid var(--_colour);
-      outline-offset: 3px;
-      border-radius: 2px;
+      outline: 0.2rem solid var(--_colour);
+      outline-offset: 0.3rem;
+      border-radius: 0.2rem;
+    }
+
+    .link-text__label {
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
     }
 
     .link-text__icon {
