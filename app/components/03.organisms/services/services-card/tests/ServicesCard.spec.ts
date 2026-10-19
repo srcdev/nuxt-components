@@ -217,14 +217,14 @@ describe("ServicesCard", () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: mockService },
     });
-    expect(wrapper.find(".eyebrow-text").classes()).toContain("large");
+    expect(wrapper.find(".eyebrow-text").attributes("data-font-size")).toBe("large");
   });
 
   it("applies eyebrowConfig.fontSize override", async () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: mockService, eyebrowConfig: { fontSize: "small" } },
     });
-    expect(wrapper.find(".eyebrow-text").classes()).toContain("small");
+    expect(wrapper.find(".eyebrow-text").attributes("data-font-size")).toBe("small");
   });
 
   it("applies eyebrowConfig.tag override", async () => {

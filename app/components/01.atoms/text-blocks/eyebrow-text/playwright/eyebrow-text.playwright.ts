@@ -2,7 +2,7 @@ import { test, expect, type Page, type Locator } from "@playwright/test";
 
 // --- Config ---
 const STORYBOOK_URL = "http://127.0.0.1:6006";
-const STORY_BASE = "atoms-text-blocks-eyebrowtext";
+const STORY_BASE = "atoms-text-blocks-eyebrow-text";
 const HEADING_TIMEOUT = 20_000;
 
 // --- Types ---

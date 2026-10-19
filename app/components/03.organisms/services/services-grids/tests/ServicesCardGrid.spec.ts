@@ -139,7 +139,7 @@ describe("ServicesCardGrid", () => {
       props: { servicesData: mockServices, eyebrowConfig: { fontSize: "small" } },
     });
     wrapper.findAll(".eyebrow-text").forEach((el) => {
-      expect(el.classes()).toContain("small");
+      expect(el.attributes("data-font-size")).toBe("small");
     });
   });
 

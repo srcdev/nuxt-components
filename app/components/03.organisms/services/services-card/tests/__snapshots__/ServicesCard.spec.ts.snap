@@ -7,7 +7,7 @@ exports[`ServicesCard > renders correct HTML structure 1`] = `
     <div class="grid-stack__layer"></div>
   </div>
   <div class="services-card-details">
-    <div class="eyebrow-text large">A subtitle</div>
+    <div class="eyebrow-text" data-font-size="large">A subtitle</div>
     <h2 class="hero-text heading axis-horizontal">
       <!--v-if--><span class="text-block-0 normal">Test Service</span>
     </h2>

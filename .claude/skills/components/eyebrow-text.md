@@ -27,7 +27,7 @@ Do not assume placeholder text or default content.
 ## Basic Usage
 
 ```vue
-<EyebrowText textContent="Interior Design" />
+<EyebrowText text-content="Interior Design" />
 ```
 
 ## With Tag and Size
@@ -37,8 +37,8 @@ Use `tag="p"` for semantic paragraph context, or `tag="span"` when inline. Choos
 ```vue
 <EyebrowText
   tag="p"
-  fontSize="small"
-  textContent="Featured Collection"
+  font-size="small"
+  text-content="Featured Collection"
 />
 ```
 
@@ -47,10 +47,10 @@ Use `tag="p"` for semantic paragraph context, or `tag="span"` when inline. Choos
 EyebrowText is commonly placed directly above a `HeroText` heading:
 
 ```vue
-<EyebrowText tag="p" textContent="Our Services" />
+<EyebrowText tag="p" text-content="Our Services" />
 <HeroText
   tag="h2"
-  :textContent="[
+  :text-content="[
     { text: 'Crafted with', styleClass: 'normal' },
     { text: 'Care', styleClass: 'accent' },
   ]"
@@ -58,6 +58,8 @@ EyebrowText is commonly placed directly above a `HeroText` heading:
 ```
 
 ## Font Size Scale
+
+The prop is rendered as `data-font-size` on the root (not a class).
 
 | Value | CSS variable |
 |-------|-------------|
@@ -110,3 +112,5 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 
 - Component is auto-imported in Nuxt — no import needed.
 - `tag` defaults to `"div"` which is block-level. Use `"span"` when the eyebrow must be inline within a flow of text.
+- Long text and unbroken strings wrap (`overflow-wrap: anywhere`). There is no line-clamp token: clamping needs `overflow: hidden`, which clips the italic overhang; `ServiceDetail` clamps its eyebrow itself with an allowance.
+- 2026-10-19 migration: the size moved from a bare `large`/`medium`/`small` class to `data-font-size`; added wrapping, a `StressTest` story and parent-story links.

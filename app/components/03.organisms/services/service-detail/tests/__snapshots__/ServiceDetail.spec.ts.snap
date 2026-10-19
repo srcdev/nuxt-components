@@ -17,7 +17,7 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
               </li>
             </ol>
           </nav>
-          <div class="eyebrow-text large">Freehand colour artistry</div>
+          <div class="eyebrow-text" data-font-size="large">Freehand colour artistry</div>
           <h1 id="v-0-0" class="hero-text display axis-horizontal">
             <!--v-if--><span class="text-block-0 normal">Balayage</span>
           </h1>

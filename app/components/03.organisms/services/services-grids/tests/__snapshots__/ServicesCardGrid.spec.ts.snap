@@ -8,7 +8,7 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
       <div class="grid-stack__layer"></div>
     </div>
     <div class="services-card-details">
-      <div class="eyebrow-text large">Subtitle for Locs Installation</div>
+      <div class="eyebrow-text" data-font-size="large">Subtitle for Locs Installation</div>
       <h2 class="hero-text heading axis-horizontal">
         <!--v-if--><span class="text-block-0 normal">Locs Installation</span>
       </h2>
@@ -31,7 +31,7 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
       <div class="grid-stack__layer"></div>
     </div>
     <div class="services-card-details">
-      <div class="eyebrow-text large">Subtitle for Locs Retwist</div>
+      <div class="eyebrow-text" data-font-size="large">Subtitle for Locs Retwist</div>
       <h2 class="hero-text heading axis-horizontal">
         <!--v-if--><span class="text-block-0 normal">Locs Retwist</span>
       </h2>
@@ -54,7 +54,7 @@ exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
       <div class="grid-stack__layer"></div>
     </div>
     <div class="services-card-details">
-      <div class="eyebrow-text large">Subtitle for Colour Treatment</div>
+      <div class="eyebrow-text" data-font-size="large">Subtitle for Colour Treatment</div>
       <h2 class="hero-text heading axis-horizontal">
         <!--v-if--><span class="text-block-0 normal">Colour Treatment</span>
       </h2>

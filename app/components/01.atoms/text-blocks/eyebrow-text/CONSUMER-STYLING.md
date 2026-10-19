@@ -22,13 +22,21 @@ The library theme also sets the colour and size tokens on `:root` (`03.theming/_
 
 No private `--_` tokens.
 
+No line-clamp token: an eyebrow is a short label, and clamping needs `overflow: hidden`, which
+clips the default italic overhang. Long text wraps (`overflow-wrap: anywhere`). A parent that needs
+a cap clamps it itself with an allowance for the overhang, as `ServiceDetail` does.
+
 ---
 
 ## State hooks
 
 | Class | When |
 |---|---|
-| `.eyebrow-text.large`, `.medium`, `.small` | The `font-size` prop |
+| `[data-font-size="large" \| "medium" \| "small"]` | The `font-size` prop |
+
+> Changed 2026-10-19: the size was a bare `large`/`medium`/`small` class on the root, which a
+> consumer's own `.small` or `.large` rule could restyle. Select `.eyebrow-text[data-font-size="small"]`
+> instead of `.eyebrow-text.small`.
 
 ---
 

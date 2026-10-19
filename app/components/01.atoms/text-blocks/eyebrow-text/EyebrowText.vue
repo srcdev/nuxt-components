@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="eyebrow-text" :class="[elementClasses, props.fontSize]">
+  <component :is="tag" class="eyebrow-text" :class="[elementClasses]" :data-font-size="fontSize">
     {{ textContent }}
   </component>
 </template>
@@ -36,16 +36,17 @@ watch(
     font-weight: var(--eyebrow-text-font-weight, inherit);
     letter-spacing: var(--eyebrow-text-letter-spacing, inherit);
     color: transparent;
+    overflow-wrap: anywhere;
 
-    &.large {
+    &[data-font-size="large"] {
       font-size: var(--eyebrow-text-large, 1.4rem);
     }
 
-    &.medium {
+    &[data-font-size="medium"] {
       font-size: var(--eyebrow-text-medium, 1.2rem);
     }
 
-    &.small {
+    &[data-font-size="small"] {
       font-size: var(--eyebrow-text-small, 1rem);
     }
   }
