@@ -274,7 +274,7 @@ Numbers are stable (code and docs cite them). Rule files are in `.claude/rules/`
 13. **`--theme-text` on dark surfaces** → `css-surface-text-pairing.md`
 14. **Form components reading `--theme-*` directly** → `forms-local-tokens.md`. `InputText`/`InputSelect` fixed 2026-08-22, `AlertContent` 2026-09-27; give the rest local tokens the next time each is touched, not in one pass.
 15. **`InputSelect` taller than its siblings** (active unitless `line-height`, fixed 2026-08-22) → `forms-local-tokens.md`
-16. **Generic structural class names** (`DisplayDialog`, 2026-08-22) → `component-class-prefix.md`
+16. **Generic structural class names** (`DisplayDialog`, 2026-08-22; bare state classes `.small`/`.title` on `EyebrowText`/`HeroText`, 2026-10-19) → `component-class-prefix.md`
 17. **Hardcoded overlay z-index** (`DisplayToast`, 2026-08-22) → `css-overlay-z-index.md`
 18. **Utility class collision** (`mi-12` on carets, 2026-08-22) → `css-utility-class-collision.md`
 19. **`ExpandingPanel` and WebKit** → `css-webkit-support.md`, `panel-variant-default.md`. An `@supports not selector(::details-content)` fallback was tried 2026-08-22 and didn't hold on real devices; don't reintroduce it. `ExpandingPanel` logs a dev-mode `console.warn` instead. `AccordianCore`'s `variant` and `ContentDocs`/`ResponsiveHeader`/`NavigationItems`' `panelVariant` default to `"classic"`. Classic's content div is a sibling of `.expanding-panel-classic-details`, not nested inside it like modern's.

@@ -180,8 +180,11 @@ Playwright `STORY_BASE` slug. The slug is derived by lowercasing and replacing s
 
 | Title                                         | STORY_BASE slug                             |
 | --------------------------------------------- | ------------------------------------------- |
-| `"Atoms/Text Blocks/HeroText"`                | `atoms-text-blocks-herotext`                |
+| `"Atoms/Text Blocks/Hero Text"`               | `atoms-text-blocks-hero-text`               |
 | `"Components/Forms/Input Text/InputText"`     | `components-forms-input-text-inputtext`     |
+
+Renaming a title changes the slug: update any `playwright/*.playwright.ts` `STORY_BASE` and any
+story links (`?path=/story/...`) that point at it.
 
 ## argTypes control types
 
@@ -274,7 +277,7 @@ export const Default: Story = {
 Key points:
 
 - `computed` is **not** auto-imported in `.ts` story files — import it explicitly from `"vue"`.
-- Components aren't auto-registered in a story's `template` string either. Every component used there, including ones you put in the component's slots (`EyebrowText`, `HeroText`, `SocialIconsList`, ...), must be imported and listed in `components: {}`. Otherwise Vue renders it as an empty unknown element (`<eyebrowtext>`) with no error. ProfileSection's header and social-icons stories rendered blank this way until 2026-10-14.
+- Components aren't auto-registered in a story's `template` string either. Every component used there, including ones you put in the component's slots (`EyebrowText`, `HeroText`, `SocialIconsList`, ...), must be imported and listed in `components: {}`. Otherwise Vue renders it as an empty unknown element (`<eyebrowtext>`) with no error. ProfileSection's header and social-icons stories rendered blank this way until 2026-10-14. Globally registered components are the exception and need no entry: `Icon` (`@nuxt/icon` registers it with `global: true`) and `NuxtLink`.
 - Props in a story's `template` string aren't type-checked either. An invalid value renders silently with no warning: ProfileSection's stories passed `font-size="large"` to `HeroText`, which only has `display`/`title`/`heading`/`subheading`/`label`, so the heading fell back to unstyled text. Check every literal prop value against the component's `interface Props`.
 - Extra args must be stripped before `v-bind` — spreading unknown keys onto a component makes them unknown HTML attributes.
 - CSS custom properties set via `:style` on the component root are picked up by `var()` in the component's scoped CSS.

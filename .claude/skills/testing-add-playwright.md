@@ -99,13 +99,18 @@ test.describe("ComponentName — combinations", () => {
 
 ## Deriving the STORY_BASE slug
 
-Take the story `title` from the `.stories.ts` file, lowercase everything, remove spaces,
-and replace `/` with `-`:
+Take the story `title` from the `.stories.ts` file, lowercase everything, and replace both spaces
+and `/` with `-`:
 
-| Story `title`                                     | `STORY_BASE`                                    |
-| ------------------------------------------------- | ----------------------------------------------- |
-| `"Atoms/Text Blocks/HeroText"`                    | `atoms-text-blocks-herotext`                    |
-| `"Components/Forms/Input Button/InputButton"` | `components-forms-input-button-inputbuttoncore` |
+| Story `title`                                 | `STORY_BASE`                                |
+| --------------------------------------------- | ------------------------------------------- |
+| `"Atoms/Text Blocks/Hero Text"`               | `atoms-text-blocks-hero-text`               |
+| `"Components/Forms/Input Button/InputButton"` | `components-forms-input-button-inputbutton` |
+
+`STORY_BASE` is hardcoded, and nothing (Vitest, ESLint, the Component Ledger) checks it. When you
+change a story `title`, update `STORY_BASE` in the component's `playwright/` folder in the same
+change. EyebrowText and HeroText pointed at ids from an older title (`...-eyebrowtext`,
+`...-herotext`) until 2026-10-19, so their suites loaded a missing story.
 
 The full story URL pattern is:
 

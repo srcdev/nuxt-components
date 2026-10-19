@@ -166,7 +166,8 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
       const before = content.slice(Math.max(0, match.index - 150), match.index);
       if (!computedWrapsIt(before)) return true;
     }
-    return false;
+    // `ref(args.x)` snapshots one arg the same way (DisplayQrCode's playground, found 2026-10-19).
+    return /\bref\(\s*args\s*[.[]/.test(content);
   });
   const hasEslintIssues = files.some((f) => eslintIssuesByFile.has(f));
   // Checklist item 6b (added 2026-10-05): at least one story file in the group exports a

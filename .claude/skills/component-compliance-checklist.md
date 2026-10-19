@@ -138,6 +138,11 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
       `computed()`: Vue renders nothing for a fractional or negative range and only warns in dev
       (`StepperList`, 2026-10-15)
     - broken image or link URLs
+    - data a third-party child can't handle: a library that throws while rendering (an encoder, a
+      parser) breaks the whole page render. Catch it with `onErrorCaptured` and render a fallback
+      (`DisplayQrCode` threw "Data too long" on an over-capacity value until 2026-10-19). Check story
+      control ranges against the library's real range too: its `radius` control ran to 20 while the
+      library clamps to 0-1
     Describe what to check in the story's docs description, and look at it at every
     `CanvasSwitcher` width. Fixes usually mean `overflow-wrap: anywhere`, `min-inline-size: 0` on
     flex/grid children, `Array.from(str)` instead of `str[0]`, and `clamp()` on values
