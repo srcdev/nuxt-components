@@ -222,7 +222,7 @@ All tokens are read via `var(--token, default)` — see the full list in the com
 Defaults are for a **light** header (changed 2026-10-07): panels use `--page-bg`, borders and hover tints are `color-mix()`es of `--theme-text`, the overflow button is transparent with a `--theme-border-focus` hover outline. They used to assume a dark bar (`Canvas`, translucent white borders and tints). A dark header sets the tokens.
 | `--responsive-nav-decorator-indicator-color` / `--responsive-nav-decorator-hovered-*` | `currentColor` / inherits | The sliding active/hover indicator bar under the main nav. |
 | `--responsive-nav-decorator-indicator-offset` | `2px` | Distance of the active indicator below the active item's bottom edge; negative raises it. |
-| `--responsive-nav-decorator-indicator-height` / `--responsive-nav-decorator-hovered-border-radius` / `--responsive-nav-decorator-transition-duration` | `2px` / `4px` / `200ms` | Active indicator thickness, hover highlight radius, and how long both take to slide. |
+| `--responsive-nav-decorator-indicator-height` / `--responsive-nav-decorator-hovered-border-radius` / `--responsive-nav-decorator-transition-duration` | `2px` / `4px` / `200ms` | Active indicator thickness, hover highlight radius, and how long both take to slide (they jump under `prefers-reduced-motion`; the chevron and overflow button don't animate their movement either). |
 
 ---
 

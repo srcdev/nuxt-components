@@ -39,7 +39,7 @@ are documented alongside it since that's where they're consumed.
 | `--responsive-nav-decorator-hovered-bg` | `color-mix(in oklch, var(--theme-text) 8%, transparent)` | Hover highlight background behind the hovered item. |
 | `--responsive-nav-decorator-indicator-height` | `2px` | Thickness of the active indicator. |
 | `--responsive-nav-decorator-hovered-border-radius` | `4px` | Corner radius of the hover highlight. |
-| `--responsive-nav-decorator-transition-duration` | `200ms` | How long the active indicator and hover highlight take to slide between items. |
+| `--responsive-nav-decorator-transition-duration` | `200ms` | How long the active indicator and hover highlight take to slide between items. Under `prefers-reduced-motion` they jump instead (the hover highlight still fades). |
 
 ### Overflow panel content (`NavigationItems`)
 
@@ -63,13 +63,17 @@ Link and dropdown text is never line-clamped: it names where the link goes. Long
 wrap inside the dropdown and overflow panels; in the top bar, an item too wide to fit moves to the
 overflow menu.
 
+> **Changed 2026-10-20**: under `prefers-reduced-motion` the active indicator and hover highlight
+> jump to the new item instead of sliding, the dropdown chevron flips without rotating, and the
+> overflow button appears without animating its width. Opacity fades stay.
+>
 > **Changed 2026-10-07**: the defaults assumed a dark bar: `Canvas` panel and button backgrounds,
 > translucent white borders (`#ffffff90`, `#efefef75`), a white button outline/hover outline and
 > white-tint hover highlights, all near-invisible on a light header. They now come from the
 > `--theme-*` slots and `--page-bg` (see the tables). A dark header sets these tokens. Also added
 > the `-link-color-hover` / `-link-color-active` tokens (top bar and overflow panel), which
 > TabNavigation had and ResponsiveHeader lacked.
-
+>
 > **Changed 2026-10-05**: the dropdown and overflow panels had no maximum size, so a long child
 > name or a long child list ran off-screen. They are now capped by the max-size tokens above.
 > `--_overflow-drop-down-width`, a private token nothing ever set, is gone (`min-width: fit-content`

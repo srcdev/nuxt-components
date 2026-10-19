@@ -914,6 +914,10 @@ watch(
                 height: var(--responsive-header-link-icon-size, 1.35em);
                 transform: var(--_icon-transform);
                 transition: transform 0.2s ease-in-out;
+
+                @media (prefers-reduced-motion: reduce) {
+                  transition: none;
+                }
               }
             }
 
@@ -1061,6 +1065,12 @@ watch(
         width: fit-content;
 
         transition: all 0.2s ease-in-out;
+
+        @media (prefers-reduced-motion: reduce) {
+          transition:
+            opacity 0.2s ease-in-out,
+            visibility 0.2s ease-in-out;
+        }
 
         &.visually-hidden {
           opacity: 0;
@@ -1232,6 +1242,17 @@ watch(
 
     &:not(.is-animated) .nav-indicator-active {
       transition: none;
+    }
+
+    /* The indicators jump to the new item instead of sliding; the hover highlight still fades. */
+    @media (prefers-reduced-motion: reduce) {
+      .nav-indicator-hovered {
+        transition: opacity 150ms ease;
+      }
+
+      .nav-indicator-active {
+        transition: none;
+      }
     }
 
     &:has(li.is-hovered) .nav-indicator-active {
