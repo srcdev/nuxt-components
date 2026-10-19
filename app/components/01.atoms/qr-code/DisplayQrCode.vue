@@ -1,5 +1,6 @@
 <template>
   <Qrcode
+    v-if="!hasEncodeError"
     :value="qrValue"
     class="display-qr-code"
     :variant
@@ -10,6 +11,9 @@
     :aria-label="ariaLabel"
     :class="[elementClasses]"
   />
+  <span v-else class="display-qr-code display-qr-code-fallback" :class="[elementClasses]" data-error>
+    <slot name="fallback"></slot>
+  </span>
 </template>
 
 <script setup lang="ts">
@@ -36,6 +40,26 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
 });
 
+const emit = defineEmits<{
+  error: [error: Error];
+}>();
+
+// The encoder throws while rendering when a value exceeds QR capacity (about 2.9KB).
+const hasEncodeError = ref(false);
+
+onErrorCaptured((error) => {
+  hasEncodeError.value = true;
+  emit("error", error instanceof Error ? error : new Error(String(error)));
+  return false;
+});
+
+watch(
+  () => props.qrValue,
+  () => {
+    hasEncodeError.value = false;
+  }
+);
+
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 watch(
@@ -49,6 +73,13 @@ watch(
   .display-qr-code {
     aspect-ratio: 1 / 1;
     width: var(--display-qr-code-size, v-bind(size));
+    max-inline-size: 100%;
+
+    &.display-qr-code-fallback {
+      display: inline-grid;
+      place-items: center;
+      overflow-wrap: anywhere;
+    }
   }
 }
 </style>

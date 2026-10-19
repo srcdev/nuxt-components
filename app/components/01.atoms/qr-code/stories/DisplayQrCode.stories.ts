@@ -1,214 +1,247 @@
-import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import DisplayQrCodeComponent from "../DisplayQrCode.vue";
+import { computed } from "vue";
+import type { Meta, StoryObj } from "@nuxtjs/storybook";
+import DisplayQrCode from "../DisplayQrCode.vue";
 import type { QrCodeVariant } from "../../../../types/components";
 
-const meta: Meta<typeof DisplayQrCodeComponent> = {
-  title: "Atoms/QR Code/DisplayQrCode",
-  component: DisplayQrCodeComponent,
-  argTypes: {
-    qrValue: {
-      control: { type: "text" },
-      description: "The value/content to encode in the QR code",
-      table: { category: "Content" },
-    },
-    size: {
-      control: { type: "text" },
-      description: "Size of the QR code (CSS value like '256px', '10rem')",
-      table: { category: "Appearance" },
-    },
-    radius: {
-      control: { type: "range", min: 0, max: 20, step: 1 },
-      description: "Border radius of the QR code corners",
-      table: { category: "Appearance" },
-    },
-    blackColor: {
-      control: { type: "color" },
-      description: "Color of the QR code foreground elements",
-      table: { category: "Appearance" },
-    },
-    whiteColor: {
-      control: { type: "color" },
-      description: "Color of the QR code background",
-      table: { category: "Appearance" },
-    },
-    ariaLabel: {
-      control: { type: "text" },
-      description: "Accessible name for the QR image (override for a more specific or translated label)",
-      table: { category: "Accessibility" },
-    },
-    variant: { table: { disable: true } },
-    styleClassPassthrough: { table: { disable: true } },
-  },
-  args: {
-    qrValue: "https://github.com/srcdev/nuxt-components",
-    size: "256px",
-    radius: 0,
-    blackColor: "#000000",
-    whiteColor: "transparent",
-    ariaLabel: "QR code",
-    styleClassPassthrough: [],
-  },
-};
+type SvgVariant = QrCodeVariant["pixel"];
 
-export default meta;
-
-interface QrStoryArgs {
+interface StoryArgs {
   qrValue: string;
   size: string;
   radius: number;
   blackColor: string;
   whiteColor: string;
   ariaLabel: string;
-  styleClassPassthrough: string[];
+  variantInner: SvgVariant;
+  variantMarker: SvgVariant;
+  variantPixel: SvgVariant;
 }
 
-const DisplayTemplate: StoryFn<QrStoryArgs> = (args, { parameters }) => ({
-  components: { DisplayQrCodeComponent },
-  setup() {
-    const variant: QrCodeVariant = parameters?.variant || {
-      inner: "default",
-      marker: "default",
-      pixel: "default",
-    };
-    return { args, variant };
+const variantOptions: SvgVariant[] = ["default", "circle", "rounded", "dots", "pixelated"];
+
+const variantArgType = (part: string) => ({
+  control: { type: "select" as const },
+  options: variantOptions,
+  description: `Story-only: sets \`variant.${part}\` on the \`variant\` prop.`,
+  table: { category: "Variant (story-only)" },
+});
+
+const meta: Meta<StoryArgs> = {
+  title: "Atoms/QR Code/DisplayQrCode",
+  component: DisplayQrCode,
+  argTypes: {
+    qrValue: {
+      control: { type: "text" },
+      description: "The value to encode. Over about 2.9KB it can't be encoded, and the `fallback` slot renders instead.",
+      table: { category: "Content" },
+    },
+    size: {
+      control: { type: "text" },
+      description: "Width of the code as any CSS length; `--display-qr-code-size` overrides it. Never wider than its container.",
+      table: { category: "Appearance" },
+    },
+    radius: {
+      control: { type: "range", min: 0, max: 1, step: 0.05 },
+      description: "Corner rounding for the rounded, circle and dots shapes, from 0 to 1 (the library clamps anything outside).",
+      table: { category: "Appearance" },
+    },
+    blackColor: {
+      control: { type: "color" },
+      description: "Colour of the dark modules. Defaults to `currentColor`.",
+      table: { category: "Appearance" },
+    },
+    whiteColor: {
+      control: { type: "color" },
+      description: "Colour of the light modules. Defaults to `transparent`.",
+      table: { category: "Appearance" },
+    },
+    ariaLabel: {
+      control: { type: "text" },
+      description: "Accessible name for the QR image (override with a more specific or translated label)",
+      table: { category: "Accessibility" },
+    },
+    variantInner: variantArgType("inner"),
+    variantMarker: variantArgType("marker"),
+    variantPixel: variantArgType("pixel"),
   },
+  args: {
+    qrValue: "https://example.com",
+    size: "256px",
+    radius: 0,
+    blackColor: "#000000",
+    whiteColor: "transparent",
+    ariaLabel: "QR code",
+    variantInner: "default",
+    variantMarker: "default",
+    variantPixel: "default",
+  },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Renders a value as an SVG QR code with `role=\"img\"` and an `ariaLabel`. `size`, `radius`, `blackColor`, `whiteColor` and `variant` (separate shapes for the inner markers, outer markers and pixels) style it. A value too long to encode renders the `fallback` slot and emits `error` instead of breaking the page.",
+      },
+    },
+  },
+};
+
+export default meta;
+type Story = StoryObj<StoryArgs>;
+
+const storySetup = (args: StoryArgs) => {
+  const componentArgs = computed(() => {
+    const { variantInner, variantMarker, variantPixel, ...rest } = args;
+    return { ...rest, variant: { inner: variantInner, marker: variantMarker, pixel: variantPixel } };
+  });
+  return { componentArgs };
+};
+
+const render: Story["render"] = (args) => ({
+  components: { DisplayQrCode },
+  setup: () => storySetup(args),
   template: `
-    <div style="padding: 40px; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border-radius: 8px;">
-      <DisplayQrCodeComponent
-        :qr-value="args.qrValue"
-        :variant="variant"
-        :radius="args.radius"
-        :black-color="args.blackColor"
-        :white-color="args.whiteColor"
-        :size="args.size"
-        :aria-label="args.ariaLabel"
-        :style-class-passthrough="args.styleClassPassthrough"
-      />
+    <div style="padding: 4rem; display: flex; align-items: center; justify-content: center; background: #f5f5f5; border-radius: 0.8rem;">
+      <DisplayQrCode v-bind="componentArgs" />
     </div>
   `,
 });
 
-export const Default = DisplayTemplate.bind({});
+const story = (description: string, args: Partial<StoryArgs> = {}): Story => ({
+  render,
+  args,
+  parameters: { docs: { description: { story: description } } },
+});
 
-export const Website = DisplayTemplate.bind({});
-Website.args = { qrValue: "https://nuxt.com", radius: 8, blackColor: "#000000" };
-Website.parameters = { variant: { inner: "circle", marker: "rounded", pixel: "dots" } };
+export const Default = story("Default styling. Use the Controls panel to try every prop, including the three variant shapes.");
 
-export const VariantDefault = DisplayTemplate.bind({});
-VariantDefault.args = { qrValue: "Default variant style", radius: 4 };
-VariantDefault.parameters = { variant: { inner: "default", marker: "default", pixel: "default" } };
+export const Website = story("A URL with circle inner markers, rounded outer markers and dot pixels.", {
+  qrValue: "https://nuxt.com",
+  radius: 0.5,
+  variantInner: "circle",
+  variantMarker: "rounded",
+  variantPixel: "dots",
+});
 
-export const VariantCircle = DisplayTemplate.bind({});
-VariantCircle.args = { qrValue: "Circle variant style", radius: 8, blackColor: "#1e40af" };
-VariantCircle.parameters = { variant: { inner: "circle", marker: "circle", pixel: "circle" } };
+export const VariantCircle = story("Every part in the circle shape.", {
+  qrValue: "Circle variant style",
+  radius: 0.5,
+  blackColor: "#1e40af",
+  variantInner: "circle",
+  variantMarker: "circle",
+  variantPixel: "circle",
+});
 
-export const VariantRounded = DisplayTemplate.bind({});
-VariantRounded.args = { qrValue: "Rounded variant style", radius: 12, blackColor: "#059669" };
-VariantRounded.parameters = { variant: { inner: "rounded", marker: "rounded", pixel: "rounded" } };
-
-export const VariantDots = DisplayTemplate.bind({});
-VariantDots.args = { qrValue: "Dots variant style", radius: 6, blackColor: "#dc2626" };
-VariantDots.parameters = { variant: { inner: "dots", marker: "dots", pixel: "dots" } };
-
-export const VariantMixed = DisplayTemplate.bind({});
-VariantMixed.args = { qrValue: "Mixed variants for creative styling", radius: 10, blackColor: "#7c3aed" };
-VariantMixed.parameters = { variant: { inner: "circle", marker: "rounded", pixel: "dots" } };
-
-export const WiFiConnection = DisplayTemplate.bind({});
-WiFiConnection.args = { qrValue: "WIFI:T:WPA;S:MyHomeNetwork;P:mySecurePassword123;H:false;", blackColor: "#1e40af", radius: 4 };
-WiFiConnection.parameters = { variant: { inner: "rounded", marker: "circle", pixel: "default" } };
-
-export const VCardContact = DisplayTemplate.bind({});
-VCardContact.args = {
-  qrValue: "BEGIN:VCARD\\nVERSION:3.0\\nFN:John Doe\\nORG:Acme Corp\\nTITLE:Software Engineer\\nTEL:+1234567890\\nEMAIL:john.doe@acme.com\\nURL:https://johndoe.dev\\nEND:VCARD",
+export const VariantRounded = story("Every part in the rounded shape, at full radius.", {
+  qrValue: "Rounded variant style",
+  radius: 1,
   blackColor: "#059669",
-  radius: 12,
-};
-VCardContact.parameters = { variant: { inner: "dots", marker: "rounded", pixel: "circle" } };
+  variantInner: "rounded",
+  variantMarker: "rounded",
+  variantPixel: "rounded",
+});
 
-export const SmallSize = DisplayTemplate.bind({});
-SmallSize.args = { qrValue: "Small QR for tight spaces", size: "128px", radius: 2, blackColor: "#f59e0b" };
-SmallSize.parameters = { variant: { inner: "dots", marker: "circle", pixel: "rounded" } };
+export const VariantDots = story("Every part in the dots shape.", {
+  qrValue: "Dots variant style",
+  radius: 0.5,
+  blackColor: "#dc2626",
+  variantInner: "dots",
+  variantMarker: "dots",
+  variantPixel: "dots",
+});
 
-export const LargeSize = DisplayTemplate.bind({});
-LargeSize.args = { qrValue: "Large QR for posters and signage", size: "400px", radius: 16, blackColor: "#0ea5e9" };
-LargeSize.parameters = { variant: { inner: "circle", marker: "rounded", pixel: "dots" } };
+export const VariantPixelated = story("Every part in the pixelated shape.", {
+  qrValue: "Pixelated variant style",
+  blackColor: "#7c3aed",
+  variantInner: "pixelated",
+  variantMarker: "pixelated",
+  variantPixel: "pixelated",
+});
 
-export const HighContrast = DisplayTemplate.bind({});
-HighContrast.args = { qrValue: "High contrast for accessibility", blackColor: "#000000", whiteColor: "#ffffff", radius: 0, size: "256px" };
-HighContrast.parameters = { variant: { inner: "default", marker: "default", pixel: "default" } };
+export const WiFiConnection = story("A Wi-Fi join string, which phone cameras offer to connect to.", {
+  qrValue: "WIFI:T:WPA;S:NorthtownGuest;P:example-password;H:false;",
+  blackColor: "#1e40af",
+  radius: 0.25,
+  variantInner: "rounded",
+  variantMarker: "circle",
+});
 
-const PlaygroundTemplate: StoryFn<QrStoryArgs> = (args) => ({
-  components: { DisplayQrCodeComponent },
-  setup() {
-    const qrValue = ref(args.qrValue);
-    const variant = ref<QrCodeVariant>({ inner: "circle", marker: "rounded", pixel: "dots" });
-    const radius = ref(args.radius);
-    const blackColor = ref(args.blackColor);
-    const whiteColor = ref(args.whiteColor);
-    const sizeValue = ref(256);
-    const size = computed(() => `${sizeValue.value}px`);
-    const presetValues = [
-      { label: "Website URL", value: "https://nuxt.com" },
-      { label: "WiFi Network", value: "WIFI:T:WPA;S:MyNetwork;P:password123;" },
-      { label: "Phone Number", value: "tel:+1234567890" },
-      { label: "Email", value: "mailto:hello@example.com" },
-      { label: "SMS", value: "sms:+1234567890?body=Hello!" },
-      { label: "Location", value: "geo:40.7128,-74.0060" },
-    ];
-    const variantOptions = ["default", "circle", "rounded", "dots"];
-    return { qrValue, variant, radius, blackColor, whiteColor, sizeValue, size, presetValues, variantOptions };
-  },
-  template: `
-    <div style="padding: 40px;">
-      <div style="display: grid; grid-template-columns: 1fr 300px; gap: 40px; align-items: start;">
-        <div style="display: flex; align-items: center; justify-content: center; min-height: 400px; background: #f8fafc; border-radius: 8px; padding: 40px;">
-          <DisplayQrCodeComponent :qrValue="qrValue" :variant="variant" :radius="radius" :blackColor="blackColor" :whiteColor="whiteColor" :size="size" />
+export const VCardContact = story("A vCard contact. Longer values produce a denser code.", {
+  qrValue:
+    "BEGIN:VCARD\nVERSION:3.0\nFN:Alex Morgan\nORG:Northtown Studio\nTEL:+441234567890\nEMAIL:alex@example.com\nURL:https://example.com\nEND:VCARD",
+  blackColor: "#059669",
+  radius: 0.75,
+  variantInner: "dots",
+  variantMarker: "rounded",
+  variantPixel: "circle",
+});
+
+export const SmallSize = story("`size` at 128px.", { size: "128px" });
+
+export const LargeSize = story("`size` at 400px. In a narrower container the code shrinks to fit.", {
+  size: "400px",
+  radius: 0.5,
+  blackColor: "#0ea5e9",
+  variantInner: "circle",
+  variantMarker: "rounded",
+  variantPixel: "dots",
+});
+
+export const HighContrast = story("Black on an opaque white background, the most reliable combination for scanning.", {
+  whiteColor: "#ffffff",
+});
+
+export const StressTest: Story = {
+  name: "Stress Test (Worst-Case Data)",
+  render: () => ({
+    components: { DisplayQrCode },
+    setup() {
+      const nearCapacity = "x".repeat(2900);
+      const overCapacity = "https://example.com/?q=" + "x".repeat(4000);
+      return { nearCapacity, overCapacity };
+    },
+    template: `
+      <div style="display: grid; gap: 2.4rem; padding: 2.4rem; font-size: 1.4rem;">
+        <p style="margin: 0;">An empty value, a single character, and emoji with right-to-left text: each still renders a code.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 2.4rem;">
+          <DisplayQrCode qr-value="" size="12rem"></DisplayQrCode>
+          <DisplayQrCode qr-value="a" size="12rem"></DisplayQrCode>
+          <DisplayQrCode qr-value="😀 التوصيل المجاني" size="12rem"></DisplayQrCode>
         </div>
-        <div style="background: white; padding: 24px; border-radius: 8px; border: 1px solid #e5e7eb;">
-          <h3 style="margin: 0 0 20px 0; color: #374151; font-size: 18px;">QR Code Playground</h3>
-          <div style="margin-bottom: 20px;">
-            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">Quick Presets:</label>
-            <select @change="qrValue = $event.target.value" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px;">
-              <option value="">Select a preset...</option>
-              <option v-for="preset in presetValues" :key="preset.label" :value="preset.value">{{ preset.label }}</option>
-            </select>
-          </div>
-          <div style="margin-bottom: 20px;">
-            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">Custom Content:</label>
-            <textarea v-model="qrValue" rows="3" style="width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 4px; font-family: monospace; font-size: 12px;" placeholder="Enter QR code content..." />
-          </div>
-          <div style="margin-bottom: 20px;">
-            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">Style Variants:</label>
-            <div style="display: grid; gap: 8px;">
-              <div><label style="font-size: 12px; color: #6b7280;">Inner:</label><select v-model="variant.inner" style="width: 100%; padding: 4px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;"><option v-for="option in variantOptions" :key="option" :value="option">{{ option }}</option></select></div>
-              <div><label style="font-size: 12px; color: #6b7280;">Marker:</label><select v-model="variant.marker" style="width: 100%; padding: 4px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;"><option v-for="option in variantOptions" :key="option" :value="option">{{ option }}</option></select></div>
-              <div><label style="font-size: 12px; color: #6b7280;">Pixel:</label><select v-model="variant.pixel" style="width: 100%; padding: 4px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;"><option v-for="option in variantOptions" :key="option" :value="option">{{ option }}</option></select></div>
-            </div>
-          </div>
-          <div style="margin-bottom: 20px;">
-            <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #374151;">Appearance:</label>
-            <div style="display: grid; gap: 12px;">
-              <div><label style="font-size: 12px; color: #6b7280;">Size: {{ sizeValue }}px</label><input v-model.number="sizeValue" type="range" min="128" max="400" step="16" style="width: 100%;" /></div>
-              <div><label style="font-size: 12px; color: #6b7280;">Radius: {{ radius }}px</label><input v-model.number="radius" type="range" min="0" max="20" step="1" style="width: 100%;" /></div>
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
-                <div><label style="font-size: 12px; color: #6b7280;">Foreground:</label><input v-model="blackColor" type="color" style="width: 100%; height: 32px; border: 1px solid #d1d5db; border-radius: 4px;" /></div>
-                <div><label style="font-size: 12px; color: #6b7280;">Background:</label><input v-model="whiteColor" type="color" style="width: 100%; height: 32px; border: 1px solid #d1d5db; border-radius: 4px;" /></div>
-              </div>
-            </div>
-          </div>
+
+        <p style="margin: 0;">2,900 characters, just under capacity: the densest code the encoder makes.</p>
+        <DisplayQrCode :qr-value="nearCapacity" size="32rem"></DisplayQrCode>
+
+        <p style="margin: 0;">Over capacity: the <code>fallback</code> slot renders in place of the code (left), or nothing (right) when the slot is empty.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 2.4rem; align-items: start;">
+          <DisplayQrCode :qr-value="overCapacity" size="16rem" style="outline: 0.1rem dashed currentColor;">
+            <template #fallback>
+              <span style="padding: 1.2rem; text-align: center;">Thislinkistoolongtoshowasaqrcodepleaseusethebuttonbelow</span>
+            </template>
+          </DisplayQrCode>
+          <DisplayQrCode :qr-value="overCapacity" size="16rem" style="outline: 0.1rem dashed currentColor;"></DisplayQrCode>
+        </div>
+
+        <p style="margin: 0;">An 80rem <code>size</code> inside an 18rem column: the code shrinks to the column.</p>
+        <div style="inline-size: 18rem; outline: 0.1rem dashed currentColor;">
+          <DisplayQrCode qr-value="https://example.com" size="80rem"></DisplayQrCode>
+        </div>
+
+        <p style="margin: 0;">Out-of-range radius (-1 and 5): the library clamps it to 0 and 1.</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 2.4rem;">
+          <DisplayQrCode qr-value="https://example.com" size="12rem" :radius="-1" :variant="{ inner: 'rounded', marker: 'rounded', pixel: 'rounded' }"></DisplayQrCode>
+          <DisplayQrCode qr-value="https://example.com" size="12rem" :radius="5" :variant="{ inner: 'rounded', marker: 'rounded', pixel: 'rounded' }"></DisplayQrCode>
         </div>
       </div>
-    </div>
-  `,
-});
-
-export const InteractivePlayground = PlaygroundTemplate.bind({});
-InteractivePlayground.args = {
-  qrValue: "https://github.com/srcdev/nuxt-components",
-  radius: 8,
-  blackColor: "#000000",
-  whiteColor: "transparent",
-  size: "256px",
-  styleClassPassthrough: [],
+    `,
+  }),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      story: { inline: false, height: "1400px" },
+      description: {
+        story:
+          "Worst-case values. Check: empty, single-character, emoji and right-to-left values all render a code; the near-capacity code renders without errors; an over-capacity value shows the `fallback` slot (with its unbroken text wrapping inside the box) or an empty box, never an error; an oversized `size` shrinks to its container; an out-of-range radius renders as 0 and 1.",
+      },
+    },
+  },
 };

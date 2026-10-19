@@ -15,8 +15,19 @@
       "  aria-label=\"$2\"",
       "  black-color=\"${3:currentColor}\"",
       "  :radius=\"${4:0.5}\"",
-      "  :variant=\"{ inner: '${5|default,circle,rounded,dots,classy,classy-rounded|}', marker: '${6|default,circle,rounded,dots,classy,classy-rounded|}', pixel: '${7|default,circle,rounded,dots,classy,classy-rounded|}' }\"",
+      "  :variant=\"{ inner: '${5|default,circle,rounded,dots,pixelated|}', marker: '${6|default,circle,rounded,dots,pixelated|}', pixel: '${7|default,circle,rounded,dots,pixelated|}' }\"",
       "/>"
+    ]
+  },
+  "SRCDEV DisplayQrCode Fallback": {
+    "description": "DisplayQrCode with a fallback for values too long to encode",
+    "scope": "vue,html",
+    "body": [
+      "<DisplayQrCode :qr-value=\"${1:url}\" aria-label=\"${2:QR code}\" @error=\"${3:onQrError}\">",
+      "  <template #fallback>",
+      "    $0",
+      "  </template>",
+      "</DisplayQrCode>"
     ]
   }
 }

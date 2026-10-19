@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { defineComponent, h, nextTick } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import DisplayQrCode from "../DisplayQrCode.vue";
 import type { QrCodeVariant } from "~/types/components";
@@ -150,5 +151,62 @@ describe("DisplayQrCode accessibility", () => {
       props: { qrValue: "https://example.com", ariaLabel: "Scan to open our booking page" },
     });
     expect(wrapper.attributes("aria-label")).toBe("Scan to open our booking page");
+  });
+});
+
+// Stands in for nuxt-qrcode, whose encoder throws "Data too long" while rendering over-capacity values.
+const QrcodeStub = defineComponent({
+  props: { value: { type: String, required: true } },
+  setup(stubProps) {
+    return () => {
+      if (stubProps.value.length > 2953) throw new Error("Data too long");
+      return h("svg");
+    };
+  },
+});
+
+const mountWithEncoder = (props: { qrValue: string; styleClassPassthrough?: string }, slots: Record<string, string> = {}) =>
+  mountSuspended(DisplayQrCode, { props, slots, global: { stubs: { Qrcode: QrcodeStub } } });
+
+describe("DisplayQrCode worst-case values", () => {
+  const tooLong = "x".repeat(5000);
+
+  it("renders an empty value without throwing", async () => {
+    const wrapper = await mountWithEncoder({ qrValue: "" });
+    expect(wrapper.attributes("role")).toBe("img");
+    expect(wrapper.attributes("data-error")).toBeUndefined();
+  });
+
+  it("encodes emoji and right-to-left text", async () => {
+    const wrapper = await mountWithEncoder({ qrValue: "😀 التوصيل المجاني" });
+    expect(wrapper.attributes("role")).toBe("img");
+  });
+
+  it("renders the fallback instead of throwing when the value exceeds QR capacity", async () => {
+    const wrapper = await mountWithEncoder({ qrValue: tooLong, styleClassPassthrough: "extra" }, { fallback: '<span class="custom-fallback">Too long to encode</span>' });
+    await nextTick();
+    expect(wrapper.find(".display-qr-code-fallback").exists()).toBe(true);
+    expect(wrapper.attributes("data-error")).toBeDefined();
+    expect(wrapper.attributes("role")).toBeUndefined();
+    expect(wrapper.classes()).toContain("extra");
+    expect(wrapper.find(".custom-fallback").text()).toBe("Too long to encode");
+  });
+
+  it("emits error when the value exceeds QR capacity", async () => {
+    const wrapper = await mountWithEncoder({ qrValue: tooLong });
+    await nextTick();
+    const events = wrapper.emitted("error");
+    expect(events).toHaveLength(1);
+    expect(events?.[0]?.[0]).toBeInstanceOf(Error);
+  });
+
+  it("recovers when the value changes to one that fits", async () => {
+    const wrapper = await mountWithEncoder({ qrValue: tooLong });
+    await nextTick();
+    expect(wrapper.find(".display-qr-code-fallback").exists()).toBe(true);
+    await wrapper.setProps({ qrValue: "https://example.com" });
+    await nextTick();
+    expect(wrapper.find(".display-qr-code-fallback").exists()).toBe(false);
+    expect(wrapper.attributes("role")).toBe("img");
   });
 });
