@@ -172,6 +172,23 @@ const Template: StoryFn<StoryArgs> = (args) => ({
 
 Don't name the inline component the same as an exported story (`TS2451: Cannot redeclare`).
 
+### Generic components (`<script setup generic="T">`)
+
+A generic component's type doesn't fit `Meta`'s `component` field (`ConcreteComponent<Args>`), so
+`npx nuxi typecheck` fails on `component: MyGeneric`. Cast it, with a one-line comment; the
+autodocs props table still generates:
+
+```ts
+import type { ConcreteComponent } from "vue";
+
+const meta: Meta<StoryArgs> = {
+  // Generic components don't fit Meta's ConcreteComponent<Args>; the props table still generates.
+  component: SlidingToggle as unknown as ConcreteComponent<StoryArgs>,
+};
+```
+
+`SlidingToggle.stories.ts` is the reference.
+
 ## Title format
 
 `"Category/Subcategory/ComponentName"` — this becomes the Storybook sidebar path and the

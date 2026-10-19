@@ -396,6 +396,31 @@ afterEach(() => {
 The `as unknown as Record<string, unknown>` double-cast is required because TypeScript's
 `HTMLElement` type has no index signature — cast through `unknown` first.
 
+## A mount helper that keeps `v-model` in sync
+
+To test a `v-model` component through clicks and keys, feed `update:modelValue` back into the
+props. The handler needs the wrapper it's creating, so hold it in a `const` object: a self-referencing
+`const wrapper` is an implicit `any` under strict mode, and `let wrapper` assigned once fails
+ESLint's `prefer-const`.
+
+```ts
+const mountToggle = async (props: Record<string, unknown> = {}) => {
+  const holder: { current?: Awaited<ReturnType<typeof mountSuspended>> } = {};
+  const onUpdate = (value: string | number) => {
+    void holder.current?.setProps({ modelValue: value });
+  };
+  const wrapper = await mountSuspended(SlidingToggle, {
+    props: { modelValue: "monthly", "onUpdate:modelValue": onUpdate, ...props },
+  });
+  holder.current = wrapper;
+  mounted.push(wrapper);
+  return wrapper;
+};
+```
+
+Type the handler's `value` as the model's full type (`string | number` for a generic model), not
+the narrower one a test happens to use.
+
 ## Describe section conventions
 
 Use these section names consistently so tests are easy to scan:
