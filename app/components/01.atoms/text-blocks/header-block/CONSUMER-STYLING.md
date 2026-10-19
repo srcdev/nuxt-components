@@ -1,25 +1,27 @@
 # HeaderBlock — Consumer Styling Guide
 
-## No component-owned CSS tokens
+## Public token API
 
-`HeaderBlock` has no `<style>` block of its own. Visual size comes from applying one of six global
-`.page-heading-1`–`.page-heading-6` utility classes (`classLevel` prop), defined in
+`HeaderBlock` has no tokens of its own, public or private (`--_`). Its own style block only sets
+`overflow-wrap: anywhere` on `.header-block`, so an unbroken word or URL wraps instead of
+overflowing its column.
+
+Visual size comes from one of six global `.page-heading-1`–`.page-heading-6` utility classes (the
+`classLevel` prop), defined in
 `app/assets/styles/setup/05.typography/02.utility-classes/_font-classes-page-heading.css`:
 
-```css
-.page-heading-1 { font-size: var(--step-8); }
-.page-heading-2 { font-size: var(--step-7); }
-/* … down to .page-heading-6 { font-size: var(--step-3); } */
-```
+| Class | `font-size` |
+|---|---|
+| `.page-heading-1` | `var(--step-8)` |
+| `.page-heading-2` | `var(--step-7)` |
+| `.page-heading-3` | `var(--step-6)` |
+| `.page-heading-4` | `var(--step-5)` |
+| `.page-heading-5` | `var(--step-4)` |
+| `.page-heading-6` | `var(--step-3)` |
 
-Each size is a fluid type-scale token (`--step-3` through `--step-8`, defined globally, not by
-this component) — override those tokens at a page/section scope to change every `page-heading-*`
-element's size at once, not just this component's.
-
-All six levels also reset `margin-block: 0rem` and `padding-block: 0rem` (instead of relying on the
-browser's own per-level heading margins, which vary by `<h1>`–`<h6>` and would otherwise fight
-`classLevel`/`tagLevel` being independent). This is a deliberate blank slate — add spacing in your
-own CSS rather than expecting a level to come with baked-in margin:
+All six also set `font-weight: 600`, `line-height: 1`, and reset `margin-block` and `padding-block`
+to `0rem` instead of relying on the browser's per-level heading margins, which would fight
+`classLevel` and `tagLevel` being independent. Add spacing in your own CSS:
 
 ```css
 .my-page .page-heading-1 {
@@ -29,22 +31,33 @@ own CSS rather than expecting a level to come with baked-in margin:
 
 ---
 
+## State hooks
+
+No state attributes. Classes on the root `<h1>`–`<h6>`:
+
+| Class | Meaning |
+|---|---|
+| `.header-block` | Always present |
+| `.page-heading-{1-6}` | The `classLevel` prop (out-of-range values fall back to `1`) |
+
+> Changed 2026-10-19: `.header-block` is new. Before, the root carried only the
+> `.page-heading-*` class and passthrough classes.
+
+---
+
 ## Local overrides
 
-There are no public tokens, so override the classes above with direct properties, scoped to an
-element you own (a page or section class, or a class added with `:style-class-passthrough`). Keep
-the block **unlayered** (no `@layer` wrapper) so it beats the library's `@layer components`. If your
-own file uses `<style scoped>`, selectors that reach inside the component need `:deep()`. Patterns
-and examples: `.claude/skills/component-local-style-override.md`.
+There are no public tokens, so override with direct properties, scoped to an element you own (a
+page or section class, or a class added with `:style-class-passthrough`). Keep the block
+**unlayered** (no `@layer` wrapper) so it beats the library's `@layer components`. If your own file
+uses `<style scoped>`, selectors that reach inside the component need `:deep()`. Patterns and
+examples: `.claude/skills/component-local-style-override.md`.
 
 **Caveat:** size comes from the global `--step-*` type-scale tokens behind `.page-heading-*`.
 Overriding a `--step-*` token on your own element changes every `page-heading-*` inside it, not just
 this component's.
 
 ### One instance
-
-Use `styleClassPassthrough` to add your own class and override `font-size`/`font-weight`/etc. for
-a single `HeaderBlock` instance without touching the shared `.page-heading-*` utility classes:
 
 ```vue
 <HeaderBlock :tag-level="2" :class-level="1" style-class-passthrough="hero-title">Big idea</HeaderBlock>
@@ -56,3 +69,15 @@ a single `HeaderBlock` instance without touching the shared `.page-heading-*` ut
 }
 ```
 
+---
+
+## Class passthrough
+
+`style-class-passthrough` adds classes to the root heading element. Reactive after mount.
+
+---
+
+## Notes
+
+- Text arrives through the default slot, so there's no line-clamp token: clamp it in your own
+  markup if needed.

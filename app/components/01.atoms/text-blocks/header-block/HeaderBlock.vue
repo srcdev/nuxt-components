@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" :id :class="[classLevelClass, elementClasses]">
+  <component :is="tag" :id class="header-block" :class="[classLevelClass, elementClasses]">
     <slot></slot>
   </component>
 </template>
@@ -48,3 +48,11 @@ watch(
   }
 );
 </script>
+
+<style lang="css">
+@layer components {
+  .header-block {
+    overflow-wrap: anywhere;
+  }
+}
+</style>

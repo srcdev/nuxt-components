@@ -58,10 +58,11 @@ heading to have an accessible name. Bind the same id to both:
 </section>
 ```
 
-Several components in this library (`PageRow`, `LayoutGridByCols`,
-`ProfileSection`, `ServiceSummary`, `ServiceDetail`, `PageHeroHighlights`) already generate this id
-automatically via the `useAriaLabelledById` composable and expose it as a `heading-id` slot prop —
-when composing inside one of those, bind `HeaderBlock`'s `id` to that slot prop instead of writing
+Three components in this library generate this id with the `useAriaLabelledById` composable and
+expose it as a `heading-id` slot prop: `PageRow` (default slot), `ProfileSection` (`heroText` slot)
+and `PageHeroHighlights` (`header` slot). (`LayoutGridByCols`, `ServiceSummary` and `ServiceDetail`
+use the composable too, but label their own heading or an `sr-only` label, with no slot prop.) When
+composing inside one of the three, bind `HeaderBlock`'s `id` to that slot prop instead of writing
 your own id:
 
 ```vue
@@ -72,7 +73,8 @@ your own id:
 
 ## Styling
 
-`HeaderBlock` has no CSS of its own — `classLevel` applies one of the global
+The root always has the `.header-block` class, whose only style is `overflow-wrap: anywhere` (so
+an unbroken word wraps instead of overflowing). `classLevel` applies one of the global
 `.page-heading-1`–`.page-heading-6` utility classes defined in
 `app/assets/styles/setup/05.typography/02.utility-classes/_font-classes-page-heading.css`, each
 setting `font-size` from a shared fluid type-scale token (`--step-3` through `--step-8`). All six
@@ -90,3 +92,9 @@ Moved to `01.atoms/text-blocks/header-block/`, alongside `EyebrowText`/`HeroText
 added the `id` prop in the same pass — several sections need their heading to carry a specific id
 for `aria-labelledby`, and `HeaderBlock` had no explicit way to receive one (matching `PageRow`'s
 existing `id?: string | null` + `:id` convention).
+
+## Migration note (2026-10-19)
+
+Added the `.header-block` root class and `overflow-wrap: anywhere`, a `StressTest` story, a
+story-only slot-text control and docs text. The spec now unmounts every wrapper. Corrected the list
+of components that expose a `heading-id` slot prop.
