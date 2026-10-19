@@ -28,8 +28,9 @@ and Escape dismissal.
 |------|------|---------|-------------|
 | `placement` | `"top" \| "right" \| "bottom" \| "left"` | `"right"` | Which side of the trigger the popover panel opens on. Each side has a `position-try-fallbacks` so the browser flips it automatically if it would overflow the viewport. |
 | `triggerAriaLabel` | `string` | `""` | aria-label on the trigger button — set this when the `trigger` slot is icon-only. Unset (no attribute) by default, since the trigger slot usually carries its own visible/accessible content. |
-| `popoverAriaLabel` | `string` | `""` | aria-label on the popover content region — set this when the `content` slot has no visible heading. |
-| `closeButtonAriaLabel` | `string` | `"Close"` | aria-label on the close button — override for localisation. |
+| `popoverAriaLabel` | `string` | `""` | Names the popover panel and gives it `role="dialog"` (with no label it has no role, since a name on a generic element isn't announced) — set this when the `content` slot has no visible heading. |
+| `closeButtonAriaLabel` | `string` | `"Close"` | The close button's accessible name (its `aria-label` and its visually hidden button text) — override for localisation. |
+| `closeIcon` | `string` | `"lucide:x"` | Iconify name for the close button icon. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root element. |
 
 ## Slots
@@ -80,11 +81,20 @@ the only source of space above/below the slotted content — a plain `<p>` doesn
   does the same in JS. The trigger has `aria-expanded` in every browser.
 - On open, focus moves to the close button (the composable's `onOpen`) so keyboard users land
   inside the panel immediately.
+- The close button is an icon-only `InputButton variant="inline"` with class
+  `pop-over-close-button`, pinned to the panel's block-start/inline-end corner, so it sits top left
+  in right-to-left text. The content slot's top padding keeps content clear of it.
+- The panel is never wider than the viewport minus `3.2rem` (whatever `--pop-over-width` says) or
+  taller than `--pop-over-max-block-size` (default `calc(100dvh - 3.2rem)`); taller content scrolls
+  inside the panel. Unbroken strings in the trigger and panel wrap (`overflow-wrap: anywhere`).
 
 ## CSS custom properties
 
 See `CONSUMER-STYLING.md` for the full `--pop-over-*` token API (gap, trigger outline, panel
-border/background/text/shadow/width, content padding, and close-button tokens).
+border/background/text/shadow/width/max-height, content padding, and close-button tokens).
+
+No line-clamp tokens: all text arrives through the `trigger` and `content` slots, so the consumer
+clamps it in their own markup.
 
 ## Notes
 
@@ -101,3 +111,7 @@ border/background/text/shadow/width, content padding, and close-button tokens).
   `@position-try` blocks commented out and unused; promoted every hardcoded value to a public CSS
   token; added tests, a Storybook story, this skill doc, and a VS Code snippet (all previously
   missing).
+- 2026-10-19 migration: the close button became an `InputButton variant="inline"` (it was a raw
+  `<button>`) and gained a `closeIcon` prop; it now uses logical insets. The panel caps at the
+  viewport width and height and wraps unbroken strings; the trigger wraps too. Added a
+  `StressTest` story and per-story docs descriptions.

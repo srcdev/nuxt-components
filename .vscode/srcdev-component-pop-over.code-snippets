@@ -40,5 +40,33 @@
       "  </template>",
       "</PopOver>"
     ]
+  },
+  "SRCDEV PopOver Localised Close": {
+    "description": "PopOver with a localised close label and a custom close icon",
+    "scope": "vue,html",
+    "body": [
+      "<PopOver close-button-aria-label=\"${1:Close}\" close-icon=\"${2:lucide:x}\">",
+      "  <template #trigger>",
+      "    <span>$3</span>",
+      "  </template>",
+      "  <template #content>",
+      "    <p>$0</p>",
+      "  </template>",
+      "</PopOver>"
+    ]
+  },
+  "SRCDEV PopOver CSS Overrides": {
+    "description": "Unlayered CSS override scaffold for PopOver public tokens",
+    "scope": "css,vue",
+    "body": [
+      ".${1:my-section} {",
+      "  --pop-over-width: ${2:30rem};",
+      "  --pop-over-gap: ${3:1rem};",
+      "  --pop-over-background-colour: ${4:var(--slate-00)};",
+      "  --pop-over-text-colour: ${5:var(--slate-09)};",
+      "  --pop-over-border-colour: ${6:var(--slate-02)};",
+      "  --pop-over-content-padding: ${7:1.6rem};$0",
+      "}"
+    ]
   }
 }

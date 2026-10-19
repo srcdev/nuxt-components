@@ -28,21 +28,25 @@
         :class="{ 'pop-over-popover-open': usesFallbackPopover && isOpen }"
         :style="positionStyle"
         :data-placement="popoverPlacement"
+        :role="popoverAriaLabel ? 'dialog' : undefined"
         :aria-label="popoverAriaLabel || undefined"
         @beforetoggle="handleBeforeToggle"
         @toggle="handleToggle"
       >
-        <button
-          ref="closeButtonRef"
+        <InputButton
+          type="button"
+          variant="inline"
           :popovertarget="popoverId"
           popovertargetaction="hide"
-          type="button"
-          class="pop-over-close-button"
+          :button-text="closeButtonAriaLabel"
           :aria-label="closeButtonAriaLabel"
+          style-class-passthrough="pop-over-close-button"
           @click="hide"
         >
-          <Icon name="lucide:x" class="pop-over-close-button-icon" aria-hidden="true" />
-        </button>
+          <template #iconOnly>
+            <Icon :name="closeIcon" class="pop-over-close-button-icon" aria-hidden="true" />
+          </template>
+        </InputButton>
         <div class="pop-over-content">
           <slot name="content"></slot>
         </div>
@@ -56,10 +60,12 @@ interface Props {
   placement?: "top" | "right" | "bottom" | "left";
   /** aria-label on the trigger button — set this when the trigger slot is icon-only. */
   triggerAriaLabel?: string;
-  /** aria-label on the popover content region — set this when the content slot has no visible heading. */
+  /** Names the panel and gives it role="dialog"; set this when the content slot has no visible heading. */
   popoverAriaLabel?: string;
   /** aria-label on the close button — override for localisation. */
   closeButtonAriaLabel?: string;
+  /** Iconify name for the close button icon. */
+  closeIcon?: string;
   styleClassPassthrough?: string | string[];
 }
 
@@ -68,6 +74,7 @@ const props = withDefaults(defineProps<Props>(), {
   triggerAriaLabel: "",
   popoverAriaLabel: "",
   closeButtonAriaLabel: "Close",
+  closeIcon: "lucide:x",
   styleClassPassthrough: () => [],
 });
 
@@ -78,7 +85,6 @@ const anchorName = `--pop-over-anchor-${id}`;
 const rootRef = ref<HTMLDivElement | null>(null);
 const triggerRef = ref<HTMLButtonElement | null>(null);
 const popoverRef = ref<HTMLDivElement | null>(null);
-const closeButtonRef = ref<HTMLButtonElement | null>(null);
 
 // Focus moves to the close button on open; closing returns it to the trigger in every mode.
 const {
@@ -95,7 +101,7 @@ const {
   triggerRef,
   popoverRef,
   side: () => props.placement,
-  onOpen: () => closeButtonRef.value?.focus(),
+  onOpen: () => popoverRef.value?.querySelector<HTMLElement>(".pop-over-close-button")?.focus(),
 });
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -113,11 +119,14 @@ watch(
   .pop-over {
     display: inline-block;
     position: relative;
+    max-inline-size: 100%;
 
     .pop-over-trigger {
       all: unset;
       cursor: pointer;
       anchor-name: var(--_anchor-name);
+      max-inline-size: 100%;
+      overflow-wrap: anywhere;
       outline: var(--pop-over-trigger-outline-width, 0.1rem) solid transparent;
 
       &:focus-visible {
@@ -141,7 +150,10 @@ watch(
         --pop-over-shadow,
         0 0.4rem 1.6rem rgba(0, 0, 0, 0.12)
       );
-      width: var(--pop-over-width, 30rem);
+      width: min(var(--pop-over-width, 30rem), calc(100vw - 3.2rem));
+      max-block-size: var(--pop-over-max-block-size, calc(100dvh - 3.2rem));
+      overflow-y: auto;
+      overflow-wrap: anywhere;
 
       opacity: 0;
       transition:
@@ -169,8 +181,8 @@ watch(
         all: unset;
         cursor: pointer;
         position: absolute;
-        top: var(--pop-over-close-button-offset, 0.8rem);
-        right: var(--pop-over-close-button-offset, 0.8rem);
+        inset-block-start: var(--pop-over-close-button-offset, 0.8rem);
+        inset-inline-end: var(--pop-over-close-button-offset, 0.8rem);
         display: grid;
         place-items: center;
         width: var(--pop-over-close-button-size, 2.4rem);
@@ -184,6 +196,10 @@ watch(
           background-color: var(--pop-over-close-button-surface-hover, var(--slate-01));
           outline-color: var(--pop-over-close-button-outline-colour-hover, var(--theme-ring));
           outline-offset: 0.1rem;
+        }
+
+        .input-button-icon {
+          margin: 0;
         }
 
         .pop-over-close-button-icon {

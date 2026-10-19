@@ -104,6 +104,16 @@ describe("PopOver", () => {
       expect(wrapper.find(".pop-over-popover").attributes("aria-label")).toBe("Filter options");
     });
 
+    it("has no role without popoverAriaLabel", async () => {
+      wrapper = await createWrapper();
+      expect(wrapper.find(".pop-over-popover").attributes("role")).toBeUndefined();
+    });
+
+    it("has role='dialog' when popoverAriaLabel is given", async () => {
+      wrapper = await createWrapper({ popoverAriaLabel: "Filter options" });
+      expect(wrapper.find(".pop-over-popover").attributes("role")).toBe("dialog");
+    });
+
     it("sets data-placement on the root element", async () => {
       wrapper = await createWrapper({ placement: "top" });
       expect(wrapper.find(".pop-over").attributes("data-placement")).toBe("top");
@@ -132,6 +142,31 @@ describe("PopOver", () => {
       const closeButton = wrapper.find(".pop-over-close-button");
       expect(closeButton.attributes("popovertargetaction")).toBe("hide");
       expect(closeButton.attributes("popovertarget")).toBe(vm.popoverId);
+    });
+
+    it("is an inline InputButton with type='button'", async () => {
+      wrapper = await createWrapper();
+      const closeButton = wrapper.find(".pop-over-close-button");
+      expect(closeButton.classes()).toContain("input-button");
+      expect(closeButton.attributes("data-variant")).toBe("inline");
+      expect(closeButton.attributes("type")).toBe("button");
+    });
+
+    it("renders the close label as visually hidden button text", async () => {
+      wrapper = await createWrapper({ closeButtonAriaLabel: "Dismiss" });
+      const text = wrapper.find(".pop-over-close-button .input-button-text");
+      expect(text.text()).toBe("Dismiss");
+      expect(text.classes()).toContain("sr-only");
+    });
+
+    it("uses lucide:x as the default close icon", async () => {
+      wrapper = await createWrapper();
+      expect(wrapper.find(".pop-over-close-button-icon").classes().join(" ")).toContain("lucide:x");
+    });
+
+    it("uses a custom closeIcon", async () => {
+      wrapper = await createWrapper({ closeIcon: "mdi:close" });
+      expect(wrapper.find(".pop-over-close-button-icon").classes().join(" ")).toContain("mdi:close");
     });
   });
 

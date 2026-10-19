@@ -2,7 +2,11 @@
 
 exports[`PopOver > renders correct HTML structure 1`] = `
 "<div class="pop-over" style="--_anchor-name: --pop-over-anchor-v-0-0;" data-placement="right"><button popovertarget="pop-over-v-0-0" popovertargetaction="toggle" type="button" class="pop-over-trigger" aria-expanded="false"><span>Open</span></button>
-  <div id="pop-over-v-0-0" popover="" class="pop-over-popover"><button popovertarget="pop-over-v-0-0" popovertargetaction="hide" type="button" class="pop-over-close-button" aria-label="Close"><span class="iconify i-lucide:x pop-over-close-button-icon" aria-hidden="true"></span></button>
+  <div id="pop-over-v-0-0" popover="" class="pop-over-popover"><button type="button" data-testid="input-button" data-theme="default" data-variant="inline" data-icon-only="" class="input-button pop-over-close-button" popovertarget="pop-over-v-0-0" popovertargetaction="hide" aria-label="Close">
+      <!--v-if-->
+      <!--v-if--><span class="input-button-text sr-only">Close</span>
+      <!--v-if--><span class="input-button-icon" data-slot="icon-only"><span class="iconify i-lucide:x pop-over-close-button-icon" aria-hidden="true"></span></span>
+    </button>
     <div class="pop-over-content">
       <p>Details</p>
     </div>
