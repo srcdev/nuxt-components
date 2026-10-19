@@ -16,12 +16,10 @@ const useTabs = (
   const currentHoveredTab = ref<HTMLElement>();
 
   type IndicatorKind = "active" | "hovered";
-  // Leading edge (start along the axis) each indicator was last sent to, to tell the direction of a move.
-  const lastStart: Record<IndicatorKind, number | null> = { active: null, hovered: null };
   let coverageFrameId: number | null = null;
   let coverageUntil = 0;
 
-  const transitionMs = () => Math.max(0, Number(toValue(duration)) || 0);
+  const { place: placeEdges } = useSlidingIndicator(tabsNavRef, { axis, duration });
 
   const activeIndex = computed(() => {
     const index = currentActiveTab.value?.dataset.tabIndex;
@@ -144,36 +142,11 @@ const useTabs = (
     activateTab(targetTab);
   };
 
-  /**
-   * Sends an indicator's two edges to its target tab, as insets from the bar's start and end edges
-   * along the axis. On a move, the edge in the direction of travel goes first and the trailing edge
-   * follows one duration later, so the indicator stretches across and then catches up. CSS retargets
-   * each edge from wherever it is, so a quick second move never pulls an edge backwards.
-   * `animate: false` (mount, resize, tab-count change) snaps both edges.
-   */
+  // Edge motion lives in useSlidingIndicator; the CSS reads --_active-* and --_hovered-* off the bar.
   const placeIndicator = (kind: IndicatorKind, animate: boolean) => {
-    const nav = tabsNavRef.value;
     const target = indicatorTarget(kind === "active" ? currentActiveTab.value : currentHoveredTab.value);
-    if (!nav || !target) return;
-
-    const vertical = toValue(axis) === "y";
-    const start = vertical ? target.offsetTop : target.offsetLeft;
-    const size = vertical ? target.offsetHeight : target.offsetWidth;
-    const end = (vertical ? nav.clientHeight : nav.clientWidth) - start - size;
-
-    const previous = lastStart[kind];
-    const ms = animate && previous !== null ? transitionMs() : 0;
-    const forward = previous !== null && start > previous;
-    const backward = previous !== null && start < previous;
-    lastStart[kind] = start;
-
-    nav.style.setProperty(`--_${kind}-duration`, ms + "ms");
-    nav.style.setProperty(`--_${kind}-start-delay`, forward ? ms + "ms" : "0ms");
-    nav.style.setProperty(`--_${kind}-end-delay`, backward ? ms + "ms" : "0ms");
-    nav.style.setProperty(`--_${kind}-start`, start + "px");
-    nav.style.setProperty(`--_${kind}-end`, end + "px");
-
-    if (kind === "active") trackCoverage(ms * 2);
+    const ms = placeEdges(kind, target, animate);
+    if (ms !== null && kind === "active") trackCoverage(ms * 2);
   };
 
   // Marks each visible tab (and the overflow trigger) that the active indicator covers by at least half,

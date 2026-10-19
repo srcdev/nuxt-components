@@ -1,0 +1,37 @@
+{
+  "SRCDEV SlidingToggle": {
+    "description": "SlidingToggle — single-choice segmented radiogroup with a sliding indicator",
+    "scope": "vue,html",
+    "body": [
+      "<SlidingToggle",
+      "  v-model=\"${1:selected}\"",
+      "  :options=\"[",
+      "    { value: '${2:monthly}', label: '${3:Monthly}' },",
+      "    { value: '${4:yearly}', label: '${5:Yearly}' },",
+      "  ]\"",
+      "  aria-label=\"${6:Billing period}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV SlidingToggle Options Variable": {
+    "description": "SlidingToggle bound to an options array, without hover tracking",
+    "scope": "vue,html",
+    "body": [
+      "<SlidingToggle v-model=\"${1:selected}\" :options=\"${2:options}\" aria-label=\"${3:Label}\"${4: :track-hover=\"false\"} />"
+    ]
+  },
+  "SRCDEV SlidingToggle CSS Override": {
+    "description": "Unlayered CSS override scaffold for SlidingToggle tokens",
+    "scope": "css,vue",
+    "body": [
+      ".${1:my-section} {",
+      "  --sliding-toggle-surface: ${2:var(--theme-surface-subtle)};",
+      "  --sliding-toggle-indicator-surface: ${3:var(--theme-on-surface)};",
+      "  --sliding-toggle-marker-colour: ${4:var(--theme-accent)};",
+      "  --sliding-toggle-option-flex: ${5|0 1 auto,1 1 0|};",
+      "  --sliding-toggle-corner-shape: ${6|round,squircle,superellipse(3),bevel,scoop,notch|};",
+      "  --sliding-toggle-indicator-stretch: ${7|1,0|};$0",
+      "}"
+    ]
+  }
+}

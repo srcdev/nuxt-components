@@ -137,6 +137,10 @@ source order when the list changes.
 
 ## Indicator motion: edge insets (2026-10-08)
 
+> **Changed 2026-10-19**: the edge maths moved into `useSlidingIndicator` (`composable-sliding-indicator.md`),
+> shared with `SlidingToggle`. `useTabs.placeIndicator` now calls it and keeps the label-coverage
+> tracking. Under `prefers-reduced-motion` the indicators now snap instead of sliding.
+
 `useTabs.placeIndicator(kind, animate)` writes each indicator's two edges as insets from the
 bar's start/end along the axis (`--_{kind}-start` / `--_{kind}-end`), and the CSS transitions
 `left`/`right` (or `top`/`bottom`) separately. Moving forward, the start edge gets a delay of one
@@ -145,9 +149,10 @@ and the trailing edge catches up: the same stretch effect as before, symmetric b
 settle timer. CSS retargets each edge from its current position, so a quick second move can't
 pull an edge backwards. Hover and active have separate duration/delay variables.
 
-`--tabs-hover-indicator-stretch` (default `1`) multiplies the hover pair's two edge delays in CSS,
-so `0` turns the hover stretch into a plain slide (both edges move together over the same
-duration). The active indicator and underline always stretch.
+`--tabs-indicator-stretch` (default `1`) multiplies every indicator's two edge delays in CSS, so `0`
+turns the stretch into a plain slide (both edges move together over the same duration) for the
+hover, active and underline indicators alike. Renamed 2026-10-19 from `--tabs-hover-indicator-stretch`,
+which covered the hover pair only.
 
 This replaced a `translate` + `scale` model (a bar-wide box translated to the tab's left and
 scaled to its width, plus a timeout to settle after a stretch, and one shared

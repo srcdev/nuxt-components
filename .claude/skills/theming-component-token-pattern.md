@@ -129,6 +129,24 @@ Prefer this over a prop: line count is presentation, and CSS handles it without 
   layout around it.
 - Document it in `CONSUMER-STYLING.md` with its default and the `1`/`none` options.
 
+## Corner shape tokens
+
+`corner-shape` (CSS Borders 4: `squircle`, `superellipse(n)`, `bevel`, `scoop`, `notch`, default
+`round`) reshapes the curve that `border-radius` draws. Give a component that wants it one public
+token, `--<component>-corner-shape`, defaulting to `round`, and read it on every element that has a
+radius so they stay in step:
+
+```css
+.sliding-toggle,
+.sliding-toggle-option {
+  corner-shape: var(--sliding-toggle-corner-shape, round);
+}
+```
+
+It's a progressive enhancement (Chromium 139+ when added on 2026-10-19): other browsers drop the
+declaration and keep the `border-radius` corners, so never rely on it for layout or meaning. Label
+it as Chromium-only in `CONSUMER-STYLING.md`. `SlidingToggle` is the first user.
+
 ## Text over an image: scrim tokens
 
 Any component that puts text over a photo (a header in a picture, a card title on its image) gets

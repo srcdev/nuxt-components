@@ -58,7 +58,7 @@ box.
 | `--tabs-underline-indicator-height` | `0.4rem` | Thickness of the underline (`axis="x"`), also its width on `axis="y"` |
 | `--tabs-hover-underline-indicator-colour` | `--tabs-underline-indicator-colour` | Colour of the thin underline/sideline that follows the hovered tab (`trackHover` and `trackIndicator`) |
 | `--tabs-hover-underline-indicator-height` | `0.1rem` | Its thickness; `0` hides it. Sits under the active underline where they overlap |
-| `--tabs-hover-indicator-stretch` | `1` | Stretch of the hover highlight and hover underline as they move: `1` stretches (leading edge first, trailing edge catches up), `0` slides both edges together. Values in between shorten the stretch |
+| `--tabs-indicator-stretch` | `1` | Stretch of every indicator (hover, active and both underlines) as it moves: `1` stretches (leading edge first, trailing edge catches up), `0` slides both edges together. Values in between shorten the stretch |
 
 ### More menu (`overflowMode="menu"`, `axis="x"`)
 
@@ -100,7 +100,7 @@ insets from the bar's start and end along the axis), `--_{kind}-duration`,
 `--_{kind}-start-delay` / `--_{kind}-end-delay`; each indicator reads them through its own
 `--_start` / `--_end` / `--_duration` / `--_start-delay` / `--_end-delay`. Not public API; use the
 `transitionDuration` prop for indicator speed (one edge moves for that long, then the other), and
-`--tabs-hover-indicator-stretch` to turn the hover stretch off. The More menu also uses
+`--tabs-indicator-stretch` to turn the stretch off. The More menu also uses
 `--_anchor-name` (a per-instance anchor name) and the `--_anchor-*` position values
 `useAnchoredPopover` writes for browsers without CSS anchor positioning.
 
@@ -166,6 +166,19 @@ before.
 > **Changed 2026-10-08**: passed-over labels used to keep their resting colour while the active
 > highlight slid under them (dark on dark), and the selected tab turned light before the
 > highlight arrived (light on light).
+
+---
+
+## Indicator motion and reduced motion
+
+The indicators slide with `useSlidingIndicator` (shared with `SlidingToggle`): the leading edge
+moves first and the trailing edge catches up. Under `prefers-reduced-motion` they snap.
+
+> **Changed 2026-10-19**: the indicators used to slide even under `prefers-reduced-motion`.
+>
+> **Changed 2026-10-19**: `--tabs-hover-indicator-stretch` (hover only) is now
+> `--tabs-indicator-stretch` and covers the active indicator and underline too. Rename it in your
+> CSS; `0` now turns the stretch off for every indicator.
 
 ---
 
