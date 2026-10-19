@@ -1,7 +1,7 @@
 {
   "name": "srcdev-nuxt-components",
   "type": "module",
-  "version": "9.6.14",
+  "version": "9.6.15",
   "main": "nuxt.config.ts",
   "types": "types.d.ts",
   "license": "MIT",
