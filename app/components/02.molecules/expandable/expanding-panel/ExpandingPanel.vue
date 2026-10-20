@@ -2,9 +2,9 @@
   <div ref="rootEl" class="expanding-panel" :class="[elementClasses, { 'content-is-on-top': contentIsOnTop }]">
     <details class="expanding-panel-details" :name :open @toggle="onDetailsToggle">
       <summary
-        :id="`id-${name}-trigger`"
+        :id="`${panelId}-trigger`"
         class="expanding-panel-summary"
-        :aria-controls="`id-${name}-content`"
+        :aria-controls="`${panelId}-content`"
         :aria-expanded="open"
         @click.prevent.stop="handleToggle"
       >
@@ -18,9 +18,9 @@
         </div>
       </summary>
       <div
-        :id="`id-${name}-content`"
+        :id="`${panelId}-content`"
         class="expanding-panel-content"
-        :aria-labelledby="`id-${name}-trigger`"
+        :aria-labelledby="`${panelId}-trigger`"
         role="region"
       >
         <slot name="content"></slot>
@@ -49,6 +49,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const fallbackName = useId();
+const panelId = useId();
 const name = computed(() => props.name || fallbackName);
 const isPanelOpen = defineModel<boolean>({ default: false });
 const animationDurationStr = computed(() => `${props.animationDuration}ms`);
@@ -69,7 +70,7 @@ if (import.meta.dev) {
   // reproducible in Chrome's device-emulation mode since that's still the Blink engine. An
   // earlier @supports-based fallback attempt (2026-08-22) turned out not to reliably kick in
   // either. Prefer ExpandingPanelClassic (or a consumer's own `classic` prop, where offered —
-  // see AccordianCore) for anything that needs to work correctly on real Apple devices today.
+  // see AccordionGroup) for anything that needs to work correctly on real Apple devices today.
   console.warn(
     `ExpandingPanel${props.name ? ` "${props.name}"` : ""}: this variant depends on ` +
       "::details-content, which WebKit (Safari/iOS) does not support — the animation and, more " +
@@ -110,6 +111,8 @@ const onDetailsToggle = (event: Event) => {
 <style lang="css">
 @layer components {
   .expanding-panel {
+    overflow-wrap: anywhere;
+
     .expanding-panel-details {
       &:hover {
         cursor: pointer;
@@ -117,7 +120,7 @@ const onDetailsToggle = (event: Event) => {
       .expanding-panel-summary {
         display: grid;
         align-items: center;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: minmax(0, 1fr) auto;
         gap: var(--expanding-panel-summary-gap, 1rem);
         list-style: none;
         user-select: none;
@@ -133,6 +136,8 @@ const onDetailsToggle = (event: Event) => {
 
         .label-wrapper {
           display: inline-block;
+          min-inline-size: 0;
+          overflow-wrap: anywhere;
         }
         /* inline-size is reserved explicitly — the grid's align-items:center
            doesn't stretch this item to row height, so with only aspect-ratio:1

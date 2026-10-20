@@ -4,7 +4,7 @@
 
 **Prefer [`ExpandingPanel`](expanding-panel.md) unless you have a concrete reason not to.** `ExpandingPanelClassic` is the pre-`::details-content` implementation, kept only as a fallback for consumers who need the open/close animation to work identically in every browser today (its `grid-template-rows: 0fr → 1fr` sibling trick has no Baseline-2025 feature dependency). `ExpandingPanel` looks and behaves identically everywhere too — the only difference is that its animation degrades to an instant (unanimated) open/close in browsers without `interpolate-size` support (Chromium only, as of 2026), where this component still animates.
 
-`ExpandingPanelClassic` is a single expand/collapse panel built on the native `<details>`/`<summary>` element. It animates open/close via a CSS grid-template-rows trick, supports `v-model` for controlled state, and can be locked open with `forceOpened`. Multiple panels can be grouped into a native accordion by sharing the same `name` prop (see `AccordianCore`).
+`ExpandingPanelClassic` is a single expand/collapse panel built on the native `<details>`/`<summary>` element. It animates open/close via a CSS grid-template-rows trick, supports `v-model` for controlled state, and can be locked open with `forceOpened`. Multiple panels can be grouped into a native accordion by sharing the same `name` prop (see `AccordionGroup`).
 
 ---
 
@@ -12,7 +12,7 @@
 
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `name` | `string` | `useId()` | Identifies the panel. Used in ARIA attributes (`id-{name}-trigger`, `id-{name}-content`). If omitted, a unique id is generated automatically. |
+| `name` | `string` | `useId()` | The `<details>` `name`; panels sharing it form an exclusive-open group. Not used for element ids (each panel gets its own `useId()`). If omitted, a unique name is generated automatically. |
 | `animationDuration` | `number` | `400` | Expand/collapse transition duration in milliseconds. Pass `0` to disable animation. |
 | `forceOpened` | `boolean` | `false` | When `true`, the panel is always open. The toggle icon is hidden and clicks do not close the panel. |
 | `contentIsOnTop` | `boolean` | `false` | When `true`, the content region is taken out of flow and absolutely positioned directly below the summary, raised above surrounding page content via `z-index` — instead of pushing layout down when it opens. Applies a `content-is-on-top` class to the root `.expanding-panel-classic` element (not the content div). Also enables click-outside-to-close (see below) — not applied when `forceOpened` is `true`. |
@@ -132,11 +132,11 @@ The component wires ARIA automatically from the `name` prop:
 
 | Element | Attribute | Value |
 |---------|-----------|-------|
-| `<summary>` | `id` | `id-{name}-trigger` |
-| `<summary>` | `aria-controls` | `id-{name}-content` |
+| `<summary>` | `id` | `{useId()}-trigger` |
+| `<summary>` | `aria-controls` | `{useId()}-content` |
 | `<summary>` | `aria-expanded` | `true` / `false` |
-| content div | `id` | `id-{name}-content` |
-| content div | `aria-labelledby` | `id-{name}-trigger` |
+| content div | `id` | `{useId()}-content` |
+| content div | `aria-labelledby` | `{useId()}-trigger` |
 | content div | `role` | `region` |
 
 Always supply a meaningful `name` prop when using multiple panels on the same page to avoid duplicate IDs.
@@ -213,9 +213,10 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 
 ## Notes
 
+- 2026-10-20: element ids come from a per-panel `useId()` instead of `name`. Panels sharing a `name` (an exclusive group, ResponsiveHeader's overflow groups) all rendered the same `id-{name}-trigger`/`-content`, so every `aria-controls` pointed at the first panel. The same pass made the summary track `minmax(0, 1fr) auto` and added `overflow-wrap: anywhere` on the root, so a long unbroken summary wraps instead of pushing the caret out of the clipped summary.
 - The open/close animation uses `grid-template-rows: 0fr → 1fr` — no JS height measurement needed.
 - `content-is-on-top` is applied to the root `.expanding-panel-classic` element, not `.expanding-panel-classic-content` — style overrides must scope through it, e.g. `.expanding-panel-classic.my-panel .expanding-panel-classic-content .inner { ... }`.
 - When `forceOpened` is `true`, `open` stays `true` regardless of `v-model`, but `v-model` still updates internally on clicks (useful if you later set `forceOpened` back to `false`).
-- Group panels into a native accordion (only one open at a time) by passing the same `name` to multiple panels or use `AccordianCore` which handles this automatically.
+- Group panels into a native accordion (only one open at a time) by passing the same `name` to multiple panels or use `AccordionGroup` which handles this automatically.
 - Auto-imported in Nuxt — no manual import needed.
 - File: `app/components/02.molecules/expandable/expanding-panel-classic/ExpandingPanelClassic.vue`

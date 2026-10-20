@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { nextTick } from "vue";
+import { nextTick, defineComponent } from "vue";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import type { ComponentPublicInstance } from "vue";
 import ExpandingPanelClassic from "../ExpandingPanelClassic.vue";
@@ -156,18 +156,11 @@ describe("ExpandingPanelClassic", () => {
 
   // ─── ARIA & IDs ───────────────────────────────────────────────────────────
 
-  it("sets id on summary to id-{name}-trigger", async () => {
+  it("points the summary's aria-controls at the content region", async () => {
     const wrapper = await mountSuspended(ExpandingPanelClassic, {
       props: { name: "aria-panel" },
     });
-    expect(wrapper.find("summary").attributes("id")).toBe("id-aria-panel-trigger");
-  });
-
-  it("sets aria-controls on summary to id-{name}-content", async () => {
-    const wrapper = await mountSuspended(ExpandingPanelClassic, {
-      props: { name: "aria-panel" },
-    });
-    expect(wrapper.find("summary").attributes("aria-controls")).toBe("id-aria-panel-content");
+    expect(wrapper.find("summary").attributes("aria-controls")).toBe(wrapper.find(".expanding-panel-classic-content").attributes("id"));
   });
 
   it("sets aria-expanded to false when closed", async () => {
@@ -185,20 +178,11 @@ describe("ExpandingPanelClassic", () => {
     expect(wrapper.find("summary").attributes("aria-expanded")).toBe("true");
   });
 
-  it("sets id on content region to id-{name}-content", async () => {
+  it("labels the content region by its summary", async () => {
     const wrapper = await mountSuspended(ExpandingPanelClassic, {
       props: { name: "aria-panel" },
     });
-    expect(wrapper.find(".expanding-panel-classic-content").attributes("id")).toBe("id-aria-panel-content");
-  });
-
-  it("sets aria-labelledby on content region to id-{name}-trigger", async () => {
-    const wrapper = await mountSuspended(ExpandingPanelClassic, {
-      props: { name: "aria-panel" },
-    });
-    expect(wrapper.find(".expanding-panel-classic-content").attributes("aria-labelledby")).toBe(
-      "id-aria-panel-trigger",
-    );
+    expect(wrapper.find(".expanding-panel-classic-content").attributes("aria-labelledby")).toBe(wrapper.find("summary").attributes("id"));
   });
 
   it("sets role='region' on the content div", async () => {
@@ -482,33 +466,43 @@ describe("ExpandingPanelClassic", () => {
 
   // ─── name prop / useId fallback ───────────────────────────────────────────
 
-  it("uses the provided name in ARIA attributes", async () => {
+  it("builds ids from useId, not from the name", async () => {
     const wrapper = await mountSuspended(ExpandingPanelClassic, {
       props: { name: "my-panel" },
     });
-    expect(wrapper.find("summary").attributes("id")).toBe("id-my-panel-trigger");
-    expect(wrapper.find(".expanding-panel-classic-content").attributes("id")).toBe("id-my-panel-content");
+    expect(wrapper.find("summary").attributes("id")).not.toContain("my-panel");
+    expect(wrapper.find(".expanding-panel-classic-content").attributes("id")).not.toContain("my-panel");
   });
 
   it("generates ARIA ids when no name prop is supplied", async () => {
     const wrapper = await mountSuspended(ExpandingPanelClassic);
     const summaryId = wrapper.find("summary").attributes("id") ?? "";
     const contentId = wrapper.find(".expanding-panel-classic-content").attributes("id") ?? "";
-    expect(summaryId).toMatch(/^id-.+-trigger$/);
-    expect(contentId).toMatch(/^id-.+-content$/);
+    expect(summaryId).toMatch(/^.+-trigger$/);
+    expect(contentId).toMatch(/^.+-content$/);
   });
 
-  it("updates the details name and ARIA ids when the name prop changes after mount", async () => {
+  it("updates the details name when the name prop changes after mount, keeping its ids", async () => {
     const wrapper = await mountSuspended(ExpandingPanelClassic, {
       props: { name: "panel-a" },
     });
+    const summaryId = wrapper.find("summary").attributes("id");
     expect(wrapper.find("details").attributes("name")).toBe("panel-a");
-    expect(wrapper.find("summary").attributes("id")).toBe("id-panel-a-trigger");
 
     await wrapper.setProps({ name: "panel-b" });
 
     expect(wrapper.find("details").attributes("name")).toBe("panel-b");
-    expect(wrapper.find("summary").attributes("id")).toBe("id-panel-b-trigger");
-    expect(wrapper.find(".expanding-panel-classic-content").attributes("id")).toBe("id-panel-b-content");
+    expect(wrapper.find("summary").attributes("id")).toBe(summaryId);
+  });
+
+  it("gives panels that share a name distinct ids", async () => {
+    const Host = defineComponent({
+      components: { ExpandingPanelClassic },
+      template: `<div><ExpandingPanelClassic name="shared"></ExpandingPanelClassic><ExpandingPanelClassic name="shared"></ExpandingPanelClassic></div>`,
+    });
+    const wrapper = await mountSuspended(Host);
+    const ids = wrapper.findAll("[id]").map((el) => el.attributes("id"));
+    expect(ids).toHaveLength(4);
+    expect(new Set(ids).size).toBe(4);
   });
 });

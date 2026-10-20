@@ -91,7 +91,7 @@ predictable pattern (`item-0`, `item-1`, …).
 | Reason to keep `itemCount` | Example |
 
 |---|---|
-| Multiple slot types per item must be grouped into one rendered element | `AccordianCore` — `summary`/`icon`/`content` per `<ExpandingPanel>` |
+| Multiple slot types per item must be grouped into one rendered element | `AccordionGroup` — `summary`/`icon`/`content` per panel |
 | Two parallel loops must stay in sync for aria linking | `TabbedContent` — trigger `<button>` loop + panel `<div>` loop linked by id |
 | `itemCount` drives non-slot logic (z-index, CSS scope, counters) | `WipeAwayVertical` — `z-index: itemCount - key`, `timelineScope` computed |
 | `$slots` inspection per iteration is needed to conditionally render | `StepperList` — checks `$slots[indicator-N]` to toggle class per `<li>` |
@@ -131,7 +131,6 @@ Some components pair multiple slot types per index (e.g. TabbedContent):
 ### Reference components (indexed dynamic slots)
 
 - `app/components/01.atoms/tabbed-content/TabbedContent.vue`
-- `app/components/accordian/AccordianCore.vue`
 - `app/components/02.molecules/stepper-list/StepperList.vue`
 - `app/components/01.atoms/animations/view-timeline/WipeAwayVertical.vue`
 
@@ -200,6 +199,7 @@ No count prop needed — just add slots:
 ### Examples (prefixed slot inference)
 
 - `app/components/02.molecules/profile-section/ProfileSection.vue`
+- `app/components/02.molecules/expandable/accordion-group/AccordionGroup.vue` (three slot kinds per item; count from `item-{n}-summary`)
 
 ---
 

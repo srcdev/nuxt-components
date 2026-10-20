@@ -2,9 +2,9 @@
   <div ref="rootEl" class="expanding-panel-classic" :class="[elementClasses, { 'content-is-on-top': contentIsOnTop }]">
     <details class="expanding-panel-classic-details" :name :open @toggle="onDetailsToggle">
       <summary
-        :id="`id-${name}-trigger`"
+        :id="`${panelId}-trigger`"
         class="expanding-panel-classic-summary"
-        :aria-controls="`id-${name}-content`"
+        :aria-controls="`${panelId}-content`"
         :aria-expanded="open"
         @click.prevent.stop="handleToggle"
       >
@@ -19,9 +19,9 @@
       </summary>
     </details>
     <div
-      :id="`id-${name}-content`"
+      :id="`${panelId}-content`"
       class="expanding-panel-classic-content"
-      :aria-labelledby="`id-${name}-trigger`"
+      :aria-labelledby="`${panelId}-trigger`"
       role="region"
     >
       <div class="inner">
@@ -51,6 +51,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const fallbackName = useId();
+const panelId = useId();
 const name = computed(() => props.name || fallbackName);
 const isPanelOpen = defineModel<boolean>({ default: false });
 const animationDurationStr = computed(() => `${props.animationDuration}ms`);
@@ -98,6 +99,8 @@ const onDetailsToggle = (event: Event) => {
 <style lang="css">
 @layer components {
   .expanding-panel-classic {
+    overflow-wrap: anywhere;
+
     .expanding-panel-classic-details {
       &:hover {
         cursor: pointer;
@@ -105,7 +108,7 @@ const onDetailsToggle = (event: Event) => {
       .expanding-panel-classic-summary {
         display: grid;
         align-items: center;
-        grid-template-columns: 1fr auto;
+        grid-template-columns: minmax(0, 1fr) auto;
         gap: var(--expanding-panel-classic-summary-gap, 1rem);
         list-style: none;
         user-select: none;
@@ -121,6 +124,8 @@ const onDetailsToggle = (event: Event) => {
 
         .label-wrapper {
           display: inline-block;
+          min-inline-size: 0;
+          overflow-wrap: anywhere;
         }
         /* inline-size is reserved explicitly — the grid's align-items:center
            doesn't stretch this item to row height, so with only aspect-ratio:1

@@ -106,7 +106,7 @@ const props = withDefaults(defineProps<Props>(), {
   docsPageNavAriaLabel: "On this page",
   // Defaults to "classic" — the docs/admin nav toggle relies on contentIsOnTop on mobile, and
   // ExpandingPanel's ::details-content-based positioning silently fails on WebKit (Safari/iOS),
-  // making the nav unreachable there. See AccordianCore's own variant prop and CLAUDE.md
+  // making the nav unreachable there. See AccordionGroup's own variant prop and CLAUDE.md
   // pitfall #19 for the full mechanism. "modern" is opt-in.
   panelVariant: "classic",
   styleClassPassthrough: () => [],

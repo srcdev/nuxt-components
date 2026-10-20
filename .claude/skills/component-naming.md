@@ -107,7 +107,7 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | ~~AlertMaskCore~~ | ✅ `AlertMask` (2026-10-17) | - |
 | ~~DisplayTooltipDefined~~ | ✅ `DisplayTooltipRich` (2026-10-18): Material 3 "rich tooltip", the implementation word "Defined" said nothing about what it is | - |
 | CardCore | **decide**: `Card` is single-word and collision-prone; prefer a prefixed name (`Display*`, `Content*`) | yes |
-| AccordianCore | **decide**: also fixes the "Accordian" misspelling; bare `Accordion` is single-word and collision-prone, and it is built on `<details>`/`<summary>` | yes |
+| ~~AccordianCore~~ | ✅ `AccordionGroup` (2026-10-20) | yes |
 | ~~TabsCore~~ | ✅ `TabbedContent` (2026-10-07) | - |
 
 The `input-checkbox` family also has `MultipleCheckboxes`/`SingleCheckbox` on top of the Core; look

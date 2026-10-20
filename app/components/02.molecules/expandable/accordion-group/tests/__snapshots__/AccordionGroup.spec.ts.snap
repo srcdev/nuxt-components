@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AccordionGroup > renders correct HTML structure 1`] = `
+"<div class="accordion-group">
+  <div class="expanding-panel-classic accordion-group-item">
+    <details class="expanding-panel-classic-details" name="faq">
+      <summary id="v-0-0-1-trigger" class="expanding-panel-classic-summary" aria-controls="v-0-0-1-content" aria-expanded="false">
+        <div class="label-wrapper"><span>Summary 0</span></div>
+        <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></div>
+      </summary>
+    </details>
+    <div id="v-0-0-1-content" class="expanding-panel-classic-content" aria-labelledby="v-0-0-1-trigger" role="region">
+      <div class="inner">
+        <p>Content 0</p>
+      </div>
+    </div>
+  </div>
+  <div class="expanding-panel-classic accordion-group-item">
+    <details class="expanding-panel-classic-details" name="faq">
+      <summary id="v-0-0-3-trigger" class="expanding-panel-classic-summary" aria-controls="v-0-0-3-content" aria-expanded="false">
+        <div class="label-wrapper"><span>Summary 1</span></div>
+        <div class="icon-wrapper"><span>+</span></div>
+      </summary>
+    </details>
+    <div id="v-0-0-3-content" class="expanding-panel-classic-content" aria-labelledby="v-0-0-3-trigger" role="region">
+      <div class="inner">
+        <p>Content 1</p>
+      </div>
+    </div>
+  </div>
+  <div class="expanding-panel-classic accordion-group-item">
+    <details class="expanding-panel-classic-details" name="faq">
+      <summary id="v-0-0-5-trigger" class="expanding-panel-classic-summary" aria-controls="v-0-0-5-content" aria-expanded="false">
+        <div class="label-wrapper"><span>Summary 2</span></div>
+        <div class="icon-wrapper"><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></div>
+      </summary>
+    </details>
+    <div id="v-0-0-5-content" class="expanding-panel-classic-content" aria-labelledby="v-0-0-5-trigger" role="region">
+      <div class="inner">
+        <p>Content 2</p>
+      </div>
+    </div>
+  </div>
+</div>"
+`;

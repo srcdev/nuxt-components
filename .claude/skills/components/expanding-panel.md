@@ -2,11 +2,11 @@
 
 ## Overview
 
-`ExpandingPanel` is a single expand/collapse panel built on the native `<details>`/`<summary>` element. It animates open/close by styling the `::details-content` pseudo-element (the browser's own anonymous box wrapping everything after `<summary>`) where supported, supports `v-model` for controlled state, and can be locked open with `forceOpened`. Multiple panels can be grouped into a native accordion by sharing the same `name` prop (see `AccordianCore`).
+`ExpandingPanel` is a single expand/collapse panel built on the native `<details>`/`<summary>` element. It animates open/close by styling the `::details-content` pseudo-element (the browser's own anonymous box wrapping everything after `<summary>`) where supported, supports `v-model` for controlled state, and can be locked open with `forceOpened`. Multiple panels can be grouped into a native accordion by sharing the same `name` prop (see `AccordionGroup`).
 
 **WebKit (Safari/iOS) does not support `::details-content`** as of 2026-08, confirmed via real-device testing — Chrome's device-emulation mode cannot catch this, since it's still the Blink engine underneath regardless of which browser UI it's simulating. WebKit silently drops the whole rule block: no animation and (more seriously) `content-is-on-top`'s `position: absolute` never applying, so an overlay panel renders in normal document flow and can break the surrounding layout. An `@supports not selector(::details-content)` CSS-only fallback was tried (2026-08-22) but didn't reliably kick in on real devices either and was reverted the same day — **do not reintroduce that approach**.
 
-**The actual fix is component-level, not CSS-level**: every consumer that gave `ExpandingPanel` a choice of implementation now defaults to `ExpandingPanelClassic` instead — see `AccordianCore`'s `variant` prop (default `"classic"`), `ContentDocs`'s `panelVariant` prop (default `"classic"`), and `ResponsiveHeader`/`NavigationItems`'s `panelVariant` prop (default `"classic"`). `ExpandingPanel` itself is unchanged (still `::details-content`-only, no fallback) and logs a `console.warn` in dev mode on every mount warning about this. Reach for `ExpandingPanel` directly, or pass `variant`/`panelVariant: "modern"` to one of the above, only once you've confirmed it's acceptable for your actual audience — it is **not** the safe default anywhere in this library anymore. See pitfall #19 in the repo's `CLAUDE.md` for the full history.
+**The actual fix is component-level, not CSS-level**: every consumer that gave `ExpandingPanel` a choice of implementation now defaults to `ExpandingPanelClassic` instead — see `AccordionGroup`'s `variant` prop (default `"classic"`), `ContentDocs`'s `panelVariant` prop (default `"classic"`), and `ResponsiveHeader`/`NavigationItems`'s `panelVariant` prop (default `"classic"`). `ExpandingPanel` itself is unchanged (still `::details-content`-only, no fallback) and logs a `console.warn` in dev mode on every mount warning about this. Reach for `ExpandingPanel` directly, or pass `variant`/`panelVariant: "modern"` to one of the above, only once you've confirmed it's acceptable for your actual audience — it is **not** the safe default anywhere in this library anymore. See pitfall #19 in the repo's `CLAUDE.md` for the full history.
 
 ---
 
@@ -14,7 +14,7 @@
 
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `name` | `string` | `useId()` | Identifies the panel. Used in ARIA attributes (`id-{name}-trigger`, `id-{name}-content`). If omitted, a unique id is generated automatically. |
+| `name` | `string` | `useId()` | The `<details>` `name`; panels sharing it form an exclusive-open group. Not used for element ids (each panel gets its own `useId()`). If omitted, a unique name is generated automatically. |
 | `animationDuration` | `number` | `400` | Expand/collapse transition duration in milliseconds. Pass `0` to disable animation. |
 | `forceOpened` | `boolean` | `false` | When `true`, the panel is always open. The toggle icon is hidden and clicks do not close the panel. |
 | `contentIsOnTop` | `boolean` | `false` | When `true`, the content region is taken out of flow and absolutely positioned directly below the summary, raised above surrounding page content via `z-index` — instead of pushing layout down when it opens. Applies a `content-is-on-top` class to the root `.expanding-panel` element (not the content div). Also enables click-outside-to-close (see below) — not applied when `forceOpened` is `true`. |
@@ -132,11 +132,11 @@ The component wires ARIA automatically from the `name` prop:
 
 | Element | Attribute | Value |
 |---------|-----------|-------|
-| `<summary>` | `id` | `id-{name}-trigger` |
-| `<summary>` | `aria-controls` | `id-{name}-content` |
+| `<summary>` | `id` | `{useId()}-trigger` |
+| `<summary>` | `aria-controls` | `{useId()}-content` |
 | `<summary>` | `aria-expanded` | `true` / `false` |
-| content div | `id` | `id-{name}-content` |
-| content div | `aria-labelledby` | `id-{name}-trigger` |
+| content div | `id` | `{useId()}-content` |
+| content div | `aria-labelledby` | `{useId()}-trigger` |
 | content div | `role` | `region` |
 
 Always supply a meaningful `name` prop when using multiple panels on the same page to avoid duplicate IDs.
@@ -213,9 +213,10 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 
 ## Notes
 
+- 2026-10-20: element ids come from a per-panel `useId()` instead of `name`. Panels sharing a `name` (an exclusive group, ResponsiveHeader's overflow groups) all rendered the same `id-{name}-trigger`/`-content`, so every `aria-controls` pointed at the first panel. The same pass made the summary track `minmax(0, 1fr) auto` and added `overflow-wrap: anywhere` on the root, so a long unbroken summary wraps instead of pushing the caret out of the clipped summary.
 - The open/close animation targets `::details-content` (`height: 0 → auto`, `overflow: clip`) — no JS height measurement needed. Requires `interpolate-size: allow-keywords` for the height transition itself (Chromium only as of 2026; other browsers with `::details-content` support still toggle correctly, just instantly). WebKit has neither, and there is no automatic fallback — use `ExpandingPanelClassic` (see the Overview section above) for anything that needs to work correctly there.
 - `content-is-on-top` is applied to the root `.expanding-panel` element, not `.expanding-panel-content` — style overrides must scope through it, e.g. `.expanding-panel.my-panel .expanding-panel-content { ... }`.
 - When `forceOpened` is `true`, `open` stays `true` regardless of `v-model`, but `v-model` still updates internally on clicks (useful if you later set `forceOpened` back to `false`).
-- Group panels into a native accordion (only one open at a time) by passing the same `name` to multiple panels or use `AccordianCore` which handles this automatically.
+- Group panels into a native accordion (only one open at a time) by passing the same `name` to multiple panels or use `AccordionGroup` which handles this automatically.
 - Auto-imported in Nuxt — no manual import needed.
 - File: `app/components/02.molecules/expandable/expanding-panel/ExpandingPanel.vue`

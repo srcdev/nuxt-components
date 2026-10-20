@@ -8,12 +8,12 @@ exports[`NavigationItems > renders correct HTML structure with default props 1`]
     <li class="overflow-navigation-item visible" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="2" role="none">
       <div class="expanding-panel-classic overflow-navigation-details">
         <details class="expanding-panel-classic-details" name="overflow-navigation-group">
-          <summary id="id-overflow-navigation-group-trigger" class="expanding-panel-classic-summary" aria-controls="id-overflow-navigation-group-content" aria-expanded="false">
+          <summary id="v-0-0-1-trigger" class="expanding-panel-classic-summary" aria-controls="v-0-0-1-content" aria-expanded="false">
             <div class="label-wrapper"><span class="overflow-navigation-text" aria-label="UI Components submenu" role="menuitem" aria-haspopup="true">UI Components</span></div>
             <div class="icon-wrapper"><span class="iconify i-mdi:chevron-down icon" aria-hidden="true"></span></div>
           </summary>
         </details>
-        <div id="id-overflow-navigation-group-content" class="expanding-panel-classic-content" aria-labelledby="id-overflow-navigation-group-trigger" role="region">
+        <div id="v-0-0-1-content" class="expanding-panel-classic-content" aria-labelledby="v-0-0-1-trigger" role="region">
           <div class="inner">
             <div class="overflow-navigation-sub-nav-inner">
               <ul class="overflow-navigation-sub-nav-list">

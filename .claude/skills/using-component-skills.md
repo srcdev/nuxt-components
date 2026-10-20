@@ -47,7 +47,7 @@ Component skills land in `.claude/skills/srcdev-nuxt-components/components/`:
 │           ├── pricing-card.md         — SaaS pricing plan card
 │           ├── input-copy.md           — copy-to-clipboard input
 │           ├── expanding-panel.md      — single expand/collapse panel
-│           ├── accordian-core.md       — native accordion (grouped panels)
+│           ├── accordion-group.md      — native accordion (grouped panels)
 │           ├── display-avatar.md       — circular avatar component
 │           ├── card-core.md            — generic card container
 │           ├── auto-grid.md            — responsive auto-fit grid

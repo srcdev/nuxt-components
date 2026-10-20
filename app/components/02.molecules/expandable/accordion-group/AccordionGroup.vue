@@ -1,22 +1,21 @@
 <template>
-  <div class="display-accordian" :class="[elementClasses]">
+  <div class="accordion-group" :class="elementClasses">
     <component
       :is="panelComponent"
-      v-for="(item, key) in itemCount"
-      :key="key"
+      v-for="index in panelIndexes()"
+      :key="index"
       :name
       :animation-duration="animationDuration"
-      icon-size="medium"
-      :style-class-passthrough="['accordian-item']"
+      :style-class-passthrough="['accordion-group-item']"
     >
       <template #summary>
-        <slot :name="`accordian-${key}-summary`"></slot>
+        <slot :name="`item-${index}-summary`"></slot>
       </template>
-      <template #icon>
-        <slot :name="`accordian-${key}-icon`"></slot>
+      <template v-if="slots[`item-${index}-icon`]" #icon>
+        <slot :name="`item-${index}-icon`"></slot>
       </template>
       <template #content>
-        <slot :name="`accordian-${key}-content`"></slot>
+        <slot :name="`item-${index}-content`"></slot>
       </template>
     </component>
   </div>
@@ -28,36 +27,49 @@ import ExpandingPanelClassic from "../expanding-panel-classic/ExpandingPanelClas
 
 interface Props {
   name?: string;
-  itemCount?: number;
   animationDuration?: number;
   variant?: "modern" | "classic";
   styleClassPassthrough?: string | string[];
 }
 
-// Defaults to "classic" (not "modern") — ExpandingPanel's animation/positioning relies on
-// ::details-content, which WebKit (Safari/iOS) doesn't support (see ExpandingPanel's own dev-mode
-// warning and CLAUDE.md pitfall #19). "modern" is opt-in for consumers who've confirmed it works
-// for their audience, not the safe default.
+// "classic" by default: "modern" relies on ::details-content, which WebKit lacks (pitfall #19).
 const props = withDefaults(defineProps<Props>(), {
   name: undefined,
-  itemCount: 0,
   animationDuration: 300,
   variant: "classic",
   styleClassPassthrough: () => [],
 });
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+const slots = useSlots();
+const SUMMARY_SLOT = /^item-(\d+)-summary$/;
+
+const panelIndexes = () =>
+  Object.keys(slots)
+    .map((slotName) => SUMMARY_SLOT.exec(slotName)?.[1])
+    .filter((index): index is string => index !== undefined)
+    .map(Number)
+    .sort((a, b) => a - b);
+
 const animationDurationStr = computed(() => `${props.animationDuration}ms`);
 const panelComponent = computed(() => (props.variant === "classic" ? ExpandingPanelClassic : ExpandingPanel));
+
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.styleClassPassthrough,
+  () => {
+    resetElementClasses(props.styleClassPassthrough);
+  }
+);
 </script>
 
 <style lang="css">
 @layer components {
-  .display-accordian {
-    max-width: 600px;
-    margin: 0 auto;
+  .accordion-group {
+    max-inline-size: var(--accordion-group-max-width, 60rem);
+    margin-inline: auto;
 
-    .accordian-item {
+    .accordion-group-item {
       &.expanding-panel,
       &.expanding-panel-classic {
         transition:

@@ -93,6 +93,7 @@ visual style, pass a modifier class:
 
 ## Notes
 
+- Long unbroken summaries wrap (`overflow-wrap: anywhere` on the root, summary track `minmax(0, 1fr) auto`) rather than pushing the icon out of the clipped summary. Changed 2026-10-20.
 - `--expanding-panel-content-gap` and `--expanding-panel-content-z-index` only take effect when
   `contentIsOnTop` is `true` — they're no-ops for the default (in-flow) layout.
 - `background-color`, `padding`, `border`, and shadow are all safe to set directly on

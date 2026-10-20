@@ -4,10 +4,19 @@ import type { Meta, StoryObj } from "@nuxtjs/storybook";
 const meta: Meta<typeof ExpandingPanelClassic> = {
   title: "Molecules/Expandable/Expanding Panel Classic",
   component: ExpandingPanelClassic,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "A single expand/collapse panel on native <details>/<summary>. To render a set of these from slots, optionally exclusive-open, use " +
+          "[AccordionGroup](?path=/story/molecules-expandable-accordiongroup--exclusive-open), which renders this panel for every item when `variant=\"classic\"`.",
+      },
+    },
+  },
   argTypes: {
     name: {
       control: { type: "text" },
-      description: "Unique name used for ARIA attributes and to group panels in a native <details> accordion",
+      description: "The <details> name: panels sharing it form an exclusive-open group. Element ids come from useId(), not from this.",
     },
     animationDuration: {
       control: { type: "number", min: 0, step: 50 },

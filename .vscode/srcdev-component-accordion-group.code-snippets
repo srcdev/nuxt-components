@@ -1,0 +1,38 @@
+{
+  "SRCDEV AccordionGroup": {
+    "description": "AccordionGroup with item-{n}-summary/content slots; a shared name makes it exclusive-open",
+    "scope": "vue,html",
+    "body": [
+      "<AccordionGroup name=\"${1:faq}\">",
+      "  <template #item-0-summary>${2:Question one?}</template>",
+      "  <template #item-0-content><p>${3:Answer one.}</p></template>",
+      "",
+      "  <template #item-1-summary>${4:Question two?}</template>",
+      "  <template #item-1-content><p>${5:Answer two.}</p></template>",
+      "</AccordionGroup>"
+    ]
+  },
+  "SRCDEV AccordionGroup Looped": {
+    "description": "AccordionGroup driven by an array via dynamic item-{n} slot names",
+    "scope": "vue,html",
+    "body": [
+      "<AccordionGroup name=\"${1:faq}\">",
+      "  <template v-for=\"(item, i) in ${2:items}\" :key=\"`s\\${i}`\" #[`item-\\${i}-summary`]>{{ item.${3:question} }}</template>",
+      "  <template v-for=\"(item, i) in ${2:items}\" :key=\"`c\\${i}`\" #[`item-\\${i}-content`]><p>{{ item.${4:answer} }}</p></template>",
+      "</AccordionGroup>"
+    ]
+  },
+  "SRCDEV AccordionGroup CSS Override": {
+    "description": "AccordionGroup width and panel divider overrides scoped to a page or section class",
+    "scope": "css",
+    "body": [
+      ".${1:faq-section} {",
+      "  --accordion-group-max-width: ${2:72rem};",
+      "",
+      "  .accordion-group-item:not(:last-child) {",
+      "    border-block-end: 0.1rem solid ${3:var(--theme-border)};",
+      "  }",
+      "}"
+    ]
+  }
+}
