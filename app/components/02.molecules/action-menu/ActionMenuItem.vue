@@ -66,7 +66,7 @@ watch(
     box-sizing: border-box;
     cursor: pointer;
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
 
     width: 100%;
@@ -105,9 +105,12 @@ watch(
 
     .action-menu-item-label {
       grid-column: 2;
-      white-space: nowrap;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
       overflow: hidden;
-      text-overflow: ellipsis;
+      overflow-wrap: anywhere;
+      -webkit-line-clamp: var(--action-menu-item-label-line-clamp, none);
+      line-clamp: var(--action-menu-item-label-line-clamp, none);
     }
 
     .action-menu-item-arrow {

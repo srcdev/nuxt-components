@@ -29,6 +29,7 @@ All `--action-menu-*` tokens are the stable override surface. Action menus repea
 | `--action-menu-popover-border` | `0.1rem solid var(--slate-03)` | Menu panel border shorthand |
 | `--action-menu-popover-border-radius` | `0.8rem` | Menu panel corner rounding |
 | `--action-menu-popover-min-width` | `20rem` | Minimum menu width |
+| `--action-menu-popover-max-width` | `min(32rem, calc(100vw - 3.2rem))` | Maximum menu width; longer labels wrap |
 | `--action-menu-popover-shadow` | `0 0.4rem 1.6rem rgba(0, 0, 0, 0.1)` | Menu panel drop shadow |
 | `--action-menu-popover-transition-duration` | `200ms` | Open/close fade duration |
 | `--action-menu-popover-z-index` | `999999` | Stacking order in browsers without CSS anchor positioning (see Positioning). Ignored where the popover renders in the top layer |
@@ -45,6 +46,12 @@ All `--action-menu-*` tokens are the stable override surface. Action menus repea
 | `--action-menu-item-gap` | `1.2rem` | Space between icon, label and arrow |
 | `--action-menu-item-padding-inline` | `1.6rem` | Row horizontal padding |
 | `--action-menu-item-padding-block` | `1.2rem` | Row vertical padding |
+| `--action-menu-item-label-line-clamp` | `none` | Caps the label at this many lines with an ellipsis (`1` is single-line ellipsis, `none` shows it all) |
+
+> Changed 2026-10-20: labels used to stay on one line and widen the menu without limit, so a long
+> label pushed it past a phone screen. The menu now stops at `--action-menu-popover-max-width` and
+> labels wrap; set `--action-menu-item-label-line-clamp: 1` for the old single-line look with an
+> ellipsis. `--action-menu-popover-max-width` and `--action-menu-item-label-line-clamp` are new.
 
 > Changed 2026-09-27: item `light-dark()` defaults replaced by their light values (older iPad
 > Safari lacks `light-dark()`), matching the already-light panel. Icon sizes are applied as
@@ -79,8 +86,8 @@ Inner classes: `.action-menu-trigger`, `.action-menu-trigger-icon`, `.action-men
 ## Positioning
 
 The menu uses the Popover API plus CSS anchor positioning: it opens below the trigger,
-right-aligned, and flips above near the bottom of the viewport (`position-try-fallbacks:
-flip-block`).
+right-aligned, and flips above near the bottom of the viewport and to open rightwards near the left
+edge (`position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline`).
 
 Fallbacks, via the shared `useAnchoredPopover` composable:
 
@@ -148,5 +155,5 @@ doesn't rely on it for its defaults.
 ## Notes
 
 - Negative `--action-menu-block-distance` values make the menu overlap the trigger.
-- `--action-menu-popover-min-width` is a floor; long labels widen the menu. Set
-  `width: max-content` on `.action-menu-popover` to change that.
+- `--action-menu-popover-min-width` is a floor and `--action-menu-popover-max-width` a ceiling;
+  between them the menu sizes to its longest label, and labels wrap at the ceiling.

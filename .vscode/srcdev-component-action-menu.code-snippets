@@ -20,8 +20,8 @@
     "scope": "vue,html",
     "body": [
       "<ActionMenu>",
-      "  <template v-for=\"($1action, $2i) in $3actions\" :key=\"$1action.label\" #[`item-${$2i}`]>",
-      "    <ActionMenuItem :label=\"$1action.label\" :href=\"$1action.href\" @click=\"$1action.onClick\" />",
+      "  <template v-for=\"(action, i) in ${1:actions}\" :key=\"`\\${i}-\\${action.label}`\" #[`item-\\${i}`]>",
+      "    <ActionMenuItem :label=\"action.label\" :href=\"action.href\" @click=\"action.onClick\" />",
       "  </template>",
       "</ActionMenu>"
     ]
@@ -30,7 +30,7 @@
     "description": "CSS override scaffold for ActionMenu tokens",
     "scope": "css",
     "body": [
-      ".$1my-page {",
+      ".${1:my-page} {",
       "  --action-menu-trigger-icon-color: $2;",
       "  --action-menu-popover-background: $3;",
       "  --action-menu-popover-border: $4;",

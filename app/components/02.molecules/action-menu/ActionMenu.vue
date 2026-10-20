@@ -174,6 +174,7 @@ watch(
       background-color: var(--action-menu-popover-background, var(--slate-00));
       border-radius: var(--action-menu-popover-border-radius, 0.8rem);
       min-width: var(--action-menu-popover-min-width, 20rem);
+      max-inline-size: var(--action-menu-popover-max-width, min(32rem, calc(100vw - 3.2rem)));
       box-shadow: var(--action-menu-popover-shadow, 0 0.4rem 1.6rem rgba(0, 0, 0, 0.1));
       overflow: hidden;
 
@@ -181,7 +182,10 @@ watch(
       top: calc(anchor(bottom) + var(--action-menu-block-distance, 0.4rem));
       right: anchor(right);
       left: auto;
-      position-try-fallbacks: flip-block;
+      position-try-fallbacks:
+        flip-block,
+        flip-inline,
+        flip-block flip-inline;
 
       opacity: 0;
       display: none;
@@ -221,7 +225,7 @@ watch(
 
       .action-menu-list {
         display: grid;
-        grid-template-columns: auto 1fr auto;
+        grid-template-columns: auto minmax(0, 1fr) auto;
 
         list-style: none;
         padding: 0;

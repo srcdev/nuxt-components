@@ -141,11 +141,17 @@ Quick reference:
   `items[0]`; `ArrowUp` should focus `items[items.length - 1]`. Without the guard, the modulo
   formula gives `items[n-2]` for `ArrowUp` — the second-to-last item instead of the last.
 - **Right-aligned by default** — the menu's right edge aligns with the trigger's right edge
-  (`right: anchor(right)`). Flips above the trigger near the bottom of the viewport
-  (`position-try-fallbacks: flip-block`).
+  (`right: anchor(right)`). Flips above the trigger near the bottom of the viewport, and opens
+  rightwards from a trigger near the left edge (`position-try-fallbacks: flip-block, flip-inline,
+  flip-block flip-inline`; anchor-positioning browsers only, the JS fallback flips block only).
+- **Width and long labels** — the menu sizes to its longest label between
+  `--action-menu-popover-min-width` (20rem) and `--action-menu-popover-max-width`
+  (`min(32rem, 100vw - 3.2rem)`); labels wrap at the ceiling (`overflow-wrap: anywhere`, label
+  track `minmax(0, 1fr)`). `--action-menu-item-label-line-clamp` (default `none`) caps them. Until
+  2026-10-20 labels were `nowrap` and widened the menu without limit. `StressTest` story.
 - **`anchorName` format** — internally generated as `--action-menu-anchor-{id}` (a valid CSS
   `<dashed-ident>`). Set via a CSS custom property on the root element so both the trigger's
   `anchor-name` and the popover's `position-anchor` can reference the same value.
-- **Dynamic slots stability** — `item-{n}` slots enforce that only `ActionMenuItem` content
-  enters the list; arbitrary HTML inside the popover is not supported and will break the ARIA
-  `menu` / `menuitem` pattern.
+- **One `ActionMenuItem` per slot** — nothing enforces it, but anything else inside an `item-{n}`
+  slot breaks the ARIA `menu` / `menuitem` pattern (keyboard navigation only finds
+  `[role="menuitem"]`).

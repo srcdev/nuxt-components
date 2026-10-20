@@ -2,11 +2,14 @@ import { computed, ref } from "vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import ActionMenu from "../ActionMenu.vue";
 import ActionMenuItem from "../ActionMenuItem.vue";
+import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
+import type { MediaCanvas } from "~/types/components";
 
 // ─── Meta ─────────────────────────────────────────────────────────────────────
 
 interface StoryArgs {
   itemCount?: number;
+  labelLineClamp?: string;
   label?: string;
   triggerIcon?: string;
   styleClassPassthrough?: string | string[];
@@ -17,8 +20,8 @@ const meta: Meta<StoryArgs> = {
   component: ActionMenu,
   argTypes: {
     itemCount: {
-      control: { type: "number", min: 0, max: 8, step: 1 },
-      description: "Number of items to show (story control — not a component prop)",
+      control: { type: "number", min: 0, max: 5, step: 1 },
+      description: "**Story control, not a prop.** Number of items to show (0 to 5, the size of this data set).",
       table: { category: "Content" },
     },
     label: {
@@ -31,6 +34,13 @@ const meta: Meta<StoryArgs> = {
       description: "Icon name for the trigger button",
       table: { category: "Appearance" },
     },
+    labelLineClamp: {
+      control: { type: "select" },
+      options: ["none", "1", "2", "3"],
+      description:
+        "**Story control, not a prop.** Sets `--action-menu-item-label-line-clamp`. In your CSS: `.my-page { --action-menu-item-label-line-clamp: 1; }`",
+      table: { category: "CSS tokens (story only, set in your CSS)" },
+    },
     styleClassPassthrough: {
       table: { disable: true },
     },
@@ -38,6 +48,7 @@ const meta: Meta<StoryArgs> = {
   args: {
     itemCount: 5,
     label: "Open actions menu",
+    labelLineClamp: "none",
     triggerIcon: "lucide:ellipsis",
   },
   parameters: {
@@ -67,6 +78,17 @@ const actionItems = [
   { label: "Delete",     icon: "lucide:trash-2",  href: undefined },
 ] as const;
 
+function useStorySetup(args: StoryArgs) {
+  const componentArgs = computed(() => {
+    const { itemCount: _itemCount, labelLineClamp: _labelLineClamp, ...rest } = args;
+    return rest;
+  });
+  const tokenStyle = computed(() => ({
+    "--action-menu-item-label-line-clamp": args.labelLineClamp || undefined,
+  }));
+  return { args, componentArgs, tokenStyle };
+}
+
 // ─── Stories ──────────────────────────────────────────────────────────────────
 
 /**
@@ -81,13 +103,7 @@ export const Default: Story = {
   render: (args) => ({
     components: { ActionMenu, ActionMenuItem },
     setup() {
-      // `args` is Storybook's own reactive object — read from it directly (`args.x`) inside
-      // these computeds rather than destructuring it into local variables at setup-time, which
-      // would snapshot the values once and stop reflecting later Controls-panel changes.
-      const componentArgs = computed(() => {
-        const { itemCount, ...rest } = args;
-        return rest;
-      });
+      const { componentArgs, tokenStyle } = useStorySetup(args);
       const lastAction = ref<string | null>(null);
       const items = computed(() =>
         actionItems.slice(0, args.itemCount ?? 5).map((item, i) => ({
@@ -95,11 +111,11 @@ export const Default: Story = {
           slotName: `item-${i}`,
         }))
       );
-      return { componentArgs, items, lastAction };
+      return { componentArgs, tokenStyle, items, lastAction };
     },
     template: `
       <div style="padding: 4rem 8rem; display: flex; flex-direction: column; align-items: flex-end; gap: 2rem;">
-        <ActionMenu v-bind="componentArgs">
+        <ActionMenu v-bind="componentArgs" :style="tokenStyle">
           <template v-for="item in items" :key="item.slotName" #[item.slotName]>
             <ActionMenuItem :label="item.label" @click="lastAction = item.label">
               <template #icon>
@@ -128,11 +144,11 @@ export const MixedItems: Story = {
   render: (args) => ({
     components: { ActionMenu, ActionMenuItem },
     setup() {
-      return { args };
+      return useStorySetup(args);
     },
     template: `
       <div style="padding: 4rem 8rem; display: flex; justify-content: flex-end;">
-        <ActionMenu v-bind="args">
+        <ActionMenu v-bind="componentArgs" :style="tokenStyle">
           <template #item-0>
             <ActionMenuItem label="Edit record" @click="() => {}">
               <template #icon><Icon name="lucide:pencil" /></template>
@@ -168,11 +184,11 @@ export const NoIcons: Story = {
   render: (args) => ({
     components: { ActionMenu, ActionMenuItem },
     setup() {
-      return { args };
+      return useStorySetup(args);
     },
     template: `
       <div style="padding: 4rem 8rem; display: flex; justify-content: flex-end;">
-        <ActionMenu v-bind="args">
+        <ActionMenu v-bind="componentArgs" :style="tokenStyle">
           <template #item-0>
             <ActionMenuItem label="Approve" @click="() => {}" />
           </template>
@@ -206,7 +222,7 @@ export const InContext: Story = {
         { name: "Sam Patel",      email: "sam@example.com",     role: "Editor" },
         { name: "Jordan Clarke",  email: "jordan@example.com",  role: "Viewer" },
       ];
-      return { args, users };
+      return { ...useStorySetup(args), users };
     },
     template: `
       <div style="padding: 4rem; max-width: 56rem; margin: 0 auto;">
@@ -234,7 +250,7 @@ export const InContext: Story = {
               flex-shrink: 0;
             "
           >
-            {{ user.name[0] }}
+            {{ Array.from(user.name)[0] }}
           </div>
           <div style="flex: 1; min-width: 0;">
             <p style="margin: 0; font-size: 1.4rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
@@ -245,7 +261,7 @@ export const InContext: Story = {
             </p>
           </div>
           <span style="font-size: 1.2rem; opacity: 0.5; white-space: nowrap;">{{ user.role }}</span>
-          <ActionMenu v-bind="args">
+          <ActionMenu v-bind="componentArgs" :style="tokenStyle">
             <template #item-0>
               <ActionMenuItem label="Edit user" @click="() => {}">
                 <template #icon><Icon name="lucide:pencil" /></template>
@@ -336,4 +352,100 @@ export const ItemCoreStandalone: Story = {
       </div>
     `,
   }),
+};
+
+/**
+ * Stress test: hostile labels and item counts, with triggers at both inline edges.
+ */
+export const StressTest: Story = {
+  name: "Stress Test (Worst-Case Data)",
+  args: {
+    label: "Aktionen für diesen Eintrag öffnen",
+  },
+  render: (args) => ({
+    components: { ActionMenu, ActionMenuItem },
+    setup() {
+      const hostileLabels = [
+        "Donaudampfschifffahrtselektrizitätenhauptbetriebswerkbauunterbeamtengesellschaft",
+        "https://example.com/" + "a-very-long-path-segment-without-spaces".repeat(3),
+        "Diesen Eintrag dauerhaft löschen, einschließlich aller zugehörigen Anhänge und Kommentare",
+        "🎉 Celebrate",
+        "<b>Not bold</b>",
+        "حذف هذا السجل نهائيا",
+        "A",
+      ];
+      const manyItems = Array.from({ length: 12 }, (_, i) => `Action ${i + 1}`);
+      return { ...useStorySetup(args), hostileLabels, manyItems };
+    },
+    template: `
+      <div style="padding: 2.4rem 1.6rem; display: grid; gap: 4rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1.6rem;">
+          <ActionMenu v-bind="componentArgs" :style="tokenStyle">
+            <template v-for="(text, i) in hostileLabels" :key="i" #[\`item-\${i}\`]>
+              <ActionMenuItem :label="text" @click="() => {}">
+                <template #icon><Icon name="lucide:pencil" /></template>
+              </ActionMenuItem>
+            </template>
+          </ActionMenu>
+          <span>Hostile labels: left-edge trigger and right-edge trigger</span>
+          <ActionMenu v-bind="componentArgs" :style="tokenStyle">
+            <template v-for="(text, i) in hostileLabels" :key="i" #[\`item-\${i}\`]>
+              <ActionMenuItem :label="text" href="https://example.com"></ActionMenuItem>
+            </template>
+          </ActionMenu>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1.6rem;">
+          <span>Twelve items</span>
+          <ActionMenu v-bind="componentArgs" :style="tokenStyle">
+            <template v-for="(text, i) in manyItems" :key="i" #[\`item-\${i}\`]>
+              <ActionMenuItem :label="text" @click="() => {}"></ActionMenuItem>
+            </template>
+          </ActionMenu>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1.6rem;">
+          <span>One item</span>
+          <ActionMenu v-bind="componentArgs" :style="tokenStyle">
+            <template #item-0><ActionMenuItem label="Only action" @click="() => {}"></ActionMenuItem></template>
+          </ActionMenu>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 1.6rem;">
+          <span>No items (opens an empty panel, nothing focusable)</span>
+          <ActionMenu v-bind="componentArgs" :style="tokenStyle"></ActionMenu>
+        </div>
+      </div>
+    `,
+  }),
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "mobileCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    initialCanvas: "mobileCanvas",
+    docs: {
+      story: { inline: false, height: "640px" },
+      description: {
+        story:
+          "Open each menu at every canvas width. Long unbroken words and URLs should wrap inside the menu, which never grows past " +
+          "`--action-menu-popover-max-width` (32rem, or the viewport less 3.2rem). The left-edge menu should flip to open rightwards " +
+          "rather than off-screen (CSS anchor positioning browsers). Emoji and HTML-like text render as text, the Arabic label wraps like the rest, " +
+          "twelve items stay keyboard-navigable, and the empty menu opens without errors. Try the line-clamp control to cap labels at 1 to 3 lines.",
+      },
+    },
+  },
 };
