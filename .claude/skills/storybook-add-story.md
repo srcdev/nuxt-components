@@ -313,6 +313,14 @@ prop and try to pass it. Make it unmistakable:
 
 `PriceList.stories.ts` and `GoogleReviews.stories.ts` (line-clamp controls) follow this.
 
+## Dynamic slot names in template strings
+
+A dynamic slot argument can't contain spaces: `` #[`item-${i + 6}-summary`] `` is cut at the first space
+(HTML attribute names end there) and the story fails with "Missing } in template expression". It
+only shows when Storybook renders the story, since the template is a string. Write the expression
+without spaces (`` #[`item-${i}-summary`] ``), or build the names in `setup()` and bind them:
+`#[item.summarySlot]` (AccordionChat's StressTest, 2026-10-20).
+
 ## Docs page
 
 `.storybook/preview.ts` sets `tags: ["autodocs"]` globally (2026-10-14), so every story file gets a

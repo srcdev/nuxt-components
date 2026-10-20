@@ -1,0 +1,40 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AccordionChat > renders correct HTML structure 1`] = `
+"<div class="accordion-chat">
+  <div class="expanding-panel-classic accordion-chat-item">
+    <details class="expanding-panel-classic-details" name="faq">
+      <summary id="v-0-0-1-trigger" class="expanding-panel-classic-summary" aria-controls="v-0-0-1-content" aria-expanded="false">
+        <div class="label-wrapper"><span>Question 0</span></div>
+        <div class="icon-wrapper"><span class="accordion-chat-icon" aria-hidden="true"><span class="iconify i-lucide:plus accordion-chat-icon-glyph" aria-hidden="true"></span></span></div>
+      </summary>
+    </details>
+    <div id="v-0-0-1-content" class="expanding-panel-classic-content" aria-labelledby="v-0-0-1-trigger" role="region">
+      <div class="inner">
+        <div class="accordion-chat-answer"><span class="accordion-chat-avatar" aria-hidden="true">AM</span>
+          <div class="accordion-chat-bubble">
+            <p class="answer-0">Answer 0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="expanding-panel-classic accordion-chat-item">
+    <details class="expanding-panel-classic-details" name="faq">
+      <summary id="v-0-0-3-trigger" class="expanding-panel-classic-summary" aria-controls="v-0-0-3-content" aria-expanded="false">
+        <div class="label-wrapper"><span>Question 1</span></div>
+        <div class="icon-wrapper"><span class="accordion-chat-icon" aria-hidden="true"><span class="iconify i-lucide:plus accordion-chat-icon-glyph" aria-hidden="true"></span></span></div>
+      </summary>
+    </details>
+    <div id="v-0-0-3-content" class="expanding-panel-classic-content" aria-labelledby="v-0-0-3-trigger" role="region">
+      <div class="inner">
+        <div class="accordion-chat-answer"><span class="accordion-chat-avatar" aria-hidden="true">AM</span>
+          <div class="accordion-chat-bubble">
+            <p class="answer-1">Answer 1</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>"
+`;

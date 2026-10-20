@@ -1,0 +1,42 @@
+{
+  "SRCDEV AccordionChat": {
+    "description": "AccordionChat: questions as right-hand bubbles, answers as left-hand bubbles with an avatar",
+    "scope": "vue,html",
+    "body": [
+      "<AccordionChat name=\"${1:faq}\" avatar-label=\"${2:AM}\">",
+      "  <template #item-0-summary>${3:Question one?}</template>",
+      "  <template #item-0-content><p>${4:Answer one.}</p></template>",
+      "",
+      "  <template #item-1-summary>${5:Question two?}</template>",
+      "  <template #item-1-content><p>${6:Answer two.}</p></template>",
+      "</AccordionChat>"
+    ]
+  },
+  "SRCDEV AccordionChat Looped": {
+    "description": "AccordionChat driven by an array via dynamic item-{n} slot names",
+    "scope": "vue,html",
+    "body": [
+      "<AccordionChat name=\"${1:faq}\" avatar-label=\"${2:AM}\">",
+      "  <template v-for=\"(item, i) in ${3:items}\" :key=\"`s\\${i}`\" #[`item-\\${i}-summary`]>{{ item.${4:question} }}</template>",
+      "  <template v-for=\"(item, i) in ${3:items}\" :key=\"`c\\${i}`\" #[`item-\\${i}-content`]><p>{{ item.${5:answer} }}</p></template>",
+      "</AccordionChat>"
+    ]
+  },
+  "SRCDEV AccordionChat CSS Override": {
+    "description": "AccordionChat colour and type tokens scoped to a page or section class",
+    "scope": "css",
+    "body": [
+      ".${1:faq-section} {",
+      "  --accordion-chat-question-surface: ${2:#ececec};",
+      "  --accordion-chat-question-colour: ${3:#1d1d1f};",
+      "  --accordion-chat-question-surface-open: ${4:#1d1d1f};",
+      "  --accordion-chat-question-colour-open: ${5:#ffffff};",
+      "  --accordion-chat-answer-surface: ${6:#ffffff};",
+      "  --accordion-chat-answer-border: ${7:#e6e4e1};",
+      "  --accordion-chat-answer-colour: ${8:#2a2a2c};",
+      "  --accordion-chat-avatar-surface: ${9:#1d1d1f};",
+      "  --accordion-chat-avatar-colour: ${10:#ffffff};",
+      "}"
+    ]
+  }
+}

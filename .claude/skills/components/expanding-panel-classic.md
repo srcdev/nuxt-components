@@ -218,5 +218,6 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 - `content-is-on-top` is applied to the root `.expanding-panel-classic` element, not `.expanding-panel-classic-content` — style overrides must scope through it, e.g. `.expanding-panel-classic.my-panel .expanding-panel-classic-content .inner { ... }`.
 - When `forceOpened` is `true`, `open` stays `true` regardless of `v-model`, but `v-model` still updates internally on clicks (useful if you later set `forceOpened` back to `false`).
 - Group panels into a native accordion (only one open at a time) by passing the same `name` to multiple panels or use `AccordionGroup` which handles this automatically.
+- **Used by:** `AccordionGroup` (`variant="classic"`, the default), `AccordionChat` (restyles the summary as a question bubble and wraps the content in an answer bubble; never touches `.inner`), `ContentDocs`, `ResponsiveHeader` and `NavigationItems` (`panelVariant="classic"`).
 - Auto-imported in Nuxt — no manual import needed.
 - File: `app/components/02.molecules/expandable/expanding-panel-classic/ExpandingPanelClassic.vue`

@@ -9,7 +9,8 @@ const meta: Meta<typeof ExpandingPanelClassic> = {
       description: {
         component:
           "A single expand/collapse panel on native <details>/<summary>. To render a set of these from slots, optionally exclusive-open, use " +
-          "[AccordionGroup](?path=/story/molecules-expandable-accordiongroup--exclusive-open), which renders this panel for every item when `variant=\"classic\"`.",
+          "[AccordionGroup](?path=/story/molecules-expandable-accordiongroup--exclusive-open), which renders this panel for every item when `variant=\"classic\"`. " +
+          "[AccordionChat](?path=/story/molecules-expandable-accordionchat--default) restyles it as a chat: the summary becomes a question bubble and the content an answer bubble.",
       },
     },
   },

@@ -82,6 +82,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── alert-masked-content.md — AlertMaskedContent: AlertContentInner inside AlertMask's SVG mask (accent cut-out border + translucent fill); masked variant for DisplayToast/DisplayPrompt; --alert-masked-content-* colour tokens
     ├── animated-svg-text.md    — AnimatedSvgText: inline SVG stroke-draw-then-fill animation, text slot, CSS token API
     ├── accordion-group.md      — AccordionGroup (renamed from AccordianCore): panels inferred from item-{n}-summary/content/icon slots, exclusive-open via shared name, unique per-panel ids, classic/modern variant, max-width token
+    ├── accordion-chat.md       — AccordionChat: accordion as a chat (question bubbles right, rich answer bubbles left), avatar precedence item-{n}-avatar > #avatar > avatarLabel > none, built on ExpandingPanelClassic, full --accordion-chat-* token API (dark theme via tokens only)
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
     ├── hero-text.md            — HeroText props, usage patterns, styling
     ├── layout-grid-by-cols.md  — LayoutGridByCols dynamic slots (item-{n}), column/gap/collapse props that write public --layout-grid-by-cols-* tokens (CSS-settable), section label
