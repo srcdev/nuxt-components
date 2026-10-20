@@ -1,0 +1,33 @@
+{
+  "SRCDEV SparkleEffect Button": {
+    "description": "SparkleEffect around a pill button (sparkles along its border on hover/focus)",
+    "scope": "vue,html",
+    "body": [
+      "<SparkleEffect :count=\"${1:5}\"${4| continuous,|}>",
+      "  <InputButton button-text=\"${2:Button text}\" variant=\"${3|primary,secondary,tertiary|}\" is-pill />",
+      "</SparkleEffect>"
+    ]
+  },
+  "SRCDEV SparkleEffect Card": {
+    "description": "SparkleEffect around block content with its own corner radius",
+    "scope": "vue,html",
+    "body": [
+      "<SparkleEffect tag=\"div\" radius=\"${1:1.2rem}\" :count=\"${2:7}\">",
+      "  $0",
+      "</SparkleEffect>"
+    ]
+  },
+  "SRCDEV SparkleEffect CSS Override": {
+    "description": "SparkleEffect token overrides scoped to a page or section class",
+    "scope": "css,vue",
+    "body": [
+      ".${1:page-name} {",
+      "  --sparkle-effect-colour: ${2:hsl(260 80% 70%)};",
+      "  --sparkle-effect-size: ${3:0.7rem};",
+      "  --sparkle-effect-blur: ${6:1px};",
+      "  --sparkle-effect-duration: ${4:1.5s};",
+      "  --sparkle-effect-glow-opacity: ${5:0.5};",
+      "}"
+    ]
+  }
+}
