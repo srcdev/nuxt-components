@@ -213,7 +213,7 @@ See [component-local-style-override.md](../component-local-style-override.md) fo
 
 ## Notes
 
-- 2026-10-20: element ids come from a per-panel `useId()` instead of `name`. Panels sharing a `name` (an exclusive group, ResponsiveHeader's overflow groups) all rendered the same `id-{name}-trigger`/`-content`, so every `aria-controls` pointed at the first panel. The same pass made the summary track `minmax(0, 1fr) auto` and added `overflow-wrap: anywhere` on the root, so a long unbroken summary wraps instead of pushing the caret out of the clipped summary.
+- 2026-10-20: element ids come from a per-panel `useId()` instead of `name`. Panels sharing a `name` (an exclusive group, ResponsiveHeader's overflow groups) all rendered the same `id-{name}-trigger`/`-content`, so every `aria-controls` pointed at the first panel. The same pass made the summary track `minmax(0, 1fr) auto` and added `overflow-wrap: anywhere` on the root, so a long unbroken summary wraps instead of pushing the caret out of the clipped summary. The `StressTest` story covers long, RTL, emoji and empty-slot cases.
 - The open/close animation uses `grid-template-rows: 0fr → 1fr` — no JS height measurement needed.
 - `content-is-on-top` is applied to the root `.expanding-panel-classic` element, not `.expanding-panel-classic-content` — style overrides must scope through it, e.g. `.expanding-panel-classic.my-panel .expanding-panel-classic-content .inner { ... }`.
 - When `forceOpened` is `true`, `open` stays `true` regardless of `v-model`, but `v-model` still updates internally on clicks (useful if you later set `forceOpened` back to `false`).

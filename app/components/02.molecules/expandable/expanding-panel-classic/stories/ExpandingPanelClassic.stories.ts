@@ -1,5 +1,8 @@
 import ExpandingPanelClassic from "../ExpandingPanelClassic.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
+import { ref } from "vue";
+import CanvasSwitcher from "../../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
+import type { MediaCanvas } from "~/types/components";
 
 const meta: Meta<typeof ExpandingPanelClassic> = {
   title: "Molecules/Expandable/Expanding Panel Classic",
@@ -300,4 +303,73 @@ export const WithStyleClassPassthrough: Story = {
       </ExpandingPanelClassic>
     `,
   }),
+};
+
+export const StressTest: Story = {
+  name: "Stress Test (Worst-Case Data)",
+  render: (args) => ({
+    components: { ExpandingPanelClassic },
+    setup() {
+      const longUnbroken = "Donaudampfschifffahrtselektrizitätenhauptbetriebswerkbauunterbeamtengesellschaft";
+      const longUrl = "https://example.com/" + "a-very-long-path-segment-without-spaces".repeat(4);
+      const longCopy = "Unsere Behandlungen werden individuell auf Ihre Bedürfnisse abgestimmt, damit Sie sich rundum wohlfühlen. ".repeat(6);
+      return { args, longUnbroken, longUrl, longCopy };
+    },
+    template: `
+      <div style="padding: 1.6rem; display: grid; gap: 1.6rem;">
+        <ExpandingPanelClassic v-bind="args" name="stress-a">
+          <template #summary><span>{{ longUnbroken }}</span></template>
+          <template #content><p style="margin: 0; padding-block: 0.8rem;">{{ longUrl }}</p></template>
+        </ExpandingPanelClassic>
+        <ExpandingPanelClassic v-bind="args" name="stress-a">
+          <template #summary><span>{{ longCopy.slice(0, 220) }}</span></template>
+          <template #content><p style="margin: 0; padding-block: 0.8rem;">{{ longCopy }}</p></template>
+        </ExpandingPanelClassic>
+        <ExpandingPanelClassic v-bind="args">
+          <template #summary><span>🎉 Emoji first, then &lt;b&gt;html&lt;/b&gt; as text</span></template>
+          <template #content><p style="margin: 0; padding-block: 0.8rem;">&lt;script&gt;alert(1)&lt;/script&gt;</p></template>
+        </ExpandingPanelClassic>
+        <ExpandingPanelClassic v-bind="args" dir="rtl">
+          <template #summary><span>سؤال طويل من اليمين إلى اليسار للتحقق من الاتجاه</span></template>
+          <template #content><p style="margin: 0; padding-block: 0.8rem;">إجابة قصيرة.</p></template>
+        </ExpandingPanelClassic>
+        <ExpandingPanelClassic v-bind="args">
+          <template #summary><span>A</span></template>
+        </ExpandingPanelClassic>
+        <ExpandingPanelClassic v-bind="args">
+          <template #content><p style="margin: 0; padding-block: 0.8rem;">No summary slot: only the icon is clickable.</p></template>
+        </ExpandingPanelClassic>
+      </div>
+    `,
+  }),
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "mobileCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    initialCanvas: "mobileCanvas",
+    docs: {
+      story: { inline: false, height: "640px" },
+      description: {
+        story:
+          "Open each panel at every canvas width. The long unbroken summary wraps and the caret stays visible (until 2026-10-20 it pushed the " +
+          "caret out of the clipped summary); long URLs and copy wrap in the content; the first two panels share a name, so opening one closes " +
+          "the other, and each keeps its own ids; emoji and HTML-like text render as text; the RTL panel puts the caret on the left; the " +
+          "single-letter, no-content and no-summary panels keep their shape.",
+      },
+    },
+  },
 };

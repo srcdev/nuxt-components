@@ -52,7 +52,7 @@ All `--action-menu-*` tokens are the stable override surface. Action menus repea
 > label pushed it past a phone screen. The menu now stops at `--action-menu-popover-max-width` and
 > labels wrap; set `--action-menu-item-label-line-clamp: 1` for the old single-line look with an
 > ellipsis. `--action-menu-popover-max-width` and `--action-menu-item-label-line-clamp` are new.
-
+>
 > Changed 2026-09-27: item `light-dark()` defaults replaced by their light values (older iPad
 > Safari lacks `light-dark()`), matching the already-light panel. Icon sizes are applied as
 > `font-size`; the old `width`/`height` on the trigger and arrow icons was silently overridden by

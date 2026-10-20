@@ -121,7 +121,9 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
     template directly to the live object (`v-model="args.modelValue"`, `v-bind="componentArgs"`
     where `componentArgs` is a `computed()` that strips only genuinely non-prop extra args) rather
     than copying values out in `setup()` — a destructure/spread from `args` is only safe when it's
-    inside a `computed()`. The ledger's `story_args_bug` column flags this automatically (any
+    inside a `computed()`. Binding raw `args` (`v-bind="args"`) when the meta has story-only args is the
+    same bug class in a different shape: the extras land on the root as HTML attributes (`ActionMenu`'s
+    `itemcount="5"`, 2026-10-20), and the ledger doesn't see it. The ledger's `story_args_bug` column flags the destructure case automatically (any
     `{...} = args;` spread not wrapped in a `computed()`); still eyeball each story file yourself,
     since a differently-shaped variant of the same mistake may not match that exact heuristic.
 6b. **Stress-test story** — add a `StressTest` story ("Stress Test (Worst-Case Data)") that
@@ -309,6 +311,9 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
     - Element ids come from `useId()`, never from data values (rule `consumer/ids-from-useid.md`).
       Call `useId()` once at setup, never inside a `computed` (`DisplayTooltip`, `DisplayTooltipRich`,
       2026-10-18).
+    - A wrapper forwards a slot to its child only when the consumer filled it
+      (`<template v-if="slots[name]" #icon>`). An always-present `<template #icon>` replaces the child's
+      fallback with nothing: `AccordionGroup` hid the panels' default caret this way until 2026-10-20.
     - A wrapper passes its child only props the child declares. Anything else falls through as an
       HTML attribute on the child's root: `InputTextField` put `label="…"` and
       `error-message="…"` on `.input-text-wrapper` (fixed 2026-10-16). Check the child root's
