@@ -11,8 +11,10 @@ type: reference
 `<details>`/`<summary>`-based fallback for [`DeepExpandingMenu`](deep-expanding-menu.md) — same
 props, same `ResponsiveHeaderNavItem` data shape, same visual result, but built without CSS
 anchor-positioning or the Popover API. Each nav item with `childLinks` renders as a native
-`<details>` element; opening one and clicking outside it closes it again via `@vueuse/core`'s
-`onClickOutside`.
+`<details>` element. Groups in one menu share a per-instance `name` (from `useId()`), so opening
+one closes the others. A click outside the menu (`@vueuse/core` `onClickOutside`), a click
+elsewhere inside it, Escape (focus returns to the group's `<summary>`) or following a child link
+closes the open group.
 
 Prefer `DeepExpandingMenu` unless the modern implementation's browser support isn't acceptable for
 your target audience — see its own docs for the caveat.
@@ -21,7 +23,8 @@ your target audience — see its own docs for the caveat.
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `tag` | `"div" \| "section" \| "nav" \| "ul" \| "ol"` | `"nav"` | Root element tag. |
+| `tag` | `"div" \| "section" \| "nav"` | `"nav"` | Root element tag. `ul`/`ol` were dropped 2026-10-21: the root wraps a `<div>`, so they rendered invalid HTML. |
+| `ariaLabel` | `string` | `undefined` | Accessible name on the root. Set it when the page has more than one `<nav>`. |
 | `navLinks` | `ResponsiveHeaderNavItem[]` | `[]` | Top-level nav items. An item with `path` renders as a direct link; an item with `childLinks` renders as a `<details>` group. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root element. |
 
@@ -53,37 +56,35 @@ const navLinks: ResponsiveHeaderNavItem[] = [
 
 ## CSS custom properties
 
-| Property | Default | Controls |
-|----------|---------|----------|
-| `--deep-expanding-menu-classic-gap` | `1.2rem` | Gap on the root grid |
-| `--deep-expanding-menu-classic-item-gap` | `2.4rem` | Gap between top-level items |
-| `--deep-expanding-menu-classic-link-border-width` | `0.2rem` | Bottom border width on links/toggles |
-| `--deep-expanding-menu-classic-link-padding-block` | `0.8rem` | Vertical padding on links/toggles |
-| `--deep-expanding-menu-classic-link-border-colour-hover` | `var(--blue-10)` | Bottom border colour on hover/focus |
-| `--deep-expanding-menu-classic-icon-size` | `1.2rem` | Caret icon size |
-| `--deep-expanding-menu-classic-panel-offset-top` | `4rem` | Panel offset from the toggle |
-| `--deep-expanding-menu-classic-panel-width` | `20rem` | Panel width below `768px` |
-| `--deep-expanding-menu-classic-panel-width-tablet` | `40rem` | Panel width from `768px` |
-| `--deep-expanding-menu-classic-panel-width-desktop` | `60rem` | Panel width from `1024px` |
-| `--deep-expanding-menu-classic-panel-background-colour` | `white` | Panel background |
-| `--deep-expanding-menu-classic-panel-border-width` | `0.1rem` | Panel border width |
-| `--deep-expanding-menu-classic-panel-border-colour` | `black` | Panel border colour |
-| `--deep-expanding-menu-classic-panel-border-radius` | `1.2rem` | Panel corner radius |
-| `--deep-expanding-menu-classic-panel-shadow` | `0 0 1rem rgba(0, 0, 0, 0.1)` | Panel box-shadow |
-| `--deep-expanding-menu-classic-panel-padding` | `1.2rem` | Panel padding |
-| `--deep-expanding-menu-classic-panel-heading-colour` | `var(--slate-10)` | `childLinksTitle` heading colour |
-| `--deep-expanding-menu-classic-panel-list-gap` | `1.2rem` | Gap between child link grid items |
-| `--deep-expanding-menu-classic-group-link-colour` | `var(--slate-10)` | Child link text colour |
-| `--deep-expanding-menu-classic-group-link-border-colour-hover` | `var(--slate-10)` | Child link bottom border colour on hover/focus |
+Public tokens are all `--deep-expanding-menu-classic-*`: item gap, link border/padding/hover
+colour, focus ring, icon size, and the panel's offset, three container-width tiers, colours,
+border, radius, shadow, padding, heading line clamp, list gap and child link colours. Colours
+default from `--theme-text`, `--theme-border`, `--theme-surface-subtle` and `--theme-ring`. The
+full table with defaults, the prefixed class names and the sizing model are in this component's
+`CONSUMER-STYLING.md`.
 
-See `CONSUMER-STYLING.md` for the full token API.
+## Data handling
+
+- An item with `path` is a link; anything else is a `<details>` group. An empty `path` is a group.
+- A group's heading renders only when `childLinksTitle` is non-empty, and its list only when
+  `childLinks` has items.
+- Child links are keyed on index + name, so duplicate names are safe.
+- Long or unbroken labels wrap, the top-level row wraps onto more lines, and each panel is capped
+  at the menu's width. A panel opens from its toggle's left edge and doesn't flip, so near the
+  right edge it can overrun the menu. The `StressTest` story covers all of these.
 
 ## Notes
 
 - Auto-imported in Nuxt — no manual import needed.
-- Multiple `<details>` groups sharing `name="navigation-group"` means opening one does **not**
-  auto-close siblings (unlike a native accordion) — each group closes independently via
-  click-outside.
+- Until 2026-10-21 every instance used the fixed `name="navigation-group"`, so all menus on a page
+  formed one exclusive group (opening a panel in one menu closed another menu's), and the doc
+  wrongly said siblings didn't auto-close. Click-outside listeners were also bound per group in
+  `onMounted`, so groups added later never closed.
+- 2026-10-21 migration: prefixed every structural class, moved colours to `--theme-*`, panel
+  offset to `calc(100% + 1rem)`, panel widths from viewport `@media` to `@container`, removed
+  the no-op `--deep-expanding-menu-classic-gap` and a `display: flex !important`, added
+  `ariaLabel`, Escape and link-follow closing, a `:focus-visible` ring, `role="list"`, an
+  `aria-hidden` caret, the heading line-clamp token and the `StressTest` story.
 - 2026-09-07 migration: moved from an unplaced top-level folder (was `DeepExpandingMenuOld.vue`)
   into `02.molecules/navigation/deep-expanding-menu-classic/`; converted options-style
   `defineProps` to `interface Props` + `withDefaults`; switched its locally-declared

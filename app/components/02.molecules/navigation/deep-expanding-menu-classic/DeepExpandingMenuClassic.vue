@@ -1,18 +1,34 @@
 <template>
-  <component :is="tag" class="deep-expanding-menu-classic" :class="[elementClasses]">
-    <div class="inner">
+  <component
+    :is="tag"
+    ref="rootRef"
+    class="deep-expanding-menu-classic"
+    :class="[elementClasses]"
+    :aria-label="ariaLabel"
+    @click="closeOtherGroups"
+    @keydown.esc="closeOnEscape"
+  >
+    <div class="deep-expanding-menu-classic-inner">
       <template v-for="(link, key) in navLinks" :key="key">
-        <NuxtLink v-if="link.path" :to="link.path" class="navigation-link">{{ link.name }}</NuxtLink>
-        <details v-else ref="navigationGroupRef" class="navigation-group" name="navigation-group">
-          <summary class="navigation-group-toggle">
-            <span>{{ link.name }}</span>
-            <Icon name="bi:caret-down-fill" class="icon" />
+        <NuxtLink v-if="link.path" :to="link.path" class="deep-expanding-menu-classic-link">{{ link.name }}</NuxtLink>
+        <details v-else class="deep-expanding-menu-classic-group" :name="groupName">
+          <summary class="deep-expanding-menu-classic-group-toggle">
+            <span class="deep-expanding-menu-classic-group-label">{{ link.name }}</span>
+            <Icon name="bi:caret-down-fill" class="deep-expanding-menu-classic-group-icon" aria-hidden="true" />
           </summary>
-          <div class="navigation-group-panel">
-            <h4 class="page-heading-4 mb-6">{{ link.childLinksTitle }}</h4>
-            <ul class="navigation-group-list">
-              <li v-for="childLink in link.childLinks" :key="childLink.name" class="navigation-group-item">
-                <NuxtLink :to="childLink.path" class="navigation-group-link">{{ childLink.name }}</NuxtLink>
+          <div class="deep-expanding-menu-classic-group-panel">
+            <h4 v-if="link.childLinksTitle" class="deep-expanding-menu-classic-group-heading page-heading-4 mb-6">
+              {{ link.childLinksTitle }}
+            </h4>
+            <ul v-if="link.childLinks?.length" class="deep-expanding-menu-classic-group-list" role="list">
+              <li
+                v-for="(childLink, childIndex) in link.childLinks"
+                :key="`${childIndex}-${childLink.name}`"
+                class="deep-expanding-menu-classic-group-item"
+              >
+                <NuxtLink :to="childLink.path" class="deep-expanding-menu-classic-group-link">
+                  {{ childLink.name }}
+                </NuxtLink>
               </li>
             </ul>
           </div>
@@ -27,20 +43,48 @@ import { onClickOutside } from "@vueuse/core";
 import type { ResponsiveHeaderNavItem } from "~/types/components";
 
 interface Props {
-  tag?: "div" | "section" | "nav" | "ul" | "ol";
+  tag?: "div" | "section" | "nav";
   navLinks?: ResponsiveHeaderNavItem[];
+  ariaLabel?: string;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   tag: "nav",
   navLinks: () => [],
+  ariaLabel: undefined,
   styleClassPassthrough: () => [],
 });
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const navigationGroupRef = useTemplateRef<HTMLElement[]>("navigationGroupRef");
+// Per-instance so groups are exclusive within one menu but not across menus.
+const groupName = `deep-expanding-menu-classic-${useId()}`;
+
+const rootRef = ref<HTMLElement | null>(null);
+
+const openGroups = () =>
+  Array.from(rootRef.value?.querySelectorAll<HTMLDetailsElement>("details[open]") ?? []);
+
+const closeOtherGroups = (event: Event) => {
+  const target = event.target as Element | null;
+  const followedLink = !!target?.closest?.("a");
+  openGroups().forEach((group) => {
+    if (followedLink || !target || !group.contains(target)) group.open = false;
+  });
+};
+
+const closeOnEscape = (event: KeyboardEvent) => {
+  const target = event.target as Node | null;
+  const group = openGroups().find((details) => target && details.contains(target));
+  if (!group) return;
+  group.open = false;
+  group.querySelector<HTMLElement>("summary")?.focus();
+};
+
+onClickOutside(rootRef, () => {
+  openGroups().forEach((group) => (group.open = false));
+});
 
 watch(
   () => props.styleClassPassthrough,
@@ -48,36 +92,31 @@ watch(
     resetElementClasses(props.styleClassPassthrough);
   }
 );
-
-onMounted(() => {
-  navigationGroupRef.value?.forEach((element, index) => {
-    onClickOutside(element, () => {
-      navigationGroupRef.value?.[index]?.removeAttribute("open");
-    });
-  });
-});
 </script>
 
 <style lang="css">
 @layer components {
   @layer popover-setup {
     .deep-expanding-menu-classic {
-      container-type: inline-size;
+      container: deep-expanding-menu-classic / inline-size;
       display: grid;
       grid-template-areas: "element-stack";
       align-items: center;
-      gap: var(--deep-expanding-menu-classic-gap, 1.2rem);
 
-      .inner {
+      .deep-expanding-menu-classic-inner {
         grid-area: element-stack;
         display: flex;
+        flex-wrap: wrap;
         gap: var(--deep-expanding-menu-classic-item-gap, 2.4rem);
         align-items: center;
+        min-inline-size: 0;
         z-index: 1;
 
-        .navigation-link,
-        .navigation-group-toggle {
+        .deep-expanding-menu-classic-link,
+        .deep-expanding-menu-classic-group-toggle {
           all: unset;
+          min-inline-size: 0;
+          overflow-wrap: anywhere;
           border-bottom: var(--deep-expanding-menu-classic-link-border-width, 0.2rem) solid transparent;
           padding-block: var(--deep-expanding-menu-classic-link-padding-block, 0.8rem);
 
@@ -87,18 +126,22 @@ onMounted(() => {
           &:focus,
           &:focus-visible {
             cursor: pointer;
-            border-color: var(
-              --deep-expanding-menu-classic-link-border-colour-hover,
-              var(--blue-10)
-            );
+            border-color: var(--deep-expanding-menu-classic-link-border-colour-hover, var(--theme-border));
+          }
+
+          &:focus-visible {
+            outline: var(--deep-expanding-menu-classic-focus-outline-width, 0.2rem) solid
+              var(--deep-expanding-menu-classic-focus-outline-colour, var(--theme-ring, currentcolor));
+            outline-offset: 0.2rem;
           }
         }
 
-        .navigation-group {
+        .deep-expanding-menu-classic-group {
           --_icon-transform: scaleY(1);
 
           display: grid;
           grid-template-areas: "details-stack";
+          min-inline-size: 0;
           z-index: 1;
           position: relative;
 
@@ -111,16 +154,21 @@ onMounted(() => {
             --_icon-transform: scaleY(-1);
           }
 
-          .navigation-group-toggle {
+          .deep-expanding-menu-classic-group-toggle {
             grid-area: details-stack;
 
-            display: flex !important;
+            display: flex;
             align-items: center;
             gap: 1.2rem;
             list-style: none;
 
-            .icon {
+            .deep-expanding-menu-classic-group-label {
+              min-inline-size: 0;
+            }
+
+            .deep-expanding-menu-classic-group-icon {
               display: block;
+              flex-shrink: 0;
               font-size: var(--deep-expanding-menu-classic-icon-size, 1.2rem);
 
               transform: var(--_icon-transform);
@@ -128,51 +176,62 @@ onMounted(() => {
             }
           }
 
-          .navigation-group-panel {
+          .deep-expanding-menu-classic-group-panel {
             display: grid;
             grid-area: details-stack;
             z-index: 2;
             position: absolute;
             inset: auto;
-            top: var(--deep-expanding-menu-classic-panel-offset-top, 4rem);
-            left: 0rem;
+            top: var(--deep-expanding-menu-classic-panel-offset-top, calc(100% + 1rem));
+            left: 0;
             gap: var(--deep-expanding-menu-classic-panel-list-gap, 1.2rem);
 
-            width: var(--deep-expanding-menu-classic-panel-width, 20rem);
+            width: min(var(--deep-expanding-menu-classic-panel-width, 20rem), 100cqi);
 
-            @media screen and (min-width: 768px) {
-              width: var(--deep-expanding-menu-classic-panel-width-tablet, 40rem);
+            @container deep-expanding-menu-classic (min-width: 768px) {
+              width: min(var(--deep-expanding-menu-classic-panel-width-tablet, 40rem), 100cqi);
             }
 
-            @media screen and (min-width: 1024px) {
-              width: var(--deep-expanding-menu-classic-panel-width-desktop, 60rem);
+            @container deep-expanding-menu-classic (min-width: 1024px) {
+              width: min(var(--deep-expanding-menu-classic-panel-width-desktop, 60rem), 100cqi);
             }
 
-            background-color: var(--deep-expanding-menu-classic-panel-background-colour, white);
+            color: var(--deep-expanding-menu-classic-panel-text-colour, var(--theme-text));
+            background-color: var(--deep-expanding-menu-classic-panel-background-colour, var(--theme-surface-subtle));
             border: var(--deep-expanding-menu-classic-panel-border-width, 0.1rem) solid
-              var(--deep-expanding-menu-classic-panel-border-colour, black);
+              var(--deep-expanding-menu-classic-panel-border-colour, var(--theme-border));
             border-radius: var(--deep-expanding-menu-classic-panel-border-radius, 1.2rem);
             box-shadow: var(--deep-expanding-menu-classic-panel-shadow, 0 0 1rem rgba(0, 0, 0, 0.1));
             padding: var(--deep-expanding-menu-classic-panel-padding, 1.2rem);
             overflow: clip;
 
-            h4 {
-              color: var(--deep-expanding-menu-classic-panel-heading-colour, var(--slate-10));
+            .deep-expanding-menu-classic-group-heading {
+              color: var(--deep-expanding-menu-classic-panel-heading-colour, var(--theme-text));
+              overflow-wrap: anywhere;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+              -webkit-line-clamp: var(--deep-expanding-menu-classic-panel-heading-line-clamp, none);
+              line-clamp: var(--deep-expanding-menu-classic-panel-heading-line-clamp, none);
             }
 
-            .navigation-group-list {
+            .deep-expanding-menu-classic-group-list {
               display: grid;
-              grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+              grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr));
               gap: var(--deep-expanding-menu-classic-panel-list-gap, 1.2rem);
+              list-style: none;
               padding-inline-start: 0;
-              margin-block-end: 0.8rem;
+              margin-block: 0 0.8rem;
 
-              .navigation-group-item {
+              .deep-expanding-menu-classic-group-item {
                 display: block;
+                min-inline-size: 0;
 
-                a.navigation-group-link {
+                a.deep-expanding-menu-classic-group-link {
                   display: inline-block;
-                  color: var(--deep-expanding-menu-classic-group-link-colour, var(--slate-10));
+                  max-inline-size: 100%;
+                  overflow-wrap: anywhere;
+                  color: var(--deep-expanding-menu-classic-group-link-colour, var(--theme-text));
                   text-decoration: none;
                   padding-block: 0.8rem;
 
@@ -183,10 +242,7 @@ onMounted(() => {
                   &:hover,
                   &:focus-visible {
                     cursor: pointer;
-                    border-color: var(
-                      --deep-expanding-menu-classic-group-link-border-colour-hover,
-                      var(--slate-10)
-                    );
+                    border-color: var(--deep-expanding-menu-classic-group-link-border-colour-hover, var(--theme-text));
                   }
                 }
               }

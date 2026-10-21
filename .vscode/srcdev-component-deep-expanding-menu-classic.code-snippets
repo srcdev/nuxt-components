@@ -1,9 +1,39 @@
 {
   "SRCDEV DeepExpandingMenuClassic Basic": {
-    "description": "DeepExpandingMenuClassic — <details>-based fallback nav",
+    "description": "DeepExpandingMenuClassic — <details>-based nav",
     "scope": "vue,html",
+    "prefix": "srcdev-deep-expanding-menu-classic",
     "body": [
-      "<DeepExpandingMenuClassic :nav-links=\"$1navLinks\" />"
+      "<DeepExpandingMenuClassic :nav-links=\"${1:navLinks}\" aria-label=\"${2:Main}\" />"
+    ]
+  },
+  "SRCDEV DeepExpandingMenuClassic Nav Links": {
+    "description": "DeepExpandingMenuClassic — navLinks data (ResponsiveHeaderNavItem[])",
+    "scope": "typescript,vue",
+    "prefix": "srcdev-deep-expanding-menu-classic-links",
+    "body": [
+      "const ${1:navLinks}: ResponsiveHeaderNavItem[] = [",
+      "  { name: \"${2:Home}\", path: \"${3:/}\" },",
+      "  {",
+      "    name: \"${4:Services}\",",
+      "    childLinksTitle: \"${5:Our services}\",",
+      "    childLinks: [",
+      "      { name: \"${6:Haircuts}\", path: \"${7:/services/haircuts}\" },",
+      "    ],",
+      "  },",
+      "];"
+    ]
+  },
+  "SRCDEV DeepExpandingMenuClassic Style Override": {
+    "description": "DeepExpandingMenuClassic — unlayered token override scaffold",
+    "scope": "css,vue",
+    "prefix": "srcdev-deep-expanding-menu-classic-css",
+    "body": [
+      ".${1:site-nav} {",
+      "  --deep-expanding-menu-classic-item-gap: ${2:2.4rem};",
+      "  --deep-expanding-menu-classic-panel-background-colour: ${3:var(--theme-surface-subtle)};",
+      "  --deep-expanding-menu-classic-panel-heading-line-clamp: ${4:none};",
+      "}"
     ]
   }
 }

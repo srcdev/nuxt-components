@@ -2,17 +2,17 @@
 
 exports[`DeepExpandingMenuClassic > renders correct HTML structure 1`] = `
 "<nav class="deep-expanding-menu-classic">
-  <div class="inner"><a href="/" class="navigation-link">Home</a>
-    <details class="navigation-group" name="navigation-group">
-      <summary class="navigation-group-toggle"><span>Services</span><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></summary>
-      <div class="navigation-group-panel">
-        <h4 class="page-heading-4 mb-6">Our services</h4>
-        <ul class="navigation-group-list">
-          <li class="navigation-group-item"><a href="/services/haircuts" class="navigation-group-link">Haircuts</a></li>
-          <li class="navigation-group-item"><a href="/services/colouring" class="navigation-group-link">Colouring</a></li>
+  <div class="deep-expanding-menu-classic-inner"><a href="/" class="deep-expanding-menu-classic-link">Home</a>
+    <details class="deep-expanding-menu-classic-group" name="deep-expanding-menu-classic-v-0-0">
+      <summary class="deep-expanding-menu-classic-group-toggle"><span class="deep-expanding-menu-classic-group-label">Services</span><span class="iconify i-bi:caret-down-fill deep-expanding-menu-classic-group-icon" aria-hidden="true"></span></summary>
+      <div class="deep-expanding-menu-classic-group-panel">
+        <h4 class="deep-expanding-menu-classic-group-heading page-heading-4 mb-6">Our services</h4>
+        <ul class="deep-expanding-menu-classic-group-list" role="list">
+          <li class="deep-expanding-menu-classic-group-item"><a href="/services/haircuts" class="deep-expanding-menu-classic-group-link">Haircuts</a></li>
+          <li class="deep-expanding-menu-classic-group-item"><a href="/services/colouring" class="deep-expanding-menu-classic-group-link">Colouring</a></li>
         </ul>
       </div>
-    </details><a href="/contact" class="navigation-link">Contact</a>
+    </details><a href="/contact" class="deep-expanding-menu-classic-link">Contact</a>
   </div>
 </nav>"
 `;
