@@ -108,7 +108,7 @@ See `CONSUMER-STYLING.md` in the component folder.
 
 - **How positioning works**: on mount and on every measured resize, each item is read (`item.
   offsetHeight`) in DOM order and placed at the top of whichever column currently has the least
-  accumulated height, via inline `--_masonry-grid-item-top`/`-item-left`/`-item-width` custom
+  accumulated height, via inline `--_masonry-grid-item-top`/`--_masonry-grid-item-left`/`--_masonry-grid-item-width` custom
   properties the component sets directly (not part of the public token API — these are internal
   positioning state, not a styling surface). Column steps are computed in real pixels
   (`itemWidth + gap`) rather than equal percentage slots of the container — a percentage slot only

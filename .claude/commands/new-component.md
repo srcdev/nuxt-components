@@ -141,7 +141,7 @@ and say why briefly.
 - Run `npm run prepare` (never bare `npx nuxt prepare`) so `.nuxt/components.d.ts` picks up the new
   component, and tell the user to restart Storybook: a running Storybook keeps its startup
   component scan, so the new component renders as an empty unknown element until it restarts.
-- Run the new test file(s), `npx eslint <new files>`, and `npx vue-tsc`.
+- Run the new test file(s) with `npm run test:run -- <path>` (not bare `npx vitest`; rule `test-run-command.md`), `npx eslint <new files>`, and `npx vue-tsc`.
 - Run `node .claude/component-ledger/build.mjs` and check the new component's row in
   `.claude/component-ledger/audit.json` passes as described at the top of the checklist. Fix
   anything it flags before finishing.

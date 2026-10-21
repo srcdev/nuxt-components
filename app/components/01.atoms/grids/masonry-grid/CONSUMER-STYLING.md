@@ -34,8 +34,8 @@ computed in JS from measured pixel values. See `.claude/skills/components/masonr
 
 Element classes: `.masonry-grid` (root), `.masonry-grid-wrapper`, `.masonry-grid-item`.
 
-Private (not public API), set inline by script: `--_masonry-grid-item-position`, `-item-top`,
-`-item-left`, `-item-width` on each tile and `--_masonry-grid-height` on the wrapper.
+Private (not public API), set inline by script: `--_masonry-grid-item-position`,
+`--_masonry-grid-item-top`, `--_masonry-grid-item-left` and `--_masonry-grid-item-width` on each tile and `--_masonry-grid-height` on the wrapper.
 
 > Changed 2026-10-21: the state was the class `.multiple-cols`, and the private tokens were
 > `--_position`, `--_position-top`, `--_position-left`, `--_element-width` and `--_wrapper-height`:

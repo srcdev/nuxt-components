@@ -120,7 +120,7 @@ items. Skip an item only when it genuinely doesn't apply, and say why briefly.
 
 ## 4. Wrap up
 
-- Run the relevant test file(s), `npx eslint <touched files>`, and `npx vue-tsc` (or the project's
+- Run the relevant test file(s) with `npm run test:run -- <path>` (not bare `npx vitest`; rule `test-run-command.md`), `npx eslint <touched files>`, and `npx vue-tsc` (or the project's
   usual type-check command) to confirm nothing broke.
 - If you renamed, added or removed any component `.vue` file (compliance checklist item 13, a flattened
   `variants/` folder, a new wrapper), or added or renamed an export in `app/utils/` or

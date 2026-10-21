@@ -33,7 +33,7 @@ Private (not public API): `--_decode-qr-code-dropzone-border-colour`.
 > width to `0.2rem` (was `2px`), and the active background to `var(--theme-surface-subtle)` (was
 > `transparent`, so dragging gave no feedback beyond the border). The private token was renamed
 > from `--_dropzone-border-colour`.
-
+>
 > Changed 2026-09-28: all of these were hardcoded or missing. DecodeQrCode's root is no longer
 > forced to `aspect-ratio: 1 / 1`.
 
@@ -60,7 +60,7 @@ code is decoded.
 > Changed 2026-10-21: `.decode-qr-code-dropzone.is-dropping` is now `[data-dropping]` (a bare state
 > class could collide with a consumer's own `.is-dropping`), and each result `<li>` lost its inner
 > `<span>` and gained a class.
-
+>
 > Changed 2026-09-28: renamed from `.capture-qr-stream` (root), `.camera-stopped`, `.camera-error`,
 > `.scanned-results`, `.qr-code-capture` and `.qr-code-dropzone`.
 

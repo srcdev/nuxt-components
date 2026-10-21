@@ -313,6 +313,14 @@ prop and try to pass it. Make it unmistakable:
 
 `PriceList.stories.ts` and `GoogleReviews.stories.ts` (line-clamp controls) follow this.
 
+## Where shared story helpers can live
+
+Nowhere shared, so far. Stories ship in the package (`app/` is in `package.json` `files`) but
+`.storybook/` doesn't, so a story importing from `.storybook/` breaks in a consumer's type-check;
+and any `.ts` under `app/components/` is registered as a component (`pathPrefix: false` scan).
+Repeat small fixtures per story instead (the grid `StressTest` stories, 2026-10-21, each carry their
+own oversized-content block).
+
 ## Simulating hardware or library events in a stress story
 
 When a component's data only arrives from hardware or a third-party child (a camera, a file

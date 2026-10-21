@@ -346,6 +346,32 @@ be resolved from the ends and never reaches it. Mount with two items sharing the
 then `setProps` with the first and last items swapped, and assert the rendered labels in order
 (`SkipLinks.spec.ts`). With an `href`-only key that test rendered five links instead of four.
 
+## Stub third-party children that hold shared state
+
+When a component renders a library child whose behaviour the spec doesn't need (the spec drives
+the parent's own handlers), stub the child in the mount helper. Unmounting doesn't isolate a
+library that keeps module-level state: `QrcodeStream` queues every camera start/stop on one shared
+promise chain, so a start left from an earlier test failed mid-test and emitted `error` into the
+next `CaptureQrCode`, but only under full-suite load and only with `SRCDEV_STANDALONE=true`
+(2026-10-21).
+
+```typescript
+const qrcodeStreamStub = { name: "QrcodeStream", emits: ["detect", "error"], template: `<div class="qrcode-stream-stub"></div>` };
+
+const mountCapture = async (options: CaptureMountOptions = {}) => {
+  const wrapper = await mountSuspended(CaptureQrCode, {
+    ...options,
+    global: { ...options?.global, stubs: { QrcodeStream: qrcodeStreamStub, ...options?.global?.stubs } },
+  });
+  mounted.push(wrapper);
+  return wrapper;
+};
+```
+
+Assert against the stub's class, not the component's tag name (see
+`.claude/rules/test-no-vacuous-assertions.md`). Run the spec with `npm run test:run` so
+standalone-only modules load.
+
 ## Mocking browser APIs
 
 ### Global constructors (ResizeObserver, IntersectionObserver, etc.)

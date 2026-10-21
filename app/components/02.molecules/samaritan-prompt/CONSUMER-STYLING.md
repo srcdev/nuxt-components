@@ -44,7 +44,7 @@ or the current message's `fadeDuration` in `SamaritanPromptMixed`).
 > three colour tokens for the classic white-on-black look. Text now wraps (`overflow-wrap: anywhere`)
 > instead of `nowrap`, so a long message stays inside its container; `--samaritan-prompt-text-white-space`
 > and `--samaritan-prompt-text-line-clamp` are new.
-
+>
 > **Changed 2026-09-27**: all tokens were renamed from `--samaritan-*` to `--samaritan-prompt-*`,
 > and `color` became `colour` (`--samaritan-color-text` is now `--samaritan-prompt-text-colour`,
 > `--samaritan-color-cursor-off` is now `--samaritan-prompt-cursor-colour-off`, and so on). The

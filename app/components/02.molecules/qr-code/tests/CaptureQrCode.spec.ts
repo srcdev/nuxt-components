@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
 import CaptureQrCode from "../CaptureQrCode.vue";
@@ -7,8 +7,15 @@ const mounted: Awaited<ReturnType<typeof mountSuspended>>[] = [];
 
 type CaptureMountOptions = Parameters<typeof mountSuspended<typeof CaptureQrCode>>[1];
 
+// The real QrcodeStream queues camera start/stop on a module-level promise chain shared by every
+// instance, so a start left over from an earlier test can fail mid-test and flip state.error.
+const qrcodeStreamStub = { name: "QrcodeStream", emits: ["detect", "error"], template: `<div class="qrcode-stream-stub"></div>` };
+
 const mountCapture = async (options: CaptureMountOptions = {}) => {
-  const wrapper = await mountSuspended(CaptureQrCode, options);
+  const wrapper = await mountSuspended(CaptureQrCode, {
+    ...options,
+    global: { ...options?.global, stubs: { QrcodeStream: qrcodeStreamStub, ...options?.global?.stubs } },
+  });
   mounted.push(wrapper);
   return wrapper;
 };
@@ -27,13 +34,6 @@ interface CaptureVM {
 }
 
 describe("CaptureQrCode", () => {
-  // QrcodeStream (from nuxt-qrcode) runs canvas-based detection internally.
-  // jsdom defines HTMLCanvasElement but returns null for getContext, which
-  // causes the library to throw. We provide a minimal non-null mock.
-  beforeEach(() => {
-    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({} as unknown as RenderingContext);
-  });
-
   // ─── Mount ───────────────────────────────────────────────────────────────
 
   it("mounts without error", async () => {
@@ -215,10 +215,11 @@ describe("CaptureQrCode", () => {
 
   it("stops the camera when the page becomes hidden", async () => {
     const wrapper = await mountCapture();
+    expect(wrapper.find(".qrcode-stream-stub").exists()).toBe(true);
     Object.defineProperty(document, "hidden", { get: () => true, configurable: true });
     document.dispatchEvent(new Event("visibilitychange"));
     await nextTick();
-    expect(wrapper.find("qrcodestream").exists()).toBe(false);
+    expect(wrapper.find(".qrcode-stream-stub").exists()).toBe(false);
     Object.defineProperty(document, "hidden", { get: () => false, configurable: true });
   });
 
@@ -292,10 +293,6 @@ describe("CaptureQrCode", () => {
 });
 
 describe("CaptureQrCode labels and a11y", () => {
-  beforeEach(() => {
-    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({} as unknown as RenderingContext);
-  });
-
   it("uses cameraStoppedLabel for the stopped message", async () => {
     const wrapper = await mountCapture({ props: { cameraStoppedLabel: "Caméra arrêtée" } });
     (wrapper.vm as unknown as CaptureVM).state.cameraOn = false;
