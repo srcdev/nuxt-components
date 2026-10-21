@@ -1,26 +1,26 @@
 <template>
-  <component :is="tag" ref="rootRef" class="deep-expanding-menu" :class="[elementClasses]">
-    <div class="inner">
+  <component :is="tag" ref="rootRef" class="deep-expanding-menu" :class="[elementClasses]" :aria-label="ariaLabel">
+    <div class="deep-expanding-menu-inner">
       <template v-for="(link, key) in navLinks" :key="key">
-        <NuxtLink v-if="link.path" :to="link.path" class="navigation-link">{{ link.name }}</NuxtLink>
+        <NuxtLink v-if="link.path" :to="link.path" class="deep-expanding-menu-link">{{ link.name }}</NuxtLink>
 
-        <div v-else class="navigation-group" :style="`--_anchor-name: --anchor-${uid}-${key};`">
+        <div v-else class="deep-expanding-menu-group" :style="`--_anchor-name: --anchor-${uid}-${key};`">
           <button
             :ref="(el) => setElement(triggerEls, key, el)"
             type="button"
             :popovertarget="`popovertarget-${uid}-${key}`"
-            class="navigation-group-toggle"
+            class="deep-expanding-menu-group-toggle"
             :aria-expanded="isOpen && activeKey === key"
             @click="handleGroupClick(key)"
           >
-            <span>{{ link.name }}</span>
-            <Icon name="bi:caret-down-fill" class="icon" />
+            <span class="deep-expanding-menu-group-label">{{ link.name }}</span>
+            <Icon name="bi:caret-down-fill" class="deep-expanding-menu-group-icon" aria-hidden="true" />
           </button>
 
           <div
             :id="`popovertarget-${uid}-${key}`"
             :ref="(el) => setElement(panelEls, key, el)"
-            class="navigation-group-panel"
+            class="deep-expanding-menu-group-panel"
             :class="{ 'deep-expanding-menu-panel-open': usesFallbackPopover && isOpen && activeKey === key }"
             :style="activeKey === key ? positionStyle : undefined"
             :data-placement="activeKey === key ? popoverPlacement : undefined"
@@ -28,10 +28,16 @@
             @beforetoggle="handlePanelBeforeToggle(key, $event)"
             @toggle="handlePanelToggle(key, $event)"
           >
-            <h4 class="page-heading-4 mb-6">{{ link.childLinksTitle }}</h4>
-            <ul class="navigation-group-list">
-              <li v-for="childLink in link.childLinks" :key="childLink.name" class="navigation-group-item">
-                <NuxtLink :to="childLink.path" class="navigation-group-link">{{ childLink.name }}</NuxtLink>
+            <h4 v-if="link.childLinksTitle" class="deep-expanding-menu-group-heading page-heading-4 mb-6">
+              {{ link.childLinksTitle }}
+            </h4>
+            <ul v-if="link.childLinks?.length" class="deep-expanding-menu-group-list" role="list">
+              <li
+                v-for="(childLink, childIndex) in link.childLinks"
+                :key="`${childIndex}-${childLink.name}`"
+                class="deep-expanding-menu-group-item"
+              >
+                <NuxtLink :to="childLink.path" class="deep-expanding-menu-group-link">{{ childLink.name }}</NuxtLink>
               </li>
             </ul>
           </div>
@@ -41,19 +47,22 @@
   </component>
 </template>
 
+
 <script setup lang="ts">
 import type { ComponentPublicInstance } from "vue";
 import type { ResponsiveHeaderNavItem } from "~/types/components";
 
 interface Props {
-  tag?: "div" | "section" | "nav" | "ul" | "ol";
+  tag?: "div" | "section" | "nav";
   navLinks?: ResponsiveHeaderNavItem[];
+  ariaLabel?: string;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   tag: "nav",
   navLinks: () => [],
+  ariaLabel: undefined,
   styleClassPassthrough: () => [],
 });
 
@@ -126,15 +135,19 @@ watch(
       display: grid;
       grid-template-areas: "element-stack";
 
-      .inner {
+      .deep-expanding-menu-inner {
         grid-area: element-stack;
         display: flex;
+        flex-wrap: wrap;
         gap: var(--deep-expanding-menu-gap, 2.4rem);
         align-items: center;
+        min-inline-size: 0;
 
-        .navigation-link,
-        .navigation-group-toggle {
+        .deep-expanding-menu-link,
+        .deep-expanding-menu-group-toggle {
           all: unset;
+          min-inline-size: 0;
+          overflow-wrap: anywhere;
           border-bottom: var(--deep-expanding-menu-link-border-width, 0.2rem) solid transparent;
           padding-block: var(--deep-expanding-menu-link-padding-block, 0.8rem);
 
@@ -144,26 +157,35 @@ watch(
           &:focus,
           &:focus-visible {
             cursor: pointer;
-            border-color: var(
-              --deep-expanding-menu-link-border-colour-hover,
-              var(--blue-10)
-            );
+            border-color: var(--deep-expanding-menu-link-border-colour-hover, var(--theme-border));
+          }
+
+          &:focus-visible {
+            outline: var(--deep-expanding-menu-focus-outline-width, 0.2rem) solid
+              var(--deep-expanding-menu-focus-outline-colour, var(--theme-ring, currentcolor));
+            outline-offset: 0.2rem;
           }
         }
 
-        .navigation-group {
+        .deep-expanding-menu-group {
           --_icon-transform: scaleY(1);
           position: relative;
+          min-inline-size: 0;
 
-          .navigation-group-toggle {
+          .deep-expanding-menu-group-toggle {
             anchor-name: var(--_anchor-name);
 
             display: flex;
             align-items: center;
             gap: 1.2rem;
 
-            .icon {
+            .deep-expanding-menu-group-label {
+              min-inline-size: 0;
+            }
+
+            .deep-expanding-menu-group-icon {
               display: block;
+              flex-shrink: 0;
               font-size: var(--deep-expanding-menu-icon-size, 1.2rem);
 
               transform: var(--_icon-transform);
@@ -171,10 +193,11 @@ watch(
             }
           }
 
-          .navigation-group-panel {
+          .deep-expanding-menu-group-panel {
             display: none;
             position: absolute;
             position-anchor: var(--_anchor-name);
+            position-try-fallbacks: flip-inline;
             margin: 0;
             top: calc(anchor(bottom) + 1rem);
             left: calc(anchor(left) + 0rem);
@@ -187,14 +210,17 @@ watch(
             transition-behavior: allow-discrete;
 
             width: var(--deep-expanding-menu-panel-width, min(100%, 50vw));
+            max-block-size: var(--deep-expanding-menu-panel-max-height, 70dvh);
 
-            background-color: var(--deep-expanding-menu-panel-background-colour, white);
+            color: var(--deep-expanding-menu-panel-text-colour, var(--theme-text));
+            background-color: var(--deep-expanding-menu-panel-background-colour, var(--theme-surface-subtle));
             border: var(--deep-expanding-menu-panel-border-width, 0.1rem) solid
-              var(--deep-expanding-menu-panel-border-colour, black);
+              var(--deep-expanding-menu-panel-border-colour, var(--theme-border));
             border-radius: var(--deep-expanding-menu-panel-border-radius, 1.2rem);
             box-shadow: var(--deep-expanding-menu-panel-shadow, 0 0 1rem rgba(0, 0, 0, 0.1));
             padding: var(--deep-expanding-menu-panel-padding, 1.2rem);
-            overflow: clip;
+            overflow-x: clip;
+            overflow-y: auto;
 
             &:popover-open {
               display: block;
@@ -224,23 +250,33 @@ watch(
               }
             }
 
-            h4 {
-              color: var(--deep-expanding-menu-panel-heading-colour, var(--slate-10));
+            .deep-expanding-menu-group-heading {
+              color: var(--deep-expanding-menu-panel-heading-colour, var(--theme-text));
+              overflow-wrap: anywhere;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              overflow: hidden;
+              -webkit-line-clamp: var(--deep-expanding-menu-panel-heading-line-clamp, none);
+              line-clamp: var(--deep-expanding-menu-panel-heading-line-clamp, none);
             }
 
-            .navigation-group-list {
+            .deep-expanding-menu-group-list {
               display: grid;
-              grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr));
+              grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr));
               gap: var(--deep-expanding-menu-panel-list-gap, 1.2rem);
+              list-style: none;
               padding-inline-start: 0;
-              margin-block-end: 0.8rem;
+              margin-block: 0 0.8rem;
 
-              .navigation-group-item {
+              .deep-expanding-menu-group-item {
                 display: block;
+                min-inline-size: 0;
 
-                a.navigation-group-link {
+                a.deep-expanding-menu-group-link {
                   display: inline-block;
-                  color: var(--deep-expanding-menu-group-link-colour, var(--slate-10));
+                  max-inline-size: 100%;
+                  overflow-wrap: anywhere;
+                  color: var(--deep-expanding-menu-group-link-colour, var(--theme-text));
                   text-decoration: none;
                   padding-block: 0.8rem;
 
@@ -251,14 +287,14 @@ watch(
                   &:hover,
                   &:focus-visible {
                     cursor: pointer;
-                    border-color: var(--deep-expanding-menu-group-link-border-colour-hover, var(--slate-10));
+                    border-color: var(--deep-expanding-menu-group-link-border-colour-hover, var(--theme-text));
                   }
                 }
               }
             }
           }
 
-          &:has(> .navigation-group-toggle[aria-expanded="true"]) {
+          &:has(> .deep-expanding-menu-group-toggle[aria-expanded="true"]) {
             --_icon-transform: scaleY(-1);
           }
         }
@@ -267,3 +303,4 @@ watch(
   }
 }
 </style>
+

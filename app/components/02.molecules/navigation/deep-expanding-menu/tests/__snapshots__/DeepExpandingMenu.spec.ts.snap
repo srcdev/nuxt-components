@@ -2,16 +2,16 @@
 
 exports[`DeepExpandingMenu > renders correct HTML structure 1`] = `
 "<nav class="deep-expanding-menu">
-  <div class="inner"><a href="/" class="navigation-link">Home</a>
-    <div class="navigation-group" style="--_anchor-name: --anchor-v-0-0-1;"><button type="button" popovertarget="popovertarget-v-0-0-1" class="navigation-group-toggle" aria-expanded="false"><span>Services</span><span class="iconify i-bi:caret-down-fill icon" aria-hidden="true"></span></button>
-      <div id="popovertarget-v-0-0-1" class="navigation-group-panel" popover="">
-        <h4 class="page-heading-4 mb-6">Our services</h4>
-        <ul class="navigation-group-list">
-          <li class="navigation-group-item"><a href="/services/haircuts" class="navigation-group-link">Haircuts</a></li>
-          <li class="navigation-group-item"><a href="/services/colouring" class="navigation-group-link">Colouring</a></li>
+  <div class="deep-expanding-menu-inner"><a href="/" class="deep-expanding-menu-link">Home</a>
+    <div class="deep-expanding-menu-group" style="--_anchor-name: --anchor-v-0-0-1;"><button type="button" popovertarget="popovertarget-v-0-0-1" class="deep-expanding-menu-group-toggle" aria-expanded="false"><span class="deep-expanding-menu-group-label">Services</span><span class="iconify i-bi:caret-down-fill deep-expanding-menu-group-icon" aria-hidden="true"></span></button>
+      <div id="popovertarget-v-0-0-1" class="deep-expanding-menu-group-panel" popover="">
+        <h4 class="deep-expanding-menu-group-heading page-heading-4 mb-6">Our services</h4>
+        <ul class="deep-expanding-menu-group-list" role="list">
+          <li class="deep-expanding-menu-group-item"><a href="/services/haircuts" class="deep-expanding-menu-group-link">Haircuts</a></li>
+          <li class="deep-expanding-menu-group-item"><a href="/services/colouring" class="deep-expanding-menu-group-link">Colouring</a></li>
         </ul>
       </div>
-    </div><a href="/contact" class="navigation-link">Contact</a>
+    </div><a href="/contact" class="deep-expanding-menu-link">Contact</a>
   </div>
 </nav>"
 `;

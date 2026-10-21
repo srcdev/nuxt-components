@@ -2,8 +2,38 @@
   "SRCDEV DeepExpandingMenu Basic": {
     "description": "DeepExpandingMenu — anchor-positioned popover nav panels",
     "scope": "vue,html",
+    "prefix": "srcdev-deep-expanding-menu",
     "body": [
-      "<DeepExpandingMenu :nav-links=\"$1navLinks\" />"
+      "<DeepExpandingMenu :nav-links=\"${1:navLinks}\" aria-label=\"${2:Main}\" />"
+    ]
+  },
+  "SRCDEV DeepExpandingMenu Nav Links": {
+    "description": "DeepExpandingMenu — navLinks data (ResponsiveHeaderNavItem[])",
+    "scope": "typescript,vue",
+    "prefix": "srcdev-deep-expanding-menu-links",
+    "body": [
+      "const ${1:navLinks}: ResponsiveHeaderNavItem[] = [",
+      "  { name: \"${2:Home}\", path: \"${3:/}\" },",
+      "  {",
+      "    name: \"${4:Services}\",",
+      "    childLinksTitle: \"${5:Our services}\",",
+      "    childLinks: [",
+      "      { name: \"${6:Haircuts}\", path: \"${7:/services/haircuts}\" },",
+      "    ],",
+      "  },",
+      "];"
+    ]
+  },
+  "SRCDEV DeepExpandingMenu Style Override": {
+    "description": "DeepExpandingMenu — unlayered token override scaffold",
+    "scope": "css,vue",
+    "prefix": "srcdev-deep-expanding-menu-css",
+    "body": [
+      ".${1:site-nav} {",
+      "  --deep-expanding-menu-gap: ${2:2.4rem};",
+      "  --deep-expanding-menu-panel-background-colour: ${3:var(--theme-surface-subtle)};",
+      "  --deep-expanding-menu-panel-heading-line-clamp: ${4:none};",
+      "}"
     ]
   }
 }

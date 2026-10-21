@@ -142,7 +142,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── navigation-items.md       — NavigationItems: internal overflow-panel renderer for ResponsiveHeader, complement-visibility logic, not used standalone
     ├── cookie-consent-banner.md  — CookieConsentBanner: fixed non-modal Accept/Reject banner built on AlertContent, driven by useCookieConsent; title/message slots, acceptLabel/rejectLabel/icon/showIcon/ariaLabel props, InputButton (inline) actions, position/button tokens (panel via --alert-content-*), teleported so tokens go on html/passthrough
     ├── display-banner.md         — DisplayBanner: canvas/content stacked overlay banner, conditional slot wrappers, CSS token API
-    ├── deep-expanding-menu.md         — DeepExpandingMenu: anchor-positioned popover nav panels, browser support caveat, CSS token API
+    ├── deep-expanding-menu.md         — DeepExpandingMenu: anchor-positioned popover nav panels, browser support caveat, ariaLabel, prefixed classes, wrapping/flip/scroll stress handling, CSS token API
     ├── deep-expanding-menu-classic.md — DeepExpandingMenuClassic: <details>-based fallback nav, click-outside close, CSS token API
     ├── display-tooltip.md         — DisplayTooltip: anchor-positioned popover trigger, browser support caveat, triggerIcon prop, type="button" trigger, hideTrigger removes it from tab order (data-hidden), CSS token API
     ├── display-tooltip-rich.md    — DisplayTooltipRich (Material 3 rich tooltip, renamed from DisplayTooltipDefined 2026-10-18): structured title/body/action content with InputButton close button, per-field line-clamp tokens, composes DisplayTooltip
