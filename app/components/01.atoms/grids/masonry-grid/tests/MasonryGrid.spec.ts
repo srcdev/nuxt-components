@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { nextTick } from "vue";
+import { defineComponent, h, nextTick, ref } from "vue";
 import MasonryGrid from "../MasonryGrid.vue";
 
 // useElementSize/useResizeObserver (from @vueuse/core) require ResizeObserver, which jsdom
@@ -9,9 +9,9 @@ import MasonryGrid from "../MasonryGrid.vue";
 // way to feed the component a non-zero measured width.
 // Vitest 4: a mock's implementation must be a regular function (not an arrow function)
 // to remain constructible via `new`.
-let resizeCallback: ResizeObserverCallback | undefined;
+const resizeCallbacks: ResizeObserverCallback[] = [];
 const mockResizeObserver = vi.fn(function (callback: ResizeObserverCallback) {
-  resizeCallback = callback;
+  resizeCallbacks.push(callback);
   return {
     observe: vi.fn(),
     unobserve: vi.fn(),
@@ -20,16 +20,18 @@ const mockResizeObserver = vi.fn(function (callback: ResizeObserverCallback) {
 });
 
 beforeEach(() => {
-  resizeCallback = undefined;
+  resizeCallbacks.length = 0;
   vi.stubGlobal("ResizeObserver", mockResizeObserver);
   // ⚠️ Do NOT call vi.unstubAllGlobals() in afterEach — it removes global stubs from
   // vitest.setup.ts ($fetch, etc.)
 });
 
 function simulateResizeTo(width: number) {
-  resizeCallback?.(
-    [{ contentBoxSize: [{ inlineSize: width, blockSize: 0 }], contentRect: { width } } as unknown as ResizeObserverEntry],
+  resizeCallbacks.forEach((callback) =>
+    callback(
+      [{ contentBoxSize: [{ inlineSize: width, blockSize: 0 }], contentRect: { width } } as unknown as ResizeObserverEntry],
     {} as ResizeObserver
+    )
   );
 }
 
@@ -37,26 +39,39 @@ function stubOffsetHeight(el: Element, height: number) {
   Object.defineProperty(el, "offsetHeight", { value: height, configurable: true });
 }
 
+const mounted: Awaited<ReturnType<typeof mountSuspended>>[] = [];
+
+const mountGrid = async (options: Parameters<typeof mountSuspended<typeof MasonryGrid>>[1] = {}) => {
+  const wrapper = await mountSuspended(MasonryGrid, options);
+  mounted.push(wrapper);
+  return wrapper;
+};
+
+afterEach(() => {
+  mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+  vi.restoreAllMocks();
+});
+
 describe("MasonryGrid", () => {
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(MasonryGrid);
+    const wrapper = await mountGrid();
     expect(wrapper.vm).toBeTruthy();
   });
 
   it("renders as div by default", async () => {
-    const wrapper = await mountSuspended(MasonryGrid);
+    const wrapper = await mountGrid();
     expect(wrapper.element.tagName).toBe("DIV");
   });
 
   it("renders a different tag when provided", async () => {
-    const wrapper = await mountSuspended(MasonryGrid, {
+    const wrapper = await mountGrid({
       props: { tag: "section" },
     });
     expect(wrapper.element.tagName).toBe("SECTION");
   });
 
   it("renders slot content in natural authoring order", async () => {
-    const wrapper = await mountSuspended(MasonryGrid, {
+    const wrapper = await mountGrid({
       slots: {
         "item-1": "<div>Item 1</div>",
         "item-2": "<div>Item 2</div>",
@@ -67,23 +82,23 @@ describe("MasonryGrid", () => {
   });
 
   it("renders no items when no slots are provided", async () => {
-    const wrapper = await mountSuspended(MasonryGrid);
+    const wrapper = await mountGrid();
     expect(wrapper.findAll(".masonry-grid-item")).toHaveLength(0);
   });
 
   it("does not absolutely position items when only one column fits (single-column fallback)", async () => {
-    const wrapper = await mountSuspended(MasonryGrid, {
+    const wrapper = await mountGrid({
       slots: { "item-1": "<div>Item 1</div>", "item-2": "<div>Item 2</div>" },
     });
     await nextTick();
     await nextTick();
-    expect(wrapper.find(".masonry-grid-wrapper").classes()).not.toContain("multiple-cols");
+    expect(wrapper.find(".masonry-grid-wrapper").attributes("data-multiple-cols")).toBeUndefined();
     const item = wrapper.find(".masonry-grid-item").element as HTMLElement;
-    expect(item.style.getPropertyValue("--_position")).toBe("");
+    expect(item.style.getPropertyValue("--_masonry-grid-item-position")).toBe("");
   });
 
   it("packs items into whichever column is currently shortest", async () => {
-    const wrapper = await mountSuspended(MasonryGrid, {
+    const wrapper = await mountGrid({
       // itemMinWidth (300, default) + gap (12, default) = 312 -> floor(700/312) = 2 columns
       slots: {
         "item-1": "<div>Item 1</div>",
@@ -107,16 +122,16 @@ describe("MasonryGrid", () => {
     const el1 = items[0]!.element as HTMLElement;
     const el2 = items[1]!.element as HTMLElement;
     const el3 = items[2]!.element as HTMLElement;
-    expect(el1.style.getPropertyValue("--_position-top")).toBe("0px");
-    expect(el1.style.getPropertyValue("--_position-left")).toBe("0px");
-    expect(el2.style.getPropertyValue("--_position-top")).toBe("0px");
-    expect(el2.style.getPropertyValue("--_position-left")).toBe("356px");
-    expect(el3.style.getPropertyValue("--_position-top")).toBe("62px");
-    expect(el3.style.getPropertyValue("--_position-left")).toBe("356px");
+    expect(el1.style.getPropertyValue("--_masonry-grid-item-top")).toBe("0px");
+    expect(el1.style.getPropertyValue("--_masonry-grid-item-left")).toBe("0px");
+    expect(el2.style.getPropertyValue("--_masonry-grid-item-top")).toBe("0px");
+    expect(el2.style.getPropertyValue("--_masonry-grid-item-left")).toBe("356px");
+    expect(el3.style.getPropertyValue("--_masonry-grid-item-top")).toBe("62px");
+    expect(el3.style.getPropertyValue("--_masonry-grid-item-left")).toBe("356px");
   });
 
   it("uses a fixed item width when fixedWidth is set, ignoring stretch sizing", async () => {
-    const wrapper = await mountSuspended(MasonryGrid, {
+    const wrapper = await mountGrid({
       props: { fixedWidth: true, itemMinWidth: 200 },
       slots: { "item-1": "<div>Item 1</div>", "item-2": "<div>Item 2</div>" },
     });
@@ -124,11 +139,11 @@ describe("MasonryGrid", () => {
     await nextTick();
     await nextTick();
     const item = wrapper.find(".masonry-grid-item").element as HTMLElement;
-    expect(item.style.getPropertyValue("--_element-width")).toBe("200px");
+    expect(item.style.getPropertyValue("--_masonry-grid-item-width")).toBe("200px");
   });
 
   it("spaces fixed-width columns by exactly itemWidth + gap, and centers the block via justify", async () => {
-    const wrapper = await mountSuspended(MasonryGrid, {
+    const wrapper = await mountGrid({
       props: { fixedWidth: true, itemMinWidth: 200, gap: 20, justify: "center" },
       slots: {
         "item-1": "<div>Item 1</div>",
@@ -144,15 +159,55 @@ describe("MasonryGrid", () => {
     // available -> 30px leftover on each side.
     const items = wrapper.findAll(".masonry-grid-item");
     const [el1, el2, el3] = items.map((item) => item.element as HTMLElement);
-    expect(el1!.style.getPropertyValue("--_position-left")).toBe("30px");
-    expect(el2!.style.getPropertyValue("--_position-left")).toBe("250px");
-    expect(el3!.style.getPropertyValue("--_position-left")).toBe("470px");
+    expect(el1!.style.getPropertyValue("--_masonry-grid-item-left")).toBe("30px");
+    expect(el2!.style.getPropertyValue("--_masonry-grid-item-left")).toBe("250px");
+    expect(el3!.style.getPropertyValue("--_masonry-grid-item-left")).toBe("470px");
   });
 
   it("applies styleClassPassthrough", async () => {
-    const wrapper = await mountSuspended(MasonryGrid, {
+    const wrapper = await mountGrid({
       props: { styleClassPassthrough: "custom-class" },
     });
     expect(wrapper.classes()).toContain("custom-class");
+  });
+
+  it("re-packs when a tile changes height without a width change", async () => {
+    const wrapper = await mountGrid({
+      slots: { "item-1": "<div>1</div>", "item-2": "<div>2</div>", "item-3": "<div>3</div>" },
+    });
+    const items = wrapper.findAll(".masonry-grid-item");
+    stubOffsetHeight(items[0]!.element, 100);
+    stubOffsetHeight(items[1]!.element, 50);
+    stubOffsetHeight(items[2]!.element, 80);
+    simulateResizeTo(700);
+    await nextTick();
+    await nextTick();
+    const el3 = items[2]!.element as HTMLElement;
+    expect(el3.style.getPropertyValue("--_masonry-grid-item-left")).toBe("356px");
+
+    stubOffsetHeight(items[0]!.element, 10);
+    resizeCallbacks.at(-1)!([], {} as ResizeObserver);
+    vi.advanceTimersByTime(20);
+    await nextTick();
+    expect(el3.style.getPropertyValue("--_masonry-grid-item-top")).toBe("22px");
+    expect(el3.style.getPropertyValue("--_masonry-grid-item-left")).toBe("0px");
+  });
+
+  it("renders a slot that appears after mount", async () => {
+    const showSecond = ref(false);
+    const Host = defineComponent({
+      setup: () => () =>
+        h(MasonryGrid, null, {
+          "item-1": () => h("div", "First"),
+          ...(showSecond.value ? { "item-2": () => h("div", "Second") } : {}),
+        }),
+    });
+    const wrapper = await mountSuspended(Host);
+    mounted.push(wrapper);
+    expect(wrapper.findAll(".masonry-grid-item")).toHaveLength(1);
+
+    showSecond.value = true;
+    await nextTick();
+    expect(wrapper.findAll(".masonry-grid-item").map((item) => item.text())).toEqual(["First", "Second"]);
   });
 });

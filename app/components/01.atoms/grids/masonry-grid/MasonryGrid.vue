@@ -1,7 +1,7 @@
 <template>
   <component :is="tag" class="masonry-grid" :class="[elementClasses]">
-    <div ref="gridWrapper" class="masonry-grid-wrapper" :class="{ 'multiple-cols': !isSingleColumn }">
-      <div v-for="name in slotNames" :key="name" ref="gridItemRefs" class="masonry-grid-item">
+    <div ref="gridWrapper" class="masonry-grid-wrapper" :data-multiple-cols="isSingleColumn ? undefined : ''">
+      <div v-for="name in slotNames()" :key="name" class="masonry-grid-item">
         <slot :name="name"></slot>
       </div>
     </div>
@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { useElementSize } from "@vueuse/core";
+import { useElementSize, useResizeObserver } from "@vueuse/core";
 
 interface Props {
   tag?: "div" | "section" | "article" | "main";
@@ -37,14 +37,15 @@ const props = withDefaults(defineProps<Props>(), {
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
 const slots = useSlots();
-// Consumer-provided slot names, in natural authoring/DOM order — this is both the "data" this
-// component works with (no separate gridData/itemCount prop needed) and the order items are
-// measured and packed in, so reading order is always preserved: unlike a CSS `columns`-based
-// masonry, this never needs to reorder the DOM to keep visual and reading order in sync.
-const slotNames = computed(() => Object.keys(slots));
+// Slot names in authoring order; a function, not a computed, because slots aren't reactive.
+const slotNames = () => Object.keys(slots);
 
 const gridWrapper = ref<HTMLElement | null>(null);
-const gridItemRefs = ref<HTMLElement[]>([]);
+// Read from the DOM: a v-for ref array isn't guaranteed to follow DOM order, and packing depends on it.
+const gridItems = shallowRef<HTMLElement[]>([]);
+const readItems = () => {
+  gridItems.value = Array.from(gridWrapper.value?.children ?? []) as HTMLElement[];
+};
 // Resize-reactive — useElementSize wires up its own ResizeObserver internally.
 const { width } = useElementSize(gridWrapper);
 
@@ -63,13 +64,13 @@ const itemMinWidthPx = computed(() => `${props.itemMinWidth}px`);
 // order. Because placement follows DOM order directly, no reordering is ever needed here.
 function updateGrid() {
   if (gridWrapper.value === null || columnCount.value <= 1) {
-    gridItemRefs.value.forEach((item) => {
-      item?.style.removeProperty("--_position");
-      item?.style.removeProperty("--_position-top");
-      item?.style.removeProperty("--_position-left");
-      item?.style.removeProperty("--_element-width");
+    gridItems.value.forEach((item) => {
+      item?.style.removeProperty("--_masonry-grid-item-position");
+      item?.style.removeProperty("--_masonry-grid-item-top");
+      item?.style.removeProperty("--_masonry-grid-item-left");
+      item?.style.removeProperty("--_masonry-grid-item-width");
     });
-    gridWrapper.value?.style.removeProperty("--_wrapper-height");
+    gridWrapper.value?.style.removeProperty("--_masonry-grid-height");
     return;
   }
 
@@ -92,29 +93,46 @@ function updateGrid() {
 
   const colHeights = Array(columnCount.value).fill(0);
 
-  gridItemRefs.value.forEach((item) => {
+  gridItems.value.forEach((item) => {
     const minHeight = Math.min(...colHeights);
     const minIndex = colHeights.indexOf(minHeight);
 
-    item?.style.setProperty("--_position", "absolute");
-    item?.style.setProperty("--_position-top", `${minHeight}px`);
-    item?.style.setProperty("--_position-left", `${startX + minIndex * (itemWidth + props.gap)}px`);
-    item?.style.setProperty("--_element-width", `${itemWidth}px`);
+    item?.style.setProperty("--_masonry-grid-item-position", "absolute");
+    item?.style.setProperty("--_masonry-grid-item-top", `${minHeight}px`);
+    item?.style.setProperty("--_masonry-grid-item-left", `${startX + minIndex * (itemWidth + props.gap)}px`);
+    item?.style.setProperty("--_masonry-grid-item-width", `${itemWidth}px`);
 
     colHeights[minIndex] += Math.floor((item?.offsetHeight ?? 0) + props.gap);
   });
 
   const maxHeight = Math.max(...colHeights);
-  gridWrapper.value.style.setProperty("--_wrapper-height", `${maxHeight}px`);
+  gridWrapper.value.style.setProperty("--_masonry-grid-height", `${maxHeight}px`);
 }
 
 // Re-pack whenever the measured width changes (useElementSize already wires up its own
 // ResizeObserver — a second explicit useResizeObserver call here would just duplicate it).
+let frame = 0;
+const scheduleUpdate = () => {
+  cancelAnimationFrame(frame);
+  frame = requestAnimationFrame(() => updateGrid());
+};
+
 watch(width, () => nextTick(() => updateGrid()));
 
+// A tile that changes height (an image loading, text wrapping) re-packs without a width change.
+useResizeObserver(() => gridItems.value, scheduleUpdate);
+
 onMounted(() => {
+  readItems();
   nextTick(() => updateGrid());
 });
+
+onUpdated(() => {
+  readItems();
+  scheduleUpdate();
+});
+
+onBeforeUnmount(() => cancelAnimationFrame(frame));
 
 watch(
   () => [props.fixedWidth, props.justify, props.itemMinWidth, props.gap],
@@ -142,30 +160,32 @@ watch(
        (minmax(itemMinWidth, 1fr)) only ever hurt: on a narrow container it fights the container
        for space instead of just filling it. itemMinWidth starts governing column width once
        there's an actual choice to make, from two columns up (below). */
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
 
-    height: var(--_wrapper-height, auto);
+    height: var(--_masonry-grid-height, auto);
 
     @container (min-width: 768px) {
-      grid-template-columns: repeat(2, minmax(v-bind(itemMinWidthPx), 1fr));
+      grid-template-columns: repeat(2, minmax(min(100%, v-bind(itemMinWidthPx)), 1fr));
     }
     @container (min-width: 1024px) {
-      grid-template-columns: repeat(3, minmax(v-bind(itemMinWidthPx), 1fr));
+      grid-template-columns: repeat(3, minmax(min(100%, v-bind(itemMinWidthPx)), 1fr));
     }
     @container (min-width: 1280px) {
-      grid-template-columns: repeat(4, minmax(v-bind(itemMinWidthPx), 1fr));
+      grid-template-columns: repeat(4, minmax(min(100%, v-bind(itemMinWidthPx)), 1fr));
     }
 
     .masonry-grid-item {
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
       outline: 0.1rem solid var(--masonry-grid-item-border-colour, var(--theme-border));
       padding: var(--masonry-grid-item-padding, 1.2rem);
     }
 
-    &.multiple-cols .masonry-grid-item {
-      position: var(--_position, static);
-      top: var(--_position-top, auto);
-      left: var(--_position-left, auto);
-      width: var(--_element-width, auto);
+    &[data-multiple-cols] .masonry-grid-item {
+      position: var(--_masonry-grid-item-position, static);
+      top: var(--_masonry-grid-item-top, auto);
+      left: var(--_masonry-grid-item-left, auto);
+      width: var(--_masonry-grid-item-width, auto);
 
       @media (prefers-reduced-motion: no-preference) {
         transition:

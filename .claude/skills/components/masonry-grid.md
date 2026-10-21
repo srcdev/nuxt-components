@@ -98,9 +98,17 @@ See `CONSUMER-STYLING.md` in the component folder.
 
 ## Notes
 
+- 2026-10-21: tiles re-pack when any tile changes height (a `ResizeObserver` per tile, throttled to
+  one `requestAnimationFrame`), not only when the container width changes, so a late-loading image
+  no longer overlaps the tile below. Slot names are read per render (they were a `computed` over
+  `useSlots()`, which missed slots added after mount), and tiles are read in DOM order from the
+  wrapper instead of a `v-for` ref array, which Vue doesn't keep in DOM order. The multi-column state
+  is `data-multiple-cols` and the private tokens are prefixed `--_masonry-grid-*`.
+- The `StressTest` story mixes unbroken, long, image, emoji, right-to-left, empty and one-character tiles.
+
 - **How positioning works**: on mount and on every measured resize, each item is read (`item.
   offsetHeight`) in DOM order and placed at the top of whichever column currently has the least
-  accumulated height, via inline `--_position-top`/`--_position-left`/`--_element-width` custom
+  accumulated height, via inline `--_masonry-grid-item-top`/`-item-left`/`-item-width` custom
   properties the component sets directly (not part of the public token API — these are internal
   positioning state, not a styling surface). Column steps are computed in real pixels
   (`itemWidth + gap`) rather than equal percentage slots of the container — a percentage slot only

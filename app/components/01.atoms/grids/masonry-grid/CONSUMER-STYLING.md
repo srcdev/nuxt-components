@@ -26,6 +26,21 @@ computed in JS from measured pixel values. See `.claude/skills/components/masonr
 
 ---
 
+## State hooks
+
+| Hook | Meaning |
+|---|---|
+| `.masonry-grid-wrapper[data-multiple-cols]` | More than one column fits, so tiles are absolutely positioned by script |
+
+Element classes: `.masonry-grid` (root), `.masonry-grid-wrapper`, `.masonry-grid-item`.
+
+Private (not public API), set inline by script: `--_masonry-grid-item-position`, `-item-top`,
+`-item-left`, `-item-width` on each tile and `--_masonry-grid-height` on the wrapper.
+
+> Changed 2026-10-21: the state was the class `.multiple-cols`, and the private tokens were
+> `--_position`, `--_position-top`, `--_position-left`, `--_element-width` and `--_wrapper-height`:
+> generic names that inherited into components placed inside a tile.
+
 ## Local overrides
 
 Set the tokens above on an element you own (a page or section class, or a class added with
