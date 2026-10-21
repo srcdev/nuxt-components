@@ -31,6 +31,9 @@ There are no `data-*` attributes or state classes.
 
 ---
 
+The stack's single column is `minmax(0, 1fr)` and each layer has `min-inline-size: 0` (since
+2026-10-21), so a layer with an unbroken string can't widen the stack past its container.
+
 ## Local overrides
 
 Set the tokens above on an element you own (a page or section class, or a class added with

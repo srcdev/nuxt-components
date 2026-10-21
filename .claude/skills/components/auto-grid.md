@@ -37,10 +37,12 @@ When filling from a data array, use a dynamic slot name in a `v-for`:
 | Prop (template form)       | Type                                        | Default | Notes                                         |
 | -------------------------- | ------------------------------------------- | ------- | --------------------------------------------- |
 | `tag`                      | `"div" \| "section" \| "article" \| "main"` | `"div"` | Use a semantic tag for page landmark regions. |
-| `is-responsive`            | `boolean`                                   | `false` | Adds `.is-responsive`: column minimum steps small → default → large via `@container` queries at 768px / 1024px. Needs a `container-type: inline-size` ancestor. |
+| `is-responsive`            | `boolean`                                   | `false` | Adds `data-responsive` (was the class `.is-responsive` until 2026-10-21): column minimum steps small → default → large via `@container` queries at 768px / 1024px. Needs a `container-type: inline-size` ancestor. |
 | `:style-class-passthrough` | `string \| string[]`                        | `[]`    | Extra CSS classes on the root element.        |
 
 ---
+
+Each slotted item gets `min-inline-size: 0`, so an unbroken string can't widen its column. The `StressTest` story feeds every cell oversized content (an unbroken string and URL, long German, a 1600px image, emoji, right-to-left, an empty cell).
 
 ## CSS custom properties
 

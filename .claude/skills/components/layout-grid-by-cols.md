@@ -130,6 +130,8 @@ Tokens: `--layout-grid-by-cols-column-count`, `-single-col-below`, `-gap`, `-row
 
 ## Notes
 
+- The `StressTest` story feeds every cell oversized content (an unbroken string and URL, long German, a 1600px image, emoji, right-to-left, an empty cell).
+
 - Auto-imported in Nuxt — no manual import needed.
 - Slot names can be anything — semantic or indexed. Document order determines render order.
 - 2026-09-27 migration: `singleColBelow` never worked before (the breakpoint was a hardcoded `768px` container query); it does now. `gap`/`columnCount` moved from `v-bind()` to public tokens, and the layout props lost their defaults (defaults now live in CSS). A `section` without a `label` used to read the placeholder "If tag='section' then a label is required" to screen readers; it now renders nothing and relies on the composable's dev warning. `gap` must be a single length (compound values were claimed before but break the column calculation). Inner class `.layout-grid-inner` → `.layout-grid-by-cols-inner`; root no longer a `layoutGrid` size container. No consumer app used the component at the time.

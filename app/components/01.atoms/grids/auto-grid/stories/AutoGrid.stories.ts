@@ -1,4 +1,6 @@
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import type { MediaCanvas } from "~/types/components";
+import CanvasSwitcher from "../../../canvas-switcher/CanvasSwitcher.vue";
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
 import AutoGridComponent from "../AutoGrid.vue";
 
@@ -289,3 +291,46 @@ SemanticSection.parameters = {
     },
   },
 };
+
+export const StressTest: StoryFn = () => ({
+  components: { AutoGridComponent },
+  template: `
+    <AutoGridComponent :is-responsive="true">
+          <template #item-1><div style="padding: 1.2rem; background: var(--theme-surface-subtle); outline: 1px dashed currentColor;"><h3 style="margin: 0;">Supercalifragilisticexpialidociousandthensomemoretextwithoutanyspaces</h3><p style="margin: 0;">https://example.com/a/very/long/unbroken/path/that/never/wraps/on/its/own</p></div></template>
+          <template #item-2><div style="padding: 1.2rem; background: var(--theme-surface-subtle); outline: 1px dashed currentColor;"><p style="margin: 0;">Ein sehr langer Beschreibungstext aus Northtown, der auf schmalen Bildschirmen mehrfach umbrechen muss, ohne das Raster zu sprengen oder die Nachbarspalten zusammenzudrücken.</p></div></template>
+          <template #item-3><div style="padding: 1.2rem; background: var(--theme-surface-subtle); outline: 1px dashed currentColor;"><img src="/images/banners/banner-1.webp" width="1600" height="400" alt="" style="display: block; max-inline-size: 100%; block-size: auto;"></div></template>
+          <template #item-4><div style="padding: 1.2rem; background: var(--theme-surface-subtle); outline: 1px dashed currentColor;"><p style="margin: 0;">🙂 👍🏽 👨‍👩‍👧 &lt;b&gt;Not bold&lt;/b&gt;</p></div></template>
+          <template #item-5><div style="padding: 1.2rem; background: var(--theme-surface-subtle); outline: 1px dashed currentColor;"><p style="margin: 0;" dir="rtl">مرحبا بالعالم، نص طويل من اليمين إلى اليسار</p></div></template>
+          <template #item-6><div style="padding: 1.2rem; background: var(--theme-surface-subtle); outline: 1px dashed currentColor;"></div></template>
+          <template #item-7><div style="padding: 1.2rem; background: var(--theme-surface-subtle); outline: 1px dashed currentColor;"><p style="margin: 0;">x</p></div></template>
+        </AutoGridComponent>
+  `,
+});
+StressTest.storyName = "Stress Test (Worst-Case Data)";
+StressTest.decorators = [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "mobileCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; padding: 2rem; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ];
+StressTest.parameters = {
+    layout: "fullscreen",
+    docs: {
+      story: { inline: false, height: "720px" },
+      description: {
+        story:
+          "Oversized and hostile slot content at every `CanvasSwitcher` width. Check that: the unbroken heading and URL wrap inside their cell instead of widening it; the German paragraph wraps; the 1600px image scales down to its cell; emoji, `<b>` and right-to-left text render as text; the empty and one-character cells keep their place; no neighbouring cell is squeezed to nothing and nothing scrolls sideways.",
+      },
+    },
+  };

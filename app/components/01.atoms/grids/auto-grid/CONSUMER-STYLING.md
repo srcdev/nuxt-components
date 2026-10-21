@@ -26,7 +26,7 @@ No private `--_` tokens.
 | Hook | When | Effect |
 |---|---|---|
 | `.auto-grid` | Always | Root element |
-| `.auto-grid.is-responsive` | `is-responsive` prop is `true` | Column minimum steps small → default → large via `@container` queries at 768px and 1024px |
+| `.auto-grid[data-responsive]` | `is-responsive` prop is `true` (was the class `.is-responsive` until 2026-10-21) | Column minimum steps small → default → large via `@container` queries at 768px and 1024px |
 
 The breakpoints are container queries, so `is-responsive` needs an ancestor with
 `container-type: inline-size`. Without one, the small size applies at every width.

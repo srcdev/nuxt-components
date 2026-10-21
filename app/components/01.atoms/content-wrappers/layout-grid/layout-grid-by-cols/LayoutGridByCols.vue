@@ -66,6 +66,10 @@ watch(
       grid-template-columns: repeat(auto-fill, minmax(min(100%, max(var(--_collapse), var(--_column-min))), 1fr));
       row-gap: var(--layout-grid-by-cols-row-gap, var(--layout-grid-by-cols-gap, 1rem));
       column-gap: var(--_column-gap);
+
+      > * {
+        min-inline-size: 0;
+      }
     }
   }
 }

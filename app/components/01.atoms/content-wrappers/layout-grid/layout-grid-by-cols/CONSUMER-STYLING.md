@@ -42,6 +42,9 @@ old container query. Fewer items than columns leave empty tracks, as before.
 The column-gap feeds that calculation, so it must be a single length (`gap: "1rem 2rem"` style
 shorthand isn't supported; use the row/column gap tokens instead).
 
+Each slotted item gets `min-inline-size: 0` (since 2026-10-21), so an item with an unbroken string
+shrinks to its column instead of overflowing it; wrapping the text is up to your own markup.
+
 ## Local overrides
 
 Set the tokens above on an element you own (a page or section class, or a class added with

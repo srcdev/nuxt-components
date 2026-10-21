@@ -82,6 +82,8 @@ properties, since they need JS-computed values rather than being purely CSS-driv
 
 ## Notes
 
+- The `StressTest` story feeds every cell oversized content (an unbroken string and URL, long German, a 1600px image, emoji, right-to-left, an empty cell).
+
 - **Renamed from `MasonryGrid`** (2026-09-13) — see **Which one do I want?** above for why. If you
   have consumer code importing this as `MasonryGrid`, it needs updating to `ColumnFlowGrid`; the
   props and behaviour are otherwise unchanged. CSS classes/tokens were renamed to match

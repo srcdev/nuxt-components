@@ -31,9 +31,11 @@ watch(
     display: grid;
     grid-template-areas: "stack";
     grid-template-rows: 100%;
+    grid-template-columns: minmax(0, 1fr);
 
     .grid-stack__layer {
       grid-area: stack;
+      min-inline-size: 0;
     }
   }
 }

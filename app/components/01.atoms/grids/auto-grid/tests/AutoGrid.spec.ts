@@ -1,24 +1,37 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import AutoGrid from "../AutoGrid.vue";
+
+const mounted: Awaited<ReturnType<typeof mountSuspended>>[] = [];
+
+const mountComponent = async (options: Parameters<typeof mountSuspended<typeof AutoGrid>>[1] = {}) => {
+  const wrapper = await mountSuspended(AutoGrid, options);
+  mounted.push(wrapper);
+  return wrapper;
+};
+
+afterEach(() => {
+  mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+  vi.restoreAllMocks();
+});
 
 describe("AutoGrid", () => {
   // ─── Mount ───────────────────────────────────────────────────────────────
 
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(AutoGrid);
+    const wrapper = await mountComponent();
     expect(wrapper.vm).toBeTruthy();
   });
 
   // ─── Snapshots ───────────────────────────────────────────────────────────
 
   it("renders correct HTML structure (default props)", async () => {
-    const wrapper = await mountSuspended(AutoGrid);
+    const wrapper = await mountComponent();
     expect(wrapper.html()).toMatchSnapshot();
   });
 
   it("renders correct HTML structure (all props and slots set)", async () => {
-    const wrapper = await mountSuspended(AutoGrid, {
+    const wrapper = await mountComponent({
       props: {
         tag: "section",
         isResponsive: true,
@@ -36,29 +49,29 @@ describe("AutoGrid", () => {
   // ─── Root element ────────────────────────────────────────────────────────
 
   it("renders a <div> as the root element by default", async () => {
-    const wrapper = await mountSuspended(AutoGrid);
+    const wrapper = await mountComponent();
     expect(wrapper.element.tagName).toBe("DIV");
   });
 
   it("always has the auto-grid class", async () => {
-    const wrapper = await mountSuspended(AutoGrid);
+    const wrapper = await mountComponent();
     expect(wrapper.classes()).toContain("auto-grid");
   });
 
   // ─── Tag prop ────────────────────────────────────────────────────────────
 
   it("renders a <section> when tag is section", async () => {
-    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "section" } });
+    const wrapper = await mountComponent({ props: { tag: "section" } });
     expect(wrapper.element.tagName).toBe("SECTION");
   });
 
   it("renders an <article> when tag is article", async () => {
-    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "article" } });
+    const wrapper = await mountComponent({ props: { tag: "article" } });
     expect(wrapper.element.tagName).toBe("ARTICLE");
   });
 
   it("renders a <main> when tag is main", async () => {
-    const wrapper = await mountSuspended(AutoGrid, { props: { tag: "main" } });
+    const wrapper = await mountComponent({ props: { tag: "main" } });
     expect(wrapper.element.tagName).toBe("MAIN");
   });
 
@@ -71,13 +84,13 @@ describe("AutoGrid", () => {
   it.each(["div", "section", "article", "main"] as const)(
     "does not set aria-labelledby when tag is %s",
     async (tag) => {
-      const wrapper = await mountSuspended(AutoGrid, { props: { tag } });
+      const wrapper = await mountComponent({ props: { tag } });
       expect(wrapper.attributes("aria-labelledby")).toBeUndefined();
     }
   );
 
   it("passes a consumer aria-label through to the root", async () => {
-    const wrapper = await mountSuspended(AutoGrid, {
+    const wrapper = await mountComponent({
       props: { tag: "section" },
       attrs: { "aria-label": "Practice stats" },
     });
@@ -86,27 +99,27 @@ describe("AutoGrid", () => {
 
   // ─── isResponsive ────────────────────────────────────────────────────────
 
-  it("does not have is-responsive class by default", async () => {
-    const wrapper = await mountSuspended(AutoGrid);
-    expect(wrapper.classes()).not.toContain("is-responsive");
+  it("does not have data-responsive by default", async () => {
+    const wrapper = await mountComponent();
+    expect(wrapper.attributes("data-responsive")).toBeUndefined();
   });
 
-  it("adds is-responsive class when isResponsive is true", async () => {
-    const wrapper = await mountSuspended(AutoGrid, { props: { isResponsive: true } });
-    expect(wrapper.classes()).toContain("is-responsive");
+  it("adds data-responsive when isResponsive is true", async () => {
+    const wrapper = await mountComponent({ props: { isResponsive: true } });
+    expect(wrapper.attributes("data-responsive")).toBe("");
   });
 
-  it("removes is-responsive class when isResponsive changes to false", async () => {
-    const wrapper = await mountSuspended(AutoGrid, { props: { isResponsive: true } });
-    expect(wrapper.classes()).toContain("is-responsive");
+  it("removes data-responsive when isResponsive changes to false", async () => {
+    const wrapper = await mountComponent({ props: { isResponsive: true } });
+    expect(wrapper.attributes("data-responsive")).toBe("");
     await wrapper.setProps({ isResponsive: false });
-    expect(wrapper.classes()).not.toContain("is-responsive");
+    expect(wrapper.attributes("data-responsive")).toBeUndefined();
   });
 
   // ─── Slots ───────────────────────────────────────────────────────────────
 
   it("renders a named slot", async () => {
-    const wrapper = await mountSuspended(AutoGrid, {
+    const wrapper = await mountComponent({
       slots: { "item-1": "<div class='card'>Card 1</div>" },
     });
     expect(wrapper.find(".card").exists()).toBe(true);
@@ -114,7 +127,7 @@ describe("AutoGrid", () => {
   });
 
   it("renders multiple named slots", async () => {
-    const wrapper = await mountSuspended(AutoGrid, {
+    const wrapper = await mountComponent({
       slots: {
         "item-1": "<div class='card-1'>Card 1</div>",
         "item-2": "<div class='card-2'>Card 2</div>",
@@ -127,21 +140,21 @@ describe("AutoGrid", () => {
   });
 
   it("renders no slot content when no slots are provided", async () => {
-    const wrapper = await mountSuspended(AutoGrid);
+    const wrapper = await mountComponent();
     expect(wrapper.text()).toBe("");
   });
 
   // ─── styleClassPassthrough ───────────────────────────────────────────────
 
   it("applies a single styleClassPassthrough string to the root", async () => {
-    const wrapper = await mountSuspended(AutoGrid, {
+    const wrapper = await mountComponent({
       props: { styleClassPassthrough: "my-grid" },
     });
     expect(wrapper.classes()).toContain("my-grid");
   });
 
   it("applies multiple styleClassPassthrough classes from an array", async () => {
-    const wrapper = await mountSuspended(AutoGrid, {
+    const wrapper = await mountComponent({
       props: { styleClassPassthrough: ["my-grid", "mbe-32"] },
     });
     expect(wrapper.classes()).toContain("my-grid");
@@ -149,7 +162,7 @@ describe("AutoGrid", () => {
   });
 
   it("updates classes when styleClassPassthrough prop changes", async () => {
-    const wrapper = await mountSuspended(AutoGrid, {
+    const wrapper = await mountComponent({
       props: { styleClassPassthrough: ["original"] },
     });
     expect(wrapper.classes()).toContain("original");

@@ -122,7 +122,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── display-qr-code.md      — DisplayQrCode: QR code SVG from a string value, colour/size/variant/radius props, currentColor default
     ├── capture-qr-code.md      — CaptureQrCode: live camera scanner, localisable errorMessages, error slot, restarts when the tab is shown again, own-root media stream cleanup, wrapping results
     ├── decode-qr-code.md       — DecodeQrCode: file picker + drag-and-drop image decoder, shared results list, no-result/read-error messages, data-dropping state hook, CSS override points
-    ├── auto-grid.md            — AutoGrid: auto-fit responsive grid, $slots iteration, --auto-grid-gap/min-col-size-{small,default,large} tokens, is-responsive, semantic tag + aria
+    ├── auto-grid.md            — AutoGrid: auto-fit responsive grid, $slots iteration, --auto-grid-gap/min-col-size-{small,default,large} tokens, is-responsive (data-responsive hook), semantic tag + aria
     ├── display-avatar.md       — DisplayAvatar (02.molecules): circular avatar with image/initials fallback (alt announced), broken-image fallback, data-size scale tokens, image-size, --display-avatar-* colours, chip badge, icon slot
     ├── profile-section.md      — ProfileSection (02.molecules): picture + numbered profile-info-N slots, eyebrow/hero header (above, or over the picture top/bottom on a scrim via header-placement), profileLinks, container-query two-column layout, .location/.services highlight tokens
     ├── display-theme-switch.md — DisplayThemeSwitch: system/light/dark picker wrapping SegmentedControl, wired to useSettingsStore, labels/icons props, small sizing variant

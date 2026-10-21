@@ -134,6 +134,8 @@ consumer's `<style scoped>` file, `.grid-stack__layer` rules need `:deep()`. Ful
 
 ## Notes
 
+- The `StressTest` story stacks an overlay of unbroken, long and right-to-left text over an image layer.
+
 - `pointer-events: none` on overlay layers (and `pointer-events: auto` on interactive children within them) is the standard pattern for overlays that shouldn't block interaction with layers behind them.
 - There is no built-in `z-index` — stacking is handled purely by DOM order. If a consumer applies `z-index` on a layer for other reasons, be aware it creates a new stacking context.
 - The slot name is used as the Vue `:key` on the layer wrapper, so slot names must be unique.

@@ -24,6 +24,15 @@ part of the public token API. See `.claude/skills/components/column-flow-grid.md
 
 ---
 
+## State hooks
+
+No state attributes. Element classes: `.column-flow-grid-wrapper` (root, the multi-column box) and
+`.column-flow-grid-item` (each slot, `break-inside: avoid`, wraps long words since 2026-10-21).
+
+Private (not public API): `--_column-flow-grid-gap` and `--_column-flow-grid-item-min-width`, set
+inline from the `gap`/`unit` and `itemMinWidth` props. The second was `--_item-min-width` until
+2026-10-21, a generic name that leaked into slotted components.
+
 ## Local overrides
 
 Set the tokens above on an element you own (a page or section class, or a class added with

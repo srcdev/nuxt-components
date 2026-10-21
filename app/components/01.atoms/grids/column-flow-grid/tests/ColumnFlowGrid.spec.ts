@@ -1,27 +1,40 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import ColumnFlowGrid from "../ColumnFlowGrid.vue";
 
+const mounted: Awaited<ReturnType<typeof mountSuspended>>[] = [];
+
+const mountComponent = async (options: Parameters<typeof mountSuspended<typeof ColumnFlowGrid>>[1] = {}) => {
+  const wrapper = await mountSuspended(ColumnFlowGrid, options);
+  mounted.push(wrapper);
+  return wrapper;
+};
+
+afterEach(() => {
+  mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+  vi.restoreAllMocks();
+});
+
 describe("ColumnFlowGrid", () => {
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(ColumnFlowGrid);
+    const wrapper = await mountComponent();
     expect(wrapper.vm).toBeTruthy();
   });
 
   it("renders as div by default", async () => {
-    const wrapper = await mountSuspended(ColumnFlowGrid);
+    const wrapper = await mountComponent();
     expect(wrapper.element.tagName).toBe("DIV");
   });
 
   it("renders a different tag when provided", async () => {
-    const wrapper = await mountSuspended(ColumnFlowGrid, {
+    const wrapper = await mountComponent({
       props: { tag: "section" },
     });
     expect(wrapper.element.tagName).toBe("SECTION");
   });
 
   it("renders slot content", async () => {
-    const wrapper = await mountSuspended(ColumnFlowGrid, {
+    const wrapper = await mountComponent({
       slots: {
         "item-1": "<div>Item 1</div>",
       },
@@ -30,7 +43,7 @@ describe("ColumnFlowGrid", () => {
   });
 
   it("renders each provided slot as its own column-flow-grid-item", async () => {
-    const wrapper = await mountSuspended(ColumnFlowGrid, {
+    const wrapper = await mountComponent({
       slots: {
         "item-1": "<div>Item 1</div>",
         "item-2": "<div>Item 2</div>",
@@ -45,28 +58,28 @@ describe("ColumnFlowGrid", () => {
   });
 
   it("renders no items when no slots are provided", async () => {
-    const wrapper = await mountSuspended(ColumnFlowGrid);
+    const wrapper = await mountComponent();
     expect(wrapper.findAll(".column-flow-grid-item")).toHaveLength(0);
   });
 
   it("applies itemMinWidth and gap as inline CSS custom properties", async () => {
-    const wrapper = await mountSuspended(ColumnFlowGrid, {
+    const wrapper = await mountComponent({
       props: { itemMinWidth: 250, gap: 2, unit: "em" },
     });
     const style = (wrapper.element as HTMLElement).style;
-    expect(style.getPropertyValue("--_item-min-width")).toBe("250px");
+    expect(style.getPropertyValue("--_column-flow-grid-item-min-width")).toBe("250px");
     expect(style.getPropertyValue("--_column-flow-grid-gap")).toBe("2em");
   });
 
   it("applies styleClassPassthrough", async () => {
-    const wrapper = await mountSuspended(ColumnFlowGrid, {
+    const wrapper = await mountComponent({
       props: { styleClassPassthrough: "custom-class" },
     });
     expect(wrapper.classes()).toContain("custom-class");
   });
 
   it("applies multiple styleClassPassthrough classes", async () => {
-    const wrapper = await mountSuspended(ColumnFlowGrid, {
+    const wrapper = await mountComponent({
       props: { styleClassPassthrough: ["class-a", "class-b"] },
     });
     expect(wrapper.classes()).toContain("class-a");
