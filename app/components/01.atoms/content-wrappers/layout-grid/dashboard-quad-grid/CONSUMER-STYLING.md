@@ -7,10 +7,10 @@
 | `--dashboard-quad-grid-gap` | `2rem` | Gap between the four slot panels |
 | `--dashboard-quad-grid-padding` | `2rem` | Padding inside each slot panel |
 | `--dashboard-quad-grid-outline-width` | `0.1rem` | Slot panel outline width |
-| `--dashboard-quad-grid-outline-colour` | `black` | Slot panel outline colour |
+| `--dashboard-quad-grid-outline-colour` | `var(--theme-border)` | Slot panel outline colour |
 | `--dashboard-quad-grid-outline-offset` | `0` | Slot panel outline offset |
 | `--dashboard-quad-grid-border-width` | `0` | Slot panel border width (off by default — the panel edge is drawn by the outline) |
-| `--dashboard-quad-grid-border-colour` | `black` | Slot panel border colour, only visible once `--dashboard-quad-grid-border-width` is set |
+| `--dashboard-quad-grid-border-colour` | `var(--theme-border)` | Slot panel border colour, only visible once `--dashboard-quad-grid-border-width` is set |
 | `--dashboard-quad-grid-border-radius` | `0.5rem` | Slot panel corner radius |
 | `--dashboard-quad-grid-rule-width` | `0.1rem` | Width of the grid gap rule line (CSS Gap Decorations — see Notes) |
 | `--dashboard-quad-grid-rule-colour` | `transparent` | Colour of the grid gap rule line, invisible by default |
@@ -30,6 +30,16 @@ Or scope to a single instance via `styleClassPassthrough`:
 ```
 
 ---
+
+## State hooks
+
+No state attributes. Element classes: `.dashboard-quad-grid-wrapper` (root, the container),
+`.dashboard-quad-grid` (the grid), `.dashboard-quad-grid-cell` (each of the four cells) with
+`.dashboard-quad-grid-slot-1` to `-slot-4`. Cells wrap their content and the columns are
+`minmax(0, auto)`, so an unbroken string can't widen the grid.
+
+> Changed 2026-10-21: the cells were `.slot1` to `.slot4` (bare classes a consumer's own CSS could
+> match), styled through `& > div`; the outline and border colours defaulted to `black`.
 
 ## Local overrides
 

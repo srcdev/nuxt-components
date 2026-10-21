@@ -50,6 +50,11 @@ column count instead, use `LayoutGridByCols` (fixed count) or `AutoGrid` (auto-f
 
 ---
 
+## Cell classes
+
+Each slot renders in a `.dashboard-quad-grid-cell` with `.dashboard-quad-grid-slot-1` to `-slot-4`
+(`.slot1` to `.slot4` until 2026-10-21). The `StressTest` story feeds every cell oversized content (an unbroken string and URL, long German, a 1600px image, emoji, right-to-left, an empty cell).
+
 ## CSS token API
 
 See [CONSUMER-STYLING.md](../../app/components/01.atoms/content-wrappers/layout-grid/dashboard-quad-grid/CONSUMER-STYLING.md).
@@ -59,10 +64,10 @@ See [CONSUMER-STYLING.md](../../app/components/01.atoms/content-wrappers/layout-
 | `--dashboard-quad-grid-gap` | `2rem` | Gap between the four slot panels |
 | `--dashboard-quad-grid-padding` | `2rem` | Padding inside each slot panel |
 | `--dashboard-quad-grid-outline-width` | `0.1rem` | Slot panel outline width |
-| `--dashboard-quad-grid-outline-colour` | `black` | Slot panel outline colour |
+| `--dashboard-quad-grid-outline-colour` | `var(--theme-border)` | Slot panel outline colour |
 | `--dashboard-quad-grid-outline-offset` | `0` | Slot panel outline offset |
 | `--dashboard-quad-grid-border-width` | `0` | Slot panel border width (off by default — the panel edge is drawn by the outline) |
-| `--dashboard-quad-grid-border-colour` | `black` | Slot panel border colour, only visible once `--dashboard-quad-grid-border-width` is set |
+| `--dashboard-quad-grid-border-colour` | `var(--theme-border)` | Slot panel border colour, only visible once `--dashboard-quad-grid-border-width` is set |
 | `--dashboard-quad-grid-border-radius` | `0.5rem` | Slot panel corner radius |
 | `--dashboard-quad-grid-rule-width` | `0.1rem` | Width of the grid gap rule line (CSS Gap Decorations, limited browser support) |
 | `--dashboard-quad-grid-rule-colour` | `transparent` | Colour of the grid gap rule line, invisible by default |

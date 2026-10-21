@@ -3,19 +3,6 @@ import { mountSuspended } from "@nuxt/test-utils/runtime";
 import type { DOMWrapper } from "@vue/test-utils";
 import DashboardQuadGrid from "../DashboardQuadGrid.vue";
 
-// Mock useStyleClassPassthrough composable
-const mockElementClasses = { value: "" };
-const mockResetElementClasses = vi.fn();
-
-const mockUseStyleClassPassthrough = vi.fn(() => ({
-  elementClasses: mockElementClasses,
-  resetElementClasses: mockResetElementClasses,
-}));
-
-vi.mock("#imports", () => ({
-  useStyleClassPassthrough: mockUseStyleClassPassthrough,
-}));
-
 describe("DashboardQuadGrid", () => {
   let wrapper: ReturnType<typeof mountSuspended>;
 
@@ -35,19 +22,19 @@ describe("DashboardQuadGrid", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockElementClasses.value = "";
   });
 
   afterEach(() => {
     wrapper?.unmount();
+    vi.restoreAllMocks();
   });
 
   describe("Component Rendering", () => {
     it("mounts without error", async () => {
       await createWrapper();
 
-      expect(wrapper.find(".dashboard-quad-grid-wrapper")).toBeTruthy();
-      expect(wrapper.find(".dashboard-quad-grid")).toBeTruthy();
+      expect(wrapper.find(".dashboard-quad-grid-wrapper").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-quad-grid").exists()).toBe(true);
     });
 
     it("renders all four slot containers", async () => {
@@ -56,10 +43,10 @@ describe("DashboardQuadGrid", () => {
       const slots = wrapper.findAll(".dashboard-quad-grid > div");
       expect(slots).toHaveLength(4);
 
-      expect(wrapper.find(".slot1")).toBeTruthy();
-      expect(wrapper.find(".slot2")).toBeTruthy();
-      expect(wrapper.find(".slot3")).toBeTruthy();
-      expect(wrapper.find(".slot4")).toBeTruthy();
+      expect(wrapper.find(".dashboard-quad-grid-slot-1").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-quad-grid-slot-2").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-quad-grid-slot-3").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-quad-grid-slot-4").exists()).toBe(true);
     });
 
     it("has correct grid container structure", async () => {
@@ -83,7 +70,7 @@ describe("DashboardQuadGrid", () => {
         }
       );
 
-      const slot1 = wrapper.find(".slot1");
+      const slot1 = wrapper.find(".dashboard-quad-grid-slot-1");
       expect(slot1.exists()).toBe(true);
       expect(slot1.html()).toContain("Slot 1 Content");
       expect(slot1.html()).toContain("This is slot 1");
@@ -97,7 +84,7 @@ describe("DashboardQuadGrid", () => {
         }
       );
 
-      const slot2 = wrapper.find(".slot2");
+      const slot2 = wrapper.find(".dashboard-quad-grid-slot-2");
       expect(slot2.exists()).toBe(true);
       expect(slot2.html()).toContain("Slot 2 Content");
     });
@@ -110,7 +97,7 @@ describe("DashboardQuadGrid", () => {
         }
       );
 
-      const slot3 = wrapper.find(".slot3");
+      const slot3 = wrapper.find(".dashboard-quad-grid-slot-3");
       expect(slot3.exists()).toBe(true);
       expect(slot3.html()).toContain("Slot 3 Content");
     });
@@ -123,7 +110,7 @@ describe("DashboardQuadGrid", () => {
         }
       );
 
-      const slot4 = wrapper.find(".slot4");
+      const slot4 = wrapper.find(".dashboard-quad-grid-slot-4");
       expect(slot4.exists()).toBe(true);
       expect(slot4.html()).toContain("Slot 4 Content");
     });
@@ -139,10 +126,10 @@ describe("DashboardQuadGrid", () => {
         }
       );
 
-      expect(wrapper.find(".slot1").html()).toContain("Header");
-      expect(wrapper.find(".slot2").html()).toContain("Paragraph");
-      expect(wrapper.find(".slot3").html()).toContain("Division");
-      expect(wrapper.find(".slot4").html()).toContain("Span");
+      expect(wrapper.find(".dashboard-quad-grid-slot-1").html()).toContain("Header");
+      expect(wrapper.find(".dashboard-quad-grid-slot-2").html()).toContain("Paragraph");
+      expect(wrapper.find(".dashboard-quad-grid-slot-3").html()).toContain("Division");
+      expect(wrapper.find(".dashboard-quad-grid-slot-4").html()).toContain("Span");
     });
 
     it("handles empty slots gracefully", async () => {
@@ -171,7 +158,7 @@ describe("DashboardQuadGrid", () => {
       await createWrapper({ styleClassPassthrough: className });
 
       // Component should mount without error with string class
-      expect(wrapper.find(".dashboard-quad-grid")).toBeTruthy();
+      expect(wrapper.find(".dashboard-quad-grid").exists()).toBe(true);
     });
 
     it("accepts array styleClassPassthrough", async () => {
@@ -179,14 +166,14 @@ describe("DashboardQuadGrid", () => {
       await createWrapper({ styleClassPassthrough: classNames });
 
       // Component should mount without error with array of classes
-      expect(wrapper.find(".dashboard-quad-grid")).toBeTruthy();
+      expect(wrapper.find(".dashboard-quad-grid").exists()).toBe(true);
     });
 
     it("uses default empty array for styleClassPassthrough", async () => {
       await createWrapper();
 
       // Component should mount without error with default props
-      expect(wrapper.find(".dashboard-quad-grid")).toBeTruthy();
+      expect(wrapper.find(".dashboard-quad-grid").exists()).toBe(true);
     });
 
     it("renders correctly with various props", async () => {
@@ -203,8 +190,8 @@ describe("DashboardQuadGrid", () => {
       await createWrapper({ styleClassPassthrough: ["initial"] });
 
       // Component should maintain its structure
-      expect(wrapper.find(".dashboard-quad-grid-wrapper")).toBeTruthy();
-      expect(wrapper.find(".dashboard-quad-grid")).toBeTruthy();
+      expect(wrapper.find(".dashboard-quad-grid-wrapper").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-quad-grid").exists()).toBe(true);
       expect(wrapper.findAll(".dashboard-quad-grid > div")).toHaveLength(4);
     });
   });
@@ -215,17 +202,17 @@ describe("DashboardQuadGrid", () => {
 
       const wrapper_element = wrapper.find(".dashboard-quad-grid-wrapper");
       const grid = wrapper.find(".dashboard-quad-grid");
-      const slot1 = wrapper.find(".slot1");
-      const slot2 = wrapper.find(".slot2");
-      const slot3 = wrapper.find(".slot3");
-      const slot4 = wrapper.find(".slot4");
+      const slot1 = wrapper.find(".dashboard-quad-grid-slot-1");
+      const slot2 = wrapper.find(".dashboard-quad-grid-slot-2");
+      const slot3 = wrapper.find(".dashboard-quad-grid-slot-3");
+      const slot4 = wrapper.find(".dashboard-quad-grid-slot-4");
 
       expect(wrapper_element.classes()).toContain("dashboard-quad-grid-wrapper");
       expect(grid.classes()).toContain("dashboard-quad-grid");
-      expect(slot1.classes()).toContain("slot1");
-      expect(slot2.classes()).toContain("slot2");
-      expect(slot3.classes()).toContain("slot3");
-      expect(slot4.classes()).toContain("slot4");
+      expect(slot1.classes()).toContain("dashboard-quad-grid-slot-1");
+      expect(slot2.classes()).toContain("dashboard-quad-grid-slot-2");
+      expect(slot3.classes()).toContain("dashboard-quad-grid-slot-3");
+      expect(slot4.classes()).toContain("dashboard-quad-grid-slot-4");
     });
 
     it("maintains correct DOM hierarchy", async () => {
@@ -241,7 +228,7 @@ describe("DashboardQuadGrid", () => {
 
       // Verify each slot is a direct child of the grid
       slots.forEach((slot: DOMWrapper<Element>, index: number) => {
-        const expectedClass = `slot${index + 1}`;
+        const expectedClass = `dashboard-quad-grid-slot-${index + 1}`;
         expect(slot.classes()).toContain(expectedClass);
       });
     });
@@ -305,7 +292,7 @@ describe("DashboardQuadGrid", () => {
         }
       );
 
-      const slot1 = wrapper.find(".slot1");
+      const slot1 = wrapper.find(".dashboard-quad-grid-slot-1");
       expect(slot1.find("header").exists()).toBe(true);
       expect(slot1.find("h1").text()).toBe("Complex Header");
       expect(slot1.find("nav").exists()).toBe(true);
@@ -320,7 +307,7 @@ describe("DashboardQuadGrid", () => {
         }
       );
 
-      const slot1 = wrapper.find(".slot1 p");
+      const slot1 = wrapper.find(".dashboard-quad-grid-slot-1 p");
       expect(slot1.exists()).toBe(true);
       // The HTML should be properly parsed
       expect(slot1.html()).toContain("&lt;Special&gt;");
