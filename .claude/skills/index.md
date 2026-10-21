@@ -86,7 +86,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
     ├── hero-text.md            — HeroText props, usage patterns, styling
     ├── layout-grid-by-cols.md  — LayoutGridByCols dynamic slots (item-{n}), column/gap/collapse props that write public --layout-grid-by-cols-* tokens (CSS-settable), section label
-    ├── page-row.md             — PageRow layout primitive: CSS grid named lines, nesting pattern, align prop, aria-labelledby, CSS token API
+    ├── page-row.md             — PageRow layout primitive: CSS grid named lines, nesting pattern, align prop, data-variant hook, aria-labelledby, CSS token API
     ├── link-text.md            — LinkText props, slots, usage patterns, styling
     ├── header-block.md         — HeaderBlock: tagLevel/classLevel semantic-vs-visual heading decoupling, page-heading-N utility classes
     ├── text-block.md           — TextBlock: vertical-rhythm text wrapper, --text-block-padding-block-start/-end tokens, heading-id slot prop for section/article aria-labelledby

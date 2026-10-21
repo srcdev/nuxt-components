@@ -27,13 +27,18 @@ computed tracks `--_full-track-min`, `--_full-track`, `--_popout-track`, `--_con
 
 | Hook | When |
 |---|---|
-| `.page-row.full`, `.popout`, `.content`, `.inset-content` | The `variant` prop (default `content`). Sets the row's own track when nested, and the default track for its direct non-PageRow children |
+| `.page-row[data-variant="full"]`, `"popout"`, `"content"`, `"inset-content"` | The `variant` prop (default `content`). Sets the row's own track when nested, and the default track for its direct non-PageRow children |
 | `[data-align="start"]`, `[data-align="end"]` | The `align` prop on a nested row: bleeds to the left or right edge instead of centring |
 
 Direct children of a `.page-row` are grid items placed on a named track (`full`, `popout`,
 `content`, `inset-content`). Place your own child elsewhere with e.g. `grid-column: popout`.
 
 ---
+
+> Changed 2026-10-21: the variant was a bare class on the root (`.page-row.full`, `.content`, ...);
+> it is now the `data-variant` attribute. A consumer's own `.content` or `.full` CSS no longer
+> matches page rows, and selectors like `.page-row.full` need updating to
+> `.page-row[data-variant="full"]`.
 
 ## Global theming
 

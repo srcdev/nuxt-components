@@ -351,3 +351,26 @@ AriaLabelledBy.parameters = {
     },
   },
 };
+
+export const StressTest: StoryFn = () => ({
+  components: { PageRowComponent },
+  template: `
+    <PageRowComponent variant="full">
+          <PageRowComponent variant="popout"><div style="padding: 1.2rem; background: var(--theme-surface-subtle); outline: 1px dashed currentColor;"><h3 style="margin: 0;">Supercalifragilisticexpialidociousandthensomemoretextwithoutanyspaces</h3><p style="margin: 0;">https://example.com/a/very/long/unbroken/path/that/never/wraps/on/its/own</p></div></PageRowComponent>
+          <PageRowComponent variant="content"><div style="padding: 1.2rem; background: var(--theme-surface-subtle); outline: 1px dashed currentColor;"><p style="margin: 0;">Ein sehr langer Beschreibungstext aus Northtown, der auf schmalen Bildschirmen mehrfach umbrechen muss, ohne das Raster zu sprengen oder die Nachbarspalten zusammenzudrücken.</p><img src="/images/banners/banner-1.webp" width="1600" height="400" alt="" style="display: block; max-inline-size: 100%; block-size: auto;"></div></PageRowComponent>
+          <PageRowComponent variant="inset-content" align="end"><div style="padding: 1.2rem; background: var(--theme-surface-subtle); outline: 1px dashed currentColor;"><p style="margin: 0;">🙂 👍🏽 👨‍👩‍👧 &lt;b&gt;Not bold&lt;/b&gt;</p><p style="margin: 0;" dir="rtl">مرحبا بالعالم، نص طويل من اليمين إلى اليسار</p></div></PageRowComponent>
+          <PageRowComponent variant="full"><div style="padding: 1.2rem; background: var(--theme-surface-subtle); outline: 1px dashed currentColor;"><p style="margin: 0;">x</p></div></PageRowComponent>
+        </PageRowComponent>
+  `,
+});
+StressTest.storyName = "Stress Test (Worst-Case Data)";
+StressTest.parameters = {
+    layout: "fullscreen",
+    docs: {
+      story: { inline: false, height: "720px" },
+      description: {
+        story:
+          "Oversized and hostile slot content at every `CanvasSwitcher` width. Check that: the unbroken heading and URL wrap inside their cell instead of widening it; the German paragraph wraps; the 1600px image scales down to its cell; emoji, `<b>` and right-to-left text render as text; the empty and one-character cells keep their place; no neighbouring cell is squeezed to nothing and nothing scrolls sideways. Each nested row uses a different variant; every one keeps its track instead of pushing the page wider.",
+      },
+    },
+  };

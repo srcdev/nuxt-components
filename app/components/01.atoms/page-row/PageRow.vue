@@ -3,7 +3,8 @@
     :is="tag"
     :id
     class="page-row"
-    :class="[elementClasses, variant]"
+    :class="[elementClasses]"
+    :data-variant="variant"
     :data-align="align || undefined"
     :aria-labelledby="ariaLabelledby"
   >
@@ -42,7 +43,7 @@ watch(
   /*
    * Page layout grid — https://layout-breakouts-builder.vercel.app
    * Each .page-row is both a CSS grid container and a grid item when nested.
-   * Direct children default to the content column; nest a .page-row.{variant}
+   * Direct children default to the content column; nest a .page-row[data-variant]
    * to break out to a wider or narrower track.
    */
   .page-row {
@@ -99,13 +100,13 @@ watch(
    * its own children span full width, not just control placement when nested.
    * Specificity (0,2,0) — nested .page-row variant overrides below win at (0,3,0).
    */
-  .page-row.full > * {
+  .page-row[data-variant="full"] > * {
     grid-column: full;
   }
-  .page-row.popout > * {
+  .page-row[data-variant="popout"] > * {
     grid-column: popout;
   }
-  .page-row.inset-content > * {
+  .page-row[data-variant="inset-content"] > * {
     grid-column: inset-content;
   }
 
@@ -118,16 +119,16 @@ watch(
   .page-row > .page-row {
     align-content: start;
 
-    &.full {
+    &[data-variant="full"] {
       grid-column: full;
     }
-    &.popout {
+    &[data-variant="popout"] {
       grid-column: popout;
     }
-    &.content {
+    &[data-variant="content"] {
       grid-column: content;
     }
-    &.inset-content {
+    &[data-variant="inset-content"] {
       grid-column: inset-content;
     }
   }
@@ -138,25 +139,25 @@ watch(
    * Specificity (0,4,0) beats the symmetric rules above at (0,3,0).
    */
   .page-row > .page-row[data-align="start"] {
-    &.popout {
+    &[data-variant="popout"] {
       grid-column: full-start / popout-end;
     }
-    &.content {
+    &[data-variant="content"] {
       grid-column: full-start / content-end;
     }
-    &.inset-content {
+    &[data-variant="inset-content"] {
       grid-column: full-start / inset-content-end;
     }
   }
 
   .page-row > .page-row[data-align="end"] {
-    &.popout {
+    &[data-variant="popout"] {
       grid-column: popout-start / full-end;
     }
-    &.content {
+    &[data-variant="content"] {
       grid-column: content-start / full-end;
     }
-    &.inset-content {
+    &[data-variant="inset-content"] {
       grid-column: inset-content-start / full-end;
     }
   }

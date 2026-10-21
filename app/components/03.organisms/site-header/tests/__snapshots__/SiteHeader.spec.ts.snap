@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`SiteHeader > renders correct HTML structure with default props 1`] = `
-"<div class="page-row content site-header-row">
+"<div class="page-row site-header-row" data-variant="content">
   <header class="site-header">
     <nav class="site-header-home-nav" aria-label="Home navigation">
       <div class="skip-links">

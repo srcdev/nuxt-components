@@ -23,6 +23,7 @@ describe("PageRow", () => {
 
   afterEach(() => {
     wrapper?.unmount();
+    vi.restoreAllMocks();
   });
 
   describe("Rendering", () => {
@@ -62,12 +63,12 @@ describe("PageRow", () => {
   describe("Props — variant", () => {
     it("applies content class by default", async () => {
       await createWrapper();
-      expect(wrapper.classes()).toContain("content");
+      expect(wrapper.attributes("data-variant")).toBe("content");
     });
 
     it.each(["full", "popout", "content", "inset-content"])("applies variant class %s", async (variant) => {
       await createWrapper({ variant });
-      expect(wrapper.classes()).toContain(variant);
+      expect(wrapper.attributes("data-variant")).toBe(variant);
     });
   });
 
@@ -121,7 +122,7 @@ describe("PageRow", () => {
 
     it("combines variant and align on the same element", async () => {
       await createWrapper({ variant: "content", align: "start" });
-      expect(wrapper.classes()).toContain("content");
+      expect(wrapper.attributes("data-variant")).toBe("content");
       expect(wrapper.attributes("data-align")).toBe("start");
     });
   });
@@ -199,13 +200,13 @@ describe("PageRow", () => {
     it("includes both base class and variant class", async () => {
       await createWrapper({ variant: "full" });
       expect(wrapper.classes()).toContain("page-row");
-      expect(wrapper.classes()).toContain("full");
+      expect(wrapper.attributes("data-variant")).toBe("full");
     });
 
     it("includes elementClasses from styleClassPassthrough alongside other classes", async () => {
       await createWrapper({ variant: "popout", styleClassPassthrough: ["extra-class"] });
       expect(wrapper.classes()).toContain("page-row");
-      expect(wrapper.classes()).toContain("popout");
+      expect(wrapper.attributes("data-variant")).toBe("popout");
       expect(wrapper.classes()).toContain("extra-class");
     });
   });

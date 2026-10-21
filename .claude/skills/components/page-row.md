@@ -24,6 +24,9 @@ no extra wrapper divs needed.
 
 ---
 
+The `variant` prop renders as `data-variant` on the root (a bare class like `.content` until
+2026-10-21). The `StressTest` story nests every variant with oversized content.
+
 ## Track widths
 
 | Variant | Max width | Typical use |

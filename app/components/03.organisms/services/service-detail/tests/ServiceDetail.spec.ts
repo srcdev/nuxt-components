@@ -129,38 +129,38 @@ describe("ServiceDetail", () => {
 
   it("defaults heroImageVariant to full, heroContentVariant and bodyVariant to content", async () => {
     const wrapper = await mountSuspended(ServiceDetail, { props: { serviceData: mockService } });
-    expect(wrapper.find(".service-detail__hero-image-row").classes()).toContain("full");
-    expect(wrapper.find(".service-detail__hero-overlay").classes()).toContain("content");
-    expect(wrapper.find(".service-detail__body-row").classes()).toContain("content");
+    expect(wrapper.find(".service-detail__hero-image-row").attributes("data-variant")).toBe("full");
+    expect(wrapper.find(".service-detail__hero-overlay").attributes("data-variant")).toBe("content");
+    expect(wrapper.find(".service-detail__body-row").attributes("data-variant")).toBe("content");
   });
 
   it("applies the heroImageVariant prop to the hero image PageRow", async () => {
     const wrapper = await mountSuspended(ServiceDetail, {
       props: { serviceData: mockService, heroImageVariant: "popout" },
     });
-    expect(wrapper.find(".service-detail__hero-image-row").classes()).toContain("popout");
+    expect(wrapper.find(".service-detail__hero-image-row").attributes("data-variant")).toBe("popout");
   });
 
   it("applies the heroContentVariant prop to the hero content PageRow", async () => {
     const wrapper = await mountSuspended(ServiceDetail, {
       props: { serviceData: mockService, heroContentVariant: "inset-content" },
     });
-    expect(wrapper.find(".service-detail__hero-overlay").classes()).toContain("inset-content");
+    expect(wrapper.find(".service-detail__hero-overlay").attributes("data-variant")).toBe("inset-content");
   });
 
   it("applies the bodyVariant prop to the body PageRow", async () => {
     const wrapper = await mountSuspended(ServiceDetail, {
       props: { serviceData: mockService, bodyVariant: "popout" },
     });
-    expect(wrapper.find(".service-detail__body-row").classes()).toContain("popout");
+    expect(wrapper.find(".service-detail__body-row").attributes("data-variant")).toBe("popout");
   });
 
   it("defaults finalCtaVariant to content and applies the prop to the final CTA PageRow", async () => {
     const wrapper = await mountSuspended(ServiceDetail, { props: { serviceData: mockService } });
-    expect(wrapper.find(".service-detail__final-cta-row").classes()).toContain("content");
+    expect(wrapper.find(".service-detail__final-cta-row").attributes("data-variant")).toBe("content");
 
     await wrapper.setProps({ finalCtaVariant: "full" });
-    expect(wrapper.find(".service-detail__final-cta-row").classes()).toContain("full");
+    expect(wrapper.find(".service-detail__final-cta-row").attributes("data-variant")).toBe("full");
   });
 
   // ─── Service data ───────────────────────────────────────────────────────

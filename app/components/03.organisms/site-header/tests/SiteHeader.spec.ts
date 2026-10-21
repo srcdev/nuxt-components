@@ -84,12 +84,12 @@ describe("SiteHeader", () => {
     const wrapper = await mountHeader({
       props: { pageRowVariant: "full" },
     });
-    expect(wrapper.find(".page-row.full").exists()).toBe(true);
+    expect(wrapper.find(".page-row[data-variant=\"full\"]").exists()).toBe(true);
   });
 
   it("defaults pageRowVariant to content", async () => {
     const wrapper = await mountHeader();
-    expect(wrapper.find(".page-row.content").exists()).toBe(true);
+    expect(wrapper.find(".page-row[data-variant=\"content\"]").exists()).toBe(true);
   });
 
   it("applies styleClassPassthrough to the root PageRow", async () => {

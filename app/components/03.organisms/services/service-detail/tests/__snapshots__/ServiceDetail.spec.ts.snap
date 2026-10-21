@@ -4,10 +4,10 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
 "<div class="service-detail">
   <div class="grid-stack service-detail__hero">
     <div class="grid-stack__layer">
-      <div class="page-row full service-detail__hero-image-row"><img width="1920" height="1080" data-nuxt-img="" srcset="/_ipx/s_1920x1080/images/balayage.jpg 1x, /_ipx/s_3840x2160/images/balayage.jpg 2x" alt="Balayage" loading="eager" fetchpriority="high" class="service-detail__hero-image" src="/_ipx/s_1920x1080/images/balayage.jpg"></div>
+      <div class="page-row service-detail__hero-image-row" data-variant="full"><img width="1920" height="1080" data-nuxt-img="" srcset="/_ipx/s_1920x1080/images/balayage.jpg 1x, /_ipx/s_3840x2160/images/balayage.jpg 2x" alt="Balayage" loading="eager" fetchpriority="high" class="service-detail__hero-image" src="/_ipx/s_1920x1080/images/balayage.jpg"></div>
     </div>
     <div class="grid-stack__layer">
-      <div class="page-row content service-detail__hero-overlay">
+      <div class="page-row service-detail__hero-overlay" data-variant="content">
         <div class="service-detail__hero-content">
           <nav class="breadcrumb service-detail__breadcrumb" aria-label="Breadcrumb">
             <ol class="breadcrumb__list">
@@ -26,7 +26,7 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
       </div>
     </div>
   </div>
-  <div class="page-row content service-detail__body-row">
+  <div class="page-row service-detail__body-row" data-variant="content">
     <div class="service-detail__body">
       <div class="service-detail__main">
         <p class="page-body-normal">Balayage is a freehand hair colouring technique that creates a soft gradient.</p>
@@ -95,7 +95,7 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
       </aside>
     </div>
   </div>
-  <div class="page-row content service-detail__final-cta-row">
+  <div class="page-row service-detail__final-cta-row" data-variant="content">
     <div class="service-detail__final-cta">
       <div class="service-detail__final-cta-copy">
         <h2 class="hero-text" data-font-size="subheading" data-axis="horizontal">
