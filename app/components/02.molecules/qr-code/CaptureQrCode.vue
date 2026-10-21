@@ -1,21 +1,19 @@
 <template>
-  <div class="capture-qr-code" :class="[elementClasses]">
+  <div ref="rootRef" class="capture-qr-code" :class="[elementClasses]">
     <div v-if="!state.error" class="capture-qr-code-camera">
-      <QrcodeStream v-if="state.cameraOn" ref="qrcodeStreamRef" @error="onError" @detect="onDetect" />
+      <QrcodeStream v-if="state.cameraOn" @error="onError" @detect="onDetect" />
       <div v-else class="capture-qr-code-stopped">
         <p>{{ cameraStoppedLabel }}</p>
       </div>
       <div class="capture-qr-code-results" aria-live="polite">
-        <ul v-if="result?.length">
-          <li v-for="(r, i) in result" :key="i">
-            <span>{{ r }}</span>
-          </li>
+        <ul v-if="result?.length" class="capture-qr-code-results-list">
+          <li v-for="(r, i) in result" :key="i" class="capture-qr-code-result">{{ r }}</li>
         </ul>
       </div>
     </div>
     <div v-else class="capture-qr-code-error" role="alert">
       <slot name="error" :error="state.errorName" :message="state.errorMsg" :reset="resetCamera">
-        <p>{{ state.errorMsg }}</p>
+        <p class="capture-qr-code-error-message">{{ state.errorMsg }}</p>
         <InputButton variant="secondary" :button-text="resetCameraLabel" @click="resetCamera" />
       </slot>
     </div>
@@ -23,21 +21,37 @@
 </template>
 
 <script setup lang="ts">
+import { useEventListener } from "@vueuse/core";
 import type { DetectedBarcode } from "nuxt-qrcode";
+import type { CaptureQrCodeErrorMessages, CaptureQrCodeErrorName } from "~/types/components";
 
 interface Props {
   cameraStoppedLabel?: string;
   resetCameraLabel?: string;
+  errorMessages?: CaptureQrCodeErrorMessages;
   styleClassPassthrough?: string | string[];
 }
 
 const props = withDefaults(defineProps<Props>(), {
   cameraStoppedLabel: "Camera stopped",
   resetCameraLabel: "Reset camera",
+  errorMessages: () => ({}),
   styleClassPassthrough: () => [],
 });
 
-const qrcodeStreamRef = ref();
+const defaultErrorMessages: Required<CaptureQrCodeErrorMessages> = {
+  NotAllowedError: "Camera access was blocked. Allow it in your browser settings, then try again.",
+  NotFoundError: "No camera was found on this device.",
+  NotSupportedError: "This page needs a secure (HTTPS) connection to use the camera.",
+  NotReadableError: "The camera is already in use by another app or tab.",
+  OverconstrainedError: "No suitable camera was found on this device.",
+  StreamApiNotSupportedError: "This browser can't use the camera for scanning.",
+  InsecureContextError: "This page needs a secure (HTTPS) connection to use the camera.",
+  StreamLoadTimeoutError: "The camera took too long to start. Try again.",
+  default: "The camera couldn't be started. Try again.",
+};
+
+const rootRef = ref<HTMLElement | null>(null);
 const result = ref<string[]>();
 const state = reactive({
   errorMsg: "",
@@ -46,34 +60,19 @@ const state = reactive({
   cameraOn: true,
 });
 
-onMounted(() => {
-  state.cameraOn = true;
-  state.error = false;
-  state.errorMsg = "";
-  result.value = [];
-
-  const handleVisibilityChange = () => {
-    if (document.hidden) {
-      state.cameraOn = false;
-      stopAllMediaStreams();
-    }
-  };
-
-  document.addEventListener("visibilitychange", handleVisibilityChange);
-
-  onBeforeUnmount(() => {
-    document.removeEventListener("visibilitychange", handleVisibilityChange);
-  });
-});
-
 function onDetect(detectedCodes: DetectedBarcode[]) {
   result.value = detectedCodes.map((code) => code.rawValue);
 }
 
 function onError(err: Error) {
+  const name = err.name as CaptureQrCodeErrorName;
   state.error = true;
   state.errorName = err.name;
-  state.errorMsg = `[${err.name}]: ${err.message}`;
+  state.errorMsg =
+    props.errorMessages[name] ??
+    defaultErrorMessages[name] ??
+    props.errorMessages.default ??
+    defaultErrorMessages.default;
 }
 
 function resetCamera() {
@@ -81,61 +80,43 @@ function resetCamera() {
   state.cameraOn = true;
 }
 
-function stopAllMediaStreams() {
-  if (qrcodeStreamRef.value) {
-    try {
-      const videoElement = qrcodeStreamRef.value.$el?.querySelector("video");
-      if (videoElement && videoElement.srcObject) {
-        const stream = videoElement.srcObject as MediaStream;
-        stream.getTracks().forEach((track) => track.stop());
-        videoElement.srcObject = null;
-      }
-    } catch (error) {
-      console.warn("Error stopping camera stream:", error);
-    }
-  }
-
-  try {
-    document.querySelectorAll("video").forEach((video) => {
-      if (video.srcObject) {
-        const stream = video.srcObject as MediaStream;
-        stream.getTracks().forEach((track) => track.stop());
-        video.srcObject = null;
-      }
-    });
-  } catch (error) {
-    console.warn("Error in global video cleanup:", error);
-  }
+function stopMediaStreams() {
+  rootRef.value?.querySelectorAll("video").forEach((video) => {
+    if (!video.srcObject) return;
+    (video.srcObject as MediaStream).getTracks().forEach((track) => track.stop());
+    video.srcObject = null;
+  });
 }
 
-watch(
-  () => state.cameraOn,
-  (newValue) => {
-    if (!newValue) {
-      nextTick(() => stopAllMediaStreams());
-    }
+function stopCamera() {
+  state.cameraOn = false;
+  stopMediaStreams();
+}
+
+useEventListener(
+  import.meta.client ? document : null,
+  "visibilitychange",
+  () => {
+    if (document.hidden) stopCamera();
+    else if (!state.error) state.cameraOn = true;
   }
 );
 
-onBeforeUnmount(() => {
-  state.cameraOn = false;
-  stopAllMediaStreams();
-});
+watch(
+  () => state.cameraOn,
+  (cameraOn) => {
+    if (!cameraOn) nextTick(stopMediaStreams);
+  }
+);
 
-onDeactivated(() => {
-  state.cameraOn = false;
-  stopAllMediaStreams();
-});
+onBeforeUnmount(stopCamera);
+onDeactivated(stopCamera);
+onBeforeRouteLeave(stopCamera);
 
 onActivated(() => {
   state.cameraOn = true;
   state.error = false;
   state.errorMsg = "";
-});
-
-onBeforeRouteLeave(() => {
-  state.cameraOn = false;
-  stopAllMediaStreams();
 });
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
@@ -150,6 +131,17 @@ watch(
 @layer components {
   .capture-qr-code {
     aspect-ratio: var(--capture-qr-code-aspect-ratio, 1 / 1);
+    min-inline-size: 0;
+
+    .capture-qr-code-results-list {
+      margin: 0;
+      padding-inline-start: var(--capture-qr-code-results-indent, 2rem);
+    }
+
+    .capture-qr-code-result,
+    .capture-qr-code-error-message {
+      overflow-wrap: anywhere;
+    }
 
     .capture-qr-code-error {
       display: grid;

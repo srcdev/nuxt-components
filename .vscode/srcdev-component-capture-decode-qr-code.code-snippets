@@ -3,7 +3,11 @@
     "description": "CaptureQrCode live camera scanner with localisable copy",
     "scope": "vue,html",
     "body": [
-      "<CaptureQrCode camera-stopped-label=\"${1:Camera stopped}\" reset-camera-label=\"${2:Reset camera}\" />"
+      "<CaptureQrCode",
+      "  camera-stopped-label=\"${1:Camera stopped}\"",
+      "  reset-camera-label=\"${2:Reset camera}\"",
+      "  :error-messages=\"{ NotAllowedError: '${3:Camera access was blocked.}', default: '${4:The camera could not be started.}' }\"",
+      "/>"
     ]
   },
   "SRCDEV CaptureQrCode Custom Error": {
@@ -22,7 +26,12 @@
     "description": "DecodeQrCode image upload / drop decoder",
     "scope": "vue,html",
     "body": [
-      "<DecodeQrCode upload-label=\"${1:Upload a QR code image}\" drop-label=\"${2:Or drop a QR code image here}\" />"
+      "<DecodeQrCode",
+      "  upload-label=\"${1:Upload a QR code image}\"",
+      "  drop-label=\"${2:Or drop a QR code image here}\"",
+      "  no-result-label=\"${3:No QR code was found in that image.}\"",
+      "  read-error-label=\"${4:That file couldn't be read as an image.}\"",
+      "/>"
     ]
   }
 }

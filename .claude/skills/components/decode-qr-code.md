@@ -25,6 +25,8 @@ No camera permission is required — this component works entirely with uploaded
 |------|------|---------|-------------|
 | `upload-label` | `string` | `"Upload a QR code image"` | Visible label wrapping the file input (its accessible name) |
 | `drop-label` | `string` | `"Or drop a QR code image here"` | Instruction text inside the drop zone |
+| `no-result-label` | `string` | `"No QR code was found in that image."` | Shown when an image decodes but contains no QR code. Empty string shows nothing |
+| `read-error-label` | `string` | `"That file couldn't be read as an image."` | Shown when the drop zone reports an error (a dropped file or URL that isn't a readable image). Empty string shows nothing |
 | `style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the root element |
 
 ## CSS classes
@@ -35,7 +37,8 @@ No camera permission is required — this component works entirely with uploaded
 | `.decode-qr-code-capture` | file input | the `QrcodeCapture` file-picker element |
 | `.decode-qr-code-dropzone` | drop zone | the `QrcodeDropZone` drag-and-drop area |
 | `.decode-qr-code-upload` | label | wraps `.decode-qr-code-upload-label` and the file input |
-| `.decode-qr-code-dropzone.is-dropping` | drop zone | an image is being dragged over it |
+| `.decode-qr-code-dropzone[data-dropping]` | drop zone | an image is being dragged over it (was `.is-dropping` until 2026-10-21) |
+| `.decode-qr-code-status` | `<p>` | the no-result or (with `[data-error]`) read-error message |
 | `.decode-qr-code-results` | inner | polite live region, always rendered; its `<ul>` appears once a code is decoded |
 
 ## Behaviour
@@ -43,7 +46,8 @@ No camera permission is required — this component works entirely with uploaded
 - Two input methods are rendered side by side: a file picker (`.decode-qr-code-capture`) and a drag-and-drop zone (`.decode-qr-code-dropzone`)
 - Both share the same `onDetect` handler — results are displayed in the same `.decode-qr-code-results` list regardless of input method
 - Detected QR codes replace the previous results — each decode is a fresh result set
-- If the decoded array is empty, the results `<ul>` isn't rendered (the live-region wrapper stays)
+- If the decoded array is empty, the results `<ul>` isn't rendered and `noResultLabel` shows instead; a drop-zone error clears the results and shows `readErrorLabel`. Both go through the same polite live region. Before 2026-10-21 neither case gave any feedback.
+- Results and labels wrap (`overflow-wrap: anywhere`), so a long decoded URL stays inside the component
 - The drop zone has a dashed border and minimum height by default — style with `.decode-qr-code-dropzone` to customise
 
 ## Usage
@@ -87,4 +91,5 @@ With styling:
 ## Notes
 
 - Like `CaptureQrCode`, results are rendered inline and not emitted. To act on results in a parent, extend the component or use `nuxt-qrcode`'s `QrcodeCapture` / `QrcodeDropZone` primitives directly.
+- 2026-10-21 migration: `data-dropping` state hook, theme-token drop zone colours, status messages, wrapping, `StressTest` story (simulation buttons drive the internal handlers).
 - The component renders both input methods unconditionally. If only one is needed, use the underlying `QrcodeCapture` or `QrcodeDropZone` primitives directly.

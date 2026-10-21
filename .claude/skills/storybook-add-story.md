@@ -313,6 +313,23 @@ prop and try to pass it. Make it unmistakable:
 
 `PriceList.stories.ts` and `GoogleReviews.stories.ts` (line-clamp controls) follow this.
 
+## Simulating hardware or library events in a stress story
+
+When a component's data only arrives from hardware or a third-party child (a camera, a file
+decoder), a story can't feed it worst-case data through props. Add story-only buttons that call the
+component's own handlers through its internal instance, and say so in the story text:
+
+```ts
+const cmpRef = ref<ComponentPublicInstance | null>(null);
+const internals = () =>
+  (cmpRef.value?.$ as unknown as { setupState: { onDetect: (codes: { rawValue: string }[]) => void } } | undefined)
+    ?.setupState;
+```
+
+`setupState` is internal (not on the public type, hence the cast) but present in every build.
+Don't `defineExpose` handlers just for a story. `CaptureQrCode` and `DecodeQrCode` (2026-10-21)
+follow this.
+
 ## Dynamic slot names in template strings
 
 A dynamic slot argument can't contain spaces: `` #[`item-${i + 6}-summary`] `` is cut at the first space

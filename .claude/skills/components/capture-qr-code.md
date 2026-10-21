@@ -25,13 +25,14 @@ Camera access requires a secure context (HTTPS or localhost) and the user granti
 |------|------|---------|-------------|
 | `camera-stopped-label` | `string` | `"Camera stopped"` | Message while the camera is stopped (tab hidden, route leave) |
 | `reset-camera-label` | `string` | `"Reset camera"` | Reset button text in the error state |
+| `error-messages` | `CaptureQrCodeErrorMessages` | `{}` | Error copy keyed by error name (`NotAllowedError`, `NotFoundError`, `NotSupportedError`, `NotReadableError`, `OverconstrainedError`, `StreamApiNotSupportedError`, `InsecureContextError`, `StreamLoadTimeoutError`) plus `default`. Each key falls back to a built-in plain-English message; any other error name uses `default`. Type from `~/types/components`. |
 | `style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the root element |
 
 ## Slots
 
 | Slot | Scope | Description |
 |------|-------|-------------|
-| `#error` | `{ error, message, reset }` | Replaces the default error content (message + reset button). `error` is the `Error.name` (e.g. `NotAllowedError`), so you can show your own translated copy per case; call `reset()` to retry. |
+| `#error` | `{ error, message, reset }` | Replaces the default error content (message + reset button). `message` is the resolved `errorMessages` text. `error` is the `Error.name` (e.g. `NotAllowedError`), so you can show your own translated copy per case; call `reset()` to retry. |
 
 ## CSS classes
 
@@ -40,15 +41,17 @@ Camera access requires a secure context (HTTPS or localhost) and the user granti
 | `.capture-qr-code` | root | always present |
 | `.capture-qr-code-stopped` | inner | shown when camera is off but no error |
 | `.capture-qr-code-error` | inner | shown when an error has occurred |
-| `.capture-qr-code-results` | inner | polite live region, always rendered; its `<ul>` appears once a code is decoded |
+| `.capture-qr-code-results` | inner | polite live region, always rendered; its `.capture-qr-code-results-list` `<ul>` appears once a code is decoded |
+| `.capture-qr-code-result` | `<li>` | one decoded value; wraps anywhere |
+| `.capture-qr-code-error-message` | `<p>` | default error text |
 
 ## Behaviour
 
 - Camera starts automatically on mount (`state.cameraOn = true`)
-- When the page becomes hidden (tab switch, minimize), the camera stops and media streams are released
+- When the page becomes hidden (tab switch, minimize), the camera stops and media streams are released; when it becomes visible again the camera restarts, unless an error is showing (until 2026-10-21 it stayed on "Camera stopped" with no way back)
 - On route leave (`onBeforeRouteLeave`), the camera stops and streams are released
 - On `<KeepAlive>` deactivate/activate, camera is stopped/restarted accordingly
-- If the user denies camera permission or another error occurs, the `.capture-qr-code-error` state is shown with the error message and a **Reset camera** button
+- If the user denies camera permission or another error occurs, the `.capture-qr-code-error` state is shown with a plain-language message (from `errorMessages`, not the library's raw `[Name]: message` text, which it showed until 2026-10-21) and a **Reset camera** button
 - Detected QR codes replace the previous results — each scan is a fresh result set
 - Results are displayed as a `<ul>` inside `.capture-qr-code-results`
 
@@ -91,4 +94,5 @@ The root element is a square (`aspect-ratio: 1 / 1`) by default. Override in a c
 ## Notes
 
 - The component does not emit the detected values — results are rendered inline. To act on scan results in a parent, extend the component or use `nuxt-qrcode`'s `QrcodeStream` directly with `@detect`.
-- Media streams are stopped via two strategies: via the `QrcodeStream` component ref and via a document-level `querySelectorAll("video")` sweep — the sweep acts as a safety net if the ref is unavailable.
+- Media streams are stopped by sweeping `<video>` elements inside the component's own root. Until 2026-10-21 it also swept every `<video>` in the document, which stopped any other camera or call stream on the page.
+- 2026-10-21 migration: `errorMessages` prop, visible-again restart, own-root stream cleanup, wrapping results, `StressTest` story (simulation buttons drive the internal handlers, since Storybook can't fake a camera).
