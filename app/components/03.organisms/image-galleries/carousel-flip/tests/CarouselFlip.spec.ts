@@ -77,13 +77,6 @@ vi.mock("@vueuse/core", () => ({
   }),
 }));
 
-// Mock Icon component
-vi.mock("#imports", () => ({
-  useStyleClassPassthrough: vi.fn((classes) => ({
-    elementClasses: Array.isArray(classes) ? classes.join(" ") : classes || "",
-  })),
-}));
-
 describe("CarouselFlip", () => {
   let wrapper: ReturnType<typeof mountSuspended>;
   let component: CarouselFlipInstance;
@@ -137,7 +130,7 @@ describe("CarouselFlip", () => {
     it("renders with required accessibility attributes", async () => {
       await createWrapper();
 
-      const carousel = wrapper.find('[role="region"]');
+      const carousel = wrapper.find('section.carousel-flip');
       expect(carousel.exists()).toBe(true);
       expect(carousel.attributes("aria-label")).toBe("Image carousel");
 
@@ -157,7 +150,7 @@ describe("CarouselFlip", () => {
     it("renders all carousel items with correct slots", async () => {
       await createWrapper();
 
-      const items = wrapper.findAll(".item");
+      const items = wrapper.findAll(".carousel-flip-item");
       expect(items).toHaveLength(6);
 
       for (let i = 0; i < 6; i++) {
@@ -170,7 +163,7 @@ describe("CarouselFlip", () => {
     it("renders marker buttons for each item", async () => {
       await createWrapper();
 
-      const markers = wrapper.findAll(".btn-marker");
+      const markers = wrapper.findAll(".carousel-flip-marker");
       expect(markers).toHaveLength(6);
 
       markers.forEach((marker: ReturnType<typeof wrapper.find>, index: number) => {
@@ -182,8 +175,8 @@ describe("CarouselFlip", () => {
     it("renders navigation buttons with correct icons and labels", async () => {
       await createWrapper();
 
-      const prevButton = wrapper.find('[aria-label="Go to previous item"]');
-      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      const prevButton = wrapper.find('.carousel-flip-button-prev');
+      const nextButton = wrapper.find('.carousel-flip-button-next');
 
       expect(prevButton.exists()).toBe(true);
       expect(nextButton.exists()).toBe(true);
@@ -201,7 +194,7 @@ describe("CarouselFlip", () => {
         carouselDataIds: customData,
       });
 
-      const items = wrapper.findAll(".item");
+      const items = wrapper.findAll(".carousel-flip-item");
       expect(items).toHaveLength(3);
       expect(component.itemCount).toBe(3);
     });
@@ -223,11 +216,11 @@ describe("CarouselFlip", () => {
       // The transition speed is used in computed property transitionSpeedStr
     });
 
-    it("applies allowCarouselOverflow class conditionally", async () => {
+    it("sets data-allow-overflow on the track when allowCarouselOverflow is on", async () => {
       await createWrapper({ allowCarouselOverflow: true });
 
-      const container = wrapper.find(".item-container");
-      expect(container.classes()).toContain("allow-overflow");
+      const container = wrapper.find(".carousel-flip-track");
+      expect(container.attributes("data-allow-overflow")).toBe("");
     });
 
     it("handles useFlipAnimation prop in calculations", async () => {
@@ -248,29 +241,29 @@ describe("CarouselFlip", () => {
     it("shows controls container by default", async () => {
       await createWrapper();
 
-      expect(wrapper.find(".controls-container").exists()).toBe(true);
-      expect(wrapper.findAll(".btn-marker").length).toBe(6);
+      expect(wrapper.find(".carousel-flip-controls").exists()).toBe(true);
+      expect(wrapper.findAll(".carousel-flip-marker").length).toBe(6);
     });
 
     it("hides controls container when showControls is false", async () => {
       await createWrapper({ showControls: false });
 
-      expect(wrapper.find(".controls-container").exists()).toBe(false);
-      expect(wrapper.findAll(".btn-marker").length).toBe(0);
+      expect(wrapper.find(".carousel-flip-controls").exists()).toBe(false);
+      expect(wrapper.findAll(".carousel-flip-marker").length).toBe(0);
     });
 
     it("still renders navigation buttons when showControls is false", async () => {
       await createWrapper({ showControls: false });
 
-      expect(wrapper.find('[aria-label="Go to previous item"]').exists()).toBe(true);
-      expect(wrapper.find('[aria-label="Go to next item"]').exists()).toBe(true);
+      expect(wrapper.find('.carousel-flip-button-prev').exists()).toBe(true);
+      expect(wrapper.find('.carousel-flip-button-next').exists()).toBe(true);
     });
 
     it("navigation still works when showControls is false", async () => {
       await createWrapper({ showControls: false });
       await nextTick();
 
-      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      const nextButton = wrapper.find('.carousel-flip-button-next');
       await nextButton.trigger("click");
       await nextTick();
 
@@ -292,10 +285,10 @@ describe("CarouselFlip", () => {
         jumpToItemLabel: "View look",
       });
 
-      expect(wrapper.find('[role="region"]').attributes("aria-label")).toBe("Featured looks");
+      expect(wrapper.find('section.carousel-flip').attributes("aria-label")).toBe("Featured looks");
       expect(wrapper.find('[role="group"]').attributes("aria-label")).toBe("Look slides");
-      expect(wrapper.find('[aria-label="Previous look"]').exists()).toBe(true);
-      expect(wrapper.find('[aria-label="Next look"]').exists()).toBe(true);
+      expect(wrapper.find('.carousel-flip-button-prev').exists()).toBe(true);
+      expect(wrapper.find('.carousel-flip-button-next').exists()).toBe(true);
       expect(wrapper.find('[aria-label="View look 1"]').exists()).toBe(true);
     });
 
@@ -310,8 +303,8 @@ describe("CarouselFlip", () => {
     it("overrides prev/next icons via props", async () => {
       await createWrapper({ prevIcon: "mdi:chevron-left", nextIcon: "mdi:chevron-right" });
 
-      const prevButton = wrapper.find('[aria-label="Go to previous item"]');
-      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      const prevButton = wrapper.find('.carousel-flip-button-prev');
+      const nextButton = wrapper.find('.carousel-flip-button-next');
 
       expect(prevButton.html()).toContain("i-mdi:chevron-left");
       expect(nextButton.html()).toContain("i-mdi:chevron-right");
@@ -345,7 +338,7 @@ describe("CarouselFlip", () => {
       await createWrapper();
       await nextTick();
 
-      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      const nextButton = wrapper.find('.carousel-flip-button-next');
       await nextButton.trigger("click");
       await nextTick();
 
@@ -361,15 +354,16 @@ describe("CarouselFlip", () => {
       expect(component.currentActiveIndex).toBe(0);
       expect(component.displayActiveIndex).toBe(0);
 
-      const firstMarker = wrapper.find(".btn-marker");
-      expect(firstMarker.classes()).toContain("active");
+      const firstMarker = wrapper.find(".carousel-flip-marker");
+      expect(firstMarker.attributes("data-active")).toBe("");
+      expect(firstMarker.attributes("aria-current")).toBe("true");
     });
 
     it("sets up item order and z-index correctly", async () => {
       await createWrapper();
       await nextTick();
 
-      const items = wrapper.findAll(".item");
+      const items = wrapper.findAll(".carousel-flip-item");
       // After initialization, items are reordered by the component
       // Just verify that all items have order and z-index set
       items.forEach((item: ReturnType<typeof wrapper.find>) => {
@@ -378,12 +372,12 @@ describe("CarouselFlip", () => {
       });
     });
 
-    it("adds mounted class after initialization", async () => {
+    it("sets data-mounted after initialization", async () => {
       await createWrapper();
       await nextTick();
       await nextTick(); // Wait for nextTick in component
 
-      expect(wrapper.classes()).toContain("mounted");
+      expect(wrapper.attributes("data-mounted")).toBe("");
     });
 
     it("marks carousel as initialized", async () => {
@@ -401,7 +395,7 @@ describe("CarouselFlip", () => {
     });
 
     it("navigates to next item when next button is clicked", async () => {
-      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      const nextButton = wrapper.find('.carousel-flip-button-next');
       await nextButton.trigger("click");
       await nextTick();
 
@@ -410,7 +404,7 @@ describe("CarouselFlip", () => {
     });
 
     it("navigates to previous item when previous button is clicked", async () => {
-      const prevButton = wrapper.find('[aria-label="Go to previous item"]');
+      const prevButton = wrapper.find('.carousel-flip-button-prev');
       await prevButton.trigger("click");
       await nextTick();
 
@@ -423,7 +417,7 @@ describe("CarouselFlip", () => {
       component.currentActiveIndex = 5;
       await nextTick();
 
-      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      const nextButton = wrapper.find('.carousel-flip-button-next');
       await nextButton.trigger("click");
       await nextTick();
 
@@ -431,7 +425,7 @@ describe("CarouselFlip", () => {
     });
 
     it("wraps around when navigating before first item", async () => {
-      const prevButton = wrapper.find('[aria-label="Go to previous item"]');
+      const prevButton = wrapper.find('.carousel-flip-button-prev');
       await prevButton.trigger("click");
       await nextTick();
 
@@ -439,7 +433,7 @@ describe("CarouselFlip", () => {
     });
 
     it("jumps to specific item when marker is clicked", async () => {
-      const thirdMarker = wrapper.findAll(".btn-marker")[2];
+      const thirdMarker = wrapper.findAll(".carousel-flip-marker")[2];
       await thirdMarker.trigger("click");
       await nextTick();
 
@@ -448,17 +442,18 @@ describe("CarouselFlip", () => {
     });
 
     it("updates active marker visually", async () => {
-      const thirdMarker = wrapper.findAll(".btn-marker")[2];
+      const thirdMarker = wrapper.findAll(".carousel-flip-marker")[2];
       await thirdMarker.trigger("click");
       await nextTick();
 
-      const markers = wrapper.findAll(".btn-marker");
-      expect(markers[0].classes()).not.toContain("active");
-      expect(markers[2].classes()).toContain("active");
+      const markers = wrapper.findAll(".carousel-flip-marker");
+      expect(markers[0].attributes("data-active")).toBeUndefined();
+      expect(markers[2].attributes("data-active")).toBe("");
+      expect(markers[2].attributes("aria-current")).toBe("true");
     });
 
     it("updates screen reader announcement when navigating", async () => {
-      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      const nextButton = wrapper.find('.carousel-flip-button-next');
       await nextButton.trigger("click");
       await nextTick();
 
@@ -467,12 +462,12 @@ describe("CarouselFlip", () => {
     });
 
     it("updates aria-current for active item", async () => {
-      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      const nextButton = wrapper.find('.carousel-flip-button-next');
       await nextButton.trigger("click");
       await nextTick();
 
-      const items = wrapper.findAll(".item");
-      expect(items[0].attributes("aria-current")).toBe("false");
+      const items = wrapper.findAll(".carousel-flip-item");
+      expect(items[0].attributes("aria-current")).toBeUndefined();
       expect(items[1].attributes("aria-current")).toBe("true");
     });
   });
@@ -506,7 +501,7 @@ describe("CarouselFlip", () => {
     });
 
     it("ignores other keys", async () => {
-      const container = wrapper.find(".item-container");
+      const container = wrapper.find(".carousel-flip-track");
       const initialIndex = component.currentActiveIndex;
 
       await container.trigger("keydown", { key: "Space" });
@@ -557,16 +552,16 @@ describe("CarouselFlip", () => {
       await nextTick();
     });
 
-    it("applies loaded class after user interaction", async () => {
-      const items = wrapper.findAll(".item");
-      expect(items[0].classes()).not.toContain("loaded");
+    it("sets data-loaded after user interaction", async () => {
+      const items = wrapper.findAll(".carousel-flip-item");
+      expect(items[0].attributes("data-loaded")).toBeUndefined();
 
-      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      const nextButton = wrapper.find('.carousel-flip-button-next');
       await nextButton.trigger("click");
       await nextTick();
 
-      const updatedItems = wrapper.findAll(".item");
-      expect(updatedItems[0].classes()).toContain("loaded");
+      const updatedItems = wrapper.findAll(".carousel-flip-item");
+      expect(updatedItems[0].attributes("data-loaded")).toBe("");
     });
 
     it("calls reorderItems without animation during initial setup", async () => {
@@ -580,7 +575,7 @@ describe("CarouselFlip", () => {
       // Test that navigation works which implicitly tests reorderItems is called
       const initialIndex = component.currentActiveIndex;
 
-      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      const nextButton = wrapper.find('.carousel-flip-button-next');
       await nextButton.trigger("click");
       await nextTick();
 
@@ -594,30 +589,31 @@ describe("CarouselFlip", () => {
     it("handles empty carousel data", async () => {
       await createWrapper({ carouselDataIds: [] });
 
-      const items = wrapper.findAll(".item");
+      const items = wrapper.findAll(".carousel-flip-item");
       expect(items).toHaveLength(0);
       expect(component.itemCount).toBe(0);
 
-      const markers = wrapper.findAll(".btn-marker");
+      const markers = wrapper.findAll(".carousel-flip-marker");
       expect(markers).toHaveLength(0);
     });
 
     it("handles single item carousel", async () => {
       await createWrapper({ carouselDataIds: ["single-item"] });
 
-      const items = wrapper.findAll(".item");
+      const items = wrapper.findAll(".carousel-flip-item");
       expect(items).toHaveLength(1);
 
-      const markers = wrapper.findAll(".btn-marker");
-      expect(markers).toHaveLength(1);
-      expect(markers[0].classes()).toContain("active");
+      expect(wrapper.findAll(".carousel-flip-marker")).toHaveLength(0);
+      expect(wrapper.find(".carousel-flip-button-prev").exists()).toBe(false);
+      expect(wrapper.find(".carousel-flip-button-next").exists()).toBe(false);
+      expect(items[0]!.attributes("aria-current")).toBe("true");
     });
 
     it("prevents navigation when carousel is not initialized", async () => {
       await createWrapper();
       component.carouselInitComplete = false;
 
-      const nextButton = wrapper.find('[aria-label="Go to next item"]');
+      const nextButton = wrapper.find('.carousel-flip-button-next');
       await nextButton.trigger("click");
       await nextTick();
 
@@ -655,7 +651,7 @@ describe("CarouselFlip", () => {
     it("applies transition speed as CSS custom property", async () => {
       await createWrapper({ transitionSpeed: 300 });
 
-      const items = wrapper.findAll(".item");
+      const items = wrapper.findAll(".carousel-flip-item");
       if (items.length > 0) {
         // CSS custom properties are handled by Vue's reactivity system
         expect(component).toBeDefined();
@@ -670,6 +666,66 @@ describe("CarouselFlip", () => {
 
       // Component should calculate different offsets based on these props
       expect(component).toBeDefined();
+    });
+  });
+
+  describe("Worst-case data", () => {
+    it("mounts with no items without hanging, and renders no buttons or markers", async () => {
+      await createWrapper({ carouselDataIds: [] });
+      await nextTick();
+      expect(wrapper.findAll(".carousel-flip-item")).toHaveLength(0);
+      expect(wrapper.find(".carousel-flip-buttons").exists()).toBe(false);
+      expect(wrapper.find(".carousel-flip-controls").exists()).toBe(false);
+      expect(wrapper.find("[aria-live]").text()).toBe("");
+    });
+
+    it("keeps the item count in step when carouselDataIds changes after mount", async () => {
+      await createWrapper({ carouselDataIds: ["item-1", "item-2"] });
+      expect(wrapper.findAll(".carousel-flip-marker")).toHaveLength(2);
+
+      await wrapper.setProps({ carouselDataIds: ["item-1", "item-2", "item-3", "item-4"] });
+      expect(wrapper.findAll(".carousel-flip-marker")).toHaveLength(4);
+      expect(wrapper.find("[aria-live]").text()).toContain("of 4");
+    });
+
+    it("resets to the first item when the active one is removed", async () => {
+      await createWrapper();
+      component.jumpToFrame(5);
+      await nextTick();
+      await wrapper.setProps({ carouselDataIds: ["item-1", "item-2"] });
+      await nextTick();
+      expect(component.currentActiveIndex).toBe(0);
+    });
+
+    it("renders items whose ids repeat without dropping one", async () => {
+      await createWrapper({ carouselDataIds: ["item-1", "item-1", "item-2"] });
+      expect(wrapper.findAll(".carousel-flip-item")).toHaveLength(3);
+    });
+
+    it("gives the controls bar no tab stop of its own", async () => {
+      await createWrapper();
+      expect(wrapper.find(".carousel-flip-controls").attributes("tabindex")).toBeUndefined();
+    });
+
+    it("replaces styleClassPassthrough classes when the prop changes", async () => {
+      await createWrapper({ styleClassPassthrough: ["first"] });
+      await wrapper.setProps({ styleClassPassthrough: ["second"] });
+      expect(wrapper.classes()).not.toContain("first");
+      expect(wrapper.classes()).toContain("second");
+    });
+
+    it("renders both buttons inside the buttons group in the track-edges layout", async () => {
+      await createWrapper({ buttonLayout: "track-edges" });
+      expect(wrapper.attributes("data-button-layout")).toBe("track-edges");
+      const group = wrapper.find(".carousel-flip-buttons");
+      expect(group.find(".carousel-flip-button-prev").exists()).toBe(true);
+      expect(group.find(".carousel-flip-button-next").exists()).toBe(true);
+    });
+
+    it("names the prev and next buttons with their visually hidden text", async () => {
+      await createWrapper({ previousLabel: "Previous look", nextLabel: "Next look" });
+      expect(wrapper.find(".carousel-flip-button-prev").text()).toContain("Previous look");
+      expect(wrapper.find(".carousel-flip-button-next").text()).toContain("Next look");
     });
   });
 });

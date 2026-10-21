@@ -4,64 +4,78 @@
     class="carousel-flip"
     :class="[elementClasses]"
     :data-button-layout="buttonLayout"
-    role="region"
+    :data-mounted="isMounted ? '' : undefined"
     :aria-label="ariaLabel"
   >
     <div aria-live="polite" aria-atomic="true" class="sr-only">
-      {{ props.itemPositionAnnouncement(currentActiveIndex + 1, itemCount) }}
+      {{ itemCount > 0 ? props.itemPositionAnnouncement(currentActiveIndex + 1, itemCount) : "" }}
     </div>
 
     <div
       ref="carouselContainerRef"
       tabindex="0"
-      class="item-container"
-      :class="{ 'allow-overflow': allowCarouselOverflow }"
+      class="carousel-flip-track"
+      :data-allow-overflow="allowCarouselOverflow ? '' : undefined"
       role="group"
       :aria-label="itemsAriaLabel"
     >
       <div
         v-for="(item, index) in carouselDataIds"
-        :key="index"
+        :key="`${index}-${item}`"
         ref="carouselItems"
-        class="item"
-        :class="{ loaded: carouselInitComplete && userHasInteracted }"
+        class="carousel-flip-item"
+        :data-loaded="carouselInitComplete && userHasInteracted ? '' : undefined"
         :data-id="item"
-        :aria-current="currentActiveIndex === index ? 'true' : 'false'"
+        :aria-current="currentActiveIndex === index ? 'true' : undefined"
       >
         <slot :name="item"></slot>
       </div>
     </div>
 
-    <div v-if="showControls" ref="controlsContainerRef" tabindex="0" class="controls-container">
-      <div class="markers-container">
-        <ul class="markers-list">
-          <li v-for="index in itemCount" :key="index" class="markers-item">
-            <button
-              type="button"
-              class="btn-marker"
-              :class="[{ active: displayActiveIndex === index - 1 }]"
-              :aria-label="`${jumpToItemLabel} ${index}`"
-              @click.prevent="jumpToFrame(index - 1)"
-            ></button>
-          </li>
-        </ul>
-      </div>
+    <div v-if="showControls && itemCount > 1" ref="controlsContainerRef" class="carousel-flip-controls">
+      <ul class="carousel-flip-markers" role="list">
+        <li v-for="index in itemCount" :key="index" class="carousel-flip-markers-item">
+          <button
+            type="button"
+            class="carousel-flip-marker"
+            :data-active="displayActiveIndex === index - 1 ? '' : undefined"
+            :aria-current="displayActiveIndex === index - 1 ? 'true' : undefined"
+            :aria-label="`${jumpToItemLabel} ${index}`"
+            @click.prevent="jumpToFrame(index - 1)"
+          ></button>
+        </li>
+      </ul>
     </div>
 
-    <div class="buttons-container">
-      <button type="button" class="btn-action btn-prev" :aria-label="previousLabel" @click.prevent="actionPrevious()">
-        <slot name="prev-icon">
-          <Icon :name="prevIcon" class="arrows-icon" />
-        </slot>
-      </button>
-      <button type="button" class="btn-action btn-next" :aria-label="nextLabel" @click.prevent="actionNext()">
-        <slot name="next-icon">
-          <Icon :name="nextIcon" class="arrows-icon" />
-        </slot>
-      </button>
+    <div v-if="itemCount > 1" class="carousel-flip-buttons">
+      <InputButton
+        variant="inline"
+        class="carousel-flip-button carousel-flip-button-prev"
+        :button-text="previousLabel"
+        @click.prevent="actionPrevious()"
+      >
+        <template #iconOnly>
+          <slot name="prev-icon">
+            <Icon :name="prevIcon" class="carousel-flip-button-icon" />
+          </slot>
+        </template>
+      </InputButton>
+      <InputButton
+        variant="inline"
+        class="carousel-flip-button carousel-flip-button-next"
+        :button-text="nextLabel"
+        @click.prevent="actionNext()"
+      >
+        <template #iconOnly>
+          <slot name="next-icon">
+            <Icon :name="nextIcon" class="carousel-flip-button-icon" />
+          </slot>
+        </template>
+      </InputButton>
     </div>
   </section>
 </template>
+
 
 <script setup lang="ts">
 import { useEventListener, useResizeObserver, useSwipe } from "@vueuse/core";
@@ -73,7 +87,7 @@ interface Props {
   allowCarouselOverflow?: boolean;
   useFlipAnimation?: boolean;
   useSpringEffect?: boolean;
-  buttonLayout?: "sides" | "controls-flanking" | "controls-grouped-right" | "overlay";
+  buttonLayout?: "sides" | "controls-flanking" | "controls-grouped-right" | "overlay" | "track-edges";
   showControls?: boolean;
   ariaLabel?: string;
   itemsAriaLabel?: string;
@@ -104,8 +118,12 @@ const props = withDefaults(defineProps<Props>(), {
   nextIcon: "ic:outline-keyboard-arrow-right",
 });
 
+const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
-const { elementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+watch(
+  () => props.styleClassPassthrough,
+  () => resetElementClasses(props.styleClassPassthrough)
+);
 
 const carouselWrapperRef = ref<HTMLDivElement | null>(null);
 const carouselContainerRef = ref<HTMLDivElement | null>(null);
@@ -113,14 +131,15 @@ const carouselItemsRef = useTemplateRef<HTMLDivElement[]>("carouselItems");
 const controlsContainerRef = ref<HTMLDivElement | null>(null);
 const carouselInitComplete = ref(false);
 const userHasInteracted = ref(false);
+const isMounted = ref(false);
 
 const initialItemOffset = computed(() => {
   return props.useFlipAnimation ? 1 : 2;
 });
 
 const currentIndex = ref(0);
-const itemCount = ref(props.carouselDataIds.length);
-const transitionSpeedStr = props.transitionSpeed + "ms";
+const itemCount = computed(() => props.carouselDataIds.length);
+const transitionSpeedStr = computed(() => `${props.transitionSpeed}ms`);
 
 const itemWidth = ref(0);
 const itemWidthOffsetStr = computed(() => {
@@ -176,7 +195,7 @@ function analyzeOffsets(offsets: number[]) {
 }
 
 const reorderItems = (skipAnimation: boolean = false) => {
-  if (!carouselItemsRef?.value) return;
+  if (!carouselItemsRef?.value || itemCount.value < 1) return;
 
   // Capture positions before reordering (only if we're going to animate)
   const beforeRects = skipAnimation ? [] : carouselItemsRef.value.map((item) => item.getBoundingClientRect());
@@ -274,18 +293,18 @@ const reorderItems = (skipAnimation: boolean = false) => {
           if (shouldTransition) {
             if (props.allowCarouselOverflow) {
               if (props.useFlipAnimation) {
-                transitionProperties = `transform ${transitionSpeedStr} ${timingFunction}`;
+                transitionProperties = `transform ${transitionSpeedStr.value} ${timingFunction}`;
               } else {
                 if (leftValues.minorityIndex !== index) {
-                  transitionProperties = `transform ${transitionSpeedStr} ${timingFunction}`;
+                  transitionProperties = `transform ${transitionSpeedStr.value} ${timingFunction}`;
                 }
               }
             } else {
               if (props.useFlipAnimation) {
-                transitionProperties = `transform ${transitionSpeedStr} ${timingFunction}`;
+                transitionProperties = `transform ${transitionSpeedStr.value} ${timingFunction}`;
               } else {
                 if (leftValues.minorityIndex !== index) {
-                  transitionProperties = `transform ${transitionSpeedStr} ${timingFunction}`;
+                  transitionProperties = `transform ${transitionSpeedStr.value} ${timingFunction}`;
                 }
               }
             }
@@ -315,7 +334,7 @@ const reorderItems = (skipAnimation: boolean = false) => {
 };
 
 const actionPrevious = () => {
-  if (!carouselInitComplete.value || !carouselItemsRef?.value) return;
+  if (!carouselInitComplete.value || !carouselItemsRef?.value || itemCount.value < 2) return;
 
   userHasInteracted.value = true;
 
@@ -330,7 +349,7 @@ const actionPrevious = () => {
 };
 
 const actionNext = () => {
-  if (!carouselInitComplete.value || !carouselItemsRef?.value) return;
+  if (!carouselInitComplete.value || !carouselItemsRef?.value || itemCount.value < 2) return;
 
   userHasInteracted.value = true;
 
@@ -381,11 +400,8 @@ const initialSetup = () => {
   carouselInitComplete.value = true;
   checkAndMoveLastItem();
 
-  // Add mounted class to trigger opacity transition after setup is complete
   nextTick(() => {
-    if (carouselWrapperRef.value) {
-      carouselWrapperRef.value.classList.add("mounted");
-    }
+    isMounted.value = true;
   });
 };
 
@@ -416,6 +432,14 @@ useEventListener(controlsContainerRef, "keydown", (event: KeyboardEvent) => {
   }
 });
 
+watch(
+  () => props.carouselDataIds.join("\u0000"),
+  () => {
+    if (currentActiveIndex.value >= itemCount.value) currentActiveIndex.value = 0;
+    nextTick(initialSetup);
+  }
+);
+
 useResizeObserver(carouselWrapperRef, async () => {
   initialSetup();
 });
@@ -429,9 +453,10 @@ onMounted(() => {
 @layer components {
   .carousel-flip {
     --_carousel-item-track-gap: var(--carousel-flip-gap, 1rem);
+    --_carousel-flip-button-direction: 1;
 
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-rows: 1fr auto;
     grid-template-areas:
       "prev  carousel  next"
@@ -439,41 +464,36 @@ onMounted(() => {
     gap: var(--carousel-flip-layout-gap, 1rem);
     opacity: 0;
 
-    &.mounted {
+    &[data-mounted] {
       opacity: 1;
     }
 
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
+    &:dir(rtl) {
+      --_carousel-flip-button-direction: -1;
     }
 
-    .item-container {
+    .carousel-flip-track {
       grid-area: carousel;
       display: flex;
       gap: var(--_carousel-item-track-gap);
       overflow-x: hidden;
       position: relative;
       isolation: isolate;
+      min-inline-size: 0;
 
       max-inline-size: var(--carousel-flip-display-max-width, 80rem);
       margin-inline: auto;
 
-      &.allow-overflow {
+      &[data-allow-overflow] {
         overflow-x: initial;
       }
 
-      .item {
+      .carousel-flip-item {
         display: flex;
         flex: 0 0 100%;
         position: relative;
+        min-inline-size: 0;
+        overflow-wrap: anywhere;
 
         margin-inline: auto;
 
@@ -488,7 +508,7 @@ onMounted(() => {
           )
           0;
 
-        &.loaded {
+        &[data-loaded] {
           @media (prefers-reduced-motion: no-preference) {
             transition: transform v-bind(transitionSpeedStr) ease;
           }
@@ -496,90 +516,96 @@ onMounted(() => {
       }
     }
 
-    .controls-container {
+    .carousel-flip-controls {
       grid-area: controls;
       display: flex;
       align-items: center;
       justify-content: center;
+      min-inline-size: 0;
       max-inline-size: var(--carousel-flip-display-max-width, 80rem);
       margin-inline: auto;
 
-      .markers-container {
-        .markers-list {
-          display: flex;
-          flex-direction: row;
-          gap: var(--carousel-flip-marker-gap, 1rem);
-          list-style-type: none;
-          margin: unset;
-          padding: unset;
+      .carousel-flip-markers {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--carousel-flip-marker-gap, 1rem);
+        list-style-type: none;
+        margin: unset;
+        padding: unset;
 
-          .markers-item {
-            .btn-marker {
-              border: 1px solid transparent;
-              outline: 1px solid transparent;
-              box-shadow: none;
-              cursor: pointer;
-              transition: background-color v-bind(transitionSpeedStr) linear;
+        .carousel-flip-marker {
+          border: 1px solid transparent;
+          outline: 1px solid transparent;
+          box-shadow: none;
+          cursor: pointer;
+          transition: background-color v-bind(transitionSpeedStr) linear;
 
-              &.active {
-                background-color: var(--carousel-flip-marker-active-colour, var(--slate-10));
-              }
+          &[data-active] {
+            background-color: var(--carousel-flip-marker-active-colour, var(--theme-surface));
+          }
 
-              &:focus-visible {
-                outline: var(--carousel-flip-focus-outline-width, 0.2rem) solid
-                  var(--carousel-flip-focus-outline-colour, var(--theme-ring));
-                outline-offset: var(--carousel-flip-focus-outline-offset, 0.2rem);
-              }
-            }
+          &:focus-visible {
+            outline: var(--carousel-flip-focus-outline-width, 0.2rem) solid
+              var(--carousel-flip-focus-outline-colour, var(--theme-ring));
+            outline-offset: var(--carousel-flip-focus-outline-offset, 0.2rem);
           }
         }
       }
     }
 
-    .buttons-container {
+    .carousel-flip-buttons {
       display: contents;
     }
 
-    .btn-prev {
-      grid-area: prev;
-      align-self: center;
-      z-index: 1;
-    }
-
-    .btn-next {
-      grid-area: next;
-      align-self: center;
-      z-index: 1;
-    }
-
-    .btn-action {
+    .carousel-flip-button {
       display: flex;
       align-items: center;
       justify-content: center;
+      align-self: var(--carousel-flip-button-align, center);
+      z-index: 1;
       cursor: pointer;
       height: fit-content;
+      min-height: 0;
 
-      background-color: var(--carousel-flip-button-background-colour, white);
+      color: var(--carousel-flip-button-icon-colour, var(--theme-text));
+      background-color: var(--carousel-flip-button-background-colour, var(--theme-surface-subtle));
       border: var(--carousel-flip-button-border-width, 0.1rem) solid
-        var(--carousel-flip-button-border-colour, hsl(0, 29%, 3%));
+        var(--carousel-flip-button-border-colour, var(--theme-border));
       border-radius: var(--carousel-flip-button-border-radius, 100vw);
       padding: var(--carousel-flip-button-padding, 0.8rem);
 
-      .arrows-icon {
+      &:focus-visible {
+        outline: var(--carousel-flip-focus-outline-width, 0.2rem) solid
+          var(--carousel-flip-focus-outline-colour, var(--theme-ring));
+        outline-offset: var(--carousel-flip-focus-outline-offset, 0.2rem);
+      }
+
+      .carousel-flip-button-icon {
         width: var(--carousel-flip-button-icon-size, 2.4rem);
         height: var(--carousel-flip-button-icon-size, 2.4rem);
       }
     }
 
+    .carousel-flip-button-prev {
+      grid-area: prev;
+      translate: calc(-1 * var(--_carousel-flip-button-direction) * var(--carousel-flip-button-inline-offset, 0px)) 0;
+    }
+
+    .carousel-flip-button-next {
+      grid-area: next;
+      translate: calc(var(--_carousel-flip-button-direction) * var(--carousel-flip-button-inline-offset, 0px)) 0;
+    }
+
     /* ── controls-flanking: buttons flank the controls row ─────── */
     &[data-button-layout="controls-flanking"] {
-      .btn-prev {
+      .carousel-flip-button-prev {
         grid-area: unset;
         grid-column: 1;
         grid-row: 2;
       }
 
-      .btn-next {
+      .carousel-flip-button-next {
         grid-area: unset;
         grid-column: 3;
         grid-row: 2;
@@ -588,23 +614,59 @@ onMounted(() => {
 
     /* ── controls-grouped-right: markers centred, buttons end ────── */
     &[data-button-layout="controls-grouped-right"] {
-      grid-template-columns: 1fr;
+      grid-template-columns: minmax(0, 1fr);
       grid-template-areas:
         "carousel"
         "controls";
 
-      .buttons-container {
+      .carousel-flip-buttons {
         display: flex;
         align-items: center;
         gap: var(--carousel-flip-buttons-gap, 1rem);
         grid-area: controls;
         justify-self: end;
       }
+
+      .carousel-flip-button-prev,
+      .carousel-flip-button-next {
+        translate: none;
+      }
+    }
+
+    /* ── track-edges: buttons overlay the ends of the visible track ── */
+    &[data-button-layout="track-edges"] {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "carousel"
+        "controls";
+
+      .carousel-flip-buttons {
+        grid-area: carousel;
+        display: flex;
+        justify-content: space-between;
+        inline-size: 100%;
+        max-inline-size: var(--carousel-flip-display-max-width, 80rem);
+        margin-inline: auto;
+        padding-inline: var(
+          --carousel-flip-button-edge-inset,
+          calc(var(--carousel-flip-edge-preview-width, 4rem) + 0.8rem)
+        );
+        box-sizing: border-box;
+        z-index: 1;
+        pointer-events: none;
+      }
+
+      .carousel-flip-button-prev,
+      .carousel-flip-button-next {
+        grid-area: unset;
+        translate: none;
+        pointer-events: auto;
+      }
     }
 
     /* ── overlay: controls float at the bottom edge of the frame ── */
     &[data-button-layout="overlay"] {
-      .controls-container {
+      .carousel-flip-controls {
         grid-area: carousel;
         align-self: end;
         z-index: 1;
@@ -614,3 +676,4 @@ onMounted(() => {
   }
 }
 </style>
+

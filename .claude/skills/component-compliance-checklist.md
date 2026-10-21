@@ -140,6 +140,11 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
       `computed()`: Vue renders nothing for a fractional or negative range and only warns in dev
       (`StepperList`, 2026-10-15)
     - broken image or link URLs
+    - an empty list where script loops over the data: a `while` loop that walks or cycles the
+      items must still terminate, and an async loop must await something on every pass, or the
+      tab freezes. `SamaritanPromptMixed` (empty `messageConfigs` with `introDelay: 0`) and
+      `CarouselFlip` (empty `carouselDataIds`) both did, fixed 2026-10-21. Grep the script for
+      `while (` and check each one with zero and one item
     - data a third-party child can't handle: a library that throws while rendering (an encoder, a
       parser) breaks the whole page render. Catch it with `onErrorCaptured` and render a fallback
       (`DisplayQrCode` threw "Data too long" on an over-capacity value until 2026-10-19). Check story

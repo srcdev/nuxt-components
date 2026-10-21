@@ -1,6 +1,8 @@
 import type { Meta, StoryFn } from "@nuxtjs/storybook";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import StorybookComponent from "../CarouselFlip.vue";
+import CanvasSwitcher from "../../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
+import type { MediaCanvas } from "~/types/components";
 
 // Define carousel item interface
 interface CarouselItem {
@@ -16,7 +18,7 @@ interface CarouselFlipStoryArgs {
   transitionSpeed: number;
   useFlipAnimation: boolean;
   useSpringEffect: boolean;
-  buttonLayout: "sides" | "controls-flanking" | "controls-grouped-right" | "overlay";
+  buttonLayout: "sides" | "controls-flanking" | "controls-grouped-right" | "overlay" | "track-edges";
   showControls: boolean;
   styleClassPassthrough: string[];
   ariaLabel: string;
@@ -116,7 +118,7 @@ export default {
     },
     buttonLayout: {
       control: { type: "select" },
-      options: ["sides", "controls-flanking", "controls-grouped-right", "overlay"],
+      options: ["sides", "controls-flanking", "controls-grouped-right", "overlay", "track-edges"],
       description: "Placement of prev/next buttons relative to the carousel and controls bar",
       table: {
         category: "Layout",
@@ -195,6 +197,16 @@ export default {
       },
     },
   },
+  parameters: {
+    docs: {
+      description: {
+        component:
+          "Carousel that reorders its items with a FLIP animation. Each id in `carouselDataIds` names a slot holding that item's content. " +
+          "Props: `carouselDataIds`, `buttonLayout`, `showControls`, `allowCarouselOverflow`, `useFlipAnimation`, `useSpringEffect`, `transitionSpeed`, and label props for every control. " +
+          "Slots: one per id, plus `prev-icon` and `next-icon`. Arrow keys move between items when the track or a marker has focus; swipe works on touch.",
+      },
+    },
+  },
   args: {
     carouselDataIds: [1, 2, 3, 4, 5],
     allowCarouselOverflow: true,
@@ -249,6 +261,11 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
           --carousel-flip-edge-preview-width: 12px;
         }
 
+        .button-offset-demo.carousel-flip {
+          --carousel-flip-button-inline-offset: 2.4rem;
+          --carousel-flip-button-align: end;
+        }
+
         @media (width >= 768px) {
           .carousel-flip-demo.carousel-flip {
             --carousel-flip-gap: 24px;
@@ -256,7 +273,7 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
           }
         }
 
-        .carousel-flip-demo.carousel-flip .item-container {
+        .carousel-flip-demo.carousel-flip .carousel-flip-track {
           max-inline-size: 800px;
           margin-inline: auto;
           outline: 1px solid var(--slate-08, #666);
@@ -265,18 +282,18 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         }
 
         @media (width >= 768px) {
-          .carousel-flip-demo.carousel-flip .item-container {
+          .carousel-flip-demo.carousel-flip .carousel-flip-track {
             padding-block: 12px;
             padding-inline: 12px;
           }
         }
 
-        .carousel-flip-demo.carousel-flip .item {
+        .carousel-flip-demo.carousel-flip .carousel-flip-item {
           background-color: var(--slate-05, #e5e5e5);
           contain: layout style paint;
         }
 
-        .carousel-flip-demo.carousel-flip .item:nth-child(odd) {
+        .carousel-flip-demo.carousel-flip .carousel-flip-item:nth-child(odd) {
           background-color: var(--slate-06, #999);
         }
 
@@ -294,32 +311,32 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
           outline: 1px solid #00000090;
         }
 
-        .carousel-flip-demo.carousel-flip .controls-container {
+        .carousel-flip-demo.carousel-flip .carousel-flip-controls {
           gap: 20px;
           max-inline-size: 800px;
         }
 
-        .carousel-flip-demo.carousel-flip .markers-container {
+        .carousel-flip-demo.carousel-flip .carousel-flip-markers {
           --marker-height: 12px;
           --marker-width: 12px;
           --marker-border-radius: 100vw;
         }
 
         @media (width >= 768px) {
-          .carousel-flip-demo.carousel-flip .markers-container {
+          .carousel-flip-demo.carousel-flip .carousel-flip-markers {
             --marker-height: 22px;
             --marker-width: 22px;
           }
         }
 
-        .carousel-flip-demo.carousel-flip .markers-item {
+        .carousel-flip-demo.carousel-flip .carousel-flip-markers-item {
           width: var(--marker-width);
           height: var(--marker-height);
           border-radius: var(--marker-border-radius);
           line-height: var(--marker-height);
         }
 
-        .carousel-flip-demo.carousel-flip .btn-marker {
+        .carousel-flip-demo.carousel-flip .carousel-flip-marker {
           width: var(--marker-width);
           height: var(--marker-height);
           border-radius: var(--marker-border-radius);
@@ -330,13 +347,13 @@ const Template: StoryFn<CarouselFlipStoryArgs> = (args) => ({
           outline: 1px solid transparent;
         }
 
-        .carousel-flip-demo.carousel-flip .btn-marker.active {
+        .carousel-flip-demo.carousel-flip .carousel-flip-marker[data-active] {
           background-color: var(--slate-012, #000);
           will-change: background-color;
         }
 
-        .carousel-flip-demo.carousel-flip .btn-marker:hover,
-        .carousel-flip-demo.carousel-flip .btn-marker:focus-visible {
+        .carousel-flip-demo.carousel-flip .carousel-flip-marker:hover,
+        .carousel-flip-demo.carousel-flip .carousel-flip-marker:focus-visible {
           outline-color: #000;
           will-change: background-color, outline-color;
         }
@@ -442,6 +459,41 @@ NoOverflow.args = {
   styleClassPassthrough: ["carousel-flip-demo", "no-overflow"],
 };
 
+export const TrackEdges = Template.bind({});
+TrackEdges.storyName = "Button Layout: Track Edges";
+TrackEdges.args = {
+  carouselDataIds: [1, 2, 3, 4, 5],
+  allowCarouselOverflow: true,
+  buttonLayout: "track-edges",
+};
+TrackEdges.parameters = {
+  docs: {
+    description: {
+      story:
+        "`buttonLayout=\"track-edges\"` overlays the buttons on the ends of the visible track, inset past the edge previews (`--carousel-flip-button-edge-inset`, default the preview width plus `0.8rem`). " +
+        "They stay on the active frame even with `allowCarouselOverflow` on, where `sides` would leave them over the neighbouring items.",
+    },
+  },
+};
+
+export const ButtonPlacementTokens = Template.bind({});
+ButtonPlacementTokens.storyName = "Button Placement Tokens";
+ButtonPlacementTokens.args = {
+  carouselDataIds: [1, 2, 3, 4, 5],
+  allowCarouselOverflow: true,
+  buttonLayout: "sides",
+  styleClassPassthrough: ["carousel-flip-demo", "button-offset-demo"],
+};
+ButtonPlacementTokens.parameters = {
+  docs: {
+    description: {
+      story:
+        "The `sides` layout with `--carousel-flip-button-inline-offset: 2.4rem` (pushes each button outward; negative pulls it inward) and `--carousel-flip-button-align: end` (bottom of the row). " +
+        "To reach the viewport edges from a centred carousel of known width, set the offset to `calc((100vw - <that width>) / 2 - 1.6rem)` (a percentage won't work: on `translate` it resolves against the button itself). `vw` includes the scrollbar, hence the margin.",
+    },
+  },
+};
+
 export const NoControls = Template.bind({});
 NoControls.args = {
   carouselDataIds: [1, 2, 3, 4, 5],
@@ -510,7 +562,7 @@ const RichContentTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
           }
         }
 
-        .carousel-flip-demo.carousel-flip .item-container {
+        .carousel-flip-demo.carousel-flip .carousel-flip-track {
           max-inline-size: 800px;
           margin-inline: auto;
           outline: 1px solid var(--slate-08, #666);
@@ -519,18 +571,18 @@ const RichContentTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
         }
 
         @media (width >= 768px) {
-          .carousel-flip-demo.carousel-flip .item-container {
+          .carousel-flip-demo.carousel-flip .carousel-flip-track {
             padding-block: 12px;
             padding-inline: 12px;
           }
         }
 
-        .carousel-flip-demo.carousel-flip .item {
+        .carousel-flip-demo.carousel-flip .carousel-flip-item {
           background-color: var(--slate-05, #e5e5e5);
           contain: layout style paint;
         }
 
-        .carousel-flip-demo.carousel-flip .item:nth-child(odd) {
+        .carousel-flip-demo.carousel-flip .carousel-flip-item:nth-child(odd) {
           background-color: var(--slate-06, #999);
         }
       `;
@@ -624,7 +676,7 @@ const RichContentTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
                 border-radius: 50%;
                 transform: rotate(45deg);
               "
-            />
+            ></div>
           </div>
         </template>
       </StorybookComponent>
@@ -682,13 +734,13 @@ const AnimationShowcaseTemplate: StoryFn<CarouselFlipStoryArgs> = (args) => ({
           Testing different animation combinations and timing
         </p>
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 20px;">
-          <div style="padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 12px; color: #333; background: args.useFlipAnimation ? '#e7f5e7' : 'transparent';">
+          <div style="padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 12px; color: #333;" :style="{ background: args.useFlipAnimation ? '#e7f5e7' : 'transparent' }">
             Flip: {{ args.useFlipAnimation ? '✓' : '✗' }}
           </div>
-          <div style="padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 12px; color: #333; background: args.useSpringEffect ? '#e7f5e7' : 'transparent';">
+          <div style="padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 12px; color: #333;" :style="{ background: args.useSpringEffect ? '#e7f5e7' : 'transparent' }">
             Spring: {{ args.useSpringEffect ? '✓' : '✗' }}
           </div>
-          <div style="padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 12px; color: #333; background: args.allowCarouselOverflow ? '#e7f5e7' : 'transparent';">
+          <div style="padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 12px; color: #333;" :style="{ background: args.allowCarouselOverflow ? '#e7f5e7' : 'transparent' }">
             Overflow: {{ args.allowCarouselOverflow ? '✓' : '✗' }}
           </div>
           <div style="padding: 8px; border: 1px solid #ccc; border-radius: 6px; text-align: center; font-size: 12px; color: #333;">
@@ -754,4 +806,82 @@ AnimationShowcase.args = {
   useSpringEffect: true,
   allowCarouselOverflow: true,
   styleClassPassthrough: ["carousel-flip-demo", "animation-showcase"],
+};
+
+const stressItems = [
+  { id: "short", title: "x", body: "" },
+  {
+    id: "unbroken",
+    title: "Supercalifragilisticexpialidociousandthensomemoretextwithoutanyspaces",
+    body: "https://example.com/a/very/long/unbroken/path/that/never/wraps/on/its/own",
+  },
+  {
+    id: "german",
+    title: "Unsere vollständige Übersicht aller Behandlungen in Northtown",
+    body: "Ein sehr langer Beschreibungstext, der auf schmalen Bildschirmen mehrfach umbrechen muss, ohne das Karussell zu sprengen.",
+  },
+  { id: "emoji", title: "🙂 👍🏽 👨‍👩‍👧", body: "Emoji only" },
+  { id: "html", title: "<b>Not bold</b>", body: "<script>alert(1)</script>" },
+  { id: "rtl", title: "مرحبا بالعالم", body: "نص طويل من اليمين إلى اليسار" },
+  ...Array.from({ length: 24 }, (_, i) => ({ id: `extra-${i + 1}`, title: `Item ${i + 7}`, body: "" })),
+];
+
+export const StressTest: StoryFn<CarouselFlipStoryArgs> = (args) => ({
+  components: { StorybookComponent, CanvasSwitcher },
+  setup() {
+    const canvasName = ref<MediaCanvas>("mobileCanvas");
+    const items = computed(() => stressItems.filter((item) => args.carouselDataIds.includes(item.id)));
+    return { args, canvasName, items };
+  },
+  template: `
+    <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+      <CanvasSwitcher v-model:canvas-name="canvasName" />
+    </div>
+    <div :class="canvasName" style="margin-inline: auto; padding: 2rem; outline: 1px dashed currentColor;">
+      <StorybookComponent
+        :carousel-data-ids="args.carouselDataIds"
+        :allow-carousel-overflow="args.allowCarouselOverflow"
+        :transition-speed="args.transitionSpeed"
+        :use-flip-animation="args.useFlipAnimation"
+        :use-spring-effect="args.useSpringEffect"
+        :button-layout="args.buttonLayout"
+        :show-controls="args.showControls"
+        :previous-label="args.previousLabel"
+        :next-label="args.nextLabel"
+        :jump-to-item-label="args.jumpToItemLabel"
+      >
+        <template v-for="(item, index) in items" #[item.id] :key="index">
+          <div style="display: grid; gap: 0.8rem; inline-size: 100%; padding: 1.6rem; aspect-ratio: 4 / 3; background: var(--theme-surface-subtle); outline: 1px solid currentColor;">
+            <h3 style="margin: 0;">{{ item.title }}</h3>
+            <p style="margin: 0;">{{ item.body }}</p>
+          </div>
+        </template>
+      </StorybookComponent>
+    </div>
+  `,
+});
+StressTest.storyName = "Stress Test (Worst-Case Data)";
+StressTest.args = {
+  carouselDataIds: stressItems.map((item) => item.id),
+  allowCarouselOverflow: false,
+  transitionSpeed: 400,
+  useFlipAnimation: true,
+  buttonLayout: "controls-flanking",
+  previousLabel: "Zum vorherigen Element im Karussell wechseln",
+  nextLabel: "Zum nächsten Element im Karussell wechseln",
+  jumpToItemLabel: "Springe zu Element",
+  styleClassPassthrough: [],
+};
+StressTest.parameters = {
+  layout: "fullscreen",
+  docs: {
+    story: { inline: false, height: "720px" },
+    description: {
+      story:
+        "30 items with hostile content at every `CanvasSwitcher` width, in the `controls-flanking` layout. Check that: the 30 markers wrap onto several rows instead of overflowing; " +
+        "the unbroken title and URL wrap inside their item; the German text wraps; emoji, `<b>` and `<script>` render as text; the right-to-left item reads correctly; prev/next still cycle through all 30. " +
+        "In Controls, set `carouselDataIds` to `[]`: the carousel renders empty without freezing the tab (until 2026-10-21 an empty list hung it in an infinite loop). " +
+        "Set it to one id: the markers and prev/next buttons disappear, since there is nothing to move to.",
+    },
+  },
 };

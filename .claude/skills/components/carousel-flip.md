@@ -14,8 +14,7 @@ dynamic slots keyed by `carouselDataIds`. It supports swipe, arrow-key, marker-c
 prev/next-button navigation, and four `buttonLayout` variants for positioning the prev/next
 buttons relative to the marker controls.
 
-Has live production usage in a consumer app — check before making a breaking change to its
-default rendered output.
+No consumer app uses it as of 2026-10-21 (an earlier note said one did; a scan found none).
 
 ## Props
 
@@ -27,12 +26,12 @@ default rendered output.
 | `allowCarouselOverflow` | `boolean` | `false` | Allows items to overflow the item track horizontally instead of clipping. |
 | `useFlipAnimation` | `boolean` | `false` | Changes the initial item offset used in the FLIP reorder calculation. |
 | `useSpringEffect` | `boolean` | `false` | Uses `var(--spring-easing)` as the transition timing function instead of `ease`. |
-| `buttonLayout` | `"sides" \| "controls-flanking" \| "controls-grouped-right" \| "overlay"` | `"sides"` | Where the prev/next buttons sit relative to the carousel/controls. |
+| `buttonLayout` | `"sides" \| "controls-flanking" \| "controls-grouped-right" \| "overlay" \| "track-edges"` | `"sides"` | Where the prev/next buttons sit relative to the carousel/controls. |
 | `showControls` | `boolean` | `true` | Shows/hides the marker (dot) controls bar. Prev/next buttons remain regardless. |
 | `ariaLabel` | `string` | `"Image carousel"` | `aria-label` on the root region — override for localisation. |
 | `itemsAriaLabel` | `string` | `"Carousel items"` | `aria-label` on the item group — override for localisation. |
-| `previousLabel` | `string` | `"Go to previous item"` | Prev button `aria-label` — override for localisation. |
-| `nextLabel` | `string` | `"Go to next item"` | Next button `aria-label` — override for localisation. |
+| `previousLabel` | `string` | `"Go to previous item"` | Prev button accessible name (its visually hidden text) — override for localisation. |
+| `nextLabel` | `string` | `"Go to next item"` | Next button accessible name (its visually hidden text) — override for localisation. |
 | `jumpToItemLabel` | `string` | `"Jump to item"` | Marker button `aria-label` prefix — the 1-based index is appended (`"Jump to item 3"`). |
 | `itemPositionAnnouncement` | `(current: number, total: number) => string` | `` (current, total) => `Item ${current} of ${total}` `` | Builds the screen-reader live-region text on navigation — override for localisation or a different phrasing. |
 | `prevIcon` | `string` | `"ic:outline-keyboard-arrow-left"` | Iconify name for the previous button icon. Ignored if the `prev-icon` slot is used. |
@@ -64,10 +63,12 @@ One dynamically-named slot per `carouselDataIds` entry, named after that id:
 ## Navigation
 
 - **Swipe** (touch): left swipe → next, right swipe → previous.
-- **Keyboard**: `ArrowLeft`/`ArrowRight` on either the item track or the controls bar (both are
-  `tabindex="0"`).
+- **Keyboard**: `ArrowLeft`/`ArrowRight` while the item track (`tabindex="0"`) or a marker has
+  focus. The controls bar itself is no longer a tab stop (it was `tabindex="0"` with no name until
+  2026-10-21).
 - **Marker click**: jumps directly to that item.
-- **Prev/next buttons**: always rendered, regardless of `showControls`.
+- **Prev/next buttons**: `InputButton variant="inline"` with an `iconOnly` slot; rendered regardless
+  of `showControls`, but only when there are at least two items (the markers too).
 - All navigation wraps around at the ends.
 
 ## `buttonLayout` variants
@@ -77,31 +78,35 @@ One dynamically-named slot per `carouselDataIds` entry, named after that id:
 - `"controls-grouped-right"`: markers centred, prev/next buttons grouped to the right of them.
 - `"overlay"`: markers float over the bottom edge of the item track instead of occupying their
   own grid row.
+- `"track-edges"` (added 2026-10-21): prev/next overlay the ends of the visible track, inset by
+  `--carousel-flip-button-edge-inset` (default: the edge-preview width plus `0.8rem`), so they sit
+  on the active frame. Use it with `allowCarouselOverflow`, where `"sides"` leaves the buttons at
+  the component box's edges, over the neighbouring items that peek out past it.
+
+Placement tokens (added 2026-10-21): `--carousel-flip-button-align` (`start`/`center`/`end`,
+vertical) and `--carousel-flip-button-inline-offset` (`sides` and `controls-flanking`: pushes each
+button outward, negative pulls it inward; mirrors in RTL via `:dir(rtl)`). For the viewport edges
+of a centred carousel of known width: `calc((100vw - <that width>) / 2 - 1.6rem)`. A percentage
+won't work, since `translate` percentages resolve against the button.
 
 ## CSS token API
 
-See [CONSUMER-STYLING.md](../../app/components/03.organisms/image-galleries/carousel-flip/CONSUMER-STYLING.md).
+Full table, state hooks and class names: [CONSUMER-STYLING.md](../../app/components/03.organisms/image-galleries/carousel-flip/CONSUMER-STYLING.md).
+Tokens are `--carousel-flip-*`: gaps and max widths, edge preview, marker gap and active colour,
+prev/next button colours, border, radius, padding and icon size/colour, and the focus outline.
+Colours default from `--theme-surface`, `--theme-surface-subtle`, `--theme-border`,
+`--theme-text` and `--theme-ring`.
 
-| Token | Default | Controls |
-|---|---|---|
-| `--carousel-flip-gap` | `1rem` | Gap between items inside the item track |
-| `--carousel-flip-layout-gap` | `1rem` | Grid gap between the prev/carousel/next/controls areas |
-| `--carousel-flip-display-max-width` | `80rem` | Max width of the item track and the controls bar |
-| `--carousel-flip-item-max-width` | `80rem` | Max width of a single item, before subtracting the edge-preview width |
-| `--carousel-flip-edge-preview-width` | `4rem` | How much of the neighbouring items peek in at each edge |
-| `--carousel-flip-marker-gap` | `1rem` | Gap between marker (dot) buttons |
-| `--carousel-flip-marker-active-colour` | `var(--slate-10)` | Active marker background colour |
-| `--carousel-flip-button-background-colour` | `white` | Prev/next button background colour |
-| `--carousel-flip-button-border-width` | `0.1rem` | Prev/next button border width |
-| `--carousel-flip-button-border-colour` | `hsl(0, 29%, 3%)` | Prev/next button border colour |
-| `--carousel-flip-button-border-radius` | `100vw` | Prev/next button corner radius |
-| `--carousel-flip-button-padding` | `0.8rem` | Prev/next button padding |
-| `--carousel-flip-button-icon-size` | `2.4rem` | Prev/next button icon glyph size |
-| `--carousel-flip-buttons-gap` | `1rem` | Gap between prev/next buttons in the `controls-grouped-right` layout |
-| `--carousel-flip-overlay-controls-offset` | `1rem` | Distance of the controls bar from the bottom edge in the `overlay` layout |
-| `--carousel-flip-focus-outline-width` | `0.2rem` | Marker button focus-visible outline width |
-| `--carousel-flip-focus-outline-colour` | `var(--theme-ring)` | Marker button focus-visible outline colour |
-| `--carousel-flip-focus-outline-offset` | `0.2rem` | Marker button focus-visible outline offset |
+## Data handling
+
+- `itemCount` follows `carouselDataIds` after mount (it was frozen at the mount-time length until
+  2026-10-21, so adding items left the markers and announcement stale). When the list changes, the
+  layout is rebuilt and the active item resets to the first if it was removed.
+- An empty `carouselDataIds` renders an empty track. Until 2026-10-21 it sent `reorderItems` into
+  an infinite loop on mount and froze the tab.
+- Items are keyed on index + id, so a repeated id still renders (both items show that slot).
+- Item content wraps (`min-inline-size: 0`, `overflow-wrap: anywhere`), the centre grid column is
+  `minmax(0, 1fr)`, and the markers wrap onto more rows. The `StressTest` story covers all of these.
 
 ## Accessibility
 
@@ -113,6 +118,12 @@ See [CONSUMER-STYLING.md](../../app/components/03.organisms/image-galleries/caro
 - All interactive controls have accessible names via the label props above.
 
 ## Notes
+
+- 2026-10-21 migration: prefixed every structural class and moved state classes to `data-*`
+  attributes (see CONSUMER-STYLING.md), prev/next became `InputButton`, theme-token colour defaults,
+  `transitionSpeed` and the class passthrough became reactive, `aria-current` is omitted (not
+  `"false"`) on inactive items, and the spec lost a dead `#imports` mock of
+  `useStyleClassPassthrough` that never applied.
 
 - Migrated from `app/components/carousels/CarouselFlip.vue` (unplaced, legacy location) to
   `03.organisms/image-galleries/carousel-flip/` on 2026-09-21, alongside `SliderGallery`.

@@ -3,7 +3,7 @@
     "description": "CarouselFlip with looped item slots",
     "scope": "vue,html",
     "body": [
-      "<CarouselFlip :carousel-data-ids=\"$1items.map((item) => item.id)\">",
+      "<CarouselFlip :carousel-data-ids=\"$1items.map((item) => item.id)\" aria-label=\"${4:Image carousel}\">",
       "  <template v-for=\"$2item in $1items\" :key=\"$2item.id\" #[$2item.id]>",
       "    $3",
       "  </template>",
@@ -25,15 +25,33 @@
       "</CarouselFlip>"
     ]
   },
+  "SRCDEV CarouselFlip Track Edges": {
+    "description": "CarouselFlip with prev/next overlaid on the ends of the visible track",
+    "scope": "vue,html",
+    "body": [
+      "<CarouselFlip",
+      "  :carousel-data-ids=\"$1items.map((item) => item.id)\"",
+      "  button-layout=\"track-edges\"",
+      "  :allow-carousel-overflow=\"true\"",
+      ">",
+      "  <template v-for=\"$2item in $1items\" :key=\"$2item.id\" #[$2item.id]>",
+      "    $3",
+      "  </template>",
+      "</CarouselFlip>"
+    ]
+  },
   "SRCDEV CarouselFlip CSS Override": {
     "description": "CSS override scaffold for CarouselFlip tokens",
     "scope": "css",
     "body": [
       ".$1my-page {",
       "  .carousel-flip {",
-      "    --carousel-flip-gap: $2;",
-      "    --carousel-flip-marker-active-colour: $3;",
-      "    --carousel-flip-button-background-colour: $4;",
+      "    --carousel-flip-gap: ${2:1rem};",
+      "    --carousel-flip-marker-active-colour: ${3:var(--theme-surface)};",
+      "    --carousel-flip-button-background-colour: ${4:var(--theme-surface-subtle)};",
+      "    --carousel-flip-button-icon-colour: ${5:var(--theme-text)};",
+      "    --carousel-flip-button-align: ${6:center};",
+      "    --carousel-flip-button-inline-offset: ${7:0px};",
       "  }",
       "}"
     ]
