@@ -39,3 +39,6 @@ test-results/
 
 # Private claude.ai artifact link for the Component Ledger (read by .claude/hooks/refresh-component-ledger.sh)
 .claude/component-ledger/artifact-url.txt
+
+# Stray test-utils setup file written when a tool runs from a subfolder
+app/**/.nuxtrc
