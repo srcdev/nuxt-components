@@ -14,6 +14,18 @@
       "</SiteHeader>"
     ]
   },
+  "SRCDEV SiteHeader Sticky Tokens": {
+    "description": "SiteHeader sticky + layout token overrides (set on the styleClassPassthrough class)",
+    "scope": "css",
+    "body": [
+      ".${1:header} {",
+      "  --site-header-position: ${2:sticky};",
+      "  --site-header-sticky-offset: ${3:0px};",
+      "  --site-header-bg: ${4:var(--theme-surface-subtle)};",
+      "  --site-header-branding-max-width: ${5:50%};",
+      "}"
+    ]
+  },
   "SRCDEV SiteHeader With Secondary Navigation": {
     "description": "SiteHeader with the secondaryNavigation slot (e.g. a settings icon link)",
     "scope": "vue,html",
@@ -36,7 +48,7 @@
     "body": [
       "<SiteHeader",
       "  :responsive-nav-links=\"$1responsiveNavLinks\"",
-      "  home-nav-aria-label=\"${2:Home Navigation}\"",
+      "  home-nav-aria-label=\"${2:Home navigation}\"",
       "  main-nav-aria-label=\"${3:Main navigation}\"",
       "  secondary-nav-aria-label=\"${4:Secondary navigation}\"",
       "  overflow-menu-aria-label=\"${5:Overflow navigation menu}\"",

@@ -23,7 +23,7 @@ Branding (logo/wordmark) is entirely consumer-authored via the `#branding` slot 
 | `pageRowVariant` | `"full" \| "popout" \| "content" \| "inset-content"` | `"content"` | Forwarded to the root `PageRow`'s `variant` prop. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes on the root `PageRow` — targets `--site-header-*` tokens (see `CONSUMER-STYLING.md`). |
 | `navStyleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes on the nested `ResponsiveHeader` — targets its own `--responsive-header-*`/`--overflow-nav-*` tokens. |
-| `homeNavAriaLabel` | `string` | `"Home Navigation"` | aria-label on the home/branding nav landmark — override for localisation. |
+| `homeNavAriaLabel` | `string` | `"Home navigation"` | aria-label on the home/branding nav landmark — override for localisation. |
 | `mainNavAriaLabel` | `string` | `"Main navigation"` | Forwarded to `ResponsiveHeader`'s `mainNavAriaLabel` — override for localisation. |
 | `secondaryNavAriaLabel` | `string` | `"Secondary navigation"` | Forwarded to `ResponsiveHeader`'s `secondaryNavAriaLabel` — override for localisation. |
 | `overflowMenuAriaLabel` | `string` | `"Overflow navigation menu"` | Forwarded to `ResponsiveHeader`'s `overflowMenuAriaLabel` — override for localisation. |
@@ -97,8 +97,22 @@ const responsiveNavLinks = {
 
 ---
 
+## Styling and layout
+
+Tokens, class names and the sticky recipe are in this component's `CONSUMER-STYLING.md`. Since
+2026-10-21:
+
+- `--site-header-position: sticky` (with `--site-header-sticky-offset`, `--site-header-z-index`)
+  applies to the outer `.site-header-row` (the `PageRow`). Before that it sat on the inner
+  `<header>`, whose parent is exactly its height, so the header never actually stuck.
+- The branding column is `fit-content(var(--site-header-branding-max-width, 50%))` and the nav
+  column `minmax(0, 1fr)`, so a long brand wraps instead of squeezing the nav, and the nav can
+  shrink and collapse instead of overflowing. The `StressTest` story covers it.
+- `.home-navigation` became `.site-header-home-nav`, and `homeNavAriaLabel` defaults to
+  `"Home navigation"` (was `"Home Navigation"`).
+
 ## Migration notes
 
-- Consuming layouts previously assembling `PageRow` + `SkipLinks` + `ResponsiveHeader` (or the removed `TabNavigation`) by hand can switch to `SiteHeader` directly; the two `styleClassPassthrough` props map 1:1 onto the two independent passthrough hooks that pattern used.
+- Consuming layouts previously assembling `PageRow` + `SkipLinks` + `ResponsiveHeader` (or the removed `TabNavigation`) by hand can switch to `SiteHeader` directly; the two `styleClassPassthrough` props map 1:1 onto the two independent passthrough hooks that pattern used. Their hand-built markup often uses a `.home-navigation` class of its own; SiteHeader's nav is `.site-header-home-nav`, so move any styles across.
 - `TabNavigation` (removed 2026-10-07) took `NavItemData` (`{ main: [{ text, href, iconName, cssName }] }`, also removed), which is **not** the same shape as `ResponsiveHeaderProp` (`{ groupKey: [{ name, path, childLinksTitle, childLinks }] }`): migrating means reshaping the nav data, not just swapping the component. See "Migrating from TabNavigation" in `responsive-header.md`. Its `navAlign` prop has no `SiteHeader` equivalent since `ResponsiveHeader`'s layout is fixed (branding column + nav column).
 - Requires the consuming layout's main/footer regions to carry `id="main-content"` / `id="footer-content"` — same requirement as using `SkipLinks` directly.

@@ -1,8 +1,8 @@
 <template>
-  <PageRow tag="div" :variant="pageRowVariant" :style-class-passthrough="styleClassPassthrough">
+  <PageRow tag="div" class="site-header-row" :variant="pageRowVariant" :style-class-passthrough="styleClassPassthrough">
     <template #default>
       <header class="site-header">
-        <nav class="home-navigation" :aria-label="homeNavAriaLabel">
+        <nav class="site-header-home-nav" :aria-label="homeNavAriaLabel">
           <SkipLinks>
             <template #homeLink>
               <slot name="branding"></slot>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import type { ResponsiveHeaderProp } from "../../../types/components";
+import type { ResponsiveHeaderProp } from "~/types/components";
 import PageRow from "../../01.atoms/page-row/PageRow.vue";
 import SkipLinks from "../../01.atoms/navigation/skip-links/SkipLinks.vue";
 import ResponsiveHeader from "../responsive-header/ResponsiveHeader.vue";
@@ -75,7 +75,7 @@ withDefaults(defineProps<Props>(), {
   pageRowVariant: "content",
   styleClassPassthrough: () => [],
   navStyleClassPassthrough: () => [],
-  homeNavAriaLabel: "Home Navigation",
+  homeNavAriaLabel: "Home navigation",
   mainNavAriaLabel: "Main navigation",
   secondaryNavAriaLabel: "Secondary navigation",
   overflowMenuAriaLabel: "Overflow navigation menu",
@@ -88,32 +88,27 @@ const slots = useSlots();
 
 <style lang="css">
 @layer components {
-  /* ─── Public CSS tokens ─────────────────────────────────────────────────
-     Override on the consumer's scope class (via styleClassPassthrough).
-     Nested --responsive-header-* / --overflow-nav-* tokens still apply —
-     forward a scope class via navStyleClassPassthrough to reach them.
-
-     --site-header-gap             (default: 2.4rem)
-     --site-header-padding-inline  (default: 2.4rem)
-     --site-header-padding-block   (default: 0px)
-     --site-header-bg              (default: transparent)
-     --site-header-position        (default: static)
-     --site-header-sticky-offset   (default: 0px)
-     --site-header-z-index         (default: 9)
-  ──────────────────────────────────────────────────────────────────────── */
+  .site-header-row {
+    position: var(--site-header-position, static);
+    top: var(--site-header-sticky-offset, 0px);
+    z-index: var(--site-header-z-index, 9);
+  }
 
   .site-header {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: fit-content(var(--site-header-branding-max-width, 50%)) minmax(0, 1fr);
     align-items: center;
     gap: var(--site-header-gap, 2.4rem);
     padding-block: var(--site-header-padding-block, 0px);
     padding-inline: var(--site-header-padding-inline, 2.4rem);
     background-color: var(--site-header-bg, transparent);
-    position: var(--site-header-position, static);
-    top: var(--site-header-sticky-offset, 0px);
-    z-index: var(--site-header-z-index, 9);
     width: 100%;
+    min-inline-size: 0;
+
+    .site-header-home-nav {
+      min-inline-size: 0;
+      overflow-wrap: anywhere;
+    }
   }
 }
 </style>
