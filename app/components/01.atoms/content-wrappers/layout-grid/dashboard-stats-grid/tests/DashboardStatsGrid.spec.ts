@@ -2,19 +2,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import DashboardStatsGrid from "../DashboardStatsGrid.vue";
 
-// Mock useStyleClassPassthrough composable
-const mockElementClasses = { value: "" };
-const mockResetElementClasses = vi.fn();
-
-const mockUseStyleClassPassthrough = vi.fn(() => ({
-  elementClasses: mockElementClasses,
-  resetElementClasses: mockResetElementClasses,
-}));
-
-vi.mock("#imports", () => ({
-  useStyleClassPassthrough: mockUseStyleClassPassthrough,
-}));
-
 describe("DashboardStatsGrid", () => {
   let wrapper: ReturnType<typeof mountSuspended>;
 
@@ -36,34 +23,34 @@ describe("DashboardStatsGrid", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockElementClasses.value = "";
   });
 
   afterEach(() => {
     wrapper?.unmount();
+    vi.restoreAllMocks();
   });
 
   describe("Component Rendering", () => {
     it("mounts without error", async () => {
       await createWrapper();
 
-      expect(wrapper.find(".dashboard-stats-grid-wrapper")).toBeTruthy();
-      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
+      expect(wrapper.classes()).toContain("dashboard-stats-grid");
+      expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
     });
 
     it("renders top row structure correctly", async () => {
       await createWrapper();
 
-      expect(wrapper.find(".top-row")).toBeTruthy();
-      expect(wrapper.find(".top-row-slot-1")).toBeTruthy();
-      expect(wrapper.find(".top-row-slot-2")).toBeTruthy();
-      expect(wrapper.find(".top-row-slot-3")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid-top-row").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-stats-grid-top-row-slot-1").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-stats-grid-top-row-slot-2").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-stats-grid-top-row-slot-3").exists()).toBe(true);
     });
 
     it("renders bottom row correctly", async () => {
       await createWrapper();
 
-      expect(wrapper.find(".bottom-row")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid-bottom-row").exists()).toBe(true);
     });
 
     it("has correct grid container structure", async () => {
@@ -82,7 +69,7 @@ describe("DashboardStatsGrid", () => {
       await createWrapper({ topRowSlot1ItemCount: itemCount });
 
       // Component should render without error with custom item count
-      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
     });
 
     it("accepts bottomRowItemCount prop", async () => {
@@ -90,7 +77,7 @@ describe("DashboardStatsGrid", () => {
       await createWrapper({ bottomRowItemCount: itemCount });
 
       // Component should render without error with custom item count
-      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
     });
 
     it("uses default props when not provided", async () => {
@@ -100,7 +87,7 @@ describe("DashboardStatsGrid", () => {
       });
 
       // Should use default values (6 and 4)
-      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
     });
 
     it("accepts string styleClassPassthrough", async () => {
@@ -108,7 +95,7 @@ describe("DashboardStatsGrid", () => {
       await createWrapper({ styleClassPassthrough: className });
 
       // Component should mount without error with string class
-      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
     });
 
     it("accepts array styleClassPassthrough", async () => {
@@ -116,16 +103,27 @@ describe("DashboardStatsGrid", () => {
       await createWrapper({ styleClassPassthrough: classNames });
 
       // Component should mount without error with array of classes
-      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
     });
 
-    it("applies element classes to wrapper", async () => {
-      mockElementClasses.value = "test-class another-class";
+    it("applies styleClassPassthrough classes to the root", async () => {
+      await createWrapper({ styleClassPassthrough: ["test-class", "another-class"] });
+      expect(wrapper.classes()).toContain("test-class");
+      expect(wrapper.classes()).toContain("another-class");
+    });
+  });
 
-      await createWrapper();
+  describe("Item counts", () => {
+    it("floors fractional counts and treats negative or non-finite counts as zero", async () => {
+      const count = (w: typeof wrapper, selector: string) => w.findAll(`${selector} > .dashboard-stats-grid-panel`).length;
 
-      // Check that the component renders
-      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
+      await createWrapper({ topRowSlot1ItemCount: 2.7, bottomRowItemCount: -3 });
+      expect(count(wrapper, ".dashboard-stats-grid-top-row-slot-1-inner")).toBe(2);
+      expect(count(wrapper, ".dashboard-stats-grid-bottom-row")).toBe(0);
+
+      await wrapper.setProps({ topRowSlot1ItemCount: Number.NaN, bottomRowItemCount: 3 });
+      expect(count(wrapper, ".dashboard-stats-grid-top-row-slot-1-inner")).toBe(0);
+      expect(count(wrapper, ".dashboard-stats-grid-bottom-row")).toBe(3);
     });
   });
 
@@ -157,7 +155,7 @@ describe("DashboardStatsGrid", () => {
         const { unmount } = await createWrapper({ topRowSlot1ItemCount: count }, slots);
 
         // Should render without error
-        expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
+        expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
 
         // Check that content is rendered
         for (let i = 1; i <= count; i++) {
@@ -239,7 +237,7 @@ describe("DashboardStatsGrid", () => {
         const { unmount } = await createWrapper({ bottomRowItemCount: count }, slots);
 
         // Should render without error
-        expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
+        expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
 
         // Check that content is rendered
         for (let i = 1; i <= count; i++) {
@@ -294,9 +292,9 @@ describe("DashboardStatsGrid", () => {
       await createWrapper({ styleClassPassthrough: ["initial"] });
 
       // Component should maintain structure with different props
-      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
-      expect(wrapper.find(".top-row")).toBeTruthy();
-      expect(wrapper.find(".bottom-row")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-stats-grid-top-row").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-stats-grid-bottom-row").exists()).toBe(true);
     });
 
     it("handles different prop configurations", async () => {
@@ -315,7 +313,7 @@ describe("DashboardStatsGrid", () => {
       expect(wrapper.html()).toContain("Bottom 1");
 
       // Component should render properly
-      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
 
       unmount();
     });
@@ -326,29 +324,29 @@ describe("DashboardStatsGrid", () => {
       await createWrapper();
 
       const grid = wrapper.find(".dashboard-stats-grid");
-      const topRow = wrapper.find(".top-row");
-      const bottomRow = wrapper.find(".bottom-row");
+      const topRow = wrapper.find(".dashboard-stats-grid-top-row");
+      const bottomRow = wrapper.find(".dashboard-stats-grid-bottom-row");
 
       expect(grid.classes()).toContain("dashboard-stats-grid");
-      expect(topRow.classes()).toContain("top-row");
-      expect(bottomRow.classes()).toContain("bottom-row");
+      expect(topRow.classes()).toContain("dashboard-stats-grid-top-row");
+      expect(bottomRow.classes()).toContain("dashboard-stats-grid-bottom-row");
     });
 
     it("maintains correct DOM hierarchy", async () => {
       await createWrapper();
 
       const grid = wrapper.find(".dashboard-stats-grid");
-      const topRow = grid.find(".top-row");
-      const bottomRow = grid.find(".bottom-row");
+      const topRow = grid.find(".dashboard-stats-grid-top-row");
+      const bottomRow = grid.find(".dashboard-stats-grid-bottom-row");
 
       expect(grid.exists()).toBe(true);
       expect(topRow.exists()).toBe(true);
       expect(bottomRow.exists()).toBe(true);
 
       // Check top row slots exist
-      expect(topRow.find(".top-row-slot-1").exists()).toBe(true);
-      expect(topRow.find(".top-row-slot-2").exists()).toBe(true);
-      expect(topRow.find(".top-row-slot-3").exists()).toBe(true);
+      expect(topRow.find(".dashboard-stats-grid-top-row-slot-1").exists()).toBe(true);
+      expect(topRow.find(".dashboard-stats-grid-top-row-slot-2").exists()).toBe(true);
+      expect(topRow.find(".dashboard-stats-grid-top-row-slot-3").exists()).toBe(true);
     });
   });
 
@@ -359,9 +357,9 @@ describe("DashboardStatsGrid", () => {
         bottomRowItemCount: 0,
       });
 
-      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
-      expect(wrapper.find(".top-row")).toBeTruthy();
-      expect(wrapper.find(".bottom-row")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-stats-grid-top-row").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-stats-grid-bottom-row").exists()).toBe(true);
     });
 
     it("handles large item counts", async () => {
@@ -382,7 +380,7 @@ describe("DashboardStatsGrid", () => {
         slots
       );
 
-      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
       expect(wrapper.html()).toContain("Large Panel 1");
       expect(wrapper.html()).toContain("Large Bottom 1");
     });
@@ -436,9 +434,9 @@ describe("DashboardStatsGrid", () => {
         }
       );
 
-      expect(wrapper.find(".dashboard-stats-grid")).toBeTruthy();
-      expect(wrapper.find(".top-row")).toBeTruthy();
-      expect(wrapper.find(".bottom-row")).toBeTruthy();
+      expect(wrapper.find(".dashboard-stats-grid").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-stats-grid-top-row").exists()).toBe(true);
+      expect(wrapper.find(".dashboard-stats-grid-bottom-row").exists()).toBe(true);
     });
   });
 

@@ -32,6 +32,10 @@ top-row slots and overall shape are fixed.
 
 ---
 
+The two counts are floored, and a negative or non-finite count renders no panels (until 2026-10-21 a
+fractional count rendered none at all, since Vue skips a fractional `v-for` range). Element classes
+are prefixed `.dashboard-stats-grid-*` (see CONSUMER-STYLING.md). The `StressTest` story feeds every cell oversized content (an unbroken string and URL, long German, a 1600px image, emoji, right-to-left, an empty cell).
+
 ## Props reference
 
 | Prop (template form) | Type | Default | Notes |

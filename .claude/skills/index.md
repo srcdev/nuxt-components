@@ -175,7 +175,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── section-parallax.md        — SectionParallax: CSS fixed-background parallax section, iOS Safari limitation, when to use vs ScrollRevealImage, CSS token API, reduced-motion guard
     ├── container-glow.md          — ContainerGlow (renamed from ContainerGlowCore): pointer-proximity glow-border cards, named dynamic slots (one card per slot), config-prop-driven layout/interaction, full CSS token API for static visuals, reduced-motion guard
     ├── dashboard-quad-grid.md      — DashboardQuadGrid (renamed from LayoutGridA): fixed 4-slot dashboard grid, container-query breakpoints, CSS token API
-    └── dashboard-stats-grid.md     — DashboardStatsGrid (renamed from LayoutGridB): top-row panel cluster + bottom-row panel strip dashboard grid, topRowSlot1ItemCount/bottomRowItemCount, CSS token API
+    └── dashboard-stats-grid.md     — DashboardStatsGrid (renamed from LayoutGridB): top-row panel cluster + bottom-row panel strip dashboard grid, topRowSlot1ItemCount/bottomRowItemCount (floored, clamped at 0), prefixed classes, CSS token API
 ```
 
 ## Skill file template

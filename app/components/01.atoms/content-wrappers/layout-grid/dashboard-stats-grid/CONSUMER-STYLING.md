@@ -7,7 +7,7 @@
 | `--dashboard-stats-grid-gap` | `1.2rem` | Gap between panels, in every row |
 | `--dashboard-stats-grid-panel-padding` | `1.2rem` | Padding inside each panel |
 | `--dashboard-stats-grid-border-width` | `0.1rem` | Panel border width |
-| `--dashboard-stats-grid-border-colour` | `hsl(0, 29%, 3%)` | Panel border colour |
+| `--dashboard-stats-grid-border-colour` | `var(--theme-border)` | Panel border colour |
 | `--dashboard-stats-grid-border-radius` | `1.2rem` | Panel corner radius |
 | `--dashboard-stats-grid-rule-width` | `0.1rem` | Width of the grid gap rule line (CSS Gap Decorations — see Notes) |
 | `--dashboard-stats-grid-rule-colour` | `transparent` | Colour of the grid gap rule line, invisible by default |
@@ -27,6 +27,18 @@ Or scope to a single instance via `styleClassPassthrough`:
 ```
 
 ---
+
+## State hooks
+
+No state attributes. Element classes: `.dashboard-stats-grid` (root),
+`.dashboard-stats-grid-top-row`, `.dashboard-stats-grid-top-row-slot-1` (with its
+`-slot-1-inner` panel grid), `-top-row-slot-2`, `-top-row-slot-3`, `.dashboard-stats-grid-bottom-row`,
+and `.dashboard-stats-grid-panel` on every panel.
+
+> Changed 2026-10-21: these were `.top-row`, `.top-row-slot-1`, `.top-row-slot-1-inner`,
+> `.top-row-slot-2`, `.top-row-slot-3`, `.bottom-row` and `.panel`; the border colour defaulted to
+> `hsl(0, 29%, 3%)`. Tracks are `minmax(0, 1fr)` and panels wrap, so an unbroken string can't
+> widen the grid.
 
 ## Local overrides
 
