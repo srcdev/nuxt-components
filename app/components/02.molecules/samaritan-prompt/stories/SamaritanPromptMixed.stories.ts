@@ -1,12 +1,14 @@
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
+import type { MediaCanvas, SamaritanPromptMessageConfig } from "~/types/components";
 import SamaritanPromptMixed from "../SamaritanPromptMixed.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
-import type { SamaritanPromptMessageConfig } from "~/types/components";
 
-// Dark stage because the default colours are white. Keying on the serialised args restarts the
+// Dark stage with the classic white-on-black tokens (the defaults follow --theme-text and --theme-accent). Keying on the serialised args restarts the
 // loop when a control changes, so the new value is visible straight away.
 const stageStyle =
-  "display: grid; place-items: center; min-block-size: 32rem; padding: 3.2rem; background: #000; color: #fff;";
+  "display: grid; place-items: center; min-block-size: 32rem; padding: 3.2rem; background: #000; color: #fff; " +
+  "--samaritan-prompt-text-colour: #fff; --samaritan-prompt-underline-colour: #fff; --samaritan-prompt-cursor-colour: #cc0000;";
 
 const messageConfigs: SamaritanPromptMessageConfig[] = [
   { text: "Good evening", effect: "typewriter", holdDuration: 2500 },
@@ -107,8 +109,8 @@ type Story = StoryObj<typeof SamaritanPromptMixed>;
 
 export const Default: Story = {};
 
-export const LightPage: Story = {
-  name: "Light Page (token override)",
+export const ThemeDefaults: Story = {
+  name: "Theme Defaults",
   render: (args) => ({
     components: { SamaritanPromptMixed },
     setup() {
@@ -116,9 +118,67 @@ export const LightPage: Story = {
       return { args, restartKey };
     },
     template: `
-      <div style="display: grid; place-items: center; min-block-size: 32rem; padding: 3.2rem; background: #fff; --samaritan-prompt-text-colour: #000; --samaritan-prompt-underline-colour: #000;">
+      <div style="display: grid; place-items: center; min-block-size: 32rem; padding: 3.2rem;">
         <SamaritanPromptMixed :key="restartKey" v-bind="args" />
       </div>
     `,
   }),
+  parameters: {
+    docs: {
+      description: {
+        story: "No colour tokens set: text and underline follow `--theme-text`, the cursor `--theme-accent`.",
+      },
+    },
+  },
+};
+
+export const StressTest: Story = {
+  name: "Stress Test (Worst-Case Data)",
+  args: {
+    introDelay: 0,
+    messageConfigs: [
+      {
+        text: "Die Überwachungssysteme sind vollständig aktiviert und melden ungewöhnliche Aktivitäten",
+        effect: "typewriter",
+        typeSpeed: 30,
+        holdDuration: 1500,
+      },
+      { text: "https://example.com/a/very/long/unbroken/path/that/never/wraps/on/its/own", effect: "word-pulse" },
+      { text: "", effect: "typewriter", holdDuration: 300 },
+      { text: "👍🏽 👨‍👩‍👧 ok", effect: "typewriter", holdDuration: 1500 },
+      { text: "<b>Not bold</b>", effect: "word-pulse" },
+      { text: "مرحبا بالعالم", effect: "typewriter", holdDuration: 1500 },
+      { text: "x", effect: "typewriter", typeSpeed: 0, deleteSpeed: 0, holdDuration: 800, pauseDuration: 0 },
+    ],
+  },
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "fullWidthCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    layout: "fullscreen",
+    initialCanvas: "mobileCanvas",
+    docs: {
+      story: { inline: false, height: "520px" },
+      description: {
+        story:
+          "Hostile message configs at every `CanvasSwitcher` width, with `introDelay: 0`. Check that: the long German message and the unbroken URL wrap inside the canvas and stay centred; " +
+          "the empty message passes without stopping the loop; emoji with a skin tone and a family emoji type as whole characters; `<b>` renders as text; the right-to-left message reads correctly; " +
+          "the zero-speed single character still shows. Set `messageConfigs` to `[]` in Controls: the component idles instead of freezing the tab (until 2026-10-21 an empty list with `introDelay: 0` locked up the page).",
+      },
+    },
+  },
 };

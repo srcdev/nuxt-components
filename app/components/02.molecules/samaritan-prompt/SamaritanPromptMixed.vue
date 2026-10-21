@@ -20,6 +20,7 @@
 </template>
 
 <script setup lang="ts">
+import { usePreferredReducedMotion } from "@vueuse/core";
 import type { SamaritanPromptEffect, SamaritanPromptMessageConfig } from "~/types/components/samaritan-prompt";
 
 interface Props {
@@ -65,6 +66,10 @@ const activeFadeDuration = ref(props.fadeDuration);
 const fadeDurationCss = computed(() => `${activeFadeDuration.value}ms`);
 const cursorOpacity = computed(() => (cursorVisible.value ? 1 : 0));
 
+const EMPTY_POLL_MS = 500;
+
+const reducedMotion = usePreferredReducedMotion();
+
 const timer = useCancellableTimer();
 const { wait, stop, start } = timer;
 
@@ -97,8 +102,13 @@ const runTypewriter = async (config: ResolvedConfig) => {
 
   if (hideCursorInCycle) cursorVisible.value = false;
 
-  for (let i = 1; i <= text.length; i++) {
-    displayText.value = text.slice(0, i);
+  const characters = splitGraphemes(text);
+  const instant = reducedMotion.value === "reduce";
+  const typedLengths = instant ? [characters.length] : characters.map((_, i) => i + 1);
+  const deletedLengths = instant ? [0] : characters.map((_, i) => characters.length - 1 - i);
+
+  for (const length of typedLengths) {
+    displayText.value = characters.slice(0, length).join("");
     await wait(typeSpeed);
   }
 
@@ -106,8 +116,8 @@ const runTypewriter = async (config: ResolvedConfig) => {
   await wait(holdDuration);
   announcedText.value = "";
 
-  while (displayText.value.length > 0) {
-    displayText.value = displayText.value.slice(0, -1);
+  for (const length of deletedLengths) {
+    displayText.value = characters.slice(0, length).join("");
     await wait(deleteSpeed);
   }
 
@@ -149,6 +159,10 @@ const runWordPulse = async (config: ResolvedConfig) => {
 const runLoop = async () => {
   try {
     while (true) {
+      if (!props.messageConfigs.length) {
+        await wait(Math.max(props.introDelay, EMPTY_POLL_MS));
+        continue;
+      }
       if (props.introDelay > 0) await wait(props.introDelay);
 
       for (const msg of props.messageConfigs) {
@@ -183,7 +197,7 @@ onUnmounted(stop);
   src: url("/fonts/monoMMM_5.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
-  font-display: optional;
+  font-display: swap;
 }
 
 @layer components {
@@ -191,6 +205,7 @@ onUnmounted(stop);
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-inline-size: 100%;
     row-gap: var(--samaritan-prompt-cursor-gap, 0.6rem);
     font-family: var(--samaritan-prompt-font-family, "Mono MMM 5", "Nova Mono", "Courier New", monospace);
     font-size: var(--samaritan-prompt-font-size, 2rem);
@@ -208,11 +223,20 @@ onUnmounted(stop);
         display: flex;
         justify-content: center;
         min-height: 1.2em;
+        max-inline-size: 100%;
+        min-inline-size: 0;
 
         .samaritan-prompt__text {
-          color: var(--samaritan-prompt-text-colour, #ffffff);
-          white-space: nowrap;
+          color: var(--samaritan-prompt-text-colour, var(--theme-text));
+          white-space: var(--samaritan-prompt-text-white-space, normal);
+          overflow-wrap: anywhere;
+          text-align: center;
           text-transform: var(--samaritan-prompt-text-transform, uppercase);
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          -webkit-line-clamp: var(--samaritan-prompt-text-line-clamp, none);
+          line-clamp: var(--samaritan-prompt-text-line-clamp, none);
         }
       }
 
@@ -220,12 +244,12 @@ onUnmounted(stop);
         width: 100%;
         min-width: 4ch;
         height: var(--samaritan-prompt-underline-height, 0.15rem);
-        background: var(--samaritan-prompt-underline-colour, #ffffff);
+        background: var(--samaritan-prompt-underline-colour, var(--theme-text));
       }
     }
 
     .samaritan-prompt__cursor {
-      color: var(--samaritan-prompt-cursor-colour, #cc0000);
+      color: var(--samaritan-prompt-cursor-colour, var(--theme-accent));
       font-size: var(--samaritan-prompt-cursor-size, 2.4rem);
       line-height: 1;
       animation: samaritan-prompt-pulse var(--samaritan-prompt-cursor-pulse-duration, 2.5s) ease-in-out infinite;
@@ -265,7 +289,7 @@ onUnmounted(stop);
 @keyframes samaritan-prompt-pulse {
   0%,
   100% {
-    color: var(--samaritan-prompt-cursor-colour, #cc0000);
+    color: var(--samaritan-prompt-cursor-colour, var(--theme-accent));
   }
   50% {
     color: var(--samaritan-prompt-cursor-colour-off, transparent);

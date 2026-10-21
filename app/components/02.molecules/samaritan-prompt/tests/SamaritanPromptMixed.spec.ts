@@ -1,8 +1,21 @@
-import { describe, it, expect, afterEach } from "vitest";
+import { describe, it, expect, afterEach, vi } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
 import SamaritanPromptMixed from "../SamaritanPromptMixed.vue";
 import type { SamaritanPromptMessageConfig as MessageConfig } from "~/types/components/samaritan-prompt";
+
+const mounted: Awaited<ReturnType<typeof mountSuspended>>[] = [];
+
+const mountMixed = async (options: Parameters<typeof mountSuspended<typeof SamaritanPromptMixed>>[1]) => {
+  const wrapper = await mountSuspended(SamaritanPromptMixed, options);
+  mounted.push(wrapper);
+  return wrapper;
+};
+
+afterEach(() => {
+  mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+  vi.restoreAllMocks();
+});
 
 // ─── Typewriter ───────────────────────────────────────────────────────────────
 //
@@ -22,30 +35,26 @@ describe("SamaritanPromptMixed — typewriter", () => {
 
   let wrapper: Awaited<ReturnType<typeof mountSuspended>>;
 
-  afterEach(() => {
-    wrapper?.unmount();
-  });
-
   it("mounts without error", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config] } });
     expect(wrapper.vm).toBeTruthy();
   });
 
   it("renders cursor, underline, and stage", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config] } });
     expect(wrapper.find(".samaritan-prompt__cursor").text()).toBe("▲");
     expect(wrapper.find(".samaritan-prompt__underline").exists()).toBe(true);
     expect(wrapper.find(".samaritan-prompt__stage").exists()).toBe(true);
   });
 
   it("types the first character immediately on mount", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick();
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("H");
   });
 
   it("types one character per typeSpeed tick", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick();
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("H");
 
@@ -56,13 +65,13 @@ describe("SamaritanPromptMixed — typewriter", () => {
   });
 
   it("hides cursor when typing starts", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick();
     expect(wrapper.find(".samaritan-prompt__cursor").attributes("style")).toContain("opacity: 0");
   });
 
   it("cursor stays visible when hideCursorInCycle is false", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, {
+    wrapper = await mountMixed({
       props: { messageConfigs: [{ ...config, hideCursorInCycle: false }] },
     });
     await nextTick();
@@ -78,7 +87,7 @@ describe("SamaritanPromptMixed — typewriter", () => {
       holdDuration: 200,
       pauseDuration: 100,
     };
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [short] } });
+    wrapper = await mountMixed({ props: { messageConfigs: [short] } });
     await nextTick(); // "H" — first char immediate
 
     vi.advanceTimersByTime(100); // fire i=1 timer → "HI" typed, await wait(100) for i=2
@@ -106,7 +115,7 @@ describe("SamaritanPromptMixed — typewriter", () => {
       holdDuration: 200,
       pauseDuration: 100,
     };
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [short] } });
+    wrapper = await mountMixed({ props: { messageConfigs: [short] } });
     await nextTick(); // "H" — cursor hidden
 
     vi.advanceTimersByTime(100); // exit type loop (single char)
@@ -125,7 +134,7 @@ describe("SamaritanPromptMixed — typewriter", () => {
   });
 
   it("applies styleClassPassthrough", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, {
+    wrapper = await mountMixed({
       props: { messageConfigs: [config], styleClassPassthrough: "custom-class" },
     });
     expect(wrapper.find(".samaritan-prompt").classes()).toContain("custom-class");
@@ -150,24 +159,20 @@ describe("SamaritanPromptMixed — word-pulse", () => {
 
   let wrapper: Awaited<ReturnType<typeof mountSuspended>>;
 
-  afterEach(() => {
-    wrapper?.unmount();
-  });
-
   it("mounts without error", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config] } });
     expect(wrapper.vm).toBeTruthy();
   });
 
   it("starts with empty display text", async () => {
     // mountSuspended flushes pending promises, resolving the component's initial await nextTick()
     // which immediately triggers the fade-out. Text is still empty until fadeDuration elapses.
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config] } });
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("");
   });
 
   it("fades content out when cycle starts", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick(); // component's await nextTick() resolves → sets opacity=0
     await nextTick(); // DOM update
 
@@ -175,7 +180,7 @@ describe("SamaritanPromptMixed — word-pulse", () => {
   });
 
   it("hides cursor when cycle starts", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick();
     await nextTick();
 
@@ -183,7 +188,7 @@ describe("SamaritanPromptMixed — word-pulse", () => {
   });
 
   it("cursor stays visible when hideCursorInCycle is false", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, {
+    wrapper = await mountMixed({
       props: { messageConfigs: [{ ...config, hideCursorInCycle: false }] },
     });
     await nextTick();
@@ -193,7 +198,7 @@ describe("SamaritanPromptMixed — word-pulse", () => {
   });
 
   it("shows text and restores opacity after fade duration and settle delay", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick(); // component's nextTick resolves → opacity=0, await wait(fadeDuration)
     await nextTick(); // DOM update
 
@@ -212,7 +217,7 @@ describe("SamaritanPromptMixed — word-pulse", () => {
   });
 
   it("fades text back out after word duration", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config], introDelay: 0 } });
     await nextTick();
     await nextTick();
 
@@ -237,12 +242,8 @@ describe("SamaritanPromptMixed — word-pulse", () => {
 // ─── Config resolution ────────────────────────────────────────────────────────
 
 describe("SamaritanPromptMixed — config resolution", () => {
-  afterEach(() => {
-    // wrappers are unmounted inline in each test
-  });
-
   it("falls back to global effect prop when not specified per message", async () => {
-    const wrapper = await mountSuspended(SamaritanPromptMixed, {
+    const wrapper = await mountMixed({
       props: {
         messageConfigs: [{ text: "TEST" }], // no effect
         introDelay: 0,
@@ -253,11 +254,10 @@ describe("SamaritanPromptMixed — config resolution", () => {
     await nextTick();
     // typewriter first char is immediate
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("T");
-    wrapper.unmount();
   });
 
   it("falls back to global typeSpeed when not specified per message", async () => {
-    const wrapper = await mountSuspended(SamaritanPromptMixed, {
+    const wrapper = await mountMixed({
       props: {
         messageConfigs: [{ text: "HI", effect: "typewriter" }],
         introDelay: 0,
@@ -276,11 +276,10 @@ describe("SamaritanPromptMixed — config resolution", () => {
     await nextTick();
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("HI");
 
-    wrapper.unmount();
   });
 
   it("per-message holdDuration overrides global default", async () => {
-    const wrapper = await mountSuspended(SamaritanPromptMixed, {
+    const wrapper = await mountMixed({
       props: {
         messageConfigs: [
           { text: "H", effect: "typewriter", typeSpeed: 100, holdDuration: 200, deleteSpeed: 50, pauseDuration: 100 },
@@ -303,7 +302,6 @@ describe("SamaritanPromptMixed — config resolution", () => {
     await nextTick();
 
     expect(wrapper.find(".samaritan-prompt__text").text()).toBe("");
-    wrapper.unmount();
   });
 });
 
@@ -321,12 +319,8 @@ describe("SamaritanPromptMixed — accessibility and pause", () => {
 
   let wrapper: Awaited<ReturnType<typeof mountSuspended>>;
 
-  afterEach(() => {
-    wrapper?.unmount();
-  });
-
   it("hides the animated content from assistive tech and exposes a polite live region", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config], introDelay: 0 } });
     expect(wrapper.find(".samaritan-prompt__content").attributes("aria-hidden")).toBe("true");
     const live = wrapper.find(".samaritan-prompt__sr-text");
     expect(live.attributes("aria-live")).toBe("polite");
@@ -334,14 +328,14 @@ describe("SamaritanPromptMixed — accessibility and pause", () => {
   });
 
   it("announces the full message once it is typed", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], introDelay: 0 } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config], introDelay: 0 } });
     await vi.advanceTimersByTimeAsync(200);
     await nextTick();
     expect(wrapper.find(".samaritan-prompt__sr-text").text()).toBe("HI");
   });
 
   it("sets data-paused on hover and removes it on leave", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config] } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config] } });
     const root = wrapper.find(".samaritan-prompt");
     await root.trigger("pointerenter");
     expect(root.attributes("data-paused")).toBeDefined();
@@ -350,7 +344,7 @@ describe("SamaritanPromptMixed — accessibility and pause", () => {
   });
 
   it("stops typing while hovered and resumes on leave", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, {
+    wrapper = await mountMixed({
       props: { messageConfigs: [{ ...config, text: "HELLO" }], introDelay: 0 },
     });
     await vi.advanceTimersByTimeAsync(100);
@@ -369,7 +363,7 @@ describe("SamaritanPromptMixed — accessibility and pause", () => {
   });
 
   it("renders a custom cursor from the cursor slot", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, {
+    wrapper = await mountMixed({
       props: { messageConfigs: [config] },
       slots: { cursor: () => "_" },
     });
@@ -377,8 +371,61 @@ describe("SamaritanPromptMixed — accessibility and pause", () => {
   });
 
   it("exposes the fade duration as an inline private token", async () => {
-    wrapper = await mountSuspended(SamaritanPromptMixed, { props: { messageConfigs: [config], fadeDuration: 900 } });
+    wrapper = await mountMixed({ props: { messageConfigs: [config], fadeDuration: 900 } });
     const style = (wrapper.find(".samaritan-prompt").element as HTMLElement).style;
     expect(style.getPropertyValue("--_fade-duration")).toBe("900ms");
+  });
+});
+
+// ─── Worst-case data ──────────────────────────────────────────────────────────
+
+describe("SamaritanPromptMixed — worst-case data", () => {
+  const text = (wrapper: Awaited<ReturnType<typeof mountMixed>>) => wrapper.find(".samaritan-prompt__text").text();
+
+  it("idles without spinning when messageConfigs is empty and introDelay is 0", async () => {
+    const wrapper = await mountMixed({ props: { messageConfigs: [], introDelay: 0 } });
+    vi.advanceTimersByTime(2000);
+    await nextTick();
+    expect(text(wrapper)).toBe("");
+  });
+
+  it("starts once messages arrive after an empty start", async () => {
+    const wrapper = await mountMixed({ props: { messageConfigs: [], introDelay: 0 } });
+    await wrapper.setProps({ messageConfigs: [{ text: "GO", effect: "typewriter", typeSpeed: 100 }] });
+    vi.advanceTimersByTime(500);
+    await Promise.resolve();
+    await nextTick();
+    expect(text(wrapper)).toBe("G");
+  });
+
+  it("types an emoji with a skin-tone modifier as one character", async () => {
+    const wrapper = await mountMixed({
+      props: { messageConfigs: [{ text: "👍🏽A", effect: "typewriter", typeSpeed: 100 }], introDelay: 0 },
+    });
+    await nextTick();
+    expect(text(wrapper)).toBe("👍🏽");
+  });
+
+  it("shows the whole message at once under reduced motion", async () => {
+    const original = window.matchMedia;
+    window.matchMedia = ((query: string) => ({
+      matches: query.includes("prefers-reduced-motion: reduce"),
+      media: query,
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false,
+    })) as unknown as typeof window.matchMedia;
+    try {
+      const wrapper = await mountMixed({
+        props: { messageConfigs: [{ text: "HELLO", effect: "typewriter", typeSpeed: 100 }], introDelay: 0 },
+      });
+      await nextTick();
+      expect(text(wrapper)).toBe("HELLO");
+    } finally {
+      window.matchMedia = original;
+    }
   });
 });

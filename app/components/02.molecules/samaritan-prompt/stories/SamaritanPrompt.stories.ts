@@ -1,12 +1,15 @@
-import { computed } from "vue";
+import { computed, ref } from "vue";
+import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
+import type { MediaCanvas } from "~/types/components";
 import SamaritanPrompt from "../SamaritanPrompt.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
-// The default colours are white on the assumption of a dark page, so every story renders on a dark
-// stage. Keying on the serialised args restarts the loop when a timing control changes, so the
+// Stories render the classic white-on-black look by setting the colour tokens on a dark stage (the
+// defaults follow --theme-text and --theme-accent). Keying on the serialised args restarts the loop when a timing control changes, so the
 // new value is visible straight away instead of after the current cycle.
 const stageStyle =
-  "display: grid; place-items: center; min-block-size: 32rem; padding: 3.2rem; background: #000; color: #fff;";
+  "display: grid; place-items: center; min-block-size: 32rem; padding: 3.2rem; background: #000; color: #fff; " +
+  "--samaritan-prompt-text-colour: #fff; --samaritan-prompt-underline-colour: #fff; --samaritan-prompt-cursor-colour: #cc0000;";
 
 const timingArgTypes = {
   typeSpeed: {
@@ -126,4 +129,52 @@ export const CustomCursorAndTokens: Story = {
       </div>
     `,
   }),
+};
+
+export const StressTest: Story = {
+  name: "Stress Test (Worst-Case Data)",
+  args: {
+    messages: [
+      "Die Überwachungssysteme sind vollständig aktiviert und melden ungewöhnliche Aktivitäten",
+      "https://example.com/a/very/long/unbroken/path/that/never/wraps/on/its/own",
+      "",
+      "👍🏽 👨‍👩‍👧 ok",
+      "<b>Not bold</b>",
+      "مرحبا بالعالم",
+      "x",
+    ],
+    typeSpeed: 40,
+    deleteSpeed: 20,
+    holdDuration: 1500,
+  },
+  decorators: [
+    (story, context) => ({
+      components: { story, CanvasSwitcher },
+      setup() {
+        const canvasName = ref<MediaCanvas>(context.parameters.initialCanvas ?? "fullWidthCanvas");
+        return { canvasName };
+      },
+      template: `
+        <div style="padding: 1.2rem 1.6rem; border-block-end: 1px solid currentColor;">
+          <CanvasSwitcher v-model:canvas-name="canvasName" />
+        </div>
+        <div :class="canvasName" style="margin-inline: auto; outline: 1px dashed currentColor;">
+          <story />
+        </div>
+      `,
+    }),
+  ],
+  parameters: {
+    layout: "fullscreen",
+    initialCanvas: "mobileCanvas",
+    docs: {
+      story: { inline: false, height: "520px" },
+      description: {
+        story:
+          "Hostile messages at every `CanvasSwitcher` width, typed fast so the cycle comes round quickly. Check that: the long German message and the unbroken URL wrap inside the canvas and stay centred; " +
+          "the empty message is skipped over rather than stopping the loop (until 2026-10-21 it halted the cycle); emoji with a skin tone and a family emoji type as whole characters, never half a glyph; " +
+          "`<b>` types as text; the right-to-left message reads correctly; a single character still shows. Try `effect: word-pulse` too, and turn on reduced motion in your OS: each message then appears whole instead of typing.",
+      },
+    },
+  },
 };

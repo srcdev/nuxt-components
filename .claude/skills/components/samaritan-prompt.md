@@ -17,7 +17,9 @@ effects, styled as a monospace line over an underline with a pulsing cursor glyp
 
 Effects:
 
-- `typewriter` — characters typed one by one, held, deleted one by one.
+- `typewriter` — characters typed one by one, held, deleted one by one. "Characters" are graphemes
+  (`splitGraphemes()` in `app/utils/graphemes.ts`, `Intl.Segmenter`), so an emoji with a skin tone
+  or a family emoji never shows half a glyph.
 - `word-pulse` — the whole message fades in, holds, fades out.
 
 Both use `useCancellableTimer` for all timing, so the loop exits cleanly on unmount.
@@ -31,8 +33,9 @@ Both use `useCancellableTimer` for all timing, so the loop exits cleanly on unmo
   deletes or fades out, so a repeated message announces again.
 - **Pause on hover** (WCAG 2.2.2): pointer over the root pauses the sequence where it is and the
   cursor pulse; leaving resumes. The root gets `data-paused` while paused.
-- `prefers-reduced-motion: reduce` removes the cursor pulse and the word-pulse fade transition. The
-  text sequence keeps running (it's the content).
+- `prefers-reduced-motion: reduce` removes the cursor pulse and the word-pulse fade transition, and
+  the typewriter shows each message whole instead of typing and deleting it (since 2026-10-21). The
+  message sequence keeps running (it's the content).
 
 > **Changed 2026-09-27**: `SamaritanPrompt` previously had no live region (the visible text was read
 > character by character, if at all) and no reduced-motion handling; both now match
@@ -123,9 +126,13 @@ props on the component tag are hyphenated.
 
 Full token list and class hooks: `app/components/02.molecules/samaritan-prompt/CONSUMER-STYLING.md`.
 Tokens are `--samaritan-prompt-*` (text/underline/cursor colours, font, sizes, gaps, pulse
-duration). Defaults are white text on the assumption of a dark page; for a light or theme-switching
-page set `--samaritan-prompt-text-colour` and `--samaritan-prompt-underline-colour` (e.g. to
-`var(--theme-text)`).
+duration, white-space, line clamp). Colours default to `--theme-text` (text, underline) and
+`--theme-accent` (cursor); set the three colour tokens to `#fff`, `#fff`, `#cc0000` for the classic
+white-on-black look. Text wraps by default (`--samaritan-prompt-text-white-space: nowrap` restores
+one line).
+
+> **Changed 2026-10-21**: colour defaults were `#ffffff` text/underline and a `#cc0000` cursor on the
+> assumption of a dark page, and text was always `nowrap`, so a long message overflowed.
 
 The component brings no page layout; centre it from its parent.
 
@@ -134,7 +141,16 @@ The component brings no page layout; centre it from its parent.
 
 ## Notes
 
+- Both stories files have a `StressTest` story (long German, unbroken URL, empty message, emoji,
+  HTML-like text, right-to-left, single character) with the `CanvasSwitcher` decorator.
+
 - `SamaritanPromptMixed` reads `messageConfigs` at the start of each loop, so prop changes land on
-  the next loop. `SamaritanPrompt` restarts only when `effect` changes.
+  the next loop. With an empty list it polls every 500 ms (or `introDelay`, if longer) and starts
+  once messages arrive; until 2026-10-21 an empty list with `introDelay: 0` spun forever and froze
+  the tab.
+- `SamaritanPrompt` restarts when `effect` or the `messages` values change (compared by value, so
+  an inline array literal re-created on every parent render doesn't restart it). Until 2026-10-21 it
+  only restarted on `effect`, and an empty string in `messages` (or a list that shrank mid-cycle)
+  stopped the loop for good.
 - The `Mono MMM 5` font is declared with `@font-face` in each component's unscoped style from
-  `/fonts/monoMMM_5.ttf` (`font-display: swap` in `SamaritanPrompt`, `optional` in `SamaritanPromptMixed`).
+  `/fonts/monoMMM_5.ttf` (`font-display: swap` in both since 2026-10-21; `SamaritanPromptMixed` used `optional`).

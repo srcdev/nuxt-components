@@ -24,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import { usePreferredReducedMotion } from "@vueuse/core";
 import type { SamaritanPromptEffect } from "~/types/components/samaritan-prompt";
 
 interface Props {
@@ -66,6 +67,8 @@ const isPaused = ref(false);
 const fadeDurationCss = computed(() => `${props.fadeDuration}ms`);
 const cursorOpacity = computed(() => (props.hideCursorInCycle && !cursorVisible.value ? 0 : 1));
 
+const reducedMotion = usePreferredReducedMotion();
+
 const timer = useCancellableTimer();
 const { wait, schedule, stop, start } = timer;
 
@@ -87,6 +90,7 @@ const startEffect = () => {
   cursorVisible.value = true;
   phase.value = "typing";
   messageIndex.value = 0;
+  typedCount.value = 0;
   if (props.effect === "typewriter") {
     schedule(typeTick, props.typeSpeed);
   } else {
@@ -98,18 +102,21 @@ const startEffect = () => {
 type Phase = "typing" | "holding" | "deleting" | "pausing";
 const phase = ref<Phase>("typing");
 const messageIndex = ref(0);
+const typedCount = ref(0);
 
 const typeTick = () => {
   const message = props.messages[messageIndex.value];
-  if (!message) return;
+  if (message === undefined) return;
+  const characters = splitGraphemes(message);
 
   switch (phase.value) {
     case "typing":
-      if (displayText.value.length === 0 && props.hideCursorInCycle) {
+      if (typedCount.value === 0 && props.hideCursorInCycle) {
         cursorVisible.value = false;
       }
-      if (displayText.value.length < message.length) {
-        displayText.value = message.slice(0, displayText.value.length + 1);
+      if (typedCount.value < characters.length) {
+        typedCount.value = reducedMotion.value === "reduce" ? characters.length : typedCount.value + 1;
+        displayText.value = characters.slice(0, typedCount.value).join("");
         schedule(typeTick, props.typeSpeed);
       } else {
         phase.value = "holding";
@@ -125,8 +132,9 @@ const typeTick = () => {
       break;
 
     case "deleting":
-      if (displayText.value.length > 0) {
-        displayText.value = displayText.value.slice(0, -1);
+      if (typedCount.value > 0) {
+        typedCount.value = reducedMotion.value === "reduce" ? 0 : typedCount.value - 1;
+        displayText.value = characters.slice(0, typedCount.value).join("");
         schedule(typeTick, props.deleteSpeed);
       } else {
         phase.value = "pausing";
@@ -179,7 +187,7 @@ const runWordPulse = async () => {
 };
 
 watch(
-  () => props.effect,
+  () => `${props.effect}:${JSON.stringify(props.messages)}`,
   () => {
     stop();
     startEffect();
@@ -205,6 +213,7 @@ onUnmounted(stop);
     display: flex;
     flex-direction: column;
     align-items: center;
+    max-inline-size: 100%;
     row-gap: var(--samaritan-prompt-cursor-gap, 0.6rem);
     font-family: var(--samaritan-prompt-font-family, "Mono MMM 5", "Nova Mono", "Courier New", monospace);
     font-size: var(--samaritan-prompt-font-size, 2rem);
@@ -222,11 +231,20 @@ onUnmounted(stop);
         display: flex;
         justify-content: center;
         min-height: 1.2em;
+        max-inline-size: 100%;
+        min-inline-size: 0;
 
         .samaritan-prompt__text {
-          color: var(--samaritan-prompt-text-colour, #ffffff);
-          white-space: nowrap;
+          color: var(--samaritan-prompt-text-colour, var(--theme-text));
+          white-space: var(--samaritan-prompt-text-white-space, normal);
+          overflow-wrap: anywhere;
+          text-align: center;
           text-transform: var(--samaritan-prompt-text-transform, uppercase);
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          -webkit-line-clamp: var(--samaritan-prompt-text-line-clamp, none);
+          line-clamp: var(--samaritan-prompt-text-line-clamp, none);
         }
       }
 
@@ -234,12 +252,12 @@ onUnmounted(stop);
         width: 100%;
         min-width: 4ch;
         height: var(--samaritan-prompt-underline-height, 0.15rem);
-        background: var(--samaritan-prompt-underline-colour, #ffffff);
+        background: var(--samaritan-prompt-underline-colour, var(--theme-text));
       }
     }
 
     .samaritan-prompt__cursor {
-      color: var(--samaritan-prompt-cursor-colour, #cc0000);
+      color: var(--samaritan-prompt-cursor-colour, var(--theme-accent));
       font-size: var(--samaritan-prompt-cursor-size, 2.4rem);
       line-height: 1;
       animation: samaritan-prompt-pulse var(--samaritan-prompt-cursor-pulse-duration, 2.5s) ease-in-out infinite;
@@ -279,7 +297,7 @@ onUnmounted(stop);
 @keyframes samaritan-prompt-pulse {
   0%,
   100% {
-    color: var(--samaritan-prompt-cursor-colour, #cc0000);
+    color: var(--samaritan-prompt-cursor-colour, var(--theme-accent));
   }
   50% {
     color: var(--samaritan-prompt-cursor-colour-off, transparent);

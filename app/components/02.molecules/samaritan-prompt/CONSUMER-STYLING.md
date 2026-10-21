@@ -14,13 +14,15 @@ class set and one token API, so everything here applies to both.
 | `--samaritan-prompt-font-size` | `2rem` | Text size (the underline and gaps don't scale with it) |
 | `--samaritan-prompt-letter-spacing` | `0.08em` | Letter spacing |
 | `--samaritan-prompt-text-transform` | `uppercase` | Text case (`none` keeps messages as written) |
-| `--samaritan-prompt-text-colour` | `#ffffff` | Text colour |
+| `--samaritan-prompt-text-colour` | `var(--theme-text)` | Text colour |
+| `--samaritan-prompt-text-white-space` | `normal` | `nowrap` keeps each message on one line (it can then overflow a narrow container) |
+| `--samaritan-prompt-text-line-clamp` | `none` | Lines before an ellipsis. `1` is single-line ellipsis, `none` shows everything |
 
 ### Underline
 
 | Token | Default | Controls |
 |---|---|---|
-| `--samaritan-prompt-underline-colour` | `#ffffff` | Underline colour |
+| `--samaritan-prompt-underline-colour` | `var(--theme-text)` | Underline colour |
 | `--samaritan-prompt-underline-height` | `0.15rem` | Underline thickness |
 | `--samaritan-prompt-underline-gap` | `0.6rem` | Space between text and underline |
 
@@ -28,7 +30,7 @@ class set and one token API, so everything here applies to both.
 
 | Token | Default | Controls |
 |---|---|---|
-| `--samaritan-prompt-cursor-colour` | `#cc0000` | Cursor colour at the peak of the pulse |
+| `--samaritan-prompt-cursor-colour` | `var(--theme-accent)` | Cursor colour at the peak of the pulse |
 | `--samaritan-prompt-cursor-colour-off` | `transparent` | Cursor colour at the trough of the pulse |
 | `--samaritan-prompt-cursor-size` | `2.4rem` | Cursor glyph size |
 | `--samaritan-prompt-cursor-pulse-duration` | `2.5s` | One full pulse cycle |
@@ -36,6 +38,12 @@ class set and one token API, so everything here applies to both.
 
 Private, not public API: `--_fade-duration` (set inline on the root from the `fadeDuration` prop,
 or the current message's `fadeDuration` in `SamaritanPromptMixed`).
+
+> **Changed 2026-10-21**: colour defaults follow the theme (`--theme-text` for text and underline,
+> `--theme-accent` for the cursor) instead of assuming a dark page (`#ffffff`, `#cc0000`); set the
+> three colour tokens for the classic white-on-black look. Text now wraps (`overflow-wrap: anywhere`)
+> instead of `nowrap`, so a long message stays inside its container; `--samaritan-prompt-text-white-space`
+> and `--samaritan-prompt-text-line-clamp` are new.
 
 > **Changed 2026-09-27**: all tokens were renamed from `--samaritan-*` to `--samaritan-prompt-*`,
 > and `color` became `colour` (`--samaritan-color-text` is now `--samaritan-prompt-text-colour`,
@@ -69,20 +77,22 @@ Inner element classes, safe to target:
 
 - The cursor pulses between `--samaritan-prompt-cursor-colour` and `-colour-off`; set both to the
   same value for a steady cursor.
-- `prefers-reduced-motion: reduce` removes the cursor pulse and the word-pulse fade transition.
-  The text sequence itself keeps running (it is the content), and pauses on hover like always.
+- `prefers-reduced-motion: reduce` removes the cursor pulse and the word-pulse fade transition, and
+  the typewriter shows each message whole instead of typing and deleting it character by
+  character. The message sequence itself keeps running (it is the content), and pauses on hover
+  like always.
 
 ---
 
 ## Global theming
 
-The defaults assume a dark page. For a site that switches colour scheme, point the colours at the
-theme tokens once:
+The colours follow the theme by default. For the classic white-on-black look across a site:
 
 ```css
 :where(html) {
-  --samaritan-prompt-text-colour: var(--theme-text);
-  --samaritan-prompt-underline-colour: var(--theme-text);
+  --samaritan-prompt-text-colour: #fff;
+  --samaritan-prompt-underline-colour: #fff;
+  --samaritan-prompt-cursor-colour: #cc0000;
 }
 ```
 
@@ -115,4 +125,6 @@ element. Reactive: changing the prop replaces the previous classes.
   > that ancestor. Its styles now apply wherever it's used, and `.samaritan-stage` means nothing
   > to the library.
 
-- The `Mono MMM 5` font loads from `/fonts/monoMMM_5.ttf`, shipped in this layer's `public/`.
+- The `Mono MMM 5` font loads from `/fonts/monoMMM_5.ttf`, shipped in this layer's `public/`. Both components
+  declare it with `font-display: swap` (until 2026-10-21 `SamaritanPromptMixed` used `optional`, so
+  which one won depended on load order).

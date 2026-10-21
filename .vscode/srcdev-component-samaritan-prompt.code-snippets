@@ -48,13 +48,14 @@
     ]
   },
   "SRCDEV SamaritanPrompt Tokens": {
-    "description": "SamaritanPrompt / SamaritanPromptMixed CSS token overrides",
+    "description": "SamaritanPrompt / SamaritanPromptMixed CSS token overrides (classic white-on-black look)",
     "scope": "css,vue",
     "body": [
       "--samaritan-prompt-font-size: ${1:2rem};",
-      "--samaritan-prompt-text-colour: ${2:var(--theme-text)};",
-      "--samaritan-prompt-underline-colour: ${3:var(--theme-text)};",
-      "--samaritan-prompt-cursor-colour: ${4:#cc0000};"
+      "--samaritan-prompt-text-colour: ${2:#fff};",
+      "--samaritan-prompt-underline-colour: ${3:#fff};",
+      "--samaritan-prompt-cursor-colour: ${4:#cc0000};",
+      "--samaritan-prompt-text-line-clamp: ${5:none};"
     ]
   }
 }
