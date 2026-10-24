@@ -72,7 +72,7 @@
 
               {{ link.childLinksTitle ?? link.name }}
             </summary>
-            <div class="main-navigation-sub-nav" role="menu" @mouseenter="handleSubNavHover">
+            <div class="main-navigation-sub-nav" role="menu" @mouseenter="handleSubNavHover" @click="closeOnLinkClick">
               <ul class="main-navigation-sub-nav-list">
                 <li
                   v-for="(childLink, childIndex) in link.childLinks"
@@ -121,7 +121,7 @@
             :aria-hidden="true"
           />
         </summary>
-        <div class="overflow-details-nav" role="menu">
+        <div class="overflow-details-nav" role="menu" @click="closeOnLinkClick">
           <NavigationItems
             :main-navigation-state="mainNavigationState"
             :panel-variant="panelVariant"
@@ -220,6 +220,11 @@ const closeAllNavigationDetails = () => {
     element?.removeAttribute("open");
   });
   overflowDetailsRef.value?.removeAttribute("open");
+};
+
+// The header outlives route changes, so a followed link has to close its menu itself.
+const closeOnLinkClick = (event: MouseEvent) => {
+  if ((event.target as Element | null)?.closest("a")) closeAllNavigationDetails();
 };
 
 // ─── Hover-intent delay for the "safe triangle" problem ───────────────────
@@ -406,6 +411,7 @@ const overflowDetailsClass = computed<string | null>(() => {
 watch(
   () => route.path,
   () => {
+    closeAllNavigationDetails();
     isAnimated.value = false;
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {

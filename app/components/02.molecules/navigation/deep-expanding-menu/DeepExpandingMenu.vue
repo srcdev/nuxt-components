@@ -27,6 +27,7 @@
             popover
             @beforetoggle="handlePanelBeforeToggle(key, $event)"
             @toggle="handlePanelToggle(key, $event)"
+            @click="closeOnLinkClick"
           >
             <h4 v-if="link.childLinksTitle" class="deep-expanding-menu-group-heading page-heading-4 mb-6">
               {{ link.childLinksTitle }}
@@ -109,6 +110,11 @@ const handlePanelBeforeToggle = (key: number, event: Event) => {
   if ((event as ToggleEvent).newState !== "open") return;
   activeKey.value = key;
   handleBeforeToggle(event);
+};
+
+// Auto popovers only light-dismiss on outside clicks, and the menu outlives route changes.
+const closeOnLinkClick = (event: MouseEvent) => {
+  if ((event.target as Element | null)?.closest("a")) hide();
 };
 
 // Opening one auto popover closes the other, and those toggle events can arrive in either order.

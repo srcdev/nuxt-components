@@ -126,9 +126,13 @@ Any item or child link whose `path` starts with `#` is a same-page section link:
 - It is active (`li.is-active`, the indicator) by hash, not by route. On load, the URL's hash wins;
   with none, the first anchor item in the data is active. Both the top bar and the overflow menu
   share that state.
-- Clicking one closes any open dropdown and the overflow menu (route links close them by navigating).
+- Clicking one closes any open dropdown and the overflow menu.
 
 Route links and anchor links can be mixed in the same data. See the "Same-Page Anchor Links" story.
+
+Any link click inside a dropdown or the overflow menu closes every open menu, and so does a route
+change (back/forward included). The header lives in a layout and outlives navigation, so until
+2026-10-24 a followed route link left the overflow menu open on the next page.
 
 ## Migrating from TabNavigation
 

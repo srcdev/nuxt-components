@@ -293,6 +293,7 @@ Numbers are stable (code and docs cite them). Rule files are in `.claude/rules/`
 32. **`v-for` keyed on a repeatable data field** (`SkipLinks` `href`, `ContentDocs` `to`, 2026-10-18) → `vfor-keys-from-data.md`. Reordering a list with a shared `href` left a stale extra link in the DOM.
 33. **Spaces inside a dynamic slot name** (`AccordionChat` StressTest story, 2026-10-20) → `vue-dynamic-arg-no-spaces.md`. Only failed when Storybook rendered the story; no check before that sees a template string.
 34. **`calc()` on relative-colour channels in CSS** (`SparkleEffect`, 2026-10-20) → `css-relative-colour-calc.md`. A build-time PostCSS warning, not a browser problem.
+35. **Menus left open after following a link** (`ResponsiveHeader` overflow and dropdowns, `DeepExpandingMenu` panels, 2026-10-24) → `menu-close-on-link.md`. Only `#anchor` links closed them; route links relied on navigation, which a layout-level header survives. `ActionMenu`, `SelectMenu` and `DeepExpandingMenuClassic` already closed.
 
 ## Development Workflow
 

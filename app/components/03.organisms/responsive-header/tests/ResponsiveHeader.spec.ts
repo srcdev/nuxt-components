@@ -1,8 +1,16 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { nextTick } from "vue";
 import ResponsiveHeader from "../ResponsiveHeader.vue";
 import type { ResponsiveHeaderProp } from "../../../../types/components";
+
+const mounted: Awaited<ReturnType<typeof mountSuspended>>[] = [];
+
+const mountHeader = async (options: { props?: Record<string, unknown>; attachTo?: HTMLElement } = {}) => {
+  const wrapper = await mountSuspended(ResponsiveHeader, options);
+  mounted.push(wrapper);
+  return wrapper;
+};
 
 // ─── ResizeObserver mock ────────────────────────────────────────────────────
 // useResizeObserver (vueuse) only constructs `new ResizeObserver(callback)` and
@@ -69,15 +77,20 @@ describe("ResponsiveHeader", () => {
     vi.stubGlobal("ResizeObserver", MockResizeObserver);
   });
 
+  afterEach(() => {
+    mounted.splice(0).forEach((wrapper) => wrapper.unmount());
+    vi.restoreAllMocks();
+  });
+
   it("mounts without error", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     expect(wrapper.vm).toBeTruthy();
   });
 
   it("renders a plain NuxtLink for items with a path", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     const link = wrapper.find('a[href="/"]');
@@ -86,7 +99,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("renders a details/summary dropdown for items with childLinks", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     const summary = wrapper.find(".main-navigation-details-summary");
@@ -96,7 +109,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("renders a decorator icon only for items with iconName", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     const homeLink = wrapper.find('a[href="/"]');
@@ -106,7 +119,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("marks the item matching the current route as active", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
       route: "/about",
     });
@@ -116,7 +129,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("marks a dropdown item active when one of its childLinks matches the current route", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
       route: "/ui/tabs",
     });
@@ -126,7 +139,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("uses default overflow summary icons when not provided", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     const icons = wrapper.findAll(".overflow-details-summary .icon");
@@ -136,7 +149,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("uses custom overflow summary icons when provided", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: {
         responsiveNavLinks: navLinks,
         overflowDetailsSummaryIcons: { more: "mdi:dots-horizontal", burger: "mdi:menu" },
@@ -147,14 +160,14 @@ describe("ResponsiveHeader", () => {
   });
 
   it("does not render the secondaryNavigation slot when not provided", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     expect(wrapper.text()).not.toContain("Settings link");
   });
 
   it("renders the secondaryNavigation slot when provided", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
       slots: { secondaryNavigation: "<span>Settings link</span>" },
     });
@@ -162,14 +175,14 @@ describe("ResponsiveHeader", () => {
   });
 
   it("applies styleClassPassthrough to the root element", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks, styleClassPassthrough: ["site-header-nav"] },
     });
     expect(wrapper.find(".navigation.site-header-nav").exists()).toBe(true);
   });
 
   it("toggles a dropdown's open attribute on summary click", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     const details = wrapper.find(".main-navigation-details");
@@ -184,7 +197,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("does not close an open dropdown instantly when a sibling item is only briefly hovered in transit", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     const details = wrapper.find(".main-navigation-details");
@@ -198,7 +211,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("closes an open dropdown after the hover-intent delay once the cursor moved on", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     const details = wrapper.find(".main-navigation-details");
@@ -213,7 +226,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("cancels the scheduled close when the sub-nav panel itself is reached", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     const details = wrapper.find(".main-navigation-details");
@@ -236,7 +249,7 @@ describe("ResponsiveHeader", () => {
   // implicit focus side effect on its own, so these tests fire both events
   // explicitly to reproduce what a real click actually does.
   it("closes cleanly (no reopen) when clicking a summary the mouse had just hover-opened", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     const summary = wrapper.find(".main-navigation-details-summary");
@@ -268,7 +281,7 @@ describe("ResponsiveHeader", () => {
         },
       ],
     };
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: responsiveNavLinksTwoDropdowns },
     });
     const summaries = wrapper.findAll(".main-navigation-details-summary");
@@ -289,7 +302,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("does not auto-open a dropdown on hover when allowExpandOnGesture is false", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks, allowExpandOnGesture: false },
     });
     const details = wrapper.find(".main-navigation-details");
@@ -300,7 +313,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("passes mainNavigationState through to NavigationItems in the overflow panel", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     const overflowNav = wrapper.find(".overflow-details-nav");
@@ -311,7 +324,7 @@ describe("ResponsiveHeader", () => {
 
   it("hides only the items that end past the main nav's right edge", async () => {
     const geometry = mockGeometry(250);
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     await triggerGeometryPass();
@@ -325,7 +338,7 @@ describe("ResponsiveHeader", () => {
 
   it("keeps an item that ends exactly at the main nav's right edge, so a flush-right last item isn't always hidden", async () => {
     const geometry = mockGeometry(400);
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     await triggerGeometryPass();
@@ -336,7 +349,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("gives the icon-only overflow button an accessible name", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     expect(wrapper.find(".overflow-details-summary").attributes("aria-label")).toBe("More navigation");
@@ -345,14 +358,14 @@ describe("ResponsiveHeader", () => {
   });
 
   it("builds the submenu aria-label from submenuAriaLabel", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks, submenuAriaLabel: "Untermenü {title}" },
     });
     expect(wrapper.find(".main-navigation-details-summary").attributes("aria-label")).toBe("Untermenü UI Components");
   });
 
   it("falls back to name for a dropdown with no childLinksTitle", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: { firstNav: [{ name: "Services", childLinks: [{ name: "A", path: "/a" }] }] } },
     });
     const summary = wrapper.find(".main-navigation-details-summary");
@@ -362,7 +375,7 @@ describe("ResponsiveHeader", () => {
 
   it("renders child links with duplicate names without key clashes", async () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: {
         responsiveNavLinks: {
           firstNav: [
@@ -378,7 +391,7 @@ describe("ResponsiveHeader", () => {
 
   it("shows the overflow button for any group key once an item is hidden", async () => {
     const geometry = mockGeometry(150);
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: { main: [{ name: "Home", path: "/" }, { name: "About", path: "/about" }] } },
     });
     await triggerGeometryPass();
@@ -387,7 +400,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("keeps the overflow button hidden when there are no nav items", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: {} },
     });
     await triggerGeometryPass();
@@ -396,7 +409,7 @@ describe("ResponsiveHeader", () => {
   });
 
   it("renders correct HTML structure with default props", async () => {
-    const wrapper = await mountSuspended(ResponsiveHeader, {
+    const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks },
     });
     expect(wrapper.html()).toMatchSnapshot();
@@ -414,14 +427,14 @@ describe("ResponsiveHeader", () => {
     };
 
     it("renders #anchor paths as plain links and route paths as NuxtLinks", async () => {
-      const wrapper = await mountSuspended(ResponsiveHeader, { props: { responsiveNavLinks: anchorLinks } });
+      const wrapper = await mountHeader({ props: { responsiveNavLinks: anchorLinks } });
       const links = wrapper.findAll(".main-navigation-link");
       expect(links[0]!.attributes("href")).toBe("#home");
       expect(links[2]!.attributes("href")).toBe("/blog");
     });
 
     it("marks the first anchor item active on load", async () => {
-      const wrapper = await mountSuspended(ResponsiveHeader, { props: { responsiveNavLinks: anchorLinks } });
+      const wrapper = await mountHeader({ props: { responsiveNavLinks: anchorLinks } });
       await nextTick();
       const items = wrapper.findAll(".main-navigation-item");
       expect(items[0]!.classes()).toContain("is-active");
@@ -434,11 +447,68 @@ describe("ResponsiveHeader", () => {
       section.id = "about";
       section.scrollIntoView = vi.fn();
       document.body.appendChild(section);
-      const wrapper = await mountSuspended(ResponsiveHeader, { props: { responsiveNavLinks: anchorLinks } });
+      const wrapper = await mountHeader({ props: { responsiveNavLinks: anchorLinks } });
       await wrapper.findAll(".main-navigation-link")[1]!.trigger("click");
       expect(section.scrollIntoView).toHaveBeenCalled();
       expect(wrapper.findAll(".main-navigation-item")[1]!.classes()).toContain("is-active");
       section.remove();
+    });
+  });
+
+  // ─── Closing menus on navigation ──────────────────────────────────────
+
+  describe("closing menus on navigation", () => {
+    it("closes the overflow menu when a route link inside it is clicked", async () => {
+      const wrapper = await mountHeader({ props: { responsiveNavLinks: navLinks } });
+      const overflow = wrapper.find<HTMLDetailsElement>(".overflow-details");
+      overflow.element.open = true;
+
+      await wrapper.find(".overflow-details-nav a.overflow-navigation-link").trigger("click");
+      expect(overflow.element.open).toBe(false);
+    });
+
+    it("closes the overflow menu when a sub-nav link inside it is clicked", async () => {
+      const wrapper = await mountHeader({ props: { responsiveNavLinks: navLinks } });
+      const overflow = wrapper.find<HTMLDetailsElement>(".overflow-details");
+      overflow.element.open = true;
+
+      await wrapper.find(".overflow-details-nav a.overflow-navigation-sub-nav-link").trigger("click");
+      expect(overflow.element.open).toBe(false);
+    });
+
+    it("closes a dropdown when one of its links is clicked", async () => {
+      const wrapper = await mountHeader({ props: { responsiveNavLinks: navLinks } });
+      const dropdown = wrapper.find<HTMLDetailsElement>(".main-navigation-details");
+      dropdown.element.open = true;
+
+      await wrapper.find(".main-navigation-sub-nav-link").trigger("click");
+      expect(dropdown.element.open).toBe(false);
+    });
+
+    it("leaves the menus open when a click inside them isn't on a link", async () => {
+      const wrapper = await mountHeader({ props: { responsiveNavLinks: navLinks } });
+      const overflow = wrapper.find<HTMLDetailsElement>(".overflow-details");
+      const dropdown = wrapper.find<HTMLDetailsElement>(".main-navigation-details");
+      overflow.element.open = true;
+      dropdown.element.open = true;
+
+      await wrapper.find(".overflow-details-nav").trigger("click");
+      await wrapper.find(".main-navigation-sub-nav").trigger("click");
+      expect(overflow.element.open).toBe(true);
+      expect(dropdown.element.open).toBe(true);
+    });
+
+    it("closes open menus when the route changes", async () => {
+      const wrapper = await mountHeader({ props: { responsiveNavLinks: navLinks } });
+      const overflow = wrapper.find<HTMLDetailsElement>(".overflow-details");
+      const dropdown = wrapper.find<HTMLDetailsElement>(".main-navigation-details");
+      overflow.element.open = true;
+      dropdown.element.open = true;
+
+      await wrapper.vm.$router.push("/contact");
+      await nextTick();
+      expect(overflow.element.open).toBe(false);
+      expect(dropdown.element.open).toBe(false);
     });
   });
 });

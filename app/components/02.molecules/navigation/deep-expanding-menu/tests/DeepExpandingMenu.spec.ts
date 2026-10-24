@@ -198,6 +198,16 @@ describe("DeepExpandingMenu", () => {
         await nextTick();
         expect(toggles[1]!.attributes("aria-expanded")).toBe("false");
       });
+
+      it("hides the open panel when one of its links is clicked", async () => {
+        const wrapper = await mountMenu({ props: { navLinks: twoGroups } });
+        const panel = wrapper.find(".deep-expanding-menu-group-panel");
+        panel.element.dispatchEvent(toggleEvent("open"));
+        await nextTick();
+
+        await wrapper.find(".deep-expanding-menu-group-link").trigger("click");
+        expect(HTMLElement.prototype.hidePopover).toHaveBeenCalled();
+      });
     });
 
     describe("without the Popover API", () => {
@@ -221,6 +231,22 @@ describe("DeepExpandingMenu", () => {
         await toggles[1]!.trigger("click");
         expect(panels[1]!.classes()).not.toContain("deep-expanding-menu-panel-open");
         expect(toggles[1]!.attributes("aria-expanded")).toBe("false");
+      });
+
+      it("closes the open group when one of its links is clicked", async () => {
+        const wrapper = await mountMenu({ props: { navLinks: twoGroups } });
+        await wrapper.findAll(".deep-expanding-menu-group-toggle")[0]!.trigger("click");
+
+        await wrapper.find(".deep-expanding-menu-group-link").trigger("click");
+        expect(wrapper.find(".deep-expanding-menu-panel-open").exists()).toBe(false);
+      });
+
+      it("keeps the group open when a click inside the panel isn't on a link", async () => {
+        const wrapper = await mountMenu({ props: { navLinks: twoGroups } });
+        await wrapper.findAll(".deep-expanding-menu-group-toggle")[0]!.trigger("click");
+
+        await wrapper.find(".deep-expanding-menu-group-heading").trigger("click");
+        expect(wrapper.find(".deep-expanding-menu-panel-open").exists()).toBe(true);
       });
 
       it("closes the open group on Escape", async () => {

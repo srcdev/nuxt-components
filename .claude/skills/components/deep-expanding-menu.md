@@ -83,6 +83,9 @@ prefixed class names and the state hooks are in this component's `CONSUMER-STYLI
   composable's `triggerRef`/`popoverRef` are computeds over per-group element maps (filled by
   function refs). Native `toggle` events for two auto popovers can arrive in either order (B opens,
   then A closes), so a close event is ignored unless it's for the active group.
+- Clicking a link inside a panel hides it. The menu usually lives in a layout and outlives route
+  changes, and auto popovers only light-dismiss on outside clicks, so a followed link left the panel
+  open on the next page until 2026-10-24.
 - Each group toggle has `aria-expanded`; the caret flip keys off it rather than
   `:has(:popover-open)`, so it works in the fallback too.
 - Panels have no ARIA role: this is the disclosure-navigation pattern (a toggle with
