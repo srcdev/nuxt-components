@@ -1,0 +1,593 @@
+<title>Component Ledger</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#eef0ea;
+  --surface:#ffffff;
+  --surface-2:#e4e7de;
+  --ink:#1b2420;
+  --ink-soft:#51594f;
+  --ink-faint:#838a7c;
+  --line:#cdd2c4;
+  --accent:#2f6f5e;
+  --accent-soft:#dce9e2;
+  --warn:#9c6a1f;
+  --warn-soft:#f3e4c8;
+  --bad:#a1423a;
+  --bad-soft:#f4dcd8;
+  --shadow: 0 1px 2px rgba(27,36,32,0.06), 0 8px 24px -12px rgba(27,36,32,0.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#12160f;
+    --surface:#191f18;
+    --surface-2:#222922;
+    --ink:#e7ebe0;
+    --ink-soft:#aab2a0;
+    --ink-faint:#707868;
+    --line:#333c30;
+    --accent:#67b79d;
+    --accent-soft:#1e3630;
+    --warn:#d9a54f;
+    --warn-soft:#3a2f18;
+    --bad:#e0847b;
+    --bad-soft:#3d201d;
+    --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 24px -12px rgba(0,0,0,0.6);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12160f;
+  --surface:#191f18;
+  --surface-2:#222922;
+  --ink:#e7ebe0;
+  --ink-soft:#aab2a0;
+  --ink-faint:#707868;
+  --line:#333c30;
+  --accent:#67b79d;
+  --accent-soft:#1e3630;
+  --warn:#d9a54f;
+  --warn-soft:#3a2f18;
+  --bad:#e0847b;
+  --bad-soft:#3d201d;
+  --shadow: 0 1px 2px rgba(0,0,0,0.4), 0 8px 24px -12px rgba(0,0,0,0.6);
+}
+
+*{box-sizing:border-box;}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"IBM Plex Sans", system-ui, sans-serif;
+  font-size:1.4rem;
+  line-height:1.5;
+}
+.mono{font-family:"IBM Plex Mono","SFMono-Regular",Menlo,monospace;}
+::selection{background:var(--accent-soft); color:var(--ink);}
+
+.wrap{
+  max-width:112rem;
+  margin:0 auto;
+  padding:4.8rem 3.2rem 8rem;
+}
+
+/* ---------- header ---------- */
+header.top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:3.2rem;
+  border-bottom:0.1rem solid var(--line);
+  padding-bottom:2.4rem;
+  margin-bottom:3.2rem;
+  flex-wrap:wrap;
+}
+.title-block .eyebrow{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:1.1rem;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--accent);
+  margin:0 0 0.8rem;
+}
+h1{
+  font-size:3.4rem;
+  font-weight:700;
+  margin:0 0 0.6rem;
+  text-wrap:balance;
+  letter-spacing:-0.01em;
+}
+.title-block p{
+  margin:0;
+  max-width:56rem;
+  color:var(--ink-soft);
+  font-size:1.5rem;
+}
+.meta-block{
+  text-align:right;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:1.2rem;
+  color:var(--ink-faint);
+  white-space:nowrap;
+}
+.meta-block strong{color:var(--ink-soft); font-weight:500;}
+
+/* ---------- stat strip ---------- */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(6, 1fr);
+  gap:1.2rem;
+  margin-bottom:3.6rem;
+}
+.stat{
+  background:var(--surface);
+  border:0.1rem solid var(--line);
+  border-radius:0.6rem;
+  padding:1.6rem 1.6rem 1.4rem;
+  box-shadow:var(--shadow);
+}
+.stat .num{
+  font-family:"IBM Plex Mono", monospace;
+  font-variant-numeric:tabular-nums;
+  font-size:2.6rem;
+  font-weight:600;
+  line-height:1;
+}
+.stat .label{
+  margin-top:0.6rem;
+  font-size:1.15rem;
+  color:var(--ink-soft);
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+}
+.stat .bar{
+  margin-top:1rem;
+  height:0.4rem;
+  border-radius:99rem;
+  background:var(--surface-2);
+  overflow:hidden;
+}
+.stat .bar > span{
+  display:block;
+  height:100%;
+  background:var(--accent);
+  border-radius:99rem;
+}
+.stat.low .bar > span{background:var(--bad);}
+.stat.mid .bar > span{background:var(--warn);}
+
+/* ---------- narrative ---------- */
+.finding{
+  display:grid;
+  grid-template-columns:1.4fr 1fr;
+  gap:2.4rem;
+  margin-bottom:4rem;
+}
+@media (max-width:820px){ .finding{grid-template-columns:1fr;} }
+.finding h2{
+  font-size:1.9rem;
+  margin:0 0 1rem;
+}
+.finding p{margin:0 0 1rem; color:var(--ink-soft);}
+.finding p:last-child{margin-bottom:0;}
+.finding .card{
+  background:var(--surface);
+  border:0.1rem solid var(--line);
+  border-radius:0.6rem;
+  padding:2rem 2.2rem;
+  box-shadow:var(--shadow);
+}
+.card ol, .card ul{margin:0; padding-left:1.8rem;}
+.card li{margin-bottom:0.7rem; color:var(--ink-soft);}
+.card li:last-child{margin-bottom:0;}
+.card li strong{color:var(--ink);}
+
+/* ---------- controls ---------- */
+.controls{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:1rem;
+  margin-bottom:1.6rem;
+}
+.chip-group{display:flex; flex-wrap:wrap; gap:0.6rem;}
+.chip{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:1.15rem;
+  padding:0.5rem 1.1rem;
+  border-radius:99rem;
+  border:0.1rem solid var(--line);
+  background:var(--surface);
+  color:var(--ink-soft);
+  cursor:pointer;
+  transition:background .12s, color .12s, border-color .12s;
+}
+.chip:hover{border-color:var(--accent);}
+.chip.active{
+  background:var(--ink);
+  border-color:var(--ink);
+  color:var(--paper);
+}
+.search{
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:0.6rem;
+  background:var(--surface);
+  border:0.1rem solid var(--line);
+  border-radius:0.5rem;
+  padding:0.5rem 1rem;
+}
+.search input{
+  border:none;
+  background:transparent;
+  outline:none;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:1.3rem;
+  color:var(--ink);
+  width:18rem;
+}
+.search input::placeholder{color:var(--ink-faint);}
+.count-note{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:1.15rem;
+  color:var(--ink-faint);
+  margin-bottom:1rem;
+}
+
+/* ---------- table ---------- */
+.table-scroll{
+  overflow-x:auto;
+  border:0.1rem solid var(--line);
+  border-radius:0.6rem;
+  box-shadow:var(--shadow);
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:var(--surface);
+  min-width:78rem;
+}
+thead th{
+  position:sticky;
+  top:0;
+  background:var(--surface-2);
+  z-index:2;
+  text-align:left;
+  font-size:1.05rem;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  color:var(--ink-soft);
+  font-weight:600;
+  padding:1rem 1rem;
+  border-bottom:0.1rem solid var(--line);
+  cursor:pointer;
+  white-space:nowrap;
+  user-select:none;
+}
+thead th:hover{color:var(--ink);}
+thead th.sorted::after{content:" ▾"; color:var(--accent);}
+thead th.sorted.asc::after{content:" ▴";}
+tbody td{
+  padding:0.9rem 1rem;
+  border-bottom:0.1rem solid var(--line);
+  font-size:1.3rem;
+  vertical-align:middle;
+}
+tbody tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--surface-2);}
+td.path{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:1.2rem;
+  color:var(--ink);
+}
+td.path .n{color:var(--ink-faint); font-size:1.05rem; margin-left:0.4rem;}
+.tier-pill{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:1.05rem;
+  padding:0.15rem 0.6rem;
+  border-radius:0.3rem;
+  background:var(--surface-2);
+  color:var(--ink-soft);
+  white-space:nowrap;
+}
+.tier-pill.none{background:var(--bad-soft); color:var(--bad);}
+td.check{text-align:center; font-size:1.5rem; line-height:1;}
+.yes{color:var(--accent);}
+.no{color:var(--ink-faint); opacity:0.5;}
+.priv-count{
+  font-family:"IBM Plex Mono", monospace;
+  font-variant-numeric:tabular-nums;
+  font-size:1.2rem;
+}
+.priv-count.zero{color:var(--ink-faint);}
+.priv-count.some{color:var(--ink-soft);}
+.priv-count.many{color:var(--warn); font-weight:600;}
+.score-bar{
+  display:inline-flex;
+  gap:0.2rem;
+  vertical-align:middle;
+}
+.score-bar span{
+  width:0.7rem;
+  height:0.7rem;
+  border-radius:50%;
+  background:var(--surface-2);
+  border:0.1rem solid var(--line);
+}
+.score-bar span.on{background:var(--accent); border-color:var(--accent);}
+
+footer.note{
+  margin-top:2.4rem;
+  font-size:1.2rem;
+  color:var(--ink-faint);
+  max-width:80rem;
+}
+footer.note code{
+  font-family:"IBM Plex Mono", monospace;
+  background:var(--surface-2);
+  padding:0.1rem 0.4rem;
+  border-radius:0.3rem;
+}
+
+@media (max-width:900px){
+  .stats{grid-template-columns:repeat(3,1fr);}
+}
+@media (max-width:560px){
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .wrap{padding:3.2rem 1.6rem 6rem;}
+  h1{font-size:2.6rem;}
+}
+</style>
+
+<div class="wrap">
+
+  <header class="top">
+    <div class="title-block">
+      <p class="eyebrow">nuxt-components · definition of done</p>
+      <h1>Component Ledger</h1>
+      <p>A scripted pass over every component folder against the current standard: tier placement, consumer styling docs, tests, Storybook coverage, public skill docs, and VS Code snippets. Regenerated automatically whenever a component change is staged for commit.</p>
+      <div class="public-intro" style="margin-top:1.2rem;padding:1rem 1.2rem;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:6px;background:var(--accent-soft);">
+        <p style="margin:0 0 0.6rem;"><strong>Why this page is public.</strong> Every component in this library is held to one written standard, and this page shows where each one stands against it, gaps included. Nothing here is hand-written: a script rebuilds it from the repository whenever a component changes.</p>
+        <p style="margin:0 0 0.6rem;">The scored checks are structural. They prove each component has tests, a story, styling docs, a usage guide and an editor snippet, and that it follows the shared code rules. They can't prove the logic is sound, so each component also gets an independent whole-component review, recorded in the <strong>Reviewed</strong> column.</p>
+        <p style="margin:0;">That second step earns its place. The first review was of a navigation header that already passed every structural check. It found a prop whose value was silently ignored, menus that stayed open after navigating, state shared between two instances on one page, and layout with no fallback for older Safari.</p>
+      </div>
+
+    </div>
+    <div class="meta-block">
+      last rebuilt <strong id="audited-at">—</strong><br>
+      <span id="rowcount">—</span> component groups · <span id="vuecount">—</span> .vue files
+    </div>
+  </header>
+
+  <section class="stats" id="stats"></section>
+
+  <section class="finding">
+    <div id="narrative"></div>
+    <div class="card">
+      <h2 style="margin-top:0;">Reference-quality components</h2>
+      <p style="margin-bottom:1rem; color:var(--ink-soft);">Pass every doc/test/story/skill/snippet check, sit in a tier, no stray <code class="mono">variants/</code> folder. Point future work at these when in doubt about the shape of "done":</p>
+      <ol id="reference-list"></ol>
+    </div>
+  </section>
+
+  <div class="controls">
+    <div class="chip-group" id="tier-filters"></div>
+    <div class="chip-group">
+      <button class="chip" data-gap-filter="0">only incomplete</button>
+    </div>
+    <div class="search">
+      <span class="mono" style="color:var(--ink-faint);">⌕</span>
+      <input type="text" id="search" placeholder="filter by path…">
+    </div>
+  </div>
+  <p class="count-note"><span id="visible-count">0</span> shown &middot; click a column heading to sort</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th data-key="compdir" data-type="str">Component</th>
+          <th data-key="tier" data-type="str">Tier</th>
+          <th data-key="consumer_styling" data-type="bool" title="CONSUMER-STYLING.md present">Styling doc</th>
+          <th data-key="priv_tokens" data-type="num" title="Count of --_ prefixed vars — informational, not a defect count; see footer">--_ vars</th>
+          <th data-key="tests" data-type="bool">Tests</th>
+          <th data-key="stories" data-type="bool">Story</th>
+          <th data-key="skill" data-type="bool">Skill doc</th>
+          <th data-key="snippet" data-type="bool">Snippet</th>
+          <th data-key="variants" data-type="bool" title="Uses a variants/ subfolder">Variants folder</th>
+          <th data-key="legacy_props" data-type="bool" title="Still options-style defineProps({...}), not defineProps&lt;Props&gt;()">Legacy props</th>
+          <th data-key="story_args_bug" data-type="bool" title="A story destructures/refs Storybook's reactive args at setup-time, so most Controls-panel changes silently stop updating the rendered story after first render">Story args bug</th>
+          <th data-key="eslint_issues" data-type="bool" title="npx eslint reports at least one error or warning on a .vue file in this group">ESLint issues</th>
+          <th data-key="redundant_priv_tokens" data-type="bool" title="A --_ token that's declared but never read, or a single-use 1:1 copy of a public token (pitfall #20)">Redundant --_</th>
+          <th data-key="styling_doc_outdated" data-type="bool" title="CONSUMER-STYLING.md exists but predates the fixed layout (no ## Local overrides section)">Styling doc layout</th>
+          <th data-key="missing_stress_story" data-type="bool" title="No story file in this group exports a StressTest (worst-case data) story, checklist item 6b">No stress story</th>
+          <th data-key="last_reviewed" data-type="str" title="Date of the last whole-component review (/review-component). Blank means never reviewed. Not part of the score">Reviewed</th>
+          <th data-key="score" data-type="num">Score</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
+  <footer class="note">
+    <p><strong>Methodology:</strong> "Styling doc", "Tests", "Story" and "Variants folder" are filesystem checks (<code>CONSUMER-STYLING.md</code>, a <code>tests/</code> dir, a <code>stories/</code> dir or <code>*.stories.ts</code> file, a <code>variants/</code> subfolder). "Skill doc" and "Snippet" match the component's kebab-case name against <code>.claude/skills/components/*.md</code> and <code>.vscode/*.code-snippets</code> &mdash; a small number of near-miss names may read as false negatives and are worth a manual glance before acting. "Score" is the count of the five doc/test/story/skill/snippet checks passed, out of 5, and is what "reference-quality" and "only incomplete" are based on. "Legacy props" is a source check for options-style <code>defineProps({...})</code> rather than <code>defineProps&lt;Props&gt;()</code> &mdash; like "Variants folder" it is <em>not</em> counted in the 5-point score (deliberately, so it stays visible instead of vanishing into an already-high score), but it does factor into "reference-quality" and "only incomplete", same as "Variants folder".</p>
+    <p style="margin-top:0.8rem;"><strong>"Story args bug"</strong> flags a story whose <code>setup()</code> destructures or spreads Storybook's <code>args</code> into local variables/refs at mount time (e.g. <code>const { modelValue, ...otherArgs } = args;</code> then <code>ref(modelValue)</code>). @storybook/vue3 mounts the story component once and mutates the same <code>args</code> object in place on every Controls change &mdash; it does not re-run <code>setup()</code> &mdash; so a destructured copy freezes at its initial value and most Controls silently stop updating the rendered story after first render. The fix is to bind the template straight to <code>args.x</code> (optionally through a <code>computed()</code> that strips non-prop extra args), never to a value copied out in <code>setup()</code>. Also not counted in the 5-point score, for the same reason as "Legacy props".</p>
+    <p style="margin-top:0.8rem;"><strong>"ESLint issues"</strong> runs <code>npx eslint</code> across every <code>.vue</code> file under <code>app/components/</code> once per build and flags a group if any of its files reported an error or a warning. Added 2026-09-21 after fixing a dead <code>const props = withDefaults(...)</code> in <code>InputRange</code> (the assignment's value was never read once its only reference &mdash; a since-removed dead computed &mdash; was cleaned up) and finding the same pattern live in <code>FormField</code>/<code>FormWrapper</code>. It originally flagged 13 groups for <code>vue/require-default-prop</code> firing on <code>defineModel()</code>-declared props, an eslint-plugin-vue rule with no options to exempt models (it predates <code>defineModel</code>) &mdash; the fix there is <code>defineModel&lt;T&gt;({'{'} required: true {'}'})</code> where the native element genuinely can't be meaningfully "empty" (matching what <code>InputRange</code>/<code>InputRangeField</code> now do), not a blanket rule disable or an artificial default value (or <code>{'{'} default: undefined {'}'}</code> where unset is a genuinely supported state). All of those were fixed 2026-09-25. Not counted in the 5-point score, same reasoning as "Legacy props"/"Story args bug".</p>
+    <p style="margin-top:0.8rem;"><strong>"Styling doc layout"</strong> flags a group whose <code>CONSUMER-STYLING.md</code> exists but has no <code>## Local overrides</code> section, i.e. it predates the fixed layout adopted 2026-09-26 (Public token API, State hooks, Global theming, Local overrides incl. the consumer <code>&lt;style scoped&gt;</code> / <code>:deep()</code> note, optional Recipe sections, Class passthrough). Before that, each doc described overriding from a consumer's own CSS differently, or not at all. A missing doc isn't flagged here, since "Styling doc" already scores it. Not counted in the 5-point score, same reasoning as "Legacy props".</p>
+    <p style="margin-top:0.8rem;"><strong>"No stress story"</strong> flags a group where no story file exports a <code>StressTest</code> story (compliance checklist item 6b: worst-case data such as long unbroken strings, empty fields, emoji, right-to-left text, out-of-range numbers and broken URLs). Added 2026-10-05, when only <code>GoogleReviews</code> and <code>InputOtpField</code> had one. A group with no stories at all is flagged here as well as in "Story". Animation wrappers, decorative containers and Storybook tooling that take no copy or data are exempt (shown as n/a; list in <code>build.mjs</code>). Not counted in the 5-point score, same reasoning as "Legacy props".</p>
+    <p style="margin-top:0.8rem;"><strong>On <code>--_</code> vars:</strong> the public/private split is decided by consumer relevance, not reuse count &mdash; a private var is correct even used once, as long as the value has no plausible consumer override. This column is a raw count of <code>--_</code>-prefixed CSS custom properties per group; it is <em>not</em> scored and doesn't factor into "reference-quality" or "score." A high count is only a prompt to check each one by hand for a value that should have been public (a colour, size, or per-state variant with no override token) &mdash; the bug class the <code>ServicesCard</code> fix (CLAUDE.md pitfall #20) caught, not the presence of the prefix itself.</p>
+    <p style="margin-top:0.8rem;"><strong>This page regenerates from <code>.claude/component-ledger/build.mjs</code></strong>, triggered whenever a staged commit touches <code>app/components/</code> (see the <code>create-commit-message</code> skill's hook). All numbers on this page, including the narrative above, are computed live from the latest scan &mdash; nothing here is hand-written prose that can drift out of date.</p>
+  </footer>
+
+</div>
+
+<script>
+const PAYLOAD = {"auditedAt":"2026-10-24","rows":[{"compdir":"01.atoms/alert-mask","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":5,"last_reviewed":"","score":5},{"compdir":"01.atoms/animations/animated-svg-text","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/animations/clip-element","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"01.atoms/animations/container-glow","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":7,"last_reviewed":"","score":5},{"compdir":"01.atoms/animations/entry","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/animations/glowing-border","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":7,"last_reviewed":"","score":5},{"compdir":"01.atoms/animations/marquee-scroller","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":3,"last_reviewed":"","score":5},{"compdir":"01.atoms/animations/rotating-carousel-image","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":5,"last_reviewed":"","score":5},{"compdir":"01.atoms/animations/scroll-reveal-frame","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"01.atoms/animations/scroll-reveal-image","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"01.atoms/animations/section-parallax","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/animations/sparkle-effect","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":7,"last_reviewed":"","score":5},{"compdir":"01.atoms/animations/view-timeline","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/banner-video","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":4,"last_reviewed":"","score":5},{"compdir":"01.atoms/canvas-switcher","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"01.atoms/card","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":3,"last_reviewed":"","score":5},{"compdir":"01.atoms/clipped-panel","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"01.atoms/content-wrappers/docs-pages","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":14,"last_reviewed":"","score":5},{"compdir":"01.atoms/content-wrappers/layout-grid/dashboard-quad-grid","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/content-wrappers/layout-grid/dashboard-stats-grid","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/content-wrappers/layout-grid/layout-grid-by-cols","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":4,"last_reviewed":"","score":5},{"compdir":"01.atoms/display-banner","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/display-dialog","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":4,"last_reviewed":"","score":5},{"compdir":"01.atoms/display-pill","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":9,"last_reviewed":"","score":5},{"compdir":"01.atoms/display-tooltip","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":7,"last_reviewed":"","score":5},{"compdir":"01.atoms/glass-panel","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/grids/auto-grid","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/grids/column-flow-grid","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"01.atoms/grids/grid-stack","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/grids/masonry-grid","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":5,"last_reviewed":"","score":5},{"compdir":"01.atoms/navigation/breadcrumb","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"01.atoms/navigation/skip-links","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/page-row","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":8,"last_reviewed":"","score":5},{"compdir":"01.atoms/pop-over","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":7,"last_reviewed":"","score":5},{"compdir":"01.atoms/qr-code","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/tabbed-content","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":20,"last_reviewed":"","score":5},{"compdir":"01.atoms/text-block","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/text-blocks/eyebrow-text","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/text-blocks/header-block","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"01.atoms/text-blocks/hero-text","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"01.atoms/text-blocks/link-text","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"01.atoms/ui-block-decorated","tier":"01.atoms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":3,"last_reviewed":"","score":5},{"compdir":"02.molecules/action-menu","tier":"02.molecules","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":8,"last_reviewed":"","score":5},{"compdir":"02.molecules/alert-content","tier":"02.molecules","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"02.molecules/alert-masked-content","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"02.molecules/cookie-consent-banner","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":3,"last_reviewed":"","score":5},{"compdir":"02.molecules/display-avatar","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"02.molecules/display-chip","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":13,"last_reviewed":"","score":5},{"compdir":"02.molecules/display-theme-switch","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"02.molecules/display-tooltip-rich","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"02.molecules/expandable/accordion-chat","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":4,"last_reviewed":"","score":5},{"compdir":"02.molecules/expandable/accordion-group","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"02.molecules/expandable/expanding-panel","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"02.molecules/expandable/expanding-panel-classic","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"02.molecules/input-copy","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"02.molecules/navigation/deep-expanding-menu","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":5,"last_reviewed":"","score":5},{"compdir":"02.molecules/navigation/deep-expanding-menu-classic","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"02.molecules/opening-hours","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"02.molecules/price-list","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"02.molecules/pricing-card","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"02.molecules/profile-section","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":5,"last_reviewed":"","score":5},{"compdir":"02.molecules/progress-tracker","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"02.molecules/prompt","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"02.molecules/qr-code","tier":"02.molecules","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"02.molecules/samaritan-prompt","tier":"02.molecules","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"02.molecules/select-menu","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":7,"last_reviewed":"","score":5},{"compdir":"02.molecules/sliding-toggle","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":10,"last_reviewed":"","score":5},{"compdir":"02.molecules/social-icons-list","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"02.molecules/stepper-list","tier":"02.molecules","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":5,"last_reviewed":"","score":5},{"compdir":"02.molecules/toast","tier":"02.molecules","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":4,"last_reviewed":"","score":5},{"compdir":"03.organisms/google-reviews","tier":"03.organisms","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":4,"last_reviewed":"","score":5},{"compdir":"03.organisms/image-galleries/carousel-flip","tier":"03.organisms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"03.organisms/image-galleries/slider-gallery","tier":"03.organisms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":12,"last_reviewed":"","score":5},{"compdir":"03.organisms/responsive-header","tier":"03.organisms","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":21,"last_reviewed":"2026-10-24","score":5},{"compdir":"03.organisms/services/service-detail","tier":"03.organisms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"03.organisms/services/service-summary","tier":"03.organisms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"03.organisms/services/services-card","tier":"03.organisms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"03.organisms/services/services-grids","tier":"03.organisms","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"03.organisms/site-header","tier":"03.organisms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"2026-10-24","score":5},{"compdir":"04.templates/page-hero-highlights","tier":"04.templates","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":7,"last_reviewed":"","score":5},{"compdir":"05.forms/form-errors","tier":"05.forms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":5,"last_reviewed":"","score":5},{"compdir":"05.forms/form-field","tier":"05.forms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"05.forms/form-fieldset","tier":"05.forms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"05.forms/form-wrapper","tier":"05.forms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"05.forms/input-button","tier":"05.forms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":5,"last_reviewed":"","score":5},{"compdir":"05.forms/input-checkbox","tier":"05.forms","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"05.forms/input-checkbox-radio","tier":"05.forms","n_vue":3,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":3,"last_reviewed":"","score":5},{"compdir":"05.forms/input-description","tier":"05.forms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"05.forms/input-label","tier":"05.forms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"05.forms/input-number","tier":"05.forms","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":4,"last_reviewed":"","score":5},{"compdir":"05.forms/input-otp","tier":"05.forms","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"05.forms/input-radio","tier":"05.forms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":0,"last_reviewed":"","score":5},{"compdir":"05.forms/input-range","tier":"05.forms","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"05.forms/input-select","tier":"05.forms","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"05.forms/input-text","tier":"05.forms","n_vue":4,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":3,"last_reviewed":"","score":5},{"compdir":"05.forms/input-textarea","tier":"05.forms","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":1,"last_reviewed":"","score":5},{"compdir":"05.forms/pending-effect","tier":"05.forms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":true,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5},{"compdir":"05.forms/segmented-control","tier":"05.forms","n_vue":1,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":4,"last_reviewed":"","score":5},{"compdir":"05.forms/toggle-switch","tier":"05.forms","n_vue":2,"variants":false,"legacy_props":false,"story_args_bug":false,"eslint_issues":false,"redundant_priv_tokens":false,"styling_doc_outdated":false,"missing_stress_story":false,"stress_story_exempt":false,"consumer_styling":true,"tests":true,"stories":true,"skill":true,"snippet":true,"priv_tokens":2,"last_reviewed":"","score":5}]};
+const DATA = PAYLOAD.rows;
+
+document.getElementById("audited-at").textContent = PAYLOAD.auditedAt;
+document.getElementById("rowcount").textContent = DATA.length;
+document.getElementById("vuecount").textContent = DATA.reduce((s,d) => s + d.n_vue, 0);
+
+// ---- stat strip ----
+const statDefs = [
+  { key:"consumer_styling", label:"Styling doc" },
+  { key:"tests", label:"Tests" },
+  { key:"stories", label:"Story" },
+  { key:"skill", label:"Skill doc" },
+  { key:"snippet", label:"Snippet" },
+  { key:"placed", label:"In a tier", derive:d => d.tier !== "NONE" },
+];
+const statsEl = document.getElementById("stats");
+statDefs.forEach(sd => {
+  const count = DATA.filter(d => sd.derive ? sd.derive(d) : d[sd.key]).length;
+  const pct = DATA.length ? Math.round((count / DATA.length) * 100) : 0;
+  const cls = pct < 40 ? "low" : pct < 70 ? "mid" : "";
+  const el = document.createElement("div");
+  el.className = "stat " + cls;
+  el.innerHTML = `
+    <div class="num">${pct}<span style="font-size:1.5rem;">%</span></div>
+    <div class="label">${sd.label} &middot; ${count}/${DATA.length}</div>
+    <div class="bar"><span style="width:${pct}%"></span></div>
+  `;
+  statsEl.appendChild(el);
+});
+
+// ---- dynamic narrative (every number computed from DATA, nothing hand-written) ----
+const fullyCompliant = DATA.filter(d => d.score === 5 && d.tier !== "NONE" && !d.variants && !d.legacy_props && !d.story_args_bug && !d.eslint_issues && !d.redundant_priv_tokens && !d.styling_doc_outdated && !d.missing_stress_story);
+const unplaced = DATA.filter(d => d.tier === "NONE");
+const forkedVariants = DATA.filter(d => d.variants);
+const legacyProps = DATA.filter(d => d.legacy_props);
+const storyArgsBug = DATA.filter(d => d.story_args_bug);
+const eslintIssues = DATA.filter(d => d.eslint_issues);
+const redundantPriv = DATA.filter(d => d.redundant_priv_tokens);
+const stylingDocOutdated = DATA.filter(d => d.styling_doc_outdated);
+const missingStress = DATA.filter(d => d.missing_stress_story);
+const neverReviewed = DATA.filter(d => !d.last_reviewed);
+const noSkillAndUnplaced = unplaced.filter(d => !d.skill).length;
+const topPrivate = DATA.filter(d => d.priv_tokens > 0).sort((a,b) => b.priv_tokens - a.priv_tokens).slice(0, 3);
+
+const narrativeEl = document.getElementById("narrative");
+narrativeEl.innerHTML = `
+  <h2>What's dragging the average down</h2>
+  <p>Only <strong>${fullyCompliant.length} of ${DATA.length}</strong> component groups clear every check. The gaps cluster in a predictable order: the older a component, the less likely it ever got a skill doc or CONSUMER-STYLING.md written for it, because both postdate a lot of what's in this tree.</p>
+  <p><strong>${unplaced.length} groups</strong> still sit loose at <code class="mono">app/components/</code> top level rather than inside a numbered tier. ${noSkillAndUnplaced} of those ${unplaced.length} also have no skill doc &mdash; an unplaced component tends to also be an undocumented one.</p>
+  <p>${forkedVariants.length ? `<strong>${forkedVariants.length} group${forkedVariants.length===1?"":"s"}</strong> still fork${forkedVariants.length===1?"s":""} variants into a <code class="mono">variants/</code> subfolder &mdash; deprecated in favour of documenting the variation in the parent skill.md.` : `No component groups currently fork variants into a <code class="mono">variants/</code> subfolder.`}</p>
+  <p>${legacyProps.length ? `<strong>${legacyProps.length} group${legacyProps.length===1?"":"s"}</strong> still use${legacyProps.length===1?"s":""} options-style <code class="mono">defineProps({...})</code> instead of <code class="mono">defineProps&lt;Props&gt;()</code> &mdash; this doesn't move the 5-point score, so it can hide behind an otherwise-complete-looking group.` : `No component groups currently use options-style defineProps.`}</p>
+  <p>${storyArgsBug.length ? `<strong>${storyArgsBug.length} group${storyArgsBug.length===1?"":"s"}</strong> ha${storyArgsBug.length===1?"s":"ve"} a story that destructures/refs Storybook's <code class="mono">args</code> at setup-time (${storyArgsBug.map(d => `<code class="mono">${d.compdir.split("/").pop()}</code>`).join(", ")}) &mdash; the Controls panel silently stops updating most props on that story after first render. This doesn't move the 5-point score either, for the same reason as "Legacy props".` : `No component groups currently have this Storybook Controls reactivity bug.`}</p>
+  <p>${eslintIssues.length ? `<strong>${eslintIssues.length} group${eslintIssues.length===1?"":"s"}</strong> ha${eslintIssues.length===1?"s":"ve"} at least one live <code class="mono">npx eslint</code> finding (${eslintIssues.map(d => `<code class="mono">${d.compdir.split("/").pop()}</code>`).join(", ")}) &mdash; a component can score 5/5 on docs/tests/story/skill/snippet and still carry these. Not counted in the 5-point score, same reasoning as "Legacy props"/"Story args bug".` : `No component groups currently have a live ESLint finding.`}</p>
+  <p>${redundantPriv.length ? `<strong>${redundantPriv.length} group${redundantPriv.length===1?"":"s"}</strong> ha${redundantPriv.length===1?"s":"ve"} a redundant private token (${redundantPriv.map(d => `<code class="mono">${d.compdir.split("/").pop()}</code>`).join(", ")}): declared but never read, or a single-use copy of a public token. Not counted in the 5-point score.` : `No component groups have a redundant private token.`}</p>
+  <p>${stylingDocOutdated.length ? `<strong>${stylingDocOutdated.length} group${stylingDocOutdated.length===1?"":"s"}</strong> ha${stylingDocOutdated.length===1?"s":"ve"} a <code class="mono">CONSUMER-STYLING.md</code> that predates the fixed layout (no Local overrides section) &mdash; they're picked up by /migrate-component after every other check is clean.` : `Every CONSUMER-STYLING.md follows the fixed layout.`}</p>
+  <p>${missingStress.length ? `<strong>${missingStress.length} group${missingStress.length===1?"":"s"}</strong> ha${missingStress.length===1?"s":"ve"} no <code class="mono">StressTest</code> (worst-case data) story yet &mdash; picked up by /migrate-component after every other check is clean, in the priority order listed there, since each one usually turns up real overflow and wrapping fixes. Not counted in the 5-point score.` : `Every component group has a StressTest story.`}</p>
+  <p>${neverReviewed.length ? `<strong>${neverReviewed.length} of ${DATA.length} groups</strong> have never had a whole-component review (<code class="mono">/review-component</code>). The checks above see structure; a review reads the logic, and the first one found ignored props, state shared between instances and CSS with no Safari 16 path in a group scoring 5/5. Not counted in the score.` : `Every component group has had a whole-component review.`}</p>
+  <p><strong>${topPrivate.length ? "On --_ vars:" : ""}</strong> ${topPrivate.length
+    ? `the largest private-token surfaces right now are ${topPrivate.map(d => `<code class="mono">${d.compdir.split("/").pop()}</code> (${d.priv_tokens})`).join(", ")} &mdash; worth a manual look for a value that should have been public, per the corrected rule in the footer below. A high count on its own isn't a defect.`
+    : ""}</p>
+`;
+
+// ---- reference list ----
+const refList = document.getElementById("reference-list");
+fullyCompliant.forEach(d => {
+  const li = document.createElement("li");
+  li.innerHTML = `<strong>${d.compdir.split("/").pop()}</strong>`;
+  refList.appendChild(li);
+});
+if (!refList.children.length) {
+  refList.innerHTML = "<li>No component currently clears every check.</li>";
+}
+
+// ---- tier filter chips ----
+const tiers = [...new Set(DATA.map(d => d.tier))].sort();
+const tierFilters = document.getElementById("tier-filters");
+let activeTier = "all";
+const allChip = mkChip("all components", "all");
+tierFilters.appendChild(allChip);
+tiers.forEach(t => tierFilters.appendChild(mkChip(t === "NONE" ? "unplaced" : t, t)));
+
+function mkChip(label, value){
+  const b = document.createElement("button");
+  b.className = "chip" + (value === "all" ? " active" : "");
+  b.textContent = label;
+  b.dataset.tier = value;
+  b.addEventListener("click", () => {
+    activeTier = value;
+    [...tierFilters.children].forEach(c => c.classList.toggle("active", c === b));
+    render();
+  });
+  return b;
+}
+
+let onlyIncomplete = false;
+document.querySelector("[data-gap-filter]").addEventListener("click", (e) => {
+  onlyIncomplete = !onlyIncomplete;
+  e.target.classList.toggle("active", onlyIncomplete);
+  render();
+});
+
+const searchEl = document.getElementById("search");
+searchEl.addEventListener("input", render);
+
+let sortKey = "score";
+let sortAsc = true;
+document.querySelectorAll("thead th").forEach(th => {
+  th.addEventListener("click", () => {
+    const key = th.dataset.key;
+    if (sortKey === key) sortAsc = !sortAsc;
+    else { sortKey = key; sortAsc = key !== "score"; }
+    document.querySelectorAll("thead th").forEach(t => t.classList.remove("sorted","asc"));
+    th.classList.add("sorted");
+    if (sortAsc) th.classList.add("asc");
+    render();
+  });
+});
+
+function tierLabel(t){ return t === "NONE" ? "unplaced" : t; }
+
+function render(){
+  let rows = DATA.slice();
+  if (activeTier !== "all") rows = rows.filter(d => d.tier === activeTier);
+  if (onlyIncomplete) rows = rows.filter(d => d.score < 5 || d.tier === "NONE" || d.variants || d.legacy_props || d.story_args_bug || d.eslint_issues || d.redundant_priv_tokens || d.styling_doc_outdated || d.missing_stress_story);
+  const q = searchEl.value.trim().toLowerCase();
+  if (q) rows = rows.filter(d => d.compdir.toLowerCase().includes(q));
+
+  rows.sort((a,b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if (typeof av === "boolean") { av = av ? 1 : 0; bv = bv ? 1 : 0; }
+    if (typeof av === "string") return sortAsc ? av.localeCompare(bv) : bv.localeCompare(av);
+    return sortAsc ? av - bv : bv - av;
+  });
+
+  document.getElementById("visible-count").textContent = rows.length;
+
+  const tbody = document.getElementById("tbody");
+  tbody.innerHTML = rows.map(d => {
+    const privClass = d.priv_tokens === 0 ? "zero" : d.priv_tokens > 15 ? "many" : "some";
+    const dots = [d.consumer_styling, d.tests, d.stories, d.skill, d.snippet]
+      .map(v => `<span class="${v ? "on" : ""}"></span>`).join("");
+    return `<tr>
+      <td class="path">${d.compdir}<span class="n">${d.n_vue > 1 ? "×" + d.n_vue : ""}</span></td>
+      <td><span class="tier-pill ${d.tier === "NONE" ? "none" : ""} mono">${tierLabel(d.tier)}</span></td>
+      <td class="check">${check(d.consumer_styling)}</td>
+      <td class="priv-count ${privClass}">${d.priv_tokens}</td>
+      <td class="check">${check(d.tests)}</td>
+      <td class="check">${check(d.stories)}</td>
+      <td class="check">${check(d.skill)}</td>
+      <td class="check">${check(d.snippet)}</td>
+      <td class="check">${d.variants ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : '<span class="no">–</span>'}</td>
+      <td class="check">${d.legacy_props ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : '<span class="no">–</span>'}</td>
+      <td class="check">${d.story_args_bug ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : '<span class="no">–</span>'}</td>
+      <td class="check">${d.eslint_issues ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : '<span class="no">–</span>'}</td>
+      <td class="check">${d.redundant_priv_tokens ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : '<span class="no">–</span>'}</td>
+      <td class="check">${d.styling_doc_outdated ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : '<span class="no">–</span>'}</td>
+      <td class="check">${d.missing_stress_story ? '<span class="no" style="opacity:1;color:var(--warn);">●</span>' : d.stress_story_exempt ? '<span class="no" title="Exempt: takes no copy or data to stress">n/a</span>' : '<span class="no">–</span>'}</td>
+      <td class="mono">${d.last_reviewed || '<span class="no" title="Never reviewed">–</span>'}</td>
+      <td><span class="score-bar">${dots}</span></td>
+    </tr>`;
+  }).join("");
+}
+
+function check(v){
+  return v ? '<span class="yes">●</span>' : '<span class="no">–</span>';
+}
+
+render();
+</script>

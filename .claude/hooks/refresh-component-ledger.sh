@@ -26,7 +26,7 @@ if [[ $build_status -ne 0 ]]; then
 elif [[ -z "$url" ]]; then
   msg="Staged changes touch component(s) (see: $staged_components). Component Ledger rebuilt at .claude/component-ledger/output.html, but no stored artifact URL was found at $url_file — ask the user for the ledger's URL, save it there, then republish."
 else
-  msg="Staged changes touch component(s): $(echo "$staged_components" | tr '\n' ' '). Component Ledger data rebuilt at .claude/component-ledger/output.html from the current repo state — republish it now via the Artifact tool with url=\"$url\" so the ledger reflects this change before finishing the commit message."
+  msg="Staged changes touch component(s): $(echo "$staged_components" | tr '\n' ' '). Component Ledger data rebuilt at .claude/component-ledger/output.html from the current repo state — republish it now via the Artifact tool with url=\"$url\" so the ledger reflects this change before finishing the commit message. The public Storybook copy (.storybook/public/component-status/index.html) was rebuilt too: tell the user to stage it with this commit."
 fi
 
 jq -n --arg msg "$msg" '{hookSpecificOutput:{hookEventName:"PostToolUse",additionalContext:$msg}}'

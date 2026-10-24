@@ -145,6 +145,8 @@ and say why briefly.
 - Run `node .claude/component-ledger/build.mjs` and check the new component's row in
   `.claude/component-ledger/audit.json` passes as described at the top of the checklist. Fix
   anything it flags before finishing.
+- Run `/review-component` on it (its steps 2 to 5) so a fresh subagent reviews what was just built
+  before it's called done. The person who built it is the worst placed to spot its gaps.
 - Report each acceptance criterion as met (with the test or story that shows it) or not met (with
   why). Anything only visible in the browser (layout, motion, focus styling) is listed as "check in
   Storybook" with the story name, not claimed as met.

@@ -25,6 +25,7 @@ to migrate — run `node .claude/component-ledger/build.mjs` and look up that co
   also clean) and stop. Don't run step 2's `AskUserQuestion` or the step 3 checklist for a
   component that already passes every check; that flow is for when there's actual work to decide
   about.
+  If its `last_reviewed` is blank, say so and offer `/review-component` as the next step.
 - **Not fully compliant, or the user asked to migrate/fix it outright** (not just check): proceed
   to step 2 as normal.
 
@@ -89,6 +90,10 @@ Otherwise, auto-pick the next worst offender:
      components come last: an oversized-slot story is enough for them. Animation wrappers,
      decorative containers and Storybook tooling are exempt (`stressStoryExempt` in `build.mjs`) and
      never flagged.
+   - Else any group whose `last_reviewed` is blank (never had a whole-component review). There
+     is no checklist work to do, so run `/review-component` on it instead of steps 2 and 3. Pick in
+     the same risk order as the stress-story list above (data-driven and interactive components
+     first), then alphabetically.
    - Else the lowest `score` overall — same tie-break.
 3. State which component was picked and why in one line (e.g. "Picked `input-select` — unplaced isn't the issue here, it forks a `variants/` subfolder and scores 2/5.") before doing anything else, so the user can redirect you if they'd rather do a different one next.
 
@@ -136,6 +141,9 @@ items. Skip an item only when it genuinely doesn't apply, and say why briefly.
   leave it. Only defer what needs the user's decision (deleting or retiring something) or a
   consumer-repo edit. StepperList's spec cleanup was listed as a follow-up on 2026-10-15 and had to
   be done afterwards anyway.
+- Then run `/review-component` on it (its steps 2 to 5): a fresh subagent reviews the migrated
+  component and its supporting cast. The checklist proves the files exist and follow the rules;
+  the review reads the logic. Skip it only if `last_reviewed` is already today.
 - Summarize what changed and what you deliberately skipped (with reasons).
 - Don't stage, commit, or push — that's the user's call. Mention that running
   `/create-commit-message` next will trigger the Component Ledger refresh automatically via the

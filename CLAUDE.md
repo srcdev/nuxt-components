@@ -297,7 +297,7 @@ Numbers are stable (code and docs cite them). Rule files are in `.claude/rules/`
 
 ## Development Workflow
 
-The full definition of done is `.claude/skills/component-compliance-checklist.md`. Use `/new-component` to build a new component against it, and `/migrate-component` to bring an existing one up to it. The steps below are the short version.
+The full definition of done is `.claude/skills/component-compliance-checklist.md`. Use `/new-component` to build a new component against it, and `/migrate-component` to bring an existing one up to it. `/review-component` has a fresh subagent review a whole component and its supporting cast for logic gaps the checklist can't see; dates go in `.claude/component-ledger/reviews.json`. The steps below are the short version.
 
 1. **Plan**: Check existing patterns in `.claude/skills/`
 2. **Create**: Follow established component patterns

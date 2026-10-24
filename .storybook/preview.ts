@@ -30,7 +30,7 @@ const preview: Preview = {
       // function source and evals it as plain JS: no type annotations, no outside references.
       // @ts-expect-error -- parameters are untyped and annotations would break that eval.
       storySort: (a, b) => {
-        const groupOrder = ["Foundations", "Atoms", "Molecules", "Organisms", "Templates", "Components", "Patterns"];
+        const groupOrder = ["Introduction", "Foundations", "Atoms", "Molecules", "Organisms", "Templates", "Components", "Patterns", "Project"];
 
         if (a.title === b.title) {
           if (a.type === b.type) return 0;

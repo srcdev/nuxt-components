@@ -70,6 +70,11 @@ function walk(dir, out = []) {
   return out;
 }
 
+// Whole-component reviews (/review-component), keyed by compdir. build.mjs regenerates every row
+// from the repo, so the dates live in this committed file rather than in audit.json.
+const reviewsFile = path.join(here, "reviews.json");
+const reviews = fs.existsSync(reviewsFile) ? JSON.parse(fs.readFileSync(reviewsFile, "utf-8")) : {};
+
 const vueFiles = walk(componentsRoot).filter(
   (f) => !f.split(path.sep).includes("tests") && !f.split(path.sep).includes("stories")
 );
@@ -205,6 +210,7 @@ for (const [compdir, files] of [...groups.entries()].sort()) {
     skill: skillHit,
     snippet: snippetHit,
     priv_tokens: privCount,
+    last_reviewed: reviews[relDir] ?? "",
   });
 }
 
@@ -218,8 +224,19 @@ const payload = { auditedAt, rows };
 fs.writeFileSync(path.join(here, "audit.json"), JSON.stringify(payload));
 
 const template = fs.readFileSync(path.join(here, "template.html"), "utf-8");
-const output = template.replace("__PAYLOAD__", JSON.stringify(payload));
+const payloadJson = JSON.stringify(payload);
+const output = template.replace("__PUBLIC_INTRO__", "").replace("__PAYLOAD__", () => payloadJson);
 fs.writeFileSync(path.join(here, "output.html"), output);
+
+// Public copy served by Storybook (Project / Component status). Committed, so the deployed
+// Storybook serves a file and never runs this script (or ESLint) at build time.
+const publicIntro = fs.readFileSync(path.join(here, "public-intro.html"), "utf-8");
+const publicDir = path.join(root, ".storybook/public/component-status");
+fs.mkdirSync(publicDir, { recursive: true });
+fs.writeFileSync(
+  path.join(publicDir, "index.html"),
+  template.replace("__PUBLIC_INTRO__", () => publicIntro).replace("__PAYLOAD__", () => payloadJson)
+);
 
 console.log(`Component Ledger rebuilt: ${rows.length} groups, ${rows.reduce((s, d) => s + d.n_vue, 0)} .vue files.`);
 console.log(`Output: ${path.join(here, "output.html")}`);

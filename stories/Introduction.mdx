@@ -1,0 +1,63 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Introduction" />
+
+# SRCDEV Nuxt Components
+
+A Nuxt layer of Vue components, composables and design tokens for building marketing and service
+websites. Everything shown here is installed into an app with one `extends` line, and every
+component is themed through public CSS custom properties rather than by editing its source.
+
+## Install
+
+```bash
+npm install --save srcdev-nuxt-components
+```
+
+```ts
+export default defineNuxtConfig({
+  extends: "srcdev-nuxt-components",
+  css: ["srcdev-nuxt-components/app/assets/styles/main.css", "./app/assets/styles/main.css"],
+});
+```
+
+The layer CSS has to be listed explicitly. The second entry is your own stylesheet for overrides.
+
+## How this Storybook is organised
+
+| Group | What's in it |
+| --- | --- |
+| **Foundations** | Colour ramps, theme tokens and utilities everything else is built on |
+| **Atoms** | Single-purpose building blocks: text, media, animation wrappers, small controls |
+| **Molecules** | Atoms combined into one job: menus, cards, panels, toasts |
+| **Organisms** | Page sections: headers, galleries, service listings, grids |
+| **Templates** | Whole-section layouts such as page heroes |
+| **Components / Forms** | Form controls (`InputText`) and their labelled versions (`InputTextField`), plus form layout and validation |
+| **Patterns** | Complete forms assembled from the pieces above |
+| **Project** | How the library is kept to its standard |
+
+Each component's **Docs** page lists its props and slots. Most also have a **StressTest** story
+that feeds it worst-case data (long unbroken text, empty fields, right-to-left script) to show it
+holding up.
+
+## Using a component
+
+Components are auto-imported, so `<SiteHeader>` works without an import. Every component ships with:
+
+- **`CONSUMER-STYLING.md`** next to its `.vue` file: the public `--component-name-*` tokens and how
+  to override them from your own stylesheet;
+- **a usage guide** for AI coding agents, copied into your app with `npm run setup:claude`;
+- **a VS Code snippet**, copied into your app on install.
+
+Colours come from `--theme-*` tokens, so one set of overrides re-themes everything. Load-bearing
+behaviour works back to Safari 16.
+
+## Quality
+
+Every component is checked against one written standard: tests, a story, styling docs, a usage
+guide, a snippet, and the shared code and accessibility rules. The
+<a href="/?path=/docs/project-component-status--docs" target="_top">Component status</a> page shows
+where each one stands, rebuilt from the repository on every component change.
+
+Source: [GitHub](https://github.com/srcdev/nuxt-components) ·
+[npm](https://www.npmjs.com/package/srcdev-nuxt-components)

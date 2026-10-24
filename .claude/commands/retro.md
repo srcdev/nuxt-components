@@ -86,6 +86,8 @@ node .claude/component-ledger/build.mjs
 
 and confirm each in-scope component's row is still fully compliant (`score: 5` and every flag
 `false`).
+Note any in-scope component whose `last_reviewed` is blank and suggest `/review-component` for it in
+the report. Don't run the review from here: it's a separate, heavier job.
 
 ## 2. Learnings (decide and record)
 

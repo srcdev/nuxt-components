@@ -87,7 +87,7 @@ Components live in `app/components/`, grouped into tiers:
 | `02.molecules` | `Molecules/`           |
 | `03.organisms` | `Organisms/`           |
 | `04.templates` | `Templates/`           |
-| `05.forms`     | `Forms/`               |
+| `05.forms`     | `Components/Forms/`   |
 
 Components are auto-imported with `pathPrefix: false`, so the tier folder never appears in the tag name.
 
