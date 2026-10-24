@@ -66,10 +66,20 @@ placed to *visually* sit under a specific trigger needs `top`/`left`/`inline-siz
 against something local, which forces it onto a positioned ancestor, which is always either
 already inside the `overflow: hidden` box (gets clipped, invisible, protects nothing) or itself
 becomes the sub-nav's new containing block (moves the *panel* inside the clipped box instead —
-the first attempt's mistake). A commented-out `/* position: relative; */` still sitting in the
-`:last-child` override is evidence someone hit this exact trap once before, independently.
-Neither approach is fixable without restructuring how the panel escapes clipping, which the
+the first attempt's mistake). Neither approach is fixable without restructuring how the panel escapes clipping, which the
 collapse-measurement pipeline depends on.
+
+The same "no `left`/`right`" placement decides the panel's **size**: an absolutely positioned box
+with an auto width shrinks to the space between its static position and the containing block's
+edge. For a dropdown near the header's right edge that space is a few pixels, so the panel
+squeezed to one word per line (the last item, 2026-10-25). `width: max-content` (capped by
+`--responsive-header-sub-nav-max-inline-size`) sizes it from its content instead. Only the last
+item of the last group then shifts left, with `translate: calc(var(--_main-navigation-item-width) -
+100%) 12px`, which right-aligns it with its trigger in every browser. Don't swap this for anchor
+positioning: Safari before 26 has none. The rule selects the list with `:last-of-type`, not
+`:last-child`: the two indicator `<div>`s come after the lists in `.main-navigation`, so
+`:last-child` never matched and the right-align (in every version of this rule) silently never
+applied until 2026-10-25. A spec mirrors the selector against the rendered markup.
 
 **Fixed (2026-08-21) with a JS hover-intent delay instead.** `handleNavigationItemHover()` now
 calls `scheduleCloseAllNavigationDetails()`, which delays the actual close by

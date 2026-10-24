@@ -1038,6 +1038,9 @@ watch(
               background-color: var(--responsive-header-sub-nav-bg, var(--page-bg, var(--theme-surface-subtle)));
               translate: 0 12px;
 
+              /* Content width, not the space left of the trigger: near the header's right edge
+                 that space is tiny and the panel squeezes to one word per line. */
+              width: max-content;
               min-width: var(--_main-navigation-item-width);
               max-inline-size: var(--responsive-header-sub-nav-max-inline-size, min(48rem, calc(100vw - 3.2rem)));
               max-block-size: var(--responsive-header-sub-nav-max-block-size, 70vh);
@@ -1099,7 +1102,8 @@ watch(
         /* Only the last item of the last group: right-align its panel with the trigger.
            A % translate is the panel's own width, so this needs no anchor positioning
            (Safari 16). Items clip overflow, so the panel can't be positioned against one. */
-        &:last-child > .main-navigation-item:last-child .main-navigation-sub-nav {
+        /* last-of-type: the indicator divs after the lists mean no list is ever :last-child. */
+        &:last-of-type > .main-navigation-item:last-child .main-navigation-sub-nav {
           translate: calc(var(--_main-navigation-item-width) - 100%) 12px;
         }
       }

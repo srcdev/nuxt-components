@@ -678,6 +678,27 @@ describe("ResponsiveHeader", () => {
     });
   });
 
+  // Mirrors the right-align rule in the component CSS. Indicator divs follow the lists, so a
+  // :last-child selector matched nothing for months without any test noticing.
+  it("matches only the last group's last dropdown with the right-align selector", async () => {
+    const wrapper = await mountHeader({
+      props: {
+        responsiveNavLinks: {
+          ...navLinks,
+          secondNav: [
+            { name: "Contact", path: "/contact" },
+            { name: "Help", childLinksTitle: "Help", childLinks: [{ name: "FAQs", path: "/help/faqs" }] },
+          ],
+        },
+      },
+    });
+    const matched = wrapper.findAll(
+      ".main-navigation-list:last-of-type > .main-navigation-item:last-child .main-navigation-sub-nav"
+    );
+    expect(matched).toHaveLength(1);
+    expect(matched[0]!.text()).toContain("FAQs");
+  });
+
   // ─── Closing menus on navigation ──────────────────────────────────────
 
   describe("closing menus on navigation", () => {
