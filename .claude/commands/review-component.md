@@ -47,6 +47,7 @@ bias the reviewer can't see past.
 > any checklist. Note anything that looks wrong, odd or fragile.
 >
 > **Pass 2, lenses.** Then check each of these, as a minimum, not a limit:
+>
 > 1. Every prop: trace it from declaration to effect. Is it honoured, or overwritten, ignored or
 >    read once at setup so later changes are missed? Do defaults match the docs?
 > 2. Several instances on one page: ids, `name`s, CSS anchor names, `useState` keys, module-level
@@ -64,6 +65,10 @@ bias the reviewer can't see past.
 >    forward every prop they should; stories, snippet and docs describe the current code.
 > 9. Tests: do they assert something that could fail? What behaviour above has no test?
 > 10. Stale or misleading comments.
+> 11. CSS against the markup: does every positional selector (`:last-child`, `:nth-child`, `+`,
+>     `~`) match what the template actually renders, siblings included? How do floating panels size
+>     and place themselves near each edge? Is every position or state a rule targets rendered by
+>     some story, so a broken rule would be visible?
 >
 > **Report.** For each finding: severity (high, medium, low), `file:line`, a one-line claim, and a
 > concrete failure scenario (this input or state gives this wrong result). Mark each one
