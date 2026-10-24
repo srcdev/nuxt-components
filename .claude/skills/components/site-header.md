@@ -20,6 +20,8 @@ Branding (logo/wordmark) is entirely consumer-authored via the `#branding` slot 
 | `collapseBreakpoint` | `number \| null` | `null` | Forwarded to `ResponsiveHeader`. |
 | `collapseAtMainNavIntersection` | `boolean` | `false` | Forwarded to `ResponsiveHeader`. |
 | `allowExpandOnGesture` | `boolean` | `true` | Forwarded to `ResponsiveHeader`. |
+| `panelVariant` | `"modern" \| "classic"` | `"classic"` | Forwarded to `ResponsiveHeader` for overflow submenu panels. |
+| `anchorScrollOffset` | `number \| (() => number)` | `undefined` | Forwarded to `ResponsiveHeader`. Pixels left above a `#anchor` target. |
 | `pageRowVariant` | `"full" \| "popout" \| "content" \| "inset-content"` | `"content"` | Forwarded to the root `PageRow`'s `variant` prop. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes on the root `PageRow` — targets `--site-header-*` tokens (see `CONSUMER-STYLING.md`). |
 | `navStyleClassPassthrough` | `string \| string[]` | `[]` | Extra CSS classes on the nested `ResponsiveHeader` — targets its own `--responsive-header-*`/`--overflow-nav-*` tokens. |
@@ -105,6 +107,8 @@ Tokens, class names and the sticky recipe are in this component's `CONSUMER-STYL
 - `--site-header-position: sticky` (with `--site-header-sticky-offset`, `--site-header-z-index`)
   applies to the outer `.site-header-row` (the `PageRow`). Before that it sat on the inner
   `<header>`, whose parent is exactly its height, so the header never actually stuck.
+  `--site-header-z-index` defaults to `999999` so a sticky row sits with the other overlays;
+  it is ignored while position is `static`.
 - The branding column is `fit-content(var(--site-header-branding-max-width, 50%))` and the nav
   column `minmax(0, 1fr)`, so a long brand wraps instead of squeezing the nav, and the nav can
   shrink and collapse instead of overflowing. The `StressTest` story covers it.

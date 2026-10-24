@@ -37,8 +37,21 @@ export const useAnchorScroll = (options: UseAnchorScrollOptions = {}) => {
   // onMounted sets the real value after hydration, client-only.
   const activeHash = ref("");
 
-  onMounted(() => {
+  const syncActiveHash = () => {
     activeHash.value = window.location.hash;
+  };
+
+  onMounted(() => {
+    syncActiveHash();
+    // pushState does not update route.hash, and it does not fire hashchange.
+    // Back/forward fires popstate; a native jump elsewhere fires hashchange.
+    window.addEventListener("hashchange", syncActiveHash);
+    window.addEventListener("popstate", syncActiveHash);
+  });
+
+  onUnmounted(() => {
+    window.removeEventListener("hashchange", syncActiveHash);
+    window.removeEventListener("popstate", syncActiveHash);
   });
 
   // Intercepts anchor (#hash) clicks only. Routes and external links are left

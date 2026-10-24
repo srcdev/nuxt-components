@@ -3,7 +3,9 @@
     ref="navigationWrapper"
     class="navigation"
     :class="[elementClasses, { loaded: navLoaded, 'geometry-ready': isGeometryReady }]"
-    role="banner"
+    :style="{
+      '--_main-nav-indicator': mainNavIndicatorAnchor,
+    }"
   >
     <nav
       ref="mainNav"
@@ -37,7 +39,7 @@
           :data-group-key="groupKey"
           :data-local-index="localIndex"
           @mouseenter="handleNavigationItemHover(`${String(groupKey)}-${localIndex}`)"
-          @focusin="handleNavigationItemHover(`${String(groupKey)}-${localIndex}`)"
+          @focusin="handleNavigationItemFocusIn($event, `${String(groupKey)}-${localIndex}`)"
         >
           <a
             v-if="link.path && isAnchorPath(link.path)"
@@ -58,21 +60,21 @@
             <Icon v-if="link.iconName" :name="link.iconName" class="decorator-icon" aria-hidden="true" />
             {{ link.name }}
           </NuxtLink>
-          <details v-else ref="navigationDetails" class="main-navigation-details" name="navigation-group">
+          <details v-else ref="navigationDetails" class="main-navigation-details" :name="detailsGroupName">
             <summary
               class="main-navigation-details-summary has-toggle-icon"
               :aria-label="submenuLabel(link)"
+              @pointerdown="rememberSummaryOpenState"
               @mouseenter="handleSummaryHover($event)"
               @focusin="handleSummaryHover($event)"
               @click.prevent="handleSummaryAction($event)"
-              @keyup.prevent.stop="handleSummaryAction($event)"
             >
               <Icon name="mdi:chevron-down" class="icon" :aria-hidden="true" />
               <Icon v-if="link.iconName" :name="link.iconName" class="decorator-icon" aria-hidden="true" />
 
               {{ link.childLinksTitle ?? link.name }}
             </summary>
-            <div class="main-navigation-sub-nav" role="menu" @mouseenter="handleSubNavHover" @click="closeOnLinkClick">
+            <div class="main-navigation-sub-nav" @mouseenter="handleSubNavHover" @click="closeOnLinkClick">
               <ul class="main-navigation-sub-nav-list">
                 <li
                   v-for="(childLink, childIndex) in link.childLinks"
@@ -83,12 +85,11 @@
                     v-if="childLink.path && isAnchorPath(childLink.path)"
                     :href="childLink.path"
                     class="main-navigation-sub-nav-link"
-                    role="menuitem"
                     @click="handleAnchorClick($event, childLink.path)"
                   >
                     {{ childLink.name }}
                   </a>
-                  <NuxtLink v-else :to="childLink.path" class="main-navigation-sub-nav-link" role="menuitem">
+                  <NuxtLink v-else-if="childLink.path" :to="childLink.path" class="main-navigation-sub-nav-link">
                     {{ childLink.name }}
                   </NuxtLink>
                 </li>
@@ -105,7 +106,7 @@
         ref="overflowDetails"
         class="overflow-details"
         :class="overflowDetailsClass ? [overflowDetailsClass] : []"
-        name="overflow-group"
+        :name="overflowGroupName"
       >
         <summary class="overflow-details-summary has-toggle-icon" :aria-label="overflowButtonLabel">
           <Icon
@@ -121,7 +122,7 @@
             :aria-hidden="true"
           />
         </summary>
-        <div class="overflow-details-nav" role="menu" @click="closeOnLinkClick">
+        <div class="overflow-details-nav" @click="closeOnLinkClick">
           <NavigationItems
             :main-navigation-state="mainNavigationState"
             :panel-variant="panelVariant"
@@ -197,12 +198,19 @@ const props = withDefaults(defineProps<Props>(), {
 const submenuLabel = (link: ResponsiveHeaderNavItem) =>
   props.submenuAriaLabel.replace("{title}", link.childLinksTitle ?? link.name);
 
+// Exclusive <details> groups and anchor names are per instance. A fixed name groups every
+// header on the page into one accordion, and a fixed anchor-name attaches indicators to
+// whichever item was hovered last, including one in a different header.
+const instanceId = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+const detailsGroupName = `responsive-header-${instanceId}`;
+const overflowGroupName = `responsive-header-overflow-${instanceId}`;
+const mainNavIndicatorAnchor = `--responsive-main-nav-indicator-${instanceId}`;
+
 const collapseNavigationBelowWidth = computed(
   () => props.collapseBreakpoint !== null || props.collapseAtMainNavIntersection
 );
-const collapseBreakpoint = ref(props.collapseBreakpoint);
 
-// Use global navigation state for caching between route changes
+// Per-instance geometry state; each header measures itself.
 const {
   navLoaded,
   navigationInitialized,
@@ -272,17 +280,16 @@ onUnmounted(() => {
   cancelScheduledClose();
 });
 
-const toggleDetailsElement = (event: Event) => {
-  const summaryElement = event.currentTarget as HTMLElement;
-  const parentDetailsElement = summaryElement.closest("details");
-  if (!parentDetailsElement) return;
+// Recorded on pointerdown, before focusin opens the summary. A real click focuses
+// the summary first, so toggling from the post-focus state would close a panel
+// the same gesture had just opened.
+let summaryOpenBeforePointer = false;
+let summaryPointerPending = false;
 
-  if (parentDetailsElement.hasAttribute("open")) {
-    parentDetailsElement.removeAttribute("open");
-  } else {
-    parentDetailsElement.setAttribute("open", "");
-  }
-  overflowDetailsRef.value?.removeAttribute("open");
+const rememberSummaryOpenState = (event: Event) => {
+  const details = (event.currentTarget as HTMLElement | null)?.closest("details");
+  summaryOpenBeforePointer = Boolean(details?.hasAttribute("open"));
+  summaryPointerPending = true;
 };
 
 const handleSummaryHover = (event: MouseEvent | FocusEvent) => {
@@ -325,6 +332,22 @@ const handleNavigationItemHover = (key: string) => {
   scheduleCloseAllNavigationDetails();
 };
 
+// focusin bubbles, unlike mouseenter. The summary handler runs first and cancels
+// a scheduled close; the item handler must not schedule a new one when focus is
+// inside this item's own details, or tabbing or clicking the summary closes it.
+const handleNavigationItemFocusIn = (event: FocusEvent, key: string) => {
+  hoveredItemKey.value = key;
+  const item = event.currentTarget as HTMLElement | null;
+  const target = event.target;
+  const details = target instanceof Element ? target.closest("details") : null;
+  if (details && item?.contains(details)) {
+    cancelScheduledClose();
+    return;
+  }
+  if (!props.allowExpandOnGesture) return;
+  scheduleCloseAllNavigationDetails();
+};
+
 // Reaching the actual destination panel cancels the scheduled close from
 // handleNavigationItemHover — same reasoning as handleSummaryHover above.
 const handleSubNavHover = () => {
@@ -339,8 +362,24 @@ const handleNavFocusout = (event: FocusEvent) => {
   }
 };
 
-const handleSummaryAction = (event: MouseEvent | KeyboardEvent) => {
-  toggleDetailsElement(event);
+const handleSummaryAction = (event: MouseEvent) => {
+  const summaryElement = event.currentTarget as HTMLElement | null;
+  const parentDetailsElement = summaryElement?.closest("details");
+  if (!parentDetailsElement) return;
+
+  // Pointer clicks (detail > 0) decide from the pre-focus state. Keyboard
+  // activation synthesizes a click with detail 0 and toggles the current state.
+  // keyup is not listened to: Enter/Space already fire this click, and any other
+  // key must not toggle the panel.
+  const fromPointer = event.detail > 0 && summaryPointerPending;
+  summaryPointerPending = false;
+  const shouldOpen = fromPointer ? !summaryOpenBeforePointer : !parentDetailsElement.hasAttribute("open");
+  if (shouldOpen) {
+    parentDetailsElement.setAttribute("open", "");
+  } else {
+    parentDetailsElement.removeAttribute("open");
+  }
+  overflowDetailsRef.value?.removeAttribute("open");
 };
 
 const hoveredItemKey = ref<string | null>(null);
@@ -422,16 +461,23 @@ watch(
   { flush: "pre" }
 );
 
+// Copied so the geometry pass's config writes never land in the consumer's own nav data.
+// childLinks are copied too — a shallow copy would keep sharing those arrays.
+const cloneNavLinks = (links: ResponsiveHeaderProp): ResponsiveHeaderProp =>
+  Object.fromEntries(
+    Object.entries(links).map(([groupKey, group]) => [
+      groupKey,
+      group.map((link) => ({
+        ...link,
+        ...(link.childLinks ? { childLinks: link.childLinks.map((child) => ({ ...child })) } : {}),
+      })),
+    ])
+  );
+
 // Initialize main navigation state
 const mainNavigationState = ref<ResponsiveHeaderState>({
-  navListVisibility: {
-    firstNav: false,
-    secondNav: false,
-  },
-  // Copied so the geometry pass's config writes never land in the consumer's own nav data
-  clonedNavLinks: Object.fromEntries(
-    Object.entries(props.responsiveNavLinks).map(([groupKey, group]) => [groupKey, group.map((link) => ({ ...link }))])
-  ),
+  navListVisibility: Object.fromEntries(Object.keys(props.responsiveNavLinks).map((key) => [key, false])),
+  clonedNavLinks: cloneNavLinks(props.responsiveNavLinks),
   hasSecondNav: Object.keys(props.responsiveNavLinks).length > 1,
 });
 
@@ -485,9 +531,13 @@ const mainNavigationMarginBlockEndStr = computed(() => {
 });
 
 const initTemplateRefs = async () => {
-  firstNavRef.value = navRefs.value["firstNav"] as HTMLUListElement | null;
-  secondNavRef.value = navRefs.value["secondNav"] as HTMLUListElement | null;
-  return;
+  const groups = navRefs.value;
+  // "firstNav" is the historical key. Any other single group (e.g. "main") is still the
+  // main list for intersection collapse.
+  firstNavRef.value = (groups["firstNav"] ??
+    Object.values(groups).find((el) => el) ??
+    null) as HTMLUListElement | null;
+  secondNavRef.value = (groups["secondNav"] ?? null) as HTMLUListElement | null;
 };
 
 const getFlooredRect = (rect: DOMRect | null) => {
@@ -512,18 +562,22 @@ const updateNavigationConfig = async (_source?: string) => {
   secondNavRects.value =
     getFlooredRect((secondNavRef.value && secondNavRef.value.getBoundingClientRect()) ?? null) || null;
 
-  if (collapseNavigationBelowWidth.value && firstNavRects.value) {
-    collapseBreakpoint.value = firstNavRects.value?.right;
-  }
 };
 
 const allowNavigationCollapse = computed(() => {
+  if (!collapseNavigationBelowWidth.value || !navigationWrapperRects.value || secondaryNavRects.value === null) {
+    return false;
+  }
+
+  // A number is the wrapper's own width, not a viewport x-coordinate. Intersection
+  // mode is separate and only runs when no fixed width was given.
+  if (props.collapseBreakpoint !== null) {
+    return navigationWrapperRects.value.width <= props.collapseBreakpoint;
+  }
+
+  if (!firstNavRects.value) return false;
   return (
-    collapseNavigationBelowWidth.value &&
-    navigationWrapperRects.value &&
-    secondaryNavRects.value !== null &&
-    collapseBreakpoint.value !== null &&
-    Math.floor(secondaryNavRects.value.left - props.gapBetweenFirstAndSecondNav) <= collapseBreakpoint.value
+    Math.floor(secondaryNavRects.value.left - props.gapBetweenFirstAndSecondNav) <= firstNavRects.value.right
   );
 });
 
@@ -682,8 +736,7 @@ onMounted(async () => {
   isGeometryReady.value = false;
 
   // Always (re-)populate the local nav refs — firstNavRef / secondNavRef are local
-  // refs that reset on unmount, so they must be re-assigned on every mount even
-  // when the useState flags say we're already initialized.
+  // refs that reset on unmount, so they must be re-assigned on every mount.
   await initTemplateRefs();
 
   if (!navigationInitialized.value || !navLoaded.value) {
@@ -704,7 +757,10 @@ onMounted(async () => {
   // isn't available in SSR/non-browser test environments, so this is a no-op there.
   if (typeof document !== "undefined" && document.fonts) {
     document.fonts.ready.then(() => {
-      if (isGeometryReady.value) runGeometryPass();
+      // Skip only if this instance is gone. Gating on isGeometryReady dropped the
+      // correction when fonts settled during the first pass.
+      if (!navigationWrapperRef.value) return;
+      runGeometryPass();
     });
   }
 });
@@ -715,6 +771,29 @@ const itemWidth = (link?: ResponsiveHeaderNavItem) =>
   link?.config?.width === undefined ? undefined : `${link.config.width}px`;
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
+
+watch(
+  () => props.responsiveNavLinks,
+  (links) => {
+    mainNavigationState.value = {
+      ...mainNavigationState.value,
+      navListVisibility: Object.fromEntries(Object.keys(links).map((key) => [key, false])),
+      clonedNavLinks: cloneNavLinks(links),
+      hasSecondNav: Object.keys(links).length > 1,
+    };
+    isGeometryReady.value = false;
+    void runGeometryPass();
+  },
+  { deep: true }
+);
+
+watch(
+  () => [props.collapseBreakpoint, props.collapseAtMainNavIntersection] as const,
+  () => {
+    isGeometryReady.value = false;
+    void runGeometryPass();
+  }
+);
 
 watch(
   () => props.styleClassPassthrough,
@@ -1017,23 +1096,11 @@ watch(
           }
         }
 
-        &:last-child {
-          .main-navigation-item {
-            /* border: 2px solid red; */
-
-            .main-navigation-details {
-              /* border: 2px solid blue; */
-              /* position: relative; */
-              /* isolation: isolate; */
-
-              .main-navigation-sub-nav {
-                /* border: 2px solid yellow; */
-                /* left: initial; */
-                /* right: 0; */
-                translate: calc(-1 * var(--_main-navigation-item-width)) 12px;
-              }
-            }
-          }
+        /* Only the last item of the last group: right-align its panel with the trigger.
+           A % translate is the panel's own width, so this needs no anchor positioning
+           (Safari 16). Items clip overflow, so the panel can't be positioned against one. */
+        &:last-child > .main-navigation-item:last-child .main-navigation-sub-nav {
+          translate: calc(var(--_main-navigation-item-width) - 100%) 12px;
         }
       }
     }
@@ -1191,11 +1258,11 @@ watch(
   ──────────────────────────────────────────────────────────────────────── */
 
   .main-navigation li.is-hovered {
-    anchor-name: --responsive-main-nav-indicator;
+    anchor-name: var(--_main-nav-indicator);
   }
 
   .main-navigation:not(:has(li.is-hovered)) li.is-active {
-    anchor-name: --responsive-main-nav-indicator;
+    anchor-name: var(--_main-nav-indicator);
   }
 
   .main-navigation .nav-indicator-hovered,
@@ -1208,7 +1275,7 @@ watch(
     .nav-indicator-hovered {
       display: block;
       position: absolute;
-      position-anchor: --responsive-main-nav-indicator;
+      position-anchor: var(--_main-nav-indicator);
       left: anchor(left);
       right: anchor(right);
       top: anchor(top);
@@ -1234,7 +1301,7 @@ watch(
     .nav-indicator-active {
       display: block;
       position: absolute;
-      position-anchor: --responsive-main-nav-indicator;
+      position-anchor: var(--_main-nav-indicator);
       left: anchor(left);
       right: anchor(right);
       bottom: calc(anchor(bottom) - var(--responsive-nav-decorator-indicator-offset, 2px));

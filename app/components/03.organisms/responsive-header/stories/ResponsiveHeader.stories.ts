@@ -59,7 +59,8 @@ const meta: Meta<StoryArgs> = {
     },
     collapseBreakpoint: {
       control: { type: "number" },
-      description: "Fixed pixel width below which the whole main nav collapses into the overflow burger menu",
+      description:
+        "Width of this header (not the viewport), in pixels, at or below which the whole main nav collapses into the overflow burger. When set, intersection collapse does not also run",
     },
     collapseAtMainNavIntersection: {
       control: "boolean",
@@ -142,7 +143,18 @@ const responsiveNavLinks = {
     },
     { name: "Typography", path: "/typography/page-heading" },
   ],
-  secondNav: [{ name: "Contact", path: "#" }],
+  secondNav: [
+    { name: "Contact", path: "#" },
+    {
+      name: "Help",
+      childLinksTitle: "Help",
+      childLinks: [
+        { name: "FAQs", path: "/help/faqs" },
+        { name: "Support", path: "/help/support" },
+        { name: "Accessibility", path: "/help/accessibility" },
+      ],
+    },
+  ],
 };
 
 export const Default: Story = {

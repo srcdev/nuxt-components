@@ -29,7 +29,7 @@ Auto-imported by Nuxt — **do not create a local copy**.
 |---|---|---|
 | `handleNavClick` | `(event: MouseEvent, href: string) => void` | Attach to click handlers. No-ops silently for non-`#` hrefs — safe on all links. |
 | `scrollToAnchor` | `(hash: string) => void` | Scroll programmatically. Accepts `"#section"` or `"section"`. Respects motion preference and offset. |
-| `activeHash` | `Ref<string>` | Reactive ref tracking the currently active hash. Starts `""` on server and after hydration is set from `window.location.hash`. Updated on every `handleNavClick` call. Use this to drive `is-active` classes — **do not use `route.hash`**, which is not updated by `history.pushState`. |
+| `activeHash` | `Ref<string>` | Reactive ref tracking the currently active hash. Starts `""` on server and after hydration is set from `window.location.hash`. Updated on every `handleNavClick` call, and on `hashchange` and `popstate` (back/forward — `pushState` fires neither). Use this to drive `is-active` classes — **do not use `route.hash`**, which is not updated by `history.pushState`. |
 
 ---
 

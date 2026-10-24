@@ -2,8 +2,12 @@
   <div
     class="overflow-navigation-wrapper"
     :class="[elementClasses, { 'is-panel-animating': isPanelAnimating }]"
-    role="menu"
+    role="group"
     :aria-label="ariaLabel"
+    :style="{
+      '--_overflow-nav-indicator': overflowNavIndicatorAnchor,
+      '--_overflow-sub-nav-indicator': overflowSubNavIndicatorAnchor,
+    }"
     @mouseleave="
       hoveredItemKey = null;
       hoveredChildKey = null;
@@ -15,7 +19,6 @@
       class="overflow-navigation-list"
       :class="[{ visible: !mainNavigationState.navListVisibility[groupKey] }]"
       :style="{ '--_overflow-navigation-list-min-width': widestNavLinkWidthInMainNavigationState + 'px' }"
-      role="none"
     >
       <template v-for="(link, localIndex) in navGroup" :key="localIndex">
         <li
@@ -31,19 +34,17 @@
           }"
           :data-group-key="groupKey"
           :data-local-index="localIndex"
-          role="none"
           @mouseenter="hoveredItemKey = `${String(groupKey)}-${localIndex}`"
         >
           <a
             v-if="isAnchorPath(link.path)"
             class="overflow-navigation-link"
             :href="link.path"
-            role="menuitem"
             @click="emit('anchorClick', $event, link.path)"
           >
             <span class="overflow-navigation-text">{{ link.name }}</span>
           </a>
-          <NuxtLink v-else class="overflow-navigation-link" :to="link.path" role="menuitem">
+          <NuxtLink v-else class="overflow-navigation-link" :to="link.path">
             <span class="overflow-navigation-text">{{ link.name }}</span>
           </NuxtLink>
         </li>
@@ -60,23 +61,17 @@
           }"
           :data-group-key="groupKey"
           :data-local-index="localIndex"
-          role="none"
           @mouseenter="hoveredItemKey = `${String(groupKey)}-${localIndex}`"
         >
           <component
             :is="panelComponent"
             v-model="panelOpenStates[`${String(groupKey)}-${localIndex}`]"
-            name="overflow-navigation-group"
+            :name="overflowGroupName"
             :animation-duration="DETAILS_ANIMATION_DURATION"
             :style-class-passthrough="['overflow-navigation-details']"
           >
             <template #summary>
-              <span
-                class="overflow-navigation-text"
-                :aria-label="submenuLabel(link)"
-                role="menuitem"
-                :aria-haspopup="true"
-              >
+              <span class="overflow-navigation-text" :aria-label="submenuLabel(link)">
                 {{ link.childLinksTitle ?? link.name }}
               </span>
             </template>
@@ -100,12 +95,11 @@
                       v-if="childLink.path && isAnchorPath(childLink.path)"
                       :href="childLink.path"
                       class="overflow-navigation-sub-nav-link"
-                      role="menuitem"
                       @click="emit('anchorClick', $event, childLink.path)"
                     >
                       <span class="overflow-navigation-sub-nav-text">{{ childLink.name }}</span>
                     </a>
-                    <NuxtLink v-else :to="childLink.path" class="overflow-navigation-sub-nav-link" role="menuitem">
+                    <NuxtLink v-else-if="childLink.path" :to="childLink.path" class="overflow-navigation-sub-nav-link">
                       <span class="overflow-navigation-sub-nav-text">{{ childLink.name }}</span>
                     </NuxtLink>
                   </li>
@@ -157,6 +151,11 @@ const emit = defineEmits<{
 
 const submenuLabel = (link: ResponsiveHeaderNavItem) =>
   props.submenuAriaLabel.replace("{title}", link.childLinksTitle ?? link.name);
+
+const instanceId = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+const overflowGroupName = `overflow-navigation-${instanceId}`;
+const overflowNavIndicatorAnchor = `--overflow-nav-indicator-${instanceId}`;
+const overflowSubNavIndicatorAnchor = `--overflow-sub-nav-indicator-${instanceId}`;
 
 const panelComponent = computed(() => (props.panelVariant === "modern" ? ExpandingPanel : ExpandingPanelClassic));
 
@@ -453,7 +452,7 @@ watch(
   .overflow-navigation-wrapper
     .overflow-navigation-item.is-hovered:not(:has(.overflow-navigation-details))
     .overflow-navigation-link {
-    anchor-name: --overflow-nav-indicator;
+    anchor-name: var(--_overflow-nav-indicator);
   }
 
   /* Submenu — hovered: anchor to summary row only */
@@ -465,14 +464,14 @@ watch(
     .overflow-navigation-item.is-hovered
     .overflow-navigation-details
     .expanding-panel-classic-summary {
-    anchor-name: --overflow-nav-indicator;
+    anchor-name: var(--_overflow-nav-indicator);
   }
 
   /* Plain link — active (no hover) */
   .overflow-navigation-wrapper:not(:has(.overflow-navigation-item.is-hovered))
     .overflow-navigation-item.is-active:not(:has(.overflow-navigation-details))
     .overflow-navigation-link {
-    anchor-name: --overflow-nav-indicator;
+    anchor-name: var(--_overflow-nav-indicator);
   }
 
   /* Submenu — active (no hover): anchor to summary row only */
@@ -484,7 +483,7 @@ watch(
     .overflow-navigation-item.is-active
     .overflow-navigation-details
     .expanding-panel-classic-summary {
-    anchor-name: --overflow-nav-indicator;
+    anchor-name: var(--_overflow-nav-indicator);
   }
 
   .overflow-navigation-wrapper .overflow-nav-indicator-hovered,
@@ -496,7 +495,7 @@ watch(
   .overflow-navigation-wrapper .overflow-nav-indicator-hovered {
     display: block;
     position: absolute;
-    position-anchor: --overflow-nav-indicator;
+    position-anchor: var(--_overflow-nav-indicator);
     left: 0;
     right: 0;
     top: anchor(top);
@@ -517,7 +516,7 @@ watch(
   .overflow-navigation-wrapper .overflow-nav-indicator-active {
     display: block;
     position: absolute;
-    position-anchor: --overflow-nav-indicator;
+    position-anchor: var(--_overflow-nav-indicator);
     left: 0;
     width: 2px;
     top: anchor(top);
@@ -543,12 +542,12 @@ watch(
   ──────────────────────────────────────────────────────────────────────── */
 
   .overflow-navigation-sub-nav-item.is-hovered {
-    anchor-name: --overflow-sub-nav-indicator;
+    anchor-name: var(--_overflow-sub-nav-indicator);
   }
 
   .overflow-navigation-sub-nav-list:not(:has(.overflow-navigation-sub-nav-item.is-hovered))
     .overflow-navigation-sub-nav-item.is-active {
-    anchor-name: --overflow-sub-nav-indicator;
+    anchor-name: var(--_overflow-sub-nav-indicator);
   }
 
   .overflow-navigation-sub-nav-item.is-active {
@@ -562,7 +561,7 @@ watch(
     pointer-events: none;
     display: block;
     position: absolute;
-    position-anchor: --overflow-sub-nav-indicator;
+    position-anchor: var(--_overflow-sub-nav-indicator);
     left: 0;
     right: 0;
     top: anchor(top);

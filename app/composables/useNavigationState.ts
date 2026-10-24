@@ -1,13 +1,11 @@
 import type { IFlooredRect } from "../types/components"
 
 export const useNavigationState = () => {
-  // Simple reactive refs that persist across route changes using useState
-  const navLoaded = useState<boolean>("nav-loaded", () => false)
-  const navigationInitialized = useState<boolean>("nav-initialized", () => false)
-
-  // Navigation rects cache
-  const navigationWrapperRects = useState<IFlooredRect | null>("nav-wrapper-rects", () => null)
-  const secondaryNavRects = useState<IFlooredRect | null>("secondary-nav-rects", () => null)
+  // Per call, not useState. App-wide keys made two headers share one measurement.
+  const navLoaded = ref(false)
+  const navigationInitialized = ref(false)
+  const navigationWrapperRects = ref<IFlooredRect | null>(null)
+  const secondaryNavRects = ref<IFlooredRect | null>(null)
 
   const clearNavigationCache = () => {
     navLoaded.value = false

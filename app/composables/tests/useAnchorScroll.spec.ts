@@ -1,4 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { defineComponent, h } from "vue";
+import { mountSuspended } from "@nuxt/test-utils/runtime";
 import { useAnchorScroll } from "../useAnchorScroll";
 
 const stubMatchMedia = (prefersReducedMotion: boolean) => {
@@ -219,6 +221,31 @@ describe("useAnchorScroll", () => {
         scrollToAnchor("#target");
         expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 30, behavior: "smooth" });
       });
+    });
+  });
+
+  describe("history", () => {
+    it("updates activeHash on back/forward and hashchange", async () => {
+      let api: ReturnType<typeof useAnchorScroll> | undefined;
+      const Host = defineComponent({
+        setup() {
+          api = useAnchorScroll();
+          return () => h("div");
+        },
+      });
+      const wrapper = await mountSuspended(Host);
+      api!.activeHash.value = "#old";
+
+      window.location.hash = "#returned";
+      window.dispatchEvent(new HashChangeEvent("hashchange"));
+      expect(api!.activeHash.value).toBe("#returned");
+
+      window.location.hash = "#back";
+      window.dispatchEvent(new PopStateEvent("popstate"));
+      expect(api!.activeHash.value).toBe("#back");
+
+      wrapper.unmount();
+      window.location.hash = "";
     });
   });
 });

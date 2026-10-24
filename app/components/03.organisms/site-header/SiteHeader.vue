@@ -16,6 +16,8 @@
           :collapse-breakpoint="collapseBreakpoint"
           :collapse-at-main-nav-intersection="collapseAtMainNavIntersection"
           :allow-expand-on-gesture="allowExpandOnGesture"
+          :panel-variant="panelVariant"
+          :anchor-scroll-offset="anchorScrollOffset"
           :style-class-passthrough="navStyleClassPassthrough"
           :main-nav-aria-label="mainNavAriaLabel"
           :secondary-nav-aria-label="secondaryNavAriaLabel"
@@ -45,6 +47,12 @@ interface Props {
   collapseBreakpoint?: number | null;
   collapseAtMainNavIntersection?: boolean;
   allowExpandOnGesture?: boolean;
+  panelVariant?: "modern" | "classic";
+  /**
+   * Pixels to leave above a section when a same-page "#anchor" link scrolls to it.
+   * Pass a getter to read a sticky header's height at click time.
+   */
+  anchorScrollOffset?: number | (() => number);
   pageRowVariant?: "full" | "popout" | "content" | "inset-content";
   styleClassPassthrough?: string | string[];
   navStyleClassPassthrough?: string | string[];
@@ -72,6 +80,8 @@ withDefaults(defineProps<Props>(), {
   collapseBreakpoint: null,
   collapseAtMainNavIntersection: false,
   allowExpandOnGesture: true,
+  panelVariant: "classic",
+  anchorScrollOffset: undefined,
   pageRowVariant: "content",
   styleClassPassthrough: () => [],
   navStyleClassPassthrough: () => [],
@@ -91,7 +101,7 @@ const slots = useSlots();
   .site-header-row {
     position: var(--site-header-position, static);
     top: var(--site-header-sticky-offset, 0px);
-    z-index: var(--site-header-z-index, 9);
+    z-index: var(--site-header-z-index, 999999);
   }
 
   .site-header {

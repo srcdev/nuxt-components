@@ -16,6 +16,8 @@ const responsiveHeaderStub = {
     "collapseBreakpoint",
     "collapseAtMainNavIntersection",
     "allowExpandOnGesture",
+    "panelVariant",
+    "anchorScrollOffset",
     "styleClassPassthrough",
   ],
   template: `<div class="responsive-header-stub"><slot name="secondaryNavigation"></slot></div>`,
@@ -69,6 +71,8 @@ describe("SiteHeader", () => {
         gapBetweenFirstAndSecondNav: 24,
         collapseAtMainNavIntersection: true,
         allowExpandOnGesture: false,
+        panelVariant: "modern",
+        anchorScrollOffset: 64,
         navStyleClassPassthrough: ["site-header-nav"],
       },
     });
@@ -77,6 +81,8 @@ describe("SiteHeader", () => {
     expect(responsiveHeader.props("gapBetweenFirstAndSecondNav")).toBe(24);
     expect(responsiveHeader.props("collapseAtMainNavIntersection")).toBe(true);
     expect(responsiveHeader.props("allowExpandOnGesture")).toBe(false);
+    expect(responsiveHeader.props("panelVariant")).toBe("modern");
+    expect(responsiveHeader.props("anchorScrollOffset")).toBe(64);
     expect(responsiveHeader.props("styleClassPassthrough")).toEqual(["site-header-nav"]);
   });
 

@@ -1,12 +1,14 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { nextTick } from "vue";
+import { defineComponent, h, nextTick } from "vue";
 import ResponsiveHeader from "../ResponsiveHeader.vue";
 import type { ResponsiveHeaderProp } from "../../../../types/components";
 
+type MountHeaderOptions = NonNullable<Parameters<typeof mountSuspended>[1]>;
+
 const mounted: Awaited<ReturnType<typeof mountSuspended>>[] = [];
 
-const mountHeader = async (options: { props?: Record<string, unknown>; attachTo?: HTMLElement } = {}) => {
+const mountHeader = async (options: MountHeaderOptions = {}) => {
   const wrapper = await mountSuspended(ResponsiveHeader, options);
   mounted.push(wrapper);
   return wrapper;
@@ -44,6 +46,55 @@ const triggerGeometryPass = async () => {
 
 // Fake layout: the main nav ends at mainNavRight and each item is 100px wide, laid out in
 // document order, so item n (0-based) ends at (n + 1) * 100.
+const rect = (left: number, width: number): DOMRect =>
+  ({
+    left,
+    right: left + width,
+    top: 0,
+    bottom: 0,
+    x: left,
+    y: 0,
+    height: 0,
+    width,
+    toJSON: () => ({}),
+  }) as DOMRect;
+
+const mockCollapseLayout = ({
+  wrapperWidth,
+  firstNavRight,
+  secondaryLeft,
+  mainNavRight,
+}: {
+  wrapperWidth: number;
+  firstNavRight: number;
+  secondaryLeft: number;
+  mainNavRight: number;
+}) =>
+  vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(function (this: Element) {
+    if (this.classList.contains("navigation")) return rect(0, wrapperWidth);
+    if (this.classList.contains("secondary-navigation")) return rect(secondaryLeft, 40);
+    if (this.classList.contains("main-navigation-list")) {
+      const lists = Array.from(this.parentElement?.querySelectorAll(":scope > .main-navigation-list") ?? []);
+      if (lists[0] === this) return rect(0, firstNavRight);
+    }
+    if (
+      this.classList.contains("main-navigation") &&
+      !this.classList.contains("main-navigation-item") &&
+      !this.classList.contains("main-navigation-list")
+    ) {
+      return rect(0, mainNavRight);
+    }
+    if (this.classList.contains("main-navigation-item")) {
+      const items = Array.from(this.closest(".main-navigation")?.querySelectorAll(".main-navigation-item") ?? []);
+      const index = Math.max(items.indexOf(this), 0);
+      return rect(index * 100, 100);
+    }
+    return rect(0, 0);
+  });
+
+const hiddenFlags = (wrapper: Awaited<ReturnType<typeof mountHeader>>) =>
+  wrapper.findAll(".main-navigation-item").map((item) => item.classes().includes("visually-hidden"));
+
 const mockGeometry = (mainNavRight: number) =>
   vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(function (this: Element) {
     let right = 0;
@@ -301,6 +352,45 @@ describe("ResponsiveHeader", () => {
     expect(detailsElements[1]!.attributes("open")).toBeUndefined();
   });
 
+  it("stays open when a real click focuses the summary before the click", async () => {
+    const wrapper = await mountHeader({
+      props: { responsiveNavLinks: navLinks },
+    });
+    const summary = wrapper.find(".main-navigation-details-summary");
+    const details = wrapper.find(".main-navigation-details");
+
+    await summary.trigger("pointerdown");
+    await summary.trigger("focusin");
+    await summary.trigger("click", { detail: 1 });
+
+    expect(details.attributes("open")).toBe("");
+    vi.advanceTimersByTime(200);
+    await nextTick();
+    expect(details.attributes("open")).toBe("");
+  });
+
+  it("keeps a dropdown open when focus moves into its summary", async () => {
+    const wrapper = await mountHeader({
+      props: { responsiveNavLinks: navLinks },
+    });
+    const details = wrapper.find(".main-navigation-details");
+    await wrapper.find(".main-navigation-details-summary").trigger("focusin");
+    expect(details.attributes("open")).toBe("");
+
+    vi.advanceTimersByTime(200);
+    await nextTick();
+    expect(details.attributes("open")).toBe("");
+  });
+
+  it("does not toggle a dropdown on an unrelated key", async () => {
+    const wrapper = await mountHeader({
+      props: { responsiveNavLinks: navLinks },
+    });
+    const details = wrapper.find(".main-navigation-details");
+    await wrapper.find(".main-navigation-details-summary").trigger("keyup", { key: "ArrowDown" });
+    expect(details.attributes("open")).toBeUndefined();
+  });
+
   it("does not auto-open a dropdown on hover when allowExpandOnGesture is false", async () => {
     const wrapper = await mountHeader({
       props: { responsiveNavLinks: navLinks, allowExpandOnGesture: false },
@@ -346,6 +436,139 @@ describe("ResponsiveHeader", () => {
     wrapper.findAll(".main-navigation-item").forEach((item) => expect(item.classes()).not.toContain("visually-hidden"));
     expect(wrapper.find(".overflow-details").classes()).toContain("visually-hidden");
     geometry.mockRestore();
+  });
+
+  it("collapses every item when the wrapper is narrower than collapseBreakpoint", async () => {
+    const geometry = mockCollapseLayout({
+      wrapperWidth: 500,
+      firstNavRight: 400,
+      secondaryLeft: 460,
+      mainNavRight: 900,
+    });
+    const wrapper = await mountHeader({
+      props: { responsiveNavLinks: navLinks, collapseBreakpoint: 800 },
+    });
+    await triggerGeometryPass();
+
+    expect(hiddenFlags(wrapper)).toEqual([true, true, true, true]);
+    expect(wrapper.find(".overflow-details").classes()).not.toContain("visually-hidden");
+    geometry.mockRestore();
+  });
+
+  it("keeps per-item collapse when the wrapper is wider than collapseBreakpoint, even if the navs overlap", async () => {
+    const geometry = mockCollapseLayout({
+      wrapperWidth: 900,
+      firstNavRight: 400,
+      secondaryLeft: 100,
+      mainNavRight: 900,
+    });
+    const wrapper = await mountHeader({
+      props: { responsiveNavLinks: navLinks, collapseBreakpoint: 800 },
+    });
+    await triggerGeometryPass();
+
+    expect(hiddenFlags(wrapper)).toEqual([false, false, false, false]);
+    geometry.mockRestore();
+  });
+
+  it("collapses when the secondary nav intersects the main nav and no pixel breakpoint is set", async () => {
+    const geometry = mockCollapseLayout({
+      wrapperWidth: 900,
+      firstNavRight: 400,
+      secondaryLeft: 100,
+      mainNavRight: 900,
+    });
+    const wrapper = await mountHeader({
+      props: { responsiveNavLinks: navLinks, collapseAtMainNavIntersection: true },
+    });
+    await triggerGeometryPass();
+
+    expect(hiddenFlags(wrapper)).toEqual([true, true, true, true]);
+    geometry.mockRestore();
+  });
+
+  it("uses the first group for intersection collapse when it is not named firstNav", async () => {
+    const geometry = mockCollapseLayout({
+      wrapperWidth: 900,
+      firstNavRight: 400,
+      secondaryLeft: 100,
+      mainNavRight: 900,
+    });
+    const wrapper = await mountHeader({
+      props: {
+        responsiveNavLinks: { main: navLinks.firstNav! },
+        collapseAtMainNavIntersection: true,
+      },
+    });
+    await triggerGeometryPass();
+
+    expect(hiddenFlags(wrapper)).toEqual([true, true, true]);
+    geometry.mockRestore();
+  });
+
+  it("does not write measurement config into the consumer's nav data, and follows later link changes", async () => {
+    const links: ResponsiveHeaderProp = { firstNav: [{ name: "Home", path: "/" }] };
+    const geometry = mockGeometry(400);
+    const wrapper = await mountHeader({ props: { responsiveNavLinks: links } });
+    await triggerGeometryPass();
+    expect(links.firstNav![0]).not.toHaveProperty("config");
+
+    await wrapper.setProps({
+      responsiveNavLinks: {
+        firstNav: [
+          { name: "Home", path: "/" },
+          { name: "News", path: "/news" },
+        ],
+      },
+    });
+    await triggerGeometryPass();
+
+    expect(wrapper.text()).toContain("News");
+    expect(links.firstNav).toHaveLength(1);
+    expect(links.firstNav![0]).not.toHaveProperty("config");
+    geometry.mockRestore();
+  });
+
+  it("does not mark itself as a banner landmark", async () => {
+    const wrapper = await mountHeader({ props: { responsiveNavLinks: navLinks } });
+    expect(wrapper.attributes("role")).toBeUndefined();
+  });
+
+  it("does not use the menu role for site navigation", async () => {
+    const wrapper = await mountHeader({ props: { responsiveNavLinks: navLinks } });
+    expect(wrapper.find('[role="menu"]').exists()).toBe(false);
+    expect(wrapper.find('[role="menuitem"]').exists()).toBe(false);
+  });
+
+  it("shares a details name within one header but not across headers", async () => {
+    const twoDropdowns: ResponsiveHeaderProp = {
+      firstNav: [
+        { name: "Components", childLinksTitle: "Components", childLinks: [{ name: "Buttons", path: "/buttons" }] },
+        { name: "Layouts", childLinksTitle: "Layouts", childLinks: [{ name: "Page row", path: "/page-row" }] },
+      ],
+    };
+    const Host = defineComponent({
+      setup: () => () => [
+        h(ResponsiveHeader, { responsiveNavLinks: twoDropdowns }),
+        h(ResponsiveHeader, { responsiveNavLinks: twoDropdowns }),
+      ],
+    });
+    const wrapper = await mountSuspended(Host);
+    mounted.push(wrapper);
+
+    const headers = wrapper.findAll(".navigation");
+    const mainNames = headers.map((header) =>
+      header.findAll(".main-navigation-details").map((details) => details.attributes("name"))
+    );
+    expect(mainNames[0]?.[0]).toBeTruthy();
+    expect(mainNames[0]?.[0]).toBe(mainNames[0]?.[1]);
+    expect(mainNames[0]?.[0]).not.toBe(mainNames[1]?.[0]);
+    expect(mainNames[0]?.[0]).not.toBe("navigation-group");
+
+    const overflowNames = headers.map((header) => header.find(".overflow-details").attributes("name"));
+    expect(overflowNames[0]).toBeTruthy();
+    expect(overflowNames[0]).not.toBe(overflowNames[1]);
+    expect(overflowNames[0]).not.toBe("overflow-group");
   });
 
   it("gives the icon-only overflow button an accessible name", async () => {

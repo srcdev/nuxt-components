@@ -22,7 +22,16 @@ const meta: Meta<typeof SiteHeader> = {
     },
     allowExpandOnGesture: {
       control: "boolean",
-      description: "Allow the collapsed nav to expand on touch/gesture",
+      description: "Allow a dropdown to open on hover/focus, not just click",
+    },
+    panelVariant: {
+      control: "radio",
+      options: ["classic", "modern"],
+      description: "Overflow submenu panel implementation. classic (default) works in WebKit; modern does not",
+    },
+    anchorScrollOffset: {
+      control: { type: "number", min: 0, step: 4 },
+      description: "Pixels left above a #anchor target when it scrolls into view",
     },
     pageRowVariant: {
       control: { type: "radio" },
@@ -53,6 +62,7 @@ const meta: Meta<typeof SiteHeader> = {
     gapBetweenFirstAndSecondNav: 12,
     collapseAtMainNavIntersection: false,
     allowExpandOnGesture: true,
+    panelVariant: "classic",
     styleClassPassthrough: [],
     navStyleClassPassthrough: [],
   },
@@ -86,7 +96,18 @@ export const Default: Story = {
         },
         { name: "Typography", path: "/typography/page-heading" },
       ],
-      secondNav: [{ name: "Contact", path: "#" }],
+      secondNav: [
+        { name: "Contact", path: "#" },
+        {
+          name: "Help",
+          childLinksTitle: "Help",
+          childLinks: [
+            { name: "FAQs", path: "/help/faqs" },
+            { name: "Support", path: "/help/support" },
+            { name: "Accessibility", path: "/help/accessibility" },
+          ],
+        },
+      ],
     },
   },
   render: (args) => ({

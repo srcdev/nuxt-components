@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`ResponsiveHeader > renders correct HTML structure with default props 1`] = `
-"<div class="navigation loaded" role="banner">
+"<div class="navigation loaded" style="--_main-nav-indicator: --responsive-main-nav-indicator-v-0-0;">
   <nav class="main-navigation is-animated" aria-label="Main navigation">
     <ul class="main-navigation-list">
       <li class="main-navigation-item visually-hidden is-active" data-group-key="firstNav" data-local-index="0"><a href="/" class="main-navigation-link">
@@ -9,14 +9,14 @@ exports[`ResponsiveHeader > renders correct HTML structure with default props 1`
         </a></li>
       <li class="main-navigation-item visually-hidden" data-group-key="firstNav" data-local-index="1"><a href="/about" class="main-navigation-link has-icon"><span class="iconify i-mdi:home decorator-icon" aria-hidden="true"></span> About</a></li>
       <li class="main-navigation-item visually-hidden" data-group-key="firstNav" data-local-index="2">
-        <details class="main-navigation-details" name="navigation-group">
+        <details class="main-navigation-details" name="responsive-header-v-0-0">
           <summary class="main-navigation-details-summary has-toggle-icon" aria-label="UI Components submenu"><span class="iconify i-mdi:chevron-down icon" aria-hidden="true"></span>
             <!--v-if--> UI Components
           </summary>
-          <div class="main-navigation-sub-nav" role="menu">
+          <div class="main-navigation-sub-nav">
             <ul class="main-navigation-sub-nav-list">
-              <li class="main-navigation-sub-nav-item"><a href="/forms/examples/buttons" class="main-navigation-sub-nav-link" role="menuitem">Buttons</a></li>
-              <li class="main-navigation-sub-nav-item"><a href="/ui/tabs" class="main-navigation-sub-nav-link" role="menuitem">Tabs</a></li>
+              <li class="main-navigation-sub-nav-item"><a href="/forms/examples/buttons" class="main-navigation-sub-nav-link">Buttons</a></li>
+              <li class="main-navigation-sub-nav-item"><a href="/ui/tabs" class="main-navigation-sub-nav-link">Tabs</a></li>
             </ul>
           </div>
         </details>
@@ -31,27 +31,27 @@ exports[`ResponsiveHeader > renders correct HTML structure with default props 1`
     <div aria-hidden="true" class="nav-indicator-active"></div>
   </nav>
   <nav class="secondary-navigation" aria-label="Secondary navigation">
-    <details class="overflow-details visually-hidden" name="overflow-group">
+    <details class="overflow-details visually-hidden" name="responsive-header-overflow-v-0-0">
       <summary class="overflow-details-summary has-toggle-icon" aria-label="More navigation"><span class="iconify i-gravity-ui:ellipsis icon show" aria-hidden="true"></span><span class="iconify i-gravity-ui:bars icon" aria-hidden="true"></span></summary>
-      <div class="overflow-details-nav" role="menu">
-        <div class="overflow-navigation-wrapper" role="menu" aria-label="Overflow navigation menu">
-          <ul class="overflow-navigation-list visible" style="--_overflow-navigation-list-min-width: 0px;" role="none">
-            <li class="overflow-navigation-item visible is-active" data-group-key="firstNav" data-local-index="0" role="none"><a href="/" class="overflow-navigation-link" role="menuitem"><span class="overflow-navigation-text">Home</span></a></li>
-            <li class="overflow-navigation-item visible" data-group-key="firstNav" data-local-index="1" role="none"><a href="/about" class="overflow-navigation-link" role="menuitem"><span class="overflow-navigation-text">About</span></a></li>
-            <li class="overflow-navigation-item visible" data-group-key="firstNav" data-local-index="2" role="none">
+      <div class="overflow-details-nav">
+        <div class="overflow-navigation-wrapper" role="group" aria-label="Overflow navigation menu" style="--_overflow-nav-indicator: --overflow-nav-indicator-v-0-0-0; --_overflow-sub-nav-indicator: --overflow-sub-nav-indicator-v-0-0-0;">
+          <ul class="overflow-navigation-list visible" style="--_overflow-navigation-list-min-width: 0px;">
+            <li class="overflow-navigation-item visible is-active" data-group-key="firstNav" data-local-index="0"><a href="/" class="overflow-navigation-link"><span class="overflow-navigation-text">Home</span></a></li>
+            <li class="overflow-navigation-item visible" data-group-key="firstNav" data-local-index="1"><a href="/about" class="overflow-navigation-link"><span class="overflow-navigation-text">About</span></a></li>
+            <li class="overflow-navigation-item visible" data-group-key="firstNav" data-local-index="2">
               <div class="expanding-panel-classic overflow-navigation-details">
-                <details class="expanding-panel-classic-details" name="overflow-navigation-group">
-                  <summary id="v-0-0-1-trigger" class="expanding-panel-classic-summary" aria-controls="v-0-0-1-content" aria-expanded="false">
-                    <div class="label-wrapper"><span class="overflow-navigation-text" aria-label="UI Components submenu" role="menuitem" aria-haspopup="true">UI Components</span></div>
+                <details class="expanding-panel-classic-details" name="overflow-navigation-v-0-0-0">
+                  <summary id="v-0-0-2-trigger" class="expanding-panel-classic-summary" aria-controls="v-0-0-2-content" aria-expanded="false">
+                    <div class="label-wrapper"><span class="overflow-navigation-text" aria-label="UI Components submenu">UI Components</span></div>
                     <div class="icon-wrapper"><span class="iconify i-mdi:chevron-down icon" aria-hidden="true"></span></div>
                   </summary>
                 </details>
-                <div id="v-0-0-1-content" class="expanding-panel-classic-content" aria-labelledby="v-0-0-1-trigger" role="region">
+                <div id="v-0-0-2-content" class="expanding-panel-classic-content" aria-labelledby="v-0-0-2-trigger" role="region">
                   <div class="inner">
                     <div class="overflow-navigation-sub-nav-inner">
                       <ul class="overflow-navigation-sub-nav-list">
-                        <li class="overflow-navigation-sub-nav-item"><a href="/forms/examples/buttons" class="overflow-navigation-sub-nav-link" role="menuitem"><span class="overflow-navigation-sub-nav-text">Buttons</span></a></li>
-                        <li class="overflow-navigation-sub-nav-item"><a href="/ui/tabs" class="overflow-navigation-sub-nav-link" role="menuitem"><span class="overflow-navigation-sub-nav-text">Tabs</span></a></li>
+                        <li class="overflow-navigation-sub-nav-item"><a href="/forms/examples/buttons" class="overflow-navigation-sub-nav-link"><span class="overflow-navigation-sub-nav-text">Buttons</span></a></li>
+                        <li class="overflow-navigation-sub-nav-item"><a href="/ui/tabs" class="overflow-navigation-sub-nav-link"><span class="overflow-navigation-sub-nav-text">Tabs</span></a></li>
                       </ul>
                       <div aria-hidden="true" class="overflow-sub-nav-indicator-hovered"></div>
                     </div>
@@ -60,8 +60,8 @@ exports[`ResponsiveHeader > renders correct HTML structure with default props 1`
               </div>
             </li>
           </ul>
-          <ul class="overflow-navigation-list visible" style="--_overflow-navigation-list-min-width: 0px;" role="none">
-            <li class="overflow-navigation-item visible" data-group-key="secondNav" data-local-index="0" role="none"><a href="/contact" class="overflow-navigation-link" role="menuitem"><span class="overflow-navigation-text">Contact</span></a></li>
+          <ul class="overflow-navigation-list visible" style="--_overflow-navigation-list-min-width: 0px;">
+            <li class="overflow-navigation-item visible" data-group-key="secondNav" data-local-index="0"><a href="/contact" class="overflow-navigation-link"><span class="overflow-navigation-text">Contact</span></a></li>
           </ul>
           <div aria-hidden="true" class="overflow-nav-indicator-hovered"></div>
           <div aria-hidden="true" class="overflow-nav-indicator-active"></div>

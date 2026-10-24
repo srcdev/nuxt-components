@@ -14,13 +14,17 @@ at any scope without touching the component itself.
 | `--site-header-bg` | `transparent` | Background colour of `.site-header` (the content column, not the full-width row) |
 | `--site-header-position` | `static` | Set to `sticky` to pin the header, paired with `--site-header-sticky-offset` |
 | `--site-header-sticky-offset` | `0px` | `top` offset when `--site-header-position: sticky` |
-| `--site-header-z-index` | `9` | Stacking order of the row |
+| `--site-header-z-index` | `999999` | Stacking order of the row when it is sticky or fixed. Ignored while position is `static` |
 
 > Changed 2026-10-21: `--site-header-position`, `--site-header-sticky-offset` and
 > `--site-header-z-index` now apply to the outer row (`.site-header-row`, the `PageRow`) instead of
 > the inner `<header>`. On the inner header, `sticky` never stuck: its parent is exactly its own
 > height, so there was nowhere for it to move. The branding column was `auto` and is now capped by
 > `--site-header-branding-max-width`, so a long brand can't squeeze the nav to nothing.
+>
+> Changed 2026-10-24: `--site-header-z-index` defaults to `999999` (was `9`), like the library's
+> other overlays. A sticky header now sits above fixed elements with a lower z-index; set the token
+> lower on an ancestor if something of yours must stay above it.
 
 No private `--_` tokens.
 

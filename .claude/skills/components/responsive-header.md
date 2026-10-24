@@ -20,7 +20,10 @@ though it's independently testable/storyable.
 ## The measurement pipeline (read this before touching layout/CSS here)
 
 On mount, a two-phase pass measures `navigationWrapperRects`/`secondaryNavRects`/each nav
-item's `getBoundingClientRect()`/`offsetWidth`, then marks each item's `config.visible`.
+item's `getBoundingClientRect()`/`offsetWidth`, then marks each item's `config.visible` on a
+**copy** of the nav data. Do not write that config back onto the consumer's prop — a later
+prop change replaces the copy and remeasures. The pass also re-runs when
+`collapseBreakpoint` or `collapseAtMainNavIntersection` changes.
 Items with `visible: false` get a `visually-hidden` class in the top bar and are handed to
 `NavigationItems` to render in the overflow panel instead. The pass re-runs on
 `ResizeObserver` events targeting the root `.navigation` element, and once more after
@@ -76,6 +79,17 @@ close before it fires:
 - `handleSummaryHover()` (reaching a summary — cancels, then does its own close-others/toggle)
 - a `mouseenter` on `.main-navigation-sub-nav` itself, via `handleSubNavHover()`
 
+`focusin` bubbles, unlike `mouseenter`. The item's focus handler must not schedule that close
+when focus is already inside the item's own `<details>` (a click or Tab onto the summary), or
+the 200ms timer closes the panel the gesture just opened. A real click focuses the summary
+before `click` fires: record `open` on `pointerdown` and toggle from that snapshot. Do not
+also toggle on `keyup` — Enter/Space already synthesize a click, and any other key must not.
+
+Each header's `<details name>` and CSS anchor names come from `useId()`. A fixed name
+(`navigation-group`, `overflow-group`) is document-wide, so two headers on one page close
+each other's panels. The component is not `role="banner"` (`SiteHeader` already renders a
+`<header>`) and the overflow list is `role="group"`, not `role="menu"`.
+
 So a brief diagonal dip through a sibling's hit area survives (the close never actually runs
 before the cursor reaches its destination), while genuinely moving to a different part of the
 page still closes the dropdown promptly. `closeAllTimer` is cleared `onUnmounted` to avoid a
@@ -89,10 +103,11 @@ clicking a summary the mouse had just hover-opened dispatches both a `focusin` (
 already-open item closed, and the click's own toggle would immediately flip it back open — a
 visible open→closed→open flicker on every click, and the click effectively did nothing. Only
 `handleSummaryAction` (the explicit click) is allowed to close a dropdown; hover/focus is
-idempotent-safe to fire redundantly. `@vue/test-utils`' `.trigger("click")` doesn't synthesize
-this implicit focus side effect on its own — a test asserting click-to-close must explicitly
-`.trigger("focusin")` before `.trigger("click")` to reproduce it, or it'll pass against the
-buggy toggle-based version too.
+idempotent-safe to fire redundantly. A pointer click decides from the `open` state recorded on
+`pointerdown`, so focus-before-click does not invert the toggle. `@vue/test-utils`'
+`.trigger("click")` doesn't synthesize that focus or the preceding `pointerdown` — a
+click-to-close test fires `focusin` then `click` with no `pointerdown`; a real-click test fires
+`pointerdown`, then `focusin`, then `click` with `{ detail: 1 }`.
 
 ---
 
@@ -103,8 +118,8 @@ buggy toggle-based version too.
 | `responsiveNavLinks` | `ResponsiveHeaderProp` (`{ [groupKey]: ResponsiveHeaderNavItem[] }`) | `{}` | Nav groups. Each item is either a link (`path`) or a dropdown (`childLinksTitle` + `childLinks`). A single group with no dropdowns is valid for simple sites. |
 | `gapBetweenFirstAndSecondNav` | `number` | `12` | Pixel gap reserved between the first and second nav groups (also factored into the overflow-collapse width math). |
 | `overflowDetailsSummaryIcons` | `Record<string, string>` | `{ more: "gravity-ui:ellipsis", burger: "gravity-ui:bars" }` | Icon names for the overflow button's two states: `more` shows when only *some* items collapsed, `burger` shows when `allowNavigationCollapse` is active (whole nav collapsed). |
-| `collapseBreakpoint` | `number \| null` | `null` | A fixed pixel width below which the whole main nav collapses into the overflow burger, instead of the default per-item responsive collapse. |
-| `collapseAtMainNavIntersection` | `boolean` | `false` | Like `collapseBreakpoint`, but the breakpoint is derived automatically from the main nav's own measured width rather than a fixed number. |
+| `collapseBreakpoint` | `number \| null` | `null` | Pixel width of **this header's own wrapper** (not the viewport) at or below which the whole main nav collapses into the overflow burger. When set, intersection collapse does not also run. |
+| `collapseAtMainNavIntersection` | `boolean` | `false` | Collapse everything once the secondary nav intersects the first nav group. Only applies when `collapseBreakpoint` is `null`. The first group is used even if it is not named `firstNav`. |
 | `allowExpandOnGesture` | `boolean` | `true` | When `true`, hovering/focusing a dropdown summary opens it (in addition to click). When `false`, only click toggles it. |
 | `panelVariant` | `"modern" \| "classic"` | `"classic"` | Forwarded to `NavigationItems` for its dropdown submenu panels: `ExpandingPanel` (`"modern"`) or `ExpandingPanelClassic` (`"classic"`, default). `"modern"` is known not to work correctly on WebKit. See CLAUDE.md pitfall #19. |
 | `mainNavAriaLabel` | `string` | `"Main navigation"` | aria-label on the primary nav landmark — override for localisation. |
