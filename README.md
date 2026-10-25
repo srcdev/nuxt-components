@@ -58,7 +58,7 @@ To ensure skills are always up to date, VSCode snippets are installed, and `nuxt
 2. `nuxt prepare` — generates Nuxt type declarations
 3. `setup:claude` — copies skills into `.claude/skills/srcdev-nuxt-components/` and rules into `.claude/rules/srcdev-nuxt-components/`
 
-> **Note**: The snippet copy must run from your consumer app's postinstall, not the layer's. npm doesn't invoke postinstall hooks for dependencies, so each consumer app is responsible for copying snippets into its own `.vscode/` folder. Don't set `SRCDEV_STANDALONE` in a consumer app: that flag is only for running this layer on its own (it enables dev-only modules and the ramp watcher).
+> **Note**: The layer ships no install script (supply-chain scanners flag packages that run code on install), so your app's own postinstall makes these copies. If they are missing or older than the installed layer, `nuxt prepare` and `nuxt dev` log a reminder with the commands to run. Don't set `SRCDEV_STANDALONE` in a consumer app: that flag is only for running this layer on its own (it enables dev-only modules and the ramp watcher).
 
 ---
 

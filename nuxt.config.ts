@@ -51,6 +51,7 @@ export default defineNuxtConfig({
     // Required by consumers — always included
     resolve("./modules/colour-scheme"),
     resolve("./modules/icon-sets"),
+    resolve("./modules/consumer-setup"),
     "@nuxt/icon",
     ...(process.env.STORYBOOK ? [] : ["@nuxt/fonts"]),
     "@nuxt/image",

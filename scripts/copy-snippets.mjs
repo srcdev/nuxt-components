@@ -6,9 +6,9 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const srcDir = join(__dirname, '../.vscode');
 const destDir = join(process.cwd(), '.vscode');
 
-// Only run when installed as a package (not in the layer's own repo)
+// Run from the consumer app root, never from inside the package itself
 if (process.cwd() === join(__dirname, '..')) {
-  console.log('⊘ Skipping snippet copy (running in layer repo)');
+  console.log('⊘ Skipping snippet copy (run this from your app root, not the layer)');
   process.exit(0);
 }
 

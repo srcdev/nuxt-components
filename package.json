@@ -9,7 +9,6 @@
     "node": ">=24.0.0"
   },
   "scripts": {
-    "postinstall": "node scripts/copy-snippets.mjs",
     "clean": "rm -rf .nuxt && rm -rf .output",
     "cleanall": "rm -rf node_modules && rm -rf .nuxt && rm -rf .output && rm package-lock.json",
     "reinstall": "rm -rf node_modules && npm install",
@@ -102,7 +101,7 @@
     "@iconify-json/mdi": "1.2.3",
     "@iconify-json/radix-icons": "*",
     "@nuxt/eslint": "1.17.0",
-    "@nuxt/schema": "4.4.6",
+    "@nuxt/schema": "4.4.8",
     "@nuxt/test-utils": "4.1.0",
     "@nuxtjs/storybook": "10.0.0",
     "@playwright/test": "1.62.1",
@@ -144,12 +143,13 @@
     "@pinia/nuxt": "1.0.2",
     "@vueuse/motion": "3.0.3",
     "focus-trap-vue": "4.1.0",
-    "nuxt": "4.4.6",
+    "nuxt": "4.4.8",
     "pinia": "4.0.3",
     "pinia-plugin-persistedstate": "4.7.1",
-    "zod": "4.4.3"
+    "zod": "4.6.7"
   },
   "overrides": {
+    "vite": "7.3.7",
     "vue-router": "5.2.0",
     "h3": "1.15.11"
   }

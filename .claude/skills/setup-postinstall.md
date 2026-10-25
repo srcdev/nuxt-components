@@ -7,7 +7,7 @@ Prevent common "forgot to run after install" problems in a consuming app:
 1. `nuxt prepare` — generates Nuxt type declarations. Skipping it causes TypeScript errors after install or package updates.
 2. `npm run setup:claude` — copies the latest `srcdev-nuxt-components` skills into `.claude/skills/srcdev-nuxt-components/` and its consumer rules into `.claude/rules/srcdev-nuxt-components/`. Skipping it leaves Claude working from stale skill docs and rules after a package update.
 
-Additionally, `srcdev-nuxt-components` automatically copies VSCode snippet files (`.code-snippets`) to your `.vscode/` folder during its own postinstall, so components' code snippets are available immediately.
+Additionally, `scripts/copy-snippets.mjs` copies the layer's VSCode snippet files (`.code-snippets`) into your `.vscode/` folder.
 
 A consumer app's `postinstall` script runs both automatically after every `npm install`.
 
@@ -48,7 +48,7 @@ From this point on, `npm install` and `npm ci` trigger both steps automatically.
 
 ## Notes
 
-- **Snippet copy must run in consumer app**: npm doesn't invoke postinstall hooks for dependencies. Each consumer app must explicitly call `scripts/copy-snippets.mjs` in its own postinstall to copy VSCode snippets to `.vscode/`. The layer's postinstall is used when the layer runs standalone, but consumers are responsible for their own `.vscode/` folder.
+- **The layer has no install script of its own**: packages that run code on `npm install` are flagged by supply-chain scanners such as Socket, so `srcdev-nuxt-components` ships none. Your app's own `postinstall` makes every copy. If you skip it, `nuxt prepare` and `nuxt dev` log a reminder whenever your snippets or Claude docs are missing or older than the installed layer.
 - Skills land in `.claude/skills/srcdev-nuxt-components/` and rules in `.claude/rules/srcdev-nuxt-components/` — safe to re-run. The script deletes and recreates only those two folders, so anything dropped or renamed upstream is removed (a stale rule would otherwise stay loaded forever); your own project's skills and rules are never touched.
 - Only the layer's `.claude/rules/consumer/` set ships. The rest of its rules govern the library's own source (naming, ledger, demo pages) and would be wrong in an app.
 - `postinstall` also fires on `npm ci`, so CI environments get the skills and snippets too if they have a `.claude/` directory in the project.
