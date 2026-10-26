@@ -15,9 +15,14 @@
 | `--service-detail-hero-min-height-mobile` | `32rem` | Minimum hero banner height below the `768px` container breakpoint. The hero grows past it when its content (a long title, say) needs more room; the image always fills the hero (`object-fit`/`object-position` control cropping) |
 | `--service-detail-hero-min-height-tablet` | `36rem` | Minimum hero banner height from the `768px` container breakpoint |
 | `--service-detail-hero-min-height-desktop` | `42rem` | Minimum hero banner height from the `1024px` container breakpoint |
+| `--service-detail-hero-image-contain` | `size` | Whether the image may size the hero. `size`: the image fills the hero but the min heights and the content set its height. `none`: the image's own aspect ratio sets the height (a 16:9 image at full width makes a 16:9 hero), still never below the min heights |
 
 > Changed 2026-10-06: these were applied as a fixed `height`, so a long title was clipped by the
 > hero. They are now a true minimum (`min-block-size`), matching their names.
+>
+> Fixed 2026-10-26: that change let the image's intrinsic height size the hero, so a full-width
+> hero grew to the image's 16:9 height. The image row now has `contain: size` by default; set
+> `--service-detail-hero-image-contain: none` to opt back into an image-sized hero.
 >
 > Also 2026-10-06: line-clamp tokens for the hero eyebrow and title, sidebar labels and values,
 > and the final CTA heading and body. The hero title's and final CTA heading's spacing moved from
@@ -107,7 +112,7 @@ The ideal-for grid becomes 2 columns at a **500px container width**.
 | `--service-detail-sidebar-row-gap` | `1rem` | Gap between a row's label and value |
 | `--service-detail-sidebar-row-padding-block` | `1rem` | Vertical padding per price/duration/location row |
 | `--service-detail-sidebar-row-divider-colour` | `currentColor` | Divider line above each price/duration/location row |
-| `--service-detail-sidebar-row-book-cta-padding-block` | `2rem` | Vertical padding on the `book-cta` slot's own row (only renders when the slot has content) |
+| `--service-detail-sidebar-row-book-cta-padding-block` | `2rem` | Vertical padding on the `book-cta` slot's own row, `.service-detail__sidebar-book-cta` (only renders when the slot has content). The row was classed bare `.book-cta` before 2026-10-26 |
 | `--service-detail-sidebar-row-book-cta-justify-content` | `end` | Horizontal alignment of the `book-cta` slot content within its row |
 | `--service-detail-sidebar-row-label-font-size` | `1.2rem` | Font size of a row's label (e.g. "Price") |
 | `--service-detail-sidebar-label-line-clamp` | `none` | Max lines of the "Book This Service" / "You May Also Like" labels |

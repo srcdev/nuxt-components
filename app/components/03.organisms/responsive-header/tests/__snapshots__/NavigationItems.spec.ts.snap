@@ -3,13 +3,17 @@
 exports[`NavigationItems > renders correct HTML structure with default props 1`] = `
 "<div class="overflow-navigation-wrapper" role="group" aria-label="Overflow navigation menu" style="--_overflow-nav-indicator: --overflow-nav-indicator-v-0-0; --_overflow-sub-nav-indicator: --overflow-sub-nav-indicator-v-0-0;">
   <ul class="overflow-navigation-list visible" style="--_overflow-navigation-list-min-width: 0px;">
-    <li class="overflow-navigation-item is-active" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="0"><a href="/" class="overflow-navigation-link"><span class="overflow-navigation-text">Home</span></a></li>
-    <li class="overflow-navigation-item visible" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="1"><a href="/about" class="overflow-navigation-link"><span class="overflow-navigation-text">About</span></a></li>
+    <li class="overflow-navigation-item is-active" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="0"><a href="/" class="overflow-navigation-link">
+        <!--v-if--><span class="overflow-navigation-text">Home</span>
+      </a></li>
+    <li class="overflow-navigation-item visible" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="1"><a href="/about" class="overflow-navigation-link">
+        <!--v-if--><span class="overflow-navigation-text">About</span>
+      </a></li>
     <li class="overflow-navigation-item visible" style="--_main-navigation-item-width: 0px;" data-group-key="firstNav" data-local-index="2">
       <div class="expanding-panel-classic overflow-navigation-details">
         <details class="expanding-panel-classic-details" name="overflow-navigation-v-0-0">
           <summary id="v-0-0-1-trigger" class="expanding-panel-classic-summary" aria-controls="v-0-0-1-content" aria-expanded="false">
-            <div class="label-wrapper"><span class="overflow-navigation-text" aria-label="UI Components submenu">UI Components</span></div>
+            <div class="label-wrapper"><span class="overflow-navigation-label"><!--v-if--><span class="overflow-navigation-text" aria-label="UI Components submenu">UI Components</span></span></div>
             <div class="icon-wrapper"><span class="iconify i-mdi:chevron-down icon" aria-hidden="true"></span></div>
           </summary>
         </details>
@@ -28,7 +32,9 @@ exports[`NavigationItems > renders correct HTML structure with default props 1`]
     </li>
   </ul>
   <ul class="overflow-navigation-list" style="--_overflow-navigation-list-min-width: 0px;">
-    <li class="overflow-navigation-item" style="--_main-navigation-item-width: 0px;" data-group-key="secondNav" data-local-index="0"><a href="/contact" class="overflow-navigation-link"><span class="overflow-navigation-text">Contact</span></a></li>
+    <li class="overflow-navigation-item" style="--_main-navigation-item-width: 0px;" data-group-key="secondNav" data-local-index="0"><a href="/contact" class="overflow-navigation-link">
+        <!--v-if--><span class="overflow-navigation-text">Contact</span>
+      </a></li>
   </ul>
   <div aria-hidden="true" class="overflow-nav-indicator-hovered"></div>
   <div aria-hidden="true" class="overflow-nav-indicator-active"></div>

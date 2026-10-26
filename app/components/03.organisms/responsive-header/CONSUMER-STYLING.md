@@ -33,6 +33,10 @@ are documented alongside it since that's where they're consumed.
 | `--responsive-header-overflow-btn-bg` / `-size` / `-border` / `-outline` / `-icon-color` / `-hover-outline` | `transparent` / `20px` / `1px solid color-mix(in oklch, var(--theme-text) 20%, transparent)` / `1px solid transparent` / `inherit` / `1px solid var(--theme-border-focus)` | Overflow burger button. |
 | `--responsive-header-overflow-nav-bg` / `-border` / `-border-radius` / `-padding-block` | `var(--page-bg, var(--theme-surface-subtle))` / `1px solid color-mix(in oklch, var(--theme-text) 20%, transparent)` / `8px` / `12px` | Overflow panel container. |
 | `--responsive-header-overflow-nav-max-block-size` | `70vh` | Tallest the overflow panel gets before it scrolls. |
+| `--responsive-header-overflow-nav-top` | `135%` | Distance from the top of the overflow button to the top of the panel. `calc(100% + <header padding>)` drops it to the header's bottom edge. |
+| `--responsive-header-overflow-nav-inline-size` | `auto` (sized to its content) | Overflow panel width. It stays right-aligned with the button and grows leftwards, so a width equal to the header's spans the whole header. Rows stretch to fill it. `100cqi` works when the header element is an `inline-size` container. |
+| `--responsive-header-overflow-backdrop-bg` / `-filter` | `color-mix(in oklch, black 40%, transparent)` / `blur(4px)` | Page backdrop behind the open overflow menu. Only rendered with the `overflowBackdrop` prop. |
+| `--responsive-header-overflow-backdrop-inset` / `-z-index` | `0` / `998` | Where the backdrop sits. It is teleported to `body` and fixed, so it covers whatever stacks below its z-index: give the header a higher `z-index` to keep it sharp (`SiteHeader` defaults to `999999`), or start it below the header with an inset such as `var(--header-height) 0 0`. |
 | `--responsive-nav-decorator-indicator-color` | `currentColor` | Active-item indicator bar/underline. |
 | `--responsive-nav-decorator-indicator-offset` | `2px` | How far the active indicator sits below the active item's bottom edge. Negative values raise it inside the item (`-4px` sits it 4px up). |
 | `--responsive-nav-decorator-hovered-indicator-color` | inherits the above | Indicator colour while hovering. |
@@ -50,6 +54,7 @@ are documented alongside it since that's where they're consumed.
 | `--overflow-nav-link-color-active` | `--overflow-nav-link-color` | Colour on the active item. |
 | `--overflow-nav-link-border-color` | `color-mix(in oklch, var(--theme-text) 12%, transparent)` | Divider under each row. |
 | `--overflow-nav-sub-item-color` / `--overflow-nav-sub-item-font-size` | `inherit` / `inherit` | Child links inside a group. |
+| `--overflow-nav-link-icon-size` / `--overflow-nav-link-icon-gap` | `var(--responsive-header-link-icon-size, 1.35em)` / `0.8rem` | An item's `iconName` icon in the overflow menu, and its gap to the label. |
 | `--overflow-nav-decorator-indicator-color` | `currentColor` | Active-row indicator bar. |
 | `--overflow-nav-decorator-hovered-indicator-color` | inherits the above | Indicator colour while hovering. |
 | `--overflow-nav-decorator-hovered-bg` | `color-mix(in oklch, var(--theme-text) 6%, transparent)` | Hover highlight behind a row. |

@@ -85,8 +85,8 @@ exports[`ServiceDetail > renders correct HTML structure 1`] = `
       <aside class="service-detail__sidebar">
         <div class="glass-panel service-detail__booking-card">
           <p class="service-detail__sidebar-label">Book This Service</p>
-          <div class="service-detail__sidebar-row"><span>Price</span><span>£95</span></div>
-          <div class="service-detail__sidebar-row"><span>Duration</span><span>2.5 - 3.5 hours</span></div>
+          <div class="service-detail__sidebar-row"><span class="service-detail__sidebar-row-label">Price</span><span class="service-detail__sidebar-row-value">£95</span></div>
+          <div class="service-detail__sidebar-row"><span class="service-detail__sidebar-row-label">Duration</span><span class="service-detail__sidebar-row-value">2.5 - 3.5 hours</span></div>
           <!--v-if-->
           <!--v-if-->
           <div class="service-detail__sidebar-note"></div>

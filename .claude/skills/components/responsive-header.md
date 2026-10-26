@@ -127,7 +127,8 @@ click-to-close test fires `focusin` then `click` with no `pointerdown`; a real-c
 |------|------|---------|-------|
 | `responsiveNavLinks` | `ResponsiveHeaderProp` (`{ [groupKey]: ResponsiveHeaderNavItem[] }`) | `{}` | Nav groups. Each item is either a link (`path`) or a dropdown (`childLinksTitle` + `childLinks`). A single group with no dropdowns is valid for simple sites. |
 | `gapBetweenFirstAndSecondNav` | `number` | `12` | Pixel gap reserved between the first and second nav groups (also factored into the overflow-collapse width math). |
-| `overflowDetailsSummaryIcons` | `Record<string, string>` | `{ more: "gravity-ui:ellipsis", burger: "gravity-ui:bars" }` | Icon names for the overflow button's two states: `more` shows when only *some* items collapsed, `burger` shows when `allowNavigationCollapse` is active (whole nav collapsed). |
+| `overflowDetailsSummaryIcons` | `Record<string, string>` | `{ more: "gravity-ui:ellipsis", burger: "gravity-ui:bars" }` | Icon names for the overflow button's states: `more` shows when only *some* items collapsed, `burger` shows when `allowNavigationCollapse` is active (whole nav collapsed). An optional `open` (e.g. a close icon) replaces either while the menu is open (added 2026-10-26). |
+| `overflowBackdrop` | `boolean` | `false` | Dims and blurs the page behind the open overflow menu (added 2026-10-26). The backdrop is teleported to `body`, because a `PageRow` ancestor's `container-type` makes it the containing block for `position: fixed`. Clicking it closes the menu. Styled by `--responsive-header-overflow-backdrop-*`; the header must stack above its z-index. |
 | `collapseBreakpoint` | `number \| null` | `null` | Pixel width of **this header's own wrapper** (not the viewport) at or below which the whole main nav collapses into the overflow burger. When set, intersection collapse does not also run. |
 | `collapseAtMainNavIntersection` | `boolean` | `false` | Collapse everything once the secondary nav intersects the first nav group. Only applies when `collapseBreakpoint` is `null`. The first group is used even if it is not named `firstNav`. |
 | `allowExpandOnGesture` | `boolean` | `true` | When `true`, hovering/focusing a dropdown summary opens it (in addition to click). When `false`, only click toggles it. |
@@ -215,6 +216,17 @@ that don't fit move into the overflow menu) instead of all-or-nothing. To switch
   `margin-inline-end`). It used to compare against the wrapper while adding the gap a second time
   with a strict `<`, so the last item of a flush-right second group (e.g. "Contact") was always
   sent to the overflow menu, however wide the screen.
+- **Intersection collapse (fixed 2026-10-26):** `collapseAtMainNavIntersection` collapses once the
+  first group's right edge runs *past* `secondary nav left - gapBetweenFirstAndSecondNav`. It used
+  `<=`, so a single group aligned with `--responsive-header-main-nav-justify-content: safe end`
+  (which always ends exactly at that line) collapsed into the burger at every width. `safe end`
+  falls back to start alignment on overflow, which pushes the group past the line exactly when
+  the items stop fitting. Hidden items keep their measured width, so the group can't shrink back
+  under the line after collapsing. Both sides of the comparison are rounded: flooring only the
+  line meant a sub-pixel secondary nav position (`left: 860.5`) still collapsed it at every width.
+- **Overflow menu closes when the button hides (2026-10-26):** once every item fits again,
+  `showOverflowDetails` goes false and an open overflow menu is closed. Before, it stayed open but
+  invisible, which with `overflowBackdrop` left the page dimmed with no visible menu.
 - The component copies `responsiveNavLinks` before measuring. It used to write each item's
   `config` straight into the consumer's own nav data object.
 - The `StressTest` story covers all of the above.

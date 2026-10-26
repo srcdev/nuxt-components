@@ -42,9 +42,11 @@
             :href="link.path"
             @click="emit('anchorClick', $event, link.path)"
           >
+            <Icon v-if="link.iconName" :name="link.iconName" class="overflow-navigation-icon" aria-hidden="true" />
             <span class="overflow-navigation-text">{{ link.name }}</span>
           </a>
           <NuxtLink v-else class="overflow-navigation-link" :to="link.path">
+            <Icon v-if="link.iconName" :name="link.iconName" class="overflow-navigation-icon" aria-hidden="true" />
             <span class="overflow-navigation-text">{{ link.name }}</span>
           </NuxtLink>
         </li>
@@ -71,8 +73,11 @@
             :style-class-passthrough="['overflow-navigation-details']"
           >
             <template #summary>
-              <span class="overflow-navigation-text" :aria-label="submenuLabel(link)">
-                {{ link.childLinksTitle ?? link.name }}
+              <span class="overflow-navigation-label">
+                <Icon v-if="link.iconName" :name="link.iconName" class="overflow-navigation-icon" aria-hidden="true" />
+                <span class="overflow-navigation-text" :aria-label="submenuLabel(link)">
+                  {{ link.childLinksTitle ?? link.name }}
+                </span>
               </span>
             </template>
             <template #icon>
@@ -244,6 +249,8 @@ watch(
        --overflow-nav-link-border-color      (default: color-mix(in oklch, var(--theme-text) 12%, transparent))
        --overflow-nav-sub-item-color         (default: inherit)
        --overflow-nav-sub-item-font-size     (default: inherit)
+       --overflow-nav-link-icon-size         (default: --responsive-header-link-icon-size, then 1.35em)
+       --overflow-nav-link-icon-gap          (default: 0.8rem)
 
        --overflow-nav-decorator-indicator-color         (default: currentColor)
        --overflow-nav-decorator-hovered-indicator-color (default: inherits --overflow-nav-decorator-indicator-color)
@@ -257,8 +264,25 @@ watch(
     gap: var(--overflow-nav-items-gap, 0px);
     position: relative;
     inline-size: max-content;
+    min-inline-size: 100%;
     max-inline-size: var(--_max-inline-size);
     overflow-wrap: anywhere;
+
+    .overflow-navigation-link,
+    .overflow-navigation-label {
+      align-items: center;
+      gap: var(--overflow-nav-link-icon-gap, 0.8rem);
+    }
+
+    .overflow-navigation-label {
+      display: flex;
+    }
+
+    .overflow-navigation-icon {
+      flex-shrink: 0;
+      inline-size: var(--overflow-nav-link-icon-size, var(--responsive-header-link-icon-size, 1.35em));
+      block-size: var(--overflow-nav-link-icon-size, var(--responsive-header-link-icon-size, 1.35em));
+    }
 
     .overflow-navigation-list {
       display: none;

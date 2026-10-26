@@ -220,6 +220,22 @@ describe("ServiceDetail", () => {
     expect(wrapper.find(".test-book").text()).toBe(mockService.title);
   });
 
+  // The row label/value styling once used span:first-child/last-child, which also matched the
+  // single text span inside a book-cta InputButton and squeezed it to the label's width.
+  it("keeps the sidebar row label and value classes out of the book-cta row", async () => {
+    const wrapper = await mountSuspended(ServiceDetail, {
+      props: { serviceData: mockService },
+      slots: { "book-cta": `<span class="test-book-text">Book now</span>` },
+    });
+    const cta = wrapper.find(".service-detail__sidebar-book-cta");
+    expect(cta.find(".test-book-text").exists()).toBe(true);
+    expect(cta.find(".service-detail__sidebar-row-label, .service-detail__sidebar-row-value").exists()).toBe(false);
+    expect(wrapper.findAll(".service-detail__sidebar-row-label").map((label) => label.text())).toEqual([
+      "Price",
+      "Duration",
+    ]);
+  });
+
   it("renders the sidebar-note slot", async () => {
     const wrapper = await mountSuspended(ServiceDetail, {
       props: { serviceData: mockService },

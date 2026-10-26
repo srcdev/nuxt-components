@@ -13,6 +13,7 @@
           :responsive-nav-links="responsiveNavLinks"
           :gap-between-first-and-second-nav="gapBetweenFirstAndSecondNav"
           :overflow-details-summary-icons="overflowDetailsSummaryIcons"
+          :overflow-backdrop="overflowBackdrop"
           :collapse-breakpoint="collapseBreakpoint"
           :collapse-at-main-nav-intersection="collapseAtMainNavIntersection"
           :allow-expand-on-gesture="allowExpandOnGesture"
@@ -44,6 +45,8 @@ interface Props {
   responsiveNavLinks?: ResponsiveHeaderProp;
   gapBetweenFirstAndSecondNav?: number;
   overflowDetailsSummaryIcons?: Record<string, string>;
+  /** Forwarded to ResponsiveHeader's overflowBackdrop: dims the page behind the open overflow menu. */
+  overflowBackdrop?: boolean;
   collapseBreakpoint?: number | null;
   collapseAtMainNavIntersection?: boolean;
   allowExpandOnGesture?: boolean;
@@ -77,6 +80,7 @@ withDefaults(defineProps<Props>(), {
     more: "gravity-ui:ellipsis",
     burger: "gravity-ui:bars",
   }),
+  overflowBackdrop: false,
   collapseBreakpoint: null,
   collapseAtMainNavIntersection: false,
   allowExpandOnGesture: true,

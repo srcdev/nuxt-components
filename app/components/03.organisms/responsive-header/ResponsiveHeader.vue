@@ -107,18 +107,26 @@
         class="overflow-details"
         :class="overflowDetailsClass ? [overflowDetailsClass] : []"
         :name="overflowGroupName"
+        @toggle="handleOverflowToggle"
       >
         <summary class="overflow-details-summary has-toggle-icon" :aria-label="overflowButtonLabel">
           <Icon
             :name="overflowDetailsSummaryIcons.more ?? 'gravity-ui:ellipsis'"
             class="icon"
-            :class="[{ show: !allowNavigationCollapse }]"
+            :class="[{ show: !allowNavigationCollapse && !showOpenIcon }]"
             :aria-hidden="true"
           />
           <Icon
             :name="overflowDetailsSummaryIcons.burger ?? 'gravity-ui:bars'"
             class="icon"
-            :class="[{ show: allowNavigationCollapse }]"
+            :class="[{ show: allowNavigationCollapse && !showOpenIcon }]"
+            :aria-hidden="true"
+          />
+          <Icon
+            v-if="overflowDetailsSummaryIcons.open"
+            :name="overflowDetailsSummaryIcons.open"
+            class="icon"
+            :class="[{ show: showOpenIcon }]"
             :aria-hidden="true"
           />
         </summary>
@@ -135,6 +143,9 @@
       </details>
       <slot v-if="slots.secondaryNavigation" name="secondaryNavigation"></slot>
     </nav>
+    <Teleport v-if="overflowBackdrop" to="body">
+      <div v-if="overflowOpen" class="responsive-header-overflow-backdrop" aria-hidden="true"></div>
+    </Teleport>
   </div>
 </template>
 
@@ -150,7 +161,10 @@ import { useResizeObserver, onClickOutside } from "@vueuse/core";
 interface Props {
   responsiveNavLinks?: ResponsiveHeaderProp;
   gapBetweenFirstAndSecondNav?: number;
+  /** Overflow button icons: `more` (some items hidden), `burger` (all hidden) and optional `open` (menu open). */
   overflowDetailsSummaryIcons?: Record<string, string>;
+  /** Dim and blur the page behind the open overflow menu. Styled by --responsive-header-overflow-backdrop-*. */
+  overflowBackdrop?: boolean;
   collapseBreakpoint?: number | null;
   collapseAtMainNavIntersection?: boolean;
   styleClassPassthrough?: string | string[];
@@ -180,6 +194,7 @@ const props = withDefaults(defineProps<Props>(), {
     more: "gravity-ui:ellipsis",
     burger: "gravity-ui:bars",
   }),
+  overflowBackdrop: false,
   collapseBreakpoint: null,
   collapseAtMainNavIntersection: false,
   styleClassPassthrough: () => [],
@@ -229,6 +244,13 @@ const closeAllNavigationDetails = () => {
   });
   overflowDetailsRef.value?.removeAttribute("open");
 };
+
+// Set by toggle, which also fires for the close helpers' removeAttribute("open").
+const overflowOpen = ref(false);
+const handleOverflowToggle = (event: Event) => {
+  overflowOpen.value = (event.target as HTMLDetailsElement).open;
+};
+const showOpenIcon = computed(() => overflowOpen.value && Boolean(props.overflowDetailsSummaryIcons.open));
 
 // The header outlives route changes, so a followed link has to close its menu itself.
 const closeOnLinkClick = (event: MouseEvent) => {
@@ -522,6 +544,11 @@ const showOverflowDetails = computed(() =>
   )
 );
 
+// Once everything fits the button hides, so an open menu (and its backdrop) would be left with no way to close it.
+watch(showOverflowDetails, (shown) => {
+  if (!shown) overflowDetailsRef.value?.removeAttribute("open");
+});
+
 const mainNavigationMarginBlockEnd = computed(() => {
   return secondaryNavRects.value ? secondaryNavRects.value.width + props.gapBetweenFirstAndSecondNav : 0;
 });
@@ -575,9 +602,12 @@ const allowNavigationCollapse = computed(() => {
     return navigationWrapperRects.value.width <= props.collapseBreakpoint;
   }
 
+  // Touching the gap isn't an intersection: an end-aligned single group always ends exactly there.
+  // Both sides rounded, so a sub-pixel secondary nav position can't tip that touch into a collapse.
   if (!firstNavRects.value) return false;
   return (
-    Math.floor(secondaryNavRects.value.left - props.gapBetweenFirstAndSecondNav) <= firstNavRects.value.right
+    Math.round(firstNavRects.value.right) >
+    Math.round(secondaryNavRects.value.left - props.gapBetweenFirstAndSecondNav)
   );
 });
 
@@ -858,6 +888,14 @@ watch(
        --responsive-header-overflow-nav-border-radius   (default: 8px)
        --responsive-header-overflow-nav-padding-block   (default: 12px)
        --responsive-header-overflow-nav-max-block-size  (default: 70vh)
+       --responsive-header-overflow-nav-top             (default: 135%)
+       --responsive-header-overflow-nav-inline-size     (default: auto)
+
+       Only with the overflowBackdrop prop:
+       --responsive-header-overflow-backdrop-bg         (default: color-mix(in oklch, black 40%, transparent))
+       --responsive-header-overflow-backdrop-filter     (default: blur(4px))
+       --responsive-header-overflow-backdrop-inset      (default: 0)
+       --responsive-header-overflow-backdrop-z-index    (default: 998)
 
        --responsive-nav-decorator-indicator-color         (default: currentColor)
        --responsive-nav-decorator-indicator-offset        (default: 2px, below the item; negative raises it)
@@ -1225,8 +1263,9 @@ watch(
 
         .overflow-details-nav {
           position: absolute;
-          top: 135%;
+          top: var(--responsive-header-overflow-nav-top, 135%);
           right: 0;
+          inline-size: var(--responsive-header-overflow-nav-inline-size, auto);
           background-color: var(--responsive-header-overflow-nav-bg, var(--page-bg, var(--theme-surface-subtle)));
           border: var(--responsive-header-overflow-nav-border, 1px solid color-mix(in oklch, var(--theme-text) 20%, transparent));
           border-radius: var(--responsive-header-overflow-nav-border-radius, 8px);
@@ -1254,6 +1293,17 @@ watch(
           visibility 0.2s ease-in-out;
       }
     }
+  }
+
+  /* Teleported to body, so it sits outside .navigation. The header must stack above
+     --responsive-header-overflow-backdrop-z-index to stay sharp. -webkit- for Safari before 18. */
+  .responsive-header-overflow-backdrop {
+    position: fixed;
+    inset: var(--responsive-header-overflow-backdrop-inset, 0);
+    z-index: var(--responsive-header-overflow-backdrop-z-index, 998);
+    background-color: var(--responsive-header-overflow-backdrop-bg, color-mix(in oklch, black 40%, transparent));
+    -webkit-backdrop-filter: var(--responsive-header-overflow-backdrop-filter, blur(4px));
+    backdrop-filter: var(--responsive-header-overflow-backdrop-filter, blur(4px));
   }
 
   /* ─── Anchor positioning for main-nav indicators ─────────────────────────

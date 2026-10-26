@@ -506,6 +506,64 @@ describe("ResponsiveHeader", () => {
     geometry.mockRestore();
   });
 
+  // A single end-aligned group always ends exactly at the reserved gap (secondary left - 12).
+  it("does not collapse a single end-aligned group that ends exactly at the gap", async () => {
+    const geometry = mockCollapseLayout({
+      wrapperWidth: 900,
+      firstNavRight: 848,
+      secondaryLeft: 860,
+      mainNavRight: 848,
+    });
+    const wrapper = await mountHeader({
+      props: {
+        responsiveNavLinks: { main: navLinks.firstNav! },
+        collapseAtMainNavIntersection: true,
+      },
+    });
+    await triggerGeometryPass();
+
+    expect(hiddenFlags(wrapper)).toEqual([false, false, false]);
+    geometry.mockRestore();
+  });
+
+  it("does not collapse an end-aligned group when the secondary nav sits on a sub-pixel", async () => {
+    const geometry = mockCollapseLayout({
+      wrapperWidth: 900,
+      firstNavRight: 848.5,
+      secondaryLeft: 860.5,
+      mainNavRight: 848,
+    });
+    const wrapper = await mountHeader({
+      props: {
+        responsiveNavLinks: { main: navLinks.firstNav! },
+        collapseAtMainNavIntersection: true,
+      },
+    });
+    await triggerGeometryPass();
+
+    expect(hiddenFlags(wrapper)).toEqual([false, false, false]);
+    geometry.mockRestore();
+  });
+
+  it("collapses a single group once it runs past the gap", async () => {
+    const geometry = mockCollapseLayout({
+      wrapperWidth: 900,
+      firstNavRight: 849,
+      secondaryLeft: 860,
+      mainNavRight: 848,
+    });
+    const wrapper = await mountHeader({
+      props: {
+        responsiveNavLinks: { main: navLinks.firstNav! },
+        collapseAtMainNavIntersection: true,
+      },
+    });
+    await triggerGeometryPass();
+
+    expect(hiddenFlags(wrapper)).toEqual([true, true, true]);
+    geometry.mockRestore();
+  });
+
   it("does not write measurement config into the consumer's nav data, and follows later link changes", async () => {
     const links: ResponsiveHeaderProp = { firstNav: [{ name: "Home", path: "/" }] };
     const geometry = mockGeometry(400);
@@ -753,6 +811,90 @@ describe("ResponsiveHeader", () => {
       await nextTick();
       expect(overflow.element.open).toBe(false);
       expect(dropdown.element.open).toBe(false);
+    });
+  });
+
+  // ─── Overflow open icon and backdrop ──────────────────────────────────
+
+  describe("overflow open state", () => {
+    // Set open and dispatch toggle directly: jsdom queues its own toggle event on a timer,
+    // which this repo's global fake timers never run.
+    const setOverflowOpen = async (wrapper: Awaited<ReturnType<typeof mountHeader>>, open: boolean) => {
+      const overflow = wrapper.find<HTMLDetailsElement>(".overflow-details");
+      overflow.element.open = open;
+      overflow.element.dispatchEvent(new Event("toggle"));
+      await nextTick();
+    };
+
+    it("renders no open icon unless one is given", async () => {
+      const wrapper = await mountHeader({ props: { responsiveNavLinks: navLinks } });
+      expect(wrapper.findAll(".overflow-details-summary .icon")).toHaveLength(2);
+    });
+
+    it("shows the open icon instead of the others while the menu is open", async () => {
+      const wrapper = await mountHeader({
+        props: {
+          responsiveNavLinks: navLinks,
+          overflowDetailsSummaryIcons: { more: "a:more", burger: "a:burger", open: "a:close" },
+        },
+      });
+      const icons = wrapper.findAll(".overflow-details-summary .icon");
+      expect(icons).toHaveLength(3);
+      expect(icons[2]!.classes()).not.toContain("show");
+
+      await setOverflowOpen(wrapper, true);
+      expect(icons[0]!.classes()).not.toContain("show");
+      expect(icons[1]!.classes()).not.toContain("show");
+      expect(icons[2]!.classes()).toContain("show");
+
+      await setOverflowOpen(wrapper, false);
+      expect(icons[2]!.classes()).not.toContain("show");
+    });
+
+    it("renders no backdrop without overflowBackdrop", async () => {
+      const wrapper = await mountHeader({ props: { responsiveNavLinks: navLinks } });
+      await setOverflowOpen(wrapper, true);
+      expect(document.body.querySelector(".responsive-header-overflow-backdrop")).toBeNull();
+    });
+
+    it("renders the backdrop on body only while the menu is open", async () => {
+      const wrapper = await mountHeader({ props: { responsiveNavLinks: navLinks, overflowBackdrop: true } });
+      expect(document.body.querySelector(".responsive-header-overflow-backdrop")).toBeNull();
+
+      await setOverflowOpen(wrapper, true);
+      const backdrop = document.body.querySelector(".responsive-header-overflow-backdrop");
+      expect(backdrop).not.toBeNull();
+      expect(backdrop!.parentElement).toBe(document.body);
+      expect(backdrop!.getAttribute("aria-hidden")).toBe("true");
+
+      await setOverflowOpen(wrapper, false);
+      expect(document.body.querySelector(".responsive-header-overflow-backdrop")).toBeNull();
+    });
+
+    it("closes the open menu once every item fits and the button hides", async () => {
+      const geometry = mockCollapseLayout({
+        wrapperWidth: 900,
+        firstNavRight: 849,
+        secondaryLeft: 860,
+        mainNavRight: 848,
+      });
+      const wrapper = await mountHeader({
+        props: {
+          responsiveNavLinks: { main: navLinks.firstNav! },
+          collapseAtMainNavIntersection: true,
+          overflowBackdrop: true,
+        },
+      });
+      await triggerGeometryPass();
+      expect(hiddenFlags(wrapper)).toEqual([true, true, true]);
+      await setOverflowOpen(wrapper, true);
+
+      await wrapper.setProps({ collapseAtMainNavIntersection: false });
+      await triggerGeometryPass();
+
+      expect(hiddenFlags(wrapper)).toEqual([false, false, false]);
+      expect(wrapper.find<HTMLDetailsElement>(".overflow-details").element.open).toBe(false);
+      geometry.mockRestore();
     });
   });
 });

@@ -101,6 +101,17 @@ Defaults to a plain, non-linked two-item trail built from `serviceData.category`
 > Ideal-for and related cards default to `--theme-surface-subtle` (were dark slate with no text colour).
 > The `final-cta` slot sits in `.service-detail__final-cta-action`, which never shrinks, so long copy can't
 > push its button out of the banner. Sidebar row labels size to their words (up to half the row); values wrap.
+>
+> **Fixed 2026-10-26:** with the hero only a minimum height, the image's intrinsic 16:9 height sized the
+> hero, so a full-width hero grew far past its min height. The image row now has `contain: size`, so the
+> min heights and the content set the height. `--service-detail-hero-image-contain: none` opts back into
+> an image-sized hero.
+>
+> **Fixed 2026-10-26:** the sidebar row label/value styling targeted `span:first-child` and
+> `span:last-child` as descendants, so it also hit the single text span inside a `book-cta`
+> `InputButton` (uppercase, 1.2rem, max 50% wide), squeezing "Book now" to one letter group per line.
+> Rows now use `.service-detail__sidebar-row-label` / `-value`. The CTA row's bare `book-cta` class
+> was renamed `.service-detail__sidebar-book-cta`; update any consumer CSS targeting `.book-cta`.
 
 ## Line-clamp tokens
 

@@ -55,7 +55,13 @@ const meta: Meta<StoryArgs> = {
     },
     overflowDetailsSummaryIcons: {
       control: "object",
-      description: "Icon names for the overflow button's two states: `more` (some items collapsed) and `burger`",
+      description:
+        "Icon names for the overflow button: `more` (some items collapsed), `burger` (all collapsed) and optional `open` (shown while the menu is open)",
+    },
+    overflowBackdrop: {
+      control: "boolean",
+      description:
+        "Dim and blur the page behind the open overflow menu. Teleported to `body`; styled by `--responsive-header-overflow-backdrop-*`",
     },
     collapseBreakpoint: {
       control: { type: "number" },
@@ -174,6 +180,172 @@ export const CustomOverflowIcons: Story = {
     responsiveNavLinks,
     overflowDetailsSummaryIcons: { more: "mdi:dots-horizontal", burger: "mdi:menu" },
   },
+};
+
+const siteHeaderNavLinks: ResponsiveHeaderProp = {
+  main: [
+    { name: "Home", path: "/", iconName: "mdi:home" },
+    { name: "Services", path: "/services", iconName: "mdi:scissors" },
+    { name: "Consultation", path: "/consultation", iconName: "mdi:clipboard-list" },
+    { name: "Prices", path: "/prices", iconName: "mdi:tag" },
+    { name: "Contact", path: "/contact", iconName: "mdi:phone" },
+  ],
+};
+
+const DRAG_MIN_WIDTH = 280;
+
+/** A typical small-business site header: branding on the left, one end-aligned nav group on a
+ * translucent dark sticky bar. Items collapse into the burger once the group meets the branding;
+ * the open menu spans the header, drops to its bottom edge and dims the page behind.
+ * Use the canvas switcher for preset widths, or drag the frame's right edge (arrow keys on the
+ * focused handle, double-click to reset). */
+export const SiteHeaderDarkBar: Story = {
+  name: "Site header (dark sticky bar)",
+  args: {
+    responsiveNavLinks: siteHeaderNavLinks,
+    mainNavJustifyContent: "safe end",
+    collapseAtMainNavIntersection: true,
+    overflowBackdrop: true,
+    overflowDetailsSummaryIcons: { burger: "mdi-light:menu", open: "mdi:close" },
+  },
+  render: (args: StoryArgs) => ({
+    components: { ResponsiveHeader },
+    setup() {
+      const { componentArgs, tokenStyles } = useStorySetup(args);
+      const frame = ref<HTMLElement | null>(null);
+      const frameWidth = ref<number | null>(null);
+      let dragStartX = 0;
+      let dragStartWidth = 0;
+
+      const setWidth = (width: number) => {
+        frameWidth.value = Math.max(DRAG_MIN_WIDTH, Math.round(width));
+      };
+      const onHandleDown = (event: PointerEvent) => {
+        (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+        dragStartX = event.clientX;
+        dragStartWidth = frame.value?.getBoundingClientRect().width ?? 0;
+      };
+      const onHandleMove = (event: PointerEvent) => {
+        if (!(event.currentTarget as HTMLElement).hasPointerCapture(event.pointerId)) return;
+        setWidth(dragStartWidth + event.clientX - dragStartX);
+      };
+      const onHandleKey = (event: KeyboardEvent) => {
+        const step = event.shiftKey ? 50 : 10;
+        const current = frame.value?.getBoundingClientRect().width ?? 0;
+        if (event.key === "ArrowLeft") setWidth(current - step);
+        else if (event.key === "ArrowRight") setWidth(current + step);
+        else return;
+        event.preventDefault();
+      };
+      const resetWidth = () => {
+        frameWidth.value = null;
+      };
+      const frameStyles = computed(() => ({
+        ...tokenStyles.value,
+        inlineSize: frameWidth.value ? `${frameWidth.value}px` : "100%",
+      }));
+
+      return { componentArgs, frame, frameWidth, frameStyles, onHandleDown, onHandleMove, onHandleKey, resetWidth };
+    },
+    template: `
+      <div ref="frame" class="story-site-frame" :style="frameStyles">
+        <div class="story-site-header">
+          <a href="#" class="story-site-branding">Northtown Salon</a>
+          <ResponsiveHeader v-bind="componentArgs" class="story-site-nav" />
+        </div>
+        <div class="story-site-content">
+          <h2>Page content</h2>
+          <p>Open the burger menu: this copy dims and blurs behind it, and the header stays sharp above the backdrop. Click the dimmed page to close the menu.</p>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Cras mattis consectetur purus sit amet fermentum.</p>
+        </div>
+        <div
+          class="story-site-drag-handle"
+          role="separator"
+          aria-orientation="vertical"
+          aria-label="Resize frame"
+          tabindex="0"
+          @pointerdown="onHandleDown"
+          @pointermove="onHandleMove"
+          @keydown="onHandleKey"
+          @dblclick="resetWidth"
+        ></div>
+        <span class="story-site-width">{{ frameWidth ? frameWidth + "px" : "100%" }}</span>
+      </div>
+      <component is="style">
+        .story-site-frame {
+          position: relative;
+          max-inline-size: 100%;
+          min-block-size: 48rem;
+          background: linear-gradient(160deg, #c9b8a6, #6e5a4a);
+        }
+        .story-site-header {
+          container-type: inline-size;
+          position: sticky;
+          top: 0;
+          z-index: 999;
+          display: grid;
+          grid-template-columns: auto 1fr;
+          align-items: center;
+          gap: 2.4rem;
+          padding: 1.2rem 1.6rem;
+          background-color: #000000cc;
+
+          --responsive-header-link-color: #f5f5f5;
+          --responsive-header-link-color-hover: #b5b5b5;
+          --responsive-header-link-color-active: #f5f5f5;
+          --responsive-header-link-font-size: 1.6rem;
+          --responsive-nav-decorator-indicator-color: #f5f5f5;
+          --responsive-nav-decorator-hovered-bg: transparent;
+          --responsive-header-overflow-btn-icon-color: #f5f5f5;
+          --responsive-header-overflow-btn-border: none;
+          --responsive-header-overflow-btn-size: 2.8rem;
+          --responsive-header-overflow-nav-border: none;
+          --responsive-header-overflow-nav-border-radius: 0;
+          --responsive-header-overflow-nav-top: calc(100% + 1.2rem);
+          --responsive-header-overflow-nav-inline-size: 100cqi;
+          --overflow-nav-link-color: #1a1a1a;
+          --overflow-nav-link-color-active: #1a1a1a;
+          --overflow-nav-sub-item-color: #1a1a1a;
+        }
+        .story-site-branding {
+          color: #f5f5f5;
+          font-size: clamp(1.8rem, 4vw, 2.6rem);
+          text-decoration: none;
+          white-space: nowrap;
+        }
+        .story-site-nav {
+          min-inline-size: 0;
+          letter-spacing: 0.06em;
+        }
+        .story-site-content {
+          max-inline-size: 60ch;
+          padding: 3.2rem 1.6rem;
+          color: #1a1a1a;
+        }
+        .story-site-drag-handle {
+          position: absolute;
+          inset-block: 0;
+          inset-inline-end: -0.6rem;
+          inline-size: 1.2rem;
+          cursor: ew-resize;
+          touch-action: none;
+          background: linear-gradient(90deg, transparent 45%, currentColor 45% 55%, transparent 55%);
+          opacity: 0.4;
+        }
+        .story-site-drag-handle:hover,
+        .story-site-drag-handle:focus-visible {
+          opacity: 1;
+        }
+        .story-site-width {
+          position: absolute;
+          inset-block-end: 0.8rem;
+          inset-inline-end: 1.6rem;
+          font-size: 1.2rem;
+          font-variant-numeric: tabular-nums;
+        }
+      </component>
+    `,
+  }),
 };
 
 export const WithSecondaryNavigationSlot: Story = {

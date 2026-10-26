@@ -16,7 +16,8 @@ Branding (logo/wordmark) is entirely consumer-authored via the `#branding` slot 
 |------|------|---------|-------|
 | `responsiveNavLinks` | `ResponsiveHeaderProp` | `{}` | Forwarded to `ResponsiveHeader`. Keyed nav groups; each item is either a link (`path`) or a dropdown (`childLinksTitle` + `childLinks`). A single group with no dropdowns is valid for simple sites. |
 | `gapBetweenFirstAndSecondNav` | `number` | `12` | Forwarded to `ResponsiveHeader`. |
-| `overflowDetailsSummaryIcons` | `Record<string, string>` | `{ more: "gravity-ui:ellipsis", burger: "gravity-ui:bars" }` | Forwarded to `ResponsiveHeader`. |
+| `overflowDetailsSummaryIcons` | `Record<string, string>` | `{ more: "gravity-ui:ellipsis", burger: "gravity-ui:bars" }` | Forwarded to `ResponsiveHeader`. Add `open` for a close icon while the menu is open. |
+| `overflowBackdrop` | `boolean` | `false` | Forwarded to `ResponsiveHeader`: dims the page behind the open overflow menu. |
 | `collapseBreakpoint` | `number \| null` | `null` | Forwarded to `ResponsiveHeader`. |
 | `collapseAtMainNavIntersection` | `boolean` | `false` | Forwarded to `ResponsiveHeader`. |
 | `allowExpandOnGesture` | `boolean` | `true` | Forwarded to `ResponsiveHeader`. |

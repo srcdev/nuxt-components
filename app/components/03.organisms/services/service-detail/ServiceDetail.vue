@@ -132,19 +132,19 @@
             <p v-if="bookingHeading" class="service-detail__sidebar-label">{{ bookingHeading }}</p>
 
             <div v-if="serviceData.price" class="service-detail__sidebar-row">
-              <span>{{ priceLabel }}</span>
-              <span>{{ serviceData.price }}</span>
+              <span class="service-detail__sidebar-row-label">{{ priceLabel }}</span>
+              <span class="service-detail__sidebar-row-value">{{ serviceData.price }}</span>
             </div>
             <div v-if="serviceData.duration" class="service-detail__sidebar-row">
-              <span>{{ durationLabel }}</span>
-              <span>{{ serviceData.duration }}</span>
+              <span class="service-detail__sidebar-row-label">{{ durationLabel }}</span>
+              <span class="service-detail__sidebar-row-value">{{ serviceData.duration }}</span>
             </div>
             <div v-if="location" class="service-detail__sidebar-row">
-              <span>{{ locationLabel }}</span>
-              <span>{{ location }}</span>
+              <span class="service-detail__sidebar-row-label">{{ locationLabel }}</span>
+              <span class="service-detail__sidebar-row-value">{{ location }}</span>
             </div>
 
-            <div v-if="$slots['book-cta']" class="service-detail__sidebar-row book-cta">
+            <div v-if="$slots['book-cta']" class="service-detail__sidebar-row service-detail__sidebar-book-cta">
               <slot name="book-cta" :service-data="serviceData"></slot>
             </div>
 
@@ -327,6 +327,11 @@ watch(
         .service-detail__hero-overlay {
           height: 100%;
           grid-template-rows: 100%;
+        }
+
+        /* Stops the image's intrinsic height sizing the hero; the min heights and content decide. */
+        .service-detail__hero-image-row {
+          contain: var(--service-detail-hero-image-contain, size);
         }
       }
 
@@ -519,13 +524,13 @@ watch(
         padding-block: var(--service-detail-sidebar-row-padding-block, 1rem);
         border-block-start: 1px solid var(--service-detail-sidebar-row-divider-colour, currentColor);
 
-        &.book-cta {
+        &.service-detail__sidebar-book-cta {
           padding-block: var(--service-detail-sidebar-row-book-cta-padding-block, 2rem);
           border-block-start: none;
           justify-content: var(--service-detail-sidebar-row-book-cta-justify-content, end);
         }
 
-        span:last-child {
+        .service-detail__sidebar-row-value {
           flex: 1 1 0;
           min-inline-size: 0;
           text-align: end;
@@ -536,7 +541,7 @@ watch(
           line-clamp: var(--service-detail-sidebar-value-line-clamp, none);
         }
 
-        span:first-child {
+        .service-detail__sidebar-row-label {
           flex: 0 0 auto;
           max-inline-size: 50%;
           overflow-wrap: break-word;

@@ -188,4 +188,31 @@ describe("NavigationItems", () => {
     await links[0]!.trigger("click");
     expect(wrapper.emitted("anchorClick")?.[0]?.[1]).toBe("#home");
   });
+
+  it("renders each item's iconName before its label, links and dropdowns alike", async () => {
+    const wrapper = await mountSuspended(NavigationItems, {
+      props: {
+        mainNavigationState: {
+          clonedNavLinks: {
+            firstNav: [
+              { name: "Home", path: "/", iconName: "mdi:home" },
+              { name: "About", path: "#about", iconName: "mdi:information" },
+              { name: "Plain", path: "/plain" },
+              { name: "Help", iconName: "mdi:help", childLinks: [{ name: "FAQs", path: "/faqs" }] },
+            ],
+          },
+          navListVisibility: { firstNav: false },
+          hasSecondNav: false,
+        },
+      },
+    });
+    const links = wrapper.findAll(".overflow-navigation-link");
+    expect(links[0]!.find(".overflow-navigation-icon").classes()).toContain("i-mdi:home");
+    expect(links[1]!.find(".overflow-navigation-icon").classes()).toContain("i-mdi:information");
+    expect(links[2]!.find(".overflow-navigation-icon").exists()).toBe(false);
+
+    const label = wrapper.find(".overflow-navigation-details .overflow-navigation-label");
+    expect(label.find(".overflow-navigation-icon").classes()).toContain("i-mdi:help");
+    expect(label.find(".overflow-navigation-icon").attributes("aria-hidden")).toBe("true");
+  });
 });

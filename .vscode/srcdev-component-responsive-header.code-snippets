@@ -15,6 +15,17 @@
       "</ResponsiveHeader>"
     ]
   },
+  "SRCDEV ResponsiveHeader Overflow Backdrop": {
+    "description": "ResponsiveHeader whose overflow button shows a close icon while open, with the page dimmed behind the menu",
+    "scope": "vue,html",
+    "body": [
+      "<ResponsiveHeader",
+      "  :responsive-nav-links=\"$1responsiveNavLinks\"",
+      "  :overflow-details-summary-icons=\"{ more: '${2:gravity-ui:ellipsis}', burger: '${3:gravity-ui:bars}', open: '${4:gravity-ui:xmark}' }\"",
+      "  overflow-backdrop",
+      "/>"
+    ]
+  },
   "SRCDEV ResponsiveHeader Localised Nav Labels": {
     "description": "ResponsiveHeader with localised aria-labels on the main/secondary nav landmarks and overflow menu",
     "scope": "vue,html",

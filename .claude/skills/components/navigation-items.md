@@ -30,6 +30,12 @@ active-route highlighting, hover indicator).
   one item in it is collapsed.
 - Plain links render as `NuxtLink`; items with `childLinks` render an `ExpandingPanel` nested
   dropdown (its own expand/collapse, independent of the outer overflow `<details>`).
+- An item's `iconName` renders before its label (links and dropdown summaries; child links
+  have none, matching the main bar), sized by `--overflow-nav-link-icon-size` and spaced by
+  `--overflow-nav-link-icon-gap` (added 2026-10-26; before, overflow rows were text only).
+- The wrapper is `max-content` wide with `min-inline-size: 100%`: an auto-width panel still sizes
+  to the widest label, but a panel given a width (`--responsive-header-overflow-nav-inline-size`)
+  gets full-width rows (2026-10-26; rows used to stop at the widest label).
 - Active-route highlighting reuses the same `isActiveNavItem` logic as `ResponsiveHeader`
   (path match, or any `childLinks` path match).
 
