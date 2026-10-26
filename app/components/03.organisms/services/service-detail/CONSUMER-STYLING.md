@@ -117,9 +117,6 @@ The ideal-for grid becomes 2 columns at a **500px container width**.
 | `--service-detail-sidebar-row-label-font-size` | `1.2rem` | Font size of a row's label (e.g. "Price") |
 | `--service-detail-sidebar-label-line-clamp` | `none` | Max lines of the "Book This Service" / "You May Also Like" labels |
 | `--service-detail-sidebar-value-line-clamp` | `none` | Max lines of a row's value (price, duration, location) |
-
-A row's label takes the width of its own words (up to half the row) and wraps between words only;
-the value takes the rest and wraps anywhere.
 | `--service-detail-sidebar-note-font-size` | `1.2rem` | Font size of the `sidebar-note` slot content |
 | `--service-detail-sidebar-note-margin-block-start` | `1.2rem` | Space above the `sidebar-note` slot content |
 | `--service-detail-related-items-gap` | `1rem` | Gap between related-service item cards |
@@ -133,6 +130,14 @@ the value takes the rest and wraps anywhere.
 | `--service-detail-related-price-font-size` | `1.2rem` | Font size of a related item's price |
 | `--service-detail-related-title-line-clamp` | `none` | Max lines of a related item's title (default item only, not the `related-service` slot). `1` is single-line ellipsis |
 
+A row's label takes the width of its own words (up to half the row) and wraps between words only;
+the value takes the rest and wraps anywhere.
+
+> Changed 2026-10-26: the `book-cta` row's class was a bare `.book-cta`; it is now
+> `.service-detail__sidebar-book-cta`. Rename it in any CSS that targeted it. Row labels and values
+> are now `.service-detail__sidebar-row-label` / `-value`: they were styled as any first/last `span`
+> in the row, which also caught the text span inside a `book-cta` button and squeezed it.
+>
 > Changed 2026-10-06: the ideal-for and related-service cards defaulted to dark `--slate-09` with a
 > `--slate-06` border but set no text colour, so on a light page their inherited dark text was
 > unreadable. They now default to `var(--theme-surface-subtle)` with a transparent border. To keep
@@ -166,7 +171,9 @@ see Layout building blocks above.
 
 No state classes. Inner classes are all `service-detail__*` (hero, hero image/overlay/content, breadcrumb,
 hero pills, body, main, process, ideal-for and its items/icon, faqs and each faq/question, sidebar,
-booking card, sidebar label/rows/note, related items, final CTA). FAQ questions render one heading level
+booking card, sidebar label/rows/note, related items, final CTA). Each sidebar row's parts are
+`.service-detail__sidebar-row-label` and `.service-detail__sidebar-row-value`; the `book-cta` slot's
+row is `.service-detail__sidebar-row.service-detail__sidebar-book-cta`. FAQ questions render one heading level
 below `subheadingTag` (`h3` for the default `h2`, `h4` for `h3`).
 
 ---

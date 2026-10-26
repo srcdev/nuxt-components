@@ -295,6 +295,8 @@ Numbers are stable (code and docs cite them). Rule files are in `.claude/rules/`
 34. **`calc()` on relative-colour channels in CSS** (`SparkleEffect`, 2026-10-20) → `css-relative-colour-calc.md`. A build-time PostCSS warning, not a browser problem.
 35. **Menus left open after following a link** (`ResponsiveHeader` overflow and dropdowns, `DeepExpandingMenu` panels, 2026-10-24) → `menu-close-on-link.md`. Only `#anchor` links closed them; route links relied on navigation, which a layout-level header survives. `ActionMenu`, `SelectMenu` and `DeepExpandingMenuClassic` already closed.
 36. **Last dropdown squeezed and never right-aligned** (`ResponsiveHeader`, 2026-10-25) → `css-structural-selectors.md`, `css-absolute-panel-width.md`. The right-align rule's `:last-child` never matched (indicator divs follow the lists), and an auto-width panel near the edge shrank to one word per line. Both shipped through the 2026-10-24 whole-component review: neither the reviewer nor the follow-up fix checked the selector against the template, and no story had a dropdown in that position until the user added one.
+37. **Descendant positional selector caught a slotted button** (`ServiceDetail` sidebar `book-cta`, 2026-10-26) → `css-structural-selectors.md`. Row label/value were `span:first-child`/`span:last-child` descendants; `InputButton`'s single text span in the CTA row matched both.
+38. **Open overlay outliving its trigger** (`ResponsiveHeader` overflow + `overflowBackdrop`, 2026-10-26) → `menu-close-on-link.md`. Once every item fit, the burger hid but the menu stayed open, which a page backdrop made visible.
 
 ## Development Workflow
 

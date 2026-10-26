@@ -138,7 +138,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── display-prompt.md         — DisplayPrompt: inline notification banner, SemanticTheme × 4, local vs parent-controlled dismiss, outlined modifier, CSS token override
     ├── expanding-panel-classic.md — ExpandingPanelClassic: grid-template-rows animation (no Baseline-2025 dependency), same API as ExpandingPanel, cross-browser animation parity trade-off
     ├── site-header.md            — SiteHeader: PageRow + SkipLinks + ResponsiveHeader composition, #branding/#secondaryNavigation slots, dual styleClassPassthrough hooks, sticky on the outer row, capped branding column
-    ├── responsive-header.md      — ResponsiveHeader: overflow-collapsing adaptive nav, menus close on link click and route change, measurement-pipeline gotchas (unsized icons, vw font-size drift), full CSS token API
+    ├── responsive-header.md      — ResponsiveHeader: overflow-collapsing adaptive nav, optional overflow backdrop and open icon, menus close on link click and route change, measurement-pipeline gotchas (unsized icons, vw font-size drift), full CSS token API
     ├── navigation-items.md       — NavigationItems: internal overflow-panel renderer for ResponsiveHeader, complement-visibility logic, not used standalone
     ├── cookie-consent-banner.md  — CookieConsentBanner: fixed non-modal Accept/Reject banner built on AlertContent, driven by useCookieConsent; title/message slots, acceptLabel/rejectLabel/icon/showIcon/ariaLabel props, InputButton (inline) actions, position/button tokens (panel via --alert-content-*), teleported so tokens go on html/passthrough
     ├── display-banner.md         — DisplayBanner: canvas/content stacked overlay banner, conditional slot wrappers, CSS token API

@@ -449,6 +449,10 @@ story: "See the [CookieConsentBanner](?path=/story/molecules-cookieconsentbanner
   see `components/canvas-switcher.md`). The switcher renders its own buttons, so for a component
   with Playwright tests that grab the story's only `role=button` (`InputButton`), put it on the
   `StressTest` story alone, not in the meta.
+  For any width between the presets, add a drag handle on the frame's inline-end edge: the
+  `SiteHeaderDarkBar` story in `ResponsiveHeader.stories.ts` is the reference (pointer capture,
+  arrow keys on the focused handle, double-click resets, live px readout). Don't use CSS
+  `resize`: it needs `overflow` other than `visible`, which clips dropdowns and panels.
 - Use `table: { category: "..." }` in `argTypes` when a component has many props — it groups
   them in the Storybook controls panel (e.g. `"Model"`, `"Basic"`, `"Validation"`, `"Styling"`, `"Slots"`).
 - Export multiple named stories (`Default`, `WithError`, `Outlined`, etc.) when you want

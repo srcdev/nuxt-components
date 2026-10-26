@@ -233,6 +233,12 @@ that don't fit move into the overflow menu) instead of all-or-nothing. To switch
 - **Alignment (added 2026-10-05):** `--responsive-header-main-nav-justify-content`
   (default `space-between`) sets how the main nav's groups sit along the bar; use `safe end` /
   `safe center`, never plain `end`/`center`. The `MainNavAlignment` story shows the options.
+- **Site header recipe (story added 2026-10-26):** the `SiteHeaderDarkBar` story is a full
+  small-business header: branding plus one `safe end` icon group on a translucent dark sticky
+  bar, intersection collapse, `overflowBackdrop`, an `open` icon, and the overflow panel dropped
+  to the bar's bottom edge at full width (`--responsive-header-overflow-nav-top` /
+  `-inline-size: 100cqi` with the bar as an `inline-size` container). Its frame has a drag handle
+  on the right edge, so you can find the exact width where items collapse.
 
 ## Slots
 

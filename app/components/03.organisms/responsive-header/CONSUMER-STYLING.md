@@ -68,6 +68,12 @@ Link and dropdown text is never line-clamped: it names where the link goes. Long
 wrap inside the dropdown and overflow panels; in the top bar, an item too wide to fit moves to the
 overflow menu.
 
+> **Changed 2026-10-26**: overflow rows show the item's `iconName` before the label (as in the top
+> bar), and fill the panel when `--responsive-header-overflow-nav-inline-size` gives it a width
+> (they stopped at the widest label). For text-only overflow rows, set `--overflow-nav-link-icon-size`
+> and `--overflow-nav-link-icon-gap` to `0`. New: the `overflowBackdrop` prop (teleported `.responsive-header-overflow-backdrop`)
+> and an optional `open` icon in `overflowDetailsSummaryIcons`.
+>
 > **Changed 2026-10-20**: under `prefers-reduced-motion` the active indicator and hover highlight
 > jump to the new item instead of sliding, the dropdown chevron flips without rotating, and the
 > overflow button appears without animating its width. Opacity fades stay.
@@ -137,4 +143,3 @@ Set the tokens above on an element you own (a page or section class, or a class 
 - `NavigationItems`' own tokens (`--overflow-nav-*`) have their own table above since
   they style the overflow-panel's *content*, distinct from `ResponsiveHeader`'s own tokens
   above which style the top bar and the overflow *button*/*container*.
-
