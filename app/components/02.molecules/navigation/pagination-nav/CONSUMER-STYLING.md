@@ -37,7 +37,7 @@
 | `--pagination-nav-current-background` | `var(--theme-surface)` | Current page fill (`none`), and the default marker fill (`background`) |
 | `--pagination-nav-current-border-colour` | current background | Current page border (`none` only) |
 | `--pagination-nav-marker-background` | current background | Fill of the sliding `background` marker |
-| `--pagination-nav-marker-duration` | `250ms` | Slide duration; the current page's text colour switches halfway through |
+| `--pagination-nav-marker-duration` | `250ms` | Slide duration. The new current page's text turns light in the second half of the slide, and the page being left turns dark in the first half, so neither sits on the wrong background |
 | `--pagination-nav-underline-thickness` | `0.3rem` | Height (and corner radius) of the `underline` marker |
 | `--pagination-nav-underline-colour` | `var(--theme-surface)` | Colour of the `underline` marker |
 

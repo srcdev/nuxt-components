@@ -190,7 +190,7 @@ export const MarkerVariants: Story = {
     docs: {
       description: {
         story:
-          "The three `marker` values. `none` fills the current page in place; `background` slides the same fill between slots; `underline` slides a bar along the bottom edge, which suits borderless items. The current page's text colour waits half the slide before switching, so it never shows light-on-light.",
+          "The three `marker` values. `none` fills the current page in place; `background` slides the same fill between slots; `underline` slides a bar along the bottom edge, which suits borderless items. The new current page\x27s text waits half the slide before turning light, and the page being left fades back to dark over the first half as the marker moves away, so neither shows light-on-light or dark-on-dark.",
       },
     },
   },

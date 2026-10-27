@@ -307,6 +307,13 @@ The ledger can't see items 6c, 9, 10, 11 and 14, so check those by hand.
       repos for `@media` overrides of the same element (they now switch at a different point) and list
       the edits in private memory. Note that an inline-size container can't size itself from its
       content: say so in `CONSUMER-STYLING.md` (`ProfileSection`).
+    - A fixed breakpoint only works when the content's width is fixed. When the switch point depends
+      on props or data (item count, number of digits, optional controls), measure whether the
+      content fits instead, and give the root `inline-size: 100%` so it has a width to measure in a
+      flex row or a centring parent. Exclude the root's padding, and keep the measured row from
+      shrinking (`flex-shrink: 0`) or its content wraps instead of overflowing, and the check never
+      fires. `PaginationNav` (2026-10-27) planned a 36rem container query, but its full row ran
+      from 39rem to 48rem and beyond, depending on props.
     - Grid tracks that hold text are `minmax(0, …)` so an unbroken string can't widen the grid.
     - An `auto-fit` column minimum taken from a token or a measured width is wrapped in
       `min(100%, …)`, or one long item makes the column wider than its container.

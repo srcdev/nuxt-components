@@ -313,6 +313,16 @@ prop and try to pass it. Make it unmistakable:
 
 `PriceList.stories.ts` and `GoogleReviews.stories.ts` (line-clamp controls) follow this.
 
+### A restyled comparison row must look different
+
+When a story shows a token recipe next to the default ("underline with borderless tokens"), check
+each token against the component's default before writing the row. A token set to its own default,
+a 1px tweak, or a change that only shows on hover leaves the two rows looking identical, and the
+reader can't tell what the recipe is for. Change several visible things at rest (colour, weight,
+spacing, thickness), and say in the row's label what changed. `PaginationNav`'s Marker Variants
+story first set `--pagination-nav-item-border-colour: transparent`, which was already the default
+(caught by the user, 2026-10-27).
+
 ## Where shared story helpers can live
 
 Nowhere shared, so far. Stories ship in the package (`app/` is in `package.json` `files`) but

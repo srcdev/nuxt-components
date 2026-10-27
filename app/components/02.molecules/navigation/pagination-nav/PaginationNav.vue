@@ -364,6 +364,17 @@ watch(
         white-space: nowrap;
       }
 
+      .pagination-nav[data-marker="background"] & {
+        transition:
+          color calc(var(--_pagination-nav-duration) / 2) ease-in-out,
+          background-color var(--control-transition-duration) var(--control-transition-ease),
+          border-color var(--control-transition-duration) var(--control-transition-ease);
+
+        @media (prefers-reduced-motion: reduce) {
+          transition: none;
+        }
+      }
+
       &[aria-current="page"] {
         font-weight: var(--pagination-nav-current-font-weight, 700);
 

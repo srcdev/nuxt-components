@@ -407,6 +407,13 @@ const mockResizeObserver = vi.fn(() => ({
 vi.stubGlobal("ResizeObserver", mockResizeObserver);
 ```
 
+Never "unstub" it afterwards with `vi.stubGlobal("ResizeObserver", undefined)`: the key stays on
+`window`, so `@vueuse/core`'s `'ResizeObserver' in window` support check still passes and the next
+`useResizeObserver` throws "ResizeObserver is not a constructor". Stub once for the whole file. To
+drive a resize from a test, use a class stub that keeps its callback in a module variable and call
+it (`PaginationNav.spec.ts`). Arrow-function `vi.fn(() => ...)` mocks aren't constructible under
+Vitest 4, so use a class there.
+
 ### Prototype methods (Popover API, Canvas, etc.)
 
 When an API is missing from jsdom entirely (e.g. `hidePopover`, `showPopover`) use `Object.defineProperty` in `beforeEach`. **`vi.restoreAllMocks()` does not clean these up** — delete them explicitly in `afterEach`:

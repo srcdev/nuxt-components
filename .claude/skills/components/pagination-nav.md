@@ -132,6 +132,9 @@ these tokens. Full reference: `app/components/02.molecules/navigation/pagination
   page's weight instead of InputButton's 600), numbers don't wrap before compacting, the nav fills its
   width, padding is excluded from the fit check, RTL arrows flip in Safari 16.0 to 16.3, and the
   compact summary is announced.
+- 2026-10-27: in `background` mode the page being left now fades back to its resting colour over the
+  first half of the slide instead of switching at once, so it no longer shows dark-on-dark while the
+  marker slides out from under it.
 - The range helper's number guard is `toPaginationWholeNumber`, named so it can't collide with a
   consumer app's own auto-imported utils.
 - The slide only animates when the instance survives a page change. A `PaginationNav` inside a page
