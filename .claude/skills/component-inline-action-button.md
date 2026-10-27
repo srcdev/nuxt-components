@@ -104,6 +104,25 @@ focus. Keep `disabled` for a genuinely unavailable control. If the button has an
 changed visible label ("Copied!") isn't announced, because the aria-label wins; add a visually hidden
 `role="status"` span carrying the message. `InputCopy` does both (2026-10-15).
 
+## What `inline` still styles
+
+`inline` drops InputButton's colours, not all of its CSS. Two rules still apply and a wrapper usually
+has to undo them:
+
+- With `#iconOnly`, `.input-button[data-icon-only] .input-button-icon` adds `margin: 1.2rem` and
+  `aspect-ratio: 1`, so a 2rem icon makes a button over 6rem square. Reset it with
+  `.my-action-button .input-button-icon { margin: 0; }`.
+- `.input-button-text` sets its own `font-size`, `font-weight` (`--button-font-weight`, 600) and
+  `white-space: normal`, so `font: inherit` on the button never reaches the label. Set
+  `font: inherit` on `.my-action-button .input-button-text` when the wrapper owns the type.
+
+`PaginationNav` shipped with both on 2026-10-27 and its review caught them the same day.
+
+A link (`href` starting with `/`) renders as `NuxtLink`. In an app with pages, vue-router then adds
+`aria-current="page"` whenever the link's route is exact-active, and that check ignores the query.
+A link to `/blog?page=2` on `/blog?page=4` counts as current. Bind `:aria-current` explicitly on
+every such button (`undefined` when it isn't current) so the router's value is overridden.
+
 ## Real examples
 
 - `InputPasswordField`: `app/components/05.forms/input-text/InputPasswordField.vue` (show/hide toggle attached to the input)

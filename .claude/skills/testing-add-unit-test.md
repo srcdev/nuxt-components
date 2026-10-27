@@ -321,6 +321,26 @@ it("passes myProp to ChildComponent", async () => {
 
 Import the child component directly in the test file — it is not auto-imported there.
 
+## Router behaviour in tests: this repo has no vue-router
+
+With no `app/pages/`, Nuxt installs its minimal router, and tests run against it. It has no routes,
+its `RouterLink` renders a plain `<a>` (no active classes, never `aria-current`), `addRoute` returns
+nothing, and `removeRoute` throws. So a test that pushes a route to make a link "active" proves
+nothing. To test behaviour that depends on vue-router's `RouterLink` (as in a consumer app), stub it
+with a component that does what vue-router does and lets fall-through attributes override it:
+
+```ts
+const VueRouterLink = defineComponent({
+  props: { to: { type: String, required: true } },
+  setup: (props, { slots }) => () =>
+    h("a", { href: props.to, "aria-current": "page", class: "router-link-exact-active" }, slots.default?.()),
+});
+wrapper = await mountSuspended(MyComponent, { global: { stubs: { RouterLink: VueRouterLink } } });
+```
+
+`PaginationNav.spec.ts` uses this for its arrows' `aria-current` (2026-10-27). Check that a test like
+this fails without the fix: a `finally` that throws hides the real assertion error.
+
 ## Testing `useId()` uniqueness across instances
 
 Each `mountSuspended` call is its own Nuxt app, so `useId()` restarts its counter and two separately

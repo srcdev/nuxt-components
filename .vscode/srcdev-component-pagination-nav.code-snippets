@@ -1,0 +1,58 @@
+{
+  "SRCDEV PaginationNav": {
+    "description": "Pagination with v-model:page (buttons)",
+    "scope": "vue,html",
+    "body": [
+      "<PaginationNav v-model:page=\"${1:page}\" :total=\"${2:totalPages}\" />"
+    ]
+  },
+  "SRCDEV PaginationNav Links": {
+    "description": "Pagination as crawlable links, with a sliding marker",
+    "scope": "vue,html",
+    "body": [
+      "<PaginationNav",
+      "  v-model:page=\"${1:routePage}\"",
+      "  :total=\"${2:totalPages}\"",
+      "  :page-href=\"(n) => `${3:/blog}?page=\\${n}`\"",
+      "  marker=\"${4|background,underline,none|}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV PaginationNav Full": {
+    "description": "Pagination with every option and localised labels",
+    "scope": "vue,html",
+    "body": [
+      "<PaginationNav",
+      "  v-model:page=\"${1:page}\"",
+      "  :total=\"${2:totalPages}\"",
+      "  :siblings=\"${3:1}\"",
+      "  :boundaries=\"${4:1}\"",
+      "  show-edges",
+      "  marker=\"${5|none,background,underline|}\"",
+      "  layout=\"${6|auto,full,compact|}\"",
+      "  :hide-when-single-page=\"${14|false,true|}\"",
+      "  :page-href=\"${15:undefined}\"",
+      "  :style-class-passthrough=\"['${16:pagination}']\"",
+      "  aria-label=\"${7:Pagination}\"",
+      "  previous-label=\"${8:Previous page}\"",
+      "  next-label=\"${9:Next page}\"",
+      "  first-label=\"${10:First page}\"",
+      "  last-label=\"${11:Last page}\"",
+      "  page-label=\"${12:Page {page\\}}\"",
+      "  summary-label=\"${13:Page {page\\} of {total\\}}\"",
+      "/>"
+    ]
+  },
+  "SRCDEV PaginationNav CSS overrides": {
+    "description": "Unlayered token override scaffold for PaginationNav",
+    "scope": "css,vue",
+    "body": [
+      ".${1:listing-page} {",
+      "  --pagination-nav-item-border-colour: ${2:var(--theme-border)};",
+      "  --pagination-nav-item-radius: ${3:100vw};",
+      "  --pagination-nav-current-background: ${4:var(--theme-surface)};",
+      "  --pagination-nav-current-colour: ${5:var(--theme-on-surface)};",
+      "}"
+    ]
+  }
+}
