@@ -46,7 +46,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  css: ["./app/assets/styles/main.css"],
+  css: [resolve("./app/assets/styles/main.css")],
   modules: [
     // Required by consumers — always included
     resolve("./modules/colour-scheme"),

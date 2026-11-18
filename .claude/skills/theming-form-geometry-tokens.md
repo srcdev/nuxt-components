@@ -9,7 +9,7 @@ tokens in `theming-typography-tokens.md`.
 
 **You do not need to duplicate these files wholesale to override them.** Every value here is a
 plain custom property declared on `:where(html)` inside the `form-tokens` cascade layer (see
-`@import "./04.elements/" layer(form-tokens);` in `setup/index.css`). A consumer app's own CSS —
+`@import "./04.elements/index.css" layer(form-tokens);` in `setup/index.css`). A consumer app's own CSS —
 as long as it isn't itself wrapped in a named `@layer` — always wins over layered CSS regardless
 of source order, because unlayered rules are cascade-ordered after every named layer per the CSS
 Cascade Layers spec. Concretely: it does not matter whether the consumer's override file is

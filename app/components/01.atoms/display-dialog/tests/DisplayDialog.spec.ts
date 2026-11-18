@@ -4,11 +4,11 @@ import DisplayDialog from "../DisplayDialog.vue";
 import type { SemanticTheme } from "~/types/components";
 
 const { useAppConfigMock } = vi.hoisted(() => ({
-  // icon: {} is required — @nuxt/icon reads useAppConfig().icon.collections internally.
-  useAppConfigMock: vi.fn(() => ({ srcdev: undefined as Record<string, unknown> | undefined, icon: {} as object })),
+  useAppConfigMock: vi.fn(() => ({ srcdev: undefined as Record<string, unknown> | undefined })),
 }));
 
-mockNuxtImport("useAppConfig", () => useAppConfigMock);
+// Merge over the real app config so modules that read it during setup (@nuxt/icon) keep their keys.
+mockNuxtImport("useAppConfig", (original) => () => ({ ...original(), ...useAppConfigMock() }));
 
 const mounted: { unmount: () => void }[] = [];
 
@@ -353,12 +353,12 @@ describe("DisplayDialog", () => {
   });
 
   // ─── app.config resolution ────────────────────────────────────────────────
-  // Icon renders as <span class="iconify undefined{name} icon"> in jsdom.
+  // Icon renders as <span class="iconify i-{name} icon"> in jsdom.
   // All assertions are DOM-based — setupState is private API in <script setup>.
 
   describe("app.config resolution", () => {
     beforeEach(() => {
-      useAppConfigMock.mockReturnValue({ srcdev: undefined, icon: {} });
+      useAppConfigMock.mockReturnValue({ srcdev: undefined });
     });
 
     afterEach(() => {
@@ -388,7 +388,6 @@ describe("DisplayDialog", () => {
 
     it("uses app.config values when no props are supplied", async () => {
       useAppConfigMock.mockReturnValue({
-        icon: {},
         srcdev: {
           displayDialog: {
             variant: "modal",
@@ -418,7 +417,6 @@ describe("DisplayDialog", () => {
 
     it("explicit props take precedence over app.config", async () => {
       useAppConfigMock.mockReturnValue({
-        icon: {},
         srcdev: {
           displayDialog: {
             variant: "modal",
@@ -455,7 +453,6 @@ describe("DisplayDialog", () => {
 
     it("lockViewport:false in app.config skips body lock on mount", async () => {
       useAppConfigMock.mockReturnValue({
-        icon: {},
         srcdev: { displayDialog: { lockViewport: false } },
       });
       await mountDialog({ props: { dataDialogId: "test" } });

@@ -58,6 +58,8 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── vue-video-autoplay.md             — autoplay on client-side navigation: use <source> child (not :src on <video>), :key, and explicit v.load()
 ├── icon-sets.md                      — icon set packages required by layer components, FOUC prevention, component→package map
 ├── icon-sizing.md                    — @nuxt/icon CSS lives in an `icons` layer below components (2026-09-28), so width/height and font-size both size an <Icon>; keep `icons` in the @layer order
+├── consumer-layer-upgrade.md        — consumer app checklist for bumping the layer: every-upgrade steps (exact pin, matching nuxt, copied overrides, age-gated install) + per-release changes (Nuxt 4.6: overrides, Node 24.15, index.css imports, ~/ css entry, nuxt-security removeLoggers, /_nuxt/_fonts)
+├── dependencies-upgrade.md          — dependency upgrade dry run: 7-day min-release-age gate (scripts/aged-versions.mjs), worktree, baseline, phases, verification checks, consumer impact, known-traps table
 ├── vercel-node-version.md            — .nvmrc pinned to Node 24 is required; without it Vercel uses npm 10 which crashes on versionless optional stubs
 ├── robots-env-aware.md               — @nuxtjs/robots: allow crawling on prod domain only, block on preview/staging via env var
 ├── new-app-scaffold.md               — scaffold a new Nuxt consumer app extending this layer (package.json, nuxt.config, app structure, CLAUDE.md)

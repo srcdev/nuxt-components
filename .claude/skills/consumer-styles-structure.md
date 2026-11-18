@@ -20,9 +20,9 @@ Related skills, which this one ties together:
 
 ## The tree
 
-```
+```text
 app/assets/styles/
-├── main.css                      @import "./setup/";
+├── main.css                      @import "./setup/index.css";
 └── setup/
     ├── index.css                 imports each numbered folder, in order
     ├── 01.config/                page shell: html/body, layout grid, page transitions
@@ -68,23 +68,23 @@ unimported one is worse (see **Keep the import chain complete**).
 `nuxt.config.ts`: the library's stylesheet first, then the app's:
 
 ```ts
-css: ["srcdev-nuxt-components/app/assets/styles/main.css", "./app/assets/styles/main.css"],
+css: ["srcdev-nuxt-components/app/assets/styles/main.css", "~/assets/styles/main.css"],
 ```
 
 `app/assets/styles/main.css`:
 
 ```css
-@import "./setup/";
+@import "./setup/index.css";
 ```
 
 `app/assets/styles/setup/index.css`, in numbered order:
 
 ```css
-@import "./01.config/";
-@import "./02.colours/";
-@import "./03.theming/";
-@import "./04.elements/";
-@import "./05.typography/";
+@import "./01.config/index.css";
+@import "./02.colours/index.css";
+@import "./03.theming/index.css";
+@import "./04.elements/index.css";
+@import "./05.typography/index.css";
 ```
 
 Each folder's `index.css` imports its own files:
@@ -96,7 +96,9 @@ Each folder's `index.css` imports its own files:
 @import "./_card-core.css";
 ```
 
-- A **directory** import (`@import "./03.theming/";`) resolves to that folder's `index.css`.
+- Import a folder by its `index.css` (`@import "./03.theming/index.css";`), never the bare
+  directory (`@import "./03.theming/";`): Vite 8 (Nuxt 4.5+) can't resolve a directory import, so
+  the build fails.
 - A **file** import always includes the `.css` extension (`@import "./_default.css";`). Missing
   extensions have broken a consumer build before.
 

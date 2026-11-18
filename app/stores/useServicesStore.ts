@@ -1,7 +1,5 @@
 import type { Service } from "~/types/types.services";
 
-export type { Service };
-
 export const useServicesStore = defineStore(
   "useServicesStore",
   () => {

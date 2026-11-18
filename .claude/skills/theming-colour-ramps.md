@@ -269,13 +269,13 @@ In `app/assets/styles/setup/02.colours/index.css` (create if it doesn't exist):
 
 ```css
 /* app/assets/styles/setup/index.css */
-@import "./02.colours/";
+@import "./02.colours/index.css";
 @import "./03.theming/_default.css";
 ```
 
 ```css
 /* app/assets/styles/main.css */
-@import "./setup/";
+@import "./setup/index.css";
 ```
 
 ### Quick palette-only override (no generator)

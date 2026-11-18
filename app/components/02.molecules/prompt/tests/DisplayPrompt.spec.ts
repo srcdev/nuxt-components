@@ -4,11 +4,11 @@ import { mountSuspended, mockNuxtImport } from "@nuxt/test-utils/runtime";
 import DisplayPrompt from "../DisplayPrompt.vue";
 
 const { useAppConfigMock } = vi.hoisted(() => ({
-  // icon: {} is required — @nuxt/icon reads useAppConfig().icon.collections internally.
-  useAppConfigMock: vi.fn(() => ({ srcdev: undefined as Record<string, unknown> | undefined, icon: {} as object })),
+  useAppConfigMock: vi.fn(() => ({ srcdev: undefined as Record<string, unknown> | undefined })),
 }));
 
-mockNuxtImport("useAppConfig", () => useAppConfigMock);
+// Merge over the real app config so modules that read it during setup (@nuxt/icon) keep their keys.
+mockNuxtImport("useAppConfig", (original) => () => ({ ...original(), ...useAppConfigMock() }));
 
 function root(wrapper: Awaited<ReturnType<typeof mountSuspended<typeof DisplayPrompt>>>) {
   return wrapper.find(".display-prompt");
@@ -212,7 +212,7 @@ describe("DisplayPrompt", () => {
 
   describe("app.config resolution", () => {
     beforeEach(() => {
-      useAppConfigMock.mockReturnValue({ srcdev: undefined, icon: {} });
+      useAppConfigMock.mockReturnValue({ srcdev: undefined });
     });
 
     it("uses hardcoded fallbacks when app.config has no displayPrompt key", async () => {
@@ -224,7 +224,6 @@ describe("DisplayPrompt", () => {
 
     it("uses app.config values when no props are supplied", async () => {
       useAppConfigMock.mockReturnValue({
-        icon: {},
         srcdev: { displayPrompt: { theme: "success", dismissible: true } },
       });
       const w = await mountSuspended(DisplayPrompt);
@@ -235,7 +234,6 @@ describe("DisplayPrompt", () => {
 
     it("explicit props take precedence over app.config", async () => {
       useAppConfigMock.mockReturnValue({
-        icon: {},
         srcdev: { displayPrompt: { theme: "warning", dismissible: true } },
       });
       const w = await mountSuspended(DisplayPrompt, {

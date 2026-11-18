@@ -4,7 +4,7 @@ import { mountSuspended, mockNuxtImport } from "@nuxt/test-utils/runtime";
 import CookieConsentBanner from "../CookieConsentBanner.vue";
 
 const { useAppConfigMock } = vi.hoisted(() => ({
-  useAppConfigMock: vi.fn(() => ({ srcdev: undefined as Record<string, unknown> | undefined, icon: {} as object })),
+  useAppConfigMock: vi.fn(() => ({ srcdev: undefined as Record<string, unknown> | undefined })),
 }));
 
 const statusRef = ref<"unset" | "granted" | "denied">("unset");
@@ -15,7 +15,8 @@ const rejectAllSpy = vi.fn(() => {
   statusRef.value = "denied";
 });
 
-mockNuxtImport("useAppConfig", () => useAppConfigMock);
+// Merge over the real app config so modules that read it during setup (@nuxt/icon) keep their keys.
+mockNuxtImport("useAppConfig", (original) => () => ({ ...original(), ...useAppConfigMock() }));
 mockNuxtImport("useCookieConsent", () => () => ({
   status: statusRef,
   acceptAll: acceptAllSpy,
@@ -45,7 +46,7 @@ describe("CookieConsentBanner", () => {
     statusRef.value = "unset";
     acceptAllSpy.mockClear();
     rejectAllSpy.mockClear();
-    useAppConfigMock.mockReturnValue({ srcdev: undefined, icon: {} });
+    useAppConfigMock.mockReturnValue({ srcdev: undefined });
   });
 
   afterEach(() => {
@@ -79,13 +80,13 @@ describe("CookieConsentBanner", () => {
   });
 
   it("uses app.config theme when no prop is supplied", async () => {
-    useAppConfigMock.mockReturnValue({ icon: {}, srcdev: { cookieConsentBanner: { theme: "success" } } });
+    useAppConfigMock.mockReturnValue({ srcdev: { cookieConsentBanner: { theme: "success" } } });
     await mountSuspended(CookieConsentBanner);
     expect(banner()!.getAttribute("data-theme")).toBe("success");
   });
 
   it("explicit theme prop takes precedence over app.config", async () => {
-    useAppConfigMock.mockReturnValue({ icon: {}, srcdev: { cookieConsentBanner: { theme: "warning" } } });
+    useAppConfigMock.mockReturnValue({ srcdev: { cookieConsentBanner: { theme: "warning" } } });
     await mountSuspended(CookieConsentBanner, { props: { theme: "error" } });
     expect(banner()!.getAttribute("data-theme")).toBe("error");
   });

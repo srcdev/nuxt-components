@@ -4,11 +4,11 @@ import { mountSuspended, mockNuxtImport } from "@nuxt/test-utils/runtime";
 import DisplayToast from "../DisplayToast.vue";
 
 const { useAppConfigMock } = vi.hoisted(() => ({
-  // icon: {} is required — @nuxt/icon reads useAppConfig().icon.collections internally.
-  useAppConfigMock: vi.fn(() => ({ srcdev: undefined as Record<string, unknown> | undefined, icon: {} as object })),
+  useAppConfigMock: vi.fn(() => ({ srcdev: undefined as Record<string, unknown> | undefined })),
 }));
 
-mockNuxtImport("useAppConfig", () => useAppConfigMock);
+// Merge over the real app config so modules that read it during setup (@nuxt/icon) keep their keys.
+mockNuxtImport("useAppConfig", (original) => () => ({ ...original(), ...useAppConfigMock() }));
 
 const mounted: { unmount: () => void }[] = [];
 let focusVisibleSpy: { mockRestore: () => void } | null = null;
@@ -365,7 +365,7 @@ describe("DisplayToast", () => {
       // Stub the global so the component's useAppConfig() call is intercepted
       // regardless of whether Nuxt resolves it via #imports or the global scope.
       vi.stubGlobal("useAppConfig", useAppConfigMock);
-      useAppConfigMock.mockImplementation(() => ({ srcdev: undefined, icon: {} }));
+      useAppConfigMock.mockImplementation(() => ({ srcdev: undefined }));
     });
 
     it("uses hardcoded fallbacks when app.config has no displayToast key", async () => {
@@ -380,7 +380,6 @@ describe("DisplayToast", () => {
       // autoDismiss defaults to true (both hardcoded and real app.config), so false
       // is the only value that proves the mock is being read.
       useAppConfigMock.mockImplementation(() => ({
-        icon: {},
         srcdev: { displayToast: { behavior: { autoDismiss: false } } },
       }));
       await mountAndShow();
@@ -390,7 +389,6 @@ describe("DisplayToast", () => {
 
     it("config prop takes precedence over app.config", async () => {
       useAppConfigMock.mockImplementation(() => ({
-        icon: {},
         srcdev: { displayToast: { appearance: { theme: "success", position: "bottom" } } },
       }));
       await mountAndShow({ config: { appearance: { theme: "warning", position: "top" } } });

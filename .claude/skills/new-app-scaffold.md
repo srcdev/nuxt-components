@@ -56,18 +56,29 @@ to inform the CLAUDE.md and CSS tokens.
     "@iconify-json/material-symbols": "1.2.65",
     "@iconify-json/mdi": "1.2.3",
     "modern-normalize": "3.0.1",
-    "nuxt-security": "2.5.1"
+    "nuxt-security": "2.7.0"
   },
   "devDependencies": {
-    "@nuxt/eslint": "1.15.2",
-    "@nuxt/scripts": "0.13.2",
-    "@nuxtjs/robots": "6.0.6",
-    "eslint": "10.2.0",
-    "nuxt": "4.4.2",
+    "@nuxt/eslint": "1.17.0",
+    "@nuxt/scripts": "1.3.12",
+    "@nuxtjs/robots": "6.2.4",
+    "eslint": "10.14.0",
+    "nuxt": "{layer's nuxt version}",
     "srcdev-nuxt-components": "{latest version}"
-  }
+  },
+  "engines": {
+    "node": "{layer's engines.node}"
+  },
+  "overrides": "{layer's overrides block, copied exactly}"
 }
 ```
+
+**Match the layer.** `nuxt`, `engines.node` and `overrides` must be the layer's own values:
+npm ignores `overrides` declared by a dependency, and a different `nuxt` installs a second copy.
+Read them with `npm view srcdev-nuxt-components@{latest version} dependencies.nuxt engines overrides`.
+As of the Nuxt 4.6 release: `nuxt` `4.6.4`, `node` `>=24.15.0`, and
+`{ "vite": "8.3.8", "vue-router": "5.5.0", "h3": "1.15.11", "eslint-plugin-vue": "10.11.1" }`.
+Skill `consumer-layer-upgrade.md` explains each one.
 
 > **`setup:claude` script**: `mkdir -p` is required — the destination folder won't exist on a
 > fresh clone. The trailing `/.` on the source path copies contents into the destination rather
@@ -113,9 +124,8 @@ export default defineNuxtConfig({
     pageTransition: { name: "page", mode: "out-in" },
     layoutTransition: { name: "layout", mode: "out-in" },
   },
-  css: ["srcdev-nuxt-components/app/assets/styles/main.css", "./app/assets/styles/main.css"],
+  css: ["srcdev-nuxt-components/app/assets/styles/main.css", "~/assets/styles/main.css"],
   fonts: {
-    assets: { prefix: "/_fonts" },
     families: [
       // Add chosen fonts here — provider: "bunny" for Google Fonts via bunny CDN
       { name: "{Font}", weights: [300, 400, 500, 600, 700], styles: ["normal", "italic"], provider: "bunny", display: "optional" },
@@ -130,6 +140,8 @@ export default defineNuxtConfig({
   },
   eslint: { config: {} },
   security: {
+    // Vite 8 ignores removeLoggers: true; vite.build below strips console/debugger instead.
+    removeLoggers: false,
     headers: {
       contentSecurityPolicy: {
         "default-src": ["'self'"],
@@ -145,6 +157,9 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       include: ["@oddbird/css-anchor-positioning", "@vue/devtools-core", "@vue/devtools-kit", "zod"],
+    },
+    build: {
+      rolldownOptions: { output: { minify: { compress: { dropConsole: true, dropDebugger: true } } } },
     },
   },
 })
@@ -202,9 +217,17 @@ export default withNuxt({
 }
 ```
 
-**`.nvmrc`**
+**`.nvmrc`** (see `vercel-node-version.md`)
+
+```text
+24
 ```
-node 20
+
+**`.npmrc`**: only install package versions published at least 7 days ago, transitive ones
+included (supply-chain safety, npm 11.13+)
+
+```text
+min-release-age=7
 ```
 
 **`.gitignore`** — include `.output`, `.nuxt`, `.nitro`, `.cache`, `node_modules`, `.env`, `.DS_Store`, `.vercel`, `storybook-static`.
@@ -214,7 +237,7 @@ node 20
 ```
 app/
 ├── assets/styles/
-│   ├── main.css          ← @import "./setup/"; (loads after layer CSS)
+│   ├── main.css          ← @import "./setup/index.css"; (loads after layer CSS)
 │   └── setup/            ← numbered folders mirroring the library's, see consumer-styles-structure.md
 │       ├── index.css
 │       ├── 03.theming/
@@ -240,14 +263,14 @@ or page transitions. All files unlayered, token values on `:where(html)`.
 **`app/assets/styles/main.css`**:
 
 ```css
-@import "./setup/";
+@import "./setup/index.css";
 ```
 
 **`app/assets/styles/setup/index.css`**:
 
 ```css
-@import "./03.theming/";
-@import "./05.typography/";
+@import "./03.theming/index.css";
+@import "./05.typography/index.css";
 ```
 
 **`setup/03.theming/index.css`** / **`_default.css`**: brand theme values:
@@ -262,7 +285,7 @@ or page transitions. All files unlayered, token values on `:where(html)`.
 }
 ```
 
-**`setup/05.typography/index.css`** → `@import "./01.tokens/";`, **`01.tokens/index.css`** →
+**`setup/05.typography/index.css`** → `@import "./01.tokens/index.css";`, **`01.tokens/index.css`** →
 `@import "./_font-family.css";`, and **`_font-family.css`**:
 
 ```css
@@ -340,6 +363,11 @@ npm install
   brand colours or font choices from it to seed the CSS tokens.
 - If security modules are not wanted, omit `nuxt-security` from `dependencies` and remove it
   from `modules` and the `security` config block in `nuxt.config.ts`. Same for `@nuxtjs/robots`.
+  Keep the `vite.build` minify options either way: they're what strips `console` calls.
 - The `colourScheme.enabled: false` default is correct for most consumer apps — enable only if
   the app needs light/dark switching (then follow `theming-dark-mode.md`: the layer ships light values only).
-- Check the latest `srcdev-nuxt-components` version on npm before writing `package.json`.
+- Check the latest `srcdev-nuxt-components` version on npm before writing `package.json`, and
+  copy its `nuxt`, `engines` and `overrides` (see the note under step 2).
+- Pin the other packages to versions at least 7 days old:
+  `node node_modules/srcdev-nuxt-components/scripts/aged-versions.mjs package.json 7` after the
+  first install lists newer ones that clear the gate.
