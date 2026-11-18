@@ -46,7 +46,12 @@ scale token.
   your `#icon` slot content).
 - With `chip`, the root is `DisplayChip`, so it also carries `.display-chip` and its
   `data-shape`/`data-status` attributes (status comes from the `status` prop). See `display-chip`
-  for its tokens.
+  for its tokens. With `:chip="true"` they all apply (set them on the avatar or any ancestor); a
+  config object passed as `chip` wins over them for the fields it sets.
+
+> **Changed 2026-11-01**: `:chip="true"` no longer passes a fixed config (`12px`, `4px`, `0px`,
+> `90deg`) to the chip, so the `--display-chip-*` tokens now work on an avatar's chip. Before, setting
+> `--display-chip-angle` (or size, ring, offset) had no effect there. Defaults look the same.
 
 > **Changed 2026-10-14**: the size was a bare class on the root (`.display-avatar.lg`), which a
 > consumer's own `.lg`/`.xl` utility classes could match. Replace `.display-avatar.<size>` with

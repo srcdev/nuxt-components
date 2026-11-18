@@ -158,17 +158,16 @@ describe("DisplayAvatar", () => {
 
   // ─── Chip ─────────────────────────────────────────────────────────────────
 
-  it("passes chipDefaultConfig when chip=true", async () => {
+  it("leaves the chip's geometry to the --display-chip-* tokens when chip=true", async () => {
     const wrapper = await mountSuspended(DisplayAvatar, {
       props: { chip: true },
     });
     const chip = wrapper.findComponent(DisplayChip);
-    expect(chip.props("config")).toMatchObject({
-      size: "12px",
-      maskWidth: "4px",
-      offset: "0px",
-      angle: "90deg",
-    });
+    const style = chip.attributes("style");
+    expect(style).toContain("--_chip-size: var(--display-chip-size, 1.2rem)");
+    expect(style).toContain("--_chip-mask-width: var(--display-chip-mask-width, 0.4rem)");
+    expect(style).toContain("--_chip-offset: var(--display-chip-offset, 0rem)");
+    expect(style).toContain("--_chip-angle: var(--display-chip-angle, 90deg)");
   });
 
   it("passes custom config when chip is an object", async () => {

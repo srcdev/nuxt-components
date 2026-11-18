@@ -1,5 +1,7 @@
 # DisplayAvatar Component
 
+> **Changed 2026-11-01:** `:chip="true"` no longer passes a fixed config to the chip, so the `--display-chip-*` tokens (size, mask width, offset, angle) now apply to an avatar's chip. Before, the avatar's built-in `{ size: "12px", maskWidth: "4px", offset: "0px", angle: "90deg" }` won over them and setting `--display-chip-angle` did nothing. Defaults look the same.
+
 > **Changed 2026-10-14:** size is a `data-size` attribute, not a bare class (`.display-avatar.lg` → `.display-avatar[data-size="lg"]`). New `image-size` prop (default `112`): `NuxtImg` used to get `width="100%"`, which @nuxt/image ignores, so the Vercel provider requested its largest screen width for every avatar. A broken image now falls back to the initials, initials are emoji-safe, and long fallback text is clipped inside the circle. With `chip`, the status dot was drawn at the avatar's diameter instead of its configured size: avatar and chip both declared a private `--_size` on the same root element and the avatar's size rules won. The avatar's private tokens are now `--_avatar-size`/`--_avatar-font-size`. Content (both slots too) now sits in a full-size `.display-avatar-surface` that carries the background, so the chip's cutout covers the whole avatar instead of landing on the initials span and cutting into the letters.
 
 > **Changed 2026-10-08:** new `status`/`status-label` props, forwarded to the chip. Chip status used to be an `online`/`idle`/`dnd` class through `style-class-passthrough`, which no longer colours the dot.
@@ -21,7 +23,7 @@
 | `alt`                       | `string`                                  | —        | Alt text for the image; also used to derive initials.             |
 | `text`                      | `string`                                  | —        | Override the auto-derived initials with an explicit string.       |
 | `size`                      | `"xs" \| "s" \| "md" \| "lg" \| "xl"`   | `"md"`   | Sets `data-size`, which picks width, height and font-size.        |
-| `chip`                      | `boolean \| DisplayChipConfig`           | —        | Add a status chip. `true` uses defaults; pass a config object to customise. |
+| `chip`                      | `boolean \| DisplayChipConfig`           | —        | Add a status chip. `true` takes the chip's geometry from the `--display-chip-*` tokens; a config object overrides them for the fields it sets. |
 | `status`                    | `DisplayChipStatus`                       | —        | Chip status colour (`offline`/`online`/`idle`/`dnd`), forwarded to `DisplayChip`. Ignored without `chip`; the chip defaults to `offline`. |
 | `status-label`              | `string`                                  | —        | Screen-reader text for the chip status (e.g. "Online"), forwarded to `DisplayChip`. Ignored without `chip`. |
 | `:image-size`              | `number`                                  | `112`    | Pixel width and height requested from `@nuxt/image` (1x; 2x is double). Raise it if you resize the avatar past `xl` with `--display-avatar-size`. |
@@ -122,7 +124,7 @@ text="?"           → "?"
 />
 ```
 
-Default chip config: `{ size: "12px", maskWidth: "4px", offset: "0px", angle: "90deg" }`. Without `status` the dot is `offline`.
+With `:chip="true"` the chip uses the `--display-chip-*` tokens (defaults: `1.2rem` dot, `0.4rem` ring, no offset, `90deg`), so they can be set in CSS on the avatar or an ancestor, e.g. `--display-chip-angle: 60deg`. Without `status` the dot is `offline`.
 
 ### With a custom chip
 

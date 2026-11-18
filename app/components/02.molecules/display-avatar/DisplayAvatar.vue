@@ -86,14 +86,11 @@ const fallback = computed(
       .join("")
 );
 
-const chipDefaultConfig: DisplayChipConfig = {
-  size: "12px",
-  maskWidth: "4px",
-  offset: "0px",
-  angle: "90deg",
-};
-
-const chipConfig = computed(() => (typeof props.chip === "object" ? props.chip : chipDefaultConfig));
+// chip=true passes no config, so the chip takes its geometry from the --display-chip-* tokens
+// (same defaults: 1.2rem dot, 0.4rem ring, no offset, 90deg). A config here would win over them.
+const chipConfig = computed((): DisplayChipConfig | undefined =>
+  typeof props.chip === "object" ? props.chip : undefined
+);
 
 const chipTag = computed((): "div" | "span" => (props.as === "div" || props.as === "span" ? props.as : "span"));
 </script>
