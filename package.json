@@ -42,7 +42,9 @@
     "scripts/",
     "ramps.config.mjs",
     "nuxt.config.ts",
-    "types.d.ts"
+    "types.d.ts",
+    "!**/tests/",
+    "!**/stories/"
   ],
   "peerDependencies": {
     "@iconify-json/akar-icons": "*",
