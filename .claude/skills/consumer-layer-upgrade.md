@@ -52,13 +52,20 @@ work on the old version, so they can land before the bump.
   "vite": "8.3.8",
   "vue-router": "5.5.0",
   "h3": "1.15.11",
-  "eslint-plugin-vue": "10.11.1"
+  "eslint-plugin-vue": "10.11.1",
+  "devframe": { "h3": "2.0.8" },
+  "@devframes/agentic": { "h3": "2.0.8" }
 }
 ```
 
 `eslint-plugin-vue` 10.12 counts `<slot>` as a component, so with the layer's
 `vue/html-self-closing` setting (`normal: "never"`, `component: "always"`) every `<slot></slot>`
 becomes a lint error. The pin keeps the `<slot></slot>` convention (rule `vue-no-self-closing.md`).
+
+The `h3` pin is for Nitro and the Nuxt modules, which are all on h3 1.x. `devframe` and
+`@devframes/agentic` (from `@nuxt/eslint` → `@eslint/config-inspector`) need h3 2, so they get a
+nested exception. Without it the dev server fails with `The requested module 'h3' does not provide
+an export named 'H3'`. Check: `npm ls h3` shows 2.0.8 only under those two packages.
 
 ### 3. Node 24.15 or later
 

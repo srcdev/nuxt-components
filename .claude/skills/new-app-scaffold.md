@@ -77,7 +77,8 @@ to inform the CLAUDE.md and CSS tokens.
 npm ignores `overrides` declared by a dependency, and a different `nuxt` installs a second copy.
 Read them with `npm view srcdev-nuxt-components@{latest version} dependencies.nuxt engines overrides`.
 As of the Nuxt 4.6 release: `nuxt` `4.6.4`, `node` `>=24.15.0`, and
-`{ "vite": "8.3.8", "vue-router": "5.5.0", "h3": "1.15.11", "eslint-plugin-vue": "10.11.1" }`.
+`{ "vite": "8.3.8", "vue-router": "5.5.0", "h3": "1.15.11", "eslint-plugin-vue": "10.11.1",
+"devframe": { "h3": "2.0.8" }, "@devframes/agentic": { "h3": "2.0.8" } }`.
 Skill `consumer-layer-upgrade.md` explains each one.
 
 > **`setup:claude` script**: `mkdir -p` is required — the destination folder won't exist on a
