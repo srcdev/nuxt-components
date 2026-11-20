@@ -44,7 +44,8 @@
     "nuxt.config.ts",
     "types.d.ts",
     "!**/tests/",
-    "!**/stories/"
+    "!**/stories/",
+    "!**/playwright/"
   ],
   "peerDependencies": {
     "@iconify-json/akar-icons": "*",
