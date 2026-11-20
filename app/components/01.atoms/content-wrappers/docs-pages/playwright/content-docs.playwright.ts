@@ -12,7 +12,6 @@ const getElement = async (page: Page, story: string, viewport?: { width: number;
   if (viewport) await page.setViewportSize(viewport);
   await page.goto(getStoryUrl(story), { waitUntil: "load" });
   const frame = page.frameLocator("#storybook-preview-iframe");
-  await frame.locator("#storybook-root > *").waitFor({ state: "visible", timeout: ELEMENT_TIMEOUT });
   const el = frame.locator(".content-docs");
   await el.waitFor({ state: "visible", timeout: ELEMENT_TIMEOUT });
   return el;

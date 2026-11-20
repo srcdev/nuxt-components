@@ -31,7 +31,7 @@
     "storybook:serve": "npm run storybook:build && npx http-server storybook-static --port 6006",
     "storybook:cache:clean": "rm -rf node_modules/.cache/storybook node_modules/.vite",
     "playwright": "SRCDEV_STANDALONE=true npx playwright test",
-    "playwright:update": "SRCDEV_STANDALONE=true npx playwright test --update-snapshots"
+    "playwright:update": "SRCDEV_STANDALONE=true npx playwright test --update-snapshots=changed"
   },
   "files": [
     ".claude/skills/",
