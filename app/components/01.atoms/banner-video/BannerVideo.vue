@@ -233,6 +233,7 @@ onActivated(() => {
       width: var(--banner-video-toggle-size, 3.2rem);
       height: var(--banner-video-toggle-size, 3.2rem);
       min-height: auto;
+      min-width: auto;
       padding: 0;
 
       background-color: var(--banner-video-toggle-background, oklch(0% 0 0 / 0.4));

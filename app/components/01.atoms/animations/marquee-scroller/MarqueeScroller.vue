@@ -242,6 +242,7 @@ onUnmounted(() => {
       z-index: 10;
       box-sizing: border-box;
       min-height: auto;
+      min-width: auto;
       background: var(--marquee-scroller-control-background-colour, rgba(0, 0, 0, 0.7));
       color: var(--marquee-scroller-control-text-colour, white);
       border: none;

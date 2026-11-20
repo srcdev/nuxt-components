@@ -35,7 +35,7 @@ so its tokens restyle those too.
 |---|---|
 | `#left` | Icon/content before the text (ignored with `#iconOnly`) |
 | `#right` | Icon/content after the text (ignored with `#iconOnly`) |
-| `#iconOnly` | Square icon-only button; `buttonText` becomes the accessible name |
+| `#iconOnly` | Square icon-only button; `buttonText` becomes the accessible name. At least as tall as a text button (`--input-min-height`); grows only when the icon plus `--button-padding-icon-only` each side no longer fits |
 
 Give slotted `<Icon>`s `class="icon"` to pick up `--input-icon-size` (applied as `font-size`).
 

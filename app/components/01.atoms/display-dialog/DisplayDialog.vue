@@ -268,6 +268,7 @@ onUnmounted(() => {
             align-items: center;
             justify-content: center;
             min-height: auto;
+            min-width: auto;
             background-color: transparent;
             margin: var(--display-dialog-header-button-margin, 0);
             padding: var(--display-dialog-header-button-padding, 0.4rem);

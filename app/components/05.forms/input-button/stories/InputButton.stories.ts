@@ -404,6 +404,48 @@ InlineWithTextInput.parameters = {
   },
 };
 
+const iconOnlySizes = ["1.8rem", "2.4rem", "3.2rem", "4rem"];
+
+const IconOnlySizingTemplate: StoryFn = () => ({
+  components: { StorybookComponent, InputText },
+  setup() {
+    return { iconOnlySizes };
+  },
+  template: `
+    <div style="margin: 36px; display: grid; gap: 1.6rem;">
+      <div
+        v-for="size in iconOnlySizes"
+        :key="size"
+        :style="{ '--input-icon-size': size }"
+        style="display: flex; align-items: flex-start; gap: 0.8rem; outline: 1px dashed var(--slate-04);"
+      >
+        <code style="align-self: center; inline-size: 8rem;">{{ size }}</code>
+        <InputText :id="'icon-only-sizing-' + size" :name="'icon-only-sizing-' + size" placeholder="Text input" />
+        <StorybookComponent variant="primary" button-text="Text button" />
+        <StorybookComponent variant="secondary" button-text="Eject">
+          <template #iconOnly><Icon name="mdi:eject" class="icon" /></template>
+        </StorybookComponent>
+        <StorybookComponent variant="tertiary" button-text="Dealer">
+          <template #iconOnly><Icon name="mdi:cards-playing-outline" class="icon" /></template>
+        </StorybookComponent>
+      </div>
+    </div>
+  `,
+});
+
+export const IconOnlySizing = IconOnlySizingTemplate.bind({});
+
+// Fixed showcase: hardcoded values, so Controls would do nothing here.
+IconOnlySizing.parameters = {
+  controls: { disable: true },
+  docs: {
+    description: {
+      story:
+        "Each row sets a larger `--input-icon-size`. Icon-only buttons stay the same height as the text input and text button until the icon plus `--button-padding-icon-only` on each side no longer fits; only then does the square grow (the 4rem row). Controls do nothing here.",
+    },
+  },
+};
+
 const stressLabels = [
   "Jetzt unverbindlich einen kostenlosen Beratungstermin vereinbaren",
   "Datenschutzgrundverordnungskonformitätsbestätigung",

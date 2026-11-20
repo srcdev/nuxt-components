@@ -567,6 +567,7 @@ onMounted(() => {
       cursor: pointer;
       height: fit-content;
       min-height: 0;
+      min-width: 0;
 
       color: var(--carousel-flip-button-icon-colour, var(--theme-text));
       background-color: var(--carousel-flip-button-background-colour, var(--theme-surface-subtle));

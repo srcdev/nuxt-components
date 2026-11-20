@@ -269,8 +269,16 @@ watch(
       padding: 0;
 
       & .input-button-icon {
-        margin: 1.2rem;
+        margin: var(--button-padding-icon-only);
       }
+    }
+
+    /* Square floor at the text button's total height; low specificity so wrappers can resize it. */
+    &:where([data-icon-only]) {
+      --_input-button-icon-only-size: calc(var(--button-min-height) + 2 * var(--button-padding-block));
+
+      min-width: var(--_input-button-icon-only-size);
+      min-height: var(--_input-button-icon-only-size);
     }
   }
 }

@@ -4,6 +4,7 @@
 
   --button-border-radius: 0.2rem;
   --button-border-radius-icon-only: 100vw;
+  --button-padding-icon-only: 0.4rem;
 
   --button-border-width: 0.1rem;
   --button-outline-width: 0.1rem;
@@ -18,8 +19,9 @@
      icon-only's aspect-ratio: 1 sizing), so its own padding-block and border have to be
      subtracted back out here, unlike --input-min-height itself which happens to need no such
      adjustment (InputText has zero padding-block and no full border in its resting state).
-     This is a floor, not a fixed height — icon-only/pill buttons or longer button-text can
-     still grow past it. Textareas are the deliberate exception to this alignment entirely. */
+     This is a floor, not a fixed height — longer button-text or an icon bigger than the square
+     (icon + 2 × --button-padding-icon-only) can still grow past it. Icon-only buttons (padding 0)
+     add --button-padding-block back so their square matches the same total height. Textareas are the deliberate exception to this alignment entirely. */
   --button-min-height: calc(
     var(--input-min-height) - (2 * var(--button-padding-block)) - (2 * var(--button-border-width))
   );

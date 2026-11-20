@@ -29,6 +29,25 @@ see `theming-form-geometry-tokens.md`. Not duplicated here. One geometry token w
 a text input/select/number field placed next to it (e.g. an inline "email + submit" pattern — see
 the `InlineWithTextInput` story). `box-sizing: content-box` means it's a floor, not a fixed height.
 
+### Icon-only size
+
+An icon-only button (`#iconOnly` slot) is a square at least as tall as a text button: its floor is
+`--button-min-height` plus both `--button-padding-block`, so its total height also matches
+`--input-min-height`. The icon is centred in it. The square only grows once the icon plus
+`--button-padding-icon-only` (default `0.4rem`) on each side no longer fits, so with the defaults
+that's an `--input-icon-size` above `3.4rem`. Set `--button-padding-icon-only` to change that
+breathing room; it is a margin on `.input-button-icon`.
+
+The floor (`min-width`/`min-height`) is applied through `:where([data-icon-only])`, so any rule
+that styles `.input-button` with a class selector can make the button smaller: set `min-width`
+and `min-height` to `auto` alongside your own `width`/`height`.
+
+> **Changed 2026-11-20**: the icon had a fixed `1.2rem` margin and the button had no real floor,
+> so its size was `--input-icon-size + 2.4rem + borders`, and a bigger icon made the button taller
+> than its neighbours. If a layout was sized around that formula, size it from
+> `--input-min-height` instead. An icon-only button that set its own smaller `width`/`height`
+> without resetting `min-height` now needs `min-width: auto; min-height: auto`.
+
 ### Primary
 
 | Token | Falls back to | Controls |
@@ -144,7 +163,6 @@ Inner elements: `.input-button-text`, and `.input-button-icon` with `data-slot="
 > `.input-button-text`, `.btn-icon.left` → `.input-button-icon[data-slot="left"]`. Same
 > specificity, so overrides keep winning where they did.
 
-
 ## Global theming
 
 Set tokens on `:where(html)` in the consuming app's own theming file (e.g.
@@ -189,7 +207,6 @@ than fighting the `color-mix()` default:
   style="--input-button-primary-surface-hover: var(--gold-04);"
 />
 ```
-
 
 ---
 

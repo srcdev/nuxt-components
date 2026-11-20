@@ -102,6 +102,8 @@ watch(
         border-radius: var(--form-input-border-radius);
         width: var(--input-range-button-size);
         height: var(--input-range-button-size);
+        min-width: auto;
+        min-height: auto;
 
         & .input-button-icon {
           margin: initial;
