@@ -152,3 +152,28 @@ watch(
 - The `as ReturnTypeUseZodValidation` cast is required because TypeScript cannot infer the generic return type through the layer auto-import.
 - `fieldMaxLength` is currently a no-op (returns `undefined`) due to a Zod v4 internal API change — omit it from templates or pass `undefined` to `:maxlength`.
 - For server-side validation errors (e.g. from a Resend or API call), use `pushCustomErrors` with the API error response shape `{ data: { errors: Record<string, string | string[]> } }`.
+
+## Strict CSP
+
+The layer sets zod to `jitless` in a client plugin (`app/plugins/zod-jitless.client.ts`, since
+9.9.5). zod 4 otherwise probes for `eval` with `new Function("")` the first time it parses an
+object. Under a CSP without `'unsafe-eval'` (nuxt-security's default `script-src`) the browser
+blocks that and reports a CSP violation (DevTools Issues panel, `securitypolicyviolation`) on every
+page with a form, although zod catches it and the form still works. `jitless` skips the probe and
+gives up only zod's compiled fast path, which makes no visible difference for forms.
+
+Apps need nothing for this. The setting is global to the zod copy the app shares with the layer
+(client only), so it covers the app's own schemas too. An app that allows `eval` and wants the fast
+path back can undo it in its own client plugin, which runs after the layer's:
+
+```ts
+// app/plugins/zod-jit.client.ts
+import { config } from "zod";
+
+export default defineNuxtPlugin(() => {
+  config({ jitless: false });
+});
+```
+
+Check on a production build (dev CSPs can differ): load a page with a form and confirm the console
+and Issues panel report no `script-src ... eval` violation.

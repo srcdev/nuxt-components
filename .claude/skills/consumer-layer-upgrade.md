@@ -36,6 +36,15 @@ checklist.
 5. **Refresh the layer's copies**: snippets and Claude skills/rules (rule `layer-setup-copies.md`).
 6. **Check**: `npm ls nuxt vite vue-router` prints one version of each, and `npm run build` passes.
 
+## Upgrading to 9.9.5 (from 9.9.4 or earlier)
+
+The layer now sets zod to `jitless` in a client plugin, so zod's `eval` probe no longer reports a
+CSP violation under a strict CSP (skill `composable-zod-validation.md`, "Strict CSP"). Nothing to
+change in the app. If the app added its own `config({ jitless: true })` plugin for this, delete it.
+
+Check: `grep -rn "jitless" app` finds nothing left in the app (unless it deliberately sets
+`jitless: false`).
+
 ## Upgrading to the Nuxt 4.6 release (from 9.8.0 or earlier)
 
 The layer moves from Nuxt 4.4.8 to 4.6.4, which brings Vite 8 (Rolldown/Oxc). Steps 4 and 5 also
