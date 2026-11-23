@@ -5,7 +5,7 @@
     data-theme="error"
     :class="elementClasses"
     :data-testid
-    :data-input-variant="inputVariant"
+    :data-input-variant="resolvedInputVariant"
     :data-visible="showError ? '' : undefined"
     :data-detached="isDetached ? '' : undefined"
     :aria-hidden="showError ? undefined : 'true'"
@@ -47,9 +47,11 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   dataTestid: "inputError",
   styleClassPassthrough: () => [],
-  inputVariant: "normal",
+  inputVariant: undefined,
   icon: "radix-icons:circle-backslash",
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const isArray = computed(() => Array.isArray(props.errorMessage));
 const messages = computed(() =>

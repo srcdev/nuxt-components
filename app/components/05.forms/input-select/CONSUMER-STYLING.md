@@ -18,7 +18,10 @@ to override just this component; leave it unset and it inherits the shared `--th
 | `--input-select-text-color` | `var(--theme-input-text-color-normal)` | Select text colour (added 2026-10-16; it inherited the page colour before) |
 | `--input-select-border` | `var(--theme-border)` | Border colour (every variant and the open picker, resting) |
 | `--input-select-border-hover` | the resolved border (`normal`), `var(--theme-border-focus)` (`underlined`) | Outline colour on hover (mouse): 1px with no offset on `normal`, 2px at a 2px offset on `underlined` |
-| `--input-select-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal`/`outlined`). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
+| `--input-select-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal` only; `outlined` uses the outline below). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
+| `--input-select-outlined-outline` | `var(--input-select-shadow, …)` | Resting outline colour on the `outlined` variant, which has no shadow ring; red when invalid. Hover and focus switch it to the border and focus colours, so with the 1px border it reads as a 2px border |
+| `--input-select-outlined-outline-width` | `0.1rem` | Outline width on the `outlined` variant in every state |
+| `--input-select-outlined-outline-offset` | `0` | Outline offset on the `outlined` variant in every state, so it sits flush with the border |
 | `--input-select-border-focus` | `var(--theme-border-focus)` | Outline colour on `:focus-visible` (keyboard/assistive), and the open picker's outline |
 
 ### Options

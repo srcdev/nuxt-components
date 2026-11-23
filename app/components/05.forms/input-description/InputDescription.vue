@@ -4,7 +4,7 @@
     :id="descriptionId || undefined"
     class="input-description"
     :class="elementClasses"
-    :data-input-variant="inputVariant"
+    :data-input-variant="resolvedInputVariant"
     :data-invalid="fieldHasError ? '' : undefined"
   >
     <div v-if="slots.descriptionHtml" class="input-description-html">
@@ -29,9 +29,11 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   descriptionId: "",
   fieldHasError: false,
-  inputVariant: "normal",
+  inputVariant: undefined,
   styleClassPassthrough: () => [],
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const slots = useSlots();
 const showDescription = () => Boolean(slots.descriptionHtml || slots.descriptionText);

@@ -2,7 +2,7 @@
   <div
     class="input-otp"
     :class="elementClasses"
-    :data-input-variant="inputVariant"
+    :data-input-variant="resolvedInputVariant"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
     :role="groupLabel ? 'group' : undefined"
@@ -61,9 +61,11 @@ const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   ariaDescribedby: "",
   theme: "default",
-  inputVariant: "normal",
+  inputVariant: undefined,
   styleClassPassthrough: () => [],
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const emit = defineEmits<{ complete: [code: string] }>();
 
@@ -240,6 +242,18 @@ function onFocus(event: FocusEvent) {
       &:focus-visible {
         outline: var(--form-element-outline-width-focus) solid var(--_border-focus);
         outline-offset: var(--form-element-outline-offset-focus);
+      }
+    }
+
+    &[data-input-variant="outlined"] .input-otp-box {
+      outline: var(--input-otp-outlined-outline-width, 0.1rem) solid
+        var(--input-otp-outlined-outline, var(--input-otp-shadow, var(--form-element-shadow-colour, var(--colour-theme-2))));
+      outline-offset: var(--input-otp-outlined-outline-offset, 0);
+      box-shadow: none;
+
+      &:focus-visible {
+        outline-width: var(--input-otp-outlined-outline-width, 0.1rem);
+        outline-offset: var(--input-otp-outlined-outline-offset, 0);
       }
     }
 

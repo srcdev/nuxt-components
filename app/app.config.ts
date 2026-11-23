@@ -5,7 +5,7 @@ import type {
   DisplayToastPosition,
   DisplayToastAlignment,
 } from "./types/components";
-import type { InputLabelIndicator } from "./types/forms/types.forms";
+import type { InputLabelIndicator, InputUiVariant } from "./types/forms/types.forms";
 
 export default defineAppConfig({
   srcdev: {
@@ -48,6 +48,9 @@ export default defineAppConfig({
       theme: undefined as SemanticTheme | undefined,
       closeIcon: "bitcoin-icons:cross-filled",
       closeLabel: "Close",
+    },
+    forms: {
+      inputVariant: "normal" as InputUiVariant,
     },
     inputLabel: {
       indicator: "none" as InputLabelIndicator,

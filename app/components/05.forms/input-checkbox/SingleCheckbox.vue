@@ -11,7 +11,7 @@
     <template #content>
       <InputDescription
         :description-id
-        :input-variant
+        :input-variant="resolvedInputVariant"
         :field-has-error="fieldHasError"
         :style-class-passthrough="['input-text-description']"
       >
@@ -34,7 +34,7 @@
           :true-value
           :false-value
           :theme
-          :input-variant
+          :input-variant="resolvedInputVariant"
           :aria-describedby="ariaDescribedby()"
         >
           <template #checkedIcon>
@@ -45,7 +45,7 @@
           </template>
         </InputCheckboxRadioField>
       </div>
-      <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" :input-variant />
+      <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" :input-variant="resolvedInputVariant" />
     </template>
   </FormFieldset>
 </template>
@@ -79,8 +79,10 @@ const props = withDefaults(defineProps<Props>(), {
   optionsLayout: "equal-widths",
   styleClassPassthrough: () => [],
   theme: "default",
-  inputVariant: "normal",
+  inputVariant: undefined,
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const slots = useSlots();
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({ required: true });

@@ -27,7 +27,7 @@ the surrounding theme.
 | `:error-message` | `string \| string[] \| object` | (required) | A string renders as one message; an array renders as a `<ul role="list">`, with blank entries dropped. Long and unbroken text wraps inside the strip (`overflow-wrap: anywhere`); it is never line-clamped. |
 | `:show-error` | `boolean` | (required) | Opens the strip. Rendered as `data-visible`; when `false` the root gets `aria-hidden="true"`. |
 | `:is-detached` | `boolean` | (required) | `true`: sits below the control with a `2rem` gap, fully rounded. `false`: tucked under the control's bottom edge. Rendered as `data-detached`. |
-| `:input-variant` | `"normal" \| "outlined" \| "underlined"` | `"normal"` | Match the control's variant. Rendered as `data-input-variant`. `underlined` drops the rounded corners and (when attached) the outline. |
+| `:input-variant` | `"normal" \| "outlined" \| "underlined"` | `undefined` → app.config `srcdev.forms.inputVariant` → `"normal"` | Match the control's variant. Rendered as `data-input-variant`. `underlined` drops the rounded corners and (when attached) the outline. |
 | `icon` | `string` | `"radix-icons:circle-backslash"` | Iconify name for the decorative icon (`aria-hidden`). |
 | `data-testid` | `string` | `"inputError"` | |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the root, reacts to prop changes. |

@@ -19,7 +19,7 @@ override just this component; leave it unset and it inherits the shared `--theme
 | `--input-text-surface-hover` | `var(--theme-input-surface-hover)` | Slot `InputButton` background on hover |
 | `--input-text-border` | `var(--theme-border)` | Border colour (all variants, resting), and the stepper's button dividers |
 | `--input-text-border-hover` | the resolved border | 1px outline colour on hover (`normal`/`outlined`) |
-| `--input-text-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal`/`outlined`). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
+| `--input-text-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal` only; `outlined` uses the outline below). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
 | `--input-text-border-focus` | `var(--theme-border-focus)` | Outline colour on `:focus-visible` (`normal`/`outlined`), and a slot button's own focus outline |
 | `--input-text-color` | `var(--theme-input-text-color-normal)` | Input text and slot button colour, and autofilled text (global rule) |
 | `--input-text-placeholder-color` | `var(--theme-input-placeholder)` | Placeholder text colour |
@@ -28,15 +28,26 @@ override just this component; leave it unset and it inherits the shared `--theme
 
 | Token | Default | Controls |
 |---|---|---|
-| `--input-text-outlined-label-space` | `2rem` | Space reserved inside the top of the box for the floated label |
-| `--input-text-outlined-label-rest-offset` | centred in the box | How far down the resting label sits |
-| `--input-text-outlined-label-rest-indent` | `var(--input-padding-inline)` | How much further in the resting label sits than the floated one; it slides left as it floats |
-| `--input-text-outlined-label-inset-block` | `0.4rem` | How far down the floated label sits |
-| `--input-text-outlined-label-font-size` | `var(--step-5)` | Resting label size |
+| `--input-text-outlined-outline` | `var(--input-text-shadow, …)` | Resting outline colour on the `outlined` box, which has no shadow ring; theme step 2 by default, so red when invalid. Hover switches it to the border colour and focus to the focus colour, so with the 1px border it reads as a 2px border |
+| `--input-text-outlined-outline-width` | `0.1rem` | Outline width on the `outlined` box in every state (`normal` focus uses the global `--form-element-outline-width-focus`) |
+| `--input-text-outlined-outline-offset` | `0` | Outline offset on the `outlined` box in every state, so it sits flush with the border behind the pill |
+| `--input-text-outlined-label-font-size` | `var(--input-font-size)` | Resting label size |
 | `--input-text-outlined-label-scale` | `0.85` | Floated label size, as a scale of the resting size (keep the result at `--step-4` or above) |
+| `--input-text-outlined-label-padding-inline` | `0.9rem` | Space either side of the label text inside the pill |
+| `--input-text-outlined-label-padding-block` | `0.2rem` | Space above and below the label text inside the pill |
+| `--input-text-outlined-label-inset-inline` | `calc(var(--form-input-border-radius) + 0.2rem)` | Floated pill's start edge, measured from the box edge, so it clears the corner radius. At rest the label still lines up with the value and slides to this position as it floats |
+| `--input-text-outlined-label-line-height` | `1.25` | Label line height; with the font size and padding it sets the pill's height |
+| `--input-text-outlined-label-border-radius` | `999px` | Pill corner radius |
+| `--input-text-outlined-label-surface` | `var(--input-text-surface, …)` | Pill background once floated |
+| `--input-text-outlined-label-border` | `var(--input-text-border, …)` | Pill border once floated. The pill's outline follows the box's: `--input-text-outlined-outline` at rest, the border-hover colour on hover and `--input-text-border-focus` on focus, so the two read as one edge |
 | `--input-text-outlined-label-color` | `inherit` | Label colour at rest |
 | `--input-text-outlined-label-color-floated` | the resting label colour | Label colour once floated |
-| `--input-text-outlined-label-font-weight-floated` | `bold` | Label weight once floated |
+| `--input-text-outlined-label-font-weight-floated` | `normal` | Label weight once floated |
+
+The resting label is centred in the box; the floated pill is centred on the top border, and the Field
+reserves half its height above the box so it never overlaps what sits above. Both positions are
+derived from the geometry tokens, so they follow `--input-min-height`, `--input-font-size` and
+`--form-element-border-width`.
 
 Geometry (`--input-padding-*`, `--input-min-height`, `--input-font-size`, `--input-icon-slot-gap`,
 `--form-element-*`, etc.) is shared across every `05.forms` component and untouched by this —
@@ -44,7 +55,9 @@ see `theming-form-geometry-tokens.md`.
 
 Private (not public API): `--_surface`, `--_border` and `--_border-focus`, each resolved once and
 read in several places (`--_surface` swaps to the focus surface on `:focus-visible`), and
-`--_outlined-label-space`, read by both the label and the wrapper.
+the Field's `--_outlined-label-font-size`, `--_outlined-label-scale`,
+`--_outlined-label-padding-inline`, `--_outlined-label-padding-block`, `--_outlined-label-inset-inline`, `--_outlined-label-line-height`, `--_outlined-label-border-width`, `--_outlined-label-outline-width` (both divided by the scale so the scaled pill still draws 1px lines) and `--_outlined-label-block-size`, each read by the label's
+size, padding and both positions.
 
 ---
 
@@ -78,10 +91,16 @@ password toggle's icon).
 `outlined` draws the same bordered box as `normal` on the control, without the wrapper's
 start padding (kept when there's a `left` slot), so the text and label start one
 `--input-padding-inline` in from the border. In `InputTextField` (and so
-`InputPasswordField`) the label sits inside the box: at rest it's level with where the value
-goes and the input is transparent, so a placeholder or date mask never shows under it. The root's
-`data-active`, `data-filled` or `data-invalid`, a filled `left` slot, or browser autofill
-floats it to the top corner (scaled and bold) and shows the input. The label stays on one line
+`InputPasswordField`) the box is the same height as `normal`. At rest the label sits inside
+it, level with where the value goes, and the input is transparent, so a placeholder or date mask
+never shows under it. The root's `data-active`, `data-filled` or `data-invalid`, a filled `left`
+slot, or browser autofill floats it onto the top border as a pill (scaled, with its own
+border and background) and shows the input. The value is centred in the space between the
+pill's bottom edge and the bottom border (the input's top padding equals the pill's overlap and
+its min-height shrinks by the same amount, so the box height doesn't change). The pill's border and outline fade in only as the label reaches the top border (the last 40%
+of the move) and fade out at once when it drops back, so they never show inside the field. Its
+background does the opposite (opaque at once, fading only after the label has left the border),
+so the field's border line never shows through the label text. The label stays on one line
 with an ellipsis, and stops short of a `right` slot. The description moves after the input and
 error. `InputTextAsNumberField` keeps its label above the box.
 

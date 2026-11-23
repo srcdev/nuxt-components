@@ -2,7 +2,8 @@
   <div
     ref="rootRef"
     class="select-menu"
-    :class="[inputVariant, elementClasses]"
+    :class="elementClasses"
+    :data-input-variant="resolvedInputVariant"
     :style="`--_anchor-name: ${anchorName}`"
   >
     <button
@@ -142,9 +143,11 @@ const props = withDefaults(defineProps<Props>(), {
   multiple: false,
   showSelectionInTrigger: false,
   reserveLabelWidth: false,
-  inputVariant: "normal",
+  inputVariant: undefined,
   styleClassPassthrough: () => [],
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const modelValue = defineModel<string | number | (string | number)[] | undefined>({ default: undefined });
 
@@ -405,7 +408,7 @@ watch(
       }
     }
 
-    &.underlined .select-menu-trigger {
+    &[data-input-variant="underlined"] .select-menu-trigger {
       border-block-start-width: 0;
       border-inline-width: 0;
       border-block-end-width: var(

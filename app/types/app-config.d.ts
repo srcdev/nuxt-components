@@ -1,5 +1,5 @@
 import type { SemanticTheme, DisplayPromptTheme, DisplayToastTheme, DisplayToastPosition, DisplayToastAlignment } from "./components"
-import type { InputLabelIndicator } from "./forms/types.forms"
+import type { InputLabelIndicator, InputUiVariant } from "./forms/types.forms"
 
 declare module "@nuxt/schema" {
   interface AppConfigInput {
@@ -38,6 +38,9 @@ declare module "@nuxt/schema" {
         theme?: SemanticTheme
         closeIcon?: string
         closeLabel?: string
+      }
+      forms?: {
+        inputVariant?: InputUiVariant
       }
       inputLabel?: {
         indicator?: InputLabelIndicator

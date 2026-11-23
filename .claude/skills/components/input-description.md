@@ -28,7 +28,7 @@ With neither slot provided it renders nothing (no empty element, no dangling id)
 |------|------|---------|-------|
 | `:description-id` | `string` | `""` | Rendered as the root `id`, omitted when empty. Must match the id in the control's `aria-describedby`; wrappers get it from `useAriaDescribedById(...).descriptionId`, which only adds it to `aria-describedby` when a description slot is present. |
 | `:field-has-error` | `boolean` | `false` | Rendered as `data-invalid`. Styling hook only. |
-| `:input-variant` | `"normal" \| "outlined" \| "underlined"` | `"normal"` | Rendered as `data-input-variant`. Styling hook only. |
+| `:input-variant` | `"normal" \| "outlined" \| "underlined"` | `undefined` → app.config `srcdev.forms.inputVariant` → `"normal"` | Rendered as `data-input-variant`. Styling hook only. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the root, reacts to prop changes. |
 
 ## Slots

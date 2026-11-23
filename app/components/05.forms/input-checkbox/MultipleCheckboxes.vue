@@ -11,7 +11,7 @@
     <template #content>
       <InputDescription
         :description-id
-        :input-variant
+        :input-variant="resolvedInputVariant"
         :field-has-error="fieldHasError"
         :style-class-passthrough="['input-text-description']"
       >
@@ -37,7 +37,7 @@
             :true-value="item.value"
             :options-layout
             :theme
-            :input-variant
+            :input-variant="resolvedInputVariant"
             :direction
             :aria-describedby="ariaDescribedby()"
             :display-as-disc
@@ -63,7 +63,7 @@
             :field-has-error
             :true-value="item.value"
             :theme
-            :input-variant
+            :input-variant="resolvedInputVariant"
             :aria-describedby="ariaDescribedby()"
             :display-as-disc
           >
@@ -73,7 +73,7 @@
           </InputCheckboxRadioField>
         </template>
       </div>
-      <InputError :id="errorId" :error-message="errorMessage" :show-error="fieldHasError" :is-detached="true" :input-variant />
+      <InputError :id="errorId" :error-message="errorMessage" :show-error="fieldHasError" :is-detached="true" :input-variant="resolvedInputVariant" />
     </template>
   </FormFieldset>
 </template>
@@ -108,11 +108,13 @@ const props = withDefaults(defineProps<Props>(), {
   optionsLayout: "equal-widths",
   styleClassPassthrough: () => [],
   theme: "default",
-  inputVariant: "normal",
+  inputVariant: undefined,
   direction: "row",
   displayAsDisc: false,
   isPill: false,
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const slots = useSlots();
 

@@ -35,7 +35,7 @@ instead.
 | `:direction` | `"row" \| "row-reverse"` | `"row"` | Button presentation only: icon/label order. |
 | `:display-as-disc` | `boolean` | `false` | Round checkbox symbol. |
 | `:theme` | `FormUiTheme` | `"default"` | Forwarded to each control. |
-| `:input-variant` | `InputUiVariant` | `"normal"` | Forwarded to each control and the error message. |
+| `:input-variant` | `InputUiVariant` | `undefined` → app.config `srcdev.forms.inputVariant` → `"normal"` | Forwarded to each control and the error message. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Classes on the root `<fieldset>`; updates when the prop changes. |
 | `data-testid` | `string` | `"multiple-checkboxes"` | On the root `<fieldset>`. |
 | `label` | `string` | `""` | **Ignored.** Kept only so existing call sites that pass it don't break; it has never rendered. Use `legend` or the description slots. |
@@ -83,7 +83,7 @@ instead.
 | `:true-value` / `:false-value` | `string \| number \| boolean` | `true` / `false` | Model values for checked/unchecked. |
 | `:options-layout` | `OptionsLayout` | `"equal-widths"` | Rendered as `data-options-layout` on the items container. |
 | `:theme` | `FormUiTheme` | `"default"` | |
-| `:input-variant` | `InputUiVariant` | `"normal"` | |
+| `:input-variant` | `InputUiVariant` | `undefined` → app.config `srcdev.forms.inputVariant` → `"normal"` | |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Classes on the root `<fieldset>`; updates when the prop changes. |
 | `data-testid` | `string` | `"single-checkbox"` | On the root `<fieldset>`. |
 

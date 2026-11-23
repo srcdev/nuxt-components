@@ -3,13 +3,13 @@
     class="input-number-field"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
-    :data-input-variant="inputVariant"
+    :data-input-variant="resolvedInputVariant"
     :class="elementClasses"
   >
     <InputLabel
       :id
       :required
-      :input-variant
+      :input-variant="resolvedInputVariant"
       :field-has-error
       :style-class-passthrough="['input-number-label']"
     >
@@ -18,7 +18,7 @@
 
     <InputDescription
       :description-id
-      :input-variant
+      :input-variant="resolvedInputVariant"
       :field-has-error="fieldHasError"
       :style-class-passthrough="['input-text-description']"
     >
@@ -41,7 +41,7 @@
       :theme
       :required
       :weight
-      :input-variant
+      :input-variant="resolvedInputVariant"
       :field-has-error
       :aria-describedby="ariaDescribedby()"
     >
@@ -78,7 +78,7 @@
         </InputButton>
       </template>
     </InputNumber>
-    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" :input-variant />
+    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" :input-variant="resolvedInputVariant" />
   </div>
 </template>
 
@@ -110,11 +110,13 @@ const props = withDefaults(defineProps<Props>(), {
   required: false,
   theme: "default",
   weight: "normal",
-  inputVariant: "normal",
+  inputVariant: undefined,
   styleClassPassthrough: () => [],
   stepDownLabel: "Step down",
   stepUpLabel: "Step up",
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const slots = useSlots();
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);

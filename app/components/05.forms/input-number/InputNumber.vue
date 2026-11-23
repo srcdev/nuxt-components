@@ -3,7 +3,7 @@
     class="input-number-wrapper"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
-    :data-input-variant="inputVariant"
+    :data-input-variant="resolvedInputVariant"
     :data-has-left-slot="slots.left ? '' : undefined"
     :data-has-right-slot="slots.right ? '' : undefined"
   >
@@ -59,11 +59,13 @@ const props = withDefaults(defineProps<Props>(), {
   required: false,
   theme: "default",
   weight: "normal",
-  inputVariant: "normal",
+  inputVariant: undefined,
   fieldHasError: false,
   styleClassPassthrough: () => [],
   ariaDescribedby: "",
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const slots = useSlots();
 
@@ -132,6 +134,18 @@ const inputmode = computed(() => {
       &:has(input:focus-visible, button:focus-visible) {
         outline: var(--form-element-outline-width-focus) solid var(--_border-focus);
         outline-offset: var(--form-element-outline-offset-focus);
+      }
+    }
+
+    &[data-input-variant="outlined"] {
+      outline: var(--input-number-outlined-outline-width, 0.1rem) solid
+        var(--input-number-outlined-outline, var(--input-number-shadow, var(--form-element-shadow-colour, var(--colour-theme-2))));
+      outline-offset: var(--input-number-outlined-outline-offset, 0);
+      box-shadow: none;
+
+      &:has(input:focus-visible, button:focus-visible) {
+        outline-width: var(--input-number-outlined-outline-width, 0.1rem);
+        outline-offset: var(--input-number-outlined-outline-offset, 0);
       }
     }
 

@@ -30,7 +30,7 @@ Most consumers should reach for **InputNumberField** rather than `InputNumber` d
 | `:required` | `boolean` | `false` | Native `required`. |
 | `:theme` | `FormUiTheme` | `"default"` | Sets `data-theme` on the wrapper. |
 | `:weight` | `FormWeight` | `"normal"` | Adds an `input-number--{weight}` class to the input, for prop-shape consistency with sibling `05.forms` components. **No CSS in the library currently styles this class — it's a no-op today**, same convention as `InputRange`'s `weight` prop. |
-| `:input-variant` | `InputUiVariant` | `"normal"` | Rendered as `data-input-variant` on the wrapper (a bare class until 2026-10-16) — `"normal"` and `"outlined"` draw the same bordered box, `"underlined"` a bottom border only (outlined was borderless until 2026-11-23). Same prop/behaviour as `InputText`. |
+| `:input-variant` | `InputUiVariant` | `undefined` → app.config `srcdev.forms.inputVariant` → `"normal"` | Rendered as `data-input-variant` on the wrapper (a bare class until 2026-10-16) — `"normal"` and `"outlined"` draw a bordered box (`outlined` swaps the shadow ring for a flush 1px outline that reads as a 2px border on hover/focus), `"underlined"` a bottom border only. Outlined was borderless until 2026-11-23. Same prop/behaviour as `InputText`. |
 | `:field-has-error` | `boolean` | `false` | Drives `data-invalid` on the wrapper. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the input element. Reacts to changes. |
 | `:aria-describedby` | `string` | `""` | Forwarded to the native input. |

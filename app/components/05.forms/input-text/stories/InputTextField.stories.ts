@@ -168,7 +168,7 @@ export const Outlined: Story = {
     docs: {
       description: {
         story:
-          "The `outlined` variant puts the label inside the bordered box. At rest it sits where the value goes and the input is hidden, so a placeholder or a date mask never overlaps it; on focus, with a value, when invalid or with a `left` slot it shrinks to the top corner and the input shows. The description renders after the control and error.",
+          "The `outlined` variant puts the label inside the bordered box. At rest it sits where the value goes and the input is hidden, so a placeholder or a date mask never overlaps it; on focus, with a value, when invalid or with a `left` slot it moves onto the top border as a pill and the input shows. The box is the same height as `normal`. The description renders after the control and error.",
       },
     },
   },
@@ -211,7 +211,7 @@ export const OutlinedForm: Story = {
     docs: {
       description: {
         story:
-          "Text, email, date, password (right slot), invalid and textarea fields in the `outlined` variant, restyled with public tokens only: border, focus surface tint, focus outline and floated label colour. Tab through to watch each label float; the prefilled email starts floated, and emptying a field drops its label back.",
+          "Text, email, date, password (right slot), invalid and textarea fields in the `outlined` variant, restyled with public tokens only: border, focus surface tint, focus outline and floated label colour (the pill's border follows the field's border tokens). Tab through to watch each label float; the prefilled email starts floated, and emptying a field drops its label back.",
       },
     },
   },

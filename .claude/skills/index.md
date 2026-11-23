@@ -38,6 +38,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
 ├── theming-override-default.md      — replace the entire default theme with a custom palette (set --theme-hue/--theme-chroma)
 ├── theming-partial-override.md      — override a specific colour token category (palette, buttons, inputs) without a full theme replacement
 ├── theming-form-geometry-tokens.md  — non-colour form/button/input tokens (padding, border-radius, gaps): full inventory, why partial override doesn't need duplicating the source files
+├── forms-input-variant.md  — :input-variant normal/outlined/underlined: site-wide default via app.config srcdev.forms.inputVariant (prop → app.config → normal), what each looks like (outlined floating pill label), which components read it
 ├── theming-component-token-pattern.md — standard shape for overridable component colours: public token + inline fallback, no bare var()/no private-only indirection; the three tiers (theme slots / cross-component families / component-scoped); line-clamp tokens for overflowing text; image-overlay scrim tokens; rollout status
 ├── theming-status-tokens.md        — global --status-* colours (success/warning/danger/info/neutral: solid + surface + text), which components read them, how to override once for the whole library
 ├── theming-dark-mode.md            — add a dark scheme in a consumer app (layer is light-only): enable plumbing, full dark token set without light-dark(), light-dark() alternative, light-only pinning

@@ -2,7 +2,7 @@
   <div
     class="input-textarea-wrapper"
     :data-theme="theme"
-    :data-input-variant="inputVariant"
+    :data-input-variant="resolvedInputVariant"
     :data-invalid="fieldHasError ? '' : null"
     :data-dirty="isDirty ? '' : null"
     :data-active="isActive ? '' : null"
@@ -63,8 +63,10 @@ const props = withDefaults(defineProps<Props>(), {
   autocomplete: undefined,
   styleClassPassthrough: () => [],
   theme: "default",
-  inputVariant: "normal",
+  inputVariant: undefined,
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const slots = useSlots();
 
@@ -118,6 +120,22 @@ watch(
         outline: var(--form-element-outline-width-focus) solid
           var(--input-textarea-border-focus, var(--theme-border-focus));
         outline-offset: var(--form-element-outline-offset-focus);
+      }
+    }
+
+    &[data-input-variant="outlined"] {
+      outline: var(--input-textarea-outlined-outline-width, 0.1rem) solid
+        var(--input-textarea-outlined-outline, var(--input-textarea-shadow, var(--form-element-shadow-colour, var(--colour-theme-2))));
+      outline-offset: var(--input-textarea-outlined-outline-offset, 0);
+      box-shadow: none;
+
+      &:not([data-has-left-slot]) {
+        padding-inline-start: 0;
+      }
+
+      &:has(textarea:focus-visible) {
+        outline-width: var(--input-textarea-outlined-outline-width, 0.1rem);
+        outline-offset: var(--input-textarea-outlined-outline-offset, 0);
       }
     }
 

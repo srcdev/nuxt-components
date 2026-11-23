@@ -3,7 +3,7 @@
     :for="id"
     class="input-label"
     :class="elementClasses"
-    :data-input-variant="inputVariant"
+    :data-input-variant="resolvedInputVariant"
     :data-invalid="fieldHasError ? '' : undefined"
   >
     <slot name="htmlLabel"></slot>
@@ -47,9 +47,11 @@ const props = withDefaults(defineProps<Props>(), {
   requiredIcon: undefined,
   optionalIcon: undefined,
   fieldHasError: false,
-  inputVariant: "normal",
+  inputVariant: undefined,
   styleClassPassthrough: () => [],
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const appConfig = useAppConfig();
 

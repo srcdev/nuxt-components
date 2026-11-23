@@ -40,7 +40,7 @@ option in `fieldData.data`, and an `InputError`. It's the single-choice sibling 
 | `:direction` | `"row" \| "row-reverse"` | `"row"` | Icon/label order, only with `is-button`. |
 | `:options-layout` | `OptionsLayout` | `"equal-widths"` | `"equal-widths"` (auto-fit grid sized to the longest label), `"inline"` (wrapping row) or `"block"` (column). Rendered as `data-options-layout` on the items container. |
 | `:theme` | `FormUiTheme` | `"default"` | Passed to each radio. |
-| `:input-variant` | `InputUiVariant` | `"normal"` | Passed to each radio, the description and the error. |
+| `:input-variant` | `InputUiVariant` | `undefined` → app.config `srcdev.forms.inputVariant` → `"normal"` | Passed to each radio, the description and the error. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Classes on the root `<fieldset>`; updates when the prop changes. |
 | `data-testid` | `string` | `"multiple-radio-buttons"` | On the root `<fieldset>`. |
 

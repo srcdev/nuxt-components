@@ -33,7 +33,7 @@ open between picks.
 | `multiple` | `boolean` | `false` | Allow selecting more than one option. Each option gets a checkbox indicator, `v-model` becomes an array, and picking an option leaves the popover open so more can be toggled. No option icon in the trigger when `true` (no single option to represent); `triggerIcon` still shows. |
 | `showSelectionInTrigger` | `boolean` | `false` | Multiple mode only. When `true`, the trigger text updates to a comma-separated list of the currently checked options instead of staying fixed on `placeholder`/`label`. No effect outside `multiple`. |
 | `reserveLabelWidth` | `boolean` | `false` | Single-select only. Renders hidden copies of the placeholder and every option label in the same grid cell as the visible text, so the trigger is always as wide as the longest one and doesn't resize when the selection changes. Off by default, since sometimes a trigger that hugs its text is wanted. No effect with `multiple`. |
-| `inputVariant` | `InputUiVariant` | `"normal"` | Trigger border style, same prop as `InputSelect`: `"normal"` (bordered box) or `"underlined"` (bottom border only, square corners), added as a class on the root. `"outlined"` has no CSS, same as the `05.forms` inputs. |
+| `inputVariant` | `InputUiVariant` | `undefined` → app.config `srcdev.forms.inputVariant` → `"normal"` | Trigger border style, same prop as `InputSelect`: `"normal"`/`"outlined"` (bordered box) or `"underlined"` (bottom border only, square corners). Rendered as `data-input-variant` on the root (a bare class until 2026-11-23). |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes on the root `<div>`. |
 
 #### v-model

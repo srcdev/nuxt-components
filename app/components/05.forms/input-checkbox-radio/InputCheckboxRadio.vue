@@ -3,7 +3,7 @@
     class="input-checkbox-radio"
     :class="elementClasses"
     :data-type="type"
-    :data-input-variant="inputVariant"
+    :data-input-variant="resolvedInputVariant"
     :data-theme="theme"
     :data-button="isButton ? '' : undefined"
     :data-display-as-disc="displayAsDisc ? '' : undefined"
@@ -64,8 +64,10 @@ const props = withDefaults(defineProps<Props>(), {
   displayAsDisc: false,
   multipleOptions: false,
   isButton: false,
-  inputVariant: "normal",
+  inputVariant: undefined,
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({
   required: true,

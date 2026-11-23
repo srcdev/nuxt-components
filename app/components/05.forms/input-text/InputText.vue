@@ -3,7 +3,7 @@
     class="input-text-wrapper"
     data-testid="input-text-wrapper"
     :data-theme="theme"
-    :data-input-variant="inputVariant"
+    :data-input-variant="resolvedInputVariant"
     :data-invalid="fieldHasError ? '' : null"
     :data-dirty="isDirty ? '' : null"
     :data-active="isActive ? '' : null"
@@ -80,8 +80,10 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
   theme: "default",
   ariaDescribedby: "",
-  inputVariant: "normal",
+  inputVariant: undefined,
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const slots = useSlots();
 
@@ -147,8 +149,20 @@ watch(
       }
     }
 
-    &[data-input-variant="outlined"]:not([data-has-left-slot]) {
-      padding-inline-start: 0;
+    &[data-input-variant="outlined"] {
+      outline: var(--input-text-outlined-outline-width, 0.1rem) solid
+        var(--input-text-outlined-outline, var(--input-text-shadow, var(--form-element-shadow-colour, var(--colour-theme-2))));
+      outline-offset: var(--input-text-outlined-outline-offset, 0);
+      box-shadow: none;
+
+      &:not([data-has-left-slot]) {
+        padding-inline-start: 0;
+      }
+
+      &:has(input:focus-visible, button:focus-visible) {
+        outline-width: var(--input-text-outlined-outline-width, 0.1rem);
+        outline-offset: var(--input-text-outlined-outline-offset, 0);
+      }
     }
 
     &[data-input-variant="underlined"] {

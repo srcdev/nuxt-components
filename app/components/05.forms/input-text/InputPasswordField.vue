@@ -13,7 +13,7 @@
     :autocomplete
     :style-class-passthrough
     :theme
-    :input-variant
+    :input-variant="resolvedInputVariant"
   >
     <template v-if="slots.descriptionHtml" #descriptionHtml>
       <slot name="descriptionHtml"></slot>
@@ -70,10 +70,12 @@ const props = withDefaults(defineProps<Props>(), {
   autocomplete: "current-password",
   styleClassPassthrough: () => [],
   theme: "default",
-  inputVariant: "normal",
+  inputVariant: undefined,
   showPasswordText: "Show password",
   hidePasswordText: "Hide password",
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const slots = useSlots();
 

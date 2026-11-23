@@ -56,7 +56,7 @@ Use these three directly only for a custom group or layout:
 | `:field-has-error` | `boolean` | `false` | `aria-invalid="true"` on the input, `data-invalid` on the root. |
 | `:aria-describedby` | `string` | `""` | On the input, omitted when empty. |
 | `theme` | `FormUiTheme` | `"default"` | `data-theme`. |
-| `:input-variant` | `InputUiVariant` | `"normal"` | `data-input-variant`; `underlined` squares off a checkbox. |
+| `:input-variant` | `InputUiVariant` | `undefined` → app.config `srcdev.forms.inputVariant` → `"normal"` | `data-input-variant`; `underlined` squares off a checkbox. |
 | `:is-button` | `boolean` | `false` | Set by `InputCheckboxRadioButton`: no focus outline of its own, enables `display-as-disc`. |
 | `:display-as-disc` | `boolean` | `false` | Rounds a checkbox, button mode only. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | On the root, reacts to changes. |

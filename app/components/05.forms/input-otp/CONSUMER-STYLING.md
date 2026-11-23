@@ -19,7 +19,10 @@ for the two-tier shape.
 | `--input-otp-text-color` | `var(--theme-input-text-color-normal)` | Digit colour |
 | `--input-otp-border` | `var(--theme-border)` | Box border (`normal`/`outlined`) or bottom border (`underlined`) |
 | `--input-otp-border-hover` | the resolved border | 1px outline colour on hover (`normal`/`outlined`) |
-| `--input-otp-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (each box, `normal`/`outlined`). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
+| `--input-otp-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (each box, `normal` only; `outlined` uses the outline below). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
+| `--input-otp-outlined-outline` | `var(--input-otp-shadow, …)` | Resting outline colour on the `outlined` variant, which has no shadow ring; red when invalid. Hover and focus switch it to the border and focus colours, so with the 1px border it reads as a 2px border |
+| `--input-otp-outlined-outline-width` | `0.1rem` | Outline width on the `outlined` variant in every state |
+| `--input-otp-outlined-outline-offset` | `0` | Outline offset on the `outlined` variant in every state, so it sits flush with the border |
 | `--input-otp-border-focus` | `var(--theme-border-focus)` | Outline colour on `:focus-visible`, and the bottom border colour on focus (`underlined`) |
 
 ### Field (`InputOtpField`)

@@ -4,13 +4,13 @@
     :class="elementClasses"
     :data-testid
     :data-theme="theme"
-    :data-input-variant="inputVariant"
+    :data-input-variant="resolvedInputVariant"
     :data-invalid="fieldHasError ? '' : null"
   >
     <InputLabel
       :id
       :required
-      :input-variant
+      :input-variant="resolvedInputVariant"
       :field-has-error
       :style-class-passthrough="['input-select-label']"
     >
@@ -18,9 +18,9 @@
     </InputLabel>
 
     <InputDescription
-      v-if="inputVariant !== 'outlined'"
+      v-if="resolvedInputVariant !== 'outlined'"
       :description-id
-      :input-variant
+      :input-variant="resolvedInputVariant"
       :field-has-error="fieldHasError"
       :style-class-passthrough="['input-text-description']"
     >
@@ -45,15 +45,15 @@
       :required
       :theme="selectTheme"
       :aria-describedby="ariaDescribedby()"
-      :input-variant
+      :input-variant="resolvedInputVariant"
     />
 
-    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="false" :input-variant />
+    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="false" :input-variant="resolvedInputVariant" />
 
     <InputDescription
-      v-if="inputVariant === 'outlined'"
+      v-if="resolvedInputVariant === 'outlined'"
       :description-id
-      :input-variant
+      :input-variant="resolvedInputVariant"
       :field-has-error="fieldHasError"
       :style-class-passthrough="['input-text-description']"
     >
@@ -92,8 +92,10 @@ const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   styleClassPassthrough: () => [],
   theme: "default",
-  inputVariant: "normal",
+  inputVariant: undefined,
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const slots = useSlots();
 

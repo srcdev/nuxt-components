@@ -136,7 +136,7 @@ export const Outlined: Story = {
     docs: {
       description: {
         story:
-          "The `outlined` variant puts the label inside the bordered box, level with the first line of text. On focus, with a value, when invalid or with a `left` slot it shrinks to the top corner and the textarea shows. The description renders after the control and error.",
+          "The `outlined` variant puts the label inside the bordered box, level with the first line of text. On focus, with a value, when invalid or with a `left` slot it moves onto the top border as a pill and the textarea shows. The description renders after the control and error.",
       },
     },
   },

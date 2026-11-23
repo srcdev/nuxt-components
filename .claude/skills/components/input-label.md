@@ -31,7 +31,7 @@ Use `InputLabel` directly only when building a custom field wrapper:
 | `:required-icon` | `string` | `undefined` → app.config → none | Iconify name that replaces the required text. |
 | `:optional-icon` | `string` | `undefined` → app.config → none | Iconify name that replaces the visible optional text (the text stays as `.sr-only`). |
 | `:field-has-error` | `boolean` | `false` | Rendered as `data-invalid`. Styling hook only. |
-| `:input-variant` | `"normal" \| "outlined" \| "underlined"` | `"normal"` | Rendered as `data-input-variant`. Styling hook only. |
+| `:input-variant` | `"normal" \| "outlined" \| "underlined"` | `undefined` → app.config `srcdev.forms.inputVariant` → `"normal"` | Rendered as `data-input-variant`. Styling hook only. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the `<label>`, reacts to prop changes. |
 
 ## Slots

@@ -2,7 +2,7 @@
   <div
     class="input-select-wrapper"
     :data-theme="theme"
-    :data-input-variant="inputVariant"
+    :data-input-variant="resolvedInputVariant"
     :data-invalid="fieldHasError ? '' : null"
     :data-dirty="isDirty ? '' : null"
     :data-active="isActive ? '' : null"
@@ -72,9 +72,11 @@ const props = withDefaults(defineProps<Props>(), {
   fieldHasError: false,
   styleClassPassthrough: () => [],
   theme: "default",
-  inputVariant: "normal",
+  inputVariant: undefined,
   ariaDescribedby: "",
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const modelValue = defineModel<string | number | readonly number[]>({ required: true });
 const isDirty = defineModel<boolean>("isDirty");
@@ -121,6 +123,13 @@ watch(
       &:has(select:focus-visible) {
         outline-color: var(--_border-focus);
       }
+    }
+
+    &[data-input-variant="outlined"] {
+      outline: var(--input-select-outlined-outline-width, 0.1rem) solid
+        var(--input-select-outlined-outline, var(--input-select-shadow, var(--form-element-shadow-colour, var(--colour-theme-2))));
+      outline-offset: var(--input-select-outlined-outline-offset, 0);
+      box-shadow: none;
     }
 
     &[data-input-variant="underlined"] {

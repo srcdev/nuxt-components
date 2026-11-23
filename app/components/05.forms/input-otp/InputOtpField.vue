@@ -12,7 +12,7 @@
     <template #content>
       <InputDescription
         :description-id
-        :input-variant
+        :input-variant="resolvedInputVariant"
         :field-has-error="fieldHasError"
         :style-class-passthrough="['input-otp-description']"
       >
@@ -34,12 +34,12 @@
         :digit-label
         :field-has-error
         :theme
-        :input-variant
+        :input-variant="resolvedInputVariant"
         :aria-describedby="ariaDescribedby() ?? ''"
         @complete="emit('complete', $event)"
       />
 
-      <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" :input-variant />
+      <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" :input-variant="resolvedInputVariant" />
     </template>
   </FormFieldset>
 </template>
@@ -69,9 +69,11 @@ const props = withDefaults(defineProps<Props>(), {
   errorMessage: "",
   fieldHasError: false,
   theme: "default",
-  inputVariant: "normal",
+  inputVariant: undefined,
   styleClassPassthrough: () => [],
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const emit = defineEmits<{ complete: [code: string] }>();
 

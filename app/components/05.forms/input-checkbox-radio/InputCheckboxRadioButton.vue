@@ -21,7 +21,7 @@
       :false-value
       :field-has-error
       :theme
-      :input-variant
+      :input-variant="resolvedInputVariant"
       :aria-describedby
       :display-as-disc
     >
@@ -79,9 +79,11 @@ const props = withDefaults(defineProps<Props>(), {
   optionsLayout: "equal-widths",
   direction: "row",
   isPill: false,
-  inputVariant: "normal",
+  inputVariant: undefined,
   itemIcon: "material-symbols:add-2",
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const modelValue = defineModel<(string | number | boolean)[] | string | number | boolean | undefined>({ required: true });
 

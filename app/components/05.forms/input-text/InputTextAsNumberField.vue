@@ -3,7 +3,7 @@
     class="input-text-as-number-field"
     :class="elementClasses"
     :data-theme="theme"
-    :data-input-variant="inputVariant"
+    :data-input-variant="resolvedInputVariant"
     :data-invalid="fieldHasError ? '' : null"
     :data-dirty="isDirty ? '' : null"
     :data-active="isActive ? '' : null"
@@ -11,7 +11,7 @@
     <InputLabel
       :id
       :required
-      :input-variant
+      :input-variant="resolvedInputVariant"
       :field-has-error
       :style-class-passthrough="['input-text-label', 'body-normal-bold']"
     >
@@ -20,7 +20,7 @@
 
     <InputDescription
       :description-id
-      :input-variant
+      :input-variant="resolvedInputVariant"
       :field-has-error="fieldHasError"
       :style-class-passthrough="['input-text-description']"
     >
@@ -46,7 +46,7 @@
       :theme
       :inputmode
       :aria-describedby="ariaDescribedby() ?? undefined"
-      :input-variant
+      :input-variant="resolvedInputVariant"
     >
       <template v-if="slots.left" #left>
         <InputButton
@@ -79,7 +79,7 @@
         </InputButton>
       </template>
     </InputText>
-    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" :input-variant />
+    <InputError :id="errorId" :error-message :show-error="fieldHasError" :is-detached="true" :input-variant="resolvedInputVariant" />
   </div>
 </template>
 
@@ -112,10 +112,12 @@ const props = withDefaults(defineProps<Props>(), {
   styleClassPassthrough: () => [],
   theme: "default",
   step: 1,
-  inputVariant: "normal",
+  inputVariant: undefined,
   stepDownText: "Step down",
   stepUpText: "Step up",
 });
+
+const resolvedInputVariant = useInputVariant(() => props.inputVariant);
 
 const slots = useSlots();
 

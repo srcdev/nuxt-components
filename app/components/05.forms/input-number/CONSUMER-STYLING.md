@@ -19,7 +19,10 @@ token, same as `InputText`.
 | `--input-number-surface-hover` | `var(--theme-input-surface-hover)` | Embedded left/right button background on hover |
 | `--input-number-border` | `var(--theme-border)` | Border/divider colour (every variant's border, and the divider between the input and an embedded button) |
 | `--input-number-border-hover` | the resolved border | 1px wrapper outline colour on mouse hover over the input or either step button (`normal`/`outlined`) |
-| `--input-number-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal`/`outlined`). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
+| `--input-number-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal` only; `outlined` uses the outline below). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
+| `--input-number-outlined-outline` | `var(--input-number-shadow, …)` | Resting outline colour on the `outlined` variant, which has no shadow ring; red when invalid. Hover and focus switch it to the border and focus colours, so with the 1px border it reads as a 2px border |
+| `--input-number-outlined-outline-width` | `0.1rem` | Outline width on the `outlined` variant in every state |
+| `--input-number-outlined-outline-offset` | `0` | Outline offset on the `outlined` variant in every state, so it sits flush with the border |
 | `--input-number-border-focus` | `var(--theme-border-focus)` | Wrapper outline colour on `:focus-visible` (`normal`/`outlined`), and the embedded button's own `:focus-visible` outline |
 | `--input-number-text-color` | `var(--theme-input-text-color-normal)` | Input text colour |
 | `--input-number-placeholder-color` | `var(--theme-input-placeholder)` | Placeholder text colour |

@@ -38,7 +38,7 @@ Most consumers should reach for one of the Variants rather than `InputText` dire
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the native input. Reacts to changes. |
 | `:theme` | `FormUiTheme` | `"default"` | Sets `data-theme` on the wrapper. |
 | `:aria-describedby` | `string` | `""` | Forwarded to the native input; omitted when empty. |
-| `:input-variant` | `InputUiVariant` | `"normal"` | Sets `data-input-variant`. `normal` and `outlined` draw a bordered box, `underlined` a bottom border. In the Field, `outlined` puts a floating label inside the box (see the Field section). |
+| `:input-variant` | `InputUiVariant` | `undefined` → app.config `srcdev.forms.inputVariant` → `"normal"` | Sets `data-input-variant`. `normal` and `outlined` draw a bordered box, `underlined` a bottom border. In the Field, `outlined` puts a floating label inside the box (see the Field section). |
 
 ### v-models
 
@@ -158,8 +158,10 @@ description renders before the input, or after the input and error for `outlined
 **`outlined` (floating label, 2026-11-23):** the label is stacked over the bordered box (a
 one-cell grid on the root). At rest it sits level with where the value goes and the input is
 transparent, so a placeholder or date mask never shows under it. `data-active`, `data-filled`,
-`data-invalid`, a filled `left` slot or browser autofill float it to the top corner (scaled
-`0.85`, bold) and show the input. The label stays on one line with an ellipsis (its full text is
+`data-invalid`, a filled `left` slot or browser autofill float it onto the top border as a pill
+(scaled `0.85`, own border and background; the Field reserves half its height above the
+box) and show the input. The box is the same height as `normal`. The value is centred between the
+pill's bottom edge and the bottom border, not in the whole box. The label stays on one line with an ellipsis (its full text is
 still the accessible name) and stops short of a `right` slot, so `InputPasswordField` gets it too.
 The error stays in `InputError` below the box; the label text is never swapped for the error.
 Tokens: `--input-text-outlined-label-*` and `--input-text-surface-focus` (CONSUMER-STYLING.md).
