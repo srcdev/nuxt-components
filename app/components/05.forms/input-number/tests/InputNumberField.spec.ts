@@ -183,6 +183,21 @@ describe("InputNumberField", () => {
       expect(wrapper.emitted("update:modelValue")?.[0]).toEqual([5]);
     });
 
+    it("stops a double or triple click selecting nearby text, but not a single click", async () => {
+      wrapper = await wrapperFactory({ modelValue: 0, min: 0, max: 10 }, stepSlots);
+      // At min the step-down button is readonly: pressing it again is how users hit this
+      for (const button of [stepDown(), stepUp()]) {
+        const press = (detail: number) => {
+          const event = new MouseEvent("mousedown", { bubbles: true, cancelable: true, detail });
+          button.element.dispatchEvent(event);
+          return event.defaultPrevented;
+        };
+        expect(press(1)).toBe(false);
+        expect(press(2)).toBe(true);
+        expect(press(3)).toBe(true);
+      }
+    });
+
     it("treats a negative or zero step as its size, or 1", async () => {
       wrapper = await wrapperFactory({ modelValue: 5, min: 0, max: 10, step: -2 }, stepSlots);
       await stepUp().trigger("click");

@@ -53,6 +53,7 @@
           :button-text="stepDownLabel"
           :theme="theme"
           variant="inline"
+          @mousedown="preventMultiClickSelection"
           @click.stop.prevent="stepBy(-1)"
         >
           <template #iconOnly>
@@ -68,6 +69,7 @@
           :button-text="stepUpLabel"
           :theme="theme"
           variant="inline"
+          @mousedown="preventMultiClickSelection"
           @click.stop.prevent="stepBy(1)"
         >
           <template #iconOnly>
@@ -135,6 +137,14 @@ const modelValue = defineModel<number | readonly number[]>({
 
 const decimalPlaces = (value: number) => (String(value).split(".")[1] ?? "").length;
 const clamp = (value: number) => Math.min(Math.max(value, props.min), props.max);
+
+// Repeat presses (a double or triple click) would select nearby label/description text;
+// the first press is left alone so the button still takes focus.
+const preventMultiClickSelection = (event: MouseEvent) => {
+  if (event.detail > 1) {
+    event.preventDefault();
+  }
+};
 
 const stepBy = (direction: 1 | -1) => {
   const current = modelValue.value;

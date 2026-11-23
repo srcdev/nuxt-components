@@ -221,6 +221,9 @@ button icon content itself is consumer-supplied).
 
 Step-down is disabled (`readonly` on its `InputButton`) once the value reaches `min`, and
 step-up once it reaches `max`; clicking either button while at that boundary is a no-op.
+A second or third press in quick succession (a double or triple click, often on a button already at its
+limit) has its `mousedown` default prevented, so it no longer selects the nearby label, description or
+value text; a single press still focuses the button (2026-11-22).
 Each press adds or subtracts `step` (its absolute value, or 1 when it's 0), rounds away
 floating-point drift (0.2 + 0.1 gives 0.3) and clamps to `min`/`max`, so a step that would overshoot
 lands on the limit and a typed out-of-range value is pulled back in. From an empty field the first
