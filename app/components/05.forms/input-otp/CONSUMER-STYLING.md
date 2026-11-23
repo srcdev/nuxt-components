@@ -14,12 +14,12 @@ for the two-tier shape.
 | `--input-otp-box-inline-size` | `4.4rem` | Preferred box width (boxes shrink below it when the row is too narrow) |
 | `--input-otp-box-block-size` | `5.2rem` | Box height |
 | `--input-otp-font-size` | `2rem` | Digit size |
-| `--input-otp-border-radius` | `var(--form-input-border-radius)` | Box corner radius (`normal` variant) |
+| `--input-otp-border-radius` | `var(--form-input-border-radius)` | Box corner radius (`normal`/`outlined`) |
 | `--input-otp-surface` | `var(--theme-input-surface)` | Box background |
 | `--input-otp-text-color` | `var(--theme-input-text-color-normal)` | Digit colour |
-| `--input-otp-border` | `var(--theme-border)` | Box border (`normal`) or bottom border (`underlined`) |
-| `--input-otp-border-hover` | the resolved border | 1px outline colour on hover (`normal` variant) |
-| `--input-otp-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (each box, `normal` only). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
+| `--input-otp-border` | `var(--theme-border)` | Box border (`normal`/`outlined`) or bottom border (`underlined`) |
+| `--input-otp-border-hover` | the resolved border | 1px outline colour on hover (`normal`/`outlined`) |
+| `--input-otp-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (each box, `normal`/`outlined`). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
 | `--input-otp-border-focus` | `var(--theme-border-focus)` | Outline colour on `:focus-visible`, and the bottom border colour on focus (`underlined`) |
 
 ### Field (`InputOtpField`)
@@ -47,8 +47,13 @@ resolve the two public border tokens once for reuse across the variant rules.
 |---|---|---|
 | `[data-invalid]` | `.input-otp`, and the `.input-otp-field` fieldset | Error state. Switches the colour ramp to the error colours, so `--theme-border` (and everything defaulting from it) turns red without a separate error token. |
 | `[data-theme]` | `.input-otp`, `.input-otp-field` | The `theme` prop. |
-| `.normal` / `.underlined` | `.input-otp` | The `inputVariant` prop. |
+| `[data-input-variant="normal" \| "outlined" \| "underlined"]` | `.input-otp` | The `inputVariant` prop. `outlined` boxes look the same as `normal`. |
 | `.input-otp-box` | each digit `<input>` | One box. |
+
+> **Changed 2026-11-23**: the variant was a bare class on `.input-otp` (`.normal`,
+> `.underlined`, `.outlined`), which collides with consumer and utility CSS (this library has a
+> `.normal` font-weight utility). Select `.input-otp[data-input-variant="…"]` instead. `outlined`
+> used to render borderless boxes; it now matches `normal`.
 
 ## Local overrides
 

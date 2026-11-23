@@ -31,7 +31,7 @@ Most consumers should reach for **InputSelectField** rather than `InputSelect` d
 | `:title` | `string` | `"Please select an option"` | Native `title` attribute (tooltip). Visitor-facing copy: pass a translated string. |
 | `:required` | `boolean` | `false` | Native `required`. |
 | `:theme` | `FormUiTheme` | `"default"` | Sets `data-theme` on the wrapper. |
-| `:input-variant` | `InputUiVariant` | `"normal"` | Sets `data-input-variant` on the wrapper. `"normal"` (bordered box) and `"underlined"` (bottom border only) have CSS; `"outlined"` doesn't. |
+| `:input-variant` | `InputUiVariant` | `"normal"` | Sets `data-input-variant` on the wrapper. `"normal"` and `"outlined"` draw the same bordered box, `"underlined"` a bottom border only (outlined was borderless until 2026-11-23). |
 | `:field-has-error` | `boolean` | `false` | `data-invalid` on the wrapper and `aria-invalid="true"` on the select. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra CSS classes applied to the select element. Reacts to changes. |
 | `:aria-describedby` | `string` | `""` | Forwarded to the native select; omitted when empty. |

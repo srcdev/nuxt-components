@@ -38,7 +38,7 @@ Most consumers should reach for one of the Variants rather than `InputText` dire
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra classes on the native input. Reacts to changes. |
 | `:theme` | `FormUiTheme` | `"default"` | Sets `data-theme` on the wrapper. |
 | `:aria-describedby` | `string` | `""` | Forwarded to the native input; omitted when empty. |
-| `:input-variant` | `InputUiVariant` | `"normal"` | Sets `data-input-variant`. `normal` (bordered box) and `underlined` have CSS; `outlined` doesn't. |
+| `:input-variant` | `InputUiVariant` | `"normal"` | Sets `data-input-variant`. `normal` and `outlined` draw a bordered box, `underlined` a bottom border. In the Field, `outlined` puts a floating label inside the box (see the Field section). |
 
 ### v-models
 
@@ -132,8 +132,8 @@ come from `useAriaDescribedById`, so they take `name`, not `id`. Each applies
 ### InputTextField
 
 The general-purpose labelled text field. Root `.input-text-field`, with `data-theme`,
-`data-input-variant`, `data-invalid`, `data-dirty` (set once the value is non-empty) and
-`data-active`.
+`data-input-variant`, `data-invalid`, `data-dirty` (set once the value is non-empty),
+`data-filled` (while the value is non-empty; clears when emptied) and `data-active`.
 
 ```vue
 <InputTextField
@@ -154,6 +154,16 @@ Props: `type` (required), `inputmode`, `maxlength`, `min`, `max`, `name`, `place
 (required), `errorMessage: object | string` (required, pass `""` if unused) and
 `styleClassPassthrough`. Slots: `left`, `right`, `descriptionText`, `descriptionHtml`. The
 description renders before the input, or after the input and error for `outlined`.
+
+**`outlined` (floating label, 2026-11-23):** the label is stacked over the bordered box (a
+one-cell grid on the root). At rest it sits level with where the value goes and the input is
+transparent, so a placeholder or date mask never shows under it. `data-active`, `data-filled`,
+`data-invalid`, a filled `left` slot or browser autofill float it to the top corner (scaled
+`0.85`, bold) and show the input. The label stays on one line with an ellipsis (its full text is
+still the accessible name) and stops short of a `right` slot, so `InputPasswordField` gets it too.
+The error stays in `InputError` below the box; the label text is never swapped for the error.
+Tokens: `--input-text-outlined-label-*` and `--input-text-surface-focus` (CONSUMER-STYLING.md).
+`InputTextAsNumberField` doesn't float its label.
 
 ### InputPasswordField
 

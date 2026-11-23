@@ -98,6 +98,22 @@ describe("InputTextareaField", () => {
     expect(wrapper.attributes("data-dirty")).toBe("");
   });
 
+  it("sets data-filled while the field has a value, and clears it when emptied", async () => {
+    wrapper = await wrapperFactory();
+    expect(wrapper.attributes("data-filled")).toBeUndefined();
+
+    await wrapper.setProps({ modelValue: "hello" });
+    expect(wrapper.attributes("data-filled")).toBe("");
+
+    await wrapper.setProps({ modelValue: "" });
+    expect(wrapper.attributes("data-filled")).toBeUndefined();
+  });
+
+  it("counts a numeric 0 as filled", async () => {
+    wrapper = await wrapperFactory({ modelValue: 0 });
+    expect(wrapper.attributes("data-filled")).toBe("");
+  });
+
   it("sets data-input-variant on the root", async () => {
     wrapper = await wrapperFactory({ inputVariant: "underlined" });
     expect(wrapper.attributes("data-input-variant")).toBe("underlined");

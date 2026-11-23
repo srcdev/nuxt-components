@@ -17,10 +17,10 @@ token, same as `InputText`.
 |---|---|---|
 | `--input-number-surface` | `var(--theme-input-surface)` | Wrapper, input, and embedded-button background |
 | `--input-number-surface-hover` | `var(--theme-input-surface-hover)` | Embedded left/right button background on hover |
-| `--input-number-border` | `var(--theme-border)` | Border/divider colour (`normal`/`underlined` variant border, and the divider between the input and an embedded button) |
-| `--input-number-border-hover` | the resolved border | 1px wrapper outline colour on mouse hover over the input or either step button (`normal` variant only) |
-| `--input-number-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal` only). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
-| `--input-number-border-focus` | `var(--theme-border-focus)` | Wrapper outline colour on `:focus-visible` (`normal` variant), and the embedded button's own `:focus-visible` outline |
+| `--input-number-border` | `var(--theme-border)` | Border/divider colour (every variant's border, and the divider between the input and an embedded button) |
+| `--input-number-border-hover` | the resolved border | 1px wrapper outline colour on mouse hover over the input or either step button (`normal`/`outlined`) |
+| `--input-number-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal`/`outlined`). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
+| `--input-number-border-focus` | `var(--theme-border-focus)` | Wrapper outline colour on `:focus-visible` (`normal`/`outlined`), and the embedded button's own `:focus-visible` outline |
 | `--input-number-text-color` | `var(--theme-input-text-color-normal)` | Input text colour |
 | `--input-number-placeholder-color` | `var(--theme-input-placeholder)` | Placeholder text colour |
 
@@ -72,10 +72,11 @@ Inner elements: `.input-number-slot` (both slot holders), `.input-number-slot-le
 ## Input variant
 
 `:input-variant="'normal' | 'outlined' | 'underlined'"` (default `"normal"`) — same prop as
-`InputText`. Only `normal` (bordered box, with hover/focus outline) and `underlined`
-(bottom-border only) have CSS today; `outlined` has no styling in `InputText` either, so passing it renders with no border/outline at all — a
-pre-existing gap in the type, not something specific to `InputNumber`. Declared for prop-shape
-consistency with the rest of `05.forms`.
+`InputText`. `normal` and `outlined` draw the bordered box (hover/focus outline included);
+`underlined` draws a bottom border only. `InputNumberField` keeps its label above the box for
+`outlined` (only the text fields float it).
+
+> **Changed 2026-11-23**: `outlined` used to render with no border or outline.
 
 ---
 

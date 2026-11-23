@@ -105,7 +105,7 @@ watch(
       transition: none;
     }
 
-    &[data-input-variant="normal"] {
+    &:is([data-input-variant="normal"], [data-input-variant="outlined"]) {
       --_padding-block-start: 1.2rem;
     }
 
@@ -136,7 +136,7 @@ watch(
     }
 
     &:not([data-detached]) {
-      &[data-input-variant="normal"] .input-error-message-inner {
+      &:is([data-input-variant="normal"], [data-input-variant="outlined"]) .input-error-message-inner {
         padding-block-start: var(--form-input-border-radius);
       }
 

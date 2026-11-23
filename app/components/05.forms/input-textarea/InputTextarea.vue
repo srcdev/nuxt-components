@@ -87,6 +87,7 @@ watch(
 <style lang="css">
 @layer components {
   .input-textarea-wrapper {
+    --_surface: var(--input-textarea-surface, var(--theme-input-surface));
     --_border: var(--input-textarea-border, var(--theme-border));
 
     display: flex;
@@ -94,14 +95,14 @@ watch(
     gap: var(--input-textarea-slot-gap, 1.2rem);
     min-inline-size: 0;
     max-inline-size: 100%;
-    background-color: var(--input-textarea-surface, var(--theme-input-surface));
+    background-color: var(--_surface);
     padding-inline: var(--input-padding-inline);
     transition: all var(--theme-form-transition-duration) ease-in-out;
 
     z-index: 2;
     position: relative;
 
-    &[data-input-variant="normal"] {
+    &:is([data-input-variant="normal"], [data-input-variant="outlined"]) {
       border: var(--form-element-border-width) solid var(--_border);
       border-radius: var(--form-input-border-radius);
       outline: var(--form-element-outline-width) solid transparent;
@@ -112,6 +113,8 @@ watch(
       }
 
       &:has(textarea:focus-visible) {
+        --_surface: var(--input-textarea-surface-focus, var(--input-textarea-surface, var(--theme-input-surface)));
+
         outline: var(--form-element-outline-width-focus) solid
           var(--input-textarea-border-focus, var(--theme-border-focus));
         outline-offset: var(--form-element-outline-offset-focus);

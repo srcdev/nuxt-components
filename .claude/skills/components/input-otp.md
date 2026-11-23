@@ -59,7 +59,7 @@ Location: `app/components/05.forms/input-otp/`. Styling: `CONSUMER-STYLING.md` i
 | `:field-has-error` | `boolean` | `false` | `data-invalid` on the root, `aria-invalid` on each box, focuses the first box when it turns on. |
 | `:aria-describedby` | `string` | `""` | Forwarded to every box. |
 | `:theme` | `FormUiTheme` | `"default"` | `data-theme` on the root. |
-| `:input-variant` | `InputUiVariant` | `"normal"` | `normal` (bordered boxes) or `underlined`. `outlined` has no CSS, same as the other `05.forms` inputs. |
+| `:input-variant` | `InputUiVariant` | `"normal"` | Sets `data-input-variant` on `.input-otp` (a bare class until 2026-11-23). `normal` and `outlined` draw bordered boxes, `underlined` bottom borders. |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Classes on the `.input-otp` root. |
 
 ### v-model

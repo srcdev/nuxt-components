@@ -17,10 +17,11 @@ This shape mirrors `InputText`'s token set (see its own CONSUMER-STYLING.md).
 | Token | Default | Controls |
 |---|---|---|
 | `--input-textarea-surface` | `var(--theme-input-surface)` | Wrapper background |
-| `--input-textarea-border` | `var(--theme-border)` | Border colour (`normal`/`underlined` variant border) |
-| `--input-textarea-border-hover` | the resolved border | 1px wrapper outline colour on mouse hover (`normal` only) |
-| `--input-textarea-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal` only). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
-| `--input-textarea-border-focus` | `var(--theme-border-focus)` | Wrapper outline colour on `:focus-visible` (`normal` only) |
+| `--input-textarea-surface-focus` | the resolved surface | Wrapper background while the textarea has `:focus-visible` (`normal`/`outlined`) |
+| `--input-textarea-border` | `var(--theme-border)` | Border colour (all variants) |
+| `--input-textarea-border-hover` | the resolved border | 1px wrapper outline colour on mouse hover (`normal`/`outlined`) |
+| `--input-textarea-shadow` | `var(--form-element-shadow-colour, var(--colour-theme-2))` | Resting shadow ring outside the border (`normal`/`outlined`). Width is the global `--form-element-shadow-width` (`0.2rem`; `0` removes it) |
+| `--input-textarea-border-focus` | `var(--theme-border-focus)` | Wrapper outline colour on `:focus-visible` (`normal`/`outlined`) |
 | `--input-textarea-text-color` | `var(--theme-input-text-color-normal)` | Textarea text colour |
 | `--input-textarea-placeholder-color` | `var(--theme-input-placeholder)` | Placeholder text colour |
 
@@ -34,11 +35,26 @@ This shape mirrors `InputText`'s token set (see its own CONSUMER-STYLING.md).
 | `--input-textarea-slot-align` | `center` | Vertical position of the left/right slots against the textarea (`align-self`: `start`, `center`, `end`) |
 | `--input-textarea-slot-padding-block` | `0` | Space above and below each slot, so a `start`- or `end`-aligned slot doesn't sit against the field's edge |
 
+### Outlined label (`InputTextareaField`)
+
+| Token | Default | Controls |
+|---|---|---|
+| `--input-textarea-outlined-label-space` | `2rem` | Space reserved inside the top of the box for the floated label |
+| `--input-textarea-outlined-label-rest-offset` | label space + `--form-textarea-padding-block` | How far down the resting label sits (level with the first line) |
+| `--input-textarea-outlined-label-inset-block` | `0.4rem` | How far down the floated label sits |
+| `--input-textarea-outlined-label-font-size` | `var(--step-5)` | Resting label size |
+| `--input-textarea-outlined-label-scale` | `0.85` | Floated label size, as a scale of the resting size (keep the result at `--step-4` or above) |
+| `--input-textarea-outlined-label-color` | `inherit` | Label colour at rest |
+| `--input-textarea-outlined-label-color-floated` | the resting label colour | Label colour once floated |
+| `--input-textarea-outlined-label-font-weight-floated` | `bold` | Label weight once floated |
+
 Geometry (`--form-textarea-padding-block`, `--form-textarea-padding-inline`, `--input-font-size`,
 `--input-textarea-line-height`, `--input-padding-inline`, etc.) is shared across every `05.forms`
 component and untouched by this — see `theming-form-geometry-tokens.md`.
 
-Private (not public API): `--_border`, resolved once and read by both border variants.
+Private (not public API): `--_border`, resolved once and read by every border variant; `--_surface`,
+swapped to the focus surface on `:focus-visible`; `--_outlined-label-space`, read by both the
+label and the wrapper.
 
 ---
 
@@ -56,6 +72,7 @@ Private (not public API): `--_border`, resolved once and read by both border var
 | `data-invalid` | `.input-textarea-wrapper`, `.input-textarea-field` | `field-has-error` |
 | `data-dirty` | `.input-textarea-wrapper`, `.input-textarea-field` | The Field has seen a non-empty value |
 | `data-active` | `.input-textarea-wrapper`, `.input-textarea-field` | The textarea has focus |
+| `data-filled` | `.input-textarea-field` | The value is non-empty (unlike `data-dirty`, it clears when the field is emptied) |
 | `data-has-left-slot` / `data-has-right-slot` | `.input-textarea-wrapper` | The `left` / `right` slot is filled |
 
 Inner elements: `.input-textarea` (the native textarea), `.input-textarea-slot` (both slot
@@ -63,8 +80,14 @@ holders), `.input-textarea-slot-left`, `.input-textarea-slot-right`, `.input-tex
 Field's `InputLabel`), `.input-text-description` (the Field's `InputDescription`, shared with the
 other Field components).
 
-`outlined` has no CSS of its own: the control renders with no border or outline. In the Field it
-moves the description after the control and error.
+`outlined` draws the same bordered box as `normal` on the control. In the Field the label sits
+inside the box, level with the first line of text, and the textarea is transparent until the
+root's `data-active`, `data-filled` or `data-invalid` (or a filled `left` slot) floats the label
+to the top corner (scaled and bold). The label stays on one line with an ellipsis. The
+description moves after the control and error.
+
+> **Changed 2026-11-23**: `outlined` used to render the control with no border at all and the
+> label above it. It now has the floating label described above.
 
 > **Changed 2026-10-16**: state used to be bare classes, which collide with common consumer CSS
 > (an unlayered `.error` or `.normal` rule would restyle the field). Select on the attributes

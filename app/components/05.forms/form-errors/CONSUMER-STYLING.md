@@ -22,7 +22,7 @@ itself: set them on any ancestor (or `:root`) and they inherit down.
 | `--input-error-font-size` | `1.6rem` | Message font size |
 | `--input-error-font-weight` | `500` | Message font weight |
 | `--input-error-padding-inline` | `1.2rem` | Inline padding of the message, and the icon's inset from the start edge |
-| `--input-error-padding-block-start` | `1.2rem` (`normal` variant), `1rem` (others) | Message top padding. Setting it overrides every variant |
+| `--input-error-padding-block-start` | `1.2rem` (`normal`/`outlined`), `1rem` (`underlined`) | Message top padding. Setting it overrides every variant |
 | `--input-error-padding-block-end` | `1rem` | Message bottom padding |
 | `--input-error-list-gap` | `0.6rem` | Gap between messages when `error-message` is an array |
 | `--input-error-detached-offset` | `2rem` | Gap above a visible detached error |

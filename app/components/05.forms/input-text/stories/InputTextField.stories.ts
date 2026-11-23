@@ -1,6 +1,8 @@
 import { computed, ref } from "vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import InputTextField from "../InputTextField.vue";
+import InputPasswordField from "../InputPasswordField.vue";
+import InputTextareaField from "../../input-textarea/InputTextareaField.vue";
 import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
 import type { FormUiTheme, InputMode, InputTypesText, InputUiVariant } from "~/types/forms/types.forms.d";
 import type { MediaCanvas } from "~/types/components";
@@ -162,7 +164,57 @@ export const Readonly: Story = { args: { readonly: true, modelValue: "alex.morga
 export const Outlined: Story = {
   args: { inputVariant: "outlined", descriptionText: "We only use it to reply to you." },
   render,
-  parameters: { docs: { description: { story: "The `outlined` variant renders the description after the control and error." } } },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The `outlined` variant puts the label inside the bordered box. At rest it sits where the value goes and the input is hidden, so a placeholder or a date mask never overlaps it; on focus, with a value, when invalid or with a `left` slot it shrinks to the top corner and the input shows. The description renders after the control and error.",
+      },
+    },
+  },
+};
+
+export const OutlinedForm: Story = {
+  name: "Outlined Form (Token-Styled)",
+  render: () => ({
+    components: { InputTextField, InputPasswordField, InputTextareaField },
+    setup() {
+      const form = ref({ name: "", email: "alex.morgan@example.com", date: "", password: "", message: "" });
+      const formStyle = {
+        display: "grid",
+        gap: "1.6rem",
+        maxInlineSize: "64rem",
+        "--input-text-border": "#8c734d",
+        "--input-text-surface-focus": "#f9f8f6",
+        "--input-text-border-focus": "#bfa47b",
+        "--input-text-outlined-label-color-floated": "#8c734d",
+        "--input-textarea-border": "#8c734d",
+        "--input-textarea-surface-focus": "#f9f8f6",
+        "--input-textarea-border-focus": "#bfa47b",
+        "--input-textarea-outlined-label-color-floated": "#8c734d",
+      };
+      return { form, formStyle };
+    },
+    template: `
+      <form :style="formStyle" @submit.prevent>
+        <InputTextField v-model="form.name" name="fullName" type="text" label="Full name" placeholder="e.g. Alex Morgan" error-message="" input-variant="outlined" required />
+        <InputTextField v-model="form.email" name="email" type="email" label="Email address" error-message="" input-variant="outlined" required />
+        <InputTextField v-model="form.date" name="preferredDate" type="date" label="Preferred date" error-message="Please pick a date" input-variant="outlined" field-has-error />
+        <InputPasswordField v-model="form.password" name="password" label="Password" error-message="" input-variant="outlined" />
+        <InputTextareaField v-model="form.message" name="message" label="Your message" error-message="" input-variant="outlined">
+          <template #descriptionText>Tell us what you'd like to book.</template>
+        </InputTextareaField>
+      </form>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Text, email, date, password (right slot), invalid and textarea fields in the `outlined` variant, restyled with public tokens only: border, focus surface tint, focus outline and floated label colour. Tab through to watch each label float; the prefilled email starts floated, and emptying a field drops its label back.",
+      },
+    },
+  },
 };
 
 export const Underlined: Story = { args: { inputVariant: "underlined" }, render };

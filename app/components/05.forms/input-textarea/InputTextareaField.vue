@@ -7,6 +7,7 @@
     :data-invalid="fieldHasError ? '' : null"
     :data-dirty="isDirty ? '' : null"
     :data-active="isActive ? '' : null"
+    :data-filled="isFilled ? '' : null"
   >
     <InputLabel
       :id
@@ -119,6 +120,7 @@ const modelValue = defineModel<string | number | readonly string[] | null | unde
 });
 const isActive = ref<boolean>(false);
 const isDirty = ref<boolean>(false);
+const isFilled = computed(() => (modelValue.value ?? "").toString() !== "");
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
@@ -154,6 +156,71 @@ watch(
   .input-textarea-field {
     min-inline-size: 0;
     overflow-wrap: anywhere;
+
+    &[data-input-variant="outlined"] {
+      --_outlined-label-space: var(--input-textarea-outlined-label-space, 2rem);
+
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+
+      > .input-textarea-label,
+      > .input-textarea-wrapper {
+        grid-area: 1 / 1;
+      }
+
+      > .input-textarea-wrapper {
+        padding-block-start: var(--_outlined-label-space);
+      }
+
+      > .input-textarea-label {
+        align-self: start;
+        z-index: 3;
+        min-inline-size: 0;
+        margin-block: 0;
+        margin-inline: calc(
+            var(--form-element-border-width) + var(--input-padding-inline) + var(--form-textarea-padding-inline)
+          )
+          calc(var(--form-element-border-width) + var(--input-padding-inline));
+        color: var(--input-textarea-outlined-label-color, inherit);
+        font-size: var(--input-textarea-outlined-label-font-size, var(--step-5));
+        line-height: 1.5;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transform-origin: left top;
+        translate: 0
+          var(
+            --input-textarea-outlined-label-rest-offset,
+            calc(var(--_outlined-label-space) + var(--form-textarea-padding-block))
+          );
+        transition:
+          translate var(--theme-form-transition-duration) ease-in-out,
+          scale var(--theme-form-transition-duration) ease-in-out;
+
+        @media (prefers-reduced-motion: reduce) {
+          transition: none;
+        }
+      }
+
+      .input-textarea {
+        opacity: 0;
+        transition: opacity var(--theme-form-transition-duration) ease-in-out;
+      }
+
+      &:is([data-active], [data-filled], [data-invalid]),
+      &:has(.input-textarea-wrapper[data-has-left-slot]) {
+        > .input-textarea-label {
+          color: var(--input-textarea-outlined-label-color-floated, var(--input-textarea-outlined-label-color, inherit));
+          font-weight: var(--input-textarea-outlined-label-font-weight-floated, bold);
+          translate: 0 var(--input-textarea-outlined-label-inset-block, 0.4rem);
+          scale: var(--input-textarea-outlined-label-scale, 0.85);
+        }
+
+        .input-textarea {
+          opacity: 1;
+        }
+      }
+    }
   }
 }
 </style>

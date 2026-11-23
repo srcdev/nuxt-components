@@ -1,7 +1,8 @@
 <template>
   <div
     class="input-otp"
-    :class="[inputVariant, elementClasses]"
+    :class="elementClasses"
+    :data-input-variant="inputVariant"
     :data-theme="theme"
     :data-invalid="fieldHasError ? '' : null"
     :role="groupLabel ? 'group' : undefined"
@@ -226,7 +227,7 @@ function onFocus(event: FocusEvent) {
       transition: outline-color var(--theme-form-transition-duration) ease-in-out;
     }
 
-    &.normal .input-otp-box {
+    &:is([data-input-variant="normal"], [data-input-variant="outlined"]) .input-otp-box {
       border: var(--form-element-border-width) solid var(--_border);
       border-radius: var(--input-otp-border-radius, var(--form-input-border-radius));
       outline: var(--form-element-outline-width) solid transparent;
@@ -242,7 +243,7 @@ function onFocus(event: FocusEvent) {
       }
     }
 
-    &.underlined .input-otp-box {
+    &[data-input-variant="underlined"] .input-otp-box {
       border-bottom: var(--form-element-border-bottom-width-underlined) solid var(--_border);
 
       &:focus-visible {

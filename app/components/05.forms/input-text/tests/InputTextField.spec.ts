@@ -87,6 +87,27 @@ describe("InputTextField", () => {
     expect(wrapper.attributes("data-dirty")).toBe("");
   });
 
+  it("sets data-filled while the field has a value, and clears it when emptied", async () => {
+    wrapper = await wrapperFactory();
+    expect(wrapper.attributes("data-filled")).toBeUndefined();
+
+    await wrapper.setProps({ modelValue: "x" });
+    expect(wrapper.attributes("data-filled")).toBe("");
+
+    await wrapper.setProps({ modelValue: "" });
+    expect(wrapper.attributes("data-filled")).toBeUndefined();
+    expect(wrapper.attributes("data-dirty")).toBe("");
+  });
+
+  it("stacks the label over the control in the outlined variant", async () => {
+    wrapper = await wrapperFactory({ inputVariant: "outlined" });
+    const children = Array.from((wrapper.element as HTMLElement).children).map((child) => child.className);
+
+    expect(wrapper.attributes("data-input-variant")).toBe("outlined");
+    expect(children.findIndex((name) => name.includes("input-text-label"))).toBe(0);
+    expect(children.findIndex((name) => name.includes("input-text-wrapper"))).toBe(1);
+  });
+
   it("renders the description after the input for the outlined variant", async () => {
     wrapper = await wrapperFactory({ inputVariant: "outlined" }, { descriptionText: () => "Hint text" });
     const html = wrapper.html();

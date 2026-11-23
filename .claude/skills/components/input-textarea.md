@@ -31,7 +31,7 @@ Most consumers should reach for **InputTextareaField** rather than `InputTextare
 | `:readonly` | `boolean` | `false` | Native `readonly`. Added 2026-10-16. |
 | `:autocomplete` | `string` | (unset) | Native `autocomplete` token (e.g. `street-address`). Added 2026-10-16. |
 | `:theme` | `FormUiTheme` | `"default"` | Sets `data-theme` on the wrapper. |
-| `:input-variant` | `InputUiVariant` | `"normal"` | Sets `data-input-variant`. `normal` (bordered box) and `underlined` have CSS; `outlined` doesn't. |
+| `:input-variant` | `InputUiVariant` | `"normal"` | Sets `data-input-variant`. `normal` and `outlined` draw a bordered box, `underlined` a bottom border. In the Field, `outlined` puts a floating label inside the box (see the Field section). |
 | `:field-has-error` | `boolean` | `false` | `data-invalid` on the wrapper and `aria-invalid="true"` on the textarea (omitted otherwise). |
 | `:style-class-passthrough` | `string \| string[]` | `[]` | Extra CSS classes on the textarea. Reacts to changes. |
 | `:aria-describedby` | `string` | `""` | Forwarded to the native textarea; omitted when empty. |
@@ -117,7 +117,14 @@ the Field story imported `reactive`, which it used without importing.
 `InputTextareaField` composes `InputTextarea` with `InputLabel`, `InputDescription` (before the
 control, or after the control and error when `inputVariant === "outlined"`) and `InputError`. Ids
 come from `useAriaDescribedById`, so it takes `name`, not `id`. Root `.input-textarea-field`,
-with `data-theme`, `data-input-variant`, `data-invalid`, `data-dirty` and `data-active`.
+with `data-theme`, `data-input-variant`, `data-invalid`, `data-dirty`, `data-filled` (while the
+value is non-empty, including `0`; clears when emptied) and `data-active`.
+
+**`outlined` (floating label, 2026-11-23):** the label is stacked over the bordered box, level
+with the first line of text, and the textarea is transparent until `data-active`, `data-filled`,
+`data-invalid` or a filled `left` slot floats the label to the top corner (scaled `0.85`, bold).
+Same shape as `InputTextField`'s; tokens `--input-textarea-outlined-label-*` and
+`--input-textarea-surface-focus`.
 
 **Additional props over InputTextarea:**
 

@@ -262,7 +262,7 @@ describe("InputOtp", () => {
     boxes(wrapper).forEach((box) => expect(box.attributes("required")).toBeDefined());
   });
 
-  it("applies theme, variant and passthrough classes", async () => {
+  it("applies theme and variant as attributes, and passthrough classes", async () => {
     const { wrapper } = await wrapperFactory({
       theme: "success",
       inputVariant: "underlined",
@@ -270,6 +270,8 @@ describe("InputOtp", () => {
     });
     const root = wrapper.find(".input-otp");
     expect(root.attributes("data-theme")).toBe("success");
-    expect(root.classes()).toEqual(expect.arrayContaining(["underlined", "extra"]));
+    expect(root.attributes("data-input-variant")).toBe("underlined");
+    expect(root.classes()).toContain("extra");
+    expect(root.classes()).not.toContain("underlined");
   });
 });

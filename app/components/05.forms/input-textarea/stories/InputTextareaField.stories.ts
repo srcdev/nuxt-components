@@ -132,7 +132,14 @@ export const Required: Story = { args: { required: true }, render };
 export const Outlined: Story = {
   args: { inputVariant: "outlined", descriptionText: "Tell us how we can help." },
   render,
-  parameters: { docs: { description: { story: "The `outlined` variant renders the description after the control and error." } } },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "The `outlined` variant puts the label inside the bordered box, level with the first line of text. On focus, with a value, when invalid or with a `left` slot it shrinks to the top corner and the textarea shows. The description renders after the control and error.",
+      },
+    },
+  },
 };
 
 export const Underlined: Story = { args: { inputVariant: "underlined" }, render };

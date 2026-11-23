@@ -127,7 +127,7 @@ watch(
     z-index: 2;
     position: relative;
 
-    &[data-input-variant="normal"] {
+    &:is([data-input-variant="normal"], [data-input-variant="outlined"]) {
       border: var(--form-element-border-width) solid var(--_border);
       border-radius: var(--form-input-border-radius);
       outline: var(--form-element-outline-width) solid transparent;
@@ -140,9 +140,15 @@ watch(
       }
 
       &:has(input:focus-visible, button:focus-visible) {
+        --_surface: var(--input-text-surface-focus, var(--input-text-surface, var(--theme-input-surface)));
+
         outline: var(--form-element-outline-width-focus) solid var(--_border-focus);
         outline-offset: var(--form-element-outline-offset-focus);
       }
+    }
+
+    &[data-input-variant="outlined"]:not([data-has-left-slot]) {
+      padding-inline-start: 0;
     }
 
     &[data-input-variant="underlined"] {

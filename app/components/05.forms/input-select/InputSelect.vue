@@ -108,7 +108,7 @@ watch(
     position: relative;
     transition: all var(--theme-form-transition-duration) ease-in-out;
 
-    &[data-input-variant="normal"] {
+    &:is([data-input-variant="normal"], [data-input-variant="outlined"]) {
       border: var(--form-element-border-width) solid var(--_border);
       border-radius: var(--form-input-border-radius);
       outline: var(--form-element-outline-width) solid transparent;
