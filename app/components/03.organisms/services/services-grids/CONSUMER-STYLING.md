@@ -24,7 +24,7 @@ Each item is a full `ServiceSummary` or `ServicesCard`, styled by its own tokens
 > Changed 2026-10-06: CTA labels wrap inside the card (they used to stay on one line and be clipped
 > by the card edge for a long or translated title), and an empty title no longer leaves a trailing
 > space in the label.
-
+>
 > Changed 2026-09-28: ServicesCardGrid columns use `minmax(min(<min-width>, 100%), 1fr)`, so a
 > single column no longer overflows a container narrower than the minimum width.
 

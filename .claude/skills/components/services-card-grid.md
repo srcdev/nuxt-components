@@ -4,6 +4,9 @@
 
 `ServicesCardGrid` renders a responsive auto-fit CSS grid of `ServicesCard` components from a `Service[]` array. It owns the grid layout; card-level presentation (overline/hero typography) and slot content are configured via pass-through props and a scoped `#actions` slot.
 
+> **Changed 2026-11-24:** `eyebrowConfig` → `overlineConfig` (`:overline-config`), type
+> `ServicesCardEyebrowConfig` → `ServicesCardOverlineConfig`.
+
 ## Props
 
 | Prop                    | Type                              | Default                          | Required |

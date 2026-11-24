@@ -4,6 +4,11 @@
 
 `ServicesCard` renders a single service as a portrait card: image, subtitle (overline), title, short description, an optional duration/price meta row, and an `actions` slot for any CTA content. The component owns the layout and data display; all routing and button decisions are delegated to the consumer via the slot.
 
+> **Changed 2026-11-24:** `eyebrowConfig` → `overlineConfig` (type `ServicesCardEyebrowConfig` →
+> `ServicesCardOverlineConfig`) and the card's eyebrow tokens → `-overline-`, with EyebrowText →
+> OverlineText. The visuals and hover transform now sit on an inner `.services-card-surface` so the
+> lift no longer moves the hit area.
+>
 > **Changed 2026-10-06:** every inner class and card-specific token is now prefixed `services-card-`
 > (`.footer` → `.services-card-footer`, `--meta-font-size` → `--services-card-meta-font-size`,
 > `--image-wrapper-*` → `--services-card-image-*`, and so on; the full old-to-new list is in

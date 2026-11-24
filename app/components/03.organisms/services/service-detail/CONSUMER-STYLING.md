@@ -16,8 +16,20 @@
 | `--service-detail-hero-min-height-tablet` | `36rem` | Minimum hero banner height from the `768px` container breakpoint |
 | `--service-detail-hero-min-height-desktop` | `42rem` | Minimum hero banner height from the `1024px` container breakpoint |
 | `--service-detail-hero-image-contain` | `size` | Whether the image may size the hero. `size`: the image fills the hero but the min heights and the content set its height. `none`: the image's own aspect ratio sets the height (a 16:9 image at full width makes a 16:9 hero), still never below the min heights |
+| `--service-detail-hero-padding` | `3.2rem` | **Block-axis (vertical)** padding around the breadcrumb/title/pills content — horizontal alignment comes from the nested content `PageRow`, not this token |
+| `--service-detail-hero-scrim` | `linear-gradient(0deg, rgb(0 0 0 / 70%) 0%, rgb(0 0 0 / 10%) 60%, transparent 100%)` | Overlay gradient behind the hero text, for legibility over the image |
+| `--service-detail-hero-text-colour` | `white` | Colour of the breadcrumb, overline, and title over the hero image |
+| `--service-detail-hero-overline-line-clamp` | `none` | Max lines of the hero overline (subtitle), ellipsis on the last. `1` is single-line ellipsis |
+| `--service-detail-hero-title-line-clamp` | `none` | Max lines of the hero title |
+| `--service-detail-breadcrumb-margin-block-end` | `0.8rem` | Space below the breadcrumb |
+| `--service-detail-hero-pills-gap` | `0.8rem` | Gap between the duration and price pills |
+| `--service-detail-hero-pill-bg` | `transparent` | Background of the price/duration pills (via `DisplayPill`'s `--display-pill-background`) |
+| `--service-detail-hero-pill-border-colour` | `currentColor` | Border colour of the price/duration pills |
 
-> Changed 2026-10-06: these were applied as a fixed `height`, so a long title was clipped by the
+> Changed 2026-11-24: `--service-detail-hero-eyebrow-line-clamp` is now
+> `--service-detail-hero-overline-line-clamp` (EyebrowText became OverlineText).
+>
+> Changed 2026-10-06: the `-min-height-*` tokens were applied as a fixed `height`, so a long title was clipped by the
 > hero. They are now a true minimum (`min-block-size`), matching their names.
 >
 > Fixed 2026-10-26: that change let the image's intrinsic height size the hero, so a full-width
@@ -28,18 +40,9 @@
 > and the final CTA heading and body. The hero title's and final CTA heading's spacing moved from
 > utility classes (`mb-20`, `mbs-0`/`mbe-8`) into the component CSS, same values, so the clamp can
 > keep descenders and italic overhang visible.
-| `--service-detail-hero-padding` | `3.2rem` | **Block-axis (vertical)** padding around the breadcrumb/title/pills content — horizontal alignment comes from the nested content `PageRow`, not this token |
-| `--service-detail-hero-scrim` | `linear-gradient(0deg, rgb(0 0 0 / 70%) 0%, rgb(0 0 0 / 10%) 60%, transparent 100%)` | Overlay gradient behind the hero text, for legibility over the image |
-| `--service-detail-hero-text-colour` | `white` | Colour of the breadcrumb, overline, and title over the hero image |
-| `--service-detail-hero-overline-line-clamp` | `none` | Max lines of the hero overline (subtitle), ellipsis on the last. `1` is single-line ellipsis |
-| `--service-detail-hero-title-line-clamp` | `none` | Max lines of the hero title |
 
 For the breadcrumb, set Breadcrumb's own `--breadcrumb-item-line-clamp` (it reaches the hero
 breadcrumb from any ancestor).
-| `--service-detail-breadcrumb-margin-block-end` | `0.8rem` | Space below the breadcrumb |
-| `--service-detail-hero-pills-gap` | `0.8rem` | Gap between the duration and price pills |
-| `--service-detail-hero-pill-bg` | `transparent` | Background of the price/duration pills (via `DisplayPill`'s `--display-pill-background`) |
-| `--service-detail-hero-pill-border-colour` | `currentColor` | Border colour of the price/duration pills |
 
 The hero image is always `object-fit: cover` (not tokened) — only its anchor point changes
 responsively: below the `768px` container breakpoint it's anchored with

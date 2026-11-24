@@ -115,16 +115,24 @@ title are `OverlineText` (`.overline-text`) and `HeroText` (`.hero-text`), so th
 Empty `subtitle`, `title` or `shortDescription` render no element at all, and the image overlay is
 left out when both titles are empty.
 
+> Changed 2026-11-24: the background, border, outline, radius, clipping and hover transform moved
+> from the root to a new inner `.services-card-surface`, so the hover lift no longer moves the hit area
+> (a pointer near the bottom edge made the card jitter). The tokens are unchanged; only CSS that set
+> those properties directly on `.services-card` needs to target `.services-card-surface` instead.
+> Also renamed with EyebrowText → OverlineText: `--services-card-eyebrow-padding-block` →
+> `--services-card-overline-padding-block`, `--services-card-image-details-eyebrow-*` →
+> `--services-card-image-details-overline-*`, and the `eyebrowConfig` prop → `overlineConfig`.
+>
 > Changed 2026-10-06: every inner class and card-specific token is now prefixed `services-card-`.
 > Old to new: `.image-wrapper` → `.services-card-image-wrapper`, `.image` → `.services-card-image`,
 > `.image-wrapper-details` → `.services-card-image-details`, `.details-wrapper` → `.services-card-details`,
 > `.description` / `.footer` / `.meta` / `.meta-duration` / `.meta-price` → `.services-card-*`;
-> `--image-wrapper-details-*` → `--services-card-image-details-*` (with `-overline-text-colour` → `-overline-colour`,
-> `-overline-text-padding-*` → `-overline-padding-*`, `-hero-text-padding-*` → `-title-padding-*`),
+> `--image-wrapper-details-*` → `--services-card-image-details-*` (with `-eyebrow-text-colour` → `-eyebrow-colour`,
+> `-eyebrow-text-padding-*` → `-eyebrow-padding-*`, `-hero-text-padding-*` → `-title-padding-*`),
 > `--image-wrapper-border-image-zoom-transform` → `--services-card-image-zoom-transform`,
 > `--image-wrapper-*` → `--services-card-image-*`, `--details-wrapper-grid-gap` → `--services-card-details-gap`,
 > `--details-wrapper-padding-*` → `--services-card-details-padding-*`,
-> `--overline-text-padding-block` → `--services-card-overline-padding-block`,
+> `--eyebrow-text-padding-block` → `--services-card-eyebrow-padding-block`,
 > `--hero-text-padding-block` → `--services-card-title-padding-block`, `--description-*` / `--meta-*` →
 > `--services-card-description-*` / `--services-card-meta-*`, `--footer-wrapper-grid-gap` →
 > `--services-card-footer-gap`, `--footer-padding-block` → `--services-card-footer-padding-block`.

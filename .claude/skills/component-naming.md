@@ -24,7 +24,10 @@ previously migrated components retrospectively, one family at a time.
   in its control's skill doc under "Variants"). Snippet file stays `srcdev-component-<family>.code-snippets`
   and covers both.
 - **CSS custom properties don't change** on rename; they're already `--<family>-*` (e.g.
-  `--input-number-border`). Only the component name and its root/base DOM class change.
+  `--input-number-border`). Only the component name and its root/base DOM class change. The
+  exception is a rename of the family word itself (`EyebrowText` → `OverlineText`, 2026-11-24):
+  then every `--<old>-*` token, and any other component's prop, slot, type or token containing the
+  word, is renamed too.
 
 ## Never a single word that is (or could become) a native HTML element
 
@@ -66,7 +69,16 @@ stripping `Core`.
    `.claude/settings.json` (its old allowlist entries match too) and any dated "Renamed"/"Changed"
    notes, and rename a removed wrapper by hand before the bulk pass, or `XWithLabel` → `XField`
    turns `XWithLabelInline` into a name that never existed.
-3. Add a "Renamed YYYY-MM-DD" note at the top of the skill doc listing old → new names and classes.
+   A `git grep -l | xargs perl -pi` over everything also rewrites history: on 2026-11-24
+   (`EyebrowText` → `OverlineText`) it turned old-to-new tables in dated `> Changed` blockquotes into
+   names that never existed. Replace on lines not starting with `>`, or diff every `^+>` line of the
+   result and restore the old names.
+3. Add a "Renamed YYYY-MM-DD" note at the top of the skill doc listing old → new names and classes,
+   and a dated `> Changed` note in the `CONSUMER-STYLING.md` (and skill doc) of every other component
+   whose public names changed with it (a slot, prop, type or token carrying the old name). For a
+   rename consumers will hit, add an "Upgrading to ..." section to skill `consumer-layer-upgrade.md`
+   with the old → new table and a targeted migration command, tested on copies of the consumer apps
+   (`cp -R ~/websites/<app>/app` into the scratchpad) so it skips the apps' own uses of the word.
 4. Grep consumer repos (`/check-component-usage`) and **list** the files/lines that use the old
    names (in the private consumer notes, never in this repo). Don't edit the consumers yet: they pin
    an exact layer version, so a rename applied now breaks them until they bump. Apply the list when

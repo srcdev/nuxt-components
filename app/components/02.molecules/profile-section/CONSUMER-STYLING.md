@@ -54,6 +54,10 @@ colour and opacity; the solid stop and target colour still apply.
 `--profile-section-picture-header-text-colour` yourself to suit the image. The overline's own
 `--overline-text-bg-img` is set to `none` inside the picture.
 
+> Changed 2026-11-24: `--profile-section-picture-header-eyebrow-colour` is now
+> `--profile-section-picture-header-overline-colour`, and the `#eyebrowText` slot is `#overlineText`
+> (EyebrowText became OverlineText; skill `consumer-layer-upgrade.md`).
+>
 > Changed 2026-10-14: new `header-placement` prop and its tokens, and `--profile-section-info-text-colour`. The scrim
 > gained opacity, solid-stop and target-colour tokens. The image is now absolutely positioned
 > inside the frame (no visual change), so a header in the frame can grow it past its aspect ratio.

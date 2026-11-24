@@ -1,5 +1,10 @@
 # OverlineText — Consumer Styling Guide
 
+> Changed 2026-11-24: renamed from `EyebrowText`. Rename `.eyebrow-text` to `.overline-text`, every
+> `--eyebrow-text-*` token to `--overline-text-*`, and the global `--colour-text-eyebrow` to
+> `--colour-text-overline`. Props and defaults are unchanged. Full table and a migration command:
+> skill `consumer-layer-upgrade.md`.
+
 ## Public token API
 
 | Token | Default | Controls |
@@ -17,7 +22,7 @@ The library theme also sets the colour and size tokens on `:root` (`03.theming/_
 `05.typography/01.tokens/_reponsive-font-sizes.css`) with the same values.
 
 > Changed 2026-09-27: the component now carries those values as fallbacks too. Before, an app that
-> replaced the library theme files without defining `--overline-text-bg-img` got invisible text,
+> replaced the library theme files without defining `--eyebrow-text-bg-img` got invisible text,
 > since the colour is `transparent`.
 
 No private `--_` tokens.
@@ -35,8 +40,8 @@ a cap clamps it itself with an allowance for the overhang, as `ServiceDetail` do
 | `[data-font-size="large" \| "medium" \| "small"]` | The `font-size` prop |
 
 > Changed 2026-10-19: the size was a bare `large`/`medium`/`small` class on the root, which a
-> consumer's own `.small` or `.large` rule could restyle. Select `.overline-text[data-font-size="small"]`
-> instead of `.overline-text.small`.
+> consumer's own `.small` or `.large` rule could restyle. Select `.eyebrow-text[data-font-size="small"]`
+> instead of `.eyebrow-text.small` (now `.overline-text`, see the rename note above).
 
 ---
 

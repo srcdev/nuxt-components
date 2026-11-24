@@ -23,6 +23,8 @@ type: reference
 | `headerPlacement` | `"above" \| "picture-bottom" \| "picture-top"` | `"above"` | Where the `#overlineText`/`#heroText` header goes: above the grid, or over the bottom or top of the picture on a scrim. Template form: `header-placement`. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root element. |
 
+> **Changed 2026-11-24:** the `#eyebrowText` slot is now `#overlineText` (EyebrowText became OverlineText).
+
 ## Slots
 
 | Slot | Description |

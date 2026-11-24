@@ -1,8 +1,3 @@
-
-> **Changed 2026-09-27**: the background and text-colour tokens never applied before. The pills use
-> `variant="neutral"`, and `DisplayPill`'s neutral rule only read its own neutral tokens, so they rendered
-> as dark slate pills with light text (only the border token worked). `DisplayPill` variants now fall
-> back to the base `--display-pill-*` tokens, so these defaults (transparent, `currentColor`) take effect.
 # ServiceSummary — Consumer Styling Guide
 
 ## Public token API
@@ -59,6 +54,11 @@ The duration/price pills are `DisplayPill` instances — `ServiceSummary` maps i
 | `--service-summary-pill-bg` | `transparent` | Background of the price/duration pills |
 | `--service-summary-pill-colour` | `currentColor` | Text colour of the pills |
 | `--service-summary-pill-border-colour` | `currentColor` | Border colour of the pills |
+
+> **Changed 2026-09-27**: the background and text-colour tokens never applied before. The pills use
+> `variant="neutral"`, and `DisplayPill`'s neutral rule only read its own neutral tokens, so they rendered
+> as dark slate pills with light text (only the border token worked). `DisplayPill` variants now fall
+> back to the base `--display-pill-*` tokens, so these defaults (transparent, `currentColor`) take effect.
 
 For anything not covered by these (e.g. pill size, font weight), target `--display-pill-*` directly
 under `.service-summary__pills` — see [display-pill.md](../../../../../.claude/skills/components/display-pill.md).
@@ -160,4 +160,3 @@ visual style, pass a modifier class:
 - `ServiceSummary` is summary-only — it has no "full mode". For a complete single-service page
   (process, ideal-for list, FAQs, booking CTA), use
   [ServiceDetail](../../../../../.claude/skills/components/service-detail.md) instead.
-
