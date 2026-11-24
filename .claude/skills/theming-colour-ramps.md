@@ -116,7 +116,7 @@ Additional context tokens (declared in `_default.css`):
 |-------------------------------------------------------------|------------------------------------------------|
 | `ramps.config.mjs`                                          | Source of truth — hue/chroma/drift per palette |
 | `scripts/generate-ramps.mjs`                                | Generator — reads config, emits CSS            |
-| `scripts/check-ramps.mjs`                                   | CI check — errors if CSS is out of date        |
+| `scripts/check-ramps.mjs`                                   | CI check for this repo (not published to npm) |
 | `app/assets/styles/setup/02.colours/_<name>.css`            | Named steps `--name-00` … `--name-10`          |
 | `app/assets/styles/setup/02.colours/_theme-params.css`      | `--palette-*` vars                             |
 | `app/assets/styles/setup/03.theming/theme-ramp.css`         | Formula (the `--colour-theme-*` declarations)  |
@@ -125,7 +125,7 @@ Additional context tokens (declared in `_default.css`):
 
 ```bash
 npm run generate:ramps   # rebuild all generated CSS from ramps.config.mjs
-npm run check:ramps      # CI: fail if generated CSS is out of date
+npm run check:ramps      # CI in this repo only (not published): fail if generated CSS is out of date
 ```
 
 ### Adding a new named palette

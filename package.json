@@ -43,21 +43,22 @@
     "ramps.config.mjs",
     "nuxt.config.ts",
     "types.d.ts",
+    "!scripts/check-ramps.mjs",
     "!**/tests/",
     "!**/stories/",
     "!**/playwright/"
   ],
   "peerDependencies": {
-    "@iconify-json/akar-icons": "*",
-    "@iconify-json/bi": "*",
-    "@iconify-json/bitcoin-icons": "*",
-    "@iconify-json/gravity-ui": "*",
-    "@iconify-json/ic": "*",
-    "@iconify-json/logos": "*",
-    "@iconify-json/lucide": "*",
-    "@iconify-json/material-symbols": "*",
-    "@iconify-json/mdi": "*",
-    "@iconify-json/radix-icons": "*"
+    "@iconify-json/akar-icons": "^1.2.0",
+    "@iconify-json/bi": "^1.2.0",
+    "@iconify-json/bitcoin-icons": "^1.2.0",
+    "@iconify-json/gravity-ui": "^1.2.0",
+    "@iconify-json/ic": "^1.2.0",
+    "@iconify-json/logos": "^1.2.0",
+    "@iconify-json/lucide": "^1.2.0",
+    "@iconify-json/material-symbols": "^1.2.0",
+    "@iconify-json/mdi": "^1.2.0",
+    "@iconify-json/radix-icons": "^1.2.0"
   },
   "peerDependenciesMeta": {
     "@iconify-json/akar-icons": {
