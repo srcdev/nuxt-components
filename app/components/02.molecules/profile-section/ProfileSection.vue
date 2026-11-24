@@ -7,14 +7,14 @@
     :data-header-placement="headerPlacement"
   >
     <header v-if="hasHeader() && !headerInPicture" class="profile-section-header">
-      <slot v-if="hasEyebrowTextSlot()" name="eyebrowText"></slot>
+      <slot v-if="hasOverlineTextSlot()" name="overlineText"></slot>
       <slot v-if="hasHeroTextSlot()" name="heroText" :heading-id="headingId"></slot>
     </header>
 
     <div class="profile-section-inner">
       <div class="profile-section-picture">
         <header v-if="hasHeader() && headerInPicture" class="profile-section-header">
-          <slot v-if="hasEyebrowTextSlot()" name="eyebrowText"></slot>
+          <slot v-if="hasOverlineTextSlot()" name="overlineText"></slot>
           <slot v-if="hasHeroTextSlot()" name="heroText" :heading-id="headingId"></slot>
         </header>
         <NuxtImg
@@ -58,9 +58,9 @@ const props = withDefaults(defineProps<Props>(), {
 const { headingId, ariaLabelledby } = useAriaLabelledById(() => props.tag);
 
 const slots = useSlots();
-const hasEyebrowTextSlot = () => Boolean(slots.eyebrowText);
+const hasOverlineTextSlot = () => Boolean(slots.overlineText);
 const hasHeroTextSlot = () => Boolean(slots.heroText);
-const hasHeader = () => hasEyebrowTextSlot() || hasHeroTextSlot();
+const hasHeader = () => hasOverlineTextSlot() || hasHeroTextSlot();
 const hasProfileLinksSlot = () => Boolean(slots.profileLinks);
 
 const headerInPicture = computed(() => props.headerPlacement !== "above");
@@ -207,9 +207,9 @@ watch(
           color: var(--profile-section-picture-header-text-colour, contrast-color(var(--_scrim-colour)));
         }
 
-        .eyebrow-text {
-          --eyebrow-text-bg-img: none;
-          color: var(--profile-section-picture-header-eyebrow-colour, inherit);
+        .overline-text {
+          --overline-text-bg-img: none;
+          color: var(--profile-section-picture-header-overline-colour, inherit);
         }
       }
     }

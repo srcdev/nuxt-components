@@ -97,7 +97,7 @@ Additional context tokens (declared in `_default.css`):
 | `--page-bg`                    | Page background                  |
 | `--colour-text-default`        | Body text                        |
 | `--colour-text-accent`         | Accent / heading text            |
-| `--colour-text-eyebrow`        | Eyebrow text                     |
+| `--colour-text-overline`        | Overline text                     |
 
 ## Built-in component themes
 
@@ -255,7 +255,7 @@ In `app/assets/styles/setup/02.colours/index.css` (create if it doesn't exist):
 
   /* Page-level tokens — readable named steps, not raw oklch */
   --colour-text-accent:  var(--gold-09);
-  --colour-text-eyebrow: var(--gold-09);
+  --colour-text-overline: var(--gold-09);
 }
 
 /* Optional: make it available as a data-theme variant too */

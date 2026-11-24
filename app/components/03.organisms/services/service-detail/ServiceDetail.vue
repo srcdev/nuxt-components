@@ -23,7 +23,7 @@
               :aria-label="breadcrumbAriaLabel"
               class="service-detail__breadcrumb"
             />
-            <EyebrowText v-if="serviceData.subtitle" font-size="large" :text-content="serviceData.subtitle" />
+            <OverlineText v-if="serviceData.subtitle" font-size="large" :text-content="serviceData.subtitle" />
             <HeroText
               v-if="serviceData.title"
               :id="headingId"
@@ -367,7 +367,7 @@ watch(
             margin-block-end: var(--service-detail-breadcrumb-margin-block-end, 0.8rem);
           }
 
-          .eyebrow-text,
+          .overline-text,
           .hero-text {
             color: var(--service-detail-hero-text-colour, white);
             display: -webkit-box;
@@ -379,10 +379,10 @@ watch(
             margin-inline-end: calc(-1 * var(--_clip-allowance));
           }
 
-          .eyebrow-text {
+          .overline-text {
             margin-block-end: calc(-1 * var(--_clip-allowance));
-            -webkit-line-clamp: var(--service-detail-hero-eyebrow-line-clamp, none);
-            line-clamp: var(--service-detail-hero-eyebrow-line-clamp, none);
+            -webkit-line-clamp: var(--service-detail-hero-overline-line-clamp, none);
+            line-clamp: var(--service-detail-hero-overline-line-clamp, none);
           }
 
           .hero-text {

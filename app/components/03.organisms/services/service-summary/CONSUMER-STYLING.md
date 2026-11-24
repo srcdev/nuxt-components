@@ -73,8 +73,8 @@ under `.service-summary__pills` — see [display-pill.md](../../../../../.claude
 | `.service-summary__info-wrapper--align-start` / `-center` / `-end` | The `alignment` prop |
 
 Inner classes: `.service-summary__grid`, `.service-summary__image-wrapper`, `.service-summary__image`,
-`.service-summary__info-wrapper`, `.service-summary__pills`. The eyebrow, title and pills are
-`EyebrowText`, `HeroText` and `DisplayPill`; the summary text is a `p.page-body-normal`.
+`.service-summary__info-wrapper`, `.service-summary__pills`. The overline, title and pills are
+`OverlineText`, `HeroText` and `DisplayPill`; the summary text is a `p.page-body-normal`.
 
 Empty `subtitle`, `title`, `whatIsIt`, `duration` or `price` render no element (and no pill row when
 both pill values are empty). With no title, a landmark `tag` gets no `aria-labelledby`.

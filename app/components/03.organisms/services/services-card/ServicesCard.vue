@@ -21,10 +21,10 @@
           v-if="props.titlesWithinImageWrapper && (serviceData.subtitle || serviceData.title)"
           class="services-card-image-details"
         >
-          <EyebrowText
+          <OverlineText
             v-if="serviceData.subtitle"
-            :font-size="eyebrowConfig.fontSize ?? 'medium'"
-            :tag="eyebrowConfig.tag ?? 'div'"
+            :font-size="overlineConfig.fontSize ?? 'medium'"
+            :tag="overlineConfig.tag ?? 'div'"
             :text-content="serviceData.subtitle"
           />
           <HeroText
@@ -43,10 +43,10 @@
     </GridStack>
 
     <div class="services-card-details">
-      <EyebrowText
+      <OverlineText
         v-if="!props.titlesWithinImageWrapper && serviceData.subtitle"
-        :font-size="eyebrowConfig.fontSize ?? 'large'"
-        :tag="eyebrowConfig.tag ?? 'div'"
+        :font-size="overlineConfig.fontSize ?? 'large'"
+        :tag="overlineConfig.tag ?? 'div'"
         :text-content="serviceData.subtitle"
       />
       <HeroText
@@ -80,7 +80,7 @@
 
 <script setup lang="ts">
 import type { Service } from "~/types/types.services";
-import type { ServicesCardEyebrowConfig, ServicesCardHeroConfig } from "~/types/components";
+import type { ServicesCardOverlineConfig, ServicesCardHeroConfig } from "~/types/components";
 
 interface Props {
   tag?: "div" | "section" | "article";
@@ -92,7 +92,7 @@ interface Props {
    * href starting with "/". See InputButton's `external` prop for the full rationale.
    */
   external?: boolean;
-  eyebrowConfig?: ServicesCardEyebrowConfig;
+  overlineConfig?: ServicesCardOverlineConfig;
   heroConfig?: ServicesCardHeroConfig;
   /** Overrides serviceData.duration. Ignored if the `duration` slot is used. */
   durationText?: string;
@@ -106,7 +106,7 @@ const props = withDefaults(defineProps<Props>(), {
   href: undefined,
   titlesWithinImageWrapper: false,
   external: false,
-  eyebrowConfig: () => ({}),
+  overlineConfig: () => ({}),
   heroConfig: () => ({}),
   durationText: undefined,
   priceText: undefined,
@@ -248,11 +248,11 @@ watch(
           color: var(--services-card-image-details-text-colour, contrast-color(var(--_scrim-colour)));
         }
 
-        .eyebrow-text {
-          --eyebrow-text-bg-img: none;
-          color: var(--services-card-image-details-eyebrow-colour, inherit);
-          padding-block: var(--services-card-image-details-eyebrow-padding-block, 0);
-          padding-inline: var(--services-card-image-details-eyebrow-padding-inline, 2.2rem);
+        .overline-text {
+          --overline-text-bg-img: none;
+          color: var(--services-card-image-details-overline-colour, inherit);
+          padding-block: var(--services-card-image-details-overline-padding-block, 0);
+          padding-inline: var(--services-card-image-details-overline-padding-inline, 2.2rem);
         }
 
         .hero-text {
@@ -272,8 +272,8 @@ watch(
       padding-block: var(--services-card-details-padding-block, 0);
       padding-inline: var(--services-card-details-padding-inline, 0);
 
-      .eyebrow-text {
-        padding-block: var(--services-card-eyebrow-padding-block, 0.8rem 0);
+      .overline-text {
+        padding-block: var(--services-card-overline-padding-block, 0.8rem 0);
       }
 
       .hero-text {

@@ -3,7 +3,7 @@
 ## Overview
 
 `ServiceDetail` renders a single service as a full, standalone detail page: a full-bleed hero
-banner (breadcrumb, eyebrow, title, price/duration pills over the service image), a two-column
+banner (breadcrumb, overline, title, price/duration pills over the service image), a two-column
 body (long-form content in the main column, a sticky sidebar booking card + "You may also like"
 related-services list), and a closing full-width CTA banner. The process steps reuse
 [StepperList](stepper-list.md) (numbered circle indicators with connectors) rather than bespoke
@@ -122,7 +122,7 @@ with an ellipsis on the last. Set them in the consumer's own CSS, e.g.
 | Token | Clamps |
 |---|---|
 | `--breadcrumb-item-line-clamp` | Each hero breadcrumb label (Breadcrumb's own token) |
-| `--service-detail-hero-eyebrow-line-clamp` | Hero eyebrow (`subtitle`) |
+| `--service-detail-hero-overline-line-clamp` | Hero overline (`subtitle`) |
 | `--service-detail-hero-title-line-clamp` | Hero title |
 | `--service-detail-sidebar-label-line-clamp` | "Book This Service" / "You May Also Like" labels |
 | `--service-detail-sidebar-value-line-clamp` | Sidebar row values (price, duration, location) |

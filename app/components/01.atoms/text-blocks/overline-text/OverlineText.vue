@@ -1,5 +1,5 @@
 <template>
-  <component :is="tag" class="eyebrow-text" :class="[elementClasses]" :data-font-size="fontSize">
+  <component :is="tag" class="overline-text" :class="[elementClasses]" :data-font-size="fontSize">
     {{ textContent }}
   </component>
 </template>
@@ -27,27 +27,27 @@ watch(
 
 <style lang="css">
 @layer components {
-  .eyebrow-text {
+  .overline-text {
     text-transform: uppercase;
     background-clip: text;
-    background-image: var(--eyebrow-text-bg-img, linear-gradient(135deg, #c2a770, #b4747e, #d1bd94));
-    font-family: var(--eyebrow-text-font-family, inherit);
-    font-style: var(--eyebrow-text-font-style, italic);
-    font-weight: var(--eyebrow-text-font-weight, inherit);
-    letter-spacing: var(--eyebrow-text-letter-spacing, inherit);
+    background-image: var(--overline-text-bg-img, linear-gradient(135deg, #c2a770, #b4747e, #d1bd94));
+    font-family: var(--overline-text-font-family, inherit);
+    font-style: var(--overline-text-font-style, italic);
+    font-weight: var(--overline-text-font-weight, inherit);
+    letter-spacing: var(--overline-text-letter-spacing, inherit);
     color: transparent;
     overflow-wrap: anywhere;
 
     &[data-font-size="large"] {
-      font-size: var(--eyebrow-text-large, 1.4rem);
+      font-size: var(--overline-text-large, 1.4rem);
     }
 
     &[data-font-size="medium"] {
-      font-size: var(--eyebrow-text-medium, 1.2rem);
+      font-size: var(--overline-text-medium, 1.2rem);
     }
 
     &[data-font-size="small"] {
-      font-size: var(--eyebrow-text-small, 1rem);
+      font-size: var(--overline-text-small, 1rem);
     }
   }
 }

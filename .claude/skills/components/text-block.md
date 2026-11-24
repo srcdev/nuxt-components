@@ -8,7 +8,7 @@ type: reference
 
 ## Overview
 
-`TextBlock` wraps a block of text (typically a page lead: `EyebrowText` + `HeroText`/`HeaderBlock`
+`TextBlock` wraps a block of text (typically a page lead: `OverlineText` + `HeroText`/`HeaderBlock`
 + intro copy) and gives it consistent fluid vertical padding. It has no layout of its own; put it
 inside a `PageRow` for horizontal placement.
 
@@ -30,7 +30,7 @@ inside a `PageRow` for horizontal placement.
 ```vue
 <PageRow tag="div" variant="content">
   <TextBlock :style-class-passthrough="['page-lead']">
-    <EyebrowText text-content="Pricing" font-size="large" />
+    <OverlineText text-content="Pricing" font-size="large" />
     <HeroText … />
   </TextBlock>
 </PageRow>

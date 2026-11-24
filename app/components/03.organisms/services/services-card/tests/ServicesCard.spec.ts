@@ -79,7 +79,7 @@ describe("ServicesCard", () => {
     expect(wrapper.text()).toContain(mockService.title);
   });
 
-  it("renders the service subtitle via eyebrow", async () => {
+  it("renders the service subtitle via overline", async () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: mockService },
     });
@@ -211,27 +211,27 @@ describe("ServicesCard", () => {
     expect(wrapper.attributes("href")).toBe("/api/auth/github");
   });
 
-  // ─── eyebrowConfig ──────────────────────────────────────────────────────
+  // ─── overlineConfig ──────────────────────────────────────────────────────
 
-  it("uses default eyebrow fontSize of large", async () => {
+  it("uses default overline fontSize of large", async () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: mockService },
     });
-    expect(wrapper.find(".eyebrow-text").attributes("data-font-size")).toBe("large");
+    expect(wrapper.find(".overline-text").attributes("data-font-size")).toBe("large");
   });
 
-  it("applies eyebrowConfig.fontSize override", async () => {
+  it("applies overlineConfig.fontSize override", async () => {
     const wrapper = await mountSuspended(ServicesCard, {
-      props: { serviceData: mockService, eyebrowConfig: { fontSize: "small" } },
+      props: { serviceData: mockService, overlineConfig: { fontSize: "small" } },
     });
-    expect(wrapper.find(".eyebrow-text").attributes("data-font-size")).toBe("small");
+    expect(wrapper.find(".overline-text").attributes("data-font-size")).toBe("small");
   });
 
-  it("applies eyebrowConfig.tag override", async () => {
+  it("applies overlineConfig.tag override", async () => {
     const wrapper = await mountSuspended(ServicesCard, {
-      props: { serviceData: mockService, eyebrowConfig: { tag: "p" } },
+      props: { serviceData: mockService, overlineConfig: { tag: "p" } },
     });
-    expect(wrapper.find(".eyebrow-text").element.tagName).toBe("P");
+    expect(wrapper.find(".overline-text").element.tagName).toBe("P");
   });
 
   // ─── heroConfig ─────────────────────────────────────────────────────────
@@ -306,11 +306,11 @@ describe("ServicesCard", () => {
 
   // ─── Worst-case data ───────────────────────────────────────────────────
 
-  it("renders no empty eyebrow, heading or description for empty strings", async () => {
+  it("renders no empty overline, heading or description for empty strings", async () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: { ...mockService, subtitle: "", title: "", shortDescription: "" } },
     });
-    expect(wrapper.find(".eyebrow-text").exists()).toBe(false);
+    expect(wrapper.find(".overline-text").exists()).toBe(false);
     expect(wrapper.find(".hero-text").exists()).toBe(false);
     expect(wrapper.find(".services-card-description").exists()).toBe(false);
   });

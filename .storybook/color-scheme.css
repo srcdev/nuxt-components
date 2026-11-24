@@ -28,7 +28,7 @@ html[data-color-scheme="dark"] {
   --status-neutral-text: var(--slate-02);
   --colour-text-default: var(--slate-01);
   --colour-text-accent: var(--blue-05);
-  --colour-text-eyebrow: var(--blue-05);
+  --colour-text-overline: var(--blue-05);
 
   --stepper-list-counter-circle-text: var(--blue-02);
   --stepper-list-counter-circle-border: var(--blue-02);

@@ -9,13 +9,13 @@
   --page-bg: var(--slate-00);
   --colour-text-default: var(--slate-09);
   --colour-text-accent: var(--blue-09);
-  --colour-text-eyebrow: var(--blue-09);
+  --colour-text-overline: var(--blue-09);
 
   /* ===========================================
-     HERO / EYEBROW TEXT VARIABLES
+     HERO / OVERLINE TEXT VARIABLES
      =========================================== */
   --hero-text-bg-img: linear-gradient(135deg, #c2a770, #b4747e, #d1bd94);
-  --eyebrow-text-bg-img: linear-gradient(135deg, #c2a770, #b4747e, #d1bd94);
+  --overline-text-bg-img: linear-gradient(135deg, #c2a770, #b4747e, #d1bd94);
 
   /* ===========================================
      STEPPER LIST VARIABLES

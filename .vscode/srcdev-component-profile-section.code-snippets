@@ -7,8 +7,8 @@
       "  tag=\"section\"",
       "  :profile-picture=\"{ src: '$2', alt: '$3' }\"",
       ">",
-      "  <template #eyebrowText>",
-      "    <EyebrowText text-content=\"$4\" />",
+      "  <template #overlineText>",
+      "    <OverlineText text-content=\"$4\" />",
       "  </template>",
       "  <template #heroText=\"{ headingId }\">",
       "    <HeroText :id=\"headingId\" tag=\"h2\" :text-content=\"[{ text: '$5' }]\" />",
@@ -23,7 +23,7 @@
     ]
   },
   "SRCDEV ProfileSection Header In Picture": {
-    "description": "ProfileSection with the eyebrow and heading over the bottom or top of the picture, on a scrim",
+    "description": "ProfileSection with the overline and heading over the bottom or top of the picture, on a scrim",
     "scope": "vue,html",
     "body": [
       "<ProfileSection",
@@ -31,8 +31,8 @@
       "  header-placement=\"${1|picture-bottom,picture-top|}\"",
       "  :profile-picture=\"{ src: '$2', alt: '$3' }\"",
       ">",
-      "  <template #eyebrowText>",
-      "    <EyebrowText text-content=\"$4\" />",
+      "  <template #overlineText>",
+      "    <OverlineText text-content=\"$4\" />",
       "  </template>",
       "  <template #heroText=\"{ headingId }\">",
       "    <HeroText :id=\"headingId\" tag=\"h2\" :text-content=\"[{ text: '$5' }]\" />",

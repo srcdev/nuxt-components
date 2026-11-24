@@ -3,7 +3,7 @@
 ## Overview
 
 `ServiceSummary` renders a single service as a compact two-column preview: image on one side,
-eyebrow/title/price-duration pills/`whatIsIt` text on the other, with a `summary-link` slot for
+overline/title/price-duration pills/`whatIsIt` text on the other, with a `summary-link` slot for
 navigating to the full service page. All routing decisions are delegated to the consumer via the
 slot.
 
@@ -42,7 +42,7 @@ wrapper).
 ### `alignment`
 
 Vertical alignment of the info column's content within the grid cell — useful when the image is
-taller than the text content and you want the eyebrow/title/pills/link block anchored to the top,
+taller than the text content and you want the overline/title/pills/link block anchored to the top,
 center, or bottom of that space rather than stretching.
 
 ## Slots

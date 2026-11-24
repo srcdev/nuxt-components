@@ -51,10 +51,10 @@ i.e. `is-clickable` is on the root — since these all default to `transparent`/
 | `--services-card-image-padding-block` | `0 0` | Padding inside the image wrapper (block axis) |
 | `--services-card-image-padding-inline` | `0 0` | Padding inside the image wrapper (inline axis) |
 | `--services-card-image-zoom-transform` | `scale(1.05)` | Transform applied to the image while the pointer is over the image. Set `none` to turn the zoom off (not `scale(0)`, which hides the image). Turning it off suits a whole-card link with its own hover effect (`--services-card-transform-hover`, border/background hover tokens): otherwise moving from the card body onto the image starts a second, separate effect |
-| `--services-card-details-gap` | `1rem` | Gap between eyebrow/title/description/footer |
+| `--services-card-details-gap` | `1rem` | Gap between overline/title/description/footer |
 | `--services-card-details-padding-block` | `0` | Padding inside the details wrapper (block axis) |
 | `--services-card-details-padding-inline` | `0` | Padding inside the details wrapper (inline axis) |
-| `--services-card-eyebrow-padding-block` | `0.8rem 0` | Padding above/below the eyebrow |
+| `--services-card-overline-padding-block` | `0.8rem 0` | Padding above/below the overline |
 | `--services-card-title-padding-block` | `2rem 1rem` | Padding above/below the title |
 | `--services-card-description-padding-block` | `0 0` | Padding on the description text |
 | `--services-card-description-text-colour` | `inherit` | Description paragraph colour |
@@ -79,12 +79,12 @@ i.e. `is-clickable` is on the root — since these all default to `transparent`/
 
 | Token | Default | Controls |
 |---|---|---|
-| `--services-card-image-details-scrim-colour` | `#000` | Colour of the gradient scrim behind the title/eyebrow. Use an opaque colour: the default scrim fades it with `color-mix()`, and the text colour is derived from it |
+| `--services-card-image-details-scrim-colour` | `#000` | Colour of the gradient scrim behind the title/overline. Use an opaque colour: the default scrim fades it with `color-mix()`, and the text colour is derived from it |
 | `--services-card-image-details-scrim` | `linear-gradient(to top, <scrim colour at 75%>, transparent 70%)` | The whole scrim `background` value — replace it for a different shape or direction, or set `none` to remove it |
-| `--services-card-image-details-text-colour` | `contrast-color(<scrim colour>)`, `#fff` without support | Title/eyebrow text colour. Where `contrast-color()` is supported it picks black or white against the scrim colour, so a light scrim gets dark text automatically |
-| `--services-card-image-details-eyebrow-colour` | `inherit` | Eyebrow colour. The eyebrow's gradient fill is turned off over the image so it can't clash with the photo |
-| `--services-card-image-details-gap` | `0.5rem` | Gap between eyebrow and title |
-| `--services-card-image-details-eyebrow-padding-block` / `-inline` | `0` / `2.2rem` | Eyebrow padding |
+| `--services-card-image-details-text-colour` | `contrast-color(<scrim colour>)`, `#fff` without support | Title/overline text colour. Where `contrast-color()` is supported it picks black or white against the scrim colour, so a light scrim gets dark text automatically |
+| `--services-card-image-details-overline-colour` | `inherit` | Overline colour. The overline's gradient fill is turned off over the image so it can't clash with the photo |
+| `--services-card-image-details-gap` | `0.5rem` | Gap between overline and title |
+| `--services-card-image-details-overline-padding-block` / `-inline` | `0` / `2.2rem` | Overline padding |
 | `--services-card-image-details-title-padding-block` / `-inline` | `1.2rem 2.2rem` / `2.2rem` | Title padding |
 
 `contrast-color()` only reads the scrim colour, not the photo. If you remove the scrim, set `--services-card-image-details-text-colour` yourself to suit the images.
@@ -108,9 +108,9 @@ i.e. `is-clickable` is on the root — since these all default to `transparent`/
 
 Inner classes: `.services-card-image-wrapper`, `.services-card-image`, `.services-card-image-details`
 (titles over the image), `.services-card-details`, `.services-card-description`, `.services-card-footer`,
-`.services-card-meta`, `.services-card-meta-duration`, `.services-card-meta-price`. The eyebrow and
-title are `EyebrowText` (`.eyebrow-text`) and `HeroText` (`.hero-text`), so their own tokens
-(`--eyebrow-text-*`, `--hero-text-*`) inherit down into the card.
+`.services-card-meta`, `.services-card-meta-duration`, `.services-card-meta-price`. The overline and
+title are `OverlineText` (`.overline-text`) and `HeroText` (`.hero-text`), so their own tokens
+(`--overline-text-*`, `--hero-text-*`) inherit down into the card.
 
 Empty `subtitle`, `title` or `shortDescription` render no element at all, and the image overlay is
 left out when both titles are empty.
@@ -119,12 +119,12 @@ left out when both titles are empty.
 > Old to new: `.image-wrapper` → `.services-card-image-wrapper`, `.image` → `.services-card-image`,
 > `.image-wrapper-details` → `.services-card-image-details`, `.details-wrapper` → `.services-card-details`,
 > `.description` / `.footer` / `.meta` / `.meta-duration` / `.meta-price` → `.services-card-*`;
-> `--image-wrapper-details-*` → `--services-card-image-details-*` (with `-eyebrow-text-colour` → `-eyebrow-colour`,
-> `-eyebrow-text-padding-*` → `-eyebrow-padding-*`, `-hero-text-padding-*` → `-title-padding-*`),
+> `--image-wrapper-details-*` → `--services-card-image-details-*` (with `-overline-text-colour` → `-overline-colour`,
+> `-overline-text-padding-*` → `-overline-padding-*`, `-hero-text-padding-*` → `-title-padding-*`),
 > `--image-wrapper-border-image-zoom-transform` → `--services-card-image-zoom-transform`,
 > `--image-wrapper-*` → `--services-card-image-*`, `--details-wrapper-grid-gap` → `--services-card-details-gap`,
 > `--details-wrapper-padding-*` → `--services-card-details-padding-*`,
-> `--eyebrow-text-padding-block` → `--services-card-eyebrow-padding-block`,
+> `--overline-text-padding-block` → `--services-card-overline-padding-block`,
 > `--hero-text-padding-block` → `--services-card-title-padding-block`, `--description-*` / `--meta-*` →
 > `--services-card-description-*` / `--services-card-meta-*`, `--footer-wrapper-grid-gap` →
 > `--services-card-footer-gap`, `--footer-padding-block` → `--services-card-footer-padding-block`.
@@ -200,5 +200,5 @@ Use sparingly — prefer global or page-scoped CSS. When a single instance needs
 - `--services-card-details-gap` (details-wrapper's own children) and `--services-card-footer-gap`
   (the meta row ↔ actions slot gap inside `.services-card-footer`) are separate tokens — overriding one does
   not affect the other.
-- Root element tag, `href`/`external` (whole-card-clickable), `eyebrowConfig`, and `heroConfig`
+- Root element tag, `href`/`external` (whole-card-clickable), `overlineConfig`, and `heroConfig`
   are props, not CSS — see the component skill doc.

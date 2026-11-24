@@ -283,7 +283,7 @@ In your `app/assets/styles/setup/02.colours/index.css` (create if it doesn't exi
 
   /* Page-level tokens — readable named steps, not raw oklch */
   --colour-text-accent: var(--gold-09);
-  --colour-text-eyebrow: var(--gold-09);
+  --colour-text-overline: var(--gold-09);
 }
 ```
 
@@ -456,7 +456,7 @@ npm run test:update
 
 ### Visual Regression Tests (Playwright)
 
-Runs pixel-level screenshot comparisons against Storybook. Requires Storybook to be running first. Coverage is currently limited to a few components (`InputButton`, `HeroText`, `EyebrowText`, `ContentDocs`); specs live in each component's `playwright/` folder as `*.playwright.ts`.
+Runs pixel-level screenshot comparisons against Storybook. Requires Storybook to be running first. Coverage is currently limited to a few components (`InputButton`, `HeroText`, `OverlineText`, `ContentDocs`); specs live in each component's `playwright/` folder as `*.playwright.ts`.
 
 ```bash
 # 1. Start Storybook

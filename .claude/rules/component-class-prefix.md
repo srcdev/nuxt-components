@@ -12,5 +12,5 @@ Prefix every structural class in a component's markup with the component name
 
 Why: components render inside the consumer's DOM, and unlayered consumer CSS for those common names
 beats `@layer components` regardless of specificity. Detail: CLAUDE.md pitfall #16.
-EyebrowText and HeroText put their size (`.small`, `.title`, `.label`) and axis on the root as bare
+OverlineText and HeroText put their size (`.small`, `.title`, `.label`) and axis on the root as bare
 classes until 2026-10-19.

@@ -86,7 +86,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── animated-svg-text.md    — AnimatedSvgText: inline SVG stroke-draw-then-fill animation, text slot, CSS token API
     ├── accordion-group.md      — AccordionGroup (renamed from AccordianCore): panels inferred from item-{n}-summary/content/icon slots, exclusive-open via shared name, unique per-panel ids, classic/modern variant, max-width token
     ├── accordion-chat.md       — AccordionChat: accordion as a chat (question bubbles right, rich answer bubbles left), avatar precedence item-{n}-avatar > #avatar > avatarLabel > none, built on ExpandingPanelClassic, full --accordion-chat-* token API (dark theme via tokens only)
-    ├── eyebrow-text.md         — EyebrowText props, usage patterns, styling
+    ├── overline-text.md        — OverlineText (renamed from EyebrowText 2026-11-24): uppercase gradient label above a heading; props, usage patterns, styling
     ├── hero-text.md            — HeroText props, usage patterns, styling
     ├── layout-grid-by-cols.md  — LayoutGridByCols dynamic slots (item-{n}), column/gap/collapse props that write public --layout-grid-by-cols-* tokens (CSS-settable), section label
     ├── page-row.md             — PageRow layout primitive: CSS grid named lines, nesting pattern, align prop, data-variant hook, aria-labelledby, CSS token API
@@ -95,7 +95,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── text-block.md           — TextBlock: vertical-rhythm text wrapper, --text-block-padding-block-start/-end tokens, heading-id slot prop for section/article aria-labelledby
     ├── page-hero-highlights.md — PageHeroHighlights template: hero + straddling highlights strip grid (root is the `page-hero-highlights` container, grid in `.page-hero-highlights-grid`), widthConstrained caps the column, equal-width highlights wrap at --page-hero-highlights-item-min-width, light theme-token defaults, PageHeroHighlightsHeader companion
     ├── slider-gallery.md       — SliderGallery: full-screen image carousel, IGalleryData, pause-on-hover/reduced-motion auto-advance, prefixed classes, CSS tokens
-    ├── services-card.md        — ServicesCard props (incl. eyebrowConfig/heroConfig), actions slot, CSS tokens, page boilerplate
+    ├── services-card.md        — ServicesCard props (incl. overlineConfig/heroConfig), actions slot, CSS tokens, page boilerplate
     ├── google-reviews.md        — GoogleReviews + GoogleReviewCard: Google Places reviews in a scrolling row; env vars, server route, useGoogleReviews, props, slots, tokens, Google terms
     ├── services-card-grid.md        — ServicesCardGrid props, config pass-through, CSS tokens, full page boilerplate
     ├── service-summary-grid.md      — ServiceSummaryGrid props, useAlternateReverse zigzag layout, page boilerplate
@@ -127,7 +127,7 @@ Each skill is a single markdown file named `<area>-<task>.md`.
     ├── decode-qr-code.md       — DecodeQrCode: file picker + drag-and-drop image decoder, shared results list, no-result/read-error messages, data-dropping state hook, CSS override points
     ├── auto-grid.md            — AutoGrid: auto-fit responsive grid, $slots iteration, --auto-grid-gap/min-col-size-{small,default,large} tokens, is-responsive (data-responsive hook), semantic tag + aria
     ├── display-avatar.md       — DisplayAvatar (02.molecules): circular avatar with image/initials fallback (alt announced), broken-image fallback, data-size scale tokens, image-size, --display-avatar-* colours, chip badge, icon slot
-    ├── profile-section.md      — ProfileSection (02.molecules): picture + numbered profile-info-N slots, eyebrow/hero header (above, or over the picture top/bottom on a scrim via header-placement), profileLinks, container-query two-column layout, .location/.services highlight tokens
+    ├── profile-section.md      — ProfileSection (02.molecules): picture + numbered profile-info-N slots, overline/hero header (above, or over the picture top/bottom on a scrim via header-placement), profileLinks, container-query two-column layout, .location/.services highlight tokens
     ├── display-theme-switch.md — DisplayThemeSwitch: system/light/dark picker wrapping SegmentedControl, wired to useSettingsStore, labels/icons props, small sizing variant
     ├── card-core.md            — CardCore: generic card container, dynamic named slots as rows, 4 variants, blurred backdrop layer, full CSS token API
     ├── action-menu.md          — ActionMenu + ActionMenuItem: ellipsis trigger + anchored popover menu, indexed item-{n} slots, link/button items, max-width cap with wrapping labels + label line-clamp token, inline flip near the left edge, full CSS token API

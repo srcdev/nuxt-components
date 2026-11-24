@@ -38,10 +38,10 @@ upward from the bottom edge for `picture-bottom` and downward from the top edge 
 | `--profile-section-picture-header-scrim-solid-stop` | `0%` | How far into the header the scrim stays at full strength before it starts to fade (e.g. `55%` keeps it solid behind the text) |
 | `--profile-section-picture-header-scrim-target-colour` | `transparent` | Colour the scrim fades into at the header's inner edge. Set it to roughly the photo's colour there (often translucent) so the fade blends into the image instead of leaving a grey band or a visible edge |
 | `--profile-section-picture-header-scrim` | gradient from the scrim colour | The whole scrim `background`; set `none` to remove it |
-| `--profile-section-picture-header-text-colour` | `contrast-color(<scrim colour>)`, `#fff` without support | Eyebrow and heading text colour |
-| `--profile-section-picture-header-eyebrow-colour` | `inherit` | Eyebrow colour only |
+| `--profile-section-picture-header-text-colour` | `contrast-color(<scrim colour>)`, `#fff` without support | Overline and heading text colour |
+| `--profile-section-picture-header-overline-colour` | `inherit` | Overline colour only |
 | `--profile-section-picture-header-padding` | `2.4rem` | Padding around the header inside the picture |
-| `--profile-section-picture-header-gap` | `0.4rem` | Gap between eyebrow and heading |
+| `--profile-section-picture-header-gap` | `0.4rem` | Gap between overline and heading |
 
 Matching the photo is a judgement call per image: pick the target colour from the part of the photo
 the fade ends on, and add end padding (`--profile-section-picture-header-padding`, e.g.
@@ -51,8 +51,8 @@ Browsers without `color-mix()` (before Safari 16.2) start the scrim from 75% bla
 colour and opacity; the solid stop and target colour still apply.
 
 `contrast-color()` only reads the scrim colour, not the photo. If you remove the scrim, set
-`--profile-section-picture-header-text-colour` yourself to suit the image. The eyebrow's own
-`--eyebrow-text-bg-img` is set to `none` inside the picture.
+`--profile-section-picture-header-text-colour` yourself to suit the image. The overline's own
+`--overline-text-bg-img` is set to `none` inside the picture.
 
 > Changed 2026-10-14: new `header-placement` prop and its tokens, and `--profile-section-info-text-colour`. The scrim
 > gained opacity, solid-stop and target-colour tokens. The image is now absolutely positioned
@@ -74,7 +74,7 @@ gradient from the tokens above.
 
 ## State hooks
 
-Inner classes: `.profile-section-header` (only rendered when the `eyebrowText` or `heroText` slot
+Inner classes: `.profile-section-header` (only rendered when the `overlineText` or `heroText` slot
 is given; it moves inside `.profile-section-picture`, before the image, when `header-placement` is
 `picture-bottom` or `picture-top`), `.profile-section-inner` (the grid), `.profile-section-picture` (frame),
 `.profile-section-image` (the `NuxtImg`), `.profile-section-info`,

@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import ProfileSection from "../ProfileSection.vue";
-import EyebrowText from "../../../01.atoms/text-blocks/eyebrow-text/EyebrowText.vue";
+import OverlineText from "../../../01.atoms/text-blocks/overline-text/OverlineText.vue";
 import HeroText from "../../../01.atoms/text-blocks/hero-text/HeroText.vue";
 import SocialIconsList from "../../social-icons-list/SocialIconsList.vue";
 import CanvasSwitcher from "../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
@@ -23,7 +23,7 @@ const meta: Meta<typeof ProfileSection> = {
     headerPlacement: {
       control: { type: "inline-radio" },
       options: ["above", "picture-bottom", "picture-top"],
-      description: "Where the eyebrow and heading go: above the grid, or over the bottom or top of the picture on a scrim",
+      description: "Where the overline and heading go: above the grid, or over the bottom or top of the picture on a scrim",
     },
     styleClassPassthrough: {
       control: "object",
@@ -70,8 +70,8 @@ export default meta;
 type Story = StoryObj<typeof ProfileSection>;
 
 const headerSlots = `
-  <template #eyebrowText>
-    <EyebrowText tag="p" font-size="medium" text-content="About Alex" :style-class-passthrough="['mb-0']" />
+  <template #overlineText>
+    <OverlineText tag="p" font-size="medium" text-content="About Alex" :style-class-passthrough="['mb-0']" />
   </template>
   <template #heroText="{ headingId }">
     <HeroText
@@ -102,10 +102,10 @@ const infoSlots = `
 
 // ─── Stories ─────────────────────────────────────────────────────────────────
 
-/** Default — three profile-info blocks with eyebrow and hero text header slots. */
+/** Default — three profile-info blocks with overline and hero text header slots. */
 export const Default: Story = {
   render: (args) => ({
-    components: { ProfileSection, EyebrowText, HeroText, SocialIconsList },
+    components: { ProfileSection, OverlineText, HeroText, SocialIconsList },
     setup() {
       return { args };
     },
@@ -130,7 +130,7 @@ export const Default: Story = {
 export const WithProfileLinks: Story = {
   name: "With Profile Links",
   render: (args) => ({
-    components: { ProfileSection, EyebrowText, HeroText, SocialIconsList },
+    components: { ProfileSection, OverlineText, HeroText, SocialIconsList },
     setup() {
       return { args };
     },
@@ -157,7 +157,7 @@ const socialIcons: ISocialIcon[] = [
 export const WithSocialIcons: Story = {
   name: "With Social Icons",
   render: (args) => ({
-    components: { ProfileSection, EyebrowText, HeroText, SocialIconsList },
+    components: { ProfileSection, OverlineText, HeroText, SocialIconsList },
     setup() {
       return { args, socialIcons };
     },
@@ -186,24 +186,24 @@ const themedSocialIcons: ISocialIcon[] = socialIcons.map((icon) =>
   icon.networkName === "Instagram" ? { ...icon, iconName: "mdi:instagram" } : icon
 );
 
-// Every value is a token set on a styleClassPassthrough class; the --eyebrow-text-* tokens are EyebrowText's own.
+// Every value is a token set on a styleClassPassthrough class; the --overline-text-* tokens are OverlineText's own.
 const pictureThemes = `
   <component is="style">
     .profile-section.dark-overlay-profile {
       --profile-section-picture-border-radius: 0.4rem;
       --profile-section-picture-header-scrim-colour: #141110;
       --profile-section-picture-header-text-colour: #f3ece4;
-      --profile-section-picture-header-eyebrow-colour: #c9a24a;
+      --profile-section-picture-header-overline-colour: #c9a24a;
       --profile-section-picture-header-padding: 3.6rem;
       --profile-section-info-text-colour: #a39a94;
       --profile-section-highlight-colour: #c9a24a;
       --profile-section-link-colour: #e8dfd6;
       --profile-section-link-colour-hover: #c9a24a;
       --social-icons-list-icon-colour: #e8dfd6;
-      --eyebrow-text-font-family: "Poppins", sans-serif;
-      --eyebrow-text-font-style: normal;
-      --eyebrow-text-font-weight: 600;
-      --eyebrow-text-letter-spacing: 0.25em;
+      --overline-text-font-family: "Poppins", sans-serif;
+      --overline-text-font-style: normal;
+      --overline-text-font-weight: 600;
+      --overline-text-letter-spacing: 0.25em;
     }
 
     .profile-section.light-overlay-profile {
@@ -213,23 +213,23 @@ const pictureThemes = `
       --profile-section-picture-header-scrim-solid-stop: 45%;
       --profile-section-picture-header-scrim-target-colour: rgb(247 242 236 / 0);
       --profile-section-picture-header-text-colour: #2b2420;
-      --profile-section-picture-header-eyebrow-colour: #9a6b3f;
+      --profile-section-picture-header-overline-colour: #9a6b3f;
       --profile-section-picture-header-padding: 3.2rem 3.2rem 6.4rem;
       --profile-section-info-text-colour: #5a514b;
       --profile-section-highlight-colour: #9a6b3f;
       --profile-section-link-colour: #2b2420;
       --profile-section-link-colour-hover: #9a6b3f;
       --social-icons-list-icon-colour: #2b2420;
-      --eyebrow-text-font-family: "Poppins", sans-serif;
-      --eyebrow-text-font-style: normal;
-      --eyebrow-text-font-weight: 600;
-      --eyebrow-text-letter-spacing: 0.25em;
+      --overline-text-font-family: "Poppins", sans-serif;
+      --overline-text-font-style: normal;
+      --overline-text-font-weight: 600;
+      --overline-text-letter-spacing: 0.25em;
     }
   </component>
 `;
 
 const pictureHeaderRender = (themeClass: string, background: string): Story["render"] => (args) => ({
-  components: { ProfileSection, EyebrowText, HeroText, SocialIconsList },
+  components: { ProfileSection, OverlineText, HeroText, SocialIconsList },
   setup() {
     return { args, themedSocialIcons, themeClass };
   },
@@ -237,8 +237,8 @@ const pictureHeaderRender = (themeClass: string, background: string): Story["ren
     ${pictureThemes}
     <div style="padding: 2.4rem; background: ${background};">
       <ProfileSection v-bind="args" :style-class-passthrough="[themeClass]">
-        <template #eyebrowText>
-          <EyebrowText tag="p" font-size="medium" text-content="About Alex" :style-class-passthrough="['mb-0']" />
+        <template #overlineText>
+          <OverlineText tag="p" font-size="medium" text-content="About Alex" :style-class-passthrough="['mb-0']" />
         </template>
         <template #heroText="{ headingId }">
           <HeroText :id="headingId" tag="h2" font-size="heading" :text-content="[{ text: 'Alex Morgan', styleClass: 'normal' }]" />
@@ -252,7 +252,7 @@ const pictureHeaderRender = (themeClass: string, background: string): Story["ren
   `,
 });
 
-/** Header in picture, dark — eyebrow and heading at the bottom of the image, on a dark scrim. */
+/** Header in picture, dark — overline and heading at the bottom of the image, on a dark scrim. */
 export const HeaderInPictureDark: Story = {
   name: "Header In Picture (Dark, Bottom)",
   args: {
@@ -264,14 +264,14 @@ export const HeaderInPictureDark: Story = {
     docs: {
       description: {
         story:
-          "With `header-placement=\"picture-bottom\"`, the eyebrow and heading sit at the bottom of the picture on a scrim, like ServicesCard's `titles-within-image-wrapper`. A long header grows the frame rather than being clipped. " +
-          "Every value is a token set on a class added with `styleClassPassthrough`: `--profile-section-picture-header-*` for the scrim and header, `--profile-section-info-text-colour` and the highlight/link tokens for the info column, and EyebrowText's own `--eyebrow-text-*` tokens. Instagram uses `mdi:instagram` coloured with `--social-icons-list-icon-colour`, since `logos:instagram-icon` is near-black and vanishes here. Switch `headerPlacement` in Controls to move the header to the top.",
+          "With `header-placement=\"picture-bottom\"`, the overline and heading sit at the bottom of the picture on a scrim, like ServicesCard's `titles-within-image-wrapper`. A long header grows the frame rather than being clipped. " +
+          "Every value is a token set on a class added with `styleClassPassthrough`: `--profile-section-picture-header-*` for the scrim and header, `--profile-section-info-text-colour` and the highlight/link tokens for the info column, and OverlineText's own `--overline-text-*` tokens. Instagram uses `mdi:instagram` coloured with `--social-icons-list-icon-colour`, since `logos:instagram-icon` is near-black and vanishes here. Switch `headerPlacement` in Controls to move the header to the top.",
       },
     },
   },
 };
 
-/** Header in picture, light — eyebrow and heading at the top of the image, on a light scrim. */
+/** Header in picture, light — overline and heading at the top of the image, on a light scrim. */
 export const HeaderInPictureLight: Story = {
   name: "Header In Picture (Light, Top)",
   args: {
@@ -302,7 +302,7 @@ export const WithBlockHeadings: Story = {
     tag: "section",
   },
   render: (args) => ({
-    components: { ProfileSection, EyebrowText, HeroText, SocialIconsList },
+    components: { ProfileSection, OverlineText, HeroText, SocialIconsList },
     setup() {
       return { args, socialIcons };
     },
@@ -354,7 +354,7 @@ export const WithBlockHeadings: Story = {
 export const WithoutHeader: Story = {
   name: "Without Header Slots",
   render: (args) => ({
-    components: { ProfileSection, EyebrowText, HeroText, SocialIconsList },
+    components: { ProfileSection, OverlineText, HeroText, SocialIconsList },
     setup() {
       return { args };
     },
@@ -373,7 +373,7 @@ export const AsSectionTag: Story = {
     tag: "section",
   },
   render: (args) => ({
-    components: { ProfileSection, EyebrowText, HeroText, SocialIconsList },
+    components: { ProfileSection, OverlineText, HeroText, SocialIconsList },
     setup() {
       return { args };
     },
@@ -416,14 +416,14 @@ export const StressTest: Story = {
     },
   },
   render: (args) => ({
-    components: { ProfileSection, EyebrowText, HeroText, SocialIconsList },
+    components: { ProfileSection, OverlineText, HeroText, SocialIconsList },
     setup() {
       return { args, unbroken, longGerman };
     },
     template: `
       <ProfileSection v-bind="args">
-        <template #eyebrowText>
-          <EyebrowText tag="p" font-size="large" :text-content="unbroken" :style-class-passthrough="['mb-0']" />
+        <template #overlineText>
+          <OverlineText tag="p" font-size="large" :text-content="unbroken" :style-class-passthrough="['mb-0']" />
         </template>
         <template #heroText="{ headingId }">
           <HeroText :id="headingId" tag="h2" font-size="title" :text-content="[{ text: longGerman, styleClass: 'normal' }]" />
@@ -445,8 +445,8 @@ export const StressTest: Story = {
         </template>
       </ProfileSection>
       <ProfileSection v-bind="args" header-placement="picture-bottom" :profile-picture="{ src: '/images/services/service-colour.jpg', alt: 'Header within picture' }" style="margin-block-start: 4.8rem;">
-        <template #eyebrowText>
-          <EyebrowText tag="p" font-size="medium" :text-content="unbroken" :style-class-passthrough="['mb-0']" />
+        <template #overlineText>
+          <OverlineText tag="p" font-size="medium" :text-content="unbroken" :style-class-passthrough="['mb-0']" />
         </template>
         <template #heroText="{ headingId }">
           <HeroText :id="headingId" tag="h2" font-size="title" :text-content="[{ text: longGerman + ' ' + longGerman, styleClass: 'normal' }]" />
@@ -463,7 +463,7 @@ export const StressTest: Story = {
     docs: {
       description: {
         story:
-          "Hostile content: a broken image with an invalid width and height and a long HTML-like alt, an unbroken eyebrow, a long German heading, " +
+          "Hostile content: a broken image with an invalid width and height and a long HTML-like alt, an unbroken overline, a long German heading, " +
           "info slots given out of order with a gap (1, 2, 12), unbroken words and a long URL inside a `.location .highlight`, right-to-left text with emoji, " +
           "and a dozen profile links plus an unbroken one. Check at every canvas width that nothing overflows the dashed outline, the picture column " +
           "never pushes the info column off-screen, the info blocks render in numeric order, the links wrap, and the broken image keeps its 3:4 frame. " +

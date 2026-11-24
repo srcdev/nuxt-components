@@ -106,6 +106,7 @@ external consumer, free to rename. Run `/check-component-usage` for the current 
 | ~~ActionMenuItemCore~~ | ✅ `ActionMenuItem` (2026-09-27) | - |
 | ~~AlertMaskCore~~ | ✅ `AlertMask` (2026-10-17) | - |
 | ~~DisplayTooltipDefined~~ | ✅ `DisplayTooltipRich` (2026-10-18): Material 3 "rich tooltip", the implementation word "Defined" said nothing about what it is | - |
+| ~~EyebrowText~~ | ✅ `OverlineText` (2026-11-24): Material's type-scale name for the label above a title; "eyebrow" had become a cliché. Related props, slot, type and tokens in other components renamed too | yes |
 | CardCore | **decide**: `Card` is single-word and collision-prone; prefer a prefixed name (`Display*`, `Content*`) | yes |
 | ~~AccordianCore~~ | ✅ `AccordionGroup` (2026-10-20) | yes |
 | ~~TabsCore~~ | ✅ `TabbedContent` (2026-10-07) | - |

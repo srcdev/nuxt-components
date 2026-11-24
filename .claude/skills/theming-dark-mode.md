@@ -57,7 +57,7 @@ previous built-in dark mode exactly. Delete what you don't need, or swap in your
   --page-bg: var(--slate-08);
   --colour-text-default: var(--slate-01);
   --colour-text-accent: var(--blue-05);
-  --colour-text-eyebrow: var(--blue-05);
+  --colour-text-overline: var(--blue-05);
   --colour-link-default: var(--blue-02);
   --colour-link-hover: var(--blue-03);
 

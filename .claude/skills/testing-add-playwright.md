@@ -109,7 +109,7 @@ and `/` with `-`:
 
 `STORY_BASE` is hardcoded, and nothing (Vitest, ESLint, the Component Ledger) checks it. When you
 change a story `title`, update `STORY_BASE` in the component's `playwright/` folder in the same
-change. EyebrowText and HeroText pointed at ids from an older title (`...-eyebrowtext`,
+change. EyebrowText (now OverlineText) and HeroText pointed at ids from an older title (`...-eyebrowtext`,
 `...-herotext`) until 2026-10-19, so their suites loaded a missing story.
 
 The full story URL pattern is:

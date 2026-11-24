@@ -44,7 +44,7 @@ Tracks progress toward a fully migrated component library. A component is consid
 | PageRow | `page-row/PageRow.vue` | ✅ | ☐ |
 | DisplayQrCode | `qr-code/DisplayQrCode.vue` | ☐ | ☐ |
 | TextBlock | `text-block/TextBlock.vue` | ☐ | ☐ |
-| EyebrowText | `text-blocks/eyebrow-text/EyebrowText.vue` | ☐ | ☐ |
+| OverlineText | `text-blocks/overline-text/OverlineText.vue` | ☐ | ☐ |
 | HeroText | `text-blocks/hero-text/HeroText.vue` | ☐ | ☐ |
 | LinkText | `text-blocks/link-text/LinkText.vue` | ☐ | ☐ |
 | UiBlockDecorated | `ui-block-decorated/UiBlockDecorated.vue` | ✅ | ✅ `ui-block-decorated` |

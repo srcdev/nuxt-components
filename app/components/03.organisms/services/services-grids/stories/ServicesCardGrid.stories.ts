@@ -7,7 +7,7 @@ import type { MediaCanvas } from "~/types/components";
 
 type StoryArgs = {
   tag?: "div" | "section" | "main";
-  eyebrowConfig?: { tag?: "p" | "div" | "span"; fontSize?: "large" | "medium" | "small" };
+  overlineConfig?: { tag?: "p" | "div" | "span"; fontSize?: "large" | "medium" | "small" };
   heroConfig?: {
     tag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
     fontSize?: "display" | "title" | "heading" | "subheading" | "label";
@@ -31,9 +31,9 @@ const meta: Meta<StoryArgs> = {
       options: ["div", "section", "main"],
       description: "HTML element rendered as the root",
     },
-    eyebrowConfig: {
+    overlineConfig: {
       control: "object",
-      description: "Override eyebrow tag and fontSize on every card — omit keys to use defaults",
+      description: "Override overline tag and fontSize on every card — omit keys to use defaults",
     },
     heroConfig: {
       control: "object",
@@ -70,7 +70,7 @@ const meta: Meta<StoryArgs> = {
   },
   args: {
     tag: "div",
-    eyebrowConfig: {},
+    overlineConfig: {},
     heroConfig: {},
     hrefBase: "/services/",
     buttonTextPrefix: "Enquire about",
@@ -83,7 +83,7 @@ const meta: Meta<StoryArgs> = {
     docs: {
       description: {
         component:
-          "Responsive auto-fit grid of `ServicesCard` components from a `Service[]` array. Button hrefs and text are built from `hrefBase` + `service.slug` and `buttonTextPrefix` + `service.title`. Typography is configured once via `eyebrowConfig` and `heroConfig` and applied to every card.",
+          "Responsive auto-fit grid of `ServicesCard` components from a `Service[]` array. Button hrefs and text are built from `hrefBase` + `service.slug` and `buttonTextPrefix` + `service.title`. Typography is configured once via `overlineConfig` and `heroConfig` and applied to every card.",
       },
     },
   },
@@ -266,7 +266,7 @@ export const ConfigOverrides: Story = {
   argTypes: hideDemoControls,
   name: "Config Overrides",
   args: {
-    eyebrowConfig: { tag: "p", fontSize: "small" },
+    overlineConfig: { tag: "p", fontSize: "small" },
     heroConfig: { tag: "h3", fontSize: "title" },
   },
   render: (args) => ({
@@ -284,7 +284,7 @@ export const ConfigOverrides: Story = {
     docs: {
       description: {
         story:
-          "eyebrowConfig and heroConfig are applied uniformly to every card — set heroConfig.tag to h3 when the page already has an h2 above the grid.",
+          "overlineConfig and heroConfig are applied uniformly to every card — set heroConfig.tag to h3 when the page already has an h2 above the grid.",
       },
     },
   },

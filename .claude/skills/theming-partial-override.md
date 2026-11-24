@@ -67,7 +67,7 @@ Page-level tokens:
 | `--page-bg`              | Page background       |
 | `--colour-text-default`  | Body text             |
 | `--colour-text-accent`   | Accent / heading text |
-| `--colour-text-eyebrow`  | Eyebrow text          |
+| `--colour-text-overline`  | Overline text          |
 
 ## Steps
 

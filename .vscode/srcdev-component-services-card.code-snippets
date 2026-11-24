@@ -26,7 +26,7 @@
     ]
   },
   "SRCDEV ServicesCard Titles Over Image": {
-    "description": "ServicesCard with eyebrow and title overlaid on the image, over a scrim",
+    "description": "ServicesCard with overline and title overlaid on the image, over a scrim",
     "scope": "vue,html",
     "body": [
       "<ServicesCard :service-data=\"$1service\" titles-within-image-wrapper>",
@@ -37,12 +37,12 @@
     ]
   },
   "SRCDEV ServicesCard With Config Overrides": {
-    "description": "ServicesCard with eyebrowConfig/heroConfig overrides",
+    "description": "ServicesCard with overlineConfig/heroConfig overrides",
     "scope": "vue,html",
     "body": [
       "<ServicesCard",
       "  :service-data=\"$1service\"",
-      "  :eyebrow-config=\"{ fontSize: '$2small' }\"",
+      "  :overline-config=\"{ fontSize: '$2small' }\"",
       "  :hero-config=\"{ tag: '$3h3', fontSize: '$4title' }\"",
       ">",
       "  <template #actions=\"{ serviceData }\">",
@@ -103,7 +103,7 @@
       "    --services-card-details-gap: ;",
       "    --services-card-details-padding-block: ;",
       "    --services-card-details-padding-inline: ;",
-      "    --services-card-eyebrow-padding-block: ;",
+      "    --services-card-overline-padding-block: ;",
       "    --services-card-title-padding-block: ;",
       "    --services-card-description-text-colour: ;",
       "    --services-card-description-padding-block: ;",
@@ -128,10 +128,10 @@
       "    --services-card-image-details-scrim-colour: ;",
       "    --services-card-image-details-scrim: ;",
       "    --services-card-image-details-text-colour: ;",
-      "    --services-card-image-details-eyebrow-colour: ;",
+      "    --services-card-image-details-overline-colour: ;",
       "    --services-card-image-details-gap: ;",
-      "    --services-card-image-details-eyebrow-padding-block: ;",
-      "    --services-card-image-details-eyebrow-padding-inline: ;",
+      "    --services-card-image-details-overline-padding-block: ;",
+      "    --services-card-image-details-overline-padding-inline: ;",
       "    --services-card-image-details-title-padding-block: ;",
       "    --services-card-image-details-title-padding-inline: ;",
       "  }",

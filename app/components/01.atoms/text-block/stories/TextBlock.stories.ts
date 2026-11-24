@@ -23,7 +23,7 @@ const meta: Meta<typeof TextBlock> = {
     docs: {
       description: {
         component:
-          "Vertical-rhythm wrapper for a block of text (typically a page lead: eyebrow, hero heading, intro copy). Its only styling is fluid block padding, overridable via --text-block-padding-block-start/-end. The dashed outline in these stories shows the padding and is not part of the component.",
+          "Vertical-rhythm wrapper for a block of text (typically a page lead: overline, hero heading, intro copy). Its only styling is fluid block padding, overridable via --text-block-padding-block-start/-end. The dashed outline in these stories shows the padding and is not part of the component.",
       },
     },
   },

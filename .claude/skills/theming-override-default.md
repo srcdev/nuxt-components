@@ -123,7 +123,7 @@ Create `app/assets/styles/setup/03.theming/_default.css`:
   --page-bg: var(--slate-00);
   --colour-text-default:  var(--slate-09);
   --colour-text-accent:   var(--gold-09);
-  --colour-text-eyebrow:  var(--gold-09);
+  --colour-text-overline:  var(--gold-09);
 }
 ```
 

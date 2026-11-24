@@ -1,6 +1,6 @@
 ---
 name: ProfileSection
-description: ProfileSection molecule — props, dynamic profile-info slots, eyebrowText/heroText/profileLinks slots, container-query layout, accessibility
+description: ProfileSection molecule — props, dynamic profile-info slots, overlineText/heroText/profileLinks slots, container-query layout, accessibility
 type: reference
 ---
 
@@ -12,7 +12,7 @@ type: reference
 
 ## Overview
 
-`ProfileSection` is a molecule that renders a practitioner/author profile: a header area (eyebrow + heading), a profile picture, and a flexible set of bio/info blocks alongside optional profile links. It is landmark-aware — when `tag` is `section` or `article`, the root element automatically gets `aria-labelledby` wired to the heading inside the `#heroText` slot (**you must bind `headingId` yourself, and a console warning fires if you forget** — see [component-aria-landmark.md](../component-aria-landmark.md)). `tag="main"` is never auto-labelled.
+`ProfileSection` is a molecule that renders a practitioner/author profile: a header area (overline + heading), a profile picture, and a flexible set of bio/info blocks alongside optional profile links. It is landmark-aware — when `tag` is `section` or `article`, the root element automatically gets `aria-labelledby` wired to the heading inside the `#heroText` slot (**you must bind `headingId` yourself, and a console warning fires if you forget** — see [component-aria-landmark.md](../component-aria-landmark.md)). `tag="main"` is never auto-labelled.
 
 ## Props
 
@@ -20,19 +20,19 @@ type: reference
 |------|------|---------|-------------|
 | `profilePicture` | `ProfilePicture` (`{ src; alt; width?; height? }`, exported from the layer types) | — | **Required.** Rendered via `NuxtImg`. `width`/`height` default to `828`/`1104` (3:4, a Vercel-allowed width), and a missing or invalid value (0, negative, `NaN`, `Infinity`) uses the default. |
 | `tag` | `"div" \| "section" \| "article" \| "main"` | `"div"` | HTML element rendered as the root. |
-| `headerPlacement` | `"above" \| "picture-bottom" \| "picture-top"` | `"above"` | Where the `#eyebrowText`/`#heroText` header goes: above the grid, or over the bottom or top of the picture on a scrim. Template form: `header-placement`. |
+| `headerPlacement` | `"above" \| "picture-bottom" \| "picture-top"` | `"above"` | Where the `#overlineText`/`#heroText` header goes: above the grid, or over the bottom or top of the picture on a scrim. Template form: `header-placement`. |
 | `styleClassPassthrough` | `string \| string[]` | `[]` | Extra classes applied to the root element. |
 
 ## Slots
 
 | Slot | Description |
 |------|-------------|
-| `#eyebrowText` | Optional eyebrow label above the heading. Use `EyebrowText`. |
+| `#overlineText` | Optional overline label above the heading. Use `OverlineText`. |
 | `#heroText` | Heading slot. Receives `headingId` as a slot prop — bind it to the heading's `id` for accessible `aria-labelledby`. |
 | `#profile-info-1` … `#profile-info-N` | Bio / info blocks. Provide as many numbered slots as needed. They are rendered in ascending numeric order. |
 | `#profileLinks` | Links / actions shown at the bottom-right of the info column (e.g. social icons, booking CTA). Wraps onto more lines when there are many. |
 
-The `<header class="profile-section-header">` is only rendered when `#eyebrowText` or `#heroText` is given. It renders above the grid, or inside the picture when `header-placement` is `picture-bottom` or `picture-top`.
+The `<header class="profile-section-header">` is only rendered when `#overlineText` or `#heroText` is given. It renders above the grid, or inside the picture when `header-placement` is `picture-bottom` or `picture-top`.
 
 ## Basic usage
 
@@ -41,8 +41,8 @@ The `<header class="profile-section-header">` is only rendered when `#eyebrowTex
   tag="section"
   :profile-picture="{ src: '/images/profile/alex.jpg', alt: 'Alex Morgan, hair stylist' }"
 >
-  <template #eyebrowText>
-    <EyebrowText font-size="large" text-content="About Alex" />
+  <template #overlineText>
+    <OverlineText font-size="large" text-content="About Alex" />
   </template>
 
   <template #heroText="{ headingId }">
@@ -107,15 +107,15 @@ If you use a different heading component, bind `headingId` to whatever prop rend
 
 With `header-placement="picture-bottom"` or `"picture-top"`, the `<header>` renders inside `.profile-section-picture`, before the image in the DOM (so it is read first), and sits at the bottom or top of the frame on a scrim that fades away from that edge. It follows ServicesCard's `titles-within-image-wrapper`:
 
-- Scrim and text come from `--profile-section-picture-header-*` tokens: scrim colour (`#000`) and opacity (`75%`), a solid stop (`0%`, how far the scrim stays full strength before fading) and a target colour (`transparent`, what it fades into, set it to roughly the photo's colour where the fade ends so it blends instead of leaving a grey band), text colour (`contrast-color()` of the scrim colour where supported, else `#fff`), eyebrow colour, padding (`2.4rem`), gap (`0.4rem`). Full list in `CONSUMER-STYLING.md`.
+- Scrim and text come from `--profile-section-picture-header-*` tokens: scrim colour (`#000`) and opacity (`75%`), a solid stop (`0%`, how far the scrim stays full strength before fading) and a target colour (`transparent`, what it fades into, set it to roughly the photo's colour where the fade ends so it blends instead of leaving a grey band), text colour (`contrast-color()` of the scrim colour where supported, else `#fff`), overline colour, padding (`2.4rem`), gap (`0.4rem`). Full list in `CONSUMER-STYLING.md`.
 - The frame drops `overflow: hidden` in this mode, so its aspect ratio is a minimum: a long header grows the frame rather than being clipped. The image is absolutely positioned and still fills the frame.
 - `aria-labelledby` still points at the heading.
 - Drop spacing utilities like `mb-20` from the heading in this mode; the header's padding handles spacing.
 
 ```vue
 <ProfileSection tag="section" header-placement="picture-bottom" :profile-picture="picture">
-  <template #eyebrowText>
-    <EyebrowText tag="p" font-size="medium" text-content="About Alex" />
+  <template #overlineText>
+    <OverlineText tag="p" font-size="medium" text-content="About Alex" />
   </template>
   <template #heroText="{ headingId }">
     <HeroText :id="headingId" tag="h2" font-size="heading" :text-content="[{ text: 'Alex Morgan', styleClass: 'normal' }]" />

@@ -132,13 +132,13 @@ describe("ServicesCardGrid", () => {
     expect(wrapper.text()).toContain(`Learn more about ${mockServices[0]!.title}`);
   });
 
-  // ─── eyebrowConfig / heroConfig ─────────────────────────────────────────
+  // ─── overlineConfig / heroConfig ─────────────────────────────────────────
 
-  it("passes eyebrowConfig fontSize to each card", async () => {
+  it("passes overlineConfig fontSize to each card", async () => {
     const wrapper = await mountSuspended(ServicesCardGrid, {
-      props: { servicesData: mockServices, eyebrowConfig: { fontSize: "small" } },
+      props: { servicesData: mockServices, overlineConfig: { fontSize: "small" } },
     });
-    wrapper.findAll(".eyebrow-text").forEach((el) => {
+    wrapper.findAll(".overline-text").forEach((el) => {
       expect(el.attributes("data-font-size")).toBe("small");
     });
   });

@@ -577,7 +577,7 @@ const timelineCss = `
       }
     }
 
-    .stepper-timeline-eyebrow {
+    .stepper-timeline-overline {
       margin: 0 0 0.6rem;
       font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
       font-size: var(--step-4);
@@ -602,7 +602,7 @@ const timelineCss = `
       color: #a6a9b2;
     }
 
-    .stepper-list-item:has(.is-current) .stepper-timeline-eyebrow {
+    .stepper-list-item:has(.is-current) .stepper-timeline-overline {
       color: #00c8d7;
     }
 
@@ -626,7 +626,7 @@ export const TimelineDemo: Story = {
     docs: {
       description: {
         story:
-          "A consumer-styled timeline built only from public tokens and slots, no extra props. Diamond markers are rotated squares in the `#indicator-{n}` slots, each with a state class (`is-done`, `is-current`, `is-upcoming`). `.stepper-list-item:has(.is-done)` swaps that item's connector to a cyan dashed line through `--stepper-list-connector-image`; the rest stay grey and dotted. The current step's eyebrow turns cyan and upcoming steps are dimmed. The state is also written in each eyebrow, so it never depends on colour alone. See CONSUMER-STYLING.md, \"Recipe: per-step states and dashed connectors\".",
+          "A consumer-styled timeline built only from public tokens and slots, no extra props. Diamond markers are rotated squares in the `#indicator-{n}` slots, each with a state class (`is-done`, `is-current`, `is-upcoming`). `.stepper-list-item:has(.is-done)` swaps that item's connector to a cyan dashed line through `--stepper-list-connector-image`; the rest stay grey and dotted. The current step's overline turns cyan and upcoming steps are dimmed. The state is also written in each overline, so it never depends on colour alone. See CONSUMER-STYLING.md, \"Recipe: per-step states and dashed connectors\".",
       },
     },
   },
@@ -644,7 +644,7 @@ export const TimelineDemo: Story = {
             <span class="stepper-timeline-marker" :class="'is-' + step.state" aria-hidden="true"></span>
           </template>
           <template v-for="(step, i) in timelineSteps" :key="'item-' + i" #[\`item-\${i}\`]>
-            <p class="stepper-timeline-eyebrow">Step {{ String(i + 1).padStart(2, "0") }} · {{ timelineStateLabels[step.state] }}</p>
+            <p class="stepper-timeline-overline">Step {{ String(i + 1).padStart(2, "0") }} · {{ timelineStateLabels[step.state] }}</p>
             <h3 class="stepper-timeline-title" :aria-current="step.state === 'current' ? 'step' : undefined">{{ step.title }}</h3>
             <p class="stepper-timeline-body">{{ step.body }}</p>
           </template>

@@ -31,9 +31,9 @@ is a fluid `clamp()` — smallest at narrow viewports, largest at wide ones:
 | `--step-9` | ~33.6–47.7 |
 | `--step-10` | ~40.3–59.6 |
 
-Plus purpose-specific tokens for hero/eyebrow text: `--hero-text-display`, `--hero-text-title`,
-`--hero-text-heading`, `--hero-text-subheading`, `--hero-text-label`, `--eyebrow-text-large`,
-`--eyebrow-text-medium`, `--eyebrow-text-small`.
+Plus purpose-specific tokens for hero/overline text: `--hero-text-display`, `--hero-text-title`,
+`--hero-text-heading`, `--hero-text-subheading`, `--hero-text-label`, `--overline-text-large`,
+`--overline-text-medium`, `--overline-text-small`.
 
 `body` itself is set to `font-size: var(--step-4)` (`setup/01.config/_head.css`), so plain `<p>`/`<li>`
 text inherits the correct scaled size automatically — you only need to reach for a token explicitly
@@ -87,7 +87,7 @@ badges, etc.), reference the token directly rather than a class:
 Don't go below `--step-4` for anything a user is expected to actually read (nav links, table
 cells, code, captions) — `--step-2`/`--step-3` look reasonable in isolation but read as too small
 once placed in real dense UI (sidebars, TOCs, code blocks) next to normal body text. Reserve
-`--step-1`–`--step-3` for genuinely decorative/secondary marks (eyebrow labels, badge counters)
+`--step-1`–`--step-3` for genuinely decorative/secondary marks (overline labels, badge counters)
 where legibility isn't the point.
 
 ### 3. Pick a step by relative scale, not by trying to hit a literal px target

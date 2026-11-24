@@ -36,6 +36,75 @@ checklist.
 5. **Refresh the layer's copies**: snippets and Claude skills/rules (rule `layer-setup-copies.md`).
 6. **Check**: `npm ls nuxt vite vue-router` prints one version of each, and `npm run build` passes.
 
+## Upgrading to the OverlineText release (from 9.9.6 or earlier)
+
+Breaking. `EyebrowText` is now `OverlineText`, and every "eyebrow" name in the layer's public API
+became "overline". There are no aliases, so the old names stop working (an unknown component
+renders as an empty element with no error). Usage is unchanged: same props (`textContent`,
+`fontSize`, `tag`, `styleClassPassthrough`), same defaults.
+
+| Old | New |
+|-----|-----|
+| `<EyebrowText>` / `<eyebrow-text>` | `<OverlineText>` / `<overline-text>` |
+| `.eyebrow-text` (root class) | `.overline-text` |
+| `--eyebrow-text-*` (`bg-img`, `font-family`, `font-style`, `font-weight`, `letter-spacing`, `large`, `medium`, `small`) | `--overline-text-*` |
+| `--colour-text-eyebrow` (global theme token) | `--colour-text-overline` |
+| `ProfileSection` slot `#eyebrowText` | `#overlineText` |
+| `--profile-section-picture-header-eyebrow-colour` | `--profile-section-picture-header-overline-colour` |
+| `ServicesCard` / `ServicesCardGrid` prop `eyebrowConfig` (`:eyebrow-config`) | `overlineConfig` (`:overline-config`) |
+| type `ServicesCardEyebrowConfig` | `ServicesCardOverlineConfig` |
+| `--services-card-eyebrow-padding-block` | `--services-card-overline-padding-block` |
+| `--services-card-image-details-eyebrow-colour` / `-padding-block` / `-padding-inline` | `--services-card-image-details-overline-*` |
+| `--service-detail-hero-eyebrow-line-clamp` | `--service-detail-hero-overline-line-clamp` |
+
+### 1. Rename the layer's identifiers
+
+Run from the app root. It only matches the layer's names, so the app's own uses of the word (a
+local `eyebrowText` variable, an i18n `eyebrow` key) are left alone:
+
+```bash
+grep -rlE --null 'EyebrowText|eyebrow-text|eyebrowText|eyebrowConfig|eyebrow-config|colour-text-eyebrow|-eyebrow-' app \
+  | xargs -0 perl -pi -e '
+      s/\bEyebrowText\b/OverlineText/g;
+      s/(?<![\w-])eyebrow-text\b/overline-text/g;
+      s/--eyebrow-text-/--overline-text-/g;
+      s/--colour-text-eyebrow\b/--colour-text-overline/g;
+      s/(#|v-slot:)eyebrowText\b/${1}overlineText/g;
+      s/\beyebrowConfig\b/overlineConfig/g;
+      s/\beyebrow-config\b/overline-config/g;
+      s/(--(?:services-card|services-card-image-details|profile-section-picture-header|service-detail-hero)-)eyebrow-/${1}overline-/g;
+    '
+```
+
+If the app keeps components, styles or types outside `app/` (a `layers/` folder, root
+`components/`), run it on those folders too. Renaming the app's own `eyebrow` variables and i18n
+keys is optional.
+
+### 2. Delete the old snippet file
+
+`copy-snippets.mjs` adds the new `srcdev-component-overline-text.code-snippets` but never deletes,
+so remove the stale one:
+
+```bash
+rm -f .vscode/srcdev-component-eyebrow-text.code-snippets
+```
+
+(`npm run setup:claude` replaces the whole skills folder, so the old `eyebrow-text.md` skill doc
+goes on its own.)
+
+### 3. Check
+
+```bash
+grep -rnE 'EyebrowText|eyebrow-text|#eyebrowText|eyebrowConfig|eyebrow-config|colour-text-eyebrow|(services-card|image-details|picture-header|hero)-eyebrow' app
+```
+
+It should print nothing. A plain `grep -rni eyebrow app` may still list the app's own names, which
+is fine. Then `npm run build` (or the typecheck, if the app uses `ServicesCardOverlineConfig`) and
+look at each page that showed an overline: it should still be uppercase with the gradient (or the
+app's colour override).
+
+Full component docs: skill `components/overline-text.md` (srcdev-nuxt-components).
+
 ## Upgrading to 9.9.5 (from 9.9.4 or earlier)
 
 The layer now sets zod to `jitless` in a client plugin, so zod's `eval` probe no longer reports a

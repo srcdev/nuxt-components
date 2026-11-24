@@ -83,21 +83,21 @@ describe("ProfileSection", () => {
     expect(wrapper.html()).toContain("Second info block");
   });
 
-  it("does not render eyebrowText slot area when slot is not provided", async () => {
+  it("does not render overlineText slot area when slot is not provided", async () => {
     const wrapper = await mountSuspended(ProfileSection, {
       props: defaultProps,
     });
-    expect(wrapper.html()).not.toContain("eyebrow");
+    expect(wrapper.html()).not.toContain("overline");
   });
 
-  it("renders eyebrowText slot content when provided", async () => {
+  it("renders overlineText slot content when provided", async () => {
     const wrapper = await mountSuspended(ProfileSection, {
       props: defaultProps,
       slots: {
-        eyebrowText: "<p class='eyebrow'>About the author</p>",
+        overlineText: "<p class='overline'>About the author</p>",
       },
     });
-    expect(wrapper.find(".eyebrow").exists()).toBe(true);
+    expect(wrapper.find(".overline").exists()).toBe(true);
     expect(wrapper.html()).toContain("About the author");
   });
 
@@ -256,7 +256,7 @@ describe("ProfileSection", () => {
   // ─── headerPlacement ─────────────────────────────────────────────────────────────────────────────────────────────────────────
 
   const headerSlots = {
-    eyebrowText: "<p class='eyebrow'>About</p>",
+    overlineText: "<p class='overline'>About</p>",
     heroText: (props: Record<string, unknown>) => h("h2", { id: props.headingId, class: "hero-heading" }, "Heading"),
   };
 
@@ -276,7 +276,7 @@ describe("ProfileSection", () => {
     expect(wrapper.findAll(".profile-section-header").length).toBe(1);
     const picture = wrapper.find(".profile-section-picture");
     expect(picture.element.firstElementChild?.classList.contains("profile-section-header")).toBe(true);
-    expect(picture.find(".eyebrow").exists()).toBe(true);
+    expect(picture.find(".overline").exists()).toBe(true);
     expect(picture.find(".hero-heading").exists()).toBe(true);
   });
 

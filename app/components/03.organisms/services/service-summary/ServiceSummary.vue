@@ -13,7 +13,7 @@
         />
       </div>
       <div class="service-summary__info-wrapper" :class="infoWrapperClasses">
-        <EyebrowText v-if="serviceData.subtitle" font-size="large" :text-content="serviceData.subtitle" />
+        <OverlineText v-if="serviceData.subtitle" font-size="large" :text-content="serviceData.subtitle" />
         <HeroText
           v-if="serviceData.title"
           :id="headingId"

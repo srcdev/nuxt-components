@@ -1,4 +1,4 @@
-export interface ServicesCardEyebrowConfig {
+export interface ServicesCardOverlineConfig {
   tag?: "p" | "div" | "span";
   fontSize?: "large" | "medium" | "small";
 }

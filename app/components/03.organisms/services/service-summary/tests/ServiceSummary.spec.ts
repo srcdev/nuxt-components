@@ -210,14 +210,14 @@ describe("ServiceSummary", () => {
 
   // ─── Worst-case data ───────────────────────────────────────────────────
 
-  it("renders no empty eyebrow, heading, pills or body for empty strings", async () => {
+  it("renders no empty overline, heading, pills or body for empty strings", async () => {
     const wrapper = await mountSuspended(ServiceSummary, {
       props: {
         serviceData: { ...mockService, subtitle: "", title: "", duration: "", price: "", whatIsIt: "" },
         tag: "section",
       },
     });
-    expect(wrapper.find(".eyebrow-text").exists()).toBe(false);
+    expect(wrapper.find(".overline-text").exists()).toBe(false);
     expect(wrapper.find(".hero-text").exists()).toBe(false);
     expect(wrapper.find(".service-summary__pills").exists()).toBe(false);
     expect(wrapper.find("p.page-body-normal").exists()).toBe(false);

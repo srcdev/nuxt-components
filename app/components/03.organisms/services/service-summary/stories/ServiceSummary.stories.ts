@@ -3,7 +3,7 @@ import ServiceSummary from "../ServiceSummary.vue";
 import CanvasSwitcher from "../../../../01.atoms/canvas-switcher/CanvasSwitcher.vue";
 import PageRow from "../../../../01.atoms/page-row/PageRow.vue";
 import TextBlock from "../../../../01.atoms/text-block/TextBlock.vue";
-import EyebrowText from "../../../../01.atoms/text-blocks/eyebrow-text/EyebrowText.vue";
+import OverlineText from "../../../../01.atoms/text-blocks/overline-text/OverlineText.vue";
 import HeroText from "../../../../01.atoms/text-blocks/hero-text/HeroText.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 import type { Service } from "~/types/types.services";
@@ -53,7 +53,7 @@ const meta: Meta<typeof ServiceSummary> = {
     docs: {
       description: {
         component:
-          "Renders a single service as a compact two-column preview: image on one side, eyebrow/title/price-duration pills/summary text on the other, with a summary-link slot for navigating to the full ServiceDetail page. Superseded ServicesSection's old full mode — a ServiceDetail page is the correct place for process/ideal-for/FAQ/CTA content now.",
+          "Renders a single service as a compact two-column preview: image on one side, overline/title/price-duration pills/summary text on the other, with a summary-link slot for navigating to the full ServiceDetail page. Superseded ServicesSection's old full mode — a ServiceDetail page is the correct place for process/ideal-for/FAQ/CTA content now.",
       },
     },
   },
@@ -141,7 +141,7 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Eyebrow, title, price/duration pills, whatIsIt summary, and the summary-link slot.",
+        story: "Overline, title, price/duration pills, whatIsIt summary, and the summary-link slot.",
       },
     },
   },
@@ -261,7 +261,7 @@ export const FramedImage: Story = {
 export const RealisticPageContext: Story = {
   name: "Realistic Page Context",
   render: (args) => ({
-    components: { ServiceSummary, PageRow, TextBlock, EyebrowText, HeroText },
+    components: { ServiceSummary, PageRow, TextBlock, OverlineText, HeroText },
     setup() {
       return { args, sampleService };
     },
@@ -269,7 +269,7 @@ export const RealisticPageContext: Story = {
       <div>
         <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <TextBlock tag="div" :style-class-passthrough="['page-lead']">
-            <EyebrowText font-size="large" text-content="Services" />
+            <OverlineText font-size="large" text-content="Services" />
             <HeroText
               tag="h1"
               axis="vertical"
@@ -300,7 +300,7 @@ export const RealisticPageContext: Story = {
     docs: {
       description: {
         story:
-          "Matches a typical services listing page: a page hero (EyebrowText + HeroText inside PageRow/TextBlock) followed by a ServiceSummary. Use ServiceSummaryGrid for the full alternating listing — this story sanity-checks a single instance's layout in context.",
+          "Matches a typical services listing page: a page hero (OverlineText + HeroText inside PageRow/TextBlock) followed by a ServiceSummary. Use ServiceSummaryGrid for the full alternating listing — this story sanity-checks a single instance's layout in context.",
       },
     },
   },
@@ -436,7 +436,7 @@ export const StressTest: StoryObj<StressArgs> = {
           "Deliberately hostile data to find breakage: long German copy and unbroken compound words in every field, a long " +
           "German price prefix, a very long duration and price (their pills cap at the column width and end in an ellipsis), " +
           "emoji, HTML-like text (must render as text), an unbroken URL, right-to-left Arabic, a broken image, single characters, " +
-          "and a summary with every text field empty (no empty eyebrow, heading, pills or body is rendered, and a section root " +
+          "and a summary with every text field empty (no empty overline, heading, pills or body is rendered, and a section root " +
           "drops its aria-labelledby). Check at every canvas width, in both column orders: no text runs out of its column, " +
           "the two columns stay balanced and stack on narrow canvases. Try the Body line clamp control too: it's a CSS token " +
           "set by the story, not a prop.",

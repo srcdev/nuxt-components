@@ -4,7 +4,7 @@
       v-for="(item, index) in servicesData"
       :key="index"
       :service-data="item"
-      :eyebrow-config="eyebrowConfig"
+      :overline-config="overlineConfig"
       :hero-config="heroConfig"
     >
       <template #actions="{ serviceData }">
@@ -25,12 +25,12 @@
 
 <script setup lang="ts">
 import type { Service } from "~/types/types.services";
-import type { ServicesCardEyebrowConfig, ServicesCardHeroConfig } from "~/types/components";
+import type { ServicesCardOverlineConfig, ServicesCardHeroConfig } from "~/types/components";
 
 interface Props {
   tag?: "div" | "section" | "main";
   servicesData: Service[];
-  eyebrowConfig?: ServicesCardEyebrowConfig;
+  overlineConfig?: ServicesCardOverlineConfig;
   heroConfig?: ServicesCardHeroConfig;
   hrefBase?: string;
   buttonTextPrefix?: string;
@@ -40,7 +40,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   tag: "div",
-  eyebrowConfig: () => ({}),
+  overlineConfig: () => ({}),
   heroConfig: () => ({}),
   hrefBase: "/services/",
   buttonTextPrefix: "Enquire about",

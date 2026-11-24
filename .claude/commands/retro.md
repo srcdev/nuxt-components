@@ -41,7 +41,7 @@ comm -23 /tmp/retro-code /tmp/retro-doc   # in code, not documented
 comm -13 /tmp/retro-code /tmp/retro-doc   # documented, gone from code
 ```
 
-Read the result with judgement. Tokens owned by another component (`--eyebrow-text-*`), global
+Read the result with judgement. Tokens owned by another component (`--overline-text-*`), global
 theme tokens (`--theme-*`, `--colour-*`) and tokens documented as a scale shorthand
 (`-xs` / `-s` / `-md`) show up as false positives. Then check by eye:
 

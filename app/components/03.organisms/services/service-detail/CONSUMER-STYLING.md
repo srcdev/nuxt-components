@@ -24,14 +24,14 @@
 > hero grew to the image's 16:9 height. The image row now has `contain: size` by default; set
 > `--service-detail-hero-image-contain: none` to opt back into an image-sized hero.
 >
-> Also 2026-10-06: line-clamp tokens for the hero eyebrow and title, sidebar labels and values,
+> Also 2026-10-06: line-clamp tokens for the hero overline and title, sidebar labels and values,
 > and the final CTA heading and body. The hero title's and final CTA heading's spacing moved from
 > utility classes (`mb-20`, `mbs-0`/`mbe-8`) into the component CSS, same values, so the clamp can
 > keep descenders and italic overhang visible.
 | `--service-detail-hero-padding` | `3.2rem` | **Block-axis (vertical)** padding around the breadcrumb/title/pills content — horizontal alignment comes from the nested content `PageRow`, not this token |
 | `--service-detail-hero-scrim` | `linear-gradient(0deg, rgb(0 0 0 / 70%) 0%, rgb(0 0 0 / 10%) 60%, transparent 100%)` | Overlay gradient behind the hero text, for legibility over the image |
-| `--service-detail-hero-text-colour` | `white` | Colour of the breadcrumb, eyebrow, and title over the hero image |
-| `--service-detail-hero-eyebrow-line-clamp` | `none` | Max lines of the hero eyebrow (subtitle), ellipsis on the last. `1` is single-line ellipsis |
+| `--service-detail-hero-text-colour` | `white` | Colour of the breadcrumb, overline, and title over the hero image |
+| `--service-detail-hero-overline-line-clamp` | `none` | Max lines of the hero overline (subtitle), ellipsis on the last. `1` is single-line ellipsis |
 | `--service-detail-hero-title-line-clamp` | `none` | Max lines of the hero title |
 
 For the breadcrumb, set Breadcrumb's own `--breadcrumb-item-line-clamp` (it reaches the hero

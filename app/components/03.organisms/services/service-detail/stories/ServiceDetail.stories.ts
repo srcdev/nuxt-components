@@ -84,7 +84,7 @@ const meta: Meta<typeof ServiceDetail> = {
     docs: {
       description: {
         component:
-          "Renders a full service detail page: a full-bleed hero banner (breadcrumb, eyebrow, title, price/duration pills over the service image), a two-column body (long-form content plus a sticky sidebar booking card and related-services list), and a closing full-width CTA banner. Routing (breadcrumb links, book-cta, related-service links, final-cta) is delegated to the consumer via slots, same pattern as ServiceSummary.",
+          "Renders a full service detail page: a full-bleed hero banner (breadcrumb, overline, title, price/duration pills over the service image), a two-column body (long-form content plus a sticky sidebar booking card and related-services list), and a closing full-width CTA banner. Routing (breadcrumb links, book-cta, related-service links, final-cta) is delegated to the consumer via slots, same pattern as ServiceSummary.",
       },
     },
   },
@@ -311,7 +311,7 @@ type LineClamp = "none" | "1" | "2" | "3" | "4";
 // Story-only args: each drives a CSS token, not a ServiceDetail prop. See the argTypes entries.
 const lineClampTokens = {
   breadcrumbItemLineClamp: { token: "--breadcrumb-item-line-clamp", label: "Breadcrumb item" },
-  heroEyebrowLineClamp: { token: "--service-detail-hero-eyebrow-line-clamp", label: "Hero eyebrow" },
+  heroOverlineLineClamp: { token: "--service-detail-hero-overline-line-clamp", label: "Hero overline" },
   heroTitleLineClamp: { token: "--service-detail-hero-title-line-clamp", label: "Hero title" },
   sidebarLabelLineClamp: { token: "--service-detail-sidebar-label-line-clamp", label: "Sidebar label" },
   sidebarValueLineClamp: { token: "--service-detail-sidebar-value-line-clamp", label: "Sidebar value" },
@@ -442,12 +442,12 @@ export const StressTest: StoryObj<StressArgs> = {
       description: {
         story:
           "Deliberately hostile data to find breakage: a hero title of two 55-character German compound words (the hero " +
-          "grows instead of clipping it), long German breadcrumb, eyebrow, pills, booking copy and location, a German price " +
+          "grows instead of clipping it), long German breadcrumb, overline, pills, booking copy and location, a German price " +
           "prefix, emoji, HTML-like text (must render as text), an unbroken URL, right-to-left Arabic, 12 process steps and " +
           "12 ideal-for items, FAQs with an empty answer and an empty question, related services with a long title, a " +
           "duplicate slug, a broken image and an empty price, and a broken ideal-for icon name. Check at every canvas width: " +
           "no text runs out of its column, the sidebar values wrap and stay right-aligned, and the body switches to two " +
-          "columns from 900px. Try the line clamp controls too (breadcrumb items, hero eyebrow and title, sidebar labels and values, related titles, final CTA heading and body): they set CSS tokens, they are not props. The final CTA button never shrinks or gets pushed out by long copy.",
+          "columns from 900px. Try the line clamp controls too (breadcrumb items, hero overline and title, sidebar labels and values, related titles, final CTA heading and body): they set CSS tokens, they are not props. The final CTA button never shrinks or gets pushed out by long copy.",
       },
     },
   },

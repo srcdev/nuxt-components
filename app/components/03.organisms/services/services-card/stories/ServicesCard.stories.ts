@@ -14,9 +14,9 @@ const meta: Meta<typeof ServicesCard> = {
       options: ["div", "section", "article"],
       description: "HTML element rendered as the root",
     },
-    eyebrowConfig: {
+    overlineConfig: {
       control: "object",
-      description: "Override eyebrow tag and fontSize — omit keys to use defaults",
+      description: "Override overline tag and fontSize — omit keys to use defaults",
     },
     heroConfig: {
       control: "object",
@@ -45,7 +45,7 @@ const meta: Meta<typeof ServicesCard> = {
   },
   args: {
     tag: "div",
-    eyebrowConfig: {},
+    overlineConfig: {},
     heroConfig: {},
     styleClassPassthrough: [],
   },
@@ -53,7 +53,7 @@ const meta: Meta<typeof ServicesCard> = {
     docs: {
       description: {
         component:
-          "Portrait card for a single service: image, subtitle (eyebrow), title, short description, and an `actions` slot for CTA content. Heading levels and eyebrow sizing are configurable via `eyebrowConfig` and `heroConfig`. Usually consumed via `ServicesCardGrid`.",
+          "Portrait card for a single service: image, subtitle (overline), title, short description, and an `actions` slot for CTA content. Heading levels and overline sizing are configurable via `overlineConfig` and `heroConfig`. Usually consumed via `ServicesCardGrid`.",
       },
     },
   },
@@ -163,7 +163,7 @@ export const WithoutActions: Story = {
 export const ConfigOverrides: Story = {
   name: "Config Overrides",
   args: {
-    eyebrowConfig: { tag: "p", fontSize: "small" },
+    overlineConfig: { tag: "p", fontSize: "small" },
     heroConfig: { tag: "h3", fontSize: "title" },
   },
   render: (args) => ({
@@ -190,7 +190,7 @@ export const ConfigOverrides: Story = {
     docs: {
       description: {
         story:
-          "eyebrowConfig and heroConfig let consumers adjust heading levels and text sizing without touching the component — useful when multiple cards are nested inside a page with its own heading hierarchy.",
+          "overlineConfig and heroConfig let consumers adjust heading levels and text sizing without touching the component — useful when multiple cards are nested inside a page with its own heading hierarchy.",
       },
     },
   },
@@ -330,13 +330,13 @@ export const DarkOverlayCards: Story = {
           --services-card-image-zoom-transform: none;
           --services-card-image-details-scrim-colour: #141110;
           --services-card-image-details-text-colour: #f3ece4;
-          --services-card-image-details-eyebrow-colour: #c9a24a;
+          --services-card-image-details-overline-colour: #c9a24a;
           --services-card-image-details-gap: 0.4rem;
-          --eyebrow-text-font-family: "Poppins", sans-serif;
-          --eyebrow-text-font-style: normal;
-          --eyebrow-text-font-weight: 600;
-          --eyebrow-text-letter-spacing: 0.25em;
-          --services-card-image-details-eyebrow-padding-inline: 3.6rem;
+          --overline-text-font-family: "Poppins", sans-serif;
+          --overline-text-font-style: normal;
+          --overline-text-font-weight: 600;
+          --overline-text-letter-spacing: 0.25em;
+          --services-card-image-details-overline-padding-inline: 3.6rem;
           --services-card-image-details-title-padding-block: 0 2.8rem;
           --services-card-image-details-title-padding-inline: 3.6rem;
 
@@ -371,7 +371,7 @@ export const DarkOverlayCards: Story = {
     docs: {
       description: {
         story:
-          "A darker variant built from tokens: titles over the image with a dark scrim, a flush square-cornered image, a padded details panel, and a whole-card link whose hover lightens the border. Every value is a token, set on a class added with styleClassPassthrough; the eyebrow tokens are EyebrowText's own and inherit down into the card.",
+          "A darker variant built from tokens: titles over the image with a dark scrim, a flush square-cornered image, a padded details panel, and a whole-card link whose hover lightens the border. Every value is a token, set on a class added with styleClassPassthrough; the overline tokens are OverlineText's own and inherit down into the card.",
       },
     },
   },
@@ -535,8 +535,8 @@ export const StressTest: StoryObj<StressArgs> = {
       description: {
         story:
           "Deliberately hostile data to find breakage, in a grid like ServicesCardGrid's: a long German compound word as title, " +
-          "eyebrow and actions label, a long paragraph description, long duration and price strings, emoji, HTML-like text " +
-          "(must render as text), right-to-left Arabic, a card with every text field empty (no empty eyebrow, heading, " +
+          "overline and actions label, a long paragraph description, long duration and price strings, emoji, HTML-like text " +
+          "(must render as text), right-to-left Arabic, a card with every text field empty (no empty overline, heading, " +
           "description or meta row is rendered), a broken image URL (its alt text shows), single characters, a whole-card " +
           "link to a long URL, and long unbroken titles over the image. Check at every canvas width: no text runs out of its " +
           "card, every column stays the same width, a long duration/price wraps onto two lines rather than overflowing, and " +

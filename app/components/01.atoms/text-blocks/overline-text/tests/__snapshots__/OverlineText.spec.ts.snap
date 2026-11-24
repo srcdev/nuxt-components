@@ -1,0 +1,17 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`OverlineText > renders correct HTML structure for each fontSize variant 1`] = `"<div class="overline-text" data-font-size="large">Snapshot text</div>"`;
+
+exports[`OverlineText > renders correct HTML structure for each fontSize variant 2`] = `"<div class="overline-text" data-font-size="medium">Snapshot text</div>"`;
+
+exports[`OverlineText > renders correct HTML structure for each fontSize variant 3`] = `"<div class="overline-text" data-font-size="small">Snapshot text</div>"`;
+
+exports[`OverlineText > renders correct HTML structure for each tag variant 1`] = `"<p class="overline-text" data-font-size="medium">Snapshot text</p>"`;
+
+exports[`OverlineText > renders correct HTML structure for each tag variant 2`] = `"<div class="overline-text" data-font-size="medium">Snapshot text</div>"`;
+
+exports[`OverlineText > renders correct HTML structure for each tag variant 3`] = `"<span class="overline-text" data-font-size="medium">Snapshot text</span>"`;
+
+exports[`OverlineText > renders correct HTML structure with all props set 1`] = `"<p class="overline-text custom-class" data-font-size="large">New Arrivals</p>"`;
+
+exports[`OverlineText > renders correct HTML structure with default props 1`] = `"<div class="overline-text" data-font-size="medium">Featured Collection</div>"`;

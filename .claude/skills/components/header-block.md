@@ -88,7 +88,7 @@ spacing themselves rather than fighting the browser's own varying per-level head
 
 Previously lived at `app/components/typography/HeaderBlock.vue` with an inline `defineProps<{...}>()`
 type literal (no `withDefaults`) instead of the standard `interface Props` + `withDefaults` pattern.
-Moved to `01.atoms/text-blocks/header-block/`, alongside `EyebrowText`/`HeroText`/`LinkText`. Also
+Moved to `01.atoms/text-blocks/header-block/`, alongside `OverlineText`/`HeroText`/`LinkText`. Also
 added the `id` prop in the same pass — several sections need their heading to carry a specific id
 for `aria-labelledby`, and `HeaderBlock` had no explicit way to receive one (matching `PageRow`'s
 existing `id?: string | null` + `:id` convention).

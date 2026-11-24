@@ -2,7 +2,7 @@
 
 ## Overview
 
-`ServicesCardGrid` renders a responsive auto-fit CSS grid of `ServicesCard` components from a `Service[]` array. It owns the grid layout; card-level presentation (eyebrow/hero typography) and slot content are configured via pass-through props and a scoped `#actions` slot.
+`ServicesCardGrid` renders a responsive auto-fit CSS grid of `ServicesCard` components from a `Service[]` array. It owns the grid layout; card-level presentation (overline/hero typography) and slot content are configured via pass-through props and a scoped `#actions` slot.
 
 ## Props
 
@@ -10,14 +10,14 @@
 | ----------------------- | --------------------------------- | -------------------------------- | -------- |
 | `servicesData`          | `Service[]`                       | —                                | **yes**  |
 | `tag`                   | `"div" \| "section" \| "main"`    | `"div"`                          | no       |
-| `eyebrowConfig`         | `ServicesCardEyebrowConfig`                   | `{}`                             | no       |
+| `overlineConfig`         | `ServicesCardOverlineConfig`                   | `{}`                             | no       |
 | `heroConfig`            | `ServicesCardHeroConfig`                      | `{}`                             | no       |
 | `hrefBase`              | `string`                          | `"/services/"`                    | no     |
 | `buttonTextPrefix`      | `string`                          | `"Enquire about"`                | no       |
 | `buttonIcon` | `string` | `"mdi:arrow-right"` | no |
 | `styleClassPassthrough` | `string \| string[]`              | `[]`                             | no       |
 
-Both config props are passed through to every `ServicesCard` in the grid unchanged. See [services-card.md](./services-card.md) for the full key reference. The types are exported as `ServicesCardEyebrowConfig` / `ServicesCardHeroConfig` from `srcdev-nuxt-components` (were inline and not importable before 2026-09-28).
+Both config props are passed through to every `ServicesCard` in the grid unchanged. See [services-card.md](./services-card.md) for the full key reference. The types are exported as `ServicesCardOverlineConfig` / `ServicesCardHeroConfig` from `srcdev-nuxt-components` (were inline and not importable before 2026-09-28).
 
 ### Button link and text
 
@@ -57,7 +57,7 @@ Set on `.services-card-grid` (or scoped to a page class):
         <PageRow tag="div" variant="content" :style-class-passthrough="['mbe-20']">
           <ServicesCardGrid
             :services-data="servicesData ?? []"
-            :eyebrow-config="{ fontSize: 'large' }"
+            :overline-config="{ fontSize: 'large' }"
             :hero-config="{ tag: 'h2', fontSize: 'heading' }"
             href-base="/services/"
             button-text-prefix="More on"
@@ -93,7 +93,7 @@ if (servicesData.value.length === 0) {
     --services-card-grid-column-min-width: 250px;
 
     .services-card {
-      --services-card-eyebrow-padding-block: 0.8rem 0;
+      --services-card-overline-padding-block: 0.8rem 0;
       --services-card-title-padding-block: 2rem 1rem;
       --services-card-description-text-colour: inherit;
     }
