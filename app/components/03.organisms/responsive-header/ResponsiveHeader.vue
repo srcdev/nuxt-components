@@ -802,9 +802,20 @@ const itemWidth = (link?: ResponsiveHeaderNavItem) =>
 
 const { elementClasses, resetElementClasses } = useStyleClassPassthrough(props.styleClassPassthrough);
 
+// Watch the nav data's content, not its identity. Consumers commonly build the prop in a
+// computed() that calls localePath() or t(); localePath() reads the current route, so that
+// computed returns a new, identical object on every navigation. A deep watcher on the prop
+// fires for any new object, which reset every item to hidden and re-ran the geometry pass,
+// so the whole nav visibly blinked on each route change. Comparing a serialised copy (any
+// `config` dropped, it's our own measurement output) only re-measures when names, paths,
+// icons or structure really change, e.g. a locale switch.
+const navLinksSignature = (links: ResponsiveHeaderProp) =>
+  JSON.stringify(links, (key, value) => (key === "config" ? undefined : value));
+
 watch(
-  () => props.responsiveNavLinks,
-  (links) => {
+  () => navLinksSignature(props.responsiveNavLinks),
+  () => {
+    const links = props.responsiveNavLinks;
     mainNavigationState.value = {
       ...mainNavigationState.value,
       navListVisibility: Object.fromEntries(Object.keys(links).map((key) => [key, false])),
@@ -814,7 +825,6 @@ watch(
     isGeometryReady.value = false;
     void runGeometryPass();
   },
-  { deep: true }
 );
 
 watch(

@@ -14,7 +14,7 @@ Branding (logo/wordmark) is entirely consumer-authored via the `#branding` slot 
 
 | Prop | Type | Default | Notes |
 |------|------|---------|-------|
-| `responsiveNavLinks` | `ResponsiveHeaderProp` | `{}` | Forwarded to `ResponsiveHeader`. Keyed nav groups; each item is either a link (`path`) or a dropdown (`childLinksTitle` + `childLinks`). A single group with no dropdowns is valid for simple sites. |
+| `responsiveNavLinks` | `ResponsiveHeaderProp` | `{}` | Forwarded to `ResponsiveHeader`. Keyed nav groups; each item is either a link (`path`) or a dropdown (`childLinksTitle` + `childLinks`). A single group with no dropdowns is valid for simple sites. Localised links: build them per locale, not in a route-dependent `computed()` (see `responsive-header.md`, "Localised nav links"). |
 | `gapBetweenFirstAndSecondNav` | `number` | `12` | Forwarded to `ResponsiveHeader`. |
 | `overflowDetailsSummaryIcons` | `Record<string, string>` | `{ more: "gravity-ui:ellipsis", burger: "gravity-ui:bars" }` | Forwarded to `ResponsiveHeader`. Add `open` for a close icon while the menu is open. |
 | `overflowBackdrop` | `boolean` | `false` | Forwarded to `ResponsiveHeader`: dims the page behind the open overflow menu. |

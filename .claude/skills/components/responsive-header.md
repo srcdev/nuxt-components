@@ -240,6 +240,52 @@ that don't fit move into the overflow menu) instead of all-or-nothing. To switch
   `-inline-size: 100cqi` with the bar as an `inline-size` container). Its frame has a drag handle
   on the right edge, so you can find the exact width where items collapse.
 
+## Localised nav links (i18n) (since 2026-11-24)
+
+The component re-measures only when the nav data's **content** changes (names, paths, icons,
+groups, child links). A new object with the same content does nothing. Before 2026-11-24 it reset
+on any new object: every item went hidden and the two-phase geometry pass ran again, so the nav
+blinked on every route change.
+
+That mattered because the usual i18n pattern produces a new object on every navigation.
+`@nuxtjs/i18n`'s `localePath()` reads `router.currentRoute` while resolving, so a `computed()`
+that calls it depends on the route as well as the locale:
+
+```ts
+// Avoid: re-runs on every route change, because localePath() reads the route
+const responsiveNavLinks = computed<ResponsiveHeaderProp>(() => ({
+  main: [{ name: t("nav.home"), path: localePath("/"), iconName: "mdi:home" }],
+}))
+```
+
+Rebuild it only when the locale changes. A watch callback isn't tracked, so the route
+dependency goes away:
+
+```ts
+const { t, locale } = useI18n()
+const localePath = useLocalePath()
+
+const buildNavLinks = (): ResponsiveHeaderProp => ({
+  main: [
+    { name: t("nav.home"), path: localePath("/"), iconName: "mdi:home" },
+    { name: t("nav.contact"), path: localePath("/contact"), iconName: "mdi:email" },
+  ],
+})
+
+const responsiveNavLinks = shallowRef(buildNavLinks())
+watch(locale, () => {
+  responsiveNavLinks.value = buildNavLinks()
+})
+```
+
+The component now handles the `computed()` form correctly, but the `shallowRef` form still skips
+building and comparing the object on every navigation, and works on layer versions before
+2026-11-24. A locale switch changes the labels, so it does re-measure, which is correct: the
+items' widths change.
+
+Paths must be localised before they go in (`localePath()`): the component renders plain
+`NuxtLink`s, which don't add a locale prefix themselves.
+
 ## Slots
 
 | Slot | Purpose |

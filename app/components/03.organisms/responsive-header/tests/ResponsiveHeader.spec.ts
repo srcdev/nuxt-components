@@ -587,6 +587,47 @@ describe("ResponsiveHeader", () => {
     geometry.mockRestore();
   });
 
+  it("keeps its measured state when the prop is replaced by an identical copy", async () => {
+    // A consumer computed() using localePath() returns a new, equal object on every route
+    // change. That must not reset the items to hidden and re-run the geometry pass.
+    const build = (): ResponsiveHeaderProp => ({
+      main: [
+        { name: "Home", path: "/", iconName: "mdi:home" },
+        { name: "About", path: "/about" },
+      ],
+    });
+    const geometry = mockGeometry(400);
+    const wrapper = await mountHeader({ props: { responsiveNavLinks: build() } });
+    await triggerGeometryPass();
+    expect(wrapper.find(".navigation").classes()).toContain("geometry-ready");
+    expect(hiddenFlags(wrapper)).toEqual([false, false]);
+
+    await wrapper.setProps({ responsiveNavLinks: build() });
+    await nextTick();
+
+    expect(wrapper.find(".navigation").classes()).toContain("geometry-ready");
+    expect(hiddenFlags(wrapper)).toEqual([false, false]);
+    geometry.mockRestore();
+  });
+
+  it("re-measures when an item's content changes (e.g. a locale switch)", async () => {
+    const geometry = mockGeometry(400);
+    const wrapper = await mountHeader({
+      props: { responsiveNavLinks: { main: [{ name: "Home", path: "/" }] } },
+    });
+    await triggerGeometryPass();
+    expect(wrapper.find(".navigation").classes()).toContain("geometry-ready");
+
+    await wrapper.setProps({ responsiveNavLinks: { main: [{ name: "Accueil", path: "/fr" }] } });
+    await nextTick();
+
+    expect(wrapper.find(".navigation").classes()).not.toContain("geometry-ready");
+    await triggerGeometryPass();
+    expect(wrapper.find(".navigation").classes()).toContain("geometry-ready");
+    expect(wrapper.text()).toContain("Accueil");
+    geometry.mockRestore();
+  });
+
   it("does not mark itself as a banner landmark", async () => {
     const wrapper = await mountHeader({ props: { responsiveNavLinks: navLinks } });
     expect(wrapper.attributes("role")).toBeUndefined();
