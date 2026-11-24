@@ -3,71 +3,77 @@
 exports[`ServicesCardGrid > renders correct HTML structure 1`] = `
 "<div class="services-card-grid">
   <div class="services-card">
-    <div class="grid-stack services-card-image-wrapper">
-      <div class="grid-stack__layer"><img width="640" height="853" data-nuxt-img="" srcset="/_ipx/s_640x853/images/locs-installation.jpg 1x, /_ipx/s_1280x1706/images/locs-installation.jpg 2x" alt="Locs Installation" loading="lazy" class="services-card-image" src="/_ipx/s_640x853/images/locs-installation.jpg"></div>
-      <div class="grid-stack__layer"></div>
-    </div>
-    <div class="services-card-details">
-      <div class="overline-text" data-font-size="large">Subtitle for Locs Installation</div>
-      <h2 class="hero-text" data-font-size="heading" data-axis="horizontal">
-        <!--v-if--><span class="hero-text-segment normal">Locs Installation</span>
-      </h2>
-      <div class="services-card-description">Short description for Locs Installation.</div>
-      <div class="services-card-footer">
-        <div class="services-card-meta">
-          <div class="services-card-meta-duration">60 mins</div>
-          <div class="services-card-meta-price">£50</div>
-        </div><a href="/services/locs-installation" data-testid="input-button" data-theme="default" data-variant="secondary" data-link="" class="input-button mbs-24">
-          <!--v-if-->
-          <!--v-if--><span class="input-button-text">Enquire about Locs Installation</span><span class="input-button-icon" data-slot="right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
-          <!--v-if-->
-        </a>
+    <div class="services-card-surface">
+      <div class="grid-stack services-card-image-wrapper">
+        <div class="grid-stack__layer"><img width="640" height="853" data-nuxt-img="" srcset="/_ipx/s_640x853/images/locs-installation.jpg 1x, /_ipx/s_1280x1706/images/locs-installation.jpg 2x" alt="Locs Installation" loading="lazy" class="services-card-image" src="/_ipx/s_640x853/images/locs-installation.jpg"></div>
+        <div class="grid-stack__layer"></div>
+      </div>
+      <div class="services-card-details">
+        <div class="overline-text" data-font-size="large">Subtitle for Locs Installation</div>
+        <h2 class="hero-text" data-font-size="heading" data-axis="horizontal">
+          <!--v-if--><span class="hero-text-segment normal">Locs Installation</span>
+        </h2>
+        <div class="services-card-description">Short description for Locs Installation.</div>
+        <div class="services-card-footer">
+          <div class="services-card-meta">
+            <div class="services-card-meta-duration">60 mins</div>
+            <div class="services-card-meta-price">£50</div>
+          </div><a href="/services/locs-installation" data-testid="input-button" data-theme="default" data-variant="secondary" data-link="" class="input-button mbs-24">
+            <!--v-if-->
+            <!--v-if--><span class="input-button-text">Enquire about Locs Installation</span><span class="input-button-icon" data-slot="right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
+            <!--v-if-->
+          </a>
+        </div>
       </div>
     </div>
   </div>
   <div class="services-card">
-    <div class="grid-stack services-card-image-wrapper">
-      <div class="grid-stack__layer"><img width="640" height="853" data-nuxt-img="" srcset="/_ipx/s_640x853/images/locs-retwist.jpg 1x, /_ipx/s_1280x1706/images/locs-retwist.jpg 2x" alt="Locs Retwist" loading="lazy" class="services-card-image" src="/_ipx/s_640x853/images/locs-retwist.jpg"></div>
-      <div class="grid-stack__layer"></div>
-    </div>
-    <div class="services-card-details">
-      <div class="overline-text" data-font-size="large">Subtitle for Locs Retwist</div>
-      <h2 class="hero-text" data-font-size="heading" data-axis="horizontal">
-        <!--v-if--><span class="hero-text-segment normal">Locs Retwist</span>
-      </h2>
-      <div class="services-card-description">Short description for Locs Retwist.</div>
-      <div class="services-card-footer">
-        <div class="services-card-meta">
-          <div class="services-card-meta-duration">60 mins</div>
-          <div class="services-card-meta-price">£50</div>
-        </div><a href="/services/locs-retwist" data-testid="input-button" data-theme="default" data-variant="secondary" data-link="" class="input-button mbs-24">
-          <!--v-if-->
-          <!--v-if--><span class="input-button-text">Enquire about Locs Retwist</span><span class="input-button-icon" data-slot="right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
-          <!--v-if-->
-        </a>
+    <div class="services-card-surface">
+      <div class="grid-stack services-card-image-wrapper">
+        <div class="grid-stack__layer"><img width="640" height="853" data-nuxt-img="" srcset="/_ipx/s_640x853/images/locs-retwist.jpg 1x, /_ipx/s_1280x1706/images/locs-retwist.jpg 2x" alt="Locs Retwist" loading="lazy" class="services-card-image" src="/_ipx/s_640x853/images/locs-retwist.jpg"></div>
+        <div class="grid-stack__layer"></div>
+      </div>
+      <div class="services-card-details">
+        <div class="overline-text" data-font-size="large">Subtitle for Locs Retwist</div>
+        <h2 class="hero-text" data-font-size="heading" data-axis="horizontal">
+          <!--v-if--><span class="hero-text-segment normal">Locs Retwist</span>
+        </h2>
+        <div class="services-card-description">Short description for Locs Retwist.</div>
+        <div class="services-card-footer">
+          <div class="services-card-meta">
+            <div class="services-card-meta-duration">60 mins</div>
+            <div class="services-card-meta-price">£50</div>
+          </div><a href="/services/locs-retwist" data-testid="input-button" data-theme="default" data-variant="secondary" data-link="" class="input-button mbs-24">
+            <!--v-if-->
+            <!--v-if--><span class="input-button-text">Enquire about Locs Retwist</span><span class="input-button-icon" data-slot="right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
+            <!--v-if-->
+          </a>
+        </div>
       </div>
     </div>
   </div>
   <div class="services-card">
-    <div class="grid-stack services-card-image-wrapper">
-      <div class="grid-stack__layer"><img width="640" height="853" data-nuxt-img="" srcset="/_ipx/s_640x853/images/colour-treatment.jpg 1x, /_ipx/s_1280x1706/images/colour-treatment.jpg 2x" alt="Colour Treatment" loading="lazy" class="services-card-image" src="/_ipx/s_640x853/images/colour-treatment.jpg"></div>
-      <div class="grid-stack__layer"></div>
-    </div>
-    <div class="services-card-details">
-      <div class="overline-text" data-font-size="large">Subtitle for Colour Treatment</div>
-      <h2 class="hero-text" data-font-size="heading" data-axis="horizontal">
-        <!--v-if--><span class="hero-text-segment normal">Colour Treatment</span>
-      </h2>
-      <div class="services-card-description">Short description for Colour Treatment.</div>
-      <div class="services-card-footer">
-        <div class="services-card-meta">
-          <div class="services-card-meta-duration">60 mins</div>
-          <div class="services-card-meta-price">£50</div>
-        </div><a href="/services/colour-treatment" data-testid="input-button" data-theme="default" data-variant="secondary" data-link="" class="input-button mbs-24">
-          <!--v-if-->
-          <!--v-if--><span class="input-button-text">Enquire about Colour Treatment</span><span class="input-button-icon" data-slot="right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
-          <!--v-if-->
-        </a>
+    <div class="services-card-surface">
+      <div class="grid-stack services-card-image-wrapper">
+        <div class="grid-stack__layer"><img width="640" height="853" data-nuxt-img="" srcset="/_ipx/s_640x853/images/colour-treatment.jpg 1x, /_ipx/s_1280x1706/images/colour-treatment.jpg 2x" alt="Colour Treatment" loading="lazy" class="services-card-image" src="/_ipx/s_640x853/images/colour-treatment.jpg"></div>
+        <div class="grid-stack__layer"></div>
+      </div>
+      <div class="services-card-details">
+        <div class="overline-text" data-font-size="large">Subtitle for Colour Treatment</div>
+        <h2 class="hero-text" data-font-size="heading" data-axis="horizontal">
+          <!--v-if--><span class="hero-text-segment normal">Colour Treatment</span>
+        </h2>
+        <div class="services-card-description">Short description for Colour Treatment.</div>
+        <div class="services-card-footer">
+          <div class="services-card-meta">
+            <div class="services-card-meta-duration">60 mins</div>
+            <div class="services-card-meta-price">£50</div>
+          </div><a href="/services/colour-treatment" data-testid="input-button" data-theme="default" data-variant="secondary" data-link="" class="input-button mbs-24">
+            <!--v-if-->
+            <!--v-if--><span class="input-button-text">Enquire about Colour Treatment</span><span class="input-button-icon" data-slot="right"><span class="iconify i-mdi:arrow-right icon" aria-hidden="true"></span></span>
+            <!--v-if-->
+          </a>
+        </div>
       </div>
     </div>
   </div>

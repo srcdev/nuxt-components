@@ -27,7 +27,7 @@ i.e. `is-clickable` is on the root — since these all default to `transparent`/
 | `--services-card-outline-offset` | `0px` | Resting outline offset |
 | `--services-card-outline-offset-hover` | resting outline offset | Outline offset on `:hover`/`:focus-visible` — e.g. set to a larger value than the resting offset for an outline that grows outward on hover |
 | `--services-card-background-color-hover` | resting background colour | Background on `:hover`/`:focus-visible` |
-| `--services-card-transform-hover` | `none` | Transform on `:hover`/`:focus-visible`, e.g. `translateY(-0.4rem)` for a lift. Transitions with the other states; skipped under `prefers-reduced-motion: reduce` |
+| `--services-card-transform-hover` | `none` | Transform on `:hover`/`:focus-visible`, e.g. `translateY(-0.4rem)` for a lift. Transitions with the other states; skipped under `prefers-reduced-motion: reduce`. Applied to the inner `.services-card-surface`, not the root, so the hit area stays put and a pointer near the bottom edge doesn't flicker in and out of hover |
 
 ```css
 /* A card that gets a visible border + outline ring when it's a whole-card link */
@@ -106,7 +106,7 @@ i.e. `is-clickable` is on the root — since these all default to `transparent`/
 |---|---|
 | `.services-card.is-clickable` | Whole-card link mode: `href` set and no `actions` slot (root renders as `<a>` or `NuxtLink`) |
 
-Inner classes: `.services-card-image-wrapper`, `.services-card-image`, `.services-card-image-details`
+Inner classes: `.services-card-surface` (the root's only child: carries the background, border, outline, radius, clipping and hover transform), `.services-card-image-wrapper`, `.services-card-image`, `.services-card-image-details`
 (titles over the image), `.services-card-details`, `.services-card-description`, `.services-card-footer`,
 `.services-card-meta`, `.services-card-meta-duration`, `.services-card-meta-price`. The overline and
 title are `OverlineText` (`.overline-text`) and `HeroText` (`.hero-text`), so their own tokens
@@ -153,7 +153,7 @@ the same row), the extra height goes to `.services-card-footer`'s top margin ins
 below the actions slot. This keeps the meta row and actions/button aligned across a row of
 cards regardless of each card's description length, without needing CSS subgrid.
 
-`.services-card`, `.services-card-image-wrapper`, `.services-card-details`, and `.services-card-footer` all set
+`.services-card`, `.services-card-surface`, `.services-card-image-wrapper`, `.services-card-details`, and `.services-card-footer` all set
 `min-inline-size: 0`. Without it, an unbreakable child — most commonly a long `actions` slot
 button label kept on one line with `--input-button-text-white-space: nowrap` (the default was
 `nowrap` until 2026-10-17) — forces its content's min-content width up through the flex/grid chain and widens

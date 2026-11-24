@@ -5,74 +5,76 @@
     class="services-card"
     :class="[elementClasses, { 'is-clickable': isClickable() }]"
   >
-    <GridStack tag="div" :style-class-passthrough="['services-card-image-wrapper']">
-      <template #layer-1>
-        <NuxtImg
-          :src="serviceData.image"
-          :alt="serviceData.title"
-          width="640"
-          height="853"
-          loading="lazy"
-          class="services-card-image"
-        />
-      </template>
-      <template #layer-2>
-        <div
-          v-if="props.titlesWithinImageWrapper && (serviceData.subtitle || serviceData.title)"
-          class="services-card-image-details"
-        >
-          <OverlineText
-            v-if="serviceData.subtitle"
-            :font-size="overlineConfig.fontSize ?? 'medium'"
-            :tag="overlineConfig.tag ?? 'div'"
-            :text-content="serviceData.subtitle"
+    <div class="services-card-surface">
+      <GridStack tag="div" :style-class-passthrough="['services-card-image-wrapper']">
+        <template #layer-1>
+          <NuxtImg
+            :src="serviceData.image"
+            :alt="serviceData.title"
+            width="640"
+            height="853"
+            loading="lazy"
+            class="services-card-image"
           />
-          <HeroText
-            v-if="serviceData.title"
-            :tag="heroConfig.tag ?? 'h2'"
-            :font-size="heroConfig.fontSize ?? 'heading'"
-            :text-content="[
-              {
-                text: serviceData.title,
-                styleClass: 'normal',
-              },
-            ]"
-          />
-        </div>
-      </template>
-    </GridStack>
+        </template>
+        <template #layer-2>
+          <div
+            v-if="props.titlesWithinImageWrapper && (serviceData.subtitle || serviceData.title)"
+            class="services-card-image-details"
+          >
+            <OverlineText
+              v-if="serviceData.subtitle"
+              :font-size="overlineConfig.fontSize ?? 'medium'"
+              :tag="overlineConfig.tag ?? 'div'"
+              :text-content="serviceData.subtitle"
+            />
+            <HeroText
+              v-if="serviceData.title"
+              :tag="heroConfig.tag ?? 'h2'"
+              :font-size="heroConfig.fontSize ?? 'heading'"
+              :text-content="[
+                {
+                  text: serviceData.title,
+                  styleClass: 'normal',
+                },
+              ]"
+            />
+          </div>
+        </template>
+      </GridStack>
 
-    <div class="services-card-details">
-      <OverlineText
-        v-if="!props.titlesWithinImageWrapper && serviceData.subtitle"
-        :font-size="overlineConfig.fontSize ?? 'large'"
-        :tag="overlineConfig.tag ?? 'div'"
-        :text-content="serviceData.subtitle"
-      />
-      <HeroText
-        v-if="!props.titlesWithinImageWrapper && serviceData.title"
-        :tag="heroConfig.tag ?? 'h2'"
-        :font-size="heroConfig.fontSize ?? 'heading'"
-        :text-content="[
-          {
-            text: serviceData.title,
-            styleClass: 'normal',
-          },
-        ]"
-      />
-      <div v-if="serviceData.shortDescription" class="services-card-description">
-        {{ serviceData.shortDescription }}
-      </div>
-      <div v-if="hasFooter()" class="services-card-footer">
-        <div v-if="hasMeta()" class="services-card-meta">
-          <div class="services-card-meta-duration">
-            <slot name="duration" :service-data="serviceData">{{ durationText }}</slot>
-          </div>
-          <div class="services-card-meta-price">
-            <slot name="price" :service-data="serviceData">{{ priceText }}</slot>
-          </div>
+      <div class="services-card-details">
+        <OverlineText
+          v-if="!props.titlesWithinImageWrapper && serviceData.subtitle"
+          :font-size="overlineConfig.fontSize ?? 'large'"
+          :tag="overlineConfig.tag ?? 'div'"
+          :text-content="serviceData.subtitle"
+        />
+        <HeroText
+          v-if="!props.titlesWithinImageWrapper && serviceData.title"
+          :tag="heroConfig.tag ?? 'h2'"
+          :font-size="heroConfig.fontSize ?? 'heading'"
+          :text-content="[
+            {
+              text: serviceData.title,
+              styleClass: 'normal',
+            },
+          ]"
+        />
+        <div v-if="serviceData.shortDescription" class="services-card-description">
+          {{ serviceData.shortDescription }}
         </div>
-        <slot name="actions" :service-data="serviceData"></slot>
+        <div v-if="hasFooter()" class="services-card-footer">
+          <div v-if="hasMeta()" class="services-card-meta">
+            <div class="services-card-meta-duration">
+              <slot name="duration" :service-data="serviceData">{{ durationText }}</slot>
+            </div>
+            <div class="services-card-meta-price">
+              <slot name="price" :service-data="serviceData">{{ priceText }}</slot>
+            </div>
+          </div>
+          <slot name="actions" :service-data="serviceData"></slot>
+        </div>
       </div>
     </div>
   </component>
@@ -148,33 +150,44 @@ watch(
 @layer components {
   .services-card {
     display: grid;
-    grid-template-rows: auto 1fr;
-    gap: var(--services-card-gap, 1rem);
     min-inline-size: 0;
 
-    background-color: var(--services-card-background-color, transparent);
-    padding-block: var(--services-card-padding-block, 0);
-    padding-inline: var(--services-card-padding-inline, 0);
-    border-radius: var(--services-card-border-radius, 0);
-    border: var(--services-card-border-width, 1px) solid var(--services-card-border-colour, transparent);
-    outline: var(--services-card-outline-width, 2px) solid var(--services-card-outline-colour, transparent);
-    outline-offset: var(--services-card-outline-offset, 0px);
-    overflow: hidden;
+    /* The root is the hit area and never moves; the lift goes on the surface, so a pointer
+       near the bottom edge stays over the root instead of flickering in and out of hover. */
+    .services-card-surface {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: var(--services-card-gap, 1rem);
+      min-inline-size: 0;
 
-    transition:
-      background-color 0.3s ease-in-out,
-      border-color 0.3s ease-in-out,
-      outline-color 0.3s ease-in-out,
-      outline-offset 0.3s ease-in-out,
-      transform 0.3s ease-in-out;
+      background-color: var(--services-card-background-color, transparent);
+      padding-block: var(--services-card-padding-block, 0);
+      padding-inline: var(--services-card-padding-inline, 0);
+      border-radius: var(--services-card-border-radius, 0);
+      border: var(--services-card-border-width, 1px) solid var(--services-card-border-colour, transparent);
+      outline: var(--services-card-outline-width, 2px) solid var(--services-card-outline-colour, transparent);
+      outline-offset: var(--services-card-outline-offset, 0px);
+      overflow: hidden;
+
+      transition:
+        background-color 0.3s ease-in-out,
+        border-color 0.3s ease-in-out,
+        outline-color 0.3s ease-in-out,
+        outline-offset 0.3s ease-in-out,
+        transform 0.3s ease-in-out;
+    }
 
     &.is-clickable {
       color: inherit;
       text-decoration: none;
       cursor: pointer;
 
-      &:hover,
       &:focus-visible {
+        outline: none;
+      }
+
+      &:hover .services-card-surface,
+      &:focus-visible .services-card-surface {
         /* Falls back to the resting border colour (not transparent) so setting only
            --services-card-border-colour doesn't make the border vanish on hover/focus. */
         background-color: var(
@@ -187,7 +200,7 @@ watch(
         transform: var(--services-card-transform-hover, none);
       }
 
-      &:focus-visible {
+      &:focus-visible .services-card-surface {
         outline-color: var(
           --services-card-outline-colour-focus,
           var(--services-card-outline-colour-hover, var(--theme-ring, currentColor))
@@ -195,8 +208,8 @@ watch(
       }
 
       @media (prefers-reduced-motion: reduce) {
-        &:hover,
-        &:focus-visible {
+        &:hover .services-card-surface,
+        &:focus-visible .services-card-surface {
           transform: none;
         }
       }
@@ -235,7 +248,10 @@ watch(
         height: 100%;
         overflow-wrap: anywhere;
         color: var(--services-card-image-details-text-colour, #fff);
-        background: var(--services-card-image-details-scrim, linear-gradient(to top, rgb(0 0 0 / 0.75), transparent 70%));
+        background: var(
+          --services-card-image-details-scrim,
+          linear-gradient(to top, rgb(0 0 0 / 0.75), transparent 70%)
+        );
 
         @supports (color: color-mix(in oklab, red, transparent)) {
           background: var(

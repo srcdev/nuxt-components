@@ -54,6 +54,19 @@ describe("ServicesCard", () => {
     expect(wrapper.classes()).toContain("services-card");
   });
 
+  it("wraps all content in a single surface inside the root, so the hover lift never moves the hit area", async () => {
+    const wrapper = await mountSuspended(ServicesCard, {
+      props: { serviceData: mockService, href: "https://example.com/service" },
+    });
+    const children = Array.from((wrapper.element as HTMLElement).children);
+    expect(children).toHaveLength(1);
+    expect(children[0]!.classList.contains("services-card-surface")).toBe(true);
+    const surface = wrapper.find(".services-card-surface");
+    expect(surface.find(".services-card-image-wrapper").exists()).toBe(true);
+    expect(surface.find(".services-card-details").exists()).toBe(true);
+    expect(wrapper.classes()).toContain("is-clickable");
+  });
+
   it("renders as a div by default", async () => {
     const wrapper = await mountSuspended(ServicesCard, {
       props: { serviceData: mockService },
