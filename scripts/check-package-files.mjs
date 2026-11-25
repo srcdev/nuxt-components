@@ -21,7 +21,10 @@ import { dirname, join, posix } from "node:path";
 const ROOT = dirname(dirname(fileURLToPath(import.meta.url)));
 const run = (cmd) => execSync(cmd, { cwd: ROOT, maxBuffer: 64 * 1024 * 1024 }).toString();
 
-const [pack] = JSON.parse(run("npm pack --dry-run --json --ignore-scripts"));
+// npm ≤11 prints an array of pack results; npm 12 prints an object keyed by package name.
+const packJson = JSON.parse(run("npm pack --dry-run --json --ignore-scripts"));
+const pack = Array.isArray(packJson) ? packJson[0] : Object.values(packJson)[0];
+if (!pack?.files) throw new Error("Unrecognised `npm pack --json` output shape");
 const shipped = new Set(pack.files.map((f) => f.path));
 const problems = [];
 
