@@ -1226,7 +1226,8 @@ watch(
           grid-template-areas: "icon";
           align-items: center;
           justify-content: center;
-          padding-inline: 5px;
+          /* Padding would shrink the box below the icon and push it off-centre */
+          padding-inline: 0;
           white-space: nowrap;
 
           aspect-ratio: 1;
