@@ -1,4 +1,4 @@
-import ContactSection from "../tests/ContactSection.vue";
+import ContactSection from "../ContactSection.vue";
 import type { Meta, StoryObj } from "@nuxtjs/storybook";
 
 const meta: Meta<typeof ContactSection> = {

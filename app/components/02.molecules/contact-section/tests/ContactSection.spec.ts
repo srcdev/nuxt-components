@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import ContactSection from "./ContactSection.vue";
+import ContactSection from "../ContactSection.vue";
 import StepperList from "../../stepper-list/StepperList.vue";
 
 describe("ContactSection", () => {

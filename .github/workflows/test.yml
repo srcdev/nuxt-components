@@ -35,6 +35,9 @@ jobs:
           rm -rf node_modules package-lock.json
           npm install
 
+      - name: Check published package contents
+        run: npm run check:package
+
       - name: Run tests
         run: npm test -- --run
 
